@@ -10,7 +10,8 @@ import Shared
 
 // MARK: - TabManagerDelegate
 protocol TabManagerDelegate: AnyObject {
-    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool)
+    // Must be called on the main thread
+    func tabManager(_ tabManager: TabManager, didSelectedTabChange selectedTab: Tab, previousTab: Tab?, isRestoring: Bool)
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool)
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool)
 
@@ -21,7 +22,7 @@ protocol TabManagerDelegate: AnyObject {
 }
 
 extension TabManagerDelegate {
-    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {}
+    func tabManager(_ tabManager: TabManager, didSelectedTabChange selectedTab: Tab, previousTab: Tab?, isRestoring: Bool) {}
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {}
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {}
 
@@ -205,7 +206,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
     // MARK: - Webview configuration
     // A WKWebViewConfiguration used for normal tabs
-    private lazy var configuration: WKWebViewConfiguration = {
+    lazy var configuration: WKWebViewConfiguration = {
         return LegacyTabManager.makeWebViewConfig(isPrivate: false, prefs: profile.prefs)
     }()
 
@@ -343,7 +344,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     // MARK: - Add tabs
     func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab {
         return addTab(request,
-                      configuration: nil,
                       afterTab: afterTab,
                       flushToDisk: true,
                       zombie: false,
@@ -352,13 +352,11 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
     @discardableResult
     func addTab(_ request: URLRequest! = nil,
-                configuration: WKWebViewConfiguration! = nil,
                 afterTab: Tab? = nil,
                 zombie: Bool = false,
                 isPrivate: Bool = false
     ) -> Tab {
         return addTab(request,
-                      configuration: configuration,
                       afterTab: afterTab,
                       flushToDisk: true,
                       zombie: zombie,
@@ -388,23 +386,18 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     func addTab(_ request: URLRequest? = nil,
-                configuration: WKWebViewConfiguration? = nil,
                 afterTab: Tab? = nil,
                 flushToDisk: Bool,
                 zombie: Bool,
                 isPrivate: Bool = false
     ) -> Tab {
-        // Take the given configuration. Or if it was nil, take our default configuration for the current browsing mode.
-        let configuration: WKWebViewConfiguration = configuration ?? (isPrivate ? privateConfiguration : self.configuration)
-
-        let tab = Tab(profile: profile, configuration: configuration, isPrivate: isPrivate, windowUUID: windowUUID)
+        let tab = Tab(profile: profile, isPrivate: isPrivate, windowUUID: windowUUID)
         configureTab(tab, request: request, afterTab: afterTab, flushToDisk: flushToDisk, zombie: zombie)
         return tab
     }
 
     func addPopupForParentTab(profile: Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab {
         let popup = Tab(profile: profile,
-                        configuration: configuration,
                         isPrivate: parentTab.isPrivate,
                         windowUUID: windowUUID)
         configureTab(popup, request: nil, afterTab: parentTab, flushToDisk: true, zombie: false, isPopup: true)
@@ -454,7 +447,8 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         }
 
         if !zombie {
-            tab.createWebview()
+            let configuration = tab.isPrivate ? self.privateConfiguration : self.configuration
+            tab.createWebview(configuration: configuration)
         }
         tab.navigationDelegate = self.navDelegate
 
@@ -637,6 +631,20 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
             self.removeTab(tab, flushToDisk: false)
         }
         storeChanges()
+    }
+
+    @MainActor
+    func removeTabs(by urls: [URL]) async {
+        let urls = Set(urls)
+        let tabsToRemove = normalTabs.filter { tab in
+            guard let url = tab.url else { return false }
+            return urls.contains(url)
+        }
+        for tab in tabsToRemove {
+            await withCheckedContinuation { continuation in
+                removeTab(tab) { continuation.resume() }
+            }
+        }
     }
 
     @MainActor

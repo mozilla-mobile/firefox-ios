@@ -23,7 +23,7 @@ class DatabaseFixtureTest: BaseTestCase {
         super.setUp()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2458579
+    // https://mozilla.testrail.io/index.php?/cases/view/2458579
     func testBookmarksDatabaseFixture() {
         // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
@@ -51,7 +51,7 @@ class DatabaseFixtureTest: BaseTestCase {
         app.terminate()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2459133
+    // https://mozilla.testrail.io/index.php?/cases/view/2459133
    func testHistoryDatabaseFixture() throws {
        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
        mozWaitForElementToExist(tabsButton)

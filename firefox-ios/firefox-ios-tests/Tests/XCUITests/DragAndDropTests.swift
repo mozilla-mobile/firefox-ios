@@ -26,7 +26,7 @@ class DragAndDropTests: BaseTestCase {
         super.tearDown()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2362645
+    // https://mozilla.testrail.io/index.php?/cases/view/2362645
     // Smoketest
     func testRearrangeTabsTabTray() {
         openTwoWebsites()
@@ -39,12 +39,12 @@ class DragAndDropTests: BaseTestCase {
                 dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch,
                 dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch
             )
-            mozWaitForElementToExist(app.collectionViews.cells["Internet for people, not profit — Mozilla"], timeout: 10)
+            mozWaitForElementToExist(app.collectionViews.cells["Internet for people, not profit — Mozilla"])
             checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2390210
+    // https://mozilla.testrail.io/index.php?/cases/view/2390210
     func testRearrangeMoreThan3TabsTabTray() {
         // Arranging more than 3 to check that it works moving tabs between lines
         let thirdWebsite = (url: "example.com", tabName: "Example Domain. Currently selected tab.")
@@ -53,7 +53,7 @@ class DragAndDropTests: BaseTestCase {
         openTwoWebsites()
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: 10)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
         waitUntilPageLoad()
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -89,7 +89,7 @@ class DragAndDropTests: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2361191
+    // https://mozilla.testrail.io/index.php?/cases/view/2361191
     func testRearrangeTabsTabTrayLandscape() {
         // Set the device in landscape mode
         XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
@@ -116,7 +116,7 @@ class DragAndDropTests: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2361192
+    // https://mozilla.testrail.io/index.php?/cases/view/2361192
     func testDragAndDropHomeTabTabsTray() {
         navigator.openNewURL(urlString: secondWebsite.url)
         waitUntilPageLoad()
@@ -144,7 +144,7 @@ class DragAndDropTests: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2361193
+    // https://mozilla.testrail.io/index.php?/cases/view/2361193
     func testRearrangeTabsPrivateModeTabTray() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
@@ -252,7 +252,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         super.tearDown()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307024
+    // https://mozilla.testrail.io/index.php?/cases/view/2307024
     func test4RearrangeTabs() {
         if skipPlatform { return }
 
@@ -271,7 +271,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         )
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2361413
+    // https://mozilla.testrail.io/index.php?/cases/view/2361413
     func testRearrangeTabsTabTrayIsKeptinTopTabs() {
         if skipPlatform { return }
         openTwoWebsites()
@@ -290,7 +290,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2417438
+    // https://mozilla.testrail.io/index.php?/cases/view/2417438
     // This test drags the address bar and since it is not possible to drop it on another app,
     // lets do it in a search box
     func testDragAddressBarIntoSearchBox() {

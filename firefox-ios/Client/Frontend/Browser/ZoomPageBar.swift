@@ -65,7 +65,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     private lazy var zoomOutButton: UIButton = .build { button in
         self.configureButton(button,
                              image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.subtract),
-                             accessibilityLabel: .AppMenu.ZoomPageDecreaseZoomAccessibilityLabel,
+                             accessibilityLabel: .LegacyAppMenu.ZoomPageDecreaseZoomAccessibilityLabel,
                              accessibilityIdentifier: AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomOutButton)
         button.setContentHuggingPriority(.required, for: .horizontal)
         button.configuration = .plain()
@@ -83,7 +83,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     private lazy var zoomInButton: UIButton = .build { button in
         self.configureButton(button,
                              image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus),
-                             accessibilityLabel: .AppMenu.ZoomPageIncreaseZoomAccessibilityLabel,
+                             accessibilityLabel: .LegacyAppMenu.ZoomPageIncreaseZoomAccessibilityLabel,
                              accessibilityIdentifier: AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomInButton)
         button.setContentHuggingPriority(.required, for: .horizontal)
         button.configuration = .plain()
@@ -93,7 +93,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
     private lazy var closeButton: UIButton = .build { button in
         self.configureButton(button,
                              image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
-                             accessibilityLabel: .AppMenu.ZoomPageCloseAccessibilityLabel,
+                             accessibilityLabel: .LegacyAppMenu.ZoomPageCloseAccessibilityLabel,
                              accessibilityIdentifier: AccessibilityIdentifiers.FindInPage.findInPageCloseButton)
     }
 
@@ -219,7 +219,7 @@ final class ZoomPageBar: UIView, ThemeApplicable, AlphaDimmable {
         zoomLevel.text = NumberFormatter.localizedString(from: NSNumber(value: tab.pageZoom), number: .percent)
         zoomLevel.isEnabled = tab.pageZoom == 1.0 ? false : true
         gestureRecognizer.isEnabled = !(tab.pageZoom == 1.0)
-        zoomLevel.accessibilityLabel = String(format: .AppMenu.ZoomPageCurrentZoomLevelAccessibilityLabel,
+        zoomLevel.accessibilityLabel = String(format: .LegacyAppMenu.ZoomPageCurrentZoomLevelAccessibilityLabel,
                                               zoomLevel.text ?? "")
     }
 

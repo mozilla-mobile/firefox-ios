@@ -10,4 +10,6 @@ public protocol AddressToolbar {
                    toolbarDelegate: AddressToolbarDelegate,
                    leadingSpace: CGFloat?,
                    trailingSpace: CGFloat?)
+
+    func setAutocompleteSuggestion(_ suggestion: String?)
 }

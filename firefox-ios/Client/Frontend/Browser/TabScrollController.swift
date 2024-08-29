@@ -31,6 +31,8 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
         }
 
         didSet {
+            // FXIOS-9781 This could result in scrolling not closing the toolbar
+            assert(scrollView != nil, "Can't set the scrollView delegate if the webView.scrollView is nil")
             self.scrollView?.addGestureRecognizer(panGesture)
             scrollView?.delegate = self
             scrollView?.keyboardDismissMode = .onDrag
@@ -197,6 +199,21 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
             completion: nil)
     }
 
+    func hideToolbars(animated: Bool, isFindInPageMode: Bool = false) {
+        guard toolbarState != .collapsed || isFindInPageMode else { return }
+        toolbarState = .collapsed
+
+        let actualDuration = TimeInterval(ToolbarBaseAnimationDuration * hideDurationRation)
+        self.animateToolbarsWithOffsets(
+            animated,
+            duration: actualDuration,
+            headerOffset: -topScrollHeight,
+            bottomContainerOffset: bottomContainerScrollHeight,
+            overKeyboardOffset: overKeyboardScrollHeight,
+            alpha: 0,
+            completion: nil)
+    }
+
     func beginObserving(scrollView: UIScrollView) {
         guard !observedScrollViews.contains(scrollView) else {
             logger.log("Duplicate observance of scroll view", level: .warning, category: .webview)
@@ -252,21 +269,6 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
 
 // MARK: - Private
 private extension TabScrollingController {
-    func hideToolbars(animated: Bool) {
-        guard toolbarState != .collapsed else { return }
-        toolbarState = .collapsed
-
-        let actualDuration = TimeInterval(ToolbarBaseAnimationDuration * hideDurationRation)
-        self.animateToolbarsWithOffsets(
-            animated,
-            duration: actualDuration,
-            headerOffset: -topScrollHeight,
-            bottomContainerOffset: bottomContainerScrollHeight,
-            overKeyboardOffset: overKeyboardScrollHeight,
-            alpha: 0,
-            completion: nil)
-    }
-
     func configureRefreshControl(isEnabled: Bool) {
         scrollView?.refreshControl = isEnabled ? UIRefreshControl() : nil
         scrollView?.refreshControl?.addTarget(self, action: #selector(reload), for: .valueChanged)
@@ -459,15 +461,15 @@ extension TabScrollingController: UIScrollViewDelegate {
     }
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        guard !tabIsLoading(), !isBouncingAtBottom(), isAbleToScroll else { return }
+        guard !tabIsLoading(), !isBouncingAtBottom(), isAbleToScroll, let tab else { return }
 
-        tab?.shouldScrollToTop = false
+        tab.shouldScrollToTop = false
 
         if decelerate || (toolbarState == .animating && !decelerate) {
-            if scrollDirection == .up {
+            if scrollDirection == .up, !tab.isFindInPageMode {
                 showToolbars(animated: true)
             } else if scrollDirection == .down {
-                hideToolbars(animated: true)
+                hideToolbars(animated: true, isFindInPageMode: tab.isFindInPageMode)
             }
         }
     }

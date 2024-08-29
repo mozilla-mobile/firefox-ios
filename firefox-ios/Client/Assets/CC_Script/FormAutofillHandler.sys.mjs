@@ -227,7 +227,7 @@ export class FormAutofillHandler {
    * @param {object} profile
    *        A profile to be previewed with
    */
-  async previewFields(elementIds, profile) {
+  previewFields(elementIds, profile) {
     this.getAdaptedProfiles([profile]);
 
     for (const fieldDetail of this.fieldDetails) {
@@ -945,15 +945,15 @@ export class FormAutofillHandler {
    * value: The value of the element
    */
   collectFormFilledData() {
-    const filledData = {};
+    const filledData = new Map();
 
     for (const fieldDetail of this.fieldDetails) {
       const element = fieldDetail.element;
-      filledData[fieldDetail.elementId] = {
+      filledData.set(fieldDetail.elementId, {
         filledState: element.autofillState,
         filledValue: this.computeFillingValue(fieldDetail),
         value: element.value,
-      };
+      });
     }
     return filledData;
   }

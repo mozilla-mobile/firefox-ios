@@ -5,6 +5,10 @@
 import UIKit
 import Common
 
+public protocol BrowserNavigationToolbarDelegate: AnyObject {
+    func configureContextualHint(for button: UIButton)
+}
+
 /// Navigation toolbar implementation.
 public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicable {
     private enum UX {
@@ -13,6 +17,7 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
         static let borderHeight: CGFloat = 1
     }
 
+    private weak var toolbarDelegate: BrowserNavigationToolbarDelegate?
     private lazy var actionStack: UIStackView = .build { view in
         view.distribution = .equalSpacing
     }
@@ -29,7 +34,9 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
         fatalError("init(coder:) has not been implemented")
     }
 
-    public func configure(state: NavigationToolbarState) {
+    public func configure(state: NavigationToolbarState, toolbarDelegate: BrowserNavigationToolbarDelegate) {
+        self.toolbarDelegate = toolbarDelegate
+
         updateActionStack(toolbarElements: state.actions)
 
         // Update border
@@ -71,6 +78,10 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
             if let theme {
                 // As we recreate the buttons we need to apply the theme for them to be displayed correctly
                 button.applyTheme(theme: theme)
+            }
+
+            if toolbarElement.hasContextualHint == true {
+                toolbarDelegate?.configureContextualHint(for: button)
             }
         }
     }

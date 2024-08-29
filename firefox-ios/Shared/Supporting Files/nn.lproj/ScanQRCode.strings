@@ -5,5 +5,5 @@
 "ScanQRCode.ConfirmOpenURL.DenyButton.v129" = "Avvis";
 
 /* Text of the prompt to ask user permission to open a URL from a scanned QR code. Placeholder is app name. */
-"ScanQRCode.ConfirmOpenURL.Message.v129" = "Tillate %@ tå opne?";
+"ScanQRCode.ConfirmOpenURL.Message.v129" = "Tillate %@ å opne?";
 

@@ -95,7 +95,7 @@ class MockBrowserViewController: BrowserViewController {
         openURLInNewTabURL = url
         openURLInNewTabIsPrivate = isPrivate
         openURLInNewTabCount += 1
-        return Tab(profile: MockProfile(), configuration: .init(), windowUUID: windowUUID)
+        return Tab(profile: MockProfile(), windowUUID: windowUUID)
     }
 
     override func handleQRCode() {

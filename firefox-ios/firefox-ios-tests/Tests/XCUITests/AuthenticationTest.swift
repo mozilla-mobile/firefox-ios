@@ -7,9 +7,9 @@ import XCTest
 let testBasicHTTPAuthURL = "https://jigsaw.w3.org/HTTP/Basic/"
 
 class AuthenticationTest: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2360560
+    // https://mozilla.testrail.io/index.php?/cases/view/2360560
     func testBasicHTTPAuthenticationPromptVisible() {
-        mozWaitForElementToExist(app.textFields["url"], timeout: 5)
+        mozWaitForElementToExist(app.textFields["url"])
         navigator.nowAt(NewTabScreen)
         navigator.openURL(testBasicHTTPAuthURL)
         mozWaitForElementToExist(app.staticTexts["Authentication required"], timeout: 100)
@@ -17,11 +17,11 @@ class AuthenticationTest: BaseTestCase {
             "A username and password are being requested by jigsaw.w3.org. The site says: test"
         ])
 
-        let placeholderValueUsername = app.alerts.textFields.element(boundBy: 0).value as! String
-        let placeholderValuePassword = app.alerts.secureTextFields.element(boundBy: 0).value as! String
+        let placeholderValueUsername = app.alerts.textFields.element(boundBy: 0)
+        let placeholderValuePassword = app.alerts.secureTextFields.element(boundBy: 0)
 
-        XCTAssertEqual(placeholderValueUsername, "Username")
-        XCTAssertEqual(placeholderValuePassword, "Password")
+        mozWaitForValueContains(placeholderValueUsername, value: "Username")
+        mozWaitForValueContains(placeholderValuePassword, value: "Password")
 
         mozWaitForElementToExist(app.alerts.buttons["Cancel"])
         mozWaitForElementToExist(app.alerts.buttons["Log in"])

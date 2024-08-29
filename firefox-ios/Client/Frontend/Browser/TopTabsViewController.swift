@@ -24,6 +24,7 @@ struct TopTabsUX {
 protocol TopTabsDelegate: AnyObject {
     func topTabsDidPressTabs()
     func topTabsDidPressNewTab(_ isPrivate: Bool)
+    func topTabsDidLongPressNewTab(button: UIButton)
     func topTabsDidChangeTab()
     func topTabsDidPressPrivateMode()
 }
@@ -70,6 +71,14 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus), for: .normal)
         button.semanticContentAttribute = .forceLeftToRight
         button.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: .touchUpInside)
+        if self.featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly) &&
+           self.featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly) {
+            let longPressRecognizer = UILongPressGestureRecognizer(
+                target: self,
+                action: #selector(TopTabsViewController.newTabLongPressed)
+            )
+            button.addGestureRecognizer(longPressRecognizer)
+        }
         button.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.addNewTabButton
         button.accessibilityLabel = .AddTabAccessibilityLabel
         button.showsLargeContentViewer = true
@@ -213,6 +222,13 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
     @objc
     func newTabTapped() {
         delegate?.topTabsDidPressNewTab(self.topTabDisplayManager.isPrivate)
+    }
+
+    @objc
+    func newTabLongPressed(_ gestureRecognizer: UILongPressGestureRecognizer) {
+        if gestureRecognizer.state == .began {
+            delegate?.topTabsDidLongPressNewTab(button: newTab)
+        }
     }
 
     @objc

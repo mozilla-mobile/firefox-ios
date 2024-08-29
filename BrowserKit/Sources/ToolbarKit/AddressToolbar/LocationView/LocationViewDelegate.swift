@@ -21,7 +21,7 @@ protocol LocationViewDelegate: AnyObject {
     /// Called when the location view should perform a search based on the entered text.
     ///
     /// - Parameter text: The text for which the location view should search.
-    func locationViewShouldSearchFor(_ text: String)
+    func locationViewDidSubmitText(_ text: String)
 
     /// Called when requesting custom accessibility actions to be performed on the location view.
     ///

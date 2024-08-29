@@ -64,15 +64,8 @@ extension PhotonActionSheetProtocol {
             if let pasteboardContents = UIPasteboard.general.string {
                 if let urlBar = view as? URLBarView {
                     urlBar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
-                } else if view is AddressToolbarContainer {
-                    guard let uuid = view.currentWindowUUID else { return }
-
-                    let action = ToolbarAction(
-                        url: URL(string: pasteboardContents),
-                        windowUUID: uuid,
-                        actionType: ToolbarActionType.urlDidChange
-                    )
-                    store.dispatch(action)
+                } else if let toolbar = view as? AddressToolbarContainer {
+                    toolbar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
                 }
             }
         }
@@ -83,7 +76,7 @@ extension PhotonActionSheetProtocol {
             let currentURL = tabManager.selectedTab?.currentURL()
             if let url = tabManager.selectedTab?.canonicalURL?.displayURL ?? currentURL {
                 UIPasteboard.general.url = url
-                SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage,
+                SimpleToast().showAlertWithText(.LegacyAppMenu.AppMenuCopyURLConfirmMessage,
                                                 bottomContainer: alertContainer,
                                                 theme: themeManager.getCurrentTheme(for: tabManager.windowUUID))
             }
@@ -105,9 +98,9 @@ extension PhotonActionSheetProtocol {
         let toggleActionTitle: String
         // swiftlint:disable line_length
         if defaultUAisDesktop {
-            toggleActionTitle = tab.changedUserAgent ? .AppMenu.AppMenuViewDesktopSiteTitleString : .AppMenu.AppMenuViewMobileSiteTitleString
+            toggleActionTitle = tab.changedUserAgent ? .LegacyAppMenu.AppMenuViewDesktopSiteTitleString : .LegacyAppMenu.AppMenuViewMobileSiteTitleString
         } else {
-            toggleActionTitle = tab.changedUserAgent ? .AppMenu.AppMenuViewMobileSiteTitleString : .AppMenu.AppMenuViewDesktopSiteTitleString
+            toggleActionTitle = tab.changedUserAgent ? .LegacyAppMenu.AppMenuViewMobileSiteTitleString : .LegacyAppMenu.AppMenuViewDesktopSiteTitleString
         }
         // swiftlint:enable line_length
         let toggleDesktopSite = SingleActionViewModel(title: toggleActionTitle,

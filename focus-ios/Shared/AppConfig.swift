@@ -6,8 +6,8 @@ import Foundation
 import UIKit
 
 protocol AppConfig {
-    var adjustFile: String { get }
-    var firefoxAppStoreURL: URL { get }
+//    var adjustFile: String { get }
+//    var firefoxAppStoreURL: URL { get }
     var productName: String { get }
     var supportPath: String { get }
     var appId: String { get }
@@ -15,8 +15,8 @@ protocol AppConfig {
 }
 
 struct FocusAppConfig: AppConfig {
-    let adjustFile = "Adjust-Focus"
-    let firefoxAppStoreURL = URL(string: "https://app.adjust.com/gs1ao4")!
+//    let adjustFile = "Adjust-Focus"
+//    let firefoxAppStoreURL = URL(string: "https://app.adjust.com/gs1ao4")!
     let productName = "Focus"
     let supportPath = "kb/focus"
     let appId = "1055677337"
@@ -24,8 +24,8 @@ struct FocusAppConfig: AppConfig {
 }
 
 struct KlarAppConfig: AppConfig {
-    let adjustFile = "Adjust-Klar"
-    let firefoxAppStoreURL = URL(string: "https://app.adjust.com/c04cts")!
+//    let adjustFile = "Adjust-Klar"
+//    let firefoxAppStoreURL = URL(string: "https://app.adjust.com/c04cts")!
     let productName = "Klar"
     let supportPath = "products/klar"
     let appId = "1073435754"

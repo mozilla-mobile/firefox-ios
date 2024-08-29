@@ -13,7 +13,7 @@ let PDF_website = [
     "longUrlValue": "http://www.education.gov.yk.ca/"
 ]
 class BrowsingPDFTests: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307116
+    // https://mozilla.testrail.io/index.php?/cases/view/2307116
     func testOpenPDFViewer() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
@@ -25,7 +25,7 @@ class BrowsingPDFTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["1 of 1"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307117
+    // https://mozilla.testrail.io/index.php?/cases/view/2307117
     // Smoketest
     func testOpenLinkFromPDF() {
         navigator.openURL(PDF_website["url"]!)
@@ -42,7 +42,7 @@ class BrowsingPDFTests: BaseTestCase {
         mozWaitForValueContains(app.textFields["url"], value: PDF_website["pdfValue"]!)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307118
+    // https://mozilla.testrail.io/index.php?/cases/view/2307118
     func testLongPressOnPDFLink() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
@@ -60,7 +60,7 @@ class BrowsingPDFTests: BaseTestCase {
         mozWaitForElementToExist(app.buttons["Share…"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307119
+    // https://mozilla.testrail.io/index.php?/cases/view/2307119
     func testLongPressOnPDFLinkToAddToReadingList() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
@@ -75,19 +75,17 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.goto(LibraryPanel_ReadingList)
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts[PDF_website["longUrlValue"]!]
         mozWaitForElementToExist(savedToReadingList)
-        XCTAssertTrue(savedToReadingList.exists)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307120
+    // https://mozilla.testrail.io/index.php?/cases/view/2307120
     // Smoketest
     func testPinPDFtoTopSites() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
         navigator.performAction(Action.PinToTopSitesPAM)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell], timeout: 10)
+        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
         mozWaitForElementToExist(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!])
-        XCTAssertTrue(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!].exists)
 
         // Open pdf from pinned site
         let pdfTopSite = app
@@ -108,10 +106,10 @@ class BrowsingPDFTests: BaseTestCase {
         mozWaitForElementToExist(app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash])
         app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash].tap()
         mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
-        XCTAssertTrue(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!].exists)
+        mozWaitForElementToExist(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307121
+    // https://mozilla.testrail.io/index.php?/cases/view/2307121
     // Smoketest
     func testBookmarkPDF() {
         navigator.openURL(PDF_website["url"]!)
@@ -121,6 +119,6 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Bookmarks)
         mozWaitForElementToExist(app.tables["Bookmarks List"])
-        XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[PDF_website["bookmarkLabel"]!].exists)
+        mozWaitForElementToExist(app.tables["Bookmarks List"].staticTexts[PDF_website["bookmarkLabel"]!])
     }
 }

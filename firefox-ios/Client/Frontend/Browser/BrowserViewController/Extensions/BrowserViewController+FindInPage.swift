@@ -13,6 +13,7 @@ extension BrowserViewController {
         } else {
             useCustomFindInteraction(isVisible: isVisible, tab: tab)
         }
+        tabManager.selectedTab?.isFindInPageMode = isVisible && isBottomSearchBar
     }
 
     @available(iOS 16, *)
@@ -21,7 +22,7 @@ extension BrowserViewController {
 
         if isVisible {
             webView.isFindInteractionEnabled = true
-            webView.findInteraction?.searchText = searchText
+            webView.findInteraction?.searchText = searchText ?? ""
             webView.findInteraction?.presentFindNavigator(showingReplace: false)
         } else {
             webView.findInteraction?.dismissFindNavigator()

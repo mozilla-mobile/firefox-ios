@@ -38,6 +38,7 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
     var layerConfirmation: UIColor = FXColors.Green80
     var layerWarning: UIColor = FXColors.Yellow70.withAlphaComponent(0.77)
     var layerError: UIColor = FXColors.Pink80
+    var layerSelectedText: UIColor = FXColors.Violet60
     var layerSearch: UIColor = FXColors.Ink90
     var layerGradientURL = Gradient(colors: [
         FXColors.Ink90.withAlphaComponent(0),

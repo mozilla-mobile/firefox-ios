@@ -40,13 +40,13 @@ class LibraryViewModelTests: XCTestCase {
         for panel in subject.panelDescriptors {
             switch panel.panelType {
             case .bookmarks:
-                XCTAssertEqual(panel.panelType.title, .AppMenu.AppMenuBookmarksTitleString)
+                XCTAssertEqual(panel.panelType.title, .LegacyAppMenu.AppMenuBookmarksTitleString)
             case .history:
-                XCTAssertEqual(panel.panelType.title, .AppMenu.AppMenuHistoryTitleString)
+                XCTAssertEqual(panel.panelType.title, .LegacyAppMenu.AppMenuHistoryTitleString)
             case .downloads:
-                XCTAssertEqual(panel.panelType.title, .AppMenu.AppMenuDownloadsTitleString)
+                XCTAssertEqual(panel.panelType.title, .LegacyAppMenu.AppMenuDownloadsTitleString)
             case .readingList:
-                XCTAssertEqual(panel.panelType.title, .AppMenu.AppMenuReadingListTitleString)
+                XCTAssertEqual(panel.panelType.title, .LegacyAppMenu.AppMenuReadingListTitleString)
             }
         }
     }

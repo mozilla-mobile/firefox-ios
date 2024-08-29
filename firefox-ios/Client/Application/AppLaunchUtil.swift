@@ -11,7 +11,7 @@ import Glean
 
 class AppLaunchUtil {
     private var logger: Logger
-    private var adjustHelper: AdjustHelper
+//    private var adjustHelper: AdjustHelper
     private var profile: Profile
     private let introScreenManager: IntroScreenManager
 
@@ -19,7 +19,7 @@ class AppLaunchUtil {
          profile: Profile) {
         self.logger = logger
         self.profile = profile
-        self.adjustHelper = AdjustHelper(profile: profile)
+//        self.adjustHelper = AdjustHelper(profile: profile)
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
     }
 
@@ -78,7 +78,13 @@ class AppLaunchUtil {
             }
         }
 
-        RustFirefoxAccounts.startup(prefs: profile.prefs) { _ in
+        // RustFirefoxAccounts doesn't have access to the feature flags
+        // So we check the nimbus flag here before sending it to the startup
+        var fxaFeatures: RustFxAFeatures = []
+        if LegacyFeatureFlagsManager.shared.isFeatureEnabled(.closeRemoteTabs, checking: .buildAndUser) {
+            fxaFeatures.insert(.closeRemoteTabs)
+        }
+        RustFirefoxAccounts.startup(prefs: profile.prefs, features: fxaFeatures) { _ in
             self.logger.log("RustFirefoxAccounts started", level: .info, category: .sync)
             AppEventQueue.signal(event: .accountManagerInitialized)
         }
@@ -122,7 +128,7 @@ class AppLaunchUtil {
         }
 
         updateSessionCount()
-        adjustHelper.setupAdjust()
+//        adjustHelper.setupAdjust()
         AppEventQueue.signal(event: .postLaunchDependenciesComplete)
     }
 

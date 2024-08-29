@@ -5,7 +5,7 @@
 import XCTest
 
 class PageActionMenuTest: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2587660
+    // https://mozilla.testrail.io/index.php?/cases/view/2587660
     func testFindInPageURLBarElement() {
         // Navigate to website
         loadWebPage("https://www.example.com")
@@ -33,7 +33,7 @@ class PageActionMenuTest: BaseTestCase {
     }
 
     // Smoketest
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/395022
+    // https://mozilla.testrail.io/index.php?/cases/view/395022
     func testActivityMenuFindInPageAction() {
         // Navigate to website
         loadWebPage("https://www.example.com")

@@ -26,9 +26,12 @@ include:
   - nimbus-features/menuRefactorFeature.yaml
   - nimbus-features/messagingFeature.yaml
   - nimbus-features/microsurveyFeature.yaml
+  - nimbus-features/nativeErrorPageFeature.yaml
   - nimbus-features/nightModeFeature.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
+  - nimbus-features/passwordGeneratorFeature.yaml
   - nimbus-features/reduxSearchSettingsFeature.yaml
+  - nimbus-features/remoteTabManagement.yaml
   - nimbus-features/searchFeature.yaml
   - nimbus-features/splashScreenFeature.yaml
   - nimbus-features/spotlightSearchFeature.yaml

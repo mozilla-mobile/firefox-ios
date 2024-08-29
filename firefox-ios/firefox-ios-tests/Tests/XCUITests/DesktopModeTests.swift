@@ -8,7 +8,7 @@ import XCTest
 // swiftlint:disable empty_count
 // Tests for both platforms
 class DesktopModeTestsIpad: IpadOnlyTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306852
+    // https://mozilla.testrail.io/index.php?/cases/view/2306852
     // smoketest
     func testLongPressReload() {
         if skipPlatform { return }
@@ -43,7 +43,7 @@ class DesktopModeTestsIpad: IpadOnlyTestCase {
 }
 
 class DesktopModeTestsIphone: IphoneOnlyTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306853
+    // https://mozilla.testrail.io/index.php?/cases/view/2306853
     func testClearPrivateData() {
         if skipPlatform { return }
 
@@ -68,7 +68,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306855
+    // https://mozilla.testrail.io/index.php?/cases/view/2306855
     func testSameHostInMultipleTabs() {
         if skipPlatform { return }
 
@@ -99,7 +99,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306854
+    // https://mozilla.testrail.io/index.php?/cases/view/2306854
     // Smoketest
     func testChangeModeInSameTab() {
         if skipPlatform { return }
@@ -123,7 +123,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306856
+    // https://mozilla.testrail.io/index.php?/cases/view/2306856
     func testPrivateModeOffAlsoRemovesFromNormalMode() {
         if skipPlatform { return }
 
@@ -142,7 +142,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         // Workaround to be sure the snackbar disappears
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton], timeout: 5)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton])
         app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].tap()
         navigator.goto(BrowserTabMenu)
         navigator.goto(RequestMobileSite) // toggle off
@@ -158,7 +158,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306857
+    // https://mozilla.testrail.io/index.php?/cases/view/2306857
     func testPrivateModeOnHasNoAffectOnNormalMode() {
         if skipPlatform { return }
 
@@ -185,13 +185,13 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306852
+    // https://mozilla.testrail.io/index.php?/cases/view/2306852
     // smoketest
     func testLongPressReload() {
         if skipPlatform { return }
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.webViews.staticTexts.firstMatch, timeout: 5)
+        mozWaitForElementToExist(app.webViews.staticTexts.firstMatch)
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
         navigator.nowAt(BrowserTab)

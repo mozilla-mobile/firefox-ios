@@ -10,7 +10,6 @@ import UIKit
 /// Please add new features alphabetically.
 enum NimbusFeatureFlagID: String, CaseIterable {
     case accountSettingsRedux
-    case addressAutofill
     case addressAutofillEdit
     case bottomSearchBar
     case contextualHintForToolbar
@@ -28,9 +27,12 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case loginAutofill
     case menuRefactor
     case microsurvey
+    case nativeErrorPage
     case nightMode
+    case passwordGenerator
     case preferSwitchToOpenTabOverDuplicate
     case reduxSearchSettings
+    case closeRemoteTabs
     case reportSiteIssue
     case searchHighlights
     case splashScreen
@@ -42,7 +44,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
 
     var debugKey: String? {
         switch self {
-        case .microsurvey:
+        case .microsurvey, .closeRemoteTabs:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil
@@ -78,9 +80,9 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         // Cases where users do not have the option to manipulate a setting.
         case .contextualHintForToolbar,
                 .accountSettingsRedux,
-                .addressAutofill,
                 .addressAutofillEdit,
                 .creditCardAutofillStatus,
+                .closeRemoteTabs,
                 .fakespotBackInStock,
                 .fakespotFeature,
                 .fakespotProductAds,
@@ -88,7 +90,9 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .loginAutofill,
                 .microsurvey,
                 .menuRefactor,
+                .nativeErrorPage,
                 .nightMode,
+                .passwordGenerator,
                 .preferSwitchToOpenTabOverDuplicate,
                 .reduxSearchSettings,
                 .reportSiteIssue,
