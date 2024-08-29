@@ -98,7 +98,14 @@ class DefaultImageHandler: ImageHandler {
 
     private func fallbackToLetterFavicon(imageModel: SiteImageModel) async -> UIImage {
         do {
-            let image = try await letterImageGenerator.generateLetterImage(siteString: imageModel.cacheKey)
+            var siteString = imageModel.cacheKey
+            if imageModel.siteURL.scheme == "internal", imageModel.siteURL.lastPathComponent == "home" {
+                // We should use an "H" letter favicon for the home page with internal URL `internal://local/about/home`,
+                // not an "L" from the "local" shortDomain.
+                siteString = "home"
+            }
+
+            let image = try await letterImageGenerator.generateLetterImage(siteString: siteString)
             // FIXME Do we really want to cache letter icons and never attempt to get a favicon again?
             //       We can drop into here on a network timeout.
             await imageCache.cacheImage(image: image, cacheKey: imageModel.cacheKey, type: imageModel.imageType)
