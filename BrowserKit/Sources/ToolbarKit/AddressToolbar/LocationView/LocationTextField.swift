@@ -94,7 +94,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     }
 
     override func deleteBackward() {
-        lastReplacement = nil
+        lastReplacement = ""
         hideCursor = false
 
         guard markedTextRange == nil else {
