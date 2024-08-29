@@ -162,6 +162,62 @@ final class SiteImageHandlerTests: XCTestCase {
         XCTAssertEqual(urlHandler.clearCacheCalled, 1)
         XCTAssertEqual(imageHandler.clearCacheCalledCount, 1)
     }
+
+    func testFavicon_multipleCalls_singletonQueue() async {
+        // This method duplicates the behaviour currently seen in the app where each TopSiteItemCell has its own
+        // SiteImageHandler, which is repeatedly deallocated and reallocated during reloads.
+        let urlHandler1 = MockFaviconURLHandler()
+        urlHandler1.sleepOnGetFaviconURL = true
+
+        let urlHandler2 = MockFaviconURLHandler()
+        urlHandler2.sleepOnGetFaviconURL = true
+
+        let urlHandler3 = MockFaviconURLHandler()
+        urlHandler3.sleepOnGetFaviconURL = true
+
+        let siteURL = "https://www.example.hello.com"
+        let subject1 = DefaultSiteImageHandler(urlHandler: urlHandler1,
+                                               imageHandler: imageHandler)
+        let subject2 = DefaultSiteImageHandler(urlHandler: urlHandler2,
+                                               imageHandler: imageHandler)
+        let subject3 = DefaultSiteImageHandler(urlHandler: urlHandler3,
+                                               imageHandler: imageHandler)
+        let model = SiteImageModel(id: UUID(),
+                                   expectedImageType: .favicon,
+                                   siteURLString: siteURL)
+
+        // A task group will start all these requests simultaneously
+        let results = await withTaskGroup(of: (SiteImageModel).self, returning: [SiteImageModel].self) { group in
+            for subject in [subject1, subject2, subject3] {
+                for _ in 0...10 {
+                    group.addTask {
+                        return await subject.getImage(site: model)
+                    }
+                }
+            }
+
+            var images: [SiteImageModel] = []
+
+            for await image in group {
+                images.append(image)
+            }
+
+            return images
+        }
+
+        XCTAssert(!results.isEmpty)
+
+        // Only one of the urlHandlers should ever be called for multiple requests for the same resource. We don't
+        // want repeated network requests to the same resource. Note that the order of threading will determine
+        // which of the three urlHandlers is triggered.
+        let urlHandlerCalls = [
+            urlHandler1.getFaviconURLCalled,
+            urlHandler2.getFaviconURLCalled,
+            urlHandler3.getFaviconURLCalled
+        ]
+        XCTAssertEqual(urlHandlerCalls.reduce(0, +), 1, "Only one of the urlHandlers should ever be called")
+        XCTAssertEqual(imageHandler.fetchFaviconCalledCount, 1, "image handler should only be called once")
+    }
 }
 
 // MARK: - MockFaviconURLHandler
@@ -169,10 +225,19 @@ private class MockFaviconURLHandler: FaviconURLHandler {
     var faviconURL: URL?
     var capturedImageModel: SiteImageModel?
     var cacheKey: String?
+    var getFaviconURLCalled = 0
     var cacheFaviconURLCalled = 0
     var clearCacheCalled = 0
+    var sleepOnGetFaviconURL = false
 
     func getFaviconURL(site: SiteImageModel) async throws -> SiteImageModel {
+        getFaviconURLCalled += 1
+
+        if sleepOnGetFaviconURL {
+            let sleepTime = UInt64(0.3 * Double(NSEC_PER_SEC))
+            try? await Task.sleep(nanoseconds: sleepTime)
+        }
+
         capturedImageModel = site
         return SiteImageModel(id: site.id,
                               expectedImageType: site.expectedImageType,
@@ -198,9 +263,11 @@ private class MockImageHandler: ImageHandler {
     var faviconImage = UIImage()
     var heroImage: UIImage?
     var capturedSite: SiteImageModel?
+    var fetchFaviconCalledCount = 0
     var clearCacheCalledCount = 0
 
     func fetchFavicon(site: SiteImageModel) async -> UIImage {
+        fetchFaviconCalledCount += 1
         capturedSite = site
         return faviconImage
     }
