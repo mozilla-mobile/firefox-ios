@@ -82,8 +82,8 @@ final class ImageHandlerTests: XCTestCase {
 
         // `cacheKey` will be the `shortDomain` if no `resourceURL` was provided at time of SiteImageModel creation,
         // as it is with sites having hard coded `faviconURL`s
-        XCTAssertEqual(model.cacheKey, siteURL.absoluteString)
-        XCTAssertEqual(letterImageGenerator.capturedSiteString, siteURL.absoluteString)
+        XCTAssertEqual(model.cacheKey, faviconURL.absoluteString)
+        XCTAssertEqual(letterImageGenerator.capturedSiteString, faviconURL.absoluteString)
     }
 
     func testFavicon_whenNoUrl_returnsFallbackLetterFavicon_noFaviconURL() async {
