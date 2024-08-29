@@ -6,8 +6,8 @@ import UIKit
 import Common
 
 public protocol SiteImageHandler {
-    func getImage(site: SiteImageModel) async -> SiteImageModel
-    func cacheFaviconURL(siteURL: URL?, faviconURL: URL?)
+    func getImage(model: SiteImageModel) async -> UIImage
+    func cacheFaviconURL(siteURL: URL, faviconURL: URL)
     func clearAllCaches()
 }
 
@@ -31,43 +31,22 @@ public class DefaultSiteImageHandler: SiteImageHandler {
         self.imageHandler = imageHandler
     }
 
-    public func getImage(site: SiteImageModel) async -> SiteImageModel {
-        var imageModel = site
-
-        // urlStringRequest possibly cannot be a URL
-        if let siteURL = URL(string: site.siteURLString ?? "", invalidCharacters: false) {
-            let domain = generateDomainURL(siteURL: siteURL)
-            imageModel.siteURL = siteURL
-            imageModel.domain = domain
-        }
-
-        imageModel.cacheKey = generateCacheKey(siteURL: URL(string: site.siteURLString ?? "", invalidCharacters: false),
-                                               faviconURL: imageModel.faviconURL,
-                                               type: imageModel.expectedImageType)
-
-        switch site.expectedImageType {
+    public func getImage(model: SiteImageModel) async -> UIImage {
+        switch model.imageType {
         case .heroImage:
             do {
-                imageModel.heroImage = try await getHeroImage(imageModel: imageModel)
+                return try await getHeroImage(imageModel: model)
             } catch {
                 // If hero image fails, we return a favicon image
-                imageModel.faviconImage = await getFaviconImage(imageModel: imageModel)
+                return await getFaviconImage(imageModel: model)
             }
         case .favicon:
-            imageModel.faviconImage = await getFaviconImage(imageModel: imageModel)
+            return await getFaviconImage(imageModel: model)
         }
-
-        return imageModel
     }
 
-    public func cacheFaviconURL(siteURL: URL?, faviconURL: URL?) {
-        guard let siteURL = siteURL,
-              let faviconURL = faviconURL else {
-            return
-        }
-
-        let cacheKey = generateCacheKey(siteURL: siteURL,
-                                        type: .favicon)
+    public func cacheFaviconURL(siteURL: URL, faviconURL: URL) {
+        let cacheKey = SiteImageModel.generateCacheKey(siteURL: siteURL, type: .favicon)
         urlHandler.cacheFaviconURL(cacheKey: cacheKey, faviconURL: faviconURL)
     }
 
@@ -78,29 +57,9 @@ public class DefaultSiteImageHandler: SiteImageHandler {
 
     // MARK: - Private
 
-    private func generateCacheKey(siteURL: URL?,
-                                  faviconURL: URL? = nil,
-                                  type: SiteImageType) -> String {
-        // If we already have a favicon url use the url as the cache key
-        if let faviconURL = faviconURL {
-            return faviconURL.absoluteString
-        }
-
-        guard let siteURL = siteURL else { return "" }
-
-        // Always use the full site URL as the cache key for hero images
-        if type == .heroImage {
-            return siteURL.absoluteString
-        }
-
-        // For everything else use the domain as the key to avoid caching
-        // and fetching unnecessary duplicates
-        return siteURL.shortDomain ?? siteURL.shortDisplayString
-    }
-
     private func getHeroImage(imageModel: SiteImageModel) async throws -> UIImage {
         do {
-            return try await imageHandler.fetchHeroImage(site: imageModel)
+            return try await imageHandler.fetchHeroImage(imageModel: imageModel)
         } catch {
             throw error
         }
@@ -119,21 +78,14 @@ public class DefaultSiteImageHandler: SiteImageHandler {
         let requestHandle = Task {
             var faviconImageModel = imageModel
 
-            do {
-                if faviconImageModel.faviconURL == nil {
-                    // Try to obtain the favicon URL if needed (ideally from cache, otherwise scrape the webpage)
-                    faviconImageModel = try await urlHandler.getFaviconURL(site: imageModel)
-                }
-
-                // Try to load the favicon image from the cache, or make a request to the favicon URL
-                // if it's not in the cache
-                let icon = await imageHandler.fetchFavicon(site: faviconImageModel)
-                return icon
-            } catch {
-                // If no favicon URL, generate favicon without it
-                let letter = await imageHandler.fetchFavicon(site: imageModel)
-                return letter
+            if faviconImageModel.resourceURL == nil {
+                // Try to obtain the favicon URL if needed (ideally from cache, otherwise scrape the webpage)
+                faviconImageModel.resourceURL = try? await urlHandler.getFaviconURL(model: imageModel)
             }
+
+            // Try to load the favicon image from the cache, or make a request to the favicon URL if it's not in the cache
+            let icon = await imageHandler.fetchFavicon(imageModel: faviconImageModel)
+            return icon
         }
 
         DefaultSiteImageHandler.requestQueue[requestKey] = requestHandle

@@ -4,7 +4,7 @@
 
 import Foundation
 
-enum SiteImageError: Error, CustomStringConvertible {
+enum SiteImageError: Error, CustomStringConvertible, Equatable {
     case invalidHTML
     case noFaviconFound
     case noFaviconURLFound
