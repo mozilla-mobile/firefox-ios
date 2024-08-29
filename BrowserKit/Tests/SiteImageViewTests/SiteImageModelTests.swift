@@ -15,10 +15,16 @@ class SiteImageModelTests: XCTestCase {
         XCTAssertEqual(model.cacheKey, faviconURL.absoluteString)
     }
 
-    func testShortDomain_isCacheKey_forFavicon() async {
+    func testShortDomain_isCacheKey_forFavicon_withNoResourceURL() async {
         let model = SiteImageModel(id: UUID(), imageType: .favicon, siteURL: siteURL)
 
         XCTAssertEqual(model.cacheKey, siteURL.shortDomain)
+    }
+
+    func testAbsoluteString_isCacheKey_forFavicon_withResourceURL() async {
+        let model = SiteImageModel(id: UUID(), imageType: .favicon, siteURL: siteURL, resourceURL: faviconURL)
+
+        XCTAssertEqual(model.cacheKey, faviconURL.absoluteString)
     }
 
     func testAbsolutePath_isCacheKey_forHeroImage() async {
@@ -39,11 +45,31 @@ class SiteImageModelTests: XCTestCase {
         let cacheKey = SiteImageModel.generateCacheKey(siteURL: siteURL, type: .favicon)
 
         XCTAssertEqual(cacheKey, siteURL.shortDomain)
+        XCTAssertEqual(cacheKey, "mozilla")
     }
 
     func testGenerateCacheKey_returnsAbsolutePath_forHeroImage() async {
         let cacheKey = SiteImageModel.generateCacheKey(siteURL: siteURL, type: .heroImage)
 
         XCTAssertEqual(cacheKey, siteURL.absoluteString)
+        XCTAssertEqual(cacheKey, "https://www.mozilla.org")
+    }
+
+    func testGenerateCacheKey_returnsLocal_forInternalURL_forFavicon() async {
+        let internalSiteURL = URL(string: "internal://local/about/home#panel=0")!
+
+        let cacheKey = SiteImageModel.generateCacheKey(siteURL: internalSiteURL, type: .favicon)
+
+        XCTAssertEqual(cacheKey, internalSiteURL.shortDomain)
+        XCTAssertEqual(cacheKey, "local")
+    }
+
+    func testGenerateCacheKey_returnsURL_forInternalURL_forFavicon() async {
+        let internalSiteURL = URL(string: "internal://local/about/home#panel=0")!
+
+        let cacheKey = SiteImageModel.generateCacheKey(siteURL: internalSiteURL, type: .heroImage)
+
+        XCTAssertEqual(cacheKey, internalSiteURL.absoluteString)
+        XCTAssertEqual(cacheKey, "internal://local/about/home#panel=0")
     }
 }

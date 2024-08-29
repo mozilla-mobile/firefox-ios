@@ -57,6 +57,22 @@ class FaviconURLHandlerTests: XCTestCase {
         }
     }
 
+    func testGetFaviconURL_forInternalURL() async {
+        let internalSiteURL = URL(string: "internal://local/about/home#panel=0")!
+
+        await mockCache.setTestResult(error: .noURLInCache)
+        mockFetcher.url = faviconURL
+        let model = createSiteImageModel(siteURL: internalSiteURL)
+        let subject = DefaultFaviconURLHandler(urlFetcher: mockFetcher,
+                                               urlCache: mockCache)
+        do {
+            let _ = try await subject.getFaviconURL(model: model)
+            XCTFail("Should throw an error")
+        } catch {
+            XCTAssertEqual(error as? SiteImageError, SiteImageError.noFaviconFound)
+        }
+    }
+
     func testGetFaviconURL_errorNoFaviconFound() async {
         await mockCache.setTestResult(error: .noURLInCache)
         mockFetcher.error = .noFaviconFound
