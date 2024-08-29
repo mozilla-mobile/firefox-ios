@@ -24,6 +24,11 @@ struct DefaultFaviconURLHandler: FaviconURLHandler {
     /// from the cache, then a network request is made to hopefully scrape the favicon URL from a webpage's metadata.
     /// **Note**: This is a slow call when the URL is not cached.
     func getFaviconURL(model: SiteImageModel) async throws -> URL {
+        guard model.siteURL.scheme != "internal" else {
+            // For internal URLs, skip trying to fetch a faviconURL (result in `"unsupported URL"` network errors)
+            throw SiteImageError.noFaviconFound
+        }
+
         do {
             let url = try await urlCache.getURLFromCache(cacheKey: model.cacheKey)
             return url
