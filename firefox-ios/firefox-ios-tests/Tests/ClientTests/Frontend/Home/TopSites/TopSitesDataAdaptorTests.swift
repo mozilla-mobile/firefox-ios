@@ -566,7 +566,7 @@ class TopSiteHistoryManagerStub: TopSiteHistoryManager {
         (0..<addPinnedSiteCount).forEach {
             let pinnedSiteURL = duplicatePinnedSiteURL ? String(format: ContileProviderMock.url, "\($0)"): String(format: ContileProviderMock.pinnedURL, "\($0)")
             let site = Site(url: pinnedSiteURL, title: String(format: ContileProviderMock.pinnedTitle, "\($0)"))
-            sites.append(PinnedSite(site: site))
+            sites.append(PinnedSite(site: site, faviconURL: "url-does-not-matter"))
         }
 
         (0..<siteCount).forEach {
