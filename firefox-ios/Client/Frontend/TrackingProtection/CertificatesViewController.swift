@@ -40,6 +40,8 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
         static let tableViewTopMargin = 20.0
     }
 
+    private var headerItemsList: [CertificatesHeaderItem] = []
+
     private let titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Bold.title1.scaledFont()
         label.text = .Menu.EnhancedTrackingProtection.certificatesTitle
@@ -120,20 +122,27 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
     }
 
     private func setupCertificatesHeaderView() {
-        // TODO: FXIOS-9834 Add tab indicator for table view tabs and hide/unhide it on selection
+        headerItemsList.removeAll()
         for (index, certificate) in viewModel.certificates.enumerated() {
             let certificateValues = viewModel.getCertificateValues(from: "\(certificate.subject)")
             if !certificateValues.isEmpty, let commonName = certificateValues[CertificateKeys.commonName] {
-                let button: UIButton = .build { [weak self] button in
-                    button.setTitle(commonName, for: .normal)
-                    button.setTitleColor(self?.currentTheme().colors.textPrimary, for: .normal)
-                    button.configuration?.titleLineBreakMode = .byWordWrapping
-                    button.titleLabel?.numberOfLines = 2
-                    button.titleLabel?.textAlignment = .center
-                    button.tag = index
-                    button.addTarget(self, action: #selector(self?.certificateButtonTapped(_:)), for: .touchUpInside)
+                let item: CertificatesHeaderItem = .build { [weak self] item in
+                    guard let self else { return }
+                    let commonName = self.viewModel.getCertificateValues(from: "\(certificate.subject)")[CertificateKeys.commonName]
+                    item.configure(theme: self.currentTheme(), tagIndex: index, title: commonName)
                 }
-                headerStackView.addArrangedSubview(button)
+
+                item.itemSelectedCallback = { [weak self] selectedIndex in
+                    guard let self else { return }
+                    for item in self.headerItemsList.filter({ $0.tag != selectedIndex }) {
+                        item.hideIndicator()
+                    }
+                    self.viewModel.selectedCertificateIndex = selectedIndex
+                    self.certificatesTableView.reloadData()
+                }
+
+                headerItemsList.append(item)
+                headerStackView.addArrangedSubview(item)
             }
         }
 
@@ -155,8 +164,7 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
         view.addSubview(tableViewTopSpacer)
         view.addSubview(certificatesTableView)
         NSLayoutConstraint.activate([
-            tableViewTopSpacer.topAnchor.constraint(equalTo: headerStackView.bottomAnchor,
-                                                    constant: UX.tableViewSpacerTopMargin),
+            tableViewTopSpacer.topAnchor.constraint(equalTo: headerStackView.bottomAnchor),
             tableViewTopSpacer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableViewTopSpacer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableViewTopSpacer.heightAnchor.constraint(equalToConstant: UX.tableViewSpacerHeight),
@@ -167,12 +175,6 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
             certificatesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             certificatesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-    }
-
-    @objc
-    private func certificateButtonTapped(_ sender: UIButton) {
-        viewModel.selectedCertificateIndex = sender.tag
-        certificatesTableView.reloadData()
     }
 
     // MARK: - UITableViewDataSource
@@ -271,6 +273,7 @@ extension CertificatesViewController {
         let theme = currentTheme()
         overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
         view.backgroundColor = theme.colors.layer5
+        certificatesTableView.backgroundColor = .clear
         titleLabel.textColor = theme.colors.textPrimary
         tableViewTopSpacer.backgroundColor = theme.colors.layer1
         setNeedsStatusBarAppearanceUpdate()
