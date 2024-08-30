@@ -199,7 +199,7 @@ struct AddressBarState: StateType, Equatable {
 
         case ToolbarActionType.didStartEditingUrl:
             guard let action = action as? ToolbarAction,
-                  let addressToolbarModel = action.addressToolbarModel 
+                  let addressToolbarModel = action.addressToolbarModel
             else { return state }
 
             return AddressBarState(
