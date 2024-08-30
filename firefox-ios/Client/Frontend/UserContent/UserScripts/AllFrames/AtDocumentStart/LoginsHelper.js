@@ -5,11 +5,13 @@
 
 "use strict";
 
+import "Assets/CC_Script/Helpers.ios.mjs";
 import { Logic } from "Assets/CC_Script/LoginManager.shared.mjs";
+import { PasswordGenerator } from "resource://gre/modules/PasswordGenerator.sys.mjs";
 
 // Ensure this module only gets included once. This is
 // required for user scripts injected into all frames.
-window.__firefox__.includeOnce("LoginsHelper", function() {
+window.__firefox__.includeOnce("LoginsHelper", function () {
   var gEnabled = true;
   var gStoreWhenAutocompleteOff = true;
   var gAutofillForms = true;
@@ -18,14 +20,15 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
   var KEYCODE_ARROW_DOWN = 40;
 
   function log(pieces) {
-    if (!gDebug)
-      return;
+    if (!gDebug) return;
     alert(pieces);
   }
 
   var LoginManagerContent = {
-    _getRandomId: function() {
-      return Math.round(Math.random() * (Number.MAX_VALUE - Number.MIN_VALUE) + Number.MIN_VALUE).toString()
+    _getRandomId: function () {
+      return Math.round(
+        Math.random() * (Number.MAX_VALUE - Number.MIN_VALUE) + Number.MIN_VALUE
+      ).toString();
     },
 
     // We need to keep track of the field that was focused by the user
@@ -34,23 +37,26 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     // focus back to the specific field but rather to the top view.
     activeField: null,
 
-    _messages: [ "RemoteLogins:loginsFound" ],
+    _messages: ["RemoteLogins:loginsFound"],
 
     // Map from form login requests to information about that request.
-    _requests: { },
-
+    _requests: {},
 
     receiveMessage: function (msg) {
       switch (msg.name) {
         case "RemoteLogins:loginsFound": {
-          console.log("ooooo ---- here ?? ", this.activeField.form, this.activeField)
+          console.log(
+            "ooooo ---- here ?? ",
+            this.activeField.form,
+            this.activeField
+          );
           this.loginsFound(this.activeField.form, msg.logins);
           break;
         }
       }
     },
 
-    loginsFound : function (form, loginsFound) {
+    loginsFound: function (form, loginsFound) {
       var autofillForm = gAutofillForms; // && !PrivateBrowsingUtils.isContentWindowPrivate(doc.defaultView);
       this._fillForm(form, autofillForm, true, false, false, loginsFound);
     },
@@ -64,20 +70,20 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
      *
      * skipEmptyFields can be set to ignore password fields with no value.
      */
-    _getPasswordFields : function (form, skipEmptyFields) {
+    _getPasswordFields: function (form, skipEmptyFields) {
       // Locate the password fields in the form.
       var pwFields = [];
       for (var i = 0; i < form.elements.length; i++) {
         var element = form.elements[i];
-        if (!(element instanceof HTMLInputElement) ||
-            element.type != "password")
+        if (
+          !(element instanceof HTMLInputElement) ||
+          element.type != "password"
+        )
           continue;
 
-        if (skipEmptyFields && !element.value)
-          continue;
+        if (skipEmptyFields && !element.value) continue;
 
-        pwFields[pwFields.length] = { index   : i,
-                                      element : element };
+        pwFields[pwFields.length] = { index: i, element: element };
       }
 
       // If too few or too many fields, bail out.
@@ -85,16 +91,18 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
         log("(form ignored -- no password fields.)");
         return null;
       } else if (pwFields.length > 3) {
-        log("(form ignored -- too many password fields. [ got ",
-                    pwFields.length, "])");
+        log(
+          "(form ignored -- too many password fields. [ got ",
+          pwFields.length,
+          "])"
+        );
         return null;
       }
       return pwFields;
     },
 
-    _isUsernameFieldType: function(element) {
-      if (!(element instanceof HTMLInputElement))
-        return false;
+    _isUsernameFieldType: function (element) {
+      if (!(element instanceof HTMLInputElement)) return false;
 
       if (!Logic.inputTypeIsCompatibleWithUsername(element)) {
         return false;
@@ -118,14 +126,13 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
      * change-password field, with oldPasswordField containing the password
      * that is being changed.
      */
-    _getFormFields : function (form, isSubmission) {
+    _getFormFields: function (form, isSubmission) {
       var usernameField = null;
 
       // Locate the password field(s) in the form. Up to 3 supported.
       // If there's no password field, there's nothing for us to do.
       var pwFields = this._getPasswordFields(form, isSubmission);
-      if (!pwFields)
-        return [null, null, null];
+      if (!pwFields) return [null, null, null];
 
       // Locate the username field in the form by searching backwards
       // from the first passwordfield, assume the first text field is the
@@ -139,9 +146,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
         }
       }
 
-      if (!usernameField)
-        log("(form -- no username field found)");
-
+      if (!usernameField) log("(form -- no username field found)");
 
       // If we're not submitting a form (it's a page load), there are no
       // password field values for us to use for identifying fields. So,
@@ -149,12 +154,11 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
       if (!isSubmission || pwFields.length == 1)
         return [usernameField, pwFields[0].element, null];
 
-
       // Try to figure out WTF is in the form based on the password values.
       var oldPasswordField, newPasswordField;
       var pw1 = pwFields[0].element.value;
       var pw2 = pwFields[1].element.value;
-      var pw3 = (pwFields[2] ? pwFields[2].element.value : null);
+      var pw3 = pwFields[2] ? pwFields[2].element.value : null;
 
       if (pwFields.length == 3) {
         // Look for two identical passwords, that's the new password
@@ -169,7 +173,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
         } else if (pw2 == pw3) {
           oldPasswordField = pwFields[0].element;
           newPasswordField = pwFields[2].element;
-        } else  if (pw1 == pw3) {
+        } else if (pw1 == pw3) {
           // A bit odd, but could make sense with the right page layout.
           newPasswordField = pwFields[0].element;
           oldPasswordField = pwFields[1].element;
@@ -178,7 +182,8 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
           log("(form ignored -- all 3 pw fields differ)");
           return [null, null, null];
         }
-      } else { // pwFields.length == 2
+      } else {
+        // pwFields.length == 2
         if (pw1 == pw2) {
           // Treat as if 1 pw field
           newPasswordField = pwFields[0].element;
@@ -199,9 +204,12 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
      * Returns true if the page requests autocomplete be disabled for the
      * specified form input.
      */
-    _isAutocompleteDisabled :  function (element) {
-      if (element && element.hasAttribute("autocomplete") &&
-          element.getAttribute("autocomplete").toLowerCase() == "off")
+    _isAutocompleteDisabled: function (element) {
+      if (
+        element &&
+        element.hasAttribute("autocomplete") &&
+        element.getAttribute("autocomplete").toLowerCase() == "off"
+      )
         return true;
 
       return false;
@@ -215,21 +223,20 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
      * Looks for a password change in the submitted form, so we can update
      * our stored password.
      */
-    _onFormSubmit : function (form) {
+    _onFormSubmit: function (form) {
       var doc = form.ownerDocument;
       var win = doc.defaultView;
 
       // XXX - We'll handle private mode in Swift
       // if (PrivateBrowsingUtils.isContentWindowPrivate(win)) {
-        // We won't do anything in private browsing mode anyway,
-        // so there's no need to perform further checks.
-        // log("(form submission ignored in private browsing mode)");
-        // return;
+      // We won't do anything in private browsing mode anyway,
+      // so there's no need to perform further checks.
+      // log("(form submission ignored in private browsing mode)");
+      // return;
       // }
 
       // If password saving is disabled (globally or for host), bail out now.
-      if (!gEnabled)
-        return;
+      if (!gEnabled) return;
 
       var hostname = LoginUtils._getPasswordOrigin(doc.documentURI);
       if (!hostname) {
@@ -247,31 +254,34 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
       var oldPasswordField = fields[2];
 
       // Need at least 1 valid password field to do anything.
-      if (newPasswordField == null)
-        return;
+      if (newPasswordField == null) return;
 
       // Check for autocomplete=off attribute. We don't use it to prevent
       // autofilling (for existing logins), but won't save logins when it's
       // present and the storeWhenAutocompleteOff pref is false.
       // XXX spin out a bug that we don't update timeLastUsed in this case?
-      if ((this._isAutocompleteDisabled(form) ||
-           this._isAutocompleteDisabled(usernameField) ||
-           this._isAutocompleteDisabled(newPasswordField) ||
-           this._isAutocompleteDisabled(oldPasswordField)) && !gStoreWhenAutocompleteOff) {
+      if (
+        (this._isAutocompleteDisabled(form) ||
+          this._isAutocompleteDisabled(usernameField) ||
+          this._isAutocompleteDisabled(newPasswordField) ||
+          this._isAutocompleteDisabled(oldPasswordField)) &&
+        !gStoreWhenAutocompleteOff
+      ) {
         log("(form submission ignored -- autocomplete=off found)");
         return;
       }
 
       // Don't try to send DOM nodes over IPC.
-      var mockUsername = usernameField ? { name: usernameField.name,
-                                           value: usernameField.value } :
-                                           null;
-      var mockPassword = { name: newPasswordField.name,
-                           value: newPasswordField.value };
-      var mockOldPassword = oldPasswordField ?
-                          { name: oldPasswordField.name,
-                            value: oldPasswordField.value } :
-                            null;
+      var mockUsername = usernameField
+        ? { name: usernameField.name, value: usernameField.value }
+        : null;
+      var mockPassword = {
+        name: newPasswordField.name,
+        value: newPasswordField.value,
+      };
+      var mockOldPassword = oldPasswordField
+        ? { name: oldPasswordField.name, value: oldPasswordField.value }
+        : null;
 
       // Make sure to pass the opener's top in case it was in a frame.
       var opener = win.opener ? win.opener.top : null;
@@ -283,16 +293,19 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
         usernameField: mockUsername.name,
         password: mockPassword.value,
         passwordField: mockPassword.name,
-        formSubmitUrl: formSubmitUrl
+        formSubmitUrl: formSubmitUrl,
       });
     },
 
     // TODO(issam): Merge this with .setUserInput for form autofill and use that instead.
     fillValue(field, value) {
-      const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
+      const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+        window.HTMLInputElement.prototype,
+        "value"
+      ).set;
       nativeInputValueSetter.call(field, value);
 
-      ["input", "change", "blur"].forEach(eventName => {
+      ["input", "change", "blur"].forEach((eventName) => {
         field.dispatchEvent(new Event(eventName, { bubbles: true }));
       });
     },
@@ -313,8 +326,14 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
      *     the user
      * - foundLogins is an array of nsILoginInfo for optimization
      */
-    _fillForm : function (form, autofillForm, ignoreAutocomplete,
-                          clobberPassword, userTriggered, foundLogins) {
+    _fillForm: function (
+      form,
+      autofillForm,
+      ignoreAutocomplete,
+      clobberPassword,
+      userTriggered,
+      foundLogins
+    ) {
       // Heuristically determine what the user/pass fields are
       // We do this before checking to see if logins are stored,
       // so that the user isn't prompted for a master password
@@ -324,8 +343,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
       var passwordField = fields[1];
 
       // Need a valid password field to do anything.
-      if (passwordField == null)
-        return [false, foundLogins];
+      if (passwordField == null) return [false, foundLogins];
 
       // If the password field is disabled or read-only, there's nothing to do.
       if (passwordField.disabled || passwordField.readOnly) {
@@ -346,7 +364,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
       if (passwordField.maxLength >= 0)
         maxPasswordLen = passwordField.maxLength;
 
-      var createLogin = function(login) {
+      var createLogin = function (login) {
         return {
           hostname: login.hostname,
           formSubmitUrl: login.formSubmitUrl,
@@ -354,23 +372,21 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
           username: login.username,
           password: login.password,
           usernameField: login.usernameField,
-          passwordField: login.passwordField
-        }
-      }
+          passwordField: login.passwordField,
+        };
+      };
       foundLogins = foundLogins.map(createLogin);
       var logins = foundLogins.filter(function (l) {
-        var fit = (l.username.length <= maxUsernameLen &&
-                   l.password.length <= maxPasswordLen);
-        if (!fit)
-          log("Ignored", l.username, "login: won't fit");
+        var fit =
+          l.username.length <= maxUsernameLen &&
+          l.password.length <= maxPasswordLen;
+        if (!fit) log("Ignored", l.username, "login: won't fit");
 
         return fit;
       }, this);
 
-
       // Nothing to do if we have no matching logins available.
-      if (logins.length == 0)
-        return [false, foundLogins];
+      if (logins.length == 0) return [false, foundLogins];
 
       // The reason we didn't end up filling the form, if any.  We include
       // this in the formInfo object we send with the passwordmgr-found-logins
@@ -382,11 +398,12 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
       // the autocomplete stuff to the username field, so the user can
       // still manually select a login to be filled in.
       var isFormDisabled = false;
-      if (!ignoreAutocomplete &&
-          (this._isAutocompleteDisabled(form) ||
-           this._isAutocompleteDisabled(usernameField) ||
-           this._isAutocompleteDisabled(passwordField))) {
-
+      if (
+        !ignoreAutocomplete &&
+        (this._isAutocompleteDisabled(form) ||
+          this._isAutocompleteDisabled(usernameField) ||
+          this._isAutocompleteDisabled(passwordField))
+      ) {
         isFormDisabled = true;
         log("form not filled, has autocomplete=off");
       }
@@ -399,15 +416,24 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
         // Fill the form
         if (usernameField) {
           // Don't modify the username field if it's disabled or readOnly so we preserve its case.
-          var disabledOrReadOnly = usernameField.disabled || usernameField.readOnly;
+          var disabledOrReadOnly =
+            usernameField.disabled || usernameField.readOnly;
 
           var userNameDiffers = selectedLogin.username != usernameField.value;
           // Don't replace the username if it differs only in case, and the user triggered
           // this autocomplete. We assume that if it was user-triggered the entered text
           // is desired.
-          var userEnteredDifferentCase = userTriggered && userNameDiffers && usernameField.value.toLowerCase() == selectedLogin.username.toLowerCase();
+          var userEnteredDifferentCase =
+            userTriggered &&
+            userNameDiffers &&
+            usernameField.value.toLowerCase() ==
+              selectedLogin.username.toLowerCase();
 
-          if (!disabledOrReadOnly && !userEnteredDifferentCase && userNameDiffers) {
+          if (
+            !disabledOrReadOnly &&
+            !userEnteredDifferentCase &&
+            userNameDiffers
+          ) {
             this.fillValue(usernameField, selectedLogin.username);
             dispatchKeyboardEvent(usernameField, "keydown", KEYCODE_ARROW_DOWN);
             dispatchKeyboardEvent(usernameField, "keyup", KEYCODE_ARROW_DOWN);
@@ -442,8 +468,34 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
       // this._notifyFoundLogins(didntFillReason, usernameField, passwordField, foundLogins, selectedLogin);
       return [didFillForm, foundLogins];
     },
-  }
+  };
 
+  const generatePassword = (rules = {}) => {
+    let mapOfRules = null;
+
+    // TODO(issam): Implement this later when we have the rules from the json file
+    // if(rules) {
+    //   const domainRules = PasswordRulesParser.parsePasswordRules(
+    //     rules
+    //   );
+    //   mapOfRules = transformRulesToMap(domainRules);
+    // }
+    // The correct implementation later would be to send a message to swift
+    // But for now we just fill the password field with a generated password
+    const generatedPassword = PasswordGenerator.generatePassword({
+      inputMaxLength: LoginManagerContent.activeField.maxLength,
+      ...(rules ?? { rules: mapOfRules }),
+    });
+
+    return generatedPassword;
+  };
+
+  const fillGeneratedPassword = (password) => {
+    field.setUserInput(password);
+    Logic.fillConfirmFieldWithGeneratedPassword(
+      LoginManagerContent.activeField
+    );
+  };
 
   function yieldFocusBackToField() {
     LoginManagerContent.activeField?.blur();
@@ -453,7 +505,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
   // define the field types for focus events
   const FocusFieldType = {
     username: "username",
-    password: "password"
+    password: "password",
   };
 
   function onFocusIn(event) {
@@ -462,72 +514,102 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
       return;
     }
 
-    const [username, password] = LoginManagerContent._getFormFields(form, false);
-    if (password) {
+    const [username, password] = LoginManagerContent._getFormFields(
+      form,
+      false
+    );
+    const field = event.target;
+    const isNewPassword =
+      password && Logic.isProbablyANewPasswordField(password);
+    const isPasswordField = field === password;
+
+    if (isNewPassword && isPasswordField) {
+      LoginManagerContent.activeField = event.target;
+      webkit.messageHandlers.loginsManagerMessageHandler.postMessage({
+        type: "generatePassword",
+        fieldType: "password", // Unnecessary, but need to change type defs in swift
+      });
+    } else if (password && !isNewPassword) {
       LoginManagerContent.activeField = event.target;
       webkit.messageHandlers.loginsManagerMessageHandler.postMessage({
         type: "fieldType",
-        fieldType: event.target === username ? FocusFieldType.username : FocusFieldType.password,
+        fieldType:
+          event.target === username
+            ? FocusFieldType.username
+            : FocusFieldType.password,
       });
     }
   }
 
-  document.addEventListener("focusin", (ev) => onFocusIn(ev), {capture: true});
-    
+  document.addEventListener("focusin", (ev) => onFocusIn(ev), {
+    capture: true,
+  });
+
   var LoginUtils = {
     /*
      * _getPasswordOrigin
      *
      * Get the parts of the URL we want for identification.
      */
-    _getPasswordOrigin : function (uriString, allowJS) {
+    _getPasswordOrigin: function (uriString, allowJS) {
       // All of this logic is moved to swift (so that we don't need a uri parser here)
       return uriString;
     },
 
-    _getActionOrigin : function(form) {
+    _getActionOrigin: function (form) {
       var uriString = form.action;
 
       // A blank or missing action submits to where it came from.
-      if (uriString == "")
-        uriString = form.baseURI; // ala bug 297761
+      if (uriString == "") uriString = form.baseURI; // ala bug 297761
 
       return this._getPasswordOrigin(uriString, true);
     },
-  }
+  };
 
-
-  window.addEventListener("submit", function(event) {
+  window.addEventListener("submit", function (event) {
     try {
       LoginManagerContent._onFormSubmit(event.target);
-    } catch(ex) {
+    } catch (ex) {
       // Eat errors to avoid leaking them to the page
       log(ex);
     }
   });
 
   function LoginInjector() {
-    this.inject = function(msg) {
+    this.inject = function (msg) {
       try {
         LoginManagerContent.receiveMessage(msg);
-      } catch(ex) {
+      } catch (ex) {
         // Eat errors to avoid leaking them to the page
         // alert(ex);
       }
     };
     this.yieldFocusBackToField = yieldFocusBackToField;
+    this.generatePassword = generatePassword;
+    this.fillGeneratedPassword = fillGeneratedPassword;
   }
 
   Object.defineProperty(window.__firefox__, "logins", {
     enumerable: false,
     configurable: false,
     writable: false,
-    value: Object.freeze(new LoginInjector())
+    value: Object.freeze(new LoginInjector()),
   });
 
   function dispatchKeyboardEvent(element, eventName, keyCode) {
     var event = document.createEvent("KeyboardEvent");
-    event.initKeyboardEvent(eventName, true, true, window, 0, 0, 0, 0, 0, keyCode);
+    event.initKeyboardEvent(
+      eventName,
+      true,
+      true,
+      window,
+      0,
+      0,
+      0,
+      0,
+      0,
+      keyCode
+    );
     element.dispatchEvent(event);
   }
 });

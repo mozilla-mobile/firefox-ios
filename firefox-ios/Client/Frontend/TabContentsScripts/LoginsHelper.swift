@@ -123,6 +123,21 @@ class LoginsHelper: TabContentScript {
         guard let res = message.body as? [String: Any],
               let type = res["type"] as? String
         else { return }
+        
+        if(type == "generatePassword") {
+            let jsFunctionCall = "window.__firefox__.logins.generatePassword()"
+            let generatedPassword = self.tab?.webView?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall) { (result, error) in
+                if let error = error {
+                    print("JavaScript evaluation error: \(error.localizedDescription)")
+                } else if let result = result as? [String: Any] {
+                    print("JavaScript object: \(result)")
+
+                }
+            }
+            
+            
+            
+        }
 
         // NOTE: FXIOS-3856 will further enhance the logs into actual callback
         if let parsedMessage = parseFieldFocusMessage(from: res) {
