@@ -5,28 +5,28 @@
 import Kingfisher
 import UIKit
 
-/// Handles caching of images. Will cache following the different image type. So for a given
-/// domain you can get different image type.
+/// Caches images for specific `SiteImageType`s. 
+/// - Note: Different `SiteImageType`s will return different images. The type is appended to the cache key.
 protocol SiteImageCache {
-    /// Get the image depending on the image type
+    /// Retrieves an image from the cache depending on the type.
     /// - Parameters:
-    ///   - domain: The domain to retrieve the image from
-    ///   - type: The image type to retrieve the image from the cache
-    /// - Returns: The image from the cache or throws an error if it could not retrieve it
-    func getImageFromCache(cacheKey: String,
-                           type: SiteImageType) async throws -> UIImage
+    ///   - cacheKey: The cache key for the image.
+    ///   - type: The image type to retrieve from the cache.
+    /// - Returns: The image from the cache.
+    /// - Throws: An error if the image cannot be retrieved.
+    func getImage(cacheKey: String, type: SiteImageType) async throws -> UIImage
 
-    /// Cache an image into the right cache depending on it's type
+    /// Stores an image in the cache.
     /// - Parameters:
-    ///   - image: The image to cache
-    ///   - domain: The image domain
-    ///   - type: The image type
+    ///   - image: The image to cache.
+    ///   - cacheKey: The cache key for the image.
+    ///   - type: The image type to save to the cache.
     func cacheImage(image: UIImage,
                     cacheKey: String,
                     type: SiteImageType) async
 
-    /// Clears the image cache
-    func clearCache() async
+    /// Clears the image cache.
+    func clear() async
 }
 
 actor DefaultSiteImageCache: SiteImageCache {
@@ -36,12 +36,10 @@ actor DefaultSiteImageCache: SiteImageCache {
         self.imageCache = imageCache
     }
 
-    func getImageFromCache(cacheKey: String,
-                           type: SiteImageType) async throws -> UIImage {
-        let key = self.cacheKey(cacheKey, type: type)
+    func getImage(cacheKey: String, type: SiteImageType) async throws -> UIImage {
+        let key = createCacheKey(cacheKey, forType: type)
         do {
-            let result = try await imageCache.retrieveImage(forKey: key)
-            guard let image = result else {
+            guard let image = try await imageCache.retrieve(forKey: key) else {
                 throw SiteImageError.unableToRetrieveFromCache("Image was nil")
             }
             return image
@@ -51,15 +49,15 @@ actor DefaultSiteImageCache: SiteImageCache {
     }
 
     func cacheImage(image: UIImage, cacheKey: String, type: SiteImageType) async {
-        let key = self.cacheKey(cacheKey, type: type)
+        let key = createCacheKey(cacheKey, forType: type)
         imageCache.store(image: image, forKey: key)
     }
 
-    func clearCache() async {
-        imageCache.clearCache()
+    func clear() async {
+        imageCache.clear()
     }
 
-    private func cacheKey(_ cacheKey: String, type: SiteImageType) -> String {
+    private func createCacheKey(_ cacheKey: String, forType type: SiteImageType) -> String {
         return "\(cacheKey)-\(type.rawValue)"
     }
 }
