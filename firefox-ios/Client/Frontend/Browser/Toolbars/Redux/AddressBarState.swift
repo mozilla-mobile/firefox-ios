@@ -211,7 +211,9 @@ struct AddressBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.didStartEditingUrl:
-            guard let addressToolbarModel = (action as? ToolbarAction)?.addressToolbarModel else { return state }
+            guard let action = action as? ToolbarAction,
+                  let addressToolbarModel = action.addressToolbarModel
+            else { return state }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
@@ -220,7 +222,7 @@ struct AddressBarState: StateType, Equatable {
                 browserActions: addressToolbarModel.browserActions ?? state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,
-                searchTerm: state.searchTerm,
+                searchTerm: action.searchTerm ?? state.searchTerm,
                 lockIconImageName: state.lockIconImageName,
                 isEditing: addressToolbarModel.isEditing ?? state.isEditing,
                 isScrollingDuringEdit: false,
