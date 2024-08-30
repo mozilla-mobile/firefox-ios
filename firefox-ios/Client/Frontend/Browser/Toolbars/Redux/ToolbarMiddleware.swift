@@ -607,6 +607,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         else { return }
 
         let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                          searchTerm: action.searchTerm ?? toolbarState.addressToolbar.searchTerm,
                                           isShowingTopTabs: action.isShowingTopTabs ?? toolbarState.isShowingTopTabs,
                                           windowUUID: action.windowUUID,
                                           actionType: dispatchActionType)
