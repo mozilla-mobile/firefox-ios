@@ -224,7 +224,8 @@ final class AddressToolbarContainer: UIView,
             // the layout (compact/regular) that should be displayed is driven by the state
             // but we only need to switch toolbars if shouldDisplayCompact changes
             // otherwise we needlessly add/remove toolbars from the view hierarchy,
-            // which messes with the LocationTextField first responder status (see FXIOS-9883)
+            // which messes with the LocationTextField first responder status
+            // (see https://github.com/mozilla-mobile/firefox-ios/issues/21676)
             let shouldSwitchToolbars = newModel.shouldDisplayCompact != self.model?.shouldDisplayCompact
 
             // Replace the old model after we are done using it for comparison
