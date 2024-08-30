@@ -115,7 +115,6 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
         navigator.performAction(Action.BookmarkThreeDots)
-        waitUntilPageLoad()
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Bookmarks)
         mozWaitForElementToExist(app.tables["Bookmarks List"])
