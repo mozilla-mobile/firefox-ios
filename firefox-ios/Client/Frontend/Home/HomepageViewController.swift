@@ -389,9 +389,16 @@ class HomepageViewController:
         if featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly),
            let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
            toolbarState.addressToolbar.isEditing {
-            let action = ToolbarMiddlewareAction(windowUUID: windowUUID,
-                                                 actionType: ToolbarMiddlewareActionType.cancelEdit)
-            store.dispatch(action)
+            // When the user scrolls the homepage we cancel edit mode
+            // On a website we just dismiss the keyboard
+            if toolbarState.addressToolbar.url == nil {
+                let action = ToolbarMiddlewareAction(windowUUID: windowUUID,
+                                                     actionType: ToolbarMiddlewareActionType.cancelEdit)
+                store.dispatch(action)
+            } else {
+                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didScrollDuringEdit)
+                store.dispatch(action)
+            }
         }
 
         let scrolledToTop = lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0

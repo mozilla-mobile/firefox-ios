@@ -3041,6 +3041,10 @@ class BrowserViewController: UIViewController,
         configureDataClearanceContextualHint(button)
     }
 
+    func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool) {
+        addressToolbarDidEnterOverlayMode(addressToolbarContainer)
+    }
+
     func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]? {
         locationActionsForURLBar().map { $0.accessibilityCustomAction }
     }

@@ -106,7 +106,8 @@ struct ToolbarState: ScreenState, Equatable {
             ToolbarActionType.urlDidChange,
             ToolbarActionType.didPasteSearchTerm,
             ToolbarActionType.didStartEditingUrl,
-            ToolbarActionType.cancelEdit:
+            ToolbarActionType.cancelEdit,
+            ToolbarActionType.didScrollDuringEdit:
             guard let toolbarAction = action as? ToolbarAction else { return state }
             return ToolbarState(
                 windowUUID: state.windowUUID,
@@ -193,20 +194,20 @@ struct ToolbarState: ScreenState, Equatable {
 
         case ToolbarActionType.readerModeStateChanged:
             guard let toolbarAction = action as? ToolbarAction else { return state }
-                return ToolbarState(
-                    windowUUID: state.windowUUID,
-                    toolbarPosition: state.toolbarPosition,
-                    isPrivateMode: state.isPrivateMode,
-                    addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
-                    navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
-                    isShowingNavigationToolbar: state.isShowingNavigationToolbar,
-                    isShowingTopTabs: state.isShowingTopTabs,
-                    readerModeState: toolbarAction.readerModeState,
-                    badgeImageName: state.badgeImageName,
-                    maskImageName: state.maskImageName,
-                    canGoBack: state.canGoBack,
-                    canGoForward: state.canGoForward,
-                    numberOfTabs: state.numberOfTabs)
+            return ToolbarState(
+                windowUUID: state.windowUUID,
+                toolbarPosition: state.toolbarPosition,
+                isPrivateMode: state.isPrivateMode,
+                addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
+                navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
+                isShowingNavigationToolbar: state.isShowingNavigationToolbar,
+                isShowingTopTabs: state.isShowingTopTabs,
+                readerModeState: toolbarAction.readerModeState,
+                badgeImageName: state.badgeImageName,
+                maskImageName: state.maskImageName,
+                canGoBack: state.canGoBack,
+                canGoForward: state.canGoForward,
+                numberOfTabs: state.numberOfTabs)
 
         default:
             return ToolbarState(
