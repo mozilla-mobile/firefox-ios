@@ -28,9 +28,9 @@ extension Tab {
             baseDomainList.removeAll()
         }
 
-        static func contains(url: URL) -> Bool {
+        static func contains(url: URL, isPrivate: Bool) -> Bool {
             guard let baseDomain = url.baseDomain else { return false }
-            return privateModeHostList.contains(baseDomain) || baseDomainList.contains(baseDomain)
+            return isPrivate ? privateModeHostList.contains(baseDomain) : baseDomainList.contains(baseDomain)
         }
 
         static func updateDomainList(forUrl url: URL, isChangedUA: Bool, isPrivate: Bool) {
@@ -44,15 +44,15 @@ extension Tab {
                     ChangeUserAgent.privateModeHostList.remove(baseDomain)
                     // Continue to next section and try remove it from `hostList` also.
                 }
-            }
-
-            if isChangedUA, !baseDomainList.contains(baseDomain) {
-                baseDomainList.insert(baseDomain)
-            } else if !isChangedUA, baseDomainList.contains(baseDomain) {
-                baseDomainList.remove(baseDomain)
             } else {
-                // Don't save to disk, return early
-                return
+                if isChangedUA, !baseDomainList.contains(baseDomain) {
+                    baseDomainList.insert(baseDomain)
+                } else if !isChangedUA, baseDomainList.contains(baseDomain) {
+                    baseDomainList.remove(baseDomain)
+                } else {
+                    // Don't save to disk, return early
+                    return
+                }
             }
 
             // At this point, saving to disk takes place.
