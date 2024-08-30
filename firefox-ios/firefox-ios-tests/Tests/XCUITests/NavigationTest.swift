@@ -295,8 +295,10 @@ class NavigationTest: BaseTestCase {
         } else {
             mozWaitForElementToExist(app.buttons["Copy"])
         }
-        if !iPad() {
-            mozWaitForElementToExist(app.scrollViews.staticTexts["Messages"])
+        if #unavailable(iOS 18) {
+            if !iPad() {
+                mozWaitForElementToExist(app.scrollViews.staticTexts["Messages"])
+            }
         }
         if #unavailable(iOS 17) {
             mozWaitForElementToExist(app.scrollViews.cells["XCElementSnapshotPrivilegedValuePlaceholder"])
@@ -315,8 +317,10 @@ class NavigationTest: BaseTestCase {
         } else {
             mozWaitForElementToExist(app.buttons["Copy"])
         }
-        if !iPad() {
-            mozWaitForElementToExist(app.scrollViews.staticTexts["Messages"])
+        if #unavailable(iOS 18) {
+            if !iPad() {
+                mozWaitForElementToExist(app.scrollViews.staticTexts["Messages"])
+            }
         }
         if #unavailable(iOS 17) {
             mozWaitForElementToExist(app.scrollViews.cells["XCElementSnapshotPrivilegedValuePlaceholder"])
