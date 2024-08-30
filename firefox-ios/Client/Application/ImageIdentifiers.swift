@@ -71,4 +71,8 @@ public struct ImageIdentifiers {
         public static let fingerprintersTrackers = "fingerprintersTrackersImage"
         public static let crossSiteTrackers = "crossSiteTrackersImage"
     }
+
+    public struct NativeErrorPage {
+        public static let noInternetConnection = "noInternetConnection"
+    }
 }
