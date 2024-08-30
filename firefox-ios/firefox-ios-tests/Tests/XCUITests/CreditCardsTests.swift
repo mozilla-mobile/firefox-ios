@@ -441,10 +441,10 @@ class CreditCardsTests: BaseTestCase {
         navigator.goto(CreditCardsSettings)
         unlockLoginsView()
         // Credit cards details did not change
-        mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).staticTexts.elementContainingText("1252"))
+        mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons.elementContainingText("1252"))
         var cardDetails = ["Test", "Expires", "5/40"]
         for i in cardDetails {
-            mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).staticTexts[i])
+            mozWaitForElementToExist(app.tables.cells.element(boundBy: 1).buttons[i])
         }
         // Repeat above steps and tap on "Save"
         navigator.goto(NewTabScreen)
