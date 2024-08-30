@@ -2,10 +2,15 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import UIKit
+import Redux
 
-final class MainMenuView: UIView {
+final class MainMenuView: UIView, StoreSubscriber {
     // MARK: - UI Elements
+    private lazy var submitButton: UIButton = .build { button in
+        button.addTarget(self, action: #selector(self.tapTestButton), for: .touchUpInside)
+    }
 
     // MARK: - Properties
 
@@ -16,5 +21,22 @@ final class MainMenuView: UIView {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - UI Setup
+    private func setupView() {
+        self.addSubview(submitButton)
+        self.backgroundColor = .systemPurple
+
+        NSLayoutConstraint.activate([
+            submitButton.widthAnchor.constraint(equalToConstant: 200),
+            submitButton.heightAnchor.constraint(equalToConstant: 80),
+            submitButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            submitButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 25),
+        ])
+    }
+
+    @objc
+    private func tapTestButton() {
     }
 }
