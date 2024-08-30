@@ -2390,11 +2390,19 @@ class BrowserViewController: UIViewController,
             // Without a delay, the text field fails to become first responder
             // Check that the newly created tab is still selected.
             // This let's the user spam the Cmd+T button without lots of responder changes.
-            guard tab == self.tabManager.selectedTab, !self.isToolbarRefactorEnabled else { return }
+            guard tab == self.tabManager.selectedTab else { return }
 
-            self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
-            if let text = searchText {
-                self.urlBar.setLocation(text, search: true)
+            if self.isToolbarRefactorEnabled {
+                let action = ToolbarMiddlewareAction(searchTerm: searchText,
+                                                     windowUUID: self.windowUUID,
+                                                     actionType: ToolbarMiddlewareActionType.didStartEditingUrl)
+                store.dispatch(action)
+            } else {
+                self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
+
+                if let text = searchText {
+                    self.urlBar.setLocation(text, search: true)
+                }
             }
         }
     }
