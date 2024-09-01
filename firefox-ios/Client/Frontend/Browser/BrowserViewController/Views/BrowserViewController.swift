@@ -2685,7 +2685,7 @@ class BrowserViewController: UIViewController,
             // Handle different field types
             switch fieldValues.fieldValue {
             case .address:
-                handleAddressField(type: type,
+                handleFoundAddressFieldValue(type: type,
                                    tabWebView: tabWebView,
                                    webView: webView,
                                    frame: frame)
@@ -2721,7 +2721,7 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func handleAddressField(type: FormAutofillPayloadType?,
+    private func handleFoundAddressFieldValue(type: FormAutofillPayloadType?,
                                     tabWebView: TabWebView,
                                     webView: WKWebView,
                                     frame: WKFrameInfo?) {
