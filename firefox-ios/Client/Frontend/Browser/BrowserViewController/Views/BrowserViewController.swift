@@ -2686,9 +2686,9 @@ class BrowserViewController: UIViewController,
             switch fieldValues.fieldValue {
             case .address:
                 handleFoundAddressFieldValue(type: type,
-                                   tabWebView: tabWebView,
-                                   webView: webView,
-                                   frame: frame)
+                                             tabWebView: tabWebView,
+                                             webView: webView,
+                                             frame: frame)
             case .creditCard:
                 guard let creditCardPayload = fieldValues.fieldData as? UnencryptedCreditCardFields,
                       let type = type,
