@@ -68,6 +68,7 @@ enum ToolbarActionType: ActionType {
     case didPasteSearchTerm
     case didStartEditingUrl
     case cancelEdit
+    case didScrollDuringEdit
     case readerModeStateChanged
 }
 
@@ -86,6 +87,7 @@ class ToolbarMiddlewareAction: Action {
     let badgeImageName: String?
     let readerModeState: ReaderModeState?
     let maskImageName: String?
+    let searchTerm: String?
 
     init(buttonType: ToolbarActionState.ActionType? = nil,
          buttonTapped: UIButton? = nil,
@@ -101,6 +103,7 @@ class ToolbarMiddlewareAction: Action {
          badgeImageName: String? = nil,
          readerModeState: ReaderModeState? = nil,
          maskImageName: String? = nil,
+         searchTerm: String? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.buttonType = buttonType
@@ -117,6 +120,7 @@ class ToolbarMiddlewareAction: Action {
         self.badgeImageName = badgeImageName
         self.readerModeState = readerModeState
         self.maskImageName = maskImageName
+        self.searchTerm = searchTerm
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }

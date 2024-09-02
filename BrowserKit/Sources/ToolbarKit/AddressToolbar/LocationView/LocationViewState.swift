@@ -20,6 +20,7 @@ public struct LocationViewState {
     public let url: URL?
     public let searchTerm: String?
     public let isEditing: Bool
+    public let isScrollingDuringEdit: Bool
     public let shouldSelectSearchTerm: Bool
     public var onTapLockIcon: (() -> Void)?
     public var onLongPress: (() -> Void)?
@@ -37,6 +38,7 @@ public struct LocationViewState {
         url: URL?,
         searchTerm: String?,
         isEditing: Bool,
+        isScrollingDuringEdit: Bool,
         shouldSelectSearchTerm: Bool,
         onTapLockIcon: (() -> Void)? = nil,
         onLongPress: (() -> Void)? = nil
@@ -53,6 +55,7 @@ public struct LocationViewState {
         self.url = url
         self.searchTerm = searchTerm
         self.isEditing = isEditing
+        self.isScrollingDuringEdit = isScrollingDuringEdit
         self.shouldSelectSearchTerm = shouldSelectSearchTerm
         self.onTapLockIcon = onTapLockIcon
         self.onLongPress = onLongPress

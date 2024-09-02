@@ -6,19 +6,16 @@ import UIKit
 
 protocol ImageHandler {
     /// The ImageHandler will fetch the favicon with the following precedence:
-    ///     1. Tries to fetch from the bundle.
-    ///     2. Tries to fetch from the cache.
-    ///     3. Tries to fetch from the favicon fetcher (from the web) if there's a URL. 
-    ///        If there's no URL it fallbacks to the letter favicon.
-    ///     4. When all fails it returns the letter favicon.
+    ///     1. Tries to fetch from the cache.
+    ///     2. If there is a URL, tries to fetch from the web.
+    ///     3. When all fails, returns the letter favicon.
     ///
-    /// Any time the favicon is fetched, it will be cache for future usage.
-    ///
+    /// Any time a favicon is fetched, it will be cached for future usage.
     /// - Parameters:
-    ///   - imageURL: The image URL, can be nil if it could not be retrieved from the site
+    ///   - imageModel: The image URL, can be nil if it could not be retrieved from the site
     ///   - domain: The domain this favicon will be associated with
     /// - Returns: The favicon image
-    func fetchFavicon(site: SiteImageModel) async -> UIImage
+    func fetchFavicon(imageModel: SiteImageModel) async -> UIImage
 
     /// The ImageHandler will fetch the hero image with the following precedence
     ///     1. Tries to fetch from the cache.
@@ -30,94 +27,88 @@ protocol ImageHandler {
     ///   - siteURL: The site URL to fetch the hero image from
     ///   - domain: The domain this hero image will be associated with
     /// - Returns: The hero image
-    func fetchHeroImage(site: SiteImageModel) async throws -> UIImage
+    func fetchHeroImage(imageModel: SiteImageModel) async throws -> UIImage
 
     /// Clears the image cache
     func clearCache()
 }
 
 class DefaultImageHandler: ImageHandler {
-    private let bundleImageFetcher: BundleImageFetcher
     private let imageCache: SiteImageCache
     private let faviconFetcher: FaviconFetcher
     private let letterImageGenerator: LetterImageGenerator
     private let heroImageFetcher: HeroImageFetcher
 
-    init(bundleImageFetcher: BundleImageFetcher = DefaultBundleImageFetcher(),
-         imageCache: SiteImageCache = DefaultSiteImageCache(),
+    init(imageCache: SiteImageCache = DefaultSiteImageCache(),
          faviconFetcher: FaviconFetcher = DefaultFaviconFetcher(),
          letterImageGenerator: LetterImageGenerator = DefaultLetterImageGenerator(),
          heroImageFetcher: HeroImageFetcher = DefaultHeroImageFetcher()) {
-        self.bundleImageFetcher = bundleImageFetcher
         self.imageCache = imageCache
         self.faviconFetcher = faviconFetcher
         self.letterImageGenerator = letterImageGenerator
         self.heroImageFetcher = heroImageFetcher
     }
 
-    func fetchFavicon(site: SiteImageModel) async -> UIImage {
+    func fetchFavicon(imageModel: SiteImageModel) async -> UIImage {
         do {
-            return try bundleImageFetcher.getImageFromBundle(domain: site.domain)
+            return try await imageCache.getImage(cacheKey: imageModel.cacheKey, type: imageModel.imageType)
         } catch {
-            return await fetchFaviconFromCache(site: site)
+            return await fetchFaviconFromFetcher(imageModel: imageModel)
         }
     }
 
-    func fetchHeroImage(site: SiteImageModel) async throws -> UIImage {
+    func fetchHeroImage(imageModel: SiteImageModel) async throws -> UIImage {
         do {
-            return try await imageCache.getImageFromCache(cacheKey: site.cacheKey, type: .heroImage)
+            return try await imageCache.getImage(cacheKey: imageModel.cacheKey, type: imageModel.imageType)
         } catch {
-            return try await fetchHeroImageFromFetcher(site: site)
+            return try await fetchHeroImageFromFetcher(imageModel: imageModel)
         }
     }
 
     func clearCache() {
         Task {
-            await self.imageCache.clearCache()
+            await self.imageCache.clear()
         }
     }
 
     // MARK: Private
 
-    private func fetchFaviconFromCache(site: SiteImageModel) async -> UIImage {
+    private func fetchFaviconFromFetcher(imageModel: SiteImageModel) async -> UIImage {
         do {
-            return try await imageCache.getImageFromCache(cacheKey: site.cacheKey, type: site.expectedImageType)
+            guard let faviconURL = imageModel.resourceURL else {
+                throw SiteImageError.noFaviconURLFound
+            }
+            let image = try await faviconFetcher.fetchFavicon(from: faviconURL)
+            await imageCache.cacheImage(image: image, cacheKey: imageModel.cacheKey, type: imageModel.imageType)
+            return image
         } catch {
-            return await fetchFaviconFromFetcher(site: site)
+            return await fallbackToLetterFavicon(imageModel: imageModel)
         }
     }
 
-    private func fetchFaviconFromFetcher(site: SiteImageModel) async -> UIImage {
+    private func fetchHeroImageFromFetcher(imageModel: SiteImageModel) async throws -> UIImage {
         do {
-            guard let url = site.faviconURL else {
-                return await fallbackToLetterFavicon(site: site)
+            let image = try await heroImageFetcher.fetchHeroImage(from: imageModel.siteURL)
+            await imageCache.cacheImage(image: image, cacheKey: imageModel.cacheKey, type: .heroImage)
+            return image
+        } catch {
+            throw SiteImageError.noHeroImage
+        }
+    }
+
+    private func fallbackToLetterFavicon(imageModel: SiteImageModel) async -> UIImage {
+        do {
+            var siteString = imageModel.cacheKey
+            if imageModel.siteURL.scheme == "internal", imageModel.siteURL.lastPathComponent == "home" {
+                // We should use an "H" letter favicon for the home page with internal URL `internal://local/about/home`,
+                // not an "L" from the "local" shortDomain.
+                siteString = "home"
             }
 
-            let image = try await faviconFetcher.fetchFavicon(from: url)
-            await imageCache.cacheImage(image: image, cacheKey: site.cacheKey, type: site.expectedImageType)
-            return image
-        } catch {
-            return await fallbackToLetterFavicon(site: site)
-        }
-    }
-
-    private func fetchHeroImageFromFetcher(site: SiteImageModel) async throws -> UIImage {
-        guard let siteURL = site.siteURL else {
-            throw SiteImageError.noHeroImage
-        }
-        do {
-            let image = try await heroImageFetcher.fetchHeroImage(from: siteURL)
-            await imageCache.cacheImage(image: image, cacheKey: site.cacheKey, type: .heroImage)
-            return image
-        } catch {
-            throw SiteImageError.noHeroImage
-        }
-    }
-
-    private func fallbackToLetterFavicon(site: SiteImageModel) async -> UIImage {
-        do {
-            let image = try await letterImageGenerator.generateLetterImage(siteString: site.cacheKey)
-            await imageCache.cacheImage(image: image, cacheKey: site.cacheKey, type: site.expectedImageType)
+            let image = try await letterImageGenerator.generateLetterImage(siteString: siteString)
+            // FIXME Do we really want to cache letter icons and never attempt to get a favicon again?
+            //       We can drop into here on a network timeout.
+            await imageCache.cacheImage(image: image, cacheKey: imageModel.cacheKey, type: imageModel.imageType)
             return image
         } catch {
             return UIImage(named: "globeLarge")?.withRenderingMode(.alwaysTemplate) ?? UIImage()

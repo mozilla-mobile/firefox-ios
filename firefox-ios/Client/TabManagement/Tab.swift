@@ -258,9 +258,13 @@ class Tab: NSObject, ThemeApplicable {
     private let faviconHelper: SiteImageHandler
     var faviconURL: String? {
         didSet {
+            guard let url = url,
+                  let faviconURLString = faviconURL,
+                  let faviconUrl = URL(string: faviconURLString, invalidCharacters: false)
+            else { return }
             faviconHelper.cacheFaviconURL(
                 siteURL: url,
-                faviconURL: URL(string: faviconURL ?? "", invalidCharacters: false)
+                faviconURL: faviconUrl
             )
         }
     }

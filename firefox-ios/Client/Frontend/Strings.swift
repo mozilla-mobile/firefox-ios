@@ -1513,13 +1513,13 @@ extension String {
 
 // MARK: - Native Error Page
 extension String {
-    struct NativeErrorPage {
+    public struct NativeErrorPage {
         public static let ButtonLabel = MZLocalizedString(
             key: "NativeErrorPage.ButtonLabel.v131",
             tableName: "NativeErrorPage",
             value: "Reload",
             comment: "On error page, this is the text on a button that will try to load the page again.")
-        struct NoInternetConnection {
+        public struct NoInternetConnection {
             public static let TitleLabel = MZLocalizedString(
                 key: "NativeErrorPage.NoInternetConnection.TitleLabel.v131",
                 tableName: "NativeErrorPage",
@@ -1531,7 +1531,7 @@ extension String {
                 value: "Try connecting on a different device. Check your modem or router. Disconnect and reconnect to Wi-Fi.",
                 comment: "On error page, this is the description for no internet connection.")
         }
-        struct GenericError {
+        public struct GenericError {
             public static let TitleLabel = MZLocalizedString(
                 key: "NativeErrorPage.GenericError.TitleLabel.v131",
                 tableName: "NativeErrorPage",
@@ -3900,7 +3900,7 @@ extension String {
             public static let FindInPage = MZLocalizedString(
                 key: "MainMenu.ToolsSection.FindInPage.Title.v131",
                 tableName: "MainMenu",
-                value: "Find in Page...",
+                value: "Find in Page…",
                 comment: "On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page.")
             public static let Tools = MZLocalizedString(
                 key: "MainMenu.ToolsSection.ToolsSubmenu.Title.v131",
@@ -4039,7 +4039,7 @@ extension String {
                     key: "MainMenu.Submenus.Save.BookmarkThisPage.Title.v131",
                     tableName: "MainMenu",
                     value: "Bookmark This Page",
-                    comment: "On the main menu, in the tools submenu, the title for the menu component that indicates the current zoom level. Placeholder is for the current zoom level percentage. ")
+                    comment: "On the main menu, in the Save submenu, the title for the menu component that allows a user to save a bookmark for this particular page..")
                 public static let BookmarkThisPageSubtitle = MZLocalizedString(
                     key: "MainMenu.Submenus.Save.BookmarkThisPage.Subtitle.v131",
                     tableName: "MainMenu",
@@ -4461,6 +4461,12 @@ extension String {
                 tableName: "EnhancedTrackingProtection",
                 value: "Verified by %@",
                 comment: "Text to let users know the site verifier, where the placeholder represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details.")
+
+            public static let viewCertificatesButtonTitle = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Details.ViewCertificatesTitle.v131",
+                tableName: "EnhancedTrackingProtection",
+                value: "View certificate",
+                comment: "The title for the button that allows users to view certificates inside the enhanced tracking protection details screen.")
 
             public static let trackersBlockedLabel = MZLocalizedString(
                 key: "Menu.EnhancedTrackingProtection.Details.Trackers.v128",

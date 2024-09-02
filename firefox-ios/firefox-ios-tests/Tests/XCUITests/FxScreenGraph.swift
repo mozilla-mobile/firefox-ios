@@ -369,7 +369,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 // There is no Cancel option in iPad.
                 app.otherElements["PopoverDismissRegion"].tap()
             } else {
-                app.buttons["Close"].tap()
+                app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].tapOnApp()
             }
         }
     }

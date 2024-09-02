@@ -365,6 +365,10 @@ class HomepageViewController:
     private func dismissKeyboard() {
         if currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false {
             overlayManager.cancelEditing(shouldCancelLoading: false)
+
+            let action = ToolbarMiddlewareAction(windowUUID: windowUUID,
+                                                 actionType: ToolbarMiddlewareActionType.cancelEdit)
+            store.dispatch(action)
         }
     }
 
@@ -379,6 +383,22 @@ class HomepageViewController:
             statusBarScrollDelegate?.scrollViewDidScroll(scrollView,
                                                          statusBarFrame: statusBarFrame,
                                                          theme: theme)
+        }
+
+        // Only dispatch action when user is in edit mode to avoid having the toolbar re-displayed
+        if featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly),
+           let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+           toolbarState.addressToolbar.isEditing {
+            // When the user scrolls the homepage we cancel edit mode
+            // On a website we just dismiss the keyboard
+            if toolbarState.addressToolbar.url == nil {
+                let action = ToolbarMiddlewareAction(windowUUID: windowUUID,
+                                                     actionType: ToolbarMiddlewareActionType.cancelEdit)
+                store.dispatch(action)
+            } else {
+                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didScrollDuringEdit)
+                store.dispatch(action)
+            }
         }
 
         let scrolledToTop = lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0

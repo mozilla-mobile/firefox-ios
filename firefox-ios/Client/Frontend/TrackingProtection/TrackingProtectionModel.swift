@@ -127,6 +127,15 @@ class TrackingProtectionModel {
         return theme.colors.layer3
     }
 
+    func getDetailsModel() -> TrackingProtectionDetailsModel {
+        return TrackingProtectionDetailsModel(topLevelDomain: websiteTitle,
+                                              title: displayTitle,
+                                              URL: url.absoluteDisplayString,
+                                              getLockIcon: getConnectionStatusImage(themeType:),
+                                              connectionStatusMessage: connectionStatusString,
+                                              connectionSecure: connectionSecure)
+    }
+
     func getConnectionStatusImage(themeType: ThemeType) -> UIImage {
         if connectionSecure {
             return UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.lock)

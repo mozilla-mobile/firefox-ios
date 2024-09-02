@@ -16,6 +16,7 @@ struct AddressBarState: StateType, Equatable {
     var searchTerm: String?
     var lockIconImageName: String?
     var isEditing: Bool
+    var isScrollingDuringEdit: Bool
     var shouldSelectSearchTerm: Bool
     var isLoading: Bool
 
@@ -29,6 +30,7 @@ struct AddressBarState: StateType, Equatable {
                   searchTerm: nil,
                   lockIconImageName: "",
                   isEditing: false,
+                  isScrollingDuringEdit: false,
                   shouldSelectSearchTerm: true,
                   isLoading: false)
     }
@@ -42,6 +44,7 @@ struct AddressBarState: StateType, Equatable {
          searchTerm: String? = nil,
          lockIconImageName: String?,
          isEditing: Bool = false,
+         isScrollingDuringEdit: Bool = false,
          shouldSelectSearchTerm: Bool = true,
          isLoading: Bool = false) {
         self.windowUUID = windowUUID
@@ -53,6 +56,7 @@ struct AddressBarState: StateType, Equatable {
         self.searchTerm = searchTerm
         self.lockIconImageName = lockIconImageName
         self.isEditing = isEditing
+        self.isScrollingDuringEdit = isScrollingDuringEdit
         self.shouldSelectSearchTerm = shouldSelectSearchTerm
         self.isLoading = isLoading
     }
@@ -73,7 +77,8 @@ struct AddressBarState: StateType, Equatable {
                 url: model.url,
                 searchTerm: state.searchTerm,
                 lockIconImageName: model.lockIconImageName ?? state.lockIconImageName,
-                isEditing: state.isEditing
+                isEditing: state.isEditing,
+                isScrollingDuringEdit: state.isScrollingDuringEdit
             )
 
         case ToolbarActionType.numberOfTabsChanged:
@@ -88,7 +93,8 @@ struct AddressBarState: StateType, Equatable {
                 url: state.url,
                 searchTerm: state.searchTerm,
                 lockIconImageName: state.lockIconImageName,
-                isEditing: state.isEditing
+                isEditing: state.isEditing,
+                isScrollingDuringEdit: state.isScrollingDuringEdit
             )
 
         case ToolbarActionType.readerModeStateChanged:
@@ -101,7 +107,8 @@ struct AddressBarState: StateType, Equatable {
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
                 url: addressToolbarModel.url,
-                lockIconImageName: addressToolbarModel.lockIconImageName
+                lockIconImageName: addressToolbarModel.lockIconImageName,
+                isScrollingDuringEdit: state.isScrollingDuringEdit
             )
 
         case ToolbarActionType.addressToolbarActionsDidChange:
@@ -116,7 +123,8 @@ struct AddressBarState: StateType, Equatable {
                 url: state.url,
                 searchTerm: state.searchTerm,
                 lockIconImageName: state.lockIconImageName,
-                isEditing: addressToolbarModel.isEditing ?? state.isEditing
+                isEditing: addressToolbarModel.isEditing ?? state.isEditing,
+                isScrollingDuringEdit: state.isScrollingDuringEdit
             )
 
         case ToolbarActionType.urlDidChange:
@@ -131,7 +139,8 @@ struct AddressBarState: StateType, Equatable {
                 url: addressToolbarModel.url,
                 searchTerm: nil,
                 lockIconImageName: addressToolbarModel.lockIconImageName ?? state.lockIconImageName,
-                isEditing: addressToolbarModel.isEditing ?? state.isEditing
+                isEditing: addressToolbarModel.isEditing ?? state.isEditing,
+                isScrollingDuringEdit: state.isScrollingDuringEdit
             )
 
         case ToolbarActionType.backForwardButtonStatesChanged:
@@ -147,7 +156,8 @@ struct AddressBarState: StateType, Equatable {
                 url: state.url,
                 searchTerm: nil,
                 lockIconImageName: state.lockIconImageName,
-                isEditing: state.isEditing
+                isEditing: state.isEditing,
+                isScrollingDuringEdit: state.isScrollingDuringEdit
             )
 
         case ToolbarActionType.showMenuWarningBadge:
@@ -162,7 +172,8 @@ struct AddressBarState: StateType, Equatable {
                 url: state.url,
                 searchTerm: state.searchTerm,
                 lockIconImageName: state.lockIconImageName,
-                isEditing: state.isEditing
+                isEditing: state.isEditing,
+                isScrollingDuringEdit: state.isScrollingDuringEdit
             )
 
         case ToolbarActionType.scrollOffsetChanged,
@@ -178,7 +189,8 @@ struct AddressBarState: StateType, Equatable {
                 url: state.url,
                 searchTerm: state.searchTerm,
                 lockIconImageName: state.lockIconImageName,
-                isEditing: state.isEditing
+                isEditing: state.isEditing,
+                isScrollingDuringEdit: state.isScrollingDuringEdit
             )
 
         case ToolbarActionType.didPasteSearchTerm:
@@ -194,11 +206,14 @@ struct AddressBarState: StateType, Equatable {
                 searchTerm: toolbarAction.searchTerm,
                 lockIconImageName: state.lockIconImageName,
                 isEditing: true,
+                isScrollingDuringEdit: state.isScrollingDuringEdit,
                 shouldSelectSearchTerm: false
             )
 
         case ToolbarActionType.didStartEditingUrl:
-            guard let addressToolbarModel = (action as? ToolbarAction)?.addressToolbarModel else { return state }
+            guard let action = action as? ToolbarAction,
+                  let addressToolbarModel = action.addressToolbarModel
+            else { return state }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
@@ -207,9 +222,10 @@ struct AddressBarState: StateType, Equatable {
                 browserActions: addressToolbarModel.browserActions ?? state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,
-                searchTerm: state.searchTerm,
+                searchTerm: action.searchTerm ?? state.searchTerm,
                 lockIconImageName: state.lockIconImageName,
                 isEditing: addressToolbarModel.isEditing ?? state.isEditing,
+                isScrollingDuringEdit: false,
                 shouldSelectSearchTerm: state.shouldSelectSearchTerm
             )
 
@@ -225,7 +241,22 @@ struct AddressBarState: StateType, Equatable {
                 url: state.url,
                 searchTerm: nil,
                 lockIconImageName: state.lockIconImageName,
-                isEditing: addressToolbarModel.isEditing ?? state.isEditing
+                isEditing: addressToolbarModel.isEditing ?? state.isEditing,
+                isScrollingDuringEdit: false
+            )
+
+        case ToolbarActionType.didScrollDuringEdit:
+            return AddressBarState(
+                windowUUID: state.windowUUID,
+                navigationActions: state.navigationActions,
+                pageActions: state.pageActions,
+                browserActions: state.browserActions,
+                borderPosition: state.borderPosition,
+                url: state.url,
+                searchTerm: state.searchTerm,
+                lockIconImageName: state.lockIconImageName,
+                isEditing: state.isEditing,
+                isScrollingDuringEdit: true
             )
 
         default:
@@ -238,7 +269,8 @@ struct AddressBarState: StateType, Equatable {
                 url: state.url,
                 searchTerm: state.searchTerm,
                 lockIconImageName: state.lockIconImageName,
-                isEditing: state.isEditing
+                isEditing: state.isEditing,
+                isScrollingDuringEdit: state.isScrollingDuringEdit
             )
         }
     }

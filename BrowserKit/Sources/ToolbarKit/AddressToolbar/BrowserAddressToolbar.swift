@@ -263,8 +263,8 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         toolbarDelegate?.searchSuggestions(searchTerm: text)
     }
 
-    func locationViewDidBeginEditing(_ text: String) {
-        toolbarDelegate?.openSuggestions(searchTerm: text.lowercased())
+    func locationViewDidBeginEditing(_ text: String, shouldShowSuggestions: Bool) {
+        toolbarDelegate?.addressToolbarDidBeginEditing(searchTerm: text, shouldShowSuggestions: shouldShowSuggestions)
     }
 
     func locationViewDidSubmitText(_ text: String) {
@@ -276,8 +276,6 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
     func locationViewAccessibilityActions() -> [UIAccessibilityCustomAction]? {
         toolbarDelegate?.addressToolbarAccessibilityActions()
     }
-
-    func locationViewDidCancelEditing() {}
 
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
