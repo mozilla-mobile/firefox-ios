@@ -71,7 +71,7 @@
 "Autocomplete.addCustomUrlPlaceholder" = "Webcím beillesztése vagy megadása";
 
 /* Label for button to add a custom URL with the + prefix */
-"Autocomplete.addCustomUrlWithPlus" = "+ Egyéni URL hozzáadása";
+"Autocomplete.addCustomUrlWithPlus" = "+ Egyéni webcím hozzáadása";
 
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "Új egyéni webcím hozzáadva.";
@@ -443,7 +443,7 @@
 "ShareMenu.RequestDesktop" = "Asztali oldal kérése";
 
 /* Text for the share menu option when a user wants to reload the site as a mobile device */
-"ShareMenu.RequestMobile" = "Mobil oldal kérése";
+"ShareMenu.RequestMobile" = "Mobilos oldal kérése";
 
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Megnyitás a Chrome-ban";
