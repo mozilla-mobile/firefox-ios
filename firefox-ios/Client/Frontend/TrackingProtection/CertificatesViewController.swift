@@ -131,19 +131,19 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
             stack.distribution = .fillEqually
             stack.spacing = UX.headerStackViewSpacing
         }
-        for (_, certificate) in viewModel.certificates.enumerated() {
+        for (index, certificate) in viewModel.certificates.enumerated() {
             let certificateValues = viewModel.getCertificateValues(from: "\(certificate.subject)")
             if !certificateValues.isEmpty, let commonName = certificateValues[CertificateKeys.commonName] {
                 let item: CertificatesHeaderItem = .build { [weak self] item in
                     guard let self else { return }
                     item.configure(theme: self.currentTheme(),
                                    title: commonName,
-                                   isSelected: viewModel.selectedCertificateIndex == section)
+                                   isSelected: viewModel.selectedCertificateIndex == index)
                 }
 
                 item.itemSelectedCallback = { [weak self] in
                     guard let self else { return }
-                    self.viewModel.selectedCertificateIndex = section
+                    self.viewModel.selectedCertificateIndex = index
                     self.certificatesTableView.reloadData()
                 }
 
