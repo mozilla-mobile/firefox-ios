@@ -141,7 +141,7 @@ class ChangeUserAgentTests: XCTestCase {
     func testClear() {
         let url = URL(string: "https://www.google.com")!
         Tab.ChangeUserAgent.updateDomainList(forUrl: url, isChangedUA: true, isPrivate: false)
-            XCTAssert(Tab.ChangeUserAgent.contains(url: url, isPrivate: false))
+      XCTAssert(Tab.ChangeUserAgent.contains(url: url, isPrivate: false))
 
         Tab.ChangeUserAgent.clear()
         XCTAssertFalse(Tab.ChangeUserAgent.contains(url: url, isPrivate: false))
