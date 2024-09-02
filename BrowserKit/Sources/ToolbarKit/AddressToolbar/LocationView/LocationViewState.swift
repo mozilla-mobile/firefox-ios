@@ -22,7 +22,7 @@ public struct LocationViewState {
     public let isEditing: Bool
     public let isScrollingDuringEdit: Bool
     public let shouldSelectSearchTerm: Bool
-    public var onTapLockIcon: (() -> Void)?
+    public var onTapLockIcon: ((UIButton) -> Void)?
     public var onLongPress: (() -> Void)?
 
     public init(
@@ -40,7 +40,7 @@ public struct LocationViewState {
         isEditing: Bool,
         isScrollingDuringEdit: Bool,
         shouldSelectSearchTerm: Bool,
-        onTapLockIcon: (() -> Void)? = nil,
+        onTapLockIcon: ((UIButton) -> Void)? = nil,
         onLongPress: (() -> Void)? = nil
     ) {
         self.searchEngineImageViewA11yId = searchEngineImageViewA11yId

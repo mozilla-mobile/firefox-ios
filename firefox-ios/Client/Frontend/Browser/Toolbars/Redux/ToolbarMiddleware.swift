@@ -253,7 +253,8 @@ final class ToolbarMiddleware: FeatureFlaggable {
             store.dispatch(action)
 
         case .trackingProtection:
-            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+            let action = GeneralBrowserAction(buttonTapped: action.buttonTapped,
+                                              windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showTrackingProtectionDetails)
             store.dispatch(action)
 
