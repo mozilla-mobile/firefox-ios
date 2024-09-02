@@ -1,6 +1,9 @@
 /* The title of the button on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
 "DefaultBrowserPopup.ButtonTitle.v114" = "Mont d'an arventennoù";
 
+/* The footer label on the Default Browser Popup, which is below all the instructions asking the users if their Firefox browser is the default browser. If it is then close this message and tap skip. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"DefaultBrowserPopup.DescriptionFooter.v124" = "*Ho merdeer dre ziouer eo %@ endeo?* Serrit ar gemennadenn-mañ ha pouezit war \"Tremen\".";
+
 /* The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "DefaultBrowserPopup.FirstLabel.v114" = "1. Mont d'an *arventennoù*";
 
@@ -16,8 +19,14 @@
 /* String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Customization.Intro.Continue.Action.v123" = "Personelaat %@";
 
+/* String used to describe the description label of the customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Intro.Description.v123" = "Keflugnit ho neuz hag ho parrenn-ostilhoù evit klotañ gant ho toare da verdeiñ.";
+
 /* String used to describe the option to skip the customization cards in Firefox Onboarding screens and start browsing. */
 "Onboarding.Customization.Intro.Skip.Action.v123" = "Kregiñ gant ar merdeiñ";
+
+/* String used to describe the title of the customization onboarding page in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Customization.Intro.Title.v123" = "%@  a lak ac’hanoc’h e penn ar jeu";
 
 /* String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens. */
 "Onboarding.Customization.Theme.Continue.Action.v123" = "Enrollañ ha kenderc’hel";
@@ -25,11 +34,17 @@
 /* On the theme customization onboarding card, the string used to describe the option to set the theme to dark theme from the available choices. */
 "Onboarding.Customization.Theme.Dark.Action.v123" = "Teñval";
 
+/* String used to describe the description label of the theme customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Theme.Description.v123" = "Sellit ouzh ar web bravañ";
+
 /* On the theme customization onboarding card, the string used to describe the option to set the theme to light theme from the available choices. */
 "Onboarding.Customization.Theme.Light.Action.v123" = "Sklaer";
 
 /* String used to describe the option to skip the theme customization in Firefox Onboarding screens. */
 "Onboarding.Customization.Theme.Skip.Action.v123" = "Tremen e-bioù";
+
+/* On the theme customization onboarding card, the string used to describe the option to set the theme to system theme from the available choices. */
+"Onboarding.Customization.Theme.System.Action.v123" = "Reizhiad - emgefreek";
 
 /* String used to describe the title of the theme customization onboarding page in our Onboarding screens. */
 "Onboarding.Customization.Theme.Title.v123" = "Dibab un tem";
@@ -37,8 +52,17 @@
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
 "Onboarding.Customization.Toolbar.Bottom.Action.v123" = "Traoñ";
 
+/* String used to describe the option to save set preferences and leave onboarding to start browsing in the app. */
+"Onboarding.Customization.Toolbar.Continue.Action.v123" = "Enrollañ ha kregiñ da verdeiñ";
+
+/* String used to describe the description label of the toolbar customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Toolbar.Description.v123" = "Mirit ar c'hlaskoù tost ouzhoc’h.";
+
 /* String used to describe the option to skip the toolbar customization in Firefox Onboarding screens and start browisg in the app. */
 "Onboarding.Customization.Toolbar.Skip.Action.v123" = "Tremen e-bioù";
+
+/* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Toolbar.Title.v123" = "Dibab ul lec’h barrenn-ostilhoù";
 
 /* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
 "Onboarding.Customization.Toolbar.Top.Action.v123" = "Krecʼh";
@@ -55,6 +79,9 @@
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "Kenderc’hel";
 
+/* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Notification.Description.v120" = "Kasit ivinelloù etre ho trevnadoù ha dizoloit keweriusterioù prevezded all e %@.";
+
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Skip.Action.v115" = "Tremen";
 
@@ -64,11 +91,20 @@
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Gweredekaat ar rebuzadurioù";
 
+/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Sync.Description.v120" = "P'emaoc’h kennasket ha goubredet hoc’h suroc’h. %@ a enrineg ho kerioù-tremen, ho sinedoù hag muioc’h c’hoazh.";
+
+/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Sync.Description.v123" = "%@ a enrineg ho kerioù-tremen, ho sinedoù ha muioc’h c’hoazh p'emaoc’h goubredet.";
+
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.SignIn.Action.v114" = "Kennaskañ";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.Skip.Action.v114" = "Tremen";
+
+/* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
+"Onboarding.Sync.Title.v120" = "Chomit enrineget pa tremenit eus un trevnad d'egile";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "Drekleur klasel";
@@ -93,6 +129,15 @@
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Welcome.ActionTreatementA.v114" = "Lakaat da verdeer dre ziouer";
+
+/* Accessibility label for close button that dismisses the welcome onboarding screen. Placeholder is for the app name. */
+"Onboarding.Welcome.Close.AccessibilityLabel.v121" = "Serriñ ha kuitaat pajenn degemer %@";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Description.TreatementA.v120" = "Hor merdeer harpet gant un aozadur hep gounidoù a sikour da herzel an embregerezhioù d'ho heuliañ pep lec'h er web.";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Welcome.Description.v120" = "Hor merdeer harpet gant un aozadur hep gounidoù a sikour da herzel an embregerezhioù d'ho heuliañ pep lec'h er web.";
 
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Link.Action.v114" = "Lennit hon evezhiadenn a-fet buhez prevez evit gouzout hiroc’h";

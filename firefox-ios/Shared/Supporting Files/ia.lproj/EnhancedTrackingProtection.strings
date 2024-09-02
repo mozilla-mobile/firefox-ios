@@ -1,3 +1,36 @@
+/* The title for the certificate common name inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.CommonName.v131" = "Nomine commun";
+
+/* The title for the certificate issuer country inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.IssuerCountry.v131" = "Pais";
+
+/* The title for the certificate issuer name section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.IssuerName.v131" = "Nomine del emissor";
+
+/* The title for the certificate issuer organization inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.IssuerOrganization.v131" = "Organisation";
+
+/* The title for the certificate subject alt names section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectAltNames.v131" = "Nomines alternative del subjecto";
+
+/* The title for the certificate subject alt names DNS name inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectAltNamesDNSName.v131" = "Nomine de DNS";
+
+/* The title for the certificate subject name section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectName.v131" = "Nomine del subjecto";
+
+/* The title for the certificates screen inside the certificates screen. */
+"Menu.EnhancedTrackingProtection.Certificates.Title.v131" = "Certificato";
+
+/* The title for the certificate validity section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.Validity.v131" = "Validitate";
+
+/* The title for the certificate validity not after date inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.ValidityNotAfter.v131" = "Non post";
+
+/* The title for the certificate validity not before date inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.ValidityNotBefore.v131" = "Non ante";
+
 /* The text for the clear cookies and site data alert button inside the enhanced tracking protection screen. */
 "Menu.EnhancedTrackingProtection.ClearData.AlertCancelButton.v128" = "Cancellar";
 

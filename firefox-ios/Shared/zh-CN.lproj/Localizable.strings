@@ -17,7 +17,7 @@
 "About" = "关于";
 
 /* The title for the pinning a shortcut action */
-"ActivityStream.ContextMenu.AddToShortcuts" = "添加快捷指令";
+"ActivityStream.ContextMenu.AddToShortcuts" = "添加快捷方式";
 
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite2" = "固定";
@@ -719,7 +719,7 @@
 "Menu.AddBookmark.Label.v99" = "添加";
 
 /* Toast displayed to the user after adding the item to the Shortcuts. */
-"Menu.AddPin.Confirm2" = "快捷指令已添加";
+"Menu.AddPin.Confirm2" = "快捷方式已添加";
 
 /* Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label. */
 "Menu.AddReadingList.Label.v99" = "添加";

@@ -1,5 +1,17 @@
+/* This label is used for a button in the address list screen allowing users to manage their saved addresses. It's meant to direct users to where they can add, remove, or edit their saved addresses. */
+"Addresses.ManageAddressesButton.v130" = "Administrar direcciones";
+
+/* Accessibility label for an address list item in autofill settings screen. The %@ parameter is the address of the user that will read the name, street, city, state, postal code if available. */
+"Addresses.Settings.ListItemA11y.v130" = "Dirección para %@";
+
 /* On the autofill settings screen, a label for the section that displays the list of saved addresses. This label adds additional context for users regarding the toggle switch that allows saving and autofilling of addresses for webpages. */
 "Addresses.Settings.SavedAddressesSectionTitle.v124" = "DIRECCIONES GUARDADAS";
+
+/* Title text for the content unavailable view informing users they can create or add new addresses. %@ is the name of the app. */
+"Addresses.Settings.SaveToFirefox.Title.v130" = "Guardar direcciones en %@";
+
+/* Description text for the content unavailable view informing users they can create or add new addresses. */
+"Addresses.Settings.SecureSaveInfo.Description.v130" = "Guarda tu información de forma segura para acceder a ella rápidamente más tarde.";
 
 /* On the autofill settings screen, a label under the title label to add additional context for user in regards to what the toggle switch that allow saving and autofilling of addresses for webpages does, letting users know that this action includes phone numbers and email addresses. */
 "Addresses.Settings.Switch.Description.v124" = "Incluye números de teléfono y direcciones de correo electrónico";
@@ -15,6 +27,12 @@
 
 /* Description label for when there are no credit cards shown in credit card list in autofill settings screen. */
 "CreditCard.Settings.EmptyListDescription.v112" = "Guarda la información de tu tarjeta de forma segura para pagar más rápido la próxima vez.";
+
+/* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
+"CreditCard.Settings.EmptyListTitle.v122" = "Guardar tarjetas en %@";
+
+/* Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card issuer (e.g. Visa). The second parameter is the name of the credit card holder. The third parameter is the last 4 digits of the credit card. The fourth parameter is the card's expiration date. */
+"CreditCard.Settings.ListItemA11y.v118" = "%1$@, emitida a %2$@, termina en %3$@, caduca el %4$@";
 
 /* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used. */
 "CreditCard.Settings.NotNow.v122" = "Ahora no";
@@ -44,7 +62,16 @@
 "FxA.FirefoxAccount.v119" = "Cuenta";
 
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
+"Settings.AddressAutofill.Title.v124" = "Autocompletar direcciones";
+
+/* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "Direcciones";
+
+/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
+"Settings.AutofillCreditCard.Title.v122" = "Métodos de pago";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title.v119" = "Cuenta";
 
 /* This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsStatus.v112" = "Esto debe estar activado para recibir pestañas y recibir notificaciones cuando inicies sesión en otro dispositivo.";

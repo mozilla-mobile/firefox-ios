@@ -1,3 +1,36 @@
+/* The title for the certificate common name inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.CommonName.v131" = "Algemene naam";
+
+/* The title for the certificate issuer country inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.IssuerCountry.v131" = "Land";
+
+/* The title for the certificate issuer name section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.IssuerName.v131" = "Naam uitgever";
+
+/* The title for the certificate issuer organization inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.IssuerOrganization.v131" = "Organisatie";
+
+/* The title for the certificate subject alt names section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectAltNames.v131" = "Alternatieve houdernamen";
+
+/* The title for the certificate subject alt names DNS name inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectAltNamesDNSName.v131" = "DNS-naam";
+
+/* The title for the certificate subject name section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectName.v131" = "Naam houder";
+
+/* The title for the certificates screen inside the certificates screen. */
+"Menu.EnhancedTrackingProtection.Certificates.Title.v131" = "Certificaat";
+
+/* The title for the certificate validity section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.Validity.v131" = "Geldigheid";
+
+/* The title for the certificate validity not after date inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.ValidityNotAfter.v131" = "Niet na";
+
+/* The title for the certificate validity not before date inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.ValidityNotBefore.v131" = "Niet voor";
+
 /* The text for the clear cookies and site data alert button inside the enhanced tracking protection screen. */
 "Menu.EnhancedTrackingProtection.ClearData.AlertCancelButton.v128" = "Annuleren";
 
@@ -48,6 +81,9 @@
 
 /* Header for the enhanced tracking protection screen when the user has selected to be protected. */
 "Menu.EnhancedTrackingProtection.On.Header.v128" = "U bent beschermd. Als we iets ontdekken, laten we u dat weten.";
+
+/* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
+"Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "Uw verbinding is niet beveiligd.";
 
 /* Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
 "Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128" = "Wees voorzichtig op deze website";
