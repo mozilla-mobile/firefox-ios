@@ -11,7 +11,7 @@ final class CertificatesHeaderItem: UIView {
         static let headerItemsSpacing = 10.0
     }
 
-    var itemSelectedCallback: ((_ selectedCertificateIndex: Int) -> Void)?
+    var itemSelectedCallback: (() -> Void)?
     private var theme: Theme?
 
     private let stackView: UIStackView = .build { stack in
@@ -54,24 +54,18 @@ final class CertificatesHeaderItem: UIView {
         stackView.addArrangedSubview(indicator)
     }
 
-    func configure(theme: Theme, tagIndex: Int, title: String?) {
+    func configure(theme: Theme, title: String?, isSelected: Bool) {
         self.theme = theme
-        self.tag = tagIndex
         button.setTitle(title, for: .normal)
         button.addTarget(self, action: #selector(certificateButtonTapped(_:)), for: .touchUpInside)
-        indicator.backgroundColor = tagIndex == 0 ? theme.colors.textAccent : .clear
-        button.setTitleColor(tagIndex == 0 ? theme.colors.textAccent : theme.colors.textPrimary, for: .normal)
-    }
-
-    func hideIndicator() {
-        indicator.backgroundColor = .clear
-        button.setTitleColor(theme?.colors.textPrimary, for: .normal)
+        indicator.backgroundColor = isSelected ? theme.colors.textAccent : .clear
+        button.setTitleColor(isSelected ? theme.colors.textAccent : theme.colors.textPrimary, for: .normal)
+        indicator.backgroundColor = isSelected ? theme.colors.textAccent : .clear
     }
 
     @objc
     private func certificateButtonTapped(_ sender: UIButton) {
-        indicator.backgroundColor = theme?.colors.textAccent
         button.setTitleColor(theme?.colors.textAccent, for: .normal)
-        itemSelectedCallback?(self.tag)
+        itemSelectedCallback?()
     }
 }
