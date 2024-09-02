@@ -263,6 +263,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                     windowUUID: state.windowUUID,
                     browserViewType: state.browserViewType,
                     displayView: .trackingProtectionDetails,
+                    buttonTapped: action.buttonTapped,
                     microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
         case GeneralBrowserActionType.showMenu:
             return BrowserViewControllerState(

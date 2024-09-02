@@ -18,7 +18,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     private var urlAbsolutePath: String?
     private var searchTerm: String?
     private var notifyTextChanged: (() -> Void)?
-    private var onTapLockIcon: (() -> Void)?
+    private var onTapLockIcon: ((UIButton) -> Void)?
     private var onLongPress: (() -> Void)?
     private var delegate: LocationViewDelegate?
 
@@ -324,7 +324,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
 
     @objc
     private func didTapLockIcon() {
-        onTapLockIcon?()
+        onTapLockIcon?(lockIconButton)
     }
 
     @objc
