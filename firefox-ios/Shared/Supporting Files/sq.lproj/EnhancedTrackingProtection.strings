@@ -49,6 +49,9 @@
 /* Header for the enhanced tracking protection screen when the user has selected to be protected. */
 "Menu.EnhancedTrackingProtection.On.Header.v128" = "Jeni i mbrojtur. Nëse vërejmë gjë, do t’ua bëjmë të ditur.";
 
+/* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
+"Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "Lidhja juaj s’është e siguruar.";
+
 /* Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
 "Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128" = "Hapni sytë në këtë sajt";
 
