@@ -131,7 +131,7 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
             stack.distribution = .fillEqually
             stack.spacing = UX.headerStackViewSpacing
         }
-        for certificate in viewModel.certificates.enumerated() {
+        for (_, certificate) in viewModel.certificates.enumerated() {
             let certificateValues = viewModel.getCertificateValues(from: "\(certificate.subject)")
             if !certificateValues.isEmpty, let commonName = certificateValues[CertificateKeys.commonName] {
                 let item: CertificatesHeaderItem = .build { [weak self] item in
