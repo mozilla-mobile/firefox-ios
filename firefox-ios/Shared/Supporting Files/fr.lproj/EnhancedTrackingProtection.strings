@@ -1,3 +1,36 @@
+/* The title for the certificate common name inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.CommonName.v131" = "Nom courant";
+
+/* The title for the certificate issuer country inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.IssuerCountry.v131" = "Pays";
+
+/* The title for the certificate issuer name section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.IssuerName.v131" = "Nom de l’émetteur";
+
+/* The title for the certificate issuer organization inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.IssuerOrganization.v131" = "Organisation";
+
+/* The title for the certificate subject alt names section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectAltNames.v131" = "Noms alternatifs du sujet";
+
+/* The title for the certificate subject alt names DNS name inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectAltNamesDNSName.v131" = "Nom DNS";
+
+/* The title for the certificate subject name section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectName.v131" = "Nom du sujet";
+
+/* The title for the certificates screen inside the certificates screen. */
+"Menu.EnhancedTrackingProtection.Certificates.Title.v131" = "Certificat";
+
+/* The title for the certificate validity section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.Validity.v131" = "Validité";
+
+/* The title for the certificate validity not after date inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.ValidityNotAfter.v131" = "Pas après";
+
+/* The title for the certificate validity not before date inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.ValidityNotBefore.v131" = "Pas avant";
+
 /* The text for the clear cookies and site data alert button inside the enhanced tracking protection screen. */
 "Menu.EnhancedTrackingProtection.ClearData.AlertCancelButton.v128" = "Annuler";
 

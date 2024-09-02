@@ -1,5 +1,11 @@
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v131" = "Tazele";
+
 /* On error page, this is the description for generic error. */
 "NativeErrorPage.GenericError.Description.v131" = "Bir SSL hatası oluştu ve sunucuyla güvenli bağlantı kurulamadı.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v131" = "Dikkatli olun. Doğru görünmeyen bir şeyler var.";
 
 /* On error page, this is the description for no internet connection. */
 "NativeErrorPage.NoInternetConnection.Description.v131" = "Farklı bir cihazdan bağlanmayı deneyin. Modeminizi veya yönlendiricinizi kontrol edin. Wi-Fi bağlantınızı kesip yeniden bağlanın.";

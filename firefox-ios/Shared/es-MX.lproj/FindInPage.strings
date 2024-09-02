@@ -2,11 +2,11 @@
 "Done" = "Realizado";
 
 /* Text selection menu item */
-"Find in Page" = "Encontrar en la página";
+"Find in Page" = "Buscar en la página";
 
 /* Accessibility label for next result button in Find in Page Toolbar. */
-"Next in-page result" = "Siguiente en la página de resultados";
+"Next in-page result" = "Siguiente resultado en la página";
 
 /* Accessibility label for previous result button in Find in Page Toolbar. */
-"Previous in-page result" = "Anterior en la página de resultados";
+"Previous in-page result" = "Anterior resultado en la página";
 
