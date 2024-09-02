@@ -49,6 +49,9 @@
 /* Header for the enhanced tracking protection screen when the user has selected to be protected. */
 "Menu.EnhancedTrackingProtection.On.Header.v128" = "Sćo šćitany. Jolic něco namakajomy, dajomy wam to k wěsći.";
 
+/* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
+"Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "Waš zwisk njejo wěsty.";
+
 /* Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
 "Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128" = "Buźćo wobglědniwy na toś tom sedle";
 

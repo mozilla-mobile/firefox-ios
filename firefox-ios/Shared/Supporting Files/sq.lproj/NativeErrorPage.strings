@@ -1,0 +1,15 @@
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v131" = "Ringarkoje";
+
+/* On error page, this is the description for generic error. */
+"NativeErrorPage.GenericError.Description.v131" = "Ndodhi një gabim SSL dhe s’u vendos dot një lidhje e siguruar me shërbyesin.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v131" = "Hapni sytë. Diçka s’duket siç duhet.";
+
+/* On error page, this is the description for no internet connection. */
+"NativeErrorPage.NoInternetConnection.Description.v131" = "Provoni të lidheni që nga një pajisje tjetër. Shihni modemin ose rrugëzuesin tuaj. Shkëputuni dhe rilidhuni me Wi-Fi-n.";
+
+/* On error page, this is the title for no internet connection */
+"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Duket se ka një problem me lidhjen tuaj në internet.";
+

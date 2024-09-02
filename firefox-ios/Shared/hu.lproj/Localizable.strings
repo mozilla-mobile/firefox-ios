@@ -89,7 +89,7 @@
 "Bookmark.DetailFieldTitle.Label" = "Cím";
 
 /* The label for the URL field when editing a bookmark */
-"Bookmark.DetailFieldURL.Label" = "URL";
+"Bookmark.DetailFieldURL.Label" = "Webcím";
 
 /* Toggle bookmarks syncing setting */
 "Bookmarks" = "Könyvjelzők";
@@ -737,7 +737,7 @@
 "Menu.Copy.Title" = "Cím másolása";
 
 /* Toast displayed to user after copy url pressed. */
-"Menu.CopyURL.Confirm" = "URL a vágólapra másolva";
+"Menu.CopyURL.Confirm" = "Webcím a vágólapra másolva";
 
 /* Label for the customize homepage button in the menu page. Pressing this button takes users to the settings options, where they can customize the Firefox Home page */
 "Menu.CustomizeHomePage.v99" = "Kezdőoldal testreszabása";
@@ -1034,7 +1034,7 @@
 "Search.ThirdPartyEngines.Cancel" = "Mégse";
 
 /* A message explaining fault in custom search engine form. */
-"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Egy keresőszolgáltatás már hozzá lett adva ezzel a címmel vagy URL-lel.";
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Egy keresőszolgáltatás már hozzá lett adva ezzel a címmel vagy webcímmel.";
 
 /* A title stating that we failed to add custom search engine. */
 "Search.ThirdPartyEngines.DuplicateErrorTitle" = "Sikertelen";
@@ -1142,10 +1142,10 @@
 "Settings.AddCustomEngine.TitlePlaceholder" = "Keresőszolgáltatás";
 
 /* The title for URL Field */
-"Settings.AddCustomEngine.URLLabel" = "URL";
+"Settings.AddCustomEngine.URLLabel" = "Webcím";
 
 /* The placeholder for URL Field when saving a custom search engine */
-"Settings.AddCustomEngine.URLPlaceholder" = "URL (Cserélje a keresést erre: %s)";
+"Settings.AddCustomEngine.URLPlaceholder" = "Webcím (Cserélje a keresést erre: %s)";
 
 /* Title of setting to block opening external apps when pressing links. */
 "Settings.BlockOpeningExternalApps.Title" = "Külső alkalmazások megnyitásának blokkolása";
@@ -1373,7 +1373,7 @@
 "Settings.LoginsAndPasswordsTitle" = "Bejelentkezések és jelszavak";
 
 /* Label used to set a custom url as the new tab option (homepage). */
-"Settings.NewTab.CustomURL" = "Egyéni URL";
+"Settings.NewTab.CustomURL" = "Egyéni webcím";
 
 /* Option in settings to show a blank page when you open a new tab */
 "Settings.NewTab.Option.BlankPage" = "Üres oldal";

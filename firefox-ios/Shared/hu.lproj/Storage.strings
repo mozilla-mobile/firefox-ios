@@ -5,7 +5,7 @@
 "Bookmarks Toolbar" = "Könyvjelzők eszköztár";
 
 /* The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android. */
-"Mobile Bookmarks" = "Mobil könyvjelzők";
+"Mobile Bookmarks" = "Mobilos könyvjelzők";
 
 /* The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android. */
 "Unsorted Bookmarks" = "Nem rendezett könyvjelzők";

@@ -1,3 +1,36 @@
+/* The title for the certificate common name inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.CommonName.v131" = "Num frequent";
+
+/* The title for the certificate issuer country inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.IssuerCountry.v131" = "Pajais";
+
+/* The title for the certificate issuer name section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.IssuerName.v131" = "Num da l’emettur";
+
+/* The title for the certificate issuer organization inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.IssuerOrganization.v131" = "Organisaziun";
+
+/* The title for the certificate subject alt names section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectAltNames.v131" = "Nums alternativs dal subject";
+
+/* The title for the certificate subject alt names DNS name inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectAltNamesDNSName.v131" = "Num DNS";
+
+/* The title for the certificate subject name section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectName.v131" = "Num dal subject";
+
+/* The title for the certificates screen inside the certificates screen. */
+"Menu.EnhancedTrackingProtection.Certificates.Title.v131" = "Certificat";
+
+/* The title for the certificate validity section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.Validity.v131" = "Validitad";
+
+/* The title for the certificate validity not after date inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.ValidityNotAfter.v131" = "Betg suenter";
+
+/* The title for the certificate validity not before date inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.ValidityNotBefore.v131" = "Betg avant";
+
 /* The text for the clear cookies and site data alert button inside the enhanced tracking protection screen. */
 "Menu.EnhancedTrackingProtection.ClearData.AlertCancelButton.v128" = "Interrumper";
 
@@ -22,6 +55,9 @@
 /* Text to let users know that the current website is not secure. */
 "Menu.EnhancedTrackingProtection.Details.ConnectionUnsecure.v128" = "Connexiun betg segirada";
 
+/* Text to let users know that no trackers were found on the current website. */
+"Menu.EnhancedTrackingProtection.Details.NoTrackers.v131" = "Na chattà nagins fastizaders";
+
 /* Text to let users know how many cross-site tracking cookies were blocked on the current website. The placeholder will show the number of such cookies detected */
 "Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite.v129" = "Cookies che fastizeschan tranter websites: %@";
 
@@ -45,6 +81,9 @@
 
 /* Header for the enhanced tracking protection screen when the user has selected to be protected. */
 "Menu.EnhancedTrackingProtection.On.Header.v128" = "Ti es protegì. Sche nus scuvrin insatge, t’infurmain nus.";
+
+/* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
+"Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "Tia connexiun n’è betg segira.";
 
 /* Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
 "Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128" = "Sajas precaut sin questa website";
