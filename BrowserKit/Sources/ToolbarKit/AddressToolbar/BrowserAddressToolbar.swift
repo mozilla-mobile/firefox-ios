@@ -176,6 +176,12 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         ])
 
         updateActionSpacing()
+
+        setupAccessibility()
+    }
+
+    private func setupAccessibility() {
+        addInteraction(UILargeContentViewerInteraction())
     }
 
     internal func updateActions(state: AddressToolbarState) {

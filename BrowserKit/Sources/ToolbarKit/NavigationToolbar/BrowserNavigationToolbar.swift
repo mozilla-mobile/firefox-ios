@@ -61,6 +61,12 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
             actionStack.bottomAnchor.constraint(equalTo: bottomAnchor),
             actionStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalEdgeSpace),
         ])
+
+        setupAccessibility()
+    }
+
+    private func setupAccessibility() {
+        addInteraction(UILargeContentViewerInteraction())
     }
 
     private func updateActionStack(toolbarElements: [ToolbarElement]) {
