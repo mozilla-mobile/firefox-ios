@@ -416,7 +416,7 @@ class CreditCardsTests: BaseTestCase {
         selectCreditCardOnFormWebsite()
         dismissSavedCardsPrompt()
         // Modify the card details
-        fillCardDetailsOnWebsite(cardNr: cards[1], expirationDate: "0640", nameOnCard: "Test2")
+        fillCardDetailsOnWebsite(cardNr: cards[1], expirationDate: "0640", nameOnCard: "Test2", skipFillInfo: true)
         // Tap on "Pay"
         let payButton = app.webViews["contentView"].webViews.buttons["Pay"]
         if iPad() {
@@ -461,7 +461,7 @@ class CreditCardsTests: BaseTestCase {
         selectCreditCardOnFormWebsite()
         dismissSavedCardsPrompt()
         // Modify the card details
-        fillCardDetailsOnWebsite(cardNr: cards[1], expirationDate: "0640", nameOnCard: "Test2")
+        fillCardDetailsOnWebsite(cardNr: cards[1], expirationDate: "0640", nameOnCard: "Test2", skipFillInfo: true)
         // Tap on "Pay"
         if iPad() {
             app.swipeUp()
@@ -513,7 +513,8 @@ class CreditCardsTests: BaseTestCase {
         }
     }
 
-    private func fillCardDetailsOnWebsite(cardNr: String, expirationDate: String, nameOnCard: String) {
+    private func fillCardDetailsOnWebsite(cardNr: String, expirationDate: String, nameOnCard: String,
+                                          skipFillInfo: Bool = false) {
         let cardNumber = app.webViews["contentView"].webViews.textFields["Card number"]
         let expiration = app.webViews["contentView"].webViews.textFields["Expiration"]
         let name = app.webViews["contentView"].webViews.textFields["Full name on card"]
@@ -530,13 +531,14 @@ class CreditCardsTests: BaseTestCase {
         }
         email.typeText("foo@mozilla.org")
         mozWaitForElementToExist(cardNumber)
-        cardNumber.tapOnApp()
-        cardNumber.tap()
-        cardNumber.typeText(cardNr)
-        mozWaitForElementToExist(expiration)
-        dismissSavedCardsPrompt()
-        expiration.tapOnApp()
-        expiration.typeText(expirationDate)
+        if skipFillInfo == false {
+            cardNumber.tapOnApp()
+            cardNumber.typeText(cardNr)
+            mozWaitForElementToExist(expiration)
+            dismissSavedCardsPrompt()
+            expiration.tapOnApp()
+            expiration.typeText(expirationDate)
+        }
         cvc.tapOnApp()
         cvc.typeText("123")
         zip.tapOnApp()
