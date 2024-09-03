@@ -455,6 +455,12 @@ extension LegacyWebViewController: WKNavigationDelegate {
             break
         }
 
+        // Prevent Focus from opening deeplinks from links
+        if navigationAction.request.url?.scheme?.contains("firefox") == true {
+            decisionHandler(.cancel, preferences)
+            return
+        }
+
         currentBackForwardItem = webView.backForwardList.currentItem
         // prevent Focus from opening universal links
         // https://stackoverflow.com/questions/38450586/prevent-universal-links-from-opening-in-wkwebview-uiwebview
