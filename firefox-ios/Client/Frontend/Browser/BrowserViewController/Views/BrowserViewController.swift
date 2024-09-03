@@ -1966,7 +1966,7 @@ class BrowserViewController: UIViewController,
             presentLocationViewActionSheet(from: addressToolbarContainer)
         case .trackingProtectionDetails:
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
-            navigationHandler?.showEnhancedTrackingProtection(sourceView: view)
+            navigationHandler?.showEnhancedTrackingProtection(sourceView: state.buttonTapped ?? addressToolbarContainer)
         case .menu:
             didTapOnMenu(button: state.buttonTapped)
         case .reloadLongPressAction:

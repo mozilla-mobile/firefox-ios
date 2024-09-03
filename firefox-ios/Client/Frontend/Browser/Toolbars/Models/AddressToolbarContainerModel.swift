@@ -43,8 +43,9 @@ class AddressToolbarContainerModel: Equatable {
             isEditing: isEditing,
             isScrollingDuringEdit: isScrollingDuringEdit,
             shouldSelectSearchTerm: shouldSelectSearchTerm,
-            onTapLockIcon: {
+            onTapLockIcon: { button in
                 let action = ToolbarMiddlewareAction(buttonType: .trackingProtection,
+                                                     buttonTapped: button,
                                                      gestureType: .tap,
                                                      windowUUID: self.windowUUID,
                                                      actionType: ToolbarMiddlewareActionType.didTapButton)
