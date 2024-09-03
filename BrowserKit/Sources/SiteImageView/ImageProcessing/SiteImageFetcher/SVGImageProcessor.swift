@@ -4,7 +4,7 @@
 
 import UIKit
 import Kingfisher
-import SVGKit
+import SwiftDraw
 
 /// A Kingfisher image processor to parse SVG image data.
 /// - Documentation: https://github.com/onevcat/Kingfisher/wiki/Cheat-Sheet#creating-your-own-processor
@@ -12,6 +12,8 @@ public struct SVGImageProcessor: ImageProcessor {
     // `identifier` should be the same for processors with the same properties/functionality
     // It will be used when storing and retrieving the image to/from cache.
     public var identifier: String = "com.mozilla.SVGImageProcessor"
+
+    private let defaultFaviconSize = CGSize(width: 360, height: 360) // FIXME Hero size?
 
     // Convert input data/image to target image and return it.
     public func process(item: ImageProcessItem, options: KingfisherParsedOptionsInfo) -> KFCrossPlatformImage? {
@@ -22,7 +24,7 @@ public struct SVGImageProcessor: ImageProcessor {
             return image
         case .data(let data):
             // Your own way to convert some data to an image.
-            return SVGKImage(data: data)?.uiImage
+            return SVG(data: data)?.rasterize(with: defaultFaviconSize)
         }
     }
 }

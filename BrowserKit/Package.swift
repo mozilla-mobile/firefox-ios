@@ -56,11 +56,12 @@ let package = Package(
         .package(
             url: "https://github.com/getsentry/sentry-cocoa.git",
             exact: "8.35.0"),
-        .package(url: "https://github.com/nbhasin2/GCDWebServer.git",
-                branch: "master"),
         .package(
-            url: "https://github.com/SVGKit/SVGKit.git",
-            exact: "3.0.0"),
+            url: "https://github.com/nbhasin2/GCDWebServer.git",
+            branch: "master"),
+        .package(
+            url: "https://github.com/swhitty/SwiftDraw",
+            exact: "0.17.0"),
     ],
     targets: [
         .target(
@@ -72,11 +73,13 @@ let package = Package(
             dependencies: ["ComponentLibrary"]),
         .target(
             name: "SiteImageView",
-            dependencies: ["Fuzi", "Kingfisher", "Common", "SVGKit"],
+            dependencies: ["Fuzi", "Kingfisher", "Common", "SwiftDraw"],
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "SiteImageViewTests",
-            dependencies: ["SiteImageView"]),
+            dependencies: ["SiteImageView"],
+            resources: [.copy("testSVG")]
+        ),
         .target(
             name: "Common",
             dependencies: ["Dip",
