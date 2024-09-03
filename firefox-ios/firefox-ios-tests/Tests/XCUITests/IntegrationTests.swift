@@ -284,7 +284,7 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(SettingsScreen)
         app.tables.cells["SignInToSync"].tap()
         app.buttons["EmailSignIn.button"].tap()
-        
+
         navigator.nowAt(FxASigninScreen)
         mozWaitForElementToExist(app.staticTexts["Enter your password"], timeout: TIMEOUT_LONG)
         navigator.performAction(Action.FxATypePasswordExistingAccount)
