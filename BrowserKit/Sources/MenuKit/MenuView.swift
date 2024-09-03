@@ -4,14 +4,9 @@
 
 import Common
 import UIKit
-import Redux
 
-final class MainMenuView: UIView, StoreSubscriber {
+final class MainMenuView: UIView {
     // MARK: - UI Elements
-    private lazy var submitButton: UIButton = .build { button in
-        button.addTarget(self, action: #selector(self.tapTestButton), for: .touchUpInside)
-    }
-
     // MARK: - Properties
 
     // MARK: - Initializers
@@ -25,18 +20,9 @@ final class MainMenuView: UIView, StoreSubscriber {
 
     // MARK: - UI Setup
     private func setupView() {
-        self.addSubview(submitButton)
         self.backgroundColor = .systemPurple
 
         NSLayoutConstraint.activate([
-            submitButton.widthAnchor.constraint(equalToConstant: 200),
-            submitButton.heightAnchor.constraint(equalToConstant: 80),
-            submitButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            submitButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 25),
         ])
-    }
-
-    @objc
-    private func tapTestButton() {
     }
 }

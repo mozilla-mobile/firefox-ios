@@ -7,7 +7,7 @@ import Redux
 import ToolbarKit
 
 final class MainMenuAction: Action {
-    init(
+    override init(
         windowUUID: WindowUUID,
         actionType: ActionType
     ) {

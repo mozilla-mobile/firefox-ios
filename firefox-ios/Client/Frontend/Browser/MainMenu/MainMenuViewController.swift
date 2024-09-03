@@ -39,6 +39,12 @@ class MainMenuViewController: UIViewController,
         view.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
     }
 
+    private lazy var testButton: UIButton = .build { button in
+        button.addTarget(self, action: #selector(self.testButtonTapped), for: .touchUpInside)
+        button.backgroundColor = .systemPink
+    }
+
+
     // MARK: - Properties
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
@@ -99,7 +105,16 @@ class MainMenuViewController: UIViewController,
     }
 
     // MARK: - UI setup
-    private func setupView() { }
+    private func setupView() { 
+        view.addSubview(testButton)
+
+        NSLayoutConstraint.activate([
+            testButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            testButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            testButton.heightAnchor.constraint(equalToConstant: 100),
+            testButton.widthAnchor.constraint(equalToConstant: 200)
+        ])
+    }
 
     private func updateContent() {
         contentStackView.removeAllArrangedViews()
@@ -141,6 +156,9 @@ class MainMenuViewController: UIViewController,
 
     @objc
     private func closeTapped() { }
+
+    @objc
+    private func testButtonTapped() { }
 
     // In iOS 15 modals with a large detent read content underneath the modal
     // in voice over. To prevent this we manually turn this off.

@@ -5,8 +5,6 @@
 public struct MenuState: Equatable {
     var shouldDismiss: Bool
 
-    let testTapAction: ((UIButton) -> Void)?
-
     public init(shouldDismiss: Bool = false) {
         self.shouldDismiss = shouldDismiss
     }

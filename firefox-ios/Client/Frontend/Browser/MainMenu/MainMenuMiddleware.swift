@@ -104,25 +104,6 @@ final class MainMenuMiddleware: FeatureFlaggable {
         let uuid = action.windowUUID
 
         switch action.actionType {
-        case GeneralBrowserMiddlewareActionType.browserDidLoad:
-            guard let toolbarPosition = action.toolbarPosition else { return }
-
-            let addressToolbarModel = loadInitialAddressToolbarState(toolbarPosition: position)
-            let navigationToolbarModel = loadInitialNavigationToolbarState(toolbarPosition: position)
-
-            let action = ToolbarAction(addressToolbarModel: addressToolbarModel,
-                                       navigationToolbarModel: navigationToolbarModel,
-                                       toolbarPosition: position,
-                                       windowUUID: uuid,
-                                       actionType: ToolbarActionType.didLoadToolbars)
-            store.dispatch(action)
-
-        case GeneralBrowserMiddlewareActionType.websiteDidScroll:
-            updateBorderPosition(action: action, state: state)
-
-        case GeneralBrowserMiddlewareActionType.toolbarPositionChanged:
-            updateToolbarPosition(action: action, state: state)
-
         default:
             break
         }
