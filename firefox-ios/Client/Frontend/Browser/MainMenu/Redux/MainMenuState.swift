@@ -3,13 +3,12 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import MenuKit
 import Shared
 import Redux
 
 struct MainMenuState: ScreenState, Equatable {
     var windowUUID: WindowUUID
-    var menuState: MenuState
+    var shouldDismiss: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let mainMenuState = store.state.screenState(
@@ -23,30 +22,39 @@ struct MainMenuState: ScreenState, Equatable {
 
         self.init(
             windowUUID: mainMenuState.windowUUID,
-            menuState: mainMenuState.menuState
+            shouldDismiss: mainMenuState.shouldDismiss
         )
     }
 
-    init(
-        windowUUID: WindowUUID
-    ) {
+    init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
-            menuState: MenuState()
+            shouldDismiss: false
         )
     }
 
-    private init(windowUUID: WindowUUID, menuState: MenuState) {
+    private init(
+        windowUUID: WindowUUID,
+        shouldDismiss: Bool
+    ) {
         self.windowUUID = windowUUID
-        self.menuState = menuState
+        self.shouldDismiss = shouldDismiss
     }
 
     static let reducer: Reducer<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
-
+        
         switch action.actionType {
+        case MainMenuMiddlewareActionType.dismissMenu:
+            return MainMenuState(
+                windowUUID: state.windowUUID,
+                shouldDismiss: true
+            )
         default:
-            return MainMenuState(windowUUID: state.windowUUID, menuState: MenuState())
+            return MainMenuState(
+                windowUUID: state.windowUUID,
+                shouldDismiss: false
+            )
         }
     }
 }

@@ -44,11 +44,11 @@ class MainMenuViewController: UIViewController,
         button.backgroundColor = .systemPink
     }
 
-
     // MARK: - Properties
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
+    var coordinator: MainMenuCoordinator?
 
     private let windowUUID: WindowUUID
     private var viewModel: MainMenuViewModel
@@ -97,6 +97,9 @@ class MainMenuViewController: UIViewController,
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        store.dispatch(
+            MainMenuAction(windowUUID: windowUUID, actionType: MainMenuActionType.mainMenuDidAppear)
+        )
         updateModalA11y()
     }
 
@@ -105,7 +108,7 @@ class MainMenuViewController: UIViewController,
     }
 
     // MARK: - UI setup
-    private func setupView() { 
+    private func setupView() {
         view.addSubview(testButton)
 
         NSLayoutConstraint.activate([
@@ -138,11 +141,15 @@ class MainMenuViewController: UIViewController,
     func unsubscribeFromRedux() {
         let action = ScreenAction(windowUUID: windowUUID,
                                   actionType: ScreenActionType.closeScreen,
-                                  screen: .microsurvey)
+                                  screen: .mainMenu)
         store.dispatch(action)
     }
 
     func newState(state: MainMenuState) {
+        menuState = state
+        if menuState.shouldDismiss {
+            coordinator?.dismissModal(animated: true)
+        }
     }
 
     // MARK: - UX related
@@ -158,7 +165,14 @@ class MainMenuViewController: UIViewController,
     private func closeTapped() { }
 
     @objc
-    private func testButtonTapped() { }
+    private func testButtonTapped() {
+        store.dispatch(
+            MainMenuAction(
+                windowUUID: windowUUID,
+                actionType: MainMenuActionType.closeMenu
+            )
+        )
+    }
 
     // In iOS 15 modals with a large detent read content underneath the modal
     // in voice over. To prevent this we manually turn this off.

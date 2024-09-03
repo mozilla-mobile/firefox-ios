@@ -42,6 +42,7 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
             windowUUID: tabManager.windowUUID,
             viewModel: MainMenuViewModel(windowUUID: tabManager.windowUUID)
         )
+        mainMenuViewController.coordinator = self
         return mainMenuViewController
     }
 }

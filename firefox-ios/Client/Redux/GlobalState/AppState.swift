@@ -54,11 +54,12 @@ let store = Store(state: AppState(),
                   reducer: AppState.reducer,
                   middlewares: [
                     FeltPrivacyMiddleware().privacyManagerProvider,
-                    ThemeManagerMiddleware().themeManagerProvider,
-                    TabManagerMiddleware().tabsPanelProvider,
-                    RemoteTabsPanelMiddleware().remoteTabsPanelProvider,
-                    ToolbarMiddleware().toolbarProvider,
-                    MicrosurveyPromptMiddleware().microsurveyProvider,
+                    MainMenuMiddleware().mainMenuProvider,
                     MicrosurveyMiddleware().microsurveyProvider,
+                    MicrosurveyPromptMiddleware().microsurveyProvider,
+                    RemoteTabsPanelMiddleware().remoteTabsPanelProvider,
+                    TabManagerMiddleware().tabsPanelProvider,
+                    ThemeManagerMiddleware().themeManagerProvider,
+                    ToolbarMiddleware().toolbarProvider,
                     TrackingProtectionMiddleware().trackingProtectionProvider
                   ])
