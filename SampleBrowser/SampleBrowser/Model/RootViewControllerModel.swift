@@ -103,7 +103,7 @@ class RootViewControllerModel {
             urlTextFieldA11yId: "urlTextField",
             urlTextFieldA11yLabel: "Address Bar",
             searchEngineImage: UIImage(named: "bingSearchEngine"),
-            lockIconImageName: StandardImageIdentifiers.Medium.sun,
+            lockIconImageName: StandardImageIdentifiers.Large.lock,
             url: url,
             searchTerm: nil,
             isEditing: false,
