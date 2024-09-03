@@ -2685,28 +2685,10 @@ class BrowserViewController: UIViewController,
             // Handle different field types
             switch fieldValues.fieldValue {
             case .address:
-                guard addressAutofillSettingsUserDefaultsIsEnabled(),
-                      AddressLocaleFeatureValidator.isValidRegion(),
-                      // FXMO-376: Phase 2 let addressPayload = fieldValues.fieldData as? UnencryptedAddressFields,
-                      let type = type else { return }
-
-                // Handle address form filling or capturing
-                switch type {
-                case .fillAddressForm:
-                    displayAddressAutofillAccessoryView(tabWebView: tabWebView)
-                case .captureAddressForm:
-                    // FXMO-376: No action needed for capturing address form as this is for Phase 2
-                    break
-                default:
-                    break
-                }
-
-                tabWebView.accessoryView.savedAddressesClosure = {
-                    DispatchQueue.main.async { [weak self] in
-                        webView.resignFirstResponder()
-                        self?.navigationHandler?.showAddressAutofill(frame: frame)
-                    }
-                }
+                handleFoundAddressFieldValue(type: type,
+                                             tabWebView: tabWebView,
+                                             webView: webView,
+                                             frame: frame)
             case .creditCard:
                 guard let creditCardPayload = fieldValues.fieldData as? UnencryptedCreditCardFields,
                       let type = type,
@@ -2735,6 +2717,34 @@ class BrowserViewController: UIViewController,
                 handleSavedCardsButtonTap(tabWebView: tabWebView,
                                           webView: webView,
                                           frame: frame)
+            }
+        }
+    }
+
+    private func handleFoundAddressFieldValue(type: FormAutofillPayloadType?,
+                                              tabWebView: TabWebView,
+                                              webView: WKWebView,
+                                              frame: WKFrameInfo?) {
+        guard addressAutofillSettingsUserDefaultsIsEnabled(),
+              AddressLocaleFeatureValidator.isValidRegion(),
+              // FXMO-376: Phase 2 let addressPayload = fieldValues.fieldData as? UnencryptedAddressFields,
+              let type = type else { return }
+
+        // Handle address form filling or capturing
+        switch type {
+        case .fillAddressForm:
+            displayAddressAutofillAccessoryView(tabWebView: tabWebView)
+        case .captureAddressForm:
+            // FXMO-376: No action needed for capturing address form as this is for Phase 2
+            break
+        default:
+            break
+        }
+
+        tabWebView.accessoryView.savedAddressesClosure = {
+            DispatchQueue.main.async { [weak self] in
+                webView.resignFirstResponder()
+                self?.navigationHandler?.showAddressAutofill(frame: frame)
             }
         }
     }
