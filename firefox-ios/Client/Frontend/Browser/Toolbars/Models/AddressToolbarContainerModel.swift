@@ -69,10 +69,13 @@ class AddressToolbarContainerModel: Equatable {
     init(state: ToolbarState, profile: Profile, windowUUID: UUID) {
         self.borderPosition = state.addressToolbar.borderPosition
         self.navigationActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.navigationActions,
+                                                                         isShowingTopTabs: state.isShowingTopTabs,
                                                                          windowUUID: windowUUID)
         self.pageActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.pageActions,
+                                                                   isShowingTopTabs: state.isShowingTopTabs,
                                                                    windowUUID: windowUUID)
         self.browserActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.browserActions,
+                                                                      isShowingTopTabs: state.isShowingTopTabs,
                                                                       windowUUID: windowUUID)
         self.windowUUID = windowUUID
         self.searchEngineImage = profile.searchEngines.defaultEngine?.image
@@ -98,7 +101,9 @@ class AddressToolbarContainerModel: Equatable {
         return query
     }
 
-    private static func mapActions(_ actions: [ToolbarActionState], windowUUID: UUID) -> [ToolbarElement] {
+    private static func mapActions(_ actions: [ToolbarActionState],
+                                   isShowingTopTabs: Bool,
+                                   windowUUID: UUID) -> [ToolbarElement] {
         return actions.map { action in
             ToolbarElement(
                 iconName: action.iconName,
@@ -119,6 +124,7 @@ class AddressToolbarContainerModel: Equatable {
                                                          actionType: ToolbarMiddlewareActionType.customA11yAction)
                     store.dispatch(action)
                 } : nil,
+                hasLongPressAction: action.canPerformLongPressAction(isShowingTopTabs: isShowingTopTabs),
                 onSelected: { button in
                     let action = ToolbarMiddlewareAction(buttonType: action.actionType,
                                                          buttonTapped: button,
@@ -126,7 +132,7 @@ class AddressToolbarContainerModel: Equatable {
                                                          windowUUID: windowUUID,
                                                          actionType: ToolbarMiddlewareActionType.didTapButton)
                     store.dispatch(action)
-                }, onLongPress: action.canPerformLongPressAction(isShowingTopTabs: true) ? { button in
+                }, onLongPress: action.canPerformLongPressAction(isShowingTopTabs: isShowingTopTabs) ? { button in
                     let action = ToolbarMiddlewareAction(buttonType: action.actionType,
                                                          buttonTapped: button,
                                                          gestureType: .longPress,
