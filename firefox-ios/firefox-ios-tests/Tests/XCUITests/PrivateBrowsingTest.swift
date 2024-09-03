@@ -175,6 +175,7 @@ class PrivateBrowsingTest: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307012
+    // Smoketest
     func testLongPressLinkOptionsPrivateMode() {
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
