@@ -214,7 +214,6 @@ final class AddressToolbarContainer: UIView,
                                      leadingSpace: leadingToolbarSpace,
                                      trailingSpace: trailingToolbarSpace)
 
-
             // Dismiss overlay mode when not editing to fix overlay mode staying open
             // on iPad when switching tabs using top tabs
             if !toolbarState.addressToolbar.isEditing {
@@ -240,17 +239,13 @@ final class AddressToolbarContainer: UIView,
 
     private func setupLayout() {
         addSubview(progressBar)
-        addSubview(toolbar)
 
         NSLayoutConstraint.activate([
             progressBar.leadingAnchor.constraint(equalTo: leadingAnchor),
             progressBar.trailingAnchor.constraint(equalTo: trailingAnchor),
-
-            toolbar.topAnchor.constraint(equalTo: topAnchor),
-            toolbar.leadingAnchor.constraint(equalTo: leadingAnchor),
-            toolbar.bottomAnchor.constraint(equalTo: bottomAnchor),
-            toolbar.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
+
+        setupToolbarConstraints()
     }
 
     private func switchToolbars() {
@@ -260,6 +255,10 @@ final class AddressToolbarContainer: UIView,
             regularToolbar.removeFromSuperview()
         }
 
+        setupToolbarConstraints()
+    }
+
+    private func setupToolbarConstraints() {
         addSubview(toolbar)
 
         NSLayoutConstraint.activate([
