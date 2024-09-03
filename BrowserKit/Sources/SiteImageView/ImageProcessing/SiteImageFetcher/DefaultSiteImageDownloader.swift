@@ -20,7 +20,7 @@ class DefaultSiteImageDownloader: ImageDownloader, SiteImageDownloader {
                        completionHandler: ((Result<SiteImageLoadingResult, Error>) -> Void)?
     ) -> DownloadTask? {
         return downloadImage(with: url,
-                             options: nil,
+                             options: [.processor(SVGImageProcessor())],
                              completionHandler: { result in
             switch result {
             case .success(let value):
