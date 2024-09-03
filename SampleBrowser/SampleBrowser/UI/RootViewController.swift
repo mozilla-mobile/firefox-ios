@@ -235,7 +235,19 @@ class RootViewController: UIViewController,
     func shouldDisplayTextForURL(_ url: URL?) -> String? {
         return nil
     }
-
+    
+    func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool) {
+        
+    }
+    
+    func addressToolbarAccessibilityActions() -> [UIAccessibilityCustomAction]? {
+        return []
+    }
+    
+    func configureContextualHint(_ addressToolbar: BrowserAddressToolbar, for button: UIButton) {
+        
+    }
+    
     // MARK: - SearchViewDelegate
 
     func tapOnSuggestion(term: String) {

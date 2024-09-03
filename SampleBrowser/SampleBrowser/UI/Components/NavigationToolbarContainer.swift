@@ -14,7 +14,9 @@ protocol NavigationToolbarDelegate: AnyObject {
     func menuButtonTapped()
 }
 
-class NavigationToolbarContainer: UIView, ThemeApplicable {
+class NavigationToolbarContainer: UIView,
+                                  ThemeApplicable,
+                                  BrowserNavigationToolbarDelegate {
     private enum UX {
         static let toolbarHeight: CGFloat = 48
     }
@@ -59,7 +61,7 @@ class NavigationToolbarContainer: UIView, ThemeApplicable {
     }
 
     func configure(_ model: NavigationToolbarContainerModel) {
-        toolbar.configure(state: model.state)
+        toolbar.configure(state: model.state, toolbarDelegate: self)
     }
 
     private func setupLayout() {
@@ -75,6 +77,9 @@ class NavigationToolbarContainer: UIView, ThemeApplicable {
             toolbar.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
     }
+    
+    // MARK: - BrowserNavigationToolbarDelegate
+    func configureContextualHint(for button: UIButton) {}
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
