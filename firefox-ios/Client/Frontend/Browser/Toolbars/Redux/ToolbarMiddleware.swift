@@ -662,8 +662,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
         let middleAction = getMiddleButtonAction(url: url, isPrivateMode: toolbarState.isPrivateMode)
 
-        let isShowingTopTabs = action.isShowingTopTabs ?? false
-
         let canGoBack = action.canGoBack ?? toolbarState.canGoBack
         let canGoForward = action.canGoForward ?? toolbarState.canGoForward
         let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
