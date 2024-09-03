@@ -23,7 +23,7 @@ class RootViewControllerModel {
             iconName: "Back",
             isEnabled: canGoBack,
             a11yLabel: "Navigate Back",
-            a11yHint: nil, 
+            a11yHint: nil,
             a11yId: "backButton",
             onSelected: { _ in
                 self.navigationToolbarDelegate?.backButtonTapped()
@@ -32,7 +32,7 @@ class RootViewControllerModel {
             iconName: "Forward",
             isEnabled: canGoForward,
             a11yLabel: "Navigate Forward",
-            a11yHint: nil, 
+            a11yHint: nil,
             a11yId: "forwardButton",
             onSelected: { _ in
                 self.navigationToolbarDelegate?.forwardButtonTapped()
@@ -41,7 +41,7 @@ class RootViewControllerModel {
             iconName: isReloading ? StandardImageIdentifiers.Large.cross : StandardImageIdentifiers.Large.sync,
             isEnabled: isReloading,
             a11yLabel: isReloading ? "Stop loading website" : "Reload website",
-            a11yHint: nil, 
+            a11yHint: nil,
             a11yId: isReloading ? "stopButton" : "reloadButton",
             onSelected: { _ in
                 if self.isReloading {
@@ -54,7 +54,7 @@ class RootViewControllerModel {
             iconName: StandardImageIdentifiers.Large.appMenu,
             isEnabled: true,
             a11yLabel: "Open Menu",
-            a11yHint: nil, 
+            a11yHint: nil,
             a11yId: "appMenuButton",
             onSelected: { _ in
                 self.navigationToolbarDelegate?.menuButtonTapped()
@@ -80,7 +80,7 @@ class RootViewControllerModel {
             iconName: StandardImageIdentifiers.Large.qrCode,
             isEnabled: true,
             a11yLabel: "Read QR Code",
-            a11yHint: nil, 
+            a11yHint: nil,
             a11yId: "qrCodeButton",
             onSelected: nil)]
 
@@ -88,7 +88,7 @@ class RootViewControllerModel {
             iconName: StandardImageIdentifiers.Large.appMenu,
             isEnabled: true,
             a11yLabel: "Open Menu",
-            a11yHint: nil, 
+            a11yHint: nil,
             a11yId: "appMenuButton",
             onSelected: { _ in
                 self.addressToolbarDelegate?.didTapMenu()

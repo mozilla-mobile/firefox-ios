@@ -77,9 +77,10 @@ class NavigationToolbarContainer: UIView,
             toolbar.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
     }
-    
+
     // MARK: - BrowserNavigationToolbarDelegate
-    func configureContextualHint(for button: UIButton) {}
+    func configureContextualHint(for button: UIButton) {
+    }
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
