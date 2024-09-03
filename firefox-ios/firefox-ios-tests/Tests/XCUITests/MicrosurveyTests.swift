@@ -84,9 +84,11 @@ final class MicrosurveyTests: BaseTestCase {
         app.buttons[AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.privateModeToggleButton]
         let homepageToggleButtonIpad = app.buttons[AccessibilityIdentifiers.Browser.TopTabs.privateModeButton]
         if !iPad() {
+            mozWaitForElementToExist(homepageToggleButtonIphone)
             homepageToggleButtonIphone.tap()
             mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.PrivateMode.Homepage.link])
         } else {
+            mozWaitForElementToExist(homepageToggleButtonIpad)
             homepageToggleButtonIpad.tap()
             mozWaitForElementToExist(app.collectionViews[AccessibilityIdentifiers.Browser.TopTabs.collectionView])
         }
