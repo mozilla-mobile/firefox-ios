@@ -8,15 +8,33 @@ import SwiftDraw
 import Kingfisher
 
 class SVGImageProcessorTests: XCTestCase {
-    let faviconURL = URL(string: "https://news.ycombinator.com/y18.svg")!
+    let svgFaviconURL = URL(string: "https://news.ycombinator.com/y18.svg")!
+    let icoFaviconURL = URL(string: "https://www.mozilla.org/favicon.ico")!
 
     func testDownloadingSVGImage_withKingfisherProcessor() async {
         let exp = expectation(description: "Image download and parse")
 
         let siteDownloader = DefaultSiteImageDownloader()
-        siteDownloader.downloadImage(with: faviconURL, options: [.processor(SVGImageProcessor())]) { result in
+        siteDownloader.downloadImage(with: svgFaviconURL, options: [.processor(SVGImageProcessor())]) { result in
             switch result {
-            case .success(let value):
+            case .success:
+                exp.fulfill()
+            case .failure(let error):
+                XCTFail("Should not have an error: \(error) \(error.errorDescription ?? "")")
+                exp.fulfill()
+            }
+        }
+
+        await fulfillment(of: [exp], timeout: 200.0)
+    }
+
+    func testDownloadingICOImage_withKingfisherProcessor() async {
+        let exp = expectation(description: "Image download and parse")
+
+        let siteDownloader = DefaultSiteImageDownloader()
+        siteDownloader.downloadImage(with: icoFaviconURL, options: [.processor(SVGImageProcessor())]) { result in
+            switch result {
+            case .success:
                 exp.fulfill()
             case .failure(let error):
                 XCTFail("Should not have an error: \(error) \(error.errorDescription ?? "")")
@@ -30,7 +48,7 @@ class SVGImageProcessorTests: XCTestCase {
     func testSVGKit_processesSVG() async {
         let rasterSize = CGSize(width: 240, height: 240)
 
-        guard let svgData = try? Data(contentsOf: faviconURL) else {
+        guard let svgData = try? Data(contentsOf: svgFaviconURL) else {
             XCTFail("Failed to download SVG image")
             return
         }

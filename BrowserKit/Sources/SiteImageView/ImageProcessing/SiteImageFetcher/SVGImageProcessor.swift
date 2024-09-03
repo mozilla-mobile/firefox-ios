@@ -23,8 +23,13 @@ public struct SVGImageProcessor: ImageProcessor {
             // You can do whatever you want to apply to the image and return the result.
             return image
         case .data(let data):
-            // Your own way to convert some data to an image.
-            return SVG(data: data)?.rasterize(with: defaultFaviconSize)
+            if let image = UIImage(data: data) {
+                return image
+            } else if let svgImage = SVG(data: data)?.rasterize(with: defaultFaviconSize) {
+                return svgImage
+            } else {
+                return nil
+            }
         }
     }
 }
