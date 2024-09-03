@@ -44,7 +44,7 @@ jobs:
       - name: Commit and push changes
         run: |
           git diff
-          git diff --quiet || (git add . && git commit -m "Update remote settings with latest rules" && git push)
+          git diff --quiet || (git add firefox-ios/Client/Assets/RemoteSettingsData/RemotePasswordRules.json && git commit -m "Update remote settings with latest rules" && git push)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -62,7 +62,14 @@ jobs:
         if: always()
         run: echo "JOB_LOG_URL=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_ENV
 
-      - name: Send Slack notification if GitHub Action fails
+      - name: Send Slack to notifiy if github action fails
         if: '!cancelled()'
         id: slack
-        uses: slackapi/slack
+        uses: slackapi/slack-github-action@v1.26.0
+        env:
+          JOB_STATUS: ${{ job.status == 'success' && ':white_check_mark:' || job.status == 'failure' && ':x:' }}
+          JOB_STATUS_COLOR: ${{ job.status == 'success' && '#36a64f' || job.status == 'failure' && '#FF0000' }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        with:
+          payload-file-path: "./test-fixtures/ci/slack-notification-payload-remote-settings-fetch.json"
