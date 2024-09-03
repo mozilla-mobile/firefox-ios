@@ -77,9 +77,7 @@ let package = Package(
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "SiteImageViewTests",
-            dependencies: ["SiteImageView"],
-            resources: [.copy("testSVG")]
-        ),
+            dependencies: ["SiteImageView"]),
         .target(
             name: "Common",
             dependencies: ["Dip",
