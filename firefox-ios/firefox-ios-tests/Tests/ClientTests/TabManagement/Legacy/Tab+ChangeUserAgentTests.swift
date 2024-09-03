@@ -42,7 +42,8 @@ class ChangeUserAgentTests: XCTestCase {
             isChangedUA: testMockData.isChangedUA,
             isPrivate: testMockData.isPrivate
         )
-        XCTAssertEqual(Tab.ChangeUserAgent.contains(url: url), testMockData.expectContainsURL)
+        XCTAssertEqual(Tab.ChangeUserAgent.contains(url: url, isPrivate: testMockData.isPrivate),
+                       testMockData.expectContainsURL)
     }
 
     func testUpdateAndContainsDidChangeUAAndPrivate() {
@@ -59,7 +60,8 @@ class ChangeUserAgentTests: XCTestCase {
             isChangedUA: testMockData.isChangedUA,
             isPrivate: testMockData.isPrivate
         )
-        XCTAssertEqual(Tab.ChangeUserAgent.contains(url: url), testMockData.expectContainsURL)
+        XCTAssertEqual(Tab.ChangeUserAgent.contains(url: url, isPrivate: testMockData.isPrivate),
+                       testMockData.expectContainsURL)
     }
 
     func testUpdateAndContainsNoChangeUANotPrivate() {
@@ -77,7 +79,8 @@ class ChangeUserAgentTests: XCTestCase {
             isChangedUA: testMockData.isChangedUA,
             isPrivate: testMockData.isPrivate
         )
-        XCTAssertEqual(Tab.ChangeUserAgent.contains(url: url), testMockData.expectContainsURL)
+        XCTAssertEqual(Tab.ChangeUserAgent.contains(url: url, isPrivate: testMockData.isPrivate),
+                       testMockData.expectContainsURL)
     }
 
     func testUpdateAndContainsNoChangeUAAndPrivate() {
@@ -94,7 +97,8 @@ class ChangeUserAgentTests: XCTestCase {
             isChangedUA: testMockData.isChangedUA,
             isPrivate: testMockData.isPrivate
         )
-        XCTAssertEqual(Tab.ChangeUserAgent.contains(url: url), testMockData.expectContainsURL)
+        XCTAssertEqual(Tab.ChangeUserAgent.contains(url: url, isPrivate: testMockData.isPrivate),
+                       testMockData.expectContainsURL)
     }
 
     func tryAllCasesForUpdateAndContains() {
@@ -130,17 +134,17 @@ class ChangeUserAgentTests: XCTestCase {
                 isChangedUA: testCase.isChangedUA,
                 isPrivate: testCase.isPrivate
             )
-            XCTAssertEqual(Tab.ChangeUserAgent.contains(url: url), testCase.expectContainsURL)
+            XCTAssertEqual(Tab.ChangeUserAgent.contains(url: url, isPrivate: testCase.isPrivate), testCase.expectContainsURL)
         }
     }
 
     func testClear() {
         let url = URL(string: "https://www.google.com")!
         Tab.ChangeUserAgent.updateDomainList(forUrl: url, isChangedUA: true, isPrivate: false)
-        XCTAssert(Tab.ChangeUserAgent.contains(url: url))
+      XCTAssert(Tab.ChangeUserAgent.contains(url: url, isPrivate: false))
 
         Tab.ChangeUserAgent.clear()
-        XCTAssertFalse(Tab.ChangeUserAgent.contains(url: url))
+        XCTAssertFalse(Tab.ChangeUserAgent.contains(url: url, isPrivate: false))
     }
 
     // MARK: removeMobilePrefixFrom tests

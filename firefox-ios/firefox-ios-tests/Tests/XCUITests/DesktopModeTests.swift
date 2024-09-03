@@ -145,9 +145,9 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton])
         app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].tap()
         navigator.goto(BrowserTabMenu)
-        navigator.goto(RequestMobileSite) // toggle off
+        navigator.goto(RequestDesktopSite) // toggle off
         waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
         // is now off in private, mode, confirm it is off in normal mode
 
@@ -155,7 +155,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306857

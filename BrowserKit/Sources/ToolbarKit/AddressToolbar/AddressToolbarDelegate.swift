@@ -9,6 +9,7 @@ public protocol AddressToolbarDelegate: AnyObject {
     func searchSuggestions(searchTerm: String)
     func openBrowser(searchTerm: String)
     func openSuggestions(searchTerm: String)
+    func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool)
     func addressToolbarAccessibilityActions() -> [UIAccessibilityCustomAction]?
     func configureContextualHint(_ addressToolbar: BrowserAddressToolbar, for button: UIButton)
 }

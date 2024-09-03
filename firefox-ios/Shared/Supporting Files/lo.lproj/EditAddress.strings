@@ -1,0 +1,48 @@
+/* Title for the cancel button in the remove address alert. */
+"Addresses.EditAddress.Alert.CancelButton.v129" = "ຍົກເລີກ";
+
+/* Message explaining the consequences of removing an address from all synced devices. */
+"Addresses.EditAddress.Alert.Message.v129" = "ທີ່ຢູ່ຈະຖືກລຶບອອກຈາກທຸກອຸປະກອນທີ່ຊິ້ງຂອງທ່ານ.";
+
+/* Title for the remove button in the remove address alert. */
+"Addresses.EditAddress.Alert.RemoveButton.v129" = "ລຶບ";
+
+/* Title for the alert indicating the action to remove an address. */
+"Addresses.EditAddress.Alert.Title.v129" = "ລຶບທີ່ຢູ່";
+
+/* Title for the interface option where users can add a new address for autofill purposes. This facilitates quicker form completion by automatically filling in the user's address information. */
+"Addresses.EditAddress.AutofillAddAddressTitle.v129" = "ເພີ່ມທີ່ຢູ່";
+
+/* Label for the area field, allowing users to specify a particular area within a city or region. This detail can improve the specificity and accuracy of autofilled addresses. */
+"Addresses.EditAddress.AutofillAddressArea.v129" = "ພື້ນທີ່";
+
+/* Label for the field where users input the city part of their address. This information is crucial for mail delivery and service provision, ensuring accurate city identification in autofill settings. */
+"Addresses.EditAddress.AutofillAddressCity.v129" = "ເມືອງ";
+
+/* Label for the field where users can specify just the country, used in contexts where full address details are not required. Simplifies autofill when only country information is necessary. */
+"Addresses.EditAddress.AutofillAddressCountryOnly.v129" = "ປະເທດ";
+
+/* Label for the country or region field in address forms, allowing users to specify their country or territorial region. This is fundamental for international mail and services, ensuring autofill accuracy across borders. */
+"Addresses.EditAddress.AutofillAddressCountryRegion.v129" = "ປະເທດ ຫຼື ພາກພື້ນ";
+
+/* Label for the county field, crucial for addressing in regions where county lines play a key role in postal services. Enhances autofill accuracy by including county information. */
+"Addresses.EditAddress.AutofillAddressCounty.v129" = "ປະເທດ";
+
+/* Label for the department field, used in countries like France and Colombia where departments are a key administrative division. Ensures correct departmental information is autofilled. */
+"Addresses.EditAddress.AutofillAddressDepartment.v129" = "ພະແນກ";
+
+/* Label for the district field in the address form, allowing users to specify their district for more precise location identification. This aids in refining address details for accurate autofill. */
+"Addresses.EditAddress.AutofillAddressDistrict.v129" = "ແຂວງ";
+
+/* Label for the Do/Si field, pertinent to addresses in South Korea. Do/Si refers to provincial level divisions, and specifying this enhances address accuracy in autofill settings. */
+"Addresses.EditAddress.AutofillAddressDoSi.v129" = "Do/Si";
+
+/* Label for the Eircode field, specific to Ireland. It's a unique postal code system that helps in precise location identification, enhancing the effectiveness of autofill. */
+"Addresses.EditAddress.AutofillAddressEircode.v129" = "Eircode";
+
+/* Label for the email address field, where users input their email. Critical for digital communication and account verification, this ensures email addresses are autofilled accurately. */
+"Addresses.EditAddress.AutofillAddressEmail.v129" = "ອີເມລ";
+
+/* Label for the emirate field, essential for addresses in the United Arab Emirates. Including emirate details ensures the autofill feature accurately represents user addresses. */
+"Addresses.EditAddress.AutofillAddressEmirate.v129" = "Emirate";
+

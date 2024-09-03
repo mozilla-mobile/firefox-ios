@@ -30,6 +30,7 @@ class BrowserCoordinator: BaseCoordinator,
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
     var privateViewController: PrivateHomepageViewController?
+    var errorViewController: NativeErrorPageViewController?
 
     private var profile: Profile
     private let tabManager: TabManager
@@ -713,6 +714,19 @@ class BrowserCoordinator: BaseCoordinator,
         }
 
         present(navigationController)
+    }
+
+    func showNativeErrorPage(overlayManager: OverlayModeManager) {
+        // TODO: FXIOS-9641 #21239 Integration with Redux - presenting view
+        let errorPageModel = ErrorPageModel(errorTitle: "", errorDecription: "", errorCode: "")
+        let errorpageController = NativeErrorPageViewController(model: errorPageModel,
+                                                                windowUUID: windowUUID,
+                                                                overlayManager: overlayManager)
+        guard browserViewController.embedContent(errorpageController) else {
+            logger.log("Unable to embed private homepage", level: .debug, category: .coordinator)
+            return
+        }
+        self.errorViewController = errorpageController
     }
 
     private func setiPadLayoutDetents(for controller: UIViewController) {

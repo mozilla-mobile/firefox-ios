@@ -11,7 +11,6 @@ protocol LocationTextFieldDelegate: AnyObject {
     func locationTextField(_ textField: LocationTextField, didEnterText text: String)
     func locationTextFieldShouldReturn(_ textField: LocationTextField) -> Bool
     func locationTextFieldShouldClear(_ textField: LocationTextField) -> Bool
-    func locationPasteAndGo(_ textField: LocationTextField)
     func locationTextFieldDidBeginEditing(_ textField: UITextField)
     func locationTextFieldDidEndEditing(_ textField: UITextField)
 }
@@ -93,7 +92,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     }
 
     override func deleteBackward() {
-        lastReplacement = nil
+        lastReplacement = ""
         hideCursor = false
 
         guard markedTextRange == nil else {

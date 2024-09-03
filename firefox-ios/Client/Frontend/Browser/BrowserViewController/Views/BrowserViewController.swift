@@ -1389,8 +1389,13 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Native Error Page
 
-    private func setupNativeErrorPage() {
-        guard featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly) else { return }
+    private func isNativeErrorPage() -> Bool {
+        featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly)
+    }
+
+    func showEmbeddedNativeErrorPage() {
+    // TODO: FXIOS-9641 #21239 Implement Redux for Native Error Pages
+        browserDelegate?.showNativeErrorPage(overlayManager: overlayManager)
     }
 
     // MARK: - Update content
@@ -1420,6 +1425,9 @@ class BrowserViewController: UIViewController,
 
     func updateInContentHomePanel(_ url: URL?, focusUrlBar: Bool = false) {
         let isAboutHomeURL = url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
+
+        let isErrorURL = url.flatMap { InternalURL($0)?.isErrorPage } ?? false
+
         guard url != nil else {
             showEmbeddedWebview()
             if !isToolbarRefactorEnabled {
@@ -1430,6 +1438,8 @@ class BrowserViewController: UIViewController,
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+        } else if isErrorURL && isNativeErrorPage() {
+            showEmbeddedNativeErrorPage()
         } else {
             showEmbeddedWebview()
             if !isToolbarRefactorEnabled {
@@ -1956,7 +1966,7 @@ class BrowserViewController: UIViewController,
             presentLocationViewActionSheet(from: addressToolbarContainer)
         case .trackingProtectionDetails:
             TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
-            navigationHandler?.showEnhancedTrackingProtection(sourceView: view)
+            navigationHandler?.showEnhancedTrackingProtection(sourceView: state.buttonTapped ?? addressToolbarContainer)
         case .menu:
             didTapOnMenu(button: state.buttonTapped)
         case .reloadLongPressAction:
@@ -2390,11 +2400,19 @@ class BrowserViewController: UIViewController,
             // Without a delay, the text field fails to become first responder
             // Check that the newly created tab is still selected.
             // This let's the user spam the Cmd+T button without lots of responder changes.
-            guard tab == self.tabManager.selectedTab, !self.isToolbarRefactorEnabled else { return }
+            guard tab == self.tabManager.selectedTab else { return }
 
-            self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
-            if let text = searchText {
-                self.urlBar.setLocation(text, search: true)
+            if self.isToolbarRefactorEnabled {
+                let action = ToolbarMiddlewareAction(searchTerm: searchText,
+                                                     windowUUID: self.windowUUID,
+                                                     actionType: ToolbarMiddlewareActionType.didStartEditingUrl)
+                store.dispatch(action)
+            } else {
+                self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
+
+                if let text = searchText {
+                    self.urlBar.setLocation(text, search: true)
+                }
             }
         }
     }
@@ -3039,6 +3057,10 @@ class BrowserViewController: UIViewController,
     // Also implements NavigationToolbarContainerDelegate::configureContextualHint(for button: UIButton)
     func configureContextualHint(for button: UIButton) {
         configureDataClearanceContextualHint(button)
+    }
+
+    func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool) {
+        addressToolbarDidEnterOverlayMode(addressToolbarContainer)
     }
 
     func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]? {

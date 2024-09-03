@@ -18,6 +18,7 @@ class AddressToolbarContainerModel: Equatable {
     let url: URL?
     let searchTerm: String?
     let isEditing: Bool
+    let isScrollingDuringEdit: Bool
     let isPrivateMode: Bool
     let shouldSelectSearchTerm: Bool
     let shouldDisplayCompact: Bool
@@ -40,9 +41,11 @@ class AddressToolbarContainerModel: Equatable {
             url: url,
             searchTerm: term,
             isEditing: isEditing,
+            isScrollingDuringEdit: isScrollingDuringEdit,
             shouldSelectSearchTerm: shouldSelectSearchTerm,
-            onTapLockIcon: {
+            onTapLockIcon: { button in
                 let action = ToolbarMiddlewareAction(buttonType: .trackingProtection,
+                                                     buttonTapped: button,
                                                      gestureType: .tap,
                                                      windowUUID: self.windowUUID,
                                                      actionType: ToolbarMiddlewareActionType.didTapButton)
@@ -78,6 +81,7 @@ class AddressToolbarContainerModel: Equatable {
         self.url = state.addressToolbar.url
         self.searchTerm = state.addressToolbar.searchTerm
         self.isEditing = state.addressToolbar.isEditing
+        self.isScrollingDuringEdit = state.addressToolbar.isScrollingDuringEdit
         self.isPrivateMode = state.isPrivateMode
         self.shouldSelectSearchTerm = state.addressToolbar.shouldSelectSearchTerm
         self.shouldDisplayCompact = state.isShowingNavigationToolbar

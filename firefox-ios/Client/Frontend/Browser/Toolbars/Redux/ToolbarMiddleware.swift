@@ -253,7 +253,8 @@ final class ToolbarMiddleware: FeatureFlaggable {
             store.dispatch(action)
 
         case .trackingProtection:
-            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+            let action = GeneralBrowserAction(buttonTapped: action.buttonTapped,
+                                              windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showTrackingProtectionDetails)
             store.dispatch(action)
 
@@ -607,6 +608,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         else { return }
 
         let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
+                                          searchTerm: action.searchTerm ?? toolbarState.addressToolbar.searchTerm,
                                           isShowingTopTabs: action.isShowingTopTabs ?? toolbarState.isShowingTopTabs,
                                           windowUUID: action.windowUUID,
                                           actionType: dispatchActionType)

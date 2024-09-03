@@ -18,7 +18,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     private var urlAbsolutePath: String?
     private var searchTerm: String?
     private var notifyTextChanged: (() -> Void)?
-    private var onTapLockIcon: (() -> Void)?
+    private var onTapLockIcon: ((UIButton) -> Void)?
     private var onLongPress: (() -> Void)?
     private var delegate: LocationViewDelegate?
 
@@ -258,10 +258,11 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         urlTextField.placeholder = state.urlTextFieldPlaceholder
         urlAbsolutePath = state.url?.absoluteString
 
-        _ = state.isEditing ? becomeFirstResponder() : resignFirstResponder()
+        let shouldShowKeyboard = state.isEditing && !state.isScrollingDuringEdit
+        _ = shouldShowKeyboard ? becomeFirstResponder() : resignFirstResponder()
 
         // Start overlay mode & select text when in edit mode with a search term
-        if state.isEditing, state.shouldSelectSearchTerm {
+        if shouldShowKeyboard, state.shouldSelectSearchTerm {
             DispatchQueue.main.async {
                 self.urlTextField.selectAll(nil)
             }
@@ -323,7 +324,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
 
     @objc
     private func didTapLockIcon() {
-        onTapLockIcon?()
+        onTapLockIcon?(lockIconButton)
     }
 
     @objc
@@ -354,21 +355,15 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         return true
     }
 
-    func locationPasteAndGo(_ textField: LocationTextField) {
-        if let pasteboardContents = UIPasteboard.general.string {
-            delegate?.locationViewDidSubmitText(pasteboardContents)
-        }
-    }
-
     func locationTextFieldDidBeginEditing(_ textField: UITextField) {
         updateUIForSearchEngineDisplay()
+        let searchText = searchTerm != nil ? searchTerm : urlAbsolutePath
 
-        DispatchQueue.main.async { [self] in
-            // `attributedText` property is set to nil to remove all formatting and truncation set before.
-            textField.attributedText = nil
-            textField.text = searchTerm != nil ? searchTerm : urlAbsolutePath
-        }
-        delegate?.locationViewDidBeginEditing(textField.text ?? "")
+        // `attributedText` property is set to nil to remove all formatting and truncation set before.
+        textField.attributedText = nil
+        textField.text = searchText
+
+        delegate?.locationViewDidBeginEditing(searchText ?? "", shouldShowSuggestions: searchTerm != nil)
     }
 
     func locationTextFieldDidEndEditing(_ textField: UITextField) {
