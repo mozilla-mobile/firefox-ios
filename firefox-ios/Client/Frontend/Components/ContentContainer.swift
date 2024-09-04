@@ -36,6 +36,10 @@ class ContentContainer: UIView {
         return type == .webview
     }
 
+    var hasNativeErrorPage: Bool {
+        return type == .nativeErrorPage
+    }
+
     /// Determine if the content can be added, making sure we only add once
     /// - Parameters:
     ///   - viewController: The view controller to add to the container

@@ -22,6 +22,8 @@ final class NativeErrorPageViewController: UIViewController,
         windowUUID
     }
 
+    weak var coordinator: NativeErrorPageCoordinatorDelegate?
+
     private var overlayManager: OverlayModeManager
     var contentType: ContentType = .nativeErrorPage
 

@@ -32,6 +32,6 @@ protocol BrowserDelegate: AnyObject {
     /// ensuring we are in the required state to perform deeplinks
     func browserHasLoaded()
 
-    /// Show the Error page to the user
-    func showNativeErrorPage(overlayManager: OverlayModeManager)
+//    /// Show the Error page to the user
+    func showNativeErrorPage(model: ErrorPageModel, overlayManager: OverlayModeManager)
 }

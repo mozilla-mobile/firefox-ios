@@ -417,9 +417,12 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         let isAboutHomeURL = InternalURL(action.selectedTabURL)?.isAboutHomeURL ?? false
         var browserViewType = BrowserViewType.normalHomepage
         let isPrivateBrowsing = action.isPrivateBrowsing ?? false
+        let isErrorURL = InternalURL(action.selectedTabURL)?.isErrorPage ?? false
 
         if isAboutHomeURL {
             browserViewType = isPrivateBrowsing ? .privateHomepage : .normalHomepage
+        } else if isErrorURL {
+            browserViewType = .nativeErrorpage
         } else {
             browserViewType = .webview
         }

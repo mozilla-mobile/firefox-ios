@@ -550,6 +550,7 @@
 		630FE1342C7FB42500D9D6B2 /* NativeErrorPageMockModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630FE1302C7FB42500D9D6B2 /* NativeErrorPageMockModel.swift */; };
 		630FE1352C7FB42500D9D6B2 /* NativeErrorPageViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630FE1322C7FB42500D9D6B2 /* NativeErrorPageViewControllerTests.swift */; };
 		63306D3921103EAE00F25400 /* LegacySavedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D3821103EAE00F25400 /* LegacySavedTab.swift */; };
+		63C18F082C87592A002E827A /* NativeErrorPageCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C18F072C87592A002E827A /* NativeErrorPageCoordinator.swift */; };
 		63F7A9AA2C7529ED005846F5 /* NativeErrorPageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F7A9A92C7529ED005846F5 /* NativeErrorPageModel.swift */; };
 		63F7A9AC2C752BB0005846F5 /* NativeErrorPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F7A9AB2C752BB0005846F5 /* NativeErrorPageViewController.swift */; };
 		6669B5E2211418A200CA117B /* WebsiteDataSearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6669B5E1211418A200CA117B /* WebsiteDataSearchResultsViewController.swift */; };
@@ -6241,6 +6242,7 @@
 		63306D3821103EAE00F25400 /* LegacySavedTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacySavedTab.swift; sourceTree = "<group>"; };
 		634148899F41CAA3BCF71E8B /* or */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = or; path = or.lproj/Localizable.strings; sourceTree = "<group>"; };
 		63B04BE882C41584580E0E59 /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = "fa.lproj/Default Browser.strings"; sourceTree = "<group>"; };
+		63C18F072C87592A002E827A /* NativeErrorPageCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeErrorPageCoordinator.swift; sourceTree = "<group>"; };
 		63F7A9A92C7529ED005846F5 /* NativeErrorPageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeErrorPageModel.swift; sourceTree = "<group>"; };
 		63F7A9AB2C752BB0005846F5 /* NativeErrorPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeErrorPageViewController.swift; sourceTree = "<group>"; };
 		63FE433D87018CDDFCF592E3 /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/ErrorPages.strings; sourceTree = "<group>"; };
@@ -10096,6 +10098,7 @@
 		63F7A9A82C752999005846F5 /* NativeErrorPage */ = {
 			isa = PBXGroup;
 			children = (
+				63C18F072C87592A002E827A /* NativeErrorPageCoordinator.swift */,
 				63F7A9A92C7529ED005846F5 /* NativeErrorPageModel.swift */,
 				63F7A9AB2C752BB0005846F5 /* NativeErrorPageViewController.swift */,
 			);
@@ -15390,6 +15393,7 @@
 				F886218C270CD3B8007F4562 /* DevicePasscodeRequiredViewController.swift in Sources */,
 				D83822001FC7961D00303C12 /* DispatchQueueHelper.swift in Sources */,
 				EBC486992195F46B00CDA48D /* InternalSchemeHandler.swift in Sources */,
+				63C18F082C87592A002E827A /* NativeErrorPageCoordinator.swift in Sources */,
 				E18BAAFD28E4A44500098AE2 /* TopTabFader.swift in Sources */,
 				C8656D79270F866700E199EA /* CustomizeHomepageSectionCell.swift in Sources */,
 				ABE4393E2AC432040074FFE1 /* PartnerWebsites.swift in Sources */,
