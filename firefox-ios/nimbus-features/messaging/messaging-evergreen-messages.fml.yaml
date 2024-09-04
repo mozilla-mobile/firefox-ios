@@ -55,12 +55,12 @@ import:
                   utm-content: homepage
                   icon: homeLarge
                   options:
-                    - Microsurvey/Microsurvey.Survey.Options.VerySatisfied.v131
-                    - Microsurvey/Microsurvey.Survey.Options.Satisfied.v131
-                    - Microsurvey/Microsurvey.Survey.Options.Neutral.v131
-                    - Microsurvey/Microsurvey.Survey.Options.Dissatisfied.v131
-                    - Microsurvey/Microsurvey.Survey.Options.VeryDissatisfied.v131
-                    - Microsurvey/Microsurvey.Survey.Options.NotApplicable.v131
+                    - Microsurvey/Microsurvey.Survey.Options.VerySatisfied.v132
+                    - Microsurvey/Microsurvey.Survey.Options.Satisfied.v132
+                    - Microsurvey/Microsurvey.Survey.Options.Neutral.v132
+                    - Microsurvey/Microsurvey.Survey.Options.Dissatisfied.v132
+                    - Microsurvey/Microsurvey.Survey.Options.VeryDissatisfied.v132
+                    - Microsurvey/Microsurvey.Survey.Options.NotApplicable.v132
 
         - channel: developer
           value:

@@ -1464,32 +1464,32 @@ extension String {
 
             public struct Options {
                 public static let LikertScaleOption1 = MZLocalizedString(
-                    key: "Microsurvey.Survey.Options.VerySatisfied.v131",
+                    key: "Microsurvey.Survey.Options.VerySatisfied.v132",
                     tableName: "Microsurvey",
                     value: "Very satisfied",
                     comment: "On the microsurvey, this is the title for one of the options that the user can select to answer the survey.")
                 public static let LikertScaleOption2 = MZLocalizedString(
-                    key: "Microsurvey.Survey.Options.Satisfied.v131",
+                    key: "Microsurvey.Survey.Options.Satisfied.v132",
                     tableName: "Microsurvey",
                     value: "Satisfied",
                     comment: "On the microsurvey, this is the title for one of the options that the user can select to answer the survey.")
                 public static let LikertScaleOption3 = MZLocalizedString(
-                    key: "Microsurvey.Survey.Options.Neutral.v131",
+                    key: "Microsurvey.Survey.Options.Neutral.v132",
                     tableName: "Microsurvey",
                     value: "Neutral",
                     comment: "On the microsurvey, this is the title for one of the options that the user can select to answer the survey.")
                 public static let LikertScaleOption4 = MZLocalizedString(
-                    key: "Microsurvey.Survey.Options.Dissatisfied.v131",
+                    key: "Microsurvey.Survey.Options.Dissatisfied.v132",
                     tableName: "Microsurvey",
                     value: "Dissatisfied",
                     comment: "On the microsurvey, this is the title for one of the options that the user can select to answer the survey.")
                 public static let LikertScaleOption5 = MZLocalizedString(
-                    key: "Microsurvey.Survey.Options.VeryDissatisfied.v131",
+                    key: "Microsurvey.Survey.Options.VeryDissatisfied.v132",
                     tableName: "Microsurvey",
                     value: "Very dissatisfied",
                     comment: "On the microsurvey, this is the title for one of the options that the user can select to answer the survey.")
                 public static let LikertScaleOption6 = MZLocalizedString(
-                    key: "Microsurvey.Survey.Options.NotApplicable.v131",
+                    key: "Microsurvey.Survey.Options.NotApplicable.v132",
                     tableName: "Microsurvey",
                     value: "I don’t use it",
                     comment: "On the microsurvey, this is the title for one of the options that the user can select to answer the survey. It indicates that the user has not use the feature that the survey is inquiring about.")
