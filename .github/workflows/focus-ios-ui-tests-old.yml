@@ -1,0 +1,82 @@
+name: Focus iOS 15 & 16 tests
+on:
+  workflow_dispatch:
+
+env:
+    browser: focus-ios
+    xcode_version: 15.4
+    test_results_directory: /Users/runner/tmp
+
+jobs:
+  Focus-iOS-Tests:
+    name: Focus iOS
+    runs-on: macos-14
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - ios_version: 16.4
+            ios_simulator: iPhone 14
+          - ios_version: 15.5
+            ios_simulator: iPhone 13
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v4.1.7
+        with:
+          repository: mozilla-mobile/firefox-ios
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install packages
+        run: |
+          brew update
+          brew install blacktop/tap/ipsw
+          pip3 install virtualenv pipenv
+      - name: Setup Xcode
+        id: xcode
+        run: |
+          sudo rm -rf /Applications/Xcode.app
+          sudo xcode-select -s /Applications/Xcode_${{ env.xcode_version }}.app/Contents/Developer
+          xcodebuild -version
+          ./checkout.sh
+          ./bootstrap.sh --force
+      - name: Create iOS ${{ matrix.ios_version }} simulator
+        id: setup-simulator
+        run: |
+          brew install blacktop/tap/ipsw
+          echo "iOS ${{ matrix.ios_version }} Simulator" | ipsw download xcode --sim
+          dmg_file=$(ls *.dmg)
+          curl https://gist.githubusercontent.com/testableapple/3688bbf7c0e475aa915bd34b7cf7876e/raw/db91bbbc5ace3835de34db5030c6b04e519847e5/install_runtime.sh > install_runtime.sh
+          chmod u+x install_runtime.sh
+          sh install_runtime.sh "${dmg_file}"
+          xcrun simctl list runtimes
+      - name: Build Focus
+        id: compile
+        run: |
+          xcodebuild build-for-testing \
+            -project Blockzilla.xcodeproj -scheme Focus \
+            -configuration FocusDebug \
+            CODE_SIGNING_ALLOWED=NO -destination \
+            'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}'
+        working-directory: focus-ios
+      - name: Run smoke tests
+        run: |
+          xcodebuild test-without-building \
+            -project Blockzilla.xcodeproj -scheme Focus \
+            -configuration FocusDebug \
+            CODE_SIGNING_ALLOWED=NO \
+            -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
+            -testPlan SmokeTest
+        working-directory: ${{ env.browser }}
+        continue-on-error: true
+      - name: Run full functional tests
+        run: |
+          xcodebuild test-without-building \
+            -project Blockzilla.xcodeproj -scheme Focus \
+            -configuration FocusDebug \
+            CODE_SIGNING_ALLOWED=NO \
+            -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
+            -testPlan FullFunctionalTests
+        working-directory: ${{ env.browser }}
+        continue-on-error: true
