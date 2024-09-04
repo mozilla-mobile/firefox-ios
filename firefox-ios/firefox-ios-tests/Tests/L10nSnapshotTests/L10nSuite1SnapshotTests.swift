@@ -54,6 +54,22 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         // Swipe to the Homescreen
         app.buttons["\(rootA11yId)SecondaryButton"].tap()
         currentScreen += 1
+        mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)TitleLabel"])
+        mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)DescriptionLabel"])
+        mozWaitForElementToExist(app.buttons["\(rootA11yId)PrimaryButton"])
+        mozWaitForElementToExist(app.buttons["\(rootA11yId)SecondaryButton"])
+        snapshot("Onboarding-4")
+
+        app.buttons["\(rootA11yId)PrimaryButton"].tap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)TitleLabel"])
+        mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)DescriptionLabel"])
+        mozWaitForElementToExist(app.buttons["\(rootA11yId)PrimaryButton"])
+        mozWaitForElementToExist(app.buttons["\(rootA11yId)SecondaryButton"])
+        snapshot("Onboarding-5")
+
+        app.buttons["\(rootA11yId)PrimaryButton"].tap()
+        currentScreen += 1
         mozWaitForElementToExist(app.textFields["url"])
         mozWaitForElementToExist(app.webViews["contentView"])
         snapshot("Homescreen-first-visit")
