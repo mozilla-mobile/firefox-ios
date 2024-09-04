@@ -99,8 +99,28 @@ struct ToolbarState: ScreenState, Equatable {
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
 
         switch action.actionType {
-        case ToolbarActionType.didLoadToolbars,
-            ToolbarActionType.addressToolbarActionsDidChange,
+        case ToolbarActionType.didLoadToolbars:
+            guard let toolbarAction = action as? ToolbarAction,
+                  let toolbarPosition = toolbarAction.toolbarPosition
+            else { return state }
+
+            let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
+            return ToolbarState(
+                windowUUID: state.windowUUID,
+                toolbarPosition: position,
+                isPrivateMode: state.isPrivateMode,
+                addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
+                navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
+                isShowingNavigationToolbar: state.isShowingNavigationToolbar,
+                isShowingTopTabs: state.isShowingTopTabs,
+                readerModeState: state.readerModeState,
+                badgeImageName: state.badgeImageName,
+                maskImageName: state.maskImageName,
+                canGoBack: state.canGoBack,
+                canGoForward: state.canGoForward,
+                numberOfTabs: state.numberOfTabs)
+
+        case ToolbarActionType.addressToolbarActionsDidChange,
             ToolbarActionType.backForwardButtonStatesChanged,
             ToolbarActionType.scrollOffsetChanged,
             ToolbarActionType.urlDidChange,
@@ -109,9 +129,14 @@ struct ToolbarState: ScreenState, Equatable {
             ToolbarActionType.cancelEdit,
             ToolbarActionType.didScrollDuringEdit:
             guard let toolbarAction = action as? ToolbarAction else { return state }
+            let position = if let toolbarPosition = toolbarAction.toolbarPosition {
+                addressToolbarPositionFromSearchBarPosition(toolbarPosition)
+            } else {
+                state.toolbarPosition
+            }
             return ToolbarState(
                 windowUUID: state.windowUUID,
-                toolbarPosition: toolbarAction.toolbarPosition ?? state.toolbarPosition,
+                toolbarPosition: position,
                 isPrivateMode: state.isPrivateMode,
                 addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
                 navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
@@ -126,9 +151,14 @@ struct ToolbarState: ScreenState, Equatable {
 
         case ToolbarActionType.showMenuWarningBadge:
             guard let toolbarAction = action as? ToolbarAction else { return state }
+            let position = if let toolbarPosition = toolbarAction.toolbarPosition {
+                addressToolbarPositionFromSearchBarPosition(toolbarPosition)
+            } else {
+                state.toolbarPosition
+            }
             return ToolbarState(
                 windowUUID: state.windowUUID,
-                toolbarPosition: toolbarAction.toolbarPosition ?? state.toolbarPosition,
+                toolbarPosition: position,
                 isPrivateMode: state.isPrivateMode,
                 addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
                 navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
@@ -176,7 +206,8 @@ struct ToolbarState: ScreenState, Equatable {
                 numberOfTabs: state.numberOfTabs)
 
         case ToolbarActionType.toolbarPositionChanged:
-            guard let position = (action as? ToolbarAction)?.toolbarPosition else { return state }
+            guard let toolbarPosition = (action as? ToolbarAction)?.toolbarPosition else { return state }
+            let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
             return ToolbarState(
                 windowUUID: state.windowUUID,
                 toolbarPosition: position,
@@ -224,6 +255,14 @@ struct ToolbarState: ScreenState, Equatable {
                 canGoBack: state.canGoBack,
                 canGoForward: state.canGoForward,
                 numberOfTabs: state.numberOfTabs)
+        }
+    }
+
+    private static func addressToolbarPositionFromSearchBarPosition(_ position: SearchBarPosition)
+    -> AddressToolbarPosition {
+        switch position {
+        case .top: return .top
+        case .bottom: return .bottom
         }
     }
 }

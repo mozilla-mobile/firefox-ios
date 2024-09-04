@@ -110,12 +110,12 @@ final class ToolbarMiddleware: FeatureFlaggable {
             guard let toolbarPosition = action.toolbarPosition else { return }
 
             let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
-            let addressToolbarModel = loadInitialAddressToolbarState(toolbarPosition: position)
-            let navigationToolbarModel = loadInitialNavigationToolbarState(toolbarPosition: position)
+            let borderPosition = getAddressBorderPosition(toolbarPosition: position)
+            let displayBorder = shouldDisplayNavigationToolbarBorder(toolbarPosition: position)
 
-            let action = ToolbarAction(addressToolbarModel: addressToolbarModel,
-                                       navigationToolbarModel: navigationToolbarModel,
-                                       toolbarPosition: position,
+            let action = ToolbarAction(toolbarPosition: toolbarPosition,
+                                       addressBorderPosition: borderPosition,
+                                       displayNavBorder: displayBorder,
                                        windowUUID: uuid,
                                        actionType: ToolbarActionType.didLoadToolbars)
             store.dispatch(action)
@@ -382,7 +382,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
         let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
                                           navigationToolbarModel: navToolbarModel,
-                                          toolbarPosition: position,
+                                          toolbarPosition: toolbarPosition,
                                           windowUUID: action.windowUUID,
                                           actionType: ToolbarActionType.toolbarPositionChanged)
         store.dispatch(toolbarAction)

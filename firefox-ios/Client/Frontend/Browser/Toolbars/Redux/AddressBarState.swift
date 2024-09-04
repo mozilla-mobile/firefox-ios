@@ -20,6 +20,13 @@ struct AddressBarState: StateType, Equatable {
     var shouldSelectSearchTerm: Bool
     var isLoading: Bool
 
+    private static let qrCodeScanAction = ToolbarActionState(
+        actionType: .qrCode,
+        iconName: StandardImageIdentifiers.Large.qrCode,
+        isEnabled: true,
+        a11yLabel: .QRCode.ToolbarButtonA11yLabel,
+        a11yId: AccessibilityIdentifiers.Browser.ToolbarButtons.qrCode)
+
     init(windowUUID: WindowUUID) {
         self.init(windowUUID: windowUUID,
                   navigationActions: [],
@@ -28,7 +35,7 @@ struct AddressBarState: StateType, Equatable {
                   borderPosition: nil,
                   url: nil,
                   searchTerm: nil,
-                  lockIconImageName: "",
+                  lockIconImageName: nil,
                   isEditing: false,
                   isScrollingDuringEdit: false,
                   shouldSelectSearchTerm: true,
@@ -42,7 +49,7 @@ struct AddressBarState: StateType, Equatable {
          borderPosition: AddressToolbarBorderPosition?,
          url: URL?,
          searchTerm: String? = nil,
-         lockIconImageName: String?,
+         lockIconImageName: String? = nil,
          isEditing: Bool = false,
          isScrollingDuringEdit: Bool = false,
          shouldSelectSearchTerm: Bool = true,
@@ -66,19 +73,15 @@ struct AddressBarState: StateType, Equatable {
 
         switch action.actionType {
         case ToolbarActionType.didLoadToolbars:
-            guard let model = (action as? ToolbarAction)?.addressToolbarModel else { return state }
+            guard let borderPosition = (action as? ToolbarAction)?.addressBorderPosition else { return state }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
-                navigationActions: model.navigationActions ?? state.navigationActions,
-                pageActions: model.pageActions ?? state.pageActions,
-                browserActions: model.browserActions ?? state.browserActions,
-                borderPosition: model.borderPosition ?? state.borderPosition,
-                url: model.url,
-                searchTerm: state.searchTerm,
-                lockIconImageName: model.lockIconImageName ?? state.lockIconImageName,
-                isEditing: state.isEditing,
-                isScrollingDuringEdit: state.isScrollingDuringEdit
+                navigationActions: [ToolbarActionState](),
+                pageActions: [qrCodeScanAction],
+                browserActions: [tabsAction(), menuAction()],
+                borderPosition: borderPosition,
+                url: nil
             )
 
         case ToolbarActionType.numberOfTabsChanged:
@@ -273,5 +276,32 @@ struct AddressBarState: StateType, Equatable {
                 isScrollingDuringEdit: state.isScrollingDuringEdit
             )
         }
+    }
+
+    // MARK: - Helper
+    private static func tabsAction(numberOfTabs: Int = 1,
+                                   isPrivateMode: Bool = false,
+                                   isShowingTopTabs: Bool = false) -> ToolbarActionState {
+        return ToolbarActionState(
+            actionType: .tabs,
+            iconName: StandardImageIdentifiers.Large.tab,
+            badgeImageName: isPrivateMode ? StandardImageIdentifiers.Medium.privateModeCircleFillPurple : nil,
+            maskImageName: isPrivateMode ? ImageIdentifiers.badgeMask : nil,
+            numberOfTabs: numberOfTabs,
+            isShowingTopTabs: isShowingTopTabs,
+            isEnabled: true,
+            a11yLabel: .TabsButtonShowTabsAccessibilityLabel,
+            a11yId: AccessibilityIdentifiers.Toolbar.tabsButton)
+    }
+
+    private static func menuAction(badgeImageName: String? = nil, maskImageName: String? = nil) -> ToolbarActionState {
+        return ToolbarActionState(
+            actionType: .menu,
+            iconName: StandardImageIdentifiers.Large.appMenu,
+            badgeImageName: badgeImageName,
+            maskImageName: maskImageName,
+            isEnabled: true,
+            a11yLabel: .LegacyAppMenu.Toolbar.MenuButtonAccessibilityLabel,
+            a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
     }
 }

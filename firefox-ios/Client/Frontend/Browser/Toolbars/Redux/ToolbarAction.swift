@@ -9,7 +9,7 @@ import ToolbarKit
 final class ToolbarAction: Action {
     let addressToolbarModel: AddressToolbarModel?
     let navigationToolbarModel: NavigationToolbarModel?
-    let toolbarPosition: AddressToolbarPosition?
+    let toolbarPosition: SearchBarPosition?
     let numberOfTabs: Int?
     let url: URL?
     let searchTerm: String?
@@ -21,10 +21,12 @@ final class ToolbarAction: Action {
     let canGoBack: Bool?
     let canGoForward: Bool?
     let readerModeState: ReaderModeState?
+    let addressBorderPosition: AddressToolbarBorderPosition?
+    let displayNavBorder: Bool?
 
     init(addressToolbarModel: AddressToolbarModel? = nil,
          navigationToolbarModel: NavigationToolbarModel? = nil,
-         toolbarPosition: AddressToolbarPosition? = nil,
+         toolbarPosition: SearchBarPosition? = nil,
          numberOfTabs: Int? = nil,
          url: URL? = nil,
          searchTerm: String? = nil,
@@ -36,6 +38,8 @@ final class ToolbarAction: Action {
          canGoBack: Bool? = nil,
          canGoForward: Bool? = nil,
          readerModeState: ReaderModeState? = nil,
+         addressBorderPosition: AddressToolbarBorderPosition? = nil,
+         displayNavBorder: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.addressToolbarModel = addressToolbarModel
@@ -52,6 +56,8 @@ final class ToolbarAction: Action {
         self.canGoBack = canGoBack
         self.canGoForward = canGoForward
         self.readerModeState = readerModeState
+        self.addressBorderPosition = addressBorderPosition
+        self.displayNavBorder = displayNavBorder
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
