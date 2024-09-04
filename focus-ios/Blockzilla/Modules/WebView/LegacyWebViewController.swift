@@ -456,7 +456,8 @@ extension LegacyWebViewController: WKNavigationDelegate {
         }
 
         // Prevent Focus from opening deeplinks from links
-        if let scheme = navigationAction.request.url?.scheme, scheme == AppInfo.appScheme {
+        if let scheme = navigationAction.request.url?.scheme,
+           scheme.caseInsensitiveCompare(AppInfo.appScheme) == .orderedSame {
             decisionHandler(.cancel, preferences)
             return
         }
