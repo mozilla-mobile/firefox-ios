@@ -43,7 +43,7 @@ struct MainMenuState: ScreenState, Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
-        
+
         switch action.actionType {
         case MainMenuMiddlewareActionType.dismissMenu:
             return MainMenuState(
