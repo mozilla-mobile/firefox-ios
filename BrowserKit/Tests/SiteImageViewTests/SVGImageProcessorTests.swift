@@ -25,7 +25,7 @@ class SVGImageProcessorTests: XCTestCase {
             }
         }
 
-        await fulfillment(of: [exp], timeout: 200.0)
+        await fulfillment(of: [exp], timeout: 2.0)
     }
 
     func testDownloadingICOImage_withKingfisherProcessor() async {
