@@ -400,7 +400,17 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         let popup = Tab(profile: profile,
                         isPrivate: parentTab.isPrivate,
                         windowUUID: windowUUID)
-        configureTab(popup, request: nil, afterTab: parentTab, flushToDisk: true, zombie: false, isPopup: true)
+
+        // Configure the tab for the child popup webview. In this scenario we need to be sure to pass along
+        // the specific `configuration` that we are given by the WKUIDelegate callback, since if we do not
+        // use this configuration WebKit will throw an exception.
+        configureTab(popup,
+                     request: nil,
+                     afterTab: parentTab,
+                     flushToDisk: true,
+                     zombie: false,
+                     isPopup: true,
+                     requiredConfiguration: configuration)
 
         // Wait momentarily before selecting the new tab, otherwise the parent tab
         // may be unable to set `window.location` on the popup immediately after
@@ -417,7 +427,8 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
                       afterTab parent: Tab? = nil,
                       flushToDisk: Bool,
                       zombie: Bool,
-                      isPopup: Bool = false
+                      isPopup: Bool = false,
+                      requiredConfiguration: WKWebViewConfiguration? = nil
     ) {
         // If network is not available webView(_:didCommit:) is not going to be called
         // We should set request url in order to show url in url bar even no network
@@ -447,7 +458,12 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         }
 
         if !zombie {
-            let configuration = tab.isPrivate ? self.privateConfiguration : self.configuration
+            let configuration: WKWebViewConfiguration
+            if let required = requiredConfiguration {
+                configuration = required
+            } else {
+                configuration = tab.isPrivate ? self.privateConfiguration : self.configuration
+            }
             tab.createWebview(configuration: configuration)
         }
         tab.navigationDelegate = self.navDelegate
