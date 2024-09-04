@@ -2005,6 +2005,8 @@ class BrowserViewController: UIViewController,
             didTapOnBack()
         case .forward:
             didTapOnForward()
+        case .reloadNoCache:
+            tabManager.selectedTab?.reload(bypassCache: true)
         case .reload:
             tabManager.selectedTab?.reload()
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .reloadFromUrlBar)

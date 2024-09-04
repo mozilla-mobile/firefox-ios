@@ -55,11 +55,15 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "reload"])
+        if isToolbarRefactorEnabled {
+            store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
+                                                actionType: GeneralBrowserActionType.reloadWebsite))
+        } else {
+            guard let tab = tabManager.selectedTab else { return }
 
-        guard let tab = tabManager.selectedTab else { return }
-
-        if !contentContainer.hasHomepage {
-            tab.reload()
+            if !contentContainer.hasHomepage {
+                tab.reload()
+            }
         }
     }
 
@@ -69,10 +73,15 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "reload-no-cache"])
-        guard let tab = tabManager.selectedTab else { return }
+        if isToolbarRefactorEnabled {
+            store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
+                                                actionType: GeneralBrowserActionType.reloadWebsiteNoCache))
+        } else {
+            guard let tab = tabManager.selectedTab else { return }
 
-        if !contentContainer.hasHomepage {
-            tab.reload(bypassCache: true)
+            if !contentContainer.hasHomepage {
+                tab.reload(bypassCache: true)
+            }
         }
     }
 
@@ -134,7 +143,10 @@ extension BrowserViewController {
                                      extras: ["action": "select-location-bar"])
         scrollController.showToolbars(animated: true)
 
-        if !isToolbarRefactorEnabled {
+        if isToolbarRefactorEnabled {
+            store.dispatch(ToolbarMiddlewareAction(windowUUID: windowUUID,
+                                                   actionType: ToolbarMiddlewareActionType.didStartEditingUrl))
+        } else {
             urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
         }
     }

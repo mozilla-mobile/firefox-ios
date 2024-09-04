@@ -13,6 +13,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case back
         case forward
         case reload
+        case reloadNoCache
         case stopLoading
         case newTab
     }
