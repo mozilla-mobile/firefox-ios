@@ -3495,22 +3495,36 @@ extension BrowserViewController: SearchViewControllerDelegate {
         searchController?.reloadData()
     }
 
+    func setLocationView(text: String, search: Bool) {
+        if isToolbarRefactorEnabled {
+            let toolbarAction = ToolbarAction(
+                searchTerm: text,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.didSetTextInLocationView
+            )
+            store.dispatch(toolbarAction)
+
+            if search {
+                openSuggestions(searchTerm: text)
+                searchLoader?.setQueryWithoutAutocomplete(text)
+            }
+        } else {
+            urlBar.setLocation(text, search: search)
+        }
+    }
+
     func searchViewController(
         _ searchViewController: SearchViewController,
         didHighlightText text: String,
         search: Bool
     ) {
         searchViewController.searchTelemetry?.interactionType = .refined
-        if !isToolbarRefactorEnabled {
-            self.urlBar.setLocation(text, search: search)
-        }
+        setLocationView(text: text, search: search)
     }
 
     func searchViewController(_ searchViewController: SearchViewController, didAppend text: String) {
         searchViewController.searchTelemetry?.interactionType = .pasted
-        if !isToolbarRefactorEnabled {
-            self.urlBar.setLocation(text, search: false)
-        }
+        setLocationView(text: text, search: false)
     }
 
     func searchViewControllerWillHide(_ searchViewController: SearchViewController) {
