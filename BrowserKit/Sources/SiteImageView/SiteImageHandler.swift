@@ -78,9 +78,11 @@ public class DefaultSiteImageHandler: SiteImageHandler {
         let requestHandle = Task {
             var faviconImageModel = imageModel
 
-            if faviconImageModel.resourceURL == nil {
-                // Try to obtain the favicon URL if needed (ideally from cache, otherwise scrape the webpage)
-                faviconImageModel.resourceURL = try? await urlHandler.getFaviconURL(model: imageModel)
+            // Try to obtain the favicon URL if needed (ideally from cache, otherwise scrape the webpage)
+            // If an image was available in the bundle, we would have known at initialization time of the SiteImageModel
+            if faviconImageModel.siteResource == nil,
+               let faviconURL = try? await urlHandler.getFaviconURL(model: imageModel) {
+                faviconImageModel.siteResource = .remoteURL(url: faviconURL)
             }
 
             // Try to load the favicon image from the cache, or make a request to the favicon URL if it's not in the cache

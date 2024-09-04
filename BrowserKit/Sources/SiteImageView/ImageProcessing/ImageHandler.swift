@@ -75,12 +75,21 @@ class DefaultImageHandler: ImageHandler {
 
     private func fetchFaviconFromFetcher(imageModel: SiteImageModel) async -> UIImage {
         do {
-            guard let faviconURL = imageModel.resourceURL else {
+            guard let resourceType = imageModel.siteResource else {
                 throw SiteImageError.noFaviconURLFound
             }
-            let image = try await faviconFetcher.fetchFavicon(from: faviconURL)
-            await imageCache.cacheImage(image: image, cacheKey: imageModel.cacheKey, type: imageModel.imageType)
-            return image
+            switch resourceType {
+            case .bundleAsset(let assetName):
+                guard let image = UIImage(named: assetName) else {
+                    // FIXME Can we catch and log this error within the Client?
+                    throw SiteImageError.noImageInBundle
+                }
+                return image
+            case .remoteURL(let faviconURL):
+                let image = try await faviconFetcher.fetchFavicon(from: faviconURL)
+                await imageCache.cacheImage(image: image, cacheKey: imageModel.cacheKey, type: imageModel.imageType)
+                return image
+            }
         } catch {
             return await fallbackToLetterFavicon(imageModel: imageModel)
         }
