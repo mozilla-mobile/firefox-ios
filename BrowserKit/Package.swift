@@ -6,7 +6,7 @@ let package = Package(
     name: "BrowserKit",
     platforms: [
         .iOS(.v15),
-        .macOS(.v10_14)
+        .macOS(.v10_15)
     ],
     products: [
         .library(
