@@ -17,8 +17,8 @@ jobs:
         include:
           - ios_version: 16.4
             ios_simulator: iPhone 14
-          - ios_version: 15.5
-            ios_simulator: iPhone 13
+        #  - ios_version: 15.5
+        #    ios_simulator: iPhone 13
     steps:
       - name: Check out source code
         uses: actions/checkout@v4.1.7
@@ -51,6 +51,8 @@ jobs:
           chmod u+x install_runtime.sh
           sh install_runtime.sh "${dmg_file}"
           xcrun simctl list runtimes
+          xcrun simctl list devices iphone
+          xcrun simctl create "${{ matrix.ios_simulator }}" com.apple.CoreSimulator.SimRuntime.iOS-16-4
       - name: Build Focus
         id: compile
         run: |
