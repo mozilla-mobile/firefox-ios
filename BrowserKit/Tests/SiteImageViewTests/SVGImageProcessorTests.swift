@@ -45,7 +45,7 @@ class SVGImageProcessorTests: XCTestCase {
         await fulfillment(of: [exp], timeout: 2.0)
     }
 
-    func testSVGKit_processesSVG() async {
+    func testParsingAndRasterizingSVG_fromWebData() async {
         let rasterSize = CGSize(width: 240, height: 240)
 
         guard let svgData = try? Data(contentsOf: svgFaviconURL) else {
