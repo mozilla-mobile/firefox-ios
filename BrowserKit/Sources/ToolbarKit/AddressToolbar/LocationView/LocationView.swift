@@ -22,6 +22,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     private var onLongPress: (() -> Void)?
     private var delegate: LocationViewDelegate?
 
+    private var isEditing = false
     private var isURLTextFieldEmpty: Bool {
         urlTextField.text?.isEmpty == true
     }
@@ -185,15 +186,14 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     }
 
     private func updateGradient() {
-        let showGradientForLongURL = doesURLTextFieldExceedViewWidth && !urlTextField.isFirstResponder
+        let showGradientForLongURL = doesURLTextFieldExceedViewWidth && !isEditing
         gradientView.isHidden = !showGradientForLongURL
         gradientLayer.frame = gradientView.bounds
     }
 
     private func updateURLTextFieldLeadingConstraintBasedOnState() {
-        let isTextFieldFocused = urlTextField.isFirstResponder
-        let shouldAdjustForOverflow = doesURLTextFieldExceedViewWidth && !isTextFieldFocused
-        let shouldAdjustForNonEmpty = !isURLTextFieldEmpty && !isTextFieldFocused
+        let shouldAdjustForOverflow = doesURLTextFieldExceedViewWidth && !isEditing
+        let shouldAdjustForNonEmpty = !isURLTextFieldEmpty && !isEditing
 
         // hide the leading "..." by moving them behind the lock icon
         if shouldAdjustForOverflow {
@@ -214,7 +214,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     }
 
     private func updateIconContainer() {
-        guard !urlTextField.isEditing else {
+        guard !isEditing else {
             updateUIForSearchEngineDisplay()
             return
         }
@@ -235,6 +235,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     }
 
     private func updateUIForLockIconDisplay() {
+        guard !isEditing else { return }
         removeContainerIcons()
         iconContainerStackView.addArrangedSubview(lockIconButton)
         urlTextFieldLeadingConstraint?.constant = 0
@@ -249,6 +250,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
 
     // MARK: - `urlTextField` Configuration
     private func configureURLTextField(_ state: LocationViewState) {
+        isEditing = state.isEditing
         if state.isEditing {
             urlTextField.text = (state.searchTerm != nil) ? state.searchTerm : state.url?.absoluteString
         } else {
@@ -270,7 +272,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     }
 
     private func formatAndTruncateURLTextField() {
-        guard !urlTextField.isEditing else { return }
+        guard !isEditing else { return }
 
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineBreakMode = .byTruncatingHead
@@ -356,6 +358,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     }
 
     func locationTextFieldDidBeginEditing(_ textField: UITextField) {
+        guard !isEditing else { return }
         updateUIForSearchEngineDisplay()
         let searchText = searchTerm != nil ? searchTerm : urlAbsolutePath
 
@@ -400,7 +403,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         urlTextFieldColor = colors.textPrimary
         urlTextFieldSubdomainColor = colors.textSecondary
         gradientLayer.colors = colors.layerGradientURL.cgColors.reversed()
-        searchEngineImageView.backgroundColor = colors.iconPrimary
+        searchEngineImageView.backgroundColor = colors.layer2
         lockIconButton.tintColor = colors.iconPrimary
         lockIconButton.backgroundColor = colors.layerSearch
         urlTextField.applyTheme(theme: theme)

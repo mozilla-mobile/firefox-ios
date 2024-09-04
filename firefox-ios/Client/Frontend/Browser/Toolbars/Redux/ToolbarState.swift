@@ -104,6 +104,7 @@ struct ToolbarState: ScreenState, Equatable {
             ToolbarActionType.backForwardButtonStatesChanged,
             ToolbarActionType.scrollOffsetChanged,
             ToolbarActionType.urlDidChange,
+            ToolbarActionType.didSetTextInLocationView,
             ToolbarActionType.didPasteSearchTerm,
             ToolbarActionType.didStartEditingUrl,
             ToolbarActionType.cancelEdit,

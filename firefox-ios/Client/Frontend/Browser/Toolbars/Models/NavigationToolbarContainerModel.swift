@@ -36,6 +36,7 @@ struct NavigationToolbarContainerModel: Equatable {
                                                          actionType: ToolbarMiddlewareActionType.customA11yAction)
                     store.dispatch(action)
                 } : nil,
+                hasLongPressAction: action.canPerformLongPressAction(isShowingTopTabs: state.isShowingTopTabs),
                 onSelected: { button in
                     let action = ToolbarMiddlewareAction(buttonType: action.actionType,
                                                          buttonTapped: button,
@@ -43,7 +44,7 @@ struct NavigationToolbarContainerModel: Equatable {
                                                          windowUUID: windowUUID,
                                                          actionType: ToolbarMiddlewareActionType.didTapButton)
                     store.dispatch(action)
-                }, onLongPress: action.canPerformLongPressAction(isShowingTopTabs: action.isShowingTopTabs) ? { button in
+                }, onLongPress: action.canPerformLongPressAction(isShowingTopTabs: state.isShowingTopTabs) ? { button in
                     let action = ToolbarMiddlewareAction(buttonType: action.actionType,
                                                          buttonTapped: button,
                                                          gestureType: .longPress,

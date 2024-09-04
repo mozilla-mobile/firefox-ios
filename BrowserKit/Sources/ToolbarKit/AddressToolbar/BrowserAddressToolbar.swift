@@ -62,8 +62,8 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
 
     public func configure(state: AddressToolbarState,
                           toolbarDelegate: any AddressToolbarDelegate,
-                          leadingSpace: CGFloat?,
-                          trailingSpace: CGFloat?) {
+                          leadingSpace: CGFloat? = nil,
+                          trailingSpace: CGFloat? = nil) {
         self.toolbarDelegate = toolbarDelegate
         configure(state: state)
         updateSpacing(leading: leadingSpace, trailing: trailingSpace)
