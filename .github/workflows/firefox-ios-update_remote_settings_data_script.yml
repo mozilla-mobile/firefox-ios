@@ -41,10 +41,10 @@ jobs:
       - name: Fetch remote settings and update files
         run: python ./firefox-ios/Client/Assets/RemoteSettingsData/Update_Remote_Settings.py
 
-      - name: Commit and push changes
+      - name: Add changes
         run: |
           git diff
-          git diff --quiet || (git add firefox-ios/Client/Assets/RemoteSettingsData/RemotePasswordRules.json && git commit -m "Update remote settings with latest rules" && git push)
+          git diff --quiet || git add firefox-ios/Client/Assets/RemoteSettingsData/RemotePasswordRules.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
