@@ -200,28 +200,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
         }
     }
 
-    private func loadInitialAddressToolbarState(toolbarPosition: AddressToolbarPosition) -> AddressToolbarModel {
-        let borderPosition = getAddressBorderPosition(toolbarPosition: toolbarPosition)
-
-        return AddressToolbarModel(navigationActions: [ToolbarActionState](),
-                                   pageActions: [qrCodeScanAction],
-                                   browserActions: [tabsAction(), menuAction()],
-                                   borderPosition: borderPosition,
-                                   url: nil)
-    }
-
-    private func loadInitialNavigationToolbarState(toolbarPosition: AddressToolbarPosition) -> NavigationToolbarModel {
-        let actions = [
-            backAction(enabled: false),
-            forwardAction(enabled: false),
-            searchAction,
-            tabsAction(),
-            menuAction()
-        ]
-        let displayBorder = shouldDisplayNavigationToolbarBorder(toolbarPosition: toolbarPosition)
-        return NavigationToolbarModel(actions: actions, displayBorder: displayBorder)
-    }
-
     private func handleToolbarButtonTapActions(action: ToolbarMiddlewareAction, state: AppState) {
         switch action.buttonType {
         case .home:
