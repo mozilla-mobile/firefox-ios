@@ -48,7 +48,7 @@ class MainMenuViewController: UIViewController,
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
-    var coordinator: MainMenuCoordinator?
+    weak var coordinator: MainMenuCoordinator?
 
     private let windowUUID: WindowUUID
     private var viewModel: MainMenuViewModel
