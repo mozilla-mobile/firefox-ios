@@ -55,12 +55,12 @@ import:
                   utm-content: homepage
                   icon: homeLarge
                   options:
-                    - Microsurvey/Microsurvey.Survey.Options.LikertScaleOption1.v127
-                    - Microsurvey/Microsurvey.Survey.Options.LikertScaleOption2.v127
-                    - Microsurvey/Microsurvey.Survey.Options.LikertScaleOption3.v127
-                    - Microsurvey/Microsurvey.Survey.Options.LikertScaleOption4.v127
-                    - Microsurvey/Microsurvey.Survey.Options.LikertScaleOption5.v127
-                    - Microsurvey/Microsurvey.Survey.Options.LikertScaleOption6.v129
+                    - Microsurvey/Microsurvey.Survey.Options.VerySatisfied.v131
+                    - Microsurvey/Microsurvey.Survey.Options.Satisfied.v131
+                    - Microsurvey/Microsurvey.Survey.Options.Neutral.v131
+                    - Microsurvey/Microsurvey.Survey.Options.Dissatisfied.v131
+                    - Microsurvey/Microsurvey.Survey.Options.VeryDissatisfied.v131
+                    - Microsurvey/Microsurvey.Survey.Options.NotApplicable.v131
 
         - channel: developer
           value:
