@@ -61,22 +61,82 @@ jobs:
             'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}'
         working-directory: focus-ios
       - name: Run smoke tests
+        id: run-smoketests
         run: |
           xcodebuild test-without-building \
             -project Blockzilla.xcodeproj -scheme Focus \
             -configuration FocusDebug \
             CODE_SIGNING_ALLOWED=NO \
             -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
-            -testPlan SmokeTest
+            -testPlan SmokeTest \
+            -resultBundlePath ${{ env.test_results_directory }}/results-smoketest \
+            | tee xcodebuild-smoketest.log | xcpretty -r junit --output ./junit-smoketest.xml && exit ${PIPESTATUS[0]}
         working-directory: ${{ env.browser }}
         continue-on-error: true
       - name: Run full functional tests
+        id: run-fullfunctionaltests
         run: |
           xcodebuild test-without-building \
             -project Blockzilla.xcodeproj -scheme Focus \
             -configuration FocusDebug \
             CODE_SIGNING_ALLOWED=NO \
             -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
-            -testPlan FullFunctionalTests
+            -testPlan FullFunctionalTests \
+            -resultBundlePath ${{ env.test_results_directory }}/results-fullfunctionaltests \
+            | tee xcodebuild-fullfunctionaltests.log | xcpretty -r junit --output ./junit-fullfunctionaltests.xml && exit ${PIPESTATUS[0]}
         working-directory: ${{ env.browser }}
         continue-on-error: true
+      - name: Determine pass/fail status
+        id: passfail
+        run: |
+          echo "Smoke Tests status: "${{ steps.run-smoketests.outcome }}
+          echo "Full Functional Tests status: "${{ steps.run-fullfunctionaltests.outcome }}
+          if [[ ${{ steps.run-smoketests.outcome }} != 'success' 
+                || ${{ steps.run-fullfunctionaltests.outcome }} != 'success' ]]; then
+            exit 1
+          else
+            exit 0
+          fi
+        continue-on-error: true
+      - name: Print test report
+        id: test-report
+        run: |
+          jrm combined.xml junit-*.xml
+          python ../test-fixtures/ci/convert_junit_to_markdown.py --smoke --github --${{ env.browser }} ./combined.xml ./github.md
+          cat github.md >> $GITHUB_STEP_SUMMARY
+          python ../test-fixtures/ci/convert_junit_to_markdown.py --smoke --slack --${{ env.browser }} ./combined.xml ./slack.json
+          mv ./combined.xml "junit-focus-ios-${{ matrix.ios_simulator }}-${{ matrix.ios_version }}-`date +"%Y-%m-%d"`.xml"
+        working-directory:  ${{ env.browser }}
+      - name: Upload junit files
+        id: upload-junit
+        uses: actions/upload-artifact@v4.3.3
+        with:
+          name: ${{ env.browser }}-${{ matrix.ios_simulator }}-${{ matrix.ios_version }}-junit-${{ github.run_number }}
+          path: ${{ env.browser }}/junit-focus-ios-*.xml
+          retention-days: 90
+      - name: Upload log file
+        id: upload-log
+        uses: actions/upload-artifact@v4.3.3
+        with:
+          name: ${{ env.browser }}-${{ matrix.ios_simulator }}-xcodebuildlog-${{ github.run_number }}
+          path: ${{ env.browser }}/xcodebuild-*.log
+          retention-days: 90
+      - name: Report to Slack
+        id: slack
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload-file-path: ${{ env.browser }}/slack.json
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          ios_simulator: ${{ matrix.ios_simulator }}
+          pass_fail:  ${{ steps.passfail.outcome == 'success' && ':white_check_mark:' || ':x:' }}
+          xcodebuild_test_plan: Smoke/FullFunctional
+          ref_name: ${{ github.ref_name }}
+          repository: ${{ github.repository }}
+          run_id: ${{ github.run_id }}
+          server_url: ${{ github.server_url }}
+          sha: ${{ github.sha }}
+      - name: Return fail status if a test fails
+        run: |
+          exit ${{ steps.passfail.outcome == 'success' && '0' || '1' }}   
