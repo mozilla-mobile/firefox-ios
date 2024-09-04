@@ -21,7 +21,7 @@ struct CertificateKeys {
 typealias CertificateItems = [(key: String, value: String)]
 
 class CertificatesViewController: UIViewController, Themeable, UITableViewDelegate, UITableViewDataSource {
-    private enum CertificatesItemType: Int {
+    private enum CertificatesItemType: Int, CaseIterable {
         case subjectName
         case issuerName
         case validity
@@ -122,7 +122,7 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
     // MARK: - UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard !viewModel.certificates.isEmpty else { return 0 }
-        return 4
+        return CertificatesItemType.allCases.count
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -134,12 +134,10 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
         for (index, certificate) in viewModel.certificates.enumerated() {
             let certificateValues = viewModel.getCertificateValues(from: "\(certificate.subject)")
             if !certificateValues.isEmpty, let commonName = certificateValues[CertificateKeys.commonName] {
-                let item: CertificatesHeaderItem = .build { [weak self] item in
-                    guard let self else { return }
-                    item.configure(theme: self.currentTheme(),
-                                   title: commonName,
-                                   isSelected: viewModel.selectedCertificateIndex == index)
-                }
+                let item: CertificatesHeaderItem = .build()
+                item.configure(theme: self.currentTheme(),
+                               title: commonName,
+                               isSelected: viewModel.selectedCertificateIndex == index)
 
                 item.itemSelectedCallback = { [weak self] in
                     guard let self else { return }

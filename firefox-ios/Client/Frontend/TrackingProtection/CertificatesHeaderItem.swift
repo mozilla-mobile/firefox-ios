@@ -18,19 +18,16 @@ final class CertificatesHeaderItem: UIView {
         stack.axis = .vertical
         stack.distribution = .fillProportionally
         stack.spacing = UX.headerItemsSpacing
-        stack.translatesAutoresizingMaskIntoConstraints = false
     }
 
     private let button: UIButton = .build { button in
         button.configuration?.titleLineBreakMode = .byCharWrapping
         button.titleLabel?.numberOfLines = 2
         button.titleLabel?.textAlignment = .center
-        button.translatesAutoresizingMaskIntoConstraints = false
     }
 
     private let indicator: UIView = .build { view in
         view.heightAnchor.constraint(equalToConstant: UX.headerItemIndicatorHeight).isActive = true
-        view.translatesAutoresizingMaskIntoConstraints = false
     }
 
     override init(frame: CGRect) {
