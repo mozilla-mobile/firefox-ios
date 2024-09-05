@@ -103,7 +103,7 @@ public struct AccessibilityIdentifiers {
         struct BlockedTrackers {
             static let headerView = "BlockedTrackers.HeaderView"
             static let mainView = "BlockedTrackers.MainView"
-            static let containerView = "BlockedTrackers.BaseView"
+            static let containerView = "BlockedTrackers.TableView"
             static let crossSiteTrackersView = "BlockedTrackers.CrossSiteTrackersView"
             static let socialMediaTrackersView = "BlockedTrackers.SocialMediaTrackersView"
             static let fingerprintersView = "BlockedTrackers.FingerprintersView"
