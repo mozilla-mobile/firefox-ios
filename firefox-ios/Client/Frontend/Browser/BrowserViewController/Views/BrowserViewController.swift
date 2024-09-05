@@ -1538,11 +1538,15 @@ class BrowserViewController: UIViewController,
     func finishEditingAndSubmit(_ url: URL, visitType: VisitType, forTab tab: Tab) {
         if !isToolbarRefactorEnabled {
             urlBar.currentURL = url
+        } else {
+            store.dispatch(ToolbarMiddlewareAction(url: url,
+                                                   windowUUID: windowUUID,
+                                                   actionType: ToolbarMiddlewareActionType.urlDidChange))
         }
         overlayManager.finishEditing(shouldCancelLoading: false)
 
         if let nav = tab.loadRequest(URLRequest(url: url)) {
-            self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
+            recordNavigationInTab(tab, navigation: nav, visitType: visitType)
         }
     }
 
