@@ -2310,7 +2310,9 @@ class BrowserViewController: UIViewController,
 
     func handle(query: String) {
         openBlankNewTab(focusLocationField: false)
-        if !isToolbarRefactorEnabled {
+        if isToolbarRefactorEnabled {
+            openBrowser(searchTerm: query)
+        } else {
             urlBar(urlBar, didSubmitText: query)
         }
     }
