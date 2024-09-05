@@ -4,7 +4,8 @@
 
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
-  FormLikeFactory: "resource://gre/modules/FormLikeFactory.sys.mjs",
+  AutofillFormFactory:
+    "resource://gre/modules/shared/AutofillFormFactory.sys.mjs",
   FormAutofillHandler:
     "resource://gre/modules/shared/FormAutofillHandler.sys.mjs",
 });
@@ -31,7 +32,8 @@ export class FormStateManager {
     if (!element) {
       return null;
     }
-    let rootElement = lazy.FormLikeFactory.findRootForField(element);
+
+    const rootElement = lazy.AutofillFormFactory.findRootForField(element);
     return this._formsDetails.get(rootElement);
   }
 
@@ -53,7 +55,7 @@ export class FormStateManager {
 
     if (!handler) {
       handler = new lazy.FormAutofillHandler(
-        lazy.FormLikeFactory.createFromField(element),
+        lazy.AutofillFormFactory.createFromField(element),
         this.onFilledModifiedCallback
       );
       this._formsDetails.set(handler.form.rootElement, handler);
