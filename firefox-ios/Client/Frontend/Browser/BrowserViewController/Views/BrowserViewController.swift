@@ -1623,7 +1623,14 @@ class BrowserViewController: UIViewController,
     }
 
     override func accessibilityPerformMagicTap() -> Bool {
-        if !isToolbarRefactorEnabled, !urlBar.locationView.readerModeButton.isHidden {
+        if isToolbarRefactorEnabled {
+            let action = GeneralBrowserAction(
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserActionType.showReaderMode
+            )
+            store.dispatch(action)
+            return true
+        } else if !urlBar.locationView.readerModeButton.isHidden {
             self.urlBar.tabLocationViewDidTapReaderMode(self.urlBar.locationView)
             return true
         }
@@ -2110,7 +2117,7 @@ class BrowserViewController: UIViewController,
 
     func toggleReaderMode() {
         guard let tab = tabManager.selectedTab,
-              let readerMode = tab.getContentScript(name: "ReaderMode") as? ReaderMode
+              let readerMode = tab.getContentScript(name: ReaderMode.name()) as? ReaderMode
         else { return }
 
         switch readerMode.state {
