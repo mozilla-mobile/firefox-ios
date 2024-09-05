@@ -22,8 +22,6 @@ jobs:
     steps:
       - name: Check out source code
         uses: actions/checkout@v4.1.7
-        with:
-          repository: mozilla-mobile/firefox-ios
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -33,7 +31,6 @@ jobs:
           pip3 install virtualenv pipenv
           gem install xcpretty -v 0.3.0
           pip install blockkit==1.9.1
-          npm install -g junit-report-merger@7.0.0
       - name: Setup Xcode
         id: xcode
         run: |
