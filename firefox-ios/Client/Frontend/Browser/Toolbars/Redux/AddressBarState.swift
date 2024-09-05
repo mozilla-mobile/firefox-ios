@@ -207,6 +207,23 @@ struct AddressBarState: StateType, Equatable {
                 readerModeState: state.readerModeState
             )
 
+        case ToolbarActionType.traitCollectionDidChange:
+            guard let toolbarAction = action as? ToolbarAction else { return state }
+
+            return AddressBarState(
+                windowUUID: state.windowUUID,
+                navigationActions: navigationActions(action: toolbarAction, addressBarState: state),
+                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
+                browserActions: browserActions(action: toolbarAction, addressBarState: state),
+                borderPosition: state.borderPosition,
+                url: state.url,
+                searchTerm: nil,
+                lockIconImageName: state.lockIconImageName,
+                isEditing: state.isEditing,
+                isScrollingDuringEdit: state.isScrollingDuringEdit,
+                readerModeState: state.readerModeState
+            )
+
         case ToolbarActionType.backForwardButtonStatesChanged:
             guard let toolbarAction = action as? ToolbarAction else { return state }
             var addressToolbarModel = toolbarAction.addressToolbarModel

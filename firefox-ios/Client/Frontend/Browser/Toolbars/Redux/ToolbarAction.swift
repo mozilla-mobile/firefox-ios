@@ -85,6 +85,7 @@ enum ToolbarActionType: ActionType {
     case readerModeStateChanged
     case backButtonStateChanged
     case forwardButtonStateChanged
+    case traitCollectionDidChange
 }
 
 class ToolbarMiddlewareAction: Action {
@@ -148,7 +149,6 @@ enum ToolbarMiddlewareActionType: ActionType {
     case didStartEditingUrl
     case cancelEdit
     case websiteLoadingStateDidChange
-    case traitCollectionDidChange
     case showMenuWarningBadge
     case readerModeStateChanged
 }

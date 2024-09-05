@@ -246,6 +246,22 @@ struct ToolbarState: ScreenState, Equatable {
                 canGoForward: toolbarAction.canGoForward ?? state.canGoForward,
                 numberOfTabs: state.numberOfTabs)
 
+        case ToolbarActionType.traitCollectionDidChange:
+            guard let toolbarAction = action as? ToolbarAction else { return state }
+            return ToolbarState(
+                windowUUID: state.windowUUID,
+                toolbarPosition: state.toolbarPosition,
+                isPrivateMode: state.isPrivateMode,
+                addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
+                navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
+                isShowingNavigationToolbar: state.isShowingNavigationToolbar,
+                isShowingTopTabs: toolbarAction.isShowingTopTabs ?? state.isShowingTopTabs,
+                badgeImageName: state.badgeImageName,
+                maskImageName: state.maskImageName,
+                canGoBack: state.canGoBack,
+                canGoForward: state.canGoForward,
+                numberOfTabs: state.numberOfTabs)
+
         default:
             return ToolbarState(
                 windowUUID: state.windowUUID,

@@ -155,9 +155,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
                                                   isEditing: false,
                                                   dispatchActionType: ToolbarActionType.cancelEdit)
 
-        case ToolbarMiddlewareActionType.traitCollectionDidChange:
-            updateAddressToolbarNavigationActions(action: action, state: state)
-
         case ToolbarMiddlewareActionType.showMenuWarningBadge:
             updateMenuWarningBadge(action: action, state: state)
 

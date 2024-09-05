@@ -2254,10 +2254,10 @@ class BrowserViewController: UIViewController,
               toolbarState.isShowingTopTabs != showTopTabs
         else { return }
 
-        let action = ToolbarMiddlewareAction(
+        let action = ToolbarAction(
             isShowingTopTabs: showTopTabs,
             windowUUID: windowUUID,
-            actionType: ToolbarMiddlewareActionType.traitCollectionDidChange
+            actionType: ToolbarActionType.traitCollectionDidChange
         )
         store.dispatch(action)
     }
