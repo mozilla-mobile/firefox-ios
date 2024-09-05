@@ -128,16 +128,14 @@ struct NavigationBarState: StateType, Equatable {
             a11yId: AccessibilityIdentifiers.Toolbar.forwardButton)
     }
 
-    private static  func tabsAction(numberOfTabs: Int = 1,
-                                    isPrivateMode: Bool = false,
-                                    isShowingTopTabs: Bool = false) -> ToolbarActionState {
+    private static func tabsAction(numberOfTabs: Int = 1,
+                                   isPrivateMode: Bool = false) -> ToolbarActionState {
         return ToolbarActionState(
             actionType: .tabs,
             iconName: StandardImageIdentifiers.Large.tab,
             badgeImageName: isPrivateMode ? StandardImageIdentifiers.Medium.privateModeCircleFillPurple : nil,
             maskImageName: isPrivateMode ? ImageIdentifiers.badgeMask : nil,
             numberOfTabs: numberOfTabs,
-            isShowingTopTabs: isShowingTopTabs,
             isEnabled: true,
             a11yLabel: .TabsButtonShowTabsAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.tabsButton)
