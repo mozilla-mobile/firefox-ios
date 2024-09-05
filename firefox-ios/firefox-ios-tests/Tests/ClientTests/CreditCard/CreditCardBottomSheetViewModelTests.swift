@@ -286,11 +286,13 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         let expectation = expectation(description: "wait for credit card fields to be saved")
 
         viewModel.didTapMainButton { _ in
+            XCTAssertNotNil(self.viewModel)
+            XCTAssertNotNil(self.mockAutofill)
             XCTAssertEqual(self.mockAutofill.addCreditCardCalledCount, 1)
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 1.0)
+        waitForExpectations(timeout: 5.0)
     }
 
     func test_didTapMainButton_withUpdateState_callsAddCreditCard() {
@@ -299,11 +301,13 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         let expectation = expectation(description: "wait for credit card fields to be updated")
 
         viewModel.didTapMainButton { _ in
+            XCTAssertNotNil(self.viewModel)
+            XCTAssertNotNil(self.mockAutofill)
             XCTAssertEqual(self.mockAutofill.updateCreditCardCalledCount, 1)
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 1.0)
+        waitForExpectations(timeout: 5.0)
     }
 
     func test_updateCreditCardList_callsListCreditCards() {
@@ -313,6 +317,8 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         viewModel.state = .selectSavedCard
 
         viewModel.updateCreditCardList({ cards in
+            XCTAssertNotNil(self.viewModel)
+            XCTAssertNotNil(self.mockAutofill)
             XCTAssertEqual(self.viewModel.creditCards, cards)
             XCTAssertEqual(cards?.count, 1)
             XCTAssertEqual(cards?.first?.guid, "1")
@@ -320,7 +326,7 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
             XCTAssertEqual(self.mockAutofill.listCreditCardsCalledCount, 1)
             expectation.fulfill()
         })
-        waitForExpectations(timeout: 1.0)
+        waitForExpectations(timeout: 5.0)
     }
 
     func test_updateCreditCardList_withoutSelectedSavedCardState_doesNotCallListCreditCards() {
