@@ -1066,6 +1066,11 @@
 		AB3DB0C92B596739001D32CB /* AppStartupTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3DB0C82B596739001D32CB /* AppStartupTelemetry.swift */; };
 		AB42CC742A1F5240003C9594 /* CreditCardBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB42CC722A1F523F003C9594 /* CreditCardBottomSheetViewController.swift */; };
 		AB42CC752A1F5240003C9594 /* CreditCardBottomSheetHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB42CC732A1F5240003C9594 /* CreditCardBottomSheetHeaderView.swift */; };
+		AB4FB4D52C89FAFD005EF0CC /* BlockedTrackersTableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FB4D42C89FAFC005EF0CC /* BlockedTrackersTableController.swift */; };
+		AB4FB4DA2C89FB10005EF0CC /* BlockedTrackersModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FB4D62C89FB0D005EF0CC /* BlockedTrackersModel.swift */; };
+		AB4FB4DB2C89FB10005EF0CC /* BlockedTrackersHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FB4D72C89FB0D005EF0CC /* BlockedTrackersHeaderView.swift */; };
+		AB4FB4DC2C89FB10005EF0CC /* BlockedTrackerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FB4D82C89FB0E005EF0CC /* BlockedTrackerCell.swift */; };
+		AB4FB4DD2C89FB10005EF0CC /* BlockedTrackersTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FB4D92C89FB0F005EF0CC /* BlockedTrackersTableView.swift */; };
 		AB52ED3B2A0E8873001067F5 /* UserConversionMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB52ED3A2A0E8873001067F5 /* UserConversionMetrics.swift */; };
 		AB6FEA202AEA5CA200E7B2F2 /* FakespotAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6FEA1F2AEA5CA200E7B2F2 /* FakespotAdView.swift */; };
 		AB7D4C3129ACAED100626427 /* Tab+ChangeUserAgentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7D4C3029ACAED100626427 /* Tab+ChangeUserAgentTests.swift */; };
@@ -7369,6 +7374,11 @@
 		AB3DB0C82B596739001D32CB /* AppStartupTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStartupTelemetry.swift; sourceTree = "<group>"; };
 		AB42CC722A1F523F003C9594 /* CreditCardBottomSheetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreditCardBottomSheetViewController.swift; sourceTree = "<group>"; };
 		AB42CC732A1F5240003C9594 /* CreditCardBottomSheetHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreditCardBottomSheetHeaderView.swift; sourceTree = "<group>"; };
+		AB4FB4D42C89FAFC005EF0CC /* BlockedTrackersTableController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockedTrackersTableController.swift; sourceTree = "<group>"; };
+		AB4FB4D62C89FB0D005EF0CC /* BlockedTrackersModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockedTrackersModel.swift; sourceTree = "<group>"; };
+		AB4FB4D72C89FB0D005EF0CC /* BlockedTrackersHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockedTrackersHeaderView.swift; sourceTree = "<group>"; };
+		AB4FB4D82C89FB0E005EF0CC /* BlockedTrackerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockedTrackerCell.swift; sourceTree = "<group>"; };
+		AB4FB4D92C89FB0F005EF0CC /* BlockedTrackersTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockedTrackersTableView.swift; sourceTree = "<group>"; };
 		AB52ED3A2A0E8873001067F5 /* UserConversionMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConversionMetrics.swift; sourceTree = "<group>"; };
 		AB6FEA1F2AEA5CA200E7B2F2 /* FakespotAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotAdView.swift; sourceTree = "<group>"; };
 		AB7C4D658AB44D577390B61F /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/Menu.strings; sourceTree = "<group>"; };
@@ -11386,8 +11396,21 @@
 				0A93C8A92C87070300BEA143 /* TrackingProtectionConnectionStatusView.swift */,
 				0A93C8AB2C870E7100BEA143 /* TrackingProtectionToggleView.swift */,
 				0ACBC3462C89E90200B4D868 /* TrackingProtectionNavigationHeaderView.swift */,
+				AB4FB4D42C89FAFC005EF0CC /* BlockedTrackersTableController.swift */,
+				AB4FB4DE2C8A0251005EF0CC /* BlockedTrackersHelpers */,
 			);
 			path = TrackingProtection;
+			sourceTree = "<group>";
+		};
+		AB4FB4DE2C8A0251005EF0CC /* BlockedTrackersHelpers */ = {
+			isa = PBXGroup;
+			children = (
+				AB4FB4D82C89FB0E005EF0CC /* BlockedTrackerCell.swift */,
+				AB4FB4D72C89FB0D005EF0CC /* BlockedTrackersHeaderView.swift */,
+				AB4FB4D62C89FB0D005EF0CC /* BlockedTrackersModel.swift */,
+				AB4FB4D92C89FB0F005EF0CC /* BlockedTrackersTableView.swift */,
+			);
+			path = BlockedTrackersHelpers;
 			sourceTree = "<group>";
 		};
 		AB9CBC0A2C53B9A400102610 /* TrackingProtectionTests */ = {
@@ -15241,6 +15264,7 @@
 				8A832A9229DC99790025D5DD /* LaunchScreenViewModel.swift in Sources */,
 				C869912C28917688007ACC5C /* WallpaperNetworkModule.swift in Sources */,
 				E1442FD8294782D9003680B0 /* UIPasteboard+Extension.swift in Sources */,
+				AB4FB4D52C89FAFD005EF0CC /* BlockedTrackersTableController.swift in Sources */,
 				C8A4137428BE58C900D8EFEA /* WallpaperMetadataCodableProtocol.swift in Sources */,
 				8A93080927BFE88F0052167D /* PhotonActionSheetContainerCell.swift in Sources */,
 				C8B41E0A29F0284B00FE218A /* NimbusOnboardingFeatureLayer.swift in Sources */,
@@ -15339,6 +15363,7 @@
 				396CDB55203C5B870034A3A3 /* TabTrayController+KeyCommands.swift in Sources */,
 				1DF2BDC32BD1BCF300E53C57 /* WindowManager+DebugUtilities.swift in Sources */,
 				C855728629AEA3FB00AF32B0 /* SurveySurfaceViewController.swift in Sources */,
+				AB4FB4DA2C89FB10005EF0CC /* BlockedTrackersModel.swift in Sources */,
 				74E36D781B71323500D69DA1 /* SettingsContentViewController.swift in Sources */,
 				EBB8950C21939E4100EB91A0 /* FirefoxTabContentBlocker.swift in Sources */,
 				21618A632A422A3900A5189E /* ThemeMiddleware.swift in Sources */,
@@ -15409,6 +15434,7 @@
 				D34510881ACF415700EC27F0 /* SearchLoader.swift in Sources */,
 				E17496402994302D0096900A /* PreferredFont.swift in Sources */,
 				E1442FD4294782D9003680B0 /* URL+Mail.swift in Sources */,
+				AB4FB4DD2C89FB10005EF0CC /* BlockedTrackersTableView.swift in Sources */,
 				9636D92827F5D72D00771F5E /* GleanPlumbMessageManager.swift in Sources */,
 				C80685D126A0C93900DCD895 /* UserResearch.swift in Sources */,
 				B2999FF52B194AB200F0FEC1 /* FormAutofillHelperError.swift in Sources */,
@@ -15610,6 +15636,7 @@
 				210E0EB8298D9D4500BB4F33 /* DefaultSearchEngineProvider.swift in Sources */,
 				8AE80BBA2891C0C300BC12EA /* JumpBackInSectionLayout.swift in Sources */,
 				21618A612A4201E500A5189E /* ThemeSettingsController.swift in Sources */,
+				AB4FB4DB2C89FB10005EF0CC /* BlockedTrackersHeaderView.swift in Sources */,
 				21357F2D293FDB60004BF9FD /* LegacyRemoteTabsErrorDataSource.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
 				DFACDFAA274D489B00A94EEC /* HistoryHighlightsViewModel.swift in Sources */,
@@ -15895,6 +15922,7 @@
 				81A3F6F22C2DB00900BDD86B /* MainMenuViewController.swift in Sources */,
 				E16E1C9828C25F1D00EE2EF5 /* SiteTableViewHeader.swift in Sources */,
 				E177989E2BD7D75A00F6F0EB /* ToolbarMiddleware.swift in Sources */,
+				AB4FB4DC2C89FB10005EF0CC /* BlockedTrackerCell.swift in Sources */,
 				C8CD80D72A1E2C6E0097C3AE /* NimbusMessagingHelperUtilityProtocol.swift in Sources */,
 				8ACE9BFB2A54A010001E7A73 /* ExpandButtonState.swift in Sources */,
 				E14792A32C2C5C660058211C /* ToolbarHelper.swift in Sources */,
