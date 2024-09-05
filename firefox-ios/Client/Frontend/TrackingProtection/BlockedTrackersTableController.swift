@@ -91,7 +91,9 @@ class BlockedTrackersTableViewController: UIViewController,
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
                 constant: TPMenuUX.UX.horizontalMargin
             ),
-            navigationView.heightAnchor.constraint(greaterThanOrEqualToConstant: TPMenuUX.UX.baseCellHeight)
+            navigationView.heightAnchor.constraint(
+                greaterThanOrEqualToConstant: TPMenuUX.UX.BlockedTrackers.baseCellHeight
+            )
         ]
         constraints.append(contentsOf: navigationViewContraints)
     }
@@ -142,7 +144,7 @@ class BlockedTrackersTableViewController: UIViewController,
     }
 
     private func updateViewDetails() {
-        navigationView.siteTitleLabel.text = model.topLevelDomain
+        navigationView.setTitle(with: model.topLevelDomain)
 
         if let headerView = trackersTable.headerView(forSection: 0) as? BlockedTrackersHeaderView {
             headerView.totalTrackersBlockedLabel.text = model.getTotalTrackersText()
