@@ -145,8 +145,6 @@ enum ToolbarMiddlewareActionType: ActionType {
     case customA11yAction
     case urlDidChange
     case searchEngineDidChange
-    case didStartEditingUrl
-    case cancelEdit
     case websiteLoadingStateDidChange
     case showMenuWarningBadge
     case readerModeStateChanged

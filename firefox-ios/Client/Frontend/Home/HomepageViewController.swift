@@ -366,8 +366,7 @@ class HomepageViewController:
         if currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false {
             overlayManager.cancelEditing(shouldCancelLoading: false)
 
-            let action = ToolbarMiddlewareAction(windowUUID: windowUUID,
-                                                 actionType: ToolbarMiddlewareActionType.cancelEdit)
+            let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
             store.dispatch(action)
         }
     }

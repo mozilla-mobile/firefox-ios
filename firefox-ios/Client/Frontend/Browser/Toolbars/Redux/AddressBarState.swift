@@ -278,44 +278,42 @@ struct AddressBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.didStartEditingUrl:
-            guard let action = action as? ToolbarAction,
-                  let addressToolbarModel = action.addressToolbarModel
-            else { return state }
+            guard let toolbarAction = action as? ToolbarAction else { return state }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
-                navigationActions: addressToolbarModel.navigationActions ?? state.navigationActions,
-                pageActions: addressToolbarModel.pageActions ?? state.pageActions,
-                browserActions: addressToolbarModel.browserActions ?? state.browserActions,
+                navigationActions: navigationActions(action: toolbarAction, addressBarState: state),
+                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: true),
+                browserActions: browserActions(action: toolbarAction, addressBarState: state),
                 borderPosition: state.borderPosition,
                 url: state.url,
-                searchTerm: action.searchTerm ?? state.searchTerm,
+                searchTerm: toolbarAction.searchTerm ?? state.searchTerm,
                 lockIconImageName: state.lockIconImageName,
-                isEditing: addressToolbarModel.isEditing ?? state.isEditing,
+                isEditing: true,
                 isScrollingDuringEdit: false,
                 shouldSelectSearchTerm: state.shouldSelectSearchTerm,
                 readerModeState: state.readerModeState
             )
 
         case ToolbarActionType.cancelEdit:
-            guard let addressToolbarModel = (action as? ToolbarAction)?.addressToolbarModel else { return state }
+            guard let toolbarAction = action as? ToolbarAction else { return state }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
-                navigationActions: addressToolbarModel.navigationActions ?? state.navigationActions,
-                pageActions: addressToolbarModel.pageActions ?? state.pageActions,
-                browserActions: addressToolbarModel.browserActions ?? state.browserActions,
+                navigationActions: navigationActions(action: toolbarAction, addressBarState: state),
+                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: true),
+                browserActions: browserActions(action: toolbarAction, addressBarState: state),
                 borderPosition: state.borderPosition,
                 url: state.url,
                 searchTerm: nil,
                 lockIconImageName: state.lockIconImageName,
-                isEditing: addressToolbarModel.isEditing ?? state.isEditing,
+                isEditing: false,
                 isScrollingDuringEdit: false,
                 readerModeState: state.readerModeState
             )
 
         case ToolbarActionType.didSetTextInLocationView:
-            guard let toolbarAction = (action as? ToolbarAction) else { return state }
+            guard let toolbarAction = action as? ToolbarAction else { return state }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,

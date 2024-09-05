@@ -139,21 +139,9 @@ final class ToolbarMiddleware: FeatureFlaggable {
         case ToolbarMiddlewareActionType.didTapButton:
             resolveToolbarMiddlewareButtonTapActions(action: action, state: state)
 
-        case ToolbarMiddlewareActionType.didStartEditingUrl:
-            updateAddressToolbarNavigationActions(action: action,
-                                                  state: state,
-                                                  isEditing: true,
-                                                  dispatchActionType: ToolbarActionType.didStartEditingUrl)
-
         case ToolbarMiddlewareActionType.websiteLoadingStateDidChange,
             ToolbarMiddlewareActionType.searchEngineDidChange:
             updateAddressToolbarNavigationActions(action: action, state: state, isEditing: false)
-
-        case ToolbarMiddlewareActionType.cancelEdit:
-            updateAddressToolbarNavigationActions(action: action,
-                                                  state: state,
-                                                  isEditing: false,
-                                                  dispatchActionType: ToolbarActionType.cancelEdit)
 
         case ToolbarMiddlewareActionType.showMenuWarningBadge:
             updateMenuWarningBadge(action: action, state: state)
@@ -227,8 +215,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
             store.dispatch(action)
 
         case .cancelEdit:
-            let action = ToolbarMiddlewareAction(windowUUID: action.windowUUID,
-                                                 actionType: ToolbarMiddlewareActionType.cancelEdit)
+            let action = ToolbarAction(windowUUID: action.windowUUID, actionType: ToolbarActionType.cancelEdit)
             store.dispatch(action)
 
         case .readerMode:

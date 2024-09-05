@@ -2403,9 +2403,9 @@ class BrowserViewController: UIViewController,
             guard tab == self.tabManager.selectedTab else { return }
 
             if self.isToolbarRefactorEnabled {
-                let action = ToolbarMiddlewareAction(searchTerm: searchText,
-                                                     windowUUID: self.windowUUID,
-                                                     actionType: ToolbarMiddlewareActionType.didStartEditingUrl)
+                let action = ToolbarAction(searchTerm: searchText,
+                                           windowUUID: self.windowUUID,
+                                           actionType: ToolbarActionType.didStartEditingUrl)
                 store.dispatch(action)
             } else {
                 self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
