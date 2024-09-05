@@ -391,8 +391,7 @@ class HomepageViewController:
             // When the user scrolls the homepage we cancel edit mode
             // On a website we just dismiss the keyboard
             if toolbarState.addressToolbar.url == nil {
-                let action = ToolbarMiddlewareAction(windowUUID: windowUUID,
-                                                     actionType: ToolbarMiddlewareActionType.cancelEdit)
+                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
                 store.dispatch(action)
             } else {
                 let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didScrollDuringEdit)
