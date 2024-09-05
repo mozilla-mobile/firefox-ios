@@ -21,6 +21,13 @@ struct TrackingProtectionDetailsModel {
 }
 
 class TrackingProtectionDetailsViewController: UIViewController, Themeable {
+    private struct UX {
+        static let baseCellHeight: CGFloat = 44
+        static let baseDistance: CGFloat = 20
+        static let bottomDistance: CGFloat = 350
+        static let viewCertButtonTopDistance: CGFloat = 8.0
+    }
+
     // MARK: - UI
     private let scrollView: UIScrollView = .build { scrollView in }
     private let baseView: UIStackView = .build { stackView in
@@ -107,13 +114,13 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
             scrollView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
             scrollView.bottomAnchor.constraint(
                 equalTo: view.bottomAnchor,
-                constant: -TPMenuUX.UX.TrackingDetails.bottomDistance
+                constant: -UX.bottomDistance
             ),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             baseView.topAnchor.constraint(
                 equalTo: scrollView.topAnchor,
-                constant: TPMenuUX.UX.TrackingDetails.baseDistance
+                constant: UX.baseDistance
             ),
             baseView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             baseView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
@@ -141,7 +148,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
                 constant: TPMenuUX.UX.horizontalMargin
             ),
-            headerView.heightAnchor.constraint(greaterThanOrEqualToConstant: TPMenuUX.UX.baseCellHeight)
+            headerView.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.baseCellHeight)
         ]
 
         constraints.append(contentsOf: headerViewContraints)
@@ -151,7 +158,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     private func setupConnectionStatusView() {
         baseView.addArrangedSubview(connectionView)
         let connectionViewContraints = [
-            connectionView.heightAnchor.constraint(greaterThanOrEqualToConstant: TPMenuUX.UX.baseCellHeight),
+            connectionView.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.baseCellHeight),
         ]
 
         constraints.append(contentsOf: connectionViewContraints)
@@ -161,7 +168,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     private func setupVerifiedByView() {
         baseView.addArrangedSubview(verifiedByView)
         let verifiedByViewContraints = [
-            verifiedByView.heightAnchor.constraint(greaterThanOrEqualToConstant: TPMenuUX.UX.baseCellHeight)
+            verifiedByView.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.baseCellHeight)
         ]
 
         constraints.append(contentsOf: verifiedByViewContraints)
@@ -177,7 +184,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
         viewCertificatesButton.configure(viewModel: certificatesButtonViewModel)
         baseView.addArrangedSubview(viewCertificatesButton)
         baseView.setCustomSpacing(
-            TPMenuUX.UX.TrackingDetails.viewCertButtonTopDistance,
+            UX.viewCertButtonTopDistance,
             after: verifiedByView
         )
     }
@@ -211,7 +218,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     }
 
     private func updateViewDetails() {
-        headerView.siteTitleLabel.text = model.topLevelDomain
+        headerView.setTitle(with: model.topLevelDomain)
         connectionView.connectionStatusLabel.text = model.connectionStatusMessage
         let certificateVerifier =  String(format: .Menu.EnhancedTrackingProtection.connectionVerifiedByLabel,
                                           model.topLevelDomain) // to be updated with the certificate verifier

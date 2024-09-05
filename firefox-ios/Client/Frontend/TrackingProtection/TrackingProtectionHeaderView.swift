@@ -3,93 +3,138 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import UIKit
 import Common
-import Shared
+import SiteImageView
 import ComponentLibrary
 
-class TrackingProtectionHeaderView: UIView {
-    let siteTitleLabel: UILabel = .build { label in
-        label.adjustsFontForContentSizeCategory = true
-        label.textAlignment = .center
+final class TrackingProtectionHeaderView: UIView, ThemeApplicable {
+    private struct UX {
+        static let headerLinesLimit: Int = 2
+        static let siteDomainLabelsVerticalSpacing: CGFloat = 12
+        static let faviconImageSize: CGFloat = 40
+        static let closeButtonSize: CGFloat = 30
+        static let horizontalMargin: CGFloat = 16
+    }
+
+    var closeButtonCallback: (() -> Void)?
+
+    private var faviconHeightConstraint: NSLayoutConstraint?
+    private var faviconWidthConstraint: NSLayoutConstraint?
+
+    private lazy var headerLabelsContainer: UIStackView = .build { stack in
+        stack.backgroundColor = .clear
+        stack.alignment = .leading
+        stack.axis = .vertical
+        stack.spacing = TPMenuUX.UX.headerLabelDistance
+    }
+
+    private var favicon: FaviconImageView = .build { favicon in
+        favicon.manuallySetImage(
+            UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate) ?? UIImage())
+    }
+
+    private let siteDisplayTitleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.headline.scaledFont()
-        label.numberOfLines = 2
-        label.accessibilityTraits.insert(.header)
+        label.numberOfLines = UX.headerLinesLimit
+        label.adjustsFontForContentSizeCategory = true
+    }
+
+    private let siteDomainLabel: UILabel = .build { label in
+        label.font = FXFontStyles.Regular.caption1.scaledFont()
+        label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
     }
 
     private var closeButton: CloseButton = .build { button in
-        button.layer.cornerRadius = 0.5 * TPMenuUX.UX.closeButtonSize
+        button.layer.cornerRadius = 0.5 * UX.closeButtonSize
     }
 
-    var backButton: UIButton = .build { button in
-        button.layer.cornerRadius = 0.5 * TPMenuUX.UX.closeButtonSize
-        button.clipsToBounds = true
-        button.setTitle(.KeyboardShortcuts.Back, for: .normal)
-        button.setImage(UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.chevronLeft)
-            .withRenderingMode(.alwaysTemplate),
-                        for: .normal)
-        button.titleLabel?.font = TPMenuUX.Fonts.viewTitleLabels.scaledFont()
-    }
-
-    private let horizontalLine: UIView = .build { _ in }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupView()
+    init() {
+        super.init(frame: .zero)
+        setupLayout()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: View Setup
-    private func setupView() {
-        addSubviews(siteTitleLabel, backButton, closeButton, horizontalLine)
-
+    private func setupLayout() {
+        headerLabelsContainer.addArrangedSubview(siteDisplayTitleLabel)
+        headerLabelsContainer.addArrangedSubview(siteDomainLabel)
+        self.addSubviews(favicon, headerLabelsContainer, closeButton)
+        faviconHeightConstraint = favicon.heightAnchor.constraint(equalToConstant: UX.faviconImageSize)
+        faviconWidthConstraint = favicon.widthAnchor.constraint(equalToConstant: UX.faviconImageSize)
         NSLayoutConstraint.activate([
-            backButton.leadingAnchor.constraint(
-                equalTo: leadingAnchor,
-                constant: TPMenuUX.UX.TrackingDetails.imageMargins
+            favicon.leadingAnchor.constraint(
+                equalTo: self.leadingAnchor,
+                constant: TPMenuUX.UX.horizontalMargin
             ),
-            backButton.centerYAnchor.constraint(equalTo: centerYAnchor),
+            favicon.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            faviconHeightConstraint ?? NSLayoutConstraint(),
+            faviconWidthConstraint ?? NSLayoutConstraint(),
 
-            siteTitleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            siteTitleLabel.leadingAnchor.constraint(equalTo: backButton.trailingAnchor),
-            siteTitleLabel.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor),
-            siteTitleLabel.topAnchor.constraint(
-                equalTo: topAnchor,
-                constant: TPMenuUX.UX.TrackingDetails.baseDistance
+            headerLabelsContainer.topAnchor.constraint(
+                equalTo: self.topAnchor,
+                constant: UX.siteDomainLabelsVerticalSpacing
             ),
-            siteTitleLabel.bottomAnchor.constraint(
-                equalTo: bottomAnchor,
-                constant: -TPMenuUX.UX.TrackingDetails.baseDistance
+            headerLabelsContainer.bottomAnchor.constraint(
+                equalTo: self.bottomAnchor,
+                constant: -UX.siteDomainLabelsVerticalSpacing
+            ),
+            headerLabelsContainer.leadingAnchor.constraint(
+                equalTo: favicon.trailingAnchor,
+                constant: UX.siteDomainLabelsVerticalSpacing
+            ),
+            headerLabelsContainer.trailingAnchor.constraint(
+                equalTo: closeButton.leadingAnchor,
+                constant: -UX.horizontalMargin
             ),
 
             closeButton.trailingAnchor.constraint(
-                equalTo: trailingAnchor,
-                constant: -TPMenuUX.UX.horizontalMargin
+                equalTo: self.trailingAnchor,
+                constant: -UX.horizontalMargin
             ),
-            closeButton.centerYAnchor.constraint(equalTo: centerYAnchor),
-            closeButton.heightAnchor.constraint(greaterThanOrEqualToConstant: TPMenuUX.UX.closeButtonSize),
-            closeButton.widthAnchor.constraint(greaterThanOrEqualToConstant: TPMenuUX.UX.closeButtonSize),
-            closeButton.widthAnchor.constraint(equalTo: closeButton.heightAnchor),
-
-            horizontalLine.leadingAnchor.constraint(equalTo: leadingAnchor),
-            horizontalLine.trailingAnchor.constraint(equalTo: trailingAnchor),
-            horizontalLine.bottomAnchor.constraint(equalTo: bottomAnchor),
-            horizontalLine.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.Line.height)
+            closeButton.topAnchor.constraint(
+                equalTo: self.topAnchor,
+                constant: UX.horizontalMargin
+            ),
+            closeButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.closeButtonSize),
+            closeButton.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.closeButtonSize)
         ])
     }
 
-    // MARK: ThemeApplicable
-    public func applyTheme(theme: Theme) {
+    func setupDetails(website: String, display: String, icon: FaviconImageViewModel) {
+        favicon.setFavicon(icon)
+        siteDomainLabel.text = website
+        siteDisplayTitleLabel.text = display
+    }
+
+    func setTitle(with text: String) {
+        siteDisplayTitleLabel.text = text
+    }
+
+    func adjustLayout() {
+        let faviconSize = UX.faviconImageSize
+        faviconHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: faviconSize), 2 * faviconSize)
+        faviconWidthConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: faviconSize), 2 * faviconSize)
+    }
+
+    func setupActions() {
+        closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
+    }
+
+    @objc
+    func closeButtonTapped() {
+        closeButtonCallback?()
+    }
+
+    func applyTheme(theme: Theme) {
+        closeButton.backgroundColor = theme.colors.layer2
         let buttonImage = UIImage(named: StandardImageIdentifiers.Medium.cross)?
             .tinted(withColor: theme.colors.iconSecondary)
         closeButton.setImage(buttonImage, for: .normal)
-        closeButton.backgroundColor = theme.colors.layer2
-        backButton.tintColor = theme.colors.iconAction
-        backButton.setTitleColor(theme.colors.textAccent, for: .normal)
-        horizontalLine.backgroundColor = theme.colors.borderPrimary
-        siteTitleLabel.textColor = theme.colors.textPrimary
+        siteDomainLabel.textColor = theme.colors.textSecondary
+        siteDisplayTitleLabel.textColor = theme.colors.textPrimary
+        self.tintColor = theme.colors.layer2
     }
 }
