@@ -224,24 +224,6 @@ struct AddressBarState: StateType, Equatable {
                 readerModeState: state.readerModeState
             )
 
-        case ToolbarActionType.backForwardButtonStatesChanged:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-            var addressToolbarModel = toolbarAction.addressToolbarModel
-
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: addressToolbarModel?.navigationActions ?? state.navigationActions,
-                pageActions: addressToolbarModel?.pageActions ?? state.pageActions,
-                browserActions: state.browserActions,
-                borderPosition: state.borderPosition,
-                url: state.url,
-                searchTerm: nil,
-                lockIconImageName: state.lockIconImageName,
-                isEditing: state.isEditing,
-                isScrollingDuringEdit: state.isScrollingDuringEdit,
-                readerModeState: state.readerModeState
-            )
-
         case ToolbarActionType.showMenuWarningBadge:
             let browserActions = (action as? ToolbarAction)?.addressToolbarModel?.browserActions
 

@@ -367,29 +367,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
         store.dispatch(toolbarAction)
     }
 
-    private func updateBackForwardToolbarActions(action: ToolbarMiddlewareAction,
-                                                 state: AppState) {
-        guard let toolbarState = state.screenState(ToolbarState.self,
-                                                   for: .toolbar,
-                                                   window: action.windowUUID),
-              let addressToolbarModel = generateAddressToolbarActions(action: action,
-                                                                      state: state),
-              let navToolbarModel = generateNavigationToolbarActions(action: action,
-                                                                     state: state)
-        else { return }
-
-        let canGoBack = action.canGoBack ?? toolbarState.canGoBack
-        let canGoForward = action.canGoForward ?? toolbarState.canGoForward
-
-        let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
-                                          navigationToolbarModel: navToolbarModel,
-                                          canGoBack: canGoBack,
-                                          canGoForward: canGoForward,
-                                          windowUUID: action.windowUUID,
-                                          actionType: ToolbarActionType.backForwardButtonStatesChanged)
-        store.dispatch(toolbarAction)
-    }
-
     // MARK: Address Toolbar Actions
 
     private func addressToolbarBrowserActions(

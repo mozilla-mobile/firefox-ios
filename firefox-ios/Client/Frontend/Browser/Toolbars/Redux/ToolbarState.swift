@@ -115,7 +115,6 @@ struct ToolbarState: ScreenState, Equatable {
                 numberOfTabs: state.numberOfTabs)
 
         case ToolbarActionType.addressToolbarActionsDidChange,
-            ToolbarActionType.backForwardButtonStatesChanged,
             ToolbarActionType.scrollOffsetChanged,
             ToolbarActionType.urlDidChange,
             ToolbarActionType.didSetTextInLocationView,

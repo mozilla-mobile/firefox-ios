@@ -87,15 +87,6 @@ struct NavigationBarState: StateType, Equatable {
                 displayBorder: state.displayBorder
             )
 
-        case ToolbarActionType.backForwardButtonStatesChanged:
-            guard let model = (action as? ToolbarAction)?.navigationToolbarModel else { return state }
-
-            return NavigationBarState(
-                windowUUID: state.windowUUID,
-                actions: model.actions ?? state.actions,
-                displayBorder: state.displayBorder
-            )
-
         case ToolbarActionType.showMenuWarningBadge:
             guard let model = (action as? ToolbarAction)?.navigationToolbarModel else { return state }
 
