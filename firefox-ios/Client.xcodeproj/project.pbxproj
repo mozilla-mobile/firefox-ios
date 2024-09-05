@@ -477,6 +477,7 @@
 		5A37861429A2BFB9006B3A34 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 5A37861329A2BFB9006B3A34 /* Common */; };
 		5A37861929A2C337006B3A34 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 5A37861829A2C337006B3A34 /* Sentry */; };
 		5A37861D29A2C37C006B3A34 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 5A37861C29A2C37C006B3A34 /* Common */; };
+		5A393F8D2C8A410900D2628D /* SiteImageView in Frameworks */ = {isa = PBXBuildFile; productRef = 5A393F8C2C8A410900D2628D /* SiteImageView */; };
 		5A3A2A0D287F742C00B79EAC /* BackgroundSyncUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A2A0C287F742C00B79EAC /* BackgroundSyncUtility.swift */; };
 		5A3A7DCE2886F7880065F81A /* BookmarksDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A7DCD2886F7880065F81A /* BookmarksDataAdaptor.swift */; };
 		5A3A7DD62889CF3D0065F81A /* BookmarksDataAdaptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A3A7DD52889CF3D0065F81A /* BookmarksDataAdaptorTests.swift */; };
@@ -8851,6 +8852,7 @@
 			files = (
 				43BE581B278BE5AE00491291 /* RustMozillaAppServices.framework in Frameworks */,
 				5A87148C292EA1640039A5BD /* Fuzi in Frameworks */,
+				5A393F8D2C8A410900D2628D /* SiteImageView in Frameworks */,
 				C820439A2523DC4500740B71 /* libStorage.a in Frameworks */,
 				5A70EF12295DFD6400790249 /* Common in Frameworks */,
 				D09A0CDC1FAA24CC009A0273 /* libAccount.a in Frameworks */,
@@ -13309,6 +13311,7 @@
 			packageProductDependencies = (
 				5A87148B292EA1640039A5BD /* Fuzi */,
 				5A70EF11295DFD6400790249 /* Common */,
+				5A393F8C2C8A410900D2628D /* SiteImageView */,
 			);
 			productName = Sync;
 			productReference = 2827315E1ABC9BE600AA1954 /* Sync.framework */;
@@ -23779,6 +23782,10 @@
 		5A37861C29A2C37C006B3A34 /* Common */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Common;
+		};
+		5A393F8C2C8A410900D2628D /* SiteImageView */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SiteImageView;
 		};
 		5A5AB97F296CA03500485E06 /* SiteImageView */ = {
 			isa = XCSwiftPackageProductDependency;
