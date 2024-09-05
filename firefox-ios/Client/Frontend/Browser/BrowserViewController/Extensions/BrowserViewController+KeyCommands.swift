@@ -165,8 +165,15 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "new-tab"])
-        store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
-                                            actionType: GeneralBrowserActionType.addNewTab))
+        
+        if isToolbarRefactorEnabled {
+            store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
+                                                actionType: GeneralBrowserActionType.addNewTab))
+        } else {
+            let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+            openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
+            keyboardPressesHandler().reset()
+        }
     }
 
     @objc
