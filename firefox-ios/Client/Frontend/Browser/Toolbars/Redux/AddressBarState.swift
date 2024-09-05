@@ -245,6 +245,22 @@ struct AddressBarState: StateType, Equatable {
                 isScrollingDuringEdit: false
             )
 
+        case ToolbarActionType.didSetTextInLocationView:
+            guard let toolbarAction = (action as? ToolbarAction) else { return state }
+
+            return AddressBarState(
+                windowUUID: state.windowUUID,
+                navigationActions: state.navigationActions,
+                pageActions: state.pageActions,
+                browserActions: state.browserActions,
+                borderPosition: state.borderPosition,
+                url: state.url,
+                searchTerm: toolbarAction.searchTerm,
+                lockIconImageName: state.lockIconImageName,
+                isEditing: true,
+                shouldSelectSearchTerm: false
+            )
+
         case ToolbarActionType.didScrollDuringEdit:
             return AddressBarState(
                 windowUUID: state.windowUUID,

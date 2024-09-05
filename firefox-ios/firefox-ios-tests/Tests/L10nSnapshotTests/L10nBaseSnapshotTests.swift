@@ -126,3 +126,9 @@ class L10nBaseSnapshotTests: XCTestCase {
         mozWaitForElementToNotExist(progressIndicator, timeout: 30.0)
     }
 }
+
+extension XCUIElement {
+    func tapOnApp() {
+        coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+    }
+}
