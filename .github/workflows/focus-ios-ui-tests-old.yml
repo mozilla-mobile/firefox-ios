@@ -119,6 +119,22 @@ jobs:
           name: ${{ env.browser }}-${{ matrix.ios_simulator }}-xcodebuildlog-${{ github.run_number }}
           path: ${{ env.browser }}/xcodebuild-*.log
           retention-days: 90
+      - name: Report to Slack
+        id: slack
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload-file-path: ${{ env.browser }}/slack.json
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          ios_simulator: ${{ matrix.ios_simulator }}
+          pass_fail:  ${{ steps.passfail.outcome == 'success' && ':white_check_mark:' || ':x:' }}
+          xcodebuild_test_plan: SmokeTests & FullFunctionalTests
+          ref_name: ${{ github.ref_name }}
+          repository: ${{ github.repository }}
+          run_id: ${{ github.run_id }}
+          server_url: ${{ github.server_url }}
+          sha: ${{ github.sha }}
       - name: Return fail status if a test fails
         run: |
           exit ${{ steps.passfail.outcome == 'success' && '0' || '1' }}   
