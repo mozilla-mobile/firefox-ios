@@ -99,11 +99,19 @@ jobs:
       - name: Print test report
         id: test-report
         run: |
-          jrm combined.xml junit-*.xml
-          python ../test-fixtures/ci/convert_junit_to_markdown.py --smoke --github --${{ env.browser }} ./combined.xml ./github.md
-          cat github.md >> $GITHUB_STEP_SUMMARY
-          python ../test-fixtures/ci/convert_junit_to_markdown.py --smoke --slack --${{ env.browser }} ./combined.xml ./slack.json
-          mv ./combined.xml "junit-focus-ios-${{ matrix.ios_simulator }}-${{ matrix.ios_version }}-`date +"%Y-%m-%d"`.xml"
+          # Smoke Tests
+          python ../test-fixtures/ci/convert_junit_to_markdown.py --smoke --github --${{ env.browser }} ./junit-smoketests.xml ./github-smoketests.md
+          echo "# Smoke Tests\n" >> $GITHUB_STEP_SUMMARY
+          cat github-smoketests.md >> $GITHUB_STEP_SUMMARY
+          python ../test-fixtures/ci/convert_junit_to_markdown.py --smoke --slack --${{ env.browser }} ./junit-smoketests.xml ./slack-smoketests.json
+          mv ./junit-smoketests.xml "junit-focus-ios-smoketests-${{ matrix.ios_simulator }}-${{ matrix.ios_version }}-`date +"%Y-%m-%d"`.xml"
+         
+          # Full Functional Tests
+          python ../test-fixtures/ci/convert_junit_to_markdown.py --github --${{ env.browser }} ./junit-fullfunctionaltests.xml ./github-fullfunctionaltests.md
+          echo "\n# Full Functional Tests\n" >> $GITHUB_STEP_SUMMARY
+          cat github-fullfunctionaltests.md >> $GITHUB_STEP_SUMMARY
+          python ../test-fixtures/ci/convert_junit_to_markdown.py --slack --${{ env.browser }} ./junit-fullfunctionaltests.xml ./slack-fullfunctionaltests.json
+          mv ./junit-fullfunctionaltests.xml "junit-focus-ios-fullfunctionaltests-${{ matrix.ios_simulator }}-${{ matrix.ios_version }}-`date +"%Y-%m-%d"`.xml"
         working-directory:  ${{ env.browser }}
       - name: Upload junit files
         id: upload-junit
@@ -119,17 +127,33 @@ jobs:
           name: ${{ env.browser }}-${{ matrix.ios_simulator }}-xcodebuildlog-${{ github.run_number }}
           path: ${{ env.browser }}/xcodebuild-*.log
           retention-days: 90
-      - name: Report to Slack
-        id: slack
+      - name: Report to Slack (SmokeTests)
+        id: slack-smoketests
         uses: slackapi/slack-github-action@v1.26.0
         with:
-          payload-file-path: ${{ env.browser }}/slack.json
+          payload-file-path: ${{ env.browser }}/slack-smoketests.json
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
           ios_simulator: ${{ matrix.ios_simulator }}
-          pass_fail:  ${{ steps.passfail.outcome == 'success' && ':white_check_mark:' || ':x:' }}
-          xcodebuild_test_plan: SmokeTests & FullFunctionalTests
+          pass_fail:  ${{ steps.run-smoketests.outcome == 'success' && ':white_check_mark:' || ':x:' }}
+          xcodebuild_test_plan: SmokeTests
+          ref_name: ${{ github.ref_name }}
+          repository: ${{ github.repository }}
+          run_id: ${{ github.run_id }}
+          server_url: ${{ github.server_url }}
+          sha: ${{ github.sha }}
+      - name: Report to Slack (FullFunctionalTests)
+        id: slack-fullfunctionaltests
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload-file-path: ${{ env.browser }}/slack-fullfunctionaltests.json
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          os_simulator: ${{ matrix.ios_simulator }}
+          pass_fail:  ${{ steps.run-fullfunctionaltests.outcome == 'success' && ':white_check_mark:' || ':x:' }}
+          xcodebuild_test_plan: FullFunctionalTests
           ref_name: ${{ github.ref_name }}
           repository: ${{ github.repository }}
           run_id: ${{ github.run_id }}
