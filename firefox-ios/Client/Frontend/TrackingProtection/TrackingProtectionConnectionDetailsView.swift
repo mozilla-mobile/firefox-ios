@@ -1,0 +1,119 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import Foundation
+import Common
+
+final class TrackingProtectionConnectionDetailsView: UIView {
+    private struct UX {
+        static let foxImageSize: CGFloat = 100
+        static let connectionDetailsLabelsVerticalSpacing: CGFloat = 12
+        static let connectionDetailsLabelBottomSpacing: CGFloat = 28
+        static let connectionDetailsStackSpacing = 15.0
+    }
+
+    private let connectionDetailsContentView: UIView = .build { view in
+        view.layer.cornerRadius = TPMenuUX.UX.viewCornerRadius
+        view.layer.masksToBounds = true
+    }
+
+    private let foxStatusImage: UIImageView = .build { image in
+        image.contentMode = .scaleAspectFit
+        image.clipsToBounds = true
+    }
+
+    private var connectionDetailsLabelsContainer: UIStackView = .build { stack in
+        stack.backgroundColor = .clear
+        stack.distribution = .fillProportionally
+        stack.alignment = .leading
+        stack.axis = .vertical
+        stack.spacing = UX.connectionDetailsStackSpacing
+    }
+
+    private var connectionDetailsTitleLabel: UILabel = .build { label in
+        label.font = FXFontStyles.Bold.subheadline.scaledFont()
+        label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
+    }
+
+    private let connectionDetailsStatusLabel: UILabel = .build { label in
+        label.font = FXFontStyles.Regular.subheadline.scaledFont()
+        label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
+    }
+
+    init() {
+        super.init(frame: .zero)
+        setupLayout()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    private func setupLayout() {
+        self.layer.cornerRadius = TPMenuUX.UX.viewCornerRadius
+        self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        self.layer.masksToBounds = true
+
+        connectionDetailsLabelsContainer.addArrangedSubview(connectionDetailsTitleLabel)
+        connectionDetailsLabelsContainer.addArrangedSubview(connectionDetailsStatusLabel)
+        connectionDetailsContentView.addSubviews(foxStatusImage, connectionDetailsLabelsContainer)
+        self.addSubview(connectionDetailsContentView)
+        NSLayoutConstraint.activate([
+            // Content
+            connectionDetailsContentView.leadingAnchor.constraint(
+                equalTo: self.leadingAnchor,
+                constant: TPMenuUX.UX.connectionDetailsHeaderMargins
+            ),
+            connectionDetailsContentView.trailingAnchor.constraint(
+                equalTo: self.trailingAnchor,
+                constant: -TPMenuUX.UX.connectionDetailsHeaderMargins
+            ),
+            connectionDetailsContentView.topAnchor.constraint(equalTo: self.topAnchor,
+                                                              constant: TPMenuUX.UX.connectionDetailsHeaderMargins),
+            connectionDetailsContentView.bottomAnchor.constraint(equalTo: self.bottomAnchor,
+                                                                 constant: -TPMenuUX.UX.connectionDetailsHeaderMargins / 2),
+            // Image
+            foxStatusImage.leadingAnchor.constraint(
+                equalTo: connectionDetailsContentView.leadingAnchor,
+                constant: TPMenuUX.UX.horizontalMargin
+            ),
+            foxStatusImage.topAnchor.constraint(
+                equalTo: connectionDetailsContentView.topAnchor,
+                constant: TPMenuUX.UX.horizontalMargin
+            ),
+            foxStatusImage.heightAnchor.constraint(equalToConstant: UX.foxImageSize),
+            foxStatusImage.widthAnchor.constraint(equalToConstant: UX.foxImageSize),
+
+            // Labels
+            connectionDetailsLabelsContainer.topAnchor.constraint(
+                equalTo: connectionDetailsContentView.topAnchor,
+                constant: TPMenuUX.UX.horizontalMargin
+            ),
+            connectionDetailsLabelsContainer.bottomAnchor.constraint(
+                equalTo: connectionDetailsContentView.bottomAnchor,
+                constant: -UX.connectionDetailsLabelBottomSpacing / 2
+            ),
+            connectionDetailsLabelsContainer.leadingAnchor.constraint(
+                equalTo: foxStatusImage.trailingAnchor,
+                constant: UX.connectionDetailsLabelsVerticalSpacing),
+            connectionDetailsLabelsContainer.trailingAnchor.constraint(equalTo:
+                                                                        connectionDetailsContentView.trailingAnchor,
+                                                                       constant: -TPMenuUX.UX.horizontalMargin),
+            connectionDetailsLabelsContainer.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.foxImageSize)
+        ])
+    }
+
+    func setupDetails(color: UIColor? = nil, title: String, status: String, image: UIImage?) {
+        connectionDetailsContentView.backgroundColor = color
+        connectionDetailsTitleLabel.text = title
+        connectionDetailsStatusLabel.text = status
+        foxStatusImage.image = image
+    }
+
+    func setupAccessibilityIdentifiers(foxImageA11yId: String) {
+        foxStatusImage.accessibilityIdentifier = foxImageA11yId
+    }
+}
