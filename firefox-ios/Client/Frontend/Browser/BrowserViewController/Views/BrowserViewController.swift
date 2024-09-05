@@ -3787,9 +3787,9 @@ extension BrowserViewController: TabManagerDelegate {
               toolbarState.numberOfTabs != count
         else { return }
 
-        let action = ToolbarMiddlewareAction(numberOfTabs: count,
-                                             windowUUID: windowUUID,
-                                             actionType: ToolbarMiddlewareActionType.numberOfTabsChanged)
+        let action = ToolbarAction(numberOfTabs: count,
+                                   windowUUID: windowUUID,
+                                   actionType: ToolbarActionType.numberOfTabsChanged)
         store.dispatch(action)
     }
 }

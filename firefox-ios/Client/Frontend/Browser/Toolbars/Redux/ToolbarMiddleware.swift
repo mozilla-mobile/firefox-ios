@@ -158,9 +158,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
         case ToolbarMiddlewareActionType.traitCollectionDidChange:
             updateAddressToolbarNavigationActions(action: action, state: state)
 
-        case ToolbarMiddlewareActionType.numberOfTabsChanged:
-            updateNumberOfTabs(action: action, state: state)
-
         case ToolbarMiddlewareActionType.showMenuWarningBadge:
             updateMenuWarningBadge(action: action, state: state)
 
@@ -353,24 +350,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
         case .top: return .top
         case .bottom: return .bottom
         }
-    }
-
-    private func updateNumberOfTabs(action: ToolbarMiddlewareAction,
-                                    state: AppState) {
-        guard let numberOfTabs = action.numberOfTabs,
-              let addressToolbarModel = generateAddressToolbarActions(action: action,
-                                                                      state: state,
-                                                                      isEditing: false),
-              let navToolbarModel = generateNavigationToolbarActions(action: action,
-                                                                     state: state)
-        else { return }
-
-        let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
-                                          navigationToolbarModel: navToolbarModel,
-                                          numberOfTabs: numberOfTabs,
-                                          windowUUID: action.windowUUID,
-                                          actionType: ToolbarActionType.numberOfTabsChanged)
-        store.dispatch(toolbarAction)
     }
 
     private func updateMenuWarningBadge(action: ToolbarMiddlewareAction,

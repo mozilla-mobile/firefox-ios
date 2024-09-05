@@ -143,7 +143,6 @@ class ToolbarMiddlewareAction: Action {
 enum ToolbarMiddlewareActionType: ActionType {
     case didTapButton
     case customA11yAction
-    case numberOfTabsChanged
     case urlDidChange
     case searchEngineDidChange
     case didStartEditingUrl
