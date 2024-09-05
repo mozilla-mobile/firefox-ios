@@ -9,6 +9,11 @@ import Shared
 import ComponentLibrary
 
 class TrackingProtectionStatusView: UIView {
+    private struct UX {
+        static let imageMargins: CGFloat = 10
+        static let connectionStatusLabelConstraintConstant = 16.0
+    }
+
     let connectionImage: UIImageView = .build { image in
         image.contentMode = .scaleAspectFit
         image.clipsToBounds = true
@@ -56,7 +61,7 @@ class TrackingProtectionStatusView: UIView {
 
             connectionStatusLabel.leadingAnchor.constraint(
                 equalTo: connectionImage.trailingAnchor,
-                constant: TPMenuUX.UX.TrackingDetails.imageMargins
+                constant: UX.imageMargins
             ),
             connectionStatusLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             connectionStatusLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
