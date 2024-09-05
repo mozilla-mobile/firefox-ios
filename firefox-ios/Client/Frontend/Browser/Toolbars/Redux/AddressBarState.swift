@@ -181,7 +181,7 @@ struct AddressBarState: StateType, Equatable {
 
         case ToolbarActionType.scrollOffsetChanged,
             ToolbarActionType.toolbarPositionChanged:
-            let borderPosition = (action as? ToolbarAction)?.addressToolbarModel?.borderPosition
+            guard let borderPosition = (action as? ToolbarAction)?.addressBorderPosition else { return state }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
