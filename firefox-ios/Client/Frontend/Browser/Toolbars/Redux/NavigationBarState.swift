@@ -77,6 +77,16 @@ struct NavigationBarState: StateType, Equatable {
                 displayBorder: state.displayBorder
             )
 
+        case ToolbarActionType.backButtonStateChanged,
+            ToolbarActionType.forwardButtonStateChanged:
+            guard let toolbarAction = action as? ToolbarAction else { return state }
+
+            return NavigationBarState(
+                windowUUID: state.windowUUID,
+                actions: navigationActions(action: toolbarAction, navigationBarState: state),
+                displayBorder: state.displayBorder
+            )
+
         case ToolbarActionType.backForwardButtonStatesChanged:
             guard let model = (action as? ToolbarAction)?.navigationToolbarModel else { return state }
 
@@ -150,6 +160,7 @@ struct NavigationBarState: StateType, Equatable {
     }
 
     private static func getMiddleButtonAction(url: URL?, isPrivateMode: Bool) -> ToolbarActionState {
+        // ToDo
 //        let canShowDataClearanceAction = false // canShowDataClearanceAction(isPrivate: isPrivateMode)
 //        let isNewTabEnabled = featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
         let middleActionForWebpage = homeAction // canShowDataClearanceAction ?

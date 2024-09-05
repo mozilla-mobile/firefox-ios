@@ -191,6 +191,24 @@ struct AddressBarState: StateType, Equatable {
                 readerModeState: state.readerModeState
             )
 
+        case ToolbarActionType.backButtonStateChanged,
+            ToolbarActionType.forwardButtonStateChanged:
+            guard let toolbarAction = action as? ToolbarAction else { return state }
+
+            return AddressBarState(
+                windowUUID: state.windowUUID,
+                navigationActions: navigationActions(action: toolbarAction, addressBarState: state),
+                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: false),
+                browserActions: state.browserActions,
+                borderPosition: state.borderPosition,
+                url: state.url,
+                searchTerm: nil,
+                lockIconImageName: state.lockIconImageName,
+                isEditing: state.isEditing,
+                isScrollingDuringEdit: state.isScrollingDuringEdit,
+                readerModeState: state.readerModeState
+            )
+
         case ToolbarActionType.backForwardButtonStatesChanged:
             guard let toolbarAction = action as? ToolbarAction else { return state }
             var addressToolbarModel = toolbarAction.addressToolbarModel
@@ -379,6 +397,8 @@ struct AddressBarState: StateType, Equatable {
             let isForwardButtonEnabled = canGoForward
             actions.append(backAction(enabled: isBackButtonEnabled))
             actions.append(forwardAction(enabled: isForwardButtonEnabled))
+
+            // ToDo
 //            if canShowDataClearanceAction(isPrivate: toolbarState.isPrivateMode) {
 //                actions.append(dataClearanceAction)
 //            }
@@ -422,6 +442,8 @@ struct AddressBarState: StateType, Equatable {
         actions.append(shareAction)
 
         let isLoadingChangeAction = action.actionType as? ToolbarMiddlewareActionType == .websiteLoadingStateDidChange
+
+        // ToDo
         let isLoading = addressBarState.isLoading // isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
 
         if isLoading == true {

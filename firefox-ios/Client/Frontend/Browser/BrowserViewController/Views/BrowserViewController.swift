@@ -1938,13 +1938,13 @@ class BrowserViewController: UIViewController,
 
     private func dispatchBackForwardToolbarAction(_ isEnabled: Bool?,
                                                   _ windowUUID: UUID,
-                                                  _ actionType: ToolbarMiddlewareActionType) {
+                                                  _ actionType: ToolbarActionType) {
         switch actionType {
         case .backButtonStateChanged:
-            let action = ToolbarMiddlewareAction(canGoBack: isEnabled, windowUUID: windowUUID, actionType: actionType)
+            let action = ToolbarAction(canGoBack: isEnabled, windowUUID: windowUUID, actionType: actionType)
             store.dispatch(action)
         case .forwardButtonStateChanged:
-            let action = ToolbarMiddlewareAction(canGoForward: isEnabled, windowUUID: windowUUID, actionType: actionType)
+            let action = ToolbarAction(canGoForward: isEnabled, windowUUID: windowUUID, actionType: actionType)
             store.dispatch(action)
         default: break
         }

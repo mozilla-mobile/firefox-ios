@@ -161,10 +161,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
         case ToolbarMiddlewareActionType.numberOfTabsChanged:
             updateNumberOfTabs(action: action, state: state)
 
-        case ToolbarMiddlewareActionType.backButtonStateChanged,
-            ToolbarMiddlewareActionType.forwardButtonStateChanged:
-            updateNumberOfTabs(action: action, state: state)
-
         case ToolbarMiddlewareActionType.showMenuWarningBadge:
             updateMenuWarningBadge(action: action, state: state)
 
