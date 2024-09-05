@@ -57,7 +57,7 @@ jobs:
             -configuration FocusDebug \
             CODE_SIGNING_ALLOWED=NO -destination \
             'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}'
-        working-directory: focus-ios
+        working-directory:  ${{ env.browser }}
       - name: Run smoke tests
         id: run-smoketests
         run: |
@@ -101,15 +101,19 @@ jobs:
         run: |
           # Smoke Tests
           python ../test-fixtures/ci/convert_junit_to_markdown.py --smoke --github --${{ env.browser }} ./junit-smoketests.xml ./github-smoketests.md
-          echo "# Smoke Tests\n" >> $GITHUB_STEP_SUMMARY
+          echo "# Smoke Tests " >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
           cat github-smoketests.md >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
           python ../test-fixtures/ci/convert_junit_to_markdown.py --smoke --slack --${{ env.browser }} ./junit-smoketests.xml ./slack-smoketests.json
           mv ./junit-smoketests.xml "junit-focus-ios-smoketests-${{ matrix.ios_simulator }}-${{ matrix.ios_version }}-`date +"%Y-%m-%d"`.xml"
          
           # Full Functional Tests
           python ../test-fixtures/ci/convert_junit_to_markdown.py --github --${{ env.browser }} ./junit-fullfunctionaltests.xml ./github-fullfunctionaltests.md
-          echo "\n# Full Functional Tests\n" >> $GITHUB_STEP_SUMMARY
+          echo "# Full Functional Tests " >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
           cat github-fullfunctionaltests.md >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
           python ../test-fixtures/ci/convert_junit_to_markdown.py --slack --${{ env.browser }} ./junit-fullfunctionaltests.xml ./slack-fullfunctionaltests.json
           mv ./junit-fullfunctionaltests.xml "junit-focus-ios-fullfunctionaltests-${{ matrix.ios_simulator }}-${{ matrix.ios_version }}-`date +"%Y-%m-%d"`.xml"
         working-directory:  ${{ env.browser }}
