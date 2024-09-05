@@ -4,7 +4,7 @@ features:
     description: >
       Controls the menu refactor feature
     variables:
-      enabled:
+     enabled:
         description: >
           Controls which menu users will see
         type: Boolean
