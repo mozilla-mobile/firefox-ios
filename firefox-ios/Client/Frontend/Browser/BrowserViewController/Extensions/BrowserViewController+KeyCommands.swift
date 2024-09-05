@@ -75,12 +75,8 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "go-back"])
-
-        guard let tab = tabManager.selectedTab, tab.canGoBack else { return }
-
-        if !contentContainer.hasHomepage {
-            tab.goBack()
-        }
+        store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
+                                            actionType: GeneralBrowserActionType.navigateBack))
     }
 
     @objc
@@ -90,11 +86,8 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "go-forward"])
 
-        guard let tab = tabManager.selectedTab, tab.canGoForward else { return }
-
-        if !contentContainer.hasHomepage {
-            tab.goForward()
-        }
+        store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
+                                            actionType: GeneralBrowserActionType.navigateForward))
     }
 
     @objc
