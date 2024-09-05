@@ -9,13 +9,11 @@ class RemoteSettingsOptionViewController: UIViewController, UITableViewDelegate,
     private var collections: [ServerCollection] = []
     private var remoteSettingsUtil = RemoteSettingsUtil(bucket: .defaultBucket, collection: .searchTelemetry)
     private var logger: Logger
-    private lazy var tableView: UITableView = {
-        let tableView = UITableView(frame: view.bounds)
-        tableView.delegate = self
+    private lazy var tableView: UITableView = .build { tableView in
         tableView.dataSource = self
+        tableView.delegate = self
         tableView.register(cellType: OneLineTableViewCell.self)
-        return tableView
-    }()
+    }
 
     init(logger: Logger = DefaultLogger.shared) {
         self.logger = logger
@@ -67,6 +65,37 @@ class RemoteSettingsOptionViewController: UIViewController, UITableViewDelegate,
 
     private func setupTableView() {
         view.addSubview(tableView)
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+            tableView.addGestureRecognizer(longPressGesture)
+    }
+    
+    @objc private func handleLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
+        if gestureRecognizer.state == .began {
+            let point = gestureRecognizer.location(in: tableView)
+
+            if let indexPath = tableView.indexPathForRow(at: point) {
+                let collection = collections[indexPath.row]
+
+                let contentToCopy = collection.id
+                UIPasteboard.general.string = contentToCopy
+
+                let alert = UIAlertController(title: "Copied",
+                                              message: "\(contentToCopy) copied to clipboard",
+                                              preferredStyle: .alert)
+                present(alert, animated: true)
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    alert.dismiss(animated: true, completion: nil)
+                }
+            }
+        }
     }
 
     func fetchCollections(bucketID: String) {
