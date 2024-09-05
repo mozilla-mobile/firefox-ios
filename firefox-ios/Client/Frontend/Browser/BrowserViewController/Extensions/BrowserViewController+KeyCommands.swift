@@ -55,16 +55,8 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "reload"])
-        if isToolbarRefactorEnabled {
-            store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
-                                                actionType: GeneralBrowserActionType.reloadWebsite))
-        } else {
-            guard let tab = tabManager.selectedTab else { return }
-
-            if !contentContainer.hasHomepage {
-                tab.reload()
-            }
-        }
+        store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
+                                            actionType: GeneralBrowserActionType.reloadWebsite))
     }
 
     @objc
@@ -73,16 +65,8 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "reload-no-cache"])
-        if isToolbarRefactorEnabled {
-            store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
-                                                actionType: GeneralBrowserActionType.reloadWebsiteNoCache))
-        } else {
-            guard let tab = tabManager.selectedTab else { return }
-
-            if !contentContainer.hasHomepage {
-                tab.reload(bypassCache: true)
-            }
-        }
+        store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
+                                            actionType: GeneralBrowserActionType.reloadWebsiteNoCache))
     }
 
     @objc
@@ -157,9 +141,8 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "new-tab"])
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
-        keyboardPressesHandler().reset()
+        store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
+                                            actionType: GeneralBrowserActionType.addNewTab))
     }
 
     @objc
