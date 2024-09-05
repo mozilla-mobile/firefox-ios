@@ -137,14 +137,11 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
                 let item: CertificatesHeaderItem = .build()
                 item.configure(theme: self.currentTheme(),
                                title: commonName,
-                               isSelected: viewModel.selectedCertificateIndex == index)
-
-                item.itemSelectedCallback = { [weak self] in
+                               isSelected: viewModel.selectedCertificateIndex == index) { [weak self] in
                     guard let self else { return }
                     self.viewModel.selectedCertificateIndex = index
                     self.certificatesTableView.reloadData()
                 }
-
                 headerStackView.addArrangedSubview(item)
             }
         }
