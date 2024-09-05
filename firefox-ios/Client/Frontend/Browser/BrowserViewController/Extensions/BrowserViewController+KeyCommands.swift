@@ -55,12 +55,11 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "reload"])
+        guard let tab = tabManager.selectedTab else { return }
         if isToolbarRefactorEnabled {
             store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
                                                 actionType: GeneralBrowserActionType.reloadWebsite))
         } else {
-            guard let tab = tabManager.selectedTab else { return }
-
             if !contentContainer.hasHomepage {
                 tab.reload()
             }
@@ -73,12 +72,11 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "reload-no-cache"])
+        guard let tab = tabManager.selectedTab else { return }
         if isToolbarRefactorEnabled {
             store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
                                                 actionType: GeneralBrowserActionType.reloadWebsiteNoCache))
         } else {
-            guard let tab = tabManager.selectedTab else { return }
-
             if !contentContainer.hasHomepage {
                 tab.reload(bypassCache: true)
             }
@@ -91,12 +89,11 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "go-back"])
+        guard let tab = tabManager.selectedTab, tab.canGoBack else { return }
         if isToolbarRefactorEnabled {
             store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
                                                 actionType: GeneralBrowserActionType.navigateBack))
         } else {
-            guard let tab = tabManager.selectedTab, tab.canGoBack else { return }
-
             if !contentContainer.hasHomepage {
                 tab.goBack()
             }
@@ -109,12 +106,11 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "go-forward"])
+        guard let tab = tabManager.selectedTab, tab.canGoForward else { return }
         if isToolbarRefactorEnabled {
             store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
                                                 actionType: GeneralBrowserActionType.navigateForward))
         } else {
-            guard let tab = tabManager.selectedTab, tab.canGoForward else { return }
-
             if !contentContainer.hasHomepage {
                 tab.goForward()
             }
