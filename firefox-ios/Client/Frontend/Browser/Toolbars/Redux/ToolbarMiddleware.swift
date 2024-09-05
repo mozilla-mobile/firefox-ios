@@ -484,8 +484,9 @@ final class ToolbarMiddleware: FeatureFlaggable {
         let menuBadgeImageName = isShowMenuWarningAction ? action.badgeImageName : toolbarState.badgeImageName
         let maskImageName = isShowMenuWarningAction ? action.maskImageName : toolbarState.maskImageName
 
-        actions.append(contentsOf: [tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode),
-                                    menuAction(badgeImageName: menuBadgeImageName, maskImageName: maskImageName)])
+        actions.append(contentsOf: [
+            tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode),
+            menuAction(badgeImageName: menuBadgeImageName, maskImageName: maskImageName)])
 
         return actions
     }
@@ -631,8 +632,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
         let middleAction = getMiddleButtonAction(url: url, isPrivateMode: toolbarState.isPrivateMode)
 
-        let isShowingTopTabs = action.isShowingTopTabs ?? false
-
         let canGoBack = action.canGoBack ?? toolbarState.canGoBack
         let canGoForward = action.canGoForward ?? toolbarState.canGoForward
         let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
@@ -645,9 +644,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
             backAction(enabled: canGoBack),
             forwardAction(enabled: canGoForward),
             middleAction,
-            tabsAction(numberOfTabs: numberOfTabs,
-                       isPrivateMode: toolbarState.isPrivateMode,
-                       isShowingTopTabs: isShowingTopTabs),
+            tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode),
             menuAction(badgeImageName: menuBadgeImageName, maskImageName: maskImageName)
         ]
 
@@ -693,15 +690,13 @@ final class ToolbarMiddleware: FeatureFlaggable {
     }
 
     private func tabsAction(numberOfTabs: Int = 1,
-                            isPrivateMode: Bool = false,
-                            isShowingTopTabs: Bool = false) -> ToolbarActionState {
+                            isPrivateMode: Bool = false) -> ToolbarActionState {
         return ToolbarActionState(
             actionType: .tabs,
             iconName: StandardImageIdentifiers.Large.tab,
             badgeImageName: isPrivateMode ? StandardImageIdentifiers.Medium.privateModeCircleFillPurple : nil,
             maskImageName: isPrivateMode ? ImageIdentifiers.badgeMask : nil,
             numberOfTabs: numberOfTabs,
-            isShowingTopTabs: isShowingTopTabs,
             isEnabled: true,
             a11yLabel: .TabsButtonShowTabsAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.tabsButton)

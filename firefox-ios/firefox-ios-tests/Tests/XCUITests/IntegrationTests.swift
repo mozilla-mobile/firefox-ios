@@ -285,11 +285,11 @@ class IntegrationTests: BaseTestCase {
         app.tables.cells["SignInToSync"].tap()
         app.buttons["EmailSignIn.button"].tap()
 
-        mozWaitForElementToExist(app.secureTextFields.element(boundBy: 0))
-        app.secureTextFields.element(boundBy: 0).tap()
-        app.secureTextFields.element(boundBy: 0).typeText(userState.fxaPassword!)
-        mozWaitForElementToExist(app.webViews.buttons.element(boundBy: 0))
-        app.webViews.buttons.element(boundBy: 0).tap()
+        navigator.nowAt(FxASigninScreen)
+        mozWaitForElementToExist(app.staticTexts["Enter your password"], timeout: TIMEOUT_LONG)
+        navigator.performAction(Action.FxATypePasswordExistingAccount)
+        navigator.performAction(Action.FxATapOnSignInButton)
+        mozWaitForElementToNotExist(app.staticTexts["Enter your password"], timeout: TIMEOUT_LONG)
 
         navigator.nowAt(SettingsScreen)
         mozWaitForElementToExist(app.staticTexts["GENERAL"])

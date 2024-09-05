@@ -200,52 +200,72 @@ final class AddressToolbarContainer: UIView,
 
     private func updateModel(toolbarState: ToolbarState) {
         guard let windowUUID, let profile else { return }
-        let model = AddressToolbarContainerModel(state: toolbarState,
-                                                 profile: profile,
-                                                 windowUUID: windowUUID)
-        if self.model != model {
-            self.model = model
-
-        	updateProgressBarPosition(toolbarState.toolbarPosition)
-            compactToolbar.configure(state: model.addressToolbarState,
+        let newModel = AddressToolbarContainerModel(state: toolbarState,
+                                                    profile: profile,
+                                                    windowUUID: windowUUID)
+        if self.model != newModel {
+            updateProgressBarPosition(toolbarState.toolbarPosition)
+            compactToolbar.configure(state: newModel.addressToolbarState,
                                      toolbarDelegate: self,
                                      leadingSpace: leadingToolbarSpace,
                                      trailingSpace: trailingToolbarSpace)
-            regularToolbar.configure(state: model.addressToolbarState,
+            regularToolbar.configure(state: newModel.addressToolbarState,
                                      toolbarDelegate: self,
                                      leadingSpace: leadingToolbarSpace,
                                      trailingSpace: trailingToolbarSpace)
-
-            // the layout (compact/regular) that should be displayed is driven by the state
-            adjustLayout()
 
             // Dismiss overlay mode when not editing to fix overlay mode staying open
             // on iPad when switching tabs using top tabs
             if !toolbarState.addressToolbar.isEditing {
                 leaveOverlayMode(reason: .cancelled, shouldCancelLoading: false)
             }
+
+            // the layout (compact/regular) that should be displayed is driven by the state
+            // but we only need to switch toolbars if shouldDisplayCompact changes
+            // otherwise we needlessly add/remove toolbars from the view hierarchy,
+            // which messes with the LocationTextField first responder status
+            // (see https://github.com/mozilla-mobile/firefox-ios/issues/21676)
+            let shouldSwitchToolbars = newModel.shouldDisplayCompact != self.model?.shouldDisplayCompact
+
+            // Replace the old model after we are done using it for comparison
+            // All functionality that depends on the new model should come after this
+            self.model = newModel
+
+            if shouldSwitchToolbars {
+                switchToolbars()
+            }
         }
     }
 
     private func setupLayout() {
         addSubview(progressBar)
-        adjustLayout()
-    }
-
-    private func adjustLayout() {
-        compactToolbar.removeFromSuperview()
-        regularToolbar.removeFromSuperview()
-
-        addSubview(toolbar)
 
         NSLayoutConstraint.activate([
             progressBar.leadingAnchor.constraint(equalTo: leadingAnchor),
             progressBar.trailingAnchor.constraint(equalTo: trailingAnchor),
+        ])
 
+        setupToolbarConstraints()
+    }
+
+    private func switchToolbars() {
+        if compactToolbar.isDescendant(of: self) {
+            compactToolbar.removeFromSuperview()
+        } else {
+            regularToolbar.removeFromSuperview()
+        }
+
+        setupToolbarConstraints()
+    }
+
+    private func setupToolbarConstraints() {
+        addSubview(toolbar)
+
+        NSLayoutConstraint.activate([
             toolbar.topAnchor.constraint(equalTo: topAnchor),
             toolbar.leadingAnchor.constraint(equalTo: leadingAnchor),
             toolbar.bottomAnchor.constraint(equalTo: bottomAnchor),
-            toolbar.trailingAnchor.constraint(equalTo: trailingAnchor),
+            toolbar.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }
 
