@@ -113,7 +113,7 @@ extension BrowserViewController {
             store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
                                                 actionType: GeneralBrowserActionType.navigateForward))
         } else {
-            guard let tab = tabManager.selectedTab, tab.canGoBack else { return }
+            guard let tab = tabManager.selectedTab, tab.canGoForward else { return }
 
             if !contentContainer.hasHomepage {
                 tab.goForward()
