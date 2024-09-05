@@ -1,0 +1,165 @@
+name: Focus iOS 15 & 16 tests
+on:
+  workflow_dispatch:
+
+env:
+    browser: focus-ios
+    xcode_version: 15.4
+    test_results_directory: /Users/runner/tmp
+
+jobs:
+  Focus-iOS-Tests:
+    name: Focus iOS
+    runs-on: macos-14
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - ios_version: 16.4
+            ios_simulator: iPhone 14
+          - ios_version: 15.5
+            ios_simulator: iPhone 13
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v4.1.7
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install packages
+        run: |
+          pip3 install virtualenv pipenv
+          gem install xcpretty -v 0.3.0
+          pip install blockkit==1.9.1
+      - name: Setup Xcode
+        id: xcode
+        run: |
+          sudo rm -rf /Applications/Xcode.app
+          sudo rm -fr /Applications/Xcode_16*
+          sudo rm -fr /Applications/Xcode_14*
+          sudo xcode-select -s /Applications/Xcode_${{ env.xcode_version }}.app/Contents/Developer
+          xcodebuild -version
+          ./checkout.sh
+          ./bootstrap.sh --force
+      - name: Create iOS ${{ matrix.ios_version }} simulator
+        id: setup-simulator
+        run: |
+          sudo xcodes runtimes install "iOS ${{ matrix.ios_version }}"
+          xcrun simctl list devices iphone
+      - name: Build Focus
+        id: compile
+        run: |
+          xcodebuild build-for-testing \
+            -project Blockzilla.xcodeproj -scheme Focus \
+            -configuration FocusDebug \
+            CODE_SIGNING_ALLOWED=NO -destination \
+            'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}'
+        working-directory:  ${{ env.browser }}
+      - name: Run smoke tests
+        id: run-smoketests
+        run: |
+          xcodebuild test-without-building \
+            -project Blockzilla.xcodeproj -scheme Focus \
+            -configuration FocusDebug \
+            CODE_SIGNING_ALLOWED=NO \
+            -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
+            -testPlan SmokeTest \
+            -resultBundlePath ${{ env.test_results_directory }}/results-smoketests \
+            | tee xcodebuild-smoketests.log | xcpretty -r junit --output ./junit-smoketests.xml && exit ${PIPESTATUS[0]}
+        working-directory: ${{ env.browser }}
+        continue-on-error: true
+      - name: Run full functional tests
+        id: run-fullfunctionaltests
+        run: |
+          xcodebuild test-without-building \
+            -project Blockzilla.xcodeproj -scheme Focus \
+            -configuration FocusDebug \
+            CODE_SIGNING_ALLOWED=NO \
+            -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
+            -testPlan FullFunctionalTests \
+            -resultBundlePath ${{ env.test_results_directory }}/results-fullfunctionaltests \
+            | tee xcodebuild-fullfunctionaltests.log | xcpretty -r junit --output ./junit-fullfunctionaltests.xml && exit ${PIPESTATUS[0]}
+        working-directory: ${{ env.browser }}
+        continue-on-error: true
+      - name: Determine pass/fail status
+        id: passfail
+        run: |
+          echo "Smoke Tests status: "${{ steps.run-smoketests.outcome }}
+          echo "Full Functional Tests status: "${{ steps.run-fullfunctionaltests.outcome }}
+          if [[ ${{ steps.run-smoketests.outcome }} != 'success' 
+                || ${{ steps.run-fullfunctionaltests.outcome }} != 'success' ]]; then
+            exit 1
+          else
+            exit 0
+          fi
+        continue-on-error: true
+      - name: Print test report
+        id: test-report
+        run: |
+          # Smoke Tests
+          python ../test-fixtures/ci/convert_junit_to_markdown.py --smoke --github --${{ env.browser }} ./junit-smoketests.xml ./github-smoketests.md
+          echo "# Smoke Tests " >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          cat github-smoketests.md >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          python ../test-fixtures/ci/convert_junit_to_markdown.py --smoke --slack --${{ env.browser }} ./junit-smoketests.xml ./slack-smoketests.json
+          mv ./junit-smoketests.xml "junit-focus-ios-smoketests-${{ matrix.ios_simulator }}-${{ matrix.ios_version }}-`date +"%Y-%m-%d"`.xml"
+         
+          # Full Functional Tests
+          python ../test-fixtures/ci/convert_junit_to_markdown.py --github --${{ env.browser }} ./junit-fullfunctionaltests.xml ./github-fullfunctionaltests.md
+          echo "# Full Functional Tests " >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          cat github-fullfunctionaltests.md >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          python ../test-fixtures/ci/convert_junit_to_markdown.py --slack --${{ env.browser }} ./junit-fullfunctionaltests.xml ./slack-fullfunctionaltests.json
+          mv ./junit-fullfunctionaltests.xml "junit-focus-ios-fullfunctionaltests-${{ matrix.ios_simulator }}-${{ matrix.ios_version }}-`date +"%Y-%m-%d"`.xml"
+        working-directory:  ${{ env.browser }}
+      - name: Upload junit files
+        id: upload-junit
+        uses: actions/upload-artifact@v4.3.3
+        with:
+          name: ${{ env.browser }}-${{ matrix.ios_simulator }}-${{ matrix.ios_version }}-junit-${{ github.run_number }}
+          path: ${{ env.browser }}/junit-focus-ios-*.xml
+          retention-days: 90
+      - name: Upload log file
+        id: upload-log
+        uses: actions/upload-artifact@v4.3.3
+        with:
+          name: ${{ env.browser }}-${{ matrix.ios_simulator }}-${{ matrix.ios_version }}-xcodebuildlog-${{ github.run_number }}
+          path: ${{ env.browser }}/xcodebuild-*.log
+          retention-days: 90
+      - name: Report to Slack (SmokeTests)
+        id: slack-smoketests
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload-file-path: ${{ env.browser }}/slack-smoketests.json
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          ios_simulator: ${{ matrix.ios_simulator }}
+          pass_fail:  ${{ steps.run-smoketests.outcome == 'success' && ':white_check_mark:' || ':x:' }}
+          xcodebuild_test_plan: SmokeTests
+          ref_name: ${{ github.ref_name }}
+          repository: ${{ github.repository }}
+          run_id: ${{ github.run_id }}
+          server_url: ${{ github.server_url }}
+          sha: ${{ github.sha }}
+      - name: Report to Slack (FullFunctionalTests)
+        id: slack-fullfunctionaltests
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload-file-path: ${{ env.browser }}/slack-fullfunctionaltests.json
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          os_simulator: ${{ matrix.ios_simulator }}
+          pass_fail:  ${{ steps.run-fullfunctionaltests.outcome == 'success' && ':white_check_mark:' || ':x:' }}
+          xcodebuild_test_plan: FullFunctionalTests
+          ref_name: ${{ github.ref_name }}
+          repository: ${{ github.repository }}
+          run_id: ${{ github.run_id }}
+          server_url: ${{ github.server_url }}
+          sha: ${{ github.sha }}
+      - name: Return fail status if a test fails
+        run: |
+          exit ${{ steps.passfail.outcome == 'success' && '0' || '1' }}   
