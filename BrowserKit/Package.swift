@@ -73,7 +73,7 @@ let package = Package(
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "SiteImageViewTests",
-            dependencies: ["SiteImageView"]),
+            dependencies: ["SiteImageView", .product(name: "GCDWebServers", package: "GCDWebServer")]),
         .target(
             name: "Common",
             dependencies: ["Dip",

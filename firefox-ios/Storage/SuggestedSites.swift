@@ -5,6 +5,12 @@
 import UIKit
 import Shared
 
+import SiteImageView
+
+struct MyTestStruct {
+    var resource: SiteResource?
+}
+
 open class SuggestedSite: Site {
     override open var tileURL: URL {
         return URL(string: url as String, invalidCharacters: false) ?? URL(string: "about:blank")!
