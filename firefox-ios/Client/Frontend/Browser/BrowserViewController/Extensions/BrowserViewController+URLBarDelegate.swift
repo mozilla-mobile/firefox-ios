@@ -264,6 +264,9 @@ extension BrowserViewController: URLBarDelegate {
 
         let conversionMetrics = UserConversionMetrics()
         conversionMetrics.didPerformSearch()
+
+        Experiments.events.recordEvent(BehavioralTargetingEvent.performedSearch)
+
         GleanMetrics.Search
             .counts["\(engine.engineID ?? "custom").\(SearchLocation.actionBar.rawValue)"]
             .add()
