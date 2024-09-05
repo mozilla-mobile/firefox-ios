@@ -17,8 +17,8 @@ jobs:
         include:
           - ios_version: 16.4
             ios_simulator: iPhone 14
-        #  - ios_version: 15.5
-        #    ios_simulator: iPhone 13
+          - ios_version: 15.5
+            ios_simulator: iPhone 13
     steps:
       - name: Check out source code
         uses: actions/checkout@v4.1.7
@@ -30,9 +30,10 @@ jobs:
           python-version: '3.11'
       - name: Install packages
         run: |
-          brew update
-          brew install blacktop/tap/ipsw
           pip3 install virtualenv pipenv
+          gem install xcpretty -v 0.3.0
+          pip install blockkit==1.9.1
+          npm install -g junit-report-merger@7.0.0
       - name: Setup Xcode
         id: xcode
         run: |
@@ -41,18 +42,14 @@ jobs:
           xcodebuild -version
           ./checkout.sh
           ./bootstrap.sh --force
+
+          # Free up disk space: Delete Xcode not in use
+          sudo rm -fr /Applications/Xcode_16*
       - name: Create iOS ${{ matrix.ios_version }} simulator
         id: setup-simulator
         run: |
-          brew install blacktop/tap/ipsw
-          echo "iOS ${{ matrix.ios_version }} Simulator" | ipsw download xcode --sim
-          dmg_file=$(ls *.dmg)
-          curl https://gist.githubusercontent.com/testableapple/3688bbf7c0e475aa915bd34b7cf7876e/raw/db91bbbc5ace3835de34db5030c6b04e519847e5/install_runtime.sh > install_runtime.sh
-          chmod u+x install_runtime.sh
-          sh install_runtime.sh "${dmg_file}"
-          xcrun simctl list runtimes
+          sudo xcodes runtimes install "iOS ${{ matrix.ios_version }}"
           xcrun simctl list devices iphone
-          xcrun simctl create "${{ matrix.ios_simulator }}" com.apple.CoreSimulator.SimRuntime.iOS-16-4
       - name: Build Focus
         id: compile
         run: |
@@ -71,8 +68,8 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ matrix.ios_version }}' \
             -testPlan SmokeTest \
-            -resultBundlePath ${{ env.test_results_directory }}/results-smoketest \
-            | tee xcodebuild-smoketest.log | xcpretty -r junit --output ./junit-smoketest.xml && exit ${PIPESTATUS[0]}
+            -resultBundlePath ${{ env.test_results_directory }}/results-smoketests \
+            | tee xcodebuild-smoketests.log | xcpretty -r junit --output ./junit-smoketests.xml && exit ${PIPESTATUS[0]}
         working-directory: ${{ env.browser }}
         continue-on-error: true
       - name: Run full functional tests
@@ -123,22 +120,6 @@ jobs:
           name: ${{ env.browser }}-${{ matrix.ios_simulator }}-xcodebuildlog-${{ github.run_number }}
           path: ${{ env.browser }}/xcodebuild-*.log
           retention-days: 90
-      - name: Report to Slack
-        id: slack
-        uses: slackapi/slack-github-action@v1.26.0
-        with:
-          payload-file-path: ${{ env.browser }}/slack.json
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-          ios_simulator: ${{ matrix.ios_simulator }}
-          pass_fail:  ${{ steps.passfail.outcome == 'success' && ':white_check_mark:' || ':x:' }}
-          xcodebuild_test_plan: Smoke/FullFunctional
-          ref_name: ${{ github.ref_name }}
-          repository: ${{ github.repository }}
-          run_id: ${{ github.run_id }}
-          server_url: ${{ github.server_url }}
-          sha: ${{ github.sha }}
       - name: Return fail status if a test fails
         run: |
           exit ${{ steps.passfail.outcome == 'success' && '0' || '1' }}   
