@@ -38,13 +38,12 @@ jobs:
         id: xcode
         run: |
           sudo rm -rf /Applications/Xcode.app
+          sudo rm -fr /Applications/Xcode_16*
+          sudo rm -fr /Applications/Xcode_14*
           sudo xcode-select -s /Applications/Xcode_${{ env.xcode_version }}.app/Contents/Developer
           xcodebuild -version
           ./checkout.sh
           ./bootstrap.sh --force
-
-          # Free up disk space: Delete Xcode not in use
-          sudo rm -fr /Applications/Xcode_16*
       - name: Create iOS ${{ matrix.ios_version }} simulator
         id: setup-simulator
         run: |
