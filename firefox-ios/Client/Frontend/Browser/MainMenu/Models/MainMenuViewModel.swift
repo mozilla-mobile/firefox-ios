@@ -7,12 +7,7 @@ import Common
 import Shared
 
 class MainMenuViewModel {
-    let windowUUID: WindowUUID
-
-    init(profile: Profile = AppContainer.shared.resolve(),
-         windowUUID: WindowUUID) {
-        self.windowUUID = windowUUID
-    }
+    init() { }
 
     func getCurrentDetent(
         for presentedController: UIPresentationController?
