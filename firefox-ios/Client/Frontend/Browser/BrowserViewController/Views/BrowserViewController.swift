@@ -1845,12 +1845,10 @@ class BrowserViewController: UIViewController,
 
     func updateReaderModeState(for tab: Tab?, readerModeState: ReaderModeState) {
         if isToolbarRefactorEnabled {
-            let action = ToolbarMiddlewareAction(
-                lockIconImageName: lockIconImageName(for: tab),
-                url: tab?.url?.displayURL,
+            let action = ToolbarAction(
                 readerModeState: readerModeState,
                 windowUUID: windowUUID,
-                actionType: ToolbarMiddlewareActionType.readerModeStateChanged
+                actionType: ToolbarActionType.readerModeStateChanged
             )
             store.dispatch(action)
         } else {
@@ -1862,14 +1860,14 @@ class BrowserViewController: UIViewController,
     /// Call this whenever the page URL changes.
     fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
         guard !isToolbarRefactorEnabled else {
-            let action = ToolbarMiddlewareAction(
+            let action = ToolbarAction(
+                url: tab.url?.displayURL, 
                 isShowingNavigationToolbar: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection),
-                lockIconImageName: lockIconImageName(for: tab),
-                url: tab.url?.displayURL,
                 canGoBack: tab.canGoBack,
                 canGoForward: tab.canGoForward,
+                lockIconImageName: lockIconImageName(for: tab),
                 windowUUID: windowUUID,
-                actionType: ToolbarMiddlewareActionType.urlDidChange)
+                actionType: ToolbarActionType.urlDidChange)
             store.dispatch(action)
             return
         }

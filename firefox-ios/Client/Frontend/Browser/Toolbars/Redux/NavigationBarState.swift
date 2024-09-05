@@ -11,12 +11,19 @@ struct NavigationBarState: StateType, Equatable {
     var actions: [ToolbarActionState]
     var displayBorder: Bool
 
-    static let searchAction = ToolbarActionState(
+    private static let searchAction = ToolbarActionState(
         actionType: .search,
         iconName: StandardImageIdentifiers.Large.search,
         isEnabled: true,
         a11yLabel: .TabToolbarSearchAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.searchButton)
+
+    private static let homeAction = ToolbarActionState(
+        actionType: .home,
+        iconName: StandardImageIdentifiers.Large.home,
+        isEnabled: true,
+        a11yLabel: .TabToolbarHomeAccessibilityLabel,
+        a11yId: AccessibilityIdentifiers.Toolbar.homeButton)
 
     init(windowUUID: WindowUUID) {
         self.init(windowUUID: windowUUID,
@@ -53,12 +60,12 @@ struct NavigationBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.urlDidChange:
-            guard let model = (action as? ToolbarAction)?.navigationToolbarModel else { return state }
+            guard let toolbarAction = action as? ToolbarAction else { return state }
 
             return NavigationBarState(
                 windowUUID: state.windowUUID,
-                actions: model.actions ?? state.actions,
-                displayBorder: model.displayBorder ?? state.displayBorder
+                actions: navigationActions(action: toolbarAction, navigationBarState: state),
+                displayBorder: state.displayBorder
             )
 
         case ToolbarActionType.numberOfTabsChanged:
@@ -105,6 +112,52 @@ struct NavigationBarState: StateType, Equatable {
                 displayBorder: state.displayBorder
             )
         }
+    }
+
+    // MARK: - Navigation Toolbar Actions
+
+    private static func navigationActions(
+        action: ToolbarAction,
+        navigationBarState: NavigationBarState)
+    -> [ToolbarActionState] {
+        var actions = [ToolbarActionState]()
+
+        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+        else { return actions }
+
+        let isUrlChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
+        let url = isUrlChangeAction ? action.url : toolbarState.addressToolbar.url
+
+        let middleAction = getMiddleButtonAction(url: url, isPrivateMode: toolbarState.isPrivateMode)
+
+        let canGoBack = action.canGoBack ?? toolbarState.canGoBack
+        let canGoForward = action.canGoForward ?? toolbarState.canGoForward
+        let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
+
+        let isShowMenuWarningAction = action.actionType as? ToolbarMiddlewareActionType == .showMenuWarningBadge
+        let menuBadgeImageName = isShowMenuWarningAction ? action.badgeImageName : toolbarState.badgeImageName
+        let maskImageName = isShowMenuWarningAction ? action.maskImageName : toolbarState.maskImageName
+
+        actions = [
+            backAction(enabled: canGoBack),
+            forwardAction(enabled: canGoForward),
+            middleAction,
+            tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode),
+            menuAction(badgeImageName: menuBadgeImageName, maskImageName: maskImageName)
+        ]
+
+        return actions
+    }
+
+    private static func getMiddleButtonAction(url: URL?, isPrivateMode: Bool) -> ToolbarActionState {
+//        let canShowDataClearanceAction = false // canShowDataClearanceAction(isPrivate: isPrivateMode)
+//        let isNewTabEnabled = featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
+        let middleActionForWebpage = homeAction // canShowDataClearanceAction ?
+//                                     dataClearanceAction : isNewTabEnabled ? newTabAction : homeAction
+        let middleActionForHomepage = searchAction
+        let middleAction = url == nil ? middleActionForHomepage : middleActionForWebpage
+
+        return middleAction
     }
 
     // MARK: - Helper

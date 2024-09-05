@@ -23,6 +23,8 @@ final class ToolbarAction: Action {
     let readerModeState: ReaderModeState?
     let addressBorderPosition: AddressToolbarBorderPosition?
     let displayNavBorder: Bool?
+    let lockIconImageName: String?
+    let isEditing: Bool?
 
     init(addressToolbarModel: AddressToolbarModel? = nil,
          navigationToolbarModel: NavigationToolbarModel? = nil,
@@ -40,6 +42,8 @@ final class ToolbarAction: Action {
          readerModeState: ReaderModeState? = nil,
          addressBorderPosition: AddressToolbarBorderPosition? = nil,
          displayNavBorder: Bool? = nil,
+         lockIconImageName: String? = nil,
+         isEditing: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.addressToolbarModel = addressToolbarModel
@@ -58,6 +62,8 @@ final class ToolbarAction: Action {
         self.readerModeState = readerModeState
         self.addressBorderPosition = addressBorderPosition
         self.displayNavBorder = displayNavBorder
+        self.lockIconImageName = lockIconImageName
+        self.isEditing = isEditing
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }

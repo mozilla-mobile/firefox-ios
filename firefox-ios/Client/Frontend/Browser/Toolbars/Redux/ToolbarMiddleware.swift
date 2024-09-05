@@ -139,12 +139,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
         case ToolbarMiddlewareActionType.didTapButton:
             resolveToolbarMiddlewareButtonTapActions(action: action, state: state)
 
-        case ToolbarMiddlewareActionType.urlDidChange:
-            updateUrlAndActions(action: action, state: state)
-
-        case ToolbarMiddlewareActionType.readerModeStateChanged:
-            updateReaderModeState(action: action, state: state)
-
         case ToolbarMiddlewareActionType.didStartEditingUrl:
             updateAddressToolbarNavigationActions(action: action,
                                                   state: state,
@@ -365,44 +359,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
         }
     }
 
-    private func updateUrlAndActions(action: ToolbarMiddlewareAction, state: AppState) {
-        guard let addressToolbarModel = generateAddressToolbarActions(action: action,
-                                                                      state: state,
-                                                                      lockIconImageName: action.lockIconImageName,
-                                                                      isEditing: false),
-              let navToolbarModel = generateNavigationToolbarActions(action: action,
-                                                                     state: state)
-        else { return }
-
-        let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
-                                          navigationToolbarModel: navToolbarModel,
-                                          url: action.url,
-                                          isShowingNavigationToolbar: action.isShowingNavigationToolbar,
-                                          canGoBack: action.canGoBack,
-                                          canGoForward: action.canGoForward,
-                                          readerModeState: action.readerModeState,
-                                          windowUUID: action.windowUUID,
-                                          actionType: ToolbarActionType.urlDidChange)
-        store.dispatch(toolbarAction)
-    }
-
-    private func updateReaderModeState(action: ToolbarMiddlewareAction,
-                                       state: AppState) {
-        guard let readerModeState = action.readerModeState,
-              let addressToolbarModel = generateAddressToolbarActions(
-                action: action,
-                state: state,
-                lockIconImageName: action.lockIconImageName,
-                isEditing: false
-              ) else { return }
-
-        let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
-                                          readerModeState: readerModeState,
-                                          windowUUID: action.windowUUID,
-                                          actionType: ToolbarActionType.readerModeStateChanged)
-        store.dispatch(toolbarAction)
-    }
-
     private func updateNumberOfTabs(action: ToolbarMiddlewareAction,
                                     state: AppState) {
         guard let numberOfTabs = action.numberOfTabs,
@@ -538,7 +494,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
         let isUrlChangeAction = action.actionType as? ToolbarMiddlewareActionType == .urlDidChange
         let isReaderModeAction = action.actionType as? ToolbarMiddlewareActionType == .readerModeStateChanged
-        let readerModeState = isReaderModeAction ? action.readerModeState : toolbarState.readerModeState
+        let readerModeState = isReaderModeAction ? action.readerModeState : toolbarState.addressToolbar.readerModeState
         let url = (isUrlChangeAction || isReaderModeAction) ? action.url : toolbarState.addressToolbar.url
         readerModeAction.shouldDisplayAsHighlighted = readerModeState == .active
 

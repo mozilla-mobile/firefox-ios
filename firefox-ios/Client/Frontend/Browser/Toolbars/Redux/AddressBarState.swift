@@ -19,6 +19,7 @@ struct AddressBarState: StateType, Equatable {
     var isScrollingDuringEdit: Bool
     var shouldSelectSearchTerm: Bool
     var isLoading: Bool
+    let readerModeState: ReaderModeState?
 
     private static let qrCodeScanAction = ToolbarActionState(
         actionType: .qrCode,
@@ -26,6 +27,43 @@ struct AddressBarState: StateType, Equatable {
         isEnabled: true,
         a11yLabel: .QRCode.ToolbarButtonA11yLabel,
         a11yId: AccessibilityIdentifiers.Browser.ToolbarButtons.qrCode)
+
+    private static let shareAction = ToolbarActionState(
+        actionType: .share,
+        iconName: StandardImageIdentifiers.Large.share,
+        isEnabled: true,
+        a11yLabel: .TabLocationShareAccessibilityLabel,
+        a11yId: AccessibilityIdentifiers.Toolbar.shareButton)
+
+    private static let stopLoadingAction = ToolbarActionState(
+        actionType: .stopLoading,
+        iconName: StandardImageIdentifiers.Large.cross,
+        isEnabled: true,
+        a11yLabel: .TabToolbarStopAccessibilityLabel,
+        a11yId: AccessibilityIdentifiers.Toolbar.stopButton)
+
+    private static let reloadAction = ToolbarActionState(
+        actionType: .reload,
+        iconName: StandardImageIdentifiers.Large.arrowClockwise,
+        isEnabled: true,
+        a11yLabel: .TabLocationReloadAccessibilityLabel,
+        a11yHint: .TabLocationReloadAccessibilityHint,
+        a11yId: AccessibilityIdentifiers.Toolbar.reloadButton)
+
+    private static let cancelEditAction = ToolbarActionState(
+        actionType: .cancelEdit,
+        iconName: StandardImageIdentifiers.Large.chevronLeft,
+        isFlippedForRTL: true,
+        isEnabled: true,
+        a11yLabel: AccessibilityIdentifiers.GeneralizedIdentifiers.back,
+        a11yId: AccessibilityIdentifiers.Browser.UrlBar.cancelButton)
+
+    private static let newTabAction = ToolbarActionState(
+        actionType: .newTab,
+        iconName: StandardImageIdentifiers.Large.plus,
+        isEnabled: true,
+        a11yLabel: .Toolbars.NewTabButton,
+        a11yId: AccessibilityIdentifiers.Toolbar.addNewTabButton)
 
     init(windowUUID: WindowUUID) {
         self.init(windowUUID: windowUUID,
@@ -39,7 +77,8 @@ struct AddressBarState: StateType, Equatable {
                   isEditing: false,
                   isScrollingDuringEdit: false,
                   shouldSelectSearchTerm: true,
-                  isLoading: false)
+                  isLoading: false,
+                  readerModeState: nil)
     }
 
     init(windowUUID: WindowUUID,
@@ -53,7 +92,8 @@ struct AddressBarState: StateType, Equatable {
          isEditing: Bool = false,
          isScrollingDuringEdit: Bool = false,
          shouldSelectSearchTerm: Bool = true,
-         isLoading: Bool = false) {
+         isLoading: Bool = false,
+         readerModeState: ReaderModeState? = nil) {
         self.windowUUID = windowUUID
         self.navigationActions = navigationActions
         self.pageActions = pageActions
@@ -66,6 +106,7 @@ struct AddressBarState: StateType, Equatable {
         self.isScrollingDuringEdit = isScrollingDuringEdit
         self.shouldSelectSearchTerm = shouldSelectSearchTerm
         self.isLoading = isLoading
+        self.readerModeState = readerModeState
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -97,21 +138,23 @@ struct AddressBarState: StateType, Equatable {
                 searchTerm: state.searchTerm,
                 lockIconImageName: state.lockIconImageName,
                 isEditing: state.isEditing,
-                isScrollingDuringEdit: state.isScrollingDuringEdit
+                isScrollingDuringEdit: state.isScrollingDuringEdit,
+                readerModeState: state.readerModeState
             )
 
         case ToolbarActionType.readerModeStateChanged:
-            guard let addressToolbarModel = (action as? ToolbarAction)?.addressToolbarModel else { return state }
+            guard let toolbarAction = action as? ToolbarAction else { return state }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
                 navigationActions: state.navigationActions,
-                pageActions: addressToolbarModel.pageActions ?? state.pageActions,
+                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: false),
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
-                url: addressToolbarModel.url,
-                lockIconImageName: addressToolbarModel.lockIconImageName,
-                isScrollingDuringEdit: state.isScrollingDuringEdit
+                url: state.url,
+                lockIconImageName: state.lockIconImageName,
+                isScrollingDuringEdit: state.isScrollingDuringEdit,
+                readerModeState: toolbarAction.readerModeState
             )
 
         case ToolbarActionType.addressToolbarActionsDidChange:
@@ -127,23 +170,25 @@ struct AddressBarState: StateType, Equatable {
                 searchTerm: state.searchTerm,
                 lockIconImageName: state.lockIconImageName,
                 isEditing: addressToolbarModel.isEditing ?? state.isEditing,
-                isScrollingDuringEdit: state.isScrollingDuringEdit
+                isScrollingDuringEdit: state.isScrollingDuringEdit,
+                readerModeState: state.readerModeState
             )
 
         case ToolbarActionType.urlDidChange:
-            guard let addressToolbarModel = (action as? ToolbarAction)?.addressToolbarModel else { return state }
+            guard let toolbarAction = action as? ToolbarAction else { return state }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
-                navigationActions: addressToolbarModel.navigationActions ?? state.navigationActions,
-                pageActions: addressToolbarModel.pageActions ?? state.pageActions,
-                browserActions: state.browserActions,
+                navigationActions: navigationActions(action: toolbarAction, addressBarState: state),
+                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: false),
+                browserActions: browserActions(action: toolbarAction, addressBarState: state),
                 borderPosition: state.borderPosition,
-                url: addressToolbarModel.url,
+                url: toolbarAction.url,
                 searchTerm: nil,
-                lockIconImageName: addressToolbarModel.lockIconImageName ?? state.lockIconImageName,
-                isEditing: addressToolbarModel.isEditing ?? state.isEditing,
-                isScrollingDuringEdit: state.isScrollingDuringEdit
+                lockIconImageName: toolbarAction.lockIconImageName ?? state.lockIconImageName,
+                isEditing: toolbarAction.isEditing ?? state.isEditing,
+                isScrollingDuringEdit: state.isScrollingDuringEdit,
+                readerModeState: state.readerModeState
             )
 
         case ToolbarActionType.backForwardButtonStatesChanged:
@@ -160,7 +205,8 @@ struct AddressBarState: StateType, Equatable {
                 searchTerm: nil,
                 lockIconImageName: state.lockIconImageName,
                 isEditing: state.isEditing,
-                isScrollingDuringEdit: state.isScrollingDuringEdit
+                isScrollingDuringEdit: state.isScrollingDuringEdit,
+                readerModeState: state.readerModeState
             )
 
         case ToolbarActionType.showMenuWarningBadge:
@@ -176,7 +222,8 @@ struct AddressBarState: StateType, Equatable {
                 searchTerm: state.searchTerm,
                 lockIconImageName: state.lockIconImageName,
                 isEditing: state.isEditing,
-                isScrollingDuringEdit: state.isScrollingDuringEdit
+                isScrollingDuringEdit: state.isScrollingDuringEdit,
+                readerModeState: state.readerModeState
             )
 
         case ToolbarActionType.scrollOffsetChanged,
@@ -193,7 +240,8 @@ struct AddressBarState: StateType, Equatable {
                 searchTerm: state.searchTerm,
                 lockIconImageName: state.lockIconImageName,
                 isEditing: state.isEditing,
-                isScrollingDuringEdit: state.isScrollingDuringEdit
+                isScrollingDuringEdit: state.isScrollingDuringEdit,
+                readerModeState: state.readerModeState
             )
 
         case ToolbarActionType.didPasteSearchTerm:
@@ -210,7 +258,8 @@ struct AddressBarState: StateType, Equatable {
                 lockIconImageName: state.lockIconImageName,
                 isEditing: true,
                 isScrollingDuringEdit: state.isScrollingDuringEdit,
-                shouldSelectSearchTerm: false
+                shouldSelectSearchTerm: false,
+                readerModeState: state.readerModeState
             )
 
         case ToolbarActionType.didStartEditingUrl:
@@ -229,7 +278,8 @@ struct AddressBarState: StateType, Equatable {
                 lockIconImageName: state.lockIconImageName,
                 isEditing: addressToolbarModel.isEditing ?? state.isEditing,
                 isScrollingDuringEdit: false,
-                shouldSelectSearchTerm: state.shouldSelectSearchTerm
+                shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+                readerModeState: state.readerModeState
             )
 
         case ToolbarActionType.cancelEdit:
@@ -245,7 +295,8 @@ struct AddressBarState: StateType, Equatable {
                 searchTerm: nil,
                 lockIconImageName: state.lockIconImageName,
                 isEditing: addressToolbarModel.isEditing ?? state.isEditing,
-                isScrollingDuringEdit: false
+                isScrollingDuringEdit: false,
+                readerModeState: state.readerModeState
             )
 
         case ToolbarActionType.didSetTextInLocationView:
@@ -261,7 +312,8 @@ struct AddressBarState: StateType, Equatable {
                 searchTerm: toolbarAction.searchTerm,
                 lockIconImageName: state.lockIconImageName,
                 isEditing: true,
-                shouldSelectSearchTerm: false
+                shouldSelectSearchTerm: false,
+                readerModeState: state.readerModeState
             )
 
         case ToolbarActionType.didScrollDuringEdit:
@@ -275,7 +327,8 @@ struct AddressBarState: StateType, Equatable {
                 searchTerm: state.searchTerm,
                 lockIconImageName: state.lockIconImageName,
                 isEditing: state.isEditing,
-                isScrollingDuringEdit: true
+                isScrollingDuringEdit: true,
+                readerModeState: state.readerModeState
             )
 
         default:
@@ -289,9 +342,122 @@ struct AddressBarState: StateType, Equatable {
                 searchTerm: state.searchTerm,
                 lockIconImageName: state.lockIconImageName,
                 isEditing: state.isEditing,
-                isScrollingDuringEdit: state.isScrollingDuringEdit
+                isScrollingDuringEdit: state.isScrollingDuringEdit,
+                readerModeState: state.readerModeState
             )
         }
+    }
+
+    // MARK: - Address Toolbar Actions
+    private static func navigationActions(
+        action: ToolbarAction,
+        addressBarState: AddressBarState,
+        isEditing: Bool = false
+    ) -> [ToolbarActionState] {
+        var actions = [ToolbarActionState]()
+
+        guard let toolbarState = store.state.screenState(ToolbarState.self,
+                                                         for: .toolbar,
+                                                         window: action.windowUUID)
+        else { return actions }
+
+        let isUrlChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
+        let url = isUrlChangeAction ? action.url : addressBarState.url
+        let isShowingNavToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
+        let canGoBack = action.canGoBack ?? toolbarState.canGoBack
+        let canGoForward = action.canGoForward ?? toolbarState.canGoForward
+
+        if isEditing {
+            // back carrot when in edit mode
+            actions.append(cancelEditAction)
+        } else if isShowingNavToolbar || url == nil {
+            // there are no navigation actions if on homepage or when nav toolbar is shown
+            return actions
+        } else if url != nil {
+            // back/forward when url exists and nav toolbar is not shown
+            let isBackButtonEnabled = canGoBack
+            let isForwardButtonEnabled = canGoForward
+            actions.append(backAction(enabled: isBackButtonEnabled))
+            actions.append(forwardAction(enabled: isForwardButtonEnabled))
+//            if canShowDataClearanceAction(isPrivate: toolbarState.isPrivateMode) {
+//                actions.append(dataClearanceAction)
+//            }
+        }
+
+        return actions
+    }
+
+    private static func pageActions(
+        action: ToolbarAction,
+        addressBarState: AddressBarState,
+        isEditing: Bool
+    ) -> [ToolbarActionState] {
+        var actions = [ToolbarActionState]()
+
+        let isUrlChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
+        let isReaderModeAction = action.actionType as? ToolbarActionType == .readerModeStateChanged
+        let readerModeState = isReaderModeAction ? action.readerModeState : addressBarState.readerModeState
+        let url = isUrlChangeAction ? action.url : addressBarState.url
+
+        guard url != nil, !isEditing else {
+            // On homepage we only show the QR code button
+            return [qrCodeScanAction]
+        }
+
+        switch readerModeState {
+        case .active, .available:
+            var readerModeAction = ToolbarActionState(
+                actionType: .readerMode,
+                iconName: StandardImageIdentifiers.Large.readerView,
+                isEnabled: true,
+                a11yLabel: .TabLocationReaderModeAccessibilityLabel,
+                a11yHint: .TabLocationReloadAccessibilityHint,
+                a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton,
+                a11yCustomActionName: .TabLocationReaderModeAddToReadingListAccessibilityLabel)
+            readerModeAction.shouldDisplayAsHighlighted = readerModeState == .active
+            actions.append(readerModeAction)
+        default: break
+        }
+
+        actions.append(shareAction)
+
+        let isLoadingChangeAction = action.actionType as? ToolbarMiddlewareActionType == .websiteLoadingStateDidChange
+        let isLoading = addressBarState.isLoading // isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
+
+        if isLoading == true {
+            actions.append(stopLoadingAction)
+        } else if isLoading == false {
+            actions.append(reloadAction)
+        }
+
+        return actions
+    }
+
+    private static func browserActions(
+        action: ToolbarAction,
+        addressBarState: AddressBarState
+    ) -> [ToolbarActionState] {
+        var actions = [ToolbarActionState]()
+
+        guard let toolbarState = store.state.screenState(ToolbarState.self,
+                                                         for: .toolbar,
+                                                         window: action.windowUUID)
+        else { return actions }
+
+        if !(action.isShowingTopTabs ?? toolbarState.isShowingTopTabs) {
+            actions.append(newTabAction)
+        }
+
+        let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
+        let isShowMenuWarningAction = action.actionType as? ToolbarMiddlewareActionType == .showMenuWarningBadge
+        let menuBadgeImageName = isShowMenuWarningAction ? action.badgeImageName : toolbarState.badgeImageName
+        let maskImageName = isShowMenuWarningAction ? action.maskImageName : toolbarState.maskImageName
+
+        actions.append(contentsOf: [
+            tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode),
+            menuAction(badgeImageName: menuBadgeImageName, maskImageName: maskImageName)])
+
+        return actions
     }
 
     // MARK: - Helper
@@ -317,5 +483,25 @@ struct AddressBarState: StateType, Equatable {
             isEnabled: true,
             a11yLabel: .LegacyAppMenu.Toolbar.MenuButtonAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
+    }
+
+    private static func backAction(enabled: Bool) -> ToolbarActionState {
+        return ToolbarActionState(
+            actionType: .back,
+            iconName: StandardImageIdentifiers.Large.back,
+            isFlippedForRTL: true,
+            isEnabled: enabled,
+            a11yLabel: .TabToolbarBackAccessibilityLabel,
+            a11yId: AccessibilityIdentifiers.Toolbar.backButton)
+    }
+
+    private static func forwardAction(enabled: Bool) -> ToolbarActionState {
+        return ToolbarActionState(
+            actionType: .forward,
+            iconName: StandardImageIdentifiers.Large.forward,
+            isFlippedForRTL: true,
+            isEnabled: enabled,
+            a11yLabel: .TabToolbarForwardAccessibilityLabel,
+            a11yId: AccessibilityIdentifiers.Toolbar.forwardButton)
     }
 }
