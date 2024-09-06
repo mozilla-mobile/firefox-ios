@@ -109,7 +109,7 @@ final class TrackingProtectionBlockedTrackersView: UIView, ThemeApplicable {
         shieldImage.image = UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.shield)
             .withRenderingMode(.alwaysTemplate)
         if let trackersBlocked {
-            trackersDetailArrow.isHidden = trackersBlocked > 0 ? false : true
+            trackersDetailArrow.isHidden = trackersBlocked == 0
         }
     }
 
