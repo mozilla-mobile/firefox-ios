@@ -425,10 +425,8 @@ struct AddressBarState: StateType, Equatable {
             return actions
         } else if url != nil {
             // back/forward when url exists and nav toolbar is not shown
-            let isBackButtonEnabled = canGoBack
-            let isForwardButtonEnabled = canGoForward
-            actions.append(backAction(enabled: isBackButtonEnabled))
-            actions.append(forwardAction(enabled: isForwardButtonEnabled))
+            actions.append(backAction(enabled: canGoBack))
+            actions.append(forwardAction(enabled: canGoForward))
 
             if toolbarState.canShowDataClearanceAction && toolbarState.isPrivateMode {
                 actions.append(dataClearanceAction)
@@ -506,14 +504,17 @@ struct AddressBarState: StateType, Equatable {
 
         actions.append(contentsOf: [
             tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode),
-            menuAction(showWarningBadge: showWarningBadge)])
+            menuAction(showWarningBadge: showWarningBadge)
+        ])
 
         return actions
     }
 
     // MARK: - Helper
-    private static func tabsAction(numberOfTabs: Int = 1,
-                                   isPrivateMode: Bool = false) -> ToolbarActionState {
+    private static func tabsAction(
+        numberOfTabs: Int = 1,
+        isPrivateMode: Bool = false)
+    -> ToolbarActionState {
         return ToolbarActionState(
             actionType: .tabs,
             iconName: StandardImageIdentifiers.Large.tab,
