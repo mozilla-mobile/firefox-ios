@@ -27,81 +27,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
         }
     }
 
-    lazy var stopLoadingAction = ToolbarActionState(
-        actionType: .stopLoading,
-        iconName: StandardImageIdentifiers.Large.cross,
-        isEnabled: true,
-        a11yLabel: .TabToolbarStopAccessibilityLabel,
-        a11yId: AccessibilityIdentifiers.Toolbar.stopButton)
-
-    lazy var reloadAction = ToolbarActionState(
-        actionType: .reload,
-        iconName: StandardImageIdentifiers.Large.arrowClockwise,
-        isEnabled: true,
-        a11yLabel: .TabLocationReloadAccessibilityLabel,
-        a11yHint: .TabLocationReloadAccessibilityHint,
-        a11yId: AccessibilityIdentifiers.Toolbar.reloadButton)
-
-    private lazy var readerModeAction = ToolbarActionState(
-        actionType: .readerMode,
-        iconName: StandardImageIdentifiers.Large.readerView,
-        isEnabled: true,
-        a11yLabel: .TabLocationReaderModeAccessibilityLabel,
-        a11yHint: .TabLocationReloadAccessibilityHint,
-        a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton,
-        a11yCustomActionName: .TabLocationReaderModeAddToReadingListAccessibilityLabel)
-
-    lazy var qrCodeScanAction = ToolbarActionState(
-        actionType: .qrCode,
-        iconName: StandardImageIdentifiers.Large.qrCode,
-        isEnabled: true,
-        a11yLabel: .QRCode.ToolbarButtonA11yLabel,
-        a11yId: AccessibilityIdentifiers.Browser.ToolbarButtons.qrCode)
-
-    lazy var cancelEditAction = ToolbarActionState(
-        actionType: .cancelEdit,
-        iconName: StandardImageIdentifiers.Large.chevronLeft,
-        isFlippedForRTL: true,
-        isEnabled: true,
-        a11yLabel: AccessibilityIdentifiers.GeneralizedIdentifiers.back,
-        a11yId: AccessibilityIdentifiers.Browser.UrlBar.cancelButton)
-
-    lazy var homeAction = ToolbarActionState(
-        actionType: .home,
-        iconName: StandardImageIdentifiers.Large.home,
-        isEnabled: true,
-        a11yLabel: .TabToolbarHomeAccessibilityLabel,
-        a11yId: AccessibilityIdentifiers.Toolbar.homeButton)
-
-    lazy var newTabAction = ToolbarActionState(
-        actionType: .newTab,
-        iconName: StandardImageIdentifiers.Large.plus,
-        isEnabled: true,
-        a11yLabel: .Toolbars.NewTabButton,
-        a11yId: AccessibilityIdentifiers.Toolbar.addNewTabButton)
-
-    lazy var shareAction = ToolbarActionState(
-        actionType: .share,
-        iconName: StandardImageIdentifiers.Large.share,
-        isEnabled: true,
-        a11yLabel: .TabLocationShareAccessibilityLabel,
-        a11yId: AccessibilityIdentifiers.Toolbar.shareButton)
-
-    lazy var searchAction = ToolbarActionState(
-        actionType: .search,
-        iconName: StandardImageIdentifiers.Large.search,
-        isEnabled: true,
-        a11yLabel: .TabToolbarSearchAccessibilityLabel,
-        a11yId: AccessibilityIdentifiers.Toolbar.searchButton)
-
-    lazy var dataClearanceAction = ToolbarActionState(
-        actionType: .dataClearance,
-        iconName: StandardImageIdentifiers.Large.dataClearance,
-        isEnabled: true,
-        hasContextualHint: true,
-        a11yLabel: .TabToolbarDataClearanceAccessibilityLabel,
-        a11yId: AccessibilityIdentifiers.Toolbar.fireButton)
-
     private func resolveGeneralBrowserMiddlewareActions(action: GeneralBrowserMiddlewareAction, state: AppState) {
         let uuid = action.windowUUID
 
@@ -326,14 +251,14 @@ final class ToolbarMiddleware: FeatureFlaggable {
         store.dispatch(toolbarAction)
     }
 
+    // MARK: - Helper
+
     private func addressToolbarPositionFromSearchBarPosition(_ position: SearchBarPosition) -> AddressToolbarPosition {
         switch position {
         case .top: return .top
         case .bottom: return .bottom
         }
     }
-
-    // MARK: - Helper
 
     private func getAddressBorderPosition(toolbarPosition: AddressToolbarPosition,
                                           isPrivate: Bool = false,
