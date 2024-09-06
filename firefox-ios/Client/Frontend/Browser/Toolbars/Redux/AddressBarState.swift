@@ -406,7 +406,8 @@ struct AddressBarState: StateType, Equatable {
     ) -> [ToolbarActionState] {
         var actions = [ToolbarActionState]()
 
-        //No actions needed for the address toolbar, which is only shown in iPhone landscape and iPad
+        // no actions needed for the address toolbar, which is only shown in iPhone landscape and iPad,
+        // when the navigation toolbar is showing (denoting we are not in iPhone landsacpe or iPad)
         guard let toolbarState = store.state.screenState(ToolbarState.self,
                                                          for: .toolbar,
                                                          window: action.windowUUID),
