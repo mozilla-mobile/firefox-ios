@@ -569,7 +569,7 @@ class TopSiteHistoryManagerStub: TopSiteHistoryManager {
             sites.append(
                 PinnedSite(
                     site: site,
-                    faviconResource: .remoteURL(url: URL(string: "https://mozilla.org/favicon.ico")!) // URL doesn't matter
+                    faviconResource: nil
                 )
             )
         }

@@ -129,7 +129,6 @@ class DefaultImageHandler: ImageHandler {
 
     private func getBundleImage(assetName: String) throws -> UIImage {
         guard let image = UIImage(named: assetName) else {
-            // FIXME Can we catch and log this error within the Client?
             throw SiteImageError.noImageInBundle
         }
         return image
