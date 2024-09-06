@@ -6,8 +6,9 @@ import Foundation
 
 /// Contains type definitions for remote settings used in the app
 
-public enum RemoteCollection: String {
+public enum RemoteCollection: String, CaseIterable {
     case searchTelemetry = "search-telemetry-v2"
+    case searchConfigV2 = "search-config-v2"
 }
 
 public enum Remotebucket: String {

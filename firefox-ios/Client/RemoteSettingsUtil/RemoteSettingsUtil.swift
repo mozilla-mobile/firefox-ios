@@ -18,6 +18,13 @@ public protocol RemoteSettingsUtilProvider: AnyObject {
     func updateCollectionName(to newCollection: RemoteCollection)
 }
 
+/*
+ Cache
+ 1) Initially Shipped - (Always Present) Option for settings json inside app which is shipped with it
+ 2) Fetch from Application Service - TBD, updates on Tues / Thursday
+ 2.1) After fetching from Application Service Store a copy in the app in case 2 is not available
+ */
+
 class RemoteSettingsUtil: RemoteSettingsUtilProvider {    
     private var bucket: Remotebucket
     private var collection: RemoteCollection
