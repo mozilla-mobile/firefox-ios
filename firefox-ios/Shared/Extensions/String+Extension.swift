@@ -102,12 +102,12 @@ public extension String {
         return nsString.substring(with: match.range(at: 1))
     }
 
-    /// Returning a dictionary [String: String] from string format: "Key1=Value1, Key2=Value2, ..."
-    func getDictionary() -> [String: String] {
+    /// Returning a dictionary [String: String] from string format: "Key1<valueSeparator> Value1<keySeparator>, ..."
+    func getDictionary(keySeparator: Character = ",", valueSeparator: Character = "=") -> [String: String] {
         var result = [String: String]()
-        let components = self.split(separator: ",")
+        let components = self.split(separator: keySeparator)
         for component in components {
-            let parts = component.split(separator: "=", maxSplits: 1, omittingEmptySubsequences: false)
+            let parts = component.split(separator: valueSeparator, maxSplits: 1, omittingEmptySubsequences: false)
             if parts.count == 2 {
                 let key = parts[0].trimmingCharacters(in: .whitespacesAndNewlines)
                 let value = parts[1].trimmingCharacters(in: .whitespacesAndNewlines)

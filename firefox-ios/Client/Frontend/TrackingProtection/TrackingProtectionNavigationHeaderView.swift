@@ -75,10 +75,12 @@ class TrackingProtectionNavigationHeaderView: UIView {
                 equalTo: trailingAnchor,
                 constant: -TPMenuUX.UX.horizontalMargin
             ),
-            closeButton.centerYAnchor.constraint(equalTo: centerYAnchor),
+            closeButton.topAnchor.constraint(
+                equalTo: self.topAnchor,
+                constant: TPMenuUX.UX.horizontalMargin
+            ),
             closeButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.closeButtonSize),
             closeButton.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.closeButtonSize),
-            closeButton.widthAnchor.constraint(equalTo: closeButton.heightAnchor),
 
             horizontalLine.leadingAnchor.constraint(equalTo: leadingAnchor),
             horizontalLine.trailingAnchor.constraint(equalTo: trailingAnchor),
