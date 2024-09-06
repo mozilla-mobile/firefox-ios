@@ -2712,10 +2712,10 @@ class BrowserViewController: UIViewController,
                                              frame: frame)
             case .creditCard:
                 handleFoundCreditCardFieldValue(fieldValues: fieldValues,
-                                 type: type,
-                                 tabWebView: tabWebView,
-                                 webView: webView,
-                                 frame: frame)
+                                                type: type,
+                                                tabWebView: tabWebView,
+                                                webView: webView,
+                                                frame: frame)
             }
         }
     }
@@ -2749,10 +2749,10 @@ class BrowserViewController: UIViewController,
     }
 
     private func handleFoundCreditCardFieldValue(fieldValues: AutofillFieldValuePayload,
-                                  type: FormAutofillPayloadType?,
-                                  tabWebView: TabWebView,
-                                  webView: WKWebView,
-                                  frame: WKFrameInfo?) {
+                                                 type: FormAutofillPayloadType?,
+                                                 tabWebView: TabWebView,
+                                                 webView: WKWebView,
+                                                 frame: WKFrameInfo?) {
         guard let creditCardPayload = fieldValues.fieldData as? UnencryptedCreditCardFields,
               let type = type,
               autofillCreditCardSettingsUserDefaultIsEnabled() else { return }
