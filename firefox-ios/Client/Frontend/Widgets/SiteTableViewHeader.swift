@@ -77,7 +77,8 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, Reusabl
         titleTrailingConstraint = titleLabel.trailingAnchor.constraint(
             equalTo: contentView.trailingAnchor,
             constant: -UX.titleTrailingLeadingMargin)
-
+        
+        let scaledImageViewSize = UIFontMetrics.default.scaledValue(for: UX.imageWidthHeight)
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                 constant: UX.titleTrailingLeadingMargin),
@@ -90,8 +91,8 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, Reusabl
             collapsibleImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             collapsibleImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor,
                                                            constant: -UX.imageTrailingSpace),
-            collapsibleImageView.widthAnchor.constraint(equalToConstant: UX.imageWidthHeight),
-            collapsibleImageView.heightAnchor.constraint(equalToConstant: UX.imageWidthHeight)
+            collapsibleImageView.widthAnchor.constraint(equalToConstant: scaledImageViewSize),
+            collapsibleImageView.heightAnchor.constraint(equalToConstant: scaledImageViewSize)
         ])
 
         showImage(false)

@@ -664,12 +664,10 @@ class CheckmarkSetting: Setting {
         static let defaultInset: CGFloat = 0
         static let cellIndentationWidth: CGFloat = 42
         static let cellIndentationLevel = 1
-        static let checkmarkHeight: CGFloat = 20
-        static let checkmarkWidth: CGFloat = 24
         static let checkmarkTopHeight: CGFloat = 10
+        static let checkmarkHeight: CGFloat = 24.0
         static let checkmarkLeading: CGFloat = 20
         static let checkmarkSymbol = "\u{2713}"
-        static let checkmarkFontSize: CGFloat = 20
         static let cellAlpha: CGFloat = 0.5
     }
 
@@ -680,7 +678,6 @@ class CheckmarkSetting: Setting {
 
     private lazy var check: UILabel = .build { label in
         label.text = UX.checkmarkSymbol
-        label.font = UIFont.systemFont(ofSize: UX.checkmarkFontSize)
     }
 
     override var status: NSAttributedString? {
@@ -716,25 +713,7 @@ class CheckmarkSetting: Setting {
 
             cell.accessoryType = .detailButton
 
-            let checkColor = isChecked() ? theme.colors.actionPrimary : UIColor.clear
-
-            cell.contentView.addSubview(check)
-            NSLayoutConstraint.activate(
-                [
-                    check.heightAnchor.constraint(equalToConstant: UX.checkmarkHeight),
-                    check.widthAnchor.constraint(equalToConstant: UX.checkmarkWidth),
-                    check.topAnchor.constraint(
-                        equalTo: cell.contentView.topAnchor,
-                        constant: UX.checkmarkTopHeight
-                    ),
-                    check.leadingAnchor.constraint(
-                        equalTo: cell.contentView.leadingAnchor,
-                        constant: UX.checkmarkLeading
-                    )
-                ]
-            )
-
-            check.textColor = checkColor
+            setupLeftCheckLabel(cell, theme: theme)
 
             let result = NSMutableAttributedString()
             if let str = title?.string {
@@ -751,6 +730,32 @@ class CheckmarkSetting: Setting {
         if !enabled {
             cell.subviews.forEach { $0.alpha = UX.cellAlpha }
         }
+    }
+
+    private func setupLeftCheckLabel(_ cell: UITableViewCell, theme: Theme) {
+        check.font = FXFontStyles.Regular.body.scaledFont()
+        let checkMarkWidth = check.font.pointSize + UX.checkmarkLeading
+        cell.contentView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0.0,
+                                                                            leading: checkMarkWidth,
+                                                                            bottom: 0.0,
+                                                                            trailing: 0.0)
+        let checkColor = isChecked() ? theme.colors.actionPrimary : UIColor.clear
+        let checkmarkSize = UIFontMetrics.default.scaledValue(for: UX.checkmarkHeight)
+        cell.contentView.addSubview(check)
+        NSLayoutConstraint.activate([
+            check.topAnchor.constraint(
+                equalTo: cell.contentView.topAnchor,
+                constant: UX.checkmarkTopHeight
+            ),
+            check.leadingAnchor.constraint(
+                equalTo: cell.contentView.leadingAnchor,
+                constant: UX.checkmarkLeading
+            ),
+            check.heightAnchor.constraint(equalToConstant: checkmarkSize),
+            check.widthAnchor.constraint(equalToConstant: checkmarkSize)
+        ])
+
+        check.textColor = checkColor
     }
 
     override func onClick(_ navigationController: UINavigationController?) {

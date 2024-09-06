@@ -7,6 +7,8 @@ import UIKit
 
 public class CloseButton: UIButton {
     private var viewModel: CloseButtonViewModel?
+    private var heightConstraint: NSLayoutConstraint?
+    private var widthConstraint: NSLayoutConstraint?
 
     private struct UX {
         static let closeButtonSize = CGSize(width: 30, height: 30)
@@ -17,6 +19,7 @@ public class CloseButton: UIButton {
         super.init(frame: frame)
 
         setImage(UIImage(named: UX.crossCircleImage), for: .normal)
+        adjustsImageSizeForAccessibilityContentSizeCategory = true
         setupConstraints()
     }
 
@@ -26,10 +29,15 @@ public class CloseButton: UIButton {
 
     private func setupConstraints() {
         translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            heightAnchor.constraint(equalToConstant: UX.closeButtonSize.height),
-            widthAnchor.constraint(equalToConstant: UX.closeButtonSize.width)
-        ])
+        heightConstraint = heightAnchor.constraint(equalToConstant: UX.closeButtonSize.height)
+        heightConstraint?.isActive = true
+        widthConstraint = widthAnchor.constraint(equalToConstant: UX.closeButtonSize.width)
+        widthConstraint?.isActive = true
+    }
+
+    public func updateLayoutForDynamicFont(newSize: CGFloat) {
+        heightConstraint?.constant = newSize
+        widthConstraint?.constant = newSize
     }
 
     public func configure(viewModel: CloseButtonViewModel) {

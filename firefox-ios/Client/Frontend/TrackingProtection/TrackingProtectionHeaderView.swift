@@ -20,6 +20,8 @@ final class TrackingProtectionHeaderView: UIView, ThemeApplicable {
 
     private var faviconHeightConstraint: NSLayoutConstraint?
     private var faviconWidthConstraint: NSLayoutConstraint?
+    private var closeButtonHeightConstraint: NSLayoutConstraint?
+    private var closeButtonWidthConstraint: NSLayoutConstraint?
 
     private lazy var headerLabelsContainer: UIStackView = .build { stack in
         stack.backgroundColor = .clear
@@ -61,7 +63,7 @@ final class TrackingProtectionHeaderView: UIView, ThemeApplicable {
     private func setupLayout() {
         headerLabelsContainer.addArrangedSubview(siteDisplayTitleLabel)
         headerLabelsContainer.addArrangedSubview(siteDomainLabel)
-        self.addSubviews(favicon, headerLabelsContainer, closeButton)
+        addSubviews(favicon, headerLabelsContainer, closeButton)
         faviconHeightConstraint = favicon.heightAnchor.constraint(equalToConstant: UX.faviconImageSize)
         faviconWidthConstraint = favicon.widthAnchor.constraint(equalToConstant: UX.faviconImageSize)
         NSLayoutConstraint.activate([
@@ -97,9 +99,7 @@ final class TrackingProtectionHeaderView: UIView, ThemeApplicable {
             closeButton.topAnchor.constraint(
                 equalTo: self.topAnchor,
                 constant: UX.horizontalMargin
-            ),
-            closeButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.closeButtonSize),
-            closeButton.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.closeButtonSize)
+            )
         ])
     }
 
@@ -114,9 +114,15 @@ final class TrackingProtectionHeaderView: UIView, ThemeApplicable {
     }
 
     func adjustLayout() {
-        let faviconSize = UX.faviconImageSize
-        faviconHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: faviconSize), 2 * faviconSize)
-        faviconWidthConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: faviconSize), 2 * faviconSize)
+        let faviconDynamicSize = min(UIFontMetrics.default.scaledValue(for: UX.faviconImageSize),
+                                     2 * UX.faviconImageSize)
+        faviconHeightConstraint?.constant = faviconDynamicSize
+        faviconWidthConstraint?.constant = faviconDynamicSize
+
+        let closeButtonDynamicSize = min(UIFontMetrics.default.scaledValue(for: UX.closeButtonSize),
+                                         2 * UX.closeButtonSize)
+        closeButton.updateLayoutForDynamicFont(newSize: closeButtonDynamicSize)
+        closeButton.layer.cornerRadius = closeButtonDynamicSize * 0.5
     }
 
     func setupActions() {

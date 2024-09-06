@@ -13,6 +13,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
     }
 
     private lazy var linkButton: LinkButton = .build()
+    private var contentSizeCategoryNotificationTicket: NSObjectProtocol?
     let prefs: Prefs
     var currentBlockingStrength: BlockingStrength
 
@@ -45,6 +46,11 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         applyTheme()
+        let contentSizeChangeNotification = UIContentSizeCategory.didChangeNotification
+        contentSizeCategoryNotificationTicket = notificationCenter.addObserver(name: contentSizeChangeNotification,
+                                                                               queue: .main) { _ in
+            self.tableView.reloadData()
+        }
     }
 
     override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
@@ -199,5 +205,10 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
         super.applyTheme()
         let currentTheme = currentTheme()
         linkButton.applyTheme(theme: currentTheme)
+    }
+
+    deinit {
+        guard let contentSizeCategoryNotificationTicket else { return }
+        notificationCenter.removeObserver(contentSizeCategoryNotificationTicket)
     }
 }
