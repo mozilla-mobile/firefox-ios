@@ -203,6 +203,27 @@ class HomepageViewController:
             || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
             reloadOnRotation(newSize: viewModel.newSize ?? view.frame.size)
         }
+
+        updateToolbarStateTraitCollectionIfNecessary(traitCollection)
+    }
+
+    /// When the trait collection changes the top taps display might have to change
+    /// This requires an update of the toolbars.
+    private func updateToolbarStateTraitCollectionIfNecessary(_ newCollection: UITraitCollection) {
+        let showTopTabs = ToolbarHelper().shouldShowTopTabs(for: newCollection)
+
+        // Only dispatch action when the value of top tabs being shown is different from what is saved in the state
+        // to avoid having the toolbar re-displayed
+        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+              toolbarState.isShowingTopTabs != showTopTabs
+        else { return }
+
+        let action = ToolbarAction(
+            isShowingTopTabs: showTopTabs,
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.traitCollectionDidChange
+        )
+        store.dispatch(action)
     }
 
     // Displays or hides the private mode toggle button in the header
