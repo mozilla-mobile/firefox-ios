@@ -154,6 +154,7 @@ class CreditCardsTests: BaseTestCase {
             }
             mozWaitForElementToNotExist(app.buttons[useSavedCard])
             dismissSavedCardsPrompt()
+            swipeDown(nrOfSwipes: 3)
             navigator.goto(CreditCardsSettings)
             unlockLoginsView()
             mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
