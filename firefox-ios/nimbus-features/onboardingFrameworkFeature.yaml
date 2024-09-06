@@ -134,7 +134,7 @@ features:
               card-type: basic
               order: 20
               title: Onboarding/Onboarding.Sync.Title.v120
-              body: Onboarding/Onboarding.Sync.Description.v120
+              body: Onboarding/Onboarding.Sync.Description.v123
               image: sync-devices
               buttons:
                 primary:
