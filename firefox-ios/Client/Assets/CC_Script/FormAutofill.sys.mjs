@@ -37,12 +37,15 @@ const ENABLED_AUTOFILL_CAPTURE_ON_FORM_REMOVAL_PREF =
   "extensions.formautofill.heuristics.captureOnFormRemoval";
 const ENABLED_AUTOFILL_CAPTURE_ON_PAGE_NAVIGATION_PREF =
   "extensions.formautofill.heuristics.captureOnPageNavigation";
+const ENABLED_AUTOFILL_SAME_ORIGIN_WITH_TOP =
+  "extensions.formautofill.heuristics.autofillSameOriginWithTop";
 
 export const FormAutofill = {
   ENABLED_AUTOFILL_ADDRESSES_PREF,
   ENABLED_AUTOFILL_ADDRESSES_CAPTURE_PREF,
   ENABLED_AUTOFILL_CAPTURE_ON_FORM_REMOVAL_PREF,
   ENABLED_AUTOFILL_CAPTURE_ON_PAGE_NAVIGATION_PREF,
+  ENABLED_AUTOFILL_SAME_ORIGIN_WITH_TOP,
   ENABLED_AUTOFILL_CREDITCARDS_PREF,
   AUTOFILL_CREDITCARDS_REAUTH_PREF,
   AUTOFILL_CREDITCARDS_AUTOCOMPLETE_OFF_PREF,
@@ -283,6 +286,11 @@ XPCOMUtils.defineLazyPreferenceGetter(
   null,
   null,
   val => val?.split(",").filter(v => !!v)
+);
+XPCOMUtils.defineLazyPreferenceGetter(
+  FormAutofill,
+  "autofillSameOriginWithTop",
+  ENABLED_AUTOFILL_SAME_ORIGIN_WITH_TOP
 );
 
 XPCOMUtils.defineLazyPreferenceGetter(

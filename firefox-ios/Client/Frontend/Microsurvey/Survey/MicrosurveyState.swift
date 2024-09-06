@@ -48,13 +48,13 @@ struct MicrosurveyState: ScreenState, Equatable {
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
 
         switch action.actionType {
-        case MicrosurveyMiddlewareActionType.dismissSurvey:
+        case MicrosurveyActionType.closeSurvey:
             return MicrosurveyState(
                 windowUUID: state.windowUUID,
                 shouldDismiss: true,
                 showPrivacy: false
             )
-        case MicrosurveyMiddlewareActionType.navigateToPrivacyNotice:
+        case MicrosurveyActionType.tapPrivacyNotice:
             return MicrosurveyState(
                 windowUUID: state.windowUUID,
                 shouldDismiss: false,

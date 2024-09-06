@@ -24,6 +24,4 @@ enum MicrosurveyPromptActionType: ActionType {
 
 enum MicrosurveyPromptMiddlewareActionType: ActionType {
     case initialize
-    case dismissPrompt
-    case openSurvey
 }
