@@ -96,51 +96,15 @@ class ToolbarMiddlewareAction: Action {
     let buttonType: ToolbarActionState.ActionType?
     let buttonTapped: UIButton?
     let gestureType: ToolbarButtonGesture?
-    let isLoading: Bool?
-    let isShowingTopTabs: Bool?
-    let isShowingNavigationToolbar: Bool?
-    let lockIconImageName: String?
-    let numberOfTabs: Int?
-    let url: URL?
-    let canGoBack: Bool?
-    let canGoForward: Bool?
-    let badgeImageName: String?
-    let readerModeState: ReaderModeState?
-    let maskImageName: String?
-    let searchTerm: String?
 
     init(buttonType: ToolbarActionState.ActionType? = nil,
          buttonTapped: UIButton? = nil,
          gestureType: ToolbarButtonGesture? = nil,
-         isLoading: Bool? = nil,
-         isShowingTopTabs: Bool? = nil,
-         isShowingNavigationToolbar: Bool? = nil,
-         lockIconImageName: String? = nil,
-         numberOfTabs: Int? = nil,
-         url: URL? = nil,
-         canGoBack: Bool? = nil,
-         canGoForward: Bool? = nil,
-         badgeImageName: String? = nil,
-         readerModeState: ReaderModeState? = nil,
-         maskImageName: String? = nil,
-         searchTerm: String? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.buttonType = buttonType
         self.buttonTapped = buttonTapped
         self.gestureType = gestureType
-        self.isLoading = isLoading
-        self.isShowingTopTabs = isShowingTopTabs
-        self.isShowingNavigationToolbar = isShowingNavigationToolbar
-        self.lockIconImageName = lockIconImageName
-        self.numberOfTabs = numberOfTabs
-        self.url = url
-        self.canGoBack = canGoBack
-        self.canGoForward = canGoForward
-        self.badgeImageName = badgeImageName
-        self.readerModeState = readerModeState
-        self.maskImageName = maskImageName
-        self.searchTerm = searchTerm
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -148,6 +112,4 @@ class ToolbarMiddlewareAction: Action {
 enum ToolbarMiddlewareActionType: ActionType {
     case didTapButton
     case customA11yAction
-    case urlDidChange
-    case readerModeStateChanged
 }

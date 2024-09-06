@@ -1860,7 +1860,7 @@ class BrowserViewController: UIViewController,
     fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
         guard !isToolbarRefactorEnabled else {
             let action = ToolbarAction(
-                url: tab.url?.displayURL, 
+                url: tab.url?.displayURL,
                 isShowingNavigationToolbar: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection),
                 canGoBack: tab.canGoBack,
                 canGoForward: tab.canGoForward,
