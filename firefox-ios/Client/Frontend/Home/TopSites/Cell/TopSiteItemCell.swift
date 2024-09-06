@@ -144,17 +144,20 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         accessibilityLabel = topSite.accessibilityLabel
 
         let siteURLString = topSite.site.url
-        var imageURL: URL?
+        var imageResource: SiteResource?
 
-        if let site = topSite.site as? SponsoredTile {
-            imageURL = URL(string: site.imageURL, invalidCharacters: false)
-        } else if let site = topSite.site as? PinnedSite, let urlString = site.faviconURL {
-            imageURL = URL(string: urlString, invalidCharacters: false)
+        if let site = topSite.site as? SponsoredTile,
+           let url = URL(string: site.imageURL, invalidCharacters: false) {
+            imageResource = .remoteURL(url: url)
+        } else if let site = topSite.site as? PinnedSite,
+                  let urlString = site.faviconURL,
+                  let url = URL(string: urlString) {
+            imageResource = .remoteURL(url: url)
         } else if let site = topSite.site as? SuggestedSite {
-            imageURL = URL(string: site.faviconUrl, invalidCharacters: false)
+            imageResource = site.faviconResource
         }
         let viewModel = FaviconImageViewModel(siteURLString: siteURLString,
-                                              faviconURL: imageURL)
+                                              siteResource: imageResource)
         imageView.setFavicon(viewModel)
         self.textColor = textColor
 

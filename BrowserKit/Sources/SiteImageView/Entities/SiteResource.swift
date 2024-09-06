@@ -11,5 +11,6 @@ public enum SiteResource {
     case remoteURL(url: URL)
     /// An image bundled in the app in a .xcassets library.
     /// - Parameter name: The name of the image.
-    case bundleAsset(name: String)
+    /// - Parameter forRemoteResource: The URL from which this bundled image was obtained. Can be cached for future requests.
+    case bundleAsset(name: String, forRemoteResource: URL)
 }

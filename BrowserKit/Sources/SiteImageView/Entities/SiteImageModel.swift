@@ -18,7 +18,7 @@ public struct SiteImageModel {
     // Used to cache any resources related to this request
     let cacheKey: String
 
-    // The bundled resource or remote URL (e.g. faviconURL, preferrably high resolution) for this image
+    // The bundled resource or remote URL (e.g. faviconURL, preferrably high resolution) for this image.
     var siteResource: SiteResource?
 
     // Loaded image asset

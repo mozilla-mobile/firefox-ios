@@ -51,6 +51,11 @@ class DefaultImageHandler: ImageHandler {
 
     func fetchFavicon(imageModel: SiteImageModel) async -> UIImage {
         do {
+            // If this is one of our special bundled favicons, simply return it from the bundle
+            if case let .bundleAsset(assetName, _) = imageModel.siteResource {
+                return try getBundleImage(assetName: assetName)
+            }
+
             return try await imageCache.getImage(cacheKey: imageModel.cacheKey, type: imageModel.imageType)
         } catch {
             return await fetchFaviconFromFetcher(imageModel: imageModel)
@@ -79,13 +84,11 @@ class DefaultImageHandler: ImageHandler {
                 throw SiteImageError.noFaviconURLFound
             }
             switch resourceType {
-            case .bundleAsset(let assetName):
-                guard let image = UIImage(named: assetName) else {
-                    // FIXME Can we catch and log this error within the Client?
-                    throw SiteImageError.noImageInBundle
-                }
-                return image
+            case .bundleAsset(let assetName, _):
+                assertionFailure("You shouldn't be trying to fetch a bundled asset image! \(assetName)")
+                return try getBundleImage(assetName: assetName)
             case .remoteURL(let faviconURL):
+
                 let image = try await faviconFetcher.fetchFavicon(from: faviconURL)
                 await imageCache.cacheImage(image: image, cacheKey: imageModel.cacheKey, type: imageModel.imageType)
                 return image
@@ -122,5 +125,13 @@ class DefaultImageHandler: ImageHandler {
         } catch {
             return UIImage(named: "globeLarge")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
         }
+    }
+
+    private func getBundleImage(assetName: String) throws -> UIImage {
+        guard let image = UIImage(named: assetName) else {
+            // FIXME Can we catch and log this error within the Client?
+            throw SiteImageError.noImageInBundle
+        }
+        return image
     }
 }
