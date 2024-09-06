@@ -37,6 +37,8 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
         static let headerStackViewTopMargin = 20.0
     }
 
+    private let tableViewHeader: UIView = .build()
+
     private let titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Bold.title1.scaledFont()
         label.text = .Menu.EnhancedTrackingProtection.certificatesTitle
@@ -112,7 +114,8 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
         certificatesTableView.dataSource = self
         view.addSubview(certificatesTableView)
         NSLayoutConstraint.activate([
-            certificatesTableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
+            certificatesTableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
+                                                       constant: -UX.headerStackViewTopMargin),
             certificatesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             certificatesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             certificatesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -126,6 +129,7 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        tableViewHeader.subviews.first?.removeFromSuperview()
         let headerStackView: UIStackView = .build { stack in
             stack.axis = .horizontal
             stack.distribution = .fillEqually
@@ -146,18 +150,22 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
             }
         }
 
-        view.addSubview(headerStackView)
+        view.addSubview(tableViewHeader)
+        tableViewHeader.addSubview(headerStackView)
 
         NSLayoutConstraint.activate([
-            headerStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor,
-                                                     constant: UX.headerStackViewMargin),
-            headerStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor,
-                                                      constant: -UX.headerStackViewMargin),
-            headerStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
-                                                 constant: UX.headerStackViewTopMargin)
+            tableViewHeader.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableViewHeader.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableViewHeader.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
+
+            headerStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            headerStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            headerStackView.topAnchor.constraint(equalTo: tableViewHeader.topAnchor,
+                                                 constant: UX.headerStackViewTopMargin),
+            headerStackView.bottomAnchor.constraint(equalTo: tableViewHeader.bottomAnchor),
         ])
 
-        return headerStackView
+        return tableViewHeader
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -252,6 +260,7 @@ extension CertificatesViewController {
         view.backgroundColor = theme.colors.layer5
         certificatesTableView.backgroundColor = .clear
         titleLabel.textColor = theme.colors.textPrimary
+        tableViewHeader.backgroundColor = theme.colors.layer5
         setNeedsStatusBarAppearanceUpdate()
     }
 }
