@@ -13,7 +13,7 @@ public struct SVGImageProcessor: ImageProcessor {
     // It will be used when storing and retrieving the image to/from cache.
     public var identifier: String = "com.mozilla.SVGImageProcessor"
 
-    private let defaultFaviconSize = CGSize(width: 360, height: 360) // FIXME Hero size?
+    private let defaultFaviconSize = CGSize(width: 360, height: 360)
 
     // Convert input data/image to target image and return it.
     public func process(item: ImageProcessItem, options: KingfisherParsedOptionsInfo) -> KFCrossPlatformImage? {
