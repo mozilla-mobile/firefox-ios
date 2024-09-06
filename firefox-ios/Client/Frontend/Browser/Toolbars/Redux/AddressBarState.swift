@@ -406,7 +406,8 @@ struct AddressBarState: StateType, Equatable {
     ) -> [ToolbarActionState] {
         var actions = [ToolbarActionState]()
 
-        // Navigation actions are only added to the the address toolbar when there is no navigation toolbar shown, which occurs in iPhone landscape and iPad
+        // Navigation actions are only added to the the address toolbar when there is no navigation toolbar shown, which
+        // occurs in iPhone landscape and iPad
         guard let toolbarState = store.state.screenState(ToolbarState.self,
                                                          for: .toolbar,
                                                          window: action.windowUUID),
