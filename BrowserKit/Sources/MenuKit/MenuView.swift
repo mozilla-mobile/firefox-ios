@@ -12,7 +12,7 @@ public final class MenuView: UIView {
     // MARK: - Properties
 
     // MARK: - Initializers
-    override public init(frame: CGRect) {
+    override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
     }
@@ -32,5 +32,9 @@ public final class MenuView: UIView {
             tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         ])
+    }
+
+    public func updateDataSource(with newDataSource: [[MenuElement]]) {
+        tableView.updateDataSource(newDataSource)
     }
 }

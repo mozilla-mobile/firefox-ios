@@ -8,6 +8,7 @@ import UIKit
 class MenuTableView: UIView, UITableViewDataSource, UITableViewDelegate {
     // Declare the table view as a property of the container view
     private let tableView: UITableView
+    private var dataSource: [[MenuElement]] = []
 
     override init(frame: CGRect) {
         tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -35,35 +36,39 @@ class MenuTableView: UIView, UITableViewDataSource, UITableViewDelegate {
         ])
 
         tableView.register(
-            MenuTableViewCell.self,
-            forCellReuseIdentifier: MenuTableViewCell.cellIdentifier
+            MenuCell.self,
+            forCellReuseIdentifier: MenuCell.cellIdentifier
         )
 
         tableView.dataSource = self
         tableView.delegate = self
     }
 
+    func updateDataSource(_ newDataSource: [[MenuElement]]) {
+        self.dataSource = newDataSource
+        tableView.reloadData()
+    }
     // MARK: - UITableViewDataSource Methods
     func numberOfSections(
         in tableView: UITableView
     ) -> Int {
-        return 4
+        return dataSource.count
     }
 
     func tableView(
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
-        return 5
+        return dataSource[section].count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
-            withIdentifier: MenuTableViewCell.cellIdentifier,
+            withIdentifier: MenuCell.cellIdentifier,
             for: indexPath
-        ) as! MenuTableViewCell
+        ) as! MenuCell
 
-        cell.textLabel?.text = "Section \(indexPath.section), Row \(indexPath.row + 1)"
+        cell.configureCellWith(model: dataSource[indexPath.section][indexPath.row])
 
         return cell
     }

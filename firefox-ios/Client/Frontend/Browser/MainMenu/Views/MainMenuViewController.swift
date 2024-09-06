@@ -53,6 +53,19 @@ class MainMenuViewController: UIViewController,
 
     var currentWindowUUID: UUID? { return windowUUID }
 
+    // FAKE STUFF
+    private let fakeMenuItem = MenuElement(
+        title: "Test title",
+        iconName: "",
+        isEnabled: true,
+        isActive: false,
+        a11yLabel: "",
+        a11yHint: "",
+        a11yId: "",
+        action: nil
+    )
+    private let fakeData: [[MenuElement]]
+
     // MARK: - Initializers
     init(
         windowUUID: WindowUUID,
@@ -65,6 +78,13 @@ class MainMenuViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         menuState = MainMenuState(windowUUID: windowUUID)
+        self.fakeData = [
+            [fakeMenuItem, fakeMenuItem],
+            [fakeMenuItem, fakeMenuItem, fakeMenuItem, fakeMenuItem, fakeMenuItem],
+            [fakeMenuItem, fakeMenuItem, fakeMenuItem, fakeMenuItem, fakeMenuItem],
+            [fakeMenuItem, fakeMenuItem, fakeMenuItem, fakeMenuItem, fakeMenuItem],
+            [fakeMenuItem, fakeMenuItem],
+        ]
         super.init(nibName: nil, bundle: nil)
 
         setupNotifications(forObserver: self,
@@ -106,6 +126,7 @@ class MainMenuViewController: UIViewController,
 
     // MARK: - UI setup
     private func setupView() {
+        menuContent.updateDataSource(with: fakeData)
         view.addSubview(menuContent)
 
         NSLayoutConstraint.activate([

@@ -6,18 +6,26 @@ import Foundation
 import Common
 import UIKit
 
-class MenuTableViewCell: UITableViewCell, ReusableCell {
+class MenuCell: UITableViewCell, ReusableCell {
+    // MARK: - Properties
+    var model: MenuElement!
+
+    // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupCell()
     }
 
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupCell()
+        fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupCell() {
+    func configureCellWith(model: MenuElement) {
+        self.model = model
+        self.textLabel?.text = model.title
+        setupView()
+    }
+
+    private func setupView() {
         self.backgroundColor = .systemPink
         self.textLabel?.font = UIFont.systemFont(ofSize: 16)
         self.textLabel?.textColor = .black
