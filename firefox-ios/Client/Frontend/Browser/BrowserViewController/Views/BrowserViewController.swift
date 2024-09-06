@@ -1745,11 +1745,10 @@ class BrowserViewController: UIViewController,
             setupLoadingSpinnerFor(webView, isLoading: loading)
 
             if isToolbarRefactorEnabled {
-                let action = ToolbarMiddlewareAction(
+                let action = ToolbarAction(
                     isLoading: loading,
-                    url: tab.url?.displayURL,
                     windowUUID: windowUUID,
-                    actionType: ToolbarMiddlewareActionType.websiteLoadingStateDidChange
+                    actionType: ToolbarActionType.websiteLoadingStateDidChange
                 )
                 store.dispatch(action)
             }

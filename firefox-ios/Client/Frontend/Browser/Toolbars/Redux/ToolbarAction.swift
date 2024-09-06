@@ -25,6 +25,7 @@ final class ToolbarAction: Action {
     let displayNavBorder: Bool?
     let lockIconImageName: String?
     let isEditing: Bool?
+    let isLoading: Bool?
 
     init(addressToolbarModel: AddressToolbarModel? = nil,
          navigationToolbarModel: NavigationToolbarModel? = nil,
@@ -44,6 +45,7 @@ final class ToolbarAction: Action {
          displayNavBorder: Bool? = nil,
          lockIconImageName: String? = nil,
          isEditing: Bool? = nil,
+         isLoading: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.addressToolbarModel = addressToolbarModel
@@ -64,6 +66,7 @@ final class ToolbarAction: Action {
         self.displayNavBorder = displayNavBorder
         self.lockIconImageName = lockIconImageName
         self.isEditing = isEditing
+        self.isLoading = isLoading
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -85,6 +88,7 @@ enum ToolbarActionType: ActionType {
     case backButtonStateChanged
     case forwardButtonStateChanged
     case traitCollectionDidChange
+    case websiteLoadingStateDidChange
 }
 
 class ToolbarMiddlewareAction: Action {
@@ -145,7 +149,6 @@ enum ToolbarMiddlewareActionType: ActionType {
     case customA11yAction
     case urlDidChange
     case searchEngineDidChange
-    case websiteLoadingStateDidChange
     case showMenuWarningBadge
     case readerModeStateChanged
 }

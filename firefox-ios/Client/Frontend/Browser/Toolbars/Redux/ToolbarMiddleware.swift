@@ -139,8 +139,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         case ToolbarMiddlewareActionType.didTapButton:
             resolveToolbarMiddlewareButtonTapActions(action: action, state: state)
 
-        case ToolbarMiddlewareActionType.websiteLoadingStateDidChange,
-            ToolbarMiddlewareActionType.searchEngineDidChange:
+        case ToolbarMiddlewareActionType.searchEngineDidChange:
             updateAddressToolbarNavigationActions(action: action, state: state, isEditing: false)
 
         case ToolbarMiddlewareActionType.showMenuWarningBadge:
@@ -447,7 +446,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
         actions.append(shareAction)
 
-        let isLoadingChangeAction = action.actionType as? ToolbarMiddlewareActionType == .websiteLoadingStateDidChange
+        let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
         let isLoading = isLoadingChangeAction ? action.isLoading : toolbarState.addressToolbar.isLoading
 
         if isLoading == true {
