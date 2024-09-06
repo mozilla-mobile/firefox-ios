@@ -298,7 +298,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         let toolbarAction = ToolbarAction(addressBorderPosition: addressBorderPosition,
                                           displayNavBorder: displayNavToolbarBorder,
                                           windowUUID: action.windowUUID,
-                                          actionType: ToolbarActionType.didLoadToolbars)
+                                          actionType: ToolbarActionType.borderPositionChanged)
         store.dispatch(toolbarAction)
     }
 

@@ -278,16 +278,16 @@ struct AddressBarState: StateType, Equatable {
                 readerModeState: state.readerModeState
             )
 
-        case ToolbarActionType.scrollOffsetChanged,
+        case ToolbarActionType.borderPositionChanged,
             ToolbarActionType.toolbarPositionChanged:
-            guard let borderPosition = (action as? ToolbarAction)?.addressBorderPosition else { return state }
+            guard let toolbarAction = action as? ToolbarAction else { return state }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
                 navigationActions: state.navigationActions,
                 pageActions: state.pageActions,
                 browserActions: state.browserActions,
-                borderPosition: borderPosition,
+                borderPosition: toolbarAction.addressBorderPosition,
                 url: state.url,
                 searchTerm: state.searchTerm,
                 lockIconImageName: state.lockIconImageName,

@@ -77,7 +77,7 @@ enum ToolbarActionType: ActionType {
     case addressToolbarActionsDidChange
     case urlDidChange
     case didSetTextInLocationView
-    case scrollOffsetChanged
+    case borderPositionChanged
     case toolbarPositionChanged
     case showMenuWarningBadge
     case didPasteSearchTerm

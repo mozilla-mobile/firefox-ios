@@ -96,7 +96,7 @@ struct NavigationBarState: StateType, Equatable {
                 displayBorder: state.displayBorder
             )
 
-        case ToolbarActionType.scrollOffsetChanged,
+        case ToolbarActionType.borderPositionChanged,
             ToolbarActionType.toolbarPositionChanged:
             guard let displayBorder = (action as? ToolbarAction)?.displayNavBorder else { return state }
 
