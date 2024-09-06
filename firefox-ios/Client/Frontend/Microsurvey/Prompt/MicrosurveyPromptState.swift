@@ -42,14 +42,14 @@ struct MicrosurveyPromptState: StateType, Equatable {
                 showSurvey: false,
                 model: model
             )
-        case MicrosurveyPromptMiddlewareActionType.dismissPrompt:
+        case MicrosurveyPromptActionType.closePrompt:
             return MicrosurveyPromptState(
                 windowUUID: state.windowUUID,
                 showPrompt: false,
                 showSurvey: false,
                 model: state.model
             )
-        case MicrosurveyPromptMiddlewareActionType.openSurvey:
+        case MicrosurveyPromptActionType.continueToSurvey:
             return MicrosurveyPromptState(
                 windowUUID: state.windowUUID,
                 showPrompt: true,
