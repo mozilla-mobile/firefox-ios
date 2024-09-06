@@ -665,7 +665,7 @@ class CheckmarkSetting: Setting {
         static let cellIndentationWidth: CGFloat = 42
         static let cellIndentationLevel = 1
         static let checkmarkTopHeight: CGFloat = 10
-        static let checkmarkHeight: CGFloat = 24.0
+        static let checkmarkHeight: CGFloat = 20.0
         static let checkmarkLeading: CGFloat = 20
         static let checkmarkSymbol = "\u{2713}"
         static let cellAlpha: CGFloat = 0.5
