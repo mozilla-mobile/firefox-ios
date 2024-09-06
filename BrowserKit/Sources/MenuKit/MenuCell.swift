@@ -26,8 +26,13 @@ class MenuCell: UITableViewCell, ReusableCell {
     }
 
     private func setupView() {
-        self.backgroundColor = .systemPink
+        self.backgroundColor = .systemYellow
         self.textLabel?.font = UIFont.systemFont(ofSize: 16)
         self.textLabel?.textColor = .black
+    }
+
+    func performAction() {
+        guard let action = model.action else { return }
+        action()
     }
 }

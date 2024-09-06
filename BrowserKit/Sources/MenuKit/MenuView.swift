@@ -23,7 +23,7 @@ public final class MenuView: UIView {
 
     // MARK: - UI Setup
     private func setupView() {
-        self.backgroundColor = .systemPurple
+        backgroundColor = .clear
         self.addSubview(tableView)
 
         NSLayoutConstraint.activate([

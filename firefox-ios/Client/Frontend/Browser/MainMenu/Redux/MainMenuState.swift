@@ -45,7 +45,7 @@ struct MainMenuState: ScreenState, Equatable {
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
 
         switch action.actionType {
-        case MainMenuMiddlewareActionType.dismissMenu:
+        case MainMenuActionType.closeMenu:
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 shouldDismiss: true

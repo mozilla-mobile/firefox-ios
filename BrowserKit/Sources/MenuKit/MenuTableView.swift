@@ -25,6 +25,8 @@ class MenuTableView: UIView, UITableViewDataSource, UITableViewDelegate {
     }
 
     private func setupTableView() {
+        backgroundColor = .clear
+        tableView.backgroundColor = .clear
         self.addSubview(tableView)
 
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -48,6 +50,7 @@ class MenuTableView: UIView, UITableViewDataSource, UITableViewDelegate {
         self.dataSource = newDataSource
         tableView.reloadData()
     }
+
     // MARK: - UITableViewDataSource Methods
     func numberOfSections(
         in tableView: UITableView
@@ -75,7 +78,30 @@ class MenuTableView: UIView, UITableViewDataSource, UITableViewDelegate {
 
     // MARK: - UITableViewDelegate Methods
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Selected row at index: \(indexPath.section)-\(indexPath.row)")
-        tableView.deselectRow(at: indexPath, animated: true)
+        if false {
+//            let detailVC = DetailViewController()
+//            detailVC.model = selectedModel
+//            if let viewController = findViewController() {
+//                viewController.navigationController?.pushViewController(detailVC, animated: true)
+//            }
+        } else {
+            guard let action = dataSource[indexPath.section][indexPath.row].action else {
+                tableView.deselectRow(at: indexPath, animated: true)
+                return
+            }
+            action()
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
+    }
+
+    private func findViewController() -> UIViewController? {
+        var nextResponder: UIResponder? = self
+        while nextResponder != nil {
+            nextResponder = nextResponder?.next
+            if let viewController = nextResponder as? UIViewController {
+                return viewController
+            }
+        }
+        return nil
     }
 }

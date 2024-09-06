@@ -53,18 +53,7 @@ class MainMenuViewController: UIViewController,
 
     var currentWindowUUID: UUID? { return windowUUID }
 
-    // FAKE STUFF
-    private let fakeMenuItem = MenuElement(
-        title: "Test title",
-        iconName: "",
-        isEnabled: true,
-        isActive: false,
-        a11yLabel: "",
-        a11yHint: "",
-        a11yId: "",
-        action: nil
-    )
-    private let fakeData: [[MenuElement]]
+    private var fakeData: [[MenuElement]]
 
     // MARK: - Initializers
     init(
@@ -78,13 +67,7 @@ class MainMenuViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         menuState = MainMenuState(windowUUID: windowUUID)
-        self.fakeData = [
-            [fakeMenuItem, fakeMenuItem],
-            [fakeMenuItem, fakeMenuItem, fakeMenuItem, fakeMenuItem, fakeMenuItem],
-            [fakeMenuItem, fakeMenuItem, fakeMenuItem, fakeMenuItem, fakeMenuItem],
-            [fakeMenuItem, fakeMenuItem, fakeMenuItem, fakeMenuItem, fakeMenuItem],
-            [fakeMenuItem, fakeMenuItem],
-        ]
+        self.fakeData = []
         super.init(nibName: nil, bundle: nil)
 
         setupNotifications(forObserver: self,
@@ -103,6 +86,30 @@ class MainMenuViewController: UIViewController,
         sheetPresentationController?.delegate = self
         scrollView.delegate = self
 
+        let fakeMenuItem = MenuElement(
+            title: "Test title",
+            iconName: "",
+            isEnabled: true,
+            isActive: false,
+            a11yLabel: "",
+            a11yHint: "",
+            a11yId: "",
+            action: {
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: self.windowUUID,
+                        actionType: MainMenuActionType.closeMenu
+                    )
+                )
+            }
+        )
+        fakeData = [
+            [fakeMenuItem, fakeMenuItem],
+            [fakeMenuItem, fakeMenuItem, fakeMenuItem, fakeMenuItem, fakeMenuItem],
+            [fakeMenuItem, fakeMenuItem, fakeMenuItem, fakeMenuItem, fakeMenuItem],
+            [fakeMenuItem, fakeMenuItem, fakeMenuItem, fakeMenuItem, fakeMenuItem],
+            [fakeMenuItem, fakeMenuItem],
+        ]
         setupView()
         listenForThemeChange(view)
     }
@@ -115,7 +122,10 @@ class MainMenuViewController: UIViewController,
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         store.dispatch(
-            MainMenuAction(windowUUID: windowUUID, actionType: MainMenuActionType.mainMenuDidAppear)
+            MainMenuAction(
+                windowUUID: windowUUID,
+                actionType: MainMenuActionType.mainMenuDidAppear
+            )
         )
         updateModalA11y()
     }
@@ -172,7 +182,7 @@ class MainMenuViewController: UIViewController,
     // MARK: - UX related
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        view.backgroundColor = theme.colors.layer1
+        view.backgroundColor = .systemPurple//theme.colors.layer1
     }
 
     // MARK: - Notifications

@@ -12,13 +12,8 @@ final class MainMenuAction: Action {
     }
 }
 
-final class MainMenuMiddlewareAction: Action { }
-
 enum MainMenuActionType: ActionType {
     case mainMenuDidAppear
+    case toggleNightMode
     case closeMenu
-}
-
-enum MainMenuMiddlewareActionType: ActionType {
-    case dismissMenu
 }
