@@ -8,6 +8,7 @@ import Common
 final class CertificatesCell: UITableViewCell, ReusableCell, ThemeApplicable {
     struct UX {
         static let sectionLabelWidth = 150.0
+        static let sectionLabelTopMargin = 20.0
         static let sectionLabelMargin = 20.0
         static let sectionItemsSpacing = 40.0
         static let allSectionItemsSpacing = 10.0
@@ -37,7 +38,7 @@ final class CertificatesCell: UITableViewCell, ReusableCell, ThemeApplicable {
             sectionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                   constant: UX.sectionLabelMargin),
             sectionLabel.topAnchor.constraint(equalTo: contentView.topAnchor,
-                                              constant: UX.sectionLabelMargin),
+                                              constant: UX.sectionLabelTopMargin),
             sectionLabel.widthAnchor.constraint(equalToConstant: UX.sectionLabelWidth),
 
             allSectionItemsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
@@ -75,6 +76,7 @@ final class CertificatesCell: UITableViewCell, ReusableCell, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
+        backgroundColor = .clear
         sectionLabel.textColor = theme.colors.textPrimary
     }
 

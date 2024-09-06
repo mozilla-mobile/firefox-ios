@@ -12,14 +12,13 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
 
 class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     weak var parentCoordinator: ParentCoordinatorDelegate?
-    private var profile: Profile
     private let tabManager: TabManager
 
-    init(router: Router,
-         profile: Profile = AppContainer.shared.resolve(),
-         tabManager: TabManager) {
+    init(
+        router: Router,
+        tabManager: TabManager
+    ) {
         self.tabManager = tabManager
-        self.profile = profile
         super.init(router: router)
     }
 
@@ -40,8 +39,9 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     private func createMainMenuViewController() -> MainMenuViewController {
         let mainMenuViewController = MainMenuViewController(
             windowUUID: tabManager.windowUUID,
-            viewModel: MainMenuViewModel(windowUUID: tabManager.windowUUID)
+            viewModel: MainMenuViewModel()
         )
+        mainMenuViewController.coordinator = self
         return mainMenuViewController
     }
 }

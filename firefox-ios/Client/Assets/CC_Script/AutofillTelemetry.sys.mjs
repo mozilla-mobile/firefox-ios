@@ -109,6 +109,10 @@ class AutofillTelemetryBase {
         true
       )
     );
+
+    try {
+      this.recordIframeLayoutDetection(flowId, fieldDetails);
+    } catch {}
   }
 
   recordPopupShown(flowId, fieldDetails) {
@@ -122,7 +126,9 @@ class AutofillTelemetryBase {
     const extra = this.#initFormEventExtra("unavailable");
 
     for (const fieldDetail of fieldDetails) {
-      let { filledState, value } = data.get(fieldDetail.elementId);
+      // It is possible that we don't autofill a field because it is cross-origin.
+      // When that happens, the data will not include that element.
+      let { filledState, filledValue } = data.get(fieldDetail.elementId) ?? {};
       switch (filledState) {
         case FIELD_STATES.AUTO_FILLED:
           filledState = "filled";
@@ -130,7 +136,7 @@ class AutofillTelemetryBase {
         case FIELD_STATES.NORMAL:
         default:
           filledState =
-            fieldDetail.tagName == "SELECT" || value.length
+            fieldDetail.localName == "select" || filledValue?.length
               ? "user_filled"
               : "not_filled";
           break;
@@ -152,7 +158,7 @@ class AutofillTelemetryBase {
     const extra = this.#initFormEventExtra("unavailable");
 
     for (const fieldDetail of fieldDetails) {
-      let { filledState, value } = data.get(fieldDetail.elementId);
+      let { filledState, filledValue } = data.get(fieldDetail.elementId);
       switch (filledState) {
         case FIELD_STATES.AUTO_FILLED:
           filledState = "autofilled";
@@ -160,7 +166,7 @@ class AutofillTelemetryBase {
         case FIELD_STATES.NORMAL:
         default:
           filledState =
-            fieldDetail.tagName == "SELECT" || value.length
+            fieldDetail.localName == "select" || filledValue.length
               ? "user_filled"
               : "not_filled";
           break;
@@ -253,6 +259,44 @@ class AutofillTelemetryBase {
     for (let record of records) {
       histogram.add(this.HISTOGRAM_PROFILE_NUM_USES_KEY, record.timesUsed);
     }
+  }
+
+  recordIframeLayoutDetection(flowId, fieldDetails) {
+    const fieldsInMainFrame = [];
+    const fieldsInIframe = [];
+    const fieldsInSandboxedIframe = [];
+    const fieldsInCrossOrignIframe = [];
+
+    const iframes = new Set();
+    for (const fieldDetail of fieldDetails) {
+      const bc = BrowsingContext.get(fieldDetail.browsingContextId);
+      if (bc.top == bc) {
+        fieldsInMainFrame.push(fieldDetail);
+        continue;
+      }
+
+      iframes.add(bc);
+      fieldsInIframe.push(fieldDetail);
+      if (bc.sandboxFlags != 0) {
+        fieldsInSandboxedIframe.push(fieldDetail);
+      }
+
+      if (!FormAutofillUtils.isBCSameOriginWithTop(bc)) {
+        fieldsInCrossOrignIframe.push(fieldDetail);
+      }
+    }
+
+    const extra = {
+      category: this.EVENT_CATEGORY,
+      flow_id: flowId,
+      iframe_count: iframes.size,
+      main_frame: fieldsInMainFrame.map(f => f.fieldName).toString(),
+      iframe: fieldsInIframe.map(f => f.fieldName).toString(),
+      cross_origin: fieldsInCrossOrignIframe.map(f => f.fieldName).toString(),
+      sandboxed: fieldsInSandboxedIframe.map(f => f.fieldName).toString(),
+    };
+
+    Glean.formautofill.iframeLayoutDetection.record(extra);
   }
 }
 

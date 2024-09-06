@@ -23,11 +23,15 @@ export class FieldDetail {
   // this field
   rootElementId = null;
 
+  // If the element is an iframe, it is the id of the BrowsingContext of the iframe,
+  // Otherwise, it is the id of the BrowsingContext the element is in
+  browsingContextId = null;
+
   // string with `${element.id}/{element.name}`. This is only used for debugging.
   identifier = "";
 
   // tag name attribute of the element
-  tagName = null;
+  localName = null;
 
   // The inferred field name for this element.
   fieldName = null;
@@ -71,7 +75,7 @@ export class FieldDetail {
       form.rootElement
     );
     this.identifier = `${element.id}/${element.name}`;
-    this.tagName = element.tagName;
+    this.localName = element.localName;
     this.fieldName = fieldName;
 
     if (autocompleteInfo) {
@@ -102,6 +106,15 @@ export class FieldDetail {
       }
     } else {
       this.reason = "regex-heuristic";
+    }
+
+    try {
+      this.browsingContextId =
+        element.localName == "iframe"
+          ? element.browsingContext.id
+          : BrowsingContext.getFromWindow(element.ownerGlobal).id;
+    } catch {
+      /* unit test doesn't have ownerGlobal */
     }
 
     this.isVisible = lazy.FormAutofillUtils.isFieldVisible(this.element);
