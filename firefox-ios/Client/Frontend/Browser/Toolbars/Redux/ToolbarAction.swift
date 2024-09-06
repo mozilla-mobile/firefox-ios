@@ -89,6 +89,7 @@ enum ToolbarActionType: ActionType {
     case forwardButtonStateChanged
     case traitCollectionDidChange
     case websiteLoadingStateDidChange
+    case searchEngineDidChange
 }
 
 class ToolbarMiddlewareAction: Action {
@@ -148,7 +149,6 @@ enum ToolbarMiddlewareActionType: ActionType {
     case didTapButton
     case customA11yAction
     case urlDidChange
-    case searchEngineDidChange
     case showMenuWarningBadge
     case readerModeStateChanged
 }

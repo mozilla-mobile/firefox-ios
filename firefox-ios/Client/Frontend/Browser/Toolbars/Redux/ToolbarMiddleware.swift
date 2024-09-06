@@ -139,9 +139,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
         case ToolbarMiddlewareActionType.didTapButton:
             resolveToolbarMiddlewareButtonTapActions(action: action, state: state)
 
-        case ToolbarMiddlewareActionType.searchEngineDidChange:
-            updateAddressToolbarNavigationActions(action: action, state: state, isEditing: false)
-
         case ToolbarMiddlewareActionType.showMenuWarningBadge:
             updateMenuWarningBadge(action: action, state: state)
 

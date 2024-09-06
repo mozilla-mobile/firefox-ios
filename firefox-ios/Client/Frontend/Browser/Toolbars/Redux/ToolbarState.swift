@@ -122,7 +122,8 @@ struct ToolbarState: ScreenState, Equatable {
             ToolbarActionType.didStartEditingUrl,
             ToolbarActionType.cancelEdit,
             ToolbarActionType.didScrollDuringEdit,
-            ToolbarActionType.websiteLoadingStateDidChange:
+            ToolbarActionType.websiteLoadingStateDidChange,
+            ToolbarActionType.searchEngineDidChange:
             guard let toolbarAction = action as? ToolbarAction else { return state }
             let position = if let toolbarPosition = toolbarAction.toolbarPosition {
                 addressToolbarPositionFromSearchBarPosition(toolbarPosition)
