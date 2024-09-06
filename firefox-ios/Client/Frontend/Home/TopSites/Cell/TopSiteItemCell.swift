@@ -149,10 +149,8 @@ class TopSiteItemCell: UICollectionViewCell, ReusableCell {
         if let site = topSite.site as? SponsoredTile,
            let url = URL(string: site.imageURL, invalidCharacters: false) {
             imageResource = .remoteURL(url: url)
-        } else if let site = topSite.site as? PinnedSite,
-                  let urlString = site.faviconURL,
-                  let url = URL(string: urlString) {
-            imageResource = .remoteURL(url: url)
+        } else if let site = topSite.site as? PinnedSite {
+            imageResource = site.faviconResource
         } else if let site = topSite.site as? SuggestedSite {
             imageResource = site.faviconResource
         }
