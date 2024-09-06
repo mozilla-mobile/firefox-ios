@@ -77,7 +77,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, ThemeApplicable, Reusabl
         titleTrailingConstraint = titleLabel.trailingAnchor.constraint(
             equalTo: contentView.trailingAnchor,
             constant: -UX.titleTrailingLeadingMargin)
-        
+
         let scaledImageViewSize = UIFontMetrics.default.scaledValue(for: UX.imageWidthHeight)
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
