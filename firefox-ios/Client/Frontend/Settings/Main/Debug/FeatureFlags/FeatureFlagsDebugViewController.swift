@@ -21,31 +21,40 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
     }
 
     private func generateFeatureFlagToggleSettings() -> SettingSection {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
-        let microsurveySetting = FeatureFlagsBoolSetting(
-            with: .microsurvey,
-            titleText: NSAttributedString(
-                string: "Enable Microsurvey",
-                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]),
-            statusText: NSAttributedString(
-                string: "Toggle to reset microsurvey expiration",
-                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-        ) { [weak self] _ in
-            UserDefaults.standard.set(nil, forKey: "\(GleanPlumbMessageStore.rootKey)\("homepage-microsurvey-message")")
-            self?.reloadView()
-        }
-        let closeRemoteTabsSetting = getCloseRemoteTabSetting(theme)
-        return SettingSection(title: nil, children: [microsurveySetting, closeRemoteTabsSetting])
+        return SettingSection(
+            title: nil,
+            children: [
+                FeatureFlagsBoolSetting(
+                    with: .closeRemoteTabs,
+                    titleText: format(string: "Enable Close Remote Tabs"),
+                    statusText: format(string: "Toggle to enable closing tabs remotely feature")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .microsurvey,
+                    titleText: format(string: "Enable Microsurvey"),
+                    statusText: format(string: "Toggle to reset microsurvey expiration")
+                ) { [weak self] _ in
+                    UserDefaults.standard.set(nil, forKey: "\(GleanPlumbMessageStore.rootKey)\("homepage-microsurvey-message")")
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .menuRefactor,
+                    titleText: format(string: "Enable New Menu"),
+                    statusText: format(string: "Toggle to use the new menu")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                }
+            ]
+        )
     }
 
     private func generateFeatureFlagList() -> SettingSection {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let flags = NimbusFeatureFlagID.allCases
         let settingsList = flags.compactMap { flagID in
-            return Setting(title: NSAttributedString(
-                string: "\(flagID): \(featureFlags.isFeatureEnabled(flagID, checking: .buildOnly))",
-                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-            )
+            return Setting(title: format(string: "\(flagID): \(featureFlags.isFeatureEnabled(flagID, checking: .buildOnly))"))
         }
         return SettingSection(
             title: NSAttributedString(string: "Build only status"),
@@ -53,22 +62,16 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
         )
     }
 
-    private func getCloseRemoteTabSetting(_ theme: Theme) -> FeatureFlagsBoolSetting {
-        FeatureFlagsBoolSetting(
-            with: .closeRemoteTabs,
-            titleText: NSAttributedString(
-                string: "Enable Close Remote Tabs",
-                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]),
-            statusText: NSAttributedString(
-                string: "Toggle to enable closing tabs remotely feature",
-                attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
-        ) { [weak self] _ in
-            self?.reloadView()
-        }
-    }
-
     private func reloadView() {
         self.settings = self.generateSettings()
         self.tableView.reloadData()
+    }
+
+    private func format(string: String) -> NSAttributedString {
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        return NSAttributedString(
+            string: string,
+            attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
+        )
     }
 }
