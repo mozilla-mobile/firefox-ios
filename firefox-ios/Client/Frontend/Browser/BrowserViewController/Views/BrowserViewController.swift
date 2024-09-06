@@ -3265,11 +3265,9 @@ extension BrowserViewController: LegacyTabDelegate {
                 guard self?.autofillLoginNimbusFeatureFlag() == true else { return }
                 guard let tabURL = tab?.url else { return }
                 let logins = (try? await self?.profile.logins.listLogins()) ?? []
-                let loginsForCurrentTab = logins.filter { login in
-                    if field == FocusFieldType.username && login.decryptedUsername.isEmpty { return false }
-                    guard let recordHostnameURL = URL(string: login.hostname) else { return false }
-                    return recordHostnameURL.baseDomain == tabURL.baseDomain
-                }
+                let loginsForCurrentTab = self?.filterLoginsForCurrentTab(logins: logins,
+                                                                      tabURL: tabURL,
+                                                                      field: field) ?? []
                 if loginsForCurrentTab.isEmpty {
                     tab?.webView?.accessoryView.reloadViewFor(.standard)
                 } else {
