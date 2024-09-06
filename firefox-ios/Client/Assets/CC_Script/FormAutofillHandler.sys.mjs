@@ -173,15 +173,18 @@ export class FormAutofillHandler {
   /**
    * Set fieldDetails from the form about fields that can be autofilled.
    *
+   * @param {boolean} ignoreUnknown
+   *        True to only keep fields that have a field name
+   *
    * @returns {Array} The valid address and credit card details.
    */
-  collectFormFields() {
+  collectFormFields(ignoreUnknown = true) {
     const fields = lazy.FormAutofillHeuristics.getFormInfo(this.form) ?? [];
     this.fieldDetails = fields.filter(field => {
       if (["cc-csc"].includes(field.fieldName)) {
         return false;
       }
-      return !!field.fieldName;
+      return ignoreUnknown ? !!field.fieldName : true;
     });
     return this.fieldDetails;
   }
