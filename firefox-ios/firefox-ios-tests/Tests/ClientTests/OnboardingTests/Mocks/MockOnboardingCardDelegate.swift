@@ -57,6 +57,8 @@ class MockOnboardinCardDelegateController: UIViewController,
             presentPrivacyPolicy(from: cardName,
                                  selector: nil,
                                  completion: {})
+        case .openIosFxSettings:
+            DefaultApplicationHelper().openSettings()
         case .endOnboarding:
             self.action = .endOnboarding
         }
