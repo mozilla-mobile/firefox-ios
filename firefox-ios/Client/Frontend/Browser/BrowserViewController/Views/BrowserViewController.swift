@@ -2711,7 +2711,7 @@ class BrowserViewController: UIViewController,
                                              webView: webView,
                                              frame: frame)
             case .creditCard:
-                handleCreditCard(fieldValues: fieldValues,
+                handleFoundCreditCardFieldValue(fieldValues: fieldValues,
                                  type: type,
                                  tabWebView: tabWebView,
                                  webView: webView,
@@ -2748,7 +2748,7 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func handleCreditCard(fieldValues: AutofillFieldValuePayload,
+    private func handleFoundCreditCardFieldValue(fieldValues: AutofillFieldValuePayload,
                                   type: FormAutofillPayloadType?,
                                   tabWebView: TabWebView,
                                   webView: WKWebView,
