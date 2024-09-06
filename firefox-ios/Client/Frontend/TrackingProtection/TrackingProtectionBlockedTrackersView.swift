@@ -108,6 +108,9 @@ final class TrackingProtectionBlockedTrackersView: UIView, ThemeApplicable {
         trackersLabel.text = getTrackerString(for: trackersBlocked)
         shieldImage.image = UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.shield)
             .withRenderingMode(.alwaysTemplate)
+        if let trackersBlocked {
+            trackersDetailArrow.isHidden = trackersBlocked == 0
+        }
     }
 
     func setupAccessibilityIdentifiers(arrowImageA11yId: String,
