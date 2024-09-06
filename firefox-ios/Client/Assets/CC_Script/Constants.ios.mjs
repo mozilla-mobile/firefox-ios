@@ -33,6 +33,7 @@ const IOS_DEFAULT_PREFERENCES = {
   "extensions.formautofill.focusOnAutofill": false,
   "extensions.formautofill.test.ignoreVisibilityCheck": false,
   "extensions.formautofill.heuristics.autofillSameOriginWithTop": false,
+  "signon.generation.confidenceThreshold": 0.75,
 };
 
 // Used Mimic the behavior of .getAutocompleteInfo()
