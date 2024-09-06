@@ -260,13 +260,13 @@ struct AddressBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.showMenuWarningBadge:
-            let browserActions = (action as? ToolbarAction)?.addressToolbarModel?.browserActions
+            guard let toolbarAction = action as? ToolbarAction else { return state }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
                 navigationActions: state.navigationActions,
                 pageActions: state.pageActions,
-                browserActions: browserActions ?? state.browserActions,
+                browserActions: browserActions(action: toolbarAction, addressBarState: state),
                 borderPosition: state.borderPosition,
                 url: state.url,
                 searchTerm: state.searchTerm,
@@ -512,7 +512,7 @@ struct AddressBarState: StateType, Equatable {
         }
 
         let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
-        let isShowMenuWarningAction = action.actionType as? ToolbarMiddlewareActionType == .showMenuWarningBadge
+        let isShowMenuWarningAction = action.actionType as? ToolbarActionType == .showMenuWarningBadge
         let menuBadgeImageName = isShowMenuWarningAction ? action.badgeImageName : toolbarState.badgeImageName
         let maskImageName = isShowMenuWarningAction ? action.maskImageName : toolbarState.maskImageName
 

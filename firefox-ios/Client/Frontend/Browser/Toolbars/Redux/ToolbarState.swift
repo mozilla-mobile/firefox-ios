@@ -146,23 +146,18 @@ struct ToolbarState: ScreenState, Equatable {
 
         case ToolbarActionType.showMenuWarningBadge:
             guard let toolbarAction = action as? ToolbarAction else { return state }
-            let position = if let toolbarPosition = toolbarAction.toolbarPosition {
-                addressToolbarPositionFromSearchBarPosition(toolbarPosition)
-            } else {
-                state.toolbarPosition
-            }
             return ToolbarState(
                 windowUUID: state.windowUUID,
-                toolbarPosition: position,
+                toolbarPosition: state.toolbarPosition,
                 isPrivateMode: state.isPrivateMode,
                 addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
                 navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
-                isShowingNavigationToolbar: toolbarAction.isShowingNavigationToolbar ?? state.isShowingNavigationToolbar,
-                isShowingTopTabs: toolbarAction.isShowingTopTabs ?? state.isShowingTopTabs,
-                badgeImageName: toolbarAction.badgeImageName,
-                maskImageName: toolbarAction.maskImageName,
-                canGoBack: toolbarAction.canGoBack ?? state.canGoBack,
-                canGoForward: toolbarAction.canGoForward ?? state.canGoForward,
+                isShowingNavigationToolbar: state.isShowingNavigationToolbar,
+                isShowingTopTabs: state.isShowingTopTabs,
+                badgeImageName: state.badgeImageName,
+                maskImageName: state.maskImageName,
+                canGoBack: state.canGoBack,
+                canGoForward: state.canGoForward,
                 numberOfTabs: state.numberOfTabs)
 
         case ToolbarActionType.numberOfTabsChanged:

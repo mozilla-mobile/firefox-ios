@@ -139,9 +139,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
         case ToolbarMiddlewareActionType.didTapButton:
             resolveToolbarMiddlewareButtonTapActions(action: action, state: state)
 
-        case ToolbarMiddlewareActionType.showMenuWarningBadge:
-            updateMenuWarningBadge(action: action, state: state)
-
         default:
             break
         }
@@ -332,24 +329,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
         }
     }
 
-    private func updateMenuWarningBadge(action: ToolbarMiddlewareAction,
-                                        state: AppState) {
-        guard let addressToolbarModel = generateAddressToolbarActions(action: action,
-                                                                      state: state,
-                                                                      isEditing: false),
-              let navToolbarModel = generateNavigationToolbarActions(action: action,
-                                                                     state: state)
-        else { return }
-
-        let toolbarAction = ToolbarAction(addressToolbarModel: addressToolbarModel,
-                                          navigationToolbarModel: navToolbarModel,
-                                          badgeImageName: action.badgeImageName,
-                                          maskImageName: action.maskImageName,
-                                          windowUUID: action.windowUUID,
-                                          actionType: ToolbarActionType.showMenuWarningBadge)
-        store.dispatch(toolbarAction)
-    }
-
     // MARK: Address Toolbar Actions
 
     private func addressToolbarBrowserActions(
@@ -368,7 +347,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         }
 
         let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
-        let isShowMenuWarningAction = action.actionType as? ToolbarMiddlewareActionType == .showMenuWarningBadge
+        let isShowMenuWarningAction = action.actionType as? ToolbarActionType == .showMenuWarningBadge
         let menuBadgeImageName = isShowMenuWarningAction ? action.badgeImageName : toolbarState.badgeImageName
         let maskImageName = isShowMenuWarningAction ? action.maskImageName : toolbarState.maskImageName
 
@@ -524,7 +503,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         let canGoForward = action.canGoForward ?? toolbarState.canGoForward
         let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
 
-        let isShowMenuWarningAction = action.actionType as? ToolbarMiddlewareActionType == .showMenuWarningBadge
+        let isShowMenuWarningAction = action.actionType as? ToolbarActionType == .showMenuWarningBadge
         let menuBadgeImageName = isShowMenuWarningAction ? action.badgeImageName : toolbarState.badgeImageName
         let maskImageName = isShowMenuWarningAction ? action.maskImageName : toolbarState.maskImageName
 

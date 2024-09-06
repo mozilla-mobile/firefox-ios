@@ -371,11 +371,11 @@ class BrowserViewController: UIViewController,
             let badgeImageName = showWarningBadge ? StandardImageIdentifiers.Large.warningFill : nil
             let maskImageName = showWarningBadge ? ImageIdentifiers.menuWarningMask : nil
 
-            let action = ToolbarMiddlewareAction(
+            let action = ToolbarAction(
                 badgeImageName: badgeImageName,
                 maskImageName: maskImageName,
                 windowUUID: windowUUID,
-                actionType: ToolbarMiddlewareActionType.showMenuWarningBadge
+                actionType: ToolbarActionType.showMenuWarningBadge
             )
             store.dispatch(action)
         } else {

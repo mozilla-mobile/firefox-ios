@@ -88,11 +88,11 @@ struct NavigationBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.showMenuWarningBadge:
-            guard let model = (action as? ToolbarAction)?.navigationToolbarModel else { return state }
+            guard let toolbarAction = action as? ToolbarAction else { return state }
 
             return NavigationBarState(
                 windowUUID: state.windowUUID,
-                actions: model.actions ?? state.actions,
+                actions: navigationActions(action: toolbarAction, navigationBarState: state),
                 displayBorder: state.displayBorder
             )
 
@@ -135,7 +135,7 @@ struct NavigationBarState: StateType, Equatable {
         let canGoForward = action.canGoForward ?? toolbarState.canGoForward
         let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
 
-        let isShowMenuWarningAction = action.actionType as? ToolbarMiddlewareActionType == .showMenuWarningBadge
+        let isShowMenuWarningAction = action.actionType as? ToolbarActionType == .showMenuWarningBadge
         let menuBadgeImageName = isShowMenuWarningAction ? action.badgeImageName : toolbarState.badgeImageName
         let maskImageName = isShowMenuWarningAction ? action.maskImageName : toolbarState.maskImageName
 
