@@ -1752,6 +1752,8 @@
 		EBF47E701F7979DF00899189 /* TelemetryWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF47E6F1F7979DF00899189 /* TelemetryWrapper.swift */; };
 		EBFDB790211C83A5005CCA2F /* BrowserViewController+FindInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFDB787211C83A5005CCA2F /* BrowserViewController+FindInPage.swift */; };
 		EDD47EDB2C88E13C0033504C /* BundledTopSitesFavicons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EDD47EDA2C88E13C0033504C /* BundledTopSitesFavicons.xcassets */; };
+		EDF567A02C8B51DC00FDB09D /* SiteImageView in Frameworks */ = {isa = PBXBuildFile; productRef = EDF5679F2C8B51DC00FDB09D /* SiteImageView */; };
+		EDF567A22C8B51E100FDB09D /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = EDF567A12C8B51E100FDB09D /* Kingfisher */; };
 		F018F84C2719AE8300B9A52D /* ThemedDefaultNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F018F84B2719AE8300B9A52D /* ThemedDefaultNavigationController.swift */; };
 		F18859502A3E454E0004AA7B /* EnhancedTrackingProtectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F188594F2A3E454E0004AA7B /* EnhancedTrackingProtectionCoordinator.swift */; };
 		F1BC457E2A40F6D2005541D5 /* EnhancedTrackingProtectionCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18859512A3E46020004AA7B /* EnhancedTrackingProtectionCoordinatorTests.swift */; };
@@ -9034,9 +9036,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EDF567A02C8B51DC00FDB09D /* SiteImageView in Frameworks */,
 				43F93C2827A8683E009833D9 /* RustMozillaAppServices.framework in Frameworks */,
 				8A8BAE142B21110000D774EB /* GCDWebServers in Frameworks */,
 				E6231C081B90A71E005ABB0D /* libz.tbd in Frameworks */,
+				EDF567A22C8B51E100FDB09D /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -13698,6 +13702,8 @@
 			name = ClientTests;
 			packageProductDependencies = (
 				8A8BAE132B21110000D774EB /* GCDWebServers */,
+				EDF5679F2C8B51DC00FDB09D /* SiteImageView */,
+				EDF567A12C8B51E100FDB09D /* Kingfisher */,
 			);
 			productName = ClientTests;
 			productReference = F84B21D31A090F8100AAB793 /* ClientTests.xctest */;
@@ -23935,6 +23941,15 @@
 		E177989F2BD8043800F6F0EB /* ToolbarKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ToolbarKit;
+		};
+		EDF5679F2C8B51DC00FDB09D /* SiteImageView */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SiteImageView;
+		};
+		EDF567A12C8B51E100FDB09D /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5A984D322C8A31A0007938C9 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 		F8DEACC42A3D43DA00C3B19D /* Sentry */ = {
 			isa = XCSwiftPackageProductDependency;

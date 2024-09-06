@@ -6,11 +6,14 @@ import MozillaAppServices
 import Shared
 import Storage
 import XCTest
+import SiteImageView
 
 @testable import Client
 
 class TopSitesHelperTests: XCTestCase {
+    private let faviconResource: SiteResource = .remoteURL(url: URL(string: "https://mozilla.org/favicon.ico")!)
     private var profile: MockProfile!
+
     private func deleteDatabases() {
         do {
             try profile.files.remove("TopSitesHelperTests.db")
@@ -164,7 +167,7 @@ class TopSitesHelperTests: XCTestCase {
             mockPinnedSites: true,
             pinnedSites: [PinnedSite(
                 site: Site(url: "https://facebook.com", title: "Facebook"),
-                faviconURL: "url-does-not-matter"
+                faviconResource: faviconResource
             )]
         )
 
@@ -188,11 +191,11 @@ extension TopSitesHelperTests {
         return [
             PinnedSite(
                 site: Site(url: "https://apinnedsite.com/", title: "a pinned site title"),
-                faviconURL: "url-does-not-matter-1"
+                faviconResource: faviconResource
             ),
             PinnedSite(
                 site: Site(url: "https://apinnedsite2.com/", title: "a pinned site title2"),
-                faviconURL: "url-does-not-matter-2"
+                faviconResource: faviconResource
             )
         ]
     }
