@@ -406,23 +406,20 @@ struct AddressBarState: StateType, Equatable {
     ) -> [ToolbarActionState] {
         var actions = [ToolbarActionState]()
 
+        //No actions needed for the address toolbar, which is only shown in iPhone landscape and iPad
         guard let toolbarState = store.state.screenState(ToolbarState.self,
                                                          for: .toolbar,
-                                                         window: action.windowUUID)
+                                                         window: action.windowUUID),
+                  !(action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar)
         else { return actions }
-
-        let isShowingNavToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
-        let canGoBack = action.canGoBack ?? toolbarState.canGoBack
-        let canGoForward = action.canGoForward ?? toolbarState.canGoForward
 
         if isEditing {
             // back carrot when in edit mode
             actions.append(cancelEditAction)
-        } else if isShowingNavToolbar {
-            // there are no navigation actions if the nav toolbar is shown
-            return actions
         } else {
-            // back/forward and maybe data clearance when not editing and nav toolbar is not shown
+            // otherwise back/forward and maybe data clearance when not editing
+            let canGoBack = action.canGoBack ?? toolbarState.canGoBack
+            let canGoForward = action.canGoForward ?? toolbarState.canGoForward
             actions.append(backAction(enabled: canGoBack))
             actions.append(forwardAction(enabled: canGoForward))
 
