@@ -136,15 +136,15 @@ struct NavigationBarState: StateType, Equatable {
         let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
 
         let isShowMenuWarningAction = action.actionType as? ToolbarActionType == .showMenuWarningBadge
-        let menuBadgeImageName = isShowMenuWarningAction ? action.badgeImageName : toolbarState.badgeImageName
-        let maskImageName = isShowMenuWarningAction ? action.maskImageName : toolbarState.maskImageName
+        let showActionWarningBadge = action.showMenuWarningBadge ?? toolbarState.showMenuWarningBadge
+        let showWarningBadge = isShowMenuWarningAction ? showActionWarningBadge : toolbarState.showMenuWarningBadge
 
         actions = [
             backAction(enabled: canGoBack),
             forwardAction(enabled: canGoForward),
             middleAction,
             tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode),
-            menuAction(badgeImageName: menuBadgeImageName, maskImageName: maskImageName)
+            menuAction(showWarningBadge: showWarningBadge)
         ]
 
         return actions
@@ -196,12 +196,12 @@ struct NavigationBarState: StateType, Equatable {
             a11yId: AccessibilityIdentifiers.Toolbar.tabsButton)
     }
 
-    private static func menuAction(badgeImageName: String? = nil, maskImageName: String? = nil) -> ToolbarActionState {
+    private static func menuAction(showWarningBadge: Bool = false) -> ToolbarActionState {
         return ToolbarActionState(
             actionType: .menu,
             iconName: StandardImageIdentifiers.Large.appMenu,
-            badgeImageName: badgeImageName,
-            maskImageName: maskImageName,
+            badgeImageName: showWarningBadge ? StandardImageIdentifiers.Large.warningFill : nil,
+            maskImageName: showWarningBadge ? ImageIdentifiers.menuWarningMask : nil,
             isEnabled: true,
             a11yLabel: .LegacyAppMenu.Toolbar.MenuButtonAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton)

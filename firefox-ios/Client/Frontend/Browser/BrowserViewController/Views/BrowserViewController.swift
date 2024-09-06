@@ -368,12 +368,8 @@ class BrowserViewController: UIViewController,
         let showWarningBadge = consume isActionNeeded
 
         if isToolbarRefactorEnabled {
-            let badgeImageName = showWarningBadge ? StandardImageIdentifiers.Large.warningFill : nil
-            let maskImageName = showWarningBadge ? ImageIdentifiers.menuWarningMask : nil
-
             let action = ToolbarAction(
-                badgeImageName: badgeImageName,
-                maskImageName: maskImageName,
+                showMenuWarningBadge: showWarningBadge,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.showMenuWarningBadge
             )

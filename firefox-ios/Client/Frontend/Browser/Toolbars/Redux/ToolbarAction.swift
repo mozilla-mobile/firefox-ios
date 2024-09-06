@@ -7,15 +7,12 @@ import Redux
 import ToolbarKit
 
 final class ToolbarAction: Action {
-    let addressToolbarModel: AddressToolbarModel?
-    let navigationToolbarModel: NavigationToolbarModel?
     let toolbarPosition: SearchBarPosition?
     let numberOfTabs: Int?
     let url: URL?
     let searchTerm: String?
     let isPrivate: Bool?
-    let badgeImageName: String?
-    let maskImageName: String?
+    let showMenuWarningBadge: Bool?
     let isShowingNavigationToolbar: Bool?
     let isShowingTopTabs: Bool?
     let canGoBack: Bool?
@@ -27,15 +24,12 @@ final class ToolbarAction: Action {
     let isEditing: Bool?
     let isLoading: Bool?
 
-    init(addressToolbarModel: AddressToolbarModel? = nil,
-         navigationToolbarModel: NavigationToolbarModel? = nil,
-         toolbarPosition: SearchBarPosition? = nil,
+    init(toolbarPosition: SearchBarPosition? = nil,
          numberOfTabs: Int? = nil,
          url: URL? = nil,
          searchTerm: String? = nil,
          isPrivate: Bool? = nil,
-         badgeImageName: String? = nil,
-         maskImageName: String? = nil,
+         showMenuWarningBadge: Bool? = nil,
          isShowingNavigationToolbar: Bool? = nil,
          isShowingTopTabs: Bool? = nil,
          canGoBack: Bool? = nil,
@@ -48,15 +42,12 @@ final class ToolbarAction: Action {
          isLoading: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
-        self.addressToolbarModel = addressToolbarModel
-        self.navigationToolbarModel = navigationToolbarModel
         self.toolbarPosition = toolbarPosition
         self.numberOfTabs = numberOfTabs
         self.url = url
         self.searchTerm = searchTerm
         self.isPrivate = isPrivate
-        self.badgeImageName = badgeImageName
-        self.maskImageName = maskImageName
+        self.showMenuWarningBadge = showMenuWarningBadge
         self.isShowingNavigationToolbar = isShowingNavigationToolbar
         self.isShowingTopTabs = isShowingTopTabs
         self.canGoBack = canGoBack
@@ -74,7 +65,6 @@ final class ToolbarAction: Action {
 enum ToolbarActionType: ActionType {
     case didLoadToolbars
     case numberOfTabsChanged
-    case addressToolbarActionsDidChange
     case urlDidChange
     case didSetTextInLocationView
     case borderPositionChanged

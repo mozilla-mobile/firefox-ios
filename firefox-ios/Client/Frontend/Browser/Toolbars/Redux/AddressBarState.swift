@@ -182,25 +182,6 @@ struct AddressBarState: StateType, Equatable {
                 readerModeState: state.readerModeState
             )
 
-        case ToolbarActionType.addressToolbarActionsDidChange:
-            guard let addressToolbarModel = (action as? ToolbarAction)?.addressToolbarModel else { return state }
-
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: addressToolbarModel.navigationActions ?? state.navigationActions,
-                pageActions: addressToolbarModel.pageActions ?? state.pageActions,
-                browserActions: addressToolbarModel.browserActions ?? state.browserActions,
-                borderPosition: state.borderPosition,
-                url: state.url,
-                searchTerm: state.searchTerm,
-                lockIconImageName: state.lockIconImageName,
-                isEditing: addressToolbarModel.isEditing ?? state.isEditing,
-                isScrollingDuringEdit: state.isScrollingDuringEdit,
-                shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-                isLoading: state.isLoading,
-                readerModeState: state.readerModeState
-            )
-
         case ToolbarActionType.urlDidChange:
             guard let toolbarAction = action as? ToolbarAction else { return state }
 
@@ -513,12 +494,12 @@ struct AddressBarState: StateType, Equatable {
 
         let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
         let isShowMenuWarningAction = action.actionType as? ToolbarActionType == .showMenuWarningBadge
-        let menuBadgeImageName = isShowMenuWarningAction ? action.badgeImageName : toolbarState.badgeImageName
-        let maskImageName = isShowMenuWarningAction ? action.maskImageName : toolbarState.maskImageName
+        let showActionWarningBadge = action.showMenuWarningBadge ?? toolbarState.showMenuWarningBadge
+        let showWarningBadge = isShowMenuWarningAction ? showActionWarningBadge : toolbarState.showMenuWarningBadge
 
         actions.append(contentsOf: [
             tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode),
-            menuAction(badgeImageName: menuBadgeImageName, maskImageName: maskImageName)])
+            menuAction(showWarningBadge: showWarningBadge)])
 
         return actions
     }
@@ -537,12 +518,12 @@ struct AddressBarState: StateType, Equatable {
             a11yId: AccessibilityIdentifiers.Toolbar.tabsButton)
     }
 
-    private static func menuAction(badgeImageName: String? = nil, maskImageName: String? = nil) -> ToolbarActionState {
+    private static func menuAction(showWarningBadge: Bool = false) -> ToolbarActionState {
         return ToolbarActionState(
             actionType: .menu,
             iconName: StandardImageIdentifiers.Large.appMenu,
-            badgeImageName: badgeImageName,
-            maskImageName: maskImageName,
+            badgeImageName: showWarningBadge ? StandardImageIdentifiers.Large.warningFill : nil,
+            maskImageName: showWarningBadge ? ImageIdentifiers.menuWarningMask : nil,
             isEnabled: true,
             a11yLabel: .LegacyAppMenu.Toolbar.MenuButtonAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
