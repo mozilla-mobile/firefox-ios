@@ -411,8 +411,6 @@ struct AddressBarState: StateType, Equatable {
                                                          window: action.windowUUID)
         else { return actions }
 
-        let isUrlChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
-        let url = isUrlChangeAction ? action.url : addressBarState.url
         let isShowingNavToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
         let canGoBack = action.canGoBack ?? toolbarState.canGoBack
         let canGoForward = action.canGoForward ?? toolbarState.canGoForward
@@ -420,11 +418,11 @@ struct AddressBarState: StateType, Equatable {
         if isEditing {
             // back carrot when in edit mode
             actions.append(cancelEditAction)
-        } else if isShowingNavToolbar || url == nil {
-            // there are no navigation actions if on homepage or when nav toolbar is shown
+        } else if isShowingNavToolbar {
+            // there are no navigation actions if the nav toolbar is shown
             return actions
-        } else if url != nil {
-            // back/forward when url exists and nav toolbar is not shown
+        } else {
+            // back/forward and maybe data clearance when not editing and nav toolbar is not shown
             actions.append(backAction(enabled: canGoBack))
             actions.append(forwardAction(enabled: canGoForward))
 
