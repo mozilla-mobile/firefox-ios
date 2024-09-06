@@ -1,6 +1,8 @@
 name: Focus iOS 15 & 16 tests
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 7 * * 1,3,5"
 
 env:
     browser: focus-ios
