@@ -19,5 +19,7 @@ class MenuTableViewCell: UITableViewCell, ReusableCell {
 
     private func setupCell() {
         self.backgroundColor = .systemPink
+        self.textLabel?.font = UIFont.systemFont(ofSize: 16)
+        self.textLabel?.textColor = .black
     }
 }

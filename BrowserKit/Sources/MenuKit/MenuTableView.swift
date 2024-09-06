@@ -5,31 +5,27 @@
 import Foundation
 import UIKit
 
-public class MenuTableView: UIView, UITableViewDataSource, UITableViewDelegate {
+class MenuTableView: UIView, UITableViewDataSource, UITableViewDelegate {
     // Declare the table view as a property of the container view
-    private let tableView = UITableView()
+    private let tableView: UITableView
 
     override init(frame: CGRect) {
-        super.init(frame: frame)
+        tableView = UITableView(frame: .zero, style: .insetGrouped)
+        super.init(frame: .zero)
         setupView()
     }
 
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        setupView()
+        fatalError("init(coder:) has not been implemented")
     }
 
     private func setupView() {
-        backgroundColor = .systemPink
         setupTableView()
     }
 
-    // Function to set up the table view
     private func setupTableView() {
-        // Add the table view to the container view
         self.addSubview(tableView)
 
-        // Set up the table view's frame or constraints
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: self.topAnchor),
@@ -38,44 +34,43 @@ public class MenuTableView: UIView, UITableViewDataSource, UITableViewDelegate {
             tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         ])
 
-        // Register the generic cell for reuse
         tableView.register(
             MenuTableViewCell.self,
             forCellReuseIdentifier: MenuTableViewCell.cellIdentifier
         )
 
-        // Set the data source and delegate to the current view
         tableView.dataSource = self
         tableView.delegate = self
     }
 
     // MARK: - UITableViewDataSource Methods
-
-    // Return the number of rows in the table view
-    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // For this example, we'll just return 10 rows
-        return 10
+    func numberOfSections(
+        in tableView: UITableView
+    ) -> Int {
+        return 4
     }
 
-    // Create and configure cells for the table view
-    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // Dequeue a reusable cell of the specified type
+    func tableView(
+        _ tableView: UITableView,
+        numberOfRowsInSection section: Int
+    ) -> Int {
+        return 5
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
             withIdentifier: MenuTableViewCell.cellIdentifier,
             for: indexPath
         ) as! MenuTableViewCell
 
-        // Customize the cell content for the specific row
-        cell.textLabel?.text = "Row \(indexPath.row + 1)"
+        cell.textLabel?.text = "Section \(indexPath.section), Row \(indexPath.row + 1)"
 
         return cell
     }
 
     // MARK: - UITableViewDelegate Methods
-
-    // Handle row selection (optional)
-    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Selected row at index: \(indexPath.row)")
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Selected row at index: \(indexPath.section)-\(indexPath.row)")
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }

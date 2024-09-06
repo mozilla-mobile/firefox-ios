@@ -7,6 +7,7 @@ import ComponentLibrary
 import UIKit
 import Shared
 import Redux
+import MenuKit
 
 class MainMenuViewController: UIViewController,
                               Themeable,
@@ -23,12 +24,8 @@ class MainMenuViewController: UIViewController,
         static let scrollContentStackSpacing: CGFloat = 16
     }
 
+    private lazy var menuContent: MenuView = .build()
     private lazy var scrollView: UIScrollView = .build()
-
-    private lazy var contentStackView: UIStackView = .build { stackView in
-        stackView.axis = .vertical
-        stackView.spacing = UX.scrollContentStackSpacing
-    }
 
     private lazy var closeButton: CloseButton = .build { view in
         let viewModel = CloseButtonViewModel(
@@ -109,18 +106,17 @@ class MainMenuViewController: UIViewController,
 
     // MARK: - UI setup
     private func setupView() {
-        view.addSubview(testButton)
+        view.addSubview(menuContent)
 
         NSLayoutConstraint.activate([
-            testButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            testButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            testButton.heightAnchor.constraint(equalToConstant: 100),
-            testButton.widthAnchor.constraint(equalToConstant: 200)
+            menuContent.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            menuContent.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            menuContent.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            menuContent.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
 
     private func updateContent() {
-        contentStackView.removeAllArrangedViews()
         applyTheme()
     }
 

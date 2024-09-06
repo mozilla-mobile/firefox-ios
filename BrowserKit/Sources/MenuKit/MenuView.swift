@@ -5,13 +5,16 @@
 import Common
 import UIKit
 
-final class MainMenuView: UIView {
+public final class MenuView: UIView {
     // MARK: - UI Elements
+    private var tableView: MenuTableView = .build()
+
     // MARK: - Properties
 
     // MARK: - Initializers
-    override init(frame: CGRect) {
-        super.init(frame: .zero)
+    override public init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
     }
 
     required init?(coder: NSCoder) {
@@ -21,8 +24,13 @@ final class MainMenuView: UIView {
     // MARK: - UI Setup
     private func setupView() {
         self.backgroundColor = .systemPurple
+        self.addSubview(tableView)
 
         NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: self.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         ])
     }
 }
