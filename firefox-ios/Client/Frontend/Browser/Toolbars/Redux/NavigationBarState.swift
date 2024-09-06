@@ -25,6 +25,21 @@ struct NavigationBarState: StateType, Equatable {
         a11yLabel: .TabToolbarHomeAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.homeButton)
 
+    private static let dataClearanceAction = ToolbarActionState(
+        actionType: .dataClearance,
+        iconName: StandardImageIdentifiers.Large.dataClearance,
+        isEnabled: true,
+        hasContextualHint: true,
+        a11yLabel: .TabToolbarDataClearanceAccessibilityLabel,
+        a11yId: AccessibilityIdentifiers.Toolbar.fireButton)
+
+    private static let newTabAction = ToolbarActionState(
+        actionType: .newTab,
+        iconName: StandardImageIdentifiers.Large.plus,
+        isEnabled: true,
+        a11yLabel: .Toolbars.NewTabButton,
+        a11yId: AccessibilityIdentifiers.Toolbar.addNewTabButton)
+
     init(windowUUID: WindowUUID) {
         self.init(windowUUID: windowUUID,
                   actions: [],
@@ -129,7 +144,10 @@ struct NavigationBarState: StateType, Equatable {
         let isUrlChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
         let url = isUrlChangeAction ? action.url : toolbarState.addressToolbar.url
 
-        let middleAction = getMiddleButtonAction(url: url, isPrivateMode: toolbarState.isPrivateMode)
+        let middleAction = getMiddleButtonAction(url: url,
+                                                 isPrivateMode: toolbarState.isPrivateMode,
+                                                 canShowDataClearanceAction: toolbarState.canShowDataClearanceAction,
+                                                 isNewTabFeatureEnabled: toolbarState.isNewTabFeatureEnabled)
 
         let canGoBack = action.canGoBack ?? toolbarState.canGoBack
         let canGoForward = action.canGoForward ?? toolbarState.canGoForward
@@ -150,12 +168,16 @@ struct NavigationBarState: StateType, Equatable {
         return actions
     }
 
-    private static func getMiddleButtonAction(url: URL?, isPrivateMode: Bool) -> ToolbarActionState {
-        // ToDo
-//        let canShowDataClearanceAction = false // canShowDataClearanceAction(isPrivate: isPrivateMode)
-//        let isNewTabEnabled = featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
-        let middleActionForWebpage = homeAction // canShowDataClearanceAction ?
-//                                     dataClearanceAction : isNewTabEnabled ? newTabAction : homeAction
+    private static func getMiddleButtonAction(url: URL?,
+                                              isPrivateMode: Bool,
+                                              canShowDataClearanceAction: Bool,
+                                              isNewTabFeatureEnabled: Bool)
+    -> ToolbarActionState {
+        // WT ToDo
+        let canShowDataClearanceAction = canShowDataClearanceAction && isPrivateMode
+        let isNewTabEnabled = isNewTabFeatureEnabled
+        let middleActionForWebpage = canShowDataClearanceAction ?
+                                     dataClearanceAction : isNewTabEnabled ? newTabAction : homeAction
         let middleActionForHomepage = searchAction
         let middleAction = url == nil ? middleActionForHomepage : middleActionForWebpage
 

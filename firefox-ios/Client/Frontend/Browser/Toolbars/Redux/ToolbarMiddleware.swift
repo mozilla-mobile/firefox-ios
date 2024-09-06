@@ -113,11 +113,14 @@ final class ToolbarMiddleware: FeatureFlaggable {
             let borderPosition = getAddressBorderPosition(toolbarPosition: position)
             let displayBorder = shouldDisplayNavigationToolbarBorder(toolbarPosition: position)
 
-            let action = ToolbarAction(toolbarPosition: toolbarPosition,
-                                       addressBorderPosition: borderPosition,
-                                       displayNavBorder: displayBorder,
-                                       windowUUID: uuid,
-                                       actionType: ToolbarActionType.didLoadToolbars)
+            let action = ToolbarAction(
+                toolbarPosition: toolbarPosition,
+                addressBorderPosition: borderPosition,
+                displayNavBorder: displayBorder,
+                isNewTabFeatureEnabled: featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly),
+                canShowDataClearanceAction: canShowDataClearanceAction(),
+                windowUUID: uuid,
+                actionType: ToolbarActionType.didLoadToolbars)
             store.dispatch(action)
 
         case GeneralBrowserMiddlewareActionType.websiteDidScroll:
@@ -340,5 +343,12 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
     private func shouldDisplayNavigationToolbarBorder(toolbarPosition: AddressToolbarPosition) -> Bool {
         return manager.shouldDisplayNavigationBorder(toolbarPosition: toolbarPosition)
+    }
+
+    private func canShowDataClearanceAction() -> Bool {
+        let isFeltPrivacyUIEnabled = featureFlags.isFeatureEnabled(.feltPrivacySimplifiedUI, checking: .buildOnly)
+        let isFeltPrivacyDeletionEnabled = featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildOnly)
+
+        return isFeltPrivacyUIEnabled && isFeltPrivacyDeletionEnabled
     }
 }

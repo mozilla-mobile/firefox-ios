@@ -65,6 +65,14 @@ struct AddressBarState: StateType, Equatable {
         a11yLabel: .Toolbars.NewTabButton,
         a11yId: AccessibilityIdentifiers.Toolbar.addNewTabButton)
 
+    private static let dataClearanceAction = ToolbarActionState(
+        actionType: .dataClearance,
+        iconName: StandardImageIdentifiers.Large.dataClearance,
+        isEnabled: true,
+        hasContextualHint: true,
+        a11yLabel: .TabToolbarDataClearanceAccessibilityLabel,
+        a11yId: AccessibilityIdentifiers.Toolbar.fireButton)
+
     init(windowUUID: WindowUUID) {
         self.init(windowUUID: windowUUID,
                   navigationActions: [],
@@ -422,10 +430,9 @@ struct AddressBarState: StateType, Equatable {
             actions.append(backAction(enabled: isBackButtonEnabled))
             actions.append(forwardAction(enabled: isForwardButtonEnabled))
 
-            // ToDo
-//            if canShowDataClearanceAction(isPrivate: toolbarState.isPrivateMode) {
-//                actions.append(dataClearanceAction)
-//            }
+            if toolbarState.canShowDataClearanceAction && toolbarState.isPrivateMode {
+                actions.append(dataClearanceAction)
+            }
         }
 
         return actions

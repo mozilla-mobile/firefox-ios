@@ -23,6 +23,8 @@ final class ToolbarAction: Action {
     let lockIconImageName: String?
     let isEditing: Bool?
     let isLoading: Bool?
+    let isNewTabFeatureEnabled: Bool?
+    let canShowDataClearanceAction: Bool?
 
     init(toolbarPosition: SearchBarPosition? = nil,
          numberOfTabs: Int? = nil,
@@ -40,6 +42,8 @@ final class ToolbarAction: Action {
          lockIconImageName: String? = nil,
          isEditing: Bool? = nil,
          isLoading: Bool? = nil,
+         isNewTabFeatureEnabled: Bool? = nil,
+         canShowDataClearanceAction: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.toolbarPosition = toolbarPosition
@@ -58,6 +62,8 @@ final class ToolbarAction: Action {
         self.lockIconImageName = lockIconImageName
         self.isEditing = isEditing
         self.isLoading = isLoading
+        self.isNewTabFeatureEnabled = isNewTabFeatureEnabled
+        self.canShowDataClearanceAction = canShowDataClearanceAction
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
