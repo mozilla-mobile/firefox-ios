@@ -179,10 +179,7 @@ export class FormAutofillSection {
 
     const autofillableSections = [];
     for (const section of sections) {
-      // We don't support csc field, so remove csc fields from section
-      const fieldDetails = section.fieldDetails.filter(
-        f => !["cc-csc"].includes(f.fieldName)
-      );
+      const fieldDetails = section.fieldDetails;
       if (!fieldDetails.length) {
         continue;
       }
@@ -319,6 +316,23 @@ export class FormAutofillSection {
     return data;
   }
 
+  /**
+   * Heuristics to determine which fields to autofill when a section contains
+   * multiple fields of the same type.
+   */
+  getAutofillFields() {
+    return this.fieldDetails.filter(fieldDetail => {
+      // When both visible and invisible <select> elements exist, we only autofill the
+      // visible <select>.
+      if (fieldDetail.localName == "select" && !fieldDetail.isVisible) {
+        return !this.fieldDetails.some(
+          field => field.fieldName == fieldDetail.fieldName && field.isVisible
+        );
+      }
+      return true;
+    });
+  }
+
   /*
    * For telemetry
    */
@@ -384,6 +398,29 @@ export class FormAutofillSection {
    */
   getFieldDetailByElementId(elementId) {
     return this.fieldDetails.find(detail => detail.elementId == elementId);
+  }
+
+  /**
+   * Groups an array of field details by their browsing context IDs.
+   *
+   * @param {Array} fieldDetails
+   *        Array of fieldDetails object
+   *
+   * @returns {object}
+   *        An object keyed by BrowsingContext Id, value is an array that
+   *        contains all fieldDetails with the same BrowsingContext id.
+   */
+  static groupFieldDetailsByBrowsingContext(fieldDetails) {
+    const detailsByBC = {};
+    for (const fieldDetail of fieldDetails) {
+      const bcid = fieldDetail.browsingContextId;
+      if (detailsByBC[bcid]) {
+        detailsByBC[bcid].push(fieldDetail);
+      } else {
+        detailsByBC[bcid] = [fieldDetail];
+      }
+    }
+    return detailsByBC;
   }
 }
 

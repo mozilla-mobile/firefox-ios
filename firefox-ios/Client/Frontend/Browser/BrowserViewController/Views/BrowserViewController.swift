@@ -368,14 +368,10 @@ class BrowserViewController: UIViewController,
         let showWarningBadge = consume isActionNeeded
 
         if isToolbarRefactorEnabled {
-            let badgeImageName = showWarningBadge ? StandardImageIdentifiers.Large.warningFill : nil
-            let maskImageName = showWarningBadge ? ImageIdentifiers.menuWarningMask : nil
-
-            let action = ToolbarMiddlewareAction(
-                badgeImageName: badgeImageName,
-                maskImageName: maskImageName,
+            let action = ToolbarAction(
+                showMenuWarningBadge: showWarningBadge,
                 windowUUID: windowUUID,
-                actionType: ToolbarMiddlewareActionType.showMenuWarningBadge
+                actionType: ToolbarActionType.showMenuWarningBadge
             )
             store.dispatch(action)
         } else {
@@ -1623,7 +1619,14 @@ class BrowserViewController: UIViewController,
     }
 
     override func accessibilityPerformMagicTap() -> Bool {
-        if !isToolbarRefactorEnabled, !urlBar.locationView.readerModeButton.isHidden {
+        if isToolbarRefactorEnabled {
+            let action = GeneralBrowserAction(
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserActionType.showReaderMode
+            )
+            store.dispatch(action)
+            return true
+        } else if !urlBar.locationView.readerModeButton.isHidden {
             self.urlBar.tabLocationViewDidTapReaderMode(self.urlBar.locationView)
             return true
         }
@@ -1745,11 +1748,10 @@ class BrowserViewController: UIViewController,
             setupLoadingSpinnerFor(webView, isLoading: loading)
 
             if isToolbarRefactorEnabled {
-                let action = ToolbarMiddlewareAction(
+                let action = ToolbarAction(
                     isLoading: loading,
-                    url: tab.url?.displayURL,
                     windowUUID: windowUUID,
-                    actionType: ToolbarMiddlewareActionType.websiteLoadingStateDidChange
+                    actionType: ToolbarActionType.websiteLoadingStateDidChange
                 )
                 store.dispatch(action)
             }
@@ -1845,12 +1847,10 @@ class BrowserViewController: UIViewController,
 
     func updateReaderModeState(for tab: Tab?, readerModeState: ReaderModeState) {
         if isToolbarRefactorEnabled {
-            let action = ToolbarMiddlewareAction(
-                lockIconImageName: lockIconImageName(for: tab),
-                url: tab?.url?.displayURL,
+            let action = ToolbarAction(
                 readerModeState: readerModeState,
                 windowUUID: windowUUID,
-                actionType: ToolbarMiddlewareActionType.readerModeStateChanged
+                actionType: ToolbarActionType.readerModeStateChanged
             )
             store.dispatch(action)
         } else {
@@ -1862,14 +1862,14 @@ class BrowserViewController: UIViewController,
     /// Call this whenever the page URL changes.
     fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
         guard !isToolbarRefactorEnabled else {
-            let action = ToolbarMiddlewareAction(
-                isShowingNavigationToolbar: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection),
-                lockIconImageName: lockIconImageName(for: tab),
+            let action = ToolbarAction(
                 url: tab.url?.displayURL,
+                isShowingNavigationToolbar: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection),
                 canGoBack: tab.canGoBack,
                 canGoForward: tab.canGoForward,
+                lockIconImageName: lockIconImageName(for: tab),
                 windowUUID: windowUUID,
-                actionType: ToolbarMiddlewareActionType.urlDidChange)
+                actionType: ToolbarActionType.urlDidChange)
             store.dispatch(action)
             return
         }
@@ -1940,13 +1940,13 @@ class BrowserViewController: UIViewController,
 
     private func dispatchBackForwardToolbarAction(_ isEnabled: Bool?,
                                                   _ windowUUID: UUID,
-                                                  _ actionType: ToolbarMiddlewareActionType) {
+                                                  _ actionType: ToolbarActionType) {
         switch actionType {
         case .backButtonStateChanged:
-            let action = ToolbarMiddlewareAction(canGoBack: isEnabled, windowUUID: windowUUID, actionType: actionType)
+            let action = ToolbarAction(canGoBack: isEnabled, windowUUID: windowUUID, actionType: actionType)
             store.dispatch(action)
         case .forwardButtonStateChanged:
-            let action = ToolbarMiddlewareAction(canGoForward: isEnabled, windowUUID: windowUUID, actionType: actionType)
+            let action = ToolbarAction(canGoForward: isEnabled, windowUUID: windowUUID, actionType: actionType)
             store.dispatch(action)
         default: break
         }
@@ -2005,6 +2005,8 @@ class BrowserViewController: UIViewController,
             didTapOnBack()
         case .forward:
             didTapOnForward()
+        case .reloadNoCache:
+            tabManager.selectedTab?.reload(bypassCache: true)
         case .reload:
             tabManager.selectedTab?.reload()
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .reloadFromUrlBar)
@@ -2108,7 +2110,7 @@ class BrowserViewController: UIViewController,
 
     func toggleReaderMode() {
         guard let tab = tabManager.selectedTab,
-              let readerMode = tab.getContentScript(name: "ReaderMode") as? ReaderMode
+              let readerMode = tab.getContentScript(name: ReaderMode.name()) as? ReaderMode
         else { return }
 
         switch readerMode.state {
@@ -2254,10 +2256,10 @@ class BrowserViewController: UIViewController,
               toolbarState.isShowingTopTabs != showTopTabs
         else { return }
 
-        let action = ToolbarMiddlewareAction(
+        let action = ToolbarAction(
             isShowingTopTabs: showTopTabs,
             windowUUID: windowUUID,
-            actionType: ToolbarMiddlewareActionType.traitCollectionDidChange
+            actionType: ToolbarActionType.traitCollectionDidChange
         )
         store.dispatch(action)
     }
@@ -2310,7 +2312,9 @@ class BrowserViewController: UIViewController,
 
     func handle(query: String) {
         openBlankNewTab(focusLocationField: false)
-        if !isToolbarRefactorEnabled {
+        if isToolbarRefactorEnabled {
+            openBrowser(searchTerm: query)
+        } else {
             urlBar(urlBar, didSubmitText: query)
         }
     }
@@ -2403,9 +2407,9 @@ class BrowserViewController: UIViewController,
             guard tab == self.tabManager.selectedTab else { return }
 
             if self.isToolbarRefactorEnabled {
-                let action = ToolbarMiddlewareAction(searchTerm: searchText,
-                                                     windowUUID: self.windowUUID,
-                                                     actionType: ToolbarMiddlewareActionType.didStartEditingUrl)
+                let action = ToolbarAction(searchTerm: searchText,
+                                           windowUUID: self.windowUUID,
+                                           actionType: ToolbarActionType.didStartEditingUrl)
                 store.dispatch(action)
             } else {
                 self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
@@ -3483,10 +3487,7 @@ extension BrowserViewController: SearchViewControllerDelegate {
     func updateForDefaultSearchEngineDidChange(_ notification: Notification) {
         // Update search icon when the search engine changes
         if isToolbarRefactorEnabled {
-            let action = ToolbarMiddlewareAction(
-                windowUUID: windowUUID,
-                actionType: ToolbarMiddlewareActionType.searchEngineDidChange
-            )
+            let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.searchEngineDidChange)
             store.dispatch(action)
         } else {
             urlBar.searchEnginesDidUpdate()
@@ -3787,9 +3788,9 @@ extension BrowserViewController: TabManagerDelegate {
               toolbarState.numberOfTabs != count
         else { return }
 
-        let action = ToolbarMiddlewareAction(numberOfTabs: count,
-                                             windowUUID: windowUUID,
-                                             actionType: ToolbarMiddlewareActionType.numberOfTabsChanged)
+        let action = ToolbarAction(numberOfTabs: count,
+                                   windowUUID: windowUUID,
+                                   actionType: ToolbarActionType.numberOfTabsChanged)
         store.dispatch(action)
     }
 }
