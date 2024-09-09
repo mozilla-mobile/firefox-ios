@@ -491,7 +491,7 @@ window.__firefox__.includeOnce("LoginsHelper", function () {
   };
 
   const fillGeneratedPassword = (password) => {
-    field.setUserInput(password);
+    LoginManagerContent.activeField.setUserInput(password);
     Logic.fillConfirmFieldWithGeneratedPassword(
       LoginManagerContent.activeField
     );

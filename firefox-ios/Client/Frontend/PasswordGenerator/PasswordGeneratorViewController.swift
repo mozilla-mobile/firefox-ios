@@ -52,14 +52,7 @@ class PasswordGeneratorViewController: UIViewController, Themeable {
         field.addGestureRecognizer(longPressGesture)
     }
 
-    private lazy var passwordLabel: UILabel = .build { label in
-        label.numberOfLines = 0
-        label.font = FXFontStyles.Regular.body.scaledFont()
-        label.text = "X3yusk3~^V+bc7z"
-        var text = NSMutableAttributedString(string: .PasswordGenerator.passwordReadoutPrefaceA11y)
-        text.append(NSMutableAttributedString(string: label.text!, attributes: [.accessibilitySpeechSpellOut: true]))
-        label.accessibilityAttributedLabel = text
-    }
+    private lazy var passwordLabel: UILabel = .build()
 
     private lazy var passwordRefreshButton: UIButton = .build { button in
         button.setImage(
@@ -68,28 +61,29 @@ class PasswordGeneratorViewController: UIViewController, Themeable {
         button.accessibilityIdentifier = AccessibilityIdentifiers.PasswordGenerator.bottomSheetRefreshStrongPasswordButton
     }
 
-    private lazy var usePasswordButton: PrimaryRoundedButton = .build { button in
-        let usePasswordButtonVM = PrimaryRoundedButtonViewModel(
-            title: .PasswordGenerator.UsePassword,
-            a11yIdentifier: AccessibilityIdentifiers.PasswordGenerator.bottomSheetUsePasswordButton)
-        button.configure(viewModel: usePasswordButtonVM)
-    }
+    private lazy var usePasswordButton: PrimaryRoundedButton = .build()
 
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
+    private var generatedPassword: String
+    private var fillPasswordField: ((String) -> Void)?
     private var contentViewHeightConstraint: NSLayoutConstraint!
 
     // MARK: - Initializers
 
     init(windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
-         notificationCenter: NotificationProtocol = NotificationCenter.default) {
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         generatedPassword: String,
+         fillPasswordField: @escaping (String) -> Void ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.generatedPassword = generatedPassword
+        self.fillPasswordField = fillPasswordField
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -102,6 +96,8 @@ class PasswordGeneratorViewController: UIViewController, Themeable {
     override func viewDidLoad() {
         super.viewDidLoad()
         listenForThemeChange(view)
+        buildPasswordLabel()
+        buildUsePasswordButton()
         setupView()
         applyTheme()
         UIAccessibility.post(notification: .screenChanged, argument: String.PasswordGenerator.PasswordGenerator)
@@ -228,7 +224,30 @@ class PasswordGeneratorViewController: UIViewController, Themeable {
 
     @objc
     func copyText(_ sender: Any?) {
-        UIPasteboard.general.string = passwordLabel.text
+        UIPasteboard.general.string = generatedPassword
+    }
+
+    @objc
+    func useButtonOnClick() {
+        fillPasswordField?(generatedPassword)
+        dismiss(animated: true)
+    }
+
+    private func buildPasswordLabel() {
+        passwordLabel.numberOfLines = 0
+        passwordLabel.font = FXFontStyles.Regular.body.scaledFont()
+        let text = NSMutableAttributedString(string: .PasswordGenerator.passwordReadoutPrefaceA11y)
+        passwordLabel.text = generatedPassword
+        text.append(NSMutableAttributedString(string: passwordLabel.text!, attributes: [.accessibilitySpeechSpellOut: true]))
+        passwordLabel.accessibilityAttributedLabel = text
+    }
+
+    private func buildUsePasswordButton() {
+        let usePasswordButtonVM = PrimaryRoundedButtonViewModel(
+            title: .PasswordGenerator.UsePassword,
+            a11yIdentifier: AccessibilityIdentifiers.PasswordGenerator.bottomSheetUsePasswordButton)
+        usePasswordButton.configure(viewModel: usePasswordButtonVM)
+        usePasswordButton.addTarget(self, action: #selector(useButtonOnClick), for: .touchUpInside)
     }
 }
 

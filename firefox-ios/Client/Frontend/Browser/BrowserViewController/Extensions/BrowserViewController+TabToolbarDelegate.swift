@@ -364,8 +364,8 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
                                     flowType: fxaParameters.flowType,
                                     referringPage: fxaParameters.referringPage)
     }
-    func showPasswordGeneratorBottomSheet() {
-        let passwordGeneratorVC = PasswordGeneratorViewController(windowUUID: windowUUID)
+    func showPasswordGeneratorBottomSheet(generatedPassword: String, fillPasswordField: @escaping (String) -> Void) {
+        let passwordGeneratorVC = PasswordGeneratorViewController(windowUUID: windowUUID, generatedPassword: generatedPassword, fillPasswordField: fillPasswordField)
 
         var bottomSheetVM = BottomSheetViewModel(
             closeButtonA11yLabel: .PasswordGenerator.CloseButtonA11yLabel,

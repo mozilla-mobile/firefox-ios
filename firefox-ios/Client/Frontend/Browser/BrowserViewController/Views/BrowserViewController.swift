@@ -3222,6 +3222,13 @@ extension BrowserViewController: LegacyTabDelegate {
                     }
                 }
             }
+            logins.foundPasswordField = { (password: String) -> Void in
+                self.showPasswordGeneratorBottomSheet(
+                    generatedPassword: password,
+                    fillPasswordField: {_ in
+                        LoginsHelper.fillPasswordFields(password: password, with: tab)
+                    })
+            }
         }
 
         // Credit card autofill setup and callback
