@@ -29,7 +29,7 @@ struct NavigationBarState: StateType, Equatable {
         actionType: .dataClearance,
         iconName: StandardImageIdentifiers.Large.dataClearance,
         isEnabled: true,
-        hasContextualHint: true,
+        contextualHint: ContextualHintType.dataClearance.rawValue,
         a11yLabel: .TabToolbarDataClearanceAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.fireButton)
 

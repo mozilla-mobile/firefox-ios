@@ -36,6 +36,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         UIAccessibility.post(notification: .layoutChanged, argument: dataClearanceContextHintVC)
     }
 
+    func configureNavigationContextualHint(_ view: UIView) {
+
+    }
+
     func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         didTapOnHome()
     }

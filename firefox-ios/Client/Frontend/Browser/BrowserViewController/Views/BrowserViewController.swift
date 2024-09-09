@@ -94,6 +94,7 @@ class BrowserViewController: UIViewController,
     var appAuthenticator: AppAuthenticationProtocol
     var toolbarContextHintVC: ContextualHintViewController
     var dataClearanceContextHintVC: ContextualHintViewController
+    var navigationContextHintVC: ContextualHintViewController
     let shoppingContextHintVC: ContextualHintViewController
     var windowUUID: WindowUUID { return tabManager.windowUUID }
     var currentWindowUUID: UUID? { return windowUUID }
@@ -262,6 +263,11 @@ class BrowserViewController: UIViewController,
         )
         self.dataClearanceContextHintVC = ContextualHintViewController(with: dataClearanceViewProvider,
                                                                        windowUUID: windowUUID)
+
+        let navigationViewProvider = ContextualHintViewProvider(forHintType: .navigation, with: profile)
+
+        self.navigationContextHintVC = ContextualHintViewController(with: navigationViewProvider, windowUUID: windowUUID)
+
         super.init(nibName: nil, bundle: nil)
         didInit()
     }
@@ -3073,9 +3079,17 @@ class BrowserViewController: UIViewController,
         searchController?.searchTelemetry?.determineInteractionType()
     }
 
-    // Also implements NavigationToolbarContainerDelegate::configureContextualHint(for button: UIButton)
-    func configureContextualHint(for button: UIButton) {
-        configureDataClearanceContextualHint(button)
+    // Also implements 
+    // NavigationToolbarContainerDelegate::configureContextualHint(for button: UIButton, with contextualHint: String)
+    func configureContextualHint(for button: UIButton, with contextualHint: String) {
+        switch contextualHint {
+        case ContextualHintType.dataClearance.rawValue:
+            configureDataClearanceContextualHint(button)
+        case ContextualHintType.navigation.rawValue:
+            configureNavigationContextualHint(button)
+        default:
+            return
+        }
     }
 
     func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool) {

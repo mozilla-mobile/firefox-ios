@@ -11,7 +11,7 @@ protocol AddressToolbarContainerDelegate: AnyObject {
     func searchSuggestions(searchTerm: String)
     func openBrowser(searchTerm: String)
     func openSuggestions(searchTerm: String)
-    func configureContextualHint(for button: UIButton)
+    func configureContextualHint(for button: UIButton, with contextualHint: String)
     func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool)
     func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]?
     func addressToolbarDidEnterOverlayMode(_ view: UIView)
@@ -335,9 +335,13 @@ final class AddressToolbarContainer: UIView,
         delegate?.addressToolbarContainerAccessibilityActions()
     }
 
-    func configureContextualHint(_ addressToolbar: BrowserAddressToolbar, for button: UIButton) {
+    func configureContextualHint(
+        _ addressToolbar: BrowserAddressToolbar,
+        for button: UIButton,
+        with contextualHint: String
+    ) {
         if addressToolbar == toolbar {
-            delegate?.configureContextualHint(for: button)
+            delegate?.configureContextualHint(for: button, with: contextualHint)
         }
     }
 

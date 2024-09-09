@@ -8,7 +8,7 @@ import Redux
 import UIKit
 
 protocol NavigationToolbarContainerDelegate: AnyObject {
-    func configureContextualHint(for: UIButton)
+    func configureContextualHint(for: UIButton, with contextualHint: String)
 }
 
 class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
@@ -100,7 +100,7 @@ class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
 }
 
 extension NavigationToolbarContainer: BrowserNavigationToolbarDelegate {
-    func configureContextualHint(for button: UIButton) {
-        toolbarDelegate?.configureContextualHint(for: button)
+    func configureContextualHint(for button: UIButton, with contextualHint: String) {
+        toolbarDelegate?.configureContextualHint(for: button, with: contextualHint)
     }
 }

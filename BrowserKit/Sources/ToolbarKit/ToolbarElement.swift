@@ -27,7 +27,7 @@ public struct ToolbarElement: Equatable {
     let shouldDisplayAsHighlighted: Bool
 
     /// Indicates that there is an associated contextual hint
-    let hasContextualHint: Bool?
+    let contextualHint: String?
 
     /// Accessibility label of the toolbar element
     let a11yLabel: String
@@ -63,7 +63,7 @@ public struct ToolbarElement: Equatable {
                 isEnabled: Bool,
                 isFlippedForRTL: Bool = false,
                 shouldDisplayAsHighlighted: Bool = false,
-                hasContextualHint: Bool = false,
+                contextualHint: String? = nil,
                 a11yLabel: String,
                 a11yHint: String?,
                 a11yId: String,
@@ -79,7 +79,7 @@ public struct ToolbarElement: Equatable {
         self.isEnabled = isEnabled
         self.isFlippedForRTL = isFlippedForRTL
         self.shouldDisplayAsHighlighted = shouldDisplayAsHighlighted
-        self.hasContextualHint = hasContextualHint
+        self.contextualHint = contextualHint
         self.onSelected = onSelected
         self.onLongPress = onLongPress
         self.a11yLabel = a11yLabel
@@ -98,7 +98,7 @@ public struct ToolbarElement: Equatable {
         lhs.isEnabled == rhs.isEnabled &&
         lhs.isFlippedForRTL == rhs.isFlippedForRTL &&
         lhs.shouldDisplayAsHighlighted == rhs.shouldDisplayAsHighlighted &&
-        lhs.hasContextualHint == rhs.hasContextualHint &&
+        lhs.contextualHint == rhs.contextualHint &&
         lhs.hasLongPressAction == rhs.hasLongPressAction &&
         lhs.a11yLabel == rhs.a11yLabel &&
         lhs.a11yHint == rhs.a11yHint &&
