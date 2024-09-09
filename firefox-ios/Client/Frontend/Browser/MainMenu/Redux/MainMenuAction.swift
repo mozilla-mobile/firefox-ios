@@ -17,10 +17,13 @@ enum MainMenuActionType: ActionType {
     case mainMenuDidAppear
     case toggleNightMode
     case closeMenu
+    case newTab(isPrivate: Bool)
     case show(MainMenuNavigationDestination)
 }
 
 enum MainMenuNavigationDestination {
+    case newTab
+    case newPrivateTab
     case bookmarks
     case customizeHomepage
     case downloads

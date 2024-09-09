@@ -61,6 +61,12 @@ struct MainMenuState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 menuElements: MainMenuConfigurationUtility().populateMenuElements(with: state.windowUUID)
             )
+        case MainMenuActionType.newTab(isPrivate: let isPrivate):
+            return MainMenuState(
+                windowUUID: state.windowUUID,
+                menuElements: MainMenuConfigurationUtility().populateMenuElements(with: state.windowUUID),
+                navigationDestination: isPrivate ? .newPrivateTab : .newTab
+            )
         case MainMenuActionType.show(let destination):
             return MainMenuState(
                 windowUUID: state.windowUUID,
@@ -76,9 +82,7 @@ struct MainMenuState: ScreenState, Equatable {
         default:
             return MainMenuState(
                 windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                navigationDestination: state.navigationDestination,
-                shouldDismiss: state.shouldDismiss
+                menuElements: state.menuElements
             )
         }
     }
@@ -109,7 +113,7 @@ struct MainMenuConfigurationUtility {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenu
+                            actionType: MainMenuActionType.newTab(isPrivate: false)
                         )
                     )
                 }
@@ -126,7 +130,7 @@ struct MainMenuConfigurationUtility {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenu
+                            actionType: MainMenuActionType.newTab(isPrivate: true)
                         )
                     )
                 }

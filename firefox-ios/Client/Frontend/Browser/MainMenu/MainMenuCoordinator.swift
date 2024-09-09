@@ -7,12 +7,14 @@ import Foundation
 import Shared
 
 protocol MainMenuCoordinatorDelegate: AnyObject {
-    // Define any coordinator delegate methods
+    func openNewTab(inPrivateMode: Bool)
+    func showLibraryPanel(_ panel: Route.HomepanelSection)
+    func showSettings(at destination: Route.SettingsSection)
 }
 
 class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     weak var parentCoordinator: ParentCoordinatorDelegate?
-    weak var navigationHandler: BrowserNavigationHandler?
+    weak var navigationHandler: MainMenuCoordinatorDelegate?
     private let tabManager: TabManager
 
     init(
@@ -38,20 +40,24 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
 
             switch destination {
             case .bookmarks:
-                self.navigationHandler?.show(homepanelSection: .bookmarks)
+                self.navigationHandler?.showLibraryPanel(.bookmarks)
             case .customizeHomepage:
-                self.navigationHandler?.show(settings: .homePage)
+                self.navigationHandler?.showSettings(at: .homePage)
             case .downloads:
-                self.navigationHandler?.show(homepanelSection: .downloads)
+                self.navigationHandler?.showLibraryPanel(.downloads)
             case .getHelp:
                 break
 //                self.navigationHandler?.openupr
             case .history:
-                self.navigationHandler?.show(homepanelSection: .history)
+                self.navigationHandler?.showLibraryPanel(.history)
+            case .newTab:
+                self.navigationHandler?.openNewTab(inPrivateMode: false)
+            case .newPrivateTab:
+                self.navigationHandler?.openNewTab(inPrivateMode: true)
             case .passwords:
-                self.navigationHandler?.show(settings: .password)
+                self.navigationHandler?.showSettings(at: .password)
             case .settings:
-                self.navigationHandler?.show(settings: .general)
+                self.navigationHandler?.showSettings(at: .general)
             }
 
             self.parentCoordinator?.didFinish(from: self)
