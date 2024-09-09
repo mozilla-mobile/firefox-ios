@@ -11,6 +11,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         static let horizontalSpace: CGFloat = 8
         static let gradientViewWidth: CGFloat = 40
         static let searchEngineImageViewCornerRadius: CGFloat = 4
+        static let iconContainerCornerRadius: CGFloat = 8
         static let lockIconImageViewSize = CGSize(width: 20, height: 20)
         static let searchEngineImageViewSize = CGSize(width: 24, height: 24)
     }
@@ -60,6 +61,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     }
 
     private lazy var searchEngineContentView: UIView = .build()
+    private lazy var iconContainerBackgroundView: UIView = .build()
 
     private lazy var searchEngineImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
@@ -139,10 +141,26 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         super.layoutSubviews()
         updateGradient()
         updateURLTextFieldLeadingConstraintBasedOnState()
+        applyCornerRadiusToLeftCorners(
+            view: iconContainerBackgroundView,
+            radius: UX.iconContainerCornerRadius
+        )
+    }
+
+    private func applyCornerRadiusToLeftCorners(view: UIView, radius: CGFloat) {
+        let path = UIBezierPath(
+            roundedRect: view.bounds,
+            byRoundingCorners: [.topLeft, .bottomLeft],
+            cornerRadii: CGSize(width: radius, height: radius)
+        )
+        let mask = CAShapeLayer()
+        mask.path = path.cgPath
+        view.layer.mask = mask
     }
 
     private func setupLayout() {
         addSubviews(urlTextField, iconContainerStackView, gradientView)
+        iconContainerStackView.addSubview(iconContainerBackgroundView)
         searchEngineContentView.addSubview(searchEngineImageView)
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
 
@@ -159,6 +177,11 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
             urlTextField.topAnchor.constraint(equalTo: topAnchor),
             urlTextField.bottomAnchor.constraint(equalTo: bottomAnchor),
             urlTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalSpace),
+
+            iconContainerBackgroundView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
+            iconContainerBackgroundView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor),
+            iconContainerBackgroundView.leadingAnchor.constraint(equalTo: urlTextField.leadingAnchor),
+            iconContainerBackgroundView.trailingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor),
 
             searchEngineImageView.heightAnchor.constraint(equalToConstant: UX.searchEngineImageViewSize.height),
             searchEngineImageView.widthAnchor.constraint(equalToConstant: UX.searchEngineImageViewSize.width),
@@ -404,6 +427,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         urlTextFieldSubdomainColor = colors.textSecondary
         gradientLayer.colors = colors.layerGradientURL.cgColors.reversed()
         searchEngineImageView.backgroundColor = colors.layer2
+        iconContainerBackgroundView.backgroundColor = colors.layerSearch
         lockIconButton.tintColor = colors.iconPrimary
         lockIconButton.backgroundColor = colors.layerSearch
         urlTextField.applyTheme(theme: theme)

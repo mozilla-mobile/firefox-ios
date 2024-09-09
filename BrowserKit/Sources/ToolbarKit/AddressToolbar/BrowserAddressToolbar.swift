@@ -21,6 +21,8 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         static let actionSpacing: CGFloat = 0
         static let buttonSize = CGSize(width: 44, height: 44)
         static let locationHeight: CGFloat = 44
+        // This could be changed at some point, depending on the a11y UX design.
+        static let locationMaxHeight: CGFloat = 54
     }
 
     private weak var toolbarDelegate: AddressToolbarDelegate?
@@ -50,14 +52,25 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
     private var toolbarBottomBorderHeightConstraint: NSLayoutConstraint?
     private var leadingNavigationActionStackConstraint: NSLayoutConstraint?
     private var trailingBrowserActionStackConstraint: NSLayoutConstraint?
+    private var locationContainerHeightConstraint: NSLayoutConstraint?
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
         setupLayout()
+        setupObservers()
+        adjustHeightConstraintForCurrentContentSizeCategory()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(
+            self,
+            name: UIContentSizeCategory.didChangeNotification,
+            object: nil
+        )
     }
 
     public func configure(state: AddressToolbarState,
@@ -135,6 +148,9 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
             constant: -UX.horizontalEdgeSpace)
         trailingBrowserActionStackConstraint?.isActive = true
 
+        locationContainerHeightConstraint = locationContainer.heightAnchor.constraint(equalToConstant: UX.locationHeight)
+        locationContainerHeightConstraint?.isActive = true
+
         NSLayoutConstraint.activate([
             toolbarContainerView.leadingAnchor.constraint(equalTo: leadingAnchor),
             toolbarContainerView.topAnchor.constraint(equalTo: toolbarTopBorderView.topAnchor,
@@ -156,7 +172,6 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
 
             locationContainer.topAnchor.constraint(equalTo: toolbarContainerView.topAnchor),
             locationContainer.bottomAnchor.constraint(equalTo: toolbarContainerView.bottomAnchor),
-            locationContainer.heightAnchor.constraint(equalToConstant: UX.locationHeight),
 
             locationView.leadingAnchor.constraint(equalTo: locationContainer.leadingAnchor),
             locationView.topAnchor.constraint(equalTo: locationContainer.topAnchor),
@@ -180,8 +195,30 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         setupAccessibility()
     }
 
+    private func setupObservers() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(adjustHeightConstraintForCurrentContentSizeCategory),
+            name: UIContentSizeCategory.didChangeNotification,
+            object: nil
+        )
+    }
+
+    // MARK: - Accessibility
     private func setupAccessibility() {
         addInteraction(UILargeContentViewerInteraction())
+    }
+
+    @objc
+    private func adjustHeightConstraintForCurrentContentSizeCategory() {
+        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+        if contentSizeCategory == .accessibilityExtraExtraLarge ||
+            contentSizeCategory == .accessibilityExtraExtraExtraLarge {
+            locationContainerHeightConstraint?.constant = UX.locationMaxHeight
+        } else {
+            locationContainerHeightConstraint?.constant = UX.locationHeight
+        }
+        setNeedsLayout()
     }
 
     internal func updateActions(state: AddressToolbarState) {
