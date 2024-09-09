@@ -61,11 +61,11 @@ struct MainMenuState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 menuElements: MainMenuConfigurationUtility().populateMenuElements(with: state.windowUUID)
             )
-        case MainMenuActionType.showSettings:
+        case MainMenuActionType.show(let destination):
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 menuElements: MainMenuConfigurationUtility().populateMenuElements(with: state.windowUUID),
-                navigationDestination: .settings
+                navigationDestination: destination
             )
         case MainMenuActionType.closeMenu:
             return MainMenuState(
@@ -88,7 +88,6 @@ struct MainMenuConfigurationUtility {
     func populateMenuElements(with uuid: WindowUUID) -> [[MenuElement]] {
         return [
             getNewTabSection(with: uuid),
-            getPageToolsSection(with: uuid),
             getLibrariesSection(with: uuid),
             getOtherToolsSection(with: uuid)
         ]
@@ -99,7 +98,7 @@ struct MainMenuConfigurationUtility {
     ) -> [MenuElement] {
         return [
             MenuElement(
-                title: "Test title",
+                title: .MainMenu.TabsSection.NewTab,
                 iconName: "",
                 isEnabled: true,
                 isActive: false,
@@ -116,7 +115,7 @@ struct MainMenuConfigurationUtility {
                 }
             ),
             MenuElement(
-                title: "Test title",
+                title: .MainMenu.TabsSection.NewPrivateTab,
                 iconName: "",
                 isEnabled: true,
                 isActive: false,
@@ -140,7 +139,7 @@ struct MainMenuConfigurationUtility {
     ) -> [MenuElement] {
         return [
             MenuElement(
-                title: "Test title",
+                title: .MainMenu.PanelLinkSection.Bookmarks,
                 iconName: "",
                 isEnabled: true,
                 isActive: false,
@@ -151,13 +150,13 @@ struct MainMenuConfigurationUtility {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenu
+                            actionType: MainMenuActionType.show(.bookmarks)
                         )
                     )
                 }
             ),
             MenuElement(
-                title: "Test title",
+                title: .MainMenu.PanelLinkSection.History,
                 iconName: "",
                 isEnabled: true,
                 isActive: false,
@@ -168,13 +167,13 @@ struct MainMenuConfigurationUtility {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenu
+                            actionType: MainMenuActionType.show(.history)
                         )
                     )
                 }
             ),
             MenuElement(
-                title: "Test title",
+                title: .MainMenu.PanelLinkSection.Downloads,
                 iconName: "",
                 isEnabled: true,
                 isActive: false,
@@ -185,13 +184,13 @@ struct MainMenuConfigurationUtility {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenu
+                            actionType: MainMenuActionType.show(.downloads)
                         )
                     )
                 }
             ),
             MenuElement(
-                title: "Test title",
+                title: .MainMenu.PanelLinkSection.Passwords,
                 iconName: "",
                 isEnabled: true,
                 isActive: false,
@@ -202,82 +201,7 @@ struct MainMenuConfigurationUtility {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenu
-                        )
-                    )
-                }
-            )
-        ]
-    }
-
-    private func getPageToolsSection(
-        with uuid: WindowUUID
-    ) -> [MenuElement] {
-        return [
-            MenuElement(
-                title: "Test title",
-                iconName: "",
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: "",
-                a11yHint: "",
-                a11yId: "",
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenu
-                        )
-                    )
-                }
-            ),
-            MenuElement(
-                title: "Test title",
-                iconName: "",
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: "",
-                a11yHint: "",
-                a11yId: "",
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenu
-                        )
-                    )
-                }
-            ),
-            MenuElement(
-                title: "Test title",
-                iconName: "",
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: "",
-                a11yHint: "",
-                a11yId: "",
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenu
-                        )
-                    )
-                }
-            ),
-            MenuElement(
-                title: "Test title",
-                iconName: "",
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: "",
-                a11yHint: "",
-                a11yId: "",
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenu
+                            actionType: MainMenuActionType.show(.passwords)
                         )
                     )
                 }
@@ -290,7 +214,27 @@ struct MainMenuConfigurationUtility {
     ) -> [MenuElement] {
         return [
             MenuElement(
-                title: "Test title",
+                title: .MainMenu.OtherToolsSection.CustomizeHomepage,
+                iconName: "",
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: "",
+                a11yHint: "",
+                a11yId: "",
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.show(.customizeHomepage)
+                        )
+                    )
+                }
+            ),
+            MenuElement(
+                title: String(
+                    format: .MainMenu.OtherToolsSection.WhatsNew,
+                    AppName.shortName.rawValue
+                ),
                 iconName: "",
                 isEnabled: true,
                 isActive: false,
@@ -307,24 +251,7 @@ struct MainMenuConfigurationUtility {
                 }
             ),
             MenuElement(
-                title: "Test title",
-                iconName: "",
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: "",
-                a11yHint: "",
-                a11yId: "",
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenu
-                        )
-                    )
-                }
-            ),
-            MenuElement(
-                title: "Test title",
+                title: .MainMenu.OtherToolsSection.GetHelp,
                 iconName: "",
                 isEnabled: true,
                 isActive: false,
@@ -352,157 +279,7 @@ struct MainMenuConfigurationUtility {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.showSettings
-                        )
-                    )
-                }
-            )
-        ]
-    }
-
-    private func getToolsSubmenu(
-        with uuid: WindowUUID
-    ) -> [MenuElement] {
-        return [
-            MenuElement(
-                title: "Test title",
-                iconName: "",
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: "",
-                a11yHint: "",
-                a11yId: "",
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenu
-                        )
-                    )
-                }
-            ),
-            MenuElement(
-                title: "Test title",
-                iconName: "",
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: "",
-                a11yHint: "",
-                a11yId: "",
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenu
-                        )
-                    )
-                }
-            ),
-            MenuElement(
-                title: "Test title",
-                iconName: "",
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: "",
-                a11yHint: "",
-                a11yId: "",
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenu
-                        )
-                    )
-                }
-            ),
-            MenuElement(
-                title: "Test title",
-                iconName: "",
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: "",
-                a11yHint: "",
-                a11yId: "",
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenu
-                        )
-                    )
-                }
-            )
-        ]
-    }
-
-    private func getSaveSumbenu(
-        with uuid: WindowUUID
-    ) -> [MenuElement] {
-        return [
-            MenuElement(
-                title: "Test title",
-                iconName: "",
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: "",
-                a11yHint: "",
-                a11yId: "",
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenu
-                        )
-                    )
-                }
-            ),
-            MenuElement(
-                title: "Test title",
-                iconName: "",
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: "",
-                a11yHint: "",
-                a11yId: "",
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenu
-                        )
-                    )
-                }
-            ),
-            MenuElement(
-                title: "Test title",
-                iconName: "",
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: "",
-                a11yHint: "",
-                a11yId: "",
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenu
-                        )
-                    )
-                }
-            ),
-            MenuElement(
-                title: "Test title",
-                iconName: "",
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: "",
-                a11yHint: "",
-                a11yId: "",
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenu
+                            actionType: MainMenuActionType.show(.settings)
                         )
                     )
                 }

@@ -37,6 +37,19 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
             guard let self else { return }
 
             switch destination {
+            case .bookmarks:
+                self.navigationHandler?.show(homepanelSection: .bookmarks)
+            case .customizeHomepage:
+                self.navigationHandler?.show(settings: .homePage)
+            case .downloads:
+                self.navigationHandler?.show(homepanelSection: .downloads)
+            case .getHelp:
+                break
+//                self.navigationHandler?.openupr
+            case .history:
+                self.navigationHandler?.show(homepanelSection: .history)
+            case .passwords:
+                self.navigationHandler?.show(settings: .password)
             case .settings:
                 self.navigationHandler?.show(settings: .general)
             }
