@@ -12,6 +12,7 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
 
 class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     weak var parentCoordinator: ParentCoordinatorDelegate?
+    weak var navigationHandler: BrowserNavigationHandler?
     private let tabManager: TabManager
 
     init(
@@ -31,9 +32,22 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         router.present(viewController, animated: true)
     }
 
+    func navigateTo(_ destination: MainMenuNavigationDestination, animated: Bool) {
+        router.dismiss(animated: animated, completion: { [weak self] in
+            guard let self else { return }
+
+            switch destination {
+            case .settings:
+                self.navigationHandler?.show(settings: .general)
+            }
+
+            self.parentCoordinator?.didFinish(from: self)
+        })
+    }
+
     func dismissModal(animated: Bool) {
         router.dismiss(animated: animated, completion: nil)
-        parentCoordinator?.didFinish(from: self)
+        self.parentCoordinator?.didFinish(from: self)
     }
 
     private func createMainMenuViewController() -> MainMenuViewController {

@@ -156,6 +156,11 @@ class MainMenuViewController: UIViewController,
 
         menuContent.updateDataSource(with: menuState.menuElements)
 
+        if let navigationDestination = menuState.navigationDestination {
+            coordinator?.navigateTo(navigationDestination, animated: true)
+            return
+        }
+
         if menuState.shouldDismiss {
             coordinator?.dismissModal(animated: true)
         }

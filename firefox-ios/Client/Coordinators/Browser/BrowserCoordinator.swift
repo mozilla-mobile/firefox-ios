@@ -530,6 +530,7 @@ class BrowserCoordinator: BaseCoordinator,
 
         let coordinator = MainMenuCoordinator(router: router, tabManager: tabManager)
         coordinator.parentCoordinator = self
+        coordinator.navigationHandler = self
         add(child: coordinator)
         return coordinator
     }
