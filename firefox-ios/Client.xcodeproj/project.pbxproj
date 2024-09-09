@@ -8914,11 +8914,8 @@
 				E17798A02BD8043800F6F0EB /* ToolbarKit in Frameworks */,
 				E6231C011B90A44F005ABB0D /* libz.tbd in Frameworks */,
 				E4B3348A1BBF23F9004E2BFF /* AdSupport.framework in Frameworks */,
-<<<<<<< HEAD
-=======
 				5A984D362C8A3407007938C9 /* Kingfisher in Frameworks */,
 				819656172C80C6F300E62323 /* MenuKit in Frameworks */,
->>>>>>> faf3161fe (Add FXIOS-9928 Bundle DefaultSuggestedSites and Workaround for Blurry Google Favicons [Favicon Refactor] (#21832))
 				8AB30EC82B6C038600BD9A9B /* Lottie in Frameworks */,
 				5A871488292EA1440039A5BD /* Fuzi in Frameworks */,
 				432BD0242790EBD000A0F3C3 /* Adjust in Frameworks */,
@@ -13701,11 +13698,8 @@
 				8AB30EC72B6C038600BD9A9B /* Lottie */,
 				AB2AC6622BCFD0A200022AAB /* X509 */,
 				E177989F2BD8043800F6F0EB /* ToolbarKit */,
-<<<<<<< HEAD
-=======
 				5A984D352C8A3407007938C9 /* Kingfisher */,
 				819656162C80C6F300E62323 /* MenuKit */,
->>>>>>> faf3161fe (Add FXIOS-9928 Bundle DefaultSuggestedSites and Workaround for Blurry Google Favicons [Favicon Refactor] (#21832))
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
