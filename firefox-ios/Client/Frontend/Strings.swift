@@ -6894,6 +6894,53 @@ extension String {
     }
 }
 
+
+// MARK: - Password generator
+extension String {
+    public struct PasswordGenerator {
+        public static let UseStrongPassword = MZLocalizedString(
+            key: "PasswordGenerator.UseStrongPassword.v132",
+            tableName: "PasswordGenerator",
+            value: "Use a strong password?",
+            comment: "Header Text displayed when a user interacts with the password field in a signup form, as part of a popup. A random password has been generated for the user -- clicking a button fills in the password of the signup form with this password.")
+        public static let PasswordGeneratorInformation = MZLocalizedString(
+            key: "PasswordGenerator.PasswordGeneratorInformation.v132",
+            tableName: "PasswordGenerator",
+            value: "Protect your account by using a strong, randomly generated password.",
+            comment: "Text displayed when a user interacts with the password field in a signup form, as part of a popup. This popup allows the user to generate a password that they have the option to use when signing up for an account.")
+        public static let UsePassword = MZLocalizedString(
+            key: "PasswordGenerator.UsePassword.v132",
+            tableName: "PasswordGenerator",
+            value: "Use Password",
+            comment: "Button displayed when a user interacts with the password field in a signup form, as part of a popup. A random password has been generated for the user and clicking this button fills in the password of the signup form with this password.")
+        public static let PasswordGenerator = MZLocalizedString(
+            key: "PasswordGenerator.PasswordGenerator.v132",
+            tableName: "PasswordGenerator",
+            value: "Password Generator",
+            comment: "Accessibility label describing a feature that generates a password when the password field of a signup form is interacted with.")
+        public static let CloseButtonA11yLabel = MZLocalizedString(
+            key: "PasswordGenerator.CloseButtonA11ylabel.v132",
+            tableName: "PasswordGenerator",
+            value: "Close",
+            comment: "Accessibility label describing the close button for the popup related to a feature that generates a password when the password field of a signup form is interacted with.")
+        public static let refreshStrongPasswordButtonA11yLabel = MZLocalizedString(
+            key: "PasswordGenerator.refreshStrongPasswordButtonA11yLabel.v132",
+            tableName: "PasswordGenerator",
+            value: "Generate a new strong password",
+            comment: "Accessibility label describing the refresh password button for the popup related to a feature that generates a password when the password field of a signup form is interacted with.")
+        public static let passwordReadoutPrefaceA11y = MZLocalizedString(
+            key: "PasswordGenerator.passwordReadoutPrefaceA11y.v132",
+            tableName: "PasswordGenerator",
+            value: "Generated password: ",
+            comment: "Prefix such that an accesibility user is alerted to the fact that a strongly generated password is going to be announced following this string.")
+        public static let copyStrongPassword = MZLocalizedString(
+            key: "PasswordGenerator.copyStrongPassword.v132",
+            tableName: "PasswordGenerator",
+            value: "Copy",
+            comment: "When a user creates an account they have the option to generate a strong password to use for this new account. The user is capable of copying this password by long pressing the generated value displayed to a user in a popup.")
+    }
+}
+
 // MARK: - v35 Strings
 extension String {
     public static let FirefoxHomeJumpBackInSectionTitle = MZLocalizedString(
