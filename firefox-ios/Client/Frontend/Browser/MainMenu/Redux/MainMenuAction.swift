@@ -13,6 +13,7 @@ final class MainMenuAction: Action {
 }
 
 enum MainMenuActionType: ActionType {
+    case viewDidLoad
     case mainMenuDidAppear
     case toggleNightMode
     case closeMenu

@@ -53,8 +53,6 @@ class MainMenuViewController: UIViewController,
 
     var currentWindowUUID: UUID? { return windowUUID }
 
-    private var fakeData: [[MenuElement]]
-
     // MARK: - Initializers
     init(
         windowUUID: WindowUUID,
@@ -67,7 +65,6 @@ class MainMenuViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         menuState = MainMenuState(windowUUID: windowUUID)
-        self.fakeData = []
         super.init(nibName: nil, bundle: nil)
 
         setupNotifications(forObserver: self,
@@ -86,32 +83,14 @@ class MainMenuViewController: UIViewController,
         sheetPresentationController?.delegate = self
         scrollView.delegate = self
 
-        let fakeMenuItem = MenuElement(
-            title: "Test title",
-            iconName: "",
-            isEnabled: true,
-            isActive: false,
-            a11yLabel: "",
-            a11yHint: "",
-            a11yId: "",
-            action: {
-                store.dispatch(
-                    MainMenuAction(
-                        windowUUID: self.windowUUID,
-                        actionType: MainMenuActionType.closeMenu
-                    )
-                )
-            }
-        )
-        fakeData = [
-            [fakeMenuItem, fakeMenuItem],
-            [fakeMenuItem, fakeMenuItem, fakeMenuItem, fakeMenuItem, fakeMenuItem],
-            [fakeMenuItem, fakeMenuItem, fakeMenuItem, fakeMenuItem, fakeMenuItem],
-            [fakeMenuItem, fakeMenuItem, fakeMenuItem, fakeMenuItem, fakeMenuItem],
-            [fakeMenuItem, fakeMenuItem],
-        ]
         setupView()
         listenForThemeChange(view)
+        store.dispatch(
+            MainMenuAction(
+                windowUUID: self.windowUUID,
+                actionType: MainMenuActionType.viewDidLoad
+            )
+        )
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -136,7 +115,7 @@ class MainMenuViewController: UIViewController,
 
     // MARK: - UI setup
     private func setupView() {
-        menuContent.updateDataSource(with: fakeData)
+        menuContent.updateDataSource(with: menuState.menuElements)
         view.addSubview(menuContent)
 
         NSLayoutConstraint.activate([
@@ -174,6 +153,9 @@ class MainMenuViewController: UIViewController,
 
     func newState(state: MainMenuState) {
         menuState = state
+
+        menuContent.updateDataSource(with: menuState.menuElements)
+
         if menuState.shouldDismiss {
             coordinator?.dismissModal(animated: true)
         }
@@ -222,7 +204,9 @@ class MainMenuViewController: UIViewController,
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate
-    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) { }
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        coordinator?.dismissModal(animated: true)
+    }
 
     // MARK: - UISheetPresentationControllerDelegate
     func sheetPresentationControllerDidChangeSelectedDetentIdentifier(
