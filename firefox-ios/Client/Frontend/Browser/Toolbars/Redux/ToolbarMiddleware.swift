@@ -22,6 +22,10 @@ final class ToolbarMiddleware: FeatureFlaggable {
     lazy var toolbarProvider: Middleware<AppState> = { state, action in
         if let action = action as? GeneralBrowserMiddlewareAction {
             self.resolveGeneralBrowserMiddlewareActions(action: action, state: state)
+        } else if let action = action as? MicrosurveyPromptMiddlewareAction {
+            self.resolveMicrosurveyActions(windowUUID: action.windowUUID, actionType: action.actionType, state: state)
+        } else if let action = action as? MicrosurveyPromptAction {
+            self.resolveMicrosurveyActions(windowUUID: action.windowUUID, actionType: action.actionType, state: state)
         } else if let action = action as? ToolbarMiddlewareAction {
             self.resolveToolbarMiddlewareActions(action: action, state: state)
         }
@@ -49,11 +53,22 @@ final class ToolbarMiddleware: FeatureFlaggable {
             store.dispatch(action)
 
         case GeneralBrowserMiddlewareActionType.websiteDidScroll:
-            updateBorderPosition(action: action, state: state)
+            updateTopAddressBorderPosition(action: action, state: state)
 
         case GeneralBrowserMiddlewareActionType.toolbarPositionChanged:
             updateToolbarPosition(action: action, state: state)
 
+        default:
+            break
+        }
+    }
+
+    private func resolveMicrosurveyActions(windowUUID: WindowUUID, actionType: ActionType, state: AppState) {
+        switch actionType {
+        case MicrosurveyPromptMiddlewareActionType.initialize:
+            updateToolbarBorders(windowUUID: windowUUID, state: state, isMicrosurveyShown: true)
+        case MicrosurveyPromptActionType.closePrompt:
+            updateToolbarBorders(windowUUID: windowUUID, state: state, isMicrosurveyShown: false)
         default:
             break
         }
@@ -206,28 +221,57 @@ final class ToolbarMiddleware: FeatureFlaggable {
         }
     }
 
-    private func updateBorderPosition(action: GeneralBrowserMiddlewareAction, state: AppState) {
+    // MARK: - Border
+    private func updateTopAddressBorderPosition(action: GeneralBrowserMiddlewareAction, state: AppState) {
         guard let scrollOffset = action.scrollOffset,
               let toolbarState = state.screenState(ToolbarState.self,
                                                    for: .toolbar,
-                                                   window: action.windowUUID)
+                                                   window: action.windowUUID),
+              toolbarState.toolbarPosition == .top
         else { return }
 
-        let addressBorderPosition = getAddressBorderPosition(toolbarPosition: toolbarState.toolbarPosition,
-                                                             isPrivate: toolbarState.isPrivateMode,
-                                                             scrollY: scrollOffset.y)
-        let displayNavToolbarBorder = shouldDisplayNavigationToolbarBorder(
-            toolbarPosition: toolbarState.toolbarPosition)
+        let addressBorderPosition = getAddressBorderPosition(
+            toolbarPosition: toolbarState.toolbarPosition,
+            isPrivate: toolbarState.isPrivateMode,
+            scrollY: scrollOffset.y
+        )
 
         let needsAddressToolbarUpdate = toolbarState.addressToolbar.borderPosition != addressBorderPosition
-        let needsNavToolbarUpdate = toolbarState.navigationToolbar.displayBorder != displayNavToolbarBorder
-        guard needsAddressToolbarUpdate || needsNavToolbarUpdate else { return }
 
-        let toolbarAction = ToolbarAction(addressBorderPosition: addressBorderPosition,
-                                          displayNavBorder: displayNavToolbarBorder,
-                                          windowUUID: action.windowUUID,
-                                          actionType: ToolbarActionType.borderPositionChanged)
+        guard needsAddressToolbarUpdate else { return }
+
+        let toolbarAction = ToolbarAction(
+            addressBorderPosition: addressBorderPosition,
+            windowUUID: action.windowUUID,
+            actionType: ToolbarActionType.borderPositionChanged
+        )
         store.dispatch(toolbarAction)
+    }
+
+    private func isMicrosurveyShown(action: GeneralBrowserMiddlewareAction, state: AppState) -> Bool {
+        let bvcState = state.screenState(BrowserViewControllerState.self, for: .browserViewController, window: action.windowUUID)
+        return bvcState?.microsurveyState.showPrompt ?? false
+    }
+
+    // Update border to hide for bottom toolbars when microsurvey is shown,
+    // so that it appears to belong to the app and harder to spoof
+    private func updateToolbarBorders(windowUUID: WindowUUID, state: AppState, isMicrosurveyShown: Bool) {
+        guard let toolbarState = state.screenState(ToolbarState.self,
+                                                   for: .toolbar,
+                                                   window: windowUUID) else { return }
+
+        if toolbarState.toolbarPosition == .top {
+            let toolbarAction = ToolbarAction(displayNavBorder: !isMicrosurveyShown,
+                                              windowUUID: windowUUID,
+                                              actionType: ToolbarActionType.borderPositionChanged)
+            store.dispatch(toolbarAction)
+        } else {
+            let toolbarAction = ToolbarAction(addressBorderPosition: isMicrosurveyShown ? .none : .top,
+                                              displayNavBorder: false,
+                                              windowUUID: windowUUID,
+                                              actionType: ToolbarActionType.borderPositionChanged)
+            store.dispatch(toolbarAction)
+        }
     }
 
     private func updateToolbarPosition(action: GeneralBrowserMiddlewareAction, state: AppState) {
@@ -239,10 +283,16 @@ final class ToolbarMiddleware: FeatureFlaggable {
         else { return }
 
         let addressToolbarPosition = addressToolbarPositionFromSearchBarPosition(searchBarPosition)
-        let addressBorderPosition = getAddressBorderPosition(toolbarPosition: addressToolbarPosition,
+        var addressBorderPosition = getAddressBorderPosition(toolbarPosition: addressToolbarPosition,
                                                              isPrivate: toolbarState.isPrivateMode,
                                                              scrollY: scrollOffset.y)
-        let displayNavToolbarBorder = shouldDisplayNavigationToolbarBorder(toolbarPosition: addressToolbarPosition)
+        var displayNavToolbarBorder = shouldDisplayNavigationToolbarBorder(toolbarPosition: addressToolbarPosition)
+
+        if isMicrosurveyShown(action: action, state: state) {
+            displayNavToolbarBorder = false
+            let isAddressToolbarOnBottom = addressToolbarPosition == .bottom
+            addressBorderPosition = isAddressToolbarOnBottom ? .none : addressBorderPosition
+        }
 
         let toolbarAction = ToolbarAction(toolbarPosition: searchBarPosition,
                                           addressBorderPosition: addressBorderPosition,
@@ -263,7 +313,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
     private func getAddressBorderPosition(toolbarPosition: AddressToolbarPosition,
                                           isPrivate: Bool = false,
-                                          scrollY: CGFloat = 0) -> AddressToolbarBorderPosition? {
+                                          scrollY: CGFloat = 0) -> AddressToolbarBorderPosition {
         return manager.getAddressBorderPosition(for: toolbarPosition, isPrivate: isPrivate, scrollY: scrollY)
     }
 
