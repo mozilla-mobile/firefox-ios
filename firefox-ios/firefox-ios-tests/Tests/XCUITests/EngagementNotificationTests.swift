@@ -7,13 +7,19 @@ import XCTest
 class EngagementNotificationTests: BaseTestCase {
     override func setUp() {
         // Fresh install the app
-        removeApp()
+        // removeApp() does not work on iOS 15 and 16 intermittently
+        if #available(iOS 17, *) {
+            removeApp()
+        }
         // The app is correctly installed
         super.setUp()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307101
-    func testDontAllowNotifications() {
+    func testDontAllowNotifications() throws {
+        if #unavailable(iOS 17) {
+            throw XCTSkip("setUp() fails to remove app intermittently")
+        }
         // Skip login
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
