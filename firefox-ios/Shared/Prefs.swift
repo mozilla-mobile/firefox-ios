@@ -109,6 +109,7 @@ public struct PrefsKeys {
         case toolbarOnboardingKey = "ContextualHintToolbarOnboardingKey"
         case shoppingOnboardingKey = "ShoppingOnboardingCFRKey"
         case shoppingOnboardingCFRsCounterKey = "ShoppingOnboardingCFRsCounterKey"
+        case navigationKey = "ContextualHintNavigation"
     }
 
     // Firefox settings

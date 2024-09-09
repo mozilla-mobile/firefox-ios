@@ -231,6 +231,11 @@ extension String {
                 tableName: "ToolbarLocation",
                 value: "Move the toolbar to the top if that’s more your style.",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the top.")
+            public static let NavigationButtonsBody = MZLocalizedString(
+                key: "ContextualHints.Toolbar.Navigation.Description.v132",
+                tableName: "ToolbarLocation",
+                value: "Tap and hold the arrows to jump between pages in this tab’s history.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can press and hold either the back or forward web navigation buttons to quickly navigate their back/forward history")
         }
 
         public struct Shopping {
