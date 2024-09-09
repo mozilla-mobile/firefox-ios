@@ -57,6 +57,24 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
 
     let editAddressWebViewManager: WebViewPreloadManaging
 
+    var cancelButtonLabel: String {
+        isEditMode ?
+            .Addresses.Settings.Edit.AutofillCancelButton :
+            .Addresses.Settings.Edit.CloseNavBarButtonLabel
+    }
+
+    var primaryButtonLabel: String {
+        isEditMode ?
+            .Addresses.Settings.Edit.AutofillSaveButton :
+            .Addresses.Settings.Edit.EditNavBarButtonLabel
+    }
+
+    var editNavigationbarTitle: String {
+        isEditMode ?
+            .Addresses.Settings.Edit.AutofillEditAddressTitle :
+            .Addresses.Settings.Edit.AutofillViewAddressTitle
+    }
+
     // MARK: - Initializer
 
     /// Initializes the AddressListViewModel.

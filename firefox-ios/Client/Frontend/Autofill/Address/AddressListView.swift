@@ -83,23 +83,11 @@ struct AddressListView: View {
                         )
 
                 case .edit:
-                    let title = viewModel.isEditMode ?
-                        String.Addresses.Settings.Edit.AutofillEditAddressTitle :
-                        String.Addresses.Settings.Edit.AutofillViewAddressTitle
-
-                    let primaryButtonLabel = viewModel.isEditMode ?
-                        String.Addresses.Settings.Edit.AutofillSaveButton :
-                        String.Addresses.Settings.Edit.EditNavBarButtonLabel
-
-                    let cancelButtonLabel = viewModel.isEditMode ?
-                        String.Addresses.Settings.Edit.AutofillCancelButton :
-                        String.Addresses.Settings.Edit.CloseNavBarButtonLabel
-
                     EditAddressViewControllerRepresentable(model: viewModel)
-                        .navigationBarTitle(title, displayMode: .inline)
+                        .navigationBarTitle(viewModel.editNavigationbarTitle, displayMode: .inline)
                         .toolbar {
                             ToolbarItemGroup(placement: .cancellationAction) {
-                                Button(cancelButtonLabel) {
+                                Button(viewModel.cancelButtonLabel) {
                                     if viewModel.isEditMode {
                                         viewModel.cancelEditButtonTap()
                                     } else {
@@ -109,7 +97,7 @@ struct AddressListView: View {
                             }
 
                             ToolbarItemGroup(placement: .primaryAction) {
-                                Button(primaryButtonLabel) {
+                                Button(viewModel.primaryButtonLabel) {
                                     if viewModel.isEditMode {
                                         viewModel.saveEditButtonTap()
                                     } else {
