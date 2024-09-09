@@ -506,10 +506,10 @@
 "Hotkeys.NewTab.DiscoveryTitle" = "Nova kartica";
 
 /* A label indicating the keyboard shortcut of switching from Private Browsing to Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Hotkeys.NormalMode.DiscoveryTitle" = "Uobičajeni način pregledavanja";
+"Hotkeys.NormalMode.DiscoveryTitle" = "Modus normalnog pregledavanja";
 
 /* A label indicating the keyboard shortcut of switching from Normal Browsing mode to Private Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Hotkeys.PrivateMode.DiscoveryTitle" = "Privatni način pregledavanja";
+"Hotkeys.PrivateMode.DiscoveryTitle" = "Modus privatnog pregledavanja";
 
 /* A label indicating the keyboard shortcut of reloading the current page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.Reload.DiscoveryTitle" = "Ponovno učitaj stranicu";
@@ -764,10 +764,10 @@
 "Menu.NewTab.v99" = "Nova kartica";
 
 /* Label for the button, displayed in the menu, turns off night mode. */
-"Menu.NightModeTurnOff.Label2" = "Isključi noćni način";
+"Menu.NightModeTurnOff.Label2" = "Isključi noćni modus";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
-"Menu.NightModeTurnOn.Label2" = "Uključi noćni način";
+"Menu.NightModeTurnOn.Label2" = "Uključi noćni modus";
 
 /* Label for the button, displayed in the menu, takes you to passwords screen when pressed. */
 "Menu.Passwords.Label" = "Lozinke";
@@ -947,7 +947,7 @@
 "Reader View" = "Prikaz za čitanje";
 
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
-"ReaderMode.Available.VoiceOverAnnouncement" = "Dostupan je način rada za čitanje";
+"ReaderMode.Available.VoiceOverAnnouncement" = "Dostupan je modus čitanja";
 
 /* Name for Mark as read button in reader mode */
 "ReaderModeBar.MarkAsRead.v106" = "Označi kao pročitano";
@@ -986,7 +986,7 @@
 "ReopenAlert.Title" = "Ponovo otvori posljednju zatvorenu karticu";
 
 /* Accessibility label for button resetting font size in display settings of reader mode */
-"Reset text size" = "Vrati veličinu teksta na zadanu veličinu";
+"Reset text size" = "Obnovi veličinu teksta";
 
 /* Font type setting in the reading view settings */
 "Sans-serif" = "Sans-serif";
@@ -1214,7 +1214,7 @@
 "Settings.DisplayTheme.StatusTitle" = "Automatski";
 
 /* Switch mode settings section title */
-"Settings.DisplayTheme.SwitchMode.SectionHeader" = "Prebacivanje modusa";
+"Settings.DisplayTheme.SwitchMode.SectionHeader" = "Promijeni modus";
 
 /* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
 "Settings.DisplayTheme.SwitchSubtitle" = "Prebaci automatski na osnovi svjetline ekrana";
@@ -1736,7 +1736,7 @@
 "TranslationToastHandler.PromptTranslate.OK" = "Da";
 
 /* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
-"TranslationToastHandler.PromptTranslate.Title" = "Čini se da je jezik ove stranice %1$@. Želiš li je prevesti na %2$@ pomoću %3$@?";
+"TranslationToastHandler.PromptTranslate.Title" = "Čini se da je jezik ove stranice %1$@. Želiš li je prevesti na %2$@ pomoću usluge %3$@?";
 
 /* Tile title for Twitter */
 "Twitter" = "Twitter";
