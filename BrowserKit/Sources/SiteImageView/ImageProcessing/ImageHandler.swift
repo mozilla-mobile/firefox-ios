@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import UIKit
+import Common
 
 protocol ImageHandler {
     /// The ImageHandler will fetch the favicon with the following precedence:
@@ -38,6 +39,7 @@ class DefaultImageHandler: ImageHandler {
     private let faviconFetcher: FaviconFetcher
     private let letterImageGenerator: LetterImageGenerator
     private let heroImageFetcher: HeroImageFetcher
+    private var logger: Logger = DefaultLogger.shared
 
     init(imageCache: SiteImageCache = DefaultSiteImageCache(),
          faviconFetcher: FaviconFetcher = DefaultFaviconFetcher(),
@@ -83,16 +85,19 @@ class DefaultImageHandler: ImageHandler {
             guard let resourceType = imageModel.siteResource else {
                 throw SiteImageError.noFaviconURLFound
             }
-            switch resourceType {
-            case .bundleAsset(let assetName, _):
-                assertionFailure("You shouldn't be trying to fetch a bundled asset image! \(assetName)")
-                return try getBundleImage(assetName: assetName)
-            case .remoteURL(let faviconURL):
 
-                let image = try await faviconFetcher.fetchFavicon(from: faviconURL)
-                await imageCache.cacheImage(image: image, cacheKey: imageModel.cacheKey, type: imageModel.imageType)
-                return image
+            let imageURL: URL
+            switch resourceType {
+            case .bundleAsset(let assetName, let forRemoteResource):
+                assertionFailure("You shouldn't be trying to fetch a bundled asset image! \(assetName)")
+                imageURL = forRemoteResource
+            case .remoteURL(let faviconURL):
+                imageURL = faviconURL
             }
+
+            let image = try await faviconFetcher.fetchFavicon(from: imageURL)
+            await imageCache.cacheImage(image: image, cacheKey: imageModel.cacheKey, type: imageModel.imageType)
+            return image
         } catch {
             return await fallbackToLetterFavicon(imageModel: imageModel)
         }
@@ -129,6 +134,12 @@ class DefaultImageHandler: ImageHandler {
 
     private func getBundleImage(assetName: String) throws -> UIImage {
         guard let image = UIImage(named: assetName) else {
+            logger.log(
+                "Could not get image from bundle",
+                level: .warning,
+                category: .images,
+                extra: ["assetName": assetName]
+            )
             throw SiteImageError.noImageInBundle
         }
         return image
