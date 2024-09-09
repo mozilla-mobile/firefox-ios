@@ -168,8 +168,9 @@ class MainMenuViewController: UIViewController,
 
     // MARK: - UX related
     func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
-        view.backgroundColor = .systemPurple//theme.colors.layer1
+//        let theme = themeManager.getCurrentTheme(for: windowUUID)
+//        view.backgroundColor = theme.colors.layer1
+        view.backgroundColor = .systemPurple
     }
 
     // MARK: - Notifications

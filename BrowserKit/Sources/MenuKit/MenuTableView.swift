@@ -6,7 +6,6 @@ import Foundation
 import UIKit
 
 class MenuTableView: UIView, UITableViewDataSource, UITableViewDelegate {
-    // Declare the table view as a property of the container view
     private let tableView: UITableView
     private var dataSource: [[MenuElement]] = []
 
@@ -52,9 +51,7 @@ class MenuTableView: UIView, UITableViewDataSource, UITableViewDelegate {
     }
 
     // MARK: - UITableViewDataSource Methods
-    func numberOfSections(
-        in tableView: UITableView
-    ) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return dataSource.count
     }
 
@@ -65,7 +62,10 @@ class MenuTableView: UIView, UITableViewDataSource, UITableViewDelegate {
         return dataSource[section].count
     }
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath
+    ) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
             withIdentifier: MenuCell.cellIdentifier,
             for: indexPath
@@ -77,31 +77,15 @@ class MenuTableView: UIView, UITableViewDataSource, UITableViewDelegate {
     }
 
     // MARK: - UITableViewDelegate Methods
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if false {
-//            let detailVC = DetailViewController()
-//            detailVC.model = selectedModel
-//            if let viewController = findViewController() {
-//                viewController.navigationController?.pushViewController(detailVC, animated: true)
-//            }
-        } else {
-            guard let action = dataSource[indexPath.section][indexPath.row].action else {
-                tableView.deselectRow(at: indexPath, animated: true)
-                return
-            }
-            action()
+    func tableView(
+        _ tableView: UITableView,
+        didSelectRowAt indexPath: IndexPath
+    ) {
+        guard let action = dataSource[indexPath.section][indexPath.row].action else {
             tableView.deselectRow(at: indexPath, animated: true)
+            return
         }
-    }
-
-    private func findViewController() -> UIViewController? {
-        var nextResponder: UIResponder? = self
-        while nextResponder != nil {
-            nextResponder = nextResponder?.next
-            if let viewController = nextResponder as? UIViewController {
-                return viewController
-            }
-        }
-        return nil
+        action()
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
