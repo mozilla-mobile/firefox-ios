@@ -373,6 +373,9 @@ final class AddressToolbarContainer: UIView,
                 actionType: ToolbarActionType.didPasteSearchTerm
             )
             store.dispatch(action)
+        } else {
+            let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didStartEditingUrl)
+            store.dispatch(action)
         }
     }
 

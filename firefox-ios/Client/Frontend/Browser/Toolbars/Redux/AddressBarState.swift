@@ -193,16 +193,21 @@ struct AddressBarState: StateType, Equatable {
         case ToolbarActionType.urlDidChange:
             guard let toolbarAction = action as? ToolbarAction else { return state }
 
+            // if we are in edit mode and the url changes we should leave edit mode
+            let isEditing = state.isEditing && toolbarAction.url == state.url
+
             return AddressBarState(
                 windowUUID: state.windowUUID,
-                navigationActions: navigationActions(action: toolbarAction, addressBarState: state),
-                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: false),
+                navigationActions: navigationActions(action: toolbarAction,
+                                                     addressBarState: state,
+                                                     isEditing: isEditing),
+                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: isEditing),
                 browserActions: browserActions(action: toolbarAction, addressBarState: state),
                 borderPosition: state.borderPosition,
                 url: toolbarAction.url,
                 searchTerm: nil,
                 lockIconImageName: toolbarAction.lockIconImageName ?? state.lockIconImageName,
-                isEditing: false,
+                isEditing: isEditing,
                 isScrollingDuringEdit: state.isScrollingDuringEdit,
                 shouldSelectSearchTerm: state.shouldSelectSearchTerm,
                 isLoading: state.isLoading,
