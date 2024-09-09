@@ -83,28 +83,36 @@ struct AddressListView: View {
                         )
 
                 case .edit:
+                    let title = viewModel.isEditMode ?
+                        String.Addresses.Settings.Edit.AutofillEditAddressTitle :
+                        String.Addresses.Settings.Edit.AutofillViewAddressTitle
+
+                    let primaryButtonLabel = viewModel.isEditMode ?
+                        String.Addresses.Settings.Edit.AutofillSaveButton :
+                        String.Addresses.Settings.Edit.EditNavBarButtonLabel
+
+                    let cancelButtonLabel = viewModel.isEditMode ?
+                        String.Addresses.Settings.Edit.AutofillCancelButton :
+                        String.Addresses.Settings.Edit.CloseNavBarButtonLabel
+
                     EditAddressViewControllerRepresentable(model: viewModel)
-                        .navigationBarTitle(String.Addresses.Settings.Edit.AutofillEditAddressTitle, displayMode: .inline)
+                        .navigationBarTitle(title, displayMode: .inline)
                         .toolbar {
                             ToolbarItemGroup(placement: .cancellationAction) {
-                                if viewModel.isEditMode {
-                                    Button(String.Addresses.Settings.Edit.AutofillCancelButton) {
+                                Button(cancelButtonLabel) {
+                                    if viewModel.isEditMode {
                                         viewModel.cancelEditButtonTap()
-                                    }
-                                } else {
-                                    Button(String.Addresses.Settings.Edit.CloseNavBarButtonLabel) {
+                                    } else {
                                         viewModel.closeEditButtonTap()
                                     }
                                 }
                             }
 
                             ToolbarItemGroup(placement: .primaryAction) {
-                                if viewModel.isEditMode {
-                                    Button(String.Addresses.Settings.Edit.AutofillSaveButton) {
+                                Button(primaryButtonLabel) {
+                                    if viewModel.isEditMode {
                                         viewModel.saveEditButtonTap()
-                                    }
-                                } else {
-                                    Button(String.Addresses.Settings.Edit.EditNavBarButtonLabel) {
+                                    } else {
                                         viewModel.editButtonTap()
                                     }
                                 }
