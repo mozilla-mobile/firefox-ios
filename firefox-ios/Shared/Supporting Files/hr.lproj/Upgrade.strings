@@ -8,7 +8,7 @@
 "Upgrade.SyncSign.Title.v114" = "Mijenjanje ekrana nikada nije bilo lakše";
 
 /* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
-"Upgrade.Welcome.Action.v114" = "Postavi kao zadani preglednik";
+"Upgrade.Welcome.Action.v114" = "Postavi kao standardni preglednik";
 
 /* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
 "Upgrade.Welcome.Description.v114" = "Nove boje. Nova pogodnost. Ista predanost ljudima prije profita.";

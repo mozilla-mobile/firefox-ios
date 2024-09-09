@@ -20,10 +20,10 @@
 "Private Browsing" = "Privatno pregledavanje";
 
 /* Accessibility label for toggling on/off private mode */
-"Private Mode" = "Privatan način rada";
+"Private Mode" = "Privatni modus";
 
 /* Accessiblity hint for toggling on/off private mode */
-"Turns private mode on or off" = "Uključuje ili isključuje privatni način rada";
+"Turns private mode on or off" = "Uključuje ili isključuje privatni modus";
 
 /* Will be displayed in Settings under 'Close Private Tabs' */
 "When Leaving Private Browsing" = "Tijekom napuštanja privatnog pregledavanja";
