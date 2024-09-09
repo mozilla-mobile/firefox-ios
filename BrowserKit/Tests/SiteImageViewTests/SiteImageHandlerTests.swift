@@ -31,7 +31,7 @@ final class SiteImageHandlerTests: XCTestCase {
         let model = SiteImageModel(id: UUID(),
                                    imageType: .favicon,
                                    siteURL: siteURL,
-                                   resourceURL: nil) // No faviconURL yet
+                                   siteResource: nil) // No faviconURL yet
         _ = await subject.getImage(model: model)
 
         XCTAssertEqual(urlHandler.getFaviconURLCalled, 1, "getFaviconURLCalled should be called once")
@@ -46,7 +46,7 @@ final class SiteImageHandlerTests: XCTestCase {
         let model = SiteImageModel(id: UUID(),
                                    imageType: .favicon,
                                    siteURL: siteURL,
-                                   resourceURL: faviconURL)
+                                   siteResource: .remoteURL(url: faviconURL))
         _ = await subject.getImage(model: model)
 
         XCTAssertEqual(urlHandler.getFaviconURLCalled, 0, "getFaviconURLCalled should not be called")
@@ -60,7 +60,7 @@ final class SiteImageHandlerTests: XCTestCase {
         let model = SiteImageModel(id: UUID(),
                                    imageType: .favicon,
                                    siteURL: siteURL,
-                                   resourceURL: nil)
+                                   siteResource: nil)
         _ = await subject.getImage(model: model)
 
         XCTAssertEqual(urlHandler.getFaviconURLCalled, 1, "getFaviconURLCalled should be called")
@@ -76,7 +76,7 @@ final class SiteImageHandlerTests: XCTestCase {
         let model = SiteImageModel(id: UUID(),
                                    imageType: .favicon,
                                    siteURL: siteURL,
-                                   resourceURL: faviconURL)
+                                   siteResource: .remoteURL(url: faviconURL))
         _ = await subject.getImage(model: model)
 
         XCTAssertEqual(imageHandler.fetchFaviconCalledCount, 1, "fetchFavicon should be called once")

@@ -5,6 +5,7 @@
 import Shared
 import UIKit
 import Storage
+import SiteImageView
 
 // Manage the specific Google top site case
 class GoogleTopSiteManager {
@@ -16,8 +17,9 @@ class GoogleTopSiteManager {
         static let usUrl = "https://www.google.com/webhp?client=firefox-b-1-m&channel=ts"
         static let rowUrl = "https://www.google.com/webhp?client=firefox-b-m&channel=ts"
 
-        // Google favicon URL
-        static let faviconUrl = "https://www.google.com/images/branding/product_ios/3x/gsa_ios_60dp.png"
+        // Google favicon
+        private static let faviconUrl = URL(string: "https://www.google.com/images/branding/product_ios/3x/gsa_ios_60dp.png")!
+        static let faviconResource: SiteResource = .bundleAsset(name: "google-com", forRemoteResource: faviconUrl)
 
         // The number of tiles taken by Google top site manager
         static let reservedSpaceCount = 1
@@ -71,7 +73,7 @@ class GoogleTopSiteManager {
 
         let pinnedSite = PinnedSite(
             site: Site(url: url, title: "Google"),
-            faviconURL: Constants.faviconUrl
+            faviconResource: Constants.faviconResource
         )
         pinnedSite.guid = Constants.googleGUID
         return pinnedSite
