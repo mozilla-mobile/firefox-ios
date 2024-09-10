@@ -406,25 +406,18 @@ struct AddressBarState: StateType, Equatable {
     ) -> [ToolbarActionState] {
         var actions = [ToolbarActionState]()
 
-        guard let toolbarState = store.state.screenState(ToolbarState.self,
-                                                         for: .toolbar,
-                                                         window: action.windowUUID)
+        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return actions }
 
-        let isUrlChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
-        let url = isUrlChangeAction ? action.url : addressBarState.url
-        let isShowingNavToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
-        let canGoBack = action.canGoBack ?? toolbarState.canGoBack
-        let canGoForward = action.canGoForward ?? toolbarState.canGoForward
+        let isShowingNavigationToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
 
         if isEditing {
             // back carrot when in edit mode
             actions.append(cancelEditAction)
-        } else if isShowingNavToolbar || url == nil {
-            // there are no navigation actions if on homepage or when nav toolbar is shown
-            return actions
-        } else if url != nil {
-            // back/forward when url exists and nav toolbar is not shown
+        } else if !isShowingNavigationToolbar {
+            // otherwise back/forward and maybe data clearance when navigation toolbar is hidden
+            let canGoBack = action.canGoBack ?? toolbarState.canGoBack
+            let canGoForward = action.canGoForward ?? toolbarState.canGoForward
             actions.append(backAction(enabled: canGoBack))
             actions.append(forwardAction(enabled: canGoForward))
 
