@@ -38,46 +38,24 @@ def download_icons_and_save():
     subprocess.run(["git", "clone", "https://github.com/FirefoxUX/acorn-icons"])
 
     target_dir_to_copy = [16, 20, 24, 30]
-    output_folder_path = "../output_icons"
-
+    asset_folder_path = "../firefox-ios/Client/Assets/Images.xcassets/"
+    images_list_present = os.listdir(asset_folder_path)
     for dir in target_dir_to_copy:
         dir_path = f"acorn-icons/icons/mobile/{dir}/pdf"
         directory_tree = os.walk(dir_path)
 
         for dir_object in directory_tree:
             for file in dir_object[2]:
-                if file.endswith(".pdf"):
-                    icon_path = os.path.join(dir_object[0], file)
-                    folder_name = f"{os.path.splitext(file)[0]}.imageset"
-
-                    destination_folder = os.path.join(output_folder_path, folder_name)
+                icon_path = os.path.join(dir_object[0], file)
+                folder_name = f"{os.path.splitext(file)[0]}.imageset".replace("Dark", "").replace("Light", "")
+                
+                # file has to be a pdf and we need the file already present in the images folder
+                if file.endswith(".pdf") and folder_name in images_list_present: 
+                    destination_folder = os.path.join(asset_folder_path, folder_name)
                     os.makedirs(destination_folder, exist_ok=True)
                     
                     destination_file = os.path.join(destination_folder, file)
                     shutil.copy(icon_path, destination_file)
-                    
-                    # Create the content.json file in the same folder
-                    contents_json_file = {
-                        "images": [
-                            {
-                                "filename": file,
-                                "idiom": "universal"
-                            }
-                        ],
-                        "info": {
-                            "author": "xcode",
-                            "version": 1
-                        },
-                        "properties": {
-                            "preserves-vector-representation": True
-                        }
-                    }
-                    
-                    # Write the content.json file
-                    json_filename = os.path.join(destination_folder, "Contents.json")
-                    with open(json_filename, "w") as json_file:
-                        json.dump(contents_json_file, json_file, indent=4)
-                    
                     print(f"Copied {file} to {destination_folder} and created Contents.json")
     
     os.chdir("..")
@@ -92,14 +70,14 @@ def sort_icons_by_size() -> dict:
         "Large": []
     }
 
-    output_icons_dir = "output_icons"
-    for folder in os.listdir(output_icons_dir):
+    asset_folder_path = "firefox-ios/Client/Assets/Images.xcassets/"
+    for folder in os.listdir(asset_folder_path):
         if folder.endswith(".imageset"):
             file_name = folder.split(".")[0]
             
             size_key = next((key for key in icons_by_size if key in file_name), None)
             
-            if size_key:
+            if size_key == "ExtraLarge":
                 icon_name = file_name.replace(size_key, "")
                 icons_by_size[size_key].append((icon_name, file_name))
 
@@ -153,5 +131,3 @@ def generate_standard_image_identifiers_swift(sorted_icons: dict):
 download_icons_and_save()
 sorted_icons = sort_icons_by_size()
 generate_standard_image_identifiers_swift(sorted_icons)
-
-## Update just the images that are already there, not all that
