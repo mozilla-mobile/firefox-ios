@@ -191,6 +191,7 @@ struct NavigationBarState: StateType, Equatable {
             iconName: StandardImageIdentifiers.Large.back,
             isFlippedForRTL: true,
             isEnabled: enabled,
+            contextualHint: ContextualHintType.navigation.rawValue,
             a11yLabel: .TabToolbarBackAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.backButton)
     }
