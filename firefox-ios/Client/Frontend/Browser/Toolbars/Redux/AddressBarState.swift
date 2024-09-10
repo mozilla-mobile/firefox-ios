@@ -455,15 +455,20 @@ struct AddressBarState: StateType, Equatable {
 
         switch readerModeState {
         case .active, .available:
+            let shouldDisplayAsHighlighted = readerModeState == .active
+            let iconName = shouldDisplayAsHighlighted ?
+            StandardImageIdentifiers.Large.readerViewFill :
+            StandardImageIdentifiers.Large.readerView
+
             var readerModeAction = ToolbarActionState(
                 actionType: .readerMode,
-                iconName: StandardImageIdentifiers.Large.readerView,
+                iconName: iconName,
                 isEnabled: true,
                 a11yLabel: .TabLocationReaderModeAccessibilityLabel,
                 a11yHint: .TabLocationReloadAccessibilityHint,
                 a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton,
                 a11yCustomActionName: .TabLocationReaderModeAddToReadingListAccessibilityLabel)
-            readerModeAction.shouldDisplayAsHighlighted = readerModeState == .active
+            readerModeAction.shouldDisplayAsHighlighted = shouldDisplayAsHighlighted
             actions.append(readerModeAction)
         default: break
         }
