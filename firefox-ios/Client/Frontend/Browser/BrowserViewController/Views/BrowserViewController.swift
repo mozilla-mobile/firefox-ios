@@ -114,11 +114,7 @@ class BrowserViewController: UIViewController,
     var pasteAction: AccessibleAction!
     var copyAddressAction: AccessibleAction!
 
-    // navigation contextual hint
-    var backButton: UIButton?
-    var forwardButton: UIButton?
-    var navigationDoubleTapTimer: Timer?
-    var isPresentingNavigationContextualHint = false
+    var navigationHintDoubleTapTimer: Timer?
 
     weak var gridTabTrayController: LegacyGridTabViewController?
     var tabTrayViewController: TabTrayController?
@@ -3087,19 +3083,13 @@ class BrowserViewController: UIViewController,
     }
 
     // Also implements 
-    // NavigationToolbarContainerDelegate::configureContextualHint(for button: UIButton, with contextualHint: String)
-    func configureContextualHint(for button: UIButton, with contextualHint: String) {
-        switch contextualHint {
+    // NavigationToolbarContainerDelegate::configureContextualHint(for button: UIButton, with contextualHintType: String)
+    func configureContextualHint(for button: UIButton, with contextualHintType: String) {
+        switch contextualHintType {
         case ContextualHintType.dataClearance.rawValue:
             configureDataClearanceContextualHint(button)
         case ContextualHintType.navigation.rawValue:
-            backButton = button
-
-            // When the toolbar updates (eg after the back button clicks and the url changes) while the contextual hint
-            // is waiting to be shown, we need to update the reference to the back button to the new one
-            if isPresentingNavigationContextualHint {
-                configureNavigationContextualHint(backButton!)
-            }
+            configureNavigationContextualHint(button)
         default:
             return
         }

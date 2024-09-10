@@ -25,6 +25,7 @@ final class ToolbarAction: Action {
     let isLoading: Bool?
     let isNewTabFeatureEnabled: Bool?
     let canShowDataClearanceAction: Bool?
+    let canShowNavigationHint: Bool?
 
     init(toolbarPosition: SearchBarPosition? = nil,
          numberOfTabs: Int? = nil,
@@ -44,6 +45,7 @@ final class ToolbarAction: Action {
          isLoading: Bool? = nil,
          isNewTabFeatureEnabled: Bool? = nil,
          canShowDataClearanceAction: Bool? = nil,
+         canShowNavigationHint: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.toolbarPosition = toolbarPosition
@@ -64,6 +66,7 @@ final class ToolbarAction: Action {
         self.isLoading = isLoading
         self.isNewTabFeatureEnabled = isNewTabFeatureEnabled
         self.canShowDataClearanceAction = canShowDataClearanceAction
+        self.canShowNavigationHint = canShowNavigationHint
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -86,6 +89,7 @@ enum ToolbarActionType: ActionType {
     case traitCollectionDidChange
     case websiteLoadingStateDidChange
     case searchEngineDidChange
+    case navigationButtonDoubleTapped
 }
 
 class ToolbarMiddlewareAction: Action {

@@ -225,8 +225,8 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
                 button.applyTheme(theme: theme)
             }
 
-            if let contextualHint = toolbarElement.contextualHint {
-                toolbarDelegate?.configureContextualHint(self, for: button, with: contextualHint)
+            if let contextualHintType = toolbarElement.contextualHintType {
+                toolbarDelegate?.configureContextualHint(self, for: button, with: contextualHintType)
             }
         }
     }

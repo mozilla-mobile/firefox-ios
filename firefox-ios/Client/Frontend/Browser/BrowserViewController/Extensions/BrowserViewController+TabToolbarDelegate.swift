@@ -38,15 +38,17 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     // Starts a timer to monitor for a navigation button double tap for the navigation contextual hint
     func startNavigationButtonDoubleTapTimer() {
-        guard let button = backButton else { return }
-        if navigationDoubleTapTimer == nil {
-            navigationDoubleTapTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { _ in
-                self.navigationDoubleTapTimer = nil
+//        guard let button = backButton else { return }
+        if navigationHintDoubleTapTimer == nil {
+            navigationHintDoubleTapTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { _ in
+                self.navigationHintDoubleTapTimer = nil
             }
         } else {
-            isPresentingNavigationContextualHint = true
-            navigationDoubleTapTimer = nil
-            configureNavigationContextualHint(button)
+            navigationHintDoubleTapTimer = nil
+            let action = ToolbarAction(canShowNavigationHint: true, 
+                                       windowUUID: windowUUID,
+                                       actionType: ToolbarActionType.navigationButtonDoubleTapped)
+            store.dispatch(action)
         }
     }
 
@@ -65,10 +67,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         if let selectedTab = tabManager.selectedTab, selectedTab.isFxHomeTab || !selectedTab.loading {
             present(navigationContextHintVC, animated: true)
             UIAccessibility.post(notification: .layoutChanged, argument: navigationContextHintVC)
-            isPresentingNavigationContextualHint = false
-        } else {
-            guard let button = backButton else { return }
-            configureNavigationContextualHint(button)
+            let action = ToolbarAction(canShowNavigationHint: false, 
+                                       windowUUID: windowUUID,
+                                       actionType: ToolbarActionType.navigationButtonDoubleTapped)
+            store.dispatch(action)
         }
     }
 

@@ -29,7 +29,7 @@ struct NavigationBarState: StateType, Equatable {
         actionType: .dataClearance,
         iconName: StandardImageIdentifiers.Large.dataClearance,
         isEnabled: true,
-        contextualHint: ContextualHintType.dataClearance.rawValue,
+        contextualHintType: ContextualHintType.dataClearance.rawValue,
         a11yLabel: .TabToolbarDataClearanceAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.fireButton)
 
@@ -191,7 +191,7 @@ struct NavigationBarState: StateType, Equatable {
             iconName: StandardImageIdentifiers.Large.back,
             isFlippedForRTL: true,
             isEnabled: enabled,
-            contextualHint: ContextualHintType.navigation.rawValue,
+            contextualHintType: ContextualHintType.navigation.rawValue,
             a11yLabel: .TabToolbarBackAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.backButton)
     }
