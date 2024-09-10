@@ -37,7 +37,37 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func configureNavigationContextualHint(_ view: UIView) {
+        navigationContextHintVC.configure(
+            anchor: view,
+            withArrowDirection: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection) ? .down : .up,
+            andDelegate: self,
+            presentedUsing: { [weak self] in self?.presentNavigationContextualHint() },
+            andActionForButton: { },
+            overlayState: overlayManager)
+    }
 
+    private func presentNavigationContextualHint() {
+        if let selectedTab = tabManager.selectedTab, selectedTab.isFxHomeTab || !selectedTab.loading {
+            present(navigationContextHintVC, animated: true)
+            UIAccessibility.post(notification: .layoutChanged, argument: navigationContextHintVC)
+            isPresentingNavigationContextualHint = false
+        } else {
+            guard let button = backButton else { return }
+            configureNavigationContextualHint(button)
+        }
+    }
+
+    func startNavigationContextualHintTimer() {
+        guard let button = backButton else { return }
+        if navigationContextualHintTimer == nil {
+            navigationContextualHintTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { _ in
+                self.navigationContextualHintTimer = nil
+            }
+        } else {
+            isPresentingNavigationContextualHint = true
+            navigationContextualHintTimer = nil
+            configureNavigationContextualHint(button)
+        }
     }
 
     func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton) {

@@ -114,6 +114,12 @@ class BrowserViewController: UIViewController,
     var pasteAction: AccessibleAction!
     var copyAddressAction: AccessibleAction!
 
+    // navigation contextual hint
+    var backButton: UIButton?
+    var forwardButton: UIButton?
+    var navigationContextualHintTimer: Timer?
+    var isPresentingNavigationContextualHint = false
+
     weak var gridTabTrayController: LegacyGridTabViewController?
     var tabTrayViewController: TabTrayController?
 
@@ -2014,6 +2020,7 @@ class BrowserViewController: UIViewController,
             didTapOnHome()
         case .back:
             didTapOnBack()
+            startNavigationContextualHintTimer()
         case .forward:
             didTapOnForward()
         case .reloadNoCache:
@@ -3086,7 +3093,13 @@ class BrowserViewController: UIViewController,
         case ContextualHintType.dataClearance.rawValue:
             configureDataClearanceContextualHint(button)
         case ContextualHintType.navigation.rawValue:
-            configureNavigationContextualHint(button)
+            backButton = button
+
+            // When the toolbar updates (eg after the back button clicks and the url changes) while the contextual hint
+            // is waiting to be shown, we need to update the reference to the back button to the new one
+            if isPresentingNavigationContextualHint {
+                configureNavigationContextualHint(backButton!)
+            }
         default:
             return
         }
