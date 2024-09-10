@@ -34,7 +34,7 @@ public final class MenuView: UIView {
         ])
     }
 
-    public func updateDataSource(with newDataSource: [[MenuElement]]) {
+    public func updateDataSource(with newDataSource: [MenuSection]) {
         tableView.updateDataSource(newDataSource)
     }
 }

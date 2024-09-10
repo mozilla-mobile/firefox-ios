@@ -70,10 +70,7 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     }
 
     private func createMainMenuViewController() -> MainMenuViewController {
-        let mainMenuViewController = MainMenuViewController(
-            windowUUID: tabManager.windowUUID,
-            viewModel: MainMenuViewModel()
-        )
+        let mainMenuViewController = MainMenuViewController(windowUUID: tabManager.windowUUID)
         mainMenuViewController.coordinator = self
         return mainMenuViewController
     }

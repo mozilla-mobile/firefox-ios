@@ -7,7 +7,7 @@ import UIKit
 
 class MenuTableView: UIView, UITableViewDataSource, UITableViewDelegate {
     private let tableView: UITableView
-    private var dataSource: [[MenuElement]] = []
+    private var menuData: [MenuSection] = []
 
     override init(frame: CGRect) {
         tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -45,21 +45,21 @@ class MenuTableView: UIView, UITableViewDataSource, UITableViewDelegate {
         tableView.delegate = self
     }
 
-    func updateDataSource(_ newDataSource: [[MenuElement]]) {
-        self.dataSource = newDataSource
+    func updateDataSource(_ newDataSource: [MenuSection]) {
+        self.menuData = newDataSource
         tableView.reloadData()
     }
 
     // MARK: - UITableViewDataSource Methods
     func numberOfSections(in tableView: UITableView) -> Int {
-        return dataSource.count
+        return menuData.count
     }
 
     func tableView(
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
-        return dataSource[section].count
+        return menuData[section].options.count
     }
 
     func tableView(
@@ -71,7 +71,7 @@ class MenuTableView: UIView, UITableViewDataSource, UITableViewDelegate {
             for: indexPath
         ) as! MenuCell
 
-        cell.configureCellWith(model: dataSource[indexPath.section][indexPath.row])
+        cell.configureCellWith(model: menuData[indexPath.section].options[indexPath.row])
 
         return cell
     }
@@ -81,7 +81,7 @@ class MenuTableView: UIView, UITableViewDataSource, UITableViewDelegate {
         _ tableView: UITableView,
         didSelectRowAt indexPath: IndexPath
     ) {
-        guard let action = dataSource[indexPath.section][indexPath.row].action else {
+        guard let action = menuData[indexPath.section].options[indexPath.row].action else {
             tableView.deselectRow(at: indexPath, animated: true)
             return
         }

@@ -48,7 +48,6 @@ class MainMenuViewController: UIViewController,
     weak var coordinator: MainMenuCoordinator?
 
     private let windowUUID: WindowUUID
-    private var viewModel: MainMenuViewModel
     private var menuState: MainMenuState
 
     var currentWindowUUID: UUID? { return windowUUID }
@@ -56,11 +55,9 @@ class MainMenuViewController: UIViewController,
     // MARK: - Initializers
     init(
         windowUUID: WindowUUID,
-        viewModel: MainMenuViewModel,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         themeManager: ThemeManager = AppContainer.shared.resolve()
     ) {
-        self.viewModel = viewModel
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
@@ -192,7 +189,7 @@ class MainMenuViewController: UIViewController,
     // In iOS 15 modals with a large detent read content underneath the modal
     // in voice over. To prevent this we manually turn this off.
     private func updateModalA11y() {
-        var currentDetent: UISheetPresentationController.Detent.Identifier? = viewModel.getCurrentDetent(
+        var currentDetent: UISheetPresentationController.Detent.Identifier? = getCurrentDetent(
             for: sheetPresentationController
         )
 
@@ -207,6 +204,13 @@ class MainMenuViewController: UIViewController,
         }
 
         view.accessibilityViewIsModal = currentDetent == .large ? true : false
+    }
+
+    private func getCurrentDetent(
+        for presentedController: UIPresentationController?
+    ) -> UISheetPresentationController.Detent.Identifier? {
+        guard let sheetController = presentedController as? UISheetPresentationController else { return nil }
+        return sheetController.selectedDetentIdentifier
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate

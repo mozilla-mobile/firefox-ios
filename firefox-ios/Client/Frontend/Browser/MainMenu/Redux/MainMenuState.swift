@@ -9,7 +9,7 @@ import Redux
 
 struct MainMenuState: ScreenState, Equatable {
     var windowUUID: WindowUUID
-    var menuElements: [[MenuElement]]
+    var menuElements: [MenuSection]
     var navigationDestination: MainMenuNavigationDestination?
     var shouldDismiss: Bool
 
@@ -42,7 +42,7 @@ struct MainMenuState: ScreenState, Equatable {
 
     private init(
         windowUUID: WindowUUID,
-        menuElements: [[MenuElement]],
+        menuElements: [MenuSection],
         navigationDestination: MainMenuNavigationDestination? = nil,
         shouldDismiss: Bool = false
     ) {
@@ -89,7 +89,7 @@ struct MainMenuState: ScreenState, Equatable {
 }
 
 struct MainMenuConfigurationUtility {
-    func populateMenuElements(with uuid: WindowUUID) -> [[MenuElement]] {
+    func populateMenuElements(with uuid: WindowUUID) -> [MenuSection] {
         return [
             getNewTabSection(with: uuid),
             getLibrariesSection(with: uuid),
@@ -99,8 +99,8 @@ struct MainMenuConfigurationUtility {
 
     private func getNewTabSection(
         with uuid: WindowUUID
-    ) -> [MenuElement] {
-        return [
+    ) -> MenuSection {
+        return MenuSection(options: [
             MenuElement(
                 title: .MainMenu.TabsSection.NewTab,
                 iconName: "",
@@ -135,13 +135,13 @@ struct MainMenuConfigurationUtility {
                     )
                 }
             )
-        ]
+        ])
     }
 
     private func getLibrariesSection(
         with uuid: WindowUUID
-    ) -> [MenuElement] {
-        return [
+    ) -> MenuSection {
+        return MenuSection(options: [
             MenuElement(
                 title: .MainMenu.PanelLinkSection.Bookmarks,
                 iconName: "",
@@ -210,13 +210,13 @@ struct MainMenuConfigurationUtility {
                     )
                 }
             )
-        ]
+        ])
     }
 
     private func getOtherToolsSection(
         with uuid: WindowUUID
-    ) -> [MenuElement] {
-        return [
+    ) -> MenuSection {
+        return MenuSection(options: [
             MenuElement(
                 title: .MainMenu.OtherToolsSection.CustomizeHomepage,
                 iconName: "",
@@ -288,6 +288,6 @@ struct MainMenuConfigurationUtility {
                     )
                 }
             )
-        ]
+        ])
     }
 }
