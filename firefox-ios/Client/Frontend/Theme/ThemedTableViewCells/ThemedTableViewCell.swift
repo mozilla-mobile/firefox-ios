@@ -60,7 +60,6 @@ class ThemedTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
         editingAccessoryView = nil
         editingAccessoryType = .none
         imageView?.image = nil
-        contentView.directionalLayoutMargins = .zero
         contentView.subviews.forEach {
             $0.removeFromSuperview()
         }

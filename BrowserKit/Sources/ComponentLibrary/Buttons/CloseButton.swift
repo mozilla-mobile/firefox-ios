@@ -5,7 +5,10 @@
 import Common
 import UIKit
 
-public class CloseButton: UIButton {
+public class CloseButton: UIButton,
+                          Notifiable {
+    public var notificationCenter: any NotificationProtocol = NotificationCenter.default
+
     private var viewModel: CloseButtonViewModel?
     private var heightConstraint: NSLayoutConstraint?
     private var widthConstraint: NSLayoutConstraint?
@@ -20,6 +23,7 @@ public class CloseButton: UIButton {
 
         setImage(UIImage(named: UX.crossCircleImage), for: .normal)
         adjustsImageSizeForAccessibilityContentSizeCategory = true
+        imageView?.adjustsImageSizeForAccessibilityContentSizeCategory = true
         setupConstraints()
     }
 
@@ -29,21 +33,39 @@ public class CloseButton: UIButton {
 
     private func setupConstraints() {
         translatesAutoresizingMaskIntoConstraints = false
-        heightConstraint = heightAnchor.constraint(equalToConstant: UX.closeButtonSize.height)
+        let dynamicWidth = UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.width)
+        let dynamicHeight = UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.height)
+        heightConstraint = heightAnchor.constraint(equalToConstant: dynamicHeight)
         heightConstraint?.isActive = true
-        widthConstraint = widthAnchor.constraint(equalToConstant: UX.closeButtonSize.width)
+        widthConstraint = widthAnchor.constraint(equalToConstant: dynamicWidth)
         widthConstraint?.isActive = true
     }
 
-    public func updateLayoutForDynamicFont(newSize: CGFloat) {
-        heightConstraint?.constant = newSize
-        widthConstraint?.constant = newSize
-    }
+    public func configure(viewModel: CloseButtonViewModel,
+                          notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.notificationCenter = notificationCenter
+        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
 
-    public func configure(viewModel: CloseButtonViewModel) {
         self.viewModel = viewModel
-
         accessibilityIdentifier = viewModel.a11yIdentifier
         accessibilityLabel = viewModel.a11yLabel
+    }
+
+    // MARK: - Notifiable
+
+    public func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIContentSizeCategory.didChangeNotification:
+            let dynamicWidth = UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.width)
+            let dynamicHeight = UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.height)
+            heightConstraint?.constant = dynamicHeight
+            widthConstraint?.constant = dynamicWidth
+        default:
+            break
+        }
+    }
+
+    deinit {
+        notificationCenter.removeObserver(self)
     }
 }

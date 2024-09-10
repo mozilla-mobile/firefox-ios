@@ -666,6 +666,7 @@ class CheckmarkSetting: Setting {
         static let cellIndentationLevel = 1
         static let checkmarkTopHeight: CGFloat = 10
         static let checkmarkHeight: CGFloat = 20.0
+        static let checkmarkWidth: CGFloat = 24.0
         static let checkmarkLeading: CGFloat = 20
         static let checkmarkSymbol = "\u{2713}"
         static let cellAlpha: CGFloat = 0.5
@@ -708,9 +709,9 @@ class CheckmarkSetting: Setting {
         } else {
             let window = UIWindow.keyWindow
             let safeAreaInsets = window?.safeAreaInsets.left ?? UX.defaultInset
-            cell.indentationWidth = UX.cellIndentationWidth + safeAreaInsets
+            let dynamicIndentationWidth = UIFontMetrics.default.scaledValue(for: UX.cellIndentationWidth)
+            cell.indentationWidth = dynamicIndentationWidth + safeAreaInsets
             cell.indentationLevel = UX.cellIndentationLevel
-
             cell.accessoryType = .detailButton
 
             setupLeftCheckLabel(cell, theme: theme)
@@ -733,15 +734,13 @@ class CheckmarkSetting: Setting {
     }
 
     private func setupLeftCheckLabel(_ cell: UITableViewCell, theme: Theme) {
-        check.font = FXFontStyles.Regular.body.scaledFont()
-        let checkMarkWidth = check.font.pointSize + UX.checkmarkLeading
-        cell.contentView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 0.0,
-                                                                            leading: checkMarkWidth,
-                                                                            bottom: 0.0,
-                                                                            trailing: 0.0)
+        check.font = FXFontStyles.Regular.title3.scaledFont()
         let checkColor = isChecked() ? theme.colors.actionPrimary : UIColor.clear
-        let checkmarkSize = UIFontMetrics.default.scaledValue(for: UX.checkmarkHeight)
+        check.textColor = checkColor
+
         cell.contentView.addSubview(check)
+        let checkmarkHeight = UIFontMetrics.default.scaledValue(for: UX.checkmarkHeight)
+        let checkmarkWidth = UIFontMetrics.default.scaledValue(for: UX.checkmarkWidth)
         NSLayoutConstraint.activate([
             check.topAnchor.constraint(
                 equalTo: cell.contentView.topAnchor,
@@ -751,11 +750,9 @@ class CheckmarkSetting: Setting {
                 equalTo: cell.contentView.leadingAnchor,
                 constant: UX.checkmarkLeading
             ),
-            check.heightAnchor.constraint(equalToConstant: checkmarkSize),
-            check.widthAnchor.constraint(equalToConstant: checkmarkSize)
+            check.heightAnchor.constraint(equalToConstant: checkmarkHeight),
+            check.widthAnchor.constraint(equalToConstant: checkmarkWidth)
         ])
-
-        check.textColor = checkColor
     }
 
     override func onClick(_ navigationController: UINavigationController?) {

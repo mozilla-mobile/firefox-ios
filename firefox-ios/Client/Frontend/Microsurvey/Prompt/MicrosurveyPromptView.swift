@@ -20,7 +20,6 @@ final class MicrosurveyPromptView: UIView, ThemeApplicable, Notifiable {
     private struct UX {
         static let headerStackSpacing: CGFloat = 8
         static let stackSpacing: CGFloat = 17
-        static let closeButtonSize = CGSize(width: 30, height: 30)
         static let borderThickness = 1.0
         static let logoSize: CGFloat = 24
         static let padding = NSDirectionalEdgeInsets(

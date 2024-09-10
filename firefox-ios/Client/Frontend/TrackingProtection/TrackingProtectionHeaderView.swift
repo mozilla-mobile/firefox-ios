@@ -12,7 +12,6 @@ final class TrackingProtectionHeaderView: UIView, ThemeApplicable {
         static let headerLinesLimit: Int = 2
         static let siteDomainLabelsVerticalSpacing: CGFloat = 12
         static let faviconImageSize: CGFloat = 40
-        static let closeButtonSize: CGFloat = 30
         static let horizontalMargin: CGFloat = 16
     }
 
@@ -48,7 +47,9 @@ final class TrackingProtectionHeaderView: UIView, ThemeApplicable {
     }
 
     private var closeButton: CloseButton = .build { button in
-        button.layer.cornerRadius = 0.5 * UX.closeButtonSize
+        let viewModel = CloseButtonViewModel(a11yLabel: "",
+                                             a11yIdentifier: "")
+        button.configure(viewModel: viewModel)
     }
 
     init() {
@@ -114,15 +115,9 @@ final class TrackingProtectionHeaderView: UIView, ThemeApplicable {
     }
 
     func adjustLayout() {
-        let faviconDynamicSize = min(UIFontMetrics.default.scaledValue(for: UX.faviconImageSize),
-                                     2 * UX.faviconImageSize)
+        let faviconDynamicSize = UIFontMetrics.default.scaledValue(for: UX.faviconImageSize)
         faviconHeightConstraint?.constant = faviconDynamicSize
         faviconWidthConstraint?.constant = faviconDynamicSize
-
-        let closeButtonDynamicSize = min(UIFontMetrics.default.scaledValue(for: UX.closeButtonSize),
-                                         2 * UX.closeButtonSize)
-        closeButton.updateLayoutForDynamicFont(newSize: closeButtonDynamicSize)
-        closeButton.layer.cornerRadius = closeButtonDynamicSize * 0.5
     }
 
     func setupActions() {
@@ -135,10 +130,6 @@ final class TrackingProtectionHeaderView: UIView, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        closeButton.backgroundColor = theme.colors.layer2
-        let buttonImage = UIImage(named: StandardImageIdentifiers.Medium.cross)?
-            .tinted(withColor: theme.colors.iconSecondary)
-        closeButton.setImage(buttonImage, for: .normal)
         siteDomainLabel.textColor = theme.colors.textSecondary
         siteDisplayTitleLabel.textColor = theme.colors.textPrimary
         self.tintColor = theme.colors.layer2
