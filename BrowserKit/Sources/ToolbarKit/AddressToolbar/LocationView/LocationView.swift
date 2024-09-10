@@ -207,16 +207,19 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
 
     private func updateURLTextFieldLeadingConstraintBasedOnState() {
         let shouldAdjustForOverflow = doesURLTextFieldExceedViewWidth && !isEditing
+        let shouldAdjustForNonEmpty = !isURLTextFieldEmpty && !isEditing
 
         // hide the leading "..." by moving them behind the lock icon
         if shouldAdjustForOverflow {
             updateURLTextFieldLeadingConstraint(constant: -dotWidth)
+        } else if shouldAdjustForNonEmpty {
+            updateURLTextFieldLeadingConstraint()
         } else {
             updateURLTextFieldLeadingConstraint(constant: UX.horizontalSpace)
         }
     }
 
-    private func updateURLTextFieldLeadingConstraint(constant: CGFloat) {
+    private func updateURLTextFieldLeadingConstraint(constant: CGFloat = 0) {
         urlTextFieldLeadingConstraint?.constant = constant
     }
 
