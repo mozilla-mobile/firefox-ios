@@ -32,7 +32,9 @@ class TabDisplayView: UIView,
     private let animationQueue: TabTrayAnimationQueue
     var theme: Theme?
 
-    private var tabsListDataSource: UICollectionViewDiffableDataSource<TabDisplaySection, Tab>?
+
+    // Using tabUUID as it's a way to identify the Tab object which is hashable
+    private var tabsListDataSource: UICollectionViewDiffableDataSource<TabDisplaySection, TabUUID>?
 
     private var shouldHideInactiveTabs: Bool {
         guard !tabsState.isPrivateMode else { return true }
