@@ -3,11 +3,14 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import MenuKit
 import Shared
 import Redux
 
 struct MainMenuState: ScreenState, Equatable {
     var windowUUID: WindowUUID
+    var menuElements: [MenuSection]
+    var navigationDestination: MainMenuNavigationDestination?
     var shouldDismiss: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
@@ -22,6 +25,8 @@ struct MainMenuState: ScreenState, Equatable {
 
         self.init(
             windowUUID: mainMenuState.windowUUID,
+            menuElements: mainMenuState.menuElements,
+            navigationDestination: mainMenuState.navigationDestination,
             shouldDismiss: mainMenuState.shouldDismiss
         )
     }
@@ -29,15 +34,21 @@ struct MainMenuState: ScreenState, Equatable {
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
+            menuElements: [],
+            navigationDestination: nil,
             shouldDismiss: false
         )
     }
 
     private init(
         windowUUID: WindowUUID,
-        shouldDismiss: Bool
+        menuElements: [MenuSection],
+        navigationDestination: MainMenuNavigationDestination? = nil,
+        shouldDismiss: Bool = false
     ) {
         self.windowUUID = windowUUID
+        self.menuElements = menuElements
+        self.navigationDestination = navigationDestination
         self.shouldDismiss = shouldDismiss
     }
 
@@ -45,16 +56,238 @@ struct MainMenuState: ScreenState, Equatable {
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
 
         switch action.actionType {
-        case MainMenuMiddlewareActionType.dismissMenu:
+        case MainMenuActionType.viewDidLoad:
             return MainMenuState(
                 windowUUID: state.windowUUID,
+                menuElements: MainMenuConfigurationUtility().populateMenuElements(with: state.windowUUID)
+            )
+        case MainMenuActionType.newTab(isPrivate: let isPrivate):
+            return MainMenuState(
+                windowUUID: state.windowUUID,
+                menuElements: MainMenuConfigurationUtility().populateMenuElements(with: state.windowUUID),
+                navigationDestination: isPrivate ? .newPrivateTab : .newTab
+            )
+        case MainMenuActionType.show(let destination):
+            return MainMenuState(
+                windowUUID: state.windowUUID,
+                menuElements: MainMenuConfigurationUtility().populateMenuElements(with: state.windowUUID),
+                navigationDestination: destination
+            )
+        case MainMenuActionType.closeMenu:
+            return MainMenuState(
+                windowUUID: state.windowUUID,
+                menuElements: state.menuElements,
                 shouldDismiss: true
             )
         default:
             return MainMenuState(
                 windowUUID: state.windowUUID,
-                shouldDismiss: false
+                menuElements: state.menuElements
             )
         }
+    }
+}
+
+struct MainMenuConfigurationUtility {
+    func populateMenuElements(with uuid: WindowUUID) -> [MenuSection] {
+        return [
+            getNewTabSection(with: uuid),
+            getLibrariesSection(with: uuid),
+            getOtherToolsSection(with: uuid)
+        ]
+    }
+
+    private func getNewTabSection(
+        with uuid: WindowUUID
+    ) -> MenuSection {
+        return MenuSection(options: [
+            MenuElement(
+                title: .MainMenu.TabsSection.NewTab,
+                iconName: "",
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: "",
+                a11yHint: "",
+                a11yId: "",
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.newTab(isPrivate: false)
+                        )
+                    )
+                }
+            ),
+            MenuElement(
+                title: .MainMenu.TabsSection.NewPrivateTab,
+                iconName: "",
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: "",
+                a11yHint: "",
+                a11yId: "",
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.newTab(isPrivate: true)
+                        )
+                    )
+                }
+            )
+        ])
+    }
+
+    private func getLibrariesSection(
+        with uuid: WindowUUID
+    ) -> MenuSection {
+        return MenuSection(options: [
+            MenuElement(
+                title: .MainMenu.PanelLinkSection.Bookmarks,
+                iconName: "",
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: "",
+                a11yHint: "",
+                a11yId: "",
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.show(.bookmarks)
+                        )
+                    )
+                }
+            ),
+            MenuElement(
+                title: .MainMenu.PanelLinkSection.History,
+                iconName: "",
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: "",
+                a11yHint: "",
+                a11yId: "",
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.show(.history)
+                        )
+                    )
+                }
+            ),
+            MenuElement(
+                title: .MainMenu.PanelLinkSection.Downloads,
+                iconName: "",
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: "",
+                a11yHint: "",
+                a11yId: "",
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.show(.downloads)
+                        )
+                    )
+                }
+            ),
+            MenuElement(
+                title: .MainMenu.PanelLinkSection.Passwords,
+                iconName: "",
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: "",
+                a11yHint: "",
+                a11yId: "",
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.show(.passwords)
+                        )
+                    )
+                }
+            )
+        ])
+    }
+
+    private func getOtherToolsSection(
+        with uuid: WindowUUID
+    ) -> MenuSection {
+        return MenuSection(options: [
+            MenuElement(
+                title: .MainMenu.OtherToolsSection.CustomizeHomepage,
+                iconName: "",
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: "",
+                a11yHint: "",
+                a11yId: "",
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.show(.customizeHomepage)
+                        )
+                    )
+                }
+            ),
+            MenuElement(
+                title: String(
+                    format: .MainMenu.OtherToolsSection.WhatsNew,
+                    AppName.shortName.rawValue
+                ),
+                iconName: "",
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: "",
+                a11yHint: "",
+                a11yId: "",
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.closeMenu
+                        )
+                    )
+                }
+            ),
+            MenuElement(
+                title: .MainMenu.OtherToolsSection.GetHelp,
+                iconName: "",
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: "",
+                a11yHint: "",
+                a11yId: "",
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.closeMenu
+                        )
+                    )
+                }
+            ),
+            MenuElement(
+                title: .MainMenu.OtherToolsSection.Settings,
+                iconName: "",
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: "",
+                a11yHint: "",
+                a11yId: "",
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.show(.settings)
+                        )
+                    )
+                }
+            )
+        ])
     }
 }

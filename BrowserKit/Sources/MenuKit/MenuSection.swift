@@ -3,9 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Glean
 
-struct MainMenuTelemetry {
-    func mainMenuViewed() { }
-    func mainMenuDismissed() { }
+public struct MenuSection: Equatable {
+    public let options: [MenuElement]
+
+    public init(options: [MenuElement]) {
+        self.options = options
+    }
 }

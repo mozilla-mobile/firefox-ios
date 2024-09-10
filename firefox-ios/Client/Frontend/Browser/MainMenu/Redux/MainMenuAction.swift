@@ -12,13 +12,23 @@ final class MainMenuAction: Action {
     }
 }
 
-final class MainMenuMiddlewareAction: Action { }
-
 enum MainMenuActionType: ActionType {
+    case viewDidLoad
     case mainMenuDidAppear
+    case toggleNightMode
     case closeMenu
+    case newTab(isPrivate: Bool)
+    case show(MainMenuNavigationDestination)
 }
 
-enum MainMenuMiddlewareActionType: ActionType {
-    case dismissMenu
+enum MainMenuNavigationDestination {
+    case newTab
+    case newPrivateTab
+    case bookmarks
+    case customizeHomepage
+    case downloads
+    case getHelp
+    case history
+    case passwords
+    case settings
 }

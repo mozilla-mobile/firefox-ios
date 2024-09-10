@@ -44,7 +44,9 @@ enum NimbusFeatureFlagID: String, CaseIterable {
 
     var debugKey: String? {
         switch self {
-        case .microsurvey, .closeRemoteTabs:
+        case .closeRemoteTabs,
+                .microsurvey,
+                .menuRefactor:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil

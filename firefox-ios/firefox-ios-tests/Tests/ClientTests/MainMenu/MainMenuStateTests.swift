@@ -18,18 +18,6 @@ final class MainMenuStateTests: XCTestCase {
         DependencyHelperMock().reset()
     }
 
-    func testDismissSurveyAction() {
-        let initialState = createSubject()
-        let reducer = mainMenuReducer()
-
-        XCTAssertEqual(initialState.shouldDismiss, false)
-
-        let action = getMiddleWareAction(for: .dismissMenu)
-        let newState = reducer(initialState, action)
-
-        XCTAssertEqual(newState.shouldDismiss, true)
-    }
-
     // MARK: - Private
     private func createSubject() -> MainMenuState {
         return MainMenuState(windowUUID: .XCTestDefaultUUID)
@@ -37,9 +25,5 @@ final class MainMenuStateTests: XCTestCase {
 
     private func mainMenuReducer() -> Reducer<MainMenuState> {
         return MainMenuState.reducer
-    }
-
-    private func getMiddleWareAction(for actionType: MainMenuMiddlewareActionType) -> MainMenuAction {
-        return MainMenuAction(windowUUID: .XCTestDefaultUUID, actionType: actionType)
     }
 }

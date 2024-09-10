@@ -19,18 +19,9 @@ final class MainMenuMiddleware {
         case MainMenuActionType.mainMenuDidAppear:
             self.telemetry.mainMenuViewed()
         case MainMenuActionType.closeMenu:
-            self.dismissMenu(windowUUID: action.windowUUID)
+            self.telemetry.mainMenuDismissed()
         default:
             break
         }
-    }
-
-    // MARK: - Action Helpers
-    private func dismissMenu(windowUUID: WindowUUID) {
-        let action = MainMenuAction(
-            windowUUID: windowUUID,
-            actionType: MainMenuMiddlewareActionType.dismissMenu
-        )
-        store.dispatch(action)
     }
 }
