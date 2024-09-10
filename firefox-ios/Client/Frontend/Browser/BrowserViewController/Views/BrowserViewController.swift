@@ -3266,8 +3266,8 @@ extension BrowserViewController: LegacyTabDelegate {
                 guard let tabURL = tab?.url else { return }
                 let logins = (try? await self?.profile.logins.listLogins()) ?? []
                 let loginsForCurrentTab = self?.filterLoginsForCurrentTab(logins: logins,
-                                                                      tabURL: tabURL,
-                                                                      field: field) ?? []
+                                                                          tabURL: tabURL,
+                                                                          field: field) ?? []
                 if loginsForCurrentTab.isEmpty {
                     tab?.webView?.accessoryView.reloadViewFor(.standard)
                 } else {
