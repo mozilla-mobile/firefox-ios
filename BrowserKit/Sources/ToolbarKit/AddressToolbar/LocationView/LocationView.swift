@@ -12,7 +12,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         static let gradientViewWidth: CGFloat = 40
         static let searchEngineImageViewCornerRadius: CGFloat = 4
         static let iconContainerCornerRadius: CGFloat = 8
-        static let lockIconImageViewSize = CGSize(width: 20, height: 20)
+        static let lockIconImageViewSize = CGSize(width: 40, height: 24)
         static let searchEngineImageViewSize = CGSize(width: 24, height: 24)
     }
 
@@ -52,6 +52,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
 
     private var clearButtonWidthConstraint: NSLayoutConstraint?
     private var urlTextFieldLeadingConstraint: NSLayoutConstraint?
+    private var iconContainerStackViewLeadingConstraint: NSLayoutConstraint?
     private var lockIconWidthAnchor: NSLayoutConstraint?
 
     private lazy var iconContainerStackView: UIStackView = .build { view in
@@ -156,6 +157,9 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
             equalTo: iconContainerStackView.trailingAnchor)
         urlTextFieldLeadingConstraint?.isActive = true
 
+        iconContainerStackViewLeadingConstraint = iconContainerStackView.leadingAnchor.constraint(equalTo: leadingAnchor)
+        iconContainerStackViewLeadingConstraint?.isActive = true
+
         NSLayoutConstraint.activate([
             gradientView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
             gradientView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor),
@@ -184,8 +188,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
             lockIconButton.widthAnchor.constraint(equalToConstant: UX.lockIconImageViewSize.width),
 
             iconContainerStackView.topAnchor.constraint(equalTo: topAnchor),
-            iconContainerStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            iconContainerStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalSpace),
+            iconContainerStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 
@@ -204,19 +207,16 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
 
     private func updateURLTextFieldLeadingConstraintBasedOnState() {
         let shouldAdjustForOverflow = doesURLTextFieldExceedViewWidth && !isEditing
-        let shouldAdjustForNonEmpty = !isURLTextFieldEmpty && !isEditing
 
         // hide the leading "..." by moving them behind the lock icon
         if shouldAdjustForOverflow {
             updateURLTextFieldLeadingConstraint(constant: -dotWidth)
-        } else if shouldAdjustForNonEmpty {
-            updateURLTextFieldLeadingConstraint()
         } else {
             updateURLTextFieldLeadingConstraint(constant: UX.horizontalSpace)
         }
     }
 
-    private func updateURLTextFieldLeadingConstraint(constant: CGFloat = 0) {
+    private func updateURLTextFieldLeadingConstraint(constant: CGFloat) {
         urlTextFieldLeadingConstraint?.constant = constant
     }
 
@@ -241,6 +241,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         removeContainerIcons()
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
         urlTextFieldLeadingConstraint?.constant = UX.horizontalSpace
+        iconContainerStackViewLeadingConstraint?.constant = UX.horizontalSpace
         updateURLTextFieldLeadingConstraint(constant: UX.horizontalSpace)
         updateGradient()
     }
@@ -250,6 +251,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         removeContainerIcons()
         iconContainerStackView.addArrangedSubview(lockIconButton)
         urlTextFieldLeadingConstraint?.constant = 0
+        iconContainerStackViewLeadingConstraint?.constant = 0
         updateGradient()
     }
 
