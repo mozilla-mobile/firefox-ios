@@ -14,7 +14,6 @@ class ContentBlockerSettingViewController: SettingsTableViewController,
     }
 
     private lazy var linkButton: LinkButton = .build()
-    private var contentSizeCategoryNotificationTicket: NSObjectProtocol?
     let prefs: Prefs
     var currentBlockingStrength: BlockingStrength
 
