@@ -40,6 +40,11 @@ FILES_TO_DOWNLOAD = [
     "toolkit/components/passwordmgr/LoginManager.shared.mjs",
     "toolkit/components/formautofill/Overrides.ios.js",
     "toolkit/modules/third_party/fathom/fathom.mjs",
+    "toolkit/components/passwordmgr/shared/LoginFormFactory.sys.mjs",
+    "toolkit/components/passwordmgr/shared/NewPasswordModel.sys.mjs",
+    "toolkit/components/passwordmgr/shared/PasswordGenerator.sys.mjs ",
+    "toolkit/components/passwordmgr/shared/PasswordRulesParser.sys.mjs",
+    "toolkit/components/passwordmgr/LoginManager.shared.sys.mjs",
 ]
 
 
