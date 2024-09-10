@@ -14,6 +14,7 @@ final class MainMenuAction: Action {
 
 enum MainMenuActionType: ActionType {
     case viewDidLoad
+    case updateTabInfo(MenuTabInfo?)
     case mainMenuDidAppear
     case toggleNightMode
     case closeMenu
