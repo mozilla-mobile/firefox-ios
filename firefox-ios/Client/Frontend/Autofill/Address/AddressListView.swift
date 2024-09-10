@@ -84,27 +84,23 @@ struct AddressListView: View {
 
                 case .edit:
                     EditAddressViewControllerRepresentable(model: viewModel)
-                        .navigationBarTitle(String.Addresses.Settings.Edit.AutofillEditAddressTitle, displayMode: .inline)
+                        .navigationBarTitle(viewModel.editNavigationbarTitle, displayMode: .inline)
                         .toolbar {
                             ToolbarItemGroup(placement: .cancellationAction) {
-                                if viewModel.isEditMode {
-                                    Button(String.Addresses.Settings.Edit.AutofillCancelButton) {
+                                Button(viewModel.cancelButtonLabel) {
+                                    if viewModel.isEditMode {
                                         viewModel.cancelEditButtonTap()
-                                    }
-                                } else {
-                                    Button(String.Addresses.Settings.Edit.CloseNavBarButtonLabel) {
+                                    } else {
                                         viewModel.closeEditButtonTap()
                                     }
                                 }
                             }
 
                             ToolbarItemGroup(placement: .primaryAction) {
-                                if viewModel.isEditMode {
-                                    Button(String.Addresses.Settings.Edit.AutofillSaveButton) {
+                                Button(viewModel.primaryButtonLabel) {
+                                    if viewModel.isEditMode {
                                         viewModel.saveEditButtonTap()
-                                    }
-                                } else {
-                                    Button(String.Addresses.Settings.Edit.EditNavBarButtonLabel) {
+                                    } else {
                                         viewModel.editButtonTap()
                                     }
                                 }
