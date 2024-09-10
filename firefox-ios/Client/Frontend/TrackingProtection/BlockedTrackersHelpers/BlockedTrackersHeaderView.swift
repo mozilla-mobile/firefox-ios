@@ -8,16 +8,13 @@ import Shared
 
 class BlockedTrackersHeaderView: UITableViewHeaderFooterView,
                                  ReusableCell {
-    let totalTrackersBlockedLabel: UILabel = {
-        let label = UILabel()
+    let totalTrackersBlockedLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .left
         label.font = FXFontStyles.Regular.caption1.scaledFont()
         label.numberOfLines = 2
         label.accessibilityTraits.insert(.header)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    }
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)

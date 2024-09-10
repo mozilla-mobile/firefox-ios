@@ -11,13 +11,14 @@ class BlockedTrackerCell: UITableViewCell,
     private struct UX {
         static let imageMargins: CGFloat = 10
         static let textVerticalDistance: CGFloat = 11
+        static let cornerRadius: CGFloat = 5
     }
 
     private let trackerImageView: UIImageView = .build { image in
         image.contentMode = .scaleAspectFit
         image.clipsToBounds = true
         image.layer.masksToBounds = true
-        image.layer.cornerRadius = 5
+        image.layer.cornerRadius = UX.cornerRadius
     }
 
     private let trackerLabel: UILabel = .build { label in

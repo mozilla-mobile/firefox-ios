@@ -62,17 +62,6 @@ public struct ImageIdentifiers {
         }
     }
 
-    public struct TrackingProtection {
-        public static let protectionAlert = "protectionAlert"
-        public static let protectionOn = "protectionOn"
-        public static let protectionOff = "protectionOff"
-
-        public static let socialMediaTrackers = "socialMediaTrackersImage"
-        public static let fingerprintersTrackers = "fingerprintersTrackersImage"
-        public static let crossSiteTrackers = "crossSiteTrackersImage"
-        public static let analyticsTrackersImage = "analyticsTrackersImage"
-    }
-
     public struct NativeErrorPage {
         public static let noInternetConnection = "noInternetConnection"
     }

@@ -110,6 +110,21 @@ public struct StandardImageIdentifiers {
         public static let warning = "warningLarge"
         public static let warningFill = "warningFillLarge"
         public static let whatsNew = "whatsNewLarge"
+
+        public struct TrackingProtection {
+            public static let analyticsTrackersImage = "analyticsTrackersImage"
+            public static let crossSiteTrackers = "crossSiteTrackersImage"
+            public static let fingerprintersTrackers = "fingerprintersTrackersImage"
+
+            public static let protectionAlert = "protectionAlert"
+            public static let protectionOn = "protectionOn"
+            public static let protectionOff = "protectionOff"
+
+            public static let socialMediaTrackers = "socialMediaTrackersImage"
+
+
+
+        }
     }
 
     // Icon size 30x30

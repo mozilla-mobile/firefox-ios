@@ -87,7 +87,6 @@ class BlockedTrackersTableViewController: UIViewController,
     // MARK: Header View Setup
     private func setupNavigationView() {
         view.addSubview(navigationView)
-        navigationView.translatesAutoresizingMaskIntoConstraints = false
         let navigationViewContraints = [
             navigationView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
             navigationView.trailingAnchor.constraint(

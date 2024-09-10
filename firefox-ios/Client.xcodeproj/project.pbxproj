@@ -1071,6 +1071,7 @@
 		AB4FB4DB2C89FB10005EF0CC /* BlockedTrackersHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FB4D72C89FB0D005EF0CC /* BlockedTrackersHeaderView.swift */; };
 		AB4FB4DC2C89FB10005EF0CC /* BlockedTrackerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FB4D82C89FB0E005EF0CC /* BlockedTrackerCell.swift */; };
 		AB4FB4DD2C89FB10005EF0CC /* BlockedTrackersTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FB4D92C89FB0F005EF0CC /* BlockedTrackersTableView.swift */; };
+		AB4FB4E12C90491F005EF0CC /* BlockedTrackersTableViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB4FB4DF2C9048D1005EF0CC /* BlockedTrackersTableViewControllerTests.swift */; };
 		AB52ED3B2A0E8873001067F5 /* UserConversionMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB52ED3A2A0E8873001067F5 /* UserConversionMetrics.swift */; };
 		AB6FEA202AEA5CA200E7B2F2 /* FakespotAdView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB6FEA1F2AEA5CA200E7B2F2 /* FakespotAdView.swift */; };
 		AB7D4C3129ACAED100626427 /* Tab+ChangeUserAgentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7D4C3029ACAED100626427 /* Tab+ChangeUserAgentTests.swift */; };
@@ -7379,6 +7380,7 @@
 		AB4FB4D72C89FB0D005EF0CC /* BlockedTrackersHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockedTrackersHeaderView.swift; sourceTree = "<group>"; };
 		AB4FB4D82C89FB0E005EF0CC /* BlockedTrackerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockedTrackerCell.swift; sourceTree = "<group>"; };
 		AB4FB4D92C89FB0F005EF0CC /* BlockedTrackersTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockedTrackersTableView.swift; sourceTree = "<group>"; };
+		AB4FB4DF2C9048D1005EF0CC /* BlockedTrackersTableViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedTrackersTableViewControllerTests.swift; sourceTree = "<group>"; };
 		AB52ED3A2A0E8873001067F5 /* UserConversionMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserConversionMetrics.swift; sourceTree = "<group>"; };
 		AB6FEA1F2AEA5CA200E7B2F2 /* FakespotAdView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotAdView.swift; sourceTree = "<group>"; };
 		AB7C4D658AB44D577390B61F /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/Menu.strings; sourceTree = "<group>"; };
@@ -11419,6 +11421,7 @@
 				0AFF7F652C7784F000265214 /* TrackingProtectionModelTests.swift */,
 				AB9CBC062C53B76400102610 /* TrackingProtectionStateTests.swift */,
 				0A7693602C7DD19500103A6D /* CertificatesViewModelTests.swift */,
+				AB4FB4DF2C9048D1005EF0CC /* BlockedTrackersTableViewControllerTests.swift */,
 			);
 			path = TrackingProtectionTests;
 			sourceTree = "<group>";
@@ -16130,6 +16133,7 @@
 				C8B41E0F29F0357300FE218A /* NimbusOnboardingFeatureLayerTests.swift in Sources */,
 				5AF6254728A58AC100A90253 /* MockHistoryHighlightsDataAdaptor.swift in Sources */,
 				8A7A26E329D4ACF300EA76F1 /* SceneCoordinatorTests.swift in Sources */,
+				AB4FB4E12C90491F005EF0CC /* BlockedTrackersTableViewControllerTests.swift in Sources */,
 				39C137972655798A003DC662 /* NimbusIntegrationTests.swift in Sources */,
 				215B458427DA87FC00E5E800 /* TabMetadataManagerTests.swift in Sources */,
 				215349062886007900FADB4D /* GleanPlumbMessageStoreTests.swift in Sources */,

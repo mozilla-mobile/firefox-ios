@@ -3,6 +3,8 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Common
+import Shared
 
 struct BlockedTrackersTableModel {
     let topLevelDomain: String
@@ -27,16 +29,16 @@ struct BlockedTrackersTableModel {
                                          trackingContentCount)
 
         let crossSiteImage = UIImage(
-            imageLiteralResourceName: ImageIdentifiers.TrackingProtection.crossSiteTrackers
+            imageLiteralResourceName: StandardImageIdentifiers.Large.TrackingProtection.crossSiteTrackers
         ).withRenderingMode(.alwaysTemplate)
         let fingerprintersImage = UIImage(
-            imageLiteralResourceName: ImageIdentifiers.TrackingProtection.fingerprintersTrackers
+            imageLiteralResourceName: StandardImageIdentifiers.Large.TrackingProtection.fingerprintersTrackers
         ).withRenderingMode(.alwaysTemplate)
         let socialMediaImage = UIImage(
-            imageLiteralResourceName: ImageIdentifiers.TrackingProtection.socialMediaTrackers
+            imageLiteralResourceName: StandardImageIdentifiers.Large.TrackingProtection.socialMediaTrackers
         ).withRenderingMode(.alwaysTemplate)
         let trackingContentImage = UIImage(
-            imageLiteralResourceName: ImageIdentifiers.TrackingProtection.analyticsTrackersImage
+            imageLiteralResourceName: StandardImageIdentifiers.Large.TrackingProtection.analyticsTrackersImage
         ).withRenderingMode(.alwaysTemplate)
 
         return [
