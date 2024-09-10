@@ -19,8 +19,6 @@ final class TrackingProtectionHeaderView: UIView, ThemeApplicable {
 
     private var faviconHeightConstraint: NSLayoutConstraint?
     private var faviconWidthConstraint: NSLayoutConstraint?
-    private var closeButtonHeightConstraint: NSLayoutConstraint?
-    private var closeButtonWidthConstraint: NSLayoutConstraint?
 
     private lazy var headerLabelsContainer: UIStackView = .build { stack in
         stack.backgroundColor = .clear
