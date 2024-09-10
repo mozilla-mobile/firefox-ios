@@ -36,6 +36,20 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         UIAccessibility.post(notification: .layoutChanged, argument: dataClearanceContextHintVC)
     }
 
+    // Starts a timer to monitor for a navigation button double tap for the navigation contextual hint
+    func startNavigationButtonDoubleTapTimer() {
+        guard let button = backButton else { return }
+        if navigationDoubleTapTimer == nil {
+            navigationDoubleTapTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { _ in
+                self.navigationDoubleTapTimer = nil
+            }
+        } else {
+            isPresentingNavigationContextualHint = true
+            navigationDoubleTapTimer = nil
+            configureNavigationContextualHint(button)
+        }
+    }
+
     func configureNavigationContextualHint(_ view: UIView) {
         navigationContextHintVC.configure(
             anchor: view,
@@ -47,25 +61,13 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     private func presentNavigationContextualHint() {
+        // Only show the contextual hint if the tab webpage is loaded or we are on the home page
         if let selectedTab = tabManager.selectedTab, selectedTab.isFxHomeTab || !selectedTab.loading {
             present(navigationContextHintVC, animated: true)
             UIAccessibility.post(notification: .layoutChanged, argument: navigationContextHintVC)
             isPresentingNavigationContextualHint = false
         } else {
             guard let button = backButton else { return }
-            configureNavigationContextualHint(button)
-        }
-    }
-
-    func startNavigationContextualHintTimer() {
-        guard let button = backButton else { return }
-        if navigationContextualHintTimer == nil {
-            navigationContextualHintTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { _ in
-                self.navigationContextualHintTimer = nil
-            }
-        } else {
-            isPresentingNavigationContextualHint = true
-            navigationContextualHintTimer = nil
             configureNavigationContextualHint(button)
         }
     }

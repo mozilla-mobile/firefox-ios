@@ -117,7 +117,7 @@ class BrowserViewController: UIViewController,
     // navigation contextual hint
     var backButton: UIButton?
     var forwardButton: UIButton?
-    var navigationContextualHintTimer: Timer?
+    var navigationDoubleTapTimer: Timer?
     var isPresentingNavigationContextualHint = false
 
     weak var gridTabTrayController: LegacyGridTabViewController?
@@ -2020,7 +2020,7 @@ class BrowserViewController: UIViewController,
             didTapOnHome()
         case .back:
             didTapOnBack()
-            startNavigationContextualHintTimer()
+            startNavigationButtonDoubleTapTimer()
         case .forward:
             didTapOnForward()
         case .reloadNoCache:
