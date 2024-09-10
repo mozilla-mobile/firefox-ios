@@ -3216,45 +3216,42 @@ extension BrowserViewController: LegacyTabDelegate {
         readerMode.delegate = self
         tab.addContentScript(readerMode, name: ReaderMode.name())
 
-        // only add the logins helper if the tab is not a private browsing tab
-        if !tab.isPrivate {
-            let logins = LoginsHelper(
-                tab: tab,
-                profile: profile,
-                theme: currentTheme()
-            )
-            tab.addContentScript(logins, name: LoginsHelper.name())
-            logins.foundFieldValues = { [weak self, weak tab, weak webView] field, currentRequestId in
-                Task {
-                    guard self?.autofillLoginNimbusFeatureFlag() == true else { return }
-                    guard let tabURL = tab?.url else { return }
-                    let logins = (try? await self?.profile.logins.listLogins()) ?? []
-                    let loginsForCurrentTab = logins.filter { login in
-                        if field == FocusFieldType.username && login.decryptedUsername.isEmpty { return false }
-                        guard let recordHostnameURL = URL(string: login.hostname) else { return false }
-                        return recordHostnameURL.baseDomain == tabURL.baseDomain
-                    }
-                    if loginsForCurrentTab.isEmpty {
-                        tab?.webView?.accessoryView.reloadViewFor(.standard)
-                    } else {
-                        tab?.webView?.accessoryView.reloadViewFor(.login)
-                        tab?.webView?.reloadInputViews()
-                        TelemetryWrapper.recordEvent(
-                            category: .action,
-                            method: .view,
-                            object: .loginsAutofillPromptShown
+        let logins = LoginsHelper(
+            tab: tab,
+            profile: profile,
+            theme: currentTheme()
+        )
+        tab.addContentScript(logins, name: LoginsHelper.name())
+        logins.foundFieldValues = { [weak self, weak tab, weak webView] field, currentRequestId in
+            Task {
+                guard self?.autofillLoginNimbusFeatureFlag() == true else { return }
+                guard let tabURL = tab?.url else { return }
+                let logins = (try? await self?.profile.logins.listLogins()) ?? []
+                let loginsForCurrentTab = logins.filter { login in
+                    if field == FocusFieldType.username && login.decryptedUsername.isEmpty { return false }
+                    guard let recordHostnameURL = URL(string: login.hostname) else { return false }
+                    return recordHostnameURL.baseDomain == tabURL.baseDomain
+                }
+                if loginsForCurrentTab.isEmpty {
+                    tab?.webView?.accessoryView.reloadViewFor(.standard)
+                } else {
+                    tab?.webView?.accessoryView.reloadViewFor(.login)
+                    tab?.webView?.reloadInputViews()
+                    TelemetryWrapper.recordEvent(
+                        category: .action,
+                        method: .view,
+                        object: .loginsAutofillPromptShown
+                    )
+                }
+                tab?.webView?.accessoryView.savedLoginsClosure = {
+                    Task { @MainActor [weak self] in
+                        // Dismiss keyboard
+                        webView?.resignFirstResponder()
+                        self?.authenticateSelectSavedLoginsClosureBottomSheet(
+                            tabURL: tabURL,
+                            currentRequestId: currentRequestId,
+                            field: field
                         )
-                    }
-                    tab?.webView?.accessoryView.savedLoginsClosure = {
-                        Task { @MainActor [weak self] in
-                            // Dismiss keyboard
-                            webView?.resignFirstResponder()
-                            self?.authenticateSelectSavedLoginsClosureBottomSheet(
-                                tabURL: tabURL,
-                                currentRequestId: currentRequestId,
-                                field: field
-                            )
-                        }
                     }
                 }
             }

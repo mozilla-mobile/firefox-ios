@@ -274,7 +274,7 @@ class CreditCardsTests: BaseTestCase {
             app.buttons[useSavedCard].tap()
             unlockLoginsView()
             mozWaitForElementToExist(app.staticTexts["Use saved card"])
-            app.scrollViews.otherElements.tables.cells.element(boundBy: 1).tap()
+            app.scrollViews.otherElements.tables.cells["creditCardCell_1"].tap()
             validateAutofillCardInfo(cardNr: "4111 1111 1111 1111", expirationNr: "06 / 40", name: "Test2")
             dismissSavedCardsPrompt()
             app.swipeUp()
@@ -285,7 +285,9 @@ class CreditCardsTests: BaseTestCase {
             app.buttons[useSavedCard].tap()
             unlockLoginsView()
             mozWaitForElementToExist(app.staticTexts["Use saved card"])
-            app.scrollViews.otherElements.tables.cells.element(boundBy: 2).tap()
+            app.scrollViews.element.swipeUp()
+            mozWaitForElementToExist(app.scrollViews.otherElements.tables.cells["creditCardCell_2"])
+            app.scrollViews.otherElements.tables.cells["creditCardCell_2"].tap()
             validateAutofillCardInfo(cardNr: "5346 7556 0029 9631", expirationNr: "07 / 40", name: "Test3")
         }
     }
@@ -665,6 +667,9 @@ class CreditCardsTests: BaseTestCase {
         let cardNumber = app.webViews["contentView"].webViews.textFields["Card number"]
         mozWaitForElementToExist(cardNumber)
         cardNumber.tapOnApp()
+        if !app.buttons[useSavedCard].isHittable {
+            cardNumber.tapOnApp()
+        }
         // Use saved card prompt is displayed
         mozWaitForElementToExist(app.buttons[useSavedCard])
         // Expand the prompt

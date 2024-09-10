@@ -33,9 +33,6 @@ jobs:
               id: compile
               run: |
                 xcodebuild \
-                  -resolvePackageDependencies \
-                  -onlyUsePackageVersionsFromResolvedFile
-                xcodebuild \
                   build-for-testing \
                   -scheme ${{ env.xcodebuild_scheme }} \
                   -target ${{ env.xcodebuild_target }} \

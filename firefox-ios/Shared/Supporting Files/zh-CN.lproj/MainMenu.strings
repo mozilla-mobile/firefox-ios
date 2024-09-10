@@ -61,6 +61,12 @@
 /* On the main menu, in the Save submenu, the title for the menu component that allows a user to remove the current website from the shortcuts on the homepage. */
 "MainMenu.Submenus.Save.RemoveFromShortcuts.Title.v131" = "移除快捷方式";
 
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Save as PDF tool. */
+"MainMenu.Submenus.Save.SaveAsPDF.Subtitle.v131" = "PDF";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows the user to use the Save to PDF tool. */
+"MainMenu.Submenus.Save.SaveAsPDF.Title.v131" = "另存为 PDF";
+
 /* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Reading List tool. */
 "MainMenu.Submenus.Save.SaveToReadingList.Subtitle.v131" = "阅读列表";
 
