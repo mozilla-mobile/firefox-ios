@@ -61,7 +61,10 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     }
 
     private lazy var searchEngineContentView: UIView = .build()
-    private lazy var iconContainerBackgroundView: UIView = .build()
+
+    private lazy var iconContainerBackgroundView: UIView = .build { view in
+        view.layer.cornerRadius = UX.iconContainerCornerRadius
+    }
 
     private lazy var searchEngineImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
@@ -141,21 +144,6 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         super.layoutSubviews()
         updateGradient()
         updateURLTextFieldLeadingConstraintBasedOnState()
-        applyCornerRadiusToLeftCorners(
-            view: iconContainerBackgroundView,
-            radius: UX.iconContainerCornerRadius
-        )
-    }
-
-    private func applyCornerRadiusToLeftCorners(view: UIView, radius: CGFloat) {
-        let path = UIBezierPath(
-            roundedRect: view.bounds,
-            byRoundingCorners: [.topLeft, .bottomLeft],
-            cornerRadii: CGSize(width: radius, height: radius)
-        )
-        let mask = CAShapeLayer()
-        mask.path = path.cgPath
-        view.layer.mask = mask
     }
 
     private func setupLayout() {
