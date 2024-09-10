@@ -447,6 +447,12 @@ class BrowserCoordinator: BaseCoordinator,
         coordinator.startModal()
     }
 
+    func openURLInNewTab(_ url: URL?) {
+        if let url = url {
+            browserViewController.openURLInNewTab(url, isPrivate: self.tabManager.selectedTab?.isPrivate ?? false)
+        }
+    }
+
     func openNewTab(inPrivateMode isPrivate: Bool) {
         handle(homepanelSection: isPrivate ? .newPrivateTab : .newTab)
     }
