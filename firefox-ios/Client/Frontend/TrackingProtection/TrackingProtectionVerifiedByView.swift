@@ -35,8 +35,9 @@ class TrackingProtectionVerifiedByView: UIView {
 
         NSLayoutConstraint.activate([
             verifiedByLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: TPMenuUX.UX.horizontalMargin),
-            verifiedByLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            verifiedByLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
+            verifiedByLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -TPMenuUX.UX.horizontalMargin),
+            verifiedByLabel.topAnchor.constraint(equalTo: topAnchor, constant: TPMenuUX.UX.horizontalMargin),
+            verifiedByLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -TPMenuUX.UX.horizontalMargin)
         ])
     }
 
