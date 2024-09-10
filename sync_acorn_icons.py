@@ -49,8 +49,10 @@ def download_icons_and_save():
                 icon_path = os.path.join(dir_object[0], file)
                 folder_name = f"{os.path.splitext(file)[0]}.imageset".replace("Dark", "").replace("Light", "")
 
+                original_file_path = f"{asset_folder_path}{folder_name}/{file}"
                 # file has to be a pdf and we need the file already present in the images folder
-                if file.endswith(".pdf") and folder_name in images_list_present: 
+                # the file need to be already in the original folder, no different file can be added
+                if file.endswith(".pdf") and folder_name in images_list_present and os.path.exists(original_file_path):
                     destination_folder = os.path.join(asset_folder_path, folder_name)
                     os.makedirs(destination_folder, exist_ok=True)
                     
