@@ -492,7 +492,8 @@ class BrowserViewController: UIViewController,
         // If we are displaying a private tab, hide any elements in the tab that we wouldn't want shown
         // when the app is in the home switcher
         guard let privateTab = tabManager.selectedTab,
-              privateTab.isPrivate
+              privateTab.isPrivate,
+              canShowPrivacyView
         else { return }
 
         view.bringSubviewToFront(webViewContainerBackdrop)
@@ -508,8 +509,15 @@ class BrowserViewController: UIViewController,
         presentedViewController?.view.alpha = 0
     }
 
+    var canShowPrivacyView: Bool {
+        // Show privacy view if no view controller is presented
+        // or if the presented view is a PhotonActionSheet.
+        self.presentedViewController == nil || presentedViewController is PhotonActionSheet
+    }
+
     @objc
     func appDidBecomeActiveNotification() {
+        guard canShowPrivacyView else { return }
         // Re-show any components that might have been hidden because they were being displayed
         // as part of a private mode tab
         UIView.animate(
