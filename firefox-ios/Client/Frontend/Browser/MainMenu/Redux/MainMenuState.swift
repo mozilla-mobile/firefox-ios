@@ -61,12 +61,6 @@ struct MainMenuState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 menuElements: MainMenuConfigurationUtility().populateMenuElements(with: state.windowUUID)
             )
-        case MainMenuActionType.newTab(isPrivate: let isPrivate):
-            return MainMenuState(
-                windowUUID: state.windowUUID,
-                menuElements: MainMenuConfigurationUtility().populateMenuElements(with: state.windowUUID),
-                navigationDestination: isPrivate ? .newPrivateTab : .newTab
-            )
         case MainMenuActionType.show(let destination):
             return MainMenuState(
                 windowUUID: state.windowUUID,
@@ -113,7 +107,7 @@ struct MainMenuConfigurationUtility {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.newTab(isPrivate: false)
+                            actionType: MainMenuActionType.show(.newTab)
                         )
                     )
                 }
@@ -130,7 +124,7 @@ struct MainMenuConfigurationUtility {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.newTab(isPrivate: true)
+                            actionType: MainMenuActionType.show(.newPrivateTab)
                         )
                     )
                 }
@@ -249,7 +243,7 @@ struct MainMenuConfigurationUtility {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenu
+                            actionType: MainMenuActionType.show(.goToURL(SupportUtils.URLForWhatsNew))
                         )
                     )
                 }
@@ -266,7 +260,7 @@ struct MainMenuConfigurationUtility {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenu
+                            actionType: MainMenuActionType.show(.goToURL(SupportUtils.URLForGetHelp))
                         )
                     )
                 }
