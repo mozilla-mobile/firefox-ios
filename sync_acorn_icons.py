@@ -48,7 +48,7 @@ def download_icons_and_save():
             for file in dir_object[2]:
                 icon_path = os.path.join(dir_object[0], file)
                 folder_name = f"{os.path.splitext(file)[0]}.imageset".replace("Dark", "").replace("Light", "")
-                
+
                 # file has to be a pdf and we need the file already present in the images folder
                 if file.endswith(".pdf") and folder_name in images_list_present: 
                     destination_folder = os.path.join(asset_folder_path, folder_name)
@@ -77,7 +77,7 @@ def sort_icons_by_size() -> dict:
             
             size_key = next((key for key in icons_by_size if key in file_name), None)
             
-            if size_key == "ExtraLarge":
+            if size_key:
                 icon_name = file_name.replace(size_key, "")
                 icons_by_size[size_key].append((icon_name, file_name))
 
@@ -85,17 +85,17 @@ def sort_icons_by_size() -> dict:
 
 def generate_standard_image_identifiers_swift(sorted_icons: dict):
     swift_file_content = """
-    // This Source Code Form is subject to the terms of the Mozilla Public
-    // License, v. 2.0. If a copy of the MPL was not distributed with this
-    // file, You can obtain one at http://mozilla.org/MPL/2.0/
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-    import Foundation
+import Foundation
 
-    /// This struct defines all the standard image identifiers of icons and images used in the app.
-    /// When adding new identifiers, please respect alphabetical order.
-    /// Sing the song if you must.
-    public struct StandardImageIdentifiers {
-    """
+/// This struct defines all the standard image identifiers of icons and images used in the app.
+/// When adding new identifiers, please respect alphabetical order.
+/// Sing the song if you must.
+public struct StandardImageIdentifiers {
+"""
 
     size_struct_map = {
         "Small": "16x16",
