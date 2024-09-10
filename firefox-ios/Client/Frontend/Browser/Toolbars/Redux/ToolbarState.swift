@@ -296,7 +296,25 @@ struct ToolbarState: ScreenState, Equatable {
                 showMenuWarningBadge: state.showMenuWarningBadge,
                 isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
                 canShowDataClearanceAction: state.canShowDataClearanceAction,
-                canShowNavigationHint: toolbarAction.canShowNavigationHint ?? state.canShowNavigationHint)
+                canShowNavigationHint: true)
+
+        case ToolbarActionType.navigationHintFinishedPresenting:
+            guard let toolbarAction = action as? ToolbarAction else { return state }
+            return ToolbarState(
+                windowUUID: state.windowUUID,
+                toolbarPosition: state.toolbarPosition,
+                isPrivateMode: state.isPrivateMode,
+                addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
+                navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
+                isShowingNavigationToolbar: state.isShowingNavigationToolbar,
+                isShowingTopTabs: toolbarAction.isShowingTopTabs ?? state.isShowingTopTabs,
+                canGoBack: state.canGoBack,
+                canGoForward: state.canGoForward,
+                numberOfTabs: state.numberOfTabs,
+                showMenuWarningBadge: state.showMenuWarningBadge,
+                isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
+                canShowDataClearanceAction: state.canShowDataClearanceAction,
+                canShowNavigationHint: false)
 
         default:
             return ToolbarState(

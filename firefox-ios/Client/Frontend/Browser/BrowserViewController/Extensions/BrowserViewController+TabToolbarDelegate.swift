@@ -38,16 +38,13 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     // Starts a timer to monitor for a navigation button double tap for the navigation contextual hint
     func startNavigationButtonDoubleTapTimer() {
-//        guard let button = backButton else { return }
         if navigationHintDoubleTapTimer == nil {
             navigationHintDoubleTapTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { _ in
                 self.navigationHintDoubleTapTimer = nil
             }
         } else {
             navigationHintDoubleTapTimer = nil
-            let action = ToolbarAction(canShowNavigationHint: true, 
-                                       windowUUID: windowUUID,
-                                       actionType: ToolbarActionType.navigationButtonDoubleTapped)
+            let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.navigationButtonDoubleTapped)
             store.dispatch(action)
         }
     }
@@ -58,6 +55,11 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             withArrowDirection: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection) ? .down : .up,
             andDelegate: self,
             presentedUsing: { [weak self] in self?.presentNavigationContextualHint() },
+            actionOnDismiss: {
+                let action = ToolbarAction(windowUUID: self.windowUUID,
+                                           actionType: ToolbarActionType.navigationHintFinishedPresenting)
+                store.dispatch(action)
+            },
             andActionForButton: { },
             overlayState: overlayManager)
     }
@@ -67,10 +69,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         if let selectedTab = tabManager.selectedTab, selectedTab.isFxHomeTab || !selectedTab.loading {
             present(navigationContextHintVC, animated: true)
             UIAccessibility.post(notification: .layoutChanged, argument: navigationContextHintVC)
-            let action = ToolbarAction(canShowNavigationHint: false, 
-                                       windowUUID: windowUUID,
-                                       actionType: ToolbarActionType.navigationButtonDoubleTapped)
-            store.dispatch(action)
         }
     }
 

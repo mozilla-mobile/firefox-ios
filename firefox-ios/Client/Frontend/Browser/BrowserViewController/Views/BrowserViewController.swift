@@ -2019,6 +2019,7 @@ class BrowserViewController: UIViewController,
             startNavigationButtonDoubleTapTimer()
         case .forward:
             didTapOnForward()
+            startNavigationButtonDoubleTapTimer()
         case .reloadNoCache:
             tabManager.selectedTab?.reload(bypassCache: true)
         case .reload:
