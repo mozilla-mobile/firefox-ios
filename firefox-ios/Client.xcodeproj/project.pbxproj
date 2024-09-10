@@ -24,6 +24,7 @@
 		0A93C8AC2C870E7100BEA143 /* TrackingProtectionToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A93C8AB2C870E7100BEA143 /* TrackingProtectionToggleView.swift */; };
 		0AC659272BF35854005C614A /* FxAWebViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC659262BF35854005C614A /* FxAWebViewModelTests.swift */; };
 		0AC659292BF493CE005C614A /* MockFxAWebViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC659282BF493CE005C614A /* MockFxAWebViewModel.swift */; };
+		0ACBC3472C89E90300B4D868 /* TrackingProtectionNavigationHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACBC3462C89E90200B4D868 /* TrackingProtectionNavigationHeaderView.swift */; };
 		0AD3EEAC2C2485A7001044E5 /* ThemedCenteredTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD3EEAB2C2485A7001044E5 /* ThemedCenteredTableViewCell.swift */; };
 		0AFF7F642C7784D600265214 /* MockDataCleaner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFF7F632C7784D600265214 /* MockDataCleaner.swift */; };
 		0AFF7F662C7784F100265214 /* TrackingProtectionModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFF7F652C7784F000265214 /* TrackingProtectionModelTests.swift */; };
@@ -2192,6 +2193,7 @@
 		0A93C8AB2C870E7100BEA143 /* TrackingProtectionToggleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionToggleView.swift; sourceTree = "<group>"; };
 		0AC659262BF35854005C614A /* FxAWebViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxAWebViewModelTests.swift; sourceTree = "<group>"; };
 		0AC659282BF493CE005C614A /* MockFxAWebViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFxAWebViewModel.swift; sourceTree = "<group>"; };
+		0ACBC3462C89E90200B4D868 /* TrackingProtectionNavigationHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionNavigationHeaderView.swift; sourceTree = "<group>"; };
 		0AD3EEAB2C2485A7001044E5 /* ThemedCenteredTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedCenteredTableViewCell.swift; sourceTree = "<group>"; };
 		0AE9462E8A8E05CE07D4973D /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0AFF7F632C7784D600265214 /* MockDataCleaner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockDataCleaner.swift; sourceTree = "<group>"; };
@@ -11268,6 +11270,7 @@
 				0A76936A2C82018700103A6D /* TrackingProtectionBlockedTrackersView.swift */,
 				0A93C8A92C87070300BEA143 /* TrackingProtectionConnectionStatusView.swift */,
 				0A93C8AB2C870E7100BEA143 /* TrackingProtectionToggleView.swift */,
+				0ACBC3462C89E90200B4D868 /* TrackingProtectionNavigationHeaderView.swift */,
 			);
 			path = TrackingProtection;
 			sourceTree = "<group>";
@@ -15042,6 +15045,7 @@
 				8ADC2A102A33758E00543DAA /* FxALaunchParams.swift in Sources */,
 				D3C3696E1CC6B78800348A61 /* LocalRequestHelper.swift in Sources */,
 				E17496382991A2720096900A /* AdaptiveStack.swift in Sources */,
+				0ACBC3472C89E90300B4D868 /* TrackingProtectionNavigationHeaderView.swift in Sources */,
 				E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */,
 				7A6DF9EB2BFECC3C00A0C608 /* LegacyTabPeekPreviewActionBuilder.swift in Sources */,
 				E177989C2BD7D48500F6F0EB /* ToolbarAction.swift in Sources */,

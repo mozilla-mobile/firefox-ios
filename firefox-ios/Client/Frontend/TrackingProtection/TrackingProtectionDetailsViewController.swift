@@ -7,6 +7,7 @@ import Common
 import Shared
 import SiteImageView
 import ComponentLibrary
+import X509
 
 struct TrackingProtectionDetailsModel {
     let topLevelDomain: String
@@ -33,9 +34,10 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     private let baseView: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.containerView
+        stackView.distribution = .fillProportionally
     }
 
-    private let headerView: TrackingProtectionHeaderView = .build { header in
+    private let headerView: TrackingProtectionNavigationHeaderView = .build { header in
         header.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.headerView
     }
     private let connectionView: TrackingProtectionStatusView = .build { view in
@@ -56,6 +58,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     var model: TrackingProtectionDetailsModel
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
+    var certificate: Certificate?
     var themeObserver: NSObjectProtocol?
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
@@ -65,11 +68,13 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     init(with model: TrackingProtectionDetailsModel,
          windowUUID: WindowUUID,
          and notificationCenter: NotificationProtocol = NotificationCenter.default,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         certificate: Certificate?) {
         self.model = model
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
+        self.certificate = certificate
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -136,42 +141,25 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     // MARK: Header View Setup
     private func setupHeaderView() {
         view.addSubview(headerView)
-        headerView.translatesAutoresizingMaskIntoConstraints = false
-
-        let headerViewContraints = [
-            headerView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
-            headerView.trailingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-                constant: -TPMenuUX.UX.horizontalMargin
-            ),
-            headerView.leadingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
-            ),
-            headerView.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.baseCellHeight)
+        let headerConstraints = [
+            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            headerView.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor,
+                constant: TPMenuUX.UX.popoverTopDistance
+            )
         ]
-
-        constraints.append(contentsOf: headerViewContraints)
+        constraints.append(contentsOf: headerConstraints)
     }
 
     // MARK: Connection Status View Setup
     private func setupConnectionStatusView() {
         baseView.addArrangedSubview(connectionView)
-        let connectionViewContraints = [
-            connectionView.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.baseCellHeight),
-        ]
-
-        constraints.append(contentsOf: connectionViewContraints)
     }
 
     // MARK: Verified By View Setup
     private func setupVerifiedByView() {
         baseView.addArrangedSubview(verifiedByView)
-        let verifiedByViewContraints = [
-            verifiedByView.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.baseCellHeight)
-        ]
-
-        constraints.append(contentsOf: verifiedByViewContraints)
     }
 
     // MARK: See Certificates View Setup
@@ -220,18 +208,18 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     private func updateViewDetails() {
         headerView.setTitle(with: model.topLevelDomain)
         connectionView.connectionStatusLabel.text = model.connectionStatusMessage
-        let certificateVerifier =  String(format: .Menu.EnhancedTrackingProtection.connectionVerifiedByLabel,
-                                          model.topLevelDomain) // to be updated with the certificate verifier
-        verifiedByView.configure(verifiedBy: certificateVerifier)
-        viewCertificatesButton.setTitle(model.viewCertificatesButtonTitle, for: .normal)
+        if let certificate,
+           let issuer = "\(certificate.issuer)".getDictionary()[CertificateKeys.commonName] {
+            let certificateVerifier = String(format: .Menu.EnhancedTrackingProtection.connectionVerifiedByLabel,
+                                             issuer)
+            verifiedByView.configure(verifiedBy: certificateVerifier)
+            viewCertificatesButton.setTitle(model.viewCertificatesButtonTitle, for: .normal)
+        } else {
+            verifiedByView.isHidden = true
+        }
     }
 
     // MARK: - Actions
-    @objc
-    func closeButtonTapped() {
-        self.dismiss(animated: true)
-    }
-
     @objc
     func viewCertificatesTapped() {
         // TODO: FXIOS-9853 connect with the certificates screen
