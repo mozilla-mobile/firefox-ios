@@ -45,6 +45,7 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
     let certificatesTableView: UITableView = .build { tableView in
         tableView.allowsSelection = false
         tableView.register(CertificatesCell.self, forCellReuseIdentifier: CertificatesCell.cellIdentifier)
+        tableView.sectionHeaderTopPadding = 0
     }
 
     // MARK: - Variables
