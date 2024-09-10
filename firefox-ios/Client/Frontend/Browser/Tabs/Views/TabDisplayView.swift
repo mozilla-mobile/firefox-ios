@@ -32,7 +32,7 @@ class TabDisplayView: UIView,
     private let animationQueue: TabTrayAnimationQueue
     var theme: Theme?
 
-    private var tabsListDataSource: UICollectionViewDiffableDataSource<TabDisplaySection, Tab
+    private var tabsListDataSource: UICollectionViewDiffableDataSource<TabDisplaySection, Tab>?
 
     private var shouldHideInactiveTabs: Bool {
         guard !tabsState.isPrivateMode else { return true }
