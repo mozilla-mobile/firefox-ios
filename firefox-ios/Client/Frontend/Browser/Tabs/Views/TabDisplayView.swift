@@ -32,7 +32,6 @@ class TabDisplayView: UIView,
     private let animationQueue: TabTrayAnimationQueue
     var theme: Theme?
 
-
     // Using tabUUID as it's a way to identify the Tab object which is hashable
     private var tabsListDataSource: UICollectionViewDiffableDataSource<TabDisplaySection, TabUUID>?
 
@@ -85,6 +84,54 @@ class TabDisplayView: UIView,
         collectionView.collectionViewLayout = createLayout()
         return collectionView
     }()
+
+//    // Create a diffable data source
+//    let dataSource = UICollectionViewDiffableDataSource<Section, Item>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell? in
+//        // Dequeue a reusable cell
+//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
+//        // Configure the cell with data
+//        cell.textLabel.text = item.name
+//        return cell
+//    }
+
+    // We now use this to set up the cells instead of cellForItemAt
+    private func configureDataSource() {
+        // Create a cell registration that the diffable data source will use.
+//        let tabCellRegistration = UICollectionView.CellRegistration<TabCell.self, Tab> { cell, indexPath, recipe in
+//            var contentConfiguration = UIListContentConfiguration.subtitleCell()
+//            contentConfiguration.text = recipe.title
+//            contentConfiguration.secondaryText = recipe.subtitle
+//            contentConfiguration.image = recipe.smallImage
+//            contentConfiguration.imageProperties.cornerRadius = 4
+//            contentConfiguration.imageProperties.maximumSize = CGSize(width: 60, height: 60)
+//
+//            cell.contentConfiguration = contentConfiguration
+//
+//            if recipe.isFavorite {
+//                let image = UIImage(systemName: "heart.fill")
+//                let accessoryConfiguration = UICellAccessory.CustomViewConfiguration(customView: UIImageView(image: image),
+//                                                                                     placement: .trailing(displayed: .always),
+//                                                                                     tintColor: .secondaryLabel)
+//                cell.accessories = [.customView(configuration: accessoryConfiguration)]
+//            } else {
+//                cell.accessories = []
+//            }
+//        }
+
+        // Create the diffable data source and its cell provider.
+        tabsListDataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { [weak self] (collectionView, indexPath, identifier) -> UICollectionViewCell in
+            // `identifier/item` is an instance of `tabUUID`. Use it to
+            // retrieve the tab from the backing data store.
+            guard let self, let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: TabCell.cellIdentifier,
+                for: indexPath
+            ) as? TabCell else { return UICollectionViewCell() }
+
+            let tabState = self.tabsState.tabs[indexPath.row]
+            cell.configure(with: tabState, theme: self.theme, delegate: self)
+            return cell
+        }
+    }
 
     public init(panelType: TabTrayPanelType,
                 state: TabsPanelState,
@@ -268,6 +315,7 @@ class TabDisplayView: UIView,
         return reusableView
     }
 
+    // Comment out when diffable datasource is completed
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath)
     -> UICollectionViewCell {
