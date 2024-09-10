@@ -63,11 +63,15 @@ class TrackingProtectionStatusView: UIView {
                 equalTo: connectionImage.trailingAnchor,
                 constant: UX.imageMargins
             ),
-            connectionStatusLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            connectionStatusLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+            connectionStatusLabel.trailingAnchor.constraint(equalTo: trailingAnchor,
+                                                            constant: -TPMenuUX.UX.horizontalMargin),
+            connectionStatusLabel.topAnchor.constraint(equalTo: topAnchor,
+                                                       constant: TPMenuUX.UX.horizontalMargin),
 
             dividerView.leadingAnchor.constraint(equalTo: connectionStatusLabel.leadingAnchor),
             dividerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            dividerView.topAnchor.constraint(equalTo: connectionStatusLabel.bottomAnchor,
+                                             constant: TPMenuUX.UX.horizontalMargin),
             dividerView.bottomAnchor.constraint(equalTo: bottomAnchor),
             dividerView.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.Line.height)
         ])
