@@ -31,28 +31,28 @@ def save_latest_release_if_needed(data: dict) -> bool:
     file.close()
     return should_fetch_new_icons
 
-def download_icons_and_save():
+def download_icons_and_save_in_assets():
     temp_dir_folder_name = "temp_dir"
     os.makedirs(temp_dir_folder_name, exist_ok=True)
     os.chdir(temp_dir_folder_name)
     subprocess.run(["git", "clone", "https://github.com/FirefoxUX/acorn-icons"])
 
-    target_dir_to_copy = [16, 20, 24, 30]
+    target_size_to_copy = [16, 20, 24, 30]
     asset_folder_path = "../firefox-ios/Client/Assets/Images.xcassets/"
-    images_list_present = os.listdir(asset_folder_path)
-    for dir in target_dir_to_copy:
-        dir_path = f"acorn-icons/icons/mobile/{dir}/pdf"
-        directory_tree = os.walk(dir_path)
+    asset_folder_list = os.listdir(asset_folder_path)
+    for size in target_size_to_copy:
+        icons_dir_path = f"acorn-icons/icons/mobile/{size}/pdf"
+        directory_tree = os.walk(icons_dir_path)
 
         for dir_object in directory_tree:
             for file in dir_object[2]:
                 icon_path = os.path.join(dir_object[0], file)
                 folder_name = f"{os.path.splitext(file)[0]}.imageset".replace("Dark", "").replace("Light", "")
 
-                original_file_path = f"{asset_folder_path}{folder_name}/{file}"
+                asset_file_path = f"{asset_folder_path}{folder_name}/{file}"
                 # file has to be a pdf and we need the file already present in the images folder
-                # the file need to be already in the original folder, no different file can be added
-                if file.endswith(".pdf") and folder_name in images_list_present and os.path.exists(original_file_path):
+                # the file need to be already in the asset folder, no different file can be added
+                if file.endswith(".pdf") and folder_name in asset_folder_list and os.path.exists(asset_file_path):
                     destination_folder = os.path.join(asset_folder_path, folder_name)
                     os.makedirs(destination_folder, exist_ok=True)
                     
@@ -67,7 +67,7 @@ def sort_icons_by_size() -> dict:
     icons_by_size: dict[str, list[tuple[str]]] = {
         "Small": [],
         "Medium": [],
-        # Extra Large should be before Large since next() method will pick always Large either 
+        # Extra Large should be before Large since next() will pick Large also for ExtraLarge case
         "ExtraLarge": [],
         "Large": []
     }
@@ -117,11 +117,10 @@ public struct StandardImageIdentifiers {
             
             swift_file_content += "    }\n"
 
-    # Closing the main struct
     swift_file_content += "}"
 
-    # Step 4: Write the generated Swift file content to a .swift file
-    with open("StandardImageIdentifiers.swift", "w") as swift_file:
+    standard_image_file_path = "BrowserKit/Sources/Common/Constants/StandardImageIdentifiers.swift"
+    with open(standard_image_file_path, "w") as swift_file:
         swift_file.write(swift_file_content)
 
 
@@ -130,6 +129,6 @@ public struct StandardImageIdentifiers {
 
 
 
-download_icons_and_save()
+download_icons_and_save_in_assets()
 sorted_icons = sort_icons_by_size()
 generate_standard_image_identifiers_swift(sorted_icons)
