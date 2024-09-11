@@ -448,7 +448,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func openURLInNewTab(_ url: URL?) {
-        if let url = url {
+        if let url {
             browserViewController.openURLInNewTab(url, isPrivate: self.tabManager.selectedTab?.isPrivate ?? false)
         }
     }
@@ -465,6 +465,10 @@ class BrowserCoordinator: BaseCoordinator,
         presentWithModalDismissIfNeeded {
             self.handleSettings(with: destination, onDismiss: nil)
         }
+    }
+
+    func showFindInPage() {
+        browserViewController.showFindInPage()
     }
 
     private func makeMenuCoordinator() -> MainMenuCoordinator? {

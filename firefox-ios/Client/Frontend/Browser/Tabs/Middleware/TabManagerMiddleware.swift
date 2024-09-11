@@ -633,21 +633,41 @@ class TabManagerMiddleware {
             store.dispatch(
                 MainMenuAction(
                     windowUUID: action.windowUUID,
-                    actionType: MainMenuActionType.updateTabInfo(
+                    actionType: MainMenuActionType.updateCurrentTabInfo(
                         getTabInfo(forWindow: action.windowUUID)
                     )
                 )
             )
+        case MainMenuActionType.toggleUserAgent:
+            changeUserAgent(forWindow: action.windowUUID)
         default:
             break
         }
     }
 
-    private func getTabInfo(forWindow windowUUID: WindowUUID) -> MenuTabInfo? {
+    private func getTabInfo(forWindow windowUUID: WindowUUID) -> MainMenuTabInfo? {
         guard let selectedTab = tabManager(for: windowUUID).selectedTab else { return nil }
-        return MenuTabInfo(
+        let defaultUAisDesktop = UserAgent.isDesktop(ua: UserAgent.getUserAgent())
+        let tabHasChangedUserAgent = selectedTab.changedUserAgent
+
+        return MainMenuTabInfo(
             url: selectedTab.url,
-            isHomepage: selectedTab.isFxHomeTab
+            isHomepage: selectedTab.isFxHomeTab,
+            isDefaultUserAgentDesktop: defaultUAisDesktop,
+            hasChangedUserAgent: tabHasChangedUserAgent
         )
+    }
+
+    private func changeUserAgent(forWindow windowUUID: WindowUUID) {
+        guard let selectedTab = tabManager(for: windowUUID).selectedTab else { return }
+
+        if let url = selectedTab.url {
+            selectedTab.toggleChangeUserAgent()
+            Tab.ChangeUserAgent.updateDomainList(
+                forUrl: url,
+                isChangedUA: selectedTab.changedUserAgent,
+                isPrivate: selectedTab.isPrivate
+            )
+        }
     }
 }

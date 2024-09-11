@@ -7,9 +7,11 @@ import MenuKit
 import Shared
 import Redux
 
-struct MenuTabInfo: Equatable {
+struct MainMenuTabInfo: Equatable {
     let url: URL?
     let isHomepage: Bool
+    let isDefaultUserAgentDesktop: Bool
+    let hasChangedUserAgent: Bool
 }
 
 struct MainMenuState: ScreenState, Equatable {
@@ -18,7 +20,7 @@ struct MainMenuState: ScreenState, Equatable {
     var shouldDismiss: Bool
 
     var navigationDestination: MainMenuNavigationDestination?
-    var currentTabInfo: MenuTabInfo?
+    var currentTabInfo: MainMenuTabInfo?
     private let menuConfigurator = MainMenuConfigurationUtility()
 
     init(appState: AppState, uuid: WindowUUID) {
@@ -53,7 +55,7 @@ struct MainMenuState: ScreenState, Equatable {
     private init(
         windowUUID: WindowUUID,
         menuElements: [MenuSection],
-        currentTabInfo: MenuTabInfo?,
+        currentTabInfo: MainMenuTabInfo?,
         navigationDestination: MainMenuNavigationDestination? = nil,
         shouldDismiss: Bool = false
     ) {
@@ -74,12 +76,12 @@ struct MainMenuState: ScreenState, Equatable {
                 menuElements: state.menuElements,
                 currentTabInfo: state.currentTabInfo
             )
-        case MainMenuActionType.updateTabInfo(let info):
+        case MainMenuActionType.updateCurrentTabInfo(let info):
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuConfigurator.generateMenuElements(
                     with: state.windowUUID,
-                    tabIsHomepage: info?.isHomepage
+                    andInfo: info
                 ),
                 currentTabInfo: info
             )
@@ -90,7 +92,8 @@ struct MainMenuState: ScreenState, Equatable {
                 currentTabInfo: state.currentTabInfo,
                 navigationDestination: destination
             )
-        case MainMenuActionType.closeMenu:
+        case MainMenuActionType.toggleUserAgent,
+            MainMenuActionType.closeMenu:
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,

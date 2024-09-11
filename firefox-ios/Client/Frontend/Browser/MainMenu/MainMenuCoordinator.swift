@@ -11,6 +11,7 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     func openNewTab(inPrivateMode: Bool)
     func showLibraryPanel(_ panel: Route.HomepanelSection)
     func showSettings(at destination: Route.SettingsSection)
+    func showFindInPage()
 }
 
 class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
@@ -46,6 +47,8 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
                 self.navigationHandler?.showSettings(at: .homePage)
             case .downloads:
                 self.navigationHandler?.showLibraryPanel(.downloads)
+            case .findInPage:
+                self.navigationHandler?.showFindInPage()
             case .goToURL(let url):
                 self.navigationHandler?.openURLInNewTab(url)
             case .history:
