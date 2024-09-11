@@ -30,7 +30,6 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
 
     // MARK: - UI
     struct UX {
-        static let headerStackViewSpacing = 16.0
         static let titleLabelMargin = 8.0
         static let titleLabelTopMargin = 20.0
         static let headerStackViewMargin = 8.0
@@ -45,7 +44,8 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
     let certificatesTableView: UITableView = .build { tableView in
         tableView.allowsSelection = false
         tableView.register(CertificatesCell.self, forCellReuseIdentifier: CertificatesCell.cellIdentifier)
-        tableView.sectionHeaderTopPadding = 0
+        tableView.register(CertificatesHeaderView.self,
+                           forHeaderFooterViewReuseIdentifier: CertificatesHeaderView.cellIdentifier)
     }
 
     // MARK: - Variables
@@ -127,11 +127,9 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerStackView: UIStackView = .build { stack in
-            stack.axis = .horizontal
-            stack.distribution = .fillEqually
-            stack.spacing = UX.headerStackViewSpacing
-        }
+        let headerView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: CertificatesHeaderView.cellIdentifier) as! CertificatesHeaderView
+        var items: [CertificatesHeaderItem] = []
         for (index, certificate) in viewModel.certificates.enumerated() {
             let certificateValues = viewModel.getCertificateValues(from: "\(certificate.subject)")
             if !certificateValues.isEmpty, let commonName = certificateValues[CertificateKeys.commonName] {
@@ -143,20 +141,11 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
                     self.viewModel.selectedCertificateIndex = index
                     self.certificatesTableView.reloadData()
                 }
-                headerStackView.addArrangedSubview(item)
+                items.append(item)
             }
         }
-
-        view.addSubview(headerStackView)
-
-        NSLayoutConstraint.activate([
-            headerStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            headerStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            headerStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor)
-        ])
-
-        headerStackView.backgroundColor = currentTheme().colors.layer5
-        return headerStackView
+        headerView.configure(withItems: items, theme: currentTheme())
+        return headerView
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -250,5 +239,6 @@ extension CertificatesViewController {
         view.backgroundColor = theme.colors.layer5
         titleLabel.textColor = theme.colors.textPrimary
         titleLabel.backgroundColor = theme.colors.layer5
+        certificatesTableView.reloadData()
     }
 }
