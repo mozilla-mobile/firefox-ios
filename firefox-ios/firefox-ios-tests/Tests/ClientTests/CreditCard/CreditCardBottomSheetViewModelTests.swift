@@ -11,7 +11,7 @@ import XCTest
 @testable import Client
 
 // TODO: FXIOS-9855: Will re-enable in the future after investigating if we see tab error after disabling this test
-//class CreditCardBottomSheetViewModelTests: XCTestCase {
+// class CreditCardBottomSheetViewModelTests: XCTestCase {
 //    private var profile: MockProfile!
 //    private var viewModel: CreditCardBottomSheetViewModel!
 //    private var mockAutofill: MockCreditCardProvider!
@@ -341,4 +341,4 @@ import XCTest
 //        })
 //        waitForExpectations(timeout: 1.0)
 //    }
-//}
+// }
