@@ -22,10 +22,10 @@ final class MainMenuStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = mainMenuReducer()
 
-        XCTAssertEqual(initialState.shouldDismiss, false)
+        XCTAssertFalse(initialState.shouldDismiss)
         XCTAssertEqual(initialState.menuElements, [])
-        XCTAssertEqual(initialState.navigationDestination, nil)
-        XCTAssertEqual(initialState.currentTabInfo, nil)
+        XCTAssertNil(initialState.navigationDestination)
+        XCTAssertNil(initialState.currentTabInfo)
     }
 
     func testUpdatingCurrentTabInfo() {
@@ -39,7 +39,7 @@ final class MainMenuStateTests: XCTestCase {
             hasChangedUserAgent: true
         )
 
-        XCTAssertEqual(initialState.currentTabInfo, nil)
+        XCTAssertNil(initialState.currentTabInfo)
 
         let newState = reducer(
             initialState,
@@ -56,7 +56,7 @@ final class MainMenuStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = mainMenuReducer()
 
-        XCTAssertEqual(initialState.navigationDestination, nil)
+        XCTAssertNil(initialState.navigationDestination)
 
         MainMenuNavigationDestination.allCases.forEach { destination in
             let newState = reducer(
@@ -75,7 +75,7 @@ final class MainMenuStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = mainMenuReducer()
 
-        XCTAssertEqual(initialState.shouldDismiss, false)
+        XCTAssertFalse(initialState.shouldDismiss)
 
         let newState = reducer(
             initialState,
@@ -85,14 +85,14 @@ final class MainMenuStateTests: XCTestCase {
             )
         )
 
-        XCTAssertEqual(newState.shouldDismiss, true)
+        XCTAssertTrue(newState.shouldDismiss)
     }
 
     func testCloseAction() {
         let initialState = createSubject()
         let reducer = mainMenuReducer()
 
-        XCTAssertEqual(initialState.shouldDismiss, false)
+        XCTAssertFalse(initialState.shouldDismiss)
 
         let newState = reducer(
             initialState,
@@ -102,7 +102,7 @@ final class MainMenuStateTests: XCTestCase {
             )
         )
 
-        XCTAssertEqual(newState.shouldDismiss, true)
+        XCTAssertTrue(newState.shouldDismiss)
     }
 
     // MARK: - Private

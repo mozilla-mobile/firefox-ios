@@ -76,6 +76,8 @@ struct MainMenuConfigurationUtility: Equatable {
         with uuid: WindowUUID,
         and configuration: MainMenuTabInfo?
     ) -> MenuSection {
+        // Configuration can be `nil` if Redux hasn't yet returned the
+        // required information about the tab.
         guard let configuration else { return MenuSection(options: []) }
 
         return MenuSection(
@@ -161,6 +163,12 @@ struct MainMenuConfigurationUtility: Equatable {
     ) -> String {
         typealias Menu = String.MainMenu.ToolsSection
 
+        // Our default User Agest gets set depending on the architecture we're
+        // running on. Thus, to determine which string to use, we need to know
+        //   1) which architecture we've started from and
+        //   2) whether or not we've requested to change the user agent in the tab
+        // Using this information, we're able to present the correct string for
+        // the "Request Mobile/Desktop Site" menu option
         let switchToDesktop = tabHasChangedUserAgent ? defaultIsDesktop : !defaultIsDesktop
         return switchToDesktop ? Menu.SwitchToDesktopSite : Menu.SwitchToMobileSite
     }
