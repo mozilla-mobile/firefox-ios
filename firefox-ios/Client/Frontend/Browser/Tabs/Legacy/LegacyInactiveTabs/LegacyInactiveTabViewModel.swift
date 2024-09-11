@@ -54,7 +54,7 @@ class LegacyInactiveTabViewModel {
     /// it is not a given that a tab has an active/inactive state. Thus, we must
     /// assume that if we want to use active/inactive state, we can do so without
     /// that particular feature being active but still respecting that logic.
-    static func getActiveEligibleTabsFrom(_ tabs: [Tab], profile: Profile) -> [Tab] {
+    static func getActiveEligibleTabsFrom(_ tabs: [Tab]) -> [Tab] {
         var activeTabs = [Tab]()
 
         let currentDate = Date()
