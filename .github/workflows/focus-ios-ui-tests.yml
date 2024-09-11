@@ -117,10 +117,10 @@ jobs:
               id: slack
               uses: slackapi/slack-github-action@v1.26.0
               with:
-                channel-id: ${{ secrets.CHANNEL_ID }}
                 payload-file-path: ${{ env.browser }}/slack.json
               env:
-                SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+                SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+                SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
                 ios_simulator: ${{ matrix.ios_simulator }}
                 pass_fail:  ${{ steps.run-tests.outcome == 'success' && ':white_check_mark:' || ':x:' }}
                 xcodebuild_test_plan: ${{ matrix.xcodebuild_test_plan }}
