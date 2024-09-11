@@ -20,7 +20,7 @@ struct MainMenuConfigurationUtility: Equatable {
         ]
 
         // Conditionally add tools section if this is a website
-        if let isHomepage = isHomepage, !isHomepage {
+        if let isHomepage, !isHomepage {
             menuSections.insert(getToolsSection(with: uuid), at: 1)
         }
 
