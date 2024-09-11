@@ -23,6 +23,10 @@ def save_latest_release_if_needed(data: dict) -> bool:
     :returns bool: True if a new release has been deteceted, otherwise False
     '''
     file_path = "latest_acorn_release.json"
+    if not os.path.exists(file_path):
+        with open(file_path, "w"):
+            pass
+        
     file = open(file_path, "r+")
     should_fetch_new_icons = False
     if not file.read():
