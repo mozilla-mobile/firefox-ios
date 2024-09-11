@@ -9,25 +9,35 @@ def fetch_latest_release_from_acorn() -> dict|None:
     owner = "FirefoxUX" 
     repo = "acorn-icons"    
     url = f"https://api.github.com/repos/{owner}/{repo}/releases/latest"
-    response = requests.get(url=url)
-    if response.status_code == 200:
-        return response.json()
+    try:
+        response = requests.get(url=url)
+        if response.status_code == 200:
+            return response.json()
+    except Exception as e:
+        print(f"It was not possible to retrieve the latest acorn release.\nerror: {e}")
+        exit()
     
 def save_latest_release_if_needed(data: dict) -> bool:
-    file = open("latest_acorn_release.json", "r+")
+    '''
+    Saves the latest release object if needed.
+
+    :returns bool: True if a new release has been deteceted, otherwise False
+    '''
+    file_path = "latest_acorn_release.json"
+    file = open(file_path, "r+")
     should_fetch_new_icons = False
-    if len(file.read()) == 0:
+    if not file.read():
         json.dump(data, fp=file, indent=4)
         should_fetch_new_icons = True
     else:
-        file.flush()
-        current_fetched_id = data["id"]
+        file.seek(0)
+        latest_fetched_id = data["id"]
         saved_id = json.load(file)["id"]
-        if current_fetched_id == saved_id:
+        if latest_fetched_id > saved_id:
             # new release has to be fetched
-            file.truncate(0)
-            json.dump(data, fp=file, indent=4)
-            should_fetch_new_icons = True
+            with open(file_path, "w") as file:
+                json.dump(data, fp=file, indent=4)
+                should_fetch_new_icons = True
     file.close()
     return should_fetch_new_icons
 
@@ -35,8 +45,10 @@ def download_icons_and_save_in_assets():
     temp_dir_folder_name = "temp_dir"
     os.makedirs(temp_dir_folder_name, exist_ok=True)
     os.chdir(temp_dir_folder_name)
-    subprocess.run(["git", "clone", "https://github.com/FirefoxUX/acorn-icons"])
-
+    clone_response = subprocess.run(["git", "clone", "https://github.com/FirefoxUX/acorn-icons"])
+    if clone_response.returncode != 0:
+        print(f"Couldn't clone acorn icon repository")
+        exit()
     target_size_to_copy = [16, 20, 24, 30]
     asset_folder_path = "../firefox-ios/Client/Assets/Images.xcassets/"
     asset_folder_list = os.listdir(asset_folder_path)
@@ -58,7 +70,6 @@ def download_icons_and_save_in_assets():
                     
                     destination_file = os.path.join(destination_folder, file)
                     shutil.copy(icon_path, destination_file)
-                    print(f"Copied {file} to {destination_folder} and created Contents.json")
     
     os.chdir("..")
     subprocess.run(["rm", "-rf", temp_dir_folder_name])
@@ -123,12 +134,13 @@ public struct StandardImageIdentifiers {
     with open(standard_image_file_path, "w") as swift_file:
         swift_file.write(swift_file_content)
 
+def main():
+    latest_release = fetch_latest_release_from_acorn()
+    if latest_release:
+        should_download_icons = save_latest_release_if_needed(latest_release)
+        if should_download_icons:
+            download_icons_and_save_in_assets()
+            sorted_icons = sort_icons_by_size()
+            generate_standard_image_identifiers_swift(sorted_icons)
 
-    print("PDF files have been processed and copied with content.json files.")
-
-
-
-
-download_icons_and_save_in_assets()
-sorted_icons = sort_icons_by_size()
-generate_standard_image_identifiers_swift(sorted_icons)
+main()
