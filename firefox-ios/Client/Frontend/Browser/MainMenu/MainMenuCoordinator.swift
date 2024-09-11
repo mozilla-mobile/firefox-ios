@@ -29,11 +29,14 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
 
     func startModal() {
         let viewController = createMainMenuViewController()
+        let navController = UINavigationController(rootViewController: viewController)
+        navController.modalPresentationStyle = .pageSheet
+        navController.isNavigationBarHidden = true
 
-        if let sheet = viewController.sheetPresentationController {
+        if let sheet = navController.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
         }
-        router.present(viewController, animated: true)
+        router.present(navController, animated: true)
     }
 
     func navigateTo(_ destination: MainMenuNavigationDestination, animated: Bool) {

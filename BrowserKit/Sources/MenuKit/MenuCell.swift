@@ -6,9 +6,9 @@ import Foundation
 import Common
 import UIKit
 
-class MenuCell: UITableViewCell, ReusableCell {
+public class MenuCell: UITableViewCell, ReusableCell {
     // MARK: - Properties
-    var model: MenuElement!
+    public var model: MenuElement!
 
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -19,7 +19,7 @@ class MenuCell: UITableViewCell, ReusableCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configureCellWith(model: MenuElement) {
+    public func configureCellWith(model: MenuElement) {
         self.model = model
         self.textLabel?.text = model.title
         setupView()

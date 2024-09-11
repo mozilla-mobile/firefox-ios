@@ -10,6 +10,8 @@ import Redux
 import MenuKit
 
 class MainMenuViewController: UIViewController,
+                              UITableViewDelegate,
+                              UITableViewDataSource,
                               Themeable,
                               Notifiable,
                               UIAdaptivePresentationControllerDelegate,
@@ -60,6 +62,7 @@ class MainMenuViewController: UIViewController,
         sheetPresentationController?.delegate = self
 
         setupView()
+        setupTableView()
         listenForThemeChange(view)
         store.dispatch(
             MainMenuAction(
@@ -90,8 +93,16 @@ class MainMenuViewController: UIViewController,
     }
 
     // MARK: - UI setup
+    private func setupTableView() {
+        menuContent.tableView.tableView.register(
+            MenuCell.self,
+            forCellReuseIdentifier: MenuCell.cellIdentifier
+        )
+        menuContent.tableView.tableView.dataSource = self
+        menuContent.tableView.tableView.delegate = self
+    }
     private func setupView() {
-        menuContent.updateDataSource(with: menuState.menuElements)
+//        menuContent.updateDataSource(with: menuState.menuElements)
         view.addSubview(menuContent)
 
         NSLayoutConstraint.activate([
@@ -126,7 +137,7 @@ class MainMenuViewController: UIViewController,
     func newState(state: MainMenuState) {
         menuState = state
 
-        menuContent.updateDataSource(with: menuState.menuElements)
+        menuContent.tableView.tableView.reloadData()
 
         if let navigationDestination = menuState.navigationDestination {
             coordinator?.navigateTo(navigationDestination, animated: true)
@@ -186,5 +197,44 @@ class MainMenuViewController: UIViewController,
         _ sheetPresentationController: UISheetPresentationController
     ) {
         updateModalA11y()
+    }
+
+    // MARK: - UITableViewDataSource
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return menuState.menuElements.count
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        numberOfRowsInSection section: Int
+    ) -> Int {
+        return menuState.menuElements[section].options.count
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath
+    ) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: MenuCell.cellIdentifier,
+            for: indexPath
+        ) as! MenuCell
+
+        cell.configureCellWith(model: menuState.menuElements[indexPath.section].options[indexPath.row])
+
+        return cell
+    }
+
+    // MARK: - UITableViewDelegate Methods
+    func tableView(
+        _ tableView: UITableView,
+        didSelectRowAt indexPath: IndexPath
+    ) {
+        guard let action = menuState.menuElements[indexPath.section].options[indexPath.row].action else {
+            tableView.deselectRow(at: indexPath, animated: true)
+            return
+        }
+        action()
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }

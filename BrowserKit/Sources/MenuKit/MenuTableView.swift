@@ -5,9 +5,8 @@
 import Foundation
 import UIKit
 
-class MenuTableView: UIView, UITableViewDataSource, UITableViewDelegate {
-    private let tableView: UITableView
-    private var menuData: [MenuSection] = []
+public class MenuTableView: UIView {
+    public var tableView: UITableView
 
     override init(frame: CGRect) {
         tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -24,68 +23,17 @@ class MenuTableView: UIView, UITableViewDataSource, UITableViewDelegate {
     }
 
     private func setupTableView() {
-        backgroundColor = .clear
         tableView.backgroundColor = .clear
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(tableView)
 
-        tableView.translatesAutoresizingMaskIntoConstraints = false
+        backgroundColor = .clear
+
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: self.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         ])
-
-        tableView.register(
-            MenuCell.self,
-            forCellReuseIdentifier: MenuCell.cellIdentifier
-        )
-
-        tableView.dataSource = self
-        tableView.delegate = self
-    }
-
-    func updateDataSource(_ newDataSource: [MenuSection]) {
-        self.menuData = newDataSource
-        tableView.reloadData()
-    }
-
-    // MARK: - UITableViewDataSource Methods
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return menuData.count
-    }
-
-    func tableView(
-        _ tableView: UITableView,
-        numberOfRowsInSection section: Int
-    ) -> Int {
-        return menuData[section].options.count
-    }
-
-    func tableView(
-        _ tableView: UITableView,
-        cellForRowAt indexPath: IndexPath
-    ) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(
-            withIdentifier: MenuCell.cellIdentifier,
-            for: indexPath
-        ) as! MenuCell
-
-        cell.configureCellWith(model: menuData[indexPath.section].options[indexPath.row])
-
-        return cell
-    }
-
-    // MARK: - UITableViewDelegate Methods
-    func tableView(
-        _ tableView: UITableView,
-        didSelectRowAt indexPath: IndexPath
-    ) {
-        guard let action = menuData[indexPath.section].options[indexPath.row].action else {
-            tableView.deselectRow(at: indexPath, animated: true)
-            return
-        }
-        action()
-        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
