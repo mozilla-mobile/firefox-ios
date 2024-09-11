@@ -14,20 +14,20 @@ final class MainMenuAction: Action {
 
 enum MainMenuActionType: ActionType {
     case viewDidLoad
+    case updateTabInfo(MenuTabInfo?)
     case mainMenuDidAppear
     case toggleNightMode
     case closeMenu
-    case newTab(isPrivate: Bool)
     case show(MainMenuNavigationDestination)
 }
 
-enum MainMenuNavigationDestination {
+enum MainMenuNavigationDestination: Equatable {
     case newTab
     case newPrivateTab
     case bookmarks
     case customizeHomepage
     case downloads
-    case getHelp
+    case goToURL(URL?)
     case history
     case passwords
     case settings

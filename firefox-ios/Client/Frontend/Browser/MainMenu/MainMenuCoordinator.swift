@@ -7,6 +7,7 @@ import Foundation
 import Shared
 
 protocol MainMenuCoordinatorDelegate: AnyObject {
+    func openURLInNewTab(_ url: URL?)
     func openNewTab(inPrivateMode: Bool)
     func showLibraryPanel(_ panel: Route.HomepanelSection)
     func showSettings(at destination: Route.SettingsSection)
@@ -45,9 +46,8 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
                 self.navigationHandler?.showSettings(at: .homePage)
             case .downloads:
                 self.navigationHandler?.showLibraryPanel(.downloads)
-            case .getHelp:
-                break
-//                self.navigationHandler?.openupr
+            case .goToURL(let url):
+                self.navigationHandler?.openURLInNewTab(url)
             case .history:
                 self.navigationHandler?.showLibraryPanel(.history)
             case .newTab:

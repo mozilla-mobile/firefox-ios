@@ -29,6 +29,8 @@ class TabManagerMiddleware {
             self.resolveTabTrayActions(action: action, state: state)
         } else if let action = action as? TabPanelViewAction {
             self.resovleTabPanelViewActions(action: action, state: state)
+        } else if let action = action as? MainMenuAction {
+            self.resolveMainMenuActions(with: action, appState: state)
         }
     }
 
@@ -622,5 +624,30 @@ class TabManagerMiddleware {
                                          value: .syncPanel,
                                          extras: nil)
         }
+    }
+
+    // MARK: - Main menu actions
+    private func resolveMainMenuActions(with action: MainMenuAction, appState: AppState) {
+        switch action.actionType {
+        case MainMenuActionType.viewDidLoad:
+            store.dispatch(
+                MainMenuAction(
+                    windowUUID: action.windowUUID,
+                    actionType: MainMenuActionType.updateTabInfo(
+                        getTabInfo(forWindow: action.windowUUID)
+                    )
+                )
+            )
+        default:
+            break
+        }
+    }
+
+    private func getTabInfo(forWindow windowUUID: WindowUUID) -> MenuTabInfo? {
+        guard let selectedTab = tabManager(for: windowUUID).selectedTab else { return nil }
+        return MenuTabInfo(
+            url: selectedTab.url,
+            isHomepage: selectedTab.isFxHomeTab
+        )
     }
 }

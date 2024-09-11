@@ -18,6 +18,11 @@ public struct SupportUtils {
         return URL(string: "https://www.mozilla.org/en-US/firefox/ios/notes/")
     }
 
+    public static var URLForGetHelp: URL? {
+        // Returns the predefined URL associated to the menu's Get Help button action.
+        return URL(string: "https://support.mozilla.org/products/ios")
+    }
+
     public static var URLForPocketLearnMore: URL? {
         // Returns the predefined URL associated to homepage Pocket's Learn more action.
         return URL(string: "https://www.mozilla.org/firefox/pocket/?utm_source=ff_ios")
