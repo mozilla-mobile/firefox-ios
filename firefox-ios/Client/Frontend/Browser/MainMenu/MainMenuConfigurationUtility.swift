@@ -10,18 +10,24 @@ import Shared
 struct MainMenuConfigurationUtility: Equatable {
     func generateMenuElements(
         with uuid: WindowUUID,
-        tabIsHomepage isHomepage: Bool?
+        andInfo configuration: MainMenuTabInfo?
     ) -> [MenuSection] {
         // Always include these sections
         var menuSections: [MenuSection] = [
             getNewTabSection(with: uuid),
             getLibrariesSection(with: uuid),
-            getOtherToolsSection(with: uuid, isHomepage: isHomepage ?? false)
+            getOtherToolsSection(
+                with: uuid,
+                isHomepage: configuration?.isHomepage ?? false
+            )
         ]
 
         // Conditionally add tools section if this is a website
-        if let isHomepage, !isHomepage {
-            menuSections.insert(getToolsSection(with: uuid), at: 1)
+        if let configuration, !configuration.isHomepage {
+            menuSections.insert(
+                getToolsSection(with: uuid, and: configuration),
+                at: 1
+            )
         }
 
         return menuSections
@@ -66,78 +72,99 @@ struct MainMenuConfigurationUtility: Equatable {
         ])
     }
 
-    private func getToolsSection(with uuid: WindowUUID) -> MenuSection {
-        return MenuSection(options: [
-            MenuElement(
-                title: .MainMenu.ToolsSection.SwitchToDesktopSite,
-                iconName: "",
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: "",
-                a11yHint: "",
-                a11yId: "",
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenu
+    private func getToolsSection(
+        with uuid: WindowUUID,
+        and configuration: MainMenuTabInfo?
+    ) -> MenuSection {
+        guard let configuration else { return MenuSection(options: []) }
+
+        return MenuSection(
+            options: [
+                MenuElement(
+                    title: getUserAgentTitle(
+                        defaultIsDesktop: configuration.isDefaultUserAgentDesktop,
+                        tabHasChangedUserAgent: configuration.hasChangedUserAgent
+                    ),
+                    iconName: "",
+                    isEnabled: true,
+                    isActive: false,
+                    a11yLabel: "",
+                    a11yHint: "",
+                    a11yId: "",
+                    action: {
+                        store.dispatch(
+                            MainMenuAction(
+                                windowUUID: uuid,
+                                actionType: MainMenuActionType.toggleUserAgent
+                            )
                         )
-                    )
-                }
-            ),
-            MenuElement(
-                title: .MainMenu.ToolsSection.FindInPage,
-                iconName: "",
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: "",
-                a11yHint: "",
-                a11yId: "",
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.show(.findInPage)
+                    }
+                ),
+                MenuElement(
+                    title: .MainMenu.ToolsSection.FindInPage,
+                    iconName: "",
+                    isEnabled: true,
+                    isActive: false,
+                    a11yLabel: "",
+                    a11yHint: "",
+                    a11yId: "",
+                    action: {
+                        store.dispatch(
+                            MainMenuAction(
+                                windowUUID: uuid,
+                                actionType: MainMenuActionType.show(.findInPage)
+                            )
                         )
-                    )
-                }
-            ),
-            MenuElement(
-                title: .MainMenu.ToolsSection.Tools,
-                iconName: "",
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: "",
-                a11yHint: "",
-                a11yId: "",
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenu
+                    }
+                ),
+                MenuElement(
+                    title: .MainMenu.ToolsSection.Tools,
+                    iconName: "",
+                    isEnabled: true,
+                    isActive: false,
+                    a11yLabel: "",
+                    a11yHint: "",
+                    a11yId: "",
+                    action: {
+                        store.dispatch(
+                            MainMenuAction(
+                                windowUUID: uuid,
+                                actionType: MainMenuActionType.closeMenu
+                            )
                         )
-                    )
-                }
-            ),
-            MenuElement(
-                title: .MainMenu.ToolsSection.Save,
-                iconName: "",
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: "",
-                a11yHint: "",
-                a11yId: "",
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenu
+                    }
+                ),
+                MenuElement(
+                    title: .MainMenu.ToolsSection.Save,
+                    iconName: "",
+                    isEnabled: true,
+                    isActive: false,
+                    a11yLabel: "",
+                    a11yHint: "",
+                    a11yId: "",
+                    action: {
+                        store.dispatch(
+                            MainMenuAction(
+                                windowUUID: uuid,
+                                actionType: MainMenuActionType.closeMenu
+                            )
                         )
-                    )
-                }
-            )
-        ])
+                    }
+                )
+            ]
+        )
     }
+
+    private func getUserAgentTitle(
+        defaultIsDesktop: Bool,
+        tabHasChangedUserAgent: Bool
+    ) -> String {
+        typealias Menu = String.MainMenu.ToolsSection
+
+        let switchToDesktop = tabHasChangedUserAgent ? defaultIsDesktop : !defaultIsDesktop
+        return switchToDesktop ? Menu.SwitchToDesktopSite : Menu.SwitchToMobileSite
+    }
+
     private func getLibrariesSection(with uuid: WindowUUID) -> MenuSection {
         return MenuSection(options: [
             MenuElement(

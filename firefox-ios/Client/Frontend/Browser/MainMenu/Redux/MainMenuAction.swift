@@ -14,11 +14,12 @@ final class MainMenuAction: Action {
 
 enum MainMenuActionType: ActionType {
     case viewDidLoad
-    case updateTabInfo(MenuTabInfo?)
+    case updateCurrentTabInfo(MainMenuTabInfo?)
     case mainMenuDidAppear
     case toggleNightMode
     case closeMenu
     case show(MainMenuNavigationDestination)
+    case toggleUserAgent
 }
 
 enum MainMenuNavigationDestination: Equatable {
