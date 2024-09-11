@@ -38,6 +38,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     // Starts a timer to monitor for a navigation button double tap for the navigation contextual hint
     func startNavigationButtonDoubleTapTimer() {
+        guard isToolbarRefactorEnabled, isToolbarNavigationHintEnabled else { return }
         if navigationHintDoubleTapTimer == nil {
             navigationHintDoubleTapTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { _ in
                 self.navigationHintDoubleTapTimer = nil
@@ -50,6 +51,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func configureNavigationContextualHint(_ view: UIView) {
+        guard isToolbarRefactorEnabled, isToolbarNavigationHintEnabled else { return }
         navigationContextHintVC.configure(
             anchor: view,
             withArrowDirection: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection) ? .down : .up,

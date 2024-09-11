@@ -129,6 +129,9 @@ class BrowserViewController: UIViewController,
     var isOneTapNewTabEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
     }
+    var isToolbarNavigationHintEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.toolbarNavigationHint, checking: .buildOnly) 
+    }
     private var browserViewControllerState: BrowserViewControllerState?
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
