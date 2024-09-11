@@ -29,6 +29,7 @@ class StudiesToggleSetting: BoolSetting {
         )
 
         self.settingsDelegate = settingsDelegate
+
         super.init(
             prefs: prefs,
             prefKey: AppConstants.prefStudiesToggle,
@@ -39,9 +40,36 @@ class StudiesToggleSetting: BoolSetting {
                 Experiments.setStudiesSetting($0)
             }
         )
-        // We make sure to set this on initialization, in case the setting is turned off
-        // in which case, we would to make sure that users are opted out of experiments
-        Experiments.setStudiesSetting(prefs.boolForKey(AppConstants.prefStudiesToggle) ?? true)
+
+        setupSettingDidChange()
+
+        let sendUsageDataPref = prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
+
+        // Special Case (EXP-4780) disable the studies if usage data is disabled
+        updateSetting(for: sendUsageDataPref)
+    }
+
+    private func setupSettingDidChange() {
+        self.settingDidChange = {
+            Experiments.setStudiesSetting($0)
+        }
+    }
+
+    func updateSetting(for isUsageEnabled: Bool) {
+        guard !isUsageEnabled else {
+            // Note: switch should be enabled only when studies are enabled
+            control.setSwitchTappable(to: true)
+            // We make sure to set this on initialization, in case the setting is turned off
+            // in which case, we would to make sure that users are opted out of experiments
+            Experiments.setStudiesSetting(prefs?.boolForKey(AppConstants.prefStudiesToggle) ?? true)
+            return
+        }
+
+        // Special Case (EXP-4780) Disable the Studies setting if usage data is disabled
+        control.setSwitchTappable(to: false)
+        control.toggleSwitch(to: false)
+        writeBool(control.switchView)
+        Experiments.setStudiesSetting(false)
     }
 
     override var accessibilityIdentifier: String? {

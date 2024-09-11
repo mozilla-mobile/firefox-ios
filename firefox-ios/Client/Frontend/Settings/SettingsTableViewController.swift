@@ -196,6 +196,14 @@ class PaddedSwitch: UIView {
         switchView.isEnabled = isEnabled
     }
 
+    func setSwitchTappable(to value: Bool) {
+        switchView.isEnabled = value
+    }
+
+    func toggleSwitch(to value: Bool, animated: Bool = true) {
+        switchView.setOn(value, animated: animated)
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -206,10 +214,10 @@ class PaddedSwitch: UIView {
 class BoolSetting: Setting, FeatureFlaggable {
     // Sometimes a subclass will manage its own pref setting. In that case the prefkey will be nil
     let prefKey: String?
-
     let prefs: Prefs?
+
+    var settingDidChange: ((Bool) -> Void)?
     private let defaultValue: Bool?
-    private let settingDidChange: ((Bool) -> Void)?
     private let statusText: NSAttributedString?
     private let featureFlagName: NimbusFeatureFlagID?
 
@@ -332,7 +340,6 @@ class BoolSetting: Setting, FeatureFlaggable {
     func switchValueChanged(_ control: UISwitch) {
         writeBool(control)
         settingDidChange?(control.isOn)
-
         if let featureFlagName = featureFlagName {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .change,
