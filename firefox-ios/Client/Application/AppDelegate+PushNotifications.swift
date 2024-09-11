@@ -57,6 +57,7 @@ extension AppDelegate {
             queue: nil
         ) { notification in
             if let newState = notification.userInfo?["newState"] as? ConstellationState {
+                self.setPreferencesForSyncedAccount(for: newState)
                 if newState.localDevice?.pushEndpointExpired ?? false {
                     NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
                     // Our endpoint expired, we should check for missed messages
@@ -64,6 +65,14 @@ extension AppDelegate {
                 }
             }
         }
+    }
+
+    private func setPreferencesForSyncedAccount(for newState: ConstellationState) {
+        guard self.profile.hasSyncableAccount() else { return }
+        profile.prefs.setBool(true, forKey: PrefsKeys.Sync.signedInFxaAccount)
+        let remoteCount = newState.remoteDevices.count
+        let devicesCount = Int32(remoteCount + 1)
+        self.profile.prefs.setInt(devicesCount, forKey: PrefsKeys.Sync.numberOfSyncedDevices)
     }
 }
 
