@@ -58,19 +58,11 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         super.init(frame: .zero)
         setupLayout()
         setupObservers()
-        adjustHeightConstraintForCurrentContentSizeCategory()
+        adjustHeightConstraintForA11ySizeCategory()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        NotificationCenter.default.removeObserver(
-            self,
-            name: UIContentSizeCategory.didChangeNotification,
-            object: nil
-        )
     }
 
     public func configure(state: AddressToolbarState,
@@ -198,7 +190,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
     private func setupObservers() {
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(adjustHeightConstraintForCurrentContentSizeCategory),
+            selector: #selector(adjustHeightConstraintForA11ySizeCategory),
             name: UIContentSizeCategory.didChangeNotification,
             object: nil
         )
@@ -210,11 +202,12 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
     }
 
     @objc
-    private func adjustHeightConstraintForCurrentContentSizeCategory() {
+    private func adjustHeightConstraintForA11ySizeCategory() {
+        let height = min(UIFontMetrics.default.scaledValue(for: UX.locationHeight), UX.locationMaxHeight)
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
-        if contentSizeCategory == .accessibilityExtraExtraLarge ||
-            contentSizeCategory == .accessibilityExtraExtraExtraLarge {
-            locationContainerHeightConstraint?.constant = UX.locationMaxHeight
+
+        if contentSizeCategory.isAccessibilityCategory {
+            locationContainerHeightConstraint?.constant = height
         } else {
             locationContainerHeightConstraint?.constant = UX.locationHeight
         }
