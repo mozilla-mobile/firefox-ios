@@ -517,28 +517,27 @@ class BrowserViewController: UIViewController,
 
     @objc
     func appDidBecomeActiveNotification() {
-        guard canShowPrivacyView else { return }
-        // Re-show any components that might have been hidden because they were being displayed
-        // as part of a private mode tab
-        UIView.animate(
-            withDuration: 0.2,
-            delay: 0,
-            options: UIView.AnimationOptions(),
-            animations: {
-                self.contentStackView.alpha = 1
-
-                if self.isToolbarRefactorEnabled {
-                    self.addressToolbarContainer.alpha = 1
-                } else {
-                    self.urlBar.locationContainer.alpha = 1
-                }
-
-                self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
-                self.presentedViewController?.view.alpha = 1
-            }, completion: { _ in
-                self.webViewContainerBackdrop.alpha = 0
-                self.view.sendSubviewToBack(self.webViewContainerBackdrop)
-            })
+        if canShowPrivacyView {
+            // Re-show any components that might have been hidden because they were being displayed
+            // as part of a private mode tab
+            UIView.animate(
+                withDuration: 0.2,
+                delay: 0,
+                options: UIView.AnimationOptions(),
+                animations: {
+                    self.contentStackView.alpha = 1
+                    if self.isToolbarRefactorEnabled {
+                        self.addressToolbarContainer.alpha = 1
+                    } else {
+                        self.urlBar.locationContainer.alpha = 1
+                    }
+                    self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
+                    self.presentedViewController?.view.alpha = 1
+                }, completion: { _ in
+                    self.webViewContainerBackdrop.alpha = 0
+                    self.view.sendSubviewToBack(self.webViewContainerBackdrop)
+                })
+        }
 
         if let tab = tabManager.selectedTab, !tab.isFindInPageMode {
             // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
