@@ -404,7 +404,7 @@ class Tab: NSObject, ThemeApplicable {
     private var alertQueue = [JSAlertInfo]()
 
     var profile: Profile
-    
+
     /// Returns true if this tab is considered inactive (has not been executed for more than a specific number of days).
     /// Note: When `FasterInactiveTabsOverride` is enabled, tabs become inactive very quickly for testing purposes.
     var isInactive: Bool {
@@ -422,12 +422,12 @@ class Tab: NSObject, ThemeApplicable {
         guard let tabTimeStamp = lastExecutedTime ?? firstCreatedTime else {
             return false
         }
-        
+
         // If the tabDate is older than our inactive date cutoff, return true
         let tabDate = Date.fromTimestamp(tabTimeStamp)
         return tabDate <= inactiveDate
     }
-    
+
     /// Returns true if this tab is considered active (has been executed within a specific numbers of days).
     /// Note: When `FasterInactiveTabsOverride` is enabled, tabs become inactive very quickly for testing purposes.
     var isActive: Bool {
