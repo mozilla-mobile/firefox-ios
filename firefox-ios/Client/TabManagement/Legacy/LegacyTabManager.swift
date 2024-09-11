@@ -91,11 +91,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     var inactiveTabs: [Tab] {
-        let normalTabs = Set(normalTabs)
-        let normalActiveTabs = Set(normalActiveTabs)
-
-        let inactiveTabs = normalTabs.subtracting(normalActiveTabs)
-        return Array(inactiveTabs)
+        return normalTabs.filter({ $0.isInactive })
     }
 
     var privateTabs: [Tab] {

@@ -23,9 +23,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
     var inactiveTabsManager: InactiveTabsManagerProtocol
 
     override var normalActiveTabs: [Tab] {
-        let inactiveTabs = getInactiveTabs()
-        let activeTabs = tabs.filter { $0.isPrivate == false && !inactiveTabs.contains($0) }
-        return activeTabs
+        return tabs.filter { !$0.isPrivate && $0.isActive }
     }
 
     init(profile: Profile,
