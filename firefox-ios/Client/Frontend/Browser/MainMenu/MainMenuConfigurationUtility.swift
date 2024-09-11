@@ -33,6 +33,7 @@ struct MainMenuConfigurationUtility: Equatable {
         return menuSections
     }
 
+    // MARK: - New Tabs Section
     private func getNewTabSection(with uuid: WindowUUID) -> MenuSection {
         return MenuSection(options: [
             MenuElement(
@@ -72,6 +73,7 @@ struct MainMenuConfigurationUtility: Equatable {
         ])
     }
 
+    // MARK: - Tools Section
     private func getToolsSection(
         with uuid: WindowUUID,
         and configuration: MainMenuTabInfo?
@@ -134,7 +136,8 @@ struct MainMenuConfigurationUtility: Equatable {
                                 actionType: MainMenuActionType.closeMenu
                             )
                         )
-                    }
+                    },
+                    submenu: getToolsSubmenu(with: uuid)
                 ),
                 MenuElement(
                     title: .MainMenu.ToolsSection.Save,
@@ -173,6 +176,48 @@ struct MainMenuConfigurationUtility: Equatable {
         return switchToDesktop ? Menu.SwitchToDesktopSite : Menu.SwitchToMobileSite
     }
 
+    private func getToolsSubmenu(with uuid: WindowUUID) -> [MenuSection] {
+        return [MenuSection(
+            options: [
+                MenuElement(
+                    title: "tools submenu item 1",
+                    iconName: "",
+                    isEnabled: true,
+                    isActive: false,
+                    a11yLabel: "",
+                    a11yHint: "",
+                    a11yId: "",
+                    action: {
+                        store.dispatch(
+                            MainMenuAction(
+                                windowUUID: uuid,
+                                actionType: MainMenuActionType.closeMenu
+                            )
+                        )
+                    }
+                ),
+                MenuElement(
+                    title: "tools submenu item 2",
+                    iconName: "",
+                    isEnabled: true,
+                    isActive: false,
+                    a11yLabel: "",
+                    a11yHint: "",
+                    a11yId: "",
+                    action: {
+                        store.dispatch(
+                            MainMenuAction(
+                                windowUUID: uuid,
+                                actionType: MainMenuActionType.closeMenu
+                            )
+                        )
+                    }
+                )
+            ]
+        )]
+    }
+
+    // MARK: - Libraries Section
     private func getLibrariesSection(with uuid: WindowUUID) -> MenuSection {
         return MenuSection(options: [
             MenuElement(
@@ -246,6 +291,7 @@ struct MainMenuConfigurationUtility: Equatable {
         ])
     }
 
+    // MARK: - Other Tools Section
     private func getOtherToolsSection(
         with uuid: WindowUUID,
         isHomepage: Bool
