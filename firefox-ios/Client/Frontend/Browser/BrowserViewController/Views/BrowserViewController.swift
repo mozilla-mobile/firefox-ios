@@ -1055,9 +1055,13 @@ class BrowserViewController: UIViewController,
 
         // Everything works fine on iPad orientation switch (because CFR remains anchored to the same button),
         // so only necessary to dismiss when vertical size class changes
-        if dataClearanceContextHintVC.isPresenting &&
-            previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
-            dataClearanceContextHintVC.dismiss(animated: true)
+        if previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
+            if dataClearanceContextHintVC.isPresenting {
+                dataClearanceContextHintVC.dismiss(animated: true)
+            }
+            if navigationContextHintVC.isPresenting {
+                navigationContextHintVC.dismiss(animated: true)
+            }
         }
     }
 
