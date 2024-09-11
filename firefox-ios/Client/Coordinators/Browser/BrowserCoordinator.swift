@@ -467,6 +467,10 @@ class BrowserCoordinator: BaseCoordinator,
         }
     }
 
+    func showFindInPage() {
+        browserViewController.showFindInPage()
+    }
+
     private func makeMenuCoordinator() -> MainMenuCoordinator? {
         guard !childCoordinators.contains(where: { $0 is MainMenuCoordinator }) else { return nil }
 

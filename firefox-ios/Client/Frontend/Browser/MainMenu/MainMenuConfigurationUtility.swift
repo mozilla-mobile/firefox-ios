@@ -97,7 +97,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenu
+                            actionType: MainMenuActionType.show(.findInPage)
                         )
                     )
                 }

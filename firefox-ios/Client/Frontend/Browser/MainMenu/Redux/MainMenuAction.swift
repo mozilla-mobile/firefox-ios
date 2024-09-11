@@ -27,6 +27,7 @@ enum MainMenuNavigationDestination: Equatable {
     case bookmarks
     case customizeHomepage
     case downloads
+    case findInPage
     case goToURL(URL?)
     case history
     case passwords
