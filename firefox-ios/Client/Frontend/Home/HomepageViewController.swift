@@ -384,7 +384,11 @@ class HomepageViewController:
 
     @objc
     private func dismissKeyboard() {
-        if currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false {
+        /* homepage and error page, both are "internal" url, making
+           topsites on homepage inaccessible from error page 
+           when address bar is selected hence using "about/home".
+        */
+        if currentTab?.lastKnownUrl?.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(AboutHomeHandler.path)") ?? false {
             overlayManager.cancelEditing(shouldCancelLoading: false)
 
             let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
