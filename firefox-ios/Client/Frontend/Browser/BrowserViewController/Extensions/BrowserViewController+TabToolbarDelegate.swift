@@ -67,10 +67,25 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     private func presentNavigationContextualHint() {
-        // Only show the contextual hint if the tab webpage is loaded or we are on the home page
-        if let selectedTab = tabManager.selectedTab, selectedTab.isFxHomeTab || !selectedTab.loading {
+        // Only show the contextual hint if:
+        // 1. The tab webpage is loaded OR we are on the home page, and the
+        // 2. Microsurvey prompt is not being displayed
+        // If the hint does not show,
+        // ToolbarActionType.navigationButtonDoubleTapped will have to be dispatched again through user action
+        guard let state = store.state.screenState(BrowserViewControllerState.self,
+                                                  for: .browserViewController,
+                                                  window: windowUUID)
+        else { return }
+
+        if let selectedTab = tabManager.selectedTab,
+            selectedTab.isFxHomeTab || !selectedTab.loading,
+            !state.microsurveyState.showPrompt {
             present(navigationContextHintVC, animated: true)
             UIAccessibility.post(notification: .layoutChanged, argument: navigationContextHintVC)
+        } else {
+            let action = ToolbarAction(windowUUID: self.windowUUID,
+                                       actionType: ToolbarActionType.navigationHintFinishedPresenting)
+            store.dispatch(action)
         }
     }
 
