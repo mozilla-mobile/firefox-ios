@@ -14,8 +14,8 @@ final class MicrosurveyPromptStateTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testShowPromptAction() {
@@ -24,7 +24,10 @@ final class MicrosurveyPromptStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.showPrompt, false)
 
-        let action = getAction(for: .initialize(MicrosurveyMock.model))
+        let action = MicrosurveyPromptMiddlewareAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: MicrosurveyPromptMiddlewareActionType.initialize
+        )
         let newState = reducer(initialState, action)
 
         XCTAssertEqual(newState.showPrompt, true)
@@ -42,7 +45,7 @@ final class MicrosurveyPromptStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.showPrompt, true)
 
-        let action = getAction(for: .dismissPrompt)
+        let action = getAction(for: .closePrompt)
         let newState = reducer(initialState, action)
 
         XCTAssertEqual(newState.showPrompt, false)
@@ -55,7 +58,7 @@ final class MicrosurveyPromptStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.showSurvey, false)
 
-        let action = getAction(for: .openSurvey)
+        let action = getAction(for: .continueToSurvey)
         let newState = reducer(initialState, action)
 
         XCTAssertEqual(newState.showSurvey, true)
@@ -71,7 +74,7 @@ final class MicrosurveyPromptStateTests: XCTestCase {
         return MicrosurveyPromptState.reducer
     }
 
-    private func getAction(for actionType: MicrosurveyPromptMiddlewareActionType) -> MicrosurveyPromptMiddlewareAction {
-        return  MicrosurveyPromptMiddlewareAction(windowUUID: .XCTestDefaultUUID, actionType: actionType)
+    private func getAction(for actionType: MicrosurveyPromptActionType) -> MicrosurveyPromptAction {
+        return  MicrosurveyPromptAction(windowUUID: .XCTestDefaultUUID, actionType: actionType)
     }
 }

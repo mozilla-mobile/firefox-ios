@@ -4,6 +4,12 @@
 /* Label for the button, displayed in the menu, used to copy the current page link to the clipboard. */
 "Menu.CopyLink.Title" = "Hivatkozás másolása";
 
+/* Toast displayed to user after downlaod pdf was pressed. */
+"Menu.DownloadPDF.Confirm.v129" = "A PDF sikeresen letöltve";
+
+/* Label for the button, displayed in the menu, downloads a pdf when pressed. */
+"Menu.DownloadPDF.Label.v129" = "PDF letöltése";
+
 /* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
 "Menu.FindInPageAction.Title" = "Keresés az oldalon";
 
@@ -44,7 +50,7 @@
 "Menu.ViewDekstopSiteAction.Title" = "Asztali oldal kérése";
 
 /* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
-"Menu.ViewMobileSiteAction.Title" = "Mobil oldal kérése";
+"Menu.ViewMobileSiteAction.Title" = "Mobilos oldal kérése";
 
 /* Label for the button, displayed in the menu, used to navigate to the home page. */
 "SettingsMenu.OpenHomePageAction.Title" = "Kezdőlap";

@@ -20,11 +20,13 @@ class FirefoxHomeViewModelTests: XCTestCase {
         if let bundleID = Bundle.main.bundleIdentifier {
             UserDefaults.standard.removePersistentDomain(forName: bundleID)
         }
+        DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() {
         super.tearDown()
         profile = nil
+        AppContainer.shared.reset()
     }
 
     // MARK: Number of sections

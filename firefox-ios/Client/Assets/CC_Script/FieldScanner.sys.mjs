@@ -15,10 +15,25 @@ export class FieldDetail {
   // Reference to the elemenet
   elementWeakRef = null;
 
-  // id/name. This is only used for debugging
+  // The identifier generated via ContentDOMReference for the associated DOM element
+  // of this field
+  elementId = null;
+
+  // The identifier generated via ContentDOMReference for the root element of
+  // this field
+  rootElementId = null;
+
+  // If the element is an iframe, it is the id of the BrowsingContext of the iframe,
+  // Otherwise, it is the id of the BrowsingContext the element is in
+  browsingContextId = null;
+
+  // string with `${element.id}/{element.name}`. This is only used for debugging.
   identifier = "";
 
-  // The inferred field name for this element
+  // tag name attribute of the element
+  localName = null;
+
+  // The inferred field name for this element.
   fieldName = null;
 
   // The approach we use to infer the information for this element
@@ -50,41 +65,75 @@ export class FieldDetail {
 
   constructor(
     element,
+    form,
     fieldName = null,
     { autocompleteInfo = {}, confidence = null } = {}
   ) {
     this.elementWeakRef = new WeakRef(element);
+    this.elementId = lazy.FormAutofillUtils.getElementIdentifier(element);
+    this.rootElementId = lazy.FormAutofillUtils.getElementIdentifier(
+      form.rootElement
+    );
     this.identifier = `${element.id}/${element.name}`;
+    this.localName = element.localName;
     this.fieldName = fieldName;
 
-    if (autocompleteInfo) {
+    if (!this.fieldName) {
+      this.reason = "unknown";
+    } else if (autocompleteInfo) {
       this.reason = "autocomplete";
       this.section = autocompleteInfo.section;
       this.addressType = autocompleteInfo.addressType;
       this.contactType = autocompleteInfo.contactType;
       this.credentialType = autocompleteInfo.credentialType;
+      this.sectionName = this.section || this.addressType;
     } else if (confidence) {
       this.reason = "fathom";
       this.confidence = confidence;
+
+      // TODO: This should be removed once we support reference field info across iframe.
+      // Temporarily add an addtional "the field is the only visible input" constraint
+      // when determining whether a form has only a high-confidence cc-* field a valid
+      // credit card section. We can remove this restriction once we are confident
+      // about only using fathom.
+      this.isOnlyVisibleFieldWithHighConfidence = false;
+      if (
+        this.confidence > lazy.FormAutofillUtils.ccFathomHighConfidenceThreshold
+      ) {
+        const root = element.form || element.ownerDocument;
+        const inputs = root.querySelectorAll("input:not([type=hidden])");
+        if (inputs.length == 1 && inputs[0] == element) {
+          this.isOnlyVisibleFieldWithHighConfidence = true;
+        }
+      }
     } else {
       this.reason = "regex-heuristic";
     }
+
+    try {
+      this.browsingContextId =
+        element.localName == "iframe"
+          ? element.browsingContext.id
+          : BrowsingContext.getFromWindow(element.ownerGlobal).id;
+    } catch {
+      /* unit test doesn't have ownerGlobal */
+    }
+
+    this.isVisible = lazy.FormAutofillUtils.isFieldVisible(this.element);
   }
 
   get element() {
     return this.elementWeakRef.deref();
   }
 
-  get sectionName() {
-    return this.section || this.addressType;
-  }
-
-  #isVisible = null;
-  get isVisible() {
-    if (this.#isVisible == null) {
-      this.#isVisible = lazy.FormAutofillUtils.isFieldVisible(this.element);
-    }
-    return this.#isVisible;
+  /**
+   * Convert FieldDetail class to an object that is suitable for
+   * sending over IPC. Avoid using this in other case.
+   */
+  toVanillaObject() {
+    const json = { ...this };
+    delete json.elementWeakRef;
+    return json;
   }
 }
 
@@ -96,6 +145,7 @@ export class FieldDetail {
  * `inferFieldInfo` function.
  */
 export class FieldScanner {
+  #form = null;
   #elementsWeakRef = null;
   #inferFieldInfoFn = null;
 
@@ -107,12 +157,16 @@ export class FieldScanner {
    * Create a FieldScanner based on form elements with the existing
    * fieldDetails.
    *
-   * @param {Array.DOMElement} elements
-   *        The elements from a form for each parser.
+   * @param {FormLike} form
    * @param {Funcion} inferFieldInfoFn
    *        The callback function that is used to infer the field info of a given element
    */
-  constructor(elements, inferFieldInfoFn) {
+  constructor(form, inferFieldInfoFn) {
+    const elements = Array.from(form.elements).filter(element =>
+      lazy.FormAutofillUtils.isCreditCardOrAddressFieldType(element)
+    );
+
+    this.#form = form;
     this.#elementsWeakRef = new WeakRef(elements);
     this.#inferFieldInfoFn = inferFieldInfoFn;
   }
@@ -189,9 +243,11 @@ export class FieldScanner {
       throw new Error("Try to push the non-existing element info.");
     }
     const element = this.#elements[elementIndex];
-    const [fieldName, autocompleteInfo, confidence] =
-      this.#inferFieldInfoFn(element);
-    const fieldDetail = new FieldDetail(element, fieldName, {
+    const [fieldName, autocompleteInfo, confidence] = this.#inferFieldInfoFn(
+      element,
+      this.#elements
+    );
+    const fieldDetail = new FieldDetail(element, this.#form, fieldName, {
       autocompleteInfo,
       confidence,
     });

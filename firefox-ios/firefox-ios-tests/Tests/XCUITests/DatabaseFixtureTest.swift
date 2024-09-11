@@ -23,7 +23,7 @@ class DatabaseFixtureTest: BaseTestCase {
         super.setUp()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2458579
+    // https://mozilla.testrail.io/index.php?/cases/view/2458579
     func testBookmarksDatabaseFixture() {
         // Warning: Avoid using mozWaitForElementToExist as it is up to 25x less performant
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
@@ -51,7 +51,7 @@ class DatabaseFixtureTest: BaseTestCase {
         app.terminate()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2459133
+    // https://mozilla.testrail.io/index.php?/cases/view/2459133
    func testHistoryDatabaseFixture() throws {
        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
        mozWaitForElementToExist(tabsButton)
@@ -64,8 +64,12 @@ class DatabaseFixtureTest: BaseTestCase {
        do {
            let snapshot = try app.tables["History List"].snapshot()
            let historyList = snapshot.children.count
-
-           XCTAssertEqual(historyList, 103, "There should be 103 entries in the history list")
+           if #available(iOS 18, *) {
+               XCTAssertEqual(historyList, 105, "There should be 105 entries in the history list")
+           } else {
+               // For iOS 18, the scrollbars (vertical and horizontal) are included in the table
+               XCTAssertEqual(historyList, 103, "There should be 103 entries in the history list")
+           }
        } catch {
            XCTFail("Failed to take snapshot: \(error)")
        }

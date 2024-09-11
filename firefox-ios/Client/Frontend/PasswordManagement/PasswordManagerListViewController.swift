@@ -47,7 +47,8 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
         self.viewModel = PasswordManagerViewModel(
             profile: profile,
             searchController: searchController,
-            theme: themeManager.currentTheme(for: windowUUID)
+            theme: themeManager.getCurrentTheme(for: windowUUID),
+            loginProvider: profile.logins
         )
         self.loginDataSource = LoginDataSource(viewModel: viewModel)
         self.themeManager = themeManager
@@ -135,11 +136,9 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         viewModel.theme = theme
         loginDataSource.viewModel = viewModel
-        tableView.reloadSections(IndexSet(integer: PasswordManagerListViewController.loginsSettingsSection),
-                                 with: .none)
 
         view.backgroundColor = theme.colors.layer1
         tableView.separatorColor = theme.colors.borderPrimary
@@ -269,7 +268,7 @@ private extension PasswordManagerListViewController {
 
     func loadLogins(_ query: String? = nil) {
         loadingView.isHidden = false
-        loadingView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        loadingView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         viewModel.loadLogins(query, loginDataSource: self.loginDataSource)
     }
 
@@ -377,7 +376,7 @@ extension PasswordManagerListViewController: UITableViewDelegate {
         // not using a grouped table: show header borders
         headerView.showBorder(for: .top, true)
         headerView.showBorder(for: .bottom, true)
-        headerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        headerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         return headerView
     }
 

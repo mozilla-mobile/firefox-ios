@@ -13,6 +13,7 @@ class LoginListViewModel: ObservableObject {
     @Published var logins: [EncryptedLogin] = []
 
     private let tabURL: URL
+    private let field: FocusFieldType
     private let loginStorage: LoginStorage
     private let logger: Logger
     let onLoginCellTap: (EncryptedLogin) -> Void
@@ -24,12 +25,14 @@ class LoginListViewModel: ObservableObject {
 
     init(
         tabURL: URL,
+        field: FocusFieldType,
         loginStorage: LoginStorage,
         logger: Logger,
         onLoginCellTap: @escaping (EncryptedLogin) -> Void,
         manageLoginInfoAction: @escaping () -> Void
     ) {
         self.tabURL = tabURL
+        self.field = field
         self.loginStorage = loginStorage
         self.logger = logger
         self.onLoginCellTap = onLoginCellTap
@@ -40,6 +43,7 @@ class LoginListViewModel: ObservableObject {
         do {
             let logins = try await loginStorage.listLogins()
             self.logins = logins.filter { login in
+                if field == FocusFieldType.username && login.decryptedUsername.isEmpty { return false }
                 guard let recordHostnameURL = URL(string: login.hostname) else { return false }
                 return recordHostnameURL.baseDomain == tabURL.baseDomain
             }

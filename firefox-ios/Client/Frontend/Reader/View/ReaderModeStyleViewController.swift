@@ -206,7 +206,7 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
 
     // MARK: - Applying Theme
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         popoverPresentationController?.backgroundColor = theme.colors.layer1
 
         slider.tintColor = theme.colors.actionPrimary

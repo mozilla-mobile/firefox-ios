@@ -37,60 +37,56 @@ struct AddressAutofillToggle: View {
 
     var body: some View {
         VStack {
-            // Divider line to separate content (hidden by default)
             Divider()
                 .frame(height: 0.7)
                 .padding(.leading, 16)
                 .hidden()
 
-            // Horizontal stack containing title, description, and toggle
-            HStack {
-                // Left-aligned stack for title and description
-                VStack(alignment: .leading) {
-                    // Title for the Toggle
-                    Text(String.Addresses.Settings.SwitchTitle)
-                        .font(.body)
-                        .foregroundColor(textColor)
-
-                    // Description for the Toggle
-                    Text(String.Addresses.Settings.SwitchDescription)
-                        .font(.footnote)
-                        .foregroundColor(descriptionTextColor)
+            main
+                .accessibilityElement()
+                .accessibilityLabel("\(String.Addresses.Settings.SwitchTitle), \(String.Addresses.Settings.SwitchDescription)")
+                .accessibilityValue("\(model.isEnabled ? 1 : 0)")
+                .accessibilityAddTraits(traits)
+                .accessibilityAction {
+                    model.isEnabled = !model.isEnabled
                 }
-                .padding(.leading, 16)
 
-                Spacer()
-
-                // Toggle switch
-                Toggle(isOn: $model.isEnabled) {
-                    EmptyView()
-                }
-                .padding(.trailing, 16)
-                .labelsHidden()
-                .toggleStyle(SwitchToggleStyle(tint: toggleTintColor))
-                .frame(alignment: .trailing)
-            }
-            .accessibilityElement()
-            .accessibilityLabel("\(String.Addresses.Settings.SwitchTitle), \(String.Addresses.Settings.SwitchDescription)")
-            .accessibilityValue("\(model.isEnabled ? 1 : 0)")
-            .accessibilityAddTraits(traits)
-            .accessibilityAction {
-                model.isEnabled = !model.isEnabled
-            }
-
-            // Divider line to separate content
             Divider()
                 .frame(height: 0.7)
                 .padding(.leading, 16)
         }
         .background(backgroundColor)
         .onAppear {
-            // Apply theme when the view appears
-            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        }
+    }
+
+    private var main: some View {
+        return HStack {
+            VStack(alignment: .leading) {
+                Text(String.Addresses.Settings.SwitchTitle)
+                    .font(.body)
+                    .foregroundColor(textColor)
+
+                Text(String.Addresses.Settings.SwitchDescription)
+                    .font(.footnote)
+                    .foregroundColor(descriptionTextColor)
+            }
+            .padding(.leading, 16)
+
+            Spacer()
+
+            Toggle(isOn: $model.isEnabled) {
+                EmptyView()
+            }
+            .padding(.trailing, 16)
+            .labelsHidden()
+            .toggleStyle(SwitchToggleStyle(tint: toggleTintColor))
+            .frame(alignment: .trailing)
         }
     }
 

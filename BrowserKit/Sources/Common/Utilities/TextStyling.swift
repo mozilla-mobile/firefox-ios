@@ -24,4 +24,10 @@ public struct TextStyling {
     public func systemFont() -> UIFont {
         return UIFont.systemFont(ofSize: size, weight: weight)
     }
+
+    public func monospacedFont() -> UIFont {
+        return DefaultDynamicFontHelper.preferredFont(withTextStyle: textStyle,
+                                                      size: size,
+                                                      symbolicTraits: [.traitMonoSpace])
+    }
 }

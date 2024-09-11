@@ -31,7 +31,7 @@ class CustomSearchViewController: SettingsTableViewController {
     var successCallback: (() -> Void)?
     private lazy var spinnerView: UIActivityIndicatorView = .build { [self] spinner in
         spinner.style = .medium
-        spinner.color = themeManager.currentTheme(for: windowUUID).colors.iconSpinner
+        spinner.color = themeManager.getCurrentTheme(for: windowUUID).colors.iconSpinner
         spinner.hidesWhenStopped = true
     }
 
@@ -104,13 +104,13 @@ class CustomSearchViewController: SettingsTableViewController {
         }
 
         let siteImageModel = SiteImageModel(id: UUID(),
-                                            expectedImageType: .favicon,
-                                            siteURLString: url.absoluteString)
-        let result = await faviconFetcher.getImage(site: siteImageModel)
+                                            imageType: .favicon,
+                                            siteURL: url)
+        let image = await faviconFetcher.getImage(model: siteImageModel)
 
         let engine = OpenSearchEngine(engineID: nil,
                                       shortName: name,
-                                      image: result.faviconImage ?? UIImage(),
+                                      image: image,
                                       searchTemplate: template,
                                       suggestTemplate: nil,
                                       isCustomEngine: true)

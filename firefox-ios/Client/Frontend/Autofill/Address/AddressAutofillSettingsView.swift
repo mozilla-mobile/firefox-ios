@@ -37,18 +37,21 @@ struct AddressAutofillSettingsView: View {
                     .padding(.top, 25)
                     .frame(maxWidth: .infinity)
 
-                // Address list view
-                AddressListView(windowUUID: windowUUID, viewModel: addressListViewModel)
+                if addressListViewModel.showSection || addressListViewModel.isEditingFeatureEnabled {
+                    AddressListView(windowUUID: windowUUID, viewModel: addressListViewModel)
+                } else {
+                    Spacer()
+                }
             }
             .background(viewBackground)
         }
         .onAppear {
-            // Apply the theme when the view appears
-            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            addressListViewModel.fetchAddresses()
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
     }
 

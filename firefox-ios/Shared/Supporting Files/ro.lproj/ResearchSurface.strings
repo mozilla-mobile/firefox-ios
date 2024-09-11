@@ -1,0 +1,3 @@
+/* On the Research Survey popup, the text for the button that, when tapped, will dismiss this screen, and the user will not be taken to the survey. */
+"SecondaryButton.Label.v112" = "Nu, mulțumesc";
+

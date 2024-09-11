@@ -1,5 +1,5 @@
 /* This value is used as the toast message for the saving success alert in the remember credit card page */
-"CreditCard.RememberCard.SecondaryButtonTitle.v116" = "מידע הכרטיס עודכן";
+"CreditCard.RememberCard.SecondaryButtonTitle.v116" = "פרטי הכרטיס עודכנו";
 
 /* This value is used as the title for the update card page */
 "CreditCard.UpdateCard.MainTitle.v122" = "לעדכן את הכרטיס?";

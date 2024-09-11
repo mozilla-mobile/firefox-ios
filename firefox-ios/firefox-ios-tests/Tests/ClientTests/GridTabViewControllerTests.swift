@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Common
 @testable import Client
 
 final class LegacyGridTabViewControllerTests: XCTestCase {
@@ -13,7 +14,8 @@ final class LegacyGridTabViewControllerTests: XCTestCase {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         profile = MockProfile()
-        manager = TabManagerImplementation(profile: profile, uuid: .XCTestDefaultUUID)
+        manager = TabManagerImplementation(profile: profile,
+                                           uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: false))
     }
 
     override func tearDown() {

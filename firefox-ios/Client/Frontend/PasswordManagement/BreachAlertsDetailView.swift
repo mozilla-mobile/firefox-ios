@@ -14,8 +14,6 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
         static let shadowOpacity: Float = 0.6
         static let shadowOffset = CGSize(width: 0, height: 2)
         static let titleIconSize: CGFloat = 24
-        static let titleFontSize: CGFloat = 19
-        static let fontSize: CGFloat = 16
     }
 
     private var breachLink = String()
@@ -33,7 +31,7 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
     private lazy var titleIconContainer: UIView = .build()
 
     private lazy var titleLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredBoldFont(withTextStyle: .headline, size: UX.titleFontSize)
+        label.font = FXFontStyles.Bold.title3.scaledFont()
         label.text = .BreachAlertsTitle
         label.sizeToFit()
         label.isAccessibilityElement = true
@@ -42,11 +40,7 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
     }
 
     private lazy var learnMoreButton: UIButton = .build { button in
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .body,
-            size: UX.fontSize,
-            weight: .semibold
-        )
+        button.titleLabel?.font  = FXFontStyles.Bold.callout.scaledFont()
         button.isAccessibilityElement = true
         button.accessibilityTraits = .button
         button.accessibilityLabel = .BreachAlertsLearnMore
@@ -56,7 +50,7 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
     private lazy var breachDateLabel: UILabel = .build { label in
         label.text = .BreachAlertsBreachDate
         label.numberOfLines = 0
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.fontSize, weight: .semibold)
+        label.font = FXFontStyles.Bold.callout.scaledFont()
         label.isAccessibilityElement = true
         label.accessibilityTraits = .staticText
         label.accessibilityLabel = .BreachAlertsBreachDate
@@ -65,7 +59,7 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
     private lazy var descriptionLabel: UILabel = .build { label in
         label.text = .BreachAlertsDescription
         label.numberOfLines = 0
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.fontSize, weight: .medium)
+        label.font = FXFontStyles.Bold.callout.scaledFont()
         label.isAccessibilityElement = true
         label.accessibilityTraits = .staticText
     }
@@ -73,7 +67,7 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
     private lazy var goToLabel: UILabel = .build { label in
         let breachLinkGesture = UITapGestureRecognizer(target: self, action: #selector(self.didTapBreachLink))
         label.addGestureRecognizer(breachLinkGesture)
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body, size: UX.fontSize, weight: .semibold)
+        label.font = FXFontStyles.Bold.callout.scaledFont()
         label.numberOfLines = 0
         label.isUserInteractionEnabled = true
         label.isAccessibilityElement = true

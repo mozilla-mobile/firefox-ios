@@ -7,8 +7,12 @@ import ToolbarKit
 import Redux
 import UIKit
 
+protocol NavigationToolbarContainerDelegate: AnyObject {
+    func configureContextualHint(for: UIButton)
+}
+
 class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
-    typealias SubscriberStateType = BrowserViewControllerState
+    typealias SubscriberStateType = ToolbarState
 
     private enum UX {
         static let toolbarHeight: CGFloat = 48
@@ -19,6 +23,7 @@ class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
             subscribeToRedux()
         }
     }
+    weak var toolbarDelegate: NavigationToolbarContainerDelegate?
     private var toolbarState: ToolbarState?
     private var model: NavigationToolbarContainerModel?
 
@@ -46,11 +51,11 @@ class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
     // MARK: - Redux
 
     func subscribeToRedux() {
-        guard let uuid = windowUUID else { return }
+        guard let windowUUID else { return }
 
         store.subscribe(self, transform: {
             $0.select({ appState in
-                return BrowserViewControllerState(appState: appState, uuid: uuid)
+                return ToolbarState(appState: appState, uuid: windowUUID)
             })
         })
     }
@@ -59,17 +64,18 @@ class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
         store.unsubscribe(self)
     }
 
-    func newState(state: BrowserViewControllerState) {
-        toolbarState = state.toolbarState
-        updateModel(toolbarState: state.toolbarState)
+    func newState(state: ToolbarState) {
+        updateModel(toolbarState: state)
     }
 
     private func updateModel(toolbarState: ToolbarState) {
         guard let windowUUID else { return }
         let model = NavigationToolbarContainerModel(state: toolbarState, windowUUID: windowUUID)
-        self.model = model
 
-        toolbar.configure(state: model.navigationToolbarState)
+        if self.model != model {
+            self.model = model
+            toolbar.configure(state: model.navigationToolbarState, toolbarDelegate: self)
+        }
     }
 
     private func setupLayout() {
@@ -90,5 +96,11 @@ class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
     func applyTheme(theme: Theme) {
         toolbar.applyTheme(theme: theme)
         backgroundColor = theme.colors.layer1
+    }
+}
+
+extension NavigationToolbarContainer: BrowserNavigationToolbarDelegate {
+    func configureContextualHint(for button: UIButton) {
+        toolbarDelegate?.configureContextualHint(for: button)
     }
 }

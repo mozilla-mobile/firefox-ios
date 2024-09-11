@@ -13,17 +13,17 @@ public struct PrivateModeTheme: Theme {
 
 private struct PrivateModeColorPalette: ThemeColourPalette {
     // MARK: - Layers
-    var layer1: UIColor = FXColors.Ink50
-    var layer2: UIColor = FXColors.Ink50
+    var layer1: UIColor = FXColors.Violet90
+    var layer2: UIColor = FXColors.Violet90
     var layer3: UIColor = FXColors.Ink90
     var layer4: UIColor = FXColors.DarkGrey20.withAlphaComponent(0.7)
     var layer5: UIColor = FXColors.Ink20
-    var layer5Hover: UIColor = FXColors.DarkGrey20
+    var layer5Hover: UIColor = FXColors.DarkGrey40
     var layerScrim: UIColor = FXColors.DarkGrey90.withAlphaComponent(0.95)
-    var layerGradient = Gradient(colors: [FXColors.Violet40, FXColors.Violet70])
+    var layerGradient = Gradient(colors: [FXColors.Violet70, FXColors.Violet60])
     var layerGradientOverlay = Gradient(colors: [
         FXColors.DarkGrey40.withAlphaComponent(0),
-        FXColors.DarkGrey40.withAlphaComponent(0.4)
+        FXColors.DarkGrey40.withAlphaComponent(1)
     ])
     var layerAccentNonOpaque: UIColor = FXColors.Blue20.withAlphaComponent(0.2)
     var layerAccentPrivate: UIColor = FXColors.Purple60
@@ -38,6 +38,7 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
     var layerConfirmation: UIColor = FXColors.Green80
     var layerWarning: UIColor = FXColors.Yellow70.withAlphaComponent(0.77)
     var layerError: UIColor = FXColors.Pink80
+    var layerSelectedText: UIColor = FXColors.Violet60
     var layerSearch: UIColor = FXColors.Ink90
     var layerGradientURL = Gradient(colors: [
         FXColors.Ink90.withAlphaComponent(0),
@@ -71,7 +72,7 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
     var actionError: UIColor = FXColors.Pink70.withAlphaComponent(0.69)
     var actionInfo: UIColor = FXColors.Blue60
     var actionTabActive: UIColor = FXColors.Purple60
-    var actionTabInactive: UIColor = FXColors.Ink50
+    var actionTabInactive: UIColor = FXColors.Ink90
 
     // MARK: - Text
     var textPrimary: UIColor = FXColors.LightGrey05
@@ -100,12 +101,12 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
     var iconRatingNeutral: UIColor = FXColors.LightGrey05.withAlphaComponent(0.3)
 
     // MARK: - Border
-    var borderPrimary: UIColor = FXColors.DarkGrey05
+    var borderPrimary: UIColor = FXColors.Ink05
     var borderAccent: UIColor = FXColors.Purple60
     var borderAccentNonOpaque: UIColor = FXColors.Blue20.withAlphaComponent(0.2)
     var borderAccentPrivate: UIColor = FXColors.Purple60
     var borderInverted: UIColor = FXColors.DarkGrey90
-    var borderToolbarDivider: UIColor = FXColors.Violet80
+    var borderToolbarDivider: UIColor = FXColors.Violet90
 
     // MARK: - Shadow
     var shadowDefault: UIColor = FXColors.DarkGrey90.withAlphaComponent(0.16)

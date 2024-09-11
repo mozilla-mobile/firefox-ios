@@ -20,6 +20,7 @@ protocol SettingsFlowDelegate: AnyObject,
     func showExperiments()
     func showFirefoxSuggest()
     func openDebugTestTabs(count: Int)
+    func showDebugFeatureFlags()
     func showPasswordManager(shouldShowOnboarding: Bool)
     func didFinishShowingSettings()
 }
@@ -182,7 +183,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             string: String.FirefoxHomepage.HomeTabBanner.EvergreenMessage.HomeTabBannerDescription)
 
         return [SettingSection(footerTitle: footerTitle,
-                               children: [DefaultBrowserSetting(theme: themeManager.currentTheme(for: windowUUID))])]
+                               children: [DefaultBrowserSetting(theme: themeManager.getCurrentTheme(for: windowUUID))])]
     }
 
     private func getAccountSetting() -> [SettingSection] {
@@ -231,7 +232,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         if inactiveTabsAreBuildActive {
             generalSettings.insert(
                 TabsSetting(
-                    theme: themeManager.currentTheme(for: windowUUID),
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
                     settingsDelegate: parentCoordinator
                 ),
                 at: 3
@@ -240,7 +241,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         let offerToOpenCopiedLinksSettings = BoolSetting(
             prefs: profile.prefs,
-            theme: themeManager.currentTheme(for: windowUUID),
+            theme: themeManager.getCurrentTheme(for: windowUUID),
             prefKey: "showClipboardBar",
             defaultValue: false,
             titleText: .SettingsOfferClipboardBarTitle,
@@ -249,7 +250,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         let showLinksPreviewSettings = BoolSetting(
             prefs: profile.prefs,
-            theme: themeManager.currentTheme(for: windowUUID),
+            theme: themeManager.getCurrentTheme(for: windowUUID),
             prefKey: PrefsKeys.ContextMenuShowLinkPreviews,
             defaultValue: true,
             titleText: .SettingsShowLinkPreviewsTitle,
@@ -258,7 +259,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         let blockOpeningExternalAppsSettings = BoolSetting(
             prefs: profile.prefs,
-            theme: themeManager.currentTheme(for: windowUUID),
+            theme: themeManager.getCurrentTheme(for: windowUUID),
             prefKey: PrefsKeys.BlockOpeningExternalApps,
             defaultValue: false,
             titleText: .SettingsBlockOpeningExternalAppsTitle
@@ -283,23 +284,32 @@ class AppSettingsTableViewController: SettingsTableViewController,
             privacySettings.append(AutofillCreditCardSettings(settings: self, settingsDelegate: parentCoordinator))
         }
 
-        let autofillAddressStatus = featureFlags.isFeatureEnabled(.addressAutofill, checking: .buildOnly)
+        let autofillAddressStatus = AddressLocaleFeatureValidator.isValidRegion()
         if autofillAddressStatus {
-            privacySettings.append(AddressAutofillSetting(theme: themeManager.currentTheme(for: windowUUID),
+            privacySettings.append(AddressAutofillSetting(theme: themeManager.getCurrentTheme(for: windowUUID),
                                                           profile: profile,
                                                           settingsDelegate: parentCoordinator))
         }
 
         privacySettings.append(ClearPrivateDataSetting(settings: self, settingsDelegate: parentCoordinator))
 
+        privacySettings += [
+            BoolSetting(prefs: profile.prefs,
+                        theme: themeManager.getCurrentTheme(for: windowUUID),
+                        prefKey: PrefsKeys.Settings.closePrivateTabs,
+                        defaultValue: true,
+                        titleText: .AppSettingsClosePrivateTabsTitle,
+                        statusText: .AppSettingsClosePrivateTabsDescription)
+        ]
+
         privacySettings.append(ContentBlockerSetting(settings: self, settingsDelegate: parentCoordinator))
 
-        privacySettings.append(NotificationsSetting(theme: themeManager.currentTheme(for: windowUUID),
+        privacySettings.append(NotificationsSetting(theme: themeManager.getCurrentTheme(for: windowUUID),
                                                     profile: profile,
                                                     settingsDelegate: parentCoordinator))
 
         privacySettings += [
-            PrivacyPolicySetting(theme: themeManager.currentTheme(for: windowUUID),
+            PrivacyPolicySetting(theme: themeManager.getCurrentTheme(for: windowUUID),
                                  settingsDelegate: parentCoordinator)
         ]
 
@@ -313,14 +323,14 @@ class AppSettingsTableViewController: SettingsTableViewController,
             SendFeedbackSetting(settingsDelegate: parentCoordinator),
             SendAnonymousUsageDataSetting(prefs: profile.prefs,
                                           delegate: settingsDelegate,
-                                          theme: themeManager.currentTheme(for: windowUUID),
+                                          theme: themeManager.getCurrentTheme(for: windowUUID),
                                           settingsDelegate: parentCoordinator),
             StudiesToggleSetting(prefs: profile.prefs,
                                  delegate: settingsDelegate,
-                                 theme: themeManager.currentTheme(for: windowUUID),
+                                 theme: themeManager.getCurrentTheme(for: windowUUID),
                                  settingsDelegate: parentCoordinator),
             OpenSupportPageSetting(delegate: settingsDelegate,
-                                   theme: themeManager.currentTheme(for: windowUUID),
+                                   theme: themeManager.getCurrentTheme(for: windowUUID),
                                    settingsDelegate: parentCoordinator),
         ]
 
@@ -341,7 +351,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     }
 
     private func getDebugSettings() -> [SettingSection] {
-        let hiddenDebugOptions = [
+        var hiddenDebugOptions = [
             ExperimentsSettings(settings: self, settingsDelegate: self),
             ExportLogDataSetting(settings: self),
             ExportBrowserDataSetting(settings: self),
@@ -359,6 +369,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
             OpenFiftyTabsDebugOption(settings: self, settingsDelegate: self),
             FirefoxSuggestSettings(settings: self, settingsDelegate: self),
         ]
+
+        #if MOZ_CHANNEL_BETA || MOZ_CHANNEL_FENNEC
+        hiddenDebugOptions.append(FeatureFlagsSettings(settings: self, settingsDelegate: self))
+        #endif
 
         return [SettingSection(title: NSAttributedString(string: "Debug"), children: hiddenDebugOptions)]
     }
@@ -393,6 +407,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
     func pressedOpenFiftyTabs() {
         parentCoordinator?.openDebugTestTabs(count: 50)
+    }
+
+    func pressedDebugFeatureFlags() {
+        parentCoordinator?.showDebugFeatureFlags()
     }
 
     // MARK: SharedSettingsDelegate

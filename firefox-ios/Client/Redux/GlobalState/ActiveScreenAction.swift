@@ -26,7 +26,10 @@ enum AppScreen {
     case tabsPanel
     case remoteTabsPanel
     case tabPeek
+    case mainMenu
     case microsurvey
+    case trackingProtection
+    case toolbar
 }
 
 enum ScreenActionType: ActionType {

@@ -507,7 +507,7 @@ class SearchViewController: SiteTableViewController,
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.currentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     override func tableView(
@@ -660,6 +660,15 @@ class SearchViewController: SiteTableViewController,
         case .history:
             let suggestion = viewModel.historySites[indexPath.item]
             searchDelegate?.searchViewController(self, didHighlightText: suggestion.url, search: false)
+        case .searchSuggestions:
+            guard let suggestion = viewModel.suggestions?[indexPath.item] else { return }
+            searchDelegate?.searchViewController(self, didHighlightText: suggestion, search: false)
+        case .remoteTabs:
+            let suggestion = viewModel.remoteClientTabs[indexPath.item]
+            searchDelegate?.searchViewController(self, didHighlightText: suggestion.tab.URL.absoluteString, search: false)
+        case .firefoxSuggestions:
+            let suggestion = viewModel.firefoxSuggestions[indexPath.item]
+            searchDelegate?.searchViewController(self, didHighlightText: suggestion.url.absoluteString, search: false)
         default: return
         }
     }
@@ -889,12 +898,27 @@ class SearchViewController: SiteTableViewController,
             break
         }
     }
+
+    // MARK: - Internal Utilities
+
+    private func firstNonEmptySection(before: Int? = nil, after: Int? = nil) -> Int? {
+        let allSections = SearchListSection.allCases
+        let sectionsOrdered = before != nil ? allSections.reversed() : allSections
+        for section in sectionsOrdered {
+            let sectionValue = section.rawValue
+            guard before == nil || sectionValue < before! else { continue }
+            guard after == nil || sectionValue > after! else { continue }
+            guard tableView(tableView, numberOfRowsInSection: sectionValue) > 0 else { continue }
+            return sectionValue
+        }
+        return nil
+    }
 }
 
 // MARK: - Keyboard shortcuts
 extension SearchViewController {
     func handleKeyCommands(sender: UIKeyCommand) {
-        let initialSection = SearchListSection.firefoxSuggestions.rawValue
+        let initialSection: Int = firstNonEmptySection() ?? 0
         guard let current = tableView.indexPathForSelectedRow else {
             let initialSectionCount = tableView(tableView, numberOfRowsInSection: initialSection)
             if sender.input == UIKeyCommand.inputDownArrow, initialSectionCount > 0 {
@@ -918,8 +942,10 @@ extension SearchViewController {
                     searchDelegate?.searchViewController(self, didHighlightText: viewModel.searchQuery, search: false)
                     return
                 } else {
-                    nextSection = current.section - 1
-                    nextItem = tableView(tableView, numberOfRowsInSection: nextSection) - 1
+                    let currentSection = current.section
+                    guard let next = firstNonEmptySection(before: currentSection) else { return }
+                    nextSection = next
+                    nextItem = tableView(tableView, numberOfRowsInSection: next) - 1
                 }
             } else {
                 nextSection = current.section
@@ -933,8 +959,9 @@ extension SearchViewController {
                     return
                 } else {
                     // We can go to the next section.
-                    guard current.section + 1 < initialSection else { return }
-                    nextSection = current.section + 1
+                    let currentSection = current.section
+                    guard let next = firstNonEmptySection(after: currentSection) else { return }
+                    nextSection = next
                     nextItem = 0
                 }
             } else {

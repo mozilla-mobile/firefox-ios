@@ -8,6 +8,8 @@ import Account
 import Common
 import ComponentLibrary
 
+import enum MozillaAppServices.OAuthScope
+
 /// Reflects parent page that launched FirefoxAccountSignInViewController
 enum FxASignInParentType {
     case settings
@@ -224,10 +226,12 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
                                                   constant: -UX.horizontalPadding),
             emailButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8),
         ])
+        containerView.setNeedsLayout()
+        containerView.layoutIfNeeded()
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         let colors = theme.colors
         view.backgroundColor = colors.layer1
         qrSignInLabel.textColor = colors.textPrimary
@@ -266,6 +270,29 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
         TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .tap, object: .syncSignInUseEmail)
         navigationController?.pushViewController(fxaWebVC, animated: true)
     }
+
+    private func showFxAWebViewController(_ url: URL, completion: @escaping (URL) -> Void) {
+        if let accountManager = profile.rustFxA.accountManager {
+            let entrypoint = self.deepLinkParams.entrypoint.rawValue
+            accountManager.getManageAccountURL(entrypoint: "ios_settings_\(entrypoint)") { [weak self] result in
+                guard let self = self else { return }
+                accountManager.beginPairingAuthentication(
+                    pairingUrl: url.absoluteString,
+                    entrypoint: "pairing_\(entrypoint)",
+                    // We ask for the session scope because the web content never
+                    // got the session as the user never entered their email and
+                    // password
+                    scopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session]
+                ) { [weak self] result in
+                    guard self != nil else { return }
+
+                    if case .success(let url) = result {
+                        completion(url)
+                    }
+                }
+            }
+        }
+    }
 }
 
 // MARK: - QRCodeViewControllerDelegate Functions
@@ -275,18 +302,27 @@ extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
             telemetryObj: telemetryObject
         )
 
-        let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString),
-                                      profile: profile,
-                                      dismissalStyle: fxaDismissStyle,
-                                      deepLinkParams: deepLinkParams,
-                                      shouldAskForNotificationPermission: shouldAskForPermission)
-        navigationController?.pushViewController(vc, animated: true)
+        // Only show the FxAWebViewController if the correct FxA pairing QR code was captured
+        showFxAWebViewController(url) { [weak self] url in
+            guard let self else { return }
+            let vc = FxAWebViewController(
+                pageType: .qrCode(url: url),
+                profile: profile,
+                dismissalStyle: fxaDismissStyle,
+                deepLinkParams: deepLinkParams,
+                shouldAskForNotificationPermission: shouldAskForPermission)
+            navigationController?.pushViewController(vc, animated: true)
+        }
     }
 
     func didScanQRCodeWithText(_ text: String) {
         logger.log("FirefoxAccountSignInVC Error: `didScanQRCodeWithText` should not be called",
                    level: .info,
                    category: .sync)
+    }
+
+    var qrCodeScanningPermissionLevel: QRCodeScanPermissions {
+        return .allowURLsWithoutPrompt
     }
 }
 

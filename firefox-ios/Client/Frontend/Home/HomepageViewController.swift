@@ -43,6 +43,7 @@ class HomepageViewController:
     private var jumpBackInContextualHintViewController: ContextualHintViewController
     private var syncTabContextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
+    private var lastContentOffsetY: CGFloat = 0
     private var logger: Logger
     var windowUUID: WindowUUID { return tabManager.windowUUID }
     var currentWindowUUID: UUID? { return windowUUID }
@@ -81,7 +82,7 @@ class HomepageViewController:
         self.viewModel = HomepageViewModel(profile: profile,
                                            isPrivate: isPrivate,
                                            tabManager: tabManager,
-                                           theme: themeManager.currentTheme(for: tabManager.windowUUID))
+                                           theme: themeManager.getCurrentTheme(for: tabManager.windowUUID))
 
         let jumpBackInContextualViewProvider = ContextualHintViewProvider(forHintType: .jumpBackIn,
                                                                           with: viewModel.profile)
@@ -202,6 +203,27 @@ class HomepageViewController:
             || previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
             reloadOnRotation(newSize: viewModel.newSize ?? view.frame.size)
         }
+
+        updateToolbarStateTraitCollectionIfNecessary(traitCollection)
+    }
+
+    /// When the trait collection changes the top taps display might have to change
+    /// This requires an update of the toolbars.
+    private func updateToolbarStateTraitCollectionIfNecessary(_ newCollection: UITraitCollection) {
+        let showTopTabs = ToolbarHelper().shouldShowTopTabs(for: newCollection)
+
+        // Only dispatch action when the value of top tabs being shown is different from what is saved in the state
+        // to avoid having the toolbar re-displayed
+        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+              toolbarState.isShowingTopTabs != showTopTabs
+        else { return }
+
+        let action = ToolbarAction(
+            isShowingTopTabs: showTopTabs,
+            windowUUID: windowUUID,
+            actionType: ToolbarActionType.traitCollectionDidChange
+        )
+        store.dispatch(action)
     }
 
     // Displays or hides the private mode toggle button in the header
@@ -350,7 +372,7 @@ class HomepageViewController:
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         viewModel.theme = theme
         view.backgroundColor = theme.colors.layer1
     }
@@ -364,16 +386,49 @@ class HomepageViewController:
     private func dismissKeyboard() {
         if currentTab?.lastKnownUrl?.absoluteString.hasPrefix("internal://") ?? false {
             overlayManager.cancelEditing(shouldCancelLoading: false)
+
+            let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
+            store.dispatch(action)
         }
+    }
+
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        lastContentOffsetY = scrollView.contentOffset.y
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // We only handle status bar overlay alpha if there's a wallpaper applied on the homepage
         if WallpaperManager().currentWallpaper.type != .defaultWallpaper {
-            let theme = themeManager.currentTheme(for: windowUUID)
+            let theme = themeManager.getCurrentTheme(for: windowUUID)
             statusBarScrollDelegate?.scrollViewDidScroll(scrollView,
                                                          statusBarFrame: statusBarFrame,
                                                          theme: theme)
+        }
+
+        // Only dispatch action when user is in edit mode to avoid having the toolbar re-displayed
+        if featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly),
+           let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+           toolbarState.addressToolbar.isEditing {
+            // When the user scrolls the homepage we cancel edit mode
+            // On a website we just dismiss the keyboard
+            if toolbarState.addressToolbar.url == nil {
+                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
+                store.dispatch(action)
+            } else {
+                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didScrollDuringEdit)
+                store.dispatch(action)
+            }
+        }
+
+        let scrolledToTop = lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0
+        let scrolledDown = lastContentOffsetY == 0 && scrollView.contentOffset.y > 0
+
+        if scrolledDown || scrolledToTop {
+            lastContentOffsetY = scrollView.contentOffset.y
+            let action = GeneralBrowserMiddlewareAction(scrollOffset: scrollView.contentOffset,
+                                                        windowUUID: windowUUID,
+                                                        actionType: GeneralBrowserMiddlewareActionType.websiteDidScroll)
+            store.dispatch(action)
         }
     }
 
@@ -396,12 +451,13 @@ class HomepageViewController:
         let viewController = WallpaperSelectorViewController(viewModel: viewModel, windowUUID: windowUUID)
         var bottomSheetViewModel = BottomSheetViewModel(
             closeButtonA11yLabel: .CloseButtonTitle,
-            closeButtonA11yIdentifier:
-                AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.closeButton)
+            closeButtonA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.closeButton
+        )
         bottomSheetViewModel.shouldDismissForTapOutside = false
         let bottomSheetVC = BottomSheetViewController(
             viewModel: bottomSheetViewModel,
-            childViewController: viewController
+            childViewController: viewController,
+            windowUUID: windowUUID
         )
 
         self.present(bottomSheetVC, animated: false, completion: nil)
@@ -490,7 +546,7 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
             let headerViewModel = sectionViewModel.shouldShow ? sectionViewModel.headerViewModel : LabelButtonHeaderViewModel.emptyHeader
             // swiftlint:enable line_length
             headerView.configure(viewModel: headerViewModel,
-                                 theme: themeManager.currentTheme(for: windowUUID))
+                                 theme: themeManager.getCurrentTheme(for: windowUUID))
 
             // Jump back in header specific setup
             if sectionViewModel.sectionType == .jumpBackIn {
@@ -518,7 +574,7 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
                 }
                 self.showSiteWithURLHandler(learnMoreURL)
             }
-            footerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            footerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             return footerView
         }
         return reusableView
@@ -789,8 +845,8 @@ extension HomepageViewController: HomepageContextMenuHelperDelegate {
         homePanelDelegate?.homePanelDidRequestToOpenSettings(at: settingsPage)
     }
 
-    func homePanelDidRequestBookmarkToast(for action: BookmarkAction) {
-        homePanelDelegate?.homePanelDidRequestBookmarkToast(for: action)
+    func homePanelDidRequestBookmarkToast(url: URL?, action: BookmarkAction) {
+        homePanelDelegate?.homePanelDidRequestBookmarkToast(url: url, action: action)
     }
 }
 

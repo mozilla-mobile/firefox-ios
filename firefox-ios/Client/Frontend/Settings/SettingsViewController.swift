@@ -43,7 +43,7 @@ class SettingsViewController: UIViewController, Themeable {
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: currentWindowUUID)
+        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         view.backgroundColor = theme.colors.layer1
     }
 }

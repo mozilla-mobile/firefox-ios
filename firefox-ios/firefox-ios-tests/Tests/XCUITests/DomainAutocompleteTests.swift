@@ -43,12 +43,13 @@ class DomainAutocompleteTests: BaseTestCase {
         super.setUp()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2334558
+    // https://mozilla.testrail.io/index.php?/cases/view/2334558
     func test1Autocomplete() {
         // Basic autocompletion cases
         // The autocomplete does not display the history item from the DB. Workaround is to manually visit "mozilla.org".
         navigator.openURL("mozilla.org")
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
         if isTablet {
             navigator.performAction(Action.AcceptRemovingAllTabs)
         } else {
@@ -70,18 +71,15 @@ class DomainAutocompleteTests: BaseTestCase {
     }
 
     // Test that deleting characters works correctly with autocomplete
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2334647
+    // https://mozilla.testrail.io/index.php?/cases/view/2334647
     func test3AutocompleteDeletingChars() {
         // The autocomplete does not display the history item from the DB. Workaround is to manually visit "mozilla.org".
         navigator.openURL("mozilla.org")
         waitUntilPageLoad()
         navigator.goto(TabTray)
 
-        // Workaround to avoid https://github.com/mozilla-mobile/firefox-ios/issues/16810 crash
-        // navigator.goto(CloseTabMenu)
-        // navigator.performAction(Action.AcceptRemovingAllTabs)
-        mozWaitForElementToExist(app.collectionViews.buttons["crossLarge"])
-        app.collectionViews.buttons["crossLarge"].tap()
+        navigator.goto(CloseTabMenu)
+        navigator.performAction(Action.AcceptRemovingAllTabs)
         navigator.nowAt(HomePanelsScreen)
 
         navigator.goto(URLBarOpen)
@@ -103,7 +101,7 @@ class DomainAutocompleteTests: BaseTestCase {
         }
     }
     // Delete the entire string and verify that the home panels are shown again.
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2334648
+    // https://mozilla.testrail.io/index.php?/cases/view/2334648
     func test6DeleteEntireString() {
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("www.moz")
@@ -118,7 +116,7 @@ class DomainAutocompleteTests: BaseTestCase {
     }
 
     // Ensure that the scheme is included in the autocompletion.
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2334649
+    // https://mozilla.testrail.io/index.php?/cases/view/2334649
     func test4EnsureSchemeIncludedAutocompletion() {
         navigator.openURL(websiteExample["url"]!)
         waitUntilPageLoad()
@@ -132,7 +130,7 @@ class DomainAutocompleteTests: BaseTestCase {
     }
 
     // Non-matches.
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2334650
+    // https://mozilla.testrail.io/index.php?/cases/view/2334650
     func test5NoMatches() {
         navigator.openURL("twitter.com/login")
         waitUntilPageLoad()
@@ -179,7 +177,7 @@ class DomainAutocompleteTests: BaseTestCase {
     }
 
     // Test default domains.
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2334651
+    // https://mozilla.testrail.io/index.php?/cases/view/2334651
     func test2DefaultDomains() {
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("a")
@@ -201,7 +199,7 @@ class DomainAutocompleteTests: BaseTestCase {
     }
 
     // Test mixed case autocompletion.
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2334653
+    // https://mozilla.testrail.io/index.php?/cases/view/2334653
     func testMixedCaseAutocompletion() {
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("MoZ")

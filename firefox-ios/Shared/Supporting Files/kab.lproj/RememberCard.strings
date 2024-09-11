@@ -1,3 +1,6 @@
+/* This value is used as the header for the remember card page. The placeholder is for the app name. */
+"CreditCard.RememberCard.Header.v122" = "%@ ittewgelhin uṭṭun n tkarḍa-k·m. Tangalt-ik n tɣellist ur tezmir ara ad tettwasekles.";
+
 /* This value is used as the title for the Yes button in the remember credit card page */
 "CreditCard.RememberCard.MainButtonTitle.v122" = "Sekles";
 

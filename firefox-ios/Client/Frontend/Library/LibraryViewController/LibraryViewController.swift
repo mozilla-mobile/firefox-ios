@@ -314,7 +314,7 @@ class LibraryViewController: UIViewController, Themeable {
     }
 
     private func setupToolBarAppearance() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         let standardAppearance = UIToolbarAppearance()
         standardAppearance.configureWithDefaultBackground()
         standardAppearance.backgroundColor = theme.colors.layer1
@@ -332,7 +332,7 @@ class LibraryViewController: UIViewController, Themeable {
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
 
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer3
         navigationController?.navigationBar.barTintColor = theme.colors.layer1
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary

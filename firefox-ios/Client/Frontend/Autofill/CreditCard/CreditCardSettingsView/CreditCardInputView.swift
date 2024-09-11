@@ -26,66 +26,32 @@ struct CreditCardInputView: View {
 
     var body: some View {
         NavigationView {
-            ZStack {
-                backgroundColor.ignoresSafeArea()
-                VStack(spacing: 0) {
-                    Divider()
-                        .frame(height: 0.7)
-                        .foregroundColor(borderColor)
-
-                    Group {
-                        CreditCardInputField(windowUUID: windowUUID,
-                                             inputType: .name,
-                                             showError: !viewModel.nameIsValid,
-                                             inputViewModel: viewModel)
-                        .padding(.top, 11)
-
-                        Divider()
-                            .frame(height: 0.7)
-                            .foregroundColor(borderColor)
-                            .padding(.top, 1)
-                    }
-                    .background(textFieldBackgroundColor)
-
-                    Group {
-                        CreditCardInputField(windowUUID: windowUUID,
-                                             inputType: .number,
-                                             showError: !viewModel.numberIsValid,
-                                             inputViewModel: viewModel)
-                        .padding(.top, 11)
-
-                        Divider()
-                            .frame(height: 0.7)
-                            .foregroundColor(borderColor)
-                            .padding(.top, 1)
-                    }
-                    .background(textFieldBackgroundColor)
-
-                    Group {
-                        CreditCardInputField(windowUUID: windowUUID,
-                                             inputType: .expiration,
-                                             showError: viewModel.showExpirationError,
-                                             inputViewModel: viewModel)
-                        .padding(.top, 11)
-
-                        Divider()
-                            .frame(height: 0.7)
-                            .foregroundColor(borderColor)
-                            .padding(.top, 1)
-                    }
-                    .background(textFieldBackgroundColor)
-
-                    Spacer()
-                        .frame(height: 4)
-
-                    if viewModel.state == .edit {
-                        RemoveCardButton(windowUUID: windowUUID,
-                                         alertDetails: viewModel.removeButtonDetails)
-                        .padding(.top, 28)
-                    }
-
-                    Spacer()
+            main
+                .blur(radius: isBlurred ? 10 : 0)
+                .onAppear {
+                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
                 }
+                .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+                    guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
+                    applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+                }
+                .onReceive(NotificationCenter.default.publisher(
+                    for: UIApplication.willResignActiveNotification)
+                ) { _ in
+                    isBlurred = true
+                }
+                .onReceive(NotificationCenter.default.publisher(
+                    for: UIApplication.didBecomeActiveNotification)
+                ) { _ in
+                    isBlurred = false
+                }
+        }
+    }
+
+    private var main: some View {
+        return ZStack {
+            backgroundColor.ignoresSafeArea()
+            form
                 .navigationBarTitle(viewModel.state.title,
                                     displayMode: .inline)
                 .toolbar {
@@ -101,25 +67,79 @@ struct CreditCardInputView: View {
                 }
                 .padding(.top, 0)
                 .background(backgroundColor.edgesIgnoringSafeArea(.bottom))
+        }
+    }
+
+    private var form: some View {
+        return VStack(spacing: 0) {
+            Divider()
+                .frame(height: 0.7)
+                .foregroundColor(borderColor)
+
+            name
+                .background(textFieldBackgroundColor)
+
+            number
+                .background(textFieldBackgroundColor)
+
+            expiration
+                .background(textFieldBackgroundColor)
+
+            Spacer()
+                .frame(height: 4)
+
+            if viewModel.state == .edit {
+                RemoveCardButton(windowUUID: windowUUID,
+                                 alertDetails: viewModel.removeButtonDetails)
+                .padding(.top, 28)
             }
-            .blur(radius: isBlurred ? 10 : 0)
-            .onAppear {
-                applyTheme(theme: themeManager.currentTheme(for: windowUUID))
-            }
-            .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
-                guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-                applyTheme(theme: themeManager.currentTheme(for: windowUUID))
-            }
-            .onReceive(NotificationCenter.default.publisher(
-                for: UIApplication.willResignActiveNotification)
-            ) { _ in
-                isBlurred = true
-            }
-            .onReceive(NotificationCenter.default.publisher(
-                for: UIApplication.didBecomeActiveNotification)
-            ) { _ in
-                isBlurred = false
-            }
+
+            Spacer()
+        }
+    }
+
+    private var name: some View {
+        return Group {
+            CreditCardInputField(windowUUID: windowUUID,
+                                 inputType: .name,
+                                 showError: !viewModel.nameIsValid,
+                                 inputViewModel: viewModel)
+            .padding(.top, 11)
+
+            Divider()
+                .frame(height: 0.7)
+                .foregroundColor(borderColor)
+                .padding(.top, 1)
+        }
+    }
+
+    private var number: some View {
+        return Group {
+            CreditCardInputField(windowUUID: windowUUID,
+                                 inputType: .number,
+                                 showError: !viewModel.numberIsValid,
+                                 inputViewModel: viewModel)
+            .padding(.top, 11)
+
+            Divider()
+                .frame(height: 0.7)
+                .foregroundColor(borderColor)
+                .padding(.top, 1)
+        }
+    }
+
+    private var expiration: some View {
+        return Group {
+            CreditCardInputField(windowUUID: windowUUID,
+                                 inputType: .expiration,
+                                 showError: viewModel.showExpirationError,
+                                 inputViewModel: viewModel)
+            .padding(.top, 11)
+
+            Divider()
+                .frame(height: 0.7)
+                .foregroundColor(borderColor)
+                .padding(.top, 1)
         }
     }
 

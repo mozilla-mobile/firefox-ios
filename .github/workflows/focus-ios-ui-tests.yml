@@ -1,0 +1,134 @@
+name: "Focus UI Tests"
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "0 1 * * *"
+
+env:
+    browser: focus-ios
+    xcode_version: 15.4
+    ios_version: 17.5
+    ios_simulator_default: iPhone 15
+    xcodebuild_scheme: Focus
+    xcodebuild_target: XCUITest
+    test_results_directory: /Users/runner/tmp
+    
+jobs:
+    compile:
+        name: Compile
+        runs-on: macos-14
+        steps:
+            - name: Check out source code
+              uses: actions/checkout@v4.1.7
+            - name: Setup Xcode
+              id: xcode
+              run: |
+                sudo rm -rf /Applications/Xcode.app
+                sudo xcode-select -s /Applications/Xcode_${{ env.xcode_version }}.app/Contents/Developer
+                xcodebuild -version
+                ./checkout.sh
+                ./bootstrap.sh --force
+            - name: Compile source code
+              id: compile
+              run: |
+                xcodebuild \
+                  build-for-testing \
+                  -scheme ${{ env.xcodebuild_scheme }} \
+                  -target ${{ env.xcodebuild_target }} \
+                  -derivedDataPath ~/DerivedData \
+                  -destination 'platform=iOS Simulator,name=${{ env.ios_simulator_default }},OS=${{ env.ios_version }}' \
+                  COMPILER_INDEX_STORE_ENABLE=NO CODE_SIGN_IDENTITY= CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO ARCH="arm64"
+              working-directory: ${{ env.browser }}
+            - name: Save Derived Data
+              id: upload-derived-data
+              uses: actions/upload-artifact@v4.3.3
+              with:
+                name: xcode-cache-deriveddata-${{ github.workflow }}-${{ github.sha }}
+                path: ~/DerivedData/Build/Products
+                retention-days: 2          
+    run-tests:
+        name: Run tests
+        runs-on: macos-14
+        needs: compile
+        strategy:
+            fail-fast: false
+            matrix:
+                xcodebuild_test_plan: ['SmokeTest', 'FullFunctionalTests']
+                ios_simulator: [ 'iPhone 15', 'iPad Pro (12.9-inch) (6th generation)']
+        steps:
+            - name: Check out source code
+              uses: actions/checkout@v4.1.7
+            - name: Install packages
+              id: packages
+              run: |
+                gem install xcpretty -v 0.3.0
+                pip install blockkit==1.9.1
+            - name: Setup Xcode
+              id: xcode
+              run: |
+                sudo rm -rf /Applications/Xcode.app
+                sudo xcode-select -s /Applications/Xcode_${{ env.xcode_version }}.app/Contents/Developer
+                xcodebuild -version
+                ./checkout.sh
+                ./bootstrap.sh --force
+            - name: Get derived data
+              id: download-derived-data
+              uses: actions/download-artifact@v4
+              with:
+                name: xcode-cache-deriveddata-${{ github.workflow }}-${{ github.sha }}
+                path: ~/DerivedData/Build/Products
+            - name: Run tests
+              id: run-tests
+              run: |
+                xcodebuild \
+                    test-without-building \
+                    -scheme ${{ env.xcodebuild_scheme }} \
+                    -target ${{ env.xcodebuild_target }} \
+                    -derivedDataPath ~/DerivedData \
+                    -destination 'platform=iOS Simulator,name=${{ matrix.ios_simulator }},OS=${{ env.ios_version }}' \
+                    -testPlan ${{ matrix.xcodebuild_test_plan }} \
+                    -resultBundlePath ${{ env.test_results_directory }}/results \
+                    | tee xcodebuild.log | xcpretty -r junit && exit ${PIPESTATUS[0]}
+              working-directory:  ${{ env.browser }}
+              continue-on-error: true
+            - name: Print test report
+              id: test-report
+              run: |
+                python ../test-fixtures/ci/convert_junit_to_markdown.py ${{ matrix.xcodebuild_test_plan == 'SmokeTest' && '--smoke' || '' }} --github --${{ env.browser }} ./build/reports/junit.xml ./github.md
+                cat github.md >> $GITHUB_STEP_SUMMARY
+                python ../test-fixtures/ci/convert_junit_to_markdown.py ${{ matrix.xcodebuild_test_plan == 'SmokeTest' && '--smoke' || '' }} --slack --${{ env.browser }} ./build/reports/junit.xml ./slack.json
+              working-directory:  ${{ env.browser }}
+            - name: Upload log file
+              id: upload-log
+              uses: actions/upload-artifact@v4.3.3
+              with:
+                name: ${{ env.browser }}-${{ matrix.xcodebuild_test_plan }}-${{ matrix.ios_simulator }}-xcodebuildlog-${{ github.run_number }}
+                path: ${{ env.browser }}/xcodebuild.log
+                retention-days: 90
+            - name: Upload junit files
+              id: upload-junit
+              uses: actions/upload-artifact@v4.3.3
+              with:
+                name: ${{ env.browser }}-${{ matrix.xcodebuild_test_plan }}-${{ matrix.ios_simulator }}-junit-${{ github.run_number }}
+                path: ${{ env.browser }}/build/reports/junit.xml
+                retention-days: 90
+            - name: Report to Slack
+              id: slack
+              uses: slackapi/slack-github-action@v1.26.0
+              with:
+                payload-file-path: ${{ env.browser }}/slack.json
+              env:
+                SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+                SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+                ios_simulator: ${{ matrix.ios_simulator }}
+                pass_fail:  ${{ steps.run-tests.outcome == 'success' && ':white_check_mark:' || ':x:' }}
+                xcodebuild_test_plan: ${{ matrix.xcodebuild_test_plan }}
+                ref_name: ${{ github.ref_name }}
+                repository: ${{ github.repository }}
+                run_id: ${{ github.run_id }}
+                server_url: ${{ github.server_url }}
+                sha: ${{ github.sha }}
+            - name: Return fail status if a test fails
+              run: |
+                exit ${{ steps.run-tests.outcome == 'success' && '0' || '1' }}

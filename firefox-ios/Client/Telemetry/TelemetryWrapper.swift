@@ -209,6 +209,13 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
             GleanMetrics.Preferences.showClipboardBar.set(false)
         }
 
+        // Close private tabs
+        if let closePrivateTabs = prefs.boolForKey(PrefsKeys.Settings.closePrivateTabs) {
+            GleanMetrics.Preferences.closePrivateTabs.set(closePrivateTabs)
+        } else {
+            GleanMetrics.Preferences.closePrivateTabs.set(false)
+        }
+
         // Tracking protection - enabled
         if let tpEnabled = prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) {
             GleanMetrics.TrackingProtection.enabled.set(tpEnabled)
@@ -305,8 +312,6 @@ extension TelemetryWrapper {
         case switchControl = "switch-control"
         case dynamicTextSize = "dynamic-text-size"
         case error = "error"
-        case engagement = "engagement"
-        case abandonment = "abandonment"
     }
 
     public enum EventObject: String {
@@ -1590,6 +1595,7 @@ extension TelemetryWrapper {
         // MARK: App cycle
         case(.action, .foreground, .app, _, _):
             GleanMetrics.AppCycle.foreground.record()
+            GleanMetrics.ServerKnobs.validation.record()
             // record the same event for Nimbus' internal event store
             Experiments.events.recordEvent(BehavioralTargetingEvent.appForeground)
         case(.action, .background, .app, _, _):
@@ -1919,10 +1925,6 @@ extension TelemetryWrapper {
             GleanMetrics.Awesomebar.shareButtonTapped.record()
         case (.action, .drag, .locationBar, _, _):
             GleanMetrics.Awesomebar.dragLocationBar.record()
-        case (.action, .engagement, .locationBar, _, _):
-            GleanMetrics.Awesomebar.engagement.record()
-        case (.action, .abandonment, .locationBar, _, _):
-            GleanMetrics.Awesomebar.abandonment.record()
         // MARK: - GleanPlumb Messaging
         case (.information, .view, .messaging, .messageImpression, let extras):
             guard let messageSurface = extras?[EventExtraKey.messageSurface.rawValue] as? String,

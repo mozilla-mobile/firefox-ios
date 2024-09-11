@@ -19,20 +19,38 @@ class OnboardingTests: BaseTestCase {
     }
 
     // Smoketest
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306814
+    // https://mozilla.testrail.io/index.php?/cases/view/2306814
     func testFirstRunTour() {
         // Complete the First run from first screen to the latest one
         // Check that the first's tour screen is shown as well as all the elements in there
-        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: 15)
+        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"])
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)DescriptionLabel"])
+        mozWaitForElementToExist(app.buttons["\(rootA11yId)PrimaryButton"])
+        mozWaitForElementToExist(app.buttons["\(rootA11yId)SecondaryButton"])
+        mozWaitForElementToExist(app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"])
+        mozWaitForElementToExist(app.pageIndicators["\(AccessibilityIdentifiers.Onboarding.pageControl)"])
+
+        // Swipe to the second screen
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"])
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)DescriptionLabel"])
+        mozWaitForElementToExist(app.buttons["\(rootA11yId)PrimaryButton"])
+        mozWaitForElementToExist(app.buttons["\(rootA11yId)SecondaryButton"])
+
+        // Swipe to the third screen
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"])
         XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
-        XCTAssertTrue(app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].exists)
-        XCTAssertTrue(app.pageIndicators["\(AccessibilityIdentifiers.Onboarding.pageControl)"].exists)
 
-        // Swipe to the second screen
+        // Swipe to the fourth screen
         app.buttons["\(rootA11yId)SecondaryButton"].tap()
         currentScreen += 1
         mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: 15)
@@ -42,8 +60,8 @@ class OnboardingTests: BaseTestCase {
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
 
-        // Swipe to the third screen
-        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        // Swipe to the fifth screen
+        app.buttons["\(rootA11yId)PrimaryButton"].tap()
         currentScreen += 1
         mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: 15)
         XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
@@ -53,20 +71,20 @@ class OnboardingTests: BaseTestCase {
         XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
 
         // Finish onboarding
-        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        app.buttons["\(rootA11yId)PrimaryButton"].tap()
         let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         mozWaitForElementToExist(topSites)
     }
 
     // Smoketest
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306816
+    // https://mozilla.testrail.io/index.php?/cases/view/2306816
     func testCloseTour() {
         app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].tap()
         let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         mozWaitForElementToExist(topSites)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306815
+    // https://mozilla.testrail.io/index.php?/cases/view/2306815
     func testWhatsNewPage() {
         app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].tap()
         navigator.goto(BrowserTabMenu)
@@ -82,18 +100,18 @@ class OnboardingTests: BaseTestCase {
         let mySubstring = textUrl[range]
         let releaseVersion = String(mySubstring)
 
-        XCTAssertTrue(app.staticTexts[releaseVersion].exists)
+        mozWaitForElementToExist(app.staticTexts[releaseVersion])
         mozWaitForValueContains(
             app.textFields["url"],
             value: "www.mozilla.org/en-US/firefox/ios/" + releaseVersion + "/releasenotes/"
         )
-        XCTAssertTrue(app.staticTexts["Release Notes"].exists)
+        mozWaitForElementToExist(app.staticTexts["Release Notes"])
         if iPad() {
-            XCTAssertTrue(
-                app.staticTexts["Firefox for iOS \(releaseVersion), See All New Features, Updates and Fixes"].exists
+            mozWaitForElementToExist(
+                app.staticTexts["Firefox for iOS \(releaseVersion), See All New Features, Updates and Fixes"]
             )
         }
-        XCTAssertTrue(app.staticTexts["Firefox for iOS Release"].exists)
-        XCTAssertTrue(app.staticTexts["Get the most recent version"].exists)
+        mozWaitForElementToExist(app.staticTexts["Firefox for iOS Release"])
+        mozWaitForElementToExist(app.staticTexts["Get the most recent version"])
     }
 }

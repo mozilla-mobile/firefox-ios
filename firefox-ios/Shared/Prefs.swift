@@ -71,6 +71,7 @@ public struct PrefsKeys {
 
     // For ease of use, please list keys alphabetically.
     public struct FeatureFlags {
+        public static let DebugSuffixKey = "DebugKey"
         public static let FirefoxSuggest = "FirefoxSuggest"
         public static let HistoryHighlightsSection = "HistoryHighlightsSectionUserPrefsKey"
         public static let InactiveTabs = "InactiveTabsUserPrefsKey"
@@ -108,6 +109,11 @@ public struct PrefsKeys {
         case toolbarOnboardingKey = "ContextualHintToolbarOnboardingKey"
         case shoppingOnboardingKey = "ShoppingOnboardingCFRKey"
         case shoppingOnboardingCFRsCounterKey = "ShoppingOnboardingCFRsCounterKey"
+    }
+
+    // Firefox settings
+    public struct Settings {
+        public static let closePrivateTabs = "ClosePrivateTabs"
     }
 
     // Activity Stream
@@ -161,6 +167,9 @@ public struct PrefsKeys {
 
     // The last recorded CFR timestamp
     public static let FakespotLastCFRTimestamp = "FakespotLastCFRTimestamp"
+
+    // Representing whether or not the last user session was private
+    public static let LastSessionWasPrivate = "wasLastSessionPrivate"
 
     // Only used to force nimbus features to true with tests
     public static let NimbusFeatureTestsOverride = "NimbusFeatureTestsOverride"

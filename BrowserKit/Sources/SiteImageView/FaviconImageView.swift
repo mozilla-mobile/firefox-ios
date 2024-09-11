@@ -60,7 +60,8 @@ public class FaviconImageView: UIImageView, SiteImageView {
     // MARK: - SiteImageView
 
     func setURL(_ viewModel: FaviconImageViewModel) {
-        guard let siteURLString = viewModel.siteURLString ?? viewModel.faviconURL?.absoluteString,
+        guard let siteURLString = viewModel.siteURLString,
+              let siteURL = URL(string: siteURLString, invalidCharacters: false),
               canMakeRequest(with: siteURLString)
         else { return }
 
@@ -74,22 +75,18 @@ public class FaviconImageView: UIImageView, SiteImageView {
         currentURLString = siteURLString
 
         let model = SiteImageModel(id: id,
-                                   expectedImageType: .favicon,
-                                   siteURLString: viewModel.siteURLString,
-                                   faviconURL: viewModel.faviconURL)
-        updateImage(site: model)
+                                   imageType: .favicon,
+                                   siteURL: siteURL,
+                                   siteResource: viewModel.siteResource)
+        updateImage(model: model)
     }
 
-    func setImage(imageModel: SiteImageModel) {
-        setupFaviconImage(imageModel)
+    func setImage(image: UIImage) {
+        self.image = image
         completionHandler?()
     }
 
     // MARK: - Favicon
-
-    private func setupFaviconImage(_ viewModel: SiteImageModel) {
-        image = viewModel.faviconImage
-    }
 
     private func setupFaviconLayout(viewModel: FaviconImageViewModel) {
         layer.cornerRadius = viewModel.faviconCornerRadius

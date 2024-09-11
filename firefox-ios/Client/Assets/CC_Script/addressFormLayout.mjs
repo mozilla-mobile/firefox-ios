@@ -16,6 +16,9 @@ const fieldTemplates = {
       name: item.fieldId,
       required: item.required,
       value: item.value ?? "",
+      // Conditionally add pattern attribute since pattern=""/false/undefined
+      // results in weird behaviour.
+      ...(item.pattern && { pattern: item.pattern }),
     };
   },
   input(item) {
@@ -102,24 +105,28 @@ function* convertLayoutToUI(fields, l10nStrings) {
 
     const label = createElement("label", fieldUI.label);
     const { tag, ...rest } = fieldUI.field;
-    const field = createElement(tag, rest);
-    label.appendChild(field);
     const span = createElement("span", fieldUI.span);
     label.appendChild(span);
-
+    const field = createElement(tag, rest);
+    label.appendChild(field);
     yield label;
   }
 }
 
 /**
  * Retrieves the current form data from the current form element on the page.
+ * NOTE: We are intentionally not using FormData here because on iOS we have states where
+ *       selects are disabled and FormData ignores disabled elements. We want getCurrentFormData
+ *       to always refelect the exact state of the form.
  *
  * @returns {object} An object containing key-value pairs of form data.
  */
 export const getCurrentFormData = () => {
-  const formElement = document.querySelector("form");
-  const formData = new FormData(formElement);
-  return Object.fromEntries(formData.entries());
+  const formData = {};
+  for (const element of document.querySelector("form").elements) {
+    formData[element.name] = element.value ?? "";
+  }
+  return formData;
 };
 
 /**

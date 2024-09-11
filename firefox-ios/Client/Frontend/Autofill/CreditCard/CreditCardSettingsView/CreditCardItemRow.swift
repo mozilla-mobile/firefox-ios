@@ -88,6 +88,7 @@ struct CreditCardItemRow: View {
                     didSelectAction?()
                 }
             }
+            .accessibility(addTraits: .isButton)
             Rectangle()
                 .fill(separatorColor)
                 .frame(maxWidth: .infinity)
@@ -99,23 +100,23 @@ struct CreditCardItemRow: View {
         .background(ClearBackgroundView())
         .padding(.vertical, addPadding ? 8 : 0)
         .onAppear {
-            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
     }
 
     func getImage(creditCard: CreditCard) -> Image {
-        let defaultImage = Image(StandardImageIdentifiers.Large.creditCard)
+        let defaultImage = Image(decorative: StandardImageIdentifiers.Large.creditCard)
 
         guard let type = CreditCardType(rawValue: creditCard.ccType.uppercased()),
-              let image = type.image else {
+              let image = type.imageName else {
             return defaultImage
         }
 
-        return Image(uiImage: image)
+        return Image(decorative: image)
     }
 
     func applyTheme(theme: Theme) {

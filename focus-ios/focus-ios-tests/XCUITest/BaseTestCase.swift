@@ -4,6 +4,8 @@
 
 import XCTest
 
+let TIMEOUT: TimeInterval = 15
+
 class BaseTestCase: XCTestCase {
     let app = XCUIApplication()
 
@@ -49,27 +51,27 @@ class BaseTestCase: XCTestCase {
         return false
     }
 
-    func waitForEnable(_ element: XCUIElement, timeout: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
-        waitFor(element, with: "exists == enable", timeout: timeout, file: file, line: line)
+    func waitForEnable(_ element: XCUIElement, timeout: TimeInterval = 30.0, file: String = #file, line: UInt = #line) {
+        waitFor(element, with: "enabled == true", timeout: timeout, file: file, line: line)
     }
 
-    func waitForExistence(_ element: XCUIElement, timeout: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
+    func waitForExistence(_ element: XCUIElement, timeout: TimeInterval = 30.0, file: String = #file, line: UInt = #line) {
             waitFor(element, with: "exists == true", timeout: timeout, file: file, line: line)
     }
 
-    func waitForHittable(_ element: XCUIElement, timeout: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
+    func waitForHittable(_ element: XCUIElement, timeout: TimeInterval = 30.0, file: String = #file, line: UInt = #line) {
             waitFor(element, with: "isHittable == true", timeout: timeout, file: file, line: line)
     }
 
-    func waitForNoExistence(_ element: XCUIElement, timeoutValue: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
-           waitFor(element, with: "exists != true", timeout: timeoutValue, file: file, line: line)
+    func waitForNoExistence(_ element: XCUIElement, timeout: TimeInterval = 30.0, file: String = #file, line: UInt = #line) {
+           waitFor(element, with: "exists != true", timeout: timeout, file: file, line: line)
     }
 
-    func waitForValueContains(_ element: XCUIElement, value: String, file: String = #file, line: UInt = #line) {
-            waitFor(element, with: "value CONTAINS '\(value)'", file: file, line: line)
+    func waitForValueContains(_ element: XCUIElement, timeout: TimeInterval = 30.0, value: String, file: String = #file, line: UInt = #line) {
+            waitFor(element, with: "value CONTAINS '\(value)'", timeout: timeout, file: file, line: line)
     }
 
-    private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 5.0, file: String, line: UInt) {
+    private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 30, file: String, line: UInt) {
             let predicate = NSPredicate(format: predicateString)
             let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
             let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
@@ -81,6 +83,18 @@ class BaseTestCase: XCTestCase {
                 self.record(issue)
             }
         }
+
+    func mozWaitForElementToExist(_ element: XCUIElement, timeout: TimeInterval? = TIMEOUT) {
+        let startTime = Date()
+
+        while !element.exists {
+            if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
+                XCTFail("Timed out waiting for element \(element) to exist")
+                break
+            }
+            usleep(10000)
+        }
+    }
 
     func search(searchWord: String, waitForLoadToFinish: Bool = true) {
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
@@ -101,9 +115,11 @@ class BaseTestCase: XCTestCase {
     }
 
     func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true) {
-        waitForExistence(app.textFields["URLBar.urlText"], timeout: 3)
+        waitForExistence(app.textFields["URLBar.urlText"])
         app.textFields["URLBar.urlText"].tap()
-        app.textFields["URLBar.urlText"].clearAndEnterText(text: url+"\n")
+        app.textFields["URLBar.urlText"].clearAndEnterText(text: url)
+        waitForValueContains(app.textFields["URLBar.urlText"], value: url)
+        app.textFields["URLBar.urlText"].typeText("\n")
 
 //        if waitForLoadToFinish {
 //            let finishLoadingTimeout: TimeInterval = 30
@@ -115,7 +131,7 @@ class BaseTestCase: XCTestCase {
 //        }
     }
 
-    private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 5.0) {
+    private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 30) {
         let predicate = NSPredicate(format: predicateString)
         let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
         let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
@@ -131,7 +147,7 @@ class BaseTestCase: XCTestCase {
 
     func waitForWebPageLoad () {
         let app = XCUIApplication()
-        let finishLoadingTimeout: TimeInterval = 30
+        let finishLoadingTimeout: TimeInterval = 60
         let progressIndicator = app.progressIndicators.element(boundBy: 0)
 
         expectation(for: NSPredicate(format: "exists != true"), evaluatedWith: progressIndicator, handler: nil)

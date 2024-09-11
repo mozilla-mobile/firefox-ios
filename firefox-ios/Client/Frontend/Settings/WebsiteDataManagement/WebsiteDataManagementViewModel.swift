@@ -55,6 +55,10 @@ class WebsiteDataManagementViewModel {
         }
     }
 
+    func showMoreButtonPressed() {
+        state = .displayAll
+    }
+
     private func removeSelectedRecords() {
         let previousState = state
         state = .loading

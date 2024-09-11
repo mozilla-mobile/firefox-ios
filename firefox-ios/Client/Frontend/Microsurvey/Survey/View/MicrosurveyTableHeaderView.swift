@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-class MicrosurveyTableHeaderView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
+final class MicrosurveyTableHeaderView: UITableViewHeaderFooterView, ReusableCell, ThemeApplicable {
     private struct UX {
         static let radioButtonSize = CGSize(width: 24, height: 24)
         static let spacing: CGFloat = 12
@@ -23,6 +23,8 @@ class MicrosurveyTableHeaderView: UITableViewHeaderFooterView, ReusableCell, The
         stackView.spacing = UX.spacing
     }
 
+    private lazy var iconContainer: UIView = .build()
+
     private lazy var iconView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
     }
@@ -36,7 +38,8 @@ class MicrosurveyTableHeaderView: UITableViewHeaderFooterView, ReusableCell, The
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
 
-        horizontalStackView.addArrangedSubview(iconView)
+        iconContainer.addSubview(iconView)
+        horizontalStackView.addArrangedSubview(iconContainer)
         horizontalStackView.addArrangedSubview(questionLabel)
         contentView.addSubview(horizontalStackView)
 
@@ -59,8 +62,18 @@ class MicrosurveyTableHeaderView: UITableViewHeaderFooterView, ReusableCell, The
                     constant: UX.padding.bottom
                 ),
 
-                iconView.heightAnchor.constraint(equalToConstant: UX.radioButtonSize.height),
-                iconView.widthAnchor.constraint(equalToConstant: UX.radioButtonSize.width)
+                iconView.widthAnchor.constraint(
+                    equalToConstant: UX.radioButtonSize.width
+                ),
+                iconView.heightAnchor.constraint(
+                    equalToConstant: UX.radioButtonSize.height
+                ),
+                iconView.widthAnchor.constraint(
+                    equalTo: iconContainer.widthAnchor
+                ),
+                iconView.centerYAnchor.constraint(
+                    equalTo: iconContainer.centerYAnchor
+                )
             ]
         )
     }

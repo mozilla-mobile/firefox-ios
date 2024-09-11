@@ -35,7 +35,7 @@ class ThemedDefaultNavigationController: DismissableNavigationViewController, Th
     }
 
     private func setupNavigationBarAppearance() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         let standardAppearance = UINavigationBarAppearance()
         standardAppearance.configureWithDefaultBackground()
         standardAppearance.backgroundColor = theme.colors.layer1
@@ -52,7 +52,7 @@ class ThemedDefaultNavigationController: DismissableNavigationViewController, Th
     }
 
     private func setupToolBarAppearance() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         let standardAppearance = UIToolbarAppearance()
         standardAppearance.configureWithDefaultBackground()
         standardAppearance.backgroundColor = theme.colors.layer1

@@ -16,6 +16,7 @@ public struct AccessibilityIdentifiers {
     /// Used for toolbar/URL bar buttons since our classes are built that buttons can live in one or the other
     /// Using only those a11y identifiers for both ensures we have standard way to refer to buttons from iPad to iPhone
     struct Toolbar {
+        static let urlBarBorder = "TabToolbar.urlBarBorder"
         static let settingsMenuButton = "TabToolbar.menuButton"
         static let homeButton = "TabToolbar.homeButton"
         static let trackingProtection = "TabLocationView.trackingProtectionButton"
@@ -69,6 +70,48 @@ public struct AccessibilityIdentifiers {
 
     struct ContextualHints {
         static let actionButton = "ContextualHints.ActionButton"
+    }
+
+    struct EnhancedTrackingProtection {
+        struct MainScreen {
+            static let clearCookiesButton = "TrackingProtection.ClearCookiesButton"
+            static let trackingProtectionSettingsButton = "TrackingProtection.SettingsButton"
+            static let foxImage = "TrackingProtection.FoxStatusImage"
+            static let shieldImage = "TrackingProtection.ShieldImage"
+            static let lockImage = "TrackingProtection.LockImage"
+            static let arrowImage = "TrackingProtection.ArrowImage"
+            static let domainLabel = "TrackingProtection.DomainTitleLabel"
+            static let domainHeaderLabel = "TrackingProtection.DomainHeaderLabel"
+            static let statusTitleLabel = "TrackingProtection.ConnectionStatusTitleLabel"
+            static let statusBodyLabel = "TrackingProtection.ConnectionStatusBodyLabel"
+            static let trackersBlockedLabel = "TrackingProtection.TrackersBlockedLabel"
+            static let securityStatusLabel = "TrackingProtection.ConnectionSecurityStatusLabel"
+            static let toggleViewTitleLabel = "TrackingProtection.ToggleViewTitleLabel"
+            static let toggleViewBodyLabel = "TrackingProtection.ToggleViewBodyLabel"
+            static let closeButton = "TrackingProtection.CloseButton"
+            static let faviconImage = "TrackingProtection.FaviconImage"
+        }
+
+        struct DetailsScreen {
+            static let headerView = "TrackingProtectionDetails.HeaderView"
+            static let mainView = "TrackingProtectionDetails.MainView"
+            static let containerView = "TrackingProtectionDetails.BaseView"
+            static let connectionView = "TrackingProtectionDetails.ConnectionView"
+            static let certificatesButton = "TrackingProtectionDetails.CertificatesButton"
+        }
+
+        struct BlockedTrackers {
+            static let headerView = "BlockedTrackers.HeaderView"
+            static let mainView = "BlockedTrackers.MainView"
+            static let containerView = "BlockedTrackers.BaseView"
+            static let crossSiteTrackersView = "BlockedTrackers.CrossSiteTrackersView"
+            static let socialMediaTrackersView = "BlockedTrackers.SocialMediaTrackersView"
+            static let fingerprintersView = "BlockedTrackers.FingerprintersView"
+            static let crossSiteTrackersImage = "BlockedTrackers.CrossSiteTrackersImage"
+            static let socialMediaTrackersImage = "BlockedTrackers.SocialMediaTrackersImage"
+            static let fingerprintersImage = "BlockedTrackers.FingerprintersImage"
+            static let blockedTrackersLabel = "BlockedTrackers.BlockedTrackersLabel"
+        }
     }
 
     struct FirefoxHomepage {
@@ -348,6 +391,7 @@ public struct AccessibilityIdentifiers {
         static let syncTabsButton = "syncTabsButtonTabTray"
         static let navBarSegmentedControl = "navBarTabTray"
         static let syncDataButton = "syncDataButton"
+        static let learnMoreButton = "learnMoreButton"
 
         struct InactiveTabs {
             static let headerLabel = "InactiveTabs.headerLabel"
@@ -467,6 +511,7 @@ public struct AccessibilityIdentifiers {
             static let fxaSignInButton = "EmailSignIn.button"
             static let qrButton = "QRCodeSignIn.button"
             static let qrScanFailedAlertOkButton = "qrCodeAlert.okButton"
+            static let signInButton = "Sign in"
         }
 
         struct Search {
@@ -525,6 +570,7 @@ public struct AccessibilityIdentifiers {
             static let title = "ClearPrivateData"
             static let websiteDataSection = "WebsiteData"
             static let clearPrivateDataSection = "ClearPrivateData"
+            static let clearAllWebsiteData = "ClearAllWebsiteData"
         }
 
         struct Notifications {
@@ -569,6 +615,10 @@ public struct AccessibilityIdentifiers {
 
         struct ShowLink {
             static let title = "showLinkPreviews"
+        }
+
+        struct ClosePrivateTabs {
+            static let title = "ClosePrivateTabs"
         }
 
         struct SearchBar {
@@ -681,12 +731,13 @@ public struct AccessibilityIdentifiers {
         static let zoomPageZoomInButton = "ZoomPage.zoomInButton"
         static let zoomPageZoomOutButton = "ZoomPage.zoomOutButton"
         static let zoomPageZoomLevelLabel = "ZoomPage.zoomLevelLabel"
+        static let doneButton = "find.doneButton"
     }
 
     struct FindInPage {
-        static let findInPageCloseButton = "FindInPage.closeButton"
-        static let findNextButton = "FindInPage.find_next"
-        static let findPreviousButton = "FindInPage.find_previous"
+        static let findInPageCloseButton = "find.doneButton"
+        static let findNextButton = "find.nextButton"
+        static let findPreviousButton = "find.previousButton"
     }
 
     struct RememberCreditCard {

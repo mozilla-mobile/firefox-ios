@@ -1,0 +1,15 @@
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v131" = "Oppdater";
+
+/* On error page, this is the description for generic error. */
+"NativeErrorPage.GenericError.Description.v131" = "Det har oppstått ein SSL-feil og ei sikker tilkopling til sørvaren kan ikkje opprettast.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v131" = "Ver varsam. Noko ser ikkje rett ut.";
+
+/* On error page, this is the description for no internet connection. */
+"NativeErrorPage.NoInternetConnection.Description.v131" = "Prøv å kople til på ei anna eining. Sjekk modemet eller ruteren. Kople frå og kople til Wi-fi igjen.";
+
+/* On error page, this is the title for no internet connection */
+"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Det ser ut til at det er eit problem med internett-tilkoplinga di.";
+

@@ -440,7 +440,7 @@
 "ShareMenu.RemoveShortcut.Confirm" = "Atalho removido";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
-"ShareMenu.RequestDesktop" = "Versão do site para desktop";
+"ShareMenu.RequestDesktop" = "Versão do site para computador";
 
 /* Text for the share menu option when a user wants to reload the site as a mobile device */
 "ShareMenu.RequestMobile" = "Solicitar site para celular";
@@ -614,7 +614,7 @@
 "URL.addToAutocompleteLabel" = "Adicionar link para ser completado automaticamente";
 
 /* Text for the URL context menu when a user long presses on the URL bar with clipboard contents. */
-"URL.contextMenu" = "Colar e ir";
+"URL.contextMenu" = "Colar e abrir";
 
 /* Erase button in the URL bar */
 "URL.eraseButtonLabel" = "APAGAR";

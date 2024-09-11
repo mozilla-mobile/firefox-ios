@@ -1,3 +1,6 @@
 /* Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks the user to enter their device passcode to access the protected screen. */
 "Biometry.Screen.UniversalAuthenticationReason.v115" = "Autentiqueu-vos per accedir a les contrasenyes.";
 
+/* Biometric authentication is when the system prompts users for Face ID or fingerprint before accessing protected information. This string asks the user to enter their device passcode to access the protected screen for logins and encrypted cards. */
+"Biometry.Screen.UniversalAuthenticationReason.v122" = "Autentiqueu-vos per accedir a les contrasenyes i formes de pagament que heu desat.";
+

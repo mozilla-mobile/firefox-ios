@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import SwiftUI
+import Common
 
 /// Enum file that holds the different cases for the Quick Actions small widget with their
 /// configurations (string, backgrounds, images) as selected by the user in edit mode.
@@ -17,11 +18,11 @@ enum QuickLink: Int {
         case .search:
             return "faviconFox"
         case .privateSearch:
-            return "privateModeLarge"
+            return StandardImageIdentifiers.Large.privateMode
         case .copiedLink:
-            return "tabTrayLarge"
+            return StandardImageIdentifiers.Large.tabTray
         case .closePrivateTabs:
-            return "deleteLarge"
+            return StandardImageIdentifiers.Large.delete
         }
     }
 

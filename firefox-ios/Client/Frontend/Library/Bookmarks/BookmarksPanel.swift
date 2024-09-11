@@ -486,7 +486,7 @@ class BookmarksPanel: SiteTableViewController,
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.currentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 }
 
@@ -526,7 +526,7 @@ extension BookmarksPanel: LibraryPanelContextMenu {
                                                tapHandler: { _ in
             self.profile.pinnedSites.addPinnedTopSite(site).uponQueue(.main) { result in
                 if result.isSuccess {
-                    SimpleToast().showAlertWithText(.AppMenu.AddPinToShortcutsConfirmMessage,
+                    SimpleToast().showAlertWithText(.LegacyAppMenu.AddPinToShortcutsConfirmMessage,
                                                     bottomContainer: self.view,
                                                     theme: self.currentTheme())
                 } else {

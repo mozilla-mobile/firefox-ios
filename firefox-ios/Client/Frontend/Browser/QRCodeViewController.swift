@@ -10,6 +10,20 @@ import Common
 protocol QRCodeViewControllerDelegate: AnyObject {
     func didScanQRCodeWithURL(_ url: URL)
     func didScanQRCodeWithText(_ text: String)
+    var qrCodeScanningPermissionLevel: QRCodeScanPermissions { get }
+}
+
+/// Defines client behavior when scanning QR code content with security implications (i.e. URLs)
+enum QRCodeScanPermissions {
+    /// Standard; scanned URLs will prompt users before opening.
+    case `default`
+    /// Scanned URLs will not prompt users before opening (sign-in flow etc.)
+    case allowURLsWithoutPrompt
+}
+
+private enum QRCodeViewControllerState {
+    case scanning
+    case promptingUser
 }
 
 class QRCodeViewController: UIViewController {
@@ -24,6 +38,8 @@ class QRCodeViewController: UIViewController {
 
     weak var qrCodeDelegate: QRCodeViewControllerDelegate?
     weak var dismissHandler: QRCodeDismissHandler?
+
+    private var state: QRCodeViewControllerState = .scanning
 
     private lazy var captureSession: AVCaptureSession = {
         let session = AVCaptureSession()
@@ -159,6 +175,27 @@ class QRCodeViewController: UIViewController {
             self.dismissController()
         }))
         present(alert, animated: true)
+    }
+
+    private func presentConfirmationAlert(urlDisplayString: String,
+                                          onCancel: @escaping (UIAlertAction) -> Void,
+                                          onConfirm: @escaping (UIAlertAction) -> Void) {
+        let confirmationAlert = UIAlertController(
+            title: String(format: .ScanQRCodeConfirmOpenURLMessage, AppName.shortName.rawValue),
+            message: urlDisplayString,
+            preferredStyle: .alert)
+
+        let cancelAction = UIAlertAction(title: .ScanQRCodeURLPromptDenyButton,
+                                         style: .cancel,
+                                         handler: onCancel)
+        let openURLAction = UIAlertAction(title: .ScanQRCodeURLPromptAllowButton,
+                                          style: .default,
+                                          handler: onConfirm)
+
+        confirmationAlert.addAction(cancelAction)
+        confirmationAlert.addAction(openURLAction)
+
+        self.present(confirmationAlert, animated: true)
     }
 
     private func applyShapeLayer() {
@@ -318,6 +355,18 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
     func metadataOutput(_ output: AVCaptureMetadataOutput,
                         didOutput metadataObjects: [AVMetadataObject],
                         from connection: AVCaptureConnection) {
+        guard state == .scanning else { return }
+
+        func cleanUpAndRemoveQRCodeScanner() {
+            stopScanLineAnimation()
+            dismissController()
+        }
+
+        func openScannedQRCodeURL(_ url: URL) {
+            qrCodeDelegate?.didScanQRCodeWithURL(url)
+            cleanUpAndRemoveQRCodeScanner()
+        }
+
         if metadataObjects.isEmpty {
             captureSession.stopRunning()
             let alert = AlertController(title: "", message: .ScanQRCodeInvalidDataErrorMessage, preferredStyle: .alert)
@@ -333,16 +382,28 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
             if let metaData = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
                let qrCodeDelegate = self.qrCodeDelegate,
                let text = metaData.stringValue {
+                captureSession.stopRunning()
                 // Open QR codes only when they are recognized as webpages, otherwise open as text
                 if let url = URIFixup.getURL(text), url.isWebPage() {
-                    qrCodeDelegate.didScanQRCodeWithURL(url)
+                    let shouldPrompt = qrCodeDelegate.qrCodeScanningPermissionLevel != .allowURLsWithoutPrompt
+
+                    if shouldPrompt {
+                        // Prompt users before opening scanned URL. Show shortened host (if possible) as the preview.
+                        state = .promptingUser
+                        let websiteHost: String?
+                        if #available(iOS 16.0, *) { websiteHost = url.host() } else { websiteHost = url.host }
+                        presentConfirmationAlert(urlDisplayString: websiteHost ?? text,
+                                                 onCancel: { _ in cleanUpAndRemoveQRCodeScanner() },
+                                                 onConfirm: { _ in openScannedQRCodeURL(url) })
+                        return
+                    } else {
+                        openScannedQRCodeURL(url)
+                    }
                 } else {
                     qrCodeDelegate.didScanQRCodeWithText(text)
                 }
             }
-            captureSession.stopRunning()
-            stopScanLineAnimation()
-            dismissController()
+            cleanUpAndRemoveQRCodeScanner()
         }
     }
 }

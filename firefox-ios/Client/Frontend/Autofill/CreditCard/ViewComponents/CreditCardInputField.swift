@@ -7,7 +7,7 @@ import Foundation
 import SwiftUI
 import Shared
 
-enum CreditCardInputType {
+enum CreditCardInputType: String {
     case name, number, expiration
 }
 
@@ -113,11 +113,11 @@ struct CreditCardInputField: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.leading, 20)
         .onAppear {
-            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
     }
 
@@ -204,7 +204,10 @@ struct CreditCardInputField: View {
             if inputType == .expiration {
                 _ = self.updateInputValidity()
             }
-        }.accessibilityLabel(fieldHeadline)
+        }
+        .accessibilityLabel(fieldHeadline)
+        .accessibilityIdentifier(inputType.rawValue)
+        .accessibility(addTraits: .isButton)
     }
 
     // MARK: Helper

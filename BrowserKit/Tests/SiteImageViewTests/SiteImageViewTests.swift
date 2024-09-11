@@ -25,12 +25,11 @@ final class SiteImageViewTests: XCTestCase {
                                               faviconCornerRadius: 8)
         let subject = FaviconImageView(frame: .zero, imageFetcher: imageFetcher) {
             expectation.fulfill()
+            XCTAssertEqual(self.imageFetcher.getImageCalled, 1, "get image should be called")
         }
         subject.setFavicon(viewModel)
 
         waitForExpectations(timeout: 0.1)
-        XCTAssertEqual(imageFetcher.capturedSite?.siteURLString, url)
-        XCTAssertEqual(imageFetcher.capturedSite?.expectedImageType, .favicon)
     }
 
     func testHeroImageSetup() {
@@ -44,12 +43,11 @@ final class SiteImageViewTests: XCTestCase {
                                                   fallbackFaviconSize: CGSize())
         let subject = HeroImageView(frame: .zero, imageFetcher: imageFetcher) {
             expectation.fulfill()
+            XCTAssertEqual(self.imageFetcher.getImageCalled, 1, "get image should be called")
         }
         subject.setHeroImage(viewModel)
 
         waitForExpectations(timeout: 0.1)
-        XCTAssertEqual(imageFetcher.capturedSite?.siteURLString, url)
-        XCTAssertEqual(imageFetcher.capturedSite?.expectedImageType, .heroImage)
     }
 
     func testCanMakeRequest_firstTime_true() {
@@ -82,18 +80,18 @@ final class SiteImageViewTests: XCTestCase {
 
 class MockSiteImageHandler: SiteImageHandler {
     var image = UIImage()
-    var capturedSite: SiteImageModel?
     var siteURL: URL?
     var faviconURL: URL?
+    var getImageCalled = 0
     var cacheFaviconURLCalled = 0
     var clearAllCachesCalled = 0
 
-    func getImage(site: SiteImageModel) async -> SiteImageModel {
-        capturedSite = site
-        return site
+    func getImage(model: SiteImageModel) async -> UIImage {
+        getImageCalled += 1
+        return image
     }
 
-    func cacheFaviconURL(siteURL: URL?, faviconURL: URL?) {
+    func cacheFaviconURL(siteURL: URL, faviconURL: URL) {
         self.siteURL = siteURL
         self.faviconURL = faviconURL
         cacheFaviconURLCalled += 1

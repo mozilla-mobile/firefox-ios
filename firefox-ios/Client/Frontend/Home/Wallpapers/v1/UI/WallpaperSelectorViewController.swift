@@ -27,8 +27,7 @@ class WallpaperSelectorViewController: WallpaperBaseViewController, Themeable {
     private var collectionViewHeightConstraint: NSLayoutConstraint!
 
     private lazy var headerLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .headline,
-                                                            size: 17)
+        label.font = FXFontStyles.Regular.headline.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.text = .Onboarding.Wallpaper.SelectorTitle
         label.textAlignment = .center
@@ -37,8 +36,7 @@ class WallpaperSelectorViewController: WallpaperBaseViewController, Themeable {
     }
 
     private lazy var instructionLabel: UILabel = .build { label in
-        label.font = DefaultDynamicFontHelper.preferredFont(withTextStyle: .body,
-                                                            size: 12)
+        label.font = FXFontStyles.Regular.caption1.scaledFont()
         label.adjustsFontForContentSizeCategory = true
         label.text = .Onboarding.Wallpaper.SelectorDescription
         label.textAlignment = .center
@@ -104,7 +102,7 @@ class WallpaperSelectorViewController: WallpaperBaseViewController, Themeable {
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         contentView.backgroundColor = theme.colors.layer1
         headerLabel.textColor = theme.colors.textPrimary
         instructionLabel.textColor = theme.colors.textPrimary
@@ -129,7 +127,7 @@ extension WallpaperSelectorViewController: UICollectionViewDelegate, UICollectio
         else { return UICollectionViewCell() }
 
         cell.viewModel = cellViewModel
-        cell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         return cell
     }
 

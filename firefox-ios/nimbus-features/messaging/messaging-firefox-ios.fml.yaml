@@ -37,7 +37,7 @@ import:
               ALLOWED_TIPS_NOTIFICATIONS: "allowed_tips_notifications"
 
               # Behavioral Targeting Events
-              VIEWED_HOMEPAGE:  "'homepage_viewed'|eventLastSeen('Hours') <= 24"
+              SECOND_HOMEPAGE_VIEW:  "'homepage_viewed'|eventSum('Years', 4, 0) >= 2"
 
             actions:
               OPEN_SETTINGS:                      ://deep-link?url=settings/general
@@ -68,7 +68,7 @@ import:
                 max-display-count: 5
               MICROSURVEY:
                 priority: 50
-                max-display-count: 5
+                max-display-count: 1
               NOTIFICATION:
                 priority: 50
                 max-display-count: 1

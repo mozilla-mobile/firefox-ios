@@ -38,7 +38,7 @@ struct HistoryActionablesModel: Hashable {
         if let imageName = imageName {
             let themeManager: ThemeManager = AppContainer.shared.resolve()
             self.itemImage = UIImage(named: imageName)?
-                .withTintColor(themeManager.currentTheme(for: window).colors.iconSecondary)
+                .withTintColor(themeManager.getCurrentTheme(for: window).colors.iconSecondary)
         } else {
             self.itemImage = nil
         }

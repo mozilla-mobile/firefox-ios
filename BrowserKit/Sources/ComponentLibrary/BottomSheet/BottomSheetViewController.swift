@@ -60,11 +60,13 @@ public class BottomSheetViewController: UIViewController,
     private lazy var scrollContentView: UIView = .build { _ in }
     private var contentViewBottomConstraint: NSLayoutConstraint!
     private var viewTranslation = CGPoint(x: 0, y: 0)
+    private let windowUUID: WindowUUID
 
     // MARK: Init
     public init(viewModel: BottomSheetViewModel,
                 childViewController: BottomSheetChild,
                 usingDimmedBackground: Bool = false,
+                windowUUID: WindowUUID,
                 notificationCenter: NotificationProtocol = NotificationCenter.default,
                 themeManager: ThemeManager = AppContainer.shared.resolve()) {
         self.viewModel = viewModel
@@ -72,6 +74,7 @@ public class BottomSheetViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         self.useDimmedBackground = usingDimmedBackground
+        self.windowUUID = windowUUID
 
         super.init(nibName: nil, bundle: nil)
 
@@ -136,8 +139,7 @@ public class BottomSheetViewController: UIViewController,
     // MARK: - Theme
 
     public func applyTheme() {
-        guard let uuid = (self.view as? ThemeUUIDIdentifiable)?.currentWindowUUID else { return }
-        contentView.backgroundColor = themeManager.currentTheme(for: uuid).colors.layer1
+        contentView.backgroundColor = themeManager.getCurrentTheme(for: windowUUID).colors.layer1
         sheetView.layer.shadowOpacity = viewModel.shadowOpacity
 
         if useDimmedBackground {
@@ -147,7 +149,7 @@ public class BottomSheetViewController: UIViewController,
     }
 
     public var currentWindowUUID: WindowUUID? {
-        return (self.view as? ThemeUUIDIdentifiable)?.currentWindowUUID
+        return windowUUID
     }
 
     // MARK: - UIGestureRecognizerDelegate

@@ -24,6 +24,11 @@ public class ZoomLevelStore {
 
     private static let fileName = "domain-zoom-levels"
 
+    private let concurrentQueue = DispatchQueue(
+        label: "org.mozilla.ios.Fennec.zoomLevelStoreQueue",
+        attributes: .concurrent
+    )
+
     private let url = URL(fileURLWithPath: fileName,
                           relativeTo: FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first)
 
@@ -32,23 +37,26 @@ public class ZoomLevelStore {
         domainZoomLevels = loadAll()
     }
 
-    public func save(_ domainZoomLevel: DomainZoomLevel) {
-        if let foundDomainZoomLevel = findZoomLevel(forDomain: domainZoomLevel.host),
-           let index = domainZoomLevels
-            .firstIndex(where: { $0.host == foundDomainZoomLevel.host }) {
-            domainZoomLevels.remove(at: index)
-        }
-        if domainZoomLevel.zoomLevel != 1.0 {
-            domainZoomLevels.append(domainZoomLevel)
-        }
-        let encoder = JSONEncoder()
-        do {
-            guard let data = try? encoder.encode(domainZoomLevels) else { return }
-            try data.write(to: url, options: .atomic)
-        } catch {
-            logger.log("Unable to write data to disk: \(error)",
-                       level: .debug,
-                       category: .storage)
+    public func save(_ domainZoomLevel: DomainZoomLevel, completion: (() -> Void)? = nil) {
+        concurrentQueue.async(flags: .barrier) { [unowned self] in
+            if let index = domainZoomLevels.firstIndex(where: {
+                $0.host == domainZoomLevel.host
+            }) {
+                domainZoomLevels.remove(at: index)
+            }
+            if domainZoomLevel.zoomLevel != 1.0 {
+                domainZoomLevels.append(domainZoomLevel)
+            }
+            let encoder = JSONEncoder()
+            do {
+                guard let data = try? encoder.encode(domainZoomLevels) else { return }
+                try data.write(to: url, options: .atomic)
+            } catch {
+                logger.log("Unable to write data to disk: \(error)",
+                           level: .debug,
+                           category: .storage)
+            }
+            completion?()
         }
     }
 
@@ -67,6 +75,10 @@ public class ZoomLevelStore {
     }
 
     public func findZoomLevel(forDomain host: String) -> DomainZoomLevel? {
-        domainZoomLevels.first { $0.host == host }
+        var zoomLevel: DomainZoomLevel?
+        concurrentQueue.sync {
+            zoomLevel = domainZoomLevels.first { $0.host == host }
+        }
+        return zoomLevel
     }
 }

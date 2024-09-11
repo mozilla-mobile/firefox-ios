@@ -20,7 +20,7 @@ private struct LightColourPalette: ThemeColourPalette {
     var layer5: UIColor = FXColors.White
     var layer5Hover: UIColor = FXColors.LightGrey20
     var layerScrim: UIColor = FXColors.DarkGrey30.withAlphaComponent(0.95)
-    var layerGradient = Gradient(colors: [FXColors.Violet40, FXColors.Violet70])
+    var layerGradient = Gradient(colors: [FXColors.Violet60, FXColors.Violet70])
     var layerGradientOverlay = Gradient(colors: [FXColors.DarkGrey40.withAlphaComponent(0),
                                                  FXColors.DarkGrey40.withAlphaComponent(0.4)])
     var layerAccentNonOpaque: UIColor = FXColors.Blue50.withAlphaComponent(0.3)
@@ -36,6 +36,7 @@ private struct LightColourPalette: ThemeColourPalette {
     var layerConfirmation: UIColor = FXColors.Green20
     var layerWarning: UIColor = FXColors.Yellow20
     var layerError: UIColor = FXColors.Red10
+    var layerSelectedText: UIColor = FXColors.DarkGrey05.withAlphaComponent(0.73)
     var layerSearch: UIColor = FXColors.LightGrey30
     var layerGradientURL = Gradient(colors: [
         FXColors.LightGrey30.withAlphaComponent(0),

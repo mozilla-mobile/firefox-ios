@@ -6,8 +6,15 @@ import Foundation
 import Redux
 import Common
 
-class MicrosurveyPromptAction: Action { }
-class MicrosurveyPromptMiddlewareAction: Action { }
+final class MicrosurveyPromptAction: Action { }
+
+final class MicrosurveyPromptMiddlewareAction: Action {
+    let microsurveyModel: MicrosurveyModel?
+    init(microsurveyModel: MicrosurveyModel? = nil, windowUUID: WindowUUID, actionType: any ActionType) {
+        self.microsurveyModel = microsurveyModel
+        super.init(windowUUID: windowUUID, actionType: actionType)
+    }
+}
 
 enum MicrosurveyPromptActionType: ActionType {
     case showPrompt
@@ -16,7 +23,5 @@ enum MicrosurveyPromptActionType: ActionType {
 }
 
 enum MicrosurveyPromptMiddlewareActionType: ActionType {
-    case initialize(MicrosurveyModel)
-    case dismissPrompt
-    case openSurvey
+    case initialize
 }

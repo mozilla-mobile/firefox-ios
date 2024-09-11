@@ -17,7 +17,7 @@ enum TabTrayPanelType: Int, CaseIterable {
         case .privateTabs:
             return .TabTrayPrivateBrowsingTitle
         case .syncedTabs:
-            return .AppMenu.AppMenuSyncedTabsTitleString
+            return .LegacyAppMenu.AppMenuSyncedTabsTitleString
         }
     }
 

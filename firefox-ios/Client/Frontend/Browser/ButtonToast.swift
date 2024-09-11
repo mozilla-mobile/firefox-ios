@@ -35,7 +35,7 @@ class ButtonToast: Toast {
 
     private var labelStackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
-        stackView.alignment = .fill
+        stackView.alignment = .leading
     }
 
     private var titleLabel: UILabel = .build { label in
@@ -170,5 +170,58 @@ class ButtonToast: Toast {
     func buttonPressed() {
         completionHandler?(true)
         dismiss(true)
+    }
+}
+
+@available(iOS 16.0, *)
+class PasteControlToast: ButtonToast {
+    private var theme: Theme?
+    private var pasteControlTarget: UIViewController?
+
+    private lazy var pasteControl: UIPasteControl = {
+        let pasteControlConfig = UIPasteControl.Configuration()
+        pasteControlConfig.displayMode = .iconAndLabel
+        pasteControlConfig.baseForegroundColor = theme?.colors.textInverted
+        pasteControlConfig.baseBackgroundColor = theme?.colors.actionPrimary
+
+        let pasteControl = UIPasteControl(configuration: pasteControlConfig)
+        pasteControl.target = pasteControlTarget
+        pasteControl.translatesAutoresizingMaskIntoConstraints = false
+        pasteControl.layer.borderWidth = UX.buttonBorderWidth
+        pasteControl.layer.cornerRadius = UX.buttonBorderRadius
+        pasteControl.widthAnchor.constraint(equalToConstant: 90).isActive = true
+
+        return pasteControl
+    }()
+
+    init(viewModel: ButtonToastViewModel, theme: Theme?, target: UIViewController?) {
+        self.theme = theme
+        self.pasteControlTarget = target
+        super.init(viewModel: viewModel, theme: theme)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func setupPaddedButton(stackView: UIStackView, buttonText: String?) {
+        let paddedView = UIView()
+        paddedView.translatesAutoresizingMaskIntoConstraints = false
+        paddedView.addSubview(pasteControl)
+        stackView.addArrangedSubview(paddedView)
+
+        NSLayoutConstraint.activate([
+            pasteControl.centerYAnchor.constraint(equalTo: paddedView.centerYAnchor),
+            pasteControl.centerXAnchor.constraint(equalTo: paddedView.centerXAnchor),
+
+            paddedView.topAnchor.constraint(equalTo: stackView.topAnchor),
+            paddedView.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
+            paddedView.widthAnchor.constraint(equalTo: pasteControl.widthAnchor, constant: UX.widthOffset)
+        ])
+    }
+
+    override func applyTheme(theme: Theme) {
+        super.applyTheme(theme: theme)
+        pasteControl.layer.borderColor = theme.colors.borderInverted.cgColor
     }
 }

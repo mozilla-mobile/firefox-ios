@@ -4,15 +4,18 @@
 
 import UIKit
 import Shared
+import SiteImageView
 
 open class SuggestedSite: Site {
     override open var tileURL: URL {
         return URL(string: url as String, invalidCharacters: false) ?? URL(string: "about:blank")!
     }
-
+    public let faviconResource: SiteResource
     let trackingId: Int
+
     init(data: SuggestedSiteData) {
         self.trackingId = data.trackingId
+        self.faviconResource = data.faviconResource
         super.init(url: data.url, title: data.title, bookmarked: nil)
         self.guid = "default" + data.title // A guid is required in the case the site might become a pinned site
     }
@@ -38,9 +41,7 @@ open class SuggestedSitesCursor: ArrayCursor<SuggestedSite> {
 
 public struct SuggestedSiteData {
     var url: String
-    var bgColor: String
-    var imageUrl: String
-    var faviconUrl: String
+    var faviconResource: SiteResource
     var trackingId: Int
     var title: String
 }

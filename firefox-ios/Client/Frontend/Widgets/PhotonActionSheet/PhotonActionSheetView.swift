@@ -9,7 +9,7 @@ import Shared
 
 // MARK: - PhotonActionSheetViewDelegate
 protocol PhotonActionSheetViewDelegate: AnyObject {
-    func didClick(item: SingleActionViewModel?)
+    func didClick(item: SingleActionViewModel?, animationCompletion: @escaping () -> Void)
 }
 
 // This is the view contained in PhotonActionSheetContainerCell in the PhotonActionSheet table view.
@@ -110,7 +110,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
     }
 
     private lazy var tabsLabel: UILabel = .build { label in
-        label.font = UIFont.boldSystemFont(ofSize: UIConstants.DefaultChromeSmallSize)
+        label.font = FXFontStyles.Bold.caption2.systemFont()
     }
 
     lazy var bottomBorder: UIView = .build { _ in }
@@ -175,8 +175,12 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
         isSelected = (gestureRecognizer?.state == .began) || (gestureRecognizer?.state == .changed)
 
         item.isEnabled = !item.isEnabled
-        handler(item)
-        self.delegate?.didClick(item: item)
+
+        // Notify the delegate then wait until all animations are completed before handling the item
+        // (Note: The iOS16 system find interactor will only work if the settings menu dismiss animation has completed)
+        self.delegate?.didClick(item: item, animationCompletion: {
+            handler(item)
+        })
     }
 
     // MARK: Setup

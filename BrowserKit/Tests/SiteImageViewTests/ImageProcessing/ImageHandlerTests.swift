@@ -7,7 +7,9 @@ import LinkPresentation
 @testable import SiteImageView
 
 final class ImageHandlerTests: XCTestCase {
-    private var bundleImageFetcher: MockBundleImageFetcher!
+    let siteURL = URL(string: "https://www.mozilla.com")!
+    let faviconURL = URL(string: "https://www.mozilla.org/media/img/favicons/mozilla/apple-touch-icon.8cbe9c835c00.png")!
+
     private var heroImageFetcher: MockHeroImageFetcher!
     private var siteImageCache: MockSiteImageCache!
     private var faviconFetcher: MockFaviconFetcher!
@@ -15,7 +17,6 @@ final class ImageHandlerTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        self.bundleImageFetcher = MockBundleImageFetcher()
         self.heroImageFetcher = MockHeroImageFetcher()
         self.siteImageCache = MockSiteImageCache()
         self.faviconFetcher = MockFaviconFetcher()
@@ -24,7 +25,6 @@ final class ImageHandlerTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
-        self.bundleImageFetcher = nil
         self.heroImageFetcher = nil
         self.siteImageCache = nil
         self.faviconFetcher = nil
@@ -33,48 +33,24 @@ final class ImageHandlerTests: XCTestCase {
 
     // MARK: - Favicon
 
-    private func createSiteImageModel(cacheKey: String,
-                                      imageURL: URL? = nil,
+    private func createSiteImageModel(resourceURL: URL? = nil,
                                       type: SiteImageType = .favicon) -> SiteImageModel {
         return SiteImageModel(id: UUID(),
-                              expectedImageType: type,
-                              siteURLString: cacheKey,
-                              siteURL: URL(string: cacheKey)!,
-                              cacheKey: cacheKey,
-                              faviconURL: imageURL,
-                              faviconImage: nil,
-                              heroImage: nil)
-    }
-
-    func testFavicon_whenImageInBundle_returnsBundleImage() async {
-        let expectedResult = UIImage()
-        bundleImageFetcher.image = expectedResult
-        let subject = createSubject()
-        let site = createSiteImageModel(cacheKey: "Mozilla", imageURL: URL(string: "www.mozilla.com"))
-        let result = await subject.fetchFavicon(site: site)
-        XCTAssertEqual(expectedResult, result)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleSucceedCalled, 1)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleFailedCalled, 0)
-
-        XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
-        XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 0)
-
-        XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
-        XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 0)
-
-        XCTAssertEqual(siteImageCache.cacheImageCalled, 0)
-        XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 0)
+                              imageType: type,
+                              siteURL: siteURL,
+                              siteResource: resourceURL != nil ? .remoteURL(url: resourceURL!) : nil,
+                              image: nil)
     }
 
     func testFavicon_whenImageInCache_returnsCacheImage() async {
         let expectedResult = UIImage()
         siteImageCache.image = expectedResult
         let subject = createSubject()
-        let site = createSiteImageModel(cacheKey: "Mozilla", imageURL: URL(string: "www.mozilla.com"))
-        let result = await subject.fetchFavicon(site: site)
+        let model = createSiteImageModel(resourceURL: faviconURL)
+
+        let result = await subject.fetchFavicon(imageModel: model)
+
         XCTAssertEqual(expectedResult, result)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleSucceedCalled, 0)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleFailedCalled, 1)
 
         XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 1)
         XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 0)
@@ -87,14 +63,36 @@ final class ImageHandlerTests: XCTestCase {
         XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 0)
     }
 
-    func testFavicon_whenNoUrl_returnsFallbackLetterFavicon() async {
+    func testFavicon_whenNoImages_returnsFallbackLetterFavicon_forHardcodedFaviconURL() async {
         let subject = createSubject()
-        let site = createSiteImageModel(cacheKey: "Mozilla")
-        let result = await subject.fetchFavicon(site: site)
+        let model = createSiteImageModel(resourceURL: faviconURL)
+        let result = await subject.fetchFavicon(imageModel: model)
 
         XCTAssertEqual(letterImageGenerator.image, result)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleSucceedCalled, 0)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleFailedCalled, 1)
+
+        XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
+        XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 1)
+
+        XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
+        XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 1)
+
+        XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
+        XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
+        XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 1)
+
+        // `cacheKey` will be the `shortDomain` if no `resourceURL` was provided at time of SiteImageModel creation,
+        // as it is with sites having hard coded `faviconURL`s
+        XCTAssertEqual(model.cacheKey, faviconURL.absoluteString)
+        XCTAssertEqual(letterImageGenerator.capturedSiteString, faviconURL.absoluteString)
+    }
+
+    func testFavicon_whenNoUrl_returnsFallbackLetterFavicon_noFaviconURL() async {
+        let subject = createSubject()
+        let site = createSiteImageModel(resourceURL: nil)
+
+        let result = await subject.fetchFavicon(imageModel: site)
+
+        XCTAssertEqual(letterImageGenerator.image, result)
 
         XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
         XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 1)
@@ -105,18 +103,19 @@ final class ImageHandlerTests: XCTestCase {
         XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
         XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
         XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 1)
+
+        XCTAssertEqual(letterImageGenerator.capturedSiteString, siteURL.shortDomain)
     }
 
-    func testFavicon_whenImageFetcher_returnsImageFetcherFavicon() async {
+    func testFavicon_whenImageFetcherHasImage_returnsFromImageFetcher() async {
         let expectedResult = UIImage()
         faviconFetcher.image = expectedResult
         let subject = createSubject()
-        let site = createSiteImageModel(cacheKey: "Mozilla", imageURL: URL(string: "www.mozilla.com"))
-        let result = await subject.fetchFavicon(site: site)
+        let model = createSiteImageModel(resourceURL: faviconURL)
+
+        let result = await subject.fetchFavicon(imageModel: model)
 
         XCTAssertEqual(expectedResult, result)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleSucceedCalled, 0)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleFailedCalled, 1)
 
         XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
         XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 1)
@@ -131,22 +130,52 @@ final class ImageHandlerTests: XCTestCase {
 
     func testFavicon_whenNoImages_returnsFallbackLetterFavicon() async {
         let subject = createSubject()
-        let site = createSiteImageModel(cacheKey: "Mozilla", imageURL: URL(string: "www.mozilla.com"))
-        let result = await subject.fetchFavicon(site: site)
+        let model = createSiteImageModel(resourceURL: nil)
+        let result = await subject.fetchFavicon(imageModel: model)
 
         XCTAssertEqual(letterImageGenerator.image, result)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleSucceedCalled, 0)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleFailedCalled, 1)
 
         XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
         XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 1)
 
         XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
-        XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 1)
+        XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 0)
 
         XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
         XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
         XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 1)
+
+        // `cacheKey` will be the `shortDomain` if no `resourceURL` was provided at time of SiteImageModel creation,
+        // as it is with sites having hard coded `faviconURL`s
+        XCTAssertEqual(model.cacheKey, siteURL.shortDomain)
+        XCTAssertEqual(letterImageGenerator.capturedSiteString, siteURL.shortDomain)
+    }
+
+    func testFavicon_whenInternalHomeURL_returnsFallbackLetterFavicon() async {
+        let subject = createSubject()
+        let model = SiteImageModel(id: UUID(),
+                                   imageType: .favicon,
+                                   siteURL: URL(string: "internal://local/about/home#panel=0")!,
+                                   siteResource: nil,
+                                   image: nil)
+        let result = await subject.fetchFavicon(imageModel: model)
+
+        XCTAssertEqual(letterImageGenerator.image, result)
+
+        XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
+        XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 1)
+
+        // Skip faviconFetcher since no faviconURL is provided
+        XCTAssertEqual(faviconFetcher.fetchImageSucceedCalled, 0)
+        XCTAssertEqual(faviconFetcher.fetchImageFailedCalled, 0)
+
+        XCTAssertEqual(siteImageCache.cachedWithType, .favicon)
+        XCTAssertEqual(siteImageCache.cacheImageCalled, 1)
+        XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 1)
+
+        // ImageHandler has a special site string override for internal strings
+        XCTAssertEqual(model.cacheKey, "local")
+        XCTAssertEqual(letterImageGenerator.capturedSiteString, "home")
     }
 
     // MARK: - Hero image
@@ -155,13 +184,13 @@ final class ImageHandlerTests: XCTestCase {
         let expectedResult = UIImage()
         siteImageCache.image = expectedResult
         let subject = createSubject()
-        let site = createSiteImageModel(cacheKey: "Mozilla",
-                                        imageURL: URL(string: "www.mozilla.com"),
-                                        type: .heroImage)
-
+        let model = createSiteImageModel(resourceURL: faviconURL,
+                                         type: .heroImage)
         do {
-            let result = try await subject.fetchHeroImage(site: site)
+            let result = try await subject.fetchHeroImage(imageModel: model)
+
             XCTAssertEqual(expectedResult, result)
+
             XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 1)
             XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 0)
             XCTAssertEqual(siteImageCache.getFromCacheWithType, .heroImage)
@@ -178,12 +207,11 @@ final class ImageHandlerTests: XCTestCase {
         let expectedResult = UIImage()
         heroImageFetcher.image = expectedResult
         let subject = createSubject()
-        let site = createSiteImageModel(cacheKey: "Mozilla",
-                                        imageURL: URL(string: "www.mozilla.com"),
-                                        type: .heroImage)
-
+        let model = createSiteImageModel(resourceURL: faviconURL,
+                                         type: .heroImage)
         do {
-            let result = try await subject.fetchHeroImage(site: site)
+            let result = try await subject.fetchHeroImage(imageModel: model)
+
             XCTAssertEqual(expectedResult, result)
             XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
             XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 1)
@@ -198,12 +226,10 @@ final class ImageHandlerTests: XCTestCase {
 
     func testHeroImage_whenNoHeroImage_throwsNoHeroImageError() async {
         let subject = createSubject()
-        let site = createSiteImageModel(cacheKey: "Mozilla",
-                                        imageURL: URL(string: "www.mozilla.com"),
-                                        type: .heroImage)
-
+        let model = createSiteImageModel(resourceURL: faviconURL,
+                                         type: .heroImage)
         do {
-            _ = try await subject.fetchHeroImage(site: site)
+            _ = try await subject.fetchHeroImage(imageModel: model)
 
             XCTFail("Should have failed with SiteImageError.noHeroImage")
         } catch let error as SiteImageError {
@@ -224,15 +250,13 @@ final class ImageHandlerTests: XCTestCase {
     func testHeroImageFallback_retrievesFromHeroImageCache() async {
         let expectedResult = UIImage()
         let subject = createSubject()
-        let site = createSiteImageModel(cacheKey: "Mozilla",
-                                        imageURL: URL(string: "www.mozilla.com"),
-                                        type: .heroImage)
+        let model = createSiteImageModel(resourceURL: faviconURL,
+                                         type: .heroImage)
         siteImageCache.image = expectedResult
 
-        let result = await subject.fetchFavicon(site: site)
+        let result = await subject.fetchFavicon(imageModel: model)
+
         XCTAssertEqual(letterImageGenerator.image, result)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleSucceedCalled, 0)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleFailedCalled, 1)
 
         XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 1)
         XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 0)
@@ -247,15 +271,13 @@ final class ImageHandlerTests: XCTestCase {
     func testHeroImageFallback_savesInHeroImageCache() async {
         let expectedResult = UIImage()
         let subject = createSubject()
-        let site = createSiteImageModel(cacheKey: "Mozilla",
-                                        imageURL: URL(string: "www.mozilla.com"),
-                                        type: .heroImage)
+        let model = createSiteImageModel(resourceURL: faviconURL,
+                                         type: .heroImage)
         faviconFetcher.image = expectedResult
 
-        let result = await subject.fetchFavicon(site: site)
+        let result = await subject.fetchFavicon(imageModel: model)
+
         XCTAssertEqual(letterImageGenerator.image, result)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleSucceedCalled, 0)
-        XCTAssertEqual(bundleImageFetcher.getImageFromBundleFailedCalled, 1)
 
         XCTAssertEqual(siteImageCache.getImageFromCacheSucceedCalled, 0)
         XCTAssertEqual(siteImageCache.getImageFromCacheFailedCalled, 1)
@@ -280,28 +302,10 @@ final class ImageHandlerTests: XCTestCase {
 
 private extension ImageHandlerTests {
     func createSubject() -> ImageHandler {
-        return DefaultImageHandler(bundleImageFetcher: bundleImageFetcher,
-                                   imageCache: siteImageCache,
+        return DefaultImageHandler(imageCache: siteImageCache,
                                    faviconFetcher: faviconFetcher,
                                    letterImageGenerator: letterImageGenerator,
                                    heroImageFetcher: heroImageFetcher)
-    }
-}
-
-// MARK: - MockBundleImageFetcher
-private class MockBundleImageFetcher: BundleImageFetcher {
-    var image: UIImage?
-    var getImageFromBundleSucceedCalled = 0
-    var getImageFromBundleFailedCalled = 0
-
-    func getImageFromBundle(domain: ImageDomain?) throws -> UIImage {
-        if let image = image {
-            getImageFromBundleSucceedCalled += 1
-            return image
-        } else {
-            getImageFromBundleFailedCalled += 1
-            throw SiteImageError.noImageInBundle
-        }
     }
 }
 
@@ -334,7 +338,7 @@ private class MockSiteImageCache: SiteImageCache {
     var cachedWithType: SiteImageType?
     var clearCacheCalledCount = 0
 
-    func getImageFromCache(cacheKey: String, type: SiteImageType) async throws -> UIImage {
+    func getImage(cacheKey: String, type: SiteImageType) async throws -> UIImage {
         getFromCacheWithType = type
         if let image = image {
             getImageFromCacheSucceedCalled += 1
@@ -350,7 +354,7 @@ private class MockSiteImageCache: SiteImageCache {
         cachedWithType = type
     }
 
-    func clearCache() async {
+    func clear() async {
         clearCacheCalledCount += 1
     }
 }
@@ -376,9 +380,11 @@ private class MockFaviconFetcher: FaviconFetcher {
 private class MockLetterImageGenerator: LetterImageGenerator {
     var image = UIImage()
     var generateLetterImageCalled = 0
+    var capturedSiteString: String?
 
     func generateLetterImage(siteString: String) -> UIImage {
         generateLetterImageCalled += 1
+        capturedSiteString = siteString
         return image
     }
 }

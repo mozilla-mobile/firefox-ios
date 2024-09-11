@@ -18,7 +18,6 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         super.setUp()
 
         Glean.shared.resetGlean(clearStores: true)
-        Glean.shared.enableTestingMode()
         messagingStore = MockGleanPlumbMessageStore(messageId: messageId)
         applicationHelper = MockApplicationHelper()
         subject = GleanPlumbMessageManager(
@@ -240,6 +239,19 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         XCTAssertEqual(hardcodedNimbusFeatures.getExposureCount(featureId: "messaging"), 2)
     }
 
+    func testManagerGetMessages_happyPath_withNoAction() throws {
+        let expectedId = "infoCard"
+        let messages = [
+            createMessage(messageId: "infoCard-notyet", action: nil, surface: .newTabCard, trigger: ["true", "false"]),
+            createMessage(messageId: expectedId, action: nil, surface: .newTabCard, trigger: ["true", "true"])
+        ]
+        guard let observed = subject.getNextMessage(for: .newTabCard, from: messages) else {
+            XCTFail("Expected to retrieve message")
+            return
+        }
+        XCTAssertEqual(observed.id, expectedId)
+    }
+
     func testManagerOnMessageDisplayed() {
         let message = createMessage(messageId: messageId)
         subject.onMessageDisplayed(message)
@@ -254,6 +266,15 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         subject.onMessagePressed(message, window: nil)
         let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
         XCTAssertTrue(messageMetadata.isExpired)
+        XCTAssertEqual(applicationHelper.openURLCalled, 1)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.clicked)
+    }
+
+    func testManagerOnMessagePressed_withoutExpiring() {
+        let message = createMessage(messageId: messageId, action: "://test-action")
+        subject.onMessagePressed(message, window: nil, shouldExpire: false)
+        let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
+        XCTAssertFalse(messageMetadata.isExpired)
         XCTAssertEqual(applicationHelper.openURLCalled, 1)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.clicked)
     }
@@ -348,6 +369,16 @@ class GleanPlumbMessageManagerTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.malformed)
     }
 
+    func testManagerOnMessagePressed_withNoAction() {
+        let message = createMessage(messageId: messageId, action: nil)
+        subject.onMessagePressed(message, window: nil)
+        let messageMetadata = messagingStore.getMessageMetadata(messageId: messageId)
+        XCTAssertTrue(messageMetadata.isExpired)
+        XCTAssertEqual(applicationHelper.openURLCalled, 0)
+        XCTAssertNil(applicationHelper.lastOpenURL)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Messaging.clicked)
+    }
+
     func testManagerOnMessageDismissed() {
         let message = createMessage(messageId: messageId)
         subject.onMessageDismissed(message)
@@ -360,7 +391,7 @@ class GleanPlumbMessageManagerTests: XCTestCase {
     // MARK: - Helper function
 
     private func createMessage(messageId: String,
-                               action: String = "MAKE_DEFAULT_BROWSER",
+                               action: String? = "MAKE_DEFAULT_BROWSER",
                                actionParams: [String: String] = [:],
                                surface: MessageSurfaceId = .newTabCard,
                                trigger: [String] = ["true"],
@@ -436,8 +467,9 @@ class MockGleanPlumbMessageStore: GleanPlumbMessageStoreProtocol {
         }
     }
 
-    func onMessagePressed(_ message: GleanPlumbMessage) {
+    func onMessagePressed(_ message: GleanPlumbMessage, shouldExpire: Bool) {
         let metadata = metadata(for: message)
+        guard shouldExpire else { return }
         onMessageExpired(metadata, surface: message.surface, shouldReport: false)
     }
 

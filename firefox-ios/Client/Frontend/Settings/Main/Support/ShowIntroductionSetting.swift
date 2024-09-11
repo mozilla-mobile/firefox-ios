@@ -15,7 +15,7 @@ class ShowIntroductionSetting: Setting {
     init(settings: SettingsTableViewController,
          settingsDelegate: DebugSettingsDelegate?) {
         self.settingsDelegate = settingsDelegate
-        let theme = settings.themeManager.currentTheme(for: settings.windowUUID)
+        let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
         let attributes = [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
         super.init(title: NSAttributedString(string: .AppSettingsShowTour,
                                              attributes: attributes))

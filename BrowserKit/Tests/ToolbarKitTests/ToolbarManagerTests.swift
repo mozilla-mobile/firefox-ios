@@ -8,60 +8,68 @@ import Common
 
 final class ToolbarManagerTests: XCTestCase {
     // Address toolbar border
-    func testDisplayAddressToolbarTopBorderWhenScrolledThenShouldNotDisplay() {
+    func testAddressToolbarBorderPositionWhenTopPlacementAndScrolledThenShouldDisplayBottomBorder() {
         let subject = createSubject()
-        XCTAssertFalse(subject.shouldDisplayAddressBorder(borderPosition: .top,
-                                                          toolbarPosition: .top,
-                                                          isPrivate: false,
-                                                          scrollY: 10))
+        XCTAssertEqual(AddressToolbarBorderPosition.bottom, subject.getAddressBorderPosition(
+            for: .top,
+            isPrivate: false,
+            scrollY: 10))
     }
 
-    func testDisplayAddressToolbarTopBorderWhenBottomPlacementThenShouldDisplay() {
+    func testAddressToolbarBorderPositionWhenTopPlacementAndNotScrolledThenShouldDisplayNoBorder() {
         let subject = createSubject()
-        XCTAssertTrue(subject.shouldDisplayAddressBorder(borderPosition: .top,
-                                                         toolbarPosition: .bottom,
-                                                         isPrivate: false,
-                                                         scrollY: 0))
+        XCTAssertNil(subject.getAddressBorderPosition(
+            for: .top,
+            isPrivate: false,
+            scrollY: 0))
     }
 
-    func testDisplayAddressToolbarTopBorderWhenPrivateModeThenShouldNotDisplay() {
+    func testAddressToolbarBorderPositionWhenBottomPlacementAndScrolledThenShouldDisplayTopBorder() {
         let subject = createSubject()
-        XCTAssertFalse(subject.shouldDisplayAddressBorder(borderPosition: .top,
-                                                          toolbarPosition: .top,
-                                                          isPrivate: true,
-                                                          scrollY: 0))
+        XCTAssertEqual(AddressToolbarBorderPosition.top, subject.getAddressBorderPosition(
+            for: .bottom,
+            isPrivate: false,
+            scrollY: 10))
     }
 
-    func testDisplayAddressToolbarTopBorderWhenNotScrolledNonPrivateModeWithTopPlacementThenShouldNotDisplay() {
+    func testAddressToolbarBorderPositionWhenBottomPlacementAndNotScrolledThenShouldDisplayTopBorder() {
         let subject = createSubject()
-        XCTAssertFalse(subject.shouldDisplayAddressBorder(borderPosition: .top,
-                                                          toolbarPosition: .top,
-                                                          isPrivate: false,
-                                                          scrollY: 0))
+        XCTAssertEqual(AddressToolbarBorderPosition.top, subject.getAddressBorderPosition(
+            for: .bottom,
+            isPrivate: false,
+            scrollY: 0))
     }
 
-    func testDisplayAddressToolbarBottomBorderWhenBottomPlacementThenShouldNotDisplay() {
+    func testAddressToolbarBorderPositionWhenTopPlacementAndPrivateAndScrolledThenShouldDisplayBottomBorder() {
         let subject = createSubject()
-        XCTAssertFalse(subject.shouldDisplayAddressBorder(borderPosition: .bottom,
-                                                          toolbarPosition: .bottom,
-                                                          isPrivate: false,
-                                                          scrollY: 0))
+        XCTAssertEqual(AddressToolbarBorderPosition.bottom, subject.getAddressBorderPosition(
+            for: .top,
+            isPrivate: true,
+            scrollY: 10))
     }
 
-    func testDisplayAddressToolbarBottomBorderWhenPrivateModeThenShouldDisplay() {
+    func testAddressToolbarBorderPositionWhenTopPlacementAndPrivateAndNotScrolledThenShouldDisplayBottomBorder() {
         let subject = createSubject()
-        XCTAssertTrue(subject.shouldDisplayAddressBorder(borderPosition: .bottom,
-                                                         toolbarPosition: .bottom,
-                                                         isPrivate: true,
-                                                         scrollY: 0))
+        XCTAssertEqual(AddressToolbarBorderPosition.bottom, subject.getAddressBorderPosition(
+            for: .top,
+            isPrivate: true,
+            scrollY: 0))
     }
 
-    func testDisplayAddressToolbarBottomBorderWhenNotScrolledNonPrivateModeWithTopPlacementThenShouldNotDisplay() {
+    func testAddressToolbarBorderPositionWhenBottomPlacementAndPrivateAndNotScrolledThenShouldDisplayTopBorder() {
         let subject = createSubject()
-        XCTAssertFalse(subject.shouldDisplayAddressBorder(borderPosition: .bottom,
-                                                          toolbarPosition: .top,
-                                                          isPrivate: false,
-                                                          scrollY: 0))
+        XCTAssertEqual(AddressToolbarBorderPosition.top, subject.getAddressBorderPosition(
+            for: .bottom,
+            isPrivate: true,
+            scrollY: 0))
+    }
+
+    func testAddressToolbarBorderPositionWhenBottomPlacementAndPrivateAndScrolledThenShouldDisplayTopBorder() {
+        let subject = createSubject()
+        XCTAssertEqual(AddressToolbarBorderPosition.top, subject.getAddressBorderPosition(
+            for: .bottom,
+            isPrivate: true,
+            scrollY: 10))
     }
 
     // Navigation toolbar border

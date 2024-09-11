@@ -64,12 +64,11 @@ extension UIViewController {
         guard let uuid = (view as ThemeUUIDIdentifiable).currentWindowUUID else { return }
 
         let vcToPresent = vcBeingPresented
-        let buttonItem = UIBarButtonItem(
-            title: navItemText.localizedString(),
-            style: .plain,
-            target: self,
-            action: #selector(dismissVC)
-        )
+        let buttonItem = UIBarButtonItem(title: navItemText.localizedString(), style: .plain) { [weak self] _ in
+            // Note: Do not initialize the back button action with an @objc selector, as `dismissVC`'s method signature
+            // no longer matches (will crash).
+            self?.dismissVC()
+        }
         switch navItemLocation {
         case .Left:
             vcToPresent.navigationItem.leftBarButtonItem = buttonItem
@@ -90,9 +89,8 @@ extension UIViewController {
         presentWithModalDismissIfNeeded(themedNavigationController, animated: true)
     }
 
-    @objc
-    func dismissVC() {
-        self.dismiss(animated: true, completion: nil)
+    func dismissVC(withCompletion completion: (() -> Void)? = nil) {
+        self.dismiss(animated: true, completion: completion)
     }
 
     /// A convenience function to dismiss modal presentation views if they are

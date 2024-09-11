@@ -31,7 +31,7 @@ class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlagga
         var sections = [Setting]()
         let topSitesSetting = BoolSetting(
             prefs: profile.prefs,
-            theme: themeManager.currentTheme(for: windowUUID),
+            theme: themeManager.getCurrentTheme(for: windowUUID),
             prefKey: PrefsKeys.UserFeatureFlagPrefs.TopSiteSection,
             defaultValue: true,
             titleText: .Settings.Homepage.Shortcuts.ShortcutsToggle
@@ -40,7 +40,7 @@ class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlagga
 
         let sponsoredShortcutSetting = BoolSetting(
             prefs: profile.prefs,
-            theme: themeManager.currentTheme(for: windowUUID),
+            theme: themeManager.getCurrentTheme(for: windowUUID),
             prefKey: PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts,
             defaultValue: true,
             titleText: .Settings.Homepage.Shortcuts.SponsoredShortcutsToggle
@@ -79,7 +79,7 @@ extension TopSitesSettingsViewController {
         init(settings: SettingsTableViewController) {
             self.profile = settings.profile
             self.windowUUID = settings.windowUUID
-            let theme = settings.themeManager.currentTheme(for: windowUUID)
+            let theme = settings.themeManager.getCurrentTheme(for: windowUUID)
             super.init(
                 title: NSAttributedString(
                     string: .Settings.Homepage.Shortcuts.Rows,

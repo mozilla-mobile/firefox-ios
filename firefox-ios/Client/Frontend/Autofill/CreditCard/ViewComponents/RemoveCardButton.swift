@@ -60,11 +60,11 @@ struct RemoveCardButton: View {
             }.background(backgroundColor.edgesIgnoringSafeArea(.bottom))
         }
         .onAppear {
-            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
             // part of FXIOS-6797, if the app goes to the background and

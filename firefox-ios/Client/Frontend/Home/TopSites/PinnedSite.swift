@@ -4,11 +4,14 @@
 
 import Foundation
 import Storage
+import SiteImageView
 
 open class PinnedSite: Site {
     let isPinnedSite = true
+    let faviconResource: SiteResource?
 
-    init(site: Site) {
+    init(site: Site, faviconResource: SiteResource?) {
+        self.faviconResource = faviconResource
         super.init(url: site.url, title: site.title, bookmarked: site.bookmarked)
         self.metadata = site.metadata
     }

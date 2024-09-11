@@ -26,12 +26,13 @@ class JumpBackInTests: BaseTestCase {
 
         // "Jump Back In" is enabled by default. See Settings -> Homepage
         navigator.goto(HomeSettings)
+        mozWaitForElementToExist(app.switches["Jump Back In"])
         XCTAssertEqual(app.switches["Jump Back In"].value as! String, "1")
 
         navigator.goto(NewTabScreen)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306922
+    // https://mozilla.testrail.io/index.php?/cases/view/2306922
     func testJumpBackInSection() {
         // Open a tab and visit a page
         navigator.openURL("https://www.example.com")
@@ -43,12 +44,12 @@ class JumpBackInTests: BaseTestCase {
         closeKeyboard()
 
         // "Jump Back In" section is displayed
-        mozWaitForElementToExist(app.cells["JumpBackInCell"].firstMatch, timeout: TIMEOUT)
+        mozWaitForElementToExist(app.cells["JumpBackInCell"].firstMatch)
         // The contextual hint box is not displayed consistently, so
         // I don't test for its existence.
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306920
+    // https://mozilla.testrail.io/index.php?/cases/view/2306920
     // Smoketest
     func testPrivateTab() throws {
         throw XCTSkip("This test is flaky")
@@ -146,16 +147,17 @@ class JumpBackInTests: BaseTestCase {
 //        mozWaitForElementToNotExist(app.cells["JumpBackInCell"].staticTexts["YouTube"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2445811
+    // https://mozilla.testrail.io/index.php?/cases/view/2445811
     func testLongTapOnJumpBackInLink() {
         // On homepage, go to the "Jump back in" section and long tap on one of the links
         navigator.openURL(path(forTestPage: "test-example.html"))
         mozWaitForElementToExist(app.webViews.links[website_2["link"]!], timeout: TIMEOUT_LONG)
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
-        mozWaitForElementToExist(app.otherElements.collectionViews.element(boundBy: 0), timeout: TIMEOUT)
+        mozWaitForElementToExist(app.otherElements.collectionViews.element(boundBy: 0))
         mozWaitForElementToExist(app.buttons["Open in New Tab"])
         app.buttons["Open in New Tab"].tap()
         waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
         navigator.performAction(Action.GoToHomePage)
         mozWaitForElementToExist(app.cells["JumpBackInCell"].firstMatch)
         app.cells["JumpBackInCell"].firstMatch.press(forDuration: 2)
@@ -165,6 +167,6 @@ class JumpBackInTests: BaseTestCase {
         mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.plus])
         mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.privateMode])
         mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.bookmark])
-        mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.shareApple])
+        mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.share])
     }
 }

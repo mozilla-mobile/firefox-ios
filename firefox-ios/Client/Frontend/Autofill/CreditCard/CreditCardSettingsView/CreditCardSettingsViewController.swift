@@ -10,7 +10,7 @@ import SwiftUI
 
 import struct MozillaAppServices.CreditCard
 
-class CreditCardSettingsViewController: SensitiveViewController, Themeable {
+class CreditCardSettingsViewController: SensitiveViewController, UIAdaptivePresentationControllerDelegate, Themeable {
     var viewModel: CreditCardSettingsViewModel
     var themeObserver: NSObjectProtocol?
     var themeManager: ThemeManager
@@ -146,7 +146,7 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.currentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     func applyTheme() {
@@ -187,6 +187,7 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
         guard let creditCardAddEditView = creditCardAddEditView else { return}
         creditCardAddEditView.view.backgroundColor = .clear
         creditCardAddEditView.modalPresentationStyle = .formSheet
+        creditCardAddEditView.presentationController?.delegate = self
         present(creditCardAddEditView, animated: true, completion: nil)
     }
 
@@ -194,7 +195,7 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
         guard status != .none else { return }
         SimpleToast().showAlertWithText(status.message,
                                         bottomContainer: view,
-                                        theme: self.themeManager.currentTheme(for: self.windowUUID))
+                                        theme: self.themeManager.getCurrentTheme(for: self.windowUUID))
     }
 
     @objc
@@ -249,5 +250,12 @@ class CreditCardSettingsViewController: SensitiveViewController, Themeable {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .change,
                                      object: .creditCardModified)
+    }
+
+    // MARK: - UIAdaptivePresentationControllerDelegate
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        if presentationController.presentedViewController is UIHostingController<CreditCardInputView> {
+            viewModel.cardInputViewModel.clearValues()
+        }
     }
 }

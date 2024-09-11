@@ -27,6 +27,7 @@ class TabToolbar: UIView, SearchBarLocationProvider {
                                                      imageMask: ImageIdentifiers.menuWarningMask)
 
     var helper: TabToolbarHelper?
+    var isMicrosurveyShown = false
     private let contentView = UIStackView()
 
     // MARK: - Initializers
@@ -81,8 +82,9 @@ class TabToolbar: UIView, SearchBarLocationProvider {
     }
 
     override func draw(_ rect: CGRect) {
-        // No line when the search bar is on top of the toolbar
-        guard !isBottomSearchBar else { return }
+        // No line when the search bar or microsurvey is on top of the toolbar
+        // In terms of the microsurvey, by not having the border, it makes it difficult for websites to replicate the prompt.
+        guard !isBottomSearchBar && !isMicrosurveyShown else { return }
 
         if let context = UIGraphicsGetCurrentContext() {
             drawLine(context, start: .zero, end: CGPoint(x: frame.width, y: 0))

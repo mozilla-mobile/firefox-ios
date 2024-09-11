@@ -98,7 +98,7 @@ class ThemeSettingsControllerTests: XCTestCase {
         subject.themeManager.setAutomaticBrightnessValue(userBrightness)
 
         subject.systemBrightnessChanged()
-        XCTAssertEqual(subject.themeManager.currentTheme(for: windowUUID).type, .light)
+        XCTAssertEqual(subject.themeManager.getCurrentTheme(for: windowUUID).type, .light)
     }
 
     func testSystemBrightnessChanged_ForDarkTheme_WithRedux() {
@@ -114,7 +114,7 @@ class ThemeSettingsControllerTests: XCTestCase {
         subject.themeManager.setAutomaticBrightnessValue(userBrightness)
 
         subject.systemBrightnessChanged()
-        XCTAssertEqual(subject.themeManager.currentTheme(for: windowUUID).type, .dark)
+        XCTAssertEqual(subject.themeManager.getCurrentTheme(for: windowUUID).type, .dark)
     }
 
     // MARK: - Private

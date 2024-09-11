@@ -4,17 +4,23 @@
 
 import Foundation
 import Redux
+import Common
 
-class MicrosurveyAction: Action { }
-class MicrosurveyMiddlewareAction: Action { }
+final class MicrosurveyAction: Action {
+    let userSelection: String?
+    let surveyId: String
+
+    init(surveyId: String, userSelection: String? = nil, windowUUID: WindowUUID, actionType: any ActionType) {
+        self.surveyId = surveyId
+        self.userSelection = userSelection
+        super.init(windowUUID: windowUUID, actionType: actionType)
+    }
+}
 
 enum MicrosurveyActionType: ActionType {
     case closeSurvey
     case submitSurvey
     case tapPrivacyNotice
-}
-
-enum MicrosurveyMiddlewareActionType: ActionType {
-    case dismissSurvey
-    case navigateToPrivacyNotice
+    case surveyDidAppear
+    case confirmationViewed
 }

@@ -134,7 +134,7 @@ features:
               card-type: basic
               order: 20
               title: Onboarding/Onboarding.Sync.Title.v120
-              body: Onboarding/Onboarding.Sync.Description.v120
+              body: Onboarding/Onboarding.Sync.Description.v123
               image: sync-devices
               buttons:
                 primary:
@@ -143,6 +143,49 @@ features:
                 secondary:
                   title: Onboarding/Onboarding.Sync.Skip.Action.v114
                   action: forward-one-card
+              onboarding-type: fresh-install
+              prerequisites:
+                - ALWAYS
+            customization-theme:
+              card-type: multiple-choice
+              order: 40
+              title: Onboarding/Onboarding.Customization.Theme.Title.v123
+              body: Onboarding/Onboarding.Customization.Theme.Description.v123
+              image: themeing
+              buttons:
+                primary:
+                  title: Onboarding/Onboarding.Customization.Theme.Continue.Action.v123
+                  action: forward-one-card
+              multiple-choice-buttons:
+                - title: Onboarding/Onboarding.Customization.Theme.System.Action.v123
+                  image: theme-system
+                  action: theme-system-default
+                - title: Onboarding/Onboarding.Customization.Theme.Light.Action.v123
+                  image: theme-light
+                  action: theme-light
+                - title: Onboarding/Onboarding.Customization.Theme.Dark.Action.v123
+                  image: theme-dark
+                  action: theme-dark
+              onboarding-type: fresh-install
+              prerequisites:
+                - ALWAYS
+            customization-toolbar:
+              card-type: multiple-choice
+              order: 41
+              title: Onboarding/Onboarding.Customization.Toolbar.Title.v123
+              body: Onboarding/Onboarding.Customization.Toolbar.Description.v123
+              image: toolbar
+              buttons:
+                primary:
+                  title: Onboarding/Onboarding.Customization.Toolbar.Continue.Action.v123
+                  action: forward-one-card
+              multiple-choice-buttons:
+                - title: Onboarding/Onboarding.Customization.Toolbar.Top.Action.v123
+                  image: toolbar-top
+                  action: toolbar-top
+                - title: Onboarding/Onboarding.Customization.Toolbar.Bottom.Action.v123
+                  image: toolbar-bottom
+                  action: toolbar-bottom
               onboarding-type: fresh-install
               prerequisites:
                 - ALWAYS
@@ -389,6 +432,10 @@ enums:
       read-privacy-policy:
         description: >
           Will open a webview where the user can read the privacy policy
+      open-ios-fx-settings:
+        description: >
+          Will take the user to the default browser settings
+          in the iOS system settings
       end-onboarding:
         description: >
           Will end the onboarding on a set card

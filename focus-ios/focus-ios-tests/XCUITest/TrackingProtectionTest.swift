@@ -5,19 +5,19 @@
 import XCTest
 
 class TrackingProtectionTest: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2544056
+    // https://mozilla.testrail.io/index.php?/cases/view/2544056
     func testInactiveSettings() {
         // Go to in-app settings
         // Check the new options in TP Settings menu
         dismissURLBarFocused()
-        waitForExistence(app.buttons["HomeView.settingsButton"], timeout: 10)
+        waitForExistence(app.buttons["HomeView.settingsButton"])
         // Set search engine to Google
         app.buttons["HomeView.settingsButton"].tap()
         let settingsButton = app.settingsButton
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
 
-        waitForExistence(app.tables.cells["settingsViewController.trackingCell"], timeout: 10)
+        waitForExistence(app.tables.cells["settingsViewController.trackingCell"])
         app.tables.cells["settingsViewController.trackingCell"].tap()
 
         waitForExistence(app.navigationBars["Tracking Protection"])
@@ -34,7 +34,7 @@ class TrackingProtectionTest: BaseTestCase {
     }
 
     // Smoketest
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/394999
+    // https://mozilla.testrail.io/index.php?/cases/view/394999
     func testProtectionSidebar() {
         // Visit https://www.mozilla.org
         loadWebPage("mozilla.org")
@@ -61,7 +61,7 @@ class TrackingProtectionTest: BaseTestCase {
     }
 
     // Smoke test
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1569890
+    // https://mozilla.testrail.io/index.php?/cases/view/1569890
     func testAdBlocking() {
         // Load URL
         loadWebPage("https://blockads.fivefilters.org/")
@@ -69,11 +69,11 @@ class TrackingProtectionTest: BaseTestCase {
 
         // Check ad blocking is enabled
         let TrackingProtection = app.staticTexts["Ad blocking enabled!"]
-        XCTAssertTrue(TrackingProtection.exists)
+        waitForExistence(TrackingProtection)
     }
 
     // Smoke test
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1569869
+    // https://mozilla.testrail.io/index.php?/cases/view/1569869
     func testShieldMenuSetting() {
         // Load URL
         loadWebPage("https://blockads.fivefilters.org/")
@@ -98,7 +98,7 @@ class TrackingProtectionTest: BaseTestCase {
         }
         waitForExistence(app.buttons["HomeView.settingsButton"])
         app.buttons["HomeView.settingsButton"].tap()
-        waitForExistence(app.collectionViews.buttons["Settings"], timeout: 5)
+        waitForExistence(app.collectionViews.buttons["Settings"])
         app.collectionViews.buttons["Settings"].tap()
         waitForExistence(app.cells["settingsViewController.trackingCell"])
         app.cells["settingsViewController.trackingCell"].tap()

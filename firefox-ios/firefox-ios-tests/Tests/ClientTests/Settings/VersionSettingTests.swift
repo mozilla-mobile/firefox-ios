@@ -31,7 +31,7 @@ class VersionSettingTests: XCTestCase {
         let versionSetting = VersionSetting(settingsDelegate: delegate)
         versionSetting.theme = DefaultThemeManager(
             sharedContainerIdentifier: AppInfo.sharedContainerIdentifier
-        ).currentTheme(for: windowUUID)
+        ).getCurrentTheme(for: windowUUID)
 
         // When
         versionSetting.onLongPress(navigationController)

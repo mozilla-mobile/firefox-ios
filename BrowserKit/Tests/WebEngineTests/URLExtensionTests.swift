@@ -183,4 +183,18 @@ final class URLExtensionTests: XCTestCase {
         let safeUrl = url.safeEncodedUrl
         XCTAssertNil(safeUrl)
     }
+
+    func testFaviconRootDirectoryURL() {
+        let url1 = URL(string: "https://some.domain.com/path/subpath")
+        let favicon1 = url1?.faviconUrl()
+        XCTAssertEqual(favicon1, URL(string: "https://some.domain.com/favicon.ico")!)
+
+        let url2 = URL(string: "http://website.org////")
+        let favicon2 = url2?.faviconUrl()
+        XCTAssertEqual(favicon2, URL(string: "http://website.org/favicon.ico")!)
+
+        let url3 = URL(string: "scheme://another.website.net/path/")
+        let favicon3 = url3?.faviconUrl()
+        XCTAssertEqual(favicon3, URL(string: "scheme://another.website.net/favicon.ico")!)
+    }
 }

@@ -36,7 +36,7 @@ protocol TabManager: AnyObject {
     func removeDelegate(_ delegate: TabManagerDelegate, completion: (() -> Void)?)
     func selectTab(_ tab: Tab?, previous: Tab?)
     func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab
-    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool)
+    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool, isPrivate: Bool)
     func removeTab(_ tab: Tab, completion: (() -> Void)?)
     func removeTabs(_ tabs: [Tab])
     func undoCloseTab()
@@ -62,7 +62,6 @@ protocol TabManager: AnyObject {
 
     @discardableResult
     func addTab(_ request: URLRequest!,
-                configuration: WKWebViewConfiguration!,
                 afterTab: Tab?,
                 zombie: Bool,
                 isPrivate: Bool) -> Tab
@@ -82,6 +81,9 @@ protocol TabManager: AnyObject {
 
     /// Undo close all tabs, it will restore the tabs that were backed up when the close action was called.
     func undoCloseAllTabs()
+
+    /// Removes all tabs matching the urls, used when other clients request to close tabs on this device.
+    func removeTabs(by urls: [URL]) async
 
     /// Get inactive tabs from the list of tabs based on the time condition to be considered inactive.
     /// Replaces LegacyInactiveTabModel and related classes
@@ -128,13 +130,11 @@ extension TabManager {
 
     @discardableResult
     func addTab(_ request: URLRequest! = nil,
-                configuration: WKWebViewConfiguration! = nil,
                 afterTab: Tab? = nil,
                 zombie: Bool = false,
                 isPrivate: Bool = false
     ) -> Tab {
         addTab(request,
-               configuration: configuration,
                afterTab: afterTab,
                zombie: zombie,
                isPrivate: isPrivate)
@@ -148,7 +148,7 @@ extension TabManager {
                                 didClearTabs: didClearTabs)
     }
 
-    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool = true) {
-        addTabsForURLs(urls, zombie: zombie, shouldSelectTab: shouldSelectTab)
+    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool = true, isPrivate: Bool = false) {
+        addTabsForURLs(urls, zombie: zombie, shouldSelectTab: shouldSelectTab, isPrivate: isPrivate)
     }
 }

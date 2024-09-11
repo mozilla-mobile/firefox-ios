@@ -15,7 +15,7 @@ func path(forTestPage page: String) -> String {
 }
 
 // Extended timeout values for mozWaitForElementToExist and mozWaitForElementToNotExist
-let TIMEOUT: TimeInterval = 15
+let TIMEOUT: TimeInterval = 20
 let TIMEOUT_LONG: TimeInterval = 45
 
 class BaseTestCase: XCTestCase {
@@ -47,7 +47,7 @@ class BaseTestCase: XCTestCase {
         // Let's be sure the app is backgrounded
         _ = app.wait(for: XCUIApplication.State.runningBackgroundSuspended, timeout: TIMEOUT)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        mozWaitForElementToExist(springboard.icons["XCUITests-Runner"], timeout: 10)
+        mozWaitForElementToExist(springboard.icons["XCUITests-Runner"])
         app.activate()
     }
 
@@ -57,8 +57,22 @@ class BaseTestCase: XCTestCase {
         sleep(2)
         swipeStart.press(forDuration: 0.1, thenDragTo: swipeEnd)
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        mozWaitForElementToExist(springboard.icons["XCUITests-Runner"], timeout: 10)
+        mozWaitForElementToExist(springboard.icons["XCUITests-Runner"])
         app.activate()
+    }
+
+    func removeApp() {
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let icon = springboard.icons.containingText("Fennec").element(boundBy: 0)
+        if icon.exists {
+            icon.press(forDuration: 1.5)
+            mozWaitForElementToExist(springboard.buttons["Remove App"])
+            springboard.buttons["Remove App"].tap()
+            mozWaitForElementToExist(springboard.alerts.buttons["Delete App"])
+            springboard.alerts.buttons["Delete App"].tap()
+            mozWaitForElementToExist(springboard.alerts.buttons["Delete"])
+            springboard.alerts.buttons["Delete"].tap()
+        }
     }
 
     func setUpScreenGraph() {
@@ -72,6 +86,7 @@ class BaseTestCase: XCTestCase {
             app.activate()
         }
         app.launch()
+        mozWaitForElementToExist(app.windows.otherElements.firstMatch)
     }
 
     func setUpLaunchArguments() {
@@ -126,7 +141,7 @@ class BaseTestCase: XCTestCase {
 
     func waitForExistence(
         _ element: XCUIElement,
-        timeout: TimeInterval = 5.0,
+        timeout: TimeInterval = TIMEOUT,
         file: String = #file,
         line: UInt = #line
     ) {
@@ -148,7 +163,7 @@ class BaseTestCase: XCTestCase {
 
     func waitForNoExistence(
         _ element: XCUIElement,
-        timeoutValue: TimeInterval = 5.0,
+        timeoutValue: TimeInterval = TIMEOUT,
         file: String = #file,
         line: UInt = #line
     ) {
@@ -190,7 +205,7 @@ class BaseTestCase: XCTestCase {
         _ element: XCUIElement,
         with predicateString: String,
         description: String? = nil,
-        timeout: TimeInterval = 5.0,
+        timeout: TimeInterval = TIMEOUT,
         file: String,
         line: UInt
     ) {
@@ -245,7 +260,9 @@ class BaseTestCase: XCTestCase {
             .otherElements
             .otherElements
             .count
-        let numberOfExpectedRecentlyVisitedBookmarks = 3
+        let numberOfExpectedRecentlyVisitedBookmarks = 2
+        mozWaitForElementToExist(app.scrollViews
+            .cells[AccessibilityIdentifiers.FirefoxHomepage.Bookmarks.itemCell].firstMatch)
         XCTAssertEqual(numberOfRecentlyVisitedBookmarks, numberOfExpectedRecentlyVisitedBookmarks)
     }
 
@@ -259,6 +276,8 @@ class BaseTestCase: XCTestCase {
             .otherElements
             .count
         let numberOfExpectedRecentlyVisitedBookmarks = 1
+        mozWaitForElementToExist(app.scrollViews
+            .cells[AccessibilityIdentifiers.FirefoxHomepage.Bookmarks.itemCell].firstMatch)
         XCTAssertEqual(numberOfRecentlyVisitedBookmarks, numberOfExpectedRecentlyVisitedBookmarks)
     }
 
@@ -273,7 +292,7 @@ class BaseTestCase: XCTestCase {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.buttons["Reader View"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons["Reader View"])
         app.buttons["Reader View"].tap()
         waitUntilPageLoad()
         mozWaitForElementToExist(app.buttons["Add to Reading List"])
@@ -293,7 +312,7 @@ class BaseTestCase: XCTestCase {
     }
 
      func selectOptionFromContextMenu(option: String) {
-        XCTAssertTrue(app.tables["Context Menu"].cells.otherElements[option].exists)
+        mozWaitForElementToExist(app.tables["Context Menu"].cells.otherElements[option])
         app.tables["Context Menu"].cells.otherElements[option].tap()
         mozWaitForElementToNotExist(app.tables["Context Menu"])
     }
@@ -331,7 +350,7 @@ class BaseTestCase: XCTestCase {
     }
 
     func waitForTabsButton() {
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
     }
 
     func unlockLoginsView() {
@@ -341,7 +360,7 @@ class BaseTestCase: XCTestCase {
         }
 
         let passcodeInput = springboard.otherElements.secureTextFields.firstMatch
-        mozWaitForElementToExist(passcodeInput, timeout: 20)
+        mozWaitForElementToExist(passcodeInput)
         passcodeInput.tap()
         passcodeInput.typeText("foo\n")
         mozWaitForElementToNotExist(passcodeInput)

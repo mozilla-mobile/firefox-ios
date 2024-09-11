@@ -5,5 +5,5 @@
 "CreditCard.ErrorState.CardNumberSublabel.v112" = "请输入有效卡号";
 
 /* Sub label error string that gets shown when user enters incorrect input for their name printed on their credit card in the text box. */
-"CreditCard.ErrorState.NameOnCardSublabel.v112" = "请输入持卡人姓名";
+"CreditCard.ErrorState.NameOnCardSublabel.v112" = "请输入姓名";
 

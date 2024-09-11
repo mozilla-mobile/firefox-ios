@@ -19,7 +19,6 @@ class TabsTelemetryTests: XCTestCase {
         inactiveTabsManager = MockInactiveTabsManager()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         Glean.shared.resetGlean(clearStores: true)
-        Glean.shared.enableTestingMode()
         DependencyHelperMock().bootstrapDependencies()
     }
 
@@ -31,7 +30,7 @@ class TabsTelemetryTests: XCTestCase {
 
     func testTrackTabsQuantity_withNormalTab_gleanIsCalled() {
         let tabManager = TabManagerImplementation(profile: profile,
-                                                  uuid: .XCTestDefaultUUID,
+                                                  uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: false),
                                                   inactiveTabsManager: inactiveTabsManager)
 
         let tab = tabManager.addTab()
@@ -50,7 +49,8 @@ class TabsTelemetryTests: XCTestCase {
     }
 
     func testTrackTabsQuantity_withPrivateTab_gleanIsCalled() {
-        let tabManager = TabManagerImplementation(profile: profile, uuid: .XCTestDefaultUUID)
+        let tabManager = TabManagerImplementation(profile: profile,
+                                                  uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: false))
         tabManager.addTab(isPrivate: true)
 
         TabsTelemetry.trackTabsQuantity(tabManager: tabManager)
@@ -66,7 +66,7 @@ class TabsTelemetryTests: XCTestCase {
 
     func testTrackTabsQuantity_ensureNoInactiveTabs_gleanIsCalled() {
         let tabManager = TabManagerImplementation(profile: profile,
-                                                  uuid: .XCTestDefaultUUID,
+                                                  uuid: ReservedWindowUUID(uuid: .XCTestDefaultUUID, isNew: false),
                                                   inactiveTabsManager: inactiveTabsManager)
         let tab = tabManager.addTab()
         inactiveTabsManager.activeTabs = [tab]

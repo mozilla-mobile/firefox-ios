@@ -64,3 +64,25 @@ extension Address: Encodable {
 extension Address: Swift.Identifiable {
     public var id: String { guid }
 }
+
+extension Address {
+    var addressCityStateZipcode: String {
+        var components = [addressLevel2, addressLevel1, postalCode]
+        components = components.compactMap { $0.isEmpty ? nil : $0 }
+        return components.joined(separator: ", ")
+    }
+
+    var a11ySettingsRow: String {
+        let components = [
+            name,
+            streetAddress,
+            addressLevel2,
+            addressLevel1,
+            postalCode
+        ]
+        let nonEmptyComponents = components.compactMap { $0.isEmpty ? nil : $0 }
+        let addressDetails = nonEmptyComponents.joined(separator: ", ")
+        let label = String(format: String.Addresses.Settings.ListItemA11y, addressDetails)
+        return label
+    }
+}

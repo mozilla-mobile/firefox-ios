@@ -59,7 +59,7 @@ final class DefaultThemeManagerTests: XCTestCase {
 
         let expectedResult = ThemeType.light
 
-        XCTAssertEqual(sut.currentTheme(for: windowUUID).type, expectedResult)
+        XCTAssertEqual(sut.getCurrentTheme(for: windowUUID).type, expectedResult)
     }
 
     // MARK: - Changing current theme tests
@@ -68,9 +68,9 @@ final class DefaultThemeManagerTests: XCTestCase {
         let sut = createSubject(with: userDefaults)
         let expectedResult = ThemeType.dark
 
-        sut.changeCurrentTheme(.dark, for: windowUUID)
+        sut.setManualTheme(to: .dark)
 
-        XCTAssertEqual(sut.currentTheme(for: windowUUID).type, expectedResult)
+        XCTAssertEqual(sut.getCurrentTheme(for: windowUUID).type, expectedResult)
         XCTAssertEqual(
             userDefaults.string(forKey: DefaultThemeManager.ThemeKeys.themeName),
             expectedResult.rawValue
@@ -81,10 +81,10 @@ final class DefaultThemeManagerTests: XCTestCase {
         let sut = createSubject(with: userDefaults)
         let expectedResult = ThemeType.light
 
-        sut.changeCurrentTheme(.dark, for: windowUUID)
-        sut.changeCurrentTheme(.light, for: windowUUID)
+        sut.setManualTheme(to: .dark)
+        sut.setManualTheme(to: .light)
 
-        XCTAssertEqual(sut.currentTheme(for: windowUUID).type, expectedResult)
+        XCTAssertEqual(sut.getCurrentTheme(for: windowUUID).type, expectedResult)
         XCTAssertEqual(
             userDefaults.string(forKey: DefaultThemeManager.ThemeKeys.themeName),
             expectedResult.rawValue
@@ -99,7 +99,7 @@ final class DefaultThemeManagerTests: XCTestCase {
 
         sut.setSystemTheme(isOn: false)
 
-        XCTAssertEqual(sut.currentTheme(for: windowUUID).type, expectedResult)
+        XCTAssertEqual(sut.getCurrentTheme(for: windowUUID).type, expectedResult)
     }
 
     func testDTM_systemThemeTurnedOffThenOn_returnsDefaultTheme() {
@@ -109,7 +109,7 @@ final class DefaultThemeManagerTests: XCTestCase {
         sut.setSystemTheme(isOn: false)
         sut.setSystemTheme(isOn: true)
 
-        XCTAssertEqual(sut.currentTheme(for: windowUUID).type, expectedResult)
+        XCTAssertEqual(sut.getCurrentTheme(for: windowUUID).type, expectedResult)
     }
 
     // MARK: - Private theme tests
@@ -120,7 +120,7 @@ final class DefaultThemeManagerTests: XCTestCase {
 
         sut.setPrivateTheme(isOn: true, for: windowUUID)
 
-        XCTAssertEqual(sut.currentTheme(for: windowUUID).type, expectedResult)
+        XCTAssertEqual(sut.getCurrentTheme(for: windowUUID).type, expectedResult)
     }
 
     func testDTM_privateModeEnabledAndThenDisabled_returnsOriginalTheme() {
@@ -130,14 +130,14 @@ final class DefaultThemeManagerTests: XCTestCase {
         sut.setPrivateTheme(isOn: true, for: windowUUID)
         sut.setPrivateTheme(isOn: false, for: windowUUID)
 
-        XCTAssertEqual(sut.currentTheme(for: windowUUID).type, expectedResult)
+        XCTAssertEqual(sut.getCurrentTheme(for: windowUUID).type, expectedResult)
     }
 
     func testDTM_privateModeEnabled_originalThemeRemainsSaved() {
         let sut = createSubject(with: userDefaults)
         let expectedResult = ThemeType.dark.rawValue
 
-        sut.changeCurrentTheme(.dark, for: windowUUID)
+        sut.setManualTheme(to: .dark)
         sut.setPrivateTheme(isOn: true, for: windowUUID)
 
         XCTAssertEqual(
@@ -153,12 +153,12 @@ final class DefaultThemeManagerTests: XCTestCase {
         let expectedResult = ThemeType.light
         let currentThemeExpectedResult = ThemeType.privateMode
 
-        sut.changeCurrentTheme(.dark, for: windowUUID)
+        sut.setManualTheme(to: .dark)
         sut.setPrivateTheme(isOn: true, for: windowUUID)
-        sut.changeCurrentTheme(.light, for: windowUUID)
+        sut.setManualTheme(to: .light)
 
-        XCTAssertEqual(sut.currentTheme(for: windowUUID).type, currentThemeExpectedResult)
-        XCTAssertEqual(sut.getNormalSavedTheme(), expectedResult)
+        XCTAssertEqual(sut.getCurrentTheme(for: windowUUID).type, currentThemeExpectedResult)
+        XCTAssertEqual(sut.getUserManualTheme(), expectedResult)
     }
 
     // MARK: - Brightness Tests
@@ -180,7 +180,7 @@ final class DefaultThemeManagerTests: XCTestCase {
             userDefaults.float(forKey: DefaultThemeManager.ThemeKeys.AutomaticBrightness.thresholdValue),
             expectedBrightnessValue
         )
-        XCTAssertEqual(sut.currentTheme(for: windowUUID).type, expectedTheme)
+        XCTAssertEqual(sut.getCurrentTheme(for: windowUUID).type, expectedTheme)
     }
 
     func testDTM_settingAutoBrightnessThresholdValue_changesToNewValue() {
@@ -207,7 +207,7 @@ final class DefaultThemeManagerTests: XCTestCase {
 
         testBrightnessWith(threshold: 0.25, in: sut)
 
-        XCTAssertEqual(sut.currentTheme(for: windowUUID).type, expectedTheme)
+        XCTAssertEqual(sut.getCurrentTheme(for: windowUUID).type, expectedTheme)
     }
 
     func testDTM_autoBrightnessOnThresholdEqualToScreenBrigthness_returnsLightTheme() {
@@ -216,7 +216,7 @@ final class DefaultThemeManagerTests: XCTestCase {
 
         testBrightnessWith(threshold: 0.50, in: sut)
 
-        XCTAssertEqual(sut.currentTheme(for: windowUUID).type, expectedTheme)
+        XCTAssertEqual(sut.getCurrentTheme(for: windowUUID).type, expectedTheme)
     }
 
     func testDTM_autoBrightnessOnThresholdGreaterThanScreenBrigthness_returnsDarkTheme() {
@@ -225,7 +225,7 @@ final class DefaultThemeManagerTests: XCTestCase {
 
         testBrightnessWith(threshold: 0.75, in: sut)
 
-        XCTAssertEqual(sut.currentTheme(for: windowUUID).type, expectedTheme)
+        XCTAssertEqual(sut.getCurrentTheme(for: windowUUID).type, expectedTheme)
     }
 
     func testDTM_autoBrightnessOn_changeValues_thenOff_returnsToExpectedSystemTheme() {
@@ -234,10 +234,10 @@ final class DefaultThemeManagerTests: XCTestCase {
         let expectedThemeInSystemMode = ThemeType.light
 
         testBrightnessWith(threshold: 0.75, in: sut)
-        XCTAssertEqual(sut.currentTheme(for: windowUUID).type, expectedThemeInBrightnessMode)
+        XCTAssertEqual(sut.getCurrentTheme(for: windowUUID).type, expectedThemeInBrightnessMode)
 
         sut.setSystemTheme(isOn: true)
-        XCTAssertEqual(sut.currentTheme(for: windowUUID).type, expectedThemeInSystemMode)
+        XCTAssertEqual(sut.getCurrentTheme(for: windowUUID).type, expectedThemeInSystemMode)
     }
 
     // MARK: - Helper methods

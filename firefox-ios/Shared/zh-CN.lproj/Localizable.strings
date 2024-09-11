@@ -17,7 +17,7 @@
 "About" = "关于";
 
 /* The title for the pinning a shortcut action */
-"ActivityStream.ContextMenu.AddToShortcuts" = "添加快捷指令";
+"ActivityStream.ContextMenu.AddToShortcuts" = "添加快捷方式";
 
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite2" = "固定";
@@ -38,7 +38,7 @@
 "ActivityStream.RecentHistory.Title" = "最近访问";
 
 /* Section title label for Shortcuts */
-"ActivityStream.Shortcuts.SectionTitle" = "快捷指令";
+"ActivityStream.Shortcuts.SectionTitle" = "快捷方式";
 
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "设置行数";
@@ -719,7 +719,7 @@
 "Menu.AddBookmark.Label.v99" = "添加";
 
 /* Toast displayed to the user after adding the item to the Shortcuts. */
-"Menu.AddPin.Confirm2" = "快捷指令已添加";
+"Menu.AddPin.Confirm2" = "快捷方式已添加";
 
 /* Label for the add to reading list button in the menu. Pressing this button adds the current page to the reading list. Please keep the text as short as possible for this label. */
 "Menu.AddReadingList.Label.v99" = "添加";
@@ -756,6 +756,9 @@
 
 /* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "历史记录";
+
+/* Label for the new private tab button in the menu page. Pressing this button opens a new private tab. */
+"Menu.NewPrivateTab.Label" = "新建隐私标签页";
 
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
 "Menu.NewTab.v99" = "新建标签页";
@@ -1144,6 +1147,9 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "网址（请用 %s 替换查询内容）";
 
+/* Title of setting to block opening external apps when pressing links. */
+"Settings.BlockOpeningExternalApps.Title" = "阻止打开外部应用";
+
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "清除所有网站数据";
 
@@ -1399,6 +1405,12 @@
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "当打开 Firefox 时";
 
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
+"Settings.OfferClipboardBar.Status.v128" = "打开 %@ 时询问";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.StatusV2" = "当打开 Firefox 时";
+
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "询问打开已复制的链接";
 
@@ -1440,6 +1452,9 @@
 
 /* Description displayed under the ”Show Link Previews” option */
 "Settings.ShowLinkPreviews.Status" = "长按链接时";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.StatusV2" = "长按链接时";
 
 /* Title of setting to enable link previews when long-pressing links. */
 "Settings.ShowLinkPreviews.Title" = "显示链接预览";
@@ -1502,7 +1517,7 @@
 "Settings.TrackingProtection.Alert.Button" = "好，知道了";
 
 /* Decription for the tracker protection alert. */
-"Settings.TrackingProtection.Alert.Description" = "若网站无法正常工作，请轻点地址栏中的“锁”图标，关闭对此网站的增强型跟踪保护。";
+"Settings.TrackingProtection.Alert.Description" = "若网站无法正常工作，请轻点地址栏中的挂锁图标，关闭对此网站的增强型跟踪保护。";
 
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "注意！";
@@ -1517,10 +1532,10 @@
 "Settings.TrackingProtection.ProtectionCellFooter" = "减少定向广告，并阻止广告商跟踪您的浏览。";
 
 /* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer" = "若网站无法正常工作，请轻点地址栏中的“锁”图标，关闭对此网站的增强型跟踪保护。";
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "若网站无法正常工作，请轻点地址栏中的挂锁图标，关闭对此网站的增强型跟踪保护。";
 
 /* Footer information for tracker protection level. */
-"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "若网站无法正常工作，请轻点地址栏中的“锁”图标，关闭对此网站的增强型跟踪保护。";
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "若网站无法正常工作，请轻点地址栏中的挂锁图标，关闭对此网站的增强型跟踪保护。";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "允许部分广告跟踪行为，同时让网站功能保持正常。";

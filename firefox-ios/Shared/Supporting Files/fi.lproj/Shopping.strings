@@ -118,6 +118,12 @@
 /* Title for card displayed when a shopping product has not been analysed yet. */
 "Shopping.NoAnalysisCard.HeadlineLabel.Title.v120" = "Näistä arvosteluista ei ole vielä tietoa";
 
+/* Label for the first paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be the website the user is coming from when viewing this screen (default Amazon). The second parameter will be replaced by the app name. This string is almost identical with 'Shopping.OptInCard.FirstParagraph.Description', but without Best Buy and Walmart websites, which are not available in many locales. */
+"Shopping.OptInCard.FirstParagraph.AmazonOnly.Description.v122" = "Katso, kuinka luotettavia tuotearvostelut ovat palvelussa %1$@, ennen kuin ostat. Arvostelujen tarkistin, %2$@in kokeellinen ominaisuus, on sisäänrakennettu suoraan selaimeen.";
+
+/* Label for the header of the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.HeaderLabel.Title.v120" = "Kokeile luotettavaa tuotearvosteluopastamme";
+
 /* Label for the Learn more button in the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.LearnMoreButtonTitle.Title.v120" = "Lue lisää";
 
@@ -157,6 +163,12 @@
 /* Adjusted rating label from How we determine review quality card displayed in the shopping review quality bottom sheet. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "Shopping.ReviewQualityCard.AdjustedRating.Label.v120" = "*Oikaistu arvosana* perustuu vain niihin arvosteluihin, jotka koemme luotettaviksi.";
 
+/* Accessibility label for the up chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Collapse.AccessibilityLabel.v120" = "Supista \"Kuinka määritämme arvostelun laadun\"-kortti";
+
+/* Accessibility label for the down chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
+"Shopping.ReviewQualityCard.Expand.AccessibilityLabel.v120" = "Laajenna \"Kuinka määritämme arvostelun laadun\"-kortti";
+
 /* Title of the 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
 "Shopping.ReviewQualityCard.Label.Title.v120" = "Kuinka määritämme arvostelun laadun";
 
@@ -187,6 +199,9 @@
 /* Accessibility label for the recommended products label and switch, grouped together. The first placeholder is for the recommended products label, and the second placeholder is for the state of the switch: On/Off. */
 "Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityLabel.v123" = "%1$@, kytkinpainike, %2$@.";
 
+/* Action title of the footer underneath the Settings Card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
+"Shopping.SettingsCard.Footer.Action.v120" = "Arvostelujen tarkistuksen tarjoaa %2$@n %1$@";
+
 /* Title of the settings card displayed in the shopping review quality bottom sheet. */
 "Shopping.SettingsCard.Label.Title.v120" = "Asetukset";
 
@@ -201,6 +216,9 @@
 
 /* Label of the button from settings card displayed in the shopping review quality bottom sheet. */
 "Shopping.SettingsCard.TurnOffButton.Title.v120" = "Poista arvostelujen tarkistus käytöstä";
+
+/* Accessibility label for close button that dismisses the Shopping Experience (Fakespot) sheet. */
+"Shopping.Sheet.Close.AccessibilityLabel.v121" = "Sulje arvostelujen tarkistus";
 
 /* Label for the header of the Shopping Experience (Fakespot) sheet */
 "Shopping.Sheet.Title.v120" = "Arvostelun tarkistus";

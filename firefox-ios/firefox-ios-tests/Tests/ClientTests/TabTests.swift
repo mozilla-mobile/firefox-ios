@@ -34,14 +34,14 @@ class TabTests: XCTestCase {
 
     func testDisplayTitle_ForHomepageURL() {
         let url = URL(string: "internal://local/about/home")!
-        let tab = Tab(profile: MockProfile(), configuration: WKWebViewConfiguration(), windowUUID: windowUUID)
+        let tab = Tab(profile: MockProfile(), windowUUID: windowUUID)
         tab.url = url
-        let expectedDisplayTitle = String.AppMenu.AppMenuOpenHomePageTitleString
+        let expectedDisplayTitle = String.LegacyAppMenu.AppMenuOpenHomePageTitleString
         XCTAssertEqual(tab.displayTitle, expectedDisplayTitle)
     }
 
     func testTabDoesntLeak() {
-        let tab = Tab(profile: MockProfile(), configuration: WKWebViewConfiguration(), windowUUID: windowUUID)
+        let tab = Tab(profile: MockProfile(), windowUUID: windowUUID)
         tab.tabDelegate = tabDelegate
         trackForMemoryLeaks(tab)
     }

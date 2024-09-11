@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
+final class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let radioButtonSize = CGSize(width: 24, height: 24)
         static let spacing: CGFloat = 12
@@ -46,6 +46,10 @@ class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
         label.isAccessibilityElement = false
     }
 
+    var title: String? {
+        optionLabel.text
+    }
+
     var checked = false {
         didSet {
             let checkedButton = UIImage(named: UX.Images.selected)
@@ -56,12 +60,16 @@ class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
     }
 
     var optionA11yValue: String {
-        let selectedLabel: String = .Microsurvey.Survey.SelectedRadioButtonAccessibilityLabel
         let unselectedLabel: String = .Microsurvey.Survey.UnselectedRadioButtonAccessibilityLabel
 
-        var a11yValue = checked ? selectedLabel : unselectedLabel
-        if let a11yOptionsOrderValue {
-            a11yValue.append(", \(a11yOptionsOrderValue)")
+        // This check is due to the selected option having a system trait to read out selected
+        // However, there is no system trait for unselected
+        let a11yValue: String
+        let order = a11yOptionsOrderValue ?? ""
+        if checked {
+            a11yValue = order
+        } else {
+            a11yValue = unselectedLabel + ", \(order)"
         }
         return a11yValue
     }

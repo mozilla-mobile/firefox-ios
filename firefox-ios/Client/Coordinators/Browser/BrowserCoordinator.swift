@@ -25,11 +25,13 @@ class BrowserCoordinator: BaseCoordinator,
                           TabManagerDelegate,
                           TabTrayCoordinatorDelegate,
                           PrivateHomepageDelegate,
-                          WindowEventCoordinator {
+                          WindowEventCoordinator,
+                          MainMenuCoordinatorDelegate {
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
     var privateViewController: PrivateHomepageViewController?
+    var errorViewController: NativeErrorPageViewController?
 
     private var profile: Profile
     private let tabManager: TabManager
@@ -40,6 +42,8 @@ class BrowserCoordinator: BaseCoordinator,
     private let applicationHelper: ApplicationHelper
     private var browserIsReady = false
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
+
+    override var isDismissable: Bool { false }
 
     init(router: Router,
          screenshotService: ScreenshotService,
@@ -437,6 +441,36 @@ class BrowserCoordinator: BaseCoordinator,
         handleSettings(with: settings)
     }
 
+    // MARK: - MainMenuCoordinatorDelegate
+    func showMainMenu() {
+        guard let coordinator = makeMenuCoordinator() else { return }
+        coordinator.startModal()
+    }
+
+    func openNewTab(inPrivateMode isPrivate: Bool) {
+        handle(homepanelSection: isPrivate ? .newPrivateTab : .newTab)
+    }
+
+    func showLibraryPanel(_ panel: Route.HomepanelSection) {
+        showLibrary(with: panel)
+    }
+
+    func showSettings(at destination: Route.SettingsSection) {
+        presentWithModalDismissIfNeeded {
+            self.handleSettings(with: destination, onDismiss: nil)
+        }
+    }
+
+    private func makeMenuCoordinator() -> MainMenuCoordinator? {
+        guard !childCoordinators.contains(where: { $0 is MainMenuCoordinator }) else { return nil }
+
+        let coordinator = MainMenuCoordinator(router: router, tabManager: tabManager)
+        coordinator.parentCoordinator = self
+        coordinator.navigationHandler = self
+        add(child: coordinator)
+        return coordinator
+    }
+
     // MARK: - BrowserNavigationHandler
 
     func show(settings: Route.SettingsSection, onDismiss: (() -> Void)? = nil) {
@@ -567,9 +601,9 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     @MainActor
-    func showSavedLoginAutofill(tabURL: URL, currentRequestId: String) {
+    func showSavedLoginAutofill(tabURL: URL, currentRequestId: String, field: FocusFieldType) {
         let bottomSheetCoordinator = makeCredentialAutofillCoordinator()
-        bottomSheetCoordinator.showSavedLoginAutofill(tabURL: tabURL, currentRequestId: currentRequestId)
+        bottomSheetCoordinator.showSavedLoginAutofill(tabURL: tabURL, currentRequestId: currentRequestId, field: field)
     }
 
     func showAddressAutofill(frame: WKFrameInfo?) {
@@ -683,6 +717,7 @@ class BrowserCoordinator: BaseCoordinator,
 
         let navigationController = DismissableNavigationViewController()
         navigationController.sheetPresentationController?.detents = [.medium(), .large()]
+        setiPadLayoutDetents(for: navigationController)
         navigationController.sheetPresentationController?.prefersGrabberVisible = true
         let coordinator = MicrosurveyCoordinator(
             model: model,
@@ -701,6 +736,24 @@ class BrowserCoordinator: BaseCoordinator,
         }
 
         present(navigationController)
+    }
+
+    func showNativeErrorPage(overlayManager: OverlayModeManager) {
+        // TODO: FXIOS-9641 #21239 Integration with Redux - presenting view
+        let errorPageModel = ErrorPageModel(errorTitle: "", errorDecription: "", errorCode: "")
+        let errorpageController = NativeErrorPageViewController(model: errorPageModel,
+                                                                windowUUID: windowUUID,
+                                                                overlayManager: overlayManager)
+        guard browserViewController.embedContent(errorpageController) else {
+            logger.log("Unable to embed private homepage", level: .debug, category: .coordinator)
+            return
+        }
+        self.errorViewController = errorpageController
+    }
+
+    private func setiPadLayoutDetents(for controller: UIViewController) {
+        guard controller.shouldUseiPadSetup() else { return }
+        controller.sheetPresentationController?.selectedDetentIdentifier = .large
     }
 
     private func present(_ viewController: UIViewController,

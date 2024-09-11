@@ -6,7 +6,7 @@ import Foundation
 import Common
 
 /// Used to describe an action that can be dispatched by the redux store
-open class Action {
+open class Action: CustomDebugStringConvertible {
     public var windowUUID: WindowUUID
     public var actionType: ActionType
 
@@ -18,6 +18,12 @@ open class Action {
     func displayString() -> String {
         let className = String(describing: Self.self)
         return "\(className) \(actionType)"
+    }
+
+    public var debugDescription: String {
+        let className = String(describing: type(of: self))
+        let memAddr = Unmanaged.passUnretained(self).toOpaque()
+        return "<\(className): \(memAddr)> Type: \(actionType) Window: \(windowUUID.uuidString.prefix(4))"
     }
 }
 

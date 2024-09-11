@@ -5,17 +5,17 @@
 import XCTest
 
 class DisplaySettingTests: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2337485
+    // https://mozilla.testrail.io/index.php?/cases/view/2337485
     func testCheckDisplaySettingsDefault() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(DisplaySettings)
         mozWaitForElementToExist(app.navigationBars["Theme"])
-        XCTAssertTrue(app.tables["DisplayTheme.Setting.Options"].exists)
+        mozWaitForElementToExist(app.tables["DisplayTheme.Setting.Options"])
         let switchValue = app.switches["SystemThemeSwitchValue"].value!
         XCTAssertEqual(switchValue as! String, "1")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2337487
+    // https://mozilla.testrail.io/index.php?/cases/view/2337487
     func testCheckSystemThemeChanges() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(DisplaySettings)
@@ -30,27 +30,26 @@ class DisplaySettingTests: BaseTestCase {
         mozWaitForElementToExist(app.switches["SystemThemeSwitchValue"])
         let switchValue = app.switches["SystemThemeSwitchValue"].value!
         XCTAssertEqual(switchValue as! String, "0")
-        XCTAssertTrue(app.cells.staticTexts["Light"].exists)
-        XCTAssertTrue(app.cells.staticTexts["Dark"].exists)
+        mozWaitForElementToExist(app.cells.staticTexts["Light"])
+        mozWaitForElementToExist(app.cells.staticTexts["Dark"])
 
         // Select the Automatic mode
         navigator.performAction(Action.SelectAutomatically)
-
-        XCTAssertTrue(app.tables.otherElements["THRESHOLD"].exists)
-        XCTAssertFalse(app.cells.staticTexts["Light"].exists)
-        XCTAssertFalse(app.cells.staticTexts["Dark"].exists)
+        mozWaitForElementToExist(app.tables.otherElements["THRESHOLD"])
+        mozWaitForElementToNotExist(app.cells.staticTexts["Light"])
+        mozWaitForElementToNotExist(app.cells.staticTexts["Dark"])
 
         // Now select the Manual mode
         navigator.performAction(Action.SelectManually)
-        XCTAssertFalse(app.tables.otherElements["THRESHOLD"].exists)
-        XCTAssertTrue(app.cells.staticTexts["Light"].exists)
-        XCTAssertTrue(app.cells.staticTexts["Dark"].exists)
+        mozWaitForElementToNotExist(app.tables.otherElements["THRESHOLD"])
+        mozWaitForElementToExist(app.cells.staticTexts["Light"])
+        mozWaitForElementToExist(app.cells.staticTexts["Dark"])
 
         // Enable back system theme
         navigator.performAction(Action.SystemThemeSwitch)
         let switchValueAfter = app.switches["SystemThemeSwitchValue"].value!
         XCTAssertEqual(switchValueAfter as! String, "1")
-        XCTAssertFalse(app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["SWITCH MODE"].exists)
-        XCTAssertFalse(app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["THEME PICKER"].exists)
+        mozWaitForElementToNotExist(app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["SWITCH MODE"])
+        mozWaitForElementToNotExist(app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["THEME PICKER"])
     }
 }

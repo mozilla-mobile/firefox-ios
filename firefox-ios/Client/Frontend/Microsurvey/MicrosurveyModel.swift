@@ -5,9 +5,11 @@
 import Foundation
 
 struct MicrosurveyModel: Equatable {
+    let id: String
     let promptTitle: String
     let promptButtonLabel: String
     let surveyQuestion: String
     let surveyOptions: [String]
     let icon: UIImage?
+    let utmContent: String?
 }

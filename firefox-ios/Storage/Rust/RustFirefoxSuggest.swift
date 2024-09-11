@@ -59,7 +59,7 @@ public class RustFirefoxSuggest: RustFirefoxSuggestProtocol {
         try await withCheckedThrowingContinuation { continuation in
             writerQueue.async(qos: .utility) {
                 do {
-                    try self.store.ingest(constraints: SuggestIngestionConstraints())
+                    _ = try self.store.ingest(constraints: SuggestIngestionConstraints())
                     continuation.resume()
                 } catch {
                     continuation.resume(throwing: error)

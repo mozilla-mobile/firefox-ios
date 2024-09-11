@@ -4,6 +4,7 @@
 
 import UIKit
 import AuthenticationServices
+import Common
 
 protocol CredentialListViewProtocol: AnyObject {
     var credentialExtensionContext: ASCredentialProviderExtensionContext? { get }
@@ -109,8 +110,11 @@ class CredentialListViewController: UIViewController, CredentialListViewProtocol
         self.navigationItem.hidesSearchBarWhenScrolling = false
         self.definesPresentationContext = true
 
-        let searchIcon = UIImage(named: "searchLarge")?.withRenderingMode(.alwaysTemplate).tinted(UIColor.systemBlue)
-        let clearIcon = UIImage(named: "crossCircleFillLarge")?.withRenderingMode(.alwaysTemplate)
+        let searchIcon = UIImage(named: StandardImageIdentifiers.Large.search)?
+            .withRenderingMode(.alwaysTemplate)
+            .tinted(UIColor.systemBlue)
+        let clearIcon = UIImage(named: StandardImageIdentifiers.Large.crossCircleFill)?
+            .withRenderingMode(.alwaysTemplate)
             .tinted(UIColor.systemBlue)
         searchController.searchBar.setImage(searchIcon, for: UISearchBar.Icon.search, state: .normal)
         searchController.searchBar.setImage(clearIcon, for: UISearchBar.Icon.clear, state: .normal)

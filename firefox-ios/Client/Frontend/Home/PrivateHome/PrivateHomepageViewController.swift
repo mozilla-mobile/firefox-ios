@@ -84,14 +84,14 @@ final class PrivateHomepageViewController:
             body: String(format: .FirefoxHomepage.FeltPrivacyUI.Body, AppName.shortName.rawValue),
             link: .FirefoxHomepage.FeltPrivacyUI.Link
         )
-        messageCard.configure(with: messageCardModel, and: themeManager.currentTheme(for: windowUUID))
+        messageCard.configure(with: messageCardModel, and: themeManager.getCurrentTheme(for: windowUUID))
         messageCard.privateBrowsingLinkTapped = learnMore
         return messageCard
     }()
 
     private lazy var homepageHeaderCell: HomepageHeaderCell = {
         let header = HomepageHeaderCell()
-        header.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        header.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         header.configure(with: headerViewModel)
         return header
     }()
@@ -199,7 +199,7 @@ final class PrivateHomepageViewController:
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         gradient.colors = theme.colors.layerHomepage.cgColors
         homepageHeaderCell.applyTheme(theme: theme)
         privateMessageCardCell.applyTheme(theme: theme)

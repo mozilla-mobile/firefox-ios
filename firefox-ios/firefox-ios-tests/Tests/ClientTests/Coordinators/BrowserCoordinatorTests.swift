@@ -10,7 +10,7 @@ import XCTest
 
 @testable import Client
 
-final class BrowserCoordinatorTests: XCTestCase {
+final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     private var mockRouter: MockRouter!
     private var profile: MockProfile!
     private var overlayModeManager: MockOverlayModeManager!
@@ -200,7 +200,12 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertNotNil(subject.childCoordinators[0] as? EnhancedTrackingProtectionCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
-        XCTAssertTrue(mockRouter.presentedViewController is EnhancedTrackingProtectionMenuVC)
+
+        if featureFlags.isFeatureEnabled(.trackingProtectionRefactor, checking: .buildOnly) {
+            XCTAssertTrue(mockRouter.presentedViewController is TrackingProtectionViewController)
+        } else {
+            XCTAssertTrue(mockRouter.presentedViewController is EnhancedTrackingProtectionMenuVC)
+        }
     }
 
     func testShowShareExtension_addsShareExtensionCoordinator() {
@@ -242,7 +247,8 @@ final class BrowserCoordinatorTests: XCTestCase {
         let subject = createSubject()
         let testURL = URL(string: "https://example.com")!
         let currentRequestId = "testRequestID"
-        subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId)
+        let field = FocusFieldType.password
+        subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId, field: field)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is CredentialAutofillCoordinator)
@@ -280,9 +286,9 @@ final class BrowserCoordinatorTests: XCTestCase {
     }
 
     func testShowBackForwardList_presentsBackForwardListViewController() {
-        let mockTab = Tab(profile: profile, configuration: .init(), windowUUID: windowUUID)
+        let mockTab = Tab(profile: profile, windowUUID: windowUUID)
         mockTab.url = URL(string: "https://www.google.com")
-        mockTab.createWebview()
+        mockTab.createWebview(configuration: .init())
         tabManager.selectedTab = mockTab
 
         let subject = createSubject()
@@ -988,6 +994,31 @@ final class BrowserCoordinatorTests: XCTestCase {
         XCTAssertTrue(mockRouter.presentedViewController is BottomSheetViewController)
     }
 
+    // MARK: - Menu
+    func testShowMainMenu_addsMainMenuCoordinator() {
+        let subject = createSubject()
+
+        subject.showMainMenu()
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is MainMenuCoordinator)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is MainMenuViewController)
+    }
+
+    func testMainMenuCoordinatorDelegate_didDidDismiss_removesChild() {
+        let subject = createSubject()
+        subject.browserHasLoaded()
+
+        subject.showMainMenu()
+        let menuCoordinator = subject.childCoordinators[0] as! MainMenuCoordinator
+        menuCoordinator.dismissModal(animated: false)
+
+        XCTAssertEqual(mockRouter.dismissCalled, 1)
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
+    }
+
+    // MARK: - Microsurvey
     func testShowMicrosurvey_addsMicrosurveyCoordinator() {
         let subject = createSubject()
 

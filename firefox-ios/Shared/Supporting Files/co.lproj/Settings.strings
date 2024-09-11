@@ -1,5 +1,17 @@
+/* This label is used for a button in the address list screen allowing users to manage their saved addresses. It's meant to direct users to where they can add, remove, or edit their saved addresses. */
+"Addresses.ManageAddressesButton.v130" = "Urganizà l’indirizzi";
+
+/* Accessibility label for an address list item in autofill settings screen. The %@ parameter is the address of the user that will read the name, street, city, state, postal code if available. */
+"Addresses.Settings.ListItemA11y.v130" = "Indirizzu per %@";
+
 /* On the autofill settings screen, a label for the section that displays the list of saved addresses. This label adds additional context for users regarding the toggle switch that allows saving and autofilling of addresses for webpages. */
 "Addresses.Settings.SavedAddressesSectionTitle.v124" = "INDIRIZZI ARREGISTRATI";
+
+/* Title text for the content unavailable view informing users they can create or add new addresses. %@ is the name of the app. */
+"Addresses.Settings.SaveToFirefox.Title.v130" = "Arregistrà l’indirizzi in %@";
+
+/* Description text for the content unavailable view informing users they can create or add new addresses. */
+"Addresses.Settings.SecureSaveInfo.Description.v130" = "Arregistrate e vostre infurmazioni in tutta sicurità per accedeci prestu prestu un’altra volta.";
 
 /* On the autofill settings screen, a label under the title label to add additional context for user in regards to what the toggle switch that allow saving and autofilling of addresses for webpages does, letting users know that this action includes phone numbers and email addresses. */
 "Addresses.Settings.Switch.Description.v124" = "Include i numeri di telefonu è l’indirizzi elettronichi";
@@ -68,7 +80,7 @@
 "Settings.Notifications.SyncNotificationsTitle.v112" = "Sincrunizazione";
 
 /* This is the footer title informing the user needs to turn on notifications in iOS Settings. Both placeholders will be replaced with the app name. */
-"Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "Avete disattivatu tutte e nutificazioni di %1$@. Attivatele via Preferenze > Nutificazioni > %2$@";
+"Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "Avete disattivatu tutte e nutificazioni di %1$@. Attivatele via Parametri > Nutificazioni > %2$@";
 
 /* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. The placeholder will be replaced with the app name. */
 "Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "Sapene di più nant’à funzioni ghjuvevule è cumu ottene u più bonu di %@.";
@@ -80,7 +92,7 @@
 "Settings.Notifications.Title.v112" = "Nutificazioni";
 
 /* This is the title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name. */
-"Settings.Notifications.TurnOnNotificationsMessage.v112" = "Andate in e preferenze di u vostru apparechju per attivà e nutificazioni in %@";
+"Settings.Notifications.TurnOnNotificationsMessage.v112" = "Andate in i parametri di u vostru apparechju per attivà e nutificazioni in %@";
 
 /* This is the title informing the user needs to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "Attivate e nutificazioni";

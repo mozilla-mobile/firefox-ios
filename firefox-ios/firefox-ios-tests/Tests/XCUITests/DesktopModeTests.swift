@@ -8,7 +8,7 @@ import XCTest
 // swiftlint:disable empty_count
 // Tests for both platforms
 class DesktopModeTestsIpad: IpadOnlyTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306852
+    // https://mozilla.testrail.io/index.php?/cases/view/2306852
     // smoketest
     func testLongPressReload() {
         if skipPlatform { return }
@@ -26,27 +26,24 @@ class DesktopModeTestsIpad: IpadOnlyTestCase {
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
-        // Workaround: Open a new tab before closing all tabs.
-        // https://github.com/mozilla-mobile/firefox-ios/issues/16810
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
 
-        // Disabling next steps due to https://github.com/mozilla-mobile/firefox-ios/issues/16810 crash
-//        navigator.performAction(Action.AcceptRemovingAllTabs)
-//        waitUntilPageLoad()
-//
-//        // Covering scenario that when closing a tab and re-opening should preserve Mobile mode
-//        navigator.nowAt(NewTabScreen)
-//        navigator.createNewTab()
-//        navigator.openURL(path(forTestPage: "test-user-agent.html"))
-//        waitUntilPageLoad()
-//        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        navigator.performAction(Action.AcceptRemovingAllTabs)
+        waitUntilPageLoad()
+
+        // Covering scenario that when closing a tab and re-opening should preserve Mobile mode
+        navigator.nowAt(NewTabScreen)
+        navigator.createNewTab()
+        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        waitUntilPageLoad()
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
 }
 
 class DesktopModeTestsIphone: IphoneOnlyTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306853
+    // https://mozilla.testrail.io/index.php?/cases/view/2306853
     func testClearPrivateData() {
         if skipPlatform { return }
 
@@ -71,7 +68,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306855
+    // https://mozilla.testrail.io/index.php?/cases/view/2306855
     func testSameHostInMultipleTabs() {
         if skipPlatform { return }
 
@@ -102,7 +99,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306854
+    // https://mozilla.testrail.io/index.php?/cases/view/2306854
     // Smoketest
     func testChangeModeInSameTab() {
         if skipPlatform { return }
@@ -126,7 +123,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306856
+    // https://mozilla.testrail.io/index.php?/cases/view/2306856
     func testPrivateModeOffAlsoRemovesFromNormalMode() {
         if skipPlatform { return }
 
@@ -145,12 +142,12 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         // Workaround to be sure the snackbar disappears
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton], timeout: 5)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton])
         app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].tap()
         navigator.goto(BrowserTabMenu)
-        navigator.goto(RequestMobileSite) // toggle off
+        navigator.goto(RequestDesktopSite) // toggle off
         waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
         // is now off in private, mode, confirm it is off in normal mode
 
@@ -158,10 +155,10 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306857
+    // https://mozilla.testrail.io/index.php?/cases/view/2306857
     func testPrivateModeOnHasNoAffectOnNormalMode() {
         if skipPlatform { return }
 
@@ -188,13 +185,13 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306852
+    // https://mozilla.testrail.io/index.php?/cases/view/2306852
     // smoketest
     func testLongPressReload() {
         if skipPlatform { return }
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.webViews.staticTexts.firstMatch, timeout: 5)
+        mozWaitForElementToExist(app.webViews.staticTexts.firstMatch)
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
         navigator.nowAt(BrowserTab)
@@ -213,21 +210,18 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
-        // Workaround: Open a new tab before closing all tabs.
-        // https://github.com/mozilla-mobile/firefox-ios/issues/16810
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
 
-        // Disabling next steps due to https://github.com/mozilla-mobile/firefox-ios/issues/16810 crash
-//        navigator.performAction(Action.AcceptRemovingAllTabs)
-//        waitUntilPageLoad()
-//        navigator.nowAt(NewTabScreen)
-//        // Covering scenario that when closing a tab and re-opening should preserve Desktop mode
-//        navigator.createNewTab()
-//        navigator.openURL(path(forTestPage: "test-user-agent.html"))
-//        waitUntilPageLoad()
-//        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+        navigator.performAction(Action.AcceptRemovingAllTabs)
+        waitUntilPageLoad()
+        navigator.nowAt(NewTabScreen)
+        // Covering scenario that when closing a tab and re-opening should preserve Desktop mode
+        navigator.createNewTab()
+        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        waitUntilPageLoad()
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
     }
 }
 // swiftlint:enable empty_count

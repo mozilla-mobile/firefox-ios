@@ -11,7 +11,7 @@ class ToolbarMenuTests: BaseTestCase {
         super.tearDown()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306840
+    // https://mozilla.testrail.io/index.php?/cases/view/2306840
     func testToolbarMenu() {
         navigator.nowAt(NewTabScreen)
         let hamburgerMenu = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
@@ -45,7 +45,7 @@ class ToolbarMenuTests: BaseTestCase {
         mozWaitForElementToExist(app.tables["Context Menu"])
         validateMenuOptions()
         XCUIDevice.shared.orientation = .landscapeLeft
-        mozWaitForElementToExist(hamburgerMenu, timeout: 15)
+        mozWaitForElementToExist(hamburgerMenu)
         mozWaitForElementToNotExist(app.tables["Context Menu"])
         mozWaitForElementToExist(app.textFields["url"])
         mozWaitForElementToExist(app.webViews["contentView"])
@@ -62,7 +62,6 @@ class ToolbarMenuTests: BaseTestCase {
                 "Menu button is not on the right side of tabs button"
             )
         }
-        dismissSurveyPrompt()
         mozWaitForElementToExist(firstPocketCell)
         XCTAssertTrue(
             hamburgerMenu.isAbove(element: firstPocketCell),
@@ -76,16 +75,15 @@ class ToolbarMenuTests: BaseTestCase {
     }
 
     private func validateMenuOptions() {
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkTrayFill].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.history].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.download].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.readingList].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.login].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.sync].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.nightMode].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.whatsNew].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.helpCircle].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.edit].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.settings].exists)
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkTrayFill])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.download])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.readingList])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.login])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.sync])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.nightMode])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.whatsNew])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.helpCircle])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.edit])
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.settings])
     }
 }

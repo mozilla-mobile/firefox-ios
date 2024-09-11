@@ -150,7 +150,7 @@ class CreditCardBottomSheetViewController: UIViewController,
                 a11yIdentifier: AccessibilityIdentifiers.RememberCreditCard.yesButton
             )
             yesButton.configure(viewModel: buttonViewModel)
-            yesButton.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            yesButton.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
 
         contentView.addSubviews(cardTableView, buttonsContainerStackView)
@@ -301,6 +301,7 @@ class CreditCardBottomSheetViewController: UIViewController,
         hostingCell.selectionStyle = .none
         hostingCell.isAccessibilityElement = true
         hostingCell.accessibilityAttributedLabel = viewModel.a11yLabel(for: creditCard)
+        hostingCell.accessibilityIdentifier = "creditCardCell_\(indexPath.row)"
 
         return hostingCell
     }
@@ -311,7 +312,7 @@ class CreditCardBottomSheetViewController: UIViewController,
         ) as? CreditCardBottomSheetHeaderView else {
             return nil
         }
-        headerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        headerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         headerView.viewModel = viewModel
         return headerView
     }
@@ -327,7 +328,7 @@ class CreditCardBottomSheetViewController: UIViewController,
             ) as? CreditCardBottomSheetFooterView else {
                 return nil
             }
-            footerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            footerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             if !footerView.manageCardsButton.responds(
                 to: #selector(CreditCardBottomSheetViewController.didTapManageCards)
             ) {
@@ -363,7 +364,7 @@ class CreditCardBottomSheetViewController: UIViewController,
 
     // MARK: Themable
     func applyTheme() {
-        let currentTheme = themeManager.currentTheme(for: windowUUID).colors
+        let currentTheme = themeManager.getCurrentTheme(for: windowUUID).colors
         view.backgroundColor = currentTheme.layer1
         cardTableView.reloadData()
     }

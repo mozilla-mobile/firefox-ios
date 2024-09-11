@@ -8,6 +8,7 @@ import Storage
 import Common
 
 import struct MozillaAppServices.LoginEntry
+import struct MozillaAppServices.EncryptedLogin
 
 class Authenticator {
     fileprivate static let MaxAuthenticationAttempts = 3
@@ -103,44 +104,25 @@ class Authenticator {
                     return
                 }
 
-                let logins = logins.compactMap {
-                    // HTTP Auth must have nil formSubmitUrl and a non-nil httpRealm.
-                    return $0.formSubmitUrl == nil && $0.httpRealm != nil ? $0 : nil
-                }
+                let logins = filterHttpAuthLogins(logins: logins)
                 var credentials: URLCredential?
 
                 // It is possible that we might have duplicate entries since we match against host and scheme://host.
                 // This is a side effect of https://bugzilla.mozilla.org/show_bug.cgi?id=1238103.
                 if logins.count > 1 {
-                    credentials = (logins.first(where: { login in
-                        (login.protectionSpace.`protocol` == challenge.protectionSpace.`protocol`)
-                        && !login.hasMalformedHostname
-                    }))?.credentials
-
-                    let malformedGUIDs: [GUID] = logins.compactMap { login in
-                        if login.hasMalformedHostname {
-                            return login.id
-                        }
-                        return nil
-                    }
-                    loginsProvider.deleteLogins(ids: malformedGUIDs) { _ in }
+                    credentials = handleDuplicatedEntries(logins: logins,
+                                                          challenge: challenge,
+                                                          loginsProvider: loginsProvider)
                 }
 
                 // Found a single entry but the schemes don't match. This is a result of a schemeless entry that we
                 // saved in a previous iteration of the app so we need to migrate it. We only care about the
                 // the username/password so we can rewrite the scheme to be correct.
                 else if logins.count == 1 && logins[0].protectionSpace.`protocol` != challenge.protectionSpace.`protocol` {
-                    let login = logins[0]
-                    credentials = login.credentials
-                    let new = LoginEntry(credentials: login.credentials, protectionSpace: challenge.protectionSpace)
-                    loginsProvider.updateLogin(id: login.id, login: new) { result in
-                        switch result {
-                        case .success:
-                            completionHandler(.success(credentials))
-                        case .failure(let error):
-                            completionHandler(.failure(error))
-                        }
-                    }
+                    handleUnmatchedSchemes(logins: logins,
+                                           challenge: challenge,
+                                           loginsProvider: loginsProvider,
+                                           completionHandler: completionHandler)
                     return
                 }
 
@@ -148,13 +130,54 @@ class Authenticator {
                 else if logins.count == 1 {
                     credentials = logins[0].credentials
                 } else {
-                    logger.log("No logins found for Authenticator",
-                               level: .info,
-                               category: .webview)
+                    logger.log("No logins found for Authenticator", level: .info, category: .webview)
                 }
 
                 completionHandler(.success(credentials))
 
+            case .failure(let error):
+                completionHandler(.failure(error))
+            }
+        }
+    }
+
+    private static func filterHttpAuthLogins(logins: [EncryptedLogin]) -> [EncryptedLogin] {
+        return logins.compactMap {
+            // HTTP Auth must have nil formSubmitUrl and a non-nil httpRealm.
+            return $0.formSubmitUrl == nil && $0.httpRealm != nil ? $0 : nil
+        }
+    }
+
+    private static func handleDuplicatedEntries(logins: [EncryptedLogin],
+                                                challenge: URLAuthenticationChallenge,
+                                                loginsProvider: RustLogins) -> URLCredential? {
+        let credentials = (logins.first(where: { login in
+            (login.protectionSpace.`protocol` == challenge.protectionSpace.`protocol`)
+            && !login.hasMalformedHostname
+        }))?.credentials
+
+        let malformedGUIDs: [GUID] = logins.compactMap { login in
+            if login.hasMalformedHostname {
+                return login.id
+            }
+            return nil
+        }
+        loginsProvider.deleteLogins(ids: malformedGUIDs) { _ in }
+
+        return credentials
+    }
+
+    private static func handleUnmatchedSchemes(logins: [EncryptedLogin],
+                                               challenge: URLAuthenticationChallenge,
+                                               loginsProvider: RustLogins,
+                                               completionHandler: @escaping (Result<URLCredential?, Error>) -> Void) {
+        let login = logins[0]
+        let credentials = login.credentials
+        let new = LoginEntry(credentials: login.credentials, protectionSpace: challenge.protectionSpace)
+        loginsProvider.updateLogin(id: login.id, login: new) { result in
+            switch result {
+            case .success:
+                completionHandler(.success(credentials))
             case .failure(let error):
                 completionHandler(.failure(error))
             }

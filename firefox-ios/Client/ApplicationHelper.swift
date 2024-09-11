@@ -9,6 +9,7 @@ protocol ApplicationHelper {
     func openSettings()
     func open(_ url: URL)
     func open(_ url: URL, inWindow: WindowUUID)
+    func closeTabs(_ urls: [URL]) async
 }
 
 /// UIApplication.shared wrapper
@@ -44,6 +45,19 @@ struct DefaultApplicationHelper: ApplicationHelper {
         })
         if !foundTargetScene {
             open(url)
+        }
+    }
+
+    /// Closes all tabs that match the url passed in
+    /// This is most likely from other clients connected to the same
+    /// account requesting to close the tab on this device
+    ///
+    /// - Parameters:
+    ///   - urls: an array of URLs requested to be closed
+    func closeTabs(_ urls: [URL]) async {
+        let windowManager = AppContainer.shared.resolve() as WindowManager
+        for tabManager in windowManager.allWindowTabManagers() {
+            await tabManager.removeTabs(by: urls)
         }
     }
 }

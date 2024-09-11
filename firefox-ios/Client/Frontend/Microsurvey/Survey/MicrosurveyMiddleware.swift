@@ -7,41 +7,41 @@ import Redux
 import Shared
 import Common
 
-class MicrosurveyMiddleware {
+final class MicrosurveyMiddleware {
+    private let microsurveyTelemetry = MicrosurveyTelemetry()
+
     lazy var microsurveyProvider: Middleware<AppState> = { state, action in
         let windowUUID = action.windowUUID
+        guard let surveyId = (action as? MicrosurveyAction)?.surveyId else { return }
         switch action.actionType {
         case MicrosurveyActionType.closeSurvey:
-            self.dismissSurvey(windowUUID: windowUUID)
+            self.dismissSurvey(windowUUID: windowUUID, surveyId: surveyId)
         case MicrosurveyActionType.tapPrivacyNotice:
-            self.navigateToPrivacyNotice(windowUUID: windowUUID)
+            self.sendTelemtryForNavigatingToPrivacyNotice(surveyId: surveyId)
         case MicrosurveyActionType.submitSurvey:
-            self.sendTelemetryAndClosePrompt(windowUUID: windowUUID)
+            self.sendTelemetryAndClosePrompt(windowUUID: windowUUID, action: action, surveyId: surveyId)
+        case MicrosurveyActionType.surveyDidAppear:
+            self.microsurveyTelemetry.surveyViewed(surveyId: surveyId)
+        case MicrosurveyActionType.confirmationViewed:
+            self.microsurveyTelemetry.confirmationShown(surveyId: surveyId)
         default:
            break
         }
     }
 
-    private func dismissSurvey(windowUUID: WindowUUID) {
-        let newAction = MicrosurveyMiddlewareAction(
-            windowUUID: windowUUID,
-            actionType: MicrosurveyMiddlewareActionType.dismissSurvey
-        )
-        store.dispatch(newAction)
+    private func dismissSurvey(windowUUID: WindowUUID, surveyId: String) {
+        microsurveyTelemetry.dismissButtonTapped(surveyId: surveyId)
         closeMicrosurveyPrompt(windowUUID: windowUUID)
     }
 
-    private func navigateToPrivacyNotice(windowUUID: WindowUUID) {
-        let newAction = MicrosurveyMiddlewareAction(
-            windowUUID: windowUUID,
-            actionType: MicrosurveyMiddlewareActionType.navigateToPrivacyNotice
-        )
-        store.dispatch(newAction)
+    private func sendTelemtryForNavigatingToPrivacyNotice(surveyId: String) {
+        microsurveyTelemetry.privacyNoticeTapped(surveyId: surveyId)
     }
 
-    private func sendTelemetryAndClosePrompt(windowUUID: WindowUUID) {
-        // TODO: FXIOS-8990 - Send telemetry via Mobile messaging infrastructure
+    private func sendTelemetryAndClosePrompt(windowUUID: WindowUUID, action: Action, surveyId: String) {
         closeMicrosurveyPrompt(windowUUID: windowUUID)
+        guard let userSelection = (action as? MicrosurveyAction)?.userSelection else { return }
+        microsurveyTelemetry.userResponseSubmitted(surveyId: surveyId, userSelection: userSelection)
     }
 
     private func closeMicrosurveyPrompt(windowUUID: WindowUUID) {

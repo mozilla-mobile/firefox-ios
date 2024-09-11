@@ -8,6 +8,7 @@ enum ContentType {
     case webview
     case homepage
     case privateHomepage
+    case nativeErrorPage
 }
 
 protocol ContentContainable: UIViewController {
@@ -43,6 +44,8 @@ class ContentContainer: UIView {
         switch type {
         case .homepage:
             return !(content is HomepageViewController)
+        case .nativeErrorPage:
+            return !(content is NativeErrorPageViewController)
         case .privateHomepage:
             return !(content is PrivateHomepageViewController)
         case .webview:

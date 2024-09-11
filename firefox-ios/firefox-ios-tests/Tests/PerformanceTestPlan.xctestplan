@@ -48,6 +48,8 @@
         "JumpBackInTests",
         "LibraryTestsIpad",
         "LoginTest",
+        "MicrosurveyTests",
+        "MultiWindowTests",
         "NavigationTest",
         "NewTabSettingsTest",
         "NightModeTests",

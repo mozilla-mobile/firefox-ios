@@ -189,7 +189,7 @@ class ContextualHintViewController: UIViewController,
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         hintView.applyTheme(theme: theme)
     }
 

@@ -53,7 +53,7 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
         return createButtonItem(imageName: StandardImageIdentifiers.Large.delete,
                                 action: #selector(didTapDeleteTabs(_:)),
                                 a11yId: AccessibilityIdentifiers.TabTray.closeAllTabsButton,
-                                a11yLabel: .AppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel)
+                                a11yLabel: .LegacyAppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel)
     }()
 
     private lazy var newTabButtonIpad: UIBarButtonItem = {
@@ -67,7 +67,7 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
         return createButtonItem(imageName: StandardImageIdentifiers.Large.delete,
                                 action: #selector(didTapDeleteTabs(_:)),
                                 a11yId: AccessibilityIdentifiers.TabTray.closeAllTabsButton,
-                                a11yLabel: .AppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel)
+                                a11yLabel: .LegacyAppMenu.Toolbar.TabTrayDeleteMenuButtonAccessibilityLabel)
     }()
 
     private lazy var newTabButtonIphone: UIBarButtonItem = {
@@ -106,7 +106,7 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
     private func syncLoadingView() -> UIStackView {
         let syncingLabel = UILabel()
         syncingLabel.text = .SyncingMessageWithEllipsis
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
         syncingLabel.textColor = theme.colors.textPrimary
 
         let activityIndicator = UIActivityIndicatorView(style: .medium)
@@ -223,6 +223,7 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
 
         viewSetup()
         listenForThemeChange(view)
+        updatePrivateUIState()
         applyTheme()
         changePanel()
     }
@@ -270,6 +271,13 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
         ])
 
         showPanel(viewModel.tabTrayView)
+    }
+
+    func updatePrivateUIState() {
+        UserDefaults.standard.set(
+            viewModel.tabManager.selectedTab?.isPrivate ?? false,
+            forKey: PrefsKeys.LastSessionWasPrivate
+        )
     }
 
     private func updateTitle() {
@@ -334,6 +342,7 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
         }
         updateToolbarItems(forSyncTabs: viewModel.profile.hasSyncableAccount())
         viewModel.tabTrayView.didTogglePrivateMode(privateMode)
+        updatePrivateUIState()
         updateTitle()
     }
 
@@ -505,8 +514,8 @@ class LegacyTabTrayViewController: UIViewController, Themeable, TabTrayControlle
     // MARK: - Themable
 
     func applyTheme() {
-        view.backgroundColor = themeManager.currentTheme(for: windowUUID).colors.layer4
-        navigationToolbar.barTintColor = themeManager.currentTheme(for: windowUUID).colors.layer1
+        view.backgroundColor = themeManager.getCurrentTheme(for: windowUUID).colors.layer4
+        navigationToolbar.barTintColor = themeManager.getCurrentTheme(for: windowUUID).colors.layer1
     }
 }
 
@@ -583,6 +592,7 @@ extension LegacyTabTrayViewController {
         notificationCenter.post(name: .TabsTrayDidClose, withUserInfo: windowUUID.userInfo)
         // Update Private mode when closing TabTray, if the mode toggle but
         // no tab is pressed with return to previous state
+        updatePrivateUIState()
         viewModel.tabTrayView.didTogglePrivateMode(viewModel.tabManager.selectedTab?.isPrivate ?? false)
         if viewModel.segmentToFocus == .privateTabs {
             TelemetryWrapper.recordEvent(category: .action,

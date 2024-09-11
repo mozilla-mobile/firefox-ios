@@ -39,7 +39,7 @@ class SiriOpenURLSetting: Setting {
     override var accessibilityIdentifier: String? { return "SiriSettings" }
 
     init(settings: SettingsTableViewController) {
-        let theme = settings.themeManager.currentTheme(for: settings.windowUUID)
+        let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
         super.init(
             title: NSAttributedString(
                 string: .SettingsSiriOpenURL,

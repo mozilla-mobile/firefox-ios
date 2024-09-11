@@ -67,32 +67,16 @@ struct FakespotState: ScreenState, Equatable {
 
         switch action.actionType {
         case FakespotActionType.settingsStateDidChange:
-            let isExpanded = action.isExpanded ?? state.isSettingsExpanded
-            var state = state
-            state.expandState[state.currentTabUUID, default: ExpandState()].isSettingsExpanded = isExpanded
-            return state
+            return handleSettings(action: action, state: state)
 
         case FakespotActionType.reviewQualityDidChange:
-            let isExpanded = action.isExpanded ?? state.isReviewQualityExpanded
-            var state = state
-            state.expandState[state.currentTabUUID, default: ExpandState()].isReviewQualityExpanded = isExpanded
-            return state
+            return handleReviewQuality(action: action, state: state)
 
         case FakespotActionType.highlightsDidChange:
-            let isExpanded = action.isExpanded ?? state.isHighlightsSectionExpanded
-            var state = state
-            state.expandState[state.currentTabUUID, default: ExpandState()].isHighlightsSectionExpanded = isExpanded
-            return state
+            return handleHighlights(action: action, state: state)
 
         case FakespotActionType.tabDidChange:
-            guard let tabUUID = action.tabUUID else { return state }
-            var state = state
-            if state.telemetryState[tabUUID] == nil {
-                state.telemetryState[tabUUID] = TelemetryState()
-            }
-            state.currentTabUUID = tabUUID
-
-            return state
+            return handleTabDidChange(action: action, state: state)
 
         case FakespotActionType.tabDidReload:
             guard let tabUUID = action.tabUUID,
@@ -159,5 +143,37 @@ struct FakespotState: ScreenState, Equatable {
         default:
             return state
         }
+    }
+
+    private static func handleSettings(action: FakespotAction, state: FakespotState) -> FakespotState {
+        let isExpanded = action.isExpanded ?? state.isSettingsExpanded
+        var state = state
+        state.expandState[state.currentTabUUID, default: ExpandState()].isSettingsExpanded = isExpanded
+        return state
+    }
+
+    private static func handleReviewQuality(action: FakespotAction, state: FakespotState) -> FakespotState {
+        let isExpanded = action.isExpanded ?? state.isReviewQualityExpanded
+        var state = state
+        state.expandState[state.currentTabUUID, default: ExpandState()].isReviewQualityExpanded = isExpanded
+        return state
+    }
+
+    private static func handleHighlights(action: FakespotAction, state: FakespotState) -> FakespotState {
+        let isExpanded = action.isExpanded ?? state.isHighlightsSectionExpanded
+        var state = state
+        state.expandState[state.currentTabUUID, default: ExpandState()].isHighlightsSectionExpanded = isExpanded
+        return state
+    }
+
+    private static func handleTabDidChange(action: FakespotAction, state: FakespotState) -> FakespotState {
+        guard let tabUUID = action.tabUUID else { return state }
+        var state = state
+        if state.telemetryState[tabUUID] == nil {
+            state.telemetryState[tabUUID] = TelemetryState()
+        }
+        state.currentTabUUID = tabUUID
+
+        return state
     }
 }

@@ -4,13 +4,14 @@
 
 import Foundation
 import UIKit
+import Common
 
 /// The view model used to configure a `BottomSheetViewController`
 public struct BottomSheetViewModel {
-    private struct UX {
-        static let cornerRadius: CGFloat = 8
-        static let animationTransitionDuration: CGFloat = 0.3
-        static let shadowOpacity: Float = 0.3
+    public struct UX {
+        public static let cornerRadius: CGFloat = 8
+        public static let animationTransitionDuration: CGFloat = 0.3
+        public static let shadowOpacity: Float = 0.3
     }
 
     public var cornerRadius: CGFloat
@@ -21,23 +22,15 @@ public struct BottomSheetViewModel {
     public var closeButtonA11yLabel: String
     public var closeButtonA11yIdentifier: String
 
-    public init(closeButtonA11yLabel: String, closeButtonA11yIdentifier: String) {
-        cornerRadius = BottomSheetViewModel.UX.cornerRadius
-        animationTransitionDuration = BottomSheetViewModel.UX.animationTransitionDuration
-        backgroundColor = .clear
-        shouldDismissForTapOutside = true
-        shadowOpacity = BottomSheetViewModel.UX.shadowOpacity
-        self.closeButtonA11yLabel = closeButtonA11yLabel
-        self.closeButtonA11yIdentifier = closeButtonA11yIdentifier
-    }
-
-    public init(cornerRadius: CGFloat,
-                animationTransitionDuration: TimeInterval,
-                backgroundColor: UIColor,
-                shouldDismissForTapOutside: Bool,
-                shadowOpacity: Float,
-                closeButtonA11yLabel: String,
-                closeButtonA11yIdentifier: String) {
+    public init(
+        cornerRadius: CGFloat = BottomSheetViewModel.UX.cornerRadius,
+        animationTransitionDuration: TimeInterval = BottomSheetViewModel.UX.animationTransitionDuration,
+        backgroundColor: UIColor = .clear,
+        shouldDismissForTapOutside: Bool = true,
+        shadowOpacity: Float = BottomSheetViewModel.UX.shadowOpacity,
+        closeButtonA11yLabel: String,
+        closeButtonA11yIdentifier: String
+    ) {
         self.cornerRadius = cornerRadius
         self.animationTransitionDuration = animationTransitionDuration
         self.backgroundColor = backgroundColor

@@ -27,6 +27,7 @@ final class MicrosurveyViewController: UIViewController,
     private let windowUUID: WindowUUID
     private let model: MicrosurveyModel
     private var microsurveyState: MicrosurveyState
+    private var selectedOption: String?
 
     // MARK: UI Elements
     private struct UX {
@@ -147,7 +148,7 @@ final class MicrosurveyViewController: UIViewController,
         if microsurveyState.shouldDismiss {
             coordinator?.dismissFlow()
         } else if microsurveyState.showPrivacy {
-            coordinator?.showPrivacy()
+            coordinator?.showPrivacy(with: model.utmContent)
         }
     }
 
@@ -178,9 +179,16 @@ final class MicrosurveyViewController: UIViewController,
         applyTheme()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        UIAccessibility.post(notification: .screenChanged, argument: String.Microsurvey.Survey.SurveyA11yLabel)
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        UIAccessibility.post(notification: .screenChanged, argument: nil)
+        store.dispatch(
+            MicrosurveyAction(surveyId: model.id, windowUUID: windowUUID, actionType: MicrosurveyActionType.surveyDidAppear)
+        )
     }
 
     deinit {
@@ -215,6 +223,7 @@ final class MicrosurveyViewController: UIViewController,
         scrollContainer.addArrangedSubview(containerView)
         scrollContainer.addArrangedSubview(submitButton)
         scrollContainer.addArrangedSubview(privacyPolicyButton)
+        scrollContainer.accessibilityElements = [containerView, submitButton, privacyPolicyButton]
 
         scrollView.addSubview(scrollContainer)
 
@@ -275,8 +284,8 @@ final class MicrosurveyViewController: UIViewController,
 
     // MARK: ThemeApplicable
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
-        view.backgroundColor = theme.colors.layer1
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        view.backgroundColor = theme.colors.layer3
 
         headerLabel.textColor = theme.colors.textPrimary
         closeButton.tintColor = theme.colors.textSecondary
@@ -309,7 +318,12 @@ final class MicrosurveyViewController: UIViewController,
 
     private func sendTelemetry() {
         store.dispatch(
-            MicrosurveyAction(windowUUID: windowUUID, actionType: MicrosurveyActionType.submitSurvey)
+            MicrosurveyAction(
+                surveyId: model.id,
+                userSelection: selectedOption,
+                windowUUID: windowUUID,
+                actionType: MicrosurveyActionType.submitSurvey
+            )
         )
     }
 
@@ -318,6 +332,7 @@ final class MicrosurveyViewController: UIViewController,
         tableView.removeFromSuperview()
         submitButton.removeFromSuperview()
         containerView.addSubview(confirmationView)
+        scrollContainer.accessibilityElements = [containerView, privacyPolicyButton]
         NSLayoutConstraint.activate(
             [
                 confirmationView.topAnchor.constraint(equalTo: containerView.topAnchor),
@@ -326,20 +341,35 @@ final class MicrosurveyViewController: UIViewController,
                 confirmationView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
             ]
         )
-        confirmationView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        confirmationView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        store.dispatch(
+            MicrosurveyAction(
+                surveyId: model.id,
+                windowUUID: windowUUID,
+                actionType: MicrosurveyActionType.confirmationViewed
+            )
+        )
     }
 
     @objc
     private func didTapClose() {
         store.dispatch(
-            MicrosurveyAction(windowUUID: windowUUID, actionType: MicrosurveyActionType.closeSurvey)
+            MicrosurveyAction(
+                surveyId: model.id,
+                windowUUID: windowUUID,
+                actionType: MicrosurveyActionType.closeSurvey
+            )
         )
     }
 
     @objc
     private func didTapPrivacyPolicy() {
         store.dispatch(
-            MicrosurveyAction(windowUUID: windowUUID, actionType: MicrosurveyActionType.tapPrivacyNotice)
+            MicrosurveyAction(
+                surveyId: model.id,
+                windowUUID: windowUUID,
+                actionType: MicrosurveyActionType.tapPrivacyNotice
+            )
         )
     }
 
@@ -357,7 +387,7 @@ final class MicrosurveyViewController: UIViewController,
         }
         cell.configure(model.surveyOptions[indexPath.row])
         cell.setA11yValue(for: indexPath.row, outOf: tableView.numberOfRows(inSection: .zero))
-        cell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         return cell
     }
 
@@ -369,7 +399,7 @@ final class MicrosurveyViewController: UIViewController,
             return nil
         }
         headerView.configure(model.surveyQuestion, icon: model.icon)
-        headerView.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        headerView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         return headerView
     }
 
@@ -378,6 +408,7 @@ final class MicrosurveyViewController: UIViewController,
         let selectedCell = tableView.cellForRow(at: indexPath) as? MicrosurveyTableViewCell
         if selectedCell?.checked == false {
             (tableView.cellForRow(at: indexPath) as? MicrosurveyTableViewCell)?.checked.toggle()
+            selectedOption = selectedCell?.title
         }
     }
 

@@ -13,9 +13,6 @@ final class NimbusFeatureFlagLayer {
         case .accountSettingsRedux:
             return checkAccountSettingsRedux(from: nimbus)
 
-        case .addressAutofill:
-            return checkAddressAutofill(from: nimbus)
-
         case .addressAutofillEdit:
             return checkAddressAutofillEditing(from: nimbus)
 
@@ -61,14 +58,23 @@ final class NimbusFeatureFlagLayer {
         case .microsurvey:
             return checkMicrosurveyFeature(from: nimbus)
 
+        case .nativeErrorPage:
+            return checkNativeErrorPageFeature(from: nimbus)
+
         case .nightMode:
             return checkNightModeFeature(from: nimbus)
+
+        case .passwordGenerator:
+            return checkPasswordGeneratorFeature(from: nimbus)
 
         case .preferSwitchToOpenTabOverDuplicate:
             return checkPreferSwitchToOpenTabOverDuplicate(from: nimbus)
 
         case .reduxSearchSettings:
             return checkReduxSearchSettingsFeature(from: nimbus)
+
+        case .closeRemoteTabs:
+            return checkCloseRemoteTabsFeature(from: nimbus)
 
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
@@ -81,6 +87,9 @@ final class NimbusFeatureFlagLayer {
 
         case .toolbarRefactor:
             return checkToolbarRefactorFeature(from: nimbus)
+
+        case .toolbarOneTapNewTab:
+            return checkToolbarOneTapNewTabFeature(from: nimbus)
 
         case .trackingProtectionRefactor:
             return checkTrackingProtectionRefactor(from: nimbus)
@@ -162,6 +171,11 @@ final class NimbusFeatureFlagLayer {
         return config.enabled
     }
 
+    private func checkToolbarOneTapNewTabFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.toolbarRefactorFeature.value()
+        return config.oneTapNewTab
+    }
+
     private func checkTrackingProtectionRefactor(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.trackingProtectionRefactor.value()
         return config.enabled
@@ -236,6 +250,10 @@ final class NimbusFeatureFlagLayer {
         return config.productAds
     }
 
+    private func checkPasswordGeneratorFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.passwordGeneratorFeature.value().enabled
+    }
+
     private func checkProductBackInStockFakespotFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.shopping2023.value()
 
@@ -244,12 +262,6 @@ final class NimbusFeatureFlagLayer {
 
     private func checkPreferSwitchToOpenTabOverDuplicate(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.homescreenFeature.value().preferSwitchToOpenTab
-    }
-
-    private func checkAddressAutofill(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.addressAutofillFeature.value()
-
-        return config.status
     }
 
     private func checkAddressAutofillEditing(from nimbus: FxNimbus) -> Bool {
@@ -289,5 +301,14 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.nightModeFeature.value()
 
         return config.enabled
+    }
+
+    private func checkCloseRemoteTabsFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.remoteTabManagement.value()
+        return config.closeTabsEnabled
+    }
+
+    private func checkNativeErrorPageFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.nativeErrorPageFeature.value().enabled
     }
 }

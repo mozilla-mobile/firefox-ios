@@ -254,7 +254,7 @@ private class WKScriptMessageHandleDelegate: NSObject, WKScriptMessageHandler {
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        guard let delegate = delegate else { return }
+        guard let delegate else { return }
         delegate.userContentController(userContentController, didReceive: message)
     }
 }

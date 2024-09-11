@@ -1,0 +1,45 @@
+#!/bin/sh
+
+# get the URL of a remote
+get_remote_url() {
+  remote_name=$1
+  git remote get-url "$remote_name"
+}
+
+# remote name associated with the restricted URL
+find_remote_name_by_url() {
+  restricted_url="https://github.com/mozilla-mobile/firefox-ios.git"
+  for remote in $(git remote); do
+    remote_url=$(get_remote_url "$remote")
+    if [ "$remote_url" = "$restricted_url" ]; then
+      echo "$remote"
+      return
+    fi
+  done
+  echo ""
+}
+
+# current tracked remote and branch for the current local branch
+upstream=$(git rev-parse --abbrev-ref --symbolic-full-name @{u})
+current_tracked_remote=$(echo "$upstream" | cut -d'/' -f1)
+current_tracked_branch=$(echo "$upstream" | cut -d'/' -f2)
+
+echo "Current tracked remote: $current_tracked_remote"
+echo "Current tracked branch: $current_tracked_branch"
+
+restricted_remote=$(find_remote_name_by_url)
+echo "Restricted remote: $restricted_remote"
+
+# Special Case: remote being pushed to from the first argument of the pre-push hook
+push_remote_my=$1
+echo "Push remote: $restricted_remote"
+
+if [ "$current_tracked_branch" = "main" ]; then
+  # if the push remote is the restricted remote
+  if [ "$push_remote_my" = "$restricted_remote" ]; then
+    echo "Direct pushes to the 'main' branch on the specified remote are not allowed."
+    exit 1
+  fi
+fi
+
+exit 0

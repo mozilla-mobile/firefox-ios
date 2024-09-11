@@ -16,6 +16,7 @@ class WebsiteDataManagementViewController: UIViewController,
     var notificationCenter: NotificationProtocol
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
+    private static let showMoreCellReuseIdentifier = "showMoreCell"
 
     private enum Section: Int {
         case sites = 0
@@ -46,13 +47,12 @@ class WebsiteDataManagementViewController: UIViewController,
 
     var tableView: UITableView!
     var searchController: UISearchController?
-    var showMoreButtonEnabled = true
 
     private lazy var searchResultsViewController = WebsiteDataSearchResultsViewController(viewModel: viewModel,
                                                                                           windowUUID: windowUUID)
 
     private func currentTheme() -> Theme {
-        return themeManager.currentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     override func viewDidLoad() {
@@ -68,7 +68,13 @@ class WebsiteDataManagementViewController: UIViewController,
         tableView.isEditing = true
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.allowsSelectionDuringEditing = true
+        tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: ThemedTableViewCell.cellIdentifier)
+        tableView.register(
+            ThemedTableViewCell.self,
+            forCellReuseIdentifier: WebsiteDataManagementViewController.showMoreCellReuseIdentifier
+        )
         tableView.register(cellType: ThemedTableViewCell.self)
+        tableView.register(cellType: ThemedCenteredTableViewCell.self)
         tableView.register(
             ThemedTableSectionHeaderFooterView.self,
             forHeaderFooterViewReuseIdentifier: ThemedTableSectionHeaderFooterView.cellIdentifier
@@ -103,12 +109,6 @@ class WebsiteDataManagementViewController: UIViewController,
         viewModel.onViewModelChanged = { [weak self] in
             guard let self = self else { return }
             self.loadingView.isHidden = self.viewModel.state != .loading
-
-            // Show either 10, 8 or 6 records initially depending on the screen size.
-            let height = max(self.view.frame.width, self.view.frame.height)
-            let numberOfInitialRecords = height > 667 ? 10 : height > 568 ? 8 : 6
-            self.showMoreButtonEnabled = self.viewModel.siteRecords.count > numberOfInitialRecords
-
             self.searchResultsViewController.reloadData()
             self.tableView.reloadData()
         }
@@ -144,10 +144,11 @@ class WebsiteDataManagementViewController: UIViewController,
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
-        let cell = dequeueCellFor(indexPath: indexPath)
         let section = Section(rawValue: indexPath.section)!
         switch section {
         case .sites:
+            let cell = dequeueCellFor(indexPath: indexPath)
+            cell.applyTheme(theme: currentTheme())
             if let record = viewModel.siteRecords[safe: indexPath.row] {
                 cell.textLabel?.text = record.displayName
                 if viewModel.selectedRecords.contains(record) {
@@ -161,8 +162,10 @@ class WebsiteDataManagementViewController: UIViewController,
                 type: .standard
             )
             cell.configure(viewModel: cellViewModel)
+            return cell
         case .showMore:
-            let cellType: ThemedTableViewCellType = showMoreButtonEnabled ? .actionPrimary : .disabled
+            let cell = dequeueCellFor(indexPath: indexPath)
+            let cellType: ThemedTableViewCellType = viewModel.state != .displayAll ? .actionPrimary : .disabled
             let cellViewModel = ThemedTableViewCellViewModel(
                 theme: currentTheme(),
                 type: cellType
@@ -171,32 +174,53 @@ class WebsiteDataManagementViewController: UIViewController,
             cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = "ShowMoreWebsiteData"
             cell.configure(viewModel: cellViewModel)
+            cell.applyTheme(theme: currentTheme())
             showMoreButton = cell
+            return cell
         case .clearButton:
-            let cellViewModel = ThemedTableViewCellViewModel(
-                theme: currentTheme(),
-                type: .destructive
-            )
-            cell.textLabel?.text = viewModel.clearButtonTitle
-            cell.textLabel?.textAlignment = .center
-            cell.accessibilityTraits = UIAccessibilityTraits.button
-            cell.accessibilityIdentifier = "ClearAllWebsiteData"
-            cell.configure(viewModel: cellViewModel)
+            let cell = dequeueCellFor(indexPath: indexPath) as? ThemedCenteredTableViewCell
+            cell?.setTitle(to: viewModel.clearButtonTitle)
+            cell?.setAccessibilities(
+                traits: .button,
+                identifier: AccessibilityIdentifiers.Settings.ClearData.clearAllWebsiteData)
+            cell?.applyTheme(theme: currentTheme())
+            return cell ?? ThemedCenteredTableViewCell()
         }
-
-        cell.applyTheme(theme: currentTheme())
-        return cell
     }
 
     private func dequeueCellFor(indexPath: IndexPath) -> ThemedTableViewCell {
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: ThemedTableViewCell.cellIdentifier,
-            for: indexPath
-        ) as? ThemedTableViewCell
-        else {
+        guard let section = Section(rawValue: indexPath.section) else {
             return ThemedTableViewCell()
         }
-        return cell
+        switch section {
+        case .sites:
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: ThemedTableViewCell.cellIdentifier,
+                for: indexPath
+            ) as? ThemedTableViewCell
+            else {
+                return ThemedTableViewCell()
+            }
+            return cell
+        case .showMore:
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: WebsiteDataManagementViewController.showMoreCellReuseIdentifier,
+                for: indexPath
+            ) as? ThemedTableViewCell
+            else {
+                return ThemedTableViewCell()
+            }
+            return cell
+        case .clearButton:
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: ThemedCenteredTableViewCell.cellIdentifier,
+                for: indexPath
+            ) as? ThemedCenteredTableViewCell
+            else {
+                return ThemedCenteredTableViewCell()
+            }
+            return cell
+        }
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -205,16 +229,16 @@ class WebsiteDataManagementViewController: UIViewController,
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let section = Section(rawValue: section)!
+        let height = max(self.view.frame.width, self.view.frame.height)
+        let numberOfInitialRecords = height > 667 ? 10 : height > 568 ? 8 : 6
+
         switch section {
         case .sites:
             let numberOfRecords = viewModel.siteRecords.count
-
             // Show either 10, 8 or 6 records initially depending on the screen size.
-            let height = max(self.view.frame.width, self.view.frame.height)
-            let numberOfInitialRecords = height > 667 ? 10 : height > 568 ? 8 : 6
-            return showMoreButtonEnabled ? min(numberOfRecords, numberOfInitialRecords) : numberOfRecords
+            return viewModel.state == .displayAll ? numberOfRecords: min(numberOfRecords, numberOfInitialRecords)
         case .showMore:
-            return showMoreButtonEnabled ? 1 : 0
+            return (viewModel.state != .displayAll && viewModel.siteRecords.count > numberOfInitialRecords) ? 1 : 0
         case .clearButton:
             return 1
         }
@@ -228,13 +252,14 @@ class WebsiteDataManagementViewController: UIViewController,
             viewModel.selectItem(item)
             break
         case .showMore:
-            showMoreButtonEnabled = false
+            viewModel.showMoreButtonPressed()
             tableView.reloadData()
         case .clearButton:
             let generator = UIImpactFeedbackGenerator(style: .heavy)
             generator.impactOccurred()
             let alert = viewModel.createAlertToRemove()
             present(alert, animated: true, completion: nil)
+            tableView.deselectRow(at: indexPath, animated: true)
         }
     }
 

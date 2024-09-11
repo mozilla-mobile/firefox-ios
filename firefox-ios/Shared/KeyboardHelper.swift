@@ -46,12 +46,14 @@ public protocol KeyboardHelperDelegate: AnyObject {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState)
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState)
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidChangeWithState state: KeyboardState)
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState)
 }
 
 public extension KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {}
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {}
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidChangeWithState state: KeyboardState) {}
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {}
 }
 
 /**
@@ -89,6 +91,12 @@ open class KeyboardHelper: NSObject {
             self,
             selector: #selector(keyboardWillHide),
             name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardDidHide),
+            name: UIResponder.keyboardDidHideNotification,
             object: nil
         )
         NotificationCenter.default.addObserver(
@@ -149,6 +157,16 @@ open class KeyboardHelper: NSObject {
             for weakDelegate in delegates {
                 weakDelegate.delegate?.keyboardHelper(self,
                                                       keyboardWillHideWithState: KeyboardState(userInfo))
+            }
+        }
+    }
+
+    @objc
+    private func keyboardDidHide(_ notification: Notification) {
+        if let userInfo = notification.userInfo {
+            for weakDelegate in delegates {
+                weakDelegate.delegate?.keyboardHelper(self,
+                                                      keyboardDidHideWithState: KeyboardState(userInfo))
             }
         }
     }

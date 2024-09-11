@@ -14,9 +14,9 @@ class ContextMenuHelper: NSObject {
         let alt: String?
     }
 
-    fileprivate weak var tab: Tab?
+    private weak var tab: Tab?
 
-    fileprivate(set) var elements: Elements?
+    private(set) var elements: Elements?
 
     required init(tab: Tab) {
         super.init()
@@ -37,7 +37,7 @@ extension ContextMenuHelper: TabContentScript {
         _ userContentController: WKUserContentController,
         didReceiveScriptMessage message: WKScriptMessage
     ) {
-        guard let data = message.body as? [String: AnyObject] else { return }
+        guard let data = message.body as? [String: Any] else { return }
 
         if let x = data["touchX"] as? Double, let y = data["touchY"] as? Double {
             touchPoint = CGPoint(x: x, y: y)

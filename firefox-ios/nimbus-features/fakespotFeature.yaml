@@ -43,14 +43,14 @@ features:
     defaults:
       - channel: beta
         value:
-          status: true
-          back_in_stock_reporting: true
-          product_ads: true
+          status: false
+          back_in_stock_reporting: false
+          product_ads: false
       - channel: developer
         value:
-          status: true
-          back_in_stock_reporting: true
-          product_ads: true
+          status: false
+          back_in_stock_reporting: false
+          product_ads: false
 
 objects:
   WebsiteConfig:

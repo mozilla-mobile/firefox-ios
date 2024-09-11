@@ -506,10 +506,10 @@
 "Hotkeys.NewTab.DiscoveryTitle" = "Nova kartica";
 
 /* A label indicating the keyboard shortcut of switching from Private Browsing to Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Hotkeys.NormalMode.DiscoveryTitle" = "Uobičajeni način pregledavanja";
+"Hotkeys.NormalMode.DiscoveryTitle" = "Modus normalnog pregledavanja";
 
 /* A label indicating the keyboard shortcut of switching from Normal Browsing mode to Private Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Hotkeys.PrivateMode.DiscoveryTitle" = "Privatni način pregledavanja";
+"Hotkeys.PrivateMode.DiscoveryTitle" = "Modus privatnog pregledavanja";
 
 /* A label indicating the keyboard shortcut of reloading the current page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.Reload.DiscoveryTitle" = "Ponovno učitaj stranicu";
@@ -543,6 +543,9 @@
 
 /* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.FindAgain" = "Ponovno pronađi";
+
+/* A label indicating the keyboard shortcut to reload a tab without it's cache. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. */
+"Keyboard.Shortcuts.RefreshWithoutCache.v108" = "Učitaj ponovo zanemarujući predmemoriju";
 
 /* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.Section.Bookmark" = "Zabilješke";
@@ -754,14 +757,17 @@
 /* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "Povijest";
 
+/* Label for the new private tab button in the menu page. Pressing this button opens a new private tab. */
+"Menu.NewPrivateTab.Label" = "Nova privatna kartica";
+
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
 "Menu.NewTab.v99" = "Nova kartica";
 
 /* Label for the button, displayed in the menu, turns off night mode. */
-"Menu.NightModeTurnOff.Label2" = "Isključi noćni način";
+"Menu.NightModeTurnOff.Label2" = "Isključi noćni modus";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
-"Menu.NightModeTurnOn.Label2" = "Uključi noćni način";
+"Menu.NightModeTurnOn.Label2" = "Uključi noćni modus";
 
 /* Label for the button, displayed in the menu, takes you to passwords screen when pressed. */
 "Menu.Passwords.Label" = "Lozinke";
@@ -941,7 +947,7 @@
 "Reader View" = "Prikaz za čitanje";
 
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
-"ReaderMode.Available.VoiceOverAnnouncement" = "Dostupan je način rada za čitanje";
+"ReaderMode.Available.VoiceOverAnnouncement" = "Dostupan je modus čitanja";
 
 /* Name for Mark as read button in reader mode */
 "ReaderModeBar.MarkAsRead.v106" = "Označi kao pročitano";
@@ -980,7 +986,7 @@
 "ReopenAlert.Title" = "Ponovo otvori posljednju zatvorenu karticu";
 
 /* Accessibility label for button resetting font size in display settings of reader mode */
-"Reset text size" = "Vrati veličinu teksta na zadanu veličinu";
+"Reset text size" = "Obnovi veličinu teksta";
 
 /* Font type setting in the reading view settings */
 "Sans-serif" = "Sans-serif";
@@ -1141,6 +1147,9 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (Zamijeni upit s %s)";
 
+/* Title of setting to block opening external apps when pressing links. */
+"Settings.BlockOpeningExternalApps.Title" = "Blokiraj otvaranje eksternih aplikacija";
+
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Obriši sve podatke web lokacije";
 
@@ -1205,7 +1214,7 @@
 "Settings.DisplayTheme.StatusTitle" = "Automatski";
 
 /* Switch mode settings section title */
-"Settings.DisplayTheme.SwitchMode.SectionHeader" = "Prebacivanje modusa";
+"Settings.DisplayTheme.SwitchMode.SectionHeader" = "Promijeni modus";
 
 /* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
 "Settings.DisplayTheme.SwitchSubtitle" = "Prebaci automatski na osnovi svjetline ekrana";
@@ -1239,6 +1248,9 @@
 
 /* This is the description below the settings section located in the menu under customize current homepage. It describes what the options in the section are for. */
 "Settings.Home.Current.Description.v101" = "Odaberi što se prikazuje kao početna stranica.";
+
+/* In the settings menu, on the Firefox homepage customization section, this is the description below the section, describing what the options in the section are for. */
+"Settings.Home.Option.Description.v101" = "Odaberi što je uključeno na početnoj Firefox stranici.";
 
 /* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle the Jump Back In section on homepage on or off */
 "Settings.Home.Option.JumpBackIn" = "Vrati se natrag";
@@ -1275,6 +1287,27 @@
 
 /* In the settings menu, on the Firefox homepage customization section, this is the title for the option that allows users to access the wallpaper settings for the application. */
 "Settings.Home.Option.Wallpaper" = "Pozadinska slika";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the amethyst firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.AmethystWallpaper.v99" = "Firefox pozadina, uzorak ametista.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the beach hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.BeachHillsWallpaper.v100" = "Firefox pozadina, uzorak brežuljaka na plaži.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the cerulean firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.CeruleanWallpaper.v99" = "Firefox pozadina, nebesko plavi uzorak.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string for the default wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.DefaultWallpaper.v99" = "Standardna pozadina.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the sunrise firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.SunriseWallpaper.v99" = "Firefox pozadina, uzorak izlaska sunca.";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the accessibility string of the toggle for turning wallpaper cycling shortcut on or off on the homepage. */
+"Settings.Home.Option.Wallpaper.Accessibility.ToggleButton" = "Prebacivanje pozadine početne stranice";
+
+/* In the settings menu, on the Firefox wallpaper customization screen, this is the title accessibility string for the twilight hills firefox wallpaper. */
+"Settings.Home.Option.Wallpaper.Accessibility.TwilightHillsWallpaper.v100" = "Firefox pozadina, uzorak brda u sumraku.";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the group of wallpapers that are always available to the user. The %@ will be replaced by the app name and thus doesn't need translation. */
 "Settings.Home.Option.Wallpaper.Classic.Title.v106" = "Klasični %@";
@@ -1372,6 +1405,12 @@
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "Prilikom otvaranja Firefoxa";
 
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
+"Settings.OfferClipboardBar.Status.v128" = "Prilikom otvaranja %@";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.StatusV2" = "Prilikom otvaranja Firefoxa";
+
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Ponudi otvoriti kopirane poveznice";
 
@@ -1383,6 +1422,9 @@
 
 /* Touch ID prompt subtitle when accessing logins and passwords */
 "Settings.Passwords.FingerPrintReason.v103" = "Koristi otisak prsta za pristup lozinkama.";
+
+/* Message shown when you enter Passwords screen for the first time. It explains how password are protected in the Firefox for iOS application. */
+"Settings.Passwords.OnboardingMessage.v103" = "Tvoje su lozinke sada zaštićene Face ID-om, Touch ID-om ili šifrom uređaja.";
 
 /* Setting that appears in the Passwords screen to enable the built-in password manager so users can save their passwords. */
 "Settings.Passwords.SavePasswords.v103" = "Spremi lozinke";
@@ -1411,6 +1453,9 @@
 /* Description displayed under the ”Show Link Previews” option */
 "Settings.ShowLinkPreviews.Status" = "Pri dugom pritisku na poveznicu";
 
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.StatusV2" = "Pri dugom pritisku na poveznicu";
+
 /* Title of setting to enable link previews when long-pressing links. */
 "Settings.ShowLinkPreviews.Title" = "Prikaži preglede poveznica";
 
@@ -1435,6 +1480,9 @@
 /* Label used as a toggle item in Settings. When this is off, the user is opting out of all studies. */
 "Settings.Studies.Toggle.Title" = "Studije";
 
+/* Ddescription that appears in the settings screen to explain what Firefox Sync is useful for. */
+"Settings.Sync.ButtonDescription.v103" = "Prijavi se za sinkroniziranje kartica, zabilješki, lozinki i više.";
+
 /* Button label that appears in the settings to prompt the user to sign in to Firefox for iOS sync service to sync and save data. */
 "Settings.Sync.ButtonTitle.v103" = "Sinkroniziraj i spremi podatke";
 
@@ -1443,6 +1491,9 @@
 
 /* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
 "Settings.Tabs.CustomizeTabsSection.InactiveTabs" = "Neaktivne kartice";
+
+/* This is the description for the setting that toggles the Inactive Tabs feature in the settings menu under the Tabs customization section. Inactive tabs are a separate section of tabs that appears in the Tab Tray, which can be enabled or not */
+"Settings.Tabs.CustomizeTabsSection.InactiveTabsDescription.v101" = "Kartice koje nisu pogledane u zadnja dva tjedna premještaju se u odjeljak neaktivnih kartica.";
 
 /* In the settings menu, in the Tabs customization section, this is the title for the setting that toggles the Tab Groups feature - where tabs from related searches are grouped - on or off */
 "Settings.Tabs.CustomizeTabsSection.TabGroups" = "Grupe kartica";
@@ -1465,6 +1516,9 @@
 /* Dismiss button for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Button" = "U redu, razumijem";
 
+/* Decription for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Description" = "Ako web stranica ne radi prema očekivanjima, dodirni lokot u adresnoj traci i isključi poboljšanu zaštitu od praćenja za tu stranicu.";
+
 /* Title for the tracker protection alert. */
 "Settings.TrackingProtection.Alert.Title" = "Oprez!";
 
@@ -1476,6 +1530,12 @@
 
 /* Additional information about your Enhanced Tracking Protection */
 "Settings.TrackingProtection.ProtectionCellFooter" = "Smanjuje broj ciljanih oglasa i pomaže spriječiti oglašivače da prate tvoje kretanje internetom.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer" = "Ako web stranica ne radi prema očekivanjima, dodirni lokot u adresnoj traci i isključi poboljšanu zaštitu od praćenja za tu stranicu.";
+
+/* Footer information for tracker protection level. */
+"Settings.TrackingProtection.ProtectionLevel.Footer.Lock" = "Ako web stranica ne radi prema očekivanjima, dodirni lokot u adresnoj traci i isključi poboljšanu zaštitu od praćenja za tu stranicu.";
 
 /* Description for standard level tracker protection */
 "Settings.TrackingProtection.ProtectionLevelStandard.Description" = "Dopušta neke programe za praćenje, kako bi web stranice mogle ispravno funkcionirati.";
@@ -1676,7 +1736,7 @@
 "TranslationToastHandler.PromptTranslate.OK" = "Da";
 
 /* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
-"TranslationToastHandler.PromptTranslate.Title" = "Čini se da je jezik ove stranice %1$@. Želiš li je prevesti na %2$@ pomoću %3$@?";
+"TranslationToastHandler.PromptTranslate.Title" = "Čini se da je jezik ove stranice %1$@. Želiš li je prevesti na %2$@ pomoću usluge %3$@?";
 
 /* Tile title for Twitter */
 "Twitter" = "Twitter";

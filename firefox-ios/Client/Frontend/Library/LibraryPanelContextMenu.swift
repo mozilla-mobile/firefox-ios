@@ -111,7 +111,7 @@ extension LibraryPanelContextMenu {
     func getShareAction(site: Site, sourceView: UIView, delegate: LibraryPanelCoordinatorDelegate?) -> PhotonRowActions {
         return SingleActionViewModel(
             title: .ShareContextMenuTitle,
-            iconString: StandardImageIdentifiers.Large.shareApple) { _ in
+            iconString: StandardImageIdentifiers.Large.share) { _ in
                 guard let siteURL = URL(string: site.url, invalidCharacters: false) else { return }
                 delegate?.shareLibraryItem(url: siteURL, sourceView: sourceView)
         }.items

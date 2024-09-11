@@ -21,8 +21,8 @@ final class TabScrollControllerTests: XCTestCase {
         super.setUp()
 
         self.mockProfile = MockProfile()
-        self.subject = TabScrollingController()
-        self.tab = Tab(profile: mockProfile, configuration: WKWebViewConfiguration(), windowUUID: windowUUID)
+        self.subject = TabScrollingController(windowUUID: windowUUID)
+        self.tab = Tab(profile: mockProfile, windowUUID: windowUUID)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         mockGesture = UIPanGestureRecognizerMock()
         DependencyHelperMock().bootstrapDependencies()
@@ -92,7 +92,7 @@ final class TabScrollControllerTests: XCTestCase {
     }
 
     private func setupTabScroll() {
-        tab.createWebview()
+        tab.createWebview(configuration: .init())
         tab.webView?.scrollView.contentSize = CGSize(width: 200, height: 2000)
         tab.webView?.scrollView.delegate = subject
         subject.tab = tab

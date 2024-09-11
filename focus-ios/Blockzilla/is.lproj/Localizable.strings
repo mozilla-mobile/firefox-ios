@@ -629,7 +629,7 @@
 "URL.paste" = "Líma";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
-"URL.placeholderText" = "Leitaðu eða sláðu inn vistfang";
+"URL.placeholderText" = "Leitaðu eða settu inn vistfang";
 
 /* Label displayed for search button when typing in the URL bar */
 "URL.searchLabel" = "Leita að %@";

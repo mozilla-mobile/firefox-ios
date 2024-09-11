@@ -50,13 +50,26 @@ final class MicrosurveyCoordinatorTests: XCTestCase {
 
     func testMicrosurveyDelegate_showPrivacy_callsRouterDismiss_andCreatesNewTab() throws {
         let subject = createSubject()
+        let languageIdentifier = Locale.preferredLanguages.first ?? ""
 
         subject.start()
-        subject.showPrivacy()
+        subject.showPrivacy(with: nil)
 
         XCTAssertEqual(mockRouter.dismissCalled, 1)
         XCTAssertEqual(mockTabManager.addTabsForURLsCalled, 1)
-        XCTAssertEqual(mockTabManager.addTabsURLs, [URL(string: "https://www.mozilla.org/privacy/firefox")])
+        XCTAssertEqual(mockTabManager.addTabsURLs, [URL(string: "https://www.mozilla.org/\(languageIdentifier)/privacy/firefox/?utm_medium=firefox-mobile&utm_source=modal&utm_campaign=microsurvey")])
+    }
+
+    func testMicrosurveyDelegate_showPrivacyWithContentParams_callsRouterDismiss_andCreatesNewTab() throws {
+        let subject = createSubject()
+        let languageIdentifier = Locale.preferredLanguages.first ?? ""
+
+        subject.start()
+        subject.showPrivacy(with: "homepage")
+
+        XCTAssertEqual(mockRouter.dismissCalled, 1)
+        XCTAssertEqual(mockTabManager.addTabsForURLsCalled, 1)
+        XCTAssertEqual(mockTabManager.addTabsURLs, [URL(string: "https://www.mozilla.org/\(languageIdentifier)/privacy/firefox/?utm_medium=firefox-mobile&utm_source=modal&utm_campaign=microsurvey&utm_content=homepage")])
     }
 
     private func createSubject(file: StaticString = #file,

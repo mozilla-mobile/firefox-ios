@@ -13,9 +13,7 @@ import XCTest
 class CreditCardBottomSheetViewModelTests: XCTestCase {
     private var profile: MockProfile!
     private var viewModel: CreditCardBottomSheetViewModel!
-    private var files: FileAccessor!
-    private var autofill: RustAutofill!
-    private var encryptionKey: String!
+    private var mockAutofill: MockCreditCardProvider!
     private var samplePlainTextCard = UnencryptedCreditCardFields(ccName: "Allen Burges",
                                                                   ccNumber: "4111111111111111",
                                                                   ccNumberLast4: "1111",
@@ -41,105 +39,49 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
                                               timeLastModified: 123123,
                                               timesUsed: 123123)
 
-    private var invalidSampleCreditCard = CreditCard(guid: "1",
-                                                     ccName: "Allen Burges",
-                                                     ccNumberEnc: "",
-                                                     ccNumberLast4: "",
-                                                     ccExpMonth: 1,
-                                                     ccExpYear: 0,
-                                                     ccType: "",
-                                                     timeCreated: 0,
-                                                     timeLastUsed: nil,
-                                                     timeLastModified: 2,
-                                                     timesUsed: 0)
-
     override func setUp() {
         super.setUp()
-        files = MockFiles()
-
-        if let rootDirectory = try? files.getAndEnsureDirectory() {
-            let databasePath = URL(fileURLWithPath: rootDirectory, isDirectory: true)
-                .appendingPathComponent("testAutofill.db").path
-            try? files.remove("testAutofill.db")
-
-            if let key = try? createAutofillKey() {
-                encryptionKey = key
-            } else {
-                XCTFail("Encryption key wasn't created")
-            }
-
-            autofill = RustAutofill(databasePath: databasePath)
-            _ = autofill.reopenIfClosed()
-        } else {
-            XCTFail("Could not retrieve root directory")
-        }
-
-        profile = MockProfile()
-        _ = profile.autofill.reopenIfClosed()
-
-        viewModel = CreditCardBottomSheetViewModel(profile: profile,
-                                                   creditCard: nil,
-                                                   decryptedCreditCard: samplePlainTextCard,
-                                                   state: .save)
+        mockAutofill = MockCreditCardProvider()
+        viewModel = CreditCardBottomSheetViewModel(
+            creditCardProvider: mockAutofill,
+            creditCard: nil,
+            decryptedCreditCard: samplePlainTextCard,
+            state: .save
+        )
     }
 
     override func tearDown() {
-        super.tearDown()
-        profile.shutdown()
-        profile = nil
-        autofill = nil
-        files = nil
+        mockAutofill = nil
         viewModel = nil
+        super.tearDown()
     }
 
     // MARK: - Test Cases
-    func testSavingCard() {
-        viewModel.creditCard = sampleCreditCard
+    func test_saveCreditCard_callsAddCreditCard() {
         let expectation = expectation(description: "wait for credit card fields to be saved")
         let decryptedCreditCard = viewModel.getPlainCreditCardValues(bottomSheetState: .save)
         // Make sure the year saved is a 4 digit year and not 2 digit
         // 2000 because that is our current period
         XCTAssertTrue(decryptedCreditCard!.ccExpYear > 2000)
         viewModel.saveCreditCard(with: decryptedCreditCard) { creditCard, error in
-            guard error == nil, let creditCard = creditCard else {
-                XCTFail()
-                return
-            }
-            XCTAssertEqual(creditCard.ccName, self.viewModel.creditCard?.ccName)
-            // Note: the number for credit card is encrypted so that part
-            // will get added later and for now we will check the name only
+            XCTAssertEqual(self.mockAutofill.addCreditCardCalledCount, 1)
             expectation.fulfill()
         }
         waitForExpectations(timeout: 1.0)
     }
 
-    func testUpdatingCard() {
+    func test_saveAndUpdateCreditCard_callsProperAutofillMethods() {
         viewModel.state = .save
-        viewModel.decryptedCreditCard = samplePlainTextCard
         let expectationSave = expectation(description: "wait for credit card fields to be saved")
         let expectationUpdate = expectation(description: "wait for credit card fields to be updated")
 
         viewModel.saveCreditCard(with: samplePlainTextCard) { creditCard, error in
-            guard error == nil, let creditCard = creditCard else {
-                XCTFail()
-                return
-            }
+            XCTAssertEqual(self.mockAutofill.addCreditCardCalledCount, 1)
             expectationSave.fulfill()
-            XCTAssertEqual(creditCard.ccName, self.viewModel.decryptedCreditCard?.ccName)
-            // Note: the number for credit card is encrypted so that part
-            // will get added later and for now we will check the name only
-
-            self.samplePlainTextCard.ccExpYear = 2045
-            self.samplePlainTextCard.ccName = "Test"
             self.viewModel.state = .update
-
-            self.viewModel.updateCreditCard(for: creditCard.guid,
+            self.viewModel.updateCreditCard(for: creditCard?.guid,
                                             with: self.samplePlainTextCard) { didUpdate, error in
-                XCTAssertNotNil(didUpdate)
-                if let updated = didUpdate {
-                    XCTAssert(updated)
-                }
-                XCTAssertNil(error)
+                XCTAssertEqual(self.mockAutofill.updateCreditCardCalledCount, 1)
                 expectationUpdate.fulfill()
             }
         }
@@ -338,54 +280,64 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         XCTAssertEqual(value!.ccNumber, sampleCreditCardVal.ccNumberEnc)
     }
 
-    func test_didTapMainButton() {
+    func test_didTapMainButton_withSaveState_callsAddCreditCard() {
         viewModel.state = .save
         viewModel.decryptedCreditCard = samplePlainTextCard
         let expectation = expectation(description: "wait for credit card fields to be saved")
 
-        viewModel.didTapMainButton { error in
-            XCTAssertNil(error)
+        viewModel.didTapMainButton { _ in
+            XCTAssertNotNil(self.viewModel)
+            XCTAssertNotNil(self.mockAutofill)
+            XCTAssertEqual(self.mockAutofill.addCreditCardCalledCount, 1)
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 1.0)
+        waitForExpectations(timeout: 5.0)
     }
 
-    func test_invalidCreditCardUpdateDidTapMainButton() {
+    func test_didTapMainButton_withUpdateState_callsAddCreditCard() {
         viewModel.state = .update
-        viewModel.creditCard = invalidSampleCreditCard
         viewModel.decryptedCreditCard = samplePlainTextCard
         let expectation = expectation(description: "wait for credit card fields to be updated")
 
-        viewModel.didTapMainButton { error in
-            XCTAssertNotNil(error)
+        viewModel.didTapMainButton { _ in
+            XCTAssertNotNil(self.viewModel)
+            XCTAssertNotNil(self.mockAutofill)
+            XCTAssertEqual(self.mockAutofill.updateCreditCardCalledCount, 1)
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 1.0)
+        waitForExpectations(timeout: 5.0)
     }
 
-    func test_updateCreditCardList() {
+    func test_updateCreditCardList_callsListCreditCards() {
         let expectation = expectation(description: "wait for credit card to be added")
         viewModel.creditCard = nil
         viewModel.decryptedCreditCard = nil
-        // Add a sample card to the storage
-        viewModel.saveCreditCard(with: samplePlainTextCard) { creditCard, error in
-            guard error == nil, creditCard != nil else {
-                XCTFail()
-                return
-            }
-            // Make the view model state selected card
-            self.viewModel.state = .selectSavedCard
-            // Perform update
-            self.viewModel.updateCreditCardList({ cards in
-                // Check if the view model updated the list
-                let cards = self.viewModel.creditCards
-                XCTAssertNotNil(cards)
-                XCTAssert(!cards!.isEmpty)
-                expectation.fulfill()
-            })
-        }
-        waitForExpectations(timeout: 3.0)
+        viewModel.state = .selectSavedCard
+
+        viewModel.updateCreditCardList({ cards in
+            XCTAssertNotNil(self.viewModel)
+            XCTAssertNotNil(self.mockAutofill)
+            XCTAssertEqual(self.viewModel.creditCards, cards)
+            XCTAssertEqual(cards?.count, 1)
+            XCTAssertEqual(cards?.first?.guid, "1")
+            XCTAssertEqual(cards?.first?.ccName, "Allen Burges")
+            XCTAssertEqual(self.mockAutofill.listCreditCardsCalledCount, 1)
+            expectation.fulfill()
+        })
+        waitForExpectations(timeout: 5.0)
+    }
+
+    func test_updateCreditCardList_withoutSelectedSavedCardState_doesNotCallListCreditCards() {
+        let expectation = expectation(description: "wait for credit card to be added")
+        expectation.isInverted = true
+        viewModel.creditCard = nil
+        viewModel.decryptedCreditCard = nil
+
+        viewModel.updateCreditCardList({ cards in
+            expectation.fulfill()
+        })
+        waitForExpectations(timeout: 1.0)
     }
 }

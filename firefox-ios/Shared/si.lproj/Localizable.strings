@@ -5,10 +5,10 @@
 "+" = "+";
 
 /* Authentication prompt message with no realm. Parameter is the hostname of the site */
-"A username and password are being requested by %@." = "%@ වෙතින් පරිශීලක නාමයක් හා මුරපදයක් ඉල්ලා සිටියි.";
+"A username and password are being requested by %@." = "%@ වෙතින් පරිශ්‍රීලක නාමයක් හා මුරපදයක් ඉල්ලා සිටියි.";
 
 /* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
-"A username and password are being requested by %@. The site says: %@" = "%1$@ විසින් පරිශීලක නාමයක් සහ මුරපදයක් ඉල්ලා සිටියි. අඩවිය පවසන්නේ: %2$@";
+"A username and password are being requested by %@. The site says: %@" = "%1$@ විසින් පරිශ්‍රීලක නාමයක් සහ මුරපදයක් ඉල්ලා සිටියි. අඩවිය පවසන්නේ: %2$@";
 
 /* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "Aa" = "Aa";
@@ -757,6 +757,9 @@
 /* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "ඉතිහාසය";
 
+/* Label for the new private tab button in the menu page. Pressing this button opens a new private tab. */
+"Menu.NewPrivateTab.Label" = "නව පෞද්. පටිත්ත";
+
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
 "Menu.NewTab.v99" = "නව පටිත්ත";
 
@@ -1138,6 +1141,9 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "ඒ.ස.නි. (විමසුම %s සමඟ ප්‍රතිස්ථාපනය)";
 
+/* Title of setting to block opening external apps when pressing links. */
+"Settings.BlockOpeningExternalApps.Title" = "බාහිර යෙදුම් ඇරීම අවහිර කරන්න";
+
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "සියළුම අඩවිවල දත්ත මකන්න";
 
@@ -1393,6 +1399,12 @@
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "ෆයර්ෆොක්ස් විවෘත කරන විට";
 
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
+"Settings.OfferClipboardBar.Status.v128" = "%@ විවෘත කරන විට";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.StatusV2" = "ෆයර්ෆොක්ස් විවෘත කරන විට";
+
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "පිටපත් කළ සබැඳි ඇරීමට දක්වන්න";
 
@@ -1434,6 +1446,9 @@
 
 /* Description displayed under the ”Show Link Previews” option */
 "Settings.ShowLinkPreviews.Status" = "සබැඳි මත දිගු වෙලාවක් එබූ විට";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.StatusV2" = "සබැඳි මත දිගු වෙලාවක් එබූ විට";
 
 /* Title of setting to enable link previews when long-pressing links. */
 "Settings.ShowLinkPreviews.Title" = "සබැඳි පෙරදසුන් පෙන්වන්න";
@@ -1733,7 +1748,7 @@
 "Use stage servers" = "අදියර සේවාදායක භාවිතය";
 
 /* Username textbox in Authentication prompt */
-"Username" = "පරිශීලක නාමය";
+"Username" = "පරිශ්‍රීලක නාමය";
 
 /* The message of the error displayed to a user when they trying to change a wallpaper failed. */
 "Wallpaper.Change.Error.Body.v106" = "මෙම බිතුපතෙහි යම් දෙයක් වැරදී ඇත.";

@@ -65,11 +65,7 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
         let button = UIButton(type: .system)
         button.setTitle(.CreditCard.Settings.Done, for: .normal)
         button.addTarget(self, action: #selector(self.tappedDoneButton), for: .touchUpInside)
-        button.titleLabel?.font = DefaultDynamicFontHelper.preferredFont(
-            withTextStyle: .body,
-            size: UX.doneButtonFontSize,
-            weight: .semibold
-        )
+        button.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
         let barButton = UIBarButtonItem(customView: button)
         barButton.accessibilityIdentifier = AccessibilityIdentifiers.Browser.KeyboardAccessory.doneButton
         return barButton
@@ -220,7 +216,7 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
     }
 
     func applyTheme() {
-        let theme = themeManager.currentTheme(for: windowUUID)
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
 
         backgroundColor = theme.colors.layer5
         [previousButton, nextButton, doneButton].forEach {

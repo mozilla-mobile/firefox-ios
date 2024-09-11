@@ -363,6 +363,51 @@ public class RustAutofill {
         }
     }
 
+    /// Updates the address asynchronously.
+    ///
+    /// - Parameters:
+    ///   - id: The identifier of the address to update.
+    ///   - address: The updated address fields.
+    ///   - completion: A closure called upon update completion, taking a Result object indicating success or failure.
+    public func updateAddress(
+        id: String,
+        address: UpdatableAddressFields,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) {
+        performDatabaseOperation { error in
+            guard error == nil else {
+                completion(.failure(error!))
+                return
+            }
+            do {
+                try self.storage?.updateAddress(guid: id, a: address)
+                completion(.success(()))
+            } catch let error {
+                completion(.failure(error))
+            }
+        }
+    }
+
+    /// Deletes an address from the storage.
+    ///
+    /// - Parameters:
+    ///   - id: The unique identifier of the address to be deleted.
+    ///   - completion: A closure called upon update completion, taking a Result object indicating success or failure.
+    public func deleteAddress(id: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        performDatabaseOperation { error in
+            guard error == nil else {
+                completion(.failure(error!))
+                return
+            }
+            do {
+                _ = try self.storage?.deleteAddress(guid: id)
+                completion(.success(()))
+            } catch let error {
+                completion(.failure(error))
+            }
+        }
+    }
+
     /// Retrieves all addresses from the database.
     ///
     /// - Parameter completion: A closure called upon completion with the list of addresses or an error.

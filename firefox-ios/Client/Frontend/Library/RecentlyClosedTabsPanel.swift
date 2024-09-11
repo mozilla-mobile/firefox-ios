@@ -77,7 +77,7 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel, Themeable {
     }
 
     func applyTheme() {
-        view.backgroundColor = themeManager.currentTheme(for: windowUUID).colors.layer1
+        view.backgroundColor = themeManager.getCurrentTheme(for: windowUUID).colors.layer1
     }
 }
 
@@ -122,7 +122,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         twoLineCell.descriptionLabel.text = displayURL.absoluteDisplayString
         twoLineCell.leftImageView.layer.borderWidth = RecentlyClosedPanelUX.IconBorderWidth
         twoLineCell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: displayURL.absoluteString))
-        twoLineCell.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        twoLineCell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         return twoLineCell
     }
 
@@ -131,19 +131,8 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         let url = recentlyClosedTabs[indexPath.row].url
         recentlyClosedTabsDelegate?.openRecentlyClosedSiteInNewTab(url, isPrivate: false)
 
-        // The code above creates new tab and selects it, but TabManagerImplementation.selectTab()
-        // currently performs the actual selection update asynchronously via Swift Async + Task/Await.
-        // This means that selectTab() returns before the tab is actually selected. As a result, the
-        // delegate callback below will incorrectly cause a duplicate tab (since it will treat the
-        // url as having been applied to the current tab, not our newly-added tab from above). This
-        // is avoided by making sure we wait for our expected tab above to be selected before
-        // notifying our library panel delegate. [FXIOS-7741]
-
-        let tabWindowUUID = windowUUID
-        AppEventQueue.wait(for: .selectTab(url, tabWindowUUID)) {
-            let visitType = VisitType.typed    // Means History, too.
-            self.libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: visitType)
-        }
+        let visitType = VisitType.typed    // Means History, too.
+        self.libraryPanelDelegate?.libraryPanel(didSelectURL: url, visitType: visitType)
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

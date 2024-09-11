@@ -656,6 +656,113 @@ downloads:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
 
+# Microsurvey
+microsurvey:
+  shown:
+    type: event
+    description: |
+        The survey surface (bottom sheet) was shown and visible.
+    extra_keys:
+      survey_id:
+        type: string
+        description: |
+          The id of the survey.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19506
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20875
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20801
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20903
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-01-01"
+
+  privacy_notice_tapped:
+    type: event
+    description: |
+        Records that the user tapped on the privacy notice.
+    extra_keys:
+      survey_id:
+        type: string
+        description: |
+          The id of the survey.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19506
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20875
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20801
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20903
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: "2025-01-01"
+
+  dismiss_button_tapped:
+    type: event
+    description: |
+        Records that the user tapped on the close button to dismiss the survey.
+    extra_keys:
+      survey_id:
+        type: string
+        description: |
+          The id of the survey.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19506
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20875
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20801
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20903
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: "2025-01-01"
+
+  submit_button_tapped:
+    type: event
+    description: |
+        Records that the user tapped on the submit button to respond to the survey.
+    extra_keys:
+      user_selection:
+        type: string
+        description: |
+          The user's selected option e.g. "satisfied".
+      survey_id:
+        type: string
+        description: |
+          The id of the survey.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19506
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20875
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20801
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20903
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    data_sensitivity:
+      - interaction
+    expires: "2025-01-01"
+
+  confirmation_shown:
+    type: event
+    description: |
+        Records that the confirmation message in the survey has been viewed by the user.
+    extra_keys:
+      survey_id:
+        type: string
+        description: |
+          The id of the survey.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20800
+      - https://github.com/mozilla-mobile/firefox-ios/issues/20875
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20840
+      - https://github.com/mozilla-mobile/firefox-ios/pull/20903
+    notification_emails:
+        - fx-ios-data-stewards@mozilla.com
+    expires: "2025-01-01"
+
 # Shopping Experience (Fakespot)
 shopping:
   product_page_visits:
@@ -4498,7 +4605,7 @@ awesomebar:
       - technical
     notification_emails:
       - sync-core@mozilla.com
-      - teshaq@mozilla.com
+      - mhammond@mozilla.com
     expires: never
   share_button_tapped:
     type: event
@@ -4512,38 +4619,6 @@ awesomebar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-01-01"
-  engagement:
-    type: event
-    description: |
-      Recorded when the user completes their search session by
-      tapping a search result, or entering a URL or a search term.
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-8326
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-8550
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/18452
-      - https://github.com/mozilla-mobile/firefox-ios/pull/19009
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    data_sensitivity:
-      - interaction
-    expires: "2025-01-01"
-  abandonment:
-    type: event
-    description: |
-      Recorded when the user dismisses the awesomebar without completing their
-      search.
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-8326
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-8550
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/18452
-      - https://github.com/mozilla-mobile/firefox-ios/pull/19009
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    data_sensitivity:
-      - interaction
     expires: "2025-01-01"
 
 # Share sheet specific metrics
@@ -4866,7 +4941,7 @@ places_history_migration:
     data_sensitivity:
       - technical
     notification_emails:
-      - teshaq@mozilla.com
+      - mhammond@mozilla.com
       - sync-team@mozilla.com
     expires: "2025-01-01"
   num_to_migrate:
@@ -4882,7 +4957,7 @@ places_history_migration:
     data_sensitivity:
       - technical
     notification_emails:
-      - teshaq@mozilla.com
+      - mhammond@mozilla.com
       - sync-team@mozilla.com
     expires: "2025-01-01"
   num_migrated:
@@ -4898,7 +4973,7 @@ places_history_migration:
     data_sensitivity:
       - technical
     notification_emails:
-      - teshaq@mozilla.com
+      - mhammond@mozilla.com
       - sync-team@mozilla.com
     expires: "2025-01-01"
   migration_ended_rate:
@@ -4913,7 +4988,7 @@ places_history_migration:
     data_sensitivity:
       - technical
     notification_emails:
-      - teshaq@mozilla.com
+      - mhammond@mozilla.com
       - sync-team@mozilla.com
     expires: "2025-01-01"
   migration_error_rate:
@@ -4928,7 +5003,7 @@ places_history_migration:
     data_sensitivity:
       - technical
     notification_emails:
-      - teshaq@mozilla.com
+      - mhammond@mozilla.com
       - sync-team@mozilla.com
     expires: "2025-01-01"
 # Address autofill
@@ -5555,3 +5630,21 @@ windows:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
     unit: quantity of iPad windows
+
+# Server Knobs validation
+server_knobs:
+  validation:
+    disabled: true
+    type: event
+    description: |
+      Temporary metric recorded at the same time as
+      "app_cycle.foreground" to validate that the Glean Server Knobs
+      functionality is working correctly.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1823688
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1823688#c2
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+      - brosa@mozilla.com
+    expires: "2024-09-01"

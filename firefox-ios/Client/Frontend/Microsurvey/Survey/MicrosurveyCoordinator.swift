@@ -8,10 +8,15 @@ import Shared
 
 protocol MicrosurveyCoordinatorDelegate: AnyObject {
     func dismissFlow()
-    func showPrivacy()
+    func showPrivacy(with content: String?)
 }
 
 final class MicrosurveyCoordinator: BaseCoordinator, FeatureFlaggable, MicrosurveyCoordinatorDelegate {
+    private struct UTMParams {
+        static let source = "modal"
+        static let campaign = "microsurvey"
+    }
+
     weak var parentCoordinator: ParentCoordinatorDelegate?
     private let tabManager: TabManager
     private var windowUUID: WindowUUID { return tabManager.windowUUID }
@@ -36,10 +41,14 @@ final class MicrosurveyCoordinator: BaseCoordinator, FeatureFlaggable, Microsurv
         parentCoordinator?.didFinish(from: self)
     }
 
-    func showPrivacy() {
-        // TODO: FXIOS-8976 - Add to Support Utils
-        guard let url = URL(string: "https://www.mozilla.org/privacy/firefox") else { return }
-        tabManager.addTabsForURLs([url], zombie: false, shouldSelectTab: true)
+    func showPrivacy(with content: String?) {
+        guard let url = SupportUtils.URLForPrivacyNotice(
+            source: UTMParams.source,
+            campaign: UTMParams.campaign,
+            content: content
+        ) else { return }
+        let currentTab = tabManager.selectedTab?.isPrivate ?? false
+        tabManager.addTabsForURLs([url], zombie: false, shouldSelectTab: true, isPrivate: currentTab)
         router.dismiss(animated: true, completion: nil)
         parentCoordinator?.didFinish(from: self)
     }

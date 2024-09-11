@@ -20,7 +20,7 @@ class SiriPageSetting: Setting {
          settingsDelegate: GeneralSettingsDelegate?) {
         self.profile = settings.profile
         self.settingsDelegate = settingsDelegate
-        let theme = settings.themeManager.currentTheme(for: settings.windowUUID)
+        let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
         super.init(
             title: NSAttributedString(
                 string: .SettingsSiriSectionName,

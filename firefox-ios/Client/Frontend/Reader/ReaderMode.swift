@@ -35,7 +35,7 @@ enum ReaderModeTheme: String {
 
         let appTheme: Theme = {
             guard let uuid = window else { return themeManager.windowNonspecificTheme() }
-            return themeManager.currentTheme(for: uuid)
+            return themeManager.getCurrentTheme(for: uuid)
         }()
 
         guard appTheme.type != .dark else { return .dark }
@@ -190,7 +190,7 @@ struct ReaderModeStyle {
         self.theme = ReaderModeTheme.preferredTheme(for: self.theme, window: windowUUID)
     }
 
-    static func defaultStyle(for window: WindowUUID?) -> ReaderModeStyle {
+    static func defaultStyle(for window: WindowUUID? = nil) -> ReaderModeStyle {
         return ReaderModeStyle(
             windowUUID: window,
             theme: .light,

@@ -8,7 +8,7 @@
 "About.privateBullet1" = "Fate ricerche è navigate in l’appiecazione";
 
 /* Label on About screen */
-"About.privateBullet2" = "Bluccate i perseguitatori (o mudificate e preferenze per auturizalli)";
+"About.privateBullet2" = "Bluccate i perseguitatori (o mudificate i parametri per auturizalli)";
 
 /* Label on About screen */
 "About.privateBullet3" = "Squassate i canistrelli è ancu e cronolugie di navigazione è di ricerca";
@@ -74,7 +74,7 @@
 "Autocomplete.addCustomUrlWithPlus" = "+ Aghjunghje un indirizzu persunalizatu";
 
 /* Label for toast alerting a custom URL has been added */
-"Autocomplete.customUrlAdded" = "Novu indirizzu persunalizatu aghjuntu.";
+"Autocomplete.customUrlAdded" = "L’indirizzu web persunalizatu novu hè aghjuntu.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
 "Autocomplete.defaultDescriptoin" = "Attivà per chì %@ compii autumaticamente più di 450 indirizzi populari in a barra d’indirizzu.";
@@ -107,7 +107,7 @@
 "BiometricAuthentication.UnlockButton.Title" = "Sbluccà";
 
 /* Create a new session after failing a biometric check */
-"BiometricPrompt.newSession" = "Nova sessione";
+"BiometricPrompt.newSession" = "Sessione nova";
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Ritornu";
@@ -125,7 +125,7 @@
 "Browser.reloadLabel" = "Ricaricà";
 
 /* Accessibility label for the settings button */
-"Browser.settingsLabel" = "Preferenze";
+"Browser.settingsLabel" = "Parametri";
 
 /* Accessibility label for the stop button */
 "Browser.stopLabel" = "Piantà";
@@ -215,7 +215,7 @@
 "Onboarding.Incognito.Title" = "Più chè solu incognitu";
 
 /* Text for a label that indicates the description of protection section from onboarding screen. */
-"Onboarding.Protection.Description" = "Cunfigureghja e preferenze per sceglie s’è vò scumpartite assai o pocu.";
+"Onboarding.Protection.Description" = "Cunfigureghja i parametri per sceglie s’è vò scumpartite assai o pocu.";
 
 /* Text for a label that indicates the title of protection section from onboarding screen. */
 "Onboarding.Protection.Title" = "Prutezzione discreziunale";
@@ -239,10 +239,10 @@
 "Safari.instructionsNotEnabled" = "%@ ùn hè micca attivatu.";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
-"Safari.instructionsOpen" = "Aprite e preferenze";
+"Safari.instructionsOpen" = "Aprite i parametri";
 
 /* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
-"Safari.openInstruction" = "Aprite e preferenze di l’apparechju";
+"Safari.openInstruction" = "Aprite i parametri di l’apparechju";
 
 /* Save button label */
 "Save" = "Arregistrà";
@@ -305,7 +305,7 @@
 "Settings.safariTitle" = "INTEGRAZIONE SAFARI";
 
 /* Title for settings screen */
-"Settings.screenTitle" = "Preferenze";
+"Settings.screenTitle" = "Parametri";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Aghjunghje un altru mutore di ricerca";
@@ -320,7 +320,7 @@
 "Settings.Search.NameToDisplay" = "Nome à affissà";
 
 /* Toast displayed after adding a search engine */
-"Settings.Search.NewSearchEngineAdded" = "Novu mutore di ricerca aghjuntu.";
+"Settings.Search.NewSearchEngineAdded" = "U mutore di ricerca novu hè aghjuntu.";
 
 /* Label for button to bring deleted default engines back */
 "Settings.Search.RestoreEngine" = "Risturà i mutori di ricerca predefiniti";
@@ -563,10 +563,10 @@
 "TodayWidget.SearchInApp.Instruction" = "Circà in %@";
 
 /* This is the body text that is displayed for the Context Menu icon tooltip */
-"TooltipBodyText.ContextMenu" = "Andà à e preferenze per urganizà l’ozzioni specifiche di cunfidenzialità è di sicurità.";
+"TooltipBodyText.ContextMenu" = "Andà à i parametri per urganizà l’ozzioni specifiche di cunfidenzialità è di sicurità.";
 
 /* This is the body text that is displayed for the Privacy tooltip */
-"TooltipBodyText.Privacy" = "Ste preferenze predefinite furniscenu una prutezzione forte. Ma hè faciule di mudificalle per suddisfà i vostri bisogni specifichi.";
+"TooltipBodyText.Privacy" = "Sti parametri predefiniti furniscenu una prutezzione forte. Ma hè faciule di mudificalli per suddisfà i vostri bisogni specifichi.";
 
 /* This is the body text that is displayed for the Search Bar tooltip */
 "TooltipBodyText.SearchBar" = "Principiate a vostra sessione di navigazione privata è noi bluccheremu l’elementi di spiunagiu è l’altre minacce durante a navigazione.";
@@ -581,7 +581,7 @@
 "TooltipBodyText.TrashIcon" = "Picchichjate a curbella à ogni mumenti per caccià tutta traccia di a vostra sessione currente.";
 
 /* This is the body text that is displayed for the Trash icon tooltip */
-"TooltipBodyText.TrashIcon.V2" = "Picchicciate quì per squassà tuttu - cronolugia, canistrelli, ecc. - è principiate à zeru in un’unghjetta nova.";
+"TooltipBodyText.TrashIcon.V2" = "Picchichjate quì per squassà tuttu - cronolugia, canistrelli, ecc. - è principiate à zeru in un’unghjetta nova.";
 
 /* This is the title text that is displayed for the Privacy tooltip */
 "TooltipTitleText.Privacy" = "Site prutetti !";

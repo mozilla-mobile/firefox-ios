@@ -200,13 +200,13 @@
 "ContextMenu.ShareLinkButtonTitle" = "Sparte u liame";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
-"ContextualHints.SearchBarPlacement.CallToAction" = "Preferenze di a barra d’attrezzi";
+"ContextualHints.SearchBarPlacement.CallToAction" = "Parametri di a barra d’attrezzi";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one talks about the inactive tabs feature. */
 "ContextualHints.TabTray.InactiveTabs" = "L’unghjette chì vo ùn avete micca viste dapoi duie settimane sò dispiazzate quì.";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is the call to action for the inactive tabs contextual popup. */
-"ContextualHints.TabTray.InactiveTabs.CallToAction" = "Disattivà in e preferenze";
+"ContextualHints.TabTray.InactiveTabs.CallToAction" = "Disattivà in i parametri";
 
 /* Accessibility label for action denoting closing contextual hint. */
 "ContextualHintsCloseButtonAccessibility.v105" = "Chjode";
@@ -224,7 +224,7 @@
 "CoverSheet.v24.ETP.Description" = "A prutezzione rinfurzata contr’à u spiunagiu impedisce u spiunagiu cù e publicità. Attivate u modu Severa per bluccà ancu più di perseguitatori, publicità è d’annunzii micca richiesti.";
 
 /* Text for the new ETP settings button */
-"CoverSheet.v24.ETP.Settings.Button" = "Andà à e preferenze";
+"CoverSheet.v24.ETP.Settings.Button" = "Andà à i parametri";
 
 /* Title for the new ETP mode i.e. standard vs strict */
 "CoverSheet.v24.ETP.Title" = "Prutezzione contr’à u spiunagiu da e publicità";
@@ -245,7 +245,7 @@
 "DefaultBrowserCloseButtonAccessibility.v102" = "Chjode";
 
 /* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
-"Display Settings" = "Preferenze per affissà";
+"Display Settings" = "Parametri per affissà";
 
 /* Used as a button label for crash dialog prompt */
 "Don’t Send" = "Ùn mandà micca";
@@ -353,7 +353,7 @@
 "FirefoxHomepage.Common.PagesCount.v112" = "Pagine : %d";
 
 /* The title for the Settings context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to the Shortcuts Settings. */
-"FirefoxHomepage.ContextualMenu.Settings.v101" = "Preferenze";
+"FirefoxHomepage.ContextualMenu.Settings.v101" = "Parametri";
 
 /* The title for the Sponsored Content context menu action for sponsored tiles in the Firefox home page shortcuts section. Clicking this brings the users to a support page where users can learn more about Sponsored content and how it works. */
 "FirefoxHomepage.ContextualMenu.SponsoredContent.v101" = "I nostri spunsurizatori è a vostra vita privata";
@@ -560,7 +560,7 @@
 "Keyboard.Shortcuts.Section.Window" = "Finestra";
 
 /* A label indicating the keyboard shortcut of opening the application's settings menu. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.Settings" = "Preferenze";
+"Keyboard.Shortcuts.Settings" = "Parametri";
 
 /* A label indicating the keyboard shortcut of showing all bookmarks. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ShowBookmarks" = "Affissà l’indette";
@@ -611,7 +611,7 @@
 "LibraryPanel.History.DeleteGroupedItem.v104" = "Squassà";
 
 /* In the history panel, users will be able to search terms in their browsing history. This label is shown when there is no results after querying the search terms in the user's history. */
-"LibraryPanel.History.NoHistoryFound.v99" = "Nisunu elementu trovu in a cronolugia";
+"LibraryPanel.History.NoHistoryFound.v99" = "Ùn si trova nunda in a cronolugia";
 
 /* In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs. */
 "LibraryPanel.History.RecentlyClosedTabs.v99" = "Unghjette chjose pocu fà";
@@ -757,6 +757,9 @@
 /* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "Cronolugia";
 
+/* Label for the new private tab button in the menu page. Pressing this button opens a new private tab. */
+"Menu.NewPrivateTab.Label" = "Nova unghjetta privata";
+
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
 "Menu.NewTab.v99" = "Nova unghjetta";
 
@@ -821,7 +824,7 @@
 "Menu.TrackingProtection.Details.Verifier" = "Verificatu da %@";
 
 /* The title for tracking protection settings */
-"Menu.TrackingProtection.ProtectionSettings.Title" = "Preferenze di prutezzione";
+"Menu.TrackingProtection.ProtectionSettings.Title" = "Parametri di prutezzione";
 
 /* The title that shows the number of content cookies blocked */
 "Menu.TrackingProtectionBlockedContent.Title" = "Cuntenutu impiegatu per u spiunagiu";
@@ -896,7 +899,7 @@
 "Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Aprite l’articuli in modu di lettura picchichjendu l’icona di libru quand’ella s’affacca in a barra di titulu.";
 
 /* See http://mzl.la/1G7uHo7 */
-"Open Settings" = "Apre e preferenze";
+"Open Settings" = "Apre i parametri";
 
 /* Toggle tabs syncing setting */
 "Open Tabs" = "Unghjette aperte";
@@ -1001,7 +1004,7 @@
 "ScanQRCode.InvalidDataError.Message" = "I dati sò inaccetevule";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Andà à « Preferenze » > « Firefox » di l’apparechju. Permette à Firefox d’accede à l’apparechju-fotò.";
+"ScanQRCode.PermissionError.Message.v100" = "Andà à « Parametri » > « Firefox » di l’apparechju. Permette à Firefox d’accede à l’apparechju-fotò.";
 
 /* Title for the QR code scanner view. */
 "ScanQRCode.View.Title" = "Analizà un codice QR";
@@ -1085,7 +1088,7 @@
 "SendTo.NoDevicesFound.Message" = "Ùn avete alcunu altru apparechju prontu à esse sincrunizatu è cunnessu à stu contu Firefox.";
 
 /* See http://mzl.la/1ISlXnU */
-"SendTo.NotSignedIn.Message" = "Ci vole à apre Firefox, andà in Preferenze è identificassi per cuntinuà.";
+"SendTo.NotSignedIn.Message" = "Ci vole à apre Firefox, andà in Parametri è identificassi per cuntinuà.";
 
 /* See http://mzl.la/1ISlXnU */
 "SendTo.NotSignedIn.Title" = "Ùn site micca cunnessu à u vostru contu Firefox.";
@@ -1121,7 +1124,7 @@
 "Serif" = "Patta (Serif)";
 
 /* Title in the settings view controller title bar */
-"Settings" = "Preferenze";
+"Settings" = "Parametri";
 
 /* The button text in Search Settings that opens the Custom Search Engine view. */
 "Settings.AddCustomEngine" = "Aghjunghje un mutore di ricerca";
@@ -1143,6 +1146,9 @@
 
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "Indirizzu web (Rimpiazzà a ricerca da %s)";
+
+/* Title of setting to block opening external apps when pressing links. */
+"Settings.BlockOpeningExternalApps.Title" = "Bluccà l’apertura d’appiecazioni esterne";
 
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Squassà tutti dati di siti";
@@ -1232,7 +1238,7 @@
 "Settings.FxA.DeviceName" = "Nome di l’apparechju";
 
 /* Label used as a section title in the Firefox Accounts Settings screen. */
-"Settings.FxA.Sync.SectionName" = "Preferenze di sincrunizazione";
+"Settings.FxA.Sync.SectionName" = "Parametri di sincrunizazione";
 
 /* Title displayed in header of the FxA settings panel. */
 "Settings.FxA.Title" = "Contu Firefox";
@@ -1399,6 +1405,12 @@
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "À l’apertura di Firefox";
 
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
+"Settings.OfferClipboardBar.Status.v128" = "À l’apertura di %@";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.StatusV2" = "À l’apertura di Firefox";
+
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Prupone d’apre i liami cupiati";
 
@@ -1440,6 +1452,9 @@
 
 /* Description displayed under the ”Show Link Previews” option */
 "Settings.ShowLinkPreviews.Status" = "Durante un appoghju longu nant’à i liami";
+
+/* Description displayed under the ”Show Link Previews” option */
+"Settings.ShowLinkPreviews.StatusV2" = "Durante un appoghju longu nant’à i liami";
 
 /* Title of setting to enable link previews when long-pressing links. */
 "Settings.ShowLinkPreviews.Title" = "Affissà a fighjulata di i liami";

@@ -31,7 +31,7 @@ private struct DarkColourPalette: ThemeColourPalette {
     var layer5: UIColor = FXColors.DarkGrey40
     var layer5Hover: UIColor = FXColors.DarkGrey20
     var layerScrim: UIColor = FXColors.DarkGrey90.withAlphaComponent(0.95)
-    var layerGradient = Gradient(colors: [FXColors.Violet40, FXColors.Violet70])
+    var layerGradient = Gradient(colors: [FXColors.Violet60, FXColors.Violet70])
     var layerGradientOverlay = Gradient(colors: [FXColors.DarkGrey40.withAlphaComponent(0),
                                                  FXColors.DarkGrey40.withAlphaComponent(0.4)])
     var layerAccentNonOpaque: UIColor = FXColors.Blue20.withAlphaComponent(0.2)
@@ -47,6 +47,7 @@ private struct DarkColourPalette: ThemeColourPalette {
     var layerConfirmation: UIColor = FXColors.Green80
     var layerWarning: UIColor = FXColors.Yellow70.withAlphaComponent(0.77)
     var layerError: UIColor = FXColors.Pink80
+    var layerSelectedText: UIColor = FXColors.LightGrey05.withAlphaComponent(0.34)
     var layerSearch: UIColor = FXColors.DarkGrey80
     var layerGradientURL = Gradient(colors: [
         FXColors.DarkGrey80.withAlphaComponent(0),
@@ -80,7 +81,7 @@ private struct DarkColourPalette: ThemeColourPalette {
     var actionError: UIColor = FXColors.Pink70.withAlphaComponent(0.69)
     var actionInfo: UIColor = FXColors.Blue60
     var actionTabActive: UIColor = FXColors.DarkGrey30
-    var actionTabInactive: UIColor = FXColors.DarkGrey30
+    var actionTabInactive: UIColor = FXColors.DarkGrey80
 
     // MARK: - Text
     var textPrimary: UIColor = FXColors.LightGrey05

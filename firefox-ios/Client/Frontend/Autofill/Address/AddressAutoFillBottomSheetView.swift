@@ -8,25 +8,44 @@ import Common
 import ComponentLibrary
 
 struct AddressAutoFillBottomSheetView: View {
-    // MARK: - Properties
-
     let windowUUID: WindowUUID
     @Environment(\.themeManager)
     var themeManager
 
-    /// The observed object for managing the address list.
     @ObservedObject var addressListViewModel: AddressListViewModel
+    @State private var backgroundColor: Color = .clear
 
     // MARK: - Body
 
     var body: some View {
         VStack {
-            AutofillHeaderView(windowUUID: windowUUID, title: .Addresses.BottomSheet.UseASavedAddress)
-            Spacer()
-            AddressScrollView(windowUUID: windowUUID, viewModel: addressListViewModel)
-            Spacer()
+            AutofillHeaderView(
+                windowUUID: windowUUID,
+                title: .Addresses.BottomSheet.UseASavedAddress
+            )
+            AddressScrollView(
+                windowUUID: windowUUID,
+                viewModel: addressListViewModel
+            )
+            AutofillFooterView(
+                windowUUID: windowUUID,
+                title: .Addresses.BottomSheet.ManageAddressesButton,
+                primaryAction: { addressListViewModel.manageAddressesInfoAction?() }
+            )
         }
         .padding()
-        .background(Color(themeManager.currentTheme(for: windowUUID).colors.layer1))
+        .background(backgroundColor)
+        .onAppear {
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
+            guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        }
+    }
+
+    func applyTheme(theme: Theme) {
+        let color = theme.colors
+        backgroundColor = Color(color.layer1)
     }
 }

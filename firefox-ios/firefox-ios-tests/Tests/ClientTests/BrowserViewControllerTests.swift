@@ -20,7 +20,6 @@ class BrowserViewControllerTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
         TelemetryContextualIdentifier.setupContextId()
         Glean.shared.resetGlean(clearStores: true)
-        Glean.shared.enableTestingMode()
 
         profile = MockProfile()
         tabManager = MockTabManager()

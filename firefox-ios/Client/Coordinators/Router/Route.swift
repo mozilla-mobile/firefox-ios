@@ -86,6 +86,7 @@ enum Route: Equatable {
 
     /// An enumeration representing different sections of the settings menu.
     enum SettingsSection: String, CaseIterable, Equatable {
+        case addresses
         case contentBlocker
         case clearPrivateData = "clear-private-data"
         case creditCard

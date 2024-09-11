@@ -32,11 +32,11 @@ struct LoginAutofillView: View {
         .padding()
         .background(backgroundColor)
         .onAppear {
-            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         }
     }
 
@@ -51,6 +51,7 @@ struct LoginAutofillView: View {
         windowUUID: .XCTestDefaultUUID,
         viewModel: LoginListViewModel(
             tabURL: URL(string: "http://www.example.com", invalidCharacters: false)!,
+            field: FocusFieldType.username,
             loginStorage: MockLoginStorage(),
             logger: MockLogger(),
             onLoginCellTap: { _ in },

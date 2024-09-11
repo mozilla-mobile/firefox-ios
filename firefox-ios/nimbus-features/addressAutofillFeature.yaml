@@ -1,19 +1,5 @@
 # The configuration for the addressAutofillFeature feature
 features:
-  address-autofill-feature:
-    description: This property defines the address card autofill feature
-    variables:
-      status:
-        description: If true, we will allow user to use the address autofill feature
-        type: Boolean
-        default: false
-    defaults:
-      - channel: beta
-        value:
-          status: true
-      - channel: developer
-        value:
-          status: true
   address-autofill-edit:
     description: This property defines if the address editing is enabled in Settings
     variables:

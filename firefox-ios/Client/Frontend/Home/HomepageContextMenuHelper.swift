@@ -13,7 +13,7 @@ import enum MozillaAppServices.BookmarkRoots
 protocol HomepageContextMenuHelperDelegate: UIViewController {
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool)
     func homePanelDidRequestToOpenSettings(at settingsPage: Route.SettingsSection)
-    func homePanelDidRequestBookmarkToast(for action: BookmarkAction)
+    func homePanelDidRequestBookmarkToast(url: URL?, action: BookmarkAction)
 }
 // swiftlint:enable class_delegate_protocol
 
@@ -202,7 +202,8 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                 site.setBookmarked(false)
             }
 
-            self.delegate?.homePanelDidRequestBookmarkToast(for: .remove)
+            let url = URL(string: site.url)
+            self.delegate?.homePanelDidRequestBookmarkToast(url: url, action: .remove)
 
             TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .activityStream)
         })
@@ -229,7 +230,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                                                                                  toApplication: .shared)
             site.setBookmarked(true)
 
-            self.delegate?.homePanelDidRequestBookmarkToast(for: .add)
+            self.delegate?.homePanelDidRequestBookmarkToast(url: nil, action: .add)
 
             TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .activityStream)
         })
@@ -242,7 +243,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
     /// - Returns: Share action
     private func getShareAction(site: Site, sourceView: UIView?) -> PhotonRowActions {
         return SingleActionViewModel(title: .ShareContextMenuTitle,
-                                     iconString: StandardImageIdentifiers.Large.shareApple,
+                                     iconString: StandardImageIdentifiers.Large.share,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
             guard let url = URL(string: site.url, invalidCharacters: false) else { return }

@@ -75,7 +75,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
     }
 
     private func currentTheme() -> Theme {
-        return themeManager.currentTheme(for: windowUUID)
+        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     override func viewDidLoad() {
@@ -94,13 +94,13 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = dequeueCellFor(indexPath: indexPath)
-        cell.applyTheme(theme: currentTheme())
-
+        cell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         if indexPath.section == sectionArrow {
             cell.accessoryType = .disclosureIndicator
             cell.textLabel?.text = .SettingsWebsiteDataTitle
             cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.ClearData.websiteDataSection
             clearButton = cell
+            return cell
         } else if indexPath.section == sectionToggles {
             cell.textLabel?.text = clearables[indexPath.item].clearable.label
             cell.textLabel?.numberOfLines = 0
@@ -112,16 +112,17 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             cell.accessoryView = control
             cell.selectionStyle = .none
             control.tag = indexPath.item
-        } else {
-            cell.textLabel?.text = .SettingsClearPrivateDataClearButton
-            cell.textLabel?.textAlignment = .center
-            cell.textLabel?.textColor = currentTheme().colors.textWarning
-            cell.accessibilityTraits = UIAccessibilityTraits.button
-            cell.accessibilityIdentifier = AccessibilityIdentifiers.Settings.ClearData.clearPrivateDataSection
+            return cell
+        } else if let cell = cell as? ThemedCenteredTableViewCell {
+            cell.setTitle(to: .SettingsClearPrivateDataClearButton)
+            cell.setAccessibilities(
+                traits: .button,
+                identifier: AccessibilityIdentifiers.Settings.ClearData.clearPrivateDataSection)
             clearButton = cell
+            return cell
+        } else {
+            return ThemedTableViewCell()
         }
-
-        return cell
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -164,6 +165,18 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         tableView.deselectRow(at: indexPath, animated: false)
     }
 
+    override func dequeueCellFor(indexPath: IndexPath) -> ThemedTableViewCell {
+        guard indexPath.section == sectionButton else {
+            return super.dequeueCellFor(indexPath: indexPath)
+        }
+
+        if let cell = tableView.dequeueReusableCell(
+            withIdentifier: ThemedCenteredTableViewCell.cellIdentifier,
+            for: indexPath) as? ThemedCenteredTableViewCell {
+            return cell
+        }
+        return ThemedTableViewCell()
+    }
     private func clearPrivateData(_ action: UIAlertAction) {
         let toggles = self.toggles
         self.clearables

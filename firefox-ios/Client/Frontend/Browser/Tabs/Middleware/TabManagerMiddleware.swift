@@ -390,16 +390,18 @@ class TabManagerMiddleware {
                                                           actionType: TabPanelMiddlewareActionType.showToast)
                     store.dispatch(action)
                 } else {
-                    let dismissAction = TabTrayAction(windowUUID: uuid,
-                                                      actionType: TabTrayActionType.dismissTabTray)
-                    store.dispatch(dismissAction)
-
                     let toastAction = GeneralBrowserAction(toastType: .closedAllTabs(count: normalCount),
                                                            windowUUID: uuid,
                                                            actionType: GeneralBrowserActionType.showToast)
                     store.dispatch(toastAction)
                 }
             }
+        }
+
+        if !tabsState.isPrivateMode {
+            let dismissAction = TabTrayAction(windowUUID: uuid,
+                                              actionType: TabTrayActionType.dismissTabTray)
+            store.dispatch(dismissAction)
         }
     }
 
@@ -429,7 +431,8 @@ class TabManagerMiddleware {
                                                          actionType: TabPanelMiddlewareActionType.refreshInactiveTabs)
             store.dispatch(refreshAction)
 
-            let toastAction = TabPanelMiddlewareAction(toastType: .closedAllTabs(count: tabsState.inactiveTabs.count),
+            let inactiveTabsCount = tabsState.inactiveTabs.count
+            let toastAction = TabPanelMiddlewareAction(toastType: .closedAllInactiveTabs(count: inactiveTabsCount),
                                                        windowUUID: uuid,
                                                        actionType: TabPanelMiddlewareActionType.showToast)
             store.dispatch(toastAction)
@@ -506,10 +509,8 @@ class TabManagerMiddleware {
         let windowManager: WindowManager = AppContainer.shared.resolve()
         guard uuid != .unavailable else {
             assertionFailure()
-            logger.log("Unexpected or unavailable UUID for TabManager. Returning active window tab manager by default.",
-                       level: .warning,
-                       category: .tabs)
-            return windowManager.tabManager(for: windowManager.activeWindow)
+            logger.log("Unexpected or unavailable window UUID for requested TabManager.", level: .fatal, category: .tabs)
+            return windowManager.allWindowTabManagers().first!
         }
 
         return windowManager.tabManager(for: uuid)

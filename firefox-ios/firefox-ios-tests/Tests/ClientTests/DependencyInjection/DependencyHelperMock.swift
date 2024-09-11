@@ -9,7 +9,10 @@ import TabDataStore
 @testable import Client
 
 class DependencyHelperMock {
-    func bootstrapDependencies(injectedTabManager: TabManager? = nil) {
+    func bootstrapDependencies(
+        injectedTabManager: TabManager? = nil,
+        injectedMicrosurveyManager: MicrosurveyManager? = nil
+    ) {
         AppContainer.shared.reset()
 
         let profile: Client.Profile = BrowserProfile(
@@ -27,7 +30,7 @@ class DependencyHelperMock {
         let windowManager: WindowManager = MockWindowManager(wrappedManager: WindowManagerImplementation())
         let tabManager: TabManager =
         injectedTabManager ?? TabManagerImplementation(profile: profile,
-                                                       uuid: windowUUID,
+                                                       uuid: ReservedWindowUUID(uuid: windowUUID, isNew: false),
                                                        windowManager: windowManager)
 
         let appSessionProvider: AppSessionProvider = AppSessionManager()
@@ -44,6 +47,9 @@ class DependencyHelperMock {
 
         AppContainer.shared.register(service: windowManager)
         windowManager.newBrowserWindowConfigured(AppWindowInfo(tabManager: tabManager), uuid: windowUUID)
+
+        let microsurveyManager: MicrosurveyManager = injectedMicrosurveyManager ?? MockMicrosurveySurfaceManager()
+        AppContainer.shared.register(service: microsurveyManager)
 
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()

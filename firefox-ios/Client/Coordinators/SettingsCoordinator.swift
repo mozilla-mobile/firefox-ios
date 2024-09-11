@@ -79,6 +79,16 @@ class SettingsCoordinator: BaseCoordinator,
 
     private func getSettingsViewController(settingsSection section: Route.SettingsSection) -> UIViewController? {
         switch section {
+        case .addresses:
+            let viewModel = AddressAutofillSettingsViewModel(
+                profile: profile,
+                windowUUID: windowUUID
+            )
+            let viewController = AddressAutofillSettingsViewController(
+                addressAutofillViewModel: viewModel,
+                windowUUID: windowUUID
+            )
+            return viewController
         case .newTab:
             let viewController = NewTabContentSettingsViewController(prefs: profile.prefs,
                                                                      windowUUID: windowUUID)
@@ -124,7 +134,7 @@ class SettingsCoordinator: BaseCoordinator,
                 let viewModel = WallpaperSettingsViewModel(
                     wallpaperManager: wallpaperManager,
                     tabManager: tabManager,
-                    theme: themeManager.currentTheme(for: windowUUID)
+                    theme: themeManager.getCurrentTheme(for: windowUUID)
                 )
                 let wallpaperVC = WallpaperSettingsViewController(viewModel: viewModel, windowUUID: windowUUID)
                 wallpaperVC.settingsDelegate = self
@@ -196,6 +206,11 @@ class SettingsCoordinator: BaseCoordinator,
 
     func openDebugTestTabs(count: Int) {
         parentCoordinator?.openDebugTestTabs(count: count)
+    }
+
+    func showDebugFeatureFlags() {
+        let featureFlagsViewController = FeatureFlagsDebugViewController(windowUUID: windowUUID)
+        router.push(featureFlagsViewController)
     }
 
     func showPasswordManager(shouldShowOnboarding: Bool) {

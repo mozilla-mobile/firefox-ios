@@ -9,7 +9,7 @@ class FakespotTests: BaseTestCase {
         super.tearDown()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307128
+    // https://mozilla.testrail.io/index.php?/cases/view/2307128
     func testFakespotAvailable() {
         reachReviewChecker()
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
@@ -20,7 +20,7 @@ class FakespotTests: BaseTestCase {
         mozWaitForElementToNotExist(app.otherElements[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358865
+    // https://mozilla.testrail.io/index.php?/cases/view/2358865
     func testReviewQualityCheckBottomSheetUI() {
         reachReviewChecker()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton])
@@ -28,7 +28,7 @@ class FakespotTests: BaseTestCase {
         validateReviewQualityCheckSheet()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358866
+    // https://mozilla.testrail.io/index.php?/cases/view/2358866
     func testReviewQualityCheckBottomSheetUILandscape() throws {
         if iPad() {
             throw XCTSkip("iPhone only test")
@@ -42,7 +42,7 @@ class FakespotTests: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358902
+    // https://mozilla.testrail.io/index.php?/cases/view/2358902
     // Smoketest
     func testPriceTagIconAvailableOnlyOnDetailPage() {
         // Search for a product but do not open the product detail page
@@ -52,7 +52,7 @@ class FakespotTests: BaseTestCase {
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358904
+    // https://mozilla.testrail.io/index.php?/cases/view/2358904
     // Smoketest
     func testPriceTagNotDisplayedInPrivateMode() {
         // Open a product detail page using a private tab and check the address bar
@@ -62,7 +62,7 @@ class FakespotTests: BaseTestCase {
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358924
+    // https://mozilla.testrail.io/index.php?/cases/view/2358924
     func testAcceptTheRejectedOptInNotification() {
         reachReviewChecker()
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
@@ -87,7 +87,7 @@ class FakespotTests: BaseTestCase {
         XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Shopping.sheetCloseButton].label, "Close Review Checker")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358901
+    // https://mozilla.testrail.io/index.php?/cases/view/2358901
     func testPriceTagNotDisplayedOnSitesNotIntegratedFakespot() {
         // Navigate to ebay.com
         navigator.openURL("https://www.ebay.com")
@@ -110,7 +110,7 @@ class FakespotTests: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358863
+    // https://mozilla.testrail.io/index.php?/cases/view/2358863
     func testSettingsSectionUI() {
         // Navigate to a product detail page
         reachReviewChecker()
@@ -137,7 +137,7 @@ class FakespotTests: BaseTestCase {
         validateExpandedSettingsSection()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358892
+    // https://mozilla.testrail.io/index.php?/cases/view/2358892
     func testOptInNotificationLayout() {
         // Navigate to a product detail page on amazon.com page
         reachReviewChecker()
@@ -150,7 +150,7 @@ class FakespotTests: BaseTestCase {
         validateLayoutOnWalmartAndBestBuy("https://www.bestbuy.com", isWalmart: false, "Best Buy", "Amazon", "Walmart")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358878
+    // https://mozilla.testrail.io/index.php?/cases/view/2358878
     func testLearnMoreAboutFakespotHyperlink() {
         // Navigate to a product detail page
         reachReviewChecker()
@@ -170,7 +170,7 @@ class FakespotTests: BaseTestCase {
         validateMozillaSupportWebpage("Review Checker for Firefox Mobile", "support.mozilla.org")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358864
+    // https://mozilla.testrail.io/index.php?/cases/view/2358864
     func testTurnOffAndOnTheReviewQualityCheck() {
         // Navigate to a product detail page
         reachReviewChecker()
@@ -193,7 +193,7 @@ class FakespotTests: BaseTestCase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358894
+    // https://mozilla.testrail.io/index.php?/cases/view/2358894
     func testLearnMoreLink() {
         // Navigate to a product detail page
         reachReviewChecker()
@@ -206,7 +206,7 @@ class FakespotTests: BaseTestCase {
         validateMozillaSupportWebpage("Review Checker for Firefox Mobile", "support.mozilla.org")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358896
+    // https://mozilla.testrail.io/index.php?/cases/view/2358896
     func testTermsOfUseLink() {
         // Navigate to a product detail page
         reachReviewChecker()
@@ -219,7 +219,7 @@ class FakespotTests: BaseTestCase {
         validateMozillaSupportWebpage("Fakespot Terms of Use", "www.fakespot.com")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358895
+    // https://mozilla.testrail.io/index.php?/cases/view/2358895
     func testPrivacyPolicyLink() {
         // Navigate to a product detail page
         reachReviewChecker()
@@ -232,7 +232,7 @@ class FakespotTests: BaseTestCase {
         validateMozillaSupportWebpage("Privacy Notice", "privacy/firefox")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2358929
+    // https://mozilla.testrail.io/index.php?/cases/view/2358929
     func testPriceTagIconAndReviewCheckLandscape() {
         // Change the device orientation to be landscape
         XCUIDevice.shared.orientation = UIDeviceOrientation.landscapeLeft
@@ -405,6 +405,9 @@ class FakespotTests: BaseTestCase {
     private func reachReviewChecker() {
         loadWebsiteAndPerformSearch()
         app.swipeDown()
+        if app.buttons["DONE"].exists {
+            app.buttons["DONE"].tap()
+        }
         app.webViews["contentView"].firstMatch.images.firstMatch.tap()
         waitUntilPageLoad()
         if !app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton].exists {
@@ -449,7 +452,7 @@ class FakespotTests: BaseTestCase {
         if !app.keyboards.element.isHittable {
             searchAmazon.tap()
         }
-        searchAmazon.typeText("Shoe")
+        searchAmazon.typeText("can opener")
         website.buttons["Go"].tap()
         waitUntilPageLoad()
         while website.links.elementContainingText("Sorry! Something went wrong on our end.").exists {

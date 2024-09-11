@@ -14,24 +14,24 @@ enum CreditCardType: String, Equatable, CaseIterable {
     case mir = "MIR"
     case unionpay = "UNIONPAY"
 
-    var image: UIImage? {
+    var imageName: String? {
         switch self {
         case .visa:
-            return UIImage(named: ImageIdentifiers.logoVisa)
+            return ImageIdentifiers.logoVisa
         case .mastercard:
-            return UIImage(named: ImageIdentifiers.logoMastercard)
+            return ImageIdentifiers.logoMastercard
         case .amex:
-            return UIImage(named: ImageIdentifiers.logoAmex)
+            return ImageIdentifiers.logoAmex
         case .diners:
-            return UIImage(named: ImageIdentifiers.logoDiners)
+            return ImageIdentifiers.logoDiners
         case .jcb:
-            return UIImage(named: ImageIdentifiers.logoJcb)
+            return ImageIdentifiers.logoJcb
         case .discover:
-            return UIImage(named: ImageIdentifiers.logoDiscover)
+            return ImageIdentifiers.logoDiscover
         case .mir:
-            return UIImage(named: ImageIdentifiers.logoMir)
+            return ImageIdentifiers.logoMir
         case .unionpay:
-            return UIImage(named: ImageIdentifiers.logoUnionpay)
+            return ImageIdentifiers.logoUnionpay
         }
     }
 

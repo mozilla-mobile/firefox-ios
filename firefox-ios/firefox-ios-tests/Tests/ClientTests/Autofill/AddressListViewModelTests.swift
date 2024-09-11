@@ -10,11 +10,12 @@ import Common
 
 @testable import Client
 
-class AddressListViewModelTests: XCTestCase {
+final class AddressListViewModelTests: XCTestCase {
     var viewModel: AddressListViewModel!
     var mockProfile: MockProfile!
     var mockLogger: MockLogger!
     var mockAutofill: MockAutofill!
+    var mockThemeManager: MockThemeManager!
 
     var cancellables: [AnyCancellable] = []
     let dummyAddresses = [
@@ -76,10 +77,13 @@ class AddressListViewModelTests: XCTestCase {
         mockProfile = MockProfile()
         mockLogger = MockLogger()
         mockAutofill = MockAutofill()
+        mockThemeManager = MockThemeManager()
         viewModel = AddressListViewModel(
             logger: mockLogger,
             windowUUID: WindowUUID(),
-            addressProvider: mockAutofill
+            addressProvider: mockAutofill,
+            themeManager: mockThemeManager,
+            profile: mockProfile
         )
     }
 
@@ -132,7 +136,6 @@ class AddressListViewModelTests: XCTestCase {
     }
 
     func testInjectJSONDataInitSuccess() throws {
-        viewModel.isDarkTheme = { _ in true }
         let address = dummyAddresses[0]
         viewModel.destination = .edit(address)
 
@@ -235,18 +238,66 @@ class AddressListViewModelTests: XCTestCase {
             }
             .store(in: &cancellables)
     }
+
+    func testTappingOnAddressAndTapCancelDissmissesEditScreen() {
+        let address = dummyAddresses[0]
+
+        viewModel.addressTapped(address)
+        XCTAssertEqual(viewModel.destination, .edit(address))
+
+        viewModel.editButtonTap()
+        XCTAssertTrue(viewModel.isEditMode)
+
+        viewModel.cancelEditButtonTap()
+        XCTAssertFalse(viewModel.isEditMode)
+
+        viewModel.closeEditButtonTap()
+        XCTAssertNil(viewModel.destination)
+    }
+
+    func testRemoveButtonShowOnEditModeTappingRemovesAddress() {
+        let address = dummyAddresses[0]
+
+        viewModel.addressTapped(address)
+        XCTAssertEqual(viewModel.destination, .edit(address))
+
+        viewModel.editButtonTap()
+        XCTAssertTrue(viewModel.isEditMode)
+
+        viewModel.removeConfimationButtonTap()
+        XCTAssertTrue(mockAutofill.deleteAddressesCalled)
+    }
 }
 
-class MockAutofill: AddressProvider {
+final class MockAutofill: AddressProvider {
     var mockListAllAddressesResult: Result<[Address], Error>?
     var mockSaveAddressResult: Result<Address, Error>?
+    var mockEditAddressResult: Result<Void, Error>?
     var listAllAddressesCalled = false
+    var deleteAddressesCalled = false
+
+    func deleteAddress(
+        id: String,
+        completion: @escaping (Result<Void, any Error>) -> Void
+    ) {
+        deleteAddressesCalled = true
+    }
 
     func addAddress(
         address: UpdatableAddressFields,
         completion: @escaping (Result<Address, Error>) -> Void
     ) {
         if let result = mockSaveAddressResult {
+            completion(result)
+        }
+    }
+
+    func updateAddress(
+        id: String,
+        address: MozillaAppServices.UpdatableAddressFields,
+        completion: @escaping (Result<Void, any Error>) -> Void
+    ) {
+        if let result = mockEditAddressResult {
             completion(result)
         }
     }

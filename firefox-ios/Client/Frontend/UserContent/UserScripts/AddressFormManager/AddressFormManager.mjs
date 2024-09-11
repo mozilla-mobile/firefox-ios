@@ -3,8 +3,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import "resource://gre/modules/shared/Helpers.ios.mjs";
-import { createFormLayoutFromRecord, getCurrentFormData } from "resource://gre/modules/shared/addressFormLayout.mjs";
+import {
+  createFormLayoutFromRecord,
+  getCurrentFormData,
+} from "resource://gre/modules/shared/addressFormLayout.mjs";
 
+// Expose getCurrentFormData to the window object.
+window.getCurrentFormData = getCurrentFormData;
 /**
  * Sets the theme of the webview.
  * @param {Boolean} isDarkTheme - Set to true if the dark theme should be applied.
@@ -12,6 +17,7 @@ import { createFormLayoutFromRecord, getCurrentFormData } from "resource://gre/m
 const setTheme = (isDarkTheme) => {
   document.body.classList.toggle("dark", isDarkTheme);
 };
+window.setTheme = setTheme;
 
 /**
  * Automatically resizes a textarea to fit its content.
@@ -73,10 +79,22 @@ const toggleEditMode = (isEditable = false) => {
   textFields.forEach((element) => (element.readOnly = !isEditable));
   selectElements.forEach((element) => (element.disabled = !isEditable));
 
-  textFields[0].focus();
+  if (isEditable) {
+    // Focus the first input field when entering edit mode.
+    // This will show the keyboard.
+    document.querySelector("input").focus();
+  } else {
+    // Remove focus from the input field when exiting edit mode.
+    // This will hide the keyboard.
+    document.activeElement.blur();
+  }
 };
 window.toggleEditMode = toggleEditMode;
 
-window.getCurrentFormData = getCurrentFormData;
-
-window.setTheme = setTheme;
+/**
+ * Reset form inside the webview.
+ */
+const resetForm = () => {
+  document.querySelector("form").innerHTML = "";
+};
+window.resetForm = resetForm;

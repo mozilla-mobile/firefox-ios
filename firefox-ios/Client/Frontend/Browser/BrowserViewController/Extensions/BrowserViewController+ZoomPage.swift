@@ -32,7 +32,7 @@ extension BrowserViewController {
         zoomPageBar.heightAnchor
             .constraint(greaterThanOrEqualToConstant: UIConstants.ZoomPageBarHeight)
             .isActive = true
-        zoomPageBar.applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+        zoomPageBar.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
 
         if UIDevice.current.userInterfaceIdiom != .pad {
             updateViewConstraints()

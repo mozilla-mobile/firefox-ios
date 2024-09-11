@@ -13,7 +13,7 @@ class ReportSiteTests: BaseTestCase {
     func testReportSiteIssueOn() {
         launchAndGoToMenu()
 
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.lightbulb].exists)
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.lightbulb])
     }
 
     func testReportSiteIssueOff() {
@@ -23,7 +23,7 @@ class ReportSiteTests: BaseTestCase {
 
         launchAndGoToMenu()
 
-        XCTAssertFalse(app.tables.otherElements[StandardImageIdentifiers.Large.lightbulb].exists)
+        mozWaitForElementToNotExist(app.tables.otherElements[StandardImageIdentifiers.Large.lightbulb])
     }
 
     // MARK: Helper

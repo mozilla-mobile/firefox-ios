@@ -11,6 +11,17 @@ import Storage
 
 /// A view displaying a list of addresses.
 struct AddressListView: View {
+    // MARK: - Constants
+
+    private enum UX {
+        static let imageWidth: CGFloat = 200
+        static let contentUnavailableViewPadding: CGFloat = 24
+        static let vStackSpacing: CGFloat = 0
+        static let titleFontSize: CGFloat = 22
+        static let subtitleFontSize: CGFloat = 16
+        static let contentUnavailableViewTopPadding: CGFloat = 125
+    }
+
     // MARK: - Properties
 
     let windowUUID: WindowUUID
@@ -19,31 +30,44 @@ struct AddressListView: View {
     @ObservedObject var viewModel: AddressListViewModel
     @State private var customLightGray: Color = .clear
 
+    @State var titleTextColor: Color = .clear
+    @State var subTextColor: Color = .clear
+    @State var imageColor: Color = .clear
+
     // MARK: - Body
 
     var body: some View {
-        List {
+        Group {
             if viewModel.showSection {
-                Section(header: Text(String.Addresses.Settings.SavedAddressesSectionTitle)) {
-                    ForEach(viewModel.addresses, id: \.self) { address in
-                        AddressCellView(
-                            windowUUID: windowUUID,
-                            address: address,
-                            onTap: {
-                                if viewModel.isEditingFeatureEnabled {
-                                    viewModel.addressTapped(address)
+                List {
+                    Section(header: Text(String.Addresses.Settings.SavedAddressesSectionTitle)) {
+                        ForEach(viewModel.addresses, id: \.self) { address in
+                            AddressCellView(
+                                windowUUID: windowUUID,
+                                address: address,
+                                onTap: {
+                                    if viewModel.isEditingFeatureEnabled {
+                                        viewModel.addressTapped(address)
+                                    }
                                 }
-                            }
-                        )
+                            )
+                        }
                     }
+                    .font(.caption)
+                    .foregroundColor(customLightGray)
                 }
-                .font(.caption)
-                .foregroundColor(customLightGray)
+                .listStyle(.plain)
+                .listRowInsets(EdgeInsets())
+            } else if viewModel.isEditingFeatureEnabled {
+                contentUnavailableView
+                    .padding(.top, UX.contentUnavailableViewTopPadding)
+                    .padding(.horizontal, UX.contentUnavailableViewPadding)
+                Spacer()
             }
         }
-        .listStyle(.plain)
-        .listRowInsets(EdgeInsets())
-        .sheet(item: $viewModel.destination) { destination in
+        .sheet(item: $viewModel.destination, onDismiss: {
+            viewModel.isEditMode = false
+        }) { destination in
             NavigationView {
                 switch destination {
                 case .add:
@@ -60,23 +84,42 @@ struct AddressListView: View {
 
                 case .edit:
                     EditAddressViewControllerRepresentable(model: viewModel)
+                        .navigationBarTitle(viewModel.editNavigationbarTitle, displayMode: .inline)
                         .toolbar {
                             ToolbarItemGroup(placement: .cancellationAction) {
-                                Button(String.Addresses.Settings.Edit.AutofillCancelButton) {
-                                    viewModel.cancelEditButtonTap()
+                                Button(viewModel.cancelButtonLabel) {
+                                    if viewModel.isEditMode {
+                                        viewModel.cancelEditButtonTap()
+                                    } else {
+                                        viewModel.closeEditButtonTap()
+                                    }
+                                }
+                            }
+
+                            ToolbarItemGroup(placement: .primaryAction) {
+                                Button(viewModel.primaryButtonLabel) {
+                                    if viewModel.isEditMode {
+                                        viewModel.saveEditButtonTap()
+                                    } else {
+                                        viewModel.editButtonTap()
+                                    }
                                 }
                             }
                         }
+                    .ignoresSafeArea(.keyboard)
                 }
             }
         }
         .onAppear {
-            viewModel.fetchAddresses()
-            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            viewModel.editAddressWebViewManager.preloadWebView()
         }
         .onReceive(NotificationCenter.default.publisher(for: .ThemeDidChange)) { notification in
             guard let uuid = notification.windowUUID, uuid == windowUUID else { return }
-            applyTheme(theme: themeManager.currentTheme(for: windowUUID))
+            applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        }
+        .onDisappear {
+            viewModel.editAddressWebViewManager.teardownWebView()
         }
     }
 
@@ -87,5 +130,36 @@ struct AddressListView: View {
     func applyTheme(theme: Theme) {
         let color = theme.colors
         customLightGray = Color(color.textSecondary)
+        titleTextColor = Color(color.textPrimary)
+        subTextColor = Color(color.textSecondary)
+        imageColor = Color(color.iconSecondary)
+    }
+
+    @ViewBuilder var contentUnavailableView: some View {
+        VStack {
+            Image(StandardImageIdentifiers.Large.location)
+                .resizable()
+                .renderingMode(.template)
+                .aspectRatio(contentMode: .fit)
+                .frame(width: UX.imageWidth)
+                .foregroundColor(imageColor)
+                .accessibility(hidden: true)
+
+            VStack(spacing: UX.vStackSpacing) {
+                Text(
+                    String(
+                        format: String.Addresses.Settings.SaveAddressesToFirefox,
+                        AppName.shortName.rawValue
+                    )
+                )
+                .preferredBodyFont(size: UX.titleFontSize)
+                .foregroundColor(titleTextColor)
+
+                Text(String.Addresses.Settings.SecureSaveInfo)
+                    .preferredBodyFont(size: UX.subtitleFontSize)
+                    .foregroundColor(subTextColor)
+            }
+            .multilineTextAlignment(.center)
+        }
     }
 }

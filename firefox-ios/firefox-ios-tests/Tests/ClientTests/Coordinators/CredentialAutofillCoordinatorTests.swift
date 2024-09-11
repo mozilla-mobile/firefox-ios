@@ -61,8 +61,9 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
 
         let testURL = URL(string: "https://example.com")!
         let currentRequestId = "testRequestID"
+        let field = FocusFieldType.password
 
-        subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId)
+        subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId, field: field)
 
         XCTAssertTrue(router.presentedViewController is BottomSheetViewController)
         XCTAssertEqual(router.presentCalled, 1)
@@ -74,8 +75,9 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
 
         let testURL = URL(string: "https://example.com")!
         let currentRequestId = "testRequestID"
+        let field = FocusFieldType.password
 
-        subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId)
+        subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId, field: field)
 
         if let bottomSheetViewController = router.presentedViewController as? BottomSheetViewController {
             bottomSheetViewController.loadViewIfNeeded()
@@ -98,8 +100,9 @@ final class CredentialAutofillCoordinatorTests: XCTestCase {
 
         let testURL = URL(string: "https://example.com")!
         let currentRequestId = "testRequestID"
+        let field = FocusFieldType.password
 
-        subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId)
+        subject.showSavedLoginAutofill(tabURL: testURL, currentRequestId: currentRequestId, field: field)
 
         if let bottomSheetViewController = router.presentedViewController as? BottomSheetViewController {
             bottomSheetViewController.loadViewIfNeeded()

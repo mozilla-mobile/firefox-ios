@@ -199,7 +199,7 @@ class MockGleanPlumbMessageManagerProtocol: GleanPlumbMessageManagerProtocol {
     }
 
     var onMessagePressedCalled = 0
-    func onMessagePressed(_ message: GleanPlumbMessage, window: WindowUUID?) {
+    func onMessagePressed(_ message: GleanPlumbMessage, window: WindowUUID?, shouldExpire: Bool) {
         onMessagePressedCalled += 1
     }
 
