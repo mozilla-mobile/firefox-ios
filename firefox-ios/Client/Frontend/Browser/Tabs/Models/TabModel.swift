@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct TabModel: Equatable {
+struct TabModel: Equatable, Hashable {
     let tabUUID: TabUUID
     let isSelected: Bool
     let isPrivate: Bool
