@@ -5,10 +5,10 @@
 import Foundation
 import UIKit
 
-class DetailViewController: UIViewController {
+public class DetailViewController: UIViewController {
     var model: String?
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = .systemMint

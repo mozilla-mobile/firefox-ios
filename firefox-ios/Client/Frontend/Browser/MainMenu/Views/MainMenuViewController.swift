@@ -94,15 +94,11 @@ class MainMenuViewController: UIViewController,
 
     // MARK: - UI setup
     private func setupTableView() {
-        menuContent.tableView.tableView.register(
-            MenuCell.self,
-            forCellReuseIdentifier: MenuCell.cellIdentifier
-        )
-        menuContent.tableView.tableView.dataSource = self
-        menuContent.tableView.tableView.delegate = self
+        menuContent.setDelegate(to: self)
+        menuContent.setDataSource(to: self)
     }
+
     private func setupView() {
-//        menuContent.updateDataSource(with: menuState.menuElements)
         view.addSubview(menuContent)
 
         NSLayoutConstraint.activate([
@@ -137,7 +133,7 @@ class MainMenuViewController: UIViewController,
     func newState(state: MainMenuState) {
         menuState = state
 
-        menuContent.tableView.tableView.reloadData()
+        menuContent.reloadTableView()
 
         if let navigationDestination = menuState.navigationDestination {
             coordinator?.navigateTo(navigationDestination, animated: true)
@@ -230,11 +226,15 @@ class MainMenuViewController: UIViewController,
         _ tableView: UITableView,
         didSelectRowAt indexPath: IndexPath
     ) {
-        guard let action = menuState.menuElements[indexPath.section].options[indexPath.row].action else {
+        if let submenu = menuState.menuElements[indexPath.section].options[indexPath.row].submenu {
+            let detailVC = DetailViewController()
+            detailVC.title = "Detail View"
+            navigationController?.pushViewController(detailVC, animated: true)
+        } else if let action = menuState.menuElements[indexPath.section].options[indexPath.row].action {
             tableView.deselectRow(at: indexPath, animated: true)
-            return
+            action()
+        } else {
+            tableView.deselectRow(at: indexPath, animated: true)
         }
-        action()
-        tableView.deselectRow(at: indexPath, animated: true)
     }
 }

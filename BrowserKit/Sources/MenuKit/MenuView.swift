@@ -7,7 +7,7 @@ import UIKit
 
 public final class MenuView: UIView {
     // MARK: - UI Elements
-    public var tableView: MenuTableView = .build()
+    private var tableView: MenuTableView = .build()
     public var accountHeaderView: MenuAccountHeaderView = .build()
 
     // MARK: - Properties
@@ -40,8 +40,17 @@ public final class MenuView: UIView {
             tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         ])
     }
-//
-//    public func updateDataSource(with newDataSource: [MenuSection]) {
-//        tableView.updateDataSource(newDataSource)
-//    }
+
+    // MARK: - Interface
+    public func setDelegate(to delegate: UITableViewDelegate) {
+        tableView.tableView.delegate = delegate
+    }
+
+    public func setDataSource(to delegate: UITableViewDataSource) {
+        tableView.tableView.dataSource = delegate
+    }
+
+    public func reloadTableView() {
+        tableView.tableView.reloadData()
+    }
 }

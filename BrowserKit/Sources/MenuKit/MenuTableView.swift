@@ -5,11 +5,12 @@
 import Foundation
 import UIKit
 
-public class MenuTableView: UIView {
-    public var tableView: UITableView
+class MenuTableView: UIView {
+    var tableView: UITableView
 
     override init(frame: CGRect) {
         tableView = UITableView(frame: .zero, style: .insetGrouped)
+        tableView.register(MenuCell.self, forCellReuseIdentifier: MenuCell.cellIdentifier)
         super.init(frame: .zero)
         setupView()
     }
