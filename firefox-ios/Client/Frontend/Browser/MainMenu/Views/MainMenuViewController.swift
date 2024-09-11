@@ -19,27 +19,7 @@ class MainMenuViewController: UIViewController,
     typealias SubscriberStateType = MainMenuState
 
     // MARK: - UI/UX elements
-    private struct UX {
-        static let closeButtonWidthHeight: CGFloat = 30
-        static let scrollContentStackSpacing: CGFloat = 16
-    }
-
     private lazy var menuContent: MenuView = .build()
-    private lazy var scrollView: UIScrollView = .build()
-
-    private lazy var closeButton: CloseButton = .build { view in
-        let viewModel = CloseButtonViewModel(
-            a11yLabel: .Shopping.CloseButtonAccessibilityLabel,
-            a11yIdentifier: AccessibilityIdentifiers.Shopping.sheetCloseButton
-        )
-        view.configure(viewModel: viewModel)
-        view.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
-    }
-
-    private lazy var testButton: UIButton = .build { button in
-        button.addTarget(self, action: #selector(self.testButtonTapped), for: .touchUpInside)
-        button.backgroundColor = .systemPink
-    }
 
     // MARK: - Properties
     var notificationCenter: NotificationProtocol
@@ -78,7 +58,6 @@ class MainMenuViewController: UIViewController,
         super.viewDidLoad()
         presentationController?.delegate = self
         sheetPresentationController?.delegate = self
-        scrollView.delegate = self
 
         setupView()
         listenForThemeChange(view)
@@ -121,10 +100,6 @@ class MainMenuViewController: UIViewController,
             menuContent.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             menuContent.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
-    }
-
-    private func updateContent() {
-        applyTheme()
     }
 
     // MARK: - Redux
@@ -173,19 +148,7 @@ class MainMenuViewController: UIViewController,
     // MARK: - Notifications
     func handleNotifications(_ notification: Notification) { }
 
-    @objc
-    private func closeTapped() { }
-
-    @objc
-    private func testButtonTapped() {
-        store.dispatch(
-            MainMenuAction(
-                windowUUID: windowUUID,
-                actionType: MainMenuActionType.closeMenu
-            )
-        )
-    }
-
+    // MARK: - A11y
     // In iOS 15 modals with a large detent read content underneath the modal
     // in voice over. To prevent this we manually turn this off.
     private func updateModalA11y() {
