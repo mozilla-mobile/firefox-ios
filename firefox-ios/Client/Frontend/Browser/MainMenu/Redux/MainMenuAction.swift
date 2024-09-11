@@ -33,4 +33,21 @@ enum MainMenuNavigationDestination: Equatable {
     case history
     case passwords
     case settings
+
+    /// This must manually be done, because we can't conform to `CaseIterable`
+    /// when we have enums with associated types
+    static var allCases: [MainMenuNavigationDestination] {
+        return [
+            .newTab,
+            .newPrivateTab,
+            .bookmarks,
+            .customizeHomepage,
+            .downloads,
+            .findInPage,
+            .goToURL(nil),
+            .history,
+            .passwords,
+            .settings,
+        ]
+    }
 }
