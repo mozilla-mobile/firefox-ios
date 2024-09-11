@@ -413,7 +413,7 @@ class Tab: NSObject, ThemeApplicable {
 
         // Debug for inactive tabs to easily test in code
         if UserDefaults.standard.bool(forKey: PrefsKeys.FasterInactiveTabsOverride) {
-            inactiveDate = Calendar.current.date(byAdding: .minute, value: -2, to: currentDate) ?? Date()
+            inactiveDate = Calendar.current.date(byAdding: .second, value: -10, to: currentDate) ?? Date()
         } else {
             inactiveDate = Calendar.current.date(byAdding: .day, value: -14, to: currentDate.noon) ?? Date()
         }
