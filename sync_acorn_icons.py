@@ -3,7 +3,6 @@ import json
 import os
 import shutil
 import subprocess
-import json
 
 def fetch_latest_release_from_acorn() -> dict|None:
     owner = "FirefoxUX" 
