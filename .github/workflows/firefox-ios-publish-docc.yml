@@ -15,7 +15,7 @@ permissions:
 # Allow one concurrent deployment
 concurrency:
   group: "pages"
-  cancel-in-progress: true
+  cancel-in-progress:
 
 jobs:
   # Single deploy job since we're just deploying
