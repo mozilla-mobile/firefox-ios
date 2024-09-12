@@ -229,8 +229,7 @@ class MainMenuViewController: UIViewController,
         tableView.deselectRow(at: indexPath, animated: true)
 
         if let submenu = menuState.menuElements[indexPath.section].options[indexPath.row].submenu {
-            let detailVC = MainMenuDetailViewController(windowUUID: self.windowUUID, with: submenu)
-            navigationController?.pushViewController(detailVC, animated: true)
+            coordinator?.showDetailViewController(with: submenu)
         } else if let action = menuState.menuElements[indexPath.section].options[indexPath.row].action {
             action()
         }

@@ -474,7 +474,10 @@ class BrowserCoordinator: BaseCoordinator,
     private func makeMenuCoordinator() -> MainMenuCoordinator? {
         guard !childCoordinators.contains(where: { $0 is MainMenuCoordinator }) else { return nil }
 
-        let coordinator = MainMenuCoordinator(router: router, tabManager: tabManager)
+        let coordinator = MainMenuCoordinator(
+            router: router,
+            windowUUID: tabManager.windowUUID
+        )
         coordinator.parentCoordinator = self
         coordinator.navigationHandler = self
         add(child: coordinator)

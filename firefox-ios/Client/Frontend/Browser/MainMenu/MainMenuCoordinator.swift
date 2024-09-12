@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import MenuKit
 import Shared
 
 protocol MainMenuCoordinatorDelegate: AnyObject {
@@ -17,26 +18,40 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
 class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     weak var parentCoordinator: ParentCoordinatorDelegate?
     weak var navigationHandler: MainMenuCoordinatorDelegate?
-    private let tabManager: TabManager
+
+    private let windowUUID: WindowUUID
+    private var navController: UINavigationController!
 
     init(
         router: Router,
-        tabManager: TabManager
+        windowUUID: WindowUUID
     ) {
-        self.tabManager = tabManager
+        self.windowUUID = windowUUID
         super.init(router: router)
     }
 
     func startModal() {
         let viewController = createMainMenuViewController()
-        let navController = UINavigationController(rootViewController: viewController)
+        navController = UINavigationController(rootViewController: viewController)
         navController.modalPresentationStyle = .pageSheet
         navController.isNavigationBarHidden = true
 
         if let sheet = navController.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
         }
+
         router.present(navController, animated: true)
+    }
+
+    func showDetailViewController(with submenu: [MenuSection]) {
+        navController.pushViewController(
+            createMainMenuDetailViewController(with: submenu),
+            animated: true
+        )
+    }
+
+    func dismissDetailViewController() {
+        navController.popViewController(animated: true)
     }
 
     func navigateTo(_ destination: MainMenuNavigationDestination, animated: Bool) {
@@ -76,8 +91,17 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     }
 
     private func createMainMenuViewController() -> MainMenuViewController {
-        let mainMenuViewController = MainMenuViewController(windowUUID: tabManager.windowUUID)
+        let mainMenuViewController = MainMenuViewController(windowUUID: windowUUID)
         mainMenuViewController.coordinator = self
         return mainMenuViewController
+    }
+
+    private func createMainMenuDetailViewController(with submenu: [MenuSection]) -> MainMenuDetailViewController {
+        let detailVC = MainMenuDetailViewController(
+            windowUUID: windowUUID,
+            with: submenu
+        )
+        detailVC.coordinator = self
+        return detailVC
     }
 }

@@ -18,6 +18,7 @@ class MainMenuDetailViewController: UIViewController,
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
+    weak var coordinator: MainMenuCoordinator?
 
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
@@ -109,7 +110,7 @@ class MainMenuDetailViewController: UIViewController,
 
     // MARK: - MainMenuDetailNavigationHandler
     func backToMainView() {
-        navigationController?.popViewController(animated: true)
+        coordinator?.dismissDetailViewController()
     }
 
     // MARK: - Notifications
