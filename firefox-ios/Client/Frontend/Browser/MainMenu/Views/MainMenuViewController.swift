@@ -226,14 +226,13 @@ class MainMenuViewController: UIViewController,
         _ tableView: UITableView,
         didSelectRowAt indexPath: IndexPath
     ) {
+        tableView.deselectRow(at: indexPath, animated: true)
+
         if let submenu = menuState.menuElements[indexPath.section].options[indexPath.row].submenu {
             let detailVC = MainMenuDetailViewController(windowUUID: self.windowUUID, with: submenu)
             navigationController?.pushViewController(detailVC, animated: true)
         } else if let action = menuState.menuElements[indexPath.section].options[indexPath.row].action {
-            tableView.deselectRow(at: indexPath, animated: true)
             action()
-        } else {
-            tableView.deselectRow(at: indexPath, animated: true)
         }
     }
 }

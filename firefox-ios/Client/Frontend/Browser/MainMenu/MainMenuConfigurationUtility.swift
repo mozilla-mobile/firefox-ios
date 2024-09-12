@@ -76,12 +76,8 @@ struct MainMenuConfigurationUtility: Equatable {
     // MARK: - Tools Section
     private func getToolsSection(
         with uuid: WindowUUID,
-        and configuration: MainMenuTabInfo?
+        and configuration: MainMenuTabInfo
     ) -> MenuSection {
-        // Configuration can be `nil` if Redux hasn't yet returned the
-        // required information about the tab.
-        guard let configuration else { return MenuSection(options: []) }
-
         return MenuSection(
             options: [
                 MenuElement(

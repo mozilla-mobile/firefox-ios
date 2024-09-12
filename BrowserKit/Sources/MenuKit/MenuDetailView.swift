@@ -11,6 +11,7 @@ public final class MenuDetailView: UIView {
     private var detailHeaderView: MenuSubmenuHeaderView = .build()
 
     // MARK: - Properties
+    public var navigationDelegate: MainMenuDetailNavigationHandler!
 
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -52,5 +53,9 @@ public final class MenuDetailView: UIView {
 
     public func reloadTableView() {
         tableView.tableView.reloadData()
+    }
+
+    public func setupHeaderNavigation(from delegate: MainMenuDetailNavigationHandler) {
+        detailHeaderView.navigationDelegate = delegate
     }
 }

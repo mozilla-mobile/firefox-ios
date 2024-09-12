@@ -8,9 +8,10 @@ import Common
 import UIKit
 
 class MainMenuDetailViewController: UIViewController,
-                                           UITableViewDelegate,
-                                           UITableViewDataSource,
-                                           Notifiable {
+                                    UITableViewDelegate,
+                                    UITableViewDataSource,
+                                    MainMenuDetailNavigationHandler,
+                                    Notifiable {
     // MARK: - UI/UX elements
     private lazy var submenuContent: MenuDetailView = .build()
 
@@ -59,6 +60,7 @@ class MainMenuDetailViewController: UIViewController,
         ])
 
         setupTableView()
+        submenuContent.setupHeaderNavigation(from: self)
     }
 
     private func setupTableView() {
@@ -103,6 +105,11 @@ class MainMenuDetailViewController: UIViewController,
         }
         action()
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+
+    // MARK: - MainMenuDetailNavigationHandler
+    func backToMainView() {
+        navigationController?.popViewController(animated: true)
     }
 
     // MARK: - Notifications
