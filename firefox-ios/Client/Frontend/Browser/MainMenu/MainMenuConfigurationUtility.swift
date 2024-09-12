@@ -154,13 +154,18 @@ struct MainMenuConfigurationUtility: Equatable {
         typealias Menu = String.MainMenu.ToolsSection
 
         // Our default User Agent gets set depending on the architecture we're
-        // running on. Thus, to determine which string to use, we need to know
+        // running on. For example, if we're building on an Intel Mac, we get
+        // desktop User Agent by default. Thus, to determine which string to use,
+        // we need to know:
         //   1) which architecture we've started from and
         //   2) whether or not we've requested to change the user agent in the tab
         // Using this information, we're able to present the correct string for
         // the "Request Mobile/Desktop Site" menu option
-        let switchToDesktop = tabHasChangedUserAgent ? defaultIsDesktop : !defaultIsDesktop
-        return switchToDesktop ? Menu.SwitchToDesktopSite : Menu.SwitchToMobileSite
+        if defaultIsDesktop {
+            return tabHasChangedUserAgent ? Menu.SwitchToDesktopSite : Menu.SwitchToMobileSite
+        } else {
+            return tabHasChangedUserAgent ? Menu.SwitchToMobileSite : Menu.SwitchToDesktopSite
+        }
     }
 
     private func getToolsSubmenu(with uuid: WindowUUID) -> [MenuSection] {

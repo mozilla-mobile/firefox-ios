@@ -104,7 +104,7 @@ class MainMenuDetailViewController: UIViewController,
         action()
         tableView.deselectRow(at: indexPath, animated: true)
     }
-    
+
     // MARK: - Notifications
     func handleNotifications(_ notification: Notification) { }
 }
