@@ -204,6 +204,7 @@ class TabManagerMiddleware {
         var tabs = [TabModel]()
         let tabManager = tabManager(for: uuid)
         let selectedTab = tabManager.selectedTab
+        // Be careful to use active tabs and not inactive tabs
         let tabManagerTabs = isPrivateMode ? tabManager.privateTabs : tabManager.normalActiveTabs
         tabManagerTabs.forEach { tab in
             let tabModel = TabModel(tabUUID: tab.tabUUID,
@@ -302,10 +303,12 @@ class TabManagerMiddleware {
     /// - Returns: If is the last tab to be closed used to trigger dismissTabTray action
     private func closeTab(with tabUUID: TabUUID, uuid: WindowUUID, isPrivate: Bool) async -> Bool {
         let tabManager = tabManager(for: uuid)
-        let isLastTab = isPrivate ? tabManager.privateTabs.count == 1 : tabManager.normalTabs.count == 1
+        let isLastActiveTab = isPrivate
+                            ? tabManager.privateTabs.count == 1
+                            : tabManager.normalActiveTabs.count == 1
 
         await tabManager.removeTab(tabUUID)
-        return isLastTab
+        return isLastActiveTab
     }
 
     /// Close tab and trigger refresh
