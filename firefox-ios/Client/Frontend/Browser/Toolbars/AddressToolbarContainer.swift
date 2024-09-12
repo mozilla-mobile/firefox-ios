@@ -314,8 +314,7 @@ final class AddressToolbarContainer: UIView,
 
         guard let windowUUID else { return }
 
-        let action = ToolbarMiddlewareAction(windowUUID: windowUUID,
-                                             actionType: ToolbarMiddlewareActionType.didStartEditingUrl)
+        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didStartEditingUrl)
         store.dispatch(action)
     }
 
@@ -324,8 +323,7 @@ final class AddressToolbarContainer: UIView,
 
         guard let windowUUID else { return }
 
-        let action = ToolbarMiddlewareAction(windowUUID: windowUUID,
-                                             actionType: ToolbarMiddlewareActionType.didStartEditingUrl)
+        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didStartEditingUrl)
         store.dispatch(action)
 
         if shouldShowSuggestions {

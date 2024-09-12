@@ -148,8 +148,7 @@ extension BrowserViewController {
         scrollController.showToolbars(animated: true)
 
         if isToolbarRefactorEnabled {
-            store.dispatch(ToolbarMiddlewareAction(windowUUID: windowUUID,
-                                                   actionType: ToolbarMiddlewareActionType.didStartEditingUrl))
+            store.dispatch(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didStartEditingUrl))
         } else {
             urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
         }

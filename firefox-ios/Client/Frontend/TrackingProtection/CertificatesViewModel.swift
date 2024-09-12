@@ -20,20 +20,6 @@ final class CertificatesViewModel {
         self.certificates = certificates
     }
 
-    func getCertificateValues(from input: String) -> [String: String] {
-        var result = [String: String]()
-        let components = input.split(separator: ",")
-        for component in components {
-            let parts = component.split(separator: "=", maxSplits: 1, omittingEmptySubsequences: false)
-            if parts.count == 2 {
-                let key = parts[0].trimmingCharacters(in: .whitespacesAndNewlines)
-                let value = parts[1].trimmingCharacters(in: .whitespacesAndNewlines)
-                result[key] = value
-            }
-        }
-        return result
-    }
-
     func getDNSNamesList(from input: String) -> [String] {
         let pattern = #"DNSName\("([^"]+)"\)"#
         var dnsNames: [String] = []

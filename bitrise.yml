@@ -836,11 +836,7 @@ workflows:
 
             ./firefox-ios/l10n-screenshots.sh en-US
         title: Generate screenshots
-    - deploy-to-bitrise-io@1.10:
-        inputs:
-        - deploy_path: l10n-screenshots-dd/
-        - is_compress: 'true'
-    - deploy-to-bitrise-io@1.10:
+    - deploy-to-bitrise-io@2.9.2:
         inputs:
         - deploy_path: l10n-screenshots/en-US/en-US
         - is_compress: 'true'

@@ -149,7 +149,7 @@
 "Shopping.OptInCard.SecondaryButton.Title.v120" = "Ne sada";
 
 /* Label for the second paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be replaced by the Fakespot app name. The second parameter will be replaced the company name of Mozilla. */
-"Shopping.OptInCard.SecondParagraph.Description.v120" = "Koristeći %1$@ moć od %2$@ pomažemo ti da izbjegneš pristrane i neautentične recenzije. Naš model UI-a se stalno poboljšava kako bi te zaštitio dok kupuješ.";
+"Shopping.OptInCard.SecondParagraph.Description.v120" = "Koristeći %1$@ od %2$@ pomažemo ti da izbjegneš neobjektivne i neautentične recenzije. Naš UI model se stalno poboljšava kako bi te zaštitio dok kupuješ.";
 
 /* Show Firefox Browser Terms of Use page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
 "Shopping.OptInCard.TermsOfUse.Button.Title.v120" = "Uvjeti korištenja";

@@ -1,6 +1,8 @@
 name: Focus iOS 15 & 16 tests
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 7 * * 1,3,5"
 
 env:
     browser: focus-ios
@@ -137,6 +139,7 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
           ios_simulator: ${{ matrix.ios_simulator }}
+          ios_version: ${{ matrix.ios_version }}
           pass_fail:  ${{ steps.run-smoketests.outcome == 'success' && ':white_check_mark:' || ':x:' }}
           xcodebuild_test_plan: SmokeTests
           ref_name: ${{ github.ref_name }}
@@ -152,7 +155,8 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-          os_simulator: ${{ matrix.ios_simulator }}
+          ios_simulator: ${{ matrix.ios_simulator }}
+          ios_version: ${{ matrix.ios_version }}
           pass_fail:  ${{ steps.run-fullfunctionaltests.outcome == 'success' && ':white_check_mark:' || ':x:' }}
           xcodebuild_test_plan: FullFunctionalTests
           ref_name: ${{ github.ref_name }}

@@ -734,6 +734,8 @@ extension BrowserViewController: WKNavigationDelegate {
                 if isToolbarRefactorEnabled {
                     let action = ToolbarAction(
                         url: tab.url?.displayURL,
+                        canGoBack: tab.canGoBack,
+                        canGoForward: tab.canGoForward,
                         windowUUID: windowUUID,
                         actionType: ToolbarActionType.urlDidChange
                     )

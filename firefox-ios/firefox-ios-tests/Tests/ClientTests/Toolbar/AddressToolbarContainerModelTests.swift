@@ -32,12 +32,12 @@ class AddressToolbarContainerModelTests: XCTestCase {
                                  navigationToolbar: navigationState,
                                  isShowingNavigationToolbar: true,
                                  isShowingTopTabs: true,
-                                 readerModeState: nil,
-                                 badgeImageName: nil,
-                                 maskImageName: nil,
                                  canGoBack: true,
                                  canGoForward: true,
-                                 numberOfTabs: 1)
+                                 numberOfTabs: 1,
+                                 showMenuWarningBadge: false,
+                                 isNewTabFeatureEnabled: false,
+                                 canShowDataClearanceAction: false)
         viewModel = AddressToolbarContainerModel(state: state,
                                                  profile: mockProfile,
                                                  windowUUID: windowUUID)

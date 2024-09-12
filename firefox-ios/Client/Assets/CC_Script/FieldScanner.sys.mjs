@@ -78,7 +78,9 @@ export class FieldDetail {
     this.localName = element.localName;
     this.fieldName = fieldName;
 
-    if (autocompleteInfo) {
+    if (!this.fieldName) {
+      this.reason = "unknown";
+    } else if (autocompleteInfo) {
       this.reason = "autocomplete";
       this.section = autocompleteInfo.section;
       this.addressType = autocompleteInfo.addressType;

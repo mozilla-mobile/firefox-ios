@@ -5647,4 +5647,4 @@ server_knobs:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
       - brosa@mozilla.com
-    expires: "2024-09-01"
+    expires: "2025-01-01"

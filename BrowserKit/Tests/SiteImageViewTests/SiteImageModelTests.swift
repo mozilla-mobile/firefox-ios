@@ -10,7 +10,14 @@ class SiteImageModelTests: XCTestCase {
     let faviconURL = URL(string: "https://www.mozilla.org/media/img/favicons/mozilla/apple-touch-icon.8cbe9c835c00.png")!
 
     func testFaviconURL_isCacheKey_whenProvidedForFavicon() async {
-        let model = SiteImageModel(id: UUID(), imageType: .favicon, siteURL: siteURL, resourceURL: faviconURL)
+        let model = SiteImageModel(
+            id: UUID(),
+            imageType: .favicon,
+            siteURL: siteURL,
+            siteResource: .remoteURL(
+                url: faviconURL
+            )
+        )
 
         XCTAssertEqual(model.cacheKey, faviconURL.absoluteString)
     }
@@ -22,7 +29,12 @@ class SiteImageModelTests: XCTestCase {
     }
 
     func testAbsoluteString_isCacheKey_forFavicon_withResourceURL() async {
-        let model = SiteImageModel(id: UUID(), imageType: .favicon, siteURL: siteURL, resourceURL: faviconURL)
+        let model = SiteImageModel(
+            id: UUID(),
+            imageType: .favicon,
+            siteURL: siteURL,
+            siteResource: .remoteURL(url: faviconURL)
+        )
 
         XCTAssertEqual(model.cacheKey, faviconURL.absoluteString)
     }
@@ -34,7 +46,14 @@ class SiteImageModelTests: XCTestCase {
     }
 
     func testShortDomain_isCacheKey_whenResourceURLProvidedForHeroImage() async {
-        let model = SiteImageModel(id: UUID(), imageType: .heroImage, siteURL: siteURL, resourceURL: faviconURL)
+        let model = SiteImageModel(
+            id: UUID(),
+            imageType: .heroImage,
+            siteURL: siteURL,
+            siteResource: .remoteURL(
+                url: faviconURL
+            )
+        )
 
         XCTAssertEqual(model.cacheKey, siteURL.absoluteString)
     }

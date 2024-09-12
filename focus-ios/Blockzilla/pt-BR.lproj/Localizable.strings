@@ -440,7 +440,7 @@
 "ShareMenu.RemoveShortcut.Confirm" = "Atalho removido";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
-"ShareMenu.RequestDesktop" = "Versão do site para desktop";
+"ShareMenu.RequestDesktop" = "Versão do site para computador";
 
 /* Text for the share menu option when a user wants to reload the site as a mobile device */
 "ShareMenu.RequestMobile" = "Solicitar site para celular";

@@ -38,7 +38,7 @@ final class ImageHandlerTests: XCTestCase {
         return SiteImageModel(id: UUID(),
                               imageType: type,
                               siteURL: siteURL,
-                              resourceURL: resourceURL,
+                              siteResource: resourceURL != nil ? .remoteURL(url: resourceURL!) : nil,
                               image: nil)
     }
 
@@ -156,7 +156,7 @@ final class ImageHandlerTests: XCTestCase {
         let model = SiteImageModel(id: UUID(),
                                    imageType: .favicon,
                                    siteURL: URL(string: "internal://local/about/home#panel=0")!,
-                                   resourceURL: nil,
+                                   siteResource: nil,
                                    image: nil)
         let result = await subject.fetchFavicon(imageModel: model)
 

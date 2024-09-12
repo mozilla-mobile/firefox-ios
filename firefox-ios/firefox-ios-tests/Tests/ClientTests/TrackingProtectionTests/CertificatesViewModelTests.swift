@@ -25,20 +25,20 @@ final class CertificatesViewModelTests: XCTestCase {
 
     func testGetCertificateValues() {
         let data = "CN=www.google.com, O=Google Trust Services, C=US"
-        let result = viewModel.getCertificateValues(from: data)
+        let result = data.getDictionary()
         XCTAssertEqual(result["CN"], "www.google.com")
         XCTAssertEqual(result["O"], "Google Trust Services")
         XCTAssertEqual(result["C"], "US")
     }
 
     func testGetCertificateFromInvalidData() {
-        let result = viewModel.getCertificateValues(from: "")
+        let result = "".getDictionary()
         XCTAssertEqual(result, [:])
     }
 
     func testGetCertificateValuesWithMissingValue() {
         let data = "CN=www.google.com, O=, C=US"
-        let result = viewModel.getCertificateValues(from: data)
+        let result = data.getDictionary()
         XCTAssertEqual(result["CN"], "www.google.com")
         XCTAssertEqual(result["O"], "")
         XCTAssertEqual(result["C"], "US")

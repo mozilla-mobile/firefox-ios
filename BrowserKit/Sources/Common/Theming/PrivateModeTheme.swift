@@ -72,7 +72,7 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
     var actionError: UIColor = FXColors.Pink70.withAlphaComponent(0.69)
     var actionInfo: UIColor = FXColors.Blue60
     var actionTabActive: UIColor = FXColors.Purple60
-    var actionTabInactive: UIColor = FXColors.Ink50
+    var actionTabInactive: UIColor = FXColors.Ink90
 
     // MARK: - Text
     var textPrimary: UIColor = FXColors.LightGrey05

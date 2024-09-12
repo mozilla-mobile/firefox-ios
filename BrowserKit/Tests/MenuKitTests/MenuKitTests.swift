@@ -8,22 +8,24 @@ import XCTest
 final class MenuKitTests: XCTestCase {
     func testMenuElement_initializesCorrectly() {
         let subject = MenuElement(
+            title: "test",
             iconName: "test",
             isEnabled: true,
             isActive: true,
-            hasSubmenu: false,
             a11yLabel: "test",
             a11yHint: nil,
-            a11yId: "test"
+            a11yId: "test",
+            action: nil
         )
         let expectedResult = MenuElement(
+            title: "test",
             iconName: "test",
             isEnabled: true,
             isActive: true,
-            hasSubmenu: false,
             a11yLabel: "test",
             a11yHint: nil,
-            a11yId: "test"
+            a11yId: "test",
+            action: nil
         )
 
         XCTAssertEqual(subject, expectedResult)

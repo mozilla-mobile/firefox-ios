@@ -134,7 +134,7 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
             withIdentifier: CertificatesHeaderView.cellIdentifier) as! CertificatesHeaderView
         var items: [CertificatesHeaderItem] = []
         for (index, certificate) in viewModel.certificates.enumerated() {
-            let certificateValues = viewModel.getCertificateValues(from: "\(certificate.subject)")
+            let certificateValues = certificate.subject.description.getDictionary()
             if !certificateValues.isEmpty, let commonName = certificateValues[CertificateKeys.commonName] {
                 let item: CertificatesHeaderItem = .build()
                 item.configure(theme: self.currentTheme(),
@@ -165,14 +165,14 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
 
         switch CertificatesItemType(rawValue: indexPath.row) {
         case .subjectName:
-            if let commonName = viewModel.getCertificateValues(from: "\(certificate.subject)")[CertificateKeys.commonName] {
+            if let commonName = certificate.subject.description.getDictionary()[CertificateKeys.commonName] {
                 cell.configure(theme: currentTheme(),
                                sectionTitle: .Menu.EnhancedTrackingProtection.certificateSubjectName,
                                items: [(.Menu.EnhancedTrackingProtection.certificateCommonName, commonName)])
             }
 
         case .issuerName:
-            let issuerData = viewModel.getCertificateValues(from: "\(certificate.issuer)")
+            let issuerData = certificate.issuer.description.getDictionary()
             if let country = issuerData[CertificateKeys.country],
                let organization = issuerData[CertificateKeys.organization],
                let commonName = issuerData[CertificateKeys.commonName] {

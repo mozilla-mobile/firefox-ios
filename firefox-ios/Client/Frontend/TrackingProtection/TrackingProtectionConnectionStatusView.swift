@@ -124,10 +124,13 @@ final class TrackingProtectionConnectionStatusView: UIView, ThemeApplicable {
         connectionDetailArrow.tintColor = theme.colors.iconSecondary
     }
 
-    func setConnectionStatusImage(image: UIImage, isConnectionSecure: Bool, theme: Theme) {
+    func setConnectionStatus(image: UIImage, isConnectionSecure: Bool, theme: Theme) {
         connectionStatusImage.image = image
         if isConnectionSecure {
+            connectionDetailArrow.isHidden = false
             connectionStatusImage.tintColor = theme.colors.iconPrimary
+        } else {
+            connectionDetailArrow.isHidden = true
         }
     }
 }
