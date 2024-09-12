@@ -231,20 +231,21 @@ final class ToolbarMiddleware: FeatureFlaggable {
     }
 
     private func updateToolbarPosition(action: GeneralBrowserMiddlewareAction, state: AppState) {
-        guard let toolbarPosition = action.toolbarPosition,
+        guard let searchBarPosition = action.toolbarPosition,
               let scrollOffset = action.scrollOffset,
               let toolbarState = state.screenState(ToolbarState.self,
                                                    for: .toolbar,
                                                    window: action.windowUUID)
         else { return }
 
-        let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
-        let addressBorderPosition = getAddressBorderPosition(toolbarPosition: position,
+        let addressToolbarPosition = addressToolbarPositionFromSearchBarPosition(searchBarPosition)
+        let addressBorderPosition = getAddressBorderPosition(toolbarPosition: addressToolbarPosition,
                                                              isPrivate: toolbarState.isPrivateMode,
                                                              scrollY: scrollOffset.y)
-        let displayNavToolbarBorder = shouldDisplayNavigationToolbarBorder(toolbarPosition: position)
+        let displayNavToolbarBorder = shouldDisplayNavigationToolbarBorder(toolbarPosition: addressToolbarPosition)
 
-        let toolbarAction = ToolbarAction(addressBorderPosition: addressBorderPosition,
+        let toolbarAction = ToolbarAction(toolbarPosition: searchBarPosition,
+                                          addressBorderPosition: addressBorderPosition,
                                           displayNavBorder: displayNavToolbarBorder,
                                           windowUUID: action.windowUUID,
                                           actionType: ToolbarActionType.toolbarPositionChanged)
