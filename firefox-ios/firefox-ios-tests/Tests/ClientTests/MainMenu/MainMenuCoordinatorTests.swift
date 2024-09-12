@@ -33,7 +33,7 @@ final class MainMenuCoordinatorTests: XCTestCase {
     func testStart_presentsMainMenuController() throws {
         let subject = createSubject()
 
-        subject.startModal()
+        subject.showMenuModal()
 
         XCTAssertTrue(mockRouter.presentedViewController is MainMenuViewController)
         XCTAssertEqual(mockRouter.presentCalled, 1)
@@ -42,8 +42,8 @@ final class MainMenuCoordinatorTests: XCTestCase {
     func testMainMenu_dismissFlow_callsRouterDismiss() throws {
         let subject = createSubject()
 
-        subject.startModal()
-        subject.dismissModal(animated: false)
+        subject.showMenuModal()
+        subject.dismissMenuModal(animated: false)
 
         XCTAssertEqual(mockRouter.dismissCalled, 1)
     }

@@ -141,7 +141,7 @@ class MainMenuViewController: UIViewController,
         }
 
         if menuState.shouldDismiss {
-            coordinator?.dismissModal(animated: true)
+            coordinator?.dismissMenuModal(animated: true)
         }
     }
 
@@ -185,7 +185,7 @@ class MainMenuViewController: UIViewController,
 
     // MARK: - UIAdaptivePresentationControllerDelegate
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        coordinator?.dismissModal(animated: true)
+        coordinator?.dismissMenuModal(animated: true)
     }
 
     // MARK: - UISheetPresentationControllerDelegate

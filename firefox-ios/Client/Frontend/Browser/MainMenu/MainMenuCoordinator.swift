@@ -22,15 +22,12 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     private let windowUUID: WindowUUID
     private var navController: UINavigationController!
 
-    init(
-        router: Router,
-        windowUUID: WindowUUID
-    ) {
+    init(router: Router, windowUUID: WindowUUID) {
         self.windowUUID = windowUUID
         super.init(router: router)
     }
 
-    func startModal() {
+    func showMenuModal() {
         let viewController = createMainMenuViewController()
         navController = UINavigationController(rootViewController: viewController)
         navController.modalPresentationStyle = .pageSheet
@@ -52,6 +49,11 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
 
     func dismissDetailViewController() {
         navController.popViewController(animated: true)
+    }
+
+    func dismissMenuModal(animated: Bool) {
+        router.dismiss(animated: animated, completion: nil)
+        self.parentCoordinator?.didFinish(from: self)
     }
 
     func navigateTo(_ destination: MainMenuNavigationDestination, animated: Bool) {
@@ -85,11 +87,7 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         })
     }
 
-    func dismissModal(animated: Bool) {
-        router.dismiss(animated: animated, completion: nil)
-        self.parentCoordinator?.didFinish(from: self)
-    }
-
+    // MARK: - Private helpers
     private func createMainMenuViewController() -> MainMenuViewController {
         let mainMenuViewController = MainMenuViewController(windowUUID: windowUUID)
         mainMenuViewController.coordinator = self

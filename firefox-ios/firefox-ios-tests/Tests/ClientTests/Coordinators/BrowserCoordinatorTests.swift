@@ -1012,7 +1012,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
         subject.showMainMenu()
         let menuCoordinator = subject.childCoordinators[0] as! MainMenuCoordinator
-        menuCoordinator.dismissModal(animated: false)
+        menuCoordinator.dismissMenuModal(animated: false)
 
         XCTAssertEqual(mockRouter.dismissCalled, 1)
         XCTAssertTrue(subject.childCoordinators.isEmpty)
