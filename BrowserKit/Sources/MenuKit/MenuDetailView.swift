@@ -10,9 +10,6 @@ public final class MenuDetailView: UIView {
     private var tableView: MenuTableView = .build()
     private var detailHeaderView: MenuSubmenuHeaderView = .build()
 
-    // MARK: - Properties
-    public var navigationDelegate: MainMenuDetailNavigationHandler!
-
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)

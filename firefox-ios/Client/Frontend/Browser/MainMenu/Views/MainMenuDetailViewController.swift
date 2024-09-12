@@ -46,11 +46,17 @@ class MainMenuDetailViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .systemMint
+        setupView()
+        setupTableView()
+        submenuContent.setupHeaderNavigation(from: self)
+    }
 
+    private func setupView() {
+        view.backgroundColor = .systemMint
         view.addSubview(submenuContent)
 
         NSLayoutConstraint.activate([
@@ -59,9 +65,6 @@ class MainMenuDetailViewController: UIViewController,
             submenuContent.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             submenuContent.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
-
-        setupTableView()
-        submenuContent.setupHeaderNavigation(from: self)
     }
 
     private func setupTableView() {

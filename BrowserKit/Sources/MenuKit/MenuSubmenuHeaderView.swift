@@ -18,7 +18,7 @@ final class MenuSubmenuHeaderView: UIView {
     }
 
     // MARK: - Properties
-    weak var navigationDelegate: MainMenuDetailNavigationHandler!
+    weak var navigationDelegate: MainMenuDetailNavigationHandler?
 
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -45,6 +45,6 @@ final class MenuSubmenuHeaderView: UIView {
 
     @objc
     private func backButtonTapped() {
-        navigationDelegate.backToMainView()
+        navigationDelegate?.backToMainView()
     }
 }
