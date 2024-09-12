@@ -41,11 +41,13 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
         label.text = .Menu.EnhancedTrackingProtection.certificatesTitle
     }
 
+    //TODO: FXIOS-9980 Tracking Protection Certificates Screen tableView header text is a little bit cutted off
     let certificatesTableView: UITableView = .build { tableView in
         tableView.allowsSelection = false
         tableView.register(CertificatesCell.self, forCellReuseIdentifier: CertificatesCell.cellIdentifier)
         tableView.register(CertificatesHeaderView.self,
                            forHeaderFooterViewReuseIdentifier: CertificatesHeaderView.cellIdentifier)
+        tableView.sectionHeaderTopPadding = 0
     }
 
     // MARK: - Variables
@@ -113,7 +115,8 @@ class CertificatesViewController: UIViewController, Themeable, UITableViewDelega
         certificatesTableView.dataSource = self
         view.addSubview(certificatesTableView)
         NSLayoutConstraint.activate([
-            certificatesTableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
+            certificatesTableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, 
+                                                       constant: UX.titleLabelTopMargin),
             certificatesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             certificatesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             certificatesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
