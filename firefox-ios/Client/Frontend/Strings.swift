@@ -352,6 +352,12 @@ extension String {
                     value: "Try again",
                     comment: "Suggestion to try again after an error occurred while trying to save an address."
                 )
+                public static let AddressUpdatedConfirmation = MZLocalizedString(
+                    key: "Addresses.Toast.AddressUpdatedConfirmation.v130",
+                    tableName: "EditAddress",
+                    value: "Address Saved",
+                    comment: "Toast message confirming that an address has been successfully updated."
+                )
                 public static let RemoveAddressTitle = MZLocalizedString(
                     key: "Addresses.EditAddress.Alert.Title.v129",
                     tableName: "EditAddress",
