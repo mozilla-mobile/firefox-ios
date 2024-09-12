@@ -29,7 +29,7 @@ final class AddressToolbarContainer: UIView,
                                      URLBarViewProtocol {
     private enum UX {
         static let compactLeadingEdgeEditing: CGFloat = 8
-        static let compactHorizontalEdge: CGFloat = 16
+        static let compactHorizontalEdge: CGFloat = 24
     }
 
     typealias SubscriberStateType = ToolbarState
@@ -43,14 +43,7 @@ final class AddressToolbarContainer: UIView,
         return shouldDisplayCompact ? compactToolbar : regularToolbar
     }
 
-    private var shouldDisplayCompact: Bool {
-        guard let model else {
-            return traitCollection.horizontalSizeClass == .compact
-        }
-
-        return model.shouldDisplayCompact
-    }
-
+    private var shouldDisplayCompact = true
     private var isTransitioning = false {
         didSet {
             if isTransitioning {
@@ -175,6 +168,7 @@ final class AddressToolbarContainer: UIView,
         let newModel = AddressToolbarContainerModel(state: toolbarState,
                                                     profile: profile,
                                                     windowUUID: windowUUID)
+        shouldDisplayCompact = newModel.shouldDisplayCompact
         if self.model != newModel {
             updateProgressBarPosition(toolbarState.toolbarPosition)
             compactToolbar.configure(state: newModel.addressToolbarState,

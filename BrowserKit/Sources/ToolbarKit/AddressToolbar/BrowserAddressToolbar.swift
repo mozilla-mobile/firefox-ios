@@ -12,7 +12,7 @@ import Common
 /// +-------------+------------+-----------------------+----------+
 public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, LocationViewDelegate {
     private enum UX {
-        static let horizontalEdgeSpace: CGFloat = 16
+        static let horizontalEdgeSpace: CGFloat = 24
         static let verticalEdgeSpace: CGFloat = 8
         static let horizontalSpace: CGFloat = 8
         static let cornerRadius: CGFloat = 8
