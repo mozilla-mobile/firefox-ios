@@ -76,7 +76,13 @@ export class FieldDetail {
     );
     this.identifier = `${element.id}/${element.name}`;
     this.localName = element.localName;
-    this.fieldName = fieldName;
+
+    if (Array.isArray(fieldName)) {
+      this.fieldName = fieldName[0];
+      this.alternativeFieldName = fieldName[1];
+    } else {
+      this.fieldName = fieldName;
+    }
 
     if (!this.fieldName) {
       this.reason = "unknown";
