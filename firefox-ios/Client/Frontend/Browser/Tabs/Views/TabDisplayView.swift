@@ -119,7 +119,7 @@ class TabDisplayView: UIView,
 //        }
 
         // Create the diffable data source and its cell provider.
-        tabsListDataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { [weak self] (collectionView, indexPath, identifier) -> UICollectionViewCell in
+        tabsListDataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { [weak self] (collectionView, indexPath, tabId) -> UICollectionViewCell in
             // `identifier/item` is an instance of `tabModel`. Use it to
             // retrieve the tab from the backing data store.
             guard let self, let cell = collectionView.dequeueReusableCell(
@@ -127,7 +127,8 @@ class TabDisplayView: UIView,
                 for: indexPath
             ) as? TabCell else { return UICollectionViewCell() }
 
-            let tabState = self.tabsState.tabs[indexPath.row]
+            guard let tabState = self.tabsState.tabs.first(where: { $0.id == tabId }) else { return UICollectionViewCell() }
+
             cell.configure(with: tabState, theme: self.theme, delegate: self)
             return cell
         }
