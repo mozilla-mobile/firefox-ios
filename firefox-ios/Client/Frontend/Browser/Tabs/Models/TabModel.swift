@@ -4,7 +4,8 @@
 
 import Foundation
 
-struct TabModel: Equatable, Hashable {
+struct TabModel: Equatable, Identifiable {
+    let id: String
     let tabUUID: TabUUID
     let isSelected: Bool
     let isPrivate: Bool
@@ -17,6 +18,7 @@ struct TabModel: Equatable, Hashable {
 
     static func emptyTabState(tabUUID: TabUUID, title: String) -> TabModel {
         return TabModel(
+            id: tabUUID, 
             tabUUID: tabUUID,
             isSelected: false,
             isPrivate: false,
