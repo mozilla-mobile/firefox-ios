@@ -33,7 +33,7 @@ class TabDisplayView: UIView,
     var theme: Theme?
 
     // Using tabUUID as it's a way to identify the Tab object which is hashable
-    private var tabsListDataSource: UICollectionViewDiffableDataSource<TabDisplaySection, TabUUID>?
+    private var tabsListDataSource: UICollectionViewDiffableDataSource<TabDisplaySection, TabModel.ID>?
 
     private var shouldHideInactiveTabs: Bool {
         guard !tabsState.isPrivateMode else { return true }
@@ -120,7 +120,7 @@ class TabDisplayView: UIView,
 
         // Create the diffable data source and its cell provider.
         tabsListDataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { [weak self] (collectionView, indexPath, identifier) -> UICollectionViewCell in
-            // `identifier/item` is an instance of `tabUUID`. Use it to
+            // `identifier/item` is an instance of `tabModel`. Use it to
             // retrieve the tab from the backing data store.
             guard let self, let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: TabCell.cellIdentifier,
