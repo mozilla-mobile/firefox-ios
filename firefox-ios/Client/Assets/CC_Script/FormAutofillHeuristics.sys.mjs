@@ -24,6 +24,9 @@ const MULTI_N_FIELD_NAMES = {
   "cc-number": 4,
 };
 
+const CC_TYPE = 1;
+const ADDR_TYPE = 2;
+
 /**
  * Returns the autocomplete information of fields according to heuristics.
  */
@@ -521,6 +524,33 @@ export const FormAutofillHeuristics = {
   },
 
   /**
+   * If the given field is of a different type than the previous
+   * field, use the alternate field name instead.
+   */
+  _checkForAlternateField(scanner, fieldDetail) {
+    if (fieldDetail.alternativeFieldName) {
+      const previousField = scanner.getFieldDetailByIndex(
+        scanner.parsingIndex - 1
+      );
+      if (previousField) {
+        const preIsCC = lazy.FormAutofillUtils.isCreditCardField(
+          previousField.fieldName
+        );
+        const curIsCC = lazy.FormAutofillUtils.isCreditCardField(
+          fieldDetail.fieldName
+        );
+
+        // If the current type is different from the previous element's type, use
+        // the alternative fieldname instead.
+        if (preIsCC != curIsCC) {
+          fieldDetail.fieldName = fieldDetail.alternativeFieldName;
+          fieldDetail.reason = "update-heuristic-alternate";
+        }
+      }
+    }
+  },
+
+  /**
    * This function should provide all field details of a form which are placed
    * in the belonging section. The details contain the autocomplete info
    * (e.g. fieldName, section, etc).
@@ -538,6 +568,8 @@ export const FormAutofillHeuristics = {
 
       // First, we get the inferred field info
       const fieldDetail = scanner.getFieldDetailByIndex(scanner.parsingIndex);
+
+      this._checkForAlternateField(scanner, fieldDetail);
 
       if (
         this._parsePhoneFields(scanner, fieldDetail) ||
@@ -686,8 +718,8 @@ export const FormAutofillHeuristics = {
     }
 
     // Find a matched field name using regexp-based heuristics
-    const matchedFieldName = this._findMatchedFieldName(element, fields);
-    return [matchedFieldName, null, null];
+    const matchedFieldNames = this._findMatchedFieldNames(element, fields);
+    return [matchedFieldNames, null, null];
   },
 
   /**
@@ -867,12 +899,17 @@ export const FormAutofillHeuristics = {
   },
 
   /**
-   * Find the first matching field name from a given list of field names
+   * Find matching field names from a given list of field names
    * that matches an HTML element.
    *
    * The function first tries to match the element against a set of
    * pre-defined regular expression rules. If no match is found, it
    * then checks for label-specific rules, if they exist.
+   *
+   * The return value can contain a maximum of two field names, the
+   * first item the first match found, and the second an alternate field
+   * name always of a different type, where the two type are credit card
+   * and address.
    *
    * Note: For label rules, the keyword is often more general
    * (e.g., "^\\W*address"), hence they are only searched within labels
@@ -880,27 +917,53 @@ export const FormAutofillHeuristics = {
    *
    * @param {HTMLElement} element The element to match.
    * @param {Array<string>} fieldNames An array of field names to compare against.
-   * @returns {string|null} The name of the matched field, or null if no match was found.
+   * @returns {Array} An array of the matching field names.
    */
-  _findMatchedFieldName(element, fieldNames) {
+  _findMatchedFieldNames(element, fieldNames) {
     if (!fieldNames.length) {
-      return null;
+      return [];
     }
 
-    // Attempt to match the element against the default set of rules
-    let matchedFieldName = fieldNames.find(fieldName =>
-      this._matchRegexp(element, this.RULES[fieldName])
-    );
+    // The first element is the field name, and the second element is the type.
+    let fields = fieldNames.map(name => [
+      name,
+      lazy.FormAutofillUtils.isCreditCardField(name) ? CC_TYPE : ADDR_TYPE,
+    ]);
 
-    // If no match is found, and if a label rule exists for the field,
-    // attempt to match against the label rules
-    if (!matchedFieldName) {
-      matchedFieldName = fieldNames.find(fieldName => {
-        const regexp = this.LABEL_RULES[fieldName];
-        return this._matchRegexp(element, regexp, { attribute: false });
-      });
+    let foundType;
+    let attribute = true;
+    let matchedFieldNames = [];
+
+    // Check RULES first, and only check LABEL_RULES if no match is found.
+    for (let rules of [this.RULES, this.LABEL_RULES]) {
+      // Attempt to match the element against the default set of rules.
+      if (
+        fields.find(field => {
+          const [fieldName, type] = field;
+
+          // The same type has been found already, so skip.
+          if (foundType == type) {
+            return false;
+          }
+
+          if (!this._matchRegexp(element, rules[fieldName], { attribute })) {
+            return false;
+          }
+
+          foundType = type;
+          matchedFieldNames.push(fieldName);
+
+          return matchedFieldNames.length == 2;
+        })
+      ) {
+        break;
+      }
+
+      // Don't match attributes for label rules.
+      attribute = false;
     }
-    return matchedFieldName;
+
+    return matchedFieldNames;
   },
 
   /**
