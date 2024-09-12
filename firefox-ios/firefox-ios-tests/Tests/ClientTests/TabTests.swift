@@ -5,6 +5,7 @@
 import XCTest
 import WebKit
 import Common
+import Shared
 @testable import Client
 
 class TabTests: XCTestCase {
@@ -13,7 +14,8 @@ class TabTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        tabDelegate = MockLegacyTabDelegate()
+        // Disable debug flag for faster inactive tabs and perform tests based on the real 14 day time to inactive
+        UserDefaults.standard.set(false, forKey: PrefsKeys.FasterInactiveTabsOverride)
     }
 
     override func tearDown() {
@@ -44,6 +46,22 @@ class TabTests: XCTestCase {
         let tab = Tab(profile: MockProfile(), windowUUID: windowUUID)
         tab.tabDelegate = tabDelegate
         trackForMemoryLeaks(tab)
+    }
+
+    func testTabIsActive_within14Days() {
+        // Tabs use the current date by default, so this one should be considered recent and active on initialization
+        let tab = Tab(profile: MockProfile(), windowUUID: windowUUID)
+
+        XCTAssertTrue(tab.isActive)
+        XCTAssertFalse(tab.isInactive)
+    }
+
+    func testTabIsInactive_outside14Days() {
+        let lastMonthDate = Date().lastMonth
+        let tab = Tab(profile: MockProfile(), windowUUID: windowUUID, tabCreatedTime: lastMonthDate)
+
+        XCTAssertFalse(tab.isActive)
+        XCTAssertTrue(tab.isInactive)
     }
 }
 

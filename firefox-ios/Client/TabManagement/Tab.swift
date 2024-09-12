@@ -419,6 +419,7 @@ class Tab: NSObject, ThemeApplicable {
         if UserDefaults.standard.bool(forKey: PrefsKeys.FasterInactiveTabsOverride) {
             inactiveDate = Calendar.current.date(byAdding: .second, value: -10, to: currentDate) ?? Date()
         } else {
+            // FIXME Is there a reason we use noon of the current day instead of the exact time, when calculating -14 days?
             inactiveDate = Calendar.current.date(byAdding: .day, value: -14, to: currentDate.noon) ?? Date()
         }
 
@@ -437,6 +438,7 @@ class Tab: NSObject, ThemeApplicable {
          isPrivate: Bool = false,
          windowUUID: WindowUUID,
          faviconHelper: SiteImageHandler = DefaultSiteImageHandler.factory(),
+         tabCreatedTime: Date = Date(),
          logger: Logger = DefaultLogger.shared) {
         self.nightMode = false
         self.windowUUID = windowUUID
@@ -444,12 +446,12 @@ class Tab: NSObject, ThemeApplicable {
         self.profile = profile
         self.metadataManager = LegacyTabMetadataManager(metadataObserver: profile.places)
         self.faviconHelper = faviconHelper
+        self.lastExecutedTime = tabCreatedTime.toTimestamp()
+        self.firstCreatedTime = tabCreatedTime.toTimestamp()
         self.logger = logger
         super.init()
         self.isPrivate = isPrivate
-        let tabCreatedTime = Date().toTimestamp()
-        self.lastExecutedTime = tabCreatedTime
-        self.firstCreatedTime = tabCreatedTime
+
         debugTabCount += 1
 
         TelemetryWrapper.recordEvent(
