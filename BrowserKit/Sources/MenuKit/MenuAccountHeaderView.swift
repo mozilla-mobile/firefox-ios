@@ -5,7 +5,7 @@
 import Foundation
 import UIKit
 
-public final class MenuAccountHeaderView: UIView {
+final class MenuAccountHeaderView: UIView {
     // MARK: - UI Elements
 
     // MARK: - Properties

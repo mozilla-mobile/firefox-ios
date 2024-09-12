@@ -21,7 +21,7 @@ class MainMenuViewController: UIViewController,
     typealias SubscriberStateType = MainMenuState
 
     // MARK: - UI/UX elements
-    private lazy var menuContent: MenuView = .build()
+    private lazy var menuContent: MenuMainView = .build()
 
     // MARK: - Properties
     var notificationCenter: NotificationProtocol
@@ -227,8 +227,7 @@ class MainMenuViewController: UIViewController,
         didSelectRowAt indexPath: IndexPath
     ) {
         if let submenu = menuState.menuElements[indexPath.section].options[indexPath.row].submenu {
-            let detailVC = DetailViewController()
-            detailVC.title = "Detail View"
+            let detailVC = MainMenuDetailViewController(windowUUID: self.windowUUID, with: submenu)
             navigationController?.pushViewController(detailVC, animated: true)
         } else if let action = menuState.menuElements[indexPath.section].options[indexPath.row].action {
             tableView.deselectRow(at: indexPath, animated: true)

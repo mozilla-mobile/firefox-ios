@@ -5,10 +5,10 @@
 import Common
 import UIKit
 
-public final class MenuView: UIView {
+public final class MenuDetailView: UIView {
     // MARK: - UI Elements
     private var tableView: MenuTableView = .build()
-    public var accountHeaderView: MenuAccountHeaderView = .build()
+    private var detailHeaderView: MenuSubmenuHeaderView = .build()
 
     // MARK: - Properties
 
@@ -25,16 +25,16 @@ public final class MenuView: UIView {
     // MARK: - UI Setup
     private func setupView() {
         backgroundColor = .clear
-        self.addSubview(accountHeaderView)
+        self.addSubview(detailHeaderView)
         self.addSubview(tableView)
 
         NSLayoutConstraint.activate([
-            accountHeaderView.topAnchor.constraint(equalTo: self.topAnchor),
-            accountHeaderView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            accountHeaderView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            accountHeaderView.heightAnchor.constraint(equalToConstant: 70),
+            detailHeaderView.topAnchor.constraint(equalTo: self.topAnchor),
+            detailHeaderView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            detailHeaderView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            detailHeaderView.heightAnchor.constraint(equalToConstant: 70),
 
-            tableView.topAnchor.constraint(equalTo: accountHeaderView.bottomAnchor),
+            tableView.topAnchor.constraint(equalTo: detailHeaderView.bottomAnchor),
             tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
