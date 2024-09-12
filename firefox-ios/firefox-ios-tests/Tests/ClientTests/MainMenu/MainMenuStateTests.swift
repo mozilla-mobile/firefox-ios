@@ -20,7 +20,6 @@ final class MainMenuStateTests: XCTestCase {
 
     func testInitialization() {
         let initialState = createSubject()
-        let reducer = mainMenuReducer()
 
         XCTAssertFalse(initialState.shouldDismiss)
         XCTAssertEqual(initialState.menuElements, [])
