@@ -464,7 +464,7 @@
 "HistoryPanel.RecentlyClosedTabsButton.Title" = "Son kapatılanlar";
 
 /* Accessibility label for the tab toolbar indicating the Home button. */
-"Home" = "Ana sayfa";
+"Home" = "Giriş sayfası";
 
 /* The title for the Bookmark context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Bookmark" = "Yer imi";

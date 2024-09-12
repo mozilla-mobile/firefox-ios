@@ -4,6 +4,9 @@
 /* On the main menu, at the top, when the user is signed in but there was an error syncing. The description subtitle for the sync error state. */
 "MainMenu.Account.SyncError.Description.v131" = "Eşitleme duraklatıldı";
 
+/* On the main menu, at the top, when the user is signed in but there was an error syncing. The title for this state. */
+"MainMenu.Account.SyncError.Title.v131" = "Eşitlemek için yeniden giriş yap";
+
 /* On the main menu, the title for the action that will take the user to the Downloads panel. Please keep as short as possible, <15 chars of space available. */
 "MainMenu.PanelLinkSection.Downloads.Title.v131" = "İndirilenler";
 
@@ -22,6 +25,9 @@
 /* On the main menu, the title for the action that will take the user to the Settings menu. */
 "MainMenu.SettingsSection.Settings.Title.v131" = "Ayarlar";
 
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to add the current website to the shortcuts on the homepage. */
+"MainMenu.Submenus.Save.AddToShortcuts.Title.v131" = "Kısayollara ekle";
+
 /* On the main menu, in the Save submenu, the title for the menu component that allows a user to save a bookmark for this particular page.. */
 "MainMenu.Submenus.Save.BookmarkThisPage.Title.v131" = "Sayfayı yer imlerine ekle";
 
@@ -30,6 +36,9 @@
 
 /* On the main menu, in the Save submenu, the title for the menu component that allows the user to remove this site from the reading list. */
 "MainMenu.Submenus.Save.RemoveFromReadingList.Title.v131" = "Okuma listesinden kaldır";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to remove the current website from the shortcuts on the homepage. */
+"MainMenu.Submenus.Save.RemoveFromShortcuts.Title.v131" = "Kısayollardan kaldır";
 
 /* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Save as PDF tool. */
 "MainMenu.Submenus.Save.SaveAsPDF.Subtitle.v131" = "PDF";

@@ -1,3 +1,6 @@
+/* The title for the certificate common name inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.CommonName.v131" = "通用名称";
+
 /* The title for the certificate issuer country inside the certificate screen. */
 "Menu.EnhancedTrackingProtection.Certificates.IssuerCountry.v131" = "国家/地区";
 
@@ -7,8 +10,20 @@
 /* The title for the certificate issuer organization inside the certificate screen. */
 "Menu.EnhancedTrackingProtection.Certificates.IssuerOrganization.v131" = "组织";
 
+/* The title for the certificate subject alt names section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectAltNames.v131" = "主题替代名称";
+
 /* The title for the certificate subject alt names DNS name inside the certificate screen. */
 "Menu.EnhancedTrackingProtection.Certificates.SubjectAltNamesDNSName.v131" = "DNS 名称";
+
+/* The title for the certificate subject name section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectName.v131" = "主题名称";
+
+/* The title for the certificates screen inside the certificates screen. */
+"Menu.EnhancedTrackingProtection.Certificates.Title.v131" = "证书";
+
+/* The title for the certificate validity section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.Validity.v131" = "有效性";
 
 /* The title for the certificate validity not after date inside the certificate screen. */
 "Menu.EnhancedTrackingProtection.Certificates.ValidityNotAfter.v131" = "不晚于";
@@ -57,6 +72,9 @@
 
 /* Text to let users know the site verifier, where the placeholder represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
 "Menu.EnhancedTrackingProtection.Details.Verifier.v128" = "验证者：%@";
+
+/* The title for the button that allows users to view certificates inside the enhanced tracking protection details screen. */
+"Menu.EnhancedTrackingProtection.Details.ViewCertificatesTitle.v131" = "查看证书";
 
 /* Header for the enhanced tracking protection screen when the user has opted out of the feature. Placeholder will be replaced by the app name */
 "Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ 已关闭，建议重新启用保护。";

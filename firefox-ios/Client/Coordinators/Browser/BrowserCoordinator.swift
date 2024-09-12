@@ -25,7 +25,8 @@ class BrowserCoordinator: BaseCoordinator,
                           TabManagerDelegate,
                           TabTrayCoordinatorDelegate,
                           PrivateHomepageDelegate,
-                          WindowEventCoordinator {
+                          WindowEventCoordinator,
+                          MainMenuCoordinatorDelegate {
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
@@ -440,6 +441,46 @@ class BrowserCoordinator: BaseCoordinator,
         handleSettings(with: settings)
     }
 
+    // MARK: - MainMenuCoordinatorDelegate
+    func showMainMenu() {
+        guard let coordinator = makeMenuCoordinator() else { return }
+        coordinator.startModal()
+    }
+
+    func openURLInNewTab(_ url: URL?) {
+        if let url {
+            browserViewController.openURLInNewTab(url, isPrivate: self.tabManager.selectedTab?.isPrivate ?? false)
+        }
+    }
+
+    func openNewTab(inPrivateMode isPrivate: Bool) {
+        handle(homepanelSection: isPrivate ? .newPrivateTab : .newTab)
+    }
+
+    func showLibraryPanel(_ panel: Route.HomepanelSection) {
+        showLibrary(with: panel)
+    }
+
+    func showSettings(at destination: Route.SettingsSection) {
+        presentWithModalDismissIfNeeded {
+            self.handleSettings(with: destination, onDismiss: nil)
+        }
+    }
+
+    func showFindInPage() {
+        browserViewController.showFindInPage()
+    }
+
+    private func makeMenuCoordinator() -> MainMenuCoordinator? {
+        guard !childCoordinators.contains(where: { $0 is MainMenuCoordinator }) else { return nil }
+
+        let coordinator = MainMenuCoordinator(router: router, tabManager: tabManager)
+        coordinator.parentCoordinator = self
+        coordinator.navigationHandler = self
+        add(child: coordinator)
+        return coordinator
+    }
+
     // MARK: - BrowserNavigationHandler
 
     func show(settings: Route.SettingsSection, onDismiss: (() -> Void)? = nil) {
@@ -520,15 +561,6 @@ class BrowserCoordinator: BaseCoordinator,
         }
 
         let coordinator = FakespotCoordinator(router: router, tabManager: tabManager)
-        coordinator.parentCoordinator = self
-        add(child: coordinator)
-        return coordinator
-    }
-
-    private func makeMenuCoordinator() -> MainMenuCoordinator? {
-        guard !childCoordinators.contains(where: { $0 is MainMenuCoordinator }) else { return nil }
-
-        let coordinator = MainMenuCoordinator(router: router, tabManager: tabManager)
         coordinator.parentCoordinator = self
         add(child: coordinator)
         return coordinator
@@ -739,12 +771,6 @@ class BrowserCoordinator: BaseCoordinator,
                          completion: (() -> Void)? = nil) {
         browserViewController.willNavigateAway()
         router.present(viewController)
-    }
-
-    // MARK: - Main Menu
-    func showMainMenu() {
-        guard let coordinator = makeMenuCoordinator() else { return }
-        coordinator.startModal()
     }
 
     // MARK: - ParentCoordinatorDelegate

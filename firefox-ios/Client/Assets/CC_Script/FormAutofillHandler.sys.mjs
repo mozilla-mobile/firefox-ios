@@ -180,12 +180,9 @@ export class FormAutofillHandler {
    */
   collectFormFields(ignoreUnknown = true) {
     const fields = lazy.FormAutofillHeuristics.getFormInfo(this.form) ?? [];
-    this.fieldDetails = fields.filter(field => {
-      if (["cc-csc"].includes(field.fieldName)) {
-        return false;
-      }
-      return ignoreUnknown ? !!field.fieldName : true;
-    });
+    this.fieldDetails = ignoreUnknown
+      ? fields.filter(field => field.fieldName)
+      : fields;
     return this.fieldDetails;
   }
 

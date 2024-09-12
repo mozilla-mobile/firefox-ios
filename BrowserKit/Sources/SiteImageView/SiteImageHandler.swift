@@ -78,9 +78,17 @@ public class DefaultSiteImageHandler: SiteImageHandler {
         let requestHandle = Task {
             var faviconImageModel = imageModel
 
-            if faviconImageModel.resourceURL == nil {
-                // Try to obtain the favicon URL if needed (ideally from cache, otherwise scrape the webpage)
-                faviconImageModel.resourceURL = try? await urlHandler.getFaviconURL(model: imageModel)
+            // Try to obtain the favicon URL if needed (ideally from cache, otherwise scrape the webpage)
+            if faviconImageModel.siteResource == nil,
+               let faviconURL = try? await urlHandler.getFaviconURL(model: imageModel) {
+                faviconImageModel.siteResource = .remoteURL(url: faviconURL)
+            }
+
+            // If this resource is in the bundle (as with Home screen SuggestedSites), cache its associated URL. 
+            // - Note:  This is a small optimization for when a SuggestedSite is actually visited and/or bookmarked by a user
+            //           and the `SiteImageModel` isn't generated from a Home tile `Site` type.
+            if case let .bundleAsset(_, resourceURL) = faviconImageModel.siteResource {
+                urlHandler.cacheFaviconURL(cacheKey: faviconImageModel.cacheKey, faviconURL: resourceURL)
             }
 
             // Try to load the favicon image from the cache, or make a request to the favicon URL if it's not in the cache

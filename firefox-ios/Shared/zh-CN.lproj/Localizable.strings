@@ -38,7 +38,7 @@
 "ActivityStream.RecentHistory.Title" = "最近访问";
 
 /* Section title label for Shortcuts */
-"ActivityStream.Shortcuts.SectionTitle" = "快捷指令";
+"ActivityStream.Shortcuts.SectionTitle" = "快捷方式";
 
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "设置行数";

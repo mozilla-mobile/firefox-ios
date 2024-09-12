@@ -12,13 +12,42 @@ final class MainMenuAction: Action {
     }
 }
 
-final class MainMenuMiddlewareAction: Action { }
-
 enum MainMenuActionType: ActionType {
+    case viewDidLoad
+    case updateCurrentTabInfo(MainMenuTabInfo?)
     case mainMenuDidAppear
+    case toggleNightMode
     case closeMenu
+    case show(MainMenuNavigationDestination)
+    case toggleUserAgent
 }
 
-enum MainMenuMiddlewareActionType: ActionType {
-    case dismissMenu
+enum MainMenuNavigationDestination: Equatable {
+    case newTab
+    case newPrivateTab
+    case bookmarks
+    case customizeHomepage
+    case downloads
+    case findInPage
+    case goToURL(URL?)
+    case history
+    case passwords
+    case settings
+
+    /// This must manually be done, because we can't conform to `CaseIterable`
+    /// when we have enums with associated types
+    static var allCases: [MainMenuNavigationDestination] {
+        return [
+            .newTab,
+            .newPrivateTab,
+            .bookmarks,
+            .customizeHomepage,
+            .downloads,
+            .findInPage,
+            .goToURL(nil),
+            .history,
+            .passwords,
+            .settings,
+        ]
+    }
 }

@@ -492,7 +492,8 @@ class BrowserViewController: UIViewController,
         // If we are displaying a private tab, hide any elements in the tab that we wouldn't want shown
         // when the app is in the home switcher
         guard let privateTab = tabManager.selectedTab,
-              privateTab.isPrivate
+              privateTab.isPrivate,
+              canShowPrivacyView
         else { return }
 
         view.bringSubviewToFront(webViewContainerBackdrop)
@@ -508,6 +509,12 @@ class BrowserViewController: UIViewController,
         presentedViewController?.view.alpha = 0
     }
 
+    var canShowPrivacyView: Bool {
+        // Show privacy view if no view controller is presented
+        // or if the presented view is a PhotonActionSheet.
+        self.presentedViewController == nil || presentedViewController is PhotonActionSheet
+    }
+
     @objc
     func appDidBecomeActiveNotification() {
         // Re-show any components that might have been hidden because they were being displayed
@@ -518,13 +525,11 @@ class BrowserViewController: UIViewController,
             options: UIView.AnimationOptions(),
             animations: {
                 self.contentStackView.alpha = 1
-
                 if self.isToolbarRefactorEnabled {
                     self.addressToolbarContainer.alpha = 1
                 } else {
                     self.urlBar.locationContainer.alpha = 1
                 }
-
                 self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
                 self.presentedViewController?.view.alpha = 1
             }, completion: { _ in
@@ -2101,6 +2106,14 @@ class BrowserViewController: UIViewController,
     }
 
     func didTapOnMenu(button: UIButton?) {
+        // Ensure that any keyboards or spinners are dismissed before presenting the menu
+        UIApplication.shared.sendAction(
+            #selector(UIResponder.resignFirstResponder),
+            to: nil,
+            from: nil,
+            for: nil
+        )
+
         if featureFlags.isFeatureEnabled(.menuRefactor, checking: .buildOnly) {
             navigationHandler?.showMainMenu()
         } else {
@@ -2164,14 +2177,6 @@ class BrowserViewController: UIViewController,
 
     private func showPhotonMainMenu(from button: UIButton?) {
         guard let button else { return }
-
-        // Ensure that any keyboards or spinners are dismissed before presenting the menu
-        UIApplication.shared.sendAction(
-            #selector(UIResponder.resignFirstResponder),
-            to: nil,
-            from: nil,
-            for: nil
-        )
 
         // Logs homePageMenu or siteMenu depending if HomePage is open or not
         let isHomePage = tabManager.selectedTab?.isFxHomeTab ?? false
@@ -3216,45 +3221,42 @@ extension BrowserViewController: LegacyTabDelegate {
         readerMode.delegate = self
         tab.addContentScript(readerMode, name: ReaderMode.name())
 
-        // only add the logins helper if the tab is not a private browsing tab
-        if !tab.isPrivate {
-            let logins = LoginsHelper(
-                tab: tab,
-                profile: profile,
-                theme: currentTheme()
-            )
-            tab.addContentScript(logins, name: LoginsHelper.name())
-            logins.foundFieldValues = { [weak self, weak tab, weak webView] field, currentRequestId in
-                Task {
-                    guard self?.autofillLoginNimbusFeatureFlag() == true else { return }
-                    guard let tabURL = tab?.url else { return }
-                    let logins = (try? await self?.profile.logins.listLogins()) ?? []
-                    let loginsForCurrentTab = logins.filter { login in
-                        if field == FocusFieldType.username && login.decryptedUsername.isEmpty { return false }
-                        guard let recordHostnameURL = URL(string: login.hostname) else { return false }
-                        return recordHostnameURL.baseDomain == tabURL.baseDomain
-                    }
-                    if loginsForCurrentTab.isEmpty {
-                        tab?.webView?.accessoryView.reloadViewFor(.standard)
-                    } else {
-                        tab?.webView?.accessoryView.reloadViewFor(.login)
-                        tab?.webView?.reloadInputViews()
-                        TelemetryWrapper.recordEvent(
-                            category: .action,
-                            method: .view,
-                            object: .loginsAutofillPromptShown
+        let logins = LoginsHelper(
+            tab: tab,
+            profile: profile,
+            theme: currentTheme()
+        )
+        tab.addContentScript(logins, name: LoginsHelper.name())
+        logins.foundFieldValues = { [weak self, weak tab, weak webView] field, currentRequestId in
+            Task {
+                guard self?.autofillLoginNimbusFeatureFlag() == true else { return }
+                guard let tabURL = tab?.url else { return }
+                let logins = (try? await self?.profile.logins.listLogins()) ?? []
+                let loginsForCurrentTab = logins.filter { login in
+                    if field == FocusFieldType.username && login.decryptedUsername.isEmpty { return false }
+                    guard let recordHostnameURL = URL(string: login.hostname) else { return false }
+                    return recordHostnameURL.baseDomain == tabURL.baseDomain
+                }
+                if loginsForCurrentTab.isEmpty {
+                    tab?.webView?.accessoryView.reloadViewFor(.standard)
+                } else {
+                    tab?.webView?.accessoryView.reloadViewFor(.login)
+                    tab?.webView?.reloadInputViews()
+                    TelemetryWrapper.recordEvent(
+                        category: .action,
+                        method: .view,
+                        object: .loginsAutofillPromptShown
+                    )
+                }
+                tab?.webView?.accessoryView.savedLoginsClosure = {
+                    Task { @MainActor [weak self] in
+                        // Dismiss keyboard
+                        webView?.resignFirstResponder()
+                        self?.authenticateSelectSavedLoginsClosureBottomSheet(
+                            tabURL: tabURL,
+                            currentRequestId: currentRequestId,
+                            field: field
                         )
-                    }
-                    tab?.webView?.accessoryView.savedLoginsClosure = {
-                        Task { @MainActor [weak self] in
-                            // Dismiss keyboard
-                            webView?.resignFirstResponder()
-                            self?.authenticateSelectSavedLoginsClosureBottomSheet(
-                                tabURL: tabURL,
-                                currentRequestId: currentRequestId,
-                                field: field
-                            )
-                        }
                     }
                 }
             }

@@ -134,7 +134,7 @@ features:
               card-type: basic
               order: 20
               title: Onboarding/Onboarding.Sync.Title.v120
-              body: Onboarding/Onboarding.Sync.Description.v120
+              body: Onboarding/Onboarding.Sync.Description.v123
               image: sync-devices
               buttons:
                 primary:
@@ -432,6 +432,10 @@ enums:
       read-privacy-policy:
         description: >
           Will open a webview where the user can read the privacy policy
+      open-ios-fx-settings:
+        description: >
+          Will take the user to the default browser settings
+          in the iOS system settings
       end-onboarding:
         description: >
           Will end the onboarding on a set card

@@ -7,11 +7,16 @@ import Foundation
 import Shared
 
 protocol MainMenuCoordinatorDelegate: AnyObject {
-    // Define any coordinator delegate methods
+    func openURLInNewTab(_ url: URL?)
+    func openNewTab(inPrivateMode: Bool)
+    func showLibraryPanel(_ panel: Route.HomepanelSection)
+    func showSettings(at destination: Route.SettingsSection)
+    func showFindInPage()
 }
 
 class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     weak var parentCoordinator: ParentCoordinatorDelegate?
+    weak var navigationHandler: MainMenuCoordinatorDelegate?
     private let tabManager: TabManager
 
     init(
@@ -31,16 +36,44 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         router.present(viewController, animated: true)
     }
 
+    func navigateTo(_ destination: MainMenuNavigationDestination, animated: Bool) {
+        router.dismiss(animated: animated, completion: { [weak self] in
+            guard let self else { return }
+
+            switch destination {
+            case .bookmarks:
+                self.navigationHandler?.showLibraryPanel(.bookmarks)
+            case .customizeHomepage:
+                self.navigationHandler?.showSettings(at: .homePage)
+            case .downloads:
+                self.navigationHandler?.showLibraryPanel(.downloads)
+            case .findInPage:
+                self.navigationHandler?.showFindInPage()
+            case .goToURL(let url):
+                self.navigationHandler?.openURLInNewTab(url)
+            case .history:
+                self.navigationHandler?.showLibraryPanel(.history)
+            case .newTab:
+                self.navigationHandler?.openNewTab(inPrivateMode: false)
+            case .newPrivateTab:
+                self.navigationHandler?.openNewTab(inPrivateMode: true)
+            case .passwords:
+                self.navigationHandler?.showSettings(at: .password)
+            case .settings:
+                self.navigationHandler?.showSettings(at: .general)
+            }
+
+            self.parentCoordinator?.didFinish(from: self)
+        })
+    }
+
     func dismissModal(animated: Bool) {
         router.dismiss(animated: animated, completion: nil)
-        parentCoordinator?.didFinish(from: self)
+        self.parentCoordinator?.didFinish(from: self)
     }
 
     private func createMainMenuViewController() -> MainMenuViewController {
-        let mainMenuViewController = MainMenuViewController(
-            windowUUID: tabManager.windowUUID,
-            viewModel: MainMenuViewModel()
-        )
+        let mainMenuViewController = MainMenuViewController(windowUUID: tabManager.windowUUID)
         mainMenuViewController.coordinator = self
         return mainMenuViewController
     }

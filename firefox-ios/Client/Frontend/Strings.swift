@@ -3937,7 +3937,7 @@ extension String {
                 comment: "On the main menu, the title for the action that will take the user to the Passwords panel in the settings screen. Please keep as short as possible, <15 chars of space available.")
         }
 
-        public struct SettingsSection {
+        public struct OtherToolsSection {
             public static let CustomizeHomepage = MZLocalizedString(
                 key: "MainMenu.SettingsSection.CustomizeHomepage.Title.v131",
                 tableName: "MainMenu",

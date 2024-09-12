@@ -270,12 +270,14 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
             connectionStatusView.bottomAnchor.constraint(equalTo: connectionHorizontalLine.bottomAnchor)
         ]
         constraints.append(contentsOf: connectionConstraints)
-        connectionStatusView.connectionStatusButtonCallback = {
+        connectionStatusView.connectionStatusButtonCallback = { [weak self] in
+            guard let self, viewModel.connectionSecure else { return }
             // TODO: FXIOS-9198 #20366 Enhanced Tracking Protection Connection details screen
-            //        let detailsVC = TrackingProtectionDetailsViewController(with: viewModel.getDetailsModel(),
-            //                                                                windowUUID: windowUUID)
-            //        detailsVC.modalPresentationStyle = .pageSheet
-            //        self.present(detailsVC, animated: true)
+            //            let detailsVC = TrackingProtectionDetailsViewController(with: viewModel.getDetailsModel(),
+            //                                                                    windowUUID: windowUUID,
+            //                                                                    certificate: viewModel.certificates.first)
+            //            detailsVC.modalPresentationStyle = .pageSheet
+            //            self.present(detailsVC, animated: true)
         }
     }
 
@@ -507,9 +509,9 @@ extension TrackingProtectionViewController {
         connectionDetailsHeaderView.backgroundColor = theme.colors.layer2
         trackersView.applyTheme(theme: theme)
         connectionStatusView.applyTheme(theme: theme)
-        connectionStatusView.setConnectionStatusImage(image: viewModel.getConnectionStatusImage(themeType: theme.type),
-                                                      isConnectionSecure: viewModel.connectionSecure,
-                                                      theme: theme)
+        connectionStatusView.setConnectionStatus(image: viewModel.getConnectionStatusImage(themeType: theme.type),
+                                                 isConnectionSecure: viewModel.connectionSecure,
+                                                 theme: theme)
         connectionHorizontalLine.backgroundColor = theme.colors.borderPrimary
         toggleView.applyTheme(theme: theme)
         clearCookiesButton.applyTheme(theme: theme)
