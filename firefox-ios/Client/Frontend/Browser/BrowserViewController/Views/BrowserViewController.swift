@@ -130,7 +130,7 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
     }
     var isToolbarNavigationHintEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.toolbarNavigationHint, checking: .buildOnly) 
+        return featureFlags.isFeatureEnabled(.toolbarNavigationHint, checking: .buildOnly)
     }
     private var browserViewControllerState: BrowserViewControllerState?
 
