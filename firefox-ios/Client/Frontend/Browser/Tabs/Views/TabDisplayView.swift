@@ -85,15 +85,6 @@ class TabDisplayView: UIView,
         return collectionView
     }()
 
-//    // Create a diffable data source
-//    let dataSource = UICollectionViewDiffableDataSource<Section, Item>(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell? in
-//        // Dequeue a reusable cell
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
-//        // Configure the cell with data
-//        cell.textLabel.text = item.name
-//        return cell
-//    }
-
     // We now use this to set up the cells instead of cellForItemAt
     private func configureDataSource() {
         // Create a cell registration that the diffable data source will use.
@@ -122,15 +113,34 @@ class TabDisplayView: UIView,
         tabsListDataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { [weak self] (collectionView, indexPath, tabId) -> UICollectionViewCell in
             // `identifier/item` is an instance of `tabModel`. Use it to
             // retrieve the tab from the backing data store.
-            guard let self, let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: TabCell.cellIdentifier,
-                for: indexPath
-            ) as? TabCell else { return UICollectionViewCell() }
+            guard let self else { return UICollectionViewCell() }
 
-            guard let tabState = self.tabsState.tabs.first(where: { $0.id == tabId }) else { return UICollectionViewCell() }
+            switch getTabDisplay(for: indexPath.section) {
+            case .inactiveTabs:
+                guard let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: InactiveTabsCell.cellIdentifier,
+                    for: indexPath
+                ) as? InactiveTabsCell,
+                let tabVM = tabsState.inactiveTabs.first(where: { $0.id == tabId })
+                else { return UICollectionViewCell() }
 
-            cell.configure(with: tabState, theme: self.theme, delegate: self)
-            return cell
+                cell.configure(with: tabVM)
+                if let theme = theme {
+                    cell.applyTheme(theme: theme)
+                }
+                return cell
+            case .tabs:
+                guard
+                    let cell = collectionView.dequeueReusableCell(
+                        withReuseIdentifier: TabCell.cellIdentifier,
+                        for: indexPath
+                    ) as? TabCell,
+                    let tabState = tabsState.tabs.first(where: { $0.id == tabId })
+                else { return UICollectionViewCell() }
+
+                cell.configure(with: tabState, theme: theme, delegate: self)
+                return cell
+            }
         }
     }
 
