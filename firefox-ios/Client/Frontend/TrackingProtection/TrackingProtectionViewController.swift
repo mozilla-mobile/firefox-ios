@@ -413,6 +413,8 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         toggleView.setupAccessibilityIdentifiers(
             toggleViewTitleLabelA11yId: viewModel.toggleViewTitleLabelA11yId,
             toggleViewBodyLabelA11yId: viewModel.toggleViewBodyLabelA11yId)
+        headerContainer.setupAccessibility(closeButtonA11yLabel: viewModel.closeButtonA11yLabel,
+                                           closeButtonA11yId: viewModel.closeButtonA11yId)
         clearCookiesButton.accessibilityIdentifier = viewModel.clearCookiesButtonA11yId
         settingsLinkButton.accessibilityIdentifier = viewModel.settingsA11yId
     }

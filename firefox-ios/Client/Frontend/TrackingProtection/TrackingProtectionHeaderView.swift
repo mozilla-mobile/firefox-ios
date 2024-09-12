@@ -46,7 +46,7 @@ final class TrackingProtectionHeaderView: UIView, ThemeApplicable {
 
     private var closeButton: CloseButton = .build { button in
         let viewModel = CloseButtonViewModel(a11yLabel: "",
-                                             a11yIdentifier: "")
+                                             a11yIdentifier: "Test Identifier")
         button.configure(viewModel: viewModel)
     }
 
@@ -100,6 +100,12 @@ final class TrackingProtectionHeaderView: UIView, ThemeApplicable {
                 constant: UX.horizontalMargin
             )
         ])
+    }
+
+    func setupAccessibility(closeButtonA11yLabel: String, closeButtonA11yId: String) {
+        let closeButtonViewModel = CloseButtonViewModel(a11yLabel: closeButtonA11yLabel,
+                                                        a11yIdentifier: closeButtonA11yId)
+        closeButton.configure(viewModel: closeButtonViewModel)
     }
 
     func setupDetails(website: String, display: String, icon: FaviconImageViewModel) {
