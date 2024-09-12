@@ -53,7 +53,6 @@ final class SiteImageHandlerTests: XCTestCase {
     }
 
     func testGetImage_favicon_noURL_stillCallsImageHandler_fetchFavicon() async {
-        let faviconURLString = "https://www.mozilla.org/media/img/favicons/mozilla/apple-touch-icon.8cbe9c835c00.png"
         let siteURL = URL(string: "https://www.mozilla.com")!
         let subject = DefaultSiteImageHandler(urlHandler: urlHandler,
                                               imageHandler: imageHandler)
