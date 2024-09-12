@@ -166,7 +166,7 @@ struct MainMenuConfigurationUtility: Equatable {
     ) -> String {
         typealias Menu = String.MainMenu.ToolsSection
 
-        // Our default User Agest gets set depending on the architecture we're
+        // Our default User Agent gets set depending on the architecture we're
         // running on. Thus, to determine which string to use, we need to know
         //   1) which architecture we've started from and
         //   2) whether or not we've requested to change the user agent in the tab
