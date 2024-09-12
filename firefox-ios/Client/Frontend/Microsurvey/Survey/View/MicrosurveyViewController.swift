@@ -342,6 +342,7 @@ final class MicrosurveyViewController: UIViewController,
             ]
         )
         confirmationView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        UIAccessibility.post(notification: .screenChanged, argument: nil)
         store.dispatch(
             MicrosurveyAction(
                 surveyId: model.id,
