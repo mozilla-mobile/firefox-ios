@@ -12,12 +12,16 @@ import WebKit
 private var debugTabCount = 0
 
 func mostRecentTab(inTabs tabs: [Tab]) -> Tab? {
-    var recent = tabs.first
+    guard var recent = tabs.first else {
+        return nil
+    }
+
     tabs.forEach { tab in
-        if let time = tab.lastExecutedTime, time > (recent?.lastExecutedTime ?? 0) {
+        if tab.lastExecutedTime > recent.lastExecutedTime {
             recent = tab
         }
     }
+
     return recent
 }
 
@@ -253,8 +257,8 @@ class Tab: NSObject, ThemeApplicable {
     var webView: TabWebView?
     weak var tabDelegate: LegacyTabDelegate?
     var bars = [SnackBar]()
-    var lastExecutedTime: Timestamp?
-    var firstCreatedTime: Timestamp?
+    var lastExecutedTime: Timestamp
+    var firstCreatedTime: Timestamp
     private let faviconHelper: SiteImageHandler
     var faviconURL: String? {
         didSet {
@@ -418,13 +422,8 @@ class Tab: NSObject, ThemeApplicable {
             inactiveDate = Calendar.current.date(byAdding: .day, value: -14, to: currentDate.noon) ?? Date()
         }
 
-        // If we can't get a Tab timestamp, we consider it an active tab
-        guard let tabTimeStamp = lastExecutedTime ?? firstCreatedTime else {
-            return false
-        }
-
         // If the tabDate is older than our inactive date cutoff, return true
-        let tabDate = Date.fromTimestamp(tabTimeStamp)
+        let tabDate = Date.fromTimestamp(lastExecutedTime)
         return tabDate <= inactiveDate
     }
 
@@ -474,7 +473,7 @@ class Tab: NSObject, ThemeApplicable {
                 URL: displayURL,
                 title: tab.title ?? tab.displayTitle,
                 history: history,
-                lastUsed: tab.lastExecutedTime ?? 0,
+                lastUsed: tab.lastExecutedTime,
                 icon: icon,
                 inactive: inactive
             )
