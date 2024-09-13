@@ -8,9 +8,8 @@ import Common
 import UIKit
 
 class MainMenuDetailViewController: UIViewController,
-                                    UITableViewDelegate,
-                                    UITableViewDataSource,
                                     MainMenuDetailNavigationHandler,
+                                    MenuTableViewNavigationDelegate,
                                     Notifiable {
     // MARK: - UI/UX elements
     private lazy var submenuContent: MenuDetailView = .build()
@@ -68,48 +67,20 @@ class MainMenuDetailViewController: UIViewController,
     }
 
     private func setupTableView() {
-        submenuContent.setDelegate(to: self)
-        submenuContent.setDataSource(to: self)
+        setupTableViewNavigationDelegate(with: self)
+        reloadTableView(with: submenuData)
     }
 
-    // MARK: - UITableViewDataSource
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return submenuData.count
+    // MARK: - TableViewDelegates
+    func setupTableViewNavigationDelegate(with delegate: any MenuTableViewNavigationDelegate) {
+        submenuContent.setupTableViewNavigationDelegate(with: delegate)
     }
 
-    func tableView(
-        _ tableView: UITableView,
-        numberOfRowsInSection section: Int
-    ) -> Int {
-        return submenuData[section].options.count
+    func reloadTableView(with data: [MenuSection]) {
+        submenuContent.reloadTableView(with: data)
     }
 
-    func tableView(
-        _ tableView: UITableView,
-        cellForRowAt indexPath: IndexPath
-    ) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(
-            withIdentifier: MenuCell.cellIdentifier,
-            for: indexPath
-        ) as! MenuCell
-
-        cell.configureCellWith(model: submenuData[indexPath.section].options[indexPath.row])
-
-        return cell
-    }
-
-    // MARK: - UITableViewDelegate Methods
-    func tableView(
-        _ tableView: UITableView,
-        didSelectRowAt indexPath: IndexPath
-    ) {
-        guard let action = submenuData[indexPath.section].options[indexPath.row].action else {
-            tableView.deselectRow(at: indexPath, animated: true)
-            return
-        }
-        action()
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
+    func goToDetailView(with submenu: [MenuSection]) { }
 
     // MARK: - MainMenuDetailNavigationHandler
     func backToMainView() {

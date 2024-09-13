@@ -5,7 +5,8 @@
 import Common
 import UIKit
 
-public final class MenuMainView: UIView {
+public final class MenuMainView: UIView,
+                                 MenuTableViewNavigationDelegate {
     // MARK: - UI Elements
     private var tableView: MenuTableView = .build()
     private var accountHeaderView: MenuAccountHeaderView = .build()
@@ -42,15 +43,13 @@ public final class MenuMainView: UIView {
     }
 
     // MARK: - Interface
-    public func setDelegate(to delegate: UITableViewDelegate) {
-        tableView.tableView.delegate = delegate
+    public func setupTableViewNavigationDelegate(with delegate: any MenuTableViewNavigationDelegate) {
+        tableView.navigationDelegate = delegate
     }
 
-    public func setDataSource(to delegate: UITableViewDataSource) {
-        tableView.tableView.dataSource = delegate
+    public func reloadTableView(with data: [MenuSection]) {
+        tableView.reloadTableView(with: data)
     }
 
-    public func reloadTableView() {
-        tableView.tableView.reloadData()
-    }
+    public func goToDetailView(with submenu: [MenuSection]) { }
 }

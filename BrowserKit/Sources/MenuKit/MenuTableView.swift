@@ -5,12 +5,22 @@
 import Foundation
 import UIKit
 
-class MenuTableView: UIView {
-    var tableView: UITableView
+public protocol MenuTableViewNavigationDelegate: AnyObject {
+    func setupTableViewNavigationDelegate(with delegate: MenuTableViewNavigationDelegate)
+    func reloadTableView(with data: [MenuSection])
+    func goToDetailView(with submenu: [MenuSection])
+}
+
+class MenuTableView: UIView,
+                     UITableViewDelegate,
+                     UITableViewDataSource {
+    private var tableView: UITableView
+    private var menuData: [MenuSection]
+    weak var navigationDelegate: MenuTableViewNavigationDelegate?
 
     override init(frame: CGRect) {
         tableView = UITableView(frame: .zero, style: .insetGrouped)
-        tableView.register(MenuCell.self, forCellReuseIdentifier: MenuCell.cellIdentifier)
+        menuData = []
         super.init(frame: .zero)
         setupView()
     }
@@ -21,14 +31,14 @@ class MenuTableView: UIView {
 
     private func setupView() {
         setupTableView()
+        setupUI()
     }
 
-    private func setupTableView() {
+    private func setupUI() {
+        backgroundColor = .clear
         tableView.backgroundColor = .clear
         tableView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(tableView)
-
-        backgroundColor = .clear
 
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: self.topAnchor),
@@ -36,5 +46,59 @@ class MenuTableView: UIView {
             tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         ])
+    }
+
+    private func setupTableView() {
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(
+            MenuCell.self,
+            forCellReuseIdentifier: MenuCell.cellIdentifier
+        )
+    }
+
+    // MARK: - UITableViewDataSource
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return menuData.count
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        numberOfRowsInSection section: Int
+    ) -> Int {
+        return menuData[section].options.count
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath
+    ) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: MenuCell.cellIdentifier,
+            for: indexPath
+        ) as! MenuCell
+
+        cell.configureCellWith(model: menuData[indexPath.section].options[indexPath.row])
+
+        return cell
+    }
+
+    // MARK: - UITableViewDelegate Methods
+    func tableView(
+        _ tableView: UITableView,
+        didSelectRowAt indexPath: IndexPath
+    ) {
+        tableView.deselectRow(at: indexPath, animated: false)
+
+        if let submenu = menuData[indexPath.section].options[indexPath.row].submenu {
+            navigationDelegate?.goToDetailView(with: submenu)
+        } else if let action = menuData[indexPath.section].options[indexPath.row].action {
+            action()
+        }
+    }
+
+    func reloadTableView(with data: [MenuSection]) {
+        menuData = data
+        tableView.reloadData()
     }
 }
