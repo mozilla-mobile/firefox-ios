@@ -9,7 +9,6 @@ import Storage
 import Shared
 import Common
 
-@MainActor
 class JumpBackInViewModelTests: XCTestCase {
     var mockProfile: MockProfile!
     var mockTabManager: MockTabManager!
