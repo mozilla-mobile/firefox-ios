@@ -14,7 +14,8 @@ private var debugTabCount = 0
 func mostRecentTab(inTabs tabs: [Tab]) -> Tab? {
     var recent = tabs.first
     tabs.forEach { tab in
-        if let time = tab.lastExecutedTime, time > (recent?.lastExecutedTime ?? 0) {
+        let time = tab.lastExecutedTime
+        if time > (recent?.lastExecutedTime ?? 0) {
             recent = tab
         }
     }
@@ -253,8 +254,8 @@ class Tab: NSObject, ThemeApplicable {
     var webView: TabWebView?
     weak var tabDelegate: LegacyTabDelegate?
     var bars = [SnackBar]()
-    var lastExecutedTime: Timestamp?
-    var firstCreatedTime: Timestamp?
+    var lastExecutedTime: Timestamp
+    var firstCreatedTime: Timestamp
     private let faviconHelper: SiteImageHandler
     var faviconURL: String? {
         didSet {
@@ -418,12 +419,8 @@ class Tab: NSObject, ThemeApplicable {
             inactiveDate = Calendar.current.date(byAdding: .day, value: -14, to: currentDate.noon) ?? Date()
         }
 
-        // If we can't get a Tab timestamp, we consider it an active tab
-        guard let tabTimeStamp = lastExecutedTime ?? firstCreatedTime else {
-            return false
-        }
-
         // If the tabDate is older than our inactive date cutoff, return true
+        let tabTimeStamp = lastExecutedTime
         let tabDate = Date.fromTimestamp(tabTimeStamp)
         return tabDate <= inactiveDate
     }
@@ -446,11 +443,11 @@ class Tab: NSObject, ThemeApplicable {
         self.metadataManager = LegacyTabMetadataManager(metadataObserver: profile.places)
         self.faviconHelper = faviconHelper
         self.logger = logger
-        super.init()
-        self.isPrivate = isPrivate
         let tabCreatedTime = Date().toTimestamp()
         self.lastExecutedTime = tabCreatedTime
         self.firstCreatedTime = tabCreatedTime
+        super.init()
+        self.isPrivate = isPrivate
         debugTabCount += 1
 
         TelemetryWrapper.recordEvent(
