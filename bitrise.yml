@@ -836,11 +836,11 @@ workflows:
 
             ./firefox-ios/l10n-screenshots.sh en-US
         title: Generate screenshots
-    - deploy-to-bitrise-io@2.9.2:
+    - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: l10n-screenshots-dd/
         - is_compress: 'true'
-    - deploy-to-bitrise-io@2.9.2:
+    - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: l10n-screenshots/en-US/en-US
         - is_compress: 'true'
@@ -899,7 +899,7 @@ workflows:
               mv "$locale.zip" artifacts/
             done
         title: Generate screenshots
-    - deploy-to-bitrise-io@2.9.2:
+    - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: artifacts/
     envs:
@@ -1261,7 +1261,7 @@ workflows:
             sed 's/.*=//;s/'\''/"/g' data.txt > test.json
             cat test.json
             python3 perfTestTransform.py
-    - deploy-to-bitrise-io@2.9.2: {}
+    - deploy-to-bitrise-io@2: {}
     before_run:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
