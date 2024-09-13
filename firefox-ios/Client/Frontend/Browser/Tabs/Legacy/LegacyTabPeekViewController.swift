@@ -31,46 +31,6 @@ class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
     private var previewAccessibilityLabel: String!
     private var webView: WKWebView?
 
-    // Preview action items.
-    override var previewActionItems: [UIPreviewActionItem] { return previewActions }
-
-    lazy var previewActions: [UIPreviewActionItem] = {
-        let actionsBuilder = LegacyTabPeekPreviewActionBuilder()
-
-        let urlIsTooLongToSave = self.tab?.urlIsTooLong ?? false
-        let isHomeTab = self.tab?.isFxHomeTab ?? false
-        if !self.ignoreURL && !urlIsTooLongToSave {
-            if !self.isBookmarked && !isHomeTab {
-                actionsBuilder.addBookmark { [weak self] previewAction, viewController in
-                    guard let wself = self, let tab = wself.tab else { return }
-                    wself.delegate?.tabPeekDidAddBookmark(tab)
-                }
-            }
-            if self.hasRemoteClients {
-                actionsBuilder.addSendToDeviceTitle { [weak self] previewAction, viewController in
-                    guard let wself = self, let clientPicker = wself.fxaDevicePicker else { return }
-                    wself.delegate?.tabPeekRequestsPresentationOf(clientPicker)
-                }
-            }
-            // only add the copy URL action if we don't already have 3 items in our list
-            // as we are only allowed 4 in total and we always want to display close tab
-            if actionsBuilder.count < 3 {
-                actionsBuilder.addCopyUrl { [weak self] previewAction, viewController in
-                    guard let wself = self, let url = wself.tab?.canonicalURL else { return }
-
-                    UIPasteboard.general.url = url
-                    wself.delegate?.tabPeekDidCopyUrl()
-                }
-            }
-        }
-        actionsBuilder.addCloseTab { [weak self] previewAction, viewController in
-            guard let wself = self, let tab = wself.tab else { return }
-            wself.delegate?.tabPeekDidCloseTab(tab)
-        }
-
-        return actionsBuilder.build()
-    }()
-
     func contextActions(defaultActions: [UIMenuElement]) -> UIMenu {
         var actions = [UIAction]()
 
@@ -149,6 +109,7 @@ class LegacyTabPeekViewController: UIViewController, WKNavigationDelegate {
         let imageView: UIImageView = .build { imageView in
             imageView.image = screenshot
         }
+        imageView.contentMode = .scaleAspectFill
         view.addSubview(imageView)
 
         NSLayoutConstraint.activate([

@@ -546,6 +546,12 @@ extension LegacyWebViewController: WKUIDelegate {
         // check if this is a new frame / window
         guard navigationAction.targetFrame == nil else { return nil }
 
+        // Prevent Focus from opening deeplinks from links
+        if let scheme = navigationAction.request.url?.scheme,
+           scheme.caseInsensitiveCompare(AppInfo.appScheme) == .orderedSame {
+            return nil
+        }
+
         // If URL is a file:// when web application calls window.open() or fails validation, prevent loading
         guard let url = navigationAction.request.url,
               let validatedURL = URIFixup.getURL(entry: url.absoluteString) else {

@@ -80,6 +80,7 @@ class TabPeekViewController: UIViewController,
         let imageView: UIImageView = .build { imageView in
             imageView.image = self.tabPeekState.screenshot
         }
+        imageView.contentMode = .scaleAspectFill
         view.addSubview(imageView)
 
         NSLayoutConstraint.activate([
