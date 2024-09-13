@@ -22,8 +22,8 @@ class BlockedTrackersTableViewControllerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testBlockedTrackersViewController_simpleCreation_hasNoLeaks() {
