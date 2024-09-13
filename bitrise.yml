@@ -835,7 +835,12 @@ workflows:
             fastlane -version
 
             ./firefox-ios/l10n-screenshots.sh en-US
-    - deploy-to-bitrise-io@2.9.2:
+        title: Generate screenshots
+    - deploy-to-bitrise-io@2.92:
+        inputs:
+        - deploy_path: l10n-screenshots-dd/
+        - is_compress: 'true'
+    - deploy-to-bitrise-io@2.92:
         inputs:
         - deploy_path: l10n-screenshots/en-US/en-US
         - is_compress: 'true'
@@ -853,6 +858,28 @@ workflows:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@6.2: {}
     - certificate-and-profile-installer@1: {}
+    - script@1:
+        inputs:
+        - content: >-
+            #!/usr/bin/env bash
+
+            # fail if any commands fails
+
+            set -e
+
+            # debug log
+
+            set -x
+
+            curl --location --retry 5 --output l10n-screenshots-dd.zip
+            "$MOZ_DERIVED_DATA_PATH"
+
+            mkdir l10n-screenshots-dd
+
+            unzip l10n-screenshots-dd.zip -d l10n-screenshots-dd
+
+            rm l10n-screenshots-dd.zip
+        title: Download derived data path
     - script@1.1:
         inputs:
         - content: |-
@@ -863,7 +890,7 @@ workflows:
             set -x
             gem install fastlane -v 2.219.0
             fastlane -version
-            ./firefox-ios/l10n-screenshots.sh $MOZ_LOCALES
+            ./firefox-ios/l10n-screenshots.sh --test-without-building $MOZ_LOCALES
 
             mkdir -p artifacts
 
@@ -872,7 +899,7 @@ workflows:
               mv "$locale.zip" artifacts/
             done
         title: Generate screenshots
-    - deploy-to-bitrise-io@1.10:
+    - deploy-to-bitrise-io@2.92:
         inputs:
         - deploy_path: artifacts/
     envs:
@@ -1234,7 +1261,7 @@ workflows:
             sed 's/.*=//;s/'\''/"/g' data.txt > test.json
             cat test.json
             python3 perfTestTransform.py
-    - deploy-to-bitrise-io@1.9: {}
+    - deploy-to-bitrise-io@2.92: {}
     before_run:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
