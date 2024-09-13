@@ -1003,7 +1003,12 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is MainMenuCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
-        XCTAssertTrue(mockRouter.presentedViewController is MainMenuViewController)
+
+        guard let presentedVC = mockRouter.presentedViewController else {
+            XCTFail("No view controller is presented.")
+            return
+        }
+        XCTAssertTrue(presentedVC is UINavigationController)
     }
 
     func testMainMenuCoordinatorDelegate_didDidDismiss_removesChild() {
