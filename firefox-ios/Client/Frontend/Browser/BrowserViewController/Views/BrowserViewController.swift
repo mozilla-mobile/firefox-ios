@@ -2032,6 +2032,7 @@ class BrowserViewController: UIViewController,
 
     func presentLocationViewActionSheet(from view: UIView) {
         let actions = getLongPressLocationBarActions(with: view, alertContainer: contentContainer)
+        guard !actions.isEmpty else { return }
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
 
