@@ -266,7 +266,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
                                          tabHistoryCurrentState: state)
 
             let tabId = UUID(uuidString: tab.tabUUID) ?? UUID()
-            let logMessage = "for saving for tab id \(tabId). It was last used \(Date.fromTimestamp(tab.lastExecutedTime ?? 0))"
+            let logMessage = "for saving for tab id \(tabId). It was last used \(Date.fromTimestamp(tab.lastExecutedTime))"
             if tab.url == nil {
                 logger.log("Tab has empty tab.URL \(logMessage)",
                            level: .debug,
@@ -278,8 +278,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
                            siteUrl: tab.url?.absoluteString ?? tab.lastKnownUrl?.absoluteString ?? "",
                            faviconURL: tab.faviconURL,
                            isPrivate: tab.isPrivate,
-                           lastUsedTime: Date.fromTimestamp(tab.lastExecutedTime ?? 0),
-                           createdAtTime: Date.fromTimestamp(tab.firstCreatedTime ?? 0),
+                           lastUsedTime: Date.fromTimestamp(tab.lastExecutedTime),
+                           createdAtTime: Date.fromTimestamp(tab.firstCreatedTime),
                            tabGroupData: groupData)
         }
 

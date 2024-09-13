@@ -116,11 +116,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         eligibleTabs = SponsoredContentFilterUtility().filterSponsoredTabs(from: eligibleTabs)
 
         // sort the tabs chronologically
-        eligibleTabs = eligibleTabs.sorted {
-            let firstTab = $0.lastExecutedTime ?? $0.firstCreatedTime ?? 0
-            let secondTab = $1.lastExecutedTime ?? $0.firstCreatedTime ?? 0
-            return firstTab > secondTab
-        }
+        eligibleTabs = eligibleTabs.sorted { $0.lastExecutedTime > $1.lastExecutedTime }
 
         return eligibleTabs
     }
@@ -920,7 +916,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
         let parentTabIsMostRecentUsed = mostRecentTab(inTabs: viableTabs) == parentTab
 
-        if parentTabIsMostRecentUsed, parentTab.lastExecutedTime != nil {
+        if parentTabIsMostRecentUsed {
             selectTab(parentTab, previous: tab)
             return true
         }
