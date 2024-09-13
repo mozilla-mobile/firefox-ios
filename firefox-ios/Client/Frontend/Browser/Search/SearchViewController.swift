@@ -300,6 +300,7 @@ class SearchViewController: SiteTableViewController,
             let engineButton: UIButton = .build()
             engineButton.setImage(engine.image, for: [])
             engineButton.imageView?.contentMode = .scaleAspectFit
+            engineButton.imageView?.translatesAutoresizingMaskIntoConstraints = false
             engineButton.imageView?.layer.cornerRadius = 4
             engineButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
             engineButton.addTarget(self, action: #selector(didSelectEngine), for: .touchUpInside)
