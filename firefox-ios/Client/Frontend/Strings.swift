@@ -4639,7 +4639,7 @@ extension String {
             public static let closeButtonAccessibilityLabel = MZLocalizedString(
                 key: "Menu.EnhancedTrackingProtection.CloseButton.AccessibilityLabel.v132",
                 tableName: "EnhancedTrackingProtection",
-                value: "Close Tracking Protection Menu",
+                value: "Close privacy and security menu",
                 comment: "The accessibility label for the close button in the Enhanced Tracking protection menu.")
         }
     }
