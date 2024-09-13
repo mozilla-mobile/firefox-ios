@@ -741,9 +741,7 @@ class BrowserCoordinator: BaseCoordinator,
         navigationController.sheetPresentationController?.prefersGrabberVisible = true
         let coordinator = MicrosurveyCoordinator(
             model: model,
-            router: DefaultRouter(
-                navigationController: navigationController
-            ),
+            router: DefaultRouter(navigationController: navigationController),
             tabManager: tabManager
         )
         coordinator.parentCoordinator = self

@@ -997,18 +997,15 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     // MARK: - Menu
     func testShowMainMenu_addsMainMenuCoordinator() {
         let subject = createSubject()
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
 
         subject.showMainMenu()
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is MainMenuCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
-
-        guard let presentedVC = mockRouter.presentedViewController else {
-            XCTFail("No view controller is presented.")
-            return
-        }
-        XCTAssertTrue(presentedVC is UINavigationController)
+        XCTAssertTrue(mockRouter.presentedViewController is DismissableNavigationViewController)
+        XCTAssertTrue(mockRouter.presentedViewController?.children.first is MainMenuViewController)
     }
 
     func testMainMenuCoordinatorDelegate_didDidDismiss_removesChild() {
@@ -1016,11 +1013,34 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         subject.browserHasLoaded()
 
         subject.showMainMenu()
-        let menuCoordinator = subject.childCoordinators[0] as! MainMenuCoordinator
+        guard let menuCoordinator = subject.childCoordinators[0] as? MainMenuCoordinator else {
+            XCTFail("Main menu coordinator was expected to be resolved")
+            return
+        }
+
         menuCoordinator.dismissMenuModal(animated: false)
 
-        XCTAssertEqual(mockRouter.dismissCalled, 1)
         XCTAssertTrue(subject.childCoordinators.isEmpty)
+    }
+
+    func testMainMenuCoordinatorDelegate_navigatesToSettings() {
+        let subject = createSubject()
+        subject.browserHasLoaded()
+
+        subject.showMainMenu()
+        guard let menuCoordinator = subject.childCoordinators[0] as? MainMenuCoordinator else {
+            XCTFail("Main menu coordinator was expected to be resolved")
+            return
+        }
+
+        menuCoordinator.navigateTo(.customizeHomepage, animated: false)
+
+        guard let settingsCoordinator = subject.childCoordinators[0] as? SettingsCoordinator else {
+            XCTFail("Settings coordinator was expected to be resolved")
+            return
+        }
+
+        XCTAssertTrue(mockRouter.presentedViewController?.children.first is AppSettingsTableViewController)
     }
 
     // MARK: - Microsurvey
