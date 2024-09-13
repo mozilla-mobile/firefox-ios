@@ -19,7 +19,6 @@ let secureTrackingProtectionOnLabel = "Secure connection"
 let secureTrackingProtectionOffLabel = "Secure connection. Enhanced Tracking Protection is off."
 
 class TrackingProtectionTests: BaseTestCase {
-    
     private func disableEnableTrackingProtectionForSite() {
         navigator.performAction(Action.TrackingProtectionperSiteToggle)
     }
@@ -36,14 +35,22 @@ class TrackingProtectionTests: BaseTestCase {
     private func reloadWithWithoutTrackingProtection(label: String) {
         mozWaitForElementToExist(app.buttons.element(matching: .button, identifier: reloadButton), timeout: 10)
         app.buttons.element(matching: .button, identifier: reloadButton).press(forDuration: 3)
-        if (label == "Without Tracking Protection"){
-            XCTAssertEqual("Reload Without Tracking Protection", app.otherElements.element(matching: .any, identifier: reloadWithWithoutProtectionButton).label)
+        if label == "Without Tracking Protection" {
+            XCTAssertEqual(
+                "Reload Without Tracking Protection",
+                app.otherElements.element(matching: .any, identifier: reloadWithWithoutProtectionButton).label
+            )
         } else {
-            XCTAssertEqual("Reload With Tracking Protection", app.otherElements.element(matching: .any, identifier: reloadWithWithoutProtectionButton).label)
+            XCTAssertEqual(
+                "Reload With Tracking Protection",
+                app.otherElements.element(
+                    matching: .any,
+                    identifier: reloadWithWithoutProtectionButton
+                ).label
+            )
         }
         app.otherElements.element(matching: .any, identifier: reloadWithWithoutProtectionButton).tap()
     }
-    
     private func enableStrictMode() {
         navigator.performAction(Action.EnableStrictMode)
         app.buttons[buttonSettings].tap()
@@ -187,7 +194,10 @@ class TrackingProtectionTests: BaseTestCase {
         app.links.staticTexts["expired"].tap()
         waitUntilPageLoad()
         // The page is correctly displayed with the lock icon disabled
-        mozWaitForElementToExist(app.staticTexts["This Connection is Untrusted"], timeout: TIMEOUT_LONG)
+        mozWaitForElementToExist(
+            app.staticTexts["This Connection is Untrusted"],
+            timeout: TIMEOUT_LONG
+        )
         mozWaitForElementToExist(app.staticTexts.elementContainingText("Firefox has not connected to this website."))
         XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label, "Connection not secure")
     }
@@ -208,7 +218,7 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.performAction(Action.CloseTPContextMenu)
         mozWaitForElementToNotExist(app.staticTexts["Secure connection"])
     }
-    
+
     // https://mozilla.testrail.io/index.php?/cases/view/2307063
     func testStrictTrackingProtection() {
         navigator.goto(TrackingProtectionSettings)
@@ -216,16 +226,25 @@ class TrackingProtectionTests: BaseTestCase {
         enableStrictMode()
         navigator.nowAt(BrowserTab)
         navigator.openURL(trackingProtectionTestUrl)
-        
-        // Check TRacking Protection On
-        XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label, secureTrackingProtectionOnLabel)
-        
+
+        // Check Tracking Protection On
+        XCTAssertEqual(
+            app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
+            secureTrackingProtectionOnLabel
+        )
+
         reloadWithWithoutTrackingProtection(label: "Without Tracking Protection")
-        
-        XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label, secureTrackingProtectionOffLabel)
+
+        XCTAssertEqual(
+            app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
+            secureTrackingProtectionOffLabel
+        )
 
         reloadWithWithoutTrackingProtection(label: "With Tracking Protection")
-        
-        XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label, secureTrackingProtectionOnLabel)
+
+        XCTAssertEqual(
+            app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
+            secureTrackingProtectionOnLabel
+        )
     }
 }
