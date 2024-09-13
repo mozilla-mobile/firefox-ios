@@ -25,11 +25,8 @@ class LegacyInactiveTabButton: UITableViewCell, ThemeApplicable, ReusableCell {
 
     private lazy var roundedButton: UIButton = {
         let button = UIButton()
-        button.titleLabel?.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(
-            withTextStyle: .body,
-            weight: .semibold,
-            maxSize: 16)
-        button.setTitle(.TabsTray.InactiveTabs.CloseAllInactiveTabsButton, for: .normal)
+        let attributedTitle = NSAttributedString(string: .TabsTray.InactiveTabs.CloseAllInactiveTabsButton,
+                                                 attributes: [.font: FXFontStyles.Regular.headline.systemFont()])
         button.titleLabel?.textAlignment = .center
         button.titleLabel?.lineBreakMode = .byTruncatingTail
         button.layer.cornerRadius = 13.5
@@ -38,6 +35,7 @@ class LegacyInactiveTabButton: UITableViewCell, ThemeApplicable, ReusableCell {
         button.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.InactiveTabs.deleteButton
         button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
         button.configuration = .plain()
+        button.configuration?.attributedTitle = AttributedString(attributedTitle)
         button.configuration?.contentInsets = NSDirectionalEdgeInsets(top: UX.ButtonInset,
                                                                       leading: UX.ButtonInset,
                                                                       bottom: UX.ButtonInset,
