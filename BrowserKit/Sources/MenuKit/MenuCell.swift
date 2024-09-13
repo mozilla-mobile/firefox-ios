@@ -8,7 +8,7 @@ import UIKit
 
 public class MenuCell: UITableViewCell, ReusableCell {
     // MARK: - Properties
-    public var model: MenuElement!
+    public var model: MenuElement?
 
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -32,7 +32,7 @@ public class MenuCell: UITableViewCell, ReusableCell {
     }
 
     func performAction() {
-        guard let action = model.action else { return }
+        guard let action = model?.action else { return }
         action()
     }
 }

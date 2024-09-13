@@ -20,8 +20,8 @@ final class MainMenuCoordinatorTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         AppContainer.shared.reset()
+        super.tearDown()
     }
 
     func testInitialState() {
@@ -31,7 +31,7 @@ final class MainMenuCoordinatorTests: XCTestCase {
     func testStart_presentsMainMenuController() throws {
         let subject = createSubject()
 
-        subject.startMenuFlow()
+        subject.start()
 
         guard let presentedVC = mockRouter.presentedViewController else {
             XCTFail("No view controller is presented.")
@@ -50,7 +50,7 @@ final class MainMenuCoordinatorTests: XCTestCase {
         let subject = createSubject()
         let mockData = [MenuSection(options: [])]
 
-        subject.startMenuFlow()
+        subject.start()
         guard let presentedVC = mockRouter.presentedViewController else {
             XCTFail("No view controller is presented.")
             return
@@ -75,7 +75,7 @@ final class MainMenuCoordinatorTests: XCTestCase {
         let subject = createSubject()
         let mockData = [MenuSection(options: [])]
 
-        subject.startMenuFlow()
+        subject.start()
         guard let presentedVC = mockRouter.presentedViewController else {
             XCTFail("No view controller is presented.")
             return
@@ -100,7 +100,7 @@ final class MainMenuCoordinatorTests: XCTestCase {
     func testMainMenu_dismissFlow_callsRouterDismiss() throws {
         let subject = createSubject()
 
-        subject.startMenuFlow()
+        subject.start()
         subject.dismissMenuModal(animated: false)
 
         XCTAssertEqual(mockRouter.dismissCalled, 1)

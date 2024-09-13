@@ -7,6 +7,10 @@ import UIKit
 
 public final class MenuDetailView: UIView,
                                    MenuTableViewNavigationDelegate {
+    private struct UX {
+        static let headerHeight: CGFloat = 70
+    }
+
     // MARK: - UI Elements
     private var tableView: MenuTableView = .build()
     private var detailHeaderView: MenuSubmenuHeaderView = .build()
@@ -24,14 +28,14 @@ public final class MenuDetailView: UIView,
     // MARK: - UI Setup
     private func setupView() {
         backgroundColor = .clear
-        self.addSubview(detailHeaderView)
-        self.addSubview(tableView)
+        addSubview(detailHeaderView)
+        addSubview(tableView)
 
         NSLayoutConstraint.activate([
             detailHeaderView.topAnchor.constraint(equalTo: self.topAnchor),
             detailHeaderView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             detailHeaderView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            detailHeaderView.heightAnchor.constraint(equalToConstant: 70),
+            detailHeaderView.heightAnchor.constraint(equalToConstant: UX.headerHeight),
 
             tableView.topAnchor.constraint(equalTo: detailHeaderView.bottomAnchor),
             tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),

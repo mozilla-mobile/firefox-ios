@@ -20,40 +20,31 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     weak var navigationHandler: MainMenuCoordinatorDelegate?
 
     private let windowUUID: WindowUUID
-    private var navController: UINavigationController!
 
     init(router: Router, windowUUID: WindowUUID) {
         self.windowUUID = windowUUID
         super.init(router: router)
     }
 
-    func startMenuFlow() {
+    func start() {
         let viewController = createMainMenuViewController()
-        navController = UINavigationController(rootViewController: viewController)
-        navController.modalPresentationStyle = .pageSheet
-        navController.isNavigationBarHidden = true
-
-        if let sheet = navController.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-        }
-
-        router.present(navController, animated: true)
+        router.setRootViewController(viewController, hideBar: true)
     }
 
     func showDetailViewController(with submenu: [MenuSection]) {
-        navController.pushViewController(
+        router.push(
             createMainMenuDetailViewController(with: submenu),
             animated: true
         )
     }
 
     func dismissDetailViewController() {
-        navController.popViewController(animated: true)
+        router.popViewController(animated: true)
     }
 
     func dismissMenuModal(animated: Bool) {
         router.dismiss(animated: animated, completion: nil)
-        self.parentCoordinator?.didFinish(from: self)
+        parentCoordinator?.didFinish(from: self)
     }
 
     func navigateTo(_ destination: MainMenuNavigationDestination, animated: Bool) {

@@ -18,8 +18,8 @@ final class MainMenuDetailsViewControllerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testMainMenuDetailsViewController_simpleCreation_hasNoLeaks() {

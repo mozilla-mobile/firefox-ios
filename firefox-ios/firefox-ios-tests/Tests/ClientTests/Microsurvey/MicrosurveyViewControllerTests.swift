@@ -16,8 +16,8 @@ final class MicrosurveyViewControllerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testMicrosurveyViewController_simpleCreation_hasNoLeaks() {
