@@ -63,7 +63,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                 store.dispatch(action)
             },
             andActionForButton: { },
-            overlayState: overlayManager)
+            overlayState: overlayManager,
+            ignoreSafeArea: true)
     }
 
     private func presentNavigationContextualHint() {
