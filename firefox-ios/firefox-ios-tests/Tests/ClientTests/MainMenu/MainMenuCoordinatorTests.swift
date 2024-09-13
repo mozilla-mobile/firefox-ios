@@ -10,13 +10,11 @@ import XCTest
 
 final class MainMenuCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
-    private var mockTabManager: MockTabManager!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         mockRouter = MockRouter(navigationController: MockNavigationController())
-        mockTabManager = MockTabManager()
     }
 
     override func tearDown() {
@@ -25,7 +23,12 @@ final class MainMenuCoordinatorTests: XCTestCase {
     }
 
     func testInitialState() {
-        XCTAssertEqual(mockRouter.presentCalled, 0)
+        _ = createSubject()
+
+        XCTAssertFalse(mockRouter.rootViewController is MicrosurveyViewController)
+        XCTAssertEqual(mockRouter.setRootViewControllerCalled, 0)
+        XCTAssertEqual(mockRouter.pushCalled, 0)
+        XCTAssertEqual(mockRouter.popViewControllerCalled, 0)
     }
 
     func testStart_presentsMainMenuController() throws {
@@ -33,17 +36,8 @@ final class MainMenuCoordinatorTests: XCTestCase {
 
         subject.start()
 
-        guard let presentedVC = mockRouter.presentedViewController else {
-            XCTFail("No view controller is presented.")
-            return
-        }
-
-        XCTAssertTrue(presentedVC is UINavigationController)
-        XCTAssertEqual(mockRouter.presentCalled, 1)
-
-        let navController = presentedVC as? UINavigationController
-
-        XCTAssertTrue(navController?.topViewController is MainMenuViewController)
+        XCTAssertTrue(mockRouter.rootViewController is MainMenuViewController)
+        XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
     }
 
     func testShowDetailViewController() {
@@ -51,24 +45,10 @@ final class MainMenuCoordinatorTests: XCTestCase {
         let mockData = [MenuSection(options: [])]
 
         subject.start()
-        guard let presentedVC = mockRouter.presentedViewController else {
-            XCTFail("No view controller is presented.")
-            return
-        }
-
         subject.showDetailViewController(with: mockData)
 
-        let expectation = self.expectation(description: "Detail View Controller Presented")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            let navController = presentedVC as? UINavigationController
-            if navController?.topViewController is MainMenuDetailViewController {
-                expectation.fulfill()
-            } else {
-                XCTFail("MainMenuDetailViewController is not visible.")
-            }
-        }
-
-        waitForExpectations(timeout: 1, handler: nil)
+        XCTAssertTrue(mockRouter.pushedViewController is MainMenuDetailViewController)
+        XCTAssertEqual(mockRouter.pushCalled, 1)
     }
 
     func testDismissDetailViewController() {
@@ -76,25 +56,11 @@ final class MainMenuCoordinatorTests: XCTestCase {
         let mockData = [MenuSection(options: [])]
 
         subject.start()
-        guard let presentedVC = mockRouter.presentedViewController else {
-            XCTFail("No view controller is presented.")
-            return
-        }
-
         subject.showDetailViewController(with: mockData)
         subject.dismissDetailViewController()
 
-        let expectation = self.expectation(description: "Menu View Controller Presented")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            let navController = presentedVC as? UINavigationController
-            if navController?.topViewController is MainMenuViewController {
-                expectation.fulfill()
-            } else {
-                XCTFail("MainMenuViewController is not visible.")
-            }
-        }
-
-        waitForExpectations(timeout: 1, handler: nil)
+        XCTAssertTrue(mockRouter.rootViewController is MainMenuViewController)
+        XCTAssertEqual(mockRouter.popViewControllerCalled, 1)
     }
 
     func testMainMenu_dismissFlow_callsRouterDismiss() throws {

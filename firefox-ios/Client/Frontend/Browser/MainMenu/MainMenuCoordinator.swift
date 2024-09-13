@@ -27,8 +27,10 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     }
 
     func start() {
-        let viewController = createMainMenuViewController()
-        router.setRootViewController(viewController, hideBar: true)
+        router.setRootViewController(
+            createMainMenuViewController(),
+            hideBar: true
+        )
     }
 
     func showDetailViewController(with submenu: [MenuSection]) {
