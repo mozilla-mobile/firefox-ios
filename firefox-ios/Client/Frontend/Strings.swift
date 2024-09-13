@@ -353,7 +353,13 @@ extension String {
                     comment: "Suggestion to try again after an error occurred while trying to save an address."
                 )
                 public static let AddressUpdatedConfirmation = MZLocalizedString(
-                    key: "Addresses.Toast.AddressUpdatedConfirmation.v130",
+                    key: "Addresses.Toast.AddressUpdatedConfirmation.v129",
+                    tableName: "EditAddress",
+                    value: "Address Information Updated",
+                    comment: "Toast message confirming that an address has been successfully updated."
+                )
+                 public static let AddressUpdatedConfirmationV2 = MZLocalizedString(
+                    key: "Addresses.Toast.AddressUpdatedConfirmation.v132.v2",
                     tableName: "EditAddress",
                     value: "Address Saved",
                     comment: "Toast message confirming that an address has been successfully updated."
@@ -7046,11 +7052,6 @@ extension String {
                 tableName: "Microsurvey",
                 value: "Selected",
                 comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label that states whether the survey option was selected.")
-            public static let AddressUpdatedConfirmation = MZLocalizedString(
-                key: "Addresses.Toast.AddressUpdatedConfirmation.v129",
-                tableName: "EditAddress",
-                value: "Address Information Updated",
-                comment: "Toast message confirming that an address has been successfully updated.")
         }
     }
 }
