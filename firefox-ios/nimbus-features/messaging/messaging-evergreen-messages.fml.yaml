@@ -47,7 +47,7 @@ import:
                 surface: microsurvey
                 style: MICROSURVEY
                 trigger-if-all:
-                    - SECOND_HOMEPAGE_VIEW
+                  - SECOND_HOMEPAGE_VIEW
                 title: Microsurvey/Microsurvey.Prompt.TitleLabel.v127
                 text: "How satisfied are you with your Firefox homepage?" # Should not show this message if this is nil
                 button-label: Microsurvey/Microsurvey.Prompt.Button.v127
