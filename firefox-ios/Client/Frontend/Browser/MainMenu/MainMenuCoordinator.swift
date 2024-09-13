@@ -27,7 +27,7 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         super.init(router: router)
     }
 
-    func showMenuModal() {
+    func startMenuFlow() {
         let viewController = createMainMenuViewController()
         navController = UINavigationController(rootViewController: viewController)
         navController.modalPresentationStyle = .pageSheet

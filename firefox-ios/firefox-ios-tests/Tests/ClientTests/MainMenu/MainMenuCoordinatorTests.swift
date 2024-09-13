@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
+import MenuKit
 import XCTest
 
 @testable import Client
@@ -24,25 +25,82 @@ final class MainMenuCoordinatorTests: XCTestCase {
     }
 
     func testInitialState() {
-        _ = createSubject()
-
-        XCTAssertFalse(mockRouter.presentedViewController is MainMenuViewController)
         XCTAssertEqual(mockRouter.presentCalled, 0)
     }
 
     func testStart_presentsMainMenuController() throws {
         let subject = createSubject()
 
-        subject.showMenuModal()
+        subject.startMenuFlow()
 
-        XCTAssertTrue(mockRouter.presentedViewController is MainMenuViewController)
+        guard let presentedVC = mockRouter.presentedViewController else {
+            XCTFail("No view controller is presented.")
+            return
+        }
+
+        XCTAssertTrue(presentedVC is UINavigationController)
         XCTAssertEqual(mockRouter.presentCalled, 1)
+
+        let navController = presentedVC as? UINavigationController
+
+        XCTAssertTrue(navController?.topViewController is MainMenuViewController)
+    }
+
+    func testShowDetailViewController() {
+        let subject = createSubject()
+        let mockData = [MenuSection(options: [])]
+
+        subject.startMenuFlow()
+        guard let presentedVC = mockRouter.presentedViewController else {
+            XCTFail("No view controller is presented.")
+            return
+        }
+
+        subject.showDetailViewController(with: mockData)
+
+        let expectation = self.expectation(description: "Detail View Controller Presented")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            let navController = presentedVC as? UINavigationController
+            if navController?.topViewController is MainMenuDetailViewController {
+                expectation.fulfill()
+            } else {
+                XCTFail("MainMenuDetailViewController is not visible.")
+            }
+        }
+
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+
+    func testDismissDetailViewController() {
+        let subject = createSubject()
+        let mockData = [MenuSection(options: [])]
+
+        subject.startMenuFlow()
+        guard let presentedVC = mockRouter.presentedViewController else {
+            XCTFail("No view controller is presented.")
+            return
+        }
+
+        subject.showDetailViewController(with: mockData)
+        subject.dismissDetailViewController()
+
+        let expectation = self.expectation(description: "Menu View Controller Presented")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            let navController = presentedVC as? UINavigationController
+            if navController?.topViewController is MainMenuViewController {
+                expectation.fulfill()
+            } else {
+                XCTFail("MainMenuViewController is not visible.")
+            }
+        }
+
+        waitForExpectations(timeout: 1, handler: nil)
     }
 
     func testMainMenu_dismissFlow_callsRouterDismiss() throws {
         let subject = createSubject()
 
-        subject.showMenuModal()
+        subject.startMenuFlow()
         subject.dismissMenuModal(animated: false)
 
         XCTAssertEqual(mockRouter.dismissCalled, 1)
@@ -52,7 +110,7 @@ final class MainMenuCoordinatorTests: XCTestCase {
         file: StaticString = #file,
         line: UInt = #line
     ) -> MainMenuCoordinator {
-        let subject = MainMenuCoordinator(router: mockRouter, tabManager: mockTabManager)
+        let subject = MainMenuCoordinator(router: mockRouter, windowUUID: .XCTestDefaultUUID)
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject

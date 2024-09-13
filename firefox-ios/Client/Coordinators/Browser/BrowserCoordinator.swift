@@ -444,7 +444,7 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - MainMenuCoordinatorDelegate
     func showMainMenu() {
         guard let coordinator = makeMenuCoordinator() else { return }
-        coordinator.showMenuModal()
+        coordinator.startMenuFlow()
     }
 
     func openURLInNewTab(_ url: URL?) {
