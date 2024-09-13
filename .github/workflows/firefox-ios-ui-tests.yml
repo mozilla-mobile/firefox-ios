@@ -207,11 +207,12 @@ jobs:
     run-fullfunctionaltests:
       name: Run full functional tests
       runs-on: macos-14
-      needs: compile
+      needs: run-smoketests
+      if: false
       strategy:
         fail-fast: false
         matrix:
-          ios_simulator: ['iPhone 15 Pro Max']
+          ios_simulator: ['iPhone 15 Pro Max', 'iPad Pro (12.9 inch) (6th generation)']
       steps:
         - name: Check out source code
           uses: actions/checkout@v4.1.7

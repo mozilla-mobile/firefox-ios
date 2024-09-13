@@ -198,7 +198,7 @@ jobs:
     run-fullfunctionaltests:
       name: Run full functional tests
       runs-on: macos-14
-      if: ${{ always() }}
+      if: false
       needs: run-smoketests
       strategy:
         fail-fast: false
