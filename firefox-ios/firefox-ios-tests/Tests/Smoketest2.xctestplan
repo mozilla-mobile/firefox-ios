@@ -130,6 +130,7 @@
         "TrackingProtectionTests\/testLockIconMenu()",
         "TrackingProtectionTests\/testLockIconSecureConnection()",
         "TrackingProtectionTests\/testProtectionLevelMoreInfoMenu()",
+        "TrackingProtectionTests\/testStrictTrackingProtection()",
         "URLValidationTests",
         "UrlBarTests",
         "WhatsNewTest",

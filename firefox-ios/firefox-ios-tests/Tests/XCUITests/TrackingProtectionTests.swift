@@ -5,15 +5,51 @@
 import XCTest
 import Common
 
-// swiftlint:disable line_length
-let standardBlockedElementsString = "Firefox blocks cross-site trackers, social trackers, cryptominers, and fingerprinters."
-let strictBlockedElementsString = "Firefox blocks cross-site trackers, social trackers, cryptominers, fingerprinters, and tracking content."
-// swiftlint:enable line_length
-
+// Urls
 let websiteWithBlockedElements = "twitter.com"
 let differentWebsite = path(forTestPage: "test-example.html")
+let trackingProtectionTestUrl = "https://senglehardt.com/test/trackingprotection/test_pages/"
+
+// Selectors
+let buttonSettings = "Settings"
+let buttonDone = "Done"
+let reloadButton = "TabLocationView.reloadButton"
+let reloadWithWithoutProtectionButton = "shieldSlashLarge"
+let secureTrackingProtectionOnLabel = "Secure connection"
+let secureTrackingProtectionOffLabel = "Secure connection. Enhanced Tracking Protection is off."
 
 class TrackingProtectionTests: BaseTestCase {
+    
+    private func disableEnableTrackingProtectionForSite() {
+        navigator.performAction(Action.TrackingProtectionperSiteToggle)
+    }
+
+    private func checkTrackingProtectionDisabledForSite() {
+        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
+    }
+
+    private func checkTrackingProtectionEnabledForSite() {
+        navigator.goto(TrackingProtectionContextMenuDetails)
+        mozWaitForElementToExist(app.cells.staticTexts["Enhanced Tracking Protection is ON for this site."])
+    }
+
+    private func reloadWithWithoutTrackingProtection(label: String) {
+        mozWaitForElementToExist(app.buttons.element(matching: .button, identifier: reloadButton), timeout: 10)
+        app.buttons.element(matching: .button, identifier: reloadButton).press(forDuration: 3)
+        if (label == "Without Tracking Protection"){
+            XCTAssertEqual("Reload Without Tracking Protection", app.otherElements.element(matching: .any, identifier: reloadWithWithoutProtectionButton).label)
+        } else {
+            XCTAssertEqual("Reload With Tracking Protection", app.otherElements.element(matching: .any, identifier: reloadWithWithoutProtectionButton).label)
+        }
+        app.otherElements.element(matching: .any, identifier: reloadWithWithoutProtectionButton).tap()
+    }
+    
+    private func enableStrictMode() {
+        navigator.performAction(Action.EnableStrictMode)
+        app.buttons[buttonSettings].tap()
+        app.buttons[buttonDone].tap()
+    }
+
     // https://mozilla.testrail.io/index.php?/cases/view/2307059
     // Smoketest
     func testStandardProtectionLevel() {
@@ -58,27 +94,6 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.goto(TrackingProtectionSettings)
         // Turn on ETP
         navigator.performAction(Action.SwitchETP)
-    }
-
-    private func disableEnableTrackingProtectionForSite() {
-        navigator.performAction(Action.TrackingProtectionperSiteToggle)
-    }
-
-    private func checkTrackingProtectionDisabledForSite() {
-        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
-    }
-
-    private func checkTrackingProtectionEnabledForSite() {
-        navigator.goto(TrackingProtectionContextMenuDetails)
-        mozWaitForElementToExist(app.cells.staticTexts["Enhanced Tracking Protection is ON for this site."])
-    }
-
-    private func enableStrictMode() {
-        navigator.performAction(Action.EnableStrictMode)
-
-        // Dismiss the alert and go back to the site
-        app.alerts.buttons.firstMatch.tap()
-        app.buttons["Done"].tap()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2319381
@@ -192,5 +207,25 @@ class TrackingProtectionTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["Secure connection"])
         navigator.performAction(Action.CloseTPContextMenu)
         mozWaitForElementToNotExist(app.staticTexts["Secure connection"])
+    }
+    
+    // https://mozilla.testrail.io/index.php?/cases/view/2307063
+    func testStrictTrackingProtection() {
+        navigator.goto(TrackingProtectionSettings)
+        // Enable Strict Protection Level
+        enableStrictMode()
+        navigator.nowAt(BrowserTab)
+        navigator.openURL(trackingProtectionTestUrl)
+        
+        // Check TRacking Protection On
+        XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label, secureTrackingProtectionOnLabel)
+        
+        reloadWithWithoutTrackingProtection(label: "Without Tracking Protection")
+        
+        XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label, secureTrackingProtectionOffLabel)
+
+        reloadWithWithoutTrackingProtection(label: "With Tracking Protection")
+        
+        XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label, secureTrackingProtectionOnLabel)
     }
 }
