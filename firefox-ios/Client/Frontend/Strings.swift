@@ -6923,23 +6923,23 @@ extension String {
             tableName: "PasswordGenerator",
             value: "Close",
             comment: "Accessibility label describing the close button for the popup related to a feature that generates a password when the password field of a signup form is interacted with.")
-        public static let refreshPasswordButtonA11yLabel = MZLocalizedString(
+        public static let RefreshPasswordButtonA11yLabel = MZLocalizedString(
             key: "PasswordGenerator.refreshPasswordButtonA11yLabel.v132",
             tableName: "PasswordGenerator",
             value: "Generate a new strong password",
             comment: "Accessibility label describing a refresh password button belonging to a popup that generates a password when the password field of a signup form is interacted with.")
-        public static let passwordReadoutPrefaceA11y = MZLocalizedString(
+        public static let PasswordReadoutPrefaceA11y = MZLocalizedString(
             key: "PasswordGenerator.passwordReadoutPrefaceA11y.v132",
             tableName: "PasswordGenerator",
             value: "Generated password: ",
             comment: "Prefix to alert accessibility users that a generated password will be read to them next.")
-        public static let copyPasswordButtonLabel = MZLocalizedString(
+        public static let CopyPasswordButtonLabel = MZLocalizedString(
             key: "PasswordGenerator.copyPasswordButtonLabel.v132",
             tableName: "PasswordGenerator",
             value: "Copy",
             comment: "When a user is in the process of creating an account, they have the option to generate a password. The user is capable of copying this password after long pressing the value of the password displayed to them. This string is the label of the copy button that appears after long pressing the password.")
-        public static let useStrongPasswordAccessoryLabel = MZLocalizedString(
-            key: "PasswordGenerator.useStrongPasswordAccessoryLabel.v132",
+        public static let useStrongPasswordKeyboardAccessoryButtonLabel = MZLocalizedString(
+            key: "PasswordGenerator.useStrongPasswordKeyboardAccessoryButtonLabel.v132",
             tableName: "PasswordGenerator",
             value: "Use strong password",
             comment: "When a user is in the process of creating an account, they have the option to generate a password. The popup displaying the generated password to the user is available by clicking a keyboard accessory button with this label.")
