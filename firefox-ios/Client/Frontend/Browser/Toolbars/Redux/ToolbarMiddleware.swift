@@ -249,7 +249,11 @@ final class ToolbarMiddleware: FeatureFlaggable {
     }
 
     private func isMicrosurveyShown(action: GeneralBrowserMiddlewareAction, state: AppState) -> Bool {
-        let bvcState = state.screenState(BrowserViewControllerState.self, for: .browserViewController, window: action.windowUUID)
+        let bvcState = state.screenState(
+            BrowserViewControllerState.self,
+            for: .browserViewController,
+            window: action.windowUUID
+        )
         return bvcState?.microsurveyState.showPrompt ?? false
     }
 
