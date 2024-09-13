@@ -4,6 +4,12 @@
 /* Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark. */
 "Bookmarks.Menu.DeletedBookmark.v131" = "“%@” silindi";
 
+/* When a bookmark is longpressed in the bookmarks menu, an `Edit Bookmark` button is present. */
+"Bookmarks.Menu.EditBookmark.v131" = "Yer imini düzenle";
+
+/* When a folder is longpressed in the bookmarks menu, an `Edit Folder` button is present. */
+"Bookmarks.Menu.EditFolder.v131" = "Klasörü düzenle";
+
 /* The title for the Edit context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Edit.v131" = "Düzenle";
 
