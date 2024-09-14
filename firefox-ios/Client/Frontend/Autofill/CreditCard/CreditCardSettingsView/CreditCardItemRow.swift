@@ -89,7 +89,7 @@ struct CreditCardItemRow: View {
         return VStack(spacing: 0) {
             creditCardName
 
-            getCreditCardNumber()
+            creditCardNumber
 
             getCreditCardExpiration()
         }
@@ -103,7 +103,7 @@ struct CreditCardItemRow: View {
                    alignment: .leading)
     }
 
-    private func getCreditCardNumber() -> some View {
+    private var creditCardNumber: some View {
         return AdaptiveStack(horizontalAlignment: .leading,
                              spacing: isAccessibilityCategory ? 0 : 5,
                              isAccessibilityCategory: isAccessibilityCategory) {
