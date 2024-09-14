@@ -30,31 +30,20 @@ struct CreditCardItemRow: View {
 
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
-            AdaptiveStack(horizontalAlignment: .leading,
-                          verticalAlignment: .center,
-                          spacing: isAccessibilityCategory ? 5 : 24,
-                          isAccessibilityCategory: isAccessibilityCategory) {
-                getImage(creditCard: item)
-                    .renderingMode(.original)
-                    .resizable()
-                    .frame(width: 48, height: 48)
-                    .aspectRatio(contentMode: .fit)
-
-                creditCardData
-            }
-            .padding(.leading, 16)
-            .padding(.trailing, 16)
-            .padding(.top, 11)
-            .padding(.bottom, 11)
-            .background(isTapping ? backgroundHoverColor : backgroundColor)
-            .onTapGesture {
-                isTapping = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    isTapping = false
-                    didSelectAction?()
+            creditCardContent
+                .padding(.leading, 16)
+                .padding(.trailing, 16)
+                .padding(.top, 11)
+                .padding(.bottom, 11)
+                .background(isTapping ? backgroundHoverColor : backgroundColor)
+                .onTapGesture {
+                    isTapping = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        isTapping = false
+                        didSelectAction?()
+                    }
                 }
-            }
-            .accessibility(addTraits: .isButton)
+                .accessibility(addTraits: .isButton)
             Rectangle()
                 .fill(separatorColor)
                 .frame(maxWidth: .infinity)
