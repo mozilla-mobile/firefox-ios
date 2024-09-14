@@ -87,7 +87,7 @@ struct CreditCardItemRow: View {
 
     private var creditCardContent: some View {
         return VStack(spacing: 0) {
-            getCreditCardName()
+            creditCardName
 
             getCreditCardNumber()
 
@@ -95,7 +95,7 @@ struct CreditCardItemRow: View {
         }
     }
 
-    private func getCreditCardName() -> some View {
+    private var creditCardName: some View {
         return Text(item.ccName)
             .font(.body)
             .foregroundColor(titleTextColor)
