@@ -9,7 +9,7 @@ import UIKit
 
 class MainMenuDetailViewController: UIViewController,
                                     MainMenuDetailNavigationHandler,
-                                    MenuTableViewNavigationDelegate,
+                                    MenuTableViewDataDelegate,
                                     Notifiable {
     // MARK: - UI/UX elements
     private lazy var submenuContent: MenuDetailView = .build()
@@ -67,20 +67,13 @@ class MainMenuDetailViewController: UIViewController,
     }
 
     private func setupTableView() {
-        setupTableViewNavigationDelegate(with: self)
         reloadTableView(with: submenuData)
     }
 
     // MARK: - TableViewDelegates
-    func setupTableViewNavigationDelegate(with delegate: any MenuTableViewNavigationDelegate) {
-        submenuContent.setupTableViewNavigationDelegate(with: delegate)
-    }
-
     func reloadTableView(with data: [MenuSection]) {
         submenuContent.reloadTableView(with: data)
     }
-
-    func goToDetailView(with submenu: [MenuSection]) { }
 
     // MARK: - MainMenuDetailNavigationHandler
     func backToMainView() {

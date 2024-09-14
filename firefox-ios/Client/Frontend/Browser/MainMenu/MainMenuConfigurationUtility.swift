@@ -125,8 +125,16 @@ struct MainMenuConfigurationUtility: Equatable {
                     a11yLabel: "",
                     a11yHint: "",
                     a11yId: "",
-                    action: nil,
-                    submenu: getToolsSubmenu(with: uuid)
+                    action: {
+                        store.dispatch(
+                            MainMenuAction(
+                                windowUUID: uuid,
+                                actionType: MainMenuActionType.show(
+                                    .detailsView(with: getToolsSubmenu(with: uuid))
+                                )
+                            )
+                        )
+                    }
                 ),
                 MenuElement(
                     title: .MainMenu.ToolsSection.Save,
@@ -136,8 +144,16 @@ struct MainMenuConfigurationUtility: Equatable {
                     a11yLabel: "",
                     a11yHint: "",
                     a11yId: "",
-                    action: nil,
-                    submenu: getSaveSubmenu(with: uuid)
+                    action: {
+                        store.dispatch(
+                            MainMenuAction(
+                                windowUUID: uuid,
+                                actionType: MainMenuActionType.show(
+                                    .detailsView(with: getSaveSubmenu(with: uuid))
+                                )
+                            )
+                        )
+                    }
                 )
             ]
         )

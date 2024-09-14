@@ -13,7 +13,7 @@ class MainMenuViewController: UIViewController,
                               UIAdaptivePresentationControllerDelegate,
                               UISheetPresentationControllerDelegate,
                               UIScrollViewDelegate,
-                              MenuTableViewNavigationDelegate,
+                              MenuTableViewDataDelegate,
                               Themeable,
                               Notifiable,
                               StoreSubscriber {
@@ -93,7 +93,6 @@ class MainMenuViewController: UIViewController,
 
     // MARK: - UI setup
     private func setupTableView() {
-        setupTableViewNavigationDelegate(with: self)
         reloadTableView(with: menuState.menuElements)
     }
 
@@ -195,15 +194,7 @@ class MainMenuViewController: UIViewController,
     }
 
     // MARK: - MenuTableViewDelegate
-    func setupTableViewNavigationDelegate(with delegate: any MenuTableViewNavigationDelegate) {
-        menuContent.setupTableViewNavigationDelegate(with: delegate)
-    }
-
     func reloadTableView(with data: [MenuSection]) {
         menuContent.reloadTableView(with: data)
-    }
-
-    func goToDetailView(with submenu: [MenuSection]) {
-        coordinator?.showDetailViewController(with: submenu)
     }
 }

@@ -6,7 +6,7 @@ import Common
 import UIKit
 
 public final class MenuDetailView: UIView,
-                                   MenuTableViewNavigationDelegate {
+                                   MenuTableViewDataDelegate {
     private struct UX {
         static let headerHeight: CGFloat = 70
     }
@@ -45,15 +45,9 @@ public final class MenuDetailView: UIView,
     }
 
     // MARK: - Interface
-    public func setupTableViewNavigationDelegate(with delegate: any MenuTableViewNavigationDelegate) {
-        tableView.navigationDelegate = delegate
-    }
-
     public func reloadTableView(with data: [MenuSection]) {
         tableView.reloadTableView(with: data)
     }
-
-    public func goToDetailView(with submenu: [MenuSection]) { }
 
     public func setupHeaderNavigation(from delegate: MainMenuDetailNavigationHandler) {
         detailHeaderView.navigationDelegate = delegate

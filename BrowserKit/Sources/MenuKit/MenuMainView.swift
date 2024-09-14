@@ -6,7 +6,7 @@ import Common
 import UIKit
 
 public final class MenuMainView: UIView,
-                                 MenuTableViewNavigationDelegate {
+                                 MenuTableViewDataDelegate {
     // MARK: - UI Elements
     private var tableView: MenuTableView = .build()
     private var accountHeaderView: MenuAccountHeaderView = .build()
@@ -43,13 +43,7 @@ public final class MenuMainView: UIView,
     }
 
     // MARK: - Interface
-    public func setupTableViewNavigationDelegate(with delegate: any MenuTableViewNavigationDelegate) {
-        tableView.navigationDelegate = delegate
-    }
-
     public func reloadTableView(with data: [MenuSection]) {
         tableView.reloadTableView(with: data)
     }
-
-    public func goToDetailView(with submenu: [MenuSection]) { }
 }

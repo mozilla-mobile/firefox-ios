@@ -5,10 +5,8 @@
 import Foundation
 import UIKit
 
-public protocol MenuTableViewNavigationDelegate: AnyObject {
-    func setupTableViewNavigationDelegate(with delegate: MenuTableViewNavigationDelegate)
+public protocol MenuTableViewDataDelegate: AnyObject {
     func reloadTableView(with data: [MenuSection])
-    func goToDetailView(with submenu: [MenuSection])
 }
 
 class MenuTableView: UIView,
@@ -16,7 +14,6 @@ class MenuTableView: UIView,
                      UITableViewDataSource {
     private var tableView: UITableView
     private var menuData: [MenuSection]
-    weak var navigationDelegate: MenuTableViewNavigationDelegate?
 
     override init(frame: CGRect) {
         tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -90,9 +87,7 @@ class MenuTableView: UIView,
     ) {
         tableView.deselectRow(at: indexPath, animated: false)
 
-        if let submenu = menuData[indexPath.section].options[indexPath.row].submenu {
-            navigationDelegate?.goToDetailView(with: submenu)
-        } else if let action = menuData[indexPath.section].options[indexPath.row].action {
+        if let action = menuData[indexPath.section].options[indexPath.row].action {
             action()
         }
     }
