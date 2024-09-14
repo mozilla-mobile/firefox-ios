@@ -40,7 +40,7 @@ struct CreditCardItemRow: View {
                     .frame(width: 48, height: 48)
                     .aspectRatio(contentMode: .fit)
 
-                creditCardContent
+                creditCardData
             }
             .padding(.leading, 16)
             .padding(.trailing, 16)
@@ -85,7 +85,7 @@ struct CreditCardItemRow: View {
         return Image(decorative: image)
     }
 
-    private var creditCardContent: some View {
+    private var creditCardData: some View {
         return VStack(spacing: 0) {
             creditCardName
 
