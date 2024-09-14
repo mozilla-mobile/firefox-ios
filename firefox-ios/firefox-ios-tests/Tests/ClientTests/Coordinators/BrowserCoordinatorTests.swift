@@ -1035,11 +1035,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
         menuCoordinator.navigateTo(.customizeHomepage, animated: false)
 
-        guard let settingsCoordinator = subject.childCoordinators[0] as? SettingsCoordinator else {
-            XCTFail("Settings coordinator was expected to be resolved")
-            return
-        }
-
+        XCTAssertTrue(subject.childCoordinators[0] is SettingsCoordinator)
         XCTAssertTrue(mockRouter.presentedViewController?.children.first is AppSettingsTableViewController)
     }
 
