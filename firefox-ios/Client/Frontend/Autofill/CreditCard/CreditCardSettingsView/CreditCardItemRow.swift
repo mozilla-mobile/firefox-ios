@@ -85,6 +85,21 @@ struct CreditCardItemRow: View {
         return Image(decorative: image)
     }
 
+    private var creditCardContent: some View {
+        return AdaptiveStack(horizontalAlignment: .leading,
+                             verticalAlignment: .center,
+                             spacing: isAccessibilityCategory ? 5 : 24,
+                             isAccessibilityCategory: isAccessibilityCategory) {
+            getImage(creditCard: item)
+                .renderingMode(.original)
+                .resizable()
+                .frame(width: 48, height: 48)
+                .aspectRatio(contentMode: .fit)
+
+            creditCardData
+        }
+    }
+
     private var creditCardData: some View {
         return VStack(spacing: 0) {
             creditCardName
