@@ -91,7 +91,7 @@ struct CreditCardItemRow: View {
 
             creditCardNumber
 
-            getCreditCardExpiration()
+            creditCardExpiration
         }
     }
 
@@ -120,7 +120,7 @@ struct CreditCardItemRow: View {
         .padding(.bottom, 3)
     }
 
-    private func getCreditCardExpiration() -> some View {
+    private var creditCardExpiration: some View {
         return AdaptiveStack(horizontalAlignment: .leading,
                              spacing: isAccessibilityCategory ? 0 : 5,
                              isAccessibilityCategory: isAccessibilityCategory) {
