@@ -1312,14 +1312,6 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Microsurvey
-    private var isToolbarPositionBottom: Bool {
-        let toolbarState = store.state.screenState(ToolbarState.self,
-                                                   for: .toolbar,
-                                                   window: windowUUID)
-        let isBottomToolbar = toolbarState?.toolbarPosition == .bottom
-        return isToolbarRefactorEnabled ? isBottomToolbar : urlBar.isBottomSearchBar
-    }
-
     private func setupMicrosurvey() {
         guard featureFlags.isFeatureEnabled(.microsurvey, checking: .buildOnly), microsurvey == nil else { return }
 
@@ -1334,7 +1326,7 @@ class BrowserViewController: UIViewController,
         microsurvey.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(microsurvey)
 
-        if isToolbarPositionBottom {
+        if isBottomSearchBar {
             overKeyboardContainer.addArrangedViewToTop(microsurvey, animated: false, completion: {
                 self.view.layoutIfNeeded()
             })
@@ -1357,7 +1349,7 @@ class BrowserViewController: UIViewController,
         guard !shouldUseiPadSetup(), !isToolbarRefactorEnabled else { return }
         let hasMicrosurvery = microsurvey != nil
 
-        if let urlBar, isToolbarPositionBottom {
+        if let urlBar, isBottomSearchBar {
             urlBar.isMicrosurveyShown = hasMicrosurvery
             urlBar.updateTopBorderDisplay()
         }
@@ -1377,7 +1369,7 @@ class BrowserViewController: UIViewController,
     private func removeMicrosurveyPrompt() {
         guard let microsurvey else { return }
 
-        if isToolbarPositionBottom {
+        if isBottomSearchBar {
             overKeyboardContainer.removeArrangedView(microsurvey)
         } else {
             bottomContainer.removeArrangedView(microsurvey)
