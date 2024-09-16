@@ -65,4 +65,10 @@ public struct ImageIdentifiers {
     public struct NativeErrorPage {
         public static let noInternetConnection = "noInternetConnection"
     }
+
+    public struct TrackingProtection {
+        public static let protectionAlert = "protectionAlertLarge"
+        public static let protectionOff = "protectionOffLarge"
+        public static let protectionOn = "protectionOnLarge"
+    }
 }

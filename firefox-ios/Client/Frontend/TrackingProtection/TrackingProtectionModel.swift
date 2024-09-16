@@ -84,12 +84,12 @@ class TrackingProtectionModel {
     var isProtectionEnabled = false
     var connectionDetailsImage: UIImage? {
         if !isProtectionEnabled {
-            return UIImage(named: StandardImageIdentifiers.Large.protectionOff)
+            return UIImage(named: ImageIdentifiers.TrackingProtection.protectionOff)
         }
         if !connectionSecure {
-            return UIImage(named: StandardImageIdentifiers.Large.protectionAlert)
+            return UIImage(named: ImageIdentifiers.TrackingProtection.protectionAlert)
         }
-        return UIImage(named: StandardImageIdentifiers.Large.protectionOn)
+        return UIImage(named: ImageIdentifiers.TrackingProtection.protectionOn)
     }
 
     var isSiteETPEnabled: Bool {

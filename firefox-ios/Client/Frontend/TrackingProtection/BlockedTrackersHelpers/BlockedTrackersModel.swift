@@ -29,16 +29,16 @@ struct BlockedTrackersTableModel {
                                          trackingContentCount)
 
         let crossSiteImage = UIImage(
-            imageLiteralResourceName: StandardImageIdentifiers.Large.crossSiteTrackers
+            imageLiteralResourceName: StandardImageIdentifiers.Large.cookies
         ).withRenderingMode(.alwaysTemplate)
         let fingerprintersImage = UIImage(
-            imageLiteralResourceName: StandardImageIdentifiers.Large.fingerprintersTrackers
+            imageLiteralResourceName: StandardImageIdentifiers.Large.fingerprinter
         ).withRenderingMode(.alwaysTemplate)
         let socialMediaImage = UIImage(
-            imageLiteralResourceName: StandardImageIdentifiers.Large.socialMediaTrackers
+            imageLiteralResourceName: StandardImageIdentifiers.Large.socialTracker
         ).withRenderingMode(.alwaysTemplate)
         let trackingContentImage = UIImage(
-            imageLiteralResourceName: StandardImageIdentifiers.Large.analyticsTrackers
+            imageLiteralResourceName: StandardImageIdentifiers.Large.image
         ).withRenderingMode(.alwaysTemplate)
 
         return [
