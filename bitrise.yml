@@ -836,7 +836,7 @@ workflows:
 
             ./firefox-ios/l10n-screenshots.sh en-US
         title: Generate screenshots
-    - save-cache@1
+    - save-cache@1:
         inputs:
         - key: l10n-screenshots-dd-{{ git rev-parse HEAD }}
           paths: l10n-screenshots-dd
