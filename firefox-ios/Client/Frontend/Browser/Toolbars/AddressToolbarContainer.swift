@@ -29,7 +29,7 @@ final class AddressToolbarContainer: UIView,
                                      URLBarViewProtocol {
     private enum UX {
         static let compactLeadingEdgeEditing: CGFloat = 8
-        static let compactHorizontalEdge: CGFloat = 24
+        static let compactHorizontalEdge: CGFloat = 16
     }
 
     typealias SubscriberStateType = ToolbarState
