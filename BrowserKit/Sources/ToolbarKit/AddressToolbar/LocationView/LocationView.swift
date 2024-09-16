@@ -11,7 +11,8 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         static let horizontalSpace: CGFloat = 8
         static let gradientViewWidth: CGFloat = 40
         static let searchEngineImageViewCornerRadius: CGFloat = 4
-        static let lockIconImageViewSize = CGSize(width: 20, height: 20)
+        static let iconContainerCornerRadius: CGFloat = 8
+        static let lockIconImageViewSize = CGSize(width: 40, height: 24)
         static let searchEngineImageViewSize = CGSize(width: 24, height: 24)
     }
 
@@ -51,6 +52,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
 
     private var clearButtonWidthConstraint: NSLayoutConstraint?
     private var urlTextFieldLeadingConstraint: NSLayoutConstraint?
+    private var iconContainerStackViewLeadingConstraint: NSLayoutConstraint?
     private var lockIconWidthAnchor: NSLayoutConstraint?
 
     private lazy var iconContainerStackView: UIStackView = .build { view in
@@ -60,6 +62,10 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     }
 
     private lazy var searchEngineContentView: UIView = .build()
+
+    private lazy var iconContainerBackgroundView: UIView = .build { view in
+        view.layer.cornerRadius = UX.iconContainerCornerRadius
+    }
 
     private lazy var searchEngineImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
@@ -143,12 +149,16 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
 
     private func setupLayout() {
         addSubviews(urlTextField, iconContainerStackView, gradientView)
+        iconContainerStackView.addSubview(iconContainerBackgroundView)
         searchEngineContentView.addSubview(searchEngineImageView)
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
 
         urlTextFieldLeadingConstraint = urlTextField.leadingAnchor.constraint(
             equalTo: iconContainerStackView.trailingAnchor)
         urlTextFieldLeadingConstraint?.isActive = true
+
+        iconContainerStackViewLeadingConstraint = iconContainerStackView.leadingAnchor.constraint(equalTo: leadingAnchor)
+        iconContainerStackViewLeadingConstraint?.isActive = true
 
         NSLayoutConstraint.activate([
             gradientView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
@@ -159,6 +169,11 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
             urlTextField.topAnchor.constraint(equalTo: topAnchor),
             urlTextField.bottomAnchor.constraint(equalTo: bottomAnchor),
             urlTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalSpace),
+
+            iconContainerBackgroundView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
+            iconContainerBackgroundView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor),
+            iconContainerBackgroundView.leadingAnchor.constraint(equalTo: urlTextField.leadingAnchor),
+            iconContainerBackgroundView.trailingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor),
 
             searchEngineImageView.heightAnchor.constraint(equalToConstant: UX.searchEngineImageViewSize.height),
             searchEngineImageView.widthAnchor.constraint(equalToConstant: UX.searchEngineImageViewSize.width),
@@ -173,8 +188,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
             lockIconButton.widthAnchor.constraint(equalToConstant: UX.lockIconImageViewSize.width),
 
             iconContainerStackView.topAnchor.constraint(equalTo: topAnchor),
-            iconContainerStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            iconContainerStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.horizontalSpace),
+            iconContainerStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 
@@ -230,6 +244,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         removeContainerIcons()
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
         urlTextFieldLeadingConstraint?.constant = UX.horizontalSpace
+        iconContainerStackViewLeadingConstraint?.constant = UX.horizontalSpace
         updateURLTextFieldLeadingConstraint(constant: UX.horizontalSpace)
         updateGradient()
     }
@@ -239,6 +254,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         removeContainerIcons()
         iconContainerStackView.addArrangedSubview(lockIconButton)
         urlTextFieldLeadingConstraint?.constant = 0
+        iconContainerStackViewLeadingConstraint?.constant = 0
         updateGradient()
     }
 
@@ -404,6 +420,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         urlTextFieldSubdomainColor = colors.textSecondary
         gradientLayer.colors = colors.layerGradientURL.cgColors.reversed()
         searchEngineImageView.backgroundColor = colors.layer2
+        iconContainerBackgroundView.backgroundColor = colors.layerSearch
         lockIconButton.tintColor = colors.iconPrimary
         lockIconButton.backgroundColor = colors.layerSearch
         urlTextField.applyTheme(theme: theme)
