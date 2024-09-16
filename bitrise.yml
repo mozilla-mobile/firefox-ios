@@ -860,9 +860,7 @@ workflows:
     - certificate-and-profile-installer@1: {}
     - restore-cache@2:
         inputs:
-        - key: |-
-            l10n-screenshots-dd-{{ git rev-parse HEAD }}
-            l10n-screenshots-dd-
+        - key: l10n-screenshots-dd-{{ git rev-parse HEAD }}
           paths: l10n-screenshots-dd
         title: Download derived data path
     - script@1.1:
