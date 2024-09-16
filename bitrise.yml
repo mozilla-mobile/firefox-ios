@@ -838,8 +838,8 @@ workflows:
         title: Generate screenshots
     - save-cache@1:
         inputs:
-        - key: l10n-screenshots-dd-{{ checksum "package-lock.json" }}
-          paths: l10n-screenshots-dd
+        - key: l10n-screenshots-dd-{{ git rev-parse HEAD }}
+        - paths: l10n-screenshots-dd
     - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: l10n-screenshots/en-US/en-US
@@ -860,8 +860,10 @@ workflows:
     - certificate-and-profile-installer@1: {}
     - restore-cache@2:
         inputs:
-        - key: l10n-screenshots-dd-{{ checksum "package-lock.json" }}
-          paths: l10n-screenshots-dd
+        - key: |-
+            l10n-screenshots-dd-{{ git rev-parse HEAD }}
+            l10n-screenshots-dd-
+        - paths: l10n-screenshots-dd
         title: Download derived data path
     - script@1.1:
         inputs:
