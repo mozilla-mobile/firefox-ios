@@ -455,7 +455,7 @@ class HistoryPanel: UIViewController,
             withIdentifier: TwoLineImageOverlayCell.cellIdentifier,
             for: indexPath
         ) as? TwoLineImageOverlayCell else {
-            logger.log("History Panel - cannot create TwoLineImageOverlayCell for STG",
+            logger.log("History Panel - cannot create TwoLineImageOverlayCell for Search Term Group",
                        level: .debug,
                        category: .library)
             return nil
