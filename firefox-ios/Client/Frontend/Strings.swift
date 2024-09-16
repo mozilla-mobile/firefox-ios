@@ -6894,7 +6894,6 @@ extension String {
     }
 }
 
-
 // MARK: - Password generator
 extension String {
     public struct PasswordGenerator {
