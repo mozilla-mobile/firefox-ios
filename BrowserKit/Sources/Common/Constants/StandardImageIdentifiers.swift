@@ -32,6 +32,7 @@ public struct StandardImageIdentifiers {
 
     // Icon size 24x24
     public struct Large {
+        public static let analyticsTrackers = "analyticsLarge"
         public static let appendUpLeft = "appendUpLeftLarge"
         public static let appMenu = "appMenuLarge"
         public static let arrowClockwise = "arrowClockwiseLarge"
@@ -49,6 +50,7 @@ public struct StandardImageIdentifiers {
         public static let clipboard = "clipboardLarge"
         public static let cloud = "cloudLarge"
         public static let competitiveness = "competitivenessLarge"
+        public static let crossSiteTrackers = "crossSiteLarge"
         public static let creditCard = "creditCardLarge"
         public static let criticalFill = "criticalFillLarge"
         public static let cross = "crossLarge"
@@ -61,6 +63,7 @@ public struct StandardImageIdentifiers {
         public static let deviceTablet = "deviceTabletLarge"
         public static let download = "downloadLarge"
         public static let edit = "editLarge"
+        public static let fingerprintersTrackers = "fingerprintersLarge"
         public static let folder = "folderLarge"
         public static let forward = "forwardLarge"
         public static let globe = "globeLarge"
@@ -89,6 +92,9 @@ public struct StandardImageIdentifiers {
         public static let plus = "plusLarge"
         public static let price = "priceLarge"
         public static let privateMode = "privateModeLarge"
+        public static let protectionAlert = "protectionAlertLarge"
+        public static let protectionOff = "protectionOffLarge"
+        public static let protectionOn = "protectionOnLarge"
         public static let qrCode = "qrCodeLarge"
         public static let quality = "qualityLarge"
         public static let readerView = "readerViewLarge"
@@ -102,6 +108,7 @@ public struct StandardImageIdentifiers {
         public static let shieldSlash = "shieldSlashLarge"
         public static let shipping = "shippingLarge"
         public static let shopping = "shoppingLarge"
+        public static let socialMediaTrackers = "socialMediaLarge"
         public static let subtract = "subtractLarge"
         public static let sync = "syncLarge"
         public static let syncTabs = "syncTabsLarge"
@@ -110,18 +117,6 @@ public struct StandardImageIdentifiers {
         public static let warning = "warningLarge"
         public static let warningFill = "warningFillLarge"
         public static let whatsNew = "whatsNewLarge"
-
-        public struct TrackingProtection {
-            public static let analyticsTrackersImage = "analyticsLarge"
-            public static let crossSiteTrackers = "crossSiteLarge"
-            public static let fingerprintersTrackers = "fingerprintersLarge"
-
-            public static let protectionAlert = "protectionAlertLarge"
-            public static let protectionOn = "protectionOnLarge"
-            public static let protectionOff = "protectionOffLarge"
-
-            public static let socialMediaTrackers = "socialMediaLarge"
-        }
     }
 
     // Icon size 30x30

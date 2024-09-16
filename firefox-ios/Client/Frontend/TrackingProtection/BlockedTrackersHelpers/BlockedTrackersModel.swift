@@ -38,7 +38,7 @@ struct BlockedTrackersTableModel {
             imageLiteralResourceName: StandardImageIdentifiers.Large.TrackingProtection.socialMediaTrackers
         ).withRenderingMode(.alwaysTemplate)
         let trackingContentImage = UIImage(
-            imageLiteralResourceName: StandardImageIdentifiers.Large.TrackingProtection.analyticsTrackersImage
+            imageLiteralResourceName: StandardImageIdentifiers.Large.TrackingProtection.analyticsTrackers
         ).withRenderingMode(.alwaysTemplate)
 
         return [
