@@ -25,8 +25,17 @@
 /* On the main menu, the title for the action that will take the user to the Settings menu. */
 "MainMenu.SettingsSection.Settings.Title.v131" = "Ayarlar";
 
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to add a website to the home screen. */
+"MainMenu.Submenus.Save.AddToHomeScreen.Title.v131" = "Ana ekrana ekle";
+
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Shortcuts tool. */
+"MainMenu.Submenus.Save.AddToShortcuts.Subtitle.v131" = "Kısayol";
+
 /* On the main menu, in the Save submenu, the title for the menu component that allows a user to add the current website to the shortcuts on the homepage. */
 "MainMenu.Submenus.Save.AddToShortcuts.Title.v131" = "Kısayollara ekle";
+
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Bookmarks tool. */
+"MainMenu.Submenus.Save.BookmarkThisPage.Subtitle.v131" = "Yer imi ekle";
 
 /* On the main menu, in the Save submenu, the title for the menu component that allows a user to save a bookmark for this particular page.. */
 "MainMenu.Submenus.Save.BookmarkThisPage.Title.v131" = "Sayfayı yer imlerine ekle";
