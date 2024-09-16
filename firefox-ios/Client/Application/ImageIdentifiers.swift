@@ -67,8 +67,8 @@ public struct ImageIdentifiers {
     }
 
     public struct TrackingProtection {
-        public static let protectionAlert = "protectionAlertLarge"
-        public static let protectionOff = "protectionOffLarge"
-        public static let protectionOn = "protectionOnLarge"
+        public static let protectionAlert = "protectionPanelAlert"
+        public static let protectionOff = "protectionPanelOff"
+        public static let protectionOn = "protectionPanelOn"
     }
 }
