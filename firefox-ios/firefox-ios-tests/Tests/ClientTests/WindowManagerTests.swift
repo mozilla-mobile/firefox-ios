@@ -107,15 +107,8 @@ class WindowManagerTests: XCTestCase {
         let subject = createSubject()
         mockTabDataStore.resetMockTabWindowUUIDs()
 
-        // Check that asking for two UUIDs results in two unique/random UUIDs
-        // Note: there is a possibility of collision between any two randomly-
-        // generated UUIDs but it is astronomically small (1 out of 2^122).
-        // Although iPhone should only ideally have one UUID, there is not
-        // existing id saved in onDiskUUIDs, so we are okay with generating
-        // a new one here.
         let uuid1 = subject.reserveNextAvailableWindowUUID(isIpad: isIpad)
-        let uuid2 = subject.reserveNextAvailableWindowUUID(isIpad: isIpad)
-        XCTAssertNotEqual(uuid1.uuid, uuid2.uuid)
+        XCTAssertTrue(uuid1.isNew)
     }
 
     func testNextAvailableUUIDWhenOnlyOneWindowSaved_forIpad() {
