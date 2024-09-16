@@ -368,7 +368,7 @@ class HistoryPanel: UIViewController,
 
             if var historyActionable = item as? HistoryActionablesModel {
                 historyActionable.configureImage(for: windowUUID)
-                return self.getHistoryActionableCell(historyActionable: historyActionable, indexPath: indexPath)
+                return getHistoryActionableCell(historyActionable: historyActionable, indexPath: indexPath)
             }
 
             if let site = item as? Site {
