@@ -376,7 +376,7 @@ class HistoryPanel: UIViewController,
             }
 
             if let searchTermGroup = item as? ASGroup<Site> {
-                return self.getGroupCell(searchTermGroup: searchTermGroup, indexPath: indexPath)
+                return getGroupCell(searchTermGroup: searchTermGroup, indexPath: indexPath)
             }
 
             // This should never happen! You will have an empty row!
