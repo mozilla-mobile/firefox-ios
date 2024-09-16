@@ -2,12 +2,14 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import XCTest
+import Foundation
 import Common
+import MenuKit
+import XCTest
 
 @testable import Client
 
-final class MainMenuViewControllerTests: XCTestCase {
+final class MainMenuDetailsViewControllerTests: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
@@ -20,8 +22,11 @@ final class MainMenuViewControllerTests: XCTestCase {
         super.tearDown()
     }
 
-    func testMainMenuViewController_simpleCreation_hasNoLeaks() {
-        let controller = MainMenuViewController(windowUUID: windowUUID)
+    func testMainMenuDetailsViewController_simpleCreation_hasNoLeaks() {
+        let controller = MainMenuDetailViewController(
+            windowUUID: windowUUID,
+            with: [MenuSection(options: [])]
+        )
         trackForMemoryLeaks(controller)
     }
 }

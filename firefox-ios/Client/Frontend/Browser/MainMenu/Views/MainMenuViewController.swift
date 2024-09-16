@@ -10,36 +10,17 @@ import Redux
 import MenuKit
 
 class MainMenuViewController: UIViewController,
-                              Themeable,
-                              Notifiable,
                               UIAdaptivePresentationControllerDelegate,
                               UISheetPresentationControllerDelegate,
                               UIScrollViewDelegate,
+                              MenuTableViewDataDelegate,
+                              Themeable,
+                              Notifiable,
                               StoreSubscriber {
     typealias SubscriberStateType = MainMenuState
 
     // MARK: - UI/UX elements
-    private struct UX {
-        static let closeButtonWidthHeight: CGFloat = 30
-        static let scrollContentStackSpacing: CGFloat = 16
-    }
-
-    private lazy var menuContent: MenuView = .build()
-    private lazy var scrollView: UIScrollView = .build()
-
-    private lazy var closeButton: CloseButton = .build { view in
-        let viewModel = CloseButtonViewModel(
-            a11yLabel: .Shopping.CloseButtonAccessibilityLabel,
-            a11yIdentifier: AccessibilityIdentifiers.Shopping.sheetCloseButton
-        )
-        view.configure(viewModel: viewModel)
-        view.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
-    }
-
-    private lazy var testButton: UIButton = .build { button in
-        button.addTarget(self, action: #selector(self.testButtonTapped), for: .touchUpInside)
-        button.backgroundColor = .systemPink
-    }
+    private lazy var menuContent: MenuMainView = .build()
 
     // MARK: - Properties
     var notificationCenter: NotificationProtocol
@@ -78,9 +59,9 @@ class MainMenuViewController: UIViewController,
         super.viewDidLoad()
         presentationController?.delegate = self
         sheetPresentationController?.delegate = self
-        scrollView.delegate = self
 
         setupView()
+        setupTableView()
         listenForThemeChange(view)
         store.dispatch(
             MainMenuAction(
@@ -111,8 +92,11 @@ class MainMenuViewController: UIViewController,
     }
 
     // MARK: - UI setup
+    private func setupTableView() {
+        reloadTableView(with: menuState.menuElements)
+    }
+
     private func setupView() {
-        menuContent.updateDataSource(with: menuState.menuElements)
         view.addSubview(menuContent)
 
         NSLayoutConstraint.activate([
@@ -121,10 +105,6 @@ class MainMenuViewController: UIViewController,
             menuContent.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             menuContent.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
-    }
-
-    private func updateContent() {
-        applyTheme()
     }
 
     // MARK: - Redux
@@ -151,7 +131,7 @@ class MainMenuViewController: UIViewController,
     func newState(state: MainMenuState) {
         menuState = state
 
-        menuContent.updateDataSource(with: menuState.menuElements)
+        reloadTableView(with: menuState.menuElements)
 
         if let navigationDestination = menuState.navigationDestination {
             coordinator?.navigateTo(navigationDestination, animated: true)
@@ -159,7 +139,7 @@ class MainMenuViewController: UIViewController,
         }
 
         if menuState.shouldDismiss {
-            coordinator?.dismissModal(animated: true)
+            coordinator?.dismissMenuModal(animated: true)
         }
     }
 
@@ -173,19 +153,7 @@ class MainMenuViewController: UIViewController,
     // MARK: - Notifications
     func handleNotifications(_ notification: Notification) { }
 
-    @objc
-    private func closeTapped() { }
-
-    @objc
-    private func testButtonTapped() {
-        store.dispatch(
-            MainMenuAction(
-                windowUUID: windowUUID,
-                actionType: MainMenuActionType.closeMenu
-            )
-        )
-    }
-
+    // MARK: - A11y
     // In iOS 15 modals with a large detent read content underneath the modal
     // in voice over. To prevent this we manually turn this off.
     private func updateModalA11y() {
@@ -215,7 +183,7 @@ class MainMenuViewController: UIViewController,
 
     // MARK: - UIAdaptivePresentationControllerDelegate
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
-        coordinator?.dismissModal(animated: true)
+        coordinator?.dismissMenuModal(animated: true)
     }
 
     // MARK: - UISheetPresentationControllerDelegate
@@ -223,5 +191,10 @@ class MainMenuViewController: UIViewController,
         _ sheetPresentationController: UISheetPresentationController
     ) {
         updateModalA11y()
+    }
+
+    // MARK: - MenuTableViewDelegate
+    func reloadTableView(with data: [MenuSection]) {
+        menuContent.reloadTableView(with: data)
     }
 }

@@ -649,15 +649,21 @@ class TabManagerMiddleware {
     }
 
     private func getTabInfo(forWindow windowUUID: WindowUUID) -> MainMenuTabInfo? {
-        guard let selectedTab = tabManager(for: windowUUID).selectedTab else { return nil }
+        guard let selectedTab = tabManager(for: windowUUID).selectedTab else {
+            logger.log(
+                "Attempted to get `selectedTab` but it was `nil` when in shouldn't be",
+                level: .fatal,
+                category: .tabs
+            )
+            return nil
+        }
         let defaultUAisDesktop = UserAgent.isDesktop(ua: UserAgent.getUserAgent())
-        let tabHasChangedUserAgent = selectedTab.changedUserAgent
 
         return MainMenuTabInfo(
             url: selectedTab.url,
             isHomepage: selectedTab.isFxHomeTab,
             isDefaultUserAgentDesktop: defaultUAisDesktop,
-            hasChangedUserAgent: tabHasChangedUserAgent
+            hasChangedUserAgent: selectedTab.changedUserAgent
         )
     }
 

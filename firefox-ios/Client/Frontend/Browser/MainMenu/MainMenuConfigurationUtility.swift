@@ -33,6 +33,7 @@ struct MainMenuConfigurationUtility: Equatable {
         return menuSections
     }
 
+    // MARK: - New Tabs Section
     private func getNewTabSection(with uuid: WindowUUID) -> MenuSection {
         return MenuSection(options: [
             MenuElement(
@@ -72,14 +73,11 @@ struct MainMenuConfigurationUtility: Equatable {
         ])
     }
 
+    // MARK: - Tools Section
     private func getToolsSection(
         with uuid: WindowUUID,
-        and configuration: MainMenuTabInfo?
+        and configuration: MainMenuTabInfo
     ) -> MenuSection {
-        // Configuration can be `nil` if Redux hasn't yet returned the
-        // required information about the tab.
-        guard let configuration else { return MenuSection(options: []) }
-
         return MenuSection(
             options: [
                 MenuElement(
@@ -131,7 +129,9 @@ struct MainMenuConfigurationUtility: Equatable {
                         store.dispatch(
                             MainMenuAction(
                                 windowUUID: uuid,
-                                actionType: MainMenuActionType.closeMenu
+                                actionType: MainMenuActionType.show(
+                                    .detailsView(with: getToolsSubmenu(with: uuid))
+                                )
                             )
                         )
                     }
@@ -148,7 +148,9 @@ struct MainMenuConfigurationUtility: Equatable {
                         store.dispatch(
                             MainMenuAction(
                                 windowUUID: uuid,
-                                actionType: MainMenuActionType.closeMenu
+                                actionType: MainMenuActionType.show(
+                                    .detailsView(with: getSaveSubmenu(with: uuid))
+                                )
                             )
                         )
                     }
@@ -163,16 +165,229 @@ struct MainMenuConfigurationUtility: Equatable {
     ) -> String {
         typealias Menu = String.MainMenu.ToolsSection
 
-        // Our default User Agest gets set depending on the architecture we're
-        // running on. Thus, to determine which string to use, we need to know
+        // Our default User Agent gets set depending on the architecture we're
+        // running on. For example, if we're building on an Intel Mac, we get
+        // desktop User Agent by default. Thus, to determine which string to use,
+        // we need to know:
         //   1) which architecture we've started from and
         //   2) whether or not we've requested to change the user agent in the tab
         // Using this information, we're able to present the correct string for
         // the "Request Mobile/Desktop Site" menu option
-        let switchToDesktop = tabHasChangedUserAgent ? defaultIsDesktop : !defaultIsDesktop
-        return switchToDesktop ? Menu.SwitchToDesktopSite : Menu.SwitchToMobileSite
+        if defaultIsDesktop {
+            return tabHasChangedUserAgent ? Menu.SwitchToDesktopSite : Menu.SwitchToMobileSite
+        } else {
+            return tabHasChangedUserAgent ? Menu.SwitchToMobileSite : Menu.SwitchToDesktopSite
+        }
     }
 
+    private func getToolsSubmenu(with uuid: WindowUUID) -> [MenuSection] {
+        return [
+            MenuSection(
+                options: [
+                    MenuElement(
+                        title: .MainMenu.Submenus.Tools.Zoom,
+                        iconName: "",
+                        isEnabled: true,
+                        isActive: false,
+                        a11yLabel: "",
+                        a11yHint: "",
+                        a11yId: "",
+                        action: {
+                            store.dispatch(
+                                MainMenuAction(
+                                    windowUUID: uuid,
+                                    actionType: MainMenuActionType.closeMenu
+                                )
+                            )
+                        }
+                    ),
+                    MenuElement(
+                        title: .MainMenu.Submenus.Tools.ReaderViewOn,
+                        iconName: "",
+                        isEnabled: true,
+                        isActive: false,
+                        a11yLabel: "",
+                        a11yHint: "",
+                        a11yId: "",
+                        action: {
+                            store.dispatch(
+                                MainMenuAction(
+                                    windowUUID: uuid,
+                                    actionType: MainMenuActionType.closeMenu
+                                )
+                            )
+                        }
+                    ),
+                    MenuElement(
+                        title: .MainMenu.Submenus.Tools.NightModeOn,
+                        iconName: "",
+                        isEnabled: true,
+                        isActive: false,
+                        a11yLabel: "",
+                        a11yHint: "",
+                        a11yId: "",
+                        action: {
+                            store.dispatch(
+                                MainMenuAction(
+                                    windowUUID: uuid,
+                                    actionType: MainMenuActionType.closeMenu
+                                )
+                            )
+                        }
+                    ),
+                    MenuElement(
+                        title: .MainMenu.Submenus.Tools.ReportBrokenSite,
+                        iconName: "",
+                        isEnabled: true,
+                        isActive: false,
+                        a11yLabel: "",
+                        a11yHint: "",
+                        a11yId: "",
+                        action: {
+                            store.dispatch(
+                                MainMenuAction(
+                                    windowUUID: uuid,
+                                    actionType: MainMenuActionType.closeMenu
+                                )
+                            )
+                        }
+                    )
+                ]
+            ),
+            MenuSection(
+                options: [
+                    MenuElement(
+                        title: .MainMenu.Submenus.Tools.Print,
+                        iconName: "",
+                        isEnabled: true,
+                        isActive: false,
+                        a11yLabel: "",
+                        a11yHint: "",
+                        a11yId: "",
+                        action: {
+                            store.dispatch(
+                                MainMenuAction(
+                                    windowUUID: uuid,
+                                    actionType: MainMenuActionType.closeMenu
+                                )
+                            )
+                        }
+                    ),
+                    MenuElement(
+                        title: .MainMenu.Submenus.Tools.Share,
+                        iconName: "",
+                        isEnabled: true,
+                        isActive: false,
+                        a11yLabel: "",
+                        a11yHint: "",
+                        a11yId: "",
+                        action: {
+                            store.dispatch(
+                                MainMenuAction(
+                                    windowUUID: uuid,
+                                    actionType: MainMenuActionType.closeMenu
+                                )
+                            )
+                        }
+                    ),
+                ]
+            )
+        ]
+    }
+
+    private func getSaveSubmenu(with uuid: WindowUUID) -> [MenuSection] {
+        return [MenuSection(
+            options: [
+                MenuElement(
+                    title: .MainMenu.Submenus.Save.BookmarkThisPage,
+                    iconName: "",
+                    isEnabled: true,
+                    isActive: false,
+                    a11yLabel: "",
+                    a11yHint: "",
+                    a11yId: "",
+                    action: {
+                        store.dispatch(
+                            MainMenuAction(
+                                windowUUID: uuid,
+                                actionType: MainMenuActionType.closeMenu
+                            )
+                        )
+                    }
+                ),
+                MenuElement(
+                    title: .MainMenu.Submenus.Save.AddToShortcuts,
+                    iconName: "",
+                    isEnabled: true,
+                    isActive: false,
+                    a11yLabel: "",
+                    a11yHint: "",
+                    a11yId: "",
+                    action: {
+                        store.dispatch(
+                            MainMenuAction(
+                                windowUUID: uuid,
+                                actionType: MainMenuActionType.closeMenu
+                            )
+                        )
+                    }
+                ),
+                MenuElement(
+                    title: .MainMenu.Submenus.Save.AddToHomeScreen,
+                    iconName: "",
+                    isEnabled: true,
+                    isActive: false,
+                    a11yLabel: "",
+                    a11yHint: "",
+                    a11yId: "",
+                    action: {
+                        store.dispatch(
+                            MainMenuAction(
+                                windowUUID: uuid,
+                                actionType: MainMenuActionType.closeMenu
+                            )
+                        )
+                    }
+                ),
+                MenuElement(
+                    title: .MainMenu.Submenus.Save.SaveToReadingList,
+                    iconName: "",
+                    isEnabled: true,
+                    isActive: false,
+                    a11yLabel: "",
+                    a11yHint: "",
+                    a11yId: "",
+                    action: {
+                        store.dispatch(
+                            MainMenuAction(
+                                windowUUID: uuid,
+                                actionType: MainMenuActionType.closeMenu
+                            )
+                        )
+                    }
+                ),
+                MenuElement(
+                    title: .MainMenu.Submenus.Save.SaveAsPDF,
+                    iconName: "",
+                    isEnabled: true,
+                    isActive: false,
+                    a11yLabel: "",
+                    a11yHint: "",
+                    a11yId: "",
+                    action: {
+                        store.dispatch(
+                            MainMenuAction(
+                                windowUUID: uuid,
+                                actionType: MainMenuActionType.closeMenu
+                            )
+                        )
+                    }
+                ),
+            ]
+        )]
+    }
+
+    // MARK: - Libraries Section
     private func getLibrariesSection(with uuid: WindowUUID) -> MenuSection {
         return MenuSection(options: [
             MenuElement(
@@ -246,6 +461,7 @@ struct MainMenuConfigurationUtility: Equatable {
         ])
     }
 
+    // MARK: - Other Tools Section
     private func getOtherToolsSection(
         with uuid: WindowUUID,
         isHomepage: Bool

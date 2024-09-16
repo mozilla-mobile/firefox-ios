@@ -443,8 +443,8 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - MainMenuCoordinatorDelegate
     func showMainMenu() {
-        guard let coordinator = makeMenuCoordinator() else { return }
-        coordinator.startModal()
+        guard let menuNavViewController = makeMenuNavViewController() else { return }
+        present(menuNavViewController)
     }
 
     func openURLInNewTab(_ url: URL?) {
@@ -471,14 +471,24 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.showFindInPage()
     }
 
-    private func makeMenuCoordinator() -> MainMenuCoordinator? {
+    private func makeMenuNavViewController() -> DismissableNavigationViewController? {
         guard !childCoordinators.contains(where: { $0 is MainMenuCoordinator }) else { return nil }
 
-        let coordinator = MainMenuCoordinator(router: router, tabManager: tabManager)
+        let navigationController = DismissableNavigationViewController()
+        navigationController.sheetPresentationController?.detents = [.medium(), .large()]
+        navigationController.sheetPresentationController?.prefersGrabberVisible = true
+        setiPadLayoutDetents(for: navigationController)
+
+        let coordinator = MainMenuCoordinator(
+            router: DefaultRouter(navigationController: navigationController),
+            windowUUID: tabManager.windowUUID
+        )
         coordinator.parentCoordinator = self
         coordinator.navigationHandler = self
         add(child: coordinator)
-        return coordinator
+        coordinator.start()
+
+        return navigationController
     }
 
     // MARK: - BrowserNavigationHandler
@@ -731,9 +741,7 @@ class BrowserCoordinator: BaseCoordinator,
         navigationController.sheetPresentationController?.prefersGrabberVisible = true
         let coordinator = MicrosurveyCoordinator(
             model: model,
-            router: DefaultRouter(
-                navigationController: navigationController
-            ),
+            router: DefaultRouter(navigationController: navigationController),
             tabManager: tabManager
         )
         coordinator.parentCoordinator = self

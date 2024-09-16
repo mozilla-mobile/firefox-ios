@@ -5,9 +5,11 @@
 import Common
 import UIKit
 
-public final class MenuView: UIView {
+public final class MenuMainView: UIView,
+                                 MenuTableViewDataDelegate {
     // MARK: - UI Elements
     private var tableView: MenuTableView = .build()
+    private var accountHeaderView: MenuAccountHeaderView = .build()
 
     // MARK: - Properties
 
@@ -24,17 +26,24 @@ public final class MenuView: UIView {
     // MARK: - UI Setup
     private func setupView() {
         backgroundColor = .clear
+        self.addSubview(accountHeaderView)
         self.addSubview(tableView)
 
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: self.topAnchor),
+            accountHeaderView.topAnchor.constraint(equalTo: self.topAnchor),
+            accountHeaderView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            accountHeaderView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            accountHeaderView.heightAnchor.constraint(equalToConstant: 70),
+
+            tableView.topAnchor.constraint(equalTo: accountHeaderView.bottomAnchor),
             tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         ])
     }
 
-    public func updateDataSource(with newDataSource: [MenuSection]) {
-        tableView.updateDataSource(newDataSource)
+    // MARK: - Interface
+    public func reloadTableView(with data: [MenuSection]) {
+        tableView.reloadTableView(with: data)
     }
 }
