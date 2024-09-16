@@ -23,12 +23,11 @@ jobs:
                python -m pip install --upgrade pip
                pip install requests
     
-            - name: Run script to monitor releases
+            - name: Run script download icons if needed
               run: |
                python sync_acorn_icons.py
             
             - name: Check changes
-              id: check_changes
               run: |
                 if [[ $(git status --porcelain) ]]; then
                     echo "changes_detected=true" >> $GITHUB_ENV 
