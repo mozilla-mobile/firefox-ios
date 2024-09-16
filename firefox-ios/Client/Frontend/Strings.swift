@@ -6898,12 +6898,12 @@ extension String {
 // MARK: - Password generator
 extension String {
     public struct PasswordGenerator {
-        public static let PasswordGeneratorTitle = MZLocalizedString(
+        public static let Title = MZLocalizedString(
             key: "PasswordGenerator.PasswordGeneratorTitle.v132",
             tableName: "PasswordGenerator",
             value: "Use a strong password?",
             comment: "Title text displayed as part of a popup displayed when a user interacts with the password field in a signup form. A random password has been generated for the user -- clicking a button fills in the password of the signup form with this generated password.")
-        public static let PasswordGeneratorDescription = MZLocalizedString(
+        public static let Description = MZLocalizedString(
             key: "PasswordGenerator.PasswordGeneratorDescription.v132",
             tableName: "PasswordGenerator",
             value: "Protect your account by using a strong, randomly generated password.",
@@ -6913,7 +6913,7 @@ extension String {
             tableName: "PasswordGenerator",
             value: "Use Password",
             comment: "Label of a button that is part of a popup displayed when a user interacts with the password field in a signup form. A random password has been generated for the user and clicking this button fills in the password field of the signup form with this generated password.")
-        public static let PasswordGeneratorA11yLabel = MZLocalizedString(
+        public static let A11yLabel = MZLocalizedString(
             key: "PasswordGenerator.PasswordGeneratorA11yLabel.v132",
             tableName: "PasswordGenerator",
             value: "Password Generator",
@@ -6931,14 +6931,14 @@ extension String {
         public static let PasswordReadoutPrefaceA11y = MZLocalizedString(
             key: "PasswordGenerator.passwordReadoutPrefaceA11y.v132",
             tableName: "PasswordGenerator",
-            value: "Generated password: ",
-            comment: "Prefix to alert accessibility users that a generated password will be read to them next.")
+            value: "Generated password: %@",
+            comment: "Prefix to alert accessibility users that a generated password (represented by %@) will be read to them next.")
         public static let CopyPasswordButtonLabel = MZLocalizedString(
             key: "PasswordGenerator.copyPasswordButtonLabel.v132",
             tableName: "PasswordGenerator",
             value: "Copy",
             comment: "When a user is in the process of creating an account, they have the option to generate a password. The user is capable of copying this password after long pressing the value of the password displayed to them. This string is the label of the copy button that appears after long pressing the password.")
-        public static let useStrongPasswordKeyboardAccessoryButtonLabel = MZLocalizedString(
+        public static let KeyboardAccessoryButtonLabel = MZLocalizedString(
             key: "PasswordGenerator.useStrongPasswordKeyboardAccessoryButtonLabel.v132",
             tableName: "PasswordGenerator",
             value: "Use strong password",
