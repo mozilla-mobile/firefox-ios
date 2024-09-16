@@ -372,7 +372,7 @@ class HistoryPanel: UIViewController,
             }
 
             if let site = item as? Site {
-                return self.getSiteCell(site: site, indexPath: indexPath)
+                return getSiteCell(site: site, indexPath: indexPath)
             }
 
             if let searchTermGroup = item as? ASGroup<Site> {
