@@ -29,12 +29,7 @@ final class AddressToolbarContainer: UIView,
                                      URLBarViewProtocol {
     private enum UX {
         static let compactLeadingEdgeEditing: CGFloat = 8
-        static let compactLeadingEdgeDisplay: CGFloat = 16
-        static let compactTrailingEdge: CGFloat = 16
-
-        static let regularHorizontalEdgeEditing: CGFloat = 16
-        static let regularHorizontalEdgeWebsite: CGFloat = 16
-        static let regularHorizontalEdgeHomepage: CGFloat = 24
+        static let compactHorizontalEdge: CGFloat = 16
     }
 
     typealias SubscriberStateType = ToolbarState
@@ -48,14 +43,7 @@ final class AddressToolbarContainer: UIView,
         return shouldDisplayCompact ? compactToolbar : regularToolbar
     }
 
-    private var shouldDisplayCompact: Bool {
-        guard let model else {
-            return traitCollection.horizontalSizeClass == .compact
-        }
-
-        return model.shouldDisplayCompact
-    }
-
+    private var shouldDisplayCompact = true
     private var isTransitioning = false {
         didSet {
             if isTransitioning {
@@ -76,43 +64,20 @@ final class AddressToolbarContainer: UIView,
     private var progressBarTopConstraint: NSLayoutConstraint?
     private var progressBarBottomConstraint: NSLayoutConstraint?
 
-    private var leadingToolbarSpace: CGFloat? {
+    private func calculateToolbarSpace(isLeading: Bool) -> CGFloat? {
         guard let toolbarState = store.state.screenState(ToolbarState.self,
                                                          for: .toolbar,
                                                          window: windowUUID)
         else { return nil }
 
         let isCompact = shouldDisplayCompact
-        let isHomepage = toolbarState.addressToolbar.url == nil
         let isEditing = toolbarState.addressToolbar.isEditing
 
-        switch true {
-        case isCompact && isEditing: return UX.compactLeadingEdgeEditing
-        case isCompact: return UX.compactLeadingEdgeDisplay
-        case !isCompact && isEditing: return UX.regularHorizontalEdgeEditing
-        case !isCompact && isHomepage: return UX.regularHorizontalEdgeHomepage
-        case !isCompact: return UX.regularHorizontalEdgeWebsite
-        default: return nil
+        if isCompact && isEditing {
+            return isLeading ? UX.compactLeadingEdgeEditing : -UX.compactHorizontalEdge
         }
-    }
 
-    private var trailingToolbarSpace: CGFloat? {
-        guard let toolbarState = store.state.screenState(ToolbarState.self,
-                                                         for: .toolbar,
-                                                         window: windowUUID)
-        else { return nil }
-
-        let isCompact = shouldDisplayCompact
-        let isHomepage = toolbarState.addressToolbar.url == nil
-        let isEditing = toolbarState.addressToolbar.isEditing
-
-        switch true {
-        case isCompact: return -UX.compactTrailingEdge
-        case !isCompact && isEditing: return -UX.regularHorizontalEdgeEditing
-        case !isCompact && isHomepage: return -UX.regularHorizontalEdgeHomepage
-        case !isCompact: return -UX.regularHorizontalEdgeWebsite
-        default: return nil
-        }
+        return nil
     }
 
     /// Overlay mode is the state where the lock/reader icons are hidden, the home panels are shown,
@@ -203,16 +168,17 @@ final class AddressToolbarContainer: UIView,
         let newModel = AddressToolbarContainerModel(state: toolbarState,
                                                     profile: profile,
                                                     windowUUID: windowUUID)
+        shouldDisplayCompact = newModel.shouldDisplayCompact
         if self.model != newModel {
             updateProgressBarPosition(toolbarState.toolbarPosition)
             compactToolbar.configure(state: newModel.addressToolbarState,
                                      toolbarDelegate: self,
-                                     leadingSpace: leadingToolbarSpace,
-                                     trailingSpace: trailingToolbarSpace)
+                                     leadingSpace: calculateToolbarSpace(isLeading: true),
+                                     trailingSpace: calculateToolbarSpace(isLeading: false))
             regularToolbar.configure(state: newModel.addressToolbarState,
                                      toolbarDelegate: self,
-                                     leadingSpace: leadingToolbarSpace,
-                                     trailingSpace: trailingToolbarSpace)
+                                     leadingSpace: calculateToolbarSpace(isLeading: true),
+                                     trailingSpace: calculateToolbarSpace(isLeading: false))
 
             // Dismiss overlay mode when not editing to fix overlay mode staying open
             // on iPad when switching tabs using top tabs
