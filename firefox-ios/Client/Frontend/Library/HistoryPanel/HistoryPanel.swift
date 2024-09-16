@@ -364,7 +364,7 @@ class HistoryPanel: UIViewController,
             HistoryPanelSections,
             AnyHashable
         >(tableView: tableView) { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
-            guard let self = self else { return nil }
+            guard let self else { return nil }
 
             if var historyActionable = item as? HistoryActionablesModel {
                 historyActionable.configureImage(for: windowUUID)
