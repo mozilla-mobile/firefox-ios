@@ -222,7 +222,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
     }
 
     // MARK: - Border
-    // For the top placement of the address bar, the border is only visible on scroll
+    // For the top placement of the address bar, the border is only visible on scroll. This is due to a design choice.
     private func updateTopAddressBorderPosition(action: GeneralBrowserMiddlewareAction, state: AppState) {
         guard let scrollOffset = action.scrollOffset,
               let toolbarState = state.screenState(ToolbarState.self,
