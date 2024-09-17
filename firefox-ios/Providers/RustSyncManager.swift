@@ -167,7 +167,6 @@ public class RustSyncManager: NSObject, SyncManager {
 
     private func setPreferenceForSignIn() {
         let signedInFxaAccountValue = profile?.prefs.boolForKey(PrefsKeys.Sync.signedInFxaAccount)
-        
         // We only want to set the prefs if it has not been set (nil)
         // There is a case where a user has a syncable account, but returns
         // false so we check if nil here.
