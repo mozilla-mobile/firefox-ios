@@ -23,7 +23,6 @@ public class CloseButton: UIButton,
 
         setImage(UIImage(named: UX.crossCircleImage), for: .normal)
         adjustsImageSizeForAccessibilityContentSizeCategory = true
-        imageView?.adjustsImageSizeForAccessibilityContentSizeCategory = true
         setupConstraints()
     }
 
@@ -33,12 +32,11 @@ public class CloseButton: UIButton,
 
     private func setupConstraints() {
         translatesAutoresizingMaskIntoConstraints = false
-        let dynamicWidth = UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.width)
-        let dynamicHeight = UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.height)
-        heightConstraint = heightAnchor.constraint(equalToConstant: dynamicHeight)
+        heightConstraint = heightAnchor.constraint(equalToConstant: UX.closeButtonSize.height)
         heightConstraint?.isActive = true
-        widthConstraint = widthAnchor.constraint(equalToConstant: dynamicWidth)
+        widthConstraint = widthAnchor.constraint(equalToConstant: UX.closeButtonSize.width)
         widthConstraint?.isActive = true
+        updateButtonSizeForDyanimcFont()
     }
 
     public func configure(viewModel: CloseButtonViewModel,
@@ -50,16 +48,20 @@ public class CloseButton: UIButton,
         accessibilityIdentifier = viewModel.a11yIdentifier
         accessibilityLabel = viewModel.a11yLabel
     }
+    
+    private func updateButtonSizeForDyanimcFont() {
+        let dynamicWidth = max(UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.width), UX.closeButtonSize.width)
+        let dynamicHeight = max(UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.height), UX.closeButtonSize.height)
+        heightConstraint?.constant = dynamicHeight
+        widthConstraint?.constant = dynamicWidth
+    }
 
     // MARK: - Notifiable
 
     public func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case UIContentSizeCategory.didChangeNotification:
-            let dynamicWidth = UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.width)
-            let dynamicHeight = UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.height)
-            heightConstraint?.constant = dynamicHeight
-            widthConstraint?.constant = dynamicWidth
+            updateButtonSizeForDyanimcFont()
         default:
             break
         }

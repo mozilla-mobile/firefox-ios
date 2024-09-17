@@ -44,11 +44,7 @@ final class TrackingProtectionHeaderView: UIView, ThemeApplicable {
         label.adjustsFontForContentSizeCategory = true
     }
 
-    private var closeButton: CloseButton = .build { button in
-        let viewModel = CloseButtonViewModel(a11yLabel: "",
-                                             a11yIdentifier: "Test Identifier")
-        button.configure(viewModel: viewModel)
-    }
+    private var closeButton: CloseButton = .build()
 
     init() {
         super.init(frame: .zero)
@@ -119,7 +115,7 @@ final class TrackingProtectionHeaderView: UIView, ThemeApplicable {
     }
 
     func adjustLayout() {
-        let faviconDynamicSize = UIFontMetrics.default.scaledValue(for: UX.faviconImageSize)
+        let faviconDynamicSize = max(UIFontMetrics.default.scaledValue(for: UX.faviconImageSize), UX.faviconImageSize)
         faviconHeightConstraint?.constant = faviconDynamicSize
         faviconWidthConstraint?.constant = faviconDynamicSize
     }
