@@ -363,6 +363,12 @@ extension String {
                     value: "Address Information Updated",
                     comment: "Toast message confirming that an address has been successfully updated."
                 )
+                 public static let AddressUpdatedConfirmationV2 = MZLocalizedString(
+                    key: "Addresses.Toast.AddressUpdatedConfirmation.v132.v2",
+                    tableName: "EditAddress",
+                    value: "Address Saved",
+                    comment: "Toast message confirming that an address has been successfully updated."
+                )
                 public static let RemoveAddressTitle = MZLocalizedString(
                     key: "Addresses.EditAddress.Alert.Title.v129",
                     tableName: "EditAddress",
