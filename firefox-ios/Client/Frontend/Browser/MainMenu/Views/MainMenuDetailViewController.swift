@@ -26,22 +26,22 @@ class MainMenuDetailViewController: UIViewController,
     var currentWindowUUID: UUID? { return windowUUID }
     var submenuState: MainMenuDetailsState
 
-    var submenuData: [MenuSection]
     var submenuTitle: String
+    private var submenuType: MainMenuDetailsViewType
 
     // MARK: - Initializers
     init(
         windowUUID: WindowUUID,
-        with data: [MenuSection],
         title: String,
+        with submenuType: MainMenuDetailsViewType,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         themeManager: ThemeManager = AppContainer.shared.resolve()
     ) {
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
-        self.submenuData = data
         self.submenuTitle = title
+        self.submenuType = submenuType
         self.submenuState = MainMenuDetailsState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
 
@@ -60,6 +60,7 @@ class MainMenuDetailViewController: UIViewController,
 
         setupView()
         setupTableView()
+
         submenuContent.setViews(with: submenuTitle, and: .KeyboardShortcuts.Back)
         submenuContent.detailHeaderView.backToMainMenuCallback = { [weak self] in
             self?.coordinator?.dismissDetailViewController()
@@ -68,6 +69,13 @@ class MainMenuDetailViewController: UIViewController,
             self?.coordinator?.dismissMenuModal(animated: true)
         }
         setupAccessibilityIdentifiers()
+
+        store.dispatch(
+            MainMenuAction(
+                windowUUID: self.windowUUID,
+                actionType: MainMenuDetailsActionType.viewDidLoad
+            )
+        )
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -132,7 +140,7 @@ class MainMenuDetailViewController: UIViewController,
     }
 
     private func setupTableView() {
-        reloadTableView(with: submenuData)
+        reloadTableView(with: submenuState.menuElements)
     }
 
     // MARK: - Redux
@@ -152,14 +160,24 @@ class MainMenuDetailViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.closeScreen,
-                                  screen: .mainMenu)
-        store.dispatch(action)
+        store.dispatch(
+            ScreenAction(windowUUID: windowUUID,
+                         actionType: ScreenActionType.closeScreen,
+                         screen: .mainMenuDetails)
+        )
     }
 
     func newState(state: MainMenuDetailsState) {
         submenuState = state
+
+        if submenuState.submenuType == nil {
+            store.dispatch(
+                MainMenuAction(
+                    windowUUID: submenuState.windowUUID,
+                    actionType: MainMenuDetailsActionType.updateSubmenuType(submenuType)
+                )
+            )
+        }
 
         reloadTableView(with: submenuState.menuElements)
     }

@@ -20,6 +20,11 @@ final class MainMenuAction: Action {
     }
 }
 
+enum MainMenuDetailsViewType {
+    case tools
+    case save
+}
+
 enum MainMenuActionType: ActionType {
     case viewDidLoad
     case updateCurrentTabInfo(MainMenuTabInfo?)
@@ -27,13 +32,13 @@ enum MainMenuActionType: ActionType {
     case toggleNightMode
     case closeMenu
     case show
+    case openDetailsView(to: MainMenuDetailsViewType, title: String)
     case toggleUserAgent
 }
 
 enum MainMenuNavigationDestination: Equatable {
     case bookmarks
     case customizeHomepage
-    case detailsView(with: [MenuSection], title: String)
     case downloads
     case findInPage
     case goToURL(URL?)
@@ -47,16 +52,26 @@ enum MainMenuNavigationDestination: Equatable {
     /// when we have enums with associated types
     static var allCases: [MainMenuNavigationDestination] {
         return [
-            .newTab,
-            .newPrivateTab,
             .bookmarks,
             .customizeHomepage,
             .downloads,
             .findInPage,
             .goToURL(nil),
             .history,
+            .newTab,
+            .newPrivateTab,
             .passwords,
             .settings,
         ]
     }
+}
+
+enum MainMenuMiddlewareActionType: ActionType {
+    case requestTabInfo
+    case provideTabInfo(MainMenuTabInfo?)
+}
+
+enum MainMenuDetailsActionType: ActionType {
+    case viewDidLoad
+    case updateSubmenuType(MainMenuDetailsViewType)
 }

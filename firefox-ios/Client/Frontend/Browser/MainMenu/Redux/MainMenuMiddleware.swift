@@ -10,12 +10,34 @@ final class MainMenuMiddleware {
     private let logger: Logger
     private let telemetry = MainMenuTelemetry()
 
-    init(logger: Logger = DefaultLogger.shared) {
+    var currentTabInfo: MainMenuTabInfo?
+
+    init(
+        logger: Logger = DefaultLogger.shared
+    ) {
         self.logger = logger
+        self.currentTabInfo = nil
     }
 
     lazy var mainMenuProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
+        case MainMenuActionType.viewDidLoad,
+            MainMenuDetailsActionType.viewDidLoad:
+            if let currentTabInfo = self.currentTabInfo {
+                self.dispatchTabInfo(with: action.windowUUID, and: currentTabInfo)
+            } else {
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: action.windowUUID,
+                        actionType: MainMenuMiddlewareActionType.requestTabInfo
+                    )
+                )
+            }
+        case MainMenuMiddlewareActionType.provideTabInfo(let info):
+            if let info {
+                self.currentTabInfo = info
+                self.dispatchTabInfo(with: action.windowUUID, and: info)
+            }
         case MainMenuActionType.mainMenuDidAppear:
             self.telemetry.mainMenuViewed()
         case MainMenuActionType.closeMenu:
@@ -23,5 +45,17 @@ final class MainMenuMiddleware {
         default:
             break
         }
+    }
+
+    private func dispatchTabInfo(
+        with windowUUID: WindowUUID,
+        and info: MainMenuTabInfo
+    ) {
+        store.dispatch(
+            MainMenuAction(
+                windowUUID: windowUUID,
+                actionType: MainMenuActionType.updateCurrentTabInfo(info)
+            )
+        )
     }
 }

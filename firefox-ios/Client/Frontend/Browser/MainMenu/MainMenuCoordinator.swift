@@ -33,9 +33,9 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         )
     }
 
-    func showDetailViewController(with submenu: [MenuSection], title: String) {
+func showDetailViewController(for submenuType: MainMenuDetailsViewType, title: String) {
         router.push(
-            createMainMenuDetailViewController(with: submenu, title: title),
+            createMainMenuDetailViewController(with: submenuType, title: String),
             animated: true
         )
     }
@@ -50,41 +50,34 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     }
 
     func navigateTo(_ destination: MainMenuNavigationDestination, animated: Bool) {
-        if case let .detailsView(with: submenu, title: title) = destination {
-            self.showDetailViewController(with: submenu, title: title)
-        } else {
-            router.dismiss(animated: animated, completion: { [weak self] in
-                guard let self else { return }
+        router.dismiss(animated: animated, completion: { [weak self] in
+            guard let self else { return }
 
-                switch destination {
-                case .bookmarks:
-                    self.navigationHandler?.showLibraryPanel(.bookmarks)
-                case .customizeHomepage:
-                    self.navigationHandler?.showSettings(at: .homePage)
-                case .downloads:
-                    self.navigationHandler?.showLibraryPanel(.downloads)
-                case .findInPage:
-                    self.navigationHandler?.showFindInPage()
-                case .goToURL(let url):
-                    self.navigationHandler?.openURLInNewTab(url)
-                case .history:
-                    self.navigationHandler?.showLibraryPanel(.history)
-                case .newTab:
-                    self.navigationHandler?.openNewTab(inPrivateMode: false)
-                case .newPrivateTab:
-                    self.navigationHandler?.openNewTab(inPrivateMode: true)
-                case .passwords:
-                    self.navigationHandler?.showSettings(at: .password)
-                case .settings:
-                    self.navigationHandler?.showSettings(at: .general)
-                case .detailsView:
-                    // This special case is being handled above
-                    break
-                }
+            switch destination {
+            case .bookmarks:
+                self.navigationHandler?.showLibraryPanel(.bookmarks)
+            case .customizeHomepage:
+                self.navigationHandler?.showSettings(at: .homePage)
+            case .downloads:
+                self.navigationHandler?.showLibraryPanel(.downloads)
+            case .findInPage:
+                self.navigationHandler?.showFindInPage()
+            case .goToURL(let url):
+                self.navigationHandler?.openURLInNewTab(url)
+            case .history:
+                self.navigationHandler?.showLibraryPanel(.history)
+            case .newTab:
+                self.navigationHandler?.openNewTab(inPrivateMode: false)
+            case .newPrivateTab:
+                self.navigationHandler?.openNewTab(inPrivateMode: true)
+            case .passwords:
+                self.navigationHandler?.showSettings(at: .password)
+            case .settings:
+                self.navigationHandler?.showSettings(at: .general)
+            }
 
-                self.parentCoordinator?.didFinish(from: self)
-            })
-        }
+            self.parentCoordinator?.didFinish(from: self)
+        })
     }
 
     // MARK: - Private helpers
@@ -94,13 +87,11 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         return mainMenuViewController
     }
 
-    private func createMainMenuDetailViewController(with submenu: [MenuSection],
-                                                    title: String) -> MainMenuDetailViewController {
-        let detailVC = MainMenuDetailViewController(
-            windowUUID: windowUUID,
-            with: submenu,
-            title: title
-        )
+    private func createMainMenuDetailViewController(
+        with submenuType: MainMenuDetailsViewType,
+        title: String
+    ) -> MainMenuDetailViewController {
+        let detailVC = MainMenuDetailViewController(windowUUID: windowUUID, with: submenuType)
         detailVC.coordinator = self
         return detailVC
     }

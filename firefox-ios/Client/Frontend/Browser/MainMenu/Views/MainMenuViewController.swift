@@ -167,6 +167,11 @@ class MainMenuViewController: UIViewController,
 
         reloadTableView(with: menuState.menuElements)
 
+        if let submenuType = menuState.shouldShowDetailsFor {
+            coordinator?.showDetailViewController(for: submenuType)
+            return
+        }
+
         if let navigationDestination = menuState.navigationDestination {
             coordinator?.navigateTo(navigationDestination, animated: true)
             return
