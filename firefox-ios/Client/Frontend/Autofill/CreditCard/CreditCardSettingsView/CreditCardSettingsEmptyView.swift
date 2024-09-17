@@ -25,7 +25,7 @@ struct CreditCardSettingsEmptyView: View {
                 .edgesIgnoringSafeArea(.all)
             GeometryReader { proxy in
                 ScrollView {
-                    getScrollViewContent()
+                    scrollViewContent
                         .frame(minHeight: proxy.size.height)
                 }
                 .frame(maxWidth: .infinity)
@@ -40,7 +40,7 @@ struct CreditCardSettingsEmptyView: View {
         }
     }
 
-    private func getScrollViewContent() -> some View {
+    private var scrollViewContent: some View {
         return VStack {
             getCreditCardAutofillToggle()
             Spacer()
