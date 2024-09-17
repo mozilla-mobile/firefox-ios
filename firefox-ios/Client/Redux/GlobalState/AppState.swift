@@ -21,6 +21,7 @@ struct AppState: StateType {
                 switch ($0, screen) {
                 case (.browserViewController(let state), .browserViewController): return state as? S
                 case (.mainMenu(let state), .mainMenu): return state as? S
+                case (.mainMenuDetails(let state), .mainMenuDetails): return state as? S
                 case (.microsurvey(let state), .microsurvey): return state as? S
                 case (.remoteTabsPanel(let state), .remoteTabsPanel): return state as? S
                 case (.tabsPanel(let state), .tabsPanel): return state as? S
