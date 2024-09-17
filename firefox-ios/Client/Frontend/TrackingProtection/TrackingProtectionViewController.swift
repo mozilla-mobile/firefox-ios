@@ -34,6 +34,7 @@ protocol TrackingProtectionMenuDelegate: AnyObject {
 
 class TrackingProtectionViewController: UIViewController, Themeable, Notifiable, UIScrollViewDelegate {
     var themeManager: ThemeManager
+    var profile: Profile?
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
     let windowUUID: WindowUUID
@@ -105,10 +106,12 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
     // MARK: - View lifecycle
 
     init(viewModel: TrackingProtectionModel,
+         profile: Profile,
          windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.viewModel = viewModel
+        self.profile = profile
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
@@ -483,7 +486,8 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
 
     // MARK: - Update Views
     private func updateProtectionViewStatus() {
-        if toggleView.toggleIsOn {
+        let isContentBlockingConfigEnabled = profile?.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? false
+        if toggleView.toggleIsOn, isContentBlockingConfigEnabled {
             toggleView.setStatusLabelText(with: .Menu.EnhancedTrackingProtection.switchOnText)
             trackersView.setVisibility(isHidden: false)
             viewModel.isProtectionEnabled = true
@@ -492,6 +496,7 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
             trackersView.setVisibility(isHidden: true)
             viewModel.isProtectionEnabled = false
         }
+        toggleView.setToggleSwitchVisibility(with: !isContentBlockingConfigEnabled)
         connectionDetailsHeaderView.setupDetails(color: viewModel.getConnectionDetailsBackgroundColor(theme: currentTheme()),
                                                  title: viewModel.connectionDetailsTitle,
                                                  status: viewModel.connectionDetailsHeader,
