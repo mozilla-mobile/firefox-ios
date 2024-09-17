@@ -2907,7 +2907,7 @@ class BrowserViewController: UIViewController,
         }
 
         if !isToolbarRefactorEnabled {
-            let isPrivate = (currentTheme.type == .privateMode)
+            let isPrivate = tabManager.selectedTab?.isPrivate ?? false
             urlBar.applyUIMode(isPrivate: isPrivate, theme: currentTheme)
         }
 
