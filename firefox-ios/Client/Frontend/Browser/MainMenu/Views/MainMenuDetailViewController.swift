@@ -70,7 +70,8 @@ class MainMenuDetailViewController: UIViewController,
         }
         setupAccessibilityIdentifiers()
 
-        store.dispatch(
+now)
+            store.dispatch(
             MainMenuAction(
                 windowUUID: self.windowUUID,
                 actionType: MainMenuDetailsActionType.viewDidLoad
@@ -118,6 +119,14 @@ class MainMenuDetailViewController: UIViewController,
 
     private func setupView() {
         view.addSubview(submenuContent)
+        submenuContent.setCloseAction(to: {
+            store.dispatch(
+                MainMenuAction(
+                    windowUUID: self.windowUUID,
+                    actionType: MainMenuDetailsActionType.dismissView
+                )
+            )
+        })
 
         NSLayoutConstraint.activate([
             submenuContent.topAnchor.constraint(equalTo: view.topAnchor),
@@ -177,6 +186,12 @@ class MainMenuDetailViewController: UIViewController,
                     actionType: MainMenuDetailsActionType.updateSubmenuType(submenuType)
                 )
             )
+            return
+        }
+
+        if submenuState.shouldDismiss {
+            backToMainView()
+            return
         }
 
         reloadTableView(with: submenuState.menuElements)

@@ -11,6 +11,7 @@ public final class MenuDetailView: UIView,
     // MARK: - UI Elements
     private var tableView: MenuTableView = .build()
     public var detailHeaderView: NavigationHeaderView = .build()
+now)
 
     // MARK: - Initializers
     override init(frame: CGRect) {

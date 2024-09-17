@@ -93,6 +93,14 @@ struct MainMenuDetailsState: ScreenState, Equatable {
                 ),
                 currentTabInfo: state.currentTabInfo
             )
+        case MainMenuDetailsActionType.dismissView:
+            return MainMenuDetailsState(
+                windowUUID: state.windowUUID,
+                submenuType: state.submenuType,
+                menuElements: state.menuElements,
+                currentTabInfo: state.currentTabInfo,
+                shouldDismiss: true
+            )
         default:
             return MainMenuDetailsState(
                 windowUUID: state.windowUUID,

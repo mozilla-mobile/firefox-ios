@@ -74,4 +74,5 @@ enum MainMenuMiddlewareActionType: ActionType {
 enum MainMenuDetailsActionType: ActionType {
     case viewDidLoad
     case updateSubmenuType(MainMenuDetailsViewType)
+    case dismissView
 }
