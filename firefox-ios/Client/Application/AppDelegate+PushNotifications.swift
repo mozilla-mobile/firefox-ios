@@ -71,6 +71,7 @@ extension AppDelegate {
         guard self.profile.hasSyncableAccount() else { return }
         profile.prefs.setBool(true, forKey: PrefsKeys.Sync.signedInFxaAccount)
         let remoteCount = newState.remoteDevices.count
+        // The additional +1 is to also add a count for the local device being used
         let devicesCount = Int32(remoteCount + 1)
         self.profile.prefs.setInt(devicesCount, forKey: PrefsKeys.Sync.numberOfSyncedDevices)
     }
