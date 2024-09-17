@@ -7,7 +7,8 @@ import Foundation
 import Shared
 import ComponentLibrary
 
-class ContentBlockerSettingViewController: SettingsTableViewController {
+class ContentBlockerSettingViewController: SettingsTableViewController,
+                                           Notifiable {
     private struct UX {
         static let buttonContentInsets = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0)
     }
@@ -45,6 +46,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         applyTheme()
+        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
     }
 
     override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
@@ -199,5 +201,19 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
         super.applyTheme()
         let currentTheme = currentTheme()
         linkButton.applyTheme(theme: currentTheme)
+    }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIContentSizeCategory.didChangeNotification:
+            tableView.reloadData()
+        default:
+            break
+        }
+    }
+
+    deinit {
+        notificationCenter.removeObserver(self)
     }
 }

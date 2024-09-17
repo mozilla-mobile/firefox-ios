@@ -12,7 +12,6 @@ final class TrackingProtectionHeaderView: UIView, ThemeApplicable {
         static let headerLinesLimit: Int = 2
         static let siteDomainLabelsVerticalSpacing: CGFloat = 12
         static let faviconImageSize: CGFloat = 40
-        static let closeButtonSize: CGFloat = 30
         static let horizontalMargin: CGFloat = 16
     }
 
@@ -45,9 +44,7 @@ final class TrackingProtectionHeaderView: UIView, ThemeApplicable {
         label.adjustsFontForContentSizeCategory = true
     }
 
-    private var closeButton: CloseButton = .build { button in
-        button.layer.cornerRadius = 0.5 * UX.closeButtonSize
-    }
+    private var closeButton: CloseButton = .build()
 
     init() {
         super.init(frame: .zero)
@@ -61,7 +58,7 @@ final class TrackingProtectionHeaderView: UIView, ThemeApplicable {
     private func setupLayout() {
         headerLabelsContainer.addArrangedSubview(siteDisplayTitleLabel)
         headerLabelsContainer.addArrangedSubview(siteDomainLabel)
-        self.addSubviews(favicon, headerLabelsContainer, closeButton)
+        addSubviews(favicon, headerLabelsContainer, closeButton)
         faviconHeightConstraint = favicon.heightAnchor.constraint(equalToConstant: UX.faviconImageSize)
         faviconWidthConstraint = favicon.widthAnchor.constraint(equalToConstant: UX.faviconImageSize)
         NSLayoutConstraint.activate([
@@ -97,10 +94,14 @@ final class TrackingProtectionHeaderView: UIView, ThemeApplicable {
             closeButton.topAnchor.constraint(
                 equalTo: self.topAnchor,
                 constant: UX.horizontalMargin
-            ),
-            closeButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.closeButtonSize),
-            closeButton.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.closeButtonSize)
+            )
         ])
+    }
+
+    func setupAccessibility(closeButtonA11yLabel: String, closeButtonA11yId: String) {
+        let closeButtonViewModel = CloseButtonViewModel(a11yLabel: closeButtonA11yLabel,
+                                                        a11yIdentifier: closeButtonA11yId)
+        closeButton.configure(viewModel: closeButtonViewModel)
     }
 
     func setupDetails(website: String, display: String, icon: FaviconImageViewModel) {
@@ -114,9 +115,9 @@ final class TrackingProtectionHeaderView: UIView, ThemeApplicable {
     }
 
     func adjustLayout() {
-        let faviconSize = UX.faviconImageSize
-        faviconHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: faviconSize), 2 * faviconSize)
-        faviconWidthConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: faviconSize), 2 * faviconSize)
+        let faviconDynamicSize = max(UIFontMetrics.default.scaledValue(for: UX.faviconImageSize), UX.faviconImageSize)
+        faviconHeightConstraint?.constant = faviconDynamicSize
+        faviconWidthConstraint?.constant = faviconDynamicSize
     }
 
     func setupActions() {
@@ -129,10 +130,6 @@ final class TrackingProtectionHeaderView: UIView, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        closeButton.backgroundColor = theme.colors.layer2
-        let buttonImage = UIImage(named: StandardImageIdentifiers.Medium.cross)?
-            .tinted(withColor: theme.colors.iconSecondary)
-        closeButton.setImage(buttonImage, for: .normal)
         siteDomainLabel.textColor = theme.colors.textSecondary
         siteDisplayTitleLabel.textColor = theme.colors.textPrimary
         self.tintColor = theme.colors.layer2

@@ -9,11 +9,11 @@ import Redux
 import Shared
 
 final class MicrosurveyViewController: UIViewController,
-                                 UITableViewDataSource,
-                                 UITableViewDelegate,
-                                 Themeable,
-                                 StoreSubscriber,
-                                 Notifiable {
+                                       UITableViewDataSource,
+                                       UITableViewDelegate,
+                                       Themeable,
+                                       StoreSubscriber,
+                                       Notifiable {
     typealias SubscriberStateType = MicrosurveyState
 
     // MARK: Themable Variables
@@ -77,8 +77,9 @@ final class MicrosurveyViewController: UIViewController,
     }
 
     private lazy var closeButton: CloseButton = .build { button in
-        button.accessibilityLabel = .Microsurvey.Survey.CloseButtonAccessibilityLabel
-        button.accessibilityIdentifier = AccessibilityIdentifiers.Microsurvey.Survey.closeButton
+        let viewModel = CloseButtonViewModel(a11yLabel: .Microsurvey.Survey.CloseButtonAccessibilityLabel,
+                                             a11yIdentifier: AccessibilityIdentifiers.Microsurvey.Survey.closeButton)
+        button.configure(viewModel: viewModel)
         button.addTarget(self, action: #selector(self.didTapClose), for: .touchUpInside)
     }
 

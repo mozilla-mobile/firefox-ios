@@ -4635,6 +4635,12 @@ extension String {
                 tableName: "EnhancedTrackingProtection",
                 value: "DNS Name",
                 comment: "The title for the certificate subject alt names DNS name inside the certificate screen.")
+
+            public static let closeButtonAccessibilityLabel = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.CloseButton.AccessibilityLabel.v132",
+                tableName: "EnhancedTrackingProtection",
+                value: "Close privacy and security menu",
+                comment: "The accessibility label for the close button in the Enhanced Tracking protection menu.")
         }
     }
 }

@@ -343,7 +343,7 @@ class ReadingListPanel: UITableViewController,
             label.text = .ReaderPanelWelcome
             label.textAlignment = .center
             label.font = FXFontStyles.Bold.body.scaledFont()
-            label.adjustsFontSizeToFitWidth = true
+            label.numberOfLines = 0
             label.textColor = self.currentTheme().colors.textSecondary
         }
         let readerModeLabel: UILabel = .build { label in
@@ -353,7 +353,7 @@ class ReadingListPanel: UITableViewController,
             label.textColor = self.currentTheme().colors.textSecondary
         }
         let readerModeImageView: UIImageView = .build { imageView in
-            imageView.contentMode = .scaleAspectFit
+            imageView.contentMode = .scaleAspectFill
             imageView.image = UIImage(named: StandardImageIdentifiers.Large.readerView)?
                 .withRenderingMode(.alwaysTemplate)
             imageView.tintColor = self.currentTheme().colors.textSecondary
@@ -365,7 +365,7 @@ class ReadingListPanel: UITableViewController,
             label.textColor = self.currentTheme().colors.textSecondary
         }
         let readingListImageView: UIImageView = .build { imageView in
-            imageView.contentMode = .scaleAspectFit
+            imageView.contentMode = .scaleAspectFill
             imageView.image = UIImage(named: StandardImageIdentifiers.Large.readingListAdd)?
                 .withRenderingMode(.alwaysTemplate)
             imageView.tintColor = self.currentTheme().colors.textSecondary
@@ -376,6 +376,7 @@ class ReadingListPanel: UITableViewController,
 
         view.addSubview(emptyStateViewWrapper)
 
+        let imageScaledWidth = UIFontMetrics.default.scaledValue(for: ReadingListPanelUX.WelcomeScreenItemImageWidth)
         NSLayoutConstraint.activate(
             [
                 // title
@@ -397,7 +398,7 @@ class ReadingListPanel: UITableViewController,
                 readerModeImageView.centerYAnchor.constraint(equalTo: readerModeLabel.centerYAnchor),
                 readerModeImageView.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
                 readerModeImageView.widthAnchor.constraint(
-                    equalToConstant: ReadingListPanelUX.WelcomeScreenItemImageWidth
+                    equalToConstant: imageScaledWidth
                 ),
 
                 // second row
@@ -414,7 +415,7 @@ class ReadingListPanel: UITableViewController,
                 readingListImageView.centerYAnchor.constraint(equalTo: readingListLabel.centerYAnchor),
                 readingListImageView.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
                 readingListImageView.widthAnchor.constraint(
-                    equalToConstant: ReadingListPanelUX.WelcomeScreenItemImageWidth
+                    equalToConstant: imageScaledWidth
                 ),
 
                 readingListLabel.bottomAnchor.constraint(
