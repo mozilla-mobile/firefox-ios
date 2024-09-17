@@ -33,6 +33,17 @@ struct MainMenuConfigurationUtility: Equatable {
         return menuSections
     }
 
+    public func getSubmenuFor(
+        type: MainMenuDetailsViewType?,
+        with uuid: WindowUUID
+    ) -> [MenuSection] {
+        guard let type else { return [] }
+        switch type {
+        case .tools: return getToolsSubmenu(with: uuid)
+        case .save: return getSaveSubmenu(with: uuid)
+        }
+    }
+
     // MARK: - New Tabs Section
     private func getNewTabSection(with uuid: WindowUUID) -> MenuSection {
         return MenuSection(options: [
@@ -129,12 +140,11 @@ struct MainMenuConfigurationUtility: Equatable {
                         store.dispatch(
                             MainMenuAction(
                                 windowUUID: uuid,
-                                actionType: MainMenuActionType.show(
-                                    .detailsView(with: getToolsSubmenu(with: uuid))
-                                )
+                                actionType: MainMenuActionType.openDetailsView(to: .tools)
                             )
                         )
-                    }
+                    },
+                    hasSubmenu: true
                 ),
                 MenuElement(
                     title: .MainMenu.ToolsSection.Save,
@@ -148,12 +158,11 @@ struct MainMenuConfigurationUtility: Equatable {
                         store.dispatch(
                             MainMenuAction(
                                 windowUUID: uuid,
-                                actionType: MainMenuActionType.show(
-                                    .detailsView(with: getSaveSubmenu(with: uuid))
-                                )
+                                actionType: MainMenuActionType.openDetailsView(to: .save)
                             )
                         )
-                    }
+                    },
+                    hasSubmenu: true
                 )
             ]
         )
@@ -180,6 +189,166 @@ struct MainMenuConfigurationUtility: Equatable {
         }
     }
 
+    // MARK: - Libraries Section
+    private func getLibrariesSection(with uuid: WindowUUID) -> MenuSection {
+        return MenuSection(options: [
+            MenuElement(
+                title: .MainMenu.PanelLinkSection.Bookmarks,
+                iconName: "",
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: "",
+                a11yHint: "",
+                a11yId: "",
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.show(.bookmarks)
+                        )
+                    )
+                }
+            ),
+            MenuElement(
+                title: .MainMenu.PanelLinkSection.History,
+                iconName: "",
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: "",
+                a11yHint: "",
+                a11yId: "",
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.show(.history)
+                        )
+                    )
+                }
+            ),
+            MenuElement(
+                title: .MainMenu.PanelLinkSection.Downloads,
+                iconName: "",
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: "",
+                a11yHint: "",
+                a11yId: "",
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.show(.downloads)
+                        )
+                    )
+                }
+            ),
+            MenuElement(
+                title: .MainMenu.PanelLinkSection.Passwords,
+                iconName: "",
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: "",
+                a11yHint: "",
+                a11yId: "",
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.show(.passwords)
+                        )
+                    )
+                }
+            )
+        ])
+    }
+
+    // MARK: - Other Tools Section
+    private func getOtherToolsSection(
+        with uuid: WindowUUID,
+        isHomepage: Bool
+    ) -> MenuSection {
+        let homepageOptions = [
+            MenuElement(
+                title: .MainMenu.OtherToolsSection.CustomizeHomepage,
+                iconName: "",
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: "",
+                a11yHint: "",
+                a11yId: "",
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.show(.customizeHomepage)
+                        )
+                    )
+                }
+            ),
+            MenuElement(
+                title: String(
+                    format: .MainMenu.OtherToolsSection.WhatsNew,
+                    AppName.shortName.rawValue
+                ),
+                iconName: "",
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: "",
+                a11yHint: "",
+                a11yId: "",
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.show(.goToURL(SupportUtils.URLForWhatsNew))
+                        )
+                    )
+                }
+            )
+        ]
+
+        let standardOptions = [
+            MenuElement(
+                title: .MainMenu.OtherToolsSection.GetHelp,
+                iconName: "",
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: "",
+                a11yHint: "",
+                a11yId: "",
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.show(.goToURL(SupportUtils.URLForGetHelp))
+                        )
+                    )
+                }
+            ),
+            MenuElement(
+                title: .MainMenu.OtherToolsSection.Settings,
+                iconName: "",
+                isEnabled: true,
+                isActive: false,
+                a11yLabel: "",
+                a11yHint: "",
+                a11yId: "",
+                action: {
+                    store.dispatch(
+                        MainMenuAction(
+                            windowUUID: uuid,
+                            actionType: MainMenuActionType.show(.settings)
+                        )
+                    )
+                }
+            )
+        ]
+
+        return MenuSection(options: isHomepage ? homepageOptions + standardOptions : standardOptions)
+    }
+
+    // MARK: - Submenus
     private func getToolsSubmenu(with uuid: WindowUUID) -> [MenuSection] {
         return [
             MenuSection(
@@ -385,164 +554,5 @@ struct MainMenuConfigurationUtility: Equatable {
                 ),
             ]
         )]
-    }
-
-    // MARK: - Libraries Section
-    private func getLibrariesSection(with uuid: WindowUUID) -> MenuSection {
-        return MenuSection(options: [
-            MenuElement(
-                title: .MainMenu.PanelLinkSection.Bookmarks,
-                iconName: "",
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: "",
-                a11yHint: "",
-                a11yId: "",
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.show(.bookmarks)
-                        )
-                    )
-                }
-            ),
-            MenuElement(
-                title: .MainMenu.PanelLinkSection.History,
-                iconName: "",
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: "",
-                a11yHint: "",
-                a11yId: "",
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.show(.history)
-                        )
-                    )
-                }
-            ),
-            MenuElement(
-                title: .MainMenu.PanelLinkSection.Downloads,
-                iconName: "",
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: "",
-                a11yHint: "",
-                a11yId: "",
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.show(.downloads)
-                        )
-                    )
-                }
-            ),
-            MenuElement(
-                title: .MainMenu.PanelLinkSection.Passwords,
-                iconName: "",
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: "",
-                a11yHint: "",
-                a11yId: "",
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.show(.passwords)
-                        )
-                    )
-                }
-            )
-        ])
-    }
-
-    // MARK: - Other Tools Section
-    private func getOtherToolsSection(
-        with uuid: WindowUUID,
-        isHomepage: Bool
-    ) -> MenuSection {
-        let homepageOptions = [
-            MenuElement(
-                title: .MainMenu.OtherToolsSection.CustomizeHomepage,
-                iconName: "",
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: "",
-                a11yHint: "",
-                a11yId: "",
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.show(.customizeHomepage)
-                        )
-                    )
-                }
-            ),
-            MenuElement(
-                title: String(
-                    format: .MainMenu.OtherToolsSection.WhatsNew,
-                    AppName.shortName.rawValue
-                ),
-                iconName: "",
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: "",
-                a11yHint: "",
-                a11yId: "",
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.show(.goToURL(SupportUtils.URLForWhatsNew))
-                        )
-                    )
-                }
-            )
-        ]
-
-        let standardOptions = [
-            MenuElement(
-                title: .MainMenu.OtherToolsSection.GetHelp,
-                iconName: "",
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: "",
-                a11yHint: "",
-                a11yId: "",
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.show(.goToURL(SupportUtils.URLForGetHelp))
-                        )
-                    )
-                }
-            ),
-            MenuElement(
-                title: .MainMenu.OtherToolsSection.Settings,
-                iconName: "",
-                isEnabled: true,
-                isActive: false,
-                a11yLabel: "",
-                a11yHint: "",
-                a11yId: "",
-                action: {
-                    store.dispatch(
-                        MainMenuAction(
-                            windowUUID: uuid,
-                            actionType: MainMenuActionType.show(.settings)
-                        )
-                    )
-                }
-            )
-        ]
-
-        return MenuSection(options: isHomepage ? homepageOptions + standardOptions : standardOptions)
     }
 }

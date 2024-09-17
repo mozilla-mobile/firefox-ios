@@ -632,11 +632,11 @@ class TabManagerMiddleware {
     // MARK: - Main menu actions
     private func resolveMainMenuActions(with action: MainMenuAction, appState: AppState) {
         switch action.actionType {
-        case MainMenuActionType.viewDidLoad:
+        case MainMenuMiddlewareActionType.requestTabInfo:
             store.dispatch(
                 MainMenuAction(
                     windowUUID: action.windowUUID,
-                    actionType: MainMenuActionType.updateCurrentTabInfo(
+                    actionType: MainMenuMiddlewareActionType.provideTabInfo(
                         getTabInfo(forWindow: action.windowUUID)
                     )
                 )

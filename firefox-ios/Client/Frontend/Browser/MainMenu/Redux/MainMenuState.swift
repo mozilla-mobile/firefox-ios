@@ -20,7 +20,9 @@ struct MainMenuState: ScreenState, Equatable {
     var shouldDismiss: Bool
 
     var navigationDestination: MainMenuNavigationDestination?
+    var shouldShowDetailsFor: MainMenuDetailsViewType?
     var currentTabInfo: MainMenuTabInfo?
+
     private let menuConfigurator = MainMenuConfigurationUtility()
 
     init(appState: AppState, uuid: WindowUUID) {
@@ -38,6 +40,7 @@ struct MainMenuState: ScreenState, Equatable {
             menuElements: mainMenuState.menuElements,
             currentTabInfo: mainMenuState.currentTabInfo,
             navigationDestination: mainMenuState.navigationDestination,
+            shouldShowDetailsFor: mainMenuState.shouldShowDetailsFor,
             shouldDismiss: mainMenuState.shouldDismiss
         )
     }
@@ -48,6 +51,7 @@ struct MainMenuState: ScreenState, Equatable {
             menuElements: [],
             currentTabInfo: nil,
             navigationDestination: nil,
+            shouldShowDetailsFor: nil,
             shouldDismiss: false
         )
     }
@@ -57,12 +61,14 @@ struct MainMenuState: ScreenState, Equatable {
         menuElements: [MenuSection],
         currentTabInfo: MainMenuTabInfo?,
         navigationDestination: MainMenuNavigationDestination? = nil,
+        shouldShowDetailsFor submenuType: MainMenuDetailsViewType? = nil,
         shouldDismiss: Bool = false
     ) {
         self.windowUUID = windowUUID
         self.menuElements = menuElements
         self.currentTabInfo = currentTabInfo
         self.navigationDestination = navigationDestination
+        self.shouldShowDetailsFor = submenuType
         self.shouldDismiss = shouldDismiss
     }
 
@@ -84,6 +90,13 @@ struct MainMenuState: ScreenState, Equatable {
                     andInfo: info
                 ),
                 currentTabInfo: info
+            )
+        case MainMenuActionType.openDetailsView(to: let submenuType):
+            return MainMenuState(
+                windowUUID: state.windowUUID,
+                menuElements: state.menuElements,
+                currentTabInfo: state.currentTabInfo,
+                shouldShowDetailsFor: submenuType
             )
         case MainMenuActionType.show(let destination):
             return MainMenuState(
