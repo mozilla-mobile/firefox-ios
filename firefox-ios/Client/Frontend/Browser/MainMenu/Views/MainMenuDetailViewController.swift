@@ -2,15 +2,18 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
-import MenuKit
 import Common
+import MenuKit
+import Redux
 import UIKit
 import ComponentLibrary
 
 class MainMenuDetailViewController: UIViewController,
                                     MenuTableViewDataDelegate,
-                                    Notifiable {
+                                    Notifiable,
+                                    StoreSubscriber {
+    typealias StoreSubscriberType = MainMenuDetailsState
+
     // MARK: - UI/UX elements
     private lazy var submenuContent: MenuDetailView = .build()
 
@@ -21,6 +24,7 @@ class MainMenuDetailViewController: UIViewController,
 
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
+    var submenuState: MainMenuDetailsState
 
     var submenuData: [MenuSection]
     var submenuTitle: String
@@ -38,10 +42,12 @@ class MainMenuDetailViewController: UIViewController,
         self.themeManager = themeManager
         self.submenuData = data
         self.submenuTitle = title
+        self.submenuState = MainMenuDetailsState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
 
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
+        subscribeToRedux()
     }
 
     required init?(coder: NSCoder) {
@@ -91,6 +97,10 @@ class MainMenuDetailViewController: UIViewController,
         }, completion: nil)
     }
 
+    deinit {
+        unsubscribeFromRedux()
+    }
+
     // MARK: - UX related
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
@@ -123,6 +133,35 @@ class MainMenuDetailViewController: UIViewController,
 
     private func setupTableView() {
         reloadTableView(with: submenuData)
+    }
+
+    // MARK: - Redux
+    func subscribeToRedux() {
+        store.dispatch(
+            ScreenAction(windowUUID: windowUUID,
+                         actionType: ScreenActionType.showScreen,
+                         screen: .mainMenuDetails)
+        )
+
+        let uuid = windowUUID
+        store.subscribe(self, transform: {
+            return $0.select({ appState in
+                return MainMenuDetailsState(appState: appState, uuid: uuid)
+            })
+        })
+    }
+
+    func unsubscribeFromRedux() {
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.closeScreen,
+                                  screen: .mainMenu)
+        store.dispatch(action)
+    }
+
+    func newState(state: MainMenuDetailsState) {
+        submenuState = state
+
+        reloadTableView(with: submenuState.menuElements)
     }
 
     // MARK: - TableViewDelegates
