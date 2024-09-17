@@ -37,7 +37,8 @@ class AddressToolbarContainerModelTests: XCTestCase {
                                  numberOfTabs: 1,
                                  showMenuWarningBadge: false,
                                  isNewTabFeatureEnabled: false,
-                                 canShowDataClearanceAction: false)
+                                 canShowDataClearanceAction: false,
+                                 canShowNavigationHint: false)
         viewModel = AddressToolbarContainerModel(state: state,
                                                  profile: mockProfile,
                                                  windowUUID: windowUUID)

@@ -48,6 +48,8 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
             hintTypeShouldBePresented = true
         case .shoppingExperience:
             return canPresentShoppingCFR
+        case .navigation:
+            hintTypeShouldBePresented = true
         }
 
         return hintTypeShouldBePresented && !hasAlreadyBeenPresented(hintType)

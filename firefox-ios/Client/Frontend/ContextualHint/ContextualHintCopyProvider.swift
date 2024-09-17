@@ -69,6 +69,8 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
 
         case .shoppingExperience:
             descriptionCopy = getShoppingCopy(.description)
+        case .navigation:
+            descriptionCopy = CFRStrings.Toolbar.NavigationButtonsBody
         }
 
         return descriptionCopy
@@ -88,6 +90,8 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
             actionCopy = getShoppingCopy(.action)
         case .jumpBackIn,
                 .jumpBackInSyncedTab:
+            actionCopy = ""
+        case .navigation:
             actionCopy = ""
         }
 

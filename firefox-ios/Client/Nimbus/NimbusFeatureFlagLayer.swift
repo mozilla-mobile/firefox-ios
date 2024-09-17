@@ -91,6 +91,9 @@ final class NimbusFeatureFlagLayer {
         case .toolbarOneTapNewTab:
             return checkToolbarOneTapNewTabFeature(from: nimbus)
 
+        case .toolbarNavigationHint:
+            return checkToolbarNavigationHintFeature(from: nimbus)
+
         case .trackingProtectionRefactor:
             return checkTrackingProtectionRefactor(from: nimbus)
 
@@ -174,6 +177,11 @@ final class NimbusFeatureFlagLayer {
     private func checkToolbarOneTapNewTabFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.toolbarRefactorFeature.value()
         return config.oneTapNewTab
+    }
+
+    private func checkToolbarNavigationHintFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.toolbarRefactorFeature.value()
+        return config.navigationHint
     }
 
     private func checkTrackingProtectionRefactor(from nimbus: FxNimbus) -> Bool {
