@@ -45,7 +45,7 @@ struct CreditCardSettingsEmptyView: View {
             creditCardAutofillToggle
             Spacer()
             creditCardImage
-            getEmptyListTitle()
+            emptyListTitle
             getEmptyListDescription()
             Spacer()
             Spacer()
@@ -73,7 +73,7 @@ struct CreditCardSettingsEmptyView: View {
             .accessibility(hidden: true)
     }
 
-    private func getEmptyListTitle() -> some View {
+    private var emptyListTitle: some View {
         return Text(String(format: .CreditCard.Settings.EmptyListTitle,
                            AppName.shortName.rawValue))
         .preferredBodyFont(size: 22)
