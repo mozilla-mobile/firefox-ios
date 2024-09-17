@@ -12,8 +12,10 @@ public final class MenuDetailView: UIView,
     }
 
     // MARK: - UI Elements
-    private var tableView: MenuTableView = .build()
-    private var detailHeaderView: MenuSubmenuHeaderView = .build()
+    private lazy var tableView: MenuTableView = .build()
+    private lazy var detailHeaderView: MenuSubmenuHeaderView = .build()
+
+    // MARK: - Properties
 
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -48,8 +50,8 @@ public final class MenuDetailView: UIView,
         tableView.reloadTableView(with: data)
     }
 
-    public func setupHeaderNavigation(from delegate: MainMenuDetailNavigationHandler) {
-        detailHeaderView.navigationDelegate = delegate
+    public func setCloseAction(to closeAction: (() -> Void)?) {
+        detailHeaderView.setCloseAction(to: closeAction)
     }
 
     // MARK: - Theme Applicable

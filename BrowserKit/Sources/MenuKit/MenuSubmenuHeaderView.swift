@@ -17,7 +17,7 @@ final class MenuSubmenuHeaderView: UIView, ThemeApplicable {
     }
 
     // MARK: - Properties
-    weak var navigationDelegate: MainMenuDetailNavigationHandler?
+    var closeAction: (() -> Void)?
 
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -43,7 +43,11 @@ final class MenuSubmenuHeaderView: UIView, ThemeApplicable {
 
     @objc
     private func backButtonTapped() {
-        navigationDelegate?.backToMainView()
+        closeAction?()
+    }
+
+    public func setCloseAction(to closeAction: (() -> Void)?) {
+        self.closeAction = closeAction
     }
 
     // MARK: Theme Applicable
