@@ -44,7 +44,7 @@ struct CreditCardSettingsEmptyView: View {
         return VStack {
             creditCardAutofillToggle
             Spacer()
-            getCreditCardImage()
+            creditCardImage
             getEmptyListTitle()
             getEmptyListDescription()
             Spacer()
@@ -61,7 +61,7 @@ struct CreditCardSettingsEmptyView: View {
         .padding(.top, 25)
     }
 
-    private func getCreditCardImage() -> some View {
+    private var creditCardImage: some View {
         return Image(StandardImageIdentifiers.Large.creditCard)
             .resizable()
             .renderingMode(.template)
