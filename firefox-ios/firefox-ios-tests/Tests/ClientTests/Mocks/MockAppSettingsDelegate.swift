@@ -28,6 +28,8 @@ class MockDebugSettingsDelegate: DebugSettingsDelegate {
 
     func pressedFirefoxSuggest() {}
 
+    func pressedRemoteSettingsOption() {}
+
     func pressedOpenFiftyTabs() {}
 
     func pressedDebugFeatureFlags() {}
