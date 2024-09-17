@@ -42,7 +42,7 @@ struct CreditCardSettingsEmptyView: View {
 
     private var scrollViewContent: some View {
         return VStack {
-            getCreditCardAutofillToggle()
+            creditCardAutofillToggle
             Spacer()
             getCreditCardImage()
             getEmptyListTitle()
@@ -52,7 +52,7 @@ struct CreditCardSettingsEmptyView: View {
         }
     }
 
-    private func getCreditCardAutofillToggle() -> some View {
+    private var creditCardAutofillToggle: some View {
         return CreditCardAutofillToggle(
             windowUUID: windowUUID,
             textColor: toggleTextColor,
