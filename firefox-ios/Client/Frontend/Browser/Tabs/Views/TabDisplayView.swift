@@ -219,6 +219,24 @@ class TabDisplayView: UIView,
         }
     }
 
+    private func updateCollectionView(state: TabsPanelState) {
+        var snapshot = NSDiffableDataSourceSnapshot<TabDisplaySection, SectionTabItem>()
+
+          // Add sections
+          snapshot.appendSections([.tabs, .inactiveTabs])
+
+          // Add tabs to the snapshot
+          let tabs = state.tabs.map { SectionTabItem.tab($0) }
+          snapshot.appendItems(tabs, toSection: .tabs)
+
+          // Add inactive tabs to the snapshot
+          let inactiveTabs = state.inactiveTabs.map { SectionTabItem.inactiveTab($0) }
+          snapshot.appendItems(inactiveTabs, toSection: .inactiveTabs)
+
+          // Apply the snapshot to the diffable data source
+        tabsListDataSource?.apply(snapshot, animatingDifferences: true)
+    }
+
     private func scrollToTab(_ index: Int) {
         let section = shouldHideInactiveTabs ? 0 : 1
         let indexPath = IndexPath(row: index,
