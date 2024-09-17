@@ -8,7 +8,6 @@ import UIKit
 
 class TabDisplayView: UIView,
                       ThemeApplicable,
-                      UICollectionViewDataSource,
                       UICollectionViewDelegate,
                       UICollectionViewDelegateFlowLayout,
                       TabCellDelegate,
@@ -82,7 +81,6 @@ class TabDisplayView: UIView,
         collectionView.alwaysBounceVertical = true
         collectionView.keyboardDismissMode = .onDrag
         collectionView.dragInteractionEnabled = true
-        collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.dragDelegate = self
         collectionView.dropDelegate = self
@@ -192,6 +190,7 @@ class TabDisplayView: UIView,
         super.init(frame: .zero)
         self.inactiveTabsSectionManager.delegate = self
         setupLayout()
+        configureDataSource()
     }
 
     required init?(coder: NSCoder) {
@@ -201,7 +200,7 @@ class TabDisplayView: UIView,
     func newState(state: TabsPanelState) {
         tabsState = state
 
-        collectionView.reloadData()
+        updateCollectionView(state: tabsState)
 
         if let index = state.scrollToIndex {
             scrollToTab(index)
@@ -308,107 +307,6 @@ class TabDisplayView: UIView,
                                         windowUUID: windowUUID,
                                         actionType: TabPanelViewActionType.closeInactiveTabs)
         store.dispatch(action)
-    }
-
-    // MARK: UICollectionViewDataSource
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        guard !tabsState.isPrivateTabsEmpty else { return 0 }
-
-        guard !shouldHideInactiveTabs else { return 1 }
-
-        return TabDisplaySection.allCases.count
-    }
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch getTabDisplay(for: section) {
-        case .inactiveTabs:
-            return tabsState.isInactiveTabsExpanded ? tabsState.inactiveTabs.count : 0
-        case .tabs:
-            guard !tabsState.tabs.isEmpty else { return 0 }
-
-            return tabsState.tabs.count
-        }
-    }
-
-    // SOPHIE - remove when diffable datasource is implemented
-    func collectionView(_ collectionView: UICollectionView,
-                        viewForSupplementaryElementOfKind kind: String,
-                        at indexPath: IndexPath)
-    -> UICollectionReusableView {
-        let reusableView = UICollectionReusableView()
-        switch getTabDisplay(for: indexPath.section) {
-        case .inactiveTabs:
-            if kind == UICollectionView.elementKindSectionHeader,
-               let view = collectionView.dequeueReusableSupplementaryView(
-                ofKind: UICollectionView.elementKindSectionHeader,
-                withReuseIdentifier: InactiveTabsHeaderView.cellIdentifier,
-                for: indexPath) as? InactiveTabsHeaderView {
-                view.state = tabsState.isInactiveTabsExpanded ? .down : .trailing
-                if let theme = theme {
-                    view.applyTheme(theme: theme)
-                }
-                view.moreButton.isHidden = false
-                view.moreButton.addTarget(self,
-                                          action: #selector(toggleInactiveTab),
-                                          for: .touchUpInside)
-                view.accessibilityLabel = tabsState.isInactiveTabsExpanded ?
-                    .TabsTray.InactiveTabs.TabsTrayInactiveTabsSectionOpenedAccessibilityTitle :
-                    .TabsTray.InactiveTabs.TabsTrayInactiveTabsSectionClosedAccessibilityTitle
-                let tapGestureRecognizer = UITapGestureRecognizer(target: self,
-                                                                  action: #selector(toggleInactiveTab))
-                view.addGestureRecognizer(tapGestureRecognizer)
-                return view
-            } else if kind == UICollectionView.elementKindSectionFooter,
-                      tabsState.isInactiveTabsExpanded,
-                      let footerView = collectionView.dequeueReusableSupplementaryView(
-                       ofKind: UICollectionView.elementKindSectionFooter,
-                       withReuseIdentifier: InactiveTabsFooterView.cellIdentifier,
-                       for: indexPath) as? InactiveTabsFooterView {
-                if let theme = theme {
-                    footerView.applyTheme(theme: theme)
-                }
-                footerView.buttonClosure = {
-                    let action = TabPanelViewAction(panelType: self.panelType,
-                                                    windowUUID: self.windowUUID,
-                                                    actionType: TabPanelViewActionType.closeAllInactiveTabs)
-                    store.dispatch(action)
-                }
-                return footerView
-            }
-
-        default: return reusableView
-        }
-        return reusableView
-    }
-
-    // Comment out when diffable datasource is completed
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath)
-    -> UICollectionViewCell {
-        switch getTabDisplay(for: indexPath.section) {
-        case .inactiveTabs:
-            guard let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: InactiveTabsCell.cellIdentifier,
-                for: indexPath
-            ) as? InactiveTabsCell
-            else { return UICollectionViewCell() }
-
-            cell.configure(with: tabsState.inactiveTabs[indexPath.row])
-            if let theme = theme {
-                cell.applyTheme(theme: theme)
-            }
-            return cell
-        case .tabs:
-            guard let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: TabCell.cellIdentifier,
-                for: indexPath
-            ) as? TabCell
-            else { return UICollectionViewCell() }
-
-            let tabState = tabsState.tabs[indexPath.row]
-            cell.configure(with: tabState, theme: theme, delegate: self)
-            return cell
-        }
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
