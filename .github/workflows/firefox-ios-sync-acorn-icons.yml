@@ -23,7 +23,7 @@ jobs:
                python -m pip install --upgrade pip
                pip install requests
     
-            - name: Run script download icons if needed
+            - name: Download Acorn icons
               run: |
                python sync_acorn_icons.py
             
