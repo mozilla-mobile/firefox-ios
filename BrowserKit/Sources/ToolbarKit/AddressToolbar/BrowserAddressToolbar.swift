@@ -10,7 +10,7 @@ import Common
 /// | navigation  | indicators | url       [ page    ] | browser  |
 /// |   actions   |            |           [ actions ] | actions  |
 /// +-------------+------------+-----------------------+----------+
-public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, LocationViewDelegate {
+public class BrowserAddressToolbar: UIView, Notifiable, AddressToolbar, ThemeApplicable, LocationViewDelegate {
     private enum UX {
         static let horizontalEdgeSpace: CGFloat = 16
         static let verticalEdgeSpace: CGFloat = 8
@@ -21,8 +21,11 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         static let actionSpacing: CGFloat = 0
         static let buttonSize = CGSize(width: 44, height: 44)
         static let locationHeight: CGFloat = 44
+        // This could be changed at some point, depending on the a11y UX design.
+        static let locationMaxHeight: CGFloat = 54
     }
 
+    public var notificationCenter: any Common.NotificationProtocol = NotificationCenter.default
     private weak var toolbarDelegate: AddressToolbarDelegate?
     private var theme: Theme?
 
@@ -50,10 +53,13 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
     private var toolbarBottomBorderHeightConstraint: NSLayoutConstraint?
     private var leadingNavigationActionStackConstraint: NSLayoutConstraint?
     private var trailingBrowserActionStackConstraint: NSLayoutConstraint?
+    private var locationContainerHeightConstraint: NSLayoutConstraint?
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
         setupLayout()
+        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
+        adjustHeightConstraintForA11ySizeCategory()
     }
 
     required init?(coder: NSCoder) {
@@ -135,6 +141,9 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
             constant: -UX.horizontalEdgeSpace)
         trailingBrowserActionStackConstraint?.isActive = true
 
+        locationContainerHeightConstraint = locationContainer.heightAnchor.constraint(equalToConstant: UX.locationHeight)
+        locationContainerHeightConstraint?.isActive = true
+
         NSLayoutConstraint.activate([
             toolbarContainerView.leadingAnchor.constraint(equalTo: leadingAnchor),
             toolbarContainerView.topAnchor.constraint(equalTo: toolbarTopBorderView.topAnchor,
@@ -156,7 +165,6 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
 
             locationContainer.topAnchor.constraint(equalTo: toolbarContainerView.topAnchor),
             locationContainer.bottomAnchor.constraint(equalTo: toolbarContainerView.bottomAnchor),
-            locationContainer.heightAnchor.constraint(equalToConstant: UX.locationHeight),
 
             locationView.leadingAnchor.constraint(equalTo: locationContainer.leadingAnchor),
             locationView.topAnchor.constraint(equalTo: locationContainer.topAnchor),
@@ -180,8 +188,21 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         setupAccessibility()
     }
 
+    // MARK: - Accessibility
     private func setupAccessibility() {
         addInteraction(UILargeContentViewerInteraction())
+    }
+
+    private func adjustHeightConstraintForA11ySizeCategory() {
+        let height = min(UIFontMetrics.default.scaledValue(for: UX.locationHeight), UX.locationMaxHeight)
+        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+
+        if contentSizeCategory.isAccessibilityCategory {
+            locationContainerHeightConstraint?.constant = height
+        } else {
+            locationContainerHeightConstraint?.constant = UX.locationHeight
+        }
+        setNeedsLayout()
     }
 
     internal func updateActions(state: AddressToolbarState) {
@@ -257,6 +278,15 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         default:
             toolbarTopBorderHeightConstraint?.constant = 0
             toolbarBottomBorderHeightConstraint?.constant = 0
+        }
+    }
+
+    // MARK: - Notifiable
+    public func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIContentSizeCategory.didChangeNotification:
+            adjustHeightConstraintForA11ySizeCategory()
+        default: break
         }
     }
 

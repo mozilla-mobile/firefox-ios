@@ -456,7 +456,7 @@ workflows:
             echo "Adding com.apple.developer.web-browser to entitlements"
 
             /usr/libexec/PlistBuddy -c "Add :com.apple.developer.web-browser bool true" firefox-ios/Client/Entitlements/FennecApplication.entitlements
-    - cache-pull@2.1: {}
+    - cache-pull@2: {}
   2_certificate_and_profile:
     steps:
     - certificate-and-profile-installer@1: {}
@@ -673,7 +673,7 @@ workflows:
     - activate-ssh-key@4.0:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@6.2: {}
-    - cache-pull@2.4: {}
+    - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
     - script@1:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
@@ -767,7 +767,7 @@ workflows:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@6.2: {}
-    - cache-pull@2.1: {}
+    - cache-pull@2: {}
     - certificate-and-profile-installer@1: {}
     - script@1:
         inputs:
@@ -836,7 +836,11 @@ workflows:
 
             ./firefox-ios/l10n-screenshots.sh en-US
         title: Generate screenshots
-    - deploy-to-bitrise-io@2.9.2:
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - deploy_path: l10n-screenshots-dd/
+        - is_compress: 'true'
+    - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: l10n-screenshots/en-US/en-US
         - is_compress: 'true'
@@ -895,7 +899,7 @@ workflows:
               mv "$locale.zip" artifacts/
             done
         title: Generate screenshots
-    - deploy-to-bitrise-io@1.10:
+    - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: artifacts/
     envs:
@@ -1217,7 +1221,7 @@ workflows:
 
   Bitrise_Performance_Test:
     steps:
-    - cache-pull@2.1:
+    - cache-pull@2:
         is_always_run: true
     - xcode-test@4.5:
         inputs:
@@ -1257,7 +1261,7 @@ workflows:
             sed 's/.*=//;s/'\''/"/g' data.txt > test.json
             cat test.json
             python3 perfTestTransform.py
-    - deploy-to-bitrise-io@1.9: {}
+    - deploy-to-bitrise-io@2: {}
     before_run:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
@@ -1281,7 +1285,7 @@ workflows:
         - scheme: Fennec_Enterprise
         - configuration: Fennec_Enterprise
     - deploy-to-bitrise-io@2: {}
-    - cache-pull@2.7.2:
+    - cache-pull@2:
         inputs:
         - cache_paths: "$HOME/sdk/google-cloud-sdk"
     - script@1:
@@ -1461,7 +1465,7 @@ workflows:
             # do not double-quote $TEST_PLAN, as it is a wildcard and we need it to expand
             ( cd "$PRODUCTS_DIR" && zip -r "${SCHEME}.zip" "${SCHEME}-${SDK}" ${TEST_PLAN}*.xctestrun )
             mv "${PRODUCTS_DIR}/${SCHEME}.zip" "$TARGET_ARCHIVE"
-    - cache-pull@2.7.2:
+    - cache-pull@2:
         inputs:
         - cache_paths: "$HOME/google-cloud-sdk"
     - script@1:

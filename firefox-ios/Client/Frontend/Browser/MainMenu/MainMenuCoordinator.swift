@@ -4,44 +4,102 @@
 
 import Common
 import Foundation
+import MenuKit
 import Shared
 
 protocol MainMenuCoordinatorDelegate: AnyObject {
-    // Define any coordinator delegate methods
+    func openURLInNewTab(_ url: URL?)
+    func openNewTab(inPrivateMode: Bool)
+    func showLibraryPanel(_ panel: Route.HomepanelSection)
+    func showSettings(at destination: Route.SettingsSection)
+    func showFindInPage()
 }
 
 class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     weak var parentCoordinator: ParentCoordinatorDelegate?
-    private let tabManager: TabManager
+    weak var navigationHandler: MainMenuCoordinatorDelegate?
 
-    init(
-        router: Router,
-        tabManager: TabManager
-    ) {
-        self.tabManager = tabManager
+    private let windowUUID: WindowUUID
+
+    init(router: Router, windowUUID: WindowUUID) {
+        self.windowUUID = windowUUID
         super.init(router: router)
     }
 
-    func startModal() {
-        let viewController = createMainMenuViewController()
-
-        if let sheet = viewController.sheetPresentationController {
-            sheet.detents = [.medium(), .large()]
-        }
-        router.present(viewController, animated: true)
+    func start() {
+        router.setRootViewController(
+            createMainMenuViewController(),
+            hideBar: true
+        )
     }
 
-    func dismissModal(animated: Bool) {
+    func showDetailViewController(with submenu: [MenuSection]) {
+        router.push(
+            createMainMenuDetailViewController(with: submenu),
+            animated: true
+        )
+    }
+
+    func dismissDetailViewController() {
+        router.popViewController(animated: true)
+    }
+
+    func dismissMenuModal(animated: Bool) {
         router.dismiss(animated: animated, completion: nil)
         parentCoordinator?.didFinish(from: self)
     }
 
+    func navigateTo(_ destination: MainMenuNavigationDestination, animated: Bool) {
+        if case let .detailsView(with: submenu) = destination {
+            self.showDetailViewController(with: submenu)
+        } else {
+            router.dismiss(animated: animated, completion: { [weak self] in
+                guard let self else { return }
+
+                switch destination {
+                case .bookmarks:
+                    self.navigationHandler?.showLibraryPanel(.bookmarks)
+                case .customizeHomepage:
+                    self.navigationHandler?.showSettings(at: .homePage)
+                case .downloads:
+                    self.navigationHandler?.showLibraryPanel(.downloads)
+                case .findInPage:
+                    self.navigationHandler?.showFindInPage()
+                case .goToURL(let url):
+                    self.navigationHandler?.openURLInNewTab(url)
+                case .history:
+                    self.navigationHandler?.showLibraryPanel(.history)
+                case .newTab:
+                    self.navigationHandler?.openNewTab(inPrivateMode: false)
+                case .newPrivateTab:
+                    self.navigationHandler?.openNewTab(inPrivateMode: true)
+                case .passwords:
+                    self.navigationHandler?.showSettings(at: .password)
+                case .settings:
+                    self.navigationHandler?.showSettings(at: .general)
+                case .detailsView:
+                    // This special case is being handled above
+                    break
+                }
+
+                self.parentCoordinator?.didFinish(from: self)
+            })
+        }
+    }
+
+    // MARK: - Private helpers
     private func createMainMenuViewController() -> MainMenuViewController {
-        let mainMenuViewController = MainMenuViewController(
-            windowUUID: tabManager.windowUUID,
-            viewModel: MainMenuViewModel()
-        )
+        let mainMenuViewController = MainMenuViewController(windowUUID: windowUUID)
         mainMenuViewController.coordinator = self
         return mainMenuViewController
+    }
+
+    private func createMainMenuDetailViewController(with submenu: [MenuSection]) -> MainMenuDetailViewController {
+        let detailVC = MainMenuDetailViewController(
+            windowUUID: windowUUID,
+            with: submenu
+        )
+        detailVC.coordinator = self
+        return detailVC
     }
 }

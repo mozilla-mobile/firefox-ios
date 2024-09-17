@@ -48,6 +48,7 @@ class TrackingProtectionModel {
     let toggleViewTitleLabelA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.toggleViewTitleLabel
     let toggleViewBodyLabelA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.toggleViewBodyLabel
     let closeButtonA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.closeButton
+    let closeButtonA11yLabel = String.Menu.EnhancedTrackingProtection.closeButtonAccessibilityLabel
     let faviconImageA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.faviconImage
 
     var websiteTitle: String {

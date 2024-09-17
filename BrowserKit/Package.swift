@@ -46,7 +46,7 @@ let package = Package(
             branch: "master"),
         .package(
             url: "https://github.com/onevcat/Kingfisher.git",
-            exact: "7.11.0"),
+            exact: "7.12.0"),
         .package(
             url: "https://github.com/AliSoftware/Dip.git",
             exact: "7.1.1"),
@@ -55,7 +55,7 @@ let package = Package(
             exact: "2.0.0"),
         .package(
             url: "https://github.com/getsentry/sentry-cocoa.git",
-            exact: "8.35.0"),
+            exact: "8.36.0"),
         .package(
             url: "https://github.com/nbhasin2/GCDWebServer.git",
             branch: "master"),
@@ -77,7 +77,12 @@ let package = Package(
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "SiteImageViewTests",
-            dependencies: ["SiteImageView", .product(name: "GCDWebServers", package: "GCDWebServer")]),
+            dependencies: ["SiteImageView", .product(name: "GCDWebServers", package: "GCDWebServer")],
+            resources: [
+                .copy("Resources/mozilla.ico"),
+                .copy("Resources/hackernews.svg"),
+            ]
+        ),
         .target(
             name: "Common",
             dependencies: ["Dip",

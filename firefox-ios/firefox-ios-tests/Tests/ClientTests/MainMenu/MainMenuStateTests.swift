@@ -14,20 +14,94 @@ final class MainMenuStateTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
-    func testDismissSurveyAction() {
+    func testInitialization() {
+        let initialState = createSubject()
+
+        XCTAssertFalse(initialState.shouldDismiss)
+        XCTAssertEqual(initialState.menuElements, [])
+        XCTAssertNil(initialState.navigationDestination)
+        XCTAssertNil(initialState.currentTabInfo)
+    }
+
+    func testUpdatingCurrentTabInfo() {
         let initialState = createSubject()
         let reducer = mainMenuReducer()
 
-        XCTAssertEqual(initialState.shouldDismiss, false)
+        let expectedResult = MainMenuTabInfo(
+            url: URL(string: "https://mozilla.com"),
+            isHomepage: true,
+            isDefaultUserAgentDesktop: true,
+            hasChangedUserAgent: true
+        )
 
-        let action = getMiddleWareAction(for: .dismissMenu)
-        let newState = reducer(initialState, action)
+        XCTAssertNil(initialState.currentTabInfo)
 
-        XCTAssertEqual(newState.shouldDismiss, true)
+        let newState = reducer(
+            initialState,
+            MainMenuAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MainMenuActionType.updateCurrentTabInfo(expectedResult)
+            )
+        )
+
+        XCTAssertEqual(newState.currentTabInfo, expectedResult)
+    }
+
+    func testNavigation_AllCases() {
+        let initialState = createSubject()
+        let reducer = mainMenuReducer()
+
+        XCTAssertNil(initialState.navigationDestination)
+
+        MainMenuNavigationDestination.allCases.forEach { destination in
+            let newState = reducer(
+                initialState,
+                MainMenuAction(
+                    windowUUID: .XCTestDefaultUUID,
+                    actionType: MainMenuActionType.show(destination)
+                )
+            )
+
+            XCTAssertEqual(newState.navigationDestination, destination)
+        }
+    }
+
+    func testToggleUserAgentAction() {
+        let initialState = createSubject()
+        let reducer = mainMenuReducer()
+
+        XCTAssertFalse(initialState.shouldDismiss)
+
+        let newState = reducer(
+            initialState,
+            MainMenuAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MainMenuActionType.toggleUserAgent
+            )
+        )
+
+        XCTAssertTrue(newState.shouldDismiss)
+    }
+
+    func testCloseAction() {
+        let initialState = createSubject()
+        let reducer = mainMenuReducer()
+
+        XCTAssertFalse(initialState.shouldDismiss)
+
+        let newState = reducer(
+            initialState,
+            MainMenuAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: MainMenuActionType.closeMenu
+            )
+        )
+
+        XCTAssertTrue(newState.shouldDismiss)
     }
 
     // MARK: - Private
@@ -37,9 +111,5 @@ final class MainMenuStateTests: XCTestCase {
 
     private func mainMenuReducer() -> Reducer<MainMenuState> {
         return MainMenuState.reducer
-    }
-
-    private func getMiddleWareAction(for actionType: MainMenuMiddlewareActionType) -> MainMenuAction {
-        return MainMenuAction(windowUUID: .XCTestDefaultUUID, actionType: actionType)
     }
 }

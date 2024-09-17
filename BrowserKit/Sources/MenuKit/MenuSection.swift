@@ -4,4 +4,10 @@
 
 import Foundation
 
-struct MainMenuModel: Equatable { }
+public struct MenuSection: Equatable {
+    public let options: [MenuElement]
+
+    public init(options: [MenuElement]) {
+        self.options = options
+    }
+}

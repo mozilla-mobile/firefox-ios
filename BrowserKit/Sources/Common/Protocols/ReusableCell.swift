@@ -12,27 +12,27 @@ import UIKit
 ///
 /// As defined in the extensions, this will generally, where adhering to the
 /// implemented conditions, return a string describing `self`.
-protocol ReusableCell: AnyObject {
+public protocol ReusableCell: AnyObject {
     static var cellIdentifier: String { get }
 }
 
-extension ReusableCell where Self: UICollectionViewCell {
+public extension ReusableCell where Self: UICollectionViewCell {
     static var cellIdentifier: String { return String(describing: self) }
 }
 
-extension ReusableCell where Self: UITableViewCell {
+public extension ReusableCell where Self: UITableViewCell {
     static var cellIdentifier: String { return String(describing: self) }
 }
 
-extension ReusableCell where Self: UITableViewHeaderFooterView {
+public extension ReusableCell where Self: UITableViewHeaderFooterView {
     static var cellIdentifier: String { return String(describing: self) }
 }
 
-extension ReusableCell where Self: UICollectionReusableView {
+public extension ReusableCell where Self: UICollectionReusableView {
     static var cellIdentifier: String { return String(describing: self) }
 }
 
-extension UICollectionView {
+public extension UICollectionView {
     func dequeueReusableCell<T: ReusableCell>(cellType: T.Type, for indexPath: IndexPath) -> T? {
         guard let cell = dequeueReusableCell(withReuseIdentifier: T.cellIdentifier, for: indexPath) as? T
         else { return nil }
@@ -45,7 +45,7 @@ extension UICollectionView {
     }
 }
 
-extension UITableView {
+public extension UITableView {
     func register<T: ReusableCell>(cellType: T.Type) {
         register(T.self, forCellReuseIdentifier: T.cellIdentifier)
     }

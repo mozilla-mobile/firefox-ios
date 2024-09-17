@@ -492,7 +492,8 @@ class BrowserViewController: UIViewController,
         // If we are displaying a private tab, hide any elements in the tab that we wouldn't want shown
         // when the app is in the home switcher
         guard let privateTab = tabManager.selectedTab,
-              privateTab.isPrivate
+              privateTab.isPrivate,
+              canShowPrivacyView
         else { return }
 
         view.bringSubviewToFront(webViewContainerBackdrop)
@@ -508,6 +509,12 @@ class BrowserViewController: UIViewController,
         presentedViewController?.view.alpha = 0
     }
 
+    var canShowPrivacyView: Bool {
+        // Show privacy view if no view controller is presented
+        // or if the presented view is a PhotonActionSheet.
+        self.presentedViewController == nil || presentedViewController is PhotonActionSheet
+    }
+
     @objc
     func appDidBecomeActiveNotification() {
         // Re-show any components that might have been hidden because they were being displayed
@@ -518,13 +525,11 @@ class BrowserViewController: UIViewController,
             options: UIView.AnimationOptions(),
             animations: {
                 self.contentStackView.alpha = 1
-
                 if self.isToolbarRefactorEnabled {
                     self.addressToolbarContainer.alpha = 1
                 } else {
                     self.urlBar.locationContainer.alpha = 1
                 }
-
                 self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
                 self.presentedViewController?.view.alpha = 1
             }, completion: { _ in
@@ -1307,14 +1312,6 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - Microsurvey
-    private var isToolbarPositionBottom: Bool {
-        let toolbarState = store.state.screenState(ToolbarState.self,
-                                                   for: .toolbar,
-                                                   window: windowUUID)
-        let isBottomToolbar = toolbarState?.toolbarPosition == .bottom
-        return isToolbarRefactorEnabled ? isBottomToolbar : urlBar.isBottomSearchBar
-    }
-
     private func setupMicrosurvey() {
         guard featureFlags.isFeatureEnabled(.microsurvey, checking: .buildOnly), microsurvey == nil else { return }
 
@@ -1329,7 +1326,7 @@ class BrowserViewController: UIViewController,
         microsurvey.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(microsurvey)
 
-        if isToolbarPositionBottom {
+        if isBottomSearchBar {
             overKeyboardContainer.addArrangedViewToTop(microsurvey, animated: false, completion: {
                 self.view.layoutIfNeeded()
             })
@@ -1352,7 +1349,7 @@ class BrowserViewController: UIViewController,
         guard !shouldUseiPadSetup(), !isToolbarRefactorEnabled else { return }
         let hasMicrosurvery = microsurvey != nil
 
-        if let urlBar, isToolbarPositionBottom {
+        if let urlBar, isBottomSearchBar {
             urlBar.isMicrosurveyShown = hasMicrosurvery
             urlBar.updateTopBorderDisplay()
         }
@@ -1372,7 +1369,7 @@ class BrowserViewController: UIViewController,
     private func removeMicrosurveyPrompt() {
         guard let microsurvey else { return }
 
-        if isToolbarPositionBottom {
+        if isBottomSearchBar {
             overKeyboardContainer.removeArrangedView(microsurvey)
         } else {
             bottomContainer.removeArrangedView(microsurvey)
@@ -2027,6 +2024,7 @@ class BrowserViewController: UIViewController,
 
     func presentLocationViewActionSheet(from view: UIView) {
         let actions = getLongPressLocationBarActions(with: view, alertContainer: contentContainer)
+        guard !actions.isEmpty else { return }
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
 
@@ -2101,6 +2099,14 @@ class BrowserViewController: UIViewController,
     }
 
     func didTapOnMenu(button: UIButton?) {
+        // Ensure that any keyboards or spinners are dismissed before presenting the menu
+        UIApplication.shared.sendAction(
+            #selector(UIResponder.resignFirstResponder),
+            to: nil,
+            from: nil,
+            for: nil
+        )
+
         if featureFlags.isFeatureEnabled(.menuRefactor, checking: .buildOnly) {
             navigationHandler?.showMainMenu()
         } else {
@@ -2164,14 +2170,6 @@ class BrowserViewController: UIViewController,
 
     private func showPhotonMainMenu(from button: UIButton?) {
         guard let button else { return }
-
-        // Ensure that any keyboards or spinners are dismissed before presenting the menu
-        UIApplication.shared.sendAction(
-            #selector(UIResponder.resignFirstResponder),
-            to: nil,
-            from: nil,
-            for: nil
-        )
 
         // Logs homePageMenu or siteMenu depending if HomePage is open or not
         let isHomePage = tabManager.selectedTab?.isFxHomeTab ?? false
@@ -2909,7 +2907,7 @@ class BrowserViewController: UIViewController,
         }
 
         if !isToolbarRefactorEnabled {
-            let isPrivate = (currentTheme.type == .privateMode)
+            let isPrivate = tabManager.selectedTab?.isPrivate ?? false
             urlBar.applyUIMode(isPrivate: isPrivate, theme: currentTheme)
         }
 

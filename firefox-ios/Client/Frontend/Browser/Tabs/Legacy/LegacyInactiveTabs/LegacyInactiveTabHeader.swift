@@ -15,9 +15,7 @@ class LegacyInactiveTabHeader: UITableViewHeaderFooterView, ReusableCell {
 
     lazy var titleLabel: UILabel = .build { titleLabel in
         titleLabel.text = self.title
-        titleLabel.font = LegacyDynamicFontHelper.defaultHelper.preferredFont(
-            withTextStyle: .headline,
-            maxSize: 17)
+        titleLabel.font = FXFontStyles.Regular.headline.systemFont()
         titleLabel.adjustsFontForContentSizeCategory = true
         titleLabel.minimumScaleFactor = 0.6
         titleLabel.numberOfLines = 1

@@ -7,42 +7,20 @@ import ComponentLibrary
 import UIKit
 import Shared
 import Redux
+import MenuKit
 
 class MainMenuViewController: UIViewController,
-                              Themeable,
-                              Notifiable,
                               UIAdaptivePresentationControllerDelegate,
                               UISheetPresentationControllerDelegate,
                               UIScrollViewDelegate,
+                              MenuTableViewDataDelegate,
+                              Themeable,
+                              Notifiable,
                               StoreSubscriber {
     typealias SubscriberStateType = MainMenuState
 
     // MARK: - UI/UX elements
-    private struct UX {
-        static let closeButtonWidthHeight: CGFloat = 30
-        static let scrollContentStackSpacing: CGFloat = 16
-    }
-
-    private lazy var scrollView: UIScrollView = .build()
-
-    private lazy var contentStackView: UIStackView = .build { stackView in
-        stackView.axis = .vertical
-        stackView.spacing = UX.scrollContentStackSpacing
-    }
-
-    private lazy var closeButton: CloseButton = .build { view in
-        let viewModel = CloseButtonViewModel(
-            a11yLabel: .Shopping.CloseButtonAccessibilityLabel,
-            a11yIdentifier: AccessibilityIdentifiers.Shopping.sheetCloseButton
-        )
-        view.configure(viewModel: viewModel)
-        view.addTarget(self, action: #selector(self.closeTapped), for: .touchUpInside)
-    }
-
-    private lazy var testButton: UIButton = .build { button in
-        button.addTarget(self, action: #selector(self.testButtonTapped), for: .touchUpInside)
-        button.backgroundColor = .systemPink
-    }
+    private lazy var menuContent: MenuMainView = .build()
 
     // MARK: - Properties
     var notificationCenter: NotificationProtocol
@@ -51,7 +29,6 @@ class MainMenuViewController: UIViewController,
     weak var coordinator: MainMenuCoordinator?
 
     private let windowUUID: WindowUUID
-    private var viewModel: MainMenuViewModel
     private var menuState: MainMenuState
 
     var currentWindowUUID: UUID? { return windowUUID }
@@ -59,11 +36,9 @@ class MainMenuViewController: UIViewController,
     // MARK: - Initializers
     init(
         windowUUID: WindowUUID,
-        viewModel: MainMenuViewModel,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         themeManager: ThemeManager = AppContainer.shared.resolve()
     ) {
-        self.viewModel = viewModel
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
@@ -84,10 +59,16 @@ class MainMenuViewController: UIViewController,
         super.viewDidLoad()
         presentationController?.delegate = self
         sheetPresentationController?.delegate = self
-        scrollView.delegate = self
 
         setupView()
+        setupTableView()
         listenForThemeChange(view)
+        store.dispatch(
+            MainMenuAction(
+                windowUUID: self.windowUUID,
+                actionType: MainMenuActionType.viewDidLoad
+            )
+        )
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -98,7 +79,10 @@ class MainMenuViewController: UIViewController,
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         store.dispatch(
-            MainMenuAction(windowUUID: windowUUID, actionType: MainMenuActionType.mainMenuDidAppear)
+            MainMenuAction(
+                windowUUID: windowUUID,
+                actionType: MainMenuActionType.mainMenuDidAppear
+            )
         )
         updateModalA11y()
     }
@@ -108,20 +92,19 @@ class MainMenuViewController: UIViewController,
     }
 
     // MARK: - UI setup
-    private func setupView() {
-        view.addSubview(testButton)
-
-        NSLayoutConstraint.activate([
-            testButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            testButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            testButton.heightAnchor.constraint(equalToConstant: 100),
-            testButton.widthAnchor.constraint(equalToConstant: 200)
-        ])
+    private func setupTableView() {
+        reloadTableView(with: menuState.menuElements)
     }
 
-    private func updateContent() {
-        contentStackView.removeAllArrangedViews()
-        applyTheme()
+    private func setupView() {
+        view.addSubview(menuContent)
+
+        NSLayoutConstraint.activate([
+            menuContent.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            menuContent.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            menuContent.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            menuContent.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+        ])
     }
 
     // MARK: - Redux
@@ -147,37 +130,34 @@ class MainMenuViewController: UIViewController,
 
     func newState(state: MainMenuState) {
         menuState = state
+
+        reloadTableView(with: menuState.menuElements)
+
+        if let navigationDestination = menuState.navigationDestination {
+            coordinator?.navigateTo(navigationDestination, animated: true)
+            return
+        }
+
         if menuState.shouldDismiss {
-            coordinator?.dismissModal(animated: true)
+            coordinator?.dismissMenuModal(animated: true)
         }
     }
 
     // MARK: - UX related
     func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: windowUUID)
-        view.backgroundColor = theme.colors.layer1
+//        let theme = themeManager.getCurrentTheme(for: windowUUID)
+//        view.backgroundColor = theme.colors.layer1
+        view.backgroundColor = .systemPurple
     }
 
     // MARK: - Notifications
     func handleNotifications(_ notification: Notification) { }
 
-    @objc
-    private func closeTapped() { }
-
-    @objc
-    private func testButtonTapped() {
-        store.dispatch(
-            MainMenuAction(
-                windowUUID: windowUUID,
-                actionType: MainMenuActionType.closeMenu
-            )
-        )
-    }
-
+    // MARK: - A11y
     // In iOS 15 modals with a large detent read content underneath the modal
     // in voice over. To prevent this we manually turn this off.
     private func updateModalA11y() {
-        var currentDetent: UISheetPresentationController.Detent.Identifier? = viewModel.getCurrentDetent(
+        var currentDetent: UISheetPresentationController.Detent.Identifier? = getCurrentDetent(
             for: sheetPresentationController
         )
 
@@ -194,13 +174,27 @@ class MainMenuViewController: UIViewController,
         view.accessibilityViewIsModal = currentDetent == .large ? true : false
     }
 
+    private func getCurrentDetent(
+        for presentedController: UIPresentationController?
+    ) -> UISheetPresentationController.Detent.Identifier? {
+        guard let sheetController = presentedController as? UISheetPresentationController else { return nil }
+        return sheetController.selectedDetentIdentifier
+    }
+
     // MARK: - UIAdaptivePresentationControllerDelegate
-    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) { }
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        coordinator?.dismissMenuModal(animated: true)
+    }
 
     // MARK: - UISheetPresentationControllerDelegate
     func sheetPresentationControllerDidChangeSelectedDetentIdentifier(
         _ sheetPresentationController: UISheetPresentationController
     ) {
         updateModalA11y()
+    }
+
+    // MARK: - MenuTableViewDelegate
+    func reloadTableView(with data: [MenuSection]) {
+        menuContent.reloadTableView(with: data)
     }
 }

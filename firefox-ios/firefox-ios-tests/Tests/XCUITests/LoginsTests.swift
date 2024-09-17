@@ -116,6 +116,9 @@ class LoginTest: BaseTestCase {
             // Workaround for Bitrise specific issue. "vagrant" user is used in Bitrise.
             if (ProcessInfo.processInfo.environment["HOME"]!).contains(String("vagrant")) {
                 XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
+            // Workaround for Github Actions specific issue. "runner" user is used in Github Actions.
+            } else if (ProcessInfo.processInfo.environment["HOME"]!).contains(String("runner")) {
+                XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
             } else {
                 XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 2)
             }

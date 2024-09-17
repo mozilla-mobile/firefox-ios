@@ -4,6 +4,7 @@
 
 import Foundation
 import Storage
+import Common
 
 struct LegacyInactiveTabItemCellModel {
     struct UX {
@@ -19,7 +20,7 @@ struct LegacyInactiveTabItemCellModel {
     }
 
     var fontForLabel: UIFont {
-        return LegacyDynamicFontHelper.defaultHelper.preferredFont(withTextStyle: .body, maxSize: 17)
+        return FXFontStyles.Regular.body.systemFont()
     }
 
     var title: String?

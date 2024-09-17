@@ -7,4 +7,5 @@ import Glean
 
 struct MainMenuTelemetry {
     func mainMenuViewed() { }
+    func mainMenuDismissed() { }
 }

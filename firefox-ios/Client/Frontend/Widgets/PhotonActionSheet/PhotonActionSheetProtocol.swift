@@ -82,11 +82,16 @@ extension PhotonActionSheetProtocol {
             }
         }
 
+        var actionItems: [PhotonRowActions] = []
         if UIPasteboard.general.hasStrings {
-            return [pasteGoAction.items, pasteAction.items, copyAddressAction.items]
-        } else {
-            return [copyAddressAction.items]
+            actionItems.append(contentsOf: [pasteGoAction.items, pasteAction.items])
         }
+
+        if tabManager.selectedTab?.canonicalURL?.displayURL != nil {
+            actionItems.append(copyAddressAction.items)
+        }
+
+        return actionItems
     }
 
     func getRefreshLongPressMenu(for tab: Tab) -> [PhotonRowActions] {

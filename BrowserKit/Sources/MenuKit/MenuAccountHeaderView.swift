@@ -2,16 +2,18 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Common
+import Foundation
 import UIKit
 
-final class MainMenuView: UIView {
+final class MenuAccountHeaderView: UIView {
     // MARK: - UI Elements
+
     // MARK: - Properties
 
     // MARK: - Initializers
     override init(frame: CGRect) {
-        super.init(frame: .zero)
+        super.init(frame: frame)
+        setupView()
     }
 
     required init?(coder: NSCoder) {
@@ -20,7 +22,7 @@ final class MainMenuView: UIView {
 
     // MARK: - UI Setup
     private func setupView() {
-        self.backgroundColor = .systemPurple
+        backgroundColor = .systemPink
 
         NSLayoutConstraint.activate([
         ])

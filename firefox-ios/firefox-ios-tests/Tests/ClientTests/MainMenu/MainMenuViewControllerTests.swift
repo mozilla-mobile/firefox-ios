@@ -16,15 +16,12 @@ final class MainMenuViewControllerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testMainMenuViewController_simpleCreation_hasNoLeaks() {
-        let controller = MainMenuViewController(
-            windowUUID: windowUUID,
-            viewModel: MainMenuViewModel()
-        )
+        let controller = MainMenuViewController(windowUUID: windowUUID)
         trackForMemoryLeaks(controller)
     }
 }

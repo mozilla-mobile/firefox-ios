@@ -12,12 +12,16 @@ import WebKit
 private var debugTabCount = 0
 
 func mostRecentTab(inTabs tabs: [Tab]) -> Tab? {
-    var recent = tabs.first
+    guard var recent = tabs.first else {
+        return nil
+    }
+
     tabs.forEach { tab in
-        if let time = tab.lastExecutedTime, time > (recent?.lastExecutedTime ?? 0) {
+        if tab.lastExecutedTime > recent.lastExecutedTime {
             recent = tab
         }
     }
+
     return recent
 }
 
@@ -253,8 +257,8 @@ class Tab: NSObject, ThemeApplicable {
     var webView: TabWebView?
     weak var tabDelegate: LegacyTabDelegate?
     var bars = [SnackBar]()
-    var lastExecutedTime: Timestamp?
-    var firstCreatedTime: Timestamp?
+    var lastExecutedTime: Timestamp
+    var firstCreatedTime: Timestamp
     private let faviconHelper: SiteImageHandler
     var faviconURL: String? {
         didSet {
@@ -405,10 +409,36 @@ class Tab: NSObject, ThemeApplicable {
 
     var profile: Profile
 
+    /// Returns true if this tab is considered inactive (has not been executed for more than a specific number of days).
+    /// Note: When `FasterInactiveTabsOverride` is enabled, tabs become inactive very quickly for testing purposes.
+    var isInactive: Bool {
+        let currentDate = Date()
+        let inactiveDate: Date
+
+        // Debug for inactive tabs to easily test in code
+        if UserDefaults.standard.bool(forKey: PrefsKeys.FasterInactiveTabsOverride) {
+            inactiveDate = Calendar.current.date(byAdding: .second, value: -10, to: currentDate) ?? Date()
+        } else {
+            // FIXME Is there a reason we use noon of the current day instead of the exact time, when calculating -14 days?
+            inactiveDate = Calendar.current.date(byAdding: .day, value: -14, to: currentDate.noon) ?? Date()
+        }
+
+        // If the tabDate is older than our inactive date cutoff, return true
+        let tabDate = Date.fromTimestamp(lastExecutedTime)
+        return tabDate <= inactiveDate
+    }
+
+    /// Returns true if this tab is considered active (has been executed within a specific numbers of days).
+    /// Note: When `FasterInactiveTabsOverride` is enabled, tabs become inactive very quickly for testing purposes.
+    var isActive: Bool {
+        return !isInactive
+    }
+
     init(profile: Profile,
          isPrivate: Bool = false,
          windowUUID: WindowUUID,
          faviconHelper: SiteImageHandler = DefaultSiteImageHandler.factory(),
+         tabCreatedTime: Date = Date(),
          logger: Logger = DefaultLogger.shared) {
         self.nightMode = false
         self.windowUUID = windowUUID
@@ -416,12 +446,12 @@ class Tab: NSObject, ThemeApplicable {
         self.profile = profile
         self.metadataManager = LegacyTabMetadataManager(metadataObserver: profile.places)
         self.faviconHelper = faviconHelper
+        self.lastExecutedTime = tabCreatedTime.toTimestamp()
+        self.firstCreatedTime = tabCreatedTime.toTimestamp()
         self.logger = logger
         super.init()
         self.isPrivate = isPrivate
-        let tabCreatedTime = Date().toTimestamp()
-        self.lastExecutedTime = tabCreatedTime
-        self.firstCreatedTime = tabCreatedTime
+
         debugTabCount += 1
 
         TelemetryWrapper.recordEvent(
@@ -445,7 +475,7 @@ class Tab: NSObject, ThemeApplicable {
                 URL: displayURL,
                 title: tab.title ?? tab.displayTitle,
                 history: history,
-                lastUsed: tab.lastExecutedTime ?? 0,
+                lastUsed: tab.lastExecutedTime,
                 icon: icon,
                 inactive: inactive
             )
