@@ -92,30 +92,8 @@ class TabDisplayView: UIView,
 
     // We now use this to set up the cells instead of cellForItemAt
     private func configureDataSource() {
-        // Create a cell registration that the diffable data source will use.
-//        let tabCellRegistration = UICollectionView.CellRegistration<TabCell.self, Tab> { cell, indexPath, recipe in
-//            var contentConfiguration = UIListContentConfiguration.subtitleCell()
-//            contentConfiguration.text = recipe.title
-//            contentConfiguration.secondaryText = recipe.subtitle
-//            contentConfiguration.image = recipe.smallImage
-//            contentConfiguration.imageProperties.cornerRadius = 4
-//            contentConfiguration.imageProperties.maximumSize = CGSize(width: 60, height: 60)
-//
-//            cell.contentConfiguration = contentConfiguration
-//
-//            if recipe.isFavorite {
-//                let image = UIImage(systemName: "heart.fill")
-//                let accessoryConfiguration = UICellAccessory.CustomViewConfiguration(customView: UIImageView(image: image),
-//                                                                                     placement: .trailing(displayed: .always),
-//                                                                                     tintColor: .secondaryLabel)
-//                cell.accessories = [.customView(configuration: accessoryConfiguration)]
-//            } else {
-//                cell.accessories = []
-//            }
-//        }
-
         // Create the diffable data source and its cell provider.
-        tabsListDataSource = UICollectionViewDiffableDataSource<TabDisplaySection, SectionTabItem>(collectionView: collectionView) 
+        tabsListDataSource = UICollectionViewDiffableDataSource<TabDisplaySection, SectionTabItem>(collectionView: collectionView)
         { [weak self] (collectionView, indexPath, sectionItem) -> UICollectionViewCell in
             // `identifier/item` is an instance of `tabModel`. Use it to
             // retrieve the tab from the backing data store.
@@ -145,6 +123,59 @@ class TabDisplayView: UIView,
                 cell.configure(with: tab, theme: theme, delegate: self)
                 return cell
             }
+        }
+
+        // Configure supplementary view provider for section headers
+        tabsListDataSource?.supplementaryViewProvider = { [weak self] (collectionView, kind, indexPath) -> UICollectionReusableView? in
+            let reusableView = UICollectionReusableView()
+            // Retrieve the section based on the current indexPath
+            let section = self?.getTabDisplay(for: indexPath.section)
+
+            // Only show the header for the Inactive Tabs section
+            guard let self, section == .inactiveTabs else {
+                return nil  // Return nil for the Tabs section, no header will be displayed
+            }
+
+            // Dequeue the header view for the inactive tabs section
+            if kind == UICollectionView.elementKindSectionHeader,
+               let headerView = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: InactiveTabsHeaderView.cellIdentifier,
+                for: indexPath) as? InactiveTabsHeaderView {
+                headerView.state = tabsState.isInactiveTabsExpanded ? .down : .trailing
+                if let theme = theme {
+                    headerView.applyTheme(theme: theme)
+                }
+                headerView.moreButton.isHidden = false
+                headerView.moreButton.addTarget(self,
+                                                action: #selector(toggleInactiveTab),
+                                                for: .touchUpInside)
+                headerView.accessibilityLabel = tabsState.isInactiveTabsExpanded ?
+                    .TabsTray.InactiveTabs.TabsTrayInactiveTabsSectionOpenedAccessibilityTitle :
+                    .TabsTray.InactiveTabs.TabsTrayInactiveTabsSectionClosedAccessibilityTitle
+                let tapGestureRecognizer = UITapGestureRecognizer(target: self,
+                                                                  action: #selector(toggleInactiveTab))
+                headerView.addGestureRecognizer(tapGestureRecognizer)
+                return headerView
+            } else if kind == UICollectionView.elementKindSectionFooter,
+                      tabsState.isInactiveTabsExpanded,
+                      let footerView = collectionView.dequeueReusableSupplementaryView(
+                        ofKind: UICollectionView.elementKindSectionFooter,
+                        withReuseIdentifier: InactiveTabsFooterView.cellIdentifier,
+                        for: indexPath) as? InactiveTabsFooterView {
+                if let theme = theme {
+                    footerView.applyTheme(theme: theme)
+                }
+                footerView.buttonClosure = {
+                    let action = TabPanelViewAction(panelType: self.panelType,
+                                                    windowUUID: self.windowUUID,
+                                                    actionType: TabPanelViewActionType.closeAllInactiveTabs)
+                    store.dispatch(action)
+                }
+                return footerView
+            }
+
+            return reusableView
         }
     }
 
@@ -245,6 +276,7 @@ class TabDisplayView: UIView,
         return section
     }
 
+    // SOPHIE - comment out to check what needs to be removed after diffable datasource implementation
     private func getTabDisplay(for section: Int) -> TabDisplaySection {
         guard !shouldHideInactiveTabs else { return .tabs }
 
