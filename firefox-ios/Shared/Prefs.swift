@@ -90,6 +90,11 @@ public struct PrefsKeys {
         public static let showSearchSuggestions = "FirefoxSuggestShowSearchSuggestions"
     }
 
+    public struct Sync {
+        public static let numberOfSyncedDevices = "numberOfSyncedDevicesKey"
+        public static let signedInFxaAccount = "signedInFxaAccountKey"
+    }
+
     public struct UserFeatureFlagPrefs {
         public static let ASPocketStories = "ASPocketStoriesUserPrefsKey"
         public static let BookmarksSection = "BookmarksSectionUserPrefsKey"
