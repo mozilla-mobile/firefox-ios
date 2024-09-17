@@ -835,11 +835,11 @@ workflows:
             fastlane -version
 
             ./firefox-ios/l10n-screenshots.sh en-US
-            git log --pretty=format:'%h' -n 1
+            echo $GIT_CLONE_COMMIT_HASH
         title: Generate screenshots
     - save-cache@1:
         inputs:
-        - key: l10n-screenshots-dd-`git log --pretty=format:'%h' -n 1`
+        - key: l10n-screenshots-dd-{{ echo $GIT_CLONE_COMMIT_HASH }}
         - paths: l10n-screenshots-dd
     - deploy-to-bitrise-io@2:
         inputs:
