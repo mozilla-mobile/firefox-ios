@@ -835,10 +835,11 @@ workflows:
             fastlane -version
 
             ./firefox-ios/l10n-screenshots.sh en-US
+            git rev-parse HEAD
         title: Generate screenshots
     - save-cache@1:
         inputs:
-        - key: l10n-screenshots-dd-{{ `git rev-parse HEAD` }}
+        - key: l10n-screenshots-dd-{{ checksum "package-lock.json" }}
         - paths: l10n-screenshots-dd
     - deploy-to-bitrise-io@2:
         inputs:
