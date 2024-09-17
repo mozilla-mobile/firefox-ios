@@ -48,7 +48,7 @@ public class CloseButton: UIButton,
         accessibilityIdentifier = viewModel.a11yIdentifier
         accessibilityLabel = viewModel.a11yLabel
     }
-    
+
     private func updateButtonSizeForDyanimcFont() {
         let dynamicWidth = max(UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.width), UX.closeButtonSize.width)
         let dynamicHeight = max(UIFontMetrics.default.scaledValue(for: UX.closeButtonSize.height), UX.closeButtonSize.height)
