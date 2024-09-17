@@ -23,6 +23,11 @@ class TabDisplayView: UIView,
         case tabs
     }
 
+    enum SectionTabItem: Hashable {
+        case inactiveTab(InactiveTabsModel)
+        case tab(TabModel)
+    }
+
     let panelType: TabTrayPanelType
     private(set) var tabsState: TabsPanelState
     private var performingChainedOperations = false
@@ -33,7 +38,7 @@ class TabDisplayView: UIView,
     var theme: Theme?
 
     // Using tabUUID as it's a way to identify the Tab object which is hashable
-    private var tabsListDataSource: UICollectionViewDiffableDataSource<TabDisplaySection, TabModel.ID>?
+    private var tabsListDataSource: UICollectionViewDiffableDataSource<TabDisplaySection, SectionTabItem>?
 
     private var shouldHideInactiveTabs: Bool {
         guard !tabsState.isPrivateMode else { return true }
@@ -110,35 +115,34 @@ class TabDisplayView: UIView,
 //        }
 
         // Create the diffable data source and its cell provider.
-        tabsListDataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { [weak self] (collectionView, indexPath, tabId) -> UICollectionViewCell in
+        tabsListDataSource = UICollectionViewDiffableDataSource<TabDisplaySection, SectionTabItem>(collectionView: collectionView) 
+        { [weak self] (collectionView, indexPath, sectionItem) -> UICollectionViewCell in
             // `identifier/item` is an instance of `tabModel`. Use it to
             // retrieve the tab from the backing data store.
             guard let self else { return UICollectionViewCell() }
 
-            switch getTabDisplay(for: indexPath.section) {
-            case .inactiveTabs:
+            switch sectionItem {
+            case .inactiveTab(let inactiveTab):
                 guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: InactiveTabsCell.cellIdentifier,
                     for: indexPath
-                ) as? InactiveTabsCell,
-                let tabVM = tabsState.inactiveTabs.first(where: { $0.id == tabId })
+                ) as? InactiveTabsCell
                 else { return UICollectionViewCell() }
 
-                cell.configure(with: tabVM)
+                cell.configure(with: inactiveTab)
                 if let theme = theme {
                     cell.applyTheme(theme: theme)
                 }
                 return cell
-            case .tabs:
+            case .tab(let tab):
                 guard
                     let cell = collectionView.dequeueReusableCell(
                         withReuseIdentifier: TabCell.cellIdentifier,
                         for: indexPath
-                    ) as? TabCell,
-                    let tabState = tabsState.tabs.first(where: { $0.id == tabId })
+                    ) as? TabCell
                 else { return UICollectionViewCell() }
 
-                cell.configure(with: tabState, theme: theme, delegate: self)
+                cell.configure(with: tab, theme: theme, delegate: self)
                 return cell
             }
         }
@@ -276,6 +280,7 @@ class TabDisplayView: UIView,
         }
     }
 
+    // SOPHIE - remove when diffable datasource is implemented
     func collectionView(_ collectionView: UICollectionView,
                         viewForSupplementaryElementOfKind kind: String,
                         at indexPath: IndexPath)
