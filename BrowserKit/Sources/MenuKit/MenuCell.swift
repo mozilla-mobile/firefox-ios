@@ -48,7 +48,7 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
         self.model = model
         self.titleLabel.text = model.title
         self.descriptionLabel.text = model.a11yLabel // TODO: to be updated with the correct value
-        self.icon.image = UIImage(named: model.iconName)
+        self.icon.image = UIImage(named: model.iconName)?.withRenderingMode(.alwaysTemplate)
         setupView()
     }
 
@@ -77,8 +77,20 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     // TODO: FXIOS-10022 ⁃ Add themeing to the menu (applying this method remained)
     public func applyTheme(theme: Theme) {
+        guard let model else { return }
         backgroundColor = theme.colors.layer2
-        titleLabel.textColor = theme.colors.textPrimary
-        descriptionLabel.textColor = theme.colors.textSecondary
+        if model.isActive {
+            titleLabel.textColor = theme.colors.textAccent
+            descriptionLabel.textColor = theme.colors.textSecondary
+            icon.tintColor = theme.colors.iconAccentBlue
+        } else if !model.isEnabled {
+            titleLabel.textColor = theme.colors.textDisabled
+            descriptionLabel.textColor = theme.colors.textDisabled
+            icon.tintColor = theme.colors.iconDisabled
+        } else {
+            titleLabel.textColor = theme.colors.textPrimary
+            descriptionLabel.textColor = theme.colors.textSecondary
+            icon.tintColor = theme.colors.iconSecondary
+        }
     }
 }
