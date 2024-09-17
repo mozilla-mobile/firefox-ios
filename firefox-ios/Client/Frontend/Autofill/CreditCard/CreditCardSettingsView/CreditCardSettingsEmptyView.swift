@@ -46,7 +46,7 @@ struct CreditCardSettingsEmptyView: View {
             Spacer()
             creditCardImage
             emptyListTitle
-            getEmptyListDescription()
+            emptyListDescription
             Spacer()
             Spacer()
         }
@@ -83,7 +83,7 @@ struct CreditCardSettingsEmptyView: View {
         .padding(.trailing, 10)
     }
 
-    private func getEmptyListDescription() -> some View {
+    private var emptyListDescription: some View {
         return Text(String.CreditCard.Settings.EmptyListDescription)
             .preferredBodyFont(size: 16)
             .foregroundColor(subTextColor)
