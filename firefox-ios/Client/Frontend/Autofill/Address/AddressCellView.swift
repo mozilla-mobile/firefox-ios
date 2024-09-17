@@ -9,15 +9,6 @@ import Storage
 
 import struct MozillaAppServices.Address
 
-extension VerticalAlignment {
-    enum MidAddressIconAndName: AlignmentID {
-        static func defaultValue (in context: ViewDimensions) -> CGFloat {
-            context[.top]
-        }
-    }
-    static let midAddressIconAndName = VerticalAlignment(MidAddressIconAndName.self)
-}
-
 // MARK: - AddressCellView
 
 /// A view representing a cell displaying address information.
@@ -40,18 +31,18 @@ struct AddressCellView: View {
     var body: some View {
         Button(action: onTap) {
             VStack(alignment: .leading, spacing: 0) {
-                HStack(alignment: .midAccountAndName, spacing: 24) {
+                HStack(alignment: .midIconAndLabel, spacing: 24) {
                     Image(StandardImageIdentifiers.Large.location)
                         .renderingMode(.template)
                         .padding(.leading, 16)
                         .foregroundColor(iconPrimary)
-                        .alignmentGuide(.midAddressIconAndName) { $0[VerticalAlignment.center] }
+                        .alignmentGuide(.midIconAndLabel) { $0[VerticalAlignment.center] }
                     VStack(alignment: .leading) {
                         if !address.name.isEmpty {
                             Text(address.name)
                                 .font(.body)
                                 .foregroundColor(textColor)
-                                .alignmentGuide(.midAddressIconAndName) { $0[VerticalAlignment.center] }
+                                .alignmentGuide(.midIconAndLabel) { $0[VerticalAlignment.center] }
                         }
                         if !address.streetAddress.isEmpty {
                             Text(address.streetAddress)
