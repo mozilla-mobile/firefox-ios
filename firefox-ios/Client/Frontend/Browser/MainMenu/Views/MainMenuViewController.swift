@@ -133,8 +133,8 @@ class MainMenuViewController: UIViewController,
 
         reloadTableView(with: menuState.menuElements)
 
-        if let submenuType = menuState.shouldShowDetailsFor {
-            coordinator?.showDetailViewController(for: submenuType)
+        if menuState.shouldShowDetailsView {
+            coordinator?.showDetailViewController()
             return
         }
 

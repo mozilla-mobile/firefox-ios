@@ -26,19 +26,15 @@ class MainMenuDetailViewController: UIViewController,
     var currentWindowUUID: UUID? { return windowUUID }
     var submenuState: MainMenuDetailsState
 
-    private var submenuType: MainMenuDetailsViewType
-
     // MARK: - Initializers
     init(
         windowUUID: WindowUUID,
-        with submenuType: MainMenuDetailsViewType,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         themeManager: ThemeManager = AppContainer.shared.resolve()
     ) {
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
-        self.submenuType = submenuType
         self.submenuState = MainMenuDetailsState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
 
@@ -69,6 +65,17 @@ class MainMenuDetailViewController: UIViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyTheme()
+
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        store.dispatch(
+            MainMenuAction(
+                windowUUID: self.windowUUID,
+                actionType: MainMenuDetailsActionType.viewDidDisappear
+            )
+        )
     }
 
     deinit {
@@ -132,15 +139,15 @@ class MainMenuDetailViewController: UIViewController,
     func newState(state: MainMenuDetailsState) {
         submenuState = state
 
-        if submenuState.submenuType == nil {
-            store.dispatch(
-                MainMenuAction(
-                    windowUUID: submenuState.windowUUID,
-                    actionType: MainMenuDetailsActionType.updateSubmenuType(submenuType)
-                )
-            )
-            return
-        }
+//        if submenuState.submenuType == nil {
+//            store.dispatch(
+//                MainMenuAction(
+//                    windowUUID: submenuState.windowUUID,
+//                    actionType: MainMenuDetailsActionType.updateSubmenuType(submenuType)
+//                )
+//            )
+//            return
+//        }
 
         if submenuState.shouldDismiss {
             backToMainView()

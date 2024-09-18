@@ -133,6 +133,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     iconName: "",
                     isEnabled: true,
                     isActive: false,
+                    hasSubmenu: true,
                     a11yLabel: "",
                     a11yHint: "",
                     a11yId: "",
@@ -140,17 +141,17 @@ struct MainMenuConfigurationUtility: Equatable {
                         store.dispatch(
                             MainMenuAction(
                                 windowUUID: uuid,
-                                actionType: MainMenuActionType.openDetailsView(to: .tools)
+                                actionType: MainMenuActionType.openDetailsViewTo(.tools)
                             )
                         )
-                    },
-                    hasSubmenu: true
+                    }
                 ),
                 MenuElement(
                     title: .MainMenu.ToolsSection.Save,
                     iconName: "",
                     isEnabled: true,
                     isActive: false,
+                    hasSubmenu: true,
                     a11yLabel: "",
                     a11yHint: "",
                     a11yId: "",
@@ -158,11 +159,10 @@ struct MainMenuConfigurationUtility: Equatable {
                         store.dispatch(
                             MainMenuAction(
                                 windowUUID: uuid,
-                                actionType: MainMenuActionType.openDetailsView(to: .save)
+                                actionType: MainMenuActionType.openDetailsViewTo(.save)
                             )
                         )
-                    },
-                    hasSubmenu: true
+                    }
                 )
             ]
         )

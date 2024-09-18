@@ -33,9 +33,9 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         )
     }
 
-    func showDetailViewController(for submenuType: MainMenuDetailsViewType) {
+    func showDetailViewController() {
         router.push(
-            createMainMenuDetailViewController(with: submenuType),
+            createMainMenuDetailViewController(),
             animated: true
         )
     }
@@ -87,10 +87,8 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         return mainMenuViewController
     }
 
-    private func createMainMenuDetailViewController(
-        with submenuType: MainMenuDetailsViewType
-    ) -> MainMenuDetailViewController {
-        let detailVC = MainMenuDetailViewController(windowUUID: windowUUID, with: submenuType)
+    private func createMainMenuDetailViewController() -> MainMenuDetailViewController {
+        let detailVC = MainMenuDetailViewController(windowUUID: windowUUID)
         detailVC.coordinator = self
         return detailVC
     }

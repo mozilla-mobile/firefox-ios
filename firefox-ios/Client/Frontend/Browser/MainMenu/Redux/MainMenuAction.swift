@@ -24,7 +24,7 @@ enum MainMenuActionType: ActionType {
     case mainMenuDidAppear
     case toggleNightMode
     case closeMenu
-    case openDetailsView(to: MainMenuDetailsViewType)
+    case openDetailsViewTo(MainMenuDetailsViewType)
     case show(MainMenuNavigationDestination)
     case toggleUserAgent
 }
@@ -60,12 +60,14 @@ enum MainMenuNavigationDestination: Equatable {
 }
 
 enum MainMenuMiddlewareActionType: ActionType {
-    case requestTabInfo
     case provideTabInfo(MainMenuTabInfo?)
+    case requestTabInfo
+    case updateSubmenuTypeTo(MainMenuDetailsViewType)
 }
 
 enum MainMenuDetailsActionType: ActionType {
-    case viewDidLoad
-    case updateSubmenuType(MainMenuDetailsViewType)
     case dismissView
+    case updateSubmenuType(MainMenuDetailsViewType)
+    case viewDidLoad
+    case viewDidDisappear
 }
