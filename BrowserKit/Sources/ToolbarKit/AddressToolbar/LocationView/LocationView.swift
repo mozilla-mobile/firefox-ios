@@ -361,7 +361,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         guard let text = textField.text else { return true }
         if !text.trimmingCharacters(in: .whitespaces).isEmpty {
             delegate?.locationViewDidSubmitText(text)
-            textField.resignFirstResponder()
+            _ = textField.resignFirstResponder()
             return true
         } else {
             return false
