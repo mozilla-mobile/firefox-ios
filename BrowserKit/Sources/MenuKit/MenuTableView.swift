@@ -16,6 +16,7 @@ class MenuTableView: UIView,
     struct UX {
         static let topPadding: CGFloat = 1
     }
+
     private var tableView: UITableView
     private var menuData: [MenuSection]
     private var theme: Theme?
@@ -107,7 +108,7 @@ class MenuTableView: UIView,
     ) -> UIView? {
         if section == 0 {
             let headerView = UIView()
-            headerView.backgroundColor = .systemRed
+            headerView.backgroundColor = .clear
             return headerView
         }
         return nil
