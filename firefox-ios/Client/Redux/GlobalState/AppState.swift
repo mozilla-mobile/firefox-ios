@@ -51,32 +51,27 @@ extension AppState {
     }
 }
 
+let middlewares = [
+    FeltPrivacyMiddleware().privacyManagerProvider,
+    MainMenuMiddleware().mainMenuProvider,
+    MicrosurveyMiddleware().microsurveyProvider,
+    MicrosurveyPromptMiddleware().microsurveyProvider,
+    RemoteTabsPanelMiddleware().remoteTabsPanelProvider,
+    TabManagerMiddleware().tabsPanelProvider,
+    ThemeManagerMiddleware().themeManagerProvider,
+    ToolbarMiddleware().toolbarProvider,
+    TrackingProtectionMiddleware().trackingProtectionProvider
+]
+
+// In order for us to mock and test the middlewares easier,
+// we change the store to be instantiated as a variable.
+// For non testing builds, we leave the store as a constant.
 #if TESTING
 var store = Store(state: AppState(),
                   reducer: AppState.reducer,
-                  middlewares: [
-                    FeltPrivacyMiddleware().privacyManagerProvider,
-                    MainMenuMiddleware().mainMenuProvider,
-                    MicrosurveyMiddleware().microsurveyProvider,
-                    MicrosurveyPromptMiddleware().microsurveyProvider,
-                    RemoteTabsPanelMiddleware().remoteTabsPanelProvider,
-                    TabManagerMiddleware().tabsPanelProvider,
-                    ThemeManagerMiddleware().themeManagerProvider,
-                    ToolbarMiddleware().toolbarProvider,
-                    TrackingProtectionMiddleware().trackingProtectionProvider
-                  ])
+                  middlewares: middlewares)
 #else
 let store = Store(state: AppState(),
                   reducer: AppState.reducer,
-                  middlewares: [
-                    FeltPrivacyMiddleware().privacyManagerProvider,
-                    MainMenuMiddleware().mainMenuProvider,
-                    MicrosurveyMiddleware().microsurveyProvider,
-                    MicrosurveyPromptMiddleware().microsurveyProvider,
-                    RemoteTabsPanelMiddleware().remoteTabsPanelProvider,
-                    TabManagerMiddleware().tabsPanelProvider,
-                    ThemeManagerMiddleware().themeManagerProvider,
-                    ToolbarMiddleware().toolbarProvider,
-                    TrackingProtectionMiddleware().trackingProtectionProvider
-                  ])
+                  middlewares: middlewares)
 #endif
