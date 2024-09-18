@@ -93,6 +93,16 @@ class MainMenuViewController: UIViewController,
         updateModalA11y()
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        store.dispatch(
+            MainMenuAction(
+                windowUUID: windowUUID,
+                actionType: MainMenuActionType.viewWillDisappear
+            )
+        )
+    }
+
     deinit {
         unsubscribeFromRedux()
     }
