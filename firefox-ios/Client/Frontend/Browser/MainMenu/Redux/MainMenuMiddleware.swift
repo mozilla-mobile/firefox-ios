@@ -83,6 +83,5 @@ final class MainMenuMiddleware {
                 actionType: MainMenuActionType.updateCurrentTabInfo(info)
             )
         )
-
     }
 }
