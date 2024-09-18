@@ -14,7 +14,6 @@ class ReaderPanelEmptyStateView: UIView {
             label.text = .ReaderPanelWelcome
             label.textAlignment = .center
             label.font = FXFontStyles.Bold.body.scaledFont()
-            label.adjustsFontSizeToFitWidth = true
             label.numberOfLines = 0
             label.textColor = self.currentTheme().colors.textSecondary
         }
