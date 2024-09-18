@@ -32,6 +32,8 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
         stackView.spacing = UX.contentSpacing
     }
 
+    private var accessoryArrowView: UIImageView = .build()
+
     // MARK: - Properties
     public var model: MenuElement?
 
@@ -49,12 +51,15 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
         self.titleLabel.text = model.title
         self.descriptionLabel.text = model.a11yLabel // TODO: to be updated with the correct value
         self.icon.image = UIImage(named: model.iconName)?.withRenderingMode(.alwaysTemplate)
+        self.accessoryArrowView.image =
+        UIImage(named: StandardImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
         setupView()
     }
 
     private func setupView() {
         self.addSubview(icon)
         self.addSubview(contentStackView)
+        self.addSubview(accessoryArrowView)
         contentStackView.addArrangedSubview(titleLabel)
         contentStackView.addArrangedSubview(descriptionLabel)
         NSLayoutConstraint.activate([
@@ -64,9 +69,15 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
             icon.heightAnchor.constraint(equalToConstant: UX.iconSize),
 
             contentStackView.leadingAnchor.constraint(equalTo: icon.trailingAnchor, constant: UX.contentMargin),
-            contentStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.contentMargin),
             contentStackView.topAnchor.constraint(equalTo: topAnchor, constant: UX.contentMargin),
-            contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.contentMargin)
+            contentStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.contentMargin),
+
+            accessoryArrowView.leadingAnchor.constraint(equalTo: contentStackView.trailingAnchor,
+                                                        constant: UX.contentMargin),
+            accessoryArrowView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.contentMargin),
+            accessoryArrowView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            accessoryArrowView.widthAnchor.constraint(equalToConstant: UX.iconSize),
+            accessoryArrowView.heightAnchor.constraint(equalToConstant: UX.iconSize)
         ])
     }
 
@@ -79,6 +90,7 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
     public func applyTheme(theme: Theme) {
         guard let model else { return }
         backgroundColor = theme.colors.layer2
+        accessoryArrowView.isHidden = !model.hasSubmenu || model.isActive ? true : false
         if model.isActive {
             titleLabel.textColor = theme.colors.textAccent
             descriptionLabel.textColor = theme.colors.textSecondary
@@ -87,10 +99,12 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
             titleLabel.textColor = theme.colors.textDisabled
             descriptionLabel.textColor = theme.colors.textDisabled
             icon.tintColor = theme.colors.iconDisabled
+            accessoryArrowView.tintColor = theme.colors.iconDisabled
         } else {
             titleLabel.textColor = theme.colors.textPrimary
             descriptionLabel.textColor = theme.colors.textSecondary
             icon.tintColor = theme.colors.iconSecondary
+            accessoryArrowView.tintColor = theme.colors.iconSecondary
         }
     }
 }
