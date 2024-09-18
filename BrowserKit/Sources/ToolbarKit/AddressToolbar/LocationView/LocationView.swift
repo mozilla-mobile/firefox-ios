@@ -21,7 +21,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     private var notifyTextChanged: (() -> Void)?
     private var onTapLockIcon: ((UIButton) -> Void)?
     private var onLongPress: (() -> Void)?
-    private var delegate: LocationViewDelegate?
+    private weak var delegate: LocationViewDelegate?
 
     private var isEditing = false
     private var isURLTextFieldEmpty: Bool {

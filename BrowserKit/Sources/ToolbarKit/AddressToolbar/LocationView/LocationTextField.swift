@@ -19,7 +19,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     private var tintedClearImage: UIImage?
     private var clearButtonTintColor: UIColor?
 
-    var autocompleteDelegate: LocationTextFieldDelegate?
+    weak var autocompleteDelegate: LocationTextFieldDelegate?
 
     // This variable is a solution to get the right behaviour for refocusing
     // the LocationTextField. The initial transition into Overlay Mode
