@@ -219,14 +219,16 @@ struct AddressBarState: StateType, Equatable {
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
-                navigationActions: navigationActions(action: toolbarAction, addressBarState: state),
+                navigationActions: navigationActions(action: toolbarAction,
+                                                     addressBarState: state,
+                                                     isEditing: state.isEditing),
                 pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: false),
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,
                 searchTerm: nil,
                 lockIconImageName: state.lockIconImageName,
-                isEditing: false,
+                isEditing: state.isEditing,
                 isScrollingDuringEdit: state.isScrollingDuringEdit,
                 shouldSelectSearchTerm: state.shouldSelectSearchTerm,
                 isLoading: state.isLoading,
@@ -238,7 +240,9 @@ struct AddressBarState: StateType, Equatable {
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
-                navigationActions: navigationActions(action: toolbarAction, addressBarState: state),
+                navigationActions: navigationActions(action: toolbarAction,
+                                                     addressBarState: state,
+                                                     isEditing: state.isEditing),
                 pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
                 browserActions: browserActions(action: toolbarAction, addressBarState: state),
                 borderPosition: state.borderPosition,
