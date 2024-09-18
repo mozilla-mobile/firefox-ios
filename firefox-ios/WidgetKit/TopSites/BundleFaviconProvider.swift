@@ -6,7 +6,7 @@ import Foundation
 import SiteImageView
 
 struct BundleFaviconProvider {
-    struct Favicon {
+    private struct Favicon {
         let title: String
         let resource: SiteResource
     }
