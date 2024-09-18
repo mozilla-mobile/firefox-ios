@@ -54,8 +54,19 @@ class MainMenuDetailViewController: UIViewController,
         submenuContent.setupHeaderNavigation(from: self)
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        applyTheme()
+    }
+
+    // MARK: - UX related
+    func applyTheme() {
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        view.backgroundColor = theme.colors.layer3
+        submenuContent.applyTheme(theme: theme)
+    }
+
     private func setupView() {
-        view.backgroundColor = .systemMint
         view.addSubview(submenuContent)
 
         NSLayoutConstraint.activate([

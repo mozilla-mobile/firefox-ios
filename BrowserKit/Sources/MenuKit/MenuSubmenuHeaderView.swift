@@ -10,10 +10,9 @@ public protocol MainMenuDetailNavigationHandler: AnyObject {
     func backToMainView()
 }
 
-final class MenuSubmenuHeaderView: UIView {
+final class MenuSubmenuHeaderView: UIView, ThemeApplicable {
     // MARK: - UI Elements
     private lazy var backButton: UIButton = .build { button in
-        button.backgroundColor = .systemRed
         button.addTarget(self, action: #selector(self.backButtonTapped), for: .touchUpInside)
     }
 
@@ -32,7 +31,6 @@ final class MenuSubmenuHeaderView: UIView {
 
     // MARK: - UI Setup
     private func setupView() {
-        backgroundColor = .systemCyan
         addSubviews(backButton)
 
         NSLayoutConstraint.activate([
@@ -46,5 +44,11 @@ final class MenuSubmenuHeaderView: UIView {
     @objc
     private func backButtonTapped() {
         navigationDelegate?.backToMainView()
+    }
+
+    // MARK: Theme Applicable
+    func applyTheme(theme: Theme) {
+        backgroundColor = theme.colors.layer3
+        backButton.tintColor = theme.colors.textAccent
     }
 }

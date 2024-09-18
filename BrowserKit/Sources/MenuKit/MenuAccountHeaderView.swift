@@ -4,8 +4,9 @@
 
 import Foundation
 import UIKit
+import Common
 
-final class MenuAccountHeaderView: UIView {
+final class MenuAccountHeaderView: UIView, ThemeApplicable {
     // MARK: - UI Elements
 
     // MARK: - Properties
@@ -22,9 +23,12 @@ final class MenuAccountHeaderView: UIView {
 
     // MARK: - UI Setup
     private func setupView() {
-        backgroundColor = .systemPink
-
         NSLayoutConstraint.activate([
         ])
+    }
+
+    // MARK: - Theme Applicable
+    func applyTheme(theme: Theme) {
+        backgroundColor = theme.colors.layer3
     }
 }
