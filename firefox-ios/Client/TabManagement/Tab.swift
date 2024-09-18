@@ -80,6 +80,18 @@ class Tab: NSObject, ThemeApplicable {
         }
     }
 
+    var isNormal: Bool {
+        return !isPrivate
+    }
+
+    var isNormalActive: Bool {
+        return !isPrivate && isActive
+    }
+
+    var isNormalAndInactive: Bool {
+        return !isPrivate && isInactive
+    }
+
     /// The window associated with the tab (where the tab lives and will be displayed).
     /// Currently tabs cannot be actively moved between windows on iPadOS, however this
     /// may change in the future.

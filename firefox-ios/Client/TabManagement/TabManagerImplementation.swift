@@ -293,7 +293,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         return tabData
     }
 
-    /// storeChanges is called when a web view has finished loading a page
+    /// storeChanges is called when a web view has finished loading a page, or when a tab is removed, and in other cases.
     override func storeChanges() {
         let windowManager: WindowManager = AppContainer.shared.resolve()
         windowManager.performMultiWindowAction(.storeTabs)
@@ -324,7 +324,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
     /// Note: it is safe to call this with `tab` and `previous` as the same tab, for use in the case
     /// where the index of the tab has changed (such as after deletion).
     override func selectTab(_ tab: Tab?, previous: Tab? = nil) {
-        let url = tab?.url
         guard let tab = tab,
               let tabUUID = UUID(uuidString: tab.tabUUID)
         else {
@@ -333,6 +332,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
                        category: .tabs)
             return
         }
+
+        let url = tab.url
 
         logger.log("Select tab",
                    level: .info,
@@ -343,9 +344,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
 
         willSelectTab(url)
 
-        let previous = previous ?? selectedTab
-
-        previous?.metadataManager?.updateTimerAndObserving(state: .tabSwitched, isPrivate: previous?.isPrivate ?? false)
+        let isPrivateBrowsing = (previous ?? selectedTab)?.isPrivate
+        previous?.metadataManager?.updateTimerAndObserving(state: .tabSwitched, isPrivate: isPrivateBrowsing ?? false)
         tab.metadataManager?.updateTimerAndObserving(state: .tabSelected, isPrivate: tab.isPrivate)
 
         // Make sure to wipe the private tabs if the user has the pref turned on
@@ -358,9 +358,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         preserveTabs()
 
         let sessionData = tabSessionStore.fetchTabSession(tabID: tabUUID)
-        selectTabWithSession(tab: tab,
-                             previous: previous,
-                             sessionData: sessionData)
+        selectTabWithSession(tab: tab, sessionData: sessionData)
 
         // Default to false if the feature flag is not enabled
         var isPrivate = false
@@ -426,7 +424,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         store.dispatch(action)
     }
 
-    private func selectTabWithSession(tab: Tab, previous: Tab?, sessionData: Data?) {
+    private func selectTabWithSession(tab: Tab, sessionData: Data?) {
         assert(Thread.isMainThread, "Currently expected to be called only on main thread.")
         let configuration: WKWebViewConfiguration = tab.isPrivate ? self.privateConfiguration : self.configuration
 

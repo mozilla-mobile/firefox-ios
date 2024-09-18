@@ -87,7 +87,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     var normalActiveTabs: [Tab] {
-        return LegacyInactiveTabViewModel.getActiveEligibleTabsFrom(normalTabs)
+        return normalTabs.filter({ $0.isActive })
     }
 
     var inactiveTabs: [Tab] {
@@ -98,10 +98,9 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         return tabs.filter { $0.isPrivate }
     }
 
-    /// This variable returns all normal tabs, sorted chronologically, excluding any
-    /// home page tabs.
+    /// This variable returns all normal tabs, sorted chronologically, excluding any home page tabs.
     var recentlyAccessedNormalTabs: [Tab] {
-        var eligibleTabs = viableTabs()
+        var eligibleTabs = normalActiveTabs // Do not include inactive tabs, as they are not "recently" accessed
 
         eligibleTabs = eligibleTabs.filter { tab in
             if tab.lastKnownUrl == nil {
@@ -130,6 +129,15 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
             return nil
         }
         return tabs[_selectedIndex]
+    }
+
+    var selectedTabUUID: UUID? {
+        guard let selectedTab = self.selectedTab,
+              let uuid = UUID(uuidString: selectedTab.tabUUID) else {
+            return nil
+        }
+
+        return uuid
     }
 
     subscript(index: Int) -> Tab? {
@@ -413,6 +421,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         return popup
     }
 
+    /// Note: Inserts AND configures the given tab.
     func configureTab(_ tab: Tab,
                       request: URLRequest?,
                       afterTab parent: Tab? = nil,
@@ -905,9 +914,9 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         storeChanges()
     }
 
-    // Select the most recently visited tab, IFF it is also the parent tab of the closed tab.
+    // Select the most recently visited tab, IF it is also the parent tab of the closed tab and is NOT inactive.
     private func selectParentTab(afterRemoving tab: Tab) -> Bool {
-        let viableTabs = (tab.isPrivate ? privateTabs : normalTabs).filter { $0 != tab }
+        let viableTabs = (tab.isPrivate ? privateTabs : normalActiveTabs).filter { $0 != tab }
         guard let parentTab = tab.parent,
               parentTab != tab,
               !viableTabs.isEmpty,
