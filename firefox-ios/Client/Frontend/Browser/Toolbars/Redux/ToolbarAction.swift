@@ -81,8 +81,7 @@ enum ToolbarActionType: ActionType {
     case cancelEdit
     case didScrollDuringEdit
     case readerModeStateChanged
-    case backButtonStateChanged
-    case forwardButtonStateChanged
+    case backForwardButtonStateChanged
     case traitCollectionDidChange
     case websiteLoadingStateDidChange
     case searchEngineDidChange

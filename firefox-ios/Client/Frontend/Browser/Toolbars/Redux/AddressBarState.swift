@@ -214,8 +214,7 @@ struct AddressBarState: StateType, Equatable {
                 readerModeState: state.readerModeState
             )
 
-        case ToolbarActionType.backButtonStateChanged,
-            ToolbarActionType.forwardButtonStateChanged:
+        case ToolbarActionType.backForwardButtonStateChanged:
             guard let toolbarAction = action as? ToolbarAction else { return state }
 
             return AddressBarState(

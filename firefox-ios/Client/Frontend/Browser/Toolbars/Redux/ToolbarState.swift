@@ -231,8 +231,7 @@ struct ToolbarState: ScreenState, Equatable {
                 isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
                 canShowDataClearanceAction: state.canShowDataClearanceAction)
 
-        case ToolbarActionType.backButtonStateChanged,
-            ToolbarActionType.forwardButtonStateChanged:
+        case ToolbarActionType.backForwardButtonStateChanged:
             guard let toolbarAction = action as? ToolbarAction else { return state }
             return ToolbarState(
                 windowUUID: state.windowUUID,

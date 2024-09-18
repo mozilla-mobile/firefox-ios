@@ -442,8 +442,9 @@ class BrowserViewController: UIViewController,
             updateURLBarDisplayURL(tab)
 
             if isToolbarRefactorEnabled {
-                dispatchBackForwardToolbarAction(webView.canGoBack, windowUUID, .backButtonStateChanged)
-                dispatchBackForwardToolbarAction(webView.canGoForward, windowUUID, .forwardButtonStateChanged)
+                dispatchBackForwardToolbarAction(canGoBack: webView.canGoBack,
+                                                 canGoForward: webView.canGoForward,
+                                                 windowUUID: windowUUID)
             } else {
                 navigationToolbar.updateBackStatus(webView.canGoBack)
                 navigationToolbar.updateForwardStatus(webView.canGoForward)
@@ -1794,7 +1795,7 @@ class BrowserViewController: UIViewController,
                   let canGoBack = change?[.newKey] as? Bool
             else { break }
             if isToolbarRefactorEnabled {
-                dispatchBackForwardToolbarAction(canGoBack, windowUUID, .backButtonStateChanged)
+                dispatchBackForwardToolbarAction(canGoBack: canGoBack, windowUUID: windowUUID)
             } else {
                 navigationToolbar.updateBackStatus(canGoBack)
             }
@@ -1803,7 +1804,7 @@ class BrowserViewController: UIViewController,
                   let canGoForward = change?[.newKey] as? Bool
             else { break }
             if isToolbarRefactorEnabled {
-                dispatchBackForwardToolbarAction(canGoForward, windowUUID, .forwardButtonStateChanged)
+                dispatchBackForwardToolbarAction(canGoForward: canGoForward, windowUUID: windowUUID)
             } else {
                 navigationToolbar.updateForwardStatus(canGoForward)
             }
@@ -1935,18 +1936,15 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func dispatchBackForwardToolbarAction(_ isEnabled: Bool?,
-                                                  _ windowUUID: UUID,
-                                                  _ actionType: ToolbarActionType) {
-        switch actionType {
-        case .backButtonStateChanged:
-            let action = ToolbarAction(canGoBack: isEnabled, windowUUID: windowUUID, actionType: actionType)
-            store.dispatch(action)
-        case .forwardButtonStateChanged:
-            let action = ToolbarAction(canGoForward: isEnabled, windowUUID: windowUUID, actionType: actionType)
-            store.dispatch(action)
-        default: break
-        }
+    private func dispatchBackForwardToolbarAction(canGoBack: Bool? = nil,
+                                                  canGoForward: Bool? = nil,
+                                                  windowUUID: UUID) {
+        guard canGoBack != nil || canGoForward != nil else { return }
+        let action = ToolbarAction(canGoBack: canGoBack,
+                                   canGoForward: canGoForward,
+                                   windowUUID: windowUUID,
+                                   actionType: ToolbarActionType.backForwardButtonStateChanged)
+        store.dispatch(action)
     }
 
     private func handleDisplayActions(for state: BrowserViewControllerState) {
@@ -3653,8 +3651,9 @@ extension BrowserViewController: TabManagerDelegate {
         setupMiddleButtonStatus(isLoading: selectedTab.loading)
 
         if isToolbarRefactorEnabled {
-            dispatchBackForwardToolbarAction(selectedTab.canGoBack, windowUUID, .backButtonStateChanged)
-            dispatchBackForwardToolbarAction(selectedTab.canGoForward, windowUUID, .forwardButtonStateChanged)
+            dispatchBackForwardToolbarAction(canGoBack: selectedTab.canGoBack,
+                                             canGoForward: selectedTab.canGoForward,
+                                             windowUUID: windowUUID)
         } else {
             navigationToolbar.updateBackStatus(selectedTab.canGoBack)
             navigationToolbar.updateForwardStatus(selectedTab.canGoForward)
