@@ -488,7 +488,7 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
 
     // MARK: - Update Views
     private func updateProtectionViewStatus() {
-        let isContentBlockingConfigEnabled = profile?.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? false
+        let isContentBlockingConfigEnabled = profile?.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? true
         if toggleView.toggleIsOn, isContentBlockingConfigEnabled {
             toggleView.setStatusLabelText(with: .Menu.EnhancedTrackingProtection.switchOnText)
             trackersView.setVisibility(isHidden: false)
