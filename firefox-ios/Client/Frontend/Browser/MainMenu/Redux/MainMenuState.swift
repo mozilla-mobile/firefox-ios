@@ -18,9 +18,9 @@ struct MainMenuState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     var menuElements: [MenuSection]
     var shouldDismiss: Bool
+    var shouldShowDetailsView: Bool
 
     var navigationDestination: MainMenuNavigationDestination?
-    var shouldShowDetailsFor: MainMenuDetailsViewType?
     var currentTabInfo: MainMenuTabInfo?
 
     private let menuConfigurator = MainMenuConfigurationUtility()
@@ -40,8 +40,8 @@ struct MainMenuState: ScreenState, Equatable {
             menuElements: mainMenuState.menuElements,
             currentTabInfo: mainMenuState.currentTabInfo,
             navigationDestination: mainMenuState.navigationDestination,
-            shouldShowDetailsFor: mainMenuState.shouldShowDetailsFor,
-            shouldDismiss: mainMenuState.shouldDismiss
+            shouldDismiss: mainMenuState.shouldDismiss,
+            shouldShowDetailsView: mainMenuState.shouldShowDetailsView
         )
     }
 
@@ -51,8 +51,8 @@ struct MainMenuState: ScreenState, Equatable {
             menuElements: [],
             currentTabInfo: nil,
             navigationDestination: nil,
-            shouldShowDetailsFor: nil,
-            shouldDismiss: false
+            shouldDismiss: false,
+            shouldShowDetailsView: false
         )
     }
 
@@ -61,15 +61,15 @@ struct MainMenuState: ScreenState, Equatable {
         menuElements: [MenuSection],
         currentTabInfo: MainMenuTabInfo?,
         navigationDestination: MainMenuNavigationDestination? = nil,
-        shouldShowDetailsFor submenuType: MainMenuDetailsViewType? = nil,
-        shouldDismiss: Bool = false
+        shouldDismiss: Bool = false,
+        shouldShowDetailsView: Bool = false
     ) {
         self.windowUUID = windowUUID
         self.menuElements = menuElements
         self.currentTabInfo = currentTabInfo
         self.navigationDestination = navigationDestination
-        self.shouldShowDetailsFor = submenuType
         self.shouldDismiss = shouldDismiss
+        self.shouldShowDetailsView = shouldShowDetailsView
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -91,12 +91,19 @@ struct MainMenuState: ScreenState, Equatable {
                 ),
                 currentTabInfo: info
             )
-        case MainMenuActionType.openDetailsView(to: let submenuType):
+        case MainMenuActionType.openDetailsViewTo(let submenuType):
+            store.dispatch(
+                MainMenuAction(
+                    windowUUID: state.windowUUID,
+                    actionType: MainMenuMiddlewareActionType.updateSubmenuTypeTo(submenuType)
+                )
+            )
+
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
                 currentTabInfo: state.currentTabInfo,
-                shouldShowDetailsFor: submenuType
+                shouldShowDetailsView: true
             )
         case MainMenuActionType.show:
             guard let menuAction = action as? MainMenuAction else { return state }

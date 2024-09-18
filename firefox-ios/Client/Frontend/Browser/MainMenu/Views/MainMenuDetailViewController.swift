@@ -82,6 +82,17 @@ now)
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyTheme()
+
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        store.dispatch(
+            MainMenuAction(
+                windowUUID: self.windowUUID,
+                actionType: MainMenuDetailsActionType.viewDidDisappear
+            )
+        )
     }
 
     // MARK: Notifications
@@ -179,15 +190,15 @@ now)
     func newState(state: MainMenuDetailsState) {
         submenuState = state
 
-        if submenuState.submenuType == nil {
-            store.dispatch(
-                MainMenuAction(
-                    windowUUID: submenuState.windowUUID,
-                    actionType: MainMenuDetailsActionType.updateSubmenuType(submenuType)
-                )
-            )
-            return
-        }
+//        if submenuState.submenuType == nil {
+//            store.dispatch(
+//                MainMenuAction(
+//                    windowUUID: submenuState.windowUUID,
+//                    actionType: MainMenuDetailsActionType.updateSubmenuType(submenuType)
+//                )
+//            )
+//            return
+//        }
 
         if submenuState.shouldDismiss {
             backToMainView()

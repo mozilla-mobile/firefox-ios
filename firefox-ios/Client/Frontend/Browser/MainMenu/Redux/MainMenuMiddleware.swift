@@ -11,6 +11,7 @@ final class MainMenuMiddleware {
     private let telemetry = MainMenuTelemetry()
 
     var currentTabInfo: MainMenuTabInfo?
+    var submenuToDisplay: MainMenuDetailsViewType?
 
     init(
         logger: Logger = DefaultLogger.shared
@@ -21,29 +22,54 @@ final class MainMenuMiddleware {
 
     lazy var mainMenuProvider: Middleware<AppState> = { state, action in
         switch action.actionType {
-        case MainMenuActionType.viewDidLoad,
-            MainMenuDetailsActionType.viewDidLoad:
-            if let currentTabInfo = self.currentTabInfo {
-                self.dispatchTabInfo(with: action.windowUUID, and: currentTabInfo)
-            } else {
+        case MainMenuActionType.viewDidLoad:
+            self.performViewDidLoadFlow(with: action.windowUUID)
+        case MainMenuDetailsActionType.viewDidLoad:
+            self.performViewDidLoadFlow(with: action.windowUUID)
+
+            if let submenuType = self.submenuToDisplay {
                 store.dispatch(
                     MainMenuAction(
                         windowUUID: action.windowUUID,
-                        actionType: MainMenuMiddlewareActionType.requestTabInfo
+                        actionType: MainMenuDetailsActionType.updateSubmenuType(submenuType)
                     )
                 )
             }
+        case MainMenuDetailsActionType.viewDidDisappear:
+            self.submenuToDisplay = nil
         case MainMenuMiddlewareActionType.provideTabInfo(let info):
             if let info {
                 self.currentTabInfo = info
                 self.dispatchTabInfo(with: action.windowUUID, and: info)
             }
+        case MainMenuMiddlewareActionType.updateSubmenuTypeTo(let submenuType):
+            self.submenuToDisplay = submenuType
+
+            store.dispatch(
+                MainMenuAction(
+                    windowUUID: action.windowUUID,
+                    actionType: MainMenuDetailsActionType.updateSubmenuType(submenuType)
+                )
+            )
         case MainMenuActionType.mainMenuDidAppear:
             self.telemetry.mainMenuViewed()
         case MainMenuActionType.closeMenu:
             self.telemetry.mainMenuDismissed()
         default:
             break
+        }
+    }
+
+    private func performViewDidLoadFlow(with uuid: WindowUUID) {
+        if let currentTabInfo {
+            self.dispatchTabInfo(with: uuid, and: currentTabInfo)
+        } else {
+            store.dispatch(
+                MainMenuAction(
+                    windowUUID: uuid,
+                    actionType: MainMenuMiddlewareActionType.requestTabInfo
+                )
+            )
         }
     }
 
@@ -57,5 +83,6 @@ final class MainMenuMiddleware {
                 actionType: MainMenuActionType.updateCurrentTabInfo(info)
             )
         )
+
     }
 }

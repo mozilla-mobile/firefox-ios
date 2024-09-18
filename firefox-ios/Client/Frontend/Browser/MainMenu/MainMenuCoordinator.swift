@@ -91,7 +91,7 @@ func showDetailViewController(for submenuType: MainMenuDetailsViewType, title: S
         with submenuType: MainMenuDetailsViewType,
         title: String
     ) -> MainMenuDetailViewController {
-        let detailVC = MainMenuDetailViewController(windowUUID: windowUUID, with: submenuType)
+        let detailVC = MainMenuDetailViewController(windowUUID: windowUUID, with: submenuType, title: title)
         detailVC.coordinator = self
         return detailVC
     }

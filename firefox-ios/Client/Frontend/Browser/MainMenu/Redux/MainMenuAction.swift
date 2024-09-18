@@ -67,12 +67,14 @@ enum MainMenuNavigationDestination: Equatable {
 }
 
 enum MainMenuMiddlewareActionType: ActionType {
-    case requestTabInfo
     case provideTabInfo(MainMenuTabInfo?)
+    case requestTabInfo
+    case updateSubmenuTypeTo(MainMenuDetailsViewType)
 }
 
 enum MainMenuDetailsActionType: ActionType {
-    case viewDidLoad
-    case updateSubmenuType(MainMenuDetailsViewType)
     case dismissView
+    case updateSubmenuType(MainMenuDetailsViewType)
+    case viewDidLoad
+    case viewDidDisappear
 }

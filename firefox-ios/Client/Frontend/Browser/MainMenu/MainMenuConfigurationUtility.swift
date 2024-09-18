@@ -176,8 +176,7 @@ struct MainMenuConfigurationUtility: Equatable {
 title: .MainMenu.ToolsSection.Tools)
                             )
                         )
-                    },
-                    hasSubmenu: true
+                    }
                 ),
                 MenuElement(
                     title: .MainMenu.ToolsSection.Save,
@@ -196,8 +195,7 @@ title: .MainMenu.ToolsSection.Tools)
 title: .MainMenu.ToolsSection.Save)
                             )
                         )
-                    },
-                    hasSubmenu: true
+                    }
                 )
             ]
         )
