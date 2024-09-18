@@ -47,7 +47,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
         switch self {
         case .closeRemoteTabs,
                 .microsurvey,
-                .menuRefactor:
+                .menuRefactor,
+                .nativeErrorPage:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil

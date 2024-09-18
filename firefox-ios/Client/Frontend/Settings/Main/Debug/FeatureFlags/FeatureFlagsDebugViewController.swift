@@ -45,6 +45,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     statusText: format(string: "Toggle to use the new menu")
                 ) { [weak self] _ in
                     self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .nativeErrorPage,
+                    titleText: format(string: "Enable Native Error Page"),
+                    statusText: format(string: "Toggle to display natively created error pages")
+                ) { [weak self] _ in
+                    self?.reloadView()
                 }
             ]
         )
