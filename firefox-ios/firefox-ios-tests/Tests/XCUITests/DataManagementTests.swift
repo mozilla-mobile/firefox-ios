@@ -38,7 +38,12 @@ class DataManagementTests: BaseTestCase {
         waitUntilPageLoad()
         navigator.goto(WebsiteDataSettings)
         mozWaitForElementToExist(app.tables.otherElements["Website Data"])
-        mozWaitForElementToExist(app.tables.buttons.images["circle"].firstMatch)
+        print(app.debugDescription)
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.tables.buttons.images["circle"].firstMatch)
+        } else {
+            mozWaitForElementToExist(app.tables.buttons.firstMatch)
+        }
         if app.cells["ShowMoreWebsiteData"].exists {
             app.cells["ShowMoreWebsiteData"].tap()
         }
