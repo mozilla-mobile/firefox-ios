@@ -833,7 +833,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         // B) If the removed tab was selected, we must choose an appropriate next selected tab from among the existing tabs
         // C) When we close the last tab of a certain type, we may need to perform additional logic
         //      - For example, closing the last private tab should select the most recent active normal tab, if possible
-        
+
         // Viable tabs for selection are private tabs and normal active tabs. We never want to select a normal inactive tab.
         let viableTabsToSelect = removedTab.isPrivate
                           ? privateTabs

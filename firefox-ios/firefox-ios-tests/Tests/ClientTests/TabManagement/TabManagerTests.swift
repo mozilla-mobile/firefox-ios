@@ -22,6 +22,9 @@ class TabManagerTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
+        // Disable debug flag for faster inactive tabs and perform tests based on the real 14 day time to inactive
+        UserDefaults.standard.set(false, forKey: PrefsKeys.FasterInactiveTabsOverride)
+
         DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         // For this test suite, use a consistent window UUID for all test cases
