@@ -4,7 +4,6 @@
 
 import SwiftUI
 import WidgetKit
-import Storage
 import SiteImageView
 
 struct TopSitesProvider: TimelineProvider {
