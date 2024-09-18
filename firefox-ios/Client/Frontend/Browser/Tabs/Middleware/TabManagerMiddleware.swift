@@ -440,7 +440,7 @@ class TabManagerMiddleware {
             store.dispatch(refreshAction)
 
             // Refresh the active tabs panel. Can only happen if the user is in normal browsering mode (not private).
-            // Related: FXIOS-10010, FXIOS-9954
+            // Related: FXIOS-10010, FXIOS-9954, FXIOS-9999
             let model = getTabsDisplayModel(for: false, shouldScrollToTab: false, uuid: uuid)
             let refreshActiveTabsPanelAction = TabPanelMiddlewareAction(tabDisplayModel: model,
                                                                         windowUUID: uuid,

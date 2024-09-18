@@ -879,7 +879,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
             }
         }
     }
-    
+
     /// Returns a direct neighbouring tab of the same type as the removed tab.
     /// - Parameters:
     ///   - removedTab: A tab that was just removed from the `tabs` array.

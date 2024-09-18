@@ -482,7 +482,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
 
     @MainActor
     override func removeAllInactiveTabs() async {
-        let currentModeTabs = backupCloseTabs
+        let currentModeTabs = getInactiveTabs()
         backupCloseTabs = currentModeTabs
         for tab in currentModeTabs {
             await self.removeTab(tab.tabUUID)
