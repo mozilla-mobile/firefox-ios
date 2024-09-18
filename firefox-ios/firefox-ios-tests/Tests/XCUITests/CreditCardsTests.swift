@@ -527,10 +527,12 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToExist(email)
         email.tapOnApp()
         var nrOfRetries = 3
-        while email.value(forKey: "hasKeyboardFocus") as? Bool == false && nrOfRetries > 0 {
-            swipeUp(nrOfSwipes: 1)
-            email.tapOnApp()
-            nrOfRetries -= 1
+        if iPad() {
+            while email.value(forKey: "hasKeyboardFocus") as? Bool == false && nrOfRetries > 0 {
+                swipeDown(nrOfSwipes: 1)
+                email.tapOnApp()
+                nrOfRetries -= 1
+            }
         }
         email.typeText("foo@mozilla.org")
         mozWaitForElementToExist(cardNumber)
@@ -542,6 +544,8 @@ class CreditCardsTests: BaseTestCase {
             expiration.tapOnApp()
             expiration.typeText(expirationDate)
         }
+        swipeDown(nrOfSwipes: 1)
+        swipeUp(nrOfSwipes: 1)
         cvc.tapOnApp()
         cvc.typeText("123")
         zip.tapOnApp()

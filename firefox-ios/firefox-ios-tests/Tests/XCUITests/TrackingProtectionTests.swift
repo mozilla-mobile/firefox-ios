@@ -117,9 +117,7 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.goto(TrackingProtectionContextMenuDetails)
         mozWaitForElementToExist(app.staticTexts["Connection not secure"], timeout: 5)
-        // This is a workaround in order to pass the tests for the newest Tracking Protection UI
-        // it may be changed back to "false", after the Tracking Protection UI implementation is done
-        XCTAssertTrue(app.switches.element.exists)
+        XCTAssertFalse(app.switches.element.exists)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2318742
