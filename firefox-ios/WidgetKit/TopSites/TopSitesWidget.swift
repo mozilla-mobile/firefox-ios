@@ -27,7 +27,6 @@ struct TopSitesView: View {
         static let emptySquareFillColor = Color(red: 0.85, green: 0.85, blue: 0.85, opacity: 0.3)
         static let faviconImageSize = CGSize(width: 30.0, height: 30.0)
         static let faviconContainerSize: CGFloat = 60.0
-        static let faviconContainerFillColor = Color.clear
         static let maskShapeCornerRadius: CGFloat = 5.0
     }
 
@@ -38,11 +37,11 @@ struct TopSitesView: View {
         let url = site.url
 
         Link(destination: linkToContainingApp("?url=\(url)", query: "widget-medium-topsites-open-url")) {
-            Rectangle()
-                .fill(UX.faviconContainerFillColor)
-                .frame(width: UX.faviconContainerSize, height: UX.faviconContainerSize)
-                .overlay {
-                    if let image = entry.favicons[site.imageKey] {
+            if let image = entry.favicons[site.imageKey] {
+                Rectangle()
+                    .fill(Color.clear)
+                    .frame(width: UX.faviconContainerSize, height: UX.faviconContainerSize)
+                    .overlay {
                         image
                             .resizable()
                             .frame(width: UX.faviconImageSize.width,
@@ -50,8 +49,11 @@ struct TopSitesView: View {
                             .scaledToFit()
                             .mask(maskShape)
                     }
-                }
-                .mask(maskShape)
+                    .mask(maskShape)
+            } else {
+                emptySquare
+                    .frame(width: UX.faviconContainerSize, height: UX.faviconContainerSize)
+            }
         }
     }
 
