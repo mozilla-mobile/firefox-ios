@@ -189,16 +189,6 @@ now)
     func newState(state: MainMenuDetailsState) {
         submenuState = state
 
-//        if submenuState.submenuType == nil {
-//            store.dispatch(
-//                MainMenuAction(
-//                    windowUUID: submenuState.windowUUID,
-//                    actionType: MainMenuDetailsActionType.updateSubmenuType(submenuType)
-//                )
-//            )
-//            return
-//        }
-
         if submenuState.shouldDismiss {
             backToMainView()
             return
