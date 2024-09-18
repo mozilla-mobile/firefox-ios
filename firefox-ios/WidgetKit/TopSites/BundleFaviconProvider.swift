@@ -4,7 +4,6 @@
 
 import Foundation
 import SiteImageView
-import Shared
 
 struct BundleFaviconProvider {
     struct Favicon {
