@@ -79,6 +79,7 @@ class ThirdPartySearchTest: BaseTestCase {
         // Need to go step by step to Search Settings. The ScreenGraph will fail to go to the Search Settings Screen
         mozWaitForElementToExist(app.buttons["urlBar-cancel"])
         app.buttons["urlBar-cancel"].tap()
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
         app.tables["Context Menu"].otherElements["Settings"].tap()
         mozWaitForElementToExist(app.tables.staticTexts["Google"])
