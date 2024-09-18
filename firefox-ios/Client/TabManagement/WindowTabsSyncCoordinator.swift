@@ -40,7 +40,7 @@ final class WindowTabsSyncCoordinator {
         let allTabManagers = delegate.tabManagers()
         let windowCount = allTabManagers.count
         let normalTabs = allTabManagers.flatMap({ $0.normalTabs })
-        let inactiveTabs = Set(allTabManagers.flatMap({ $0.inactiveTabs }))
+        let inactiveTabs = Set(allTabManagers.flatMap({ $0.normalInactiveTabs }))
 
         // It is possible that not all tabs have loaded yet, so we filter out tabs with a nil URL.
         let storedTabs: [RemoteTab] = normalTabs.compactMap { Tab.toRemoteTab($0, inactive: inactiveTabs.contains($0)) }
