@@ -65,7 +65,6 @@ class MainMenuDetailViewController: UIViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyTheme()
-
     }
 
     override func viewDidDisappear(_ animated: Bool) {
