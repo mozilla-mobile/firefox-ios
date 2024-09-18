@@ -15,6 +15,7 @@ class ReaderPanelEmptyStateView: UIView {
             label.textAlignment = .center
             label.font = FXFontStyles.Bold.body.scaledFont()
             label.adjustsFontSizeToFitWidth = true
+            label.numberOfLines = 0
             label.textColor = self.currentTheme().colors.textSecondary
         }
     }()
@@ -30,7 +31,7 @@ class ReaderPanelEmptyStateView: UIView {
 
     private lazy var readerModeImageView: UIImageView = {
         return .build { imageView in
-            imageView.contentMode = .scaleAspectFit
+            imageView.contentMode = .scaleAspectFill
             imageView.image = UIImage(named: StandardImageIdentifiers.Large.readerView)?
                 .withRenderingMode(.alwaysTemplate)
             imageView.tintColor = self.currentTheme().colors.textSecondary
@@ -48,7 +49,7 @@ class ReaderPanelEmptyStateView: UIView {
 
     private lazy var readingListImageView: UIImageView = {
         return .build { imageView in
-            imageView.contentMode = .scaleAspectFit
+            imageView.contentMode = .scaleAspectFill
             imageView.image = UIImage(named: StandardImageIdentifiers.Large.readingListAdd)?
                 .withRenderingMode(.alwaysTemplate)
             imageView.tintColor = self.currentTheme().colors.textSecondary
@@ -88,6 +89,7 @@ class ReaderPanelEmptyStateView: UIView {
     }
 
     private func setupConstraints() {
+        let imageScaledWidth = UIFontMetrics.default.scaledValue(for: ReadingListPanelUX.WelcomeScreenItemImageWidth)
         NSLayoutConstraint.activate(
             [
                 // title
@@ -109,7 +111,7 @@ class ReaderPanelEmptyStateView: UIView {
                 readerModeImageView.centerYAnchor.constraint(equalTo: readerModeLabel.centerYAnchor),
                 readerModeImageView.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
                 readerModeImageView.widthAnchor.constraint(
-                    equalToConstant: ReadingListPanelUX.WelcomeScreenItemImageWidth
+                    equalToConstant: imageScaledWidth
                 ),
 
                 // second row
@@ -126,7 +128,7 @@ class ReaderPanelEmptyStateView: UIView {
                 readingListImageView.centerYAnchor.constraint(equalTo: readingListLabel.centerYAnchor),
                 readingListImageView.trailingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor),
                 readingListImageView.widthAnchor.constraint(
-                    equalToConstant: ReadingListPanelUX.WelcomeScreenItemImageWidth
+                    equalToConstant: imageScaledWidth
                 ),
 
                 readingListLabel.bottomAnchor.constraint(
