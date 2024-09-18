@@ -34,12 +34,14 @@ final class MainMenuMiddleware {
 
     private func resolveMainMenuActionTypeActions(action: MainMenuAction, state: AppState) {
         switch action.actionType {
-        case MainMenuActionType.viewDidLoad:
-            self.performViewDidLoadFlow(with: action.windowUUID)
-        case MainMenuActionType.mainMenuDidAppear:
-            self.telemetry.mainMenuViewed()
         case MainMenuActionType.closeMenu:
             self.telemetry.mainMenuDismissed()
+        case MainMenuActionType.mainMenuDidAppear:
+            self.telemetry.mainMenuViewed()
+        case MainMenuActionType.viewDidLoad:
+            self.performViewDidLoadFlow(with: action.windowUUID)
+        case MainMenuActionType.viewWillDisappear:
+            self.currentTabInfo = nil
         default:
             break
         }
@@ -49,15 +51,7 @@ final class MainMenuMiddleware {
         switch action.actionType {
         case MainMenuDetailsActionType.viewDidLoad:
             self.performViewDidLoadFlow(with: action.windowUUID)
-
-            if let submenuType = self.submenuToDisplay {
-                store.dispatch(
-                    MainMenuAction(
-                        windowUUID: action.windowUUID,
-                        actionType: MainMenuDetailsActionType.updateSubmenuType(submenuType)
-                    )
-                )
-            }
+            self.dispatchSubmenuType(with: action.windowUUID)
         case MainMenuDetailsActionType.viewDidDisappear:
             self.submenuToDisplay = nil
         default:
@@ -69,13 +63,7 @@ final class MainMenuMiddleware {
         switch action.actionType {
         case MainMenuMiddlewareActionType.updateSubmenuTypeTo(let submenuType):
             self.submenuToDisplay = submenuType
-
-            store.dispatch(
-                MainMenuAction(
-                    windowUUID: action.windowUUID,
-                    actionType: MainMenuDetailsActionType.updateSubmenuType(submenuType)
-                )
-            )
+            self.dispatchSubmenuType(with: action.windowUUID)
         case MainMenuMiddlewareActionType.provideTabInfo(let info):
             if let info {
                 self.currentTabInfo = info
@@ -109,5 +97,16 @@ final class MainMenuMiddleware {
                 actionType: MainMenuActionType.updateCurrentTabInfo(info)
             )
         )
+    }
+
+    private func dispatchSubmenuType(with windowUUID: WindowUUID) {
+        if let submenuToDisplay {
+            store.dispatch(
+                MainMenuAction(
+                    windowUUID: windowUUID,
+                    actionType: MainMenuDetailsActionType.updateSubmenuType(submenuToDisplay)
+                )
+            )
+        }
     }
 }
