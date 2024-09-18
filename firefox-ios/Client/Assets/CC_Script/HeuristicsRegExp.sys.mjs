@@ -47,6 +47,7 @@ export const HeuristicsRegExp = {
       "address-line2": "addrline2|address_2|addl2",
       "address-line3": "addrline3|address_3|addl3",
       "address-level1": "land", // de-DE
+      "postal-code": "^PLZ(\\b|\\*)", // de-DE
       "additional-name": "apellido.?materno|lastlastname",
       "cc-name":
         "accountholdername" +
