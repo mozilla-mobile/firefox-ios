@@ -21,6 +21,16 @@ struct TopSitesWidget: Widget {
 }
 
 struct TopSitesView: View {
+    private struct UX {
+        static let widgetBackgroundColor = Color(red: 0.11, green: 0.11, blue: 0.13)
+        static let emptySquareSize: CGFloat = 30.0
+        static let emptySquareFillColor = Color(red: 0.85, green: 0.85, blue: 0.85, opacity: 0.3)
+        static let faviconImageSize = CGSize(width: 30.0, height: 30.0)
+        static let faviconContainerSize: CGFloat = 60.0
+        static let faviconContainerFillColor = Color.clear
+        static let maskShapeCornerRadius: CGFloat = 5.0
+    }
+
     let entry: TopSitesEntry
 
     @ViewBuilder
@@ -28,71 +38,51 @@ struct TopSitesView: View {
         let url = site.url
 
         Link(destination: linkToContainingApp("?url=\(url)", query: "widget-medium-topsites-open-url")) {
-            if entry.favicons[site.imageKey] != nil {
-                (entry.favicons[site.imageKey])!.resizable().frame(width: 60, height: 60).mask(maskShape)
-            } else {
-                Rectangle()
-                    .fill(UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 0.3).color)
-                    .frame(width: 60, height: 60)
-            }
+            Rectangle()
+                .fill(UX.faviconContainerFillColor)
+                .frame(width: UX.faviconContainerSize, height: UX.faviconContainerSize)
+                .overlay {
+                    if let image = entry.favicons[site.imageKey] {
+                        image
+                            .resizable()
+                            .frame(width: UX.faviconImageSize.width,
+                                   height: UX.faviconImageSize.height)
+                            .scaledToFit()
+                            .mask(maskShape)
+                    }
+                }
+                .mask(maskShape)
         }
     }
 
     var maskShape: RoundedRectangle {
-        RoundedRectangle(cornerRadius: 5)
+        RoundedRectangle(cornerRadius: UX.maskShapeCornerRadius)
     }
 
     var emptySquare: some View {
         maskShape
-            .fill(UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 0.3).color)
-            .frame(width: 60, height: 60)
-            .background(Color.clear).frame(maxWidth: .infinity)
+            .fill(UX.emptySquareFillColor)
+            .frame(width: UX.emptySquareSize, height: UX.emptySquareSize)
+            .background(Color.clear)
+            .frame(maxWidth: .infinity)
     }
 
     var body: some View {
         VStack {
-            HStack {
-                if entry.sites.isEmpty {
-                    ForEach(0..<4, id: \.self) { _ in
-                        emptySquare
-                    }
-                } else if entry.sites.count > 3 {
-                    ForEach(entry.sites.prefix(4), id: \.url) { tab in
-                        topSitesItem(tab)
-                            .background(Color.clear).frame(maxWidth: .infinity)
-                    }
-                } else {
-                    ForEach(entry.sites[0...entry.sites.count - 1], id: \.url) { tab in
-                        topSitesItem(tab).frame(maxWidth: .infinity)
-                    }
-
-                    ForEach(0..<(4 - entry.sites.count), id: \.self) { _ in
+            // Make a grid with 4 columns
+            LazyVGrid(columns: (0..<4).map { _ in GridItem(.flexible(minimum: 0, maximum: .infinity)) }, content: {
+                ForEach(0..<8) { index in
+                    if let site = entry.sites[safe: index] {
+                        topSitesItem(site)
+                    } else {
                         emptySquare
                     }
                 }
-            }.padding([.top, .horizontal])
-            Spacer()
-            HStack {
-                if entry.sites.count > 7 {
-                    ForEach(entry.sites[4...7], id: \.url) { tab in
-                        topSitesItem(tab).frame(maxWidth: .infinity)
-                    }
-                } else {
-                    // Ensure there is at least a single site in the second row
-                    if entry.sites.count > 4 {
-                        ForEach(entry.sites[4...entry.sites.count - 1], id: \.url) { tab in
-                            topSitesItem(tab).frame(maxWidth: .infinity)
-                        }
-                    }
-
-                    ForEach(0..<(min(4, 8 - entry.sites.count)), id: \.self) { _ in
-                        emptySquare
-                    }
-                }
-            }.padding([.bottom, .horizontal])
+            })
+            .padding(.all)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .widgetBackground(UIColor(red: 0.11, green: 0.11, blue: 0.13, alpha: 1.00).color)
+        .widgetBackground(UX.widgetBackgroundColor)
     }
 
     private func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {

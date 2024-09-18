@@ -4,11 +4,12 @@
 
 import SwiftUI
 import WidgetKit
-import Shared
+import Storage
 import SiteImageView
 
 struct TopSitesProvider: TimelineProvider {
     public typealias Entry = TopSitesEntry
+    private let bundleFaviconProvider = BundleFaviconProvider()
 
     func placeholder(in context: Context) -> TopSitesEntry {
         return TopSitesEntry(date: Date(), favicons: [String: Image](), sites: [])
@@ -24,7 +25,8 @@ struct TopSitesProvider: TimelineProvider {
                 for site in widgetKitTopSites {
                     let siteImageModel = SiteImageModel(id: UUID(),
                                                         imageType: .favicon,
-                                                        siteURL: site.url)
+                                                        siteURL: site.url,
+                                                        siteResource: bundleFaviconProvider.resource(for: site.title))
                     group.addTask {
                         let image = await siteImageFetcher.getImage(model: siteImageModel)
                         return (site.imageKey, image)
