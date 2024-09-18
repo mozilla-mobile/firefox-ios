@@ -900,6 +900,14 @@ class Tab: NSObject, ThemeApplicable {
     func applyTheme(theme: Theme) {
         UITextField.appearance().keyboardAppearance = theme.type.keyboardAppearence(isPrivate: isPrivate)
     }
+    
+    // MARK: - Static Helpers
+    
+    /// Returns true if the tabs both have the same type of private, normal active, and normal inactive.
+    /// Simply checks the `isPrivate` and `isActive` flags of both tabs.
+    func isSameTypeAs(_ otherTab: Tab) -> Bool {
+        return isPrivate == otherTab.isPrivate && isActive == otherTab.isActive
+    }
 }
 
 extension Tab: UIGestureRecognizerDelegate {

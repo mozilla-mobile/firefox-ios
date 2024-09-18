@@ -557,7 +557,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         guard let index = tabs.firstIndex(where: { $0 === tab }) else { return }
         DispatchQueue.main.async { [weak self] in
             self?.removeTab(tab, flushToDisk: true)
-            self?.updateIndexAfterRemovalOf(tab, deletedIndex: index)
+            self?.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
             completion?()
         }
 
@@ -581,7 +581,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
                 isSelected: selectedTab?.tabUUID == tab.tabUUID)
         }
         self.removeTab(tab, flushToDisk: true)
-        self.updateIndexAfterRemovalOf(tab, deletedIndex: index)
+        self.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index) // Crash path
 
         TelemetryWrapper.recordEvent(
             category: .action,
@@ -824,90 +824,93 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         privateConfiguration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
     }
 
-    func updateIndexAfterRemovalOf(_ removedTab: Tab, deletedIndex: Int) {
+    private func updateSelectedTabAfterRemovalOf(_ removedTab: Tab, deletedIndex: Int) {
         // We have to handle 3 different types of tabs: private tabs, normal active tabs, and normal inactive tabs.
         // These tabs are all in the `tabs` array but are differentiated by their respective flags.
-        // When we remove any kind of tab, the array size changes, necessitating us to update the selected tab index. If we
-        // remove the currently selected tab, we also need to select a new tab as is most reasonable.
-        // When we close the last tab of a certain type, we may need to perform some extra logic. For example, closing the
-        // last private tab should select the most recent active normal tab, if possible.
+        //
+        // Once a tab has been removed, we must consider several situations:
+        // A) A change in the `tabs` array size, which may require us to shift the selected tab index 1 to the left
+        // B) If the removed tab was selected, we must choose an appropriate next selected tab from among the existing tabs
+        // C) When we close the last tab of a certain type, we may need to perform additional logic
+        //      - For example, closing the last private tab should select the most recent active normal tab, if possible
+        
+        // Viable tabs for selection are private tabs and normal active tabs. We never want to select a normal inactive tab.
         let viableTabsToSelect = removedTab.isPrivate
                           ? privateTabs
-                          : normalActiveTabs // (tab.isActive ? normalActiveTabs : inactiveTabs)
+                          : normalActiveTabs
 
         // When the user closes the last private tab or last normal active tab, we must handle this gracefully.
         guard !viableTabsToSelect.isEmpty else {
             if removedTab.isPrivate,
-               let mostRecentActiveTab = mostRecentTab(inTabs: normalActiveTabs) ?? normalActiveTabs.last {
-                // If we close the last private tab, attempt to select the most recent active tab (if one exists).
+               let mostRecentActiveTab = mostRecentTab(inTabs: normalActiveTabs) {
                 selectTab(mostRecentActiveTab, previous: removedTab)
             } else {
-                // Otherwise, make a new normal active tab and select that.
                 selectTab(addTab(), previous: removedTab)
             }
-
             return
         }
 
+        // When the currently selected tab has been deleted, try to select the next most reasonable tab. However, we must
+        // never surface an old inactive tab.
         if deletedIndex == _selectedIndex {
-            let mostRecentViableTab = mostRecentTab(inTabs: viableTabsToSelect) ?? viableTabsToSelect.last
+            let mostRecentViableTab = mostRecentTab(inTabs: viableTabsToSelect)
 
-            // If we've deleted the current selected tab, we try to select a different tab in a way that makes sense.
-            // However, we must avoid ever selecting an old inactive tab; it's better to make a new Home tab than to
-            // resurface an old tab.
             if let mostRecentViableTab, mostRecentViableTab == removedTab.parent {
                 // 1. Try to select the most recently used viable tab, if it's the removed tab's parent.
                 selectTab(mostRecentViableTab, previous: removedTab)
             } else if !removedTab.isNormalAndInactive,
                       let rightOrLeftTab = findRightOrLeftTab(forRemovedTab: removedTab, withDeletedIndex: deletedIndex) {
-                // 2. Try to select an array neighbour of the same type, except if the removed tab is inactive (unlikely
+                // 2. Try to select an array neighbour of the same tab type, except if the removed tab is inactive (unlikely
                 // edge case).
                 selectTab(rightOrLeftTab, previous: removedTab)
             } else {
-                // 4. If there are no suitable active tabs to select, create a new Home normal active tab.
-                // (Note: It's possible to fall into here when all tabs have become inactive.)
+                // 3. If there are no suitable active tabs to select, create a new normal active tab.
+                // (Note: It's possible to fall into here when all tabs have become inactive, especially when debugging.)
                 selectTab(addTab(), previous: removedTab)
             }
         } else if deletedIndex < _selectedIndex {
-            // If we delete a tab in the `tabs` array that's earlier than the selected tab, we need to update our the index.
+            // If we delete a tab in the `tabs` array that's earlier than the selected tab, we need to shift our index.
             // The selected tab itself hasn't actually changed. Reselect it to call code paths related to saving, etc.
             if let selectedTab = tabs[safe: _selectedIndex - 1] {
                 selectTab(selectedTab, previous: selectedTab)
             } else {
-                assertionFailure("This should never happen")
+                assertionFailure("This should never happen!")
                 selectTab(addTab())
             }
         }
     }
-
+    
+    /// Returns a direct neighbouring tab of the same type as the removed tab.
+    /// - Parameters:
+    ///   - removedTab: A tab that was just removed from the `tabs` array.
+    ///   - deletedIndex: The former index of the removed tab in the `tabs` array.
+    /// - Returns: Returns the neighbouring tab of the same type as removedTab. Preference given to the tab on the right.
     func findRightOrLeftTab(forRemovedTab removedTab: Tab, withDeletedIndex deletedIndex: Int) -> Tab? {
-        // We know the index of the deleted tab in the full `tabs` array. However, if we want to get the closest neighbouring
-        // tab of the same type, we need to map this index into a subarray contaning only tabs matching that type.
+        // We know the fomer index of the removed tab in the full `tabs` array. However, if we want to get the closest
+        // neighbouring tab of the same type, we need to map this index into a subarray containing only tabs of that type.
         //
         // Example:
         //          An array with private tabs (P), inactive normal tabs (I), and active normal tabs (A) is as follows. The
-        //          deleted index is 7, indicating normal active tab A3 was removed.
+        //          deleted index is 7, indicating normal active tab A3 was previously removed.
         //          [P1, P2, A1, I1, A2, I2, P3, A3, A4, P4]
-        //                                       ^ Deleted index is 7
+        //                                       ^ deletedIndex is 7
         //
-        //          We can map this deleted index to an index into the subarray of normal active tabs by simply counting the
-        //          number of normal active tabs present in the array up to the removed tab. In this case, there are 2.
+        //          We can map this deletedIndex to an index into a filtered subarray containing only normal active tabs.
+        //          To do this, we count the number of normal active tabs in the `tabs` array in the range 0..<deletedIndex.
+        //          In this case, there are two: A1 and A2.
         //
         //          [A1, A2, _, A4]
-        //                   ^ Deleted index mapped to subarray of normal active tabs is 2
+        //                   ^ deletedIndex mapped to subarray of normal active tabs is 2
         //
         let arraySlice = tabs[0..<deletedIndex]
 
-        // This predicate filters tabs and only returns tabs of the same type as the removed tab (e.g. private, active...)
-        let predicateMatchingType: (Tab) -> Bool = {
-            $0.isPrivate == removedTab.isPrivate && $0.isActive == removedTab.isActive // TODO helper matches type
-        }
-        let mappedDeletedIndex = arraySlice.filter(predicateMatchingType).count // Get the count of similar tabs in left side
-        let filteredTabs = tabs.filter(predicateMatchingType)
+        // Get the count of similar tabs on left side of the array
+        let mappedDeletedIndex = arraySlice.filter({ removedTab.isSameTypeAs($0) }).count
+        let filteredTabs = tabs.filter({ removedTab.isSameTypeAs($0) })
 
         // Now that we know at which index in the subarray the removedTab was removed, we can look for its nearest left or
         // right neighbours of the same type. This code checks the right tab first, then the left tab.
-        // Use safe index into arrays to protect against out of bounds errors (e.g. deletedIndex is 0).
+        // Note: Use safe index into arrays to protect against out of bounds errors (e.g. deletedIndex is 0).
         return filteredTabs[safe: mappedDeletedIndex] ?? filteredTabs[safe: mappedDeletedIndex - 1]
     }
 
