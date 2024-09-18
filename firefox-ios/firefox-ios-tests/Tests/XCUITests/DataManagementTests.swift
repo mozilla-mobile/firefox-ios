@@ -38,7 +38,7 @@ class DataManagementTests: BaseTestCase {
         waitUntilPageLoad()
         navigator.goto(WebsiteDataSettings)
         mozWaitForElementToExist(app.tables.otherElements["Website Data"])
-        if #available(iOS 16, *) {
+        if #available(iOS 17, *) {
             mozWaitForElementToExist(app.tables.buttons.images["circle"].firstMatch)
         } else {
             mozWaitForElementToExist(app.tables.buttons.firstMatch)
