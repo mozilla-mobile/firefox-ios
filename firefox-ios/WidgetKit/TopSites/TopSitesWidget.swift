@@ -23,38 +23,33 @@ struct TopSitesWidget: Widget {
 struct TopSitesView: View {
     private struct UX {
         static let widgetBackgroundColor = Color(red: 0.11, green: 0.11, blue: 0.13)
-        static let emptySquareSize: CGFloat = 30.0
         static let emptySquareFillColor = Color(red: 0.85, green: 0.85, blue: 0.85, opacity: 0.3)
-        static let faviconImageSize = CGSize(width: 30.0, height: 30.0)
-        static let faviconContainerSize: CGFloat = 60.0
         static let maskShapeCornerRadius: CGFloat = 5.0
     }
 
     let entry: TopSitesEntry
 
     @ViewBuilder
-    func topSitesItem(_ site: WidgetKitTopSiteModel) -> some View {
+    func topSitesItem(_ site: WidgetKitTopSiteModel, itemSize: CGFloat) -> some View {
         let url = site.url
 
         Link(destination: linkToContainingApp("?url=\(url)", query: "widget-medium-topsites-open-url")) {
+            let imageSize = itemSize / 2
             if let image = entry.favicons[site.imageKey] {
                 Rectangle()
                     .fill(Color.clear)
-                    .frame(width: UX.faviconContainerSize, height: UX.faviconContainerSize)
                     .overlay {
                         image
                             .resizable()
-                            .frame(width: UX.faviconImageSize.width,
-                                   height: UX.faviconImageSize.height)
+                            .frame(width: imageSize, height: imageSize)
                             .scaledToFit()
                             .mask(maskShape)
                     }
                     .mask(maskShape)
             } else {
-                emptySquare
-                    .frame(width: UX.faviconContainerSize, height: UX.faviconContainerSize)
+                emptySquare.frame(width: imageSize, height: imageSize)
             }
-        }
+        }.frame(width: itemSize, height: itemSize)
     }
 
     var maskShape: RoundedRectangle {
@@ -64,24 +59,26 @@ struct TopSitesView: View {
     var emptySquare: some View {
         maskShape
             .fill(UX.emptySquareFillColor)
-            .frame(width: UX.emptySquareSize, height: UX.emptySquareSize)
             .background(Color.clear)
-            .frame(maxWidth: .infinity)
     }
 
     var body: some View {
         VStack {
             // Make a grid with 4 columns
-            LazyVGrid(columns: (0..<4).map { _ in GridItem(.flexible(minimum: 0, maximum: .infinity)) }, content: {
-                ForEach(0..<8) { index in
-                    if let site = entry.sites[safe: index] {
-                        topSitesItem(site)
-                    } else {
-                        emptySquare
+            GeometryReader { geom in
+                LazyVGrid(columns: (0..<4).map { _ in GridItem(.flexible(minimum: 0, maximum: .infinity)) },
+                          spacing: 0,
+                          content: {
+                    ForEach(0..<8) { index in
+                        if let site = entry.sites[safe: index] {
+                            topSitesItem(site, itemSize: geom.size.height / 2)
+                        } else {
+                            emptySquare
+                                .frame(width: geom.size.height / 4, height: geom.size.height / 4)
+                        }
                     }
-                }
-            })
-            .padding(.all)
+                })
+            }.padding(.all)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .widgetBackground(UX.widgetBackgroundColor)
