@@ -311,7 +311,7 @@ class TabManagerMiddleware {
         // then we want to close the tray.
         let isLastActiveTab = isPrivate
                             ? tabManager.privateTabs.count == 1
-                            : (tabManager.normalActiveTabs.count == 1 || tabManager.normalTabs.count == 1)
+                            : (tabManager.normalActiveTabs.count <= 1 || tabManager.normalTabs.count == 1)
         await tabManager.removeTab(tabUUID)
         return isLastActiveTab
     }
