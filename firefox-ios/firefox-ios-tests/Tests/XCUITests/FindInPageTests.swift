@@ -19,7 +19,6 @@ class FindInPageTests: BaseTestCase {
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.searchFields["find.searchField"])
         } else {
-            print(app.debugDescription)
             mozWaitForElementToExist(app.textFields["FindInPage.searchField"])
         }
     }
