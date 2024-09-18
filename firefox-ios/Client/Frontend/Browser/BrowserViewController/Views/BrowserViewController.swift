@@ -3651,9 +3651,11 @@ extension BrowserViewController: TabManagerDelegate {
         setupMiddleButtonStatus(isLoading: selectedTab.loading)
 
         if isToolbarRefactorEnabled {
-            dispatchBackForwardToolbarAction(canGoBack: selectedTab.canGoBack,
-                                             canGoForward: selectedTab.canGoForward,
-                                             windowUUID: windowUUID)
+            let action = ToolbarAction(canGoBack: selectedTab.canGoBack,
+                                       canGoForward: selectedTab.canGoForward,
+                                       windowUUID: windowUUID,
+                                       actionType: ToolbarActionType.didSelectTabChange)
+            store.dispatch(action)
         } else {
             navigationToolbar.updateBackStatus(selectedTab.canGoBack)
             navigationToolbar.updateForwardStatus(selectedTab.canGoForward)
