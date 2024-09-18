@@ -555,12 +555,9 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     // MARK: - Remove tabs
     func removeTab(_ tab: Tab, completion: (() -> Void)? = nil) {
         guard let index = tabs.firstIndex(where: { $0 === tab }) else { return }
-        DispatchQueue.main.async { [unowned self] in
-            // gather the index of the deleted tab within the viable tabs array
-            // so we can select the correct next tab after deletion
-            let viableTabsIndex = deletedIndexForViableTabs(tab)
-            self.removeTab(tab, flushToDisk: true)
-            self.updateIndexAfterRemovalOf(tab, deletedIndex: index, viableTabsIndex: viableTabsIndex)
+        DispatchQueue.main.async { [weak self] in
+            self?.removeTab(tab, flushToDisk: true)
+            self?.updateIndexAfterRemovalOf(tab, deletedIndex: index)
             completion?()
         }
 
@@ -577,15 +574,14 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
 
         let tab = tabs[index]
-        let viableTabsIndex = deletedIndexForViableTabs(tab)
         if TabTrayFlagManager.isRefactorEnabled {
             backupCloseTab = BackupCloseTab(
                 tab: tab,
-                restorePosition: viableTabsIndex,
+                restorePosition: index,
                 isSelected: selectedTab?.tabUUID == tab.tabUUID)
         }
         self.removeTab(tab, flushToDisk: true)
-        self.updateIndexAfterRemovalOf(tab, deletedIndex: index, viableTabsIndex: viableTabsIndex)
+        self.updateIndexAfterRemovalOf(tab, deletedIndex: index)
 
         TelemetryWrapper.recordEvent(
             category: .action,
@@ -828,53 +824,59 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         privateConfiguration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
     }
 
-    // returns all activate tabs (private or normal)
-    private func viableTabs(isPrivate: Bool = false) -> [Tab] {
-        if !isPrivate, featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser) {
-            // only use active tabs as viable tabs
-            // we cannot use recentlyAccessedNormalTabs as this is filtering for sponsored and sorting tabs
-            return LegacyInactiveTabViewModel.getActiveEligibleTabsFrom(normalTabs)
-        } else {
-            return isPrivate ? privateTabs : normalTabs
+    func updateIndexAfterRemovalOf(_ removedTab: Tab, deletedIndex: Int) {
+        // We have to handle 3 different types of tabs: private tabs, normal active tabs, and normal inactive tabs.
+        // These tabs are all in the `tabs` array but are differentiated by their respective flags.
+        // When we remove any kind of tab, the array size changes, necessitating us to update the selected tab index. If we
+        // remove the currently selected tab, we also need to select a new tab as is most reasonable.
+        // When we close the last tab of a certain type, we may need to perform some extra logic. For example, closing the
+        // last private tab should select the most recent active normal tab, if possible.
+        let viableTabsToSelect = removedTab.isPrivate
+                          ? privateTabs
+                          : normalActiveTabs // (tab.isActive ? normalActiveTabs : inactiveTabs)
+
+        // When the user closes the last private tab or last normal active tab, we must handle this gracefully.
+        guard !viableTabsToSelect.isEmpty else {
+            if removedTab.isPrivate,
+               let mostRecentActiveTab = mostRecentTab(inTabs: normalActiveTabs) ?? normalActiveTabs.last {
+                // If we close the last private tab, attempt to select the most recent active tab (if one exists).
+                selectTab(mostRecentActiveTab, previous: removedTab)
+            } else {
+                // Otherwise, make a new normal active tab and select that.
+                selectTab(addTab(), previous: removedTab)
+            }
+
+            return
         }
-    }
 
-    // returns the index of a deleted tab in the viable tabs array
-    private func deletedIndexForViableTabs(_ tab: Tab) -> Int {
-        let viableTabs = viableTabs(isPrivate: tab.isPrivate)
-        return viableTabs.firstIndex(of: tab) ?? -1
-    }
+        if deletedIndex == _selectedIndex {
+            let mostRecentViableTab = mostRecentTab(inTabs: viableTabsToSelect) ?? viableTabsToSelect.last
 
-    private func updateIndexAfterRemovalOf(_ tab: Tab, deletedIndex: Int, viableTabsIndex: Int) {
-        let closedLastNormalActiveTab = !tab.isPrivate && normalActiveTabs.isEmpty
-        let closedLastPrivateTab = tab.isPrivate && privateTabs.isEmpty
-
-        if closedLastNormalActiveTab {
-            // When we close the last normal tab (or last active normal tab), we should show the Home screen.
-            selectTab(addTab(), previous: tab)
-        } else if closedLastPrivateTab {
-            selectTab(mostRecentTab(inTabs: tabs) ?? tabs.last, previous: tab)
-        } else if deletedIndex == _selectedIndex {
-            if !selectParentTab(afterRemoving: tab) {
-                // We only consider active tabs viable (we don't want to surface a 2 week old inactive tab)
-                let viableTabs = viableTabs(isPrivate: tab.isPrivate)
-                let activeViableTabs = LegacyInactiveTabViewModel.getActiveEligibleTabsFrom(viableTabs)
-
-                // Try to select the active tab to the left or right of the removed tab. If that fails, fallback to
-                // selecting the most recent tab
-                if let rightOrLeftTab =
-                    activeViableTabs[safe: viableTabsIndex] ?? activeViableTabs[safe: viableTabsIndex - 1] {
-                    selectTab(rightOrLeftTab, previous: tab)
-                } else {
-                    let mostRecentTab = mostRecentTab(inTabs: activeViableTabs) ?? activeViableTabs.last
-                    selectTab(mostRecentTab, previous: tab)
-                }
+            // If we've deleted the current selected tab, we try to select a different tab in a way that makes sense.
+            // However, we must avoid ever selecting an old inactive tab; it's better to make a new Home tab than to
+            // resurface an old tab.
+            if let mostRecentViableTab, mostRecentViableTab == removedTab.parent {
+                // 1. Try to select the most recently used viable tab, if it's the removed tab's parent.
+                selectTab(mostRecentViableTab, previous: removedTab)
+            } else if !removedTab.isNormalAndInactive,
+                      let rightOrLeftTab = findRightOrLeftTab(forRemovedTab: removedTab, withDeletedIndex: deletedIndex) {
+                // 2. Try to select an array neighbour of the same type, except if the removed tab is inactive (unlikely
+                // edge case).
+                selectTab(rightOrLeftTab, previous: removedTab)
+            } else {
+                // 4. If there are no suitable active tabs to select, create a new Home normal active tab.
+                // (Note: It's possible to fall into here when all tabs have become inactive.)
+                selectTab(addTab(), previous: removedTab)
             }
         } else if deletedIndex < _selectedIndex {
-            // If we delete an active tab that's before the selected active tab, we need to shift our selection index
-            // since the array size has changed.
-            let selected = tabs[safe: _selectedIndex - 1]
-            selectTab(selected, previous: selected)
+            // If we delete a tab in the `tabs` array that's earlier than the selected tab, we need to update our the index.
+            // The selected tab itself hasn't actually changed. Reselect it to call code paths related to saving, etc.
+            if let selectedTab = tabs[safe: _selectedIndex - 1] {
+                selectTab(selectedTab, previous: selectedTab)
+            } else {
+                assertionFailure("This should never happen")
+                selectTab(addTab())
+            }
         }
     }
 
@@ -943,24 +945,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
         delegates.forEach { $0.get()?.tabManagerUpdateCount() }
         storeChanges()
-    }
-
-    // Select the most recently visited tab, IF it is also the parent tab of the closed tab and is NOT inactive.
-    private func selectParentTab(afterRemoving tab: Tab) -> Bool {
-        let viableTabs = (tab.isPrivate ? privateTabs : normalActiveTabs).filter { $0 != tab }
-        guard let parentTab = tab.parent,
-              parentTab != tab,
-              !viableTabs.isEmpty,
-              viableTabs.contains(parentTab)
-        else { return false }
-
-        let parentTabIsMostRecentUsed = mostRecentTab(inTabs: viableTabs) == parentTab
-
-        if parentTabIsMostRecentUsed {
-            selectTab(parentTab, previous: tab)
-            return true
-        }
-        return false
     }
 
     // MARK: - Start at Home

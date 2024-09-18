@@ -189,16 +189,16 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
                    level: .debug,
                    category: .tabs)
 
-        selectTab(tabToSelect)
-
-        // If tabToSelect is nil after restoration, force selection of first tab normal tab
-        if tabToSelect == nil {
-            guard let tabToSelect = tabs.first(where: { !$0.isPrivate }) else {
+        if let tabToSelect {
+            selectTab(tabToSelect)
+        } else {
+            // If `tabToSelect` is nil after restoration, force selection of the most recent normal active tab, if one exists.
+            guard let mostRecentActiveTab = mostRecentTab(inTabs: normalActiveTabs) else {
                 selectTab(addTab())
                 return
             }
 
-            selectTab(tabToSelect)
+            selectTab(mostRecentActiveTab)
         }
     }
 
@@ -236,11 +236,9 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
 
     private func preserveTabs(forced: Bool) {
         Task {
-            // This value should never be nil but we need to still treat it
-            // as if it can be nil until the old code is removed
-            let activeTabID = UUID(uuidString: self.selectedTab?.tabUUID ?? "") ?? UUID()
+            // FIXME FXIOS-10059 TabManagerImplementation's preserveTabs is called with a nil selectedTab
             let windowData = WindowData(id: windowUUID,
-                                        activeTabId: activeTabID,
+                                        activeTabId: self.selectedTabUUID ?? UUID(),
                                         tabData: self.generateTabDataForSaving())
             await tabDataStore.saveWindowData(window: windowData, forced: forced)
 
@@ -265,10 +263,9 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
                                          nextUrl: oldTabGroupData?.tabAssociatedNextUrl,
                                          tabHistoryCurrentState: state)
 
-            let tabId = UUID(uuidString: tab.tabUUID) ?? UUID()
-            let logMessage = "for saving for tab id \(tabId). It was last used \(Date.fromTimestamp(tab.lastExecutedTime))"
+            let tabId =  UUID(uuidString: tab.tabUUID) ?? UUID()
             if tab.url == nil {
-                logger.log("Tab has empty tab.URL \(logMessage)",
+                logger.log("Tab has empty tab.URL for saving for tab id \(tabId). It was last used \(Date.fromTimestamp(tab.lastExecutedTime))",
                            level: .debug,
                            category: .tabs)
             }
@@ -485,8 +482,8 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
 
     @MainActor
     override func removeAllInactiveTabs() async {
-        backupCloseTabs = getInactiveTabs()
         let currentModeTabs = backupCloseTabs
+        backupCloseTabs = currentModeTabs
         for tab in currentModeTabs {
             await self.removeTab(tab.tabUUID)
         }
@@ -555,9 +552,9 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
     // MARK: - WindowSimpleTabsProvider
 
     func windowSimpleTabs() -> [TabUUID: SimpleTab] {
-        let activeTabID = UUID(uuidString: self.selectedTab?.tabUUID ?? "") ?? UUID()
+        // FIXME possibly also related FXIOS-10059 TabManagerImplementation's preserveTabs is called with a nil selectedTab
         let windowData = WindowData(id: windowUUID,
-                                    activeTabId: activeTabID,
+                                    activeTabId: self.selectedTabUUID ?? UUID(),
                                     tabData: self.generateTabDataForSaving())
         return SimpleTab.convertToSimpleTabs(windowData.tabData)
     }
