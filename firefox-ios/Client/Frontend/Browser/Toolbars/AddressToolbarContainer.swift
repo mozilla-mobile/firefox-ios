@@ -328,7 +328,7 @@ final class AddressToolbarContainer: UIView,
 
     // MARK: - Overlay Mode
     func enterOverlayMode(_ locationText: String?, pasted: Bool, search: Bool) {
-        guard let windowUUID else { return }
+        guard let windowUUID, !inOverlayMode else { return }
         inOverlayMode = true
         delegate?.addressToolbarDidEnterOverlayMode(self)
 
@@ -346,8 +346,11 @@ final class AddressToolbarContainer: UIView,
     }
 
     func leaveOverlayMode(reason: URLBarLeaveOverlayModeReason, shouldCancelLoading cancel: Bool) {
+        guard let windowUUID, inOverlayMode else { return }
         _ = toolbar.resignFirstResponder()
         inOverlayMode = false
         delegate?.addressToolbar(self, didLeaveOverlayModeForReason: reason)
+        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
+        store.dispatch(action)
     }
 }
