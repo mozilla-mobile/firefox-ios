@@ -51,6 +51,21 @@ extension AppState {
     }
 }
 
+#if TESTING
+var store = Store(state: AppState(),
+                  reducer: AppState.reducer,
+                  middlewares: [
+                    FeltPrivacyMiddleware().privacyManagerProvider,
+                    MainMenuMiddleware().mainMenuProvider,
+                    MicrosurveyMiddleware().microsurveyProvider,
+                    MicrosurveyPromptMiddleware().microsurveyProvider,
+                    RemoteTabsPanelMiddleware().remoteTabsPanelProvider,
+                    TabManagerMiddleware().tabsPanelProvider,
+                    ThemeManagerMiddleware().themeManagerProvider,
+                    ToolbarMiddleware().toolbarProvider,
+                    TrackingProtectionMiddleware().trackingProtectionProvider
+                  ])
+#else
 let store = Store(state: AppState(),
                   reducer: AppState.reducer,
                   middlewares: [
@@ -64,3 +79,4 @@ let store = Store(state: AppState(),
                     ToolbarMiddleware().toolbarProvider,
                     TrackingProtectionMiddleware().trackingProtectionProvider
                   ])
+#endif
