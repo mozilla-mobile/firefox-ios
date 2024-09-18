@@ -65,16 +65,16 @@ struct TopSitesView: View {
     var body: some View {
         VStack {
             // Make a grid with 4 columns
-            GeometryReader { geom in
+            GeometryReader { provider in
                 LazyVGrid(columns: (0..<4).map { _ in GridItem(.flexible(minimum: 0, maximum: .infinity)) },
                           spacing: 0,
                           content: {
                     ForEach(0..<8) { index in
                         if let site = entry.sites[safe: index] {
-                            topSitesItem(site, itemSize: geom.size.height / 2)
+                            topSitesItem(site, itemSize: provider.size.height / 2)
                         } else {
                             emptySquare
-                                .frame(width: geom.size.height / 4, height: geom.size.height / 4)
+                                .frame(width: provider.size.height / 4, height: provider.size.height / 4)
                         }
                     }
                 })
