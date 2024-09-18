@@ -5,6 +5,7 @@
 import Foundation
 
 enum BrowserViewType {
+    case nativeErrorPage
     case normalHomepage
     case privateHomepage
     case webview
