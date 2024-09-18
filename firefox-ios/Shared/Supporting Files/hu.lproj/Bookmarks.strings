@@ -5,7 +5,7 @@
 "Bookmarks.Menu.BookmarksTopLevelTitle.v131" = "Könyvjelzők";
 
 /* Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark. */
-"Bookmarks.Menu.DeletedBookmark.v131" = "„%1$s” törölve";
+"Bookmarks.Menu.DeletedBookmark.v131" = "„%@” törölve";
 
 /* When a folder is longpressed in the bookmarks menu, a `Delete Folder` button is present. */
 "Bookmarks.Menu.DeleteFolder.v131" = "Mappa törlése";
