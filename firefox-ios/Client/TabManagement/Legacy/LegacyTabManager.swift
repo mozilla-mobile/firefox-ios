@@ -878,6 +878,37 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         }
     }
 
+    func findRightOrLeftTab(forRemovedTab removedTab: Tab, withDeletedIndex deletedIndex: Int) -> Tab? {
+        // We know the index of the deleted tab in the full `tabs` array. However, if we want to get the closest neighbouring
+        // tab of the same type, we need to map this index into a subarray contaning only tabs matching that type.
+        //
+        // Example:
+        //          An array with private tabs (P), inactive normal tabs (I), and active normal tabs (A) is as follows. The
+        //          deleted index is 7, indicating normal active tab A3 was removed.
+        //          [P1, P2, A1, I1, A2, I2, P3, A3, A4, P4]
+        //                                       ^ Deleted index is 7
+        //
+        //          We can map this deleted index to an index into the subarray of normal active tabs by simply counting the
+        //          number of normal active tabs present in the array up to the removed tab. In this case, there are 2.
+        //
+        //          [A1, A2, _, A4]
+        //                   ^ Deleted index mapped to subarray of normal active tabs is 2
+        //
+        let arraySlice = tabs[0..<deletedIndex]
+
+        // This predicate filters tabs and only returns tabs of the same type as the removed tab (e.g. private, active...)
+        let predicateMatchingType: (Tab) -> Bool = {
+            $0.isPrivate == removedTab.isPrivate && $0.isActive == removedTab.isActive // TODO helper matches type
+        }
+        let mappedDeletedIndex = arraySlice.filter(predicateMatchingType).count // Get the count of similar tabs in left side
+        let filteredTabs = tabs.filter(predicateMatchingType)
+
+        // Now that we know at which index in the subarray the removedTab was removed, we can look for its nearest left or
+        // right neighbours of the same type. This code checks the right tab first, then the left tab.
+        // Use safe index into arrays to protect against out of bounds errors (e.g. deletedIndex is 0).
+        return filteredTabs[safe: mappedDeletedIndex] ?? filteredTabs[safe: mappedDeletedIndex - 1]
+    }
+
     private func reAddTabs(tabsToAdd: [Tab], previousTabUUID: TabUUID, isPrivate: Bool = false) {
         tabs.append(contentsOf: tabsToAdd)
         let tabToSelect = tabs.first(where: { $0.tabUUID == previousTabUUID })

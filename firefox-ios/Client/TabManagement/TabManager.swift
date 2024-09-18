@@ -60,6 +60,7 @@ protocol TabManager: AnyObject {
                                          isPrivate: Bool,
                                          previousTabUUID: TabUUID)
     func undoCloseAllTabsLegacy(recentlyClosedTabs: [Tab], previousTabUUID: TabUUID, isPrivate: Bool)
+    func findRightOrLeftTab(forRemovedTab removedTab: Tab, withDeletedIndex deletedIndex: Int) -> Tab?
 
     @discardableResult
     func addTab(_ request: URLRequest!,

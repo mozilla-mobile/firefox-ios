@@ -30,7 +30,7 @@ class MockTabManager: TabManager {
     var count: Int = 0
     var normalTabs = [Tab]()
     var normalActiveTabs = [Tab]()
-    var inactiveTabs = [Tab]()
+    var normalInactiveTabs = [Tab]()
     var privateTabs = [Tab]()
     var tabDisplayType: TabDisplayType = .TabGrid
 
@@ -158,6 +158,10 @@ class MockTabManager: TabManager {
                                  didClearTabs: @escaping (_ tabsToRemove: [Tab],
                                                           _ isPrivate: Bool,
                                                           _ previousTabUUID: String) -> Void) {}
+
+    func findRightOrLeftTab(forRemovedTab removedTab: Tab, withDeletedIndex deletedIndex: Int) -> Tab? {
+        return nil
+    }
 
     // MARK: - Inactive tabs
     func getInactiveTabs() -> [Tab] {
