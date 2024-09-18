@@ -86,7 +86,7 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
         action()
     }
 
-    // TODO: FXIOS-10022 ⁃ Add themeing to the menu (applying this method remained)
+    // MARK: - Theme Applicable
     public func applyTheme(theme: Theme) {
         guard let model else { return }
         backgroundColor = theme.colors.layer2

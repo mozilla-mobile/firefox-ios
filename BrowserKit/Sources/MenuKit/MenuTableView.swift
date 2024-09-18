@@ -4,6 +4,7 @@
 
 import Foundation
 import UIKit
+import Common
 
 public protocol MenuTableViewDataDelegate: AnyObject {
     func reloadTableView(with data: [MenuSection])
@@ -11,9 +12,10 @@ public protocol MenuTableViewDataDelegate: AnyObject {
 
 class MenuTableView: UIView,
                      UITableViewDelegate,
-                     UITableViewDataSource {
+                     UITableViewDataSource, ThemeApplicable {
     private var tableView: UITableView
     private var menuData: [MenuSection]
+    private var theme: Theme?
 
     override init(frame: CGRect) {
         tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -32,8 +34,6 @@ class MenuTableView: UIView,
     }
 
     private func setupUI() {
-        backgroundColor = .clear
-        tableView.backgroundColor = .clear
         tableView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(tableView)
 
@@ -76,7 +76,7 @@ class MenuTableView: UIView,
         ) as! MenuCell
 
         cell.configureCellWith(model: menuData[indexPath.section].options[indexPath.row])
-
+        if let theme { cell.applyTheme(theme: theme) }
         return cell
     }
 
@@ -95,5 +95,12 @@ class MenuTableView: UIView,
     func reloadTableView(with data: [MenuSection]) {
         menuData = data
         tableView.reloadData()
+    }
+
+    // MARK: - Theme Applicable
+    func applyTheme(theme: Theme) {
+        self.theme = theme
+        backgroundColor = .clear
+        tableView.backgroundColor = .clear
     }
 }
