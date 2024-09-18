@@ -22,7 +22,7 @@ final class MicrosurveyMiddlewareTests: XCTestCase {
 
     func testDismissSurveyAction() throws {
         store = Store(
-            state: AppState(),
+            state: setupAppState(),
             reducer: AppState.reducer,
             middlewares: [MicrosurveyMiddleware().microsurveyProvider]
         )
@@ -32,11 +32,19 @@ final class MicrosurveyMiddlewareTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Microsurvey.dismissButtonTapped)
         let resultValue = try XCTUnwrap(GleanMetrics.Microsurvey.dismissButtonTapped.testGetValue())
         XCTAssertEqual(resultValue[0].extra?["survey_id"], "microsurvey-id")
+
+        let bvcState = store.state.screenState(
+            BrowserViewControllerState.self,
+            for: .browserViewController,
+            window: .XCTestDefaultUUID
+        )
+        XCTAssertNotNil(bvcState)
+        XCTAssertEqual(bvcState?.microsurveyState.showPrompt, false)
     }
 
     func testPrivacyNoticeTappedAction() throws {
         store = Store(
-            state: AppState(),
+            state: setupAppState(),
             reducer: AppState.reducer,
             middlewares: [MicrosurveyMiddleware().microsurveyProvider]
         )
@@ -46,11 +54,19 @@ final class MicrosurveyMiddlewareTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Microsurvey.privacyNoticeTapped)
         let resultValue = try XCTUnwrap(GleanMetrics.Microsurvey.privacyNoticeTapped.testGetValue())
         XCTAssertEqual(resultValue[0].extra?["survey_id"], "microsurvey-id")
+
+        let microsurveyState = store.state.screenState(
+            MicrosurveyState.self,
+            for: .microsurvey,
+            window: .XCTestDefaultUUID
+        )
+        XCTAssertNotNil(microsurveyState)
+        XCTAssertEqual(microsurveyState?.showPrivacy, true)
     }
 
     func testSubmitSurveyAction() throws {
         store = Store(
-            state: AppState(),
+            state: setupAppState(),
             reducer: AppState.reducer,
             middlewares: [MicrosurveyMiddleware().microsurveyProvider]
         )
@@ -66,6 +82,14 @@ final class MicrosurveyMiddlewareTests: XCTestCase {
         let resultValue = try XCTUnwrap(GleanMetrics.Microsurvey.submitButtonTapped.testGetValue())
         XCTAssertEqual(resultValue[0].extra?["survey_id"], "microsurvey-id")
         XCTAssertEqual(resultValue[0].extra?["user_selection"], "Neutral")
+
+        let bvcState = store.state.screenState(
+            BrowserViewControllerState.self,
+            for: .browserViewController,
+            window: .XCTestDefaultUUID
+        )
+        XCTAssertNotNil(bvcState)
+        XCTAssertEqual(bvcState?.microsurveyState.showPrompt, false)
     }
 
     func testConfirmationViewedAction() throws {
@@ -87,6 +111,25 @@ final class MicrosurveyMiddlewareTests: XCTestCase {
             surveyId: "microsurvey-id",
             windowUUID: .XCTestDefaultUUID,
             actionType: actionType
+        )
+    }
+
+    private func setupAppState() -> AppState {
+        return AppState(
+            activeScreens: ActiveScreensState(
+                screens: [
+                    .browserViewController(
+                        BrowserViewControllerState(
+                            windowUUID: .XCTestDefaultUUID
+                        )
+                    ),
+                    .microsurvey(
+                        MicrosurveyState(
+                            windowUUID: .XCTestDefaultUUID
+                        )
+                    )
+                ]
+            )
         )
     }
 }
