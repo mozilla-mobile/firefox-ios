@@ -21,7 +21,6 @@ final class ToolbarAction: Action {
     let addressBorderPosition: AddressToolbarBorderPosition?
     let displayNavBorder: Bool?
     let lockIconImageName: String?
-    let isEditing: Bool?
     let isLoading: Bool?
     let isNewTabFeatureEnabled: Bool?
     let canShowDataClearanceAction: Bool?
@@ -40,7 +39,6 @@ final class ToolbarAction: Action {
          addressBorderPosition: AddressToolbarBorderPosition = .none,
          displayNavBorder: Bool? = nil,
          lockIconImageName: String? = nil,
-         isEditing: Bool? = nil,
          isLoading: Bool? = nil,
          isNewTabFeatureEnabled: Bool? = nil,
          canShowDataClearanceAction: Bool? = nil,
@@ -60,7 +58,6 @@ final class ToolbarAction: Action {
         self.addressBorderPosition = addressBorderPosition
         self.displayNavBorder = displayNavBorder
         self.lockIconImageName = lockIconImageName
-        self.isEditing = isEditing
         self.isLoading = isLoading
         self.isNewTabFeatureEnabled = isNewTabFeatureEnabled
         self.canShowDataClearanceAction = canShowDataClearanceAction
