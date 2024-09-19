@@ -22521,6 +22521,7 @@
 					"-Xlinker",
 					"-no_application_extension",
 				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG TESTING";
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				VALIDATE_WORKSPACE = YES;
 			};
@@ -22544,7 +22545,6 @@
 					"-ObjC",
 					"-ld_classic",
 				);
-				OTHER_SWIFT_FLAGS = "$(OTHER_SWIFT_FLAGS_common) -DMOZ_CHANNEL_FENNEC";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
@@ -22729,7 +22729,6 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = "firefox-ios-tests/Tests/ClientTests/Info.plist";
-				OTHER_SWIFT_FLAGS = "$(OTHER_SWIFT_FLAGS_common) -DMOZ_CHANNEL_FENNEC -DTESTING";
 				PRODUCT_NAME = ClientTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
