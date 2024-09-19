@@ -4515,7 +4515,6 @@ extension String {
                 value: "Tracking content: %@",
                 comment: "Text to let users know how many analytics trackers were blocked on the current website. The placeholder will show the number of such cookies detected")
 
-
             public static let connectionSecureLabel = MZLocalizedString(
                 key: "Menu.EnhancedTrackingProtection.Details.ConnectionSecure.v128",
                 tableName: "EnhancedTrackingProtection",
