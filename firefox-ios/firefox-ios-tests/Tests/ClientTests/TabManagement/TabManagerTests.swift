@@ -377,6 +377,98 @@ class TabManagerTests: XCTestCase {
         )
     }
 
+    // MARK: - findPreviouslySelectedTabAfterRemovalOf
+
+    func testFindPreviouslySelectedTabAfterRemovalOf_tabAtLargerIndexWasRemoved() async throws {
+        let tabManager = createSubject()
+        let numberActiveTabs = 7
+        let selectedIndex = 3
+        addTabs(to: tabManager, ofType: .normalActive, count: numberActiveTabs)
+        guard let middleNormalActiveTab = tabManager.normalActiveTabs[safe: selectedIndex] else {
+            XCTFail("Test did not meet preconditions")
+            return
+        }
+
+        // Set the middle tab as selected
+        await MainActor.run {
+            tabManager.selectTab(middleNormalActiveTab)
+        }
+
+        let deletedIndex = numberActiveTabs - 1 // Delete a later tab and don't shift the selected tab in the array
+        tabManager.tabs.remove(at: deletedIndex)
+
+        guard let selectedTab = tabManager.findPreviouslySelectedTabAfterRemovalOf(
+                                                                                      middleNormalActiveTab,
+                                                                                      atIndex: deletedIndex
+                                                                                   ) else {
+            XCTFail("Selected tab should be returned")
+            return
+        }
+
+        // The returned tab should be the same as the selected tab
+        XCTAssertEqual(selectedTab, middleNormalActiveTab, "Removed tab should be returned as it was previously selected")
+    }
+
+    func testFindPreviouslySelectedTabAfterRemovalOf_selectedTabWasRemoved() async throws {
+        let tabManager = createSubject()
+        let numberActiveTabs = 7
+        let selectedIndex = 3
+        addTabs(to: tabManager, ofType: .normalActive, count: numberActiveTabs)
+        guard let middleNormalActiveTab = tabManager.normalActiveTabs[safe: selectedIndex] else {
+            XCTFail("Test did not meet preconditions")
+            return
+        }
+
+        // Set the middle tab as selected
+        await MainActor.run {
+            tabManager.selectTab(middleNormalActiveTab)
+        }
+
+        let deletedIndex = selectedIndex // Delete the selected tab
+        tabManager.tabs.remove(at: deletedIndex) // Now this tab is gone and none are selected
+
+        guard let selectedTab = tabManager.findPreviouslySelectedTabAfterRemovalOf(
+                                                                                      middleNormalActiveTab,
+                                                                                      atIndex: deletedIndex
+                                                                                  ) else {
+            XCTFail("Selected tab should be returned")
+            return
+        }
+
+        // The returned tab should be the same as the selected tab
+        XCTAssertEqual(selectedTab, middleNormalActiveTab, "Removed tab should be returned as it was previously selected")
+    }
+
+    func testFindPreviouslySelectedTabAfterRemovalOf_tabAtSmallerIndexWasRemoved() async throws {
+        let tabManager = createSubject()
+        let numberActiveTabs = 7
+        let selectedIndex = 3
+        addTabs(to: tabManager, ofType: .normalActive, count: numberActiveTabs)
+        guard let middleNormalActiveTab = tabManager.normalActiveTabs[safe: selectedIndex] else {
+            XCTFail("Test did not meet preconditions")
+            return
+        }
+
+        // Set the middle tab as selected
+        await MainActor.run {
+            tabManager.selectTab(middleNormalActiveTab)
+        }
+
+        let deletedIndex = 0 // Delete an earlier tab and left shift the selected tab in the array
+        tabManager.tabs.remove(at: deletedIndex)
+
+        guard let selectedTab = tabManager.findPreviouslySelectedTabAfterRemovalOf(
+                                                                                      middleNormalActiveTab,
+                                                                                      atIndex: deletedIndex
+                                                                                   ) else {
+            XCTFail("Selected tab should be returned")
+            return
+        }
+
+        // The returned tab should be the same as the selected tab
+        XCTAssertEqual(selectedTab, middleNormalActiveTab, "Removed tab should be returned as it was previously selected")
+    }
+
     // MARK: - Remove Tab (removing selected normal active tab)
 
     func testRemoveTab_removeSelectedNormalActiveTab_selectsRecentParentNormalActiveTab() async throws {
@@ -762,6 +854,46 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 1, "The second normal tab should be selected")
     }
 
+    func testRemoveTab_removeLastPrivateTab_hasInactiveTabs_hasNoActiveTabs_createsNewNormalActiveTab() async throws {
+        let tabManager = createSubject()
+
+        let numberNormalInactiveTabs = 3
+        let numberPrivateTabs = 1
+        addTabs(to: tabManager, ofType: .normalInactive, count: numberNormalInactiveTabs)
+        addTabs(to: tabManager, ofType: .privateAny, count: numberPrivateTabs)
+        guard let privateTab = tabManager.privateTabs[safe: 0] else {
+            XCTFail("Test did not meet preconditions")
+            return
+        }
+
+        // Set the first tab as selected
+        await MainActor.run {
+            tabManager.selectTab(privateTab)
+        }
+
+        // Sanity check preconditions
+        XCTAssertEqual(tabManager.tabs.count, numberNormalInactiveTabs + numberPrivateTabs)
+        XCTAssertEqual(tabManager.inactiveTabs.count, numberNormalInactiveTabs)
+        XCTAssertEqual(tabManager.normalActiveTabs.count, 0)
+        XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs)
+        XCTAssertEqual(tabManager.selectedTab, privateTab)
+        XCTAssertEqual(tabManager.selectedIndex, 3)
+        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, privateTab.tabUUID)
+
+        // Remove the only active tab, which is selected
+        tabManager.removeTab(privateTab)
+        try await Task.sleep(nanoseconds: sleepTime)
+
+        // When the last normal active tab is removed, even if there are normal active tabs, we expect a new normal active
+        // tab to be added as we don't want to surface an old inactive tab.
+        XCTAssertEqual(tabManager.tabs.count, numberNormalInactiveTabs + 1)
+        XCTAssertEqual(tabManager.inactiveTabs.count, numberNormalInactiveTabs)
+        XCTAssertEqual(tabManager.normalActiveTabs.count, 1)
+        XCTAssertEqual(tabManager.privateTabs.count, 0)
+        XCTAssertNotEqual(tabManager.selectedTab, privateTab, "The added selected tab should not equal the removed tab")
+        XCTAssertEqual(tabManager.selectedIndex, 3, "A new tab should be appended and selected")
+    }
+
     func testRemoveTab_removeLastPrivateTab_isOnlyTab_createsNewNormalActiveTab() async throws {
         let tabManager = createSubject()
 
@@ -881,6 +1013,46 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertNotEqual(tabManager.selectedTab, firstTab, "The newly added selected tab should not equal the removed tab")
         XCTAssertEqual(tabManager.selectedIndex, 0, "A new tab should be appended and selected")
+    }
+
+    func testRemoveTab_removeLastNormalActiveTab_hasInactiveTabs_createsNewNormalActiveTab() async throws {
+        let tabManager = createSubject()
+
+        let numberNormalInactiveTabs = 3
+        let numberNormalActiveTabs = 1
+        addTabs(to: tabManager, ofType: .normalInactive, count: numberNormalInactiveTabs)
+        addTabs(to: tabManager, ofType: .normalActive, count: numberNormalActiveTabs)
+        guard let activeTab = tabManager.normalActiveTabs[safe: 0] else {
+            XCTFail("Test did not meet preconditions")
+            return
+        }
+
+        // Set the first tab as selected
+        await MainActor.run {
+            tabManager.selectTab(activeTab)
+        }
+
+        // Sanity check preconditions
+        XCTAssertEqual(tabManager.tabs.count, numberNormalInactiveTabs + numberNormalActiveTabs)
+        XCTAssertEqual(tabManager.inactiveTabs.count, numberNormalInactiveTabs)
+        XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalActiveTabs)
+        XCTAssertEqual(tabManager.privateTabs.count, 0)
+        XCTAssertEqual(tabManager.selectedTab, activeTab)
+        XCTAssertEqual(tabManager.selectedIndex, 3)
+        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, activeTab.tabUUID)
+
+        // Remove the only active tab, which is selected
+        tabManager.removeTab(activeTab)
+        try await Task.sleep(nanoseconds: sleepTime)
+
+        // When the last normal active tab is removed, even if there are normal active tabs, we expect a new normal active
+        // tab to be added as we don't want to surface an old inactive tab.
+        XCTAssertEqual(tabManager.tabs.count, numberNormalInactiveTabs + 1)
+        XCTAssertEqual(tabManager.inactiveTabs.count, numberNormalInactiveTabs)
+        XCTAssertEqual(tabManager.normalActiveTabs.count, 1)
+        XCTAssertEqual(tabManager.privateTabs.count, 0)
+        XCTAssertNotEqual(tabManager.selectedTab, activeTab, "The newly added selected tab should not equal the removed tab")
+        XCTAssertEqual(tabManager.selectedIndex, 3, "A new tab should be appended and selected")
     }
 
     // MARK: - Remove Tab (removing last normal inactive tab, which means it's selected, another weird edge case)
@@ -1247,7 +1419,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 0, "Index of new normal active tab")
     }
 
-    func testRemoveAllInactiveTabs_whenNormalActiveTabsExist() async throws {
+    func testRemoveAllInactiveTabs_whenNormalActiveTabsExist_isNormalBrowsingMode() async throws {
         let tabManager = createSubject()
 
         let numberNormalInactiveTabs = 3
@@ -1281,6 +1453,43 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalInactiveTabs)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, secondTab, "The selected tab should not have changed")
+        XCTAssertEqual(tabManager.selectedIndex, 1, "Index will have shifted by the number of removed inactive tabs")
+    }
+
+    func testRemoveAllInactiveTabs_whenOnlyPrivateTabsExist_isPrivateBrowsingMode() async throws {
+        let tabManager = createSubject()
+
+        let numberNormalInactiveTabs = 3
+        let numberNormalPrivateTabs = 3
+        addTabs(to: tabManager, ofType: .normalInactive, count: numberNormalInactiveTabs)
+        addTabs(to: tabManager, ofType: .privateAny, count: numberNormalPrivateTabs)
+        guard let secondPrivateTab = tabManager.privateTabs[safe: 1] else {
+            XCTFail("Test did not meet preconditions")
+            return
+        }
+
+        // Set the second private tab as selected
+        await MainActor.run {
+            tabManager.selectTab(secondPrivateTab)
+        }
+
+        // Sanity check preconditions
+        XCTAssertEqual(tabManager.tabs.count, numberNormalInactiveTabs + numberNormalPrivateTabs)
+        XCTAssertEqual(tabManager.inactiveTabs.count, numberNormalInactiveTabs)
+        XCTAssertEqual(tabManager.normalActiveTabs.count, 0)
+        XCTAssertEqual(tabManager.privateTabs.count, numberNormalPrivateTabs)
+        XCTAssertEqual(tabManager.selectedTab, secondPrivateTab)
+        XCTAssertEqual(tabManager.selectedIndex, 4)
+        XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, secondPrivateTab.tabUUID)
+
+        await tabManager.removeAllInactiveTabs()
+        try await Task.sleep(nanoseconds: sleepTime)
+
+        XCTAssertEqual(tabManager.tabs.count, numberNormalPrivateTabs, "Number of private tabs should not have changed")
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.normalActiveTabs.count, 0)
+        XCTAssertEqual(tabManager.privateTabs.count, numberNormalPrivateTabs, "Private tab count should not change")
+        XCTAssertEqual(tabManager.selectedTab, secondPrivateTab, "The selected tab should not have changed")
         XCTAssertEqual(tabManager.selectedIndex, 1, "Index will have shifted by the number of removed inactive tabs")
     }
 

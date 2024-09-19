@@ -164,6 +164,10 @@ class MockTabManager: TabManager {
         return nil
     }
 
+    func findPreviouslySelectedTabAfterRemovalOf(_ removedTab: Tab, atIndex deletedIndex: Int) -> Tab? {
+        return nil
+    }
+
     // MARK: - Inactive tabs
     func getInactiveTabs() -> [Tab] {
         return inactiveTabs

@@ -581,7 +581,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
                 isSelected: selectedTab?.tabUUID == tab.tabUUID)
         }
         self.removeTab(tab, flushToDisk: true)
-        self.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index) // Crash path
+        self.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
 
         TelemetryWrapper.recordEvent(
             category: .action,
@@ -834,26 +834,25 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         // C) When we close the last tab of a certain type, we may need to perform additional logic
         //      - For example, closing the last private tab should select the most recent active normal tab, if possible
 
-        // Viable tabs for selection are private tabs and normal active tabs. We never want to select a normal inactive tab.
-        let viableTabsToSelect = removedTab.isPrivate
-                          ? privateTabs
-                          : normalActiveTabs
-
-        // When the user closes the last private tab or last normal active tab, we must handle this gracefully.
-        guard !viableTabsToSelect.isEmpty else {
-            if removedTab.isPrivate,
-               let mostRecentActiveTab = mostRecentTab(inTabs: normalActiveTabs) {
-                selectTab(mostRecentActiveTab, previous: removedTab)
-            } else {
-                selectTab(addTab(), previous: removedTab)
-            }
-            return
-        }
-
         // When the currently selected tab has been deleted, try to select the next most reasonable tab. However, we must
         // never surface an old inactive tab.
         if deletedIndex == _selectedIndex {
-            let mostRecentViableTab = mostRecentTab(inTabs: viableTabsToSelect)
+            // Check if the user has closed the last viable tab of the current browsing mode: private or normal. If so, we
+            // should handle this gracefully. (i.e. close the last private tab should open the most recent normal active tab)
+            let tabsOfSameType = removedTab.isPrivate
+                                 ? privateTabs
+                                 : normalTabs
+            guard !tabsOfSameType.isEmpty else {
+                if removedTab.isPrivate,
+                   let mostRecentActiveTab = mostRecentTab(inTabs: normalActiveTabs) {
+                    selectTab(mostRecentActiveTab, previous: removedTab)
+                } else {
+                    selectTab(addTab(), previous: removedTab)
+                }
+                return
+            }
+
+            let mostRecentViableTab = mostRecentTab(inTabs: tabsOfSameType)
 
             if let mostRecentViableTab, mostRecentViableTab == removedTab.parent {
                 // 1. Try to select the most recently used viable tab, if it's the removed tab's parent.
@@ -912,6 +911,25 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         // right neighbours of the same type. This code checks the right tab first, then the left tab.
         // Note: Use safe index into arrays to protect against out of bounds errors (e.g. deletedIndex is 0).
         return filteredTabs[safe: mappedDeletedIndex] ?? filteredTabs[safe: mappedDeletedIndex - 1]
+    }
+
+    /// Returns the current selected Tab from the `tabs` array, assuming the selectedIndex has not yet been updated after
+    /// the removal of `removedTab` at the given deleted index.
+    /// - Parameters:
+    ///   - removedTab: The tab that was just removed.
+    ///   - deletedIndex: The index of the `removedTab` before it was removed.
+    /// - Returns: Returns the current selected tab prior to updating `_selectedIndex`, or nil if does not exist.
+    func findPreviouslySelectedTabAfterRemovalOf(_ removedTab: Tab, atIndex deletedIndex: Int) -> Tab? {
+        if selectedIndex < deletedIndex {
+            // If the selected tab was earlier in the array, no shift needs to happen
+            return tabs[safe: _selectedIndex]
+        } else if selectedIndex == deletedIndex {
+            // The removed tab was the previously selected tab
+            return removedTab
+        } else {
+            // If a tab earlier in the array was removed, then the selected tab will shift by one
+            return tabs[safe: _selectedIndex - 1]
+        }
     }
 
     private func reAddTabs(tabsToAdd: [Tab], previousTabUUID: TabUUID, isPrivate: Bool = false) {
