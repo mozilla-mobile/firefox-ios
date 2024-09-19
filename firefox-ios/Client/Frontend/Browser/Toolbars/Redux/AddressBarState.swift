@@ -158,7 +158,7 @@ struct AddressBarState: StateType, Equatable {
             return AddressBarState(
                 windowUUID: state.windowUUID,
                 navigationActions: state.navigationActions,
-                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: false),
+                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,
@@ -177,7 +177,7 @@ struct AddressBarState: StateType, Equatable {
             return AddressBarState(
                 windowUUID: state.windowUUID,
                 navigationActions: state.navigationActions,
-                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: false),
+                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,
@@ -219,7 +219,7 @@ struct AddressBarState: StateType, Equatable {
                 navigationActions: navigationActions(action: toolbarAction,
                                                      addressBarState: state,
                                                      isEditing: state.isEditing),
-                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: false),
+                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,
@@ -337,7 +337,7 @@ struct AddressBarState: StateType, Equatable {
             return AddressBarState(
                 windowUUID: state.windowUUID,
                 navigationActions: navigationActions(action: toolbarAction, addressBarState: state),
-                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: true),
+                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: false),
                 browserActions: browserActions(action: toolbarAction, addressBarState: state),
                 borderPosition: state.borderPosition,
                 url: state.url,
