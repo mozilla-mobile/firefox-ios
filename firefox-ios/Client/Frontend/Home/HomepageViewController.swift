@@ -258,6 +258,7 @@ class HomepageViewController:
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.backgroundColor = .clear
         collectionView.accessibilityIdentifier = a11y.collectionView
+        collectionView.addInteraction(UIContextMenuInteraction(delegate: self))
         contentStackView.addArrangedSubview(collectionView)
     }
 
@@ -882,6 +883,23 @@ extension HomepageViewController: UIPopoverPresentationControllerDelegate {
 
     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
         return true
+    }
+}
+
+// MARK: - UIContextMenuInteractionDelegate
+extension HomepageViewController: UIContextMenuInteractionDelegate {
+    // Handles iPad trackpad right clicks
+    func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction,
+        configurationForMenuAtLocation location: CGPoint
+    ) -> UIContextMenuConfiguration? {
+        let locationInCollectionView = interaction.location(in: collectionView)
+        guard let indexPath = collectionView.indexPathForItem(at: locationInCollectionView),
+              let viewModel = viewModel.getSectionViewModel(shownSection: indexPath.section) as? HomepageSectionHandler
+        else { return nil }
+
+        viewModel.handleLongPress(with: collectionView, indexPath: indexPath)
+        return nil
     }
 }
 
