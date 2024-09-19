@@ -85,7 +85,6 @@ enum ToolbarActionType: ActionType {
     case traitCollectionDidChange
     case websiteLoadingStateDidChange
     case searchEngineDidChange
-    case didSelectTabChange
     case navigationButtonDoubleTapped
     case navigationHintFinishedPresenting
 }

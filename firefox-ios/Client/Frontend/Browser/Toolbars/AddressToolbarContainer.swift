@@ -358,6 +358,7 @@ final class AddressToolbarContainer: UIView,
         _ = toolbar.resignFirstResponder()
         inOverlayMode = false
         delegate?.addressToolbar(self, didLeaveOverlayModeForReason: reason)
+
         let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
         store.dispatch(action)
     }

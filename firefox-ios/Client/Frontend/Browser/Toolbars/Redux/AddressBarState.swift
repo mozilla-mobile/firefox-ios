@@ -330,8 +330,7 @@ struct AddressBarState: StateType, Equatable {
                 readerModeState: state.readerModeState
             )
 
-        case ToolbarActionType.cancelEdit,
-            ToolbarActionType.didSelectTabChange:
+        case ToolbarActionType.cancelEdit:
             guard let toolbarAction = action as? ToolbarAction else { return state }
 
             return AddressBarState(
