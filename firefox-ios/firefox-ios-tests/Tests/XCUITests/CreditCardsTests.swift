@@ -348,7 +348,10 @@ class CreditCardsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306979
-    func testSaveThisCardPrompt() {
+    func testSaveThisCardPrompt() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("testSaveThisCardPrompt() does not work on iOS 15")
+        }
         navigator.goto(NewTabScreen)
         navigator.openURL("https://checkout.stripe.dev/preview")
         waitUntilPageLoad()

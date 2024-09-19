@@ -70,6 +70,7 @@ final class MicrosurveyTests: BaseTestCase {
         let continueButton = app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton]
         continueButton.tap()
 
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Survey.closeButton])
         app.buttons[AccessibilityIdentifiers.Microsurvey.Survey.closeButton].tap()
 
         mozWaitForElementToNotExist(app.images[AccessibilityIdentifiers.Microsurvey.Survey.firefoxLogo])

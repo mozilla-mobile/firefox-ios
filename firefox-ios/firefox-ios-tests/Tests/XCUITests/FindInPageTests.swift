@@ -38,9 +38,15 @@ class FindInPageTests: BaseTestCase {
         app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.search].tap()
 
         // Enter some text to start finding
-        app.searchFields["find.searchField"].typeText("Book")
-        mozWaitForElementToExist(app.searchFields["Book"])
-        XCTAssertEqual(app.staticTexts["find.resultLabel"].label, "1 of 1,000", "The book word count does match")
+        if #available(iOS 16, *) {
+            app.searchFields["find.searchField"].typeText("Book")
+            mozWaitForElementToExist(app.searchFields["Book"])
+            XCTAssertEqual(app.staticTexts["find.resultLabel"].label, "1 of 1,000", "The book word count does match")
+        } else {
+            app.textFields["FindInPage.searchField"].typeText("Book")
+            mozWaitForElementToExist(app.textFields["Book"])
+            XCTAssertEqual(app.staticTexts["FindInPage.matchCount"].label, "1/500+", "The book word count does match")
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306851
@@ -99,11 +105,15 @@ class FindInPageTests: BaseTestCase {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu(openSite: userState.url!)
         // Enter some text to start finding
-        app.searchFields["find.searchField"].typeText("The Book of")
+        if #available(iOS 16, *) {
+            app.searchFields["find.searchField"].typeText("The Book of")
 
-        // Once there are matches, test previous/next buttons
-        mozWaitForElementToExist(app.staticTexts["1 of 6"])
-        XCTAssertTrue(app.staticTexts["1 of 6"].exists)
+            // Once there are matches, test previous/next buttons
+            mozWaitForElementToExist(app.staticTexts["1 of 6"])
+            XCTAssertTrue(app.staticTexts["1 of 6"].exists)
+        } else {
+            app.textFields["FindInPage.searchField"].typeText("The Book of")
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323714
@@ -116,9 +126,15 @@ class FindInPageTests: BaseTestCase {
         app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
         // Enter some text to start finding
         app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.search].tap()
-        app.searchFields["find.searchField"].typeText("The Book of")
-        mozWaitForElementToExist(app.searchFields["The Book of"])
-        XCTAssertEqual(app.staticTexts["find.resultLabel"].label, "1 of 1,000", "The book word count does match")
+        if #available(iOS 16, *) {
+            app.searchFields["find.searchField"].typeText("The Book of")
+            mozWaitForElementToExist(app.searchFields["The Book of"])
+            XCTAssertEqual(app.staticTexts["find.resultLabel"].label, "1 of 1,000", "The book word count does match")
+        } else {
+            app.textFields["FindInPage.searchField"].typeText("The Book of")
+            mozWaitForElementToExist(app.textFields["The Book of"])
+            XCTAssertEqual(app.staticTexts["FindInPage.matchCount"].label, "1/500+", "The book word count does match")
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323718
@@ -126,11 +142,15 @@ class FindInPageTests: BaseTestCase {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu(openSite: userState.url!)
         // Enter some text to start finding
-        app.searchFields["find.searchField"].typeText("Mozilla")
+        if #available(iOS 16, *) {
+            app.searchFields["find.searchField"].typeText("Mozilla")
 
-        // There should be matches
-        mozWaitForElementToExist(app.staticTexts["1 of 6"])
-        XCTAssertTrue(app.staticTexts["1 of 6"].exists)
+            // There should be matches
+            mozWaitForElementToExist(app.staticTexts["1 of 6"])
+            XCTAssertTrue(app.staticTexts["1 of 6"].exists)
+        } else {
+            app.textFields["FindInPage.searchField"].typeText("Mozilla")
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323801
@@ -139,9 +159,13 @@ class FindInPageTests: BaseTestCase {
         openFindInPageFromMenu(openSite: userState.url!)
 
         // Try to find text which does not match and check that there are not results
-        app.searchFields["find.searchField"].typeText("foo")
-        mozWaitForElementToExist(app.staticTexts["0"])
-        XCTAssertTrue(app.staticTexts["0"].exists, "There should not be any matches")
+        if #available(iOS 16, *) {
+            app.searchFields["find.searchField"].typeText("foo")
+            mozWaitForElementToExist(app.staticTexts["0"])
+            XCTAssertTrue(app.staticTexts["0"].exists, "There should not be any matches")
+        } else {
+            app.textFields["FindInPage.searchField"].typeText("foo")
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323802
@@ -154,8 +178,13 @@ class FindInPageTests: BaseTestCase {
         app.textFields["address"].typeText("\n")
 
         // Once the page is reloaded the search bar should not appear
-        mozWaitForElementToNotExist(app.searchFields["find.searchField"])
-        XCTAssertFalse(app.searchFields["find.searchField"].exists)
+        if #available(iOS 16, *) {
+            mozWaitForElementToNotExist(app.searchFields["find.searchField"])
+            XCTAssertFalse(app.searchFields["find.searchField"].exists)
+        } else {
+            mozWaitForElementToNotExist(app.searchFields["FindInPage.searchField"])
+            XCTAssertFalse(app.searchFields["FindInPage.searchField"].exists)
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323803
@@ -206,9 +235,17 @@ class FindInPageTests: BaseTestCase {
         }
         mozWaitForElementToExist(app.menuItems["Find in Page"])
         app.menuItems["Find in Page"].tap()
-        mozWaitForElementToExist(app.searchFields[textToFind])
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.searchFields[textToFind])
+        } else {
+            mozWaitForElementToExist(app.textFields[textToFind])
+        }
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.FindInPage.findPreviousButton])
-        XCTAssertTrue(app.searchFields[textToFind].exists, "The bar does not appear with the text selected to be found")
+        if #available(iOS 16, *) {
+            XCTAssertTrue(app.searchFields[textToFind].exists, "The bar does not appear with the text selected to be found")
+        } else {
+            XCTAssertTrue(app.textFields[textToFind].exists, "The bar does not appear with the text selected to be found")
+        }
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.FindInPage.findNextButton])
     }
 }
