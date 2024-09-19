@@ -5,7 +5,7 @@
 "TodayWidget.ClosePrivateTabsLabelV2" = "Zavrieť súkromné karty";
 
 /* Description for medium size widget to add Firefox Shortcut to home screen */
-"TodayWidget.FirefoxShortcutGalleryDescription" = "Pridajte si skratky Firefoxu na svoju domovskú obrazovku.";
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Pridajte si skratky Firefoxu na svoju plochu.";
 
 /* Go to link pasted on the clipboard */
 "TodayWidget.GoToCopiedLinkLabelV1" = "Prejsť na skopírovaný odkaz";
@@ -29,7 +29,7 @@
 "TodayWidget.PrivateTabButtonLabelV1" = "Súkromné vyhľadávanie";
 
 /* Description for small size widget to add it to home screen */
-"TodayWidget.QuickActionGalleryDescription" = "Pridajte si skratku Firefoxu na domovskú obrazovku. Pre úpravu alebo výber inej skratky na widgete podržte prst.";
+"TodayWidget.QuickActionGalleryDescription" = "Pridajte si skratku Firefoxu na plochu. Pre úpravu alebo výber inej skratky na widgete podržte prst.";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "Rýchle akcie";

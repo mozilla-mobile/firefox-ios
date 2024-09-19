@@ -69,7 +69,7 @@ struct AddressBarState: StateType, Equatable {
         actionType: .dataClearance,
         iconName: StandardImageIdentifiers.Large.dataClearance,
         isEnabled: true,
-        hasContextualHint: true,
+        contextualHintType: ContextualHintType.dataClearance.rawValue,
         a11yLabel: .TabToolbarDataClearanceAccessibilityLabel,
         a11yId: AccessibilityIdentifiers.Toolbar.fireButton)
 
@@ -547,6 +547,7 @@ struct AddressBarState: StateType, Equatable {
             iconName: StandardImageIdentifiers.Large.back,
             isFlippedForRTL: true,
             isEnabled: enabled,
+            contextualHintType: ContextualHintType.navigation.rawValue,
             a11yLabel: .TabToolbarBackAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.backButton)
     }

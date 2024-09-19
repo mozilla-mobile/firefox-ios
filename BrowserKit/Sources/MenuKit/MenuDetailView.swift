@@ -6,7 +6,7 @@ import Common
 import UIKit
 
 public final class MenuDetailView: UIView,
-                                   MenuTableViewDataDelegate {
+                                   MenuTableViewDataDelegate, ThemeApplicable {
     private struct UX {
         static let headerHeight: CGFloat = 70
     }
@@ -27,7 +27,6 @@ public final class MenuDetailView: UIView,
 
     // MARK: - UI Setup
     private func setupView() {
-        backgroundColor = .clear
         addSubview(detailHeaderView)
         addSubview(tableView)
 
@@ -51,5 +50,12 @@ public final class MenuDetailView: UIView,
 
     public func setupHeaderNavigation(from delegate: MainMenuDetailNavigationHandler) {
         detailHeaderView.navigationDelegate = delegate
+    }
+
+    // MARK: - Theme Applicable
+    public func applyTheme(theme: Theme) {
+        backgroundColor = .clear
+        tableView.applyTheme(theme: theme)
+        detailHeaderView.applyTheme(theme: theme)
     }
 }

@@ -36,6 +36,60 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         UIAccessibility.post(notification: .layoutChanged, argument: dataClearanceContextHintVC)
     }
 
+    // Starts a timer to monitor for a navigation button double tap for the navigation contextual hint
+    func startNavigationButtonDoubleTapTimer() {
+        guard isToolbarRefactorEnabled, isToolbarNavigationHintEnabled else { return }
+        if navigationHintDoubleTapTimer == nil {
+            navigationHintDoubleTapTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { _ in
+                self.navigationHintDoubleTapTimer = nil
+            }
+        } else {
+            navigationHintDoubleTapTimer = nil
+            let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.navigationButtonDoubleTapped)
+            store.dispatch(action)
+        }
+    }
+
+    func configureNavigationContextualHint(_ view: UIView) {
+        guard isToolbarRefactorEnabled, isToolbarNavigationHintEnabled else { return }
+        navigationContextHintVC.configure(
+            anchor: view,
+            withArrowDirection: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection) ? .down : .up,
+            andDelegate: self,
+            presentedUsing: { [weak self] in self?.presentNavigationContextualHint() },
+            actionOnDismiss: {
+                let action = ToolbarAction(windowUUID: self.windowUUID,
+                                           actionType: ToolbarActionType.navigationHintFinishedPresenting)
+                store.dispatch(action)
+            },
+            andActionForButton: { },
+            overlayState: overlayManager,
+            ignoreSafeArea: true)
+    }
+
+    private func presentNavigationContextualHint() {
+        // Only show the contextual hint if:
+        // 1. The tab webpage is loaded OR we are on the home page, and the
+        // 2. Microsurvey prompt is not being displayed
+        // If the hint does not show,
+        // ToolbarActionType.navigationButtonDoubleTapped will have to be dispatched again through user action
+        guard let state = store.state.screenState(BrowserViewControllerState.self,
+                                                  for: .browserViewController,
+                                                  window: windowUUID)
+        else { return }
+
+        if let selectedTab = tabManager.selectedTab,
+            selectedTab.isFxHomeTab || !selectedTab.loading,
+            !state.microsurveyState.showPrompt {
+            present(navigationContextHintVC, animated: true)
+            UIAccessibility.post(notification: .layoutChanged, argument: navigationContextHintVC)
+        } else {
+            let action = ToolbarAction(windowUUID: self.windowUUID,
+                                       actionType: ToolbarActionType.navigationHintFinishedPresenting)
+            store.dispatch(action)
+        }
+    }
+
     func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         didTapOnHome()
     }

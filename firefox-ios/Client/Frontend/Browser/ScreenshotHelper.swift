@@ -20,11 +20,10 @@ class ScreenshotHelper {
         self.logger = logger
     }
 
+    // TODO: FXIOS-9978 - Screenshot of native error page for tab manager
     /// Takes a screenshot of the WebView to be displayed on the tab view page
-    /**
-     If taking a screenshot of the home page, uses our custom screenshot `UIView` extension function
-     If taking a screenshot of a website, uses apple's `takeSnapshot` function
-     */
+    /// If taking a screenshot of the home page, uses our custom screenshot `UIView` extension function
+    /// If taking a screenshot of a website, uses apple's `takeSnapshot` function
     func takeScreenshot(_ tab: Tab) {
         guard let webView = tab.webView, let url = tab.url else {
             logger.log("Tab Snapshot Error",

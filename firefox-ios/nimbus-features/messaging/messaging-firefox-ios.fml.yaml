@@ -36,6 +36,8 @@ import:
               INACTIVE_NEW_USER:        "is_inactive_new_user"
               ALLOWED_TIPS_NOTIFICATIONS: "allowed_tips_notifications"
 
+              FXA_CURRENTLY_SIGNED_IN: "is_fxa_signed_in == true"
+
               # Behavioral Targeting Events
               SECOND_HOMEPAGE_VIEW:  "'homepage_viewed'|eventSum('Years', 4, 0) >= 2"
 

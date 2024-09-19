@@ -94,6 +94,7 @@ class BrowserViewController: UIViewController,
     var appAuthenticator: AppAuthenticationProtocol
     var toolbarContextHintVC: ContextualHintViewController
     var dataClearanceContextHintVC: ContextualHintViewController
+    var navigationContextHintVC: ContextualHintViewController
     let shoppingContextHintVC: ContextualHintViewController
     var windowUUID: WindowUUID { return tabManager.windowUUID }
     var currentWindowUUID: UUID? { return windowUUID }
@@ -113,6 +114,8 @@ class BrowserViewController: UIViewController,
     var pasteAction: AccessibleAction!
     var copyAddressAction: AccessibleAction!
 
+    var navigationHintDoubleTapTimer: Timer?
+
     weak var gridTabTrayController: LegacyGridTabViewController?
     var tabTrayViewController: TabTrayController?
 
@@ -125,6 +128,9 @@ class BrowserViewController: UIViewController,
     }
     var isOneTapNewTabEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
+    }
+    var isToolbarNavigationHintEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.toolbarNavigationHint, checking: .buildOnly)
     }
     private var browserViewControllerState: BrowserViewControllerState?
 
@@ -262,6 +268,11 @@ class BrowserViewController: UIViewController,
         )
         self.dataClearanceContextHintVC = ContextualHintViewController(with: dataClearanceViewProvider,
                                                                        windowUUID: windowUUID)
+
+        let navigationViewProvider = ContextualHintViewProvider(forHintType: .navigation, with: profile)
+
+        self.navigationContextHintVC = ContextualHintViewController(with: navigationViewProvider, windowUUID: windowUUID)
+
         super.init(nibName: nil, bundle: nil)
         didInit()
     }
@@ -1045,9 +1056,13 @@ class BrowserViewController: UIViewController,
 
         // Everything works fine on iPad orientation switch (because CFR remains anchored to the same button),
         // so only necessary to dismiss when vertical size class changes
-        if dataClearanceContextHintVC.isPresenting &&
-            previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
-            dataClearanceContextHintVC.dismiss(animated: true)
+        if previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
+            if dataClearanceContextHintVC.isPresenting {
+                dataClearanceContextHintVC.dismiss(animated: true)
+            }
+            if navigationContextHintVC.isPresenting {
+                navigationContextHintVC.dismiss(animated: true)
+            }
         }
     }
 
@@ -1400,6 +1415,8 @@ class BrowserViewController: UIViewController,
                    category: .coordinator)
 
         switch browserViewType {
+        case .nativeErrorPage:
+            showEmbeddedNativeErrorPage()
         case .normalHomepage:
             showEmbeddedHomepage(inline: true, isPrivate: false)
         case .privateHomepage:
@@ -1998,8 +2015,10 @@ class BrowserViewController: UIViewController,
             didTapOnHome()
         case .back:
             didTapOnBack()
+            startNavigationButtonDoubleTapTimer()
         case .forward:
             didTapOnForward()
+            startNavigationButtonDoubleTapTimer()
         case .reloadNoCache:
             tabManager.selectedTab?.reload(bypassCache: true)
         case .reload:
@@ -3064,9 +3083,17 @@ class BrowserViewController: UIViewController,
         searchController?.searchTelemetry?.determineInteractionType()
     }
 
-    // Also implements NavigationToolbarContainerDelegate::configureContextualHint(for button: UIButton)
-    func configureContextualHint(for button: UIButton) {
-        configureDataClearanceContextualHint(button)
+    // Also implements 
+    // NavigationToolbarContainerDelegate::configureContextualHint(for button: UIButton, with contextualHintType: String)
+    func configureContextualHint(for button: UIButton, with contextualHintType: String) {
+        switch contextualHintType {
+        case ContextualHintType.dataClearance.rawValue:
+            configureDataClearanceContextualHint(button)
+        case ContextualHintType.navigation.rawValue:
+            configureNavigationContextualHint(button)
+        default:
+            return
+        }
     }
 
     func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool) {

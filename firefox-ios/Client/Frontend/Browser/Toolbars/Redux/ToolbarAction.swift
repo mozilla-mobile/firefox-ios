@@ -86,6 +86,8 @@ enum ToolbarActionType: ActionType {
     case websiteLoadingStateDidChange
     case searchEngineDidChange
     case didSelectTabChange
+    case navigationButtonDoubleTapped
+    case navigationHintFinishedPresenting
 }
 
 class ToolbarMiddlewareAction: Action {

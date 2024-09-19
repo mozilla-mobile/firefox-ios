@@ -22,6 +22,7 @@ class AddressToolbarContainerModel: Equatable {
     let isPrivateMode: Bool
     let shouldSelectSearchTerm: Bool
     let shouldDisplayCompact: Bool
+    let canShowNavigationHint: Bool
 
     let windowUUID: UUID
 
@@ -88,6 +89,7 @@ class AddressToolbarContainerModel: Equatable {
         self.isPrivateMode = state.isPrivateMode
         self.shouldSelectSearchTerm = state.addressToolbar.shouldSelectSearchTerm
         self.shouldDisplayCompact = state.isShowingNavigationToolbar
+        self.canShowNavigationHint = state.canShowNavigationHint
     }
 
     func searchTermFromURL(_ url: URL?, searchEngines: SearchEngines) -> String? {
@@ -113,7 +115,7 @@ class AddressToolbarContainerModel: Equatable {
                 isEnabled: action.isEnabled,
                 isFlippedForRTL: action.isFlippedForRTL,
                 shouldDisplayAsHighlighted: action.shouldDisplayAsHighlighted,
-                hasContextualHint: action.hasContextualHint,
+                contextualHintType: action.contextualHintType,
                 a11yLabel: action.a11yLabel,
                 a11yHint: action.a11yHint,
                 a11yId: action.a11yId,

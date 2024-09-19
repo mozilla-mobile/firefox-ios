@@ -104,6 +104,7 @@
         "NavigationTest\/testLongPressLinkOptionsPrivateMode()",
         "NavigationTest\/testLongPressOnAddressBar()",
         "NavigationTest\/testNavigation()",
+        "NavigationTest\/testOpenExternalLink()",
         "NavigationTest\/testOpenInNewPrivateTab()",
         "NavigationTest\/testOpenInNewTab()",
         "NavigationTest\/testPopUpBlocker()",
