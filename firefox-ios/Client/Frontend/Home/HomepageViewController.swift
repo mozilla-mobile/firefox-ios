@@ -258,8 +258,7 @@ class HomepageViewController:
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.backgroundColor = .clear
         collectionView.accessibilityIdentifier = a11y.collectionView
-        let interaction = UIContextMenuInteraction(delegate: self)
-        collectionView.addInteraction(interaction)
+        collectionView.addInteraction(UIContextMenuInteraction(delegate: self))
         contentStackView.addArrangedSubview(collectionView)
     }
 
