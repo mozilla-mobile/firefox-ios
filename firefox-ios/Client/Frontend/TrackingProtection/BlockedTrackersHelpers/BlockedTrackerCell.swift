@@ -29,7 +29,9 @@ class BlockedTrackerCell: UITableViewCell,
     }
 
     public let dividerView: UIView = .build { _ in }
-    private var trackerImageViewHeightConstraint: NSLayoutConstraint?
+    private lazy var trackerImageViewHeightConstraint: NSLayoutConstraint = {
+        return trackerImageView.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.iconSize)
+    }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -45,7 +47,6 @@ class BlockedTrackerCell: UITableViewCell,
         contentView.addSubview(trackerLabel)
         contentView.addSubview(dividerView)
 
-        trackerImageViewHeightConstraint = trackerImageView.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.iconSize)
         NSLayoutConstraint.activate([
             trackerImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             trackerImageView.leadingAnchor.constraint(
@@ -53,7 +54,7 @@ class BlockedTrackerCell: UITableViewCell,
                 constant: TPMenuUX.UX.horizontalMargin
             ),
             trackerImageView.heightAnchor.constraint(equalTo: trackerImageView.widthAnchor),
-            trackerImageViewHeightConstraint!,
+            trackerImageViewHeightConstraint,
 
             trackerLabel.leadingAnchor.constraint(
                 equalTo: trackerImageView.trailingAnchor,
@@ -85,7 +86,7 @@ class BlockedTrackerCell: UITableViewCell,
         let iconSize = TPMenuUX.UX.iconSize
         let scaledIconSize = min(UIFontMetrics.default.scaledValue(for: iconSize), 2 * iconSize)
 
-        trackerImageViewHeightConstraint?.constant = scaledIconSize
+        trackerImageViewHeightConstraint.constant = scaledIconSize
     }
 
     func applyTheme(theme: Theme) {
