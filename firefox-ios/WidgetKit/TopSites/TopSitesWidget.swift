@@ -24,59 +24,37 @@ struct TopSitesView: View {
     private struct UX {
         static let widgetBackgroundColor = Color(red: 0.11, green: 0.11, blue: 0.13)
         static let emptySquareFillColor = Color(red: 0.85, green: 0.85, blue: 0.85, opacity: 0.3)
-        static let maskShapeCornerRadius: CGFloat = 5.0
+        static let itemCornerRadius: CGFloat = 5.0
+        static let iconScale: CGFloat = 1.0
+        static let minimumRowSpacing: CGFloat = 12.0
     }
 
     let entry: TopSitesEntry
-
-    @ViewBuilder
-    func topSitesItem(_ site: WidgetKitTopSiteModel, itemSize: CGFloat) -> some View {
-        let url = site.url
-
-        Link(destination: linkToContainingApp("?url=\(url)", query: "widget-medium-topsites-open-url")) {
-            let imageSize = itemSize / 2
-            if let image = entry.favicons[site.imageKey] {
-                Rectangle()
-                    .fill(Color.clear)
-                    .overlay {
-                        image
-                            .resizable()
-                            .frame(width: imageSize, height: imageSize)
-                            .scaledToFit()
-                            .mask(maskShape)
-                    }
-                    .mask(maskShape)
-            } else {
-                emptySquare.frame(width: imageSize, height: imageSize)
-            }
-        }.frame(width: itemSize, height: itemSize)
-    }
-
-    var maskShape: RoundedRectangle {
-        RoundedRectangle(cornerRadius: UX.maskShapeCornerRadius)
-    }
-
-    var emptySquare: some View {
-        maskShape
-            .fill(UX.emptySquareFillColor)
-            .background(Color.clear)
-    }
 
     var body: some View {
         VStack {
             // Make a grid with 4 columns
             GeometryReader { provider in
+                // There are 2 rows and the height of them is half of the widget height
+                // So they occupy the whole available space
+                let rowSize = provider.size.height / 2
+                let itemSize = calculateIconSize(provider: provider, rowSize: rowSize)
                 LazyVGrid(columns: (0..<4).map { _ in GridItem(.flexible(minimum: 0, maximum: .infinity)) },
                           spacing: 0,
                           content: {
-                    let actualSize = 60.0
                     ForEach(0..<8) { index in
                         if let site = entry.sites[safe: index] {
-                            topSitesItem(site, itemSize: actualSize)//provider.size.height / 2)
+                            topSitesItem(site, iconSize: itemSize)
+                                .frame(height: rowSize)
                         } else {
-                            emptySquare
-                                .frame(width: actualSize/2, height: actualSize/2)
-                                // .frame(width: provider.size.height / 4, height: provider.size.height / 4)
+                            Rectangle()
+                                .fill(Color.clear)
+                                .frame(height: rowSize)
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: UX.itemCornerRadius)
+                                        .fill(UX.emptySquareFillColor)
+                                        .frame(width: itemSize, height: itemSize)
+                                }
                         }
                     }
                 })
@@ -85,6 +63,38 @@ struct TopSitesView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .widgetBackground(UX.widgetBackgroundColor)
+    }
+
+    @ViewBuilder
+    private func topSitesItem(_ site: WidgetKitTopSiteModel, iconSize: CGFloat) -> some View {
+        let url = site.url
+        Link(destination: linkToContainingApp("?url=\(url)", query: "widget-medium-topsites-open-url")) {
+            Group {
+                if let image = entry.favicons[site.imageKey] {
+                    image
+                        .resizable()
+                        .scaledToFit()
+                } else {
+                    Rectangle()
+                        .fill(UX.emptySquareFillColor)
+                }
+            }
+            .frame(width: iconSize, height: iconSize)
+            .clipShape(RoundedRectangle(cornerRadius: UX.itemCornerRadius))
+        }
+    }
+
+    private func calculateIconSize(provider: GeometryProxy, rowSize: CGFloat) -> CGFloat {
+        let dynamicIconScale = UIFontMetrics.default.scaledValue(for: UX.iconScale)
+        // since the widget has 2 rows and the height of each row is half of the widget size.
+        // it is set that the icon height is 4 times smaller then widget height.
+        // That is the standard size for the icon and can be adjust modifyng UX.iconScale.
+        // it adapts also to dynamic font scale by scaling the UX.iconScale value
+        let iconHeight = (provider.size.height / 4) * dynamicIconScale
+        if iconHeight > (rowSize - UX.minimumRowSpacing) {
+            return rowSize - UX.minimumRowSpacing
+        }
+        return iconHeight
     }
 
     private func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {
