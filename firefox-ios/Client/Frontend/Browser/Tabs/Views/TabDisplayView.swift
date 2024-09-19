@@ -207,14 +207,14 @@ class TabDisplayView: UIView,
         }
 
         if state.didTapAddTab {
-            animationQueue.addAnimation(for: collectionView) { [weak self] in
-                guard let self else { return }
+//            animationQueue.addAnimation(for: collectionView) { [weak self] in
+//                guard let self else { return }
 
                 let action = TabPanelViewAction(panelType: self.panelType,
                                                 windowUUID: self.windowUUID,
                                                 actionType: TabPanelViewActionType.addNewTab)
                 store.dispatch(action)
-            }
+           // }
         }
     }
 
@@ -402,31 +402,43 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
 
     func collectionView(_ collectionView: UICollectionView,
                         performDropWith coordinator: UICollectionViewDropCoordinator) {
+        // Ensure the drag is active and gather the necessary data
         guard collectionView.hasActiveDrag,
               let destinationIndexPath = coordinator.destinationIndexPath,
               let dragItem = coordinator.items.first?.dragItem,
               let tab = dragItem.localObject as? TabModel,
               let sourceIndex = tabsState.tabs.firstIndex(of: tab) else { return }
 
+        // Define the section and source/destination index paths
         let section = destinationIndexPath.section
         let start = IndexPath(row: sourceIndex, section: section)
         let end = IndexPath(row: destinationIndexPath.item, section: section)
 
+        // Prepare the data for the move action
         let moveTabData = MoveTabData(originIndex: start.row,
                                       destinationIndex: end.row,
                                       isPrivate: tabsState.isPrivateMode)
 
+        // Handle the drop visually
         coordinator.drop(dragItem, toItemAt: destinationIndexPath)
 
-        animationQueue.addAnimation(for: collectionView) { [weak self] in
-            guard let self else { return }
-            let action = TabPanelViewAction(panelType: panelType,
-                                            moveTabData: moveTabData,
-                                            windowUUID: windowUUID,
-                                            actionType: TabPanelViewActionType.moveTab)
+        // Perform the animation and dispatch the Redux action
+//        animationQueue.addAnimation(for: collectionView) { [weak self] in
+//            guard let self else { return }
 
+            // Create the Redux action and dispatch it to update the global state
+            let action = TabPanelViewAction(
+                panelType: panelType,
+                moveTabData: moveTabData,
+                windowUUID: windowUUID,
+                actionType: TabPanelViewActionType.moveTab
+            )
+
+            // Dispatch the action to update the Redux state
             store.dispatch(action)
-            collectionView.moveItem(at: start, to: end)
-        }
+
+            // Update the diffable data source with the new state after dispatch so there's no delay
+            updateCollectionView(state: tabsState)
+      //  }
     }
 }
