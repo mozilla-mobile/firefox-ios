@@ -890,9 +890,10 @@ extension HomepageViewController: UIPopoverPresentationControllerDelegate {
 // MARK: - UIContextMenuInteractionDelegate
 extension HomepageViewController: UIContextMenuInteractionDelegate {
     // Handles iPad trackpad right clicks
-    func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
-                                configurationForMenuAtLocation location: CGPoint)
-    -> UIContextMenuConfiguration? {
+    func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction,
+        configurationForMenuAtLocation location: CGPoint
+    ) -> UIContextMenuConfiguration? {
         let locationInCollectionView = interaction.location(in: collectionView)
         guard let indexPath = collectionView.indexPathForItem(at: locationInCollectionView),
               let viewModel = viewModel.getSectionViewModel(shownSection: indexPath.section) as? HomepageSectionHandler
