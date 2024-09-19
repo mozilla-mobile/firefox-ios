@@ -94,7 +94,7 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         return mainMenuViewController
     }
 
-    private func createMainMenuDetailViewController(with submenu: [MenuSection], 
+    private func createMainMenuDetailViewController(with submenu: [MenuSection],
                                                     title: String) -> MainMenuDetailViewController {
         let detailVC = MainMenuDetailViewController(
             windowUUID: windowUUID,
