@@ -16,7 +16,11 @@ class FindInPageTests: BaseTestCase {
 
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.FindInPage.findNextButton])
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.FindInPage.findPreviousButton])
-        mozWaitForElementToExist(app.searchFields["find.searchField"])
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.searchFields["find.searchField"])
+        } else {
+            mozWaitForElementToExist(app.textFields["FindInPage.searchField"])
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2323463
@@ -46,30 +50,44 @@ class FindInPageTests: BaseTestCase {
         openFindInPageFromMenu(openSite: userState.url!)
 
         // Enter some text to start finding
-        app.searchFields["find.searchField"].typeText("Book")
+        if #available(iOS 16, *) {
+            app.searchFields["find.searchField"].typeText("Book")
+        } else {
+            app.textFields["FindInPage.searchField"].typeText("Book")
+        }
 
         // Once there are matches, test previous/next buttons
-        mozWaitForElementToExist(app.staticTexts["1 of 6"])
-        XCTAssertTrue(app.staticTexts["1 of 6"].exists)
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.staticTexts["1 of 6"])
+            XCTAssertTrue(app.staticTexts["1 of 6"].exists)
+        }
 
         let nextInPageResultButton = app.buttons[AccessibilityIdentifiers.FindInPage.findNextButton]
         nextInPageResultButton.tap()
-        mozWaitForElementToExist(app.staticTexts["2 of 6"])
-        XCTAssertTrue(app.staticTexts["2 of 6"].exists)
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.staticTexts["2 of 6"])
+            XCTAssertTrue(app.staticTexts["2 of 6"].exists)
+        }
 
         nextInPageResultButton.tap()
-        mozWaitForElementToExist(app.staticTexts["3 of 6"])
-        XCTAssertTrue(app.staticTexts["3 of 6"].exists)
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.staticTexts["3 of 6"])
+            XCTAssertTrue(app.staticTexts["3 of 6"].exists)
+        }
 
         let previousInPageResultButton = app.buttons[AccessibilityIdentifiers.FindInPage.findPreviousButton]
         previousInPageResultButton.tap()
 
-        mozWaitForElementToExist(app.staticTexts["2 of 6"])
-        XCTAssertTrue(app.staticTexts["2 of 6"].exists)
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.staticTexts["2 of 6"])
+            XCTAssertTrue(app.staticTexts["2 of 6"].exists)
+        }
 
         previousInPageResultButton.tap()
-        mozWaitForElementToExist(app.staticTexts["1 of 6"])
-        XCTAssertTrue(app.staticTexts["1 of 6"].exists)
+        if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.staticTexts["1 of 6"])
+            XCTAssertTrue(app.staticTexts["1 of 6"].exists)
+        }
 
         // Tapping on close dismisses the search bar
         navigator.goto(BrowserTab)
