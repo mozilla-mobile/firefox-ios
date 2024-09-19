@@ -74,6 +74,8 @@ let package = Package(
         .target(
             name: "SiteImageView",
             dependencies: ["Fuzi", "Kingfisher", "Common", "SwiftDraw"],
+            exclude: ["README.md"],
+            resources: [.process("DefaultFavicons.xcassets")],
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "SiteImageViewTests",

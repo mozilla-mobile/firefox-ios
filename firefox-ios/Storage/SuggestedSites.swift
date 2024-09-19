@@ -10,7 +10,7 @@ open class SuggestedSite: Site {
     override open var tileURL: URL {
         return URL(string: url as String, invalidCharacters: false) ?? URL(string: "about:blank")!
     }
-    public let faviconResource: SiteResource
+    public let faviconResource: SiteResource?
     let trackingId: Int
 
     init(data: SuggestedSiteData) {
@@ -41,7 +41,7 @@ open class SuggestedSitesCursor: ArrayCursor<SuggestedSite> {
 
 public struct SuggestedSiteData {
     var url: String
-    var faviconResource: SiteResource
+    var faviconResource: SiteResource?
     var trackingId: Int
     var title: String
 }

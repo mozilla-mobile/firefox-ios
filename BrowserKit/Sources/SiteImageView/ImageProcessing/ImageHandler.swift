@@ -40,22 +40,29 @@ class DefaultImageHandler: ImageHandler {
     private let letterImageGenerator: LetterImageGenerator
     private let heroImageFetcher: HeroImageFetcher
     private var logger: Logger = DefaultLogger.shared
+    private let bundleFaviconProvider: BundleFaviconProvider
 
     init(imageCache: SiteImageCache = DefaultSiteImageCache(),
          faviconFetcher: FaviconFetcher = DefaultFaviconFetcher(),
          letterImageGenerator: LetterImageGenerator = DefaultLetterImageGenerator(),
-         heroImageFetcher: HeroImageFetcher = DefaultHeroImageFetcher()) {
+         heroImageFetcher: HeroImageFetcher = DefaultHeroImageFetcher(),
+         bundleFaviconProvider: BundleFaviconProvider = DefaultBundleFaviconProvider()) {
         self.imageCache = imageCache
         self.faviconFetcher = faviconFetcher
         self.letterImageGenerator = letterImageGenerator
         self.heroImageFetcher = heroImageFetcher
+        self.bundleFaviconProvider = bundleFaviconProvider
     }
 
     func fetchFavicon(imageModel: SiteImageModel) async -> UIImage {
         do {
-            // If this is one of our special bundled favicons, simply return it from the bundle
+            // If this is one of our special bundled favicons, simply return it from the app bundle
             if case let .bundleAsset(assetName, _) = imageModel.siteResource {
-                return try getBundleImage(assetName: assetName)
+                return try getBundleImage(assetName: assetName, bundle: .main)
+            }
+            // If the site doesn't have a resource try to load the favicon from the package bundle
+            if case let .bundleAsset(assetName, _) = bundleFaviconProvider.resource(for: imageModel.siteURL) {
+                return try getBundleImage(assetName: assetName, bundle: .module)
             }
 
             return try await imageCache.getImage(cacheKey: imageModel.cacheKey, type: imageModel.imageType)
@@ -131,9 +138,9 @@ class DefaultImageHandler: ImageHandler {
             return UIImage(named: "globeLarge")?.withRenderingMode(.alwaysTemplate) ?? UIImage()
         }
     }
-
-    private func getBundleImage(assetName: String) throws -> UIImage {
-        guard let image = UIImage(named: assetName) else {
+    
+    private func getBundleImage(assetName: String, bundle: Bundle) throws -> UIImage {
+        guard let image = UIImage(named: assetName, in: bundle, with: nil) else {
             logger.log(
                 "Could not get image from bundle",
                 level: .warning,

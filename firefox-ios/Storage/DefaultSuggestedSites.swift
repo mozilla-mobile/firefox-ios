@@ -37,48 +37,26 @@ open class DefaultSuggestedSites {
         "default": [
             SuggestedSiteData(
                 url: "https://m.facebook.com/",
-                faviconResource: .bundleAsset(
-                    name: "facebook-com",
-                    forRemoteResource: URL(string: "https://static.xx.fbcdn.net/rsrc.php/v3/yi/r/4Kv5U5b1o3f.png")!
-                ),
                 trackingId: 632,
                 title: .DefaultSuggestedFacebook
             ),
             SuggestedSiteData(
                 url: "https://m.youtube.com/",
-                faviconResource: .bundleAsset(
-                    name: "youtube-com",
-                    forRemoteResource: URL(string: "https://m.youtube.com/static/apple-touch-icon-180x180-precomposed.png")!
-                ),
                 trackingId: 631,
                 title: .DefaultSuggestedYouTube
             ),
             SuggestedSiteData(
                 url: "https://www.amazon.com/",
-                // NOTE: Amazon does not host a high quality favicon. We are falling back to the one hosted in our
-                // ContileProvider.contileProdResourceEndpoint (https://ads.mozilla.org/v1/tiles).
-                faviconResource: .bundleAsset(
-                    name: "amazon-com",
-                    forRemoteResource: URL(string: "https://tiles-cdn.prod.ads.prod.webservices.mozgcp.net/CAP5k4gWqcBGwir7bEEmBWveLMtvldFu-y_kyO3txFA=.9991.jpg")!
-                ),
                 trackingId: 630,
                 title: .DefaultSuggestedAmazon
             ),
             SuggestedSiteData(
                 url: "https://www.wikipedia.org/",
-                faviconResource: .bundleAsset(
-                    name: "wikipedia-org",
-                    forRemoteResource: URL(string: "https://www.wikipedia.org/static/apple-touch/wikipedia.png")!
-                ),
                 trackingId: 629,
                 title: .DefaultSuggestedWikipedia
             ),
             SuggestedSiteData(
                 url: "https://x.com/",
-                faviconResource: .bundleAsset(
-                    name: "x-com",
-                    forRemoteResource: URL(string: "https://abs.twimg.com/responsive-web/client-web/icon-ios.77d25eba.png")!
-                ),
                 trackingId: 628,
                 title: .DefaultSuggestedX
             )
