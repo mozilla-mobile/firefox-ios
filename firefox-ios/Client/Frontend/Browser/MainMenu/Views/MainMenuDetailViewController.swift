@@ -6,9 +6,10 @@ import Foundation
 import MenuKit
 import Common
 import UIKit
+import ComponentLibrary
 
 class MainMenuDetailViewController: UIViewController,
-                                    MainMenuDetailNavigationHandler,
+                                    NavigationHeaderViewActionsHandler,
                                     MenuTableViewDataDelegate,
                                     Notifiable {
     // MARK: - UI/UX elements
@@ -23,11 +24,13 @@ class MainMenuDetailViewController: UIViewController,
     var currentWindowUUID: UUID? { return windowUUID }
 
     var submenuData: [MenuSection]
+    var submenuTitle: String
 
     // MARK: - Initializers
     init(
         windowUUID: WindowUUID,
         with data: [MenuSection],
+        title: String,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         themeManager: ThemeManager = AppContainer.shared.resolve()
     ) {
@@ -35,6 +38,7 @@ class MainMenuDetailViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         self.submenuData = data
+        self.submenuTitle = title
         super.init(nibName: nil, bundle: nil)
 
         setupNotifications(forObserver: self,
@@ -52,6 +56,7 @@ class MainMenuDetailViewController: UIViewController,
         setupView()
         setupTableView()
         submenuContent.setupHeaderNavigation(from: self)
+        submenuContent.setViews(with: submenuTitle, and: .KeyboardShortcuts.Back)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -86,9 +91,13 @@ class MainMenuDetailViewController: UIViewController,
         submenuContent.reloadTableView(with: data)
     }
 
-    // MARK: - MainMenuDetailNavigationHandler
+    // MARK: - NavigationHeaderViewActionsHandler
     func backToMainView() {
         coordinator?.dismissDetailViewController()
+    }
+
+    func dismissMenu() {
+        coordinator?.dismissMenuModal(animated: true)
     }
 
     // MARK: - Notifications

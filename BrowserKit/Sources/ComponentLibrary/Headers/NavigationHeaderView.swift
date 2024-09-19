@@ -2,17 +2,21 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
 import UIKit
 import Common
-import Shared
-import ComponentLibrary
 
-class TrackingProtectionNavigationHeaderView: UIView {
+public protocol NavigationHeaderViewActionsHandler: AnyObject {
+    func backToMainView()
+    func dismissMenu()
+}
+
+public final class NavigationHeaderView: UIView {
     private struct UX {
         static let closeButtonSize: CGFloat = 30
         static let imageMargins: CGFloat = 10
         static let baseDistance: CGFloat = 20
+        static let horizontalMargin: CGFloat = 16
+        static let separatorHeight: CGFloat = 1
     }
 
     let siteTitleLabel: UILabel = .build { label in
@@ -23,21 +27,22 @@ class TrackingProtectionNavigationHeaderView: UIView {
         label.accessibilityTraits.insert(.header)
     }
 
-    private var closeButton: CloseButton = .build { button in
+    private lazy var closeButton: CloseButton = .build { button in
         button.layer.cornerRadius = 0.5 * UX.closeButtonSize
+        button.addTarget(self, action: #selector(self.dismissMenuTapped), for: .touchUpInside)
     }
 
-    var backButton: UIButton = .build { button in
-        button.layer.cornerRadius = 0.5 * UX.closeButtonSize
-        button.clipsToBounds = true
-        button.setTitle(.KeyboardShortcuts.Back, for: .normal)
+    private lazy var backButton: UIButton = .build { button in
         button.setImage(UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.chevronLeft)
             .withRenderingMode(.alwaysTemplate),
                         for: .normal)
-        button.titleLabel?.font = FXFontStyles.Regular.headline.scaledFont()
+        button.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
+        button.addTarget(self, action: #selector(self.backButtonTapped), for: .touchUpInside)
     }
 
     private let horizontalLine: UIView = .build { _ in }
+
+    public weak var navigationDelegate: NavigationHeaderViewActionsHandler?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -60,8 +65,8 @@ class TrackingProtectionNavigationHeaderView: UIView {
             backButton.centerYAnchor.constraint(equalTo: centerYAnchor),
 
             siteTitleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            siteTitleLabel.leadingAnchor.constraint(equalTo: backButton.trailingAnchor),
-            siteTitleLabel.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor),
+            siteTitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            siteTitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             siteTitleLabel.topAnchor.constraint(
                 equalTo: topAnchor,
                 constant: UX.baseDistance
@@ -73,30 +78,38 @@ class TrackingProtectionNavigationHeaderView: UIView {
 
             closeButton.trailingAnchor.constraint(
                 equalTo: trailingAnchor,
-                constant: -TPMenuUX.UX.horizontalMargin
-            ),
-            closeButton.topAnchor.constraint(
-                equalTo: self.topAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
+                constant: -UX.horizontalMargin
             ),
             closeButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.closeButtonSize),
             closeButton.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.closeButtonSize),
+            closeButton.centerYAnchor.constraint(equalTo: centerYAnchor),
 
             horizontalLine.leadingAnchor.constraint(equalTo: leadingAnchor),
             horizontalLine.trailingAnchor.constraint(equalTo: trailingAnchor),
             horizontalLine.bottomAnchor.constraint(equalTo: bottomAnchor),
-            horizontalLine.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.Line.height)
+            horizontalLine.heightAnchor.constraint(equalToConstant: UX.separatorHeight)
         ])
     }
 
-    func setTitle(with text: String) {
-        siteTitleLabel.text = text
+    public func setViews(with title: String, and backButtonText: String) {
+        siteTitleLabel.text = title
+        backButton.setTitle(backButtonText, for: .normal)
+    }
+
+    @objc
+    private func backButtonTapped() {
+        navigationDelegate?.backToMainView()
+    }
+
+    @objc
+    private func dismissMenuTapped() {
+        navigationDelegate?.dismissMenu()
     }
 
     // MARK: ThemeApplicable
     public func applyTheme(theme: Theme) {
         let buttonImage = UIImage(named: StandardImageIdentifiers.Medium.cross)?
-            .tinted(withColor: theme.colors.iconSecondary)
+            .withTintColor(theme.colors.iconSecondary)
         closeButton.setImage(buttonImage, for: .normal)
         closeButton.backgroundColor = theme.colors.layer2
         backButton.tintColor = theme.colors.iconAction

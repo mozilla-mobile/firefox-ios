@@ -33,9 +33,9 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         )
     }
 
-    func showDetailViewController(with submenu: [MenuSection]) {
+    func showDetailViewController(with submenu: [MenuSection], title: String) {
         router.push(
-            createMainMenuDetailViewController(with: submenu),
+            createMainMenuDetailViewController(with: submenu, title: title),
             animated: true
         )
     }
@@ -50,8 +50,8 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     }
 
     func navigateTo(_ destination: MainMenuNavigationDestination, animated: Bool) {
-        if case let .detailsView(with: submenu) = destination {
-            self.showDetailViewController(with: submenu)
+        if case let .detailsView(with: submenu, title: title) = destination {
+            self.showDetailViewController(with: submenu, title: title)
         } else {
             router.dismiss(animated: animated, completion: { [weak self] in
                 guard let self else { return }
@@ -94,10 +94,11 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         return mainMenuViewController
     }
 
-    private func createMainMenuDetailViewController(with submenu: [MenuSection]) -> MainMenuDetailViewController {
+    private func createMainMenuDetailViewController(with submenu: [MenuSection], title: String) -> MainMenuDetailViewController {
         let detailVC = MainMenuDetailViewController(
             windowUUID: windowUUID,
-            with: submenu
+            with: submenu,
+            title: title
         )
         detailVC.coordinator = self
         return detailVC

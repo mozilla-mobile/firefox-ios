@@ -130,7 +130,8 @@ struct MainMenuConfigurationUtility: Equatable {
                             MainMenuAction(
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.show(
-                                    .detailsView(with: getToolsSubmenu(with: uuid))
+                                    .detailsView(with: getToolsSubmenu(with: uuid),
+                                                 title: .MainMenu.ToolsSection.Tools)
                                 )
                             )
                         )
@@ -149,7 +150,8 @@ struct MainMenuConfigurationUtility: Equatable {
                             MainMenuAction(
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.show(
-                                    .detailsView(with: getSaveSubmenu(with: uuid))
+                                    .detailsView(with: getSaveSubmenu(with: uuid),
+                                                 title: .MainMenu.ToolsSection.Save)
                                 )
                             )
                         )
