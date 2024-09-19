@@ -9,7 +9,6 @@ import UIKit
 import ComponentLibrary
 
 class MainMenuDetailViewController: UIViewController,
-                                    NavigationHeaderViewActionsHandler,
                                     MenuTableViewDataDelegate,
                                     Notifiable {
     // MARK: - UI/UX elements
@@ -55,8 +54,13 @@ class MainMenuDetailViewController: UIViewController,
 
         setupView()
         setupTableView()
-        submenuContent.setupHeaderNavigation(from: self)
         submenuContent.setViews(with: submenuTitle, and: .KeyboardShortcuts.Back)
+        submenuContent.detailHeaderView.backToMainMenuCallback = { [weak self] in
+            self?.coordinator?.dismissDetailViewController()
+        }
+        submenuContent.detailHeaderView.dismissMenuCallback = { [weak self] in
+            self?.coordinator?.dismissMenuModal(animated: true)
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -89,15 +93,6 @@ class MainMenuDetailViewController: UIViewController,
     // MARK: - TableViewDelegates
     func reloadTableView(with data: [MenuSection]) {
         submenuContent.reloadTableView(with: data)
-    }
-
-    // MARK: - NavigationHeaderViewActionsHandler
-    func backToMainView() {
-        coordinator?.dismissDetailViewController()
-    }
-
-    func dismissMenu() {
-        coordinator?.dismissMenuModal(animated: true)
     }
 
     // MARK: - Notifications

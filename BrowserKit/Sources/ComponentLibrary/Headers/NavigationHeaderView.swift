@@ -5,11 +5,6 @@
 import UIKit
 import Common
 
-public protocol NavigationHeaderViewActionsHandler: AnyObject {
-    func backToMainView()
-    func dismissMenu()
-}
-
 public final class NavigationHeaderView: UIView {
     private struct UX {
         static let closeButtonSize: CGFloat = 30
@@ -18,6 +13,9 @@ public final class NavigationHeaderView: UIView {
         static let horizontalMargin: CGFloat = 16
         static let separatorHeight: CGFloat = 1
     }
+
+    public var backToMainMenuCallback: (() -> Void)?
+    public var dismissMenuCallback: (() -> Void)?
 
     let siteTitleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
@@ -41,8 +39,6 @@ public final class NavigationHeaderView: UIView {
     }
 
     private let horizontalLine: UIView = .build { _ in }
-
-    public weak var navigationDelegate: NavigationHeaderViewActionsHandler?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -98,12 +94,12 @@ public final class NavigationHeaderView: UIView {
 
     @objc
     private func backButtonTapped() {
-        navigationDelegate?.backToMainView()
+        backToMainMenuCallback?()
     }
 
     @objc
     private func dismissMenuTapped() {
-        navigationDelegate?.dismissMenu()
+        dismissMenuCallback?()
     }
 
     // MARK: ThemeApplicable

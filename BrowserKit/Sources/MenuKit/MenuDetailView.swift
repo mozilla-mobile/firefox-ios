@@ -14,7 +14,7 @@ public final class MenuDetailView: UIView,
 
     // MARK: - UI Elements
     private var tableView: MenuTableView = .build()
-    private var detailHeaderView: NavigationHeaderView = .build()
+    public var detailHeaderView: NavigationHeaderView = .build()
 
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -47,10 +47,6 @@ public final class MenuDetailView: UIView,
     // MARK: - Interface
     public func reloadTableView(with data: [MenuSection]) {
         tableView.reloadTableView(with: data)
-    }
-
-    public func setupHeaderNavigation(from delegate: NavigationHeaderViewActionsHandler) {
-        detailHeaderView.navigationDelegate = delegate
     }
 
     public func setViews(with title: String, and backButtonText: String) {
