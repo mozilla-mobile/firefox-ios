@@ -69,16 +69,19 @@ struct TopSitesView: View {
                 LazyVGrid(columns: (0..<4).map { _ in GridItem(.flexible(minimum: 0, maximum: .infinity)) },
                           spacing: 0,
                           content: {
+                    let actualSize = 60.0
                     ForEach(0..<8) { index in
                         if let site = entry.sites[safe: index] {
-                            topSitesItem(site, itemSize: provider.size.height / 2)
+                            topSitesItem(site, itemSize: actualSize)//provider.size.height / 2)
                         } else {
                             emptySquare
-                                .frame(width: provider.size.height / 4, height: provider.size.height / 4)
+                                .frame(width: actualSize/2, height: actualSize/2)
+                                // .frame(width: provider.size.height / 4, height: provider.size.height / 4)
                         }
                     }
                 })
-            }.padding(.all)
+            }
+            .padding(.all)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .widgetBackground(UX.widgetBackgroundColor)
