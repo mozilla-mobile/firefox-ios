@@ -906,7 +906,13 @@ class Tab: NSObject, ThemeApplicable {
     /// Returns true if the tabs both have the same type of private, normal active, and normal inactive.
     /// Simply checks the `isPrivate` and `isActive` flags of both tabs.
     func isSameTypeAs(_ otherTab: Tab) -> Bool {
-        return isPrivate == otherTab.isPrivate && isActive == otherTab.isActive
+        if isPrivate == otherTab.isPrivate {
+            // Private tabs are always lumped together in the same type regardless of their last execution time
+            return true
+        } else {
+            // Two normal tabs are only the same type if they're both active, or both inactive
+            return isActive == otherTab.isActive
+        }
     }
 }
 
