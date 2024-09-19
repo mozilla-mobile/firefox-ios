@@ -99,7 +99,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         Task {
             await buildTabRestore(window: await tabMigration.runMigration(for: windowUUID))
             logger.log("Tabs restore ended after migration", level: .debug, category: .tabs)
-            logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(normalInactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
+            logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
         }
     }
 
@@ -110,7 +110,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
             let windowData: WindowData? = windowIsNew ? nil : await self.tabDataStore.fetchWindowData(uuid: windowUUID)
             await buildTabRestore(window: windowData)
             logger.log("Tabs restore ended after fetching window data", level: .debug, category: .tabs)
-            logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(normalInactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
+            logger.log("Normal tabs count; \(normalTabs.count), Inactive tabs count; \(inactiveTabs.count), Private tabs count; \(privateTabs.count)", level: .debug, category: .tabs)
         }
     }
 

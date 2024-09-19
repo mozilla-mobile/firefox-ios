@@ -38,7 +38,7 @@ final class TabsTelemetry {
                                      extras: normalExtra)
 
         let inactiveExtra = [
-            TelemetryWrapper.EventExtraKey.tabsQuantity.rawValue: Int64(tabManager.normalInactiveTabs.count)
+            TelemetryWrapper.EventExtraKey.tabsQuantity.rawValue: Int64(tabManager.inactiveTabs.count)
         ]
         TelemetryWrapper.recordEvent(category: .information,
                                      method: .background,

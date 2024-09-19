@@ -180,7 +180,7 @@ class TabManagerTests: XCTestCase {
 
         // Test
         XCTAssertEqual(subject.normalActiveTabs.count, 1, "Only one tab remains active")
-        XCTAssertEqual(subject.normalInactiveTabs.count, 2, "Two tabs should now be inactive")
+        XCTAssertEqual(subject.inactiveTabs.count, 2, "Two tabs should now be inactive")
         XCTAssertEqual(subject.normalTabs.count, totalTabCount, "The total tab count should not have changed")
     }
 
@@ -372,7 +372,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertNotNil(rightOrLeftTab)
         XCTAssertEqual(
             rightOrLeftTab,
-            tabManager.normalInactiveTabs[safe: 1],
+            tabManager.inactiveTabs[safe: 1],
             "Should choose the second inactive tab as the nearest neighbour on the right"
         )
     }
@@ -408,7 +408,7 @@ class TabManagerTests: XCTestCase {
 
         // Sanity check preconditions
         XCTAssertEqual(tabManager.tabs.count, numberNormalActiveTabs)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalActiveTabs)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, secondNormalActiveTab)
@@ -421,7 +421,7 @@ class TabManagerTests: XCTestCase {
 
         // When the a middle tab is removed, we expect its recent parent to be selected.
         XCTAssertEqual(tabManager.tabs.count, numberNormalActiveTabs - 1)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalActiveTabs - 1)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, firstNormalActiveTab, "Should have selected the parent tab, it's most recent")
@@ -446,7 +446,7 @@ class TabManagerTests: XCTestCase {
 
         // Sanity check preconditions
         XCTAssertEqual(tabManager.tabs.count, numberNormalActiveTabs)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalActiveTabs)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, secondNormalActiveTab)
@@ -459,7 +459,7 @@ class TabManagerTests: XCTestCase {
 
         // When the a middle tab is removed, and its parent is stale, we expect the tab on the right to be selected
         XCTAssertEqual(tabManager.tabs.count, numberNormalActiveTabs - 1)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalActiveTabs - 1)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, thirdNormalActiveTab, "Should select tab on the right since no parent")
@@ -491,7 +491,7 @@ class TabManagerTests: XCTestCase {
 
         // Sanity check preconditions
         XCTAssertEqual(tabManager.tabs.count, numberNormalActiveTabs)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalActiveTabs)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, secondNormalActiveTab)
@@ -504,7 +504,7 @@ class TabManagerTests: XCTestCase {
 
         // When the a middle tab is removed, and its parent is stale, we expect the tab on the right to be selected
         XCTAssertEqual(tabManager.tabs.count, numberNormalActiveTabs - 1)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalActiveTabs - 1)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, thirdNormalActiveTab, "Should select tab on the right since parent is stale")
@@ -542,7 +542,7 @@ class TabManagerTests: XCTestCase {
 
         // Sanity check preconditions
         XCTAssertEqual(tabManager.tabs.count, numberPrivateTabs)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
         XCTAssertEqual(tabManager.normalActiveTabs.count, 0)
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs)
         XCTAssertEqual(tabManager.selectedTab, secondPrivateTab)
@@ -555,7 +555,7 @@ class TabManagerTests: XCTestCase {
 
         // When the a middle tab is removed, we expect its recent parent to be selected.
         XCTAssertEqual(tabManager.tabs.count, numberPrivateTabs - 1)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
         XCTAssertEqual(tabManager.normalActiveTabs.count, 0)
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs - 1)
         XCTAssertEqual(tabManager.selectedTab, firstPrivateTab, "Should have selected the parent tab, as it is most recent")
@@ -587,7 +587,7 @@ class TabManagerTests: XCTestCase {
 
         // Sanity check preconditions
         XCTAssertEqual(tabManager.tabs.count, numberPrivateTabs)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
         XCTAssertEqual(tabManager.normalActiveTabs.count, 0)
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs)
         XCTAssertEqual(tabManager.selectedTab, secondPrivateTab)
@@ -600,7 +600,7 @@ class TabManagerTests: XCTestCase {
 
         // When the a middle tab is removed with no parent, we expect the right tab to be selected.
         XCTAssertEqual(tabManager.tabs.count, numberPrivateTabs - 1)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
         XCTAssertEqual(tabManager.normalActiveTabs.count, 0)
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs - 1)
         XCTAssertEqual(tabManager.selectedTab, thirdPrivateTab, "Should have selected the tab on the right")
@@ -632,7 +632,7 @@ class TabManagerTests: XCTestCase {
 
         // Sanity check preconditions
         XCTAssertEqual(tabManager.tabs.count, numberPrivateTabs)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
         XCTAssertEqual(tabManager.normalActiveTabs.count, 0)
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs)
         XCTAssertEqual(tabManager.selectedTab, secondPrivateTab)
@@ -645,7 +645,7 @@ class TabManagerTests: XCTestCase {
 
         // When the a middle tab is removed, and its parent is stale, we expect the tab on the right to be selected
         XCTAssertEqual(tabManager.tabs.count, numberPrivateTabs - 1)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
         XCTAssertEqual(tabManager.normalActiveTabs.count, 0)
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs - 1)
         XCTAssertEqual(tabManager.selectedTab, thirdPrivateTab, "Should select tab on the right since parent is stale")
@@ -663,7 +663,7 @@ class TabManagerTests: XCTestCase {
         let numberActiveTabs = 3
         addTabs(to: tabManager, ofType: .normalInactive, count: numberInactiveTabs)
         addTabs(to: tabManager, ofType: .normalActive, count: numberActiveTabs)
-        guard let secondInactiveTab = tabManager.normalInactiveTabs[safe: 1],
+        guard let secondInactiveTab = tabManager.inactiveTabs[safe: 1],
               let secondNormalTab = tabManager.normalActiveTabs[safe: 1] else {
             XCTFail("Test did not meet preconditions")
             return
@@ -688,7 +688,7 @@ class TabManagerTests: XCTestCase {
 
         // Sanity check preconditions
         XCTAssertEqual(tabManager.tabs.count, numberInactiveTabs + numberActiveTabs)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, numberInactiveTabs)
+        XCTAssertEqual(tabManager.inactiveTabs.count, numberInactiveTabs)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberActiveTabs)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, secondInactiveTab)
@@ -703,7 +703,7 @@ class TabManagerTests: XCTestCase {
         // In this case, we'd expect the most recent active tab to be chosen since `firstInactiveTab` has no parent and no
         // left/right tab that's viable in the array (surrounded by two inactive tabs).
         XCTAssertEqual(tabManager.tabs.count, numberInactiveTabs + numberActiveTabs, "Size won't change as new tab replaces")
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, numberInactiveTabs - 1)
+        XCTAssertEqual(tabManager.inactiveTabs.count, numberInactiveTabs - 1)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberActiveTabs + 1)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         for tab in initialTabs {
@@ -742,7 +742,7 @@ class TabManagerTests: XCTestCase {
 
         // Sanity check preconditions
         XCTAssertEqual(tabManager.tabs.count, numberPrivateTabs + numberNormalActiveTabs)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalActiveTabs)
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs)
         XCTAssertEqual(tabManager.selectedTab, privateTab)
@@ -755,7 +755,7 @@ class TabManagerTests: XCTestCase {
 
         // When the last selected private tab is removed, and there's a recent active tab, we expect that to be selected
         XCTAssertEqual(tabManager.tabs.count, numberNormalActiveTabs)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalActiveTabs)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, secondNormalTab, "Should select the most recently executed normal active tab")
@@ -779,7 +779,7 @@ class TabManagerTests: XCTestCase {
 
         // Sanity check preconditions
         XCTAssertEqual(tabManager.tabs.count, numberPrivateTabs)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
         XCTAssertEqual(tabManager.normalActiveTabs.count, 0)
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs)
         XCTAssertEqual(tabManager.selectedTab, firstTab)
@@ -793,7 +793,7 @@ class TabManagerTests: XCTestCase {
         // When the last selected private tab is removed, and there are no normal active tabs,
         // we expect a new active normal tab to be added
         XCTAssertEqual(tabManager.tabs.count, numberPrivateTabs)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
         XCTAssertEqual(tabManager.normalActiveTabs.count, 1)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertNotEqual(tabManager.selectedTab, firstTab, "The newly added selected tab should not equal the removed tab")
@@ -821,7 +821,7 @@ class TabManagerTests: XCTestCase {
 
         // Sanity check preconditions
         XCTAssertEqual(tabManager.tabs.count, numberPrivateTabs + numberInactiveTabs)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, numberInactiveTabs)
+        XCTAssertEqual(tabManager.inactiveTabs.count, numberInactiveTabs)
         XCTAssertEqual(tabManager.normalActiveTabs.count, 0)
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs)
         XCTAssertEqual(tabManager.selectedTab, firstTab)
@@ -835,7 +835,7 @@ class TabManagerTests: XCTestCase {
         // When the last selected private tab is removed, and there are no only inactive normal tabs remaining,
         // we expect a new active normal tab to be added
         XCTAssertEqual(tabManager.tabs.count, numberPrivateTabs + numberInactiveTabs, "Removed tab is replaced, count same")
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, numberInactiveTabs)
+        XCTAssertEqual(tabManager.inactiveTabs.count, numberInactiveTabs)
         XCTAssertEqual(tabManager.normalActiveTabs.count, 1, "A new active tab should be added")
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs - 1)
         for tab in initialTabs {
@@ -863,7 +863,7 @@ class TabManagerTests: XCTestCase {
 
         // Sanity check preconditions
         XCTAssertEqual(tabManager.tabs.count, numberNormalActiveTabs)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalActiveTabs)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, firstTab)
@@ -876,7 +876,7 @@ class TabManagerTests: XCTestCase {
 
         // When the last active tab is removed, we expect a new active normal tab to be added
         XCTAssertEqual(tabManager.tabs.count, numberNormalActiveTabs)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalActiveTabs)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertNotEqual(tabManager.selectedTab, firstTab, "The newly added selected tab should not equal the removed tab")
@@ -904,7 +904,7 @@ class TabManagerTests: XCTestCase {
 
         // Sanity check preconditions
         XCTAssertEqual(tabManager.tabs.count, numberInactiveTabs)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, numberInactiveTabs)
+        XCTAssertEqual(tabManager.inactiveTabs.count, numberInactiveTabs)
         XCTAssertEqual(tabManager.normalActiveTabs.count, 0)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, firstTab)
@@ -917,7 +917,7 @@ class TabManagerTests: XCTestCase {
 
         // When the last selected inactive tab is removed, we expect a new active normal tab to be added
         XCTAssertEqual(tabManager.tabs.count, numberInactiveTabs)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
         XCTAssertEqual(tabManager.normalActiveTabs.count, 1)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertNotEqual(tabManager.selectedTab, firstTab, "The newly added selected tab should not equal the removed tab")
@@ -950,7 +950,7 @@ class TabManagerTests: XCTestCase {
 
         // Sanity check preconditions
         XCTAssertEqual(tabManager.tabs.count, totalTabCount)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, numberNormalInactiveTabs)
+        XCTAssertEqual(tabManager.inactiveTabs.count, numberNormalInactiveTabs)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalActiveTabs)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, thirdNormalActiveTab)
@@ -963,7 +963,7 @@ class TabManagerTests: XCTestCase {
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(tabManager.tabs.count, totalTabCount - 1)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, numberNormalInactiveTabs)
+        XCTAssertEqual(tabManager.inactiveTabs.count, numberNormalInactiveTabs)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalActiveTabs - 1)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, thirdNormalActiveTab, "The selected tab should not change")
@@ -994,7 +994,7 @@ class TabManagerTests: XCTestCase {
 
         // Sanity check preconditions
         XCTAssertEqual(tabManager.tabs.count, totalTabCount)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, numberNormalInactiveTabs)
+        XCTAssertEqual(tabManager.inactiveTabs.count, numberNormalInactiveTabs)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalActiveTabs)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, firstNormalActiveTab)
@@ -1007,7 +1007,7 @@ class TabManagerTests: XCTestCase {
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(tabManager.tabs.count, totalTabCount - 1)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, numberNormalInactiveTabs)
+        XCTAssertEqual(tabManager.inactiveTabs.count, numberNormalInactiveTabs)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalActiveTabs - 1)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, firstNormalActiveTab, "The selected tab should not change")
@@ -1037,7 +1037,7 @@ class TabManagerTests: XCTestCase {
 
         // Sanity check preconditions
         XCTAssertEqual(tabManager.tabs.count, totalTabCount)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, numberNormalInactiveTabs)
+        XCTAssertEqual(tabManager.inactiveTabs.count, numberNormalInactiveTabs)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalActiveTabs)
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs)
         XCTAssertEqual(tabManager.selectedTab, secondPrivateTab)
@@ -1050,7 +1050,7 @@ class TabManagerTests: XCTestCase {
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(tabManager.tabs.count, totalTabCount - 1)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, numberNormalInactiveTabs)
+        XCTAssertEqual(tabManager.inactiveTabs.count, numberNormalInactiveTabs)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalActiveTabs)
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs - 1)
         XCTAssertEqual(tabManager.selectedTab, secondPrivateTab, "The selected tab should not change")
@@ -1080,7 +1080,7 @@ class TabManagerTests: XCTestCase {
 
         // Sanity check preconditions
         XCTAssertEqual(tabManager.tabs.count, totalTabCount)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, numberNormalInactiveTabs)
+        XCTAssertEqual(tabManager.inactiveTabs.count, numberNormalInactiveTabs)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalActiveTabs)
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs)
         XCTAssertEqual(tabManager.selectedTab, firstPrivateTab)
@@ -1093,7 +1093,7 @@ class TabManagerTests: XCTestCase {
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(tabManager.tabs.count, totalTabCount - 1)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, numberNormalInactiveTabs)
+        XCTAssertEqual(tabManager.inactiveTabs.count, numberNormalInactiveTabs)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalActiveTabs)
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs - 1)
         XCTAssertEqual(tabManager.selectedTab, firstPrivateTab, "The selected tab should not change")
@@ -1111,7 +1111,7 @@ class TabManagerTests: XCTestCase {
         addTabs(to: tabManager, ofType: .normalActive, count: numberNormalActiveTabs)
         addTabs(to: tabManager, ofType: .privateAny, count: numberPrivateTabs)
         guard let firstPrivateTab = tabManager.privateTabs[safe: 0],
-              let firstNormalInactiveTab = tabManager.normalInactiveTabs[safe: 0] else {
+              let firstNormalInactiveTab = tabManager.inactiveTabs[safe: 0] else {
             XCTFail("Test did not meet preconditions")
             return
         }
@@ -1123,7 +1123,7 @@ class TabManagerTests: XCTestCase {
 
         // Sanity check preconditions
         XCTAssertEqual(tabManager.tabs.count, totalTabCount)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, numberNormalInactiveTabs)
+        XCTAssertEqual(tabManager.inactiveTabs.count, numberNormalInactiveTabs)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalActiveTabs)
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs)
         XCTAssertEqual(tabManager.selectedTab, firstPrivateTab)
@@ -1136,7 +1136,7 @@ class TabManagerTests: XCTestCase {
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(tabManager.tabs.count, totalTabCount - 1)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, numberNormalInactiveTabs - 1)
+        XCTAssertEqual(tabManager.inactiveTabs.count, numberNormalInactiveTabs - 1)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalActiveTabs)
         XCTAssertEqual(tabManager.privateTabs.count, numberPrivateTabs)
         XCTAssertEqual(tabManager.selectedTab, firstPrivateTab, "The selected tab should not change")
@@ -1164,7 +1164,7 @@ class TabManagerTests: XCTestCase {
 
         // Sanity check preconditions
         XCTAssertEqual(tabManager.tabs.count, numberNormalActiveTabs)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalActiveTabs)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, secondTab)
@@ -1176,7 +1176,7 @@ class TabManagerTests: XCTestCase {
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(tabManager.tabs.count, numberNormalActiveTabs - 1)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalActiveTabs - 1)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, secondTab, "The selected tab should not change")
@@ -1187,7 +1187,7 @@ class TabManagerTests: XCTestCase {
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(tabManager.tabs.count, numberNormalActiveTabs - 2)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalActiveTabs - 2)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, secondTab, "The selected tab should not change")
@@ -1199,7 +1199,7 @@ class TabManagerTests: XCTestCase {
 
         // We expect a new normal active tab will be created
         XCTAssertEqual(tabManager.tabs.count, 1)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
         XCTAssertEqual(tabManager.normalActiveTabs.count, 1)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertNotEqual(tabManager.selectedTab, secondTab, "This tab should have been removed")
@@ -1214,7 +1214,7 @@ class TabManagerTests: XCTestCase {
 
         let numberNormalInactiveTabs = 3
         addTabs(to: tabManager, ofType: .normalInactive, count: numberNormalInactiveTabs)
-        guard let secondTab = tabManager.normalInactiveTabs[safe: 1] else {
+        guard let secondTab = tabManager.inactiveTabs[safe: 1] else {
             XCTFail("Test did not meet preconditions")
             return
         }
@@ -1228,7 +1228,7 @@ class TabManagerTests: XCTestCase {
 
         // Sanity check preconditions
         XCTAssertEqual(tabManager.tabs.count, numberNormalInactiveTabs)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, numberNormalInactiveTabs)
+        XCTAssertEqual(tabManager.inactiveTabs.count, numberNormalInactiveTabs)
         XCTAssertEqual(tabManager.normalActiveTabs.count, 0)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, secondTab)
@@ -1240,7 +1240,7 @@ class TabManagerTests: XCTestCase {
 
         // We expect a new normal active tab will be created, all inactive tabs removed
         XCTAssertEqual(tabManager.tabs.count, 1)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
         XCTAssertEqual(tabManager.normalActiveTabs.count, 1)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertNotEqual(tabManager.selectedTab, secondTab, "This tab should have been removed")
@@ -1266,7 +1266,7 @@ class TabManagerTests: XCTestCase {
 
         // Sanity check preconditions
         XCTAssertEqual(tabManager.tabs.count, numberNormalInactiveTabs + numberNormalActiveTabs)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, numberNormalInactiveTabs)
+        XCTAssertEqual(tabManager.inactiveTabs.count, numberNormalInactiveTabs)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalActiveTabs)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, secondTab)
@@ -1277,7 +1277,7 @@ class TabManagerTests: XCTestCase {
         try await Task.sleep(nanoseconds: sleepTime)
 
         XCTAssertEqual(tabManager.tabs.count, numberNormalActiveTabs)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 0)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 0)
         XCTAssertEqual(tabManager.normalActiveTabs.count, numberNormalInactiveTabs)
         XCTAssertEqual(tabManager.privateTabs.count, 0)
         XCTAssertEqual(tabManager.selectedTab, secondTab, "The selected tab should not have changed")
@@ -1352,7 +1352,7 @@ class TabManagerTests: XCTestCase {
         // Check preconditions
         XCTAssertEqual(tabManager.tabs.count, 9)
         XCTAssertEqual(tabManager.normalActiveTabs.count, 4)
-        XCTAssertEqual(tabManager.normalInactiveTabs.count, 2)
+        XCTAssertEqual(tabManager.inactiveTabs.count, 2)
         XCTAssertEqual(tabManager.privateTabs.count, 3)
     }
 }

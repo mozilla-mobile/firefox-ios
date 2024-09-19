@@ -90,7 +90,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         return normalTabs.filter({ $0.isActive })
     }
 
-    var normalInactiveTabs: [Tab] {
+    var inactiveTabs: [Tab] {
         return normalTabs.filter({ $0.isInactive })
     }
 
@@ -698,7 +698,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     func removeAllInactiveTabs() async { fatalError("should never be called") }
 
     func getInactiveTabs() -> [Tab] {
-        return normalInactiveTabs
+        return inactiveTabs
     }
 
     @MainActor

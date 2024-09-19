@@ -31,7 +31,7 @@ class MockTabManager: TabManager {
     var count: Int = 0
     var normalTabs = [Tab]()
     var normalActiveTabs = [Tab]()
-    var normalInactiveTabs = [Tab]()
+    var inactiveTabs = [Tab]()
     var privateTabs = [Tab]()
     var tabDisplayType: TabDisplayType = .TabGrid
 
@@ -166,7 +166,7 @@ class MockTabManager: TabManager {
 
     // MARK: - Inactive tabs
     func getInactiveTabs() -> [Tab] {
-        return normalInactiveTabs
+        return inactiveTabs
     }
 
     func removeAllInactiveTabs() async {}
