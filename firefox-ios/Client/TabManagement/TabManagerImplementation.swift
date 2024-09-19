@@ -192,7 +192,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         if let tabToSelect {
             selectTab(tabToSelect)
         } else {
-            // If `tabToSelect` is nil after restoration, force selection of the most recent normal active tab, if one exists.
+            // If `tabToSelect` is nil after restoration, force selection of the most recent normal active tab if one exists.
             guard let mostRecentActiveTab = mostRecentTab(inTabs: normalActiveTabs) else {
                 selectTab(addTab())
                 return
