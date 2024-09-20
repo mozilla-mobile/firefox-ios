@@ -6990,6 +6990,7 @@
 		8AED23C427AC1F9500DE7E97 /* BaseContentStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseContentStackView.swift; sourceTree = "<group>"; };
 		8AED868228CA3B3400351A50 /* BookmarkPanelViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkPanelViewModelTests.swift; sourceTree = "<group>"; };
 		8AEDB11429F9F00400F2A53B /* SceneContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneContainer.swift; sourceTree = "<group>"; };
+		8AEDFE832C9DAB9C00821359 /* FennecTesting.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = FennecTesting.xcconfig; sourceTree = "<group>"; };
 		8AEE284A276A973400C7104D /* RatingPromptManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingPromptManagerTests.swift; sourceTree = "<group>"; };
 		8AEE62C62756BA34003207D1 /* LoginsHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = LoginsHelper.js; path = AllFrames/AtDocumentStart/LoginsHelper.js; sourceTree = "<group>"; };
 		8AEE62C72756BA34003207D1 /* TrackingProtectionStats.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = TrackingProtectionStats.js; path = AllFrames/AtDocumentStart/TrackingProtectionStats.js; sourceTree = "<group>"; };
@@ -12766,6 +12767,7 @@
 				8A2B1A5A28216C4C0061216B /* Debug.xcconfig */,
 				E6DCC1ED1DCBB6AA00CEC4B7 /* Fennec.enterprise.xcconfig */,
 				E60961861B62B8A700DD640F /* Fennec.xcconfig */,
+				8AEDFE832C9DAB9C00821359 /* FennecTesting.xcconfig */,
 				E60961891B62B8C800DD640F /* Firefox.xcconfig */,
 				E6FCC43C1C40565200DF6113 /* FirefoxBeta.xcconfig */,
 				8A2B1A5C28216C4D0061216B /* Release.xcconfig */,
@@ -22530,6 +22532,7 @@
 		};
 		8A19936E2C9B5A63001F4D57 /* Fennec_Testing */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8AEDFE832C9DAB9C00821359 /* FennecTesting.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon_Developer;
