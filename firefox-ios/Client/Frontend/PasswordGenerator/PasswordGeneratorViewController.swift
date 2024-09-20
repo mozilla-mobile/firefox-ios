@@ -136,7 +136,6 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
         contentView.addSubviews(header, descriptionLabel, passwordField, usePasswordButton)
         header.addSubviews(headerImageView, headerLabel)
         passwordField.addSubviews(passwordLabel, passwordRefreshButton)
-        
 
         // Content View Constraints
         NSLayoutConstraint.activate([
@@ -153,7 +152,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
                 equalTo: view.safeAreaLayoutGuide.bottomAnchor,
                 constant: -UX.containerPadding),
         ])
-        
+
         // Content View Elements Layout
         NSLayoutConstraint.activate([
             header.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -218,7 +217,6 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
             passwordRefreshButton.widthAnchor.constraint(equalToConstant: scaledRefreshButtonSize),
             passwordRefreshButton.heightAnchor.constraint(equalToConstant: scaledRefreshButtonSize),
         ])
-
     }
 
     // MARK: - Themable
