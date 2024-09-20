@@ -19,14 +19,14 @@ class BlockedTrackersTableViewController: UIViewController,
                                           UITableViewDelegate {
     private struct UX {
         static let baseCellHeight: CGFloat = 44
-        static let baseDistance: CGFloat = 20
-        static let bottomDistance: CGFloat = 350
         static let headerDistance: CGFloat = 8
     }
 
     private lazy var trackersTable: BlockedTrackersTableView = .build { tableView in
         tableView.delegate = self
     }
+
+    private var tableViewHeader: BlockedTrackersHeaderView = .build()
 
     // MARK: Navigation View
     private let navigationView: TrackingProtectionHeaderView = .build { header in
@@ -76,6 +76,13 @@ class BlockedTrackersTableViewController: UIViewController,
         applyTheme()
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        trackersTable.layoutIfNeeded()
+        let height = trackersTable.contentSize.height
+        trackersTable.heightAnchor.constraint(equalToConstant: height).isActive = true
+    }
+
     // MARK: View Setup
     private func setupView() {
         setupNavigationView()
@@ -105,20 +112,22 @@ class BlockedTrackersTableViewController: UIViewController,
 
     // MARK: TableView Setup
     private func setupTableView() {
+        view.addSubview(tableViewHeader)
         view.addSubview(trackersTable)
         let tableConstraints = [
+            tableViewHeader.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            tableViewHeader.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            tableViewHeader.topAnchor.constraint(equalTo: navigationView.bottomAnchor),
             trackersTable.leadingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor,
                 constant: TPMenuUX.UX.horizontalMargin
             ),
             trackersTable.topAnchor.constraint(
-                equalTo: navigationView.bottomAnchor,
+                equalTo: tableViewHeader.bottomAnchor,
                 constant: UX.headerDistance
             ),
             trackersTable.bottomAnchor.constraint(
-                greaterThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor,
-                constant: 0
-            ),
+                lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor),
             trackersTable.trailingAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.trailingAnchor,
                 constant: -TPMenuUX.UX.horizontalMargin
@@ -150,31 +159,7 @@ class BlockedTrackersTableViewController: UIViewController,
 
     private func updateViewDetails() {
         navigationView.setTitle(with: model.topLevelDomain)
-
-        if let headerView = trackersTable.headerView(forSection: 0) as? BlockedTrackersHeaderView {
-            headerView.totalTrackersBlockedLabel.text = model.getTotalTrackersText()
-        }
-    }
-
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section == 0 {
-            guard let headerView = tableView.dequeueReusableHeaderFooterView(
-                withIdentifier: BlockedTrackersHeaderView.cellIdentifier
-            ) as? BlockedTrackersHeaderView else { return UIView() }
-
-            headerView.totalTrackersBlockedLabel.text = model.getTotalTrackersText()
-            headerView.applyTheme(theme: currentTheme())
-            return headerView
-        }
-        return nil
-    }
-
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return UITableView.automaticDimension
-    }
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
+        tableViewHeader.totalTrackersBlockedLabel.text = model.getTotalTrackersText()
     }
 
     @objc
@@ -222,6 +207,7 @@ class BlockedTrackersTableViewController: UIViewController,
         let theme = currentTheme()
         navigationView.applyTheme(theme: theme)
         trackersTable.applyTheme(theme: theme)
+        tableViewHeader.applyTheme(theme: theme)
         view.backgroundColor = theme.colors.layer1
     }
 }

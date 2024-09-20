@@ -40,6 +40,10 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     private let headerView: TrackingProtectionNavigationHeaderView = .build { header in
         header.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.headerView
     }
+    private let baseInformationsView: UIStackView = .build { stackView in
+        stackView.axis = .vertical
+        stackView.distribution = .fillProportionally
+    }
     private let connectionView: TrackingProtectionStatusView = .build { view in
         view.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.connectionView
     }
@@ -103,8 +107,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
 
         setupContentView()
         setupHeaderView()
-        setupConnectionStatusView()
-        setupVerifiedByView()
+        setupBaseInformationsView()
         setupSeeCertificatesView()
         setupAccessibilityIdentifiers()
         NSLayoutConstraint.activate(constraints)
@@ -152,14 +155,13 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
         constraints.append(contentsOf: headerConstraints)
     }
 
-    // MARK: Connection Status View Setup
-    private func setupConnectionStatusView() {
-        baseView.addArrangedSubview(connectionView)
-    }
-
-    // MARK: Verified By View Setup
-    private func setupVerifiedByView() {
-        baseView.addArrangedSubview(verifiedByView)
+    // MARK: Connection Status & Verified By View Setup
+    private func setupBaseInformationsView() {
+        baseInformationsView.layer.cornerRadius = TPMenuUX.UX.viewCornerRadius * 2
+        baseInformationsView.layer.masksToBounds = true
+        baseInformationsView.addArrangedSubview(connectionView)
+        baseInformationsView.addArrangedSubview(verifiedByView)
+        baseView.addArrangedSubview(baseInformationsView)
     }
 
     // MARK: See Certificates View Setup
@@ -235,6 +237,8 @@ extension TrackingProtectionDetailsViewController {
     func applyTheme() {
         let theme = currentTheme()
         view.backgroundColor =  theme.colors.layer1
+        baseInformationsView.layer.borderColor = theme.colors.borderPrimary.cgColor
+        baseInformationsView.layer.borderWidth = TPMenuUX.UX.borderViewWidth
         connectionView.connectionImage.image = model.getLockIcon(theme.type)
         verifiedByView.applyTheme(theme: theme)
         viewCertificatesButton.applyTheme(theme: theme)

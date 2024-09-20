@@ -9,14 +9,10 @@ import Shared
 
 class BlockedTrackersTableView: UITableView,
                                 UITableViewDelegate {
-    private struct UX {
-        static let estimatedRowHeight: CGFloat = 44
-        static let headerPreferredHeight: CGFloat = 24
-    }
     var diffableDataSource: UITableViewDiffableDataSource<Int, BlockedTrackerItem>?
 
     init() {
-        super.init(frame: .zero, style: .insetGrouped)
+        super.init(frame: .zero, style: .plain)
         setupTableView()
     }
 
@@ -32,16 +28,10 @@ class BlockedTrackersTableView: UITableView,
         allowsSelection = false
         separatorColor = .clear
         separatorStyle = .singleLine
-        isScrollEnabled = false
         showsVerticalScrollIndicator = false
-        rowHeight = UITableView.automaticDimension
         accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.BlockedTrackers.containerView
-        estimatedRowHeight = UX.estimatedRowHeight
-        estimatedSectionHeaderHeight = UX.headerPreferredHeight
         register(BlockedTrackerCell.self,
                  forCellReuseIdentifier: BlockedTrackerCell.cellIdentifier)
-        register(BlockedTrackersHeaderView.self,
-                 forHeaderFooterViewReuseIdentifier: BlockedTrackersHeaderView.cellIdentifier)
     }
 
     func applySnapshot(with items: [BlockedTrackerItem]) {
@@ -54,6 +44,7 @@ class BlockedTrackersTableView: UITableView,
     // MARK: Themable
     func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer1
+        layer.borderWidth = TPMenuUX.UX.borderViewWidth
         layer.borderColor = theme.colors.borderPrimary.cgColor
     }
 }

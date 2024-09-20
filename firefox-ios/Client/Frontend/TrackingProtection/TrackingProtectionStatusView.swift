@@ -42,10 +42,6 @@ class TrackingProtectionStatusView: UIView {
 
     // MARK: View Setup
     private func setupView() {
-        layer.cornerRadius = TPMenuUX.UX.viewCornerRadius
-        layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        layer.masksToBounds = true
-
         addSubviews(connectionImage, connectionStatusLabel, dividerView)
 
         lockImageHeightConstraint = connectionImage.widthAnchor.constraint(equalToConstant: TPMenuUX.UX.iconSize)

@@ -27,10 +27,6 @@ class TrackingProtectionVerifiedByView: UIView {
 
     // MARK: View Setup
     private func setupView() {
-        layer.cornerRadius = TPMenuUX.UX.viewCornerRadius
-        layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        layer.masksToBounds = true
-
         addSubview(verifiedByLabel)
 
         NSLayoutConstraint.activate([

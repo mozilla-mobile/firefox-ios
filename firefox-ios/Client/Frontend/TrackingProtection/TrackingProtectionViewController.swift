@@ -18,7 +18,7 @@ struct TPMenuUX {
         static let connectionDetailsHeaderMargins: CGFloat = 8
         static let faviconCornerRadius: CGFloat = 5
         static let clearDataButtonCornerRadius: CGFloat = 12
-        static let clearDataButtonBorderWidth: CGFloat = 1
+        static let borderViewWidth: CGFloat = 1
         static let settingsLinkButtonBottomSpacing: CGFloat = 32
         static let modalMenuCornerRadius: CGFloat = 12
         struct Line {
@@ -77,7 +77,7 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         button.titleLabel?.textAlignment = .left
         button.titleLabel?.numberOfLines = 0
         button.layer.cornerRadius = TPMenuUX.UX.clearDataButtonCornerRadius
-        button.layer.borderWidth = TPMenuUX.UX.clearDataButtonBorderWidth
+        button.layer.borderWidth = TPMenuUX.UX.borderViewWidth
         button.addTarget(self, action: #selector(self.didTapClearCookiesAndSiteData), for: .touchUpInside)
     }
 
@@ -513,7 +513,7 @@ extension TrackingProtectionViewController {
         overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
         view.backgroundColor = theme.colors.layer1
         headerContainer.applyTheme(theme: theme)
-        connectionDetailsHeaderView.backgroundColor = theme.colors.layer2
+        connectionDetailsHeaderView.applyTheme(theme: theme)
         trackersView.applyTheme(theme: theme)
         connectionStatusView.applyTheme(theme: theme)
         connectionStatusView.setConnectionStatus(image: viewModel.getConnectionStatusImage(themeType: theme.type),

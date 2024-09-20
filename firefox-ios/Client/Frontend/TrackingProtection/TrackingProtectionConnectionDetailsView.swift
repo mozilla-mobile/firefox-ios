@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-final class TrackingProtectionConnectionDetailsView: UIView {
+final class TrackingProtectionConnectionDetailsView: UIView, ThemeApplicable {
     private struct UX {
         static let foxImageSize: CGFloat = 100
         static let connectionDetailsLabelsVerticalSpacing: CGFloat = 12
@@ -115,5 +115,11 @@ final class TrackingProtectionConnectionDetailsView: UIView {
 
     func setupAccessibilityIdentifiers(foxImageA11yId: String) {
         foxStatusImage.accessibilityIdentifier = foxImageA11yId
+    }
+
+    func applyTheme(theme: Theme) {
+        backgroundColor = theme.colors.layer2
+        connectionDetailsContentView.layer.borderColor = theme.colors.borderPrimary.cgColor
+        connectionDetailsContentView.layer.borderWidth = TPMenuUX.UX.borderViewWidth
     }
 }
