@@ -21,9 +21,9 @@ struct RemoteSettingsFetchConfig: Codable {
         }
     }
 
-    /// Use this method to initially load all available rules from local fetch config JSON.
-    /// These rules are important to know the corresponding bucket,
-    /// collection and file name for the local remote settings.
+    /// Use this method to load all available rules from local fetch config JSON.
+    /// These rules can be used to know the corresponding bucket, collection and file
+    /// for the local remote settings object.
     static func loadSettingsFetchConfig() -> RemoteSettingsFetchConfig? {
         guard let path = Bundle.main.path(forResource: "RemoteSettingsFetchConfig",
                                           ofType: "json") else { return nil }
@@ -36,21 +36,4 @@ struct RemoteSettingsFetchConfig: Codable {
             return nil
         }
     }
-
-    // MARK: Helpers
-
-    /// Helper to list the names of all available local remote data types we have for loading
-//    func listAllLocalRemoteSettingsType() -> [RemoteDataType] {
-//        var availableSettings: [RemoteDataType] = []
-//
-//        for rule in rules {
-//            if rule.name == RemoteDataType.passwordRules.name {
-//                availableSettings.append(.passwordRules)
-//            }
-//            // NOTE: add mappings between rule.name and RemoteDataType cases
-//            // Ex. Search config v2 for search engine consolidation
-//        }
-//
-//        return availableSettings
-//    }
 }
