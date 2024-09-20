@@ -88,6 +88,42 @@ class TabTests: XCTestCase {
         XCTAssertTrue(privateInactiveTab.isSameTypeAs(privateActiveTab))
     }
 
+    func testIsSameTypeAs_trueForTwoPrivateTabs_bothActive() {
+        let privateActiveTab1 = Tab(
+            profile: MockProfile(),
+            isPrivate: true,
+            windowUUID: windowUUID
+        )
+        let privateActiveTab2 = Tab(
+            profile: MockProfile(),
+            isPrivate: true,
+            windowUUID: windowUUID
+        )
+
+        XCTAssertTrue(privateActiveTab1.isSameTypeAs(privateActiveTab2))
+        XCTAssertTrue(privateActiveTab2.isSameTypeAs(privateActiveTab1))
+    }
+
+    func testIsSameTypeAs_trueForTwoPrivateTabs_bothInactive() {
+        let lastMonthDate = Date().lastMonth
+
+        let privateInctiveTab1 = Tab(
+            profile: MockProfile(),
+            isPrivate: true,
+            windowUUID: windowUUID,
+            tabCreatedTime: lastMonthDate
+        )
+        let privateInactiveTab2 = Tab(
+            profile: MockProfile(),
+            isPrivate: true,
+            windowUUID: windowUUID,
+            tabCreatedTime: lastMonthDate
+        )
+
+        XCTAssertTrue(privateInctiveTab1.isSameTypeAs(privateInactiveTab2))
+        XCTAssertTrue(privateInactiveTab2.isSameTypeAs(privateInctiveTab1))
+    }
+
     func testIsSameTypeAs_falseForNormalTabAndPrivateTab() {
         let lastMonthDate = Date().lastMonth
 
