@@ -419,26 +419,13 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
                                       destinationIndex: end.row,
                                       isPrivate: tabsState.isPrivateMode)
 
-        // Handle the drop visually
-        coordinator.drop(dragItem, toItemAt: destinationIndexPath)
+        let action = TabPanelViewAction(
+            panelType: panelType,
+            moveTabData: moveTabData,
+            windowUUID: windowUUID,
+            actionType: TabPanelViewActionType.moveTab
+        )
 
-        // Perform the animation and dispatch the Redux action
-//        animationQueue.addAnimation(for: collectionView) { [weak self] in
-//            guard let self else { return }
-
-            // Create the Redux action and dispatch it to update the global state
-            let action = TabPanelViewAction(
-                panelType: panelType,
-                moveTabData: moveTabData,
-                windowUUID: windowUUID,
-                actionType: TabPanelViewActionType.moveTab
-            )
-
-            // Dispatch the action to update the Redux state
-            store.dispatch(action)
-
-            // Update the diffable data source with the new state after dispatch so there's no delay
-            updateCollectionView(state: tabsState)
-      //  }
+        store.dispatch(action)
     }
 }
