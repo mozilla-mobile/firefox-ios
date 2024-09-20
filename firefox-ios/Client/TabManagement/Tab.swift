@@ -1101,7 +1101,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
         return super.hitTest(point, with: event)
     }
 
-    #if swift(>=6)
+#if compiler(>=6)
     override func evaluateJavaScript(
         _ javaScriptString: String,
         completionHandler: (
@@ -1110,7 +1110,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     ) {
         super.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
     }
-    #else
+#else
     /// Override evaluateJavascript - should not be called directly on TabWebViews any longer
     /// We should only be calling evaluateJavascriptInDefaultContentWorld in the future
     @available(*,
@@ -1119,7 +1119,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     override func evaluateJavaScript(_ javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
         super.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
     }
-    #endif
+#endif
     // MARK: - ThemeApplicable
 
     /// Updates the `background-color` of the webview to match

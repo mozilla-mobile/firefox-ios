@@ -112,9 +112,9 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     private func updateRecentTabs() async -> [Tab] {
         // Recent tabs need to be accessed from .main otherwise value isn't proper
         return await withCheckedContinuation { continuation in
-            mainQueue.async {
-                    let recentTabs = self.tabManager.recentlyAccessedNormalTabs
-                    continuation.resume(returning: recentTabs)
+            Task { @MainActor in
+                let recentTabs = await self.tabManager.recentlyAccessedNormalTabs
+                continuation.resume(returning: recentTabs)
             }
         }
     }
@@ -181,20 +181,22 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     @MainActor
     @objc
     func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .ShowHomepage,
-                .TabDataUpdated,
-                .TabsTrayDidClose,
-                .TabsTrayDidSelectHomeTab,
-                .TopTabsTabClosed:
-            guard let uuid = notification.windowUUID,
-                  uuid == tabManager.windowUUID
-            else { return }
-            Task { await updateTabsData() }
-        case .ProfileDidFinishSyncing,
-                .FirefoxAccountChanged:
-            Task { await updateTabsAndAccountData() }
-        default: break
+        Task { @MainActor in
+            switch notification.name {
+            case .ShowHomepage,
+                    .TabDataUpdated,
+                    .TabsTrayDidClose,
+                    .TabsTrayDidSelectHomeTab,
+                    .TopTabsTabClosed:
+                guard let uuid = notification.windowUUID,
+                      await uuid == tabManager.windowUUID
+                else { return }
+                await updateTabsData()
+            case .ProfileDidFinishSyncing,
+                    .FirefoxAccountChanged:
+                await updateTabsAndAccountData()
+            default: break
+            }
         }
     }
 }
