@@ -48,7 +48,7 @@ enum BlocklistFileName: String, CaseIterable {
     }()
 
     var filename: String { return self.rawValue }
-    
+
     /// Blocklist files compiled for Basic tracking protection mode
     static var basic: [BlocklistFileName] {
         return [
