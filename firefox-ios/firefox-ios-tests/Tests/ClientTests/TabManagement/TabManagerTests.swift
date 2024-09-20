@@ -10,6 +10,10 @@ import Shared
 import Common
 @testable import Client
 
+// Note: Some of these tests are annotated with @MainActor because a new Tab is created without the zombie flag set to true.
+// This is unavoidable with the current architecture given a new tab is created as a side effect. For these tabs, if the test
+// isn't run on the main thread, then in its deinit the webView.navigationDelegate is updated not on the main thread, causing
+// failures in Bitrise. This should be improved. [FXIOS-10110]
 class TabManagerTests: XCTestCase {
     var tabWindowUUID: WindowUUID!
     var mockTabStore: MockTabDataStore!
@@ -379,6 +383,7 @@ class TabManagerTests: XCTestCase {
 
     // MARK: - Remove Tab (removing selected normal active tab)
 
+    @MainActor
     func testRemoveTab_removeSelectedNormalActiveTab_selectsRecentParentNormalActiveTab() async throws {
         let tabManager = createSubject()
 
@@ -428,6 +433,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 0, "The first tab, the parent, should be selected")
     }
 
+    @MainActor
     func testRemoveTab_removeSelectedNormalActiveTab_selectsRightOrLeftNormalActiveTab_ifNoParent() async throws {
         let tabManager = createSubject()
 
@@ -466,6 +472,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 1, "The third tab, now 2nd in array, should be selected")
     }
 
+    @MainActor
     func testRemoveTab_removeSelectedNormalActiveTab_selectsRightOrLeftActiveTab_ifParentNotRecent() async throws {
         let tabManager = createSubject()
 
@@ -513,6 +520,7 @@ class TabManagerTests: XCTestCase {
 
     // MARK: - Remove Tab (removing selected private tab)
 
+    @MainActor
     func testRemoveTab_removeSelectedPrivateTab_selectsRecentParentPrivateTab() async throws {
         let tabManager = createSubject()
 
@@ -562,6 +570,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 0, "The first tab, the parent, should be selected")
     }
 
+    @MainActor
     func testRemoveTab_removeSelectedPrivateTab_selectsRightOrLeftPrivateTab_ifNoRecentParent() async throws {
         let tabManager = createSubject()
 
@@ -607,6 +616,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 1, "The third tab, now at index 1, should be selected")
     }
 
+    @MainActor
     func testRemoveTab_removeSelectedPrivateTab_selectsRightOrLeftPrivateTab_ifParentNotRecent() async throws {
         let tabManager = createSubject()
 
@@ -654,6 +664,7 @@ class TabManagerTests: XCTestCase {
 
     // MARK: - Remove Tab (removing selected inactive tab, weird edge case)
 
+    @MainActor
     func testRemoveTab_removeSelectedNormalInactiveTab_createsNewNormalActiveTab() async throws {
         // This is a weird edge case that shouldn't happen in practice, but let's make sure we can handle it.
         // If the selected tab is removed, and it also happens to be inactive, treat it like a normal active tab.
@@ -714,6 +725,7 @@ class TabManagerTests: XCTestCase {
 
     // MARK: - Remove Tab (removing last private tab)
 
+    @MainActor
     func testRemoveTab_removeLastPrivateTab_hasNormalTabs_selectsRecentNormalTab() async throws {
         let tabManager = createSubject()
 
@@ -762,6 +774,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 1, "The second normal tab should be selected")
     }
 
+    @MainActor
     func testRemoveTab_removeLastPrivateTab_hasInactiveTabs_hasNoActiveTabs_createsNewNormalActiveTab() async throws {
         let tabManager = createSubject()
 
@@ -802,6 +815,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 3, "A new tab should be appended and selected")
     }
 
+    @MainActor
     func testRemoveTab_removeLastPrivateTab_isOnlyTab_createsNewNormalActiveTab() async throws {
         let tabManager = createSubject()
 
@@ -840,6 +854,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 0, "A new tab should be appended and selected")
     }
 
+    @MainActor
     func testRemoveTab_removeLastPrivateTab_onlyOtherTabsAreNormalInactiveTabs_createsNewNormalActiveTab() async throws {
         let tabManager = createSubject()
 
@@ -886,6 +901,7 @@ class TabManagerTests: XCTestCase {
 
     // MARK: - Remove Tab (removing last normal active tab)
 
+    @MainActor
     func testRemoveTab_removeLastNormalActiveTab_isOnlyTab_createsNewNormalActiveTab() async throws {
         let tabManager = createSubject()
 
@@ -923,6 +939,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 0, "A new tab should be appended and selected")
     }
 
+    @MainActor
     func testRemoveTab_removeLastNormalActiveTab_hasInactiveTabs_createsNewNormalActiveTab() async throws {
         let tabManager = createSubject()
 
@@ -965,6 +982,7 @@ class TabManagerTests: XCTestCase {
 
     // MARK: - Remove Tab (removing last normal inactive tab, which means it's selected, another weird edge case)
 
+    @MainActor
     func testRemoveTab_removeLastNormalInactiveTab_isOnlyTab_createsNewNormalActiveTab() async throws {
         let tabManager = createSubject()
 
@@ -1006,6 +1024,7 @@ class TabManagerTests: XCTestCase {
 
     // MARK: - Remove Tab (removing one unselected tabs among many)
 
+    @MainActor
     func testRemoveTab_removeUnselectedNormalActiveTab_fromManyMixedTabs_causesArrayShift() async throws {
         let tabManager = createSubject()
 
@@ -1050,6 +1069,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 4, "The selected tab index should have shifted left")
     }
 
+    @MainActor
     func testRemoveTab_removeUnselectedNormalActiveTab_fromManyMixedTabs_noArrayShift() async throws {
         let tabManager = createSubject()
 
@@ -1094,6 +1114,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 1, "The selected tab index should not have shifted")
     }
 
+    @MainActor
     func testRemoveTab_removeUnselectedPrivateTab_fromManyMixedTabs_causesArrayShift() async throws {
         let tabManager = createSubject()
 
@@ -1137,6 +1158,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 6, "The selected tab index should have shifted left")
     }
 
+    @MainActor
     func testRemoveTab_removeUnselectedPrivateTab_fromManyMixedTabs_noArrayShift() async throws {
         let tabManager = createSubject()
 
@@ -1180,6 +1202,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 6, "The selected tab index should have shifted left")
     }
 
+    @MainActor
     func testRemoveTab_removeUnselectedNormalInactiveTab_fromManyMixedTabs_causesArrayShift() async throws {
         let tabManager = createSubject()
 
@@ -1225,6 +1248,7 @@ class TabManagerTests: XCTestCase {
 
     // MARK: - Remove Tab (removing unselected tabs at array bounds)
 
+    @MainActor
     func testRemoveTab_removeFirstTab_removeLastTime_removeOnlyTab() async throws {
         let tabManager = createSubject()
 
@@ -1288,6 +1312,7 @@ class TabManagerTests: XCTestCase {
 
     // MARK: - removeAllInactiveTabs (removing unselected tabs at array bounds)
 
+    @MainActor
     func testRemoveAllInactiveTabs_whenOnlyInactiveTabs_opensNewActiveTab() async throws {
         // This is a strange edge case that can happen if your active tab goes inactive (most commonly with 10s debug timer).
         let tabManager = createSubject()
@@ -1327,6 +1352,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 0, "Index of new normal active tab")
     }
 
+    @MainActor
     func testRemoveAllInactiveTabs_whenNormalActiveTabsExist_isNormalBrowsingMode() async throws {
         let tabManager = createSubject()
 
@@ -1364,6 +1390,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 1, "Index will have shifted by the number of removed inactive tabs")
     }
 
+    @MainActor
     func testRemoveAllInactiveTabs_whenOnlyPrivateTabsExist_isPrivateBrowsingMode() async throws {
         let tabManager = createSubject()
 
