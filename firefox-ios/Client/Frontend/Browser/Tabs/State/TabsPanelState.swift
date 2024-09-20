@@ -15,7 +15,6 @@ struct TabsPanelState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     var scrollToIndex: Int?
     var didTapAddTab: Bool
-    var didMoveTab: Bool
     var urlRequest: URLRequest?
 
     var isPrivateTabsEmpty: Bool {
@@ -39,7 +38,6 @@ struct TabsPanelState: ScreenState, Equatable {
                   toastType: panelState.toastType,
                   scrollToIndex: panelState.scrollToIndex,
                   didTapAddTab: panelState.didTapAddTab,
-                  didMoveTab: panelState.didMoveTab,
                   urlRequest: panelState.urlRequest)
     }
 
@@ -73,7 +71,6 @@ struct TabsPanelState: ScreenState, Equatable {
         self.windowUUID = windowUUID
         self.scrollToIndex = scrollToIndex
         self.didTapAddTab = didTapAddTab
-        self.didMoveTab = didMoveTab
         self.urlRequest = urlRequest
     }
 
@@ -133,17 +130,6 @@ struct TabsPanelState: ScreenState, Equatable {
                                   inactiveTabs: state.inactiveTabs,
                                   isInactiveTabsExpanded: state.isInactiveTabsExpanded,
                                   toastType: type)
-
-//        case TabPanelAction.didTapAddTab:
-//        let didTapNewTab = context.didTapAddTab
-//        let urlRequest = context.urlRequest
-//        let isPrivateMode = context.isPrivate
-//        return TabsPanelState(windowUUID: state.windowUUID,
-//        isPrivateMode: isPrivateMode,
-//        tabs: state.tabs,
-//        inactiveTabs: state.inactiveTabs,
-//        isInactiveTabsExpanded: state.isInactiveTabsExpanded,
-//        didTapAddTab: didTapNewTab)
 
         default:
             return TabsPanelState(windowUUID: state.windowUUID,
