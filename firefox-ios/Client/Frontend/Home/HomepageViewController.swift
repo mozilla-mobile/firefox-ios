@@ -43,7 +43,6 @@ class HomepageViewController:
     private var jumpBackInContextualHintViewController: ContextualHintViewController
     private var syncTabContextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
-    private var lastContentOffsetY: CGFloat = 0
     private var logger: Logger
     var windowUUID: WindowUUID { return tabManager.windowUUID }
     var currentWindowUUID: UUID? { return windowUUID }
@@ -258,6 +257,7 @@ class HomepageViewController:
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.backgroundColor = .clear
         collectionView.accessibilityIdentifier = a11y.collectionView
+        collectionView.addInteraction(UIContextMenuInteraction(delegate: self))
         contentStackView.addArrangedSubview(collectionView)
     }
 
@@ -399,10 +399,6 @@ class HomepageViewController:
         }
     }
 
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        lastContentOffsetY = scrollView.contentOffset.y
-    }
-
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         handleScroll(scrollView, isUserInteraction: true)
     }
@@ -416,11 +412,11 @@ class HomepageViewController:
                                                          theme: theme)
         }
 
-        // Only dispatch action when user interacted with the view (e.g. scrolled) and we are in edit mode
-        // to avoid having the toolbar re-displayed
-        if isUserInteraction,
-           featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly),
-           let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+        let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+
+        // Only dispatch action when user is in edit mode to avoid having the toolbar re-displayed
+        if featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly),
+           let toolbarState,
            toolbarState.addressToolbar.isEditing {
             // When the user scrolls the homepage we cancel edit mode
             // On a website we just dismiss the keyboard
@@ -433,15 +429,20 @@ class HomepageViewController:
             }
         }
 
-        let scrolledToTop = lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0
-        let scrolledDown = lastContentOffsetY == 0 && scrollView.contentOffset.y > 0
+        guard let toolbarState,
+              let borderPosition = toolbarState.addressToolbar.borderPosition
+        else { return }
 
-        if scrolledDown || scrolledToTop {
-            lastContentOffsetY = scrollView.contentOffset.y
-            let action = GeneralBrowserMiddlewareAction(scrollOffset: scrollView.contentOffset,
-                                                        windowUUID: windowUUID,
-                                                        actionType: GeneralBrowserMiddlewareActionType.websiteDidScroll)
-            store.dispatch(action)
+        // Only dispatch the action to update the toolbar border if needed, which is only if either
+        // a) we scroll down, and the toolbar border is not already at the bottom (so we show it), or
+        // b) we scroll up past the top of the scroll view, and the border is currently at the bottom (so we hide it)
+        if (scrollView.contentOffset.y > 0 && borderPosition != .bottom)
+           || (scrollView.contentOffset.y < 0 && borderPosition != .none) {
+            store.dispatch(
+                GeneralBrowserMiddlewareAction(
+                    scrollOffset: scrollView.contentOffset,
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserMiddlewareActionType.websiteDidScroll))
         }
     }
 
@@ -891,6 +892,23 @@ extension HomepageViewController: UIPopoverPresentationControllerDelegate {
 
     func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
         return true
+    }
+}
+
+// MARK: - UIContextMenuInteractionDelegate
+extension HomepageViewController: UIContextMenuInteractionDelegate {
+    // Handles iPad trackpad right clicks
+    func contextMenuInteraction(
+        _ interaction: UIContextMenuInteraction,
+        configurationForMenuAtLocation location: CGPoint
+    ) -> UIContextMenuConfiguration? {
+        let locationInCollectionView = interaction.location(in: collectionView)
+        guard let indexPath = collectionView.indexPathForItem(at: locationInCollectionView),
+              let viewModel = viewModel.getSectionViewModel(shownSection: indexPath.section) as? HomepageSectionHandler
+        else { return nil }
+
+        viewModel.handleLongPress(with: collectionView, indexPath: indexPath)
+        return nil
     }
 }
 
