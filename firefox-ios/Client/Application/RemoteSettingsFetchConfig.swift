@@ -20,33 +20,11 @@ struct RemoteSettingsFetchConfig: Codable {
             case collectionsID = "collections_id"
         }
     }
-    
-    // MARK: Helpers
 
-    func listAllRemoteSettings() -> [RemoteDataType] {
-        var availableSettings: [RemoteDataType] = []
-        
-        for rule in rules {
-            if rule.name == RemoteDataType.passwordRules.name {
-                availableSettings.append(.passwordRules)
-            }
-            // NOTE: add mappings between rule.name and RemoteDataType cases
-            // Ex. Search config v2 for search engine consolidation
-        }
-
-        return availableSettings
-    }
-
-    // Load the appropriate local data based on the enum case selected
-    func loadLocal<T: Codable>(settingType: RemoteDataType, as type: T.Type) -> T? {
-        guard let rule = rules.first(where: { $0.name == settingType.name }) else {
-            return nil
-        }
-
-        return RemoteDataType.loadRecord(for: rule, type: type)
-    }
-
-    static func load() -> RemoteSettingsFetchConfig? {
+    /// Use this method to initially load all available rules from local fetch config JSON.
+    /// These rules are important to know the corresponding bucket,
+    /// collection and file name for the local remote settings.
+    static func loadSettingsFetchConfig() -> RemoteSettingsFetchConfig? {
         guard let path = Bundle.main.path(forResource: "RemoteSettingsFetchConfig",
                                           ofType: "json") else { return nil }
         let url = URL(fileURLWithPath: path)
@@ -58,4 +36,21 @@ struct RemoteSettingsFetchConfig: Codable {
             return nil
         }
     }
+
+    // MARK: Helpers
+
+    /// Helper to list the names of all available local remote data types we have for loading
+//    func listAllLocalRemoteSettingsType() -> [RemoteDataType] {
+//        var availableSettings: [RemoteDataType] = []
+//
+//        for rule in rules {
+//            if rule.name == RemoteDataType.passwordRules.name {
+//                availableSettings.append(.passwordRules)
+//            }
+//            // NOTE: add mappings between rule.name and RemoteDataType cases
+//            // Ex. Search config v2 for search engine consolidation
+//        }
+//
+//        return availableSettings
+//    }
 }

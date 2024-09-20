@@ -732,6 +732,7 @@
 		8A4593C82BF7BECA002758DE /* MicrosurveyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4593C42BF7BECA002758DE /* MicrosurveyViewController.swift */; };
 		8A4593C92BF7BECA002758DE /* MicrosurveyTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4593C52BF7BECA002758DE /* MicrosurveyTableHeaderView.swift */; };
 		8A4593CA2BF7BECA002758DE /* MicrosurveyTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4593C62BF7BECA002758DE /* MicrosurveyTableView.swift */; };
+		8A46F5A22C9E1CA9005B6422 /* RemoteSettingsUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46F5A12C9E1CA9005B6422 /* RemoteSettingsUtilities.swift */; };
 		8A471183287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A471182287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift */; };
 		8A471185287F6E4800F5A6EA /* SeparatorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A471184287F6E4800F5A6EA /* SeparatorTableViewCell.swift */; };
 		8A4AC0EB28C929D700439F83 /* URLSessionDataTaskProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4AC0E928C929D700439F83 /* URLSessionDataTaskProtocol.swift */; };
@@ -6786,6 +6787,7 @@
 		8A4593C42BF7BECA002758DE /* MicrosurveyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicrosurveyViewController.swift; sourceTree = "<group>"; };
 		8A4593C52BF7BECA002758DE /* MicrosurveyTableHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicrosurveyTableHeaderView.swift; sourceTree = "<group>"; };
 		8A4593C62BF7BECA002758DE /* MicrosurveyTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicrosurveyTableView.swift; sourceTree = "<group>"; };
+		8A46F5A12C9E1CA9005B6422 /* RemoteSettingsUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteSettingsUtilities.swift; sourceTree = "<group>"; };
 		8A471182287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksPanelViewModel.swift; sourceTree = "<group>"; };
 		8A471184287F6E4800F5A6EA /* SeparatorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorTableViewCell.swift; sourceTree = "<group>"; };
 		8A4AC0E928C929D700439F83 /* URLSessionDataTaskProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSessionDataTaskProtocol.swift; sourceTree = "<group>"; };
@@ -10735,12 +10737,13 @@
 		8A73FA7D2C99419B00AD1029 /* Remote Settings */ = {
 			isa = PBXGroup;
 			children = (
-				8A55125D2BF6842500250FA9 /* RemoteSettingsUtil.swift */,
+				8A73FA832C994C1200AD1029 /* Remote Records */,
 				8A73FA7F2C994B6600AD1029 /* RemoteDataType.swift */,
 				8A73FA812C994B9800AD1029 /* RemoteSettingsFetchConfig.swift */,
-				8A73FA832C994C1200AD1029 /* Remote Records */,
+				8A46F5A12C9E1CA9005B6422 /* RemoteSettingsUtilities.swift */,
 			);
 			name = "Remote Settings";
+			path = Application;
 			sourceTree = "<group>";
 		};
 		8A73FA832C994C1200AD1029 /* Remote Records */ = {
@@ -13177,6 +13180,7 @@
 			children = (
 				F84B21E41A0910F600AAB793 /* Application */,
 				F84B21EB1A0910F600AAB793 /* Assets */,
+				8A73FA7D2C99419B00AD1029 /* Remote Settings */,
 				8A8B2E222C23E4B600134A6E /* RemoteSettingsUtil */,
 				E60961841B62B7E100DD640F /* Configuration */,
 				8AD984F12AF1554F00B9FDA4 /* ContentBlocker */,
@@ -13336,7 +13340,6 @@
 				1DA6F6502B48B42900BB5AD6 /* WindowEventCoordinator.swift */,
 				1DC372012B23C80F000F96C8 /* WindowManager.swift */,
 				1DF2BDC22BD1BCF300E53C57 /* WindowManager+DebugUtilities.swift */,
-				8A73FA7D2C99419B00AD1029 /* Remote Settings */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -15234,6 +15237,7 @@
 				D3B6923F1B9F9A58004B87A4 /* FindInPageHelper.swift in Sources */,
 				E1FE133329C22782002A65FF /* BackgroundNotificationSurfaceUtility.swift in Sources */,
 				8AE80BBC2891C20D00BC12EA /* JumpBackInList.swift in Sources */,
+				8A46F5A22C9E1CA9005B6422 /* RemoteSettingsUtilities.swift in Sources */,
 				8A395552299AF83400B2AFBB /* UIControl+Extension.swift in Sources */,
 				C2A72A692A769460002ACCE2 /* ReadingListCoordinator.swift in Sources */,
 				F85C7F122721048E004BDBA4 /* Layout.swift in Sources */,

@@ -18,19 +18,12 @@ public protocol RemoteSettingsUtilProvider: AnyObject {
     func updateCollectionName(to newCollection: RemoteCollection)
 }
 
-/*
- Cache
- 1) Initially Shipped - (Always Present) Option for settings json inside app which is shipped with it
- 2) Fetch from Application Service - TBD, updates on Tues / Thursday
- 2.1) After fetching from Application Service Store a copy in the app in case 2 is not available
- */
-
 class RemoteSettingsUtil: RemoteSettingsUtilProvider {    
     private var bucket: Remotebucket
     private var collection: RemoteCollection
     private let logger: Logger
     private let baseURL = "https://firefox.settings.services.mozilla.com/v1/"
-    var remoteSettings: RemoteSettingsProtocol
+    var remoteSettings: RemoteSettingsProtocol?
 
     init(bucket: Remotebucket,
          collection: RemoteCollection,
@@ -47,7 +40,15 @@ class RemoteSettingsUtil: RemoteSettingsUtilProvider {
             self.remoteSettings = remoteSettings
         } else {
             let config = RemoteSettingsConfig(collectionName: collection.rawValue)
-            self.remoteSettings = try! RemoteSettings(remoteSettingsConfig: config)
+
+            do {
+                self.remoteSettings = try RemoteSettings(remoteSettingsConfig: config)
+            } catch {
+                self.logger.log("Failed to load remote settings",
+                                 level: .warning,
+                                 category: .remoteSettings,
+                                 description: error.localizedDescription)
+            }
         }
     }
     
@@ -72,10 +73,12 @@ class RemoteSettingsUtil: RemoteSettingsUtilProvider {
         UserDefaults.standard.removeObject(forKey: key)
     }
 
-    private func fetchRemoteRecords(completion: @escaping (Result<[RemoteSettingsRecord], RemoteSettingsUtilError>) -> Void) {
+    private func fetchRemoteRecords(completion: @escaping (Result<[RemoteSettingsRecord],
+                                                           RemoteSettingsUtilError>) -> Void) {
         do {
-            let response = try remoteSettings.getRecords()
-            completion(.success(response.records))
+            if let response = try remoteSettings?.getRecords() {
+                completion(.success(response.records))
+            }
         } catch {
             completion(.failure(.fetchError(error)))
         }
@@ -97,10 +100,19 @@ class RemoteSettingsUtil: RemoteSettingsUtilProvider {
     func updateCollectionName(to newCollection: RemoteCollection) {
         self.collection = newCollection
         let config = RemoteSettingsConfig(collectionName: newCollection.rawValue)
-        self.remoteSettings = try! RemoteSettings(remoteSettingsConfig: config)
+        
+        do {
+            self.remoteSettings = try RemoteSettings(remoteSettingsConfig: config)
+        } catch {
+            self.logger.log("Failed to load remote settings",
+                             level: .warning,
+                             category: .remoteSettings,
+                             description: error.localizedDescription)
+        }
     }
 
     // MARK: Collections
+
     func updateAndFetchRecords(for collectionName: RemoteCollection,
                                with key: String = PrefsKeys.remoteSettingsKey,
                                and records: [RemoteSettingsRecord]? = nil,

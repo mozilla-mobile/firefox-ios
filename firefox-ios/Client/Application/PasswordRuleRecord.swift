@@ -4,7 +4,9 @@
 
 import Foundation
 
-struct PasswordRuleRecord: Codable {
+protocol RemoteDataTypeRecord: Codable {}
+
+struct PasswordRuleRecord: RemoteDataTypeRecord {
     let domain: String
     let passwordRules: String
     let id: String

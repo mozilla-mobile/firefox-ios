@@ -98,17 +98,6 @@ class RemoteSettingsOptionViewController: UIViewController, UITableViewDelegate,
         }
     }
 
-    func fetchCollections(bucketID: String) {
-        print(remoteSettingsUtil.loadPasswordRules()?.first?.domain ?? "")
-        remoteSettingsUtil.fetchCollections(for: bucketID) { [weak self] collections in
-            DispatchQueue.main.async {
-                self?.collections = collections ?? []
-                self?.tableView.reloadData()
-            }
-        }
-    }
-
-RemoteSettingsOptions/RemoteSettingsOptionViewController.swift
     // MARK: - UITableViewDataSource
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
