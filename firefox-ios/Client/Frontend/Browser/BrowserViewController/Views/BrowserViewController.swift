@@ -554,6 +554,10 @@ class BrowserViewController: UIViewController,
 
         // Update lock icon without redrawing the whole locationView
         if let tab = tabManager.selectedTab, !isToolbarRefactorEnabled {
+            // It appears this was added to fix an issue with the lock icon, so we're
+            // calling into this for some kind of beneficial side effect. We should
+            // probably explore a different solution; tab content blocking does not
+            // change every time the app is brought forward. [FXIOS-10091]
             urlBar.locationView.tabDidChangeContentBlocking(tab)
         }
 
