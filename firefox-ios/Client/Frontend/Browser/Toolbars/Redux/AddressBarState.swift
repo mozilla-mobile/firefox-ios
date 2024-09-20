@@ -192,6 +192,7 @@ struct AddressBarState: StateType, Equatable {
 
         case ToolbarActionType.urlDidChange:
             guard let toolbarAction = action as? ToolbarAction else { return state }
+            let borderPosition = getAddressToolbarBorderPosition(action: toolbarAction, state: state)
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
@@ -200,7 +201,7 @@ struct AddressBarState: StateType, Equatable {
                                                      isEditing: state.isEditing),
                 pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
                 browserActions: browserActions(action: toolbarAction, addressBarState: state),
-                borderPosition: state.borderPosition,
+                borderPosition: borderPosition,
                 url: toolbarAction.url,
                 searchTerm: nil,
                 lockIconImageName: toolbarAction.lockIconImageName ?? state.lockIconImageName,
@@ -559,5 +560,22 @@ struct AddressBarState: StateType, Equatable {
             isEnabled: enabled,
             a11yLabel: .TabToolbarForwardAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.forwardButton)
+    }
+
+    private static func getAddressToolbarBorderPosition(
+        action: ToolbarAction,
+        state: AddressBarState)
+    -> AddressToolbarBorderPosition? {
+        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+        else { return state.borderPosition }
+
+        let isWebPage = action.url?.isWebPage() ?? false
+        if toolbarState.toolbarPosition == .bottom && isWebPage {
+            return .top
+        } else if toolbarState.toolbarPosition == .top && isWebPage {
+            return .bottom
+        } else {
+            return AddressToolbarBorderPosition.none
+        }
     }
 }

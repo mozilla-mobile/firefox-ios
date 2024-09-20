@@ -477,24 +477,6 @@ extension TabScrollingController: UIScrollViewDelegate {
             setOffset(y: 0, for: scrollView)
         }
 
-        let toolbarState = store.state.screenState(Client.ToolbarState.self, for: .toolbar, window: windowUUID)
-
-        guard let toolbarState,
-              let borderPosition = toolbarState.addressToolbar.borderPosition
-        else { return }
-
-        // Only dispatch the action to update the toolbar border if needed, which is only if either
-        // a) we scroll down, and the toolbar border is not already at the bottom (so we show it), or
-        // b) we scroll up past the top of the scroll view, and the border is currently at the bottom (so we hide it)
-        if (scrollView.contentOffset.y > 0 && borderPosition != .bottom)
-           || (scrollView.contentOffset.y < 0 && borderPosition != .none) {
-            store.dispatch(
-                GeneralBrowserMiddlewareAction(
-                    scrollOffset: scrollView.contentOffset,
-                    windowUUID: windowUUID,
-                    actionType: GeneralBrowserMiddlewareActionType.websiteDidScroll))
-        }
-
         guard isAnimatingToolbar else { return }
         if contentOffsetBeforeAnimation.y - scrollView.contentOffset.y > UX.abruptScrollEventOffset {
             setOffset(y: contentOffsetBeforeAnimation.y + self.topScrollHeight, for: scrollView)
