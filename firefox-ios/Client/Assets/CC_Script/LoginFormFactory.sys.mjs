@@ -55,15 +55,15 @@ export const LoginFormFactory = {
   },
 
   /**
-   * Create a LoginForm object from the HTMLHtmlElement that is the root of the document
+   * Create a LoginForm object from an elememt that is the root of the document
    *
    * Currently all <input> not in a <form> are one LoginForm but this
    * shouldn't be relied upon as the heuristics may change to detect multiple
    * "forms" (e.g. registration and login) on one page with a <form>.
    *
-   * @param {HTMLHtmlElement} aDocumentRoot
+   * @param {HTMLElement} aDocumentRoot
    * @return {LoginForm}
-   * @throws Error if aDocumentRoot isn't an HTMLHtmlElement
+   * @throws Error if aDocumentRoot is null
    */
   createFromDocumentRoot(aDocumentRoot) {
     const formLike = lazy.FormLikeFactory.createFromDocumentRoot(aDocumentRoot);
