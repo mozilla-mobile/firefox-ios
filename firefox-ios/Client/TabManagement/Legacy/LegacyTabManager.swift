@@ -65,6 +65,7 @@ struct BackupCloseTab {
 }
 
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
+@preconcurrency
 class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler {
     // MARK: - Variables
     let profile: Profile
@@ -697,7 +698,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     @MainActor
-    func undoCloseInactiveTabs() { fatalError("should never be called") }
+    func undoCloseInactiveTabs() async { fatalError("should never be called") }
 
     func backgroundRemoveAllTabs(isPrivate: Bool = false,
                                  didClearTabs: @escaping (_ tabsToRemove: [Tab],

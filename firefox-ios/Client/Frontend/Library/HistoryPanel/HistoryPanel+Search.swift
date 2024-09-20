@@ -88,5 +88,3 @@ extension HistoryPanel: KeyboardHelperDelegate {
             })
     }
 }
-
-extension AnyHashable: @unchecked Swift.Sendable {}

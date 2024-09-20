@@ -114,7 +114,7 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
         return await withCheckedContinuation { continuation in
             mainQueue.async {
                 Task {
-                    let recentTabs = self.tabManager.recentlyAccessedNormalTabs
+                    let recentTabs = await self.tabManager.recentlyAccessedNormalTabs
                     continuation.resume(returning: recentTabs)
                 }
             }
@@ -191,7 +191,7 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
                     .TabsTrayDidSelectHomeTab,
                     .TopTabsTabClosed:
                 guard let uuid = notification.windowUUID,
-                      uuid == tabManager.windowUUID
+                      await uuid == tabManager.windowUUID
                 else { return }
                 await updateTabsData()
             case .ProfileDidFinishSyncing,
