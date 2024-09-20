@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+#if canImport(SwiftUI)
 import SwiftUI
 import Common
 
@@ -77,12 +78,27 @@ struct AutofillHeaderView: View {
     }
 }
 
-#Preview {
+@available(iOS 17, *)
+#Preview(traits: .sizeThatFitsLayout) {
     AutofillHeaderView(
         windowUUID: .XCTestDefaultUUID,
         title: "Use this login?",
         subtitle: "You’ll sign into cnn.com"
     )
-    .previewLayout(.sizeThatFits)
     .padding()
 }
+
+#else
+struct AutoFillHeaderView_Previews: PreviewProvider {
+    static var previews: some View {
+        AutofillHeaderView(
+            windowUUID: .XCTestDefaultUUID,
+            title: "Use this login?",
+            subtitle: "You’ll sign into cnn.com"
+        )
+        .previewLayout(.sizeThatFits)
+        .padding()
+    }
+}
+
+#endif

@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+#if canImport(SwiftUI)
 import SwiftUI
 import Common
 
@@ -62,12 +63,27 @@ struct AutofillFooterView: View {
     }
 }
 
-#Preview {
+@available(iOS 17, *)
+#Preview(traits: .sizeThatFitsLayout) {
     AutofillFooterView(
         windowUUID: .XCTestDefaultUUID,
         title: "Manage Login Info",
         primaryAction: { }
     )
-    .previewLayout(.sizeThatFits)
     .padding()
 }
+
+#else
+struct AutoFillFooterView_Previews: PreviewProvider {
+    static var previews: some View {
+        AutofillFooterView(
+            windowUUID: .XCTestDefaultUUID,
+            title: "Manage Login Info",
+            primaryAction: { }
+        )
+        .previewLayout(.sizeThatFits)
+        .padding()
+    }
+}
+
+#endif

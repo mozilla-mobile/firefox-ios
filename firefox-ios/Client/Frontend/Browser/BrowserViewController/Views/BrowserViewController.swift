@@ -376,7 +376,7 @@ class BrowserViewController: UIViewController,
     @objc
     fileprivate func appMenuBadgeUpdate() {
         let isActionNeeded = RustFirefoxAccounts.shared.isActionNeeded
-        let showWarningBadge = consume isActionNeeded
+        let showWarningBadge = isActionNeeded
 
         if isToolbarRefactorEnabled {
             let action = ToolbarAction(

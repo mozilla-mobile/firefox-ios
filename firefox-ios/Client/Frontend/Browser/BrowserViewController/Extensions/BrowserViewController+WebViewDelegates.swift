@@ -4,7 +4,7 @@
 
 import Foundation
 import Common
-import WebKit
+@preconcurrency import WebKit
 import Shared
 import UIKit
 import Photos

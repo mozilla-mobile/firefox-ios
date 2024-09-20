@@ -43,7 +43,7 @@ class CertificatesHandler {
 }
 
 // Define a function to get the certificates for a given URL
-func getCertificates(for url: URL, completion: @escaping ([Certificate]?) -> Void) {
+func getCertificates(for url: URL, completion: @Sendable @escaping ([Certificate]?) -> Void) {
     // Create a URL session with a custom delegate
     let session = URLSession(configuration: .default,
                              delegate: CertificateDelegate(completion: completion),
@@ -70,18 +70,22 @@ class CertificateDelegate: NSObject, URLSessionDelegate {
         self.completion = completion
     }
 
-    func urlSession(_ session: URLSession, didReceive
-                    challenge: URLAuthenticationChallenge,
-                    completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        if let serverTrust = challenge.protectionSpace.serverTrust {
-            let certificatesHandler = CertificatesHandler(serverTrust: serverTrust)
-            self.completion(certificatesHandler.handleCertificates())
-            // Use the server trust
-            completionHandler(.useCredential, URLCredential(trust: serverTrust))
-        } else {
-            // Call the completion handler with nil if serverTrust is not available
-            self.completion(nil)
-            completionHandler(.cancelAuthenticationChallenge, nil)
+    func urlSession(
+        _ session: URLSession,
+        didReceive challenge: URLAuthenticationChallenge
+    ) async -> (
+        URLSession.AuthChallengeDisposition,
+        URLCredential?
+    ) {
+        return await withCheckedContinuation { continuation in
+            if let serverTrust = challenge.protectionSpace.serverTrust {
+                let certificatesHandler = CertificatesHandler(serverTrust: serverTrust)
+                self.completion(certificatesHandler.handleCertificates())
+                continuation.resume(returning: (.useCredential, URLCredential(trust: serverTrust)))
+            } else {
+                self.completion(nil)
+                continuation.resume(returning: (.cancelAuthenticationChallenge, nil))
+            }
         }
     }
 }

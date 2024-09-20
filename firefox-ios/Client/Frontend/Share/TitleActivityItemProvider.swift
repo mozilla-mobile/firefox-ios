@@ -14,7 +14,7 @@ import Foundation
 ///
 /// Note that not all applications use the Subject. For example OmniFocus ignores it, so we need to do both.
 
-class TitleActivityItemProvider: UIActivityItemProvider {
+class TitleActivityItemProvider: UIActivityItemProvider, @unchecked Sendable {
     static let activityTypesToIgnore = [
         UIActivity.ActivityType.copyToPasteboard,
         UIActivity.ActivityType.message,

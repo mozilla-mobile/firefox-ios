@@ -65,7 +65,7 @@ struct BackupCloseTab {
 }
 
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
-class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler {
+class LegacyTabManager: NSObject, FeatureFlaggable, @preconcurrency TabManager, TabEventHandler {
     // MARK: - Variables
     let profile: Profile
     let windowUUID: WindowUUID
