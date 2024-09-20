@@ -13,7 +13,6 @@ enum TabManagerConstants {
 }
 
 // MARK: - TabManager protocol
-@preconcurrency
 protocol TabManager: AnyObject {
     var windowUUID: WindowUUID { get }
     var isRestoringTabs: Bool { get }

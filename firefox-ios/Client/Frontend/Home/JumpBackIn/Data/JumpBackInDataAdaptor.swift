@@ -28,8 +28,11 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     private var hasSyncAccount: Bool?
 
     private let mainQueue: DispatchQueueInterface
-
     weak var delegate: JumpBackInDelegate?
+
+    private var windowUUID: WindowUUID {
+        return tabManager.windowUUID
+    }
 
     // MARK: Init
     init(profile: Profile,
@@ -112,8 +115,8 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     private func updateRecentTabs() async -> [Tab] {
         // Recent tabs need to be accessed from .main otherwise value isn't proper
         return await withCheckedContinuation { continuation in
-            Task { @MainActor in
-                let recentTabs = await self.tabManager.recentlyAccessedNormalTabs
+            ensureMainThread {
+                let recentTabs = self.tabManager.recentlyAccessedNormalTabs
                 continuation.resume(returning: recentTabs)
             }
         }
@@ -181,7 +184,7 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     @MainActor
     @objc
     func handleNotifications(_ notification: Notification) {
-        Task { @MainActor in
+        Task {
             switch notification.name {
             case .ShowHomepage,
                     .TabDataUpdated,
@@ -189,7 +192,7 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
                     .TabsTrayDidSelectHomeTab,
                     .TopTabsTabClosed:
                 guard let uuid = notification.windowUUID,
-                      await uuid == tabManager.windowUUID
+                    await uuid == windowUUID
                 else { return }
                 await updateTabsData()
             case .ProfileDidFinishSyncing,
