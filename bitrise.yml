@@ -836,10 +836,10 @@ workflows:
 
             ./firefox-ios/l10n-screenshots.sh en-US
         title: Generate screenshots
-    - deploy-to-bitrise-io@2:
+    - save-cache@1:
         inputs:
-        - deploy_path: l10n-screenshots-dd/
-        - is_compress: 'true'
+        - key: l10n-screenshots-dd-$GIT_CLONE_COMMIT_HASH
+        - paths: l10n-screenshots-dd
     - deploy-to-bitrise-io@2:
         inputs:
         - deploy_path: l10n-screenshots/en-US/en-US
@@ -858,27 +858,12 @@ workflows:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@6.2: {}
     - certificate-and-profile-installer@1: {}
-    - script@1:
+    - restore-cache@2:
         inputs:
-        - content: >-
-            #!/usr/bin/env bash
-
-            # fail if any commands fails
-
-            set -e
-
-            # debug log
-
-            set -x
-
-            curl --location --retry 5 --output l10n-screenshots-dd.zip
-            "$MOZ_DERIVED_DATA_PATH"
-
-            mkdir l10n-screenshots-dd
-
-            unzip l10n-screenshots-dd.zip -d l10n-screenshots-dd
-
-            rm l10n-screenshots-dd.zip
+        - key: |-
+            l10n-screenshots-dd-$GIT_CLONE_COMMIT_HASH
+            l10n-screenshots-dd-
+        - paths: l10n-screenshots-dd
         title: Download derived data path
     - script@1.1:
         inputs:

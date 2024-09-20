@@ -291,6 +291,11 @@ export class FormAutofillSection {
     };
 
     for (const detail of this.fieldDetails) {
+      // Do not save security code.
+      if (detail.fieldName == "cc-csc") {
+        continue;
+      }
+
       const { filledValue } = formFilledData.get(detail.elementId);
 
       if (
@@ -322,6 +327,12 @@ export class FormAutofillSection {
    */
   getAutofillFields() {
     return this.fieldDetails.filter(fieldDetail => {
+      // We don't save security code, but if somehow the profile has securty code,
+      // make sure we don't autofill it.
+      if (fieldDetail.fieldName == "cc-csc") {
+        return false;
+      }
+
       // When both visible and invisible <select> elements exist, we only autofill the
       // visible <select>.
       if (fieldDetail.localName == "select" && !fieldDetail.isVisible) {

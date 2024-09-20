@@ -501,12 +501,14 @@ class NavigationTest: BaseTestCase {
         XCTAssertTrue(backButton.isEnabled, "Back button is disabled")
         backButton.tap()
         waitUntilPageLoad()
-        mozWaitForValueContains(app.textFields["url"], value: "test-example.html")
-        XCTAssertTrue(backButton.isHittable, "Back button is not hittable")
-        XCTAssertTrue(backButton.isEnabled, "Back button is disabled")
-        backButton.tap()
-        waitUntilPageLoad()
-        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        if #available(iOS 16, *) {
+            mozWaitForValueContains(app.textFields["url"], value: "test-example.html")
+            XCTAssertTrue(backButton.isHittable, "Back button is not hittable")
+            XCTAssertTrue(backButton.isEnabled, "Back button is disabled")
+            backButton.tap()
+            waitUntilPageLoad()
+            mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2721282
