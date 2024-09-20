@@ -85,12 +85,14 @@ struct MainMenuState: ScreenState, Equatable {
                 ),
                 currentTabInfo: info
             )
-        case MainMenuActionType.show(let destination):
+        case MainMenuActionType.show:
+            guard let menuAction = action as? MainMenuAction else { return state }
+
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
                 currentTabInfo: state.currentTabInfo,
-                navigationDestination: destination
+                navigationDestination: menuAction.navigationDestination
             )
         case MainMenuActionType.toggleUserAgent,
             MainMenuActionType.closeMenu:
