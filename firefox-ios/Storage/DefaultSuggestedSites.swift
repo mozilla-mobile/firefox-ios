@@ -80,7 +80,7 @@ open class DefaultSuggestedSites {
                     forRemoteResource: URL(string: "https://abs.twimg.com/responsive-web/client-web/icon-ios.77d25eba.png")!
                 ),
                 trackingId: 628,
-                title: "x.com"
+                title: .DefaultSuggestedX
             )
         ],
         "zh_CN": [ // FIXME Do we still want this as a special case localization? Android doesn't compile this vers. anymore
