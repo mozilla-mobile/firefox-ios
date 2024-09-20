@@ -130,7 +130,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         else {
             // Always make sure there is a single normal tab
             // Note: this is where the first tab in a newly-created browser window will be added
-            generateEmptyTab()
+            await generateEmptyTab()
             logger.log("There was no tabs restored, creating a normal tab",
                        level: .debug,
                        category: .tabs)
@@ -212,7 +212,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
 
     /// Creates the webview so needs to live on the main thread
     @MainActor
-    private func generateEmptyTab() {
+    private func generateEmptyTab() async {
         let newTab = addTab()
         selectTab(newTab)
     }

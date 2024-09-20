@@ -1101,7 +1101,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
         return super.hitTest(point, with: event)
     }
 
-    #if swift(>=5.10)
+    #if swift(>=6)
     override func evaluateJavaScript(
         _ javaScriptString: String,
         completionHandler: (
