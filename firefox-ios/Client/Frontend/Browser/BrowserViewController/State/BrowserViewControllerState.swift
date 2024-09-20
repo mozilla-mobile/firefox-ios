@@ -46,6 +46,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     var displayView: DisplayType? // use default value when re-creating
     var buttonTapped: UIButton?
     var microsurveyState: MicrosurveyPromptState
+    var showPasswordGenerator: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let bvcState = store.state.screenState(
@@ -68,7 +69,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                   navigateTo: bvcState.navigateTo,
                   displayView: bvcState.displayView,
                   buttonTapped: bvcState.buttonTapped,
-                  microsurveyState: bvcState.microsurveyState)
+                  microsurveyState: bvcState.microsurveyState,
+                  showPasswordGenerator: bvcState.showPasswordGenerator)
     }
 
     init(windowUUID: WindowUUID) {
@@ -98,7 +100,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         navigateTo: NavigationType? = nil,
         displayView: DisplayType? = nil,
         buttonTapped: UIButton? = nil,
-        microsurveyState: MicrosurveyPromptState
+        microsurveyState: MicrosurveyPromptState,
+        showPasswordGenerator: Bool = false
     ) {
         self.searchScreenState = searchScreenState
         self.showDataClearanceFlow = showDataClearanceFlow
@@ -112,6 +115,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         self.displayView = displayView
         self.buttonTapped = buttonTapped
         self.microsurveyState = microsurveyState
+        self.showPasswordGenerator = showPasswordGenerator
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -418,6 +422,16 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 browserViewType: state.browserViewType,
                 displayView: .dataClearance,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+        case GeneralBrowserActionType.showPasswordGenerator:
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                showDataClearanceFlow: state.showDataClearanceFlow,
+                fakespotState: state.fakespotState,
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                showPasswordGenerator: true
+                )
         default:
             return state
         }

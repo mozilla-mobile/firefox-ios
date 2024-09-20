@@ -656,6 +656,10 @@ class BrowserViewController: UIViewController,
             executeToolbarActions()
 
             handleMicrosurvey(state: state)
+
+            if state.showPasswordGenerator {
+                navigationHandler?.showPasswordGenerator()
+            }
         }
     }
 

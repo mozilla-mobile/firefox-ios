@@ -92,6 +92,8 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 
     func showMicrosurvey(model: MicrosurveyModel)
 
+    func showPasswordGenerator()
+
     /// Shows the app menu
     func showMainMenu()
 }
