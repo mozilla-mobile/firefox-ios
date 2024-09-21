@@ -57,11 +57,9 @@ enum RemoteDataType: String, Codable {
             if let decodedArray = try? JSONDecoder().decode([T].self, from: data) {
                 return decodedArray
             }
-
             let singleObject = try JSONDecoder().decode(T.self, from: data)
             return [singleObject]
         } catch {
-            print("Error: Failed to decode '\(fileName).json'. Error: \(error.localizedDescription)")
             throw RemoteDataTypeError.decodingError(fileName: fileName, error: error)
         }
     }
