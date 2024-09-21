@@ -874,7 +874,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
                 selectTab(addTab(), previous: removedTab)
             }
         } else if deletedIndex < _selectedIndex {
-            // If we delete a tab in the `tabs` array that's earlier than the selected tab, we need to shift our index.
+            // If we delete a tab in the `tabs` array that's ahead of the selected tab, we need to shift our index.
             // The selected tab itself hasn't actually changed; reselect it to call code paths related to saving, etc.
             if let selectedTab = tabs[safe: _selectedIndex - 1] {
                 selectTab(selectedTab, previous: selectedTab)
