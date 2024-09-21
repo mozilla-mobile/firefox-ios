@@ -745,6 +745,10 @@
 		8A4593C82BF7BECA002758DE /* MicrosurveyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4593C42BF7BECA002758DE /* MicrosurveyViewController.swift */; };
 		8A4593C92BF7BECA002758DE /* MicrosurveyTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4593C52BF7BECA002758DE /* MicrosurveyTableHeaderView.swift */; };
 		8A4593CA2BF7BECA002758DE /* MicrosurveyTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4593C62BF7BECA002758DE /* MicrosurveyTableView.swift */; };
+		8A46F5AB2C9E4389005B6422 /* PasswordRuleRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46F5A52C9E4389005B6422 /* PasswordRuleRecord.swift */; };
+		8A46F5AC2C9E4389005B6422 /* RemoteDataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46F5A72C9E4389005B6422 /* RemoteDataType.swift */; };
+		8A46F5AD2C9E4389005B6422 /* RemoteSettingsFetchConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46F5A82C9E4389005B6422 /* RemoteSettingsFetchConfig.swift */; };
+		8A46F5AE2C9E4389005B6422 /* RemoteSettingsUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46F5A92C9E4389005B6422 /* RemoteSettingsUtilities.swift */; };
 		8A471183287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A471182287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift */; };
 		8A471185287F6E4800F5A6EA /* SeparatorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A471184287F6E4800F5A6EA /* SeparatorTableViewCell.swift */; };
 		8A4AC0EB28C929D700439F83 /* URLSessionDataTaskProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4AC0E928C929D700439F83 /* URLSessionDataTaskProtocol.swift */; };
@@ -6870,6 +6874,10 @@
 		8A4593C42BF7BECA002758DE /* MicrosurveyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicrosurveyViewController.swift; sourceTree = "<group>"; };
 		8A4593C52BF7BECA002758DE /* MicrosurveyTableHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicrosurveyTableHeaderView.swift; sourceTree = "<group>"; };
 		8A4593C62BF7BECA002758DE /* MicrosurveyTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicrosurveyTableView.swift; sourceTree = "<group>"; };
+		8A46F5A52C9E4389005B6422 /* PasswordRuleRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordRuleRecord.swift; sourceTree = "<group>"; };
+		8A46F5A72C9E4389005B6422 /* RemoteDataType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteDataType.swift; sourceTree = "<group>"; };
+		8A46F5A82C9E4389005B6422 /* RemoteSettingsFetchConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteSettingsFetchConfig.swift; sourceTree = "<group>"; };
+		8A46F5A92C9E4389005B6422 /* RemoteSettingsUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteSettingsUtilities.swift; sourceTree = "<group>"; };
 		8A471182287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksPanelViewModel.swift; sourceTree = "<group>"; };
 		8A471184287F6E4800F5A6EA /* SeparatorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorTableViewCell.swift; sourceTree = "<group>"; };
 		8A4AC0E928C929D700439F83 /* URLSessionDataTaskProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSessionDataTaskProtocol.swift; sourceTree = "<group>"; };
@@ -10759,6 +10767,25 @@
 			path = Debug;
 			sourceTree = "<group>";
 		};
+		8A46F5A62C9E4389005B6422 /* RemoteRecords */ = {
+			isa = PBXGroup;
+			children = (
+				8A46F5A52C9E4389005B6422 /* PasswordRuleRecord.swift */,
+			);
+			path = RemoteRecords;
+			sourceTree = "<group>";
+		};
+		8A46F5AA2C9E4389005B6422 /* RemoteSettings */ = {
+			isa = PBXGroup;
+			children = (
+				8A46F5A62C9E4389005B6422 /* RemoteRecords */,
+				8A46F5A72C9E4389005B6422 /* RemoteDataType.swift */,
+				8A46F5A82C9E4389005B6422 /* RemoteSettingsFetchConfig.swift */,
+				8A46F5A92C9E4389005B6422 /* RemoteSettingsUtilities.swift */,
+			);
+			path = RemoteSettings;
+			sourceTree = "<group>";
+		};
 		8A4AC0ED28C929DD00439F83 /* URLSession */ = {
 			isa = PBXGroup;
 			children = (
@@ -13448,6 +13475,7 @@
 		F84B21E41A0910F600AAB793 /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				8A46F5AA2C9E4389005B6422 /* RemoteSettings */,
 				C84266742728462900382274 /* AccessibilityIdentifiers.swift */,
 				5A47CFF42860FB8900B2B7BF /* AppLaunchUtil.swift */,
 				E1FE133029C22726002A65FF /* BackgroundFetchAndProcessingUtility.swift */,
@@ -15603,6 +15631,7 @@
 				8AC1065F28D0CD700013263A /* OpenQLPreviewHelper.swift in Sources */,
 				EBA3B2C32268F16300728BDB /* PhotonActionSheetView.swift in Sources */,
 				E18EA56F28AD3279003F97FC /* UIDevice+Extension.swift in Sources */,
+				8A46F5AD2C9E4389005B6422 /* RemoteSettingsFetchConfig.swift in Sources */,
 				CDB3BE8724746787009320EE /* FirefoxAccountSignInViewController.swift in Sources */,
 				8A471183287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift in Sources */,
 				8A44F20E2B585E1F0016BC81 /* HomepageTelemetry.swift in Sources */,
@@ -15658,6 +15687,7 @@
 				8AEAD9F32C3D7B3E001A2C5A /* FeatureFlagsSettings.swift in Sources */,
 				216A0D7B2A40F08B008077BA /* ThemeSettingsAction.swift in Sources */,
 				C2506C932A6A863600F2B76E /* HistoryCoordinator.swift in Sources */,
+				8A46F5AE2C9E4389005B6422 /* RemoteSettingsUtilities.swift in Sources */,
 				8A3EF8012A2FCFC900796E3A /* FasterInactiveTabs.swift in Sources */,
 				CA7FC7D324A6A9B70012F347 /* PasswordManagerDataSourceHelper.swift in Sources */,
 				0E6C1E252C90B0E0001A43BB /* PasswordGeneratorMiddleware.swift in Sources */,
@@ -15821,6 +15851,7 @@
 				8ABC5AEE284532C900FEA552 /* PocketDiscoverCell.swift in Sources */,
 				ABE856AD2C75029F00C56F47 /* TrackingProtectionStatusView.swift in Sources */,
 				C834330026BAD32800ABAAA6 /* EnhancedTrackingProtectionDetailsVM.swift in Sources */,
+				8A46F5AB2C9E4389005B6422 /* PasswordRuleRecord.swift in Sources */,
 				8A03309528C2653600286539 /* LegacyTabFileManager.swift in Sources */,
 				8AB5958A284145B30090F4AE /* HomepageSectionHandler.swift in Sources */,
 				E1442FD0294782D9003680B0 /* UIAlertController+Extension.swift in Sources */,
@@ -15867,6 +15898,7 @@
 				43F7952525795F69005AEE40 /* SearchTelemetry.swift in Sources */,
 				E65075541E37F6FC006961AC /* LegacyDynamicFontHelper.swift in Sources */,
 				8ADAE4242A33A126007BF926 /* StudiesToggleSetting.swift in Sources */,
+				8A46F5AC2C9E4389005B6422 /* RemoteDataType.swift in Sources */,
 				8C1953302B85E7EC00761B20 /* AutofillFooterView.swift in Sources */,
 				C82CDD47233E8996002E2743 /* Tab+ChangeUserAgent.swift in Sources */,
 				81122E212B221AC0003DD9F8 /* SearchScreenState.swift in Sources */,
