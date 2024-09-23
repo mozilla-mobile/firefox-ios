@@ -391,11 +391,6 @@ class HomepageViewController:
         */
         if currentTab?.lastKnownUrl?.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(AboutHomeHandler.path)") ?? false {
             overlayManager.cancelEditing(shouldCancelLoading: false)
-
-            if featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly) {
-                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
-                store.dispatch(action)
-            }
         }
     }
 
