@@ -196,7 +196,6 @@ class ContentBlocker {
     }
 
     private func add(contentRuleList: WKContentRuleList, toTab tab: ContentBlockerTab) {
-        print("DBG: adding content rule: \(contentRuleList.identifier ?? "<nil>")")
         tab.currentWebView()?.configuration.userContentController.add(contentRuleList)
     }
 
