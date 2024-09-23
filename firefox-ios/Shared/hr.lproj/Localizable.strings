@@ -1,11 +1,11 @@
 /* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
-"-" = "-";
+"-" = "−";
 
 /* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "+" = "+";
 
 /* Authentication prompt message with no realm. Parameter is the hostname of the site */
-"A username and password are being requested by %@." = "%@ zahtjeva korisničko ime i lozinku.";
+"A username and password are being requested by %@." = "%@ zahtijeva korisničko ime i lozinku.";
 
 /* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
 "A username and password are being requested by %@. The site says: %@" = "%1$@ zahtjeva korisničko ime i lozinku. Stranica kaže: %2$@";
@@ -14,7 +14,7 @@
 "Aa" = "Aa";
 
 /* About settings section title */
-"About" = "O Firefoxu";
+"About" = "O postavkama";
 
 /* The title for the pinning a shortcut action */
 "ActivityStream.ContextMenu.AddToShortcuts" = "Dodaj u prečace";
@@ -290,7 +290,7 @@
 "Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
 
 /* Action button for deleting downloaded files in the Downloads panel. */
-"DownloadsPanel.Delete.Title" = "Obriši";
+"DownloadsPanel.Delete.Title" = "Izbriši";
 
 /* Title for the Downloads Panel empty state. */
 "DownloadsPanel.EmptyState.Title" = "Preuzete datoteke će se prikazati ovdje.";
@@ -392,7 +392,7 @@
 "fxa.signin.qr-link-instruction" = "Na računalu otvori Firefox i idi na firefox.com/pair";
 
 /* FxA sign in view qr code scan button */
-"fxa.signin.ready-to-scan" = "Spremno za skeniranje";
+"fxa.signin.ready-to-scan" = "Spremno za snimanje";
 
 /* FxA sign in view email login button */
 "fxa.signin.use-email-instead" = "Umjesto toga koristi e-mail";
@@ -470,7 +470,7 @@
 "HomePanel.ContextMenu.Bookmark" = "Zabilješka";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.DeleteFromHistory" = "Obriši iz povijesti";
+"HomePanel.ContextMenu.DeleteFromHistory" = "Izbriši iz povijesti";
 
 /* The title for the Open in New Private Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "Otvori u privatnoj kartici";
@@ -998,7 +998,7 @@
 "ScanQRCode.Error.OK.Button" = "U redu";
 
 /* Text for the instructions label, displayed in the QR scanner view */
-"ScanQRCode.Instructions.Label" = "Za skeniranje, poravnaj QR kȏd unutar okvira";
+"ScanQRCode.Instructions.Label" = "Za snimanje koda poravnaj QR kod unutar okvira";
 
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "Podaci nisu valjani";
@@ -1007,7 +1007,7 @@
 "ScanQRCode.PermissionError.Message.v100" = "Idi u „Postavke” > „Firefox”. Dozvoli Firefoxu pristup kameri.";
 
 /* Title for the QR code scanner view. */
-"ScanQRCode.View.Title" = "Skeniraj QR kȏd";
+"ScanQRCode.View.Title" = "Snimi QR kod";
 
 /* Open search section of settings */
 "Search" = "Traži";
