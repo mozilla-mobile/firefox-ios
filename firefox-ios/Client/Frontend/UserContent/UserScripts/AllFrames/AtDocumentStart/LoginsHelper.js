@@ -6,7 +6,7 @@
 "use strict";
 
 import "Assets/CC_Script/Helpers.ios.mjs";
-import { Logic } from "Assets/CC_Script/LoginManager.shared.mjs";
+import { Logic } from "Assets/CC_Script/LoginManager.shared.sys.mjs";
 import { PasswordGenerator } from "resource://gre/modules/PasswordGenerator.sys.mjs";
 
 // Ensure this module only gets included once. This is
@@ -491,7 +491,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     if (!form) {
       return;
     }
-  
+
     const [username, password] = LoginManagerContent._getFormFields(form, false);
     const field = event.target;
     const formHasNewPassword =
@@ -503,7 +503,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
       webkit.messageHandlers.loginsManagerMessageHandler.postMessage({
         type: "generatePassword",
       });
-    } else if (!isPasswordField && password) {
+    } else if (!formHasNewPassword && password) {
       webkit.messageHandlers.loginsManagerMessageHandler.postMessage({
         type: "fieldType",
         fieldType:
