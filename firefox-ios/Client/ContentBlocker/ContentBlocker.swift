@@ -249,7 +249,10 @@ extension ContentBlocker {
         DispatchQueue.global().async {
             var source = ""
             do {
-                let fileTrimmed = file.hasSuffix(".json") ? String(file.dropLast(5)) : file
+                let jsonSuffix = ".json"
+                let suffixLength = jsonSuffix.count
+                // Trim off .json suffix if needed, we only want the raw file name
+                let fileTrimmed = file.hasSuffix(jsonSuffix) ? String(file.dropLast(suffixLength)) : file
                 if let path = Bundle.main.path(forResource: fileTrimmed, ofType: "json") {
                     source = try String(contentsOfFile: path, encoding: .utf8)
                 }
