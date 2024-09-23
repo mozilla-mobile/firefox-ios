@@ -10,7 +10,7 @@ import SiteImageView
 
 /// This ViewController is meant to show a tableView of STG items in a flat list with NO section headers.
 /// When we have coordinators, where the coordinator provides the VM to the VC, we can generalize this.
-final class SearchGroupedItemsViewController: UIViewController, UITableViewDelegate, Themeable {
+class SearchGroupedItemsViewController: UIViewController, UITableViewDelegate, Themeable {
     // MARK: - Properties
 
     typealias a11y = AccessibilityIdentifiers.LibraryPanels.GroupedList
@@ -58,7 +58,7 @@ final class SearchGroupedItemsViewController: UIViewController, UITableViewDeleg
         return button
     }()
 
-    private var diffableDatasource: UITableViewDiffableDataSource<Sections, Site>?
+    private var diffableDatasource: UITableViewDiffableDataSource<Sections, AnyHashable>?
 
     // MARK: - Inits
 
@@ -126,38 +126,42 @@ final class SearchGroupedItemsViewController: UIViewController, UITableViewDeleg
 
     private func configureDatasource() {
         // swiftlint:disable line_length
-        diffableDatasource = UITableViewDiffableDataSource<Sections, Site>(tableView: tableView) { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
+        diffableDatasource = UITableViewDiffableDataSource<Sections, AnyHashable>(tableView: tableView) { [weak self] (tableView, indexPath, item) -> UITableViewCell? in
         // swiftlint:enable line_length
             guard let self = self else { return nil }
 
-            let site = item
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.cellIdentifier,
-                                                           for: indexPath) as? TwoLineImageOverlayCell
-            else {
-                self.logger.log("GeneralizedHistoryItems - Could not dequeue a TwoLineImageOverlayCell",
-                                level: .debug,
-                                category: .library)
-                return nil
-            }
-            let totalRows = tableView.numberOfRows(inSection: indexPath.section)
-            cell.addCustomSeparator(
-                atTop: indexPath.row == 0,
-                atBottom: indexPath.row == totalRows - 1
-            )
-            cell.titleLabel.text = site.title
-            cell.titleLabel.isHidden = site.title.isEmpty
-            cell.descriptionLabel.text = site.url
-            cell.descriptionLabel.isHidden = false
-            cell.leftImageView.layer.borderWidth = 0.5
-            cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
-            cell.applyTheme(theme: self.themeManager.getCurrentTheme(for: windowUUID))
+            if let site = item as? Site {
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.cellIdentifier,
+                                                               for: indexPath) as? TwoLineImageOverlayCell
+                else {
+                    self.logger.log("GeneralizedHistoryItems - Could not dequeue a TwoLineImageOverlayCell",
+                                    level: .debug,
+                                    category: .library)
+                    return nil
+                }
+                let totalRows = tableView.numberOfRows(inSection: indexPath.section)
+                cell.addCustomSeparator(
+                    atTop: indexPath.row == 0,
+                    atBottom: indexPath.row == totalRows - 1
+                )
+                cell.titleLabel.text = site.title
+                cell.titleLabel.isHidden = site.title.isEmpty
+                cell.descriptionLabel.text = site.url
+                cell.descriptionLabel.isHidden = false
+                cell.leftImageView.layer.borderWidth = 0.5
+                cell.leftImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
+                cell.applyTheme(theme: self.themeManager.getCurrentTheme(for: windowUUID))
 
-            return cell
+                return cell
+            }
+
+            // This shouldn't happen! An empty row!
+            return UITableViewCell()
         }
     }
 
     private func applySnapshot() {
-        var snapshot = NSDiffableDataSourceSnapshot<Sections, Site>()
+        var snapshot = NSDiffableDataSourceSnapshot<Sections, AnyHashable>()
 
         snapshot.appendSections(Sections.allCases)
 
@@ -177,7 +181,9 @@ final class SearchGroupedItemsViewController: UIViewController, UITableViewDeleg
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let item = diffableDatasource?.itemIdentifier(for: indexPath) else { return }
 
-        handleSiteItemTapped(site: item)
+        if let site = item as? Site {
+            handleSiteItemTapped(site: site)
+        }
     }
 
     private func handleSiteItemTapped(site: Site) {

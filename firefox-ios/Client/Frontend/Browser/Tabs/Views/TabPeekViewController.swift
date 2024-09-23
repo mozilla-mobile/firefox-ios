@@ -15,7 +15,7 @@ class TabPeekViewController: UIViewController,
     var contextActions: UIContextMenuActionProvider = { _ in return nil }
     private let windowUUID: WindowUUID
 
-    internal var tabModel: TabModel
+    private var tabModel: TabModel
 
     func contextActions(defaultActions: [UIMenuElement]) -> UIMenu {
         return makeMenuActions()
