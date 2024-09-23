@@ -449,9 +449,8 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
   const generatePassword = (rules) => {
     let mapOfRules = null;
 
-    // This will be skipped for now, as we don't have the rules yet
-    // Once we have the rules, we can parse them and send an appropriate
-    // password to swift
+    // If the rules are not provided, we will use the default rules
+    // The rules are provided by swift depending on the domain
     if(rules) {
       const domainRules = PasswordRulesParser.parsePasswordRules(
         rules
