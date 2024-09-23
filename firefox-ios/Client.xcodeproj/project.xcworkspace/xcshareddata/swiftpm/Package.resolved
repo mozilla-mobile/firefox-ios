@@ -140,8 +140,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-crypto.git",
       "state" : {
-        "revision" : "81bee98e706aee68d39ed5996db069ef2b313d62",
-        "version" : "3.7.1"
+        "revision" : "9f95b4d033a4edd3814b48608db3f2ca90c7218b",
+        "version" : "3.7.0"
       }
     },
     {
