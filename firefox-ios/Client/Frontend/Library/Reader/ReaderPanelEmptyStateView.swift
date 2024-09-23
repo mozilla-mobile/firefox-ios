@@ -20,15 +20,13 @@ final class ReaderPanelEmptyStateView: UIView {
     let windowUUID: WindowUUID
     let themeManager: Common.ThemeManager
 
-    private lazy var welcomeLabel: UILabel = {
-        return .build { label in
-            label.text = .ReaderPanelWelcome
-            label.textAlignment = .center
-            label.font = FXFontStyles.Bold.body.scaledFont()
-            label.numberOfLines = 0
-            label.textColor = self.currentTheme().colors.textSecondary
-        }
-    }()
+    private lazy var welcomeLabel: UILabel = .build { label in
+        label.text = .ReaderPanelWelcome
+        label.textAlignment = .center
+        label.font = FXFontStyles.Bold.body.scaledFont()
+        label.numberOfLines = 0
+        label.textColor = self.currentTheme().colors.textSecondary
+    }
 
     private lazy var readerModeLabel: UILabel = {
         return .build { label in
