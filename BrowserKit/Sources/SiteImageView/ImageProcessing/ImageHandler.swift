@@ -59,7 +59,7 @@ class DefaultImageHandler: ImageHandler {
                 return try mainBundleImage ?? getBundleImage(assetName: assetName, bundle: .module)
             }
 
-            // If the image has no resource then try to load a default favicon from the package bundle
+            // The default images are stored with the cache key as name, try to load it from package bundle
             if let image = try? getBundleImage(assetName: imageModel.cacheKey, bundle: .module) {
                 return image
             }

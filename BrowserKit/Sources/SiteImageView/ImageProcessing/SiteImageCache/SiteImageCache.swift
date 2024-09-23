@@ -42,7 +42,6 @@ actor DefaultSiteImageCache: SiteImageCache {
             guard let image = try await imageCache.retrieve(forKey: key) else {
                 throw SiteImageError.unableToRetrieveFromCache("Image was nil")
             }
-            print("FF: \(image) cache key: \(cacheKey)")
             return image
         } catch let error as KingfisherError {
             throw SiteImageError.unableToRetrieveFromCache(error.errorDescription ?? "No description")
