@@ -654,7 +654,7 @@ class BrowserViewController: UIViewController,
                 overlayManager.openNewTab(url: nil, newTabSettings: newTabSettings)
             }
 
-            executeToolbarActions()
+            executeNavigationAndDisplayActions()
 
             handleMicrosurvey(state: state)
         }
@@ -1941,7 +1941,7 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func executeToolbarActions() {
+    private func executeNavigationAndDisplayActions() {
         guard isToolbarRefactorEnabled, let state = browserViewControllerState else { return }
 
         switch state {
@@ -3601,8 +3601,8 @@ extension BrowserViewController: SearchViewControllerDelegate {
 
 extension BrowserViewController: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selectedTab: Tab, previousTab: Tab?, isRestoring: Bool) {
-        // Failing to have a non-nil webView by this point will cause the toolbar scrolling behaviour to regress, back/foward
-        // buttons never to become enabled, etc. on tab restore after launch. [FXIOS-9785, FXIOS-9781]
+        // Failing to have a non-nil webView by this point will cause the toolbar scrolling behaviour to regress,
+        // back/forward buttons never to become enabled, etc. on tab restore after launch. [FXIOS-9785, FXIOS-9781]
         assert(selectedTab.webView != nil, "Setup will fail if the webView is not initialized for selectedTab")
 
         // Remove the old accessibilityLabel. Since this webview shouldn't be visible, it doesn't need it
@@ -3922,7 +3922,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     private func finishEditionMode() {
-        // If keyboard is dismiss leave edition mode Homepage case is handled in HomepageVC
+        // If keyboard is dismissed leave edit mode, Homepage case is handled in HomepageVC
         let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)
         if newTabChoice != .topSites, newTabChoice != .blankPage {
             overlayManager.cancelEditing(shouldCancelLoading: false)
