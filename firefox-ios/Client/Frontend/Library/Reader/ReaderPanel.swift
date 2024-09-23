@@ -26,17 +26,6 @@ private struct ReadingListTableViewCellUX {
     static let MarkAsReadButtonTitleEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
 }
 
-struct ReadingListPanelUX {
-    // Welcome Screen
-    static let WelcomeScreenPadding: CGFloat = 15
-    static let WelcomeScreenHorizontalMinPadding: CGFloat = 40
-
-    static let WelcomeScreenMaxWidth: CGFloat = 400
-    static let WelcomeScreenItemImageWidth: CGFloat = 20
-
-    static let WelcomeScreenTopPadding: CGFloat = 120
-}
-
 class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
     var title: String = "Example" {
         didSet {
