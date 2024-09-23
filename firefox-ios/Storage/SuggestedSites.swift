@@ -7,6 +7,10 @@ import Shared
 import SiteImageView
 
 open class SuggestedSite: Site {
+    override open var tileURL: URL {
+        return URL(string: url as String, invalidCharacters: false) ?? URL(string: "about:blank")!
+    }
+
     public init(url: String,
                 title: String,
                 faviconResource: SiteResource? = nil) {
