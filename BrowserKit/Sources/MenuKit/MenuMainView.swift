@@ -4,12 +4,13 @@
 
 import Common
 import UIKit
+import ComponentLibrary
 
 public final class MenuMainView: UIView,
                                  MenuTableViewDataDelegate, ThemeApplicable {
     // MARK: - UI Elements
     private var tableView: MenuTableView = .build()
-    private var accountHeaderView: MenuAccountHeaderView = .build()
+    public var accountHeaderView: HeaderView = .build()
 
     // MARK: - Properties
 
@@ -41,6 +42,12 @@ public final class MenuMainView: UIView,
         ])
     }
 
+    public func setupDetails(subtitle: String, title: String, icon: UIImage?) {
+        accountHeaderView.setupDetails(subtitle: subtitle,
+                                       title: title,
+                                       icon: icon)
+    }
+
     // MARK: - Interface
     public func reloadTableView(with data: [MenuSection]) {
         tableView.reloadTableView(with: data)
@@ -51,5 +58,6 @@ public final class MenuMainView: UIView,
         backgroundColor = .clear
         tableView.applyTheme(theme: theme)
         accountHeaderView.applyTheme(theme: theme)
+        accountHeaderView.setIcon(isSmaller: true, theme: theme)
     }
 }
