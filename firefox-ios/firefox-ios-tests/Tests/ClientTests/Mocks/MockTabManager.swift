@@ -166,5 +166,5 @@ class MockTabManager: TabManager {
 
     func removeAllInactiveTabs() async {}
 
-    func undoCloseInactiveTabs() {}
+    func undoCloseInactiveTabs() async {}
 }
