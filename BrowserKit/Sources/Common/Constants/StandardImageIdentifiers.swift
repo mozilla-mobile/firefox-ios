@@ -91,6 +91,7 @@ public struct StandardImageIdentifiers {
         public static let plus = "plusLarge"
         public static let price = "priceLarge"
         public static let privateMode = "privateModeLarge"
+        public static let privateModeCircleFill = "privateModeCircleFillLarge"
         public static let qrCode = "qrCodeLarge"
         public static let quality = "qualityLarge"
         public static let readerView = "readerViewLarge"
@@ -113,6 +114,11 @@ public struct StandardImageIdentifiers {
         public static let warning = "warningLarge"
         public static let warningFill = "warningFillLarge"
         public static let whatsNew = "whatsNewLarge"
+        public static let tools = "toolLarge"
+        public static let save = "saveLarge"
+        public static let print = "printLarge"
+        public static let addToHomeScreen = "addToHomescreenLarge"
+        public static let gridAdd = "gridAddLarge"
     }
 
     // Icon size 30x30

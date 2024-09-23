@@ -8,6 +8,34 @@ import MenuKit
 import Shared
 
 struct MainMenuConfigurationUtility: Equatable {
+    private struct Icons {
+        static let newTab = StandardImageIdentifiers.Large.plus
+        static let newPrivateTab = StandardImageIdentifiers.Large.privateModeCircleFill
+        static let deviceDesktop = StandardImageIdentifiers.Large.deviceDesktop
+        static let findInPage = StandardImageIdentifiers.Large.search
+        static let tools = StandardImageIdentifiers.Large.tools
+        static let save = StandardImageIdentifiers.Large.save
+        static let bookmarks = StandardImageIdentifiers.Large.bookmarkTrayFill
+        static let history = StandardImageIdentifiers.Large.history
+        static let downloads = StandardImageIdentifiers.Large.download
+        static let passwords = StandardImageIdentifiers.Large.login
+        static let getHelp = StandardImageIdentifiers.Large.helpCircle
+        static let settings = StandardImageIdentifiers.Large.settings
+        static let whatsNew = StandardImageIdentifiers.Large.whatsNew
+        static let zoom = StandardImageIdentifiers.Large.pageZoom
+        static let readerViewOn = StandardImageIdentifiers.Large.readerView
+        static let nightModeOn = StandardImageIdentifiers.Large.nightMode
+        static let print = StandardImageIdentifiers.Large.print
+        static let share = StandardImageIdentifiers.Large.share
+        static let addToShortcuts = StandardImageIdentifiers.Large.pin
+        static let saveToReadingList = StandardImageIdentifiers.Large.readingListAdd
+        static let addToHomeScreen = StandardImageIdentifiers.Large.addToHomeScreen
+        static let bookmarkThisPage = StandardImageIdentifiers.Large.bookmark
+        static let reportBrokenSite = StandardImageIdentifiers.Large.lightbulb
+        static let customizeHomepage = StandardImageIdentifiers.Large.gridAdd
+        static let saveAsPDF = StandardImageIdentifiers.Large.folder
+    }
+
     func generateMenuElements(
         with uuid: WindowUUID,
         andInfo configuration: MainMenuTabInfo?
@@ -38,7 +66,7 @@ struct MainMenuConfigurationUtility: Equatable {
         return MenuSection(options: [
             MenuElement(
                 title: .MainMenu.TabsSection.NewTab,
-                iconName: "",
+                iconName: Icons.newTab,
                 isEnabled: true,
                 isActive: false,
                 a11yLabel: "",
@@ -56,7 +84,7 @@ struct MainMenuConfigurationUtility: Equatable {
             ),
             MenuElement(
                 title: .MainMenu.TabsSection.NewPrivateTab,
-                iconName: "",
+                iconName: Icons.newPrivateTab,
                 isEnabled: true,
                 isActive: false,
                 a11yLabel: "",
@@ -87,7 +115,7 @@ struct MainMenuConfigurationUtility: Equatable {
                         defaultIsDesktop: configuration.isDefaultUserAgentDesktop,
                         tabHasChangedUserAgent: configuration.hasChangedUserAgent
                     ),
-                    iconName: "",
+                    iconName: Icons.deviceDesktop,
                     isEnabled: true,
                     isActive: false,
                     a11yLabel: "",
@@ -104,7 +132,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 ),
                 MenuElement(
                     title: .MainMenu.ToolsSection.FindInPage,
-                    iconName: "",
+                    iconName: Icons.findInPage,
                     isEnabled: true,
                     isActive: false,
                     a11yLabel: "",
@@ -122,9 +150,10 @@ struct MainMenuConfigurationUtility: Equatable {
                 ),
                 MenuElement(
                     title: .MainMenu.ToolsSection.Tools,
-                    iconName: "",
+                    iconName: Icons.tools,
                     isEnabled: true,
                     isActive: false,
+                    hasSubmenu: true,
                     a11yLabel: "",
                     a11yHint: "",
                     a11yId: "",
@@ -140,9 +169,10 @@ struct MainMenuConfigurationUtility: Equatable {
                 ),
                 MenuElement(
                     title: .MainMenu.ToolsSection.Save,
-                    iconName: "",
+                    iconName: Icons.save,
                     isEnabled: true,
                     isActive: false,
+                    hasSubmenu: true,
                     a11yLabel: "",
                     a11yHint: "",
                     a11yId: "",
@@ -187,7 +217,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 options: [
                     MenuElement(
                         title: .MainMenu.Submenus.Tools.Zoom,
-                        iconName: "",
+                        iconName: Icons.zoom,
                         isEnabled: true,
                         isActive: false,
                         a11yLabel: "",
@@ -204,7 +234,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     ),
                     MenuElement(
                         title: .MainMenu.Submenus.Tools.ReaderViewOn,
-                        iconName: "",
+                        iconName: Icons.readerViewOn,
                         isEnabled: true,
                         isActive: false,
                         a11yLabel: "",
@@ -221,7 +251,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     ),
                     MenuElement(
                         title: .MainMenu.Submenus.Tools.NightModeOn,
-                        iconName: "",
+                        iconName: Icons.nightModeOn,
                         isEnabled: true,
                         isActive: false,
                         a11yLabel: "",
@@ -238,7 +268,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     ),
                     MenuElement(
                         title: .MainMenu.Submenus.Tools.ReportBrokenSite,
-                        iconName: "",
+                        iconName: Icons.reportBrokenSite,
                         isEnabled: true,
                         isActive: false,
                         a11yLabel: "",
@@ -259,7 +289,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 options: [
                     MenuElement(
                         title: .MainMenu.Submenus.Tools.Print,
-                        iconName: "",
+                        iconName: Icons.print,
                         isEnabled: true,
                         isActive: false,
                         a11yLabel: "",
@@ -276,7 +306,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     ),
                     MenuElement(
                         title: .MainMenu.Submenus.Tools.Share,
-                        iconName: "",
+                        iconName: Icons.share,
                         isEnabled: true,
                         isActive: false,
                         a11yLabel: "",
@@ -301,7 +331,7 @@ struct MainMenuConfigurationUtility: Equatable {
             options: [
                 MenuElement(
                     title: .MainMenu.Submenus.Save.BookmarkThisPage,
-                    iconName: "",
+                    iconName: Icons.bookmarkThisPage,
                     isEnabled: true,
                     isActive: false,
                     a11yLabel: "",
@@ -318,7 +348,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 ),
                 MenuElement(
                     title: .MainMenu.Submenus.Save.AddToShortcuts,
-                    iconName: "",
+                    iconName: Icons.addToShortcuts,
                     isEnabled: true,
                     isActive: false,
                     a11yLabel: "",
@@ -335,7 +365,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 ),
                 MenuElement(
                     title: .MainMenu.Submenus.Save.AddToHomeScreen,
-                    iconName: "",
+                    iconName: Icons.addToHomeScreen,
                     isEnabled: true,
                     isActive: false,
                     a11yLabel: "",
@@ -352,7 +382,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 ),
                 MenuElement(
                     title: .MainMenu.Submenus.Save.SaveToReadingList,
-                    iconName: "",
+                    iconName: Icons.saveToReadingList,
                     isEnabled: true,
                     isActive: false,
                     a11yLabel: "",
@@ -369,7 +399,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 ),
                 MenuElement(
                     title: .MainMenu.Submenus.Save.SaveAsPDF,
-                    iconName: "",
+                    iconName: Icons.saveAsPDF,
                     isEnabled: true,
                     isActive: false,
                     a11yLabel: "",
@@ -393,7 +423,7 @@ struct MainMenuConfigurationUtility: Equatable {
         return MenuSection(options: [
             MenuElement(
                 title: .MainMenu.PanelLinkSection.Bookmarks,
-                iconName: "",
+                iconName: Icons.bookmarks,
                 isEnabled: true,
                 isActive: false,
                 a11yLabel: "",
@@ -411,7 +441,7 @@ struct MainMenuConfigurationUtility: Equatable {
             ),
             MenuElement(
                 title: .MainMenu.PanelLinkSection.History,
-                iconName: "",
+                iconName: Icons.history,
                 isEnabled: true,
                 isActive: false,
                 a11yLabel: "",
@@ -429,7 +459,7 @@ struct MainMenuConfigurationUtility: Equatable {
             ),
             MenuElement(
                 title: .MainMenu.PanelLinkSection.Downloads,
-                iconName: "",
+                iconName: Icons.downloads,
                 isEnabled: true,
                 isActive: false,
                 a11yLabel: "",
@@ -447,7 +477,7 @@ struct MainMenuConfigurationUtility: Equatable {
             ),
             MenuElement(
                 title: .MainMenu.PanelLinkSection.Passwords,
-                iconName: "",
+                iconName: Icons.passwords,
                 isEnabled: true,
                 isActive: false,
                 a11yLabel: "",
@@ -474,7 +504,7 @@ struct MainMenuConfigurationUtility: Equatable {
         let homepageOptions = [
             MenuElement(
                 title: .MainMenu.OtherToolsSection.CustomizeHomepage,
-                iconName: "",
+                iconName: Icons.customizeHomepage,
                 isEnabled: true,
                 isActive: false,
                 a11yLabel: "",
@@ -495,7 +525,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     format: .MainMenu.OtherToolsSection.WhatsNew,
                     AppName.shortName.rawValue
                 ),
-                iconName: "",
+                iconName: Icons.whatsNew,
                 isEnabled: true,
                 isActive: false,
                 a11yLabel: "",
@@ -516,7 +546,7 @@ struct MainMenuConfigurationUtility: Equatable {
         let standardOptions = [
             MenuElement(
                 title: .MainMenu.OtherToolsSection.GetHelp,
-                iconName: "",
+                iconName: Icons.getHelp,
                 isEnabled: true,
                 isActive: false,
                 a11yLabel: "",
@@ -534,7 +564,7 @@ struct MainMenuConfigurationUtility: Equatable {
             ),
             MenuElement(
                 title: .MainMenu.OtherToolsSection.Settings,
-                iconName: "",
+                iconName: Icons.settings,
                 isEnabled: true,
                 isActive: false,
                 a11yLabel: "",
