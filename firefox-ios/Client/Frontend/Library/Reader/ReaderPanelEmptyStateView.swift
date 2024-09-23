@@ -42,14 +42,12 @@ final class ReaderPanelEmptyStateView: UIView {
         imageView.tintColor = self.currentTheme().colors.textSecondary
     }
 
-    private lazy var readingListLabel: UILabel = {
-        return .build { label in
-            label.text = .ReaderPanelReadingListDescription
-            label.font = FXFontStyles.Regular.body.scaledFont()
-            label.numberOfLines = 0
-            label.textColor = self.currentTheme().colors.textSecondary
-        }
-    }()
+    private lazy var readingListLabel: UILabel = .build { label in
+        label.text = .ReaderPanelReadingListDescription
+        label.font = FXFontStyles.Regular.body.scaledFont()
+        label.numberOfLines = 0
+        label.textColor = self.currentTheme().colors.textSecondary
+    }
 
     private lazy var readingListImageView: UIImageView = {
         return .build { imageView in
