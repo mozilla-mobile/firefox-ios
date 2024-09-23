@@ -5,7 +5,9 @@
 
 "use strict";
 
+import "Assets/CC_Script/Helpers.ios.mjs";
 import { Logic } from "Assets/CC_Script/LoginManager.shared.mjs";
+import { PasswordGenerator } from "resource://gre/modules/PasswordGenerator.sys.mjs";
 
 // Ensure this module only gets included once. This is
 // required for user scripts injected into all frames.
@@ -444,6 +446,34 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     },
   }
 
+  const generatePassword = (rules) => {
+    let mapOfRules = null;
+
+    // This will be skipped for now, as we don't have the rules yet
+    // Once we have the rules, we can parse them and send an appropriate
+    // password to swift
+    if(rules) {
+      const domainRules = PasswordRulesParser.parsePasswordRules(
+        rules
+      );
+      mapOfRules = transformRulesToMap(domainRules);
+    }
+
+    const generatedPassword = PasswordGenerator.generatePassword({
+      inputMaxLength: LoginManagerContent.activeField.maxLength,
+      rules: mapOfRules,
+    });
+
+    return generatedPassword;
+  };
+
+  const fillGeneratedPassword = (password) => {
+    LoginManagerContent.yieldFocusBackToField();
+    LoginManagerContent.activeField.setUserInput(password);
+    Logic.fillConfirmFieldWithGeneratedPassword(
+      LoginManagerContent.activeField
+    );
+  };
 
   function yieldFocusBackToField() {
     LoginManagerContent.activeField?.blur();
@@ -461,13 +491,23 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     if (!form) {
       return;
     }
-
+  
     const [username, password] = LoginManagerContent._getFormFields(form, false);
-    if (password) {
-      LoginManagerContent.activeField = event.target;
+    const field = event.target;
+    const formHasNewPassword =
+      password && Logic.isProbablyANewPasswordField(password);
+    const isPasswordField = field === password;
+
+    LoginManagerContent.activeField = field;
+    if (formHasNewPassword && isPasswordField) {
+      webkit.messageHandlers.loginsManagerMessageHandler.postMessage({
+        type: "generatePassword",
+      });
+    } else if (!isPasswordField && password) {
       webkit.messageHandlers.loginsManagerMessageHandler.postMessage({
         type: "fieldType",
-        fieldType: event.target === username ? FocusFieldType.username : FocusFieldType.password,
+        fieldType:
+          field === username ? FocusFieldType.username : FocusFieldType.password,
       });
     }
   }
@@ -516,6 +556,8 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
       }
     };
     this.yieldFocusBackToField = yieldFocusBackToField;
+    this.generatePassword = generatePassword;
+    this.fillGeneratedPassword = fillGeneratedPassword;
   }
 
   Object.defineProperty(window.__firefox__, "logins", {
