@@ -8,9 +8,19 @@ import ComponentLibrary
 import Redux
 import Shared
 
+// Delegate for coordinator to be able to handle navigation
+protocol NativeErrorPageCoordinatorDelegate: AnyObject {
+    func reloadErrorPage()
+    func goBackToPreviousPage()
+    func proceedToURL()
+}
+
 final class NativeErrorPageViewController: UIViewController,
                                            Themeable,
-                                           ContentContainable {
+                                           ContentContainable,
+                                           StoreSubscriber {
+    typealias SubscriberStateType = NativeErrorPageState
+
     private let model: ErrorPageModel
     private let windowUUID: WindowUUID
 
@@ -24,6 +34,9 @@ final class NativeErrorPageViewController: UIViewController,
 
     private var overlayManager: OverlayModeManager
     var contentType: ContentType = .nativeErrorPage
+    private var nativeErrorPageState: NativeErrorPageState
+
+    weak var parentCoordinator: NativeErrorPageCoordinatorDelegate?
 
     // MARK: UI Elements
     private struct UX {
@@ -83,7 +96,7 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     private lazy var reloadButton: PrimaryRoundedButton = .build { button in
-        button.addTarget(self, action: #selector(self.didTapSubmit), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.didTapReload), for: .touchUpInside)
         button.isEnabled = true
     }
 
@@ -109,15 +122,51 @@ final class NativeErrorPageViewController: UIViewController,
         self.themeManager = themeManager
         self.overlayManager = overlayManager
         self.notificationCenter = notificationCenter
+        nativeErrorPageState = NativeErrorPageState(windowUUID: windowUUID)
         super.init(
             nibName: nil,
             bundle: nil
         )
-
+        subscribeToRedux()
         configureUI()
         setupLayout()
         adjustConstraints()
         showViewForCurrentOrientation()
+    }
+
+    // MARK: Redux
+    func newState(state: NativeErrorPageState) {
+        nativeErrorPageState = state
+        if nativeErrorPageState.shouldReload {
+            parentCoordinator?.reloadErrorPage()
+        }
+//        else if nativeErrorPageState.shouldGoBack {
+//            parentCoordinator?.goBackToPreviousPage()
+//        } else if nativeErrorPageState.showLearnMore {
+//        } else if nativeErrorPageState.showCertificate {
+//        } else if nativeErrorPageState.showProceedToURL {
+//            parentCoordinator?.proceedToURL()
+//        }
+    }
+
+    func subscribeToRedux() {
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.showScreen,
+                                  screen: .nativeErrorPage)
+        store.dispatch(action)
+        let uuid = windowUUID
+        store.subscribe(self, transform: {
+            return $0.select({ appState in
+                return NativeErrorPageState(appState: appState, uuid: uuid)
+            })
+        })
+    }
+
+    func unsubscribeFromRedux() {
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.closeScreen,
+                                  screen: .nativeErrorPage)
+        store.dispatch(action)
     }
 
     override func viewDidLoad() {
@@ -136,6 +185,10 @@ final class NativeErrorPageViewController: UIViewController,
         )
         adjustConstraints()
         showViewForCurrentOrientation()
+    }
+
+    deinit {
+        unsubscribeFromRedux()
     }
 
     // TODO: FXIOS-9639 #21237 [a11y] Verify accessibility for Voice Over, Dynamic text
@@ -223,6 +276,13 @@ final class NativeErrorPageViewController: UIViewController,
 
     // TODO: FXIOS-9860 #21645 Integration with Redux - reload button
     @objc
-    private func didTapSubmit() {
+    private func didTapReload() {
+        store.dispatch(
+            NativeErrorPageAction(
+                nativeErrorPageModel: model,
+                windowUUID: windowUUID,
+                actionType: NativeErrorPageActionType.reload
+            )
+        )
     }
 }

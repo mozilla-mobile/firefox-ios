@@ -29,6 +29,7 @@ struct AppState: StateType {
                 case (.themeSettings(let state), .themeSettings): return state as? S
                 case (.toolbar(let state), .toolbar): return state as? S
                 case (.trackingProtection(let state), .trackingProtection): return state as? S
+                case (.nativeErrorPage(let state), .nativeErrorPage): return state as? S
                 default: return nil
                 }
             }.first(where: {
@@ -51,27 +52,16 @@ extension AppState {
     }
 }
 
-let middlewares = [
-    FeltPrivacyMiddleware().privacyManagerProvider,
-    MainMenuMiddleware().mainMenuProvider,
-    MicrosurveyMiddleware().microsurveyProvider,
-    MicrosurveyPromptMiddleware().microsurveyProvider,
-    RemoteTabsPanelMiddleware().remoteTabsPanelProvider,
-    TabManagerMiddleware().tabsPanelProvider,
-    ThemeManagerMiddleware().themeManagerProvider,
-    ToolbarMiddleware().toolbarProvider,
-    TrackingProtectionMiddleware().trackingProtectionProvider
-]
-
-// In order for us to mock and test the middlewares easier,
-// we change the store to be instantiated as a variable.
-// For non testing builds, we leave the store as a constant.
-#if TESTING
-var store = Store(state: AppState(),
-                  reducer: AppState.reducer,
-                  middlewares: middlewares)
-#else
 let store = Store(state: AppState(),
                   reducer: AppState.reducer,
-                  middlewares: middlewares)
-#endif
+                  middlewares: [
+                    FeltPrivacyMiddleware().privacyManagerProvider,
+                    MainMenuMiddleware().mainMenuProvider,
+                    MicrosurveyMiddleware().microsurveyProvider,
+                    MicrosurveyPromptMiddleware().microsurveyProvider,
+                    RemoteTabsPanelMiddleware().remoteTabsPanelProvider,
+                    TabManagerMiddleware().tabsPanelProvider,
+                    ThemeManagerMiddleware().themeManagerProvider,
+                    ToolbarMiddleware().toolbarProvider,
+                    TrackingProtectionMiddleware().trackingProtectionProvider
+                  ])
