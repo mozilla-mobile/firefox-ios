@@ -49,14 +49,12 @@ final class ReaderPanelEmptyStateView: UIView {
         label.textColor = self.currentTheme().colors.textSecondary
     }
 
-    private lazy var readingListImageView: UIImageView = {
-        return .build { imageView in
-            imageView.contentMode = .scaleAspectFill
-            imageView.image = UIImage(named: StandardImageIdentifiers.Large.readingListAdd)?
-                .withRenderingMode(.alwaysTemplate)
-            imageView.tintColor = self.currentTheme().colors.textSecondary
-        }
-    }()
+    private lazy var readingListImageView: UIImageView = .build { imageView in
+        imageView.contentMode = .scaleAspectFill
+        imageView.image = UIImage(named: StandardImageIdentifiers.Large.readingListAdd)?
+            .withRenderingMode(.alwaysTemplate)
+        imageView.tintColor = self.currentTheme().colors.textSecondary
+    }
 
     private lazy var emptyStateViewWrapper: UIView = {
         return .build { view in
