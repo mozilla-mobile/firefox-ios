@@ -1,3 +1,6 @@
+/* On the main menu, at the top, when the user is signed out. The description for the sign in action */
+"MainMenu.Account.SignedOut.Description.v131" = "Parolaları, sekmeleri ve daha fazlasını eşitle";
+
 /* On the main menu, at the top, when the user is signed out. The title for the sign in action */
 "MainMenu.Account.SignedOut.Title.v131" = "Giriş yap";
 
@@ -6,6 +9,9 @@
 
 /* On the main menu, at the top, when the user is signed in but there was an error syncing. The title for this state. */
 "MainMenu.Account.SyncError.Title.v131" = "Eşitlemek için yeniden giriş yap";
+
+/* On the main menu, the title for the action that will take the user to the Bookmarks panel. Please keep as short as possible, <15 chars of space available. */
+"MainMenu.PanelLinkSection.Bookmarks.Title.v131" = "Yer imleri";
 
 /* On the main menu, the title for the action that will take the user to the Downloads panel. Please keep as short as possible, <15 chars of space available. */
 "MainMenu.PanelLinkSection.Downloads.Title.v131" = "İndirilenler";
@@ -24,6 +30,9 @@
 
 /* On the main menu, the title for the action that will take the user to the Settings menu. */
 "MainMenu.SettingsSection.Settings.Title.v131" = "Ayarlar";
+
+/* On the main menu, the title for the action that will take the user to a What's New in Firefox popup. Placeholder is for the app name. */
+"MainMenu.SettingsSection.WhatsNew.Title.v131" = "%@’taki yenilikler";
 
 /* On the main menu, in the Save submenu, the title for the menu component that allows a user to add a website to the home screen. */
 "MainMenu.Submenus.Save.AddToHomeScreen.Title.v131" = "Ana ekrana ekle";
