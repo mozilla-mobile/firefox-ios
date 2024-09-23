@@ -7,41 +7,10 @@ import Shared
 import SiteImageView
 
 open class SuggestedSite: Site {
-    override open var tileURL: URL {
-        return URL(string: url as String, invalidCharacters: false) ?? URL(string: "about:blank")!
+    public init(url: String,
+                title: String,
+                faviconResource: SiteResource? = nil) {
+        super.init(url: url, title: title, bookmarked: nil, faviconResource: faviconResource)
+        self.guid = "default" + title // A guid is required in the case the site might become a pinned site
     }
-    public let faviconResource: SiteResource?
-    let trackingId: Int
-
-    init(data: SuggestedSiteData) {
-        self.trackingId = data.trackingId
-        self.faviconResource = data.faviconResource
-        super.init(url: data.url, title: data.title, bookmarked: nil)
-        self.guid = "default" + data.title // A guid is required in the case the site might become a pinned site
-    }
-}
-
-public let SuggestedSites = SuggestedSitesCursor()
-
-open class SuggestedSitesCursor: ArrayCursor<SuggestedSite> {
-    fileprivate init() {
-        let locale = Locale.current
-        let sites = DefaultSuggestedSites.sites[locale.identifier] ??
-                    DefaultSuggestedSites.sites["default"]! as [SuggestedSiteData]
-        let tiles = sites.map({ data -> SuggestedSite in
-            var site = data
-            if let domainMap = DefaultSuggestedSites.urlMap[data.url], let localizedURL = domainMap[locale.identifier] {
-                site.url = localizedURL
-            }
-            return SuggestedSite(data: site)
-        })
-        super.init(data: tiles, status: .success, statusMessage: "Loaded")
-    }
-}
-
-public struct SuggestedSiteData {
-    var url: String
-    var faviconResource: SiteResource?
-    var trackingId: Int
-    var title: String
 }

@@ -4,14 +4,7 @@
 
 import UIKit
 import Shared
-
-public protocol Identifiable: Equatable {
-    var id: Int? { get set }
-}
-
-public func == <T> (lhs: T, rhs: T) -> Bool where T: Identifiable {
-    return lhs.id == rhs.id
-}
+import SiteImageView
 
 // TODO: Site shouldn't have all of these optional decorators. Include those in the
 // cursor results, perhaps as a tuple.
@@ -28,25 +21,70 @@ open class Site: Identifiable {
         return URL(string: url, invalidCharacters: false)?.host?.components(separatedBy: ".").suffix(2).first
     }
 
+    public var faviconImageCacheKey: String {
+        return tileURL.shortDomain ?? tileURL.shortDisplayString
+    }
+    private var storage: Storage {
+        return Storage(resource: faviconResource, title: title, id: id, guid: guid, url: url)
+    }
+
     public let url: String
     public let title: String
+    public let faviconResource: SiteResource?
     open var metadata: PageMetadata?
     open var latestVisit: Visit?
     open fileprivate(set) var bookmarked: Bool?
 
-    public convenience init(url: String, title: String) {
-        self.init(url: url, title: title, bookmarked: false, guid: nil)
+    private struct Storage: Codable {
+        let resource: SiteResource?
+        let title: String
+        let id: Int?
+        let guid: String?
+        let url: String
     }
 
-    public init(url: String, title: String, bookmarked: Bool?, guid: String? = nil) {
+    private init(from storage: Storage) {
+        self.faviconResource = storage.resource
+        self.title = storage.title
+        self.url = storage.url
+        self.id = storage.id
+        self.guid = storage.guid
+    }
+
+    public convenience init(url: String, title: String) {
+        self.init(url: url, title: title, bookmarked: false, guid: nil, faviconResource: nil)
+    }
+
+    public init(url: String,
+                title: String,
+                bookmarked: Bool?,
+                guid: String? = nil,
+                faviconResource: SiteResource? = nil) {
         self.url = url
         self.title = title
         self.bookmarked = bookmarked
         self.guid = guid
+        self.faviconResource = faviconResource
     }
 
     open func setBookmarked(_ bookmarked: Bool) {
         self.bookmarked = bookmarked
+    }
+
+    // MARK: - Encode & Decode
+
+    public static func encode(with encoder: JSONEncoder, data: [Site]) throws -> Data {
+        let storage = data.map { site in
+            return site.storage
+        }
+        return try encoder.encode(storage)
+    }
+
+    public static func decode(from decoder: JSONDecoder, data: Data) throws -> [Site] {
+        let storage = try decoder.decode([Storage].self, from: data)
+        return storage.map {
+            return Site(from: $0)
+        }
     }
 }
 

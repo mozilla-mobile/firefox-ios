@@ -4,6 +4,9 @@
 
 import Foundation
 import WidgetKit
+import Shared
+import Common
+import Storage
 
 protocol TopSitesWidget {
     /// Write top sites to widgetkit
@@ -13,9 +16,12 @@ protocol TopSitesWidget {
 
 class TopSitesWidgetManager: TopSitesWidget {
     private let topSitesProvider: TopSitesProvider
+    private let userDefaults: UserDefaultsInterface
 
-    init(topSitesProvider: TopSitesProvider) {
+    init(topSitesProvider: TopSitesProvider,
+         userDefaults: UserDefaultsInterface = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier) ?? .standard) {
         self.topSitesProvider = topSitesProvider
+        self.userDefaults = userDefaults
     }
 
     @available(iOS 14.0, *)
@@ -23,19 +29,17 @@ class TopSitesWidgetManager: TopSitesWidget {
         topSitesProvider.getTopSites { sites in
             guard let sites = sites else { return }
 
-            var widgetkitTopSites = [WidgetKitTopSiteModel]()
-            sites.forEach { site in
-                let imageKey = site.tileURL.baseDomain ?? ""
-                if let webUrl = URL(string: site.url, invalidCharacters: false) {
-                    widgetkitTopSites.append(WidgetKitTopSiteModel(title: site.title,
-                                                                   url: webUrl,
-                                                                   imageKey: imageKey))
-                }
-            }
             // save top sites for widgetkit use
-            WidgetKitTopSiteModel.save(widgetKitTopSites: widgetkitTopSites)
+            self.save(topSites: sites)
             // Update widget timeline
             WidgetCenter.shared.reloadAllTimelines()
         }
+    }
+
+    private func save(topSites: [Site]) {
+        userDefaults.removeObject(forKey: PrefsKeys.WidgetKitSimpleTopTab)
+
+        guard let encodedData = try? Site.encode(with: JSONEncoder(), data: topSites) else { return }
+        userDefaults.set(encodedData, forKey: PrefsKeys.WidgetKitSimpleTopTab)
     }
 }

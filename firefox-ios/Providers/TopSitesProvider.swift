@@ -71,7 +71,7 @@ class TopSitesProviderImplementation: TopSitesProvider {
     }
 
     func defaultTopSites(_ prefs: Prefs) -> [Site] {
-        let suggested = SuggestedSites.asArray()
+        let suggested = DefaultSuggestedSites.defaultSites()
         let deleted = prefs.arrayForKey(defaultSuggestedSitesKey) as? [String] ?? []
         return suggested.filter({ deleted.firstIndex(of: $0.url) == .none })
     }

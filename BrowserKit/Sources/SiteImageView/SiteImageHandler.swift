@@ -14,7 +14,6 @@ public protocol SiteImageHandler {
 public class DefaultSiteImageHandler: SiteImageHandler {
     private let urlHandler: FaviconURLHandler
     private let imageHandler: ImageHandler
-    private let bundleFaviconsProvider: BundleFaviconProvider
 
     /// Right now, multiple `SiteImageView`s each have their own `DefaultSiteImageHandler`. Ideally they'd all share a
     /// reference to the same `DefaultSiteImageHandler` so we could properly queue and throttle requests to get favicon
@@ -27,11 +26,9 @@ public class DefaultSiteImageHandler: SiteImageHandler {
     }
 
     init(urlHandler: FaviconURLHandler = DefaultFaviconURLHandler(),
-         imageHandler: ImageHandler = DefaultImageHandler(),
-         bundleFaviconProvider: BundleFaviconProvider = DefaultBundleFaviconProvider()) {
+         imageHandler: ImageHandler = DefaultImageHandler()) {
         self.urlHandler = urlHandler
         self.imageHandler = imageHandler
-        self.bundleFaviconsProvider = bundleFaviconProvider
     }
 
     public func getImage(model: SiteImageModel) async -> UIImage {
