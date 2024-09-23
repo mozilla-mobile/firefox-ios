@@ -5,7 +5,7 @@
 import UIKit
 import Common
 
-class ReaderPanelEmptyStateView: UIView {
+final class ReaderPanelEmptyStateView: UIView {
     let windowUUID: WindowUUID
     let themeManager: Common.ThemeManager
 
