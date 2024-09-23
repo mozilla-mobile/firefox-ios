@@ -5,7 +5,7 @@
 import UIKit
 import Common
 
-struct ReadingListPanelUX {
+private struct ReadingListPanelUX {
     // Welcome Screen
     static let WelcomeScreenPadding: CGFloat = 15
     static let WelcomeScreenHorizontalMinPadding: CGFloat = 40
