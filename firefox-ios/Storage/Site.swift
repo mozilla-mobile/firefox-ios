@@ -34,7 +34,7 @@ open class Site: Identifiable {
     open var metadata: PageMetadata?
     open var latestVisit: Visit?
     open fileprivate(set) var bookmarked: Bool?
-
+    // Created since to avoid making Sites Codable which involes making also PageMetadata and Visit Codable too
     private struct Storage: Codable {
         let resource: SiteResource?
         let title: String

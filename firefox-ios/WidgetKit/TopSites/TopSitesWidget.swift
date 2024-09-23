@@ -5,7 +5,6 @@
 import SwiftUI
 import WidgetKit
 import Combine
-import Storage
 
 struct TopSitesWidget: Widget {
     private let kind: String = "Top Sites"
