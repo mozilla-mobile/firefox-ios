@@ -37,24 +37,22 @@ export let FormLikeFactory = {
   },
 
   /**
-   * Create a FormLike object from an HTMLHtmlElement that is the root of the document
+   * Create a FormLike object from an element that is the root of the document
    *
    * Currently all <input> not in a <form> are one LoginForm but this
    * shouldn't be relied upon as the heuristics may change to detect multiple
    * "forms" (e.g. registration and login) on one page with a <form>.
    *
-   * @param {HTMLHtmlElement} aDocumentRoot
+   * @param {HTMLElement} aDocumentRoot
    * @param {Object} aOptions
    * @param {boolean} [aOptions.ignoreForm = false]
    *        True to always use owner document as the `form`
-   * @return {FormLike}
-   * @throws Error if aDocumentRoot isn't an HTMLHtmlElement
+   * @return {formLike}
+   * @throws Error if aDocumentRoot is null
    */
   createFromDocumentRoot(aDocumentRoot, aOptions = {}) {
-    if (!HTMLHtmlElement.isInstance(aDocumentRoot)) {
-      throw new Error(
-        "createFromDocumentRoot: aDocumentRoot must be an HTMLHtmlElement"
-      );
+    if (!aDocumentRoot) {
+      throw new Error("createFromDocumentRoot: aDocumentRoot is null");
     }
 
     let formLike = {

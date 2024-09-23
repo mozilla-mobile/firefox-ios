@@ -48,7 +48,8 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.show(.newTab)
+                            actionType: MainMenuActionType.show,
+                            navigationDestination: .newTab
                         )
                     )
                 }
@@ -65,7 +66,8 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.show(.newPrivateTab)
+                            actionType: MainMenuActionType.show,
+                            navigationDestination: .newPrivateTab
                         )
                     )
                 }
@@ -112,7 +114,8 @@ struct MainMenuConfigurationUtility: Equatable {
                         store.dispatch(
                             MainMenuAction(
                                 windowUUID: uuid,
-                                actionType: MainMenuActionType.show(.findInPage)
+                                actionType: MainMenuActionType.show,
+                                navigationDestination: .findInPage
                             )
                         )
                     }
@@ -129,10 +132,9 @@ struct MainMenuConfigurationUtility: Equatable {
                         store.dispatch(
                             MainMenuAction(
                                 windowUUID: uuid,
-                                actionType: MainMenuActionType.show(
-                                    .detailsView(with: getToolsSubmenu(with: uuid),
-                                                 title: .MainMenu.ToolsSection.Tools)
-                                )
+                                actionType: MainMenuActionType.show,
+                                navigationDestination: .detailsView(with: getToolsSubmenu(with: uuid),
+                                                                    title: .MainMenu.ToolsSection.Tools)
                             )
                         )
                     }
@@ -149,10 +151,9 @@ struct MainMenuConfigurationUtility: Equatable {
                         store.dispatch(
                             MainMenuAction(
                                 windowUUID: uuid,
-                                actionType: MainMenuActionType.show(
-                                    .detailsView(with: getSaveSubmenu(with: uuid),
-                                                 title: .MainMenu.ToolsSection.Save)
-                                )
+                                actionType: MainMenuActionType.show,
+                                navigationDestination: .detailsView(with: getSaveSubmenu(with: uuid),
+                                                                    title: .MainMenu.ToolsSection.Save)
                             )
                         )
                     }
@@ -404,7 +405,8 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.show(.bookmarks)
+                            actionType: MainMenuActionType.show,
+                            navigationDestination: .bookmarks
                         )
                     )
                 }
@@ -421,7 +423,8 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.show(.history)
+                            actionType: MainMenuActionType.show,
+                            navigationDestination: .history
                         )
                     )
                 }
@@ -438,7 +441,8 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.show(.downloads)
+                            actionType: MainMenuActionType.show,
+                            navigationDestination: .downloads
                         )
                     )
                 }
@@ -455,7 +459,8 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.show(.passwords)
+                            actionType: MainMenuActionType.show,
+                            navigationDestination: .passwords
                         )
                     )
                 }
@@ -481,7 +486,8 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.show(.customizeHomepage)
+                            actionType: MainMenuActionType.show,
+                            navigationDestination: .customizeHomepage
                         )
                     )
                 }
@@ -501,7 +507,8 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.show(.goToURL(SupportUtils.URLForWhatsNew))
+                            actionType: MainMenuActionType.show,
+                            navigationDestination: .goToURL(SupportUtils.URLForWhatsNew)
                         )
                     )
                 }
@@ -521,7 +528,8 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.show(.goToURL(SupportUtils.URLForGetHelp))
+                            actionType: MainMenuActionType.show,
+                            navigationDestination: .goToURL(SupportUtils.URLForGetHelp)
                         )
                     )
                 }
@@ -538,7 +546,8 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.show(.settings)
+                            actionType: MainMenuActionType.show,
+                            navigationDestination: .settings
                         )
                     )
                 }
