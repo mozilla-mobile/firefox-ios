@@ -412,7 +412,8 @@ class HomepageViewController:
         // Only dispatch action when user is in edit mode to avoid having the toolbar re-displayed
         if featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly),
            let toolbarState,
-           toolbarState.addressToolbar.isEditing {
+           toolbarState.addressToolbar.isEditing,
+           isUserInteraction {
             // When the user scrolls the homepage we cancel edit mode
             // On a website we just dismiss the keyboard
             if toolbarState.addressToolbar.url == nil {
