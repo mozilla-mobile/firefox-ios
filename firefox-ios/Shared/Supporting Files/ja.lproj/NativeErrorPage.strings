@@ -4,3 +4,12 @@
 /* On error page, this is the description for generic error. */
 "NativeErrorPage.GenericError.Description.v131" = "SSL エラーが発生したため、サーバーへの安全な接続を確立できません。";
 
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v131" = "気を付けてください。何か問題が起こっています。";
+
+/* On error page, this is the description for no internet connection. */
+"NativeErrorPage.NoInternetConnection.Description.v131" = "別の端末で接続してみてください。モデムまたはルーターを確認してください。Wi-Fi を一旦切断して再接続してください。";
+
+/* On error page, this is the title for no internet connection */
+"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "インターネット接続に問題があるようです。";
+
