@@ -25,7 +25,8 @@ final class MainMenuDetailsViewControllerTests: XCTestCase {
     func testMainMenuDetailsViewController_simpleCreation_hasNoLeaks() {
         let controller = MainMenuDetailViewController(
             windowUUID: windowUUID,
-            with: [MenuSection(options: [])]
+            with: [MenuSection(options: [])],
+            title: ""
         )
         trackForMemoryLeaks(controller)
     }
