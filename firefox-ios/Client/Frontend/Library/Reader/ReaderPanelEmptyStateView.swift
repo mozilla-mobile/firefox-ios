@@ -56,15 +56,13 @@ final class ReaderPanelEmptyStateView: UIView {
         imageView.tintColor = self.currentTheme().colors.textSecondary
     }
 
-    private lazy var emptyStateViewWrapper: UIView = {
-        return .build { view in
-            view.addSubviews(self.welcomeLabel,
-                             self.readerModeLabel,
-                             self.readerModeImageView,
-                             self.readingListLabel,
-                             self.readingListImageView)
-        }
-    }()
+    private lazy var emptyStateViewWrapper: UIView = .build { view in
+        view.addSubviews(self.welcomeLabel,
+                         self.readerModeLabel,
+                         self.readerModeImageView,
+                         self.readingListLabel,
+                         self.readingListImageView)
+    }
 
     init(
         windowUUID: WindowUUID,
