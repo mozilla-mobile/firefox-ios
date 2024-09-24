@@ -1,5 +1,16 @@
 #!/bin/sh
 
+echo "Starting Swiftlint Check..."
+swiftlint --strict
+RESULT=$?
+
+if [ $RESULT -ne 0 ]; then
+    echo "Violations found. Please fix the issues before pushing."
+    exit 1
+else 
+    echo "🎉  Hooray. No violation. You may proceed."
+fi
+
 # get the URL of a remote
 get_remote_url() {
   remote_name=$1
