@@ -67,14 +67,24 @@ struct MainMenuDetailsState: ScreenState, Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
-
+        
         switch action.actionType {
         case MainMenuDetailsActionType.viewDidLoad:
+            guard let menuState = store.state.screenState(
+                MainMenuState.self,
+                for: .mainMenu,
+                window: action.windowUUID),
+                  let currentTabInfo = menuState.currentTabInfo
+            else { return state }
+            
             return MainMenuDetailsState(
                 windowUUID: state.windowUUID,
                 submenuType: state.submenuType,
-                menuElements: state.menuElements,
-                currentTabInfo: state.currentTabInfo
+                menuElements: state.menuConfigurator.getSubmenuFor(
+                    type: .tools,
+                    with: action.windowUUID
+                ),
+                currentTabInfo: currentTabInfo
             )
         case MainMenuActionType.updateCurrentTabInfo:
             guard let action = action as? MainMenuAction else { return state }

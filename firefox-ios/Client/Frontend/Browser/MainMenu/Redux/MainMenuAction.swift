@@ -7,19 +7,6 @@ import Foundation
 import MenuKit
 import Redux
 
-struct MenuNavigationDestination: Equatable {
-    let destination: MainMenuNavigationDestination
-    let urlToVisit: URL?
-
-    init(
-        _ destination: MainMenuNavigationDestination,
-        urlToVisit: URL? = nil
-    ) {
-        self.destination = destination
-        self.urlToVisit = urlToVisit
-    }
-}
-
 final class MainMenuAction: Action {
     var navigationDestination: MenuNavigationDestination?
     var currentTabInfo: MainMenuTabInfo?
@@ -28,42 +15,23 @@ final class MainMenuAction: Action {
         windowUUID: WindowUUID,
         actionType: any ActionType,
         navigationDestination: MenuNavigationDestination? = nil,
-        urlToVisit: URL? = nil,
         currentTabInfo: MainMenuTabInfo? = nil
     ) {
         self.navigationDestination = navigationDestination
+        self.currentTabInfo = currentTabInfo
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
-}
-
-enum MainMenuDetailsViewType {
-    case tools
-    case save
 }
 
 enum MainMenuActionType: ActionType {
     case closeMenu
     case mainMenuDidAppear
-    case show
-    case openDetailsViewTo(MainMenuDetailsViewType, title: String)
+    case navigate
     case toggleNightMode
     case toggleUserAgent
     case updateCurrentTabInfo
     case viewDidLoad
     case viewWillDisappear
-}
-
-enum MainMenuNavigationDestination: Equatable {
-    case bookmarks
-    case customizeHomepage
-    case downloads
-    case findInPage
-    case goToURL
-    case history
-    case newTab
-    case newPrivateTab
-    case passwords
-    case settings
 }
 
 enum MainMenuMiddlewareActionType: ActionType {

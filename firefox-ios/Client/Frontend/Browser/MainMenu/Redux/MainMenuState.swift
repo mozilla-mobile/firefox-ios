@@ -17,6 +17,7 @@ struct MainMenuTabInfo: Equatable {
 struct MainMenuState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     var menuElements: [MenuSection]
+
     var shouldDismiss: Bool
     var shouldShowDetailsView: Bool
 
@@ -74,6 +75,7 @@ struct MainMenuState: ScreenState, Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
+        guard let action = action as? MainMenuAction else { return state }
 
         switch action.actionType {
         case MainMenuActionType.viewDidLoad:
@@ -83,8 +85,6 @@ struct MainMenuState: ScreenState, Equatable {
                 currentTabInfo: state.currentTabInfo
             )
         case MainMenuActionType.updateCurrentTabInfo:
-            guard let action = action as? MainMenuAction else { return state }
-
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuConfigurator.generateMenuElements(
@@ -93,20 +93,12 @@ struct MainMenuState: ScreenState, Equatable {
                 ),
                 currentTabInfo: action.currentTabInfo
             )
-        case MainMenuActionType.openDetailsViewTo(let submenuType, let title):
+        case MainMenuActionType.navigate:
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
                 currentTabInfo: state.currentTabInfo,
-                shouldShowDetailsView: true
-            )
-        case MainMenuActionType.show:
-            guard let menuAction = action as? MainMenuAction else { return state }
-            return MainMenuState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                currentTabInfo: state.currentTabInfo,
-                navigationDestination: menuAction.navigationDestination
+                navigationDestination: action.navigationDestination
             )
         case MainMenuActionType.toggleUserAgent,
             MainMenuActionType.closeMenu:

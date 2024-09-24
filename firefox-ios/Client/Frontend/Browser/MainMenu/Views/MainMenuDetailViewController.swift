@@ -26,7 +26,7 @@ class MainMenuDetailViewController: UIViewController,
     var currentWindowUUID: UUID? { return windowUUID }
     var submenuState: MainMenuDetailsState
 
-    var submenuTitle: String
+    private var submenuTitle: String
     private var submenuType: MainMenuDetailsViewType
 
     // MARK: - Initializers

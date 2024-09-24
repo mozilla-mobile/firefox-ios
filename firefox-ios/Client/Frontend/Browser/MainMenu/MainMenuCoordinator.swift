@@ -58,6 +58,12 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
                 self.navigationHandler?.showLibraryPanel(.bookmarks)
             case .customizeHomepage:
                 self.navigationHandler?.showSettings(at: .homePage)
+            case .details:
+                guard let submenu = destination.submenu else { return }
+                typealias Titles = String.MainMenu.ToolsSection
+                let title = submenu == .tools ? Titles.Tools : Titles.Save
+
+                showDetailViewController(for: submenu, title: title)
             case .downloads:
                 self.navigationHandler?.showLibraryPanel(.downloads)
             case .findInPage:
