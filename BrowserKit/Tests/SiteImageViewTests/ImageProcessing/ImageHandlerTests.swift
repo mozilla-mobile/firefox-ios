@@ -100,7 +100,7 @@ final class ImageHandlerTests: XCTestCase {
         XCTAssertEqual(letterImageGenerator.generateLetterImageCalled, 0)
     }
 
-    func testFavicon_whenSiteResourceIsBundle_returnsBundleImage() async {
+    func testFavicon_whenSiteResourceIsInBundle_returnsBundleImage() async {
         let siteURL = URL(string: "https://www.facebook.com")!
         let subject = createSubject()
         let resource: SiteResource = .bundleAsset(name: "facebook", forRemoteResource: siteURL)

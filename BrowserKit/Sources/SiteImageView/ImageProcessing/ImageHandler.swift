@@ -54,13 +54,11 @@ class DefaultImageHandler: ImageHandler {
     func fetchFavicon(imageModel: SiteImageModel) async -> UIImage {
         do {
             if case let .bundleAsset(assetName, _) = imageModel.siteResource {
-                // Try to load the image from the App bundle otherwise fallback to the package bundle
-                let mainBundleImage = try? getBundleImage(assetName: assetName, bundle: .main)
-                return try mainBundleImage ?? getBundleImage(assetName: assetName, bundle: .module)
+                return try getBundleImage(assetName: assetName)
             }
 
-            // The default images are stored with the cache key as name, try to load it from package bundle
-            if let image = try? getBundleImage(assetName: imageModel.cacheKey, bundle: .module) {
+            // The default images are stored with the cache key as name, try to load it from bundle
+            if let image = try? getBundleImage(assetName: imageModel.cacheKey) {
                 return image
             }
 
@@ -138,16 +136,20 @@ class DefaultImageHandler: ImageHandler {
         }
     }
 
-    private func getBundleImage(assetName: String, bundle: Bundle) throws -> UIImage {
-        guard let image = UIImage(named: assetName, in: bundle, with: nil) else {
-            logger.log(
-                "Could not get image from bundle",
-                level: .warning,
-                category: .images,
-                extra: ["assetName": assetName]
-            )
-            throw SiteImageError.noImageInBundle
+    private func getBundleImage(assetName: String) throws -> UIImage {
+        // try to load it first from main app bundle then fallback on package one
+        if let image = UIImage(named: assetName, in: .main, with: nil) {
+            return image
         }
-        return image
+        if let image = UIImage(named: assetName, in: .module, with: nil) {
+            return image
+        }
+        logger.log(
+            "Could not get image from bundle",
+            level: .warning,
+            category: .images,
+            extra: ["assetName": assetName]
+        )
+        throw SiteImageError.noImageInBundle
     }
 }
