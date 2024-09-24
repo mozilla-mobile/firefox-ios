@@ -6116,9 +6116,9 @@ extension String {
 // MARK: - Tab Tray v1
 extension String {
     public static let TabTrayToggleAccessibilityLabel = MZLocalizedString(
-        key: "Private Mode",
+        key: "PrivateBrowsing.Toggle.A11y.Label.v132",
         tableName: "PrivateBrowsing",
-        value: nil,
+        value: "Private browsing",
         comment: "Accessibility label for toggling on/off private mode")
     public static let TabTrayToggleAccessibilityHint = MZLocalizedString(
         key: "Turns private mode on or off",
@@ -7135,6 +7135,13 @@ extension String {
                 tableName: "Microsurvey",
                 value: "Selected",
                 comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label that states whether the survey option was selected.")
+        }
+        struct v132 {
+            public static let TabTrayToggleAccessibilityLabel = MZLocalizedString(
+                key: "Private Mode",
+                tableName: "PrivateBrowsing",
+                value: nil,
+                comment: "Accessibility label for toggling on/off private mode")
         }
     }
 }
