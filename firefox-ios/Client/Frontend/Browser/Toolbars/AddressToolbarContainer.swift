@@ -287,11 +287,6 @@ final class AddressToolbarContainer: UIView,
     func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool) {
         enterOverlayMode(nil, pasted: false, search: false)
 
-        guard let windowUUID else { return }
-
-        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didStartEditingUrl)
-        store.dispatch(action)
-
         if shouldShowSuggestions {
             delegate?.openSuggestions(searchTerm: searchTerm)
         }
