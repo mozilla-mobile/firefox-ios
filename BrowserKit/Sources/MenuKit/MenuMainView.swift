@@ -6,7 +6,7 @@ import Common
 import UIKit
 
 public final class MenuMainView: UIView,
-                                 MenuTableViewDataDelegate {
+                                 MenuTableViewDataDelegate, ThemeApplicable {
     // MARK: - UI Elements
     private var tableView: MenuTableView = .build()
     private var accountHeaderView: MenuAccountHeaderView = .build()
@@ -25,7 +25,6 @@ public final class MenuMainView: UIView,
 
     // MARK: - UI Setup
     private func setupView() {
-        backgroundColor = .clear
         self.addSubview(accountHeaderView)
         self.addSubview(tableView)
 
@@ -45,5 +44,12 @@ public final class MenuMainView: UIView,
     // MARK: - Interface
     public func reloadTableView(with data: [MenuSection]) {
         tableView.reloadTableView(with: data)
+    }
+
+    // MARK: - ThemeApplicable
+    public func applyTheme(theme: Theme) {
+        backgroundColor = .clear
+        tableView.applyTheme(theme: theme)
+        accountHeaderView.applyTheme(theme: theme)
     }
 }

@@ -21,20 +21,25 @@ class ScreenshotHelper {
     }
 
     /// Takes a screenshot of the WebView to be displayed on the tab view page
-    /**
-     If taking a screenshot of the home page, uses our custom screenshot `UIView` extension function
-     If taking a screenshot of a website, uses apple's `takeSnapshot` function
-     */
+    /// If taking a screenshot of the home page, uses our custom screenshot `UIView` extension function
+    /// If taking a screenshot of a website, uses apple's `takeSnapshot` function
     func takeScreenshot(_ tab: Tab) {
-        guard let webView = tab.webView, let url = tab.url else {
+        guard let webView = tab.webView else {
             logger.log("Tab Snapshot Error",
                        level: .debug,
                        category: .tabs,
                        description: "Tab webView or url is nil")
             return
         }
-        // Handle home page snapshots, can not use Apple API snapshot function for this
-        if InternalURL(url)?.isAboutHomeURL ?? false {
+        /// Handle home page snapshots, can not use Apple API snapshot function for this
+        guard let browserVC = controller else {
+            return
+        }
+
+        /// Added condition for native error page. Instead of checking url,
+        /// we check the ContentContainer.
+        if browserVC.contentContainer.hasHomepage || browserVC.contentContainer.hasPrivateHomepage
+            || browserVC.contentContainer.hasNativeErrorPage {
             if let homeview = controller?.contentContainer.contentView {
                 let screenshot = homeview.screenshot(quality: UIConstants.ActiveScreenshotQuality)
                 tab.hasHomeScreenshot = true

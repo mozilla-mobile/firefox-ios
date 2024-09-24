@@ -9,6 +9,7 @@ public struct MenuElement: Equatable {
     let iconName: String
     let isEnabled: Bool
     let isActive: Bool
+    let hasSubmenu: Bool
     let a11yLabel: String
     let a11yHint: String?
     let a11yId: String
@@ -21,6 +22,7 @@ public struct MenuElement: Equatable {
         iconName: String,
         isEnabled: Bool,
         isActive: Bool,
+        hasSubmenu: Bool = false,
         a11yLabel: String,
         a11yHint: String?,
         a11yId: String,
@@ -30,6 +32,7 @@ public struct MenuElement: Equatable {
         self.iconName = iconName
         self.isEnabled = isEnabled
         self.isActive = isActive
+        self.hasSubmenu = hasSubmenu
         self.a11yLabel = a11yLabel
         self.a11yHint = a11yHint
         self.a11yId = a11yId
@@ -41,6 +44,7 @@ public struct MenuElement: Equatable {
         lhs.iconName == rhs.iconName &&
         lhs.isEnabled == rhs.isEnabled &&
         lhs.isActive == rhs.isActive &&
+        lhs.hasSubmenu == rhs.hasSubmenu &&
         lhs.a11yLabel == rhs.a11yLabel &&
         lhs.a11yHint == rhs.a11yHint &&
         lhs.a11yId == rhs.a11yId

@@ -12,12 +12,13 @@ class GeneralBrowserAction: Action {
     let toastType: ToastType?
     let showOverlay: Bool?
     let buttonTapped: UIButton?
-
+    let isNativeErrorPage: Bool?
     init(selectedTabURL: URL? = nil,
          isPrivateBrowsing: Bool? = nil,
          toastType: ToastType? = nil,
          showOverlay: Bool? = nil,
          buttonTapped: UIButton? = nil,
+         isNativeErrorPage: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.selectedTabURL = selectedTabURL
@@ -25,6 +26,7 @@ class GeneralBrowserAction: Action {
         self.toastType = toastType
         self.buttonTapped = buttonTapped
         self.showOverlay = showOverlay
+        self.isNativeErrorPage = isNativeErrorPage
         super.init(windowUUID: windowUUID,
                    actionType: actionType)
     }

@@ -315,7 +315,7 @@ export class FormAutofillHandler {
           element.value == element.defaultValue ||
           element.autofillState == FIELD_STATES.AUTO_FILLED
         ) {
-          this.fillFieldValue(element, value);
+          FormAutofillHandler.fillFieldValue(element, value);
           this.changeFieldState(fieldDetail, FIELD_STATES.AUTO_FILLED);
         }
       } else if (HTMLSelectElement.isInstance(element)) {
@@ -328,7 +328,7 @@ export class FormAutofillHandler {
         // Use case for multiple select is not considered here.
         if (!option.selected) {
           option.selected = true;
-          this.fillFieldValue(element, option.value);
+          FormAutofillHandler.fillFieldValue(element, option.value);
         }
         // Autofill highlight appears regardless if value is changed or not
         this.changeFieldState(fieldDetail, FIELD_STATES.AUTO_FILLED);
@@ -844,8 +844,13 @@ export class FormAutofillHandler {
     }
     return value;
   }
-
-  fillFieldValue(element, value) {
+  /**
+   * Fills the provided element with the specified value.
+   *
+   * @param {HTMLInputElement| HTMLSelectElement} element - The form field element to be filled.
+   * @param {string} value - The value to be filled into the form field.
+   */
+  static fillFieldValue(element, value) {
     if (FormAutofillUtils.focusOnAutofill) {
       element.focus({ preventScroll: true });
     }

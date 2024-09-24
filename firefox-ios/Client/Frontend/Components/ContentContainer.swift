@@ -36,6 +36,10 @@ class ContentContainer: UIView {
         return type == .webview
     }
 
+    var hasNativeErrorPage: Bool {
+        return type == .nativeErrorPage
+    }
+
     /// Determine if the content can be added, making sure we only add once
     /// - Parameters:
     ///   - viewController: The view controller to add to the container
@@ -75,9 +79,10 @@ class ContentContainer: UIView {
     // MARK: - Private
 
     private func removePreviousContent() {
-        // Only remove previous content when it's the homepage. We're not remving the webview controller for now
-        // since if it's not loaded, the webview doesn't layout it's WKCompositingView which result in black screen
-        guard hasHomepage || hasPrivateHomepage else { return }
+        // Only remove previous content when it's the homepage or native error page.
+        // We're not removing the webview controller for now since if it's not loaded, the
+        // webview doesn't layout it's WKCompositingView which result in black screen
+        guard hasHomepage || hasPrivateHomepage || hasNativeErrorPage else { return }
         contentController?.willMove(toParent: nil)
         contentController?.view.removeFromSuperview()
         contentController?.removeFromParent()

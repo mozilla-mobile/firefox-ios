@@ -50,6 +50,7 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
             )
 
             enhancedTrackingProtectionMenuVC = TrackingProtectionViewController(viewModel: etpViewModel,
+                                                                                profile: profile,
                                                                                 windowUUID: tabManager.windowUUID)
             enhancedTrackingProtectionMenuVC?.enhancedTrackingProtectionMenuDelegate = self
         } else {

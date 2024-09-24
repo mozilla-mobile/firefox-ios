@@ -237,10 +237,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
             scrollY: scrollOffset.y
         )
 
-        let needsAddressToolbarUpdate = toolbarState.addressToolbar.borderPosition != addressBorderPosition
-
-        guard needsAddressToolbarUpdate else { return }
-
         let toolbarAction = ToolbarAction(
             addressBorderPosition: addressBorderPosition,
             windowUUID: action.windowUUID,

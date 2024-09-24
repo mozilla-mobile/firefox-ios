@@ -414,8 +414,16 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
 
     private func didSelectTab(_ url: URL?) {
         tabsTelemetry.stopTabSwitchMeasurement()
+        let isNativeErrorPage = featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly)
+
+        // If app starts with error url, first homepage appears and
+        // then error page is loaded. To directly load error page
+        // isNativeErrorPage flag is added. If native error page flag enabled
+        // then isNativeErrorPage = true.
+
         let action = GeneralBrowserAction(selectedTabURL: url,
                                           isPrivateBrowsing: selectedTab?.isPrivate ?? false,
+                                          isNativeErrorPage: isNativeErrorPage,
                                           windowUUID: windowUUID,
                                           actionType: GeneralBrowserActionType.updateSelectedTab)
         store.dispatch(action)

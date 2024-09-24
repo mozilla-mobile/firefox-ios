@@ -54,6 +54,32 @@ final class BrowserViewControllerStateTests: XCTestCase {
         XCTAssertEqual(newState.displayView, .dataClearance)
     }
 
+    func testPrivateModeAction() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertEqual(initialState.browserViewType, .normalHomepage)
+
+        let action = getPrivateModeAction(isPrivate: true, for: .privateModeUpdated)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.browserViewType, .privateHomepage)
+    }
+
+    func testUpdateSelectedTabAction() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertEqual(initialState.browserViewType, .normalHomepage)
+
+        let action = getGeneralBrowserAction(selectedTabURL: URL(string: "internal://local/errorpage"),
+                                             isNativeErrorPage: true,
+                                             for: .updateSelectedTab)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.browserViewType, .nativeErrorPage)
+    }
+
     // MARK: - Private
     private func createSubject() -> BrowserViewControllerState {
         return BrowserViewControllerState(windowUUID: .XCTestDefaultUUID)
@@ -65,5 +91,18 @@ final class BrowserViewControllerStateTests: XCTestCase {
 
     private func getAction(for actionType: GeneralBrowserActionType) -> GeneralBrowserAction {
         return  GeneralBrowserAction(windowUUID: .XCTestDefaultUUID, actionType: actionType)
+    }
+
+    private func getPrivateModeAction(isPrivate: Bool, for actionType: PrivateModeActionType) -> PrivateModeAction {
+        return  PrivateModeAction(isPrivate: isPrivate, windowUUID: .XCTestDefaultUUID, actionType: actionType)
+    }
+
+    func getGeneralBrowserAction(selectedTabURL: URL? = nil,
+                                 isNativeErrorPage: Bool? = nil,
+                                 for actionType: GeneralBrowserActionType) -> GeneralBrowserAction {
+        return  GeneralBrowserAction(selectedTabURL: selectedTabURL,
+                                     isNativeErrorPage: isNativeErrorPage,
+                                     windowUUID: .XCTestDefaultUUID,
+                                     actionType: actionType)
     }
 }

@@ -200,6 +200,21 @@ extension String {
             }
         }
 
+        public struct MainMenu {
+            public struct NewMenu {
+                public static let Title = MZLocalizedString(
+                    key: "ContextualHints.MainMenu.NewMenu.Title.v132",
+                    tableName: "MainMenu",
+                    value: "New: streamlined menu",
+                    comment: "Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint.")
+                public static let Body = MZLocalizedString(
+                    key: "ContextualHints.MainMenu.NewMenu.Body.v132",
+                    tableName: "MainMenu",
+                    value: "Find what you need faster, from private browsing to save actions.",
+                    comment: "Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the body text for the hint.")
+            }
+        }
+
         public struct TabsTray {
             public struct InactiveTabs {
                 public static let Action = MZLocalizedString(
@@ -231,6 +246,11 @@ extension String {
                 tableName: "ToolbarLocation",
                 value: "Move the toolbar to the top if that’s more your style.",
                 comment: "Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the top.")
+            public static let NavigationButtonsBody = MZLocalizedString(
+                key: "ContextualHints.Toolbar.Navigation.Description.v132",
+                tableName: "ToolbarLocation",
+                value: "Tap and hold the arrows to jump between pages in this tab’s history.",
+                comment: "Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can press and hold either the back or forward web navigation buttons to quickly navigate their back/forward history")
         }
 
         public struct Shopping {
@@ -356,6 +376,12 @@ extension String {
                     key: "Addresses.Toast.AddressUpdatedConfirmation.v129",
                     tableName: "EditAddress",
                     value: "Address Information Updated",
+                    comment: "Toast message confirming that an address has been successfully updated."
+                )
+                 public static let AddressUpdatedConfirmationV2 = MZLocalizedString(
+                    key: "Addresses.Toast.AddressUpdatedConfirmation.v132.v2",
+                    tableName: "EditAddress",
+                    value: "Address Saved",
                     comment: "Toast message confirming that an address has been successfully updated."
                 )
                 public static let RemoveAddressTitle = MZLocalizedString(
@@ -4498,6 +4524,12 @@ extension String {
                 value: "Fingerprinters: %@",
                 comment: "Text to let users know how many fingerprinters were blocked on the current website. The placeholder will show the number of fingerprinters detected")
 
+            public static let analyticsTrackersBlockedLabel = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.Details.Trackers.Analytics.v132",
+                tableName: "EnhancedTrackingProtection",
+                value: "Tracking content: %@",
+                comment: "Text to let users know how many analytics trackers were blocked on the current website. The placeholder will show the number of such cookies detected")
+
             public static let connectionSecureLabel = MZLocalizedString(
                 key: "Menu.EnhancedTrackingProtection.Details.ConnectionSecure.v128",
                 tableName: "EnhancedTrackingProtection",
@@ -4635,6 +4667,12 @@ extension String {
                 tableName: "EnhancedTrackingProtection",
                 value: "DNS Name",
                 comment: "The title for the certificate subject alt names DNS name inside the certificate screen.")
+
+            public static let closeButtonAccessibilityLabel = MZLocalizedString(
+                key: "Menu.EnhancedTrackingProtection.CloseButton.AccessibilityLabel.v132",
+                tableName: "EnhancedTrackingProtection",
+                value: "Close privacy and security menu",
+                comment: "The accessibility label for the close button in the Enhanced Tracking protection menu.")
         }
     }
 }

@@ -6,9 +6,9 @@ import Foundation
 import MenuKit
 import Common
 import UIKit
+import ComponentLibrary
 
 class MainMenuDetailViewController: UIViewController,
-                                    MainMenuDetailNavigationHandler,
                                     MenuTableViewDataDelegate,
                                     Notifiable {
     // MARK: - UI/UX elements
@@ -23,11 +23,13 @@ class MainMenuDetailViewController: UIViewController,
     var currentWindowUUID: UUID? { return windowUUID }
 
     var submenuData: [MenuSection]
+    var submenuTitle: String
 
     // MARK: - Initializers
     init(
         windowUUID: WindowUUID,
         with data: [MenuSection],
+        title: String,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         themeManager: ThemeManager = AppContainer.shared.resolve()
     ) {
@@ -35,6 +37,7 @@ class MainMenuDetailViewController: UIViewController,
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         self.submenuData = data
+        self.submenuTitle = title
         super.init(nibName: nil, bundle: nil)
 
         setupNotifications(forObserver: self,
@@ -51,11 +54,28 @@ class MainMenuDetailViewController: UIViewController,
 
         setupView()
         setupTableView()
-        submenuContent.setupHeaderNavigation(from: self)
+        submenuContent.setViews(with: submenuTitle, and: .KeyboardShortcuts.Back)
+        submenuContent.detailHeaderView.backToMainMenuCallback = { [weak self] in
+            self?.coordinator?.dismissDetailViewController()
+        }
+        submenuContent.detailHeaderView.dismissMenuCallback = { [weak self] in
+            self?.coordinator?.dismissMenuModal(animated: true)
+        }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        applyTheme()
+    }
+
+    // MARK: - UX related
+    func applyTheme() {
+        let theme = themeManager.getCurrentTheme(for: windowUUID)
+        view.backgroundColor = theme.colors.layer3
+        submenuContent.applyTheme(theme: theme)
     }
 
     private func setupView() {
-        view.backgroundColor = .systemMint
         view.addSubview(submenuContent)
 
         NSLayoutConstraint.activate([
@@ -73,11 +93,6 @@ class MainMenuDetailViewController: UIViewController,
     // MARK: - TableViewDelegates
     func reloadTableView(with data: [MenuSection]) {
         submenuContent.reloadTableView(with: data)
-    }
-
-    // MARK: - MainMenuDetailNavigationHandler
-    func backToMainView() {
-        coordinator?.dismissDetailViewController()
     }
 
     // MARK: - Notifications

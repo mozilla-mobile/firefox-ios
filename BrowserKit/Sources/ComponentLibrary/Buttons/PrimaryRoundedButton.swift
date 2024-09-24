@@ -62,7 +62,6 @@ public class PrimaryRoundedButton: ResizableButton, ThemeApplicable {
             container.font = FXFontStyles.Bold.callout.scaledFont()
             return container
         }
-
         updatedConfiguration.imageColorTransformer = UIConfigurationColorTransformer { [weak self] color in
             if self?.state == .disabled {
                 return self?.foregroundColorDisabled ?? .white

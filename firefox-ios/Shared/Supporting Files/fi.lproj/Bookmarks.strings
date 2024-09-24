@@ -13,6 +13,9 @@
 /* When a bookmark is longpressed in the bookmarks menu, an `Edit Bookmark` button is present. */
 "Bookmarks.Menu.EditBookmark.v131" = "Muokkaa kirjanmerkkiä";
 
+/* When editing a bookmark, you can select the folder that the bookmark will be saved in. The label for this section of the view is `Save in`. */
+"Bookmarks.Menu.EditBookmarkSaveIn.v131" = "Tallenna kansioon";
+
 /* Label on the top of the `Edit Bookmarks` screen. */
 "Bookmarks.Menu.EditBookmarkTitle.v131" = "Muokkaa kirjanmerkkiä";
 

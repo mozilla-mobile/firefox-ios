@@ -30,65 +30,20 @@ struct CreditCardItemRow: View {
 
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
-            AdaptiveStack(horizontalAlignment: .leading,
-                          verticalAlignment: .center,
-                          spacing: isAccessibilityCategory ? 5 : 24,
-                          isAccessibilityCategory: isAccessibilityCategory) {
-                getImage(creditCard: item)
-                    .renderingMode(.original)
-                    .resizable()
-                    .frame(width: 48, height: 48)
-                    .aspectRatio(contentMode: .fit)
-
-                VStack(spacing: 0) {
-                    Text(item.ccName)
-                        .font(.body)
-                        .foregroundColor(titleTextColor)
-                        .frame(maxWidth: .infinity,
-                               alignment: .leading)
-
-                    AdaptiveStack(horizontalAlignment: .leading,
-                                  spacing: isAccessibilityCategory ? 0 : 5,
-                                  isAccessibilityCategory: isAccessibilityCategory) {
-                        Text(item.ccType)
-                            .font(.body)
-                            .foregroundColor(titleTextColor)
-                        Text(verbatim: "••••\(item.ccNumberLast4)")
-                            .font(.subheadline)
-                            .foregroundColor(subTextColor)
+            creditCardContent
+                .padding(.leading, 16)
+                .padding(.trailing, 16)
+                .padding(.top, 11)
+                .padding(.bottom, 11)
+                .background(isTapping ? backgroundHoverColor : backgroundColor)
+                .onTapGesture {
+                    isTapping = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        isTapping = false
+                        didSelectAction?()
                     }
-                    .frame(maxWidth: .infinity,
-                           alignment: .leading)
-                    .padding(.top, 3)
-                    .padding(.bottom, 3)
-
-                    AdaptiveStack(horizontalAlignment: .leading,
-                                  spacing: isAccessibilityCategory ? 0 : 5,
-                                  isAccessibilityCategory: isAccessibilityCategory) {
-                        Text(String.CreditCard.DisplayCard.ExpiresLabel)
-                            .font(.body)
-                            .foregroundColor(subTextColor)
-                        Text(verbatim: "\(item.ccExpMonth)/\(item.ccExpYear % 100)")
-                            .font(.subheadline)
-                            .foregroundColor(subTextColor)
-                    }
-                    .frame(maxWidth: .infinity,
-                           alignment: .leading)
                 }
-            }
-            .padding(.leading, 16)
-            .padding(.trailing, 16)
-            .padding(.top, 11)
-            .padding(.bottom, 11)
-            .background(isTapping ? backgroundHoverColor : backgroundColor)
-            .onTapGesture {
-                isTapping = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    isTapping = false
-                    didSelectAction?()
-                }
-            }
-            .accessibility(addTraits: .isButton)
+                .accessibility(addTraits: .isButton)
             Rectangle()
                 .fill(separatorColor)
                 .frame(maxWidth: .infinity)
@@ -117,6 +72,71 @@ struct CreditCardItemRow: View {
         }
 
         return Image(decorative: image)
+    }
+
+    private var creditCardContent: some View {
+        return AdaptiveStack(horizontalAlignment: .leading,
+                             verticalAlignment: .center,
+                             spacing: isAccessibilityCategory ? 5 : 24,
+                             isAccessibilityCategory: isAccessibilityCategory) {
+            getImage(creditCard: item)
+                .renderingMode(.original)
+                .resizable()
+                .frame(width: 48, height: 48)
+                .aspectRatio(contentMode: .fit)
+
+            creditCardData
+        }
+    }
+
+    private var creditCardData: some View {
+        return VStack(spacing: 0) {
+            creditCardName
+
+            creditCardNumber
+
+            creditCardExpiration
+        }
+    }
+
+    private var creditCardName: some View {
+        return Text(item.ccName)
+            .font(.body)
+            .foregroundColor(titleTextColor)
+            .frame(maxWidth: .infinity,
+                   alignment: .leading)
+    }
+
+    private var creditCardNumber: some View {
+        return AdaptiveStack(horizontalAlignment: .leading,
+                             spacing: isAccessibilityCategory ? 0 : 5,
+                             isAccessibilityCategory: isAccessibilityCategory) {
+            Text(item.ccType)
+                .font(.body)
+                .foregroundColor(titleTextColor)
+            Text(verbatim: "••••\(item.ccNumberLast4)")
+                .font(.subheadline)
+                .foregroundColor(subTextColor)
+        }
+        .frame(maxWidth: .infinity,
+               alignment: .leading)
+        .padding(.top, 3)
+        .padding(.bottom, 3)
+    }
+
+    private var creditCardExpiration: some View {
+        return AdaptiveStack(horizontalAlignment: .leading,
+                             spacing: isAccessibilityCategory ? 0 : 5,
+                             isAccessibilityCategory: isAccessibilityCategory) {
+            Text(String.CreditCard.DisplayCard.ExpiresLabel)
+                .font(.body)
+                .foregroundColor(subTextColor)
+            Text(verbatim: "\(item.ccExpMonth)/\(item.ccExpYear % 100)")
+                .font(.subheadline)
+                .foregroundColor(subTextColor)
+        }
+        .frame(maxWidth: .infinity,
+               alignment: .leading)
     }
 
     func applyTheme(theme: Theme) {

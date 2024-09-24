@@ -49,6 +49,7 @@ public struct StandardImageIdentifiers {
         public static let clipboard = "clipboardLarge"
         public static let cloud = "cloudLarge"
         public static let competitiveness = "competitivenessLarge"
+        public static let cookies = "cookiesLarge"
         public static let creditCard = "creditCardLarge"
         public static let criticalFill = "criticalFillLarge"
         public static let cross = "crossLarge"
@@ -61,6 +62,7 @@ public struct StandardImageIdentifiers {
         public static let deviceTablet = "deviceTabletLarge"
         public static let download = "downloadLarge"
         public static let edit = "editLarge"
+        public static let fingerprinter = "fingerprinterLarge"
         public static let folder = "folderLarge"
         public static let forward = "forwardLarge"
         public static let globe = "globeLarge"
@@ -89,6 +91,7 @@ public struct StandardImageIdentifiers {
         public static let plus = "plusLarge"
         public static let price = "priceLarge"
         public static let privateMode = "privateModeLarge"
+        public static let privateModeCircleFill = "privateModeCircleFillLarge"
         public static let qrCode = "qrCodeLarge"
         public static let quality = "qualityLarge"
         public static let readerView = "readerViewLarge"
@@ -102,6 +105,7 @@ public struct StandardImageIdentifiers {
         public static let shieldSlash = "shieldSlashLarge"
         public static let shipping = "shippingLarge"
         public static let shopping = "shoppingLarge"
+        public static let socialTracker = "socialMediaLarge"
         public static let subtract = "subtractLarge"
         public static let sync = "syncLarge"
         public static let syncTabs = "syncTabsLarge"
@@ -110,6 +114,11 @@ public struct StandardImageIdentifiers {
         public static let warning = "warningLarge"
         public static let warningFill = "warningFillLarge"
         public static let whatsNew = "whatsNewLarge"
+        public static let tools = "toolLarge"
+        public static let save = "saveLarge"
+        public static let print = "printLarge"
+        public static let addToHomeScreen = "addToHomescreenLarge"
+        public static let gridAdd = "gridAddLarge"
     }
 
     // Icon size 30x30

@@ -4,16 +4,17 @@
 
 import Common
 import UIKit
+import ComponentLibrary
 
 public final class MenuDetailView: UIView,
-                                   MenuTableViewDataDelegate {
+                                   MenuTableViewDataDelegate, ThemeApplicable {
     private struct UX {
         static let headerHeight: CGFloat = 70
     }
 
     // MARK: - UI Elements
     private var tableView: MenuTableView = .build()
-    private var detailHeaderView: MenuSubmenuHeaderView = .build()
+    public var detailHeaderView: NavigationHeaderView = .build()
 
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -27,7 +28,6 @@ public final class MenuDetailView: UIView,
 
     // MARK: - UI Setup
     private func setupView() {
-        backgroundColor = .clear
         addSubview(detailHeaderView)
         addSubview(tableView)
 
@@ -49,7 +49,14 @@ public final class MenuDetailView: UIView,
         tableView.reloadTableView(with: data)
     }
 
-    public func setupHeaderNavigation(from delegate: MainMenuDetailNavigationHandler) {
-        detailHeaderView.navigationDelegate = delegate
+    public func setViews(with title: String, and backButtonText: String) {
+        detailHeaderView.setViews(with: title, and: backButtonText)
+    }
+
+    // MARK: - Theme Applicable
+    public func applyTheme(theme: Theme) {
+        backgroundColor = .clear
+        tableView.applyTheme(theme: theme)
+        detailHeaderView.applyTheme(theme: theme)
     }
 }

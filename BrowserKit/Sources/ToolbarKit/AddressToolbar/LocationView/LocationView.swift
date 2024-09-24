@@ -172,7 +172,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
 
             iconContainerBackgroundView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
             iconContainerBackgroundView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor),
-            iconContainerBackgroundView.leadingAnchor.constraint(equalTo: urlTextField.leadingAnchor),
+            iconContainerBackgroundView.leadingAnchor.constraint(lessThanOrEqualTo: urlTextField.leadingAnchor),
             iconContainerBackgroundView.trailingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor),
 
             searchEngineImageView.heightAnchor.constraint(equalToConstant: UX.searchEngineImageViewSize.height),

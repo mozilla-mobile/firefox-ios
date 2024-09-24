@@ -10,7 +10,7 @@ import Common
 /// | navigation  | indicators | url       [ page    ] | browser  |
 /// |   actions   |            |           [ actions ] | actions  |
 /// +-------------+------------+-----------------------+----------+
-public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, LocationViewDelegate {
+public class BrowserAddressToolbar: UIView, Notifiable, AddressToolbar, ThemeApplicable, LocationViewDelegate {
     private enum UX {
         static let horizontalEdgeSpace: CGFloat = 16
         static let verticalEdgeSpace: CGFloat = 8
@@ -25,6 +25,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         static let locationMaxHeight: CGFloat = 54
     }
 
+    public var notificationCenter: any Common.NotificationProtocol = NotificationCenter.default
     private weak var toolbarDelegate: AddressToolbarDelegate?
     private var theme: Theme?
 
@@ -57,7 +58,7 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
     override init(frame: CGRect) {
         super.init(frame: .zero)
         setupLayout()
-        setupObservers()
+        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
         adjustHeightConstraintForA11ySizeCategory()
     }
 
@@ -187,21 +188,11 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         setupAccessibility()
     }
 
-    private func setupObservers() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(adjustHeightConstraintForA11ySizeCategory),
-            name: UIContentSizeCategory.didChangeNotification,
-            object: nil
-        )
-    }
-
     // MARK: - Accessibility
     private func setupAccessibility() {
         addInteraction(UILargeContentViewerInteraction())
     }
 
-    @objc
     private func adjustHeightConstraintForA11ySizeCategory() {
         let height = min(UIFontMetrics.default.scaledValue(for: UX.locationHeight), UX.locationMaxHeight)
         let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
@@ -255,8 +246,8 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
                 button.applyTheme(theme: theme)
             }
 
-            if toolbarElement.hasContextualHint == true {
-                toolbarDelegate?.configureContextualHint(self, for: button)
+            if let contextualHintType = toolbarElement.contextualHintType {
+                toolbarDelegate?.configureContextualHint(self, for: button, with: contextualHintType)
             }
         }
     }
@@ -287,6 +278,15 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         default:
             toolbarTopBorderHeightConstraint?.constant = 0
             toolbarBottomBorderHeightConstraint?.constant = 0
+        }
+    }
+
+    // MARK: - Notifiable
+    public func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIContentSizeCategory.didChangeNotification:
+            adjustHeightConstraintForA11ySizeCategory()
+        default: break
         }
     }
 

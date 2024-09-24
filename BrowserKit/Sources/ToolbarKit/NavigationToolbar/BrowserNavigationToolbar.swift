@@ -6,7 +6,7 @@ import UIKit
 import Common
 
 public protocol BrowserNavigationToolbarDelegate: AnyObject {
-    func configureContextualHint(for button: UIButton)
+    func configureContextualHint(for button: UIButton, with contextualHintType: String)
 }
 
 /// Navigation toolbar implementation.
@@ -86,8 +86,8 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
                 button.applyTheme(theme: theme)
             }
 
-            if toolbarElement.hasContextualHint == true {
-                toolbarDelegate?.configureContextualHint(for: button)
+            if let contextualHintType = toolbarElement.contextualHintType {
+                toolbarDelegate?.configureContextualHint(for: button, with: contextualHintType)
             }
         }
     }

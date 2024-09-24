@@ -62,7 +62,8 @@ final class MainMenuStateTests: XCTestCase {
                 initialState,
                 MainMenuAction(
                     windowUUID: .XCTestDefaultUUID,
-                    actionType: MainMenuActionType.show(destination)
+                    actionType: MainMenuActionType.show,
+                    navigationDestination: destination
                 )
             )
 

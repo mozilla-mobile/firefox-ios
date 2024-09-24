@@ -190,7 +190,7 @@ jobs:
         with:
           payload-file-path: ${{ env.browser }}/slack.json
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_URL: ${{ secrets.WEBHOOK_SLACK_TOKEN }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
           ios_simulator: ${{ matrix.ios_simulator }}
           pass_fail:  ${{ steps.passfail.outcome == 'success' && ':white_check_mark:' || ':x:' }}

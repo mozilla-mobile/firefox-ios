@@ -501,12 +501,55 @@ class NavigationTest: BaseTestCase {
         XCTAssertTrue(backButton.isEnabled, "Back button is disabled")
         backButton.tap()
         waitUntilPageLoad()
-        mozWaitForValueContains(app.textFields["url"], value: "test-example.html")
-        XCTAssertTrue(backButton.isHittable, "Back button is not hittable")
-        XCTAssertTrue(backButton.isEnabled, "Back button is disabled")
-        backButton.tap()
+        if #available(iOS 16, *) {
+            mozWaitForValueContains(app.textFields["url"], value: "test-example.html")
+            XCTAssertTrue(backButton.isHittable, "Back button is not hittable")
+            XCTAssertTrue(backButton.isEnabled, "Back button is disabled")
+            backButton.tap()
+            waitUntilPageLoad()
+            mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2721282
+    func testOpenExternalLink() {
+        // Disable "Block external links" toggle
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(SettingsScreen)
+        let switchBlockLinks = app.tables.cells.switches["blockOpeningExternalApps"]
+        scrollToElement(switchBlockLinks)
+        if let switchValue = switchBlockLinks.value as? String, switchValue == "1" {
+            switchBlockLinks.tap()
+        }
+        // Open website and tap on one of the external article links
+        validateExternalLink()
+        navigator.nowAt(NewTabScreen)
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        validateExternalLink(isPrivate: true)
+    }
+
+    private func validateExternalLink(isPrivate: Bool = false) {
+        navigator.openURL("ultimateqa.com/dummy-automation-websites")
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        scrollToElement(app.links["SauceDemo.com"])
+        app.links["SauceDemo.com"].tap(force: true)
+        waitUntilPageLoad()
+        // Sometimes first tap is not working on iPad
+        if iPad() {
+            if let urlTextField =  app.textFields["url"].value as? String,
+               urlTextField == "ultimateqa.com/dummy-automation-websites" {
+                app.links["SauceDemo.com"].tap(force: true)
+            }
+        }
+        let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
+        mozWaitForElementToExist(tabsButton)
+        if !isPrivate {
+            XCTAssertEqual(tabsButton.value as? String, "2")
+        } else {
+            // External link is opened in the same tab on private mode
+            // Change validation after https://github.com/mozilla-mobile/firefox-ios/issues/21773 is fixed
+            XCTAssertEqual(tabsButton.value as? String, "1")
+        }
     }
 
     private func openContextMenuForArticleLink() {
