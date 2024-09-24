@@ -76,6 +76,18 @@ class Tab: NSObject, ThemeApplicable {
         }
     }
 
+    var isNormal: Bool {
+        return !isPrivate
+    }
+
+    var isNormalActive: Bool {
+        return !isPrivate && isActive
+    }
+
+    var isNormalAndInactive: Bool {
+        return !isPrivate && isInactive
+    }
+
     /// The window associated with the tab (where the tab lives and will be displayed).
     /// Currently tabs cannot be actively moved between windows on iPadOS, however this
     /// may change in the future.
@@ -886,6 +898,23 @@ class Tab: NSObject, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         UITextField.appearance().keyboardAppearance = theme.type.keyboardAppearence(isPrivate: isPrivate)
+    }
+
+    // MARK: - Static Helpers
+
+    /// Returns true if the tabs both have the same type of private, normal active, and normal inactive.
+    /// Simply checks the `isPrivate` and `isActive` flags of both tabs.
+    func isSameTypeAs(_ otherTab: Tab) -> Bool {
+        switch (self.isPrivate, otherTab.isPrivate) {
+        case (true, true):
+            // Two private tabs are always lumped together in the same type regardless of their last execution time
+            return true
+        case (false, false):
+            // Two normal tabs are only the same type if they're both active, or both inactive
+            return self.isActive == otherTab.isActive
+        default:
+            return false
+        }
     }
 }
 
