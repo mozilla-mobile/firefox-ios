@@ -2548,9 +2548,13 @@ class BrowserViewController: UIViewController,
         }
 
         if webViewStatus == .finishedNavigation {
-            if tab !== tabManager.selectedTab,
-                let webView = tab.webView,
-                tab.screenshot == nil {
+            let isSelectedTab = (tab == tabManager.selectedTab)
+            if isSelectedTab && !isToolbarRefactorEnabled {
+                // Refresh secure content state after completed navigation
+                urlBar.locationView.hasSecureContent = webView.hasOnlySecureContent
+            }
+
+            if !isSelectedTab, let webView = tab.webView, tab.screenshot == nil {
                 // To Screenshot a tab that is hidden we must add the webView,
                 // then wait enough time for the webview to render.
                 webView.frame = contentContainer.frame
