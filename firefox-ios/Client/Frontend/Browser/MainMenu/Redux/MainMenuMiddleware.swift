@@ -20,8 +20,6 @@ final class MainMenuMiddleware {
         switch action.actionType {
         case MainMenuActionType.closeMenu:
             self.telemetry.mainMenuDismissed()
-        case MainMenuActionType.mainMenuDidAppear:
-            self.telemetry.mainMenuViewed()
         case MainMenuActionType.viewDidLoad:
             store.dispatch(
                 MainMenuAction(

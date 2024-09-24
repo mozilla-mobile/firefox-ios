@@ -36,7 +36,20 @@ struct MainMenuConfigurationUtility: Equatable {
         static let saveAsPDF = StandardImageIdentifiers.Large.folder
     }
 
-    func generateMenuElements(
+    public func generateMenuElements(
+        with configuration: MainMenuTabInfo?,
+        for viewType: MainMenuDetailsViewType?,
+        and uuid: WindowUUID
+    ) -> [MenuSection] {
+        switch viewType {
+        case .tools: return getToolsSubmenu(with: uuid)
+        case .save: return getSaveSubmenu(with: uuid)
+        default: return getMainMenuElements(with: uuid, andInfo: configuration)
+        }
+    }
+
+    // MARK: - Main Menu
+    private func getMainMenuElements(
         with uuid: WindowUUID,
         andInfo configuration: MainMenuTabInfo?
     ) -> [MenuSection] {
@@ -61,17 +74,6 @@ struct MainMenuConfigurationUtility: Equatable {
         return menuSections
     }
 
-    public func getSubmenuFor(
-        type: MainMenuDetailsViewType?,
-        with uuid: WindowUUID
-    ) -> [MenuSection] {
-        guard let type else { return [] }
-        switch type {
-        case .tools: return getToolsSubmenu(with: uuid)
-        case .save: return getSaveSubmenu(with: uuid)
-        }
-    }
-
     // MARK: - New Tabs Section
     private func getNewTabSection(with uuid: WindowUUID) -> MenuSection {
         return MenuSection(options: [
@@ -87,7 +89,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.navigate,
+                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(.newTab)
                         )
                     )
@@ -105,7 +107,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.navigate,
+                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(.newPrivateTab)
                         )
                     )
@@ -153,7 +155,7 @@ struct MainMenuConfigurationUtility: Equatable {
                         store.dispatch(
                             MainMenuAction(
                                 windowUUID: uuid,
-                                actionType: MainMenuActionType.navigate,
+                                actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
                                 navigationDestination: MenuNavigationDestination(.findInPage)
                             )
                         )
@@ -172,8 +174,8 @@ struct MainMenuConfigurationUtility: Equatable {
                         store.dispatch(
                             MainMenuAction(
                                 windowUUID: uuid,
-                                actionType: MainMenuActionType.navigate,
-                                navigationDestination: MenuNavigationDestination(.details, submenu: .save)
+                                actionType: MainMenuActionType.showDetailsView,
+                                changeMenuViewTo: .tools
                             )
                         )
                     }
@@ -191,8 +193,8 @@ struct MainMenuConfigurationUtility: Equatable {
                         store.dispatch(
                             MainMenuAction(
                                 windowUUID: uuid,
-                                actionType: MainMenuActionType.navigate,
-                                navigationDestination: MenuNavigationDestination(.details, submenu: .save)
+                                actionType: MainMenuActionType.showDetailsView,
+                                changeMenuViewTo: .save
                             )
                         )
                     }
@@ -445,7 +447,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.navigate,
+                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(.bookmarks)
                         )
                     )
@@ -463,7 +465,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.navigate,
+                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(.history)
                         )
                     )
@@ -481,7 +483,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.navigate,
+                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(.downloads)
                         )
                     )
@@ -499,7 +501,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.navigate,
+                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(.passwords)
                         )
                     )
@@ -526,7 +528,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.navigate,
+                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(.customizeHomepage)
                         )
                     )
@@ -547,7 +549,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.navigate,
+                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(
                                 .goToURL,
                                 urlToVisit: SupportUtils.URLForWhatsNew
@@ -571,7 +573,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.navigate,
+                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(
                                 .goToURL,
                                 urlToVisit: SupportUtils.URLForGetHelp
@@ -592,7 +594,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.navigate,
+                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(.settings)
                         )
                     )

@@ -33,9 +33,9 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         )
     }
 
-    func showDetailViewController(for submenuType: MainMenuDetailsViewType, title: String) {
+    func showDetailViewController() {
         router.push(
-            createMainMenuDetailViewController(with: submenuType, title: title),
+            createMainMenuDetailViewController(),
             animated: true
         )
     }
@@ -58,14 +58,6 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
                 self.navigationHandler?.showLibraryPanel(.bookmarks)
             case .customizeHomepage:
                 self.navigationHandler?.showSettings(at: .homePage)
-            case .details:
-                guard let submenu = destination.submenu else { return }
-                typealias Titles = String.MainMenu.ToolsSection
-                let title = submenu == .tools ? Titles.Tools : Titles.Save
-
-                showDetailViewController(for: submenu, title: title)
-                // in this case, we do not want to call the parent coordinator
-                return
             case .downloads:
                 self.navigationHandler?.showLibraryPanel(.downloads)
             case .findInPage:
@@ -95,11 +87,8 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         return mainMenuViewController
     }
 
-    private func createMainMenuDetailViewController(
-        with submenuType: MainMenuDetailsViewType,
-        title: String
-    ) -> MainMenuDetailViewController {
-        let detailVC = MainMenuDetailViewController(windowUUID: windowUUID, title: title, with: submenuType)
+    private func createMainMenuDetailViewController() -> MainMenuDetailViewController {
+        let detailVC = MainMenuDetailViewController(windowUUID: windowUUID)
         detailVC.coordinator = self
         return detailVC
     }

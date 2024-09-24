@@ -84,12 +84,6 @@ class MainMenuViewController: UIViewController,
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        store.dispatch(
-            MainMenuAction(
-                windowUUID: windowUUID,
-                actionType: MainMenuActionType.mainMenuDidAppear
-            )
-        )
         updateModalA11y()
     }
 
@@ -170,6 +164,11 @@ class MainMenuViewController: UIViewController,
 
     func newState(state: MainMenuState) {
         menuState = state
+
+        if menuState.currentSubmenuView != nil {
+            coordinator?.showDetailViewController()
+            return
+        }
 
         if let navigationDestination = menuState.navigationDestination {
             coordinator?.navigateTo(navigationDestination, animated: true)

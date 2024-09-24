@@ -10,11 +10,12 @@ import Redux
 struct MainMenuDetailsState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     var menuElements: [MenuSection]
-    var currentTabInfo: MainMenuTabInfo?
     var shouldDismiss: Bool
 
+//    typealias Titles = String.MainMenu.ToolsSection
+//    let title = submenuType == .tools ? Titles.Tools : Titles.Save
+
     var navigationDestination: MainMenuNavigationDestination?
-    var submenuType: MainMenuDetailsViewType?
 
     private let menuConfigurator = MainMenuConfigurationUtility()
 
@@ -30,9 +31,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
 
         self.init(
             windowUUID: currentState.windowUUID,
-            submenuType: currentState.submenuType,
             menuElements: currentState.menuElements,
-            currentTabInfo: currentState.currentTabInfo,
             navigationDestination: currentState.navigationDestination,
             shouldDismiss: currentState.shouldDismiss
         )
@@ -41,9 +40,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
-            submenuType: nil,
             menuElements: [],
-            currentTabInfo: nil,
             navigationDestination: nil,
             shouldDismiss: false
         )
@@ -51,74 +48,47 @@ struct MainMenuDetailsState: ScreenState, Equatable {
 
     private init(
         windowUUID: WindowUUID,
-        submenuType: MainMenuDetailsViewType?,
         menuElements: [MenuSection],
-        currentTabInfo: MainMenuTabInfo?,
         navigationDestination: MainMenuNavigationDestination? = nil,
         shouldDismiss: Bool = false
     ) {
         self.windowUUID = windowUUID
         self.menuElements = menuElements
-        self.currentTabInfo = currentTabInfo
         self.navigationDestination = navigationDestination
         self.shouldDismiss = shouldDismiss
-        self.submenuType = submenuType
     }
 
     static let reducer: Reducer<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
-        
+
         switch action.actionType {
         case MainMenuDetailsActionType.viewDidLoad:
             guard let menuState = store.state.screenState(
                 MainMenuState.self,
                 for: .mainMenu,
                 window: action.windowUUID),
-                  let currentTabInfo = menuState.currentTabInfo
+                  let currentTabInfo = menuState.currentTabInfo,
+                  let currentSubmenu = menuState.currentSubmenuView
             else { return state }
-            
-            return MainMenuDetailsState(
-                windowUUID: state.windowUUID,
-                submenuType: state.submenuType,
-                menuElements: state.menuConfigurator.getSubmenuFor(
-                    type: .tools,
-                    with: action.windowUUID
-                ),
-                currentTabInfo: currentTabInfo
-            )
-        case MainMenuActionType.updateCurrentTabInfo:
-            guard let action = action as? MainMenuAction else { return state }
 
             return MainMenuDetailsState(
                 windowUUID: state.windowUUID,
-                submenuType: state.submenuType,
-                menuElements: state.menuElements,
-                currentTabInfo: action.currentTabInfo
-            )
-        case MainMenuDetailsActionType.updateSubmenuType(let type):
-            return MainMenuDetailsState(
-                windowUUID: state.windowUUID,
-                submenuType: type,
-                menuElements: state.menuConfigurator.getSubmenuFor(
-                    type: type,
-                    with: state.windowUUID
-                ),
-                currentTabInfo: state.currentTabInfo
+                menuElements: state.menuConfigurator.generateMenuElements(
+                    with: currentTabInfo,
+                    for: currentSubmenu,
+                    and: action.windowUUID
+                )
             )
         case MainMenuDetailsActionType.dismissView:
             return MainMenuDetailsState(
                 windowUUID: state.windowUUID,
-                submenuType: state.submenuType,
                 menuElements: state.menuElements,
-                currentTabInfo: state.currentTabInfo,
                 shouldDismiss: true
             )
         default:
             return MainMenuDetailsState(
                 windowUUID: state.windowUUID,
-                submenuType: state.submenuType,
-                menuElements: state.menuElements,
-                currentTabInfo: state.currentTabInfo
+                menuElements: state.menuElements
             )
         }
     }

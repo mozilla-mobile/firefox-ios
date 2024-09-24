@@ -22,6 +22,7 @@ struct MainMenuState: ScreenState, Equatable {
 
     var navigationDestination: MenuNavigationDestination?
     var currentTabInfo: MainMenuTabInfo?
+    var currentSubmenuView: MainMenuDetailsViewType?
 
     private let menuConfigurator = MainMenuConfigurationUtility()
 
@@ -39,6 +40,7 @@ struct MainMenuState: ScreenState, Equatable {
             windowUUID: mainMenuState.windowUUID,
             menuElements: mainMenuState.menuElements,
             currentTabInfo: mainMenuState.currentTabInfo,
+            submenuDestination: mainMenuState.currentSubmenuView,
             navigationDestination: mainMenuState.navigationDestination,
             shouldDismiss: mainMenuState.shouldDismiss
         )
@@ -49,6 +51,7 @@ struct MainMenuState: ScreenState, Equatable {
             windowUUID: windowUUID,
             menuElements: [],
             currentTabInfo: nil,
+            submenuDestination: nil,
             navigationDestination: nil,
             shouldDismiss: false
         )
@@ -58,11 +61,13 @@ struct MainMenuState: ScreenState, Equatable {
         windowUUID: WindowUUID,
         menuElements: [MenuSection],
         currentTabInfo: MainMenuTabInfo?,
+        submenuDestination: MainMenuDetailsViewType? = nil,
         navigationDestination: MenuNavigationDestination? = nil,
         shouldDismiss: Bool = false
     ) {
         self.windowUUID = windowUUID
         self.menuElements = menuElements
+        self.currentSubmenuView = submenuDestination
         self.currentTabInfo = currentTabInfo
         self.navigationDestination = navigationDestination
         self.shouldDismiss = shouldDismiss
@@ -77,12 +82,20 @@ struct MainMenuState: ScreenState, Equatable {
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuConfigurator.generateMenuElements(
-                    with: state.windowUUID,
-                    andInfo: action.currentTabInfo
+                    with: action.currentTabInfo,
+                    for: state.currentSubmenuView,
+                    and: state.windowUUID
                 ),
                 currentTabInfo: action.currentTabInfo
             )
-        case MainMenuActionType.navigate:
+        case MainMenuActionType.showDetailsView:
+            return MainMenuState(
+                windowUUID: state.windowUUID,
+                menuElements: state.menuElements,
+                currentTabInfo: state.currentTabInfo,
+                submenuDestination: action.detailsViewToShow
+            )
+        case MainMenuActionType.closeMenuAndNavigateToDestination:
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,

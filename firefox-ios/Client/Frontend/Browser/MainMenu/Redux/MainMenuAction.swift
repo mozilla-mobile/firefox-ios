@@ -10,14 +10,17 @@ import Redux
 final class MainMenuAction: Action {
     var navigationDestination: MenuNavigationDestination?
     var currentTabInfo: MainMenuTabInfo?
+    var detailsViewToShow: MainMenuDetailsViewType?
 
     init(
         windowUUID: WindowUUID,
         actionType: any ActionType,
         navigationDestination: MenuNavigationDestination? = nil,
+        changeMenuViewTo: MainMenuDetailsViewType? = nil,
         currentTabInfo: MainMenuTabInfo? = nil
     ) {
         self.navigationDestination = navigationDestination
+        self.detailsViewToShow = changeMenuViewTo
         self.currentTabInfo = currentTabInfo
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
@@ -25,8 +28,8 @@ final class MainMenuAction: Action {
 
 enum MainMenuActionType: ActionType {
     case closeMenu
-    case mainMenuDidAppear
-    case navigate
+    case showDetailsView
+    case closeMenuAndNavigateToDestination
     case toggleUserAgent
     case updateCurrentTabInfo
     case viewDidLoad

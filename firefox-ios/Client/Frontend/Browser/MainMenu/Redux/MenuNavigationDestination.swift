@@ -25,15 +25,12 @@ enum MainMenuDetailsViewType {
 struct MenuNavigationDestination: Equatable {
     let destination: MainMenuNavigationDestination
     let urlToVisit: URL?
-    let submenu: MainMenuDetailsViewType?
 
     init(
         _ destination: MainMenuNavigationDestination,
-        urlToVisit: URL? = nil,
-        submenu: MainMenuDetailsViewType? = nil
+        urlToVisit: URL? = nil
     ) {
         self.destination = destination
         self.urlToVisit = urlToVisit
-        self.submenu = submenu
     }
 }
