@@ -741,7 +741,10 @@ extension BrowserViewController: WKNavigationDelegate {
                         actionType: ToolbarActionType.urlDidChange
                     )
                     store.dispatch(action)
-                    let middlewareAction = ToolbarMiddlewareAction(windowUUID: windowUUID, actionType: ToolbarMiddlewareActionType.urlDidChange)
+                    let middlewareAction = ToolbarMiddlewareAction(
+                        windowUUID: windowUUID,
+                        actionType: ToolbarMiddlewareActionType.urlDidChange
+                    )
                     store.dispatch(middlewareAction)
                 } else {
                     urlBar.currentURL = tab.url?.displayURL
