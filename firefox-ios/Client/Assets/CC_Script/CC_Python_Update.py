@@ -42,7 +42,7 @@ FILES_TO_DOWNLOAD = [
     "toolkit/modules/third_party/fathom/fathom.mjs",
     "toolkit/components/passwordmgr/shared/LoginFormFactory.sys.mjs",
     "toolkit/components/passwordmgr/shared/NewPasswordModel.sys.mjs",
-    "toolkit/components/passwordmgr/shared/PasswordGenerator.sys.mjs ",
+    "toolkit/components/passwordmgr/shared/PasswordGenerator.sys.mjs",
     "toolkit/components/passwordmgr/shared/PasswordRulesParser.sys.mjs",
     "toolkit/components/passwordmgr/LoginManager.shared.sys.mjs",
 ]

@@ -123,7 +123,7 @@ let package = Package(
             dependencies: ["ToolbarKit"]),
         .target(
             name: "MenuKit",
-            dependencies: ["Common"],
+            dependencies: ["Common", "ComponentLibrary"],
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "MenuKitTests",

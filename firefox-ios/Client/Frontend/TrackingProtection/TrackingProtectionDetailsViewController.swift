@@ -37,7 +37,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
         stackView.distribution = .fillProportionally
     }
 
-    private let headerView: TrackingProtectionNavigationHeaderView = .build { header in
+    private let headerView: NavigationHeaderView = .build { header in
         header.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.DetailsScreen.headerView
     }
     private let connectionView: TrackingProtectionStatusView = .build { view in
@@ -206,7 +206,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     }
 
     private func updateViewDetails() {
-        headerView.setTitle(with: model.topLevelDomain)
+        headerView.setViews(with: model.topLevelDomain, and: .KeyboardShortcuts.Back)
         connectionView.connectionStatusLabel.text = model.connectionStatusMessage
         if let certificate,
            let issuer = "\(certificate.issuer)".getDictionary()[CertificateKeys.commonName] {

@@ -10,6 +10,9 @@ let newTopSite = [
     "topSiteLabel": "Mozilla",
     "bookmarkLabel": "Internet for people, not profit — Mozilla (US)"
 ]
+let newTopSiteiOS15 = [
+    "bookmarkLabel": "Internet for people, not profit"
+]
 let allDefaultTopSites = ["Facebook", "YouTube", "Amazon", "Wikipedia", "X"]
 
 class ActivityStreamTest: BaseTestCase {
@@ -111,12 +114,24 @@ class ActivityStreamTest: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
         let topSitesCells = app.collectionViews.cells["TopSitesCell"]
-        waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
+        if #available(iOS 16, *) {
+            waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
+        } else {
+            waitForExistence(topSitesCells.staticTexts[newTopSiteiOS15["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
+        }
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
 
-        topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!].press(forDuration: 1)
+        if #available(iOS 16, *) {
+            topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!].press(forDuration: 1)
+        } else {
+            topSitesCells.staticTexts[newTopSiteiOS15["bookmarkLabel"]!].press(forDuration: 1)
+        }
         selectOptionFromContextMenu(option: "Pin")
-        waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
+        if #available(iOS 16, *) {
+            waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
+        } else {
+            waitForExistence(topSitesCells.staticTexts[newTopSiteiOS15["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
+        }
 
         waitForExistence(app.buttons["urlBar-cancel"])
         navigator.performAction(Action.CloseURLBarOpen)
@@ -125,7 +140,11 @@ class ActivityStreamTest: BaseTestCase {
         navigator.goto(ClearPrivateDataSettings)
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(HomePanelsScreen)
-        waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!])
+        if #available(iOS 16, *) {
+            waitForExistence(topSitesCells.staticTexts[newTopSite["bookmarkLabel"]!])
+        } else {
+            waitForExistence(topSitesCells.staticTexts[newTopSiteiOS15["bookmarkLabel"]!])
+        }
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
     }
 
@@ -144,6 +163,9 @@ class ActivityStreamTest: BaseTestCase {
         waitForExistence(allTopSites.element(boundBy: 0))
         allTopSites.element(boundBy: 0).press(forDuration: 1)
         selectOptionFromContextMenu(option: "Remove")
+        if #unavailable(iOS 16) {
+            mozWaitForElementToNotExist(app.staticTexts[topSiteFirstCell])
+        }
 
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 4)
 

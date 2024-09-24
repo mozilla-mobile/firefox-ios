@@ -8,7 +8,14 @@ import MenuKit
 import Redux
 
 final class MainMenuAction: Action {
-    override init(windowUUID: WindowUUID, actionType: any ActionType) {
+    var navigationDestination: MainMenuNavigationDestination?
+
+    init(
+        windowUUID: WindowUUID,
+        actionType: any ActionType,
+        navigationDestination: MainMenuNavigationDestination? = nil
+    ) {
+        self.navigationDestination = navigationDestination
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -19,14 +26,14 @@ enum MainMenuActionType: ActionType {
     case mainMenuDidAppear
     case toggleNightMode
     case closeMenu
-    case show(MainMenuNavigationDestination)
+    case show
     case toggleUserAgent
 }
 
 enum MainMenuNavigationDestination: Equatable {
     case bookmarks
     case customizeHomepage
-    case detailsView(with: [MenuSection])
+    case detailsView(with: [MenuSection], title: String)
     case downloads
     case findInPage
     case goToURL(URL?)

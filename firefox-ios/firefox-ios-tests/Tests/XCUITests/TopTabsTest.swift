@@ -467,6 +467,8 @@ class TopTabsTest: BaseTestCase {
         mozWaitForElementToExist(app.buttons["Undo"])
         mozWaitForElementToExist(app.staticTexts["Tab Closed"])
         app.buttons["Undo"].tap()
+        mozWaitForElementToNotExist(app.buttons["Undo"])
+        mozWaitForElementToNotExist(app.staticTexts["Tab Closed"])
         // The tab closed is restored
         mozWaitForElementToExist(tabsTrayCell.element(boundBy: 3))
         XCTAssertEqual(Int(numTab!), tabsTrayCell.count)

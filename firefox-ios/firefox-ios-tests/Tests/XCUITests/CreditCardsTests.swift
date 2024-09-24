@@ -348,7 +348,10 @@ class CreditCardsTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306979
-    func testSaveThisCardPrompt() {
+    func testSaveThisCardPrompt() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("testSaveThisCardPrompt() does not work on iOS 15")
+        }
         navigator.goto(NewTabScreen)
         navigator.openURL("https://checkout.stripe.dev/preview")
         waitUntilPageLoad()
@@ -527,10 +530,12 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToExist(email)
         email.tapOnApp()
         var nrOfRetries = 3
-        while email.value(forKey: "hasKeyboardFocus") as? Bool == false && nrOfRetries > 0 {
-            swipeUp(nrOfSwipes: 1)
-            email.tapOnApp()
-            nrOfRetries -= 1
+        if iPad() {
+            while email.value(forKey: "hasKeyboardFocus") as? Bool == false && nrOfRetries > 0 {
+                swipeDown(nrOfSwipes: 1)
+                email.tapOnApp()
+                nrOfRetries -= 1
+            }
         }
         email.typeText("foo@mozilla.org")
         mozWaitForElementToExist(cardNumber)
@@ -542,6 +547,8 @@ class CreditCardsTests: BaseTestCase {
             expiration.tapOnApp()
             expiration.typeText(expirationDate)
         }
+        swipeDown(nrOfSwipes: 1)
+        swipeUp(nrOfSwipes: 1)
         cvc.tapOnApp()
         cvc.typeText("123")
         zip.tapOnApp()

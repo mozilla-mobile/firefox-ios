@@ -52,7 +52,6 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
     var headerTopConstraint: Constraint?
 
     private var lastPanTranslation: CGFloat = 0
-    private var lastContentOffsetY: CGFloat = 0
     private var scrollDirection: ScrollDirection = .down
     var toolbarState: ToolbarState = .visible
 
@@ -456,10 +455,6 @@ extension TabScrollingController: UIGestureRecognizerDelegate {
 }
 
 extension TabScrollingController: UIScrollViewDelegate {
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        lastContentOffsetY = scrollView.contentOffset.y
-    }
-
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard !tabIsLoading(), !isBouncingAtBottom(), isAbleToScroll, let tab else { return }
 
@@ -482,15 +477,22 @@ extension TabScrollingController: UIScrollViewDelegate {
             setOffset(y: 0, for: scrollView)
         }
 
-        let scrolledToTop = lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0
-        let scrolledDown = lastContentOffsetY == 0 && scrollView.contentOffset.y > 0
+        let toolbarState = store.state.screenState(Client.ToolbarState.self, for: .toolbar, window: windowUUID)
 
-        if scrolledDown || scrolledToTop {
-            lastContentOffsetY = scrollView.contentOffset.y
-            let action = GeneralBrowserMiddlewareAction(scrollOffset: scrollView.contentOffset,
-                                                        windowUUID: windowUUID,
-                                                        actionType: GeneralBrowserMiddlewareActionType.websiteDidScroll)
-            store.dispatch(action)
+        guard let toolbarState,
+              let borderPosition = toolbarState.addressToolbar.borderPosition
+        else { return }
+
+        // Only dispatch the action to update the toolbar border if needed, which is only if either
+        // a) we scroll down, and the toolbar border is not already at the bottom (so we show it), or
+        // b) we scroll up past the top of the scroll view, and the border is currently at the bottom (so we hide it)
+        if (scrollView.contentOffset.y > 0 && borderPosition != .bottom)
+           || (scrollView.contentOffset.y < 0 && borderPosition != .none) {
+            store.dispatch(
+                GeneralBrowserMiddlewareAction(
+                    scrollOffset: scrollView.contentOffset,
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserMiddlewareActionType.websiteDidScroll))
         }
 
         guard isAnimatingToolbar else { return }
