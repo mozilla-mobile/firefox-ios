@@ -325,7 +325,7 @@ struct AddressBarState: StateType, Equatable {
                 lockIconImageName: state.lockIconImageName,
                 isEditing: true,
                 isScrollingDuringEdit: false,
-                shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+                shouldSelectSearchTerm: true,
                 isLoading: state.isLoading,
                 readerModeState: state.readerModeState
             )
@@ -344,7 +344,7 @@ struct AddressBarState: StateType, Equatable {
                 lockIconImageName: state.lockIconImageName,
                 isEditing: false,
                 isScrollingDuringEdit: false,
-                shouldSelectSearchTerm: false,
+                shouldSelectSearchTerm: true,
                 isLoading: state.isLoading,
                 readerModeState: state.readerModeState
             )
