@@ -323,6 +323,16 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
+    func testShowPasswordGenerator_presentsPasswordGeneratorBottomSheet() {
+        let subject = createSubject()
+        let mockTab = Tab(profile: profile, windowUUID: windowUUID)
+
+        subject.showPasswordGenerator(tab: mockTab)
+
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is BottomSheetViewController)
+    }
+
     // MARK: - ParentCoordinatorDelegate
 
     func testRemoveChildCoordinator_whenDidFinishCalled() {

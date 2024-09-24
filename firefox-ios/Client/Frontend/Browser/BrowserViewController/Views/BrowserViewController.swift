@@ -658,7 +658,9 @@ class BrowserViewController: UIViewController,
             handleMicrosurvey(state: state)
 
             if state.showPasswordGenerator {
-                navigationHandler?.showPasswordGenerator()
+                if let tab = tabManager.selectedTab {
+                    navigationHandler?.showPasswordGenerator(tab: tab)
+                }
             }
         }
     }

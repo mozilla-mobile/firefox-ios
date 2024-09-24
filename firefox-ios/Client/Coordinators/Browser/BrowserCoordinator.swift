@@ -783,8 +783,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
 // MARK: - Password Generator
-    func showPasswordGenerator() {
-        guard let tab = tabManager.selectedTab else {return}
+    func showPasswordGenerator(tab: Tab) {
         let passwordGenVC = PasswordGeneratorViewController(windowUUID: windowUUID, currentTab: tab)
 
         let action = PasswordGeneratorAction(
