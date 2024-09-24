@@ -1636,14 +1636,11 @@ class BrowserViewController: UIViewController,
                   let bookmarkNode = bookmarkFolder.children?.first as? FxBookmarkNode
             else { return }
 
-            let detailController = BookmarkDetailPanel(profile: self.profile,
-                                                       windowUUID: self.windowUUID,
-                                                       bookmarkNode: bookmarkNode,
-                                                       parentBookmarkFolder: bookmarkFolder,
-                                                       presentedFromToast: true,
-                                                       deleteBookmark: { [weak self] in
-                self?.showBookmarkToast(action: .remove)
-            })
+            let detailController = LegacyBookmarkDetailPanel(profile: self.profile,
+                                                             windowUUID: self.windowUUID,
+                                                             bookmarkNode: bookmarkNode,
+                                                             parentBookmarkFolder: bookmarkFolder,
+                                                             presentedFromToast: true)
             let controller: DismissableNavigationViewController
             controller = DismissableNavigationViewController(rootViewController: detailController)
             self.present(controller, animated: true, completion: nil)

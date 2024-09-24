@@ -4,9 +4,9 @@
 
 import Foundation
 
-protocol BookmarksRefactorFeatureFlag {}
+protocol BookmarksRefactorFeatureFlagProvider {}
 
-extension BookmarksRefactorFeatureFlag {
+extension BookmarksRefactorFeatureFlagProvider {
     var isBookmarkRefactorEnabled: Bool {
         NimbusManager.shared.featureFlagLayer.checkNimbusConfigFor(.bookmarksRefactor)
     }

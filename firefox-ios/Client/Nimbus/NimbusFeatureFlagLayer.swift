@@ -15,7 +15,7 @@ final class NimbusFeatureFlagLayer {
 
         case .addressAutofillEdit:
             return checkAddressAutofillEditing(from: nimbus)
-            
+
         case .bookmarksRefactor:
             return checkBookmarksRefactor(from: nimbus)
 
@@ -115,7 +115,7 @@ final class NimbusFeatureFlagLayer {
     private func checkAccountSettingsRedux(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.accountSettingsReduxFeature.value().enabled
     }
-    
+
     private func checkBookmarksRefactor(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.bookmarkRefactorFeature.value().enabled
     }

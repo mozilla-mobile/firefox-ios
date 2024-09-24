@@ -20,9 +20,9 @@ let LocalizedRootBookmarkFolderStrings = [
     LocalDesktopFolder.localDesktopFolderGuid: String.Bookmarks.Menu.DesktopBookmarks
 ]
 
-class BookmarksPanel: SiteTableViewController,
-                      LibraryPanel,
-                      CanRemoveQuickActionBookmark {
+class LegacyBookmarksPanel: SiteTableViewController,
+                            LibraryPanel,
+                            CanRemoveQuickActionBookmark {
     struct UX {
         static let FolderIconSize = CGSize(width: 24, height: 24)
         static let RowFlashDelay: TimeInterval = 0.4
@@ -494,7 +494,7 @@ class BookmarksPanel: SiteTableViewController,
 
 // MARK: - LibraryPanelContextMenu
 
-extension BookmarksPanel: LibraryPanelContextMenu {
+extension LegacyBookmarksPanel: LibraryPanelContextMenu {
     func presentContextMenu(for site: Site,
                             with indexPath: IndexPath,
                             completionHandler: @escaping () -> PhotonActionSheet?) {
@@ -560,7 +560,7 @@ extension BookmarksPanel: LibraryPanelContextMenu {
 }
 
 // MARK: - Notifiable
-extension BookmarksPanel: Notifiable {
+extension LegacyBookmarksPanel: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .FirefoxAccountChanged:
@@ -572,7 +572,7 @@ extension BookmarksPanel: Notifiable {
 }
 
 // MARK: - Toolbar button actions
-extension BookmarksPanel {
+extension LegacyBookmarksPanel {
     func bottomLeftButtonAction() {
         if state == .bookmarks(state: .inFolderEditMode) {
             presentInFolderActions()
@@ -629,7 +629,7 @@ extension BookmarksPanel {
     }
 
     func handleItemEditMode() {
-        guard let bookmarkEditView = navigationController?.viewControllers.last as? BookmarkDetailPanel else { return }
+        guard let bookmarkEditView = navigationController?.viewControllers.last as? LegacyBookmarkDetailPanel else { return }
 
         updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
         bookmarkEditView.save().uponQueue(.main) { _ in

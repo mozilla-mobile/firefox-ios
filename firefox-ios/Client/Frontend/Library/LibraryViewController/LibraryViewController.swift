@@ -237,10 +237,10 @@ class LibraryViewController: UIViewController, Themeable {
 
         libraryPanel.view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            libraryPanel.view.topAnchor.constraint(equalTo: segmentControlToolbar.bottomAnchor),
-            libraryPanel.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            libraryPanel.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            libraryPanel.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            libraryPanel.view.topAnchor.constraint(equalTo: controllerContainerView.topAnchor),
+            libraryPanel.view.leadingAnchor.constraint(equalTo: controllerContainerView.leadingAnchor),
+            libraryPanel.view.bottomAnchor.constraint(equalTo: controllerContainerView.bottomAnchor),
+            libraryPanel.view.trailingAnchor.constraint(equalTo: controllerContainerView.trailingAnchor)
         ])
         libraryPanel.didMove(toParent: self)
         updateTitle()
@@ -345,6 +345,13 @@ class LibraryViewController: UIViewController, Themeable {
 
         setNeedsStatusBarAppearanceUpdate()
         setupToolBarAppearance()
+    }
+
+    func setNavigationBarHidden(_ value: Bool) {
+        navigationController?.setNavigationBarHidden(value, animated: false)
+        let controlbarHeight = segmentControlToolbar.frame.height
+        segmentControlToolbar.transform = value ? .init(translationX: 0, y: -controlbarHeight) : .identity
+        controllerContainerView.transform = value ? .init(translationX: 0, y: -controlbarHeight) : .identity
     }
 }
 

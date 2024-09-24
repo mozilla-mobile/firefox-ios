@@ -38,7 +38,7 @@ extension BookmarksCoordinatorDelegate {
 
 class BookmarksCoordinator: BaseCoordinator,
                             BookmarksCoordinatorDelegate,
-                            BookmarksRefactorFeatureFlag {
+                            BookmarksRefactorFeatureFlagProvider {
     // MARK: - Properties
 
     private let profile: Profile
@@ -69,9 +69,12 @@ class BookmarksCoordinator: BaseCoordinator,
                                                 bookmarksHandler: profile.places,
                                                 bookmarkFolderGUID: folder.guid)
         if isBookmarkRefactorEnabled {
-            router.push(BookmarksViewController())
+            let controller = BookmarksViewController(viewModel: viewModel, windowUUID: windowUUID)
+            controller.bookmarkCoordinatorDelegate = self
+            controller.libraryPanelDelegate = parentCoordinator
+            router.push(controller)
         } else {
-            let controller = BookmarksPanel(viewModel: viewModel, windowUUID: windowUUID)
+            let controller = LegacyBookmarksPanel(viewModel: viewModel, windowUUID: windowUUID)
             controller.bookmarkCoordinatorDelegate = self
             controller.libraryPanelDelegate = parentCoordinator
             router.push(controller)
@@ -80,14 +83,22 @@ class BookmarksCoordinator: BaseCoordinator,
 
     func showBookmarkDetail(for node: FxBookmarkNode, folder: FxBookmarkNode, completion: (() -> Void)? = nil) {
         TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .bookmarksPanel)
-        let detailController = BookmarkDetailPanel(profile: profile,
-                                                   windowUUID: windowUUID,
-                                                   bookmarkNode: node,
-                                                   parentBookmarkFolder: folder,
-                                                   deleteBookmark: {
-            completion?()
-        })
-        router.push(detailController)
+        if isBookmarkRefactorEnabled {
+            navigationHandler?.setNavigationBarHidden(true)
+            let detailController = EditBookmarkViewController(node: node,
+                                                              parentFolder: folder,
+                                                              windowUUID: windowUUID)
+            detailController.onViewDisappear = { [weak self] in
+                self?.navigationHandler?.setNavigationBarHidden(false)
+            }
+            router.push(detailController)
+        } else {
+            let detailController = LegacyBookmarkDetailPanel(profile: profile,
+                                                             windowUUID: windowUUID,
+                                                             bookmarkNode: node,
+                                                             parentBookmarkFolder: folder)
+            router.push(detailController)
+        }
     }
 
     func showBookmarkDetail(
@@ -95,7 +106,7 @@ class BookmarksCoordinator: BaseCoordinator,
         parentBookmarkFolder: FxBookmarkNode,
         updatePanelState: ((LibraryPanelSubState) -> Void)? = nil
     ) {
-        let detailController = BookmarkDetailPanel(
+        let detailController = LegacyBookmarkDetailPanel(
             profile: profile,
             windowUUID: windowUUID,
             withNewBookmarkNodeType: bookmarkType,
