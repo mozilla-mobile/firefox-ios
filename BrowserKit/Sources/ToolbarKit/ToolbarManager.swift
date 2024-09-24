@@ -14,6 +14,7 @@ public protocol ToolbarManager {
     /// Determines which border should be displayed for the address toolbar
     func getAddressBorderPosition(for toolbarPosition: AddressToolbarPosition,
                                   isPrivate: Bool,
+                                  isWebPage: Bool,
                                   scrollY: CGFloat) -> AddressToolbarBorderPosition
 
     /// Determines whether a border on top of the navigation toolbar should be displayed
@@ -25,15 +26,17 @@ public class DefaultToolbarManager: ToolbarManager {
 
     public func getAddressBorderPosition(for toolbarPosition: AddressToolbarPosition,
                                          isPrivate: Bool,
+                                         isWebPage: Bool,
                                          scrollY: CGFloat) -> AddressToolbarBorderPosition {
         // display the top border if
         // - the toolbar is displayed at the bottom
         // display the bottom border if
-        // - the toolbar is displayed at the top and the website was scrolled
+        // - the toolbar is displayed at the top and page is scrolled (applies to homepage)
+        // - the toolbar is displayed at the top and we are on a webpage
         // - the toolbar is displayed at the top and we are in private mode
         if toolbarPosition == .bottom {
             return .top
-        } else if toolbarPosition == .top && (scrollY > 0 || isPrivate) {
+        } else if toolbarPosition == .top && (scrollY > 0 || isWebPage || isPrivate) {
             return .bottom
         } else {
             return .none
