@@ -6,7 +6,7 @@ import UIKit
 import Common
 
 final class ReaderPanelEmptyStateView: UIView {
-    private struct ReadingListPanelUX {
+    private struct UX {
         // Welcome Screen
         static let WelcomeScreenPadding: CGFloat = 15
         static let WelcomeScreenHorizontalMinPadding: CGFloat = 40
@@ -16,7 +16,7 @@ final class ReaderPanelEmptyStateView: UIView {
 
         static let WelcomeScreenTopPadding: CGFloat = 120
     }
-    
+
     let windowUUID: WindowUUID
     let themeManager: Common.ThemeManager
 
@@ -87,7 +87,7 @@ final class ReaderPanelEmptyStateView: UIView {
     }
 
     private func setupConstraints() {
-        let imageScaledWidth = UIFontMetrics.default.scaledValue(for: ReadingListPanelUX.WelcomeScreenItemImageWidth)
+        let imageScaledWidth = UIFontMetrics.default.scaledValue(for: UX.WelcomeScreenItemImageWidth)
         NSLayoutConstraint.activate(
             [
                 // title
@@ -98,12 +98,12 @@ final class ReaderPanelEmptyStateView: UIView {
                 // first row
                 readerModeLabel.topAnchor.constraint(
                     equalTo: welcomeLabel.bottomAnchor,
-                    constant: ReadingListPanelUX.WelcomeScreenPadding
+                    constant: UX.WelcomeScreenPadding
                 ),
                 readerModeLabel.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor),
                 readerModeLabel.trailingAnchor.constraint(
                     equalTo: readerModeImageView.leadingAnchor,
-                    constant: -ReadingListPanelUX.WelcomeScreenPadding
+                    constant: -UX.WelcomeScreenPadding
                 ),
 
                 readerModeImageView.centerYAnchor.constraint(equalTo: readerModeLabel.centerYAnchor),
@@ -115,12 +115,12 @@ final class ReaderPanelEmptyStateView: UIView {
                 // second row
                 readingListLabel.topAnchor.constraint(
                     equalTo: readerModeLabel.bottomAnchor,
-                    constant: ReadingListPanelUX.WelcomeScreenPadding
+                    constant: UX.WelcomeScreenPadding
                 ),
                 readingListLabel.leadingAnchor.constraint(equalTo: welcomeLabel.leadingAnchor),
                 readingListLabel.trailingAnchor.constraint(
                     equalTo: readingListImageView.leadingAnchor,
-                    constant: -ReadingListPanelUX.WelcomeScreenPadding
+                    constant: -UX.WelcomeScreenPadding
                 ),
 
                 readingListImageView.centerYAnchor.constraint(equalTo: readingListLabel.centerYAnchor),
@@ -136,20 +136,20 @@ final class ReaderPanelEmptyStateView: UIView {
                 // overall positioning of emptyStateViewWrapper
                 emptyStateViewWrapper.leadingAnchor.constraint(
                     greaterThanOrEqualTo: leadingAnchor,
-                    constant: ReadingListPanelUX.WelcomeScreenHorizontalMinPadding
+                    constant: UX.WelcomeScreenHorizontalMinPadding
                 ),
                 emptyStateViewWrapper.trailingAnchor.constraint(
                     lessThanOrEqualTo: trailingAnchor,
-                    constant: -ReadingListPanelUX.WelcomeScreenHorizontalMinPadding
+                    constant: -UX.WelcomeScreenHorizontalMinPadding
                 ),
                 emptyStateViewWrapper.widthAnchor.constraint(
-                    lessThanOrEqualToConstant: ReadingListPanelUX.WelcomeScreenMaxWidth
+                    lessThanOrEqualToConstant: UX.WelcomeScreenMaxWidth
                 ),
 
                 emptyStateViewWrapper.centerXAnchor.constraint(equalTo: centerXAnchor),
                 emptyStateViewWrapper.topAnchor.constraint(
                     equalTo: topAnchor,
-                    constant: ReadingListPanelUX.WelcomeScreenTopPadding
+                    constant: UX.WelcomeScreenTopPadding
                 ),
                 emptyStateViewWrapper.bottomAnchor.constraint(equalTo: bottomAnchor)
             ]
