@@ -180,12 +180,6 @@ final class AddressToolbarContainer: UIView,
                                      leadingSpace: calculateToolbarSpace(isLeading: true),
                                      trailingSpace: calculateToolbarSpace(isLeading: false))
 
-            // Dismiss overlay mode when not editing to fix overlay mode staying open
-            // on iPad when switching tabs using top tabs
-            if !toolbarState.addressToolbar.isEditing {
-                leaveOverlayMode(reason: .cancelled, shouldCancelLoading: false)
-            }
-
             // the layout (compact/regular) that should be displayed is driven by the state
             // but we only need to switch toolbars if shouldDisplayCompact changes
             // otherwise we needlessly add/remove toolbars from the view hierarchy,
