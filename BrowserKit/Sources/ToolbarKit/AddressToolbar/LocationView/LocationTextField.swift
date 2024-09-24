@@ -256,6 +256,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
 
     public func textFieldDidEndEditing(_ textField: UITextField) {
         lastReplacement = nil
+        textField.selectedTextRange = nil
         autocompleteDelegate?.locationTextFieldDidEndEditing(self)
     }
 
