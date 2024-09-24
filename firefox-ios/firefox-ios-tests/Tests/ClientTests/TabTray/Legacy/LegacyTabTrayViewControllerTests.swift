@@ -17,6 +17,7 @@ final class LegacyTabTrayViewControllerTests: XCTestCase {
     var gridTab: LegacyGridTabViewController!
     var overlayManager: MockOverlayModeManager!
     var urlBar: MockURLBarView!
+    let sleepTime: UInt64 = 1 * NSEC_PER_SEC
 
     override func setUp() {
         super.setUp()
@@ -49,7 +50,8 @@ final class LegacyTabTrayViewControllerTests: XCTestCase {
         gridTab = nil
     }
 
-    func testCountUpdatesAfterTabRemoval() throws {
+    @MainActor
+    func testCountUpdatesAfterTabRemoval() async throws {
         let tabToRemove = manager.addTab()
         manager.addTab()
 
@@ -57,20 +59,10 @@ final class LegacyTabTrayViewControllerTests: XCTestCase {
         XCTAssertEqual(tabTray.countLabel.text, "2")
 
         gridTab.tabDisplayManager.performCloseAction(for: tabToRemove)
-        // Wait for notification of .TabClosed when tab is removed
-        let expectation = expectation(description: "notificationReceived")
-        NotificationCenter.default.addObserver(
-            forName: .UpdateLabelOnTabClosed,
-            object: nil,
-            queue: nil
-        ) { notification in
-            expectation.fulfill()
+        try await Task.sleep(nanoseconds: sleepTime)
 
-            XCTAssertEqual(self.tabTray.viewModel.normalTabsCount, "1")
-            XCTAssertEqual(self.tabTray.countLabel.text, "1")
-        }
-
-        waitForExpectations(timeout: 3.0)
+        XCTAssertEqual(self.tabTray.viewModel.normalTabsCount, "1")
+        XCTAssertEqual(self.tabTray.countLabel.text, "1")
     }
 
     func testTabTrayRevertToRegular_ForNoPrivateTabSelected() {

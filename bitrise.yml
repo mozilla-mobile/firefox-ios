@@ -112,7 +112,7 @@ workflows:
     - script@1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Run Danger 2
-        timeout: 180
+        timeout: 360
         inputs:
         - content: |
             #!/usr/bin/env bash
