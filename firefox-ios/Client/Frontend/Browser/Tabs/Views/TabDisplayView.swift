@@ -199,45 +199,35 @@ class TabDisplayView: UIView,
 
     func newState(state: TabsPanelState) {
         tabsState = state
+
         if state.didRefreshTabs {
             updateCollectionView(state: tabsState)
         }
-
 
         if let index = state.scrollToIndex {
             scrollToTab(index)
         }
 
         if state.didTapAddTab {
-//            animationQueue.addAnimation(for: collectionView) { [weak self] in
-//                guard let self else { return }
-
-                let action = TabPanelViewAction(panelType: self.panelType,
-                                                windowUUID: self.windowUUID,
-                                                actionType: TabPanelViewActionType.addNewTab)
-                store.dispatch(action)
-           // }
+            let action = TabPanelViewAction(panelType: self.panelType,
+                                            windowUUID: self.windowUUID,
+                                            actionType: TabPanelViewActionType.addNewTab)
+            store.dispatch(action)
         }
     }
 
     private func updateCollectionView(state: TabsPanelState) {
-
-        // Step 1: Retrieve the current snapshot
          guard let currentSnapshot = tabsListDataSource?.snapshot() else { return }
          var snapshot = NSDiffableDataSourceSnapshot<TabDisplaySection, SectionTabItem>()
 
-          // Add sections
           snapshot.appendSections([.tabs, .inactiveTabs])
 
-          // Add tabs to the snapshot
           let tabs = state.tabs.map { SectionTabItem.tab($0) }
           snapshot.appendItems(tabs, toSection: .tabs)
 
-          // Add inactive tabs to the snapshot
           let inactiveTabs = state.inactiveTabs.map { SectionTabItem.inactiveTab($0) }
           snapshot.appendItems(inactiveTabs, toSection: .inactiveTabs)
 
-          // Apply the snapshot to the diffable data source
         if !areSnapshotsEqual(currentSnapshot, snapshot) {
             tabsListDataSource?.apply(snapshot, animatingDifferences: false)
         }
@@ -260,7 +250,6 @@ class TabDisplayView: UIView,
                 return false
             }
         }
-
         return true
     }
 
