@@ -5,18 +5,18 @@
 import UIKit
 import Common
 
-private struct ReadingListPanelUX {
-    // Welcome Screen
-    static let WelcomeScreenPadding: CGFloat = 15
-    static let WelcomeScreenHorizontalMinPadding: CGFloat = 40
-
-    static let WelcomeScreenMaxWidth: CGFloat = 400
-    static let WelcomeScreenItemImageWidth: CGFloat = 20
-
-    static let WelcomeScreenTopPadding: CGFloat = 120
-}
-
 final class ReaderPanelEmptyStateView: UIView {
+    private struct ReadingListPanelUX {
+        // Welcome Screen
+        static let WelcomeScreenPadding: CGFloat = 15
+        static let WelcomeScreenHorizontalMinPadding: CGFloat = 40
+
+        static let WelcomeScreenMaxWidth: CGFloat = 400
+        static let WelcomeScreenItemImageWidth: CGFloat = 20
+
+        static let WelcomeScreenTopPadding: CGFloat = 120
+    }
+    
     let windowUUID: WindowUUID
     let themeManager: Common.ThemeManager
 
