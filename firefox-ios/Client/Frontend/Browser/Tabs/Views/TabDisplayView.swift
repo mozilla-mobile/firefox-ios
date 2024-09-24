@@ -223,7 +223,7 @@ class TabDisplayView: UIView,
     private func updateCollectionView(state: TabsPanelState) {
 
         // Step 1: Retrieve the current snapshot
-       // guard let currentSnapshot = tabsListDataSource?.snapshot() else { return }
+         guard let currentSnapshot = tabsListDataSource?.snapshot() else { return }
          var snapshot = NSDiffableDataSourceSnapshot<TabDisplaySection, SectionTabItem>()
 
           // Add sections
@@ -238,7 +238,30 @@ class TabDisplayView: UIView,
           snapshot.appendItems(inactiveTabs, toSection: .inactiveTabs)
 
           // Apply the snapshot to the diffable data source
-        tabsListDataSource?.apply(snapshot, animatingDifferences: true)
+        if !areSnapshotsEqual(currentSnapshot, snapshot) {
+            tabsListDataSource?.apply(snapshot, animatingDifferences: false)
+        }
+    }
+
+    func areSnapshotsEqual(_ snapshot1: NSDiffableDataSourceSnapshot<TabDisplaySection, SectionTabItem>,
+                           _ snapshot2: NSDiffableDataSourceSnapshot<TabDisplaySection, SectionTabItem>) -> Bool {
+
+        // Check if the sections are the same
+        if snapshot1.sectionIdentifiers != snapshot2.sectionIdentifiers {
+            return false
+        }
+
+        // Check if the items in each section are the same
+        for section in snapshot1.sectionIdentifiers {
+            let items1 = snapshot1.itemIdentifiers(inSection: section)
+            let items2 = snapshot2.itemIdentifiers(inSection: section)
+
+            if items1 != items2 {
+                return false
+            }
+        }
+
+        return true
     }
 
     private func scrollToTab(_ index: Int) {
@@ -431,13 +454,8 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
             else { return }
 
             coordinator.drop(dragItem, toItemAt: destinationIndexPath)
-            var currentSnapshot = tabsListDataSource?.snapshot()
-            currentSnapshot?.insertItems([firstItem], beforeItem: secondItem)
-            currentSnapshot?.deleteItems([secondItem])
-            tabsListDataSource?.apply(currentSnapshot!, animatingDifferences: true)
-            //           var snapshot = NSDiffableDataSourceSnapshot<TabDisplaySection, SectionTabItem>()
-//            snapshot.moveItem(firstItem, beforeItem: secondItem)
-//            tabsListDataSource?.apply(snapshot, animatingDifferences: true)
+
+            updateItemPosition(firstItem: firstItem, secondItem: secondItem)
 
         }
 
@@ -454,6 +472,34 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
         )
 
         store.dispatch(action)
+    }
+
+    func updateItemPosition(
+                            firstItem: TabDisplayView.SectionTabItem,
+                            secondItem: TabDisplayView.SectionTabItem) {
+        var snapshot = tabsListDataSource?.snapshot()
+
+        // Step 1: Retrieve the current order of items in the snapshot for the relevant section
+        let currentItems = snapshot!.itemIdentifiers(inSection: .tabs)  // Assuming a single section here
+
+        // Step 2: Find the indices of the section items in the snapshot
+        guard let firstItemIndex = currentItems.firstIndex(of: firstItem),
+              let secondItemIndex = currentItems.firstIndex(of: secondItem) else {
+            return // Indices not found, so nothing to move
+        }
+
+        // Step 3: Compare the positions of the items
+        if firstItemIndex < secondItemIndex {
+            // Move the first item to be after the second item
+            snapshot!.moveItem(firstItem, afterItem: secondItem)
+        } else if firstItemIndex > secondItemIndex {
+            // Move the first item to be before the second item
+            snapshot!.moveItem(firstItem, beforeItem: secondItem)
+        }
+
+        tabsListDataSource?.apply(snapshot!, animatingDifferences: false)
+
+        // No change needed if firstItemIndex == secondItemIndex
     }
 
     private func updateMovedItemsSnapshot(tempTabs: [TabModel]) {
