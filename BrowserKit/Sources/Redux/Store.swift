@@ -68,15 +68,14 @@ public class Store<State: StateType>: DefaultDispatchStore {
     }
 
     public func dispatch(_ action: Action) {
-        guard Thread.isMainThread && !actionRunning else {
-            DispatchQueue.main.async { [weak self] in self?.dispatch(action) }
-            return
-        }
-
         logger.log("Dispatched action: \(action.displayString())", level: .info, category: .redux)
 
-        actionRunning = true; defer { actionRunning = false }
+        DispatchQueue.main.async { [weak self] in
+            self?.executeAction(action)
+        }
+    }
 
+    private func executeAction(_ action: Action) {
         // Each active screen state is given an opportunity to be reduced using the dispatched action
         // (Note: this is true even if the action's UUID differs from the screen's window's UUID).
         // Typically, reducers should compare the action's UUID to the incoming state UUID and skip
