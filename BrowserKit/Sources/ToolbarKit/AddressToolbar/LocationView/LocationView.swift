@@ -280,10 +280,8 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         _ = shouldShowKeyboard ? becomeFirstResponder() : resignFirstResponder()
 
         // Start overlay mode & select text when in edit mode with a search term
-        if shouldShowKeyboard, state.shouldSelectSearchTerm {
-            DispatchQueue.main.async {
-                self.urlTextField.selectAll(nil)
-            }
+        if shouldShowKeyboard == true && state.shouldSelectSearchTerm == true {
+            urlTextField.selectAll(nil)
         }
     }
 
