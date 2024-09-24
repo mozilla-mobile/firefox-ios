@@ -64,6 +64,8 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
                 let title = submenu == .tools ? Titles.Tools : Titles.Save
 
                 showDetailViewController(for: submenu, title: title)
+                // in this case, we do not want to call the parent coordinator
+                return
             case .downloads:
                 self.navigationHandler?.showLibraryPanel(.downloads)
             case .findInPage:

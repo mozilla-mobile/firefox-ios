@@ -7,7 +7,6 @@ import Foundation
 enum MainMenuNavigationDestination: Equatable {
     case bookmarks
     case customizeHomepage
-    case details
     case downloads
     case findInPage
     case goToURL

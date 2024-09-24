@@ -27,11 +27,9 @@ enum MainMenuActionType: ActionType {
     case closeMenu
     case mainMenuDidAppear
     case navigate
-    case toggleNightMode
     case toggleUserAgent
     case updateCurrentTabInfo
     case viewDidLoad
-    case viewWillDisappear
 }
 
 enum MainMenuMiddlewareActionType: ActionType {

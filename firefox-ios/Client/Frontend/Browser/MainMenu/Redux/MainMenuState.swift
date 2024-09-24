@@ -19,7 +19,6 @@ struct MainMenuState: ScreenState, Equatable {
     var menuElements: [MenuSection]
 
     var shouldDismiss: Bool
-    var shouldShowDetailsView: Bool
 
     var navigationDestination: MenuNavigationDestination?
     var currentTabInfo: MainMenuTabInfo?
@@ -41,8 +40,7 @@ struct MainMenuState: ScreenState, Equatable {
             menuElements: mainMenuState.menuElements,
             currentTabInfo: mainMenuState.currentTabInfo,
             navigationDestination: mainMenuState.navigationDestination,
-            shouldDismiss: mainMenuState.shouldDismiss,
-            shouldShowDetailsView: mainMenuState.shouldShowDetailsView
+            shouldDismiss: mainMenuState.shouldDismiss
         )
     }
 
@@ -52,8 +50,7 @@ struct MainMenuState: ScreenState, Equatable {
             menuElements: [],
             currentTabInfo: nil,
             navigationDestination: nil,
-            shouldDismiss: false,
-            shouldShowDetailsView: false
+            shouldDismiss: false
         )
     }
 
@@ -62,15 +59,13 @@ struct MainMenuState: ScreenState, Equatable {
         menuElements: [MenuSection],
         currentTabInfo: MainMenuTabInfo?,
         navigationDestination: MenuNavigationDestination? = nil,
-        shouldDismiss: Bool = false,
-        shouldShowDetailsView: Bool = false
+        shouldDismiss: Bool = false
     ) {
         self.windowUUID = windowUUID
         self.menuElements = menuElements
         self.currentTabInfo = currentTabInfo
         self.navigationDestination = navigationDestination
         self.shouldDismiss = shouldDismiss
-        self.shouldShowDetailsView = shouldShowDetailsView
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -78,12 +73,6 @@ struct MainMenuState: ScreenState, Equatable {
         guard let action = action as? MainMenuAction else { return state }
 
         switch action.actionType {
-        case MainMenuActionType.viewDidLoad:
-            return MainMenuState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                currentTabInfo: state.currentTabInfo
-            )
         case MainMenuActionType.updateCurrentTabInfo:
             return MainMenuState(
                 windowUUID: state.windowUUID,

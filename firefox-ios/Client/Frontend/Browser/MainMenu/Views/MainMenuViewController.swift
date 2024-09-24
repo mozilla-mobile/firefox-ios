@@ -93,16 +93,6 @@ class MainMenuViewController: UIViewController,
         updateModalA11y()
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        store.dispatch(
-            MainMenuAction(
-                windowUUID: windowUUID,
-                actionType: MainMenuActionType.viewWillDisappear
-            )
-        )
-    }
-
     deinit {
         unsubscribeFromRedux()
     }
@@ -153,10 +143,13 @@ class MainMenuViewController: UIViewController,
 
     // MARK: - Redux
     func subscribeToRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.showScreen,
-                                  screen: .mainMenu)
-        store.dispatch(action)
+        store.dispatch(
+            ScreenAction(
+                windowUUID: windowUUID,
+                actionType: ScreenActionType.showScreen,
+                screen: .mainMenu
+            )
+        )
         let uuid = windowUUID
         store.subscribe(self, transform: {
             return $0.select({ appState in
@@ -166,21 +159,17 @@ class MainMenuViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.closeScreen,
-                                  screen: .mainMenu)
-        store.dispatch(action)
+        store.dispatch(
+            ScreenAction(
+                windowUUID: windowUUID,
+                actionType: ScreenActionType.closeScreen,
+                screen: .mainMenu
+            )
+        )
     }
 
     func newState(state: MainMenuState) {
         menuState = state
-
-        reloadTableView(with: menuState.menuElements)
-
-        if menuState.shouldShowDetailsView {
-            coordinator?.showDetailViewController(for: .tools, title: "test")
-            return
-        }
 
         if let navigationDestination = menuState.navigationDestination {
             coordinator?.navigateTo(navigationDestination, animated: true)
@@ -189,7 +178,10 @@ class MainMenuViewController: UIViewController,
 
         if menuState.shouldDismiss {
             coordinator?.dismissMenuModal(animated: true)
+            return
         }
+
+        reloadTableView(with: menuState.menuElements)
     }
 
     // MARK: - UX related
