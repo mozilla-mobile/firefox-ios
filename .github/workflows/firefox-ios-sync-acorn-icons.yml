@@ -38,7 +38,7 @@ jobs:
               run: |
                 git config --global user.name "github-actions[bot]"
                 git config --global user.email "github-actions[bot]@users.noreply.github.com"
-                git add .
+                git add latest_acorn_release.json firefox-ios/Client/Assets/Images.xcassets/ BrowserKit/Sources/Common/Constants/StandardImageIdentifiers.swift
                 git commit -m "Updated Icons from Acorn repo"
 
             - name: Create Pull Request
