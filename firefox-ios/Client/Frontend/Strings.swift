@@ -200,6 +200,21 @@ extension String {
             }
         }
 
+        public struct MainMenu {
+            public struct NewMenu {
+                public static let Title = MZLocalizedString(
+                    key: "ContextualHints.MainMenu.NewMenu.Title.v132",
+                    tableName: "MainMenu",
+                    value: "New: streamlined menu",
+                    comment: "Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint.")
+                public static let Body = MZLocalizedString(
+                    key: "ContextualHints.MainMenu.NewMenu.Body.v132",
+                    tableName: "MainMenu",
+                    value: "Find what you need faster, from private browsing to save actions.",
+                    comment: "Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the body text for the hint.")
+            }
+        }
+
         public struct TabsTray {
             public struct InactiveTabs {
                 public static let Action = MZLocalizedString(
