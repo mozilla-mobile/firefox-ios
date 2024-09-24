@@ -36,7 +36,9 @@ extension BookmarksCoordinatorDelegate {
     }
 }
 
-class BookmarksCoordinator: BaseCoordinator, BookmarksCoordinatorDelegate {
+class BookmarksCoordinator: BaseCoordinator,
+                            BookmarksCoordinatorDelegate,
+                            BookmarksRefactorFeatureFlag {
     // MARK: - Properties
 
     private let profile: Profile
@@ -66,10 +68,14 @@ class BookmarksCoordinator: BaseCoordinator, BookmarksCoordinatorDelegate {
         let viewModel = BookmarksPanelViewModel(profile: profile,
                                                 bookmarksHandler: profile.places,
                                                 bookmarkFolderGUID: folder.guid)
-        let controller = BookmarksPanel(viewModel: viewModel, windowUUID: windowUUID)
-        controller.bookmarkCoordinatorDelegate = self
-        controller.libraryPanelDelegate = parentCoordinator
-        router.push(controller)
+        if isBookmarkRefactorEnabled {
+            router.push(BookmarksViewController())
+        } else {
+            let controller = BookmarksPanel(viewModel: viewModel, windowUUID: windowUUID)
+            controller.bookmarkCoordinatorDelegate = self
+            controller.libraryPanelDelegate = parentCoordinator
+            router.push(controller)
+        }
     }
 
     func showBookmarkDetail(for node: FxBookmarkNode, folder: FxBookmarkNode, completion: (() -> Void)? = nil) {
