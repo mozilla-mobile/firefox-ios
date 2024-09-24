@@ -37,7 +37,7 @@ class TabDisplayView: UIView,
     var theme: Theme?
 
     // Using tabUUID as it's a way to identify the Tab object which is hashable
-    private var tabsListDataSource: UICollectionViewDiffableDataSource<TabDisplaySection, SectionTabItem>?
+    private var dataSource: UICollectionViewDiffableDataSource<TabDisplaySection, SectionTabItem>?
 
     private var shouldHideInactiveTabs: Bool {
         guard !tabsState.isPrivateMode else { return true }
@@ -91,7 +91,7 @@ class TabDisplayView: UIView,
     // We now use this to set up the cells instead of cellForItemAt
     private func configureDataSource() {
         // Create the diffable data source and its cell provider.
-        tabsListDataSource = UICollectionViewDiffableDataSource<TabDisplaySection, SectionTabItem>(collectionView: collectionView)
+        dataSource = UICollectionViewDiffableDataSource<TabDisplaySection, SectionTabItem>(collectionView: collectionView)
         { [weak self] (collectionView, indexPath, sectionItem) -> UICollectionViewCell in
             // `identifier/item` is an instance of `tabModel`. Use it to
             // retrieve the tab from the backing data store.
@@ -124,7 +124,7 @@ class TabDisplayView: UIView,
         }
 
         // Configure supplementary view provider for section headers
-        tabsListDataSource?.supplementaryViewProvider = { [weak self] (collectionView, kind, indexPath) -> UICollectionReusableView? in
+        dataSource?.supplementaryViewProvider = { [weak self] (collectionView, kind, indexPath) -> UICollectionReusableView? in
             let reusableView = UICollectionReusableView()
             // Retrieve the section based on the current indexPath
             let section = self?.getTabDisplay(for: indexPath.section)
@@ -217,7 +217,7 @@ class TabDisplayView: UIView,
     }
 
     private func updateCollectionView(state: TabsPanelState) {
-         guard let currentSnapshot = tabsListDataSource?.snapshot() else { return }
+         guard let currentSnapshot = dataSource?.snapshot() else { return }
          var snapshot = NSDiffableDataSourceSnapshot<TabDisplaySection, SectionTabItem>()
 
           snapshot.appendSections([.tabs, .inactiveTabs])
@@ -229,7 +229,7 @@ class TabDisplayView: UIView,
           snapshot.appendItems(inactiveTabs, toSection: .inactiveTabs)
 
         if !areSnapshotsEqual(currentSnapshot, snapshot) {
-            tabsListDataSource?.apply(snapshot, animatingDifferences: false)
+            dataSource?.apply(snapshot, animatingDifferences: false)
         }
     }
 
@@ -424,7 +424,7 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
               let dragItem = coordinator.items.first?.dragItem,
               let tab = dragItem.localObject as? TabModel,
               let sourceIndex = tabsState.tabs.firstIndex(of: tab),
-              let dataSource = tabsListDataSource
+              let dataSource = dataSource
         else { return }
 
         let section = destinationIndexPath.section
@@ -457,7 +457,7 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
     private func visuallyUpdateItemPosition(
             firstItem: TabDisplayView.SectionTabItem,
             secondItem: TabDisplayView.SectionTabItem) {
-        guard let dataSource = tabsListDataSource else { return }
+        guard let dataSource = dataSource else { return }
 
         var snapshot = dataSource.snapshot()
         let currentItems = snapshot.itemIdentifiers(inSection: .tabs)
