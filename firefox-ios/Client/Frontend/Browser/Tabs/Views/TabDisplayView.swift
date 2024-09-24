@@ -430,14 +430,12 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
 
     func collectionView(_ collectionView: UICollectionView,
                         performDropWith coordinator: UICollectionViewDropCoordinator) {
-        // Ensure the drag is active and gather the necessary data
         guard collectionView.hasActiveDrag,
               let destinationIndexPath = coordinator.destinationIndexPath,
               let dragItem = coordinator.items.first?.dragItem,
               let tab = dragItem.localObject as? TabModel,
               let sourceIndex = tabsState.tabs.firstIndex(of: tab) else { return }
 
-        // Define the section and source/destination index paths
         let section = destinationIndexPath.section
         let start = IndexPath(row: sourceIndex, section: section)
         let end = IndexPath(row: destinationIndexPath.item, section: section)
@@ -456,10 +454,7 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
             coordinator.drop(dragItem, toItemAt: destinationIndexPath)
 
             updateItemPosition(firstItem: firstItem, secondItem: secondItem)
-
         }
-
-        // Prepare the data for the move action
         let moveTabData = MoveTabData(originIndex: start.row,
                                       destinationIndex: end.row,
                                       isPrivate: tabsState.isPrivateMode)
@@ -474,45 +469,23 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
         store.dispatch(action)
     }
 
-    func updateItemPosition(
-                            firstItem: TabDisplayView.SectionTabItem,
-                            secondItem: TabDisplayView.SectionTabItem) {
-        var snapshot = tabsListDataSource?.snapshot()
+    private func updateItemPosition(firstItem: TabDisplayView.SectionTabItem, secondItem: TabDisplayView.SectionTabItem) {
+        guard let dataSource =  tabsListDataSource else { return }
 
-        // Step 1: Retrieve the current order of items in the snapshot for the relevant section
-        let currentItems = snapshot!.itemIdentifiers(inSection: .tabs)  // Assuming a single section here
+        var snapshot = dataSource.snapshot()
+        let currentItems = snapshot.itemIdentifiers(inSection: .tabs)
 
-        // Step 2: Find the indices of the section items in the snapshot
         guard let firstItemIndex = currentItems.firstIndex(of: firstItem),
               let secondItemIndex = currentItems.firstIndex(of: secondItem) else {
-            return // Indices not found, so nothing to move
+            return
         }
 
-        // Step 3: Compare the positions of the items
         if firstItemIndex < secondItemIndex {
-            // Move the first item to be after the second item
-            snapshot!.moveItem(firstItem, afterItem: secondItem)
+            snapshot.moveItem(firstItem, afterItem: secondItem)
         } else if firstItemIndex > secondItemIndex {
-            // Move the first item to be before the second item
-            snapshot!.moveItem(firstItem, beforeItem: secondItem)
+            snapshot.moveItem(firstItem, beforeItem: secondItem)
         }
 
-        tabsListDataSource?.apply(snapshot!, animatingDifferences: false)
-
-        // No change needed if firstItemIndex == secondItemIndex
-    }
-
-    private func updateMovedItemsSnapshot(tempTabs: [TabModel]) {
-        var snapshot = NSDiffableDataSourceSnapshot<TabDisplaySection, SectionTabItem>()
-
-          // Add sections
-          snapshot.appendSections([.tabs])
-
-          // Add tabs to the snapshot
-        let tabs = tempTabs.map { SectionTabItem.tab($0) }
-          snapshot.appendItems(tabs, toSection: .tabs)
-
-        // Apply the snapshot to the diffable data source
-        tabsListDataSource?.apply(snapshot, animatingDifferences: true)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
 }
