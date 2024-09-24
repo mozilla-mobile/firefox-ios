@@ -33,7 +33,7 @@ enum MainMenuActionType: ActionType {
 enum MainMenuNavigationDestination: Equatable {
     case bookmarks
     case customizeHomepage
-    case detailsView(with: [MenuSection])
+    case detailsView(with: [MenuSection], title: String)
     case downloads
     case findInPage
     case goToURL(URL?)

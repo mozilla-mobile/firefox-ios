@@ -1,0 +1,52 @@
+name: Sync Icons from Acorn repo
+
+on: 
+    workflow_dispatch:
+    schedule:
+      - cron: '0 12 * * SUN'
+
+jobs:
+    download_icons_if_needed:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+    
+            - name: Set up Python
+              uses: actions/setup-python@v4
+              with:
+               python-version: '3.x'
+    
+            - name: Install dependencies
+              run: |
+               python -m pip install --upgrade pip
+               pip install requests
+    
+            - name: Download Acorn icons
+              run: |
+               python sync_acorn_icons.py
+            
+            - name: Check changes
+              run: |
+                if [[ $(git status --porcelain) ]]; then
+                    echo "changes_detected=true" >> $GITHUB_ENV 
+                fi
+
+            - name: Commit if needed 
+              if: ${{ env.changes_detected }}
+              run: |
+                git config --global user.name "github-actions[bot]"
+                git config --global user.email "github-actions[bot]@users.noreply.github.com"
+                git add latest_acorn_release.json firefox-ios/Client/Assets/Images.xcassets/ BrowserKit/Sources/Common/Constants/StandardImageIdentifiers.swift
+                git commit -m "Updated Icons from Acorn repo"
+
+            - name: Create Pull Request
+              if: ${{ env.changes_detected }}
+              uses: peter-evans/create-pull-request@v6
+              with:
+                  author: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+                  committer: GitHub <noreply@github.com>
+                  title: Update Firefox icons from Acorn repo
+                  branch: update-firefox-project-with-acorn-icons
+                  token: ${{ secrets.GITHUB_TOKEN }}

@@ -133,7 +133,8 @@ struct MainMenuConfigurationUtility: Equatable {
                             MainMenuAction(
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.show,
-                                navigationDestination: .detailsView(with: getToolsSubmenu(with: uuid))
+                                navigationDestination: .detailsView(with: getToolsSubmenu(with: uuid),
+                                                                    title: .MainMenu.ToolsSection.Tools)
                             )
                         )
                     }
@@ -151,7 +152,8 @@ struct MainMenuConfigurationUtility: Equatable {
                             MainMenuAction(
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.show,
-                                navigationDestination: .detailsView(with: getSaveSubmenu(with: uuid))
+                                navigationDestination: .detailsView(with: getSaveSubmenu(with: uuid),
+                                                                    title: .MainMenu.ToolsSection.Save)
                             )
                         )
                     }

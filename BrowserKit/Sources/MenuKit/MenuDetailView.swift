@@ -4,6 +4,7 @@
 
 import Common
 import UIKit
+import ComponentLibrary
 
 public final class MenuDetailView: UIView,
                                    MenuTableViewDataDelegate, ThemeApplicable {
@@ -13,7 +14,7 @@ public final class MenuDetailView: UIView,
 
     // MARK: - UI Elements
     private var tableView: MenuTableView = .build()
-    private var detailHeaderView: MenuSubmenuHeaderView = .build()
+    public var detailHeaderView: NavigationHeaderView = .build()
 
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -48,8 +49,8 @@ public final class MenuDetailView: UIView,
         tableView.reloadTableView(with: data)
     }
 
-    public func setupHeaderNavigation(from delegate: MainMenuDetailNavigationHandler) {
-        detailHeaderView.navigationDelegate = delegate
+    public func setViews(with title: String, and backButtonText: String) {
+        detailHeaderView.setViews(with: title, and: backButtonText)
     }
 
     // MARK: - Theme Applicable

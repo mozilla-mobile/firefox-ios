@@ -20,7 +20,7 @@
 "About.rowHelp" = "도움말";
 
 /* Link to Privacy Notice in the About screen */
-"About.rowPrivacy" = "개인 정보 보호 정책";
+"About.rowPrivacy" = "개인정보 보호정책";
 
 /* Label for row in About screen */
 "About.rowRights" = "사용자 권리";
