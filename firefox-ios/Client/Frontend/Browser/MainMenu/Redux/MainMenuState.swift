@@ -20,7 +20,7 @@ struct MainMenuState: ScreenState, Equatable {
     var shouldDismiss: Bool
     var shouldShowDetailsView: Bool
 
-    var navigationDestination: MainMenuNavigationDestination?
+    var navigationDestination: MenuNavigationDestination?
     var currentTabInfo: MainMenuTabInfo?
 
     private let menuConfigurator = MainMenuConfigurationUtility()
@@ -60,7 +60,7 @@ struct MainMenuState: ScreenState, Equatable {
         windowUUID: WindowUUID,
         menuElements: [MenuSection],
         currentTabInfo: MainMenuTabInfo?,
-        navigationDestination: MainMenuNavigationDestination? = nil,
+        navigationDestination: MenuNavigationDestination? = nil,
         shouldDismiss: Bool = false,
         shouldShowDetailsView: Bool = false
     ) {
@@ -82,23 +82,18 @@ struct MainMenuState: ScreenState, Equatable {
                 menuElements: state.menuElements,
                 currentTabInfo: state.currentTabInfo
             )
-        case MainMenuActionType.updateCurrentTabInfo(let info):
+        case MainMenuActionType.updateCurrentTabInfo:
+            guard let action = action as? MainMenuAction else { return state }
+
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuConfigurator.generateMenuElements(
                     with: state.windowUUID,
-                    andInfo: info
+                    andInfo: action.currentTabInfo
                 ),
-                currentTabInfo: info
+                currentTabInfo: action.currentTabInfo
             )
-        case MainMenuActionType.openDetailsViewTo(let submenuType):
-            store.dispatch(
-                MainMenuAction(
-                    windowUUID: state.windowUUID,
-                    actionType: MainMenuMiddlewareActionType.updateSubmenuTypeTo(submenuType)
-                )
-            )
-
+        case MainMenuActionType.openDetailsViewTo(let submenuType, let title):
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,

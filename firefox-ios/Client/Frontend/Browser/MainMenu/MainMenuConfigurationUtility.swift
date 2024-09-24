@@ -88,7 +88,7 @@ struct MainMenuConfigurationUtility: Equatable {
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.show,
-                            navigationDestination: .newTab
+                            navigationDestination: MenuNavigationDestination(.newTab)
                         )
                     )
                 }
@@ -106,7 +106,7 @@ struct MainMenuConfigurationUtility: Equatable {
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.show,
-                            navigationDestination: .newPrivateTab
+                            navigationDestination: MenuNavigationDestination(.newPrivateTab)
                         )
                     )
                 }
@@ -154,7 +154,7 @@ struct MainMenuConfigurationUtility: Equatable {
                             MainMenuAction(
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.show,
-                                navigationDestination: .findInPage
+                                navigationDestination: MenuNavigationDestination(.findInPage)
                             )
                         )
                     }
@@ -172,8 +172,7 @@ struct MainMenuConfigurationUtility: Equatable {
                         store.dispatch(
                             MainMenuAction(
                                 windowUUID: uuid,
-                                actionType: MainMenuActionType.openDetailsView(to: .tools),
-title: .MainMenu.ToolsSection.Tools)
+                                actionType: MainMenuActionType.openDetailsViewTo(.tools, title: .MainMenu.ToolsSection.Tools)
                             )
                         )
                     }
@@ -191,8 +190,7 @@ title: .MainMenu.ToolsSection.Tools)
                         store.dispatch(
                             MainMenuAction(
                                 windowUUID: uuid,
-                                actionType: MainMenuActionType.openDetailsView(to: .save),
-title: .MainMenu.ToolsSection.Save)
+                                actionType: MainMenuActionType.openDetailsViewTo(.save, title: .MainMenu.ToolsSection.Save)
                             )
                         )
                     }
@@ -446,7 +444,7 @@ title: .MainMenu.ToolsSection.Save)
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.show,
-                            navigationDestination: .bookmarks
+                            navigationDestination: MenuNavigationDestination(.bookmarks)
                         )
                     )
                 }
@@ -464,7 +462,7 @@ title: .MainMenu.ToolsSection.Save)
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.show,
-                            navigationDestination: .history
+                            navigationDestination: MenuNavigationDestination(.history)
                         )
                     )
                 }
@@ -482,7 +480,7 @@ title: .MainMenu.ToolsSection.Save)
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.show,
-                            navigationDestination: .downloads
+                            navigationDestination: MenuNavigationDestination(.downloads)
                         )
                     )
                 }
@@ -500,7 +498,7 @@ title: .MainMenu.ToolsSection.Save)
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.show,
-                            navigationDestination: .passwords
+                            navigationDestination: MenuNavigationDestination(.passwords)
                         )
                     )
                 }
@@ -527,7 +525,7 @@ title: .MainMenu.ToolsSection.Save)
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.show,
-                            navigationDestination: .customizeHomepage
+                            navigationDestination: MenuNavigationDestination(.customizeHomepage)
                         )
                     )
                 }
@@ -548,7 +546,10 @@ title: .MainMenu.ToolsSection.Save)
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.show,
-                            navigationDestination: .goToURL(SupportUtils.URLForWhatsNew)
+                            navigationDestination: MenuNavigationDestination(
+                                .goToURL,
+                                urlToVisit: SupportUtils.URLForWhatsNew
+                            )
                         )
                     )
                 }
@@ -569,7 +570,10 @@ title: .MainMenu.ToolsSection.Save)
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.show,
-                            navigationDestination: .goToURL(SupportUtils.URLForGetHelp)
+                            navigationDestination: MenuNavigationDestination(
+                                .goToURL,
+                                urlToVisit: SupportUtils.URLForGetHelp
+                            )
                         )
                     )
                 }
@@ -587,7 +591,7 @@ title: .MainMenu.ToolsSection.Save)
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.show,
-                            navigationDestination: .settings
+                            navigationDestination: MenuNavigationDestination(.settings)
                         )
                     )
                 }

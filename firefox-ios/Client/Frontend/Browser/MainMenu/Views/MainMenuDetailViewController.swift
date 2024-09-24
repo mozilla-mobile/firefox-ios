@@ -70,8 +70,7 @@ class MainMenuDetailViewController: UIViewController,
         }
         setupAccessibilityIdentifiers()
 
-now)
-            store.dispatch(
+        store.dispatch(
             MainMenuAction(
                 windowUUID: self.windowUUID,
                 actionType: MainMenuDetailsActionType.viewDidLoad
@@ -129,14 +128,6 @@ now)
 
     private func setupView() {
         view.addSubview(submenuContent)
-        submenuContent.setCloseAction(to: {
-            store.dispatch(
-                MainMenuAction(
-                    windowUUID: self.windowUUID,
-                    actionType: MainMenuDetailsActionType.dismissView
-                )
-            )
-        })
 
         NSLayoutConstraint.activate([
             submenuContent.topAnchor.constraint(equalTo: view.topAnchor),
@@ -190,7 +181,7 @@ now)
         submenuState = state
 
         if submenuState.shouldDismiss {
-            backToMainView()
+            coordinator?.dismissMenuModal(animated: true)
             return
         }
 

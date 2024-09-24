@@ -76,12 +76,14 @@ struct MainMenuDetailsState: ScreenState, Equatable {
                 menuElements: state.menuElements,
                 currentTabInfo: state.currentTabInfo
             )
-        case MainMenuActionType.updateCurrentTabInfo(let info):
+        case MainMenuActionType.updateCurrentTabInfo:
+            guard let action = action as? MainMenuAction else { return state }
+
             return MainMenuDetailsState(
                 windowUUID: state.windowUUID,
                 submenuType: state.submenuType,
                 menuElements: state.menuElements,
-                currentTabInfo: info
+                currentTabInfo: action.currentTabInfo
             )
         case MainMenuDetailsActionType.updateSubmenuType(let type):
             return MainMenuDetailsState(

@@ -647,9 +647,8 @@ class TabManagerMiddleware {
             store.dispatch(
                 MainMenuAction(
                     windowUUID: action.windowUUID,
-                    actionType: MainMenuMiddlewareActionType.provideTabInfo(
-                        getTabInfo(forWindow: action.windowUUID)
-                    )
+                    actionType: MainMenuActionType.updateCurrentTabInfo,
+                    currentTabInfo: getTabInfo(forWindow: action.windowUUID)
                 )
             )
         case MainMenuActionType.toggleUserAgent:

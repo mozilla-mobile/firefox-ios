@@ -6,10 +6,6 @@ import Common
 import Foundation
 import UIKit
 
-public protocol MainMenuDetailNavigationHandler: AnyObject {
-    func backToMainView()
-}
-
 final class MenuSubmenuHeaderView: UIView, ThemeApplicable {
     // MARK: - UI Elements
     private lazy var backButton: UIButton = .build { button in

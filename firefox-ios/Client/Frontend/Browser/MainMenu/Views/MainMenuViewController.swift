@@ -178,7 +178,7 @@ class MainMenuViewController: UIViewController,
         reloadTableView(with: menuState.menuElements)
 
         if menuState.shouldShowDetailsView {
-            coordinator?.showDetailViewController()
+            coordinator?.showDetailViewController(for: .tools, title: "test")
             return
         }
 

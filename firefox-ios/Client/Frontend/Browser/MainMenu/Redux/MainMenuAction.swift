@@ -7,13 +7,29 @@ import Foundation
 import MenuKit
 import Redux
 
+struct MenuNavigationDestination: Equatable {
+    let destination: MainMenuNavigationDestination
+    let urlToVisit: URL?
+
+    init(
+        _ destination: MainMenuNavigationDestination,
+        urlToVisit: URL? = nil
+    ) {
+        self.destination = destination
+        self.urlToVisit = urlToVisit
+    }
+}
+
 final class MainMenuAction: Action {
-    var navigationDestination: MainMenuNavigationDestination?
+    var navigationDestination: MenuNavigationDestination?
+    var currentTabInfo: MainMenuTabInfo?
 
     init(
         windowUUID: WindowUUID,
         actionType: any ActionType,
-        navigationDestination: MainMenuNavigationDestination? = nil
+        navigationDestination: MenuNavigationDestination? = nil,
+        urlToVisit: URL? = nil,
+        currentTabInfo: MainMenuTabInfo? = nil
     ) {
         self.navigationDestination = navigationDestination
         super.init(windowUUID: windowUUID, actionType: actionType)
@@ -32,7 +48,7 @@ enum MainMenuActionType: ActionType {
     case openDetailsViewTo(MainMenuDetailsViewType, title: String)
     case toggleNightMode
     case toggleUserAgent
-    case updateCurrentTabInfo(MainMenuTabInfo?)
+    case updateCurrentTabInfo
     case viewDidLoad
     case viewWillDisappear
 }
@@ -42,35 +58,16 @@ enum MainMenuNavigationDestination: Equatable {
     case customizeHomepage
     case downloads
     case findInPage
-    case goToURL(URL?)
+    case goToURL
     case history
     case newTab
     case newPrivateTab
     case passwords
     case settings
-
-    /// This must manually be done, because we can't conform to `CaseIterable`
-    /// when we have enums with associated types
-    static var allCases: [MainMenuNavigationDestination] {
-        return [
-            .bookmarks,
-            .customizeHomepage,
-            .downloads,
-            .findInPage,
-            .goToURL(nil),
-            .history,
-            .newTab,
-            .newPrivateTab,
-            .passwords,
-            .settings,
-        ]
-    }
 }
 
 enum MainMenuMiddlewareActionType: ActionType {
-    case provideTabInfo(MainMenuTabInfo?)
     case requestTabInfo
-    case updateSubmenuTypeTo(MainMenuDetailsViewType)
 }
 
 enum MainMenuDetailsActionType: ActionType {
