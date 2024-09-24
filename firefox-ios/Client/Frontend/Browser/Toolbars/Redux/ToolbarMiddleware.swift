@@ -319,6 +319,11 @@ final class ToolbarMiddleware: FeatureFlaggable {
     private func cancelEditMode(windowUUID: WindowUUID) {
         let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
         store.dispatch(action)
+
+        let browserAction = GeneralBrowserAction(showOverlay: false,
+                                                 windowUUID: windowUUID,
+                                                 actionType: GeneralBrowserActionType.leaveOverlay)
+        store.dispatch(browserAction)
     }
 
     private func addressToolbarPositionFromSearchBarPosition(_ position: SearchBarPosition) -> AddressToolbarPosition {

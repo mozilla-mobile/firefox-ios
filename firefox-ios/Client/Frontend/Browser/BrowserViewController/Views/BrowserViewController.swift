@@ -652,6 +652,8 @@ class BrowserViewController: UIViewController,
 
             if state.showOverlay == true {
                 overlayManager.openNewTab(url: nil, newTabSettings: newTabSettings)
+            } else if state.showOverlay == false {
+                overlayManager.cancelEditing(shouldCancelLoading: false)
             }
 
             executeNavigationAndDisplayActions()
