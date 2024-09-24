@@ -434,31 +434,27 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
               let destinationIndexPath = coordinator.destinationIndexPath,
               let dragItem = coordinator.items.first?.dragItem,
               let tab = dragItem.localObject as? TabModel,
-              let sourceIndex = tabsState.tabs.firstIndex(of: tab) else { return }
+              let sourceIndex = tabsState.tabs.firstIndex(of: tab),
+              let dataSource = tabsListDataSource
+        else { return }
 
         let section = destinationIndexPath.section
         let start = IndexPath(row: sourceIndex, section: section)
         let end = IndexPath(row: destinationIndexPath.item, section: section)
 
-        let items = coordinator.items
-        if items.count == 1, let item = items.first, let sourceIndexPath = item.sourceIndexPath {
-            var destIndexPath = destinationIndexPath
-            if destIndexPath.row >= collectionView.numberOfItems(inSection: destIndexPath.section) {
-                destIndexPath.row = collectionView.numberOfItems(inSection: destIndexPath.section) - 1
-            }
+        guard let firstItem = dataSource.itemIdentifier(for: start),
+              let secondItem = dataSource.itemIdentifier(for: end)
+        else { return }
 
-            guard let firstItem = tabsListDataSource?.itemIdentifier(for: sourceIndexPath),
-                  let secondItem = tabsListDataSource?.itemIdentifier(for: destIndexPath)
-            else { return }
+        coordinator.drop(dragItem, toItemAt: destinationIndexPath)
 
-            coordinator.drop(dragItem, toItemAt: destinationIndexPath)
+        // This method allows us to animate the change in position before the 
+        // redux state has been updated so that there isn't a delay between updates
+        visuallyUpdateItemPosition(firstItem: firstItem, secondItem: secondItem)
 
-            updateItemPosition(firstItem: firstItem, secondItem: secondItem)
-        }
         let moveTabData = MoveTabData(originIndex: start.row,
                                       destinationIndex: end.row,
                                       isPrivate: tabsState.isPrivateMode)
-
         let action = TabPanelViewAction(
             panelType: panelType,
             moveTabData: moveTabData,
@@ -469,8 +465,10 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
         store.dispatch(action)
     }
 
-    private func updateItemPosition(firstItem: TabDisplayView.SectionTabItem, secondItem: TabDisplayView.SectionTabItem) {
-        guard let dataSource =  tabsListDataSource else { return }
+    private func visuallyUpdateItemPosition(
+            firstItem: TabDisplayView.SectionTabItem,
+            secondItem: TabDisplayView.SectionTabItem) {
+        guard let dataSource = tabsListDataSource else { return }
 
         var snapshot = dataSource.snapshot()
         let currentItems = snapshot.itemIdentifiers(inSection: .tabs)
