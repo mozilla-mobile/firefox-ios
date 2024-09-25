@@ -8,7 +8,7 @@ import Redux
 import UIKit
 import ComponentLibrary
 
-class MainMenuDetailViewController: UIViewController,
+class MainMenuDetailsViewController: UIViewController,
                                     MenuTableViewDataDelegate,
                                     Notifiable,
                                     StoreSubscriber {
