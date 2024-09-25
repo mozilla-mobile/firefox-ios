@@ -74,7 +74,6 @@
 		0EC57CE52CA31E59002E3F04 /* PasswordGeneratorStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC57CE42CA31E59002E3F04 /* PasswordGeneratorStateTests.swift */; };
 		0EC57D082CA6FCA5002E3F04 /* PasswordGeneratorHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC57D072CA6FCA5002E3F04 /* PasswordGeneratorHeaderView.swift */; };
 		0EC57D0A2CA6FCC5002E3F04 /* PasswordGeneratorPasswordFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC57D092CA6FCC5002E3F04 /* PasswordGeneratorPasswordFieldView.swift */; };
-		0ED102F52C9C941000810A82 /* PasswordGeneratorSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ED102F42C9C941000810A82 /* PasswordGeneratorSetting.swift */; };
 		158241282820698B00956B39 /* RustRemoteTabsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158241272820698B00956B39 /* RustRemoteTabsTests.swift */; };
 		15DE98FD27FCED4F00F1ECDB /* RustRemoteTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15DE98FC27FCED4F00F1ECDB /* RustRemoteTabs.swift */; };
 		1BE7A4902C636AC800460798 /* URLSession+sharedMPTCP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE7A48F2C636AC800460798 /* URLSession+sharedMPTCP.swift */; };
@@ -2339,7 +2338,6 @@
 		0EC57CE42CA31E59002E3F04 /* PasswordGeneratorStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordGeneratorStateTests.swift; sourceTree = "<group>"; };
 		0EC57D072CA6FCA5002E3F04 /* PasswordGeneratorHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordGeneratorHeaderView.swift; sourceTree = "<group>"; };
 		0EC57D092CA6FCC5002E3F04 /* PasswordGeneratorPasswordFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordGeneratorPasswordFieldView.swift; sourceTree = "<group>"; };
-		0ED102F42C9C941000810A82 /* PasswordGeneratorSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordGeneratorSetting.swift; sourceTree = "<group>"; };
 		0EEE4B2AA4EEEF77B6F992F7 /* ml */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ml; path = ml.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		0F894AD0807E49799E2534E6 /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/Today.strings; sourceTree = "<group>"; };
 		0FB44A1B9437AF9EABCD398E /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
@@ -10870,7 +10868,6 @@
 				8A3EF80C2A2FD04D00796E3A /* ResetWallpaperOnboardingPage.swift */,
 				8A3EF8062A2FCFF700796E3A /* SentryIDSetting.swift */,
 				8A3EF80E2A2FD05D00796E3A /* ToggleInactiveTabs.swift */,
-				0ED102F42C9C941000810A82 /* PasswordGeneratorSetting.swift */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -15543,7 +15540,6 @@
 				D308E4E41A5306F500842685 /* SearchEngines.swift in Sources */,
 				438FE8642988ABA600155B10 /* CreditCardTableViewController.swift in Sources */,
 				3BCE6D3C1CEB9E4D0080928C /* ThirdPartySearchAlerts.swift in Sources */,
-				0ED102F52C9C941000810A82 /* PasswordGeneratorSetting.swift in Sources */,
 				8A93F86229D36F0F004159D9 /* NavigationController.swift in Sources */,
 				E13F8C342928194800BDC8B4 /* PhotonActionSheetSiteHeaderView.swift in Sources */,
 				C2D71B9B2A3850B4003DEC7A /* ThemedTableViewCellViewModel.swift in Sources */,
