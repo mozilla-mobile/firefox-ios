@@ -200,6 +200,21 @@ extension String {
             }
         }
 
+        public struct MainMenu {
+            public struct NewMenu {
+                public static let Title = MZLocalizedString(
+                    key: "ContextualHints.MainMenu.NewMenu.Title.v132",
+                    tableName: "MainMenu",
+                    value: "New: streamlined menu",
+                    comment: "Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint.")
+                public static let Body = MZLocalizedString(
+                    key: "ContextualHints.MainMenu.NewMenu.Body.v132",
+                    tableName: "MainMenu",
+                    value: "Find what you need faster, from private browsing to save actions.",
+                    comment: "Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the body text for the hint.")
+            }
+        }
+
         public struct TabsTray {
             public struct InactiveTabs {
                 public static let Action = MZLocalizedString(
@@ -6101,9 +6116,9 @@ extension String {
 // MARK: - Tab Tray v1
 extension String {
     public static let TabTrayToggleAccessibilityLabel = MZLocalizedString(
-        key: "Private Mode",
+        key: "PrivateBrowsing.Toggle.A11y.Label.v132",
         tableName: "PrivateBrowsing",
-        value: nil,
+        value: "Private browsing",
         comment: "Accessibility label for toggling on/off private mode")
     public static let TabTrayToggleAccessibilityHint = MZLocalizedString(
         key: "Turns private mode on or off",
@@ -7120,6 +7135,13 @@ extension String {
                 tableName: "Microsurvey",
                 value: "Selected",
                 comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label that states whether the survey option was selected.")
+        }
+        struct v132 {
+            public static let TabTrayToggleAccessibilityLabel = MZLocalizedString(
+                key: "Private Mode",
+                tableName: "PrivateBrowsing",
+                value: nil,
+                comment: "Accessibility label for toggling on/off private mode")
         }
     }
 }

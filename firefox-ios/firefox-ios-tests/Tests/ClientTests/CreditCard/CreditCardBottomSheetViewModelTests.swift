@@ -2,15 +2,14 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import MozillaAppServices
-import Shared
-import Storage
-import UIKit
-import XCTest
-
-@testable import Client
-
-// TODO: FXIOS-9855: Will re-enable in the future after investigating if we see tab error after disabling this test
+// import MozillaAppServices
+// import Shared
+// import Storage
+// import UIKit
+// import XCTest
+//
+// @testable import Client
+//
 // class CreditCardBottomSheetViewModelTests: XCTestCase {
 //    private var profile: MockProfile!
 //    private var viewModel: CreditCardBottomSheetViewModel!

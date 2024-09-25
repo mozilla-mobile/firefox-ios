@@ -743,7 +743,7 @@
 "Menu.CustomizeHomePage.v99" = "Dostosuj stronę startową";
 
 /* Label for the button, displayed in the menu, takes you to Downloads screen when pressed. */
-"Menu.Downloads.Label" = "Pobrane pliki";
+"Menu.Downloads.Label" = "Pobrane";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtectionOff.Title" = "Ochrona jest wyłączona na tej witrynie";

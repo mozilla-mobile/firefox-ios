@@ -158,9 +158,9 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
 
     private func evaluateJavaScript(_ jsCode: String) {
         guard let webView else { return }
-        webView.evaluateJavaScript(jsCode) { result, error in
+        webView.evaluateJavaScript(jsCode) { [weak self] result, error in
             if let error = error {
-                self.logger.log(
+                self?.logger.log(
                     "JavaScript execution error",
                     level: .warning,
                     category: .autofill,
@@ -194,8 +194,8 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
         alertController.addAction(UIAlertAction(
             title: String.Addresses.Settings.Edit.RemoveButtonTitle,
             style: .destructive,
-            handler: { _ in
-                self.model.removeConfimationButtonTap()
+            handler: { [weak self] _ in
+                self?.model.removeConfimationButtonTap()
             }
         ))
 
