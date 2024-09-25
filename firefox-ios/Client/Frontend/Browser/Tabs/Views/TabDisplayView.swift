@@ -235,7 +235,6 @@ class TabDisplayView: UIView,
 
     func areSnapshotsEqual(_ snapshot1: NSDiffableDataSourceSnapshot<TabDisplaySection, SectionTabItem>,
                            _ snapshot2: NSDiffableDataSourceSnapshot<TabDisplaySection, SectionTabItem>) -> Bool {
-
         // Check if the sections are the same
         if snapshot1.sectionIdentifiers != snapshot2.sectionIdentifiers {
             return false
@@ -359,11 +358,16 @@ class TabDisplayView: UIView,
 
     @objc
     func toggleInactiveTab() {
+        guard let dataSource = dataSource else { return }
+
         let action = TabPanelViewAction(panelType: panelType,
                                         windowUUID: windowUUID,
                                         actionType: TabPanelViewActionType.toggleInactiveTabs)
         store.dispatch(action)
-        collectionView.collectionViewLayout.invalidateLayout()
+
+        var snapshot = dataSource.snapshot()
+        snapshot.reloadSections([.inactiveTabs, .tabs])
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
 
     // MARK: - TabCellDelegate
