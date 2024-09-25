@@ -20,6 +20,7 @@ public final class HeaderView: UIView, ThemeApplicable {
     }
 
     public var closeButtonCallback: (() -> Void)?
+    public var mainButtonCallback: (() -> Void)?
 
     private var faviconHeightConstraint: NSLayoutConstraint?
     private var faviconWidthConstraint: NSLayoutConstraint?
@@ -52,6 +53,11 @@ public final class HeaderView: UIView, ThemeApplicable {
         button.addTarget(self, action: #selector(self.closeButtonTapped), for: .touchUpInside)
     }
 
+    private lazy var mainButton: UIButton = .build { button in
+        button.backgroundColor = .clear
+        button.addTarget(self, action: #selector(self.mainButtonTapped), for: .touchUpInside)
+    }
+
     private var iconMask: UIView = .build { view in
         view.backgroundColor = .clear
     }
@@ -70,7 +76,7 @@ public final class HeaderView: UIView, ThemeApplicable {
     private func setupLayout() {
         headerLabelsContainer.addArrangedSubview(titleLabel)
         headerLabelsContainer.addArrangedSubview(subtitleLabel)
-        addSubviews(iconMask, favicon, headerLabelsContainer, closeButton, horizontalLine)
+        addSubviews(mainButton, iconMask, favicon, headerLabelsContainer, closeButton, horizontalLine)
         NSLayoutConstraint.activate([
             favicon.leadingAnchor.constraint(
                 equalTo: self.leadingAnchor,
@@ -108,14 +114,30 @@ public final class HeaderView: UIView, ThemeApplicable {
             iconMask.widthAnchor.constraint(equalToConstant: UX.maskFaviconImageSize),
             iconMask.heightAnchor.constraint(equalToConstant: UX.maskFaviconImageSize),
             iconMask.centerXAnchor.constraint(equalTo: favicon.centerXAnchor),
-            iconMask.centerYAnchor.constraint(equalTo: favicon.centerYAnchor)
+            iconMask.centerYAnchor.constraint(equalTo: favicon.centerYAnchor),
+
+            mainButton.leadingAnchor.constraint(equalTo: iconMask.leadingAnchor),
+            mainButton.trailingAnchor.constraint(equalTo: headerLabelsContainer.trailingAnchor),
+            mainButton.topAnchor.constraint(equalTo: headerLabelsContainer.topAnchor),
+            mainButton.bottomAnchor.constraint(equalTo: headerLabelsContainer.bottomAnchor)
         ])
     }
 
-    public func setupAccessibility(closeButtonA11yLabel: String, closeButtonA11yId: String) {
+    public func setupAccessibility(closeButtonA11yLabel: String,
+                                   closeButtonA11yId: String,
+                                   mainButtonA11yLabel: String? = nil,
+                                   mainButtonA11yId: String? = nil) {
         let closeButtonViewModel = CloseButtonViewModel(a11yLabel: closeButtonA11yLabel,
                                                         a11yIdentifier: closeButtonA11yId)
         closeButton.configure(viewModel: closeButtonViewModel)
+        if let mainButtonA11yLabel, let mainButtonA11yId {
+            titleLabel.isAccessibilityElement = false
+            subtitleLabel.isAccessibilityElement = false
+            mainButton.accessibilityIdentifier = mainButtonA11yId
+            mainButton.accessibilityLabel = mainButtonA11yLabel
+        } else {
+            mainButton.isAccessibilityElement = false
+        }
     }
 
     public func setupDetails(subtitle: String, title: String, icon: FaviconImageViewModel) {
@@ -158,6 +180,11 @@ public final class HeaderView: UIView, ThemeApplicable {
     @objc
     func closeButtonTapped() {
         closeButtonCallback?()
+    }
+
+    @objc
+    func mainButtonTapped() {
+        mainButtonCallback?()
     }
 
     public func applyTheme(theme: Theme) {

@@ -23,6 +23,7 @@ public final class NavigationHeaderView: UIView {
         label.font = FXFontStyles.Regular.headline.scaledFont()
         label.numberOfLines = 2
         label.accessibilityTraits.insert(.header)
+        label.isAccessibilityElement = false
     }
 
     private lazy var closeButton: CloseButton = .build { button in
@@ -35,6 +36,7 @@ public final class NavigationHeaderView: UIView {
             .withRenderingMode(.alwaysTemplate),
                         for: .normal)
         button.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.addTarget(self, action: #selector(self.backButtonTapped), for: .touchUpInside)
     }
 
@@ -60,9 +62,6 @@ public final class NavigationHeaderView: UIView {
             ),
             backButton.centerYAnchor.constraint(equalTo: centerYAnchor),
 
-            siteTitleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            siteTitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
-            siteTitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             siteTitleLabel.topAnchor.constraint(
                 equalTo: topAnchor,
                 constant: UX.baseDistance
@@ -71,6 +70,7 @@ public final class NavigationHeaderView: UIView {
                 equalTo: bottomAnchor,
                 constant: -UX.baseDistance
             ),
+            siteTitleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
 
             closeButton.trailingAnchor.constraint(
                 equalTo: trailingAnchor,
@@ -85,6 +85,17 @@ public final class NavigationHeaderView: UIView {
             horizontalLine.bottomAnchor.constraint(equalTo: bottomAnchor),
             horizontalLine.heightAnchor.constraint(equalToConstant: UX.separatorHeight)
         ])
+    }
+
+    public func setupAccessibility(closeButtonA11yLabel: String,
+                                   closeButtonA11yId: String,
+                                   backButtonA11yLabel: String,
+                                   backButtonA11yId: String) {
+        let closeButtonViewModel = CloseButtonViewModel(a11yLabel: closeButtonA11yLabel,
+                                                        a11yIdentifier: closeButtonA11yId)
+        closeButton.configure(viewModel: closeButtonViewModel)
+        backButton.accessibilityIdentifier = backButtonA11yId
+        backButton.accessibilityLabel = backButtonA11yLabel
     }
 
     public func setViews(with title: String, and backButtonText: String) {

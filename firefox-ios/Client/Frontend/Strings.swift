@@ -3897,7 +3897,163 @@ extension String {
                 tableName: "MainMenu",
                 value: "Syncing paused",
                 comment: "On the main menu, at the top, when the user is signed in but there was an error syncing. The description subtitle for the sync error state.")
+            public static let CloseButtonAccessibilityLabel = MZLocalizedString(
+                key: "MainMenu.Account.CloseButton.AccessibilityLabel.v133",
+                tableName: "MainMenu",
+                value: "Close",
+                comment: "The accessibility label for the close button in the Main menu.")
+            public static let MainButtonAccessibilityLabel = MZLocalizedString(
+                key: "MainMenu.Account.MainButton.AccessibilityLabel.v133",
+                tableName: "MainMenu",
+                value: "Sign in to sync passwords, tabs, and more",
+                comment: "The accessibility label for the sign in button in the Main menu header view.")
+            public static let BackButtonAccessibilityLabel = MZLocalizedString(
+                key: "MainMenu.Account.BackButton.AccessibilityLabel.v133",
+                tableName: "MainMenu",
+                value: "Back",
+                comment: "The accessibility label for the back button in the Main menu header navigation view.")
         }
+
+        public static let MainMenuAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.MainMenu.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: "Main Menu",
+            comment: "The accessibility label for the Main Menu.")
+        public static let NewTabMenuItemAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.NewTabMenuItem.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: "New tab",
+            comment: "The accessibility label for the Main Menu New Tab item.")
+        public static let NewPrivateTabMenuItemAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.NewPrivateTabMenuItem.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: "New private tab",
+            comment: "The accessibility label for the Main Menu New Private Tab item.")
+        public static let SwitchToDesktopMenuItemAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.SwitchToDesktopMenuItem.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: "Switch to desktop site",
+            comment: "The accessibility label for the Main Menu Switch to desktop site item.")
+        public static let FindInPageMenuItemAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.FindInPageMenuItem.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: "Find in page",
+            comment: "The accessibility label for the Main Menu Find in page item.")
+        public static let ToolsMenuItemAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.ToolsMenuItem.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: "Tools",
+            comment: "The accessibility label for the Main Menu Tools item.")
+        public static let ToolsMenuItemAccessibilityHint = MZLocalizedString(
+            key: "MainMenu.ToolsMenuItem.AccessibilityHint.v133",
+            tableName: "MainMenu",
+            value: "Zoom, Reader View, Translate, Review Checker",
+            comment: "The accessibility hint for the Main Menu Tools item.")
+        public static let SaveMenuItemAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.SaveMenuItem.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: "Save",
+            comment: "The accessibility label for the Main Menu Save item.")
+        public static let SaveMenuItemAccessibilityHint = MZLocalizedString(
+            key: "MainMenu.SaveMenuItem.AccessibilityHint.v133",
+            tableName: "MainMenu",
+            value: "Add bookmark, Shortcut, Home, Collection",
+            comment: "The accessibility hint for the Main Menu Save item.")
+        public static let BookmarksMenuItemAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.BookmarksMenuItem.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: "Bookmarks",
+            comment: "The accessibility label for the Main Menu Bookmarks item.")
+        public static let HistoryMenuItemAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.HistoryMenuItem.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: "History",
+            comment: "The accessibility label for the Main Menu History item.")
+        public static let DownloadsMenuItemAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.DownloadsMenuItem.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: "Downloads",
+            comment: "The accessibility label for the Main Menu Downloads item.")
+        public static let PasswordsMenuItemAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.PasswordsMenuItem.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: "Passwords",
+            comment: "The accessibility label for the Main Menu Passwords item.")
+        public static let GetHelpMenuItemAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.GetHelpMenuItem.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: "GetHelp",
+            comment: "The accessibility label for the Main Menu GetHelp item.")
+        public static let SettingsMenuItemAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.SettingsMenuItem.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: "Settings",
+            comment: "The accessibility label for the Main Menu Settings item.")
+        public static let ZoomMenuItemAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.ZoomMenuItem.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: "Zoom at %@",
+            comment: "The accessibility label for the Main Menu Zoom item.")
+        public static let TurnOnReaderViewMenuItemAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.TurnOnReaderViewMenuItem.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: "Turn on reader view",
+            comment: "The accessibility label for the Main Menu Turn On Reader View item.")
+        public static let TurnOnNightModeMenuItemAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.TurnOnNightModeMenuItem.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: "Turn on night mode",
+            comment: "The accessibility label for the Main Menu Turn On Night Mode item.")
+        public static let PrintMenuItemAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.PrintMenuItem.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: "Print",
+            comment: "The accessibility label for the Main Menu Print item.")
+        public static let ShareMenuItemAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.ShareMenuItem.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: "Share",
+            comment: "The accessibility label for the Main Menu Share item.")
+        public static let ReportBrokenSiteMenuItemAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.ReportBrokenSiteMenuItem.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: "Report broken site",
+            comment: "The accessibility label for the Main Menu Report Broken Site item.")
+        public static let BookmarkThisPageMenuItemAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.BookmarkThisPageMenuItem.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: "Bookmark this page",
+            comment: "The accessibility label for the Main Menu Bookmark This Page item.")
+        public static let AddToShortcutsMenuItemAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.AddToShortcutsMenuItem.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: "Add to shortcuts",
+            comment: "The accessibility label for the Main Menu Add To Shortcuts item.")
+        public static let AddToHomeScreenMenuItemAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.AddToHomeScreenMenuItem.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: "Add to home screen",
+            comment: "The accessibility label for the Main Menu Add To Home Screen item.")
+        public static let SaveToReadingListMenuItemAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.SaveToReadingListMenuItem.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: "Save to reading list",
+            comment: "The accessibility label for the Main Menu Save To Reading List item.")
+        public static let SaveAsPDFMenuItemAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.SaveAsPDFMenuItem.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: "Save as PDF",
+            comment: "The accessibility label for the Main Menu Save As PDF item.")
+        public static let CustomizeHomepageMenuItemAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.CustomizeHomepageMenuItem.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: " Customize Homepage",
+            comment: "The accessibility label for the Main Menu Customize Homepage item.")
+        public static let NewInMenuItemAccessibilityLabel = MZLocalizedString(
+            key: "MainMenu.NewInMenuItem.AccessibilityLabel.v133",
+            tableName: "MainMenu",
+            value: "New in %@",
+            comment: "The accessibility label for the Main Menu New In item.")
 
         public struct TabsSection {
             public static let NewTab = MZLocalizedString(
@@ -3913,6 +4069,11 @@ extension String {
         }
 
         public struct ToolsSection {
+            public static let Description = MZLocalizedString(
+                key: "MainMenu.ToolsSection.Tools.Subtitle.v133",
+                tableName: "MainMenu",
+                value: "Zoom, Reader View, Translate, Review Checker",
+                comment: "On the main menu, the description/subtitle for the Tools section.")
             public static let SwitchToDesktopSite = MZLocalizedString(
                 key: "MainMenu.ToolsSection.SwitchToDesktopSite.Title.v131",
                 tableName: "MainMenu",
@@ -4061,6 +4222,11 @@ extension String {
             }
 
             public struct Save {
+                public static let Description = MZLocalizedString(
+                    key: "MainMenu.SaveSection.Save.Subtitle.v133",
+                    tableName: "MainMenu",
+                    value: "Add Bookmark, Shortcut, Home, Reading List, PDF",
+                    comment: "On the main menu, the description/subtitle for the Save section.")
                 public static let BookmarkThisPage = MZLocalizedString(
                     key: "MainMenu.Submenus.Save.BookmarkThisPage.Title.v131",
                     tableName: "MainMenu",

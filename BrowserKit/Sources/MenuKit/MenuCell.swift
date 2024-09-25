@@ -49,10 +49,14 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
     public func configureCellWith(model: MenuElement) {
         self.model = model
         self.titleLabel.text = model.title
-        self.descriptionLabel.text = model.a11yLabel // TODO: to be updated with the correct value
+        self.descriptionLabel.text = model.description
         self.icon.image = UIImage(named: model.iconName)?.withRenderingMode(.alwaysTemplate)
         self.accessoryArrowView.image =
         UIImage(named: StandardImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
+        self.isAccessibilityElement = true
+        self.accessibilityIdentifier = model.a11yId
+        self.accessibilityLabel = model.a11yLabel
+        self.accessibilityHint = model.a11yHint
         setupView()
     }
 

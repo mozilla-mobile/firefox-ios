@@ -48,6 +48,20 @@ public final class MenuMainView: UIView,
                                        icon: icon)
     }
 
+    public func setupAccessibilityIdentifiers(closeButtonA11yLabel: String,
+                                              closeButtonA11yId: String,
+                                              mainButtonA11yLabel: String,
+                                              mainButtonA11yId: String,
+                                              menuA11yId: String,
+                                              menuA11yLabel: String) {
+        accountHeaderView.setupAccessibility(closeButtonA11yLabel: closeButtonA11yLabel,
+                                             closeButtonA11yId: closeButtonA11yId,
+                                             mainButtonA11yLabel: mainButtonA11yLabel,
+                                             mainButtonA11yId: mainButtonA11yId)
+        tableView.accessibilityIdentifier = menuA11yId
+        tableView.accessibilityLabel = menuA11yLabel
+    }
+
     // MARK: - Interface
     public func reloadTableView(with data: [MenuSection]) {
         tableView.reloadTableView(with: data)

@@ -73,6 +73,8 @@ class MainMenuViewController: UIViewController,
         menuContent.accountHeaderView.closeButtonCallback = { [weak self] in
             self?.coordinator?.dismissMenuModal(animated: true)
         }
+
+        setupAccessibilityIdentifiers()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -189,6 +191,16 @@ class MainMenuViewController: UIViewController,
     ) -> UISheetPresentationController.Detent.Identifier? {
         guard let sheetController = presentedController as? UISheetPresentationController else { return nil }
         return sheetController.selectedDetentIdentifier
+    }
+
+    private func setupAccessibilityIdentifiers() {
+        menuContent.setupAccessibilityIdentifiers(
+            closeButtonA11yLabel: .MainMenu.Account.CloseButtonAccessibilityLabel,
+            closeButtonA11yId: AccessibilityIdentifiers.MainMenu.HeaderView.closeButton,
+            mainButtonA11yLabel: .MainMenu.Account.MainButtonAccessibilityLabel,
+            mainButtonA11yId: AccessibilityIdentifiers.MainMenu.HeaderView.mainButton,
+            menuA11yId: AccessibilityIdentifiers.MainMenu.mainMenu,
+            menuA11yLabel: .MainMenu.MainMenuAccessibilityLabel)
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate
