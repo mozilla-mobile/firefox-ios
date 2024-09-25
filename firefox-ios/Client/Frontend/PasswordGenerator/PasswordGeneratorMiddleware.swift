@@ -34,7 +34,6 @@ final class PasswordGeneratorMiddleware {
             let jsFunctionCall = "window.__firefox__.logins.generatePassword()"
             tab.webView?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall) { (result, error) in
                 if let error = error {
-                    completion("generating the password failed :/")
                     print("JavaScript evaluation error: \(error.localizedDescription)")
                 } else if let result = result as? String {
                     print("JavaScript object: \(result)")
