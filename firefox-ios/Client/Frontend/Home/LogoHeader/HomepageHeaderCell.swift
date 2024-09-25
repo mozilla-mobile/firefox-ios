@@ -115,5 +115,8 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         let privateModeButtonTintColor = viewModel.isPrivate ? theme.colors.layer2 : theme.colors.iconPrimary
         privateModeButton.imageView?.tintColor = privateModeButtonTintColor
         privateModeButton.backgroundColor = viewModel.isPrivate ? .white : .clear
+        privateModeButton.accessibilityValue = viewModel.isPrivate ?
+            .TabTrayToggleAccessibilityValueOn :
+            .TabTrayToggleAccessibilityValueOff
     }
 }
