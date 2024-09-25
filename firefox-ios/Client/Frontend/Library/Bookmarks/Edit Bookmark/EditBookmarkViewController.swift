@@ -14,6 +14,9 @@ class EditBookmarkViewController: UIViewController,
     var themeManager: any ThemeManager
     var themeObserver: (any NSObjectProtocol)?
     var notificationCenter: any NotificationProtocol
+    private var theme: any Theme {
+        return themeManager.getCurrentTheme(for: currentWindowUUID)
+    }
 
     private lazy var tableView: UITableView = .build { view in
         view.dataSource = self
@@ -48,9 +51,14 @@ class EditBookmarkViewController: UIViewController,
         super.viewDidLoad()
         navigationController?.setNavigationBarHidden(false, animated: true)
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        navigationController?.navigationBar.backItem?.title = parentFolder.title
         title = "Edit Bookmark"
         setupSubviews()
-        setTheme(themeManager.getCurrentTheme(for: currentWindowUUID))
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setTheme(theme)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -74,15 +82,36 @@ class EditBookmarkViewController: UIViewController,
     // MARK: - Themeable
 
     func applyTheme() {
-        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
         setTheme(theme)
         tableView.reloadData()
     }
 
     private func setTheme(_ theme: any Theme) {
-        view.backgroundColor = theme.colors.layer1
-    }
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.barTintColor = theme.colors.layer1
+        navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
+        navigationController?.navigationBar.backgroundColor = .red//theme.colors.layer1
+        navigationController?.navigationBar.titleTextAttributes = [
+            .foregroundColor: theme.colors.textPrimary
+        ]
+        // There is an ANNOYING bar in the nav bar above the segment control. These are the
+        // UIBarBackgroundShadowViews. We must set them to be clear images in order to
+        // have a seamless nav bar, if embedding the segmented control.
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
 
+        view.backgroundColor = theme.colors.layer3
+        navigationController?.navigationBar.barTintColor = theme.colors.layer1
+        navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
+        navigationController?.navigationBar.backgroundColor = theme.colors.layer1
+        navigationController?.toolbar.barTintColor = theme.colors.layer1
+        navigationController?.toolbar.tintColor = theme.colors.actionPrimary
+
+        setNeedsStatusBarAppearanceUpdate()
+        tableView.backgroundColor = .red// theme.colors.layer1
+    }
+    
     // MARK: - UITableViewDataSource & UITableViewDelegate
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
