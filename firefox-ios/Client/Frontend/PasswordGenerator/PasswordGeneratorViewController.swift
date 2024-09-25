@@ -25,6 +25,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     var notificationCenter: NotificationProtocol
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
+    private var currentTab: Tab
 
     // MARK: - Views
 
@@ -56,6 +57,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.passwordGeneratorState = PasswordGeneratorState(windowUUID: windowUUID)
+        self.currentTab = currentTab
         super.init(nibName: nil, bundle: nil)
         self.subscribeToRedux()
         setupNotifications(forObserver: self,

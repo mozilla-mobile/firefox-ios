@@ -32,7 +32,7 @@ struct LoginItem: Codable {
     var hostname: String
 }
 
-class LoginsHelper: TabContentScript {
+class LoginsHelper: TabContentScript, FeatureFlaggable {
     private weak var tab: Tab?
     private let profile: Profile
     private let theme: Theme
@@ -123,6 +123,16 @@ class LoginsHelper: TabContentScript {
         guard let res = message.body as? [String: Any],
               let type = res["type"] as? String
         else { return }
+
+        if type == "generatePassword" {
+            if self.featureFlags.isFeatureEnabled(.passwordGenerator, checking: .buildOnly) {
+                guard let tab = self.tab else {return}
+                let newAction = GeneralBrowserAction(
+                    windowUUID: tab.windowUUID,
+                    actionType: GeneralBrowserActionType.showPasswordGenerator)
+                store.dispatch(newAction)
+            }
+        }
 
         // NOTE: FXIOS-3856 will further enhance the logs into actual callback
         if let parsedMessage = parseFieldFocusMessage(from: res) {
