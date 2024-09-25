@@ -25,14 +25,6 @@ final class TabNumberButton: ToolbarButton {
         label.textAlignment = .center
     }
 
-    override var isHighlighted: Bool {
-        didSet {
-            countLabel.textColor = isHighlighted ?
-            foregroundColorHighlighted :
-            foregroundColorNormal
-        }
-    }
-
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -48,6 +40,13 @@ final class TabNumberButton: ToolbarButton {
 
         guard let numberOfTabs = element.numberOfTabs else { return }
         updateTabCount(numberOfTabs)
+    }
+
+    override public func updateConfiguration() {
+        super.updateConfiguration()
+
+        // Use image view tint color for tab number label as it gets dimmed when a modal gets displayed
+        countLabel.textColor = imageView?.tintColor ?? configuration?.baseForegroundColor
     }
 
     private func updateTabCount(_ count: Int) {
@@ -66,11 +65,5 @@ final class TabNumberButton: ToolbarButton {
             countLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             countLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
-    }
-
-    // MARK: - Theming System
-    override func applyTheme(theme: any Theme) {
-        super.applyTheme(theme: theme)
-        countLabel.textColor = theme.colors.iconPrimary
     }
 }
