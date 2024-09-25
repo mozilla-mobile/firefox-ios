@@ -69,6 +69,10 @@ class MainMenuViewController: UIViewController,
                 actionType: MainMenuActionType.viewDidLoad
             )
         )
+
+        menuContent.accountHeaderView.closeButtonCallback = { [weak self] in
+            self?.coordinator?.dismissMenuModal(animated: true)
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -105,6 +109,12 @@ class MainMenuViewController: UIViewController,
             menuContent.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             menuContent.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
+
+        let icon = UIImage(named: StandardImageIdentifiers.Large.avatarCircle)?
+            .withRenderingMode(.alwaysTemplate)
+        menuContent.setupDetails(subtitle: .MainMenu.Account.SignedOutDescription,
+                                 title: .MainMenu.Account.SignedOutTitle,
+                                 icon: icon)
     }
 
     // MARK: - Redux

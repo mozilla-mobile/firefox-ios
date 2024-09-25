@@ -6,6 +6,7 @@ import Foundation
 import Common
 import Shared
 import SiteImageView
+import ComponentLibrary
 
 struct BlockedTrackerItem: Hashable {
     let identifier = UUID()
@@ -29,7 +30,7 @@ class BlockedTrackersTableViewController: UIViewController,
     }
 
     // MARK: Navigation View
-    private let navigationView: TrackingProtectionHeaderView = .build { header in
+    private let navigationView: NavigationHeaderView = .build { header in
         header.accessibilityIdentifier = AccessibilityIdentifiers.EnhancedTrackingProtection.BlockedTrackers.headerView
     }
 
@@ -149,7 +150,7 @@ class BlockedTrackersTableViewController: UIViewController,
     }
 
     private func updateViewDetails() {
-        navigationView.setTitle(with: model.topLevelDomain)
+        navigationView.setViews(with: model.topLevelDomain, and: .KeyboardShortcuts.Back)
 
         if let headerView = trackersTable.headerView(forSection: 0) as? BlockedTrackersHeaderView {
             headerView.totalTrackersBlockedLabel.text = model.getTotalTrackersText()
