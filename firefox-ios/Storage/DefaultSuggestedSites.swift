@@ -38,6 +38,7 @@ open class DefaultSuggestedSites {
             SuggestedSite(
                 url: "https://m.facebook.com/",
                 title: .DefaultSuggestedFacebook,
+                trackingId: 632,
                 faviconResource: .bundleAsset(
                     name: "facebook",
                     forRemoteResource: URL(string: "https://static.xx.fbcdn.net/rsrc.php/v3/yi/r/4Kv5U5b1o3f.png")!
@@ -46,6 +47,7 @@ open class DefaultSuggestedSites {
             SuggestedSite(
                 url: "https://m.youtube.com/",
                 title: .DefaultSuggestedYouTube,
+                trackingId: 631,
                 faviconResource: .bundleAsset(
                     name: "youtube",
                     forRemoteResource: URL(string: "https://m.youtube.com/static/apple-touch-icon-180x180-precomposed.png")!
@@ -54,6 +56,7 @@ open class DefaultSuggestedSites {
             SuggestedSite(
                 url: "https://www.amazon.com/",
                 title: .DefaultSuggestedAmazon,
+                trackingId: 630,
                 // NOTE: Amazon does not host a high quality favicon. We are falling back to the one hosted in our
                 // ContileProvider.contileProdResourceEndpoint (https://ads.mozilla.org/v1/tiles).
                 faviconResource: .bundleAsset(
@@ -64,6 +67,7 @@ open class DefaultSuggestedSites {
             SuggestedSite(
                 url: "https://www.wikipedia.org/",
                 title: .DefaultSuggestedWikipedia,
+                trackingId: 629,
                 faviconResource: .bundleAsset(
                     name: "wikipedia",
                     forRemoteResource: URL(string: "https://www.wikipedia.org/static/apple-touch/wikipedia.png")!
@@ -72,6 +76,7 @@ open class DefaultSuggestedSites {
             SuggestedSite(
                 url: "https://x.com/",
                 title: .DefaultSuggestedX,
+                trackingId: 628,
                 faviconResource: .bundleAsset(
                     name: "x",
                     forRemoteResource: URL(string: "https://abs.twimg.com/responsive-web/client-web/icon-ios.77d25eba.png")!
@@ -82,27 +87,32 @@ open class DefaultSuggestedSites {
             SuggestedSite(
                 url: "http://mozilla.com.cn",
                 title: "火狐社区",
+                trackingId: 700,
                 // FIXME We need a higher quality favicon link
                 faviconResource: .remoteURL(url: URL(string: "http://mozilla.com.cn/favicon.ico")!)
             ),
             SuggestedSite(
                 url: "https://m.baidu.com/",
                 title: "百度",
+                trackingId: 701,
                 faviconResource: .remoteURL(url: URL(string: "https://psstatic.cdn.bcebos.com/video/wiseindex/aa6eef91f8b5b1a33b454c401_1660835115000.png")!)
             ),
             SuggestedSite(
                 url: "http://sina.cn",
                 title: "新浪",
+                trackingId: 702,
                 faviconResource: .remoteURL(url: URL(string: "https://mjs.sinaimg.cn/wap/online/public/images/addToHome/sina_114x114_v1.png")!)
             ),
             SuggestedSite(
                 url: "http://info.3g.qq.com/g/s?aid=index&g_f=23946&g_ut=3",
                 title: "腾讯",
+                trackingId: 703,
                 faviconResource: .remoteURL(url: URL(string: "https://mat1.gtimg.com/qqcdn/qqindex2021/favicon.ico")!)
             ),
             SuggestedSite(
                 url: "http://m.taobao.com",
                 title: "淘宝",
+                trackingId: 704,
                 faviconResource: .remoteURL(url: URL(string: "https://gw.alicdn.com/tps/i2/TB1nmqyFFXXXXcQbFXXE5jB3XXX-114-114.png")!)
             ),
             SuggestedSite(
@@ -113,6 +123,7 @@ open class DefaultSuggestedSites {
                 nBG8BKydLFl5fCQ5eCUsSM184GGsSXQ8WUiwcWl8RcV84G1slXTZdEAMAOEkWAmsBK2s
                 """,
                 title: "京东",
+                trackingId: 705,
                 // FIXME We need a higher quality favicon link
                 faviconResource: .remoteURL(url: URL(string: "https://corporate.jd.com/favicon.ico")!)
             )
@@ -126,6 +137,7 @@ open class DefaultSuggestedSites {
             if let domainMap = DefaultSuggestedSites.urlMap[data.url], let localizedURL = domainMap[locale.identifier] {
                 return SuggestedSite(url: localizedURL,
                                      title: data.title,
+                                     trackingId: data.trackingId,
                                      faviconResource: data.faviconResource)
             }
             return data

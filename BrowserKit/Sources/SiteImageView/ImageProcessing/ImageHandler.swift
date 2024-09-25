@@ -54,7 +54,7 @@ class DefaultImageHandler: ImageHandler {
     func fetchFavicon(imageModel: SiteImageModel) async -> UIImage {
         do {
             if case let .bundleAsset(assetName, _) = imageModel.siteResource {
-                return try getBundleImage(assetName: assetName)
+                return try loadDefaultFaviconFromBundle(assetName: assetName)
             }
 
             // The default images are stored with the cache key as name, try to load it from bundle
@@ -65,6 +65,20 @@ class DefaultImageHandler: ImageHandler {
             return try await imageCache.getImage(cacheKey: imageModel.cacheKey, type: imageModel.imageType)
         } catch {
             return await fetchFaviconFromFetcher(imageModel: imageModel)
+        }
+    }
+    
+    private func loadDefaultFaviconFromBundle(assetName: String) throws -> UIImage {
+        do {
+            return try getBundleImage(assetName: assetName)
+        } catch {
+            logger.log(
+                "Could not get image from bundle",
+                level: .warning,
+                category: .images,
+                extra: ["assetName": assetName]
+            )
+            throw SiteImageError.noImageInBundle
         }
     }
 
@@ -144,12 +158,6 @@ class DefaultImageHandler: ImageHandler {
         if let image = UIImage(named: assetName, in: .module, with: nil) {
             return image
         }
-        logger.log(
-            "Could not get image from bundle",
-            level: .warning,
-            category: .images,
-            extra: ["assetName": assetName]
-        )
         throw SiteImageError.noImageInBundle
     }
 }
