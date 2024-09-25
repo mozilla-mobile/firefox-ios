@@ -30,7 +30,6 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
 
         var profile: BrowserProfile
         let launchArguments = ProcessInfo.processInfo.arguments
-        let dirForTestProfile = self.dirForTestProfile
 
         launchArguments.forEach { arg in
             if arg.starts(with: LaunchArguments.ServerPort) {
