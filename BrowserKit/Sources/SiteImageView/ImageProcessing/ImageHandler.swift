@@ -67,7 +67,7 @@ class DefaultImageHandler: ImageHandler {
             return await fetchFaviconFromFetcher(imageModel: imageModel)
         }
     }
-    
+
     private func loadDefaultFaviconFromBundle(assetName: String) throws -> UIImage {
         do {
             return try getBundleImage(assetName: assetName)
@@ -78,7 +78,7 @@ class DefaultImageHandler: ImageHandler {
                 category: .images,
                 extra: ["assetName": assetName]
             )
-            throw SiteImageError.noImageInBundle
+            throw error
         }
     }
 
