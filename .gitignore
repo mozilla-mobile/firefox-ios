@@ -61,6 +61,8 @@ python-env/
 # Vim
 *~
 .*.sw*
+buildServer.json
+.nvim/
 
 # IDEA
 .idea
