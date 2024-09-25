@@ -69,7 +69,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 iconName: Icons.newTab,
                 isEnabled: true,
                 isActive: false,
-                a11yLabel: .MainMenu.NewTabMenuItemAccessibilityLabel,
+                a11yLabel: .MainMenu.AccessibilityLabels.NewTabMenuItemAccessibilityLabel,
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.newTab,
                 action: {
@@ -87,7 +87,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 iconName: Icons.newPrivateTab,
                 isEnabled: true,
                 isActive: false,
-                a11yLabel: .MainMenu.NewPrivateTabMenuItemAccessibilityLabel,
+                a11yLabel: .MainMenu.AccessibilityLabels.NewPrivateTabMenuItemAccessibilityLabel,
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.newPrivateTab,
                 action: {
@@ -118,7 +118,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     iconName: Icons.deviceDesktop,
                     isEnabled: true,
                     isActive: false,
-                    a11yLabel: .MainMenu.SwitchToDesktopMenuItemAccessibilityLabel,
+                    a11yLabel: .MainMenu.AccessibilityLabels.SwitchToDesktopMenuItemAccessibilityLabel,
                     a11yHint: "",
                     a11yId: AccessibilityIdentifiers.MainMenu.switchToDesktopSite,
                     action: {
@@ -135,7 +135,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     iconName: Icons.findInPage,
                     isEnabled: true,
                     isActive: false,
-                    a11yLabel: .MainMenu.FindInPageMenuItemAccessibilityLabel,
+                    a11yLabel: .MainMenu.AccessibilityLabels.FindInPageMenuItemAccessibilityLabel,
                     a11yHint: "",
                     a11yId: AccessibilityIdentifiers.MainMenu.findInPage,
                     action: {
@@ -150,13 +150,12 @@ struct MainMenuConfigurationUtility: Equatable {
                 ),
                 MenuElement(
                     title: .MainMenu.ToolsSection.Tools,
-                    description: .MainMenu.ToolsSection.Description,
                     iconName: Icons.tools,
                     isEnabled: true,
                     isActive: false,
                     hasSubmenu: true,
-                    a11yLabel: .MainMenu.ToolsMenuItemAccessibilityLabel,
-                    a11yHint: .MainMenu.ToolsMenuItemAccessibilityHint,
+                    a11yLabel: .MainMenu.AccessibilityLabels.ToolsMenuItemAccessibilityLabel,
+                    a11yHint: .MainMenu.AccessibilityLabels.ToolsMenuItemAccessibilityHint,
                     a11yId: AccessibilityIdentifiers.MainMenu.tools,
                     action: {
                         store.dispatch(
@@ -171,13 +170,12 @@ struct MainMenuConfigurationUtility: Equatable {
                 ),
                 MenuElement(
                     title: .MainMenu.ToolsSection.Save,
-                    description: .MainMenu.Submenus.Save.Description,
                     iconName: Icons.save,
                     isEnabled: true,
                     isActive: false,
                     hasSubmenu: true,
-                    a11yLabel: .MainMenu.SaveMenuItemAccessibilityLabel,
-                    a11yHint: .MainMenu.SaveMenuItemAccessibilityHint,
+                    a11yLabel: .MainMenu.AccessibilityLabels.SaveMenuItemAccessibilityLabel,
+                    a11yHint: .MainMenu.AccessibilityLabels.SaveMenuItemAccessibilityHint,
                     a11yId: AccessibilityIdentifiers.MainMenu.save,
                     action: {
                         store.dispatch(
@@ -224,7 +222,7 @@ struct MainMenuConfigurationUtility: Equatable {
                         iconName: Icons.zoom,
                         isEnabled: true,
                         isActive: false,
-                        a11yLabel: .MainMenu.ZoomMenuItemAccessibilityLabel,
+                        a11yLabel: .MainMenu.AccessibilityLabels.ZoomMenuItemAccessibilityLabel,
                         a11yHint: "",
                         a11yId: AccessibilityIdentifiers.MainMenu.zoom,
                         action: {
@@ -241,7 +239,7 @@ struct MainMenuConfigurationUtility: Equatable {
                         iconName: Icons.readerViewOn,
                         isEnabled: true,
                         isActive: false,
-                        a11yLabel: .MainMenu.TurnOnReaderViewMenuItemAccessibilityLabel,
+                        a11yLabel: .MainMenu.AccessibilityLabels.TurnOnReaderViewMenuItemAccessibilityLabel,
                         a11yHint: "",
                         a11yId: AccessibilityIdentifiers.MainMenu.readerViewOn,
                         action: {
@@ -258,7 +256,7 @@ struct MainMenuConfigurationUtility: Equatable {
                         iconName: Icons.nightModeOn,
                         isEnabled: true,
                         isActive: false,
-                        a11yLabel: .MainMenu.TurnOnNightModeMenuItemAccessibilityLabel,
+                        a11yLabel: .MainMenu.AccessibilityLabels.TurnOnNightModeMenuItemAccessibilityLabel,
                         a11yHint: "",
                         a11yId: AccessibilityIdentifiers.MainMenu.nightModeOn,
                         action: {
@@ -275,7 +273,7 @@ struct MainMenuConfigurationUtility: Equatable {
                         iconName: Icons.reportBrokenSite,
                         isEnabled: true,
                         isActive: false,
-                        a11yLabel: .MainMenu.ReportBrokenSiteMenuItemAccessibilityLabel,
+                        a11yLabel: .MainMenu.AccessibilityLabels.ReportBrokenSiteMenuItemAccessibilityLabel,
                         a11yHint: "",
                         a11yId: AccessibilityIdentifiers.MainMenu.reportBrokenSite,
                         action: {
@@ -296,7 +294,7 @@ struct MainMenuConfigurationUtility: Equatable {
                         iconName: Icons.print,
                         isEnabled: true,
                         isActive: false,
-                        a11yLabel: .MainMenu.PrintMenuItemAccessibilityLabel,
+                        a11yLabel: .MainMenu.AccessibilityLabels.PrintMenuItemAccessibilityLabel,
                         a11yHint: "",
                         a11yId: AccessibilityIdentifiers.MainMenu.print,
                         action: {
@@ -313,7 +311,7 @@ struct MainMenuConfigurationUtility: Equatable {
                         iconName: Icons.share,
                         isEnabled: true,
                         isActive: false,
-                        a11yLabel: .MainMenu.ShareMenuItemAccessibilityLabel,
+                        a11yLabel: .MainMenu.AccessibilityLabels.ShareMenuItemAccessibilityLabel,
                         a11yHint: "",
                         a11yId: AccessibilityIdentifiers.MainMenu.share,
                         action: {
@@ -338,7 +336,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     iconName: Icons.bookmarkThisPage,
                     isEnabled: true,
                     isActive: false,
-                    a11yLabel: .MainMenu.BookmarkThisPageMenuItemAccessibilityLabel,
+                    a11yLabel: .MainMenu.AccessibilityLabels.BookmarkThisPageMenuItemAccessibilityLabel,
                     a11yHint: "",
                     a11yId: AccessibilityIdentifiers.MainMenu.bookmarkThisPage,
                     action: {
@@ -355,7 +353,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     iconName: Icons.addToShortcuts,
                     isEnabled: true,
                     isActive: false,
-                    a11yLabel: .MainMenu.AddToShortcutsMenuItemAccessibilityLabel,
+                    a11yLabel: .MainMenu.AccessibilityLabels.AddToShortcutsMenuItemAccessibilityLabel,
                     a11yHint: "",
                     a11yId: AccessibilityIdentifiers.MainMenu.addToShortcuts,
                     action: {
@@ -372,7 +370,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     iconName: Icons.addToHomeScreen,
                     isEnabled: true,
                     isActive: false,
-                    a11yLabel: .MainMenu.AddToHomeScreenMenuItemAccessibilityLabel,
+                    a11yLabel: .MainMenu.AccessibilityLabels.AddToHomeScreenMenuItemAccessibilityLabel,
                     a11yHint: "",
                     a11yId: AccessibilityIdentifiers.MainMenu.addToHomeScreen,
                     action: {
@@ -389,7 +387,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     iconName: Icons.saveToReadingList,
                     isEnabled: true,
                     isActive: false,
-                    a11yLabel: .MainMenu.SaveToReadingListMenuItemAccessibilityLabel,
+                    a11yLabel: .MainMenu.AccessibilityLabels.SaveToReadingListMenuItemAccessibilityLabel,
                     a11yHint: "",
                     a11yId: AccessibilityIdentifiers.MainMenu.saveToReadingList,
                     action: {
@@ -406,7 +404,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     iconName: Icons.saveAsPDF,
                     isEnabled: true,
                     isActive: false,
-                    a11yLabel: .MainMenu.SaveAsPDFMenuItemAccessibilityLabel,
+                    a11yLabel: .MainMenu.AccessibilityLabels.SaveAsPDFMenuItemAccessibilityLabel,
                     a11yHint: "",
                     a11yId: AccessibilityIdentifiers.MainMenu.saveAsPDF,
                     action: {
@@ -430,7 +428,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 iconName: Icons.bookmarks,
                 isEnabled: true,
                 isActive: false,
-                a11yLabel: .MainMenu.BookmarksMenuItemAccessibilityLabel,
+                a11yLabel: .MainMenu.AccessibilityLabels.BookmarksMenuItemAccessibilityLabel,
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.bookmarks,
                 action: {
@@ -448,7 +446,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 iconName: Icons.history,
                 isEnabled: true,
                 isActive: false,
-                a11yLabel: .MainMenu.HistoryMenuItemAccessibilityLabel,
+                a11yLabel: .MainMenu.AccessibilityLabels.HistoryMenuItemAccessibilityLabel,
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.history,
                 action: {
@@ -466,7 +464,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 iconName: Icons.downloads,
                 isEnabled: true,
                 isActive: false,
-                a11yLabel: .MainMenu.DownloadsMenuItemAccessibilityLabel,
+                a11yLabel: .MainMenu.AccessibilityLabels.DownloadsMenuItemAccessibilityLabel,
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.downloads,
                 action: {
@@ -484,7 +482,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 iconName: Icons.passwords,
                 isEnabled: true,
                 isActive: false,
-                a11yLabel: .MainMenu.PasswordsMenuItemAccessibilityLabel,
+                a11yLabel: .MainMenu.AccessibilityLabels.PasswordsMenuItemAccessibilityLabel,
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.passwords,
                 action: {
@@ -511,7 +509,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 iconName: Icons.customizeHomepage,
                 isEnabled: true,
                 isActive: false,
-                a11yLabel: .MainMenu.CustomizeHomepageMenuItemAccessibilityLabel,
+                a11yLabel: .MainMenu.AccessibilityLabels.CustomizeHomepageMenuItemAccessibilityLabel,
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.customizeHomepage,
                 action: {
@@ -532,7 +530,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 iconName: Icons.whatsNew,
                 isEnabled: true,
                 isActive: false,
-                a11yLabel: .MainMenu.NewInMenuItemAccessibilityLabel,
+                a11yLabel: .MainMenu.AccessibilityLabels.NewInMenuItemAccessibilityLabel,
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.whatsNew,
                 action: {
@@ -553,7 +551,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 iconName: Icons.getHelp,
                 isEnabled: true,
                 isActive: false,
-                a11yLabel: .MainMenu.GetHelpMenuItemAccessibilityLabel,
+                a11yLabel: .MainMenu.AccessibilityLabels.GetHelpMenuItemAccessibilityLabel,
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.getHelp,
                 action: {
@@ -571,7 +569,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 iconName: Icons.settings,
                 isEnabled: true,
                 isActive: false,
-                a11yLabel: .MainMenu.SettingsMenuItemAccessibilityLabel,
+                a11yLabel: .MainMenu.AccessibilityLabels.SettingsMenuItemAccessibilityLabel,
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.settings,
                 action: {

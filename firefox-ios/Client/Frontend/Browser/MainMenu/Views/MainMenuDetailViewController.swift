@@ -89,9 +89,9 @@ class MainMenuDetailViewController: UIViewController,
 
     private func setupAccessibilityIdentifiers() {
         submenuContent.setupAccessibilityIdentifiers(
-            closeButtonA11yLabel: .MainMenu.Account.CloseButtonAccessibilityLabel,
+            closeButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.CloseButtonAccessibilityLabel,
             closeButtonA11yId: AccessibilityIdentifiers.MainMenu.NavigationHeaderView.closeButton,
-            backButtonA11yLabel: .MainMenu.Account.BackButtonAccessibilityLabel,
+            backButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.BackButtonAccessibilityLabel,
             backButtonA11yId: AccessibilityIdentifiers.MainMenu.NavigationHeaderView.backButton)
     }
 
