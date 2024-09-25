@@ -82,7 +82,7 @@ struct FakespotState: ScreenState, Equatable {
             return handleTabDidReload(action: action, state: state)
 
         case FakespotActionType.pressedShoppingButton:
-            return handlePressedShopping(state: state)
+            return handlePressedShoppingButton(state: state)
 
         case FakespotActionType.show:
             return handleShow(state: state)
@@ -168,7 +168,7 @@ struct FakespotState: ScreenState, Equatable {
         return state
     }
 
-    private static func handlePressedShopping(state: FakespotState) -> FakespotState {
+    private static func handlePressedShoppingButton(state: FakespotState) -> FakespotState {
         var state = state
         state.isOpen = !state.isOpen
         state.sidebarOpenForiPadLandscape = state.isOpen
