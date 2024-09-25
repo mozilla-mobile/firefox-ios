@@ -66,7 +66,7 @@ let package = Package(
     targets: [
         .target(
             name: "ComponentLibrary",
-            dependencies: ["Common"],
+            dependencies: ["Common", "SiteImageView"],
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "ComponentLibraryTests",
