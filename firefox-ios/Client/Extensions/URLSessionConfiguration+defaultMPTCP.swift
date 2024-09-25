@@ -7,21 +7,13 @@ import Foundation
 extension URLSessionConfiguration {
     static var defaultMPTCP: URLSessionConfiguration {
         let conf = self.default
-        #if os(iOS)
-            // multipath is only available on iOS, enable it only in this case
-            conf.multipathServiceType = .handover
-        #endif
-        // if we aren't building for iOS, defaultMPTCP == default, thus fall back to TCP
+        conf.multipathServiceType = .handover
         return conf
     }
 
     static var ephemeralMPTCP: URLSessionConfiguration {
         let conf = self.ephemeral
-        #if os(iOS)
-            // multipath is only available on iOS, enable it only in this case
-            conf.multipathServiceType = .handover
-        #endif
-        // If we aren't building for iOS, ephemeralMPTCP == ephemeral, thus fallback to TCP
+        conf.multipathServiceType = .handover
         return conf
     }
 }
