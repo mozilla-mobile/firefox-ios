@@ -33,8 +33,8 @@ public struct StandardImageIdentifiers {
     // Icon size 24x24
     public struct Large {
         public static let addToHomeScreen = "addToHomescreenLarge"
-        public static let appMenu = "appMenuLarge"
         public static let appendUpLeft = "appendUpLeftLarge"
+        public static let appMenu = "appMenuLarge"
         public static let arrowClockwise = "arrowClockwiseLarge"
         public static let avatarCircle = "avatarCircleLarge"
         public static let back = "backLarge"
