@@ -6120,11 +6120,6 @@ extension String {
         tableName: "PrivateBrowsing",
         value: "Private browsing",
         comment: "Accessibility label for toggling on/off private mode")
-    public static let TabTrayToggleAccessibilityHint = MZLocalizedString(
-        key: "Turns private mode on or off",
-        tableName: "PrivateBrowsing",
-        value: nil,
-        comment: "Accessiblity hint for toggling on/off private mode")
     public static let TabTrayToggleAccessibilityValueOn = MZLocalizedString(
         key: "On",
         tableName: "PrivateBrowsing",
@@ -7142,6 +7137,11 @@ extension String {
                 tableName: "PrivateBrowsing",
                 value: nil,
                 comment: "Accessibility label for toggling on/off private mode")
+            public static let TabTrayToggleAccessibilityHint = MZLocalizedString(
+                key: "Turns private mode on or off",
+                tableName: "PrivateBrowsing",
+                value: nil,
+                comment: "Accessiblity hint for toggling on/off private mode")
         }
     }
 }

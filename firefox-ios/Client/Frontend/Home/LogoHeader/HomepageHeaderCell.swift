@@ -54,7 +54,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         button.layer.cornerRadius = button.frame.size.width / 2
         button.addTarget(self, action: #selector(self?.switchMode), for: .touchUpInside)
         button.accessibilityLabel = .TabTrayToggleAccessibilityLabel
-        button.accessibilityHint = .TabTrayToggleAccessibilityHint
         button.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.privateModeToggleButton
     }
 
