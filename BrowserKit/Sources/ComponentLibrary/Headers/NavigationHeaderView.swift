@@ -17,7 +17,7 @@ public final class NavigationHeaderView: UIView {
     public var backToMainMenuCallback: (() -> Void)?
     public var dismissMenuCallback: (() -> Void)?
 
-    let siteTitleLabel: UILabel = .build { label in
+    let titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .center
         label.font = FXFontStyles.Regular.headline.scaledFont()
@@ -53,7 +53,7 @@ public final class NavigationHeaderView: UIView {
 
     // MARK: View Setup
     private func setupView() {
-        addSubviews(siteTitleLabel, backButton, closeButton, horizontalLine)
+        addSubviews(titleLabel, backButton, closeButton, horizontalLine)
 
         NSLayoutConstraint.activate([
             backButton.leadingAnchor.constraint(
@@ -62,15 +62,15 @@ public final class NavigationHeaderView: UIView {
             ),
             backButton.centerYAnchor.constraint(equalTo: centerYAnchor),
 
-            siteTitleLabel.topAnchor.constraint(
+            titleLabel.topAnchor.constraint(
                 equalTo: topAnchor,
                 constant: UX.baseDistance
             ),
-            siteTitleLabel.bottomAnchor.constraint(
+            titleLabel.bottomAnchor.constraint(
                 equalTo: bottomAnchor,
                 constant: -UX.baseDistance
             ),
-            siteTitleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
 
             closeButton.trailingAnchor.constraint(
                 equalTo: trailingAnchor,
@@ -99,7 +99,7 @@ public final class NavigationHeaderView: UIView {
     }
 
     public func setViews(with title: String, and backButtonText: String) {
-        siteTitleLabel.text = title
+        titleLabel.text = title
         backButton.setTitle(backButtonText, for: .normal)
     }
 
@@ -122,6 +122,6 @@ public final class NavigationHeaderView: UIView {
         backButton.tintColor = theme.colors.iconAction
         backButton.setTitleColor(theme.colors.textAccent, for: .normal)
         horizontalLine.backgroundColor = theme.colors.borderPrimary
-        siteTitleLabel.textColor = theme.colors.textPrimary
+        titleLabel.textColor = theme.colors.textPrimary
     }
 }
