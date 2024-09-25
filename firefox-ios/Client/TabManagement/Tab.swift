@@ -1101,6 +1101,7 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
         return super.hitTest(point, with: event)
     }
 
+    // swiftlint:disable unneeded_override
 #if compiler(>=6)
     override func evaluateJavaScript(
         _ javaScriptString: String,
@@ -1120,6 +1121,8 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
         super.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
     }
 #endif
+    // swiftlint:enable unneeded_override
+
     // MARK: - ThemeApplicable
 
     /// Updates the `background-color` of the webview to match
