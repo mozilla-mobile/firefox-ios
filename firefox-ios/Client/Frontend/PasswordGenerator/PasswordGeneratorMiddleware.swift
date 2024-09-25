@@ -20,7 +20,7 @@ final class PasswordGeneratorMiddleware: FeatureFlaggable {
     }
 
     private func showPasswordGenerator(tab: Tab, windowUUID: WindowUUID) {
-        // TODO - Business Logic to be added (tab is a necessary part of future business logic)
+        // TODO - FXIOS-9660 Business Logic to be added (tab is a necessary part of future business logic)
         let newAction = PasswordGeneratorAction(
             windowUUID: windowUUID,
             actionType: PasswordGeneratorActionType.updateGeneratedPassword,

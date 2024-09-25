@@ -81,7 +81,6 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     private lazy var passwordRefreshButton: UIButton = .build { button in
         button.setImage(
             UIImage(named: StandardImageIdentifiers.Large.arrowClockwise)?.withRenderingMode(.alwaysTemplate), for: .normal)
-//        button.imageView?.contentMode = .scaleAspectFit
         button.contentHorizontalAlignment = .fill
         button.contentVerticalAlignment = .fill
         button.accessibilityLabel = .PasswordGenerator.RefreshPasswordButtonA11yLabel
