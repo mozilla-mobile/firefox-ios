@@ -20,7 +20,7 @@ final class PasswordGeneratorViewControllerTests: XCTestCase {
         super.tearDown()
     }
 
-    func testMicrosurveyViewController_simpleCreation_hasNoLeaks() {
+    func testPasswordGeneratorViewController_simpleCreation_hasNoLeaks() {
         let mockProfile = MockProfile()
         let currentTab = Tab(profile: mockProfile, windowUUID: windowUUID)
         let passwordGeneratorViewController = PasswordGeneratorViewController(windowUUID: windowUUID, currentTab: currentTab)

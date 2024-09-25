@@ -36,7 +36,6 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     var notificationCenter: NotificationProtocol
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
-    private var contentViewHeightConstraint: NSLayoutConstraint!
     private let scaledRefreshButtonSize = UIFontMetrics.default.scaledValue(for: UX.passwordRefreshButtonHeight)
     private let scaledHeaderImageSize = UIFontMetrics.default.scaledValue(for: UX.headerImageHeight)
 
