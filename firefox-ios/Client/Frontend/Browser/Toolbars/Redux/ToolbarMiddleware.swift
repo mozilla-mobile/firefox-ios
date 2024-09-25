@@ -134,6 +134,8 @@ final class ToolbarMiddleware: FeatureFlaggable {
             store.dispatch(action)
 
         case .tabs:
+            cancelEditMode(windowUUID: action.windowUUID)
+
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showTabTray)
             store.dispatch(action)
@@ -145,14 +147,15 @@ final class ToolbarMiddleware: FeatureFlaggable {
             store.dispatch(action)
 
         case .menu:
+            cancelEditMode(windowUUID: action.windowUUID)
+
             let action = GeneralBrowserAction(buttonTapped: action.buttonTapped,
                                               windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showMenu)
             store.dispatch(action)
 
         case .cancelEdit:
-            let action = ToolbarAction(windowUUID: action.windowUUID, actionType: ToolbarActionType.cancelEdit)
-            store.dispatch(action)
+            cancelEditMode(windowUUID: action.windowUUID)
 
         case .readerMode:
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
@@ -313,6 +316,15 @@ final class ToolbarMiddleware: FeatureFlaggable {
     }
 
     // MARK: - Helper
+    private func cancelEditMode(windowUUID: WindowUUID) {
+        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
+        store.dispatch(action)
+
+        let browserAction = GeneralBrowserAction(showOverlay: false,
+                                                 windowUUID: windowUUID,
+                                                 actionType: GeneralBrowserActionType.leaveOverlay)
+        store.dispatch(browserAction)
+    }
 
     private func addressToolbarPositionFromSearchBarPosition(_ position: SearchBarPosition) -> AddressToolbarPosition {
         switch position {
