@@ -365,6 +365,7 @@ class TabDisplayView: UIView,
                                         actionType: TabPanelViewActionType.toggleInactiveTabs)
         store.dispatch(action)
 
+        // reload sections of the snapshot so that the collectionView can show/hide the expanded inactiveTabs
         var snapshot = dataSource.snapshot()
         snapshot.reloadSections([.inactiveTabs, .tabs])
         dataSource.apply(snapshot, animatingDifferences: true)
