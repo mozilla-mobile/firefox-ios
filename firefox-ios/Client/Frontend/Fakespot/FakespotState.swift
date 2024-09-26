@@ -94,7 +94,7 @@ struct FakespotState: ScreenState, Equatable {
             return handleAppearance(action: action, state: state)
 
         case FakespotActionType.surfaceDisplayedEventSend:
-            return handleSurfaceDisplayed(state: state)
+            return handleSurfaceDisplayedEvent(state: state)
 
         case FakespotActionType.adsImpressionEventSendFor:
             return handleAdsImpression(action: action, state: state)
@@ -183,7 +183,7 @@ struct FakespotState: ScreenState, Equatable {
         return state
     }
 
-    private static func handleSurfaceDisplayed(state: FakespotState) -> FakespotState {
+    private static func handleSurfaceDisplayedEvent(state: FakespotState) -> FakespotState {
         var state = state
         state.sendSurfaceDisplayedTelemetryEvent = false
         return state
