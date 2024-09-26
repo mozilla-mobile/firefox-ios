@@ -3931,7 +3931,7 @@ extension String {
 
             public struct AccessibilityLabels {
                 public static let MainMenu = MZLocalizedString(
-                    key: "MainMenu.AccessibilityLabels.MainMenu.v132",
+                    key: "MainMenu.TabsSection.AccessibilityLabels.MainMenu.v132",
                     tableName: "MainMenu",
                     value: "Main Menu",
                     comment: "The accessibility label for the Main Menu.")
