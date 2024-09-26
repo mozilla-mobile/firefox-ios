@@ -36,6 +36,8 @@ class MockSettingsFlowDelegate: SettingsFlowDelegate,
         showExperimentsCalled += 1
     }
 
+    func showRemoteSettingsOption() {}
+
     func showFirefoxSuggest() {}
 
     func openDebugTestTabs(count: Int) {}

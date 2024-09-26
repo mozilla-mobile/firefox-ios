@@ -19,6 +19,7 @@ protocol SettingsFlowDelegate: AnyObject,
     func showCreditCardSettings()
     func showExperiments()
     func showFirefoxSuggest()
+    func showRemoteSettingsOption()
     func openDebugTestTabs(count: Int)
     func showDebugFeatureFlags()
     func showPasswordManager(shouldShowOnboarding: Bool)
@@ -393,6 +394,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             FasterInactiveTabs(settings: self, settingsDelegate: self),
             OpenFiftyTabsDebugOption(settings: self, settingsDelegate: self),
             FirefoxSuggestSettings(settings: self, settingsDelegate: self),
+            RemoteSettingsOption(settings: self, settingsDelegate: self)
         ]
 
         #if MOZ_CHANNEL_BETA || MOZ_CHANNEL_FENNEC
@@ -428,6 +430,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
     func pressedFirefoxSuggest() {
         parentCoordinator?.showFirefoxSuggest()
+    }
+    
+    func pressedRemoteSettingsOption() {
+        parentCoordinator?.showRemoteSettingsOption()
     }
 
     func pressedOpenFiftyTabs() {

@@ -188,6 +188,9 @@ public struct PrefsKeys {
 
     // Used to show splash screen only during first time on fresh install
     public static let splashScreenShownKey = "splashScreenShownKey"
+    
+    // Remote Setting keys
+    public static let remoteSettingsKey = "remoteSettingsKey"
 }
 
 public protocol Prefs {
