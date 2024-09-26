@@ -5,6 +5,7 @@
 import XCTest
 import WebKit
 import Common
+import Shared
 @testable import Client
 
 class TabTests: XCTestCase {
@@ -13,7 +14,8 @@ class TabTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        tabDelegate = MockLegacyTabDelegate()
+        // Disable debug flag for faster inactive tabs and perform tests based on the real 14 day time to inactive
+        UserDefaults.standard.set(false, forKey: PrefsKeys.FasterInactiveTabsOverride)
     }
 
     override func tearDown() {
