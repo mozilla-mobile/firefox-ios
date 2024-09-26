@@ -13,7 +13,6 @@ final class ToolbarManagerTests: XCTestCase {
         XCTAssertEqual(AddressToolbarBorderPosition.bottom, subject.getAddressBorderPosition(
             for: .top,
             isPrivate: false,
-            isWebPage: false,
             scrollY: 10))
     }
 
@@ -22,25 +21,6 @@ final class ToolbarManagerTests: XCTestCase {
         XCTAssertEqual(AddressToolbarBorderPosition.none, subject.getAddressBorderPosition(
             for: .top,
             isPrivate: false,
-            isWebPage: false,
-            scrollY: 0))
-    }
-
-    func testAddressToolbarBorderPositionWhenTopPlacementAndWebpageScrolledThenShouldDisplayBottomBorder() {
-        let subject = createSubject()
-        XCTAssertEqual(AddressToolbarBorderPosition.bottom, subject.getAddressBorderPosition(
-            for: .top,
-            isPrivate: false,
-            isWebPage: true,
-            scrollY: 10))
-    }
-
-    func testAddressToolbarBorderPositionWhenTopPlacementAndWebpageNotScrolledThenShouldDisplayNoBorder() {
-        let subject = createSubject()
-        XCTAssertEqual(AddressToolbarBorderPosition.bottom, subject.getAddressBorderPosition(
-            for: .top,
-            isPrivate: false,
-            isWebPage: true,
             scrollY: 0))
     }
 
@@ -49,7 +29,6 @@ final class ToolbarManagerTests: XCTestCase {
         XCTAssertEqual(AddressToolbarBorderPosition.top, subject.getAddressBorderPosition(
             for: .bottom,
             isPrivate: false,
-            isWebPage: false,
             scrollY: 10))
     }
 
@@ -58,7 +37,6 @@ final class ToolbarManagerTests: XCTestCase {
         XCTAssertEqual(AddressToolbarBorderPosition.top, subject.getAddressBorderPosition(
             for: .bottom,
             isPrivate: false,
-            isWebPage: false,
             scrollY: 0))
     }
 
@@ -67,7 +45,6 @@ final class ToolbarManagerTests: XCTestCase {
         XCTAssertEqual(AddressToolbarBorderPosition.bottom, subject.getAddressBorderPosition(
             for: .top,
             isPrivate: true,
-            isWebPage: false,
             scrollY: 10))
     }
 
@@ -76,7 +53,6 @@ final class ToolbarManagerTests: XCTestCase {
         XCTAssertEqual(AddressToolbarBorderPosition.bottom, subject.getAddressBorderPosition(
             for: .top,
             isPrivate: true,
-            isWebPage: false,
             scrollY: 0))
     }
 
@@ -85,7 +61,6 @@ final class ToolbarManagerTests: XCTestCase {
         XCTAssertEqual(AddressToolbarBorderPosition.top, subject.getAddressBorderPosition(
             for: .bottom,
             isPrivate: true,
-            isWebPage: false,
             scrollY: 0))
     }
 
@@ -94,7 +69,6 @@ final class ToolbarManagerTests: XCTestCase {
         XCTAssertEqual(AddressToolbarBorderPosition.top, subject.getAddressBorderPosition(
             for: .bottom,
             isPrivate: true,
-            isWebPage: false,
             scrollY: 10))
     }
 

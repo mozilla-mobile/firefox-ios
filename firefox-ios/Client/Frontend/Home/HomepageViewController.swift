@@ -43,6 +43,7 @@ class HomepageViewController:
     private var jumpBackInContextualHintViewController: ContextualHintViewController
     private var syncTabContextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
+    private var lastContentOffsetY: CGFloat = 0
     private var logger: Logger
     var windowUUID: WindowUUID { return tabManager.windowUUID }
     var currentWindowUUID: UUID? { return windowUUID }
@@ -394,6 +395,10 @@ class HomepageViewController:
         }
     }
 
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        lastContentOffsetY = scrollView.contentOffset.y
+    }
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         handleScroll(scrollView, isUserInteraction: true)
     }
@@ -424,16 +429,12 @@ class HomepageViewController:
                 store.dispatch(action)
             }
         }
-
-        guard let toolbarState,
-              let borderPosition = toolbarState.addressToolbar.borderPosition
-        else { return }
-
-        // Only dispatch the action to update the toolbar border if needed, which is only if either
-        // a) we scroll down, and the toolbar border is not already at the bottom (so we show it), or
-        // b) we scroll up past the top of the scroll view, and the border is currently at the bottom (so we hide it)
-        if (scrollView.contentOffset.y > 0 && borderPosition != .bottom)
-           || (scrollView.contentOffset.y < 0 && borderPosition != .none) {
+        
+        // this action controls the address toolbar's border position, and to prevent spamming redux with actions for every
+        // change in content offset, we keep track of lastContentOffsetY to know if the border needs to be updated
+        if (lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0) ||
+            (lastContentOffsetY <= 0 && scrollView.contentOffset.y > 0) {
+            lastContentOffsetY = scrollView.contentOffset.y
             store.dispatch(
                 GeneralBrowserMiddlewareAction(
                     scrollOffset: scrollView.contentOffset,

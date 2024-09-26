@@ -52,6 +52,7 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
     var headerTopConstraint: Constraint?
 
     private var lastPanTranslation: CGFloat = 0
+    private var lastContentOffsetY: CGFloat = 0
     private var scrollDirection: ScrollDirection = .down
     var toolbarState: ToolbarState = .visible
 
@@ -455,6 +456,10 @@ extension TabScrollingController: UIGestureRecognizerDelegate {
 }
 
 extension TabScrollingController: UIScrollViewDelegate {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+            lastContentOffsetY = scrollView.contentOffset.y
+        }
+
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard !tabIsLoading(), !isBouncingAtBottom(), isAbleToScroll, let tab else { return }
 
@@ -475,6 +480,18 @@ extension TabScrollingController: UIScrollViewDelegate {
         // for PDFs, we should set the initial offset to 0 (ZERO)
         if let tab, tab.shouldScrollToTop {
             setOffset(y: 0, for: scrollView)
+        }
+
+        // this action controls the address toolbar's border position, and to prevent spamming redux with actions for every
+        // change in content offset, we keep track of lastContentOffsetY to know if the border needs to be updated
+        if (lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0) ||
+            (lastContentOffsetY <= 0 && scrollView.contentOffset.y > 0) {
+            lastContentOffsetY = scrollView.contentOffset.y
+            store.dispatch(
+                GeneralBrowserMiddlewareAction(
+                    scrollOffset: scrollView.contentOffset,
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserMiddlewareActionType.websiteDidScroll))
         }
 
         guard isAnimatingToolbar else { return }

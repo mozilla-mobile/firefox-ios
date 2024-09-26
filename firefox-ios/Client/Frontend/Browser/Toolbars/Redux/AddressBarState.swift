@@ -200,7 +200,7 @@ struct AddressBarState: StateType, Equatable {
                                                      isEditing: state.isEditing),
                 pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
                 browserActions: browserActions(action: toolbarAction, addressBarState: state),
-                borderPosition: toolbarAction.addressBorderPosition,
+                borderPosition: state.borderPosition,
                 url: toolbarAction.url,
                 searchTerm: nil,
                 lockIconImageName: toolbarAction.lockIconImageName ?? state.lockIconImageName,
