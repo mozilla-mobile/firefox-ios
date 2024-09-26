@@ -531,14 +531,14 @@ class NavigationTest: BaseTestCase {
     private func validateExternalLink(isPrivate: Bool = false) {
         navigator.openURL("ultimateqa.com/dummy-automation-websites")
         waitUntilPageLoad()
-        scrollToElement(app.links["SauceDemo.com"])
-        app.links["SauceDemo.com"].tap(force: true)
+        scrollToElement(app.links["SauceDemo.com"].firstMatch)
+        app.links["SauceDemo.com"].firstMatch.tap(force: true)
         waitUntilPageLoad()
         // Sometimes first tap is not working on iPad
         if iPad() {
             if let urlTextField =  app.textFields["url"].value as? String,
                urlTextField == "ultimateqa.com/dummy-automation-websites" {
-                app.links["SauceDemo.com"].tap(force: true)
+                app.links["SauceDemo.com"].firstMatch.tap(force: true)
             }
         }
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
