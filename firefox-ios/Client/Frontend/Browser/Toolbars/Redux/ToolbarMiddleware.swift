@@ -83,7 +83,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         case ToolbarMiddlewareActionType.didTapButton:
             resolveToolbarMiddlewareButtonTapActions(action: action, state: state)
 
-        case ToolbarMiddlewareActionType.tabModeChanged:
+        case ToolbarMiddlewareActionType.urlDidChange:
             guard let scrollOffset = action.scrollOffset else { return }
             updateTopAddressBorderPosition(scrollOffset: scrollOffset, windowUUID: action.windowUUID, state: state)
 

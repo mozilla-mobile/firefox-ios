@@ -1892,7 +1892,7 @@ class BrowserViewController: UIViewController,
                 let middlewareAction = ToolbarMiddlewareAction(
                     scrollOffset: scrollController.contentOffset,
                     windowUUID: windowUUID,
-                    actionType: ToolbarMiddlewareActionType.tabModeChanged)
+                    actionType: ToolbarMiddlewareActionType.urlDidChange)
                 store.dispatch(middlewareAction)
             }
             return

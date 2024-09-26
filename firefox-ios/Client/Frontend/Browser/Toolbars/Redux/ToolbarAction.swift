@@ -109,5 +109,5 @@ class ToolbarMiddlewareAction: Action {
 enum ToolbarMiddlewareActionType: ActionType {
     case didTapButton
     case customA11yAction
-    case tabModeChanged // private vs normal tab
+    case urlDidChange
 }
