@@ -44,6 +44,16 @@ public final class MenuDetailView: UIView,
         ])
     }
 
+    public func setupAccessibilityIdentifiers(closeButtonA11yLabel: String,
+                                              closeButtonA11yId: String,
+                                              backButtonA11yLabel: String,
+                                              backButtonA11yId: String) {
+        detailHeaderView.setupAccessibility(closeButtonA11yLabel: closeButtonA11yLabel,
+                                            closeButtonA11yId: closeButtonA11yId,
+                                            backButtonA11yLabel: backButtonA11yLabel,
+                                            backButtonA11yId: backButtonA11yId)
+    }
+
     // MARK: - Interface
     public func reloadTableView(with data: [MenuSection]) {
         tableView.reloadTableView(with: data)

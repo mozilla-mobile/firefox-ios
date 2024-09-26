@@ -317,7 +317,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         if isTablet {
             screenState.tap(
-                app.buttons["Private Mode"],
+                app.buttons[AccessibilityIdentifiers.Browser.TopTabs.privateModeButton],
                 forAction: Action.TogglePrivateModeFromTabBarNewTab
             ) { userState in
                 userState.isPrivate = !userState.isPrivate
@@ -447,7 +447,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(HomePanelsScreen) { screenState in
         if isTablet {
             screenState.tap(
-                app.buttons["Private Mode"],
+                app.buttons[AccessibilityIdentifiers.Browser.TopTabs.privateModeButton],
                 forAction: Action.TogglePrivateModeFromTabBarHomePanel
             ) { userState in
                 userState.isPrivate = !userState.isPrivate

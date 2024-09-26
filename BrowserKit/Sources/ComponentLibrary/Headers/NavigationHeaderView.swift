@@ -17,12 +17,13 @@ public final class NavigationHeaderView: UIView {
     public var backToMainMenuCallback: (() -> Void)?
     public var dismissMenuCallback: (() -> Void)?
 
-    let siteTitleLabel: UILabel = .build { label in
+    let titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .center
         label.font = FXFontStyles.Regular.headline.scaledFont()
         label.numberOfLines = 2
         label.accessibilityTraits.insert(.header)
+        label.isAccessibilityElement = false
     }
 
     private lazy var closeButton: CloseButton = .build { button in
@@ -35,6 +36,7 @@ public final class NavigationHeaderView: UIView {
             .withRenderingMode(.alwaysTemplate),
                         for: .normal)
         button.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.addTarget(self, action: #selector(self.backButtonTapped), for: .touchUpInside)
     }
 
@@ -51,7 +53,7 @@ public final class NavigationHeaderView: UIView {
 
     // MARK: View Setup
     private func setupView() {
-        addSubviews(siteTitleLabel, backButton, closeButton, horizontalLine)
+        addSubviews(titleLabel, backButton, closeButton, horizontalLine)
 
         NSLayoutConstraint.activate([
             backButton.leadingAnchor.constraint(
@@ -60,17 +62,15 @@ public final class NavigationHeaderView: UIView {
             ),
             backButton.centerYAnchor.constraint(equalTo: centerYAnchor),
 
-            siteTitleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            siteTitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
-            siteTitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            siteTitleLabel.topAnchor.constraint(
+            titleLabel.topAnchor.constraint(
                 equalTo: topAnchor,
                 constant: UX.baseDistance
             ),
-            siteTitleLabel.bottomAnchor.constraint(
+            titleLabel.bottomAnchor.constraint(
                 equalTo: bottomAnchor,
                 constant: -UX.baseDistance
             ),
+            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
 
             closeButton.trailingAnchor.constraint(
                 equalTo: trailingAnchor,
@@ -87,8 +87,19 @@ public final class NavigationHeaderView: UIView {
         ])
     }
 
+    public func setupAccessibility(closeButtonA11yLabel: String,
+                                   closeButtonA11yId: String,
+                                   backButtonA11yLabel: String,
+                                   backButtonA11yId: String) {
+        let closeButtonViewModel = CloseButtonViewModel(a11yLabel: closeButtonA11yLabel,
+                                                        a11yIdentifier: closeButtonA11yId)
+        closeButton.configure(viewModel: closeButtonViewModel)
+        backButton.accessibilityIdentifier = backButtonA11yId
+        backButton.accessibilityLabel = backButtonA11yLabel
+    }
+
     public func setViews(with title: String, and backButtonText: String) {
-        siteTitleLabel.text = title
+        titleLabel.text = title
         backButton.setTitle(backButtonText, for: .normal)
     }
 
@@ -111,6 +122,6 @@ public final class NavigationHeaderView: UIView {
         backButton.tintColor = theme.colors.iconAction
         backButton.setTitleColor(theme.colors.textAccent, for: .normal)
         horizontalLine.backgroundColor = theme.colors.borderPrimary
-        siteTitleLabel.textColor = theme.colors.textPrimary
+        titleLabel.textColor = theme.colors.textPrimary
     }
 }
