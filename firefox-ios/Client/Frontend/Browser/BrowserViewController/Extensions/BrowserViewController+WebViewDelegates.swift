@@ -540,7 +540,7 @@ extension BrowserViewController: WKNavigationDelegate {
             }
 
             if navigationAction.navigationType == .linkActivated {
-                if tab.isPrivate || (profile.prefs.boolForKey(PrefsKeys.BlockOpeningExternalApps) ?? false) {
+                if profile.prefs.boolForKey(PrefsKeys.BlockOpeningExternalApps) ?? false {
                     decisionHandler(.cancel)
                     webView.load(navigationAction.request)
                     return
