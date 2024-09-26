@@ -6,6 +6,7 @@ import UIKit
 import Shared
 import Common
 
+/// Helper utility that aims to detect potential bugs in production which could result in tab loss.
 final class TabErrorTelemetryHelper {
     static let shared = TabErrorTelemetryHelper()
     private let defaultsKey = "TabErrorTelemetryHelper_Data"
