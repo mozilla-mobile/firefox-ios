@@ -636,6 +636,7 @@ extension TelemetryWrapper {
         case crashedLastLaunch = "crashed_last_launch"
         case cpuException = "cpu_exception"
         case hangException = "hang-exception"
+        case tabLossDetected = "tab-loss-detected"
         case fxSuggestionTelemetryInfo = "fx-suggestion-telemetry-info"
         case fxSuggestionPosition = "fx-suggestion-position"
         case fxSuggestionDidTap = "fx-suggestion-did-tap"

@@ -102,6 +102,7 @@
 		1DA6F6512B48B42900BB5AD6 /* WindowEventCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA6F6502B48B42900BB5AD6 /* WindowEventCoordinator.swift */; };
 		1DA710072AE7106B00677F6B /* AppDataUsageReportSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA710062AE7106B00677F6B /* AppDataUsageReportSetting.swift */; };
 		1DC372022B23C80F000F96C8 /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC372012B23C80F000F96C8 /* WindowManager.swift */; };
+		1DD4B26E2CA4D09100B51945 /* TabErrorTelemetryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DD4B26D2CA4D09100B51945 /* TabErrorTelemetryHelper.swift */; };
 		1DDAD13E24F0651C007623C8 /* TopSitesWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDAD13C24F064F7007623C8 /* TopSitesWidget.swift */; };
 		1DDE3DB32AC34E1E0039363B /* TabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDE3DB22AC34E1E0039363B /* TabCell.swift */; };
 		1DDE3DB52AC360EC0039363B /* TabCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDE3DB42AC360EC0039363B /* TabCellTests.swift */; };
@@ -2435,6 +2436,7 @@
 		1DA6F6502B48B42900BB5AD6 /* WindowEventCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowEventCoordinator.swift; sourceTree = "<group>"; };
 		1DA710062AE7106B00677F6B /* AppDataUsageReportSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDataUsageReportSetting.swift; sourceTree = "<group>"; };
 		1DC372012B23C80F000F96C8 /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
+		1DD4B26D2CA4D09100B51945 /* TabErrorTelemetryHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabErrorTelemetryHelper.swift; sourceTree = "<group>"; };
 		1DDAD13C24F064F7007623C8 /* TopSitesWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesWidget.swift; sourceTree = "<group>"; };
 		1DDE3DB22AC34E1E0039363B /* TabCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCell.swift; sourceTree = "<group>"; };
 		1DDE3DB42AC360EC0039363B /* TabCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCellTests.swift; sourceTree = "<group>"; };
@@ -13107,6 +13109,7 @@
 				8A44F20D2B585E1F0016BC81 /* HomepageTelemetry.swift */,
 				8A95FF632B1E969E00AC303D /* TelemetryContextualIdentifier.swift */,
 				EBF47E6F1F7979DF00899189 /* TelemetryWrapper.swift */,
+				1DD4B26D2CA4D09100B51945 /* TabErrorTelemetryHelper.swift */,
 				8A0727452B4890B50071BB9F /* WebviewTelemetry.swift */,
 				8A359EF42A1FD4CF004A5BB7 /* Wrapper */,
 			);
@@ -15599,6 +15602,7 @@
 				D88FDAAF1F4E2BA000FD9709 /* PhotonActionSheetAnimator.swift in Sources */,
 				C83432FE26BAD30D00ABAAA6 /* EnhancedTrackingProtectionDetailsVC.swift in Sources */,
 				E698FFDA1B4AADF40001F623 /* TabScrollController.swift in Sources */,
+				1DD4B26E2CA4D09100B51945 /* TabErrorTelemetryHelper.swift in Sources */,
 				8A359EF32A1FD449004A5BB7 /* AdjustWrapper.swift in Sources */,
 				8AAEBA022BF5110A000C02B5 /* MicrosurveyAction.swift in Sources */,
 				D34510881ACF415700EC27F0 /* SearchLoader.swift in Sources */,
