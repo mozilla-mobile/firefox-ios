@@ -263,14 +263,9 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
                                          nextUrl: oldTabGroupData?.tabAssociatedNextUrl,
                                          tabHistoryCurrentState: state)
 
-<<<<<<< HEAD
-            let tabId = UUID(uuidString: tab.tabUUID) ?? UUID()
-            let logMessage = "for saving for tab id \(tabId). It was last used \(Date.fromTimestamp(tab.lastExecutedTime ?? 0))"
-=======
             let tabId =  UUID(uuidString: tab.tabUUID) ?? UUID()
->>>>>>> 5e949c45d (Bugfix FXIOS-9998 Fix crash when deleting and the undoing the inactive tabs multiple times in a row (related improvements FXIOS-9954, FXIOS-10010, FXIOS-9999) (#22075))
             if tab.url == nil {
-                logger.log("Tab has empty tab.URL for saving for tab id \(tabId). It was last used \(Date.fromTimestamp(tab.lastExecutedTime))",
+                logger.log("Tab has empty tab.URL for saving for tab id \(tabId). It was last used \(Date.fromTimestamp(tab.lastExecutedTime ?? 0))",
                            level: .debug,
                            category: .tabs)
             }

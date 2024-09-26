@@ -45,8 +45,6 @@ class TabTests: XCTestCase {
         tab.tabDelegate = tabDelegate
         trackForMemoryLeaks(tab)
     }
-<<<<<<< HEAD
-=======
 
     // MARK: - isActive, isInactive
 
@@ -198,7 +196,6 @@ class TabTests: XCTestCase {
         XCTAssertTrue(normalInctiveTab1.isSameTypeAs(normalInctiveTab2))
         XCTAssertTrue(normalInctiveTab2.isSameTypeAs(normalInctiveTab1))
     }
->>>>>>> 5e949c45d (Bugfix FXIOS-9998 Fix crash when deleting and the undoing the inactive tabs multiple times in a row (related improvements FXIOS-9954, FXIOS-10010, FXIOS-9999) (#22075))
 }
 
 // MARK: - MockLegacyTabDelegate

@@ -959,27 +959,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         storeChanges()
     }
 
-<<<<<<< HEAD
-    // Select the most recently visited tab, IFF it is also the parent tab of the closed tab.
-    private func selectParentTab(afterRemoving tab: Tab) -> Bool {
-        let viableTabs = (tab.isPrivate ? privateTabs : normalTabs).filter { $0 != tab }
-        guard let parentTab = tab.parent,
-              parentTab != tab,
-              !viableTabs.isEmpty,
-              viableTabs.contains(parentTab)
-        else { return false }
-
-        let parentTabIsMostRecentUsed = mostRecentTab(inTabs: viableTabs) == parentTab
-
-        if parentTabIsMostRecentUsed, parentTab.lastExecutedTime != nil {
-            selectTab(parentTab, previous: tab)
-            return true
-        }
-        return false
-    }
-
-=======
->>>>>>> 5e949c45d (Bugfix FXIOS-9998 Fix crash when deleting and the undoing the inactive tabs multiple times in a row (related improvements FXIOS-9954, FXIOS-10010, FXIOS-9999) (#22075))
     // MARK: - Start at Home
 
     /// Public interface for checking whether the StartAtHome Feature should run.
