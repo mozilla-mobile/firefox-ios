@@ -100,7 +100,7 @@ struct FakespotState: ScreenState, Equatable {
             return handleAdsImpressionEvent(action: action, state: state)
 
         case FakespotActionType.adsExposureEventSendFor:
-            return handleAdsExposure(action: action, state: state)
+            return handleAdsExposureEvent(action: action, state: state)
 
         default:
             return state
@@ -199,7 +199,7 @@ struct FakespotState: ScreenState, Equatable {
         return state
     }
 
-    private static func handleAdsExposure(action: FakespotAction, state: FakespotState) -> FakespotState {
+    private static func handleAdsExposureEvent(action: FakespotAction, state: FakespotState) -> FakespotState {
         guard let productId = action.productId else { return state }
         var state = state
         if state.telemetryState[state.currentTabUUID]?.adEvents[productId] == nil {
