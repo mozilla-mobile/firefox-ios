@@ -61,6 +61,7 @@ class MainMenuDetailViewController: UIViewController,
         submenuContent.detailHeaderView.dismissMenuCallback = { [weak self] in
             self?.coordinator?.dismissMenuModal(animated: true)
         }
+        setupAccessibilityIdentifiers()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -84,6 +85,14 @@ class MainMenuDetailViewController: UIViewController,
             submenuContent.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             submenuContent.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
+    }
+
+    private func setupAccessibilityIdentifiers() {
+        submenuContent.setupAccessibilityIdentifiers(
+            closeButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.CloseButton,
+            closeButtonA11yId: AccessibilityIdentifiers.MainMenu.NavigationHeaderView.closeButton,
+            backButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.BackButton,
+            backButtonA11yId: AccessibilityIdentifiers.MainMenu.NavigationHeaderView.backButton)
     }
 
     private func setupTableView() {

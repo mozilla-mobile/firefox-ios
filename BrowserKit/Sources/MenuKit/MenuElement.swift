@@ -6,6 +6,7 @@ import UIKit
 
 public struct MenuElement: Equatable {
     let title: String
+    let description: String?
     let iconName: String
     let isEnabled: Bool
     let isActive: Bool
@@ -19,6 +20,7 @@ public struct MenuElement: Equatable {
     // for the struct will be internal and can not be used outside of MenuKit
     public init(
         title: String,
+        description: String? = nil,
         iconName: String,
         isEnabled: Bool,
         isActive: Bool,
@@ -29,6 +31,7 @@ public struct MenuElement: Equatable {
         action: (() -> Void)?
     ) {
         self.title = title
+        self.description = description
         self.iconName = iconName
         self.isEnabled = isEnabled
         self.isActive = isActive
@@ -41,6 +44,7 @@ public struct MenuElement: Equatable {
 
     public static func == (lhs: MenuElement, rhs: MenuElement) -> Bool {
         return lhs.title == rhs.title &&
+        lhs.description == rhs.description &&
         lhs.iconName == rhs.iconName &&
         lhs.isEnabled == rhs.isEnabled &&
         lhs.isActive == rhs.isActive &&
