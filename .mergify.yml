@@ -1,6 +1,6 @@
 queue_rules:
   - name: default
-    conditions:
+    queue_conditions:
       - check-success=Bitrise
 
 pull_request_rules:
@@ -22,7 +22,7 @@ pull_request_rules:
         type: APPROVE
         message: Github-action[bot] 💪
       queue:
-        method: rebase
+        merge_method: rebase
         name: default
   - name: Rust Component Upgrade - Auto Merge
     conditions:
@@ -35,7 +35,7 @@ pull_request_rules:
         type: APPROVE
         message: Github-action[bot] 💪
       queue:
-        method: rebase
+        merge_method: rebase
         name: default
   - name: L10N - Auto Merge
     conditions:
@@ -48,7 +48,7 @@ pull_request_rules:
         type: APPROVE
         message: LGTM 😎
       queue:
-        method: rebase
+        merge_method: rebase
         name: default
   - name: Needs landing - Rebase
     conditions:
@@ -59,7 +59,7 @@ pull_request_rules:
       - label!=Do Not Merge ⛔️
     actions:
       queue:
-        method: rebase
+        merge_method: rebase
         name: default
   - name: Needs landing - Squash
     conditions:
@@ -70,5 +70,5 @@ pull_request_rules:
       - label!=Do Not Merge ⛔️
     actions:
       queue:
-        method: squash
+        merge_method: squash
         name: default
