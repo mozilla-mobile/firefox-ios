@@ -429,7 +429,7 @@ class HomepageViewController:
                 store.dispatch(action)
             }
         }
-        
+
         // this action controls the address toolbar's border position, and to prevent spamming redux with actions for every
         // change in content offset, we keep track of lastContentOffsetY to know if the border needs to be updated
         if (lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0) ||
