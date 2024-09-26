@@ -1885,6 +1885,16 @@ class BrowserViewController: UIViewController,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange)
             store.dispatch(action)
+
+            if let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+               toolbarState.isPrivateMode != tab.isPrivate {
+                // update toolbar borders
+                let middlewareAction = ToolbarMiddlewareAction(
+                    scrollOffset: scrollController.contentOffset,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarMiddlewareActionType.tabModeChanged)
+                store.dispatch(middlewareAction)
+            }
             return
         }
 
