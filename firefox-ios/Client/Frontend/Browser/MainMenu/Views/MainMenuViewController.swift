@@ -195,12 +195,12 @@ class MainMenuViewController: UIViewController,
 
     private func setupAccessibilityIdentifiers() {
         menuContent.setupAccessibilityIdentifiers(
-            closeButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.CloseButtonAccessibilityLabel,
+            closeButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.CloseButton,
             closeButtonA11yId: AccessibilityIdentifiers.MainMenu.HeaderView.closeButton,
-            mainButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.MainButtonAccessibilityLabel,
+            mainButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.MainButton,
             mainButtonA11yId: AccessibilityIdentifiers.MainMenu.HeaderView.mainButton,
             menuA11yId: AccessibilityIdentifiers.MainMenu.mainMenu,
-            menuA11yLabel: .MainMenu.AccessibilityLabels.MainMenuAccessibilityLabel)
+            menuA11yLabel: .MainMenu.TabsSection.AccessibilityLabels.MainMenu)
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate
