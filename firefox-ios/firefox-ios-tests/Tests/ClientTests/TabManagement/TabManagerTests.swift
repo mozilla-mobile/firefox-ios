@@ -159,29 +159,26 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(mockDiskImageStore.deleteImageForKeyCallCount, 1)
     }
 
-    func testGetInactiveTabs() {
+    func testGetActiveAndInactiveTabs() {
+        let totalTabCount = 3
         let subject = createSubject()
-        addTabs(to: subject, count: 3)
-        XCTAssert(subject.tabs.count == 3, "Expected 3 newly added tabs.")
+        addTabs(to: subject, count: totalTabCount)
 
-        // Set createdAt date for all tabs to be distant past (inactive by default)
-        subject.tabs.forEach { $0.firstCreatedTime = Timestamp(0) }
+        // Preconditions
+        XCTAssertEqual(subject.tabs.count, totalTabCount, "Expected 3 newly added tabs.")
+        XCTAssertEqual(subject.normalActiveTabs.count, totalTabCount, "All tabs should be active on initialization")
 
-        // Override lastExecutedTime of 1st tab to indicate tab active
-        // and lastExecutedTime of other 2 to be distant past
-        let tab1 = subject.tabs[0]
-        let tab2 = subject.tabs[1]
-        let tab3 = subject.tabs[2]
-        let lastExecutedDate = Calendar.current.add(numberOfDays: 1, to: Date())
-        tab1.lastExecutedTime = lastExecutedDate?.toTimestamp()
-        tab2.lastExecutedTime = 0
-        tab3.lastExecutedTime = 0
+        // Override lastExecutedTime of 1st tab to be recent (i.e. active)
+        // and lastExecutedTime of other 2 to be distant past (i.e. inactive)
+        let lastExecutedDate = Calendar.current.add(numberOfDays: 1, to: Date())!
+        subject.tabs[0].lastExecutedTime = lastExecutedDate.toTimestamp()
+        subject.tabs[1].lastExecutedTime = 0
+        subject.tabs[2].lastExecutedTime = 0
 
-        let inactiveTabs = subject.getInactiveTabs()
-        let expectedInactiveTabs = 2
-
-        // Expect 2 of 3 tabs are inactive (except 1st)
-        XCTAssertEqual(inactiveTabs.count, expectedInactiveTabs)
+        // Test
+        XCTAssertEqual(subject.normalActiveTabs.count, 1, "Only one tab remains active")
+        XCTAssertEqual(subject.inactiveTabs.count, 2, "Two tabs should now be inactive")
+        XCTAssertEqual(subject.normalTabs.count, totalTabCount, "The total tab count should not have changed")
     }
 
     func test_addTabsForURLs() {

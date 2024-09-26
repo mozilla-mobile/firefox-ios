@@ -67,10 +67,6 @@ class LegacyInactiveTabViewModel {
         if hasRunInactiveTabFeatureBefore == false { LegacyInactiveTabModel.hasRunInactiveTabFeatureBefore = true }
 
         for tab in self.allTabs {
-            // Append selected tab to normal tab as we don't want to remove that
-            let tabTimeStamp = tab.lastExecutedTime ?? tab.firstCreatedTime ?? 0
-            let tabDate = Date.fromTimestamp(tabTimeStamp)
-
             // 1. Initializing and assigning an empty inactive tab state to the inactiveTabModel mode
             if inactiveTabModel.tabWithStatus[tab.tabUUID] == nil {
                 inactiveTabModel.tabWithStatus[tab.tabUUID] = InactiveTabStates()
@@ -90,7 +86,7 @@ class LegacyInactiveTabViewModel {
                 inactiveTabModel.tabWithStatus[tab.tabUUID]?.currentState = .normal
             } else if tabType?.nextState == .shouldBecomeInactive && state == .sameSession {
                 continue
-            } else if tab == selectedTab || tab.isActive || tabTimeStamp == 0 {
+            } else if tab == selectedTab || tab.isActive {
                 inactiveTabModel.tabWithStatus[tab.tabUUID]?.currentState = .normal
             } else if tab.isInactive {
                 if hasRunInactiveTabFeatureBefore == false {
