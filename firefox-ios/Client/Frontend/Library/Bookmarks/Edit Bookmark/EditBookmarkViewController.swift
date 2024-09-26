@@ -10,6 +10,22 @@ class EditBookmarkViewController: UIViewController,
                                   UITableViewDelegate,
                                   UITableViewDataSource,
                                   Themeable {
+    private enum Section: Int, CaseIterable {
+        case bookmark
+        case folder
+
+        var allowsSelection: Bool {
+            return switch self {
+            case .bookmark:
+                false
+            case .folder:
+                true
+            }
+        }
+    }
+    private struct UX {
+        static let bookmarkCellTopPadding: CGFloat = 25.0
+    }
     var currentWindowUUID: WindowUUID?
     var themeManager: any ThemeManager
     var themeObserver: (any NSObjectProtocol)?
@@ -22,19 +38,20 @@ class EditBookmarkViewController: UIViewController,
         view.dataSource = self
         view.delegate = self
         view.register(cellType: EditBookmarkCell.self)
-        view.allowsSelection = false
+        view.register(cellType: OneLineTableViewCell.self)
+        view.separatorStyle = .none
+        let headerSpacerView = UIView(frame: CGRect(origin: .zero,
+                                                    size: CGSize(width: 0, height: UX.bookmarkCellTopPadding)))
+        view.tableHeaderView = headerSpacerView
     }
     var onViewDisappear: (() -> Void)?
-    private let node: FxBookmarkNode
-    private let parentFolder: FxBookmarkNode
+    private let viewModel: EditBookmarkViewModel
 
-    init(node: FxBookmarkNode,
-         parentFolder: FxBookmarkNode,
+    init(viewModel: EditBookmarkViewModel,
          windowUUID: WindowUUID,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          themeManager: ThemeManager = AppContainer.shared.resolve()) {
-        self.node = node
-        self.parentFolder = parentFolder
+        self.viewModel = viewModel
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.currentWindowUUID = windowUUID
@@ -51,11 +68,14 @@ class EditBookmarkViewController: UIViewController,
         super.viewDidLoad()
         navigationController?.setNavigationBarHidden(false, animated: true)
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
-        navigationController?.navigationBar.backItem?.title = parentFolder.title
+        navigationController?.navigationBar.backItem?.title = viewModel.parentFolder.title
         title = "Edit Bookmark"
+        viewModel.onFolderStatusUpdate = { [weak self] in
+            self?.tableView.reloadSections(IndexSet(integer: Section.folder.rawValue), with: .automatic)
+        }
         setupSubviews()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setTheme(theme)
@@ -64,6 +84,7 @@ class EditBookmarkViewController: UIViewController,
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(true, animated: true)
+        viewModel.saveBookmark()
         onViewDisappear?()
     }
 
@@ -87,51 +108,97 @@ class EditBookmarkViewController: UIViewController,
     }
 
     private func setTheme(_ theme: any Theme) {
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.barTintColor = theme.colors.layer1
-        navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
-        navigationController?.navigationBar.backgroundColor = .red//theme.colors.layer1
-        navigationController?.navigationBar.titleTextAttributes = [
+        let appearence = UINavigationBarAppearance()
+        appearence.backgroundColor = theme.colors.layer1
+        // remove divider from navigation bar
+        appearence.shadowColor = .clear
+        appearence.titleTextAttributes = [
             .foregroundColor: theme.colors.textPrimary
         ]
-        // There is an ANNOYING bar in the nav bar above the segment control. These are the
-        // UIBarBackgroundShadowViews. We must set them to be clear images in order to
-        // have a seamless nav bar, if embedding the segmented control.
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-
-        view.backgroundColor = theme.colors.layer3
-        navigationController?.navigationBar.barTintColor = theme.colors.layer1
+        navigationController?.navigationBar.standardAppearance = appearence
+        navigationController?.navigationBar.scrollEdgeAppearance = appearence
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
-        navigationController?.navigationBar.backgroundColor = theme.colors.layer1
-        navigationController?.toolbar.barTintColor = theme.colors.layer1
-        navigationController?.toolbar.tintColor = theme.colors.actionPrimary
-
-        setNeedsStatusBarAppearanceUpdate()
-        tableView.backgroundColor = .red// theme.colors.layer1
+        view.backgroundColor = theme.colors.layer3
+        tableView.backgroundColor = theme.colors.layer1
     }
-    
+
     // MARK: - UITableViewDataSource & UITableViewDelegate
 
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return Section.allCases.count
+    }
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: EditBookmarkCell.cellIdentifier,
-                                                       for: indexPath) as? EditBookmarkCell
-        else {
-            return UITableViewCell()
+        guard let section = Section(rawValue: indexPath.section) else { return UITableViewCell() }
+        switch section {
+        case .bookmark:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: EditBookmarkCell.cellIdentifier,
+                                                           for: indexPath) as? EditBookmarkCell
+            else {
+                return UITableViewCell()
+            }
+            if let node = viewModel.node as? BookmarkItemData {
+                cell.setData(siteURL: node.url, title: node.title)
+            }
+            cell.onURLFieldUpdate = { [weak self] in
+                self?.viewModel.setUpdatedURL($0)
+            }
+            cell.onTitleFieldUpdate = { [weak self] in
+                self?.viewModel.setUpdatedTitle($0)
+            }
+            cell.selectionStyle = .none
+            cell.applyTheme(theme: theme)
+            return cell
+        case .folder:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
+                                                           for: indexPath) as? OneLineTableViewCell,
+                  let folder = viewModel.folderStructures[safe: indexPath.row]
+            else {
+                return UITableViewCell()
+            }
+            cell.titleLabel.text = folder.title
+            let folderImage = UIImage(named: StandardImageIdentifiers.Large.folder)?.withRenderingMode(.alwaysTemplate)
+            cell.leftImageView.image = folderImage
+            cell.indentationLevel = folder.indentation
+            let canShowAccessoryView = viewModel.shouldShowDisclosureIndicator(isFolderSelected: folder.isSelected)
+            cell.accessoryType = canShowAccessoryView ? .checkmark : .none
+            cell.selectionStyle = .default
+            cell.applyTheme(theme: theme)
+            return cell
         }
-        if let node = node as? BookmarkItemData {
-            cell.setData(siteURL: node.url, title: node.title)
-        }
-        cell.applyTheme(theme: themeManager.getCurrentTheme(for: currentWindowUUID))
-        return cell
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
 
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        guard let section = Section(rawValue: section) else { return nil }
+        if section == .folder {
+            return "SAVE IN"
+        }
+        return nil
+    }
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        guard let section = Section(rawValue: section) else { return 0 }
+        return switch section {
+        case .bookmark:
+            1
+        case .folder:
+            viewModel.folderStructures.count
+        }
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        guard let section = Section(rawValue: indexPath.section) else { return }
+        if section == .folder, let folder = viewModel.folderStructures[safe: indexPath.row] {
+            viewModel.selectFolder(folder)
+        }
     }
 }

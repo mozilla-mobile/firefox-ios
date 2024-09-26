@@ -11,32 +11,21 @@ public class DefaultTextField: UITextField, ThemeApplicable {
         super.init(frame: frame)
         clearButtonMode = .whileEditing
         font = UIFont.preferredFont(forTextStyle: .body)
-        replaceClearButtonIcon()
+        let buttonImage = UIImage(named: StandardImageIdentifiers.Large.crossCircleFill)?.withRenderingMode(.alwaysTemplate)
+        clearButton?.setImage(buttonImage, for: .normal)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func replaceClearButtonIcon() {
-        guard let clearButton = value(forKey: "clearButton") as? UIButton else { return }
-        clearButton.adjustsImageSizeForAccessibilityContentSizeCategory = true
-        clearButton.setImage(UIImage(named: StandardImageIdentifiers.Large.crossCircleFill),
-                             for: .normal)
+    private var clearButton: UIButton? {
+        return value(forKey: "clearButton") as? UIButton
     }
 
     // MARK: - ThemeApplicable
 
     public func applyTheme(theme: any Theme) {
+        tintColor = theme.colors.iconPrimary
     }
-}
-
-@available(iOS 17, *)
-#Preview {
-    let textField = DefaultTextField()
-    textField.backgroundColor = .red.withAlphaComponent(0.2)
-    textField.translatesAutoresizingMaskIntoConstraints = false
-    textField.widthAnchor.constraint(equalToConstant: 300).isActive = true
-    textField.heightAnchor.constraint(equalToConstant: 100).isActive = true
-    return textField
 }

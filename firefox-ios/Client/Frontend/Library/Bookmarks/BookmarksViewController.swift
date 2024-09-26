@@ -134,9 +134,9 @@ class BookmarksViewController: SiteTableViewController,
     override func reloadData() {
         viewModel.reloadData { [weak self] in
             self?.tableView.reloadData()
-
+            self?.flashRow()
             if self?.viewModel.shouldFlashRow ?? false {
-                self?.flashRow()
+                
             }
         }
     }
@@ -178,7 +178,6 @@ class BookmarksViewController: SiteTableViewController,
             tapHandler: { _ in
                 guard let bookmarkFolder = self.viewModel.bookmarkFolder else { return }
 
-                self.updatePanelState(newState: .bookmarks(state: .itemEditMode))
                 self.bookmarkCoordinatorDelegate?.showBookmarkDetail(
                     bookmarkType: .folder,
                     parentBookmarkFolder: bookmarkFolder
@@ -365,7 +364,6 @@ class BookmarksViewController: SiteTableViewController,
                 isCurrentFolderEditable(at: indexPath) {
                 // Only show detail controller for editable nodes
                 bookmarkCoordinatorDelegate?.showBookmarkDetail(for: node, folder: bookmarkFolder)
-                updatePanelState(newState: .bookmarks(state: .itemEditMode))
             }
             return
         }

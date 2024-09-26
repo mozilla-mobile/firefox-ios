@@ -85,8 +85,13 @@ class BookmarksCoordinator: BaseCoordinator,
         TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .bookmarksPanel)
         if isBookmarkRefactorEnabled {
             navigationHandler?.setNavigationBarHidden(true)
-            let detailController = EditBookmarkViewController(node: node,
-                                                              parentFolder: folder,
+            let viewModel = EditBookmarkViewModel(parentFolder: folder, node: node, profile: profile)
+            viewModel.onBookmarkSaved = { [weak self] in
+                guard let rootBookmarkController = self?.router.rootViewController as? BookmarksViewController
+                else { return }
+                rootBookmarkController.reloadData()
+            }
+            let detailController = EditBookmarkViewController(viewModel: viewModel,
                                                               windowUUID: windowUUID)
             detailController.onViewDisappear = { [weak self] in
                 self?.navigationHandler?.setNavigationBarHidden(false)
