@@ -29,6 +29,8 @@ public class Store<State: StateType>: DefaultDispatchStore {
     private var subscriptions: Set<SubscriptionType> = []
     private var actionRunning = false
     private let logger: Logger
+    private var actionQueue: [Action] = []
+    private var isProcessingActions = false
 
     public init(state: State,
                 reducer: @escaping Reducer<State>,
@@ -70,9 +72,26 @@ public class Store<State: StateType>: DefaultDispatchStore {
     public func dispatch(_ action: Action) {
         logger.log("Dispatched action: \(action.displayString())", level: .info, category: .redux)
 
-        DispatchQueue.main.async { [weak self] in
-            self?.executeAction(action)
+        if Thread.isMainThread {
+            actionQueue.append(action)
+            processQueuedActions()
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                self?.actionQueue.append(action)
+                self?.processQueuedActions()
+            }
         }
+    }
+
+    private func processQueuedActions() {
+        guard !isProcessingActions else { return }
+        isProcessingActions = true
+        while !actionQueue.isEmpty {
+            let action = actionQueue.first!
+            actionQueue.remove(at: 0)
+            executeAction(action)
+        }
+        isProcessingActions = false
     }
 
     private func executeAction(_ action: Action) {
