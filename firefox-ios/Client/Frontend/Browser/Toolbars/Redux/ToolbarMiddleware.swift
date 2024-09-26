@@ -53,7 +53,8 @@ final class ToolbarMiddleware: FeatureFlaggable {
             store.dispatch(action)
 
         case GeneralBrowserMiddlewareActionType.websiteDidScroll:
-            updateTopAddressBorderPosition(action: action, state: state)
+            guard let scrollOffset = action.scrollOffset else { return }
+            updateTopAddressBorderPosition(scrollOffset: scrollOffset, windowUUID: action.windowUUID, state: state)
 
         case GeneralBrowserMiddlewareActionType.toolbarPositionChanged:
             updateToolbarPosition(action: action, state: state)
@@ -81,6 +82,10 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
         case ToolbarMiddlewareActionType.didTapButton:
             resolveToolbarMiddlewareButtonTapActions(action: action, state: state)
+
+        case ToolbarMiddlewareActionType.urlDidChange:
+            guard let scrollOffset = action.scrollOffset else { return }
+            updateTopAddressBorderPosition(scrollOffset: scrollOffset, windowUUID: action.windowUUID, state: state)
 
         default:
             break
@@ -226,11 +231,10 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
     // MARK: - Border
     // For the top placement of the address bar, the border is only visible on scroll. This is due to a design choice.
-    private func updateTopAddressBorderPosition(action: GeneralBrowserMiddlewareAction, state: AppState) {
-        guard let scrollOffset = action.scrollOffset,
-              let toolbarState = state.screenState(ToolbarState.self,
+    private func updateTopAddressBorderPosition(scrollOffset: CGPoint, windowUUID: WindowUUID, state: AppState) {
+        guard let toolbarState = state.screenState(ToolbarState.self,
                                                    for: .toolbar,
-                                                   window: action.windowUUID),
+                                                   window: windowUUID),
               toolbarState.toolbarPosition == .top
         else { return }
 
@@ -242,7 +246,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
         let toolbarAction = ToolbarAction(
             addressBorderPosition: addressBorderPosition,
-            windowUUID: action.windowUUID,
+            windowUUID: windowUUID,
             actionType: ToolbarActionType.borderPositionChanged
         )
         store.dispatch(toolbarAction)

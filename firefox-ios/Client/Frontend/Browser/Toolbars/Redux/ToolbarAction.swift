@@ -90,15 +90,18 @@ class ToolbarMiddlewareAction: Action {
     let buttonType: ToolbarActionState.ActionType?
     let buttonTapped: UIButton?
     let gestureType: ToolbarButtonGesture?
+    let scrollOffset: CGPoint?
 
     init(buttonType: ToolbarActionState.ActionType? = nil,
          buttonTapped: UIButton? = nil,
          gestureType: ToolbarButtonGesture? = nil,
+         scrollOffset: CGPoint? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.buttonType = buttonType
         self.buttonTapped = buttonTapped
         self.gestureType = gestureType
+        self.scrollOffset = scrollOffset
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -106,4 +109,5 @@ class ToolbarMiddlewareAction: Action {
 enum ToolbarMiddlewareActionType: ActionType {
     case didTapButton
     case customA11yAction
+    case urlDidChange
 }
