@@ -32,13 +32,15 @@ final class TabErrorTelemetryHelper {
     /// without any obvious cause (e.g. Close All Tabs action) then it is suggestive of
     /// a potential bug impacting users, and a MetricKit event is logged.
     func validateTabCountForForegroundedScene(_ window: WindowUUID) {
-        guard let tabCounts = UserDefaults.standard.object(forKey: self.defaultsKey) as? [String: Int],
-              let expectedTabCount = tabCounts[window.uuidString] else { return }
-        let currentTabCount = getTabCount(window: window)
+        ensureMainThread {
+            guard let tabCounts = UserDefaults.standard.object(forKey: self.defaultsKey) as? [String: Int],
+                  let expectedTabCount = tabCounts[window.uuidString] else { return }
+            let currentTabCount = self.getTabCount(window: window)
 
-        if expectedTabCount > 1 && (expectedTabCount - currentTabCount) > 1 {
-            // Potential tab loss bug detected. Log a MetricKit error.
-            sendTelemetryTabLossDetectedEvent()
+            if expectedTabCount > 1 && (expectedTabCount - currentTabCount) > 1 {
+                // Potential tab loss bug detected. Log a MetricKit error.
+                self.sendTelemetryTabLossDetectedEvent()
+            }
         }
     }
 
