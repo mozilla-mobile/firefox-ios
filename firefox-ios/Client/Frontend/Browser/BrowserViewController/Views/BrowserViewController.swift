@@ -1877,6 +1877,7 @@ class BrowserViewController: UIViewController,
         guard !isToolbarRefactorEnabled else {
             let action = ToolbarAction(
                 url: tab.url?.displayURL,
+                isPrivate: tab.isPrivate,
                 isShowingNavigationToolbar: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection),
                 canGoBack: tab.canGoBack,
                 canGoForward: tab.canGoForward,

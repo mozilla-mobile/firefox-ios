@@ -139,7 +139,7 @@ struct ToolbarState: ScreenState, Equatable {
             return ToolbarState(
                 windowUUID: state.windowUUID,
                 toolbarPosition: state.toolbarPosition,
-                isPrivateMode: state.isPrivateMode,
+                isPrivateMode: toolbarAction.isPrivate ?? state.isPrivateMode,
                 addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
                 navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
                 isShowingNavigationToolbar: toolbarAction.isShowingNavigationToolbar ?? state.isShowingNavigationToolbar,
