@@ -14,10 +14,7 @@ final class NativeErrorPageAction: Action {
 }
 
 enum NativeErrorPageActionType: ActionType {
-    case reload
-//    case goBack
-//    case tapAdvanced
-//    case proceedToURL
-//    case learMore
-//    case viewCertificate
+    case tapAdvanced
+    case learMore
+    case viewCertificate
 }

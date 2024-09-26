@@ -364,13 +364,17 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
 
         case GeneralBrowserActionType.reloadWebsiteNoCache:
+
+            let isNativeErrorPage = action.isNativeErrorPage ?? false
+            let browserViewType = isNativeErrorPage ? .nativeErrorPage : state.browserViewType
+
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 toast: state.toast,
                 windowUUID: state.windowUUID,
-                browserViewType: state.browserViewType,
+                browserViewType: browserViewType,
                 navigateTo: .reloadNoCache,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
 

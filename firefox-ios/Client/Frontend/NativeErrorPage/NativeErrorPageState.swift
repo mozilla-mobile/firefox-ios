@@ -8,11 +8,9 @@ import Common
 
 struct NativeErrorPageState: ScreenState, Equatable {
     var windowUUID: WindowUUID
-    var shouldReload: Bool
-//    var showProceedToURL: Bool
-//    var showLearnMore: Bool
-//    var showCertificate: Bool
-//    var shouldGoBack: Bool
+    var showAdvanced: Bool
+    var showLearnMore: Bool
+    var showCertificate: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let nativeErrorPageState = store.state.screenState(
@@ -26,11 +24,9 @@ struct NativeErrorPageState: ScreenState, Equatable {
 
         self.init(
             windowUUID: nativeErrorPageState.windowUUID,
-            shouldReload: nativeErrorPageState.shouldReload
-//            showProceedToURL: nativeErrorPageState.showProceedToURL,
-//            showLearnMore: nativeErrorPageState.showLearnMore,
-//            showCertificate: nativeErrorPageState.showCertificate,
-//            shouldGoBack: nativeErrorPageState.shouldGoBack
+            showAdvanced: nativeErrorPageState.showAdvanced,
+            showLearnMore: nativeErrorPageState.showLearnMore,
+            showCertificate: nativeErrorPageState.showCertificate
         )
     }
 
@@ -39,87 +35,55 @@ struct NativeErrorPageState: ScreenState, Equatable {
     ) {
         self.init(
             windowUUID: windowUUID,
-            shouldReload: false
-//            showProceedToURL: false,
-//            showLearnMore: false,
-//            showCertificate: false,
-//            shouldGoBack: false
+            showAdvanced: false,
+            showLearnMore: false,
+            showCertificate: false
         )
     }
 
     private init(
         windowUUID: WindowUUID,
-        shouldReload: Bool
-//        showProceedToURL: Bool,
-//        showLearnMore: Bool,
-//        showCertificate: Bool,
-//        shouldGoBack: Bool
+        showAdvanced: Bool,
+        showLearnMore: Bool,
+        showCertificate: Bool
     ) {
         self.windowUUID = windowUUID
-        self.shouldReload = shouldReload
-//        self.showProceedToURL = showProceedToURL
-//        self.showLearnMore = showLearnMore
-//        self.showCertificate = showCertificate
-//        self.shouldGoBack = shouldGoBack
+        self.showAdvanced = showAdvanced
+        self.showLearnMore = showLearnMore
+        self.showCertificate = showCertificate
     }
 
     static let reducer: Reducer<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
 
         switch action.actionType {
-        case NativeErrorPageActionType.reload:
+        case NativeErrorPageActionType.tapAdvanced:
             return NativeErrorPageState(
                 windowUUID: state.windowUUID,
-                shouldReload: true
-//                showProceedToURL: false,
-//                showLearnMore: false,
-//                showCertificate: false,
-//                shouldGoBack: false
+                showAdvanced: true,
+                showLearnMore: false,
+                showCertificate: false
             )
-//        case NativeErrorPageActionType.goBack:
-//            return NativeErrorPageState(
-//                windowUUID: state.windowUUID,
-//                shouldReload: false,
-//                showProceedToURL: false,
-//                showLearnMore: false,
-//                showCertificate: false,
-//                shouldGoBack: true
-//            )
-//        case NativeErrorPageActionType.tapAdvanced:
-//            return NativeErrorPageState(
-//                windowUUID: state.windowUUID,
-//                shouldReload: false,
-//                showProceedToURL: true,
-//                showLearnMore: false,
-//                showCertificate: false,
-//                shouldGoBack: false
-//            )
-//        case NativeErrorPageActionType.learMore:
-//            return NativeErrorPageState(
-//                windowUUID: state.windowUUID,
-//                shouldReload: false,
-//                showProceedToURL: false,
-//                showLearnMore: true,
-//                showCertificate: false,
-//                shouldGoBack: false
-//            )
-//        case NativeErrorPageActionType.viewCertificate:
-//            return NativeErrorPageState(
-//                windowUUID: state.windowUUID,
-//                shouldReload: false,
-//                showProceedToURL: false,
-//                showLearnMore: false,
-//                showCertificate: true,
-//                shouldGoBack: false
-//            )
+        case NativeErrorPageActionType.learMore:
+            return NativeErrorPageState(
+                windowUUID: state.windowUUID,
+                showAdvanced: false,
+                showLearnMore: true,
+                showCertificate: false
+            )
+        case NativeErrorPageActionType.viewCertificate:
+            return NativeErrorPageState(
+                windowUUID: state.windowUUID,
+                showAdvanced: false,
+                showLearnMore: false,
+                showCertificate: true
+            )
         default:
             return NativeErrorPageState(
                 windowUUID: state.windowUUID,
-                shouldReload: false
-//                showProceedToURL: false,
-//                showLearnMore: false,
-//                showCertificate: false,
-//                shouldGoBack: false
+                showAdvanced: false,
+                showLearnMore: false,
+                showCertificate: false
             )
         }
     }

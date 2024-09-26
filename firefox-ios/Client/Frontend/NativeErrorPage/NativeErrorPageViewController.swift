@@ -8,13 +8,6 @@ import ComponentLibrary
 import Redux
 import Shared
 
-// Delegate for coordinator to be able to handle navigation
-protocol NativeErrorPageCoordinatorDelegate: AnyObject {
-    func reloadErrorPage()
-    func goBackToPreviousPage()
-    func proceedToURL()
-}
-
 final class NativeErrorPageViewController: UIViewController,
                                            Themeable,
                                            ContentContainable,
@@ -35,8 +28,6 @@ final class NativeErrorPageViewController: UIViewController,
     private var overlayManager: OverlayModeManager
     var contentType: ContentType = .nativeErrorPage
     private var nativeErrorPageState: NativeErrorPageState
-
-    weak var parentCoordinator: NativeErrorPageCoordinatorDelegate?
 
     // MARK: UI Elements
     private struct UX {
@@ -137,16 +128,6 @@ final class NativeErrorPageViewController: UIViewController,
     // MARK: Redux
     func newState(state: NativeErrorPageState) {
         nativeErrorPageState = state
-        if nativeErrorPageState.shouldReload {
-            parentCoordinator?.reloadErrorPage()
-        }
-//        else if nativeErrorPageState.shouldGoBack {
-//            parentCoordinator?.goBackToPreviousPage()
-//        } else if nativeErrorPageState.showLearnMore {
-//        } else if nativeErrorPageState.showCertificate {
-//        } else if nativeErrorPageState.showProceedToURL {
-//            parentCoordinator?.proceedToURL()
-//        }
     }
 
     func subscribeToRedux() {
@@ -278,10 +259,10 @@ final class NativeErrorPageViewController: UIViewController,
     @objc
     private func didTapReload() {
         store.dispatch(
-            NativeErrorPageAction(
-                nativeErrorPageModel: model,
+            GeneralBrowserAction(
+                isNativeErrorPage: true,
                 windowUUID: windowUUID,
-                actionType: NativeErrorPageActionType.reload
+                actionType: GeneralBrowserActionType.reloadWebsiteNoCache
             )
         )
     }

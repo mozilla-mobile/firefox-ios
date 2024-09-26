@@ -132,6 +132,11 @@ class BrowserViewController: UIViewController,
     var isToolbarNavigationHintEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarNavigationHint, checking: .buildOnly)
     }
+
+    var isNativeErrorPageEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly)
+    }
+
     private var browserViewControllerState: BrowserViewControllerState?
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
@@ -1396,10 +1401,6 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Native Error Page
 
-    private func isNativeErrorPage() -> Bool {
-        featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly)
-    }
-
     func showEmbeddedNativeErrorPage() {
     // TODO: FXIOS-9641 #21239 Implement Redux for Native Error Pages
         browserDelegate?.showNativeErrorPage(overlayManager: overlayManager)
@@ -1447,7 +1448,7 @@ class BrowserViewController: UIViewController,
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-        } else if isErrorURL && isNativeErrorPage() {
+        } else if isErrorURL && isNativeErrorPageEnabled {
             showEmbeddedNativeErrorPage()
         } else {
             showEmbeddedWebview()
@@ -1940,7 +1941,9 @@ class BrowserViewController: UIViewController,
     }
 
     private func executeNavigationAndDisplayActions() {
-        guard isToolbarRefactorEnabled, let state = browserViewControllerState else { return }
+        let isToolBarRefactorOrNativeErrorPage = isToolbarRefactorEnabled || isNativeErrorPageEnabled
+
+        guard isToolBarRefactorOrNativeErrorPage, let state = browserViewControllerState else { return }
 
         switch state {
         case _ where state.navigateTo != nil:

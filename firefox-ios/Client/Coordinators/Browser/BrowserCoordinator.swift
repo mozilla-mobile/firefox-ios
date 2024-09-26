@@ -26,8 +26,7 @@ class BrowserCoordinator: BaseCoordinator,
                           TabTrayCoordinatorDelegate,
                           PrivateHomepageDelegate,
                           WindowEventCoordinator,
-                          MainMenuCoordinatorDelegate,
-                          NativeErrorPageCoordinatorDelegate {
+                          MainMenuCoordinatorDelegate {
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
@@ -763,24 +762,11 @@ class BrowserCoordinator: BaseCoordinator,
         let errorpageController = NativeErrorPageViewController(model: errorPageModel,
                                                                 windowUUID: windowUUID,
                                                                 overlayManager: overlayManager)
-        errorpageController.parentCoordinator = self
         guard browserViewController.embedContent(errorpageController) else {
             logger.log("Unable to embed private homepage", level: .debug, category: .coordinator)
             return
         }
         self.errorViewController = errorpageController
-    }
-
-    func reloadErrorPage() {
-        browserViewController.reloadTabIgnoringCacheKeyCommand()
-    }
-
-    func goBackToPreviousPage() {
-        browserViewController.goBackKeyCommand()
-    }
-
-    func proceedToURL() {
-//        
     }
 
     private func setiPadLayoutDetents(for controller: UIViewController) {
