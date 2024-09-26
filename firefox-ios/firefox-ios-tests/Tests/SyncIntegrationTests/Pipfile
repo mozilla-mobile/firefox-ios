@@ -11,6 +11,10 @@ mozprofile = "*"
 mozrunner = "*"
 mozversion = "*"
 pytest = "*"
+# pytest-fxa-mte needs an update after PyFxA has a new release (>0.7.9).
+# pytest-fxa-mte 1.5.1 imports pyfxa-mte, a temporary fork that includes the
+# change for /accounts/destroy. After PyFxA has a new release, pytest-fxa-mte
+# should import pyfxa instead. 
 pytest-fxa-mte = "1.5.1"
 pytest-html = "*"
 pytest-metadata = "*"
