@@ -405,6 +405,35 @@ class Tab: NSObject, ThemeApplicable {
 
     var profile: Profile
 
+    /// Returns true if this tab is considered inactive (has not been executed for more than a specific number of days).
+    /// Note: When `FasterInactiveTabsOverride` is enabled, tabs become inactive very quickly for testing purposes.
+    var isInactive: Bool {
+        let currentDate = Date()
+        let inactiveDate: Date
+
+        // Debug for inactive tabs to easily test in code
+        if UserDefaults.standard.bool(forKey: PrefsKeys.FasterInactiveTabsOverride) {
+            inactiveDate = Calendar.current.date(byAdding: .second, value: -10, to: currentDate) ?? Date()
+        } else {
+            inactiveDate = Calendar.current.date(byAdding: .day, value: -14, to: currentDate.noon) ?? Date()
+        }
+
+        // If we can't get a Tab timestamp, we consider it an active tab
+        guard let tabTimeStamp = lastExecutedTime ?? firstCreatedTime else {
+            return false
+        }
+
+        // If the tabDate is older than our inactive date cutoff, return true
+        let tabDate = Date.fromTimestamp(tabTimeStamp)
+        return tabDate <= inactiveDate
+    }
+
+    /// Returns true if this tab is considered active (has been executed within a specific numbers of days).
+    /// Note: When `FasterInactiveTabsOverride` is enabled, tabs become inactive very quickly for testing purposes.
+    var isActive: Bool {
+        return !isInactive
+    }
+
     init(profile: Profile,
          isPrivate: Bool = false,
          windowUUID: WindowUUID,
