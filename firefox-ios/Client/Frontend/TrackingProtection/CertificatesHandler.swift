@@ -43,7 +43,7 @@ class CertificatesHandler {
 }
 
 // Define a function to get the certificates for a given URL
-func getCertificates(for url: URL, completion: @Sendable @escaping ([Certificate]?) -> Void) {
+func getCertificates(for url: URL, completion: @escaping ([Certificate]?) -> Void) {
     // Create a URL session with a custom delegate
     let session = URLSession(configuration: .default,
                              delegate: CertificateDelegate(completion: completion),
