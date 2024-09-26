@@ -53,14 +53,32 @@ class DefaultImageHandler: ImageHandler {
 
     func fetchFavicon(imageModel: SiteImageModel) async -> UIImage {
         do {
-            // If this is one of our special bundled favicons, simply return it from the bundle
             if case let .bundleAsset(assetName, _) = imageModel.siteResource {
-                return try getBundleImage(assetName: assetName)
+                return try loadDefaultFaviconFromBundle(assetName: assetName)
+            }
+
+            // The default images are stored with the cache key as name, try to load it from bundle
+            if let image = try? getBundleImage(assetName: imageModel.cacheKey) {
+                return image
             }
 
             return try await imageCache.getImage(cacheKey: imageModel.cacheKey, type: imageModel.imageType)
         } catch {
             return await fetchFaviconFromFetcher(imageModel: imageModel)
+        }
+    }
+
+    private func loadDefaultFaviconFromBundle(assetName: String) throws -> UIImage {
+        do {
+            return try getBundleImage(assetName: assetName)
+        } catch {
+            logger.log(
+                "Could not get image from bundle",
+                level: .warning,
+                category: .images,
+                extra: ["assetName": assetName]
+            )
+            throw error
         }
     }
 
@@ -133,15 +151,13 @@ class DefaultImageHandler: ImageHandler {
     }
 
     private func getBundleImage(assetName: String) throws -> UIImage {
-        guard let image = UIImage(named: assetName) else {
-            logger.log(
-                "Could not get image from bundle",
-                level: .warning,
-                category: .images,
-                extra: ["assetName": assetName]
-            )
-            throw SiteImageError.noImageInBundle
+        // try to load it first from main app bundle then fallback on package one
+        if let image = UIImage(named: assetName, in: .main, with: nil) {
+            return image
         }
-        return image
+        if let image = UIImage(named: assetName, in: .module, with: nil) {
+            return image
+        }
+        throw SiteImageError.noImageInBundle
     }
 }

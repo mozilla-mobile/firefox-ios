@@ -74,13 +74,15 @@ let package = Package(
         .target(
             name: "SiteImageView",
             dependencies: ["Fuzi", "Kingfisher", "Common", "SwiftDraw"],
+            exclude: ["README.md"],
+            resources: [.process("BundledTopSitesFavicons.xcassets")],
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "SiteImageViewTests",
             dependencies: ["SiteImageView", .product(name: "GCDWebServers", package: "GCDWebServer")],
             resources: [
                 .copy("Resources/mozilla.ico"),
-                .copy("Resources/hackernews.svg"),
+                .copy("Resources/hackernews.svg")
             ]
         ),
         .target(
