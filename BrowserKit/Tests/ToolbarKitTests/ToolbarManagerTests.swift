@@ -8,7 +8,7 @@ import Common
 
 final class ToolbarManagerTests: XCTestCase {
     // Address toolbar border
-    func testAddressToolbarBorderPositionWhenTopPlacementAndHomepageScrolledThenShouldDisplayBottomBorder() {
+    func testAddressToolbarBorderPositionWhenTopPlacementAndScrolledThenShouldDisplayBottomBorder() {
         let subject = createSubject()
         XCTAssertEqual(AddressToolbarBorderPosition.bottom, subject.getAddressBorderPosition(
             for: .top,
@@ -16,7 +16,7 @@ final class ToolbarManagerTests: XCTestCase {
             scrollY: 10))
     }
 
-    func testAddressToolbarBorderPositionWhenTopPlacementAndHomepageNotScrolledThenShouldDisplayNoBorder() {
+    func testAddressToolbarBorderPositionWhenTopPlacementAndNotScrolledThenShouldDisplayNoBorder() {
         let subject = createSubject()
         XCTAssertEqual(AddressToolbarBorderPosition.none, subject.getAddressBorderPosition(
             for: .top,
