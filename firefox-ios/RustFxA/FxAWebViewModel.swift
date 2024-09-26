@@ -29,7 +29,7 @@ private enum RemoteCommand: String {
     case login = "fxaccounts:login"
     case changePassword = "fxaccounts:change_password"
     case signOut = "fxaccounts:logout"
-    case deleteAccount = "fxaccounts:delete_account"
+    case deleteAccount = "fxaccounts:delete"
     case profileChanged = "profile:change"
 }
 
