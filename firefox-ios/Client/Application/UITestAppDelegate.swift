@@ -30,7 +30,6 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
 
         var profile: BrowserProfile
         let launchArguments = ProcessInfo.processInfo.arguments
-        let dirForTestProfile = self.dirForTestProfile
 
         launchArguments.forEach { arg in
             if arg.starts(with: LaunchArguments.ServerPort) {
@@ -38,42 +37,7 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
             }
 
             if arg.starts(with: LaunchArguments.LoadDatabasePrefix) {
-                if launchArguments.contains(LaunchArguments.ClearProfile) {
-                    fatalError("Clearing profile and loading a test database is not a supported combination.")
-                }
-
-                // Grab the name of file in the bundle's test-fixtures dir, and copy it to the runtime app dir.
-                let filename = arg.replacingOccurrences(of: LaunchArguments.LoadDatabasePrefix, with: "")
-                let input = URL(
-                    fileURLWithPath: Bundle(for: UITestAppDelegate.self).path(
-                        forResource: filename,
-                        ofType: nil,
-                        inDirectory: "test-fixtures"
-                    )!
-                )
-                try? FileManager.default.createDirectory(
-                    atPath: dirForTestProfile,
-                    withIntermediateDirectories: false,
-                    attributes: nil
-                )
-                let output = URL(fileURLWithPath: "\(dirForTestProfile)/places.db")
-
-                let enumerator = FileManager.default.enumerator(atPath: dirForTestProfile)
-                let filePaths = enumerator?.allObjects as! [String]
-                filePaths.filter { $0.contains(".db") }.forEach { item in
-                    try? FileManager.default.removeItem(
-                        at: URL(fileURLWithPath: "\(dirForTestProfile)/\(item)")
-                    )
-                }
-
-                do {
-                    try FileManager.default.copyItem(at: input, to: output)
-                } catch {
-                    fatalError("Could not copy items from \(input) to \(output): \(error)")
-                }
-
-                // Tests currently load a browserdb history, we make sure we migrate it everytime
-                UserDefaults.standard.setValue(false, forKey: PrefsKeys.PlacesHistoryMigrationSucceeded)
+                configureDatabase(arg, launchArguments: launchArguments)
             }
 
             if arg.starts(with: LaunchArguments.LoadTabsStateArchive) {
@@ -202,6 +166,45 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
         } else {
             fatalError("Failed to set web server port override.")
         }
+    }
+
+    private func configureDatabase(_ arg: String, launchArguments: [String]) {
+        if launchArguments.contains(LaunchArguments.ClearProfile) {
+            fatalError("Clearing profile and loading a test database is not a supported combination.")
+        }
+
+        // Grab the name of file in the bundle's test-fixtures dir, and copy it to the runtime app dir.
+        let filename = arg.replacingOccurrences(of: LaunchArguments.LoadDatabasePrefix, with: "")
+        let input = URL(
+            fileURLWithPath: Bundle(for: UITestAppDelegate.self).path(
+                forResource: filename,
+                ofType: nil,
+                inDirectory: "test-fixtures"
+            )!
+        )
+        try? FileManager.default.createDirectory(
+            atPath: dirForTestProfile,
+            withIntermediateDirectories: false,
+            attributes: nil
+        )
+        let output = URL(fileURLWithPath: "\(dirForTestProfile)/places.db")
+
+        let enumerator = FileManager.default.enumerator(atPath: dirForTestProfile)
+        let filePaths = enumerator?.allObjects as! [String]
+        filePaths.filter { $0.contains(".db") }.forEach { item in
+            try? FileManager.default.removeItem(
+                at: URL(fileURLWithPath: "\(dirForTestProfile)/\(item)")
+            )
+        }
+
+        do {
+            try FileManager.default.copyItem(at: input, to: output)
+        } catch {
+            fatalError("Could not copy items from \(input) to \(output): \(error)")
+        }
+
+        // Tests currently load a browserdb history, we make sure we migrate it everytime
+        UserDefaults.standard.setValue(false, forKey: PrefsKeys.PlacesHistoryMigrationSucceeded)
     }
 
     override func application(
