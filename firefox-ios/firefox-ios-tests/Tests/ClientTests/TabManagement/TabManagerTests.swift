@@ -761,7 +761,7 @@ class TabManagerTests: XCTestCase {
         XCTAssertEqual(tabManager.selectedIndex, 0)
         XCTAssertEqual(tabManager.selectedTabUUID?.uuidString, privateTab.tabUUID)
 
-        // Remove the last selected private tab
+        // Remove the selected single private tab
         tabManager.removeTab(privateTab)
         try await Task.sleep(nanoseconds: sleepTime)
 
