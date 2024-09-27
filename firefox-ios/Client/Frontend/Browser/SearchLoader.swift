@@ -14,7 +14,7 @@ private let URLBeforePathRegex = try? NSRegularExpression(pattern: "^https?://([
  * Shared data source for the SearchViewController and the URLBar domain completion.
  * Since both of these use the same SQL query, we can perform the query once and dispatch the results.
  */
-class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggable {
+final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggable {
     fileprivate let profile: Profile
     fileprivate let autocompleteView: Autocompletable
     private let logger: Logger
