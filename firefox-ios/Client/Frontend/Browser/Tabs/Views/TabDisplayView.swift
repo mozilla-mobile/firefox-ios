@@ -92,7 +92,7 @@ class TabDisplayView: UIView,
     private func configureDataSource() {
         // Create the diffable data source and its cell provider.
         dataSource = UICollectionViewDiffableDataSource<TabDisplaySection, SectionTabItem>(collectionView: collectionView)
-        { [weak self] (collectionView, indexPath, sectionItem) -> UICollectionViewCell in
+         { [weak self] (collectionView, indexPath, sectionItem) -> UICollectionViewCell in
             // `identifier/item` is an instance of `tabModel`. Use it to
             // retrieve the tab from the backing data store.
             guard let self else { return UICollectionViewCell() }
@@ -124,7 +124,11 @@ class TabDisplayView: UIView,
         }
 
         // Configure supplementary view provider for section headers
-        dataSource?.supplementaryViewProvider = { [weak self] (collectionView, kind, indexPath) -> UICollectionReusableView? in
+        dataSource?.supplementaryViewProvider = { [weak self] (
+            collectionView,
+            kind,
+            indexPath
+        ) -> UICollectionReusableView? in
             let reusableView = UICollectionReusableView()
             // Retrieve the section based on the current indexPath
             let section = self?.getTabDisplay(for: indexPath.section)
