@@ -916,7 +916,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
             return true
         case (false, false):
             // Two normal tabs are only the same type if they're both active, or both inactive
-            return isInactiveTabsEnabled 
+            return isInactiveTabsEnabled
                 ? self.isActive == otherTab.isActive
                 : true
         default:
