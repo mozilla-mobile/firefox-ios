@@ -136,7 +136,6 @@ class BookmarksViewController: SiteTableViewController,
             self?.tableView.reloadData()
             self?.flashRow()
             if self?.viewModel.shouldFlashRow ?? false {
-                
             }
         }
     }

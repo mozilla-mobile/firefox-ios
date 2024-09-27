@@ -133,6 +133,7 @@ class LibraryViewController: UIViewController, Themeable {
 
     func updateViewWithState() {
         setupButtons()
+        print("this pc ")
     }
 
     fileprivate func updateTitle() {
@@ -142,7 +143,7 @@ class LibraryViewController: UIViewController, Themeable {
     }
 
     private func shouldHideBottomToolbar(panel: LibraryPanel) -> Bool {
-        return panel.bottomToolbarItems.isEmpty
+        return panel.bottomToolbarItems.isEmpty || (navigationController?.isNavigationBarHidden ?? false)
     }
 
     func setupLibraryPanel(_ panel: UIViewController,
@@ -333,7 +334,7 @@ class LibraryViewController: UIViewController, Themeable {
         navigationController?.navigationBar.shadowImage = UIImage()
 
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        view.backgroundColor = theme.colors.layer3
+        view.backgroundColor = theme.colors.layer1
         navigationController?.navigationBar.barTintColor = theme.colors.layer1
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
         navigationController?.navigationBar.backgroundColor = theme.colors.layer1
@@ -348,6 +349,7 @@ class LibraryViewController: UIViewController, Themeable {
     }
 
     func setNavigationBarHidden(_ value: Bool) {
+        navigationController?.setToolbarHidden(value, animated: true)
         navigationController?.setNavigationBarHidden(value, animated: false)
         let controlbarHeight = segmentControlToolbar.frame.height
         segmentControlToolbar.transform = value ? .init(translationX: 0, y: -controlbarHeight) : .identity

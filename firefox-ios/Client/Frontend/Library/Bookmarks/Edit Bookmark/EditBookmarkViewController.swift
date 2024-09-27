@@ -45,6 +45,7 @@ class EditBookmarkViewController: UIViewController,
         view.tableHeaderView = headerSpacerView
     }
     var onViewDisappear: (() -> Void)?
+    var onViewWillappear: (() -> Void)?
     private let viewModel: EditBookmarkViewModel
 
     init(viewModel: EditBookmarkViewModel,
@@ -66,9 +67,9 @@ class EditBookmarkViewController: UIViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.setNavigationBarHidden(false, animated: true)
-        navigationController?.interactivePopGestureRecognizer?.isEnabled = false
-        navigationController?.navigationBar.backItem?.title = viewModel.parentFolder.title
+        let backTitle = viewModel.backNavigationButtonTitle()
+        navigationController?.navigationBar.topItem?.title = backTitle
+        // TODO: - Translate
         title = "Edit Bookmark"
         viewModel.onFolderStatusUpdate = { [weak self] in
             self?.tableView.reloadSections(IndexSet(integer: Section.folder.rawValue), with: .automatic)
@@ -79,13 +80,18 @@ class EditBookmarkViewController: UIViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setTheme(theme)
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        onViewWillappear?()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: true)
-        viewModel.saveBookmark()
+        if let isDragging = transitionCoordinator?.isInteractive, !isDragging {
+            navigationController?.setNavigationBarHidden(true, animated: true)
+        }
         onViewDisappear?()
+        viewModel.saveBookmark()
     }
 
     // MARK: - Setup
@@ -118,7 +124,7 @@ class EditBookmarkViewController: UIViewController,
         navigationController?.navigationBar.standardAppearance = appearence
         navigationController?.navigationBar.scrollEdgeAppearance = appearence
         navigationController?.navigationBar.tintColor = theme.colors.actionPrimary
-        view.backgroundColor = theme.colors.layer3
+        view.backgroundColor = theme.colors.layer1
         tableView.backgroundColor = theme.colors.layer1
     }
 
@@ -137,9 +143,8 @@ class EditBookmarkViewController: UIViewController,
             else {
                 return UITableViewCell()
             }
-            if let node = viewModel.node as? BookmarkItemData {
-                cell.setData(siteURL: node.url, title: node.title)
-            }
+
+            cell.setData(siteURL: viewModel.bookmarkURL, title: viewModel.bookmarkTitle)
             cell.onURLFieldUpdate = { [weak self] in
                 self?.viewModel.setUpdatedURL($0)
             }

@@ -84,7 +84,6 @@ class BookmarksCoordinator: BaseCoordinator,
     func showBookmarkDetail(for node: FxBookmarkNode, folder: FxBookmarkNode, completion: (() -> Void)? = nil) {
         TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .bookmarksPanel)
         if isBookmarkRefactorEnabled {
-            navigationHandler?.setNavigationBarHidden(true)
             let viewModel = EditBookmarkViewModel(parentFolder: folder, node: node, profile: profile)
             viewModel.onBookmarkSaved = { [weak self] in
                 guard let rootBookmarkController = self?.router.rootViewController as? BookmarksViewController
@@ -93,8 +92,13 @@ class BookmarksCoordinator: BaseCoordinator,
             }
             let detailController = EditBookmarkViewController(viewModel: viewModel,
                                                               windowUUID: windowUUID)
+            detailController.onViewWillappear = { [weak self] in
+                self?.navigationHandler?.setNavigationBarHidden(true)
+            }
             detailController.onViewDisappear = { [weak self] in
-                self?.navigationHandler?.setNavigationBarHidden(false)
+                if !(detailController.transitionCoordinator?.isInteractive ?? false) {
+                    self?.navigationHandler?.setNavigationBarHidden(false)
+                }
             }
             router.push(detailController)
         } else {
@@ -119,7 +123,6 @@ class BookmarksCoordinator: BaseCoordinator,
         ) {
             updatePanelState?($0)
         }
-        router.push(detailController)
     }
 
     func shareLibraryItem(url: URL, sourceView: UIView) {
