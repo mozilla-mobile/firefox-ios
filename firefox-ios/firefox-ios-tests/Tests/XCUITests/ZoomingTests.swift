@@ -27,21 +27,20 @@ class ZoomingTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306947
     // Smoketest
-    // FIXME FXIOS-10122 Must be addressed
-//    func testZoomingActions() {
-//        // Regular browsing
-//        validateZoomActions()
-//
-//        // Repeat all the steps in private browsing
-//        XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
-//        navigator.nowAt(BrowserTab)
-//        navigator.goto(TabTray)
-//        if !app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].exists {
-//            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
-//        }
-//        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-//        validateZoomActions()
-//    }
+    func testZoomingActions() {
+        // Regular browsing
+        validateZoomActions()
+
+        // Repeat all the steps in private browsing
+        XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
+        navigator.nowAt(BrowserTab)
+        navigator.goto(TabTray)
+        if !app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].exists {
+            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
+        }
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        validateZoomActions()
+    }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306949
     func testZoomForceCloseFirefox() {
