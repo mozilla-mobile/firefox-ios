@@ -6,7 +6,7 @@ queue_rules:
   - name: squash-queue
     queue_conditions:
       - check-success=Bitrise
-    merge_method: rebase
+    merge_method: squash
 
 pull_request_rules:
   - name: Resolve conflict
@@ -27,7 +27,7 @@ pull_request_rules:
         type: APPROVE
         message: Github-action[bot] 💪
       queue:
-        name: rebase_queue
+        name: rebase-queue
   - name: Rust Component Upgrade - Auto Merge
     conditions:
       - author=github-actions[bot]
@@ -39,7 +39,7 @@ pull_request_rules:
         type: APPROVE
         message: Github-action[bot] 💪
       queue:
-        name: rebase_queue
+        name: rebase-queue
   - name: L10N - Auto Merge
     conditions:
       - author=github-actions[bot]
@@ -51,7 +51,7 @@ pull_request_rules:
         type: APPROVE
         message: LGTM 😎
       queue:
-        name: rebase_queue
+        name: rebase-queue
   - name: Needs landing - Rebase
     conditions:
       - check-success=Bitrise
@@ -61,7 +61,7 @@ pull_request_rules:
       - label!=Do Not Merge ⛔️
     actions:
       queue:
-        name: rebase_queue
+        name: rebase-queue
   - name: Needs landing - Squash
     conditions:
       - check-success=Bitrise
@@ -71,4 +71,4 @@ pull_request_rules:
       - label!=Do Not Merge ⛔️
     actions:
       queue:
-        name: squash_queue
+        name: squash-queue
