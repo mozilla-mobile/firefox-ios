@@ -66,7 +66,7 @@ enum TabUrlType: String {
 
 typealias TabUUID = String
 
-class Tab: NSObject, ThemeApplicable {
+class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
     static let privateModeKey = "PrivateModeKey"
     private var _isPrivate = false
     private(set) var isPrivate: Bool {
@@ -80,16 +80,20 @@ class Tab: NSObject, ThemeApplicable {
         }
     }
 
+    var isInactiveTabsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
+    }
+
     var isNormal: Bool {
         return !isPrivate
     }
 
     var isNormalActive: Bool {
-        return !isPrivate && isActive
+        return !isPrivate && (isInactiveTabsEnabled ? isActive : true)
     }
 
     var isNormalAndInactive: Bool {
-        return !isPrivate && isInactive
+        return !isPrivate && (isInactiveTabsEnabled ? isInactive : false)
     }
 
     /// The window associated with the tab (where the tab lives and will be displayed).
@@ -912,7 +916,9 @@ class Tab: NSObject, ThemeApplicable {
             return true
         case (false, false):
             // Two normal tabs are only the same type if they're both active, or both inactive
-            return self.isActive == otherTab.isActive
+            return isInactiveTabsEnabled 
+                ? self.isActive == otherTab.isActive
+                : true
         default:
             return false
         }
