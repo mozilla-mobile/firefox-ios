@@ -233,7 +233,7 @@ class TabManagerMiddleware {
 
         let tabManager = tabManager(for: uuid)
         var inactiveTabs = [InactiveTabsModel]()
-        for tab in tabManager.getInactiveTabs() {
+        for tab in tabManager.inactiveTabs {
             let inactiveTab = InactiveTabsModel(tabUUID: tab.tabUUID,
                                                 title: tab.displayTitle,
                                                 url: tab.url,
@@ -305,10 +305,13 @@ class TabManagerMiddleware {
     /// - Returns: If is the last tab to be closed used to trigger dismissTabTray action
     private func closeTab(with tabUUID: TabUUID, uuid: WindowUUID, isPrivate: Bool) async -> Bool {
         let tabManager = tabManager(for: uuid)
+        // In non-private mode, if:
+        //      A) the last normal active tab is closed, or
+        //      B) the last of ALL normal tabs are closed (i.e. all tabs are inactive and closed at once),
+        // then we want to close the tray.
         let isLastActiveTab = isPrivate
                             ? tabManager.privateTabs.count == 1
-                            : tabManager.normalActiveTabs.count == 1
-
+                            : (tabManager.normalActiveTabs.count <= 1 || tabManager.normalTabs.count == 1)
         await tabManager.removeTab(tabUUID)
         return isLastActiveTab
     }
@@ -424,8 +427,8 @@ class TabManagerMiddleware {
 
     // MARK: - Inactive tabs helper
 
-    /// Close all inactive tabs removing them from the tabs array on `TabManager`.
-    /// Makes a backup of tabs to be deleted in case undo option is selected
+    /// Close all inactive tabs, removing them from the tabs array on `TabManager`.
+    /// Makes a backup of tabs to be deleted in case the undo option is selected.
     private func closeAllInactiveTabs(state: AppState, uuid: WindowUUID) {
         guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
         let tabManager = tabManager(for: uuid)
@@ -435,6 +438,14 @@ class TabManagerMiddleware {
                                                          windowUUID: uuid,
                                                          actionType: TabPanelMiddlewareActionType.refreshInactiveTabs)
             store.dispatch(refreshAction)
+
+            // Refresh the active tabs panel. Can only happen if the user is in normal browsering mode (not private).
+            // Related: FXIOS-10010, FXIOS-9954, FXIOS-9999
+            let model = getTabsDisplayModel(for: false, shouldScrollToTab: false, uuid: uuid)
+            let refreshActiveTabsPanelAction = TabPanelMiddlewareAction(tabDisplayModel: model,
+                                                                        windowUUID: uuid,
+                                                                        actionType: TabPanelMiddlewareActionType.refreshTabs)
+            store.dispatch(refreshActiveTabsPanelAction)
 
             let inactiveTabsCount = tabsState.inactiveTabs.count
             let toastAction = TabPanelMiddlewareAction(toastType: .closedAllInactiveTabs(count: inactiveTabsCount),

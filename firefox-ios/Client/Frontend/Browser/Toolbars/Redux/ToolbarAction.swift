@@ -21,7 +21,6 @@ final class ToolbarAction: Action {
     let addressBorderPosition: AddressToolbarBorderPosition?
     let displayNavBorder: Bool?
     let lockIconImageName: String?
-    let isEditing: Bool?
     let isLoading: Bool?
     let isNewTabFeatureEnabled: Bool?
     let canShowDataClearanceAction: Bool?
@@ -40,7 +39,6 @@ final class ToolbarAction: Action {
          addressBorderPosition: AddressToolbarBorderPosition = .none,
          displayNavBorder: Bool? = nil,
          lockIconImageName: String? = nil,
-         isEditing: Bool? = nil,
          isLoading: Bool? = nil,
          isNewTabFeatureEnabled: Bool? = nil,
          canShowDataClearanceAction: Bool? = nil,
@@ -60,7 +58,6 @@ final class ToolbarAction: Action {
         self.addressBorderPosition = addressBorderPosition
         self.displayNavBorder = displayNavBorder
         self.lockIconImageName = lockIconImageName
-        self.isEditing = isEditing
         self.isLoading = isLoading
         self.isNewTabFeatureEnabled = isNewTabFeatureEnabled
         self.canShowDataClearanceAction = canShowDataClearanceAction
@@ -81,8 +78,7 @@ enum ToolbarActionType: ActionType {
     case cancelEdit
     case didScrollDuringEdit
     case readerModeStateChanged
-    case backButtonStateChanged
-    case forwardButtonStateChanged
+    case backForwardButtonStateChanged
     case traitCollectionDidChange
     case websiteLoadingStateDidChange
     case searchEngineDidChange
@@ -94,15 +90,18 @@ class ToolbarMiddlewareAction: Action {
     let buttonType: ToolbarActionState.ActionType?
     let buttonTapped: UIButton?
     let gestureType: ToolbarButtonGesture?
+    let scrollOffset: CGPoint?
 
     init(buttonType: ToolbarActionState.ActionType? = nil,
          buttonTapped: UIButton? = nil,
          gestureType: ToolbarButtonGesture? = nil,
+         scrollOffset: CGPoint? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.buttonType = buttonType
         self.buttonTapped = buttonTapped
         self.gestureType = gestureType
+        self.scrollOffset = scrollOffset
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -110,4 +109,5 @@ class ToolbarMiddlewareAction: Action {
 enum ToolbarMiddlewareActionType: ActionType {
     case didTapButton
     case customA11yAction
+    case urlDidChange
 }

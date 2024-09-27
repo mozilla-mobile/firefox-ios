@@ -79,36 +79,16 @@ struct FakespotState: ScreenState, Equatable {
             return handleTabDidChange(action: action, state: state)
 
         case FakespotActionType.tabDidReload:
-            guard let tabUUID = action.tabUUID,
-                    state.currentTabUUID == tabUUID,
-                    let productId = action.productId
-            else { return state }
-
-            var state = state
-            state.telemetryState[tabUUID]?.adEvents[productId] = AdTelemetryState()
-            return state
+            return handleTabDidReload(action: action, state: state)
 
         case FakespotActionType.pressedShoppingButton:
-            var state = state
-            state.isOpen = !state.isOpen
-            state.sidebarOpenForiPadLandscape = state.isOpen
-            if !state.isOpen {
-                state.sendSurfaceDisplayedTelemetryEvent = true
-            }
-            return state
+            return handlePressedShoppingButton(state: state)
 
         case FakespotActionType.show:
-            var state = state
-            state.isOpen = true
-            state.sidebarOpenForiPadLandscape = true
-            return state
+            return handleShow(state: state)
 
         case FakespotActionType.dismiss:
-            var state = state
-            state.isOpen = false
-            state.sidebarOpenForiPadLandscape = false
-            state.sendSurfaceDisplayedTelemetryEvent = true
-            return state
+            return handleDismiss(state: state)
 
         case FakespotActionType.setAppearanceTo:
             let isEnabled = action.isOpen ?? state.isOpen
@@ -174,6 +154,42 @@ struct FakespotState: ScreenState, Equatable {
         }
         state.currentTabUUID = tabUUID
 
+        return state
+    }
+
+    private static func handleTabDidReload(action: FakespotAction, state: FakespotState) -> FakespotState {
+        guard let tabUUID = action.tabUUID,
+                state.currentTabUUID == tabUUID,
+                let productId = action.productId
+        else { return state }
+
+        var state = state
+        state.telemetryState[tabUUID]?.adEvents[productId] = AdTelemetryState()
+        return state
+    }
+
+    private static func handlePressedShoppingButton(state: FakespotState) -> FakespotState {
+        var state = state
+        state.isOpen = !state.isOpen
+        state.sidebarOpenForiPadLandscape = state.isOpen
+        if !state.isOpen {
+            state.sendSurfaceDisplayedTelemetryEvent = true
+        }
+        return state
+    }
+
+    private static func handleShow(state: FakespotState) -> FakespotState {
+        var state = state
+        state.isOpen = true
+        state.sidebarOpenForiPadLandscape = true
+        return state
+    }
+
+    private static func handleDismiss(state: FakespotState) -> FakespotState {
+        var state = state
+        state.isOpen = false
+        state.sidebarOpenForiPadLandscape = false
+        state.sendSurfaceDisplayedTelemetryEvent = true
         return state
     }
 }

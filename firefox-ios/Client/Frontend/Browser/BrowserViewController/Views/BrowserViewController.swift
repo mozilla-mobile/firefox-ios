@@ -453,8 +453,9 @@ class BrowserViewController: UIViewController,
             updateURLBarDisplayURL(tab)
 
             if isToolbarRefactorEnabled {
-                dispatchBackForwardToolbarAction(webView.canGoBack, windowUUID, .backButtonStateChanged)
-                dispatchBackForwardToolbarAction(webView.canGoForward, windowUUID, .forwardButtonStateChanged)
+                dispatchBackForwardToolbarAction(canGoBack: webView.canGoBack,
+                                                 canGoForward: webView.canGoForward,
+                                                 windowUUID: windowUUID)
             } else {
                 navigationToolbar.updateBackStatus(webView.canGoBack)
                 navigationToolbar.updateForwardStatus(webView.canGoForward)
@@ -651,9 +652,11 @@ class BrowserViewController: UIViewController,
 
             if state.showOverlay == true {
                 overlayManager.openNewTab(url: nil, newTabSettings: newTabSettings)
+            } else if state.showOverlay == false {
+                overlayManager.cancelEditing(shouldCancelLoading: false)
             }
 
-            executeToolbarActions()
+            executeNavigationAndDisplayActions()
 
             handleMicrosurvey(state: state)
         }
@@ -769,11 +772,7 @@ class BrowserViewController: UIViewController,
         pasteAction = AccessibleAction(name: .PasteTitle, handler: {  [weak self] () -> Bool in
             guard let self, let pasteboardContents = UIPasteboard.general.string else { return false }
             // Enter overlay mode and make the search controller appear.
-            if isToolbarRefactorEnabled {
-                addressToolbarContainer.enterOverlayMode(pasteboardContents, pasted: true, search: true)
-            } else {
-                overlayManager.openSearch(with: pasteboardContents)
-            }
+            overlayManager.openSearch(with: pasteboardContents)
             searchController?.searchTelemetry?.interactionType = .pasted
             return true
         })
@@ -1811,7 +1810,7 @@ class BrowserViewController: UIViewController,
                   let canGoBack = change?[.newKey] as? Bool
             else { break }
             if isToolbarRefactorEnabled {
-                dispatchBackForwardToolbarAction(canGoBack, windowUUID, .backButtonStateChanged)
+                dispatchBackForwardToolbarAction(canGoBack: canGoBack, windowUUID: windowUUID)
             } else {
                 navigationToolbar.updateBackStatus(canGoBack)
             }
@@ -1820,7 +1819,7 @@ class BrowserViewController: UIViewController,
                   let canGoForward = change?[.newKey] as? Bool
             else { break }
             if isToolbarRefactorEnabled {
-                dispatchBackForwardToolbarAction(canGoForward, windowUUID, .forwardButtonStateChanged)
+                dispatchBackForwardToolbarAction(canGoForward: canGoForward, windowUUID: windowUUID)
             } else {
                 navigationToolbar.updateForwardStatus(canGoForward)
             }
@@ -1878,6 +1877,7 @@ class BrowserViewController: UIViewController,
         guard !isToolbarRefactorEnabled else {
             let action = ToolbarAction(
                 url: tab.url?.displayURL,
+                isPrivate: tab.isPrivate,
                 isShowingNavigationToolbar: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection),
                 canGoBack: tab.canGoBack,
                 canGoForward: tab.canGoForward,
@@ -1885,6 +1885,16 @@ class BrowserViewController: UIViewController,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange)
             store.dispatch(action)
+
+            if let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+               toolbarState.isPrivateMode != tab.isPrivate {
+                // update toolbar borders
+                let middlewareAction = ToolbarMiddlewareAction(
+                    scrollOffset: scrollController.contentOffset,
+                    windowUUID: windowUUID,
+                    actionType: ToolbarMiddlewareActionType.urlDidChange)
+                store.dispatch(middlewareAction)
+            }
             return
         }
 
@@ -1940,7 +1950,7 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func executeToolbarActions() {
+    private func executeNavigationAndDisplayActions() {
         guard isToolbarRefactorEnabled, let state = browserViewControllerState else { return }
 
         switch state {
@@ -1952,18 +1962,15 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    private func dispatchBackForwardToolbarAction(_ isEnabled: Bool?,
-                                                  _ windowUUID: UUID,
-                                                  _ actionType: ToolbarActionType) {
-        switch actionType {
-        case .backButtonStateChanged:
-            let action = ToolbarAction(canGoBack: isEnabled, windowUUID: windowUUID, actionType: actionType)
-            store.dispatch(action)
-        case .forwardButtonStateChanged:
-            let action = ToolbarAction(canGoForward: isEnabled, windowUUID: windowUUID, actionType: actionType)
-            store.dispatch(action)
-        default: break
-        }
+    private func dispatchBackForwardToolbarAction(canGoBack: Bool? = nil,
+                                                  canGoForward: Bool? = nil,
+                                                  windowUUID: UUID) {
+        guard canGoBack != nil || canGoForward != nil else { return }
+        let action = ToolbarAction(canGoBack: canGoBack,
+                                   canGoForward: canGoForward,
+                                   windowUUID: windowUUID,
+                                   actionType: ToolbarActionType.backForwardButtonStateChanged)
+        store.dispatch(action)
     }
 
     private func handleDisplayActions(for state: BrowserViewControllerState) {
@@ -2548,9 +2555,13 @@ class BrowserViewController: UIViewController,
         }
 
         if webViewStatus == .finishedNavigation {
-            if tab !== tabManager.selectedTab,
-                let webView = tab.webView,
-                tab.screenshot == nil {
+            let isSelectedTab = (tab == tabManager.selectedTab)
+            if isSelectedTab && !isToolbarRefactorEnabled {
+                // Refresh secure content state after completed navigation
+                urlBar.locationView.hasSecureContent = webView.hasOnlySecureContent
+            }
+
+            if !isSelectedTab, let webView = tab.webView, tab.screenshot == nil {
                 // To Screenshot a tab that is hidden we must add the webView,
                 // then wait enough time for the webview to render.
                 webView.frame = contentContainer.frame
@@ -3603,8 +3614,8 @@ extension BrowserViewController: SearchViewControllerDelegate {
 
 extension BrowserViewController: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selectedTab: Tab, previousTab: Tab?, isRestoring: Bool) {
-        // Failing to have a non-nil webView by this point will cause the toolbar scrolling behaviour to regress, back/foward
-        // buttons never to become enabled, etc. on tab restore after launch. [FXIOS-9785, FXIOS-9781]
+        // Failing to have a non-nil webView by this point will cause the toolbar scrolling behaviour to regress,
+        // back/forward buttons never to become enabled, etc. on tab restore after launch. [FXIOS-9785, FXIOS-9781]
         assert(selectedTab.webView != nil, "Setup will fail if the webView is not initialized for selectedTab")
 
         // Remove the old accessibilityLabel. Since this webview shouldn't be visible, it doesn't need it
@@ -3680,8 +3691,9 @@ extension BrowserViewController: TabManagerDelegate {
         setupMiddleButtonStatus(isLoading: selectedTab.loading)
 
         if isToolbarRefactorEnabled {
-            dispatchBackForwardToolbarAction(selectedTab.canGoBack, windowUUID, .backButtonStateChanged)
-            dispatchBackForwardToolbarAction(selectedTab.canGoForward, windowUUID, .forwardButtonStateChanged)
+            dispatchBackForwardToolbarAction(canGoBack: selectedTab.canGoBack,
+                                             canGoForward: selectedTab.canGoForward,
+                                             windowUUID: windowUUID)
         } else {
             navigationToolbar.updateBackStatus(selectedTab.canGoBack)
             navigationToolbar.updateForwardStatus(selectedTab.canGoForward)
@@ -3923,7 +3935,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
     }
 
     private func finishEditionMode() {
-        // If keyboard is dismiss leave edition mode Homepage case is handled in HomepageVC
+        // If keyboard is dismissed leave edit mode, Homepage case is handled in HomepageVC
         let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)
         if newTabChoice != .topSites, newTabChoice != .blankPage {
             overlayManager.cancelEditing(shouldCancelLoading: false)

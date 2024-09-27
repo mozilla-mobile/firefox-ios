@@ -12,6 +12,7 @@ class MockTabManager: TabManager {
     let windowUUID: WindowUUID
     var isRestoringTabs = false
     var selectedTab: Tab?
+    var selectedTabUUID: UUID?
     var backupCloseTab: BackupCloseTab?
     var backupCloseTabs = [Tab]()
 
@@ -158,6 +159,10 @@ class MockTabManager: TabManager {
                                  didClearTabs: @escaping (_ tabsToRemove: [Tab],
                                                           _ isPrivate: Bool,
                                                           _ previousTabUUID: String) -> Void) {}
+
+    func findRightOrLeftTab(forRemovedTab removedTab: Tab, withDeletedIndex deletedIndex: Int) -> Tab? {
+        return nil
+    }
 
     // MARK: - Inactive tabs
     func getInactiveTabs() -> [Tab] {

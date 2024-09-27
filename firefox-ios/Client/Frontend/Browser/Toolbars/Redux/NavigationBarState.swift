@@ -92,8 +92,7 @@ struct NavigationBarState: StateType, Equatable {
                 displayBorder: state.displayBorder
             )
 
-        case ToolbarActionType.backButtonStateChanged,
-            ToolbarActionType.forwardButtonStateChanged:
+        case ToolbarActionType.backForwardButtonStateChanged:
             guard let toolbarAction = action as? ToolbarAction else { return state }
 
             return NavigationBarState(

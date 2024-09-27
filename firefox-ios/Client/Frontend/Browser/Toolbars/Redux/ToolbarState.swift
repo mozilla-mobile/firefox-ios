@@ -139,7 +139,7 @@ struct ToolbarState: ScreenState, Equatable {
             return ToolbarState(
                 windowUUID: state.windowUUID,
                 toolbarPosition: state.toolbarPosition,
-                isPrivateMode: state.isPrivateMode,
+                isPrivateMode: toolbarAction.isPrivate ?? state.isPrivateMode,
                 addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
                 navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
                 isShowingNavigationToolbar: toolbarAction.isShowingNavigationToolbar ?? state.isShowingNavigationToolbar,
@@ -188,24 +188,6 @@ struct ToolbarState: ScreenState, Equatable {
                 canShowDataClearanceAction: state.canShowDataClearanceAction,
                 canShowNavigationHint: state.canShowNavigationHint)
 
-        case GeneralBrowserActionType.updateSelectedTab:
-            guard let action = action as? GeneralBrowserAction else { return state }
-            return ToolbarState(
-                windowUUID: state.windowUUID,
-                toolbarPosition: state.toolbarPosition,
-                isPrivateMode: action.isPrivateBrowsing ?? state.isPrivateMode,
-                addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
-                navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action),
-                isShowingNavigationToolbar: state.isShowingNavigationToolbar,
-                isShowingTopTabs: state.isShowingTopTabs,
-                canGoBack: state.canGoBack,
-                canGoForward: state.canGoForward,
-                numberOfTabs: state.numberOfTabs,
-                showMenuWarningBadge: state.showMenuWarningBadge,
-                isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-                canShowDataClearanceAction: state.canShowDataClearanceAction,
-                canShowNavigationHint: state.canShowNavigationHint)
-
         case ToolbarActionType.toolbarPositionChanged:
             guard let toolbarPosition = (action as? ToolbarAction)?.toolbarPosition else { return state }
             let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
@@ -243,8 +225,7 @@ struct ToolbarState: ScreenState, Equatable {
                 canShowDataClearanceAction: state.canShowDataClearanceAction,
                 canShowNavigationHint: state.canShowNavigationHint)
 
-        case ToolbarActionType.backButtonStateChanged,
-            ToolbarActionType.forwardButtonStateChanged:
+        case ToolbarActionType.backForwardButtonStateChanged:
             guard let toolbarAction = action as? ToolbarAction else { return state }
             return ToolbarState(
                 windowUUID: state.windowUUID,

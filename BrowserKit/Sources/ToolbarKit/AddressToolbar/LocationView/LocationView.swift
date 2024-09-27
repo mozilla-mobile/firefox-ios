@@ -21,7 +21,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     private var notifyTextChanged: (() -> Void)?
     private var onTapLockIcon: ((UIButton) -> Void)?
     private var onLongPress: (() -> Void)?
-    private var delegate: LocationViewDelegate?
+    private weak var delegate: LocationViewDelegate?
 
     private var isEditing = false
     private var isURLTextFieldEmpty: Bool {
@@ -172,7 +172,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
 
             iconContainerBackgroundView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
             iconContainerBackgroundView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor),
-            iconContainerBackgroundView.leadingAnchor.constraint(equalTo: urlTextField.leadingAnchor),
+            iconContainerBackgroundView.leadingAnchor.constraint(lessThanOrEqualTo: urlTextField.leadingAnchor),
             iconContainerBackgroundView.trailingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor),
 
             searchEngineImageView.heightAnchor.constraint(equalToConstant: UX.searchEngineImageViewSize.height),
@@ -280,10 +280,8 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         _ = shouldShowKeyboard ? becomeFirstResponder() : resignFirstResponder()
 
         // Start overlay mode & select text when in edit mode with a search term
-        if shouldShowKeyboard, state.shouldSelectSearchTerm {
-            DispatchQueue.main.async {
-                self.urlTextField.selectAll(nil)
-            }
+        if shouldShowKeyboard == true && state.shouldSelectSearchTerm == true {
+            urlTextField.selectAll(nil)
         }
     }
 
@@ -361,7 +359,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         guard let text = textField.text else { return true }
         if !text.trimmingCharacters(in: .whitespaces).isEmpty {
             delegate?.locationViewDidSubmitText(text)
-            textField.resignFirstResponder()
+            _ = textField.resignFirstResponder()
             return true
         } else {
             return false
