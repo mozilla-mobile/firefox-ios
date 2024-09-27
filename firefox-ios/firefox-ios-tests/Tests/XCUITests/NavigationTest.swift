@@ -532,9 +532,10 @@ class NavigationTest: BaseTestCase {
         navigator.openURL("ultimateqa.com/dummy-automation-websites")
         waitUntilPageLoad()
         if app.links.matching(identifier: "SauceDemo.com").count > 1 {
-            // If there are more than one match for SauceDemo.com, for some reason the normal tab and the private tab
-            // views are still in the view hierarchy simultaneously. This should not happen unintentionally.
-            XCTFail("Too many matches! Has the UI hierarchy unexpectedly changed? ")
+            // If there are multiple matches for "SauceDemo.com", then both the normal tab and the private tab views may be
+            // in the view hierarchy simultaneously. This should not change unintentionally! Check the Debug View Hierarchy.
+            // Note: Additional matches may also appear if the external website updates.
+            XCTFail("Too many matches! Has the UI hierarchy or external website unexpectedly changed?")
         }
         scrollToElement(app.links["SauceDemo.com"].firstMatch)
         app.links["SauceDemo.com"].firstMatch.tap(force: true)
