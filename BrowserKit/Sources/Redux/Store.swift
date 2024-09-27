@@ -72,15 +72,13 @@ public class Store<State: StateType>: DefaultDispatchStore {
     public func dispatch(_ action: Action) {
         logger.log("Dispatched action: \(action.displayString())", level: .info, category: .redux)
 
-        if Thread.isMainThread {
-            actionQueue.append(action)
-            processQueuedActions()
-        } else {
-            DispatchQueue.main.async { [weak self] in
-                self?.actionQueue.append(action)
-                self?.processQueuedActions()
-            }
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async { [weak self] in self?.dispatch(action) }
+            return
         }
+
+        actionQueue.append(action)
+        processQueuedActions()
     }
 
     private func processQueuedActions() {
