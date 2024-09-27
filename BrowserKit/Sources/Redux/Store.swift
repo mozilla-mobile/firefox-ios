@@ -85,8 +85,7 @@ public class Store<State: StateType>: DefaultDispatchStore {
         guard !isProcessingActions else { return }
         isProcessingActions = true
         while !actionQueue.isEmpty {
-            let action = actionQueue.first!
-            actionQueue.remove(at: 0)
+            let action = actionQueue.removeFirst()
             executeAction(action)
         }
         isProcessingActions = false
