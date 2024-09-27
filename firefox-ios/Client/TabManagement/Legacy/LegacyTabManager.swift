@@ -98,9 +98,14 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         return tabs.filter { $0.isPrivate }
     }
 
+    var isInactiveTabsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
+    }
+
     /// This variable returns all normal tabs, sorted chronologically, excluding any home page tabs.
     var recentlyAccessedNormalTabs: [Tab] {
-        var eligibleTabs = normalActiveTabs // Do not include inactive tabs, as they are not "recently" accessed
+        // If inactive tabs are enabled, do not include inactive tabs, as they are not "recently" accessed
+        var eligibleTabs = isInactiveTabsEnabled ? normalActiveTabs : normalTabs
 
         eligibleTabs = eligibleTabs.filter { tab in
             if tab.lastKnownUrl == nil {
