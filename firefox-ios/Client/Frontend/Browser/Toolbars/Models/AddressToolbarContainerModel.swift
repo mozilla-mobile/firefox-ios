@@ -31,9 +31,9 @@ class AddressToolbarContainerModel: Equatable {
 
         let locationViewState = LocationViewState(
             searchEngineImageViewA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchEngine,
-            searchEngineImageViewA11yLabel: .AddressToolbar.PrivacyAndSecuritySettingsA11yLabel,
+            searchEngineImageViewA11yLabel: .AddressToolbar.SearchEngineA11yLabel,
             lockIconButtonA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon,
-            lockIconButtonA11yLabel: .AddressToolbar.SearchEngineA11yLabel,
+            lockIconButtonA11yLabel: .AddressToolbar.PrivacyAndSecuritySettingsA11yLabel,
             urlTextFieldPlaceholder: .AddressToolbar.LocationPlaceholder,
             urlTextFieldA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField,
             urlTextFieldA11yLabel: .AddressToolbar.LocationA11yLabel,
