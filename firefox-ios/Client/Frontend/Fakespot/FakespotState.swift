@@ -91,34 +91,16 @@ struct FakespotState: ScreenState, Equatable {
             return handleDismiss(state: state)
 
         case FakespotActionType.setAppearanceTo:
-            let isEnabled = action.isOpen ?? state.isOpen
-            var state = state
-            state.isOpen = isEnabled
-            state.sendSurfaceDisplayedTelemetryEvent = !isEnabled
-            return state
+            return handleAppearance(action: action, state: state)
 
         case FakespotActionType.surfaceDisplayedEventSend:
-            var state = state
-            state.sendSurfaceDisplayedTelemetryEvent = false
-            return state
+            return handleSurfaceDisplayedEvent(state: state)
 
         case FakespotActionType.adsImpressionEventSendFor:
-            guard let productId = action.productId else { return state }
-            var state = state
-            if state.telemetryState[state.currentTabUUID]?.adEvents[productId] == nil {
-                state.telemetryState[state.currentTabUUID]?.adEvents[productId] = AdTelemetryState()
-            }
-            state.telemetryState[state.currentTabUUID]?.adEvents[productId]?.sendAdsImpressionEvent = false
-            return state
+            return handleAdsImpressionEvent(action: action, state: state)
 
         case FakespotActionType.adsExposureEventSendFor:
-            guard let productId = action.productId else { return state }
-            var state = state
-            if state.telemetryState[state.currentTabUUID]?.adEvents[productId] == nil {
-                state.telemetryState[state.currentTabUUID]?.adEvents[productId] = AdTelemetryState()
-            }
-            state.telemetryState[state.currentTabUUID]?.adEvents[productId]?.sendAdExposureEvent = false
-            return state
+            return handleAdsExposureEvent(action: action, state: state)
 
         default:
             return state
@@ -190,6 +172,40 @@ struct FakespotState: ScreenState, Equatable {
         state.isOpen = false
         state.sidebarOpenForiPadLandscape = false
         state.sendSurfaceDisplayedTelemetryEvent = true
+        return state
+    }
+
+    private static func handleAppearance(action: FakespotAction, state: FakespotState) -> FakespotState {
+        let isEnabled = action.isOpen ?? state.isOpen
+        var state = state
+        state.isOpen = isEnabled
+        state.sendSurfaceDisplayedTelemetryEvent = !isEnabled
+        return state
+    }
+
+    private static func handleSurfaceDisplayedEvent(state: FakespotState) -> FakespotState {
+        var state = state
+        state.sendSurfaceDisplayedTelemetryEvent = false
+        return state
+    }
+
+    private static func handleAdsImpressionEvent(action: FakespotAction, state: FakespotState) -> FakespotState {
+        guard let productId = action.productId else { return state }
+        var state = state
+        if state.telemetryState[state.currentTabUUID]?.adEvents[productId] == nil {
+            state.telemetryState[state.currentTabUUID]?.adEvents[productId] = AdTelemetryState()
+        }
+        state.telemetryState[state.currentTabUUID]?.adEvents[productId]?.sendAdsImpressionEvent = false
+        return state
+    }
+
+    private static func handleAdsExposureEvent(action: FakespotAction, state: FakespotState) -> FakespotState {
+        guard let productId = action.productId else { return state }
+        var state = state
+        if state.telemetryState[state.currentTabUUID]?.adEvents[productId] == nil {
+            state.telemetryState[state.currentTabUUID]?.adEvents[productId] = AdTelemetryState()
+        }
+        state.telemetryState[state.currentTabUUID]?.adEvents[productId]?.sendAdExposureEvent = false
         return state
     }
 }
