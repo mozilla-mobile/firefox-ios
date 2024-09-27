@@ -861,8 +861,8 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
                 // If the selected tab is closed, and is private browsing, try to select a recent normal active tab. For all
                 // other cases, open a new normal active tab.
                 if removedTab.isPrivate,
-                   let mostRecentViableTab = mostRecentTab(inTabs: viableTabs) {
-                    selectTab(mostRecentViableTab, previous: removedTab)
+                   let mostRecentActiveTab = mostRecentTab(inTabs: normalActiveTabs) {
+                    selectTab(mostRecentActiveTab, previous: removedTab)
                 } else {
                     selectTab(addTab(), previous: removedTab)
                 }
