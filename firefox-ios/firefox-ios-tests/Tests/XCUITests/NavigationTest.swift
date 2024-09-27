@@ -543,13 +543,9 @@ class NavigationTest: BaseTestCase {
         }
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         mozWaitForElementToExist(tabsButton)
-        if !isPrivate {
-            XCTAssertEqual(tabsButton.value as? String, "2")
-        } else {
-            // External link is opened in the same tab on private mode
-            // Change validation after https://github.com/mozilla-mobile/firefox-ios/issues/21773 is fixed
-            XCTAssertEqual(tabsButton.value as? String, "1")
-        }
+        XCTAssertEqual(tabsButton.value as? String, "2")
+        // We need to close the tabs from regular mode in order to be able to interact with the elements from private tab
+        navigator.performAction(Action.AcceptRemovingAllTabs)
     }
 
     private func openContextMenuForArticleLink() {
