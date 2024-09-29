@@ -1,3 +1,4 @@
+
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
@@ -16,7 +17,6 @@ public struct StandardImageIdentifiers {
         public static let pinBadgeFill = "pinBadgeFillSmall"
         public static let sponsoredStar = "sponsoredStarSmall"
     }
-
     // Icon size 20x20
     public struct Medium {
         public static let bookmarkBadgeFillBlue50 = "bookmarkBadgeFillMediumBlue50"
@@ -29,17 +29,17 @@ public struct StandardImageIdentifiers {
         public static let sun = "sunMedium"
         public static let sunFill = "sunFillMedium"
     }
-
     // Icon size 24x24
     public struct Large {
-        public static let addToHomeScreen = "addToHomescreenLarge"
-        public static let appendUpLeft = "appendUpLeftLarge"
+        public static let addToHomescreen = "addToHomescreenLarge"
         public static let appMenu = "appMenuLarge"
+        public static let appendUpLeft = "appendUpLeftLarge"
         public static let arrowClockwise = "arrowClockwiseLarge"
         public static let avatarCircle = "avatarCircleLarge"
         public static let back = "backLarge"
         public static let bookmark = "bookmarkLarge"
         public static let bookmarkFill = "bookmarkFillLarge"
+        public static let bookmarkHalf = "bookmarkHalfLarge"
         public static let bookmarkSlash = "bookmarkSlashLarge"
         public static let bookmarkTrayFill = "bookmarkTrayFillLarge"
         public static let checkmark = "checkmarkLarge"
@@ -109,18 +109,17 @@ public struct StandardImageIdentifiers {
         public static let shieldSlash = "shieldSlashLarge"
         public static let shipping = "shippingLarge"
         public static let shopping = "shoppingLarge"
-        public static let socialTracker = "socialMediaLarge"
+        public static let socialMedia = "socialMediaLarge"
         public static let subtract = "subtractLarge"
         public static let sync = "syncLarge"
         public static let syncTabs = "syncTabsLarge"
         public static let tab = "tabLarge"
         public static let tabTray = "tabTrayLarge"
-        public static let tools = "toolLarge"
+        public static let tool = "toolLarge"
         public static let warning = "warningLarge"
         public static let warningFill = "warningFillLarge"
         public static let whatsNew = "whatsNewLarge"
     }
-
     // Icon size 30x30
     public struct ExtraLarge {
         public static let crossCircleFill = "crossCircleFillExtraLarge"
