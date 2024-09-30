@@ -32,18 +32,18 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
-                    with: .homepageRebuild,
-                    titleText: format(string: "Enable New Homepage"),
-                    statusText: format(string: "Toggle to use the new homepage")
-                ) { [weak self] _ in
-                    self?.reloadView()
-                },
-                FeatureFlagsBoolSetting(
                     with: .microsurvey,
                     titleText: format(string: "Enable Microsurvey"),
                     statusText: format(string: "Toggle to reset microsurvey expiration")
                 ) { [weak self] _ in
                     UserDefaults.standard.set(nil, forKey: "\(GleanPlumbMessageStore.rootKey)\("homepage-microsurvey-message")")
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .homepageRebuild,
+                    titleText: format(string: "Enable New Homepage"),
+                    statusText: format(string: "Toggle to use the new homepage")
+                ) { [weak self] _ in
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
