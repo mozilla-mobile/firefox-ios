@@ -97,9 +97,8 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         notifyTextChanged = { [self] in
             guard urlTextField.isEditing else { return }
 
-            urlTextField.text = urlTextField.text?.lowercased()
-            urlAbsolutePath = urlTextField.text
-            delegate?.locationViewDidEnterText(urlTextField.text ?? "")
+            urlAbsolutePath = urlTextField.text?.lowercased()
+            delegate?.locationViewDidEnterText(urlAbsolutePath ?? "")
         }
     }
 
@@ -243,9 +242,8 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     private func updateUIForSearchEngineDisplay() {
         removeContainerIcons()
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
-        urlTextFieldLeadingConstraint?.constant = UX.horizontalSpace
-        iconContainerStackViewLeadingConstraint?.constant = UX.horizontalSpace
         updateURLTextFieldLeadingConstraint(constant: UX.horizontalSpace)
+        iconContainerStackViewLeadingConstraint?.constant = UX.horizontalSpace
         updateGradient()
     }
 
@@ -253,7 +251,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         guard !isEditing else { return }
         removeContainerIcons()
         iconContainerStackView.addArrangedSubview(lockIconButton)
-        urlTextFieldLeadingConstraint?.constant = 0
+        updateURLTextFieldLeadingConstraint()
         iconContainerStackViewLeadingConstraint?.constant = 0
         updateGradient()
     }
