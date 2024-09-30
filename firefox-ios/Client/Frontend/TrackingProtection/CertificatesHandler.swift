@@ -77,15 +77,13 @@ class CertificateDelegate: NSObject, URLSessionDelegate {
         URLSession.AuthChallengeDisposition,
         URLCredential?
     ) {
-        return await withCheckedContinuation { continuation in
-            if let serverTrust = challenge.protectionSpace.serverTrust {
-                let certificatesHandler = CertificatesHandler(serverTrust: serverTrust)
-                self.completion(certificatesHandler.handleCertificates())
-                continuation.resume(returning: (.useCredential, URLCredential(trust: serverTrust)))
-            } else {
-                self.completion(nil)
-                continuation.resume(returning: (.cancelAuthenticationChallenge, nil))
-            }
+        if let serverTrust = challenge.protectionSpace.serverTrust {
+            let certificatesHandler = CertificatesHandler(serverTrust: serverTrust)
+            self.completion(certificatesHandler.handleCertificates())
+            return (.useCredential, URLCredential(trust: serverTrust))
+        } else {
+            self.completion(nil)
+            return (.cancelAuthenticationChallenge, nil)
         }
     }
 }
