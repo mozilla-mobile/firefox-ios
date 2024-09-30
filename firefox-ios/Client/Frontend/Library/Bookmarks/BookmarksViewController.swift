@@ -134,8 +134,8 @@ class BookmarksViewController: SiteTableViewController,
     override func reloadData() {
         viewModel.reloadData { [weak self] in
             self?.tableView.reloadData()
-            self?.flashRow()
             if self?.viewModel.shouldFlashRow ?? false {
+                self?.flashRow()
             }
         }
     }
@@ -574,23 +574,8 @@ extension BookmarksViewController {
             if viewModel.isRootNode {
                 updatePanelState(newState: .bookmarks(state: .mainView))
             }
-        case .inFolderEditMode:
-            presentInFolderActions()
-
-        case .itemEditMode:
-            updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
-
-        case .itemEditModeInvalidField:
-            updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
-
         default:
             return
-        }
-    }
-
-    func handleRightTopButton() {
-        if state == .bookmarks(state: .itemEditMode) {
-            handleItemEditMode()
         }
     }
 
@@ -608,22 +593,8 @@ extension BookmarksViewController {
             enableEditMode()
         case .inFolderEditMode:
             disableEditMode()
-        case .itemEditMode:
-            handleItemEditMode()
         default:
             return
-        }
-    }
-
-    func handleItemEditMode() {
-        guard let bookmarkEditView = navigationController?.viewControllers.last as? LegacyBookmarkDetailPanel else { return }
-
-        updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
-        bookmarkEditView.save().uponQueue(.main) { _ in
-            self.navigationController?.popViewController(animated: true)
-            if bookmarkEditView.isNew {
-                self.viewModel.didAddBookmarkNode()
-            }
         }
     }
 }

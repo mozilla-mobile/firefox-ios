@@ -5,4 +5,8 @@
 import Foundation
 
 class EditFolderViewModel {
+    func controllerTitle() -> String {
+        // TODO: translate
+        return "New Folder"
+    }
 }

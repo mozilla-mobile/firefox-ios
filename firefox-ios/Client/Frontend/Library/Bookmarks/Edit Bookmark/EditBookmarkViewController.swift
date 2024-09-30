@@ -44,8 +44,8 @@ class EditBookmarkViewController: UIViewController,
                                                     size: CGSize(width: 0, height: UX.bookmarkCellTopPadding)))
         view.tableHeaderView = headerSpacerView
     }
-    var onViewDisappear: (() -> Void)?
-    var onViewWillappear: (() -> Void)?
+    var onViewWillDisappear: (() -> Void)?
+    var onViewWillAppear: (() -> Void)?
     private let viewModel: EditBookmarkViewModel
 
     init(viewModel: EditBookmarkViewModel,
@@ -82,7 +82,7 @@ class EditBookmarkViewController: UIViewController,
         setTheme(theme)
         navigationController?.setNavigationBarHidden(false, animated: true)
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
-        onViewWillappear?()
+        onViewWillAppear?()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -90,7 +90,7 @@ class EditBookmarkViewController: UIViewController,
         if let isDragging = transitionCoordinator?.isInteractive, !isDragging {
             navigationController?.setNavigationBarHidden(true, animated: true)
         }
-        onViewDisappear?()
+        onViewWillDisappear?()
         viewModel.saveBookmark()
     }
 

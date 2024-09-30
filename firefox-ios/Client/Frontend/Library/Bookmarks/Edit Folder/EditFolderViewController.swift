@@ -20,6 +20,8 @@ class EditFolderViewController: UIViewController,
     var themeManager: any ThemeManager
     var themeObserver: (any NSObjectProtocol)?
     var notificationCenter: any NotificationProtocol
+    var onViewWillDisappear: (() -> Void)?
+    var onViewWillAppear: (() -> Void)?
     private var theme: any Theme {
         return themeManager.getCurrentTheme(for: currentWindowUUID)
     }
@@ -50,6 +52,42 @@ class EditFolderViewController: UIViewController,
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Life Cycle
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        _ = UIImage(resource: .addToHomescreenLarge)
+        navigationController?.navigationBar.topItem?.title = ""
+        title = viewModel.controllerTitle()
+        setupSubviews()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        setTheme(theme)
+        onViewWillAppear?()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if let isDraggingDown = transitionCoordinator?.isInteractive, !isDraggingDown {
+            navigationController?.setNavigationBarHidden(true, animated: true)
+        }
+        onViewWillDisappear?()
+    }
+
+    private func setupSubviews() {
+        view.addSubview(tableView)
+        NSLayoutConstraint.activate([
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 
     // MARK: - Themeable

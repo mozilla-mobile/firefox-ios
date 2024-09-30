@@ -38,17 +38,17 @@ class EditBookmarkViewModel {
     private let profile: Profile
     private let folderFetcher: FolderHierarchyFetcher
     private let bookmarksSaver: BookmarksSaver
-    
+
     private var isFolderCollapsed = true
     private(set) var folderStructures: [Folder] = []
-    
+
     var bookmarkTitle: String {
         return node?.title ?? ""
     }
     var bookmarkURL: String {
         return node?.url ?? ""
     }
-    
+
     var onFolderStatusUpdate: VoidReturnCallback?
     var onBookmarkSaved: VoidReturnCallback?
 

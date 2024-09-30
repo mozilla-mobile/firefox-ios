@@ -13,7 +13,7 @@ protocol BookmarksSaver {
 
 struct DefaultBookmarksSaver: BookmarksSaver {
     let profile: Profile
-    
+
     func save(bookmark: FxBookmarkNode, parentFolderGUID: String) async -> Result<Bool, Error> {
         return await withCheckedContinuation { continuation in
             let operation: Success? = {

@@ -12,7 +12,7 @@ protocol FolderHierarchyFetcher {
 struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher {
     let profile: Profile
     let rootFolderGUID: String
-    
+
     func fetchFolders() async -> [(folder: BookmarkFolderData, indent: Int)] {
         return await withCheckedContinuation { continuation in
             profile.places.getBookmarksTree(rootGUID: rootFolderGUID,
@@ -30,7 +30,6 @@ struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher {
                 }
             }
         }
-        
     }
 
     private func recursiveAddSubFolders(_ folder: BookmarkFolderData,

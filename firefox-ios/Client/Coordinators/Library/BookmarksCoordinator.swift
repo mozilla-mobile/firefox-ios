@@ -5,8 +5,7 @@
 import Foundation
 import Storage
 import Common
-
-import enum MozillaAppServices.BookmarkNodeType
+import MozillaAppServices
 
 protocol BookmarksCoordinatorDelegate: AnyObject, LibraryPanelCoordinatorDelegate {
     func start(from folder: FxBookmarkNode)
@@ -84,23 +83,7 @@ class BookmarksCoordinator: BaseCoordinator,
     func showBookmarkDetail(for node: FxBookmarkNode, folder: FxBookmarkNode, completion: (() -> Void)? = nil) {
         TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .bookmarksPanel)
         if isBookmarkRefactorEnabled {
-            let viewModel = EditBookmarkViewModel(parentFolder: folder, node: node, profile: profile)
-            viewModel.onBookmarkSaved = { [weak self] in
-                guard let rootBookmarkController = self?.router.rootViewController as? BookmarksViewController
-                else { return }
-                rootBookmarkController.reloadData()
-            }
-            let detailController = EditBookmarkViewController(viewModel: viewModel,
-                                                              windowUUID: windowUUID)
-            detailController.onViewWillappear = { [weak self] in
-                self?.navigationHandler?.setNavigationBarHidden(true)
-            }
-            detailController.onViewDisappear = { [weak self] in
-                if !(detailController.transitionCoordinator?.isInteractive ?? false) {
-                    self?.navigationHandler?.setNavigationBarHidden(false)
-                }
-            }
-            router.push(detailController)
+            router.push(makeDetailController(for: node, folder: folder))
         } else {
             let detailController = LegacyBookmarkDetailPanel(profile: profile,
                                                              windowUUID: windowUUID,
@@ -115,17 +98,72 @@ class BookmarksCoordinator: BaseCoordinator,
         parentBookmarkFolder: FxBookmarkNode,
         updatePanelState: ((LibraryPanelSubState) -> Void)? = nil
     ) {
-        let detailController = LegacyBookmarkDetailPanel(
-            profile: profile,
-            windowUUID: windowUUID,
-            withNewBookmarkNodeType: bookmarkType,
-            parentBookmarkFolder: parentBookmarkFolder
-        ) {
-            updatePanelState?($0)
+        if isBookmarkRefactorEnabled {
+            let detailController = makeDetailController(for: bookmarkType, parentFolder: parentBookmarkFolder)
+            router.push(detailController)
+        } else {
+            let detailController = LegacyBookmarkDetailPanel(
+                profile: profile,
+                windowUUID: windowUUID,
+                withNewBookmarkNodeType: bookmarkType,
+                parentBookmarkFolder: parentBookmarkFolder
+            ) {
+                updatePanelState?($0)
+            }
+            router.push(detailController)
         }
     }
-
+    
     func shareLibraryItem(url: URL, sourceView: UIView) {
         navigationHandler?.shareLibraryItem(url: url, sourceView: sourceView)
+    }
+    
+    // MARK: - Factory
+    
+    private func makeDetailController(for type: BookmarkNodeType, parentFolder: FxBookmarkNode) -> UIViewController {
+        if type == .folder {
+            return makeEditFolderController(for: nil, folder: parentFolder)
+        }
+        if type == .bookmark {
+            return makeEditBookmarkController(for: nil, folder: parentFolder)
+        }
+        return UIViewController()
+    }
+
+    private func makeDetailController(for node: FxBookmarkNode, folder: FxBookmarkNode) -> UIViewController {
+        if let node = node as? BookmarkItemData {
+            return makeEditBookmarkController(for: node, folder: folder)
+        }
+        if let node = node as? BookmarkFolderData {
+            return makeEditFolderController(for: node, folder: folder)
+        }
+        return UIViewController()
+    }
+
+    // TODO: understand FXBookmarkNode dependency other than BookmarkItemData
+    private func makeEditBookmarkController(for node: BookmarkItemData?, folder: FxBookmarkNode) -> UIViewController {
+        let viewModel = EditBookmarkViewModel(parentFolder: folder, node: node, profile: profile)
+        viewModel.onBookmarkSaved = { [weak self] in
+            guard let rootBookmarkController = self?.router.navigationController.viewControllers.last
+                    as? BookmarksViewController
+            else { return }
+            rootBookmarkController.reloadData()
+        }
+        let controller = EditBookmarkViewController(viewModel: viewModel,
+                                                    windowUUID: windowUUID)
+        controller.onViewWillAppear = { [weak self] in
+            self?.navigationHandler?.setNavigationBarHidden(true)
+        }
+        controller.onViewWillDisappear = { [weak self] in
+            if !(controller.transitionCoordinator?.isInteractive ?? false) {
+                self?.navigationHandler?.setNavigationBarHidden(false)
+            }
+        }
+        return controller
+    }
+
+    private func makeEditFolderController(for node: BookmarkFolderData?, folder: FxBookmarkNode) -> UIViewController {
+        let controller = EditFolderViewController(viewModel: EditFolderViewModel(), windowUUID: windowUUID)
+        return controller
     }
 }
