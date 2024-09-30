@@ -16,6 +16,7 @@ public struct StandardImageIdentifiers {
         public static let pinBadgeFill = "pinBadgeFillSmall"
         public static let sponsoredStar = "sponsoredStarSmall"
     }
+
     // Icon size 20x20
     public struct Medium {
         public static let bookmarkBadgeFillBlue50 = "bookmarkBadgeFillMediumBlue50"
@@ -28,11 +29,12 @@ public struct StandardImageIdentifiers {
         public static let sun = "sunMedium"
         public static let sunFill = "sunFillMedium"
     }
+
     // Icon size 24x24
     public struct Large {
         public static let addToHomescreen = "addToHomescreenLarge"
-        public static let appMenu = "appMenuLarge"
         public static let appendUpLeft = "appendUpLeftLarge"
+        public static let appMenu = "appMenuLarge"
         public static let arrowClockwise = "arrowClockwiseLarge"
         public static let avatarCircle = "avatarCircleLarge"
         public static let back = "backLarge"
@@ -119,6 +121,7 @@ public struct StandardImageIdentifiers {
         public static let warningFill = "warningFillLarge"
         public static let whatsNew = "whatsNewLarge"
     }
+
     // Icon size 30x30
     public struct ExtraLarge {
         public static let crossCircleFill = "crossCircleFillExtraLarge"
