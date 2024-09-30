@@ -1296,12 +1296,16 @@ class BrowserViewController: UIViewController,
             urlBar.locationView.reloadButton.reloadButtonState = .disabled
         }
 
-        browserDelegate?.showHomepage(inline: inline,
-                                      toastContainer: contentContainer,
-                                      homepanelDelegate: self,
-                                      libraryPanelDelegate: self,
-                                      statusBarScrollDelegate: statusBarOverlay,
-                                      overlayManager: overlayManager)
+        if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
+            browserDelegate?.showNewHomepage()
+        } else {
+            browserDelegate?.showHomepage(inline: inline,
+                                          toastContainer: contentContainer,
+                                          homepanelDelegate: self,
+                                          libraryPanelDelegate: self,
+                                          statusBarScrollDelegate: statusBarOverlay,
+                                          overlayManager: overlayManager)
+        }
     }
 
     func showEmbeddedWebview() {

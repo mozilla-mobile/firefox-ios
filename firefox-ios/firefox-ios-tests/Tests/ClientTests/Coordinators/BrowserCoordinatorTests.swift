@@ -128,6 +128,75 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(firstHomepage, secondHomepage)
     }
 
+    // MARK: - Show new homepage
+
+//    func testShowNewHomepage_addsOneHomepageOnly() {
+//        let subject = createSubject()
+//        subject.showNewHomepage()
+//
+//        let secondHomepage = HomepageViewController(profile: profile,
+//                                                    toastContainer: UIView(),
+//                                                    tabManager: tabManager,
+//                                                    overlayManager: overlayModeManager)
+//        XCTAssertFalse(subject.browserViewController.contentContainer.canAdd(content: secondHomepage))
+//        XCTAssertNotNil(subject.homepageViewController)
+//        XCTAssertNil(subject.webviewController)
+//    }
+//
+//    func testShowNewHomepage_reuseExistingHomepage() {
+//        let subject = createSubject()
+//        subject.showHomepage(inline: true,
+//                             toastContainer: UIView(),
+//                             homepanelDelegate: subject.browserViewController,
+//                             libraryPanelDelegate: subject.browserViewController,
+//                             statusBarScrollDelegate: scrollDelegate,
+//                             overlayManager: overlayModeManager)
+//        let firstHomepage = subject.homepageViewController
+//        XCTAssertNotNil(subject.homepageViewController)
+//
+//        subject.showHomepage(inline: true,
+//                             toastContainer: UIView(),
+//                             homepanelDelegate: subject.browserViewController,
+//                             libraryPanelDelegate: subject.browserViewController,
+//                             statusBarScrollDelegate: scrollDelegate,
+//                             overlayManager: overlayModeManager)
+//        let secondHomepage = subject.homepageViewController
+//        XCTAssertEqual(firstHomepage, secondHomepage)
+//    }
+
+    // MARK: - Show new homepage
+
+    func testShowPrivateHomepage_addsOneOnly() {
+        let subject = createSubject()
+        subject.showPrivateHomepage(overlayManager: overlayModeManager)
+
+        let privateHomepage = PrivateHomepageViewController(
+            windowUUID: .XCTestDefaultUUID,
+            overlayManager: overlayModeManager
+        )
+        XCTAssertFalse(subject.browserViewController.contentContainer.canAdd(content: privateHomepage))
+        XCTAssertNotNil(subject.privateViewController)
+        XCTAssertNil(subject.homepageViewController)
+        XCTAssertNil(subject.webviewController)
+    }
+
+    func testShowPrivateHomepage_reuseExisting() {
+        let subject = createSubject()
+        subject.showPrivateHomepage(overlayManager: overlayModeManager)
+
+        let firstPrivateHomepage = PrivateHomepageViewController(
+            windowUUID: .XCTestDefaultUUID,
+            overlayManager: overlayModeManager
+        )
+
+        XCTAssertNotNil(subject.privateViewController)
+
+        subject.showPrivateHomepage(overlayManager: overlayModeManager)
+
+        let secondPrivateHomepage = subject.privateViewController
+        XCTAssertEqual(firstPrivateHomepage, secondPrivateHomepage)
+    }
+
     // MARK: - Show webview
 
     func testShowWebview_embedNewWebview() {
