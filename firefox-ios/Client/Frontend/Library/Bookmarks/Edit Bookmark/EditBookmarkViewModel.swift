@@ -6,7 +6,29 @@ import Foundation
 import MozillaAppServices
 import Shared
 
+typealias VoidReturnCallback = () -> Void
+
 class EditBookmarkViewModel {
+    private let parentFolder: FxBookmarkNode
+    private var node: BookmarkItemData?
+    private let profile: Profile
+    private let folderFetcher: FolderHierarchyFetcher
+    private let bookmarksSaver: BookmarksSaver
+
+    private var isFolderCollapsed = true
+    private(set) var folderStructures: [Folder] = []
+    private(set) var selectedFolder: Folder?
+
+    var bookmarkTitle: String {
+        return node?.title ?? ""
+    }
+    var bookmarkURL: String {
+        return node?.url ?? ""
+    }
+
+    var onFolderStatusUpdate: VoidReturnCallback?
+    var onBookmarkSaved: VoidReturnCallback?
+
     init(parentFolder: FxBookmarkNode,
          node: FxBookmarkNode?,
          profile: Profile,
@@ -19,38 +41,12 @@ class EditBookmarkViewModel {
         self.folderFetcher = folderFetcher ?? DefaultFolderHierarchyFetcher(profile: profile,
                                                                             rootFolderGUID: BookmarkRoots.RootGUID)
         guard let parentFolder = parentFolder as? BookmarkFolderData else { return }
-        folderStructures.append(Folder(title: title(for: parentFolder),
-                                       guid: parentFolder.guid,
-                                       indentation: 0,
-                                       isSelected: true))
+        let folder = Folder(title: title(for: parentFolder),
+                            guid: parentFolder.guid,
+                            indentation: 0)
+        folderStructures = [folder]
+        selectedFolder = folder
     }
-
-    struct Folder {
-        let title: String
-        let guid: String
-        let indentation: Int
-        var isSelected: Bool
-    }
-    typealias VoidReturnCallback = () -> Void
-
-    private let parentFolder: FxBookmarkNode
-    private var node: BookmarkItemData?
-    private let profile: Profile
-    private let folderFetcher: FolderHierarchyFetcher
-    private let bookmarksSaver: BookmarksSaver
-
-    private var isFolderCollapsed = true
-    private(set) var folderStructures: [Folder] = []
-
-    var bookmarkTitle: String {
-        return node?.title ?? ""
-    }
-    var bookmarkURL: String {
-        return node?.url ?? ""
-    }
-
-    var onFolderStatusUpdate: VoidReturnCallback?
-    var onBookmarkSaved: VoidReturnCallback?
 
     func backNavigationButtonTitle() -> String {
         if parentFolder.guid == BookmarkRoots.MobileFolderGUID {
@@ -67,9 +63,8 @@ class EditBookmarkViewModel {
     func selectFolder(_ folder: Folder) {
         isFolderCollapsed.toggle()
         if isFolderCollapsed {
-            var selectedFolder = folder
-            selectedFolder.isSelected = true
-            folderStructures = [selectedFolder]
+            selectedFolder = folder
+            folderStructures = [folder]
             onFolderStatusUpdate?()
         } else {
             getFolderStructure(folder)
@@ -78,14 +73,10 @@ class EditBookmarkViewModel {
 
     private func getFolderStructure(_ selectedFolder: Folder) {
         Task { @MainActor [weak self] in
-            let folders = (await self?.folderFetcher.fetchFolders())?.map { data in
-                return Folder(title: self?.title(for: data.folder) ?? "",
-                              guid: data.folder.guid,
-                              indentation: data.indent,
-                              isSelected: selectedFolder.guid == data.folder.guid)
-            }
+            let folders = await self?.folderFetcher.fetchFolders()
             guard let folders else { return }
             self?.folderStructures = folders
+            self?.selectedFolder = selectedFolder
             self?.onFolderStatusUpdate?()
         }
     }
@@ -103,9 +94,6 @@ class EditBookmarkViewModel {
     }
 
     func saveBookmark() {
-        let selectedFolder = folderStructures.first {
-            return $0.isSelected
-        }
         guard let selectedFolder, let node else { return }
         Task { @MainActor [weak self] in
             _ = await self?.bookmarksSaver.save(bookmark: node,

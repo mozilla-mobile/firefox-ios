@@ -113,13 +113,13 @@ class BookmarksCoordinator: BaseCoordinator,
             router.push(detailController)
         }
     }
-    
+
     func shareLibraryItem(url: URL, sourceView: UIView) {
         navigationHandler?.shareLibraryItem(url: url, sourceView: sourceView)
     }
-    
+
     // MARK: - Factory
-    
+
     private func makeDetailController(for type: BookmarkNodeType, parentFolder: FxBookmarkNode) -> UIViewController {
         if type == .folder {
             return makeEditFolderController(for: nil, folder: parentFolder)
@@ -144,10 +144,7 @@ class BookmarksCoordinator: BaseCoordinator,
     private func makeEditBookmarkController(for node: BookmarkItemData?, folder: FxBookmarkNode) -> UIViewController {
         let viewModel = EditBookmarkViewModel(parentFolder: folder, node: node, profile: profile)
         viewModel.onBookmarkSaved = { [weak self] in
-            guard let rootBookmarkController = self?.router.navigationController.viewControllers.last
-                    as? BookmarksViewController
-            else { return }
-            rootBookmarkController.reloadData()
+            self?.reloadLastBookmarksController()
         }
         let controller = EditBookmarkViewController(viewModel: viewModel,
                                                     windowUUID: windowUUID)
@@ -163,7 +160,29 @@ class BookmarksCoordinator: BaseCoordinator,
     }
 
     private func makeEditFolderController(for node: BookmarkFolderData?, folder: FxBookmarkNode) -> UIViewController {
-        let controller = EditFolderViewController(viewModel: EditFolderViewModel(), windowUUID: windowUUID)
+        let viewModel = EditFolderViewModel(profile: profile,
+                                            parentFolder: folder,
+                                            folder: node)
+        viewModel.onBookmarkSaved = { [weak self] in
+            self?.reloadLastBookmarksController()
+        }
+        let controller = EditFolderViewController(viewModel: viewModel,
+                                                  windowUUID: windowUUID)
+        controller.onViewWillAppear = { [weak self] in
+            self?.navigationHandler?.setNavigationBarHidden(true)
+        }
+        controller.onViewWillDisappear = { [weak self] in
+            if !(controller.transitionCoordinator?.isInteractive ?? false) {
+                self?.navigationHandler?.setNavigationBarHidden(false)
+            }
+        }
         return controller
+    }
+
+    private func reloadLastBookmarksController() {
+        guard let rootBookmarkController = router.navigationController.viewControllers.last
+                as? BookmarksViewController
+        else { return }
+        rootBookmarkController.reloadData()
     }
 }

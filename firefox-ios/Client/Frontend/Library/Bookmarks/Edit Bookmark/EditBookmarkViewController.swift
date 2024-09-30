@@ -164,8 +164,8 @@ class EditBookmarkViewController: UIViewController,
             cell.titleLabel.text = folder.title
             let folderImage = UIImage(named: StandardImageIdentifiers.Large.folder)?.withRenderingMode(.alwaysTemplate)
             cell.leftImageView.image = folderImage
-            cell.indentationLevel = folder.indentation
-            let canShowAccessoryView = viewModel.shouldShowDisclosureIndicator(isFolderSelected: folder.isSelected)
+            cell.indentationLevel = viewModel.folderStructures.count == 1 ? 0 : folder.indentation
+            let canShowAccessoryView = viewModel.shouldShowDisclosureIndicator(isFolderSelected: folder == viewModel.selectedFolder)
             cell.accessoryType = canShowAccessoryView ? .checkmark : .none
             cell.selectionStyle = .default
             cell.applyTheme(theme: theme)

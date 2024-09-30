@@ -37,10 +37,20 @@ struct DefaultBookmarksSaver: BookmarksSaver {
                                                                  url: bookmark.url)
                     }
                 case .folder:
-                    return profile.places.updateBookmarkNode(guid: bookmark.guid,
-                                                             parentGUID: parentFolderGUID,
-                                                             position: bookmark.position,
-                                                             title: bookmark.title)
+                    guard let folder = bookmark as? BookmarkFolderData else { return nil }
+                    if folder.parentGUID == nil {
+                        let position: UInt32? = parentFolderGUID == BookmarkRoots.MobileFolderGUID ? 0 : nil
+                        return profile.places.createFolder(parentGUID: parentFolderGUID,
+                                                           title: folder.title,
+                                                           position: position).bind { result in
+                            return result.isFailure ? deferMaybe(BookmarkDetailPanelError()) : succeed()
+                        }
+                    } else {
+                        return profile.places.updateBookmarkNode(guid: bookmark.guid,
+                                                                 parentGUID: parentFolderGUID,
+                                                                 position: bookmark.position,
+                                                                 title: bookmark.title)
+                    }
                 default:
                     return nil
                 }

@@ -143,31 +143,12 @@ class BookmarksViewController: SiteTableViewController,
     // MARK: - Actions
 
     func presentInFolderActions() {
-        let viewModel = PhotonActionSheetViewModel(actions: [[getNewBookmarkAction(),
-                                                              getNewFolderAction(),
+        let viewModel = PhotonActionSheetViewModel(actions: [[getNewFolderAction(),
                                                               getNewSeparatorAction()]],
                                                    modalStyle: .overFullScreen)
         let sheet = PhotonActionSheet(viewModel: viewModel, windowUUID: windowUUID)
         sheet.modalTransitionStyle = .crossDissolve
         present(sheet, animated: true)
-    }
-
-    private func getNewBookmarkAction() -> PhotonRowActions {
-        return SingleActionViewModel(
-            title: .BookmarksNewBookmark,
-            iconString: StandardImageIdentifiers.Large.bookmark,
-            tapHandler: { _ in
-                guard let bookmarkFolder = self.viewModel.bookmarkFolder else { return }
-
-                self.updatePanelState(newState: .bookmarks(state: .itemEditModeInvalidField))
-                self.bookmarkCoordinatorDelegate?.showBookmarkDetail(
-                    bookmarkType: .bookmark,
-                    parentBookmarkFolder: bookmarkFolder,
-                    updatePanelState: { state in
-                        self.updatePanelState(newState: .bookmarks(state: state))
-                        self.sendPanelChangeNotification()
-                    })
-            }).items
     }
 
     private func getNewFolderAction() -> PhotonRowActions {

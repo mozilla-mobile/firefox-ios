@@ -60,7 +60,10 @@ class EditFolderViewController: UIViewController,
         super.viewDidLoad()
         _ = UIImage(resource: .addToHomescreenLarge)
         navigationController?.navigationBar.topItem?.title = ""
-        title = viewModel.controllerTitle()
+        title = viewModel.controllerTitle
+        viewModel.onFolderStatusUpdate = { [weak self] in
+            self?.tableView.reloadSections(IndexSet(integer: Section.parentFolder.rawValue), with: .automatic)
+        }
         setupSubviews()
     }
 
@@ -71,13 +74,14 @@ class EditFolderViewController: UIViewController,
         setTheme(theme)
         onViewWillAppear?()
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if let isDraggingDown = transitionCoordinator?.isInteractive, !isDraggingDown {
             navigationController?.setNavigationBarHidden(true, animated: true)
         }
         onViewWillDisappear?()
+        viewModel.save()
     }
 
     private func setupSubviews() {
@@ -124,11 +128,56 @@ class EditFolderViewController: UIViewController,
         case .editFolder:
             return 1
         case .parentFolder:
-            return 1
+            return viewModel.folderStructures.count
         }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let section = Section(rawValue: indexPath.section) else { return UITableViewCell() }
+        switch section {
+        case .editFolder:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: EditFolderCell.cellIdentifier, for: indexPath) as? EditFolderCell {
+                cell.setTitle(viewModel.editedFolderTitle)
+                cell.onTitleFieldUpdate = { [weak self] in
+                    self?.viewModel.updateFolderTitle($0)
+                }
+                cell.applyTheme(theme: theme)
+                return cell
+            }
+        case .parentFolder:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier, for: indexPath) as? OneLineTableViewCell,
+               let folder = viewModel.folderStructures[safe: indexPath.row] {
+                cell.titleLabel.text = folder.title
+                let folderImage = UIImage(named: StandardImageIdentifiers.Large.folder)?.withRenderingMode(.alwaysTemplate)
+                cell.leftImageView.image = folderImage
+                cell.indentationLevel = viewModel.folderStructures.count == 1 ? 0 : folder.indentation
+                let canShowAccessoryView = viewModel.shouldShowDisclosureIndicator(isFolderSelected: folder == viewModel.selectedFolder)
+                cell.accessoryType = canShowAccessoryView ? .checkmark : .none
+                cell.selectionStyle = .default
+                cell.applyTheme(theme: theme)
+                return cell
+            }
+        }
         return UITableViewCell()
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let section = Section(rawValue: indexPath.section) else { return }
+        if section == .parentFolder, let folder = viewModel.folderStructures[safe: indexPath.row] {
+            viewModel.selectFolder(folder)
+        }
+    }
+
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        guard let section = Section(rawValue: section) else { return nil }
+        if section == .parentFolder {
+            // TODO: - Translate
+            return "SAVE IN"
+        }
+        return nil
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
     }
 }

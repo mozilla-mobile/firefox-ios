@@ -6,18 +6,28 @@ import Foundation
 import MozillaAppServices
 
 protocol FolderHierarchyFetcher {
-    func fetchFolders() async -> [(folder: BookmarkFolderData, indent: Int)]
+    func fetchFolders() async -> [Folder]
+}
+
+struct Folder: Equatable {
+    let title: String
+    let guid: String
+    let indentation: Int
+
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.guid == rhs.guid
+    }
 }
 
 struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher {
     let profile: Profile
     let rootFolderGUID: String
 
-    func fetchFolders() async -> [(folder: BookmarkFolderData, indent: Int)] {
+    func fetchFolders() async -> [Folder] {
         return await withCheckedContinuation { continuation in
             profile.places.getBookmarksTree(rootGUID: rootFolderGUID,
                                             recursive: true).uponQueue(.main) {  data in
-                var folders = [(folder: BookmarkFolderData, indent: Int)]()
+                var folders = [Folder]()
                 defer {
                     continuation.resume(returning: folders)
                 }
@@ -33,9 +43,9 @@ struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher {
     }
 
     private func recursiveAddSubFolders(_ folder: BookmarkFolderData,
-                                        folders: inout [(folder: BookmarkFolderData, indent: Int)],
+                                        folders: inout [Folder],
                                         indent: Int = 0) {
-        folders.append((folder: folder, indent: indent))
+        folders.append(Folder(title: folder.title, guid: folder.guid, indentation: indent))
         for case let subFolder as BookmarkFolderData in folder.children ?? [] {
             let indentation = subFolder.isRoot ? 0 : indent + 1
             recursiveAddSubFolders(subFolder, folders: &folders, indent: indentation)
