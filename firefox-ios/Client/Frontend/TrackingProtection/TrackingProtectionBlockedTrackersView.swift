@@ -41,17 +41,25 @@ final class TrackingProtectionBlockedTrackersView: UIView, ThemeApplicable {
     private var trackersLabelTopConstraint: NSLayoutConstraint?
     private var trackersLabelBottomConstraint: NSLayoutConstraint?
 
+    private var viewConstraints: [NSLayoutConstraint] = []
+
     init() {
         super.init(frame: .zero)
-        setupLayout()
+        setupViews()
     }
 
-    required init(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupLayout() {
+    private func setupViews() {
         self.addSubviews(shieldImage, trackersLabel, trackersDetailArrow, trackersButton, trackersHorizontalLine)
+    }
+
+    private func updateLayout(isAccessibilityCategory: Bool) {
+        removeConstraints(constraints)
+        shieldImage.removeConstraints(shieldImage.constraints)
+        viewConstraints.removeAll()
         shieldImageHeightConstraint = shieldImage.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.iconSize)
         trackersArrowHeightConstraint = trackersDetailArrow.heightAnchor.constraint(
             equalToConstant: TPMenuUX.UX.iconSize
@@ -64,12 +72,11 @@ final class TrackingProtectionBlockedTrackersView: UIView, ThemeApplicable {
             equalTo: self.bottomAnchor,
             constant: -UX.trackersLabelConstraintConstant)
 
-        NSLayoutConstraint.activate([
+        viewConstraints.append(contentsOf: [
             shieldImage.leadingAnchor.constraint(
                 equalTo: self.leadingAnchor,
                 constant: TPMenuUX.UX.horizontalMargin
             ),
-            shieldImage.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             shieldImage.heightAnchor.constraint(equalTo: shieldImage.widthAnchor),
             shieldImageHeightConstraint!,
             trackersLabel.leadingAnchor.constraint(
@@ -97,11 +104,16 @@ final class TrackingProtectionBlockedTrackersView: UIView, ThemeApplicable {
             trackersButton.bottomAnchor.constraint(equalTo: self.bottomAnchor),
 
             trackersHorizontalLine.leadingAnchor.constraint(equalTo: trackersLabel.leadingAnchor),
-            trackersHorizontalLine.trailingAnchor.constraint(equalTo: self.trailingAnchor,
-                                                             constant: -TPMenuUX.UX.connectionDetailsHeaderMargins),
+            trackersHorizontalLine.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             trackersHorizontalLine.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.Line.height),
             self.bottomAnchor.constraint(equalTo: trackersHorizontalLine.bottomAnchor)
         ])
+        if !isAccessibilityCategory {
+            viewConstraints.append(shieldImage.centerYAnchor.constraint(equalTo: self.centerYAnchor))
+        } else {
+            viewConstraints.append(shieldImage.topAnchor.constraint(equalTo: trackersLabel.topAnchor))
+        }
+        NSLayoutConstraint.activate(viewConstraints)
     }
 
     func setupDetails(for trackersBlocked: Int?) {
@@ -122,6 +134,7 @@ final class TrackingProtectionBlockedTrackersView: UIView, ThemeApplicable {
     }
 
     func adjustLayout() {
+        updateLayout(isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory)
         let iconSize = TPMenuUX.UX.iconSize
         shieldImageHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: iconSize), 2 * iconSize)
         trackersArrowHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: iconSize), 2 * iconSize)
