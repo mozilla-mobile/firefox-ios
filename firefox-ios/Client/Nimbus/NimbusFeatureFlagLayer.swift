@@ -46,6 +46,9 @@ final class NimbusFeatureFlagLayer {
         case .fakespotBackInStock:
             return checkProductBackInStockFakespotFeature(from: nimbus)
 
+        case .homepageRebuild:
+            return checkHomepageFeature(from: nimbus)
+
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
 
@@ -146,6 +149,11 @@ final class NimbusFeatureFlagLayer {
         guard let status = config.sectionsEnabled[nimbusID] else { return false }
 
         return status
+    }
+
+    private func checkHomepageFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.homepageRebuildFeature.value()
+        return config.enabled
     }
 
     private func checkNimbusForContextualHintsFeature(
