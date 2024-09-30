@@ -6,7 +6,7 @@ features:
     variables:
       enabled:
         description: >
-          If true,enables the feature
+          If true, enables the feature
         type: Boolean
         default: false
     defaults:
