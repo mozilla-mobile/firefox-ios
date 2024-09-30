@@ -26,6 +26,7 @@ class BookmarkDetailPanel: SiteTableViewController {
         static let FolderIconSize = CGSize(width: 24, height: 24)
         static let IndentationWidth: CGFloat = 20
         static let MinIndentedContentWidth: CGFloat = 100
+        static let deleteBookmarkButtonHeight: CGFloat = 44
     }
 
     enum BookmarkDetailSection: Int, CaseIterable {
@@ -99,6 +100,12 @@ class BookmarkDetailPanel: SiteTableViewController {
         )
         return button
     }()
+
+    fileprivate lazy var deleteBookmarkButton: UIButton = .build { [weak self] button in
+        guard let self else { return }
+        button.translatesAutoresizingMaskIntoConstraints = true
+        button.frame = CGRect(width: self.tableView.frame.width, height: UX.deleteBookmarkButtonHeight)
+    }
 
     // MARK: - Initializers
     convenience init(
@@ -189,6 +196,7 @@ class BookmarkDetailPanel: SiteTableViewController {
     // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupDeleteBookmarkButton()
 
         if isNew, bookmarkNodeType == .bookmark {
             bookmarkItemURL = "https://"
@@ -228,6 +236,9 @@ class BookmarkDetailPanel: SiteTableViewController {
     override func applyTheme() {
         super.applyTheme()
         tableView.backgroundColor = currentTheme().colors.layer1
+        deleteBookmarkButton.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
+        deleteBookmarkButton.backgroundColor = currentTheme().colors.layer5
+        deleteBookmarkButton.setTitleColor(currentTheme().colors.textWarning, for: .normal)
     }
 
     override func reloadData() {
@@ -286,6 +297,11 @@ class BookmarkDetailPanel: SiteTableViewController {
     private func isBookmarkItemURLValid() -> Bool {
         let url = URL(string: bookmarkItemURL ?? "", invalidCharacters: false)
         return url?.schemeIsValid == true && url?.host != nil
+    }
+
+    private func setupDeleteBookmarkButton() {
+        deleteBookmarkButton.setTitle(.Bookmarks.Menu.DeleteBookmark, for: .normal)
+        self.tableView.tableFooterView = deleteBookmarkButton
     }
 
     // MARK: - Button Actions

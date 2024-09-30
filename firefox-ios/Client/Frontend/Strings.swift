@@ -172,6 +172,11 @@ extension String {
                 tableName: "Bookmarks",
                 value: "Bookmarks",
                 comment: "Name of the top level bookmarks folder present in the folder selection menu of the`Edit Bookmark` screen")
+            public static let DeleteBookmark = MZLocalizedString(
+                key: "Bookmarks.Menu.DeleteBookmark.v132",
+                tableName: "Bookmarks",
+                value: "Delete Bookmark",
+                comment: "Title for the Delete Bookmark button in the Edit Bookmark screen.")
         }
     }
 }
