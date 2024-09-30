@@ -18,6 +18,7 @@ import ToolbarKit
 
 import class MozillaAppServices.BookmarkFolderData
 import class MozillaAppServices.BookmarkItemData
+import struct MozillaAppServices.EncryptedLogin
 import enum MozillaAppServices.BookmarkRoots
 import enum MozillaAppServices.VisitType
 
@@ -2722,33 +2723,11 @@ class BrowserViewController: UIViewController,
                                              webView: webView,
                                              frame: frame)
             case .creditCard:
-                guard let creditCardPayload = fieldValues.fieldData as? UnencryptedCreditCardFields,
-                      let type = type,
-                      autofillCreditCardSettingsUserDefaultIsEnabled() else { return }
-
-                // Record telemetry for credit card form detection
-                if type == .formInput {
-                    TelemetryWrapper.recordEvent(category: .action,
-                                                 method: .tap,
-                                                 object: .creditCardFormDetected)
-                }
-
-                guard autofillCreditCardNimbusFeatureFlag() else { return }
-
-                // Handle different types of credit card interactions
-                switch type {
-                case .formInput:
-                    displayAutofillCreditCardAccessoryView(tabWebView: tabWebView)
-                case .formSubmit:
-                    showCreditCardAutofillSheet(fieldValues: creditCardPayload)
-                default:
-                    break
-                }
-
-                // Handle action when saved cards button is tapped
-                handleSavedCardsButtonTap(tabWebView: tabWebView,
-                                          webView: webView,
-                                          frame: frame)
+                handleFoundCreditCardFieldValue(fieldValues: fieldValues,
+                                                type: type,
+                                                tabWebView: tabWebView,
+                                                webView: webView,
+                                                frame: frame)
             }
         }
     }
@@ -2779,6 +2758,40 @@ class BrowserViewController: UIViewController,
                 self?.navigationHandler?.showAddressAutofill(frame: frame)
             }
         }
+    }
+
+    private func handleFoundCreditCardFieldValue(fieldValues: AutofillFieldValuePayload,
+                                                 type: FormAutofillPayloadType?,
+                                                 tabWebView: TabWebView,
+                                                 webView: WKWebView,
+                                                 frame: WKFrameInfo?) {
+        guard let creditCardPayload = fieldValues.fieldData as? UnencryptedCreditCardFields,
+              let type = type,
+              autofillCreditCardSettingsUserDefaultIsEnabled() else { return }
+
+        // Record telemetry for credit card form detection
+        if type == .formInput {
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .creditCardFormDetected)
+        }
+
+        guard autofillCreditCardNimbusFeatureFlag() else { return }
+
+        // Handle different types of credit card interactions
+        switch type {
+        case .formInput:
+            displayAutofillCreditCardAccessoryView(tabWebView: tabWebView)
+        case .formSubmit:
+            showCreditCardAutofillSheet(fieldValues: creditCardPayload)
+        default:
+            break
+        }
+
+        // Handle action when saved cards button is tapped
+        handleSavedCardsButtonTap(tabWebView: tabWebView,
+                                  webView: webView,
+                                  frame: frame)
     }
 
     private func displayAutofillCreditCardAccessoryView(tabWebView: TabWebView) {
@@ -3263,11 +3276,9 @@ extension BrowserViewController: LegacyTabDelegate {
                 guard self?.autofillLoginNimbusFeatureFlag() == true else { return }
                 guard let tabURL = tab?.url else { return }
                 let logins = (try? await self?.profile.logins.listLogins()) ?? []
-                let loginsForCurrentTab = logins.filter { login in
-                    if field == FocusFieldType.username && login.decryptedUsername.isEmpty { return false }
-                    guard let recordHostnameURL = URL(string: login.hostname) else { return false }
-                    return recordHostnameURL.baseDomain == tabURL.baseDomain
-                }
+                let loginsForCurrentTab = self?.filterLoginsForCurrentTab(logins: logins,
+                                                                          tabURL: tabURL,
+                                                                          field: field) ?? []
                 if loginsForCurrentTab.isEmpty {
                     tab?.webView?.accessoryView.reloadViewFor(.standard)
                 } else {
@@ -3332,6 +3343,16 @@ extension BrowserViewController: LegacyTabDelegate {
         tab.addContentScript(blocker, name: FirefoxTabContentBlocker.name())
 
         tab.addContentScript(FocusHelper(tab: tab), name: FocusHelper.name())
+    }
+
+    private func filterLoginsForCurrentTab(logins: [EncryptedLogin],
+                                           tabURL: URL,
+                                           field: FocusFieldType) -> [EncryptedLogin] {
+        return logins.filter { login in
+            if field == FocusFieldType.username && login.decryptedUsername.isEmpty { return false }
+            guard let recordHostnameURL = URL(string: login.hostname) else { return false }
+            return recordHostnameURL.baseDomain == tabURL.baseDomain
+        }
     }
 
     private func authenticateSelectSavedLoginsClosureBottomSheet(
