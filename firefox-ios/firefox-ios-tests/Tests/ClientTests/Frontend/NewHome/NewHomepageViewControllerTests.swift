@@ -9,8 +9,10 @@ import Common
 
 final class NewHomepageViewControllerTests: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
+    var mockNotificationCenter: MockNotificationCenter?
+    var mockThemeManager: MockThemeManager?
 
-    override class func setUp() {
+    override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
     }
@@ -20,23 +22,54 @@ final class NewHomepageViewControllerTests: XCTestCase {
         super.tearDown()
     }
 
-    func testNewHomepageViewController_hasCorrectContentType() {
+    // MARK: - Initial State
+    func testInitialCreation_hasCorrectContentType() {
         let sut = createSubject()
+
         XCTAssertEqual(sut.contentType, .newHomepage)
     }
 
-//    func testNewHomepageViewController_notificationCalled() {
-//        let sut = createSubject()
-//        XCTAssertEqual(sut.contentType, .newHomepage)
-//        sut = nil
-//        XCTAssertEqual(sut.contentType, .newHomepage)
-//    }
+    func testInitialCreation_hasCorrectWindowUUID() {
+        let sut = createSubject()
+
+        XCTAssertEqual(sut.currentWindowUUID, .XCTestDefaultUUID)
+    }
+
+    func test_viewDidLoad_setsUpTheming() {
+        let sut = createSubject()
+
+        XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 0)
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 0)
+
+        sut.loadViewIfNeeded()
+
+        // Called in listenForThemeChange() and applyTheme(), so counted twice
+        XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 1)
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 1)
+    }
+
+    // MARK: - Deinit State
+    func testDeinit_callsAppropriateNotificationCenterMethods() {
+        var sut: NewHomepageViewController? = createSubject()
+
+        XCTAssertNotNil(sut)
+        XCTAssertEqual(mockNotificationCenter?.removeObserverCallCount, 0)
+
+        sut = nil
+
+        XCTAssertNil(sut)
+        XCTAssertEqual(mockNotificationCenter?.removeObserverCallCount, 1)
+    }
 
     private func createSubject() -> NewHomepageViewController {
-        let mockNotificationCenter = MockNotificationCenter()
+        let notificationCenter = MockNotificationCenter()
+        let themeManager = MockThemeManager()
+        mockNotificationCenter = notificationCenter
+        mockThemeManager = themeManager
         let homepageViewController = NewHomepageViewController(
             windowUUID: .XCTestDefaultUUID,
-            notificationCenter: mockNotificationCenter
+            themeManager: themeManager,
+            notificationCenter: notificationCenter
         )
         trackForMemoryLeaks(homepageViewController)
         return homepageViewController
