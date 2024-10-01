@@ -124,6 +124,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
                                               actionType: GeneralBrowserActionType.goToHomepage)
             store.dispatch(action)
         case .newTab:
+            recordTelemetry(event: .toolbarOneTapNewTab, state: state, windowUUID: action.windowUUID)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.addNewTab)
             store.dispatch(action)

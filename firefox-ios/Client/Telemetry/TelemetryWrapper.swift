@@ -655,6 +655,7 @@ extension TelemetryWrapper {
         case toolbarBackLongPress = "back-long-press"
         case toolbarForwardLongPress = "forward-long-press"
         case toolbarHomeButtonTap = "home-button-tap"
+        case toolbarOneTapNewTab = "one-tap-new-tab"
     }
 
     public enum EventExtraKey: String, CustomStringConvertible {
@@ -2201,6 +2202,12 @@ extension TelemetryWrapper {
 
             GleanMetrics.Toolbar.homeTapped.record(
                 GleanMetrics.Toolbar.HomeTappedExtra(isPrivate: isPrivate)
+            )
+        case (.action, .tap, .toolbar, .toolbarOneTapNewTab, let extras):
+            guard let isPrivate = extras?[EventExtraKey.Toolbar.isPrivate.rawValue] as? Bool else { return }
+
+            GleanMetrics.Toolbar.oneTapNewTab.record(
+                GleanMetrics.Toolbar.OneTapNewTabExtra(isPrivate: isPrivate)
             )
 
         // MARK: - Uninstrumented
