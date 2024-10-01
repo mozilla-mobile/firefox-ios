@@ -2131,61 +2131,61 @@ extension TelemetryWrapper {
             guard let isPrivate = extras?[EventExtraKey.isPrivate.rawValue] as? Bool else { return }
 
             GleanMetrics.Toolbar.qrScanTapped.record(
-                GleanMetrics.Toolbar.QrScanTappedExtra(tabMode: isPrivate ? "Private" : "Normal")
+                GleanMetrics.Toolbar.QrScanTappedExtra(isPrivate: isPrivate)
             )
         case (.action, .tap, .toolbar, .toolbarClearSearchTap, let extras):
             guard let isPrivate = extras?[EventExtraKey.isPrivate.rawValue] as? Bool else { return }
 
             GleanMetrics.Toolbar.clearSearchTapped.record(
-                GleanMetrics.Toolbar.ClearSearchTappedExtra(tabMode: isPrivate ? "Private" : "Normal")
+                GleanMetrics.Toolbar.ClearSearchTappedExtra(isPrivate: isPrivate)
             )
         case (.action, .tap, .toolbar, .toolbarShareButtonTap, let extras):
             guard let isPrivate = extras?[EventExtraKey.isPrivate.rawValue] as? Bool else { return }
 
             GleanMetrics.Toolbar.shareButtonTapped.record(
-                GleanMetrics.Toolbar.ShareButtonTappedExtra(tabMode: isPrivate ? "Private" : "Normal")
+                GleanMetrics.Toolbar.ShareButtonTappedExtra(isPrivate: isPrivate)
             )
         case (.action, .tap, .toolbar, .toolbarRefreshButtonTap, let extras):
             guard let isPrivate = extras?[EventExtraKey.isPrivate.rawValue] as? Bool else { return }
 
             GleanMetrics.Toolbar.refreshButtonTapped.record(
-                GleanMetrics.Toolbar.RefreshButtonTappedExtra(tabMode: isPrivate ? "Private" : "Normal")
+                GleanMetrics.Toolbar.RefreshButtonTappedExtra(isPrivate: isPrivate)
             )
         case (.action, .tap, .toolbar, .toolbarSiteInfoTap, let extras):
             guard let isPrivate = extras?[EventExtraKey.isPrivate.rawValue] as? Bool else { return }
 
             GleanMetrics.Toolbar.siteInfoTapped.record(
-                GleanMetrics.Toolbar.SiteInfoTappedExtra(tabMode: isPrivate ? "Private" : "Normal")
+                GleanMetrics.Toolbar.SiteInfoTappedExtra(isPrivate: isPrivate)
             )
         case (.action, .tap, .toolbar, .toolbarBackButtonTap, let extras):
             guard let isPrivate = extras?[EventExtraKey.isPrivate.rawValue] as? Bool else { return }
 
             GleanMetrics.Toolbar.backButtonTapped.record(
-                GleanMetrics.Toolbar.BackButtonTappedExtra(tabMode: isPrivate ? "Private" : "Normal")
+                GleanMetrics.Toolbar.BackButtonTappedExtra(isPrivate: isPrivate)
             )
         case (.action, .tap, .toolbar, .toolbarForwardButtonTap, let extras):
             guard let isPrivate = extras?[EventExtraKey.isPrivate.rawValue] as? Bool else { return }
 
             GleanMetrics.Toolbar.forwardButtonTapped.record(
-                GleanMetrics.Toolbar.ForwardButtonTappedExtra(tabMode: isPrivate ? "Private" : "Normal")
+                GleanMetrics.Toolbar.ForwardButtonTappedExtra(isPrivate: isPrivate)
             )
         case (.action, .tap, .toolbar, .toolbarBackLongPress, let extras):
             guard let isPrivate = extras?[EventExtraKey.isPrivate.rawValue] as? Bool else { return }
 
             GleanMetrics.Toolbar.backLongPress.record(
-                GleanMetrics.Toolbar.BackLongPressExtra(tabMode: isPrivate ? "Private" : "Normal")
+                GleanMetrics.Toolbar.BackLongPressExtra(isPrivate: isPrivate)
             )
         case (.action, .tap, .toolbar, .toolbarForwardLongPress, let extras):
             guard let isPrivate = extras?[EventExtraKey.isPrivate.rawValue] as? Bool else { return }
 
             GleanMetrics.Toolbar.forwardLongPress.record(
-                GleanMetrics.Toolbar.ForwardLongPressExtra(tabMode: isPrivate ? "Private" : "Normal")
+                GleanMetrics.Toolbar.ForwardLongPressExtra(isPrivate: isPrivate)
             )
         case (.action, .tap, .toolbar, .toolbarHomeButtonTap, let extras):
             guard let isPrivate = extras?[EventExtraKey.isPrivate.rawValue] as? Bool else { return }
 
             GleanMetrics.Toolbar.homeTapped.record(
-                GleanMetrics.Toolbar.HomeTappedExtra(tabMode: isPrivate ? "Private" : "Normal")
+                GleanMetrics.Toolbar.HomeTappedExtra(isPrivate: isPrivate)
             )
 
         // MARK: - Uninstrumented

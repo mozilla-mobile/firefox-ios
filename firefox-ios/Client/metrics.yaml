@@ -4629,9 +4629,9 @@ toolbar:
         Counts the number of times a user taps the qr code scan button
         in the address toolbar
     extra_keys:
-      tab_mode:
-        description: The current tab mode
-        type: string
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/???
     data_reviews:
@@ -4645,9 +4645,9 @@ toolbar:
         Counts the number of times a user taps the clear button
         in the address toolbar
     extra_keys:
-      tab_mode:
-        description: The current tab mode
-        type: string
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/???
     data_reviews:
@@ -4661,9 +4661,9 @@ toolbar:
         Counts the number of times a user taps the share button
         in the address toolbar
     extra_keys:
-      tab_mode:
-        description: The current tab mode
-        type: string
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/???
     data_reviews:
@@ -4677,9 +4677,9 @@ toolbar:
         Counts the number of times a user taps the refresh button
         in the address toolbar
     extra_keys:
-      tab_mode:
-        description: The current tab mode
-        type: string
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/???
     data_reviews:
@@ -4693,9 +4693,9 @@ toolbar:
         Counts the number of times a user taps the site info button
         in the address toolbar
     extra_keys:
-      tab_mode:
-        description: The current tab mode
-        type: string
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/???
     data_reviews:
@@ -4709,9 +4709,9 @@ toolbar:
         Counts the number of times a user taps the back button
         in the address or navigation toolbar
     extra_keys:
-      tab_mode:
-        description: The current tab mode
-        type: string
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/???
     data_reviews:
@@ -4725,9 +4725,9 @@ toolbar:
         Counts the number of times a user taps the forward button
         in the address or navigation toolbar
     extra_keys:
-      tab_mode:
-        description: The current tab mode
-        type: string
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/???
     data_reviews:
@@ -4741,9 +4741,9 @@ toolbar:
         Counts the number of times a user long presses the back button
         in the address or navigation toolbar
     extra_keys:
-      tab_mode:
-        description: The current tab mode
-        type: string
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/???
     data_reviews:
@@ -4757,9 +4757,9 @@ toolbar:
         Counts the number of times a user long presses the forward button
         in the address or navigation toolbar
     extra_keys:
-      tab_mode:
-        description: The current tab mode
-        type: string
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/???
     data_reviews:
@@ -4773,9 +4773,9 @@ toolbar:
         Counts the number of times a user taps the home button
         in the address or navigation toolbar
     extra_keys:
-      tab_mode:
-        description: The current tab mode
-        type: string
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/???
     data_reviews:
