@@ -8,11 +8,9 @@ import SiteImageView
 
 open class PinnedSite: Site {
     let isPinnedSite = true
-    let faviconResource: SiteResource?
 
     init(site: Site, faviconResource: SiteResource?) {
-        self.faviconResource = faviconResource
-        super.init(url: site.url, title: site.title, bookmarked: site.bookmarked)
+        super.init(url: site.url, title: site.title, bookmarked: site.bookmarked, faviconResource: faviconResource)
         self.metadata = site.metadata
     }
 }

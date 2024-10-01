@@ -32,6 +32,7 @@ public struct StandardImageIdentifiers {
 
     // Icon size 24x24
     public struct Large {
+        public static let addToHomescreen = "addToHomescreenLarge"
         public static let appendUpLeft = "appendUpLeftLarge"
         public static let appMenu = "appMenuLarge"
         public static let arrowClockwise = "arrowClockwiseLarge"
@@ -39,6 +40,7 @@ public struct StandardImageIdentifiers {
         public static let back = "backLarge"
         public static let bookmark = "bookmarkLarge"
         public static let bookmarkFill = "bookmarkFillLarge"
+        public static let bookmarkHalf = "bookmarkHalfLarge"
         public static let bookmarkSlash = "bookmarkSlashLarge"
         public static let bookmarkTrayFill = "bookmarkTrayFillLarge"
         public static let checkmark = "checkmarkLarge"
@@ -66,6 +68,7 @@ public struct StandardImageIdentifiers {
         public static let folder = "folderLarge"
         public static let forward = "forwardLarge"
         public static let globe = "globeLarge"
+        public static let gridAdd = "gridAddLarge"
         public static let helpCircle = "helpCircleLarge"
         public static let history = "historyLarge"
         public static let home = "homeLarge"
@@ -90,6 +93,7 @@ public struct StandardImageIdentifiers {
         public static let pinSlash = "pinSlashLarge"
         public static let plus = "plusLarge"
         public static let price = "priceLarge"
+        public static let print = "printLarge"
         public static let privateMode = "privateModeLarge"
         public static let privateModeCircleFill = "privateModeCircleFillLarge"
         public static let qrCode = "qrCodeLarge"
@@ -98,6 +102,7 @@ public struct StandardImageIdentifiers {
         public static let readerViewFill = "readerViewFillLarge"
         public static let readingList = "readingListLarge"
         public static let readingListAdd = "readingListAddLarge"
+        public static let save = "saveLarge"
         public static let search = "searchLarge"
         public static let settings = "settingsLarge"
         public static let share = "shareLarge"
@@ -105,20 +110,16 @@ public struct StandardImageIdentifiers {
         public static let shieldSlash = "shieldSlashLarge"
         public static let shipping = "shippingLarge"
         public static let shopping = "shoppingLarge"
-        public static let socialTracker = "socialMediaLarge"
+        public static let socialMedia = "socialMediaLarge"
         public static let subtract = "subtractLarge"
         public static let sync = "syncLarge"
         public static let syncTabs = "syncTabsLarge"
         public static let tab = "tabLarge"
         public static let tabTray = "tabTrayLarge"
+        public static let tool = "toolLarge"
         public static let warning = "warningLarge"
         public static let warningFill = "warningFillLarge"
         public static let whatsNew = "whatsNewLarge"
-        public static let tools = "toolLarge"
-        public static let save = "saveLarge"
-        public static let print = "printLarge"
-        public static let addToHomeScreen = "addToHomescreenLarge"
-        public static let gridAdd = "gridAddLarge"
     }
 
     // Icon size 30x30

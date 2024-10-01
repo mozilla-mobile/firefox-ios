@@ -21,9 +21,10 @@ protocol TabManager: AnyObject {
     var tabs: [Tab] { get }
     var count: Int { get }
     var selectedTab: Tab? { get }
+    var selectedTabUUID: UUID? { get }
     var backupCloseTab: BackupCloseTab? { get set }
     var backupCloseTabs: [Tab] { get set }
-    var normalTabs: [Tab] { get }
+    var normalTabs: [Tab] { get } // Includes active and inactive tabs
     var normalActiveTabs: [Tab] { get }
     var inactiveTabs: [Tab] { get }
     var privateTabs: [Tab] { get }
@@ -59,6 +60,7 @@ protocol TabManager: AnyObject {
                                          isPrivate: Bool,
                                          previousTabUUID: TabUUID)
     func undoCloseAllTabsLegacy(recentlyClosedTabs: [Tab], previousTabUUID: TabUUID, isPrivate: Bool)
+    func findRightOrLeftTab(forRemovedTab removedTab: Tab, withDeletedIndex deletedIndex: Int) -> Tab?
 
     @discardableResult
     func addTab(_ request: URLRequest!,

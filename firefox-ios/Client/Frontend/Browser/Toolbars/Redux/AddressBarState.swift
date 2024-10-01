@@ -158,7 +158,7 @@ struct AddressBarState: StateType, Equatable {
             return AddressBarState(
                 windowUUID: state.windowUUID,
                 navigationActions: state.navigationActions,
-                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: false),
+                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,
@@ -177,7 +177,7 @@ struct AddressBarState: StateType, Equatable {
             return AddressBarState(
                 windowUUID: state.windowUUID,
                 navigationActions: state.navigationActions,
-                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: false),
+                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,
@@ -195,34 +195,37 @@ struct AddressBarState: StateType, Equatable {
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
-                navigationActions: navigationActions(action: toolbarAction, addressBarState: state),
-                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: false),
+                navigationActions: navigationActions(action: toolbarAction,
+                                                     addressBarState: state,
+                                                     isEditing: state.isEditing),
+                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
                 browserActions: browserActions(action: toolbarAction, addressBarState: state),
                 borderPosition: state.borderPosition,
                 url: toolbarAction.url,
                 searchTerm: nil,
                 lockIconImageName: toolbarAction.lockIconImageName ?? state.lockIconImageName,
-                isEditing: false,
+                isEditing: state.isEditing,
                 isScrollingDuringEdit: state.isScrollingDuringEdit,
                 shouldSelectSearchTerm: state.shouldSelectSearchTerm,
                 isLoading: state.isLoading,
                 readerModeState: state.readerModeState
             )
 
-        case ToolbarActionType.backButtonStateChanged,
-            ToolbarActionType.forwardButtonStateChanged:
+        case ToolbarActionType.backForwardButtonStateChanged:
             guard let toolbarAction = action as? ToolbarAction else { return state }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
-                navigationActions: navigationActions(action: toolbarAction, addressBarState: state),
-                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: false),
+                navigationActions: navigationActions(action: toolbarAction,
+                                                     addressBarState: state,
+                                                     isEditing: state.isEditing),
+                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,
                 searchTerm: nil,
                 lockIconImageName: state.lockIconImageName,
-                isEditing: false,
+                isEditing: state.isEditing,
                 isScrollingDuringEdit: state.isScrollingDuringEdit,
                 shouldSelectSearchTerm: state.shouldSelectSearchTerm,
                 isLoading: state.isLoading,
@@ -234,7 +237,9 @@ struct AddressBarState: StateType, Equatable {
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
-                navigationActions: navigationActions(action: toolbarAction, addressBarState: state),
+                navigationActions: navigationActions(action: toolbarAction,
+                                                     addressBarState: state,
+                                                     isEditing: state.isEditing),
                 pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
                 browserActions: browserActions(action: toolbarAction, addressBarState: state),
                 borderPosition: state.borderPosition,
@@ -320,7 +325,7 @@ struct AddressBarState: StateType, Equatable {
                 lockIconImageName: state.lockIconImageName,
                 isEditing: true,
                 isScrollingDuringEdit: false,
-                shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+                shouldSelectSearchTerm: true,
                 isLoading: state.isLoading,
                 readerModeState: state.readerModeState
             )
@@ -331,7 +336,7 @@ struct AddressBarState: StateType, Equatable {
             return AddressBarState(
                 windowUUID: state.windowUUID,
                 navigationActions: navigationActions(action: toolbarAction, addressBarState: state),
-                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: true),
+                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: false),
                 browserActions: browserActions(action: toolbarAction, addressBarState: state),
                 borderPosition: state.borderPosition,
                 url: state.url,
@@ -339,7 +344,7 @@ struct AddressBarState: StateType, Equatable {
                 lockIconImageName: state.lockIconImageName,
                 isEditing: false,
                 isScrollingDuringEdit: false,
-                shouldSelectSearchTerm: false,
+                shouldSelectSearchTerm: true,
                 isLoading: state.isLoading,
                 readerModeState: state.readerModeState
             )

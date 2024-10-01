@@ -17,10 +17,10 @@ class ToolbarButton: UIButton, ThemeApplicable {
         static let badgeIconSize = CGSize(width: 20, height: 20)
     }
 
-    private(set) var foregroundColorNormal: UIColor = .clear
-    private(set) var foregroundColorHighlighted: UIColor = .clear
-    private(set) var foregroundColorDisabled: UIColor = .clear
-    private(set) var backgroundColorNormal: UIColor = .clear
+    private var foregroundColorNormal: UIColor = .clear
+    private var foregroundColorHighlighted: UIColor = .clear
+    private var foregroundColorDisabled: UIColor = .clear
+    private var backgroundColorNormal: UIColor = .clear
 
     private var badgeImageView: UIImageView?
     private var maskImageView: UIImageView?

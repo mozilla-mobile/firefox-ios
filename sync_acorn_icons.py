@@ -100,8 +100,7 @@ def sort_icons_by_size() -> dict:
     return icons_by_size
 
 def generate_standard_image_identifiers_swift(sorted_icons: dict):
-    swift_file_content = """
-// This Source Code Form is subject to the terms of the Mozilla Public
+    swift_file_content = """// This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
@@ -126,12 +125,14 @@ public struct StandardImageIdentifiers {
             swift_file_content += f"    public struct {size} {{\n"
             
             # Sort icons alphabetically and add them to the struct
-            for icon_info in sorted(sorted_icons[size]):
+            for icon_info in sorted(sorted_icons[size], key=lambda x: x[0].lower()):
                 swift_file_content += f"        public static let {icon_info[0]} = \"{icon_info[1]}\"\n"
             
-            swift_file_content += "    }\n"
-
-    swift_file_content += "}"
+            if size == "ExtraLarge":
+                swift_file_content += "    }\n"
+            else:
+                swift_file_content += "    }\n\n"
+    swift_file_content += "}\n"
 
     standard_image_file_path = "BrowserKit/Sources/Common/Constants/StandardImageIdentifiers.swift"
     with open(standard_image_file_path, "w") as swift_file:

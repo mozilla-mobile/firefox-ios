@@ -377,9 +377,10 @@ class HomepageViewController:
         view.backgroundColor = theme.colors.layer1
     }
 
+    // called when the homepage is displayed to make sure it's scrolled to top
     func scrollToTop(animated: Bool = false) {
         collectionView?.setContentOffset(.zero, animated: animated)
-        scrollViewDidScroll(collectionView)
+        handleScroll(collectionView, isUserInteraction: false)
     }
 
     @objc
@@ -390,13 +391,14 @@ class HomepageViewController:
         */
         if currentTab?.lastKnownUrl?.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(AboutHomeHandler.path)") ?? false {
             overlayManager.cancelEditing(shouldCancelLoading: false)
-
-            let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
-            store.dispatch(action)
         }
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        handleScroll(scrollView, isUserInteraction: true)
+    }
+
+    private func handleScroll(_ scrollView: UIScrollView, isUserInteraction: Bool) {
         // We only handle status bar overlay alpha if there's a wallpaper applied on the homepage
         if WallpaperManager().currentWallpaper.type != .defaultWallpaper {
             let theme = themeManager.getCurrentTheme(for: windowUUID)
@@ -410,7 +412,8 @@ class HomepageViewController:
         // Only dispatch action when user is in edit mode to avoid having the toolbar re-displayed
         if featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly),
            let toolbarState,
-           toolbarState.addressToolbar.isEditing {
+           toolbarState.addressToolbar.isEditing,
+           isUserInteraction {
             // When the user scrolls the homepage we cancel edit mode
             // On a website we just dismiss the keyboard
             if toolbarState.addressToolbar.url == nil {

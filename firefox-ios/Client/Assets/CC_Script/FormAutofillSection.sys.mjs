@@ -179,15 +179,14 @@ export class FormAutofillSection {
 
     const autofillableSections = [];
     for (const section of sections) {
-      const fieldDetails = section.fieldDetails;
-      if (!fieldDetails.length) {
+      if (!section.fieldDetails.length) {
         continue;
       }
 
       const autofillableSection =
         section.type == FormSection.ADDRESS
-          ? new FormAutofillAddressSection(fieldDetails)
-          : new FormAutofillCreditCardSection(fieldDetails);
+          ? new FormAutofillAddressSection(section.fieldDetails)
+          : new FormAutofillCreditCardSection(section.fieldDetails);
 
       if (ignoreInvalid && !autofillableSection.isValidSection()) {
         continue;
@@ -388,6 +387,8 @@ export class FormAutofillSection {
   }
 
   onSubmitted(formFilledData) {
+    this.submitted = true;
+
     lazy.AutofillTelemetry.recordSubmittedSectionCount(this.fieldDetails, 1);
     lazy.AutofillTelemetry.recordFormInteractionEvent(
       "submitted",

@@ -51,7 +51,7 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
     private let baseView: UIView = .build()
 
     // MARK: UI components Header View
-    private var headerContainer: TrackingProtectionHeaderView = .build()
+    private var headerContainer: HeaderView = .build()
 
     // MARK: Connection Details View
     private var connectionDetailsHeaderView: TrackingProtectionConnectionDetailsView = .build()
@@ -355,9 +355,10 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
     private func updateViewDetails() {
         let headerIcon = FaviconImageViewModel(siteURLString: viewModel.url.absoluteString,
                                                faviconCornerRadius: TPMenuUX.UX.faviconCornerRadius)
-        headerContainer.setupDetails(website: viewModel.websiteTitle,
-                                     display: viewModel.displayTitle,
+        headerContainer.setupDetails(subtitle: viewModel.websiteTitle,
+                                     title: viewModel.displayTitle,
                                      icon: headerIcon)
+        headerContainer.setIcon()
 
         connectionDetailsHeaderView.setupDetails(title: viewModel.connectionDetailsTitle,
                                                  status: viewModel.connectionDetailsHeader,
@@ -372,7 +373,6 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
     }
 
     private func setupViewActions() {
-        headerContainer.setupActions()
         trackersView.setupActions()
         connectionStatusView.setupActions()
         toggleView.setupActions()

@@ -21,7 +21,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     private var notifyTextChanged: (() -> Void)?
     private var onTapLockIcon: ((UIButton) -> Void)?
     private var onLongPress: (() -> Void)?
-    private var delegate: LocationViewDelegate?
+    private weak var delegate: LocationViewDelegate?
 
     private var isEditing = false
     private var isURLTextFieldEmpty: Bool {
@@ -97,9 +97,8 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         notifyTextChanged = { [self] in
             guard urlTextField.isEditing else { return }
 
-            urlTextField.text = urlTextField.text?.lowercased()
-            urlAbsolutePath = urlTextField.text
-            delegate?.locationViewDidEnterText(urlTextField.text ?? "")
+            urlAbsolutePath = urlTextField.text?.lowercased()
+            delegate?.locationViewDidEnterText(urlAbsolutePath ?? "")
         }
     }
 
@@ -243,9 +242,8 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     private func updateUIForSearchEngineDisplay() {
         removeContainerIcons()
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
-        urlTextFieldLeadingConstraint?.constant = UX.horizontalSpace
-        iconContainerStackViewLeadingConstraint?.constant = UX.horizontalSpace
         updateURLTextFieldLeadingConstraint(constant: UX.horizontalSpace)
+        iconContainerStackViewLeadingConstraint?.constant = UX.horizontalSpace
         updateGradient()
     }
 
@@ -253,7 +251,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         guard !isEditing else { return }
         removeContainerIcons()
         iconContainerStackView.addArrangedSubview(lockIconButton)
-        urlTextFieldLeadingConstraint?.constant = 0
+        updateURLTextFieldLeadingConstraint()
         iconContainerStackViewLeadingConstraint?.constant = 0
         updateGradient()
     }
@@ -280,10 +278,8 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         _ = shouldShowKeyboard ? becomeFirstResponder() : resignFirstResponder()
 
         // Start overlay mode & select text when in edit mode with a search term
-        if shouldShowKeyboard, state.shouldSelectSearchTerm {
-            DispatchQueue.main.async {
-                self.urlTextField.selectAll(nil)
-            }
+        if shouldShowKeyboard == true && state.shouldSelectSearchTerm == true {
+            urlTextField.selectAll(nil)
         }
     }
 
@@ -361,7 +357,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         guard let text = textField.text else { return true }
         if !text.trimmingCharacters(in: .whitespaces).isEmpty {
             delegate?.locationViewDidSubmitText(text)
-            textField.resignFirstResponder()
+            _ = textField.resignFirstResponder()
             return true
         } else {
             return false

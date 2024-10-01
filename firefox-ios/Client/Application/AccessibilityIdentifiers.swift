@@ -72,6 +72,45 @@ public struct AccessibilityIdentifiers {
         static let actionButton = "ContextualHints.ActionButton"
     }
 
+    struct MainMenu {
+        struct HeaderView {
+            static let mainButton = "MainMenu.MainButton"
+            static let closeButton = "MainMenu.CloseMenuButton"
+        }
+
+        struct NavigationHeaderView {
+            static let backButton = "MainMenu.BackButton"
+            static let closeButton = "MainMenu.CloseMenuButton"
+        }
+
+        static let mainMenu = "MainMenu.Menu"
+        static let newTab = "MainMenu.NewTab"
+        static let newPrivateTab = "MainMenu.NewPrivateTab"
+        static let switchToDesktopSite = "MainMenu.SwitchToDesktopSite"
+        static let findInPage = "MainMenu.FindInPage"
+        static let tools = "MainMenu.Tools"
+        static let save = "MainMenu.Save"
+        static let bookmarks = "MainMenu.Bookmarks"
+        static let history = "MainMenu.History"
+        static let downloads = "MainMenu.Downloads"
+        static let passwords = "MainMenu.Passwords"
+        static let getHelp = "MainMenu.GetHelp"
+        static let settings = "MainMenu.Settings"
+        static let whatsNew = "MainMenu.WhatsNew"
+        static let customizeHomepage = "MainMenu.CustomizeHomepage"
+        static let saveAsPDF = "MainMenu.SaveAsPDF"
+        static let saveToReadingList = "MainMenu.SaveToReadingList"
+        static let addToHomeScreen = "MainMenu.AddToHomeScreen"
+        static let addToShortcuts = "MainMenu.AddToShortcuts"
+        static let bookmarkThisPage = "MainMenu.BookmarkThisPage"
+        static let share = "MainMenu.Share"
+        static let print = "MainMenu.Print"
+        static let reportBrokenSite = "MainMenu.ReportBrokenSite"
+        static let readerViewOn = "MainMenu.ReaderViewOn"
+        static let nightModeOn = "MainMenu.NightModeOn"
+        static let zoom = "MainMenu.Zoom"
+    }
+
     struct EnhancedTrackingProtection {
         struct MainScreen {
             static let clearCookiesButton = "TrackingProtection.ClearCookiesButton"

@@ -35,6 +35,7 @@ class GeneralBrowserAction: Action {
 enum GeneralBrowserActionType: ActionType {
     case showToast
     case showOverlay
+    case leaveOverlay
     case updateSelectedTab
     case goToHomepage
     case navigateBack

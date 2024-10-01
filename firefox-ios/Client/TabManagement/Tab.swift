@@ -66,7 +66,7 @@ enum TabUrlType: String {
 
 typealias TabUUID = String
 
-class Tab: NSObject, ThemeApplicable {
+class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
     static let privateModeKey = "PrivateModeKey"
     private var _isPrivate = false
     private(set) var isPrivate: Bool {
@@ -78,6 +78,22 @@ class Tab: NSObject, ThemeApplicable {
                 _isPrivate = newValue
             }
         }
+    }
+
+    var isInactiveTabsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
+    }
+
+    var isNormal: Bool {
+        return !isPrivate
+    }
+
+    var isNormalActive: Bool {
+        return !isPrivate && (isInactiveTabsEnabled ? isActive : true)
+    }
+
+    var isNormalAndInactive: Bool {
+        return !isPrivate && (isInactiveTabsEnabled ? isInactive : false)
     }
 
     /// The window associated with the tab (where the tab lives and will be displayed).
@@ -887,6 +903,25 @@ class Tab: NSObject, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         UITextField.appearance().keyboardAppearance = theme.type.keyboardAppearence(isPrivate: isPrivate)
+    }
+
+    // MARK: - Static Helpers
+
+    /// Returns true if the tabs both have the same type of private, normal active, and normal inactive.
+    /// Simply checks the `isPrivate` and `isActive` flags of both tabs.
+    func isSameTypeAs(_ otherTab: Tab) -> Bool {
+        switch (self.isPrivate, otherTab.isPrivate) {
+        case (true, true):
+            // Two private tabs are always lumped together in the same type regardless of their last execution time
+            return true
+        case (false, false):
+            // Two normal tabs are only the same type if they're both active, or both inactive
+            return isInactiveTabsEnabled
+                ? self.isActive == otherTab.isActive
+                : true
+        default:
+            return false
+        }
     }
 }
 

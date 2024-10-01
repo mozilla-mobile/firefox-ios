@@ -19,16 +19,23 @@ features:
           If true, enables the navigation contextual hint.
         type: Boolean
         default: false
+      unified_search_enabled:
+        description: >
+          Enables the unified search feature
+        type: Boolean
+        default: false
         
     defaults:
       - channel: beta
         value:
           enabled: false
+          unified_search_enabled: false
           one_tap_new_tab: false
           navigation_hint: false
       - channel: developer
         value:
           enabled: false
+          unified_search_enabled: false
           one_tap_new_tab: false
           navigation_hint: false
 

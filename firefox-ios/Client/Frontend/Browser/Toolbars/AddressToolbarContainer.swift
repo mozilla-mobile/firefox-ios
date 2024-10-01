@@ -180,12 +180,6 @@ final class AddressToolbarContainer: UIView,
                                      leadingSpace: calculateToolbarSpace(isLeading: true),
                                      trailingSpace: calculateToolbarSpace(isLeading: false))
 
-            // Dismiss overlay mode when not editing to fix overlay mode staying open
-            // on iPad when switching tabs using top tabs
-            if !toolbarState.addressToolbar.isEditing {
-                leaveOverlayMode(reason: .cancelled, shouldCancelLoading: false)
-            }
-
             // the layout (compact/regular) that should be displayed is driven by the state
             // but we only need to switch toolbars if shouldDisplayCompact changes
             // otherwise we needlessly add/remove toolbars from the view hierarchy,
@@ -287,11 +281,6 @@ final class AddressToolbarContainer: UIView,
     func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool) {
         enterOverlayMode(nil, pasted: false, search: false)
 
-        guard let windowUUID else { return }
-
-        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didStartEditingUrl)
-        store.dispatch(action)
-
         if shouldShowSuggestions {
             delegate?.openSuggestions(searchTerm: searchTerm)
         }
@@ -347,12 +336,19 @@ final class AddressToolbarContainer: UIView,
                 actionType: ToolbarActionType.didPasteSearchTerm
             )
             store.dispatch(action)
+        } else {
+            let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didStartEditingUrl)
+            store.dispatch(action)
         }
     }
 
     func leaveOverlayMode(reason: URLBarLeaveOverlayModeReason, shouldCancelLoading cancel: Bool) {
+        guard let windowUUID else { return }
         _ = toolbar.resignFirstResponder()
         inOverlayMode = false
         delegate?.addressToolbar(self, didLeaveOverlayModeForReason: reason)
+
+        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
+        store.dispatch(action)
     }
 }

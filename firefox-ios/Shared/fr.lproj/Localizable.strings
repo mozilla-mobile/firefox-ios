@@ -1562,7 +1562,7 @@
 "Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "Protection renforcée contre le pistage";
 
 /* Title of link to help page to find out how to solve Sync issues */
-"Settings.TroubleShootSync.Title" = "Informations pour corriger certains problèmes";
+"Settings.TroubleShootSync.Title" = "Résolution de problèmes";
 
 /* Button shows all websites on website data tableview */
 "Settings.WebsiteData.ButtonShowMore" = "Afficher plus";
