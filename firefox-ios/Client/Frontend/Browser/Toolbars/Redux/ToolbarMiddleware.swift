@@ -150,6 +150,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
             store.dispatch(action)
 
         case .trackingProtection:
+            recordTelemetry(event: .toolbarSiteInfoTap, state: state, windowUUID: action.windowUUID)
             let action = GeneralBrowserAction(buttonTapped: action.buttonTapped,
                                               windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showTrackingProtectionDetails)
