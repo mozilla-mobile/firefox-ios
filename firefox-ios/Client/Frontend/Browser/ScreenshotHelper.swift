@@ -36,10 +36,9 @@ class ScreenshotHelper {
             return
         }
 
-        /// Added condition for native error page. Instead of checking url,
-        /// we check the ContentContainer.
-        if browserVC.contentContainer.hasHomepage || browserVC.contentContainer.hasPrivateHomepage
-            || browserVC.contentContainer.hasNativeErrorPage {
+        /// For homepage and native error page, instead of checking url,
+        /// we check the ContentContainer. Only in webview case we don't need to check.
+        if !browserVC.contentContainer.hasWebView {
             if let homeview = controller?.contentContainer.contentView {
                 let screenshot = homeview.screenshot(quality: UIConstants.ActiveScreenshotQuality)
                 tab.hasHomeScreenshot = true
