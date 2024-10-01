@@ -793,11 +793,12 @@ class BrowserCoordinator: BaseCoordinator,
         )
         store.dispatch(action)
 
-        var bottomSheetVM = BottomSheetViewModel(
+        let bottomSheetVM = BottomSheetViewModel(
+            shouldDismissForTapOutside: true,
             closeButtonA11yLabel: .PasswordGenerator.CloseButtonA11yLabel,
             closeButtonA11yIdentifier: AccessibilityIdentifiers.PasswordGenerator.closeButton
         )
-        bottomSheetVM.shouldDismissForTapOutside = true
+
         let bottomSheetVC = BottomSheetViewController(
             viewModel: bottomSheetVM,
             childViewController: passwordGenVC,

@@ -18,7 +18,6 @@ final class PasswordGeneratorHeaderView: UIView, ThemeApplicable {
         label.numberOfLines = 0
         label.font = FXFontStyles.Bold.body.scaledFont()
         label.text = .PasswordGenerator.Title
-        label.isAccessibilityElement = true
         label.accessibilityIdentifier = AccessibilityIdentifiers.PasswordGenerator.headerLabel
         label.accessibilityTraits = .header
     }

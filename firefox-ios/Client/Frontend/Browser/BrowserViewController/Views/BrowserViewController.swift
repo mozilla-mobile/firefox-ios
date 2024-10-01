@@ -656,12 +656,6 @@ class BrowserViewController: UIViewController,
             executeToolbarActions()
 
             handleMicrosurvey(state: state)
-
-            if state.showPasswordGenerator {
-                if let tab = tabManager.selectedTab {
-                    navigationHandler?.showPasswordGenerator(tab: tab)
-                }
-            }
         }
     }
 
@@ -2011,6 +2005,10 @@ class BrowserViewController: UIViewController,
             presentNewTabLongPressActionSheet(from: view)
         case .dataClearance:
             didTapOnDataClearance()
+        case .passwordGenerator:
+            if let tab = tabManager.selectedTab {
+                navigationHandler?.showPasswordGenerator(tab: tab)
+            }
         }
     }
 

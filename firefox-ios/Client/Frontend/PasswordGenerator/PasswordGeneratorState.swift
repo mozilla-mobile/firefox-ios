@@ -40,7 +40,8 @@ struct PasswordGeneratorState: ScreenState, Equatable {
 
         switch action.actionType {
         case PasswordGeneratorActionType.updateGeneratedPassword:
-            guard let password = (action as? PasswordGeneratorAction)?.password else {return state}
+            guard let password = (action as? PasswordGeneratorAction)?.password else {
+                return state}
             return PasswordGeneratorState(
                 windowUUID: action.windowUUID,
                 password: password)
