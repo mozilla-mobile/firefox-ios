@@ -1610,6 +1610,26 @@ class TelemetryWrapperTests: XCTestCase {
                                           extras: extras)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.siteInfoTapped)
     }
+
+    func testRecordToolbarWhenBackButtonTappedThenGleanIsCalled() {
+        let extras = [TelemetryWrapper.EventExtraKey.isPrivate.rawValue: true]
+        TelemetryWrapper.gleanRecordEvent(category: .action,
+                                          method: .tap,
+                                          object: .toolbar,
+                                          value: .toolbarBackButtonTap,
+                                          extras: extras)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.backButtonTapped)
+    }
+
+    func testRecordToolbarWhenForwardButtonTappedThenGleanIsCalled() {
+        let extras = [TelemetryWrapper.EventExtraKey.isPrivate.rawValue: true]
+        TelemetryWrapper.gleanRecordEvent(category: .action,
+                                          method: .tap,
+                                          object: .toolbar,
+                                          value: .toolbarForwardButtonTap,
+                                          extras: extras)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.forwardButtonTapped)
+    }
 }
 
 // MARK: - Helper functions to test telemetry

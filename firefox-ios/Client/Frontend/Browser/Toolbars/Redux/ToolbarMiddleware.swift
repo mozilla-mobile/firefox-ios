@@ -133,11 +133,13 @@ final class ToolbarMiddleware: FeatureFlaggable {
             store.dispatch(action)
 
         case .back:
+            recordTelemetry(event: .toolbarBackButtonTap, state: state, windowUUID: action.windowUUID)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.navigateBack)
             store.dispatch(action)
 
         case .forward:
+            recordTelemetry(event: .toolbarForwardButtonTap, state: state, windowUUID: action.windowUUID)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.navigateForward)
             store.dispatch(action)

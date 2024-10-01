@@ -649,6 +649,8 @@ extension TelemetryWrapper {
         case toolbarShareButtonTap = "share-button-tap"
         case toolbarRefreshButtonTap = "refresh-button-tap"
         case toolbarSiteInfoTap = "site-info-tap"
+        case toolbarBackButtonTap = "back-button-tap"
+        case toolbarForwardButtonTap = "forward-button-tap"
     }
 
     public enum EventExtraKey: String, CustomStringConvertible {
@@ -2151,6 +2153,18 @@ extension TelemetryWrapper {
 
             GleanMetrics.Toolbar.siteInfoTapped.record(
                 GleanMetrics.Toolbar.SiteInfoTappedExtra(tabMode: isPrivate ? "Private" : "Normal")
+            )
+        case (.action, .tap, .toolbar, .toolbarBackButtonTap, let extras):
+            guard let isPrivate = extras?[EventExtraKey.isPrivate.rawValue] as? Bool else { return }
+
+            GleanMetrics.Toolbar.backButtonTapped.record(
+                GleanMetrics.Toolbar.BackButtonTappedExtra(tabMode: isPrivate ? "Private" : "Normal")
+            )
+        case (.action, .tap, .toolbar, .toolbarForwardButtonTap, let extras):
+            guard let isPrivate = extras?[EventExtraKey.isPrivate.rawValue] as? Bool else { return }
+
+            GleanMetrics.Toolbar.forwardButtonTapped.record(
+                GleanMetrics.Toolbar.ForwardButtonTappedExtra(tabMode: isPrivate ? "Private" : "Normal")
             )
 
         // MARK: - Uninstrumented
