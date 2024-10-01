@@ -10,12 +10,22 @@ protocol FolderHierarchyFetcher {
 }
 
 struct Folder: Equatable {
+    init(title: String, guid: String, indentation: Int) {
+        self.title = Self.localizedTitle(guid) ?? title
+        self.guid = guid
+        self.indentation = indentation
+    }
+
     let title: String
     let guid: String
     let indentation: Int
 
     static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.guid == rhs.guid
+    }
+
+    static func localizedTitle(_ guid: String) -> String? {
+        return LocalizedRootBookmarkFolderStrings[guid]
     }
 }
 

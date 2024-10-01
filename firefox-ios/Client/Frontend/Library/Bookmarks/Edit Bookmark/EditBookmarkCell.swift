@@ -55,7 +55,8 @@ class EditBookmarkCell: UITableViewCell,
         textFieldsContainerView.addArrangedSubview(urlTextfield)
         contentView.addSubviews(faviconImageView, textFieldsContainerView)
 
-        let faviconDynamicSize = UIFontMetrics.default.scaledValue(for: UX.faviconSize)
+        let faviconDynamicSize = min(UIFontMetrics.default.scaledValue(for: UX.faviconSize),
+                                     2 * UX.faviconSize)
         NSLayoutConstraint.activate([
             faviconImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,
                                                       constant: UX.faviconLeadingPadding),

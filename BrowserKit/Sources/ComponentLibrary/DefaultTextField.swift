@@ -9,18 +9,31 @@ import UIKit
 public class DefaultTextField: UITextField, ThemeApplicable {
     override init(frame: CGRect) {
         super.init(frame: frame)
-        clearButtonMode = .whileEditing
-        font = UIFont.preferredFont(forTextStyle: .body)
-        let buttonImage = UIImage(named: StandardImageIdentifiers.Large.crossCircleFill)?.withRenderingMode(.alwaysTemplate)
-        clearButton?.setImage(buttonImage, for: .normal)
+        setup()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private var clearButton: UIButton? {
-        return value(forKey: "clearButton") as? UIButton
+    private var clearButton: UIButton = .build { view in
+        let buttonImage = UIImage(named: StandardImageIdentifiers.Large.crossCircleFill)?.withRenderingMode(.alwaysTemplate)
+        view.setImage(buttonImage, for: .normal)
+    }
+
+    private func setup() {
+        clearButtonMode = .never
+        adjustsFontForContentSizeCategory = true
+        font = FXFontStyles.Regular.body.scaledFont()
+        rightView = clearButton
+        rightViewMode = .whileEditing
+        showsLargeContentViewer = true
+        isAccessibilityElement = true
+        clearButton.adjustsImageSizeForAccessibilityContentSizeCategory = true
+        clearButton.addAction(UIAction(handler: { [weak self] _ in
+            self?.text = ""
+            self?.sendActions(for: .valueChanged)
+        }), for: .touchUpInside)
     }
 
     // MARK: - ThemeApplicable

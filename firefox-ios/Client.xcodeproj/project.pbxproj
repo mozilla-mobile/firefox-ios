@@ -41,6 +41,7 @@
 		0B6FBAB21AC1F830007EC669 /* numberedPage.html in Resources */ = {isa = PBXBuildFile; fileRef = 0B6FBAB11AC1F830007EC669 /* numberedPage.html */; };
 		0B75AEA91AC20FB20015E5DC /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B8E0FF31A932BD500161DC3 /* ImageIO.framework */; };
 		0B7C1E951F6097AD006A8869 /* TrackingProtectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C1E941F6097AD006A8869 /* TrackingProtectionTests.swift */; };
+		0B7CF8872CAC1C4E00DC02F8 /* DefaultFolderHeirarchyFetcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7CF8862CAC1C4E00DC02F8 /* DefaultFolderHeirarchyFetcherTests.swift */; };
 		0B8BF3702CA2D60B00E9812D /* BookmarksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8BF36F2CA2D60B00E9812D /* BookmarksViewController.swift */; };
 		0B8BF3722CA2DA4600E9812D /* EditBookmarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8BF3712CA2DA4600E9812D /* EditBookmarkViewController.swift */; };
 		0B8BF3752CA2EFC000E9812D /* EditBookmarkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8BF3742CA2EFC000E9812D /* EditBookmarkCell.swift */; };
@@ -2243,6 +2244,7 @@
 		0B62EFD11AD63CD100ACB9CD /* Clearables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clearables.swift; sourceTree = "<group>"; };
 		0B6FBAB11AC1F830007EC669 /* numberedPage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = numberedPage.html; sourceTree = "<group>"; };
 		0B7C1E941F6097AD006A8869 /* TrackingProtectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionTests.swift; sourceTree = "<group>"; };
+		0B7CF8862CAC1C4E00DC02F8 /* DefaultFolderHeirarchyFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultFolderHeirarchyFetcherTests.swift; sourceTree = "<group>"; };
 		0B8749EB891EE229EA88FEF3 /* kn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kn; path = kn.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		0B8BF36F2CA2D60B00E9812D /* BookmarksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksViewController.swift; sourceTree = "<group>"; };
 		0B8BF3712CA2DA4600E9812D /* EditBookmarkViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBookmarkViewController.swift; sourceTree = "<group>"; };
@@ -9292,6 +9294,24 @@
 			path = SearchQuickLinksMedium;
 			sourceTree = "<group>";
 		};
+		0B7CF8842CAC1B7000DC02F8 /* Legacy */ = {
+			isa = PBXGroup;
+			children = (
+				8A8629E52880B69C0096DDB1 /* BookmarksPanelTests.swift */,
+			);
+			path = Legacy;
+			sourceTree = "<group>";
+		};
+		0B7CF8852CAC1BFB00DC02F8 /* Bookmarks */ = {
+			isa = PBXGroup;
+			children = (
+				0B7CF8862CAC1C4E00DC02F8 /* DefaultFolderHeirarchyFetcherTests.swift */,
+				8AED868228CA3B3400351A50 /* BookmarkPanelViewModelTests.swift */,
+				0B7CF8842CAC1B7000DC02F8 /* Legacy */,
+			);
+			path = Bookmarks;
+			sourceTree = "<group>";
+		};
 		0B8BF3732CA2EB3300E9812D /* Edit Bookmark */ = {
 			isa = PBXGroup;
 			children = (
@@ -11312,8 +11332,7 @@
 		8AED868128CA3A1F00351A50 /* Library */ = {
 			isa = PBXGroup;
 			children = (
-				8AED868228CA3B3400351A50 /* BookmarkPanelViewModelTests.swift */,
-				8A8629E52880B69C0096DDB1 /* BookmarksPanelTests.swift */,
+				0B7CF8852CAC1BFB00DC02F8 /* Bookmarks */,
 				8AF3B15D2AF99D2F009BB262 /* DownloadsPanelTests.swift */,
 				2137786029802B7000D01309 /* DownloadsPanelViewModelTests.swift */,
 				8AF3B1592AF99B86009BB262 /* HistoryPanelTests.swift */,
@@ -16313,6 +16332,7 @@
 				8CFD56892AAF06D3003157A6 /* ShoppingProductTests.swift in Sources */,
 				8ACA8F7629198D6400D3075D /* ThrottlerTests.swift in Sources */,
 				217AEF76284666D4004EED37 /* IntroViewModelTests.swift in Sources */,
+				0B7CF8872CAC1C4E00DC02F8 /* DefaultFolderHeirarchyFetcherTests.swift in Sources */,
 				E16C76812ABDC0DB00172DB5 /* FakespotHighlightsCardViewModelTests.swift in Sources */,
 				1D8487B62AD6038100F7527C /* RemoteTabPanelStateTests.swift in Sources */,
 				2137786129802B7000D01309 /* DownloadsPanelViewModelTests.swift in Sources */,

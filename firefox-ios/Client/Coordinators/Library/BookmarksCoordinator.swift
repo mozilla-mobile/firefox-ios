@@ -146,6 +146,7 @@ class BookmarksCoordinator: BaseCoordinator,
         viewModel.onBookmarkSaved = { [weak self] in
             self?.reloadLastBookmarksController()
         }
+        setBackBarButtonItemTitle(viewModel.backNavigationButtonTitle())
         let controller = EditBookmarkViewController(viewModel: viewModel,
                                                     windowUUID: windowUUID)
         controller.onViewWillAppear = { [weak self] in
@@ -166,6 +167,7 @@ class BookmarksCoordinator: BaseCoordinator,
         viewModel.onBookmarkSaved = { [weak self] in
             self?.reloadLastBookmarksController()
         }
+        setBackBarButtonItemTitle("")
         let controller = EditFolderViewController(viewModel: viewModel,
                                                   windowUUID: windowUUID)
         controller.onViewWillAppear = { [weak self] in
@@ -184,5 +186,17 @@ class BookmarksCoordinator: BaseCoordinator,
                 as? BookmarksViewController
         else { return }
         rootBookmarkController.reloadData()
+    }
+    
+    /// Sets the back button title for the controller
+    ///
+    /// It has to be done here and not in the detail controller directly, otherwise it won't take place the modification.
+    private func setBackBarButtonItemTitle(_ title: String) {
+        if let backBarButton = router.navigationController.viewControllers.last?.navigationItem.backBarButtonItem {
+            backBarButton.title = title
+        } else {
+            let backBarButton = UIBarButtonItem(title: title)
+            router.navigationController.viewControllers.last?.navigationItem.backBarButtonItem = backBarButton
+        }
     }
 }

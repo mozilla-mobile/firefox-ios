@@ -40,10 +40,7 @@ class EditBookmarkViewModel {
         self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: profile)
         self.folderFetcher = folderFetcher ?? DefaultFolderHierarchyFetcher(profile: profile,
                                                                             rootFolderGUID: BookmarkRoots.RootGUID)
-        guard let parentFolder = parentFolder as? BookmarkFolderData else { return }
-        let folder = Folder(title: title(for: parentFolder),
-                            guid: parentFolder.guid,
-                            indentation: 0)
+        let folder = Folder(title: parentFolder.title, guid: parentFolder.guid, indentation: 0)
         folderStructures = [folder]
         selectedFolder = folder
     }
@@ -79,10 +76,6 @@ class EditBookmarkViewModel {
             self?.selectedFolder = selectedFolder
             self?.onFolderStatusUpdate?()
         }
-    }
-
-    private func title(for folder: BookmarkFolderData) -> String {
-        return LocalizedRootBookmarkFolderStrings[folder.guid] ?? folder.title
     }
 
     func setUpdatedTitle(_ title: String) {

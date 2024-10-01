@@ -67,8 +67,6 @@ class EditBookmarkViewController: UIViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let backTitle = viewModel.backNavigationButtonTitle()
-        navigationController?.navigationBar.topItem?.title = backTitle
         // TODO: - Translate
         title = "Edit Bookmark"
         viewModel.onFolderStatusUpdate = { [weak self] in
@@ -80,6 +78,7 @@ class EditBookmarkViewController: UIViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setTheme(theme)
+        _ = viewModel.backNavigationButtonTitle()
         navigationController?.setNavigationBarHidden(false, animated: true)
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         onViewWillAppear?()
