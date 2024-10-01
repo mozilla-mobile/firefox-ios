@@ -2141,10 +2141,16 @@ class BrowserViewController: UIViewController,
         switch readerMode.state {
         case .available:
             enableReaderMode()
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readerModeOpenButton)
+
+            if !isToolbarRefactorEnabled {
+                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readerModeOpenButton)
+            }
         case .active:
             disableReaderMode()
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readerModeCloseButton)
+
+            if !isToolbarRefactorEnabled {
+                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readerModeCloseButton)
+            }
         case .unavailable:
             break
         }

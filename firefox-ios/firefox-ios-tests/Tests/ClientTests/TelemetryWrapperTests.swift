@@ -1591,7 +1591,7 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.shareButtonTapped)
     }
 
-    func testRecordToolbarWhenReaderModeTappedThenGleanIsCalled() {
+    func testRecordToolbarWhenRefreshButtonTappedThenGleanIsCalled() {
         let extras = [TelemetryWrapper.EventExtraKey.Toolbar.isPrivate.rawValue: true]
         TelemetryWrapper.gleanRecordEvent(category: .action,
                                           method: .tap,
@@ -1599,6 +1599,18 @@ class TelemetryWrapperTests: XCTestCase {
                                           value: .toolbarRefreshButtonTap,
                                           extras: extras)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.refreshButtonTapped)
+    }
+
+    func testRecordToolbarWhenReaderModeTappedThenGleanIsCalled() {
+        let extras = [
+            TelemetryWrapper.EventExtraKey.Toolbar.isPrivate.rawValue: true,
+            TelemetryWrapper.EventExtraKey.Toolbar.isEnabled.rawValue: true]
+        TelemetryWrapper.gleanRecordEvent(category: .action,
+                                          method: .tap,
+                                          object: .toolbar,
+                                          value: .toolbarReaderModeTap,
+                                          extras: extras)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.readerModeTapped)
     }
 
     func testRecordToolbarWhenSiteInfoTappedThenGleanIsCalled() {

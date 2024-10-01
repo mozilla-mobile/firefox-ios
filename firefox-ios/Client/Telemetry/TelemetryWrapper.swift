@@ -648,6 +648,7 @@ extension TelemetryWrapper {
         case toolbarClearSearchTap = "clear-search-tap"
         case toolbarShareButtonTap = "share-button-tap"
         case toolbarRefreshButtonTap = "refresh-button-tap"
+        case toolbarReaderModeTap = "reader-mode-tap"
         case toolbarSiteInfoTap = "site-info-tap"
         case toolbarBackButtonTap = "back-button-tap"
         case toolbarForwardButtonTap = "forward-button-tap"
@@ -2156,6 +2157,14 @@ extension TelemetryWrapper {
 
             GleanMetrics.Toolbar.refreshButtonTapped.record(
                 GleanMetrics.Toolbar.RefreshButtonTappedExtra(isPrivate: isPrivate)
+            )
+        case (.action, .tap, .toolbar, .toolbarReaderModeTap, let extras):
+            guard let isPrivate = extras?[EventExtraKey.Toolbar.isPrivate.rawValue] as? Bool,
+                  let isEnabled = extras?[EventExtraKey.Toolbar.isEnabled.rawValue] as? Bool
+            else { return }
+
+            GleanMetrics.Toolbar.readerModeTapped.record(
+                GleanMetrics.Toolbar.ReaderModeTappedExtra(enabled: isEnabled, isPrivate: isPrivate)
             )
         case (.action, .tap, .toolbar, .toolbarSiteInfoTap, let extras):
             guard let isPrivate = extras?[EventExtraKey.Toolbar.isPrivate.rawValue] as? Bool else { return }

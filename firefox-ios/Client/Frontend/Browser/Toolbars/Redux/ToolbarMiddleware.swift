@@ -171,6 +171,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
             cancelEditMode(windowUUID: action.windowUUID)
 
         case .readerMode:
+            recordReaderModeTelemetry(state: state, windowUUID: action.windowUUID)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showReaderMode)
             store.dispatch(action)
@@ -370,18 +371,40 @@ final class ToolbarMiddleware: FeatureFlaggable {
         return isFeltPrivacyUIEnabled && isFeltPrivacyDeletionEnabled
     }
 
-    private func recordTelemetry(event: TelemetryWrapper.EventValue, state: AppState, windowUUID: WindowUUID) {
+    private func recordTelemetry(event: TelemetryWrapper.EventValue,
+                                 additionalExtras: [String: Any]? = nil,
+                                 state: AppState,
+                                 windowUUID: WindowUUID) {
         guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
         else { return }
 
-        let extras = [
+        var extras: [String: Any] = [
             TelemetryWrapper.EventExtraKey.Toolbar.isPrivate.rawValue: toolbarState.isPrivateMode
         ]
+
+        if let additionalExtras {
+            extras = extras.merge(with: additionalExtras)
+        }
 
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .toolbar,
                                      value: event,
                                      extras: extras)
+    }
+
+    private func recordReaderModeTelemetry(state: AppState, windowUUID: WindowUUID) {
+        guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID) else { return }
+
+        let isReaderModeEnabled = switch toolbarState.addressToolbar.readerModeState {
+        case .available: true // will be enabled after action gets executed
+        default: false
+        }
+
+        recordTelemetry(
+            event: .toolbarReaderModeTap,
+            additionalExtras: [TelemetryWrapper.EventExtraKey.Toolbar.isEnabled.rawValue: isReaderModeEnabled],
+            state: state,
+            windowUUID: windowUUID)
     }
 }
