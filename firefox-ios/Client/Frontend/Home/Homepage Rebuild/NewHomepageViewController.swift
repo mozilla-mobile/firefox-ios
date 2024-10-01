@@ -8,13 +8,11 @@ import Common
 class NewHomepageViewController: UIViewController, ContentContainable, Themeable {
     // MARK: - Typealiases
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
-    private var collectionView: UICollectionView?
-    private var logger: Logger
 
-    // MARK: - ContentContainable Variables
+    // MARK: - ContentContainable variables
     var contentType: ContentType = .newHomepage
 
-    // MARK: - Themable Variables
+    // MARK: - Themable variables
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
     var notificationCenter: NotificationProtocol
@@ -22,15 +20,11 @@ class NewHomepageViewController: UIViewController, ContentContainable, Themeable
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
 
-    // MARK: - UI Components
-
-    // TODO: FXIOS-10161 Remove title label and implement proper UI
-    private lazy var titleLabel: UILabel = .build { label in
-        label.adjustsFontForContentSizeCategory = true
-        label.font = FXFontStyles.Bold.title2.scaledFont()
-        label.numberOfLines = 0
-        label.text = "New Homepage"
-    }
+    // MARK: - Private variables
+    private var collectionView: UICollectionView?
+    private var dataSource: NewHomepageDiffableDataSource?
+    private var layoutConfiguration = NewHomepageSectionLayoutProvider().createCompositionalLayout()
+    private var logger: Logger
 
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
@@ -57,6 +51,10 @@ class NewHomepageViewController: UIViewController, ContentContainable, Themeable
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLayout()
+        configureCollectionView()
+        configureDataSource()
+
+        dataSource?.applyInitialSnapshot()
 
         listenForThemeChange(view)
         applyTheme()
@@ -67,14 +65,79 @@ class NewHomepageViewController: UIViewController, ContentContainable, Themeable
         view.backgroundColor = theme.colors.layer1
     }
 
+    // MARK: - Layout
     private func setupLayout() {
-        // TODO: FXIOS-10161 Remove title label and implement proper UI
-        view.addSubview(titleLabel)
+        guard let collectionView else {
+            logger.log(
+                "NewHomepage collectionview should not have been nil, something went wrong",
+                level: .fatal,
+                category: .homepage
+            )
+            return
+        }
+
+        view.addSubview(collectionView)
 
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            titleLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
+    }
+
+    private func configureCollectionView() {
+        let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layoutConfiguration)
+
+        // TODO: FXIOS-10163 - Update with proper cells
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+
+        collectionView.keyboardDismissMode = .onDrag
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        collectionView.backgroundColor = .clear
+        collectionView.accessibilityIdentifier = a11y.collectionView
+
+        self.collectionView = collectionView
+
+        view.addSubview(collectionView)
+    }
+
+    private func configureDataSource() {
+        guard let collectionView else {
+            logger.log(
+                "NewHomepage collectionview should not have been nil, something went wrong",
+                level: .fatal,
+                category: .newHomepage
+            )
+            return
+        }
+
+        dataSource = NewHomepageDiffableDataSource(
+            collectionView: collectionView
+        ) { [weak self] (collectionView, indexPath, item) -> UICollectionViewCell? in
+            return self?.configureCell(for: item, at: indexPath)
+        }
+    }
+
+    private func configureCell(
+        for item: NewHomepageDiffableDataSource.HomeItem,
+        at indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        // TODO: FXIOS-10163 - Dummy collection cells, to update with proper cells
+        guard let cell: UICollectionViewCell = collectionView?.dequeueReusableCell(
+            withReuseIdentifier: "cell",
+            for: indexPath
+        ) else {
+            return UICollectionViewCell()
+        }
+
+        cell.contentView.backgroundColor = .systemBlue
+
+        let label = UILabel(frame: cell.contentView.bounds)
+        label.textAlignment = .center
+        label.text = item.title
+        label.textColor = .white
+        cell.contentView.addSubview(label)
+        return cell
     }
 }
