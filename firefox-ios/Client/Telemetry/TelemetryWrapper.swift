@@ -2138,14 +2138,14 @@ extension TelemetryWrapper {
         case (.action, .tap, .toolbar, .toolbarQrCodeTap, let extras):
             guard let isPrivate = extras?[EventExtraKey.Toolbar.isPrivate.rawValue] as? Bool else { return }
 
-            GleanMetrics.Toolbar.qrScanTapped.record(
-                GleanMetrics.Toolbar.QrScanTappedExtra(isPrivate: isPrivate)
+            GleanMetrics.Toolbar.qrScanButtonTapped.record(
+                GleanMetrics.Toolbar.QrScanButtonTappedExtra(isPrivate: isPrivate)
             )
         case (.action, .tap, .toolbar, .toolbarClearSearchTap, let extras):
             guard let isPrivate = extras?[EventExtraKey.Toolbar.isPrivate.rawValue] as? Bool else { return }
 
-            GleanMetrics.Toolbar.clearSearchTapped.record(
-                GleanMetrics.Toolbar.ClearSearchTappedExtra(isPrivate: isPrivate)
+            GleanMetrics.Toolbar.clearSearchButttonTapped.record(
+                GleanMetrics.Toolbar.ClearSearchButttonTappedExtra(isPrivate: isPrivate)
             )
         case (.action, .tap, .toolbar, .toolbarShareButtonTap, let extras):
             guard let isPrivate = extras?[EventExtraKey.Toolbar.isPrivate.rawValue] as? Bool else { return }
@@ -2164,14 +2164,14 @@ extension TelemetryWrapper {
                   let isEnabled = extras?[EventExtraKey.Toolbar.isEnabled.rawValue] as? Bool
             else { return }
 
-            GleanMetrics.Toolbar.readerModeTapped.record(
-                GleanMetrics.Toolbar.ReaderModeTappedExtra(enabled: isEnabled, isPrivate: isPrivate)
+            GleanMetrics.Toolbar.readerModeButtonTapped.record(
+                GleanMetrics.Toolbar.ReaderModeButtonTappedExtra(enabled: isEnabled, isPrivate: isPrivate)
             )
         case (.action, .tap, .toolbar, .toolbarSiteInfoTap, let extras):
             guard let isPrivate = extras?[EventExtraKey.Toolbar.isPrivate.rawValue] as? Bool else { return }
 
-            GleanMetrics.Toolbar.siteInfoTapped.record(
-                GleanMetrics.Toolbar.SiteInfoTappedExtra(isPrivate: isPrivate)
+            GleanMetrics.Toolbar.siteInfoButtonTapped.record(
+                GleanMetrics.Toolbar.SiteInfoButtonTappedExtra(isPrivate: isPrivate)
             )
         case (.action, .tap, .toolbar, .toolbarBackButtonTap, let extras):
             guard let isPrivate = extras?[EventExtraKey.Toolbar.isPrivate.rawValue] as? Bool else { return }
@@ -2200,14 +2200,15 @@ extension TelemetryWrapper {
         case (.action, .tap, .toolbar, .toolbarHomeButtonTap, let extras):
             guard let isPrivate = extras?[EventExtraKey.Toolbar.isPrivate.rawValue] as? Bool else { return }
 
-            GleanMetrics.Toolbar.homeTapped.record(
-                GleanMetrics.Toolbar.HomeTappedExtra(isPrivate: isPrivate)
+            GleanMetrics.Toolbar.homeButtonTapped.record(
+                GleanMetrics.Toolbar.HomeButtonTappedExtra(isPrivate: isPrivate)
             )
         case (.action, .tap, .toolbar, .toolbarOneTapNewTab, let extras):
             guard let isPrivate = extras?[EventExtraKey.Toolbar.isPrivate.rawValue] as? Bool else { return }
 
-            GleanMetrics.Toolbar.oneTapNewTab.record(
-                GleanMetrics.Toolbar.OneTapNewTabExtra(isPrivate: isPrivate)
+            GleanMetrics.Toolbar.oneTapNewTabButtonTapped.record(
+                GleanMetrics.Toolbar.OneTapNewTabButtonTappedExtra(isPrivate: isPrivate)
+            )
             )
 
         // MARK: - Uninstrumented

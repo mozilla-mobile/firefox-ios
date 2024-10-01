@@ -1568,7 +1568,7 @@ class TelemetryWrapperTests: XCTestCase {
                                           object: .toolbar,
                                           value: .toolbarQrCodeTap,
                                           extras: extras)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.qrScanTapped)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.qrScanButtonTapped)
     }
 
     func testRecordToolbarWhenClearSearchTappedThenGleanIsCalled() {
@@ -1578,7 +1578,7 @@ class TelemetryWrapperTests: XCTestCase {
                                           object: .toolbar,
                                           value: .toolbarClearSearchTap,
                                           extras: extras)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.clearSearchTapped)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.clearSearchButttonTapped)
     }
 
     func testRecordToolbarWhenShareButtonTappedThenGleanIsCalled() {
@@ -1610,7 +1610,7 @@ class TelemetryWrapperTests: XCTestCase {
                                           object: .toolbar,
                                           value: .toolbarReaderModeTap,
                                           extras: extras)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.readerModeTapped)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.readerModeButtonTapped)
     }
 
     func testRecordToolbarWhenSiteInfoTappedThenGleanIsCalled() {
@@ -1620,7 +1620,7 @@ class TelemetryWrapperTests: XCTestCase {
                                           object: .toolbar,
                                           value: .toolbarSiteInfoTap,
                                           extras: extras)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.siteInfoTapped)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.siteInfoButtonTapped)
     }
 
     func testRecordToolbarWhenBackButtonTappedThenGleanIsCalled() {
@@ -1670,7 +1670,7 @@ class TelemetryWrapperTests: XCTestCase {
                                           object: .toolbar,
                                           value: .toolbarHomeButtonTap,
                                           extras: extras)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.homeTapped)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.homeButtonTapped)
     }
 
     func testRecordToolbarWhenOneTapNewTabTappedThenGleanIsCalled() {
@@ -1680,7 +1680,7 @@ class TelemetryWrapperTests: XCTestCase {
                                           object: .toolbar,
                                           value: .toolbarOneTapNewTab,
                                           extras: extras)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.oneTapNewTab)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.oneTapNewTabButtonTapped)
     }
 }
 

@@ -4623,7 +4623,7 @@ awesomebar:
     
 # Toolbar related metrics
 toolbar:
-  qr_scan_tapped:
+  qr_scan_button_tapped:
     type: event
     description: |
         Counts the number of times a user taps the qr code scan button
@@ -4639,7 +4639,7 @@ toolbar:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
-  clear_search_tapped:
+  clear_search_buttton_tapped:
     type: event
     description: |
         Counts the number of times a user taps the clear button
@@ -4687,7 +4687,7 @@ toolbar:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
-  reader_mode_tapped:
+  reader_mode_button_tapped:
     type: event
     description: |
         Counts the number of times a user taps the reader mode button
@@ -4706,7 +4706,7 @@ toolbar:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
-  site_info_tapped:
+  site_info_button_tapped:
     type: event
     description: |
         Counts the number of times a user taps the site info button
@@ -4786,7 +4786,7 @@ toolbar:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
-  home_tapped:
+  home_button_tapped:
     type: event
     description: |
         Counts the number of times a user taps the home button
@@ -4802,7 +4802,7 @@ toolbar:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
-  one_tap_new_tab:
+  one_tap_new_tab_button_tapped:
     type: event
     description: |
         Counts the number of times a user taps the one tap new tab
