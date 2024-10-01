@@ -1987,7 +1987,6 @@ class BrowserViewController: UIViewController,
         case .locationViewLongPressAction:
             presentLocationViewActionSheet(from: addressToolbarContainer)
         case .trackingProtectionDetails:
-            TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
             navigationHandler?.showEnhancedTrackingProtection(sourceView: state.buttonTapped ?? addressToolbarContainer)
         case .menu:
             didTapOnMenu(button: state.buttonTapped)
@@ -1996,12 +1995,6 @@ class BrowserViewController: UIViewController,
             presentRefreshLongPressAction(from: button)
         case .tabTray:
             focusOnTabSegment()
-            TelemetryWrapper.recordEvent(
-                category: .action,
-                method: .press,
-                object: .tabToolbar,
-                value: .tabView
-            )
         case .share:
             guard let button = state.buttonTapped else { return }
             didTapOnShare(from: button)
@@ -2033,9 +2026,6 @@ class BrowserViewController: UIViewController,
             tabManager.selectedTab?.reload(bypassCache: true)
         case .reload:
             tabManager.selectedTab?.reload()
-            if !isToolbarRefactorEnabled {
-                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .reloadFromUrlBar)
-            }
         case .stopLoading:
             tabManager.selectedTab?.stop()
         case .newTab:
