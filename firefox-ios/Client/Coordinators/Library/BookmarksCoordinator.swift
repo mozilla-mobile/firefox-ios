@@ -187,7 +187,7 @@ class BookmarksCoordinator: BaseCoordinator,
         else { return }
         rootBookmarkController.reloadData()
     }
-    
+
     /// Sets the back button title for the controller
     ///
     /// It has to be done here and not in the detail controller directly, otherwise it won't take place the modification.
