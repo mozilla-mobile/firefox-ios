@@ -839,7 +839,10 @@ extension BrowserViewController: WKNavigationDelegate {
         // When tab url changes after web content starts loading on the page
         // We notify the content blocker change so that content blocker status
         // can be correctly shown on beside the URL bar
+
+        // TODO: content blocking hasn't really changed, can we improve code clarity here? [FXIOS-10091]
         tab.contentBlocker?.notifyContentBlockingChanged()
+
         self.scrollController.resetZoomState()
 
         if tabManager.selectedTab === tab {
