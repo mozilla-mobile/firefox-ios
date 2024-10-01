@@ -56,6 +56,8 @@
 		0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */ = {isa = PBXBuildFile; fileRef = 0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */; };
 		158241282820698B00956B39 /* RustRemoteTabsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158241272820698B00956B39 /* RustRemoteTabsTests.swift */; };
 		15DE98FD27FCED4F00F1ECDB /* RustRemoteTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15DE98FC27FCED4F00F1ECDB /* RustRemoteTabs.swift */; };
+		1BE7A4902C636AC800460798 /* URLSession+sharedMPTCP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE7A48F2C636AC800460798 /* URLSession+sharedMPTCP.swift */; };
+		1BE7A4922C636AEA00460798 /* URLSessionConfiguration+defaultMPTCP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE7A4912C636AEA00460798 /* URLSessionConfiguration+defaultMPTCP.swift */; };
 		1D06AE6624FEE4D5000B092B /* TopSitesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06AE6524FEE4D5000B092B /* TopSitesProvider.swift */; };
 		1D06AE6A24FEE8D6000B092B /* TabProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06AE6924FEE8D6000B092B /* TabProvider.swift */; };
 		1D0BA05C24F46A0400D731B5 /* TopSitesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0BA05B24F46A0400D731B5 /* TopSitesProvider.swift */; };
@@ -2366,6 +2368,8 @@
 		1BA8499F9CDB2D9FC59EC547 /* sat-Olck */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sat-Olck"; path = "sat-Olck.lproj/HistoryPanel.strings"; sourceTree = "<group>"; };
 		1BCB46B98C7EF0844081BADE /* bg */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bg; path = bg.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		1BE04EA5B4E6654288CBB928 /* co */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = co; path = co.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
+		1BE7A48F2C636AC800460798 /* URLSession+sharedMPTCP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+sharedMPTCP.swift"; sourceTree = "<group>"; };
+		1BE7A4912C636AEA00460798 /* URLSessionConfiguration+defaultMPTCP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSessionConfiguration+defaultMPTCP.swift"; sourceTree = "<group>"; };
 		1BF1480584A7191A7FA97050 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Today.strings; sourceTree = "<group>"; };
 		1C0D49279DC88F974E4BE1CB /* gd */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gd; path = gd.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		1C284BDCAF7741956A35582A /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
@@ -9658,6 +9662,8 @@
 				E1442FC7294782D7003680B0 /* UIViewController+Extension.swift */,
 				C81A8F2426D3ED1900EBA539 /* UIWindow+Extension.swift */,
 				E1442FC9294782D8003680B0 /* URL+Mail.swift */,
+				1BE7A48F2C636AC800460798 /* URLSession+sharedMPTCP.swift */,
+				1BE7A4912C636AEA00460798 /* URLSessionConfiguration+defaultMPTCP.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -15881,6 +15887,7 @@
 				8AB8571F27D931B40075C173 /* EmptyTopSiteCell.swift in Sources */,
 				CAC458F1249429C20042561A /* PasswordManagerSelectionHelper.swift in Sources */,
 				C8656D75270F834600E199EA /* FlaggableFeatureOptions.swift in Sources */,
+				1BE7A4922C636AEA00460798 /* URLSessionConfiguration+defaultMPTCP.swift in Sources */,
 				C8CD80D82A1E31C20097C3AE /* NimbusOnboardingTestingConfigUtility.swift in Sources */,
 				81E1914D2BB8578600543D78 /* OnboardingMultipleChoiceSelectionDelegate.swift in Sources */,
 				8AB8573727D951640075C173 /* HomeLogoHeaderViewModel.swift in Sources */,
@@ -15931,6 +15938,7 @@
 				8A9AC46B276D11280047F5B0 /* PocketViewModel.swift in Sources */,
 				8A7653BF28A2C92600924ABF /* PocketStandardCellViewModel.swift in Sources */,
 				8A5D1CAE2A30D71A005AD35C /* ThemeSetting.swift in Sources */,
+				1BE7A4902C636AC800460798 /* URLSession+sharedMPTCP.swift in Sources */,
 				C82F4C2B29AE2DF1005BD116 /* NotificationsSettingsViewController.swift in Sources */,
 				59A68B280D62462B85CF57A4 /* HistoryPanel.swift in Sources */,
 				C400467C1CF4E43E00B08303 /* BackForwardListViewController.swift in Sources */,
