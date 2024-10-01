@@ -902,6 +902,8 @@ class BrowserViewController: UIViewController,
         if !isToolbarRefactorEnabled {
             urlBar.searchEnginesDidUpdate()
         }
+
+        updateToolbarStateForTraitCollection(traitCollection)
     }
 
     override func viewDidAppear(_ animated: Bool) {
