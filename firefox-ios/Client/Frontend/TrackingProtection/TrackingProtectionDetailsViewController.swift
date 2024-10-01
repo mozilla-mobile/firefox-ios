@@ -107,6 +107,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
         setupVerifiedByView()
         setupSeeCertificatesView()
         setupAccessibilityIdentifiers()
+        setupHeaderViewActions()
         NSLayoutConstraint.activate(constraints)
     }
 
@@ -175,6 +176,16 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
             UX.viewCertButtonTopDistance,
             after: verifiedByView
         )
+    }
+
+    // MARK: Header Actions
+    private func setupHeaderViewActions() {
+        headerView.backToMainMenuCallback = { [weak self] in
+            self?.navigationController?.popToRootViewController(animated: true)
+        }
+        headerView.dismissMenuCallback = { [weak self] in
+            self?.navigationController?.dismissVC()
+        }
     }
 
     // MARK: Accessibility

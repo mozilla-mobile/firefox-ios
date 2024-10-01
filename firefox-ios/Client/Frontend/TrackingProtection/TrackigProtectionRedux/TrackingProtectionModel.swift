@@ -137,6 +137,16 @@ class TrackingProtectionModel {
                                               connectionSecure: connectionSecure)
     }
 
+    func getBlockedTrackersModel() -> BlockedTrackersTableModel {
+        return BlockedTrackersTableModel(
+            topLevelDomain: websiteTitle,
+            title: displayTitle,
+            URL: url.absoluteDisplayString,
+            contentBlockerStats: contentBlockerStats,
+            connectionSecure: connectionSecure
+        )
+    }
+
     func getConnectionStatusImage(themeType: ThemeType) -> UIImage {
         if connectionSecure {
             return UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.lock)

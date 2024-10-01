@@ -7,6 +7,7 @@ import UIKit
 import Common
 import ComponentLibrary
 import SiteImageView
+import Redux
 
 struct TPMenuUX {
     struct UX {
@@ -32,7 +33,11 @@ protocol TrackingProtectionMenuDelegate: AnyObject {
     func didFinish()
 }
 
-class TrackingProtectionViewController: UIViewController, Themeable, Notifiable, UIScrollViewDelegate {
+class TrackingProtectionViewController: UIViewController,
+                                        Themeable,
+                                        Notifiable,
+                                        StoreSubscriber,
+                                        UIScrollViewDelegate {
     var themeManager: ThemeManager
     var profile: Profile?
     var themeObserver: NSObjectProtocol?
@@ -93,6 +98,7 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
     // MARK: - Variables
 
     private var viewModel: TrackingProtectionModel
+    private var trackingProtectionState: TrackingProtectionState
     private var hasSetPointOrigin = false
     private var pointOrigin: CGPoint?
     var asPopover = false
@@ -115,7 +121,13 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        trackingProtectionState = TrackingProtectionState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
+        subscribeToRedux()
+    }
+
+    deinit {
+        unsubscribeFromRedux()
     }
 
     @available(*, unavailable)
@@ -156,6 +168,7 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
                 }
             }
         }
+        resetReduxStoreState()
     }
 
     private func setupView() {
@@ -172,6 +185,51 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
 
         NSLayoutConstraint.activate(constraints)
         setupAccessibilityIdentifiers()
+    }
+
+    // MARK: Redux
+    func newState(state: TrackingProtectionState) {
+        trackingProtectionState = state
+        if trackingProtectionState.showTrackingProtectionSettings {
+            enhancedTrackingProtectionMenuDelegate?.settingsOpenPage(settings: .contentBlocker)
+        } else if trackingProtectionState.showDetails {
+            showTrackersDetailsController()
+        } else if trackingProtectionState.showBlockedTrackers {
+            showBlockedTrackersController()
+        } else if trackingProtectionState.showsClearCookiesAlert {
+            onTapClearCookiesAndSiteData()
+        } else if trackingProtectionState.shouldClearCookies {
+            clearCookies()
+        } else if trackingProtectionState.shouldDismiss {
+            enhancedTrackingProtectionMenuDelegate?.didFinish()
+        }
+    }
+
+    func subscribeToRedux() {
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.showScreen,
+                                  screen: .trackingProtection)
+        store.dispatch(action)
+        let uuid = windowUUID
+        store.subscribe(self, transform: {
+            return $0.select({ appState in
+                return TrackingProtectionState(appState: appState, uuid: uuid)
+            })
+        })
+    }
+
+    func resetReduxStoreState() {
+        store.dispatch(
+            TrackingProtectionAction(windowUUID: windowUUID,
+                                     actionType: TrackingProtectionActionType.resetReduxStore)
+        )
+    }
+
+    func unsubscribeFromRedux() {
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.closeScreen,
+                                  screen: .trackingProtection)
+        store.dispatch(action)
     }
 
     // MARK: Content View
@@ -240,6 +298,29 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         baseView.addSubview(trackersConnectionContainer)
         baseView.addSubview(connectionHorizontalLine)
         trackersConnectionContainer.addArrangedSubview(trackersView)
+        let blockedTrackersConstraints = [
+            trackersView.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor,
+                constant: TPMenuUX.UX.horizontalMargin
+            ),
+            trackersView.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor,
+                constant: -TPMenuUX.UX.horizontalMargin
+            ),
+            trackersView.topAnchor.constraint(equalTo: connectionDetailsHeaderView.bottomAnchor),
+        ]
+        constraints.append(contentsOf: blockedTrackersConstraints)
+        trackersView.trackersButtonCallback = { [weak self] in
+            guard let self else { return }
+            store.dispatch(
+                TrackingProtectionAction(windowUUID: windowUUID,
+                                         actionType: TrackingProtectionActionType.tappedShowBlockedTrackers)
+            )
+        }
+    }
+
+    // MARK: Connection Status Setup
+    private func setupConnectionStatusView() {
         trackersConnectionContainer.addArrangedSubview(connectionStatusView)
         let trackersConnectionConstraints = [
             trackersView.trailingAnchor.constraint(equalTo: trackersConnectionContainer.trailingAnchor),
@@ -262,12 +343,10 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         trackersView.trackersButtonCallback = {}
         connectionStatusView.connectionStatusButtonCallback = { [weak self] in
             guard let self, viewModel.connectionSecure else { return }
-            // TODO: FXIOS-9198 #20366 Enhanced Tracking Protection Connection details screen
-            //            let detailsVC = TrackingProtectionDetailsViewController(with: viewModel.getDetailsModel(),
-            //                                                                    windowUUID: windowUUID,
-            //                                                                    certificate: viewModel.certificates.first)
-            //            detailsVC.modalPresentationStyle = .pageSheet
-            //            self.present(detailsVC, animated: true)
+            store.dispatch(
+                TrackingProtectionAction(windowUUID: windowUUID,
+                                         actionType: TrackingProtectionActionType.tappedShowTrackingProtectionDetails)
+            )
         }
     }
 
@@ -430,15 +509,50 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
     }
 
     // MARK: - Button actions
+
+    @objc
+    func trackingProtectionToggleTapped() {
+        // site is safelisted if site ETP is disabled
+        viewModel.toggleSiteSafelistStatus()
+        updateProtectionViewStatus()
+    }
+
     @objc
     private func didTapClearCookiesAndSiteData() {
-        viewModel.onTapClearCookiesAndSiteData(controller: self)
+        store.dispatch(
+            TrackingProtectionAction(windowUUID: windowUUID,
+                                     actionType: TrackingProtectionActionType.tappedShowClearCookiesAlert)
+        )
     }
 
     @objc
     func protectionSettingsTapped() {
-        enhancedTrackingProtectionMenuDelegate?.settingsOpenPage(settings: .contentBlocker)
+        store.dispatch(
+            TrackingProtectionAction(windowUUID: windowUUID,
+                                     actionType: TrackingProtectionActionType.tappedShowSettings)
+        )
     }
+
+    private func showBlockedTrackersController() {
+        let blockedTrackersVC = BlockedTrackersTableViewController(with: viewModel.getBlockedTrackersModel(),
+                                                                   windowUUID: windowUUID)
+        self.navigationController?.pushViewController(blockedTrackersVC, animated: true)
+    }
+
+    private func showTrackersDetailsController() {
+        let detailsVC = TrackingProtectionDetailsViewController(with: viewModel.getDetailsModel(),
+                                                                windowUUID: windowUUID,
+                                                                certificate: viewModel.certificates.first)
+        self.navigationController?.pushViewController(detailsVC, animated: true)
+    }
+
+    // MARK: Clear Cookies Alert
+    func onTapClearCookiesAndSiteData() {
+        resetReduxStoreState()
+        viewModel.onTapClearCookiesAndSiteData(controller: self)
+    }
+
+    func clearCookies() {}
 
     // MARK: - Gesture Recognizer
     private func addGestureRecognizer() {
