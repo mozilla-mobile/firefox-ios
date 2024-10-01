@@ -173,7 +173,6 @@ class ContentBlockerSettingViewController: SettingsTableViewController,
             linkButton.configure(viewModel: linkButtonViewModel)
 
             linkButton.addTarget(self, action: #selector(moreInfoTapped), for: .touchUpInside)
-            linkButton.isHidden = false
 
             defaultFooter.stackView.addArrangedSubview(linkButton)
 
