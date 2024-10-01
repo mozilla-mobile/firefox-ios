@@ -172,6 +172,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
             store.dispatch(action)
 
         case .reload:
+            recordTelemetry(event: .toolbarRefreshButtonTap, state: state, windowUUID: action.windowUUID)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.reloadWebsite)
             store.dispatch(action)

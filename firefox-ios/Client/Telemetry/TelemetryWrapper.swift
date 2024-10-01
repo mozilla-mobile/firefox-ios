@@ -647,6 +647,7 @@ extension TelemetryWrapper {
         case toolbarQrCodeTap = "qr-code-tap"
         case toolbarClearSearchTap = "clear-search-tap"
         case toolbarShareButtonTap = "share-button-tap"
+        case toolbarRefreshButtonTap = "refresh-button-tap"
     }
 
     public enum EventExtraKey: String, CustomStringConvertible {
@@ -2137,6 +2138,12 @@ extension TelemetryWrapper {
 
             GleanMetrics.Toolbar.shareButtonTapped.record(
                 GleanMetrics.Toolbar.ShareButtonTappedExtra(tabMode: isPrivate ? "Private" : "Normal")
+            )
+        case (.action, .tap, .toolbar, .toolbarRefreshButtonTap, let extras):
+            guard let isPrivate = extras?[EventExtraKey.isPrivate.rawValue] as? Bool else { return }
+
+            GleanMetrics.Toolbar.refreshButtonTapped.record(
+                GleanMetrics.Toolbar.RefreshButtonTappedExtra(tabMode: isPrivate ? "Private" : "Normal")
             )
 
         // MARK: - Uninstrumented

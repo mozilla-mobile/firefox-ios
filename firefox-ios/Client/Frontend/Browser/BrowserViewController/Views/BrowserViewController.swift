@@ -2033,7 +2033,9 @@ class BrowserViewController: UIViewController,
             tabManager.selectedTab?.reload(bypassCache: true)
         case .reload:
             tabManager.selectedTab?.reload()
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .reloadFromUrlBar)
+            if !isToolbarRefactorEnabled {
+                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .reloadFromUrlBar)
+            }
         case .stopLoading:
             tabManager.selectedTab?.stop()
         case .newTab:
