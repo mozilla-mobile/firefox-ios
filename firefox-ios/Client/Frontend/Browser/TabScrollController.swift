@@ -52,6 +52,7 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
     var headerTopConstraint: Constraint?
 
     private var lastPanTranslation: CGFloat = 0
+    private var lastContentOffsetY: CGFloat = 0
     private var scrollDirection: ScrollDirection = .down
     var toolbarState: ToolbarState = .visible
 
@@ -455,6 +456,10 @@ extension TabScrollingController: UIGestureRecognizerDelegate {
 }
 
 extension TabScrollingController: UIScrollViewDelegate {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+            lastContentOffsetY = scrollView.contentOffset.y
+        }
+
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard !tabIsLoading(), !isBouncingAtBottom(), isAbleToScroll, let tab else { return }
 
@@ -477,17 +482,11 @@ extension TabScrollingController: UIScrollViewDelegate {
             setOffset(y: 0, for: scrollView)
         }
 
-        let toolbarState = store.state.screenState(Client.ToolbarState.self, for: .toolbar, window: windowUUID)
-
-        guard let toolbarState,
-              let borderPosition = toolbarState.addressToolbar.borderPosition
-        else { return }
-
-        // Only dispatch the action to update the toolbar border if needed, which is only if either
-        // a) we scroll down, and the toolbar border is not already at the bottom (so we show it), or
-        // b) we scroll up past the top of the scroll view, and the border is currently at the bottom (so we hide it)
-        if (scrollView.contentOffset.y > 0 && borderPosition != .bottom)
-           || (scrollView.contentOffset.y < 0 && borderPosition != .none) {
+        // this action controls the address toolbar's border position, and to prevent spamming redux with actions for every
+        // change in content offset, we keep track of lastContentOffsetY to know if the border needs to be updated
+        if (lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0) ||
+            (lastContentOffsetY <= 0 && scrollView.contentOffset.y > 0) {
+            lastContentOffsetY = scrollView.contentOffset.y
             store.dispatch(
                 GeneralBrowserMiddlewareAction(
                     scrollOffset: scrollView.contentOffset,
