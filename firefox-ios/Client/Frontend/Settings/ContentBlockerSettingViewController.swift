@@ -29,7 +29,6 @@ class ContentBlockerSettingViewController: SettingsTableViewController,
         super.init(style: .grouped, windowUUID: windowUUID)
 
         self.title = .SettingsTrackingProtectionSectionName
-        self.linkButton.isHidden = currentBlockingStrength == .strict
 
         if !isShownFromSettings {
             navigationItem.rightBarButtonItem = UIBarButtonItem(
@@ -48,6 +47,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController,
         super.viewDidLoad()
         applyTheme()
         setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
+        setupLinkButtonVisibility(option: currentBlockingStrength)
     }
 
     private func setupLinkButtonVisibility(option: BlockingStrength) {
