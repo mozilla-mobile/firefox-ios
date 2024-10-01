@@ -576,28 +576,14 @@ class SearchViewController: SiteTableViewController,
                     }
                 }
             case .history:
-                if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
-                    if viewModel.shouldShowBrowsingHistorySuggestions {
-                        let site = viewModel.historySites[indexPath.row]
-                        if searchTelemetry?.visibleData.contains(site) == false {
-                            searchTelemetry?.visibleData.append(site)
-                        }
-                    }
-                } else {
+                if viewModel.shouldShowBrowsingHistorySuggestions {
                     let site = viewModel.historySites[indexPath.row]
                     if searchTelemetry?.visibleData.contains(site) == false {
                         searchTelemetry?.visibleData.append(site)
                     }
                 }
             case .bookmarks:
-                if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
-                    if viewModel.shouldShowBookmarksSuggestions {
-                        let site = viewModel.bookmarkSites[indexPath.row]
-                        if searchTelemetry?.visibleData.contains(site) == false {
-                            searchTelemetry?.visibleData.append(site)
-                        }
-                    }
-                } else {
+                if viewModel.shouldShowBookmarksSuggestions {
                     let site = viewModel.bookmarkSites[indexPath.row]
                     if searchTelemetry?.visibleData.contains(site) == false {
                         searchTelemetry?.visibleData.append(site)
@@ -611,9 +597,12 @@ class SearchViewController: SiteTableViewController,
                     searchTelemetry?.visibleSearchHighlights.append(highlightItem)
                 }
             case .firefoxSuggestions:
-                let firefoxSuggestion = viewModel.firefoxSuggestions[indexPath.row]
-                if searchTelemetry?.visibleFirefoxSuggestions.contains(where: { $0.url == firefoxSuggestion.url }) == false {
-                    searchTelemetry?.visibleFirefoxSuggestions.append(firefoxSuggestion)
+                if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+                    let firefoxSuggestion = viewModel.firefoxSuggestions[indexPath.row]
+                    if searchTelemetry?.visibleFirefoxSuggestions
+                        .contains(where: { $0.url == firefoxSuggestion.url }) == false {
+                        searchTelemetry?.visibleFirefoxSuggestions.append(firefoxSuggestion)
+                    }
                 }
             }
         }
@@ -627,18 +616,10 @@ class SearchViewController: SiteTableViewController,
         case .openedTabs:
             return viewModel.filteredOpenedTabs.count
         case .remoteTabs:
-            if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
-                return viewModel.shouldShowSyncedTabsSuggestions ? viewModel.filteredRemoteClientTabs.count : 0
-            } else {
-                return viewModel.filteredRemoteClientTabs.count
-            }
+            return viewModel.shouldShowSyncedTabsSuggestions ? viewModel.filteredRemoteClientTabs.count : 0
         case .history:
-            guard featureFlags.isFeatureEnabled(.firefoxSuggestFeature,
-                                                checking: .buildAndUser) else { return viewModel.historySites.count }
             return viewModel.shouldShowBrowsingHistorySuggestions ? viewModel.historySites.count : 0
         case .bookmarks:
-            guard featureFlags.isFeatureEnabled(.firefoxSuggestFeature,
-                                                checking: .buildAndUser) else { return viewModel.bookmarkSites.count }
             return viewModel.shouldShowBookmarksSuggestions ? viewModel.bookmarkSites.count : 0
         case .searchHighlights:
             return viewModel.searchHighlights.count
@@ -747,11 +728,6 @@ class SearchViewController: SiteTableViewController,
                 cell = twoLineCell
             }
         case .remoteTabs:
-            if !featureFlags.isFeatureEnabled(.firefoxSuggestFeature,
-                                              checking: .buildAndUser) {
-                viewModel.model.shouldShowSyncedTabsSuggestions = true
-                viewModel.model.shouldShowPrivateModeFirefoxSuggestions = true
-            }
             if viewModel.shouldShowSyncedTabsSuggestions,
                viewModel.filteredRemoteClientTabs.count > indexPath.row {
                 let remoteTab = viewModel.filteredRemoteClientTabs[indexPath.row].tab
@@ -768,17 +744,7 @@ class SearchViewController: SiteTableViewController,
                 cell = twoLineCell
             }
         case .history:
-            if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
-                if viewModel.shouldShowBrowsingHistorySuggestions {
-                    let site = viewModel.historySites[indexPath.row]
-                    configureBookmarksAndHistoryCell(
-                        twoLineCell,
-                        site.title,
-                        site.url
-                    )
-                    cell = twoLineCell
-                }
-            } else {
+            if viewModel.shouldShowBrowsingHistorySuggestions {
                 let site = viewModel.historySites[indexPath.row]
                 configureBookmarksAndHistoryCell(
                     twoLineCell,
@@ -789,18 +755,7 @@ class SearchViewController: SiteTableViewController,
             }
 
         case .bookmarks:
-            if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
-                if viewModel.shouldShowBookmarksSuggestions {
-                    let site = viewModel.bookmarkSites[indexPath.row]
-                    configureBookmarksAndHistoryCell(
-                        twoLineCell,
-                        site.title,
-                        site.url,
-                        site.bookmarked ?? false
-                    )
-                    cell = twoLineCell
-                }
-            } else {
+            if viewModel.shouldShowBookmarksSuggestions {
                 let site = viewModel.bookmarkSites[indexPath.row]
                 configureBookmarksAndHistoryCell(
                     twoLineCell,
