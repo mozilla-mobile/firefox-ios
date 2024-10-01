@@ -8,7 +8,7 @@ import Shared
 import UIKit
 import Redux
 
-class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themeable {
+class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themeable, Notifiable {
     private enum UX {
         static let containerPadding: CGFloat = 20
         static let containerElementsVerticalPadding: CGFloat = 16
@@ -57,6 +57,8 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
         self.passwordGeneratorState = PasswordGeneratorState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
         self.subscribeToRedux()
+        setupNotifications(forObserver: self,
+                           observing: [.DynamicFontChanged])
     }
 
     deinit {
@@ -180,6 +182,21 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     func newState(state: PasswordGeneratorState) {
         passwordGeneratorState = state
         passwordField.configure(password: passwordGeneratorState.password)
+    }
+
+    // MARK: - Notifiable
+    private func applyDynamicFontChange() {
+        header.applyDynamicFontChange()
+        passwordField.applyDynamicFontChange()
+        descriptionLabel.font = FXFontStyles.Regular.subheadline.scaledFont()
+    }
+
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DynamicFontChanged:
+            applyDynamicFontChange()
+        default: break
+        }
     }
 }
 

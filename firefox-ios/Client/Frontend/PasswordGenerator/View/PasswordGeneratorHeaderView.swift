@@ -12,7 +12,11 @@ final class PasswordGeneratorHeaderView: UIView, ThemeApplicable {
         static let headerImageHeight: CGFloat = 24
     }
 
-    private let scaledHeaderImageSize = UIFontMetrics.default.scaledValue(for: UX.headerImageHeight)
+    private var scaledHeaderImageSize = UIFontMetrics.default.scaledValue(for: UX.headerImageHeight)
+    private lazy var headerImageWidthConstraint = headerImageView.widthAnchor.constraint(
+        equalToConstant: scaledHeaderImageSize)
+    private lazy var headerImageHeightConstraint = headerImageView.heightAnchor.constraint(
+        equalToConstant: scaledHeaderImageSize)
 
     private lazy var headerLabel: UILabel = .build { label in
         label.numberOfLines = 0
@@ -31,7 +35,7 @@ final class PasswordGeneratorHeaderView: UIView, ThemeApplicable {
         super.init(frame: frame)
         self.accessibilityIdentifier = AccessibilityIdentifiers.PasswordGenerator.header
         setupLayout()
-    }
+}
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -44,8 +48,8 @@ final class PasswordGeneratorHeaderView: UIView, ThemeApplicable {
         NSLayoutConstraint.activate([
             headerImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             headerImageView.centerYAnchor.constraint(equalTo: headerLabel.centerYAnchor),
-            headerImageView.widthAnchor.constraint(equalToConstant: scaledHeaderImageSize),
-            headerImageView.heightAnchor.constraint(equalToConstant: scaledHeaderImageSize),
+            headerImageWidthConstraint,
+            headerImageHeightConstraint,
             headerLabel.leadingAnchor.constraint(
                 equalTo: headerImageView.trailingAnchor,
                 constant: UX.headerIconLabelSpacing),
@@ -60,5 +64,12 @@ final class PasswordGeneratorHeaderView: UIView, ThemeApplicable {
     func applyTheme(theme: any Common.Theme) {
         headerImageView.tintColor = theme.colors.iconPrimary
         headerLabel.textColor = theme.colors.textPrimary
+    }
+
+    func applyDynamicFontChange() {
+        scaledHeaderImageSize = UIFontMetrics.default.scaledValue(for: UX.headerImageHeight)
+        headerImageWidthConstraint.constant = scaledHeaderImageSize
+        headerImageHeightConstraint.constant = scaledHeaderImageSize
+        headerLabel.font = FXFontStyles.Bold.body.scaledFont()
     }
 }

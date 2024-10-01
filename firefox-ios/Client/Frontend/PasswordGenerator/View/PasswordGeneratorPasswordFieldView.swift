@@ -15,7 +15,12 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable {
         static let passwordRefreshButtonHeight: CGFloat = 18
     }
 
-    private let scaledRefreshButtonSize = UIFontMetrics.default.scaledValue(for: UX.passwordRefreshButtonHeight)
+    private var scaledRefreshButtonSize = UIFontMetrics.default.scaledValue(for: UX.passwordRefreshButtonHeight)
+
+    private lazy var passwordRefreshButtonWidthConstraint = passwordRefreshButton.widthAnchor.constraint(
+        equalToConstant: scaledRefreshButtonSize)
+    private lazy var passwordRefreshButtonHeightConstraint = passwordRefreshButton.heightAnchor.constraint(
+        equalToConstant: scaledRefreshButtonSize)
 
     private lazy var passwordLabel: UILabel = .build { label in
         label.accessibilityIdentifier = AccessibilityIdentifiers.PasswordGenerator.passwordlabel
@@ -64,8 +69,8 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable {
                 constant: -UX.passwordFieldHorizontalPadding),
             passwordRefreshButton.centerYAnchor.constraint(
                 equalTo: self.centerYAnchor),
-            passwordRefreshButton.widthAnchor.constraint(equalToConstant: scaledRefreshButtonSize),
-            passwordRefreshButton.heightAnchor.constraint(equalToConstant: scaledRefreshButtonSize),
+            passwordRefreshButtonWidthConstraint,
+            passwordRefreshButtonHeightConstraint,
         ])
     }
 
@@ -87,5 +92,12 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable {
         self.layer.borderColor = theme.colors.borderPrimary.cgColor
         passwordLabel.textColor = theme.colors.textPrimary
         passwordRefreshButton.tintColor = theme.colors.iconPrimary
+    }
+
+    func applyDynamicFontChange() {
+        passwordLabel.font = FXFontStyles.Regular.body.scaledFont()
+        scaledRefreshButtonSize = UIFontMetrics.default.scaledValue(for: UX.passwordRefreshButtonHeight)
+        passwordRefreshButtonHeightConstraint.constant = scaledRefreshButtonSize
+        passwordRefreshButtonWidthConstraint.constant = scaledRefreshButtonSize
     }
 }
