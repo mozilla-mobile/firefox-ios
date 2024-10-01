@@ -10474,12 +10474,12 @@
 			path = MessageCard;
 			sourceTree = "<group>";
 		};
-		8A00BD852CAB3FC200680AF9 /* NewHome */ = {
+		8A00BD852CAB3FC200680AF9 /* Homepage Rebuild */ = {
 			isa = PBXGroup;
 			children = (
 				8A00BD862CAB3FE500680AF9 /* NewHomepageViewControllerTests.swift */,
 			);
-			path = NewHome;
+			path = "Homepage Rebuild";
 			sourceTree = "<group>";
 		};
 		8A032951288F27CA00AD9B89 /* Cell */ = {
@@ -12634,7 +12634,7 @@
 				E1AEC173286E0CF500062E29 /* Browser */,
 				8A36BE2A29EDE16700AC1C5C /* ContentContainerTests.swift */,
 				9614BF3F28A53F2000D3F7EA /* ContextualHints */,
-				8A00BD852CAB3FC200680AF9 /* NewHome */,
+				8A00BD852CAB3FC200680AF9 /* Homepage Rebuild */,
 				E1AEC16E286E0CF500062E29 /* Home */,
 				4331D3EE2A059C1C00542BDD /* SyncContentSettingsViewControllerTests.swift */,
 				8AD54D3128FD9E2C0070D4B3 /* Theme */,
