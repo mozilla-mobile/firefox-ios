@@ -636,7 +636,7 @@ extension TelemetryWrapper {
         case crashedLastLaunch = "crashed_last_launch"
         case cpuException = "cpu_exception"
         case hangException = "hang-exception"
-        case tabLossDetected = "tab-loss-detected"
+        case tabLossDetected = "tab_loss_detected"
         case fxSuggestionTelemetryInfo = "fx-suggestion-telemetry-info"
         case fxSuggestionPosition = "fx-suggestion-position"
         case fxSuggestionDidTap = "fx-suggestion-did-tap"
@@ -2012,6 +2012,8 @@ extension TelemetryWrapper {
             }
         case(.information, .error, .app, .crashedLastLaunch, _):
             GleanMetrics.AppErrors.crashedLastLaunch.record()
+        case(.information, .error, .app, .tabLossDetected, _):
+            GleanMetrics.AppErrors.tabLossDetected.record()
         case(.information, .error, .app, .cpuException, let extras):
             if let quantity = extras?[EventExtraKey.size.rawValue] as? Int32 {
                 let properties = GleanMetrics.AppErrors.CpuExceptionExtra(size: quantity)
