@@ -1562,7 +1562,7 @@ class TelemetryWrapperTests: XCTestCase {
     // MARK: - Toolbar
 
     func testRecordToolbarWhenQrCodeTappedThenGleanIsCalled() {
-        let extras = [TelemetryWrapper.EventExtraKey.isPrivate.rawValue: true]
+        let extras = [TelemetryWrapper.EventExtraKey.Toolbar.isPrivate.rawValue: true]
         TelemetryWrapper.gleanRecordEvent(category: .action,
                                           method: .tap,
                                           object: .toolbar,
@@ -1572,7 +1572,7 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     func testRecordToolbarWhenClearSearchTappedThenGleanIsCalled() {
-        let extras = [TelemetryWrapper.EventExtraKey.isPrivate.rawValue: true]
+        let extras = [TelemetryWrapper.EventExtraKey.Toolbar.isPrivate.rawValue: true]
         TelemetryWrapper.gleanRecordEvent(category: .action,
                                           method: .tap,
                                           object: .toolbar,
@@ -1582,7 +1582,7 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     func testRecordToolbarWhenShareButtonTappedThenGleanIsCalled() {
-        let extras = [TelemetryWrapper.EventExtraKey.isPrivate.rawValue: true]
+        let extras = [TelemetryWrapper.EventExtraKey.Toolbar.isPrivate.rawValue: true]
         TelemetryWrapper.gleanRecordEvent(category: .action,
                                           method: .tap,
                                           object: .toolbar,
@@ -1591,8 +1591,8 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.shareButtonTapped)
     }
 
-    func testRecordToolbarWhenRefreshButtonTappedThenGleanIsCalled() {
-        let extras = [TelemetryWrapper.EventExtraKey.isPrivate.rawValue: true]
+    func testRecordToolbarWhenReaderModeTappedThenGleanIsCalled() {
+        let extras = [TelemetryWrapper.EventExtraKey.Toolbar.isPrivate.rawValue: true]
         TelemetryWrapper.gleanRecordEvent(category: .action,
                                           method: .tap,
                                           object: .toolbar,
@@ -1602,7 +1602,7 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     func testRecordToolbarWhenSiteInfoTappedThenGleanIsCalled() {
-        let extras = [TelemetryWrapper.EventExtraKey.isPrivate.rawValue: true]
+        let extras = [TelemetryWrapper.EventExtraKey.Toolbar.isPrivate.rawValue: true]
         TelemetryWrapper.gleanRecordEvent(category: .action,
                                           method: .tap,
                                           object: .toolbar,
@@ -1612,7 +1612,7 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     func testRecordToolbarWhenBackButtonTappedThenGleanIsCalled() {
-        let extras = [TelemetryWrapper.EventExtraKey.isPrivate.rawValue: true]
+        let extras = [TelemetryWrapper.EventExtraKey.Toolbar.isPrivate.rawValue: true]
         TelemetryWrapper.gleanRecordEvent(category: .action,
                                           method: .tap,
                                           object: .toolbar,
@@ -1622,7 +1622,7 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     func testRecordToolbarWhenForwardButtonTappedThenGleanIsCalled() {
-        let extras = [TelemetryWrapper.EventExtraKey.isPrivate.rawValue: true]
+        let extras = [TelemetryWrapper.EventExtraKey.Toolbar.isPrivate.rawValue: true]
         TelemetryWrapper.gleanRecordEvent(category: .action,
                                           method: .tap,
                                           object: .toolbar,
@@ -1632,7 +1632,7 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     func testRecordToolbarWhenBackLongPressedThenGleanIsCalled() {
-        let extras = [TelemetryWrapper.EventExtraKey.isPrivate.rawValue: true]
+        let extras = [TelemetryWrapper.EventExtraKey.Toolbar.isPrivate.rawValue: true]
         TelemetryWrapper.gleanRecordEvent(category: .action,
                                           method: .tap,
                                           object: .toolbar,
@@ -1642,7 +1642,7 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     func testRecordToolbarWhenForwardLongPressedThenGleanIsCalled() {
-        let extras = [TelemetryWrapper.EventExtraKey.isPrivate.rawValue: true]
+        let extras = [TelemetryWrapper.EventExtraKey.Toolbar.isPrivate.rawValue: true]
         TelemetryWrapper.gleanRecordEvent(category: .action,
                                           method: .tap,
                                           object: .toolbar,
@@ -1652,7 +1652,7 @@ class TelemetryWrapperTests: XCTestCase {
     }
 
     func testRecordToolbarWhenHomeButtonTappedThenGleanIsCalled() {
-        let extras = [TelemetryWrapper.EventExtraKey.isPrivate.rawValue: true]
+        let extras = [TelemetryWrapper.EventExtraKey.Toolbar.isPrivate.rawValue: true]
         TelemetryWrapper.gleanRecordEvent(category: .action,
                                           method: .tap,
                                           object: .toolbar,

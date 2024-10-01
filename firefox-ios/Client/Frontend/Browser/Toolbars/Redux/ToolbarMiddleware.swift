@@ -375,7 +375,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         else { return }
 
         let extras = [
-            TelemetryWrapper.EventExtraKey.isPrivate.rawValue: toolbarState.isPrivateMode
+            TelemetryWrapper.EventExtraKey.Toolbar.isPrivate.rawValue: toolbarState.isPrivateMode
         ]
 
         TelemetryWrapper.recordEvent(category: .action,
