@@ -13,6 +13,9 @@ protocol LocationViewDelegate: AnyObject {
     /// - Parameter text: The text that was entered.
     func locationViewDidEnterText(_ text: String)
 
+    /// Called when the user clears the text using the clear button in the location view.
+    func locationViewDidClearText()
+
     /// Called when the user begins editing text in the location view.
     ///
     /// - Parameters:

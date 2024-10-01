@@ -87,6 +87,9 @@ final class ToolbarMiddleware: FeatureFlaggable {
             guard let scrollOffset = action.scrollOffset else { return }
             updateTopAddressBorderPosition(scrollOffset: scrollOffset, windowUUID: action.windowUUID, state: state)
 
+        case ToolbarMiddlewareActionType.didClearSearch:
+            recordTelemetry(event: .clearSearchTap, state: state, windowUUID: action.windowUUID)
+
         default:
             break
         }
@@ -124,7 +127,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
                                               actionType: GeneralBrowserActionType.addNewTab)
             store.dispatch(action)
         case .qrCode:
-            sendTelemetry(eventName: .qrCodeTap, state: state, windowUUID: action.windowUUID)
+            recordTelemetry(event: .qrCodeTap, state: state, windowUUID: action.windowUUID)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showQRcodeReader)
             store.dispatch(action)
@@ -355,7 +358,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         return isFeltPrivacyUIEnabled && isFeltPrivacyDeletionEnabled
     }
 
-    private func sendTelemetry(eventName: TelemetryWrapper.EventValue, state: AppState, windowUUID: WindowUUID) {
+    private func recordTelemetry(event: TelemetryWrapper.EventValue, state: AppState, windowUUID: WindowUUID) {
         guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
         else { return }
 
@@ -366,7 +369,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .tap,
                                      object: .toolbar,
-                                     value: eventName,
+                                     value: event,
                                      extras: extras)
     }
 }

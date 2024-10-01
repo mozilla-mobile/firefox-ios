@@ -645,6 +645,7 @@ extension TelemetryWrapper {
         case webviewFailProvisional = "webview-fail-provisional"
         case webviewShowErrorPage = "webview-show-error-page"
         case qrCodeTap = "qr-code-tap"
+        case clearSearchTap = "clear-search-tap"
     }
 
     public enum EventExtraKey: String, CustomStringConvertible {
@@ -2123,6 +2124,12 @@ extension TelemetryWrapper {
 
             GleanMetrics.Toolbar.qrScanTapped.record(
                 GleanMetrics.Toolbar.QrScanTappedExtra(tabMode: isPrivate ? "Private" : "Normal")
+            )
+        case (.action, .tap, .toolbar, .clearSearchTap, let extras):
+            guard let isPrivate = extras?[EventExtraKey.isPrivate.rawValue] as? Bool else { return }
+
+            GleanMetrics.Toolbar.clearSearchTapped.record(
+                GleanMetrics.Toolbar.ClearSearchTappedExtra(tabMode: isPrivate ? "Private" : "Normal")
             )
 
         // MARK: - Uninstrumented
