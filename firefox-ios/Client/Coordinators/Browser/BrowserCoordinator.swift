@@ -30,6 +30,7 @@ class BrowserCoordinator: BaseCoordinator,
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
+    var newHomepageViewController: NewHomepageViewController?
     var privateViewController: PrivateHomepageViewController?
     var errorViewController: NativeErrorPageViewController?
 
@@ -120,6 +121,15 @@ class BrowserCoordinator: BaseCoordinator,
         homepageController.scrollToTop()
         // We currently don't support full page screenshot of the homepage
         screenshotService.screenshotableView = nil
+    }
+
+    func showNewHomepage() {
+        let homepageController = NewHomepageViewController(windowUUID: windowUUID)
+        guard browserViewController.embedContent(homepageController) else {
+            logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
+            return
+        }
+        self.newHomepageViewController = homepageController
     }
 
     func showPrivateHomepage(overlayManager: OverlayModeManager) {
