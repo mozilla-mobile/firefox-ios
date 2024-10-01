@@ -81,6 +81,7 @@ class BlockedTrackersTableViewController: UIViewController,
     private func setupView() {
         setupNavigationView()
         setupTableView()
+        setupHeaderViewActions()
         NSLayoutConstraint.activate(constraints)
     }
 
@@ -181,6 +182,16 @@ class BlockedTrackersTableViewController: UIViewController,
     @objc
     func closeButtonTapped() {
         self.dismiss(animated: true)
+    }
+
+    // MARK: Header Actions
+    private func setupHeaderViewActions() {
+        navigationView.backToMainMenuCallback = { [weak self] in
+            self?.navigationController?.popToRootViewController(animated: true)
+        }
+        navigationView.dismissMenuCallback = { [weak self] in
+            self?.navigationController?.dismissVC()
+        }
     }
 
     // MARK: Notifications
