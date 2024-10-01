@@ -119,6 +119,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
     private func handleToolbarButtonTapActions(action: ToolbarMiddlewareAction, state: AppState) {
         switch action.buttonType {
         case .home:
+            recordTelemetry(event: .toolbarHomeButtonTap, state: state, windowUUID: action.windowUUID)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.goToHomepage)
             store.dispatch(action)

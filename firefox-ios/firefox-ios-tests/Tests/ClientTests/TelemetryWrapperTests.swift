@@ -1650,6 +1650,16 @@ class TelemetryWrapperTests: XCTestCase {
                                           extras: extras)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.forwardLongPress)
     }
+
+    func testRecordToolbarWhenHomeButtonTappedThenGleanIsCalled() {
+        let extras = [TelemetryWrapper.EventExtraKey.isPrivate.rawValue: true]
+        TelemetryWrapper.gleanRecordEvent(category: .action,
+                                          method: .tap,
+                                          object: .toolbar,
+                                          value: .toolbarHomeButtonTap,
+                                          extras: extras)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.homeTapped)
+    }
 }
 
 // MARK: - Helper functions to test telemetry
