@@ -6,7 +6,7 @@ import XCTest
 import Foundation
 
 final class BrowsingTests: BaseTestCase {
-    //Private functions
+    // Private functions
     private func setSystemTheme(theme: String) {
         navigator.goto(DisplaySettings)
         mozWaitForElementToExist(app.switches["SystemThemeSwitchValue"])
@@ -42,7 +42,7 @@ final class BrowsingTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
     }
 
-    private func setTabBar(position: String){
+    private func setTabBar(position: String) {
         navigator.nowAt(NewTabScreen)
         navigator.goto(ToolbarSettings)
         if position == "Top" {
