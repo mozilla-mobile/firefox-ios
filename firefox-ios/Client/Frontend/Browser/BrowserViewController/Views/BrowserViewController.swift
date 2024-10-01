@@ -133,7 +133,7 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.toolbarNavigationHint, checking: .buildOnly)
     }
 
-    var isNativeErrorPageEnabled: Bool {
+    private var isNativeErrorPageEnabled: Bool {
         return featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly)
     }
 
