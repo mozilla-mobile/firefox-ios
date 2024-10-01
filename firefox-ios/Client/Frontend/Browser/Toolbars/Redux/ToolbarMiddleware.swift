@@ -124,6 +124,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
                                               actionType: GeneralBrowserActionType.addNewTab)
             store.dispatch(action)
         case .qrCode:
+            sendTelemetry(eventName: .qrCodeTap, state: state, windowUUID: action.windowUUID)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showQRcodeReader)
             store.dispatch(action)
@@ -352,5 +353,20 @@ final class ToolbarMiddleware: FeatureFlaggable {
         let isFeltPrivacyDeletionEnabled = featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildOnly)
 
         return isFeltPrivacyUIEnabled && isFeltPrivacyDeletionEnabled
+    }
+
+    private func sendTelemetry(eventName: TelemetryWrapper.EventValue, state: AppState, windowUUID: WindowUUID) {
+        guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        else { return }
+
+        let extras = [
+            TelemetryWrapper.EventExtraKey.isPrivate.rawValue: toolbarState.isPrivateMode
+        ]
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .toolbar,
+                                     value: eventName,
+                                     extras: extras)
     }
 }

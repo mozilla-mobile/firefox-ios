@@ -1558,6 +1558,18 @@ class TelemetryWrapperTests: XCTestCase {
                                           extras: extra)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Webview.showErrorPage)
     }
+
+    // MARK: - Toolbar
+
+    func testRecordToolbarWhenQrCodeTappedThenGleanIsCalled() {
+        let extras = [TelemetryWrapper.EventExtraKey.isPrivate.rawValue: true]
+        TelemetryWrapper.gleanRecordEvent(category: .action,
+                                          method: .tap,
+                                          object: .toolbar,
+                                          value: .qrCodeTap,
+                                          extras: extras)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.qrScanTapped)
+    }
 }
 
 // MARK: - Helper functions to test telemetry

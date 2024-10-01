@@ -539,6 +539,7 @@ extension TelemetryWrapper {
         case urlbarImpression = "urlbar-impression"
         case urlbarEngagement = "urlbar-engagement"
         case urlbarAbandonment = "urlbar-abandonment"
+        case toolbar = "toolbar"
     }
 
     public enum EventValue: String {
@@ -643,6 +644,7 @@ extension TelemetryWrapper {
         case webviewFail = "webview-fail"
         case webviewFailProvisional = "webview-fail-provisional"
         case webviewShowErrorPage = "webview-show-error-page"
+        case qrCodeTap = "qr-code-tap"
     }
 
     public enum EventExtraKey: String, CustomStringConvertible {
@@ -2114,6 +2116,14 @@ extension TelemetryWrapper {
                 GleanMetrics.FxSuggest.advertiser.set("wikipedia")
             }
             GleanMetrics.Pings.shared.fxSuggest.submit()
+
+        // MARK: - Toolbar
+        case (.action, .tap, .toolbar, .qrCodeTap, let extras):
+            guard let isPrivate = extras?[EventExtraKey.isPrivate.rawValue] as? Bool else { return }
+
+            GleanMetrics.Toolbar.qrScanTapped.record(
+                GleanMetrics.Toolbar.QrScanTappedExtra(tabMode: isPrivate ? "Private" : "Normal")
+            )
 
         // MARK: - Uninstrumented
         default:
