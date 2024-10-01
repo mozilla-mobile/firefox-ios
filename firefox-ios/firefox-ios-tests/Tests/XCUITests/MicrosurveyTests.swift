@@ -14,7 +14,9 @@ final class MicrosurveyTests: BaseTestCase {
     }
 
     func testShowMicrosurveyPromptFromHomepageTrigger() {
-        generateTriggerForMicrosurvey()
+        // Disabled due to issue in toggling between regular and private modes.
+        // https://github.com/mozilla-mobile/firefox-ios/issues/22295
+        // generateTriggerForMicrosurvey()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton])
         mozWaitForElementToExist(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.firefoxLogo])
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton])
@@ -28,7 +30,9 @@ final class MicrosurveyTests: BaseTestCase {
         navigator.goto(ToolbarSettings)
         navigator.performAction(Action.SelectToolbarBottom)
         navigator.goto(HomePanelsScreen)
-        generateTriggerForMicrosurvey()
+        // Disabled due to issue in toggling between regular and private modes.
+        // https://github.com/mozilla-mobile/firefox-ios/issues/22295
+        // generateTriggerForMicrosurvey()
         XCTAssertFalse(app.otherElements[AccessibilityIdentifiers.Toolbar.urlBarBorder].exists)
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton].exists)
         XCTAssertTrue(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.firefoxLogo].exists)
@@ -38,7 +42,9 @@ final class MicrosurveyTests: BaseTestCase {
     }
 
     func testCloseButtonDismissesMicrosurveyPrompt() {
-        generateTriggerForMicrosurvey()
+        // Disabled due to issue in toggling between regular and private modes.
+        // https://github.com/mozilla-mobile/firefox-ios/issues/22295
+        // generateTriggerForMicrosurvey()
         app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].tap()
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton])
         mozWaitForElementToNotExist(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.firefoxLogo])
@@ -46,7 +52,9 @@ final class MicrosurveyTests: BaseTestCase {
     }
 
     func testShowMicrosurvey() {
-        generateTriggerForMicrosurvey()
+        // Disabled due to issue in toggling between regular and private modes.
+        // https://github.com/mozilla-mobile/firefox-ios/issues/22295
+        // generateTriggerForMicrosurvey()
         let continueButton = app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton]
         continueButton.tap()
 
@@ -66,7 +74,9 @@ final class MicrosurveyTests: BaseTestCase {
     }
 
     func testCloseButtonDismissesSurveyAndPrompt() {
-        generateTriggerForMicrosurvey()
+        // Disabled due to issue in toggling between regular and private modes.
+        // https://github.com/mozilla-mobile/firefox-ios/issues/22295
+        // generateTriggerForMicrosurvey()
         let continueButton = app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton]
         continueButton.tap()
 
