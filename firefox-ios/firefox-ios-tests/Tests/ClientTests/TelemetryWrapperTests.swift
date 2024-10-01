@@ -1566,7 +1566,7 @@ class TelemetryWrapperTests: XCTestCase {
         TelemetryWrapper.gleanRecordEvent(category: .action,
                                           method: .tap,
                                           object: .toolbar,
-                                          value: .qrCodeTap,
+                                          value: .toolbarQrCodeTap,
                                           extras: extras)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.qrScanTapped)
     }
@@ -1576,7 +1576,7 @@ class TelemetryWrapperTests: XCTestCase {
         TelemetryWrapper.gleanRecordEvent(category: .action,
                                           method: .tap,
                                           object: .toolbar,
-                                          value: .clearSearchTap,
+                                          value: .toolbarClearSearchTap,
                                           extras: extras)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.clearSearchTapped)
     }

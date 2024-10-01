@@ -88,7 +88,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
             updateTopAddressBorderPosition(scrollOffset: scrollOffset, windowUUID: action.windowUUID, state: state)
 
         case ToolbarMiddlewareActionType.didClearSearch:
-            recordTelemetry(event: .clearSearchTap, state: state, windowUUID: action.windowUUID)
+            recordTelemetry(event: .toolbarClearSearchTap, state: state, windowUUID: action.windowUUID)
 
         default:
             break
@@ -127,7 +127,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
                                               actionType: GeneralBrowserActionType.addNewTab)
             store.dispatch(action)
         case .qrCode:
-            recordTelemetry(event: .qrCodeTap, state: state, windowUUID: action.windowUUID)
+            recordTelemetry(event: .toolbarQrCodeTap, state: state, windowUUID: action.windowUUID)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showQRcodeReader)
             store.dispatch(action)
