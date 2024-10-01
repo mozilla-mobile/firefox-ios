@@ -97,6 +97,28 @@ class MainMenuViewController: UIViewController,
         unsubscribeFromRedux()
     }
 
+    // MARK: Notifications
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DynamicFontChanged:
+            adjustLayout()
+        default: break
+        }
+    }
+
+    // MARK: View Transitions
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        adjustLayout()
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: { _ in
+            self.adjustLayout()
+        }, completion: nil)
+    }
+
     // MARK: - UI setup
     private func setupTableView() {
         reloadTableView(with: menuState.menuElements)
@@ -162,9 +184,6 @@ class MainMenuViewController: UIViewController,
         menuContent.applyTheme(theme: theme)
     }
 
-    // MARK: - Notifications
-    func handleNotifications(_ notification: Notification) { }
-
     // MARK: - A11y
     // In iOS 15 modals with a large detent read content underneath the modal
     // in voice over. To prevent this we manually turn this off.
@@ -201,6 +220,10 @@ class MainMenuViewController: UIViewController,
             mainButtonA11yId: AccessibilityIdentifiers.MainMenu.HeaderView.mainButton,
             menuA11yId: AccessibilityIdentifiers.MainMenu.mainMenu,
             menuA11yLabel: .MainMenu.TabsSection.AccessibilityLabels.MainMenu)
+    }
+
+    private func adjustLayout() {
+        menuContent.accountHeaderView.adjustLayout()
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate

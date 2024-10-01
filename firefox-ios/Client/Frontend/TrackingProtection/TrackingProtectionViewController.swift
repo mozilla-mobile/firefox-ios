@@ -358,7 +358,6 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         headerContainer.setupDetails(subtitle: viewModel.websiteTitle,
                                      title: viewModel.displayTitle,
                                      icon: headerIcon)
-        headerContainer.setIcon()
 
         connectionDetailsHeaderView.setupDetails(title: viewModel.connectionDetailsTitle,
                                                  status: viewModel.connectionDetailsHeader,
@@ -420,7 +419,7 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
     }
 
     private func adjustLayout() {
-        headerContainer.adjustLayout()
+        headerContainer.adjustLayout(isWebsiteIcon: true)
         trackersView.adjustLayout()
         connectionStatusView.adjustLayout()
 

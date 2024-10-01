@@ -69,6 +69,28 @@ class MainMenuDetailViewController: UIViewController,
         applyTheme()
     }
 
+    // MARK: Notifications
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DynamicFontChanged:
+            adjustLayout()
+        default: break
+        }
+    }
+
+    // MARK: View Transitions
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        adjustLayout()
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: { _ in
+            self.adjustLayout()
+        }, completion: nil)
+    }
+
     // MARK: - UX related
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
@@ -95,6 +117,10 @@ class MainMenuDetailViewController: UIViewController,
             backButtonA11yId: AccessibilityIdentifiers.MainMenu.NavigationHeaderView.backButton)
     }
 
+    private func adjustLayout() {
+        submenuContent.detailHeaderView.adjustLayout()
+    }
+
     private func setupTableView() {
         reloadTableView(with: submenuData)
     }
@@ -103,7 +129,4 @@ class MainMenuDetailViewController: UIViewController,
     func reloadTableView(with data: [MenuSection]) {
         submenuContent.reloadTableView(with: data)
     }
-
-    // MARK: - Notifications
-    func handleNotifications(_ notification: Notification) { }
 }

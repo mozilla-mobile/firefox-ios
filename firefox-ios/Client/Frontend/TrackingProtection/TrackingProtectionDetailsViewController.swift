@@ -201,6 +201,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
             UIFontMetrics.default.scaledValue(for: iconSize), 2 * iconSize
         )
 
+        headerView.adjustLayout()
         view.setNeedsLayout()
         view.layoutIfNeeded()
     }
