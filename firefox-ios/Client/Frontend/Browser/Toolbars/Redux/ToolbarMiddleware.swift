@@ -182,6 +182,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
             store.dispatch(action)
 
         case .share:
+            recordTelemetry(event: .toolbarShareButtonTap, state: state, windowUUID: action.windowUUID)
             let action = GeneralBrowserAction(buttonTapped: action.buttonTapped,
                                               windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showShare)
