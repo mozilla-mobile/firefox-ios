@@ -102,7 +102,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         case .tap:
             handleToolbarButtonTapActions(action: action, state: state)
         case .longPress:
-            handleToolbarButtonLongPressActions(action: action)
+            handleToolbarButtonLongPressActions(action: action, state: state)
         }
     }
 
@@ -206,9 +206,15 @@ final class ToolbarMiddleware: FeatureFlaggable {
         }
     }
 
-    private func handleToolbarButtonLongPressActions(action: ToolbarMiddlewareAction) {
+    private func handleToolbarButtonLongPressActions(action: ToolbarMiddlewareAction, state: AppState) {
         switch action.buttonType {
-        case .back, .forward:
+        case .back:
+            recordTelemetry(event: .toolbarBackLongPress, state: state, windowUUID: action.windowUUID)
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.showBackForwardList)
+            store.dispatch(action)
+        case .forward:
+            recordTelemetry(event: .toolbarForwardLongPress, state: state, windowUUID: action.windowUUID)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showBackForwardList)
             store.dispatch(action)

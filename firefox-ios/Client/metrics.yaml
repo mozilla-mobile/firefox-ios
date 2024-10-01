@@ -4735,6 +4735,38 @@ toolbar:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
+  back_long_press:
+    type: event
+    description: |
+        Counts the number of times a user long presses the back button
+        in the address or navigation toolbar
+    extra_keys:
+      tab_mode:
+        description: The current tab mode
+        type: string
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/???
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-01-01"
+  forward_long_press:
+    type: event
+    description: |
+        Counts the number of times a user long presses the forward button
+        in the address or navigation toolbar
+    extra_keys:
+      tab_mode:
+        description: The current tab mode
+        type: string
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/???
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-01-01"
 
 # Share sheet specific metrics
 
