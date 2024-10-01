@@ -1682,6 +1682,16 @@ class TelemetryWrapperTests: XCTestCase {
                                           extras: extras)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.oneTapNewTabButtonTapped)
     }
+
+    func testRecordToolbarWhenSearchTappedThenGleanIsCalled() {
+        let extras = [TelemetryWrapper.EventExtraKey.Toolbar.isPrivate.rawValue: true]
+        TelemetryWrapper.gleanRecordEvent(category: .action,
+                                          method: .tap,
+                                          object: .toolbar,
+                                          value: .toolbarSearchButtonTap,
+                                          extras: extras)
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.searchButtonTapped)
+    }
 }
 
 // MARK: - Helper functions to test telemetry

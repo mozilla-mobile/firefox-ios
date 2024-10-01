@@ -196,7 +196,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
             store.dispatch(action)
 
         case .search:
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .startSearchButton)
+            recordTelemetry(event: .toolbarSearchButtonTap, state: state, windowUUID: action.windowUUID)
             let action = ToolbarAction(windowUUID: action.windowUUID, actionType: ToolbarActionType.didStartEditingUrl)
             store.dispatch(action)
 
