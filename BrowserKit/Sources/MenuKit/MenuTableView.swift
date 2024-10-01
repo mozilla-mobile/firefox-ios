@@ -14,7 +14,7 @@ class MenuTableView: UIView,
                      UITableViewDelegate,
                      UITableViewDataSource, ThemeApplicable {
     struct UX {
-        static let topPadding: CGFloat = 1
+        static let topPadding: CGFloat = 10
     }
 
     private var tableView: UITableView
