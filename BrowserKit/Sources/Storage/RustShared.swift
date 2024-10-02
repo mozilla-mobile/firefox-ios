@@ -8,7 +8,7 @@ import Shared
 
 public class RustShared {
     public static func moveDatabaseFileToBackupLocation(databasePath: String,
-                                                 logger: Logger = DefaultLogger.shared) {
+                                                        logger: Logger = DefaultLogger.shared) {
         let databaseURL = URL(fileURLWithPath: databasePath)
         let databaseContainingDirURL = databaseURL.deletingLastPathComponent()
         let baseFilename = databaseURL.lastPathComponent
