@@ -13,7 +13,7 @@ final class SearchEngineView: UIView, ThemeApplicable {
     }
 
     private weak var delegate: LocationViewDelegate? // TODO Needed for FXIOS-10191
-    private var isUnifiedSearchEnabled: Bool = false
+    private var isUnifiedSearchEnabled = false
 
     private lazy var searchEngineImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
