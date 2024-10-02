@@ -7,9 +7,9 @@ on:
 
 env:
     browser: focus-ios
-    xcode_version: 15.4
-    ios_version: 17.5
-    ios_simulator_default: iPhone 15
+    xcode_version: 16.0
+    ios_version: 18.0
+    ios_simulator_default: iPhone 16
     xcodebuild_scheme: Focus
     xcodebuild_target: XCUITest
     test_results_directory: /Users/runner/tmp
@@ -55,7 +55,7 @@ jobs:
             fail-fast: false
             matrix:
                 xcodebuild_test_plan: ['SmokeTest'] # , 'FullFunctionalTests']
-                ios_simulator: [ 'iPhone 15', 'iPad Pro (12.9-inch) (6th generation)']
+                ios_simulator: [ 'iPhone 16', 'iPad Pro (12.9-inch) (6th generation)']
         steps:
             - name: Check out source code
               uses: actions/checkout@v4.1.7
