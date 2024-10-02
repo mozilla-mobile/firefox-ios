@@ -55,13 +55,6 @@ class MainMenuDetailsViewController: UIViewController,
         setupView()
         setupCallbacks()
         setupAccessibilityIdentifiers()
-
-        store.dispatch(
-            MainMenuAction(
-                windowUUID: self.windowUUID,
-                actionType: MainMenuDetailsActionType.viewDidLoad
-            )
-        )
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -135,7 +128,7 @@ class MainMenuDetailsViewController: UIViewController,
     }
 
     private func refreshContent() {
-        submenuContent.setViews(with: "test", and: .KeyboardShortcuts.Back)
+        submenuContent.setViews(with: submenuState.title, and: .KeyboardShortcuts.Back)
         reloadTableView(with: submenuState.menuElements)
     }
 

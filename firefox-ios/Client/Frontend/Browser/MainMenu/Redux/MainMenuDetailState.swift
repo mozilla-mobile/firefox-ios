@@ -12,10 +12,13 @@ struct MainMenuDetailsState: ScreenState, Equatable {
     var menuElements: [MenuSection]
     var shouldDismiss: Bool
 
-//    typealias Titles = String.MainMenu.ToolsSection
-//    let title = submenuType == .tools ? Titles.Tools : Titles.Save
+    var title: String {
+        typealias Titles = String.MainMenu.ToolsSection
+        return submenuType == .tools ? Titles.Tools : Titles.Save
+    }
 
     var navigationDestination: MainMenuNavigationDestination?
+    var submenuType: MainMenuDetailsViewType?
 
     private let menuConfigurator = MainMenuConfigurationUtility()
 
@@ -32,6 +35,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
         self.init(
             windowUUID: currentState.windowUUID,
             menuElements: currentState.menuElements,
+            submenuType: currentState.submenuType,
             navigationDestination: currentState.navigationDestination,
             shouldDismiss: currentState.shouldDismiss
         )
@@ -41,6 +45,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
         self.init(
             windowUUID: windowUUID,
             menuElements: [],
+            submenuType: nil,
             navigationDestination: nil,
             shouldDismiss: false
         )
@@ -49,11 +54,13 @@ struct MainMenuDetailsState: ScreenState, Equatable {
     private init(
         windowUUID: WindowUUID,
         menuElements: [MenuSection],
+        submenuType: MainMenuDetailsViewType?,
         navigationDestination: MainMenuNavigationDestination? = nil,
         shouldDismiss: Bool = false
     ) {
         self.windowUUID = windowUUID
         self.menuElements = menuElements
+        self.submenuType = submenuType
         self.navigationDestination = navigationDestination
         self.shouldDismiss = shouldDismiss
     }
@@ -62,11 +69,13 @@ struct MainMenuDetailsState: ScreenState, Equatable {
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
 
         switch action.actionType {
-        case MainMenuDetailsActionType.viewDidLoad:
-            guard let menuState = store.state.screenState(
-                MainMenuState.self,
-                for: .mainMenu,
-                window: action.windowUUID),
+        case ScreenActionType.showScreen:
+            guard let screenAction = action as? ScreenAction,
+                  screenAction.screen == .mainMenuDetails,
+                  let menuState = store.state.screenState(
+                    MainMenuState.self,
+                    for: .mainMenu,
+                    window: action.windowUUID),
                   let currentTabInfo = menuState.currentTabInfo,
                   let currentSubmenu = menuState.currentSubmenuView
             else { return state }
@@ -77,18 +86,21 @@ struct MainMenuDetailsState: ScreenState, Equatable {
                     with: currentTabInfo,
                     for: currentSubmenu,
                     and: action.windowUUID
-                )
+                ),
+                submenuType: currentSubmenu
             )
         case MainMenuDetailsActionType.dismissView:
             return MainMenuDetailsState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
+                submenuType: state.submenuType,
                 shouldDismiss: true
             )
         default:
             return MainMenuDetailsState(
                 windowUUID: state.windowUUID,
-                menuElements: state.menuElements
+                menuElements: state.menuElements,
+                submenuType: state.submenuType
             )
         }
     }
