@@ -302,9 +302,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
 
          return {
              // If calling again, invalidate the last timer.
-             if let timer = timer {
-                 timer.invalidate()
-             }
+             if let timer { timer.invalidate() }
              timer = Timer(
                  timeInterval: delay,
                  target: callback,

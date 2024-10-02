@@ -8,6 +8,9 @@ import Foundation
 /// Categories are sorted in alphabetical order.
 /// Do not add new categories unless discussing with the team beforehand.
 public enum LoggerCategory: String {
+    /// Related to content (trackers, advertisements) blocking
+    case adblock
+
     /// Related to address and credit card autofill
     case autofill
 

@@ -37,7 +37,6 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     }
 
     override func tearDown() {
-        super.tearDown()
         self.mockRouter = nil
         self.profile = nil
         self.overlayModeManager = nil
@@ -46,7 +45,8 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         self.applicationHelper = nil
         self.glean = nil
         self.scrollDelegate = nil
-        AppContainer.shared.reset()
+        DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testInitialState() {
@@ -125,6 +125,28 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
                              statusBarScrollDelegate: scrollDelegate,
                              overlayManager: overlayModeManager)
         let secondHomepage = subject.homepageViewController
+        XCTAssertEqual(firstHomepage, secondHomepage)
+    }
+
+    // MARK: - Show new homepage
+
+    func testShowNewHomepage_setsProperViewController() {
+        let subject = createSubject()
+        subject.showNewHomepage()
+
+        XCTAssertNotNil(subject.newHomepageViewController)
+        XCTAssertNil(subject.webviewController)
+        XCTAssertNil(subject.privateViewController)
+    }
+
+    func testShowNewHomepage_hasSameInstance() {
+        let subject = createSubject()
+        subject.showNewHomepage()
+        let firstHomepage = subject.newHomepageViewController
+        XCTAssertNotNil(subject.newHomepageViewController)
+
+        subject.showNewHomepage()
+        let secondHomepage = subject.newHomepageViewController
         XCTAssertEqual(firstHomepage, secondHomepage)
     }
 

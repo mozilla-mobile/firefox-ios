@@ -22,6 +22,7 @@ include:
   - nimbus-features/firefoxSuggestFeature.yaml
   - nimbus-features/generalFeatures.yaml
   - nimbus-features/gleanServerKnobs.yaml
+  - nimbus-features/homepageRebuildFeature.yaml
   - nimbus-features/homescreenFeature.yaml
   - nimbus-features/menuRefactorFeature.yaml
   - nimbus-features/messagingFeature.yaml

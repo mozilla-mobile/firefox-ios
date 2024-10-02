@@ -139,3 +139,6 @@
 /* Toast message confirming that an address has been successfully updated. */
 "Addresses.Toast.AddressUpdatedConfirmation.v129" = "Talɣut n tansa tettwaleqqem";
 
+/* Toast message confirming that an address has been successfully updated. */
+"Addresses.Toast.AddressUpdatedConfirmation.v132.v2" = "Tansa tettwasekles";
+

@@ -9,6 +9,7 @@ enum ContentType {
     case homepage
     case privateHomepage
     case nativeErrorPage
+    case newHomepage
 }
 
 protocol ContentContainable: UIViewController {
@@ -32,6 +33,10 @@ class ContentContainer: UIView {
         return type == .privateHomepage
     }
 
+    var hasNewHomepage: Bool {
+        return type == .newHomepage
+    }
+
     var hasWebView: Bool {
         return type == .webview
     }
@@ -50,6 +55,8 @@ class ContentContainer: UIView {
             return !(content is HomepageViewController)
         case .nativeErrorPage:
             return !(content is NativeErrorPageViewController)
+        case .newHomepage:
+            return !(content is NewHomepageViewController)
         case .privateHomepage:
             return !(content is PrivateHomepageViewController)
         case .webview:
@@ -82,7 +89,7 @@ class ContentContainer: UIView {
         // Only remove previous content when it's the homepage or native error page.
         // We're not removing the webview controller for now since if it's not loaded, the
         // webview doesn't layout it's WKCompositingView which result in black screen
-        guard hasHomepage || hasPrivateHomepage || hasNativeErrorPage else { return }
+        guard !hasWebView else { return }
         contentController?.willMove(toParent: nil)
         contentController?.view.removeFromSuperview()
         contentController?.removeFromParent()

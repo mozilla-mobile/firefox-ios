@@ -34,6 +34,9 @@
 /* On the main menu, the title for the action that will take the user to a What's New in Firefox popup. Placeholder is for the app name. */
 "MainMenu.SettingsSection.WhatsNew.Title.v131" = "%@’taki yenilikler";
 
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Add to Homescreen tool. */
+"MainMenu.Submenus.Save.AddToHomeScreen.Subtitle.v131" = "Ana ekran";
+
 /* On the main menu, in the Save submenu, the title for the menu component that allows a user to add a website to the home screen. */
 "MainMenu.Submenus.Save.AddToHomeScreen.Title.v131" = "Ana ekrana ekle";
 

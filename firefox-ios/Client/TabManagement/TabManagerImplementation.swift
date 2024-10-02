@@ -323,6 +323,9 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
     /// Note: it is safe to call this with `tab` and `previous` as the same tab, for use in the case
     /// where the index of the tab has changed (such as after deletion).
     override func selectTab(_ tab: Tab?, previous: Tab? = nil) {
+        // Fallback everywhere to selectedTab if no previous tab
+        let previous = previous ?? selectedTab
+
         guard let tab = tab,
               let tabUUID = UUID(uuidString: tab.tabUUID)
         else {
@@ -343,7 +346,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
 
         willSelectTab(url)
 
-        let isPrivateBrowsing = (previous ?? selectedTab)?.isPrivate
+        let isPrivateBrowsing = previous?.isPrivate
         previous?.metadataManager?.updateTimerAndObserving(state: .tabSwitched, isPrivate: isPrivateBrowsing ?? false)
         tab.metadataManager?.updateTimerAndObserving(state: .tabSelected, isPrivate: tab.isPrivate)
 

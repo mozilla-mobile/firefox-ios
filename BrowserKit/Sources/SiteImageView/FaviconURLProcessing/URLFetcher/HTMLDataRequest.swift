@@ -21,6 +21,7 @@ struct DefaultHTMLDataRequest: HTMLDataRequest {
         let configuration = URLSessionConfiguration.ephemeral
         configuration.httpAdditionalHeaders = ["User-Agent": RequestConstants.userAgent]
         configuration.timeoutIntervalForRequest = RequestConstants.timeout
+        configuration.multipathServiceType = .handover
 
         let urlSession = URLSession(configuration: configuration)
 

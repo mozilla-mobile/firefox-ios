@@ -12,6 +12,7 @@ public final class NavigationHeaderView: UIView {
         static let baseDistance: CGFloat = 20
         static let horizontalMargin: CGFloat = 16
         static let separatorHeight: CGFloat = 1
+        static let largeFaviconImageSize: CGFloat = 48
     }
 
     public var backToMainMenuCallback: (() -> Void)?
@@ -27,7 +28,6 @@ public final class NavigationHeaderView: UIView {
     }
 
     private lazy var closeButton: CloseButton = .build { button in
-        button.layer.cornerRadius = 0.5 * UX.closeButtonSize
         button.addTarget(self, action: #selector(self.dismissMenuTapped), for: .touchUpInside)
     }
 
@@ -35,27 +35,33 @@ public final class NavigationHeaderView: UIView {
         button.setImage(UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.chevronLeft)
             .withRenderingMode(.alwaysTemplate),
                         for: .normal)
-        button.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
         button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.addTarget(self, action: #selector(self.backButtonTapped), for: .touchUpInside)
     }
 
-    private let horizontalLine: UIView = .build { _ in }
+    private let horizontalLine: UIView = .build()
+
+    private var viewConstraints: [NSLayoutConstraint] = []
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupView()
+        setupViews()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: View Setup
-    private func setupView() {
+    private func setupViews() {
         addSubviews(titleLabel, backButton, closeButton, horizontalLine)
+    }
 
-        NSLayoutConstraint.activate([
+    // MARK: View Setup
+    private func updateLayout(isAccessibilityCategory: Bool) {
+        removeConstraints(constraints)
+        closeButton.removeConstraints(closeButton.constraints)
+        viewConstraints.removeAll()
+        viewConstraints.append(contentsOf: [
             backButton.leadingAnchor.constraint(
                 equalTo: leadingAnchor,
                 constant: UX.imageMargins
@@ -76,8 +82,6 @@ public final class NavigationHeaderView: UIView {
                 equalTo: trailingAnchor,
                 constant: -UX.horizontalMargin
             ),
-            closeButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.closeButtonSize),
-            closeButton.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.closeButtonSize),
             closeButton.centerYAnchor.constraint(equalTo: centerYAnchor),
 
             horizontalLine.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -85,6 +89,11 @@ public final class NavigationHeaderView: UIView {
             horizontalLine.bottomAnchor.constraint(equalTo: bottomAnchor),
             horizontalLine.heightAnchor.constraint(equalToConstant: UX.separatorHeight)
         ])
+        let closeButtonSizes = isAccessibilityCategory ? UX.largeFaviconImageSize : UX.closeButtonSize
+        viewConstraints.append(closeButton.heightAnchor.constraint(equalToConstant: closeButtonSizes))
+        viewConstraints.append(closeButton.widthAnchor.constraint(equalToConstant: closeButtonSizes))
+        closeButton.layer.cornerRadius = 0.5 * closeButtonSizes
+        NSLayoutConstraint.activate(viewConstraints)
     }
 
     public func setupAccessibility(closeButtonA11yLabel: String,
@@ -101,6 +110,11 @@ public final class NavigationHeaderView: UIView {
     public func setViews(with title: String, and backButtonText: String) {
         titleLabel.text = title
         backButton.setTitle(backButtonText, for: .normal)
+    }
+
+    public func adjustLayout() {
+        backButton.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
+        updateLayout(isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory)
     }
 
     @objc
