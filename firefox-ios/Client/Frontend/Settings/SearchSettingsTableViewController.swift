@@ -260,34 +260,38 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
                 )
 
             case FirefoxSuggestItem.nonSponsored.rawValue:
-                buildSettingWith(
-                    prefKey: PrefsKeys.SearchSettings.showFirefoxNonSponsoredSuggestions,
-                    defaultValue: model.shouldShowFirefoxSuggestions,
-                    titleText: String.localizedStringWithFormat(
-                        .Settings.Search.Suggest.ShowNonSponsoredSuggestionsTitle
-                    ),
-                    statusText: String.localizedStringWithFormat(
-                        .Settings.Search.Suggest.ShowNonSponsoredSuggestionsDescription,
-                        AppName.shortName.rawValue
-                    ),
-                    cell: cell,
-                    selector: #selector(didToggleEnableNonSponsoredSuggestions)
-                )
+                if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+                    buildSettingWith(
+                        prefKey: PrefsKeys.SearchSettings.showFirefoxNonSponsoredSuggestions,
+                        defaultValue: model.shouldShowFirefoxSuggestions,
+                        titleText: String.localizedStringWithFormat(
+                            .Settings.Search.Suggest.ShowNonSponsoredSuggestionsTitle
+                        ),
+                        statusText: String.localizedStringWithFormat(
+                            .Settings.Search.Suggest.ShowNonSponsoredSuggestionsDescription,
+                            AppName.shortName.rawValue
+                        ),
+                        cell: cell,
+                        selector: #selector(didToggleEnableNonSponsoredSuggestions)
+                    )
+                }
 
             case FirefoxSuggestItem.sponsored.rawValue:
-                buildSettingWith(
-                    prefKey: PrefsKeys.SearchSettings.showFirefoxSponsoredSuggestions,
-                    defaultValue: model.shouldShowSponsoredSuggestions,
-                    titleText: String.localizedStringWithFormat(
-                        .Settings.Search.Suggest.ShowSponsoredSuggestionsTitle
-                    ),
-                    statusText: String.localizedStringWithFormat(
-                        .Settings.Search.Suggest.ShowSponsoredSuggestionsDescription,
-                        AppName.shortName.rawValue
-                    ),
-                    cell: cell,
-                    selector: #selector(didToggleEnableSponsoredSuggestions)
-                )
+                if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
+                    buildSettingWith(
+                        prefKey: PrefsKeys.SearchSettings.showFirefoxSponsoredSuggestions,
+                        defaultValue: model.shouldShowSponsoredSuggestions,
+                        titleText: String.localizedStringWithFormat(
+                            .Settings.Search.Suggest.ShowSponsoredSuggestionsTitle
+                        ),
+                        statusText: String.localizedStringWithFormat(
+                            .Settings.Search.Suggest.ShowSponsoredSuggestionsDescription,
+                            AppName.shortName.rawValue
+                        ),
+                        cell: cell,
+                        selector: #selector(didToggleEnableSponsoredSuggestions)
+                    )
+                }
 
 //            case FirefoxSuggestItem.privateSuggestions.rawValue:
 //                buildSettingWith(
@@ -330,11 +334,12 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        sectionsToDisplay = [.defaultEngine, .alternateEngines, .searchEnginesSuggestions]
-
-        if featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser) {
-            sectionsToDisplay.append(.firefoxSuggestSettings)
-        }
+        sectionsToDisplay = [
+            .defaultEngine,
+            .alternateEngines,
+            .searchEnginesSuggestions,
+            .firefoxSuggestSettings
+        ]
         return sectionsToDisplay.count
     }
 
@@ -352,7 +357,8 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
             !featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser)
             ? SearchSuggestItem.allCases.count : 1
         case .firefoxSuggestSettings:
-            return FirefoxSuggestItem.allCases.count
+            return featureFlags.isFeatureEnabled(.firefoxSuggestFeature, checking: .buildAndUser)
+            ? FirefoxSuggestItem.allCases.count : 3
         }
     }
 
