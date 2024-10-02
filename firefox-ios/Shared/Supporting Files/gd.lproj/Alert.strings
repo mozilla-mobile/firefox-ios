@@ -1,9 +1,0 @@
-/* Button text to dismiss the dialog box that gets presented as a confirmation to remove card and cancel the operation. */
-"CreditCard.SnackBar.CancelRemoveCardButton.v112" = "Sguir dheth";
-
-/* Sub label for the dialog box that gets presented as a confirmation to ask user if they would like to remove the saved credit card from local as well as all their synced devices */
-"CreditCard.SnackBar.RemoveCardSublabel.v112" = "Bheir seo air falbh a’ chairt o gach uidheam sioncronaichte agad.";
-
-/* Button text to dismiss the dialog box that gets presented as a confirmation to remove card and perform the operation of removing the credit card. */
-"CreditCard.SnackBar.RemovedCardButton.v112" = "Thoir air falbh";
-
