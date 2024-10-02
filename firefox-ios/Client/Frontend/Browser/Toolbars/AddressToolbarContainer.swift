@@ -38,6 +38,7 @@ final class AddressToolbarContainer: UIView,
     private var profile: Profile?
     private var model: AddressToolbarContainerModel?
     private(set) weak var delegate: AddressToolbarContainerDelegate?
+    private var isUnifiedSearchEnabled = false
 
     private var toolbar: BrowserAddressToolbar {
         return shouldDisplayCompact ? compactToolbar : regularToolbar
@@ -93,10 +94,16 @@ final class AddressToolbarContainer: UIView,
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(windowUUID: WindowUUID, profile: Profile, delegate: AddressToolbarContainerDelegate) {
+    func configure(
+        windowUUID: WindowUUID,
+        profile: Profile,
+        delegate: AddressToolbarContainerDelegate,
+        isUnifiedSearchEnabled: Bool
+    ) {
         self.windowUUID = windowUUID
         self.profile = profile
         self.delegate = delegate
+        self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         subscribeToRedux()
     }
 
@@ -174,11 +181,13 @@ final class AddressToolbarContainer: UIView,
             compactToolbar.configure(state: newModel.addressToolbarState,
                                      toolbarDelegate: self,
                                      leadingSpace: calculateToolbarSpace(isLeading: true),
-                                     trailingSpace: calculateToolbarSpace(isLeading: false))
+                                     trailingSpace: calculateToolbarSpace(isLeading: false),
+                                     isUnifiedSearchEnabled: isUnifiedSearchEnabled)
             regularToolbar.configure(state: newModel.addressToolbarState,
                                      toolbarDelegate: self,
                                      leadingSpace: calculateToolbarSpace(isLeading: true),
-                                     trailingSpace: calculateToolbarSpace(isLeading: false))
+                                     trailingSpace: calculateToolbarSpace(isLeading: false),
+                                     isUnifiedSearchEnabled: isUnifiedSearchEnabled)
 
             // the layout (compact/regular) that should be displayed is driven by the state
             // but we only need to switch toolbars if shouldDisplayCompact changes

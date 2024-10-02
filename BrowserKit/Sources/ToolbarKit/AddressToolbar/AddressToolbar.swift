@@ -9,7 +9,8 @@ public protocol AddressToolbar {
     func configure(state: AddressToolbarState,
                    toolbarDelegate: AddressToolbarDelegate,
                    leadingSpace: CGFloat?,
-                   trailingSpace: CGFloat?)
+                   trailingSpace: CGFloat?,
+                   isUnifiedSearchEnabled: Bool)
 
     func setAutocompleteSuggestion(_ suggestion: String?)
 }
