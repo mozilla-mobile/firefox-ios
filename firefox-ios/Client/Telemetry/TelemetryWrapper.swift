@@ -539,7 +539,6 @@ extension TelemetryWrapper {
         case urlbarImpression = "urlbar-impression"
         case urlbarEngagement = "urlbar-engagement"
         case urlbarAbandonment = "urlbar-abandonment"
-        case toolbar = "toolbar"
     }
 
     public enum EventValue: String {
@@ -644,24 +643,6 @@ extension TelemetryWrapper {
         case webviewFail = "webview-fail"
         case webviewFailProvisional = "webview-fail-provisional"
         case webviewShowErrorPage = "webview-show-error-page"
-        case toolbarQrCodeTap = "toolbar-qr-code-tap"
-        case toolbarClearSearchTap = "toolbar-clear-search-tap"
-        case toolbarShareButtonTap = "toolbar-share-button-tap"
-        case toolbarRefreshButtonTap = "toolbar-refresh-button-tap"
-        case toolbarReaderModeTap = "toolbar-reader-mode-tap"
-        case toolbarSiteInfoTap = "toolbar-site-info-tap"
-        case toolbarBackButtonTap = "toolbar-back-button-tap"
-        case toolbarForwardButtonTap = "toolbar-forward-button-tap"
-        case toolbarBackLongPress = "toolbar-back-long-press"
-        case toolbarForwardLongPress = "toolbar-forward-long-press"
-        case toolbarHomeButtonTap = "toolbar-home-button-tap"
-        case toolbarOneTapNewTab = "toolbar-one-tap-new-tab"
-        case toolbarOneTapNewTabLongPress = "toolbar-one-tap-new-tab-long-press"
-        case toolbarSearchButtonTap = "toolbar-search-button-tap"
-        case toolbarTabTrayButtonTap = "toolbar-tab-tray-button-tap"
-        case toolbarTabTrayButtonLongPress = "toolbar-tab-tray-button-long-press"
-        case toolbarMenuButtonTap = "toolbar-menu-button-tap"
-        case toolbarDataClearanceButtonTap = "toolbar-data-clearance-button-tap"
     }
 
     public enum EventExtraKey: String, CustomStringConvertible {
