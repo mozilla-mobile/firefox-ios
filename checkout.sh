@@ -19,4 +19,4 @@ cd .. # Make sure we are at the root of the repo
 rm -rf shavar-prod-lists && git clone https://github.com/mozilla-services/shavar-prod-lists.git && git -C shavar-prod-lists checkout $SHAVAR_COMMIT_HASH
 
 cd BrowserKit
-swift run
+swift run --verbose
