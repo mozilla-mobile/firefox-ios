@@ -28,7 +28,9 @@ jobs:
                 sudo xcode-select -s /Applications/Xcode_${{ env.xcode_version }}.app/Contents/Developer
                 xcodebuild -version
                 ./checkout.sh
-                ./bootstrap.sh --force
+                cd BrowserKit
+                swift run --verbose
+                cd ..
             - name: Compile source code
               id: compile
               run: |
