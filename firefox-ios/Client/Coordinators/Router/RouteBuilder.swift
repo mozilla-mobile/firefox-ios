@@ -69,7 +69,7 @@ final class RouteBuilder {
                 }
 
             case .openText:
-                return .searchQuery(query: urlScanner.value(query: "text") ?? "")
+                return .searchQuery(query: urlScanner.value(query: "text") ?? "", isPrivate: isPrivate)
 
             case .glean:
                 return .glean(url: url)
@@ -90,7 +90,7 @@ final class RouteBuilder {
                 // Widget Quick links - medium - open copied url
                 if !UIPasteboard.general.hasURLs {
                     let searchText = UIPasteboard.general.string ?? ""
-                    return .searchQuery(query: searchText)
+                    return .searchQuery(query: searchText, isPrivate: isPrivate)
                 } else {
                     let url = UIPasteboard.general.url
                     return .search(url: url, isPrivate: isPrivate)

@@ -242,8 +242,8 @@ class BrowserCoordinator: BaseCoordinator,
 
         logger.log("Handling a route", level: .info, category: .coordinator)
         switch route {
-        case let .searchQuery(query):
-            handle(query: query)
+        case let .searchQuery(query, isPrivate):
+            handle(query: query, isPrivate: isPrivate)
 
         case let .search(url, isPrivate, options):
             handle(url: url, isPrivate: isPrivate, options: options)
@@ -320,8 +320,8 @@ class BrowserCoordinator: BaseCoordinator,
         }
     }
 
-    private func handle(query: String) {
-        browserViewController.handle(query: query)
+    private func handle(query: String, isPrivate: Bool) {
+        browserViewController.handle(query: query, isPrivate: isPrivate)
     }
 
     private func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {

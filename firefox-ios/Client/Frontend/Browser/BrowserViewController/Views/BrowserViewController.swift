@@ -2351,8 +2351,8 @@ class BrowserViewController: UIViewController,
                                     topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
     }
 
-    func handle(query: String) {
-        openBlankNewTab(focusLocationField: false)
+    func handle(query: String, isPrivate: Bool) {
+        openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
         if isToolbarRefactorEnabled {
             openBrowser(searchTerm: query)
         } else {
