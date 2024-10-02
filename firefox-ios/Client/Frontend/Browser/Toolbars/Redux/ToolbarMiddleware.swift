@@ -235,6 +235,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
                                               actionType: GeneralBrowserActionType.showReloadLongPressAction)
             store.dispatch(action)
         case .newTab:
+            recordTelemetry(event: .toolbarOneTapNewTabLongPress, state: state, windowUUID: action.windowUUID)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showNewTabLongPressActions)
             store.dispatch(action)

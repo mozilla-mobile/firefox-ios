@@ -656,6 +656,7 @@ extension TelemetryWrapper {
         case toolbarForwardLongPress = "forward-long-press"
         case toolbarHomeButtonTap = "home-button-tap"
         case toolbarOneTapNewTab = "one-tap-new-tab"
+        case toolbarOneTapNewTabLongPress = "one-tap-new-tab-long-press"
         case toolbarSearchButtonTap = "search-button-tap"
     }
 
@@ -2209,6 +2210,12 @@ extension TelemetryWrapper {
 
             GleanMetrics.Toolbar.oneTapNewTabButtonTapped.record(
                 GleanMetrics.Toolbar.OneTapNewTabButtonTappedExtra(isPrivate: isPrivate)
+            )
+        case (.action, .tap, .toolbar, .toolbarOneTapNewTabLongPress, let extras):
+            guard let isPrivate = extras?[EventExtraKey.Toolbar.isPrivate.rawValue] as? Bool else { return }
+
+            GleanMetrics.Toolbar.oneTapNewTabLongPress.record(
+                GleanMetrics.Toolbar.OneTapNewTabLongPressExtra(isPrivate: isPrivate)
             )
         case (.action, .tap, .toolbar, .toolbarSearchButtonTap, let extras):
             guard let isPrivate = extras?[EventExtraKey.Toolbar.isPrivate.rawValue] as? Bool else { return }
