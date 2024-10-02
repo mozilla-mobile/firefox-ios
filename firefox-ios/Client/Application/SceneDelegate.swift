@@ -144,7 +144,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             ),
             prefs: profile.prefs
         )
-        
+
         guard let route = routeBuilder.makeRoute(shortcutItem: shortcutItem,
                                                  tabSetting: NewTabAccessors.getNewTabPage(profile.prefs))
         else { return }
