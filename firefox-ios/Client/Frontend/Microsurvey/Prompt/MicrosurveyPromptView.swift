@@ -7,6 +7,7 @@ import Foundation
 import ComponentLibrary
 import Redux
 import Shared
+import Account
 
 /*
  |----------------|

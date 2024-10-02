@@ -4,6 +4,7 @@
 
 import Common
 import Redux
+import Account
 import ToolbarKit
 
 struct AddressBarState: StateType, Equatable {

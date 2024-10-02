@@ -5,7 +5,7 @@
 import Foundation
 import Common
 import Shared
-
+import SQLite3
 import enum MozillaAppServices.BookmarkNodeType
 import enum MozillaAppServices.BookmarkRoots
 

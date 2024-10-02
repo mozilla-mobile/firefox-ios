@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
+import Foundation
 
 /**
  * Used to bridge the NSErrors we get here into something that Result is happy with.

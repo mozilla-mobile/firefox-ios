@@ -7,6 +7,7 @@ import Shared
 import Storage
 import Common
 import SiteImageView
+import Account
 
 private struct SearchViewControllerUX {
     static let EngineButtonHeight: Float = 44 // Equivalent to toolbar height, fixed at the moment

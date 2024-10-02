@@ -5,6 +5,7 @@
 import Common
 import UIKit
 import Shared
+import Account
 
 class TabToolbar: UIView, SearchBarLocationProvider {
     // MARK: - Variables

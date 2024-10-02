@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Glean
 import Shared
 import Common
 
@@ -1080,7 +1079,7 @@ public class RustLogins: LoginsProtocol {
                         self.logger.log("Logins key was corrupted, new one generated",
                                         level: .warning,
                                         category: .storage)
-                        GleanMetrics.LoginsStoreKeyRegeneration.corrupt.record()
+                        // GleanMetrics.LoginsStoreKeyRegeneration.corrupt.record()
                         self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
                     }
                 } catch let error as NSError {
@@ -1096,7 +1095,7 @@ public class RustLogins: LoginsProtocol {
                 self.logger.log("Logins key lost due to storage malfunction, new one generated",
                                 level: .warning,
                                 category: .storage)
-                GleanMetrics.LoginsStoreKeyRegeneration.other.record()
+                // GleanMetrics.LoginsStoreKeyRegeneration.other.record()
                 self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
             case (.none, .some(encryptedCanaryPhrase)):
                 // We expected the key to be present, but it's gone missing on us.
@@ -1104,7 +1103,7 @@ public class RustLogins: LoginsProtocol {
                 self.logger.log("Logins key lost, new one generated",
                                 level: .warning,
                                 category: .storage)
-                GleanMetrics.LoginsStoreKeyRegeneration.lost.record()
+                // GleanMetrics.LoginsStoreKeyRegeneration.lost.record()
                 self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
             case (.none, .none):
                 // We didn't expect the key to be present, which either means this is a first-time
@@ -1125,7 +1124,7 @@ public class RustLogins: LoginsProtocol {
                     if hasLogins {
                         // Since the key data isn't present and we have login records in
                         // the database, we both clear the database and reset the key.
-                        GleanMetrics.LoginsStoreKeyRegeneration.keychainDataLost.record()
+                        // GleanMetrics.LoginsStoreKeyRegeneration.keychainDataLost.record()
                         self.resetLoginsAndKey(rustKeys: rustKeys, completion: completion)
                     } else {
                         // There are no records in the database so we don't need to wipe any

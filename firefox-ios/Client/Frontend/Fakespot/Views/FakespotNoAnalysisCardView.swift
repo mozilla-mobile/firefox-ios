@@ -6,6 +6,7 @@ import UIKit
 import Common
 import Shared
 import ComponentLibrary
+import Account
 
 struct FakespotNoAnalysisCardViewModel {
     let cardA11yId: String = AccessibilityIdentifiers.Shopping.NoAnalysisCard.card

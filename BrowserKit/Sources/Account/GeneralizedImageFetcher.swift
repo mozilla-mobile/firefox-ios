@@ -6,13 +6,15 @@ import UIKit
 import Shared
 import Common
 
-struct GeneralizedImageFetcher: URLCaching {
+public struct GeneralizedImageFetcher: URLCaching {
+    public init() {}
+    
     var urlSession = makeURLSession(
         userAgent: UserAgent.mobileUserAgent(),
         configuration: URLSessionConfiguration.default
     )
 
-    var urlCache: URLCache = {
+    public var urlCache: URLCache = {
         return URLCache.shared
     }()
 
@@ -21,7 +23,7 @@ struct GeneralizedImageFetcher: URLCaching {
     /// - Parameters:
     ///   - url: The location of the image to fetch.
     ///   - completion: The code block that will run on the `main` thread.
-    func getImageFor(
+    public func getImageFor(
         url: URL,
         timestamp: Timestamp = Date.now(),
         completion: @escaping (UIImage?) -> Void

@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import SQLite3
 
 private var ignoredSchemes = ["about"]
 

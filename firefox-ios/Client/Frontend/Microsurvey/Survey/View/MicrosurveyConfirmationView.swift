@@ -4,6 +4,7 @@
 
 import Foundation
 import Common
+import Account
 
 final class MicrosurveyConfirmationView: UIView, ThemeApplicable {
     private struct UX {

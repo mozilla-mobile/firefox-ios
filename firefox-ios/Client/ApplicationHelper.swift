@@ -16,6 +16,9 @@ protocol ApplicationHelper {
 struct DefaultApplicationHelper: ApplicationHelper {
     func openSettings() {
         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+        
+        
+        
     }
 
     /// Convenience. Opens a URL with the application.

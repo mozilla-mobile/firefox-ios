@@ -35,6 +35,8 @@
 import Foundation
 import Common
 import Shared
+import SQLite3
+import Objc
 
 private let DatabaseBusyTimeout: Int32 = 3 * 1000
 
@@ -157,7 +159,7 @@ open class SwiftData {
                     _ = try callback(FailedSQLiteDBConnection())
                     deferred.fill(Maybe(failure: NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: "Could not create a connection"])))
                 } catch let err as NSError {
-                    deferred.fill(Maybe(failure: DatabaseError(err: err)))
+                    deferred.fill(Maybe(failure: DatabaseError(description: err as! String)))
                 }
                 return
             }
@@ -168,7 +170,7 @@ open class SwiftData {
                 let result = try callback(connection)
                 deferred.fill(Maybe(success: result))
             } catch let err as NSError {
-                deferred.fill(Maybe(failure: DatabaseError(err: err)))
+                deferred.fill(Maybe(failure: DatabaseError(description: err as! String)))
             }
         }
 
