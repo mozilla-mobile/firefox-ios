@@ -38,6 +38,7 @@ import Shared
 import SQLite3
 import Objc
 
+// swiftlint: disable all
 private let DatabaseBusyTimeout: Int32 = 3 * 1000
 
 public class DBOperationCancelled: MaybeErrorType {
@@ -1608,3 +1609,4 @@ extension URL {
         return (getResourceValueForKey(key) as? NSNumber)?.int64Value
     }
 }
+// swiftlint: enable all
