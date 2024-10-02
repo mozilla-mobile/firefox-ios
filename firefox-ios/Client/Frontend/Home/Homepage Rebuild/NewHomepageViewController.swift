@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-class NewHomepageViewController: UIViewController, ContentContainable, Themeable {
+final class NewHomepageViewController: UIViewController, ContentContainable, Themeable {
     // MARK: - Typealiases
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
 

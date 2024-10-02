@@ -6,7 +6,7 @@ import Foundation
 import Common
 
 /// Holds section layout logic for the new homepage as part of the rebuild project
-class NewHomepageSectionLayoutProvider {
+final class NewHomepageSectionLayoutProvider {
     private var logger: Logger
 
     init(logger: Logger = DefaultLogger.shared) {
