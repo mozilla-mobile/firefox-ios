@@ -4850,6 +4850,22 @@ toolbar:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
+  tab_tray_button_tapped:
+    type: event
+    description: |
+        Counts the number of times a user taps the tab tray button
+        in the address or navigation toolbar
+    extra_keys:
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/???
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-01-01"
 
 # Share sheet specific metrics
 

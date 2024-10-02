@@ -149,6 +149,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         case .tabs:
             cancelEditMode(windowUUID: action.windowUUID)
 
+            recordTelemetry(event: .toolbarTabTrayButtonTap, state: state, windowUUID: action.windowUUID)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showTabTray)
             store.dispatch(action)
