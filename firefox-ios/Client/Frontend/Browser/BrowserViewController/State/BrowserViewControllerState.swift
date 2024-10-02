@@ -122,8 +122,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return BrowserViewControllerState.reduceStateForFakeSpotAction(action: action, state: state)
         } else if let action = action as? MicrosurveyPromptAction {
             return BrowserViewControllerState.reduceStateForMicrosurveyAction(action: action, state: state)
-//        } else if let action = action as? PrivateModeAction {
-//            return BrowserViewControllerState.reduceStateForPrivateModeAction(action: action, state: state)
         } else if let action = action as? GeneralBrowserAction {
             return BrowserViewControllerState.reduceStateForGeneralBrowserAction(action: action, state: state)
         } else {
@@ -159,35 +157,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             browserViewType: state.browserViewType,
             microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
     }
-
-//    static func reduceStateForPrivateModeAction(action: PrivateModeAction,
-//                                                state: BrowserViewControllerState) -> BrowserViewControllerState {
-//        switch action.actionType {
-////        case PrivateModeActionType.privateModeUpdated:
-////            let privacyState = action.isPrivate ?? false
-////            var browserViewType = state.browserViewType
-////            if browserViewType != .webview && browserViewType != .nativeErrorPage {
-////                browserViewType = privacyState ? .privateHomepage : .normalHomepage
-////            }
-////            return BrowserViewControllerState(
-////                searchScreenState: SearchScreenState(inPrivateMode: privacyState),
-////                showDataClearanceFlow: privacyState,
-////                fakespotState: state.fakespotState,
-////                windowUUID: state.windowUUID,
-////                reloadWebView: true,
-////                browserViewType: browserViewType,
-////                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
-//        default:
-//            return BrowserViewControllerState(
-//                searchScreenState: state.searchScreenState,
-//                showDataClearanceFlow: state.showDataClearanceFlow,
-//                fakespotState: state.fakespotState,
-//                windowUUID: state.windowUUID,
-//                reloadWebView: state.reloadWebView,
-//                browserViewType: state.browserViewType,
-//                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
-//        }
-//    }
 
     static func reduceStateForGeneralBrowserAction(action: GeneralBrowserAction,
                                                    state: BrowserViewControllerState) -> BrowserViewControllerState {
