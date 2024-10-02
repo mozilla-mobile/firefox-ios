@@ -4638,7 +4638,7 @@ toolbar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-01-01"
+    expires: "2025-06-01"
   clear_search_buttton_tapped:
     type: event
     description: |
@@ -4654,7 +4654,7 @@ toolbar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-01-01"
+    expires: "2025-06-01"
   share_button_tapped:
     type: event
     description: |
@@ -4670,7 +4670,7 @@ toolbar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-01-01"
+    expires: "2025-06-01"
   refresh_button_tapped:
     type: event
     description: |
@@ -4686,7 +4686,7 @@ toolbar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-01-01"
+    expires: "2025-06-01"
   reader_mode_button_tapped:
     type: event
     description: |
@@ -4705,7 +4705,7 @@ toolbar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-01-01"
+    expires: "2025-06-01"
   site_info_button_tapped:
     type: event
     description: |
@@ -4721,7 +4721,7 @@ toolbar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-01-01"
+    expires: "2025-06-01"
   back_button_tapped:
     type: event
     description: |
@@ -4737,7 +4737,7 @@ toolbar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-01-01"
+    expires: "2025-06-01"
   forward_button_tapped:
     type: event
     description: |
@@ -4753,7 +4753,7 @@ toolbar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-01-01"
+    expires: "2025-06-01"
   back_long_press:
     type: event
     description: |
@@ -4769,7 +4769,7 @@ toolbar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-01-01"
+    expires: "2025-06-01"
   forward_long_press:
     type: event
     description: |
@@ -4785,7 +4785,7 @@ toolbar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-01-01"
+    expires: "2025-06-01"
   home_button_tapped:
     type: event
     description: |
@@ -4801,7 +4801,7 @@ toolbar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-01-01"
+    expires: "2025-06-01"
   one_tap_new_tab_button_tapped:
     type: event
     description: |
@@ -4817,7 +4817,7 @@ toolbar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-01-01"
+    expires: "2025-06-01"
   one_tap_new_tab_long_press:
     type: event
     description: |
@@ -4833,7 +4833,7 @@ toolbar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-01-01"
+    expires: "2025-06-01"
   search_button_tapped:
     type: event
     description: |
@@ -4849,7 +4849,7 @@ toolbar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-01-01"
+    expires: "2025-06-01"
   tab_tray_button_tapped:
     type: event
     description: |
@@ -4865,7 +4865,7 @@ toolbar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-01-01"
+    expires: "2025-06-01"
   tab_tray_long_press:
     type: event
     description: |
@@ -4881,7 +4881,7 @@ toolbar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-01-01"
+    expires: "2025-06-01"
   app_menu_button_tapped:
     type: event
     description: |
@@ -4897,7 +4897,7 @@ toolbar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-01-01"
+    expires: "2025-06-01"
   data_clearance_button_tapped:
     type: event
     description: |
@@ -4913,7 +4913,7 @@ toolbar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: "2025-01-01"
+    expires: "2025-06-01"
 
 # Share sheet specific metrics
 
