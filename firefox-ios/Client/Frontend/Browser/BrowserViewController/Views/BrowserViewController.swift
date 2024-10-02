@@ -1269,6 +1269,7 @@ class BrowserViewController: UIViewController,
         guard contentContainer.canAdd(content: viewController) else { return false }
 
         addChild(viewController)
+        viewController.willMove(toParent: self)
         contentContainer.add(content: viewController)
         viewController.didMove(toParent: self)
         statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
@@ -3683,7 +3684,8 @@ extension BrowserViewController: TabManagerDelegate {
 
         scrollController.tab = selectedTab
 
-        if let webView = selectedTab.webView {
+        if !selectedTab.isFxHomeTab,
+           let webView = selectedTab.webView {
             webView.accessibilityLabel = .WebViewAccessibilityLabel
             webView.accessibilityIdentifier = "contentView"
             webView.accessibilityElementsHidden = false
