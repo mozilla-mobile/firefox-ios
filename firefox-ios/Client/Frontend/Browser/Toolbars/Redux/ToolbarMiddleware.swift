@@ -223,6 +223,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
                                               actionType: GeneralBrowserActionType.showBackForwardList)
             store.dispatch(action)
         case .tabs:
+            recordTelemetry(event: .toolbarTabTrayButtonLongPress, state: state, windowUUID: action.windowUUID)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showTabsLongPressActions)
             store.dispatch(action)
