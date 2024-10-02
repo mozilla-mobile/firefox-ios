@@ -117,6 +117,8 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - firefox-ios/fastlane/
   - firefox-ios/FxA
   - firefox-ios/FxAClient
+  - BrowserKit/Soruce/Shared/
+  - BrowserKit/Soruce/Storage/
   - firefox-ios/Source/ExcludedFolder
   - firefox-ios/Source/ExcludedFile.swift
   - firefox-ios/Storage/ThirdParty/SwiftData.swift
