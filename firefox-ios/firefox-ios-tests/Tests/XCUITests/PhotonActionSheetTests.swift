@@ -28,6 +28,7 @@ class PhotonActionSheetTests: BaseTestCase {
         app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash].tap()
 
         // Check that it has been unpinned
+        // Adding sleep as an workaround until https://github.com/mozilla-mobile/firefox-ios/issues/22323 is fixed
         sleep(5)
         cell.press(forDuration: 2)
         mozWaitForElementToExist(app.tables.cells.otherElements[StandardImageIdentifiers.Large.pin])
