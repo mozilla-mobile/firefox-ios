@@ -124,8 +124,8 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - firefox-ios/Storage/Generated/Metrics.swift
   - firefox-ios/ThirdParty
   - test-fixtures/tmp
-  - BrowserKit/Soruce/Shared
-  - BrowserKit/Source/Storage
+  - BrowserKit/Sources/Storage/
+  - BrowserKit/Sources/Shared/
   - firefox-ios/firefox-ios-tests/Tests/UITests/
   - l10n-screenshots-dd/
   - DerivedData/
