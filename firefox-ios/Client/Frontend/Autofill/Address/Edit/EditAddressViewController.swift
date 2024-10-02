@@ -97,15 +97,6 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
         performPostLoadActions()
     }
 
-    private func logError(message: String, description: String) {
-        logger.log(
-            message,
-            level: .warning,
-            category: .autofill,
-            description: description
-        )
-    }
-
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {}
 
     func performPostLoadActions() {
