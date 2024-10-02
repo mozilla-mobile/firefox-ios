@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo "Starting Swiftlint Check..."
-swiftlint lint --config "../.swiftlint.yml" --strict 
+swiftlint --strict 
 RESULT=$?
 
 if [ $RESULT -ne 0 ]; then
