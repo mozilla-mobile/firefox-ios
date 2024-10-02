@@ -262,7 +262,7 @@ final class NativeErrorPageViewController: UIViewController,
             GeneralBrowserAction(
                 isNativeErrorPage: true,
                 windowUUID: windowUUID,
-                actionType: GeneralBrowserActionType.reloadWebsiteNoCache
+                actionType: GeneralBrowserActionType.reloadWebsite
             )
         )
     }
