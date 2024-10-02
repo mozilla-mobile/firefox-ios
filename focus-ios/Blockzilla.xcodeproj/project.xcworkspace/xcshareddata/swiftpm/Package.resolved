@@ -2,11 +2,29 @@
   "object": {
     "pins": [
       {
+        "package": "Dip",
+        "repositoryURL": "https://github.com/AliSoftware/Dip.git",
+        "state": {
+          "branch": null,
+          "revision": "c3b601df0ff22b06b6d5ff4943faf05c0bd3f9bb",
+          "version": "7.1.1"
+        }
+      },
+      {
         "package": "Fuzi",
         "repositoryURL": "https://github.com/nbhasin2/Fuzi.git",
         "state": {
           "branch": "master",
           "revision": "04170682baf5c013a41270963c689c87ba0d1374",
+          "version": null
+        }
+      },
+      {
+        "package": "GCDWebServer",
+        "repositoryURL": "https://github.com/nbhasin2/GCDWebServer.git",
+        "state": {
+          "branch": "master",
+          "revision": "7674c93e79ee5aac17681acace324761325e7346",
           "version": null
         }
       },
@@ -17,6 +35,15 @@
           "branch": null,
           "revision": "238d6d31916ae9ef2d67a70bc613ef083046b88b",
           "version": "61.1.0"
+        }
+      },
+      {
+        "package": "Kingfisher",
+        "repositoryURL": "https://github.com/onevcat/Kingfisher.git",
+        "state": {
+          "branch": null,
+          "revision": "2ef543ee21d63734e1c004ad6c870255e8716c50",
+          "version": "7.12.0"
         }
       },
       {
@@ -44,6 +71,24 @@
           "branch": null,
           "revision": "e74fe2a978d1216c3602b129447c7301573cc2d8",
           "version": "5.7.0"
+        }
+      },
+      {
+        "package": "SwiftDraw",
+        "repositoryURL": "https://github.com/swhitty/SwiftDraw",
+        "state": {
+          "branch": null,
+          "revision": "a5c680f07b33f4cc9a451491b417b8119de23c6e",
+          "version": "0.17.0"
+        }
+      },
+      {
+        "package": "SwiftyBeaver",
+        "repositoryURL": "https://github.com/SwiftyBeaver/SwiftyBeaver.git",
+        "state": {
+          "branch": null,
+          "revision": "1080914828ef1c9ca9cd2bad50667b3d847dabff",
+          "version": "2.0.0"
         }
       }
     ]
