@@ -104,6 +104,8 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
             GleanMetrics.LegacyIds.clientId.set(uuid)
         }
 
+        glean.registerPings(GleanMetrics.Pings.shared)
+
         // Initialize Glean telemetry
         let gleanConfig = Configuration(channel: AppConstants.buildChannel.rawValue, logLevel: .off)
         glean.initialize(uploadEnabled: sendUsageData,
