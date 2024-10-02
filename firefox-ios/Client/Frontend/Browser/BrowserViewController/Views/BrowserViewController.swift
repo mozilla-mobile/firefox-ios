@@ -625,8 +625,6 @@ class BrowserViewController: UIViewController,
     }
 
     func newState(state: BrowserViewControllerState) {
-        guard let self else { return }
-
         browserViewControllerState = state
 
         // opens or close sidebar/bottom sheet to match the saved state
