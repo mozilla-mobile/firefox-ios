@@ -162,8 +162,7 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         setupHeaderView()
         setupContentView()
         setupConnectionHeaderView()
-        setupBlockedTrackersView()
-        setupConnectionStatusView()
+        setupTrackersConnectionView()
         setupToggleView()
         setupClearCookiesButton()
         setupProtectionSettingsView()
@@ -234,45 +233,31 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         constraints.append(contentsOf: connectionHeaderConstraints)
     }
 
-    // MARK: Blocked Trackers Setup
-    private func setupBlockedTrackersView() {
+    // MARK: Trackers Connection Setup
+    private func setupTrackersConnectionView() {
         baseView.addSubview(trackersConnectionContainer)
+        baseView.addSubview(connectionHorizontalLine)
         trackersConnectionContainer.addArrangedSubview(trackersView)
-        let blockedTrackersConstraints = [
-            trackersView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
-            ),
-            trackersView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor,
-                constant: -TPMenuUX.UX.horizontalMargin
-            ),
-            trackersView.topAnchor.constraint(equalTo: connectionDetailsHeaderView.bottomAnchor),
-        ]
-        constraints.append(contentsOf: blockedTrackersConstraints)
-        trackersView.trackersButtonCallback = {}
-    }
-
-    // MARK: Connection Status Setup
-    private func setupConnectionStatusView() {
         trackersConnectionContainer.addArrangedSubview(connectionStatusView)
-        connectionStatusView.addSubviews(connectionHorizontalLine)
-        let connectionConstraints = [
-            connectionStatusView.leadingAnchor.constraint(
+        let trackersConnectionConstraints = [
+            trackersView.trailingAnchor.constraint(equalTo: trackersConnectionContainer.trailingAnchor),
+            connectionStatusView.trailingAnchor.constraint(equalTo: trackersConnectionContainer.trailingAnchor),
+            trackersConnectionContainer.leadingAnchor.constraint(
                 equalTo: view.leadingAnchor,
                 constant: TPMenuUX.UX.horizontalMargin
             ),
-            connectionStatusView.trailingAnchor.constraint(
+            trackersConnectionContainer.trailingAnchor.constraint(
                 equalTo: view.trailingAnchor,
                 constant: -TPMenuUX.UX.horizontalMargin
             ),
-            connectionStatusView.topAnchor.constraint(equalTo: trackersView.bottomAnchor),
-            connectionHorizontalLine.leadingAnchor.constraint(equalTo: connectionStatusView.leadingAnchor),
-            connectionHorizontalLine.trailingAnchor.constraint(equalTo: connectionStatusView.trailingAnchor),
+            trackersConnectionContainer.topAnchor.constraint(equalTo: connectionDetailsHeaderView.bottomAnchor),
+            connectionHorizontalLine.topAnchor.constraint(equalTo: trackersConnectionContainer.bottomAnchor),
+            connectionHorizontalLine.leadingAnchor.constraint(equalTo: trackersConnectionContainer.leadingAnchor),
+            connectionHorizontalLine.trailingAnchor.constraint(equalTo: trackersConnectionContainer.trailingAnchor),
             connectionHorizontalLine.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.Line.height),
-            connectionStatusView.bottomAnchor.constraint(equalTo: connectionHorizontalLine.bottomAnchor)
         ]
-        constraints.append(contentsOf: connectionConstraints)
+        constraints.append(contentsOf: trackersConnectionConstraints)
+        trackersView.trackersButtonCallback = {}
         connectionStatusView.connectionStatusButtonCallback = { [weak self] in
             guard let self, viewModel.connectionSecure else { return }
             // TODO: FXIOS-9198 #20366 Enhanced Tracking Protection Connection details screen
@@ -293,7 +278,7 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
             toggleView.trailingAnchor.constraint(equalTo: baseView.trailingAnchor,
                                                  constant: -TPMenuUX.UX.horizontalMargin),
             toggleView.topAnchor.constraint(
-                equalTo: connectionStatusView.bottomAnchor,
+                equalTo: connectionHorizontalLine.bottomAnchor,
                 constant: 0
             )
         ]
@@ -324,25 +309,27 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
             clearCookiesButton.topAnchor.constraint(
                 equalTo: toggleView.bottomAnchor,
                 constant: TPMenuUX.UX.horizontalMargin
-            ),
-            clearCookiesButton.bottomAnchor.constraint(
-                equalTo: settingsLinkButton.topAnchor,
-                constant: -TPMenuUX.UX.horizontalMargin
-            ),
+            )
         ]
         constraints.append(contentsOf: clearCookiesButtonConstraints)
     }
 
     // MARK: Settings View Setup
-    private func setupProtectionSettingsView() {
+    private func configureProtectionSettingsView() {
         let settingsButtonViewModel = LinkButtonViewModel(title: viewModel.settingsButtonTitle,
                                                           a11yIdentifier: viewModel.settingsA11yId)
         settingsLinkButton.configure(viewModel: settingsButtonViewModel)
+    }
+
+    private func setupProtectionSettingsView() {
+        configureProtectionSettingsView()
         baseView.addSubviews(settingsLinkButton)
 
         let protectionConstraints = [
             settingsLinkButton.leadingAnchor.constraint(equalTo: baseView.leadingAnchor),
             settingsLinkButton.trailingAnchor.constraint(equalTo: baseView.trailingAnchor),
+            settingsLinkButton.topAnchor.constraint(equalTo: clearCookiesButton.bottomAnchor,
+                                                    constant: TPMenuUX.UX.horizontalMargin),
             settingsLinkButton.bottomAnchor.constraint(
                 equalTo: baseView.bottomAnchor,
                 constant: -TPMenuUX.UX.settingsLinkButtonBottomSpacing
@@ -423,6 +410,9 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         headerContainer.adjustLayout()
         trackersView.adjustLayout()
         connectionStatusView.adjustLayout()
+        connectionDetailsHeaderView.adjustLayout()
+        toggleView.adjustLayout()
+        configureProtectionSettingsView()
 
         if #available(iOS 16.0, *), UIDevice.current.userInterfaceIdiom == .phone {
             headerContainer.layoutIfNeeded()
