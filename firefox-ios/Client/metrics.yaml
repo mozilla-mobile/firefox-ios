@@ -4633,9 +4633,9 @@ toolbar:
         description: Whether the user is in private mode or not
         type: boolean
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/???
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
@@ -4649,9 +4649,9 @@ toolbar:
         description: Whether the user is in private mode or not
         type: boolean
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/???
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
@@ -4665,9 +4665,9 @@ toolbar:
         description: Whether the user is in private mode or not
         type: boolean
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/???
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
@@ -4681,9 +4681,9 @@ toolbar:
         description: Whether the user is in private mode or not
         type: boolean
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/???
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
@@ -4700,9 +4700,9 @@ toolbar:
         description: Whether reader mode was opened or closed
         type: boolean
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/???
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
@@ -4716,9 +4716,9 @@ toolbar:
         description: Whether the user is in private mode or not
         type: boolean
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/???
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
@@ -4732,9 +4732,9 @@ toolbar:
         description: Whether the user is in private mode or not
         type: boolean
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/???
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
@@ -4748,9 +4748,9 @@ toolbar:
         description: Whether the user is in private mode or not
         type: boolean
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/???
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
@@ -4764,9 +4764,9 @@ toolbar:
         description: Whether the user is in private mode or not
         type: boolean
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/???
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
@@ -4780,9 +4780,9 @@ toolbar:
         description: Whether the user is in private mode or not
         type: boolean
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/???
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
@@ -4796,9 +4796,9 @@ toolbar:
         description: Whether the user is in private mode or not
         type: boolean
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/???
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
@@ -4812,9 +4812,9 @@ toolbar:
         description: Whether the user is in private mode or not
         type: boolean
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/???
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
@@ -4828,9 +4828,9 @@ toolbar:
         description: Whether the user is in private mode or not
         type: boolean
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/???
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
@@ -4844,9 +4844,9 @@ toolbar:
         description: Whether the user is in private mode or not
         type: boolean
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/???
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
@@ -4860,9 +4860,9 @@ toolbar:
         description: Whether the user is in private mode or not
         type: boolean
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/???
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
@@ -4876,9 +4876,9 @@ toolbar:
         description: Whether the user is in private mode or not
         type: boolean
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/???
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
@@ -4892,9 +4892,9 @@ toolbar:
         description: Whether the user is in private mode or not
         type: boolean
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/???
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
@@ -4908,9 +4908,9 @@ toolbar:
         description: Whether the user is in private mode or not
         type: boolean
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/???
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/???
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
