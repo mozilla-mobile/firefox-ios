@@ -8,11 +8,7 @@ import Common
 final class SearchEngineView: UIView, ThemeApplicable {
     // MARK: - Properties
     private enum UX {
-        static let horizontalSpace: CGFloat = 8
-        static let gradientViewWidth: CGFloat = 40
         static let searchEngineImageViewCornerRadius: CGFloat = 4
-        static let iconContainerCornerRadius: CGFloat = 8
-        static let lockIconImageViewSize = CGSize(width: 40, height: 24)
         static let searchEngineImageViewSize = CGSize(width: 24, height: 24)
     }
 
