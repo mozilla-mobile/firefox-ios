@@ -33,7 +33,6 @@ public final class MenuMainView: UIView,
             accountHeaderView.topAnchor.constraint(equalTo: self.topAnchor),
             accountHeaderView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             accountHeaderView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            accountHeaderView.heightAnchor.constraint(equalToConstant: 70),
 
             tableView.topAnchor.constraint(equalTo: accountHeaderView.bottomAnchor),
             tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
@@ -62,6 +61,10 @@ public final class MenuMainView: UIView,
         tableView.accessibilityLabel = menuA11yLabel
     }
 
+    public func adjustLayout() {
+        accountHeaderView.adjustLayout()
+    }
+
     // MARK: - Interface
     public func reloadTableView(with data: [MenuSection]) {
         tableView.reloadTableView(with: data)
@@ -72,6 +75,6 @@ public final class MenuMainView: UIView,
         backgroundColor = .clear
         tableView.applyTheme(theme: theme)
         accountHeaderView.applyTheme(theme: theme)
-        accountHeaderView.setIcon(isSmaller: true, theme: theme)
+        accountHeaderView.setIconTheme(with: theme)
     }
 }

@@ -37,35 +37,38 @@ final class TrackingProtectionConnectionStatusView: UIView, ThemeApplicable {
     private var lockImageHeightConstraint: NSLayoutConstraint?
     private var connectionArrowHeightConstraint: NSLayoutConstraint?
 
+    private var viewConstraints: [NSLayoutConstraint] = []
+
     init() {
         super.init(frame: .zero)
-        setupLayout()
+        setupViews()
     }
 
-    required init(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupLayout() {
+    private func setupViews() {
         self.addSubviews(connectionStatusImage, connectionStatusLabel, connectionDetailArrow)
         self.addSubviews(connectionButton)
+    }
 
-        lockImageHeightConstraint = connectionStatusImage.widthAnchor.constraint(
-            equalToConstant: TPMenuUX.UX.iconSize
-        )
+    private func updateLayout(isAccessibilityCategory: Bool) {
+        removeConstraints(constraints)
+        connectionStatusImage.removeConstraints(connectionStatusImage.constraints)
+        viewConstraints.removeAll()
+        lockImageHeightConstraint = connectionStatusImage.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.iconSize)
         connectionArrowHeightConstraint = connectionDetailArrow.heightAnchor.constraint(
             equalToConstant: TPMenuUX.UX.iconSize
         )
 
-        NSLayoutConstraint.activate([
+        viewConstraints.append(contentsOf: [
             connectionStatusImage.leadingAnchor.constraint(
                 equalTo: self.leadingAnchor,
                 constant: TPMenuUX.UX.horizontalMargin
             ),
-            connectionStatusImage.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            connectionStatusImage.heightAnchor.constraint(equalTo: connectionStatusImage.widthAnchor),
             lockImageHeightConstraint ?? NSLayoutConstraint(),
-            connectionStatusImage.heightAnchor.constraint(equalTo: self.widthAnchor),
-
             connectionStatusLabel.leadingAnchor.constraint(
                 equalTo: connectionStatusImage.trailingAnchor,
                 constant: TPMenuUX.UX.horizontalMargin
@@ -90,8 +93,14 @@ final class TrackingProtectionConnectionStatusView: UIView, ThemeApplicable {
             connectionButton.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             connectionButton.topAnchor.constraint(equalTo: self.topAnchor),
             connectionButton.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            connectionButton.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            connectionButton.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ])
+        if !isAccessibilityCategory {
+            viewConstraints.append(connectionStatusImage.centerYAnchor.constraint(equalTo: self.centerYAnchor))
+        } else {
+            viewConstraints.append(connectionStatusImage.topAnchor.constraint(equalTo: connectionStatusLabel.topAnchor))
+        }
+        NSLayoutConstraint.activate(viewConstraints)
     }
 
     func setupDetails(image: UIImage, text: String) {
@@ -105,6 +114,7 @@ final class TrackingProtectionConnectionStatusView: UIView, ThemeApplicable {
     }
 
     func adjustLayout() {
+        updateLayout(isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory)
         let iconSize = TPMenuUX.UX.iconSize
         lockImageHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: iconSize), 2 * iconSize)
         connectionArrowHeightConstraint?.constant = min(UIFontMetrics.default.scaledValue(for: iconSize), 2 * iconSize)

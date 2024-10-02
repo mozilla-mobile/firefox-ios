@@ -567,6 +567,10 @@ class BrowserViewController: UIViewController,
 
         // Update lock icon without redrawing the whole locationView
         if let tab = tabManager.selectedTab, !isToolbarRefactorEnabled {
+            // It appears this was added to fix an issue with the lock icon, so we're
+            // calling into this for some kind of beneficial side effect. We should
+            // probably explore a different solution; tab content blocking does not
+            // change every time the app is brought forward. [FXIOS-10091]
             urlBar.locationView.tabDidChangeContentBlocking(tab)
         }
 
@@ -902,6 +906,8 @@ class BrowserViewController: UIViewController,
         if !isToolbarRefactorEnabled {
             urlBar.searchEnginesDidUpdate()
         }
+
+        updateToolbarStateForTraitCollection(traitCollection)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -1296,12 +1302,16 @@ class BrowserViewController: UIViewController,
             urlBar.locationView.reloadButton.reloadButtonState = .disabled
         }
 
-        browserDelegate?.showHomepage(inline: inline,
-                                      toastContainer: contentContainer,
-                                      homepanelDelegate: self,
-                                      libraryPanelDelegate: self,
-                                      statusBarScrollDelegate: statusBarOverlay,
-                                      overlayManager: overlayManager)
+        if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
+            browserDelegate?.showNewHomepage()
+        } else {
+            browserDelegate?.showHomepage(inline: inline,
+                                          toastContainer: contentContainer,
+                                          homepanelDelegate: self,
+                                          libraryPanelDelegate: self,
+                                          statusBarScrollDelegate: statusBarOverlay,
+                                          overlayManager: overlayManager)
+        }
     }
 
     func showEmbeddedWebview() {
@@ -1887,15 +1897,13 @@ class BrowserViewController: UIViewController,
                 actionType: ToolbarActionType.urlDidChange)
             store.dispatch(action)
 
-            if let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
-               toolbarState.isPrivateMode != tab.isPrivate {
-                // update toolbar borders
-                let middlewareAction = ToolbarMiddlewareAction(
-                    scrollOffset: scrollController.contentOffset,
-                    windowUUID: windowUUID,
-                    actionType: ToolbarMiddlewareActionType.urlDidChange)
-                store.dispatch(middlewareAction)
-            }
+            // update toolbar borders
+            let middlewareAction = ToolbarMiddlewareAction(
+                scrollOffset: scrollController.contentOffset,
+                windowUUID: windowUUID,
+                actionType: ToolbarMiddlewareActionType.urlDidChange)
+            store.dispatch(middlewareAction)
+
             return
         }
 
@@ -3877,7 +3885,7 @@ extension BrowserViewController {
     func getImageData(_ url: URL, success: @escaping (Data) -> Void) {
         makeURLSession(
             userAgent: UserAgent.fxaUserAgent,
-            configuration: URLSessionConfiguration.default).dataTask(with: url
+            configuration: URLSessionConfiguration.defaultMPTCP).dataTask(with: url
             ) { (data, response, error) in
             if validatedHTTPResponse(response, statusCode: 200..<300) != nil,
                let data = data {
