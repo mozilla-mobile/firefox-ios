@@ -7,6 +7,8 @@
 set -x
 cd focus-ios
 
+(cd ../ BrowserKit && swift run --verbose)
+
 # Version 107.0 hash
 SHAVAR_COMMIT_HASH="91cf7dd142fc69aabe334a1a6e0091a1db228203"
 
@@ -17,6 +19,3 @@ curl --proto '=https' --tlsv1.2 -sSf  https://raw.githubusercontent.com/mozilla/
 # Clone shavar prod list
 cd .. # Make sure we are at the root of the repo
 rm -rf shavar-prod-lists && git clone https://github.com/mozilla-services/shavar-prod-lists.git && git -C shavar-prod-lists checkout $SHAVAR_COMMIT_HASH
-
-# cd BrowserKit
-# swift run --verbose
