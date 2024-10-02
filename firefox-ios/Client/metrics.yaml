@@ -4639,7 +4639,7 @@ toolbar:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-06-01"
-  clear_search_buttton_tapped:
+  clear_search_button_tapped:
     type: event
     description: |
         Counts the number of times a user taps the clear button
