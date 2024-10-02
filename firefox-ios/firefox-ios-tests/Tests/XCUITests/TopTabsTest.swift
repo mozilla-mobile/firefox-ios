@@ -361,7 +361,7 @@ class TopTabsTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(TabTray)
-        app.swipeDown()
+        mozWaitForElementToExist(tabsTrayCell.firstMatch)
         app.swipeUp()
         if !iPad() {
             if #available(iOS 16, *) {
