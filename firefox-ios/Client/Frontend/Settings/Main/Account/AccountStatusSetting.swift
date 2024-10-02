@@ -6,9 +6,6 @@ import Account
 import Common
 import Foundation
 import Shared
-import Account
-
-// Sync setting that shows the current Firefox Account status.
 class AccountStatusSetting: WithAccountSetting {
     private weak var settingsDelegate: AccountSettingsDelegate?
     private var notificationCenter: NotificationProtocol

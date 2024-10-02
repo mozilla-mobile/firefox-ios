@@ -8,7 +8,7 @@ import Common
 
 public struct GeneralizedImageFetcher: URLCaching {
     public init() {}
-    
+
     var urlSession = makeURLSession(
         userAgent: UserAgent.mobileUserAgent(),
         configuration: URLSessionConfiguration.default
