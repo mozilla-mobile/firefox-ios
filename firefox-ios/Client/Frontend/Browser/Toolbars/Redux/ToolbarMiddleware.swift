@@ -203,6 +203,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
             store.dispatch(action)
 
         case .dataClearance:
+            recordTelemetry(event: .toolbarDataClearanceButtonTap, state: state, windowUUID: action.windowUUID)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.clearData)
             store.dispatch(action)
