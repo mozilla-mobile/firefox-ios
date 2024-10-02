@@ -301,6 +301,10 @@ public class BrowserAddressToolbar: UIView, Notifiable, AddressToolbar, ThemeApp
         toolbarDelegate?.searchSuggestions(searchTerm: text)
     }
 
+    func locationViewDidClearText() {
+        toolbarDelegate?.didClearSearch()
+    }
+
     func locationViewDidBeginEditing(_ text: String, shouldShowSuggestions: Bool) {
         toolbarDelegate?.addressToolbarDidBeginEditing(searchTerm: text, shouldShowSuggestions: shouldShowSuggestions)
     }

@@ -371,7 +371,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     }
 
     func locationTextFieldShouldClear(_ textField: LocationTextField) -> Bool {
-        delegate?.locationViewDidEnterText("")
+        delegate?.locationViewDidClearText()
         return true
     }
 

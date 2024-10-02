@@ -274,6 +274,16 @@ final class AddressToolbarContainer: UIView,
         delegate?.searchSuggestions(searchTerm: searchTerm)
     }
 
+    func didClearSearch() {
+        delegate?.searchSuggestions(searchTerm: "")
+
+        guard let windowUUID else { return }
+
+        let action = ToolbarMiddlewareAction(windowUUID: windowUUID,
+                                             actionType: ToolbarMiddlewareActionType.didClearSearch)
+        store.dispatch(action)
+    }
+
     func openBrowser(searchTerm: String) {
         delegate?.openBrowser(searchTerm: searchTerm)
     }
