@@ -33,14 +33,12 @@
 		0AFF7F6E2C7C7BBA00265214 /* CertificatesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFF7F6B2C7C7BB900265214 /* CertificatesViewModel.swift */; };
 		0B305E1B1E3A98A900BE0767 /* BookmarksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B305E1A1E3A98A900BE0767 /* BookmarksTests.swift */; };
 		0B3D670E1E09B90B00C1EFC7 /* AuthenticationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3D670D1E09B90B00C1EFC7 /* AuthenticationTest.swift */; };
-		0B54BD191B698B7C004C822C /* SuggestedSites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B54BD181B698B7C004C822C /* SuggestedSites.swift */; };
 		0B5A93221B1EB4C8004F47A2 /* ReadingListTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B5A93211B1EB4C8004F47A2 /* ReadingListTest.swift */; };
 		0B5A93421B1EB572004F47A2 /* readablePage.html in Resources */ = {isa = PBXBuildFile; fileRef = 0B5A93411B1EB572004F47A2 /* readablePage.html */; };
 		0B5E4B3D2CAD2D6B0002E044 /* Sync in Frameworks */ = {isa = PBXBuildFile; productRef = 0B5E4B3C2CAD2D6B0002E044 /* Sync */; };
 		0B5E4B3F2CAD2DBD0002E044 /* Sync in Frameworks */ = {isa = PBXBuildFile; productRef = 0B5E4B3E2CAD2DBD0002E044 /* Sync */; };
 		0B5E4B412CAD2DD30002E044 /* Sync in Frameworks */ = {isa = PBXBuildFile; productRef = 0B5E4B402CAD2DD30002E044 /* Sync */; };
 		0B5E4B432CAD2E840002E044 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0B5E4B422CAD2E840002E044 /* Shared */; };
-		0B5E4B462CAD2EA00002E044 /* libLegacyStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* libLegacyStorage.a */; };
 		0B5E4B482CAD2EA30002E044 /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0B5E4B472CAD2EA30002E044 /* Shared */; };
 		0B5E4B4A2CAD2EB50002E044 /* SiteImageView in Frameworks */ = {isa = PBXBuildFile; productRef = 0B5E4B492CAD2EB50002E044 /* SiteImageView */; };
 		0B5E4B4C2CAD2EBC0002E044 /* SiteImageView in Frameworks */ = {isa = PBXBuildFile; productRef = 0B5E4B4B2CAD2EBC0002E044 /* SiteImageView */; };
@@ -60,7 +58,6 @@
 		0B62EFD21AD63CD100ACB9CD /* Clearables.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B62EFD11AD63CD100ACB9CD /* Clearables.swift */; };
 		0B6E6EF32CAC34E000FA00E9 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
 		0B6E6EF42CAC34E000FA00E9 /* RustMozillaAppServices.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		0B6E6EFA2CAC365400FA00E9 /* libLegacyStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* libLegacyStorage.a */; };
 		0B6E6EFC2CAC365B00FA00E9 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
 		0B6FBAB21AC1F830007EC669 /* numberedPage.html in Resources */ = {isa = PBXBuildFile; fileRef = 0B6FBAB11AC1F830007EC669 /* numberedPage.html */; };
 		0B75AEA91AC20FB20015E5DC /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B8E0FF31A932BD500161DC3 /* ImageIO.framework */; };
@@ -74,8 +71,6 @@
 		0BB5B2881AC0A2B90052877D /* SnackBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B2861AC0A2B90052877D /* SnackBar.swift */; };
 		0BB5B30B1AC0AD1F0052877D /* LoginsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B30A1AC0AD1F0052877D /* LoginsHelper.swift */; };
 		0BC9C9C41F26F54D000E8AB5 /* SiteLoadTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC9C9C31F26F54D000E8AB5 /* SiteLoadTest.swift */; };
-		0BE4158B2CA16B5300F3B7A1 /* libStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* libStorage.a */; };
-		0BF0DB4A1E57B05E009172B0 /* LaunchArguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075861E37F7AB006961AC /* LaunchArguments.swift */; };
 		0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF0DB931A8545800039F300 /* URLBarView.swift */; };
 		0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF1B7E21AC60DEA00A7B407 /* InsetButton.swift */; };
 		0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */ = {isa = PBXBuildFile; fileRef = 0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */; };
@@ -445,7 +440,6 @@
 		43FA49A329C875C0005062DB /* SnackBar.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43FA49A129C875C0005062DB /* SnackBar.strings */; };
 		4590912E2A2E4F7700061F0C /* AutopushTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4590912D2A2E4F7700061F0C /* AutopushTests.swift */; };
 		4590912F2A2E558000061F0C /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
-		45CC573F28AD8B9B006D55AA /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CC573E28AD8B9A006D55AA /* Metrics.swift */; };
 		45D5EDA729269F7500311934 /* DataObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D5EDA629269F7500311934 /* DataObserver.swift */; };
 		45D5EDC0292D619000311934 /* MockablePinnedSites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D5EDBF292D619000311934 /* MockablePinnedSites.swift */; };
 		45D5EDCA292D65D600311934 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
@@ -1728,40 +1722,12 @@
 			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
 			remoteInfo = Shared;
 		};
-		2FA4361C1ABB83DD008031D1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
-			remoteInfo = Shared;
-		};
-		2FC87C3C1BC45E67001BAE77 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2FA435FA1ABB83B4008031D1;
-			remoteInfo = Account;
-		};
-		2FCAE2261ABB51F800877008 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2FCAE2191ABB51F800877008;
-			remoteInfo = Storage;
-		};
 		2FCAE2281ABB51F800877008 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
-		};
-		2FCAE23B1ABB520700877008 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
-			remoteInfo = Shared;
 		};
 		397848E01ED86605004C0C0B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1797,13 +1763,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = F8324A042649A188007E4BFA;
 			remoteInfo = CredentialProvider;
-		};
-		45C9D1C72A323263009CDD7A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2FCAE2191ABB51F800877008;
-			remoteInfo = Storage;
 		};
 		7B9BF92E1E435DE400CB24F4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -2477,12 +2436,10 @@
 		2F697F7D1A9FD22D009E03AE /* SearchEnginesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEnginesTests.swift; sourceTree = "<group>"; };
 		2F7A4680A2BCE93CE0BD8392 /* ml */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ml; path = ml.lproj/Menu.strings; sourceTree = "<group>"; };
 		2F884BA290D689F05C289FDE /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/Shared.strings"; sourceTree = "<group>"; };
-		2FA435FB1ABB83B4008031D1 /* libLegacyAccount.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLegacyAccount.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FA435FE1ABB83B4008031D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2FA436051ABB83B4008031D1 /* AccountTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AccountTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FA4360D1ABB83B4008031D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2FB34ADDA0D0493137633D93 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
-		2FCAE21A1ABB51F800877008 /* libLegacyStorage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libLegacyStorage.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FCAE2241ABB51F800877008 /* StorageTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StorageTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FCAE22C1ABB51F800877008 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2FCAE2791ABB533A00877008 /* MockFiles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockFiles.swift; sourceTree = "<group>"; };
@@ -8428,8 +8385,6 @@
 		E4CD9F6C1A77DD2800318571 /* ReaderModeStyleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReaderModeStyleViewController.swift; sourceTree = "<group>"; };
 		E4D6BEB81A0930EC00F538BD /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		E4D749219953D78CDF92E3C0 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/ClearHistoryConfirm.strings"; sourceTree = "<group>"; };
-		E4E0BB151AFBC9E4008D6260 /* Shared-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Shared-Bridging-Header.h"; path = "../Shared-Bridging-Header.h"; sourceTree = "<group>"; };
-		E4E0BB171AFBC9E4008D6260 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4E25CCA1CA99E7400D0F088 /* HexExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexExtensionsTests.swift; sourceTree = "<group>"; };
 		E4E7EB6C1C4AED5E0094275D /* SupportUtilsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SupportUtilsTests.swift; sourceTree = "<group>"; };
 		E4EF49439954526812CC150E /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/PrivateBrowsing.strings; sourceTree = "<group>"; };
@@ -8714,7 +8669,6 @@
 				0B5E4B6F2CAD38110002E044 /* Storage in Frameworks */,
 				0B5E4B5F2CAD36810002E044 /* Objc in Frameworks */,
 				0B6E6EFC2CAC365B00FA00E9 /* RustMozillaAppServices.framework in Frameworks */,
-				0B6E6EFA2CAC365400FA00E9 /* libLegacyStorage.a in Frameworks */,
 				5A87148A292EA1520039A5BD /* Fuzi in Frameworks */,
 				433F87D02788ECDD00693368 /* GCDWebServers in Frameworks */,
 				5A70EF10295DFD4900790249 /* Common in Frameworks */,
@@ -8779,25 +8733,11 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		2FA435F71ABB83B4008031D1 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		2FA436021ABB83B4008031D1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				4590912F2A2E558000061F0C /* RustMozillaAppServices.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2FCAE2161ABB51F800877008 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -8814,7 +8754,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B5E4B482CAD2EA30002E044 /* Shared in Frameworks */,
-				0B5E4B462CAD2EA00002E044 /* libLegacyStorage.a in Frameworks */,
 				0B5E4B4A2CAD2EB50002E044 /* SiteImageView in Frameworks */,
 				0B5E4B672CAD37010002E044 /* Storage in Frameworks */,
 				0B5E4B7B2CAD3AE20002E044 /* Account in Frameworks */,
@@ -8950,6 +8889,84 @@
 				047F9B3A24E1FF4000CD7DF7 /* SearchQuickLinks.swift */,
 			);
 			path = SearchQuickLinksMedium;
+			sourceTree = "<group>";
+		};
+		0BF1E3702CAD8EEF008B97E1 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				904F48CABE595981535FCCEB /* ErrorPages.strings */,
+				43937C2429BA686000074633 /* ResearchSurface.strings */,
+				43470D0628B39AF80034F500 /* JumpBackIn.strings */,
+				439A220D29F69A0C00F120EE /* Notification.strings */,
+				43937C1E29BA686000074633 /* EngagementNotification.strings */,
+				43937C2129BA686000074633 /* Onboarding.strings */,
+				8DFA42FBB7C25AC38ACEEA0D /* PrivateBrowsing.strings */,
+				4369B87F2B0B75A8003791B9 /* FirefoxHomepage.strings */,
+				43C50B512A0BCAA800C6A134 /* Upgrade.strings */,
+				4822451299E114F04F3EFAB0 /* ClearHistoryConfirm.strings */,
+				43B966AD2BE8F11D007448EA /* Microsurvey.strings */,
+				431F0C482AC1A112006D7D49 /* TabLocation.strings */,
+				43903A8D2C20502A00ACF76E /* EnhancedTrackingProtection.strings */,
+				43A878152B838FF90039D6B7 /* PasswordAutofill.strings */,
+				43E6BE142C57AF7600C2152C /* Toolbar.strings */,
+				99C54F4F8354A39A0F06511F /* Intro.strings */,
+				9403451493EE3ADAAEFA2EB1 /* Storage.strings */,
+				05014FF0A3822CA5C103E9C9 /* Menu.strings */,
+				99C94644BBAAC6B90043899F /* LoginManager.strings */,
+				434707672C85D3DA009585F0 /* SuggestedSites.strings */,
+				D58A202725C9D96400105D25 /* BookmarkPanel.strings */,
+				43470D0928B39AF80034F500 /* ToolbarLocation.strings */,
+				43903A872C20502A00ACF76E /* ActivityStream.strings */,
+				432C01562B83900600392A88 /* KeyboardAccessory.strings */,
+				4344BD7B2AEFC6490057F642 /* Shopping.strings */,
+				43D3ED962C3BFFC900E33D46 /* EditAddress.strings */,
+				43A7153E2A2DF94F00DD5747 /* RememberCard.strings */,
+				43079D1D2C85D3BB0047C28D /* Bookmarks.strings */,
+				43903A902C20502A00ACF76E /* QRCode.strings */,
+				43903A8A2C20502A00ACF76E /* AddressToolbar.strings */,
+				43FA49A129C875C0005062DB /* SnackBar.strings */,
+				439A221029F69A0C00F120EE /* ZoomPageBar.strings */,
+				43B296352B305F1E00A5AA9B /* Credentials.strings */,
+				43B296322B305F1E00A5AA9B /* CredentialProvider.strings */,
+				AA3047F884B6BA22989FD627 /* Search.strings */,
+				433BADA229C8769800E34991 /* ErrorState.strings */,
+				43B520E22B55493E00007187 /* TabToolbar.strings */,
+				43DC75A52A24BE73007C2BCE /* DisplayCard.strings */,
+				968645798276FD71A15F01E5 /* Default Browser.strings */,
+				7401461DBA6DB88F82931350 /* Localizable.strings */,
+				43A715412A2DF94F00DD5747 /* UpdateCard.strings */,
+				32484895B328A342AED539C8 /* AuthenticationManager.strings */,
+				43B2963B2B305F1E00A5AA9B /* LoginsHelper.strings */,
+				4378C735293E09C200D0C1C7 /* TabsTray.strings */,
+				43FA499E29C875C0005062DB /* Settings.strings */,
+				F0D8481DAC1E6378ABF1565A /* ClearPrivateDataConfirm.strings */,
+				43079D212C85D3BB0047C28D /* MainMenu.strings */,
+				436E0E132BA857AB00D01C1A /* BottomSheet.strings */,
+				58E14A8F991610DB13A9F1E1 /* ClearPrivateData.strings */,
+				43DF9458292258C300590FE3 /* SearchHeaderTitle.strings */,
+				4378C732293E09C200D0C1C7 /* Alerts.strings */,
+				AC44428AA48BA072E576E062 /* FindInPage.strings */,
+				43FA499829C875C0005062DB /* Alert.strings */,
+				43C50B4E2A0BCAA800C6A134 /* FirefoxSync.strings */,
+				43F118FE2A52E42400C44C6C /* CustomizeFirefoxHome.strings */,
+				21374EEAA2C69079F77A0AC3 /* Today.strings */,
+				43737CB129E4259700847A6F /* Edit Card.strings */,
+				064741F8AE308A64808E6265 /* Shared.strings */,
+				4308A4E42A52E38C001D652E /* SelectCreditCard.strings */,
+				43FA499B29C875C0005062DB /* EditCard.strings */,
+				43B627742C3C001E00A188E8 /* ScanQRCode.strings */,
+				437AE30E2C7C9A0C0053F7F3 /* NativeErrorPage.strings */,
+				433BAD9E29C8769800E34991 /* BiometricAuthentication.strings */,
+				D58A202D25C9D96400105D25 /* BookmarkPanelDeleteConfirm.strings */,
+				67AF4B8392ADBAA41F1B3AD0 /* HistoryPanel.strings */,
+				43D75D182AC1A16900D1DE87 /* Share.strings */,
+				43B296382B305F1E00A5AA9B /* FirefoxLogins.strings */,
+				514A4C83AE17612AF3025498 /* 3DTouchActions.strings */,
+				43B2962F2B305F1E00A5AA9B /* ContextualHints.strings */,
+				43E168912CA183A400E67516 /* PasswordGenerator.strings */,
+				43A7153B2A2DF94F00DD5747 /* Footer.strings */,
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		1D7B78952ADF324E0011E9F2 /* Event Queue */ = {
@@ -12389,72 +12406,9 @@
 		E4E0BB141AFBC9E4008D6260 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				0B5E4B7E2CAD3CD10002E044 /* Strings */,
 				5FDA464727F20C9C0060E924 /* Generated */,
 			);
 			path = Shared;
-			sourceTree = "<group>";
-		};
-		E4E0BB161AFBC9E4008D6260 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				43FA499829C875C0005062DB /* Alert.strings */,
-				4378C732293E09C200D0C1C7 /* Alerts.strings */,
-				433BAD9E29C8769800E34991 /* BiometricAuthentication.strings */,
-				D58A202725C9D96400105D25 /* BookmarkPanel.strings */,
-				D58A202D25C9D96400105D25 /* BookmarkPanelDeleteConfirm.strings */,
-				43B2962F2B305F1E00A5AA9B /* ContextualHints.strings */,
-				43B296322B305F1E00A5AA9B /* CredentialProvider.strings */,
-				43B296352B305F1E00A5AA9B /* Credentials.strings */,
-				43F118FE2A52E42400C44C6C /* CustomizeFirefoxHome.strings */,
-				43DC75A52A24BE73007C2BCE /* DisplayCard.strings */,
-				43737CB129E4259700847A6F /* Edit Card.strings */,
-				43FA499B29C875C0005062DB /* EditCard.strings */,
-				43937C1E29BA686000074633 /* EngagementNotification.strings */,
-				433BADA229C8769800E34991 /* ErrorState.strings */,
-				4369B87F2B0B75A8003791B9 /* FirefoxHomepage.strings */,
-				43B296382B305F1E00A5AA9B /* FirefoxLogins.strings */,
-				43C50B4E2A0BCAA800C6A134 /* FirefoxSync.strings */,
-				43A7153B2A2DF94F00DD5747 /* Footer.strings */,
-				E4E0BB171AFBC9E4008D6260 /* Info.plist */,
-				43E168912CA183A400E67516 /* PasswordGenerator.strings */,
-				434707672C85D3DA009585F0 /* SuggestedSites.strings */,
-				43079D212C85D3BB0047C28D /* MainMenu.strings */,
-				43079D1D2C85D3BB0047C28D /* Bookmarks.strings */,
-				437AE30E2C7C9A0C0053F7F3 /* NativeErrorPage.strings */,
-				43E6BE142C57AF7600C2152C /* Toolbar.strings */,
-				43B627742C3C001E00A188E8 /* ScanQRCode.strings */,
-				43D3ED962C3BFFC900E33D46 /* EditAddress.strings */,
-				43903A902C20502A00ACF76E /* QRCode.strings */,
-				43903A8D2C20502A00ACF76E /* EnhancedTrackingProtection.strings */,
-				43903A8A2C20502A00ACF76E /* AddressToolbar.strings */,
-				43903A872C20502A00ACF76E /* ActivityStream.strings */,
-				43B966AD2BE8F11D007448EA /* Microsurvey.strings */,
-				436E0E132BA857AB00D01C1A /* BottomSheet.strings */,
-				432C01562B83900600392A88 /* KeyboardAccessory.strings */,
-				43A878152B838FF90039D6B7 /* PasswordAutofill.strings */,
-				43470D0628B39AF80034F500 /* JumpBackIn.strings */,
-				43B2963B2B305F1E00A5AA9B /* LoginsHelper.strings */,
-				439A220D29F69A0C00F120EE /* Notification.strings */,
-				43937C2129BA686000074633 /* Onboarding.strings */,
-				43A7153E2A2DF94F00DD5747 /* RememberCard.strings */,
-				43937C2429BA686000074633 /* ResearchSurface.strings */,
-				43DF9458292258C300590FE3 /* SearchHeaderTitle.strings */,
-				4308A4E42A52E38C001D652E /* SelectCreditCard.strings */,
-				43FA499E29C875C0005062DB /* Settings.strings */,
-				43D75D182AC1A16900D1DE87 /* Share.strings */,
-				E4E0BB151AFBC9E4008D6260 /* Shared-Bridging-Header.h */,
-				4344BD7B2AEFC6490057F642 /* Shopping.strings */,
-				43FA49A129C875C0005062DB /* SnackBar.strings */,
-				431F0C482AC1A112006D7D49 /* TabLocation.strings */,
-				4378C735293E09C200D0C1C7 /* TabsTray.strings */,
-				43B520E22B55493E00007187 /* TabToolbar.strings */,
-				43470D0928B39AF80034F500 /* ToolbarLocation.strings */,
-				43A715412A2DF94F00DD5747 /* UpdateCard.strings */,
-				43C50B512A0BCAA800C6A134 /* Upgrade.strings */,
-				439A221029F69A0C00F120EE /* ZoomPageBar.strings */,
-			);
-			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		E60961841B62B7E100DD640F /* Configuration */ = {
@@ -12710,6 +12664,7 @@
 				047F9B2A24E1FE1C00CD7DF7 /* WidgetKit */,
 				43BE578B278BA4D900491291 /* RustMozillaAppServices-Info.plist */,
 				8ACD3B972BA8EA8300E73E9A /* PrivacyInfo.xcprivacy */,
+				0BF1E3702CAD8EEF008B97E1 /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -12721,9 +12676,7 @@
 				F84B22491A0920C600AAB793 /* ShareTo.appex */,
 				D39FA15F1A83E0EC00EE869C /* UITests.xctest */,
 				288A2D861AB8B3260023ABC3 /* LegacyShared.framework */,
-				2FCAE21A1ABB51F800877008 /* libLegacyStorage.a */,
 				2FCAE2241ABB51F800877008 /* StorageTests.xctest */,
-				2FA435FB1ABB83B4008031D1 /* libLegacyAccount.a */,
 				2FA436051ABB83B4008031D1 /* AccountTests.xctest */,
 				282731681ABC9BE700AA1954 /* SyncTests.xctest */,
 				E6F9650C1B2F1CF20034B023 /* SharedTests.xctest */,
@@ -13102,7 +13055,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				2F67C5281BB0D33000E7B73A /* PBXTargetDependency */,
 				28ECD9B11BA1F07000D829DA /* PBXTargetDependency */,
 			);
 			name = SyncTests;
@@ -13132,26 +13084,6 @@
 			productReference = 288A2D861AB8B3260023ABC3 /* LegacyShared.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		2FA435FA1ABB83B4008031D1 /* LegacyAccount */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 2FA436141ABB83B4008031D1 /* Build configuration list for PBXNativeTarget "LegacyAccount" */;
-			buildPhases = (
-				2FA435F61ABB83B4008031D1 /* Sources */,
-				2FA435F71ABB83B4008031D1 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				45C9D1C82A323263009CDD7A /* PBXTargetDependency */,
-				2FA4361D1ABB83DD008031D1 /* PBXTargetDependency */,
-			);
-			name = LegacyAccount;
-			packageProductDependencies = (
-			);
-			productName = Account;
-			productReference = 2FA435FB1ABB83B4008031D1 /* libLegacyAccount.a */;
-			productType = "com.apple.product-type.library.static";
-		};
 		2FA436041ABB83B4008031D1 /* AccountTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2FA436181ABB83B4008031D1 /* Build configuration list for PBXNativeTarget "AccountTests" */;
@@ -13170,26 +13102,6 @@
 			productReference = 2FA436051ABB83B4008031D1 /* AccountTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		2FCAE2191ABB51F800877008 /* LegacyStorage */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 2FCAE2331ABB51F900877008 /* Build configuration list for PBXNativeTarget "LegacyStorage" */;
-			buildPhases = (
-				45CC573928AD89CB006D55AA /* Glean SDK Generator Script */,
-				2FCAE2151ABB51F800877008 /* Sources */,
-				2FCAE2161ABB51F800877008 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				2FCAE23C1ABB520700877008 /* PBXTargetDependency */,
-			);
-			name = LegacyStorage;
-			packageProductDependencies = (
-			);
-			productName = Storage;
-			productReference = 2FCAE21A1ABB51F800877008 /* libLegacyStorage.a */;
-			productType = "com.apple.product-type.library.static";
-		};
 		2FCAE2231ABB51F800877008 /* StorageTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2FCAE2371ABB51F900877008 /* Build configuration list for PBXNativeTarget "StorageTests" */;
@@ -13201,7 +13113,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				2FCAE2271ABB51F800877008 /* PBXTargetDependency */,
 				2FCAE2291ABB51F800877008 /* PBXTargetDependency */,
 			);
 			name = StorageTests;
@@ -13532,24 +13443,12 @@
 						CreatedOnToolsVersion = 6.2;
 						LastSwiftMigration = 1000;
 					};
-					2FA435FA1ABB83B4008031D1 = {
-						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 43AQ936H96;
-						LastSwiftMigration = 1000;
-						ProvisioningStyle = Manual;
-					};
 					2FA436041ABB83B4008031D1 = {
 						CreatedOnToolsVersion = 6.2;
 						DevelopmentTeam = 43AQ936H96;
 						LastSwiftMigration = 1000;
 						ProvisioningStyle = Manual;
 						TestTargetID = F84B21BD1A090F8100AAB793;
-					};
-					2FCAE2191ABB51F800877008 = {
-						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 43AQ936H96;
-						LastSwiftMigration = 1000;
-						ProvisioningStyle = Manual;
 					};
 					2FCAE2231ABB51F800877008 = {
 						CreatedOnToolsVersion = 6.2;
@@ -13781,8 +13680,6 @@
 				F84B22481A0920C600AAB793 /* ShareTo */,
 				047F9B2624E1FE1C00CD7DF7 /* WidgetKitExtension */,
 				F8324A042649A188007E4BFA /* CredentialProvider */,
-				2FA435FA1ABB83B4008031D1 /* LegacyAccount */,
-				2FCAE2191ABB51F800877008 /* LegacyStorage */,
 				2FA436041ABB83B4008031D1 /* AccountTests */,
 				F84B21D21A090F8100AAB793 /* ClientTests */,
 				3B43E3CF1D95C48D00BBA9DB /* StoragePerfTests */,
@@ -14136,26 +14033,6 @@
 			shellPath = /bin/sh;
 			shellScript = "movedFrameworks=()\n        cd \"${CODESIGNING_FOLDER_PATH}/Frameworks/\"\n        for framework in *; do\n            if [ -d \"$framework\" ]; then\n                if [ -d \"${framework}/Frameworks\" ]; then\n                    echo \"Moving nested frameworks from ${framework}/Frameworks/ to ${PRODUCT_NAME}.app/Frameworks/\"\n        \n                    cd \"${framework}/Frameworks/\"\n                    for nestedFramework in *; do\n                        echo \"- nested: ${nestedFramework}\"\n                        movedFrameworks+=(\"${nestedFramework}\")\n                    done\n                    cd ..\n                    cd ..\n        \n                    cp -R \"${framework}/Frameworks/\" .\n                    rm -rf \"${framework}/Frameworks\"\n                fi\n            fi\n        done\n        \n        if [ \"${CONFIGURATION}\" == \"Debug\" ] & [ \"${PLATFORM_NAME}\" != \"iphonesimulator\" ] ; then\n            for movedFramework in \"${movedFrameworks[@]}\"\n            do\n                codesign --force --deep --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" --preserve-metadata=identifier,entitlements --timestamp=none \"${movedFramework}\"\n            done\n        else\n            echo \"Info: CODESIGNING is only needed for Debug on device (will be re-signed anyway when archiving) \"\n        fi\n";
 		};
-		45CC573928AD89CB006D55AA /* Glean SDK Generator Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Storage/metrics.yaml",
-			);
-			name = "Glean SDK Generator Script";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(SRCROOT)/Storage/Generated/Metrics.swift",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Get the list of modified Swift files\nrm -rf .venv; bash $PWD/bin/sdk_generator.sh -g Glean -o $SRCROOT/Storage/Generated\n";
-		};
 		5FA2232B27F6FA00005B3D87 /* Glean SDK Generator Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -14283,26 +14160,11 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		2FA435F61ABB83B4008031D1 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		2FA436011ABB83B4008031D1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				4590912E2A2E4F7700061F0C /* AutopushTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2FCAE2151ABB51F800877008 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				45CC573F28AD8B9B006D55AA /* Metrics.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -15807,31 +15669,10 @@
 			target = 288A2D851AB8B3260023ABC3 /* LegacyShared */;
 			targetProxy = 2F14E1331ABB88CF00FF98DB /* PBXContainerItemProxy */;
 		};
-		2F67C5281BB0D33000E7B73A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2FA435FA1ABB83B4008031D1 /* LegacyAccount */;
-			targetProxy = 2FC87C3C1BC45E67001BAE77 /* PBXContainerItemProxy */;
-		};
-		2FA4361D1ABB83DD008031D1 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			platformFilter = ios;
-			target = 288A2D851AB8B3260023ABC3 /* LegacyShared */;
-			targetProxy = 2FA4361C1ABB83DD008031D1 /* PBXContainerItemProxy */;
-		};
-		2FCAE2271ABB51F800877008 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2FCAE2191ABB51F800877008 /* LegacyStorage */;
-			targetProxy = 2FCAE2261ABB51F800877008 /* PBXContainerItemProxy */;
-		};
 		2FCAE2291ABB51F800877008 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = 2FCAE2281ABB51F800877008 /* PBXContainerItemProxy */;
-		};
-		2FCAE23C1ABB520700877008 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 288A2D851AB8B3260023ABC3 /* LegacyShared */;
-			targetProxy = 2FCAE23B1ABB520700877008 /* PBXContainerItemProxy */;
 		};
 		397848E11ED86605004C0C0B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -15861,11 +15702,6 @@
 		459F39E52A031D16008C3411 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 459F39E42A031D16008C3411 /* Glean */;
-		};
-		45C9D1C82A323263009CDD7A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2FCAE2191ABB51F800877008 /* LegacyStorage */;
-			targetProxy = 45C9D1C72A323263009CDD7A /* PBXContainerItemProxy */;
 		};
 		7B9BF92F1E435DE400CB24F4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -21676,29 +21512,6 @@
 			};
 			name = Fennec;
 		};
-		2FA436151ABB83B4008031D1 /* Fennec */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
-				DEFINES_MODULE = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"\"$(SRCROOT)\"",
-					"\"$(SDKROOT)/usr/include/libxml2\"",
-					"\"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**\"",
-					"ThirdParty/ecec/include/**",
-					FxA/FxA/include,
-				);
-				INFOPLIST_FILE = Account/Info.plist;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/FxA/FxA/lib",
-				);
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
-			};
-			name = Fennec;
-		};
 		2FA436191ABB83B4008031D1 /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -21706,16 +21519,6 @@
 				INFOPLIST_FILE = "firefox-ios-tests/Tests/AccountTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
-			};
-			name = Fennec;
-		};
-		2FCAE2341ABB51F900877008 /* Fennec */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEFINES_MODULE = YES;
-				INFOPLIST_FILE = Storage/Info.plist;
-				SKIP_INSTALL = YES;
-				VALIDATE_WORKSPACE = YES;
 			};
 			name = Fennec;
 		};
@@ -22223,39 +22026,6 @@
 			};
 			name = Fennec_Testing;
 		};
-		8A1993732C9B5A63001F4D57 /* Fennec_Testing */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
-				DEFINES_MODULE = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"\"$(SRCROOT)\"",
-					"\"$(SDKROOT)/usr/include/libxml2\"",
-					"\"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**\"",
-					"ThirdParty/ecec/include/**",
-					FxA/FxA/include,
-				);
-				INFOPLIST_FILE = Account/Info.plist;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/FxA/FxA/lib",
-				);
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
-			};
-			name = Fennec_Testing;
-		};
-		8A1993742C9B5A63001F4D57 /* Fennec_Testing */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEFINES_MODULE = YES;
-				INFOPLIST_FILE = Storage/Info.plist;
-				SKIP_INSTALL = YES;
-				VALIDATE_WORKSPACE = YES;
-			};
-			name = Fennec_Testing;
-		};
 		8A1993752C9B5A63001F4D57 /* Fennec_Testing */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -22539,15 +22309,6 @@
 			};
 			name = Firefox;
 		};
-		E448FCA41AEE7A6000869B6C /* Firefox */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEFINES_MODULE = YES;
-				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = Storage/Info.plist;
-			};
-			name = Firefox;
-		};
 		E448FCA51AEE7A6000869B6C /* Firefox */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -22556,29 +22317,6 @@
 				INFOPLIST_FILE = "firefox-ios-tests/Tests/StorageTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
-			};
-			name = Firefox;
-		};
-		E448FCA61AEE7A6000869B6C /* Firefox */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
-				DEFINES_MODULE = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"\"$(SRCROOT)\"",
-					"\"$(SDKROOT)/usr/include/libxml2\"",
-					"\"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**\"",
-					"ThirdParty/ecec/include/**",
-					FxA/FxA/include,
-				);
-				INFOPLIST_FILE = Account/Info.plist;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/FxA/FxA/lib",
-				);
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
 			};
 			name = Firefox;
 		};
@@ -22768,37 +22506,6 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Fennec_Enterprise;
-		};
-		E6DCC20C1DCBB6F100CEC4B7 /* Fennec_Enterprise */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEFINES_MODULE = YES;
-				INFOPLIST_FILE = Storage/Info.plist;
-			};
-			name = Fennec_Enterprise;
-		};
-		E6DCC20D1DCBB6F100CEC4B7 /* Fennec_Enterprise */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
-				DEFINES_MODULE = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"\"$(SRCROOT)\"",
-					"\"$(SDKROOT)/usr/include/libxml2\"",
-					"\"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**\"",
-					"ThirdParty/ecec/include/**",
-					FxA/FxA/include,
-				);
-				INFOPLIST_FILE = Account/Info.plist;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/FxA/FxA/lib",
-				);
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
 			};
 			name = Fennec_Enterprise;
 		};
@@ -23027,14 +22734,6 @@
 			};
 			name = FirefoxBeta;
 		};
-		E6FCC4321C40562400DF6113 /* FirefoxBeta */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DEFINES_MODULE = YES;
-				INFOPLIST_FILE = Storage/Info.plist;
-			};
-			name = FirefoxBeta;
-		};
 		E6FCC4331C40562400DF6113 /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -23043,30 +22742,6 @@
 				INFOPLIST_FILE = "firefox-ios-tests/Tests/StorageTests/Info.plist";
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
-			};
-			name = FirefoxBeta;
-		};
-		E6FCC4341C40562400DF6113 /* FirefoxBeta */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
-				DEFINES_MODULE = YES;
-				ENABLE_TESTABILITY = YES;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"\"$(SRCROOT)\"",
-					"\"$(SDKROOT)/usr/include/libxml2\"",
-					"\"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**\"",
-					"ThirdParty/ecec/include/**",
-					FxA/FxA/include,
-				);
-				INFOPLIST_FILE = Account/Info.plist;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/FxA/FxA/lib",
-				);
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
 			};
 			name = FirefoxBeta;
 		};
@@ -23512,18 +23187,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
 		};
-		2FA436141ABB83B4008031D1 /* Build configuration list for PBXNativeTarget "LegacyAccount" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				2FA436151ABB83B4008031D1 /* Fennec */,
-				8A1993732C9B5A63001F4D57 /* Fennec_Testing */,
-				E6DCC20D1DCBB6F100CEC4B7 /* Fennec_Enterprise */,
-				E448FCA61AEE7A6000869B6C /* Firefox */,
-				E6FCC4341C40562400DF6113 /* FirefoxBeta */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
-		};
 		2FA436181ABB83B4008031D1 /* Build configuration list for PBXNativeTarget "AccountTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -23532,18 +23195,6 @@
 				E6DCC2141DCBB6F100CEC4B7 /* Fennec_Enterprise */,
 				E448FCA71AEE7A6000869B6C /* Firefox */,
 				E6FCC4351C40562400DF6113 /* FirefoxBeta */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
-		};
-		2FCAE2331ABB51F900877008 /* Build configuration list for PBXNativeTarget "LegacyStorage" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				2FCAE2341ABB51F900877008 /* Fennec */,
-				8A1993742C9B5A63001F4D57 /* Fennec_Testing */,
-				E6DCC20C1DCBB6F100CEC4B7 /* Fennec_Enterprise */,
-				E448FCA41AEE7A6000869B6C /* Firefox */,
-				E6FCC4321C40562400DF6113 /* FirefoxBeta */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
