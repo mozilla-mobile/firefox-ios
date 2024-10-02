@@ -859,7 +859,12 @@ class BrowserViewController: UIViewController,
 
         // Setup the URL bar, wrapped in a view to get transparency effect
         if isToolbarRefactorEnabled {
-            addressToolbarContainer.configure(windowUUID: windowUUID, profile: profile, delegate: self)
+            addressToolbarContainer.configure(
+                windowUUID: windowUUID,
+                profile: profile,
+                delegate: self,
+                isUnifiedSearchEnabled: isUnifiedSearchEnabled
+            )
             addressToolbarContainer.applyTheme(theme: currentTheme())
             addressToolbarContainer.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
         } else {
