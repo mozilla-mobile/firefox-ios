@@ -33,7 +33,11 @@ extension ContentBlocker {
         // Note that * is added to the front of domains, so foo.com becomes *foo.com
         let list = "'*" + safelistedDomains.domainSet.joined(separator: "','*") + "'"
 
-        return ", {'action': { 'type': 'ignore-previous-rules' }, 'trigger': { 'url-filter': '.*', 'if-domain': [\(list)] }}".replacingOccurrences(of: "'", with: "\"")
+        let script =
+        """
+        , {"action": { "type": "ignore-previous-rules" }, "trigger": { "url-filter": ".*", "if-domain": [\(list)] }}
+        """
+        return script
     }
 
     func safelist(enable: Bool, url: URL, completion: (() -> Void)?) {

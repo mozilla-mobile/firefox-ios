@@ -531,6 +531,12 @@ class NavigationTest: BaseTestCase {
     private func validateExternalLink(isPrivate: Bool = false) {
         navigator.openURL("ultimateqa.com/dummy-automation-websites")
         waitUntilPageLoad()
+
+        // If there are multiple matches for "SauceDemo.com", then both the normal tab and the private tab views may be
+        // in the view hierarchy simultaneously. This should not change unintentionally! Check the Debug View Hierarchy.
+        // Note: Additional matches may also appear if the external website updates.
+        XCTAssertEqual(app.links.matching(identifier: "SauceDemo.com").count, 1, "Too many matches")
+
         scrollToElement(app.links["SauceDemo.com"].firstMatch)
         app.links["SauceDemo.com"].firstMatch.tap(force: true)
         waitUntilPageLoad()
@@ -544,8 +550,6 @@ class NavigationTest: BaseTestCase {
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         mozWaitForElementToExist(tabsButton)
         XCTAssertEqual(tabsButton.value as? String, "2")
-        // We need to close the tabs from regular mode in order to be able to interact with the elements from private tab
-        navigator.performAction(Action.AcceptRemovingAllTabs)
     }
 
     private func openContextMenuForArticleLink() {

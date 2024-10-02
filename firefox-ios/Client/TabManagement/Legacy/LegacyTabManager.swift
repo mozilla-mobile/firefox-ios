@@ -87,7 +87,11 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     var normalActiveTabs: [Tab] {
-        return normalTabs.filter({ $0.isActive })
+        if isInactiveTabsEnabled {
+            return normalTabs.filter({ $0.isActive })
+        } else {
+            return normalTabs
+        }
     }
 
     var inactiveTabs: [Tab] {
@@ -98,9 +102,14 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         return tabs.filter { $0.isPrivate }
     }
 
+    var isInactiveTabsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
+    }
+
     /// This variable returns all normal tabs, sorted chronologically, excluding any home page tabs.
     var recentlyAccessedNormalTabs: [Tab] {
-        var eligibleTabs = normalActiveTabs // Do not include inactive tabs, as they are not "recently" accessed
+        // If inactive tabs are enabled, do not include inactive tabs, as they are not "recently" accessed
+        var eligibleTabs = isInactiveTabsEnabled ? normalActiveTabs : normalTabs
 
         eligibleTabs = eligibleTabs.filter { tab in
             if tab.lastKnownUrl == nil {
@@ -847,7 +856,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
             // If so, handle this gracefully (i.e. close the last private tab should open the most recent normal active tab).
             let viableTabs = removedTab.isPrivate
                                  ? privateTabs
-                                 : normalActiveTabs // We never want to surface an inactive tab
+                                 : normalActiveTabs // We never want to surface an inactive tab, if inactive tabs enabled
             guard !viableTabs.isEmpty else {
                 // If the selected tab is closed, and is private browsing, try to select a recent normal active tab. For all
                 // other cases, open a new normal active tab.

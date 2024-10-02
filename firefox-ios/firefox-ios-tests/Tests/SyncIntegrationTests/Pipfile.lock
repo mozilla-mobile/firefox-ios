@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "710b2b26f95df49fcc12cc73f8922fe70dca0ebb74636b2099b189499bdb9391"
+            "sha256": "5c5253a40b8263aacbc202868de1f3140b23433930694bdde293cde15f0261c9"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -495,15 +495,8 @@
         },
         "pyfxa": {
             "hashes": [
-                "sha256:0cc15997585b60d69270e4d69006cada72ad8bac03e524b9037d2aed35b9bcee",
-                "sha256:dd762831892ac102ac99e7bc1b186d0dacdccd719a391b36512195867c96b7ff"
-            ],
-            "version": "==0.7.8"
-        },
-        "pyfxa-mte": {
-            "hashes": [
-                "sha256:b06e0f54fb941c90ae0b8303993fdf042be3fc95f6e487c3306676b20978456f",
-                "sha256:bd546e4348e389f4f7a68daab4ab895a90df55d241e9e8b96c57590c703bed46"
+                "sha256:67af665149ab87318bc8d4bf2216bb7945fb2dcdc5442106cbcd3c7d70559630",
+                "sha256:753b161566aa5fa632a4d273f564a573126560eb2d993bb6660386dd13d2562c"
             ],
             "markers": "python_version >= '3.8'",
             "version": "==0.7.9"
@@ -542,11 +535,11 @@
         },
         "pytest-fxa-mte": {
             "hashes": [
-                "sha256:5feb85e691b48ca10da27ab31e5ebd19ed38eda4fa03b1ca3b467bf49af188f3",
-                "sha256:6d8d7d1f840963e2b5589e0be7bf2c3ba080d1ce70549677879e24c0268c772c"
+                "sha256:c66be9d51b32414cf5cc6b84dfe5bd2ae468d9ba301a3199306a17de70e8f1a7",
+                "sha256:e10b9b6038725f600f381447246e3d844ee806fd4277f9307bd08b70d5ba29c9"
             ],
             "index": "pypi",
-            "version": "==1.5.1"
+            "version": "==1.6.0"
         },
         "pytest-html": {
             "hashes": [
@@ -568,11 +561,11 @@
         },
         "python-utils": {
             "hashes": [
-                "sha256:ad0ccdbd6f856d015cace07f74828b9840b5c4072d9e868a7f6a14fd195555a8",
-                "sha256:c5d161e4ca58ce3f8c540f035e018850b261a41e7cb98f6ccf8e1deb7174a1f1"
+                "sha256:3689556884e3ae53aec5a4c9f17b36e752a3e93a7ba2768c6553fc4dd6fa70ef",
+                "sha256:a7719a5ef4bae7360d2a15c13b08c4e3c3e39b9df19bd16f119ff8d0cfeaafb7"
             ],
-            "markers": "python_version >= '3.9'",
-            "version": "==3.8.2"
+            "markers": "python_version >= '3.10'",
+            "version": "==3.9.0"
         },
         "redo": {
             "hashes": [

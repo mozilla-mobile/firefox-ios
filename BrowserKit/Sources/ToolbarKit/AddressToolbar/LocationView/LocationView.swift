@@ -22,6 +22,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     private var onTapLockIcon: ((UIButton) -> Void)?
     private var onLongPress: (() -> Void)?
     private weak var delegate: LocationViewDelegate?
+    private var isUnifiedSearchEnabled = false
 
     private var isEditing = false
     private var isURLTextFieldEmpty: Bool {
@@ -97,9 +98,8 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         notifyTextChanged = { [self] in
             guard urlTextField.isEditing else { return }
 
-            urlTextField.text = urlTextField.text?.lowercased()
-            urlAbsolutePath = urlTextField.text
-            delegate?.locationViewDidEnterText(urlTextField.text ?? "")
+            urlAbsolutePath = urlTextField.text?.lowercased()
+            delegate?.locationViewDidEnterText(urlAbsolutePath ?? "")
         }
     }
 
@@ -117,7 +117,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         return urlTextField.resignFirstResponder()
     }
 
-    func configure(_ state: LocationViewState, delegate: LocationViewDelegate) {
+    func configure(_ state: LocationViewState, delegate: LocationViewDelegate, isUnifiedSearchEnabled: Bool) {
         searchEngineImageView.image = state.searchEngineImage
         configureLockIconButton(state)
         configureURLTextField(state)
@@ -125,6 +125,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         formatAndTruncateURLTextField()
         updateIconContainer()
         self.delegate = delegate
+        self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         searchTerm = state.searchTerm
         onLongPress = state.onLongPress
     }
@@ -148,6 +149,10 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     }
 
     private func setupLayout() {
+        if isUnifiedSearchEnabled {
+            // TODO FXIOS-10193 Update search engine icon for Unified Search
+        }
+
         addSubviews(urlTextField, iconContainerStackView, gradientView)
         iconContainerStackView.addSubview(iconContainerBackgroundView)
         searchEngineContentView.addSubview(searchEngineImageView)
@@ -243,9 +248,8 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     private func updateUIForSearchEngineDisplay() {
         removeContainerIcons()
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
-        urlTextFieldLeadingConstraint?.constant = UX.horizontalSpace
-        iconContainerStackViewLeadingConstraint?.constant = UX.horizontalSpace
         updateURLTextFieldLeadingConstraint(constant: UX.horizontalSpace)
+        iconContainerStackViewLeadingConstraint?.constant = UX.horizontalSpace
         updateGradient()
     }
 
@@ -253,7 +257,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         guard !isEditing else { return }
         removeContainerIcons()
         iconContainerStackView.addArrangedSubview(lockIconButton)
-        urlTextFieldLeadingConstraint?.constant = 0
+        updateURLTextFieldLeadingConstraint()
         iconContainerStackViewLeadingConstraint?.constant = 0
         updateGradient()
     }
@@ -367,7 +371,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     }
 
     func locationTextFieldShouldClear(_ textField: LocationTextField) -> Bool {
-        delegate?.locationViewDidEnterText("")
+        delegate?.locationViewDidClearText()
         return true
     }
 

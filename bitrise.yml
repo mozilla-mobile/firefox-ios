@@ -2109,17 +2109,17 @@ app:
     BITRISE_NIGHTLY_VERSION: '9000'
   - opts:
       is_expand: false
-    BITRISE_RELEASE_VERSION: '132.0'
+    BITRISE_RELEASE_VERSION: '133.0'
   - opts:
       is_expand: false
-    BITRISE_BETA_VERSION: '132.0'
+    BITRISE_BETA_VERSION: '133.0'
 
 trigger_map:
 - push_branch: main
   pipeline: pipeline_build_and_test
 - push_branch: epic-branch/*
   pipeline: pipeline_build_and_test
-- push_branch: release/v132
+- push_branch: release/v133
   pipeline: pipeline_build_and_test
 - pull_request_target_branch: main
   pipeline: pipeline_build_and_test

@@ -43,25 +43,33 @@ final class TrackingProtectionConnectionDetailsView: UIView {
         label.adjustsFontForContentSizeCategory = true
     }
 
+    private var viewConstraints: [NSLayoutConstraint] = []
+
     init() {
         super.init(frame: .zero)
-        setupLayout()
+        setupViews()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupLayout() {
+    private func setupViews() {
         self.layer.cornerRadius = TPMenuUX.UX.viewCornerRadius
         self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         self.layer.masksToBounds = true
-
         connectionDetailsLabelsContainer.addArrangedSubview(connectionDetailsTitleLabel)
         connectionDetailsLabelsContainer.addArrangedSubview(connectionDetailsStatusLabel)
         connectionDetailsContentView.addSubviews(foxStatusImage, connectionDetailsLabelsContainer)
         self.addSubview(connectionDetailsContentView)
-        NSLayoutConstraint.activate([
+    }
+
+    private func updateLayout(isAccessibilityCategory: Bool) {
+        removeConstraints(constraints)
+        connectionDetailsContentView.removeConstraints(connectionDetailsContentView.constraints)
+        foxStatusImage.removeConstraints(foxStatusImage.constraints)
+        viewConstraints.removeAll()
+        viewConstraints.append(contentsOf: [
             // Content
             connectionDetailsContentView.leadingAnchor.constraint(
                 equalTo: self.leadingAnchor,
@@ -88,22 +96,29 @@ final class TrackingProtectionConnectionDetailsView: UIView {
             foxStatusImage.widthAnchor.constraint(equalToConstant: UX.foxImageSize),
 
             // Labels
-            connectionDetailsLabelsContainer.topAnchor.constraint(
-                equalTo: connectionDetailsContentView.topAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
-            ),
             connectionDetailsLabelsContainer.bottomAnchor.constraint(
                 equalTo: connectionDetailsContentView.bottomAnchor,
                 constant: -UX.connectionDetailsLabelBottomSpacing / 2
             ),
-            connectionDetailsLabelsContainer.leadingAnchor.constraint(
-                equalTo: foxStatusImage.trailingAnchor,
-                constant: UX.connectionDetailsLabelsVerticalSpacing),
             connectionDetailsLabelsContainer.trailingAnchor.constraint(equalTo:
                                                                         connectionDetailsContentView.trailingAnchor,
                                                                        constant: -TPMenuUX.UX.horizontalMargin),
             connectionDetailsLabelsContainer.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.foxImageSize)
         ])
+        viewConstraints.append(connectionDetailsLabelsContainer.leadingAnchor.constraint(
+            equalTo: isAccessibilityCategory ?
+            connectionDetailsContentView.leadingAnchor : foxStatusImage.trailingAnchor,
+            constant: TPMenuUX.UX.horizontalMargin))
+        viewConstraints.append(connectionDetailsLabelsContainer.topAnchor.constraint(
+            equalTo: isAccessibilityCategory ?
+            foxStatusImage.bottomAnchor : connectionDetailsContentView.topAnchor,
+            constant: TPMenuUX.UX.horizontalMargin
+        ))
+        NSLayoutConstraint.activate(viewConstraints)
+    }
+
+    func adjustLayout() {
+        updateLayout(isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory)
     }
 
     func setupDetails(color: UIColor? = nil, title: String, status: String, image: UIImage?) {

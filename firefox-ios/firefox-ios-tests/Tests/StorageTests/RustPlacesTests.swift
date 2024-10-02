@@ -26,6 +26,12 @@ class RustPlacesTests: XCTestCase {
         _ = places.reopenIfClosed()
     }
 
+    override func tearDown() {
+        _ = places.forceClose()
+        places = nil
+        super.tearDown()
+    }
+
     /**
         Basic "smoke tests" of the history metadata. Robust test suite exists within the library itself.
      */

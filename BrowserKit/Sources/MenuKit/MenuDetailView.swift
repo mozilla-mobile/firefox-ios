@@ -8,10 +8,6 @@ import ComponentLibrary
 
 public final class MenuDetailView: UIView,
                                    MenuTableViewDataDelegate, ThemeApplicable {
-    private struct UX {
-        static let headerHeight: CGFloat = 70
-    }
-
     // MARK: - UI Elements
     private var tableView: MenuTableView = .build()
     public var detailHeaderView: NavigationHeaderView = .build()
@@ -35,7 +31,6 @@ public final class MenuDetailView: UIView,
             detailHeaderView.topAnchor.constraint(equalTo: self.topAnchor),
             detailHeaderView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             detailHeaderView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            detailHeaderView.heightAnchor.constraint(equalToConstant: UX.headerHeight),
 
             tableView.topAnchor.constraint(equalTo: detailHeaderView.bottomAnchor),
             tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
@@ -52,6 +47,10 @@ public final class MenuDetailView: UIView,
                                             closeButtonA11yId: closeButtonA11yId,
                                             backButtonA11yLabel: backButtonA11yLabel,
                                             backButtonA11yId: backButtonA11yId)
+    }
+
+    public func adjustLayout() {
+        detailHeaderView.adjustLayout()
     }
 
     // MARK: - Interface

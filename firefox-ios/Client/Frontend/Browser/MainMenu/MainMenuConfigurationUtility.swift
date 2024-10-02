@@ -13,7 +13,7 @@ struct MainMenuConfigurationUtility: Equatable {
         static let newPrivateTab = StandardImageIdentifiers.Large.privateModeCircleFill
         static let deviceDesktop = StandardImageIdentifiers.Large.deviceDesktop
         static let findInPage = StandardImageIdentifiers.Large.search
-        static let tools = StandardImageIdentifiers.Large.tools
+        static let tools = StandardImageIdentifiers.Large.tool
         static let save = StandardImageIdentifiers.Large.save
         static let bookmarks = StandardImageIdentifiers.Large.bookmarkTrayFill
         static let history = StandardImageIdentifiers.Large.history
@@ -29,7 +29,7 @@ struct MainMenuConfigurationUtility: Equatable {
         static let share = StandardImageIdentifiers.Large.share
         static let addToShortcuts = StandardImageIdentifiers.Large.pin
         static let saveToReadingList = StandardImageIdentifiers.Large.readingListAdd
-        static let addToHomeScreen = StandardImageIdentifiers.Large.addToHomeScreen
+        static let addToHomescreen = StandardImageIdentifiers.Large.addToHomescreen
         static let bookmarkThisPage = StandardImageIdentifiers.Large.bookmark
         static let reportBrokenSite = StandardImageIdentifiers.Large.lightbulb
         static let customizeHomepage = StandardImageIdentifiers.Large.gridAdd
@@ -367,7 +367,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 ),
                 MenuElement(
                     title: .MainMenu.Submenus.Save.AddToHomeScreen,
-                    iconName: Icons.addToHomeScreen,
+                    iconName: Icons.addToHomescreen,
                     isEnabled: true,
                     isActive: false,
                     a11yLabel: .MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen,

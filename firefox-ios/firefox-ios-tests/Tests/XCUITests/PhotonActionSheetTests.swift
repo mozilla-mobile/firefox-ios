@@ -19,7 +19,8 @@ class PhotonActionSheetTests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
         // Verify that the site is pinned to top
-        let cell = app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell].staticTexts["Example Domain"]
+        let itemCell = app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        let cell = itemCell.staticTexts["Example Domain"]
         mozWaitForElementToExist(cell)
 
         // Remove pin
@@ -27,6 +28,8 @@ class PhotonActionSheetTests: BaseTestCase {
         app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash].tap()
 
         // Check that it has been unpinned
+        // Adding sleep as an workaround until https://github.com/mozilla-mobile/firefox-ios/issues/22323 is fixed
+        sleep(5)
         cell.press(forDuration: 2)
         mozWaitForElementToExist(app.tables.cells.otherElements[StandardImageIdentifiers.Large.pin])
     }

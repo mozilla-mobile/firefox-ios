@@ -164,7 +164,7 @@ class ActionProviderBuilder {
 
             makeURLSession(
                 userAgent: UserAgent.fxaUserAgent,
-                configuration: URLSessionConfiguration.default
+                configuration: URLSessionConfiguration.defaultMPTCP
             ).dataTask(with: url) { (data, response, error) in
                 guard validatedHTTPResponse(response, statusCode: 200..<300) != nil else {
                     application.endBackgroundTask(self.taskId)

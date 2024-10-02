@@ -27,21 +27,20 @@ class ZoomingTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306947
     // Smoketest
-    // FIXME FXIOS-10122 Must be addressed
-//    func testZoomingActions() {
-//        // Regular browsing
-//        validateZoomActions()
-//
-//        // Repeat all the steps in private browsing
-//        XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
-//        navigator.nowAt(BrowserTab)
-//        navigator.goto(TabTray)
-//        if !app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].exists {
-//            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
-//        }
-//        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-//        validateZoomActions()
-//    }
+    func testZoomingActions() {
+        // Regular browsing
+        validateZoomActions()
+
+        // Repeat all the steps in private browsing
+        XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
+        navigator.nowAt(BrowserTab)
+        navigator.goto(TabTray)
+        if !app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].exists {
+            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
+        }
+        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        validateZoomActions()
+    }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306949
     func testZoomForceCloseFirefox() {
@@ -163,6 +162,11 @@ class ZoomingTests: BaseTestCase {
     }
 
     func zoomIn() {
+        // If there are multiple matches for this element, then both the normal tab and the private tab views may be
+        // in the view hierarchy simultaneously. This should not change unintentionally! Check the Debug View Hierarchy.
+        let viewCount = app.buttons.matching(identifier: AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel).count
+        XCTAssertLessThanOrEqual(viewCount, 1, "Too many matches")
+
         for i in 0...3 {
             zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
             let previoustTextSize = bookOfMozillaTxt.frame.size.height

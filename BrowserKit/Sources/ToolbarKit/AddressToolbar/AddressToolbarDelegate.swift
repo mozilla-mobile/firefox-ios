@@ -7,6 +7,7 @@ import UIKit
 
 public protocol AddressToolbarDelegate: AnyObject {
     func searchSuggestions(searchTerm: String)
+    func didClearSearch()
     func openBrowser(searchTerm: String)
     func openSuggestions(searchTerm: String)
     func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool)

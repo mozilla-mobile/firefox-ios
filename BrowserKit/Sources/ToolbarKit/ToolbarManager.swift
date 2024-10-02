@@ -29,7 +29,7 @@ public class DefaultToolbarManager: ToolbarManager {
         // display the top border if
         // - the toolbar is displayed at the bottom
         // display the bottom border if
-        // - the toolbar is displayed at the top and the website was scrolled
+        // - the toolbar is displayed at the top and page is scrolled
         // - the toolbar is displayed at the top and we are in private mode
         if toolbarPosition == .bottom {
             return .top

@@ -54,7 +54,6 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         button.layer.cornerRadius = button.frame.size.width / 2
         button.addTarget(self, action: #selector(self?.switchMode), for: .touchUpInside)
         button.accessibilityLabel = .TabTrayToggleAccessibilityLabel
-        button.accessibilityHint = .TabTrayToggleAccessibilityHint
         button.accessibilityIdentifier = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.privateModeToggleButton
     }
 
@@ -115,5 +114,8 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         let privateModeButtonTintColor = viewModel.isPrivate ? theme.colors.layer2 : theme.colors.iconPrimary
         privateModeButton.imageView?.tintColor = privateModeButtonTintColor
         privateModeButton.backgroundColor = viewModel.isPrivate ? .white : .clear
+        privateModeButton.accessibilityValue = viewModel.isPrivate ?
+            .TabTrayToggleAccessibilityValueOn :
+            .TabTrayToggleAccessibilityValueOff
     }
 }
