@@ -125,11 +125,5 @@ enum Route: Equatable {
     enum SearchOptions: Equatable {
         /// An option to focus the user's attention on the location field of the search interface.
         case focusLocationField
-
-        /// An option to switch to a normal search mode.
-        case switchToNormalMode
-
-        /// An option to switch to a privacy mode that may hide or obscure search results and prevent data sharing.
-        case switchToPrivacyMode
     }
 }

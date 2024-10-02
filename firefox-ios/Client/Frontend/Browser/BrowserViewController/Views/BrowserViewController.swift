@@ -2362,9 +2362,6 @@ class BrowserViewController: UIViewController,
 
     func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
         if let url = url {
-            if options?.contains(.switchToNormalMode) == true {
-                switchToPrivacyMode(isPrivate: false)
-            }
             switchToTabForURLOrOpen(url, isPrivate: isPrivate)
         } else {
             openBlankNewTab(

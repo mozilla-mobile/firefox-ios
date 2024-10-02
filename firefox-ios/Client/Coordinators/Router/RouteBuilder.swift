@@ -179,7 +179,7 @@ final class RouteBuilder {
             return .search(url: nil, isPrivate: true, options: options)
         case .openLastBookmark:
             if let urlToOpen = (shortcutItem.userInfo?[QuickActionInfos.tabURLKey] as? String)?.asURL {
-                return .search(url: urlToOpen, isPrivate: false, options: [.switchToNormalMode])
+                return .search(url: urlToOpen, isPrivate: isPrivate)
             } else {
                 return nil
             }
