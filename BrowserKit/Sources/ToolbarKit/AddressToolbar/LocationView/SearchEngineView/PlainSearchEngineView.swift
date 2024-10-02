@@ -5,19 +5,17 @@
 import UIKit
 import Common
 
-final class SearchEngineView: UIView, ThemeApplicable {
+/// A wrapped UIImageView which displays a plain search engine icon with no tapping features.
+final class PlainSearchEngineView: UIView, SearchEngineView, ThemeApplicable {
     // MARK: - Properties
     private enum UX {
-        static let searchEngineImageViewCornerRadius: CGFloat = 4
-        static let searchEngineImageViewSize = CGSize(width: 24, height: 24)
+        static let cornerRadius: CGFloat = 4
+        static let imageViewSize = CGSize(width: 24, height: 24)
     }
-
-    private weak var delegate: LocationViewDelegate? // TODO Needed for FXIOS-10191
-    private var isUnifiedSearchEnabled = false
 
     private lazy var searchEngineImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
-        imageView.layer.cornerRadius = UX.searchEngineImageViewCornerRadius
+        imageView.layer.cornerRadius = UX.cornerRadius
         imageView.isAccessibilityElement = true
     }
 
@@ -31,11 +29,9 @@ final class SearchEngineView: UIView, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(_ state: LocationViewState, delegate: LocationViewDelegate, isUnifiedSearchEnabled: Bool) {
+    func configure(_ state: LocationViewState, delegate: LocationViewDelegate) {
         searchEngineImageView.image = state.searchEngineImage
         configureA11y(state)
-        self.delegate = delegate
-        self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
     }
 
     // MARK: - Layout
@@ -45,8 +41,8 @@ final class SearchEngineView: UIView, ThemeApplicable {
         addSubviews(searchEngineImageView)
 
         NSLayoutConstraint.activate([
-            searchEngineImageView.heightAnchor.constraint(equalToConstant: UX.searchEngineImageViewSize.height),
-            searchEngineImageView.widthAnchor.constraint(equalToConstant: UX.searchEngineImageViewSize.width),
+            searchEngineImageView.heightAnchor.constraint(equalToConstant: UX.imageViewSize.height),
+            searchEngineImageView.widthAnchor.constraint(equalToConstant: UX.imageViewSize.width),
             searchEngineImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             searchEngineImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             searchEngineImageView.topAnchor.constraint(greaterThanOrEqualTo: self.topAnchor),

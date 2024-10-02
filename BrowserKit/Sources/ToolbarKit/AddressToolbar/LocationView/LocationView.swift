@@ -63,7 +63,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     private lazy var iconContainerBackgroundView: UIView = .build { view in
         view.layer.cornerRadius = UX.iconContainerCornerRadius
     }
-    private lazy var searchEngineContentView: SearchEngineView = .build()
+    private lazy var searchEngineContentView: SearchEngineView = PlainSearchEngineView()
     private lazy var lockIconButton: UIButton = .build { button in
         button.contentMode = .scaleAspectFit
         button.addTarget(self, action: #selector(self.didTapLockIcon), for: .touchUpInside)
@@ -109,7 +109,6 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     }
 
     func configure(_ state: LocationViewState, delegate: LocationViewDelegate, isUnifiedSearchEnabled: Bool) {
-        searchEngineContentView.configure(state, delegate: delegate, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
         configureLockIconButton(state)
         configureURLTextField(state)
         configureA11y(state)
@@ -119,6 +118,11 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         searchTerm = state.searchTerm
         onLongPress = state.onLongPress
+
+        searchEngineContentView = isUnifiedSearchEnabled
+                                  ? DropDownSearchEngineView()
+                                  : PlainSearchEngineView()
+        searchEngineContentView.configure(state, delegate: delegate)
     }
 
     func setAutocompleteSuggestion(_ suggestion: String?) {
@@ -140,10 +144,6 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     }
 
     private func setupLayout() {
-        if isUnifiedSearchEnabled {
-            // TODO FXIOS-10193 Update search engine icon for Unified Search
-        }
-
         addSubviews(urlTextField, iconContainerStackView, gradientView)
         iconContainerStackView.addSubview(iconContainerBackgroundView)
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
