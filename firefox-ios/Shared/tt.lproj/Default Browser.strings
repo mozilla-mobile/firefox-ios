@@ -1,0 +1,45 @@
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Firefox-ны төп браузерыгыз итү — ачык, кулланышлы интернетка тавыш бирү.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "Яхшырак Интернетка күчегез";
+
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "Ничеклеген белү";
+
+/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "Вебсайтлардан, эл. почталардан һәм хәбәрләрдән сылтамаларны автоматик рәвештә Firefox'та ачу.";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "Тизлекне, иминлекны һәм хосусыйлыкны автоматлаштыру өчен стандарт браузер итеп Firefox-ны сайлагыз.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "Көндәлек гизүегезне яхшыртыгыз";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox уртача алганда ай саен бер кулланучыга 3000+ трекерны блоклый. Хосусыйлык тынычлыгы өчен безне төп браузерыгыз итегез.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox хосусыйлыгыгызны саклый";
+
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "Башка браузерны төп браузер итү";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "Көйләүләргә күчү";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1. Көйләүләргә күчү";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2. Төп браузер кушымтасына басыгыз";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description3" = "3. Firefox-ны сайлагыз";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "Төп браузер кушымтасы";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "Стандарт браузер итеп билгеләү";
+

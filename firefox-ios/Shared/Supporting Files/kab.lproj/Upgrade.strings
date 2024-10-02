@@ -1,0 +1,18 @@
+/* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
+"Upgrade.SyncSign.Action.v114" = "Kcem";
+
+/* Description string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Description.v114" = "Kemmel seg wanda i tḥebseḍ s useqdec n waccaren ɣef yibenkan-nniḍen ara d-ibanen akka tura ɣef usebter-ik·im agejdan.";
+
+/* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Title.v114" = "Abeddel seg ugdil ɣer wayeḍ fessus ugar ɣef wayen iɛeddan";
+
+/* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
+"Upgrade.Welcome.Action.v114" = "Sbadu-t d iminig amezwer";
+
+/* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Description.v114" = "Initen imaynuten. Liser amaynut. Tuṭṭfa deg tbaḍnit n yimdanen mačči d anadi ɣef tedrimt.";
+
+/* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Title.v114" = "Ansuf ɣer internet udmawan ugar";
+

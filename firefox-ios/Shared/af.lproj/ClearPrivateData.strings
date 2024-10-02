@@ -1,0 +1,15 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "Blaaigeskiedenis";
+
+/* Settings item for clearing the cache */
+"Cache" = "Kas";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Koekies";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Vanlyn webwerfdata";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Gestoorde aanmeldings";
+

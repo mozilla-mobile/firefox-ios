@@ -1,0 +1,9 @@
+/* Sign in to Firefox account button on second intro screen. */
+"Intro.Slides.Button.SignIn" = "ప్రవేశించండి";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title.v2" = "Firefoxకి స్వాగతం";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "బ్రౌజింగ్ ను ప్రారంభించండి";
+

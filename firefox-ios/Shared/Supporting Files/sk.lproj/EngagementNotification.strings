@@ -1,0 +1,18 @@
+/* Body of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Body.v112" = "Nájdite niečo v okolí. Alebo objavte niečo zábavné.";
+
+/* Title of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Title.v112" = "Začnite prvé vyhľadávanie";
+
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is app name. */
+"Engagement.Notification.Treatment.A.Body.v114" = "Súkromné prehliadanie v prehliadači %@ neukladá vaše informácie a blokuje skryté sledovacie prvky.";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.A.Title.v114" = "Prehliadajte bez stopy";
+
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is the app name. */
+"Engagement.Notification.Treatment.B.Body.v114" = "Prehliadajte bez uložených súborov cookie alebo histórie v prehliadači %@.";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.B.Title.v114" = "Vyskúšajte súkromné prehliadanie";
+

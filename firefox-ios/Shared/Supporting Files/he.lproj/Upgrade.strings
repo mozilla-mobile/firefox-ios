@@ -1,0 +1,18 @@
+/* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
+"Upgrade.SyncSign.Action.v114" = "כניסה";
+
+/* Description string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Description.v114" = "אפשר להמשיך מאיפה שעצרת עם לשוניות ממכשירים אחרים בעמוד הבית שלך.";
+
+/* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Title.v114" = "מעבר בין מסכים קל מאי פעם";
+
+/* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
+"Upgrade.Welcome.Action.v114" = "הגדרה כדפדפן ברירת המחדל";
+
+/* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Description.v114" = "צבעים חדשים. נוחות חדשה. אותה המחויבות לאנשים על פני רווחים.";
+
+/* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Title.v114" = "ברוכים הבאים לאינטרנט אישי יותר";
+

@@ -1,0 +1,6 @@
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "Digite o código";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Utilize a sua impressão digital para aceder às Credenciais agora.";
+

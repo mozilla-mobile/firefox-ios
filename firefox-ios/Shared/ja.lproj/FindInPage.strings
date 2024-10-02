@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "完了";
+
+/* Text selection menu item */
+"Find in Page" = "ページ内検索";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "ページ内で次を検索";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "ページ内で前を検索";
+

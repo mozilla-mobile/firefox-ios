@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Tampar los onglets privats";
+
+/* Context menu option for opening a link in a new private tab */
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "Dobrir un onglet privat novèl";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox gardarà pas d'istoric nimai de cookies, pasmens los marcapaginas novèls seràn servats.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Ne saber mai";
+
+/* Toggled OFF accessibility value */
+"Off" = "Desactivat";
+
+/* Toggled ON accessibility value */
+"On" = "Activat";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Navigacion privada";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Mòde privat";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Activar o desactivar la navegacion privada";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "En sortir de la navegacion privada";
+

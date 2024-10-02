@@ -1,0 +1,60 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "Private Tabs schließen";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV2" = "Private Tabs schließen";
+
+/* Description for medium size widget to add Firefox Shortcut to home screen */
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Fügen Sie Firefox-Verknüpfungen auf Ihrem Startbildschirm hinzu.";
+
+/* Go to link pasted on the clipboard */
+"TodayWidget.GoToCopiedLinkLabelV1" = "Link in der Zwischenablage aufrufen";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV2" = "Link in der Zwischenablage aufrufen";
+
+/* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
+"TodayWidget.MoreTabsLabel" = "+%d weitere…";
+
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "Neue Suche";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "Keine offenen Tabs.";
+
+/* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.OpenFirefoxLabel" = "Firefox öffnen";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "Private Suche";
+
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "Fügen Sie Ihrem Startbildschirm eine Firefox-Verknüpfung hinzu. Berühren und halten Sie das Widget nach dem Hinzufügen, um es zu bearbeiten und eine andere Verknüpfung auszuwählen.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Schnellaktionen";
+
+/* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox-Verknüpfungen";
+
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryDescriptionV2" = "Fügen Sie Verknüpfungen zu Ihren offenen Tabs hinzu.";
+
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "Schnellansicht";
+
+/* Search in Firefox. Do not translate the word Firefox */
+"TodayWidget.SearchInFirefoxV2" = "In Firefox suchen";
+
+/* Search in private tab */
+"TodayWidget.SearchInPrivateTabLabelV2" = "In privatem Tab suchen";
+
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "Fügen Sie Verknüpfungen zu häufig und kürzlich besuchten Websites hinzu.";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "Meistbesuchte Seiten";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "Website-Verknüpfungen";
+

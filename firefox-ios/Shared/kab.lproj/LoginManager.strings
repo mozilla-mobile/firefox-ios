@@ -1,0 +1,84 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Asentem?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Sefsex";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Sfeḍ Anadi";
+
+/* Copy password text selection menu item */
+"Copy" = "Nɣel";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Yettwarna %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Kkes";
+
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Sefsex";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Kkes";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Ur tezmireḍ ara ad tesfesxeḍ tigawt-a.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Ayagi ad yekkes awal uffir seg meṛṛa ibenkan-ik·im yemtawan.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Kkes awal uffir?";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Kkes akk afran";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Sekcem askar n unadi";
+
+/* Hide password text selection menu item */
+"Hide" = "Ffer";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Inekcam ad ttwakksen i lebda.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Inekcam ad ttwakksen seg yibenkan akk yeqqnen.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Ittusnifel %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Ulac inekcam yettwafen";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Ulac awalen uffiren i yettwafen";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Ldi & ččaṛ";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Awal uffir";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Mmel";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Nadi";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Urti n unekcam n unadi";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "Nadi";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Fren akk";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Isem n useqdac";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Asmel Web";
+

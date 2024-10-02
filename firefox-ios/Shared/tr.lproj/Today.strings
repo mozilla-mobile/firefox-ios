@@ -1,0 +1,60 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "Gizlileri kapat";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV2" = "Gizlileri kapat";
+
+/* Description for medium size widget to add Firefox Shortcut to home screen */
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Ana ekranınıza Firefox kısayollarını ekleyin.";
+
+/* Go to link pasted on the clipboard */
+"TodayWidget.GoToCopiedLinkLabelV1" = "Kopyalanan linke git";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV2" = "Kopyalanan linke git";
+
+/* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
+"TodayWidget.MoreTabsLabel" = "+%d sekme daha…";
+
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "Yeni arama";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "Açık sekme yok.";
+
+/* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.OpenFirefoxLabel" = "Firefox’u aç";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "Gizli arama";
+
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "Ana ekranınıza Firefox kısayolu ekleyin. Araç takımını ekledikten sonra düzenlemek isterseniz basılı tutup farklı bir kısayol seçebilirsiniz.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Hızlı Eylemler";
+
+/* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox Kestirmeleri";
+
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryDescriptionV2" = "Açık sekmelerinize kısayollar ekleyin.";
+
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "Hızlı Görünüm";
+
+/* Search in Firefox. Do not translate the word Firefox */
+"TodayWidget.SearchInFirefoxV2" = "Firefox’ta ara";
+
+/* Search in private tab */
+"TodayWidget.SearchInPrivateTabLabelV2" = "Gizlide ara";
+
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "Sık ve son ziyaret edilen sitelere kısayollar ekleyin.";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "Sık Kullanılanlar";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "Web sitesi kısayolları";
+

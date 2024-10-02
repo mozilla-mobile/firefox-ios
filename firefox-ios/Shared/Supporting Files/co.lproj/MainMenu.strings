@@ -1,0 +1,105 @@
+/* On the main menu, at the top, when the user is signed out. The title for the sign in action */
+"MainMenu.Account.SignedOut.Title.v131" = "Cunnettesi";
+
+/* On the main menu, the title for the action that will take the user to the Bookmarks panel. Please keep as short as possible, <15 chars of space available. */
+"MainMenu.PanelLinkSection.Bookmarks.Title.v131" = "Indette";
+
+/* On the main menu, the title for the action that will take the user to the Downloads panel. Please keep as short as possible, <15 chars of space available. */
+"MainMenu.PanelLinkSection.Downloads.Title.v131" = "Scaricamenti";
+
+/* On the main menu, the title for the action that will take the user to the History panel. Please keep as short as possible, <15 chars of space available. */
+"MainMenu.PanelLinkSection.History.Title.v131" = "Cronolugia";
+
+/* On the main menu, the title for the action that will take the user to the Passwords panel in the settings screen. Please keep as short as possible, <15 chars of space available. */
+"MainMenu.PanelLinkSection.Passwords.Title.v131" = "Parolle d’intesa";
+
+/* On the main menu, the title for the action that will take the user to the Customize Hopegape section in the settings screen. */
+"MainMenu.SettingsSection.CustomizeHomepage.Title.v131" = "Persunalizà a pagina d’accolta";
+
+/* On the main menu, the title for the action that will take the user to a website to get help from Mozilla. */
+"MainMenu.SettingsSection.GetHelp.Title.v131" = "Ottene aiutu";
+
+/* On the main menu, the title for the action that will take the user to the Settings menu. */
+"MainMenu.SettingsSection.Settings.Title.v131" = "Parametri";
+
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Add to Homescreen tool. */
+"MainMenu.Submenus.Save.AddToHomeScreen.Subtitle.v131" = "Accolta";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to add a website to the home screen. */
+"MainMenu.Submenus.Save.AddToHomeScreen.Title.v131" = "Aghjunghje à u screnu d’accolta";
+
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Shortcuts tool. */
+"MainMenu.Submenus.Save.AddToShortcuts.Subtitle.v131" = "Accurtatoghju";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to add the current website to the shortcuts on the homepage. */
+"MainMenu.Submenus.Save.AddToShortcuts.Title.v131" = "Aghjunghje à l’accurtatoghji";
+
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Bookmarks tool. */
+"MainMenu.Submenus.Save.BookmarkThisPage.Subtitle.v131" = "Aghjunghje un’indetta";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to save a bookmark for this particular page.. */
+"MainMenu.Submenus.Save.BookmarkThisPage.Title.v131" = "Indettà sta pagina";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to edit the bookmark for this particular page. */
+"MainMenu.Submenus.Save.EditBookmark.Title.v131" = "Mudificà l’indetta";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows the user to remove this site from the reading list. */
+"MainMenu.Submenus.Save.RemoveFromReadingList.Title.v131" = "Caccià da a lista di lettura";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to remove the current website from the shortcuts on the homepage. */
+"MainMenu.Submenus.Save.RemoveFromShortcuts.Title.v131" = "Caccià da l’accurtatoghji";
+
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Save as PDF tool. */
+"MainMenu.Submenus.Save.SaveAsPDF.Subtitle.v131" = "PDF";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows the user to use the Save to PDF tool. */
+"MainMenu.Submenus.Save.SaveAsPDF.Title.v131" = "Arregistrà cum’è PDF";
+
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Reading List tool. */
+"MainMenu.Submenus.Save.SaveToReadingList.Subtitle.v131" = "Lista di lettura";
+
+/* On the main menu, the title for the action that will turn Night Mode off in the application. */
+"MainMenu.Submenus.Tools.NightMode.Off.Title.v131" = "Disattivà u modu nutturnu";
+
+/* On the main menu, the title for the action that will turn Night Mode on in the application. */
+"MainMenu.Submenus.Tools.NightMode.On.Title.v131" = "Attivà u modu nutturnu";
+
+/* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Night Mode tool. */
+"MainMenu.Submenus.Tools.NightMode.Subtitle.v131" = "Modu nutturnu";
+
+/* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Print tool. */
+"MainMenu.Submenus.Tools.Print.Subtitle.v131" = "Stampà";
+
+/* On the main menu, the title for the action that will take the user to the Print module in the application. */
+"MainMenu.Submenus.Tools.Print.Title.v131" = "Stampà";
+
+/* On the main menu, the title for the action that will turn the reader view on for the current website. */
+"MainMenu.Submenus.Tools.ReaderView.Off.Title.v131" = "Disattivà u modu di lettura";
+
+/* On the main menu, the title for the action that will turn the reader view on for the current website. */
+"MainMenu.Submenus.Tools.ReaderView.On.Title.v131" = "Attivà u modu di lettura";
+
+/* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Reader View tool. */
+"MainMenu.Submenus.Tools.ReaderView.Subtitle.v131" = "Modu di lettura";
+
+/* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Broken Site tool. */
+"MainMenu.Submenus.Tools.ReportBrokenSite.Subtitle.v131" = "Signalà";
+
+/* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Share tool. */
+"MainMenu.Submenus.Tools.Share.Subtitle.v131" = "Sparte";
+
+/* On the main menu, the title for the action that will take the user to the Share module in the application. */
+"MainMenu.Submenus.Tools.Share.Title.v131" = "Sparte";
+
+/* On the main menu, the title for the action that will create a new private tab. */
+"MainMenu.TabsSection.NewPrivateTab.Title.v131" = "Unghjetta privata nova";
+
+/* On the main menu, the title for the action that will create a new, non-private, tab. */
+"MainMenu.TabsSection.NewTab.Title.v131" = "Unghjetta nova";
+
+/* On the main menu, the title for the action that will take the user to the Save submenu in the menu. */
+"MainMenu.ToolsSection.SaveSubmenu.Title.v131" = "Arregistrà";
+
+/* On the main menu, the title for the action that will take the user to the Tools submenu in the menu. */
+"MainMenu.ToolsSection.ToolsSubmenu.Title.v131" = "Attrezzi";
+

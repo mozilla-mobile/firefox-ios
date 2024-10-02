@@ -1,0 +1,6 @@
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "पासकोड प्रविष्ट गर्नुहोस्";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "अब लग इन गर्न आफ्नो औँठाछाप प्रयोग गर्नुहोस्।";
+

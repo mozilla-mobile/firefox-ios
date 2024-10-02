@@ -1,0 +1,45 @@
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Mae gwneud Firefox yn borwr rhagosodedig yn bleidlais o blaid rhyngrwyd agored, hygyrch.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "Rhagosod i Rhyngrwyd Gwell";
+
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "Dysgu Sut";
+
+/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "Gosod dolenni o wefannau, e-byst, a Messages i agor yn awtomatig yn Firefox.";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "Dewiswch Firefox fel eich porwr rhagosodedig a gwneud cyflymder, diogelwch a phreifatrwydd yn nodweddion awtomatig.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "Uwchraddio Pori Bob Dydd";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Ar gyfartaledd, mae Firefox yn rhwystro dros 3,000 o dracwyr fesul defnyddiwr bob mis. Gwnewch ni eich porwr rhagosodedig ar gyfer tawelwch meddwl preifatrwydd.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Mae Firefox yn Sicrhau Preifatrwydd";
+
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "Newid Eich Porwr Rhagosodedig";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "Mynd i'r Gosodiadau";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1. Mynd i'r Gosodiadau";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2. Tapio Default Browser App";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description3" = "3. Dewis Firefox";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "Ap Porwr Rhagosodedig";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "Gosod fel y Porwr Ragosodedig";
+

@@ -1,0 +1,36 @@
+/* Accessibility hint for the reload button */
+"Address.Bar.Reload.A11y.Hint.v124" = "雙擊後按住即可取得更多資訊";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "連線不安全。加強型追蹤保護已關閉。";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.Secure.A11y.Label.v119" = "連線安全，加強型追蹤保護已關閉。";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.NotSecure.A11y.Label.v119" = "不安全連線";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.Secure.A11y.Label.v119" = "安全連線";
+
+/* Accessibility label for the lock / tracking protection button on the URL bar */
+"TabLocation.LockButton.AccessibilityLabel.v122" = "追蹤保護";
+
+/* Large content title for the lock button. This title is displayed when accessible font sizes are enabled */
+"TabLocation.LockButton.LargeContentTitle.v122" = "追蹤保護";
+
+/* Accessibility label for the share button in url bar */
+"TabLocation.Share.A11y.Label.v119" = "分享此頁面";
+
+/* Large content title for the share button. This title is displayed when using accessible font sizes is enabled */
+"TabLocation.ShareButton.AccessibilityLabel.v122" = "分享";
+
+/* Accessibility label for the shopping button in url bar */
+"TabLocation.Shopping.A11y.Label.v120" = "商品評論檢查器";
+
+/* Large content title for the tabs button. The argument is the number of open tabs or an infinity symbol. This title is displayed when using accessible font sizes is enabled. */
+"TabsButton.Accessibility.LargeContentTitle.v122" = "顯示分頁：%@";
+
+/* Large content title for the button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemoveButton.LargeContentTitle.v122" = "移除頁面";
+

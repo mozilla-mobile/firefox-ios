@@ -1,0 +1,60 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "निजी ट्याबहरु बन्द गर्नुहोस्";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV2" = "निजी ट्याबहरू\nबन्द गर्नुहोस्";
+
+/* Description for medium size widget to add Firefox Shortcut to home screen */
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Firefox लाई तपाईंको गृह स्क्रिनमा सर्टकटको रुपमा थप्नुहोस्।";
+
+/* Go to link pasted on the clipboard */
+"TodayWidget.GoToCopiedLinkLabelV1" = "कपि गरिएको लिङ्कमा जानुहोस्";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV2" = "कपि गरिएको\nलिङ्कमा जानुहोस्";
+
+/* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
+"TodayWidget.MoreTabsLabel" = "+%d थप…";
+
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "नयाँ खोजी";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "कुनैपनि खोलिएका ट्याबहरु छैनन्।";
+
+/* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.OpenFirefoxLabel" = "Firefox खोल्नुहोस्";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "निजी खोजी";
+
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "तपाईंको गृह स्क्रिनमा Firefox सर्टकट थप्नुहोस्। विजेट थपेपछि, यसलाई सम्पादन गर्न छुनुहोस् र होल्ड गर्नुहोस् र फरक सर्टकट चयन गर्नुहोस्।";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "द्रुत कार्यहरु";
+
+/* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox सर्टकटहरु";
+
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryDescriptionV2" = "तपाईंको खुला ट्याबहरूमा सर्टकटहरू थप्नुहोस्।";
+
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "द्रुत दृश्य";
+
+/* Search in Firefox. Do not translate the word Firefox */
+"TodayWidget.SearchInFirefoxV2" = "Firefox मा\nखोज्नुहोस्";
+
+/* Search in private tab */
+"TodayWidget.SearchInPrivateTabLabelV2" = "निजी ट्याबमा\nखोज्नुहोस्";
+
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "बारम्बार र भर्खरै भ्रमण गरिएका साइटहरू सर्टकटहरूको रुपमा थप्नुहोस्।";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "शीर्ष साइटहरु";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "वेबसाइट सर्टकटहरु";
+

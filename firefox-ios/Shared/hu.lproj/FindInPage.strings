@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Kész";
+
+/* Text selection menu item */
+"Find in Page" = "Keresés az oldalon";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Következő lapon belüli találat";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Előző lapon belüli találat";
+

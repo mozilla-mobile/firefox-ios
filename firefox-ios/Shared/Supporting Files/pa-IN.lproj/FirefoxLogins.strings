@@ -1,0 +1,18 @@
+/* Prompt for saving the username in the Save Logins prompt. */
+"LoginsHelper.PromptSaveLogin.Title.v122" = "ਵਰਤੋਂਕਾਰ-ਨਾਂ ਸੰਭਾਲਣਾ ਹੈ?";
+
+/* Prompt for saving a password in the Save Logins prompt. */
+"LoginsHelper.PromptSavePassword.Title.v122" = "ਪਾਸਵਰਡ ਸੰਭਾਲਣਾ ਹੈ?";
+
+/* Prompt for updating the password in the Update Password prompt. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg.v122" = "ਪਾਸਵਰਡ ਅੱਪਡੇਟ ਕਰਨਾ ਹੈ?";
+
+/* Prompt for updating a password in the Update Password prompt. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg.v122" = "ਪਾਸਵਰਡ ਅੱਪਡੇਟ ਕਰਨਾ ਹੈ?";
+
+/* Placeholder text for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder.v122" = "ਪਾਸਵਰਡ ਖੋਜੋ";
+
+/* Title for the list of logins saved by the app */
+"LoginsList.Title.v122" = "ਸੰਭਾਲੇ ਹੋਏ ਪਾਸਵਰਡ";
+

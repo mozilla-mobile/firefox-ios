@@ -1,0 +1,54 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Adakah anda pasti?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Batal";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Buang Carian";
+
+/* Copy password text selection menu item */
+"Copy" = "Salin";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Buang";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Nyahpilih Semua";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Masukkan Mod Carian";
+
+/* Hide password text selection menu item */
+"Hide" = "Sorok";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Log masuk akan dialih keluar secara kekal.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Log masuk akan dibuang daripada semua peranti yang dihubungkan.";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Tiada log masuk dijumpai";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Buka & Isi";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Kata laluan";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Dedahkan";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Cari";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Cari Medan Input";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Pilih Semua";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Nama pengguna";
+

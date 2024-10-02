@@ -1,0 +1,54 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "An bhfuil tú cinnte?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Cealaigh";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Glan an Cuardach";
+
+/* Copy password text selection menu item */
+"Copy" = "Cóipeáil";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Scrios";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Díroghnaigh Uile";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Oscail an Modh Cuardaigh";
+
+/* Hide password text selection menu item */
+"Hide" = "Folaigh";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Scriosfar na focail fhaire go buan.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Scriosfar na focail fhaire ó gach gléas ceangailte.";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Níor aimsíodh aon fhocal faire";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Oscail agus Líon";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Focal Faire";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Nocht";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Cuardaigh";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Réimse Cuardaigh";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Roghnaigh Uile";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Ainm úsáideora";
+

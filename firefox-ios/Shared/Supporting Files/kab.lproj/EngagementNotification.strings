@@ -1,0 +1,18 @@
+/* Body of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Body.v112" = "Af kra iqerben. Neɣ snirem kra yessedhayen. ";
+
+/* Title of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Title.v112" = "Bdu anadi-ik·im amezwaru";
+
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is app name. */
+"Engagement.Notification.Treatment.A.Body.v114" = "Tunigin tusligt deg %@ur tesseklas ara talɣut-ik rnu tessewḥal ineḍfaren yeffren.";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.A.Title.v114" = "Inig war ma teǧǧiḍ lǧeṛṛa";
+
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is the app name. */
+"Engagement.Notification.Treatment.B.Body.v114" = "Inig s war asekles n yinagan n tuqqnad uzray deg %@.";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.B.Title.v114" = "Ɛreḍ tunigin tusligt";
+

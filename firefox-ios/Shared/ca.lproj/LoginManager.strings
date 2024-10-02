@@ -1,0 +1,84 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Segur?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Cancel·la";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Esborra la cerca";
+
+/* Copy password text selection menu item */
+"Copy" = "Copia";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Creat: %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Suprimeix";
+
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Cancel·la";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Elimina";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Aquesta acció no es pot desfer.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Això eliminarà la contrasenya de tots els dispositius sincronitzats.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Voleu eliminar la contrasenya?";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Desmarca-ho tot";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Entra al mode de cerca";
+
+/* Hide password text selection menu item */
+"Hide" = "Amaga";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Les dades d'inici de sessió s'eliminaran permanentment.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Les dades d'inici de sessió s'eliminaran de tots els dispositius connectats.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Modificat: %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "No s'ha trobat cap inici de sessió";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "No s'ha trobat cap contrasenya";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Obre i emplena";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Contrasenya";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Mostra";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Cerca";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Camp d'entrada de la cerca";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "Cerca";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Marca-ho tot";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Nom d'usuari";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Lloc web";
+

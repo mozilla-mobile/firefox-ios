@@ -1,0 +1,60 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "ᱱᱤᱡᱮᱨᱟᱠ ᱴᱮᱵᱽ ᱠᱚ ᱵᱚᱸᱫᱚ";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV2" = "ᱱᱤᱡᱮᱨᱟᱠ ᱴᱮᱵᱽ ᱠᱚ ᱵᱚᱸᱫᱚ";
+
+/* Description for medium size widget to add Firefox Shortcut to home screen */
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Firefox ᱠᱷᱟᱴᱚᱢᱟᱪᱷᱟ ᱟᱢᱟᱜ ᱚᱲᱟᱜ ᱤᱥᱠᱨᱤᱱ ᱨᱮ ᱥᱮᱞᱮᱫ ᱢᱮ.";
+
+/* Go to link pasted on the clipboard */
+"TodayWidget.GoToCopiedLinkLabelV1" = "ᱱᱚᱠᱚᱞ ᱟᱠᱟᱱ ᱞᱮᱸᱠ ᱛᱮ ᱪᱟᱞᱟᱜᱢᱮ";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV2" = "ᱱᱚᱠᱚᱞ ᱟᱠᱟᱱ ᱞᱮᱸᱠ ᱛᱮ ᱪᱟᱞᱟᱜᱢᱮ";
+
+/* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
+"TodayWidget.MoreTabsLabel" = "+%d ᱵᱚᱲᱛᱤ…";
+
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "ᱱᱟᱶᱟ ᱥᱮᱸᱫᱽᱨᱟ";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "ᱴᱮᱵᱽ ᱠᱚ ᱡᱷᱤ ᱵᱚᱱᱩ-ᱟ.";
+
+/* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.OpenFirefoxLabel" = "Firefox ᱡᱷᱤᱜ ᱢᱮ";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "ᱱᱤᱡᱮᱨᱟᱠ ᱥᱮᱸᱫᱽᱨᱟ";
+
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "ᱢᱤᱫ ᱴᱟᱝ Firefox ᱠᱷᱟᱴᱚᱢᱟᱪᱷᱟ ᱚᱲᱟᱜ ᱤᱥᱠᱨᱤᱱ ᱨᱮ ᱥᱮᱞᱮᱫ ᱛᱟᱞᱟᱝ ᱢᱮ. ᱣᱤᱡᱮᱴ ᱥᱮᱞᱮᱫ ᱠᱟᱛᱮ ᱡᱚᱴᱮᱫ ᱢᱮ ᱟᱨ ᱚᱛᱟ ᱫᱚᱦᱚᱭ ᱢᱮ ᱥᱟᱯᱲᱟᱣ ᱞᱚᱜᱤᱛ ᱛᱮ ᱟᱨ ᱮᱴᱟᱜ-ᱟ ᱠᱷᱟᱴᱚᱢᱟᱪᱷᱟ ᱵᱟᱪᱷᱟᱣ ᱛᱟᱞᱟᱝ ᱢᱮ.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "ᱞᱚᱜᱚᱱ ᱛᱮᱭᱟ ᱠᱚᱢᱤ";
+
+/* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox ᱥᱚᱴᱠᱚᱴ";
+
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryDescriptionV2" = "ᱟᱢᱟᱜ ᱠᱷᱩᱞᱟᱹ ᱟᱠᱟᱱ ᱴᱮᱵᱽ ᱠᱚ ᱨᱮᱭᱟᱜ ᱥᱚᱴᱠᱚᱴ ᱠᱚ ᱥᱮᱞᱮᱫ ᱢᱮ ᱾";
+
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "ᱞᱚᱜᱚᱱ ᱛᱮ ᱧᱮᱞ";
+
+/* Search in Firefox. Do not translate the word Firefox */
+"TodayWidget.SearchInFirefoxV2" = "Firefox ᱨᱮ ᱥᱮᱸᱫᱽᱨᱟᱭ ᱢᱮ";
+
+/* Search in private tab */
+"TodayWidget.SearchInPrivateTabLabelV2" = "ᱱᱤᱡᱮᱨᱟᱠ ᱴᱮᱵᱽ ᱨᱮ ᱥᱮᱸᱫᱽᱨᱟᱭ ᱢᱮ";
+
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "ᱠᱷᱟᱴᱚᱢᱟᱪᱷᱟ ᱥᱮᱞᱮᱫ ᱢᱮ ᱵᱚᱨᱟᱵᱚᱨ ᱟᱨ ᱱᱤᱛᱚᱜ-ᱟ ᱥᱟᱭᱤᱴ ᱧᱮᱞᱟᱠ ᱨᱮ.";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "ᱪᱮᱛᱟᱱ ᱨᱤᱱ ᱥᱟᱭᱤᱴ";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "ᱣᱮᱵᱽᱥᱟᱭᱤᱴ ᱥᱚᱴᱠᱚᱴᱥ";
+

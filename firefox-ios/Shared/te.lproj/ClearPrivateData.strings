@@ -1,0 +1,18 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "విహరణ చరిత్ర";
+
+/* Settings item for clearing the cache */
+"Cache" = "కాష్";
+
+/* Settings item for clearing cookies */
+"Cookies" = "కుకీలు";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "దించుకున్న ఫైళ్ళు";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "ఆఫ్‌లైన్ వెబ్‌సైటు డేటా";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "భద్రపరచిన ప్రవేశాలు";
+

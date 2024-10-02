@@ -1,0 +1,21 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "היסטוריית גלישה";
+
+/* Settings item for clearing the cache */
+"Cache" = "מטמון";
+
+/* Settings item for clearing cookies */
+"Cookies" = "עוגיות";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "קבצים שהורדו";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "מידע לא מקוון של אתרים";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "כניסות שמורות";
+
+/* A settings item that allows a user to use Apple's \"Spotlight Search\" in Data Management's Website Data option to search for and select an item to delete. */
+"Spotlight Index" = "מפתח Spotlight";
+

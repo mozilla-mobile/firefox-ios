@@ -1,0 +1,9 @@
+/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "Achusta los vinclos de pachinas web, correus y mensaches ta ubrir-se automaticament en Firefox.";
+
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "Cambiar lo tuyo navegador por defecto";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "Establir como navegador predeterminau";
+

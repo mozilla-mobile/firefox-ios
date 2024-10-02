@@ -1,0 +1,12 @@
+/* Button text to dismiss the dialog box that gets presented as a confirmation to remove card and cancel the operation. */
+"CreditCard.SnackBar.CancelRemoveCardButton.v112" = "取消";
+
+/* Sub label for the dialog box that gets presented as a confirmation to ask user if they would like to remove the saved credit card from local as well as all their synced devices */
+"CreditCard.SnackBar.RemoveCardSublabel.v112" = "将在所有同步的设备上移除此卡。";
+
+/* Title label for the dialog box that gets presented as a confirmation to ask user if they would like to remove the saved credit card */
+"CreditCard.SnackBar.RemoveCardTitle.v122" = "确定要移除信用卡吗？";
+
+/* Button text to dismiss the dialog box that gets presented as a confirmation to remove card and perform the operation of removing the credit card. */
+"CreditCard.SnackBar.RemovedCardButton.v112" = "移除";
+

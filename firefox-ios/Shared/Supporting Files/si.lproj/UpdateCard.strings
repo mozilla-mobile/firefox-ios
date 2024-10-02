@@ -1,0 +1,15 @@
+/* This value is used as the toast message for the saving success alert in the remember credit card page */
+"CreditCard.RememberCard.SecondaryButtonTitle.v116" = "පතෙහි තොරතුරු යාවත්කාල විය";
+
+/* This value is used as the title for the update card page */
+"CreditCard.UpdateCard.MainTitle.v122" = "පත යාවත්කාල කරන්නද?";
+
+/* This value is used as the title for the Manage Cards button from the update credit card page */
+"CreditCard.UpdateCard.ManageCardsButtonTitle.v115" = "පත් කළමනාකරණය";
+
+/* This value is used as the title for the Not Now button in the update credit card page */
+"CreditCard.UpdateCard.NotNowButtonTitle.v115" = "දැන් නොවේ";
+
+/* This value is used as the title for the button in the update credit card page. It indicates the action to update the details f9 the card. */
+"CreditCard.UpdateCard.YesButtonTitle.v122" = "යාවත්කාලය";
+

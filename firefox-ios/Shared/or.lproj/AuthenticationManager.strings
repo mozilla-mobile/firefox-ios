@@ -1,0 +1,6 @@
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "ପାସକୋଡ଼ ଭରନ୍ତୁ";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "ନିଜ ଲଗଇନସବୁ ଦେଖିବା ପାଇଁ ଫିଙ୍ଗରପ୍ରିଣ୍ଟ ବ୍ୟବହାର କରନ୍ତୁ ।";
+

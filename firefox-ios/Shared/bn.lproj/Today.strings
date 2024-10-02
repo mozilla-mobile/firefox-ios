@@ -1,0 +1,60 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "ব্যক্তিগত ট্যাবগুলি বন্ধ করুন";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV2" = "ব্যক্তিগত\nট্যাবগুলি বন্ধ করুন";
+
+/* Description for medium size widget to add Firefox Shortcut to home screen */
+"TodayWidget.FirefoxShortcutGalleryDescription" = "আপনার হোম স্ক্রিনে Firefox শর্টকাট যুক্ত করুন।";
+
+/* Go to link pasted on the clipboard */
+"TodayWidget.GoToCopiedLinkLabelV1" = "কপি করা লিঙ্কে যান";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV2" = "কপি করা\nলিঙ্কে যান";
+
+/* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
+"TodayWidget.MoreTabsLabel" = "+%d আরো…";
+
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "নতুন অনুসন্ধান";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "কোনো খোলা ট্যাব নেই।";
+
+/* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.OpenFirefoxLabel" = "Firefox খুলুন";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "ব্যক্তিগত অনুসন্ধান";
+
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "আপনার হোম স্ক্রিনে একটি Firefox শর্টকাট যুক্ত করুন। উইজেট যুক্ত করার পরে, এটি সম্পাদনা করতে স্পর্শ করুন এবং ধরে রাখুন এবং একটি আলাদা শর্টকাট নির্বাচন করুন।";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "দ্রুত পদক্ষেপ";
+
+/* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "দ্রুত পদক্ষেপ";
+
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryDescriptionV2" = "আপনার খোলা ট্যাবগুলিতে শর্টকাট যুক্ত করুন।";
+
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "কুইক ভিউ";
+
+/* Search in Firefox. Do not translate the word Firefox */
+"TodayWidget.SearchInFirefoxV2" = "Firefox এ\nঅনুসন্ধান করুন";
+
+/* Search in private tab */
+"TodayWidget.SearchInPrivateTabLabelV2" = "ব্যক্তিগত ট্যাবে\nঅনুসন্ধান করুন";
+
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "প্রায়শই এবং সম্প্রতি দেখা সাইটগুলিতে শর্টকাট যুক্ত করুন।";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "শীর্ষ সাইটগুলি";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "ওয়েবসাইটের শর্টকাট";
+

@@ -1,0 +1,9 @@
+/* Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the top. */
+"ContextualHints.Toolbar.Bottom.Description.v107" = "ניתן להעביר את סרגל הכלים לחלק העליון אם זה יותר הסגנון שלך.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can press and hold either the back or forward web navigation buttons to quickly navigate their back/forward history */
+"ContextualHints.Toolbar.Navigation.Description.v132" = "יש להקיש ולהחזיק את החצים כדי לדלג בין דפים בהיסטוריה של לשונית זו.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the bottom. */
+"ContextualHints.Toolbar.Top.Description.v107" = "ניתן להעביר את סרגל הכלים לתחתית אם זה יותר הסגנון שלך.";
+

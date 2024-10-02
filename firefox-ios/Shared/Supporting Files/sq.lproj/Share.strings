@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "S’keni ndonjë pajisje tjetër të lidhur te kjo llogari, të gatshme për njëkohësim.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "S’keni bërë hyrjen te llogaria juaj.";
+

@@ -1,0 +1,63 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "هل أنت متأكد؟";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "ألغِ";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "امسح البحث";
+
+/* Copy password text selection menu item */
+"Copy" = "انسخ";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "أُنشئت في %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "احذف";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "ألغِ تحديد الكل";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "ادخُل وضع البحث";
+
+/* Hide password text selection menu item */
+"Hide" = "أخفِ";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "ستُزال جلسات الولوج نهائيا.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "ستُزال جلسات الولوج من الأجهزة المتصلة.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "آخر تعديل في %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "لا جلسات ولوج";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "افتح و املأ";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "كلمة السر";
+
+/* Reveal password text selection menu item */
+"Reveal" = "اعرض";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "ابحث";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "حقل عبارة البحث";
+
+/* Label for the button used to select all logins. */
+"Select All" = "حدد الكل";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "اسم المستخدم";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "الموقع";
+

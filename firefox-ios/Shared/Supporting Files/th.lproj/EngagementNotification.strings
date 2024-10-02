@@ -1,0 +1,18 @@
+/* Body of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Body.v112" = "ค้นหาสิ่งที่อยู่ใกล้ๆ หรือค้นพบอะไรสนุกๆ";
+
+/* Title of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Title.v112" = "เริ่มการค้นหาครั้งแรกของคุณ";
+
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is app name. */
+"Engagement.Notification.Treatment.A.Body.v114" = "การเรียกดูแบบส่วนตัวใน %@ จะไม่บันทึกข้อมูลของคุณและปิดกั้นตัวติดตามที่ซ่อนอยู่";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.A.Title.v114" = "ท่องเว็บโดยไร้ร่องรอย";
+
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is the app name. */
+"Engagement.Notification.Treatment.B.Body.v114" = "เรียกดูโดยไม่มีคุกกี้หรือประวัติที่บันทึกไว้ใน %@";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.B.Title.v114" = "ลองการเรียกดูแบบส่วนตัว";
+

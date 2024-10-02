@@ -1,0 +1,60 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "プライベートタブを閉じる";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV2" = "プライベートタブを閉じる";
+
+/* Description for medium size widget to add Firefox Shortcut to home screen */
+"TodayWidget.FirefoxShortcutGalleryDescription" = "ホーム画面に Firefox のショートカットを追加します。";
+
+/* Go to link pasted on the clipboard */
+"TodayWidget.GoToCopiedLinkLabelV1" = "コピーしたリンクを開く";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV2" = "コピーしたリンクを開く";
+
+/* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
+"TodayWidget.MoreTabsLabel" = "その他 %d 個...";
+
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "新規検索";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "開いたタブはありません。";
+
+/* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.OpenFirefoxLabel" = "Firefox を開く";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "プライベート検索";
+
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "Firefox のショートカットをホーム画面に追加します。ウィジェットを追加したら、長押しして編集し、別のショートカットを選択します。";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "クイックアクション";
+
+/* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox ショートカット";
+
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryDescriptionV2" = "開いているタブへのショートカットを追加します。";
+
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "クイックビュー";
+
+/* Search in Firefox. Do not translate the word Firefox */
+"TodayWidget.SearchInFirefoxV2" = "Firefox で検索";
+
+/* Search in private tab */
+"TodayWidget.SearchInPrivateTabLabelV2" = "プライベートタブで検索";
+
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "最近よく訪れるサイトへのショートカットを追加します。";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "トップサイト";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "ウェブサイトショートカット";
+

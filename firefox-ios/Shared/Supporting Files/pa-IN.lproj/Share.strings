@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "ਤੁਹਾਡੇ ਕੋਲ ਸਿੰਕ ਕਰਨ ਲਈ ਇਸ ਖਾਤੇ ਨਾਲ ਕੋਈ ਵੀ ਹੋਰ ਡਿਵਾਈਸ ਕਨੈਕਟ ਨਹੀਂ ਹੈ।";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "ਤੁਸੀਂ ਆਪਣੇ ਖਾਤੇ ਵਿੱਚ ਸਾਈਨ ਇਨ ਨਹੀਂ ਕੀਤਾ ਹੈ।";
+

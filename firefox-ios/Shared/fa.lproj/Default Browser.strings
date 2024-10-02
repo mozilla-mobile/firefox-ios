@@ -1,0 +1,27 @@
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "چگونگی کار را یاد بگیرید";
+
+/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "پیوندهای وب سایت ها ، ایمیل ها و پیام ها را تنظیم کنید تا به طور خودکار در Firefox باز شوند.";
+
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "مرورگر یش‌فرض خود تغییر دهید";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "برو به تنظیمات";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1. برو به تنظیمات";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "۲. تبدیل به مرورگر پیش‌فرض";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description3" = "3. Firefox را انتخاب کنید";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "مرورگر پیش‌فرض";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "تبدیل به مرورگر پیش‌فرض";
+

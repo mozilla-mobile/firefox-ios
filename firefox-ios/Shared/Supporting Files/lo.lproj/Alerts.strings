@@ -1,0 +1,24 @@
+/* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the body text for the alert. */
+"Alerts.FeltDeletion.Body.v122" = "ປິດແຖບສ່ວນຕົວທັງໝົດ ແລະ ລຶບປະຫວັດ, ຄຸກກີ້ ແລະ ຂໍ້ມູນເວັບໄຊທ໌ອື່ນໆທັງໝົດ.";
+
+/* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the cancel action for the alert, cancelling ending your session. */
+"Alerts.FeltDeletion.Button.Cancel.v122" = "ຍົກເລີກ";
+
+/* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the affirmative action for the alert, confirming that you do want to do that. */
+"Alerts.FeltDeletion.Button.Confirm.v122" = "ລຶບຂໍ້ມູນເຊດຊັນ";
+
+/* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the title for the alert. */
+"Alerts.FeltDeletion.Title.v122" = "ສິ້ນສຸດເຊດຊັນສ່ວນຕົວຂອງທ່ານບໍ່?";
+
+/* The title for the negative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will reject the action of restoring tabs. */
+"Alerts.RestoreTabs.Button.No.v109" = "ບໍ່ຕ້ອງການ";
+
+/* The title for the affirmative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will restore existing tabs. */
+"Alerts.RestoreTabs.Button.Yes.v109" = "ກູ້ຄືນແທັບ";
+
+/* The body of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. */
+"Alerts.RestoreTabs.Message.v109" = "ຂໍອະໄພກ່ຽວກັບເລື່ອງນັ້ນ. ກູ້ແຖບຄືນມາເພື່ອເລືອກບ່ອນທີ່ທ່ານປະໄວ້.";
+
+/* The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. The placeholder will be the Firefox name. */
+"Alerts.RestoreTabs.Title.v109.v2" = "%@ ຂັດຂ້ອງ. ກູ້ແທັບຂອງເຈົ້າຄືນມາບໍ?";
+

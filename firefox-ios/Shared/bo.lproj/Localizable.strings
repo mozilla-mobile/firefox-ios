@@ -1,0 +1,81 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* About settings section title */
+"About" = "ངོ་སྤྲོད།";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "ཆོག";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "ཕྱིར་ལོག།";
+
+/* Label for Cancel button */
+"Cancel" = "འདོར་བ།";
+
+/* Button confirming the cancellation of the download. */
+"Downloads.CancelDialog.Cancel" = "འདོར་བ།";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "ཕྱིར་ལོག།";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "རོགས་རམ།";
+
+/* The title for the Share context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Share" = "བགོ་འགྲེམས།";
+
+/* A label indicating the keyboard shortcut to navigate backwards, through session history, inside the current tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Back.DiscoveryTitle" = "ཕྱིར་ལོག།";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "གསར་བཅོས།";
+
+/* Accessibility label for the New Tab button in the tab toolbar. */
+"New Tab" = "New Tab";
+
+/* OK button */
+"OK" = "ཆོག";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "ཆོག";
+
+/* Password textbox in Authentication prompt */
+"Password" = "གསང་གྲངས།";
+
+/* OK button to dismiss the error prompt. */
+"ScanQRCode.Error.OK.Button" = "ཆོག";
+
+/* Open search section of settings */
+"Search" = "འཚོལ་བཤེར།";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "འདོར་བ།";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "ཆོག";
+
+/* Button title for cancelling share screen */
+"SendTo.Cancel.Button" = "འདོར་བ།";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "ཆོག";
+
+/* The text on the Save button when saving a custom search engine */
+"Settings.AddCustomEngine.SaveButtonText" = "ཉར་ཚགས།";
+
+/* Cancel action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.CancelButton" = "འདོར་བ།";
+
+/* Label at the top of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionName" = "འཆར།";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "བཅོས་བསྒྲིགས།";
+
+/* Username textbox in Authentication prompt */
+"Username" = "ཐོ་མིང་།";
+

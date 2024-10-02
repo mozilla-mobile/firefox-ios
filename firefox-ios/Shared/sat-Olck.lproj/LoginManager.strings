@@ -1,0 +1,84 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "ᱟᱢ ᱜᱚᱴᱟ ᱢᱮᱱᱟᱢ-ᱟ?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "ᱵᱟᱹᱰᱨᱟᱹ";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "ᱯᱟᱱᱛᱮ ᱯᱷᱟᱨᱪᱟ";
+
+/* Copy password text selection menu item */
+"Copy" = "ᱱᱚᱠᱚᱞ";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "%@ ᱨᱮ ᱛᱮᱭᱟᱨᱮᱱᱟ";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "ᱢᱮᱴᱟᱣ";
+
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "ᱵᱟᱹᱰᱨᱟᱹ";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "ᱚᱪᱚᱜᱽ ᱢᱮ";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "ᱟᱢ ᱫᱚ ᱱᱚᱶᱟ ᱠᱟᱹᱢᱤ ᱵᱟᱝ ᱨᱩᱣᱟᱹᱲ ᱟᱹᱜᱩ ᱫᱟᱲᱮᱭᱟᱜᱼᱟᱢ ᱾";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "ᱱᱚᱶᱟ ᱫᱚ ᱟᱢᱟᱜ ᱡᱚᱛᱚ ᱟᱹᱭᱩᱨ ᱢᱤᱫ ᱟᱠᱟᱱ ᱥᱟᱫᱷᱚᱱ ᱠᱷᱚᱱ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱚᱪᱚᱜᱽ ᱦᱚᱪᱚᱭᱟ ᱾";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱚᱪᱚᱜᱽᱟᱢ ᱥᱮ ? ";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "ᱡᱚᱛᱚ ᱵᱟᱪᱷᱟᱣ ᱠᱷᱚᱱ ᱚᱪᱚᱜ";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "ᱯᱟᱱᱛᱮ ᱚᱵᱚᱥᱛᱟ ᱵᱚᱞᱚ ᱢᱮ";
+
+/* Hide password text selection menu item */
+"Hide" = "ᱩᱠᱩᱭ ᱢᱮ";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "ᱵᱚᱞᱚ ᱠᱚ ᱜᱟᱹᱫᱤ ᱞᱮᱠᱷᱟᱛᱮ ᱚᱰᱚᱠᱚᱜᱼᱟ ᱾";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "ᱵᱚᱞᱚ ᱠᱚ ᱡᱷᱚᱛᱚ ᱡᱩᱰᱟᱹᱣ ᱥᱟᱫᱷᱚᱱ ᱠᱷᱚᱱ ᱚᱰᱚᱠᱚᱜᱼᱟ ᱾";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "%@ ᱵᱚᱫᱚᱞᱮᱱᱟ";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "ᱵᱚᱞᱚ ᱠᱚ ᱵᱟᱭ ᱧᱟᱢ ᱞᱮᱱᱟ";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "ᱪᱮᱫ ᱦᱚᱸ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫ ᱵᱟᱭ ᱧᱟᱢ ᱞᱮᱱᱟ";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "ᱡᱷᱤᱜ ᱢᱮ ᱟᱨ ᱯᱮᱨᱮᱡ ᱢᱮ";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "ᱫᱟᱱᱟᱲ ᱥᱟᱵᱟᱫᱽ";
+
+/* Reveal password text selection menu item */
+"Reveal" = "ᱩᱫᱩᱜ";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "ᱥᱮᱸᱫᱽᱨᱟ";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "ᱯᱟᱱᱛᱮ ᱟᱫᱮᱨ ᱡᱟᱭᱜᱟ";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "ᱥᱮᱸᱫᱽᱨᱟ";
+
+/* Label for the button used to select all logins. */
+"Select All" = "ᱡᱚᱛᱚ ᱵᱟᱪᱷᱟᱣ";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "ᱵᱮᱵᱷᱟᱨᱤᱡᱟᱠ ᱧᱩᱛᱩᱢ";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "ᱣᱮᱵ ᱥᱟᱤᱴ";
+

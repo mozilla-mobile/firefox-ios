@@ -1,0 +1,84 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Are you sure?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Cancel";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Clear Search";
+
+/* Copy password text selection menu item */
+"Copy" = "Copy";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Created %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Delete";
+
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Cancel";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Remove";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "You cannot undo this action.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "This will remove the password from all of your synchronised devices.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Remove Password?";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Deselect All";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Enter Search Mode";
+
+/* Hide password text selection menu item */
+"Hide" = "Hide";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Logins will be permanently removed.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Logins will be removed from all connected devices.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Modified %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "No logins found";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "No passwords found";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Open & Fill";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Password";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Reveal";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Search";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Search Input Field";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "Search";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Select All";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Username";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Web Site";
+

@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Užverti privačias korteles";
+
+/* Context menu option for opening a link in a new private tab */
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "Atverti naujoje privačioje kortelėje";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "„Firefox“ nekaups jūsų naršymo žurnalo ir neįsimins slapukų, tačiau nauji adresyno įrašai bus išsaugoti.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Sužinoti daugiau";
+
+/* Toggled OFF accessibility value */
+"Off" = "Išjungta";
+
+/* Toggled ON accessibility value */
+"On" = "Įjungta";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Privatusis naršymas";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Privačioji veiksena";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Privačiosios veiksenos valdymas";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Išeinant iš privačiojo naršymo";
+

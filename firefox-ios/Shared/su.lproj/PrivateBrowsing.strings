@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Tutup Tab Nyamuni";
+
+/* Context menu option for opening a link in a new private tab */
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "Buka dina Tab Nyamuni Anyar";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox moal nginget jujutan jeung réréméh anjeun, anu diteundeun ukur markah anyar.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Lenyepan";
+
+/* Toggled OFF accessibility value */
+"Off" = "Pareum";
+
+/* Toggled ON accessibility value */
+"On" = "Hurung";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Langlangan Nyamuni";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Modeu Nyamuni";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Hurungkeun atawa pareuman modeu nyamuni";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Nalika Ninggalkeun Langlangan Nyamuni";
+

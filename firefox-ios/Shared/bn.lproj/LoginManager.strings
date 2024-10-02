@@ -1,0 +1,63 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "আপনি কি নিশ্চিত?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "বাতিল";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "অনুসন্ধান মুছুন";
+
+/* Copy password text selection menu item */
+"Copy" = "কপি";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "%@ এ তৈরি করা";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "মুছে ফেলুন";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "সবগুলো অনির্বাচিত করুন";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "সার্চমোডে ঢুকুন";
+
+/* Hide password text selection menu item */
+"Hide" = "লুকান";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "লগইনগুলি স্থায়ীভাবে মুছে ফেলা হবে।";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "লগইনগুলি সব সংযুক্ত ডিভাইস থেকে সরিয়ে ফেলা হবে।";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "%@ এ সংশোধিত";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "কোন লগইন পাওয়া যায়নি";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "খুলুন আর পূরণ করুন";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "পাসওয়ার্ড";
+
+/* Reveal password text selection menu item */
+"Reveal" = "প্রকাশ করুন";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "অনুসন্ধান করুন";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "ইনপুট ফিল্ডে অনুসন্ধান করুন";
+
+/* Label for the button used to select all logins. */
+"Select All" = "সবগুলো নির্বাচন করুন";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "ব্যবহারকারীর নাম";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "ওয়েবসাইট";
+

@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "ہوگیا";
+
+/* Text selection menu item */
+"Find in Page" = "صفحے میں ڈھونڈیں";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "اگلے صفحہ میں نتیجہ";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "پچھلے صفحہ میں نتیجہ";
+

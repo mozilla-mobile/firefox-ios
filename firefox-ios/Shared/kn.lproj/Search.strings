@@ -1,0 +1,6 @@
+/* Label for search engine buttons. The argument corresponds to the name of the search engine. */
+"%@ search" = "%@ ಹುಡುಕು";
+
+/* Label for search settings button. */
+"Search Settings" = "ಹುಡುಕು ಸಿದ್ದತೆಗಳು";
+

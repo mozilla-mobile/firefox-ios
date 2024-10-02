@@ -1,0 +1,18 @@
+/* Body of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Body.v112" = "Βρείτε κάτι κοντά σας. Ή ανακαλύψτε κάτι διασκεδαστικό.";
+
+/* Title of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Title.v112" = "Κάντε την πρώτη σας αναζήτηση";
+
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is app name. */
+"Engagement.Notification.Treatment.A.Body.v114" = "Η ιδιωτική περιήγηση στο %@ δεν αποθηκεύει τις πληροφορίες σας και αποκλείει κρυφούς ιχνηλάτες.";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.A.Title.v114" = "Περιηγηθείτε χωρίς να αφήσετε ίχνη";
+
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is the app name. */
+"Engagement.Notification.Treatment.B.Body.v114" = "Περιηγηθείτε χωρίς αποθηκευμένα cookie ή ιστορικό στο %@.";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.B.Title.v114" = "Δοκιμάστε την ιδιωτική περιήγηση";
+

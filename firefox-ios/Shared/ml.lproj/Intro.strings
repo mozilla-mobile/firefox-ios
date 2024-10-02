@@ -1,0 +1,9 @@
+/* Sign in to Firefox account button on second intro screen. */
+"Intro.Slides.Button.SignIn" = "പ്രവേശിക്കുക";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title.v2" = "ഫയർ‌ഫോക്സിലേക്ക് സ്വാഗതം";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "ബ്രൗസിങ് തുടങ്ങൂക";
+

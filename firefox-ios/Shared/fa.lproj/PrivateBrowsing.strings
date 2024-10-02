@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "بستن زبانه‌های خصوصی";
+
+/* Context menu option for opening a link in a new private tab */
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "بازکردن در یک زبانه خصوصی جدید";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "فایرفاکس هیچ‌گونه تاریخچه یا کوکی از شما به خاطر نمی‌سپارد، ولی نشانک‌های جدید ذخیره خواهد شد.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "بیشتر بدانید";
+
+/* Toggled OFF accessibility value */
+"Off" = "خاموش";
+
+/* Toggled ON accessibility value */
+"On" = "روشن";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "مرور خصوصی";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "حالت خصوصی";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "خاموش یا روشن کردن حالت خصوصی";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "وقتی از مرور خصوصی خارج می شویم";
+

@@ -1,0 +1,1122 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "ഒരു ഉപയോക്തൃനാമവും രഹസ്യവാക്കും %@ ആവശ്യപ്പെടുന്നു.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "ഒരു ഉപയോക്തൃനാമവും രഹസ്യവാക്കും %1$@ ആവശ്യപ്പെടുന്നു. സൈറ്റ് പറയുന്നത്: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "അആ";
+
+/* About settings section title */
+"About" = "ഇതിനെക്കുറിച്ച്";
+
+/* Section title label for recently visited websites */
+"ActivityStream.RecentHistory.Title" = "സമീപകാലത്ത് സന്ദർശിച്ചത്";
+
+/* The title for the setting page which lets you select the number of top site rows */
+"ActivityStream.TopSites.RowSettingFooter" = "വരികൾ സജ്ജമാക്കുക";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "ടാബ് ചേര്‍ക്കുക";
+
+/* Name for button adding current article to reading list in reader mode */
+"Add to Reading List" = "വായനാ പട്ടികയിലേക്ക് ചേര്‍ക്കുക";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "വായനാ പട്ടികയിലേക്ക് ചേര്‍ത്തിരിക്കുന്നു";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "ശരി";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "വാലെറ്റിൽ രഹസ്യവാക്കു് ചേർക്കുമ്പോൾ ഒരു പിശക് സംഭവിച്ചു. പിന്നീട് വീണ്ടും ശ്രമിക്കുക.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "രഹസ്യവാക്കു് ചേർക്കുന്നതിൽ പരാജയപ്പെട്ടു";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "വിലാസവും തെരച്ചിലും";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "എപ്പോഴും അയക്കുക";
+
+/* Tile title for Amazon */
+"Amazon" = "ആമസോണ്‍";
+
+/* Authentication prompt title */
+"Authentication required" = "ആധികാരികത ഉറപ്പ് വരുത്തേണ്ടതുണ്ട്";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "പുറകോട്ട്";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "പോപ്പപ്പുകള്‍ തടയുക";
+
+/* The label for the Title field when editing a bookmark */
+"Bookmark.DetailFieldTitle.Label" = "തലക്കെട്ട്";
+
+/* The label for the URL field when editing a bookmark */
+"Bookmark.DetailFieldURL.Label" = "യുആര്‍എല്‍";
+
+/* Toggle bookmarks syncing setting */
+"Bookmarks" = "അടയാളക്കുറിപ്പുകള്‍";
+
+/* The button to edit a bookmark */
+"Bookmarks.EditBookmark.Label" = "അടയാളക്കുറിപ്പ് തിരുത്തുക";
+
+/* The button to edit a folder */
+"Bookmarks.EditFolder.Label" = "ഫോള്‍ഡര്‍ തിരുത്തുക";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "ഫോള്‍ഡര്‍";
+
+/* The button to create a new bookmark */
+"Bookmarks.NewBookmark.Label" = "പുതിയ അടയാളക്കുറിപ്പു്";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "പുതിയ ഫോള്‍ഡര്‍";
+
+/* The button to create a new separator */
+"Bookmarks.NewSeparator.Label" = "പുതിയ വിടവടയാളം";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "തലക്കെട്ട്";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "തെളിച്ചം";
+
+/* Label for Cancel button */
+"Cancel" = "റദ്ദാക്കുക";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "നിറത്തിന്റെ തീം മാറ്റുക.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "ഫോണ്ടിന്റെ ശൈലി മാറ്റും.";
+
+/* The button to open a new tab with the copied link */
+"ClipboardToast.GoToCopiedLink.Button" = "പോവുക";
+
+/* Message displayed when the user has a copied link on the clipboard */
+"ClipboardToast.GoToCopiedLink.Title" = "പകർത്തിയ ലിങ്കിലേക്ക് പോകണോ?";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "അടയ്‍ക്കുക";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "ടാബ് അടയ്ക്കുന്നു";
+
+/* Context menu item for bookmarking a link URL */
+"ContextMenu.BookmarkLinkButtonTitle" = "കണ്ണി അടയാളപ്പെടുത്തുക";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "പുതിയ സ്വകാര്യ ടാബ് തുറന്നു";
+
+/* The button text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "മാറുക";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "പുതിയ ടാബ് തുറന്നു";
+
+/* Context menu item for copying an image to the clipboard */
+"ContextMenu.CopyImageButtonTitle" = "ചിത്രം പകര്‍ത്തുക";
+
+/* Context menu item for copying an image URL to the clipboard */
+"ContextMenu.CopyImageLinkButtonTitle" = "ചിത്രത്തിന്റെ കണ്ണി പകർത്തുക";
+
+/* Context menu item for copying a link URL to the clipboard */
+"ContextMenu.CopyLinkButtonTitle" = "കണ്ണി പകര്‍ത്തുക";
+
+/* Context menu item for downloading a link URL */
+"ContextMenu.DownloadLinkButtonTitle" = "കണ്ണി ഡൗൺലോഡ് ചെയ്യുക";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenInNewTabButtonTitle" = "പുതിയ ടാബില്‍ തുറക്കുക";
+
+/* Context menu item for saving an image */
+"ContextMenu.SaveImageButtonTitle" = "ചിത്രം സൂക്ഷിക്കുക";
+
+/* Context menu item for sharing a link URL */
+"ContextMenu.ShareLinkButtonTitle" = "കണ്ണി പങ്കിടുക";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "വായനമുഖത്തിലേക്ക് പേജ് ചേര്‍ക്കാന്‍ കഴിയുന്നില്ല";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it’s already there?" = "വായനമുഖത്തിലേക്ക് പേജ് ചേര്‍ക്കാന്‍ കഴിയുന്നില്ല. അത് മുന്‍പേ അവിടെയുണ്ടോ?";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "താള്‍ കൊണ്ടു വരാന്‍ കഴിയുന്നില്ല.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "അക്കൗണ്ട്‌ ഉണ്ടാക്കുക";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "ഇരുണ്ടത്";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "അക്ഷരങ്ങളുടെ വലിപ്പം കുറയ്ക്കുക";
+
+/* Title for default search engine picker. */
+"Default Search Engine" = "സ്വതേയുള്ള തിരച്ചില്‍ യന്ത്രം";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "പ്രദര്‍ശന ക്രമീകരണങ്ങള്‍";
+
+/* Used as a button label for crash dialog prompt */
+"Don’t Send" = "അയയ്ക്കരുത്";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "സമ്പൂര്‍ണം";
+
+/* Panel accessibility label */
+"Downloads" = "ഡൌണ്‍ലോഡുകള്‍";
+
+/* The label of the button the user will press to start downloading a file */
+"Downloads.Alert.DownloadNow" = "ഇപ്പോള്‍ ഡൗണ്‍ലോഡ് ചെയ്യുക";
+
+/* Button confirming the cancellation of the download. */
+"Downloads.CancelDialog.Cancel" = "റദ്ദാക്കുക";
+
+/* Alert dialog body when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Message" = "ഈ ഡൗണ്‍ലോഡ് റദ്ദാക്കണമെന്ന് ഉറപ്പാ​ണോ?";
+
+/* Button declining the cancellation of the download. */
+"Downloads.CancelDialog.Resume" = "തുടരുക";
+
+/* Alert dialog title when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Title" = "ഡൗൺലോഡ് റദ്ദാക്കുക";
+
+/* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
+"Downloads.Toast.Cancelled.LabelText" = "ഡൗൺലോഡ് റദ്ദാക്കി";
+
+/* The label text in the Download Failed toast for showing confirmation that the download has failed. */
+"Downloads.Toast.Failed.LabelText" = "ഡൗൺലോഡ് പരാജയപ്പെട്ടു";
+
+/* The button to open a new tab with the Downloads home panel */
+"Downloads.Toast.GoToDownloads.Button" = "ഡൌണ്‍ലോഡുകള്‍";
+
+/* The description text in the Download progress toast for showing the number of files when multiple files are downloading. */
+"Downloads.Toast.MultipleFiles.DescriptionText" = "%d ഫയലുകളിൽ 1 എണ്ണം";
+
+/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+"Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
+
+/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+"Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
+
+/* Action button for deleting downloaded files in the Downloads panel. */
+"DownloadsPanel.Delete.Title" = "നീക്കം ചെയ്യുക";
+
+/* Title for the Downloads Panel empty state. */
+"DownloadsPanel.EmptyState.Title" = "ഡൗൺലോഡുചെയ്ത ഫയലുകൾ ഇവിടെ പ്രദർശിപ്പിക്കും.";
+
+/* Action button for sharing downloaded files in the Downloads panel. */
+"DownloadsPanel.Share.Title" = "പങ്കുവയ്ക്കുക";
+
+/* Text message in the settings table view */
+"Enter your password to connect" = "ബന്ധപ്പെടുത്താന്‍ താങ്കളുടെ രഹസ്യവാക്ക് നല്‍കുക";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "കൂടുതല്‍";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "മുന്നറിയിപ്പ്: വെബ്സൈറ്റിലേക്കുള്ള ബന്ധം സുരക്ഷിതമാണെന്ന് ഉറപ്പുവരുത്താനാകുുന്നില്ല.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "ഇതൊരു തെറ്റായ കോൺഫിഗറേഷൻ ആകാം അല്ലെങ്കിൽ ഒരു ആക്രമണസാധ്യതയാകാം. നിങ്ങള്‍ അപകട സാധ്യത അഭിമുഖീകരിയ്ക്കാന്‍ തയ്യാറാണെങ്കില്‍ മാത്രം തുടരുക.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "%@ എന്നതിന്റെ ഉടമസ്ഥന്‍ സൈറ്റ് തെറ്റായിട്ടാണ് ക്രമീകരിച്ചിരിക്കുന്നതു്. നിങ്ങളുടെ വിവരങ്ങള്‍ ചോരാതിരിക്കാന്‍, ഫയര്‍ഫോക്സ് ഈ സൈറ്റിലേക്ക് കണക്റ്റ് ചെയ്യുന്നില്ല.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "ഈ കണക്‌‌ഷന്‍ വിശ്വാസയോഗ്യമല്ല";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "തിരികെ പോകുക";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "ഏന്തായാലും സൈറ്റ് സന്ദര്‍ശിക്കുക";
+
+/* Question shown to user when tapping a link that opens the App Store app */
+"ExternalLink.AppStore.ConfirmationTitle" = "ആപ്പ് സ്റ്റോറിൽ ഈ ലിങ്ക് തുറക്കണോ?";
+
+/* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
+"ExternalLink.AppStore.GenericConfirmationTitle" = "ബാഹ്യ അപ്ലിക്കേഷനിൽ ഈ ലിങ്ക് തുറക്കണോ?";
+
+/* Tile title for Facebook */
+"Facebook" = "ഫേസ്ബുക്ക്";
+
+/* Title for firefox about:home page in tab history list */
+"Firefox.HomePage.Title" = "ഫയർഫോക്സ് പൂമുഖം";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "മുന്നോട്ട്";
+
+/* Settings section title for Firefox Account */
+"FxA.FirefoxAccount" = "ഫയര്‍ഫോക്സ് അക്കൌണ്ട്";
+
+/* Button label to go to Firefox Account settings */
+"FxA.ManageAccount" = "അക്കൗണ്ടും ഉപകരണങ്ങൾ നിയന്ത്രിക്കുക";
+
+/* Label when no internet is present */
+"FxA.NoInternetConnection" = "ഇന്റർനെറ്റ് ബന്ധം ഇല്ല";
+
+/* Button label to Sync your Firefox Account */
+"FxA.SyncNow" = "ഇപ്പോൾ സമന്വയിപ്പിക്കുൂ";
+
+/* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
+"FxAPush_DeviceConnected_body" = "%@ലേക്ക് ഫയർഫോക്സ് സമന്വയം ബന്ധിപ്പിച്ചു";
+
+/* Title of a notification displayed when another device has connected to FxA. */
+"FxAPush_DeviceConnected_title" = "സമന്വയം ബന്ധിപ്പിച്ചു";
+
+/* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
+"FxAPush_DeviceDisconnected_body" = "%@ വിജയകരമായി വിച്ഛേദിച്ചു.";
+
+/* Body of a notification displayed when this device has been disconnected from FxA by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_body" = "ഈ ഉപകരണം ഫയർഫോക്സ് സമന്വയത്തിൽ നിന്നും വിജയകരമായി വിച്ഛേദിച്ചിരിക്കുന്നു.";
+
+/* Title of a notification displayed when this device has been disconnected by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "സമന്വയം വിച്ഛേദിച്ചു";
+
+/* Title of a notification displayed when named device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_title" = "സമന്വയം വിച്ഛേദിച്ചു";
+
+/* Body of a notification displayed when unnamed device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_UnknownDevice_body" = "ഫയർഫോക്സ് സമന്വയത്തിൽ നിന്നും ഒരു ഉപകരണം വിച്ഛേദിച്ചിരിക്കുന്നു";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "സഹായം";
+
+/* Toggle history syncing setting */
+"History" = "നാള്‍വഴി";
+
+/* Title for button in the history panel to clear recent history */
+"HistoryPanel.ClearHistoryButtonTitle" = "അടുത്തിടെയുള്ള നാള്‍വഴി വെടിപ്പാക്കുക…";
+
+/* Option title to clear all browsing history. */
+"HistoryPanel.ClearHistoryMenuOptionEverything" = "എല്ലാം";
+
+/* Button to perform action to clear history for the last hour */
+"HistoryPanel.ClearHistoryMenuOptionTheLastHour" = "അവസാന ​മണിക്കൂര്‍";
+
+/* Button to perform action to clear history for today only */
+"HistoryPanel.ClearHistoryMenuOptionToday" = "ഇന്ന്";
+
+/* Button to perform action to clear history for yesterday and today */
+"HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday" = "ഇന്നും ഇന്നലെയും";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "താങ്കൾ അടുത്തകാലത്ത് സന്ദർശിച്ച വെബ്സൈറ്റുകൾ ഇവിടെ കാണിക്കും.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "മറ്റു ഉപകരണങ്ങളിൽ നിന്നും താങ്കളുടെ ടാബുകൾ ഇവിടെ കാണിക്കും.";
+
+/* Description for the empty synced tabs 'not signed in' state in the History Panel */
+"HistoryPanel.EmptySyncedTabsPanelNotSignedInState.Description" = "മറ്റു ഉപകരണങ്ങളില്‍ നിന്നുള്ള ടാബുകള്‍ കാണാന്‍ സൈന്‍ ഇന്‍ ചെയ്യുക.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "ഫയർഫോക്സ് സമന്വയം";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "നാള്‍വഴി";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "അടുത്ത് അടച്ചത്";
+
+/* The title for the Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Bookmark" = "അടയാളം";
+
+/* The title for the Delete from History context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.DeleteFromHistory" = "നാള്‍വഴിയിൽ നിന്ന് ഒഴിവാക്കുക";
+
+/* The title for the Open in New Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewTab" = "പുതിയ ടാബില്‍ തുറക്കുക";
+
+/* The title for the Remove context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Remove" = "നീക്കം ചെയ്യുക";
+
+/* The title for the Remove Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.RemoveBookmark" = "അടയാളം നീക്കം ചെയ്യുക";
+
+/* The title for the Share context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Share" = "പങ്കിടുക";
+
+/* A label indicating the keyboard shortcut to navigate backwards, through session history, inside the current tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Back.DiscoveryTitle" = "പുറകോട്ട്";
+
+/* A label indicating the keyboard shortcut of closing the current tab a user is in. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.CloseTab.DiscoveryTitle" = "ടാബ് അടയ്ക്കുക";
+
+/* A label indicating the keyboard shortcut of finding text a user desires within a page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Find.DiscoveryTitle" = "കണ്ടെത്തുക";
+
+/* A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Forward.DiscoveryTitle" = "മുന്നോട്ട്";
+
+/* A label indicating the keyboard shortcut of creating a new private tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "പുതിയ സ്വകാര്യ ടാബ്";
+
+/* A label indicating the keyboard shortcut of creating a new tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.NewTab.DiscoveryTitle" = "പുതിയ ടാബ്";
+
+/* A label indicating the keyboard shortcut of switching from Private Browsing to Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.NormalMode.DiscoveryTitle" = "സാധാരണ ബ്രൗസിംഗ് മോഡ്";
+
+/* A label indicating the keyboard shortcut of switching from Normal Browsing mode to Private Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.PrivateMode.DiscoveryTitle" = "സ്വകാര്യ ബ്രൗസിങ്";
+
+/* A label indicating the keyboard shortcut of reloading the current page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Reload.DiscoveryTitle" = "താള്‍ വീണ്ടും ലോഡുചെയ്യുക";
+
+/* A label indicating the keyboard shortcut of directly accessing the URL, location, bar. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "ലോക്കേഷൻ ബാര്‍ തെരഞ്ഞെടുക്കുക";
+
+/* A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "അടുത്ത ടാബ് കാണിക്കുക";
+
+/* A label indicating the keyboard shortcut of switching to a tab immediately preceding to the currently selected tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "മുമ്പത്തെ ടാബ് കാണിക്കുക";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "ടെക്‌സ്റ്റ് വലുപ്പം കൂട്ടുക";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "ഇപ്പോള്‍";
+
+/* This label is meant to signify the section containing a group of items from the past thirty days. */
+"Last month" = "കഴിഞ്ഞ മാസം";
+
+/* This label is meant to signify the section containing a group of items from the past seven days. */
+"Last week" = "കഴിഞ്ഞ ആഴ്ച";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "അനുമതിപത്രങ്ങള്‍";
+
+/* Light theme setting in Reading View settings */
+"Light" = "ലഘുവായ";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "ശരിയായ താള്‍ ലോഡ് ചെയ്യുക";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "ഉള്ളടക്കം ലോഡ് ചെയ്തുകൊണ്ടിരിക്കുന്നു…";
+
+/* Authentication prompt log in button */
+"Log in" = "പ്രവേശിക്കുക";
+
+/* Toggle logins syncing setting */
+"Logins" = "പ്രവേശനങ്ങള്‍";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "സംരക്ഷിക്കരുത്";
+
+/* Button to not update the user's password */
+"LoginsHelper.DontUpdate.Button" = "പുതുക്കേണ്ടതില്ല";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "%2$@-നു വേണ്ടി %1$@ പ്രവേശണം സംരക്ഷിക്കണോ?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "%@-നു വേണ്ടി രഹസ്യവാക്ക് സംരക്ഷിക്കണോ?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "പ്രവേശനങ്ങള്‍ സംരക്ഷിക്കുക";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "പുതുക്കുക";
+
+/* Placeholder test for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder" = "ഫില്‍റ്റര്‍";
+
+/* Title for the list of logins */
+"LoginsList.Title" = "സംരക്ഷിച്ച പ്രവേശനങ്ങള്‍";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "ഫയര്‍ഫോക്സ് തൊട്ടുമുന്‍പ് നിലച്ചപോലെ കാണുന്നു. താങ്കളുടെ ടാബുകള്‍ വീണ്ടെടുക്കാന്‍ ആഗ്രഹിക്കുന്നുവോ?";
+
+/* Title for the button that marks a reading list item as read */
+"Mark as Read" = "വായിച്ചതായി രേഖപ്പെടുത്തുക";
+
+/* Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "വായിക്കാത്തതായി രേഖപ്പെടുത്തുക";
+
+/* Toast displayed to the user after a bookmark has been added. */
+"Menu.AddBookmark.Confirm" = "അടയാളം ചേർത്തു";
+
+/* Toast displayed to the user after adding the item to their reading list. */
+"Menu.AddToReadingList.Confirm" = "വായന പട്ടികയിൽ ചേർത്തി";
+
+/* The title for the button that lets you copy the url from the location bar. */
+"Menu.Copy.Title" = "വിലാസം പകര്‍ത്തുക";
+
+/* Toast displayed to user after copy url pressed. */
+"Menu.CopyURL.Confirm" = "URL ക്ലിപ്ബോർഡിലേക്ക് പകർത്തി";
+
+/* The title for the button that lets you paste into the location bar */
+"Menu.Paste.Title" = "ഒട്ടിക്കുക";
+
+/* The title for the button that lets you paste and go to a URL */
+"Menu.PasteAndGo.Title" = "ഒട്ടിച്ചു് തുടരുക";
+
+/* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
+"Menu.ReloadWithoutTrackingProtection.Title" = "പിന്തുടരല്‍ പരിരക്ഷയില്ലാതെ പുനരാരംഭിയ്ക്കുക";
+
+/* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
+"Menu.ReloadWithTrackingProtection.Title" = "പിന്തുടരല്‍ പരിരക്ഷയോടെ പുനരാരംഭിയ്ക്കുക";
+
+/* Toast displayed to the user after a bookmark has been removed. */
+"Menu.RemoveBookmark.Confirm" = "അടയാളം നീക്കംചെയ്യുക";
+
+/* Toast displayed to the user after a tab has been sent successfully. */
+"Menu.TabSent.Confirm" = "ടാബ് അയച്ചു";
+
+/* The title for tracking protection settings */
+"Menu.TrackingProtection.ProtectionSettings.Title" = "പരിരക്ഷണ ക്രമീകരണങ്ങൾ";
+
+/* The title that shows the number of content cookies blocked */
+"Menu.TrackingProtectionBlockedContent.Title" = "ഉള്ളടക്കം ട്രാക്കുചെയ്യുന്നു";
+
+/* The title that shows the number of social URLs blocked */
+"Menu.TrackingProtectionBlockedSocial.Title" = "സോഷ്യൽ ട്രാക്കർമാർ";
+
+/* The title that shows the number of cross-site URLs blocked */
+"Menu.TrackingProtectionCrossSiteTrackers.Title" = "ക്രോസ്-സൈറ്റ് ട്രാക്കറുകൾ";
+
+/* The title that shows the number of cryptomining scripts blocked */
+"Menu.TrackingProtectionCryptominersBlocked.Title" = "ക്രിപ്‌റ്റോമൈനറുകൾ";
+
+/* Description of content trackers. */
+"Menu.TrackingProtectionDescription.ContentTrackers" = "വെബ്‌സൈറ്റുകൾ‌ പരസ്യങ്ങൾ‌, വീഡിയോകൾ‌, മറഞ്ഞിരിക്കുന്ന ട്രാക്കറുകൾ‌ അടങ്ങിയിരിക്കുന്ന മറ്റ് ഉള്ളടക്കം എന്നിവ ലോഡുചെയ്യാം. ഇവ തടയുന്നത് വെബ്‌സൈറ്റുകൾ വേഗത്തിൽ ലോഡുചെയ്യാൻ ഇടയാക്കും, പക്ഷേ ചില ബട്ടണുകൾ, ഫോമുകൾ, ലോഗിൻ ഫീൽഡുകൾ എന്നിവ പ്രവർത്തിച്ചേക്കില്ല.";
+
+/* Description of cross-site trackers. */
+"Menu.TrackingProtectionDescription.CrossSiteNew" = "നിങ്ങൾ ഓൺലൈനിൽ ചെയ്യുന്നതിനെക്കുറിച്ചുള്ള ഡാറ്റ ശേഖരിക്കുന്നതിന് ഈ കുക്കികൾ സൈറ്റിൽ നിന്ന് സൈറ്റിലേക്ക് നിങ്ങളെ പിന്തുടരുന്നു. പരസ്യദാതാക്കളും അനലിറ്റിക്സ് കമ്പനികളും പോലുള്ള മൂന്നാം കക്ഷികളാണ് അവ സജ്ജമാക്കുന്നത്.";
+
+/* Description of cryptominers. */
+"Menu.TrackingProtectionDescription.CryptominersNew" = "ഡിജിറ്റൽ പണം സ്വന്തമാക്കാൻ ക്രിപ്‌റ്റോമൈനറുകൾ നിങ്ങളുടെ സിസ്റ്റത്തിന്റെ കമ്പ്യൂട്ടിംഗ് കഴിവ് രഹസ്യമായി ഉപയോഗിക്കുന്നു. ക്രിപ്‌റ്റോമൈനിംഗ് സ്‌ക്രിപ്റ്റുകൾ നിങ്ങളുടെ ബാറ്ററി കുറയ്ക്കുന്നു, കമ്പ്യൂട്ടർ മന്ദഗതിയിലാക്കുന്നു, ഒപ്പം അവയ്ക്ക് നിങ്ങളുടെ വൈദ്യുതി ബിൽ വർദ്ധിപ്പിക്കാനും കഴിയും.";
+
+/* Description of fingerprinters. */
+"Menu.TrackingProtectionDescription.Fingerprinters" = "നിങ്ങളുടെ ബ്രൌസറിലെയും കമ്പ്യൂട്ടറിലെയും ക്രമീകരണങ്ങൾ അദ്വിതീയമാണ്. നിങ്ങളുടെ ഒരു പ്രൊഫൈൽ‌ സൃഷ്‌ടിക്കുന്നതിന് ഫിംഗർ‌പ്രിന്ററുകൾ‌ ഈ സവിശേഷമായ ക്രമീകരണങ്ങൾ‌ ശേഖരിക്കുന്നു, നിങ്ങൾ‌ ബ്രൌസ് ചെയ്യുമ്പോൾ‌ നിങ്ങളെ ട്രാക്ക് ചെയ്യുന്നതിന് ഇത് ഉപയോഗിക്കാം.";
+
+/* Description of social network trackers. */
+"Menu.TrackingProtectionDescription.SocialNetworksNew" = "നിങ്ങളുടെ കൂടുതൽ‌ പൂർ‌ണ്ണവും ടാർ‌ഗെറ്റു ചെയ്‌തതുമായ ഒരു പ്രൊഫൈൽ‌ സൃഷ്‌ടിക്കുന്നതിന് സോഷ്യൽ നെറ്റ്‌വർ‌ക്കുകൾ‌ മറ്റ് വെബ്‌സൈറ്റുകളിൽ‌ ട്രാക്കറുകൾ‌ സ്ഥാപിക്കുന്നു. ഈ ട്രാക്കറുകൾ തടയുന്നത് സോഷ്യൽ മീഡിയ കമ്പനികൾക്ക് നിങ്ങൾ ഓൺലൈനിൽ എന്താണ് ചെയ്യുന്നതെന്ന് കാണാൻ കഴിയുന്നത് കുറയ്ക്കും.";
+
+/* The title that shows the number of fingerprinting scripts blocked */
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "ഫിംഗർപ്രിന്ററുകൾ";
+
+/* The title for the option to view the What's new page. */
+"Menu.WhatsNew.Title" = "പുതിയതെന്തെല്ലാം";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "മോബൈല്‍ ഡിവൈസ്";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "ഒരു മാസത്തിനും മുന്‍പേ";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "ഒരു ആഴ്ച്ചയ്ക്കും മുന്‍പേ";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "നാവിഗേഷന്‍ ടൂള്‍ബാര്‍";
+
+/* Accessibility label for the New Tab button in the tab toolbar. */
+"New Tab" = "പുതിയ ടാബ്";
+
+/* Restore Tabs Negative Action */
+"No" = "ഇല്ല";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "ടാബുകള്‍ ഇല്ല";
+
+/* OK button */
+"OK" = "ശരി";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "ശരി";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "അയ്യോ! ഫയര്‍ഫോക്സ് തകർന്നു";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "ടൈറ്റിൽ ബാറിൽ ദൃശ്യമാകുമ്പോൾ പുസ്തക ഐക്കൺ ടാപ്പുചെയ്യുന്നതിലൂടെ റീഡർ കാഴ്ചയിൽ ലേഖനങ്ങൾ തുറക്കുക.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "സജ്ജീകരണങ്ങള്‍ തുറക്കുക";
+
+/* Toggle tabs syncing setting */
+"Open Tabs" = "തുറന്ന ടാബുകള്‍";
+
+/* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
+"OpenURL.Error.Message" = "അത് അസാധുവായ ഒരു വിലാസമാതിനാൽ ഫയർഫോക്സിന് താള് തുറക്കാൻ കഴിയില്ല.";
+
+/* Title of the message shown when the user attempts to navigate to an invalid link. */
+"OpenURL.Error.Title" = "താൾ തുറക്കാനാവുന്നില്ല";
+
+/* Password textbox in Authentication prompt */
+"Password" = "രഹസ്യവാക്ക്";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "ഇത് താങ്കളെ താങ്കളുടെ ക്യാമറ റോളിലേക്ക് ചിത്രം സൂക്ഷിക്കാന്‍ അനുവദിയ്ക്കുന്നു.";
+
+/* See http://mzl.la/1G7uHo7 */
+"PhotoLibrary.FirefoxWouldLikeAccessTitle" = "ഫയര്‍ഫോക്സ് താങ്കളുടെ ചിത്രങ്ങളിലേക്ക് പ്രവേശിയ്ക്കാന്‍ ആഗ്രഹിക്കുന്നു";
+
+/* Button for closing the menu action sheet */
+"PhotonMenu.close" = "അടയ്ക്കുക";
+
+/* Privacy section title */
+"Privacy" = "സ്വകാര്യത";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "സ്വകാര്യ വ്യവസ്ഥകള്‍";
+
+/* Title for quick-search engines settings section. */
+"Quick-Search Engines" = "അതിവേഗ തിരച്ചിലിനായുള്ള പ്രയോഗങ്ങള്‍";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "വായിക്കുക";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "വായനാമുഖം";
+
+/* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
+"ReaderMode.Available.VoiceOverAnnouncement" = "വായനാ രീതിയില്‍ ലഭ്യമാണ്";
+
+/* Panel accessibility label */
+"Reading list" = "വായന പട്ടിക";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "അടുത്ത് അടച്ച്ത്";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "വീണ്ടും തുടങ്ങുക";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "നീക്കം ചെയ്യുക";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "വായനാപ്പട്ടികയില്‍ നിന്നും നീക്കം ചെയ്യുക";
+
+/* Cancel button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Cancel" = "റദ്ദാക്കുക";
+
+/* Reopen button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Reopen" = "വീണ്ടും തുറക്കുക";
+
+/* Reopen alert title shown at home page. */
+"ReopenAlert.Title" = "അവസാനം അടച്ച ടാബ് വീണ്ടും തുറക്കുക";
+
+/* Accessibility label for button resetting font size in display settings of reader mode */
+"Reset text size" = "വാചക വലുപ്പം പുനഃസജ്ജമാക്കുക";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "സാന്‍സ്-സെറിഫ്";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "പുസ്തക-അധിക ഛിഹ്നം അമര്‍ത്തുകവഴി ലേഖനങ്ങളെ വായനാ പട്ടികയില്‍ സൂക്ഷിക്കാം.";
+
+/* OK button to dismiss the error prompt. */
+"ScanQRCode.Error.OK.Button" = "ശരി";
+
+/* Text for the instructions label, displayed in the QR scanner view */
+"ScanQRCode.Instructions.Label" = "QR കോഡ്, സ്കാൻ ചെയ്യാനുള്ള ഫ്രെയിമിനുള്ളിലേയ്ക്കു് വിന്യസിക്കുക";
+
+/* Text of the prompt that is shown to the user when the data is invalid */
+"ScanQRCode.InvalidDataError.Message" = "ഈ ഡാറ്റ അസാധുവാണ്";
+
+/* Title for the QR code scanner view. */
+"ScanQRCode.View.Title" = "QR കോഡ് പരിശോധിക്കുക";
+
+/* Open search section of settings */
+"Search" = "തെരയുക";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "തെരയൂ അല്ലെങ്കില്‍ വിലാസം നല്‍കൂ";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "പുതിയ തിരയൽ യന്ത്രം ദ്രുത തിരയൽ ബാറിൽ പ്രത്യക്ഷപ്പെടും.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "തിരയൽ യന്ത്രം ചേർത്തു!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "തിരയൽ ദാതാവിനെ ചേർക്കണോ?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "റദ്ദാക്കുക";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "ഈ തലക്കെട്ട് അല്ലെങ്കിൽ URL ഉള്ള തിരയൽ യന്ത്രം ഇതിനകം ചേർത്തിട്ടുണ്ട്.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "പരാജയപ്പെട്ടു";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "തിരയൽ ദാതാവിനെ ചേർക്കാനായില്ല.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "പരാജയപ്പെട്ടു";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.FormErrorMessage" = "എല്ലാ ഫീൽഡുകളും ശരിയായി പൂരിപ്പിക്കുക.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.FormErrorTitle" = "പരാജയപ്പെട്ടു";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "ശരി";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "തകര്‍ച്ചയുടെ വിവരം മോസില്ലയ്ക്കയച്ച്, മൂലകാരണം ശെരിയാക്കാന്‍ സഹായിക്കാം?";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "പ്രതികരണം അയയ്ക്കുക";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "റിപ്പോര്‍ട്ട് അയക്കുക";
+
+/* Button title for cancelling share screen */
+"SendTo.Cancel.Button" = "റദ്ദാക്കുക";
+
+/* Header for the list of devices table */
+"SendTo.DeviceList.Text" = "ലഭ്യമായ ഉപകരണങ്ങൾ:";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "HTTPയും HTTPS കണ്ണികളും മാത്രമാണ് പങ്കിടാനാവുക.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "ശരി";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "താങ്കൾ പങ്കിടാൻ ശ്രമിക്കുന്ന കണ്ണി പങ്കിടാനാവൂലാ.";
+
+/* Title of the dialog that allows you to send a tab to a different device */
+"SendTo.NavBar.Title" = "ടാബ് അയയ്ക്കുക";
+
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message" = "ഈ ഫയര്‍ഫോക്സ് അക്കൗണ്ടുമായി സമന്വയിപ്പിയ്ക്കാന്‍ താങ്കള്‍ക്ക് ഇതുമായി ബന്ധപെട്ടിട്ടുള്ള മറ്റു ഉപകരണങ്ങള്‍ ഒന്നും തന്നെയില്ല.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Message" = "തുടരുവാനായി ദയവായി ഫയര്‍ഫോക്സ് തുറന്ന്, സജ്ജീകരണങ്ങളില്‍ പോയി അക്കൗണ്ടില്‍ പ്രവേശിക്കുക.";
+
+/* See http://mzl.la/1ISlXnU */
+"SendTo.NotSignedIn.Title" = "താങ്കള്‍ താങ്കളുടെ ഫയര്‍ഫോക്സ് അക്കൗണ്ടിലെക്ക് പ്രവേശിച്ചിട്ടില്ല.";
+
+/* Navigation bar button to Send the current page to a device */
+"SendTo.SendAction.Text" = "അയയ്ക്കുക";
+
+/* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_body" = "മറ്റൊരു ഉപകരണത്തിൽ നിന്നും പുതിയ ടാബ് എത്തിച്ചേർന്നു.";
+
+/* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_title" = "ടാബ് ലഭിച്ചു";
+
+/* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
+"SentTab_TabArrivingNotification_WithDevice_body" = "പുതിയ ടാബിൽ %@ ൽ എത്തിച്ചേർന്നു";
+
+/* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
+"SentTab_TabArrivingNotification_WithDevice_title" = "%@ൽ നിന്നും ലഭിച്ച ടാബ്";
+
+/* Body of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.body" = "ആരംഭിക്കാൻ തട്ടുക";
+
+/* Title of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.title" = "ഫയർഫോക്സ് സമന്വയം";
+
+/* Label for an action used to view one or more tabs from a notification. */
+"SentTab.ViewAction.title" = "കാണുക";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "സെപിയ";
+
+/* Font type setting in the reading view settings */
+"Serif" = "സെറിഫ്";
+
+/* Title in the settings view controller title bar */
+"Settings" = "സജ്ജീകരണങ്ങള്‍";
+
+/* The button text in Search Settings that opens the Custom Search Engine view. */
+"Settings.AddCustomEngine" = "തിരയൽ യന്ത്രം ചേർക്കുക";
+
+/* The text on the Save button when saving a custom search engine */
+"Settings.AddCustomEngine.SaveButtonText" = "സംരക്ഷിക്കുക";
+
+/* The title of the  Custom Search Engine view. */
+"Settings.AddCustomEngine.Title" = "തിരയൽ യന്ത്രം ചേർക്കുക";
+
+/* The title for the field which sets the title for a custom search engine. */
+"Settings.AddCustomEngine.TitleLabel" = "തലക്കെട്ട്";
+
+/* The placeholder for Title Field when saving a custom search engine. */
+"Settings.AddCustomEngine.TitlePlaceholder" = "തിരയൽ യന്ത്രം";
+
+/* The title for URL Field */
+"Settings.AddCustomEngine.URLLabel" = "യുആര്‍എല്‍";
+
+/* The placeholder for URL Field when saving a custom search engine */
+"Settings.AddCustomEngine.URLPlaceholder" = "യുആര്‍എല്‍ (ക്വറിയെ %s കൊണ്ട് മാറ്റുക)";
+
+/* Button in Data Management that clears all items. */
+"Settings.ClearAllWebsiteData.Clear.Button" = "എല്ലാ വെബ്സൈറ്റ് ഡാറ്റയും മായ്ക്കുക";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "സ്വകാര്യ വിവരം ഇല്ലാതാക്കുക";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "സ്വകാര്യ വിവരം ഇല്ലാതാക്കുക";
+
+/* Copy app version alert shown in settings. */
+"Settings.CopyAppVersion.Title" = "ക്ലിപ്പ്ബോര്‍ഡിലേക്കു് പകര്‍ത്തിയിരിയ്ക്കുന്നു";
+
+/* Default text in search bar for Data Management */
+"Settings.DataManagement.SearchLabel" = "സൈറ്റുകൾ ഫിൽട്ടർ ചെയ്യുക";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.DataManagement.SectionName" = "ഡാറ്റ കൈകാര്യം";
+
+/* Title displayed in header of the setting panel. */
+"Settings.DataManagement.Title" = "ഡാറ്റ കൈകാര്യം";
+
+/* Body of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Body" = "താങ്കളുടെ അക്കൗണ്ടുമായി സിങ്ക് ചെയ്യുന്നത് ഫയര്‍ഫോക്സ് നിര്‍ത്തുന്നതാണ്, പക്ഷെ ഈ ഡിവൈസിലെ താങ്കളുടെ ബ്രൌസിംഗ് ഡാറ്റ യാതൊന്നും നീക്കം ചെയ്യുകയില്ല.";
+
+/* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
+"Settings.Disconnect.Button" = "സമന്വയം വിച്ഛേദിക്കുക";
+
+/* Cancel action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.CancelButton" = "റദ്ദാക്കുക";
+
+/* Destructive action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.DestructiveButton" = "വിച്ഛേദിക്കുക";
+
+/* Title of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Title" = "സമന്വയം വിച്ഛേദിക്കണോ?";
+
+/* Section header for brightness slider. */
+"Settings.DisplayTheme.BrightnessThreshold.SectionHeader" = "പരിധി";
+
+/* Display (theme) settings label to show if manually switch theme is enabled. */
+"Settings.DisplayTheme.Manual.StatusLabel" = "കരകൃതം";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Manually'. */
+"Settings.DisplayTheme.Manual.SwitchSubtitle" = "നിങ്ങൾക്ക് ആവശ്യമുള്ള തീം തിരഞ്ഞെടുക്കുക";
+
+/* Display (theme) setting to choose the theme manually. */
+"Settings.DisplayTheme.Manual.SwitchTitle" = "കരകൃതമായി";
+
+/* Option choice in display theme settings for dark theme */
+"Settings.DisplayTheme.OptionDark" = "ഇരുണ്ടത്";
+
+/* Option choice in display theme settings for light theme */
+"Settings.DisplayTheme.OptionLight" = "തെളിച്ചമുള്ളത്";
+
+/* Display (theme) settings footer describing how the brightness slider works. */
+"Settings.DisplayTheme.SectionFooter" = "സ്ക്രീനിന്റെ തെളിച്ചം അടിസ്ഥാനമാക്കി, പ്രമേയങ്ങള്‍ തനിയെ മാറും. പ്രമേയം മാറാന്നുള്ള പരിധി നിങ്ങൾക്ക് നിശ്ചയിയ്ക്കാം. വട്ടം നിലവിലെ സ്ക്രീന്‍ തെളിച്ചം സൂചിപ്പിക്കുന്നു.";
+
+/* Switch mode settings section title */
+"Settings.DisplayTheme.SwitchMode.SectionHeader" = "സ്വിച്ച് മോഡ്";
+
+/* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
+"Settings.DisplayTheme.SwitchSubtitle" = "സ്ക്രീൻ തെളിച്ചം അടിസ്ഥാനമാക്കി യാന്ത്രികമായി മാറുക";
+
+/* Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+"Settings.DisplayTheme.SwitchTitle" = "യാന്ത്രികമായി";
+
+/* System theme settings section title */
+"Settings.DisplayTheme.SystemTheme.SectionHeader" = "സിസ്റ്റം തീം";
+
+/* System theme settings switch to choose whether to use the same theme as the system */
+"Settings.DisplayTheme.SystemTheme.SwitchTitle" = "സിസ്റ്റം ലൈറ്റ്/ഡാർക്ക് മോഡ് ഉപയോഗിക്കുക";
+
+/* Theme picker settings section title */
+"Settings.DisplayTheme.ThemePicker.SectionHeader" = "തീം പിക്കർ";
+
+/* Title in main app settings for Theme settings */
+"Settings.DisplayTheme.Title.v2" = "തീം";
+
+/* Label used for the device name settings section. */
+"Settings.FxA.DeviceName" = "ഉപകരണത്തിന്റെ പേരു്";
+
+/* Label used as a section title in the Firefox Accounts Settings screen. */
+"Settings.FxA.Sync.SectionName" = "സമന്വയ സജ്ജീകരണങ്ങള്‍";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title" = "ഫയര്‍ഫോക്സ് അക്കൌണ്ട്";
+
+/* General settings section title */
+"Settings.General.SectionName" = "പൊതുവായവ";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "ആസ്ഥാനതാള്‍";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "നിലവിലെ ഹോംപേജ്";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "നിലവിലെ താൾ ഉപയോഗിക്കുക";
+
+/* Title for the logins and passwords screen. Translation could just use 'Logins' if the title is too long */
+"Settings.LoginsAndPasswordsTitle" = "ഉപകരണങ്ങളും പ്രവേശനങ്ങളും";
+
+/* Label used to set a custom url as the new tab option (homepage). */
+"Settings.NewTab.CustomURL" = "ഇഷ്ടാനുസൃത URL";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "ഒരു ശൂന്യമായ താൾ കാണിക്കുക";
+
+/* Option in settings to show Firefox Home when you open a new tab */
+"Settings.NewTab.Option.FirefoxHome" = "ഫയർഫോക്സ് പൂമുഖം";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "ആസ്ഥാനതാള്‍";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
+"Settings.NewTab.SectionName" = "പുതിയ ടാബ്";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "പുതിയ ടാബ്";
+
+/* Label at the top of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionName" = "കാണിക്കുക";
+
+/* Footer at the bottom of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionNameFooter" = "പുതിയ ടാബ് തുറക്കുമ്പോൾ എന്ത് കാണണമെന്ന് തീരുമാനിക്കുക";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Status" = "ഫയർഫോക്സ് തുറക്കുമ്പോൾ";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.StatusV2" = "ഫയർഫോക്സ് തുറക്കുമ്പോൾ";
+
+/* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
+"Settings.OfferClipboardBar.Title" = "പകർത്തിയ ലിങ്കുകൾ തുറക്കുമെന്നു് വാഗ്ദാനം ചെയ്യുന്നു";
+
+/* Title for Open With Settings */
+"Settings.OpenWith.PageTitle" = "ഇമെയിൽ ലിങ്കുകൾ തുറക്കാന്‍";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
+"Settings.OpenWith.SectionName" = "മെയില്‍ ആപ്പ്";
+
+/* Setting to enable the built-in password manager */
+"Settings.SaveLogins.Title" = "പ്രവേശനം സംരക്ഷിക്കുക";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "പൂർത്തിയായി";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "തിരുത്തുക";
+
+/* title for a link that explains how mozilla collects telemetry */
+"Settings.SendUsage.Link" = "കൂടുതൽ അറിയുക.";
+
+/* A short description that explains why mozilla collects usage data. */
+"Settings.SendUsage.Message" = "എല്ലാവര്‍ക്കും ഫയര്‍ഫോക്സ് മെച്ചപ്പെട്ടതാക്കാൻ ആവശ്യമുള്ള ഡാറ്റ മാത്രം ശേഖരിക്കാൻ മോസില്ല ശ്രദ്ധിയ്ക്കുന്നു.";
+
+/* The title for the setting to send usage data. */
+"Settings.SendUsage.Title" = "ഉപയോഗ ഡാറ്റ അയക്കുക";
+
+/* Setting to show Logins & Passwords quick access in the application menu */
+"Settings.ShowLoginsInAppMenu.Title" = "അപ്ലിക്കേഷൻ മെനുവിൽ കാണിക്കുക";
+
+/* The description of the open new tab siri shortcut */
+"Settings.Siri.OpenTabShortcut" = "പുതിയ റ്റാബ് തുറക്കുക";
+
+/* The description that describes what siri shortcuts are */
+"Settings.Siri.SectionDescription" = "സിരി വഴി ഫയർഫോക്സ് വേഗത്തിൽ തുറക്കാൻ സിരി കുറുക്കുവഴികൾ ഉപയോഗിക്കുക";
+
+/* The option that takes you to the siri shortcuts settings page */
+"Settings.Siri.SectionName" = "സിരി കുറുക്കുവഴികൾ";
+
+/* The Title on info view which shows a list of all blocked websites */
+"Settings.TrackingProtection.Info.BlocksTitle" = "തടയലുകള്‍";
+
+/* Title for tracking protection options section where level can be selected. */
+"Settings.TrackingProtection.ProtectionLevelTitle" = "പരിരക്ഷണ നില";
+
+/* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
+"Settings.TrackingProtection.SectionName" = "പിന്തുടരല്‍ സംരക്ഷണം";
+
+/* Tracking protection settings option for using the basic blocklist. */
+"Settings.TrackingProtectionOption.BasicBlockList" = "സ്റ്റാൻഡേർഡ് (സ്ഥിരസ്ഥിതി)";
+
+/* Tracking protection settings option for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrict" = "കണിശമായി";
+
+/* Settings option to specify that Tracking Protection is on */
+"Settings.TrackingProtectionOption.NormalBrowsingLabelOn" = "മെച്ചപ്പെടുത്തിയ ട്രാക്കിംഗ് പരിരക്ഷണം";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "പ്രശ്നപരിഹാരം";
+
+/* Button shows all websites on website data tableview */
+"Settings.WebsiteData.ButtonShowMore" = "കൂടുതൽ കാണിക്കുക";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"Settings.WebsiteData.ConfirmPrompt" = "ഈ പ്രവര്‍ത്തി നിങ്ങളുടെ വെബ്സൈറ്റ് വിവരങ്ങള്‍ മായ്ചുകളയും. പിന്നീട് ഇത് പഴയതുപോലെ ആക്കാന്‍ പറ്റില്ല.";
+
+/* Title displayed in header of the Data Management panel. */
+"Settings.WebsiteData.Title" = "വെബ്സൈറ്റു് വിവരങ്ങള്‍";
+
+/* Action label on share extension to add page to the Firefox reading list. */
+"ShareExtension.AddToReadingListAction.Title" = "വായനാ പട്ടികയിലേക്ക് ചേര്‍ക്കുക";
+
+/* Share extension label shown after user has performed 'Add to Reading List' action. */
+"ShareExtension.AddToReadingListActionDone.Title" = "വായനാ പട്ടികയിലേക്ക് ചേര്‍ത്തു";
+
+/* Action label on share extension to bookmark the page in Firefox. */
+"ShareExtension.BookmarkThisPageAction.Title" = "ഈ താള്‍ അടയാളപ്പെടുത്തുക";
+
+/* Share extension label shown after user has performed 'Bookmark this Page' action. */
+"ShareExtension.BookmarkThisPageActionDone.Title" = "അടയാളപ്പെടുത്തി";
+
+/* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
+"ShareExtension.LoadInBackgroundAction.Title" = "പശ്ചാത്തലത്തിൽ ലോഡുചെയ്യുക";
+
+/* Share extension label shown after user has performed 'Load in Background' action. */
+"ShareExtension.LoadInBackgroundActionDone.Title" = "ഫയർഫോക്സിൽ ലോഡ് ചെയ്യുന്നു";
+
+/* Action label on share extension to immediately open page in Firefox. */
+"ShareExtension.OpenInFirefoxAction.Title" = "ഫയർഫോക്സിൽ തുറക്കുക";
+
+/* Action label on share extension to search for the selected text in Firefox. */
+"ShareExtension.SeachInFirefoxAction.Title" = "ഫയർഫോക്സിൽ തിരയുക";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "തിരയല്‍ നിര്‍ദ്ദേശങ്ങള്‍ കാണിക്കുക";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar */
+"Show Tabs" = "ടാബുകള്‍ കാണിക്കുക";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "ടൂര്‍ കാണിക്കുക";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "നിര്‍ത്തുക";
+
+/* Support section title */
+"Support" = "പിന്തുണ";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "ടാബുകള്‍ അടയ്ക്കുവാന്‍ ഇടത്തോട്ടോ വലത്തോട്ടോ മൂന്ന് വിരലുകളുപയോഗിച്ച് അമര്‍ത്തി വീശുക.";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "സമന്വയിപ്പിക്കുന്നു…";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "സിങ്ക് ഓഫ്ലൈനാണ്";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "ടാബ് %2$@ ന്‍റെ %1$@";
+
+/* A label indicating the keyboard shortcut of showing the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Tab.ShowTabTray.KeyCodeTitle" = "എല്ലാ റ്റാബുകളും കാണിക്കുക";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "ടാബുകള്‍ %3$@ ന്‍റെ %1$@ മുതല്‍ %2$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "ടാബ് ട്രേ";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "പൂര്‍വ്വാവസ്ഥയിലാക്കുക";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d ടാബ്(കൾ) അടച്ചിരിക്കുന്നു";
+
+/* A label indicating the keyboard shortcut of closing all tabs from the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"TabTray.CloseAllTabs.KeyCodeTitle" = "എല്ലാ ടാബുകളും അടയ്ക്കുക";
+
+/* A label indicating the keyboard shortcut of opening a new tab in the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"TabTray.OpenNewTab.KeyCodeTitle" = "പുതിയ റ്റാബ് തുറക്കുക";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "വായനാരീതിയില്‍ പേജ് കാണിക്കുവാന്‍ കഴിയുന്നില്ല.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "താങ്കളുടെ മറ്റു ഡിവൈസുകളില്‍ നിന്നും ടാബുകള്‍ ലഭ്യമാക്കാന്‍ എന്തോ പ്രശ്നം ഉണ്ട്. കുറച്ചു സമയത്തിന്‍ ശേഷം വീണും ശ്രമിക്കുക.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "താളിനെ മാറ്റം വരുത്തുന്നതില്‍ ഒരു പിശക് ഉണ്ട്";
+
+/* Relative date for date in past week. */
+"this week" = "ഈ ആഴ്ച";
+
+/* label for Not Now button */
+"Toasts.NotNow" = "ഇപ്പോൾ വേണ്ട";
+
+/* Open App Store button */
+"Toasts.OpenAppStore" = "അപ്പ് സ്റ്റോർ തുറക്കുക";
+
+/* This label is meant to signify the section containing a group of items from the current day. */
+"Today" = "ഇന്ന്";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "ഇന്നു %@ ന്";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "മെനു";
+
+/* Accessibility label for the Close All Tabs menu button. */
+"Toolbar.Menu.CloseAllTabs" = "എല്ലാ ടാബുകളും അടയ്ക്കുക";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "താള്‍ - %@ കളയുക";
+
+/* Button to disallow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.Cancel" = "വേണ്ട";
+
+/* Button to allow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.OK" = "ഉവ്വ്";
+
+/* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
+"TranslationToastHandler.PromptTranslate.Title" = "ഈ പേജ് %1$@ൽ ദൃശ്യമാകുന്നു. %3$@ ഉപയോഗിച്ച് %2$@ ലേക്ക് വിവർത്തനംചെയ്യണോ?";
+
+/* Tile title for Twitter */
+"Twitter" = "ട്വിറ്റെര്‍";
+
+/* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
+"UIMenuItem.PasteGo" = "ഒട്ടിച്ചു് തുടരുക";
+
+/* Search in New Tab Text selection menu item */
+"UIMenuItem.SearchWithFirefox" = "ഫയർഫോക്സുപയോഗിച്ച് തിരയുക";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "വായിക്കാത്തത്";
+
+/* Username textbox in Authentication prompt */
+"Username" = "ഉപയോക്തൃനാമം";
+
+/* Accessibility label for the main web content view */
+"Web content" = "വെബ്‌ ഉള്ളടക്കം";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "നിങ്ങളുടെ വായനാ പട്ടികയിലേക്കു സ്വാഗതം";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "അത് പിന്നെ, ഇത് വല്ലാത്തൊരു നാണക്കേടാണ്.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "വികിപീഡിയ";
+
+/* Relative date for yesterday. */
+"yesterday" = "ഇന്നലെ";
+
+/* This label is meant to signify the section containing a group of items from the past 24 hours. */
+"Yesterday" = "ഇന്നലെ";
+
+/* Error message in the remote tabs panel */
+"You don’t have any tabs open in Firefox on your other devices." = "താങ്കള്‍ക്ക് താങ്കളുടെ മറ്റു ഡിവൈസുകളിലെ ഫയര്‍ഫോക്സില്‍ ടാബുകള്‍ ഒന്നും തുറന്നതായിട്ടില്ല.";
+
+/* Your Rights settings section title */
+"Your Rights" = "താങ്കളുടെ അവകാശങ്ങള്‍";
+
+/* Tile title for YouTube */
+"YouTube" = "യുട്യൂബ്";
+

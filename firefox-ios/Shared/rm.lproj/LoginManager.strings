@@ -1,0 +1,84 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Es ti segir?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Interrumper";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Svidar la tschertga";
+
+/* Copy password text selection menu item */
+"Copy" = "Copiar";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Creà: %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Stizzar";
+
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Interrumper";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Allontanar";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "I n'è betg pussaivel da revocar questa acziun.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Uschia vegn allontanà il pled-clav da tut tes apparats sincronisads.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Allontanar il pled-clav?";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Deselecziunar tut";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Midar en il modus da tschertgar";
+
+/* Hide password text selection menu item */
+"Hide" = "Zuppentar";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Las infurmaziuns d'annunzia vegnan allontanadas definitivamain.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Las infurmaziuns d'annunzia vegnan allontanadas da tut ils apparats associads.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Modifitgà: %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Chattà naginas infurmaziuns d'annunzia";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Nagins pleds-clav chattads";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Avrir & emplenir";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Pled-clav";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Mussar";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Tschertgar";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Champ d'endataziun per tschertgar";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "Tschertgar";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Selecziunar tut";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Num d'utilisader";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Website";
+

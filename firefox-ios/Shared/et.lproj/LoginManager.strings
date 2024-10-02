@@ -1,0 +1,63 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Kas oled kindel?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Loobu";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Tühjenda otsing";
+
+/* Copy password text selection menu item */
+"Copy" = "Kopeeri";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Loodud %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Kustuta";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Tühista kõik valikud";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Sisene otsingurežiimi";
+
+/* Hide password text selection menu item */
+"Hide" = "Peida";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Kasutajatunnused eemaldatakse jäädavalt.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Kasutajatunnused eemaldatakse kõigist ühendatud seadmetest.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Muudetud %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Kasutajakontosid ei leitud";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Ava ja täida";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Parool";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Kuva";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Otsi";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Otsingu sisestusväli";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Vali kõik";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Kasutajanimi";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Sait";
+

@@ -1,0 +1,36 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "Zarrar les llingüetes privaes";
+
+/* Description for medium size widget to add Firefox Shortcut to home screen */
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Amiesta atayos de Firefox a la pantalla d'aniciu.";
+
+/* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
+"TodayWidget.MoreTabsLabel" = "+%d más…";
+
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "Busca nueva";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "Nun hai llingüetes abiertes.";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "Busca privada";
+
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "Amiesta un atayu de Firefox a la pantalla d'aniciu. Darréu d'amestar el widget, tenlu primíu pa editalu y esbillar un atayu diferente.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Aiciones rápides";
+
+/* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "Atayos de Firefox";
+
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "Vista rápida";
+
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "Amiesta atayos de los sitios que más visites o que visitares apocayá.";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "Sitios Principales";
+

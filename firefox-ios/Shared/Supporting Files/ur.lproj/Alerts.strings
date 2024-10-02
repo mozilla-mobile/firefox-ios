@@ -1,0 +1,6 @@
+/* The title for the negative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will reject the action of restoring tabs. */
+"Alerts.RestoreTabs.Button.No.v109" = "نہیں";
+
+/* The title for the affirmative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will restore existing tabs. */
+"Alerts.RestoreTabs.Button.Yes.v109" = "ٹیبیں بحال کریں";
+

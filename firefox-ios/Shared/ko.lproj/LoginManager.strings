@@ -1,0 +1,84 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "계속 하시겠습니까?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "취소";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "검색 기록 지우기";
+
+/* Copy password text selection menu item */
+"Copy" = "복사";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "%@에 생성됨";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "삭제";
+
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "취소";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "삭제";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "이 작업은 취소할 수 없습니다.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "이 작업은 동기화된 모든 장치에서 비밀번호를 제거합니다.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "비밀번호를 삭제하시겠습니까?";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "모두 선택해제";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "검색 모드";
+
+/* Hide password text selection menu item */
+"Hide" = "숨기기";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "로그인을 영구적으로 제거 합니다.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "로그인을 연결된 모든 장치에서 제거합니다.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "%@에 수정됨";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "일치하는 항목 없음";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "비밀번호를 찾을 수 없음";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "열고 채우기";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "비밀번호";
+
+/* Reveal password text selection menu item */
+"Reveal" = "표시";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "검색";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "검색 입력창";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "검색";
+
+/* Label for the button used to select all logins. */
+"Select All" = "모두 선택";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "사용자 이름";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "웹 사이트";
+

@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "அந்தரங்க கீற்றுகளை மூடு";
+
+/* Context menu option for opening a link in a new private tab */
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "அந்தரங்க கீற்றில் திற";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "பயர்பாஃசு தனது பழைய வரலாறு (அ) நினைவிகளை நினைவில் வைக்காது, ஆனால் புதிய புத்தகக்குறிகளைச் சேமித்து வைக்கும்.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "மேலும் அறிக";
+
+/* Toggled OFF accessibility value */
+"Off" = "அணை";
+
+/* Toggled ON accessibility value */
+"On" = "செயற்படுத்து";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "அந்தரங்க உலாவல்";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "அந்தரங்க முறைமை";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "அந்தரங்க முறைமையைச் செயற்படுத்து (அ) அணை";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "அந்தரங்க முறைமையைச் செயற்படுத்து (அ) அணை";
+

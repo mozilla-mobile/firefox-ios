@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Gotovo";
+
+/* Text selection menu item */
+"Find in Page" = "Pronađi na stranici";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Sljedeći rezultat na stranici";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Prethodni rezultat na stranici";
+

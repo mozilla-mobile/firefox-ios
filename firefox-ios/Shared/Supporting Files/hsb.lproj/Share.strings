@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "Njejsu žane druhe graty z tutym kontom zwjazane, kotrež bychu so dali synchronizować.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "Njejsće pola swojeho konta přizjewjeny.";
+

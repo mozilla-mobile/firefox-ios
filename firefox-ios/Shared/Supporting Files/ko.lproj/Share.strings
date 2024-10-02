@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "동기화할 수 있는 이 계정에 연결된 다른 장치가 없습니다.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "계정에 로그인되어 있지 않습니다.";
+

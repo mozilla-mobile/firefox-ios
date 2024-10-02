@@ -1,0 +1,18 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "Гизү тарихы";
+
+/* Settings item for clearing the cache */
+"Cache" = "Кэш";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Кукилар";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "Йөкләнгән файллар";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Оффлайн сайт мәгълүматлары";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Сакланган логиннар";
+

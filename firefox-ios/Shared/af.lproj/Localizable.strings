@@ -1,0 +1,501 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "’n Gebruikernaam en wagwoord word deur %@ aangevra.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "’n Gebruikernaam en wagwoord word deur %1$@ aangevra. Die werf sê: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Aangaande";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Voeg oortjie by";
+
+/* Name for button adding current article to reading list in reader mode */
+"Add to Reading List" = "Voeg by leeslys";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "Goed";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Stuur altyd";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Stawing vereis";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Terug";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Blokkeer opspringers";
+
+/* Toggle bookmarks syncing setting */
+"Bookmarks" = "Boekmerke";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "Gids";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "Nuwe gids";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "Titel";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Helderheid";
+
+/* Label for Cancel button */
+"Cancel" = "Kanselleer";
+
+/* The button to open a new tab with the copied link */
+"ClipboardToast.GoToCopiedLink.Button" = "Gaan";
+
+/* Message displayed when the user has a copied link on the clipboard */
+"ClipboardToast.GoToCopiedLink.Title" = "Gaan na gekopieerde skakel?";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Sluit";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Nuwe private oortjie geopen";
+
+/* The button text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Skakel oor";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Nuwe oortjie geopen";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Kon nie bladsy laai nie.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Skep ’n rekening";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Donker";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Verklein teks";
+
+/* Title for default search engine picker. */
+"Default Search Engine" = "Verstek soekenjin";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Aansiginstellings";
+
+/* Used as a button label for crash dialog prompt */
+"Don’t Send" = "Moenie stuur nie";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "Klaar";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Gevorderd";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Waarskuwing: ons kan nie bevestig dat u verbinding aan die webwerf veilig is nie.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "Dit kan ’n opstellingsfout wees, of ’n gepeuter deur ’n aanvaller. Gaan voort op eie risiko.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "Die eienaar van %@ het hul webwerf verkeerd opgestel. Om u inligting van diefstal te beskerm, het Firefox nie aan dié webwerf verbind nie.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Hierdie verbinding is onvertroud";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Gaan terug";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Besoek werf in elk geval";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Title for firefox about:home page in tab history list */
+"Firefox.HomePage.Title" = "Firefox-tuisblad";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Vorentoe";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Hulp";
+
+/* Toggle history syncing setting */
+"History" = "Geskiedenis";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "Webwerwe wat onlangs besoek is sal hier wees.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Oortjies van ander toestelle is hier.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "Geskiedenis";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Onlangs gesluit";
+
+/* A label indicating the keyboard shortcut to navigate backwards, through session history, inside the current tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Back.DiscoveryTitle" = "Terug";
+
+/* A label indicating the keyboard shortcut of closing the current tab a user is in. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Sluit oortjie";
+
+/* A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Forward.DiscoveryTitle" = "Vorentoe";
+
+/* A label indicating the keyboard shortcut of creating a new private tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Nuwe private oortjie";
+
+/* A label indicating the keyboard shortcut of creating a new tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.NewTab.DiscoveryTitle" = "Nuwe oortjie";
+
+/* A label indicating the keyboard shortcut of reloading the current page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Reload.DiscoveryTitle" = "Herlaai bladsy";
+
+/* A label indicating the keyboard shortcut of directly accessing the URL, location, bar. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Kies liggingbalk";
+
+/* A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Wys volgende oortjie";
+
+/* A label indicating the keyboard shortcut of switching to a tab immediately preceding to the currently selected tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Wys vorige oortjie";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Vermeerder teksgrootte";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "so pas";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Lisensies";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Lig";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Laai oorspronklike blad";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Laai tans inhoud…";
+
+/* Authentication prompt log in button */
+"Log in" = "Meld aan";
+
+/* Toggle logins syncing setting */
+"Logins" = "Aanmeldings";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Moenie stoor nie";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "Stoor aanmelding %1$@ vir %2$@?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "Stoor wagwoord vir %@?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Stoor aanmelding";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Werk by";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Dit lyk of Firefox vantevore omgeval het. Wil u die oortjies herstel?";
+
+/* Title for the button that marks a reading list item as read */
+"Mark as Read" = "Merk as gelees";
+
+/* Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Merk as ongelees";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "meer as ’n maand gelede";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "meer as ’n week gelede";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Navigasienutsbalk";
+
+/* Accessibility label for the New Tab button in the tab toolbar. */
+"New Tab" = "Nuwe oortjie";
+
+/* Restore Tabs Negative Action */
+"No" = "Nee";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Geen oortjies";
+
+/* OK button */
+"OK" = "Goed";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Gits! Firefox het omgeval.";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Open artikels in Leesaansig deur op die boekikoon te raak as dit op die titelbalk verskyn.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Open instellings";
+
+/* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
+"OpenURL.Error.Message" = "Firefox kan nie die bladsy oopmaak nie want dit het ’n ongeldige adres.";
+
+/* Title of the message shown when the user attempts to navigate to an invalid link. */
+"OpenURL.Error.Title" = "Kan nie bladsy open nie";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Wagwoord";
+
+/* Privacy section title */
+"Privacy" = "Privaatheid";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Privaatheidbeleid";
+
+/* Title for quick-search engines settings section. */
+"Quick-Search Engines" = "Kitssoekenjins";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "lees";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Leesaansig";
+
+/* Panel accessibility label */
+"Reading list" = "Leeslys";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "Onlangs gesluit";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Herlaai";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Verwyder";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Verwyder uit die leeslys";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Stoor bladsye na die Leeslys deur op die boekplus-ikoon te raak in die kontroles van die Leeslys.";
+
+/* Open search section of settings */
+"Search" = "Soek";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Soek of tik adres";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "Die nuwe soekenjin sal in die snelsoekbalk verskyn.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "Soekenjin bygevoeg!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "Voeg soekverskaffer by?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "Kanselleer";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "’n Soekenjin met dié titel of URL is reeds bygevoeg.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "Die soekverskaffer kon nie bygevoeg word nie.";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.FormErrorMessage" = "Vul asb. alle velde korrek in.";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "Goed";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Stuur ’n omvalverslag na Mozilla sodat ons die probleem kan oplos?";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "Stuur terugvoer";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Stuur verslag";
+
+/* Button title for cancelling share screen */
+"SendTo.Cancel.Button" = "Kanselleer";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "Slegs HTTP- en HTTPS-skakels kan gedeel word.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "Goed";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "Die skakel wat u probeer deel, kan nie gedeel word nie.";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepia";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Title in the settings view controller title bar */
+"Settings" = "Instellings";
+
+/* The button text in Search Settings that opens the Custom Search Engine view. */
+"Settings.AddCustomEngine" = "Voeg soekenjin by";
+
+/* The text on the Save button when saving a custom search engine */
+"Settings.AddCustomEngine.SaveButtonText" = "Stoor";
+
+/* The title of the  Custom Search Engine view. */
+"Settings.AddCustomEngine.Title" = "Voeg soekenjin by";
+
+/* The title for the field which sets the title for a custom search engine. */
+"Settings.AddCustomEngine.TitleLabel" = "Titel";
+
+/* The placeholder for Title Field when saving a custom search engine. */
+"Settings.AddCustomEngine.TitlePlaceholder" = "Soekenjin";
+
+/* The title for URL Field */
+"Settings.AddCustomEngine.URLLabel" = "URL";
+
+/* The placeholder for URL Field when saving a custom search engine */
+"Settings.AddCustomEngine.URLPlaceholder" = "URL (vervang navraag met %s)";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Skrap private data";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Skrap private data";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "Tuisblad";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "Huidige tuisblad";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "Gebruik huidige bladsy";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
+"Settings.NewTab.SectionName" = "Nuwe oortjie";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "Klaar";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "Redigeer";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "Probleemoplossing";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Wys soekvoorstelle";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar */
+"Show Tabs" = "Wys oortjies";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Wys toer";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Stop";
+
+/* Support section title */
+"Support" = "Ondersteuning";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Vee regs of links met drie vingers om die oortjie te sluit.";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "Sinkroniseer tans…";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Sync is vanlyn";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "Ontdoen";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d oortjie(s) gesluit";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Die bladsy kon nie in leesaansig gewys word nie.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Daar was ’n probleem met toegang tot die ander toestelle. Probeer weer oor ’n rukkie.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Daar was ’n probleem met die omskakeling van die bladsy";
+
+/* Relative date for date in past week. */
+"this week" = "hierdie week";
+
+/* This label is meant to signify the section containing a group of items from the current day. */
+"Today" = "Vandag";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "vandag om %@";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "Kieslys";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "Verwyder bladsy - %@";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "ongelees";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Gebruikernaam";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Webinhoud";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Welkom by die leeslys";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Wel, dis nou 'n verleentheid.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipedia";
+
+/* Relative date for yesterday. */
+"yesterday" = "gister";
+
+/* This label is meant to signify the section containing a group of items from the past 24 hours. */
+"Yesterday" = "Gister";
+
+/* Error message in the remote tabs panel */
+"You don’t have any tabs open in Firefox on your other devices." = "Daar is geen oortjies oop in Firefox op ander toestelle nie.";
+
+/* Your Rights settings section title */
+"Your Rights" = "U regte";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+

@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "N’ho peus trevnad ebet all kennasket d’ar gont-mañ hegerz evit goubredañ.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "N’hoc’h ket kennasket d’ho kont.";
+

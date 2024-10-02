@@ -1,0 +1,84 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Bạn có chắc không?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Hủy bỏ";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Xóa trắng tìm kiếm";
+
+/* Copy password text selection menu item */
+"Copy" = "Sao chép";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Đã tạo %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Xóa";
+
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Hủy bỏ";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Xóa";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Bạn không thể hoàn tác hành động này.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Thao tác này sẽ xóa mật khẩu khỏi tất cả các thiết bị đã đồng bộ hóa của bạn.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Xóa mật khẩu?";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Bỏ chọn tất cả";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Vào chế độ tìm kiếm";
+
+/* Hide password text selection menu item */
+"Hide" = "Ẩn";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Thông tin đăng nhập sẽ bị xóa vĩnh viễn.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Thông tin đăng nhập sẽ bị xóa khỏi tất cả các thiết bị được kết nối.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Đã sửa đổi %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Không tìm thấy thông tin đăng nhập";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Không tìm thấy mật khẩu nào";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Mở & điền";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Mật khẩu";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Tiết lộ";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Tìm kiếm";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Trường nhập tìm kiếm";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "Tìm kiếm";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Chọn tất cả";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Tên đăng nhập";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Trang web";
+

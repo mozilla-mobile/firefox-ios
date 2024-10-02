@@ -1,0 +1,60 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "Itxi fitxa pribatuak";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV2" = "Itxi fitxa pribatuak";
+
+/* Description for medium size widget to add Firefox Shortcut to home screen */
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Gehitu Firefoxen lasterbideak zure hasierako pantailan.";
+
+/* Go to link pasted on the clipboard */
+"TodayWidget.GoToCopiedLinkLabelV1" = "Joan kopiatutako loturara";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV2" = "Joan kopiatutako loturara";
+
+/* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
+"TodayWidget.MoreTabsLabel" = "+%d gehiago…";
+
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "Bilaketa berria";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "Irekitako fitxarik ez.";
+
+/* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.OpenFirefoxLabel" = "Ireki Firefox";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "Bilaketa pribatua";
+
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "Gehitu Firefoxerako lasterbidea zure hasierako pantailan. Widget-a gehitu bezain laster, sakatu eta mantendu lasterbidea editatu eta beste bat hautatzeko.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Ekintza bizkorrak";
+
+/* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "Firefoxen lasterbideak";
+
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryDescriptionV2" = "Gehitu irekitako zure fitxetarako lasterbideak.";
+
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "Ikuspegi azkarra";
+
+/* Search in Firefox. Do not translate the word Firefox */
+"TodayWidget.SearchInFirefoxV2" = "Bilatu Firefoxen";
+
+/* Search in private tab */
+"TodayWidget.SearchInPrivateTabLabelV2" = "Bilatu fitxa pribatuan";
+
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "Gehitu lasterbideak sarri eta azkenaldian bisitatutako azken guneetara.";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "Gune erabilienak";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "Webgunearen lasterbideak";
+

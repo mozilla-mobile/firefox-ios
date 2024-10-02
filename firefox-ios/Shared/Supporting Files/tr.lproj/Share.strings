@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "Bu hesaba bağlanmış ve eşitleme yapabileceğiniz başka cihazınız yok.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "Hesabınıza giriş yapmadınız.";
+

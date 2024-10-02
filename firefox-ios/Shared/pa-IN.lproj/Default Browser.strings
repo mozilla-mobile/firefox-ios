@@ -1,0 +1,45 @@
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Firefox ਨੂੰ ਆਪਣਾ ਮੂਲ ਬਰਾਊਜ਼ਰ ਬਨਾਉਣਾ ਆਜ਼ਾਦ, ਪਹੁੰਚ ਵਿੱਚ ਇੰਟਰਨੈੱਟ ਲਈ ਵੋਟ ਪਾਉਣਾ ਹੈ।";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "ਬੇਹਤਰ ਇੰਟਰਨੈੱਟ ਲਈ ਮੂਲ";
+
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "ਹੋਰ ਸਿੱਖੋ";
+
+/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "ਵੈੱਬਸਾਈਟਾਂ, ਈਮੇਲਾਂ ਅਤੇ ਸੁਨੇਹਿਆਂ ਵਿੱਚੋਂ ਲਿੰਕਾਂ ਨੂੰ Firefox ਵਿੱਚ ਸਿੱਧਾ ਖੋਲ੍ਹਣ ਲਈ ਸੈੱਟ ਕਰੋ।";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "ਸਪੀਡ, ਸੁਰੱਖਿਆ ਅਤੇ ਪਰਦੇਦਾਰੀ ਨੂੰ ਆਪਣੇ-ਆਪ ਵਰਤਣ ਲਈ Firefox ਨੂੰ ਆਪਣਾ ਮੂਲ ਬਰਾਊਜ਼ਰ ਬਣਾਓ।";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "ਹਰ ਰੋਜ਼ ਦੇ ਬਰਾਊਜ਼ ਕਰਨ ਦਾ ਪੱਧਰ ਉੱਚਾ ਕਰੋ";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox ਹਰ ਮਹੀਨੇ ਔਸਤ 3,000+ ਟਰੈਕਰਾਂ ਉੱਤੇ ਪਾਬੰਦੀ ਲਾਉਂਦਾ ਹੈ। ਪਰਦੇਦਾਰੀ ਨੂੰ ਧਿਆਨ ਵਿੱਚ ਰੱਖਣ ਲਈ ਸਾਨੂੰ ਆਪਣਾ ਮੂਲ ਬਰਾਊਜ਼ਰ ਬਣਾਓ।";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox ਵਿੱਚ ਪਰਦੇਦਾਰੀ ਹੈ";
+
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "ਆਪਣੇ ਮੂਲ ਬਰਾਊਜ਼ਰ ਨੂੰ ਬਦਲੋ";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "ਸੈਟਿੰਗਾਂ ਉੱਤੇ ਜਾਓ";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1. Settings ਉੱਤੇ ਜਾਓ";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2. Default Browser App ਨੂੰ ਛੂਹੋ";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description3" = "3. Firefox ਚੁਣੋ";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "ਮੂਲ ਬਰਾਊਜ਼ਰ ਐਪ";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "ਮੂਲ ਬਰਾਊਜ਼ਰ ਵਜੋਂ ਸੈੱਟ ਕਰੋ";
+

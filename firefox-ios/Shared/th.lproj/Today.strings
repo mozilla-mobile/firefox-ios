@@ -1,0 +1,60 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "ปิดแท็บส่วนตัว";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV2" = "ปิดแท็บส่วนตัว";
+
+/* Description for medium size widget to add Firefox Shortcut to home screen */
+"TodayWidget.FirefoxShortcutGalleryDescription" = "เพิ่มทางลัด Firefox ไปยังหน้าจอหลักของคุณ";
+
+/* Go to link pasted on the clipboard */
+"TodayWidget.GoToCopiedLinkLabelV1" = "ไปยังลิงก์ที่คัดลอก";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV2" = "ไปยังลิงก์ที่คัดลอก";
+
+/* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
+"TodayWidget.MoreTabsLabel" = "เพิ่มเติม +%d…";
+
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "การค้นหาใหม่";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "ไม่มีแท็บที่เปิดอยู่";
+
+/* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.OpenFirefoxLabel" = "เปิด Firefox";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "การค้นหาแบบส่วนตัว";
+
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "เพิ่มทางลัด Firefox ลงในหน้าจอโฮมของคุณ หลังจากเพิ่มวิดเจ็ตแล้ว ให้แตะค้างไว้เพื่อแก้ไขและเลือกทางลัดอื่น";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "การกระทำด่วน";
+
+/* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox Shortcuts";
+
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryDescriptionV2" = "เพิ่มทางลัดไปยังแท็บที่เปิดอยู่ของคุณ";
+
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "การดูแบบด่วน";
+
+/* Search in Firefox. Do not translate the word Firefox */
+"TodayWidget.SearchInFirefoxV2" = "ค้นหาใน Firefox";
+
+/* Search in private tab */
+"TodayWidget.SearchInPrivateTabLabelV2" = "ค้นหาในแท็บส่วนตัว";
+
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "เพิ่มทางลัดไปยังไซต์ที่เข้าชมบ่อยและล่าสุด";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "ไซต์เด่น";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "ทางลัดเว็บไซต์";
+

@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Eginda";
+
+/* Text selection menu item */
+"Find in Page" = "Bilatu orrian";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Orriko hurrengo emaitza";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Orriko aurreko emaitza";
+

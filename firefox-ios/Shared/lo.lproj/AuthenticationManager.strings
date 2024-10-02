@@ -1,0 +1,6 @@
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "ປ້ອນ Passcode";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "ໃຊ້ລາຍນີ້ວມືຂອງທ່ານເພື່ອເຂົ້ານຳໃຊ້ການເຂົ້າສູ່ລະບົບດຽວນີ້ເລີຍ.";
+

@@ -1,0 +1,51 @@
+/* Title label for the view where user can add their credit card info */
+"CreditCard.EditCard.AddCreditCardTitle.v122" = "Ychwanegu Cerdyn";
+
+/* Button label for cancelling editing of the credit card details shown in the form */
+"CreditCard.EditCard.CancelNavBarButtonLabel.v113" = "Diddymu";
+
+/* Title label for user to input their credit card Expiration date in the format MM / YY printed on their credit card in the text box below. */
+"CreditCard.EditCard.CardExpirationDateTitle.v112" = "Daw i ben MM / BB";
+
+/* Title label for user to input their credit card number printed on their credit card in the text box below. */
+"CreditCard.EditCard.CardNumberTitle.v112" = "Rhif Cerdyn";
+
+/* Button label for closing the view where user can view their credit card info */
+"CreditCard.EditCard.CloseNavBarButtonLabel.v113" = "Cau";
+
+/* Label for concealing contents of the credit card number */
+"CreditCard.EditCard.ConcealLabel.v114" = "Cuddio";
+
+/* Label for copying contents of the form */
+"CreditCard.EditCard.CopyLabel.v113" = "Copïo";
+
+/* Button label for editing the credit card details shown in the form */
+"CreditCard.EditCard.EditNavBarButtonLabel.v113" = "Golygu";
+
+/* Label for credit card expiration date. The %@ will be replaced by the actual date and thus doesn't need translation. */
+"CreditCard.EditCard.ExpiredDateTitle.v112" = "Daw i ben %@";
+
+/* Title label for user to input their name printed on their credit card in the text box below. */
+"CreditCard.EditCard.NameOnCardTitle.v112" = "Enw ar y Cerdyn";
+
+/* Button title which, when tapped, will allow the user to save valid credit card details. */
+"CreditCard.EditCard.NavButtonSaveTitle.v112" = "Cadw";
+
+/* Title label for button that allows user to remove their saved credit card. */
+"CreditCard.EditCard.RemoveCardButtonTitle.v112" = "Tynnu Cerdyn";
+
+/* Label for revealing the contents of the credit card number */
+"CreditCard.EditCard.RevealLabel.v114" = "Dadlennu";
+
+/* Title label for user to pick a credit card from the list below to be updated. */
+"CreditCard.EditCard.SavedCardListTitle.v112" = "CARDIAU WEDI'U CADW";
+
+/* Button label for saving the credit card details user entered in the form */
+"CreditCard.EditCard.SaveNavBarButtonLabel.v113" = "Cadw";
+
+/* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
+"CreditCard.EditCard.ToggleToAllowAutofillTitle.v122" = "Cadw a Llanw Dulliau Talu";
+
+/* Title label for the view where user can view their credit card info */
+"CreditCard.EditCard.ViewCreditCardTitle.v116" = "Gweld Cerdyn";
+

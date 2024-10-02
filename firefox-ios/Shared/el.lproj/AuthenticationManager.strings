@@ -1,0 +1,6 @@
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "Εισαγάγετε συνθηματικό";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Αποκτήστε πρόσβαση στις συνδέσεις με το αποτύπωμά σας.";
+

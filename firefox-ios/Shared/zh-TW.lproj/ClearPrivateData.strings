@@ -1,0 +1,21 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "瀏覽紀錄";
+
+/* Settings item for clearing the cache */
+"Cache" = "快取";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Cookie";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "下載檔案";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "網頁離線資料";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "儲存的登入資訊";
+
+/* A settings item that allows a user to use Apple's \"Spotlight Search\" in Data Management's Website Data option to search for and select an item to delete. */
+"Spotlight Index" = "Spotlight 索引";
+

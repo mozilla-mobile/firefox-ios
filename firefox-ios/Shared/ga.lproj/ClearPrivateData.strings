@@ -1,0 +1,15 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "Stair Bhrabhsála";
+
+/* Settings item for clearing the cache */
+"Cache" = "Taisce";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Fianáin";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Sonraí Suíomhanna As Líne";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Focail fhaire a sábháladh";
+

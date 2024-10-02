@@ -1,0 +1,45 @@
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "ඔබගේ පෙරනිමි අතිරික්සුව බවට ෆයර්ෆොක්ස් පත් කිරීම විවෘත හා ප්‍රවේශ්‍ය අන්තර්ජාලයක් සඳහා වන ඡන්දයකි.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "කදිම අන්තර්ජාලයකට ෆයර්ෆොක්ස්";
+
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "කෙසේදැයි දැනගන්න";
+
+/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "ෆයර්ෆොක්ස් අතිරික්සුවේ ස්වයංක්‍රීයව විවෘත වීමට පණිවිඩ, වි-තැපැල් සහ අඩවිවල සබැඳි සකසන්න.";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "ෆයර්ෆොක්ස් ඔබගේ පෙරනිමි අතිරික්සුව ලෙස තේරීමෙන් වේගය, ආරක්‍ෂාව හා පෞද්ගලිකත්‍වය ස්වයංක්‍රීයව.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "ප්‍රීතිමත් දෛනික පිරික්සීමකට";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "ෆයර්ෆොක්ස් සාමාන්‍යයෙන් සෑම මසකම එක් අයෙක් සඳහා ලුහුබැඳීම් 3,000 කට වඩා අවහිර කරයි. පෞද්ගලිකත්‍වය තත්‍වාකාරයෙන් අත්විඳීමට ඔබගේ පෙරනිමි අතිරික්සුව කරන්න.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "ෆයර්ෆොක්ස් පෞද්ගලිකත්‍වය රැකදෙයි";
+
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "පෙරනිමි අතිරික්සුව මාරු කරන්න";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "සැකසුම් වෙත යන්න";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1. සැකසුම් වෙත යන්න";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2. පෙරනිමි අතිරික්සු යෙදුම ඔබන්න";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description3" = "3. ෆයර්ෆොක්ස් තෝරන්න";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "පෙරනිමි අතිරික්සු යෙදුම";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "පෙරනිමි අතිරික්සුව ලෙස සකසන්න";
+

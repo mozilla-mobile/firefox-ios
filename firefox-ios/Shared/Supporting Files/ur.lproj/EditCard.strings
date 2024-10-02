@@ -1,0 +1,33 @@
+/* Button label for cancelling editing of the credit card details shown in the form */
+"CreditCard.EditCard.CancelNavBarButtonLabel.v113" = "منسوخ کریں";
+
+/* Title label for user to input their credit card number printed on their credit card in the text box below. */
+"CreditCard.EditCard.CardNumberTitle.v112" = "کارڈ کا نمبر";
+
+/* Button label for closing the view where user can view their credit card info */
+"CreditCard.EditCard.CloseNavBarButtonLabel.v113" = "بند کریں";
+
+/* Label for concealing contents of the credit card number */
+"CreditCard.EditCard.ConcealLabel.v114" = "منسوخ کریں";
+
+/* Label for copying contents of the form */
+"CreditCard.EditCard.CopyLabel.v113" = "نقل کریں";
+
+/* Button label for editing the credit card details shown in the form */
+"CreditCard.EditCard.EditNavBarButtonLabel.v113" = "تدوین";
+
+/* Button title which, when tapped, will allow the user to save valid credit card details. */
+"CreditCard.EditCard.NavButtonSaveTitle.v112" = "محفوظ کریں";
+
+/* Title label for button that allows user to remove their saved credit card. */
+"CreditCard.EditCard.RemoveCardButtonTitle.v112" = "تمام ہٹائیں";
+
+/* Label for revealing the contents of the credit card number */
+"CreditCard.EditCard.RevealLabel.v114" = "افشاں کریں";
+
+/* Title label for user to pick a credit card from the list below to be updated. */
+"CreditCard.EditCard.SavedCardListTitle.v112" = "محفوظ شدہ کارڈز";
+
+/* Button label for saving the credit card details user entered in the form */
+"CreditCard.EditCard.SaveNavBarButtonLabel.v113" = "محفوظ کریں";
+

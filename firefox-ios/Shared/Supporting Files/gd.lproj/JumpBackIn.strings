@@ -1,0 +1,6 @@
+/* Contextual hints are little popups that appear for the users informing them of new features. This one talks about additions to the Firefox homepage regarding a more personalized experience. */
+"ContextualHints.FirefoxHomepage.JumpBackIn.PersonalizedHome" = "Seo dhut an duilleag-dhachaigh phearsantaichte agad. Nochdaidh tabaichean a bh’ agad o chionn goirid is toraidhean luirg an-seo.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. When a user is logged in and has a tab synced from desktop, this popup indicates which tab that is within the Jump Back In section. */
+"ContextualHints.FirefoxHomepage.JumpBackIn.SyncedTab.v106" = "Tha na tabaichean agad ri shioncronachadh! Lean ort far an do stad thu air an uidheam eie agad.";
+

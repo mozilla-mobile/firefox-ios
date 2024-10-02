@@ -1,0 +1,9 @@
+/* On the Research Survey popup, the text that explains what the screen is about. Placeholder is for the app name. */
+"Body.Text.v112" = "Aiutaci a migliorare %@ partecipando a un breve sondaggio.";
+
+/* On the Research Survey popup, the text for the button that, when tapped, will dismiss the popup and take the user to a survey. */
+"PrimaryButton.Label.v112" = "Partecipa al sondaggio";
+
+/* On the Research Survey popup, the text for the button that, when tapped, will dismiss this screen, and the user will not be taken to the survey. */
+"SecondaryButton.Label.v112" = "No grazie";
+

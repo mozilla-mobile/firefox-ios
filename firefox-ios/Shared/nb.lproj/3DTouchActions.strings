@@ -1,0 +1,21 @@
+/* Label for preview action on Tab Tray Tab to add current tab to Bookmarks */
+"Add to Bookmarks" = "Legg til i Bokmerker";
+
+/* Label for preview action on Tab Tray Tab to close the current tab */
+"Close Tab" = "Lukk fane";
+
+/* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
+"Copy URL" = "Kopier URL";
+
+/* Label for preview action on Tab Tray Tab to send the current link to another device */
+"Menu.SendLinkToDevice" = "Send lenke til enhet";
+
+/* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
+"Open Last Bookmark" = "Åpne siste bokmerke";
+
+/* Accessibility label, associated to the 3D Touch action on the current tab in the tab tray, used to display a larger preview of the tab. */
+"Preview of %@" = "Forhåndsvisning av %@";
+
+/* Label for preview action on Tab Tray Tab to send the current tab to another device */
+"Send to Device" = "Send til enhet";
+

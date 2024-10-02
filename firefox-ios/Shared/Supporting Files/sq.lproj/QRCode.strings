@@ -1,0 +1,3 @@
+/* Accessibility label of the QR code button in the toolbar */
+"QRCode.Toolbar.Button.A11y.Title.v128" = "Skanonin kodin QR";
+

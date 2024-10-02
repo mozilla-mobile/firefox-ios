@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "സ്വകാര്യ റ്റാബുകള്‍ അടയ്ക്കൂ";
+
+/* Context menu option for opening a link in a new private tab */
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "പുതിയ സ്വകാര്യ ടാബിൽ തുറക്കുക";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "ഫയര്‍ഫോക്സ് നിങ്ങളുടെ നാള്‍വഴികളോ കുക്കികളോ ഓര്‍ത്തു വയ്ക്കില്ല, പക്ഷെ പുതിയ അടയാളക്കുറിപ്പുകള്‍ സൂക്ഷിക്കുന്നതായിരിക്കും.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "കൂടുതല്‍ അറിയുക";
+
+/* Toggled OFF accessibility value */
+"Off" = "പ്രവർത്തനരഹിതം";
+
+/* Toggled ON accessibility value */
+"On" = "ഓണ്‍";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "സ്വകാര്യ ബ്രൗസിങ്";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "സ്വകാര്യ മോഡ്";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "സ്വകാര്യ മോഡ് ഓണ്‍ അല്ലെങ്കില്‍ ഓഫ്";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "സ്വകാര്യ മോഡില്‍ നിന്നും പുറത്തു കടക്കുമ്പോള്‍";
+

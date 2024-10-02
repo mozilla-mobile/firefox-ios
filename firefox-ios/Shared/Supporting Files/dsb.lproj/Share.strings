@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "Njejsu žedne druge rědy z toś tym kontom zwězane, kótarež by se dali synchronizěrowaś.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "Njejsćo pla swójogo konta pśizjawjony.";
+

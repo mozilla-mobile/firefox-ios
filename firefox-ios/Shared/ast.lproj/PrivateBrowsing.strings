@@ -1,0 +1,27 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Zarrar les llingüetes privaes";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox nun va recordar l'historial o les cookies, mas van guardase los marcadores nuevos.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Lleer más";
+
+/* Toggled OFF accessibility value */
+"Off" = "Sí";
+
+/* Toggled ON accessibility value */
+"On" = "Non";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Restolar en privao";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Mou priváu";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Des/activa'l mou priváu";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Al dexar de restolar en privao";
+

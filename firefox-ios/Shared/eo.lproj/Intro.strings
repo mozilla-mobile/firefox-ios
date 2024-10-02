@@ -1,0 +1,9 @@
+/* Sign in to Firefox account button on second intro screen. */
+"Intro.Slides.Button.SignIn" = "Komenci seancon";
+
+/* Title for the first panel 'Welcome' in the First Run tour. */
+"Intro.Slides.Welcome.Title.v2" = "Bonvenon al Firefox";
+
+/* See http://mzl.la/1T8gxwo */
+"Start Browsing" = "Komenci retumi";
+

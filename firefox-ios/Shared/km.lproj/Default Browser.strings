@@ -1,0 +1,27 @@
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "ស្វែងយល់​របៀប";
+
+/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "កំណត់​តំណ​ពី​គេហទំព័រ អ៊ីមែល និង Messages ដើម្បីបើក​នៅក្នុង Firefox ដោយ​ស្វ័យប្រវត្តិ។";
+
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "ប្ដូរ​កម្មវិធី​រុករក​តាមអ៊ីនធឺណិត​លំនាំដើម​របស់​អ្នក";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "ចូលទៅកាន់​ការកំណត់";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1. ចូលទៅ​ការកំណត់";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2. ចុច​កម្មវិធី​រុករក​តាម​អ៊ីនធឺណិត​លំនាំដើម";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description3" = "3. ជ្រើសរើស Firefox";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "កម្មវិធី​រុករក​តាម​អ៊ីនធឺណិត​លំនាំដើម";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "កំណត់​ជា​កម្មវិធី​រុករក​តាម​អ៊ីនធឺណិត​លំនាំដើម";
+

@@ -1,0 +1,18 @@
+/* Prompt for saving the username in the Save Logins prompt. */
+"LoginsHelper.PromptSaveLogin.Title.v122" = "Arregistrà u nome d’utilizatore ?";
+
+/* Prompt for saving a password in the Save Logins prompt. */
+"LoginsHelper.PromptSavePassword.Title.v122" = "Arregistrà a parolla d’intesa ?";
+
+/* Prompt for updating the password in the Update Password prompt. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg.v122" = "Mudificà a parolla d’intesa ?";
+
+/* Prompt for updating a password in the Update Password prompt. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg.v122" = "Mudificà a parolla d’intesa ?";
+
+/* Placeholder text for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder.v122" = "Ricercà parolle d’intesa";
+
+/* Title for the list of logins saved by the app */
+"LoginsList.Title.v122" = "PAROLLE D’INTESA ARREGISTRATE";
+

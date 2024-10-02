@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "คุณไม่มีอุปกรณ์ใด ๆ ที่เชื่อมต่อกับบัญชีนี้ที่พร้อมซิงค์";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "คุณไม่ได้ลงชื่อเข้าบัญชีของคุณ";
+

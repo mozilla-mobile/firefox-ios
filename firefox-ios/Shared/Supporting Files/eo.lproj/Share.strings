@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "Vi ne havas alian aparaton konektita al tiu ĉi konto, kiu estu disponebla por speguli.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "Vi ne komencis seancon en via konto.";
+

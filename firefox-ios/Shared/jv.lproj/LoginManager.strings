@@ -1,0 +1,27 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Yakin?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Batal";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Busak";
+
+/* Hide password text selection menu item */
+"Hide" = "Umpetaké";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Bukak & Isèni";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Tembung Sandi";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Golèk";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Pilih Kabèh";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Jeneng Panganggo";
+

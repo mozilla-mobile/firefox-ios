@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "У вас немає інших доступних для синхронізації пристроїв, під'єднаних до цього облікового запису.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "Ви не ввійшли в обліковий запис.";
+

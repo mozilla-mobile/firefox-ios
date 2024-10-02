@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Τέλος";
+
+/* Text selection menu item */
+"Find in Page" = "Εύρεση στη σελίδα";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Επόμενο αποτέλεσμα εντός σελίδας";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Προηγούμενο αποτέλεσμα εντός σελίδας";
+

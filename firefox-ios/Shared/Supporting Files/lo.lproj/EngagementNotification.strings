@@ -1,0 +1,18 @@
+/* Body of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Body.v112" = "ຊອກຫາສິ່ງທີ່ຢູ່ໃກ້ໆ. ຫຼືຄົ້ນພົບສິ່ງທີ່ມ່ວນ.";
+
+/* Title of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Title.v112" = "ເລີ່ມການຄົ້ນຫາທໍາອິດຂອງທ່ານ";
+
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is app name. */
+"Engagement.Notification.Treatment.A.Body.v114" = "ການທ່ອງເວັບສ່ວນຕົວໃນ %@ ບໍ່ໄດ້ບັນທຶກຂໍ້ມູນຂອງທ່ານ ແລະ ບລັອກຕົວຕິດຕາມທີ່ເຊື່ອງໄວ້.";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.A.Title.v114" = "ທ່ອງເວັບໂດຍບໍ່ມີການຕິດຕາມ";
+
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is the app name. */
+"Engagement.Notification.Treatment.B.Body.v114" = "ຊອກຫາດ້ວຍບໍ່ມີຄຸກກີ ຫຼື ປະຫວັດທີ່ບັນທຶກໄວ້ໃນ %@.";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.B.Title.v114" = "ລອງຊອກຫາແບບສ່ວນຕົວ";
+

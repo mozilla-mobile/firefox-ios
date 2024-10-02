@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Privaatsed kaardid suletakse";
+
+/* Context menu option for opening a link in a new private tab */
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "Ava uuel privaatsel kaardil";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox ei mäleta ajalugu või küpsiseid, aga uued järjehoidjad salvestatakse.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Rohkem teavet";
+
+/* Toggled OFF accessibility value */
+"Off" = "Väljas";
+
+/* Toggled ON accessibility value */
+"On" = "Sees";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Privaatne veebilehitsemine";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Privaatne režiim";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Lülitab privaatse režiimi sisse või välja";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Privaatsest režiimist väljumisel";
+

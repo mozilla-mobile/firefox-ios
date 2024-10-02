@@ -1,0 +1,18 @@
+/* Label for preview action on Tab Tray Tab to add current tab to Bookmarks */
+"Add to Bookmarks" = "Tonton doo-šilbawey ga";
+
+/* Label for preview action on Tab Tray Tab to close the current tab */
+"Close Tab" = "Kanji daabu";
+
+/* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
+"Copy URL" = "URL berandi";
+
+/* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
+"Open Last Bookmark" = "Doo-šilbay koraa feeri";
+
+/* Accessibility label, associated to the 3D Touch action on the current tab in the tab tray, used to display a larger preview of the tab. */
+"Preview of %@" = "Moofur %@ se";
+
+/* Label for preview action on Tab Tray Tab to send the current tab to another device */
+"Send to Device" = "Sanba jinaa do";
+

@@ -1,0 +1,54 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "ကိုယ်ပိုင်သုံးတဗ်များကိုပိတ်ပါ။";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV2" = "ကိုယ်ပိုင်သုံးတဗ်များကိုပိတ်ပါ။";
+
+/* Description for medium size widget to add Firefox Shortcut to home screen */
+"TodayWidget.FirefoxShortcutGalleryDescription" = "သင်၏မူလမြင်ကွင်းသို့ Firefox ဖြတ်လမ်းများကိုထည့်ပါ။";
+
+/* Go to link pasted on the clipboard */
+"TodayWidget.GoToCopiedLinkLabelV1" = "ကူးယူထားသည့်လင့်သို့ သွားပါ။";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV2" = "ကူးယူလင့်ခ်ကိုသွားပါ";
+
+/* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
+"TodayWidget.MoreTabsLabel" = "+%d ပို၍…";
+
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "ရှာဖွေမှုအသစ်";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "ဖွင့်ထားသည့်တပ်ဗ်များ မရှိပါ";
+
+/* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.OpenFirefoxLabel" = "Firefox ကို ဖွင့်ပါ";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "ကိုယ်ပိုင်ရှာဖွေမှု";
+
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "သင်၏မူလမြင်ကွင်းသို့ Firefox ဖြတ်လမ်းများကိုထည့်ပါ။ ဤအရာကိုထည့်ပြီးလျှင်အခြားဖြတ်လမ်းများကိုရွေးချယ်၍ထားရှိပါ။";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "လျင်မြန်စွာလုပ်ဆောင်ချက်များ";
+
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryDescriptionV2" = "သင်၏ အဖွင့်တဗ်များတွင် ဖြတ်လမ်းများကိုထည့်ပါ။";
+
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "အမြန်ကြည့်မြင်ကွင်း";
+
+/* Search in Firefox. Do not translate the word Firefox */
+"TodayWidget.SearchInFirefoxV2" = "Firefox တွင် ရှာပါ";
+
+/* Search in private tab */
+"TodayWidget.SearchInPrivateTabLabelV2" = "သီးသန့်တဗ်တွင် ရှာဖွေပါ";
+
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "မကြာခဏနှင့်မကြာသေးမီကလည်ပတ်ခဲ့သောဆိုဒ်များသို့ဖြတ်လမ်းများထည့်ပါ။";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "ထိပ်တန်းဝဘ်ဆိုက်များ";
+

@@ -1,0 +1,18 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "ബ്രൌസ് ചെയ്ത നാള്‍വഴി";
+
+/* Settings item for clearing the cache */
+"Cache" = "കാഷ്";
+
+/* Settings item for clearing cookies */
+"Cookies" = "കുക്കികള്‍";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "ഡൌൺലോഡ് ചെയ്ത ഫയലുകൾ";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "ഓഫ്‌ലൈന്‍ ആയ വെബ്സൈറ്റ് വിവരങ്ങള്‍";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "ശേഖരിച്ചിട്ടുള്ള പ്രവേശനങ്ങള്‍";
+

@@ -1,0 +1,36 @@
+/* Accessibility hint for the reload button */
+"Address.Bar.Reload.A11y.Hint.v124" = "Koppintson duplán és tartsa a további lehetőségekért";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "A kapcsolat nem biztonságos. A fokozott követés elleni védelem ki van kapcsolva.";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.Secure.A11y.Label.v119" = "Biztonságos kapcsolat. A fokozott követés elleni védelem ki van kapcsolva.";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.NotSecure.A11y.Label.v119" = "A kapcsolat nem biztonságos";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.On.Secure.A11y.Label.v119" = "Biztonságos kapcsolat";
+
+/* Accessibility label for the lock / tracking protection button on the URL bar */
+"TabLocation.LockButton.AccessibilityLabel.v122" = "Követés elleni védelem";
+
+/* Large content title for the lock button. This title is displayed when accessible font sizes are enabled */
+"TabLocation.LockButton.LargeContentTitle.v122" = "Követés elleni védelem";
+
+/* Accessibility label for the share button in url bar */
+"TabLocation.Share.A11y.Label.v119" = "Oldal megosztása";
+
+/* Large content title for the share button. This title is displayed when using accessible font sizes is enabled */
+"TabLocation.ShareButton.AccessibilityLabel.v122" = "Megosztás";
+
+/* Accessibility label for the shopping button in url bar */
+"TabLocation.Shopping.A11y.Label.v120" = "Értékelés-ellenőrző";
+
+/* Large content title for the tabs button. The argument is the number of open tabs or an infinity symbol. This title is displayed when using accessible font sizes is enabled. */
+"TabsButton.Accessibility.LargeContentTitle.v122" = "Lapok megjelenítése: %@";
+
+/* Large content title for the button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemoveButton.LargeContentTitle.v122" = "Oldal eltávolítása";
+

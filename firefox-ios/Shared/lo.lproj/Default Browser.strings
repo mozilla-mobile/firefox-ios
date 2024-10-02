@@ -1,0 +1,45 @@
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "ການເຮັດໃຫ້ Firefox ເປັນຕົວທ່ອງເວັບເລີ່ມຕົ້ນຂອງທ່ານເປັນການລົງຄະແນນສຽງສໍາລັບອິນເຕີເນັດທີ່ເປີດ, ເຂົ້າເຖິງໄດ້.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "ຄ່າເລີ່ມຕົ້ນເປັນອິນເຕີເນັດທີ່ດີກວ່າ";
+
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "ຮຽນຮູ້ວິທີການ";
+
+/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "ຕັ້ງໃຫ້ເປີດລີ້ງຈາກເວັບໄຊທ, ອີເມລ ແລະ ຂໍ້ຄວາມແບບອັດຕະໂນມັດໃນ Firefox.";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "ເລືອກ Firefox ເປັນຕົວທ່ອງເວັບເລີ່ມຕົ້ນຂອງທ່ານເພື່ອເຮັດໃຫ້ຄວາມໄວ, ຄວາມປອດໄພ, ແລະຄວາມເປັນສ່ວນຕົວອັດຕະໂນມັດ.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "ຍົກລະດັບການຊອກຫາປະຈໍາວັນ";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox ບລັອກ 3,000+ ຕົວຕິດຕາມຕໍ່ຜູ້ໃຊ້ໃນແຕ່ລະເດືອນໂດຍສະເລ່ຍ. ເຮັດໃຫ້ພວກເຮົາເປັນຕົວທ່ອງເວັບເລີ່ມຕົ້ນຂອງທ່ານເພື່ອຄວາມສະຫງົບດ້ານຄວາມເປັນສ່ວນຕົວຂອງຈິດໃຈ.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox ມີການປົກຫຸ້ມຂອງຄວາມເປັນສ່ວນຕົວ";
+
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "ປ່ຽນບຣາວເຊີຫລັກຂອງທ່ານ";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "ໄປທີ່ການຕັ້ງຄ່າ";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1. ໄປທີ່ການຕັ້ງຄ່າ";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2. ແຕະໃສ່ແອັບບຣາວເຊີຫລັກ";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description3" = "3. ເລືອກ Firefox";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "ບຣາວເຊີຫລັກ";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "ຕັ້ງໃຫ້ເປັນບຣາວເຊີຫລັກ";
+

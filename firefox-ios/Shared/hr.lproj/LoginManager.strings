@@ -1,0 +1,84 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Sigurno?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Odustani";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Isprazni pretragu";
+
+/* Copy password text selection menu item */
+"Copy" = "Kopiraj";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Izrađeno %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Izbriši";
+
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Odustani";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Ukloni";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Ovu radnju ne možeš poništiti.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Ovo će ukloniti lozinku sa svih tvojih sinkroniziranih uređaja.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Ukloniti lozinku?";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Poništi odabir";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Uključi modus pretraživanja";
+
+/* Hide password text selection menu item */
+"Hide" = "Sakrij";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Prijave će biti trajno uklonjene.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Prijave će biti uklonjene sa svih povezanih uređaja.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Promijenjeno %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Nema pronađenih prijava";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Nije pronađena nijedna lozinka";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Otvori i ispuni";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Lozinka";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Otkrij";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Traži";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Polje za pretragu";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "Traži";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Označi sve";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Korisničko ime";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Web stranica";
+

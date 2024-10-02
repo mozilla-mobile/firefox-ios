@@ -1,0 +1,9 @@
+/* Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the top. */
+"ContextualHints.Toolbar.Bottom.Description.v107" = "Μετακινήστε στο πάνω μέρος τη γραμμή εργαλείων αν αυτό ταιριάζει περισσότερο στο στυλ σας.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can press and hold either the back or forward web navigation buttons to quickly navigate their back/forward history */
+"ContextualHints.Toolbar.Navigation.Description.v132" = "Πατήστε παρατεταμένα τα βελάκια για εναλλαγή μεταξύ των σελίδων του ιστορικού αυτής της καρτέλας.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. This one indicates a user can navigate to the Settings page to move the search bar to the bottom. */
+"ContextualHints.Toolbar.Top.Description.v107" = "Μετακινήστε στο κάτω μέρος τη γραμμή εργαλείων αν αυτό ταιριάζει περισσότερο στο στυλ σας.";
+

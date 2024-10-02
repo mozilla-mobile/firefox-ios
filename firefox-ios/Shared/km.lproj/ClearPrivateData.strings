@@ -1,0 +1,21 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "​ប្រវត្តិ​រក​មើល";
+
+/* Settings item for clearing the cache */
+"Cache" = "​ឃ្លាំង​សម្ងាត់";
+
+/* Settings item for clearing cookies */
+"Cookies" = "​ខូគី";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "ឯកសារ​ដែល​បាន​ទាញយក";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "ទិន្នន័យ​វេបសាយ​​ក្រៅ​បណ្ដាញ";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "ការ​ចូល​បាន​រក្សាទុក";
+
+/* A settings item that allows a user to use Apple's \"Spotlight Search\" in Data Management's Website Data option to search for and select an item to delete. */
+"Spotlight Index" = "សន្ទស្សន៍​រំលេច";
+

@@ -1,0 +1,843 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "%1$@ ಇಂದ ಒಂದು ಬಳಕೆದಾರ ಪದ ಹಾಗು ಗುಪ್ತಪದಕ್ಕಾಗಿ ಮನವಿ ಸಲ್ಲಿಸಲಾಗಿದೆ. ತಾಣವು ಹೀಗೆ ಹೇಳುತ್ತದೆ: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "ಬಗ್ಗೆ";
+
+/* Section title label for recently visited websites */
+"ActivityStream.RecentHistory.Title" = "ಇತ್ತೀಚೆಗೆ ಭೇಟಿನೀಡಿದವು";
+
+/* The title for the setting page which lets you select the number of top site rows */
+"ActivityStream.TopSites.RowSettingFooter" = "ಸಾಲುಗಳನ್ನು ಹೊಂದಿಸಿ";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "ಟ್ಯಾಬ್ ಸೇರಿಸು";
+
+/* Name for button adding current article to reading list in reader mode */
+"Add to Reading List" = "ಓದುಗ ಪಟ್ಟಿಗೆ ಸೇರಿಸು";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "ಪುಟವನ್ನ್ನು ಓದುವ ಪಟ್ಟಿಗೆ ಸೇರಿಸಲಾಗಿದೆ";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "ಸರಿ";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "ಗುಪ್ತಪದವನ್ನು ವ್ಯಾಲೆಟ್‌ಗೆ ಸೇರಿಸುವಾಗ ದೋಷ ಸಂಭವಿಸಿದೆ. ದಯವಿಟ್ಟು ಇನ್ನೊಮ್ಮೆ ಪ್ರಯತ್ನಿಸಿ.";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "‍ವಿಳಾಸ ಮತ್ತು ಹುಡುಕು";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "ಯಾವಾಗಲೂ ಕಳಿಸು";
+
+/* Tile title for Amazon */
+"Amazon" = "‍ಅಮೇಜಾನ್";
+
+/* Authentication prompt title */
+"Authentication required" = "ದೃಢೀಕರಣದ ಅಗತ್ಯವಿದೆ";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "ಹಿಂದೆ";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "ಪಾಪ್-ಅಪ್ ಕಿಟಕಿಗಳನ್ನು ತಡೆ ಹಿಡಿ";
+
+/* The label for the Title field when editing a bookmark */
+"Bookmark.DetailFieldTitle.Label" = "ಶೀರ್ಷಿಕೆ";
+
+/* The label for the URL field when editing a bookmark */
+"Bookmark.DetailFieldURL.Label" = "URL";
+
+/* Toggle bookmarks syncing setting */
+"Bookmarks" = "ಪುಟಗುರುತುಗಳು";
+
+/* The button to edit a bookmark */
+"Bookmarks.EditBookmark.Label" = "ಪುಟಗುರುತನ್ನು ಸಂಪಾದಿಸಿ";
+
+/* The button to edit a folder */
+"Bookmarks.EditFolder.Label" = "ಕಡತಕೋಶ ಸಂಪಾದಿಸಿ";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "ಕಡತಕೋಶ";
+
+/* The button to create a new bookmark */
+"Bookmarks.NewBookmark.Label" = "ಹೊಸ ಬುಕ್‌ಮಾರ್ಕ್";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "ಹೊಸ ಕಡತಕೋಶ";
+
+/* The button to create a new separator */
+"Bookmarks.NewSeparator.Label" = "ಹೊಸ ವಿಭಜಕ";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "ಶೀರ್ಷಿಕೆ";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "ಪ್ರಕಾಶಮಾನ";
+
+/* Label for Cancel button */
+"Cancel" = "ರದ್ದು ಮಾಡು";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "ಬಣ್ಣದ ಥೀಮ್‍ ಬದಲಾಯಿಸುತ್ತದೆ.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "‍ಅಕ್ಷರ ಶೈಲಿ ಬದಲಾಯಿಸು.";
+
+/* The button to open a new tab with the copied link */
+"ClipboardToast.GoToCopiedLink.Button" = "ಹೋಗು";
+
+/* Message displayed when the user has a copied link on the clipboard */
+"ClipboardToast.GoToCopiedLink.Title" = "ಕಾಪಿ ಮಾಡಿದ ಕೊಂಡಿಗೆ ಹೋಗುವುದೇ?";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "ಮುಚ್ಚು";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "ಟ್ಯಾಬ್ ಮುಚ್ಚಲಾಗುತ್ತಿದೆ";
+
+/* Context menu item for bookmarking a link URL */
+"ContextMenu.BookmarkLinkButtonTitle" = "ಪುಟಗುರುತು ಕೊಂಡಿ";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "ಹೊಸ ಖಾಸಗಿ ಹಾಳೆ ತೆಗೆಯಲಾಗಿದೆ";
+
+/* The button text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "ಬದಲಾಯಿಸು";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "ಹೊಸ ಹಾಳೆ ತೆರೆಯಲಾಗಿದೆ";
+
+/* Context menu item for copying an image to the clipboard */
+"ContextMenu.CopyImageButtonTitle" = "ಚಿತ್ರವನ್ನು ನಕಲಿಸು";
+
+/* Context menu item for copying an image URL to the clipboard */
+"ContextMenu.CopyImageLinkButtonTitle" = "ಚಿತ್ರದ ಲಿಂಕ್ ಅನ್ನು ನಕಲಿಸಿ";
+
+/* Context menu item for copying a link URL to the clipboard */
+"ContextMenu.CopyLinkButtonTitle" = "ಕೊಂಡಿ ನಕಲಿಸು‍";
+
+/* Context menu item for downloading a link URL */
+"ContextMenu.DownloadLinkButtonTitle" = "ಡೌನ್‌ಲೋಡ್ ಕೊಂಡಿ";
+
+/* Context menu item for opening a link in a new tab */
+"ContextMenu.OpenInNewTabButtonTitle" = "ಹೊಸ ಟ್ಯಾಬ್‌ನಲ್ಲಿ ತೆರೆ";
+
+/* Context menu item for saving an image */
+"ContextMenu.SaveImageButtonTitle" = "ಚಿತ್ರವನ್ನು ಉಳಿಸು";
+
+/* Context menu item for sharing a link URL */
+"ContextMenu.ShareLinkButtonTitle" = "ಕೊಂಡಿ ಹಂಚು";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "ಪುಟವನ್ನ್ನು ಓದುವ ಪಟ್ಟಿಗೆ ಸೇರಿಸಲಾಗಿಲ್ಲ";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "ಪುಟವನ್ನು ಲೋಡ್ ಮಾಡಲಾಗಿಲ್ಲ.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "ಖಾತೆಯೊಂದನ್ನು ರಚಿಸಿ";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "ಗಾಢ";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "ಪಠ್ಯದ ಗಾತ್ರವನ್ನು ಕುಗ್ಗಿಸು";
+
+/* Title for default search engine picker. */
+"Default Search Engine" = "ಪೂರ್ವನಿಯೋಜಿತ ಹುಡುಕು ಎಂಜಿನ್";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "ಪ್ರದರ್ಶಕದ ಹೊಂದಾಣಿಕೆಗಳು";
+
+/* Used as a button label for crash dialog prompt */
+"Don’t Send" = "ಕಳುಹಿಸಬೇಡ";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "ಆಯಿತು";
+
+/* Panel accessibility label */
+"Downloads" = "ಡೌನ್‌ಲೋಡ್‌ಗಳು";
+
+/* The label of the button the user will press to start downloading a file */
+"Downloads.Alert.DownloadNow" = "ಈಗ ಡೌನ್‌ಲೋಡ್ ಮಾಡು";
+
+/* Button confirming the cancellation of the download. */
+"Downloads.CancelDialog.Cancel" = "ರದ್ದು ಮಾಡು";
+
+/* Alert dialog body when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Message" = "ನೀವು ಈ ಡೌನ್‌ಲೋಡ್ ಅನ್ನು ಅನುಮತಿಸುತ್ತಿರುವುದು ಖಚಿತವೆ?";
+
+/* Button declining the cancellation of the download. */
+"Downloads.CancelDialog.Resume" = "ಪುನರಾರಂಭಿಸು";
+
+/* Alert dialog title when the user taps the cancel download icon. */
+"Downloads.CancelDialog.Title" = "ಡೌನ್‌ಲೋಡ್‌ ರದ್ದುಗೊಳಿಸು";
+
+/* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
+"Downloads.Toast.Cancelled.LabelText" = "ಡೌನ್‌ಲೋಡ್ ರದ್ದುಪಡಿಸಲಾಗಿದೆ";
+
+/* The label text in the Download Failed toast for showing confirmation that the download has failed. */
+"Downloads.Toast.Failed.LabelText" = "ಡೌನ್‌ಲೋಡ್ ವಿಫಲವಾಗಿದೆ";
+
+/* The button to open a new tab with the Downloads home panel */
+"Downloads.Toast.GoToDownloads.Button" = "ಡೌನ್‌ಲೋಡ್‌ಗಳು";
+
+/* The description text in the Download progress toast for showing the number of files (1$) and download progress (2$). This string only consists of two placeholders for purposes of displaying two other strings side-by-side where 1$ is Downloads.Toast.MultipleFiles.DescriptionText and 2$ is Downloads.Toast.Progress.DescriptionText. This string should only consist of the two placeholders side-by-side separated by a single space and 1$ should come before 2$ everywhere except for right-to-left locales. */
+"Downloads.Toast.MultipleFilesAndProgress.DescriptionText" = "%1$@ %2$@";
+
+/* The description text in the Download progress toast for showing the downloaded file size (1$) out of the total expected file size (2$). */
+"Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
+
+/* Action button for sharing downloaded files in the Downloads panel. */
+"DownloadsPanel.Share.Title" = "ಹಂಚು";
+
+/* Text message in the settings table view */
+"Enter your password to connect" = "ಸಂಪರ್ಕಿಸಲು ನಿಮ್ಮ ಪಾಸ್‌ವರ್ಡ್ ನಮೂದಿಸಿ";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "ಸುಧಾರಿತ";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "%@ ನ ಮಾಲಿಕ ಅವರ ಜಾಲತಾಣವನ್ನು ಸರಿಯಾಗಿ ಸಂರಚಿಸಿಲ್ಲ. ನಿಮ್ಮ ಮಾಹಿತಿಯನ್ನು ಕಳ್ಳತನದಿಂದ ಸುರಕ್ಷಿತವಾಗಿರಿಸಲು, Firefox ಈ ಜಾಲತಾಣದೊಂದಿಗೆ ಸಂಪರ್ಕವನ್ನು ಹೊಂದಿಲ್ಲ.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "ಈ ಸಂಪರ್ಕ ನಂಬಲರ್ಹವಲ್ಲ";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "ಹಿಂದೆ ಹೋಗು";
+
+/* Tile title for Facebook */
+"Facebook" = "ಫೇಸ್‌ಬುಕ್‌";
+
+/* Title for firefox about:home page in tab history list */
+"Firefox.HomePage.Title" = "Firefox ಮುಖ್ಯ ಪುಟ";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "ಮುಂದೆ";
+
+/* Settings section title for Firefox Account */
+"FxA.FirefoxAccount" = "Firefox ಖಾತೆ";
+
+/* Button label to go to Firefox Account settings */
+"FxA.ManageAccount" = "ಖಾತೆ ಮತ್ತು ಸಾಧನಗಳನ್ನು ನಿರ್ವಹಿಸು‍";
+
+/* Label when no internet is present */
+"FxA.NoInternetConnection" = "ಇಂಟರ್ನೆಟ್ ಸಂಪರ್ಕ ಲಭ್ಯವಿಲ್ಲ";
+
+/* Button label to Sync your Firefox Account */
+"FxA.SyncNow" = "ಈಗ ಸಿಂಕ್ ಮಾಡು";
+
+/* Title of a notification displayed when another device has connected to FxA. */
+"FxAPush_DeviceConnected_title" = "ಸಿಂಕ್ ಸಂಪರ್ಕಿತಗೊಂಡಿದೆ";
+
+/* Title of a notification displayed when this device has been disconnected by another device. */
+"FxAPush_DeviceDisconnected_ThisDevice_title" = "ಸಿಂಕ್ ಸಂಪರ್ಕ ಕಡಿದಿದೆ";
+
+/* Title of a notification displayed when named device has been disconnected from FxA. */
+"FxAPush_DeviceDisconnected_title" = "ಸಿಂಕ್ ಸಂಪರ್ಕ ಕಡಿದಿದೆ";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "ಸಹಾಯ";
+
+/* Toggle history syncing setting */
+"History" = "ಇತಿಹಾಸ";
+
+/* Button to perform action to clear history for today only */
+"HistoryPanel.ClearHistoryMenuOptionToday" = "ಇಂದು";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "ನೀವು ತೀರ ಇತ್ತೀಚೆಗೆ ಭೇಟಿಕೊಟ್ಟ ಜಾಲತಾಣಗಳು ಇಲ್ಲಿ ಕಾಣಿಸಿಕೊಳ್ಳುತ್ತವೆ.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "ನಿಮ್ಮ ಬೇರೆ ಸಾಧನಗಳ ಟ್ಯಾಬ್‍‍ಗಳು ಇಲ್ಲಿ ಕಾಣಿಸಿಕೊಳ್ಳುತ್ತವೆ.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox ಸಿಂಕ್";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "ಇತಿಹಾಸ";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "ಇತ್ತೀಚೆಗೆ ಮುಚ್ಚಲಾದವು";
+
+/* The title for the Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Bookmark" = "ಪುಟ ಗುರುತು";
+
+/* The title for the Delete from History context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.DeleteFromHistory" = "ಇತಿಹಾಸದಿಂದ ಅಳಿಸು‍";
+
+/* The title for the Open in New Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewTab" = "ಹೊಸ ಹಾಳೆಯಲ್ಲಿ ತೆರೆ";
+
+/* The title for the Remove context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Remove" = "ತೆಗೆದು ಹಾಕು";
+
+/* The title for the Remove Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.RemoveBookmark" = "ಪುಟ ಗುರುತು ತೆಗೆ";
+
+/* The title for the Share context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Share" = "ಹಂಚು";
+
+/* A label indicating the keyboard shortcut to navigate backwards, through session history, inside the current tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Back.DiscoveryTitle" = "ಹಿಂದೆ";
+
+/* A label indicating the keyboard shortcut of closing the current tab a user is in. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.CloseTab.DiscoveryTitle" = "ಟ್ಯಾಬ್‌ ಅನ್ನು ಮುಚ್ಚು";
+
+/* A label indicating the keyboard shortcut of finding text a user desires within a page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Find.DiscoveryTitle" = "ಹುಡುಕು";
+
+/* A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Forward.DiscoveryTitle" = "ಮುಂದೆ";
+
+/* A label indicating the keyboard shortcut of creating a new private tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "ಹೊಸ ಖಾಸಗಿ ಟ್ಯಾಬ್";
+
+/* A label indicating the keyboard shortcut of creating a new tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.NewTab.DiscoveryTitle" = "ಹೊಸ ಟ್ಯಾಬ್";
+
+/* A label indicating the keyboard shortcut of switching from Private Browsing to Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.NormalMode.DiscoveryTitle" = "ಸಾಮಾನ್ಯ ಬ್ರೌಸಿಂಗ್ ಸ್ಥಿತಿ";
+
+/* A label indicating the keyboard shortcut of switching from Normal Browsing mode to Private Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.PrivateMode.DiscoveryTitle" = "ಖಾಸಗಿ ಬ್ರೌಸಿಂಗ್ ಸ್ಥಿತಿ";
+
+/* A label indicating the keyboard shortcut of reloading the current page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Reload.DiscoveryTitle" = "ಪುಟವನ್ನು ಮರಳಿ ಲೋಡ್ ಮಾಡು";
+
+/* A label indicating the keyboard shortcut of directly accessing the URL, location, bar. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "ಸ್ಥಳ ಪಟ್ಟಿ ಆಯ್ಕೆಮಾಡು";
+
+/* A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "ಮುಂದಿನ ಹಾಳೆಯನ್ನು ತೋರಿಸು";
+
+/* A label indicating the keyboard shortcut of switching to a tab immediately preceding to the currently selected tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "ಹಿಂದಿನ ಹಾಳೆಯನ್ನು ತೋರಿಸು";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "ಪಠ್ಯದ ಗಾತ್ರವನ್ನು ಹೆಚ್ಚಿಸು";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "ಈಗಷ್ಟೆ";
+
+/* This label is meant to signify the section containing a group of items from the past thirty days. */
+"Last month" = "ಹಿಂದಿನ ತಿಂಗಳು";
+
+/* This label is meant to signify the section containing a group of items from the past seven days. */
+"Last week" = "ಹಿಂದಿನ ವಾರ";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "ಪರವಾನಗಿಗಳು";
+
+/* Light theme setting in Reading View settings */
+"Light" = "ಬೆಳಕು";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "ಮೂಲ ಪುಟವನ್ನು ಲೋಡ್ ಮಾಡಿ";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "ವಿಷಯವನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ…";
+
+/* Authentication prompt log in button */
+"Log in" = "ಪ್ರವೇಶಿಸು";
+
+/* Toggle logins syncing setting */
+"Logins" = "ಲಾಗಿನ್‌ಗಳು";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "ಉಳಿಸಬೇಡ";
+
+/* Button to not update the user's password */
+"LoginsHelper.DontUpdate.Button" = "ಪರಿಷ್ಕರಿಸಬೇಡ";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "%2$@ ಗೆ ಲಾಗಿನ್ %1$@ ಉಳಿಸಬೇಕೆ?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "%@ ಗಾಗಿ ಗುಪ್ತಪದವನ್ನು ಉಳಿಸಬೇಕೆ?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "ಲಾಗಿನ್‌ ಉಳಿಸು";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "ಅಪ್‌ಡೇಟ್‌";
+
+/* Placeholder test for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder" = "ಸೋಸುಗ";
+
+/* Title for the list of logins */
+"LoginsList.Title" = "SAVED LOGINS";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "ಈ ಹಿಂದೆ ಫೈರ್ಫಾಕ್ಸ್ ಕುಸಿದಂತೆ ತೋರುತ್ತಿದೆ. ನಿಮ್ಮ ಟ್ಯಾಬ್ಗಳನ್ನು ಮರುಸ್ಥಾಪಿಸಲು ಬಯಸುವಿರಾ?";
+
+/* Title for the button that marks a reading list item as read */
+"Mark as Read" = "ಓದಿದೆ ಎಂದು ಗುರುತಿಸಿ";
+
+/* Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "ಓದಿಲ್ಲ ಎಂದು ಗುರುತಿಸಿ";
+
+/* Toast displayed to the user after a bookmark has been added. */
+"Menu.AddBookmark.Confirm" = "ಬುಕ್ ಮಾರ್ಕ್ ಸೇರಿಸಲಾಗಿದೆ";
+
+/* Toast displayed to the user after adding the item to their reading list. */
+"Menu.AddToReadingList.Confirm" = "ಓದುಗ ಪಟ್ಟಿಗೆ ಸೇರಿಸು";
+
+/* The title for the button that lets you copy the url from the location bar. */
+"Menu.Copy.Title" = "ವಿಳಾಸವನ್ನು ನಕಲಿಸು";
+
+/* Toast displayed to user after copy url pressed. */
+"Menu.CopyURL.Confirm" = "URL ಕ್ಲಿಪ್‌ಬೋರ್ಡಿಗೆ ಪ್ರತಿ ಮಾಡಲಾಗಿದೆ";
+
+/* The title for the button that lets you paste into the location bar */
+"Menu.Paste.Title" = "ಅಂಟಿಸು";
+
+/* The title for the button that lets you paste and go to a URL */
+"Menu.PasteAndGo.Title" = "ಅಂಟಿಸು ಹಾಗು ಮುಂದುವರೆ";
+
+/* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
+"Menu.ReloadWithoutTrackingProtection.Title" = "ಜಾಡುಹಿಡಿಯುವಿಕೆಯ ಸುರಕ್ಷತೆ ಇಲ್ಲದೆ ಮರು ಮೂಡಿಸು";
+
+/* Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled */
+"Menu.ReloadWithTrackingProtection.Title" = "ಜಾಡುಹಿಡಿಯುವಿಕೆಯ ಸುರಕ್ಷತೆಯೊಂದಿಗೆ ಮರು ಮೂಡಿಸು";
+
+/* Toast displayed to the user after a bookmark has been removed. */
+"Menu.RemoveBookmark.Confirm" = "ಬುಕ್‌ಮಾರ್ಕನ್ನು ತೆಗೆಯಲಾಗಿದೆ";
+
+/* The title for the option to view the What's new page. */
+"Menu.WhatsNew.Title" = "ಹೊಸತೇನಿದೆ";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "ಮೊಬೈಲ್ ಸಾಧನ";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "ಒಂದು ತಿಂಗಳಿಗಿಂತ ಹೆಚ್ಚು";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "ಒಂದು ವಾರಕ್ಕೂ ಹಿಂದೆ";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "ನ್ಯಾವಿಗೇಶನ್ ಉಪಕರಣಪಟ್ಟಿ‍";
+
+/* Accessibility label for the New Tab button in the tab toolbar. */
+"New Tab" = "ಹೊಸ ಟ್ಯಾಬ್‍";
+
+/* Restore Tabs Negative Action */
+"No" = "ಇಲ್ಲ";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "ಟ್ಯಾಬ್‌ಗಳಿಲ್ಲ";
+
+/* OK button */
+"OK" = "OK‍";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "ಸರಿ";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "‍ಓಹ್ ಓ! ‍Firefox ಕುಸಿತಗೊಂಡಿದೆ";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "ಸಿದ್ಧತೆಗಳನ್ನು ತೆರೆ";
+
+/* Toggle tabs syncing setting */
+"Open Tabs" = "ತೆರೆದ ಟ್ಯಾಬ್‌ಗಳು";
+
+/* Title of the message shown when the user attempts to navigate to an invalid link. */
+"OpenURL.Error.Title" = "ಪುಟ‍ವನ್ನು ತೆರೆಯಲಾಗಿಲ್ಲ‍";
+
+/* Password textbox in Authentication prompt */
+"Password" = "ಗುಪ್ತಪದ";
+
+/* Button for closing the menu action sheet */
+"PhotonMenu.close" = "ಮುಚ್ಚು";
+
+/* Privacy section title */
+"Privacy" = "ಗೌಪ್ಯತೆ";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "ಗೌಪ್ಯತಾ ನಿಯಮ";
+
+/* Title for quick-search engines settings section. */
+"Quick-Search Engines" = "ತ್ವರಿತ-ಹುಡುಕು ಎಂಜಿನ್‌ಗಳು";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "ಓದು";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "ಓದುಗ ನೋಟ";
+
+/* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
+"ReaderMode.Available.VoiceOverAnnouncement" = "ಓದುಗ ಸ್ಥಿತಿ ಲಭ್ಯವಿದೆ";
+
+/* Panel accessibility label */
+"Reading list" = "ಓದಬೇಕಿರುವ ಪಟ್ಟಿ";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "ಇತ್ತೀಚೆಗೆ ಮುಚ್ಚಲಾದವು";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "ಪುನಃ ಲೋಡ್ ಮಾಡು";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "ತೆಗೆ";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "ಓದುಗ ಪಟ್ಟಿಯಿಂದ ತೆಗೆ";
+
+/* Cancel button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Cancel" = "ರದ್ದುಗೊಳಿಸು";
+
+/* Reopen button text shown in reopen-alert at home page. */
+"ReopenAlert.Actions.Reopen" = "ಮರುತೆರೆ";
+
+/* Accessibility label for button resetting font size in display settings of reader mode */
+"Reset text size" = "ಪಠ್ಯದ ಗಾತ್ರ ಮರುಹೊಂದಿಸಿ";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "ಸಾನ್ಸ್‍-ಸೆರಿಫ್";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "ಓದುಗ ನೋಟ ನಿಯಂತ್ರಣಗಳಲ್ಲಿ ಪುಸ್ತಕ ಪ್ಲಸ್ ಐಕಾನ್ ತಟ್ಟುವ ಮೂಲಕ ನಿಮ್ಮ ಓದುವ ಪಟ್ಟಿಗೆ ಪುಟಗಳನ್ನು ಉಳಿಸಿ.";
+
+/* OK button to dismiss the error prompt. */
+"ScanQRCode.Error.OK.Button" = "ಸರಿ";
+
+/* Title for the QR code scanner view. */
+"ScanQRCode.View.Title" = "QR ಸಂಕೇತ ಸ್ಕ್ಯಾನ್ ಮಾಡು‍";
+
+/* Open search section of settings */
+"Search" = "ಹುಡುಕು";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "ಹುಡುಕಿ ಅಥವ ವಿಳಾಸ ನಮೂದಿಸಿ";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "ಹುಡುಕು ಸಾಧನವನ್ನು ಸೇರಿಸಲಾಗಿದೆ!";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "ರದ್ದು ಮಾಡು";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "ವಿಫಲವಾಗಿದೆ";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "ವಿಫಲಗೊಂಡಿದೆ";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.FormErrorTitle" = "ವಿಫಲವಾಗಿದೆ";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "OK";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "ಅಭಿಪ್ರಾಯವನ್ನು ಕಳುಹಿಸಿ";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "ವರದಿ ಕಳುಹಿಸು";
+
+/* Button title for cancelling share screen */
+"SendTo.Cancel.Button" = "ರದ್ದು ಮಾಡು";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "OK";
+
+/* Navigation bar button to Send the current page to a device */
+"SendTo.SendAction.Text" = "ಕಳುಹಿಸು";
+
+/* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_title" = "ಪಡೆಯಲಾದ ಟ್ಯಾಬ್";
+
+/* Body of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.body" = "ಪ್ರಾರಂಭಿಸಲು ಮೆಲ್ಲಗೆ ತಟ್ಟಿ";
+
+/* Title of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.title" = "Firefox ಸಿಂಕ್";
+
+/* Label for an action used to view one or more tabs from a notification. */
+"SentTab.ViewAction.title" = "ನೋಟ";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "ಸೆಪಿಯಾ";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Title in the settings view controller title bar */
+"Settings" = "ಸಿದ್ಧತೆಗಳು";
+
+/* The button text in Search Settings that opens the Custom Search Engine view. */
+"Settings.AddCustomEngine" = "ಹುಡುಕು ಸಾಧನವನ್ನು ಸೇರಿಸಿ";
+
+/* The text on the Save button when saving a custom search engine */
+"Settings.AddCustomEngine.SaveButtonText" = "ಉಳಿಸು";
+
+/* The title of the  Custom Search Engine view. */
+"Settings.AddCustomEngine.Title" = "ಹುಡುಕು ಸಾಧನವನ್ನು ಸೇರಿಸಿ";
+
+/* The title for the field which sets the title for a custom search engine. */
+"Settings.AddCustomEngine.TitleLabel" = "ಶೀರ್ಷಿಕೆ";
+
+/* The placeholder for Title Field when saving a custom search engine. */
+"Settings.AddCustomEngine.TitlePlaceholder" = "ಹುಡುಕು ಎಂಜಿನ್‌";
+
+/* The title for URL Field */
+"Settings.AddCustomEngine.URLLabel" = "URL";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "ಖಾಸಗಿ ದತ್ತಾಂಶವನ್ನು ಖಾಲಿಮಾಡು";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "ಖಾಸಗಿ ದತ್ತಾಂಶವನ್ನು ಖಾಲಿಮಾಡು";
+
+/* Default text in search bar for Data Management */
+"Settings.DataManagement.SearchLabel" = "ತಾಣಗಳ ಸೋಸಕ";
+
+/* Button displayed at the bottom of settings page allowing users to Disconnect from FxA */
+"Settings.Disconnect.Button" = "ಸಂಪರ್ಕ ತಪ್ಪಿಸು";
+
+/* Cancel action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.CancelButton" = "ರದ್ದು";
+
+/* Destructive action button in alert when user is prompted for disconnect */
+"Settings.Disconnect.DestructiveButton" = "ಸಂಪರ್ಕ ತಪ್ಪಿಸು";
+
+/* Title of the alert when prompting the user asking to disconnect. */
+"Settings.Disconnect.Title" = "ಸಂಪರ್ಕ ತಪ್ಪಿಸಬೇಕೆ?";
+
+/* Option choice in display theme settings for dark theme */
+"Settings.DisplayTheme.OptionDark" = "ಗಾಢ";
+
+/* Option choice in display theme settings for light theme */
+"Settings.DisplayTheme.OptionLight" = "ತಿಳಿ";
+
+/* Display (theme) settings switch to choose whether to set the dark mode manually, or automatically based on the brightness slider. */
+"Settings.DisplayTheme.SwitchTitle" = "ಸ್ವಯಂಚಾಲಿತವಾಗಿ";
+
+/* Label used for the device name settings section. */
+"Settings.FxA.DeviceName" = "ಸಾಧನದ ಹೆಸರು";
+
+/* Label used as a section title in the Firefox Accounts Settings screen. */
+"Settings.FxA.Sync.SectionName" = "ಸಿಂಕ್‍ನ ಸಿದ್ಧತೆಗಳು";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title" = "Firefox ಖಾತೆ";
+
+/* General settings section title */
+"Settings.General.SectionName" = "ಸಾಮಾನ್ಯ";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "ಮುಖಪುಟ";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "ಪ್ರಸ್ತುತ ಮುಖಪುಟ";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "ಈಗಿನ ಪುಟವನ್ನು ಬಳಸು";
+
+/* Option in settings to show a blank page when you open a new tab */
+"Settings.NewTab.Option.BlankPage" = "ಖಾಲಿ ಪುಟ";
+
+/* Option in settings to show your homepage when you open a new tab */
+"Settings.NewTab.Option.HomePage" = "ಮುಖಪುಟ";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
+"Settings.NewTab.SectionName" = "ಹೊಸ ಟ್ಯಾಬ್‍";
+
+/* Title displayed in header of the setting panel. */
+"Settings.NewTab.Title" = "ಹೊಸ ಟ್ಯಾಬ್";
+
+/* Label at the top of the New Tab screen after entering New Tab in settings */
+"Settings.NewTab.TopSectionName" = "ತೋರಿಸು";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the open with (mail links) behavior. */
+"Settings.OpenWith.SectionName" = "ಇದರೊಂದಿಗೆ ತೆರೆ";
+
+/* Setting to enable the built-in password manager */
+"Settings.SaveLogins.Title" = "ಲಾಗಿನ್‌ಗಳನ್ನು ಉಳಿಸಿ";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "ಮುಗಿಯಿತು‍";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "ತಿದ್ದಿ‍";
+
+/* title for a link that explains how mozilla collects telemetry */
+"Settings.SendUsage.Link" = "ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ.";
+
+/* The title for the setting to send usage data. */
+"Settings.SendUsage.Title" = "ಬಳಕೆಯ ದತ್ತಾಂಶ ಕಳುಹಿಸಿ";
+
+/* The description of the open new tab siri shortcut */
+"Settings.Siri.OpenTabShortcut" = "ಹೊಸ ಟ್ಯಾಬ್‌ ತೆರೆ‍";
+
+/* The description that describes what siri shortcuts are */
+"Settings.Siri.SectionDescription" = "ಸಿರಿ ಮೂಲಕ ಫೈರ್ಫಾಕ್ಸ್ ಅನ್ನು ತ್ವರಿತವಾಗಿ ತೆರೆಯಲು ಸಿರಿ ಶಾರ್ಟ್ಕಟ್ಗಳನ್ನು ಬಳಸಿ";
+
+/* The option that takes you to the siri shortcuts settings page */
+"Settings.Siri.SectionName" = "ಸಿರಿ ಶಾರ್ಟ್ಕಟ್ಗಳು";
+
+/* Dismiss button for the tracker protection alert. */
+"Settings.TrackingProtection.Alert.Button" = "ಸರಿ, ಗೊತ್ತಾಯಿತು";
+
+/* Row in top-level of settings that gets tapped to show the tracking protection settings detail view. */
+"Settings.TrackingProtection.SectionName" = "ಜಾಡು ಇರಿಸುವಿಕೆ ಇಂದ ರಕ್ಷಣೆ";
+
+/* Tracking protection settings option for using the strict blocklist. */
+"Settings.TrackingProtectionOption.BlockListStrict" = "ಕಡ್ಡಾಯ";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "ತೊಂದರೆನಿವಾರಣೆ‍";
+
+/* Button shows all websites on website data tableview */
+"Settings.WebsiteData.ButtonShowMore" = "ಇನ್ನಷ್ಟು ತೋರಿಸು";
+
+/* Title displayed in header of the Data Management panel. */
+"Settings.WebsiteData.Title" = "ಜಾಲತಾಣ ದತ್ತಾಂಶ";
+
+/* Action label on share extension to add page to the Firefox reading list. */
+"ShareExtension.AddToReadingListAction.Title" = "ಓದುಗ ಪಟ್ಟಿಗೆ ಸೇರಿಸು";
+
+/* Share extension label shown after user has performed 'Add to Reading List' action. */
+"ShareExtension.AddToReadingListActionDone.Title" = "ಓದುಗ ಪಟ್ಟಿಗೆ ಸೇರಿಸಲಾಗಿದೆ";
+
+/* Action label on share extension to bookmark the page in Firefox. */
+"ShareExtension.BookmarkThisPageAction.Title" = "ಈ ಪುಟವನ್ನು ಪುಟಗುರುತು ಮಾಡು";
+
+/* Share extension label shown after user has performed 'Bookmark this Page' action. */
+"ShareExtension.BookmarkThisPageActionDone.Title" = "ಪುಟಗುರುತು ಮಾಡಲಾದ";
+
+/* Action label on share extension to load the page in Firefox when user switches apps to bring it to foreground. */
+"ShareExtension.LoadInBackgroundAction.Title" = "ಹಿನ್ನೆಲೆಯಲ್ಲಿ ಮೂಡಿಸು";
+
+/* Share extension label shown after user has performed 'Load in Background' action. */
+"ShareExtension.LoadInBackgroundActionDone.Title" = "ಫೈರ್ಫಾಕ್ಸ್ನಲ್ಲಿ ಲೋಡ್ ಆಗುತ್ತಿದೆ";
+
+/* Action label on share extension to immediately open page in Firefox. */
+"ShareExtension.OpenInFirefoxAction.Title" = "ಫೈರ್ಫಾಕ್ಸ್ನಲ್ಲಿ ತೆರೆಯಿರಿ";
+
+/* Action label on share extension to search for the selected text in Firefox. */
+"ShareExtension.SeachInFirefoxAction.Title" = "ಫೈರ್ಫಾಕ್ಸ್ನಲ್ಲಿ ಹುಡುಕಿ";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "ಹುಡುಕಲು ಸಲಹೆಗಳನ್ನು ತೋರಿಸು";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar */
+"Show Tabs" = "ಟ್ಯಾಬ್‌ಗಳನ್ನು ತೋರಿಸು";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "ಪ್ರವಾಸವನ್ನು ತೋರಿಸಿ";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "ನಿಲ್ಲಿಸು";
+
+/* Support section title */
+"Support" = "ಬೆಂಬಲ";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "dಟ್ಯಾಬ್ ಅನ್ನು ಮುಚ್ಚಲು ಮೂರು ಬೆರಳುಗಳೊಂದಿಗೆ ಬಲ ಅಥವಾ ಎಡಕ್ಕೆ ಸ್ವೈಪ್ ಮಾಡಿ.";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "ಸಿಂಕ್ ಮಾಡಲಾಗುತ್ತಿದೆ…";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "ಸಿಂಕ್ ಆಫ್ಲೈನ್ ​​ಆಗಿದೆ";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "%2$@ ನಲ್ಲಿ %1$@";
+
+/* A label indicating the keyboard shortcut of showing the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Tab.ShowTabTray.KeyCodeTitle" = "ಎಲ್ಲಾ ಟ್ಯಾಬ್‌ಗಳನ್ನು ತೋರಿಸು";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "ರದ್ದು ಮಾಡು";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"TabTray.AddTab.Button" = "ಟ್ಯಾಬ್ ಸೇರಿಸು";
+
+/* A label indicating the keyboard shortcut of closing all tabs from the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"TabTray.CloseAllTabs.KeyCodeTitle" = "ಎಲ್ಲ ಟ್ಯಾಬ್‍ಗಳನ್ನು ಮುಚ್ಚು";
+
+/* A label indicating the keyboard shortcut of opening a new tab in the tab tray. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"TabTray.OpenNewTab.KeyCodeTitle" = "ಹೊಸ ಟ್ಯಾಬ್‌ ತೆರೆ‍";
+
+/* Relative date for date in past week. */
+"this week" = "ಈ ವಾರ";
+
+/* label for Not Now button */
+"Toasts.NotNow" = "ಈಗ ಬೇಡ";
+
+/* Open App Store button */
+"Toasts.OpenAppStore" = "ಆಫ್ ಸ್ಟೋರ್ ತೆರೆ";
+
+/* This label is meant to signify the section containing a group of items from the current day. */
+"Today" = "ಇಂದು";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "ಇಂದು %@ ನಲ್ಲಿ";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "ಪರಿವಿಡಿ";
+
+/* Accessibility label for the Close All Tabs menu button. */
+"Toolbar.Menu.CloseAllTabs" = "ಎಲ್ಲ ಟ್ಯಾಬ್‍ಗಳನ್ನು ಮುಚ್ಚು";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "ಪುಟವನ್ನು ತೆಗೆದುಹಾಕಿ — %@";
+
+/* Button to disallow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.Cancel" = "ಇಲ್ಲ";
+
+/* Button to allow the page to be translated to the user locale language */
+"TranslationToastHandler.PromptTranslate.OK" = "ಹೌದು";
+
+/* Tile title for Twitter */
+"Twitter" = "ಜಿಟ್ಟರ್";
+
+/* The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page */
+"UIMenuItem.PasteGo" = "ಅಂಟಿಸು & ಮುಂದುವರೆ";
+
+/* Search in New Tab Text selection menu item */
+"UIMenuItem.SearchWithFirefox" = "ಫೈರ್ಫಾಕ್ಸ್ ನೊಂದಿಗೆ ಹುಡುಕಿ";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "ಓದದೆ ಇರುವ";
+
+/* Username textbox in Authentication prompt */
+"Username" = "ಬಳಕೆದಾರ ಹೆಸರು";
+
+/* Accessibility label for the main web content view */
+"Web content" = "ಜಾಲ ವಿಷಯ";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "ನಿಮ್ಮ ಓದುಪಟ್ಟಿಗೆ ಸ್ವಾಗತ";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "ನಿಜ, ಇದು ಕಿರಿಕಿರಿಯುಂಟುಮಾಡುತ್ತದೆ.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "ವಿಕಿಪೀಡಿಯ";
+
+/* Relative date for yesterday. */
+"yesterday" = "ನಿನ್ನೆ";
+
+/* This label is meant to signify the section containing a group of items from the past 24 hours. */
+"Yesterday" = "ನಿನ್ನೆ";
+
+/* Your Rights settings section title */
+"Your Rights" = "‍ನಿಮ್ಮ ಹಕ್ಕುಗಳು";
+
+/* Tile title for YouTube */
+"YouTube" = "ಯೂಟ್ಯೂಬ್";
+

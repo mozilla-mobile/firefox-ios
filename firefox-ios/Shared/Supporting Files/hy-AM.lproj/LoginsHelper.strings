@@ -1,0 +1,9 @@
+/* Button to not save the user's password in the logins helper */
+"LoginsHelper.DontSave.Button.v122" = "Ոչ հիմա";
+
+/* Button to not update the user's password in the logins helper */
+"LoginsHelper.DontUpdate.Button.v122" = "Ոչ հիմա";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button.v122" = "Պահել";
+

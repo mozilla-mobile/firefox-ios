@@ -1,0 +1,6 @@
+/* This is the learn more text of the Pocket footer on Firefox Homepage. */
+"FirefoxHomepage.Pocket.Footer.LearnMore.v115" = "מידע נוסף";
+
+/* This is the title of the Pocket footer on Firefox Homepage. The first placeholder is for the Pocket app name and the second placeholder for the app name */
+"FirefoxHomepage.Pocket.Footer.Title.v116" = "מופעל על־ידי %1$@. חלק ממשפחת %2$@.";
+

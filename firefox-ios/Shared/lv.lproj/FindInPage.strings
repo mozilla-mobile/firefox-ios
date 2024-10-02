@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Gatavs";
+
+/* Text selection menu item */
+"Find in Page" = "Meklēt lapā";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Nākamais rezultāts";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Iepriekšējais rezultāts";
+

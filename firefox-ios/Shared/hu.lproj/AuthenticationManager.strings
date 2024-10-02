@@ -1,0 +1,6 @@
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "Írja be a jelkódot";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "Használja az ujjlenyomatát, hogy most hozzáférjen a bejelentkezésekhez.";
+

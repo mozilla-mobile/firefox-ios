@@ -1,0 +1,84 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Вы ўпэўнены?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Скасаваць";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Ачысціць пошук";
+
+/* Copy password text selection menu item */
+"Copy" = "Капіяваць";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Створана %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Выдаліць";
+
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Скасаваць";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Выдаліць";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Вы не зможаце адмяніць гэта дзеянне.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Гэта прывядзе да выдалення пароля з усіх вашых сінхранізаваных прылад.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Выдаліць пароль?";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Зняць выбар з усіх";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Увайсці ў рэжым пошуку";
+
+/* Hide password text selection menu item */
+"Hide" = "Схаваць";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Лагіны будуць выдалены назаўсёды.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Лагіны будуць выдалены з усіх падключаных прылад.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Зменена %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Лагіны не знойдзены";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Паролі не знойдзены";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Адкрыць і Запоўніць";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Пароль";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Праявіць";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Пошук";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Поле ўводу пошуку";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "Пошук";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Вылучыць усе";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Імя карыстальніка";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Вэб-сайт";
+

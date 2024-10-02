@@ -1,0 +1,60 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "ਨਿੱਜੀ ਟੈਬਾਂ ਨੂੰ ਬੰਦ ਕਰੋ";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV2" = "ਨਿੱਜੀ ਟੈਬਾਂ\nਨੂੰ ਬੰਦ ਕਰੋ";
+
+/* Description for medium size widget to add Firefox Shortcut to home screen */
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Firefox ਸ਼ਾਰਟਕੱਟ ਨੂੰ ਆਪਣੀ ਮੁੱਖ ਸਕਰੀਨ ਉੱਤੇ ਜੋੜੋ";
+
+/* Go to link pasted on the clipboard */
+"TodayWidget.GoToCopiedLinkLabelV1" = "ਕਾਪੀ ਕੀਤੇ ਲਿੰਕ 'ਤੇ ਜਾਓ";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV2" = "ਕਾਪੀ ਕੀਤੇ ਲਿੰਕ ਉੱਤੇ ਜਾਓ";
+
+/* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
+"TodayWidget.MoreTabsLabel" = "+%d ਹੋਰ…";
+
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "ਨਵੀਂ ਖੋਜ";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "ਕੋਈ ਖੁੱਲ੍ਹੀ ਟੈਬ ਨਹੀਂ ਹੈ।";
+
+/* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.OpenFirefoxLabel" = "Firefox ਖੋਲ੍ਹੋ";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "ਨਿੱਜੀ ਖੋਜ";
+
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "ਆਪਣੀ ਮੁੱਖ ਸਕਰੀਨ ਉੱਤੇ Firefox ਜੋੜੋ। ਵਿਜੈਟ ਜੋੜਨ ਦੇ ਬਾਅਦ ਇਸ ਨੂੰ ਸੋਧਣ ਲਈ ਛੂਹ ਕੇ ਰੱਖੋ ਅਤੇ ਵੱਖਰਾ ਸ਼ਾਰਟਕੱਟ ਚੁਣੋ।";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "ਫ਼ੌਰੀ ਕਾਰਵਾਈਆਂ";
+
+/* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox ਸ਼ਾਰਟਕੱਟ";
+
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryDescriptionV2" = "ਆਪਣੀਆਂ ਖੁੱਲ੍ਹੀਆਂ ਟੈਬਾਂ ਲਈ ਸ਼ਾਰਟਕਟ ਜੋੜੋ।";
+
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "ਫ਼ੌਰੀ ਝਲਕ";
+
+/* Search in Firefox. Do not translate the word Firefox */
+"TodayWidget.SearchInFirefoxV2" = "Firefox\nਵਿੱਚ ਖੋਜੋ";
+
+/* Search in private tab */
+"TodayWidget.SearchInPrivateTabLabelV2" = "ਨਿੱਜੀ ਟੈਬ\nਵਿੱਚ ਖੋਜੋ";
+
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "ਅਕਸਰ ਅਤੇ ਤਾਜ਼ਾ ਵੇਖੀਆਂ ਵੈੱਬਸਾਈਟਾਂ ਲਈ ਸ਼ਾਰਟਕੱਟ ਜੋੜੋ।";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "ਮੁੱਖ ਸਾਈਟਾਂ";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "ਵੈੱਬਸਾਈਟ ਸ਼ਾਰਟਕੱਟ";
+

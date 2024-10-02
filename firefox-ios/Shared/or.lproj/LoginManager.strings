@@ -1,0 +1,12 @@
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "ନାକଚ";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "ହଟାନ୍ତୁ";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "ପାସ୍‌ୱାର୍ଡ୍";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "ଖୋଜନ୍ତୁ";
+

@@ -1,0 +1,45 @@
+/* Description label for when there are no credit cards shown in credit card list in autofill settings screen. */
+"CreditCard.Settings.EmptyListDescription.v112" = "ບັນທຶກຂໍ້ມູນບັດຂອງທ່ານໄວ້ຢ່າງປອດໄພເພື່ອຈ່າຍເງິນໄດ້ໄວຂຶ້ນໃນຄັ້ງຕໍ່ໄປ.";
+
+/* When a user is in the process of making a purchase and has at least one saved credit card, a view above the keyboard shows actions a user can take. When tapping this label, the keyboard will dismiss from view. */
+"CreditCards.Settings.Done.v114" = "ສຳເລັດ";
+
+/* When a user is in the process or has finished making a purchase, and has at least one card saved, we show this tappable string. This indicates to users that they can navigate to their list of stored credit cards in the app's credit card list screen. */
+"CreditCards.Settings.ManageCards.v112" = "ຈັດການບັດ";
+
+/* When a user is in the process of making a purchase, and has at least one saved card, we show this label inside the keyboard hint. This indicates to the user that there are stored cards available for use on this pending purchase. */
+"CreditCards.Settings.UseSavedCardFromKeyboard.v112" = "ໃຊ້ບັດທີ່ບັນທຶກໄວ້";
+
+/* Settings section title for the old Firefox account */
+"FxA.FirefoxAccount.v119" = "ບັນຊີ";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title.v119" = "ບັນຊີ";
+
+/* This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
+"Settings.Notifications.SyncNotificationsStatus.v112" = "ນີ້ຈະຕ້ອງເປີດເພື່ອຮັບແຖບ ແລະຮັບການແຈ້ງເຕືອນເມື່ອທ່ານເຂົ້າສູ່ລະບົບໃນອຸປະກອນອື່ນ.";
+
+/* This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
+"Settings.Notifications.SyncNotificationsTitle.v112" = "ຊິງຄ໌";
+
+/* This is the footer title informing the user needs to turn on notifications in iOS Settings. Both placeholders will be replaced with the app name. */
+"Settings.Notifications.SystemNotificationsDisabledMessage.v112" = "ທ່ານໄດ້ປິດການແຈ້ງເຕືອນທັງໝົດ %1$@ ແລ້ວ. ເປີດພວກມັນໂດຍການໄປທີ່ການຕັ້ງຄ່າອຸປະກອນ > ການແຈ້ງເຕືອນ > %2$@";
+
+/* This is the description for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. The placeholder will be replaced with the app name. */
+"Settings.Notifications.TipsAndFeaturesNotificationsStatus.v112" = "ສຶກສາກ່ຽວກັບຄຸນສົມບັດທີ່ເປັນປະໂຫຍດ ແລະວິທີໃຊ້ປະໂຫຍດສູງສຸດຈາກ %@.";
+
+/* This is the title for the setting that toggles Tips and Features feature in the settings menu under the Notifications section. */
+"Settings.Notifications.TipsAndFeaturesNotificationsTitle.v112" = "ຄໍາແນະນໍາແລະຄຸນສົມບັດ";
+
+/* In the settings menu, in the Privacy section, this is the title for Notifications customization section. */
+"Settings.Notifications.Title.v112" = "ແຈ້ງເຕືອນ";
+
+/* This is the title informing the user needs to turn on notifications in iOS Settings. The placeholder will be replaced with the app name. */
+"Settings.Notifications.TurnOnNotificationsMessage.v112" = "ໄປທີ່ການຕັ້ງຄ່າອຸປະກອນຂອງທ່ານເພື່ອເປີດການແຈ້ງເຕືອນໃນ %@";
+
+/* This is the title informing the user needs to turn on notifications in iOS Settings. */
+"Settings.Notifications.TurnOnNotificationsTitle.v112" = "ເປີດການແຈ້ງເຕືອນ";
+
+/* Navigation title for search page in the Settings menu. */
+"Settings.Search.PageTitle.v121" = "ຄົ້ນຫາ";
+

@@ -1,0 +1,21 @@
+/* Label for preview action on Tab Tray Tab to add current tab to Bookmarks */
+"Add to Bookmarks" = "Toevoegen aan bladwijzers";
+
+/* Label for preview action on Tab Tray Tab to close the current tab */
+"Close Tab" = "Tabblad sluiten";
+
+/* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
+"Copy URL" = "URL kopiëren";
+
+/* Label for preview action on Tab Tray Tab to send the current link to another device */
+"Menu.SendLinkToDevice" = "Koppeling naar apparaat verzenden";
+
+/* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
+"Open Last Bookmark" = "Laatste bladwijzer openen";
+
+/* Accessibility label, associated to the 3D Touch action on the current tab in the tab tray, used to display a larger preview of the tab. */
+"Preview of %@" = "Voorbeeld van %@";
+
+/* Label for preview action on Tab Tray Tab to send the current tab to another device */
+"Send to Device" = "Verzenden naar apparaat";
+

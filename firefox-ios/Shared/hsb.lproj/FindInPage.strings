@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Dokónčeny";
+
+/* Text selection menu item */
+"Find in Page" = "Na stronje pytać";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Přichodny wuslědk na stronje";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Předchadny wuslědk na stronje";
+

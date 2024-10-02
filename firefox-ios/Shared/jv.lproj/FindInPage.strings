@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Rampung";
+
+/* Text selection menu item */
+"Find in Page" = "Golèk ing Kaca";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Kasil kaca-sabanjure";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Kasil kaca-sadurunge";
+

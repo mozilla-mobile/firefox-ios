@@ -1,0 +1,6 @@
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "مەخپىي نومۇرنى كىرگۈزۈڭ";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "بارماق ئىزىڭىزنى ئىشلىتىپ تىزىمغا كىرىش ئۇچۇرىنى زىيارەت قىلىڭ.";
+

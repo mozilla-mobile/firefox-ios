@@ -1,0 +1,9 @@
+/* The cancel button when confirming clear private data. */
+"Cancel" = "રદ કરો";
+
+/* The button that clears private data. */
+"OK" = "OK";
+
+/* Description of the confirmation dialog shown when a user tries to clear their private data. */
+"This action will clear all of your private data. It cannot be undone." = "આ ક્રિયા તમારા બધા ખાનગી ડેટાને સાફ કરશે. તે પૂર્વવત્ કરી શકાશે નહીં.";
+

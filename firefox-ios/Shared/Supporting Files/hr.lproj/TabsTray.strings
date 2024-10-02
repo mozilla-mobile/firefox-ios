@@ -1,0 +1,18 @@
+/* When the user closes tabs in the tab tray, a popup will appear. This is the title for the button to undo the deletion of those tabs */
+"CloseTabsToast.Button.v113" = "Poništi";
+
+/* When the user closes an individual tab in the tab tray, a popup will appear informing them the tab was closed. This is the text for the popup. */
+"CloseTabsToast.SingleTabTitle.v113" = "Kartica zatvorena";
+
+/* When the user closes tabs in the tab tray, a popup will appear informing them how many tabs were closed. This is the text for the popup. The placeholder is the number of tabs */
+"CloseTabsToast.Title.v113" = "Zatvorene kartice: %d";
+
+/* This is the swipe action title for closing an inactive tab by swiping, located in the Inactive Tabs section of the Tabs Tray */
+"InactiveTabs.TabTray.CloseSwipeActionTitle.v115" = "Zatvori";
+
+/* Users can disable syncing tabs from other devices. In the Sync Tabs panel of the Tab Tray, we inform the user tab syncing can be switched back on to view those tabs. */
+"TabsTray.Sync.SyncTabsDisabled.v116" = "Uključi sinkronizaciju kartica za pregled popisa kartica s tvojih drugih uređaja.";
+
+/* Button label to sync tabs in your account */
+"TabsTray.SyncTabs.SyncTabsButton.Title.v119" = "Sinkroniziraj kartice";
+

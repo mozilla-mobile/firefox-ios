@@ -1,0 +1,45 @@
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Ορίζοντας το Firefox ως προεπιλεγμένο πρόγραμμα περιήγησης, υποστηρίζετε ένα ανοικτό και προσβάσιμο διαδίκτυο.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "Προεπιλογή για ένα καλύτερο διαδίκτυο";
+
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "Μάθετε πώς";
+
+/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "Ρύθμιση του Firefox για αυτόματο άνοιγμα συνδέσμων από ιστοτόπους, email και μηνύματα.";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "Επιλέξτε το Firefox ως το προεπιλεγμένο πρόγραμμα περιήγησής σας για αυτόματη ταχύτητα, ασφάλεια και ιδιωτικότητα.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "Βελτίωση καθημερινής περιήγησης";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Το Firefox αποκλείει κατά μέσο όρο 3.000+ ιχνηλάτες ανά χρήστη κάθε μήνα. Ορίστε το ως προεπιλογή για να μην ανησυχείτε για το απόρρητό σας.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Το Firefox προστατεύει το απόρρητό σας";
+
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "Αλλαγή κύριου φυλλομετρητή";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "Μετάβαση στις ρυθμίσεις";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1. Μεταβείτε στις Ρυθμίσεις";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2. Πατήστε \"Προεπιλεγμένο πρόγραμμα περιήγησης εφαρμογών\"";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description3" = "3. Επιλέξτε το Firefox";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "Προεπιλεγμένο πρόγραμμα περιήγησης εφαρμογών";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "Ορισμός ως προεπιλογή";
+

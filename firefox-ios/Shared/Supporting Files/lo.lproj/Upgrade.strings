@@ -1,0 +1,18 @@
+/* Describes an action on the sync upgrade page in our Upgrade screens. This string will be on a button so user can sign up or login directly in the upgrade. */
+"Upgrade.SyncSign.Action.v114" = "ລົງຊື່ເຂົ້າໃຊ້";
+
+/* Description string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Description.v114" = "ເລືອກເບິ່ງຕໍ່ຈາກທີທ່ານປະໄວ້ດ້ວຍແຖບຈາກອຸປະກອນອື່ນໆໃນຫນ້າທໍາອິດຂອງທ່ານ.";
+
+/* Title string used to sign in to sync in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.SyncSign.Title.v114" = "ການສະຫຼັບໜ້າຈໍແມ່ນງ່າຍກວ່າທີ່ເຄີຍ";
+
+/* Describes the action on the first upgrade page in the Upgrade screen. This string will be on a button so user can continue the Upgrade. */
+"Upgrade.Welcome.Action.v114" = "ຕັ້ງໃຫ້ເປັນບຣາວເຊີຫລັກ";
+
+/* Description string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Description.v114" = "ສີໃໝ່. ຄວາມສະດວກສະບາຍໃໝ່. ຄໍາຫມັ້ນສັນຍາດຽວກັນກັບປະຊາຊົນຫຼາຍກວ່າກໍາໄລ.";
+
+/* Title string used to welcome back users in the Upgrade screens. This screen is shown after user upgrades Firefox version. */
+"Upgrade.Welcome.Title.v114" = "ຍິນດີຕ້ອນຮັບສູ່ອິນເຕີເນັດທີມີຄວາມເປັນສ່ວນຕົວສູງ";
+

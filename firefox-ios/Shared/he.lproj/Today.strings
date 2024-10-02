@@ -1,0 +1,60 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "סגירת לשוניות פרטיות";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV2" = "סגירת לשוניות פרטיות";
+
+/* Description for medium size widget to add Firefox Shortcut to home screen */
+"TodayWidget.FirefoxShortcutGalleryDescription" = "הוספת קיצורי דרך של Firefox למסך הבית שלך.";
+
+/* Go to link pasted on the clipboard */
+"TodayWidget.GoToCopiedLinkLabelV1" = "מעבר לקישור שהועתק";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV2" = "מעבר לקישור שהועתק";
+
+/* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
+"TodayWidget.MoreTabsLabel" = "ועוד %d…";
+
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "חיפוש חדש";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "אין לשוניות פתוחות.";
+
+/* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.OpenFirefoxLabel" = "פתיחת Firefox";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "חיפוש פרטי";
+
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "ניתן להוסיף קיצור דרך ל־Firefox למסך הבית שלך. לאחר הוספת הוידג’ט, יש ללחוץ ולהחזיק כדי לערוך אותו ולבחור בקיצור דרך שונה.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "פעולות מהירות";
+
+/* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "קיצורי דרך של Firefox";
+
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryDescriptionV2" = "הוספת קיצורי דרך ללשוניות הפתוחות שלך.";
+
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "תצוגה מהירה";
+
+/* Search in Firefox. Do not translate the word Firefox */
+"TodayWidget.SearchInFirefoxV2" = "חיפוש ב־Firefox";
+
+/* Search in private tab */
+"TodayWidget.SearchInPrivateTabLabelV2" = "חיפוש בלשונית פרטית";
+
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "הוספת קיצורי דרך לאתרים שבהם ביקרת לאחרונה או בתדירות גבוהה.";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "אתרים מובילים";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "קיצורי דרך לאתרים";
+

@@ -1,0 +1,3 @@
+/* Contextual hints are little popups that appear for the users informing them of new features. This is a call to action for the popup that appears to educate users about what the fire button in the toolbar does, when in private mode. */
+"ContextualHints.FeltDeletion.Body.v122" = "Tapnite tukaj za začetek nove zasebne seje. Izbrišite zgodovino, piškotke – vse.";
+

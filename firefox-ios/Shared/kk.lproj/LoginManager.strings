@@ -1,0 +1,84 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Сіз сенімдісіз бе?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Бас тарту";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Іздегенді тазалау";
+
+/* Copy password text selection menu item */
+"Copy" = "Көшіріп алу";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Жасалған %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Өшіру";
+
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Бас тарту";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Өшіру";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Бұл әрекетті болдырмау мүмкін емес.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Бұл әрекет парольді барлық синхрондалған құрылғыларыңыздан өшіреді.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Парольді өшіру керек пе?";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Таңдауды алып тастау";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Іздеу режиміне өту";
+
+/* Hide password text selection menu item */
+"Hide" = "Жасыру";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Логиндер толығымен өшірілетін болады.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Логиндер барлық байланысқан құрылғылардан өшірілетін болады.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Өзгертілген %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Логиндер табылмады";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Парольдер табылмады";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Ашу және толтыру";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Пароль";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Көрсету";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Іздеу";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Іздеуді енгізу өрісі";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "Іздеу";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Барлығын таңдау";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Пайдаланушы аты";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Вебсайт";
+

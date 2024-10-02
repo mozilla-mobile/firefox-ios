@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Закрыць прыватныя карткі";
+
+/* Context menu option for opening a link in a new private tab */
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "Адкрыць у новай прыватнай картцы";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox не будзе запамінаць нічога з вашай гісторыі ці кук, але новыя закладкі будуць захоўвацца.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Падрабязней";
+
+/* Toggled OFF accessibility value */
+"Off" = "Выключана";
+
+/* Toggled ON accessibility value */
+"On" = "Уключана";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Прыватнае агляданне";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Прыватны рэжым";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Уключае ці выключае прыватны рэжым";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Пры выхадзе з Прыватнага аглядання";
+

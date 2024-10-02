@@ -1,0 +1,24 @@
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "Necə ediləcəyini öyrən";
+
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "Əsas səyyah tətbiqinizi dəyişdirin";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "Tənzimləmələrə get";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1. Tənzimləmələrə get";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2. Əsas Səyyah Tətbiq-inə toxunun";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description3" = "3. Firefox seçin";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "Əsas Səyyah Tətbiqi";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "Əsas səyyah tətbiqi olaraq qur";
+

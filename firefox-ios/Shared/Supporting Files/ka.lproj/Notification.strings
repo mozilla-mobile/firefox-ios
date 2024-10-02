@@ -1,0 +1,3 @@
+/* Fallback Title of notification if no notification title was configured. The notification is an advise to the user. The argument is the app name. */
+"Notification.Fallback.Title.v113" = "%@ რჩევა";
+

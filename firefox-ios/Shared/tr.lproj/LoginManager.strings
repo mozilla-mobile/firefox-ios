@@ -1,0 +1,84 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Emin misiniz?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "İptal";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Aramayı temizle";
+
+/* Copy password text selection menu item */
+"Copy" = "Kopyala";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Oluşturma: %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Sil";
+
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "İptal";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Kaldır";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Bu işlemi geri alamazsınız.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Bu parola, eşitlenen tüm cihazlarınızdan silinecektir.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Parola kaldırılsın mı?";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Seçimi temizle";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Arama moduna gir";
+
+/* Hide password text selection menu item */
+"Hide" = "Gizle";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Hesaplar kalıcı olarak silinecektir.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Hesaplar tüm bağlı cihazlardan silinecektir.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Değişiklik: %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Hiç hesap bulunamadı";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Parola bulunamadı";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Aç ve doldur";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Parola";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Göster";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Ara";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Arama girdisi alanı";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "Ara";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Tümünü seç";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Kullanıcı adı";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Web sitesi";
+

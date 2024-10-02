@@ -1,0 +1,54 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Сигурни ли сте?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Отказ";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Изчистване на търсене";
+
+/* Copy password text selection menu item */
+"Copy" = "Копиране";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Изтриване";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Отмяна всички";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Влизане в режим на търсене";
+
+/* Hide password text selection menu item */
+"Hide" = "Скриване";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Вписванията ще бъдат безвъзвратно загубени.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Вписванията ще бъдат премахнати от всички свързани устройства.";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Няма намерени вписвания";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Отваряне и попълване";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Парола";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Разкриване";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Търсене";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Поле за търсене";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Избери всичко";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Потребителско име";
+

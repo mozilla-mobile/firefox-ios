@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Xong";
+
+/* Text selection menu item */
+"Find in Page" = "Tìm trong trang";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Kết quả tiếp theo trong trang";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Kết quả trước trong trang";
+

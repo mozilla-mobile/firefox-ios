@@ -1,0 +1,21 @@
+/* Label for preview action on Tab Tray Tab to add current tab to Bookmarks */
+"Add to Bookmarks" = "ເພີ່ມບຸກມາກ";
+
+/* Label for preview action on Tab Tray Tab to close the current tab */
+"Close Tab" = "ປິດແທັບ";
+
+/* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
+"Copy URL" = "ສຳເນົາ URL";
+
+/* Label for preview action on Tab Tray Tab to send the current link to another device */
+"Menu.SendLinkToDevice" = "ສົ່ງລີ້ງໄປຫາອຸປະກອນ";
+
+/* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
+"Open Last Bookmark" = "ເປີດບຸກມາກຄັ້ງຫຼ້າສຸດ";
+
+/* Accessibility label, associated to the 3D Touch action on the current tab in the tab tray, used to display a larger preview of the tab. */
+"Preview of %@" = "ສະແດງຕົວຢ່າງຂອງ %@";
+
+/* Label for preview action on Tab Tray Tab to send the current tab to another device */
+"Send to Device" = "ສົ່ງໄປຫາອຸປະກອນ";
+

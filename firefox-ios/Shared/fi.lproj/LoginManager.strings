@@ -1,0 +1,84 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Oletko varma?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Peruuta";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Tyhjennä haku";
+
+/* Copy password text selection menu item */
+"Copy" = "Kopioi";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Luotu %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Poista";
+
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Kumoa";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Poista";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Tätä toimintoa ei voi peruuttaa.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Tämä poistaa salasanan kaikista synkronoiduista laitteistasi.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Poistetaanko salasana?";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Poista kaikkien valinta";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Siirry hakemiseen";
+
+/* Hide password text selection menu item */
+"Hide" = "Piilota";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Kirjautumistiedot poistetaan pysyvästi.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Kirjautumistiedot poistetaan kaikista kytketyistä laitteista.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Muokattu %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Tunnuksia ei löydy";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Salasanoja ei löytynyt";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Avaa ja täytä";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Salasana";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Näytä";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Hae";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Haun tekstikenttä";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "Etsi";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Valitse kaikki";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Käyttäjätunnus";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Verkkosivusto";
+

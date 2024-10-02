@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "സമ്പൂര്‍ണം";
+
+/* Text selection menu item */
+"Find in Page" = "താളില്‍ തിരയുക";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "അടുത്ത പേജിലെ ഫലം കാണുക";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "മുമ്പുള്ള പേജിലെ ഫലം കാണുക";
+

@@ -1,0 +1,6 @@
+/* Text displayed above the input field when changing the existing passcode */
+"Enter passcode" = "စကားဝှက် ဖြည့်ပါ";
+
+/* Touch ID prompt subtitle when accessing logins */
+"Use your fingerprint to access Logins now." = "ယခု ဝင်ရောက်အသုံးပြုရန် သင့်လက်ဗွေပုံစံကို အသုံးပြုပါ။";
+

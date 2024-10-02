@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Itxi fitxa pribatuak";
+
+/* Context menu option for opening a link in a new private tab */
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "Ireki fitxa pribatu berrian";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefoxek ez du historia edo cookierik gogoratuko baina laster-markak gorde egingo dira.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Argibide gehiago";
+
+/* Toggled OFF accessibility value */
+"Off" = "Desaktibatuta";
+
+/* Toggled ON accessibility value */
+"On" = "Aktibatuta";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Nabigatze pribatua";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Modu pribatua";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Modu pribatua txandakatzen du";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Nabigatze pribatua uztean";
+

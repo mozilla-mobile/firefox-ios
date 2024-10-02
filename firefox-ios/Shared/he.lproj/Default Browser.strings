@@ -1,0 +1,45 @@
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "הפיכת Firefox לדפדפן ברירת המחדל שלך היא הצבעה בעד אינטרנט פתוח ונגיש.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "לעבור לאינטרנט טוב יותר כברירת מחדל";
+
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "מידע נוסף";
+
+/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "פתיחה אוטומטית של קישורים מאתרים, מהודעות דוא״ל ומהיישום הודעות ב־Firefox.";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "כדאי לבחור ב־Firefox כדפדפן ברירת המחדל שלך בשביל מהירות, בטיחות ופרטיות אוטומטית.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "שיפור הגלישה היומיומית";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "‏Firefox חוסם בממוצע למעלה מ־3,000 רכיבי מעקב למשתמש בכל חודש. הפכו אותנו לדפדפן ברירת המחדל שלך לקבלת שקט נפשי בפרטיות.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "‏Firefox דואג לפרטיות שלך";
+
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "החלפת דפדפן ברירת המחדל שלך";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "מעבר להגדרות";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1. יש לעבור להגדרות";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2. להקיש על אפליקציית דפדפן ברירת מחדל";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description3" = "3. לבחור ב־Firefox";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "יישומון דפדפן ברירת המחדל";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "הגדרה כדפדפן ברירת המחדל";
+

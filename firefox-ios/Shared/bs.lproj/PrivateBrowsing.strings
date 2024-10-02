@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Zatvori privatne tabove";
+
+/* Context menu option for opening a link in a new private tab */
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "Otvori u novom privatnom tabu";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox neće pamtiti ništa od historije ili kolačića, ali nove zabilješke će biti sačuvane.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Saznajte više";
+
+/* Toggled OFF accessibility value */
+"Off" = "Isključeno";
+
+/* Toggled ON accessibility value */
+"On" = "Uključeno";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Privatno pretraživanje";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Privatan način rada";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Uključuje ili isključuje privatni način rada";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Pri napuštanju privatnog pretraživanja";
+

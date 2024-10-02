@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "პირადი ჩანართების დახურვა";
+
+/* Context menu option for opening a link in a new private tab */
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "გახსნა ახალ პირად ჩანართში";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox არ დაიმახსოვრებს მონახულებულ გვერდებსა და ფუნთუშებს, მაგრამ ბოლოს ჩანიშნული გვერდები შენარჩუნდება.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "ვრცლად";
+
+/* Toggled OFF accessibility value */
+"Off" = "გამორთვა";
+
+/* Toggled ON accessibility value */
+"On" = "ჩართვა";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "პირადი თვალიერება";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "პირადი რეჟიმი";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "პირადი თვალიერების ჩართვა/გამორთვა";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "პირადი თვალიერების რეჟიმის დატოვებისას";
+

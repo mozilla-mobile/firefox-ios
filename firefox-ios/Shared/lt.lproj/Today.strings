@@ -1,0 +1,60 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "Užverti privačiąsias korteles";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV2" = "Užverti privačiąsias korteles";
+
+/* Description for medium size widget to add Firefox Shortcut to home screen */
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Pridėkite „Firefox“ leistukų į savo pradžios ekraną.";
+
+/* Go to link pasted on the clipboard */
+"TodayWidget.GoToCopiedLinkLabelV1" = "Atverti nukopijuotą saitą";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV2" = "Atverti nukopijuotą saitą";
+
+/* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
+"TodayWidget.MoreTabsLabel" = "+ dar %d…";
+
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "Nauja paieška";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "Nėra atvertų kortelių.";
+
+/* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.OpenFirefoxLabel" = "Atverti „Firefox“";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "Privačioji paieška";
+
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "Pridėkite „Firefox“ leistuką į savo pradžios ekraną. Pridėję valdiklį, palieskite ir palaikykite norėdami jį keisti, ir pasirinkti kitą leistuką.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Spartieji veiksmai";
+
+/* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "„Firefox“ leistukai";
+
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryDescriptionV2" = "Pridėkite leistukų į savo atvertas korteles.";
+
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "Sparti peržiūra";
+
+/* Search in Firefox. Do not translate the word Firefox */
+"TodayWidget.SearchInFirefoxV2" = "Ieškoti per „Firefox“";
+
+/* Search in private tab */
+"TodayWidget.SearchInPrivateTabLabelV2" = "Atverti privačiojoje kortelėje";
+
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "Pridėkite leistukų į dažnas ir paskiausias lankytas svetaines.";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "Lankomiausios svetainės";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "Svetainių leistukai";
+

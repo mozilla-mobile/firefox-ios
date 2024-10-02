@@ -1,0 +1,45 @@
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Firefox-ის ნაგულისხმევ ბრაუზერად დაყენება არის ღია, ხელმისაწვდომი ინტერნეტის მხარდაჭერა.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "ნაგულისხმევად უკეთესი ინტერნეტი";
+
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "იხილეთ, როგორ";
+
+/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "შედეგად ბმულებს საიტებიდან, ელფოსტიდან, წერილებიდან, პირდაპირ გახსნის Firefox.";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "აირჩიეთ Firefox ნაგულისხმევ ბრაუზერად თავისთავადი სიჩქარის, უსაფრთხოებისა და პირადულობისთვის.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "შეუფერხებელი ინტერნეტმოგზაურობა";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox ზღუდავს საშუალოდ 3000+ მეთვალყურეს ყოველთვიურად. უზრუნველყოფს ინტერნეტის უსაფრთხო და მშვიდ მოხმარებას.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox იცავს პირადულობას";
+
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "აქციეთ მთავარ ბრაუზერად";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "პარამეტრებზე გადასვლა";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1. გადადით პარამეტრებზე";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2. შეეხეთ ნაგულისხმევ ბრაუზერს";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description3" = "3. აირჩიეთ Firefox";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "ნაგულისხმევი ბრაუზერი";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "ნაგულისხმევ ბრაუზერად მითითება";
+

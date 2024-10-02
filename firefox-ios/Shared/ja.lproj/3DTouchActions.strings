@@ -1,0 +1,21 @@
+/* Label for preview action on Tab Tray Tab to add current tab to Bookmarks */
+"Add to Bookmarks" = "ブックマークに追加";
+
+/* Label for preview action on Tab Tray Tab to close the current tab */
+"Close Tab" = "タブを閉じる";
+
+/* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
+"Copy URL" = "URL をコピー";
+
+/* Label for preview action on Tab Tray Tab to send the current link to another device */
+"Menu.SendLinkToDevice" = "リンクを端末へ送信";
+
+/* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
+"Open Last Bookmark" = "最後に追加したブックマークを開く";
+
+/* Accessibility label, associated to the 3D Touch action on the current tab in the tab tray, used to display a larger preview of the tab. */
+"Preview of %@" = "%@ のプレビュー";
+
+/* Label for preview action on Tab Tray Tab to send the current tab to another device */
+"Send to Device" = "端末に送信";
+

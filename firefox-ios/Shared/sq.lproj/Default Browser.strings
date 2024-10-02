@@ -1,0 +1,45 @@
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Bërja e Firefox-it shfletuesin tuaj parazgjedhje është një votë për një internet të hapët, të përdorshëm.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "Kaloni në një Internet Më të Mirë";
+
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "Mësoni Se Si";
+
+/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "Caktoni lidhje prej sajtesh, email-esh dhe Mesazhe për hapje automatike në Firefox.";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "Zgjidhni Firefox-in si shfletuesin tuaj parazgjedhje, për t’i bërë të vetvetishme shpejtësinë, sigurinë dhe privatësinë.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "Ngrijeni Më Lart Shfletimin e Përditshëm";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox-i bllokon mesatarisht mbi 3000 gjurmues për përdorues në muaj. Bëjeni shfletuesin tuaj parazgjedhje, për privatësi dhe mendje të fjetur.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox-i e Ka të Mbuluar Privatësinë";
+
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "Këmbeni Shfletuesin Tuaj Parazgjedhje";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "Shkoni te Rregullimet";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1. Shkoni te Rregullimet";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2. Prekni Aplikacionin Shfletues Parazgjedhje";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description3" = "3. Përzgjidhni Firefox-in";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "Aplikacioni Shfletues Parazgjedhje";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "Caktojeni Shfletuesin Parazgjedhje";
+

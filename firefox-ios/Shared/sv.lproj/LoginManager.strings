@@ -1,0 +1,84 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Är du säker?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Avbryt";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Töm sökfältet";
+
+/* Copy password text selection menu item */
+"Copy" = "Kopiera";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Skapad %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Ta bort";
+
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Avbryt";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Ta bort";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Du kan inte ångra den här åtgärden.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Detta tar bort lösenordet från alla dina synkroniserade enheter.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Ta bort lösenord?";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Avmarkera alla";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Öppna sökläge";
+
+/* Hide password text selection menu item */
+"Hide" = "Dölj";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Inloggningar kommer att bli permanent borttagna.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Inloggningar kommer att tas bort från alla anslutna enheter.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Ändrad %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Inga inloggningar hittades";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Inga lösenord hittades";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Öppna & fyll i";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Lösenord";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Visa";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Sök";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Sökinmatningsfält";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "Sök";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Markera allt";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Användarnamn";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Webbplats";
+

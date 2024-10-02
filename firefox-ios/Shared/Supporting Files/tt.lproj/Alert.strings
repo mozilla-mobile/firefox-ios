@@ -1,0 +1,12 @@
+/* Button text to dismiss the dialog box that gets presented as a confirmation to remove card and cancel the operation. */
+"CreditCard.SnackBar.CancelRemoveCardButton.v112" = "Баш тарту";
+
+/* Sub label for the dialog box that gets presented as a confirmation to ask user if they would like to remove the saved credit card from local as well as all their synced devices */
+"CreditCard.SnackBar.RemoveCardSublabel.v112" = "Бу адым картаны барлык синхронланган җиһазларыгыздан бетерүгә китерәчәк.";
+
+/* Title label for the dialog box that gets presented as a confirmation to ask user if they would like to remove the saved credit card */
+"CreditCard.SnackBar.RemoveCardTitle.v122" = "Карта бетерелсенме?";
+
+/* Button text to dismiss the dialog box that gets presented as a confirmation to remove card and perform the operation of removing the credit card. */
+"CreditCard.SnackBar.RemovedCardButton.v112" = "Бетерү";
+

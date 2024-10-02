@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "Du har ingen andre enheter koblet til denne kontoen tilgjengelig for synkronisering.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "Du er ikke logget inn på kontoen din.";
+

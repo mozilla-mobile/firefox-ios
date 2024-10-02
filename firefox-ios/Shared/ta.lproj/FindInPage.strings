@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "முடிந்தது";
+
+/* Text selection menu item */
+"Find in Page" = "இங்கே தேடு";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "பக்கத்தில் அடத்தது";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "பக்கத்தில் முந்தையது";
+

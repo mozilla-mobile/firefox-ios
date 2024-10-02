@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "সম্পন্ন";
+
+/* Text selection menu item */
+"Find in Page" = "পাতাটিতে খুঁজুন";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "পরবর্তী পেজের ফলাফল";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "পূর্ববর্তী পেজের ফলাফল";
+

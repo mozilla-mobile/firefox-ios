@@ -1,0 +1,18 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "गोपनीय टेब्स बंद करियै";
+
+/* Context menu option for opening a link in a new private tab */
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "नया गोपनीय टैब मे खोलियै";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "बेसी जानकारी";
+
+/* Toggled OFF accessibility value */
+"Off" = "बंद";
+
+/* Toggled ON accessibility value */
+"On" = "चालू";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "निजी ब्राउज़िंग";
+

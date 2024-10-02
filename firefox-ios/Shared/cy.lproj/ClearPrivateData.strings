@@ -1,0 +1,21 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "Hanes Pori";
+
+/* Settings item for clearing the cache */
+"Cache" = "Storfa Dros Dro";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Cwcis";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "Ffeiliau wedi'u Llwytho i Lawr";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Data Gwefan All-lein";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Mewngofnodion wedi eu Cadw";
+
+/* A settings item that allows a user to use Apple's \"Spotlight Search\" in Data Management's Website Data option to search for and select an item to delete. */
+"Spotlight Index" = "Mynegai Spotlight";
+

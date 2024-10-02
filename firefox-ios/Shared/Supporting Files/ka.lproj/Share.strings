@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "არცერთი სხვა მოწყობილობა არ გაქვთ დაკავშირებული ამ ანგარიშთან დასინქრონებისთვის.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "არ ხართ შესული თქვენს ანგარიშზე.";
+

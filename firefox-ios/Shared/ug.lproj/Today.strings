@@ -1,0 +1,60 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "شەخسىي بەتكۈچنى ياپ";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV2" = "شەخسىي \nبەتكۈچنى ياپ";
+
+/* Description for medium size widget to add Firefox Shortcut to home screen */
+"TodayWidget.FirefoxShortcutGalleryDescription" = "باش بېتىڭىزگە Firefox تېزلەتمىسىنى قوشىدۇ.";
+
+/* Go to link pasted on the clipboard */
+"TodayWidget.GoToCopiedLinkLabelV1" = "كۆچۈرۈلگەن ئۇلانمىغا يۆتكەل";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV2" = "كۆچۈرۈلگەن\nئۇلانمىغا يۆتكەل";
+
+/* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
+"TodayWidget.MoreTabsLabel" = "+ يەنە %d …";
+
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "يېڭى ئىزدەش";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "ئوچۇق بەتكۈچ يوق.";
+
+/* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.OpenFirefoxLabel" = "Firefox نى ئاچ";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "شەخسىي ئىزدە";
+
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "باش بېتىڭىزگە Firefox تېزلەتمىسىنى قوشىدۇ. ئەپچە قوشقاندىن كېيىن، بېسىپ تۇرسا ئۇنى تەھرىرلەيدۇ ۋە باشقا تېزلەتمە تاللىغىلى بولىدۇ.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "تېز مەشغۇلات";
+
+/* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox تېزلەتمىسى";
+
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryDescriptionV2" = "ئوچۇق بەتكۈچكە تېزلەتمە قوشىدۇ.";
+
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "تېز كۆرۈش";
+
+/* Search in Firefox. Do not translate the word Firefox */
+"TodayWidget.SearchInFirefoxV2" = "Firefox تا\nئىزدە";
+
+/* Search in private tab */
+"TodayWidget.SearchInPrivateTabLabelV2" = "شەخسىي \nبەتكۈچتە ئىزدە";
+
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "دائىم ۋە يېقىندا زىيارەت قىلغان تور بېكەتلەرگە تېزلەتمە قوشىدۇ.";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "دائىملىق بېكەتلەر";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "تور بېكەت تېزلەتمىسى";
+

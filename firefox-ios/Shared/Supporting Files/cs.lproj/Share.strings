@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "K tomuto účtu nejsou připojena žádná další zařízení, která by bylo možné synchronizovat.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "Nejste přihlášeni ke svému účtu.";
+

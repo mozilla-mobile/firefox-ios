@@ -1,0 +1,66 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "დარწმუნებული ხართ?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "გაუქმება";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "ძიების გასუფთავება";
+
+/* Copy password text selection menu item */
+"Copy" = "ასლი";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "შექმნილი %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "წაშლა";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "მონიშვნის გაუქმება";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "ძიების რეჟიმი";
+
+/* Hide password text selection menu item */
+"Hide" = "დამალვა";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "ანგარიშის მონაცემები სამუდამოდ წაიშალა.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "ანგარიშის მონაცემები, ყველა დაკავშირებული მოწყობილობიდან წაიშლება.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "შეცვლილი %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "მონაცემები ვერ მოიძებნა";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "გახსნა და შევსება";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "პაროლი";
+
+/* Reveal password text selection menu item */
+"Reveal" = "ჩვენება";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "ძიება";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "საძიებო ველი";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "ძიება";
+
+/* Label for the button used to select all logins. */
+"Select All" = "ყველაფრის მონიშვნა";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "მომხმარებლის სახელი";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "ვებსაიტი";
+

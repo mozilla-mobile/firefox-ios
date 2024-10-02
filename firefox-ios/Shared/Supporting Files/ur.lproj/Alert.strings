@@ -1,0 +1,6 @@
+/* Button text to dismiss the dialog box that gets presented as a confirmation to remove card and cancel the operation. */
+"CreditCard.SnackBar.CancelRemoveCardButton.v112" = "منسوخ کریں";
+
+/* Button text to dismiss the dialog box that gets presented as a confirmation to remove card and perform the operation of removing the credit card. */
+"CreditCard.SnackBar.RemovedCardButton.v112" = "ہٹائیں";
+

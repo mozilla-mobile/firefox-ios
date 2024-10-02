@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "Þú ert ekki með önnur tæki tengd við þennan reikning sem hægt er að samstilla.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "Þú ert ekki skráð/ur inn á reikninginn þinn.";
+

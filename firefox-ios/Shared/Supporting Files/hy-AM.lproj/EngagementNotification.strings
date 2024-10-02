@@ -1,0 +1,18 @@
+/* Body of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Body.v112" = "Գտեք մոտակայքում ինչ-որ բան: Կամ բացահայտել ինչ-որ զվարճալի բան:";
+
+/* Title of notification send to user after inactivity to encourage them to use the search feature. */
+"Engagement.Notification.Title.v112" = "Սկսեք ձեր առաջին որոնումը";
+
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is app name. */
+"Engagement.Notification.Treatment.A.Body.v114" = "%@-ում գաղտնի դիտարկումը չի պահպանում ձեր տեղեկությունները և արգելափակում է թաքնված հետագծերը:";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.A.Title.v114" = "Դիտարկեք առանց հետք թողնելու";
+
+/* Body of notification send to user after inactivity to encourage them to use the private browsing feature. Placeholder is the app name. */
+"Engagement.Notification.Treatment.B.Body.v114" = "Զննեք առանց պահված թխուկների կամ պատմության %@-ում";
+
+/* Title of notification send to user after inactivity to encourage them to use the private browsing feature. */
+"Engagement.Notification.Treatment.B.Title.v114" = "Փորձեք Գաղտնի դիտարկումը";
+

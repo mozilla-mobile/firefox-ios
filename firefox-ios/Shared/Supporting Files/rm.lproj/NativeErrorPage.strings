@@ -1,0 +1,15 @@
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v131" = "Rechargiar";
+
+/* On error page, this is the description for generic error. */
+"NativeErrorPage.GenericError.Description.v131" = "Ina errur SSL è succedida. Igl è impussibel da stabilir ina connexiun segira cun il server.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v131" = "Sajas precaut. I para da dar in problem.";
+
+/* On error page, this is the description for no internet connection. */
+"NativeErrorPage.NoInternetConnection.Description.v131" = "Emprova da ta connectar cun in auter apparat. Controllescha tes modem u router. Deconnectescha e reconnectescha il WLAN.";
+
+/* On error page, this is the title for no internet connection */
+"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "I para da dar in problem cun tia connexiun d’internet.";
+

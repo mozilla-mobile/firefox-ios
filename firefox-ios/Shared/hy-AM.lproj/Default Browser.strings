@@ -1,0 +1,45 @@
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "Firefox-ը Ձեր սկզբնադիր դիտարկիչ դարձնելը քվեարկություն է բաց և հասանելի համացանցի համար:";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "Բարի գալուստ ավելի լավ համացանց";
+
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "Իմանալ ինչպես";
+
+/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "Տեղադրեք հղումներ կայքերից, էլ. նամակներից և հաղորդագրություններից՝ Firefox-ում ավտոմատ կերպով բացելու համար:";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "Ընտրեք Firefox-ը որպես ձեր լռելյայն դիտարկիչ՝ արագությունը, անվտանգությունը և գաղտնիությունը ավտոմատ դարձնելու համար:";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "Բարձրացրեք ամենօրյա զննարկումը";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "Firefox-ն ամեն ամիս արգելափակում է 3000+ հետևիչներ մեկ օգտատիրոջ համար: Դարձրեք մեզ Ձեր սկզբնադիր դիտարկիչը՝ որպեսզի գաղտնիության համար հանգիստ լինեք:";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox֊ի գաղտնիության ծանուցում";
+
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "Փոխարկեք Ձեր սկզբնադիր դիտարկիչը";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "Անցնել Կարգավորումներին";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1. Գնացեք Կարգավորումներ";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2. Հպեք սկզբնադիր դիտարկի հավելվածին";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description3" = "3. Ընտրեք Firefox-ը";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "Դիտարկիչի սկզբնադիր հավելված";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "Կայել որպես սկզբնադիր դիտարկիչ";
+

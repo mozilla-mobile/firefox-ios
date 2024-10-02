@@ -1,0 +1,66 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "کیا آپ کو یقین ہے؟";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "منسوخ کریں";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "تلاش صاف کریں";
+
+/* Copy password text selection menu item */
+"Copy" = "نقل";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "%@ پر پیدا کیا";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "مٹائیں";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "سب کو غیر منتخب کریں";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "تلاش موڈ میں داخل ہوں";
+
+/* Hide password text selection menu item */
+"Hide" = "چھپائیں";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "لاگنز مستقل طور پر ہٹا دیئے جائیں گے۔";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "لاگ ن تمام جڑے ہوئے آلات سے ہٹا دیئے جائیں گے۔";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "ترميم شدہ%@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "کوئی لاگ ان نہیں ملا";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "کھولیں اور بھریں";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "پاس ورڈ";
+
+/* Reveal password text selection menu item */
+"Reveal" = "افشاں کریں";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "تلاش";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "محرک قظعہ تلاش کریں";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "تلاش کریں";
+
+/* Label for the button used to select all logins. */
+"Select All" = "سب کچھ منتخب کريں";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "صارف کا نام";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "ويب سائٹ";
+

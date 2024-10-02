@@ -1,0 +1,54 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "Trancar pestanyas privadas";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV2" = "Zarrar pestanyas privadas";
+
+/* Description for medium size widget to add Firefox Shortcut to home screen */
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Anyade alcorces de Firefox ta la tuya pantalla d'inicio";
+
+/* Go to link pasted on the clipboard */
+"TodayWidget.GoToCopiedLinkLabelV1" = "Ir ta lo vinclo copiau";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV2" = "Ir ta lo vinclo copiau";
+
+/* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
+"TodayWidget.MoreTabsLabel" = "+%d mas…";
+
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "Nueva busqueda";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "No i hai garra pestanya ubierta.";
+
+/* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.OpenFirefoxLabel" = "Ubrir Firefox";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "Busqueda privada";
+
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "Anyade un alcorce de Firefox a la tuya pantalla d'inicio. Dimpués anyade lo widget, toca y mantén ta editar-lo y seleccionar un alcorce diferent.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Accions rapidas";
+
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryDescriptionV2" = "Anyade alcorces ta las tuyas pestanyas ubiertas.";
+
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "Vista rapida";
+
+/* Search in Firefox. Do not translate the word Firefox */
+"TodayWidget.SearchInFirefoxV2" = "Mirar en Firefox";
+
+/* Search in private tab */
+"TodayWidget.SearchInPrivateTabLabelV2" = "Mirar en una Pestanya Privada";
+
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "Anyade alcorces en as pachinas freqüents y visitadas recientemente.";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "Mas visitaus";
+

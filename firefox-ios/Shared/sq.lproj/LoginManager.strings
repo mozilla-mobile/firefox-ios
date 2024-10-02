@@ -1,0 +1,84 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Jeni i sigurt?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Anuloje";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Spastroje Kërkimin";
+
+/* Copy password text selection menu item */
+"Copy" = "Kopjoje";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Krijuar më %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Fshije";
+
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Anuloje";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Hiqe";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "S’mund ta zhbëni këtë veprim.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Kjo do ta heqë fjalëkalimin nga krejt pajisjet tuaja të njëkohësuara.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Të hiqet Fjalëkalimi?";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Shpërzgjidhi Krejt";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Hyni Në Mënyrën Kërkim";
+
+/* Hide password text selection menu item */
+"Hide" = "Fshihe";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Kredencialet e hyrjeve do të hiqen përgjithmonë.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Kredencialet e hyrjeve do të hiqen prej krejt pajisjeve të lidhura.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Ndryshuar më %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "S’u gjetën kredenciale hyrjesh";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "S’u gjetën fjalëkalime";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Hape & Plotësoje";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Fjalëkalim";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Shfaqe";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Kërkim";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Fushë Dhënieje Kërkimi";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "Kërko";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Përzgjidhe Krejt";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Emër përdoruesi";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Sajt";
+

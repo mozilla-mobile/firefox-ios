@@ -1,0 +1,21 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "Cronologia";
+
+/* Settings item for clearing the cache */
+"Cache" = "Cache";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Cookies";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "Datotecas telechargiadas";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Datas da websites offline";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Infurmaziuns d'annunzia memorisadas";
+
+/* A settings item that allows a user to use Apple's \"Spotlight Search\" in Data Management's Website Data option to search for and select an item to delete. */
+"Spotlight Index" = "Index da Spotlight";
+

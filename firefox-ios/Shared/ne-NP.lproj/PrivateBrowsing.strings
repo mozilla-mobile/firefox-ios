@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "निजी ट्याबहरू बन्द गर्नुहोस्";
+
+/* Context menu option for opening a link in a new private tab */
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "नयाँ निजी ट्याबमा खोल्नुहोस्";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox ले तपाईँको कुनैपनि ईतिहास र कुकिज सन्चीत गर्ने छैन, तर नयाँ पुस्तकचिनो भने सन्चीत हुनेछ।";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "अझ जान्नुहोस्";
+
+/* Toggled OFF accessibility value */
+"Off" = "बन्द गर्नुहोस्";
+
+/* Toggled ON accessibility value */
+"On" = "खोल्नुहोस्";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "निजी ब्राउजिङ्ग";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "निजी मोड";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "निजी मोडलाई बन्द वा सुचारू गर्छ";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "निजी ब्राउजिँङ बन्द गर्दा";
+

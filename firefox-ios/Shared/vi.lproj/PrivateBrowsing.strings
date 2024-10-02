@@ -1,0 +1,30 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Đóng thẻ riêng tư";
+
+/* Context menu option for opening a link in a new private tab */
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "Mở trong thẻ riêng tư mới";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox sẽ không nhớ bất kỳ lịch sử hoặc cookie của bạn, nhưng dấu trang mới sẽ được lưu.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Tìm hiểu thêm";
+
+/* Toggled OFF accessibility value */
+"Off" = "Tắt";
+
+/* Toggled ON accessibility value */
+"On" = "Bật";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Duyệt web riêng tư";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Chế độ riêng tư";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Bật hoặc tắt chế độ riêng tư";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Khi rời khỏi trình duyệt riêng tư";
+

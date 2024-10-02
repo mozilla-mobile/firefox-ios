@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Valmis";
+
+/* Text selection menu item */
+"Find in Page" = "Etsi sivulta";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Seuraava hakutulos sivulta";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Edellinen hakutulos sivulta";
+

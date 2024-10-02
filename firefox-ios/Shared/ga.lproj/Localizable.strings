@@ -1,0 +1,609 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "Tá ainm úsáideora agus focal faire á n-iarraidh ag %@.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "Tá ainm úsáideora agus focal faire á n-iarraidh ag %1$@. Deir an suíomh: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Áá";
+
+/* About settings section title */
+"About" = "Maidir Leis";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Cuir Cluaisín Leis";
+
+/* Name for button adding current article to reading list in reader mode */
+"Add to Reading List" = "Cuir leis an Liosta Léitheoireachta";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Cuireadh an leathanach leis an Liosta Léitheoireachta";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "OK";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "Tharla botún agus an pas á chur leis an Sparán. Déan iarracht eile ar ball.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "Níorbh fhéidir an pas a chur leis";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Seoladh agus Cuardach";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Seol i gcónaí";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Fíordheimhniú de dhíth";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Siar";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Cosc ar Phreabfhuinneoga";
+
+/* Toggle bookmarks syncing setting */
+"Bookmarks" = "Leabharmharcanna";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "Fillteán";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "Fillteán Nua";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "Teideal";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Gile";
+
+/* Label for Cancel button */
+"Cancel" = "Cealaigh";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Athraíonn seo an téama datha.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Athraíonn seo an cló.";
+
+/* The button to open a new tab with the copied link */
+"ClipboardToast.GoToCopiedLink.Button" = "Ar Aghaidh";
+
+/* Message displayed when the user has a copied link on the clipboard */
+"ClipboardToast.GoToCopiedLink.Title" = "Oscail an nasc cóipeáilte";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Dún";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "Cluaisín á dhúnadh";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Osclaíodh Cluaisín Príobháideach nua";
+
+/* The button text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Athraigh";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Osclaíodh Cluaisín nua";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Níorbh fhéidir an leathanach a chur ar an Liosta Léitheoireachta";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it’s already there?" = "Níorbh fhéidir an leathanach a chur ar an Liosta Léitheoireachta. An bhfuil sé ann cheana?";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Níorbh fhéidir an leathanach a lódáil.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Cruthaigh cuntas";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Dorcha";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Cló níos lú";
+
+/* Title for default search engine picker. */
+"Default Search Engine" = "Inneall Cuardaigh Réamhshocraithe";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Socruithe Taispeána";
+
+/* Used as a button label for crash dialog prompt */
+"Don’t Send" = "Ná Seol";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "Déanta";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Casta";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Rabhadh: ní féidir linn cinntiú go bhfuil an ceangal leis an suíomh seo slán.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "Seans go bhfuil cumraíocht mhícheart ar an suíomh, nó go bhfuil duine éigin ag déanamh ionsaí air. Lean ar aghaidh má tá tú sásta dul sa bhearna bhaoil.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "Níor chumraigh úinéir %@ an suíomh mar is ceart. Níor cheangail Firefox leis an suíomh seo, chun do chuid faisnéise a chosaint.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Ceangal Neamhiontaofa é seo";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Ar Ais";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Tabhair cuairt ar an suíomh ar aon nós";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Title for firefox about:home page in tab history list */
+"Firefox.HomePage.Title" = "Leathanach Baile Firefox";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Ar Aghaidh";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Cabhair";
+
+/* Toggle history syncing setting */
+"History" = "Stair";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "Taispeánfar na suímh ar thug tú cuairt orthu le déanaí anseo.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Taispeánfar do chuid cluaisíní ó ghléasanna eile anseo.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox Sync";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "Stair";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Dúnta le déanaí";
+
+/* The title for the Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Bookmark" = "Leabharmharc";
+
+/* The title for the Delete from History context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.DeleteFromHistory" = "Scrios ón Stair";
+
+/* The title for the Open in New Tab context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.OpenInNewTab" = "Oscail i gCluaisín Nua";
+
+/* The title for the Remove context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Remove" = "Bain";
+
+/* The title for the Remove Bookmark context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.RemoveBookmark" = "Bain an Leabharmharc";
+
+/* The title for the Share context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Share" = "Comhroinn";
+
+/* A label indicating the keyboard shortcut to navigate backwards, through session history, inside the current tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Back.DiscoveryTitle" = "Siar";
+
+/* A label indicating the keyboard shortcut of closing the current tab a user is in. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Dún an Cluaisín";
+
+/* A label indicating the keyboard shortcut of finding text a user desires within a page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Find.DiscoveryTitle" = "Aimsigh";
+
+/* A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Forward.DiscoveryTitle" = "Ar Aghaidh";
+
+/* A label indicating the keyboard shortcut of creating a new private tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Cluaisín Nua Príobháideach";
+
+/* A label indicating the keyboard shortcut of creating a new tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.NewTab.DiscoveryTitle" = "Cluaisín Nua";
+
+/* A label indicating the keyboard shortcut of reloading the current page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Reload.DiscoveryTitle" = "Athlódáil an Leathanach";
+
+/* A label indicating the keyboard shortcut of directly accessing the URL, location, bar. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Roghnaigh an Barra Suímh";
+
+/* A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Taispeáin an chéad chluaisín eile";
+
+/* A label indicating the keyboard shortcut of switching to a tab immediately preceding to the currently selected tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Taispeáin an cluaisín roimhe seo";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Cló níos mó";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "anois beag";
+
+/* This label is meant to signify the section containing a group of items from the past thirty days. */
+"Last month" = "An mhí seo caite";
+
+/* This label is meant to signify the section containing a group of items from the past seven days. */
+"Last week" = "An tseachtain seo caite";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Ceadúnais";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Sorcha";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Luchtaigh an bunleathanach";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Ábhar á lódáil…";
+
+/* Authentication prompt log in button */
+"Log in" = "Logáil isteach";
+
+/* Toggle logins syncing setting */
+"Logins" = "Focail Fhaire";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Ná Sábháil";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "An bhfuil fonn ort an focal faire do %1$@ ar %2$@ a shábháil?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "An bhfuil fonn ort focal faire do %@ a shábháil?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Sábháil an Focal Faire";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Nuashonraigh";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Dealraíonn sé gur thuairteáil Firefox roimhe seo. An bhfuil fonn ort do chuid cluaisíní a athchóiriú?";
+
+/* Title for the button that marks a reading list item as read */
+"Mark as Read" = "Marcáil “Léite”";
+
+/* Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "Marcáil “Neamhléite”";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "gléas soghluaiste";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "níos mó ná mí ó shin";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "níos mó ná seachtain ó shin";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Barra Nascleanúna";
+
+/* Accessibility label for the New Tab button in the tab toolbar. */
+"New Tab" = "Cluaisín Nua";
+
+/* Restore Tabs Negative Action */
+"No" = "Níl";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Gan cluaisín";
+
+/* OK button */
+"OK" = "OK";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "Tá";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Úps! Thuairteáil Firefox";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Tapáil an deilbhín leabhair sa bharra teidil chun alt a oscailt san Amharc Léitheoireachta.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Oscail na Socruithe";
+
+/* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
+"OpenURL.Error.Message" = "Ní féidir le Firefox an leathanach a oscailt mar gheall ar sheoladh neamhbhailí.";
+
+/* Title of the message shown when the user attempts to navigate to an invalid link. */
+"OpenURL.Error.Title" = "Ní féidir an leathanach a oscailt";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Focal Faire";
+
+/* Privacy section title */
+"Privacy" = "Príobháideachas";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Polasaí Príobháideachta";
+
+/* Title for quick-search engines settings section. */
+"Quick-Search Engines" = "Innill Mhearchuardaigh";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "léite";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "Amharc Léitheoireachta";
+
+/* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
+"ReaderMode.Available.VoiceOverAnnouncement" = "Tá Leagan Léitheora ar fáil";
+
+/* Panel accessibility label */
+"Reading list" = "Liosta léitheoireachta";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "Dúnta le Déanaí";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Athlódáil";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Bain";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Bain den Liosta Léitheoireachta";
+
+/* Accessibility label for button resetting font size in display settings of reader mode */
+"Reset text size" = "Athshocraigh méid an téacs";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Tá deilbhín leabhair a bhfuil an móide air sna rialtáin Amharc Léitheoireachta; tapáil an deilbhín seo chun leathanaigh a shábháil le do Liosta Léitheoireachta.";
+
+/* Text for the instructions label, displayed in the QR scanner view */
+"ScanQRCode.Instructions.Label" = "Ailínigh an cód QR sa fhráma lena scanadh";
+
+/* Title for the QR code scanner view. */
+"ScanQRCode.View.Title" = "Scan an cód QR";
+
+/* Open search section of settings */
+"Search" = "Cuardaigh";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Cuardach nó seoladh Gréasáin";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "Taispeánfar an t-inneall cuardaigh nua sa mbarra mearchuardaigh.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "Cuireadh an t-inneall cuardaigh leis!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "An bhfuil fonn ort an soláthraí cuardaigh a chur leis?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "Cealaigh";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Cuireadh inneall cuardaigh a bhfuil an teideal nó URL seo air leis cheana.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "Teipthe";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "Níorbh fhéidir an soláthraí cuardaigh a chur leis.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "Teipthe";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.FormErrorMessage" = "Líon na réimsí go léir mar is ceart.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.FormErrorTitle" = "Teipthe";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "OK";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "An bhfuil fonn ort tuairisc tuairteála a sheoladh chuig Mozilla leis an bhfadhb a réiteach?";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "Seol Aiseolas";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Seol an Tuairisc";
+
+/* Button title for cancelling share screen */
+"SendTo.Cancel.Button" = "Cealaigh";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "Ní féidir ach nascanna HTTP agus HTTPS a chomhroinnt.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "OK";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "Ní féidir nasc den sórt seo a chomhroinnt.";
+
+/* Body of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_body" = "Tháinig cluaisín nua isteach ó ghléas eile.";
+
+/* Title of notification shown when the device is sent one or more tabs from an unnamed device. */
+"SentTab_TabArrivingNotification_NoDevice_title" = "Fuarthas cluaisín";
+
+/* Body of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the app name. */
+"SentTab_TabArrivingNotification_WithDevice_body" = "Tháinig cluaisín nua in %@";
+
+/* Title of notification shown when the device is sent one or more tabs from the named device. %@ is the placeholder for the device name. This device name will be localized by that device. */
+"SentTab_TabArrivingNotification_WithDevice_title" = "Fuarthas cluaisín ó %@";
+
+/* Body of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.body" = "Tapáil le tosú";
+
+/* Title of notification received after a spurious message from FxA has been received. */
+"SentTab.NoTabArrivingNotification.title" = "Firefox Sync";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Donnrua";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Title in the settings view controller title bar */
+"Settings" = "Socruithe";
+
+/* The button text in Search Settings that opens the Custom Search Engine view. */
+"Settings.AddCustomEngine" = "Inneall Cuardaigh Nua";
+
+/* The text on the Save button when saving a custom search engine */
+"Settings.AddCustomEngine.SaveButtonText" = "Sábháil";
+
+/* The title of the  Custom Search Engine view. */
+"Settings.AddCustomEngine.Title" = "Inneall Cuardaigh Nua";
+
+/* The title for the field which sets the title for a custom search engine. */
+"Settings.AddCustomEngine.TitleLabel" = "Teideal";
+
+/* The placeholder for Title Field when saving a custom search engine. */
+"Settings.AddCustomEngine.TitlePlaceholder" = "Inneall Cuardaigh";
+
+/* The title for URL Field */
+"Settings.AddCustomEngine.URLLabel" = "URL";
+
+/* The placeholder for URL Field when saving a custom search engine */
+"Settings.AddCustomEngine.URLPlaceholder" = "URL (%s in áit an iarratais)";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Glan Sonraí Príobháideacha";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Glan Sonraí Príobháideacha";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "Leathanach Baile";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "Leathanach Baile faoi láthair";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "Úsáid na Leathanaigh Oscailte";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
+"Settings.NewTab.SectionName" = "Cluaisín Nua";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "Críochnaithe";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "Eagar";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "Fabhtcheartú";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Taispeáin Moltaí Cuardaigh";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar */
+"Show Tabs" = "Taispeáin Cluaisíní";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Taispeáin an Turas";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "Stad";
+
+/* Support section title */
+"Support" = "Tacaíocht";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Svaidhpeáil anoir nó aniar le trí mhéar le cluaisín a dhúnadh.";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "Á Shioncronú…";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Sioncronú as líne";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Cluaisín %1$@ as %2$@";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Cluaisíní %1$@ go %2$@ as %3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Tráidire na gCluaisíní";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "Cealaigh";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "Dúnadh %d cluaisín";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Níorbh fhéidir an leathanach seo a thaispeáint san Amharc Léitheoireachta.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Níorbh fhéidir teacht ar do chuid cluaisíní ó do ghléasanna eile. Bain triail eile as ar ball beag.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Tharla earráid agus an leathanach á thiontú";
+
+/* Relative date for date in past week. */
+"this week" = "an tseachtain seo";
+
+/* This label is meant to signify the section containing a group of items from the current day. */
+"Today" = "Inniu";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "inniu ag %@";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "Roghchlár";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "Bain an leathanach - %@";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "gan léamh";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Ainm úsáideora";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Ábhar Gréasáin";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "Fáilte go dtí do Liosta Léitheoireachta";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Bhuel, cuireann sé seo náire orainn.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Vicipéid";
+
+/* Relative date for yesterday. */
+"yesterday" = "inné";
+
+/* This label is meant to signify the section containing a group of items from the past 24 hours. */
+"Yesterday" = "Inné";
+
+/* Error message in the remote tabs panel */
+"You don’t have any tabs open in Firefox on your other devices." = "Níl aon chluaisíní oscailte agat i bhFirefox ar do ghléasanna eile.";
+
+/* Your Rights settings section title */
+"Your Rights" = "Do Chearta";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+

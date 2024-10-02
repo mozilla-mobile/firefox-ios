@@ -1,0 +1,84 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Ziur zaude?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Utzi";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Garbitu bilaketa";
+
+/* Copy password text selection menu item */
+"Copy" = "Kopiatu";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Sortuta %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Ezabatu";
+
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Utzi";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Kendu";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Ezin duzu ekintza hau desegin.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Honek pasahitza kenduko du sinkronizatutako zure gailu guztietatik.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Kendu pasahitza?";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Desautatu denak";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Sartu bilaketa moduan";
+
+/* Hide password text selection menu item */
+"Hide" = "Ezkutatu";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Saio-hasierak behin betiko kenduko dira.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Saio-hasierak konektatutako gailu guztietatik kenduko dira.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Aldatuta %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Ez da saio-hasierarik aurkitu";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Ez da pasahitzik aurkitu";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Ireki eta bete";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Pasahitza";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Agerrarazi";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Bilaketa";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Bilaketa-eremua";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "Bilatu";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Hautatu denak";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Erabiltzaile-izena";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Webgunea";
+

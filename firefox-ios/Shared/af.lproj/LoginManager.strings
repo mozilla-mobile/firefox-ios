@@ -1,0 +1,48 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Is u seker?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Kanselleer";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Wis soektog";
+
+/* Copy password text selection menu item */
+"Copy" = "Kopieer";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Verwyder";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Ontkies almal";
+
+/* Hide password text selection menu item */
+"Hide" = "Versteek";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Aanmeldinligting sal permanent geskrap word.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "Aanmeldinligting sal vanaf alle gekoppelde toestelle geskrap word.";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Geen aanmeldings gevind nie";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Open en vul in";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Wagwoord";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Onthul";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Soek";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Kies almal";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Gebruikernaam";
+

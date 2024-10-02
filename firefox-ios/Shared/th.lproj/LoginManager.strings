@@ -1,0 +1,84 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "คุณแน่ใจหรือไม่?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "ยกเลิก";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "ล้างการค้นหา";
+
+/* Copy password text selection menu item */
+"Copy" = "คัดลอก";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "สร้างเมื่อ %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "ลบ";
+
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "ยกเลิก";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "เอาออก";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "คุณไม่สามารถยกเลิกการกระทำนี้ได้";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "การดำเนินการนี้จะเป็นการลบรหัสผ่านออกจากอุปกรณ์ที่ซิงค์ทั้งหมดของคุณ";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "ลบรหัสผ่าน?";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "ไม่เลือกทั้งหมด";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "เข้าสู่โหมดค้นหา";
+
+/* Hide password text selection menu item */
+"Hide" = "ซ่อน";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "จะเอาการเข้าสู่ระบบออกอย่างถาวร";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "จะเอาการเข้าสู่ระบบออกจากอุปกรณ์ที่เชื่อมต่อทั้งหมด";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "เปลี่ยนแปลงเมื่อ %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "ไม่พบการเข้าสู่ระบบ";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "ไม่พบรหัสผ่าน";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "เปิดแล้วกรอก";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "รหัสผ่าน";
+
+/* Reveal password text selection menu item */
+"Reveal" = "เปิดเผย";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "ค้นหา";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "ช่องกรอกคำค้นหา";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "ค้นหา";
+
+/* Label for the button used to select all logins. */
+"Select All" = "เลือกทั้งหมด";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "ชื่อผู้ใช้";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "เว็บไซต์";
+

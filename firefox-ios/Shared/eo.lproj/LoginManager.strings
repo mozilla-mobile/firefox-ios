@@ -1,0 +1,84 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "Ĉu vi certas?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Nuligi";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "Viŝi serĉon";
+
+/* Copy password text selection menu item */
+"Copy" = "Kopii";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Kreita: %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Forigi";
+
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Nuligi";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Forigi";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Tiu ĉi ago ne estas malfarebla.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Tio ĉi forigos la pasvorton en ĉiuj viaj spegulitaj aparatoj.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Ĉu forigi pasvorton?";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Malelekti ĉion";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Eniri serĉan reĝimon";
+
+/* Hide password text selection menu item */
+"Hide" = "Kaŝi";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "La akreditiloj estos forigitaj por ĉiam.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "La akreditiloj estos forigitaj el ĉiuj konektitaj aparatoj.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Laste modifita: %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Neniu akreditilo trovita";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Neniu pasvorto trovita";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Malfermi kaj plenigi";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Pasvorto";
+
+/* Reveal password text selection menu item */
+"Reveal" = "Malkaŝi";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Serĉi";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "Kampo por enigi serĉon";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "Serĉi";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Elekti ĉion";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Nomo de uzanto";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Retejo";
+

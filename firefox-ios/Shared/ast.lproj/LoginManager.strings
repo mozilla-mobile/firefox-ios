@@ -1,0 +1,48 @@
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "Encaboxar";
+
+/* Copy password text selection menu item */
+"Copy" = "Copiar";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "Creóse: %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "Desaniciar";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "Deseleicionar too";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "Entrar nel mou de busca";
+
+/* Hide password text selection menu item */
+"Hide" = "Anubrir";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "Los anicios de sesión van quitase dafechu.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "Modificóse: %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "Nun s'atoparon anicios de sesión";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "Abrir y rellenar";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "Contraseña";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "Buscar";
+
+/* Label for the button used to select all logins. */
+"Select All" = "Esbillar too";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "Nome d'usuariu";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "Sitiu web";
+

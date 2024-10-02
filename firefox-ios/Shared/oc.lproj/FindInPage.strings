@@ -1,0 +1,12 @@
+/* Done button in Find in Page Toolbar. */
+"Done" = "Acabat";
+
+/* Text selection menu item */
+"Find in Page" = "Cercar dins la pagina";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"Next in-page result" = "Ocurréncia seguenta";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"Previous in-page result" = "Ocurréncia precedenta";
+

@@ -1,0 +1,60 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "Priwatne rejtariki zacyniś";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV2" = "Priwatne\nrejtariki zacyniś";
+
+/* Description for medium size widget to add Firefox Shortcut to home screen */
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Pśidajśo swójej startowej wobrazowce zwězanja Firefox";
+
+/* Go to link pasted on the clipboard */
+"TodayWidget.GoToCopiedLinkLabelV1" = "Ku kopěrowanemu wótkazoju";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV2" = "Ku kopěrowanemu wótkazoju";
+
+/* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
+"TodayWidget.MoreTabsLabel" = "+dalšne %d…";
+
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "Nowe pytanje";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "Žedne wócynjone rejtariki.";
+
+/* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.OpenFirefoxLabel" = "Firefox wócyniś";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "Priwatne pytanje";
+
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "Pśidajśo startowej wobrazowce zwězanje Firefox. Za tym až sćo pśidał asistent, pótusniśo asistent a źaržćo jen, aby wobźěłował a wubjeŕśo druge zwězanje.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Malsne akcije";
+
+/* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "Zwězanja Firefox";
+
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryDescriptionV2" = "Pśidajśo swójim wócynjonym rejtarikam zwězanja.";
+
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "Malsny naglěd";
+
+/* Search in Firefox. Do not translate the word Firefox */
+"TodayWidget.SearchInFirefoxV2" = "W Firefox pytaś";
+
+/* Search in private tab */
+"TodayWidget.SearchInPrivateTabLabelV2" = "W priwatnem rejtariku pytaś";
+
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "Pśidajśo cesto a njedawno woglědanym sedłam zwězanja.";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "Nejcesćej woglědane sedła";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "Zwězanja websedłow";
+

@@ -1,0 +1,60 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "Κλείσιμο ιδιωτικών καρτελών";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV2" = "Κλείσιμο ιδιωτικών καρτελών";
+
+/* Description for medium size widget to add Firefox Shortcut to home screen */
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Προσθήκη συντομεύσεων Firefox στην αρχική οθόνη.";
+
+/* Go to link pasted on the clipboard */
+"TodayWidget.GoToCopiedLinkLabelV1" = "Μετάβαση στον αντιγραμμένο σύνδεσμο";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV2" = "Μετάβαση στον αντιγραμμένο σύνδεσμο";
+
+/* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
+"TodayWidget.MoreTabsLabel" = "+%d ακόμα…";
+
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "Νέα αναζήτηση";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "Καμία ανοικτή καρτέλα.";
+
+/* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.OpenFirefoxLabel" = "Άνοιγμα Firefox";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "Ιδιωτική αναζήτηση";
+
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "Προσθέστε μια συντόμευση Firefox στην αρχική οθόνη. Αφού προσθέσετε το γραφικό στοιχείο, πατήστε παρατεταμένα για επεξεργασία και επιλογή διαφορετικής συντόμευσης.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Γρήγορες ενέργειες";
+
+/* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "Συντομεύσεις Firefox";
+
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryDescriptionV2" = "Προσθήκη συντομεύσεων για ανοικτές καρτέλες.";
+
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "Γρήγορη προβολή";
+
+/* Search in Firefox. Do not translate the word Firefox */
+"TodayWidget.SearchInFirefoxV2" = "Αναζήτηση στο Firefox";
+
+/* Search in private tab */
+"TodayWidget.SearchInPrivateTabLabelV2" = "Αναζήτηση σε ιδιωτική καρτέλα";
+
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "Προσθήκη συντομεύσεων για συχνές και πρόσφατες σελίδες.";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "Δημοφιλείς σελίδες";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "Συντομεύσεις ιστοτόπων";
+

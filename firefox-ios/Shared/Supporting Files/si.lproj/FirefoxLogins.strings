@@ -1,0 +1,18 @@
+/* Prompt for saving the username in the Save Logins prompt. */
+"LoginsHelper.PromptSaveLogin.Title.v122" = "පරිශ්‍රීලක නාමය සුරකින්නද?";
+
+/* Prompt for saving a password in the Save Logins prompt. */
+"LoginsHelper.PromptSavePassword.Title.v122" = "මුරපදය සුරකින්නද?";
+
+/* Prompt for updating the password in the Update Password prompt. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg.v122" = "මුරපදය යාවත්කාල කරන්නද?";
+
+/* Prompt for updating a password in the Update Password prompt. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg.v122" = "මුරපදය යාවත්කාල කරන්නද?";
+
+/* Placeholder text for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder.v122" = "මුරපද සොයන්න";
+
+/* Title for the list of logins saved by the app */
+"LoginsList.Title.v122" = "සුරැකි මුරපද";
+

@@ -1,0 +1,21 @@
+/* Label for preview action on Tab Tray Tab to add current tab to Bookmarks */
+"Add to Bookmarks" = "북마크에 추가";
+
+/* Label for preview action on Tab Tray Tab to close the current tab */
+"Close Tab" = "탭 닫기";
+
+/* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
+"Copy URL" = "URL 복사";
+
+/* Label for preview action on Tab Tray Tab to send the current link to another device */
+"Menu.SendLinkToDevice" = "기기로 링크 보내기";
+
+/* String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch */
+"Open Last Bookmark" = "최근 북마크 열기";
+
+/* Accessibility label, associated to the 3D Touch action on the current tab in the tab tray, used to display a larger preview of the tab. */
+"Preview of %@" = "%@ 미리보기";
+
+/* Label for preview action on Tab Tray Tab to send the current tab to another device */
+"Send to Device" = "기기로 보내기";
+

@@ -1,0 +1,18 @@
+/* Settings item for clearing browsing history */
+"Browsing History" = "Sejarah Pelayaran";
+
+/* Settings item for clearing the cache */
+"Cache" = "Cache";
+
+/* Settings item for clearing cookies */
+"Cookies" = "Kuki";
+
+/* Settings item for deleting downloaded files */
+"Downloaded Files" = "Fail Dimuat Turun";
+
+/* Settings item for clearing website data */
+"Offline Website Data" = "Data Laman web Luar talian";
+
+/* Settings item for clearing passwords and login data */
+"Saved Logins" = "Log Masuk Tersimpan";
+

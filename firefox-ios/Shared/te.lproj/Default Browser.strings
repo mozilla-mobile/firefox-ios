@@ -1,0 +1,9 @@
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "ఎలాగో తెలుసుకోండి";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "అమరికలకు వెళ్ళు";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1. అమరికలకు వెళ్ళండి";
+

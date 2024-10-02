@@ -1,0 +1,612 @@
+/* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"-" = "-";
+
+/* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"+" = "+";
+
+/* Authentication prompt message with no realm. Parameter is the hostname of the site */
+"A username and password are being requested by %@." = "%@ bir kullanıcı adı ve parola istiyor.";
+
+/* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
+"A username and password are being requested by %@. The site says: %@" = "%1$@ bir kullanıcı adı ve parola istiyor. Sitenin mesajı: %2$@";
+
+/* Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar. */
+"Aa" = "Aa";
+
+/* About settings section title */
+"About" = "Hakkında";
+
+/* The title for the pinning a shortcut action */
+"ActivityStream.ContextMenu.AddToShortcuts" = "Yorliqlarga qoʻshish";
+
+/* The title for the pinning a topsite action */
+"ActivityStream.ContextMenu.PinTopsite2" = "Yopishtirish";
+
+/* The title for the unpinning a topsite action */
+"ActivityStream.ContextMenu.UnpinTopsite" = "Ajratish";
+
+/* Section title label for recently visited websites */
+"ActivityStream.RecentHistory.Title" = "Soʻnggi tashrif buyurilgan";
+
+/* The title for the setting page which lets you select the number of top site rows */
+"ActivityStream.TopSites.RowSettingFooter" = "Qatorlarni oʻrnatish";
+
+/* Accessibility label for the Add Tab button in the Tab Tray. */
+"Add Tab" = "Sekme ekle";
+
+/* Name for button adding current article to reading list in reader mode */
+"Add to Reading List" = "Okuma Listesi'ne ekle";
+
+/* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
+"Added page to Reading List" = "Sahifa \"O‘qish ro‘yxati\"ga qo‘shildi";
+
+/* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Dismiss" = "OK";
+
+/* Text of the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Message" = "Talonni Wallet’ga qoʻshib boʻlmadi. Yana urinib koʻring.";
+
+/* Title of the 'Add Pass Failed' alert. See https://support.apple.com/HT204003 for context on Wallet. */
+"AddPass.Error.Title" = "Talon qoʻshilmadi";
+
+/* Accessibility label for address and search field, both words (Address, Search) are therefore nouns. */
+"Address and Search" = "Adres ve arama";
+
+/* Used as a button label for crash dialog prompt */
+"Always Send" = "Doimo jo‘natish";
+
+/* Tile title for Amazon */
+"Amazon" = "Amazon";
+
+/* Authentication prompt title */
+"Authentication required" = "Kimlik doğrulaması gerekli";
+
+/* Accessibility label for the Back button in the tab toolbar. */
+"Back" = "Geri";
+
+/* Block pop-up windows setting */
+"Block Pop-up Windows" = "Paydo bo‘luvchi oynalarni bloklash";
+
+/* Toggle bookmarks syncing setting */
+"Bookmarks" = "Yer imleri";
+
+/* The label to show the location of the folder where the bookmark is located */
+"Bookmarks.Folder.Label" = "Jild";
+
+/* The button to create a new folder */
+"Bookmarks.NewFolder.Label" = "Yangi jild";
+
+/* The label for the title of a bookmark */
+"Bookmarks.Title.Label" = "Sarlavha";
+
+/* Accessibility label for brightness adjustment slider in Reader Mode display settings */
+"Brightness" = "Parlaklık";
+
+/* Label for Cancel button */
+"Cancel" = "Bekor qilish";
+
+/* Accessibility hint for the color theme setting buttons in reader mode display settings */
+"Changes color theme." = "Renk temasını değiştirir.";
+
+/* Accessibility hint for the font type buttons in reader mode display settings */
+"Changes font type." = "Yazı tipi türünü değiştirir.";
+
+/* The button to open a new tab with the copied link */
+"ClipboardToast.GoToCopiedLink.Button" = "O‘tish";
+
+/* Message displayed when the user has a copied link on the clipboard */
+"ClipboardToast.GoToCopiedLink.Title" = "Nusxa olingan havolaga o‘tsinmi?";
+
+/* Accessibility label for action denoting closing a tab in tab list (tray) */
+"Close" = "Kapat";
+
+/* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
+"Closing tab" = "Ichki oyna yopilmoqda";
+
+/* Context menu item for bookmarking a link URL */
+"ContextMenu.BookmarkLinkButtonTitle" = "Havolani xatchoʻplarga qoʻshish";
+
+/* The label text in the Button Toast for switching to a fresh New Private Tab. */
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "Yangi maxfiy ichki oyna ochildi";
+
+/* The button text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "Almashtirish";
+
+/* The label text in the Button Toast for switching to a fresh New Tab. */
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "Yangi ichki oyna ochildi";
+
+/* Context menu item for copying an image to the clipboard */
+"ContextMenu.CopyImageButtonTitle" = "Rasmdan nusxa olish";
+
+/* Context menu item for copying an image URL to the clipboard */
+"ContextMenu.CopyImageLinkButtonTitle" = "Havoladan nusxa olish";
+
+/* Context menu item for copying a link URL to the clipboard */
+"ContextMenu.CopyLinkButtonTitle" = "Havoladan nusxa olish";
+
+/* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
+"Could not add page to Reading list" = "Sahifa \"O‘qish ro‘yxati\"ga qo‘shilmadi";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
+"Could not add page to Reading List. Maybe it’s already there?" = "Sahifani \"O‘qish ro‘yxati\"ga qo‘sha olmadingizmi? Balkim, ilgari qo‘shilgandir?";
+
+/* Error message that is shown in settings when there was a problem loading */
+"Could not load page." = "Sahifasi yuklanmadi.";
+
+/* See http://mzl.la/1Qtkf0j */
+"Create an account" = "Hisob yaratish";
+
+/* Dark theme setting in Reading View settings */
+"Dark" = "Koyu";
+
+/* Accessibility label for button decreasing font size in display settings of reader mode */
+"Decrease text size" = "Metin boyutunu küçült";
+
+/* Title for default search engine picker. */
+"Default Search Engine" = "Standart qidiruv tizimi";
+
+/* Name for display settings button in reader mode. Display in the meaning of presentation, not monitor. */
+"Display Settings" = "Görünüm ayarları";
+
+/* Used as a button label for crash dialog prompt */
+"Don’t Send" = "Jo‘natilmasin";
+
+/* Done button on left side of the Settings view controller title bar */
+"Done" = "Tayyor";
+
+/* Label for button to perform advanced actions on the error page */
+"ErrorPages.Advanced.Button" = "Qo‘shimcha";
+
+/* Warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning1.Text" = "Diqqat: bu saytga ulanish xavfsiz ekanligini tasdiqlay olmaymiz.";
+
+/* Additional warning text when clicking the Advanced button on error pages */
+"ErrorPages.AdvancedWarning2.Text" = "Bunga sabab noto‘g‘ri sozlash yoki xakkerlar harakati sabab bo‘lishi mumkin. Kuchli xavfni o‘z bo‘yningizga olsangiz, davom etishingiz mumkin.";
+
+/* Warning text on the certificate error page */
+"ErrorPages.CertWarning.Description" = "%@ egasi saytni noto‘g‘ri sozlagan. Ma’lumotlarni o‘g‘rilanishidan saqlash uchun Firefox bu saytga ulanmadi.";
+
+/* Title on the certificate error page */
+"ErrorPages.CertWarning.Title" = "Ushbu ulanish ishonchsiz.";
+
+/* Label for button to go back from the error page */
+"ErrorPages.GoBack.Button" = "Orqaga qaytish";
+
+/* Button label to temporarily continue to the site from the certificate error page */
+"ErrorPages.VisitOnce.Button" = "Saytga kirish";
+
+/* Tile title for Facebook */
+"Facebook" = "Facebook";
+
+/* Title for firefox about:home page in tab history list */
+"Firefox.HomePage.Title" = "Firefox bosh sahifasi";
+
+/* Accessibility Label for the tab toolbar Forward button */
+"Forward" = "Oldinga";
+
+/* Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ */
+"Help" = "Yordam";
+
+/* Toggle history syncing setting */
+"History" = "Tarix";
+
+/* Title for the History Panel empty state. */
+"HistoryPanel.EmptyState.Title" = "So‘nggi kirilgan sahifalar bu yerda ko‘rinadi.";
+
+/* Description for the empty synced tabs null state in the History Panel */
+"HistoryPanel.EmptySyncedTabsNullState.Description" = "Boshqa qurilmalaringizdagi ichki oynalar bu yerda ko‘rinadi.";
+
+/* Title for the empty synced tabs state in the History Panel */
+"HistoryPanel.EmptySyncedTabsState.Title" = "Firefox’ni sinxronlash";
+
+/* Title for the Back to History button in the History Panel */
+"HistoryPanel.HistoryBackButton.Title" = "Tarix";
+
+/* Title for the Recently Closed button in the History Panel */
+"HistoryPanel.RecentlyClosedTabsButton.Title" = "Yaqinda yopilgan";
+
+/* A label indicating the keyboard shortcut to navigate backwards, through session history, inside the current tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Back.DiscoveryTitle" = "Orqaga";
+
+/* A label indicating the keyboard shortcut of closing the current tab a user is in. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.CloseTab.DiscoveryTitle" = "Ichki oynani yopish";
+
+/* A label indicating the keyboard shortcut of finding text a user desires within a page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Find.DiscoveryTitle" = "Topish";
+
+/* A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Forward.DiscoveryTitle" = "Oldinga";
+
+/* A label indicating the keyboard shortcut of creating a new private tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "Yangi maxfiy ichki oyna";
+
+/* A label indicating the keyboard shortcut of creating a new tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.NewTab.DiscoveryTitle" = "Yangi ichki oyna";
+
+/* A label indicating the keyboard shortcut of reloading the current page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.Reload.DiscoveryTitle" = "Sahifani qayta yuklash";
+
+/* A label indicating the keyboard shortcut of directly accessing the URL, location, bar. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.SelectLocationBar.DiscoveryTitle" = "Manzil panelini tanlash";
+
+/* A label indicating the keyboard shortcut of switching to a subsequent tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.ShowNextTab.DiscoveryTitle" = "Keyingi ichki oynani ko‘rsatish";
+
+/* A label indicating the keyboard shortcut of switching to a tab immediately preceding to the currently selected tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "Oldingi ichki oynani ko‘rsatish";
+
+/* Accessibility label for button increasing font size in display settings of reader mode */
+"Increase text size" = "Metin boyutunu büyüt";
+
+/* Relative time for a tab that was visited within the last few moments. */
+"just now" = "hozirgina";
+
+/* A label indicating the keyboard shortcut of finding text a user desires within a page again. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.FindAgain" = "Yana topish";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with Bookmarks. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Bookmark" = "Xatchoʻplar";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with History. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.History" = "Tarix";
+
+/* A label indicating a grouping of related keyboard shortcuts describing actions a user can do with locally saved items. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.Section.Tools" = "Asboblar";
+
+/* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomIn" = "Kattalashtirish";
+
+/* A label indicating the keyboard shortcut of shrinking the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
+"Keyboard.Shortcuts.ZoomOut" = "Kichiklashtirish";
+
+/* This label is meant to signify the section containing a group of items from the past thirty days. */
+"Last month" = "O‘tgan oy";
+
+/* This label is meant to signify the section containing a group of items from the past seven days. */
+"Last week" = "O‘tgan hafta";
+
+/* Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG */
+"Licenses" = "Litsenziyalar";
+
+/* Light theme setting in Reading View settings */
+"Light" = "Yorqin";
+
+/* Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"Load original page" = "Asl sahifani yuklash";
+
+/* Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app. */
+"Loading content…" = "Tarkib yuklanmoqda…";
+
+/* Authentication prompt log in button */
+"Log in" = "Kirish";
+
+/* Toggle logins syncing setting */
+"Logins" = "Loginlar";
+
+/* Button to not save the user's password */
+"LoginsHelper.DontSave.Button" = "Saqlanmasin";
+
+/* Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site. */
+"LoginsHelper.PromptSaveLogin.Title" = "%2$@ uchun %1$@ saqlansinmi?";
+
+/* Prompt for saving a password with no username. The parameter is the hostname of the site. */
+"LoginsHelper.PromptSavePassword.Title" = "%@ uchun parol saqlansinmi?";
+
+/* Button to save the user's password */
+"LoginsHelper.SaveLogin.Button" = "Taxallusni saqlash";
+
+/* Button to update the user's password */
+"LoginsHelper.Update.Button" = "Yangilash";
+
+/* Restore Tabs Prompt Description */
+"Looks like Firefox crashed previously. Would you like to restore your tabs?" = "Firefox’da oldinroq nosozlik ro‘y berganga o‘xshaydi. Ichki oynalarni tiklashni xohlaysizmi?";
+
+/* Title for the button that marks a reading list item as read */
+"Mark as Read" = "O‘qilgan deb belgilash";
+
+/* Title for the button that marks a reading list item as unread */
+"Mark as Unread" = "O‘qilmagan deb belgilash";
+
+/* Accessibility label for Mobile Device image in remote tabs list */
+"mobile device" = "mobil cihaz";
+
+/* Relative date for dates older than a month and less than two months. */
+"more than a month ago" = "bir oydan oldinroq";
+
+/* Description for a date more than a week ago, but less than a month ago. */
+"more than a week ago" = "bir haftadan oldinroq";
+
+/* Accessibility label for the navigation toolbar displayed at the bottom of the screen. */
+"Navigation Toolbar" = "Navigatsiya paneli";
+
+/* Accessibility label for the New Tab button in the tab toolbar. */
+"New Tab" = "Yangi ichki oyna";
+
+/* Restore Tabs Negative Action */
+"No" = "Yoʻq";
+
+/* Message spoken by VoiceOver to indicate that there are no tabs in the Tabs Tray */
+"No tabs" = "Ichki oynalar yo‘q";
+
+/* OK button */
+"OK" = "OK";
+
+/* Restore Tabs Affirmative Action */
+"Okay" = "OK";
+
+/* Title for prompt displayed to user after the app crashes */
+"Oops! Firefox crashed" = "Obbo! Firefox’da nosozlik ro‘y berdi";
+
+/* See http://mzl.la/1LXbDOL */
+"Open articles in Reader View by tapping the book icon when it appears in the title bar." = "Kitobning rasmchasi nom panelida paydo bo‘lsa, uning ustiga bosib, maqolalarni \"O‘qish rejimi\"da ochishingiz mumkin.";
+
+/* See http://mzl.la/1G7uHo7 */
+"Open Settings" = "Sozlamalarni ochish";
+
+/* The message displayed to a user when they try to open a URL that cannot be handled by Firefox, or any external app. */
+"OpenURL.Error.Message" = "Xato manzil kiritilganligi uchun Firefox bu sahifani ocha olmaydi.";
+
+/* Title of the message shown when the user attempts to navigate to an invalid link. */
+"OpenURL.Error.Title" = "Sahifa ochilmadi";
+
+/* Password textbox in Authentication prompt */
+"Password" = "Parol";
+
+/* Privacy section title */
+"Privacy" = "Maxfiylik";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
+"Privacy Policy" = "Maxfiylik siyosati";
+
+/* Title for quick-search engines settings section. */
+"Quick-Search Engines" = "Tezkor qidiruv tizimlari";
+
+/* Accessibility label for read article in reading list. It's a past participle - functions as an adjective. */
+"read" = "o‘qish";
+
+/* Accessibility label for the Reader View button */
+"Reader View" = "O‘qish rejimi";
+
+/* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
+"ReaderMode.Available.VoiceOverAnnouncement" = "O‘qish rejimi mavjud";
+
+/* Panel accessibility label */
+"Reading list" = "O‘qish ro‘yxati";
+
+/* Title for the Recently Closed Tabs Panel */
+"RecentlyClosedTabsPanel.Title" = "Yaqinda yopilgan";
+
+/* Accessibility Label for the tab toolbar Reload button */
+"Reload" = "Yangilash";
+
+/* Title for the button that removes a reading list item */
+"Remove" = "Olib tashlash";
+
+/* Name for button removing current article from reading list in reader mode */
+"Remove from Reading List" = "Okuma Listesi'nden kaldır";
+
+/* Accessibility label for button resetting font size in display settings of reader mode */
+"Reset text size" = "Shrift hajmini tiklash";
+
+/* Font type setting in the reading view settings */
+"Sans-serif" = "Sans-serif";
+
+/* See http://mzl.la/1LXbDOL */
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "\"O‘qish rejimi\" boshqaruvlaridagi \"kitob +\" rasmchasi ustiga bosib, sahifalarni \"O‘qish ro‘yxati\"ga qo‘shishingiz mumkin.";
+
+/* Open search section of settings */
+"Search" = "Qidirish";
+
+/* The text shown in the URL bar on about:home */
+"Search or enter address" = "Izlang yoki manzilni kiriting";
+
+/* The message that asks the user to Add the search provider explaining where the search engine will appear */
+"Search.ThirdPartyEngines.AddMessage" = "Yangi qisiruv tizimi tezkoq qidiruv panelida paydo bo‘ladi.";
+
+/* The success message that appears after a user sucessfully adds a new search engine */
+"Search.ThirdPartyEngines.AddSuccess" = "Qidiruv tizimi qoʻshildi!";
+
+/* The title that asks the user to Add the search provider */
+"Search.ThirdPartyEngines.AddTitle" = "Qidiruv ta’minoti qo‘shilsinmi?";
+
+/* The cancel button if you do not want to add a search engine. */
+"Search.ThirdPartyEngines.Cancel" = "Bekor qilish";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.DuplicateErrorMessage" = "Bunday sarlavhali yoki URL manzilli qidiruv tizimi qo‘shilgan.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.DuplicateErrorTitle" = "Amalga oshmadi";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedMessage" = "Qidiruv ta’minoti qo‘shilmadi.";
+
+/* A title explaining that we failed to add a search engine */
+"Search.ThirdPartyEngines.FailedTitle" = "Amalga oshmadi";
+
+/* A message explaining fault in custom search engine form. */
+"Search.ThirdPartyEngines.FormErrorMessage" = "Barcha maydonlarni to‘g‘ri to‘ldiring.";
+
+/* A title stating that we failed to add custom search engine. */
+"Search.ThirdPartyEngines.FormErrorTitle" = "Amalga oshmadi";
+
+/* The confirmation button */
+"Search.ThirdPartyEngines.OK" = "OK";
+
+/* Message displayed in the crash dialog above the buttons used to select when sending reports */
+"Send a crash report so Mozilla can fix the problem?" = "Mozilla muammolarni bartaraf qilish uchun nosozlik hisobotlari jo‘natilsinmi?";
+
+/* Menu item in settings used to open input.mozilla.org where people can submit feedback */
+"Send Feedback" = "Mulohaza jo‘natish";
+
+/* Used as a button label for crash dialog prompt */
+"Send Report" = "Hisobot jo‘natish";
+
+/* Button title for cancelling share screen */
+"SendTo.Cancel.Button" = "Bekor qilish";
+
+/* Message in error prompt explaining why the URL is invalid. */
+"SendTo.Error.Message" = "Faqat HTTP va HTTPS havolalarni bo‘lishish mumkin.";
+
+/* OK button to dismiss the error prompt. */
+"SendTo.Error.OK.Button" = "OK";
+
+/* Title of error prompt displayed when an invalid URL is shared. */
+"SendTo.Error.Title" = "Siz bo‘lishmoqchi bo‘lgan havolani bo‘lishib bo‘lmaydi.";
+
+/* Sepia theme setting in Reading View settings */
+"Sepia" = "Sepiya";
+
+/* Font type setting in the reading view settings */
+"Serif" = "Serif";
+
+/* Title in the settings view controller title bar */
+"Settings" = "Sozlamalar";
+
+/* The button text in Search Settings that opens the Custom Search Engine view. */
+"Settings.AddCustomEngine" = "Qidiruv tizimini qo‘shish";
+
+/* The text on the Save button when saving a custom search engine */
+"Settings.AddCustomEngine.SaveButtonText" = "Saqlash";
+
+/* The title of the  Custom Search Engine view. */
+"Settings.AddCustomEngine.Title" = "Qidiruv tizimini qo‘shish";
+
+/* The title for the field which sets the title for a custom search engine. */
+"Settings.AddCustomEngine.TitleLabel" = "Nomi";
+
+/* The placeholder for Title Field when saving a custom search engine. */
+"Settings.AddCustomEngine.TitlePlaceholder" = "Qidiruv tizimi";
+
+/* The title for URL Field */
+"Settings.AddCustomEngine.URLLabel" = "URL";
+
+/* The placeholder for URL Field when saving a custom search engine */
+"Settings.AddCustomEngine.URLPlaceholder" = "URL (So‘rov %s bilan almashadi)";
+
+/* Button in settings that clears private data for the selected items. */
+"Settings.ClearPrivateData.Clear.Button" = "Maxfiy ma’lumotlarni tozalash";
+
+/* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
+"Settings.ClearPrivateData.SectionName" = "Maxfiy ma’lumotlarni tozalash";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the home page and its uses. */
+"Settings.HomePage.SectionName" = "Bosh sahifa";
+
+/* Title of the setting section containing the URL of the current home page. */
+"Settings.HomePage.URL.Title" = "Joriy bosh sahifa";
+
+/* Button in settings to use the current page as home page. */
+"Settings.HomePage.UseCurrent.Button" = "Joriy sahifadan foydalanish";
+
+/* Label used as an item in Settings. When touched it will open a dialog to configure the new tab behavior. */
+"Settings.NewTab.SectionName" = "Yangi ichki oyna";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Done.Button" = "Tayyor";
+
+/* Button displayed at the top of the search settings. */
+"Settings.Search.Edit.Button" = "Tahrirlash";
+
+/* Title of link to help page to find out how to solve Sync issues */
+"Settings.TroubleShootSync.Title" = "Nosozlikni tuzatish";
+
+/* Label for show search suggestions setting. */
+"Show Search Suggestions" = "Izlash bo‘yicha tavsiyalarni ko‘rsatish";
+
+/* Accessibility label for the tabs button in the (top) tab toolbar */
+"Show Tabs" = "Ichki oynalarni ko‘rsatish";
+
+/* Show the on-boarding screen again from the settings */
+"Show Tour" = "Sayohatni ko‘rsatish";
+
+/* Accessibility Label for the tab toolbar Stop button */
+"Stop" = "To‘xtatish";
+
+/* Support section title */
+"Support" = "Destek";
+
+/* Accessibility hint for tab tray's displayed tab. */
+"Swipe right or left with three fingers to close the tab." = "Ichki oynani yopish uchun 3 ta barmog‘ingiz bilan o‘ngga yoki chapga silang.";
+
+/* Message displayed when the user's account is syncing with ellipsis at the end */
+"Sync.SyncingEllipsis.Label" = "Sinxronlanmoqda…";
+
+/* Title for Sync status message when Sync failed due to being offline */
+"SyncState.Offline.Title" = "Sinxronlash oflayn holatda";
+
+/* Message spoken by VoiceOver saying the position of the single currently visible tab in Tabs Tray, along with the total number of tabs. E.g. \"Tab 2 of 5\" says that tab 2 is visible (and is the only visible tab), out of 5 tabs total. */
+"Tab %@ of %@" = "Ichki oynalar: %1$@/%2$@";
+
+/* Message spoken by VoiceOver saying the range of tabs that are currently visible in Tabs Tray, along with the total number of tabs. E.g. \"Tabs 8 to 10 of 15\" says tabs 8, 9 and 10 are visible, out of 15 tabs total. */
+"Tabs %@ to %@ of %@" = "Ichki oynalar: %1$@ %2$@’ga/%3$@";
+
+/* Accessibility label for the Tabs Tray view. */
+"Tabs Tray" = "Ichki oynalar vositasi";
+
+/* The button to undo the delete all tabs */
+"Tabs.DeleteAllUndo.Button" = "Amalni bekor qilish";
+
+/* The label indicating that all the tabs were closed */
+"Tabs.DeleteAllUndo.Title" = "%d ta ichki oyna yopildi";
+
+/* Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app. */
+"The page could not be displayed in Reader View." = "Sahifani \"Ko‘rish usuli\"da ko‘rsatib bo‘lmaydi.";
+
+/* Error message in the remote tabs panel */
+"There was a problem accessing tabs from your other devices. Try again in a few moments." = "Boshqa qurilmalardan ichki oynalarga kirishda muammo bo‘lyaptimi? Bir necha daqiqadan so‘ng urinib ko‘ring.";
+
+/* Error displayed when reader mode cannot be enabled */
+"There was an error converting the page" = "Sahifa formatini o‘zgartirishda xato yuz berdi";
+
+/* Relative date for date in past week. */
+"this week" = "bu hafta";
+
+/* This label is meant to signify the section containing a group of items from the current day. */
+"Today" = "Bugun";
+
+/* Relative date for date older than a minute. */
+"today at %@" = "bugun: %@";
+
+/* Accessibility label for the Menu button. */
+"Toolbar.Menu.AccessibilityLabel" = "Menyu";
+
+/* Button shown in editing mode to remove this site from the top sites panel. */
+"TopSites.RemovePage.Button" = "Sahifani olib tashlash - %@";
+
+/* Tile title for Twitter */
+"Twitter" = "Twitter";
+
+/* Accessibility label for unread article in reading list. It's a past participle - functions as an adjective. */
+"unread" = "o‘qilmagan";
+
+/* Username textbox in Authentication prompt */
+"Username" = "Foydalanuvchi";
+
+/* Accessibility label for the main web content view */
+"Web content" = "Veb sayt";
+
+/* See http://mzl.la/1LXbDOL */
+"Welcome to your Reading List" = "\"O‘qish ro‘yxati\"ga xush kelibsiz";
+
+/* Restore Tabs Prompt Title */
+"Well, this is embarrassing." = "Uzr, bu sharmandali holat.";
+
+/* Tile title for Wikipedia */
+"Wikipedia" = "Wikipedia";
+
+/* Relative date for yesterday. */
+"yesterday" = "kecha";
+
+/* This label is meant to signify the section containing a group of items from the past 24 hours. */
+"Yesterday" = "Kecha";
+
+/* Error message in the remote tabs panel */
+"You don’t have any tabs open in Firefox on your other devices." = "Bosha qurilmalarda Firefox’da ochilgan hech qanday ichki oynalaringiz yo‘q.";
+
+/* Your Rights settings section title */
+"Your Rights" = "Huquqlaringiz";
+
+/* Tile title for YouTube */
+"YouTube" = "YouTube";
+

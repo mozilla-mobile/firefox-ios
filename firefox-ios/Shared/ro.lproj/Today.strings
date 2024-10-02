@@ -1,0 +1,51 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "Închide filele private";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV2" = "Închide filele private";
+
+/* Description for medium size widget to add Firefox Shortcut to home screen */
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Adaugă scurtături Firefox în ecranul de pornire.";
+
+/* Go to link pasted on the clipboard */
+"TodayWidget.GoToCopiedLinkLabelV1" = "Deschide linkul copiat";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV2" = "Mergi la linkul copiat";
+
+/* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
+"TodayWidget.MoreTabsLabel" = "+%d Mai multe…";
+
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "Căutare nouă";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "Nicio filă deschisă.";
+
+/* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.OpenFirefoxLabel" = "Deschide Firefox";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "Căutare privată";
+
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "Adaugă o scurtătură Firefox în ecranul de pornire. După ce ai adăugat widgetul, ține-l atins pentru editare și selectează o scurtătură diferită.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Acțiuni rapide";
+
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "Vizualizare rapidă";
+
+/* Search in Firefox. Do not translate the word Firefox */
+"TodayWidget.SearchInFirefoxV2" = "Caută în Firefox";
+
+/* Search in private tab */
+"TodayWidget.SearchInPrivateTabLabelV2" = "Caută în filă privată";
+
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "Adaugă scurtături către site-uri vizitate frecvent și recent.";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "Site-uri de top";
+

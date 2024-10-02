@@ -1,0 +1,60 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "사생활 보호 탭 닫기";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV2" = "사생활 보호 탭 닫기";
+
+/* Description for medium size widget to add Firefox Shortcut to home screen */
+"TodayWidget.FirefoxShortcutGalleryDescription" = "홈 화면에 바로 가기를 추가합니다.";
+
+/* Go to link pasted on the clipboard */
+"TodayWidget.GoToCopiedLinkLabelV1" = "복사한 링크로 이동";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV2" = "복사한 링크로 이동";
+
+/* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
+"TodayWidget.MoreTabsLabel" = "+%d개 더 보기…";
+
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "새 검색";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "열린 탭이 없습니다.";
+
+/* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.OpenFirefoxLabel" = "Firefox 열기";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "사생활 보호 검색";
+
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "홈 화면에 Firefox 바로 가기를 추가하세요. 위젯을 추가한 후, 길게 터치하여 수정 및 다른 바로 가기를 선택하세요.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "빠른 작업";
+
+/* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "Firefox 단축키";
+
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryDescriptionV2" = "열려있는 탭에 바로 가기를 추가합니다.";
+
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "빠르게 보기";
+
+/* Search in Firefox. Do not translate the word Firefox */
+"TodayWidget.SearchInFirefoxV2" = "Firefox에서 검색";
+
+/* Search in private tab */
+"TodayWidget.SearchInPrivateTabLabelV2" = "사생활 보호 탭에서 검색";
+
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "최근에 자주 방문한 사이트에 대한 바로 가기를 추가합니다.";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "상위 사이트";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "웹 사이트 바로 가기";
+

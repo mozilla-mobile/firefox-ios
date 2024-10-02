@@ -1,0 +1,9 @@
+/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "Firefox တွင်ဝက်ဘ်ဆိုက်များ၊ အီးမေးလ်များနှင့်မက်ဆေ့ခ်ျများမှလင့်ခ်များကိုသတ်မှတ်ပါ။";
+
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "သင်၏ပုံမှန် Browser ကိုပြောင်းပါ";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "ပုံသေဘရောက်ဇာ အဖြစ်သတ်မှတ်မည်";
+

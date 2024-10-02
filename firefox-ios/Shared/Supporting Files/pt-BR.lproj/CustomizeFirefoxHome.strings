@@ -1,0 +1,9 @@
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to toggle Bookmarks section on the Firefox homepage on or off */
+"Settings.Home.Option.Bookmarks.v128" = "Favoritos";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the subtitle for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off. The placeholder is the pocket app name. */
+"Settings.Home.Option.ThoughtProvokingStories.subtitle.v116" = "Artigos sugeridos pelo %@";
+
+/* In the settings menu, in the Firefox homepage customization section, this is the title for the option that allows users to turn the Pocket Recommendations section on the Firefox homepage on or off */
+"Settings.Home.Option.ThoughtProvokingStories.v116" = "Histórias que instigam o pensamento";
+

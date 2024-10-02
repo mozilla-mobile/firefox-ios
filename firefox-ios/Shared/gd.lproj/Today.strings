@@ -1,0 +1,60 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "Dùin na tabaichean prìobhaideach";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV2" = "Dùin na tabaichean prìobhaideach";
+
+/* Description for medium size widget to add Firefox Shortcut to home screen */
+"TodayWidget.FirefoxShortcutGalleryDescription" = "Cuir ath-ghoiridean Firefox ris an sgrìn-dhachaigh agad.";
+
+/* Go to link pasted on the clipboard */
+"TodayWidget.GoToCopiedLinkLabelV1" = "Tadhail air a’ cheangal a rinn thu lethbhreac dheth";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV2" = "Tadhail air a’ cheangal a rinn thu lethbhreac dheth";
+
+/* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
+"TodayWidget.MoreTabsLabel" = "⁊ %d a bharrachd…";
+
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "Lorg ùr";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "Chan eil taba fosgailte ann.";
+
+/* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.OpenFirefoxLabel" = "Fosgail Firefox";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "Lorg prìobhaideach";
+
+/* Description for small size widget to add it to home screen */
+"TodayWidget.QuickActionGalleryDescription" = "Cuir ath-ghoirid Firefox ris an sgrìn-dhachaigh agad. An dèidh dhut a’ widget a chur ris, bean ris is cùm e airson a dheasachadh agus ath-ghoirid eadar-dhealaichte a thaghadh.";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "Grad-ghnìomhan";
+
+/* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "Ath-ghoiridean Firefox";
+
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryDescriptionV2" = "Cuir ath-ghoiridean ris na tabaichean fosgailte agad.";
+
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "Grad-shealladh";
+
+/* Search in Firefox. Do not translate the word Firefox */
+"TodayWidget.SearchInFirefoxV2" = "Lorg ann am Firefox";
+
+/* Search in private tab */
+"TodayWidget.SearchInPrivateTabLabelV2" = "Lorg ann an taba prìobhaideach";
+
+/* Description for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryDescription" = "Cuir ath-ghoiridean ri làraichean air an tadhail thu gu tric no feadhainn air an do thadhail thu o chionn goirid.";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "Brod nan làrach";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "Ath-ghoiridean làraichean-lìn";
+

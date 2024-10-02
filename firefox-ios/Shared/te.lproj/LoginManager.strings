@@ -1,0 +1,63 @@
+/* Prompt title when deleting logins */
+"Are you sure?" = "మీరు నిశ్చయంగా వున్నారా?";
+
+/* Prompt option for cancelling out of deletion */
+"Cancel" = "రద్దుచేయి";
+
+/* Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode */
+"Clear Search" = "శోధనను క్లియర్ చేయి";
+
+/* Copy password text selection menu item */
+"Copy" = "కాపీ";
+
+/* Label describing when the current login was created with the timestamp as the parameter. */
+"Created %@" = "సృష్టించబడింది %@";
+
+/* Label for the button used to delete the current login. */
+"Delete" = "తొలగించు";
+
+/* Label for the button used to deselect all logins. */
+"Deselect All" = "అన్ని ఎంపికలను తీసివేయి";
+
+/* Accessibility label for entering search mode for logins */
+"Enter Search Mode" = "శోధన మోడ్ కి ఎంటర్";
+
+/* Hide password text selection menu item */
+"Hide" = "దాచు";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them */
+"Logins will be permanently removed." = "ప్రవేశాలు శాశ్వతంగా తొలగించబడతాయి.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"Logins will be removed from all connected devices." = "అనుసంధానమైన పరికరాలన్నిటి నుండీ ప్రవేశాలు తొలగించబడతాయి.";
+
+/* Label describing when the current login was last modified with the timestamp as the parameter. */
+"Modified %@" = "సవరించబడింది %@";
+
+/* Label displayed when no logins are found after searching. */
+"No logins found" = "ప్రవేశాలేమీ కనబడలేదు";
+
+/* Open and Fill website text selection menu item */
+"Open & Fill" = "తెరచి & పూరించుము";
+
+/* Label displayed above the password row in Login Detail View. */
+"Password" = "సంకేతపదం";
+
+/* Reveal password text selection menu item */
+"Reveal" = "బహిరంగపరచు";
+
+/* Title for the search field at the top of the Logins list screen */
+"Search" = "శోధన";
+
+/* Accessibility label for the search input field in the Logins list */
+"Search Input Field" = "శోధన ఇన్పుట్ ఫీల్డ్";
+
+/* Label for the button used to select all logins. */
+"Select All" = "అన్నిటిని ఎంపికచేయుము";
+
+/* Label displayed above the username row in Login Detail View. */
+"Username" = "వాడుకరి పేరు";
+
+/* Label displayed above the website row in Login Detail View. */
+"Website" = "వెబ్‌సైటు";
+
