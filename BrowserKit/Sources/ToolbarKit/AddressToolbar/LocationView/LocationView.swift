@@ -10,10 +10,8 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     private enum UX {
         static let horizontalSpace: CGFloat = 8
         static let gradientViewWidth: CGFloat = 40
-        static let searchEngineImageViewCornerRadius: CGFloat = 4
         static let iconContainerCornerRadius: CGFloat = 8
         static let lockIconImageViewSize = CGSize(width: 40, height: 24)
-        static let searchEngineImageViewSize = CGSize(width: 24, height: 24)
     }
 
     private var urlAbsolutePath: String?
@@ -56,29 +54,22 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     private var iconContainerStackViewLeadingConstraint: NSLayoutConstraint?
     private var lockIconWidthAnchor: NSLayoutConstraint?
 
+    // MARK: - Search Engine / Lock Image
     private lazy var iconContainerStackView: UIStackView = .build { view in
         view.axis = .horizontal
         view.alignment = .center
         view.distribution = .fill
     }
-
-    private lazy var searchEngineContentView: UIView = .build()
-
     private lazy var iconContainerBackgroundView: UIView = .build { view in
         view.layer.cornerRadius = UX.iconContainerCornerRadius
     }
-
-    private lazy var searchEngineImageView: UIImageView = .build { imageView in
-        imageView.contentMode = .scaleAspectFit
-        imageView.layer.cornerRadius = UX.searchEngineImageViewCornerRadius
-        imageView.isAccessibilityElement = true
-    }
-
+    private lazy var searchEngineContentView: SearchEngineView = .build()
     private lazy var lockIconButton: UIButton = .build { button in
         button.contentMode = .scaleAspectFit
         button.addTarget(self, action: #selector(self.didTapLockIcon), for: .touchUpInside)
     }
 
+    // MARK: - URL Text Field
     private lazy var urlTextField: LocationTextField = .build { [self] urlTextField in
         urlTextField.backgroundColor = .clear
         urlTextField.font = FXFontStyles.Regular.body.scaledFont()
@@ -118,7 +109,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     }
 
     func configure(_ state: LocationViewState, delegate: LocationViewDelegate, isUnifiedSearchEnabled: Bool) {
-        searchEngineImageView.image = state.searchEngineImage
+        searchEngineContentView.configure(state, delegate: delegate, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
         configureLockIconButton(state)
         configureURLTextField(state)
         configureA11y(state)
@@ -155,7 +146,6 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
 
         addSubviews(urlTextField, iconContainerStackView, gradientView)
         iconContainerStackView.addSubview(iconContainerBackgroundView)
-        searchEngineContentView.addSubview(searchEngineImageView)
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
 
         urlTextFieldLeadingConstraint = urlTextField.leadingAnchor.constraint(
@@ -179,15 +169,6 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
             iconContainerBackgroundView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor),
             iconContainerBackgroundView.leadingAnchor.constraint(lessThanOrEqualTo: urlTextField.leadingAnchor),
             iconContainerBackgroundView.trailingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor),
-
-            searchEngineImageView.heightAnchor.constraint(equalToConstant: UX.searchEngineImageViewSize.height),
-            searchEngineImageView.widthAnchor.constraint(equalToConstant: UX.searchEngineImageViewSize.width),
-            searchEngineImageView.leadingAnchor.constraint(equalTo: searchEngineContentView.leadingAnchor),
-            searchEngineImageView.trailingAnchor.constraint(equalTo: searchEngineContentView.trailingAnchor),
-            searchEngineImageView.topAnchor.constraint(greaterThanOrEqualTo: searchEngineContentView.topAnchor),
-            searchEngineImageView.bottomAnchor.constraint(lessThanOrEqualTo: searchEngineContentView.bottomAnchor),
-            searchEngineImageView.centerXAnchor.constraint(equalTo: searchEngineContentView.centerXAnchor),
-            searchEngineImageView.centerYAnchor.constraint(equalTo: searchEngineContentView.centerYAnchor),
 
             lockIconButton.heightAnchor.constraint(equalToConstant: UX.lockIconImageViewSize.height),
             lockIconButton.widthAnchor.constraint(equalToConstant: UX.lockIconImageViewSize.width),
@@ -401,11 +382,6 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         lockIconButton.accessibilityIdentifier = state.lockIconButtonA11yId
         lockIconButton.accessibilityLabel = state.lockIconButtonA11yLabel
 
-        searchEngineImageView.accessibilityIdentifier = state.searchEngineImageViewA11yId
-        searchEngineImageView.accessibilityLabel = state.searchEngineImageViewA11yLabel
-        searchEngineImageView.largeContentTitle = state.searchEngineImageViewA11yLabel
-        searchEngineImageView.largeContentImage = nil
-
         urlTextField.accessibilityIdentifier = state.urlTextFieldA11yId
         urlTextField.accessibilityLabel = state.urlTextFieldA11yLabel
     }
@@ -421,7 +397,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         urlTextFieldColor = colors.textPrimary
         urlTextFieldSubdomainColor = colors.textSecondary
         gradientLayer.colors = colors.layerGradientURL.cgColors.reversed()
-        searchEngineImageView.backgroundColor = colors.layer2
+        searchEngineContentView.applyTheme(theme: theme)
         iconContainerBackgroundView.backgroundColor = colors.layerSearch
         lockIconButton.tintColor = colors.iconPrimary
         lockIconButton.backgroundColor = colors.layerSearch
