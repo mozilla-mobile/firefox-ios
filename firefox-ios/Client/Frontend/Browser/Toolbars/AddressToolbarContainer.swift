@@ -38,7 +38,7 @@ final class AddressToolbarContainer: UIView,
     private var profile: Profile?
     private var model: AddressToolbarContainerModel?
     private(set) weak var delegate: AddressToolbarContainerDelegate?
-    private var isUnifiedSearchEnabled: Bool = false
+    private var isUnifiedSearchEnabled = false
 
     private var toolbar: BrowserAddressToolbar {
         return shouldDisplayCompact ? compactToolbar : regularToolbar

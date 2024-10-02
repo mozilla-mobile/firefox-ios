@@ -22,7 +22,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     private var onTapLockIcon: ((UIButton) -> Void)?
     private var onLongPress: (() -> Void)?
     private weak var delegate: LocationViewDelegate?
-    private var isUnifiedSearchEnabled: Bool = false
+    private var isUnifiedSearchEnabled = false
 
     private var isEditing = false
     private var isURLTextFieldEmpty: Bool {

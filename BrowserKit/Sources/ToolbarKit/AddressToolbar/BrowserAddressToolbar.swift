@@ -28,7 +28,7 @@ public class BrowserAddressToolbar: UIView, Notifiable, AddressToolbar, ThemeApp
     public var notificationCenter: any Common.NotificationProtocol = NotificationCenter.default
     private weak var toolbarDelegate: AddressToolbarDelegate?
     private var theme: Theme?
-    private var isUnifiedSearchEnabled: Bool = false
+    private var isUnifiedSearchEnabled = false
 
     private lazy var toolbarContainerView: UIView = .build()
     private lazy var navigationActionStack: UIStackView = .build()
