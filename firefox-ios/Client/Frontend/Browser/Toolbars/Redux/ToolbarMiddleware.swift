@@ -164,6 +164,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         case .menu:
             cancelEditMode(windowUUID: action.windowUUID)
 
+            recordTelemetry(event: .toolbarMenuButtonTap, state: state, windowUUID: action.windowUUID)
             let action = GeneralBrowserAction(buttonTapped: action.buttonTapped,
                                               windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showMenu)
