@@ -27,7 +27,6 @@ jobs:
                 sudo rm -rf /Applications/Xcode.app
                 sudo xcode-select -s /Applications/Xcode_${{ env.xcode_version }}.app/Contents/Developer
                 xcodebuild -version
-                df -h
                 ./checkout.sh
                 ./bootstrap.sh --force
             - name: Compile source code

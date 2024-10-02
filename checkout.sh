@@ -18,4 +18,5 @@ curl --proto '=https' --tlsv1.2 -sSf  https://raw.githubusercontent.com/mozilla/
 cd .. # Make sure we are at the root of the repo
 rm -rf shavar-prod-lists && git clone https://github.com/mozilla-services/shavar-prod-lists.git && git -C shavar-prod-lists checkout $SHAVAR_COMMIT_HASH
 
-(cd BrowserKit && swift run)
+cd BrowserKit
+swift run
