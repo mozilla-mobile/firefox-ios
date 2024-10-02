@@ -30,6 +30,7 @@ class MainMenuViewController: UIViewController,
 
     private let windowUUID: WindowUUID
     private var menuState: MainMenuState
+    private let logger: Logger
 
     var currentWindowUUID: UUID? { return windowUUID }
 
@@ -37,11 +38,13 @@ class MainMenuViewController: UIViewController,
     init(
         windowUUID: WindowUUID,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
-        themeManager: ThemeManager = AppContainer.shared.resolve()
+        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        logger: Logger = DefaultLogger.shared
     ) {
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
+        self.logger = logger
         menuState = MainMenuState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
 

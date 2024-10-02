@@ -75,10 +75,10 @@ struct MainMenuState: ScreenState, Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
-        guard let action = action as? MainMenuAction else { return state }
 
         switch action.actionType {
         case MainMenuActionType.updateCurrentTabInfo:
+            guard let action = action as? MainMenuAction else { return state }
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuConfigurator.generateMenuElements(
@@ -89,6 +89,7 @@ struct MainMenuState: ScreenState, Equatable {
                 currentTabInfo: action.currentTabInfo
             )
         case MainMenuActionType.showDetailsView:
+            guard let action = action as? MainMenuAction else { return state }
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
@@ -96,6 +97,7 @@ struct MainMenuState: ScreenState, Equatable {
                 submenuDestination: action.detailsViewToShow
             )
         case MainMenuActionType.closeMenuAndNavigateToDestination:
+            guard let action = action as? MainMenuAction else { return state }
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,

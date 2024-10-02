@@ -30,7 +30,8 @@ class MainMenuDetailsViewController: UIViewController,
     init(
         windowUUID: WindowUUID,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
-        themeManager: ThemeManager = AppContainer.shared.resolve()
+        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        logger: Logger = DefaultLogger.shared
     ) {
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
@@ -66,16 +67,6 @@ class MainMenuDetailsViewController: UIViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyTheme()
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        store.dispatch(
-            MainMenuAction(
-                windowUUID: self.windowUUID,
-                actionType: MainMenuDetailsActionType.viewDidDisappear
-            )
-        )
     }
 
     // MARK: Notifications
