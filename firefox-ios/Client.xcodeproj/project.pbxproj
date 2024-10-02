@@ -75,7 +75,6 @@
 		0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF1B7E21AC60DEA00A7B407 /* InsetButton.swift */; };
 		0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */ = {isa = PBXBuildFile; fileRef = 0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */; };
 		158241282820698B00956B39 /* RustRemoteTabsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 158241272820698B00956B39 /* RustRemoteTabsTests.swift */; };
-		15DE98FD27FCED4F00F1ECDB /* RustRemoteTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15DE98FC27FCED4F00F1ECDB /* RustRemoteTabs.swift */; };
 		1BE7A4902C636AC800460798 /* URLSession+sharedMPTCP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE7A48F2C636AC800460798 /* URLSession+sharedMPTCP.swift */; };
 		1BE7A4922C636AEA00460798 /* URLSessionConfiguration+defaultMPTCP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BE7A4912C636AEA00460798 /* URLSessionConfiguration+defaultMPTCP.swift */; };
 		1D06AE6624FEE4D5000B092B /* TopSitesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D06AE6524FEE4D5000B092B /* TopSitesProvider.swift */; };
@@ -327,9 +326,6 @@
 		3D9CA9841EF456A8002434DD /* NightModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9CA9831EF456A8002434DD /* NightModeTests.swift */; };
 		3D9CAA1C1EFCD655002434DD /* ClipBoardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9CAA1B1EFCD655002434DD /* ClipBoardTests.swift */; };
 		3DEFED081F55EBE300F8620C /* TrackingProtectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEFED071F55EBE300F8620C /* TrackingProtectionTests.swift */; };
-		43079D1F2C85D3BB0047C28D /* Bookmarks.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43079D1D2C85D3BB0047C28D /* Bookmarks.strings */; };
-		43079D232C85D3BB0047C28D /* MainMenu.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43079D212C85D3BB0047C28D /* MainMenu.strings */; };
-		4308A4E62A52E38C001D652E /* SelectCreditCard.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4308A4E42A52E38C001D652E /* SelectCreditCard.strings */; };
 		43118CF3251A9CCA00F24376 /* LegacyTabDataRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA3CE5E24EEE7C600422BB2 /* LegacyTabDataRetriever.swift */; };
 		43118D07251A9CD100F24376 /* LegacySavedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D3821103EAE00F25400 /* LegacySavedTab.swift */; };
 		43162A2F2492DB7800F91658 /* EmptyPrivateTabsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43162A2E2492DB7800F91658 /* EmptyPrivateTabsView.swift */; };
@@ -337,25 +333,17 @@
 		43175DB826B87D2C00C41C31 /* AdsTelemetryHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43175DB726B87D2C00C41C31 /* AdsTelemetryHelper.swift */; };
 		431C0CA925C890E500395CE4 /* DefaultBrowserOnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431C0CA825C890E500395CE4 /* DefaultBrowserOnboardingViewModel.swift */; };
 		431C0D1E25C9DC4D00395CE4 /* DefaultBrowserOnboardingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431C0D1D25C9DC4D00395CE4 /* DefaultBrowserOnboardingTests.swift */; };
-		431F0C4A2AC1A112006D7D49 /* TabLocation.strings in Resources */ = {isa = PBXBuildFile; fileRef = 431F0C482AC1A112006D7D49 /* TabLocation.strings */; };
 		432BD0242790EBD000A0F3C3 /* Adjust in Frameworks */ = {isa = PBXBuildFile; productRef = 432BD0232790EBD000A0F3C3 /* Adjust */; };
-		432C01582B83900600392A88 /* KeyboardAccessory.strings in Resources */ = {isa = PBXBuildFile; fileRef = 432C01562B83900600392A88 /* KeyboardAccessory.strings */; };
 		4331A9BB27193DF0005E8080 /* ContextualHintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4331A9BA27193DEF005E8080 /* ContextualHintViewController.swift */; };
 		4331A9BD271D267E005E8080 /* ContextualHintViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4331A9BC271D267E005E8080 /* ContextualHintViewProvider.swift */; };
 		4331D3EF2A059C1C00542BDD /* SyncContentSettingsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4331D3EE2A059C1C00542BDD /* SyncContentSettingsViewControllerTests.swift */; };
 		433396C827ACE92500491049 /* LegacyInactiveTabButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433396C727ACE92500491049 /* LegacyInactiveTabButton.swift */; };
 		4336FAD2264B169000A6B076 /* WebcompatAllFramesAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = 4336FAD1264B169000A6B076 /* WebcompatAllFramesAtDocumentStart.js */; };
-		433BADA029C8769800E34991 /* BiometricAuthentication.strings in Resources */ = {isa = PBXBuildFile; fileRef = 433BAD9E29C8769800E34991 /* BiometricAuthentication.strings */; };
-		433BADA429C8769800E34991 /* ErrorState.strings in Resources */ = {isa = PBXBuildFile; fileRef = 433BADA229C8769800E34991 /* ErrorState.strings */; };
 		433F87D02788ECDD00693368 /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 433F87CF2788ECDD00693368 /* GCDWebServers */; };
 		433F87D52788F01500693368 /* KIF in Frameworks */ = {isa = PBXBuildFile; productRef = 433F87D42788F01500693368 /* KIF */; };
 		43446CF02412DDBE00F5C643 /* UpdateViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43446CEF2412DDBE00F5C643 /* UpdateViewModelTests.swift */; };
-		4344BD7D2AEFC6490057F642 /* Shopping.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4344BD7B2AEFC6490057F642 /* Shopping.strings */; };
 		4345441D26D2E52600D5EEAA /* SearchTermGroupsUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4345441C26D2E52600D5EEAA /* SearchTermGroupsUtility.swift */; };
 		4346FF08295BA6A300F4D220 /* CreditCardSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4346FF07295BA6A200F4D220 /* CreditCardSettingsViewController.swift */; };
-		434707692C85D3DA009585F0 /* SuggestedSites.strings in Resources */ = {isa = PBXBuildFile; fileRef = 434707672C85D3DA009585F0 /* SuggestedSites.strings */; };
-		43470D0828B39AF80034F500 /* JumpBackIn.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43470D0628B39AF80034F500 /* JumpBackIn.strings */; };
-		43470D0B28B39AF80034F500 /* ToolbarLocation.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43470D0928B39AF80034F500 /* ToolbarLocation.strings */; };
 		4347B398298D6D7B0045F677 /* CreditCardTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4347B397298D6D7B0045F677 /* CreditCardTableViewModel.swift */; };
 		4347B39A298DA5BB0045F677 /* CreditCardInputViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4347B399298DA5BB0045F677 /* CreditCardInputViewModel.swift */; };
 		434CD57829F6FC4500A0D04B /* MockAppAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434CD57729F6FC4500A0D04B /* MockAppAuthenticator.swift */; };
@@ -363,53 +351,24 @@
 		435C85F02788F4D00072B526 /* Glean in Frameworks */ = {isa = PBXBuildFile; productRef = 435C85EF2788F4D00072B526 /* Glean */; };
 		435D660523D794B90046EFA2 /* UpdateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D660423D794B90046EFA2 /* UpdateViewModel.swift */; };
 		435D7CC5246209AA0043ACB9 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D7CC4246209AA0043ACB9 /* IntroViewController.swift */; };
-		4369B8812B0B75A8003791B9 /* FirefoxHomepage.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4369B87F2B0B75A8003791B9 /* FirefoxHomepage.strings */; };
-		436E0E152BA857AB00D01C1A /* BottomSheet.strings in Resources */ = {isa = PBXBuildFile; fileRef = 436E0E132BA857AB00D01C1A /* BottomSheet.strings */; };
-		43737CB329E4259700847A6F /* Edit Card.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43737CB129E4259700847A6F /* Edit Card.strings */; };
-		4378C734293E09C200D0C1C7 /* Alerts.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4378C732293E09C200D0C1C7 /* Alerts.strings */; };
-		4378C737293E09C200D0C1C7 /* TabsTray.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4378C735293E09C200D0C1C7 /* TabsTray.strings */; };
 		437A857827E43FE100E42764 /* FxAWebViewTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A857727E43FE100E42764 /* FxAWebViewTelemetry.swift */; };
 		437A9B682681256800FB41C1 /* LegacyInactiveTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A9B672681256800FB41C1 /* LegacyInactiveTabCell.swift */; };
 		437A9B6A2681257F00FB41C1 /* LegacyInactiveTabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437A9B692681257F00FB41C1 /* LegacyInactiveTabViewModel.swift */; };
-		437AE3102C7C9A0C0053F7F3 /* NativeErrorPage.strings in Resources */ = {isa = PBXBuildFile; fileRef = 437AE30E2C7C9A0C0053F7F3 /* NativeErrorPage.strings */; };
 		438FE8642988ABA600155B10 /* CreditCardTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438FE8632988ABA600155B10 /* CreditCardTableViewController.swift */; };
-		43903A892C20502A00ACF76E /* ActivityStream.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43903A872C20502A00ACF76E /* ActivityStream.strings */; };
-		43903A8C2C20502A00ACF76E /* AddressToolbar.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43903A8A2C20502A00ACF76E /* AddressToolbar.strings */; };
-		43903A8F2C20502A00ACF76E /* EnhancedTrackingProtection.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43903A8D2C20502A00ACF76E /* EnhancedTrackingProtection.strings */; };
-		43903A922C20502A00ACF76E /* QRCode.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43903A902C20502A00ACF76E /* QRCode.strings */; };
 		4392FB48252EC50400AD3D23 /* InternalSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC486982195F46A00CDA48D /* InternalSchemeHandler.swift */; };
 		4392FB5C252EC51E00AD3D23 /* PrivilegedRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31CF65B1CC1959A001D0BD0 /* PrivilegedRequest.swift */; };
-		43937C2029BA686000074633 /* EngagementNotification.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43937C1E29BA686000074633 /* EngagementNotification.strings */; };
-		43937C2329BA686000074633 /* Onboarding.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43937C2129BA686000074633 /* Onboarding.strings */; };
-		43937C2629BA686000074633 /* ResearchSurface.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43937C2429BA686000074633 /* ResearchSurface.strings */; };
 		4393932029AC6CE900DC5A85 /* EnvironmentValues+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4393931F29AC6CE900DC5A85 /* EnvironmentValues+Extension.swift */; };
-		439A220F29F69A0C00F120EE /* Notification.strings in Resources */ = {isa = PBXBuildFile; fileRef = 439A220D29F69A0C00F120EE /* Notification.strings */; };
-		439A221229F69A0C00F120EE /* ZoomPageBar.strings in Resources */ = {isa = PBXBuildFile; fileRef = 439A221029F69A0C00F120EE /* ZoomPageBar.strings */; };
 		439B78182A09721600CAAE37 /* FormAutofillHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439B78172A09721600CAAE37 /* FormAutofillHelperTests.swift */; };
 		439C489C29760575007C3DCD /* CreditCardValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439C489B29760575007C3DCD /* CreditCardValidator.swift */; };
 		43A5643823CD1E1C00B6857D /* UpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A5643523CD1E1B00B6857D /* UpdateViewController.swift */; };
-		43A7153D2A2DF94F00DD5747 /* Footer.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43A7153B2A2DF94F00DD5747 /* Footer.strings */; };
-		43A715402A2DF94F00DD5747 /* RememberCard.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43A7153E2A2DF94F00DD5747 /* RememberCard.strings */; };
-		43A715432A2DF94F00DD5747 /* UpdateCard.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43A715412A2DF94F00DD5747 /* UpdateCard.strings */; };
-		43A878172B838FF90039D6B7 /* PasswordAutofill.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43A878152B838FF90039D6B7 /* PasswordAutofill.strings */; };
 		43A878FC27AB498E0071C372 /* MozillaAppServices in Frameworks */ = {isa = PBXBuildFile; productRef = 43A878FB27AB498E0071C372 /* MozillaAppServices */; };
 		43AB6FA225DC53D30016B015 /* GoogleTopSiteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6F9C25DC53D20016B015 /* GoogleTopSiteManager.swift */; };
 		43AB6FA425DC53D30016B015 /* LabelButtonHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6F9E25DC53D20016B015 /* LabelButtonHeaderView.swift */; };
-		43B296312B305F1E00A5AA9B /* ContextualHints.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43B2962F2B305F1E00A5AA9B /* ContextualHints.strings */; };
-		43B296342B305F1E00A5AA9B /* CredentialProvider.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43B296322B305F1E00A5AA9B /* CredentialProvider.strings */; };
-		43B296372B305F1E00A5AA9B /* Credentials.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43B296352B305F1E00A5AA9B /* Credentials.strings */; };
-		43B2963A2B305F1E00A5AA9B /* FirefoxLogins.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43B296382B305F1E00A5AA9B /* FirefoxLogins.strings */; };
-		43B2963D2B305F1E00A5AA9B /* LoginsHelper.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43B2963B2B305F1E00A5AA9B /* LoginsHelper.strings */; };
-		43B520E42B55493E00007187 /* TabToolbar.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43B520E22B55493E00007187 /* TabToolbar.strings */; };
-		43B627762C3C001E00A188E8 /* ScanQRCode.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43B627742C3C001E00A188E8 /* ScanQRCode.strings */; };
 		43B658D929CE251C00C9EF08 /* CreditCardInputViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B658D829CE251C00C9EF08 /* CreditCardInputViewModelTests.swift */; };
-		43B966AF2BE8F11D007448EA /* Microsurvey.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43B966AD2BE8F11D007448EA /* Microsurvey.strings */; };
 		43BDBBFE2752FA8600254DE4 /* LegacyTabCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43BDBBFD2752FA8600254DE4 /* LegacyTabCell.swift */; };
 		43BE5816278BE53E00491291 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
 		43BE5825278BE7EF00491291 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
 		43BE5827278BE81500491291 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
-		43C50B502A0BCAA800C6A134 /* FirefoxSync.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43C50B4E2A0BCAA800C6A134 /* FirefoxSync.strings */; };
-		43C50B532A0BCAA800C6A134 /* Upgrade.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43C50B512A0BCAA800C6A134 /* Upgrade.strings */; };
 		43C6A47F27A0679300C79856 /* MappaMundi in Frameworks */ = {isa = PBXBuildFile; productRef = 43C6A47E27A0679300C79856 /* MappaMundi */; };
 		43D00493296FC48F00CB0F31 /* CreditCardSettingsEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D00492296FC48F00CB0F31 /* CreditCardSettingsEmptyView.swift */; };
 		43D16B7A29831C7F009F8279 /* CreditCardAutofillToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D16B7929831C7F009F8279 /* CreditCardAutofillToggle.swift */; };
@@ -418,26 +377,15 @@
 		43D16B8229831E6A009F8279 /* CreditCardInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D16B8129831E6A009F8279 /* CreditCardInputField.swift */; };
 		43D16B8529831EA5009F8279 /* Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D16B8429831EA5009F8279 /* Style.swift */; };
 		43D16B8729831EEF009F8279 /* RemoveCardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D16B8629831EEF009F8279 /* RemoveCardButton.swift */; };
-		43D3ED982C3BFFC900E33D46 /* EditAddress.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43D3ED962C3BFFC900E33D46 /* EditAddress.strings */; };
 		43D4BCBA2972082400775FB5 /* CreditCardSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D4BCB92972082400775FB5 /* CreditCardSettingsViewModel.swift */; };
 		43D6D6A327E535FF00F47485 /* FxALoginRegistrationTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43D6D6A127E535EE00F47485 /* FxALoginRegistrationTelemetryTests.swift */; };
-		43D75D1A2AC1A16900D1DE87 /* Share.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43D75D182AC1A16900D1DE87 /* Share.strings */; };
 		43DB9784292D6846002E0B9F /* ShareButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DB9783292D6846002E0B9F /* ShareButton.swift */; };
-		43DC75A72A24BE73007C2BCE /* DisplayCard.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43DC75A52A24BE73007C2BCE /* DisplayCard.strings */; };
-		43DF945A292258C300590FE3 /* SearchHeaderTitle.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43DF9458292258C300590FE3 /* SearchHeaderTitle.strings */; };
-		43E168932CA183A400E67516 /* PasswordGenerator.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43E168912CA183A400E67516 /* PasswordGenerator.strings */; };
 		43E69EC3254D081D00B591C2 /* SimpleTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E69EAF254D064E00B591C2 /* SimpleTab.swift */; };
 		43E69ED7254D081F00B591C2 /* SimpleTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E69EAF254D064E00B591C2 /* SimpleTab.swift */; };
-		43E6BE162C57AF7600C2152C /* Toolbar.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43E6BE142C57AF7600C2152C /* Toolbar.strings */; };
-		43F119002A52E42400C44C6C /* CustomizeFirefoxHome.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43F118FE2A52E42400C44C6C /* CustomizeFirefoxHome.strings */; };
 		43F7952525795F69005AEE40 /* SearchTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43F7952425795F69005AEE40 /* SearchTelemetry.swift */; };
 		43F92B3829E9F52B000C0F17 /* AutofillAllFramesAtDocumentStart.js in Resources */ = {isa = PBXBuildFile; fileRef = 43F92B3729E9F52B000C0F17 /* AutofillAllFramesAtDocumentStart.js */; };
 		43F93C2427A8681C009833D9 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
 		43F93C2827A8683E009833D9 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
-		43FA499A29C875C0005062DB /* Alert.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43FA499829C875C0005062DB /* Alert.strings */; };
-		43FA499D29C875C0005062DB /* EditCard.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43FA499B29C875C0005062DB /* EditCard.strings */; };
-		43FA49A029C875C0005062DB /* Settings.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43FA499E29C875C0005062DB /* Settings.strings */; };
-		43FA49A329C875C0005062DB /* SnackBar.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43FA49A129C875C0005062DB /* SnackBar.strings */; };
 		4590912E2A2E4F7700061F0C /* AutopushTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4590912D2A2E4F7700061F0C /* AutopushTests.swift */; };
 		4590912F2A2E558000061F0C /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
 		45D5EDA729269F7500311934 /* DataObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D5EDA629269F7500311934 /* DataObserver.swift */; };
@@ -1373,29 +1321,9 @@
 		D51EA5BA26406A0000334331 /* ExperimentsBranchesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D51EA5B926406A0000334331 /* ExperimentsBranchesViewController.swift */; };
 		D51EA5CF26406D8300334331 /* ExperimentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D51EA5CE26406D8300334331 /* ExperimentsViewController.swift */; };
 		D525DFB325FBE5E000B18763 /* TabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D525DFB225FBE5E000B18763 /* TabTests.swift */; };
-		D58A202925C9D96400105D25 /* BookmarkPanel.strings in Resources */ = {isa = PBXBuildFile; fileRef = D58A202725C9D96400105D25 /* BookmarkPanel.strings */; };
 		D58A202C25C9D96400105D25 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D58A202A25C9D96400105D25 /* Localizable.strings */; };
-		D58A202F25C9D96400105D25 /* BookmarkPanelDeleteConfirm.strings in Resources */ = {isa = PBXBuildFile; fileRef = D58A202D25C9D96400105D25 /* BookmarkPanelDeleteConfirm.strings */; };
 		D59431ED25E9912900F0BA82 /* WidgetIntents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = D59431F025E9912900F0BA82 /* WidgetIntents.intentdefinition */; };
 		D59431EE25E9912900F0BA82 /* WidgetIntents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = D59431F025E9912900F0BA82 /* WidgetIntents.intentdefinition */; };
-		D59643E325C9B8E000EAB8B9 /* ClearPrivateData.strings in Resources */ = {isa = PBXBuildFile; fileRef = 58E14A8F991610DB13A9F1E1 /* ClearPrivateData.strings */; };
-		D59643E425C9B8E000EAB8B9 /* 3DTouchActions.strings in Resources */ = {isa = PBXBuildFile; fileRef = 514A4C83AE17612AF3025498 /* 3DTouchActions.strings */; };
-		D59643E525C9B8E000EAB8B9 /* AuthenticationManager.strings in Resources */ = {isa = PBXBuildFile; fileRef = 32484895B328A342AED539C8 /* AuthenticationManager.strings */; };
-		D59643E625C9B8E000EAB8B9 /* LoginManager.strings in Resources */ = {isa = PBXBuildFile; fileRef = 99C94644BBAAC6B90043899F /* LoginManager.strings */; };
-		D59643E725C9B8E000EAB8B9 /* Intro.strings in Resources */ = {isa = PBXBuildFile; fileRef = 99C54F4F8354A39A0F06511F /* Intro.strings */; };
-		D59643E825C9B8E000EAB8B9 /* Default Browser.strings in Resources */ = {isa = PBXBuildFile; fileRef = 968645798276FD71A15F01E5 /* Default Browser.strings */; };
-		D59643E925C9B8E000EAB8B9 /* Menu.strings in Resources */ = {isa = PBXBuildFile; fileRef = 05014FF0A3822CA5C103E9C9 /* Menu.strings */; };
-		D59643EA25C9B8E000EAB8B9 /* HistoryPanel.strings in Resources */ = {isa = PBXBuildFile; fileRef = 67AF4B8392ADBAA41F1B3AD0 /* HistoryPanel.strings */; };
-		D59643EB25C9B8E000EAB8B9 /* ClearHistoryConfirm.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4822451299E114F04F3EFAB0 /* ClearHistoryConfirm.strings */; };
-		D59643EC25C9B8E000EAB8B9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7401461DBA6DB88F82931350 /* Localizable.strings */; };
-		D59643ED25C9B8E000EAB8B9 /* FindInPage.strings in Resources */ = {isa = PBXBuildFile; fileRef = AC44428AA48BA072E576E062 /* FindInPage.strings */; };
-		D59643EE25C9B8E000EAB8B9 /* Search.strings in Resources */ = {isa = PBXBuildFile; fileRef = AA3047F884B6BA22989FD627 /* Search.strings */; };
-		D59643EF25C9B8E000EAB8B9 /* PrivateBrowsing.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8DFA42FBB7C25AC38ACEEA0D /* PrivateBrowsing.strings */; };
-		D59643F025C9B8E000EAB8B9 /* ClearPrivateDataConfirm.strings in Resources */ = {isa = PBXBuildFile; fileRef = F0D8481DAC1E6378ABF1565A /* ClearPrivateDataConfirm.strings */; };
-		D59643F125C9B8E000EAB8B9 /* ErrorPages.strings in Resources */ = {isa = PBXBuildFile; fileRef = 904F48CABE595981535FCCEB /* ErrorPages.strings */; };
-		D59643F225C9B8E000EAB8B9 /* Shared.strings in Resources */ = {isa = PBXBuildFile; fileRef = 064741F8AE308A64808E6265 /* Shared.strings */; };
-		D59643F325C9B8E000EAB8B9 /* Storage.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9403451493EE3ADAAEFA2EB1 /* Storage.strings */; };
-		D59643F425C9B8E000EAB8B9 /* Today.strings in Resources */ = {isa = PBXBuildFile; fileRef = 21374EEAA2C69079F77A0AC3 /* Today.strings */; };
 		D5D052D92645ABF400759F85 /* ExperimentsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D052D82645ABF400759F85 /* ExperimentsSettingsView.swift */; };
 		D5D0532E2645B3A700759F85 /* ExperimentsTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D0532D2645B3A700759F85 /* ExperimentsTableView.swift */; };
 		D5D237782640BBA600326204 /* ExperimentsSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D237772640BBA600326204 /* ExperimentsSettingsViewController.swift */; };
@@ -1715,13 +1643,6 @@
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
 		};
-		2F14E1331ABB88CF00FF98DB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
-			remoteInfo = Shared;
-		};
 		2FCAE2281ABB51F800877008 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -1750,13 +1671,6 @@
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
 		};
-		43118CDE251A9CAD00F24376 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
-			remoteInfo = Shared;
-		};
 		435A2FF6278F51CD00C94282 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -1778,20 +1692,6 @@
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
 		};
-		D09A0CF01FAA2C7E009A0273 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
-			remoteInfo = Shared;
-		};
-		D0EA58161FA836D200D03ED1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
-			remoteInfo = Shared;
-		};
 		D39FA1651A83E0EC00EE869C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -1806,13 +1706,6 @@
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
 		};
-		E63CD1B11B31B66400A63AFF /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
-			remoteInfo = Shared;
-		};
 		E63CD1B21B31B66400A63AFF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -1826,13 +1719,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
-		};
-		F8324AF82649B540007E4BFA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
-			remoteInfo = Shared;
 		};
 		F84B21D41A090F8100AAB793 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1863,16 +1749,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		1B0DFD2C274857350008EB0A /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4368F838279665E00013419B /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
@@ -1991,6 +1867,78 @@
 		0B62EFD11AD63CD100ACB9CD /* Clearables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Clearables.swift; sourceTree = "<group>"; };
 		0B6FBAB11AC1F830007EC669 /* numberedPage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = numberedPage.html; sourceTree = "<group>"; };
 		0B7C1E941F6097AD006A8869 /* TrackingProtectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionTests.swift; sourceTree = "<group>"; };
+		0B8314482CAD95A400470398 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0B83144B2CAD95BB00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/BookmarkPanel.strings"; sourceTree = "<group>"; };
+		0B83144D2CAD95BB00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/RememberCard.strings"; sourceTree = "<group>"; };
+		0B83144F2CAD95BB00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/NativeErrorPage.strings"; sourceTree = "<group>"; };
+		0B8314512CAD95BB00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/SuggestedSites.strings"; sourceTree = "<group>"; };
+		0B8314532CAD95BB00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/ResearchSurface.strings"; sourceTree = "<group>"; };
+		0B8314552CAD95BB00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Alerts.strings"; sourceTree = "<group>"; };
+		0B8314572CAD95BB00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/TabToolbar.strings"; sourceTree = "<group>"; };
+		0B8314592CAD95BC00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/UpdateCard.strings"; sourceTree = "<group>"; };
+		0B83145B2CAD95BC00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Share.strings"; sourceTree = "<group>"; };
+		0B83145D2CAD95BC00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Shopping.strings"; sourceTree = "<group>"; };
+		0B83145F2CAD95BC00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/BottomSheet.strings"; sourceTree = "<group>"; };
+		0B8314612CAD95BC00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/CustomizeFirefoxHome.strings"; sourceTree = "<group>"; };
+		0B8314632CAD95BC00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/MainMenu.strings"; sourceTree = "<group>"; };
+		0B8314652CAD95BC00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/ScanQRCode.strings"; sourceTree = "<group>"; };
+		0B8314672CAD95BC00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/EngagementNotification.strings"; sourceTree = "<group>"; };
+		0B8314692CAD95BD00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/FirefoxLogins.strings"; sourceTree = "<group>"; };
+		0B83146B2CAD95BD00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Edit Card.strings"; sourceTree = "<group>"; };
+		0B83146D2CAD95BD00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/DisplayCard.strings"; sourceTree = "<group>"; };
+		0B83146F2CAD95BD00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/FirefoxHomepage.strings"; sourceTree = "<group>"; };
+		0B8314712CAD95BD00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/TabsTray.strings"; sourceTree = "<group>"; };
+		0B8314732CAD95BD00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/ErrorState.strings"; sourceTree = "<group>"; };
+		0B8314752CAD95BD00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Microsurvey.strings"; sourceTree = "<group>"; };
+		0B8314772CAD95BD00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/ZoomPageBar.strings"; sourceTree = "<group>"; };
+		0B8314792CAD95BE00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Settings.strings"; sourceTree = "<group>"; };
+		0B83147B2CAD95BE00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Onboarding.strings"; sourceTree = "<group>"; };
+		0B83147D2CAD95BE00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/KeyboardAccessory.strings"; sourceTree = "<group>"; };
+		0B83147F2CAD95BE00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Alert.strings"; sourceTree = "<group>"; };
+		0B8314812CAD95BE00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/CredentialProvider.strings"; sourceTree = "<group>"; };
+		0B8314832CAD95BE00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/PasswordAutofill.strings"; sourceTree = "<group>"; };
+		0B8314852CAD95BE00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Upgrade.strings"; sourceTree = "<group>"; };
+		0B8314872CAD95BE00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/EditCard.strings"; sourceTree = "<group>"; };
+		0B8314892CAD95BF00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/SelectCreditCard.strings"; sourceTree = "<group>"; };
+		0B83148B2CAD95BF00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/EditAddress.strings"; sourceTree = "<group>"; };
+		0B83148D2CAD95BF00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/PasswordGenerator.strings"; sourceTree = "<group>"; };
+		0B83148F2CAD95BF00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Credentials.strings"; sourceTree = "<group>"; };
+		0B8314912CAD95BF00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/QRCode.strings"; sourceTree = "<group>"; };
+		0B8314932CAD95BF00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Footer.strings"; sourceTree = "<group>"; };
+		0B8314952CAD95BF00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/ContextualHints.strings"; sourceTree = "<group>"; };
+		0B8314972CAD95BF00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/TabLocation.strings"; sourceTree = "<group>"; };
+		0B8314992CAD95BF00470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Bookmarks.strings"; sourceTree = "<group>"; };
+		0B83149B2CAD95C000470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/ToolbarLocation.strings"; sourceTree = "<group>"; };
+		0B83149D2CAD95C000470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/JumpBackIn.strings"; sourceTree = "<group>"; };
+		0B83149F2CAD95C000470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/BookmarkPanelDeleteConfirm.strings"; sourceTree = "<group>"; };
+		0B8314A12CAD95C000470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/SnackBar.strings"; sourceTree = "<group>"; };
+		0B8314A32CAD95C000470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/EnhancedTrackingProtection.strings"; sourceTree = "<group>"; };
+		0B8314A52CAD95C000470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/AddressToolbar.strings"; sourceTree = "<group>"; };
+		0B8314A72CAD95C000470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/LoginsHelper.strings"; sourceTree = "<group>"; };
+		0B8314A92CAD95C000470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Toolbar.strings"; sourceTree = "<group>"; };
+		0B8314AB2CAD95C100470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/ActivityStream.strings"; sourceTree = "<group>"; };
+		0B8314AD2CAD95C100470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/FirefoxSync.strings"; sourceTree = "<group>"; };
+		0B8314AF2CAD95C100470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/BiometricAuthentication.strings"; sourceTree = "<group>"; };
+		0B8314B12CAD95C100470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/SearchHeaderTitle.strings"; sourceTree = "<group>"; };
+		0B8314B32CAD95C100470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Notification.strings"; sourceTree = "<group>"; };
+		0B8314EA2CAD95D000470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Storage.strings"; sourceTree = "<group>"; };
+		0B8314EC2CAD95D000470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/3DTouchActions.strings"; sourceTree = "<group>"; };
+		0B8314EE2CAD95D000470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/AuthenticationManager.strings"; sourceTree = "<group>"; };
+		0B8314F02CAD95D000470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/HistoryPanel.strings"; sourceTree = "<group>"; };
+		0B8314F22CAD95D000470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Search.strings"; sourceTree = "<group>"; };
+		0B8314F42CAD95D000470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Shared.strings"; sourceTree = "<group>"; };
+		0B8314F62CAD95D100470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Today.strings"; sourceTree = "<group>"; };
+		0B8314F82CAD95D100470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Default Browser.strings"; sourceTree = "<group>"; };
+		0B8314FA2CAD95D100470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/FindInPage.strings"; sourceTree = "<group>"; };
+		0B8314FC2CAD95D100470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Intro.strings"; sourceTree = "<group>"; };
+		0B8314FE2CAD95D100470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/ClearPrivateDataConfirm.strings"; sourceTree = "<group>"; };
+		0B8315002CAD95D100470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/ErrorPages.strings"; sourceTree = "<group>"; };
+		0B8315022CAD95D100470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Menu.strings"; sourceTree = "<group>"; };
+		0B8315042CAD95D200470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
+		0B8315062CAD95D200470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/ClearHistoryConfirm.strings"; sourceTree = "<group>"; };
+		0B8315082CAD95D200470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/ClearPrivateData.strings"; sourceTree = "<group>"; };
+		0B83150A2CAD95D200470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/LoginManager.strings"; sourceTree = "<group>"; };
+		0B83150C2CAD95D200470398 /* en-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-CA"; path = "en-CA.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		0B8749EB891EE229EA88FEF3 /* kn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kn; path = kn.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		0B8E0FF31A932BD500161DC3 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		0B98487A9E51F379857B3592 /* hi-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hi-IN"; path = "hi-IN.lproj/ErrorPages.strings"; sourceTree = "<group>"; };
@@ -2356,7 +2304,6 @@
 		286A45718E32C083A2250399 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/HistoryPanel.strings"; sourceTree = "<group>"; };
 		286F40A1B7B01044DA1C1D82 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		28786E541AB0F5FA009EA9EF /* DeferredTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeferredTests.swift; sourceTree = "<group>"; };
-		288A2D861AB8B3260023ABC3 /* LegacyShared.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LegacyShared.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2891F2BA1F991185001B105E /* v33.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = v33.db; sourceTree = "<group>"; };
 		289A4C121C4EB90600A460E3 /* StorageTestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorageTestUtils.swift; sourceTree = "<group>"; };
 		28A14F2AA37EE3FB2C1411C4 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/Storage.strings"; sourceTree = "<group>"; };
@@ -8687,13 +8634,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		288A2D821AB8B3260023ABC3 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		28CE83DE1A1D1E7C00576538 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -8887,6 +8827,67 @@
 				047F9B3A24E1FF4000CD7DF7 /* SearchQuickLinks.swift */,
 			);
 			path = SearchQuickLinksMedium;
+			sourceTree = "<group>";
+		};
+		0B8314472CAD957F00470398 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				0B8314AA2CAD95C100470398 /* ActivityStream.strings */,
+				0B8314A42CAD95C000470398 /* AddressToolbar.strings */,
+				0B83147E2CAD95BE00470398 /* Alert.strings */,
+				0B8314542CAD95BB00470398 /* Alerts.strings */,
+				0B8314AE2CAD95C100470398 /* BiometricAuthentication.strings */,
+				0B83144A2CAD95BB00470398 /* BookmarkPanel.strings */,
+				0B83149E2CAD95C000470398 /* BookmarkPanelDeleteConfirm.strings */,
+				0B8314982CAD95BF00470398 /* Bookmarks.strings */,
+				0B83145E2CAD95BC00470398 /* BottomSheet.strings */,
+				0B8314942CAD95BF00470398 /* ContextualHints.strings */,
+				0B8314802CAD95BE00470398 /* CredentialProvider.strings */,
+				0B83148E2CAD95BF00470398 /* Credentials.strings */,
+				0B8314602CAD95BC00470398 /* CustomizeFirefoxHome.strings */,
+				0B83146C2CAD95BD00470398 /* DisplayCard.strings */,
+				0B83146A2CAD95BD00470398 /* Edit Card.strings */,
+				0B83148A2CAD95BF00470398 /* EditAddress.strings */,
+				0B8314862CAD95BE00470398 /* EditCard.strings */,
+				0B8314662CAD95BC00470398 /* EngagementNotification.strings */,
+				0B8314A22CAD95C000470398 /* EnhancedTrackingProtection.strings */,
+				0B8314722CAD95BD00470398 /* ErrorState.strings */,
+				0B83146E2CAD95BD00470398 /* FirefoxHomepage.strings */,
+				0B8314682CAD95BD00470398 /* FirefoxLogins.strings */,
+				0B8314AC2CAD95C100470398 /* FirefoxSync.strings */,
+				0B8314922CAD95BF00470398 /* Footer.strings */,
+				0B83149C2CAD95C000470398 /* JumpBackIn.strings */,
+				0B83147C2CAD95BE00470398 /* KeyboardAccessory.strings */,
+				0B8314A62CAD95C000470398 /* LoginsHelper.strings */,
+				0B8314622CAD95BC00470398 /* MainMenu.strings */,
+				0B8314742CAD95BD00470398 /* Microsurvey.strings */,
+				0B83144E2CAD95BB00470398 /* NativeErrorPage.strings */,
+				0B8314B22CAD95C100470398 /* Notification.strings */,
+				0B83147A2CAD95BE00470398 /* Onboarding.strings */,
+				0B8314822CAD95BE00470398 /* PasswordAutofill.strings */,
+				0B83148C2CAD95BF00470398 /* PasswordGenerator.strings */,
+				0B8314902CAD95BF00470398 /* QRCode.strings */,
+				0B83144C2CAD95BB00470398 /* RememberCard.strings */,
+				0B8314522CAD95BB00470398 /* ResearchSurface.strings */,
+				0B8314642CAD95BC00470398 /* ScanQRCode.strings */,
+				0B8314B02CAD95C100470398 /* SearchHeaderTitle.strings */,
+				0B8314882CAD95BF00470398 /* SelectCreditCard.strings */,
+				0B8314782CAD95BE00470398 /* Settings.strings */,
+				0B83145A2CAD95BC00470398 /* Share.strings */,
+				0B83145C2CAD95BC00470398 /* Shopping.strings */,
+				0B8314A02CAD95C000470398 /* SnackBar.strings */,
+				0B8314502CAD95BB00470398 /* SuggestedSites.strings */,
+				0B8314962CAD95BF00470398 /* TabLocation.strings */,
+				0B8314702CAD95BD00470398 /* TabsTray.strings */,
+				0B8314562CAD95BB00470398 /* TabToolbar.strings */,
+				0B8314A82CAD95C000470398 /* Toolbar.strings */,
+				0B83149A2CAD95C000470398 /* ToolbarLocation.strings */,
+				0B8314582CAD95BC00470398 /* UpdateCard.strings */,
+				0B8314842CAD95BE00470398 /* Upgrade.strings */,
+				0B8314762CAD95BD00470398 /* ZoomPageBar.strings */,
+				0B8314482CAD95A400470398 /* Info.plist */,
+			);
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		0BF1E3702CAD8EEF008B97E1 /* Recovered References */ = {
@@ -12395,6 +12396,25 @@
 		E4E0BB141AFBC9E4008D6260 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				0B8314EB2CAD95D000470398 /* 3DTouchActions.strings */,
+				0B8314ED2CAD95D000470398 /* AuthenticationManager.strings */,
+				0B8315052CAD95D200470398 /* ClearHistoryConfirm.strings */,
+				0B8315072CAD95D200470398 /* ClearPrivateData.strings */,
+				0B8314FD2CAD95D100470398 /* ClearPrivateDataConfirm.strings */,
+				0B8314F72CAD95D100470398 /* Default Browser.strings */,
+				0B8314FF2CAD95D100470398 /* ErrorPages.strings */,
+				0B8314F92CAD95D100470398 /* FindInPage.strings */,
+				0B8314EF2CAD95D000470398 /* HistoryPanel.strings */,
+				0B8314FB2CAD95D100470398 /* Intro.strings */,
+				0B83150B2CAD95D200470398 /* Localizable.strings */,
+				0B8315092CAD95D200470398 /* LoginManager.strings */,
+				0B8315012CAD95D100470398 /* Menu.strings */,
+				0B8315032CAD95D200470398 /* PrivateBrowsing.strings */,
+				0B8314F12CAD95D000470398 /* Search.strings */,
+				0B8314F32CAD95D000470398 /* Shared.strings */,
+				0B8314E92CAD95D000470398 /* Storage.strings */,
+				0B8314F52CAD95D100470398 /* Today.strings */,
+				0B8314472CAD957F00470398 /* Supporting Files */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -12663,7 +12683,6 @@
 				F84B21D31A090F8100AAB793 /* ClientTests.xctest */,
 				F84B22491A0920C600AAB793 /* ShareTo.appex */,
 				D39FA15F1A83E0EC00EE869C /* UITests.xctest */,
-				288A2D861AB8B3260023ABC3 /* LegacyShared.framework */,
 				2FCAE2241ABB51F800877008 /* StorageTests.xctest */,
 				2FA436051ABB83B4008031D1 /* AccountTests.xctest */,
 				282731681ABC9BE700AA1954 /* SyncTests.xctest */,
@@ -13016,7 +13035,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				43118CDF251A9CAD00F24376 /* PBXTargetDependency */,
 			);
 			name = WidgetKitExtension;
 			packageProductDependencies = (
@@ -13052,26 +13070,6 @@
 			productReference = 282731681ABC9BE700AA1954 /* SyncTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		288A2D851AB8B3260023ABC3 /* LegacyShared */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 288A2D9F1AB8B3260023ABC3 /* Build configuration list for PBXNativeTarget "LegacyShared" */;
-			buildPhases = (
-				288A2D811AB8B3260023ABC3 /* Sources */,
-				288A2D821AB8B3260023ABC3 /* Frameworks */,
-				288A2D841AB8B3260023ABC3 /* Resources */,
-				4368F838279665E00013419B /* Embed Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = LegacyShared;
-			packageProductDependencies = (
-			);
-			productName = Shared;
-			productReference = 288A2D861AB8B3260023ABC3 /* LegacyShared.framework */;
-			productType = "com.apple.product-type.framework";
-		};
 		2FA436041ABB83B4008031D1 /* AccountTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2FA436181ABB83B4008031D1 /* Build configuration list for PBXNativeTarget "AccountTests" */;
@@ -13082,7 +13080,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				2F14E1341ABB88CF00FF98DB /* PBXTargetDependency */,
 				D40B30A921F718CC003C02A7 /* PBXTargetDependency */,
 			);
 			name = AccountTests;
@@ -13122,7 +13119,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				D0EA58171FA836D200D03ED1 /* PBXTargetDependency */,
 			);
 			name = NotificationService;
 			packageProductDependencies = (
@@ -13267,7 +13263,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				E6F965141B2F1CF20034B023 /* PBXTargetDependency */,
 				E6F9653A1B2F1D330034B023 /* PBXTargetDependency */,
 			);
 			name = SharedTests;
@@ -13289,7 +13284,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				F8324AF92649B540007E4BFA /* PBXTargetDependency */,
 			);
 			name = CredentialProvider;
 			packageProductDependencies = (
@@ -13389,7 +13383,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				D09A0CF11FAA2C7E009A0273 /* PBXTargetDependency */,
 			);
 			name = ShareTo;
 			packageProductDependencies = (
@@ -13426,10 +13419,6 @@
 						LastSwiftMigration = 1000;
 						ProvisioningStyle = Manual;
 						TestTargetID = F84B21BD1A090F8100AAB793;
-					};
-					288A2D851AB8B3260023ABC3 = {
-						CreatedOnToolsVersion = 6.2;
-						LastSwiftMigration = 1000;
 					};
 					2FA436041ABB83B4008031D1 = {
 						CreatedOnToolsVersion = 6.2;
@@ -13680,7 +13669,6 @@
 				7BEB64401C7345600092C02E /* L10nSnapshotTests */,
 				3BFE4B061D342FB800DDF53F /* XCUITests */,
 				43BE5774278BA4D900491291 /* RustMozillaAppServices */,
-				288A2D851AB8B3260023ABC3 /* LegacyShared */,
 			);
 		};
 /* End PBXProject section */
@@ -13693,84 +13681,6 @@
 				047F9B2E24E1FE1F00CD7DF7 /* Assets.xcassets in Resources */,
 				D58A202C25C9D96400105D25 /* Localizable.strings in Resources */,
 				8A1F6C332BC5A6D100DA6F86 /* PrivacyInfo.xcprivacy in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		288A2D841AB8B3260023ABC3 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D59643F125C9B8E000EAB8B9 /* ErrorPages.strings in Resources */,
-				43937C2629BA686000074633 /* ResearchSurface.strings in Resources */,
-				43470D0828B39AF80034F500 /* JumpBackIn.strings in Resources */,
-				439A220F29F69A0C00F120EE /* Notification.strings in Resources */,
-				43937C2029BA686000074633 /* EngagementNotification.strings in Resources */,
-				43937C2329BA686000074633 /* Onboarding.strings in Resources */,
-				D59643EF25C9B8E000EAB8B9 /* PrivateBrowsing.strings in Resources */,
-				4369B8812B0B75A8003791B9 /* FirefoxHomepage.strings in Resources */,
-				43C50B532A0BCAA800C6A134 /* Upgrade.strings in Resources */,
-				D59643EB25C9B8E000EAB8B9 /* ClearHistoryConfirm.strings in Resources */,
-				43B966AF2BE8F11D007448EA /* Microsurvey.strings in Resources */,
-				431F0C4A2AC1A112006D7D49 /* TabLocation.strings in Resources */,
-				43903A8F2C20502A00ACF76E /* EnhancedTrackingProtection.strings in Resources */,
-				43A878172B838FF90039D6B7 /* PasswordAutofill.strings in Resources */,
-				43E6BE162C57AF7600C2152C /* Toolbar.strings in Resources */,
-				D59643E725C9B8E000EAB8B9 /* Intro.strings in Resources */,
-				D59643F325C9B8E000EAB8B9 /* Storage.strings in Resources */,
-				D59643E925C9B8E000EAB8B9 /* Menu.strings in Resources */,
-				D59643E625C9B8E000EAB8B9 /* LoginManager.strings in Resources */,
-				434707692C85D3DA009585F0 /* SuggestedSites.strings in Resources */,
-				D58A202925C9D96400105D25 /* BookmarkPanel.strings in Resources */,
-				43470D0B28B39AF80034F500 /* ToolbarLocation.strings in Resources */,
-				43903A892C20502A00ACF76E /* ActivityStream.strings in Resources */,
-				432C01582B83900600392A88 /* KeyboardAccessory.strings in Resources */,
-				4344BD7D2AEFC6490057F642 /* Shopping.strings in Resources */,
-				43D3ED982C3BFFC900E33D46 /* EditAddress.strings in Resources */,
-				43A715402A2DF94F00DD5747 /* RememberCard.strings in Resources */,
-				43079D1F2C85D3BB0047C28D /* Bookmarks.strings in Resources */,
-				43903A922C20502A00ACF76E /* QRCode.strings in Resources */,
-				43903A8C2C20502A00ACF76E /* AddressToolbar.strings in Resources */,
-				43FA49A329C875C0005062DB /* SnackBar.strings in Resources */,
-				439A221229F69A0C00F120EE /* ZoomPageBar.strings in Resources */,
-				43B296372B305F1E00A5AA9B /* Credentials.strings in Resources */,
-				43B296342B305F1E00A5AA9B /* CredentialProvider.strings in Resources */,
-				D59643EE25C9B8E000EAB8B9 /* Search.strings in Resources */,
-				433BADA429C8769800E34991 /* ErrorState.strings in Resources */,
-				43B520E42B55493E00007187 /* TabToolbar.strings in Resources */,
-				43DC75A72A24BE73007C2BCE /* DisplayCard.strings in Resources */,
-				D59643E825C9B8E000EAB8B9 /* Default Browser.strings in Resources */,
-				D59643EC25C9B8E000EAB8B9 /* Localizable.strings in Resources */,
-				43A715432A2DF94F00DD5747 /* UpdateCard.strings in Resources */,
-				D59643E525C9B8E000EAB8B9 /* AuthenticationManager.strings in Resources */,
-				43B2963D2B305F1E00A5AA9B /* LoginsHelper.strings in Resources */,
-				4378C737293E09C200D0C1C7 /* TabsTray.strings in Resources */,
-				43FA49A029C875C0005062DB /* Settings.strings in Resources */,
-				D59643F025C9B8E000EAB8B9 /* ClearPrivateDataConfirm.strings in Resources */,
-				43079D232C85D3BB0047C28D /* MainMenu.strings in Resources */,
-				436E0E152BA857AB00D01C1A /* BottomSheet.strings in Resources */,
-				D59643E325C9B8E000EAB8B9 /* ClearPrivateData.strings in Resources */,
-				43DF945A292258C300590FE3 /* SearchHeaderTitle.strings in Resources */,
-				4378C734293E09C200D0C1C7 /* Alerts.strings in Resources */,
-				D59643ED25C9B8E000EAB8B9 /* FindInPage.strings in Resources */,
-				43FA499A29C875C0005062DB /* Alert.strings in Resources */,
-				43C50B502A0BCAA800C6A134 /* FirefoxSync.strings in Resources */,
-				43F119002A52E42400C44C6C /* CustomizeFirefoxHome.strings in Resources */,
-				D59643F425C9B8E000EAB8B9 /* Today.strings in Resources */,
-				43737CB329E4259700847A6F /* Edit Card.strings in Resources */,
-				D59643F225C9B8E000EAB8B9 /* Shared.strings in Resources */,
-				4308A4E62A52E38C001D652E /* SelectCreditCard.strings in Resources */,
-				43FA499D29C875C0005062DB /* EditCard.strings in Resources */,
-				43B627762C3C001E00A188E8 /* ScanQRCode.strings in Resources */,
-				437AE3102C7C9A0C0053F7F3 /* NativeErrorPage.strings in Resources */,
-				433BADA029C8769800E34991 /* BiometricAuthentication.strings in Resources */,
-				D58A202F25C9D96400105D25 /* BookmarkPanelDeleteConfirm.strings in Resources */,
-				D59643EA25C9B8E000EAB8B9 /* HistoryPanel.strings in Resources */,
-				43D75D1A2AC1A16900D1DE87 /* Share.strings in Resources */,
-				43B2963A2B305F1E00A5AA9B /* FirefoxLogins.strings in Resources */,
-				D59643E425C9B8E000EAB8B9 /* 3DTouchActions.strings in Resources */,
-				43B296312B305F1E00A5AA9B /* ContextualHints.strings in Resources */,
-				43E168932CA183A400E67516 /* PasswordGenerator.strings in Resources */,
-				43A7153D2A2DF94F00DD5747 /* Footer.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -14139,13 +14049,6 @@
 				28532CC11C473977000072D9 /* MockFiles.swift in Sources */,
 				D8BA1791206D47A80023AC00 /* DeferredTestUtils.swift in Sources */,
 				F8B18F5529EE01A2008724A8 /* RustSyncManagerAPITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		288A2D811AB8B3260023ABC3 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -15653,11 +15556,6 @@
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = 28ECD9BE1BA1F12B00D829DA /* PBXContainerItemProxy */;
 		};
-		2F14E1341ABB88CF00FF98DB /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 288A2D851AB8B3260023ABC3 /* LegacyShared */;
-			targetProxy = 2F14E1331ABB88CF00FF98DB /* PBXContainerItemProxy */;
-		};
 		2FCAE2291ABB51F800877008 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F84B21BD1A090F8100AAB793 /* Client */;
@@ -15678,11 +15576,6 @@
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = 3BFE4B0C1D342FB900DDF53F /* PBXContainerItemProxy */;
 		};
-		43118CDF251A9CAD00F24376 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 288A2D851AB8B3260023ABC3 /* LegacyShared */;
-			targetProxy = 43118CDE251A9CAD00F24376 /* PBXContainerItemProxy */;
-		};
 		435A2FF7278F51CD00C94282 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F8324A042649A188007E4BFA /* CredentialProvider */;
@@ -15702,16 +15595,6 @@
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = 7BEB64421C7345600092C02E /* PBXContainerItemProxy */;
 		};
-		D09A0CF11FAA2C7E009A0273 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 288A2D851AB8B3260023ABC3 /* LegacyShared */;
-			targetProxy = D09A0CF01FAA2C7E009A0273 /* PBXContainerItemProxy */;
-		};
-		D0EA58171FA836D200D03ED1 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 288A2D851AB8B3260023ABC3 /* LegacyShared */;
-			targetProxy = D0EA58161FA836D200D03ED1 /* PBXContainerItemProxy */;
-		};
 		D39FA1661A83E0EC00EE869C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F84B21BD1A090F8100AAB793 /* Client */;
@@ -15727,20 +15610,10 @@
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = E69DB0811E97DEAA008A67E6 /* PBXContainerItemProxy */;
 		};
-		E6F965141B2F1CF20034B023 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 288A2D851AB8B3260023ABC3 /* LegacyShared */;
-			targetProxy = E63CD1B11B31B66400A63AFF /* PBXContainerItemProxy */;
-		};
 		E6F9653A1B2F1D330034B023 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = E63CD1B21B31B66400A63AFF /* PBXContainerItemProxy */;
-		};
-		F8324AF92649B540007E4BFA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 288A2D851AB8B3260023ABC3 /* LegacyShared */;
-			targetProxy = F8324AF82649B540007E4BFA /* PBXContainerItemProxy */;
 		};
 		F84B21D51A090F8100AAB793 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -15956,6 +15829,574 @@
 				43EB5F932B2728070063D23E /* ug */,
 			);
 			name = Shared.strings;
+			sourceTree = "<group>";
+		};
+		0B83144A2CAD95BB00470398 /* BookmarkPanel.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B83144B2CAD95BB00470398 /* en-CA */,
+			);
+			name = BookmarkPanel.strings;
+			sourceTree = "<group>";
+		};
+		0B83144C2CAD95BB00470398 /* RememberCard.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B83144D2CAD95BB00470398 /* en-CA */,
+			);
+			name = RememberCard.strings;
+			sourceTree = "<group>";
+		};
+		0B83144E2CAD95BB00470398 /* NativeErrorPage.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B83144F2CAD95BB00470398 /* en-CA */,
+			);
+			name = NativeErrorPage.strings;
+			sourceTree = "<group>";
+		};
+		0B8314502CAD95BB00470398 /* SuggestedSites.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314512CAD95BB00470398 /* en-CA */,
+			);
+			name = SuggestedSites.strings;
+			sourceTree = "<group>";
+		};
+		0B8314522CAD95BB00470398 /* ResearchSurface.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314532CAD95BB00470398 /* en-CA */,
+			);
+			name = ResearchSurface.strings;
+			sourceTree = "<group>";
+		};
+		0B8314542CAD95BB00470398 /* Alerts.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314552CAD95BB00470398 /* en-CA */,
+			);
+			name = Alerts.strings;
+			sourceTree = "<group>";
+		};
+		0B8314562CAD95BB00470398 /* TabToolbar.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314572CAD95BB00470398 /* en-CA */,
+			);
+			name = TabToolbar.strings;
+			sourceTree = "<group>";
+		};
+		0B8314582CAD95BC00470398 /* UpdateCard.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314592CAD95BC00470398 /* en-CA */,
+			);
+			name = UpdateCard.strings;
+			sourceTree = "<group>";
+		};
+		0B83145A2CAD95BC00470398 /* Share.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B83145B2CAD95BC00470398 /* en-CA */,
+			);
+			name = Share.strings;
+			sourceTree = "<group>";
+		};
+		0B83145C2CAD95BC00470398 /* Shopping.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B83145D2CAD95BC00470398 /* en-CA */,
+			);
+			name = Shopping.strings;
+			sourceTree = "<group>";
+		};
+		0B83145E2CAD95BC00470398 /* BottomSheet.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B83145F2CAD95BC00470398 /* en-CA */,
+			);
+			name = BottomSheet.strings;
+			sourceTree = "<group>";
+		};
+		0B8314602CAD95BC00470398 /* CustomizeFirefoxHome.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314612CAD95BC00470398 /* en-CA */,
+			);
+			name = CustomizeFirefoxHome.strings;
+			sourceTree = "<group>";
+		};
+		0B8314622CAD95BC00470398 /* MainMenu.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314632CAD95BC00470398 /* en-CA */,
+			);
+			name = MainMenu.strings;
+			sourceTree = "<group>";
+		};
+		0B8314642CAD95BC00470398 /* ScanQRCode.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314652CAD95BC00470398 /* en-CA */,
+			);
+			name = ScanQRCode.strings;
+			sourceTree = "<group>";
+		};
+		0B8314662CAD95BC00470398 /* EngagementNotification.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314672CAD95BC00470398 /* en-CA */,
+			);
+			name = EngagementNotification.strings;
+			sourceTree = "<group>";
+		};
+		0B8314682CAD95BD00470398 /* FirefoxLogins.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314692CAD95BD00470398 /* en-CA */,
+			);
+			name = FirefoxLogins.strings;
+			sourceTree = "<group>";
+		};
+		0B83146A2CAD95BD00470398 /* Edit Card.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B83146B2CAD95BD00470398 /* en-CA */,
+			);
+			name = "Edit Card.strings";
+			sourceTree = "<group>";
+		};
+		0B83146C2CAD95BD00470398 /* DisplayCard.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B83146D2CAD95BD00470398 /* en-CA */,
+			);
+			name = DisplayCard.strings;
+			sourceTree = "<group>";
+		};
+		0B83146E2CAD95BD00470398 /* FirefoxHomepage.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B83146F2CAD95BD00470398 /* en-CA */,
+			);
+			name = FirefoxHomepage.strings;
+			sourceTree = "<group>";
+		};
+		0B8314702CAD95BD00470398 /* TabsTray.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314712CAD95BD00470398 /* en-CA */,
+			);
+			name = TabsTray.strings;
+			sourceTree = "<group>";
+		};
+		0B8314722CAD95BD00470398 /* ErrorState.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314732CAD95BD00470398 /* en-CA */,
+			);
+			name = ErrorState.strings;
+			sourceTree = "<group>";
+		};
+		0B8314742CAD95BD00470398 /* Microsurvey.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314752CAD95BD00470398 /* en-CA */,
+			);
+			name = Microsurvey.strings;
+			sourceTree = "<group>";
+		};
+		0B8314762CAD95BD00470398 /* ZoomPageBar.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314772CAD95BD00470398 /* en-CA */,
+			);
+			name = ZoomPageBar.strings;
+			sourceTree = "<group>";
+		};
+		0B8314782CAD95BE00470398 /* Settings.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314792CAD95BE00470398 /* en-CA */,
+			);
+			name = Settings.strings;
+			sourceTree = "<group>";
+		};
+		0B83147A2CAD95BE00470398 /* Onboarding.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B83147B2CAD95BE00470398 /* en-CA */,
+			);
+			name = Onboarding.strings;
+			sourceTree = "<group>";
+		};
+		0B83147C2CAD95BE00470398 /* KeyboardAccessory.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B83147D2CAD95BE00470398 /* en-CA */,
+			);
+			name = KeyboardAccessory.strings;
+			sourceTree = "<group>";
+		};
+		0B83147E2CAD95BE00470398 /* Alert.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B83147F2CAD95BE00470398 /* en-CA */,
+			);
+			name = Alert.strings;
+			sourceTree = "<group>";
+		};
+		0B8314802CAD95BE00470398 /* CredentialProvider.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314812CAD95BE00470398 /* en-CA */,
+			);
+			name = CredentialProvider.strings;
+			sourceTree = "<group>";
+		};
+		0B8314822CAD95BE00470398 /* PasswordAutofill.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314832CAD95BE00470398 /* en-CA */,
+			);
+			name = PasswordAutofill.strings;
+			sourceTree = "<group>";
+		};
+		0B8314842CAD95BE00470398 /* Upgrade.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314852CAD95BE00470398 /* en-CA */,
+			);
+			name = Upgrade.strings;
+			sourceTree = "<group>";
+		};
+		0B8314862CAD95BE00470398 /* EditCard.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314872CAD95BE00470398 /* en-CA */,
+			);
+			name = EditCard.strings;
+			sourceTree = "<group>";
+		};
+		0B8314882CAD95BF00470398 /* SelectCreditCard.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314892CAD95BF00470398 /* en-CA */,
+			);
+			name = SelectCreditCard.strings;
+			sourceTree = "<group>";
+		};
+		0B83148A2CAD95BF00470398 /* EditAddress.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B83148B2CAD95BF00470398 /* en-CA */,
+			);
+			name = EditAddress.strings;
+			sourceTree = "<group>";
+		};
+		0B83148C2CAD95BF00470398 /* PasswordGenerator.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B83148D2CAD95BF00470398 /* en-CA */,
+			);
+			name = PasswordGenerator.strings;
+			sourceTree = "<group>";
+		};
+		0B83148E2CAD95BF00470398 /* Credentials.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B83148F2CAD95BF00470398 /* en-CA */,
+			);
+			name = Credentials.strings;
+			sourceTree = "<group>";
+		};
+		0B8314902CAD95BF00470398 /* QRCode.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314912CAD95BF00470398 /* en-CA */,
+			);
+			name = QRCode.strings;
+			sourceTree = "<group>";
+		};
+		0B8314922CAD95BF00470398 /* Footer.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314932CAD95BF00470398 /* en-CA */,
+			);
+			name = Footer.strings;
+			sourceTree = "<group>";
+		};
+		0B8314942CAD95BF00470398 /* ContextualHints.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314952CAD95BF00470398 /* en-CA */,
+			);
+			name = ContextualHints.strings;
+			sourceTree = "<group>";
+		};
+		0B8314962CAD95BF00470398 /* TabLocation.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314972CAD95BF00470398 /* en-CA */,
+			);
+			name = TabLocation.strings;
+			sourceTree = "<group>";
+		};
+		0B8314982CAD95BF00470398 /* Bookmarks.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314992CAD95BF00470398 /* en-CA */,
+			);
+			name = Bookmarks.strings;
+			sourceTree = "<group>";
+		};
+		0B83149A2CAD95C000470398 /* ToolbarLocation.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B83149B2CAD95C000470398 /* en-CA */,
+			);
+			name = ToolbarLocation.strings;
+			sourceTree = "<group>";
+		};
+		0B83149C2CAD95C000470398 /* JumpBackIn.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B83149D2CAD95C000470398 /* en-CA */,
+			);
+			name = JumpBackIn.strings;
+			sourceTree = "<group>";
+		};
+		0B83149E2CAD95C000470398 /* BookmarkPanelDeleteConfirm.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B83149F2CAD95C000470398 /* en-CA */,
+			);
+			name = BookmarkPanelDeleteConfirm.strings;
+			sourceTree = "<group>";
+		};
+		0B8314A02CAD95C000470398 /* SnackBar.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314A12CAD95C000470398 /* en-CA */,
+			);
+			name = SnackBar.strings;
+			sourceTree = "<group>";
+		};
+		0B8314A22CAD95C000470398 /* EnhancedTrackingProtection.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314A32CAD95C000470398 /* en-CA */,
+			);
+			name = EnhancedTrackingProtection.strings;
+			sourceTree = "<group>";
+		};
+		0B8314A42CAD95C000470398 /* AddressToolbar.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314A52CAD95C000470398 /* en-CA */,
+			);
+			name = AddressToolbar.strings;
+			sourceTree = "<group>";
+		};
+		0B8314A62CAD95C000470398 /* LoginsHelper.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314A72CAD95C000470398 /* en-CA */,
+			);
+			name = LoginsHelper.strings;
+			sourceTree = "<group>";
+		};
+		0B8314A82CAD95C000470398 /* Toolbar.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314A92CAD95C000470398 /* en-CA */,
+			);
+			name = Toolbar.strings;
+			sourceTree = "<group>";
+		};
+		0B8314AA2CAD95C100470398 /* ActivityStream.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314AB2CAD95C100470398 /* en-CA */,
+			);
+			name = ActivityStream.strings;
+			sourceTree = "<group>";
+		};
+		0B8314AC2CAD95C100470398 /* FirefoxSync.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314AD2CAD95C100470398 /* en-CA */,
+			);
+			name = FirefoxSync.strings;
+			sourceTree = "<group>";
+		};
+		0B8314AE2CAD95C100470398 /* BiometricAuthentication.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314AF2CAD95C100470398 /* en-CA */,
+			);
+			name = BiometricAuthentication.strings;
+			sourceTree = "<group>";
+		};
+		0B8314B02CAD95C100470398 /* SearchHeaderTitle.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314B12CAD95C100470398 /* en-CA */,
+			);
+			name = SearchHeaderTitle.strings;
+			sourceTree = "<group>";
+		};
+		0B8314B22CAD95C100470398 /* Notification.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314B32CAD95C100470398 /* en-CA */,
+			);
+			name = Notification.strings;
+			sourceTree = "<group>";
+		};
+		0B8314E92CAD95D000470398 /* Storage.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314EA2CAD95D000470398 /* en-CA */,
+			);
+			name = Storage.strings;
+			sourceTree = "<group>";
+		};
+		0B8314EB2CAD95D000470398 /* 3DTouchActions.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314EC2CAD95D000470398 /* en-CA */,
+			);
+			name = 3DTouchActions.strings;
+			sourceTree = "<group>";
+		};
+		0B8314ED2CAD95D000470398 /* AuthenticationManager.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314EE2CAD95D000470398 /* en-CA */,
+			);
+			name = AuthenticationManager.strings;
+			sourceTree = "<group>";
+		};
+		0B8314EF2CAD95D000470398 /* HistoryPanel.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314F02CAD95D000470398 /* en-CA */,
+			);
+			name = HistoryPanel.strings;
+			sourceTree = "<group>";
+		};
+		0B8314F12CAD95D000470398 /* Search.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314F22CAD95D000470398 /* en-CA */,
+			);
+			name = Search.strings;
+			sourceTree = "<group>";
+		};
+		0B8314F32CAD95D000470398 /* Shared.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314F42CAD95D000470398 /* en-CA */,
+			);
+			name = Shared.strings;
+			sourceTree = "<group>";
+		};
+		0B8314F52CAD95D100470398 /* Today.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314F62CAD95D100470398 /* en-CA */,
+			);
+			name = Today.strings;
+			sourceTree = "<group>";
+		};
+		0B8314F72CAD95D100470398 /* Default Browser.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314F82CAD95D100470398 /* en-CA */,
+			);
+			name = "Default Browser.strings";
+			sourceTree = "<group>";
+		};
+		0B8314F92CAD95D100470398 /* FindInPage.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314FA2CAD95D100470398 /* en-CA */,
+			);
+			name = FindInPage.strings;
+			sourceTree = "<group>";
+		};
+		0B8314FB2CAD95D100470398 /* Intro.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314FC2CAD95D100470398 /* en-CA */,
+			);
+			name = Intro.strings;
+			sourceTree = "<group>";
+		};
+		0B8314FD2CAD95D100470398 /* ClearPrivateDataConfirm.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8314FE2CAD95D100470398 /* en-CA */,
+			);
+			name = ClearPrivateDataConfirm.strings;
+			sourceTree = "<group>";
+		};
+		0B8314FF2CAD95D100470398 /* ErrorPages.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8315002CAD95D100470398 /* en-CA */,
+			);
+			name = ErrorPages.strings;
+			sourceTree = "<group>";
+		};
+		0B8315012CAD95D100470398 /* Menu.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8315022CAD95D100470398 /* en-CA */,
+			);
+			name = Menu.strings;
+			sourceTree = "<group>";
+		};
+		0B8315032CAD95D200470398 /* PrivateBrowsing.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8315042CAD95D200470398 /* en-CA */,
+			);
+			name = PrivateBrowsing.strings;
+			sourceTree = "<group>";
+		};
+		0B8315052CAD95D200470398 /* ClearHistoryConfirm.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8315062CAD95D200470398 /* en-CA */,
+			);
+			name = ClearHistoryConfirm.strings;
+			sourceTree = "<group>";
+		};
+		0B8315072CAD95D200470398 /* ClearPrivateData.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B8315082CAD95D200470398 /* en-CA */,
+			);
+			name = ClearPrivateData.strings;
+			sourceTree = "<group>";
+		};
+		0B8315092CAD95D200470398 /* LoginManager.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B83150A2CAD95D200470398 /* en-CA */,
+			);
+			name = LoginManager.strings;
+			sourceTree = "<group>";
+		};
+		0B83150B2CAD95D200470398 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0B83150C2CAD95D200470398 /* en-CA */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 		21374EEAA2C69079F77A0AC3 /* Today.strings */ = {
@@ -21476,31 +21917,6 @@
 			};
 			name = Fennec;
 		};
-		288A2DA01AB8B3260023ABC3 /* Fennec */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				COPY_PHASE_STRIP = NO;
-				DEFINES_MODULE = NO;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "Shared/Strings/Supporting Files/Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				MACH_O_TYPE = staticlib;
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Fennec;
-		};
 		2FA436191ABB83B4008031D1 /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -22147,31 +22563,6 @@
 			};
 			name = Fennec_Testing;
 		};
-		8A1993802C9B5A63001F4D57 /* Fennec_Testing */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				COPY_PHASE_STRIP = NO;
-				DEFINES_MODULE = NO;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "Shared/Strings/Supporting Files/Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				MACH_O_TYPE = staticlib;
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-			};
-			name = Fennec_Testing;
-		};
 		D39FA1681A83E0EC00EE869C /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -22270,31 +22661,6 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				VALIDATE_WORKSPACE = YES;
-			};
-			name = Firefox;
-		};
-		E448FCA31AEE7A6000869B6C /* Firefox */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = NO;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				ENABLE_TESTABILITY = YES;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "Shared/Strings/Supporting Files/Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				MACH_O_TYPE = staticlib;
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
 			name = Firefox;
 		};
@@ -22470,31 +22836,6 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Fennec Enterprise ShareTo";
 				SKIP_INSTALL = NO;
-			};
-			name = Fennec_Enterprise;
-		};
-		E6DCC20B1DCBB6F100CEC4B7 /* Fennec_Enterprise */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = NO;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 9G8J6YA743;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "Shared/Strings/Supporting Files/Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				MACH_O_TYPE = staticlib;
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
 			name = Fennec_Enterprise;
 		};
@@ -22696,30 +23037,6 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				VALIDATE_WORKSPACE = YES;
-			};
-			name = FirefoxBeta;
-		};
-		E6FCC4311C40562400DF6113 /* FirefoxBeta */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
-				CODE_SIGN_STYLE = Manual;
-				DEFINES_MODULE = NO;
-				DEVELOPMENT_TEAM = 43AQ936H96;
-				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
-				INFOPLIST_FILE = "Shared/Strings/Supporting Files/Info.plist";
-				LOCALIZED_STRING_MACRO_NAMES = (
-					MZLocalizedString,
-					NSLocalizedString,
-					CFCopyLocalizedString,
-				);
-				MACH_O_TYPE = staticlib;
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
 			name = FirefoxBeta;
 		};
@@ -23160,18 +23477,6 @@
 				E6DCC2151DCBB6F100CEC4B7 /* Fennec_Enterprise */,
 				E448FCA91AEE7A6000869B6C /* Firefox */,
 				E6FCC4371C40562400DF6113 /* FirefoxBeta */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Fennec;
-		};
-		288A2D9F1AB8B3260023ABC3 /* Build configuration list for PBXNativeTarget "LegacyShared" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				288A2DA01AB8B3260023ABC3 /* Fennec */,
-				8A1993802C9B5A63001F4D57 /* Fennec_Testing */,
-				E6DCC20B1DCBB6F100CEC4B7 /* Fennec_Enterprise */,
-				E448FCA31AEE7A6000869B6C /* Firefox */,
-				E6FCC4311C40562400DF6113 /* FirefoxBeta */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
