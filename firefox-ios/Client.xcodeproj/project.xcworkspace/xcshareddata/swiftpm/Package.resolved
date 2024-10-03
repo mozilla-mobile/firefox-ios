@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "a-star",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Dev1an/A-Star",
+      "state" : {
+        "revision" : "036256f9a8d1dda44085a2b92fa58199446a8339",
+        "version" : "3.0.0-beta-1"
+      }
+    },
+    {
       "identity" : "dip",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/AliSoftware/Dip.git",
@@ -28,6 +37,33 @@
       }
     },
     {
+      "identity" : "glean-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mozilla/glean-swift",
+      "state" : {
+        "revision" : "238d6d31916ae9ef2d67a70bc613ef083046b88b",
+        "version" : "61.1.0"
+      }
+    },
+    {
+      "identity" : "ios_sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/adjust/ios_sdk.git",
+      "state" : {
+        "revision" : "f7a0ad4a9f99fcbfc4c73dcad557ea3c86c5aaf6",
+        "version" : "4.37.0"
+      }
+    },
+    {
+      "identity" : "kif",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kif-framework/KIF.git",
+      "state" : {
+        "revision" : "6c3ff27d9449eab614dae63e571596e4982a5205",
+        "version" : "3.8.9"
+      }
+    },
+    {
       "identity" : "kingfisher",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher.git",
@@ -37,12 +73,75 @@
       }
     },
     {
+      "identity" : "lottie-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/airbnb/lottie-ios.git",
+      "state" : {
+        "revision" : "f522990668c2f9132323a2e68d924c7dcb9130b4",
+        "version" : "4.4.0"
+      }
+    },
+    {
+      "identity" : "mappamundi",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mozilla-mobile/MappaMundi.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "f56a6e483163a761adc8cd25c337db0ed1eac524"
+      }
+    },
+    {
+      "identity" : "rust-components-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mozilla/rust-components-swift.git",
+      "state" : {
+        "revision" : "f1115735ce727e84ba0381b692aae2f62951e7c1",
+        "version" : "133.0.20241002050331"
+      }
+    },
+    {
       "identity" : "sentry-cocoa",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa.git",
       "state" : {
-        "revision" : "7fc7ca43967e2980d8691a8e017c118a84133aac",
-        "version" : "8.26.0"
+        "revision" : "5575af93efb776414f243e93d6af9f6258dc539a",
+        "version" : "8.36.0"
+      }
+    },
+    {
+      "identity" : "snapkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SnapKit/SnapKit.git",
+      "state" : {
+        "revision" : "e74fe2a978d1216c3602b129447c7301573cc2d8",
+        "version" : "5.7.0"
+      }
+    },
+    {
+      "identity" : "swift-asn1",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-asn1.git",
+      "state" : {
+        "revision" : "df5d2fcd22e3f480e3ef85bf23e277a4a0ef524d",
+        "version" : "1.2.0"
+      }
+    },
+    {
+      "identity" : "swift-certificates",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-certificates.git",
+      "state" : {
+        "revision" : "bc566f88842b3b8001717326d935c2d113af5741",
+        "version" : "1.2.0"
+      }
+    },
+    {
+      "identity" : "swift-crypto",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-crypto.git",
+      "state" : {
+        "revision" : "9f95b4d033a4edd3814b48608db3f2ca90c7218b",
+        "version" : "3.7.0"
       }
     },
     {
