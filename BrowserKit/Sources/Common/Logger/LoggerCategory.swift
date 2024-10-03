@@ -23,6 +23,9 @@ public enum LoggerCategory: String {
     /// Related to homepage UI and it's data management.
     case homepage
 
+    /// Related to new homepage UI and it's data management for the homepage rebuild project.
+    case newHomepage
+
     /// Related to errors around image fetches, and includes all image types (`SiteImageType`, and general images).
     case images
 

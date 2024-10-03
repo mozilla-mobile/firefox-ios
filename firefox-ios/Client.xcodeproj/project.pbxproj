@@ -850,6 +850,9 @@
 		8A9F0B5827C59E1800FE09AE /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
 		8A9F0B5927C5A2AB00FE09AE /* ImageIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */; };
 		8AA020EF2B9A37E500771DE0 /* NimbusSplashScreenFeatureLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA020EE2B9A37E500771DE0 /* NimbusSplashScreenFeatureLayer.swift */; };
+		8AA0A6632CAC40AA00AC7EB3 /* NewHomepageDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA0A6622CAC40AA00AC7EB3 /* NewHomepageDiffableDataSource.swift */; };
+		8AA0A6652CAC6B7100AC7EB3 /* NewHomepageCompositionalLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA0A6642CAC6B7100AC7EB3 /* NewHomepageCompositionalLayout.swift */; };
+		8AA0A6682CAC747500AC7EB3 /* NewHomepageDiffableDataSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA0A6662CAC745300AC7EB3 /* NewHomepageDiffableDataSourceTests.swift */; };
 		8AA6ADB52742B567004EEE23 /* TelemetryWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA6ADB42742B567004EEE23 /* TelemetryWrapperTests.swift */; };
 		8AA7347B28AEDB3100443D24 /* PocketViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA7347A28AEDB3100443D24 /* PocketViewModelTests.swift */; };
 		8AA8389D2CA2FEFC003FA256 /* StoreTestUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AA8389C2CA2FEFC003FA256 /* StoreTestUtility.swift */; };
@@ -6964,6 +6967,9 @@
 		8A9E46BC2A6599E5003327D4 /* MockStatusBarScrollDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStatusBarScrollDelegate.swift; sourceTree = "<group>"; };
 		8A9F0B5527C595F300FE09AE /* ImageIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageIdentifiers.swift; sourceTree = "<group>"; };
 		8AA020EE2B9A37E500771DE0 /* NimbusSplashScreenFeatureLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusSplashScreenFeatureLayer.swift; sourceTree = "<group>"; };
+		8AA0A6622CAC40AA00AC7EB3 /* NewHomepageDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHomepageDiffableDataSource.swift; sourceTree = "<group>"; };
+		8AA0A6642CAC6B7100AC7EB3 /* NewHomepageCompositionalLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHomepageCompositionalLayout.swift; sourceTree = "<group>"; };
+		8AA0A6662CAC745300AC7EB3 /* NewHomepageDiffableDataSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHomepageDiffableDataSourceTests.swift; sourceTree = "<group>"; };
 		8AA6ADB42742B567004EEE23 /* TelemetryWrapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryWrapperTests.swift; sourceTree = "<group>"; };
 		8AA7347A28AEDB3100443D24 /* PocketViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketViewModelTests.swift; sourceTree = "<group>"; };
 		8AA8389C2CA2FEFC003FA256 /* StoreTestUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreTestUtility.swift; sourceTree = "<group>"; };
@@ -10488,6 +10494,7 @@
 			isa = PBXGroup;
 			children = (
 				8A00BD862CAB3FE500680AF9 /* NewHomepageViewControllerTests.swift */,
+				8AA0A6662CAC745300AC7EB3 /* NewHomepageDiffableDataSourceTests.swift */,
 			);
 			path = "Homepage Rebuild";
 			sourceTree = "<group>";
@@ -10815,6 +10822,8 @@
 			isa = PBXGroup;
 			children = (
 				8A7D08E22CAAF7C30035999C /* NewHomepageViewController.swift */,
+				8AA0A6622CAC40AA00AC7EB3 /* NewHomepageDiffableDataSource.swift */,
+				8AA0A6642CAC6B7100AC7EB3 /* NewHomepageCompositionalLayout.swift */,
 			);
 			path = "Homepage Rebuild";
 			sourceTree = "<group>";
@@ -15412,6 +15421,7 @@
 				C8BD87602A0C248000CD803A /* OnboardingButtonsModel.swift in Sources */,
 				0BB5B2881AC0A2B90052877D /* SnackBar.swift in Sources */,
 				E1442FCF294782D9003680B0 /* UIView+Screenshot.swift in Sources */,
+				8AA0A6652CAC6B7100AC7EB3 /* NewHomepageCompositionalLayout.swift in Sources */,
 				8AB8572C27D945FA0075C173 /* TopSitesDataAdaptor.swift in Sources */,
 				C889569A27E8D1AC00E3779E /* LegacyInactiveTabHeader.swift in Sources */,
 				7BEFC6801BFF68C30059C952 /* QuickActions.swift in Sources */,
@@ -16012,6 +16022,7 @@
 				59A68FD5260B8D520F890F4A /* ReaderPanel.swift in Sources */,
 				0A93C8AA2C87070300BEA143 /* TrackingProtectionConnectionStatusView.swift in Sources */,
 				C849E46126B9C39B00260F0B /* EnhancedTrackingProtectionVC.swift in Sources */,
+				8AA0A6632CAC40AA00AC7EB3 /* NewHomepageDiffableDataSource.swift in Sources */,
 				E40FAB0C1A7ABB77009CB80D /* WebServer.swift in Sources */,
 				59A68D66379CFA85C4EAF00B /* TwoLineImageOverlayCell.swift in Sources */,
 				0A49784A2C53E63200B1E82A /* TrackingProtectionViewController.swift in Sources */,
@@ -16361,6 +16372,7 @@
 				C88012232A40E38D00F4D1D6 /* IntroViewControllerTests.swift in Sources */,
 				E16E1C9628BFB2E600EE2EF5 /* WallpaperSettingsViewModelTests.swift in Sources */,
 				E1463D042982D0240074E16E /* NotificationManagerTests.swift in Sources */,
+				8AA0A6682CAC747500AC7EB3 /* NewHomepageDiffableDataSourceTests.swift in Sources */,
 				3B61CD591F2A750800D38DE1 /* PocketFeedTests.swift in Sources */,
 				C8E1BC0A28085AA700C62964 /* NimbusFeatureFlagLayerTests.swift in Sources */,
 				F80D53CF2A09A3350047ED14 /* RustSyncManagerTests.swift in Sources */,
