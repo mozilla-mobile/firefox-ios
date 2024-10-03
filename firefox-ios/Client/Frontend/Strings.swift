@@ -176,7 +176,7 @@ extension String {
                 key: "Bookmarks.Menu.DeleteBookmark.v132",
                 tableName: "Bookmarks",
                 value: "Delete Bookmark",
-                comment: "Title for the Delete Bookmark button in the Edit Bookmark screen.")
+                comment: "The title for the Delete Bookmark button, in the Edit Bookmark popup screen which is summoned from the main menu's Save submenu, which will delete the currently bookmarked site from the user's bookmarks.")
         }
     }
 }
