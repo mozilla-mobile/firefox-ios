@@ -5,7 +5,8 @@
 import Foundation
 import Common
 
-final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable {
+final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifiable {
+    var notificationCenter: NotificationProtocol
     private enum UX {
         static let passwordFieldBorderWidth: CGFloat = 1
         static let passwordFieldCornerRadius: CGFloat = 4
@@ -24,6 +25,7 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable {
 
     private lazy var passwordLabel: UILabel = .build { label in
         label.accessibilityIdentifier = AccessibilityIdentifiers.PasswordGenerator.passwordlabel
+        label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
         label.font = FXFontStyles.Regular.body.scaledFont()
     }
@@ -37,11 +39,14 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable {
         button.accessibilityIdentifier = AccessibilityIdentifiers.PasswordGenerator.passwordRefreshButton
     }
 
-    override init(frame: CGRect) {
+    init(frame: CGRect = .zero, notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.notificationCenter = notificationCenter
         super.init(frame: frame)
         self.layer.borderWidth = UX.passwordFieldBorderWidth
         self.layer.cornerRadius = UX.passwordFieldCornerRadius
         self.accessibilityIdentifier = AccessibilityIdentifiers.PasswordGenerator.passwordField
+        setupNotifications(forObserver: self,
+                           observing: [.DynamicFontChanged])
         setupLayout()
     }
 
@@ -94,10 +99,19 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable {
         passwordRefreshButton.tintColor = theme.colors.iconPrimary
     }
 
-    func applyDynamicFontChange() {
-        passwordLabel.font = FXFontStyles.Regular.body.scaledFont()
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DynamicFontChanged:
+            applyDynamicFontChange()
+        default: break
+        }
+    }
+
+    private func applyDynamicFontChange() {
         scaledRefreshButtonSize = UIFontMetrics.default.scaledValue(for: UX.passwordRefreshButtonHeight)
         passwordRefreshButtonHeightConstraint.constant = scaledRefreshButtonSize
         passwordRefreshButtonWidthConstraint.constant = scaledRefreshButtonSize
+        setNeedsLayout()
+        layoutIfNeeded()
     }
 }

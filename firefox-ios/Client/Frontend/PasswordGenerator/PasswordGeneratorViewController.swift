@@ -34,14 +34,23 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
 
     private lazy var descriptionLabel: UILabel = .build { label in
         label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
         label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.text = .PasswordGenerator.Description
         label.accessibilityIdentifier = AccessibilityIdentifiers.PasswordGenerator.descriptionLabel
     }
 
-    private lazy var header: PasswordGeneratorHeaderView = .build()
+    private lazy var header: PasswordGeneratorHeaderView = {
+        let view = PasswordGeneratorHeaderView(frame: .zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
 
-    private lazy var passwordField: PasswordGeneratorPasswordFieldView = .build()
+    private lazy var passwordField: PasswordGeneratorPasswordFieldView = {
+        let view = PasswordGeneratorPasswordFieldView(frame: .zero)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
 
     private lazy var usePasswordButton: PrimaryRoundedButton = .build()
 
@@ -186,9 +195,8 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
 
     // MARK: - Notifiable
     private func applyDynamicFontChange() {
-        header.applyDynamicFontChange()
-        passwordField.applyDynamicFontChange()
-        descriptionLabel.font = FXFontStyles.Regular.subheadline.scaledFont()
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
     }
 
     func handleNotifications(_ notification: Notification) {
