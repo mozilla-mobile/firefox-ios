@@ -106,11 +106,6 @@ class BookmarksPanel: SiteTableViewController,
 
         tableView.register(cellType: OneLineTableViewCell.self)
         tableView.register(cellType: SeparatorTableViewCell.self)
-        notificationCenter.addObserver(
-            self,
-            selector: #selector(handleNotifications),
-            name: .LibraryPanelStateDidChange,
-            object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -377,7 +372,9 @@ class BookmarksPanel: SiteTableViewController,
                 !(node is BookmarkSeparatorData),
                 isCurrentFolderEditable(at: indexPath) {
                 // Only show detail controller for editable nodes
-                bookmarkCoordinatorDelegate?.showBookmarkDetail(for: node, folder: bookmarkFolder)
+                bookmarkCoordinatorDelegate?.showBookmarkDetail(for: node, folder: bookmarkFolder) { [weak self] in
+                    self?.updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
+                }
                 updatePanelState(newState: .bookmarks(state: .itemEditMode))
             }
             return
@@ -568,8 +565,6 @@ extension BookmarksPanel: Notifiable {
         switch notification.name {
         case .FirefoxAccountChanged:
             reloadData()
-        case .LibraryPanelStateDidChange:
-            updatePanelState(newState: .bookmarks(state: .mainView))
         default:
             break
         }

@@ -119,7 +119,8 @@ class BookmarkDetailPanel: SiteTableViewController {
         windowUUID: WindowUUID,
         bookmarkNode: FxBookmarkNode,
         parentBookmarkFolder: FxBookmarkNode,
-        presentedFromToast fromToast: Bool = false
+        presentedFromToast fromToast: Bool = false,
+        deleteBookmark: (() -> Void)?
     ) {
         let bookmarkItemData = bookmarkNode as? BookmarkItemData
         self.init(profile: profile,
@@ -142,6 +143,7 @@ class BookmarkDetailPanel: SiteTableViewController {
 
             self.title = .BookmarksEditFolder
         }
+        self.deleteBookmark = deleteBookmark
     }
 
     convenience init(
@@ -383,7 +385,7 @@ class BookmarkDetailPanel: SiteTableViewController {
                 self.deleteBookmark?()
                 self.dismiss(animated: true)
             } else {
-                NotificationCenter.default.post(name: .LibraryPanelStateDidChange, object: nil, userInfo: nil)
+                self.deleteBookmark?()
                 self.navigationController?.popViewController(animated: true)
             }
         }
