@@ -66,7 +66,13 @@ struct MainMenuDetailsState: ScreenState, Equatable {
     }
 
     static let reducer: Reducer<Self> = { state, action in
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
+            return MainMenuDetailsState(
+                windowUUID: state.windowUUID,
+                menuElements: state.menuElements,
+                submenuType: state.submenuType
+            )
+        }
 
         switch action.actionType {
         case ScreenActionType.showScreen:
