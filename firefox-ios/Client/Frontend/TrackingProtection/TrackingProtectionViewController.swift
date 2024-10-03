@@ -541,8 +541,7 @@ class TrackingProtectionViewController: UIViewController,
 
     private func showTrackersDetailsController() {
         let detailsVC = TrackingProtectionDetailsViewController(with: viewModel.getDetailsModel(),
-                                                                windowUUID: windowUUID,
-                                                                certificate: viewModel.certificates.first)
+                                                                windowUUID: windowUUID)
         self.navigationController?.pushViewController(detailsVC, animated: true)
     }
 
