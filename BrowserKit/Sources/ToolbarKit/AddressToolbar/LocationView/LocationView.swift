@@ -12,6 +12,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         static let gradientViewWidth: CGFloat = 40
         static let iconContainerCornerRadius: CGFloat = 8
         static let lockIconImageViewSize = CGSize(width: 40, height: 24)
+        static let dropDownImageViewSize = CGSize(width: 40, height: 24)
     }
 
     private var urlAbsolutePath: String?
@@ -161,6 +162,9 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         iconContainerStackViewLeadingConstraint?.isActive = true
 
         NSLayoutConstraint.activate([
+            dropDownSearchEngineView.heightAnchor.constraint(equalToConstant: UX.dropDownImageViewSize.height),
+            dropDownSearchEngineView.widthAnchor.constraint(equalToConstant: UX.dropDownImageViewSize.width),
+
             gradientView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
             gradientView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor),
             gradientView.leadingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor),

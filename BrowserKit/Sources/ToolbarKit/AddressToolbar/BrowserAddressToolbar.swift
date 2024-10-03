@@ -315,6 +315,10 @@ public class BrowserAddressToolbar: UIView, Notifiable, AddressToolbar, ThemeApp
         toolbarDelegate?.openBrowser(searchTerm: text.lowercased())
     }
 
+    func locationViewDidTapSearchEngine<T: SearchEngineView>(_ searchEngine: T) {
+            // TODO: FXIOS-10191 - To be implemented
+    }
+
     func locationViewAccessibilityActions() -> [UIAccessibilityCustomAction]? {
         toolbarDelegate?.addressToolbarAccessibilityActions()
     }
