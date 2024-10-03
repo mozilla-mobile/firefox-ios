@@ -75,6 +75,8 @@ class BookmarkDetailPanel: SiteTableViewController {
     // When `bookmarkItemURL` and `bookmarkItemOrFolderTitle` are valid updatePanelState updates Toolbar appropriaetly.
     var updatePanelState: ((LibraryPanelSubState) -> Void)?
 
+    var deleteBookmark: (() -> Void)?
+
     private var maxIndentationLevel: Int {
         return Int(floor((view.frame.width - UX.MinIndentedContentWidth) / UX.IndentationWidth))
     }
@@ -106,7 +108,10 @@ class BookmarkDetailPanel: SiteTableViewController {
         view.translatesAutoresizingMaskIntoConstraints = true
     }
 
-    fileprivate lazy var deleteBookmarkButton: UIButton = .build()
+    fileprivate lazy var deleteBookmarkButton: UIButton = .build { [weak self] button in
+        guard let self else { return }
+        button.addTarget(self, action: #selector(self.deleteBookmarkButtonTapped), for: .touchUpInside)
+    }
 
     // MARK: - Initializers
     convenience init(
@@ -369,6 +374,21 @@ class BookmarkDetailPanel: SiteTableViewController {
         return deferMaybe(BookmarkDetailPanelError())
     }
 
+    @objc
+    private func deleteBookmarkButtonTapped() {
+        guard let bookmarkItemURL else { return }
+        profile.places.deleteBookmarksWithURL(url: bookmarkItemURL).uponQueue(.main) { [weak self] result in
+            guard result.isSuccess, let self else { return }
+            if self.isPresentedFromToast {
+                self.deleteBookmark?()
+                self.dismiss(animated: true)
+            } else {
+                NotificationCenter.default.post(name: .LibraryPanelStateDidChange, object: nil, userInfo: nil)
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
+    }
+
     // MARK: UITableViewDataSource | UITableViewDelegate
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -520,14 +540,14 @@ class BookmarkDetailPanel: SiteTableViewController {
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if section == tableView.numberOfSections - 1 {
+        if section == tableView.numberOfSections - 1 && !isNew {
             return UX.deleteBookmarkButtonHeight + UX.footerTopMargin
         }
         return 0
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if section == tableView.numberOfSections - 1 {
+        if section == tableView.numberOfSections - 1 && !isNew {
             footerView.addSubview(deleteBookmarkButton)
             NSLayoutConstraint.activate([
                 deleteBookmarkButton.centerXAnchor.constraint(equalTo: footerView.centerXAnchor),

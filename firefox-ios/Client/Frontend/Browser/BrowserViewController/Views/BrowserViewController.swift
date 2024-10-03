@@ -1638,6 +1638,9 @@ class BrowserViewController: UIViewController,
                                                        presentedFromToast: true)
             let controller: DismissableNavigationViewController
             controller = DismissableNavigationViewController(rootViewController: detailController)
+            detailController.deleteBookmark = { [weak self] in
+                self?.showBookmarkToast(action: .remove)
+            }
             self.present(controller, animated: true, completion: nil)
         }
     }
