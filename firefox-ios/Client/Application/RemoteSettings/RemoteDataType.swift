@@ -21,7 +21,7 @@ enum RemoteDataTypeError: Error, LocalizedError {
 enum RemoteDataType: String, Codable {
     case passwordRules
 
-    var type: RemoteDataTypeRecord.Type {
+    var type: any RemoteDataTypeRecord.Type {
         switch self {
         case .passwordRules:
             return PasswordRuleRecord.self

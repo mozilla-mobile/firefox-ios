@@ -995,6 +995,7 @@
 		8AF99B5429EF2AF100108DEC /* MockLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF99B5329EF2AF100108DEC /* MockLogger.swift */; };
 		8AFA263227B6E9AB00D0C33B /* ToolbarBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFA263127B6E9AB00D0C33B /* ToolbarBadge.swift */; };
 		8AFA66042CA2940C0008D0F6 /* RemoteSettingsUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFA66022CA293F40008D0F6 /* RemoteSettingsUtilsTests.swift */; };
+		8AFC4E472CAF53E100C54B43 /* RemoteDataTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFC4E462CAF53E100C54B43 /* RemoteDataTypeTests.swift */; };
 		8AFCE50529DDF38300B1B253 /* LaunchScreenViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFCE50429DDF38300B1B253 /* LaunchScreenViewControllerTests.swift */; };
 		8AFCE50729DE0CD500B1B253 /* LaunchCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFCE50629DE0CD500B1B253 /* LaunchCoordinatorTests.swift */; };
 		8AFCE50929DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFCE50829DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift */; };
@@ -7136,6 +7137,7 @@
 		8AF99B5329EF2AF100108DEC /* MockLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLogger.swift; sourceTree = "<group>"; };
 		8AFA263127B6E9AB00D0C33B /* ToolbarBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarBadge.swift; sourceTree = "<group>"; };
 		8AFA66022CA293F40008D0F6 /* RemoteSettingsUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteSettingsUtilsTests.swift; sourceTree = "<group>"; };
+		8AFC4E462CAF53E100C54B43 /* RemoteDataTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteDataTypeTests.swift; sourceTree = "<group>"; };
 		8AFCE50429DDF38300B1B253 /* LaunchScreenViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewControllerTests.swift; sourceTree = "<group>"; };
 		8AFCE50629DE0CD500B1B253 /* LaunchCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchCoordinatorTests.swift; sourceTree = "<group>"; };
 		8AFCE50829DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLaunchFinishedLoadingDelegate.swift; sourceTree = "<group>"; };
@@ -11435,6 +11437,7 @@
 			isa = PBXGroup;
 			children = (
 				8AFA66022CA293F40008D0F6 /* RemoteSettingsUtilsTests.swift */,
+				8AFC4E462CAF53E100C54B43 /* RemoteDataTypeTests.swift */,
 			);
 			path = RemoteSettings;
 			sourceTree = "<group>";
@@ -16510,6 +16513,7 @@
 				E1D8BC7A21FF7A0000B100BD /* TPStatsBlocklistsTests.swift in Sources */,
 				5AF6254328A57A4600A90253 /* HistoryHighlightsDataAdaptorTests.swift in Sources */,
 				8A552AC82CB43AB400564C98 /* HeaderStateTests.swift in Sources */,
+				8AFC4E472CAF53E100C54B43 /* RemoteDataTypeTests.swift in Sources */,
 				8A7AF0C72C9A119A009691B5 /* TabPeekStateTests.swift in Sources */,
 				0AFF7F642C7784D600265214 /* MockDataCleaner.swift in Sources */,
 				8AE80BAD2891957C00BC12EA /* TopSitesDimensionTests.swift in Sources */,

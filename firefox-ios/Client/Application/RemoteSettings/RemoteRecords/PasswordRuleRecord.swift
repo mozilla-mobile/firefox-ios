@@ -4,7 +4,7 @@
 
 import Foundation
 
-protocol RemoteDataTypeRecord: Codable {}
+protocol RemoteDataTypeRecord: Codable, Equatable {}
 
 struct PasswordRuleRecord: RemoteDataTypeRecord {
     let domain: String
@@ -17,5 +17,12 @@ struct PasswordRuleRecord: RemoteDataTypeRecord {
         case passwordRules = "password-rules"
         case id
         case lastModified = "last_modified"
+    }
+
+    public static func == (lhs: PasswordRuleRecord, rhs: PasswordRuleRecord) -> Bool {
+        return lhs.domain == rhs.domain &&
+               lhs.passwordRules == rhs.passwordRules &&
+               lhs.id == rhs.id &&
+               lhs.lastModified == rhs.lastModified
     }
 }
