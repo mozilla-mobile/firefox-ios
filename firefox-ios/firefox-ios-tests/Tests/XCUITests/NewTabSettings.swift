@@ -45,7 +45,7 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.SelectNewTabAsBlankPage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         mozWaitForElementToNotExist(
@@ -80,7 +80,7 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         // Check that website is open
         mozWaitForElementToExist(app.webViews.firstMatch, timeout: TIMEOUT_LONG)
-        mozWaitForValueContains(app.textFields["url"], value: "mozilla")
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "mozilla")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307030
@@ -142,10 +142,11 @@ class NewTabSettingsTest: BaseTestCase {
         // Open new page and check that the custom url is used and he keyboard is not raised up
         navigator.performAction(Action.OpenNewTabFromTabTray)
         waitUntilPageLoad()
-        mozWaitForValueContains(app.textFields["url"], value: "mozilla")
-        XCTAssertFalse(app.textFields["url"].isSelected, "The URL has the focus")
+        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+        mozWaitForValueContains(url, value: "mozilla")
+        XCTAssertFalse(url.isSelected, "The URL has the focus")
         XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown")
-        app.textFields["url"].tap()
+        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
 
         validateKeyboardIsRaisedAndDismissed()
 
@@ -153,10 +154,10 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForValueContains(app.textFields["url"], value: "mozilla")
-        XCTAssertFalse(app.textFields["url"].isSelected, "The URL has the focus")
+        mozWaitForValueContains(url, value: "mozilla")
+        XCTAssertFalse(url.isSelected, "The URL has the focus")
         XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown")
-        app.textFields["url"].tap()
+        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
 
         validateKeyboardIsRaisedAndDismissed()
     }
@@ -167,11 +168,12 @@ class NewTabSettingsTest: BaseTestCase {
         XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
         XCTAssertTrue(app.keyboards.element.isVisible(), "The keyboard is not shown")
         // Tap the back button
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         navigator.performAction(Action.CloseURLBarOpen)
         // The keyboard is dismissed and the URL is unfocused
-        mozWaitForElementToExist(app.textFields["url"])
-        XCTAssertFalse(app.textFields["url"].isSelected, "The URL has the focus")
+        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+        mozWaitForElementToExist(url)
+        XCTAssertFalse(url.isSelected, "The URL has the focus")
         XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown")
     }
 }

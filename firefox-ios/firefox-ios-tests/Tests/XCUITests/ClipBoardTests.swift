@@ -9,7 +9,7 @@ class ClipBoardTests: BaseTestCase {
 
     // Check for test url in the browser
     func checkUrl() {
-        let urlTextField = app.textFields["url"]
+        let urlTextField = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
         mozWaitForValueContains(urlTextField, value: "www.example")
     }
 
@@ -38,7 +38,7 @@ class ClipBoardTests: BaseTestCase {
                     allowBtn.tap()
                 }
 
-                var value = app.textFields["url"].value as! String
+                var value = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as! String
                 if value.hasPrefix("http") == false {
                     value = "http://\(value)"
                 }
@@ -103,13 +103,13 @@ class ClipBoardTests: BaseTestCase {
 //        mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
 //        navigator.createNewTab()
 //        mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-//        app.textFields["url"].press(forDuration: 3)
+//        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].press(forDuration: 3)
 //        mozWaitForElementToExist(app.tables["Context Menu"])
 //        mozWaitForElementToExist(
 //            app.tables["Context Menu"].otherElements[AccessibilityIdentifiers.Photon.pasteAndGoAction]
 //        )
 //        app.tables["Context Menu"].otherElements[AccessibilityIdentifiers.Photon.pasteAndGoAction].tap()
-//        mozWaitForElementToExist(app.textFields["url"])
-//        mozWaitForValueContains(app.textFields["url"], value: "www.example.com")
+//        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
+//        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "www.example.com")
     }
 }

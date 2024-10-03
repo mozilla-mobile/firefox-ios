@@ -51,7 +51,7 @@ class SearchTests: BaseTestCase {
         mozWaitForElementToExist(app.tables["SiteTable"].cells.firstMatch)
 
         // Disable Search suggestion
-        app.buttons["urlBar-cancel"].tap()
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
 
         waitForTabsButton()
         app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
@@ -66,14 +66,14 @@ class SearchTests: BaseTestCase {
         mozWaitForElementToNotExist(app.tables["SiteTable"].cells.firstMatch)
 
         // Verify that previous choice is remembered
-        app.buttons["urlBar-cancel"].tap()
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
         navigator.nowAt(HomePanelsScreen)
         waitForTabsButton()
 
         typeOnSearchBar(text: "foobar")
         mozWaitForElementToNotExist(app.tables["SiteTable"].cells[SuggestedSite])
 
-        app.buttons["urlBar-cancel"].tap()
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
         waitForTabsButton()
         app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
         navigator.nowAt(BrowserTabMenu)
@@ -131,15 +131,15 @@ class SearchTests: BaseTestCase {
         app.menuItems["Select All"].tap()
         mozWaitForElementToExist(app.menuItems["Copy"])
         app.menuItems["Copy"].tap()
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
-        app.buttons["urlBar-cancel"].tap()
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
 
         navigator.nowAt(HomePanelsScreen)
         mozWaitForElementToExist(
             app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         )
-        mozWaitForElementToExist(app.textFields["url"])
-        app.textFields["url"].tap()
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
+        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
         mozWaitForElementToExist(app.textFields["address"])
         app.textFields["address"].tap()
 
@@ -152,7 +152,8 @@ class SearchTests: BaseTestCase {
         waitUntilPageLoad()
 
         // Check that the website is loaded
-        mozWaitForValueContains(app.textFields["url"], value: "www.mozilla.org")
+        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+        mozWaitForValueContains(url, value: "www.mozilla.org")
         waitUntilPageLoad()
 
         // Go back, write part of moz, check the autocompletion
@@ -176,7 +177,8 @@ class SearchTests: BaseTestCase {
 
         navigator.openURL("foo bar")
         mozWaitForElementToExist(app.webViews.firstMatch)
-        mozWaitForValueContains(app.textFields["url"], value: searchEngine.lowercased())
+        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+        mozWaitForValueContains(url, value: searchEngine.lowercased())
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306940
@@ -224,7 +226,8 @@ class SearchTests: BaseTestCase {
         mozWaitForElementToExist(app.menuItems["Search with Firefox"])
         app.menuItems["Search with Firefox"].tap()
         waitUntilPageLoad()
-        mozWaitForValueContains(app.textFields["url"], value: "google")
+        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+        mozWaitForValueContains(url, value: "google")
         // Now there should be two tabs open
         let numTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("2", numTab)
@@ -234,11 +237,12 @@ class SearchTests: BaseTestCase {
     // Smoketest
     func testSearchStartAfterTypingTwoWords() {
         navigator.goto(URLBarOpen)
-        mozWaitForElementToExist(app.textFields["url"])
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
         app.typeText("foo bar")
         app.typeText(XCUIKeyboardKey.return.rawValue)
-        mozWaitForElementToExist(app.textFields["url"])
-        mozWaitForValueContains(app.textFields["url"], value: "google")
+        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+        mozWaitForElementToExist(url)
+        mozWaitForValueContains(url, value: "google")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306943
@@ -322,7 +326,7 @@ class SearchTests: BaseTestCase {
             let menuSettingsButton = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
             scrollToElement(customizeHomepage)
             mozWaitForElementToExist(customizeHomepage)
-            let urlBar = app.textFields["url"]
+            let urlBar = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
             XCTAssertTrue(urlBar.isBelow(element: customizeHomepage))
             XCTAssertTrue(urlBar.isAbove(element: menuSettingsButton))
 
@@ -352,7 +356,7 @@ class SearchTests: BaseTestCase {
             app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
 
             // The focused is dismissed from the URL bar
-            let addressBar = app.textFields["url"]
+            let addressBar = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
             XCTAssertFalse(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
         }
     }

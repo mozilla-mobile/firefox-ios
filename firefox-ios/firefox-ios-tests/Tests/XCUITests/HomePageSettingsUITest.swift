@@ -93,7 +93,7 @@ class HomePageSettingsUITests: BaseTestCase {
         mozWaitForElementToExist(homePageMenuItem)
         homePageMenuItem.tap()
         waitUntilPageLoad()
-        mozWaitForValueContains(app.textFields["url"], value: "example")
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "example")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339258
@@ -134,7 +134,7 @@ class HomePageSettingsUITests: BaseTestCase {
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.GoToHomePage)
-        mozWaitForElementToExist(app.textFields["url"])
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
 
         // Now after setting History, make sure FF home is set
         navigator.goto(SettingsScreen)
@@ -161,8 +161,8 @@ class HomePageSettingsUITests: BaseTestCase {
 
         // Workaround needed after Xcode 11.3 update Issue 5937
         // Lets check only that website is open
-        mozWaitForElementToExist(app.textFields["url"])
-        mozWaitForValueContains(app.textFields["url"], value: "mozilla")
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "mozilla")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339489
@@ -222,7 +222,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
         if !iPad() {
-            mozWaitForElementToExist(app.buttons["urlBar-cancel"])
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
             navigator.performAction(Action.CloseURLBarOpen)
         }
         mozWaitForElementToExist(
@@ -268,14 +268,14 @@ class HomePageSettingsUITests: BaseTestCase {
         mozWaitForElementToNotExist(
             app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.bookmarks]
         )
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.ToggleRecentlySaved)
         navigator.nowAt(HomeSettings)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         if !iPad() {
-            mozWaitForElementToExist(app.buttons["urlBar-cancel"])
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
             navigator.performAction(Action.CloseURLBarOpen)
         }
         checkBookmarks()
@@ -325,7 +325,7 @@ class HomePageSettingsUITests: BaseTestCase {
 //                .staticTexts[urlMozillaLabel].exists
 //        )
 //        if !iPad() {
-//            mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: 3)
+//            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton], timeout: 3)
 //            navigator.performAction(Action.CloseURLBarOpen)
 //        }
 //        navigator.nowAt(NewTabScreen)

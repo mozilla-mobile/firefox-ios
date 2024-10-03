@@ -33,7 +33,7 @@ class UrlBarTests: BaseTestCase {
         // Visit any website and select the URL bar
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
         waitUntilPageLoad()
-        app.textFields["url"].tap()
+        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
         // The keyboard is brought up.
         let addressBar = app.textFields["address"]
         XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
@@ -45,7 +45,8 @@ class UrlBarTests: BaseTestCase {
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         // The URL bar is empty on the new tab
-        XCTAssertEqual(app.textFields["url"].value as! String, "Search or enter address")
+        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+        XCTAssertEqual(url.value as! String, "Search or enter address")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306887
@@ -54,7 +55,7 @@ class UrlBarTests: BaseTestCase {
         // Type a search term and hit "go"
         typeSearchTermAndHitGo(searchTerm: "Firefox")
         // The search is conducted correctly trough the default search engine
-        mozWaitForValueContains(app.textFields["url"], value: "google")
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "google")
         // Add a custom search engine and add it as default search engine
         navigator.goto(SearchSettings)
         let defaultSearchEngine = app.tables.cells.element(boundBy: 0)
@@ -68,7 +69,7 @@ class UrlBarTests: BaseTestCase {
         tapUrlBarValidateKeyboardAndIcon()
         typeSearchTermAndHitGo(searchTerm: "Firefox")
         // The search is conducted correctly trough the default search engine
-        mozWaitForValueContains(app.textFields["url"], value: "bing")
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "bing")
     }
 
     private func tapUrlBarValidateKeyboardAndIcon() {
