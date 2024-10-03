@@ -66,6 +66,17 @@ class TabDisplayPanel: UIViewController,
         subscribeToRedux()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        tabDisplayView.layoutIfNeeded()
+
+        let didLoadAction = TabPanelViewAction(panelType: panelType,
+                                               windowUUID: windowUUID,
+                                               actionType: TabPanelViewActionType.tabPanelDidLoad)
+        store.dispatch(didLoadAction)
+    }
+
     private func setupView() {
         navigationController?.setNavigationBarHidden(true, animated: false)
         view.addSubview(tabDisplayView)
@@ -162,10 +173,6 @@ class TabDisplayPanel: UIViewController,
                                         screen: .tabsPanel)
         store.dispatch(screenAction)
 
-        let didLoadAction = TabPanelViewAction(panelType: panelType,
-                                               windowUUID: windowUUID,
-                                               actionType: TabPanelViewActionType.tabPanelDidLoad)
-        store.dispatch(didLoadAction)
         let uuid = windowUUID
         store.subscribe(self, transform: {
             return $0.select({ appState in
