@@ -140,7 +140,7 @@ class CreditCardsTests: BaseTestCase {
             navigator.openURL("https://checkout.stripe.dev/preview")
             waitUntilPageLoad()
             // The autofill option (Use saved card prompt) is not displayed
-            let cardNumber = app.webViews["contentView"].webViews.textFields["Card number"]
+            let cardNumber = app.webViews["Web content"].textFields["Card number"]
             app.swipeUp()
             app.swipeUp()
             mozWaitForElementToExist(cardNumber)
@@ -166,12 +166,12 @@ class CreditCardsTests: BaseTestCase {
             waitForExistence(app.buttons["Done"])
             app.buttons["Done"].tap()
             app.swipeUp()
-            mozWaitForElementToExist(app.webViews["contentView"].webViews.staticTexts["Explore Checkout"], timeout: TIMEOUT)
+            mozWaitForElementToExist(app.webViews["Web content"].staticTexts["Explore Checkout"], timeout: TIMEOUT)
             mozWaitForElementToExist(cardNumber)
             cardNumber.tapOnApp()
             // The autofill option (Use saved card prompt) is displayed
             if !app.buttons[useSavedCard].exists {
-                app.webViews["contentView"].webViews.textFields["Full name on card"].tapOnApp()
+                app.webViews["Web content"].textFields["Full name on card"].tapOnApp()
             }
             mozWaitForElementToExist(app.buttons[useSavedCard])
         }
