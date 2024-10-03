@@ -1,15 +1,6 @@
 {
   "pins" : [
     {
-      "identity" : "a-star",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Dev1an/A-Star",
-      "state" : {
-        "revision" : "036256f9a8d1dda44085a2b92fa58199446a8339",
-        "version" : "3.0.0-beta-1"
-      }
-    },
-    {
       "identity" : "dip",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/AliSoftware/Dip.git",
@@ -37,6 +28,7 @@
       }
     },
     {
+<<<<<<< HEAD
       "identity" : "glean-swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mozilla/glean-swift",
@@ -64,6 +56,8 @@
       }
     },
     {
+=======
+>>>>>>> 4b19ff989 (Bugfix FXIOS-10212 Roll back Sentry version to 8.26.0 (#22354))
       "identity" : "kingfisher",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher.git",
@@ -73,6 +67,7 @@
       }
     },
     {
+<<<<<<< HEAD
       "identity" : "lottie-ios",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/airbnb/lottie-ios.git",
@@ -100,10 +95,13 @@
       }
     },
     {
+=======
+>>>>>>> 4b19ff989 (Bugfix FXIOS-10212 Roll back Sentry version to 8.26.0 (#22354))
       "identity" : "sentry-cocoa",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa.git",
       "state" : {
+<<<<<<< HEAD
         "revision" : "e2ac1723a4a9632e291c171b6e25a0c403b0fecb",
         "version" : "8.35.0"
       }
@@ -142,6 +140,10 @@
       "state" : {
         "revision" : "9f95b4d033a4edd3814b48608db3f2ca90c7218b",
         "version" : "3.7.0"
+=======
+        "revision" : "7fc7ca43967e2980d8691a8e017c118a84133aac",
+        "version" : "8.26.0"
+>>>>>>> 4b19ff989 (Bugfix FXIOS-10212 Roll back Sentry version to 8.26.0 (#22354))
       }
     },
     {

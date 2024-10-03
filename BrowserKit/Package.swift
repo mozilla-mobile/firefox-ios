@@ -55,7 +55,11 @@ let package = Package(
             exact: "2.0.0"),
         .package(
             url: "https://github.com/getsentry/sentry-cocoa.git",
+<<<<<<< HEAD
             exact: "8.35.0"),
+=======
+            exact: "8.26.0"),
+>>>>>>> 4b19ff989 (Bugfix FXIOS-10212 Roll back Sentry version to 8.26.0 (#22354))
         .package(
             url: "https://github.com/nbhasin2/GCDWebServer.git",
             branch: "master"),
