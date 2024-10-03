@@ -63,7 +63,11 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     private lazy var iconContainerBackgroundView: UIView = .build { view in
         view.layer.cornerRadius = UX.iconContainerCornerRadius
     }
-    private lazy var searchEngineContentView: SearchEngineView = .build()
+    // TODO FXIOS-10210 Once the Unified Search experiment is complete, we will only need to use `DropDownSearchEngineView`
+    // and we can remove `PlainSearchEngineView` from the project.
+    private lazy var plainSearchEngineView: PlainSearchEngineView = .build()
+    private lazy var dropDownSearchEngineView: DropDownSearchEngineView = .build()
+    private lazy var searchEngineContentView: SearchEngineView = plainSearchEngineView
     private lazy var lockIconButton: UIButton = .build { button in
         button.contentMode = .scaleAspectFit
         button.addTarget(self, action: #selector(self.didTapLockIcon), for: .touchUpInside)
@@ -109,7 +113,13 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     }
 
     func configure(_ state: LocationViewState, delegate: LocationViewDelegate, isUnifiedSearchEnabled: Bool) {
-        searchEngineContentView.configure(state, delegate: delegate, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
+        // TODO FXIOS-10210 Once the Unified Search experiment is complete, we won't need this extra layout logic and can
+        // simply use the `.build` method on `DropDownSearchEngineView` on `LocationView`'s init.
+        searchEngineContentView = isUnifiedSearchEnabled
+                                  ? dropDownSearchEngineView
+                                  : plainSearchEngineView
+        searchEngineContentView.configure(state, delegate: delegate)
+
         configureLockIconButton(state)
         configureURLTextField(state)
         configureA11y(state)
@@ -140,16 +150,11 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     }
 
     private func setupLayout() {
-        if isUnifiedSearchEnabled {
-            // TODO FXIOS-10193 Update search engine icon for Unified Search
-        }
-
         addSubviews(urlTextField, iconContainerStackView, gradientView)
         iconContainerStackView.addSubview(iconContainerBackgroundView)
         iconContainerStackView.addArrangedSubview(searchEngineContentView)
 
-        urlTextFieldLeadingConstraint = urlTextField.leadingAnchor.constraint(
-            equalTo: iconContainerStackView.trailingAnchor)
+        urlTextFieldLeadingConstraint = urlTextField.leadingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor)
         urlTextFieldLeadingConstraint?.isActive = true
 
         iconContainerStackViewLeadingConstraint = iconContainerStackView.leadingAnchor.constraint(equalTo: leadingAnchor)
