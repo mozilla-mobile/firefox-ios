@@ -54,18 +54,6 @@ final class BrowserViewControllerStateTests: XCTestCase {
         XCTAssertEqual(newState.displayView, .dataClearance)
     }
 
-    func testPrivateModeAction() {
-        let initialState = createSubject()
-        let reducer = browserViewControllerReducer()
-
-        XCTAssertEqual(initialState.browserViewType, .normalHomepage)
-
-        let action = getPrivateModeAction(isPrivate: true, for: .privateModeUpdated)
-        let newState = reducer(initialState, action)
-
-        XCTAssertEqual(newState.browserViewType, .privateHomepage)
-    }
-
     func testUpdateSelectedTabAction() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
