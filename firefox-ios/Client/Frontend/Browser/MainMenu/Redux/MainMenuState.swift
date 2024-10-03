@@ -74,7 +74,13 @@ struct MainMenuState: ScreenState, Equatable {
     }
 
     static let reducer: Reducer<Self> = { state, action in
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
+            return MainMenuState(
+                windowUUID: state.windowUUID,
+                menuElements: state.menuElements,
+                currentTabInfo: state.currentTabInfo
+            )
+        }
 
         switch action.actionType {
         case MainMenuActionType.updateCurrentTabInfo:
