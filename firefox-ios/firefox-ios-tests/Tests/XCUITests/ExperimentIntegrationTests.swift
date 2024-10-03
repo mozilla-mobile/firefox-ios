@@ -69,7 +69,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
 
         wait(forElement: surveyLink.element, timeout: TIMEOUT_LONG)
         surveyLink.element.tap()
-        mozWaitForValueContains(app.textFields["url"], value: "survey")
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "survey")
     }
 
     func testMessageNoThanksNavigatesCorrectly() throws {
@@ -99,7 +99,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
 
         wait(forElement: surveyLink.element, timeout: TIMEOUT_LONG)
         surveyLink.element.tap()
-        mozWaitForValueContains(app.textFields["url"], value: "survey")
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "survey")
     }
 
     func testHomeScreenMessageNavigatesCorrectly() throws {
@@ -109,7 +109,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
 
         wait(forElement: surveyLink.element, timeout: TIMEOUT_LONG)
         surveyLink.element.tap()
-        mozWaitForValueContains(app.textFields["url"], value: "survey")
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "survey")
     }
 
     func testHomeScreenMessageDismissesCorrectly() throws {

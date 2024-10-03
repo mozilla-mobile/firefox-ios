@@ -124,7 +124,7 @@ class BookmarksTests: BaseTestCase {
     // Smoketest
     func testBookmarksAwesomeBar() {
         XCTExpectFailure("The app was not launched", strict: false) {
-            mozWaitForElementToExist(app.textFields["url"], timeout: TIMEOUT_LONG)
+            mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], timeout: TIMEOUT_LONG)
         }
         typeOnSearchBar(text: "www.google")
         mozWaitForElementToExist(app.tables["SiteTable"])
@@ -165,7 +165,7 @@ class BookmarksTests: BaseTestCase {
         addNewBookmark()
         // Verify that clicking on bookmark opens the website
         app.tables["Bookmarks List"].cells.element(boundBy: 1).tap()
-        mozWaitForElementToExist(app.textFields["url"])
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306914
@@ -269,8 +269,8 @@ class BookmarksTests: BaseTestCase {
     }
 
     private func typeOnSearchBar(text: String) {
-        mozWaitForElementToExist(app.textFields["url"])
-        app.textFields["url"].tap()
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
+        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
         app.textFields["address"].typeText(text)
     }
 
@@ -279,7 +279,7 @@ class BookmarksTests: BaseTestCase {
     func testBookmarkLibraryAddDeleteBookmark() {
         // Verify that there are only 1 cell (desktop bookmark folder)
         XCTExpectFailure("The app was not launched", strict: false) {
-            mozWaitForElementToExist(app.textFields["url"], timeout: TIMEOUT_LONG)
+            mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], timeout: TIMEOUT_LONG)
         }
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()

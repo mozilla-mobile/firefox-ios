@@ -174,7 +174,7 @@ class FindInPageTests: BaseTestCase {
         openFindInPageFromMenu(openSite: userState.url!)
 
         // Before reloading, it is necessary to hide the keyboard
-        app.textFields["url"].tap()
+        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
         app.textFields["address"].typeText("\n")
 
         // Once the page is reloaded the search bar should not appear

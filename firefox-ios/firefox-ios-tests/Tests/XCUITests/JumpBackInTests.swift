@@ -7,7 +7,7 @@ import Common
 
 class JumpBackInTests: BaseTestCase {
     func closeKeyboard() {
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
@@ -108,7 +108,7 @@ class JumpBackInTests: BaseTestCase {
 //        app.cells["JumpBackInCell"].staticTexts["Twitter"].tap()
 //
 //        // The view is switched to the twitter tab
-//        let url = app.textFields["url"].value as! String
+//        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as! String
 //        XCTAssertEqual(url, "twitter.com/i/flow/login")
 //
 //        // Open a new tab in normal browsing
