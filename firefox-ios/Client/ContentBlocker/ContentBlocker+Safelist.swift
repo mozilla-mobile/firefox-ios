@@ -31,7 +31,7 @@ extension ContentBlocker {
             return ""
         }
         // Note that * is added to the front of domains, so foo.com becomes *foo.com
-        let list = "'*" + safelistedDomains.domainSet.joined(separator: "','*") + "'"
+        let list = "\"*" + safelistedDomains.domainSet.joined(separator: "\",\"*") + "\""
 
         let script =
         """
