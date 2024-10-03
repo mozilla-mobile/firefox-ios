@@ -169,7 +169,8 @@ class BookmarksPanelTests: XCTestCase {
         let bookmarkDetailPanel = BookmarkDetailPanel(profile: MockProfile(),
                                                       windowUUID: .XCTestDefaultUUID,
                                                       bookmarkNode: LocalDesktopFolder(),
-                                                      parentBookmarkFolder: LocalDesktopFolder())
+                                                      parentBookmarkFolder: LocalDesktopFolder(),
+                                                      deleteBookmark: {})
         mockNavigationController.setViewControllers([panel, bookmarkDetailPanel], animated: false)
 
         panel.handleRightTopButton()

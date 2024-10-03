@@ -1640,7 +1640,10 @@ class BrowserViewController: UIViewController,
                                                        windowUUID: self.windowUUID,
                                                        bookmarkNode: bookmarkNode,
                                                        parentBookmarkFolder: bookmarkFolder,
-                                                       presentedFromToast: true)
+                                                       presentedFromToast: true,
+                                                       deleteBookmark: { [weak self] in
+                self?.showBookmarkToast(action: .remove)
+            })
             let controller: DismissableNavigationViewController
             controller = DismissableNavigationViewController(rootViewController: detailController)
             self.present(controller, animated: true, completion: nil)

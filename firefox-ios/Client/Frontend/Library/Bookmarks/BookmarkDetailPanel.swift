@@ -26,6 +26,8 @@ class BookmarkDetailPanel: SiteTableViewController {
         static let FolderIconSize = CGSize(width: 24, height: 24)
         static let IndentationWidth: CGFloat = 20
         static let MinIndentedContentWidth: CGFloat = 100
+        static let deleteBookmarkButtonHeight: CGFloat = 44
+        static let footerTopMargin: CGFloat = 20
     }
 
     enum BookmarkDetailSection: Int, CaseIterable {
@@ -73,6 +75,8 @@ class BookmarkDetailPanel: SiteTableViewController {
     // When `bookmarkItemURL` and `bookmarkItemOrFolderTitle` are valid updatePanelState updates Toolbar appropriaetly.
     var updatePanelState: ((LibraryPanelSubState) -> Void)?
 
+    var deleteBookmark: (() -> Void)?
+
     private var maxIndentationLevel: Int {
         return Int(floor((view.frame.width - UX.MinIndentedContentWidth) / UX.IndentationWidth))
     }
@@ -100,13 +104,23 @@ class BookmarkDetailPanel: SiteTableViewController {
         return button
     }()
 
+    fileprivate lazy var footerView: UIView = .build { view in
+        view.translatesAutoresizingMaskIntoConstraints = true
+    }
+
+    fileprivate lazy var deleteBookmarkButton: UIButton = .build { [weak self] button in
+        guard let self else { return }
+        button.addTarget(self, action: #selector(self.deleteBookmarkButtonTapped), for: .touchUpInside)
+    }
+
     // MARK: - Initializers
     convenience init(
         profile: Profile,
         windowUUID: WindowUUID,
         bookmarkNode: FxBookmarkNode,
         parentBookmarkFolder: FxBookmarkNode,
-        presentedFromToast fromToast: Bool = false
+        presentedFromToast fromToast: Bool = false,
+        deleteBookmark: (() -> Void)?
     ) {
         let bookmarkItemData = bookmarkNode as? BookmarkItemData
         self.init(profile: profile,
@@ -129,6 +143,7 @@ class BookmarkDetailPanel: SiteTableViewController {
 
             self.title = .BookmarksEditFolder
         }
+        self.deleteBookmark = deleteBookmark
     }
 
     convenience init(
@@ -228,6 +243,11 @@ class BookmarkDetailPanel: SiteTableViewController {
     override func applyTheme() {
         super.applyTheme()
         tableView.backgroundColor = currentTheme().colors.layer1
+        footerView.backgroundColor = .clear
+        deleteBookmarkButton.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
+        deleteBookmarkButton.backgroundColor = currentTheme().colors.layer5
+        deleteBookmarkButton.setTitle(.Bookmarks.Menu.DeleteBookmark, for: .normal)
+        deleteBookmarkButton.setTitleColor(currentTheme().colors.textWarning, for: .normal)
     }
 
     override func reloadData() {
@@ -354,6 +374,21 @@ class BookmarkDetailPanel: SiteTableViewController {
         }
 
         return deferMaybe(BookmarkDetailPanelError())
+    }
+
+    @objc
+    private func deleteBookmarkButtonTapped() {
+        guard let bookmarkItemURL else { return }
+        profile.places.deleteBookmarksWithURL(url: bookmarkItemURL).uponQueue(.main) { [weak self] result in
+            guard result.isSuccess, let self else { return }
+            if self.isPresentedFromToast {
+                self.deleteBookmark?()
+                self.dismiss(animated: true)
+            } else {
+                self.deleteBookmark?()
+                self.navigationController?.popViewController(animated: true)
+            }
+        }
     }
 
     // MARK: UITableViewDataSource | UITableViewDelegate
@@ -504,6 +539,27 @@ class BookmarkDetailPanel: SiteTableViewController {
         }
 
         return UX.FieldRowHeight
+    }
+
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        if section == tableView.numberOfSections - 1 && !isNew {
+            return UX.deleteBookmarkButtonHeight + UX.footerTopMargin
+        }
+        return 0
+    }
+
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        if section == tableView.numberOfSections - 1 && !isNew {
+            footerView.addSubview(deleteBookmarkButton)
+            NSLayoutConstraint.activate([
+                deleteBookmarkButton.centerXAnchor.constraint(equalTo: footerView.centerXAnchor),
+                deleteBookmarkButton.topAnchor.constraint(equalTo: footerView.topAnchor, constant: UX.footerTopMargin),
+                deleteBookmarkButton.heightAnchor.constraint(equalToConstant: UX.deleteBookmarkButtonHeight),
+                deleteBookmarkButton.widthAnchor.constraint(equalToConstant: tableView.frame.width)
+            ])
+            return footerView
+        }
+        return nil
     }
 
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
