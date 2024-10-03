@@ -7,7 +7,7 @@ import MozillaAppServices
 import Common
 import Shared
 
-class RemoteSettingsUtilities {
+class RemoteSettingsUtils {
     private let logger: Logger
 
     init(logger: Logger = DefaultLogger.shared) {
