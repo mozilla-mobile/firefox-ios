@@ -134,7 +134,8 @@ class TrackingProtectionModel {
                                               URL: url.absoluteDisplayString,
                                               getLockIcon: getConnectionStatusImage(themeType:),
                                               connectionStatusMessage: connectionStatusString,
-                                              connectionSecure: connectionSecure)
+                                              connectionSecure: connectionSecure,
+                                              certificates: certificates)
     }
 
     func getBlockedTrackersModel() -> BlockedTrackersTableModel {
@@ -154,13 +155,6 @@ class TrackingProtectionModel {
         } else {
             return UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.lockSlash)
         }
-    }
-
-    func getCertificatesViewModel() -> CertificatesViewModel {
-        return CertificatesViewModel(topLevelDomain: websiteTitle,
-                                     title: displayTitle,
-                                     URL: url.absoluteDisplayString,
-                                     certificates: certificates)
     }
 
     func toggleSiteSafelistStatus() {
