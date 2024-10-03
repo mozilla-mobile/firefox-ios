@@ -41,6 +41,7 @@ public struct ImageIdentifiers {
             public static let syncv106 = "onboardingSync"
             public static let notification = "onboardingNotification"
             public static let searchWidget = "onboardingSearchWidget"
+            public static let setDefaultSteps = "onboardingSetDefaultSteps"
             public static let setToDock = "onboardingDock"
             public static let theming = "onboardingThemeing"
             public static let toolbar = "onboardingToolbar"
