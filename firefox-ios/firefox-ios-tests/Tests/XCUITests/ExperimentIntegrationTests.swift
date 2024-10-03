@@ -51,7 +51,6 @@ final class ExperimentIntegrationTests: BaseTestCase {
             return false
         }
     }
-
     func testVerifyExperimentEnrolled() throws {
         navigator.goto(SettingsScreen)
 
@@ -132,8 +131,9 @@ final class ExperimentIntegrationTests: BaseTestCase {
         let studiesToggle = app.switches.matching(
             NSPredicate(format: "identifier CONTAINS 'settings.studiesToggle'")
         )
-
+        XCTAssertEqual(studiesToggle.element.value as? String, "1")
         studiesToggle.element.tap()
+        XCTAssertEqual(studiesToggle.element.value as? String, "0")
         XCTAssertFalse(checkExperimentEnrollment(experimentName: experimentName))
     }
 }
