@@ -36,8 +36,11 @@ def read_rust_components_tag_version(SPM_PACKAGE):
     try:
         with open(SPM_PACKAGE) as f:
             data = json.load(f)
+            state_values = None, None
+            
             if SPM_PACKAGE == FOCUS_SPM_PACKAGE:
                 data = data["object"]
+                
             for i in data["pins"]:
                 if SPM_PACKAGE == FOCUS_SPM_PACKAGE:
                     if i["package"] == "MozillaRustComponentsSwift":
@@ -45,6 +48,10 @@ def read_rust_components_tag_version(SPM_PACKAGE):
                 else:
                     if i["identity"] == "rust-components-swift":
                         state_values = i["state"]["version"], i["state"]["revision"]
+
+            if None in state_values:
+                logging.info(f"Version: {state_values[0]}, Revision: {state_values[1]}")
+
             return state_values
 
     except (FileNotFoundError, json.JSONDecodeError) as e:
