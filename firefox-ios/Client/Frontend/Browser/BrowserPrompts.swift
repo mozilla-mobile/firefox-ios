@@ -40,13 +40,16 @@ protocol JSAlertInfo {
 struct MessageAlert: JSAlertInfo {
     let message: String
     let frame: WKFrameInfo
+    let completionHandler: (() -> Void)?
 
     func alertController() -> JSPromptAlertController {
         let alertController = JSPromptAlertController(
             title: titleForJavaScriptPanelInitiatedByFrame(frame),
             message: message,
             preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: .OKString, style: .default))
+        alertController.addAction(UIAlertAction(title: .OKString, style: .default) { _ in
+            completionHandler?()
+        })
         alertController.alertInfo = self
         return alertController
     }
