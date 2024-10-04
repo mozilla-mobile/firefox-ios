@@ -42,23 +42,19 @@ final class MainMenuCoordinatorTests: XCTestCase {
 
     func testShowDetailViewController() {
         let subject = createSubject()
-        let mockData = [MenuSection(options: [])]
-        let testTitle = "Test Title"
 
         subject.start()
-        subject.showDetailViewController(with: mockData, title: testTitle)
+        subject.showDetailViewController()
 
-        XCTAssertTrue(mockRouter.pushedViewController is MainMenuDetailViewController)
+        XCTAssertTrue(mockRouter.pushedViewController is MainMenuDetailsViewController)
         XCTAssertEqual(mockRouter.pushCalled, 1)
     }
 
     func testDismissDetailViewController() {
         let subject = createSubject()
-        let mockData = [MenuSection(options: [])]
-        let testTitle = "Test Title"
 
         subject.start()
-        subject.showDetailViewController(with: mockData, title: testTitle)
+        subject.showDetailViewController()
         subject.dismissDetailViewController()
 
         XCTAssertTrue(mockRouter.rootViewController is MainMenuViewController)

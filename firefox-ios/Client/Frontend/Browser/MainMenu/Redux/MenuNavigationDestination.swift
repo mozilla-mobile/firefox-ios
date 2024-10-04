@@ -4,7 +4,7 @@
 
 import Foundation
 
-enum MainMenuNavigationDestination: Equatable {
+enum MainMenuNavigationDestination: Equatable, CaseIterable {
     case bookmarks
     case customizeHomepage
     case downloads

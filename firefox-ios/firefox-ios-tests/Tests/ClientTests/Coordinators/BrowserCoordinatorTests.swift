@@ -1055,7 +1055,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
             return
         }
 
-        menuCoordinator.navigateTo(.customizeHomepage, animated: false)
+        menuCoordinator.navigateTo(MenuNavigationDestination(.customizeHomepage), animated: false)
 
         XCTAssertTrue(subject.childCoordinators[0] is SettingsCoordinator)
         XCTAssertTrue(mockRouter.presentedViewController?.children.first is AppSettingsTableViewController)
