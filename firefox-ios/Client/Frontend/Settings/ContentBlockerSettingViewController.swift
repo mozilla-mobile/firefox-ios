@@ -76,7 +76,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController,
                     TabContentBlocker.prefsChanged()
                     self.tableView.reloadData()
 
-                    self.setupLinkButtonVisibility(option: option)
+                    self.linkButton.isHidden = option == .strict
 
                     self.recordEventOnChecked(option: option)
                 })
