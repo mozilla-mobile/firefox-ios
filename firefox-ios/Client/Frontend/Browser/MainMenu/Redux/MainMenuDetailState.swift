@@ -11,14 +11,14 @@ struct MainMenuDetailsState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     var menuElements: [MenuSection]
     var shouldDismiss: Bool
+    var shouldGoBackToMenu: Bool
+    var navigationDestination: MainMenuNavigationDestination?
+    var submenuType: MainMenuDetailsViewType?
 
     var title: String {
         typealias Titles = String.MainMenu.ToolsSection
         return submenuType == .tools ? Titles.Tools : Titles.Save
     }
-
-    var navigationDestination: MainMenuNavigationDestination?
-    var submenuType: MainMenuDetailsViewType?
 
     private let menuConfigurator = MainMenuConfigurationUtility()
 
@@ -37,7 +37,8 @@ struct MainMenuDetailsState: ScreenState, Equatable {
             menuElements: currentState.menuElements,
             submenuType: currentState.submenuType,
             navigationDestination: currentState.navigationDestination,
-            shouldDismiss: currentState.shouldDismiss
+            shouldDismiss: currentState.shouldDismiss,
+            shouldGoBackToMenu: currentState.shouldGoBackToMenu
         )
     }
 
@@ -47,7 +48,8 @@ struct MainMenuDetailsState: ScreenState, Equatable {
             menuElements: [],
             submenuType: nil,
             navigationDestination: nil,
-            shouldDismiss: false
+            shouldDismiss: false,
+            shouldGoBackToMenu: false
         )
     }
 
@@ -56,13 +58,15 @@ struct MainMenuDetailsState: ScreenState, Equatable {
         menuElements: [MenuSection],
         submenuType: MainMenuDetailsViewType?,
         navigationDestination: MainMenuNavigationDestination? = nil,
-        shouldDismiss: Bool = false
+        shouldDismiss: Bool = false,
+        shouldGoBackToMenu: Bool = false
     ) {
         self.windowUUID = windowUUID
         self.menuElements = menuElements
         self.submenuType = submenuType
         self.navigationDestination = navigationDestination
         self.shouldDismiss = shouldDismiss
+        self.shouldGoBackToMenu = shouldGoBackToMenu
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -94,6 +98,13 @@ struct MainMenuDetailsState: ScreenState, Equatable {
                     and: action.windowUUID
                 ),
                 submenuType: currentSubmenu
+            )
+        case MainMenuDetailsActionType.backToMainMenu:
+            return MainMenuDetailsState(
+                windowUUID: state.windowUUID,
+                menuElements: state.menuElements,
+                submenuType: state.submenuType,
+                shouldGoBackToMenu: true
             )
         case MainMenuDetailsActionType.dismissView:
             return MainMenuDetailsState(
