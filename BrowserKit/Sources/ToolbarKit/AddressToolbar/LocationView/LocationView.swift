@@ -257,11 +257,8 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     // MARK: - `urlTextField` Configuration
     private func configureURLTextField(_ state: LocationViewState) {
         isEditing = state.isEditing
-        if state.isEditing {
-            urlTextField.text = (state.searchTerm != nil) ? state.searchTerm : state.url?.absoluteString
-        } else {
-            urlTextField.text = state.url?.absoluteString
-        }
+        let text = (state.searchTerm != nil) && state.isEditing ? state.searchTerm : state.url?.absoluteString
+        urlTextField.text = text
 
         urlTextField.placeholder = state.urlTextFieldPlaceholder
         urlAbsolutePath = state.url?.absoluteString
@@ -271,7 +268,10 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
 
         // Start overlay mode & select text when in edit mode with a search term
         if shouldShowKeyboard == true && state.shouldSelectSearchTerm == true {
-            urlTextField.selectAll(nil)
+            DispatchQueue.main.async {
+                self.urlTextField.text = text
+                self.urlTextField.selectAll(nil)
+            }
         }
     }
 
