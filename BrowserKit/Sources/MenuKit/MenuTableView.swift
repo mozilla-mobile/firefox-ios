@@ -17,6 +17,8 @@ class MenuTableView: UIView,
     private var menuData: [MenuSection]
     private var theme: Theme?
 
+    public var updateHeaderLineView: ((_ scrollViewOffset: CGFloat) -> Void)?
+
     override init(frame: CGRect) {
         tableView = UITableView(frame: .zero, style: .insetGrouped)
         menuData = []
@@ -95,6 +97,10 @@ class MenuTableView: UIView,
     func reloadTableView(with data: [MenuSection]) {
         menuData = data
         tableView.reloadData()
+    }
+
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        updateHeaderLineView?(scrollView.contentOffset.y)
     }
 
     // MARK: - Theme Applicable
