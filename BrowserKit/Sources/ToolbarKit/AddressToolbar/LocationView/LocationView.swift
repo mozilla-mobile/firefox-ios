@@ -162,9 +162,6 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         iconContainerStackViewLeadingConstraint?.isActive = true
 
         NSLayoutConstraint.activate([
-            dropDownSearchEngineView.heightAnchor.constraint(equalToConstant: UX.dropDownImageViewSize.height),
-            dropDownSearchEngineView.widthAnchor.constraint(equalToConstant: UX.dropDownImageViewSize.width),
-
             gradientView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
             gradientView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor),
             gradientView.leadingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor),
