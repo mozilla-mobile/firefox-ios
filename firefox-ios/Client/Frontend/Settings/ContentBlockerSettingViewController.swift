@@ -50,10 +50,6 @@ class ContentBlockerSettingViewController: SettingsTableViewController,
         linkButton.isHidden = currentBlockingStrength == .strict
     }
 
-    private func setupLinkButtonVisibility(option: BlockingStrength) {
-        self.linkButton.isHidden = option == .strict
-    }
-
     override func didRotate(from fromInterfaceOrientation: UIInterfaceOrientation) {
         tableView.reloadData()
     }
