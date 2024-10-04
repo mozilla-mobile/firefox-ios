@@ -47,7 +47,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController,
         super.viewDidLoad()
         applyTheme()
         setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
-        setupLinkButtonVisibility(option: currentBlockingStrength)
+        linkButton.isHidden = currentBlockingStrength == .strict
     }
 
     private func setupLinkButtonVisibility(option: BlockingStrength) {
