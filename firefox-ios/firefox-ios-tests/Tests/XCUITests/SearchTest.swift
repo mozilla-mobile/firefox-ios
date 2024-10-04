@@ -127,7 +127,7 @@ class SearchTests: BaseTestCase {
         // Copy, Paste and Go to url
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "www.mozilla.org")
-        app.textFields["address"].press(forDuration: 5)
+        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].press(forDuration: 5)
         app.menuItems["Select All"].tap()
         mozWaitForElementToExist(app.menuItems["Copy"])
         app.menuItems["Copy"].tap()
@@ -140,8 +140,8 @@ class SearchTests: BaseTestCase {
         )
         mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
         app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
-        mozWaitForElementToExist(app.textFields["address"])
-        app.textFields["address"].tap()
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
+        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
 
         mozWaitForElementToExist(app.menuItems["Paste"])
         app.menuItems["Paste"].tap()
@@ -153,7 +153,7 @@ class SearchTests: BaseTestCase {
 
         // Check that the website is loaded
         let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
-        mozWaitForValueContains(url, value: "www.mozilla.org")
+        mozWaitForValueContains(url, value: "mozilla.org")
         waitUntilPageLoad()
 
         // Go back, write part of moz, check the autocompletion
@@ -161,8 +161,8 @@ class SearchTests: BaseTestCase {
         navigator.nowAt(HomePanelsScreen)
         waitForTabsButton()
         typeOnSearchBar(text: "moz")
-        mozWaitForValueContains(app.textFields["address"], value: "mozilla.org")
-        let value = app.textFields["address"].value
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "mozilla.org")
+        let value = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value
         XCTAssertEqual(value as? String, "mozilla.org")
     }
 
@@ -258,13 +258,13 @@ class SearchTests: BaseTestCase {
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton])
             app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].tap()
 
-            let addressBar = app.textFields["address"]
+            let addressBar = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
             mozWaitForElementToExist(addressBar)
             XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
             let keyboardCount = app.keyboards.count
             XCTAssert(keyboardCount > 0, "The keyboard is not shown")
 
-            app.textFields["address"].typeText("www.google.com\n")
+            app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].typeText("www.google.com\n")
             waitUntilPageLoad()
 
             // Reload icon is displayed.
@@ -440,7 +440,7 @@ class SearchTests: BaseTestCase {
     }
 
     private func validateUrlHasFocusAndKeyboardIsDisplayed() {
-        let addressBar = app.textFields["address"]
+        let addressBar = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
         XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
         let keyboardCount = app.keyboards.count
         XCTAssert(keyboardCount > 0, "The keyboard is not shown")

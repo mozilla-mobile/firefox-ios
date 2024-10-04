@@ -10,16 +10,16 @@ class ClipBoardTests: BaseTestCase {
     // Check for test url in the browser
     func checkUrl() {
         let urlTextField = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
-        mozWaitForValueContains(urlTextField, value: "www.example")
+        mozWaitForValueContains(urlTextField, value: "example.com")
     }
 
     // Copy url from the browser
     func copyUrl() {
         navigator.goto(URLBarOpen)
-        mozWaitForElementToExist(app.textFields["address"])
-        app.textFields["address"].tap()
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
+        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
         if iPad() {
-            app.textFields["address"].press(forDuration: 1)
+            app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].press(forDuration: 1)
             app.menuItems["Select All"].tap()
         }
         mozWaitForElementToExist(app.menuItems["Copy"])
@@ -57,14 +57,12 @@ class ClipBoardTests: BaseTestCase {
         checkUrl()
         copyUrl()
         checkCopiedUrl()
-
         navigator.createNewTab()
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         navigator.nowAt(NewTabScreen)
-        navigator.goto(URLBarOpen)
-        app.textFields["address"].press(forDuration: 3)
-        app.menuItems["Paste"].tap()
-        mozWaitForValueContains(app.textFields["address"], value: "www.example.com")
+        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].press(forDuration: 3)
+        app.otherElements[AccessibilityIdentifiers.Photon.pasteAction].tap()
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "example.com")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307051
@@ -79,11 +77,11 @@ class ClipBoardTests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
         mozWaitForElementToExist(urlBar)
-        urlBar.press(forDuration: 1.5)
+        urlBar.press(forDuration: 3.0)
         app.otherElements[AccessibilityIdentifiers.Photon.pasteAndGoAction].tap()
         // The URL is pasted and the page is correctly loaded
         mozWaitForElementToExist(urlBar)
-        waitForValueContains(urlBar, value: "test-example.html")
+        waitForValueContains(urlBar, value: "localhost")
         mozWaitForElementToExist(app.staticTexts["Example Domain"])
     }
 

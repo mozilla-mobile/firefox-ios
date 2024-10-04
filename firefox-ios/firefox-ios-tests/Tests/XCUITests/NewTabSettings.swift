@@ -29,7 +29,7 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.performAction(Action.SelectNewTabAsBlankPage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
-        let addressBar = app.textFields["address"]
+        let addressBar = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
         XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
         let keyboardCount = app.keyboards.count
         XCTAssert(keyboardCount > 0, "The keyboard is not shown")
@@ -164,7 +164,7 @@ class NewTabSettingsTest: BaseTestCase {
 
     private func validateKeyboardIsRaisedAndDismissed() {
         // The keyboard is raised up
-        let addressBar = app.textFields["address"]
+        let addressBar = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
         XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
         XCTAssertTrue(app.keyboards.element.isVisible(), "The keyboard is not shown")
         // Tap the back button

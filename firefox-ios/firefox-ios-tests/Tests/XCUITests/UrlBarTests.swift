@@ -35,7 +35,7 @@ class UrlBarTests: BaseTestCase {
         waitUntilPageLoad()
         app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
         // The keyboard is brought up.
-        let addressBar = app.textFields["address"]
+        let addressBar = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
         XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
         // Scroll on the page
         app.swipeUp()
@@ -77,7 +77,7 @@ class UrlBarTests: BaseTestCase {
         waitForTabsButton()
         app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].tap()
         // The keyboard pops up and the default search icon is correctly displayed in the URL bar
-        let addressBar = app.textFields["address"]
+        let addressBar = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
         XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
         let keyboardCount = app.keyboards.count
         XCTAssert(keyboardCount > 0, "The keyboard is not shown")
@@ -91,7 +91,7 @@ class UrlBarTests: BaseTestCase {
     }
 
     private func typeSearchTermAndHitGo(searchTerm: String) {
-        app.textFields["address"].typeText(searchTerm)
+        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].typeText(searchTerm)
         waitUntilPageLoad()
         mozWaitForElementToExist(app.buttons["Go"])
         app.buttons["Go"].tap()

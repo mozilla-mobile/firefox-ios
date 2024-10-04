@@ -76,7 +76,7 @@ class TopTabsTest: BaseTestCase {
         mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
         app.cells.staticTexts[urlLabel].firstMatch.tap()
         let valueMozilla = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as! String
-        XCTAssertEqual(valueMozilla, urlValueLong)
+        XCTAssertEqual(valueMozilla, "localhost")
 
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
@@ -85,7 +85,7 @@ class TopTabsTest: BaseTestCase {
         mozWaitForElementToExist(app.cells.staticTexts[urlLabelExample])
         app.cells.staticTexts[urlLabelExample].firstMatch.tap()
         let value = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as! String
-        XCTAssertEqual(value, urlValueLongExample)
+        XCTAssertEqual(value, "localhost")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354449

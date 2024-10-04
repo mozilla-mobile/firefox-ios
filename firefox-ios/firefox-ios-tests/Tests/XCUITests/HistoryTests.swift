@@ -372,7 +372,7 @@ class HistoryTests: BaseTestCase {
         mozWaitForElementToExist(app.tables.staticTexts["The Book of Mozilla"])
         app.tables.staticTexts["The Book of Mozilla"].tap()
         let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
-        mozWaitForValueContains(url, value: "test-fixture/test-mozilla-book.html")
+        mozWaitForValueContains(url, value: "localhost")
     }
 
     // Private function created to select desired option from the "Clear Recent History" list

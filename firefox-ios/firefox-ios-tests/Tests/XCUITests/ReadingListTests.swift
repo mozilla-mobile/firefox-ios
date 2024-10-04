@@ -235,11 +235,7 @@ class ReadingListTests: BaseTestCase {
         savedToReadingList.tap()
         // The article is displayed in Reader View
         mozWaitForElementToExist(app.buttons["Reader View"])
-        // iOS 18 only: Reader View icon is enabled but is not selected.
-        if #unavailable(iOS 18) {
-            XCTAssertTrue(app.buttons["Reader View"].isSelected)
-        }
-        XCTAssertTrue(app.buttons["Reader View"].isEnabled)
+        XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.readerModeButton].isEnabled)
         app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_ReadingList)

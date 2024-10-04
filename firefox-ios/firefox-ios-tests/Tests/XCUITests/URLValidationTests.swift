@@ -28,7 +28,7 @@ class URLValidationTests: BaseTestCase {
             waitUntilPageLoad()
             mozWaitForElementToExist(app.otherElements.staticTexts["Mozilla"])
             mozWaitForElementToExist(app.buttons["Menu"])
-            mozWaitForValueContains(url, value: "www.mozilla.org/en-US/")
+            mozWaitForValueContains(url, value: "mozilla.org")
             clearURL()
         }
 
@@ -36,7 +36,7 @@ class URLValidationTests: BaseTestCase {
             navigator.openURL(i)
             waitUntilPageLoad()
             mozWaitForElementToExist(app.otherElements.staticTexts["Example Domain"])
-            mozWaitForValueContains(url, value: "example.com/")
+            mozWaitForValueContains(url, value: "example.com")
             clearURL()
         }
     }

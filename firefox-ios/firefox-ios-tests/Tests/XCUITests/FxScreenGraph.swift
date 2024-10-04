@@ -306,6 +306,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(NewTabScreen) { screenState in
         screenState.noop(to: HomePanelsScreen)
         if isTablet {
+            
             screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], to: TabTray)
         } else {
             screenState.gesture(to: TabTray) {
@@ -369,7 +370,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 // There is no Cancel option in iPad.
                 app.otherElements["PopoverDismissRegion"].tap()
             } else {
-                app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].tapOnApp()
+                app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].tapOnApp()
             }
         }
     }
@@ -957,7 +958,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         )
 
         screenState.tap(
-            app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection],
+            app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon],
             to: TrackingProtectionContextMenuDetails
         )
 

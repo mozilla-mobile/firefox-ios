@@ -64,7 +64,7 @@ class TrackingProtectionTests: BaseTestCase {
         if iPad() {
             sleep(1)
         }
-        if app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label
+        if app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].label
             == secureTrackingProtectionOffLabel {
             trackingProtection = false
         }
@@ -91,7 +91,7 @@ class TrackingProtectionTests: BaseTestCase {
         waitUntilPageLoad()
 
         // The lock icon should still be there
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon])
         mozWaitForElementToExist(
             app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
         )
@@ -102,7 +102,7 @@ class TrackingProtectionTests: BaseTestCase {
         waitUntilPageLoad()
 
         // Make sure TP is also there in PBM
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon])
         mozWaitForElementToExist(
             app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
         )
@@ -122,7 +122,7 @@ class TrackingProtectionTests: BaseTestCase {
     func testLockIconMenu() {
         navigator.openURL(differentWebsite)
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon])
         if #unavailable(iOS 16) {
             XCTAssert(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].isHittable)
             sleep(2)
@@ -197,11 +197,11 @@ class TrackingProtectionTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["mozilla.org"])
         mozWaitForElementToExist(app.staticTexts["Secure connection"])
         XCTAssertEqual(
-            app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
-            "Secure connection"
+            app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].label,
+            "Privacy & Security Settings"
         )
         // Dismiss the view and visit "badssl.com". Tap on "expired"
-        app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].tap(force: true)
+        app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].tap(force: true)
         navigator.nowAt(BrowserTab)
         navigator.openNewURL(urlString: "https://www.badssl.com")
         waitUntilPageLoad()
@@ -214,7 +214,10 @@ class TrackingProtectionTests: BaseTestCase {
             timeout: TIMEOUT_LONG
         )
         mozWaitForElementToExist(app.staticTexts.elementContainingText("Firefox has not connected to this website."))
-        XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label, "Connection not secure")
+        XCTAssertEqual(
+            app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].label,
+            "Privacy & Security Settings"
+        )
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2693741
@@ -244,34 +247,34 @@ class TrackingProtectionTests: BaseTestCase {
 
         if checkTrackingProtectionOn() {
             XCTAssertEqual(
-                app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
+                app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].label,
                 secureTrackingProtectionOnLabel
             )
             navigator.nowAt(BrowserTab)
             reloadWithWithoutTrackingProtection(label: "Without Tracking Protection")
             XCTAssertEqual(
-                app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
+                app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].label,
                 secureTrackingProtectionOffLabel
             )
             reloadWithWithoutTrackingProtection(label: "With Tracking Protection")
             XCTAssertEqual(
-                app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
+                app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].label,
                 secureTrackingProtectionOnLabel
             )
         } else {
             XCTAssertEqual(
-                app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
+                app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].label,
                 secureTrackingProtectionOffLabel
             )
             navigator.nowAt(BrowserTab)
             reloadWithWithoutTrackingProtection(label: "With Tracking Protection")
             XCTAssertEqual(
-                app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
+                app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].label,
                 secureTrackingProtectionOnLabel
             )
             reloadWithWithoutTrackingProtection(label: "Without Tracking Protection")
             XCTAssertEqual(
-                app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
+                app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].label,
                 secureTrackingProtectionOffLabel
             )
         }

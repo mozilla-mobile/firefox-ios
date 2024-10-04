@@ -44,19 +44,19 @@ class ToolbarTests: BaseTestCase {
         waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews.links["Mozilla"], timeout: 10)
         let valueMozilla = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as! String
-        XCTAssertEqual(valueMozilla, urlValueLong)
+        XCTAssertEqual(valueMozilla, "localhost")
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
         XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].isEnabled)
         navigator.openURL(website2)
         waitUntilPageLoad()
         let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
-        mozWaitForValueContains(url, value: "localhost:\(serverPort)")
+        mozWaitForValueContains(url, value: "localhost")
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
         XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
 
         app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
-        XCTAssertEqual(valueMozilla, urlValueLong)
+        XCTAssertEqual(valueMozilla, "localhost")
 
         waitUntilPageLoad()
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
@@ -67,7 +67,7 @@ class ToolbarTests: BaseTestCase {
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.cells.staticTexts[website1["label"]!])
         app.cells.element(boundBy: 0).tap()
-        XCTAssertEqual(valueMozilla, urlValueLong)
+        XCTAssertEqual(valueMozilla, "localhost")
 
         // Test to see if all the buttons are enabled.
         waitUntilPageLoad()
@@ -82,14 +82,14 @@ class ToolbarTests: BaseTestCase {
         waitForTabsButton()
         mozWaitForElementToExist(app.webViews.links["Mozilla"], timeout: 10)
         let valueMozilla = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as! String
-        XCTAssertEqual(valueMozilla, urlValueLong)
+        XCTAssertEqual(valueMozilla, "localhost")
 
         // Simulate pressing on backspace key should remove the text
         app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
-        app.textFields["address"].typeText("\u{8}")
+        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].typeText("\u{8}")
 
-        let value = app.textFields["address"].value
-        XCTAssertEqual(value as? String, "", "The url has not been removed correctly")
+        let value = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value
+        XCTAssertEqual(value as? String, "Search or enter address", "The url has not been removed correctly")
     }
 
     // Check that after scrolling on a page, the URL bar is hidden. Tapping one on the status bar will reveal
@@ -101,7 +101,6 @@ class ToolbarTests: BaseTestCase {
             // Workaround when testing on iPhone. If the orientation is in landscape on iPhone the tests will fail.
 
             XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
-            mozWaitForElementToExist(app.otherElements["Navigation Toolbar"])
 
             navigator.openURL(website1["url"]!, waitForLoading: true)
             // Adding the waiter right after navigating to the webpage in order to make the test more stable
