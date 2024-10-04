@@ -17,6 +17,7 @@ class MainMenuDetailsViewController: UIViewController,
     // MARK: - UI/UX elements
     private lazy var submenuContent: MenuDetailView = .build()
 
+    // MARK: - Properties
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -62,13 +63,8 @@ class MainMenuDetailsViewController: UIViewController,
         applyTheme()
     }
 
-    // MARK: Notifications
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DynamicFontChanged:
-            adjustLayout()
-        default: break
-        }
+    deinit {
+        unsubscribeFromRedux()
     }
 
     // MARK: View Transitions
@@ -82,10 +78,6 @@ class MainMenuDetailsViewController: UIViewController,
         coordinator.animate(alongsideTransition: { _ in
             self.adjustLayout()
         }, completion: nil)
-    }
-
-    deinit {
-        unsubscribeFromRedux()
     }
 
     // MARK: - UX related
@@ -120,10 +112,22 @@ class MainMenuDetailsViewController: UIViewController,
 
     private func setupCallbacks() {
         submenuContent.detailHeaderView.backToMainMenuCallback = { [weak self] in
-            self?.coordinator?.dismissDetailViewController()
+            guard let self else { return }
+            store.dispatch(
+                MainMenuAction(
+                    windowUUID: self.windowUUID,
+                    actionType: MainMenuDetailsActionType.backToMainMenu
+                )
+            )
         }
         submenuContent.detailHeaderView.dismissMenuCallback = { [weak self] in
-            self?.coordinator?.dismissMenuModal(animated: true)
+            guard let self else { return }
+            store.dispatch(
+                MainMenuAction(
+                    windowUUID: self.windowUUID,
+                    actionType: MainMenuDetailsActionType.dismissView
+                )
+            )
         }
     }
 
@@ -165,6 +169,11 @@ class MainMenuDetailsViewController: UIViewController,
 
         refreshContent()
 
+        if submenuState.shouldGoBackToMainMenu {
+            coordinator?.dismissDetailViewController()
+            return
+        }
+
         if submenuState.shouldDismiss {
             coordinator?.dismissMenuModal(animated: true)
             return
@@ -174,5 +183,14 @@ class MainMenuDetailsViewController: UIViewController,
     // MARK: - TableViewDelegates
     func reloadTableView(with data: [MenuSection]) {
         submenuContent.reloadTableView(with: data)
+    }
+
+    // MARK: Notifications
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DynamicFontChanged:
+            adjustLayout()
+        default: break
+        }
     }
 }

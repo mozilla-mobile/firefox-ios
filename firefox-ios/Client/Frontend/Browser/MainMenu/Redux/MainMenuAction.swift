@@ -41,4 +41,5 @@ enum MainMenuMiddlewareActionType: ActionType {
 
 enum MainMenuDetailsActionType: ActionType {
     case dismissView
+    case backToMainMenu
 }
