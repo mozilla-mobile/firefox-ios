@@ -1,9 +1,9 @@
 {
-    "url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/176179298",
-    "assets_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/176179298/assets",
-    "upload_url": "https://uploads.github.com/repos/FirefoxUX/acorn-icons/releases/176179298/assets{?name,label}",
-    "html_url": "https://github.com/FirefoxUX/acorn-icons/releases/tag/v1.22.1",
-    "id": 176179298,
+    "url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/177905895",
+    "assets_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/177905895/assets",
+    "upload_url": "https://uploads.github.com/repos/FirefoxUX/acorn-icons/releases/177905895/assets{?name,label}",
+    "html_url": "https://github.com/FirefoxUX/acorn-icons/releases/tag/v1.23.0",
+    "id": 177905895,
     "author": {
         "login": "cwzilla",
         "id": 87655586,
@@ -24,28 +24,16 @@
         "type": "User",
         "site_admin": false
     },
-    "node_id": "RE_kwDOI1CID84KgEhi",
-    "tag_name": "v1.22.1",
+    "node_id": "RE_kwDOI1CID84KmqDn",
+    "tag_name": "v1.23.0",
     "target_commitish": "main",
-    "name": "v1.22.1",
+    "name": "v1.23.0",
     "draft": false,
     "prerelease": false,
-    "created_at": "2024-09-20T19:31:59Z",
-    "published_at": "2024-09-20T19:33:03Z",
+    "created_at": "2024-10-01T23:07:12Z",
+    "published_at": "2024-10-01T23:11:26Z",
     "assets": [],
-    "tarball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/tarball/v1.22.1",
-    "zipball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/zipball/v1.22.1",
-    "body": "# Changelog\r\n## [1.22.1]\r\n### Changed\r\n- PDF\r\n  - privateModeCircleFillLarge.pdf",
-    "reactions": {
-        "url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/176179298/reactions",
-        "total_count": 3,
-        "+1": 1,
-        "-1": 0,
-        "laugh": 0,
-        "hooray": 1,
-        "confused": 0,
-        "heart": 0,
-        "rocket": 1,
-        "eyes": 0
-    }
+    "tarball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/tarball/v1.23.0",
+    "zipball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/zipball/v1.23.0",
+    "body": "# Changelog\r\n## [1.23.0]\r\n### Added\r\n- SVG\r\n  - folder-arrow-right-24.svg\r\n\r\n- XML\r\n  - ic_folder_arrow_right_24.xml"
 }
