@@ -143,7 +143,7 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
     }
 
     private func unwrapGetCurrentFormDataResult(result: Any?, error: (any Error)?, logger: Logger?) -> [String: Any]? {
-        if let error = error {
+        if let error {
             logger?.log(
                 "JavaScript execution error",
                 level: .warning,
