@@ -154,16 +154,7 @@ class EditBookmarkViewController: UIViewController,
             else {
                 return UITableViewCell()
             }
-
-            cell.setData(siteURL: viewModel.bookmarkURL, title: viewModel.bookmarkTitle)
-            cell.onURLFieldUpdate = { [weak self] in
-                self?.viewModel.setUpdatedURL($0)
-            }
-            cell.onTitleFieldUpdate = { [weak self] in
-                self?.viewModel.setUpdatedTitle($0)
-            }
-            cell.selectionStyle = .none
-            cell.applyTheme(theme: theme)
+            configureEditBookmarkCell(cell)
             return cell
         case .folder:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
@@ -172,16 +163,33 @@ class EditBookmarkViewController: UIViewController,
             else {
                 return UITableViewCell()
             }
-            cell.titleLabel.text = folder.title
-            let folderImage = UIImage(named: StandardImageIdentifiers.Large.folder)?.withRenderingMode(.alwaysTemplate)
-            cell.leftImageView.image = folderImage
-            cell.indentationLevel = viewModel.folderStructures.count == 1 ? 0 : folder.indentation
-            let canShowAccessoryView = viewModel.shouldShowDisclosureIndicator(isFolderSelected: folder == viewModel.selectedFolder)
-            cell.accessoryType = canShowAccessoryView ? .checkmark : .none
-            cell.selectionStyle = .default
-            cell.applyTheme(theme: theme)
+            configureParentFolderCell(cell, folder: folder)
             return cell
         }
+    }
+
+    private func configureEditBookmarkCell(_ cell: EditBookmarkCell) {
+        cell.setData(siteURL: viewModel.bookmarkURL, title: viewModel.bookmarkTitle)
+        cell.onURLFieldUpdate = { [weak self] in
+            self?.viewModel.setUpdatedURL($0)
+        }
+        cell.onTitleFieldUpdate = { [weak self] in
+            self?.viewModel.setUpdatedTitle($0)
+        }
+        cell.selectionStyle = .none
+        cell.applyTheme(theme: theme)
+    }
+
+    private func configureParentFolderCell(_ cell: OneLineTableViewCell, folder: Folder) {
+        cell.titleLabel.text = folder.title
+        let folderImage = UIImage(named: StandardImageIdentifiers.Large.folder)?.withRenderingMode(.alwaysTemplate)
+        cell.leftImageView.image = folderImage
+        cell.indentationLevel = viewModel.folderStructures.count == 1 ? 0 : folder.indentation
+        let isFolderSelected = folder == viewModel.selectedFolder
+        let canShowAccessoryView = viewModel.shouldShowDisclosureIndicator(isFolderSelected: isFolderSelected)
+        cell.accessoryType = canShowAccessoryView ? .checkmark : .none
+        cell.selectionStyle = .default
+        cell.applyTheme(theme: theme)
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

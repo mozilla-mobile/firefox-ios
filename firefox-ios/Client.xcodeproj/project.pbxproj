@@ -56,7 +56,6 @@
 		0BB5B30B1AC0AD1F0052877D /* LoginsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BB5B30A1AC0AD1F0052877D /* LoginsHelper.swift */; };
 		0BBC50952CA1F7F900CB7248 /* BookmarksRefactorFeatureFlagProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBC50942CA1F7F900CB7248 /* BookmarksRefactorFeatureFlagProvider.swift */; };
 		0BC9C9C41F26F54D000E8AB5 /* SiteLoadTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC9C9C31F26F54D000E8AB5 /* SiteLoadTest.swift */; };
-		0BDDB33A2CA6B17600D501DF /* EditBookmarkViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDDB3392CA6B17600D501DF /* EditBookmarkViewModelTests.swift */; };
 		0BDDB33D2CA6B1DA00D501DF /* EditFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDDB33C2CA6B1DA00D501DF /* EditFolderViewController.swift */; };
 		0BDDB33F2CA6B1F000D501DF /* EditFolderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDDB33E2CA6B1F000D501DF /* EditFolderViewModel.swift */; };
 		0BDDB3412CA6B23300D501DF /* EditFolderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDDB3402CA6B23300D501DF /* EditFolderCell.swift */; };
@@ -2267,7 +2266,6 @@
 		0BBD47CD96940FB07733C725 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/ErrorPages.strings"; sourceTree = "<group>"; };
 		0BC9C9C31F26F54D000E8AB5 /* SiteLoadTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteLoadTest.swift; sourceTree = "<group>"; };
 		0BD24470A8F71A8CE50A55E0 /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		0BDDB3392CA6B17600D501DF /* EditBookmarkViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBookmarkViewModelTests.swift; sourceTree = "<group>"; };
 		0BDDB33C2CA6B1DA00D501DF /* EditFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFolderViewController.swift; sourceTree = "<group>"; };
 		0BDDB33E2CA6B1F000D501DF /* EditFolderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFolderViewModel.swift; sourceTree = "<group>"; };
 		0BDDB3402CA6B23300D501DF /* EditFolderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFolderCell.swift; sourceTree = "<group>"; };
@@ -11350,7 +11348,6 @@
 				21737FB528789EA9000A9A92 /* HistoryPanelViewModelTests.swift */,
 				2197DF89287624BF00215624 /* LibraryViewModelTests.swift */,
 				8AF3B15B2AF99C77009BB262 /* ReadingListPanelTests.swift */,
-				0BDDB3392CA6B17600D501DF /* EditBookmarkViewModelTests.swift */,
 			);
 			path = Library;
 			sourceTree = "<group>";
@@ -16190,7 +16187,6 @@
 				21ED80B32AF2E43A0065D4C7 /* TabDisplayViewTests.swift in Sources */,
 				E1AEC177286E0CF500062E29 /* HistoryHighlightsViewModelTests.swift in Sources */,
 				2165B2C42860CB34004C0786 /* MockAdjustTelemetryData.swift in Sources */,
-				0BDDB33A2CA6B17600D501DF /* EditBookmarkViewModelTests.swift in Sources */,
 				C29B64872AD69D0200F3244B /* QRCodeCoordinatorTests.swift in Sources */,
 				0BA8964B1A250E6500C1010C /* ProfileTest.swift in Sources */,
 				8AE80BAF2891960300BC12EA /* MockTraitCollection.swift in Sources */,

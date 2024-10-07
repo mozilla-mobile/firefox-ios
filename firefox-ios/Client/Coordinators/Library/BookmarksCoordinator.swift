@@ -88,7 +88,9 @@ class BookmarksCoordinator: BaseCoordinator,
             let detailController = LegacyBookmarkDetailPanel(profile: profile,
                                                              windowUUID: windowUUID,
                                                              bookmarkNode: node,
-                                                             parentBookmarkFolder: folder)
+                                                             parentBookmarkFolder: folder) {
+                completion?()
+            }
             router.push(detailController)
         }
     }
@@ -131,17 +133,16 @@ class BookmarksCoordinator: BaseCoordinator,
     }
 
     private func makeDetailController(for node: FxBookmarkNode, folder: FxBookmarkNode) -> UIViewController {
-        if let node = node as? BookmarkItemData {
+        if node.type == .bookmark {
             return makeEditBookmarkController(for: node, folder: folder)
         }
-        if let node = node as? BookmarkFolderData {
+        if node.type == .folder {
             return makeEditFolderController(for: node, folder: folder)
         }
         return UIViewController()
     }
 
-    // TODO: understand FXBookmarkNode dependency other than BookmarkItemData
-    private func makeEditBookmarkController(for node: BookmarkItemData?, folder: FxBookmarkNode) -> UIViewController {
+    private func makeEditBookmarkController(for node: FxBookmarkNode?, folder: FxBookmarkNode) -> UIViewController {
         let viewModel = EditBookmarkViewModel(parentFolder: folder, node: node, profile: profile)
         viewModel.onBookmarkSaved = { [weak self] in
             self?.reloadLastBookmarksController()
@@ -160,7 +161,7 @@ class BookmarksCoordinator: BaseCoordinator,
         return controller
     }
 
-    private func makeEditFolderController(for node: BookmarkFolderData?, folder: FxBookmarkNode) -> UIViewController {
+    private func makeEditFolderController(for node: FxBookmarkNode?, folder: FxBookmarkNode) -> UIViewController {
         let viewModel = EditFolderViewModel(profile: profile,
                                             parentFolder: folder,
                                             folder: node)
