@@ -32,6 +32,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case newTabLongPressActions
         case readerModeLongPressAction
         case dataClearance
+        case passwordGenerator
     }
 
     let windowUUID: WindowUUID
@@ -408,6 +409,16 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 browserViewType: state.browserViewType,
                 displayView: .dataClearance,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+        case GeneralBrowserActionType.showPasswordGenerator:
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                showDataClearanceFlow: state.showDataClearanceFlow,
+                fakespotState: state.fakespotState,
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType,
+                displayView: .passwordGenerator,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action)
+                )
         default:
             return state
         }

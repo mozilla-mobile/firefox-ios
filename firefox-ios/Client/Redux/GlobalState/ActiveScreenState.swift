@@ -20,6 +20,7 @@ enum AppScreenState: Equatable {
     case themeSettings(ThemeSettingsState)
     case trackingProtection(TrackingProtectionState)
     case toolbar(ToolbarState)
+    case passwordGenerator(PasswordGeneratorState)
 
     static let reducer: Reducer<Self> = { state, action in
         switch state {
@@ -47,6 +48,8 @@ enum AppScreenState: Equatable {
             return .trackingProtection(TrackingProtectionState.reducer(state, action))
         case .toolbar(let state):
             return .toolbar(ToolbarState.reducer(state, action))
+        case .passwordGenerator(let state):
+            return .passwordGenerator(PasswordGeneratorState.reducer(state, action))
         }
     }
 
@@ -65,6 +68,7 @@ enum AppScreenState: Equatable {
         case .themeSettings: return .themeSettings
         case .trackingProtection: return .trackingProtection
         case .toolbar: return .toolbar
+        case .passwordGenerator: return .passwordGenerator
         }
     }
 
@@ -82,6 +86,7 @@ enum AppScreenState: Equatable {
         case .themeSettings(let state): return state.windowUUID
         case .trackingProtection(let state): return state.windowUUID
         case .toolbar(let state): return state.windowUUID
+        case .passwordGenerator(let state): return state.windowUUID
         }
     }
 }
@@ -144,6 +149,8 @@ struct ActiveScreensState: Equatable {
                 screens.append(.trackingProtection(TrackingProtectionState(windowUUID: uuid)))
             case .toolbar:
                 screens.append(.toolbar(ToolbarState(windowUUID: uuid)))
+            case .passwordGenerator:
+                screens.append(.passwordGenerator(PasswordGeneratorState(windowUUID: uuid)))
             }
         default:
             return screens

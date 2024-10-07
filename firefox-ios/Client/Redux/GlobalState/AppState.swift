@@ -30,6 +30,7 @@ struct AppState: StateType {
                 case (.themeSettings(let state), .themeSettings): return state as? S
                 case (.toolbar(let state), .toolbar): return state as? S
                 case (.trackingProtection(let state), .trackingProtection): return state as? S
+                case (.passwordGenerator(let state), .passwordGenerator): return state as? S
                 default: return nil
                 }
             }.first(where: {
@@ -61,7 +62,8 @@ let middlewares = [
     TabManagerMiddleware().tabsPanelProvider,
     ThemeManagerMiddleware().themeManagerProvider,
     ToolbarMiddleware().toolbarProvider,
-    TrackingProtectionMiddleware().trackingProtectionProvider
+    TrackingProtectionMiddleware().trackingProtectionProvider,
+    PasswordGeneratorMiddleware().passwordGeneratorProvider
 ]
 
 // In order for us to mock and test the middlewares easier,

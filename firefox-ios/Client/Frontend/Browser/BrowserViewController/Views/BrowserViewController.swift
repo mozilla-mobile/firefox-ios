@@ -1970,7 +1970,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func executeNavigationAndDisplayActions() {
-        guard isToolbarRefactorEnabled, let state = browserViewControllerState else { return }
+        guard let state = browserViewControllerState else { return }
 
         switch state {
         case _ where state.navigateTo != nil:
@@ -2024,6 +2024,10 @@ class BrowserViewController: UIViewController,
             presentNewTabLongPressActionSheet(from: view)
         case .dataClearance:
             didTapOnDataClearance()
+        case .passwordGenerator:
+            if let tab = tabManager.selectedTab {
+                navigationHandler?.showPasswordGenerator(tab: tab)
+            }
         }
     }
 
