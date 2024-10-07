@@ -42,6 +42,8 @@ class EditBookmarkViewController: UIViewController,
         view.delegate = self
         view.register(cellType: EditBookmarkCell.self)
         view.register(cellType: OneLineTableViewCell.self)
+        view.register(UITableViewHeaderFooterView.self,
+                      forHeaderFooterViewReuseIdentifier: UX.folderHeaderIdentifier)
         view.separatorStyle = .none
         let headerSpacerView = UIView(frame: CGRect(origin: .zero,
                                                     size: CGSize(width: 0, height: UX.bookmarkCellTopPadding)))
