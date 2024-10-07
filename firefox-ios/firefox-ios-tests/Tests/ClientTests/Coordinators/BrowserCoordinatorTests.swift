@@ -142,7 +142,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         let subject = createSubject()
         subject.showNewHomepage()
 
-        XCTAssertNotNil(subject.newHomepageViewController)
+        XCTAssertNotNil(subject.homepageViewController)
         XCTAssertNil(subject.webviewController)
         XCTAssertNil(subject.privateViewController)
     }
@@ -150,11 +150,11 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     func testShowNewHomepage_hasSameInstance() {
         let subject = createSubject()
         subject.showNewHomepage()
-        let firstHomepage = subject.newHomepageViewController
-        XCTAssertNotNil(subject.newHomepageViewController)
+        let firstHomepage = subject.homepageViewController
+        XCTAssertNotNil(subject.homepageViewController)
 
         subject.showNewHomepage()
-        let secondHomepage = subject.newHomepageViewController
+        let secondHomepage = subject.homepageViewController
         XCTAssertEqual(firstHomepage, secondHomepage)
     }
 

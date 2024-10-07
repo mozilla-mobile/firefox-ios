@@ -30,7 +30,7 @@ class BrowserCoordinator: BaseCoordinator,
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var legacyHomepageViewController: LegacyHomepageViewController?
-    var newHomepageViewController: HomepageViewController?
+    var homepageViewController: HomepageViewController?
     var privateViewController: PrivateHomepageViewController?
     var errorViewController: NativeErrorPageViewController?
 
@@ -133,7 +133,7 @@ class BrowserCoordinator: BaseCoordinator,
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
             return
         }
-        self.newHomepageViewController = homepageController
+        self.homepageViewController = homepageController
     }
 
     func showPrivateHomepage(overlayManager: OverlayModeManager) {

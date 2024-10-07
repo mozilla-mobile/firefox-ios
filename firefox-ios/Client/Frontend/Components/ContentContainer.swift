@@ -5,11 +5,11 @@
 import UIKit
 
 enum ContentType {
-    case webview
+    case homepage
     case legacyHomepage
     case privateHomepage
     case nativeErrorPage
-    case homepage
+    case webview
 }
 
 protocol ContentContainable: UIViewController {
