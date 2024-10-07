@@ -103,12 +103,14 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - BrowserDelegate
 
-    func showLegacyHomepage(inline: Bool,
-                      toastContainer: UIView,
-                      homepanelDelegate: HomePanelDelegate,
-                      libraryPanelDelegate: LibraryPanelDelegate,
-                      statusBarScrollDelegate: StatusBarScrollDelegate,
-                      overlayManager: OverlayModeManager) {
+    func showLegacyHomepage(
+        inline: Bool,
+        toastContainer: UIView,
+        homepanelDelegate: HomePanelDelegate,
+        libraryPanelDelegate: LibraryPanelDelegate,
+        statusBarScrollDelegate: StatusBarScrollDelegate,
+        overlayManager: OverlayModeManager
+    ) {
         let legacyHomepageViewController = getHomepage(
             inline: inline,
             toastContainer: toastContainer,

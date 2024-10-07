@@ -1310,12 +1310,14 @@ class BrowserViewController: UIViewController,
         if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
             browserDelegate?.showNewHomepage()
         } else {
-            browserDelegate?.showLegacyHomepage(inline: inline,
-                                          toastContainer: contentContainer,
-                                          homepanelDelegate: self,
-                                          libraryPanelDelegate: self,
-                                          statusBarScrollDelegate: statusBarOverlay,
-                                          overlayManager: overlayManager)
+            browserDelegate?.showLegacyHomepage(
+                inline: inline,
+                toastContainer: contentContainer,
+                homepanelDelegate: self,
+                libraryPanelDelegate: self,
+                statusBarScrollDelegate: statusBarOverlay,
+                overlayManager: overlayManager
+            )
         }
     }
 
