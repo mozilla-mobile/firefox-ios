@@ -1,3 +1,18 @@
+/* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the body text for the hint. */
+"ContextualHints.MainMenu.NewMenu.Body.v132" = "Löydä tarvitsemasi nopeammin aina yksityisestä selaamisesta toimintojen tallentamiseen.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
+"ContextualHints.MainMenu.NewMenu.Title.v132" = "Uutta: virtaviivaistettu valikko";
+
+/* The accessibility label for the back button in the Main menu header navigation view. */
+"MainMenu.Account.AccessibilityLabels.BackButton.v132" = "Edellinen";
+
+/* The accessibility label for the close button in the Main menu. */
+"MainMenu.Account.AccessibilityLabels.CloseButton.v132" = "Sulje";
+
+/* The accessibility label for the sign in button in the Main menu header view. */
+"MainMenu.Account.AccessibilityLabels.MainButton.v132" = "Kirjaudu sisään synkronoidaksesi salasanat, välilehdet ja paljon muuta";
+
 /* On the main menu, at the top, when the user is signed out. The description for the sign in action */
 "MainMenu.Account.SignedOut.Description.v131" = "Synkronoi salasanat, välilehdet ja paljon muuta";
 
@@ -10,17 +25,41 @@
 /* On the main menu, at the top, when the user is signed in but there was an error syncing. The title for this state. */
 "MainMenu.Account.SyncError.Title.v131" = "Kirjaudu takaisin sisään synkronointia varten";
 
-/* On the main menu, the title for the action that will take the user to the Bookmarks panel. Please keep as short as possible, <15 chars of space available. */
+/* On the main menu, the accessibility label for the action that will take the user to the Bookmarks panel. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks.v132" = "Kirjanmerkit";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Downloads panel. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.Downloads.v132" = "Lataukset";
+
+/* On the main menu, the accessibility label for the action that will take the user to the History panel. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.History.v132" = "Historia";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Passwords panel in the settings screen. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.Passwords.v132" = "Salasanat";
+
+/* On the main menu, the title for the action that will take the user to the Bookmarks panel. */
 "MainMenu.PanelLinkSection.Bookmarks.Title.v131" = "Kirjanmerkit";
 
-/* On the main menu, the title for the action that will take the user to the Downloads panel. Please keep as short as possible, <15 chars of space available. */
+/* On the main menu, the title for the action that will take the user to the Downloads panel. */
 "MainMenu.PanelLinkSection.Downloads.Title.v131" = "Lataukset";
 
-/* On the main menu, the title for the action that will take the user to the History panel. Please keep as short as possible, <15 chars of space available. */
+/* On the main menu, the title for the action that will take the user to the History panel. */
 "MainMenu.PanelLinkSection.History.Title.v131" = "Sivuhistoria";
 
-/* On the main menu, the title for the action that will take the user to the Passwords panel in the settings screen. Please keep as short as possible, <15 chars of space available. */
+/* On the main menu, the title for the action that will take the user to the Passwords panel in the settings screen. */
 "MainMenu.PanelLinkSection.Passwords.Title.v131" = "Salasanat";
+
+/* On the main menu, the accessibility labels for the action that will take the user to the Customize Homepage section in the settings screen. */
+"MainMenu.SettingsSection.AccessibilityLabels.CustomizeHomepage.v132" = "Mukauta kotisivua";
+
+/* On the main menu, the accessibility labels for the action that will take the user to a website to get help from Mozilla. */
+"MainMenu.SettingsSection.AccessibilityLabels.GetHelp.v132" = "Tuki";
+
+/* On the main menu, the accessibility labels for the action that will take the user to the Settings menu. */
+"MainMenu.SettingsSection.AccessibilityLabels.Settings.v132" = "Asetukset";
+
+/* On the main menu, the accessibility labels for the action that will take the user to a What's New in Firefox popup. Placeholder is for the app name. */
+"MainMenu.SettingsSection.AccessibilityLabels.WhatsNew.v132" = "Uutta %@issa";
 
 /* On the main menu, the title for the action that will take the user to the Customize Hopegape section in the settings screen. */
 "MainMenu.SettingsSection.CustomizeHomepage.Title.v131" = "Mukauta kotisivua";
@@ -33,6 +72,42 @@
 
 /* On the main menu, the title for the action that will take the user to a What's New in Firefox popup. Placeholder is for the app name. */
 "MainMenu.SettingsSection.WhatsNew.Title.v131" = "Uutta %@issa";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Add to Home screen tool for iOS Home screen. */
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132" = "Etusivu";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Shortcuts tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Subtitle.v132" = "Oikotie";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to add the current website to the shortcuts on the homepage. */
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Title.v132" = "Lisää oikoteihin";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Bookmarks tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Subtitle.v132" = "Lisää kirjanmerkki";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to save a bookmark for this particular page.. */
+"MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Title.v132" = "Lisää sivu kirjanmerkkeihin";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to edit the bookmark for this particular page. */
+"MainMenu.Submenus.Save.AccessibilityLabels.EditBookmark.Title.v132" = "Muokkaa kirjanmerkkiä";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows the user to remove this site from the reading list. */
+"MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromReadingList.Title.v132" = "Poista lukulistalta";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to remove the current website from the shortcuts on the homepage. */
+"MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromShortcuts.Title.v132" = "Poista oikoteistä";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Save as PDF tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveAsPDF.Subtitle.v132" = "PDF";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows the user to use the Save to PDF tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveAsPDF.Title.v132" = "Tallenna PDF-muodossa";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Reading List tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveToReadingList.Subtitle.v132" = "Lukulista";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows the user to add this site to the reading list. */
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveToReadingList.Title.v132" = "Tallenna lukulistaan";
 
 /* On the main menu, in the Save submenu, the title for the menu component that allows a user to add a website to the home screen. */
 "MainMenu.Submenus.Save.AddToHomeScreen.Title.v131" = "Lisää aloitusnäytölle";
@@ -70,6 +145,30 @@
 /* On the main menu, in the Save submenu, the title for the menu component that allows the user to add this site to the reading list. */
 "MainMenu.Submenus.Save.SaveToReadingList.Title.v131" = "Tallenna lukulistaan";
 
+/* On the main menu, the accessibility label for the action that will turn Night Mode off in the application. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.NightMode.Off.Title.v132" = "Poista yötila käytöstä";
+
+/* On the main menu, the accessibility label for the action that will turn Night Mode on in the application. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.NightMode.On.Title.v132" = "Ota yötila käyttöön";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Night Mode tool. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.NightMode.Subtitle.v132" = "Yötila";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Report Print tool. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Print.Subtitle.v132" = "Tulosta";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Print module in the application. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Print.Title.v132" = "Tulosta";
+
+/* On the main menu, the accessibility label for the action that will turn the reader view on for the current website. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReaderView.Off.Title.v132" = "Sulje lukunäkymä";
+
+/* On the main menu, the accessibility label for the action that will turn the reader view on for the current website. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReaderView.On.Title.v132" = "Avaa lukunäkymä";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Reader View tool. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReaderView.Subtitle.v132" = "Lukunäkymä";
+
 /* On the main menu, the title for the action that will turn Night Mode off in the application. */
 "MainMenu.Submenus.Tools.NightMode.Off.Title.v131" = "Poista yötila käytöstä";
 
@@ -106,11 +205,29 @@
 /* On the main menu, the title for the action that will take the user to the Share module in the application. */
 "MainMenu.Submenus.Tools.Share.Title.v131" = "Jaa";
 
+/* On the main menu, the accessibility label for the action that will create a new, non-private, tab. */
+"MainMenu.TabsSection.AccessibilityLabels.NewTab.v132" = "Uusi välilehti";
+
 /* On the main menu, the title for the action that will create a new private tab. */
 "MainMenu.TabsSection.NewPrivateTab.Title.v131" = "Uusi yksityinen välilehti";
 
 /* On the main menu, the title for the action that will create a new, non-private, tab. */
 "MainMenu.TabsSection.NewTab.Title.v131" = "Uusi välilehti";
+
+/* On the main menu, the accessibility label for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
+"MainMenu.ToolsSection.AccessibilityLabels.FindInPage.v132" = "Etsi sivulta";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
+"MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "Tallenna";
+
+/* On the main menu, the accessibility label for the action that will switch a site from mobile version to the desktop version, if available. */
+"MainMenu.ToolsSection.AccessibilityLabels.SwitchToDesktopSite.v132" = "Siirry työpöytäsivustolle";
+
+/* On the main menu, the accessibility label for the action that will switch a site from the desktop version to the mobile version. */
+"MainMenu.ToolsSection.AccessibilityLabels.SwitchToMobileSite.v132" = "Siirry mobiilisivustolle";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.Tools.v132" = "Työkalut";
 
 /* On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.FindInPage.Title.v131" = "Etsi sivulta…";
