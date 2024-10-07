@@ -1414,7 +1414,7 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Native Error Page
 
-    private func isNativeErrorPage() -> Bool {
+    func isNativeErrorPage() -> Bool {
         featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly)
     }
 
