@@ -83,8 +83,9 @@ final class InactiveTabsManagerTests: XCTestCase {
 
         for _ in 0..<amountOfInactiveTabs {
             let tab = Tab(profile: profile, windowUUID: windowUUID)
-            let lastExecutedDate = Calendar.current.add(numberOfDays: -15, to: Date())
-            tab.lastExecutedTime = lastExecutedDate?.toTimestamp()
+            if let lastExecutedDate = Calendar.current.add(numberOfDays: -15, to: Date()) {
+                tab.lastExecutedTime = lastExecutedDate.toTimestamp()
+            }
             tabs.append(tab)
         }
 

@@ -41,7 +41,7 @@
 "Microsurvey.Survey.OptionsOrder.AccessibilityLabel.v129" = "%2$@ 중 %1$@";
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this the title of a link on the survey and allows the user to navigate to our privacy policy details. */
-"Microsurvey.Survey.PrivacyPolicyLink.v127" = "개인 정보 보호 정책";
+"Microsurvey.Survey.PrivacyPolicyLink.v127" = "개인정보 보호정책";
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label that states whether the survey option was selected. */
 "Microsurvey.Survey.RadioButton.Selected.AccessibilityLabel.v129" = "선택됨";

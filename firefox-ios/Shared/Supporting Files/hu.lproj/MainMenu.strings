@@ -41,7 +41,7 @@
 "MainMenu.Submenus.Save.AddToHomeScreen.Title.v131" = "Kezdőképernyőhöz adás";
 
 /* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Shortcuts tool. */
-"MainMenu.Submenus.Save.AddToShortcuts.Subtitle.v131" = "Parancs";
+"MainMenu.Submenus.Save.AddToShortcuts.Subtitle.v131" = "Indítóikon";
 
 /* On the main menu, in the Save submenu, the title for the menu component that allows a user to add the current website to the shortcuts on the homepage. */
 "MainMenu.Submenus.Save.AddToShortcuts.Title.v131" = "Hozzáadás a Parancsokhoz";

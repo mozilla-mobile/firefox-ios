@@ -432,6 +432,10 @@ enums:
       read-privacy-policy:
         description: >
           Will open a webview where the user can read the privacy policy
+      open-ios-fx-settings:
+        description: >
+          Will take the user to the default browser settings
+          in the iOS system settings
       end-onboarding:
         description: >
           Will end the onboarding on a set card
@@ -469,6 +473,9 @@ enums:
       sync-devices:
         description: >
           Corresponding to the sync-devices image
+      set-default-steps:
+        description: >
+          Corresponding to the set to default steps image
       set-to-dock:
         description: >
           Corresponding to the set to dock image
