@@ -158,6 +158,11 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
             textColor = colors.textPrimary
         }
 
+        attributedPlaceholder = NSAttributedString(
+            string: placeholder ?? "",
+            attributes: [NSAttributedString.Key.foregroundColor: colors.textSecondary]
+        )
+
         tintClearButton()
     }
 
