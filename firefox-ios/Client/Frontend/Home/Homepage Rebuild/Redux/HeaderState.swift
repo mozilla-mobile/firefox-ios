@@ -11,8 +11,10 @@ struct HeaderState: StateType, Equatable {
     var showHeader: Bool
 
     init(windowUUID: WindowUUID) {
-        self.init(windowUUID: windowUUID,
-                  showHeader: false)
+        self.init(
+            windowUUID: windowUUID,
+            showHeader: false
+        )
     }
 
     private init(
@@ -28,7 +30,7 @@ struct HeaderState: StateType, Equatable {
         else {
             return HeaderState(
                 windowUUID: state.windowUUID,
-                showHeader: state.showHeader
+                showHeader: false
             )
         }
 

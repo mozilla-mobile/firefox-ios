@@ -30,14 +30,14 @@ struct HomepageState: ScreenState, Equatable {
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
-            loadInitialData: false
+            loadInitialData: false,
             headerState: HeaderState(windowUUID: windowUUID)
         )
     }
 
     private init(
         windowUUID: WindowUUID,
-        loadInitialData: Bool
+        loadInitialData: Bool,
         headerState: HeaderState
     ) {
         self.windowUUID = windowUUID
@@ -50,7 +50,7 @@ struct HomepageState: ScreenState, Equatable {
         else {
             return HomepageState(
                 windowUUID: state.windowUUID,
-                loadInitialData: false
+                loadInitialData: false,
                 headerState: HeaderState.reducer(state.headerState, action)
             )
         }
@@ -59,19 +59,19 @@ struct HomepageState: ScreenState, Equatable {
         case HomepageActionType.initialize:
             return HomepageState(
                 windowUUID: state.windowUUID,
-                loadInitialData: true
+                loadInitialData: true,
                 headerState: HeaderState.reducer(state.headerState, action)
             )
         case HeaderActionType.updateHeader:
             return HomepageState(
                 windowUUID: state.windowUUID,
-                loadInitialData: false
+                loadInitialData: false,
                 headerState: HeaderState.reducer(state.headerState, action)
             )
         default:
             return HomepageState(
                 windowUUID: state.windowUUID,
-                loadInitialData: false
+                loadInitialData: false,
                 headerState: HeaderState.reducer(state.headerState, action)
             )
         }

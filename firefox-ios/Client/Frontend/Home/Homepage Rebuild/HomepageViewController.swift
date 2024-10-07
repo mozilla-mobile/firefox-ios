@@ -6,15 +6,11 @@ import Foundation
 import Common
 import Redux
 
-<<<<<<< HEAD:firefox-ios/Client/Frontend/Home/Homepage Rebuild/HomepageViewController.swift
-final class HomepageViewController: UIViewController, ContentContainable, Themeable {
-=======
-final class NewHomepageViewController: UIViewController,
-                                       UICollectionViewDelegate,
-                                       ContentContainable,
-                                       Themeable,
-                                       StoreSubscriber {
->>>>>>> 1451919a81 (add initial redux):firefox-ios/Client/Frontend/Home/Homepage Rebuild/NewHomepageViewController.swift
+final class HomepageViewController: UIViewController,
+                                    UICollectionViewDelegate,
+                                    ContentContainable,
+                                    Themeable,
+                                    StoreSubscriber {
     // MARK: - Typealiases
     typealias SubscriberStateType = HomepageState
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
@@ -147,7 +143,7 @@ final class NewHomepageViewController: UIViewController,
     private func configureCollectionView() {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layoutConfiguration)
 
-        // TODO: FXIOS-10163 - Update with proper cells
+        // TODO: FXIOS-10162 - Update with proper cells
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
 
         collectionView.keyboardDismissMode = .onDrag
@@ -183,7 +179,7 @@ final class NewHomepageViewController: UIViewController,
         for item: HomepageDiffableDataSource.HomeItem,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
-        // TODO: FXIOS-10163 - Dummy collection cells, to update with proper cells
+        // TODO: FXIOS-10162 - Dummy collection cells, to update with proper cells
         guard let section = HomepageSection(
             rawValue: indexPath.section
         ), let cell: UICollectionViewCell = collectionView?.dequeueReusableCell(
@@ -193,7 +189,7 @@ final class NewHomepageViewController: UIViewController,
             self.logger.log(
                 "Section should not have been nil, something went wrong",
                 level: .fatal,
-                category: .newHomepage
+                category: .homepage
             )
             return UICollectionViewCell()
         }
@@ -224,7 +220,7 @@ final class NewHomepageViewController: UIViewController,
     // MARK: UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let selectedItem = dataSource?.itemIdentifier(for: indexPath) {
-            // TODO: FXIOS-10163 - Dummy trigger to update with proper triggers
+            // TODO: FXIOS-10162 - Dummy trigger to update with proper triggers
             if selectedItem.title == "First" {
                 store.dispatch(
                     HeaderAction(

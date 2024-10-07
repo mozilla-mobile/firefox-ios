@@ -8,39 +8,70 @@ import XCTest
 @testable import Client
 
 final class HomepageStateTests: XCTestCase {
-//    func testInitialization() {
-//        let initialState = createSubject()
-//
-//        XCTAssertFalse(initialState.showHeader)
-//    }
-//
-//    func test_windowUUID() {
-//        let initialState = createSubject()
-//
-//        XCTAssertFalse(initialState.showHeader)
-//    }
-//
-//    func testUpdatingCurrentHeader() {
-//        let initialState = createSubject()
-//        let reducer = homepageReducer()
-//
-//        let newState = reducer(
-//            initialState,
-//            HomepageAction(
-//                windowUUID: .XCTestDefaultUUID,
-//                actionType: HomepageActionType.updateHeader
-//            )
-//        )
-//
-//        XCTAssertTrue(newState.showHeader)
-//    }
-//
-//    // MARK: - Private
-//    private func createSubject() -> HomepageState {
-//        return HomepageState(windowUUID: .XCTestDefaultUUID)
-//    }
-//
-//    private func homepageReducer() -> Reducer<HomepageState> {
-//        return HomepageState.reducer
-//    }
+    func testInitialization() {
+        let initialState = createSubject()
+
+        XCTAssertFalse(initialState.loadInitialData)
+    }
+
+    func test_windowUUID_returnsValidUUID() {
+        let initialState = createSubject()
+
+        XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
+    }
+
+    func test_different_windowUUID_returnsDefaultState() {
+        let initialState = createSubject()
+        let reducer = homepageReducer()
+
+        let newState = reducer(
+            initialState,
+            HeaderAction(
+                windowUUID: .DefaultUITestingUUID,
+                actionType: HeaderActionType.updateHeader
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertFalse(newState.loadInitialData)
+    }
+
+    func test_initializeData_returnsTrue() {
+        let initialState = createSubject()
+        let reducer = homepageReducer()
+
+        let newState = reducer(
+            initialState,
+            HomepageAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageActionType.initialize
+            )
+        )
+
+        XCTAssertTrue(newState.loadInitialData)
+    }
+
+    func test_updateHeader_returnsTrue() {
+        let initialState = createSubject()
+        let reducer = homepageReducer()
+
+        let newState = reducer(
+            initialState,
+            HeaderAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HeaderActionType.updateHeader
+            )
+        )
+
+        XCTAssertTrue(newState.headerState.showHeader)
+    }
+
+    // MARK: - Private
+    private func createSubject() -> HomepageState {
+        return HomepageState(windowUUID: .XCTestDefaultUUID)
+    }
+
+    private func homepageReducer() -> Reducer<HomepageState> {
+        return HomepageState.reducer
+    }
 }

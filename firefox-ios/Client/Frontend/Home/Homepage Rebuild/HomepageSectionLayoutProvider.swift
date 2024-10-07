@@ -27,7 +27,7 @@ final class HomepageSectionLayoutProvider {
         }
     }
 
-    // TODO: FXIOS-10163 - Update layout section with appropriate views + integrate with redux
+    // TODO: FXIOS-10162 - Update layout section with appropriate views + integrate with redux
     private func createLayoutSection(
         for section: HomepageSection
     ) -> NSCollectionLayoutSection {
