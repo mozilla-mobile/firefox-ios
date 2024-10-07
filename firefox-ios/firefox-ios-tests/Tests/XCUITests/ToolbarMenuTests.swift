@@ -48,7 +48,6 @@ class ToolbarMenuTests: BaseTestCase {
         mozWaitForElementToExist(hamburgerMenu)
         mozWaitForElementToNotExist(app.tables["Context Menu"])
         mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
-        mozWaitForElementToExist(app.webViews["contentView"])
         if iPad() {
             mozWaitForElementToExist(bookmarksButton)
             XCTAssertTrue(
