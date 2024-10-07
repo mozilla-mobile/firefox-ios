@@ -12,11 +12,14 @@ final class TabErrorTelemetryHelper {
     private let defaultsKey = "TabErrorTelemetryHelper_Data"
     private let telemetryWrapper: TelemetryWrapperProtocol
     private let defaults: UserDefaultsInterface
+    private let windowManager: WindowManager
 
     private init(telemetryWrapper: TelemetryWrapperProtocol = TelemetryWrapper.shared,
+                 windowManager: WindowManager = AppContainer.shared.resolve(),
                  defaults: UserDefaultsInterface = UserDefaults.standard) {
         self.telemetryWrapper = telemetryWrapper
         self.defaults = defaults
+        self.windowManager = windowManager
     }
 
     /// Records the scene (windows) tab count for the purposes of sanity-checking for
@@ -50,7 +53,6 @@ final class TabErrorTelemetryHelper {
     // MARK: - Internal Utility
 
     private func getTabCount(window: WindowUUID) -> Int {
-        let windowManager: WindowManager = AppContainer.shared.resolve()
         return windowManager.tabManager(for: window).normalTabs.count
     }
 
