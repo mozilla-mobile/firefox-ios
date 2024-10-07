@@ -10,7 +10,13 @@ import Common
 /// | navigation  | indicators | url       [ page    ] | browser  |
 /// |   actions   |            |           [ actions ] | actions  |
 /// +-------------+------------+-----------------------+----------+
-public class BrowserAddressToolbar: UIView, Notifiable, AddressToolbar, ThemeApplicable, LocationViewDelegate {
+public class BrowserAddressToolbar: 
+    UIView,
+    Notifiable,
+    AddressToolbar,
+    ThemeApplicable,
+    LocationViewDelegate,
+    UIDragInteractionDelegate {
     private enum UX {
         static let horizontalEdgeSpace: CGFloat = 16
         static let verticalEdgeSpace: CGFloat = 8
@@ -328,5 +334,14 @@ public class BrowserAddressToolbar: UIView, Notifiable, AddressToolbar, ThemeApp
         toolbarBottomBorderView.backgroundColor = theme.colors.borderPrimary
         locationView.applyTheme(theme: theme)
         self.theme = theme
+    }
+
+    // MARK: UIDragInteractionDelegate
+    public func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
+        return []
+    }
+
+    public func dragInteraction(_ interaction: UIDragInteraction, sessionWillBegin session: UIDragSession) {
+        toolbarDelegate?.addressToolbarDidBeginDragInteraction()
     }
 }

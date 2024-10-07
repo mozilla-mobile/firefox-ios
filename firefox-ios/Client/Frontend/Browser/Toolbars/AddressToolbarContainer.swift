@@ -16,6 +16,7 @@ protocol AddressToolbarContainerDelegate: AnyObject {
     func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]?
     func addressToolbarDidEnterOverlayMode(_ view: UIView)
     func addressToolbar(_ view: UIView, didLeaveOverlayModeForReason: URLBarLeaveOverlayModeReason)
+    func addressToolbarDidBeginDragInteraction()
 }
 
 final class AddressToolbarContainer: UIView,
@@ -321,6 +322,10 @@ final class AddressToolbarContainer: UIView,
         if contextualHintType == ContextualHintType.navigation.rawValue && !toolbarState.canShowNavigationHint { return }
 
         delegate?.configureContextualHint(for: button, with: contextualHintType)
+    }
+
+    func addressToolbarDidBeginDragInteraction() {
+        delegate?.addressToolbarDidBeginDragInteraction()
     }
 
     // MARK: - MenuHelperURLBarInterface

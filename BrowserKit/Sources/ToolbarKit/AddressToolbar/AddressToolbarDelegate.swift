@@ -15,4 +15,5 @@ public protocol AddressToolbarDelegate: AnyObject {
     func configureContextualHint(_ addressToolbar: BrowserAddressToolbar,
                                  for button: UIButton,
                                  with contextualHintType: String)
+    func addressToolbarDidBeginDragInteraction()
 }
