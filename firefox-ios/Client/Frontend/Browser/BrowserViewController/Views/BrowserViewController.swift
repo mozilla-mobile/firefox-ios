@@ -1310,7 +1310,7 @@ class BrowserViewController: UIViewController,
         if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
             browserDelegate?.showNewHomepage()
         } else {
-            browserDelegate?.showHomepage(inline: inline,
+            browserDelegate?.showLegacyHomepage(inline: inline,
                                           toastContainer: contentContainer,
                                           homepanelDelegate: self,
                                           libraryPanelDelegate: self,

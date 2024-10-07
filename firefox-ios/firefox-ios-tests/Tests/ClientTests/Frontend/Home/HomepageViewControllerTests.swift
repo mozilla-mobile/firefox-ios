@@ -7,7 +7,7 @@
 import XCTest
 import Common
 
-class HomepageViewControllerTests: XCTestCase {
+class LegacyHomepageViewControllerTests: XCTestCase {
     var profile: MockProfile!
 
     override func setUp() {

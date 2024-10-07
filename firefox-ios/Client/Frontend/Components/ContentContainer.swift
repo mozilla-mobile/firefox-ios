@@ -56,7 +56,7 @@ class ContentContainer: UIView {
         case .nativeErrorPage:
             return !(content is NativeErrorPageViewController)
         case .newHomepage:
-            return !(content is NewHomepageViewController)
+            return !(content is HomepageViewController)
         case .privateHomepage:
             return !(content is PrivateHomepageViewController)
         case .webview:

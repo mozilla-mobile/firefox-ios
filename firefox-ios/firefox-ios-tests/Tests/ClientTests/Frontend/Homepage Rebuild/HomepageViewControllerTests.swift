@@ -7,7 +7,7 @@ import Common
 
 @testable import Client
 
-final class NewHomepageViewControllerTests: XCTestCase {
+final class HomepageViewControllerTests: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     var mockNotificationCenter: MockNotificationCenter?
     var mockThemeManager: MockThemeManager?

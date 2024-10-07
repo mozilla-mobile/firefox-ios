@@ -5,7 +5,7 @@
 import Foundation
 import Common
 
-final class NewHomepageViewController: UIViewController, ContentContainable, Themeable {
+final class HomepageViewController: UIViewController, ContentContainable, Themeable {
     // MARK: - Typealiases
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
 
@@ -22,8 +22,8 @@ final class NewHomepageViewController: UIViewController, ContentContainable, The
 
     // MARK: - Private variables
     private var collectionView: UICollectionView?
-    private var dataSource: NewHomepageDiffableDataSource?
-    private var layoutConfiguration = NewHomepageSectionLayoutProvider().createCompositionalLayout()
+    private var dataSource: HomepageDiffableDataSource?
+    private var layoutConfiguration = HomepageSectionLayoutProvider().createCompositionalLayout()
     private var logger: Logger
 
     // MARK: - Initializers
@@ -112,7 +112,7 @@ final class NewHomepageViewController: UIViewController, ContentContainable, The
             return
         }
 
-        dataSource = NewHomepageDiffableDataSource(
+        dataSource = HomepageDiffableDataSource(
             collectionView: collectionView
         ) { [weak self] (collectionView, indexPath, item) -> UICollectionViewCell? in
             return self?.configureCell(for: item, at: indexPath)
@@ -120,7 +120,7 @@ final class NewHomepageViewController: UIViewController, ContentContainable, The
     }
 
     private func configureCell(
-        for item: NewHomepageDiffableDataSource.HomeItem,
+        for item: HomepageDiffableDataSource.HomeItem,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
         // TODO: FXIOS-10163 - Dummy collection cells, to update with proper cells

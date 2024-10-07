@@ -14,7 +14,7 @@ protocol BrowserDelegate: AnyObject {
     ///   - libraryPanelDelegate:  The library panel delegate for the homepage
     ///   - statusBarScrollDelegate: The delegate that takes care of the status bar overlay scroll
     ///   - overlayManager: The overlay manager for the homepage
-    func showHomepage(inline: Bool,
+    func showLegacyHomepage(inline: Bool,
                       toastContainer: UIView,
                       homepanelDelegate: HomePanelDelegate,
                       libraryPanelDelegate: LibraryPanelDelegate,

@@ -47,14 +47,14 @@ final class ContentContainerTests: XCTestCase {
 
     func testCanAddNewHomepage() {
         let subject = ContentContainer(frame: .zero)
-        let homepage = NewHomepageViewController(windowUUID: .XCTestDefaultUUID)
+        let homepage = HomepageViewController(windowUUID: .XCTestDefaultUUID)
 
         XCTAssertTrue(subject.canAdd(content: homepage))
     }
 
     func testCanAddNewHomepageOnceOnly() {
         let subject = ContentContainer(frame: .zero)
-        let homepage = NewHomepageViewController(windowUUID: .XCTestDefaultUUID)
+        let homepage = HomepageViewController(windowUUID: .XCTestDefaultUUID)
 
         subject.add(content: homepage)
         XCTAssertFalse(subject.canAdd(content: homepage))
@@ -127,7 +127,7 @@ final class ContentContainerTests: XCTestCase {
 
     func testHasNewHomepage_returnsTrueWhenAdded() {
         let subject = ContentContainer(frame: .zero)
-        let homepage = NewHomepageViewController(windowUUID: .XCTestDefaultUUID)
+        let homepage = HomepageViewController(windowUUID: .XCTestDefaultUUID)
         subject.add(content: homepage)
 
         XCTAssertTrue(subject.hasNewHomepage)
@@ -188,7 +188,7 @@ final class ContentContainerTests: XCTestCase {
 
     func testContentView_hasContentNewHomepage_viewIsNotNil() {
         let subject = ContentContainer(frame: .zero)
-        let homepage = NewHomepageViewController(windowUUID: .XCTestDefaultUUID)
+        let homepage = HomepageViewController(windowUUID: .XCTestDefaultUUID)
         subject.add(content: homepage)
         XCTAssertNotNil(subject.contentView)
     }
@@ -217,7 +217,7 @@ final class ContentContainerTests: XCTestCase {
 
     func test_update_hasNewHomepage_returnsTrue() {
         let subject = ContentContainer(frame: .zero)
-        let homepage = NewHomepageViewController(windowUUID: .XCTestDefaultUUID)
+        let homepage = HomepageViewController(windowUUID: .XCTestDefaultUUID)
         subject.update(content: homepage)
         XCTAssertTrue(subject.hasNewHomepage)
         XCTAssertFalse(subject.hasHomepage)

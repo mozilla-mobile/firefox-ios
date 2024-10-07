@@ -91,7 +91,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     func testShowHomepage_addsOneHomepageOnly() {
         let subject = createSubject()
-        subject.showHomepage(inline: true,
+        subject.showLegacyHomepage(inline: true,
                              toastContainer: UIView(),
                              homepanelDelegate: subject.browserViewController,
                              libraryPanelDelegate: subject.browserViewController,
@@ -103,28 +103,28 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
                                                     tabManager: tabManager,
                                                     overlayManager: overlayModeManager)
         XCTAssertFalse(subject.browserViewController.contentContainer.canAdd(content: secondHomepage))
-        XCTAssertNotNil(subject.homepageViewController)
+        XCTAssertNotNil(subject.legacyHomepageViewController)
         XCTAssertNil(subject.webviewController)
     }
 
     func testShowHomepage_reuseExistingHomepage() {
         let subject = createSubject()
-        subject.showHomepage(inline: true,
+        subject.showLegacyHomepage(inline: true,
                              toastContainer: UIView(),
                              homepanelDelegate: subject.browserViewController,
                              libraryPanelDelegate: subject.browserViewController,
                              statusBarScrollDelegate: scrollDelegate,
                              overlayManager: overlayModeManager)
-        let firstHomepage = subject.homepageViewController
-        XCTAssertNotNil(subject.homepageViewController)
+        let firstHomepage = subject.legacyHomepageViewController
+        XCTAssertNotNil(subject.legacyHomepageViewController)
 
-        subject.showHomepage(inline: true,
+        subject.showLegacyHomepage(inline: true,
                              toastContainer: UIView(),
                              homepanelDelegate: subject.browserViewController,
                              libraryPanelDelegate: subject.browserViewController,
                              statusBarScrollDelegate: scrollDelegate,
                              overlayManager: overlayModeManager)
-        let secondHomepage = subject.homepageViewController
+        let secondHomepage = subject.legacyHomepageViewController
         XCTAssertEqual(firstHomepage, secondHomepage)
     }
 
@@ -159,7 +159,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         subject.browserViewController = mbvc
         subject.show(webView: webview)
 
-        XCTAssertNil(subject.homepageViewController)
+        XCTAssertNil(subject.legacyHomepageViewController)
         XCTAssertNotNil(subject.webviewController)
         XCTAssertEqual(mbvc.embedContentCalled, 1)
         XCTAssertEqual(mbvc.saveEmbeddedContent?.contentType, .webview)

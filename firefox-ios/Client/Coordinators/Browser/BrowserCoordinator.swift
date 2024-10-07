@@ -30,7 +30,7 @@ class BrowserCoordinator: BaseCoordinator,
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var legacyHomepageViewController: LegacyHomepageViewController?
-    var newHomepageViewController: NewHomepageViewController?
+    var newHomepageViewController: HomepageViewController?
     var privateViewController: PrivateHomepageViewController?
     var errorViewController: NativeErrorPageViewController?
 
@@ -103,7 +103,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - BrowserDelegate
 
-    func showHomepage(inline: Bool,
+    func showLegacyHomepage(inline: Bool,
                       toastContainer: UIView,
                       homepanelDelegate: HomePanelDelegate,
                       libraryPanelDelegate: LibraryPanelDelegate,
@@ -126,7 +126,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showNewHomepage() {
-        let homepageController = NewHomepageViewController(windowUUID: windowUUID)
+        let homepageController = HomepageViewController(windowUUID: windowUUID)
         guard browserViewController.embedContent(homepageController) else {
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
             return
