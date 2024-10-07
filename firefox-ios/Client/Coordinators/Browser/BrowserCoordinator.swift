@@ -29,7 +29,7 @@ class BrowserCoordinator: BaseCoordinator,
                           MainMenuCoordinatorDelegate {
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
-    var homepageViewController: HomepageViewController?
+    var legacyHomepageViewController: LegacyHomepageViewController?
     var newHomepageViewController: NewHomepageViewController?
     var privateViewController: PrivateHomepageViewController?
     var errorViewController: NativeErrorPageViewController?
@@ -109,16 +109,18 @@ class BrowserCoordinator: BaseCoordinator,
                       libraryPanelDelegate: LibraryPanelDelegate,
                       statusBarScrollDelegate: StatusBarScrollDelegate,
                       overlayManager: OverlayModeManager) {
-        let homepageController = getHomepage(inline: inline,
-                                             toastContainer: toastContainer,
-                                             homepanelDelegate: homepanelDelegate,
-                                             libraryPanelDelegate: libraryPanelDelegate,
-                                             statusBarScrollDelegate: statusBarScrollDelegate,
-                                             overlayManager: overlayManager)
+        let legacyHomepageViewController = getHomepage(
+            inline: inline,
+            toastContainer: toastContainer,
+            homepanelDelegate: homepanelDelegate,
+            libraryPanelDelegate: libraryPanelDelegate,
+            statusBarScrollDelegate: statusBarScrollDelegate,
+            overlayManager: overlayManager
+        )
 
-        guard browserViewController.embedContent(homepageController) else { return }
-        self.homepageViewController = homepageController
-        homepageController.scrollToTop()
+        guard browserViewController.embedContent(legacyHomepageViewController) else { return }
+        self.legacyHomepageViewController = legacyHomepageViewController
+        legacyHomepageViewController.scrollToTop()
         // We currently don't support full page screenshot of the homepage
         screenshotService.screenshotableView = nil
     }
@@ -192,23 +194,23 @@ class BrowserCoordinator: BaseCoordinator,
                              homepanelDelegate: HomePanelDelegate,
                              libraryPanelDelegate: LibraryPanelDelegate,
                              statusBarScrollDelegate: StatusBarScrollDelegate,
-                             overlayManager: OverlayModeManager) -> HomepageViewController {
-        if let homepageViewController = homepageViewController {
-            homepageViewController.configure(isZeroSearch: inline)
-            return homepageViewController
+                             overlayManager: OverlayModeManager) -> LegacyHomepageViewController {
+        if let legacyHomepageViewController = legacyHomepageViewController {
+            legacyHomepageViewController.configure(isZeroSearch: inline)
+            return legacyHomepageViewController
         } else {
-            let homepageViewController = HomepageViewController(
+            let legacyHomepageViewController = LegacyHomepageViewController(
                 profile: profile,
                 isZeroSearch: inline,
                 toastContainer: toastContainer,
                 tabManager: tabManager,
                 overlayManager: overlayManager)
-            homepageViewController.homePanelDelegate = homepanelDelegate
-            homepageViewController.libraryPanelDelegate = libraryPanelDelegate
-            homepageViewController.statusBarScrollDelegate = statusBarScrollDelegate
-            homepageViewController.browserNavigationHandler = self
+            legacyHomepageViewController.homePanelDelegate = homepanelDelegate
+            legacyHomepageViewController.libraryPanelDelegate = libraryPanelDelegate
+            legacyHomepageViewController.statusBarScrollDelegate = statusBarScrollDelegate
+            legacyHomepageViewController.browserNavigationHandler = self
 
-            return homepageViewController
+            return legacyHomepageViewController
         }
     }
 
@@ -828,9 +830,9 @@ class BrowserCoordinator: BaseCoordinator,
             // Clean up views and ensure BVC for the window is freed
             browserViewController.view.endEditing(true)
             browserViewController.dismissUrlBar()
-            homepageViewController?.view.removeFromSuperview()
-            homepageViewController?.removeFromParent()
-            homepageViewController = nil
+            legacyHomepageViewController?.view.removeFromSuperview()
+            legacyHomepageViewController?.removeFromParent()
+            legacyHomepageViewController = nil
             browserViewController.contentContainer.subviews.forEach { $0.removeFromSuperview() }
             browserViewController.removeFromParent()
         case .libraryOpened:

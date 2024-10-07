@@ -248,8 +248,8 @@ final class ContentContainerTests: XCTestCase {
         XCTAssertFalse(subject.hasPrivateHomepage)
     }
 
-    private func createHomepage() -> HomepageViewController {
-        return HomepageViewController(profile: profile,
+    private func createHomepage() -> LegacyHomepageViewController {
+        return LegacyHomepageViewController(profile: profile,
                                       toastContainer: UIView(),
                                       tabManager: MockTabManager(),
                                       overlayManager: overlayModeManager)

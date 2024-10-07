@@ -71,7 +71,7 @@ final class NewHomepageViewController: UIViewController, ContentContainable, The
             logger.log(
                 "NewHomepage collectionview should not have been nil, something went wrong",
                 level: .fatal,
-                category: .homepage
+                category: .legacyHomepage
             )
             return
         }

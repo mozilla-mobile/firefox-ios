@@ -31,7 +31,7 @@ class HomepageViewControllerTests: XCTestCase {
         let overlayManager = MockOverlayModeManager()
         overlayManager.setURLBar(urlBarView: urlBar)
 
-        let firefoxHomeViewController = HomepageViewController(profile: profile,
+        let firefoxHomeViewController = LegacyHomepageViewController(profile: profile,
                                                                toastContainer: UIView(),
                                                                tabManager: tabManager,
                                                                overlayManager: overlayManager)
@@ -47,7 +47,7 @@ class HomepageViewControllerTests: XCTestCase {
         let overlayManager = MockOverlayModeManager()
         overlayManager.setURLBar(urlBarView: urlBar)
 
-        let subject = HomepageViewController(
+        let subject = LegacyHomepageViewController(
             profile: profile,
             toastContainer: UIView(),
             tabManager: tabManager,

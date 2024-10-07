@@ -11,7 +11,7 @@ import UIKit
 
 import enum MozillaAppServices.VisitType
 
-class HomepageViewController:
+class LegacyHomepageViewController:
     UIViewController,
     FeatureFlaggable,
     Themeable,
@@ -539,7 +539,7 @@ class HomepageViewController:
 
 // MARK: - CollectionView Data Source
 
-extension HomepageViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension LegacyHomepageViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         viewForSupplementaryElementOfKind kind: String,
                         at indexPath: IndexPath) -> UICollectionReusableView {
@@ -627,7 +627,7 @@ extension HomepageViewController: UICollectionViewDelegate, UICollectionViewData
 
 // MARK: - Actions Handling
 
-private extension HomepageViewController {
+private extension LegacyHomepageViewController {
     // Setup all the tap and long press actions on cells in each sections
     private func setupSectionsAction() {
         // Header view
@@ -847,7 +847,7 @@ private extension HomepageViewController {
 }
 
 // MARK: FirefoxHomeContextMenuHelperDelegate
-extension HomepageViewController: HomepageContextMenuHelperDelegate {
+extension LegacyHomepageViewController: HomepageContextMenuHelperDelegate {
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool) {
         homePanelDelegate?.homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate, selectNewTab: selectNewTab)
     }
@@ -863,7 +863,7 @@ extension HomepageViewController: HomepageContextMenuHelperDelegate {
 
 // MARK: - Status Bar Background
 
-extension HomepageViewController {
+extension LegacyHomepageViewController {
     var statusBarFrame: CGRect? {
         guard let keyWindow = UIWindow.keyWindow else { return nil }
 
@@ -873,7 +873,7 @@ extension HomepageViewController {
 
 // MARK: - Popover Presentation Delegate
 
-extension HomepageViewController: UIPopoverPresentationControllerDelegate {
+extension LegacyHomepageViewController: UIPopoverPresentationControllerDelegate {
     // Dismiss the popover if the device is being rotated.
     // This is used by the Share UIActivityViewController action sheet on iPad
     func popoverPresentationController(
@@ -893,7 +893,7 @@ extension HomepageViewController: UIPopoverPresentationControllerDelegate {
 }
 
 // MARK: - UIContextMenuInteractionDelegate
-extension HomepageViewController: UIContextMenuInteractionDelegate {
+extension LegacyHomepageViewController: UIContextMenuInteractionDelegate {
     // Handles iPad trackpad right clicks
     func contextMenuInteraction(
         _ interaction: UIContextMenuInteraction,
@@ -910,7 +910,7 @@ extension HomepageViewController: UIContextMenuInteractionDelegate {
 }
 
 // MARK: - UIAdaptivePresentationControllerDelegate
-extension HomepageViewController: UIAdaptivePresentationControllerDelegate {
+extension LegacyHomepageViewController: UIAdaptivePresentationControllerDelegate {
     func adaptivePresentationStyle(
         for controller: UIPresentationController,
         traitCollection: UITraitCollection
@@ -920,7 +920,7 @@ extension HomepageViewController: UIAdaptivePresentationControllerDelegate {
 }
 
 // MARK: FirefoxHomeViewModelDelegate
-extension HomepageViewController: HomepageViewModelDelegate {
+extension LegacyHomepageViewController: HomepageViewModelDelegate {
     func reloadView() {
         ensureMainThread { [weak self] in
             guard let self = self else { return }
@@ -936,7 +936,7 @@ extension HomepageViewController: HomepageViewModelDelegate {
 }
 
 // MARK: - Notifiable
-extension HomepageViewController: Notifiable {
+extension LegacyHomepageViewController: Notifiable {
     func handleNotifications(_ notification: Notification) {
         ensureMainThread { [weak self] in
             guard let self = self else { return }

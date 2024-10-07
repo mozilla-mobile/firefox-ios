@@ -98,7 +98,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
                              statusBarScrollDelegate: scrollDelegate,
                              overlayManager: overlayModeManager)
 
-        let secondHomepage = HomepageViewController(profile: profile,
+        let secondHomepage = LegacyHomepageViewController(profile: profile,
                                                     toastContainer: UIView(),
                                                     tabManager: tabManager,
                                                     overlayManager: overlayModeManager)
