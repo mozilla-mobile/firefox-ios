@@ -5,11 +5,11 @@
 import UIKit
 
 enum ContentType {
-    case webview
     case homepage
+    case legacyHomepage
     case privateHomepage
     case nativeErrorPage
-    case newHomepage
+    case webview
 }
 
 protocol ContentContainable: UIViewController {
@@ -25,16 +25,16 @@ class ContentContainer: UIView {
         return contentController?.view
     }
 
-    var hasHomepage: Bool {
-        return type == .homepage
+    var hasLegacyHomepage: Bool {
+        return type == .legacyHomepage
     }
 
     var hasPrivateHomepage: Bool {
         return type == .privateHomepage
     }
 
-    var hasNewHomepage: Bool {
-        return type == .newHomepage
+    var hasHomepage: Bool {
+        return type == .homepage
     }
 
     var hasWebView: Bool {
@@ -51,12 +51,12 @@ class ContentContainer: UIView {
     /// - Returns: True when we can add the view controller to the container
     func canAdd(content: ContentContainable) -> Bool {
         switch type {
-        case .homepage:
-            return !(content is HomepageViewController)
+        case .legacyHomepage:
+            return !(content is LegacyHomepageViewController)
         case .nativeErrorPage:
             return !(content is NativeErrorPageViewController)
-        case .newHomepage:
-            return !(content is NewHomepageViewController)
+        case .homepage:
+            return !(content is HomepageViewController)
         case .privateHomepage:
             return !(content is PrivateHomepageViewController)
         case .webview:

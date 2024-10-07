@@ -4,11 +4,11 @@
 
 import UIKit
 
-typealias HomepageSection = NewHomepageDiffableDataSource.HomeSection
-typealias HomepageItem = NewHomepageDiffableDataSource.HomeItem
+typealias HomepageSection = HomepageDiffableDataSource.HomeSection
+typealias HomepageItem = HomepageDiffableDataSource.HomeItem
 
 /// Holds the data source configuration for the new homepage as part of the rebuild project
-final class NewHomepageDiffableDataSource:
+final class HomepageDiffableDataSource:
     UICollectionViewDiffableDataSource<HomepageSection, HomepageItem> {
     enum HomeSection: Int, Hashable {
         case header
