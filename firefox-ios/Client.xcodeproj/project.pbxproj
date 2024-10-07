@@ -612,13 +612,15 @@
 		812581962C947CD4003DFA7C /* MainMenuDetailsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812581952C947CD4003DFA7C /* MainMenuDetailsViewControllerTests.swift */; };
 		814A62462B587A3E00608195 /* DefaultThemeManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814A62452B587A3E00608195 /* DefaultThemeManagerTests.swift */; };
 		814B60F52C90C0A0000997BE /* MainMenuConfigurationUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814B60F42C90C0A0000997BE /* MainMenuConfigurationUtility.swift */; };
+		818302D82C988DFD009645EC /* MainMenuDetailState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818302D72C988DFD009645EC /* MainMenuDetailState.swift */; };
 		8187561A2BB4618500DCD1F3 /* OnboardingViewControllerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818756192BB4618500DCD1F3 /* OnboardingViewControllerState.swift */; };
 		819656152C80C55300E62323 /* MainMenuState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 819656142C80C55300E62323 /* MainMenuState.swift */; };
 		819656172C80C6F300E62323 /* MenuKit in Frameworks */ = {isa = PBXBuildFile; productRef = 819656162C80C6F300E62323 /* MenuKit */; };
 		819656192C80ECFE00E62323 /* MainMenuMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 819656182C80ECFE00E62323 /* MainMenuMiddleware.swift */; };
 		81A3F6F02C2DAEE200BDD86B /* MainMenuCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A3F6EF2C2DAEE200BDD86B /* MainMenuCoordinator.swift */; };
 		81A3F6F22C2DB00900BDD86B /* MainMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A3F6F12C2DB00900BDD86B /* MainMenuViewController.swift */; };
-		81C3E6092C93261A00A19A5A /* MainMenuDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C3E6082C93261A00A19A5A /* MainMenuDetailViewController.swift */; };
+		81C297F92CA3117200B8BE78 /* MenuNavigationDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C297F82CA3117200B8BE78 /* MenuNavigationDestination.swift */; };
+		81C3E6092C93261A00A19A5A /* MainMenuDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C3E6082C93261A00A19A5A /* MainMenuDetailsViewController.swift */; };
 		81CAE4DB2B1A2C220040C78A /* BrowserViewControllerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CAE4DA2B1A2C220040C78A /* BrowserViewControllerState.swift */; };
 		81DAB2F12C88F02500F4BE98 /* MainMenuViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DAB2F02C88F02500F4BE98 /* MainMenuViewControllerTests.swift */; };
 		81DAB2F32C88F14400F4BE98 /* MainMenuCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DAB2F22C88F14400F4BE98 /* MainMenuCoordinatorTests.swift */; };
@@ -6658,6 +6660,7 @@
 		81584D62B22049E40FC78F93 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		816D458CBEAE2A6721134028 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		81754147A06566E64C025F70 /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = "nn.lproj/Default Browser.strings"; sourceTree = "<group>"; };
+		818302D72C988DFD009645EC /* MainMenuDetailState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuDetailState.swift; sourceTree = "<group>"; };
 		818756192BB4618500DCD1F3 /* OnboardingViewControllerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewControllerState.swift; sourceTree = "<group>"; };
 		819656142C80C55300E62323 /* MainMenuState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuState.swift; sourceTree = "<group>"; };
 		819656182C80ECFE00E62323 /* MainMenuMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuMiddleware.swift; sourceTree = "<group>"; };
@@ -6665,7 +6668,8 @@
 		81A3F6EF2C2DAEE200BDD86B /* MainMenuCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuCoordinator.swift; sourceTree = "<group>"; };
 		81A3F6F12C2DB00900BDD86B /* MainMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuViewController.swift; sourceTree = "<group>"; };
 		81C14765AA7C25DF1817AC04 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Today.strings; sourceTree = "<group>"; };
-		81C3E6082C93261A00A19A5A /* MainMenuDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuDetailViewController.swift; sourceTree = "<group>"; };
+		81C297F82CA3117200B8BE78 /* MenuNavigationDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuNavigationDestination.swift; sourceTree = "<group>"; };
+		81C3E6082C93261A00A19A5A /* MainMenuDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuDetailsViewController.swift; sourceTree = "<group>"; };
 		81CAE4DA2B1A2C220040C78A /* BrowserViewControllerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerState.swift; sourceTree = "<group>"; };
 		81DAB2F02C88F02500F4BE98 /* MainMenuViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuViewControllerTests.swift; sourceTree = "<group>"; };
 		81DAB2F22C88F14400F4BE98 /* MainMenuCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuCoordinatorTests.swift; sourceTree = "<group>"; };
@@ -10467,6 +10471,8 @@
 				819656142C80C55300E62323 /* MainMenuState.swift */,
 				819656182C80ECFE00E62323 /* MainMenuMiddleware.swift */,
 				81F617C82C8755AB003799BF /* MainMenuAction.swift */,
+				81C297F82CA3117200B8BE78 /* MenuNavigationDestination.swift */,
+				818302D72C988DFD009645EC /* MainMenuDetailState.swift */,
 			);
 			path = Redux;
 			sourceTree = "<group>";
@@ -10474,7 +10480,7 @@
 		81F617C72C875583003799BF /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				81C3E6082C93261A00A19A5A /* MainMenuDetailViewController.swift */,
+				81C3E6082C93261A00A19A5A /* MainMenuDetailsViewController.swift */,
 				81A3F6F12C2DB00900BDD86B /* MainMenuViewController.swift */,
 			);
 			path = Views;
@@ -15352,6 +15358,7 @@
 				8A4593C72BF7BECA002758DE /* MicrosurveyTableViewCell.swift in Sources */,
 				8A07910F278F62F2005529CB /* AdjustHelper.swift in Sources */,
 				967A028E28FA026F003C35E3 /* SceneDelegate.swift in Sources */,
+				81C297F92CA3117200B8BE78 /* MenuNavigationDestination.swift in Sources */,
 				C8B07A4128199500000AFCE7 /* NimbusFlaggableFeature.swift in Sources */,
 				0B62EFD21AD63CD100ACB9CD /* Clearables.swift in Sources */,
 				0AFF7F6C2C7C7BBA00265214 /* CertificatesCell.swift in Sources */,
@@ -15622,6 +15629,7 @@
 				8C29627C2B1F473800571655 /* AdEventsResponse.swift in Sources */,
 				962021E128B8078400BDF3D9 /* ContextualHintCopyProvider.swift in Sources */,
 				8AE1E1D227B1ADC40024C45E /* TopBottomInterchangeable.swift in Sources */,
+				818302D82C988DFD009645EC /* MainMenuDetailState.swift in Sources */,
 				8C2937712BF79F0300146613 /* EditAddressViewController.swift in Sources */,
 				8A7653BD28A2C61D00924ABF /* PocketDataAdaptor.swift in Sources */,
 				8A093D7D2A4B3E4F0099ABA5 /* DebugSettingsDelegate.swift in Sources */,
@@ -15996,7 +16004,7 @@
 				9609F4CA26B57CE800F81493 /* Calendar+Extension.swift in Sources */,
 				E663D5781BB341C4001EF30E /* ToggleButton.swift in Sources */,
 				DFA51481275FFEE500266AA0 /* HistoryHighlightsManager.swift in Sources */,
-				81C3E6092C93261A00A19A5A /* MainMenuDetailViewController.swift in Sources */,
+				81C3E6092C93261A00A19A5A /* MainMenuDetailsViewController.swift in Sources */,
 				8ADC2A182A33775F00543DAA /* FxASignInViewParameters.swift in Sources */,
 				EBA3B2D22268F57E00728BDB /* BadgeWithBackdrop.swift in Sources */,
 				8AB5958828413F6C0090F4AE /* BookmarksCell.swift in Sources */,
