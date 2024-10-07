@@ -11,9 +11,12 @@ final class TabErrorTelemetryHelper {
     static let shared = TabErrorTelemetryHelper()
     private let defaultsKey = "TabErrorTelemetryHelper_Data"
     private let telemetryWrapper: TelemetryWrapperProtocol
+    private let defaults: UserDefaultsInterface
 
-    private init(telemetryWrapper: TelemetryWrapperProtocol = TelemetryWrapper.shared) {
+    private init(telemetryWrapper: TelemetryWrapperProtocol = TelemetryWrapper.shared,
+                 defaults: UserDefaultsInterface = UserDefaults.standard) {
         self.telemetryWrapper = telemetryWrapper
+        self.defaults = defaults
     }
 
     /// Records the scene (windows) tab count for the purposes of sanity-checking for
@@ -21,7 +24,7 @@ final class TabErrorTelemetryHelper {
     /// we attempt to detect any issues which could indicate potential tab loss.
     func recordTabCountForBackgroundedScene(_ window: WindowUUID) {
         ensureMainThread {
-            var tabCounts = UserDefaults.standard.object(forKey: self.defaultsKey) as? [String: Int] ?? [String: Int]()
+            var tabCounts = self.defaults.object(forKey: self.defaultsKey) as? [String: Int] ?? [String: Int]()
             let tabCount = self.getTabCount(window: window)
             tabCounts[window.uuidString] = tabCount
             UserDefaults.standard.set(tabCounts, forKey: self.defaultsKey)
@@ -33,7 +36,7 @@ final class TabErrorTelemetryHelper {
     /// a potential bug impacting users, and a MetricKit event is logged.
     func validateTabCountForForegroundedScene(_ window: WindowUUID) {
         ensureMainThread {
-            guard let tabCounts = UserDefaults.standard.object(forKey: self.defaultsKey) as? [String: Int],
+            guard let tabCounts = self.defaults.object(forKey: self.defaultsKey) as? [String: Int],
                   let expectedTabCount = tabCounts[window.uuidString] else { return }
             let currentTabCount = self.getTabCount(window: window)
 
