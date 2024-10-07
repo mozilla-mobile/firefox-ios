@@ -6,7 +6,6 @@ import Foundation
 import Common
 
 final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifiable {
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
     private enum UX {
         static let passwordFieldBorderWidth: CGFloat = 1
         static let passwordFieldCornerRadius: CGFloat = 4
@@ -15,6 +14,8 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifia
         static let passwordLabelAndButtonSpacing: CGFloat = 10
         static let passwordRefreshButtonHeight: CGFloat = 18
     }
+
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     private var scaledRefreshButtonSize = UIFontMetrics.default.scaledValue(for: UX.passwordRefreshButtonHeight)
 

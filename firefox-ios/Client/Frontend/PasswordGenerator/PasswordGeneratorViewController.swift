@@ -74,7 +74,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     override func viewDidLoad() {
         super.viewDidLoad()
         listenForThemeChange(view)
-        buildUsePasswordButton()
+        configureUsePasswordButton()
         setupView()
         applyTheme()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -145,7 +145,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
         header.applyTheme(theme: theme)
     }
 
-    private func buildUsePasswordButton() {
+    private func configureUsePasswordButton() {
         let usePasswordButtonVM = PrimaryRoundedButtonViewModel(
             title: .PasswordGenerator.UsePasswordButtonLabel,
             a11yIdentifier: AccessibilityIdentifiers.PasswordGenerator.usePasswordButton)

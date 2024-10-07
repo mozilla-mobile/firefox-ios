@@ -6,12 +6,13 @@
  import Common
 
 final class PasswordGeneratorHeaderView: UIView, ThemeApplicable, Notifiable {
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
     private enum UX {
         static let headerIconLabelSpacing: CGFloat = 10
         static let headerVerticalPadding: CGFloat = 8
         static let headerImageHeight: CGFloat = 24
     }
+
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
 
     private var scaledHeaderImageSize = UIFontMetrics.default.scaledValue(for: UX.headerImageHeight)
     private lazy var headerImageWidthConstraint = headerImageView.widthAnchor.constraint(
