@@ -10,7 +10,7 @@ final class HomepageViewController: UIViewController, ContentContainable, Themea
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
 
     // MARK: - ContentContainable variables
-    var contentType: ContentType = .newHomepage
+    var contentType: ContentType = .homepage
 
     // MARK: - Themable variables
     var themeManager: ThemeManager

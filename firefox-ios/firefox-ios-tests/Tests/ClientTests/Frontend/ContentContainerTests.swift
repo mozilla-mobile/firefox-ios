@@ -100,19 +100,19 @@ final class ContentContainerTests: XCTestCase {
         XCTAssertFalse(subject.canAdd(content: webview))
     }
 
-    // MARK: - hasHomepage
+    // MARK: - hashasLegacyHomepage
 
     func testHasHomepage_trueWhenHomepage() {
         let subject = ContentContainer(frame: .zero)
         let homepage = createHomepage()
         subject.add(content: homepage)
 
-        XCTAssertTrue(subject.hasHomepage)
+        XCTAssertTrue(subject.hasLegacyHomepage)
     }
 
     func testHasHomepage_falseWhenNil() {
         let subject = ContentContainer(frame: .zero)
-        XCTAssertFalse(subject.hasHomepage)
+        XCTAssertFalse(subject.hasLegacyHomepage)
     }
 
     func testHasHomepage_falseWhenWebview() {
@@ -123,19 +123,19 @@ final class ContentContainerTests: XCTestCase {
         XCTAssertFalse(subject.hasHomepage)
     }
 
-    // MARK: - hasNewHomepage
+    // MARK: - hasHomepage
 
     func testHasNewHomepage_returnsTrueWhenAdded() {
         let subject = ContentContainer(frame: .zero)
         let homepage = HomepageViewController(windowUUID: .XCTestDefaultUUID)
         subject.add(content: homepage)
 
-        XCTAssertTrue(subject.hasNewHomepage)
+        XCTAssertTrue(subject.hasHomepage)
     }
 
     func testHasNewHomepage_returnsFalseWhenNil() {
         let subject = ContentContainer(frame: .zero)
-        XCTAssertFalse(subject.hasNewHomepage)
+        XCTAssertFalse(subject.hasHomepage)
     }
 
     func testHasNewHomepage_returnsFalseWhenWebview() {
@@ -143,7 +143,7 @@ final class ContentContainerTests: XCTestCase {
         let webview = WebviewViewController(webView: WKWebView())
         subject.add(content: webview)
 
-        XCTAssertFalse(subject.hasNewHomepage)
+        XCTAssertFalse(subject.hasHomepage)
     }
 
     // MARK: - hasPrivateHomepage
@@ -205,12 +205,12 @@ final class ContentContainerTests: XCTestCase {
 
     // MARK: update method
 
-    func test_update_hasHomepage_returnsTrue() {
+    func test_update_hasLegacyHomepage_returnsTrue() {
         let subject = ContentContainer(frame: .zero)
         let homepage = createHomepage()
         subject.update(content: homepage)
-        XCTAssertTrue(subject.hasHomepage)
-        XCTAssertFalse(subject.hasNewHomepage)
+        XCTAssertTrue(subject.hasLegacyHomepage)
+        XCTAssertFalse(subject.hasHomepage)
         XCTAssertFalse(subject.hasPrivateHomepage)
         XCTAssertFalse(subject.hasWebView)
     }
@@ -219,8 +219,8 @@ final class ContentContainerTests: XCTestCase {
         let subject = ContentContainer(frame: .zero)
         let homepage = HomepageViewController(windowUUID: .XCTestDefaultUUID)
         subject.update(content: homepage)
-        XCTAssertTrue(subject.hasNewHomepage)
-        XCTAssertFalse(subject.hasHomepage)
+        XCTAssertTrue(subject.hasHomepage)
+        XCTAssertFalse(subject.hasLegacyHomepage)
         XCTAssertFalse(subject.hasPrivateHomepage)
         XCTAssertFalse(subject.hasWebView)
     }
@@ -233,8 +233,8 @@ final class ContentContainerTests: XCTestCase {
         )
         subject.update(content: privateHomepage)
         XCTAssertTrue(subject.hasPrivateHomepage)
+        XCTAssertFalse(subject.hasLegacyHomepage)
         XCTAssertFalse(subject.hasHomepage)
-        XCTAssertFalse(subject.hasNewHomepage)
         XCTAssertFalse(subject.hasWebView)
     }
 
@@ -243,15 +243,17 @@ final class ContentContainerTests: XCTestCase {
         let webview = WebviewViewController(webView: WKWebView())
         subject.update(content: webview)
         XCTAssertTrue(subject.hasWebView)
+        XCTAssertFalse(subject.hasLegacyHomepage)
         XCTAssertFalse(subject.hasHomepage)
-        XCTAssertFalse(subject.hasNewHomepage)
         XCTAssertFalse(subject.hasPrivateHomepage)
     }
 
     private func createHomepage() -> LegacyHomepageViewController {
-        return LegacyHomepageViewController(profile: profile,
-                                      toastContainer: UIView(),
-                                      tabManager: MockTabManager(),
-                                      overlayManager: overlayModeManager)
+        return LegacyHomepageViewController(
+            profile: profile,
+            toastContainer: UIView(),
+            tabManager: MockTabManager(),
+            overlayManager: overlayModeManager
+        )
     }
 }

@@ -31,10 +31,12 @@ class LegacyHomepageViewControllerTests: XCTestCase {
         let overlayManager = MockOverlayModeManager()
         overlayManager.setURLBar(urlBarView: urlBar)
 
-        let firefoxHomeViewController = LegacyHomepageViewController(profile: profile,
-                                                               toastContainer: UIView(),
-                                                               tabManager: tabManager,
-                                                               overlayManager: overlayManager)
+        let firefoxHomeViewController = LegacyHomepageViewController(
+            profile: profile,
+            toastContainer: UIView(),
+            tabManager: tabManager,
+            overlayManager: overlayManager
+        )
 
         trackForMemoryLeaks(firefoxHomeViewController)
     }

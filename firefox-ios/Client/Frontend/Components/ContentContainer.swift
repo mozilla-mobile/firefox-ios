@@ -9,7 +9,7 @@ enum ContentType {
     case legacyHomepage
     case privateHomepage
     case nativeErrorPage
-    case newHomepage
+    case homepage
 }
 
 protocol ContentContainable: UIViewController {
@@ -33,8 +33,8 @@ class ContentContainer: UIView {
         return type == .privateHomepage
     }
 
-    var hasNewHomepage: Bool {
-        return type == .newHomepage
+    var hasHomepage: Bool {
+        return type == .homepage
     }
 
     var hasWebView: Bool {
@@ -55,7 +55,7 @@ class ContentContainer: UIView {
             return !(content is LegacyHomepageViewController)
         case .nativeErrorPage:
             return !(content is NativeErrorPageViewController)
-        case .newHomepage:
+        case .homepage:
             return !(content is HomepageViewController)
         case .privateHomepage:
             return !(content is PrivateHomepageViewController)

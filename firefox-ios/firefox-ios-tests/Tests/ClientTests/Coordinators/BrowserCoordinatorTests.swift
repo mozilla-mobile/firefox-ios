@@ -91,12 +91,14 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     func testShowHomepage_addsOneHomepageOnly() {
         let subject = createSubject()
-        subject.showLegacyHomepage(inline: true,
-                             toastContainer: UIView(),
-                             homepanelDelegate: subject.browserViewController,
-                             libraryPanelDelegate: subject.browserViewController,
-                             statusBarScrollDelegate: scrollDelegate,
-                             overlayManager: overlayModeManager)
+        subject.showLegacyHomepage(
+            inline: true,
+            toastContainer: UIView(),
+            homepanelDelegate: subject.browserViewController,
+            libraryPanelDelegate: subject.browserViewController,
+            statusBarScrollDelegate: scrollDelegate,
+            overlayManager: overlayModeManager
+        )
 
         let secondHomepage = LegacyHomepageViewController(profile: profile,
                                                     toastContainer: UIView(),
@@ -109,21 +111,25 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     func testShowHomepage_reuseExistingHomepage() {
         let subject = createSubject()
-        subject.showLegacyHomepage(inline: true,
-                             toastContainer: UIView(),
-                             homepanelDelegate: subject.browserViewController,
-                             libraryPanelDelegate: subject.browserViewController,
-                             statusBarScrollDelegate: scrollDelegate,
-                             overlayManager: overlayModeManager)
+        subject.showLegacyHomepage(
+            inline: true,
+            toastContainer: UIView(),
+            homepanelDelegate: subject.browserViewController,
+            libraryPanelDelegate: subject.browserViewController,
+            statusBarScrollDelegate: scrollDelegate,
+            overlayManager: overlayModeManager
+        )
         let firstHomepage = subject.legacyHomepageViewController
         XCTAssertNotNil(subject.legacyHomepageViewController)
 
-        subject.showLegacyHomepage(inline: true,
-                             toastContainer: UIView(),
-                             homepanelDelegate: subject.browserViewController,
-                             libraryPanelDelegate: subject.browserViewController,
-                             statusBarScrollDelegate: scrollDelegate,
-                             overlayManager: overlayModeManager)
+        subject.showLegacyHomepage(
+            inline: true,
+            toastContainer: UIView(),
+            homepanelDelegate: subject.browserViewController,
+            libraryPanelDelegate: subject.browserViewController,
+            statusBarScrollDelegate: scrollDelegate,
+            overlayManager: overlayModeManager
+        )
         let secondHomepage = subject.legacyHomepageViewController
         XCTAssertEqual(firstHomepage, secondHomepage)
     }

@@ -26,7 +26,7 @@ final class HomepageViewControllerTests: XCTestCase {
     func testInitialCreation_hasCorrectContentType() {
         let sut = createSubject()
 
-        XCTAssertEqual(sut.contentType, .newHomepage)
+        XCTAssertEqual(sut.contentType, .homepage)
     }
 
     func testInitialCreation_hasCorrectWindowUUID() {
@@ -50,7 +50,7 @@ final class HomepageViewControllerTests: XCTestCase {
 
     // MARK: - Deinit State
     func testDeinit_callsAppropriateNotificationCenterMethods() {
-        var sut: NewHomepageViewController? = createSubject()
+        var sut: HomepageViewController? = createSubject()
 
         XCTAssertNotNil(sut)
         XCTAssertEqual(mockNotificationCenter?.removeObserverCallCount, 0)
@@ -61,7 +61,7 @@ final class HomepageViewControllerTests: XCTestCase {
         XCTAssertEqual(mockNotificationCenter?.removeObserverCallCount, 1)
     }
 
-    private func createSubject() -> NewHomepageViewController {
+    private func createSubject() -> HomepageViewController {
         let notificationCenter = MockNotificationCenter()
         let themeManager = MockThemeManager()
         mockNotificationCenter = notificationCenter
