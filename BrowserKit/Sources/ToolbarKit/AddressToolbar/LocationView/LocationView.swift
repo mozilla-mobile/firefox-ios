@@ -5,7 +5,11 @@
 import UIKit
 import Common
 
-final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, AccessibilityActionsSource {
+final class LocationView: UIView,
+                          LocationTextFieldDelegate,
+                          ThemeApplicable,
+                          AccessibilityActionsSource,
+                          UIDragInteractionDelegate {
     // MARK: - Properties
     private enum UX {
         static let horizontalSpace: CGFloat = 8
@@ -407,5 +411,14 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         lockIconButton.tintColor = colors.iconPrimary
         lockIconButton.backgroundColor = colors.layerSearch
         urlTextField.applyTheme(theme: theme)
+    }
+
+    // MARK: UIDragInteractionDelegate
+    public func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
+        return []
+    }
+
+    public func dragInteraction(_ interaction: UIDragInteraction, sessionWillBegin session: UIDragSession) {
+        delegate?.locationViewDidBeginDragInteraction()
     }
 }
