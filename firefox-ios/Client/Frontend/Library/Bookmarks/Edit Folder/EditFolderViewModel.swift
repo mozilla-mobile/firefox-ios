@@ -18,7 +18,7 @@ class EditFolderViewModel {
     var onBookmarkSaved: VoidReturnCallback?
 
     var controllerTitle: String {
-        return folder == nil ? "New Folder" : "Edit folder"
+        return folder == nil ? .BookmarksNewFolder : .BookmarksEditFolder
     }
     var editedFolderTitle: String? {
         return folder?.title
@@ -60,7 +60,10 @@ class EditFolderViewModel {
 
     private func getFolderStructure(_ selectedFolder: Folder) {
         Task { @MainActor [weak self] in
-            let folders = await self?.folderFetcher.fetchFolders()
+            let folders = await self?.folderFetcher.fetchFolders().filter {
+                // exclude the current editing folder from the folder structure
+                return $0.guid != self?.folder?.guid
+            }
             guard let folders else { return }
             self?.folderStructures = folders
             self?.onFolderStatusUpdate?()

@@ -192,11 +192,7 @@ class BookmarksCoordinator: BaseCoordinator,
     ///
     /// It has to be done here and not in the detail controller directly, otherwise it won't take place the modification.
     private func setBackBarButtonItemTitle(_ title: String) {
-        if let backBarButton = router.navigationController.viewControllers.last?.navigationItem.backBarButtonItem {
-            backBarButton.title = title
-        } else {
-            let backBarButton = UIBarButtonItem(title: title)
-            router.navigationController.viewControllers.last?.navigationItem.backBarButtonItem = backBarButton
-        }
+        let backBarButton = UIBarButtonItem(title: title)
+        router.navigationController.viewControllers.last?.navigationItem.backBarButtonItem = backBarButton
     }
 }

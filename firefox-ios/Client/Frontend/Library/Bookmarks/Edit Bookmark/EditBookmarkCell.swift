@@ -33,6 +33,7 @@ class EditBookmarkCell: UITableViewCell,
         }), for: .editingChanged)
     }
     private lazy var urlTextfield: DefaultTextField = .build { view in
+        view.keyboardType = .URL
         view.addAction(UIAction(handler: { [weak self] _ in
             self?.urlTextFieldDidChane()
         }), for: .editingChanged)
@@ -86,6 +87,10 @@ class EditBookmarkCell: UITableViewCell,
         titleTextfield.text = title
         urlTextfield.text = siteURL
         faviconImageView.setFavicon(FaviconImageViewModel(siteURLString: siteURL))
+    }
+
+    func focusTitleTextField() {
+        titleTextfield.becomeFirstResponder()
     }
 
     // MARK: - ThemeApplicable

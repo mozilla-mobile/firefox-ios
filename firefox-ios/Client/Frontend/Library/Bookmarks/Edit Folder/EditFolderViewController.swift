@@ -11,10 +11,13 @@ class EditFolderViewController: UIViewController,
                                 Themeable {
     private struct UX {
         static let editFolderCellTopPadding: CGFloat = 25.0
+        static let parentFolderHeaderHorizzontalPadding: CGFloat = 16.0
+        static let parentFolderHeaderBottomPadding: CGFloat = 8.0
+        static let parentFolderHeaderIdentifier = "parentFolderHeaderIdentifier"
     }
     private enum Section: Int, CaseIterable {
-        case editFolder
-        case parentFolder
+        case editFolder = 0
+        case parentFolder = 1
     }
     var currentWindowUUID: WindowUUID?
     var themeManager: any ThemeManager
@@ -33,6 +36,8 @@ class EditFolderViewController: UIViewController,
         view.delegate = self
         view.register(cellType: EditFolderCell.self)
         view.register(cellType: OneLineTableViewCell.self)
+        view.register(UITableViewHeaderFooterView.self,
+                      forHeaderFooterViewReuseIdentifier: UX.parentFolderHeaderIdentifier)
         view.separatorStyle = .none
         let headerSpacerView = UIView(frame: CGRect(origin: .zero,
                                                     size: CGSize(width: 0, height: UX.editFolderCellTopPadding)))
@@ -73,6 +78,14 @@ class EditFolderViewController: UIViewController,
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         setTheme(theme)
         onViewWillAppear?()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let editFolderCell = tableView.visibleCells.first {
+            return $0 is EditFolderCell
+        }
+        editFolderCell?.becomeFirstResponder()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -136,29 +149,39 @@ class EditFolderViewController: UIViewController,
         guard let section = Section(rawValue: indexPath.section) else { return UITableViewCell() }
         switch section {
         case .editFolder:
-            if let cell = tableView.dequeueReusableCell(withIdentifier: EditFolderCell.cellIdentifier, for: indexPath) as? EditFolderCell {
-                cell.setTitle(viewModel.editedFolderTitle)
-                cell.onTitleFieldUpdate = { [weak self] in
-                    self?.viewModel.updateFolderTitle($0)
-                }
-                cell.applyTheme(theme: theme)
-                return cell
-            }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: EditFolderCell.cellIdentifier,
+                                                           for: indexPath) as? EditFolderCell
+            else { return UITableViewCell() }
+            configureEditFolderCell(cell)
+            return cell
         case .parentFolder:
-            if let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier, for: indexPath) as? OneLineTableViewCell,
-               let folder = viewModel.folderStructures[safe: indexPath.row] {
-                cell.titleLabel.text = folder.title
-                let folderImage = UIImage(named: StandardImageIdentifiers.Large.folder)?.withRenderingMode(.alwaysTemplate)
-                cell.leftImageView.image = folderImage
-                cell.indentationLevel = viewModel.folderStructures.count == 1 ? 0 : folder.indentation
-                let canShowAccessoryView = viewModel.shouldShowDisclosureIndicator(isFolderSelected: folder == viewModel.selectedFolder)
-                cell.accessoryType = canShowAccessoryView ? .checkmark : .none
-                cell.selectionStyle = .default
-                cell.applyTheme(theme: theme)
-                return cell
-            }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
+                                                           for: indexPath) as? OneLineTableViewCell,
+                  let folder = viewModel.folderStructures[safe: indexPath.row]
+            else { return UITableViewCell() }
+            configureParentFolderCell(cell, folder: folder)
+            return cell
         }
-        return UITableViewCell()
+    }
+
+    private func configureEditFolderCell(_ cell: EditFolderCell) {
+        cell.setTitle(viewModel.editedFolderTitle)
+        cell.onTitleFieldUpdate = { [weak self] in
+            self?.viewModel.updateFolderTitle($0)
+        }
+        cell.applyTheme(theme: theme)
+    }
+
+    private func configureParentFolderCell(_ cell: OneLineTableViewCell, folder: Folder) {
+        cell.titleLabel.text = folder.title
+        let folderImage = UIImage(named: StandardImageIdentifiers.Large.folder)?.withRenderingMode(.alwaysTemplate)
+        cell.leftImageView.image = folderImage
+        cell.indentationLevel = viewModel.folderStructures.count == 1 ? 0 : folder.indentation
+        let isFolderSelected = folder == viewModel.selectedFolder
+        let canShowAccessoryView = viewModel.shouldShowDisclosureIndicator(isFolderSelected: isFolderSelected)
+        cell.accessoryType = canShowAccessoryView ? .checkmark : .none
+        cell.selectionStyle = .default
+        cell.applyTheme(theme: theme)
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -168,13 +191,28 @@ class EditFolderViewController: UIViewController,
         }
     }
 
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        guard let section = Section(rawValue: section) else { return nil }
-        if section == .parentFolder {
-            // TODO: - Translate
-            return "SAVE IN"
-        }
-        return nil
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let sectionEnum = Section(rawValue: section), sectionEnum == .parentFolder else { return nil }
+        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: UX.parentFolderHeaderIdentifier)
+        else { return nil }
+        var configuration = UIListContentConfiguration.plainHeader()
+        configuration.text = .Bookmarks.Menu.EditBookmarkSaveIn.uppercased()
+        configuration.textProperties.font = FXFontStyles.Regular.callout.scaledFont()
+        configuration.textProperties.color = theme.colors.textSecondary
+        let layoutMargins = NSDirectionalEdgeInsets(top: 0,
+                                                    leading: UX.parentFolderHeaderHorizzontalPadding,
+                                                    bottom: UX.parentFolderHeaderBottomPadding,
+                                                    trailing: UX.parentFolderHeaderHorizzontalPadding)
+        configuration.directionalLayoutMargins = layoutMargins
+        header.contentConfiguration = configuration
+        header.directionalLayoutMargins = .zero
+        header.preservesSuperviewLayoutMargins = false
+        return header
+    }
+
+    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+        guard let section = Section(rawValue: section), section == .parentFolder else { return 0 }
+        return UITableView.automaticDimension
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

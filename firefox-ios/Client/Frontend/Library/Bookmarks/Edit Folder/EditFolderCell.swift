@@ -29,9 +29,12 @@ class EditFolderCell: UITableViewCell,
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func becomeFirstResponder() -> Bool {
+        return titleTextField.becomeFirstResponder()
+    }
+
     private func setupSubviews() {
-        // TODO: - Translate
-        titleTextField.placeholder = "Title"
+        titleTextField.placeholder = .BookmarkDetailFieldTitle
         contentView.addSubview(titleTextField)
         NSLayoutConstraint.activate([
             titleTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor,

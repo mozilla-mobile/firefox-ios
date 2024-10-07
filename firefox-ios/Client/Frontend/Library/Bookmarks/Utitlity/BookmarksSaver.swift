@@ -8,13 +8,17 @@ import Shared
 
 protocol BookmarksSaver {
     /// Saves or updates a bookmark
-    func save(bookmark: FxBookmarkNode, parentFolderGUID: String) async -> Result<Bool, Error>
+    func save(bookmark: FxBookmarkNode, parentFolderGUID: String) async -> Result<Void, Error>
 }
 
 struct DefaultBookmarksSaver: BookmarksSaver {
+    enum SaveError: Error {
+        case bookmarkTypeDontSupportSaving
+    }
+
     let profile: Profile
 
-    func save(bookmark: FxBookmarkNode, parentFolderGUID: String) async -> Result<Bool, Error> {
+    func save(bookmark: FxBookmarkNode, parentFolderGUID: String) async -> Result<Void, Error> {
         return await withCheckedContinuation { continuation in
             let operation: Success? = {
                 switch bookmark.type {
@@ -55,9 +59,17 @@ struct DefaultBookmarksSaver: BookmarksSaver {
                     return nil
                 }
             }()
-            operation?.uponQueue(.main, block: { _ in
-                continuation.resume(returning: .success(true))
-            })
+            if let operation {
+                operation.uponQueue(.main, block: { result in
+                    if let result = result.successValue {
+                        continuation.resume(returning: .success(result))
+                    } else {
+                        continuation.resume(returning: .failure(SaveError.bookmarkTypeDontSupportSaving))
+                    }
+                })
+            } else {
+                continuation.resume(returning: .failure(SaveError.bookmarkTypeDontSupportSaving))
+            }
         }
     }
 }

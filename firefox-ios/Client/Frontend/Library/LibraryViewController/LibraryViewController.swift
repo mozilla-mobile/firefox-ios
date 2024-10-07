@@ -133,7 +133,6 @@ class LibraryViewController: UIViewController, Themeable {
 
     func updateViewWithState() {
         setupButtons()
-        print("this pc ")
     }
 
     fileprivate func updateTitle() {

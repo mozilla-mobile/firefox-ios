@@ -8,11 +8,13 @@ import MozillaAppServices
 
 final class DefaultFolderHeirarchyFetcherTests: XCTestCase {
     var mockProfile: MockProfile!
-    
+    let rootFolderGUID = BookmarkRoots.MobileFolderGUID
+    let testFolderTitle = "testTitle"
+
     override func setUp() async throws {
         try await super.setUp()
         mockProfile = MockProfile()
-        await addFolder(title: "test", gui: nil)
+        await addFolder(title: testFolderTitle)
     }
 
     override func tearDown() {
@@ -20,32 +22,42 @@ final class DefaultFolderHeirarchyFetcherTests: XCTestCase {
         super.tearDown()
     }
 
-    func testFolder() async {
+    func testFecthFolder_returnsPreviouslyAddedFolder() async throws {
         let subject = createSubject()
+
         let folders = await subject.fetchFolders()
+
+        let folder = try XCTUnwrap(folders.first)
         XCTAssertEqual(folders.count, 1)
-        XCTAssertEqual(folders[0].title, "test")
-        XCTAssertEqual(folders[0].indentation, 0)
+        XCTAssertEqual(folder.title, testFolderTitle)
+        // should be zero since the folder is at the root
+        XCTAssertEqual(folder.indentation, 0)
     }
-    
-    func testReturnIndentedFolders() async {
+
+    func testAddFolderToPreviousAddedFolderGUID_returnsFolderWithIndentationHigherThenPreviousFolder() async throws {
         let subject = createSubject()
-        let lastInserted = await subject.fetchFolders()[0]
-        await addFolder(title: "indented", gui: lastInserted.guid)
-        
+        let previousFolders = await subject.fetchFolders()
+        let previouslyAddedFolder = try XCTUnwrap(previousFolders.first)
+        let folderTitle = "indented"
+        await addFolder(title: folderTitle, parentFolderGUID: previouslyAddedFolder.guid)
+
         let folders = await subject.fetchFolders()
-        print(folders)
+        let lastAddedFolder = try XCTUnwrap(folders.first { $0.title == folderTitle })
+
+        XCTAssertEqual(lastAddedFolder.title, folderTitle)
+        XCTAssertGreaterThan(lastAddedFolder.indentation, previouslyAddedFolder.indentation)
     }
 
     private func createSubject() -> DefaultFolderHierarchyFetcher {
-        let subject = DefaultFolderHierarchyFetcher(profile: mockProfile, rootFolderGUID: BookmarkRoots.MobileFolderGUID)
+        let subject = DefaultFolderHierarchyFetcher(profile: mockProfile, rootFolderGUID: rootFolderGUID)
         return subject
     }
-    
-    private func addFolder(title: String, gui: String?) async {
+
+    private func addFolder(title: String, parentFolderGUID: String? = nil) async {
         return await withCheckedContinuation { continuation in
-            mockProfile.places.createFolder(parentGUID: gui ?? BookmarkRoots.MobileFolderGUID, title: title, position: 0).uponQueue(.main, block: { result in
-                print(result)
+            mockProfile.places.createFolder(parentGUID: parentFolderGUID ?? rootFolderGUID,
+                                            title: title,
+                                            position: 0).uponQueue(.main, block: { result in
                 continuation.resume()
             })
         }

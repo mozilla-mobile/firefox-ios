@@ -47,8 +47,7 @@ class EditBookmarkViewModel {
 
     func backNavigationButtonTitle() -> String {
         if parentFolder.guid == BookmarkRoots.MobileFolderGUID {
-            // TODO: - translate
-            return "All"
+            return .Bookmarks.Menu.AllBookmarks
         }
         return parentFolder.title
     }

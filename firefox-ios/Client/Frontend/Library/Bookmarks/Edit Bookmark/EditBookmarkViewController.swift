@@ -25,6 +25,9 @@ class EditBookmarkViewController: UIViewController,
     }
     private struct UX {
         static let bookmarkCellTopPadding: CGFloat = 25.0
+        static let folderHeaderIdentifier = "folderHeaderIdentifier"
+        static let folderHeaderHorizzontalPadding: CGFloat = 16.0
+        static let folderHeaderBottomPadding: CGFloat = 8.0
     }
     var currentWindowUUID: WindowUUID?
     var themeManager: any ThemeManager
@@ -67,11 +70,12 @@ class EditBookmarkViewController: UIViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // TODO: - Translate
-        title = "Edit Bookmark"
+        title = .Bookmarks.Menu.EditBookmarkTitle
         viewModel.onFolderStatusUpdate = { [weak self] in
             self?.tableView.reloadSections(IndexSet(integer: Section.folder.rawValue), with: .automatic)
         }
+        // The back button title sometimes doesn't allign with the chevron, force navigation bar layout
+        navigationController?.navigationBar.layoutIfNeeded()
         setupSubviews()
     }
 
@@ -82,6 +86,14 @@ class EditBookmarkViewController: UIViewController,
         navigationController?.setNavigationBarHidden(false, animated: true)
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         onViewWillAppear?()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let editBookmarkCell = tableView.visibleCells.first {
+            return $0 is EditBookmarkCell
+        } as? EditBookmarkCell
+        editBookmarkCell?.focusTitleTextField()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -176,14 +188,6 @@ class EditBookmarkViewController: UIViewController,
         return UITableView.automaticDimension
     }
 
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        guard let section = Section(rawValue: section) else { return nil }
-        if section == .folder {
-            return "SAVE IN"
-        }
-        return nil
-    }
-
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let section = Section(rawValue: section) else { return 0 }
         return switch section {
@@ -194,7 +198,27 @@ class EditBookmarkViewController: UIViewController,
         }
     }
 
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let sectionEnum = Section(rawValue: section), sectionEnum == .folder else { return nil }
+        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: UX.folderHeaderIdentifier)
+        else { return nil }
+        var configuration = UIListContentConfiguration.plainHeader()
+        configuration.text = .Bookmarks.Menu.EditBookmarkSaveIn.uppercased()
+        configuration.textProperties.font = FXFontStyles.Regular.callout.scaledFont()
+        configuration.textProperties.color = theme.colors.textSecondary
+        let layoutMargins = NSDirectionalEdgeInsets(top: 0,
+                                                    leading: UX.folderHeaderHorizzontalPadding,
+                                                    bottom: UX.folderHeaderBottomPadding,
+                                                    trailing: UX.folderHeaderHorizzontalPadding)
+        configuration.directionalLayoutMargins = layoutMargins
+        header.contentConfiguration = configuration
+        header.directionalLayoutMargins = .zero
+        header.preservesSuperviewLayoutMargins = false
+        return header
+    }
+
+    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+        guard let section = Section(rawValue: section), section == .folder else { return 0 }
         return UITableView.automaticDimension
     }
 

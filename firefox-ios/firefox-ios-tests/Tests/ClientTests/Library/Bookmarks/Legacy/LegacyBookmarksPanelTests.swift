@@ -9,7 +9,7 @@ import Common
 
 @testable import Client
 
-class BookmarksPanelTests: XCTestCase {
+class LegacyBookmarksPanelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
@@ -301,7 +301,7 @@ class BookmarksPanelTests: XCTestCase {
     }
 }
 
-private extension BookmarksPanelTests {
+private extension LegacyBookmarksPanelTests {
     func createPanel() -> SpyBookmarksPanel {
         let profile = MockProfile()
         let viewModel = BookmarksPanelViewModel(profile: profile,

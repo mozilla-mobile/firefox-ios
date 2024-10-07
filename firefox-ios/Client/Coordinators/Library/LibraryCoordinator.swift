@@ -109,9 +109,11 @@ class LibraryCoordinator: BaseCoordinator,
         )
         add(child: bookmarksCoordinator)
         if isBookmarkRefactorEnabled {
-            (navigationController.topViewController as? BookmarksViewController)?.bookmarkCoordinatorDelegate = bookmarksCoordinator
+            (navigationController.topViewController as? BookmarksViewController)?
+                .bookmarkCoordinatorDelegate = bookmarksCoordinator
         } else {
-            (navigationController.topViewController as? LegacyBookmarksPanel)?.bookmarkCoordinatorDelegate = bookmarksCoordinator
+            (navigationController.topViewController as? LegacyBookmarksPanel)?
+                .bookmarkCoordinatorDelegate = bookmarksCoordinator
         }
     }
 
