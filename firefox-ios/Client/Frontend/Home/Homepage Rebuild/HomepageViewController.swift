@@ -4,9 +4,19 @@
 
 import Foundation
 import Common
+import Redux
 
+<<<<<<< HEAD:firefox-ios/Client/Frontend/Home/Homepage Rebuild/HomepageViewController.swift
 final class HomepageViewController: UIViewController, ContentContainable, Themeable {
+=======
+final class NewHomepageViewController: UIViewController,
+                                       UICollectionViewDelegate,
+                                       ContentContainable,
+                                       Themeable,
+                                       StoreSubscriber {
+>>>>>>> 1451919a81 (add initial redux):firefox-ios/Client/Frontend/Home/Homepage Rebuild/NewHomepageViewController.swift
     // MARK: - Typealiases
+    typealias SubscriberStateType = HomepageState
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
 
     // MARK: - ContentContainable variables
@@ -25,6 +35,7 @@ final class HomepageViewController: UIViewController, ContentContainable, Themea
     private var dataSource: HomepageDiffableDataSource?
     private var layoutConfiguration = HomepageSectionLayoutProvider().createCompositionalLayout()
     private var logger: Logger
+    private var homepageState: HomepageState
 
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
@@ -36,7 +47,10 @@ final class HomepageViewController: UIViewController, ContentContainable, Themea
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.logger = logger
+        homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
+
+        subscribeToRedux()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -44,6 +58,7 @@ final class HomepageViewController: UIViewController, ContentContainable, Themea
     }
 
     deinit {
+        unsubscribeFromRedux()
         notificationCenter.removeObserver(self)
     }
 
@@ -54,12 +69,56 @@ final class HomepageViewController: UIViewController, ContentContainable, Themea
         configureCollectionView()
         configureDataSource()
 
-        dataSource?.applyInitialSnapshot()
+        store.dispatch(
+            HomepageAction(
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.initialize
+            )
+        )
 
         listenForThemeChange(view)
         applyTheme()
     }
 
+    // MARK: - Redux
+    func subscribeToRedux() {
+        let action = ScreenAction(
+            windowUUID: windowUUID,
+            actionType: ScreenActionType.showScreen,
+            screen: .homepage
+        )
+        store.dispatch(action)
+
+        let uuid = windowUUID
+        store.subscribe(self, transform: {
+            return $0.select({ appState in
+                return HomepageState(
+                    appState: appState,
+                    uuid: uuid
+                )
+            })
+        })
+    }
+
+    func newState(state: HomepageState) {
+        homepageState = state
+        if homepageState.loadInitialData {
+            dataSource?.applyInitialSnapshot()
+        } else if homepageState.headerState.showHeader {
+            dataSource?.updateHeaderSection()
+        }
+    }
+
+    func unsubscribeFromRedux() {
+        let action = ScreenAction(
+            windowUUID: windowUUID,
+            actionType: ScreenActionType.closeScreen,
+            screen: .homepage
+        )
+        store.dispatch(action)
+    }
+
+    // MARK: - Theming
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
@@ -96,6 +155,7 @@ final class HomepageViewController: UIViewController, ContentContainable, Themea
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.backgroundColor = .clear
         collectionView.accessibilityIdentifier = a11y.collectionView
+        collectionView.delegate = self
 
         self.collectionView = collectionView
 
@@ -124,20 +184,55 @@ final class HomepageViewController: UIViewController, ContentContainable, Themea
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
         // TODO: FXIOS-10163 - Dummy collection cells, to update with proper cells
-        guard let cell: UICollectionViewCell = collectionView?.dequeueReusableCell(
+        guard let section = HomepageSection(
+            rawValue: indexPath.section
+        ), let cell: UICollectionViewCell = collectionView?.dequeueReusableCell(
             withReuseIdentifier: "cell",
             for: indexPath
         ) else {
+            self.logger.log(
+                "Section should not have been nil, something went wrong",
+                level: .fatal,
+                category: .newHomepage
+            )
             return UICollectionViewCell()
         }
 
-        cell.contentView.backgroundColor = .systemBlue
+        cell.contentView.subviews.forEach { $0.removeFromSuperview() }
+        cell.contentView.backgroundColor = getBackgroundColor(for: section)
 
         let label = UILabel(frame: cell.contentView.bounds)
         label.textAlignment = .center
         label.text = item.title
         label.textColor = .white
         cell.contentView.addSubview(label)
+
         return cell
+    }
+
+    private func getBackgroundColor(for section: HomepageSection) -> UIColor {
+        switch section {
+        case .header:
+            return .systemPink
+        case .topSites:
+            return .systemGreen
+        case .pocket:
+            return .systemPurple
+        }
+    }
+
+    // MARK: UICollectionViewDelegate
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let selectedItem = dataSource?.itemIdentifier(for: indexPath) {
+            // TODO: FXIOS-10163 - Dummy trigger to update with proper triggers
+            if selectedItem.title == "First" {
+                store.dispatch(
+                    HeaderAction(
+                        windowUUID: windowUUID,
+                        actionType: HeaderActionType.updateHeader
+                    )
+                )
+            }
+        }
     }
 }
