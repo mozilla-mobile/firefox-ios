@@ -72,12 +72,12 @@ final class BrowserViewControllerStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
 
-        XCTAssertFalse(initialState.showPasswordGenerator)
+        XCTAssertNil(initialState.displayView)
 
         let action = getAction(for: .showPasswordGenerator)
         let newState = reducer(initialState, action)
 
-        XCTAssertTrue(newState.showPasswordGenerator)
+        XCTAssertEqual(newState.displayView, .passwordGenerator)
     }
 
     // MARK: - Private
