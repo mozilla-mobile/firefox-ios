@@ -105,7 +105,7 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifia
     }
 
     @objc
-    func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
+    private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
         let menuController = UIMenuController.shared
         let copyItem = UIMenuItem(title: .PasswordGenerator.CopyPasswordButtonLabel, action: #selector(copyText(_:)))
         menuController.menuItems = [copyItem]
@@ -113,7 +113,7 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifia
     }
 
     @objc
-    func copyText(_ sender: Any?) {
+    private func copyText(_ sender: Any?) {
         UIPasteboard.general.string = passwordLabel.text
     }
 
