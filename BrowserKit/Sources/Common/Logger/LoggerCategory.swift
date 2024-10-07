@@ -8,6 +8,9 @@ import Foundation
 /// Categories are sorted in alphabetical order.
 /// Do not add new categories unless discussing with the team beforehand.
 public enum LoggerCategory: String {
+    /// Related to content (trackers, advertisements) blocking
+    case adblock
+
     /// Related to address and credit card autofill
     case autofill
 
@@ -19,6 +22,9 @@ public enum LoggerCategory: String {
 
     /// Related to homepage UI and it's data management.
     case homepage
+
+    /// Related to new homepage UI and it's data management for the homepage rebuild project.
+    case newHomepage
 
     /// Related to errors around image fetches, and includes all image types (`SiteImageType`, and general images).
     case images

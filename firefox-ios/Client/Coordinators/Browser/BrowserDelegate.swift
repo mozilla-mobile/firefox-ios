@@ -21,6 +21,9 @@ protocol BrowserDelegate: AnyObject {
                       statusBarScrollDelegate: StatusBarScrollDelegate,
                       overlayManager: OverlayModeManager)
 
+    /// Show the new homepage to the user as part of the homepage rebuild project
+    func showNewHomepage()
+
     /// Show the private homepage to the user as part of felt privacy
     func showPrivateHomepage(overlayManager: OverlayModeManager)
 

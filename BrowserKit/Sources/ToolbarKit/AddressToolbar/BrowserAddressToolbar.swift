@@ -28,6 +28,7 @@ public class BrowserAddressToolbar: UIView, Notifiable, AddressToolbar, ThemeApp
     public var notificationCenter: any Common.NotificationProtocol = NotificationCenter.default
     private weak var toolbarDelegate: AddressToolbarDelegate?
     private var theme: Theme?
+    private var isUnifiedSearchEnabled = false
 
     private lazy var toolbarContainerView: UIView = .build()
     private lazy var navigationActionStack: UIStackView = .build()
@@ -69,17 +70,18 @@ public class BrowserAddressToolbar: UIView, Notifiable, AddressToolbar, ThemeApp
     public func configure(state: AddressToolbarState,
                           toolbarDelegate: any AddressToolbarDelegate,
                           leadingSpace: CGFloat? = nil,
-                          trailingSpace: CGFloat? = nil) {
+                          trailingSpace: CGFloat? = nil,
+                          isUnifiedSearchEnabled: Bool) {
         self.toolbarDelegate = toolbarDelegate
-        configure(state: state)
+        configure(state: state, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
         updateSpacing(leading: leadingSpace, trailing: trailingSpace)
     }
 
-    public func configure(state: AddressToolbarState) {
+    public func configure(state: AddressToolbarState, isUnifiedSearchEnabled: Bool) {
         updateActions(state: state)
         updateBorder(borderPosition: state.borderPosition)
 
-        locationView.configure(state.locationViewState, delegate: self)
+        locationView.configure(state.locationViewState, delegate: self, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
 
         setNeedsLayout()
         layoutIfNeeded()
@@ -299,6 +301,10 @@ public class BrowserAddressToolbar: UIView, Notifiable, AddressToolbar, ThemeApp
         toolbarDelegate?.searchSuggestions(searchTerm: text)
     }
 
+    func locationViewDidClearText() {
+        toolbarDelegate?.didClearSearch()
+    }
+
     func locationViewDidBeginEditing(_ text: String, shouldShowSuggestions: Bool) {
         toolbarDelegate?.addressToolbarDidBeginEditing(searchTerm: text, shouldShowSuggestions: shouldShowSuggestions)
     }
@@ -306,7 +312,7 @@ public class BrowserAddressToolbar: UIView, Notifiable, AddressToolbar, ThemeApp
     func locationViewDidSubmitText(_ text: String) {
         guard !text.isEmpty else { return }
 
-        toolbarDelegate?.openBrowser(searchTerm: text.lowercased())
+        toolbarDelegate?.openBrowser(searchTerm: text)
     }
 
     func locationViewAccessibilityActions() -> [UIAccessibilityCustomAction]? {

@@ -44,6 +44,7 @@ class MultiWindowTests: IpadOnlyTestCase {
         let topSites = AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell
         let homeButtom = AccessibilityIdentifiers.Toolbar.homeButton
         // A new tab is opened in the same window
+        mozWaitForElementToExist(app.collectionViews.cells.matching(identifier: topSites).firstMatch)
         app.collectionViews.cells.matching(identifier: topSites).firstMatch.tap()
         mozWaitForElementToExist(app.buttons[homeButtom])
         app.buttons.matching(identifier: menuButton).element(boundBy: 0).tap()
@@ -53,6 +54,7 @@ class MultiWindowTests: IpadOnlyTestCase {
         let tabButtonSecondWindow = app.buttons.matching(identifier: tabsButtonIdentifier).element(boundBy: 0)
         XCTAssertEqual(tabButtonSecondWindow.value as! String, "2", "Number of tabs opened should be equal to 2")
         // A new tab is opened in the same window
+        mozWaitForElementToExist(app.collectionViews.cells.matching(identifier: topSites).element(boundBy: 6))
         app.collectionViews.cells.matching(identifier: topSites).element(boundBy: 6).tap()
         mozWaitForElementToExist(app.buttons[homeButtom])
         app.buttons.matching(identifier: menuButton).element(boundBy: 1).tap()

@@ -4620,6 +4620,300 @@ awesomebar:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
+    
+# Toolbar related metrics
+toolbar:
+  qr_scan_button_tapped:
+    type: event
+    description: |
+        Counts the number of times a user taps the qr code scan button
+        in the address toolbar
+    extra_keys:
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+  clear_search_button_tapped:
+    type: event
+    description: |
+        Counts the number of times a user taps the clear button
+        in the address toolbar
+    extra_keys:
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+  share_button_tapped:
+    type: event
+    description: |
+        Counts the number of times a user taps the share button
+        in the address toolbar
+    extra_keys:
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+  refresh_button_tapped:
+    type: event
+    description: |
+        Counts the number of times a user taps the refresh button
+        in the address toolbar
+    extra_keys:
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+  reader_mode_button_tapped:
+    type: event
+    description: |
+        Counts the number of times a user taps the reader mode button
+        in the address toolbar
+    extra_keys:
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
+      enabled:
+        description: Whether reader mode was opened or closed
+        type: boolean
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+  site_info_button_tapped:
+    type: event
+    description: |
+        Counts the number of times a user taps the site info button
+        in the address toolbar
+    extra_keys:
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+  back_button_tapped:
+    type: event
+    description: |
+        Counts the number of times a user taps the back button
+        in the address or navigation toolbar
+    extra_keys:
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+  forward_button_tapped:
+    type: event
+    description: |
+        Counts the number of times a user taps the forward button
+        in the address or navigation toolbar
+    extra_keys:
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+  back_long_press:
+    type: event
+    description: |
+        Counts the number of times a user long presses the back button
+        in the address or navigation toolbar
+    extra_keys:
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+  forward_long_press:
+    type: event
+    description: |
+        Counts the number of times a user long presses the forward button
+        in the address or navigation toolbar
+    extra_keys:
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+  home_button_tapped:
+    type: event
+    description: |
+        Counts the number of times a user taps the home button
+        in the address or navigation toolbar
+    extra_keys:
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+  one_tap_new_tab_button_tapped:
+    type: event
+    description: |
+        Counts the number of times a user taps the one tap new tab
+        button in the address or navigation toolbar
+    extra_keys:
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+  one_tap_new_tab_long_press:
+    type: event
+    description: |
+        Counts the number of times a user long presses the one
+        tap new tab button in the address or navigation toolbar
+    extra_keys:
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+  search_button_tapped:
+    type: event
+    description: |
+        Counts the number of times a user taps the search button
+        in the address or navigation toolbar
+    extra_keys:
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+  tab_tray_button_tapped:
+    type: event
+    description: |
+        Counts the number of times a user taps the tab tray button
+        in the address or navigation toolbar
+    extra_keys:
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+  tab_tray_long_press:
+    type: event
+    description: |
+        Counts the number of times a user long presses the tab tray
+        button in the address or navigation toolbar
+    extra_keys:
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+  app_menu_button_tapped:
+    type: event
+    description: |
+        Counts the number of times a user taps the menu button
+        in the address or navigation toolbar
+    extra_keys:
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+  data_clearance_button_tapped:
+    type: event
+    description: |
+        Counts the number of times a user taps the data clearance
+        button in the address or navigation toolbar
+    extra_keys:
+      is_private:
+        description: Whether the user is in private mode or not
+        type: boolean
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19327
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22325
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
 
 # Share sheet specific metrics
 

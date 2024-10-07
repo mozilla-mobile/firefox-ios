@@ -404,7 +404,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.noop(to: HomePanel_TopSites)
 
         screenState.backAction = {
-            app.buttons["urlBar-cancel"].tap()
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
         }
         screenState.dismissOnUse = true
     }
@@ -464,7 +464,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
 
         screenState.gesture(forAction: Action.CloseURLBarOpen, transitionTo: HomePanelsScreen) {_ in
-            app.buttons["urlBar-cancel"].tap()
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
         }
     }
 
@@ -932,9 +932,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     func makeURLBarAvailable(_ screenState: MMScreenStateNode<FxUserState>) {
-        screenState.tap(app.textFields["url"], to: URLBarOpen)
+        screenState.tap(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], to: URLBarOpen)
         screenState.gesture(to: URLBarLongPressMenu) {
-            app.textFields["url"].press(forDuration: 1.0)
+            app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].press(forDuration: 1.0)
         }
     }
 

@@ -75,7 +75,8 @@ class TrackingProtectionTests: BaseTestCase {
     // Smoketest
     func testStandardProtectionLevel() {
         navigator.goto(URLBarOpen)
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
+        let cancelButton = app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton]
+        mozWaitForElementToExist(cancelButton, timeout: TIMEOUT_LONG)
         navigator.back()
         navigator.goto(TrackingProtectionSettings)
 

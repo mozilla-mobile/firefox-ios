@@ -372,7 +372,9 @@ class BookmarksPanel: SiteTableViewController,
                 !(node is BookmarkSeparatorData),
                 isCurrentFolderEditable(at: indexPath) {
                 // Only show detail controller for editable nodes
-                bookmarkCoordinatorDelegate?.showBookmarkDetail(for: node, folder: bookmarkFolder)
+                bookmarkCoordinatorDelegate?.showBookmarkDetail(for: node, folder: bookmarkFolder) { [weak self] in
+                    self?.updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
+                }
                 updatePanelState(newState: .bookmarks(state: .itemEditMode))
             }
             return

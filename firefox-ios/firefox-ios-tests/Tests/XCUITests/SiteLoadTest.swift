@@ -30,7 +30,7 @@ class SiteLoadTest: BaseTestCase {
             mozWaitForElementToExist(app.alerts.buttons["OK"])
             app.alerts.buttons["OK"].tap()
             navigator.goto(BrowserTab)
-            mozWaitForElementToExist(app.textFields["url"])
+            mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
             counter += 1
         }
     }

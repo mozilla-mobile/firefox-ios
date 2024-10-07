@@ -30,6 +30,7 @@ class MainMenuViewController: UIViewController,
 
     private let windowUUID: WindowUUID
     private var menuState: MainMenuState
+    private let logger: Logger
 
     var currentWindowUUID: UUID? { return windowUUID }
 
@@ -37,11 +38,13 @@ class MainMenuViewController: UIViewController,
     init(
         windowUUID: WindowUUID,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
-        themeManager: ThemeManager = AppContainer.shared.resolve()
+        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        logger: Logger = DefaultLogger.shared
     ) {
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
+        self.logger = logger
         menuState = MainMenuState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
 
@@ -84,17 +87,33 @@ class MainMenuViewController: UIViewController,
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        store.dispatch(
-            MainMenuAction(
-                windowUUID: windowUUID,
-                actionType: MainMenuActionType.mainMenuDidAppear
-            )
-        )
         updateModalA11y()
     }
 
     deinit {
         unsubscribeFromRedux()
+    }
+
+    // MARK: Notifications
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DynamicFontChanged:
+            adjustLayout()
+        default: break
+        }
+    }
+
+    // MARK: View Transitions
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        adjustLayout()
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: { _ in
+            self.adjustLayout()
+        }, completion: nil)
     }
 
     // MARK: - UI setup
@@ -121,10 +140,13 @@ class MainMenuViewController: UIViewController,
 
     // MARK: - Redux
     func subscribeToRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.showScreen,
-                                  screen: .mainMenu)
-        store.dispatch(action)
+        store.dispatch(
+            ScreenAction(
+                windowUUID: windowUUID,
+                actionType: ScreenActionType.showScreen,
+                screen: .mainMenu
+            )
+        )
         let uuid = windowUUID
         store.subscribe(self, transform: {
             return $0.select({ appState in
@@ -134,16 +156,22 @@ class MainMenuViewController: UIViewController,
     }
 
     func unsubscribeFromRedux() {
-        let action = ScreenAction(windowUUID: windowUUID,
-                                  actionType: ScreenActionType.closeScreen,
-                                  screen: .mainMenu)
-        store.dispatch(action)
+        store.dispatch(
+            ScreenAction(
+                windowUUID: windowUUID,
+                actionType: ScreenActionType.closeScreen,
+                screen: .mainMenu
+            )
+        )
     }
 
     func newState(state: MainMenuState) {
         menuState = state
 
-        reloadTableView(with: menuState.menuElements)
+        if menuState.currentSubmenuView != nil {
+            coordinator?.showDetailViewController()
+            return
+        }
 
         if let navigationDestination = menuState.navigationDestination {
             coordinator?.navigateTo(navigationDestination, animated: true)
@@ -152,7 +180,10 @@ class MainMenuViewController: UIViewController,
 
         if menuState.shouldDismiss {
             coordinator?.dismissMenuModal(animated: true)
+            return
         }
+
+        reloadTableView(with: menuState.menuElements)
     }
 
     // MARK: - UX related
@@ -161,9 +192,6 @@ class MainMenuViewController: UIViewController,
         view.backgroundColor = theme.colors.layer3
         menuContent.applyTheme(theme: theme)
     }
-
-    // MARK: - Notifications
-    func handleNotifications(_ notification: Notification) { }
 
     // MARK: - A11y
     // In iOS 15 modals with a large detent read content underneath the modal
@@ -201,6 +229,10 @@ class MainMenuViewController: UIViewController,
             mainButtonA11yId: AccessibilityIdentifiers.MainMenu.HeaderView.mainButton,
             menuA11yId: AccessibilityIdentifiers.MainMenu.mainMenu,
             menuA11yLabel: .MainMenu.TabsSection.AccessibilityLabels.MainMenu)
+    }
+
+    private func adjustLayout() {
+        menuContent.accountHeaderView.adjustLayout()
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate

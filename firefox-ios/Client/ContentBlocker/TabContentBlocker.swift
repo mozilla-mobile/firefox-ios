@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import WebKit
+import Common
 
 extension Notification.Name {
    public static let didChangeContentBlocking = Notification.Name("didChangeContentBlocking")
@@ -17,7 +18,7 @@ protocol ContentBlockerTab: AnyObject {
 
 class TabContentBlocker {
     weak var tab: ContentBlockerTab?
-
+    let logger: Logger
     var isEnabled: Bool {
         return false
     }
@@ -25,7 +26,7 @@ class TabContentBlocker {
     @objc
     func notifiedTabSetupRequired() {}
 
-    func currentlyEnabledLists() -> [BlocklistFileName] {
+    func currentlyEnabledLists() -> [String] {
         return []
     }
 
@@ -51,8 +52,9 @@ class TabContentBlocker {
 
     var stats = TPPageStats()
 
-    init(tab: ContentBlockerTab) {
+    init(tab: ContentBlockerTab, logger: Logger = DefaultLogger.shared) {
         self.tab = tab
+        self.logger = logger
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(notifiedTabSetupRequired),

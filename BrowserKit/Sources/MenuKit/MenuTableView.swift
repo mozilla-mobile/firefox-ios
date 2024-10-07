@@ -13,6 +13,10 @@ public protocol MenuTableViewDataDelegate: AnyObject {
 class MenuTableView: UIView,
                      UITableViewDelegate,
                      UITableViewDataSource, ThemeApplicable {
+    struct UX {
+        static let topPadding: CGFloat = 10
+    }
+
     private var tableView: UITableView
     private var menuData: [MenuSection]
     private var theme: Theme?
@@ -54,9 +58,16 @@ class MenuTableView: UIView,
         )
     }
 
-    // MARK: - UITableViewDataSource
+    // MARK: - UITableView Methods
     func numberOfSections(in tableView: UITableView) -> Int {
         return menuData.count
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        heightForHeaderInSection section: Int
+    ) -> CGFloat {
+        return section == 0 ? UX.topPadding : UITableView.automaticDimension
     }
 
     func tableView(
@@ -80,7 +91,6 @@ class MenuTableView: UIView,
         return cell
     }
 
-    // MARK: - UITableViewDelegate Methods
     func tableView(
         _ tableView: UITableView,
         didSelectRowAt indexPath: IndexPath
@@ -90,6 +100,18 @@ class MenuTableView: UIView,
         if let action = menuData[indexPath.section].options[indexPath.row].action {
             action()
         }
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        viewForHeaderInSection section: Int
+    ) -> UIView? {
+        if section == 0 {
+            let headerView = UIView()
+            headerView.backgroundColor = .clear
+            return headerView
+        }
+        return nil
     }
 
     func reloadTableView(with data: [MenuSection]) {
