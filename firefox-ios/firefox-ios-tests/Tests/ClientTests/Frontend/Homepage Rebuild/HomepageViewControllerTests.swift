@@ -66,7 +66,7 @@ final class HomepageViewControllerTests: XCTestCase {
         let themeManager = MockThemeManager()
         mockNotificationCenter = notificationCenter
         mockThemeManager = themeManager
-        let homepageViewController = NewHomepageViewController(
+        let homepageViewController = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
             themeManager: themeManager,
             notificationCenter: notificationCenter
