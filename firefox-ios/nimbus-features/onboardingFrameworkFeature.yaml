@@ -425,7 +425,7 @@ enums:
           Will request to allow notifications from the user
       set-default-browser:
         description: >
-          Will send the user to settings to set Firefox as their default browser
+          Will send the user to settings to set Firefox as their default browser and advance to next card
       open-instructions-popup:
         description: >
           Will open up a popup with instructions for something
