@@ -338,6 +338,9 @@ extension IntroViewController: OnboardingCardDelegate {
                 selector: #selector(dismissPrivacyPolicyViewController))
         case .openIosFxSettings:
             DefaultApplicationHelper().openSettings()
+            advance(numberOfPages: 1, from: cardName) {
+                self.showNextPageCompletionForLastCard()
+            }
         case .endOnboarding:
             closeOnboarding()
         }
