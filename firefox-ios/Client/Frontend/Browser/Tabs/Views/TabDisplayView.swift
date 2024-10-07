@@ -40,9 +40,13 @@ class TabDisplayView: UIView,
     private var dataSource: UICollectionViewDiffableDataSource<TabDisplaySection, SectionTabItem>?
 
     private var shouldHideInactiveTabs: Bool {
-        guard !tabsState.isPrivateMode else { return true }
-
-        return tabsState.inactiveTabs.isEmpty
+        if tabsState.isPrivateMode {
+            return true
+        } else if tabsState.inactiveTabs.isEmpty {
+            return true
+        } else {
+            return false
+        }
     }
 
     // Dragging on the collection view is either an 'active drag' where the item is moved, or
@@ -131,7 +135,9 @@ class TabDisplayView: UIView,
         ) -> UICollectionReusableView? in
             let reusableView = UICollectionReusableView()
             // Retrieve the section based on the current indexPath
+
             let section = self?.getTabDisplay(for: indexPath.section)
+            //let section = self?.dataSource?.snapshot().sectionIdentifiers[indexPath.section]
 
             // Only show the header for the Inactive Tabs section
             guard let self, section == .inactiveTabs else {
@@ -204,13 +210,15 @@ class TabDisplayView: UIView,
     func newState(state: TabsPanelState) {
         tabsState = state
 
-        if state.didRefreshTabs {
+        // Doesn't seem to be needed, check later if this is a problem
+        //if state.didRefreshTabs {
             updateCollectionView(state: tabsState)
-        }
+      //  }
 
-        if let index = state.scrollToIndex {
-            scrollToTab(index)
-        }
+        // TODO - uncomment before PR
+//        if let index = state.scrollToIndex {
+//            scrollToTab(index)
+//        }
 
         if state.didTapAddTab {
             let action = TabPanelViewAction(panelType: self.panelType,
@@ -221,39 +229,21 @@ class TabDisplayView: UIView,
     }
 
     private func updateCollectionView(state: TabsPanelState) {
-         guard let currentSnapshot = dataSource?.snapshot() else { return }
-         var snapshot = NSDiffableDataSourceSnapshot<TabDisplaySection, SectionTabItem>()
+        var snapshot = NSDiffableDataSourceSnapshot<TabDisplaySection, SectionTabItem>()
 
-          snapshot.appendSections([.tabs, .inactiveTabs])
+        snapshot.deleteAllItems()
 
-          let tabs = state.tabs.map { SectionTabItem.tab($0) }
-          snapshot.appendItems(tabs, toSection: .tabs)
+        snapshot.appendSections([.tabs])
+        let tabs = state.tabs.map { SectionTabItem.tab($0) }
+        snapshot.appendItems(tabs, toSection: .tabs)
 
-          let inactiveTabs = state.inactiveTabs.map { SectionTabItem.inactiveTab($0) }
-          snapshot.appendItems(inactiveTabs, toSection: .inactiveTabs)
-
-        if !areSnapshotsEqual(currentSnapshot, snapshot) {
-            dataSource?.apply(snapshot, animatingDifferences: false)
-        }
-    }
-
-    func areSnapshotsEqual(_ snapshot1: NSDiffableDataSourceSnapshot<TabDisplaySection, SectionTabItem>,
-                           _ snapshot2: NSDiffableDataSourceSnapshot<TabDisplaySection, SectionTabItem>) -> Bool {
-        // Check if the sections are the same
-        if snapshot1.sectionIdentifiers != snapshot2.sectionIdentifiers {
-            return false
+        if state.isInactiveTabsExpanded {
+            snapshot.appendSections([.inactiveTabs])
+            let inactiveTabs = state.inactiveTabs.map { SectionTabItem.inactiveTab($0) }
+            snapshot.appendItems(inactiveTabs, toSection: .inactiveTabs)
         }
 
-        // Check if the items in each section are the same
-        for section in snapshot1.sectionIdentifiers {
-            let items1 = snapshot1.itemIdentifiers(inSection: section)
-            let items2 = snapshot2.itemIdentifiers(inSection: section)
-
-            if items1 != items2 {
-                return false
-            }
-        }
-        return true
+        dataSource?.apply(snapshot, animatingDifferences: false)
     }
 
     private func scrollToTab(_ index: Int) {
@@ -330,21 +320,23 @@ class TabDisplayView: UIView,
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        switch getTabDisplay(for: indexPath.section) {
-        case .inactiveTabs:
-            let tabUUID = tabsState.inactiveTabs[indexPath.row].tabUUID
-            let action = TabPanelViewAction(panelType: panelType,
-                                            tabUUID: tabUUID,
-                                            windowUUID: windowUUID,
-                                            actionType: TabPanelViewActionType.selectTab)
-            store.dispatch(action)
-        case .tabs:
-            let tabUUID = tabsState.tabs[indexPath.row].tabUUID
-            let action = TabPanelViewAction(panelType: panelType,
-                                            tabUUID: tabUUID,
-                                            windowUUID: windowUUID,
-                                            actionType: TabPanelViewActionType.selectTab)
-            store.dispatch(action)
+        if let selectedItem = dataSource?.itemIdentifier(for: indexPath) {
+            switch selectedItem {
+            case .inactiveTab(let inactiveTabsModel):
+                let tabUUID = inactiveTabsModel.tabUUID
+                let action = TabPanelViewAction(panelType: panelType,
+                                                tabUUID: tabUUID,
+                                                windowUUID: windowUUID,
+                                                actionType: TabPanelViewActionType.selectTab)
+                store.dispatch(action)
+            case .tab(let tabModel):
+                let tabUUID = tabModel.tabUUID
+                let action = TabPanelViewAction(panelType: panelType,
+                                                tabUUID: tabUUID,
+                                                windowUUID: windowUUID,
+                                                actionType: TabPanelViewActionType.selectTab)
+                store.dispatch(action)
+            }
         }
     }
 
@@ -362,7 +354,7 @@ class TabDisplayView: UIView,
 
     @objc
     func toggleInactiveTab() {
-        guard let dataSource = dataSource else { return }
+       // guard let dataSource = dataSource else { return }
 
         let action = TabPanelViewAction(panelType: panelType,
                                         windowUUID: windowUUID,
@@ -370,9 +362,9 @@ class TabDisplayView: UIView,
         store.dispatch(action)
 
         // reload sections of the snapshot so that the collectionView can show/hide the expanded inactiveTabs
-        var snapshot = dataSource.snapshot()
-        snapshot.reloadSections([.inactiveTabs, .tabs])
-        dataSource.apply(snapshot, animatingDifferences: true)
+//        var snapshot = dataSource.snapshot()
+//        snapshot.reloadSections([.inactiveTabs, .tabs])
+//        dataSource.apply(snapshot, animatingDifferences: true)
     }
 
     // MARK: - TabCellDelegate
