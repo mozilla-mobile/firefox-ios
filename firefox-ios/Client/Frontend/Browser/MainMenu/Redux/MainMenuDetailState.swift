@@ -11,7 +11,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     var menuElements: [MenuSection]
     var shouldDismiss: Bool
-    var shouldGoBackToMenu: Bool
+    var shouldGoBackToMainMenu: Bool
     var navigationDestination: MainMenuNavigationDestination?
     var submenuType: MainMenuDetailsViewType?
 
@@ -38,7 +38,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
             submenuType: currentState.submenuType,
             navigationDestination: currentState.navigationDestination,
             shouldDismiss: currentState.shouldDismiss,
-            shouldGoBackToMenu: currentState.shouldGoBackToMenu
+            shouldGoBackToMenu: currentState.shouldGoBackToMainMenu
         )
     }
 
@@ -66,7 +66,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
         self.submenuType = submenuType
         self.navigationDestination = navigationDestination
         self.shouldDismiss = shouldDismiss
-        self.shouldGoBackToMenu = shouldGoBackToMenu
+        self.shouldGoBackToMainMenu = shouldGoBackToMenu
     }
 
     static let reducer: Reducer<Self> = { state, action in

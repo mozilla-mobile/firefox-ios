@@ -167,8 +167,6 @@ class MainMenuDetailsViewController: UIViewController,
     func newState(state: MainMenuDetailsState) {
         submenuState = state
 
-        refreshContent()
-
         if submenuState.shouldGoBackToMainMenu {
             coordinator?.dismissDetailViewController()
             return
@@ -178,6 +176,8 @@ class MainMenuDetailsViewController: UIViewController,
             coordinator?.dismissMenuModal(animated: true)
             return
         }
+
+        refreshContent()
     }
 
     // MARK: - TableViewDelegates
