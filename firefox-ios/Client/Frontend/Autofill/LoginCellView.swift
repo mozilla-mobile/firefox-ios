@@ -8,17 +8,6 @@ import Storage
 
 import struct MozillaAppServices.EncryptedLogin
 
-// MARK: - LoginCellView
-
-extension VerticalAlignment {
-    enum MidAccountAndName: AlignmentID {
-        static func defaultValue (in context: ViewDimensions) -> CGFloat {
-            context[.top]
-        }
-    }
-    static let midAccountAndName = VerticalAlignment(MidAccountAndName.self)
-}
-
 /// A view representing a cell displaying login information.
 struct LoginCellView: View {
     // MARK: - Properties
@@ -38,7 +27,7 @@ struct LoginCellView: View {
 
     var body: some View {
         Button(action: onTap) {
-            HStack(alignment: .midAccountAndName, spacing: 24) {
+            HStack(alignment: .midIconAndLabel, spacing: 24) {
                 Image(StandardImageIdentifiers.Large.login)
                     .renderingMode(.template)
                     .resizable()
@@ -46,14 +35,14 @@ struct LoginCellView: View {
                     .frame(width: 22)
                     .padding(.leading, 16)
                     .foregroundColor(iconPrimary)
-                    .alignmentGuide(.midAccountAndName) { $0[VerticalAlignment.center] }
+                    .alignmentGuide(.midIconAndLabel) { $0[VerticalAlignment.center] }
                     .accessibilityHidden(true)
                 VStack(alignment: .leading) {
                     Text(login.decryptedUsername.isEmpty ? String.PasswordAutofill.LoginListCellNoUsername
                          : login.decryptedUsername)
                         .font(.body)
                         .foregroundColor(textColor)
-                        .alignmentGuide(.midAccountAndName) { $0[VerticalAlignment.center] }
+                        .alignmentGuide(.midIconAndLabel) { $0[VerticalAlignment.center] }
                     Text(verbatim: "**********")
                         .font(.subheadline)
                         .foregroundColor(customLightGray)

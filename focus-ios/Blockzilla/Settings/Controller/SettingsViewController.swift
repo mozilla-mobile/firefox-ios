@@ -184,6 +184,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 toggle.tintColor = .darkGray
                 toggle.addTarget(self, action: #selector(toggleSwitched(_:)), for: .valueChanged)
                 toggle.isOn = Settings.getToggle(blockerToggle.setting)
+                if blockerToggle.setting == .studies {
+                    toggle.isEnabled = Settings.getToggle(.sendAnonymousUsageData)
+                }
                 toggles[sectionIndex]?[cellIndex] = blockerToggle
             }
         }
@@ -534,18 +537,38 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     private func toggleSwitched(_ sender: UISwitch) {
         let toggle = toggles.values.filter { $0.values.contains(where: { $0.toggle == sender }) }[0].values.filter { $0.toggle == sender }[0]
 
-        func updateSetting() {
-            Settings.set(sender.isOn, forToggle: toggle.setting)
+        func updateSetting(_ value: Bool, forToggle toggle: SettingsToggle) {
+            Settings.set(value, forToggle: toggle)
             ContentBlockerHelper.shared.reload()
             Utils.reloadSafariContentBlocker()
         }
 
-        // The following settings are special and need to be in effect immediately.
+        // Find the 'studies' toggle
+        let studiesToggle = toggles.values
+            .flatMap { $0.values }
+            .first(where: { $0.setting == .studies })?.toggle
 
+        // The following settings are special and need to be in effect immediately.
         if toggle.setting == .sendAnonymousUsageData {
             Glean.shared.setUploadEnabled(sender.isOn)
             if !sender.isOn {
                 NimbusWrapper.shared.nimbus.resetTelemetryIdentifiers()
+            }
+
+            // Disable and turn off 'studies' if 'sendAnonymousUsageData' is turned off
+            if let studiesToggle = studiesToggle {
+                if !sender.isOn {
+                    // Gray out the toggle
+                    studiesToggle.isOn = false
+                    studiesToggle.isEnabled = false
+                    studiesToggle.alpha = 0.5
+                    NimbusWrapper.shared.nimbus.globalUserParticipation = false
+                    updateSetting(false, forToggle: .studies)
+                } else {
+                    // Restore toggle's appearance
+                    studiesToggle.isEnabled = true
+                    studiesToggle.alpha = 1.0
+                }
             }
         } else if toggle.setting == .studies {
             NimbusWrapper.shared.nimbus.globalUserParticipation = sender.isOn
@@ -557,10 +580,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         case .safari where sender.isOn && !isSafariEnabled:
             let instructionsViewController = SafariInstructionsViewController()
             navigationController!.pushViewController(instructionsViewController, animated: true)
-            updateSetting()
+            updateSetting(sender.isOn, forToggle: toggle.setting)
         case .enableSearchSuggestions:
             UserDefaults.standard.set(true, forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt)
-            updateSetting()
+            updateSetting(sender.isOn, forToggle: toggle.setting)
             GleanMetrics
                 .ShowSearchSuggestions
                 .changedFromSettings
@@ -570,13 +593,13 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                         .ChangedFromSettingsExtra(isEnabled: sender.isOn)
                 )
         case .showHomeScreenTips:
-            updateSetting()
+            updateSetting(sender.isOn, forToggle: toggle.setting)
             // This update must occur after the setting has been updated to properly take effect.
             if let browserViewController = presentingViewController as? BrowserViewController {
                 browserViewController.refreshTipsDisplay()
             }
         default:
-            updateSetting()
+            updateSetting(sender.isOn, forToggle: toggle.setting)
         }
     }
 }
