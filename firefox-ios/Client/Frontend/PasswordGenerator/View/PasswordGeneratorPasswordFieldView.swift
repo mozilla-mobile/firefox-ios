@@ -52,6 +52,11 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifia
         self.layer.borderWidth = UX.passwordFieldBorderWidth
         self.layer.cornerRadius = UX.passwordFieldCornerRadius
         self.accessibilityIdentifier = AccessibilityIdentifiers.PasswordGenerator.passwordField
+        self.isUserInteractionEnabled = true
+       let longPressGesture = UILongPressGestureRecognizer(
+           target: self,
+           action: #selector(self.handleLongPress(_:)))
+        self.addGestureRecognizer(longPressGesture)
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
         setupLayout()
@@ -97,6 +102,19 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifia
         let rangeOfPassword = (attributedString.string as NSString).range(of: password)
         attributedString.addAttributes([.accessibilitySpeechSpellOut: true], range: rangeOfPassword)
         return attributedString
+    }
+
+    @objc
+    func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
+        let menuController = UIMenuController.shared
+        let copyItem = UIMenuItem(title: .PasswordGenerator.CopyPasswordButtonLabel, action: #selector(copyText(_:)))
+        menuController.menuItems = [copyItem]
+        menuController.showMenu(from: passwordLabel, rect: passwordLabel.bounds)
+    }
+
+    @objc
+    func copyText(_ sender: Any?) {
+        UIPasteboard.general.string = passwordLabel.text
     }
 
     func applyTheme(theme: any Common.Theme) {
