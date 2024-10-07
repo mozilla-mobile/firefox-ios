@@ -19,7 +19,7 @@ final class HomepageSectionLayoutProvider {
                 self.logger.log(
                     "Section should not have been nil, something went wrong",
                     level: .fatal,
-                    category: .newHomepage
+                    category: .homepage
                 )
                 return nil
             }

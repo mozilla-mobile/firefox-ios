@@ -127,7 +127,7 @@ class BrowserCoordinator: BaseCoordinator,
         screenshotService.screenshotableView = nil
     }
 
-    func showNewHomepage() {
+    func showHomepage() {
         let homepageController = HomepageViewController(windowUUID: windowUUID)
         guard browserViewController.embedContent(homepageController) else {
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)

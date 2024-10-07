@@ -69,9 +69,9 @@ final class HomepageViewController: UIViewController, ContentContainable, Themea
     private func setupLayout() {
         guard let collectionView else {
             logger.log(
-                "NewHomepage collectionview should not have been nil, something went wrong",
+                "Homepage collectionview should not have been nil, something went wrong",
                 level: .fatal,
-                category: .legacyHomepage
+                category: .homepage
             )
             return
         }
@@ -105,9 +105,9 @@ final class HomepageViewController: UIViewController, ContentContainable, Themea
     private func configureDataSource() {
         guard let collectionView else {
             logger.log(
-                "NewHomepage collectionview should not have been nil, something went wrong",
+                "Homepage collectionview should not have been nil, something went wrong",
                 level: .fatal,
-                category: .newHomepage
+                category: .homepage
             )
             return
         }
