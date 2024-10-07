@@ -6,7 +6,7 @@ import Foundation
 import Common
 
 final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifiable {
-    var notificationCenter: NotificationProtocol
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
     private enum UX {
         static let passwordFieldBorderWidth: CGFloat = 1
         static let passwordFieldCornerRadius: CGFloat = 4
@@ -39,8 +39,14 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifia
         button.accessibilityIdentifier = AccessibilityIdentifiers.PasswordGenerator.passwordRefreshButton
     }
 
-    init(frame: CGRect = .zero, notificationCenter: NotificationProtocol = NotificationCenter.default) {
+    convenience init(frame: CGRect, notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.init(frame: frame)
         self.notificationCenter = notificationCenter
+        setupNotifications(forObserver: self,
+                           observing: [.DynamicFontChanged])
+    }
+
+    override init(frame: CGRect) {
         super.init(frame: frame)
         self.layer.borderWidth = UX.passwordFieldBorderWidth
         self.layer.cornerRadius = UX.passwordFieldCornerRadius

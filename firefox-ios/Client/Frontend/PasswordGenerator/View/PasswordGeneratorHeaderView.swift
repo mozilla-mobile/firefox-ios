@@ -6,7 +6,7 @@
  import Common
 
 final class PasswordGeneratorHeaderView: UIView, ThemeApplicable, Notifiable {
-    var notificationCenter: NotificationProtocol
+    var notificationCenter: NotificationProtocol = NotificationCenter.default
     private enum UX {
         static let headerIconLabelSpacing: CGFloat = 10
         static let headerVerticalPadding: CGFloat = 8
@@ -33,8 +33,14 @@ final class PasswordGeneratorHeaderView: UIView, ThemeApplicable, Notifiable {
         imageView.accessibilityIdentifier = AccessibilityIdentifiers.PasswordGenerator.headerImage
     }
 
-    init(frame: CGRect = .zero, notificationCenter: NotificationProtocol = NotificationCenter.default) {
+    convenience init(frame: CGRect, notificationCenter: NotificationProtocol = NotificationCenter.default) {
+        self.init(frame: frame)
         self.notificationCenter = notificationCenter
+        setupNotifications(forObserver: self,
+                           observing: [.DynamicFontChanged])
+    }
+
+    override init(frame: CGRect) {
         super.init(frame: frame)
         self.accessibilityIdentifier = AccessibilityIdentifiers.PasswordGenerator.header
         setupNotifications(forObserver: self,

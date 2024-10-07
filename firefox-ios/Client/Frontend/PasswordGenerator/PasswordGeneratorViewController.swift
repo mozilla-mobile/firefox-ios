@@ -40,17 +40,9 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
         label.accessibilityIdentifier = AccessibilityIdentifiers.PasswordGenerator.descriptionLabel
     }
 
-    private lazy var header: PasswordGeneratorHeaderView = {
-        let view = PasswordGeneratorHeaderView(frame: .zero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+    private lazy var header: PasswordGeneratorHeaderView = .build()
 
-    private lazy var passwordField: PasswordGeneratorPasswordFieldView = {
-        let view = PasswordGeneratorPasswordFieldView(frame: .zero)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+    private lazy var passwordField: PasswordGeneratorPasswordFieldView = .build()
 
     private lazy var usePasswordButton: PrimaryRoundedButton = .build()
 
