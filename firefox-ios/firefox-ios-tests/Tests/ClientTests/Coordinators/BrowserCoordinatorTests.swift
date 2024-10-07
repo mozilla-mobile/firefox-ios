@@ -91,40 +91,48 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     func testShowHomepage_addsOneHomepageOnly() {
         let subject = createSubject()
-        subject.showHomepage(inline: true,
-                             toastContainer: UIView(),
-                             homepanelDelegate: subject.browserViewController,
-                             libraryPanelDelegate: subject.browserViewController,
-                             statusBarScrollDelegate: scrollDelegate,
-                             overlayManager: overlayModeManager)
+        subject.showLegacyHomepage(
+            inline: true,
+            toastContainer: UIView(),
+            homepanelDelegate: subject.browserViewController,
+            libraryPanelDelegate: subject.browserViewController,
+            statusBarScrollDelegate: scrollDelegate,
+            overlayManager: overlayModeManager
+        )
 
-        let secondHomepage = HomepageViewController(profile: profile,
-                                                    toastContainer: UIView(),
-                                                    tabManager: tabManager,
-                                                    overlayManager: overlayModeManager)
+        let secondHomepage = LegacyHomepageViewController(
+            profile: profile,
+            toastContainer: UIView(),
+            tabManager: tabManager,
+            overlayManager: overlayModeManager
+        )
         XCTAssertFalse(subject.browserViewController.contentContainer.canAdd(content: secondHomepage))
-        XCTAssertNotNil(subject.homepageViewController)
+        XCTAssertNotNil(subject.legacyHomepageViewController)
         XCTAssertNil(subject.webviewController)
     }
 
     func testShowHomepage_reuseExistingHomepage() {
         let subject = createSubject()
-        subject.showHomepage(inline: true,
-                             toastContainer: UIView(),
-                             homepanelDelegate: subject.browserViewController,
-                             libraryPanelDelegate: subject.browserViewController,
-                             statusBarScrollDelegate: scrollDelegate,
-                             overlayManager: overlayModeManager)
-        let firstHomepage = subject.homepageViewController
-        XCTAssertNotNil(subject.homepageViewController)
+        subject.showLegacyHomepage(
+            inline: true,
+            toastContainer: UIView(),
+            homepanelDelegate: subject.browserViewController,
+            libraryPanelDelegate: subject.browserViewController,
+            statusBarScrollDelegate: scrollDelegate,
+            overlayManager: overlayModeManager
+        )
+        let firstHomepage = subject.legacyHomepageViewController
+        XCTAssertNotNil(subject.legacyHomepageViewController)
 
-        subject.showHomepage(inline: true,
-                             toastContainer: UIView(),
-                             homepanelDelegate: subject.browserViewController,
-                             libraryPanelDelegate: subject.browserViewController,
-                             statusBarScrollDelegate: scrollDelegate,
-                             overlayManager: overlayModeManager)
-        let secondHomepage = subject.homepageViewController
+        subject.showLegacyHomepage(
+            inline: true,
+            toastContainer: UIView(),
+            homepanelDelegate: subject.browserViewController,
+            libraryPanelDelegate: subject.browserViewController,
+            statusBarScrollDelegate: scrollDelegate,
+            overlayManager: overlayModeManager
+        )
+        let secondHomepage = subject.legacyHomepageViewController
         XCTAssertEqual(firstHomepage, secondHomepage)
     }
 
@@ -132,21 +140,21 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     func testShowNewHomepage_setsProperViewController() {
         let subject = createSubject()
-        subject.showNewHomepage()
+        subject.showHomepage()
 
-        XCTAssertNotNil(subject.newHomepageViewController)
+        XCTAssertNotNil(subject.homepageViewController)
         XCTAssertNil(subject.webviewController)
         XCTAssertNil(subject.privateViewController)
     }
 
     func testShowNewHomepage_hasSameInstance() {
         let subject = createSubject()
-        subject.showNewHomepage()
-        let firstHomepage = subject.newHomepageViewController
-        XCTAssertNotNil(subject.newHomepageViewController)
+        subject.showHomepage()
+        let firstHomepage = subject.homepageViewController
+        XCTAssertNotNil(subject.homepageViewController)
 
-        subject.showNewHomepage()
-        let secondHomepage = subject.newHomepageViewController
+        subject.showHomepage()
+        let secondHomepage = subject.homepageViewController
         XCTAssertEqual(firstHomepage, secondHomepage)
     }
 
@@ -159,7 +167,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         subject.browserViewController = mbvc
         subject.show(webView: webview)
 
-        XCTAssertNil(subject.homepageViewController)
+        XCTAssertNil(subject.legacyHomepageViewController)
         XCTAssertNotNil(subject.webviewController)
         XCTAssertEqual(mbvc.embedContentCalled, 1)
         XCTAssertEqual(mbvc.saveEmbeddedContent?.contentType, .webview)

@@ -49,7 +49,7 @@ struct WallpaperMigrationUtility {
         } catch {
             logger.log("Metadata migration error: \(error.localizedDescription)",
                        level: .warning,
-                       category: .homepage)
+                       category: .legacyHomepage)
         }
     }
 

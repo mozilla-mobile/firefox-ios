@@ -7159,7 +7159,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 133.0.20241003050333;
+				version = 133.0.20241005050312;
 			};
 		};
 		8A0E7F2C2BA0F0E0006BC6B6 /* XCRemoteSwiftPackageReference "Fuzi" */ = {

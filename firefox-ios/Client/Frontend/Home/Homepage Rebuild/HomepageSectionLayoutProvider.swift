@@ -6,7 +6,7 @@ import Foundation
 import Common
 
 /// Holds section layout logic for the new homepage as part of the rebuild project
-final class NewHomepageSectionLayoutProvider {
+final class HomepageSectionLayoutProvider {
     private var logger: Logger
 
     init(logger: Logger = DefaultLogger.shared) {
@@ -19,7 +19,7 @@ final class NewHomepageSectionLayoutProvider {
                 self.logger.log(
                     "Section should not have been nil, something went wrong",
                     level: .fatal,
-                    category: .newHomepage
+                    category: .homepage
                 )
                 return nil
             }

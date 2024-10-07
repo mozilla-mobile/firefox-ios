@@ -35,7 +35,7 @@ class CertificatesHandler {
             } catch {
                 DefaultLogger.shared.log("\(error)",
                                          level: .warning,
-                                         category: .homepage)
+                                         category: .certificate)
             }
         }
         return certificates
@@ -54,7 +54,7 @@ func getCertificates(for url: URL, completion: @escaping ([Certificate]?) -> Voi
         if let error = error {
             DefaultLogger.shared.log("\(error)",
                                      level: .warning,
-                                     category: .homepage)
+                                     category: .certificate)
             completion(nil)
         }
     }
