@@ -4,10 +4,10 @@
 
 import Foundation
 
-struct RemoteSettingsFetchConfig: Codable {
+struct RemoteSettingsFetchConfig: Codable, Equatable {
     let rules: [Rule]
 
-    struct Rule: Codable {
+    struct Rule: Codable, Equatable {
         let name: String
         let url: String
         let file: String
@@ -25,8 +25,7 @@ struct RemoteSettingsFetchConfig: Codable {
     /// These rules can be used to know the corresponding bucket, collection and file
     /// for the local remote settings object.
     static func loadSettingsFetchConfig() -> RemoteSettingsFetchConfig? {
-        guard let path = Bundle.main.path(forResource: "RemoteSettingsFetchConfig",
-                                          ofType: "json") else { return nil }
+        guard let path = Bundle.main.path(forResource: "RemoteSettingsFetchConfig", ofType: "json") else { return nil }
         let url = URL(fileURLWithPath: path)
         do {
             let data = try Data(contentsOf: url)
