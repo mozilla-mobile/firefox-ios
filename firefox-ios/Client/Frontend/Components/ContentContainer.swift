@@ -25,8 +25,8 @@ class ContentContainer: UIView {
         return contentController?.view
     }
 
-    var hasHomepage: Bool {
-        return type == .homepage
+    var hasLegacyHomepage: Bool {
+        return type == .legacyHomepage
     }
 
     var hasPrivateHomepage: Bool {
@@ -51,7 +51,7 @@ class ContentContainer: UIView {
     /// - Returns: True when we can add the view controller to the container
     func canAdd(content: ContentContainable) -> Bool {
         switch type {
-        case .homepage:
+        case .legacyHomepage:
             return !(content is LegacyHomepageViewController)
         case .nativeErrorPage:
             return !(content is NativeErrorPageViewController)

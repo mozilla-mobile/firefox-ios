@@ -48,7 +48,7 @@ class LegacyHomepageViewController:
     var windowUUID: WindowUUID { return tabManager.windowUUID }
     var currentWindowUUID: UUID? { return windowUUID }
 
-    var contentType: ContentType = .homepage
+    var contentType: ContentType = .legacyHomepage
 
     var themeManager: ThemeManager
     var notificationCenter: NotificationProtocol
@@ -299,7 +299,7 @@ class LegacyHomepageViewController:
             self.logger.log(
                 "Section \(viewModel.sectionType) is going to show",
                 level: .debug,
-                category: .homepage
+                category: .legacyHomepage
             )
             return viewModel.section(
                 for: layoutEnvironment.traitCollection,
@@ -342,7 +342,7 @@ class LegacyHomepageViewController:
     /// done with the new trait. On iPad, trait collection doesn't change from portrait to landscape (and vice-versa)
     /// since it's `.regular` on both. We reloadOnRotation from viewWillTransition in that case.
     private func reloadOnRotation(newSize: CGSize) {
-        logger.log("Reload on rotation to new size \(newSize)", level: .info, category: .homepage)
+        logger.log("Reload on rotation to new size \(newSize)", level: .info, category: .legacyHomepage)
 
         if presentedViewController as? PhotonActionSheet != nil {
             presentedViewController?.dismiss(animated: false, completion: nil)
@@ -367,7 +367,7 @@ class LegacyHomepageViewController:
         else { return }
 
         let privacySectionState = isPrivate ? "Removing": "Adding"
-        logger.log("\(privacySectionState) privacy sensitive sections", level: .info, category: .homepage)
+        logger.log("\(privacySectionState) privacy sensitive sections", level: .info, category: .legacyHomepage)
         viewModel.isPrivate = isPrivate
         reloadView()
     }
@@ -580,7 +580,7 @@ extension LegacyHomepageViewController: UICollectionViewDelegate, UICollectionVi
                 guard let learnMoreURL = SupportUtils.URLForPocketLearnMore else {
                     self.logger.log("Failed to retrieve learn more URL from SupportUtils.URLForPocketLearnMore",
                                     level: .debug,
-                                    category: .homepage)
+                                    category: .legacyHomepage)
                     return
                 }
                 self.showSiteWithURLHandler(learnMoreURL)
@@ -930,7 +930,7 @@ extension LegacyHomepageViewController: HomepageViewModelDelegate {
             self.collectionView.collectionViewLayout.invalidateLayout()
             self.logger.log("Amount of sections shown is \(self.viewModel.shownSections.count)",
                             level: .debug,
-                            category: .homepage)
+                            category: .legacyHomepage)
         }
     }
 }
