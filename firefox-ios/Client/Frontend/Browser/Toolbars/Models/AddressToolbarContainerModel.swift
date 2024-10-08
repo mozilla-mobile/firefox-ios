@@ -29,6 +29,7 @@ class AddressToolbarContainerModel: Equatable {
 
     var addressToolbarState: AddressToolbarState {
         let term = searchTerm ?? searchTermFromURL(url, searchEngines: searchEngines)
+        let isDroppableUrl = if let url { !InternalURL.isValid(url: url) } else { false }
 
         let locationViewState = LocationViewState(
             searchEngineImageViewA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchEngine,
@@ -44,6 +45,7 @@ class AddressToolbarContainerModel: Equatable {
             searchEngineImage: searchEngineImage,
             lockIconImageName: lockIconImageName,
             url: url,
+            isDroppableUrl: isDroppableUrl,
             searchTerm: term,
             isEditing: isEditing,
             isScrollingDuringEdit: isScrollingDuringEdit,
