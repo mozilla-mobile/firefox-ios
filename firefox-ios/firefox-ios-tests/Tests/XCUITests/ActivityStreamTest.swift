@@ -167,6 +167,8 @@ class ActivityStreamTest: BaseTestCase {
             mozWaitForElementToNotExist(app.staticTexts[topSiteFirstCell])
         }
 
+        mozWaitForElementToExist(allTopSites.staticTexts[topSiteSecondCell])
+        mozWaitForElementToNotExist(allTopSites.staticTexts[topSiteFirstCell])
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 4)
 
         // Check top site in first cell now
