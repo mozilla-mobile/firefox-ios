@@ -119,23 +119,9 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
     private func getCurrentFormData(completion: @escaping (UpdatableAddressFields) -> Void) {
         guard let webView else { return }
         webView.evaluateJavaScript("getCurrentFormData();") { [weak self] result, error in
-            if let error = error {
-                self?.logger.log(
-                    "JavaScript execution error",
-                    level: .warning,
-                    category: .autofill,
-                    description: "JavaScript execution error: \(error.localizedDescription)"
-                )
-                return
-            }
-
-            guard let resultDict = result as? [String: Any] else {
-                self?.logger.log(
-                    "Result is nil or not a dictionary",
-                    level: .warning,
-                    category: .autofill,
-                    description: "Result is nil or not a dictionary"
-                )
+            guard let resultDict = self?.unwrapGetCurrentFormDataResult(result: result,
+                                                                        error: error,
+                                                                        logger: self?.logger) else {
                 return
             }
 
@@ -154,6 +140,30 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
                 )
             }
         }
+    }
+
+    private func unwrapGetCurrentFormDataResult(result: Any?, error: (any Error)?, logger: Logger?) -> [String: Any]? {
+        if let error {
+            logger?.log(
+                "JavaScript execution error",
+                level: .warning,
+                category: .autofill,
+                description: "JavaScript execution error: \(error.localizedDescription)"
+            )
+            return nil
+        }
+
+        guard let result = result as? [String: Any] else {
+            logger?.log(
+                "Result is nil or not a dictionary",
+                level: .warning,
+                category: .autofill,
+                description: "Result is nil or not a dictionary"
+            )
+            return nil
+        }
+
+        return result
     }
 
     private func evaluateJavaScript(_ jsCode: String) {
