@@ -14,6 +14,10 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
         static let contentSpacing: CGFloat = 2
     }
 
+    private var separatorInsetSize: CGFloat {
+        return UX.contentMargin + UX.iconSize + UX.iconMargin + UX.contentSpacing
+    }
+
     // MARK: - UI Elements
     private var titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.body.scaledFont()
@@ -57,6 +61,7 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
         self.accessibilityIdentifier = model.a11yId
         self.accessibilityLabel = model.a11yLabel
         self.accessibilityHint = model.a11yHint
+        self.separatorInset = UIEdgeInsets(top: 0, left: separatorInsetSize, bottom: 0, right: 0)
         setupView()
     }
 
