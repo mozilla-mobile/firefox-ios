@@ -111,4 +111,5 @@ enum ToolbarMiddlewareActionType: ActionType {
     case customA11yAction
     case urlDidChange
     case didClearSearch
+    case didStartDragInteraction
 }

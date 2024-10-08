@@ -27,6 +27,8 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         urlTextField.text?.isEmpty == true
     }
 
+    private var longPressRecognizer: UILongPressGestureRecognizer?
+
     private var doesURLTextFieldExceedViewWidth: Bool {
         guard let text = urlTextField.text, let font = urlTextField.font else {
             return false
@@ -60,9 +62,11 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         view.alignment = .center
         view.distribution = .fill
     }
+
     private lazy var iconContainerBackgroundView: UIView = .build { view in
         view.layer.cornerRadius = UX.iconContainerCornerRadius
     }
+
     // TODO FXIOS-10210 Once the Unified Search experiment is complete, we will only need to use `DropDownSearchEngineView`
     // and we can remove `PlainSearchEngineView` from the project.
     private lazy var plainSearchEngineView: PlainSearchEngineView = .build()
@@ -273,6 +277,12 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
                 self.urlTextField.selectAll(nil)
             }
         }
+
+        // Remove the default drop interaction from the URL text field so that our
+        // custom drop interaction on the BVC can accept dropped URLs.
+        if let dropInteraction = urlTextField.textDropInteraction {
+            urlTextField.removeInteraction(dropInteraction)
+        }
     }
 
     private func formatAndTruncateURLTextField() {
@@ -318,8 +328,9 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
 
     // MARK: - Gesture Recognizers
     private func addLongPressGestureRecognizer() {
-        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(LocationView.handleLongPress))
-        urlTextField.addGestureRecognizer(longPressRecognizer)
+        let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(LocationView.handleLongPress))
+        longPressRecognizer = gestureRecognizer
+        urlTextField.addGestureRecognizer(gestureRecognizer)
     }
 
     // MARK: - Selectors
@@ -407,5 +418,14 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         lockIconButton.tintColor = colors.iconPrimary
         lockIconButton.backgroundColor = colors.layerSearch
         urlTextField.applyTheme(theme: theme)
+    }
+
+    // MARK: - UIGestureRecognizerDelegate
+    func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+    ) -> Bool {
+        // When long pressing a button make sure the textfield's long press gesture is not triggered
+        return !(otherGestureRecognizer.view is UIButton)
     }
 }

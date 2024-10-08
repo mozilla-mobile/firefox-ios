@@ -3186,6 +3186,10 @@ class BrowserViewController: UIViewController,
 
         (view as? ThemeApplicable)?.applyTheme(theme: currentTheme())
     }
+
+    func addressToolbarDidBeginDragInteraction() {
+        dismissVisibleMenus()
+    }
 }
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
