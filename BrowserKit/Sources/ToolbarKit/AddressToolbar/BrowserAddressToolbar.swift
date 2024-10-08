@@ -89,7 +89,7 @@ public class BrowserAddressToolbar: UIView,
         updateBorder(borderPosition: state.borderPosition)
 
         locationView.configure(state.locationViewState, delegate: self, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
-        droppableUrl = state.locationViewState.isDroppableUrl ? state.locationViewState.url : nil
+        droppableUrl = state.locationViewState.droppableUrl
 
         setNeedsLayout()
         layoutIfNeeded()
