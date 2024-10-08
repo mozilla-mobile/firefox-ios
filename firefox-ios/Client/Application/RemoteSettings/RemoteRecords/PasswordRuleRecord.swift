@@ -7,7 +7,7 @@ import Foundation
 protocol RemoteDataTypeRecord: Codable, Equatable {}
 
 struct PasswordRuleRecord: RemoteDataTypeRecord {
-    // Unix timestamp (aka Epoch time)
+    // Unix timestamp represents milliseconds since the Unix Epoch time
     let lastModified: Int
     let domain: String
     let passwordRules: String
