@@ -8,6 +8,10 @@ import ComponentLibrary
 
 public final class MenuDetailView: UIView,
                                    MenuTableViewDataDelegate, ThemeApplicable {
+    private struct UX {
+        static let headerLineOffset: CGFloat = 35
+    }
+
     // MARK: - UI Elements
     private var tableView: MenuTableView = .build()
     public var detailHeaderView: NavigationHeaderView = .build()
@@ -16,6 +20,7 @@ public final class MenuDetailView: UIView,
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
+        handleUpdateHeaderLineView()
     }
 
     required init?(coder: NSCoder) {
@@ -24,6 +29,7 @@ public final class MenuDetailView: UIView,
 
     // MARK: - UI Setup
     private func setupView() {
+        detailHeaderView.updateHeaderLineView(isHidden: true)
         addSubview(detailHeaderView)
         addSubview(tableView)
 
@@ -51,6 +57,17 @@ public final class MenuDetailView: UIView,
 
     public func adjustLayout() {
         detailHeaderView.adjustLayout()
+    }
+
+    private func handleUpdateHeaderLineView() {
+        tableView.updateHeaderLineView = { [weak self] scrollOffset in
+            guard let self else { return }
+            if scrollOffset >= UX.headerLineOffset {
+                self.detailHeaderView.updateHeaderLineView(isHidden: false)
+            } else {
+                self.detailHeaderView.updateHeaderLineView(isHidden: true)
+            }
+        }
     }
 
     // MARK: - Interface

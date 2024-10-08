@@ -52,7 +52,7 @@ class ReadingListTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
@@ -76,7 +76,7 @@ class ReadingListTests: BaseTestCase {
         // Check that it appears on regular mode
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()

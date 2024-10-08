@@ -3,7 +3,9 @@
     {
       "name": "Password Rules",
       "url": "https://firefox.settings.services.mozilla.com/v1/buckets/main/collections/password-rules/records",
-      "file": "./firefox-ios/Client/Assets/RemoteSettingsData/RemotePasswordRules.json"
+      "file": "./firefox-ios/Client/Assets/RemoteSettingsData/RemotePasswordRules.json",
+      "bucket_id": "main",
+      "collections_id": "password-rules"
     }
   ]
 }

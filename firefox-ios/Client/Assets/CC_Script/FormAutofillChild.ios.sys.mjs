@@ -110,6 +110,13 @@ export class FormAutofillChild {
       return;
     }
 
+    // Since iOS doesn't support cross frame autofill,
+    // we should only call the autofill callback if the section is valid.
+    // TODO(issam): This will change when we have cross frame fill support.
+    if (!this.activeSection.isValidSection()) {
+      return;
+    }
+
     const fieldNamesWithValues = this.transformToFieldNamesWithValues(
       this.activeSection.fieldDetails
     );

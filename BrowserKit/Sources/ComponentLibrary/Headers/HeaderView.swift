@@ -192,6 +192,14 @@ public final class HeaderView: UIView, ThemeApplicable {
                      isWebsiteIcon: isWebsiteIcon)
     }
 
+    public func updateHeaderLineView(isHidden: Bool) {
+        if (isHidden && !horizontalLine.isHidden) || (!isHidden && horizontalLine.isHidden) {
+            UIView.animate(withDuration: 0.3) { [weak self] in
+                self?.horizontalLine.isHidden = isHidden
+            }
+        }
+    }
+
     @objc
     func closeButtonTapped() {
         closeButtonCallback?()

@@ -115,7 +115,7 @@ class CreditCardsTests: BaseTestCase {
         waitForExistence(app.buttons["Done"])
         app.buttons["Done"].tap()
         // The user is returned to the webpage
-        mozWaitForElementToExist(app.webViews["contentView"].webViews.staticTexts["Explore Checkout"])
+        mozWaitForElementToExist(app.webViews["Web content"].staticTexts["Explore Checkout"])
         mozWaitForElementToNotExist(app.buttons[useSavedCard])
     }
 
@@ -140,7 +140,7 @@ class CreditCardsTests: BaseTestCase {
             navigator.openURL("https://checkout.stripe.dev/preview")
             waitUntilPageLoad()
             // The autofill option (Use saved card prompt) is not displayed
-            let cardNumber = app.webViews["contentView"].webViews.textFields["Card number"]
+            let cardNumber = app.webViews["Web content"].textFields["Card number"]
             app.swipeUp()
             app.swipeUp()
             mozWaitForElementToExist(cardNumber)
@@ -166,12 +166,12 @@ class CreditCardsTests: BaseTestCase {
             waitForExistence(app.buttons["Done"])
             app.buttons["Done"].tap()
             app.swipeUp()
-            mozWaitForElementToExist(app.webViews["contentView"].webViews.staticTexts["Explore Checkout"], timeout: TIMEOUT)
+            mozWaitForElementToExist(app.webViews["Web content"].staticTexts["Explore Checkout"], timeout: TIMEOUT)
             mozWaitForElementToExist(cardNumber)
             cardNumber.tapOnApp()
             // The autofill option (Use saved card prompt) is displayed
             if !app.buttons[useSavedCard].exists {
-                app.webViews["contentView"].webViews.textFields["Full name on card"].tapOnApp()
+                app.webViews["Web content"].textFields["Full name on card"].tapOnApp()
             }
             mozWaitForElementToExist(app.buttons[useSavedCard])
         }
@@ -187,7 +187,7 @@ class CreditCardsTests: BaseTestCase {
         selectCreditCardOnFormWebsite()
         dismissSavedCardsPrompt()
         // The credit card's number and name are imported correctly on the designated fields
-        let contentView = app.webViews["contentView"].webViews.textFields
+        let contentView = app.webViews["Web content"].textFields
         mozWaitForElementToExist(contentView["Card number"])
         XCTAssertEqual(contentView["Card number"].value! as! String, "2720 9943 2658 1252")
         XCTAssertEqual(contentView["Expiration"].value! as! String, "05 / 40")
@@ -267,9 +267,9 @@ class CreditCardsTests: BaseTestCase {
             validateAutofillCardInfo(cardNr: "2720 9943 2658 1252", expirationNr: "05 / 40", name: "Test")
             dismissSavedCardsPrompt()
             app.swipeUp()
-            app.webViews["contentView"].webViews.textFields["Full name on card"].tapOnApp()
+            app.webViews["Web content"].textFields["Full name on card"].tapOnApp()
             if !app.buttons[useSavedCard].exists {
-                app.webViews["contentView"].webViews.textFields["Card number"].tapOnApp()
+                app.webViews["Web content"].textFields["Card number"].tapOnApp()
             }
             app.buttons[useSavedCard].tap()
             unlockLoginsView()
@@ -278,9 +278,9 @@ class CreditCardsTests: BaseTestCase {
             validateAutofillCardInfo(cardNr: "4111 1111 1111 1111", expirationNr: "06 / 40", name: "Test2")
             dismissSavedCardsPrompt()
             app.swipeUp()
-            app.webViews["contentView"].webViews.textFields["Card number"].tapOnApp()
+            app.webViews["Web content"].textFields["Card number"].tapOnApp()
             if !app.buttons[useSavedCard].exists {
-                app.webViews["contentView"].webViews.textFields["Full name on card"].tapOnApp()
+                app.webViews["Web content"].textFields["Full name on card"].tapOnApp()
             }
             app.buttons[useSavedCard].tap()
             unlockLoginsView()
@@ -359,7 +359,7 @@ class CreditCardsTests: BaseTestCase {
         // Fill in the form with the card details of a new (unsaved) credit card.
         fillCardDetailsOnWebsite(cardNr: cards[1], expirationDate: "0540", nameOnCard: "Test")
         // Tap on "Pay"
-        let payButton = app.webViews["contentView"].webViews.buttons["Pay"]
+        let payButton = app.webViews["Web content"].buttons["Pay"]
         if iPad() {
             app.swipeUp()
         }
@@ -424,7 +424,7 @@ class CreditCardsTests: BaseTestCase {
         // Modify the card details
         fillCardDetailsOnWebsite(cardNr: cards[1], expirationDate: "0640", nameOnCard: "Test2", skipFillInfo: true)
         // Tap on "Pay"
-        let payButton = app.webViews["contentView"].webViews.buttons["Pay"]
+        let payButton = app.webViews["Web content"].buttons["Pay"]
         if iPad() {
             app.swipeUp()
         }
@@ -454,7 +454,7 @@ class CreditCardsTests: BaseTestCase {
         navigator.openURL("https://checkout.stripe.dev/preview")
         waitUntilPageLoad()
         app.swipeUp()
-        let cardNumber = app.webViews["contentView"].webViews.textFields["Card number"]
+        let cardNumber = app.webViews["Web content"].textFields["Card number"]
         mozWaitForElementToExist(cardNumber)
         cardNumber.tapOnApp()
         // Use saved card prompt is displayed
@@ -521,12 +521,12 @@ class CreditCardsTests: BaseTestCase {
 
     private func fillCardDetailsOnWebsite(cardNr: String, expirationDate: String, nameOnCard: String,
                                           skipFillInfo: Bool = false) {
-        let cardNumber = app.webViews["contentView"].webViews.textFields["Card number"]
-        let expiration = app.webViews["contentView"].webViews.textFields["Expiration"]
-        let name = app.webViews["contentView"].webViews.textFields["Full name on card"]
-        let email = app.webViews["contentView"].webViews.textFields.element(boundBy: 0)
-        let cvc = app.webViews["contentView"].webViews.textFields["CVC"]
-        let zip = app.webViews["contentView"].webViews.textFields["ZIP"]
+        let cardNumber = app.webViews["Web content"].textFields["Card number"]
+        let expiration = app.webViews["Web content"].textFields["Expiration"]
+        let name = app.webViews["Web content"].textFields["Full name on card"]
+        let email = app.webViews["Web content"].textFields.element(boundBy: 0)
+        let cvc = app.webViews["Web content"].textFields["CVC"]
+        let zip = app.webViews["Web content"].textFields["ZIP"]
         mozWaitForElementToExist(email)
         email.tapOnApp()
         var nrOfRetries = 3
@@ -628,7 +628,7 @@ class CreditCardsTests: BaseTestCase {
     }
 
     private func validateAutofillCardInfo(cardNr: String, expirationNr: String, name: String) {
-        let contentView = app.webViews["contentView"].webViews.textFields
+        let contentView = app.webViews["Web content"].textFields
         XCTAssertEqual(contentView["Card number"].value! as! String, cardNr)
         XCTAssertEqual(contentView["Expiration"].value! as! String, expirationNr)
         XCTAssertEqual(contentView["Full name on card"].value! as! String, name)
@@ -642,7 +642,7 @@ class CreditCardsTests: BaseTestCase {
         navigator.openURL("https://checkout.stripe.dev/preview")
         waitUntilPageLoad()
         app.swipeUp()
-        let cardNumber = app.webViews["contentView"].webViews.textFields["Card number"]
+        let cardNumber = app.webViews["Web content"].textFields["Card number"]
         mozWaitForElementToExist(cardNumber)
         cardNumber.tapOnApp()
         if !app.buttons[useSavedCard].exists {
@@ -671,7 +671,7 @@ class CreditCardsTests: BaseTestCase {
         navigator.openURL("https://checkout.stripe.dev/preview")
         waitUntilPageLoad()
         app.swipeUp()
-        let cardNumber = app.webViews["contentView"].webViews.textFields["Card number"]
+        let cardNumber = app.webViews["Web content"].textFields["Card number"]
         mozWaitForElementToExist(cardNumber)
         cardNumber.tapOnApp()
         if !app.buttons[useSavedCard].isHittable {

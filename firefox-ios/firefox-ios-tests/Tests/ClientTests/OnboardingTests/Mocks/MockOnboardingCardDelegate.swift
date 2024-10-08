@@ -59,6 +59,7 @@ class MockOnboardinCardDelegateController: UIViewController,
                                  completion: {})
         case .openIosFxSettings:
             DefaultApplicationHelper().openSettings()
+            showNextPage(numberOfCards: 1, from: cardName, completionIfLastCard: {})
         case .endOnboarding:
             self.action = .endOnboarding
         }

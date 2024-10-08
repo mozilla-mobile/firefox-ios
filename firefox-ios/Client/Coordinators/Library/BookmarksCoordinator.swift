@@ -12,7 +12,7 @@ protocol BookmarksCoordinatorDelegate: AnyObject, LibraryPanelCoordinatorDelegat
     func start(from folder: FxBookmarkNode)
 
     /// Shows the bookmark detail to modify a bookmark folder
-    func showBookmarkDetail(for node: FxBookmarkNode, folder: FxBookmarkNode)
+    func showBookmarkDetail(for node: FxBookmarkNode, folder: FxBookmarkNode, completion: (() -> Void)?)
 
     /// Shows the bookmark detail to create a new bookmark or folder in the parent folder
     func showBookmarkDetail(
@@ -72,12 +72,15 @@ class BookmarksCoordinator: BaseCoordinator, BookmarksCoordinatorDelegate {
         router.push(controller)
     }
 
-    func showBookmarkDetail(for node: FxBookmarkNode, folder: FxBookmarkNode) {
+    func showBookmarkDetail(for node: FxBookmarkNode, folder: FxBookmarkNode, completion: (() -> Void)? = nil) {
         TelemetryWrapper.recordEvent(category: .action, method: .change, object: .bookmark, value: .bookmarksPanel)
         let detailController = BookmarkDetailPanel(profile: profile,
                                                    windowUUID: windowUUID,
                                                    bookmarkNode: node,
-                                                   parentBookmarkFolder: folder)
+                                                   parentBookmarkFolder: folder,
+                                                   deleteBookmark: {
+            completion?()
+        })
         router.push(detailController)
     }
 

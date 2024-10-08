@@ -54,18 +54,6 @@ final class BrowserViewControllerStateTests: XCTestCase {
         XCTAssertEqual(newState.displayView, .dataClearance)
     }
 
-    func testPrivateModeAction() {
-        let initialState = createSubject()
-        let reducer = browserViewControllerReducer()
-
-        XCTAssertEqual(initialState.browserViewType, .normalHomepage)
-
-        let action = getPrivateModeAction(isPrivate: true, for: .privateModeUpdated)
-        let newState = reducer(initialState, action)
-
-        XCTAssertEqual(newState.browserViewType, .privateHomepage)
-    }
-
     func testUpdateSelectedTabAction() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
@@ -78,6 +66,18 @@ final class BrowserViewControllerStateTests: XCTestCase {
         let newState = reducer(initialState, action)
 
         XCTAssertEqual(newState.browserViewType, .nativeErrorPage)
+    }
+
+    func testShowPasswordGeneratorAction() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.displayView)
+
+        let action = getAction(for: .showPasswordGenerator)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.displayView, .passwordGenerator)
     }
 
     // MARK: - Private

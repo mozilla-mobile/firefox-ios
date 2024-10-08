@@ -1512,6 +1512,15 @@ class TelemetryWrapperTests: XCTestCase {
         testEventMetricRecordingSuccess(metric: GleanMetrics.AppErrors.hangException)
     }
 
+    func test_error_tabLossDetectedIsCalled() {
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .error,
+                                     object: .app,
+                                     value: .tabLossDetected)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.AppErrors.tabLossDetected)
+    }
+
     // MARK: - RecordSearch
     func test_RecordSearch_GleanIsCalledSearchSuggestion() {
         let extras = [TelemetryWrapper.EventExtraKey.recordSearchLocation.rawValue: "suggestion",
