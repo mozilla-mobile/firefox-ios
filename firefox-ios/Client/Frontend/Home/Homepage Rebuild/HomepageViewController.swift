@@ -180,12 +180,11 @@ final class HomepageViewController: UIViewController,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
         // TODO: FXIOS-10162 - Dummy collection cells, to update with proper cells
-        guard let section = HomepageSection(
-            rawValue: indexPath.section
-        ), let cell: UICollectionViewCell = collectionView?.dequeueReusableCell(
-            withReuseIdentifier: "cell",
-            for: indexPath
-        ) else {
+        guard let section = HomepageSection(rawValue: indexPath.section),
+              let cell: UICollectionViewCell = collectionView?.dequeueReusableCell(
+                withReuseIdentifier: "cell",
+                for: indexPath
+              ) else {
             self.logger.log(
                 "Section should not have been nil, something went wrong",
                 level: .fatal,
