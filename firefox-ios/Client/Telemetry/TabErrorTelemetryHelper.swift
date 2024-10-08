@@ -30,7 +30,7 @@ final class TabErrorTelemetryHelper {
             var tabCounts = self.defaults.object(forKey: self.defaultsKey) as? [String: Int] ?? [String: Int]()
             let tabCount = self.getTabCount(window: window)
             tabCounts[window.uuidString] = tabCount
-            UserDefaults.standard.set(tabCounts, forKey: self.defaultsKey)
+            self.defaults.set(tabCounts, forKey: self.defaultsKey)
         }
     }
 
