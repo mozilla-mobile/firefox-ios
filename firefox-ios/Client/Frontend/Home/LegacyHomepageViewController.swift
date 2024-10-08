@@ -397,28 +397,20 @@ class LegacyHomepageViewController:
 
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         lastContentOffsetY = scrollView.contentOffset.y
+        handleToolbarStateOnScroll()
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         handleScroll(scrollView, isUserInteraction: true)
     }
 
-    private func handleScroll(_ scrollView: UIScrollView, isUserInteraction: Bool) {
-        // We only handle status bar overlay alpha if there's a wallpaper applied on the homepage
-        if WallpaperManager().currentWallpaper.type != .defaultWallpaper {
-            let theme = themeManager.getCurrentTheme(for: windowUUID)
-            statusBarScrollDelegate?.scrollViewDidScroll(scrollView,
-                                                         statusBarFrame: statusBarFrame,
-                                                         theme: theme)
-        }
-
+    private func handleToolbarStateOnScroll() {
         let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
 
         // Only dispatch action when user is in edit mode to avoid having the toolbar re-displayed
         if featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly),
            let toolbarState,
-           toolbarState.addressToolbar.isEditing,
-           isUserInteraction {
+           toolbarState.addressToolbar.isEditing {
             // When the user scrolls the homepage we cancel edit mode
             // On a website we just dismiss the keyboard
             if toolbarState.addressToolbar.url == nil {
@@ -428,6 +420,16 @@ class LegacyHomepageViewController:
                 let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didScrollDuringEdit)
                 store.dispatch(action)
             }
+        }
+    }
+
+    private func handleScroll(_ scrollView: UIScrollView, isUserInteraction: Bool) {
+        // We only handle status bar overlay alpha if there's a wallpaper applied on the homepage
+        if WallpaperManager().currentWallpaper.type != .defaultWallpaper {
+            let theme = themeManager.getCurrentTheme(for: windowUUID)
+            statusBarScrollDelegate?.scrollViewDidScroll(scrollView,
+                                                         statusBarFrame: statusBarFrame,
+                                                         theme: theme)
         }
 
         // this action controls the address toolbar's border position, and to prevent spamming redux with actions for every
