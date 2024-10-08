@@ -4,6 +4,7 @@ import PackageDescription
 
 let package = Package(
     name: "BrowserKit",
+    defaultLocalization: "en",
     platforms: [
         .iOS(.v15),
         .macOS(.v10_15)
@@ -71,12 +72,17 @@ let package = Package(
             exact: "0.17.0")
     ],
     targets: [
-        .target(name: "Account", dependencies: ["Shared", "Storage", "Objc"]),
+        .target(name: "Account",
+                dependencies: ["Shared", "Storage", "Objc"]),
         .target(name: "Objc"),
-        .target(name: "Storage", dependencies: ["Common", "WebEngine", "Objc", "Shared"]),
+        .target(name: "Storage",
+                dependencies: ["Common", "WebEngine", "Objc", "Shared"]),
+        .plugin(name: "GenerateMetricsStorage",
+                capability: .buildTool()),
         .target(name: "Sync", dependencies: ["Common", "Shared"]),
         .target(name: "Shared",
-                dependencies: ["Common", "WebEngine"]),
+                dependencies: ["Common", "WebEngine"],
+                resources: [.process("Resources")]),
         .target(
             name: "ComponentLibrary",
             dependencies: ["Common", "SiteImageView"],

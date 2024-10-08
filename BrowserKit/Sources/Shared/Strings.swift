@@ -9,7 +9,7 @@ import Foundation
 class BundleClass {}
 
 public struct Strings {
-    public static let bundle = Bundle(for: BundleClass.self)
+    public static let bundle = Bundle.module
 }
 
 // MARK: - Localization helper function
