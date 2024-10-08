@@ -8,6 +8,7 @@ import Shared
 import Common
 
 final class PasswordGeneratorMiddleware {
+    private let logger: Logger = DefaultLogger.shared
     lazy var passwordGeneratorProvider: Middleware<AppState> = { state, action in
         let windowUUID = action.windowUUID
         guard let currentTab = (action as? PasswordGeneratorAction)?.currentTab else { return }
@@ -34,9 +35,11 @@ final class PasswordGeneratorMiddleware {
             let jsFunctionCall = "window.__firefox__.logins.generatePassword()"
             tab.webView?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall) { (result, error) in
                 if let error = error {
-                    print("JavaScript evaluation error: \(error.localizedDescription)")
+                    self.logger.log("JavaScript evaluation error",
+                                    level: .warning,
+                                    category: .webview,
+                                    description: "\(error.localizedDescription)")
                 } else if let result = result as? String {
-                    print("JavaScript object: \(result)")
                     completion(result)
                 }
             }
