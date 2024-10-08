@@ -745,6 +745,10 @@
 		8A4593C82BF7BECA002758DE /* MicrosurveyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4593C42BF7BECA002758DE /* MicrosurveyViewController.swift */; };
 		8A4593C92BF7BECA002758DE /* MicrosurveyTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4593C52BF7BECA002758DE /* MicrosurveyTableHeaderView.swift */; };
 		8A4593CA2BF7BECA002758DE /* MicrosurveyTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4593C62BF7BECA002758DE /* MicrosurveyTableView.swift */; };
+		8A46F5AB2C9E4389005B6422 /* PasswordRuleRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46F5A52C9E4389005B6422 /* PasswordRuleRecord.swift */; };
+		8A46F5AC2C9E4389005B6422 /* RemoteDataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46F5A72C9E4389005B6422 /* RemoteDataType.swift */; };
+		8A46F5AD2C9E4389005B6422 /* RemoteSettingsFetchConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46F5A82C9E4389005B6422 /* RemoteSettingsFetchConfig.swift */; };
+		8A46F5AE2C9E4389005B6422 /* RemoteSettingsUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A46F5A92C9E4389005B6422 /* RemoteSettingsUtils.swift */; };
 		8A471183287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A471182287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift */; };
 		8A471185287F6E4800F5A6EA /* SeparatorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A471184287F6E4800F5A6EA /* SeparatorTableViewCell.swift */; };
 		8A4AC0EB28C929D700439F83 /* URLSessionDataTaskProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4AC0E928C929D700439F83 /* URLSessionDataTaskProtocol.swift */; };
@@ -910,6 +914,10 @@
 		8ABC5AEE284532C900FEA552 /* PocketDiscoverCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABC5AED284532C900FEA552 /* PocketDiscoverCell.swift */; };
 		8ABCFEA32B45C36100C2988A /* PrivateBrowsingTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABCFEA22B45C36100C2988A /* PrivateBrowsingTelemetry.swift */; };
 		8ABCFEA62B45CB4C00C2988A /* PrivateBrowsingTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABCFEA42B45CAC300C2988A /* PrivateBrowsingTelemetryTests.swift */; };
+		8ABE9F1A2CB45B4B0080E1DF /* RemotePasswordRules.json in Resources */ = {isa = PBXBuildFile; fileRef = 8AF4E7702C45B98F00BAD91C /* RemotePasswordRules.json */; };
+		8ABE9F1B2CB4620A0080E1DF /* RemoteSettingsFetchConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 8AF4E76D2C41D86100BAD91C /* RemoteSettingsFetchConfig.json */; };
+		8ABE9F1D2CB462730080E1DF /* RemoteSettingsFetchConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ABE9F1C2CB462730080E1DF /* RemoteSettingsFetchConfigTests.swift */; };
+		8ABE9F1E2CB462CA0080E1DF /* RemoteSettingsFetchConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 8AF4E76D2C41D86100BAD91C /* RemoteSettingsFetchConfig.json */; };
 		8AC1065F28D0CD700013263A /* OpenQLPreviewHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC1065E28D0CD700013263A /* OpenQLPreviewHelper.swift */; };
 		8AC225662B6D403200CDA7FD /* HomepageTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC225642B6D3FA400CDA7FD /* HomepageTelemetryTests.swift */; };
 		8AC5D55F28BFE6C8001F6F7F /* Presenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC5D55E28BFE6C8001F6F7F /* Presenter.swift */; };
@@ -990,6 +998,7 @@
 		8AF99B4F29EF1BA700108DEC /* BrowserDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF99B4E29EF1BA700108DEC /* BrowserDelegate.swift */; };
 		8AF99B5429EF2AF100108DEC /* MockLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF99B5329EF2AF100108DEC /* MockLogger.swift */; };
 		8AFA263227B6E9AB00D0C33B /* ToolbarBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFA263127B6E9AB00D0C33B /* ToolbarBadge.swift */; };
+		8AFC4E472CAF53E100C54B43 /* RemoteDataTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFC4E462CAF53E100C54B43 /* RemoteDataTypeTests.swift */; };
 		8AFCE50529DDF38300B1B253 /* LaunchScreenViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFCE50429DDF38300B1B253 /* LaunchScreenViewControllerTests.swift */; };
 		8AFCE50729DE0CD500B1B253 /* LaunchCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFCE50629DE0CD500B1B253 /* LaunchCoordinatorTests.swift */; };
 		8AFCE50929DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AFCE50829DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift */; };
@@ -6870,6 +6879,10 @@
 		8A4593C42BF7BECA002758DE /* MicrosurveyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicrosurveyViewController.swift; sourceTree = "<group>"; };
 		8A4593C52BF7BECA002758DE /* MicrosurveyTableHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicrosurveyTableHeaderView.swift; sourceTree = "<group>"; };
 		8A4593C62BF7BECA002758DE /* MicrosurveyTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicrosurveyTableView.swift; sourceTree = "<group>"; };
+		8A46F5A52C9E4389005B6422 /* PasswordRuleRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordRuleRecord.swift; sourceTree = "<group>"; };
+		8A46F5A72C9E4389005B6422 /* RemoteDataType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteDataType.swift; sourceTree = "<group>"; };
+		8A46F5A82C9E4389005B6422 /* RemoteSettingsFetchConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteSettingsFetchConfig.swift; sourceTree = "<group>"; };
+		8A46F5A92C9E4389005B6422 /* RemoteSettingsUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteSettingsUtils.swift; sourceTree = "<group>"; };
 		8A471182287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksPanelViewModel.swift; sourceTree = "<group>"; };
 		8A471184287F6E4800F5A6EA /* SeparatorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorTableViewCell.swift; sourceTree = "<group>"; };
 		8A4AC0E928C929D700439F83 /* URLSessionDataTaskProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSessionDataTaskProtocol.swift; sourceTree = "<group>"; };
@@ -7042,6 +7055,7 @@
 		8ABC5AED284532C900FEA552 /* PocketDiscoverCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketDiscoverCell.swift; sourceTree = "<group>"; };
 		8ABCFEA22B45C36100C2988A /* PrivateBrowsingTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateBrowsingTelemetry.swift; sourceTree = "<group>"; };
 		8ABCFEA42B45CAC300C2988A /* PrivateBrowsingTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateBrowsingTelemetryTests.swift; sourceTree = "<group>"; };
+		8ABE9F1C2CB462730080E1DF /* RemoteSettingsFetchConfigTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteSettingsFetchConfigTests.swift; sourceTree = "<group>"; };
 		8AC1065E28D0CD700013263A /* OpenQLPreviewHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenQLPreviewHelper.swift; sourceTree = "<group>"; };
 		8AC225642B6D3FA400CDA7FD /* HomepageTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageTelemetryTests.swift; sourceTree = "<group>"; };
 		8AC5D55E28BFE6C8001F6F7F /* Presenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presenter.swift; sourceTree = "<group>"; };
@@ -7126,6 +7140,7 @@
 		8AF99B4E29EF1BA700108DEC /* BrowserDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserDelegate.swift; sourceTree = "<group>"; };
 		8AF99B5329EF2AF100108DEC /* MockLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLogger.swift; sourceTree = "<group>"; };
 		8AFA263127B6E9AB00D0C33B /* ToolbarBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarBadge.swift; sourceTree = "<group>"; };
+		8AFC4E462CAF53E100C54B43 /* RemoteDataTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteDataTypeTests.swift; sourceTree = "<group>"; };
 		8AFCE50429DDF38300B1B253 /* LaunchScreenViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewControllerTests.swift; sourceTree = "<group>"; };
 		8AFCE50629DE0CD500B1B253 /* LaunchCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchCoordinatorTests.swift; sourceTree = "<group>"; };
 		8AFCE50829DE136300B1B253 /* MockLaunchFinishedLoadingDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLaunchFinishedLoadingDelegate.swift; sourceTree = "<group>"; };
@@ -10759,6 +10774,25 @@
 			path = Debug;
 			sourceTree = "<group>";
 		};
+		8A46F5A62C9E4389005B6422 /* RemoteRecords */ = {
+			isa = PBXGroup;
+			children = (
+				8A46F5A52C9E4389005B6422 /* PasswordRuleRecord.swift */,
+			);
+			path = RemoteRecords;
+			sourceTree = "<group>";
+		};
+		8A46F5AA2C9E4389005B6422 /* RemoteSettings */ = {
+			isa = PBXGroup;
+			children = (
+				8A46F5A62C9E4389005B6422 /* RemoteRecords */,
+				8A46F5A72C9E4389005B6422 /* RemoteDataType.swift */,
+				8A46F5A82C9E4389005B6422 /* RemoteSettingsFetchConfig.swift */,
+				8A46F5A92C9E4389005B6422 /* RemoteSettingsUtils.swift */,
+			);
+			path = RemoteSettings;
+			sourceTree = "<group>";
+		};
 		8A4AC0ED28C929DD00439F83 /* URLSession */ = {
 			isa = PBXGroup;
 			children = (
@@ -11400,6 +11434,15 @@
 				8AF99B4E29EF1BA700108DEC /* BrowserDelegate.swift */,
 			);
 			path = Browser;
+			sourceTree = "<group>";
+		};
+		8AFA66012CA2935C0008D0F6 /* RemoteSettings */ = {
+			isa = PBXGroup;
+			children = (
+				8AFC4E462CAF53E100C54B43 /* RemoteDataTypeTests.swift */,
+				8ABE9F1C2CB462730080E1DF /* RemoteSettingsFetchConfigTests.swift */,
+			);
+			path = RemoteSettings;
 			sourceTree = "<group>";
 		};
 		8AFCE50229DDC96B00B1B253 /* LaunchView */ = {
@@ -13338,6 +13381,7 @@
 			isa = PBXGroup;
 			children = (
 				0EC57CE12CA31AFC002E3F04 /* PasswordGenerator */,
+				8AFA66012CA2935C0008D0F6 /* RemoteSettings */,
 				8A171A6029F82AD90085770E /* Application */,
 				B23620492B7EAF2C000B1DE7 /* Autofill */,
 				CA7BD564248185B500A0A61B /* BreachAlertsTests.swift */,
@@ -13448,6 +13492,7 @@
 		F84B21E41A0910F600AAB793 /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				8A46F5AA2C9E4389005B6422 /* RemoteSettings */,
 				C84266742728462900382274 /* AccessibilityIdentifiers.swift */,
 				5A47CFF42860FB8900B2B7BF /* AppLaunchUtil.swift */,
 				E1FE133029C22726002A65FF /* BackgroundFetchAndProcessingUtility.swift */,
@@ -14582,6 +14627,7 @@
 				E4CD9F5B1A71506C00318571 /* Reader.css in Resources */,
 				D0FCF8061FE4772D004A7995 /* AllFramesAtDocumentEnd.js in Resources */,
 				D37524871C6E8B5A00A5F6C2 /* topdomains.txt in Resources */,
+				8ABE9F1E2CB462CA0080E1DF /* RemoteSettingsFetchConfig.json in Resources */,
 				39F4C0FA2045D87400746155 /* FocusHelper.js in Resources */,
 				E1AF3562286DE5F800960045 /* Smoketest2.xctestplan in Resources */,
 				8C29376C2BF79EE000146613 /* AddressFormManager.mjs in Resources */,
@@ -14626,12 +14672,14 @@
 				3B61CD631F2A769D00D38DE1 /* pocketglobalfeed.json in Resources */,
 				8A11C80F2731916E00AC7318 /* defaultOnlyTestList.json in Resources */,
 				C869915828917811007ACC5C /* wallpaperNoAvailabilityRange.json in Resources */,
+				8ABE9F1B2CB4620A0080E1DF /* RemoteSettingsFetchConfig.json in Resources */,
 				C869915B28917811007ACC5C /* wallpaperNewUpdates.json in Resources */,
 				C869915D28917811007ACC5C /* wallpaperAvailabilityStart.json in Resources */,
 				C87BE0A428A2ED3F00BAADF5 /* wallpaperNoLearnMoreURL.json in Resources */,
 				C869915A28917811007ACC5C /* wallpaperBadTextColor.json in Resources */,
 				C8B0F5EB283B7BF9007AE65D /* pocketsponsoredfeed.json in Resources */,
 				C869915F28917811007ACC5C /* wallpaperGoodData.json in Resources */,
+				8ABE9F1A2CB45B4B0080E1DF /* RemotePasswordRules.json in Resources */,
 				C869915928917811007ACC5C /* wallpaperAvailabilityEnd.json in Resources */,
 				C869915E28917811007ACC5C /* wallpaperBadLastUpdatedDate.json in Resources */,
 				A83E5B1A1C1DA8BF0026D912 /* image.gif in Resources */,
@@ -15603,6 +15651,7 @@
 				8AC1065F28D0CD700013263A /* OpenQLPreviewHelper.swift in Sources */,
 				EBA3B2C32268F16300728BDB /* PhotonActionSheetView.swift in Sources */,
 				E18EA56F28AD3279003F97FC /* UIDevice+Extension.swift in Sources */,
+				8A46F5AD2C9E4389005B6422 /* RemoteSettingsFetchConfig.swift in Sources */,
 				CDB3BE8724746787009320EE /* FirefoxAccountSignInViewController.swift in Sources */,
 				8A471183287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift in Sources */,
 				8A44F20E2B585E1F0016BC81 /* HomepageTelemetry.swift in Sources */,
@@ -15658,6 +15707,7 @@
 				8AEAD9F32C3D7B3E001A2C5A /* FeatureFlagsSettings.swift in Sources */,
 				216A0D7B2A40F08B008077BA /* ThemeSettingsAction.swift in Sources */,
 				C2506C932A6A863600F2B76E /* HistoryCoordinator.swift in Sources */,
+				8A46F5AE2C9E4389005B6422 /* RemoteSettingsUtils.swift in Sources */,
 				8A3EF8012A2FCFC900796E3A /* FasterInactiveTabs.swift in Sources */,
 				CA7FC7D324A6A9B70012F347 /* PasswordManagerDataSourceHelper.swift in Sources */,
 				0E6C1E252C90B0E0001A43BB /* PasswordGeneratorMiddleware.swift in Sources */,
@@ -15821,6 +15871,7 @@
 				8ABC5AEE284532C900FEA552 /* PocketDiscoverCell.swift in Sources */,
 				ABE856AD2C75029F00C56F47 /* TrackingProtectionStatusView.swift in Sources */,
 				C834330026BAD32800ABAAA6 /* EnhancedTrackingProtectionDetailsVM.swift in Sources */,
+				8A46F5AB2C9E4389005B6422 /* PasswordRuleRecord.swift in Sources */,
 				8A03309528C2653600286539 /* LegacyTabFileManager.swift in Sources */,
 				8AB5958A284145B30090F4AE /* HomepageSectionHandler.swift in Sources */,
 				E1442FD0294782D9003680B0 /* UIAlertController+Extension.swift in Sources */,
@@ -15867,6 +15918,7 @@
 				43F7952525795F69005AEE40 /* SearchTelemetry.swift in Sources */,
 				E65075541E37F6FC006961AC /* LegacyDynamicFontHelper.swift in Sources */,
 				8ADAE4242A33A126007BF926 /* StudiesToggleSetting.swift in Sources */,
+				8A46F5AC2C9E4389005B6422 /* RemoteDataType.swift in Sources */,
 				8C1953302B85E7EC00761B20 /* AutofillFooterView.swift in Sources */,
 				C82CDD47233E8996002E2743 /* Tab+ChangeUserAgent.swift in Sources */,
 				81122E212B221AC0003DD9F8 /* SearchScreenState.swift in Sources */,
@@ -16447,6 +16499,7 @@
 				A83E5B1D1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift in Sources */,
 				8A635ECD289437A8006378BA /* SyncedTabCellTests.swift in Sources */,
 				8A97E6EF2C584C4900F94793 /* AddressLocaleFeatureValidatorTests.swift in Sources */,
+				8ABE9F1D2CB462730080E1DF /* RemoteSettingsFetchConfigTests.swift in Sources */,
 				E1E425322B5A2E9700899550 /* DownloadTests.swift in Sources */,
 				5AB4237C28A1947A003BC40C /* MockNotificationCenter.swift in Sources */,
 				8A37C79F28DA4BA600B1FAD4 /* ContextualHintViewProviderTests.swift in Sources */,
@@ -16466,6 +16519,7 @@
 				E1D8BC7A21FF7A0000B100BD /* TPStatsBlocklistsTests.swift in Sources */,
 				5AF6254328A57A4600A90253 /* HistoryHighlightsDataAdaptorTests.swift in Sources */,
 				8A552AC82CB43AB400564C98 /* HeaderStateTests.swift in Sources */,
+				8AFC4E472CAF53E100C54B43 /* RemoteDataTypeTests.swift in Sources */,
 				8A7AF0C72C9A119A009691B5 /* TabPeekStateTests.swift in Sources */,
 				0AFF7F642C7784D600265214 /* MockDataCleaner.swift in Sources */,
 				8AE80BAD2891957C00BC12EA /* TopSitesDimensionTests.swift in Sources */,
