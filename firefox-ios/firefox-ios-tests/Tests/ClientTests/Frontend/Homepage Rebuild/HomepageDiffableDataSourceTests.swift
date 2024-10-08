@@ -6,16 +6,16 @@ import XCTest
 
 @testable import Client
 
-final class NewHomepageDiffableDataSourceTests: XCTestCase {
+final class HomepageDiffableDataSourceTests: XCTestCase {
     var collectionView: UICollectionView?
-    var diffableDataSource: NewHomepageDiffableDataSource?
+    var diffableDataSource: HomepageDiffableDataSource?
 
     override func setUpWithError() throws {
         try super.setUpWithError()
 
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         let collectionView = try XCTUnwrap(collectionView)
-        diffableDataSource = NewHomepageDiffableDataSource(
+        diffableDataSource = HomepageDiffableDataSource(
             collectionView: collectionView
         ) { (collectionView, indexPath, item) -> UICollectionViewCell? in
             return UICollectionViewCell()

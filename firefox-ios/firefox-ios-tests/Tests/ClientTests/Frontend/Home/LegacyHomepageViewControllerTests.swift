@@ -7,7 +7,7 @@
 import XCTest
 import Common
 
-class HomepageViewControllerTests: XCTestCase {
+class LegacyHomepageViewControllerTests: XCTestCase {
     var profile: MockProfile!
 
     override func setUp() {
@@ -31,10 +31,12 @@ class HomepageViewControllerTests: XCTestCase {
         let overlayManager = MockOverlayModeManager()
         overlayManager.setURLBar(urlBarView: urlBar)
 
-        let firefoxHomeViewController = HomepageViewController(profile: profile,
-                                                               toastContainer: UIView(),
-                                                               tabManager: tabManager,
-                                                               overlayManager: overlayManager)
+        let firefoxHomeViewController = LegacyHomepageViewController(
+            profile: profile,
+            toastContainer: UIView(),
+            tabManager: tabManager,
+            overlayManager: overlayManager
+        )
 
         trackForMemoryLeaks(firefoxHomeViewController)
     }
@@ -47,7 +49,7 @@ class HomepageViewControllerTests: XCTestCase {
         let overlayManager = MockOverlayModeManager()
         overlayManager.setURLBar(urlBarView: urlBar)
 
-        let subject = HomepageViewController(
+        let subject = LegacyHomepageViewController(
             profile: profile,
             toastContainer: UIView(),
             tabManager: tabManager,

@@ -328,7 +328,7 @@ public class BrowserAddressToolbar: UIView,
     func locationViewDidSubmitText(_ text: String) {
         guard !text.isEmpty else { return }
 
-        toolbarDelegate?.openBrowser(searchTerm: text.lowercased())
+        toolbarDelegate?.openBrowser(searchTerm: text)
     }
 
     func locationViewAccessibilityActions() -> [UIAccessibilityCustomAction]? {
