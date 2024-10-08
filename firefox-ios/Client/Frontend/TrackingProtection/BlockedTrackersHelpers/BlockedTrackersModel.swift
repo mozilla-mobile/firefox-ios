@@ -10,7 +10,7 @@ struct BlockedTrackersTableModel {
     let topLevelDomain: String
     let title: String
     let URL: String
-    let contentBlockerStats: TPPageStats?
+    var contentBlockerStats: TPPageStats?
     let connectionSecure: Bool
 
     func getItems() -> [BlockedTrackerItem] {

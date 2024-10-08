@@ -145,14 +145,18 @@ class BlockedTrackersTableViewController: UIViewController,
         }
     }
 
-    private func applySnapshot() {
+    func applySnapshot() {
         let items = model.getItems()
         trackersTable.applySnapshot(with: items)
+        updateHeaderCount()
     }
 
     private func updateViewDetails() {
         navigationView.setViews(with: model.topLevelDomain, and: .KeyboardShortcuts.Back)
+        updateHeaderCount()
+    }
 
+    private func updateHeaderCount() {
         if let headerView = trackersTable.headerView(forSection: 0) as? BlockedTrackersHeaderView {
             headerView.totalTrackersBlockedLabel.text = model.getTotalTrackersText()
         }

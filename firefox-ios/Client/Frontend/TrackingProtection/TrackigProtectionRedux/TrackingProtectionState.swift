@@ -17,6 +17,7 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
     var connectionSecure: Bool
     var showsClearCookiesAlert: Bool
     var shouldClearCookies: Bool
+    var shouldUpdateBlockedTrackerStats: Bool
 
     init(appState: AppState,
          uuid: WindowUUID) {
@@ -38,7 +39,8 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
             showDetails: trackingProtectionState.showDetails,
             showBlockedTrackers: trackingProtectionState.showBlockedTrackers,
             showsClearCookiesAlert: trackingProtectionState.showsClearCookiesAlert,
-            shouldClearCookies: trackingProtectionState.shouldClearCookies
+            shouldClearCookies: trackingProtectionState.shouldClearCookies,
+            shouldUpdateBlockedTrackerStats: trackingProtectionState.shouldUpdateBlockedTrackerStats
         )
     }
 
@@ -54,7 +56,8 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
             showDetails: false,
             showBlockedTrackers: false,
             showsClearCookiesAlert: false,
-            shouldClearCookies: false
+            shouldClearCookies: false,
+            shouldUpdateBlockedTrackerStats: false
         )
     }
 
@@ -67,7 +70,8 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
         showDetails: Bool,
         showBlockedTrackers: Bool,
         showsClearCookiesAlert: Bool,
-        shouldClearCookies: Bool
+        shouldClearCookies: Bool,
+        shouldUpdateBlockedTrackerStats: Bool
     ) {
         self.windowUUID = windowUUID
         self.shouldDismiss = shouldDismiss
@@ -78,6 +82,7 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
         self.showBlockedTrackers = showBlockedTrackers
         self.showsClearCookiesAlert = showsClearCookiesAlert
         self.shouldClearCookies = shouldClearCookies
+        self.shouldUpdateBlockedTrackerStats = shouldUpdateBlockedTrackerStats
     }
 
     static let reducer: Reducer<TrackingProtectionState> = { state, action in
@@ -94,7 +99,8 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
                 showDetails: false,
                 showBlockedTrackers: false,
                 showsClearCookiesAlert: false,
-                shouldClearCookies: true
+                shouldClearCookies: true,
+                shouldUpdateBlockedTrackerStats: false
             )
         case TrackingProtectionMiddlewareActionType.navigateToSettings:
             return TrackingProtectionState(
@@ -106,7 +112,8 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
                 showDetails: false,
                 showBlockedTrackers: false,
                 showsClearCookiesAlert: false,
-                shouldClearCookies: false
+                shouldClearCookies: false,
+                shouldUpdateBlockedTrackerStats: false
             )
         case TrackingProtectionMiddlewareActionType.showTrackingProtectionDetails:
             return TrackingProtectionState(
@@ -118,7 +125,8 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
                 showDetails: true,
                 showBlockedTrackers: false,
                 showsClearCookiesAlert: false,
-                shouldClearCookies: false
+                shouldClearCookies: false,
+                shouldUpdateBlockedTrackerStats: false
             )
         case TrackingProtectionMiddlewareActionType.showBlockedTrackersDetails:
             return TrackingProtectionState(
@@ -130,7 +138,8 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
                 showDetails: false,
                 showBlockedTrackers: true,
                 showsClearCookiesAlert: false,
-                shouldClearCookies: false
+                shouldClearCookies: false,
+                shouldUpdateBlockedTrackerStats: false
             )
         case TrackingProtectionActionType.resetReduxStore:
             return TrackingProtectionState(
@@ -142,7 +151,21 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
                 showDetails: false,
                 showBlockedTrackers: false,
                 showsClearCookiesAlert: false,
-                shouldClearCookies: false
+                shouldClearCookies: false,
+                shouldUpdateBlockedTrackerStats: false
+            )
+        case TrackingProtectionActionType.updateBlockedTrackerStats:
+            return TrackingProtectionState(
+                windowUUID: state.windowUUID,
+                shouldDismiss: false,
+                showTrackingProtectionSettings: false,
+                trackingProtectionEnabled: state.trackingProtectionEnabled,
+                connectionSecure: state.connectionSecure,
+                showDetails: false,
+                showBlockedTrackers: false,
+                showsClearCookiesAlert: false,
+                shouldClearCookies: false,
+                shouldUpdateBlockedTrackerStats: true
             )
         case TrackingProtectionMiddlewareActionType.showAlert:
             return TrackingProtectionState(
@@ -154,7 +177,8 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
                 showDetails: false,
                 showBlockedTrackers: false,
                 showsClearCookiesAlert: true,
-                shouldClearCookies: false
+                shouldClearCookies: false,
+                shouldUpdateBlockedTrackerStats: false
             )
         case TrackingProtectionActionType.toggleTrackingProtectionStatus:
             return TrackingProtectionState(
@@ -166,7 +190,8 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
                 showDetails: false,
                 showBlockedTrackers: false,
                 showsClearCookiesAlert: false,
-                shouldClearCookies: false
+                shouldClearCookies: false,
+                shouldUpdateBlockedTrackerStats: false
             )
         case TrackingProtectionMiddlewareActionType.dismissTrackingProtection:
             return TrackingProtectionState(
@@ -178,7 +203,8 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
                 showDetails: false,
                 showBlockedTrackers: false,
                 showsClearCookiesAlert: false,
-                shouldClearCookies: false
+                shouldClearCookies: false,
+                shouldUpdateBlockedTrackerStats: false
             )
         default:
             return state

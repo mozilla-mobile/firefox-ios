@@ -97,14 +97,15 @@ class TrackingProtectionViewController: UIViewController,
 
     // MARK: - Variables
 
-    private var viewModel: TrackingProtectionModel
+    private var model: TrackingProtectionModel
     private var trackingProtectionState: TrackingProtectionState
+    private var blockedTrackersVC: BlockedTrackersTableViewController?
     private var hasSetPointOrigin = false
     private var pointOrigin: CGPoint?
     var asPopover = false
 
     private var toggleContainerShouldBeHidden: Bool {
-        return !viewModel.globalETPIsEnabled
+        return !model.globalETPIsEnabled
     }
 
     private var protectionViewTopConstraint: NSLayoutConstraint?
@@ -116,7 +117,7 @@ class TrackingProtectionViewController: UIViewController,
          windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default) {
-        self.viewModel = viewModel
+        self.model = viewModel
         self.profile = profile
         self.windowUUID = windowUUID
         self.themeManager = themeManager
@@ -161,10 +162,10 @@ class TrackingProtectionViewController: UIViewController,
         updateViewDetails()
         updateProtectionViewStatus()
         applyTheme()
-        getCertificates(for: viewModel.url) { [weak self] certificates in
+        getCertificates(for: model.url) { [weak self] certificates in
             if let certificates {
                 ensureMainThread {
-                    self?.viewModel.certificates = certificates
+                    self?.model.certificates = certificates
                 }
             }
         }
@@ -200,6 +201,8 @@ class TrackingProtectionViewController: UIViewController,
             onTapClearCookiesAndSiteData()
         } else if trackingProtectionState.shouldClearCookies {
             clearCookies()
+        } else if trackingProtectionState.shouldUpdateBlockedTrackerStats {
+            updateBlockedTrackersCount()
         } else if trackingProtectionState.shouldDismiss {
             enhancedTrackingProtectionMenuDelegate?.didFinish()
         }
@@ -342,7 +345,7 @@ class TrackingProtectionViewController: UIViewController,
         constraints.append(contentsOf: trackersConnectionConstraints)
         trackersView.trackersButtonCallback = {}
         connectionStatusView.connectionStatusButtonCallback = { [weak self] in
-            guard let self, viewModel.connectionSecure else { return }
+            guard let self, model.connectionSecure else { return }
             store.dispatch(
                 TrackingProtectionAction(windowUUID: windowUUID,
                                          actionType: TrackingProtectionActionType.tappedShowTrackingProtectionDetails)
@@ -366,15 +369,15 @@ class TrackingProtectionViewController: UIViewController,
         constraints.append(contentsOf: toggleConstraints)
         toggleView.toggleSwitchedCallback = { [weak self] in
             // site is safelisted if site ETP is disabled
-            self?.viewModel.toggleSiteSafelistStatus()
+            self?.model.toggleSiteSafelistStatus()
             self?.updateProtectionViewStatus()
         }
     }
 
     // MARK: Clear Cookies Button Setup
     private func setupClearCookiesButton() {
-        let clearCookiesViewModel = TrackingProtectionButtonModel(title: viewModel.clearCookiesButtonTitle,
-                                                                  a11yIdentifier: viewModel.clearCookiesButtonA11yId)
+        let clearCookiesViewModel = TrackingProtectionButtonModel(title: model.clearCookiesButtonTitle,
+                                                                  a11yIdentifier: model.clearCookiesButtonA11yId)
         clearCookiesButton.configure(viewModel: clearCookiesViewModel)
         baseView.addSubview(clearCookiesButton)
 
@@ -397,8 +400,8 @@ class TrackingProtectionViewController: UIViewController,
 
     // MARK: Settings View Setup
     private func configureProtectionSettingsView() {
-        let settingsButtonViewModel = LinkButtonViewModel(title: viewModel.settingsButtonTitle,
-                                                          a11yIdentifier: viewModel.settingsA11yId)
+        let settingsButtonViewModel = LinkButtonViewModel(title: model.settingsButtonTitle,
+                                                          a11yIdentifier: model.settingsA11yId)
         settingsLinkButton.configure(viewModel: settingsButtonViewModel)
     }
 
@@ -421,22 +424,29 @@ class TrackingProtectionViewController: UIViewController,
     }
 
     private func updateViewDetails() {
-        let headerIcon = FaviconImageViewModel(siteURLString: viewModel.url.absoluteString,
+        let headerIcon = FaviconImageViewModel(siteURLString: model.url.absoluteString,
                                                faviconCornerRadius: TPMenuUX.UX.faviconCornerRadius)
-        headerContainer.setupDetails(subtitle: viewModel.websiteTitle,
-                                     title: viewModel.displayTitle,
+        headerContainer.setupDetails(subtitle: model.websiteTitle,
+                                     title: model.displayTitle,
                                      icon: headerIcon)
 
-        connectionDetailsHeaderView.setupDetails(title: viewModel.connectionDetailsTitle,
-                                                 status: viewModel.connectionDetailsHeader,
-                                                 image: viewModel.connectionDetailsImage)
+        connectionDetailsHeaderView.setupDetails(title: model.connectionDetailsTitle,
+                                                 status: model.connectionDetailsHeader,
+                                                 image: model.connectionDetailsImage)
 
-        trackersView.setupDetails(for: viewModel.contentBlockerStats?.total)
-        connectionStatusView.setupDetails(image: viewModel.getConnectionStatusImage(themeType: currentTheme().type),
-                                          text: viewModel.connectionStatusString)
+        updateBlockedTrackersCount()
+        connectionStatusView.setupDetails(image: model.getConnectionStatusImage(themeType: currentTheme().type),
+                                          text: model.connectionStatusString)
 
-        toggleView.setupDetails(isOn: viewModel.isSiteETPEnabled)
-        viewModel.isProtectionEnabled = toggleView.toggleIsOn
+        toggleView.setupDetails(isOn: model.isSiteETPEnabled)
+        model.isProtectionEnabled = toggleView.toggleIsOn
+    }
+
+    private func updateBlockedTrackersCount() {
+        model.contentBlockerStats = model.selectedTab?.contentBlocker?.stats
+        blockedTrackersVC?.model.contentBlockerStats = model.selectedTab?.contentBlocker?.stats
+        blockedTrackersVC?.applySnapshot()
+        trackersView.setupDetails(for: model.contentBlockerStats?.total)
     }
 
     private func setupViewActions() {
@@ -469,21 +479,21 @@ class TrackingProtectionViewController: UIViewController,
 
     // MARK: Accessibility
     private func setupAccessibilityIdentifiers() {
-        connectionDetailsHeaderView.setupAccessibilityIdentifiers(foxImageA11yId: viewModel.foxImageA11yId)
+        connectionDetailsHeaderView.setupAccessibilityIdentifiers(foxImageA11yId: model.foxImageA11yId)
         trackersView.setupAccessibilityIdentifiers(
-            arrowImageA11yId: viewModel.arrowImageA11yId,
-            trackersBlockedLabelA11yId: viewModel.trackersBlockedLabelA11yId,
-            shieldImageA11yId: viewModel.settingsA11yId)
+            arrowImageA11yId: model.arrowImageA11yId,
+            trackersBlockedLabelA11yId: model.trackersBlockedLabelA11yId,
+            shieldImageA11yId: model.settingsA11yId)
         connectionStatusView.setupAccessibilityIdentifiers(
-            arrowImageA11yId: viewModel.arrowImageA11yId,
-            securityStatusLabelA11yId: viewModel.securityStatusLabelA11yId)
+            arrowImageA11yId: model.arrowImageA11yId,
+            securityStatusLabelA11yId: model.securityStatusLabelA11yId)
         toggleView.setupAccessibilityIdentifiers(
-            toggleViewTitleLabelA11yId: viewModel.toggleViewTitleLabelA11yId,
-            toggleViewBodyLabelA11yId: viewModel.toggleViewBodyLabelA11yId)
-        headerContainer.setupAccessibility(closeButtonA11yLabel: viewModel.closeButtonA11yLabel,
-                                           closeButtonA11yId: viewModel.closeButtonA11yId)
-        clearCookiesButton.accessibilityIdentifier = viewModel.clearCookiesButtonA11yId
-        settingsLinkButton.accessibilityIdentifier = viewModel.settingsA11yId
+            toggleViewTitleLabelA11yId: model.toggleViewTitleLabelA11yId,
+            toggleViewBodyLabelA11yId: model.toggleViewBodyLabelA11yId)
+        headerContainer.setupAccessibility(closeButtonA11yLabel: model.closeButtonA11yLabel,
+                                           closeButtonA11yId: model.closeButtonA11yId)
+        clearCookiesButton.accessibilityIdentifier = model.clearCookiesButtonA11yId
+        settingsLinkButton.accessibilityIdentifier = model.settingsA11yId
     }
 
     private func adjustLayout() {
@@ -513,7 +523,7 @@ class TrackingProtectionViewController: UIViewController,
     @objc
     func trackingProtectionToggleTapped() {
         // site is safelisted if site ETP is disabled
-        viewModel.toggleSiteSafelistStatus()
+        model.toggleSiteSafelistStatus()
         updateProtectionViewStatus()
     }
 
@@ -534,13 +544,13 @@ class TrackingProtectionViewController: UIViewController,
     }
 
     private func showBlockedTrackersController() {
-        let blockedTrackersVC = BlockedTrackersTableViewController(with: viewModel.getBlockedTrackersModel(),
+        blockedTrackersVC = BlockedTrackersTableViewController(with: model.getBlockedTrackersModel(),
                                                                    windowUUID: windowUUID)
-        self.navigationController?.pushViewController(blockedTrackersVC, animated: true)
+        self.navigationController?.pushViewController(blockedTrackersVC ?? UIViewController(), animated: true)
     }
 
     private func showTrackersDetailsController() {
-        let detailsVC = TrackingProtectionDetailsViewController(with: viewModel.getDetailsModel(),
+        let detailsVC = TrackingProtectionDetailsViewController(with: model.getDetailsModel(),
                                                                 windowUUID: windowUUID)
         self.navigationController?.pushViewController(detailsVC, animated: true)
     }
@@ -548,7 +558,7 @@ class TrackingProtectionViewController: UIViewController,
     // MARK: Clear Cookies Alert
     func onTapClearCookiesAndSiteData() {
         resetReduxStoreState()
-        viewModel.onTapClearCookiesAndSiteData(controller: self)
+        model.onTapClearCookiesAndSiteData(controller: self)
     }
 
     func clearCookies() {}
@@ -596,17 +606,17 @@ class TrackingProtectionViewController: UIViewController,
         if toggleView.toggleIsOn, isContentBlockingConfigEnabled {
             toggleView.setStatusLabelText(with: .Menu.EnhancedTrackingProtection.switchOnText)
             trackersView.setVisibility(isHidden: false)
-            viewModel.isProtectionEnabled = true
+            model.isProtectionEnabled = true
         } else {
             toggleView.setStatusLabelText(with: .Menu.EnhancedTrackingProtection.switchOffText)
             trackersView.setVisibility(isHidden: true)
-            viewModel.isProtectionEnabled = false
+            model.isProtectionEnabled = false
         }
         toggleView.setToggleSwitchVisibility(with: !isContentBlockingConfigEnabled)
-        connectionDetailsHeaderView.setupDetails(color: viewModel.getConnectionDetailsBackgroundColor(theme: currentTheme()),
-                                                 title: viewModel.connectionDetailsTitle,
-                                                 status: viewModel.connectionDetailsHeader,
-                                                 image: viewModel.connectionDetailsImage)
+        connectionDetailsHeaderView.setupDetails(color: model.getConnectionDetailsBackgroundColor(theme: currentTheme()),
+                                                 title: model.connectionDetailsTitle,
+                                                 status: model.connectionDetailsHeader,
+                                                 image: model.connectionDetailsImage)
     }
 }
 
@@ -620,8 +630,8 @@ extension TrackingProtectionViewController {
         connectionDetailsHeaderView.backgroundColor = theme.colors.layer2
         trackersView.applyTheme(theme: theme)
         connectionStatusView.applyTheme(theme: theme)
-        connectionStatusView.setConnectionStatus(image: viewModel.getConnectionStatusImage(themeType: theme.type),
-                                                 isConnectionSecure: viewModel.connectionSecure,
+        connectionStatusView.setConnectionStatus(image: model.getConnectionStatusImage(themeType: theme.type),
+                                                 isConnectionSecure: model.connectionSecure,
                                                  theme: theme)
         connectionHorizontalLine.backgroundColor = theme.colors.borderPrimary
         toggleView.applyTheme(theme: theme)
