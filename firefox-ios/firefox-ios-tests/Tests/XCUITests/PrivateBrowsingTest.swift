@@ -34,7 +34,7 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
         navigator.openURL(url2)
-        mozWaitForValueContains(app.textFields["url"], value: "mozilla")
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "mozilla")
         navigator.goto(LibraryPanel_History)
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[url1And3Label])
@@ -68,7 +68,8 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.goto(URLBarOpen)
         waitUntilPageLoad()
         navigator.openURL(url3)
-        mozWaitForValueContains(app.textFields["url"], value: "test-example")
+        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+        mozWaitForValueContains(url, value: "test-example")
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(TabTray)
@@ -200,7 +201,7 @@ class PrivateBrowsingTest: BaseTestCase {
         for _ in 1...4 {
             navigator.createNewTab()
             if app.keyboards.element.isVisible() && !iPad() {
-                mozWaitForElementToExist(app.buttons["urlBar-cancel"])
+                mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
                 navigator.performAction(Action.CloseURLBarOpen)
             }
         }
@@ -304,8 +305,8 @@ class PrivateBrowsingTestIphone: IphoneOnlyTestCase {
 
         // Check that the tab has changed
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.textFields["url"])
-        mozWaitForValueContains(app.textFields["url"], value: "iana")
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "iana")
         mozWaitForElementToExist(app.links["RFC 2606"])
         mozWaitForElementToExist(app.buttons["Show Tabs"])
         let numPrivTab = app.buttons["Show Tabs"].value as? String

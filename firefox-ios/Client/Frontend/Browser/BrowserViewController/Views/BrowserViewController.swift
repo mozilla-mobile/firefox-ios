@@ -127,6 +127,9 @@ class BrowserViewController: UIViewController,
     var isToolbarRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
     }
+    var isUnifiedSearchEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.unifiedSearch, checking: .buildOnly)
+    }
     var isOneTapNewTabEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly)
     }
@@ -629,42 +632,38 @@ class BrowserViewController: UIViewController,
     }
 
     func newState(state: BrowserViewControllerState) {
-        ensureMainThread { [weak self] in
-            guard let self else { return }
+        browserViewControllerState = state
 
-            browserViewControllerState = state
-
-            // opens or close sidebar/bottom sheet to match the saved state
-            if state.fakespotState.isOpen {
-                let productURL = isToolbarRefactorEnabled ?
-                    store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)?.addressToolbar.url :
-                    urlBar.currentURL
-                guard let productURL else { return }
-                handleFakespotFlow(productURL: productURL)
-            } else if !state.fakespotState.isOpen {
-                dismissFakespotIfNeeded()
-            }
-
-            if state.reloadWebView {
-                updateContentInHomePanel(state.browserViewType)
-            }
-
-            setupMiddleButtonStatus(isLoading: false)
-
-            if let toast = state.toast {
-                self.showToastType(toast: toast)
-            }
-
-            if state.showOverlay == true {
-                overlayManager.openNewTab(url: nil, newTabSettings: newTabSettings)
-            } else if state.showOverlay == false {
-                overlayManager.cancelEditing(shouldCancelLoading: false)
-            }
-
-            executeNavigationAndDisplayActions()
-
-            handleMicrosurvey(state: state)
+        // opens or close sidebar/bottom sheet to match the saved state
+        if state.fakespotState.isOpen {
+            let productURL = isToolbarRefactorEnabled ?
+                store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)?.addressToolbar.url :
+                urlBar.currentURL
+            guard let productURL else { return }
+            handleFakespotFlow(productURL: productURL)
+        } else if !state.fakespotState.isOpen {
+            dismissFakespotIfNeeded()
         }
+
+        if state.reloadWebView {
+            updateContentInHomePanel(state.browserViewType)
+        }
+
+        setupMiddleButtonStatus(isLoading: false)
+
+        if let toast = state.toast {
+            self.showToastType(toast: toast)
+        }
+
+        if state.showOverlay == true {
+            overlayManager.openNewTab(url: nil, newTabSettings: newTabSettings)
+        } else if state.showOverlay == false {
+            overlayManager.cancelEditing(shouldCancelLoading: false)
+        }
+
+        executeNavigationAndDisplayActions()
+
+        handleMicrosurvey(state: state)
     }
 
     private func showToastType(toast: ToastType) {
@@ -856,7 +855,12 @@ class BrowserViewController: UIViewController,
 
         // Setup the URL bar, wrapped in a view to get transparency effect
         if isToolbarRefactorEnabled {
-            addressToolbarContainer.configure(windowUUID: windowUUID, profile: profile, delegate: self)
+            addressToolbarContainer.configure(
+                windowUUID: windowUUID,
+                profile: profile,
+                delegate: self,
+                isUnifiedSearchEnabled: isUnifiedSearchEnabled
+            )
             addressToolbarContainer.applyTheme(theme: currentTheme())
             addressToolbarContainer.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
         } else {
@@ -1265,7 +1269,7 @@ class BrowserViewController: UIViewController,
 
     func frontEmbeddedContent(_ viewController: ContentContainable) {
         contentContainer.update(content: viewController)
-        statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
+        statusBarOverlay.resetState(isHomepage: contentContainer.hasLegacyHomepage)
     }
 
     /// Embed a ContentContainable inside the content container
@@ -1275,9 +1279,10 @@ class BrowserViewController: UIViewController,
         guard contentContainer.canAdd(content: viewController) else { return false }
 
         addChild(viewController)
+        viewController.willMove(toParent: self)
         contentContainer.add(content: viewController)
         viewController.didMove(toParent: self)
-        statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
+        statusBarOverlay.resetState(isHomepage: contentContainer.hasLegacyHomepage)
 
         UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
         return true
@@ -1303,14 +1308,16 @@ class BrowserViewController: UIViewController,
         }
 
         if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
-            browserDelegate?.showNewHomepage()
+            browserDelegate?.showHomepage()
         } else {
-            browserDelegate?.showHomepage(inline: inline,
-                                          toastContainer: contentContainer,
-                                          homepanelDelegate: self,
-                                          libraryPanelDelegate: self,
-                                          statusBarScrollDelegate: statusBarOverlay,
-                                          overlayManager: overlayManager)
+            browserDelegate?.showLegacyHomepage(
+                inline: inline,
+                toastContainer: contentContainer,
+                homepanelDelegate: self,
+                libraryPanelDelegate: self,
+                statusBarScrollDelegate: statusBarOverlay,
+                overlayManager: overlayManager
+            )
         }
     }
 
@@ -1635,7 +1642,10 @@ class BrowserViewController: UIViewController,
                                                        windowUUID: self.windowUUID,
                                                        bookmarkNode: bookmarkNode,
                                                        parentBookmarkFolder: bookmarkFolder,
-                                                       presentedFromToast: true)
+                                                       presentedFromToast: true,
+                                                       deleteBookmark: { [weak self] in
+                self?.showBookmarkToast(action: .remove)
+            })
             let controller: DismissableNavigationViewController
             controller = DismissableNavigationViewController(rootViewController: detailController)
             self.present(controller, animated: true, completion: nil)
@@ -1960,7 +1970,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func executeNavigationAndDisplayActions() {
-        guard isToolbarRefactorEnabled, let state = browserViewControllerState else { return }
+        guard let state = browserViewControllerState else { return }
 
         switch state {
         case _ where state.navigateTo != nil:
@@ -1995,7 +2005,6 @@ class BrowserViewController: UIViewController,
         case .locationViewLongPressAction:
             presentLocationViewActionSheet(from: addressToolbarContainer)
         case .trackingProtectionDetails:
-            TelemetryWrapper.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
             navigationHandler?.showEnhancedTrackingProtection(sourceView: state.buttonTapped ?? addressToolbarContainer)
         case .menu:
             didTapOnMenu(button: state.buttonTapped)
@@ -2004,12 +2013,6 @@ class BrowserViewController: UIViewController,
             presentRefreshLongPressAction(from: button)
         case .tabTray:
             focusOnTabSegment()
-            TelemetryWrapper.recordEvent(
-                category: .action,
-                method: .press,
-                object: .tabToolbar,
-                value: .tabView
-            )
         case .share:
             guard let button = state.buttonTapped else { return }
             didTapOnShare(from: button)
@@ -2021,6 +2024,10 @@ class BrowserViewController: UIViewController,
             presentNewTabLongPressActionSheet(from: view)
         case .dataClearance:
             didTapOnDataClearance()
+        case .passwordGenerator:
+            if let tab = tabManager.selectedTab {
+                navigationHandler?.showPasswordGenerator(tab: tab)
+            }
         }
     }
 
@@ -2041,7 +2048,6 @@ class BrowserViewController: UIViewController,
             tabManager.selectedTab?.reload(bypassCache: true)
         case .reload:
             tabManager.selectedTab?.reload()
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .reloadFromUrlBar)
         case .stopLoading:
             tabManager.selectedTab?.stop()
         case .newTab:
@@ -2157,10 +2163,16 @@ class BrowserViewController: UIViewController,
         switch readerMode.state {
         case .available:
             enableReaderMode()
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readerModeOpenButton)
+
+            if !isToolbarRefactorEnabled {
+                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readerModeOpenButton)
+            }
         case .active:
             disableReaderMode()
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readerModeCloseButton)
+
+            if !isToolbarRefactorEnabled {
+                TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readerModeCloseButton)
+            }
         case .unavailable:
             break
         }
@@ -2235,11 +2247,13 @@ class BrowserViewController: UIViewController,
     }
 
     func didTapOnShare(from view: UIView) {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .awesomebarLocation,
-                                     value: .awesomebarShareTap,
-                                     extras: nil)
+        if !isToolbarRefactorEnabled {
+            TelemetryWrapper.recordEvent(category: .action,
+                                         method: .tap,
+                                         object: .awesomebarLocation,
+                                         value: .awesomebarShareTap,
+                                         extras: nil)
+        }
 
         if let selectedTab = tabManager.selectedTab, let tabUrl = selectedTab.canonicalURL?.displayURL {
             navigationHandler?.showShareExtension(
@@ -3691,7 +3705,8 @@ extension BrowserViewController: TabManagerDelegate {
 
         scrollController.tab = selectedTab
 
-        if let webView = selectedTab.webView {
+        if !selectedTab.isFxHomeTab,
+           let webView = selectedTab.webView {
             webView.accessibilityLabel = .WebViewAccessibilityLabel
             webView.accessibilityIdentifier = "contentView"
             webView.accessibilityElementsHidden = false

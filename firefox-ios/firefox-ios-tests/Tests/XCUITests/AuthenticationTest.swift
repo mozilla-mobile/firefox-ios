@@ -9,7 +9,7 @@ let testBasicHTTPAuthURL = "https://jigsaw.w3.org/HTTP/Basic/"
 class AuthenticationTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2360560
     func testBasicHTTPAuthenticationPromptVisible() {
-        mozWaitForElementToExist(app.textFields["url"])
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
         navigator.nowAt(NewTabScreen)
         navigator.openURL(testBasicHTTPAuthURL)
         mozWaitForElementToExist(app.staticTexts["Authentication required"], timeout: 100)

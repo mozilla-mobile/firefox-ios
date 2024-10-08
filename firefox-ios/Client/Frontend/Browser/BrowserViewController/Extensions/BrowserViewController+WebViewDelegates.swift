@@ -57,14 +57,14 @@ extension BrowserViewController: WKUIDelegate {
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping () -> Void
     ) {
-        let messageAlert = MessageAlert(message: message, frame: frame)
+        let messageAlert = MessageAlert(message: message, frame: frame, completionHandler: {
+            completionHandler()
+            self.logger.log("Javascript message alert was completed.", level: .info, category: .webview)
+        })
         if shouldDisplayJSAlertForWebView(webView) {
             logger.log("Javascript message alert will be presented.", level: .info, category: .webview)
 
-            present(messageAlert.alertController(), animated: true) {
-                completionHandler()
-                self.logger.log("Javascript message alert was completed.", level: .info, category: .webview)
-            }
+            present(messageAlert.alertController(), animated: true)
         } else if let promptingTab = tabManager[webView] {
             logger.log("Javascript message alert is queued.", level: .info, category: .webview)
 
@@ -324,7 +324,7 @@ extension BrowserViewController: WKUIDelegate {
                  type: WKMediaCaptureType,
                  decisionHandler: @escaping (WKPermissionDecision) -> Void) {
         // If the tab isn't the selected one or we're on the homepage, do not show the media capture prompt
-        guard tabManager.selectedTab?.webView == webView, !contentContainer.hasHomepage else {
+        guard tabManager.selectedTab?.webView == webView, !contentContainer.hasLegacyHomepage else {
             decisionHandler(.deny)
             return
         }
@@ -961,7 +961,7 @@ private extension BrowserViewController {
 
     func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
         // Only display a JS Alert if we are selected and there isn't anything being shown
-        return ((tabManager.selectedTab == nil ? false : tabManager.selectedTab!.webView == webView))
+        return (tabManager.selectedTab == nil ? false : tabManager.selectedTab!.webView == webView)
             && (self.presentedViewController == nil)
     }
 

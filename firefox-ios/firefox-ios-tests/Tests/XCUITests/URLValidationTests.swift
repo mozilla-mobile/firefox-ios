@@ -8,6 +8,7 @@ class URLValidationTests: BaseTestCase {
     let urlTypes = ["www.mozilla.org", "www.mozilla.org/", "https://www.mozilla.org", "www.mozilla.org/en", "www.mozilla.org/en-",
                     "www.mozilla.org/en-US", "https://www.mozilla.org/", "https://www.mozilla.org/en", "https://www.mozilla.org/en-US"]
     let urlHttpTypes = ["http://example.com", "http://example.com/"]
+    let url = XCUIApplication().textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
 
     override func setUp() {
         super.setUp()
@@ -27,7 +28,7 @@ class URLValidationTests: BaseTestCase {
             waitUntilPageLoad()
             mozWaitForElementToExist(app.otherElements.staticTexts["Mozilla"])
             mozWaitForElementToExist(app.buttons["Menu"])
-            mozWaitForValueContains(app.textFields["url"], value: "www.mozilla.org/en-US/")
+            mozWaitForValueContains(url, value: "www.mozilla.org/en-US/")
             clearURL()
         }
 
@@ -35,7 +36,7 @@ class URLValidationTests: BaseTestCase {
             navigator.openURL(i)
             waitUntilPageLoad()
             mozWaitForElementToExist(app.otherElements.staticTexts["Example Domain"])
-            mozWaitForValueContains(app.textFields["url"], value: "example.com/")
+            mozWaitForValueContains(url, value: "example.com/")
             clearURL()
         }
     }

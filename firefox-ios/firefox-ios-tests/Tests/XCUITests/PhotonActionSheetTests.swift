@@ -28,6 +28,7 @@ class PhotonActionSheetTests: BaseTestCase {
         app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash].tap()
 
         // Check that it has been unpinned
+        // Adding sleep as an workaround until https://github.com/mozilla-mobile/firefox-ios/issues/22323 is fixed
         sleep(5)
         cell.press(forDuration: 2)
         mozWaitForElementToExist(app.tables.cells.otherElements[StandardImageIdentifiers.Large.pin])
@@ -124,7 +125,8 @@ class PhotonActionSheetTests: BaseTestCase {
         openNewShareSheet()
         app.buttons["Cancel"].tap()
         // User is back to the BrowserTab where the sharesheet was launched
-        mozWaitForElementToExist(app.textFields["url"])
-        mozWaitForValueContains(app.textFields["url"], value: "example.com/")
+        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+        mozWaitForElementToExist(url)
+        mozWaitForValueContains(url, value: "example.com/")
     }
 }

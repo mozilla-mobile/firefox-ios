@@ -39,6 +39,7 @@ final class MicrosurveyTests: BaseTestCase {
 
     func testCloseButtonDismissesMicrosurveyPrompt() {
         generateTriggerForMicrosurvey()
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton])
         app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].tap()
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton])
         mozWaitForElementToNotExist(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.firefoxLogo])
@@ -68,6 +69,7 @@ final class MicrosurveyTests: BaseTestCase {
     func testCloseButtonDismissesSurveyAndPrompt() {
         generateTriggerForMicrosurvey()
         let continueButton = app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton]
+        mozWaitForElementToExist(continueButton)
         continueButton.tap()
 
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Survey.closeButton])
@@ -94,9 +96,11 @@ final class MicrosurveyTests: BaseTestCase {
             mozWaitForElementToExist(app.collectionViews[AccessibilityIdentifiers.Browser.TopTabs.collectionView])
         }
         if !iPad() {
+            mozWaitForElementToExist(homepageToggleButtonIphone)
             homepageToggleButtonIphone.tap()
             mozWaitForElementToExist(app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView])
         } else {
+            mozWaitForElementToExist(homepageToggleButtonIpad)
             homepageToggleButtonIpad.tap()
             mozWaitForElementToExist(app.collectionViews[AccessibilityIdentifiers.Browser.TopTabs.collectionView])
         }

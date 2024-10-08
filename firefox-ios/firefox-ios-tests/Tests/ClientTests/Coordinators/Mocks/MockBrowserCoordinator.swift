@@ -31,6 +31,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
     var updateFakespotSidebarCalled = 0
     var showMicrosurveyCalled = 0
     var showMainMenuCalled = 0
+    var showPasswordGeneratorCalled = 0
 
     func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {
         showSettingsCalled += 1
@@ -128,5 +129,9 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
 
     func showMicrosurvey(model: MicrosurveyModel) {
         showMicrosurveyCalled += 1
+    }
+
+    func showPasswordGenerator(tab: Tab) {
+        showPasswordGeneratorCalled += 1
     }
 }

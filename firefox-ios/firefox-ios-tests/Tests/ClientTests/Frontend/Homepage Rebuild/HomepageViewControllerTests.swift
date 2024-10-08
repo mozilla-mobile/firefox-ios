@@ -7,7 +7,7 @@ import Common
 
 @testable import Client
 
-final class NewHomepageViewControllerTests: XCTestCase {
+final class HomepageViewControllerTests: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     var mockNotificationCenter: MockNotificationCenter?
     var mockThemeManager: MockThemeManager?
@@ -26,7 +26,7 @@ final class NewHomepageViewControllerTests: XCTestCase {
     func testInitialCreation_hasCorrectContentType() {
         let sut = createSubject()
 
-        XCTAssertEqual(sut.contentType, .newHomepage)
+        XCTAssertEqual(sut.contentType, .homepage)
     }
 
     func testInitialCreation_hasCorrectWindowUUID() {
@@ -50,7 +50,7 @@ final class NewHomepageViewControllerTests: XCTestCase {
 
     // MARK: - Deinit State
     func testDeinit_callsAppropriateNotificationCenterMethods() {
-        var sut: NewHomepageViewController? = createSubject()
+        var sut: HomepageViewController? = createSubject()
 
         XCTAssertNotNil(sut)
         XCTAssertEqual(mockNotificationCenter?.removeObserverCallCount, 0)
@@ -61,12 +61,12 @@ final class NewHomepageViewControllerTests: XCTestCase {
         XCTAssertEqual(mockNotificationCenter?.removeObserverCallCount, 1)
     }
 
-    private func createSubject() -> NewHomepageViewController {
+    private func createSubject() -> HomepageViewController {
         let notificationCenter = MockNotificationCenter()
         let themeManager = MockThemeManager()
         mockNotificationCenter = notificationCenter
         mockThemeManager = themeManager
-        let homepageViewController = NewHomepageViewController(
+        let homepageViewController = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
             themeManager: themeManager,
             notificationCenter: notificationCenter

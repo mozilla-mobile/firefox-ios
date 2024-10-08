@@ -371,7 +371,8 @@ class HistoryTests: BaseTestCase {
         urlBarForwardButton.press(forDuration: 1)
         mozWaitForElementToExist(app.tables.staticTexts["The Book of Mozilla"])
         app.tables.staticTexts["The Book of Mozilla"].tap()
-        mozWaitForValueContains(app.textFields["url"], value: "test-fixture/test-mozilla-book.html")
+        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+        mozWaitForValueContains(url, value: "test-fixture/test-mozilla-book.html")
     }
 
     // Private function created to select desired option from the "Clear Recent History" list
@@ -387,7 +388,8 @@ class HistoryTests: BaseTestCase {
         // Workaround as the item does not appear if there is only that tab open
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: TIMEOUT_LONG)
+        let cancelButton = app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton]
+        mozWaitForElementToExist(cancelButton, timeout: TIMEOUT_LONG)
         navigator.performAction(Action.CloseURLBarOpen)
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -421,7 +423,7 @@ class HistoryTests: BaseTestCase {
     }
 
     private func closeKeyboard() {
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
     }

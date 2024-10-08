@@ -14,13 +14,19 @@ public enum LoggerCategory: String {
     /// Related to address and credit card autofill
     case autofill
 
+    /// Related to the certificate handler
+    case certificate
+
     /// Related to coordinator navigation
     case coordinator
 
     /// Related to experiments, nimbus and the messaging framework.
     case experiments
 
-    /// Related to homepage UI and it's data management.
+    /// Related to old homepage UI and it's data management. To be replaced by the homepage rebuild project.
+    case legacyHomepage
+
+    /// Related to new homepage UI and it's data management for the homepage rebuild project.
     case homepage
 
     /// Related to errors around image fetches, and includes all image types (`SiteImageType`, and general images).

@@ -95,8 +95,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mozilla/rust-components-swift.git",
       "state" : {
-        "revision" : "3ed485406e1a387e6ab6c980e094eb034f25c22d",
-        "version" : "133.0.20241001050328"
+        "revision" : "ae34e961c95e573cdcd68a11a2cae9899424bf98",
+        "version" : "133.0.20241005050312"
       }
     },
     {
@@ -104,8 +104,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa.git",
       "state" : {
-        "revision" : "5575af93efb776414f243e93d6af9f6258dc539a",
-        "version" : "8.36.0"
+        "revision" : "7fc7ca43967e2980d8691a8e017c118a84133aac",
+        "version" : "8.26.0"
       }
     },
     {

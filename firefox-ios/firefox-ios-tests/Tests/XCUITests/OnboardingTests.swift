@@ -92,7 +92,7 @@ class OnboardingTests: BaseTestCase {
         waitUntilPageLoad()
 
         // Extract version number from url
-        let url = app.textFields["url"].value
+        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value
         let textUrl = String(describing: url)
         let start = textUrl.index(textUrl.startIndex, offsetBy: 43)
         let end = textUrl.index(textUrl.startIndex, offsetBy: 48)
@@ -102,7 +102,7 @@ class OnboardingTests: BaseTestCase {
 
         mozWaitForElementToExist(app.staticTexts[releaseVersion])
         mozWaitForValueContains(
-            app.textFields["url"],
+            app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url],
             value: "www.mozilla.org/en-US/firefox/ios/" + releaseVersion + "/releasenotes/"
         )
         mozWaitForElementToExist(app.staticTexts["Release Notes"])
