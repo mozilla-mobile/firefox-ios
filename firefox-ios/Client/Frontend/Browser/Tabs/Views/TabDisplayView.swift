@@ -232,18 +232,18 @@ class TabDisplayView: UIView,
         var snapshot = NSDiffableDataSourceSnapshot<TabDisplaySection, SectionTabItem>()
 
         snapshot.deleteAllItems()
-
-        snapshot.appendSections([.tabs])
-        let tabs = state.tabs.map { SectionTabItem.tab($0) }
-        snapshot.appendItems(tabs, toSection: .tabs)
-
         if state.isInactiveTabsExpanded {
             snapshot.appendSections([.inactiveTabs])
             let inactiveTabs = state.inactiveTabs.map { SectionTabItem.inactiveTab($0) }
             snapshot.appendItems(inactiveTabs, toSection: .inactiveTabs)
         }
 
-        dataSource?.apply(snapshot, animatingDifferences: false)
+        snapshot.appendSections([.tabs])
+        let tabs = state.tabs.map { SectionTabItem.tab($0) }
+        snapshot.appendItems(tabs, toSection: .tabs)
+
+        //check that this animates okay set to true
+        dataSource?.apply(snapshot, animatingDifferences: true)
     }
 
     private func scrollToTab(_ index: Int) {
@@ -278,13 +278,15 @@ class TabDisplayView: UIView,
                 return self.tabsSectionManager.layoutSection(layoutEnvironment)
             }
 
-            let section = self.getSectionLayout(sectionIndex)
+            let section = TabDisplaySection(rawValue: sectionIndex)
             switch section {
             case .inactiveTabs:
                 return self.inactiveTabsSectionManager.layoutSection(
                     layoutEnvironment,
                     isExpanded: tabsState.isInactiveTabsExpanded)
             case .tabs:
+                return self.tabsSectionManager.layoutSection(layoutEnvironment)
+            case .none:
                 return self.tabsSectionManager.layoutSection(layoutEnvironment)
             }
         }
@@ -294,13 +296,6 @@ class TabDisplayView: UIView,
     func applyTheme(theme: Theme) {
         self.theme = theme
         collectionView.backgroundColor = theme.colors.layer3
-    }
-
-    // MARK: - Private helpers
-    private func getSectionLayout(_ sectionIndex: Int) -> TabDisplaySection {
-        guard let section = TabDisplaySection(rawValue: sectionIndex) else { return .tabs }
-
-        return section
     }
 
     // SOPHIE - comment out to check what needs to be removed after diffable datasource implementation
