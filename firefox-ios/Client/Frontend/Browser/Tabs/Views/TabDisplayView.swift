@@ -354,7 +354,7 @@ class TabDisplayView: UIView,
 
     @objc
     func toggleInactiveTab() {
-       // guard let dataSource = dataSource else { return }
+        guard let dataSource = dataSource else { return }
 
         let action = TabPanelViewAction(panelType: panelType,
                                         windowUUID: windowUUID,
@@ -362,9 +362,15 @@ class TabDisplayView: UIView,
         store.dispatch(action)
 
         // reload sections of the snapshot so that the collectionView can show/hide the expanded inactiveTabs
-//        var snapshot = dataSource.snapshot()
-//        snapshot.reloadSections([.inactiveTabs, .tabs])
-//        dataSource.apply(snapshot, animatingDifferences: true)
+        var snapshot = dataSource.snapshot()
+        if snapshot.sectionIdentifiers.contains(.inactiveTabs) {
+            snapshot.reloadSections([.inactiveTabs])
+        }
+        if snapshot.sectionIdentifiers.contains(.tabs) {
+            snapshot.reloadSections([.tabs])
+        }
+
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
 
     // MARK: - TabCellDelegate
