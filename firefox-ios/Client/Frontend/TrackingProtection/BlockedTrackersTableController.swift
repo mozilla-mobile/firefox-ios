@@ -79,6 +79,7 @@ class BlockedTrackersTableViewController: UIViewController,
 
     // MARK: View Setup
     private func setupView() {
+        constraints.removeAll()
         setupNavigationView()
         setupTableView()
         setupHeaderViewActions()
@@ -89,17 +90,15 @@ class BlockedTrackersTableViewController: UIViewController,
     private func setupNavigationView() {
         view.addSubview(navigationView)
         let navigationViewContraints = [
-            navigationView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
+            navigationView.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor,
+                constant: TPMenuUX.UX.popoverTopDistance
+            ),
             navigationView.trailingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-                constant: -TPMenuUX.UX.horizontalMargin
+                equalTo: view.trailingAnchor
             ),
             navigationView.leadingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
-            ),
-            navigationView.heightAnchor.constraint(
-                greaterThanOrEqualToConstant: UX.baseCellHeight
+                equalTo: view.leadingAnchor
             )
         ]
         constraints.append(contentsOf: navigationViewContraints)
@@ -221,6 +220,7 @@ class BlockedTrackersTableViewController: UIViewController,
     }
 
     func adjustLayout() {
+        navigationView.adjustLayout()
         for cell in trackersTable.visibleCells {
             if let blockedTrackerCell = cell as? BlockedTrackerCell {
                 blockedTrackerCell.invalidateIntrinsicContentSize()
