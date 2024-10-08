@@ -7,10 +7,11 @@ import Foundation
 protocol RemoteDataTypeRecord: Codable, Equatable {}
 
 struct PasswordRuleRecord: RemoteDataTypeRecord {
+    // Unix timestamp (aka Epoch time)
+    let lastModified: Int
     let domain: String
     let passwordRules: String
     let id: String
-    let lastModified: Int
 
     enum CodingKeys: String, CodingKey {
         case domain = "Domain"
