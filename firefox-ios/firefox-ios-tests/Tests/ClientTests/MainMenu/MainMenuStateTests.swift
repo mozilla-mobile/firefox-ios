@@ -44,7 +44,8 @@ final class MainMenuStateTests: XCTestCase {
             initialState,
             MainMenuAction(
                 windowUUID: .XCTestDefaultUUID,
-                actionType: MainMenuActionType.updateCurrentTabInfo(expectedResult)
+                actionType: MainMenuActionType.updateCurrentTabInfo,
+                currentTabInfo: expectedResult
             )
         )
 
@@ -62,12 +63,16 @@ final class MainMenuStateTests: XCTestCase {
                 initialState,
                 MainMenuAction(
                     windowUUID: .XCTestDefaultUUID,
-                    actionType: MainMenuActionType.show,
-                    navigationDestination: destination
+                    actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
+                    navigationDestination: MenuNavigationDestination(destination)
                 )
             )
 
-            XCTAssertEqual(newState.navigationDestination, destination)
+            guard let currentDestination = newState.navigationDestination?.destination else {
+                return XCTFail("Execting to find a destination, but it was nil")
+            }
+
+            XCTAssertEqual(currentDestination, destination)
         }
     }
 

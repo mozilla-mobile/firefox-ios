@@ -20,7 +20,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var sceneCoordinator: SceneCoordinator?
     var routeBuilder = RouteBuilder()
-    var logger: Logger = DefaultLogger.shared
+
+    private let logger: Logger = DefaultLogger.shared
+    private let tabErrorTelemetryHelper = TabErrorTelemetryHelper.shared
 
     // MARK: - Connecting / Disconnecting Scenes
 
@@ -87,6 +89,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Resume previously stopped downloads for, and on, THIS scene only.
         if let uuid = sceneCoordinator?.windowUUID {
             downloadQueue.resumeAll(for: uuid)
+            AppEventQueue.wait(for: .tabRestoration(uuid)) {
+                self.tabErrorTelemetryHelper.validateTabCountForForegroundedScene(uuid)
+            }
         }
     }
 
@@ -101,6 +106,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         logger.log("SceneDelegate: scene did enter background. UUID: \(logUUID)", level: .info, category: .lifecycle)
         if let uuid = sceneCoordinator?.windowUUID {
             downloadQueue.pauseAll(for: uuid)
+            tabErrorTelemetryHelper.recordTabCountForBackgroundedScene(uuid)
         }
     }
 

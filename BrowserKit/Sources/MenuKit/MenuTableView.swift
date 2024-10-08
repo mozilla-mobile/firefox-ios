@@ -13,9 +13,15 @@ public protocol MenuTableViewDataDelegate: AnyObject {
 class MenuTableView: UIView,
                      UITableViewDelegate,
                      UITableViewDataSource, ThemeApplicable {
+    struct UX {
+        static let topPadding: CGFloat = 10
+    }
+
     private var tableView: UITableView
     private var menuData: [MenuSection]
     private var theme: Theme?
+
+    public var updateHeaderLineView: ((_ scrollViewOffset: CGFloat) -> Void)?
 
     override init(frame: CGRect) {
         tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -54,9 +60,16 @@ class MenuTableView: UIView,
         )
     }
 
-    // MARK: - UITableViewDataSource
+    // MARK: - UITableView Methods
     func numberOfSections(in tableView: UITableView) -> Int {
         return menuData.count
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        heightForHeaderInSection section: Int
+    ) -> CGFloat {
+        return section == 0 ? UX.topPadding : UITableView.automaticDimension
     }
 
     func tableView(
@@ -80,7 +93,6 @@ class MenuTableView: UIView,
         return cell
     }
 
-    // MARK: - UITableViewDelegate Methods
     func tableView(
         _ tableView: UITableView,
         didSelectRowAt indexPath: IndexPath
@@ -92,9 +104,25 @@ class MenuTableView: UIView,
         }
     }
 
+    func tableView(
+        _ tableView: UITableView,
+        viewForHeaderInSection section: Int
+    ) -> UIView? {
+        if section == 0 {
+            let headerView = UIView()
+            headerView.backgroundColor = .clear
+            return headerView
+        }
+        return nil
+    }
+
     func reloadTableView(with data: [MenuSection]) {
         menuData = data
         tableView.reloadData()
+    }
+
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        updateHeaderLineView?(scrollView.contentOffset.y)
     }
 
     // MARK: - Theme Applicable

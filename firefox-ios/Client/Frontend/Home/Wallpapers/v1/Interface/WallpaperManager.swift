@@ -109,7 +109,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
         } catch {
             logger.log("Failed to set wallpaper: \(error.localizedDescription)",
                        level: .warning,
-                       category: .homepage)
+                       category: .legacyHomepage)
             completion(.failure(WallpaperManagerError.other(error)))
         }
     }
@@ -148,7 +148,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
             } catch {
                 logger.log("Error fetching wallpaper resources: \(error.localizedDescription)",
                            level: .warning,
-                           category: .homepage)
+                           category: .legacyHomepage)
                 completion(.failure(WallpaperManagerError.downloadFailed(error)))
             }
         }
@@ -237,7 +237,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
         } catch {
             logger.log("Error getting stored metadata: \(error.localizedDescription)",
                        level: .warning,
-                       category: .homepage)
+                       category: .legacyHomepage)
             return nil
         }
     }

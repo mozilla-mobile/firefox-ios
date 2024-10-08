@@ -15,11 +15,18 @@ final class MainMenuMiddleware {
     }
 
     lazy var mainMenuProvider: Middleware<AppState> = { state, action in
+        guard let action = action as? MainMenuAction else { return }
+
         switch action.actionType {
-        case MainMenuActionType.mainMenuDidAppear:
-            self.telemetry.mainMenuViewed()
         case MainMenuActionType.closeMenu:
             self.telemetry.mainMenuDismissed()
+        case MainMenuActionType.viewDidLoad:
+            store.dispatch(
+                MainMenuAction(
+                    windowUUID: action.windowUUID,
+                    actionType: MainMenuMiddlewareActionType.requestTabInfo
+                )
+            )
         default:
             break
         }
