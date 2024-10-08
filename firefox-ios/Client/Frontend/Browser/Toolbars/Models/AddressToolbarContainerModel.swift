@@ -28,8 +28,8 @@ class AddressToolbarContainerModel: Equatable {
     let windowUUID: UUID
 
     var addressToolbarState: AddressToolbarState {
-        let term = searchTerm ?? searchTermFromURL(url, searchEngines: searchEngines
-        )
+        let term = searchTerm ?? searchTermFromURL(url, searchEngines: searchEngines)
+
         var droppableUrl: URL?
         if let url, !InternalURL.isValid(url: url) {
             droppableUrl = url
