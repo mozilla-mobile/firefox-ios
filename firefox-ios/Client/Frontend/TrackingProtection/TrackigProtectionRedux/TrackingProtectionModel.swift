@@ -5,6 +5,7 @@
 import Common
 import Shared
 import Storage
+import Redux
 
 import Security
 import CryptoKit
@@ -14,13 +15,13 @@ import SwiftASN1
 class TrackingProtectionModel {
     // MARK: - Constants
     let contentBlockerStatus: BlockerStatus
-    let contentBlockerStats: TPPageStats?
+    var contentBlockerStats: TPPageStats?
     var certificates = [Certificate]()
     let url: URL
     let displayTitle: String
     let connectionSecure: Bool
     let globalETPIsEnabled: Bool
-    private var selectedTab: Tab?
+    var selectedTab: Tab?
 
     let clearCookiesButtonTitle: String = .Menu.EnhancedTrackingProtection.clearDataButtonTitle
     let clearCookiesButtonA11yId: String = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.clearCookiesButton

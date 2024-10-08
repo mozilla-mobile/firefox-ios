@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import WebKit
+import Redux
 
 extension TabContentBlocker {
     func clearPageStats() {
@@ -38,6 +39,12 @@ extension TabContentBlocker {
                     guard let listItem = listItem else { return }
 
                     self.stats = self.stats.create(matchingBlocklist: listItem, host: url.host ?? "")
+
+                    guard let windowUUID = self.tab?.currentWebView()?.currentWindowUUID else { return }
+                    store.dispatch(
+                        TrackingProtectionAction(windowUUID: windowUUID,
+                                                 actionType: TrackingProtectionActionType.updateBlockedTrackerStats)
+                    )
                 }
             }
         }

@@ -18,6 +18,7 @@ enum TrackingProtectionActionType: ActionType {
     case tappedShowBlockedTrackers
     case tappedShowClearCookiesAlert
     case resetReduxStore
+    case updateBlockedTrackerStats
 }
 
 final class TrackingProtectionMiddlewareAction: Action { }
