@@ -301,29 +301,6 @@ class TrackingProtectionViewController: UIViewController,
         baseView.addSubview(trackersConnectionContainer)
         baseView.addSubview(connectionHorizontalLine)
         trackersConnectionContainer.addArrangedSubview(trackersView)
-        let blockedTrackersConstraints = [
-            trackersView.leadingAnchor.constraint(
-                equalTo: view.leadingAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
-            ),
-            trackersView.trailingAnchor.constraint(
-                equalTo: view.trailingAnchor,
-                constant: -TPMenuUX.UX.horizontalMargin
-            ),
-            trackersView.topAnchor.constraint(equalTo: connectionDetailsHeaderView.bottomAnchor),
-        ]
-        constraints.append(contentsOf: blockedTrackersConstraints)
-        trackersView.trackersButtonCallback = { [weak self] in
-            guard let self else { return }
-            store.dispatch(
-                TrackingProtectionAction(windowUUID: windowUUID,
-                                         actionType: TrackingProtectionActionType.tappedShowBlockedTrackers)
-            )
-        }
-    }
-
-    // MARK: Connection Status Setup
-    private func setupConnectionStatusView() {
         trackersConnectionContainer.addArrangedSubview(connectionStatusView)
         let trackersConnectionConstraints = [
             trackersView.trailingAnchor.constraint(equalTo: trackersConnectionContainer.trailingAnchor),
@@ -343,7 +320,13 @@ class TrackingProtectionViewController: UIViewController,
             connectionHorizontalLine.heightAnchor.constraint(equalToConstant: TPMenuUX.UX.Line.height),
         ]
         constraints.append(contentsOf: trackersConnectionConstraints)
-        trackersView.trackersButtonCallback = {}
+        trackersView.trackersButtonCallback = { [weak self] in
+            guard let self else { return }
+            store.dispatch(
+                TrackingProtectionAction(windowUUID: windowUUID,
+                                         actionType: TrackingProtectionActionType.tappedShowBlockedTrackers)
+            )
+        }
         connectionStatusView.connectionStatusButtonCallback = { [weak self] in
             guard let self, model.connectionSecure else { return }
             store.dispatch(
@@ -545,7 +528,7 @@ class TrackingProtectionViewController: UIViewController,
 
     private func showBlockedTrackersController() {
         blockedTrackersVC = BlockedTrackersTableViewController(with: model.getBlockedTrackersModel(),
-                                                                   windowUUID: windowUUID)
+                                                               windowUUID: windowUUID)
         self.navigationController?.pushViewController(blockedTrackersVC ?? UIViewController(), animated: true)
     }
 

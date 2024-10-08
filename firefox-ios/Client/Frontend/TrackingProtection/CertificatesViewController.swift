@@ -254,6 +254,7 @@ class CertificatesViewController: UIViewController,
     }
 
     private func adjustLayout() {
+        headerView.adjustLayout()
         view.setNeedsLayout()
         view.layoutIfNeeded()
     }
