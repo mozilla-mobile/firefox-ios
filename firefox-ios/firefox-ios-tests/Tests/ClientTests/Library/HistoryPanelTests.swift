@@ -9,15 +9,18 @@ import Common
 
 class HistoryPanelTests: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
+    private var notificationCenter: MockNotificationCenter!
     override func setUp() {
         super.setUp()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         DependencyHelperMock().bootstrapDependencies()
+        notificationCenter = MockNotificationCenter()
     }
 
     override func tearDown() {
         super.tearDown()
         DependencyHelperMock().reset()
+        notificationCenter = nil
     }
 
     func testHistoryButtons() {
@@ -86,6 +89,14 @@ class HistoryPanelTests: XCTestCase {
 
         panel.updatePanelState(newState: .history(state: .inFolder))
         XCTAssertTrue(panel.shouldDismissOnDone())
+    }
+
+    func testHistoryPanel_ShouldReceiveClosedTabNotification() {
+        let panel = createSubject()
+        panel.loadView()
+        notificationCenter.post(name: .OpenRecentlyClosedTabs)
+
+        XCTAssertEqual(notificationCenter.postCallCount, 1)
     }
 
     private func createSubject() -> HistoryPanel {

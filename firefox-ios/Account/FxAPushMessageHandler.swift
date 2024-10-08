@@ -5,6 +5,7 @@
 import Shared
 import Account
 import Common
+import enum MozillaAppServices.IncomingDeviceCommand
 
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 
@@ -57,9 +58,11 @@ extension FxAPushMessageHandler {
                         case .tabReceived(_, let tabData):
                             let title = tabData.entries.last?.title ?? ""
                             let url = tabData.entries.last?.url ?? ""
-                            completion(.success(PushMessage.commandReceived(tab: ["title": title, "url": url])))
-                        default:
-                            break
+                            let command = CommandReceived.tabReceived(tab: ["title": title, "url": url])
+                            completion(.success(PushMessage.commandReceived(command: command)))
+                        case .tabsClosed(_, let payload):
+                            let command = CommandReceived.tabsClosed(urls: payload.urls)
+                            completion(.success(PushMessage.commandReceived(command: command)))
                         }
                     case .deviceConnected(let deviceName):
                         completion(.success(PushMessage.deviceConnected(deviceName)))
@@ -92,7 +95,7 @@ enum PushMessageType: String {
 }
 
 enum PushMessage: Equatable {
-    case commandReceived(tab: [String: String])
+    case commandReceived(command: CommandReceived)
     case deviceConnected(String)
     case deviceDisconnected
     case profileUpdated
@@ -157,4 +160,9 @@ enum PushMessageError: MaybeErrorType {
         case .subscriptionOutOfDate: return "subscriptionOutOfDate"
         }
     }
+}
+
+enum CommandReceived: Equatable {
+    case tabReceived(tab: [String: String])
+    case tabsClosed(urls: [String])
 }
