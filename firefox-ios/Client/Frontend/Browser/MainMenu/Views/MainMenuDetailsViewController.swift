@@ -2,18 +2,22 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
-import MenuKit
 import Common
+import MenuKit
+import Redux
 import UIKit
 import ComponentLibrary
 
-class MainMenuDetailViewController: UIViewController,
+class MainMenuDetailsViewController: UIViewController,
                                     MenuTableViewDataDelegate,
-                                    Notifiable {
+                                    Notifiable,
+                                    StoreSubscriber {
+    typealias StoreSubscriberType = MainMenuDetailsState
+
     // MARK: - UI/UX elements
     private lazy var submenuContent: MenuDetailView = .build()
 
+    // MARK: - Properties
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -21,27 +25,24 @@ class MainMenuDetailViewController: UIViewController,
 
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
-
-    var submenuData: [MenuSection]
-    var submenuTitle: String
+    var submenuState: MainMenuDetailsState
 
     // MARK: - Initializers
     init(
         windowUUID: WindowUUID,
-        with data: [MenuSection],
-        title: String,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
-        themeManager: ThemeManager = AppContainer.shared.resolve()
+        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        logger: Logger = DefaultLogger.shared
     ) {
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
-        self.submenuData = data
-        self.submenuTitle = title
+        self.submenuState = MainMenuDetailsState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
 
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
+        subscribeToRedux()
     }
 
     required init?(coder: NSCoder) {
@@ -53,14 +54,7 @@ class MainMenuDetailViewController: UIViewController,
         super.viewDidLoad()
 
         setupView()
-        setupTableView()
-        submenuContent.setViews(with: submenuTitle, and: .KeyboardShortcuts.Back)
-        submenuContent.detailHeaderView.backToMainMenuCallback = { [weak self] in
-            self?.coordinator?.dismissDetailViewController()
-        }
-        submenuContent.detailHeaderView.dismissMenuCallback = { [weak self] in
-            self?.coordinator?.dismissMenuModal(animated: true)
-        }
+        setupCallbacks()
         setupAccessibilityIdentifiers()
     }
 
@@ -69,13 +63,8 @@ class MainMenuDetailViewController: UIViewController,
         applyTheme()
     }
 
-    // MARK: Notifications
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .DynamicFontChanged:
-            adjustLayout()
-        default: break
-        }
+    deinit {
+        unsubscribeFromRedux()
     }
 
     // MARK: View Transitions
@@ -121,12 +110,87 @@ class MainMenuDetailViewController: UIViewController,
         submenuContent.detailHeaderView.adjustLayout()
     }
 
-    private func setupTableView() {
-        reloadTableView(with: submenuData)
+    private func setupCallbacks() {
+        submenuContent.detailHeaderView.backToMainMenuCallback = { [weak self] in
+            guard let self else { return }
+            store.dispatch(
+                MainMenuAction(
+                    windowUUID: self.windowUUID,
+                    actionType: MainMenuDetailsActionType.backToMainMenu
+                )
+            )
+        }
+        submenuContent.detailHeaderView.dismissMenuCallback = { [weak self] in
+            guard let self else { return }
+            store.dispatch(
+                MainMenuAction(
+                    windowUUID: self.windowUUID,
+                    actionType: MainMenuDetailsActionType.dismissView
+                )
+            )
+        }
+    }
+
+    private func refreshContent() {
+        submenuContent.setViews(with: submenuState.title, and: .KeyboardShortcuts.Back)
+        reloadTableView(with: submenuState.menuElements)
+    }
+
+    // MARK: - Redux
+    func subscribeToRedux() {
+        store.dispatch(
+            ScreenAction(
+                windowUUID: windowUUID,
+                actionType: ScreenActionType.showScreen,
+                screen: .mainMenuDetails
+            )
+        )
+
+        let uuid = windowUUID
+        store.subscribe(self, transform: {
+            return $0.select({ appState in
+                return MainMenuDetailsState(appState: appState, uuid: uuid)
+            })
+        })
+    }
+
+    func unsubscribeFromRedux() {
+        store.dispatch(
+            ScreenAction(
+                windowUUID: windowUUID,
+                actionType: ScreenActionType.closeScreen,
+                screen: .mainMenuDetails
+            )
+        )
+    }
+
+    func newState(state: MainMenuDetailsState) {
+        submenuState = state
+
+        if submenuState.shouldGoBackToMainMenu {
+            coordinator?.dismissDetailViewController()
+            return
+        }
+
+        if submenuState.shouldDismiss {
+            coordinator?.dismissMenuModal(animated: true)
+            return
+        }
+
+        refreshContent()
     }
 
     // MARK: - TableViewDelegates
     func reloadTableView(with data: [MenuSection]) {
         submenuContent.reloadTableView(with: data)
+    }
+
+    // MARK: Notifications
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case .DynamicFontChanged:
+            adjustLayout()
+        default: break
+        }
     }
 }

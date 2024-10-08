@@ -18,7 +18,7 @@ class CreditCardBottomSheetViewController: UIViewController,
     struct UX {
         static let containerPadding: CGFloat = 18.0
         static let tableMargin: CGFloat = 0
-        static let distanceBetweenHeaderAndTop: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 0 : -10
+        static let distanceBetweenHeaderAndTop: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 8 : 18
         static let distanceBetweenButtonAndTable: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 18 : 34
         static let distanceBetweenHeaderAndCells: CGFloat = 24
         static let yesButtonCornerRadius: CGFloat = 13
@@ -68,6 +68,7 @@ class CreditCardBottomSheetViewController: UIViewController,
         cardTableView.isScrollEnabled = false
         cardTableView.showsVerticalScrollIndicator = false
         cardTableView.rowHeight = UITableView.automaticDimension
+        cardTableView.sectionHeaderTopPadding = 0
         cardTableView.estimatedRowHeight = UX.estimatedRowHeight
         cardTableView.estimatedSectionFooterHeight = UX.distanceBetweenButtonAndTable
         cardTableView.estimatedSectionHeaderHeight = UX.headerPreferredHeight
@@ -218,7 +219,8 @@ class CreditCardBottomSheetViewController: UIViewController,
 
     func updateConstraints() {
         let buttonsHeight = buttonsContainerStackView.frame.height
-        let estimatedContentHeight = cardTableView.contentSize.height + buttonsHeight + UX.bottomSpacing
+        let estimatedContentHeight = cardTableView.contentSize.height +
+        buttonsHeight + UX.bottomSpacing + UX.distanceBetweenHeaderAndTop
         let aspectRatio = estimatedContentHeight / contentView.bounds.size.height
         contentViewHeightConstraint.constant = contentViewHeightConstraint.constant * aspectRatio
 

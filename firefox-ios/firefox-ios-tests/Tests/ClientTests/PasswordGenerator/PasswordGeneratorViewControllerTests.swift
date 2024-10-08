@@ -2,14 +2,12 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Foundation
-import Common
-import MenuKit
 import XCTest
+import Common
 
 @testable import Client
 
-final class MainMenuDetailsViewControllerTests: XCTestCase {
+final class PasswordGeneratorViewControllerTests: XCTestCase {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
@@ -22,8 +20,10 @@ final class MainMenuDetailsViewControllerTests: XCTestCase {
         super.tearDown()
     }
 
-    func testMainMenuDetailsViewController_simpleCreation_hasNoLeaks() {
-        let controller = MainMenuDetailsViewController(windowUUID: windowUUID)
-        trackForMemoryLeaks(controller)
+    func testPasswordGeneratorViewController_simpleCreation_hasNoLeaks() {
+        let mockProfile = MockProfile()
+        let currentTab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        let passwordGeneratorViewController = PasswordGeneratorViewController(windowUUID: windowUUID, currentTab: currentTab)
+        trackForMemoryLeaks(passwordGeneratorViewController)
     }
 }

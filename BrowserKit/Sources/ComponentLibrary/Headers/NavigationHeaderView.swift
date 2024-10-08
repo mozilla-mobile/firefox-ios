@@ -117,6 +117,14 @@ public final class NavigationHeaderView: UIView {
         updateLayout(isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory)
     }
 
+    public func updateHeaderLineView(isHidden: Bool) {
+        if (isHidden && !horizontalLine.isHidden) || (!isHidden && horizontalLine.isHidden) {
+            UIView.animate(withDuration: 0.3) { [weak self] in
+                self?.horizontalLine.isHidden = isHidden
+            }
+        }
+    }
+
     @objc
     private func backButtonTapped() {
         backToMainMenuCallback?()

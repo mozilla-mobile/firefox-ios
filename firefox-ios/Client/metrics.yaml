@@ -5704,6 +5704,17 @@ app_errors:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: never
+  tab_loss_detected:
+    type: event
+    description: |
+      Recorded when we detect potential tab loss
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/22180
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22221
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: never
 
 webview:
   did_fail_provisional:

@@ -265,7 +265,7 @@ private extension WallpaperSettingsViewController {
                 case .failure(let error):
                     self?.logger.log("Could not download and set wallpaper: \(error.localizedDescription)",
                                      level: .warning,
-                                     category: .homepage)
+                                     category: .legacyHomepage)
                     self?.showError(error) { _ in
                         self?.downloadAndSetWallpaper(at: indexPath)
                     }

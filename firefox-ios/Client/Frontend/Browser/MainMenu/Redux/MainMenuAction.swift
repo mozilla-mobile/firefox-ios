@@ -8,55 +8,38 @@ import MenuKit
 import Redux
 
 final class MainMenuAction: Action {
-    var navigationDestination: MainMenuNavigationDestination?
+    var navigationDestination: MenuNavigationDestination?
+    var currentTabInfo: MainMenuTabInfo?
+    var detailsViewToShow: MainMenuDetailsViewType?
 
     init(
         windowUUID: WindowUUID,
         actionType: any ActionType,
-        navigationDestination: MainMenuNavigationDestination? = nil
+        navigationDestination: MenuNavigationDestination? = nil,
+        changeMenuViewTo: MainMenuDetailsViewType? = nil,
+        currentTabInfo: MainMenuTabInfo? = nil
     ) {
         self.navigationDestination = navigationDestination
+        self.detailsViewToShow = changeMenuViewTo
+        self.currentTabInfo = currentTabInfo
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 
 enum MainMenuActionType: ActionType {
-    case viewDidLoad
-    case updateCurrentTabInfo(MainMenuTabInfo?)
-    case mainMenuDidAppear
-    case toggleNightMode
     case closeMenu
-    case show
+    case showDetailsView
+    case closeMenuAndNavigateToDestination
     case toggleUserAgent
+    case updateCurrentTabInfo
+    case viewDidLoad
 }
 
-enum MainMenuNavigationDestination: Equatable {
-    case bookmarks
-    case customizeHomepage
-    case detailsView(with: [MenuSection], title: String)
-    case downloads
-    case findInPage
-    case goToURL(URL?)
-    case history
-    case newTab
-    case newPrivateTab
-    case passwords
-    case settings
+enum MainMenuMiddlewareActionType: ActionType {
+    case requestTabInfo
+}
 
-    /// This must manually be done, because we can't conform to `CaseIterable`
-    /// when we have enums with associated types
-    static var allCases: [MainMenuNavigationDestination] {
-        return [
-            .newTab,
-            .newPrivateTab,
-            .bookmarks,
-            .customizeHomepage,
-            .downloads,
-            .findInPage,
-            .goToURL(nil),
-            .history,
-            .passwords,
-            .settings,
-        ]
-    }
+enum MainMenuDetailsActionType: ActionType {
+    case dismissView
+    case backToMainMenu
 }

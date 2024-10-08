@@ -68,6 +68,18 @@ final class BrowserViewControllerStateTests: XCTestCase {
         XCTAssertEqual(newState.browserViewType, .nativeErrorPage)
     }
 
+    func testShowPasswordGeneratorAction() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.displayView)
+
+        let action = getAction(for: .showPasswordGenerator)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.displayView, .passwordGenerator)
+    }
+
     // MARK: - Private
     private func createSubject() -> BrowserViewControllerState {
         return BrowserViewControllerState(windowUUID: .XCTestDefaultUUID)
