@@ -16,4 +16,5 @@ public protocol AddressToolbarDelegate: AnyObject {
                                  for button: UIButton,
                                  with contextualHintType: String)
     func addressToolbarDidBeginDragInteraction()
+    func addressToolbarDidProvideItemsForDragInteraction()
 }

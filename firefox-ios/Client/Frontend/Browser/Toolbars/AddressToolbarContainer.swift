@@ -324,6 +324,14 @@ final class AddressToolbarContainer: UIView,
         delegate?.configureContextualHint(for: button, with: contextualHintType)
     }
 
+    func addressToolbarDidProvideItemsForDragInteraction() {
+        guard let windowUUID else { return }
+
+        let action = ToolbarMiddlewareAction(windowUUID: windowUUID,
+                                             actionType: ToolbarMiddlewareActionType.didStartDragInteraction)
+        store.dispatch(action)
+    }
+
     func addressToolbarDidBeginDragInteraction() {
         delegate?.addressToolbarDidBeginDragInteraction()
     }

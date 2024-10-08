@@ -355,6 +355,8 @@ public class BrowserAddressToolbar: UIView,
                                 itemsForBeginning session: UIDragSession) -> [UIDragItem] {
         guard let url = droppableUrl, let itemProvider = NSItemProvider(contentsOf: url) else { return [] }
 
+        toolbarDelegate?.addressToolbarDidProvideItemsForDragInteraction()
+
         let dragItem = UIDragItem(itemProvider: itemProvider)
         return [dragItem]
     }
