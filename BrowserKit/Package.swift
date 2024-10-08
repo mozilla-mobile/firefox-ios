@@ -77,8 +77,6 @@ let package = Package(
         .target(name: "Objc"),
         .target(name: "Storage",
                 dependencies: ["Common", "WebEngine", "Objc", "Shared"]),
-        .plugin(name: "GenerateMetricsStorage",
-                capability: .buildTool()),
         .target(name: "Sync", dependencies: ["Common", "Shared"]),
         .target(name: "Shared",
                 dependencies: ["Common", "WebEngine"],

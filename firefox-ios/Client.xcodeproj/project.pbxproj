@@ -2224,7 +2224,6 @@
 		2816EFFF1B33E05400522243 /* UIConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
 		281B02991C037C1F005202C3 /* TestBrowserDB.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestBrowserDB.swift; sourceTree = "<group>"; };
 		281B2BE91ADF4D90002917DC /* MockProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = MockProfile.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		282731611ABC9BE600AA1954 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		282731681ABC9BE700AA1954 /* SyncTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SyncTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		282731701ABC9BE700AA1954 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		28364DEE903FF42ED740A978 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/LoginManager.strings; sourceTree = "<group>"; };
@@ -5745,7 +5744,6 @@
 		459C47419B3E2BD1BF4393F2 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		45AD4685A96876B6D2682E0F /* eu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eu; path = eu.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		45CB4750BCEF0741D15058B0 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Storage.strings; sourceTree = "<group>"; };
-		45CC573E28AD8B9A006D55AA /* Metrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metrics.swift; sourceTree = "<group>"; };
 		45D5EDA629269F7500311934 /* DataObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataObserver.swift; sourceTree = "<group>"; };
 		45D5EDBF292D619000311934 /* MockablePinnedSites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockablePinnedSites.swift; sourceTree = "<group>"; };
 		45D5EDC1292D636000311934 /* nimbus.fml.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = nimbus.fml.yaml; sourceTree = "<group>"; };
@@ -9142,14 +9140,6 @@
 			path = LibraryViewController;
 			sourceTree = "<group>";
 		};
-		282731601ABC9BE600AA1954 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				282731611ABC9BE600AA1954 /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		2827316F1ABC9BE700AA1954 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -9184,14 +9174,6 @@
 				2827316F1ABC9BE700AA1954 /* Supporting Files */,
 			);
 			path = SyncTests;
-			sourceTree = "<group>";
-		};
-		28CE83B91A1D1D3200576538 /* Sync */ = {
-			isa = PBXGroup;
-			children = (
-				282731601ABC9BE600AA1954 /* Supporting Files */,
-			);
-			path = Sync;
 			sourceTree = "<group>";
 		};
 		28CE83EF1A1D246900576538 /* Third-Party Source */ = {
@@ -9301,14 +9283,6 @@
 				2FA4360D1ABB83B4008031D1 /* Info.plist */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		2FCAE21B1ABB51F800877008 /* Storage */ = {
-			isa = PBXGroup;
-			children = (
-				45CC573D28AD8B64006D55AA /* Generated */,
-			);
-			path = Storage;
 			sourceTree = "<group>";
 		};
 		2FCAE22A1ABB51F800877008 /* StorageTests */ = {
@@ -9631,14 +9605,6 @@
 				E174963F2994302D0096900A /* PreferredFont.swift */,
 			);
 			path = ViewComponents;
-			sourceTree = "<group>";
-		};
-		45CC573D28AD8B64006D55AA /* Generated */ = {
-			isa = PBXGroup;
-			children = (
-				45CC573E28AD8B9A006D55AA /* Metrics.swift */,
-			);
-			path = Generated;
 			sourceTree = "<group>";
 		};
 		5A271ABB2860B0BD00471CE4 /* WebServer */ = {
@@ -12243,13 +12209,6 @@
 			path = Entitlements;
 			sourceTree = "<group>";
 		};
-		E4E0BB141AFBC9E4008D6260 /* Shared */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Shared;
-			sourceTree = "<group>";
-		};
 		E60961841B62B7E100DD640F /* Configuration */ = {
 			isa = PBXGroup;
 			children = (
@@ -12493,11 +12452,8 @@
 				F84B21BF1A090F8100AAB793 /* Products */,
 				D34DC84C1A16C40C00D49B7B /* Providers */,
 				C8E2E80623D20FB3005AACE6 /* RustFxA */,
-				E4E0BB141AFBC9E4008D6260 /* Shared */,
 				7B3632E71C29879300D12AF9 /* Snapshot */,
 				962C6C3B297054EC00354BE8 /* Sources */,
-				2FCAE21B1ABB51F800877008 /* Storage */,
-				28CE83B91A1D1D3200576538 /* Sync */,
 				28CE83EF1A1D246900576538 /* Third-Party Source */,
 				047F9B2A24E1FE1C00CD7DF7 /* WidgetKit */,
 				43BE578B278BA4D900491291 /* RustMozillaAppServices-Info.plist */,
