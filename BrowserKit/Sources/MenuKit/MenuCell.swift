@@ -10,6 +10,7 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let contentMargin: CGFloat = 10
         static let iconSize: CGFloat = 24
+        static let largeIconSize: CGFloat = 48
         static let iconMargin: CGFloat = 25
         static let contentSpacing: CGFloat = 2
     }
@@ -74,8 +75,6 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
         NSLayoutConstraint.activate([
             icon.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.iconMargin),
             icon.centerYAnchor.constraint(equalTo: centerYAnchor),
-            icon.widthAnchor.constraint(equalToConstant: UX.iconSize),
-            icon.heightAnchor.constraint(equalToConstant: UX.iconSize),
 
             contentStackView.leadingAnchor.constraint(equalTo: icon.trailingAnchor, constant: UX.contentMargin),
             contentStackView.topAnchor.constraint(equalTo: topAnchor, constant: UX.contentMargin),
@@ -88,6 +87,13 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
             accessoryArrowView.widthAnchor.constraint(equalToConstant: UX.iconSize),
             accessoryArrowView.heightAnchor.constraint(equalToConstant: UX.iconSize)
         ])
+        adjustLayout(isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory)
+    }
+
+    private func adjustLayout(isAccessibilityCategory: Bool) {
+        let iconSize = isAccessibilityCategory ? UX.largeIconSize : UX.iconSize
+        icon.widthAnchor.constraint(equalToConstant: iconSize).isActive = true
+        icon.heightAnchor.constraint(equalToConstant: iconSize).isActive = true
     }
 
     func performAction() {
