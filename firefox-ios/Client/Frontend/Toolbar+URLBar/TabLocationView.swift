@@ -67,6 +67,7 @@ class TabLocationView: UIView, FeatureFlaggable {
             hideButtons()
             updateTextWithURL()
             setNeedsUpdateConstraints()
+            showTrackingProtectionButton(for: url)
         }
     }
 
