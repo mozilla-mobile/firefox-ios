@@ -29,6 +29,11 @@ protocol LocationViewDelegate: AnyObject {
     /// - Parameter text: The text for which the location view should search.
     func locationViewDidSubmitText(_ text: String)
 
+    /// Called when the user taps on the search engine within the location view.
+    ///
+    /// - Parameter searchEngine: The search engine view that was tapped.
+    func locationViewDidTapSearchEngine<T: SearchEngineView>(_ searchEngine: T)
+
     /// Called when requesting custom accessibility actions to be performed on the location view.
     ///
     /// - Returns: An optional array of `UIAccessibilityCustomAction` objects.
