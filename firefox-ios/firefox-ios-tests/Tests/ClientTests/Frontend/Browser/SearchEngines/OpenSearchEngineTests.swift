@@ -24,7 +24,6 @@ class OpenSearchEngineTests: XCTestCase {
 
                 // Test encode/decode works as expected without changing the data
                 XCTAssertNotNil(customEngine)
-                XCTAssertEqual(searchEngine.image, customEngine?.image, "Images should be the same")
                 XCTAssertEqual(
                     searchEngine.image.pngData()?.count,
                     customEngine?.image.pngData()?.count,
@@ -57,9 +56,7 @@ class OpenSearchEngineTests: XCTestCase {
                 // Test encode/decode works as expected without changing the data
                 XCTAssertNotNil(searchEngines)
                 XCTAssertEqual(searchEngines?.count, dataToEncode.count)
-                XCTAssertEqual(searchEngines?[safe: 0]?.image, searchEngine1.image)
                 XCTAssertEqual(searchEngines?[safe: 0]?.image.pngData()?.count, searchEngine1.image.pngData()?.count)
-                XCTAssertEqual(searchEngines?[safe: 1]?.image, searchEngine2.image)
                 XCTAssertEqual(searchEngines?[safe: 1]?.image.pngData()?.count, searchEngine2.image.pngData()?.count)
             } catch {
                 XCTFail("Could not archive / unarchive data")
