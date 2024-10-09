@@ -1845,6 +1845,10 @@ class BrowserViewController: UIViewController,
                 navigationToolbar.updateForwardStatus(canGoForward)
             }
         case .hasOnlySecureContent:
+            guard let selectedTabURL = tabManager.selectedTab?.url,
+                  let webViewURL = webView.url,
+                  selectedTabURL == webViewURL else { return }
+
             if !isToolbarRefactorEnabled {
                 urlBar.locationView.hasSecureContent = webView.hasOnlySecureContent
                 urlBar.locationView.showTrackingProtectionButton(for: webView.url)
@@ -2582,6 +2586,9 @@ class BrowserViewController: UIViewController,
             if isSelectedTab && !isToolbarRefactorEnabled {
                 // Refresh secure content state after completed navigation
                 urlBar.locationView.hasSecureContent = webView.hasOnlySecureContent
+                if let url = webView.url {
+                    urlBar.locationView.showTrackingProtectionButton(for: url)
+                }
             }
 
             if !isSelectedTab, let webView = tab.webView, tab.screenshot == nil {
@@ -3721,6 +3728,18 @@ extension BrowserViewController: TabManagerDelegate {
                 // The webView can go gray if it was zombified due to memory pressure.
                 // When this happens, the URL is nil, so try restoring the page upon selection.
                 selectedTab.reload()
+                // If the webView is loading, we hide the lock
+                // icon and wait for did finish to get the lasted secure content status
+            } else if webView.isLoading {
+                if !isToolbarRefactorEnabled {
+                    self.urlBar.locationView.hideTrackingProtectionButton()
+                }
+                // If not, we show the lock icon with the secure content status of the webView
+            } else {
+                if !isToolbarRefactorEnabled {
+                    self.urlBar.locationView.hasSecureContent = webView.hasOnlySecureContent
+                    self.urlBar.locationView.showTrackingProtectionButton(for: webView.url)
+                }
             }
         }
 
