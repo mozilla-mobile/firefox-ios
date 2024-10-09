@@ -318,9 +318,15 @@ final class AddressToolbarContainer: UIView,
               let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
         else { return }
 
-        if contextualHintType == ContextualHintType.navigation.rawValue && !toolbarState.canShowNavigationHint { return }
+        guard let contextualHintType = ContextualHintType(rawValue: contextualHintType) else { return }
 
-        delegate?.configureContextualHint(for: button, with: contextualHintType)
+        switch contextualHintType {
+        case .navigation where toolbarState.canShowNavigationHint:
+            delegate?.configureContextualHint(for: button, with: contextualHintType.rawValue)
+        case .menuRedesign where toolbarState.canShowMenuHint:
+            delegate?.configureContextualHint(for: button, with: contextualHintType.rawValue)
+        default: break
+        }
     }
 
     // MARK: - MenuHelperURLBarInterface

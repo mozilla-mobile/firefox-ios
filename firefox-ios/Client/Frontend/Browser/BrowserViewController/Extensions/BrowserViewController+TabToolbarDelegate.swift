@@ -91,10 +91,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func configureMenuContextualHint(_ view: UIView) {
-        guard isNewMenuEnabled, isNewMenuHintEnabled else { return }
+        guard isToolbarRefactorEnabled /*isNewMenuEnabled, isNewMenuHintEnabled*/ else { return }
         menuContextHintVC.configure(
             anchor: view,
-            withArrowDirection: .down,
+            withArrowDirection: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection) ? .down : .up,
             andDelegate: self,
             presentedUsing: { [weak self] in self?.presentMenuContextualHint() },
             overlayState: overlayManager,

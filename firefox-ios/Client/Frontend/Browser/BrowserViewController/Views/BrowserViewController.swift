@@ -2596,7 +2596,14 @@ class BrowserViewController: UIViewController,
                 urlBar.locationView.hasSecureContent = webView.hasOnlySecureContent
             }
 
-            configureMenuContextualHint(toolbar.appMenuButton)
+            if let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
+               !toolbarState.canShowMenuHint {
+                if isToolbarRefactorEnabled/*, isNewMenuEnabled, isNewMenuHintEnabled*/ {
+                    let action = ToolbarAction(windowUUID: self.windowUUID,
+                                               actionType: ToolbarActionType.showMenuHint)
+                    store.dispatch(action)
+                }
+            }
 
             if !isSelectedTab, let webView = tab.webView, tab.screenshot == nil {
                 // To Screenshot a tab that is hidden we must add the webView,
@@ -3153,6 +3160,8 @@ class BrowserViewController: UIViewController,
             configureDataClearanceContextualHint(button)
         case ContextualHintType.navigation.rawValue:
             configureNavigationContextualHint(button)
+        case ContextualHintType.menuRedesign.rawValue:
+            configureMenuContextualHint(button)
         default:
             return
         }
