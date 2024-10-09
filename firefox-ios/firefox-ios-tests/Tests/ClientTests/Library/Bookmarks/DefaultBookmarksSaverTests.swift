@@ -41,13 +41,13 @@ final class DefaultBookmarksSaverTests: XCTestCase {
         let subject = createSubject()
 
         let result = try await unwrapAsync {
-            return try await subject.save(bookmark: bookmark, parentFolderGUID: rootFolderGUID).get()
+            return await subject.save(bookmark: bookmark, parentFolderGUID: rootFolderGUID)
         }
         let addedNode = try await unwrapAsync {
             return await readNode(url: bookmark.url) as? BookmarkItemData
         }
 
-        XCTAssertTrue(result)
+        XCTAssertNotNil(try? result.get())
         XCTAssertEqual(addedNode.title, bookmark.title)
         XCTAssertEqual(addedNode.url, bookmark.url)
         XCTAssertEqual(addedNode.parentGUID, rootFolderGUID)
@@ -64,15 +64,15 @@ final class DefaultBookmarksSaverTests: XCTestCase {
         let modifiedBookmark = previouslyAddedBookmark.copy(with: newTitle, url: newUrl)
 
         let result = try await unwrapAsync {
-            return try await subject.save(bookmark: modifiedBookmark,
-                                          parentFolderGUID: modifiedBookmark.parentGUID ?? rootFolderGUID).get()
+            return await subject.save(bookmark: modifiedBookmark,
+                                      parentFolderGUID: modifiedBookmark.parentGUID ?? rootFolderGUID)
         }
 
         let readModfiedBookmark = try await unwrapAsync {
             return await readNode(guid: previouslyAddedBookmark.guid) as? BookmarkItemData
         }
 
-        XCTAssertTrue(result)
+        XCTAssertNotNil(try? result.get())
         XCTAssertEqual(readModfiedBookmark.title, newTitle)
         XCTAssertEqual(readModfiedBookmark.url, newUrl)
     }
@@ -89,7 +89,7 @@ final class DefaultBookmarksSaverTests: XCTestCase {
                                         children: nil)
         let subject = createSubject()
         let result = try await unwrapAsync {
-            return try await subject.save(bookmark: folder, parentFolderGUID: rootFolderGUID).get()
+            return await subject.save(bookmark: folder, parentFolderGUID: rootFolderGUID)
         }
         let addedFolder = try await unwrapAsync {
             let rootFolder = await readNode(guid: rootFolderGUID) as? BookmarkFolderData
@@ -103,7 +103,7 @@ final class DefaultBookmarksSaverTests: XCTestCase {
             return nil
         }
 
-        XCTAssertTrue(result)
+        XCTAssertNotNil(try? result.get())
         XCTAssertEqual(addedFolder.title, folder.title)
         XCTAssertEqual(addedFolder.parentGUID, rootFolderGUID)
     }
@@ -126,15 +126,15 @@ final class DefaultBookmarksSaverTests: XCTestCase {
         let modifiedFolder = previouslyAddedFolder.copy(withTitle: newTitle)
 
         let result = try await unwrapAsync {
-            return try await subject.save(bookmark: modifiedFolder,
-                                          parentFolderGUID: modifiedFolder.parentGUID ?? rootFolderGUID).get()
+            return await subject.save(bookmark: modifiedFolder,
+                                      parentFolderGUID: modifiedFolder.parentGUID ?? rootFolderGUID)
         }
 
         let readModfiedBookmark = try await unwrapAsync {
             return await readNode(guid: modifiedFolder.guid) as? BookmarkFolderData
         }
 
-        XCTAssertTrue(result)
+        XCTAssertNotNil(try? result.get())
         XCTAssertEqual(readModfiedBookmark.title, newTitle)
     }
 

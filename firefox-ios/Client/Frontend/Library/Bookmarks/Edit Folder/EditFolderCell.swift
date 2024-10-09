@@ -13,7 +13,7 @@ class EditFolderCell: UITableViewCell,
         static let textFieldVerticalPadding: CGFloat = 12.0
         static let textFieldHorizontalPadding: CGFloat = 16.0
     }
-    private lazy var titleTextField: DefaultTextField = .build { view in
+    private lazy var titleTextField: TextField = .build { view in
         view.addAction(UIAction(handler: { [weak self] _ in
             self?.titleTextFieldDidChange()
         }), for: .editingChanged)

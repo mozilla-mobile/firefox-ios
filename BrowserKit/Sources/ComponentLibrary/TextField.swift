@@ -6,7 +6,24 @@ import Foundation
 import Common
 import UIKit
 
-public class DefaultTextField: UITextField, ThemeApplicable {
+public struct TextFieldViewModel {
+    public init(formA11yId: String,
+                formA11yLabel: String,
+                clearButtonA11yId: String,
+                clearButtonA11yLabel: String) {
+        self.formA11yId = formA11yId
+        self.formA11yLabel = formA11yLabel
+        self.clearButtonA11yId = clearButtonA11yId
+        self.clearButtonA11yLabel = clearButtonA11yLabel
+    }
+
+    public let formA11yId: String
+    public let formA11yLabel: String
+    public let clearButtonA11yId: String
+    public let clearButtonA11yLabel: String
+}
+
+public class TextField: UITextField, ThemeApplicable {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -34,6 +51,13 @@ public class DefaultTextField: UITextField, ThemeApplicable {
             self?.text = ""
             self?.sendActions(for: .valueChanged)
         }), for: .touchUpInside)
+    }
+
+    public func configure(viewModel: TextFieldViewModel) {
+        accessibilityIdentifier = viewModel.formA11yId
+        accessibilityLabel = viewModel.formA11yLabel
+        clearButton.accessibilityIdentifier = viewModel.clearButtonA11yId
+        clearButton.accessibilityLabel = viewModel.clearButtonA11yLabel
     }
 
     // MARK: - ThemeApplicable

@@ -63,8 +63,6 @@ class EditFolderViewController: UIViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        _ = UIImage(resource: .addToHomescreenLarge)
-        navigationController?.navigationBar.topItem?.title = ""
         title = viewModel.controllerTitle
         viewModel.onFolderStatusUpdate = { [weak self] in
             self?.tableView.reloadSections(IndexSet(integer: Section.parentFolder.rawValue), with: .automatic)
@@ -192,9 +190,9 @@ class EditFolderViewController: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let sectionEnum = Section(rawValue: section), sectionEnum == .parentFolder else { return nil }
-        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: UX.parentFolderHeaderIdentifier)
-        else { return nil }
+        guard let section = Section(rawValue: section),
+              section == .parentFolder,
+              let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: UX.parentFolderHeaderIdentifier) else { return nil }
         var configuration = UIListContentConfiguration.plainHeader()
         configuration.text = .Bookmarks.Menu.EditBookmarkSaveIn.uppercased()
         configuration.textProperties.font = FXFontStyles.Regular.callout.scaledFont()

@@ -27,12 +27,12 @@ class EditBookmarkCell: UITableViewCell,
         view.spacing = 10.0
     }
     private lazy var textFieldsDivder: UIView = .build()
-    private lazy var titleTextfield: DefaultTextField = .build { view in
+    private lazy var titleTextfield: TextField = .build { view in
         view.addAction(UIAction(handler: { [weak self] _ in
             self?.titleTextFieldDidChange()
         }), for: .editingChanged)
     }
-    private lazy var urlTextfield: DefaultTextField = .build { view in
+    private lazy var urlTextfield: TextField = .build { view in
         view.keyboardType = .URL
         view.addAction(UIAction(handler: { [weak self] _ in
             self?.urlTextFieldDidChane()

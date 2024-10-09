@@ -14,6 +14,7 @@ protocol BookmarksSaver {
 struct DefaultBookmarksSaver: BookmarksSaver {
     enum SaveError: Error {
         case bookmarkTypeDontSupportSaving
+        case saveOperationFailed
     }
 
     let profile: Profile
@@ -23,7 +24,6 @@ struct DefaultBookmarksSaver: BookmarksSaver {
             let operation: Success? = {
                 switch bookmark.type {
                 case .bookmark:
-                    // no parent create it
                     guard let bookmark = bookmark as? BookmarkItemData else { return nil }
                     let position: UInt32? = parentFolderGUID == BookmarkRoots.MobileFolderGUID ? 0 : nil
                     if bookmark.parentGUID == nil {
@@ -64,7 +64,7 @@ struct DefaultBookmarksSaver: BookmarksSaver {
                     if let result = result.successValue {
                         continuation.resume(returning: .success(result))
                     } else {
-                        continuation.resume(returning: .failure(SaveError.bookmarkTypeDontSupportSaving))
+                        continuation.resume(returning: .failure(SaveError.saveOperationFailed))
                     }
                 })
             } else {
