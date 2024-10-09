@@ -21,7 +21,6 @@ class BlockedTrackersTableViewController: UIViewController,
     private struct UX {
         static let baseCellHeight: CGFloat = 44
         static let baseDistance: CGFloat = 20
-        static let bottomDistance: CGFloat = 350
         static let headerDistance: CGFloat = 8
     }
 

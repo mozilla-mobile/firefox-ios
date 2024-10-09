@@ -17,7 +17,7 @@ enum TrackingProtectionActionType: ActionType {
     case tappedShowTrackingProtectionDetails
     case tappedShowBlockedTrackers
     case tappedShowClearCookiesAlert
-    case resetReduxStore
+    case goBack
     case updateBlockedTrackerStats
 }
 

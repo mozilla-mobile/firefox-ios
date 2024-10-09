@@ -160,7 +160,6 @@ class TrackingProtectionViewController: UIViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateViewDetails()
-        updateProtectionViewStatus()
         applyTheme()
         getCertificates(for: model.url) { [weak self] certificates in
             if let certificates {
@@ -224,7 +223,7 @@ class TrackingProtectionViewController: UIViewController,
     func resetReduxStoreState() {
         store.dispatch(
             TrackingProtectionAction(windowUUID: windowUUID,
-                                     actionType: TrackingProtectionActionType.resetReduxStore)
+                                     actionType: TrackingProtectionActionType.goBack)
         )
     }
 
@@ -421,8 +420,9 @@ class TrackingProtectionViewController: UIViewController,
         connectionStatusView.setupDetails(image: model.getConnectionStatusImage(themeType: currentTheme().type),
                                           text: model.connectionStatusString)
 
-        toggleView.setupDetails(isOn: model.isSiteETPEnabled)
+        toggleView.setupDetails(isOn: !model.isURLSafelisted())
         model.isProtectionEnabled = toggleView.toggleIsOn
+        updateProtectionViewStatus()
     }
 
     private func updateBlockedTrackersCount() {
@@ -600,6 +600,7 @@ class TrackingProtectionViewController: UIViewController,
                                                  title: model.connectionDetailsTitle,
                                                  status: model.connectionDetailsHeader,
                                                  image: model.connectionDetailsImage)
+        adjustLayout()
     }
 }
 
