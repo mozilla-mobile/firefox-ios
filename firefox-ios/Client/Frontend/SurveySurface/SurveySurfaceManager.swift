@@ -5,6 +5,7 @@
 import Common
 import Foundation
 import Shared
+import Account
 
 protocol SurveySurfaceDelegate: AnyObject {
     func didDisplayMessage()

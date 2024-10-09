@@ -1,0 +1,4 @@
+module Objc {
+    header "../FSUtils.h"
+    export *
+}

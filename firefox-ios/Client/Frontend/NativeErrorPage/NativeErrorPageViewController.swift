@@ -7,6 +7,7 @@ import Common
 import ComponentLibrary
 import Redux
 import Shared
+import Account
 
 final class NativeErrorPageViewController: UIViewController,
                                            Themeable,

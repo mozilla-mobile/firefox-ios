@@ -5,6 +5,7 @@
 import Foundation
 import Common
 import UIKit
+import Account
 
 class OnboardingMultipleChoiceButtonView: UIView, Themeable {
     // MARK: - UX/UI

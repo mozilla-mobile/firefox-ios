@@ -5,6 +5,7 @@
 import Shared
 import Account
 import Common
+import Foundation
 
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 

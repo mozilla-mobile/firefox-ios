@@ -4,6 +4,7 @@
 
 import SwiftUI
 import Common
+import Account
 
 struct AutofillHeaderView: View {
     // Constants for UI layout and styling

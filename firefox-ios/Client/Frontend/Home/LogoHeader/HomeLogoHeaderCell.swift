@@ -6,6 +6,7 @@ import Common
 import Foundation
 import Shared
 import UIKit
+import Account
 
 class HomeLogoHeaderCell: UICollectionViewCell, ReusableCell {
     private struct UX {

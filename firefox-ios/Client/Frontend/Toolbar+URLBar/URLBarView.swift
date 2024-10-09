@@ -6,6 +6,7 @@ import Common
 import Shared
 import SnapKit
 import UIKit
+import Account
 
 private struct URLBarViewUX {
     static let LocationLeftPadding: CGFloat = 8

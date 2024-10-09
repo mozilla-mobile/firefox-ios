@@ -4,11 +4,19 @@ import PackageDescription
 
 let package = Package(
     name: "BrowserKit",
+    defaultLocalization: "en",
     platforms: [
         .iOS(.v15),
         .macOS(.v10_15)
     ],
     products: [
+        .library(name: "Account", targets: ["Account"]),
+        .library(name: "Objc", targets: ["Objc"]),
+        .library(name: "Storage", targets: ["Storage"]),
+        .library(name: "Sync",
+                 targets: ["Sync"]),
+        .library(name: "Shared",
+                 targets: ["Shared"]),
         .library(
             name: "SiteImageView",
             targets: ["SiteImageView"]),
@@ -61,9 +69,18 @@ let package = Package(
             branch: "master"),
         .package(
             url: "https://github.com/swhitty/SwiftDraw",
-            exact: "0.17.0"),
+            exact: "0.17.0")
     ],
     targets: [
+        .target(name: "Account",
+                dependencies: ["Shared", "Storage", "Objc"]),
+        .target(name: "Objc"),
+        .target(name: "Storage",
+                dependencies: ["Common", "WebEngine", "Objc", "Shared"]),
+        .target(name: "Sync", dependencies: ["Common", "Shared"]),
+        .target(name: "Shared",
+                dependencies: ["Common", "WebEngine"],
+                resources: [.process("Resources")]),
         .target(
             name: "ComponentLibrary",
             dependencies: ["Common", "SiteImageView"],

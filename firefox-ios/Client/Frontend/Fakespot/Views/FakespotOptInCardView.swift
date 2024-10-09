@@ -6,6 +6,7 @@ import UIKit
 import Common
 import Shared
 import ComponentLibrary
+import Account
 
 // MARK: View
 final class FakespotOptInCardView: UIView, ThemeApplicable {

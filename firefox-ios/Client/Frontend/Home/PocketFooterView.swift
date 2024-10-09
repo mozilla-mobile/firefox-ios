@@ -6,6 +6,7 @@ import Common
 import UIKit
 import Shared
 import ComponentLibrary
+import Account
 
 class PocketFooterView: UICollectionReusableView, ReusableCell, ThemeApplicable {
     private struct UX {

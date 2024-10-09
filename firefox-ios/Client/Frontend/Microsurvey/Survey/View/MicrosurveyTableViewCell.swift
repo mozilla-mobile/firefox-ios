@@ -4,6 +4,7 @@
 
 import Foundation
 import Common
+import Account
 
 final class MicrosurveyTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {

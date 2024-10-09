@@ -6,6 +6,7 @@ import Common
 import UIKit
 import Storage
 import Shared
+import Account
 import SiteImageView
 
 struct BackForwardCellViewModel {
