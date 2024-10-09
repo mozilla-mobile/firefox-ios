@@ -41,7 +41,8 @@ struct HeaderState: StateType, Equatable {
 
         switch action.actionType {
         case HomepageActionType.initialize:
-            // TODO: FXIOS-10259 - Update with felt privacy feature flags or confirm we can remove the showPrivateModeToggle check
+            // TODO: FXIOS-10259 - Update with felt privacy feature flags 
+            // or confirm we can remove the showPrivateModeToggle check
             return HeaderState(
                 windowUUID: state.windowUUID,
                 isPrivate: false,
