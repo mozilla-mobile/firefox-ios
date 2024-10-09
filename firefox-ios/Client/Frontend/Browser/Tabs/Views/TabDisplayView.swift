@@ -134,17 +134,13 @@ class TabDisplayView: UIView,
             indexPath
         ) -> UICollectionReusableView? in
             let reusableView = UICollectionReusableView()
-            // Retrieve the section based on the current indexPath
-
             let section = self?.getTabDisplay(for: indexPath.section)
-            //let section = self?.dataSource?.snapshot().sectionIdentifiers[indexPath.section]
 
-            // Only show the header for the Inactive Tabs section
+
             guard let self, section == .inactiveTabs else {
-                return nil  // Return nil for the Tabs section, no header will be displayed
+                return nil
             }
 
-            // Dequeue the header view for the inactive tabs section
             if kind == UICollectionView.elementKindSectionHeader,
                let headerView = collectionView.dequeueReusableSupplementaryView(
                 ofKind: kind,
@@ -182,7 +178,6 @@ class TabDisplayView: UIView,
                 }
                 return footerView
             }
-
             return reusableView
         }
     }
@@ -210,10 +205,7 @@ class TabDisplayView: UIView,
     func newState(state: TabsPanelState) {
         tabsState = state
 
-        // Doesn't seem to be needed, check later if this is a problem
-        //if state.didRefreshTabs {
-            updateCollectionView(state: tabsState)
-      //  }
+        updateCollectionView(state: tabsState)
 
         // TODO - uncomment before PR
 //        if let index = state.scrollToIndex {
@@ -412,23 +404,14 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
               let destinationIndexPath = coordinator.destinationIndexPath,
               let dragItem = coordinator.items.first?.dragItem,
               let tab = dragItem.localObject as? TabModel,
-              let sourceIndex = tabsState.tabs.firstIndex(of: tab),
-              let dataSource = dataSource
+              let sourceIndex = tabsState.tabs.firstIndex(of: tab)
         else { return }
 
         let section = destinationIndexPath.section
         let start = IndexPath(row: sourceIndex, section: section)
         let end = IndexPath(row: destinationIndexPath.item, section: section)
 
-        guard let firstItem = dataSource.itemIdentifier(for: start),
-              let secondItem = dataSource.itemIdentifier(for: end)
-        else { return }
-
         coordinator.drop(dragItem, toItemAt: destinationIndexPath)
-
-        // This method allows us to animate the change in position before the 
-        // redux state has been updated so that there isn't a delay between updates
-        visuallyUpdateItemPosition(firstItem: firstItem, secondItem: secondItem)
 
         let moveTabData = MoveTabData(originIndex: start.row,
                                       destinationIndex: end.row,
@@ -441,27 +424,5 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
         )
 
         store.dispatch(action)
-    }
-
-    private func visuallyUpdateItemPosition(
-            firstItem: TabDisplayView.SectionTabItem,
-            secondItem: TabDisplayView.SectionTabItem) {
-        guard let dataSource = dataSource else { return }
-
-        var snapshot = dataSource.snapshot()
-        let currentItems = snapshot.itemIdentifiers(inSection: .tabs)
-
-        guard let firstItemIndex = currentItems.firstIndex(of: firstItem),
-              let secondItemIndex = currentItems.firstIndex(of: secondItem) else {
-            return
-        }
-
-        if firstItemIndex < secondItemIndex {
-            snapshot.moveItem(firstItem, afterItem: secondItem)
-        } else if firstItemIndex > secondItemIndex {
-            snapshot.moveItem(firstItem, beforeItem: secondItem)
-        }
-
-        dataSource.apply(snapshot, animatingDifferences: true)
     }
 }
