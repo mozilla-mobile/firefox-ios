@@ -55,16 +55,18 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
     // MARK: - NSCoding
 
     required init?(coder aDecoder: NSCoder) {
+        // NOTE: As per NSSecureCoding documentation, we must securely decode objects using `decodeObject(of:forKey:)` (or
+        // use the correct typed methods). Do not use `decodeObject` and then `as?` to convert to the desired type.
         let isCustomEngine = aDecoder.decodeBool(forKey: CodingKeys.isCustomEngine.rawValue)
-        guard let searchTemplate = aDecoder.decodeObject(forKey: CodingKeys.searchTemplate.rawValue) as? String,
-              let shortName = aDecoder.decodeObject(forKey: CodingKeys.shortName.rawValue) as? String,
-              let image = aDecoder.decodeObject(forKey: CodingKeys.image.rawValue) as? UIImage else {
+        guard let searchTemplate = aDecoder.decodeObject(of: NSString.self, forKey: CodingKeys.searchTemplate.rawValue),
+              let shortName = aDecoder.decodeObject(of: NSString.self, forKey: CodingKeys.shortName.rawValue),
+              let image = aDecoder.decodeObject(of: UIImage.self, forKey: CodingKeys.image.rawValue) else {
             assertionFailure()
             return nil
         }
 
-        self.searchTemplate = searchTemplate
-        self.shortName = shortName
+        self.searchTemplate = searchTemplate as String
+        self.shortName = shortName as String
         self.isCustomEngine = isCustomEngine
         self.image = image
         self.engineID = aDecoder.decodeObject(forKey: CodingKeys.engineID.rawValue) as? String
