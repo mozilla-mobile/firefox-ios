@@ -232,17 +232,17 @@ class TabDisplayView: UIView,
         var snapshot = NSDiffableDataSourceSnapshot<TabDisplaySection, SectionTabItem>()
 
         snapshot.deleteAllItems()
+        snapshot.appendSections([.inactiveTabs, .tabs])
+        snapshot.reloadSections([.inactiveTabs])
+
         if state.isInactiveTabsExpanded {
-            snapshot.appendSections([.inactiveTabs])
             let inactiveTabs = state.inactiveTabs.map { SectionTabItem.inactiveTab($0) }
             snapshot.appendItems(inactiveTabs, toSection: .inactiveTabs)
         }
 
-        snapshot.appendSections([.tabs])
         let tabs = state.tabs.map { SectionTabItem.tab($0) }
         snapshot.appendItems(tabs, toSection: .tabs)
 
-        // check that this animates okay set to true
         dataSource?.apply(snapshot, animatingDifferences: true)
     }
 
