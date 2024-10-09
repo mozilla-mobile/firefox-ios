@@ -20,6 +20,7 @@ struct AppState: StateType {
             .compactMap {
                 switch ($0, screen) {
                 case (.browserViewController(let state), .browserViewController): return state as? S
+                case (.homepage(let state), .homepage): return state as? S
                 case (.mainMenu(let state), .mainMenu): return state as? S
                 case (.mainMenuDetails(let state), .mainMenuDetails): return state as? S
                 case (.microsurvey(let state), .microsurvey): return state as? S

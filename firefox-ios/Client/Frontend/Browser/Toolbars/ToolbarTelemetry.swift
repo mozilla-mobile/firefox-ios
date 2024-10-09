@@ -98,4 +98,9 @@ struct ToolbarTelemetry {
         let isPrivateExtra = GleanMetrics.Toolbar.TabTrayLongPressExtra(isPrivate: isPrivate)
         GleanMetrics.Toolbar.tabTrayLongPress.record(isPrivateExtra)
     }
+
+    // Other
+    func dragInteractionStarted() {
+        GleanMetrics.Awesomebar.dragLocationBar.record()
+    }
 }

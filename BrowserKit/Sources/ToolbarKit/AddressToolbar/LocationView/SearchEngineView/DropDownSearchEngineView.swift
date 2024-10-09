@@ -5,7 +5,6 @@
 import UIKit
 import Common
 
-// TODO FXIOS-10193 This file is a placeholder stub for FXIOS-10193 customization
 /// A view which contains a search engine icon and a drop down arrow. Supports tapping actions which call the appropriate
 /// method on the `LocationViewDelegate`.
 final class DropDownSearchEngineView: UIView, SearchEngineView, ThemeApplicable {
@@ -14,11 +13,11 @@ final class DropDownSearchEngineView: UIView, SearchEngineView, ThemeApplicable 
         static let cornerRadius: CGFloat = 4
         static let dropDownMargin: CGFloat = 4
         static let imageViewMargin: CGFloat = 2
-        static let imageViewSize = CGSize(width: 24, height: 24)
-        static let downArrowSize = CGSize(width: 8, height: 8)
+        static let searchEngineImageSize = CGSize(width: 24, height: 24)
+        static let chevronImageSize = CGSize(width: 8, height: 8)
     }
 
-    private weak var delegate: LocationViewDelegate? // TODO FXIOS-10193 Notify delegate on tap (add selector)
+    private weak var delegate: LocationViewDelegate?
 
     private lazy var searchEngineImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
@@ -26,9 +25,15 @@ final class DropDownSearchEngineView: UIView, SearchEngineView, ThemeApplicable 
         imageView.isAccessibilityElement = true
     }
 
+    private lazy var arrowImageView: UIImageView = .build { imageView in
+        imageView.contentMode = .scaleAspectFit
+        imageView.image = UIImage(named: StandardImageIdentifiers.ExtraSmall.chevronDown)?.withRenderingMode(.alwaysTemplate)
+    }
+
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: .zero)
+        setupView()
         setupLayout()
     }
 
@@ -37,8 +42,7 @@ final class DropDownSearchEngineView: UIView, SearchEngineView, ThemeApplicable 
     }
 
     func configure(_ state: LocationViewState, delegate: LocationViewDelegate) {
-        // TODO FXIOS-10193 Load the image into the imageView
-        searchEngineImageView.backgroundColor = UIColor.red // Placeholder
+        searchEngineImageView.image = state.searchEngineImage
         configureA11y(state)
         self.delegate = delegate
     }
@@ -46,48 +50,58 @@ final class DropDownSearchEngineView: UIView, SearchEngineView, ThemeApplicable 
     // MARK: - Layout
 
     private func setupLayout() {
-        translatesAutoresizingMaskIntoConstraints = true
-        addSubviews(searchEngineImageView)
-
-        // TODO FXIOS-10193 Add subviews to create the new button with the drop-down arrow
-        //
-        //
-        //
+        addSubviews(searchEngineImageView, arrowImageView)
 
         NSLayoutConstraint.activate([
-            searchEngineImageView.heightAnchor.constraint(equalToConstant: UX.imageViewSize.height),
-            searchEngineImageView.widthAnchor.constraint(equalToConstant: UX.imageViewSize.width),
-            searchEngineImageView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            searchEngineImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            searchEngineImageView.topAnchor.constraint(greaterThanOrEqualTo: self.topAnchor),
-            searchEngineImageView.bottomAnchor.constraint(lessThanOrEqualTo: self.bottomAnchor),
-            searchEngineImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            searchEngineImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            searchEngineImageView.widthAnchor.constraint(equalToConstant: UX.searchEngineImageSize.width),
+            searchEngineImageView.heightAnchor.constraint(equalToConstant: UX.searchEngineImageSize.height),
+            searchEngineImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.imageViewMargin),
+            searchEngineImageView.topAnchor.constraint(equalTo: topAnchor, constant: UX.imageViewMargin),
+            searchEngineImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.imageViewMargin),
+
+            arrowImageView.widthAnchor.constraint(equalToConstant: UX.chevronImageSize.width),
+            arrowImageView.heightAnchor.constraint(equalToConstant: UX.chevronImageSize.height),
+            arrowImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            arrowImageView.leadingAnchor.constraint(
+                equalTo: searchEngineImageView.trailingAnchor,
+                constant: UX.dropDownMargin
+            ),
+            arrowImageView.trailingAnchor.constraint(
+                equalTo: trailingAnchor,
+                constant: -UX.dropDownMargin
+            ),
         ])
+    }
+
+    private func setupView() {
+        isUserInteractionEnabled = true
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapSearchEngine)))
+        layer.cornerRadius = UX.cornerRadius
     }
 
     // MARK: - Accessibility
 
     private func configureA11y(_ state: LocationViewState) {
-        // TODO FXIOS-10193 Enforce correct accessibility identifiers after finalizing the UI for DropDownSearchEngineView
-        // e.g.) Old code, may need updating:
-        // searchEngineImageView.accessibilityIdentifier = state.searchEngineImageViewA11yId
-        // searchEngineImageView.accessibilityLabel = state.searchEngineImageViewA11yLabel
-        // searchEngineImageView.largeContentTitle = state.searchEngineImageViewA11yLabel
-        // searchEngineImageView.largeContentImage = nil
+         searchEngineImageView.accessibilityIdentifier = state.searchEngineImageViewA11yId
+         searchEngineImageView.accessibilityLabel = state.searchEngineImageViewA11yLabel
+         searchEngineImageView.largeContentTitle = state.searchEngineImageViewA11yLabel
+         searchEngineImageView.largeContentImage = nil
     }
 
     // MARK: - Selectors
 
-    // TODO FXIOS-10193 Add selector action method to bubble up tap of this view to the delegate
-    // TODO FXIOS-10191 Actual selector implementation to come later.
+    @objc
+    private func didTapSearchEngine() {
+        delegate?.locationViewDidTapSearchEngine(self)
+        // TODO FXIOS-10191 Actual selector implementation to come later.
+    }
 
     // MARK: - ThemeApplicable
 
     func applyTheme(theme: Theme) {
-        // TODO FXIOS-10193 Apply theme to new subviews
-        // e.g.)  Old code, may need updating:
-        // let colors = theme.colors
-        // searchEngineImageView.backgroundColor = colors.layer2
+        let colors = theme.colors
+        backgroundColor = colors.layer2
+        searchEngineImageView.backgroundColor = colors.layer2
+        arrowImageView.tintColor = colors.iconPrimary
     }
 }

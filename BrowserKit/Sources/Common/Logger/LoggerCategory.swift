@@ -59,4 +59,7 @@ public enum LoggerCategory: String {
 
     /// Multi-window management on iPad devices
     case window
+
+    /// Remote settings
+    case remoteSettings
 }
