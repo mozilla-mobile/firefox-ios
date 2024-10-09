@@ -10,16 +10,16 @@
 /* On the main menu, at the top, when the user is signed in but there was an error syncing. The title for this state. */
 "MainMenu.Account.SyncError.Title.v131" = "Đăng nhập lại để đồng bộ hóa";
 
-/* On the main menu, the title for the action that will take the user to the Bookmarks panel. Please keep as short as possible, <15 chars of space available. */
+/* On the main menu, the title for the action that will take the user to the Bookmarks panel. */
 "MainMenu.PanelLinkSection.Bookmarks.Title.v131" = "Dấu trang";
 
-/* On the main menu, the title for the action that will take the user to the Downloads panel. Please keep as short as possible, <15 chars of space available. */
+/* On the main menu, the title for the action that will take the user to the Downloads panel. */
 "MainMenu.PanelLinkSection.Downloads.Title.v131" = "Tải xuống";
 
-/* On the main menu, the title for the action that will take the user to the History panel. Please keep as short as possible, <15 chars of space available. */
+/* On the main menu, the title for the action that will take the user to the History panel. */
 "MainMenu.PanelLinkSection.History.Title.v131" = "Lịch sử";
 
-/* On the main menu, the title for the action that will take the user to the Passwords panel in the settings screen. Please keep as short as possible, <15 chars of space available. */
+/* On the main menu, the title for the action that will take the user to the Passwords panel in the settings screen. */
 "MainMenu.PanelLinkSection.Passwords.Title.v131" = "Mật khẩu";
 
 /* On the main menu, the title for the action that will take the user to the Customize Hopegape section in the settings screen. */
