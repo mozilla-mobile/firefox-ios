@@ -17,6 +17,7 @@ final class PlainSearchEngineView: UIView, SearchEngineView, ThemeApplicable {
         imageView.contentMode = .scaleAspectFit
         imageView.layer.cornerRadius = UX.cornerRadius
         imageView.isAccessibilityElement = true
+        imageView.clipsToBounds = true
     }
 
     // MARK: - Init
