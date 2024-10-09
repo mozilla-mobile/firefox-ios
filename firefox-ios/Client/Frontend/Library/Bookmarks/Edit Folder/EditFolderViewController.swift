@@ -192,7 +192,8 @@ class EditFolderViewController: UIViewController,
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let section = Section(rawValue: section),
               section == .parentFolder,
-              let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: UX.parentFolderHeaderIdentifier) else { return nil }
+              let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: UX.parentFolderHeaderIdentifier)
+        else { return nil }
         var configuration = UIListContentConfiguration.plainHeader()
         configuration.text = .Bookmarks.Menu.EditBookmarkSaveIn.uppercased()
         configuration.textProperties.font = FXFontStyles.Regular.callout.scaledFont()
