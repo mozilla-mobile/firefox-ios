@@ -12,7 +12,6 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         static let gradientViewWidth: CGFloat = 40
         static let iconContainerCornerRadius: CGFloat = 8
         static let lockIconImageViewSize = CGSize(width: 40, height: 24)
-        static let dropDownImageViewSize = CGSize(width: 40, height: 24)
     }
 
     private var urlAbsolutePath: String?

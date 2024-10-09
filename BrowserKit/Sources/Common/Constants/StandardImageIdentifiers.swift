@@ -9,8 +9,8 @@ import Foundation
 /// Sing the song if you must.
 public struct StandardImageIdentifiers {
     // Icon size 8x8
-    public struct Tiny {
-        public static let chevronDown = "chevronDownTiny"
+    public struct ExtraSmall {
+        public static let chevronDown = "chevronDownExtraSmall"
     }
 
     // Icon size 16x16

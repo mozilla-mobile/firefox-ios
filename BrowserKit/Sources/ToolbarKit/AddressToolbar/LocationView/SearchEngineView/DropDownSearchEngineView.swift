@@ -27,7 +27,7 @@ final class DropDownSearchEngineView: UIView, SearchEngineView, ThemeApplicable 
 
     private lazy var arrowImageView: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage(named: StandardImageIdentifiers.Tiny.chevronDown)?.withRenderingMode(.alwaysTemplate)
+        imageView.image = UIImage(named: StandardImageIdentifiers.ExtraSmall.chevronDown)?.withRenderingMode(.alwaysTemplate)
     }
 
     // MARK: - Init
