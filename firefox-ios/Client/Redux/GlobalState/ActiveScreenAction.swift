@@ -30,7 +30,6 @@ enum AppScreen {
     case microsurvey
     case trackingProtection
     case toolbar
-    case nativeErrorPage
 }
 
 enum ScreenActionType: ActionType {

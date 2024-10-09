@@ -29,7 +29,6 @@ struct AppState: StateType {
                 case (.themeSettings(let state), .themeSettings): return state as? S
                 case (.toolbar(let state), .toolbar): return state as? S
                 case (.trackingProtection(let state), .trackingProtection): return state as? S
-                case (.nativeErrorPage(let state), .nativeErrorPage): return state as? S
                 default: return nil
                 }
             }.first(where: {
