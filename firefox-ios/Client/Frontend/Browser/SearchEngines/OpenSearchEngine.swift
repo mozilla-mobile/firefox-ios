@@ -65,7 +65,7 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
             return nil
         }
 
-        precondition(image.size != CGSize.zero, "Decoded images should not be empty")
+        assert(image.size != CGSize.zero, "Decoded images should not be empty")
         self.searchTemplate = searchTemplate as String
         self.shortName = shortName as String
         self.isCustomEngine = isCustomEngine
@@ -84,7 +84,7 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
         // to contain PNG data prior to encoding (especially for when writing to a file). [FXIOS-10216]
         // More discussion here: https://stackoverflow.com/a/7962295
         let imageWithData = UIImage(data: image.pngData() ?? Data())
-        precondition(imageWithData != nil, "Image data should never be nil, even for assets that originate from the bundle")
+        assert(imageWithData != nil, "Image data should never be nil, even for assets that originate from the bundle")
         aCoder.encode(imageWithData, forKey: CodingKeys.image.rawValue)
     }
 
