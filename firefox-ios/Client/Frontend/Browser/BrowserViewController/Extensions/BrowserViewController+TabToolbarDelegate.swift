@@ -90,6 +90,36 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }
     }
 
+    func configureMenuContextualHint(_ view: UIView) {
+        guard isNewMenuEnabled, isNewMenuHintEnabled else { return }
+        menuContextHintVC.configure(
+            anchor: view,
+            withArrowDirection: .down,
+            andDelegate: self,
+            presentedUsing: { [weak self] in self?.presentMenuContextualHint() },
+            overlayState: overlayManager,
+            ignoreSafeArea: true)
+    }
+
+    private func presentMenuContextualHint() {
+        // Only show the menu hint if:
+        // 1. The tab webpage is loaded,
+        // 2. Microsurvey prompt is not being displayed and
+        // 3. Do not present hint for new users/fresh install
+        guard let state = store.state.screenState(BrowserViewControllerState.self,
+                                                  for: .browserViewController,
+                                                  window: windowUUID)
+        else { return }
+
+        if let selectedTab = tabManager.selectedTab,
+           !selectedTab.isFxHomeTab && !selectedTab.loading,
+           !state.microsurveyState.showPrompt {
+           // InstallType.get() != .fresh -> enable it
+            present(menuContextHintVC, animated: true)
+            UIAccessibility.post(notification: .layoutChanged, argument: menuContextHintVC)
+        }
+    }
+
     func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         didTapOnHome()
     }

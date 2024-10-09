@@ -8,6 +8,7 @@ import UIKit
 public struct ContextualHintViewModel {
     public var isActionType: Bool
     public var actionButtonTitle: String
+    public var title: String
     public var description: String
     public var arrowDirection: UIPopoverArrowDirection
     public var closeButtonA11yLabel: String
@@ -18,12 +19,14 @@ public struct ContextualHintViewModel {
 
     public init(isActionType: Bool,
                 actionButtonTitle: String,
+                title: String,
                 description: String,
                 arrowDirection: UIPopoverArrowDirection,
                 closeButtonA11yLabel: String,
                 actionButtonA11yId: String) {
         self.isActionType = isActionType
         self.actionButtonTitle = actionButtonTitle
+        self.title = title
         self.description = description
         self.arrowDirection = arrowDirection
         self.closeButtonA11yLabel = closeButtonA11yLabel
