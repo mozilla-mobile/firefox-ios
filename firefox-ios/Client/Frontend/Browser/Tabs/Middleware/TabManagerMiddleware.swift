@@ -32,7 +32,7 @@ class TabManagerMiddleware {
         } else if let action = action as? MainMenuAction {
             self.resolveMainMenuActions(with: action, appState: state)
         } else if let action = action as? HomepageAction {
-            self.resolveHomepageActions(with: action, appState: state)
+            self.resolveHomepageActions(with: action)
         }
     }
 
@@ -692,7 +692,7 @@ class TabManagerMiddleware {
         }
     }
 
-    private func resolveHomepageActions(with action: HomepageAction, appState: AppState) {
+    private func resolveHomepageActions(with action: HomepageAction) {
         switch action.actionType {
         case HeaderActionType.toggleHomepageMode:
             tabManager(for: action.windowUUID).switchPrivacyMode()

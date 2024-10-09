@@ -194,7 +194,6 @@ final class HomepageViewController: UIViewController,
             guard let headerCell = cell as? HomepageHeaderCell else {
                 return UICollectionViewCell()
             }
-            // TODO: FXIOS-10259 - Update with felt privacy feature flags or confirm we can remove the isPrivate check
             headerCell.configure(
                 headerState: homepageState.headerState,
                 showiPadSetup: shouldUseiPadSetup()
