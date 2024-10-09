@@ -83,8 +83,8 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         self.headerState = headerState
         self.action = action
         setupView(with: showiPadSetup)
-        logoHeaderCell.configure(with: headerState.isPrivate)
-        privateModeButton.isHidden = !headerState.showPrivateModeToggle
+        logoHeaderCell.configure(with: showiPadSetup)
+        privateModeButton.isHidden = showiPadSetup || !headerState.showPrivateModeToggle
     }
 
     @objc
