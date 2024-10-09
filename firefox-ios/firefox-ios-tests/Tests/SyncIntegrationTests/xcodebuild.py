@@ -10,7 +10,7 @@ logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 class XCodeBuild(object):
     binary = 'xcodebuild'
-    destination = 'platform=iOS Simulator,name=iPhone 15,OS=17.4'
+    destination = 'platform=iOS Simulator,name=iPhone 15,OS=17.5'
     logger = logging.getLogger()
     scheme = 'Fennec'
     testPlan = 'SyncIntegrationTestPlan'
@@ -22,7 +22,7 @@ class XCodeBuild(object):
         self.log = log
 
     def install(self, boot=True):
-        command = "find ~/Library/Developer/Xcode/DerivedData/Client-*/Build/Products/Fennec-* -type d -iname 'Client.app'"
+        command = "find ~/Library/Developer/Xcode/DerivedData/Client-*/Build/Products/Fennec_Testing-* -type d -iname 'Client.app'"
         path = subprocess.check_output(command, shell=True, universal_newlines=True)
         if boot:
             self.xcrun.boot()
