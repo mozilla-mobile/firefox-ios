@@ -65,6 +65,7 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
             return nil
         }
 
+        precondition(image.size != CGSize.zero, "Decoded images should not be empty")
         self.searchTemplate = searchTemplate as String
         self.shortName = shortName as String
         self.isCustomEngine = isCustomEngine
@@ -77,8 +78,14 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
         aCoder.encode(searchTemplate, forKey: CodingKeys.searchTemplate.rawValue)
         aCoder.encode(shortName, forKey: CodingKeys.shortName.rawValue)
         aCoder.encode(isCustomEngine, forKey: CodingKeys.isCustomEngine.rawValue)
-        aCoder.encode(image, forKey: CodingKeys.image.rawValue)
         aCoder.encode(engineID, forKey: CodingKeys.engineID.rawValue)
+
+        // Images loaded from the BrowserKit bundle will not directly contain image data to encode. Here we force the UIImage
+        // to contain PNG data prior to encoding (especially for when writing to a file). [FXIOS-10216]
+        // More discussion here: https://stackoverflow.com/a/7962295
+        let imageWithData = UIImage(data: image.pngData() ?? Data())
+        precondition(imageWithData != nil, "Image data should never be nil, even for assets that originate from the bundle")
+        aCoder.encode(imageWithData, forKey: CodingKeys.image.rawValue)
     }
 
     // MARK: - Public
