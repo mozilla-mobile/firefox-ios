@@ -13,5 +13,5 @@ final class HeaderAction: Action {
 }
 
 enum HeaderActionType: ActionType {
-    case updateHeader
+    case toggleHomepageMode
 }

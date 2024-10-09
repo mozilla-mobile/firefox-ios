@@ -8,47 +8,29 @@ import XCTest
 @testable import Client
 
 final class HeaderStateTests: XCTestCase {
-    func testInitialization() {
-        let initialState = createSubject()
-
-        XCTAssertFalse(initialState.showHeader)
-    }
-
-    func test_windowUUID_returnsValidUUID() {
+    func tests_initialState_returnsExpectedState() {
         let initialState = createSubject()
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertFalse(initialState.isPrivate)
+        XCTAssertFalse(initialState.showPrivateModeToggle)
     }
 
-    func test_different_windowUUID_returnsDefaultState() {
+    func test_initializeAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = headerReducer()
 
         let newState = reducer(
             initialState,
-            HeaderAction(
-                windowUUID: .DefaultUITestingUUID,
-                actionType: HeaderActionType.updateHeader
+            HomepageAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageActionType.initialize
             )
         )
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertFalse(newState.showHeader)
-    }
-
-    func test_updateHeader_returnsTrue() {
-        let initialState = createSubject()
-        let reducer = headerReducer()
-
-        let newState = reducer(
-            initialState,
-            HeaderAction(
-                windowUUID: .XCTestDefaultUUID,
-                actionType: HeaderActionType.updateHeader
-            )
-        )
-
-        XCTAssertTrue(newState.showHeader)
+        XCTAssertFalse(newState.isPrivate)
+        XCTAssertTrue(newState.showPrivateModeToggle)
     }
 
     // MARK: - Private

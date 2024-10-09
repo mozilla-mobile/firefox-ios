@@ -8,21 +8,25 @@ import Redux
 
 struct HeaderState: StateType, Equatable {
     var windowUUID: WindowUUID
-    var showHeader: Bool
+    var isPrivate: Bool
+    var showPrivateModeToggle: Bool
 
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
-            showHeader: false
+            isPrivate: false,
+            showPrivateModeToggle: false
         )
     }
 
     private init(
         windowUUID: WindowUUID,
-        showHeader: Bool
+        isPrivate: Bool,
+        showPrivateModeToggle: Bool
     ) {
         self.windowUUID = windowUUID
-        self.showHeader = showHeader
+        self.isPrivate = isPrivate
+        self.showPrivateModeToggle = showPrivateModeToggle
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -30,20 +34,23 @@ struct HeaderState: StateType, Equatable {
         else {
             return HeaderState(
                 windowUUID: state.windowUUID,
-                showHeader: false
+                isPrivate: state.isPrivate,
+                showPrivateModeToggle: state.showPrivateModeToggle
             )
         }
 
         switch action.actionType {
-        case HeaderActionType.updateHeader:
+        case HomepageActionType.initialize:
             return HeaderState(
                 windowUUID: state.windowUUID,
-                showHeader: true
+                isPrivate: false,
+                showPrivateModeToggle: true
             )
         default:
             return HeaderState(
                 windowUUID: state.windowUUID,
-                showHeader: false
+                isPrivate: state.isPrivate,
+                showPrivateModeToggle: state.showPrivateModeToggle
             )
         }
     }
