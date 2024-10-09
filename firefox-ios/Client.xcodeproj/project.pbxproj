@@ -24444,7 +24444,11 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
 				kind = exactVersion;
+<<<<<<< HEAD
 				version = 132.0.0;
+=======
+				version = 133.0.20241009050322;
+>>>>>>> 5a0621db2 (Refactor [v133] Auto update SPM with latest rust-component 133.0.20241009050322 (#22462))
 			};
 		};
 		435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */ = {
@@ -24452,7 +24456,7 @@
 			repositoryURL = "https://github.com/mozilla/glean-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 61.1.0;
+				version = 61.2.0;
 			};
 		};
 		4368F83B279669690013419B /* XCRemoteSwiftPackageReference "SnapKit" */ = {
