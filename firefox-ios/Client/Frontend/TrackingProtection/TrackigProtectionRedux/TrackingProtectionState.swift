@@ -141,7 +141,7 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
                 shouldClearCookies: false,
                 shouldUpdateBlockedTrackerStats: false
             )
-        case TrackingProtectionActionType.resetReduxStore:
+        case TrackingProtectionActionType.goBack:
             return TrackingProtectionState(
                 windowUUID: state.windowUUID,
                 shouldDismiss: false,
@@ -207,7 +207,18 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
                 shouldUpdateBlockedTrackerStats: false
             )
         default:
-            return state
+            return TrackingProtectionState(
+                windowUUID: state.windowUUID,
+                shouldDismiss: false,
+                showTrackingProtectionSettings: false,
+                trackingProtectionEnabled: state.trackingProtectionEnabled,
+                connectionSecure: state.connectionSecure,
+                showDetails: false,
+                showBlockedTrackers: false,
+                showsClearCookiesAlert: false,
+                shouldClearCookies: false,
+                shouldUpdateBlockedTrackerStats: false
+            )
         }
     }
 }

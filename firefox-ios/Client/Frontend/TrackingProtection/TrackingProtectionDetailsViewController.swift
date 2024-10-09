@@ -35,7 +35,6 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     private struct UX {
         static let baseCellHeight: CGFloat = 44
         static let baseDistance: CGFloat = 20
-        static let bottomDistance: CGFloat = 0
         static let viewCertButtonTopDistance: CGFloat = 8.0
     }
 
@@ -126,8 +125,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
         let contentViewContraints = [
             scrollView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
             scrollView.bottomAnchor.constraint(
-                greaterThanOrEqualTo: view.bottomAnchor,
-                constant: -UX.bottomDistance
+                greaterThanOrEqualTo: view.bottomAnchor
             ),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -139,7 +137,7 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
             baseView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
             baseView.widthAnchor.constraint(
                 equalTo: scrollView.widthAnchor,
-                constant: -(2 * TPMenuUX.UX.horizontalMargin)
+                constant: -2 * TPMenuUX.UX.horizontalMargin
             ),
         ]
 

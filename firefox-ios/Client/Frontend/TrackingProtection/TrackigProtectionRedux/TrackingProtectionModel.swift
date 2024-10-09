@@ -164,6 +164,10 @@ class TrackingProtectionModel {
         }
     }
 
+    func isURLSafelisted() -> Bool {
+        return ContentBlocker.shared.isSafelisted(url: url)
+    }
+
     func onTapClearCookiesAndSiteData(controller: UIViewController) {
         let alertMessage = String(format: clearCookiesAlertText, url.absoluteDisplayString)
         let alert = UIAlertController(
