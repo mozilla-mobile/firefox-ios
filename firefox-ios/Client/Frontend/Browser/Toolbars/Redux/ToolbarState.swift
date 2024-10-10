@@ -125,23 +125,7 @@ struct ToolbarState: ScreenState, Equatable {
             return handleNumberOfTabsChanged(state: state, action: action)
 
         case ToolbarActionType.toolbarPositionChanged:
-            guard let toolbarPosition = (action as? ToolbarAction)?.toolbarPosition else { return state }
-            let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
-            return ToolbarState(
-                windowUUID: state.windowUUID,
-                toolbarPosition: position,
-                isPrivateMode: state.isPrivateMode,
-                addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
-                navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, action),
-                isShowingNavigationToolbar: state.isShowingNavigationToolbar,
-                isShowingTopTabs: state.isShowingTopTabs,
-                canGoBack: state.canGoBack,
-                canGoForward: state.canGoForward,
-                numberOfTabs: state.numberOfTabs,
-                showMenuWarningBadge: state.showMenuWarningBadge,
-                isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-                canShowDataClearanceAction: state.canShowDataClearanceAction,
-                canShowNavigationHint: state.canShowNavigationHint)
+            return handleToolbarPositionChanged(state: state, action: action)
 
         case ToolbarActionType.readerModeStateChanged:
             guard let toolbarAction = action as? ToolbarAction else { return state }
