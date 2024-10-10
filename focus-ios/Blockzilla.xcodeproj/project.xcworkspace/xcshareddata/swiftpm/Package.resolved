@@ -29,7 +29,6 @@
         }
       },
       {
-<<<<<<< HEAD
         "package": "Glean",
         "repositoryURL": "https://github.com/mozilla/glean-swift",
         "state": {
@@ -39,8 +38,6 @@
         }
       },
       {
-=======
->>>>>>> 112703f60 (Bugfix Downgrade sentry to 8.21.0 (#22488))
         "package": "Kingfisher",
         "repositoryURL": "https://github.com/onevcat/Kingfisher.git",
         "state": {
@@ -50,7 +47,6 @@
         }
       },
       {
-<<<<<<< HEAD
         "package": "MozillaRustComponentsSwift",
         "repositoryURL": "https://github.com/mozilla/rust-components-swift",
         "state": {
@@ -60,8 +56,6 @@
         }
       },
       {
-=======
->>>>>>> 112703f60 (Bugfix Downgrade sentry to 8.21.0 (#22488))
         "package": "Sentry",
         "repositoryURL": "https://github.com/getsentry/sentry-cocoa",
         "state": {
