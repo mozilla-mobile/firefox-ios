@@ -16,7 +16,13 @@ class MainMenuViewController: UIViewController,
                               MenuTableViewDataDelegate,
                               Themeable,
                               Notifiable,
-                              StoreSubscriber {
+                              StoreSubscriber,
+                              UIPopoverPresentationControllerDelegate {
+    private struct UX {
+        static let hintViewCornerRadius: CGFloat = 20
+        static let hintViewHeight: CGFloat = 120
+        static let hintViewMargin: CGFloat = 20
+    }
     typealias SubscriberStateType = MainMenuState
 
     // MARK: - UI/UX elements
@@ -29,19 +35,24 @@ class MainMenuViewController: UIViewController,
     weak var coordinator: MainMenuCoordinator?
 
     private let windowUUID: WindowUUID
+    private let profile: Profile
     private var menuState: MainMenuState
     private let logger: Logger
+
+    private var hintView: ContextualHintView = .build()
 
     var currentWindowUUID: UUID? { return windowUUID }
 
     // MARK: - Initializers
     init(
         windowUUID: WindowUUID,
+        profile: Profile,
         notificationCenter: NotificationProtocol = NotificationCenter.default,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         logger: Logger = DefaultLogger.shared
     ) {
         self.windowUUID = windowUUID
+        self.profile = profile
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
         self.logger = logger
@@ -88,6 +99,15 @@ class MainMenuViewController: UIViewController,
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         updateModalA11y()
+
+        if shouldDisplayHintView() {
+            setupHintView()
+        }
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        hintView.removeFromSuperview()
     }
 
     deinit {
@@ -136,6 +156,36 @@ class MainMenuViewController: UIViewController,
         menuContent.setupDetails(subtitle: .MainMenu.Account.SignedOutDescription,
                                  title: .MainMenu.Account.SignedOutTitle,
                                  icon: icon)
+    }
+
+    private func setupHintView() {
+        var viewModel = ContextualHintViewModel(
+            isActionType: false,
+            actionButtonTitle: "",
+            title: .ContextualHints.MainMenu.NewMenu.Title,
+            description: .ContextualHints.MainMenu.NewMenu.Body,
+            arrowDirection: .unknown,
+            closeButtonA11yLabel: .ContextualHints.ContextualHintsCloseAccessibility,
+            actionButtonA11yId: AccessibilityIdentifiers.ContextualHints.actionButton
+        )
+        viewModel.closeButtonAction = { [weak self] _ in
+            self?.hintView.removeFromSuperview()
+        }
+        hintView.configure(viewModel: viewModel)
+        hintView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let window = windowScene.windows.first {
+            window.addSubview(hintView)
+            NSLayoutConstraint.activate([
+                hintView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.hintViewMargin),
+                hintView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.hintViewMargin),
+                hintView.bottomAnchor.constraint(equalTo: menuContent.accountHeaderView.topAnchor,
+                                                 constant: -UX.hintViewMargin),
+                hintView.heightAnchor.constraint(equalToConstant: UX.hintViewHeight)
+            ])
+        }
+        hintView.layer.cornerRadius = UX.hintViewCornerRadius
+        hintView.layer.masksToBounds = true
     }
 
     // MARK: - Redux
@@ -235,6 +285,19 @@ class MainMenuViewController: UIViewController,
         menuContent.accountHeaderView.adjustLayout()
     }
 
+    private func shouldDisplayHintView() -> Bool {
+        // 1. Do not present hint for new users/fresh install
+        // 2. Do not present hint if it has been already presented before
+        guard profile.prefs.boolForKey(PrefsKeys.mainMenuHintKey) != nil else {
+            if InstallType.get() == .fresh {
+                return false
+            }
+            profile.prefs.setBool(true, forKey: PrefsKeys.mainMenuHintKey)
+            return true
+        }
+        return false
+    }
+
     // MARK: - UIAdaptivePresentationControllerDelegate
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         coordinator?.dismissMenuModal(animated: true)
@@ -244,6 +307,7 @@ class MainMenuViewController: UIViewController,
     func sheetPresentationControllerDidChangeSelectedDetentIdentifier(
         _ sheetPresentationController: UISheetPresentationController
     ) {
+        hintView.removeFromSuperview()
         updateModalA11y()
     }
 

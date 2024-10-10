@@ -2597,7 +2597,7 @@ class BrowserViewController: UIViewController,
 
             if let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
                !toolbarState.canShowMenuHint {
-                if isToolbarRefactorEnabled/*, isNewMenuEnabled, isNewMenuHintEnabled*/ {
+                if isToolbarRefactorEnabled, isNewMenuEnabled, isNewMenuHintEnabled {
                     let action = ToolbarAction(windowUUID: self.windowUUID,
                                                actionType: ToolbarActionType.showMenuHint)
                     store.dispatch(action)

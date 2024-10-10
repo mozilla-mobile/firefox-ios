@@ -7,6 +7,9 @@ import Shared
 import UIKit
 
 extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
+    private struct UX {
+        static let menuHintRightMargin: CGFloat = 50
+    }
     // MARK: Data Clearance CFR / Contextual Hint
 
     // Reset the CFR timer for the data clearance button to avoid presenting the CFR
@@ -91,21 +94,24 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func configureMenuContextualHint(_ view: UIView) {
-        guard isToolbarRefactorEnabled /*isNewMenuEnabled, isNewMenuHintEnabled*/ else { return }
+        guard isToolbarRefactorEnabled, isNewMenuEnabled, isNewMenuHintEnabled else { return }
         menuContextHintVC.configure(
             anchor: view,
             withArrowDirection: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection) ? .down : .up,
             andDelegate: self,
             presentedUsing: { [weak self] in self?.presentMenuContextualHint() },
             overlayState: overlayManager,
-            ignoreSafeArea: true)
+            ignoreSafeArea: true,
+            rightSafeAreaMargin: !ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection) &&
+            UIDevice.current.userInterfaceIdiom == .phone ? UX.menuHintRightMargin : nil)
     }
 
     private func presentMenuContextualHint() {
         // Only show the menu hint if:
         // 1. The tab webpage is loaded,
-        // 2. Microsurvey prompt is not being displayed and
-        // 3. Do not present hint for new users/fresh install
+        // 2. Micro-survey prompt is not being displayed and
+        // 3. Hint was NOT already presented when menu was opened.
+        // 4. Do not present hint for new users/fresh install
         guard let state = store.state.screenState(BrowserViewControllerState.self,
                                                   for: .browserViewController,
                                                   window: windowUUID)
@@ -113,8 +119,9 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
         if let selectedTab = tabManager.selectedTab,
            !selectedTab.isFxHomeTab && !selectedTab.loading,
-           !state.microsurveyState.showPrompt {
-           // InstallType.get() != .fresh -> enable it
+           !state.microsurveyState.showPrompt,
+           profile.prefs.boolForKey(PrefsKeys.mainMenuHintKey) == nil,
+           InstallType.get() != .fresh {
             present(menuContextHintVC, animated: true)
             UIAccessibility.post(notification: .layoutChanged, argument: menuContextHintVC)
         }

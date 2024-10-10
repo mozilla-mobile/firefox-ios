@@ -54,7 +54,7 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
             hintTypeShouldBePresented = true
         }
 
-        return hintTypeShouldBePresented && !hasAlreadyBeenPresented(hintType) // -> enable it
+        return hintTypeShouldBePresented && !hasAlreadyBeenPresented(hintType)
     }
 
     // MARK: - Private helpers

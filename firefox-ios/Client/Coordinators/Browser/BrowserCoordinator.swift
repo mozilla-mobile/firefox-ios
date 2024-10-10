@@ -500,7 +500,8 @@ class BrowserCoordinator: BaseCoordinator,
 
         let coordinator = MainMenuCoordinator(
             router: DefaultRouter(navigationController: navigationController),
-            windowUUID: tabManager.windowUUID
+            windowUUID: tabManager.windowUUID,
+            profile: profile
         )
         coordinator.parentCoordinator = self
         coordinator.navigationHandler = self
