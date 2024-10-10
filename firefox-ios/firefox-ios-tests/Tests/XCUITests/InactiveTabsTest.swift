@@ -65,7 +65,7 @@ final class InactiveTabsTest: BaseTestCase {
         app.switches[AccessibilityIdentifiers.Settings.Tabs.Customize.inactiveTabsSwitch].tap()
         XCTAssertEqual(
             app.switches[AccessibilityIdentifiers.Settings.Tabs.Customize.inactiveTabsSwitch].value as! String, "0")
-        app.navigationBars.buttons["Settings"].tap()
+        app.navigationBars.buttons["Settings"].tap() // Note: No AccessibilityIdentifiers
         navigator.nowAt(SettingsScreen)
 
         // Return to tabs tray
@@ -86,7 +86,6 @@ final class InactiveTabsTest: BaseTestCase {
         app.switches[AccessibilityIdentifiers.Settings.Tabs.Customize.inactiveTabsSwitch].tap()
         XCTAssertEqual(
             app.switches[AccessibilityIdentifiers.Settings.Tabs.Customize.inactiveTabsSwitch].value as! String, "1")
-        print(app.debugDescription)
         app.navigationBars.buttons["Settings"].tap()
         navigator.nowAt(SettingsScreen)
 
@@ -115,7 +114,7 @@ final class InactiveTabsTest: BaseTestCase {
         // Swipe on a tab from the list to delete
         app.otherElements["Tabs Tray"].staticTexts["Google"].swipeLeft()
         mozWaitForElementToExist(app.buttons["Close"])
-        app.buttons["Close"].tap()
+        app.buttons["Close"].tap() // Note: No AccessibilityIdentifier
         mozWaitForElementToNotExist(app.otherElements["Tabs Tray"].staticTexts["Google"])
         mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts["Facebook - log in or sign up"])
         mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts["Amazon.com. Spend less. Smile more."])
