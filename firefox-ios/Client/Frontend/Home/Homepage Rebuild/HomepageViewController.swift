@@ -100,8 +100,6 @@ final class HomepageViewController: UIViewController,
         homepageState = state
         if homepageState.loadInitialData {
             dataSource?.applyInitialSnapshot()
-        } else if homepageState.headerState.showHeader {
-            dataSource?.updateHeaderSection()
         }
     }
 
@@ -143,8 +141,7 @@ final class HomepageViewController: UIViewController,
     private func configureCollectionView() {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layoutConfiguration)
 
-        // TODO: FXIOS-10162 - Update with proper cells
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.register(HomepageHeaderCell.self, forCellWithReuseIdentifier: HomepageHeaderCell.cellIdentifier)
 
         collectionView.keyboardDismissMode = .onDrag
         collectionView.showsVerticalScrollIndicator = false
@@ -179,12 +176,7 @@ final class HomepageViewController: UIViewController,
         for item: HomepageDiffableDataSource.HomeItem,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
-        // TODO: FXIOS-10162 - Dummy collection cells, to update with proper cells
-        guard let section = HomepageSection(rawValue: indexPath.section),
-              let cell: UICollectionViewCell = collectionView?.dequeueReusableCell(
-                withReuseIdentifier: "cell",
-                for: indexPath
-              ) else {
+        guard let section = HomepageSection(rawValue: indexPath.section) else {
             self.logger.log(
                 "Section should not have been nil, something went wrong",
                 level: .fatal,
@@ -193,41 +185,44 @@ final class HomepageViewController: UIViewController,
             return UICollectionViewCell()
         }
 
-        cell.contentView.subviews.forEach { $0.removeFromSuperview() }
-        cell.contentView.backgroundColor = getBackgroundColor(for: section)
-
-        let label = UILabel(frame: cell.contentView.bounds)
-        label.textAlignment = .center
-        label.text = item.title
-        label.textColor = .white
-        cell.contentView.addSubview(label)
-
-        return cell
-    }
-
-    private func getBackgroundColor(for section: HomepageSection) -> UIColor {
         switch section {
         case .header:
-            return .systemPink
-        case .topSites:
-            return .systemGreen
-        case .pocket:
-            return .systemPurple
+            let cell = collectionView?.dequeueReusableCell(
+                withReuseIdentifier: HomepageHeaderCell.cellIdentifier,
+                for: indexPath
+            )
+            guard let headerCell = cell as? HomepageHeaderCell else {
+                return UICollectionViewCell()
+            }
+            headerCell.configure(
+                headerState: homepageState.headerState,
+                showiPadSetup: shouldUseiPadSetup()
+            ) { [weak self] in
+                guard let self else { return }
+                store.dispatch(
+                    HeaderAction(
+                        windowUUID: self.windowUUID,
+                        actionType: HeaderActionType.toggleHomepageMode
+                    )
+                )
+            }
+            headerCell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            return headerCell
+        default:
+            return UICollectionViewCell()
         }
     }
 
     // MARK: UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let selectedItem = dataSource?.itemIdentifier(for: indexPath) {
-            // TODO: FXIOS-10162 - Dummy trigger to update with proper triggers
-            if selectedItem.title == "First" {
-                store.dispatch(
-                    HeaderAction(
-                        windowUUID: windowUUID,
-                        actionType: HeaderActionType.updateHeader
-                    )
-                )
-            }
+        // TODO: FXIOS-10162 - Dummy trigger to update with proper triggers
+
+        guard let section = HomepageSection(rawValue: indexPath.section) else {
+            return
+        }
+        switch section {
+        default:
+            return
         }
     }
 }

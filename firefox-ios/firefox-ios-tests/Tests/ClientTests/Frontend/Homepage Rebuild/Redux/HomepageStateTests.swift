@@ -8,35 +8,14 @@ import XCTest
 @testable import Client
 
 final class HomepageStateTests: XCTestCase {
-    func testInitialization() {
+    func tests_initialState_returnsExpectedState() {
         let initialState = createSubject()
 
         XCTAssertFalse(initialState.loadInitialData)
-    }
-
-    func test_windowUUID_returnsValidUUID() {
-        let initialState = createSubject()
-
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
     }
 
-    func test_different_windowUUID_returnsDefaultState() {
-        let initialState = createSubject()
-        let reducer = homepageReducer()
-
-        let newState = reducer(
-            initialState,
-            HeaderAction(
-                windowUUID: .DefaultUITestingUUID,
-                actionType: HeaderActionType.updateHeader
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertFalse(newState.loadInitialData)
-    }
-
-    func test_initializeData_returnsTrue() {
+    func test_initializeAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = homepageReducer()
 
@@ -48,22 +27,10 @@ final class HomepageStateTests: XCTestCase {
             )
         )
 
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
         XCTAssertTrue(newState.loadInitialData)
-    }
-
-    func test_updateHeader_returnsTrue() {
-        let initialState = createSubject()
-        let reducer = homepageReducer()
-
-        let newState = reducer(
-            initialState,
-            HeaderAction(
-                windowUUID: .XCTestDefaultUUID,
-                actionType: HeaderActionType.updateHeader
-            )
-        )
-
-        XCTAssertTrue(newState.headerState.showHeader)
+        XCTAssertFalse(newState.headerState.isPrivate)
+        XCTAssertTrue(newState.headerState.showPrivateModeToggle)
     }
 
     // MARK: - Private

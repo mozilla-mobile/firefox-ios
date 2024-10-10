@@ -89,8 +89,8 @@ final class PrivateHomepageViewController:
         return messageCard
     }()
 
-    private lazy var homepageHeaderCell: HomepageHeaderCell = {
-        let header = HomepageHeaderCell()
+    private lazy var homepageHeaderCell: LegacyHomepageHeaderCell = {
+        let header = LegacyHomepageHeaderCell()
         header.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         header.configure(with: headerViewModel)
         return header

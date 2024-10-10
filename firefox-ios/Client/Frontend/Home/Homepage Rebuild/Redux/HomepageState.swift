@@ -62,12 +62,6 @@ struct HomepageState: ScreenState, Equatable {
                 loadInitialData: true,
                 headerState: HeaderState.reducer(state.headerState, action)
             )
-        case HeaderActionType.updateHeader:
-            return HomepageState(
-                windowUUID: state.windowUUID,
-                loadInitialData: false,
-                headerState: HeaderState.reducer(state.headerState, action)
-            )
         default:
             return HomepageState(
                 windowUUID: state.windowUUID,

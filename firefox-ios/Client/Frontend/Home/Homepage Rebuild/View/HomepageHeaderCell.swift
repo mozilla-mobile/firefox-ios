@@ -6,27 +6,6 @@ import Foundation
 import UIKit
 import Common
 
-struct HomepageHeaderCellViewModel {
-    var showiPadSetup: Bool
-    var showPrivateModeToggle: Bool
-    var isPrivate: Bool
-
-    private var action: (() -> Void)
-    private var homepageTelemetry = HomepageTelemetry()
-
-    init(isPrivate: Bool, showiPadSetup: Bool, showPrivateModeToggle: Bool, action: @escaping () -> Void) {
-        self.isPrivate = isPrivate
-        self.showiPadSetup = showiPadSetup
-        self.showPrivateModeToggle = showPrivateModeToggle
-        self.action = action
-    }
-
-    func switchMode() {
-        action()
-        homepageTelemetry.sendHomepageTappedTelemetry(enteringPrivateMode: !isPrivate)
-    }
-}
-
 // Header for the homepage in both normal and private mode
 // Contains the firefox logo and the private browsing shortcut button
 class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
@@ -36,7 +15,8 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         static let circleSize = CGRect(width: 40, height: 40)
     }
 
-    var viewModel: HomepageHeaderCellViewModel?
+    private var headerState: HeaderState?
+    private var action: (() -> Void)?
 
     private lazy var stackContainer: UIStackView = .build { stackView in
         stackView.axis = .horizontal
@@ -95,26 +75,32 @@ class HomepageHeaderCell: UICollectionViewCell, ReusableCell, ThemeApplicable {
         NSLayoutConstraint.activate(logoConstraints)
     }
 
-    func configure(with viewModel: HomepageHeaderCellViewModel) {
-        self.viewModel = viewModel
-        setupView(with: viewModel.showiPadSetup)
-        logoHeaderCell.configure(with: viewModel.showiPadSetup)
-        privateModeButton.isHidden = !viewModel.showPrivateModeToggle
+    func configure(
+        headerState: HeaderState,
+        showiPadSetup: Bool,
+        action: @escaping () -> Void
+    ) {
+        self.headerState = headerState
+        self.action = action
+        setupView(with: showiPadSetup)
+        logoHeaderCell.configure(with: showiPadSetup)
+        privateModeButton.isHidden = showiPadSetup || !headerState.showPrivateModeToggle
     }
 
     @objc
     private func switchMode() {
-        viewModel?.switchMode()
+        // TODO: FXIOS-10171 - Add Telemetry for toggle, to live in homepage middleware
+        action?()
     }
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
+        guard let isPrivateHomepage = headerState?.isPrivate else { return }
         logoHeaderCell.applyTheme(theme: theme)
-        guard let viewModel else { return }
-        let privateModeButtonTintColor = viewModel.isPrivate ? theme.colors.layer2 : theme.colors.iconPrimary
+        let privateModeButtonTintColor = isPrivateHomepage ? theme.colors.layer2 : theme.colors.iconPrimary
         privateModeButton.imageView?.tintColor = privateModeButtonTintColor
-        privateModeButton.backgroundColor = viewModel.isPrivate ? .white : .clear
-        privateModeButton.accessibilityValue = viewModel.isPrivate ?
+        privateModeButton.backgroundColor = isPrivateHomepage ? .white : .clear
+        privateModeButton.accessibilityValue = isPrivateHomepage ?
             .TabTrayToggleAccessibilityValueOn :
             .TabTrayToggleAccessibilityValueOff
     }

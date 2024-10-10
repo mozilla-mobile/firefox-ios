@@ -31,6 +31,8 @@ class TabManagerMiddleware {
             self.resovleTabPanelViewActions(action: action, state: state)
         } else if let action = action as? MainMenuAction {
             self.resolveMainMenuActions(with: action, appState: state)
+        } else if let action = action as? HeaderAction {
+            self.resolveHomepageHeaderActions(with: action)
         }
     }
 
@@ -687,6 +689,15 @@ class TabManagerMiddleware {
                 isChangedUA: selectedTab.changedUserAgent,
                 isPrivate: selectedTab.isPrivate
             )
+        }
+    }
+
+    private func resolveHomepageHeaderActions(with action: HeaderAction) {
+        switch action.actionType {
+        case HeaderActionType.toggleHomepageMode:
+            tabManager(for: action.windowUUID).switchPrivacyMode()
+        default:
+            break
         }
     }
 }
