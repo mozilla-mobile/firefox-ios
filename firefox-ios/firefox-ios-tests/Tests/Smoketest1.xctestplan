@@ -149,6 +149,7 @@
         "HomePageSettingsUITests\/testSetFirefoxHomeAsHome()",
         "HomePageSettingsUITests\/testTopSitesCustomNumberOfRows()",
         "HomePageSettingsUITests\/testTyping()",
+        "InactiveTabsTest",
         "IntegrationTests",
         "IpadOnlyTestCase",
         "IphoneOnlyTestCase",
