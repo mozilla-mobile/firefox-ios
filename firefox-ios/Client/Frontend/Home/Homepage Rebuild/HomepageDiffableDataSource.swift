@@ -18,15 +18,18 @@ final class HomepageDiffableDataSource:
 
     enum HomeItem: Hashable {
         case header
+        case pocket(PocketItem)
     }
 
-    func applyInitialSnapshot() {
+    func applyInitialSnapshot(state: HomepageState) {
         var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeItem>()
 
         snapshot.appendSections([.header, .topSites, .pocket])
         snapshot.appendItems([.header], toSection: .header)
         snapshot.appendItems([], toSection: .topSites)
-        snapshot.appendItems([], toSection: .pocket)
+
+        let stories: [HomeItem] = state.pocketState.pocketData.compactMap { .pocket($0) }
+        snapshot.appendItems(stories, toSection: .pocket)
 
         apply(snapshot, animatingDifferences: true)
     }

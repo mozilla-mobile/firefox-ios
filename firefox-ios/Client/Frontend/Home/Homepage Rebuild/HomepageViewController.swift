@@ -10,6 +10,7 @@ final class HomepageViewController: UIViewController,
                                     UICollectionViewDelegate,
                                     ContentContainable,
                                     Themeable,
+                                    Notifiable,
                                     StoreSubscriber {
     // MARK: - Typealiases
     typealias SubscriberStateType = HomepageState
@@ -45,6 +46,8 @@ final class HomepageViewController: UIViewController,
         self.logger = logger
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
+
+        setupNotifications(forObserver: self, observing: [UIApplication.didBecomeActiveNotification])
 
         subscribeToRedux()
     }
@@ -98,9 +101,7 @@ final class HomepageViewController: UIViewController,
 
     func newState(state: HomepageState) {
         homepageState = state
-        if homepageState.loadInitialData {
-            dataSource?.applyInitialSnapshot()
-        }
+        dataSource?.applyInitialSnapshot(state: state)
     }
 
     func unsubscribeFromRedux() {
@@ -142,6 +143,7 @@ final class HomepageViewController: UIViewController,
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layoutConfiguration)
 
         collectionView.register(HomepageHeaderCell.self, forCellWithReuseIdentifier: HomepageHeaderCell.cellIdentifier)
+        collectionView.register(PocketStandardCell.self, forCellWithReuseIdentifier: PocketStandardCell.cellIdentifier)
 
         collectionView.keyboardDismissMode = .onDrag
         collectionView.showsVerticalScrollIndicator = false
@@ -187,11 +189,10 @@ final class HomepageViewController: UIViewController,
 
         switch section {
         case .header:
-            let cell = collectionView?.dequeueReusableCell(
+            guard let headerCell = collectionView?.dequeueReusableCell(
                 withReuseIdentifier: HomepageHeaderCell.cellIdentifier,
                 for: indexPath
-            )
-            guard let headerCell = cell as? HomepageHeaderCell else {
+            ) as? HomepageHeaderCell else {
                 return UICollectionViewCell()
             }
             headerCell.configure(
@@ -208,12 +209,23 @@ final class HomepageViewController: UIViewController,
             }
             headerCell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
             return headerCell
+        case .pocket:
+            guard let pocketCell = collectionView?.dequeueReusableCell(
+                withReuseIdentifier: PocketStandardCell.cellIdentifier,
+                for: indexPath
+            ) as? PocketStandardCell,
+                  case let .pocket(story) = item
+            else {
+                return UICollectionViewCell()
+            }
+            pocketCell.configure(item: story, theme: themeManager.getCurrentTheme(for: windowUUID))
+            return pocketCell
         default:
             return UICollectionViewCell()
         }
     }
 
-    // MARK: UICollectionViewDelegate
+    // MARK: - UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // TODO: FXIOS-10162 - Dummy trigger to update with proper triggers
 
@@ -223,6 +235,20 @@ final class HomepageViewController: UIViewController,
         switch section {
         default:
             return
+        }
+    }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIApplication.willEnterForegroundNotification:
+            store.dispatch(
+                PocketAction(
+                    windowUUID: self.windowUUID,
+                    actionType: PocketActionType.enteredForeground
+                )
+            )
+        default: break
         }
     }
 }

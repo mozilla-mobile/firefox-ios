@@ -7,9 +7,9 @@ import UIKit
 import Shared
 import SiteImageView
 
-// MARK: - PocketStandardCell
+// MARK: - LegacyPocketStandardCell
 /// A cell used in FxHomeScreen's Pocket section
-class PocketStandardCell: UICollectionViewCell, ReusableCell {
+class LegacyPocketStandardCell: UICollectionViewCell, ReusableCell {
     struct UX {
         static let cellHeight: CGFloat = 112
         static let cellWidth: CGFloat = 350
@@ -166,7 +166,7 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
 }
 
 // MARK: - Blurrable
-extension PocketStandardCell: Blurrable {
+extension LegacyPocketStandardCell: Blurrable {
     func adjustBlur(theme: Theme) {
         // Add blur
         if shouldApplyWallpaperBlur {
@@ -181,7 +181,7 @@ extension PocketStandardCell: Blurrable {
 }
 
 // MARK: - ThemeApplicable
-extension PocketStandardCell: ThemeApplicable {
+extension LegacyPocketStandardCell: ThemeApplicable {
     func applyTheme(theme: Theme) {
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor = theme.colors.textSecondary
