@@ -365,11 +365,7 @@ class TopTabsTest: BaseTestCase {
         mozWaitForElementToExist(tabsTrayCell.firstMatch)
         app.swipeUp()
         if !iPad() {
-            if #available(iOS 16, *) {
-                XCTAssertEqual(tabsTrayCell.element(boundBy: 3).label, "Homepage. Currently selected tab.")
-            } else {
-                XCTAssertEqual(tabsTrayCell.element(boundBy: 3).label, "Homepage")
-            }
+            XCTAssertEqual(tabsTrayCell.element(boundBy: 3).label, "Homepage. Currently selected tab.")
         } else {
             XCTAssertEqual(tabsTrayCell.element(boundBy: 6).label, "Homepage. Currently selected tab.")
         }
