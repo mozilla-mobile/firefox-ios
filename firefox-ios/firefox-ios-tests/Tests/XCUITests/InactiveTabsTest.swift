@@ -14,7 +14,7 @@ final class InactiveTabsTest: BaseTestCase {
             LaunchArguments.SkipContextualHints,
             LaunchArguments.DisableAnimations
         ]
-        
+
         // Load 20 tabs. 19 tabs are inactive.
         let tabsDatabase = "tabsState20.archive"
         launchArguments.append(LaunchArguments.LoadTabsStateArchive + tabsDatabase)
