@@ -8,7 +8,17 @@ import Shared
 import Common
 
 final class PasswordGeneratorMiddleware {
-    private let logger: Logger = DefaultLogger.shared
+    private let logger: Logger
+    private let generatedPasswordStorage: GeneratedPasswordStorageProtocol
+    
+    init(logger: Logger = DefaultLogger.shared, generatedPasswordStorage: GeneratedPasswordStorageProtocol = GeneratedPasswordStorage()) {
+        self.logger = logger
+        self.generatedPasswordStorage = generatedPasswordStorage
+    }
+    
+    
+    
+    
     lazy var passwordGeneratorProvider: Middleware<AppState> = { state, action in
         let windowUUID = action.windowUUID
         guard let currentTab = (action as? PasswordGeneratorAction)?.currentTab else { return }
@@ -21,14 +31,25 @@ final class PasswordGeneratorMiddleware {
     }
 
     private func showPasswordGenerator(tab: Tab, windowUUID: WindowUUID) {
-       generateNewPassword(with: tab, completion: { generatedPassword in
-           let newAction = PasswordGeneratorAction(
-               windowUUID: windowUUID,
-               actionType: PasswordGeneratorActionType.updateGeneratedPassword,
-               password: generatedPassword
-           )
-           store.dispatch(newAction)
-       })
+        guard let origin = tab.url?.origin else {return}
+        if let password = generatedPasswordStorage.getPasswordForOrigin(origin: origin) {
+            let newAction = PasswordGeneratorAction(
+                windowUUID: windowUUID,
+                actionType: PasswordGeneratorActionType.updateGeneratedPassword,
+                password: password
+            )
+            store.dispatch(newAction)
+        } else {
+            generateNewPassword(with: tab, completion: { generatedPassword in
+                self.generatedPasswordStorage.setPasswordForOrigin(origin: origin, password: generatedPassword)
+                let newAction = PasswordGeneratorAction(
+                    windowUUID: windowUUID,
+                    actionType: PasswordGeneratorActionType.updateGeneratedPassword,
+                    password: generatedPassword
+                )
+                store.dispatch(newAction)
+            })
+        }
     }
 
     private func generateNewPassword(with tab: Tab, completion: @escaping (String) -> Void) {
