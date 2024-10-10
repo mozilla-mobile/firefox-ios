@@ -10,15 +10,13 @@ import Common
 final class PasswordGeneratorMiddleware {
     private let logger: Logger
     private let generatedPasswordStorage: GeneratedPasswordStorageProtocol
-    
-    init(logger: Logger = DefaultLogger.shared, generatedPasswordStorage: GeneratedPasswordStorageProtocol = GeneratedPasswordStorage()) {
+
+    init(logger: Logger = DefaultLogger.shared,
+         generatedPasswordStorage: GeneratedPasswordStorageProtocol = GeneratedPasswordStorage()) {
         self.logger = logger
         self.generatedPasswordStorage = generatedPasswordStorage
     }
-    
-    
-    
-    
+
     lazy var passwordGeneratorProvider: Middleware<AppState> = { state, action in
         let windowUUID = action.windowUUID
         guard let currentTab = (action as? PasswordGeneratorAction)?.currentTab else { return }
