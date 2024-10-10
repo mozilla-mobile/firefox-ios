@@ -13,8 +13,8 @@ class TabLocationViewTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         AppContainer.shared.reset()
+        super.tearDown()
     }
 
     func testDelegateMemoryLeak() {

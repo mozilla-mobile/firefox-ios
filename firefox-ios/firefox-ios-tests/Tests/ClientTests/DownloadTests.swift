@@ -14,8 +14,8 @@ class DownloadTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         download = nil
+        super.tearDown()
     }
 
     func testDelegateMemoryLeak() {

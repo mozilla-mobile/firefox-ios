@@ -19,8 +19,8 @@ class HomeLogoHeaderViewModelTests: XCTestCase, FeatureFlaggable {
     }
 
     override func tearDown() {
-        super.tearDown()
         profile = nil
+        super.tearDown()
     }
 
     func testDefaultHomepageViewModelProtocolValues() {

@@ -19,9 +19,9 @@ class VersionSettingTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
         delegate = nil
+        super.tearDown()
     }
 
     func testCopyAppVersion() {

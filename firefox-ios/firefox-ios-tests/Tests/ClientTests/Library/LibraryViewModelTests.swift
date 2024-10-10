@@ -20,10 +20,10 @@ class LibraryViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         AppContainer.shared.reset()
         profile.shutdown()
         profile = nil
+        super.tearDown()
     }
 
     func testInitialState_Init() {

@@ -39,9 +39,9 @@ class PocketStoriesTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         pocketAPI = nil
         webServer = nil
+        super.tearDown()
     }
 
     func testPocketStoriesCaching() {

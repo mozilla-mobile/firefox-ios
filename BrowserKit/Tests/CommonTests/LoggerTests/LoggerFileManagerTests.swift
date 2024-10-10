@@ -16,9 +16,9 @@ final class LoggerFileManagerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         subject = nil
         fileManager = nil
+        super.tearDown()
     }
 
     func testExpectedLogDestination() throws {

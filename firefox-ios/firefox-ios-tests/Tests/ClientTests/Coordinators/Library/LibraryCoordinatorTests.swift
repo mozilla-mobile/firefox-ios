@@ -20,10 +20,10 @@ final class LibraryCoordinatorTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         self.mockRouter = nil
         self.delegate = nil
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testEmptyChildren_whenCreated() {

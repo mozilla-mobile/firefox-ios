@@ -24,9 +24,9 @@ class FileAccessorTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         files = nil
         testDir = nil
+        super.tearDown()
     }
 
     func testFileAccessor() {

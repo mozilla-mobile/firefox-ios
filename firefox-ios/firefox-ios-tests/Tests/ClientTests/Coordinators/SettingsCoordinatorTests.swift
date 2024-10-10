@@ -23,12 +23,12 @@ final class SettingsCoordinatorTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         self.mockRouter = nil
         self.wallpaperManager = nil
         self.delegate = nil
         self.mockSettingsVC = nil
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testEmptyChildren_whenCreated() {

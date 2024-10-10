@@ -17,8 +17,8 @@ final class TabPanelStateTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testTabsState_DidLoadTabPanel() {

@@ -15,9 +15,9 @@ final class CrashManagerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         sentryWrapper = nil
         setupAppInformation(buildChannel: .other)
+        super.tearDown()
     }
 
     // MARK: - Setup

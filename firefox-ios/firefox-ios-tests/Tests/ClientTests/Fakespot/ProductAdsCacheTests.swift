@@ -42,10 +42,10 @@ final class ProductAdsCacheTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         cache = nil
         ads1 = nil
         ads2 = nil
+        super.tearDown()
     }
 
     func testCacheAds() async {

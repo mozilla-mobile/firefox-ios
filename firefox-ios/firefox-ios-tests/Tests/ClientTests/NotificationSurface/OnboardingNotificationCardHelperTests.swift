@@ -20,9 +20,9 @@ class OnboardingNotificationCardHelperTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         AppContainer.shared.reset()
         nimbusUtility = nil
+        super.tearDown()
     }
 
     func testHelper_fromOnboarding_withNotificationCard_returnsTrue() {

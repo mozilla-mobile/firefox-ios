@@ -15,9 +15,9 @@ final class TabsCoordinatorTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         mockRouter = nil
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testInitialState() {

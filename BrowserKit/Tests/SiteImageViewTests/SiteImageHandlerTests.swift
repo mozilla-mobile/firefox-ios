@@ -16,9 +16,9 @@ final class SiteImageHandlerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         self.urlHandler = nil
         self.imageHandler = nil
+        super.tearDown()
     }
 
     // MARK: - Favicon

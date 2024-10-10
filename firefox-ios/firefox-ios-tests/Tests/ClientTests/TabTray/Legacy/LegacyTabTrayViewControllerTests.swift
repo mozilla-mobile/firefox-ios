@@ -39,8 +39,6 @@ final class LegacyTabTrayViewControllerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
-
         AppContainer.shared.reset()
         profile = nil
         manager = nil
@@ -48,6 +46,7 @@ final class LegacyTabTrayViewControllerTests: XCTestCase {
         overlayManager = nil
         tabTray = nil
         gridTab = nil
+        super.tearDown()
     }
 
     @MainActor

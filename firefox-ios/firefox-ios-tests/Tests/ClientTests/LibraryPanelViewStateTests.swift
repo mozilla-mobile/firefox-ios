@@ -14,8 +14,8 @@ class LibraryPanelViewStateTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         panelState = nil
+        super.tearDown()
     }
 
     // MARK: - Single panel interaction tests

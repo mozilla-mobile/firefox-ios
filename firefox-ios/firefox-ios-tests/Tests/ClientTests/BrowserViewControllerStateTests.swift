@@ -14,8 +14,8 @@ final class BrowserViewControllerStateTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testAddNewTabAction() {

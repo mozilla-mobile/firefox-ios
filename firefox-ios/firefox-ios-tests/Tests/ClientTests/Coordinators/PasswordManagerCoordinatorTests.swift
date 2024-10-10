@@ -20,10 +20,10 @@ final class PasswordManagerCoordinatorTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         self.mockRouter = nil
         self.mockParentCoordinator = nil
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testStart_withShowOnboarding() {

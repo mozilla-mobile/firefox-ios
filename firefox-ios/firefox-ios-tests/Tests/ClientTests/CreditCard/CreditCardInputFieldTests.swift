@@ -22,10 +22,9 @@ class CreditCardInputFieldTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
-
         profile = nil
         viewModel = nil
+        super.tearDown()
     }
 
     func testInputFieldPropertiesOnName() {

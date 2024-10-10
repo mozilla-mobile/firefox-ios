@@ -18,10 +18,10 @@ class LoginManagerTests: KIFTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         clearLogins()
         tester().wait(forTimeInterval: 5)
         BrowserUtils.resetToAboutHomeKIF(tester())
+        super.tearDown()
     }
 
     fileprivate func openLoginManager() {

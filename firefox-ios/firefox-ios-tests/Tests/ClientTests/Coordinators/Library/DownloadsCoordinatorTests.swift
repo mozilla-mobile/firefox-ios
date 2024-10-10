@@ -20,11 +20,11 @@ final class DownloadsCoordinatorTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         router = nil
         parentCoordinator = nil
         profile = nil
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testHandleFile_presentsShareController() {

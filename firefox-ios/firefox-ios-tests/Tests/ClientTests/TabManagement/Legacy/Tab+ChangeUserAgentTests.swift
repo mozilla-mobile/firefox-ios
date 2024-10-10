@@ -24,8 +24,8 @@ class ChangeUserAgentTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         testFile = nil
+        super.tearDown()
     }
 
     func testUpdateAndContainsDidChangeUANotPrivate() {

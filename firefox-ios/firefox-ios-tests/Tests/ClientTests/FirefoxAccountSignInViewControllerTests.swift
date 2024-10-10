@@ -20,8 +20,8 @@ final class FirefoxAccountSignInViewControllerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testFirefoxAccountSignInViewController_simpleCreation_hasNoLeaks() {

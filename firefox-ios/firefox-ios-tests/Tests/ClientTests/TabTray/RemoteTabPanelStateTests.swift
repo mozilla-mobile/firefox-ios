@@ -17,8 +17,8 @@ final class RemoteTabPanelStateTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testTabsRefreshSkippedIfNotAllowed() {

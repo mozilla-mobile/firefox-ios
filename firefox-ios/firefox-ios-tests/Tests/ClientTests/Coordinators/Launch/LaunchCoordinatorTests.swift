@@ -22,11 +22,11 @@ final class LaunchCoordinatorTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         profile = nil
         mockRouter = nil
         delegate = nil
         AppContainer.shared.reset()
+        super.tearDown()
     }
 
     func testInitialState() {

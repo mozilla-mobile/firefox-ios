@@ -16,8 +16,8 @@ class HistoryPanelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testHistoryButtons() {

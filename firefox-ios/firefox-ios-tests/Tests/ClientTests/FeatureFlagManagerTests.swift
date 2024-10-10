@@ -20,6 +20,7 @@ class FeatureFlagManagerTests: XCTestCase, FeatureFlaggable {
 
     override func tearDown() {
         UserDefaults.standard.removeObject(forKey: PrefsKeys.NimbusFeatureTestsOverride)
+        super.tearDown()
     }
 
     // MARK: - Tests

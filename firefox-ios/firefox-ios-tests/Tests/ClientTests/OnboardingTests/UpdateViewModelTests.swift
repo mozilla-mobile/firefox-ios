@@ -19,8 +19,8 @@ class UpdateViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         profile = nil
+        super.tearDown()
     }
 
     // MARK: Enable cards

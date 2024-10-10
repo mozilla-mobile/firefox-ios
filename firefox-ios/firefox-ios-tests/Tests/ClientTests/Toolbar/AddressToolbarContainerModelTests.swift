@@ -52,10 +52,10 @@ class AddressToolbarContainerModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         viewModel = nil
         mockProfile = nil
         engines = nil
+        super.tearDown()
     }
 
     func testSearchWordFromURLWhenUrlIsNilThenSearchWordIsNil() {

@@ -22,11 +22,11 @@ class BookmarksDataAdaptorTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         mockBookmarksHandler = nil
         mockNotificationCenter = nil
         subject = nil
         mockDelegate = nil
+        super.tearDown()
     }
 
     // MARK: - getSavedData

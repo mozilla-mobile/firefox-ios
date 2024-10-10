@@ -22,12 +22,12 @@ final class BookmarksCoordinatorTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
         router = nil
         profile = nil
         parentCoordinator = nil
         navigationHandler = nil
+        super.tearDown()
     }
 
     func testStart() {

@@ -19,8 +19,8 @@ final class DefaultThemeManagerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         userDefaults = nil
+        super.tearDown()
     }
 
     // MARK: - Initialization tests

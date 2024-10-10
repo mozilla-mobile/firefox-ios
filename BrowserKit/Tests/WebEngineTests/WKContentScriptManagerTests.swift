@@ -14,8 +14,8 @@ final class WKContentScriptManagerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         script = nil
+        super.tearDown()
     }
 
     func testAddContentGivenAddedTwiceThenOnlyAddOnce() {

@@ -22,10 +22,10 @@ class StatusBarOverlayTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         self.profile = nil
         self.wallpaperManager = nil
         self.notificationCenter = nil
+        super.tearDown()
     }
 
     func testInitialState_isOpaque() throws {

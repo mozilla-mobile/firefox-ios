@@ -17,8 +17,8 @@ final class TrackingProtectionStateTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         mockProfile = nil
+        super.tearDown()
     }
 
     func testDismissSurveyAction() {

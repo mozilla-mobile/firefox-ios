@@ -16,8 +16,8 @@ final class NativeErrorPageViewControllerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testNativeErrorPageViewController_simpleCreation_hasNoLeaks() {

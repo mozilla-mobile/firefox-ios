@@ -15,8 +15,8 @@ final class HeroImageFetcherTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         self.metadataProvider = nil
+        super.tearDown()
     }
 
     func testHeroImageLoading_whenError_throwsError() async {

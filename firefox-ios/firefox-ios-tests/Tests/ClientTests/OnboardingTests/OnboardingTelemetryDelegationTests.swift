@@ -20,8 +20,8 @@ class OnboardingTelemetryDelegationTests: XCTestCase {
     }
 
     override func tearDown() {
-        nimbusUtility = nil
         super.tearDown()
+        nimbusUtility = nil
     }
 
     func testOnboardingCard_viewSendsCardView() {

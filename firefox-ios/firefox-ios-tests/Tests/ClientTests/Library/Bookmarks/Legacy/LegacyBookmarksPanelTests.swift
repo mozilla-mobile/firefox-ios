@@ -17,8 +17,8 @@ class LegacyBookmarksPanelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     // MARK: Bottom left action

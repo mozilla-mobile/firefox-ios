@@ -16,8 +16,8 @@ class LegacyRemoteTabsPanelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         AppContainer.shared.reset()
+        super.tearDown()
     }
 
     // MARK: States of panel

@@ -24,9 +24,9 @@ class FirefoxHomeViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         profile = nil
         AppContainer.shared.reset()
+        super.tearDown()
     }
 
     // MARK: Number of sections

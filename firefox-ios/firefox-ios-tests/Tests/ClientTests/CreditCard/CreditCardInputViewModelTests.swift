@@ -49,9 +49,9 @@ class CreditCardInputViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         viewModel = nil
         profile = nil
+        super.tearDown()
     }
 
     func testEditViewModel_SavingCard() {

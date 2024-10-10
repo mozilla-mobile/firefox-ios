@@ -15,8 +15,8 @@ class WallpaperMigrationUtilityTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         removeAllFolders()
+        super.tearDown()
     }
 
     func testRemovingAllFoldersOnSetup() {

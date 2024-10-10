@@ -16,9 +16,9 @@ final class TabDisplayViewTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
         profile = nil
+        super.tearDown()
     }
 
     func testNumberOfSections_ForRegularTabsWithInactiveTabs() {

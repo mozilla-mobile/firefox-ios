@@ -16,9 +16,9 @@ final class ContentBlockerGeneratorTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         self.fileManager = nil
         self.parserData = nil
+        super.tearDown()
     }
 
     func testGenerator_whenEmptyFiles_generateNothing() {

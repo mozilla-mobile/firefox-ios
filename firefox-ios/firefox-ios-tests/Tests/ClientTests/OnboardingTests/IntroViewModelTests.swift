@@ -19,8 +19,8 @@ class IntroViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         nimbusUtility = nil
+        super.tearDown()
     }
 
     func testModel_whenInitialized_hasNoViewControllers() {

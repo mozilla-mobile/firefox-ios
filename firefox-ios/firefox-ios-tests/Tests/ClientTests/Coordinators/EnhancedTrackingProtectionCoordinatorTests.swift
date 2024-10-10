@@ -28,7 +28,6 @@ final class EnhancedTrackingProtectionCoordinatorTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         self.routeBuilder = nil
         self.mockRouter = nil
         self.profile = nil
@@ -36,6 +35,7 @@ final class EnhancedTrackingProtectionCoordinatorTests: XCTestCase {
         self.glean = nil
         self.delegate = nil
         AppContainer.shared.reset()
+        super.tearDown()
     }
 
     func testParentCoordinatorDelegate_calledWithPage() {

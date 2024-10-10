@@ -14,8 +14,8 @@ final class AdsTelemetryContentScriptTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         adsTelemetryDelegate = nil
+        super.tearDown()
     }
 
     func testDidReceiveMessageGivenEmptyMessageThenNoDelegateCalled() {
