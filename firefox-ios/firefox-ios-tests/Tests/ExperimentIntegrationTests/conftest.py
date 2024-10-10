@@ -12,14 +12,9 @@ import time
 import pytest
 import requests
 
-## MUST REMOVE WHEN SYNCINTEGRATIONTEST FOLDER IS MOVED
-import sys
-
-sys.path.append("../../")
-
 from ExperimentIntegrationTests.models.models import TelemetryModel
-from SyncIntegrationTests.xcodebuild import XCodeBuild
-from SyncIntegrationTests.xcrun import XCRun
+from ExperimentIntegrationTests.xcodebuild import XCodeBuild
+from ExperimentIntegrationTests.xcrun import XCRun
 
 KLAATU_SERVER_URL = "http://localhost:1378"
 KLAATU_LOCAL_SERVER_URL = "http://localhost:1378"

@@ -11,7 +11,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
     override func setUpApp() {
         app.activate()
         let closeButton = app.buttons["CloseButton"]
-        if closeButton.waitForExistence(timeout: TIMEOUT_LONG) {
+        if closeButton.waitForExistence(timeout: TIMEOUT) {
             closeButton.tap()
         }
         super.setUpScreenGraph()
@@ -131,6 +131,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
         let studiesToggle = app.switches.matching(
             NSPredicate(format: "identifier CONTAINS 'settings.studiesToggle'")
         )
+        wait(forElement: studiesToggle.element, timeout: TIMEOUT)
         XCTAssertEqual(studiesToggle.element.value as? String, "1")
         studiesToggle.element.tap()
         XCTAssertEqual(studiesToggle.element.value as? String, "0")
