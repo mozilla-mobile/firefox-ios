@@ -27,7 +27,8 @@ class BrowserCoordinator: BaseCoordinator,
                           TabTrayCoordinatorDelegate,
                           PrivateHomepageDelegate,
                           WindowEventCoordinator,
-                          MainMenuCoordinatorDelegate {
+                          MainMenuCoordinatorDelegate,
+                          ETPCoordinatorSSLStatusDelegate {
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var legacyHomepageViewController: LegacyHomepageViewController?
@@ -218,6 +219,12 @@ class BrowserCoordinator: BaseCoordinator,
         }
     }
 
+    // MARK: - ETPCoordinatorSSLStatusDelegate
+
+    var showHasOnlySecureContentInTrackingPanel: Bool {
+        return browserViewController.urlBar.locationView.hasSecureContent
+    }
+
     // MARK: - Route handling
 
     override func canHandle(route: Route) -> Bool {
@@ -395,7 +402,8 @@ class BrowserCoordinator: BaseCoordinator,
 
     private func showETPMenu(sourceView: UIView) {
         let enhancedTrackingProtectionCoordinator = EnhancedTrackingProtectionCoordinator(router: router,
-                                                                                          tabManager: tabManager)
+                                                                                          tabManager: tabManager,
+                                                                                          secureConnectionDelegate: self)
         enhancedTrackingProtectionCoordinator.parentCoordinator = self
         add(child: enhancedTrackingProtectionCoordinator)
         enhancedTrackingProtectionCoordinator.start(sourceView: sourceView)
