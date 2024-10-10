@@ -150,8 +150,10 @@ class TrackingProtectionViewController: UIViewController, Themeable, Notifiable,
         updateProtectionViewStatus()
         applyTheme()
         getCertificates(for: viewModel.url) { [weak self] certificates in
-            if let certs = certificates {
-                self?.viewModel.certificates = certs
+            if let certificates {
+                ensureMainThread {
+                    self?.viewModel.certificates = certificates
+                }
             }
         }
     }

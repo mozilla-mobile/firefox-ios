@@ -43,6 +43,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "%@ లో తెరువు";
 
+/* Button to dismiss the 'Add Pass Failed' alert. */
+"AddPass.Error.Dismiss" = "సరే";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "ఇష్టానుసారమైన URLను జోడించండి";
 

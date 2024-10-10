@@ -129,7 +129,8 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showHomepage() {
-        let homepageController = HomepageViewController(windowUUID: windowUUID)
+        let homepageController = self.homepageViewController ?? HomepageViewController(windowUUID: windowUUID)
+
         guard browserViewController.embedContent(homepageController) else {
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
             return
@@ -490,9 +491,12 @@ class BrowserCoordinator: BaseCoordinator,
         guard !childCoordinators.contains(where: { $0 is MainMenuCoordinator }) else { return nil }
 
         let navigationController = DismissableNavigationViewController()
-        navigationController.sheetPresentationController?.detents = [.medium(), .large()]
-        navigationController.sheetPresentationController?.prefersGrabberVisible = true
-        setiPadLayoutDetents(for: navigationController)
+        if navigationController.shouldUseiPadSetup() {
+            navigationController.modalPresentationStyle = .formSheet
+        } else {
+            navigationController.sheetPresentationController?.detents = [.medium(), .large()]
+            navigationController.sheetPresentationController?.prefersGrabberVisible = true
+        }
 
         let coordinator = MainMenuCoordinator(
             router: DefaultRouter(navigationController: navigationController),
@@ -636,6 +640,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     @MainActor
+    @preconcurrency
     func showSavedLoginAutofill(tabURL: URL, currentRequestId: String, field: FocusFieldType) {
         let bottomSheetCoordinator = makeCredentialAutofillCoordinator()
         bottomSheetCoordinator.showSavedLoginAutofill(tabURL: tabURL, currentRequestId: currentRequestId, field: field)

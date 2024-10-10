@@ -21,6 +21,7 @@ class ScreenAction: Action {
 enum AppScreen {
     case browserViewController
     case onboardingViewController
+    case homepage
     case themeSettings
     case tabsTray
     case tabsPanel

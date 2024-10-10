@@ -102,6 +102,8 @@ class OneLineTableViewCell: UITableViewCell,
             equalTo: containerView.leadingAnchor,
             constant: UX.borderViewMargin
         )
+        let imageViewDynamicSize = min(UIFontMetrics.default.scaledValue(for: UX.leftImageViewSize),
+                                       2 * UX.leftImageViewSize)
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor,
                                                constant: UX.verticalMargin),
@@ -112,8 +114,8 @@ class OneLineTableViewCell: UITableViewCell,
 
             leftImageViewLeadingConstraint,
             leftImageView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
-            leftImageView.widthAnchor.constraint(equalToConstant: UX.leftImageViewSize),
-            leftImageView.heightAnchor.constraint(equalToConstant: UX.leftImageViewSize),
+            leftImageView.widthAnchor.constraint(equalToConstant: imageViewDynamicSize),
+            leftImageView.heightAnchor.constraint(equalToConstant: imageViewDynamicSize),
             leftImageView.trailingAnchor.constraint(equalTo: titleLabel.leadingAnchor,
                                                     constant: -midViewLeadingMargin),
 

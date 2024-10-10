@@ -10,3 +10,6 @@
 /* Privacy - Photo Library Additions Usage Description */
 "NSPhotoLibraryAddUsageDescription" = "ఇది ఫొటోలని భద్రపరచి ఎక్కించనిస్తుంది.";
 
+/* This is the menu item that appears when you long press the Focus icon on the phone home screen. */
+"UIApplicationShortcutItemTitle.EraseAndOpen" = "తుడిచివేసి తెరువు";
+

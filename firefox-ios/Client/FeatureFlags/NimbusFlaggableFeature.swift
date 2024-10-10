@@ -11,6 +11,7 @@ import UIKit
 enum NimbusFeatureFlagID: String, CaseIterable {
     case accountSettingsRedux
     case addressAutofillEdit
+    case bookmarksRefactor
     case bottomSearchBar
     case contextualHintForToolbar
     case creditCardAutofillStatus
@@ -87,6 +88,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.JumpBackInSection
         // Cases where users do not have the option to manipulate a setting.
         case .contextualHintForToolbar,
+                .bookmarksRefactor,
                 .accountSettingsRedux,
                 .addressAutofillEdit,
                 .creditCardAutofillStatus,

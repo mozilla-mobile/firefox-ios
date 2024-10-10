@@ -22,6 +22,9 @@
 /* Accessibility label for toggling on/off private mode */
 "Private Mode" = "Yksityinen tila";
 
+/* Accessibility label for toggling on/off private mode */
+"PrivateBrowsing.Toggle.A11y.Label.v132" = "Yksityinen selaus";
+
 /* Accessiblity hint for toggling on/off private mode */
 "Turns private mode on or off" = "Kytkee yksityisen tilan päälle tai pois";
 

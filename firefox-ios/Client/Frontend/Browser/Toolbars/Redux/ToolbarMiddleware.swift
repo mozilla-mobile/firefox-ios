@@ -93,6 +93,9 @@ final class ToolbarMiddleware: FeatureFlaggable {
             else { return }
             toolbarTelemetry.clearSearchButtonTapped(isPrivate: toolbarState.isPrivateMode)
 
+        case ToolbarMiddlewareActionType.didStartDragInteraction:
+            toolbarTelemetry.dragInteractionStarted()
+
         default:
             break
         }

@@ -16,6 +16,7 @@ include:
   - nimbus-features/accountSettingsReduxFeature.yaml
   - nimbus-features/addressAutofillFeature.yaml
   - nimbus-features/autofillFeature.yaml
+  - nimbus-features/bookmarkRefactorFeature.yaml
   - nimbus-features/contextualHintFeature.yaml
   - nimbus-features/fakespotFeature.yaml
   - nimbus-features/feltPrivacyFeature.yaml

@@ -10,7 +10,12 @@ import Common
 /// | navigation  | indicators | url       [ page    ] | browser  |
 /// |   actions   |            |           [ actions ] | actions  |
 /// +-------------+------------+-----------------------+----------+
-public class BrowserAddressToolbar: UIView, Notifiable, AddressToolbar, ThemeApplicable, LocationViewDelegate {
+public class BrowserAddressToolbar: UIView,
+                                    Notifiable,
+                                    AddressToolbar,
+                                    ThemeApplicable,
+                                    LocationViewDelegate,
+                                    UIDragInteractionDelegate {
     private enum UX {
         static let horizontalEdgeSpace: CGFloat = 16
         static let verticalEdgeSpace: CGFloat = 8
@@ -29,6 +34,7 @@ public class BrowserAddressToolbar: UIView, Notifiable, AddressToolbar, ThemeApp
     private weak var toolbarDelegate: AddressToolbarDelegate?
     private var theme: Theme?
     private var isUnifiedSearchEnabled = false
+    private var droppableUrl: URL?
 
     private lazy var toolbarContainerView: UIView = .build()
     private lazy var navigationActionStack: UIStackView = .build()
@@ -61,6 +67,7 @@ public class BrowserAddressToolbar: UIView, Notifiable, AddressToolbar, ThemeApp
         setupLayout()
         setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
         adjustHeightConstraintForA11ySizeCategory()
+        setupDragInteraction()
     }
 
     required init?(coder: NSCoder) {
@@ -82,6 +89,7 @@ public class BrowserAddressToolbar: UIView, Notifiable, AddressToolbar, ThemeApp
         updateBorder(borderPosition: state.borderPosition)
 
         locationView.configure(state.locationViewState, delegate: self, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
+        droppableUrl = state.locationViewState.droppableUrl
 
         setNeedsLayout()
         layoutIfNeeded()
@@ -188,6 +196,14 @@ public class BrowserAddressToolbar: UIView, Notifiable, AddressToolbar, ThemeApp
         updateActionSpacing()
 
         setupAccessibility()
+    }
+
+    private func setupDragInteraction() {
+        // Setup UIDragInteraction to handle dragging the location
+        // bar for dropping its URL into other apps.
+        let dragInteraction = UIDragInteraction(delegate: self)
+        dragInteraction.allowsSimultaneousRecognitionDuringLift = true
+        locationContainer.addInteraction(dragInteraction)
     }
 
     // MARK: - Accessibility
@@ -315,8 +331,16 @@ public class BrowserAddressToolbar: UIView, Notifiable, AddressToolbar, ThemeApp
         toolbarDelegate?.openBrowser(searchTerm: text)
     }
 
+    func locationViewDidTapSearchEngine<T: SearchEngineView>(_ searchEngine: T) {
+            // TODO: FXIOS-10191 - To be implemented
+    }
+
     func locationViewAccessibilityActions() -> [UIAccessibilityCustomAction]? {
         toolbarDelegate?.addressToolbarAccessibilityActions()
+    }
+
+    func locationViewDidBeginDragInteraction() {
+        toolbarDelegate?.addressToolbarDidBeginDragInteraction()
     }
 
     // MARK: - ThemeApplicable
@@ -328,5 +352,20 @@ public class BrowserAddressToolbar: UIView, Notifiable, AddressToolbar, ThemeApp
         toolbarBottomBorderView.backgroundColor = theme.colors.borderPrimary
         locationView.applyTheme(theme: theme)
         self.theme = theme
+    }
+
+    // MARK: - UIDragInteractionDelegate
+    public func dragInteraction(_ interaction: UIDragInteraction,
+                                itemsForBeginning session: UIDragSession) -> [UIDragItem] {
+        guard let url = droppableUrl, let itemProvider = NSItemProvider(contentsOf: url) else { return [] }
+
+        toolbarDelegate?.addressToolbarDidProvideItemsForDragInteraction()
+
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        return [dragItem]
+    }
+
+    public func dragInteraction(_ interaction: UIDragInteraction, sessionWillBegin session: UIDragSession) {
+        toolbarDelegate?.addressToolbarDidBeginDragInteraction()
     }
 }

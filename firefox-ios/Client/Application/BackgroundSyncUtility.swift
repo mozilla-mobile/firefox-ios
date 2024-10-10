@@ -10,6 +10,7 @@ class BackgroundSyncUtility: BackgroundUtilityProtocol {
     let profile: Profile
     let application: UIApplication
     let logger: Logger
+    private var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
 
     init(profile: Profile,
          application: UIApplication,
@@ -25,15 +26,14 @@ class BackgroundSyncUtility: BackgroundUtilityProtocol {
         if profile.syncManager.isSyncing {
             // If syncing, create a background task because _shutdown() is blocking and
             // might take a few seconds to complete
-            var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
             taskId = application.beginBackgroundTask(expirationHandler: {
                 self.shutdownProfileWhenNotActive()
-                self.application.endBackgroundTask(taskId)
+                self.application.endBackgroundTask(self.taskId)
             })
 
             DispatchQueue.main.async {
                 self.shutdownProfileWhenNotActive()
-                self.application.endBackgroundTask(taskId)
+                self.application.endBackgroundTask(self.taskId)
             }
         } else {
             // Blocking call, however without sync running it should be instantaneous
