@@ -11,8 +11,10 @@ final class HomepageStateTests: XCTestCase {
     func tests_initialState_returnsExpectedState() {
         let initialState = createSubject()
 
-        XCTAssertFalse(initialState.loadInitialData)
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
+
+        XCTAssertFalse(initialState.headerState.isPrivate)
+        XCTAssertTrue(initialState.headerState.showPrivateModeToggle)
     }
 
     func test_initializeAction_returnsExpectedState() {
@@ -28,7 +30,7 @@ final class HomepageStateTests: XCTestCase {
         )
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertTrue(newState.loadInitialData)
+
         XCTAssertFalse(newState.headerState.isPrivate)
         XCTAssertTrue(newState.headerState.showPrivateModeToggle)
     }

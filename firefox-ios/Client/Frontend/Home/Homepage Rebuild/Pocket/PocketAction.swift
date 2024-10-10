@@ -10,9 +10,9 @@ final class PocketAction: Action {
     var pocketStories: [PocketItem]?
 
     init(
+        pocketStories: [PocketItem]? = nil,
         windowUUID: WindowUUID,
-        actionType: any ActionType,
-        pocketStories: [PocketItem]? = nil
+        actionType: any ActionType
     ) {
         self.pocketStories = pocketStories
         super.init(windowUUID: windowUUID, actionType: actionType)

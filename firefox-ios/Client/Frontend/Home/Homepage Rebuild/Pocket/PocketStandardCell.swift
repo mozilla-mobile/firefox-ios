@@ -6,7 +6,6 @@ import Common
 import Foundation
 import SiteImageView
 
-// MARK: - PocketStandardCell
 /// The standard cell used in homepage pocket section
 class PocketStandardCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable {
     struct UX {

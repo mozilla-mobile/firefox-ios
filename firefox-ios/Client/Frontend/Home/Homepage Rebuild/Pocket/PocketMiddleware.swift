@@ -29,9 +29,9 @@ final class PocketMiddleware {
             let pocketStories = await pocketManager.getPocketItems()
             store.dispatch(
                 PocketAction(
+                    pocketStories: pocketStories,
                     windowUUID: action.windowUUID,
-                    actionType: PocketMiddlewareActionType.retrievedUpdatedStories,
-                    pocketStories: pocketStories
+                    actionType: PocketMiddlewareActionType.retrievedUpdatedStories
                 )
             )
         }
