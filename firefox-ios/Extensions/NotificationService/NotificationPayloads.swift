@@ -14,3 +14,9 @@ struct NotificationSentTabs {
         static let deviceNameKey = "deviceName"
     }
 }
+
+struct NotificationCloseTabs {
+    static let closeTabsKey = "closeRemoteTabs"
+    static let notificationCategoryId: String = "org.mozilla.ios.fxa.notification.category"
+    static let messageIdKey: String = "messageId"
+}
