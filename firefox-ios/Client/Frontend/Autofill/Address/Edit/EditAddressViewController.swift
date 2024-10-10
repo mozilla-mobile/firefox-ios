@@ -6,6 +6,7 @@ import UIKit
 import WebKit
 import SwiftUI
 import Common
+import Shared
 import struct MozillaAppServices.UpdatableAddressFields
 
 class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler, Themeable {
@@ -55,6 +56,7 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
         setupWebView()
         setupRemoveButton()
         listenForThemeChange(view)
+        KeyboardHelper.defaultHelper.addDelegate(self)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -78,6 +80,7 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
         guard let webView else { return }
         view.addSubview(stackView)
         stackView.addArrangedSubview(webView)
+        stackView.isLayoutMarginsRelativeArrangement = true
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -200,6 +203,20 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
         ))
 
         self.present(alertController, animated: true, completion: nil)
+    }
+}
+
+// MARK: - KeyboardHelperDelegate
+extension EditAddressViewController: KeyboardHelperDelegate {
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+        let coveredHeight = state.intersectionHeightForView(view)
+        // Adjust stackView's bottom inset when the keyboard appears
+        stackView.layoutMargins.bottom = coveredHeight
+    }
+
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+        // Reset the bottom inset when the keyboard hides
+        stackView.layoutMargins.bottom = 0
     }
 }
 
