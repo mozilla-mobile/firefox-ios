@@ -143,7 +143,7 @@ class OpenSearchEngineTests: XCTestCase {
     private func generateOpenSearchEngine(type: TestSearchEngine) throws -> OpenSearchEngine {
         guard let testImage = UIImage(
             named: type.imageName,
-            in: Bundle(for: SearchEnginesTests.self),
+            in: Bundle(for: OpenSearchEngineTests.self),
             compatibleWith: nil
         ) else {
             XCTFail("Check that image is bundled for testing")

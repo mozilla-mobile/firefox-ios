@@ -54,9 +54,13 @@ class SearchEnginesTests: XCTestCase {
     }
 
     func testAddingAndDeletingCustomEngines() {
+        guard let testImage = UIImage(named: "wikipedia", in: Bundle(for: SearchEnginesTests.self), with: nil) else {
+            XCTFail("Check that image is bundled for testing")
+            return
+        }
         let testEngine = OpenSearchEngine(engineID: "ATester",
                                           shortName: "ATester",
-                                          image: UIImage(),
+                                          image: testImage,
                                           searchTemplate: "http://firefox.com/find?q={searchTerm}",
                                           suggestTemplate: nil,
                                           isCustomEngine: true)
