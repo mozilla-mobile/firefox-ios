@@ -8,6 +8,10 @@ import ComponentLibrary
 
 public final class MenuMainView: UIView,
                                  MenuTableViewDataDelegate, ThemeApplicable {
+    private struct UX {
+        static let headerLineOffset: CGFloat = 35
+    }
+
     // MARK: - UI Elements
     private var tableView: MenuTableView = .build()
     public var accountHeaderView: HeaderView = .build()
@@ -18,6 +22,7 @@ public final class MenuMainView: UIView,
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
+        handleUpdateHeaderLineView()
     }
 
     required init?(coder: NSCoder) {
@@ -26,6 +31,7 @@ public final class MenuMainView: UIView,
 
     // MARK: - UI Setup
     private func setupView() {
+        accountHeaderView.updateHeaderLineView(isHidden: true)
         self.addSubview(accountHeaderView)
         self.addSubview(tableView)
 
@@ -33,7 +39,6 @@ public final class MenuMainView: UIView,
             accountHeaderView.topAnchor.constraint(equalTo: self.topAnchor),
             accountHeaderView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             accountHeaderView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            accountHeaderView.heightAnchor.constraint(equalToConstant: 70),
 
             tableView.topAnchor.constraint(equalTo: accountHeaderView.bottomAnchor),
             tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
@@ -48,6 +53,35 @@ public final class MenuMainView: UIView,
                                        icon: icon)
     }
 
+    public func setupAccessibilityIdentifiers(closeButtonA11yLabel: String,
+                                              closeButtonA11yId: String,
+                                              mainButtonA11yLabel: String,
+                                              mainButtonA11yId: String,
+                                              menuA11yId: String,
+                                              menuA11yLabel: String) {
+        accountHeaderView.setupAccessibility(closeButtonA11yLabel: closeButtonA11yLabel,
+                                             closeButtonA11yId: closeButtonA11yId,
+                                             mainButtonA11yLabel: mainButtonA11yLabel,
+                                             mainButtonA11yId: mainButtonA11yId)
+        tableView.accessibilityIdentifier = menuA11yId
+        tableView.accessibilityLabel = menuA11yLabel
+    }
+
+    public func adjustLayout() {
+        accountHeaderView.adjustLayout()
+    }
+
+    private func handleUpdateHeaderLineView() {
+        tableView.updateHeaderLineView = { [weak self] scrollOffset in
+            guard let self else { return }
+            if scrollOffset >= UX.headerLineOffset {
+                self.accountHeaderView.updateHeaderLineView(isHidden: false)
+            } else {
+                self.accountHeaderView.updateHeaderLineView(isHidden: true)
+            }
+        }
+    }
+
     // MARK: - Interface
     public func reloadTableView(with data: [MenuSection]) {
         tableView.reloadTableView(with: data)
@@ -58,6 +92,6 @@ public final class MenuMainView: UIView,
         backgroundColor = .clear
         tableView.applyTheme(theme: theme)
         accountHeaderView.applyTheme(theme: theme)
-        accountHeaderView.setIcon(isSmaller: true, theme: theme)
+        accountHeaderView.setIconTheme(with: theme)
     }
 }

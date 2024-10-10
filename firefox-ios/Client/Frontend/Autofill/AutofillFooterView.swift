@@ -62,12 +62,25 @@ struct AutofillFooterView: View {
     }
 }
 
-#Preview {
+@available(iOS 17, *)
+#Preview(traits: .sizeThatFitsLayout) {
     AutofillFooterView(
         windowUUID: .XCTestDefaultUUID,
         title: "Manage Login Info",
         primaryAction: { }
     )
-    .previewLayout(.sizeThatFits)
     .padding()
+}
+
+@available(iOS, deprecated: 17)
+struct AutoFillFooterView_Previews: PreviewProvider {
+    static var previews: some View {
+        AutofillFooterView(
+            windowUUID: .XCTestDefaultUUID,
+            title: "Manage Login Info",
+            primaryAction: { }
+        )
+        .previewLayout(.sizeThatFits)
+        .padding()
+    }
 }

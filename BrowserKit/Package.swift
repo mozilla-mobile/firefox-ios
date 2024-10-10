@@ -55,7 +55,7 @@ let package = Package(
             exact: "2.0.0"),
         .package(
             url: "https://github.com/getsentry/sentry-cocoa.git",
-            exact: "8.36.0"),
+            exact: "8.21.0"),
         .package(
             url: "https://github.com/nbhasin2/GCDWebServer.git",
             branch: "master"),
@@ -74,13 +74,15 @@ let package = Package(
         .target(
             name: "SiteImageView",
             dependencies: ["Fuzi", "Kingfisher", "Common", "SwiftDraw"],
+            exclude: ["README.md"],
+            resources: [.process("BundledTopSitesFavicons.xcassets")],
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "SiteImageViewTests",
             dependencies: ["SiteImageView", .product(name: "GCDWebServers", package: "GCDWebServer")],
             resources: [
                 .copy("Resources/mozilla.ico"),
-                .copy("Resources/hackernews.svg"),
+                .copy("Resources/hackernews.svg")
             ]
         ),
         .target(

@@ -14,12 +14,17 @@ protocol BrowserDelegate: AnyObject {
     ///   - libraryPanelDelegate:  The library panel delegate for the homepage
     ///   - statusBarScrollDelegate: The delegate that takes care of the status bar overlay scroll
     ///   - overlayManager: The overlay manager for the homepage
-    func showHomepage(inline: Bool,
-                      toastContainer: UIView,
-                      homepanelDelegate: HomePanelDelegate,
-                      libraryPanelDelegate: LibraryPanelDelegate,
-                      statusBarScrollDelegate: StatusBarScrollDelegate,
-                      overlayManager: OverlayModeManager)
+    func showLegacyHomepage(
+        inline: Bool,
+        toastContainer: UIView,
+        homepanelDelegate: HomePanelDelegate,
+        libraryPanelDelegate: LibraryPanelDelegate,
+        statusBarScrollDelegate: StatusBarScrollDelegate,
+        overlayManager: OverlayModeManager
+    )
+
+    /// Show the new homepage to the user as part of the homepage rebuild project
+    func showHomepage()
 
     /// Show the private homepage to the user as part of felt privacy
     func showPrivateHomepage(overlayManager: OverlayModeManager)

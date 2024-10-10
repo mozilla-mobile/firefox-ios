@@ -460,7 +460,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
 
     const generatedPassword = PasswordGenerator.generatePassword({
       inputMaxLength: LoginManagerContent.activeField.maxLength,
-      rules: mapOfRules,
+        ...(mapOfRules && { rules: mapOfRules }),
     });
 
     return generatedPassword;

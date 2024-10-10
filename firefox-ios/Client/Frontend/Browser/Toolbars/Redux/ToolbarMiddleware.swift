@@ -10,6 +10,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
     private let profile: Profile
     private let manager: ToolbarManager
     private let logger: Logger
+    private let toolbarTelemetry = ToolbarTelemetry()
 
     init(profile: Profile = AppContainer.shared.resolve(),
          manager: ToolbarManager = DefaultToolbarManager(),
@@ -53,7 +54,8 @@ final class ToolbarMiddleware: FeatureFlaggable {
             store.dispatch(action)
 
         case GeneralBrowserMiddlewareActionType.websiteDidScroll:
-            updateTopAddressBorderPosition(action: action, state: state)
+            guard let scrollOffset = action.scrollOffset else { return }
+            updateTopAddressBorderPosition(scrollOffset: scrollOffset, windowUUID: action.windowUUID, state: state)
 
         case GeneralBrowserMiddlewareActionType.toolbarPositionChanged:
             updateToolbarPosition(action: action, state: state)
@@ -82,6 +84,18 @@ final class ToolbarMiddleware: FeatureFlaggable {
         case ToolbarMiddlewareActionType.didTapButton:
             resolveToolbarMiddlewareButtonTapActions(action: action, state: state)
 
+        case ToolbarMiddlewareActionType.urlDidChange:
+            guard let scrollOffset = action.scrollOffset else { return }
+            updateTopAddressBorderPosition(scrollOffset: scrollOffset, windowUUID: action.windowUUID, state: state)
+
+        case ToolbarMiddlewareActionType.didClearSearch:
+            guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+            else { return }
+            toolbarTelemetry.clearSearchButtonTapped(isPrivate: toolbarState.isPrivateMode)
+
+        case ToolbarMiddlewareActionType.didStartDragInteraction:
+            toolbarTelemetry.dragInteractionStarted()
+
         default:
             break
         }
@@ -94,7 +108,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         case .tap:
             handleToolbarButtonTapActions(action: action, state: state)
         case .longPress:
-            handleToolbarButtonLongPressActions(action: action)
+            handleToolbarButtonLongPressActions(action: action, state: state)
         }
     }
 
@@ -109,26 +123,36 @@ final class ToolbarMiddleware: FeatureFlaggable {
     }
 
     private func handleToolbarButtonTapActions(action: ToolbarMiddlewareAction, state: AppState) {
+        guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+        else { return }
+
         switch action.buttonType {
         case .home:
+            toolbarTelemetry.homeButtonTapped(isPrivate: toolbarState.isPrivateMode)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.goToHomepage)
             store.dispatch(action)
+
         case .newTab:
+            toolbarTelemetry.oneTapNewTabButtonTapped(isPrivate: toolbarState.isPrivateMode)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.addNewTab)
             store.dispatch(action)
+
         case .qrCode:
+            toolbarTelemetry.qrCodeButtonTapped(isPrivate: toolbarState.isPrivateMode)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showQRcodeReader)
             store.dispatch(action)
 
         case .back:
+            toolbarTelemetry.backButtonTapped(isPrivate: toolbarState.isPrivateMode)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.navigateBack)
             store.dispatch(action)
 
         case .forward:
+            toolbarTelemetry.forwardButtonTapped(isPrivate: toolbarState.isPrivateMode)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.navigateForward)
             store.dispatch(action)
@@ -136,11 +160,13 @@ final class ToolbarMiddleware: FeatureFlaggable {
         case .tabs:
             cancelEditMode(windowUUID: action.windowUUID)
 
+            toolbarTelemetry.tabTrayButtonTapped(isPrivate: toolbarState.isPrivateMode)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showTabTray)
             store.dispatch(action)
 
         case .trackingProtection:
+            toolbarTelemetry.siteInfoButtonTapped(isPrivate: toolbarState.isPrivateMode)
             let action = GeneralBrowserAction(buttonTapped: action.buttonTapped,
                                               windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showTrackingProtectionDetails)
@@ -149,6 +175,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
         case .menu:
             cancelEditMode(windowUUID: action.windowUUID)
 
+            toolbarTelemetry.menuButtonTapped(isPrivate: toolbarState.isPrivateMode)
             let action = GeneralBrowserAction(buttonTapped: action.buttonTapped,
                                               windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showMenu)
@@ -158,11 +185,13 @@ final class ToolbarMiddleware: FeatureFlaggable {
             cancelEditMode(windowUUID: action.windowUUID)
 
         case .readerMode:
+            recordReaderModeTelemetry(state: state, windowUUID: action.windowUUID)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showReaderMode)
             store.dispatch(action)
 
         case .reload:
+            toolbarTelemetry.refreshButtonTapped(isPrivate: toolbarState.isPrivateMode)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.reloadWebsite)
             store.dispatch(action)
@@ -173,17 +202,19 @@ final class ToolbarMiddleware: FeatureFlaggable {
             store.dispatch(action)
 
         case .share:
+            toolbarTelemetry.shareButtonTapped(isPrivate: toolbarState.isPrivateMode)
             let action = GeneralBrowserAction(buttonTapped: action.buttonTapped,
                                               windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showShare)
             store.dispatch(action)
 
         case .search:
-            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .startSearchButton)
+            toolbarTelemetry.searchButtonTapped(isPrivate: toolbarState.isPrivateMode)
             let action = ToolbarAction(windowUUID: action.windowUUID, actionType: ToolbarActionType.didStartEditingUrl)
             store.dispatch(action)
 
         case .dataClearance:
+            toolbarTelemetry.dataClearanceButtonTapped(isPrivate: toolbarState.isPrivateMode)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.clearData)
             store.dispatch(action)
@@ -192,13 +223,23 @@ final class ToolbarMiddleware: FeatureFlaggable {
         }
     }
 
-    private func handleToolbarButtonLongPressActions(action: ToolbarMiddlewareAction) {
+    private func handleToolbarButtonLongPressActions(action: ToolbarMiddlewareAction, state: AppState) {
+        guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+        else { return }
+
         switch action.buttonType {
-        case .back, .forward:
+        case .back:
+            toolbarTelemetry.backButtonLongPressed(isPrivate: toolbarState.isPrivateMode)
+            let action = GeneralBrowserAction(windowUUID: action.windowUUID,
+                                              actionType: GeneralBrowserActionType.showBackForwardList)
+            store.dispatch(action)
+        case .forward:
+            toolbarTelemetry.forwardButtonLongPressed(isPrivate: toolbarState.isPrivateMode)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showBackForwardList)
             store.dispatch(action)
         case .tabs:
+            toolbarTelemetry.tabTrayButtonLongPressed(isPrivate: toolbarState.isPrivateMode)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showTabsLongPressActions)
             store.dispatch(action)
@@ -212,6 +253,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
                                               actionType: GeneralBrowserActionType.showReloadLongPressAction)
             store.dispatch(action)
         case .newTab:
+            toolbarTelemetry.oneTapNewTabButtonLongPressed(isPrivate: toolbarState.isPrivateMode)
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showNewTabLongPressActions)
             store.dispatch(action)
@@ -226,11 +268,10 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
     // MARK: - Border
     // For the top placement of the address bar, the border is only visible on scroll. This is due to a design choice.
-    private func updateTopAddressBorderPosition(action: GeneralBrowserMiddlewareAction, state: AppState) {
-        guard let scrollOffset = action.scrollOffset,
-              let toolbarState = state.screenState(ToolbarState.self,
+    private func updateTopAddressBorderPosition(scrollOffset: CGPoint, windowUUID: WindowUUID, state: AppState) {
+        guard let toolbarState = state.screenState(ToolbarState.self,
                                                    for: .toolbar,
-                                                   window: action.windowUUID),
+                                                   window: windowUUID),
               toolbarState.toolbarPosition == .top
         else { return }
 
@@ -242,7 +283,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
         let toolbarAction = ToolbarAction(
             addressBorderPosition: addressBorderPosition,
-            windowUUID: action.windowUUID,
+            windowUUID: windowUUID,
             actionType: ToolbarActionType.borderPositionChanged
         )
         store.dispatch(toolbarAction)
@@ -348,5 +389,16 @@ final class ToolbarMiddleware: FeatureFlaggable {
         let isFeltPrivacyDeletionEnabled = featureFlags.isFeatureEnabled(.feltPrivacyFeltDeletion, checking: .buildOnly)
 
         return isFeltPrivacyUIEnabled && isFeltPrivacyDeletionEnabled
+    }
+
+    private func recordReaderModeTelemetry(state: AppState, windowUUID: WindowUUID) {
+        guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID) else { return }
+
+        let isReaderModeEnabled = switch toolbarState.addressToolbar.readerModeState {
+        case .available: true // will be enabled after action gets executed
+        default: false
+        }
+
+        toolbarTelemetry.readerModeButtonTapped(isPrivate: toolbarState.isPrivateMode, isEnabled: isReaderModeEnabled)
     }
 }

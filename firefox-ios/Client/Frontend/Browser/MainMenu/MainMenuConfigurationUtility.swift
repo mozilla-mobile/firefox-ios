@@ -13,7 +13,7 @@ struct MainMenuConfigurationUtility: Equatable {
         static let newPrivateTab = StandardImageIdentifiers.Large.privateModeCircleFill
         static let deviceDesktop = StandardImageIdentifiers.Large.deviceDesktop
         static let findInPage = StandardImageIdentifiers.Large.search
-        static let tools = StandardImageIdentifiers.Large.tools
+        static let tools = StandardImageIdentifiers.Large.tool
         static let save = StandardImageIdentifiers.Large.save
         static let bookmarks = StandardImageIdentifiers.Large.bookmarkTrayFill
         static let history = StandardImageIdentifiers.Large.history
@@ -29,14 +29,27 @@ struct MainMenuConfigurationUtility: Equatable {
         static let share = StandardImageIdentifiers.Large.share
         static let addToShortcuts = StandardImageIdentifiers.Large.pin
         static let saveToReadingList = StandardImageIdentifiers.Large.readingListAdd
-        static let addToHomeScreen = StandardImageIdentifiers.Large.addToHomeScreen
+        static let addToHomescreen = StandardImageIdentifiers.Large.addToHomescreen
         static let bookmarkThisPage = StandardImageIdentifiers.Large.bookmark
         static let reportBrokenSite = StandardImageIdentifiers.Large.lightbulb
         static let customizeHomepage = StandardImageIdentifiers.Large.gridAdd
         static let saveAsPDF = StandardImageIdentifiers.Large.folder
     }
 
-    func generateMenuElements(
+    public func generateMenuElements(
+        with configuration: MainMenuTabInfo?,
+        for viewType: MainMenuDetailsViewType?,
+        and uuid: WindowUUID
+    ) -> [MenuSection] {
+        switch viewType {
+        case .tools: return getToolsSubmenu(with: uuid)
+        case .save: return getSaveSubmenu(with: uuid)
+        default: return getMainMenuElements(with: uuid, andInfo: configuration)
+        }
+    }
+
+    // MARK: - Main Menu
+    private func getMainMenuElements(
         with uuid: WindowUUID,
         andInfo configuration: MainMenuTabInfo?
     ) -> [MenuSection] {
@@ -69,15 +82,15 @@ struct MainMenuConfigurationUtility: Equatable {
                 iconName: Icons.newTab,
                 isEnabled: true,
                 isActive: false,
-                a11yLabel: "",
+                a11yLabel: .MainMenu.TabsSection.AccessibilityLabels.NewTab,
                 a11yHint: "",
-                a11yId: "",
+                a11yId: AccessibilityIdentifiers.MainMenu.newTab,
                 action: {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.show,
-                            navigationDestination: .newTab
+                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
+                            navigationDestination: MenuNavigationDestination(.newTab)
                         )
                     )
                 }
@@ -87,15 +100,15 @@ struct MainMenuConfigurationUtility: Equatable {
                 iconName: Icons.newPrivateTab,
                 isEnabled: true,
                 isActive: false,
-                a11yLabel: "",
+                a11yLabel: .MainMenu.TabsSection.AccessibilityLabels.NewPrivateTab,
                 a11yHint: "",
-                a11yId: "",
+                a11yId: AccessibilityIdentifiers.MainMenu.newPrivateTab,
                 action: {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.show,
-                            navigationDestination: .newPrivateTab
+                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
+                            navigationDestination: MenuNavigationDestination(.newPrivateTab)
                         )
                     )
                 }
@@ -118,9 +131,9 @@ struct MainMenuConfigurationUtility: Equatable {
                     iconName: Icons.deviceDesktop,
                     isEnabled: true,
                     isActive: false,
-                    a11yLabel: "",
+                    a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.SwitchToDesktopSite,
                     a11yHint: "",
-                    a11yId: "",
+                    a11yId: AccessibilityIdentifiers.MainMenu.switchToDesktopSite,
                     action: {
                         store.dispatch(
                             MainMenuAction(
@@ -135,15 +148,15 @@ struct MainMenuConfigurationUtility: Equatable {
                     iconName: Icons.findInPage,
                     isEnabled: true,
                     isActive: false,
-                    a11yLabel: "",
+                    a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.FindInPage,
                     a11yHint: "",
-                    a11yId: "",
+                    a11yId: AccessibilityIdentifiers.MainMenu.findInPage,
                     action: {
                         store.dispatch(
                             MainMenuAction(
                                 windowUUID: uuid,
-                                actionType: MainMenuActionType.show,
-                                navigationDestination: .findInPage
+                                actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
+                                navigationDestination: MenuNavigationDestination(.findInPage)
                             )
                         )
                     }
@@ -154,16 +167,15 @@ struct MainMenuConfigurationUtility: Equatable {
                     isEnabled: true,
                     isActive: false,
                     hasSubmenu: true,
-                    a11yLabel: "",
+                    a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.Tools,
                     a11yHint: "",
-                    a11yId: "",
+                    a11yId: AccessibilityIdentifiers.MainMenu.tools,
                     action: {
                         store.dispatch(
                             MainMenuAction(
                                 windowUUID: uuid,
-                                actionType: MainMenuActionType.show,
-                                navigationDestination: .detailsView(with: getToolsSubmenu(with: uuid),
-                                                                    title: .MainMenu.ToolsSection.Tools)
+                                actionType: MainMenuActionType.showDetailsView,
+                                changeMenuViewTo: .tools
                             )
                         )
                     }
@@ -174,16 +186,15 @@ struct MainMenuConfigurationUtility: Equatable {
                     isEnabled: true,
                     isActive: false,
                     hasSubmenu: true,
-                    a11yLabel: "",
+                    a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.Save,
                     a11yHint: "",
-                    a11yId: "",
+                    a11yId: AccessibilityIdentifiers.MainMenu.save,
                     action: {
                         store.dispatch(
                             MainMenuAction(
                                 windowUUID: uuid,
-                                actionType: MainMenuActionType.show,
-                                navigationDestination: .detailsView(with: getSaveSubmenu(with: uuid),
-                                                                    title: .MainMenu.ToolsSection.Save)
+                                actionType: MainMenuActionType.showDetailsView,
+                                changeMenuViewTo: .save
                             )
                         )
                     }
@@ -213,6 +224,7 @@ struct MainMenuConfigurationUtility: Equatable {
         }
     }
 
+    // MARK: - Submenus
     private func getToolsSubmenu(with uuid: WindowUUID) -> [MenuSection] {
         return [
             MenuSection(
@@ -222,9 +234,9 @@ struct MainMenuConfigurationUtility: Equatable {
                         iconName: Icons.zoom,
                         isEnabled: true,
                         isActive: false,
-                        a11yLabel: "",
+                        a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.Zoom,
                         a11yHint: "",
-                        a11yId: "",
+                        a11yId: AccessibilityIdentifiers.MainMenu.zoom,
                         action: {
                             store.dispatch(
                                 MainMenuAction(
@@ -239,9 +251,9 @@ struct MainMenuConfigurationUtility: Equatable {
                         iconName: Icons.readerViewOn,
                         isEnabled: true,
                         isActive: false,
-                        a11yLabel: "",
+                        a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.ReaderViewOn,
                         a11yHint: "",
-                        a11yId: "",
+                        a11yId: AccessibilityIdentifiers.MainMenu.readerViewOn,
                         action: {
                             store.dispatch(
                                 MainMenuAction(
@@ -256,9 +268,9 @@ struct MainMenuConfigurationUtility: Equatable {
                         iconName: Icons.nightModeOn,
                         isEnabled: true,
                         isActive: false,
-                        a11yLabel: "",
+                        a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.NightModeOn,
                         a11yHint: "",
-                        a11yId: "",
+                        a11yId: AccessibilityIdentifiers.MainMenu.nightModeOn,
                         action: {
                             store.dispatch(
                                 MainMenuAction(
@@ -273,9 +285,9 @@ struct MainMenuConfigurationUtility: Equatable {
                         iconName: Icons.reportBrokenSite,
                         isEnabled: true,
                         isActive: false,
-                        a11yLabel: "",
+                        a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.ReportBrokenSite,
                         a11yHint: "",
-                        a11yId: "",
+                        a11yId: AccessibilityIdentifiers.MainMenu.reportBrokenSite,
                         action: {
                             store.dispatch(
                                 MainMenuAction(
@@ -294,9 +306,9 @@ struct MainMenuConfigurationUtility: Equatable {
                         iconName: Icons.print,
                         isEnabled: true,
                         isActive: false,
-                        a11yLabel: "",
+                        a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.Print,
                         a11yHint: "",
-                        a11yId: "",
+                        a11yId: AccessibilityIdentifiers.MainMenu.print,
                         action: {
                             store.dispatch(
                                 MainMenuAction(
@@ -311,9 +323,9 @@ struct MainMenuConfigurationUtility: Equatable {
                         iconName: Icons.share,
                         isEnabled: true,
                         isActive: false,
-                        a11yLabel: "",
+                        a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.Share,
                         a11yHint: "",
-                        a11yId: "",
+                        a11yId: AccessibilityIdentifiers.MainMenu.share,
                         action: {
                             store.dispatch(
                                 MainMenuAction(
@@ -336,9 +348,9 @@ struct MainMenuConfigurationUtility: Equatable {
                     iconName: Icons.bookmarkThisPage,
                     isEnabled: true,
                     isActive: false,
-                    a11yLabel: "",
+                    a11yLabel: .MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage,
                     a11yHint: "",
-                    a11yId: "",
+                    a11yId: AccessibilityIdentifiers.MainMenu.bookmarkThisPage,
                     action: {
                         store.dispatch(
                             MainMenuAction(
@@ -353,9 +365,9 @@ struct MainMenuConfigurationUtility: Equatable {
                     iconName: Icons.addToShortcuts,
                     isEnabled: true,
                     isActive: false,
-                    a11yLabel: "",
+                    a11yLabel: .MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts,
                     a11yHint: "",
-                    a11yId: "",
+                    a11yId: AccessibilityIdentifiers.MainMenu.addToShortcuts,
                     action: {
                         store.dispatch(
                             MainMenuAction(
@@ -367,12 +379,12 @@ struct MainMenuConfigurationUtility: Equatable {
                 ),
                 MenuElement(
                     title: .MainMenu.Submenus.Save.AddToHomeScreen,
-                    iconName: Icons.addToHomeScreen,
+                    iconName: Icons.addToHomescreen,
                     isEnabled: true,
                     isActive: false,
-                    a11yLabel: "",
+                    a11yLabel: .MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen,
                     a11yHint: "",
-                    a11yId: "",
+                    a11yId: AccessibilityIdentifiers.MainMenu.addToHomeScreen,
                     action: {
                         store.dispatch(
                             MainMenuAction(
@@ -387,9 +399,9 @@ struct MainMenuConfigurationUtility: Equatable {
                     iconName: Icons.saveToReadingList,
                     isEnabled: true,
                     isActive: false,
-                    a11yLabel: "",
+                    a11yLabel: .MainMenu.Submenus.Save.AccessibilityLabels.SaveToReadingList,
                     a11yHint: "",
-                    a11yId: "",
+                    a11yId: AccessibilityIdentifiers.MainMenu.saveToReadingList,
                     action: {
                         store.dispatch(
                             MainMenuAction(
@@ -404,9 +416,9 @@ struct MainMenuConfigurationUtility: Equatable {
                     iconName: Icons.saveAsPDF,
                     isEnabled: true,
                     isActive: false,
-                    a11yLabel: "",
+                    a11yLabel: .MainMenu.Submenus.Save.AccessibilityLabels.SaveAsPDF,
                     a11yHint: "",
-                    a11yId: "",
+                    a11yId: AccessibilityIdentifiers.MainMenu.saveAsPDF,
                     action: {
                         store.dispatch(
                             MainMenuAction(
@@ -428,15 +440,15 @@ struct MainMenuConfigurationUtility: Equatable {
                 iconName: Icons.bookmarks,
                 isEnabled: true,
                 isActive: false,
-                a11yLabel: "",
+                a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks,
                 a11yHint: "",
-                a11yId: "",
+                a11yId: AccessibilityIdentifiers.MainMenu.bookmarks,
                 action: {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.show,
-                            navigationDestination: .bookmarks
+                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
+                            navigationDestination: MenuNavigationDestination(.bookmarks)
                         )
                     )
                 }
@@ -446,15 +458,15 @@ struct MainMenuConfigurationUtility: Equatable {
                 iconName: Icons.history,
                 isEnabled: true,
                 isActive: false,
-                a11yLabel: "",
+                a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.History,
                 a11yHint: "",
-                a11yId: "",
+                a11yId: AccessibilityIdentifiers.MainMenu.history,
                 action: {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.show,
-                            navigationDestination: .history
+                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
+                            navigationDestination: MenuNavigationDestination(.history)
                         )
                     )
                 }
@@ -464,15 +476,15 @@ struct MainMenuConfigurationUtility: Equatable {
                 iconName: Icons.downloads,
                 isEnabled: true,
                 isActive: false,
-                a11yLabel: "",
+                a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.Downloads,
                 a11yHint: "",
-                a11yId: "",
+                a11yId: AccessibilityIdentifiers.MainMenu.downloads,
                 action: {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.show,
-                            navigationDestination: .downloads
+                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
+                            navigationDestination: MenuNavigationDestination(.downloads)
                         )
                     )
                 }
@@ -482,15 +494,15 @@ struct MainMenuConfigurationUtility: Equatable {
                 iconName: Icons.passwords,
                 isEnabled: true,
                 isActive: false,
-                a11yLabel: "",
+                a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.Passwords,
                 a11yHint: "",
-                a11yId: "",
+                a11yId: AccessibilityIdentifiers.MainMenu.passwords,
                 action: {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.show,
-                            navigationDestination: .passwords
+                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
+                            navigationDestination: MenuNavigationDestination(.passwords)
                         )
                     )
                 }
@@ -509,15 +521,15 @@ struct MainMenuConfigurationUtility: Equatable {
                 iconName: Icons.customizeHomepage,
                 isEnabled: true,
                 isActive: false,
-                a11yLabel: "",
+                a11yLabel: .MainMenu.OtherToolsSection.AccessibilityLabels.CustomizeHomepage,
                 a11yHint: "",
-                a11yId: "",
+                a11yId: AccessibilityIdentifiers.MainMenu.customizeHomepage,
                 action: {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.show,
-                            navigationDestination: .customizeHomepage
+                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
+                            navigationDestination: MenuNavigationDestination(.customizeHomepage)
                         )
                     )
                 }
@@ -530,15 +542,18 @@ struct MainMenuConfigurationUtility: Equatable {
                 iconName: Icons.whatsNew,
                 isEnabled: true,
                 isActive: false,
-                a11yLabel: "",
+                a11yLabel: .MainMenu.OtherToolsSection.AccessibilityLabels.WhatsNew,
                 a11yHint: "",
-                a11yId: "",
+                a11yId: AccessibilityIdentifiers.MainMenu.whatsNew,
                 action: {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.show,
-                            navigationDestination: .goToURL(SupportUtils.URLForWhatsNew)
+                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
+                            navigationDestination: MenuNavigationDestination(
+                                .goToURL,
+                                urlToVisit: SupportUtils.URLForWhatsNew
+                            )
                         )
                     )
                 }
@@ -551,15 +566,18 @@ struct MainMenuConfigurationUtility: Equatable {
                 iconName: Icons.getHelp,
                 isEnabled: true,
                 isActive: false,
-                a11yLabel: "",
+                a11yLabel: .MainMenu.OtherToolsSection.AccessibilityLabels.GetHelp,
                 a11yHint: "",
-                a11yId: "",
+                a11yId: AccessibilityIdentifiers.MainMenu.getHelp,
                 action: {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.show,
-                            navigationDestination: .goToURL(SupportUtils.URLForGetHelp)
+                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
+                            navigationDestination: MenuNavigationDestination(
+                                .goToURL,
+                                urlToVisit: SupportUtils.URLForGetHelp
+                            )
                         )
                     )
                 }
@@ -569,15 +587,15 @@ struct MainMenuConfigurationUtility: Equatable {
                 iconName: Icons.settings,
                 isEnabled: true,
                 isActive: false,
-                a11yLabel: "",
+                a11yLabel: .MainMenu.OtherToolsSection.AccessibilityLabels.Settings,
                 a11yHint: "",
-                a11yId: "",
+                a11yId: AccessibilityIdentifiers.MainMenu.settings,
                 action: {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.show,
-                            navigationDestination: .settings
+                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
+                            navigationDestination: MenuNavigationDestination(.settings)
                         )
                     )
                 }

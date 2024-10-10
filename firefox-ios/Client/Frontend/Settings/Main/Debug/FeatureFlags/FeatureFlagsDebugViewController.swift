@@ -40,6 +40,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
+                    with: .homepageRebuild,
+                    titleText: format(string: "Enable New Homepage"),
+                    statusText: format(string: "Toggle to use the new homepage")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .menuRefactor,
                     titleText: format(string: "Enable New Menu"),
                     statusText: format(string: "Toggle to use the new menu")

@@ -31,6 +31,8 @@ class TabManagerMiddleware {
             self.resovleTabPanelViewActions(action: action, state: state)
         } else if let action = action as? MainMenuAction {
             self.resolveMainMenuActions(with: action, appState: state)
+        } else if let action = action as? HeaderAction {
+            self.resolveHomepageHeaderActions(with: action)
         }
     }
 
@@ -233,7 +235,7 @@ class TabManagerMiddleware {
 
         let tabManager = tabManager(for: uuid)
         var inactiveTabs = [InactiveTabsModel]()
-        for tab in tabManager.inactiveTabs {
+        for tab in tabManager.getInactiveTabs() {
             let inactiveTab = InactiveTabsModel(tabUUID: tab.tabUUID,
                                                 title: tab.displayTitle,
                                                 url: tab.url,
@@ -458,8 +460,8 @@ class TabManagerMiddleware {
     /// Handles undo close all inactive tabs. Adding back the backup tabs saved previously
     private func undoCloseAllInactiveTabs(uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
-        ensureMainThread {
-            tabManager.undoCloseInactiveTabs()
+        Task {
+            await tabManager.undoCloseInactiveTabs()
             let inactiveTabs = self.refreshInactiveTabs(uuid: uuid)
             let refreshAction = TabPanelMiddlewareAction(inactiveTabModels: inactiveTabs,
                                                          windowUUID: uuid,
@@ -643,13 +645,12 @@ class TabManagerMiddleware {
     // MARK: - Main menu actions
     private func resolveMainMenuActions(with action: MainMenuAction, appState: AppState) {
         switch action.actionType {
-        case MainMenuActionType.viewDidLoad:
+        case MainMenuMiddlewareActionType.requestTabInfo:
             store.dispatch(
                 MainMenuAction(
                     windowUUID: action.windowUUID,
-                    actionType: MainMenuActionType.updateCurrentTabInfo(
-                        getTabInfo(forWindow: action.windowUUID)
-                    )
+                    actionType: MainMenuActionType.updateCurrentTabInfo,
+                    currentTabInfo: getTabInfo(forWindow: action.windowUUID)
                 )
             )
         case MainMenuActionType.toggleUserAgent:
@@ -688,6 +689,15 @@ class TabManagerMiddleware {
                 isChangedUA: selectedTab.changedUserAgent,
                 isPrivate: selectedTab.isPrivate
             )
+        }
+    }
+
+    private func resolveHomepageHeaderActions(with action: HeaderAction) {
+        switch action.actionType {
+        case HeaderActionType.toggleHomepageMode:
+            tabManager(for: action.windowUUID).switchPrivacyMode()
+        default:
+            break
         }
     }
 }

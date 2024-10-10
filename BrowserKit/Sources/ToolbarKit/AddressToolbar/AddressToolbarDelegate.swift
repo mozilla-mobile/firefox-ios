@@ -7,6 +7,7 @@ import UIKit
 
 public protocol AddressToolbarDelegate: AnyObject {
     func searchSuggestions(searchTerm: String)
+    func didClearSearch()
     func openBrowser(searchTerm: String)
     func openSuggestions(searchTerm: String)
     func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool)
@@ -14,4 +15,6 @@ public protocol AddressToolbarDelegate: AnyObject {
     func configureContextualHint(_ addressToolbar: BrowserAddressToolbar,
                                  for button: UIButton,
                                  with contextualHintType: String)
+    func addressToolbarDidBeginDragInteraction()
+    func addressToolbarDidProvideItemsForDragInteraction()
 }

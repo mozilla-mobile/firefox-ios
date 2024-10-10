@@ -38,7 +38,7 @@ class DefaultContileNetwork: ContileNetworking {
             if let error = error {
                 self.logger.log("An error occurred while fetching data: \(error)",
                                 level: .debug,
-                                category: .homepage)
+                                category: .legacyHomepage)
                 completion(.failure(ContileNetworkingError.dataUnavailable))
                 return
             }
@@ -48,7 +48,7 @@ class DefaultContileNetwork: ContileNetworking {
             else {
                 self.logger.log("Response isn't valid, data is nil?: \(data == nil)",
                                 level: .debug,
-                                category: .homepage)
+                                category: .legacyHomepage)
                 completion(.failure(ContileNetworkingError.dataUnavailable))
                 return
             }

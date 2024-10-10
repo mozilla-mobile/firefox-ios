@@ -8,6 +8,11 @@ import Foundation
 /// When adding new identifiers, please respect alphabetical order.
 /// Sing the song if you must.
 public struct StandardImageIdentifiers {
+    // Icon size 8x8
+    public struct ExtraSmall {
+        public static let chevronDown = "chevronDownExtraSmall"
+    }
+
     // Icon size 16x16
     public struct Small {
         public static let externalLink = "externalLinkSmall"
@@ -32,7 +37,7 @@ public struct StandardImageIdentifiers {
 
     // Icon size 24x24
     public struct Large {
-        public static let addToHomeScreen = "addToHomescreenLarge"
+        public static let addToHomescreen = "addToHomescreenLarge"
         public static let appendUpLeft = "appendUpLeftLarge"
         public static let appMenu = "appMenuLarge"
         public static let arrowClockwise = "arrowClockwiseLarge"
@@ -40,6 +45,7 @@ public struct StandardImageIdentifiers {
         public static let back = "backLarge"
         public static let bookmark = "bookmarkLarge"
         public static let bookmarkFill = "bookmarkFillLarge"
+        public static let bookmarkHalf = "bookmarkHalfLarge"
         public static let bookmarkSlash = "bookmarkSlashLarge"
         public static let bookmarkTrayFill = "bookmarkTrayFillLarge"
         public static let checkmark = "checkmarkLarge"
@@ -109,13 +115,13 @@ public struct StandardImageIdentifiers {
         public static let shieldSlash = "shieldSlashLarge"
         public static let shipping = "shippingLarge"
         public static let shopping = "shoppingLarge"
-        public static let socialTracker = "socialMediaLarge"
+        public static let socialMedia = "socialMediaLarge"
         public static let subtract = "subtractLarge"
         public static let sync = "syncLarge"
         public static let syncTabs = "syncTabsLarge"
         public static let tab = "tabLarge"
         public static let tabTray = "tabTrayLarge"
-        public static let tools = "toolLarge"
+        public static let tool = "toolLarge"
         public static let warning = "warningLarge"
         public static let warningFill = "warningFillLarge"
         public static let whatsNew = "whatsNewLarge"

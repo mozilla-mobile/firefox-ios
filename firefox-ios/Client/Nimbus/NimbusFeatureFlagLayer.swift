@@ -16,6 +16,9 @@ final class NimbusFeatureFlagLayer {
         case .addressAutofillEdit:
             return checkAddressAutofillEditing(from: nimbus)
 
+        case .bookmarksRefactor:
+            return checkBookmarksRefactor(from: nimbus)
+
         case .bottomSearchBar,
                 .searchHighlights,
                 .isToolbarCFREnabled:
@@ -45,6 +48,9 @@ final class NimbusFeatureFlagLayer {
 
         case .fakespotBackInStock:
             return checkProductBackInStockFakespotFeature(from: nimbus)
+
+        case .homepageRebuild:
+            return checkHomepageFeature(from: nimbus)
 
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
@@ -88,6 +94,9 @@ final class NimbusFeatureFlagLayer {
         case .toolbarRefactor:
             return checkToolbarRefactorFeature(from: nimbus)
 
+        case .unifiedSearch:
+            return checkUnifiedSearchFeature(from: nimbus)
+
         case .toolbarOneTapNewTab:
             return checkToolbarOneTapNewTabFeature(from: nimbus)
 
@@ -105,6 +114,10 @@ final class NimbusFeatureFlagLayer {
     // MARK: - Private methods
     private func checkAccountSettingsRedux(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.accountSettingsReduxFeature.value().enabled
+    }
+
+    private func checkBookmarksRefactor(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.bookmarkRefactorFeature.value().enabled
     }
 
     private func checkGeneralFeature(for featureID: NimbusFeatureFlagID,
@@ -148,6 +161,11 @@ final class NimbusFeatureFlagLayer {
         return status
     }
 
+    private func checkHomepageFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.homepageRebuildFeature.value()
+        return config.enabled
+    }
+
     private func checkNimbusForContextualHintsFeature(
         for featureID: NimbusFeatureFlagID,
         from nimbus: FxNimbus
@@ -172,6 +190,11 @@ final class NimbusFeatureFlagLayer {
     private func checkToolbarRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.toolbarRefactorFeature.value()
         return config.enabled
+    }
+
+    private func checkUnifiedSearchFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.toolbarRefactorFeature.value()
+        return config.unifiedSearch
     }
 
     private func checkToolbarOneTapNewTabFeature(from nimbus: FxNimbus) -> Bool {

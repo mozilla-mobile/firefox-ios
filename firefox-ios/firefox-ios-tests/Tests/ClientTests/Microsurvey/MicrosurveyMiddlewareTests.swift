@@ -8,11 +8,13 @@ import XCTest
 
 @testable import Client
 
-final class MicrosurveyMiddlewareTests: XCTestCase {
+final class MicrosurveyMiddlewareIntegrationTests: XCTestCase, StoreTestUtility {
+    let storeUtilityHelper = StoreTestUtilityHelper()
     override func setUp() {
         super.setUp()
         Glean.shared.resetGlean(clearStores: true)
         DependencyHelperMock().bootstrapDependencies()
+        setupTestingStore()
     }
 
     override func tearDown() {
@@ -22,8 +24,6 @@ final class MicrosurveyMiddlewareTests: XCTestCase {
     }
 
     func testDismissSurveyAction() throws {
-        setupTestingStore()
-
         let action = getAction(for: .closeSurvey)
         store.dispatch(action)
 
@@ -41,8 +41,6 @@ final class MicrosurveyMiddlewareTests: XCTestCase {
     }
 
     func testPrivacyNoticeTappedAction() throws {
-        setupTestingStore()
-
         let action = getAction(for: .tapPrivacyNotice)
         store.dispatch(action)
 
@@ -60,8 +58,6 @@ final class MicrosurveyMiddlewareTests: XCTestCase {
     }
 
     func testSubmitSurveyAction() throws {
-        setupTestingStore()
-
         let action = MicrosurveyAction(
             surveyId: "microsurvey-id",
             userSelection: "Neutral",
@@ -85,8 +81,6 @@ final class MicrosurveyMiddlewareTests: XCTestCase {
     }
 
     func testConfirmationViewedAction() throws {
-        setupTestingStore()
-
         let action = getAction(for: .confirmationViewed)
         store.dispatch(action)
 
@@ -103,7 +97,8 @@ final class MicrosurveyMiddlewareTests: XCTestCase {
         )
     }
 
-    private func setupAppState() -> AppState {
+    // MARK: StoreTestUtility
+    func setupAppState() -> AppState {
         return AppState(
             activeScreens: ActiveScreensState(
                 screens: [
@@ -122,21 +117,16 @@ final class MicrosurveyMiddlewareTests: XCTestCase {
         )
     }
 
-    private func setupTestingStore() {
-        store = Store(
-            state: setupAppState(),
-            reducer: AppState.reducer,
+    func setupTestingStore() {
+        storeUtilityHelper.setupTestingStore(
+            with: setupAppState(),
             middlewares: [MicrosurveyMiddleware().microsurveyProvider]
         )
     }
 
     // In order to avoid flaky tests, we should reset the store
     // similar to production
-    private func resetTestingStore() {
-        store = Store(
-            state: AppState(),
-            reducer: AppState.reducer,
-            middlewares: middlewares
-        )
+    func resetTestingStore() {
+        storeUtilityHelper.resetTestingStore()
     }
 }

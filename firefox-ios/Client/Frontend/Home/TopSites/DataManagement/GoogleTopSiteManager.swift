@@ -19,7 +19,7 @@ class GoogleTopSiteManager {
 
         // Google favicon
         private static let faviconUrl = URL(string: "https://www.google.com/images/branding/product_ios/3x/gsa_ios_60dp.png")!
-        static let faviconResource: SiteResource = .bundleAsset(name: "google-com", forRemoteResource: faviconUrl)
+        static let faviconResource: SiteResource = .bundleAsset(name: "google", forRemoteResource: faviconUrl)
 
         // The number of tiles taken by Google top site manager
         static let reservedSpaceCount = 1

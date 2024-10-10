@@ -158,6 +158,11 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
             textColor = colors.textPrimary
         }
 
+        attributedPlaceholder = NSAttributedString(
+            string: placeholder ?? "",
+            attributes: [NSAttributedString.Key.foregroundColor: colors.textSecondary]
+        )
+
         tintClearButton()
     }
 
@@ -302,9 +307,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
 
          return {
              // If calling again, invalidate the last timer.
-             if let timer = timer {
-                 timer.invalidate()
-             }
+             if let timer { timer.invalidate() }
              timer = Timer(
                  timeInterval: delay,
                  target: callback,

@@ -35,20 +35,22 @@ final class TrackingProtectionToggleView: UIView, ThemeApplicable {
         label.adjustsFontForContentSizeCategory = true
     }
 
+    private var viewConstraints: [NSLayoutConstraint] = []
+
     var toggleIsOn: Bool {
         toggleSwitch.isOn
     }
 
     init() {
         super.init(frame: .zero)
-        setupLayout()
+        setupViews()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupLayout() {
+    private func setupViews() {
         self.layer.cornerRadius = TPMenuUX.UX.viewCornerRadius
         self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         self.backgroundColor = .clear
@@ -57,8 +59,12 @@ final class TrackingProtectionToggleView: UIView, ThemeApplicable {
         toggleLabelsContainer.addArrangedSubview(toggleLabel)
         toggleLabelsContainer.addArrangedSubview(toggleStatusLabel)
         self.addSubviews(toggleLabelsContainer, toggleSwitch)
+    }
 
-        NSLayoutConstraint.activate([
+    private func updateLayout(isAccessibilityCategory: Bool) {
+        removeConstraints(constraints)
+        viewConstraints.removeAll()
+        viewConstraints.append(contentsOf: [
             toggleLabelsContainer.leadingAnchor.constraint(
                 equalTo: self.leadingAnchor,
                 constant: TPMenuUX.UX.horizontalMargin
@@ -75,13 +81,23 @@ final class TrackingProtectionToggleView: UIView, ThemeApplicable {
                 equalTo: self.bottomAnchor,
                 constant: -UX.toggleLabelsContainerConstraintConstant
             ),
-
-            toggleSwitch.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             toggleSwitch.trailingAnchor.constraint(
                 equalTo: self.trailingAnchor,
                 constant: -TPMenuUX.UX.horizontalMargin
             )
         ])
+        if !isAccessibilityCategory {
+            viewConstraints.append(toggleSwitch.centerYAnchor.constraint(equalTo: self.centerYAnchor))
+        } else {
+            viewConstraints.append(toggleSwitch.topAnchor.constraint(
+                equalTo: toggleLabelsContainer.topAnchor,
+                constant: UX.toggleLabelsContainerConstraintConstant))
+        }
+        NSLayoutConstraint.activate(viewConstraints)
+    }
+
+    func adjustLayout() {
+        updateLayout(isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory)
     }
 
     func setToggleSwitchVisibility(with isHidden: Bool) {

@@ -5,10 +5,11 @@
 import UIKit
 
 enum ContentType {
-    case webview
     case homepage
+    case legacyHomepage
     case privateHomepage
     case nativeErrorPage
+    case webview
 }
 
 protocol ContentContainable: UIViewController {
@@ -24,12 +25,16 @@ class ContentContainer: UIView {
         return contentController?.view
     }
 
-    var hasHomepage: Bool {
-        return type == .homepage
+    var hasLegacyHomepage: Bool {
+        return type == .legacyHomepage
     }
 
     var hasPrivateHomepage: Bool {
         return type == .privateHomepage
+    }
+
+    var hasHomepage: Bool {
+        return type == .homepage
     }
 
     var hasWebView: Bool {
@@ -46,10 +51,12 @@ class ContentContainer: UIView {
     /// - Returns: True when we can add the view controller to the container
     func canAdd(content: ContentContainable) -> Bool {
         switch type {
-        case .homepage:
-            return !(content is HomepageViewController)
+        case .legacyHomepage:
+            return !(content is LegacyHomepageViewController)
         case .nativeErrorPage:
             return !(content is NativeErrorPageViewController)
+        case .homepage:
+            return !(content is HomepageViewController)
         case .privateHomepage:
             return !(content is PrivateHomepageViewController)
         case .webview:
@@ -82,7 +89,7 @@ class ContentContainer: UIView {
         // Only remove previous content when it's the homepage or native error page.
         // We're not removing the webview controller for now since if it's not loaded, the
         // webview doesn't layout it's WKCompositingView which result in black screen
-        guard hasHomepage || hasPrivateHomepage || hasNativeErrorPage else { return }
+        guard !hasWebView else { return }
         contentController?.willMove(toParent: nil)
         contentController?.view.removeFromSuperview()
         contentController?.removeFromParent()

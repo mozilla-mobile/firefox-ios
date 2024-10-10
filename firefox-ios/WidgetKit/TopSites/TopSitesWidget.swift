@@ -66,11 +66,11 @@ struct TopSitesView: View {
     }
 
     @ViewBuilder
-    private func topSitesItem(_ site: WidgetKitTopSiteModel, iconSize: CGFloat) -> some View {
+    private func topSitesItem(_ site: WidgetTopSite, iconSize: CGFloat) -> some View {
         let url = site.url
         Link(destination: linkToContainingApp("?url=\(url)", query: "widget-medium-topsites-open-url")) {
             Group {
-                if let image = entry.favicons[site.imageKey] {
+                if let image = entry.favicons[site.faviconImageCacheKey] {
                     image
                         .resizable()
                         .scaledToFit()

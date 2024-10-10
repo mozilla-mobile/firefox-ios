@@ -16,6 +16,7 @@ protocol AddressToolbarContainerDelegate: AnyObject {
     func addressToolbarContainerAccessibilityActions() -> [UIAccessibilityCustomAction]?
     func addressToolbarDidEnterOverlayMode(_ view: UIView)
     func addressToolbar(_ view: UIView, didLeaveOverlayModeForReason: URLBarLeaveOverlayModeReason)
+    func addressToolbarDidBeginDragInteraction()
 }
 
 final class AddressToolbarContainer: UIView,
@@ -38,6 +39,7 @@ final class AddressToolbarContainer: UIView,
     private var profile: Profile?
     private var model: AddressToolbarContainerModel?
     private(set) weak var delegate: AddressToolbarContainerDelegate?
+    private var isUnifiedSearchEnabled = false
 
     private var toolbar: BrowserAddressToolbar {
         return shouldDisplayCompact ? compactToolbar : regularToolbar
@@ -93,10 +95,16 @@ final class AddressToolbarContainer: UIView,
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(windowUUID: WindowUUID, profile: Profile, delegate: AddressToolbarContainerDelegate) {
+    func configure(
+        windowUUID: WindowUUID,
+        profile: Profile,
+        delegate: AddressToolbarContainerDelegate,
+        isUnifiedSearchEnabled: Bool
+    ) {
         self.windowUUID = windowUUID
         self.profile = profile
         self.delegate = delegate
+        self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
         subscribeToRedux()
     }
 
@@ -174,11 +182,13 @@ final class AddressToolbarContainer: UIView,
             compactToolbar.configure(state: newModel.addressToolbarState,
                                      toolbarDelegate: self,
                                      leadingSpace: calculateToolbarSpace(isLeading: true),
-                                     trailingSpace: calculateToolbarSpace(isLeading: false))
+                                     trailingSpace: calculateToolbarSpace(isLeading: false),
+                                     isUnifiedSearchEnabled: isUnifiedSearchEnabled)
             regularToolbar.configure(state: newModel.addressToolbarState,
                                      toolbarDelegate: self,
                                      leadingSpace: calculateToolbarSpace(isLeading: true),
-                                     trailingSpace: calculateToolbarSpace(isLeading: false))
+                                     trailingSpace: calculateToolbarSpace(isLeading: false),
+                                     isUnifiedSearchEnabled: isUnifiedSearchEnabled)
 
             // the layout (compact/regular) that should be displayed is driven by the state
             // but we only need to switch toolbars if shouldDisplayCompact changes
@@ -265,6 +275,16 @@ final class AddressToolbarContainer: UIView,
         delegate?.searchSuggestions(searchTerm: searchTerm)
     }
 
+    func didClearSearch() {
+        delegate?.searchSuggestions(searchTerm: "")
+
+        guard let windowUUID else { return }
+
+        let action = ToolbarMiddlewareAction(windowUUID: windowUUID,
+                                             actionType: ToolbarMiddlewareActionType.didClearSearch)
+        store.dispatch(action)
+    }
+
     func openBrowser(searchTerm: String) {
         delegate?.openBrowser(searchTerm: searchTerm)
     }
@@ -302,6 +322,18 @@ final class AddressToolbarContainer: UIView,
         if contextualHintType == ContextualHintType.navigation.rawValue && !toolbarState.canShowNavigationHint { return }
 
         delegate?.configureContextualHint(for: button, with: contextualHintType)
+    }
+
+    func addressToolbarDidProvideItemsForDragInteraction() {
+        guard let windowUUID else { return }
+
+        let action = ToolbarMiddlewareAction(windowUUID: windowUUID,
+                                             actionType: ToolbarMiddlewareActionType.didStartDragInteraction)
+        store.dispatch(action)
+    }
+
+    func addressToolbarDidBeginDragInteraction() {
+        delegate?.addressToolbarDidBeginDragInteraction()
     }
 
     // MARK: - MenuHelperURLBarInterface

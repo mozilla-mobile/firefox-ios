@@ -10,7 +10,8 @@ public final class HeaderView: UIView, ThemeApplicable {
     private struct UX {
         static let headerLinesLimit: Int = 2
         static let siteDomainLabelsVerticalSpacing: CGFloat = 12
-        static let faviconImageSize: CGFloat = 40
+        static let largeFaviconImageSize: CGFloat = 48
+        static let favIconImageSize: CGFloat = 32
         static let smallFaviconImageSize: CGFloat = 20
         static let maskFaviconImageSize: CGFloat = 32
         static let horizontalMargin: CGFloat = 16
@@ -20,9 +21,7 @@ public final class HeaderView: UIView, ThemeApplicable {
     }
 
     public var closeButtonCallback: (() -> Void)?
-
-    private var faviconHeightConstraint: NSLayoutConstraint?
-    private var faviconWidthConstraint: NSLayoutConstraint?
+    public var mainButtonCallback: (() -> Void)?
 
     private lazy var headerLabelsContainer: UIStackView = .build { stack in
         stack.backgroundColor = .clear
@@ -43,13 +42,17 @@ public final class HeaderView: UIView, ThemeApplicable {
 
     private let subtitleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.caption1.scaledFont()
-        label.numberOfLines = 0
+        label.numberOfLines = 2
         label.adjustsFontForContentSizeCategory = true
     }
 
     private lazy var closeButton: CloseButton = .build { button in
-        button.layer.cornerRadius = 0.5 * UX.closeButtonSize
         button.addTarget(self, action: #selector(self.closeButtonTapped), for: .touchUpInside)
+    }
+
+    private lazy var mainButton: UIButton = .build { button in
+        button.backgroundColor = .clear
+        button.addTarget(self, action: #selector(self.mainButtonTapped), for: .touchUpInside)
     }
 
     private var iconMask: UIView = .build { view in
@@ -58,25 +61,34 @@ public final class HeaderView: UIView, ThemeApplicable {
 
     private let horizontalLine: UIView = .build()
 
+    private var viewConstraints: [NSLayoutConstraint] = []
+
     init() {
         super.init(frame: .zero)
-        setupLayout()
+        setupViews()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setupLayout() {
+    private func setupViews() {
         headerLabelsContainer.addArrangedSubview(titleLabel)
         headerLabelsContainer.addArrangedSubview(subtitleLabel)
-        addSubviews(iconMask, favicon, headerLabelsContainer, closeButton, horizontalLine)
-        NSLayoutConstraint.activate([
+        addSubviews(mainButton, iconMask, favicon, headerLabelsContainer, closeButton, horizontalLine)
+    }
+
+    private func updateLayout(isAccessibilityCategory: Bool, isWebsiteIcon: Bool) {
+        removeConstraints(constraints)
+        favicon.removeConstraints(favicon.constraints)
+        closeButton.removeConstraints(closeButton.constraints)
+        iconMask.removeConstraints(iconMask.constraints)
+        viewConstraints.removeAll()
+        viewConstraints.append(contentsOf: [
             favicon.leadingAnchor.constraint(
                 equalTo: self.leadingAnchor,
                 constant: UX.horizontalMargin
             ),
-            favicon.centerYAnchor.constraint(equalTo: self.centerYAnchor),
 
             headerLabelsContainer.topAnchor.constraint(
                 equalTo: self.topAnchor,
@@ -96,26 +108,60 @@ public final class HeaderView: UIView, ThemeApplicable {
             ),
 
             closeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalMargin),
-            closeButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.closeButtonSize),
-            closeButton.widthAnchor.constraint(greaterThanOrEqualToConstant: UX.closeButtonSize),
-            closeButton.centerYAnchor.constraint(equalTo: centerYAnchor),
 
             horizontalLine.leadingAnchor.constraint(equalTo: leadingAnchor),
             horizontalLine.trailingAnchor.constraint(equalTo: trailingAnchor),
             horizontalLine.bottomAnchor.constraint(equalTo: bottomAnchor),
             horizontalLine.heightAnchor.constraint(equalToConstant: UX.separatorHeight),
 
-            iconMask.widthAnchor.constraint(equalToConstant: UX.maskFaviconImageSize),
-            iconMask.heightAnchor.constraint(equalToConstant: UX.maskFaviconImageSize),
             iconMask.centerXAnchor.constraint(equalTo: favicon.centerXAnchor),
-            iconMask.centerYAnchor.constraint(equalTo: favicon.centerYAnchor)
+            iconMask.centerYAnchor.constraint(equalTo: favicon.centerYAnchor),
+
+            mainButton.leadingAnchor.constraint(equalTo: iconMask.leadingAnchor),
+            mainButton.trailingAnchor.constraint(equalTo: headerLabelsContainer.trailingAnchor),
+            mainButton.topAnchor.constraint(equalTo: headerLabelsContainer.topAnchor),
+            mainButton.bottomAnchor.constraint(equalTo: headerLabelsContainer.bottomAnchor)
         ])
+        let favIconSizes = isAccessibilityCategory ? UX.largeFaviconImageSize :
+        isWebsiteIcon ? UX.favIconImageSize: UX.smallFaviconImageSize
+        viewConstraints.append(favicon.heightAnchor.constraint(equalToConstant: favIconSizes))
+        viewConstraints.append(favicon.widthAnchor.constraint(equalToConstant: favIconSizes))
+
+        let closeButtonSizes = isAccessibilityCategory ? UX.largeFaviconImageSize : UX.closeButtonSize
+        viewConstraints.append(closeButton.heightAnchor.constraint(equalToConstant: closeButtonSizes))
+        viewConstraints.append(closeButton.widthAnchor.constraint(equalToConstant: closeButtonSizes))
+        closeButton.layer.cornerRadius = 0.5 * closeButtonSizes
+
+        let maskButtonSizes = isAccessibilityCategory ? UX.largeFaviconImageSize : UX.maskFaviconImageSize
+        viewConstraints.append(iconMask.heightAnchor.constraint(equalToConstant: maskButtonSizes))
+        viewConstraints.append(iconMask.widthAnchor.constraint(equalToConstant: maskButtonSizes))
+        iconMask.layer.cornerRadius = 0.5 * maskButtonSizes
+
+        if isAccessibilityCategory {
+            viewConstraints.append(favicon.topAnchor.constraint(equalTo: headerLabelsContainer.topAnchor))
+            viewConstraints.append(closeButton.topAnchor.constraint(equalTo: headerLabelsContainer.topAnchor))
+        } else {
+            viewConstraints.append(favicon.centerYAnchor.constraint(equalTo: centerYAnchor))
+            viewConstraints.append(closeButton.centerYAnchor.constraint(equalTo: centerYAnchor))
+        }
+        NSLayoutConstraint.activate(viewConstraints)
     }
 
-    public func setupAccessibility(closeButtonA11yLabel: String, closeButtonA11yId: String) {
+    public func setupAccessibility(closeButtonA11yLabel: String,
+                                   closeButtonA11yId: String,
+                                   mainButtonA11yLabel: String? = nil,
+                                   mainButtonA11yId: String? = nil) {
         let closeButtonViewModel = CloseButtonViewModel(a11yLabel: closeButtonA11yLabel,
                                                         a11yIdentifier: closeButtonA11yId)
         closeButton.configure(viewModel: closeButtonViewModel)
+        if let mainButtonA11yLabel, let mainButtonA11yId {
+            titleLabel.isAccessibilityElement = false
+            subtitleLabel.isAccessibilityElement = false
+            mainButton.accessibilityIdentifier = mainButtonA11yId
+            mainButton.accessibilityLabel = mainButtonA11yLabel
+        } else {
+            mainButton.isAccessibilityElement = false
+        }
     }
 
     public func setupDetails(subtitle: String, title: String, icon: FaviconImageViewModel) {
@@ -132,32 +178,36 @@ public final class HeaderView: UIView, ThemeApplicable {
         titleLabel.text = title
     }
 
-    public func setIcon(isSmaller: Bool = false, theme: Theme? = nil) {
-        let sizes = isSmaller ? UX.smallFaviconImageSize : UX.faviconImageSize
-        faviconHeightConstraint = favicon.heightAnchor.constraint(equalToConstant: sizes)
-        faviconWidthConstraint = favicon.widthAnchor.constraint(equalToConstant: sizes)
-        faviconHeightConstraint?.isActive = true
-        faviconWidthConstraint?.isActive = true
-        if let theme {
-            iconMask.backgroundColor = theme.colors.layer2
-            iconMask.layer.cornerRadius = 0.5 * UX.maskFaviconImageSize
-            favicon.tintColor = theme.colors.iconSecondary
-        }
+    public func setIconTheme(with theme: Theme) {
+        iconMask.backgroundColor = theme.colors.layer2
+        favicon.tintColor = theme.colors.iconSecondary
     }
 
     func setTitle(with text: String) {
         titleLabel.text = text
     }
 
-    public func adjustLayout() {
-        let faviconDynamicSize = max(UIFontMetrics.default.scaledValue(for: UX.faviconImageSize), UX.faviconImageSize)
-        faviconHeightConstraint?.constant = faviconDynamicSize
-        faviconWidthConstraint?.constant = faviconDynamicSize
+    public func adjustLayout(isWebsiteIcon: Bool = false) {
+        updateLayout(isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory,
+                     isWebsiteIcon: isWebsiteIcon)
+    }
+
+    public func updateHeaderLineView(isHidden: Bool) {
+        if (isHidden && !horizontalLine.isHidden) || (!isHidden && horizontalLine.isHidden) {
+            UIView.animate(withDuration: 0.3) { [weak self] in
+                self?.horizontalLine.isHidden = isHidden
+            }
+        }
     }
 
     @objc
     func closeButtonTapped() {
         closeButtonCallback?()
+    }
+
+    @objc
+    func mainButtonTapped() {
+        mainButtonCallback?()
     }
 
     public func applyTheme(theme: Theme) {

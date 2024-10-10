@@ -9,7 +9,9 @@ import ToolbarKit
 
 enum AppScreenState: Equatable {
     case browserViewController(BrowserViewControllerState)
+    case homepage(HomepageState)
     case mainMenu(MainMenuState)
+    case mainMenuDetails(MainMenuDetailsState)
     case microsurvey(MicrosurveyState)
     case onboardingViewController(OnboardingViewControllerState)
     case remoteTabsPanel(RemoteTabsPanelState)
@@ -19,13 +21,18 @@ enum AppScreenState: Equatable {
     case themeSettings(ThemeSettingsState)
     case trackingProtection(TrackingProtectionState)
     case toolbar(ToolbarState)
+    case passwordGenerator(PasswordGeneratorState)
 
     static let reducer: Reducer<Self> = { state, action in
         switch state {
         case .browserViewController(let state):
             return .browserViewController(BrowserViewControllerState.reducer(state, action))
+        case .homepage(let state):
+            return .homepage(HomepageState.reducer(state, action))
         case .mainMenu(let state):
             return .mainMenu(MainMenuState.reducer(state, action))
+        case .mainMenuDetails(let state):
+            return .mainMenuDetails(MainMenuDetailsState.reducer(state, action))
         case .microsurvey(let state):
             return .microsurvey(MicrosurveyState.reducer(state, action))
         case .onboardingViewController(let state):
@@ -44,6 +51,8 @@ enum AppScreenState: Equatable {
             return .trackingProtection(TrackingProtectionState.reducer(state, action))
         case .toolbar(let state):
             return .toolbar(ToolbarState.reducer(state, action))
+        case .passwordGenerator(let state):
+            return .passwordGenerator(PasswordGeneratorState.reducer(state, action))
         }
     }
 
@@ -51,7 +60,9 @@ enum AppScreenState: Equatable {
     var associatedAppScreen: AppScreen {
         switch self {
         case .browserViewController: return .browserViewController
+        case .homepage: return .homepage
         case .mainMenu: return .mainMenu
+        case .mainMenuDetails: return .mainMenuDetails
         case .microsurvey: return .microsurvey
         case .onboardingViewController: return .onboardingViewController
         case .remoteTabsPanel: return .remoteTabsPanel
@@ -61,13 +72,16 @@ enum AppScreenState: Equatable {
         case .themeSettings: return .themeSettings
         case .trackingProtection: return .trackingProtection
         case .toolbar: return .toolbar
+        case .passwordGenerator: return .passwordGenerator
         }
     }
 
     var windowUUID: WindowUUID? {
         switch self {
         case .browserViewController(let state): return state.windowUUID
+        case .homepage(let state): return state.windowUUID
         case .mainMenu(let state): return state.windowUUID
+        case .mainMenuDetails(let state): return state.windowUUID
         case .microsurvey(let state): return state.windowUUID
         case .onboardingViewController(let state): return state.windowUUID
         case .remoteTabsPanel(let state): return state.windowUUID
@@ -77,6 +91,7 @@ enum AppScreenState: Equatable {
         case .themeSettings(let state): return state.windowUUID
         case .trackingProtection(let state): return state.windowUUID
         case .toolbar(let state): return state.windowUUID
+        case .passwordGenerator(let state): return state.windowUUID
         }
     }
 }
@@ -117,8 +132,12 @@ struct ActiveScreensState: Equatable {
             switch action.screen {
             case .browserViewController:
                 screens.append(.browserViewController(BrowserViewControllerState(windowUUID: uuid)))
+            case .homepage:
+                screens.append(.homepage(HomepageState(windowUUID: uuid)))
             case .mainMenu:
                 screens.append(.mainMenu(MainMenuState(windowUUID: uuid)))
+            case .mainMenuDetails:
+                screens.append(.mainMenuDetails(MainMenuDetailsState(windowUUID: uuid)))
             case .microsurvey:
                 screens.append(.microsurvey(MicrosurveyState(windowUUID: uuid)))
             case .onboardingViewController:
@@ -137,6 +156,8 @@ struct ActiveScreensState: Equatable {
                 screens.append(.trackingProtection(TrackingProtectionState(windowUUID: uuid)))
             case .toolbar:
                 screens.append(.toolbar(ToolbarState(windowUUID: uuid)))
+            case .passwordGenerator:
+                screens.append(.passwordGenerator(PasswordGeneratorState(windowUUID: uuid)))
             }
         default:
             return screens

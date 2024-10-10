@@ -18,6 +18,7 @@ public struct LocationViewState {
     public let searchEngineImage: UIImage?
     public let lockIconImageName: String?
     public let url: URL?
+    public let droppableUrl: URL?
     public let searchTerm: String?
     public let isEditing: Bool
     public let isScrollingDuringEdit: Bool
@@ -36,6 +37,7 @@ public struct LocationViewState {
         searchEngineImage: UIImage?,
         lockIconImageName: String?,
         url: URL?,
+        droppableUrl: URL?,
         searchTerm: String?,
         isEditing: Bool,
         isScrollingDuringEdit: Bool,
@@ -53,6 +55,7 @@ public struct LocationViewState {
         self.searchEngineImage = searchEngineImage
         self.lockIconImageName = lockIconImageName
         self.url = url
+        self.droppableUrl = droppableUrl
         self.searchTerm = searchTerm
         self.isEditing = isEditing
         self.isScrollingDuringEdit = isScrollingDuringEdit

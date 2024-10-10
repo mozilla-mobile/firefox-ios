@@ -9,6 +9,7 @@ import Shared
 
 class ActionProviderBuilder {
     private var actions = [UIAction]()
+    private var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
 
     func build() -> [UIAction] {
         return actions
@@ -157,17 +158,16 @@ class ActionProviderBuilder {
             pasteboard.url = url as URL
             let changeCount = pasteboard.changeCount
             let application = UIApplication.shared
-            var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
-            taskId = application.beginBackgroundTask(expirationHandler: {
-                application.endBackgroundTask(taskId)
+            self.taskId = application.beginBackgroundTask(expirationHandler: {
+                application.endBackgroundTask(self.taskId)
             })
 
             makeURLSession(
                 userAgent: UserAgent.fxaUserAgent,
-                configuration: URLSessionConfiguration.default
+                configuration: URLSessionConfiguration.defaultMPTCP
             ).dataTask(with: url) { (data, response, error) in
                 guard validatedHTTPResponse(response, statusCode: 200..<300) != nil else {
-                    application.endBackgroundTask(taskId)
+                    application.endBackgroundTask(self.taskId)
                     return
                 }
 
@@ -180,7 +180,7 @@ class ActionProviderBuilder {
                     pasteboard.addImageWithData(imageData, forURL: url)
                 }
 
-                application.endBackgroundTask(taskId)
+                application.endBackgroundTask(self.taskId)
             }.resume()
         })
     }

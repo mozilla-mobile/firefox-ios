@@ -184,7 +184,7 @@ class FakespotTests: BaseTestCase {
         app.buttons[shoppingIdentifier.turnOffButton].tap()
         // The 'Review quality check' bottom sheet/sidebar closes
         mozWaitForElementToNotExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
-        mozWaitForValueContains(app.textFields["url"], value: "www.amazon.com")
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "www.amazon.com")
         // In a new tab, navigate to a product detail page on amazon.com
         navigator.performAction(Action.OpenNewTabFromTabTray)
         reachReviewChecker()
@@ -270,7 +270,7 @@ class FakespotTests: BaseTestCase {
 
     private func validateMozillaSupportWebpage(_ webpageTitle: String, _ url: String) {
         mozWaitForElementToExist(app.staticTexts[webpageTitle])
-        mozWaitForValueContains(app.textFields["url"], value: url)
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: url)
         let numTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual(numTab, "2")
     }

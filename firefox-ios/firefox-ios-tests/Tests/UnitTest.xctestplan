@@ -12,24 +12,54 @@
     "codeCoverage" : {
       "targets" : [
         {
+          "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "Common",
+          "name" : "Common"
+        },
+        {
+          "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "ComponentLibrary",
+          "name" : "ComponentLibrary"
+        },
+        {
+          "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "ContentBlockingGenerator",
+          "name" : "ContentBlockingGenerator"
+        },
+        {
+          "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "MenuKit",
+          "name" : "MenuKit"
+        },
+        {
+          "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "Redux",
+          "name" : "Redux"
+        },
+        {
+          "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "SiteImageView",
+          "name" : "SiteImageView"
+        },
+        {
+          "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "TabDataStore",
+          "name" : "TabDataStore"
+        },
+        {
+          "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "ToolbarKit",
+          "name" : "ToolbarKit"
+        },
+        {
+          "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "WebEngine",
+          "name" : "WebEngine"
+        },
+        {
           "containerPath" : "container:Client.xcodeproj",
           "identifier" : "F84B21BD1A090F8100AAB793",
           "name" : "Client"
-        },
-        {
-          "containerPath" : "container:Client.xcodeproj",
-          "identifier" : "2FA435FA1ABB83B4008031D1",
-          "name" : "Account"
-        },
-        {
-          "containerPath" : "container:Client.xcodeproj",
-          "identifier" : "2FCAE2191ABB51F800877008",
-          "name" : "Storage"
-        },
-        {
-          "containerPath" : "container:Client.xcodeproj",
-          "identifier" : "E69DB0741E97DEA9008A67E6",
-          "name" : "SyncTelemetry"
         },
         {
           "containerPath" : "container:Client.xcodeproj",
@@ -43,11 +73,6 @@
         },
         {
           "containerPath" : "container:Client.xcodeproj",
-          "identifier" : "390527491C874D35007E0BB7",
-          "name" : "Today"
-        },
-        {
-          "containerPath" : "container:Client.xcodeproj",
           "identifier" : "047F9B2624E1FE1C00CD7DF7",
           "name" : "WidgetKitExtension"
         },
@@ -57,29 +82,14 @@
           "name" : "CredentialProvider"
         },
         {
-          "containerPath" : "container:BrowserKit",
-          "identifier" : "Common",
-          "name" : "Common"
+          "containerPath" : "container:Client.xcodeproj",
+          "identifier" : "2FA435FA1ABB83B4008031D1",
+          "name" : "Account"
         },
         {
-          "containerPath" : "container:BrowserKit",
-          "identifier" : "ComponentLibrary",
-          "name" : "ComponentLibrary"
-        },
-        {
-          "containerPath" : "container:BrowserKit",
-          "identifier" : "Redux",
-          "name" : "Redux"
-        },
-        {
-          "containerPath" : "container:BrowserKit",
-          "identifier" : "SiteImageView",
-          "name" : "SiteImageView"
-        },
-        {
-          "containerPath" : "container:BrowserKit",
-          "identifier" : "TabDataStore",
-          "name" : "TabDataStore"
+          "containerPath" : "container:Client.xcodeproj",
+          "identifier" : "2FCAE2191ABB51F800877008",
+          "name" : "Storage"
         }
       ]
     }

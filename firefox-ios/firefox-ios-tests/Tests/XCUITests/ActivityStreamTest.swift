@@ -133,7 +133,7 @@ class ActivityStreamTest: BaseTestCase {
             waitForExistence(topSitesCells.staticTexts[newTopSiteiOS15["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
         }
 
-        waitForExistence(app.buttons["urlBar-cancel"])
+        waitForExistence(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
@@ -167,6 +167,8 @@ class ActivityStreamTest: BaseTestCase {
             mozWaitForElementToNotExist(app.staticTexts[topSiteFirstCell])
         }
 
+        mozWaitForElementToExist(allTopSites.staticTexts[topSiteSecondCell])
+        mozWaitForElementToNotExist(allTopSites.staticTexts[topSiteFirstCell])
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 4)
 
         // Check top site in first cell now
@@ -206,7 +208,7 @@ class ActivityStreamTest: BaseTestCase {
 
         // The website is open
         mozWaitForElementToNotExist(TopSiteCellgroup)
-        waitForValueContains(app.textFields["url"], value: "wikipedia.org")
+        waitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "wikipedia.org")
     }
 
     // Smoketest
