@@ -754,8 +754,21 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL {
-            ErrorPageHelper(certStore: profile.certStore).loadPage(error, forUrl: url, inWebView: webView)
+        if isNativeErrorPage() {
+            if let tab = tabManager[webView], tab === tabManager.selectedTab {
+                guard let errorPageURL = URL(string: "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage.rawValue)") else { return }
+                let action = GeneralBrowserAction(selectedTabURL: errorPageURL,
+                                                  isPrivateBrowsing: tab.isPrivate,
+                                                  isNativeErrorPage: true,
+                                                  windowUUID: windowUUID,
+                                                  actionType: GeneralBrowserActionType.updateSelectedTab)
+                store.dispatch(action)
+                webView.load(PrivilegedRequest(url: errorPageURL) as URLRequest)
+            }
+        } else {
+            if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL {
+                ErrorPageHelper(certStore: profile.certStore).loadPage(error, forUrl: url, inWebView: webView)
+            }
         }
     }
 
