@@ -72,7 +72,8 @@ final class RemoteTabPanelTests: XCTestCase {
                                     refreshState: .idle,
                                     allowsRefresh: true,
                                     clientAndTabs: fakeData,
-                                    showingEmptyState: nil)
+                                    showingEmptyState: nil,
+                                    devices: [])
     }
 
     private func createSubject(state: RemoteTabsPanelState,

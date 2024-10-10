@@ -517,6 +517,14 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         }
     }
 
+    @MainActor
+    func closeTab(by url: URL) async {
+        // Find the tab with the specified URL
+        if let tabToClose = tabs.first(where: { $0.url == url }) {
+            await self.removeTab(tabToClose.tabUUID)
+        }
+    }
+
     // MARK: - Update Menu Items
     private func updateMenuItemsForSelectedTab() {
         guard let selectedTab,
