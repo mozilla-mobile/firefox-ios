@@ -288,6 +288,18 @@ open class MockProfile: Client.Profile {
         return deferMaybe(0)
     }
 
+    public func addTabToCommandQueue(_ deviceId: String, url: URL) {
+        return
+    }
+
+    public func removeTabFromCommandQueue(_ deviceId: String, url: URL) {
+        return
+    }
+
+    public func flushTabCommands(toDeviceId: String?) {
+        return
+    }
+
     public func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success {
         return succeed()
     }
