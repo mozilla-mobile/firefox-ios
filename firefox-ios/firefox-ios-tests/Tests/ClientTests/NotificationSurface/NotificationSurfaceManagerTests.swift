@@ -19,9 +19,9 @@ class NotificationSurfaceManagerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         messageManager = nil
         notificationManager = nil
+        super.tearDown()
     }
 
     func testShouldShowSurface_noMessage() {

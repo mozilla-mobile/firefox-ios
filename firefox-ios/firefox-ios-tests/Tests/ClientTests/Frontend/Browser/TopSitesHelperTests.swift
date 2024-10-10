@@ -21,9 +21,9 @@ class TopSitesHelperTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         self.deleteDatabases()
         self.profile = nil
+        super.tearDown()
     }
 
     override func setUp() {

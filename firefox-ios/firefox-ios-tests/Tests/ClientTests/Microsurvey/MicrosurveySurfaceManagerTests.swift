@@ -16,9 +16,9 @@ final class MicrosurveySurfaceManagerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         messageManager = nil
         AppContainer.shared.reset()
+        super.tearDown()
     }
 
     func testNilMessage_microsurveyShouldNotShow() {

@@ -14,8 +14,8 @@ final class FindInPageContentScriptTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         findInPageDelegate = nil
+        super.tearDown()
     }
 
     func testDidReceiveMessageGivenEmptyMessageThenNoDelegateCalled() {

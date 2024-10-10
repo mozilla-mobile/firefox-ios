@@ -17,9 +17,9 @@ class PocketDataAdaptorTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         mockNotificationCenter = nil
         mockPocketAPI = nil
+        super.tearDown()
     }
 
     func testEmptyData() async throws {

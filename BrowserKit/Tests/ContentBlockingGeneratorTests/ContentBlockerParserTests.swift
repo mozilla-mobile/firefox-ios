@@ -14,8 +14,8 @@ final class ContentBlockerParserTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         self.parserData = nil
+        super.tearDown()
     }
 
     func testParsingAdsFile() throws {

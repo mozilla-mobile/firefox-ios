@@ -29,13 +29,12 @@ class ContextualHintEligibilityUtilityTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
-
         profile.shutdown()
         profile = nil
         urlBar = nil
         overlayState = nil
         subject = nil
+        super.tearDown()
     }
 
     // MARK: - Test should Present cases

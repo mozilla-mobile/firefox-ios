@@ -18,8 +18,8 @@ class CustomSearchEnginesTest: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         AppContainer.shared.reset()
+        super.tearDown()
     }
 
     func testgetSearchTemplate() {

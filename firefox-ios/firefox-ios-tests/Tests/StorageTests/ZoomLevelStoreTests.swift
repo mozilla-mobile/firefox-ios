@@ -20,9 +20,9 @@ final class ZoomLevelStoreTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         zoomLevelStore = nil
         cleanUp()
+        super.tearDown()
     }
 
     private func cleanUp() {

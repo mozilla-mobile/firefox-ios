@@ -21,6 +21,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
     override func tearDown() {
         BrowserUtils.resetToAboutHomeKIF(tester())
+        super.tearDown()
     }
 
     func visitSites(noOfSites: Int) -> [(title: String, domain: String, dispDomain: String, url: String)] {

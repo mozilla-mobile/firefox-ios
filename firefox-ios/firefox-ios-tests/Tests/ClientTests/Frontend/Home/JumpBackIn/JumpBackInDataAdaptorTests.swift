@@ -23,9 +23,9 @@ final class JumpBackInDataAdaptorTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         mockProfile = nil
         mockTabManager = nil
+        super.tearDown()
     }
 
     func testEmptyData() async {

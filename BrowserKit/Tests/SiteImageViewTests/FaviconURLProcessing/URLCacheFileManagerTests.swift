@@ -17,9 +17,9 @@ class URLCacheFileManagerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         mockFileManager = nil
         subject = nil
+        super.tearDown()
     }
 
     func testGetURLCache() async {

@@ -16,9 +16,9 @@ class FaviconURLFetcherTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         networkMock = nil
         subject = nil
+        super.tearDown()
     }
 
     func testGetFaviconWithExistingIcon() async {

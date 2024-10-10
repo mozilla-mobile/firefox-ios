@@ -17,8 +17,8 @@ class OnboardingButtonActionTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         mockDelegate = nil
+        super.tearDown()
     }
 
     func testMockDelegate_whenInitialized_actionIsNil() {

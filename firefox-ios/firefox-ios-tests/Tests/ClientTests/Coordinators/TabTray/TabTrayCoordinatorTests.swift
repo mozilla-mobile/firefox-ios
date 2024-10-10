@@ -23,11 +23,11 @@ final class TabTrayCoordinatorTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         mockRouter = nil
         profile = nil
         parentCoordinator = nil
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testInitialState() {

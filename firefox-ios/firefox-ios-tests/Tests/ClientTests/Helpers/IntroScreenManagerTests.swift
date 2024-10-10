@@ -16,8 +16,8 @@ final class IntroScreenManagerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         prefs = nil
+        super.tearDown()
     }
 
     func testHasntSeenIntroScreenYet_shouldShowIt() {

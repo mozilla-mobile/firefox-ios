@@ -23,12 +23,12 @@ final class RemoteTabsCoordinatorTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         mockProfile = nil
         mockRouter = nil
         mockApplicationHelper = nil
         qrDelegate = nil
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testInitialState() {

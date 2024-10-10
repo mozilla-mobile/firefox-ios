@@ -23,9 +23,9 @@ final class PocketViewModelTests: XCTestCase, FeatureFlaggable {
     }
 
     override func tearDown() {
-        super.tearDown()
         adaptor = nil
         profile = nil
+        super.tearDown()
     }
 
     func testDefaultPocketViewModelProtocolValues_withEmptyData() {

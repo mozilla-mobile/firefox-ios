@@ -23,9 +23,9 @@ class DownloadQueueTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         queue = nil
         download = nil
+        super.tearDown()
     }
 
     func testDownloadQueueIsEmpty() {

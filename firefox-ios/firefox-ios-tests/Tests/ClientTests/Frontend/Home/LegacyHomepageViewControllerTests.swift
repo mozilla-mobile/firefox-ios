@@ -18,10 +18,10 @@ class LegacyHomepageViewControllerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         AppContainer.shared.reset()
         profile = nil
         Experiments.events.clearEvents()
+        super.tearDown()
     }
 
     func testHomepageViewController_simpleCreation_hasNoLeaks() {

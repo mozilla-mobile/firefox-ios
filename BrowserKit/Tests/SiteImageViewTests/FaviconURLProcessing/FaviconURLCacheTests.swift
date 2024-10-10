@@ -16,9 +16,9 @@ class FaviconURLCacheTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         mockFileManager = nil
         subject = nil
+        super.tearDown()
     }
 
     func testGetURLFromCacheWithEmptyCache() async {

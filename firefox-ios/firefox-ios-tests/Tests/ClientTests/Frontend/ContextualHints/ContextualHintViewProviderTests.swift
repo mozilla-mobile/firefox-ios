@@ -19,8 +19,8 @@ class ContextualHintViewProviderTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         profile = nil
+        super.tearDown()
     }
 
     // MARK: Mark Contextual Hint Configuration

@@ -13,8 +13,8 @@ final class TabDisplayPanelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testExpandedInactiveTabs_InitialState() {

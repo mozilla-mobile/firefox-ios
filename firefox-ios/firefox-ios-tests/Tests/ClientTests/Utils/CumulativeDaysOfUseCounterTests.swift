@@ -18,9 +18,9 @@ class CumulativeDaysOfUseCounterTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         counter = nil
         calendar = nil
+        super.tearDown()
     }
 
     func testByDefaultCounter_isFalse() {

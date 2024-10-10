@@ -18,9 +18,9 @@ final class SceneCoordinatorTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         mockRouter = nil
         AppContainer.shared.reset()
+        super.tearDown()
     }
 
     func testInitialState() {

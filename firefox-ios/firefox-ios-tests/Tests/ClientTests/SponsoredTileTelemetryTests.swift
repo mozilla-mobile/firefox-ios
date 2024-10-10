@@ -14,8 +14,8 @@ class SponsoredTileTelemetryTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         clearTest()
+        super.tearDown()
     }
 
     // MARK: Impression

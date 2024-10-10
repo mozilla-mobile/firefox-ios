@@ -21,10 +21,10 @@ class CanRemoveQuickActionBookmarkTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         mockQuickActions = nil
         mockBookmarksHandler = nil
         subject = nil
+        super.tearDown()
     }
 
     func testWithoutBookmarks() {

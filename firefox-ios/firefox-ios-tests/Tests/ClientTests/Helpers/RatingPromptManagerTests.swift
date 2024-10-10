@@ -29,8 +29,6 @@ class RatingPromptManagerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
-
         createdGuids = []
         promptManager?.reset()
         promptManager = nil
@@ -38,6 +36,7 @@ class RatingPromptManagerTests: XCTestCase {
         mockProfile = nil
         logger = nil
         urlOpenerSpy = nil
+        super.tearDown()
     }
 
     func testShouldShowPrompt_requiredAreFalse_returnsFalse() {

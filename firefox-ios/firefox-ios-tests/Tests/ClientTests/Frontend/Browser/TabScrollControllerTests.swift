@@ -29,12 +29,11 @@ final class TabScrollControllerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
-
         mockProfile?.shutdown()
         self.mockProfile = nil
         self.subject = nil
         self.tab = nil
+        super.tearDown()
     }
 
     func testHandlePan_ScrollingUp() {

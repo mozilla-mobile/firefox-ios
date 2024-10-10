@@ -21,10 +21,6 @@ let websiteWithSearchField = "https://developer.mozilla.org/en-US/"
 
 class DragAndDropTests: BaseTestCase {
 //  Disable test suite since in theory it does not make sense with Chron tabs implementation
-    override func tearDown() {
-        XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
-        super.tearDown()
-    }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2362645
     // Smoketest

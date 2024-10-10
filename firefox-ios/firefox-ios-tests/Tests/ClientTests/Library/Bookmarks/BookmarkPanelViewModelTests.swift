@@ -18,8 +18,8 @@ class BookmarksPanelViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         profile = nil
+        super.tearDown()
     }
 
     func testIsRootNode_falseWhenMenu() {

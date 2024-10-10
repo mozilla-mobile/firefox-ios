@@ -15,8 +15,8 @@ final class SiteImageCacheTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         self.imageCache = nil
+        super.tearDown()
     }
 
     // MARK: - Get from cache

@@ -19,10 +19,10 @@ final class LegacyGridTabViewControllerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
         profile = nil
         manager = nil
+        super.tearDown()
     }
 
     func testGridTabViewControllerDeinit() {

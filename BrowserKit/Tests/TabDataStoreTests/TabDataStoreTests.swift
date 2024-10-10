@@ -17,8 +17,8 @@ final class TabDataStoreTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         mockFileManager = nil
+        super.tearDown()
     }
 
     // MARK: - Saving Data

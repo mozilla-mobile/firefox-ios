@@ -21,9 +21,9 @@ class TabMigrationUtilityTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         profile = nil
         tabDataStore = nil
+        super.tearDown()
     }
 
     func testShouldRunMigration_OnlyOnce() async {

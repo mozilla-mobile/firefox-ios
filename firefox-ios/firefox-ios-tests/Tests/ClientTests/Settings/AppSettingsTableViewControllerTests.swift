@@ -26,13 +26,13 @@ class AppSettingsTableViewControllerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
         self.profile = nil
         self.tabManager = nil
         self.appAuthenticator = nil
         self.delegate = nil
         self.applicationHelper = nil
+        super.tearDown()
     }
 
     func testRouteNotHandled_delegatesArentCalled() {

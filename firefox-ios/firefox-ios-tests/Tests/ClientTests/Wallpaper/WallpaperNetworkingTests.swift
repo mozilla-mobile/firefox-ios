@@ -16,8 +16,8 @@ class WallpaperNetworkingTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         networking = nil
+        super.tearDown()
     }
 
     func testSetupWorksAsExpected() async {

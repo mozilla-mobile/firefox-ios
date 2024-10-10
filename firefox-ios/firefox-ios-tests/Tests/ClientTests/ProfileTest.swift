@@ -26,8 +26,8 @@ class ProfileTest: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         profile = nil
+        super.tearDown()
     }
 
     func withTestProfile(_ callback: (_ profile: Client.Profile) -> Void) {

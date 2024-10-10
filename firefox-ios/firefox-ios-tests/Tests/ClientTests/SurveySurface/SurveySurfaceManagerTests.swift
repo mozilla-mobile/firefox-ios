@@ -20,8 +20,8 @@ class SurveySurfaceManagerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         messageManager = nil
+        super.tearDown()
     }
 
     func testNilMessage_surveySurfaceShouldNotShow() {

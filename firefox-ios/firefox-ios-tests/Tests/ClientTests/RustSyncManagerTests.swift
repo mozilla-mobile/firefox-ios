@@ -39,7 +39,6 @@ class RustSyncManagerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         rustSyncManager = nil
         UserDefaults.standard.removeObject(forKey: "fxa.cwts.declinedSyncEngines")
         profile.prefs.removeObjectForKey(Keys.bookmarksStateChangedPrefKey)
@@ -56,6 +55,7 @@ class RustSyncManagerTests: XCTestCase {
         profile.prefs.removeObjectForKey(Keys.addressesStateChangedPrefKey)
 
         profile = nil
+        super.tearDown()
     }
 
     func testGetEnginesAndKeys() {

@@ -75,5 +75,6 @@ class SessionRestoreTests: KIFTestCase {
         BrowserUtils.resetToAboutHomeKIF(tester())
         tester().wait(forTimeInterval: 3)
         BrowserUtils.clearPrivateDataKIF(tester())
+        super.tearDown()
     }
 }

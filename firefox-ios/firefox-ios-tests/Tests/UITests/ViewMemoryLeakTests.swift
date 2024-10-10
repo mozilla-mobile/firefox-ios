@@ -24,6 +24,7 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
         } catch _ {
         }
         BrowserUtils.resetToAboutHomeKIF(tester())
+        super.tearDown()
     }
     /*
     func testSearchViewControllerDisposed() {

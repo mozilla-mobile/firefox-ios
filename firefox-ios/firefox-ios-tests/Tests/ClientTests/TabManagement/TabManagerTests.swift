@@ -42,11 +42,11 @@ class TabManagerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         mockProfile = nil
         mockDiskImageStore = nil
         mockTabStore = nil
         mockSessionStore = nil
+        super.tearDown()
     }
 
     // MARK: - Restore tabs

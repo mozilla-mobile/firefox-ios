@@ -20,8 +20,8 @@ class NimbusOnboardingFeatureLayerTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         configUtility = nil
+        super.tearDown()
     }
 
     // MARK: - Test placeholder methods

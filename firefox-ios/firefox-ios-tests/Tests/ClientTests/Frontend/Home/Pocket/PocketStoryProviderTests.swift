@@ -10,8 +10,8 @@ class PocketStoryProviderTests: XCTestCase, FeatureFlaggable {
     var subject: StoryProvider!
 
     override func tearDown() {
-        super.tearDown()
         subject = nil
+        super.tearDown()
     }
 
     func tesFetchingStories_ReturnsList() async {
