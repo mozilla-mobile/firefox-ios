@@ -48,7 +48,7 @@ class PocketViewModel {
     func getWidthDimension(device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
                            isLandscape: Bool = UIWindow.isLandscape) -> NSCollectionLayoutDimension {
         if device == .pad {
-            return .absolute(PocketStandardCell.UX.cellWidth) // iPad
+            return .absolute(LegacyPocketStandardCell.UX.cellWidth) // iPad
         } else if isLandscape {
             return .fractionalWidth(UX.fractionalWidthiPhoneLandscape)
         } else {
@@ -140,23 +140,23 @@ extension PocketViewModel: HomepageViewModelProtocol {
     func section(for traitCollection: UITraitCollection, size: CGSize) -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
-            heightDimension: .estimated(PocketStandardCell.UX.cellHeight)
+            heightDimension: .estimated(LegacyPocketStandardCell.UX.cellHeight)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: getWidthDimension(),
-            heightDimension: .estimated(PocketStandardCell.UX.cellHeight)
+            heightDimension: .estimated(LegacyPocketStandardCell.UX.cellHeight)
         )
 
         let subItems = Array(repeating: item, count: UX.numberOfItemsInColumn)
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: subItems)
-        group.interItemSpacing = PocketStandardCell.UX.interItemSpacing
+        group.interItemSpacing = LegacyPocketStandardCell.UX.interItemSpacing
         group.contentInsets = NSDirectionalEdgeInsets(
             top: 0,
             leading: 0,
             bottom: 0,
-            trailing: PocketStandardCell.UX.interGroupSpacing)
+            trailing: LegacyPocketStandardCell.UX.interGroupSpacing)
 
         let section = NSCollectionLayoutSection(group: group)
         let headerFooterSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
@@ -208,8 +208,8 @@ extension PocketViewModel: HomepageSectionHandler {
         recordSectionHasShown()
 
         if isStoryCell(index: indexPath.row) {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PocketStandardCell.cellIdentifier,
-                                                          for: indexPath) as! PocketStandardCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LegacyPocketStandardCell.cellIdentifier,
+                                                          for: indexPath) as! LegacyPocketStandardCell
             let viewModel = pocketStoriesViewModels[indexPath.row]
             viewModel.tag = indexPath.row
             cell.configure(viewModel: viewModel, theme: theme)

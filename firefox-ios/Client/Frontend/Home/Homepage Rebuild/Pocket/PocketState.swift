@@ -1,0 +1,60 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at http://mozilla.org/MPL/2.0/
+
+import Common
+import Foundation
+import Redux
+
+/// State for the pocket section that is used in the homepage
+struct PocketState: StateType, Equatable {
+    var windowUUID: WindowUUID
+    var pocketData: [PocketItem]
+
+    init(windowUUID: WindowUUID) {
+        self.init(
+            windowUUID: windowUUID,
+            pocketData: []
+        )
+    }
+
+    private init(
+        windowUUID: WindowUUID,
+        pocketData: [PocketItem]
+    ) {
+        self.windowUUID = windowUUID
+        self.pocketData = pocketData
+    }
+
+    static let reducer: Reducer<Self> = { state, action in
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
+        else {
+            return PocketState(
+                windowUUID: state.windowUUID,
+                pocketData: state.pocketData
+            )
+        }
+
+        switch action.actionType {
+        case PocketMiddlewareActionType.retrievedUpdatedStories:
+            guard let pocketAction = action as? PocketAction,
+                  let stories = pocketAction.pocketStories
+            else {
+                return PocketState(
+                    windowUUID: state.windowUUID,
+                    pocketData: state.pocketData
+                )
+            }
+
+            return PocketState(
+                windowUUID: state.windowUUID,
+                pocketData: stories
+            )
+        default:
+            return PocketState(
+                windowUUID: state.windowUUID,
+                pocketData: state.pocketData
+            )
+        }
+    }
+}
