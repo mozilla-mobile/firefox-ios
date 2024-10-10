@@ -8,6 +8,8 @@ import Storage
 import Shared
 import XCTest
 
+import struct MozillaAppServices.Device
+
 @testable import Client
 
 final class RemoteTabPanelStateTests: XCTestCase {
@@ -42,16 +44,28 @@ final class RemoteTabPanelStateTests: XCTestCase {
         let initialState = createSubject()
         let reducer = remoteTabsPanelReducer()
         let testTabs = generateOneClientTwoTabs()
+        let deviceId = "AAAAAA"
+        let device = Device(id: deviceId,
+                            displayName: "test device",
+                            deviceType: .mobile,
+                            capabilities: [.closeTabs, .sendTab],
+                            pushSubscription: nil,
+                            pushEndpointExpired: false,
+                            isCurrentDevice: true,
+                            lastAccessTime: nil)
 
         XCTAssertEqual(initialState.clientAndTabs.count, 0)
 
         let action = RemoteTabsPanelAction(clientAndTabs: testTabs,
+                                           devices: [device],
                                            windowUUID: WindowUUID.XCTestDefaultUUID,
                                            actionType: RemoteTabsPanelActionType.refreshDidSucceed)
         let newState = reducer(initialState, action)
 
         XCTAssertEqual(newState.clientAndTabs.count, 1)
         XCTAssertEqual(newState.clientAndTabs.first!.tabs.count, 2)
+        XCTAssertEqual(newState.devices.count, 1)
+        XCTAssertEqual(newState.devices[0].id, deviceId)
     }
 
     func testTabsRefreshFailedStateChange() {
@@ -65,6 +79,29 @@ final class RemoteTabPanelStateTests: XCTestCase {
 
         XCTAssertEqual(newState.refreshState, RemoteTabsPanelRefreshState.idle)
         XCTAssertNotNil(newState.showingEmptyState)
+    }
+
+    func testRemoteDevicesChanged() {
+        let initialState = createSubject()
+        let reducer = remoteTabsPanelReducer()
+        let deviceId = "AAAAAA"
+        let device = Device(id: deviceId,
+                            displayName: "test device",
+                            deviceType: .mobile,
+                            capabilities: [.closeTabs, .sendTab],
+                            pushSubscription: nil,
+                            pushEndpointExpired: false,
+                            isCurrentDevice: true,
+                            lastAccessTime: nil)
+
+        let action = RemoteTabsPanelAction(clientAndTabs: nil,
+                                           devices: [device],
+                                           windowUUID: WindowUUID.XCTestDefaultUUID,
+                                           actionType: RemoteTabsPanelActionType.remoteDevicesChanged)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.devices.count, 1)
+        XCTAssertEqual(newState.devices[0].id, deviceId)
     }
 
     // MARK: - Private
