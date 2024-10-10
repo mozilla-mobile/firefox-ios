@@ -43,7 +43,9 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
 
     private lazy var header: PasswordGeneratorHeaderView = .build()
 
-    private lazy var passwordField: PasswordGeneratorPasswordFieldView = .build()
+    private lazy var passwordField: PasswordGeneratorPasswordFieldView = .build { view in
+        view.refreshPasswordButtonOnClick = self.refreshPasswordButtonOnClick
+    }
 
     private lazy var usePasswordButton: PrimaryRoundedButton = .build()
 
@@ -161,6 +163,14 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
             a11yIdentifier: AccessibilityIdentifiers.PasswordGenerator.usePasswordButton)
         usePasswordButton.configure(viewModel: usePasswordButtonVM)
         usePasswordButton.addTarget(self, action: #selector(useButtonOnClick), for: .touchUpInside)
+    }
+
+    func refreshPasswordButtonOnClick() {
+        store.dispatch(PasswordGeneratorAction(
+            windowUUID: windowUUID,
+            actionType: PasswordGeneratorActionType.userTappedRefreshPassword,
+            currentTab: currentTab)
+        )
     }
 
     // MARK: - Redux
