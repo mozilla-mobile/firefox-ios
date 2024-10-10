@@ -126,7 +126,7 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
 
         if self.featureFlags.isFeatureEnabled(.passwordGenerator, checking: .buildOnly) {
             if type == "generatePassword" {
-                guard let tab = self.tab else {return}
+                guard let tab = self.tab, !tab.isPrivate else {return}
                 let newAction = GeneralBrowserAction(
                     windowUUID: tab.windowUUID,
                     actionType: GeneralBrowserActionType.showPasswordGenerator)
