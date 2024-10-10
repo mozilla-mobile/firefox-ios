@@ -36,7 +36,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
 
         subject.start(from: folder)
 
-        XCTAssertTrue(router.pushedViewController is BookmarksPanel)
+        XCTAssertTrue(router.pushedViewController is LegacyBookmarksPanel)
         XCTAssertEqual(router.pushCalled, 1)
     }
 
@@ -46,7 +46,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
 
         subject.showBookmarkDetail(for: folder, folder: folder)
 
-        XCTAssertTrue(router.pushedViewController is BookmarkDetailPanel)
+        XCTAssertTrue(router.pushedViewController is LegacyBookmarkDetailPanel)
         XCTAssertEqual(router.pushCalled, 1)
     }
 
@@ -55,7 +55,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
 
         subject.showBookmarkDetail(bookmarkType: .bookmark, parentBookmarkFolder: LocalDesktopFolder())
 
-        XCTAssertTrue(router.pushedViewController is BookmarkDetailPanel)
+        XCTAssertTrue(router.pushedViewController is LegacyBookmarkDetailPanel)
         XCTAssertEqual(router.pushCalled, 1)
     }
 
@@ -64,7 +64,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
 
         subject.showBookmarkDetail(bookmarkType: .folder, parentBookmarkFolder: LocalDesktopFolder())
 
-        XCTAssertTrue(router.pushedViewController is BookmarkDetailPanel)
+        XCTAssertTrue(router.pushedViewController is LegacyBookmarkDetailPanel)
         XCTAssertEqual(router.pushCalled, 1)
     }
 

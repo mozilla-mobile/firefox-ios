@@ -9,7 +9,7 @@ import Common
 
 @testable import Client
 
-class BookmarksPanelTests: XCTestCase {
+class LegacyBookmarksPanelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
@@ -166,11 +166,11 @@ class BookmarksPanelTests: XCTestCase {
         panel.updatePanelState(newState: .bookmarks(state: .itemEditMode))
 
         // Pushing bookmark detail panel as if we are truly in .itemEditMode
-        let bookmarkDetailPanel = BookmarkDetailPanel(profile: MockProfile(),
-                                                      windowUUID: .XCTestDefaultUUID,
-                                                      bookmarkNode: LocalDesktopFolder(),
-                                                      parentBookmarkFolder: LocalDesktopFolder(),
-                                                      deleteBookmark: {})
+        let bookmarkDetailPanel = LegacyBookmarkDetailPanel(profile: MockProfile(),
+                                                            windowUUID: .XCTestDefaultUUID,
+                                                            bookmarkNode: LocalDesktopFolder(),
+                                                            parentBookmarkFolder: LocalDesktopFolder(),
+                                                            deleteBookmark: nil)
         mockNavigationController.setViewControllers([panel, bookmarkDetailPanel], animated: false)
 
         panel.handleRightTopButton()
@@ -183,10 +183,10 @@ class BookmarksPanelTests: XCTestCase {
         panel.updatePanelState(newState: .bookmarks(state: .itemEditModeInvalidField))
 
         // Pushing bookmark detail panel as if we are truly in .itemEditMode
-        let bookmarkDetailPanel = BookmarkDetailPanel(profile: MockProfile(),
-                                                      windowUUID: .XCTestDefaultUUID,
-                                                      withNewBookmarkNodeType: .bookmark,
-                                                      parentBookmarkFolder: LocalDesktopFolder())
+        let bookmarkDetailPanel = LegacyBookmarkDetailPanel(profile: MockProfile(),
+                                                            windowUUID: .XCTestDefaultUUID,
+                                                            withNewBookmarkNodeType: .bookmark,
+                                                            parentBookmarkFolder: LocalDesktopFolder())
         mockNavigationController.setViewControllers([panel, bookmarkDetailPanel], animated: false)
 
         panel.handleRightTopButton()
@@ -302,7 +302,7 @@ class BookmarksPanelTests: XCTestCase {
     }
 }
 
-private extension BookmarksPanelTests {
+private extension LegacyBookmarksPanelTests {
     func createPanel() -> SpyBookmarksPanel {
         let profile = MockProfile()
         let viewModel = BookmarksPanelViewModel(profile: profile,
@@ -313,7 +313,7 @@ private extension BookmarksPanelTests {
     }
 }
 
-class SpyBookmarksPanel: BookmarksPanel {
+class SpyBookmarksPanel: LegacyBookmarksPanel {
     // Spying on the present method to catch the presented view controller
     var viewControllerPresented: UIViewController?
     override func present(_ viewControllerToPresent: UIViewController,

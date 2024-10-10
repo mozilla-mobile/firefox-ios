@@ -20,7 +20,7 @@ class BookmarkDetailPanelError: MaybeErrorType {
     public var description = "Unable to save BookmarkNode."
 }
 
-class BookmarkDetailPanel: SiteTableViewController {
+class LegacyBookmarkDetailPanel: SiteTableViewController {
     private struct UX {
         static let FieldRowHeight: CGFloat = 58
         static let FolderIconSize = CGSize(width: 24, height: 24)
@@ -577,7 +577,7 @@ class BookmarkDetailPanel: SiteTableViewController {
     }
 }
 
-extension BookmarkDetailPanel: TextFieldTableViewCellDelegate {
+extension LegacyBookmarkDetailPanel: TextFieldTableViewCellDelegate {
     func textFieldTableViewCell(_ textFieldTableViewCell: TextFieldTableViewCell, didChangeText text: String) {
         guard let indexPath = tableView.indexPath(for: textFieldTableViewCell) else { return }
 

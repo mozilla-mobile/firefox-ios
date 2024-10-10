@@ -12,17 +12,9 @@ import class MozillaAppServices.BookmarkItemData
 import class MozillaAppServices.BookmarkSeparatorData
 import enum MozillaAppServices.BookmarkRoots
 
-let LocalizedRootBookmarkFolderStrings = [
-    BookmarkRoots.MenuFolderGUID: String.BookmarksFolderTitleMenu,
-    BookmarkRoots.ToolbarFolderGUID: String.BookmarksFolderTitleToolbar,
-    BookmarkRoots.UnfiledFolderGUID: String.BookmarksFolderTitleUnsorted,
-    BookmarkRoots.MobileFolderGUID: String.BookmarksFolderTitleMobile,
-    LocalDesktopFolder.localDesktopFolderGuid: String.Bookmarks.Menu.DesktopBookmarks
-]
-
-class BookmarksPanel: SiteTableViewController,
-                      LibraryPanel,
-                      CanRemoveQuickActionBookmark {
+class BookmarksViewController: SiteTableViewController,
+                               LibraryPanel,
+                               CanRemoveQuickActionBookmark {
     struct UX {
         static let FolderIconSize = CGSize(width: 24, height: 24)
         static let RowFlashDelay: TimeInterval = 0.4
@@ -142,7 +134,6 @@ class BookmarksPanel: SiteTableViewController,
     override func reloadData() {
         viewModel.reloadData { [weak self] in
             self?.tableView.reloadData()
-
             if self?.viewModel.shouldFlashRow ?? false {
                 self?.flashRow()
             }
@@ -152,31 +143,12 @@ class BookmarksPanel: SiteTableViewController,
     // MARK: - Actions
 
     func presentInFolderActions() {
-        let viewModel = PhotonActionSheetViewModel(actions: [[getNewBookmarkAction(),
-                                                              getNewFolderAction(),
+        let viewModel = PhotonActionSheetViewModel(actions: [[getNewFolderAction(),
                                                               getNewSeparatorAction()]],
                                                    modalStyle: .overFullScreen)
         let sheet = PhotonActionSheet(viewModel: viewModel, windowUUID: windowUUID)
         sheet.modalTransitionStyle = .crossDissolve
         present(sheet, animated: true)
-    }
-
-    private func getNewBookmarkAction() -> PhotonRowActions {
-        return SingleActionViewModel(
-            title: .BookmarksNewBookmark,
-            iconString: StandardImageIdentifiers.Large.bookmark,
-            tapHandler: { _ in
-                guard let bookmarkFolder = self.viewModel.bookmarkFolder else { return }
-
-                self.updatePanelState(newState: .bookmarks(state: .itemEditModeInvalidField))
-                self.bookmarkCoordinatorDelegate?.showBookmarkDetail(
-                    bookmarkType: .bookmark,
-                    parentBookmarkFolder: bookmarkFolder,
-                    updatePanelState: { state in
-                        self.updatePanelState(newState: .bookmarks(state: state))
-                        self.sendPanelChangeNotification()
-                    })
-            }).items
     }
 
     private func getNewFolderAction() -> PhotonRowActions {
@@ -186,7 +158,6 @@ class BookmarksPanel: SiteTableViewController,
             tapHandler: { _ in
                 guard let bookmarkFolder = self.viewModel.bookmarkFolder else { return }
 
-                self.updatePanelState(newState: .bookmarks(state: .itemEditMode))
                 self.bookmarkCoordinatorDelegate?.showBookmarkDetail(
                     bookmarkType: .folder,
                     parentBookmarkFolder: bookmarkFolder
@@ -372,10 +343,7 @@ class BookmarksPanel: SiteTableViewController,
                 !(node is BookmarkSeparatorData),
                 isCurrentFolderEditable(at: indexPath) {
                 // Only show detail controller for editable nodes
-                bookmarkCoordinatorDelegate?.showBookmarkDetail(for: node, folder: bookmarkFolder) { [weak self] in
-                    self?.updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
-                }
-                updatePanelState(newState: .bookmarks(state: .itemEditMode))
+                bookmarkCoordinatorDelegate?.showBookmarkDetail(for: node, folder: bookmarkFolder, completion: nil)
             }
             return
         }
@@ -494,7 +462,7 @@ class BookmarksPanel: SiteTableViewController,
 
 // MARK: - LibraryPanelContextMenu
 
-extension BookmarksPanel: LibraryPanelContextMenu {
+extension BookmarksViewController: LibraryPanelContextMenu {
     func presentContextMenu(for site: Site,
                             with indexPath: IndexPath,
                             completionHandler: @escaping () -> PhotonActionSheet?) {
@@ -560,7 +528,7 @@ extension BookmarksPanel: LibraryPanelContextMenu {
 }
 
 // MARK: - Notifiable
-extension BookmarksPanel: Notifiable {
+extension BookmarksViewController: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .FirefoxAccountChanged:
@@ -572,7 +540,7 @@ extension BookmarksPanel: Notifiable {
 }
 
 // MARK: - Toolbar button actions
-extension BookmarksPanel {
+extension BookmarksViewController {
     func bottomLeftButtonAction() {
         if state == .bookmarks(state: .inFolderEditMode) {
             presentInFolderActions()
@@ -587,23 +555,8 @@ extension BookmarksPanel {
             if viewModel.isRootNode {
                 updatePanelState(newState: .bookmarks(state: .mainView))
             }
-        case .inFolderEditMode:
-            presentInFolderActions()
-
-        case .itemEditMode:
-            updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
-
-        case .itemEditModeInvalidField:
-            updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
-
         default:
             return
-        }
-    }
-
-    func handleRightTopButton() {
-        if state == .bookmarks(state: .itemEditMode) {
-            handleItemEditMode()
         }
     }
 
@@ -621,22 +574,8 @@ extension BookmarksPanel {
             enableEditMode()
         case .inFolderEditMode:
             disableEditMode()
-        case .itemEditMode:
-            handleItemEditMode()
         default:
             return
-        }
-    }
-
-    func handleItemEditMode() {
-        guard let bookmarkEditView = navigationController?.viewControllers.last as? BookmarkDetailPanel else { return }
-
-        updatePanelState(newState: .bookmarks(state: .inFolderEditMode))
-        bookmarkEditView.save().uponQueue(.main) { _ in
-            self.navigationController?.popViewController(animated: true)
-            if bookmarkEditView.isNew {
-                self.viewModel.didAddBookmarkNode()
-            }
         }
     }
 }

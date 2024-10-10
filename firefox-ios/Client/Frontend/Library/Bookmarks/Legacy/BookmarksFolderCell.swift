@@ -43,7 +43,7 @@ extension BookmarkFolderData: BookmarksFolderCell {
         let viewModel = BookmarksPanelViewModel(profile: profile,
                                                 bookmarksHandler: profile.places,
                                                 bookmarkFolderGUID: guid)
-        let nextController = BookmarksPanel(viewModel: viewModel, windowUUID: windowUUID)
+        let nextController = LegacyBookmarksPanel(viewModel: viewModel, windowUUID: windowUUID)
         if isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[guid] {
             nextController.title = localizedString
         } else {
