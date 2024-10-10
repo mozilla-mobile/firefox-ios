@@ -4,6 +4,8 @@
 
 /* eslint-disable no-undef,mozilla/balanced-listeners */
 import { AddressRecord } from "resource://gre/modules/shared/AddressRecord.sys.mjs";
+import { FormAutofillHandler } from "resource://gre/modules/shared/FormAutofillHandler.sys.mjs";
+import { FormAutofillHeuristics } from "resource://gre/modules/shared/FormAutofillHeuristics.sys.mjs";
 import { FormAutofillUtils } from "resource://gre/modules/shared/FormAutofillUtils.sys.mjs";
 import { FormStateManager } from "resource://gre/modules/shared/FormStateManager.sys.mjs";
 import { CreditCardRecord } from "resource://gre/modules/shared/CreditCardRecord.sys.mjs";
@@ -54,7 +56,7 @@ export class FormAutofillChild {
     );
   }
 
-  _doIdentifyAutofillFields(element) {
+  identifyFieldsWhenFocused(element) {
     if (this.#focusedElement == element) {
       return;
     }
@@ -65,11 +67,17 @@ export class FormAutofillChild {
     }
 
     // Find the autofill handler for this form and identify all the fields.
-    const { handler, newFieldsIdentified } =
-      this.fieldDetailsManager.identifyAutofillFields(element);
+    const handler = this.fieldDetailsManager.getOrCreateFormHandler(element);
 
-    // If we found newly identified fields, run section classification heuristic
-    if (newFieldsIdentified) {
+    if (!handler.hasIdentifiedFields() || handler.updateFormIfNeeded(element)) {
+      // If we found newly identified fields, run section classification heuristic
+      const detectedFields = FormAutofillHandler.collectFormFields(
+        handler.form
+      );
+
+      FormAutofillHeuristics.parseAndUpdateFieldNamesParent(detectedFields);
+      handler.setIdentifiedFieldDetails(detectedFields);
+
       this.#sections = FormAutofillSection.classifySections(
         handler.fieldDetails
       );
@@ -103,7 +111,7 @@ export class FormAutofillChild {
   onFocusIn(evt) {
     const element = evt.target;
 
-    this._doIdentifyAutofillFields(element);
+    this.identifyFieldsWhenFocused(element);
 
     // Only ping swift if current field is either a cc or address field
     if (!this.activeFieldDetail) {
