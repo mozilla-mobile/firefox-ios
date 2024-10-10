@@ -316,6 +316,29 @@ struct ToolbarState: ScreenState, Equatable {
         }
     }
 
+    private static func handleDidLoadToolbars(state: Self, action: Action) -> ToolbarState {
+        guard let toolbarAction = action as? ToolbarAction,
+              let toolbarPosition = toolbarAction.toolbarPosition
+        else { return state }
+
+        let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
+        return ToolbarState(
+            windowUUID: state.windowUUID,
+            toolbarPosition: position,
+            isPrivateMode: state.isPrivateMode,
+            addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
+            navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
+            isShowingNavigationToolbar: state.isShowingNavigationToolbar,
+            isShowingTopTabs: state.isShowingTopTabs,
+            canGoBack: state.canGoBack,
+            canGoForward: state.canGoForward,
+            numberOfTabs: state.numberOfTabs,
+            showMenuWarningBadge: state.showMenuWarningBadge,
+            isNewTabFeatureEnabled: toolbarAction.isNewTabFeatureEnabled ?? state.isNewTabFeatureEnabled,
+            canShowDataClearanceAction: toolbarAction.canShowDataClearanceAction ?? state.canShowDataClearanceAction,
+            canShowNavigationHint: state.canShowNavigationHint)
+    }
+
     private static func addressToolbarPositionFromSearchBarPosition(_ position: SearchBarPosition)
     -> AddressToolbarPosition {
         switch position {
