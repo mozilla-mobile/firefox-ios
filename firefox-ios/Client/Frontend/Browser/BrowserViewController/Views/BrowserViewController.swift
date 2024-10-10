@@ -1941,9 +1941,7 @@ class BrowserViewController: UIViewController,
     }
 
     private func executeNavigationAndDisplayActions() {
-        let isToolBarRefactorOrNativeErrorPage = isToolbarRefactorEnabled || isNativeErrorPageEnabled
-
-        guard isToolBarRefactorOrNativeErrorPage, let state = browserViewControllerState else { return }
+        guard let state = browserViewControllerState else { return }
 
         switch state {
         case _ where state.navigateTo != nil:
