@@ -29,29 +29,32 @@ struct MainMenuConfigurationUtility: Equatable {
         static let share = StandardImageIdentifiers.Large.share
         static let addToShortcuts = StandardImageIdentifiers.Large.pin
         static let saveToReadingList = StandardImageIdentifiers.Large.readingListAdd
-        static let addToHomescreen = StandardImageIdentifiers.Large.addToHomescreen
         static let bookmarkThisPage = StandardImageIdentifiers.Large.bookmark
         static let reportBrokenSite = StandardImageIdentifiers.Large.lightbulb
         static let customizeHomepage = StandardImageIdentifiers.Large.gridAdd
         static let saveAsPDF = StandardImageIdentifiers.Large.folder
+
+        // These will be used in the future, but not now.
+        // adding them just for completion's sake
+        //        static let addToHomescreen = StandardImageIdentifiers.Large.addToHomescreen
     }
 
     public func generateMenuElements(
-        with configuration: MainMenuTabInfo?,
+        with tabInfo: MainMenuTabInfo,
         for viewType: MainMenuDetailsViewType?,
         and uuid: WindowUUID
     ) -> [MenuSection] {
         switch viewType {
         case .tools: return getToolsSubmenu(with: uuid)
-        case .save: return getSaveSubmenu(with: uuid)
-        default: return getMainMenuElements(with: uuid, andInfo: configuration)
+        case .save: return getSaveSubmenu(with: uuid, and: tabInfo)
+        default: return getMainMenuElements(with: uuid, and: tabInfo)
         }
     }
 
     // MARK: - Main Menu
     private func getMainMenuElements(
         with uuid: WindowUUID,
-        andInfo configuration: MainMenuTabInfo?
+        and tabInfo: MainMenuTabInfo
     ) -> [MenuSection] {
         // Always include these sections
         var menuSections: [MenuSection] = [
@@ -59,14 +62,14 @@ struct MainMenuConfigurationUtility: Equatable {
             getLibrariesSection(with: uuid),
             getOtherToolsSection(
                 with: uuid,
-                isHomepage: configuration?.isHomepage ?? false
+                isHomepage: tabInfo.isHomepage
             )
         ]
 
         // Conditionally add tools section if this is a website
-        if let configuration, !configuration.isHomepage {
+        if !tabInfo.isHomepage {
             menuSections.insert(
-                getToolsSection(with: uuid, and: configuration),
+                getToolsSection(with: uuid, and: tabInfo),
                 at: 1
             )
         }
@@ -224,7 +227,7 @@ struct MainMenuConfigurationUtility: Equatable {
         }
     }
 
-    // MARK: - Submenus
+    // MARK: - Tools Submenu
     private func getToolsSubmenu(with uuid: WindowUUID) -> [MenuSection] {
         return [
             MenuSection(
@@ -340,7 +343,11 @@ struct MainMenuConfigurationUtility: Equatable {
         ]
     }
 
-    private func getSaveSubmenu(with uuid: WindowUUID) -> [MenuSection] {
+    // MARK: - Save Submenu
+    private func getSaveSubmenu(
+        with uuid: WindowUUID,
+        and tabInfo: MainMenuTabInfo
+    ) -> [MenuSection] {
         return [MenuSection(
             options: [
                 MenuElement(
@@ -377,59 +384,32 @@ struct MainMenuConfigurationUtility: Equatable {
                         )
                     }
                 ),
-                MenuElement(
-                    title: .MainMenu.Submenus.Save.AddToHomeScreen,
-                    iconName: Icons.addToHomescreen,
-                    isEnabled: true,
-                    isActive: false,
-                    a11yLabel: .MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen,
-                    a11yHint: "",
-                    a11yId: AccessibilityIdentifiers.MainMenu.addToHomeScreen,
-                    action: {
-                        store.dispatch(
-                            MainMenuAction(
-                                windowUUID: uuid,
-                                actionType: MainMenuActionType.closeMenu
-                            )
-                        )
-                    }
-                ),
-                MenuElement(
-                    title: .MainMenu.Submenus.Save.SaveToReadingList,
-                    iconName: Icons.saveToReadingList,
-                    isEnabled: true,
-                    isActive: false,
-                    a11yLabel: .MainMenu.Submenus.Save.AccessibilityLabels.SaveToReadingList,
-                    a11yHint: "",
-                    a11yId: AccessibilityIdentifiers.MainMenu.saveToReadingList,
-                    action: {
-                        store.dispatch(
-                            MainMenuAction(
-                                windowUUID: uuid,
-                                actionType: MainMenuActionType.closeMenu
-                            )
-                        )
-                    }
-                ),
-                MenuElement(
-                    title: .MainMenu.Submenus.Save.SaveAsPDF,
-                    iconName: Icons.saveAsPDF,
-                    isEnabled: true,
-                    isActive: false,
-                    a11yLabel: .MainMenu.Submenus.Save.AccessibilityLabels.SaveAsPDF,
-                    a11yHint: "",
-                    a11yId: AccessibilityIdentifiers.MainMenu.saveAsPDF,
-                    action: {
-                        store.dispatch(
-                            MainMenuAction(
-                                windowUUID: uuid,
-                                actionType: MainMenuActionType.closeMenu
-                            )
-                        )
-                    }
-                ),
+                configureReadingListItem(with: uuid, and: tabInfo)
             ]
         )]
+    }
+
+    private func configureReadingListItem(
+        with uuid: WindowUUID,
+        and tabInfo: MainMenuTabInfo
+    ) -> MenuElement {
+        return MenuElement(
+            title: .MainMenu.Submenus.Save.SaveToReadingList,
+            iconName: Icons.saveToReadingList,
+            isEnabled: tabInfo.readerModeIsAvailable,
+            isActive: false,
+            a11yLabel: .MainMenu.Submenus.Save.AccessibilityLabels.SaveToReadingList,
+            a11yHint: "",
+            a11yId: AccessibilityIdentifiers.MainMenu.saveToReadingList,
+            action: {
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: uuid,
+                        actionType: MainMenuActionType.closeMenu
+                    )
+                )
+            }
+        )
     }
 
     // MARK: - Libraries Section

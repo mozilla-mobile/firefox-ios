@@ -683,7 +683,8 @@ class TabManagerMiddleware {
             url: selectedTab.url,
             isHomepage: selectedTab.isFxHomeTab,
             isDefaultUserAgentDesktop: defaultUAisDesktop,
-            hasChangedUserAgent: selectedTab.changedUserAgent
+            hasChangedUserAgent: selectedTab.changedUserAgent,
+            readerModeIsAvailable: selectedTab.readerModeAvailableOrActive
         )
     }
 
