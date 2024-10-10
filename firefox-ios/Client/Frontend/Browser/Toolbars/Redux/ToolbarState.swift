@@ -143,21 +143,7 @@ struct ToolbarState: ScreenState, Equatable {
             return handleNavigationHintFinishedPresenting(state: state, action: action)
 
         default:
-            return ToolbarState(
-                windowUUID: state.windowUUID,
-                toolbarPosition: state.toolbarPosition,
-                isPrivateMode: state.isPrivateMode,
-                addressToolbar: state.addressToolbar,
-                navigationToolbar: state.navigationToolbar,
-                isShowingNavigationToolbar: state.isShowingNavigationToolbar,
-                isShowingTopTabs: state.isShowingTopTabs,
-                canGoBack: state.canGoBack,
-                canGoForward: state.canGoForward,
-                numberOfTabs: state.numberOfTabs,
-                showMenuWarningBadge: state.showMenuWarningBadge,
-                isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-                canShowDataClearanceAction: state.canShowDataClearanceAction,
-                canShowNavigationHint: state.canShowNavigationHint)
+            return handleDefaultActionType(state: state)
         }
     }
 
