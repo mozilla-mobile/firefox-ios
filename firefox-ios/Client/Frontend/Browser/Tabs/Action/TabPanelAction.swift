@@ -44,6 +44,7 @@ class TabPanelViewAction: Action {
 
 enum TabPanelViewActionType: ActionType {
     case tabPanelDidLoad
+    case tabPanelWillAppear
     case tabPanelDidAppear
     case addNewTab
     case closeTab
@@ -83,6 +84,7 @@ class TabPanelMiddlewareAction: Action {
 
 enum TabPanelMiddlewareActionType: ActionType {
     case didLoadTabPanel
+    case willAppearTabPanel
     case didChangeTabPanel
     case refreshTabs
     case refreshInactiveTabs
