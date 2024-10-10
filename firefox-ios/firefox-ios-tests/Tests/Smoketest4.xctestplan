@@ -85,6 +85,7 @@
         "HistoryTests\/testTabHistory()",
         "HomeButtonTests",
         "HomePageSettingsUITests",
+        "InactiveTabsTest",
         "IntegrationTests",
         "IpadOnlyTestCase",
         "IphoneOnlyTestCase",
