@@ -896,7 +896,7 @@ shopping:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
-    
+
   surface_displayed:
     type: event
     description: |
@@ -3220,17 +3220,20 @@ search:
       * actionbar
     bugs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1923843
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
       - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1923843
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
     send_in_pings:
       - metrics
       - baseline
+      - dau-reporting
     no_lint:
       - BASELINE_PING
   default_engine:
@@ -3242,17 +3245,20 @@ search:
       then the value will be 'custom'.
     bugs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1923843
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
       - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1923843
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
     send_in_pings:
       - metrics
       - baseline
+      - dau-reporting
     no_lint:
       - BASELINE_PING
   start_search_pressed:
@@ -3276,17 +3282,20 @@ search:
       Records the type of interaction a user has on SERP pages.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/7602
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1923843
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/7702
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
       - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1923843
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
     send_in_pings:
       - metrics
       - baseline
+      - dau-reporting
     no_lint:
       - BASELINE_PING
   google_topsite_pressed:
@@ -4255,6 +4264,7 @@ browser_search:
     send_in_pings:
       - metrics
       - baseline
+      - dau-reporting
     no_lint:
       - BASELINE_PING
     bugs:
@@ -4264,6 +4274,7 @@ browser_search:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
       - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1923843
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
@@ -4275,15 +4286,18 @@ browser_search:
     send_in_pings:
       - metrics
       - baseline
+      - dau-reporting
     no_lint:
       - BASELINE_PING
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/7616
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1923843
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/8970
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
       - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1923843
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
@@ -4348,7 +4362,7 @@ urlbar:
       search_mode:
         type: string
         description: |
-          If the urlbar is in search mode, thus restricting results to a 
+          If the urlbar is in search mode, thus restricting results to a
           specific search engine or local source, this is set to the search
           mode source. For iOS the search starts from tabs
       n_chars:
@@ -4367,7 +4381,7 @@ urlbar:
       groups:
         type: string
         description: |
-          Comma separated list of result groups in order, groups may be        
+          Comma separated list of result groups in order, groups may be
           repeated, since the list will match 1:1 the results list, so we
           Can link each result to a group, like  heuristic, adaptive_history,
            search_history, search_suggest, top_pick, top_site, remote_tab, addon,
@@ -4402,7 +4416,7 @@ urlbar:
       search_mode:
         type: string
         description: |
-          If the urlbar is in search mode, thus restricting results to a 
+          If the urlbar is in search mode, thus restricting results to a
           specific search engine or local source, this is set to the search
           mode source.
       n_chars:
@@ -4437,7 +4451,7 @@ urlbar:
       groups:
         type: string
         description: |
-          Comma separated list of result groups in order, groups may be        
+          Comma separated list of result groups in order, groups may be
           repeated, since the list will match 1:1 the results list, so we
           Can link each result to a group, like  heuristic, adaptive_history,
            search_history, search_suggest, top_pick, top_site, remote_tab, addon,
@@ -4473,7 +4487,7 @@ urlbar:
       search_mode:
         type: string
         description: |
-          If the urlbar is in search mode, thus restricting results to a 
+          If the urlbar is in search mode, thus restricting results to a
           specific search engine or local source, this is set to the search
           mode source. For iOS the search starts from tabs
       n_chars:
@@ -4492,7 +4506,7 @@ urlbar:
       groups:
         type: string
         description: |
-          Comma separated list of result groups in order, groups may be        
+          Comma separated list of result groups in order, groups may be
           repeated, since the list will match 1:1 the results list, so we
           Can link each result to a group, like  heuristic, adaptive_history,
            search_history, search_suggest, top_pick, top_site, remote_tab, addon,
@@ -5128,7 +5142,7 @@ credit_card:
     type: event
     description: |
       Recorded when a user taps a card from bottom sheet
-      select a card flow and the credit card gets 
+      select a card flow and the credit card gets
       autofilled on the webpage
     bugs:
       - https://mozilla-hub.atlassian.net/browse/FXIOS-6703
