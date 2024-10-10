@@ -20,6 +20,10 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
                                              TrackingProtectionMenuDelegate,
                                              EnhancedTrackingProtectionMenuDelegate,
                                              FeatureFlaggable {
+    private struct UX {
+        static let popoverPreferredSize = CGSize(width: 480, height: 540)
+    }
+
     private let profile: Profile
     private let tabManager: TabManager
     private var legacyEnhancedTrackingProtectionMenuVC: EnhancedTrackingProtectionMenuVC?
@@ -90,14 +94,12 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
                 guard let trackingProtectionNavController = trackingProtectionNavController else { return }
                 router.present(trackingProtectionNavController, animated: true, completion: nil)
             } else {
-                enhancedTrackingProtectionMenuVC.asPopover = true
-                if trackingProtectionRefactorStatus {
-                    enhancedTrackingProtectionMenuVC.preferredContentSize = CGSize(width: 480, height: 517)
-                }
-                enhancedTrackingProtectionMenuVC.modalPresentationStyle = .popover
-                enhancedTrackingProtectionMenuVC.popoverPresentationController?.sourceView = sourceView
-                enhancedTrackingProtectionMenuVC.popoverPresentationController?.permittedArrowDirections = .up
-                router.present(enhancedTrackingProtectionMenuVC, animated: true, completion: nil)
+                guard let trackingProtectionNavController = trackingProtectionNavController else { return }
+                trackingProtectionNavController.preferredContentSize = UX.popoverPreferredSize
+                trackingProtectionNavController.modalPresentationStyle = .popover
+                trackingProtectionNavController.popoverPresentationController?.sourceView = sourceView
+                trackingProtectionNavController.popoverPresentationController?.permittedArrowDirections = .up
+                router.present(trackingProtectionNavController, animated: true, completion: nil)
             }
         } else if let legacyEnhancedTrackingProtectionMenuVC {
             if UIDevice.current.userInterfaceIdiom == .phone {
