@@ -9,10 +9,17 @@ features:
           Controls which menu users will see
         type: Boolean
         default: false
+      menu_hint:
+        description: >
+          If true, enables the menu contextual hint.
+        type: Boolean
+        default: false
     defaults:
       - channel: beta
         value:
           enabled: false
+          menu_hint: false
       - channel: developer
         value:
           enabled: false
+          menu_hint: true

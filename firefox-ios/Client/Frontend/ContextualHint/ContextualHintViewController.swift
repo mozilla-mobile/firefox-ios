@@ -136,7 +136,8 @@ class ContextualHintViewController: UIViewController,
         andActionForButton buttonAction: (() -> Void)? = nil,
         andShouldStartTimerRightAway shouldStartTimer: Bool = true,
         overlayState: OverlayStateProtocol? = nil,
-        ignoreSafeArea: Bool = false
+        ignoreSafeArea: Bool = false,
+        rightSafeAreaMargin: CGFloat? = nil
     ) {
         stopTimer()
         modalPresentationStyle = .popover
@@ -150,7 +151,7 @@ class ContextualHintViewController: UIViewController,
                 top: -anchor.safeAreaInsets.top,
                 left: -anchor.safeAreaInsets.left,
                 bottom: -anchor.safeAreaInsets.bottom,
-                right: -anchor.safeAreaInsets.right
+                right: -(rightSafeAreaMargin ?? anchor.safeAreaInsets.right)
             )
         }
 
@@ -166,6 +167,7 @@ class ContextualHintViewController: UIViewController,
         var viewModel = ContextualHintViewModel(
             isActionType: viewProvider.isActionType,
             actionButtonTitle: viewProvider.getCopyFor(.action),
+            title: viewProvider.getCopyFor(.title),
             description: viewProvider.getCopyFor(.description),
             arrowDirection: arrowDirection,
             closeButtonA11yLabel: .ContextualHints.ContextualHintsCloseAccessibility,

@@ -20,9 +20,11 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     weak var navigationHandler: MainMenuCoordinatorDelegate?
 
     private let windowUUID: WindowUUID
+    private let profile: Profile
 
-    init(router: Router, windowUUID: WindowUUID) {
+    init(router: Router, windowUUID: WindowUUID, profile: Profile) {
         self.windowUUID = windowUUID
+        self.profile = profile
         super.init(router: router)
     }
 
@@ -82,7 +84,7 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
 
     // MARK: - Private helpers
     private func createMainMenuViewController() -> MainMenuViewController {
-        let mainMenuViewController = MainMenuViewController(windowUUID: windowUUID)
+        let mainMenuViewController = MainMenuViewController(windowUUID: windowUUID, profile: profile)
         mainMenuViewController.coordinator = self
         return mainMenuViewController
     }

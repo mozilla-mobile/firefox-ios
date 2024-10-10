@@ -8,6 +8,7 @@ import ToolbarKit
 struct NavigationToolbarContainerModel: Equatable {
     let actions: [ToolbarElement]
     let canShowNavigationHint: Bool
+    let canShowMenuHint: Bool
     let displayBorder: Bool
     let windowUUID: WindowUUID
 
@@ -18,6 +19,7 @@ struct NavigationToolbarContainerModel: Equatable {
     init(state: ToolbarState, windowUUID: WindowUUID) {
         self.displayBorder = state.navigationToolbar.displayBorder
         self.canShowNavigationHint = state.canShowNavigationHint
+        self.canShowMenuHint = state.canShowMenuHint
         self.actions = state.navigationToolbar.actions.map { action in
             ToolbarElement(
                 iconName: action.iconName,
