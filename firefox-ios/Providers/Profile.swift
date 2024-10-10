@@ -25,6 +25,7 @@ import struct MozillaAppServices.HistoryMigrationResult
 import struct MozillaAppServices.SyncParams
 import struct MozillaAppServices.SyncResult
 import struct MozillaAppServices.VisitObservation
+import struct MozillaAppServices.PendingCommand
 
 public protocol SyncManager {
     var isSyncing: Bool { get }
@@ -138,6 +139,10 @@ protocol Profile: AnyObject {
 
     @discardableResult
     func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
+
+    func addTabToCommandQueue(_ deviceId: String, url: URL)
+    func removeTabFromCommandQueue(_ deviceId: String, url: URL)
+    func flushTabCommands(toDeviceId: String?)
 
     func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success
     func pollCommands(forcePoll: Bool)
@@ -560,6 +565,14 @@ open class BrowserProfile: Profile {
         return self.tabs.setLocalTabs(localTabs: tabs)
     }
 
+    func addTabToCommandQueue(_ deviceId: String, url: URL) {
+        tabs.addRemoteCommand(deviceId: deviceId, url: url)
+    }
+
+    func removeTabFromCommandQueue(_ deviceId: String, url: URL) {
+        tabs.removeRemoteCommand(deviceId: deviceId, url: url)
+    }
+
     public func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success {
         let deferred = Success()
         if let accountManager = RustFirefoxAccounts.shared.accountManager {
@@ -579,6 +592,21 @@ open class BrowserProfile: Profile {
             deferred.fill(Maybe(success: ()))
         }
         return deferred
+    }
+
+    public func flushTabCommands(toDeviceId: String?) {
+        guard let deviceId = toDeviceId,
+            let constellation = RustFirefoxAccounts.shared.accountManager?.deviceConstellation() else {
+            return
+        }
+
+        // send all unsent close tab commands
+        self.tabs.getUnsentCommandUrlsByDeviceId(deviceId: deviceId) { urls in
+            constellation.sendEventToDevice(targetDeviceId: deviceId, e: .closeTabs(urls: urls))
+        }
+
+        // mark tab commands as sent
+        self.tabs.setPendingCommandsSent(deviceId: deviceId)
     }
 
     public func setCommandArrived() {
