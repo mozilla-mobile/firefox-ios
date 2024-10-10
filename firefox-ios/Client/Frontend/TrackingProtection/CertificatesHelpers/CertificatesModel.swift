@@ -5,15 +5,17 @@
 import Foundation
 import X509
 
-// TODO FXIOS-9853 ⁃ Enhanced Tracking Protection Redux
-final class CertificatesViewModel {
+final class CertificatesModel {
     let topLevelDomain: String
     let title: String
     let URL: String
     var certificates = [Certificate]()
     var selectedCertificateIndex: Int = 0
 
-    init(topLevelDomain: String, title: String, URL: String, certificates: [Certificate]) {
+    init(topLevelDomain: String,
+         title: String,
+         URL: String,
+         certificates: [Certificate]) {
         self.topLevelDomain = topLevelDomain
         self.title = title
         self.URL = URL

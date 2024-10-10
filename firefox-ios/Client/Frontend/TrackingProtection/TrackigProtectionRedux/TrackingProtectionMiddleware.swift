@@ -13,6 +13,8 @@ final class TrackingProtectionMiddleware {
         switch action.actionType {
         case TrackingProtectionActionType.toggleTrackingProtectionStatus:
             self.toggleSiteSafelistStatus(windowUUID: windowUUID)
+        case TrackingProtectionActionType.tappedShowClearCookiesAlert:
+            self.tappedShowClearCookiesAndSiteDataAlert(windowUUID: windowUUID)
         case TrackingProtectionActionType.clearCookiesAndSiteData:
             self.clearCookiesAndSiteData(windowUUID: windowUUID)
         case TrackingProtectionActionType.tappedShowTrackingProtectionDetails:
@@ -21,8 +23,6 @@ final class TrackingProtectionMiddleware {
             self.showBlockedTrackersDetails(windowUUID: windowUUID)
         case TrackingProtectionActionType.tappedShowSettings:
             self.showTrackingProtectionSettings(windowUUID: windowUUID)
-        case TrackingProtectionMiddlewareActionType.showAlert:
-            self.showBlockedTrackersDetails(windowUUID: windowUUID)
         case TrackingProtectionActionType.closeTrackingProtection:
             self.dismissScreen(windowUUID: windowUUID)
         default:
@@ -41,7 +41,15 @@ final class TrackingProtectionMiddleware {
     private func clearCookiesAndSiteData(windowUUID: WindowUUID) {
         let newAction = TrackingProtectionAction(
             windowUUID: windowUUID,
-            actionType: TrackingProtectionActionType.clearCookiesAndSiteData
+            actionType: TrackingProtectionMiddlewareActionType.clearCookies
+        )
+        store.dispatch(newAction)
+    }
+
+    private func tappedShowClearCookiesAndSiteDataAlert(windowUUID: WindowUUID) {
+        let newAction = TrackingProtectionAction(
+            windowUUID: windowUUID,
+            actionType: TrackingProtectionMiddlewareActionType.showAlert
         )
         store.dispatch(newAction)
     }

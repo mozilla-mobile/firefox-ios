@@ -111,7 +111,7 @@ final class TrackingProtectionToggleView: UIView, ThemeApplicable {
     func setupDetails(isOn: Bool) {
         toggleSwitch.isOn = isOn
         toggleLabel.text = .Menu.EnhancedTrackingProtection.switchTitle
-        toggleStatusLabel.text = toggleIsOn ?
+        toggleStatusLabel.text = isOn ?
             .Menu.EnhancedTrackingProtection.switchOnText : .Menu.EnhancedTrackingProtection.switchOffText
     }
 
