@@ -80,6 +80,18 @@ final class BrowserViewControllerStateTests: XCTestCase {
         XCTAssertEqual(newState.browserViewType, .nativeErrorPage)
     }
 
+    func testReloadWebsiteAction() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.navigateTo)
+
+        let action = getAction(for: .reloadWebsite)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.navigateTo, .reload)
+    }
+
     // MARK: - Private
     private func createSubject() -> BrowserViewControllerState {
         return BrowserViewControllerState(windowUUID: .XCTestDefaultUUID)
