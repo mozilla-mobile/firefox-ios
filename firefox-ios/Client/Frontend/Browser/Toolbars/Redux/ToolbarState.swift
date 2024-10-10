@@ -140,22 +140,7 @@ struct ToolbarState: ScreenState, Equatable {
             return handleNavigationButtonDoubleTapped(state: state, action: action)
 
         case ToolbarActionType.navigationHintFinishedPresenting:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-            return ToolbarState(
-                windowUUID: state.windowUUID,
-                toolbarPosition: state.toolbarPosition,
-                isPrivateMode: state.isPrivateMode,
-                addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
-                navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
-                isShowingNavigationToolbar: state.isShowingNavigationToolbar,
-                isShowingTopTabs: state.isShowingTopTabs,
-                canGoBack: state.canGoBack,
-                canGoForward: state.canGoForward,
-                numberOfTabs: state.numberOfTabs,
-                showMenuWarningBadge: state.showMenuWarningBadge,
-                isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-                canShowDataClearanceAction: state.canShowDataClearanceAction,
-                canShowNavigationHint: false)
+            return handleNavigationHintFinishedPresenting(state: state, action: action)
 
         default:
             return ToolbarState(
