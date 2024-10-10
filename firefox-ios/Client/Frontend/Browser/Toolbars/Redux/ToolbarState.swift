@@ -116,22 +116,7 @@ struct ToolbarState: ScreenState, Equatable {
             ToolbarActionType.didScrollDuringEdit,
             ToolbarActionType.websiteLoadingStateDidChange,
             ToolbarActionType.searchEngineDidChange:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-            return ToolbarState(
-                windowUUID: state.windowUUID,
-                toolbarPosition: state.toolbarPosition,
-                isPrivateMode: toolbarAction.isPrivate ?? state.isPrivateMode,
-                addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
-                navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
-                isShowingNavigationToolbar: toolbarAction.isShowingNavigationToolbar ?? state.isShowingNavigationToolbar,
-                isShowingTopTabs: toolbarAction.isShowingTopTabs ?? state.isShowingTopTabs,
-                canGoBack: toolbarAction.canGoBack ?? state.canGoBack,
-                canGoForward: toolbarAction.canGoForward ?? state.canGoForward,
-                numberOfTabs: state.numberOfTabs,
-                showMenuWarningBadge: state.showMenuWarningBadge,
-                isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-                canShowDataClearanceAction: state.canShowDataClearanceAction,
-                canShowNavigationHint: state.canShowNavigationHint)
+            return handleToolbarUpdates(state: state, action: action)
 
         case ToolbarActionType.showMenuWarningBadge:
             guard let toolbarAction = action as? ToolbarAction else { return state }
