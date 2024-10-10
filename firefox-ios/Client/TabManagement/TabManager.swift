@@ -97,7 +97,7 @@ protocol TabManager: AnyObject {
     func removeAllInactiveTabs() async
 
     /// Undo all inactive tabs closure. All inactive tabs are added back to the list of tabs
-    func undoCloseInactiveTabs()
+    func undoCloseInactiveTabs() async
 }
 
 extension TabManager {

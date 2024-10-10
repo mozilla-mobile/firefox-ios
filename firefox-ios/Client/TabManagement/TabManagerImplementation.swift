@@ -214,7 +214,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
 
     /// Creates the webview so needs to live on the main thread
     @MainActor
-    private func generateEmptyTab() {
+    private func generateEmptyTab() async {
         let newTab = addTab()
         selectTab(newTab)
     }
@@ -504,7 +504,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
     }
 
     @MainActor
-    override func undoCloseInactiveTabs() {
+    override func undoCloseInactiveTabs() async {
         tabs.append(contentsOf: backupCloseTabs)
         storeChanges()
         backupCloseTabs = [Tab]()
