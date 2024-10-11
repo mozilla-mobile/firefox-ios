@@ -10,7 +10,7 @@ protocol GeneratedPasswordStorageProtocol: AnyObject {
     func getPasswordForOrigin(origin: String) -> String?
 }
 
-public class GeneratedPasswordStorage: GeneratedPasswordStorageProtocol {
+class GeneratedPasswordStorage: GeneratedPasswordStorageProtocol {
     private var originToPasswordMapping: [String: String] =  [:]
 
     func deletePasswordForOrigin(origin: String) {
