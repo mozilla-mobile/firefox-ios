@@ -854,6 +854,19 @@ class BrowserViewController: UIViewController,
         urlBar.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
     }
 
+    private func addAddressToolbar() {
+        guard isToolbarRefactorEnabled else { return }
+
+        addressToolbarContainer.configure(
+            windowUUID: windowUUID,
+            profile: profile,
+            delegate: self,
+            isUnifiedSearchEnabled: isUnifiedSearchEnabled
+        )
+        addressToolbarContainer.applyTheme(theme: currentTheme())
+        addressToolbarContainer.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
+    }
+
     func addSubviews() {
         view.addSubviews(webViewContainerBackdrop, contentStackView)
 
@@ -866,14 +879,7 @@ class BrowserViewController: UIViewController,
 
         // Setup the URL bar, wrapped in a view to get transparency effect
         if isToolbarRefactorEnabled {
-            addressToolbarContainer.configure(
-                windowUUID: windowUUID,
-                profile: profile,
-                delegate: self,
-                isUnifiedSearchEnabled: isUnifiedSearchEnabled
-            )
-            addressToolbarContainer.applyTheme(theme: currentTheme())
-            addressToolbarContainer.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
+            addAddressToolbar()
         } else {
             createLegacyUrlBar()
         }
