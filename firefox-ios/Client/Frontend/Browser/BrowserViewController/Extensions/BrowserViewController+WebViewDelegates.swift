@@ -17,13 +17,6 @@ extension BrowserViewController: WKUIDelegate {
         for navigationAction: WKNavigationAction,
         windowFeatures: WKWindowFeatures
     ) -> WKWebView? {
-        print("NB -- 1 parent tab webview url \(String(describing: tabManager[webView]?.webView?.url))")
-        print("NB -- 1.1 parent tab webview title \(String(describing: tabManager[webView]?.webView?.title))")
-        print("NB -- 2 webView url \(String(describing: webView.url))")
-        print("NB -- 2.1 webView title \(String(describing: webView.title))")
-        print("NB -- 2.2 webView tag \(webView.tag)")
-        print("NB -- 3 navigationAction request \(navigationAction.request)")
-        print("NB -- 3.1 navigationAction request url \(String(describing: navigationAction.request.url))")
         guard let parentTab = tabManager[webView] else { return nil }
         guard !navigationAction.isInternalUnprivileged,
               shouldRequestBeOpenedAsPopup(navigationAction.request)
@@ -531,8 +524,6 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: decisionHandler)
-        print("NB -- 0 Data scheme \(url)")
-        print("NB -- 0 Data shouldFilterDataScheme \(navigationHandler.shouldFilterDataScheme(url: url))")
         if navigationHandler.shouldFilterDataScheme(url: url) {
             navigationHandler.filterDataScheme(url: url, navigationAction: navigationAction)
             return
