@@ -1,3 +1,9 @@
+/* Toggle for address autofill syncing setting */
+"FirefoxSync.AddressAutofillEngine.v124" = "ທີ່ຢູ່";
+
 /* Toggle for credit cards syncing setting */
-"FirefoxSync.CreditCardsEngine.v115" = "ບັດເຄຣດິດ";
+"FirefoxSync.CreditCardsEngine.v122" = "ວິທີການຊໍາລະເງິນ";
+
+/* Toggle passwords syncing setting, in the Settings > Sync Data menu of the app. */
+"Sync.LoginsEngine.Title.v122" = "ລະຫັດຜ່ານ";
 

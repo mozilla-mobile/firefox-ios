@@ -947,7 +947,7 @@
 "Reader View" = "閱讀畫面";
 
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
-"ReaderMode.Available.VoiceOverAnnouncement" = "可使用閱讀模式";
+"ReaderMode.Available.VoiceOverAnnouncement" = "可使用閱讀畫面";
 
 /* Name for Mark as read button in reader mode */
 "ReaderModeBar.MarkAsRead.v106" = "標示為已讀";

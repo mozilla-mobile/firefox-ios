@@ -1,3 +1,18 @@
+/* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the body text for the hint. */
+"ContextualHints.MainMenu.NewMenu.Body.v132" = "Namakajśo, což malsnjej trjebaśo, wót priwatnego pśeglědowanja do składowańskich akcijow.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
+"ContextualHints.MainMenu.NewMenu.Title.v132" = "Nowy: zjadnorjony meni";
+
+/* The accessibility label for the back button in the Main menu header navigation view. */
+"MainMenu.Account.AccessibilityLabels.BackButton.v132" = "Slědk";
+
+/* The accessibility label for the close button in the Main menu. */
+"MainMenu.Account.AccessibilityLabels.CloseButton.v132" = "Zacyniś";
+
+/* The accessibility label for the sign in button in the Main menu header view. */
+"MainMenu.Account.AccessibilityLabels.MainButton.v132" = "Pśizjawśo se, aby gronidła, rejtariki a wěcej synchronizěrował";
+
 /* On the main menu, at the top, when the user is signed out. The description for the sign in action */
 "MainMenu.Account.SignedOut.Description.v131" = "Gronidła, rejtariki a wěcej synchronizěrowaś";
 
@@ -9,6 +24,18 @@
 
 /* On the main menu, at the top, when the user is signed in but there was an error syncing. The title for this state. */
 "MainMenu.Account.SyncError.Title.v131" = "Pśizjawśo se zasej za synchronizaciju";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Bookmarks panel. Please keep as short as possible, <15 chars of space available. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks.v132" = "Cytańske znamjenja";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Downloads panel. Please keep as short as possible, <15 chars of space available. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.Downloads.v132" = "Ześěgnjenja";
+
+/* On the main menu, the accessibility label for the action that will take the user to the History panel. Please keep as short as possible, <15 chars of space available. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.History.v132" = "Historija";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Passwords panel in the settings screen. Please keep as short as possible, <15 chars of space available. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.Passwords.v132" = "Gronidła";
 
 /* On the main menu, the title for the action that will take the user to the Bookmarks panel. Please keep as short as possible, <15 chars of space available. */
 "MainMenu.PanelLinkSection.Bookmarks.Title.v131" = "Cytańske znamjenja";
@@ -22,6 +49,18 @@
 /* On the main menu, the title for the action that will take the user to the Passwords panel in the settings screen. Please keep as short as possible, <15 chars of space available. */
 "MainMenu.PanelLinkSection.Passwords.Title.v131" = "Gronidła";
 
+/* On the main menu, the accessibility labels for the action that will take the user to the Customize Homepage section in the settings screen. */
+"MainMenu.SettingsSection.AccessibilityLabels.CustomizeHomepage.v132" = "Startowy bok pśiměriś";
+
+/* On the main menu, the accessibility labels for the action that will take the user to a website to get help from Mozilla. */
+"MainMenu.SettingsSection.AccessibilityLabels.GetHelp.v132" = "Pomoc se wobstaraś";
+
+/* On the main menu, the accessibility labels for the action that will take the user to the Settings menu. */
+"MainMenu.SettingsSection.AccessibilityLabels.Settings.v132" = "Nastajenja";
+
+/* On the main menu, the accessibility labels for the action that will take the user to a What's New in Firefox popup. Placeholder is for the app name. */
+"MainMenu.SettingsSection.AccessibilityLabels.WhatsNew.v132" = "Nowy w %@";
+
 /* On the main menu, the title for the action that will take the user to the Customize Hopegape section in the settings screen. */
 "MainMenu.SettingsSection.CustomizeHomepage.Title.v131" = "Startowy bok pśiměriś";
 
@@ -33,6 +72,45 @@
 
 /* On the main menu, the title for the action that will take the user to a What's New in Firefox popup. Placeholder is for the app name. */
 "MainMenu.SettingsSection.WhatsNew.Title.v131" = "Nowy w %@";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Add to Home screen tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132" = "Startowy bok";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to add a website to the home screen. */
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Title.v132" = "Startowej wobrazowce pśidaś";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Shortcuts tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Subtitle.v132" = "Zwězanje";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to add the current website to the shortcuts on the homepage. */
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Title.v132" = "Zwězanjam pśidaś";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Bookmarks tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Subtitle.v132" = "Cytańske znamje pśidaś";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to save a bookmark for this particular page.. */
+"MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Title.v132" = "Toś ten bok ako cytańske znamje składowaś";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to edit the bookmark for this particular page. */
+"MainMenu.Submenus.Save.AccessibilityLabels.EditBookmark.Title.v132" = "Cytańske znamje wobźěłaś";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows the user to remove this site from the reading list. */
+"MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromReadingList.Title.v132" = "Z cytańskeje lisćiny wótwónoźeś";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to remove the current website from the shortcuts on the homepage. */
+"MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromShortcuts.Title.v132" = "Ze zwězanjow wótwónoźeś";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Save as PDF tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveAsPDF.Subtitle.v132" = "PDF";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows the user to use the Save to PDF tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveAsPDF.Title.v132" = "Ako PDF składowaś";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Reading List tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveToReadingList.Subtitle.v132" = "Cytańska lisćina";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows the user to add this site to the reading list. */
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveToReadingList.Title.v132" = "Do cytańskeje lisćiny składowaś";
 
 /* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Add to Homescreen tool. */
 "MainMenu.Submenus.Save.AddToHomeScreen.Subtitle.v131" = "Startowy bok";
@@ -72,6 +150,48 @@
 
 /* On the main menu, in the Save submenu, the title for the menu component that allows the user to add this site to the reading list. */
 "MainMenu.Submenus.Save.SaveToReadingList.Title.v131" = "Do cytańskeje lisćiny składowaś";
+
+/* On the main menu, the accessibility label for the action that will turn Night Mode off in the application. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.NightMode.Off.Title.v132" = "Nocny modus znjemóžniś";
+
+/* On the main menu, the accessibility label for the action that will turn Night Mode on in the application. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.NightMode.On.Title.v132" = "Nocny modus zmóžniś";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Night Mode tool. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.NightMode.Subtitle.v132" = "Nocny modus";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Report Print tool. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Print.Subtitle.v132" = "Śišćaś";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Print module in the application. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Print.Title.v132" = "Śišćaś";
+
+/* On the main menu, the accessibility label for the action that will turn the reader view on for the current website. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReaderView.Off.Title.v132" = "Cytański naglěd znjemóžniś";
+
+/* On the main menu, the accessibility label for the action that will turn the reader view on for the current website. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReaderView.On.Title.v132" = "Cytański naglěd zmóžniś";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Reader View tool. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReaderView.Subtitle.v132" = "Cytański naglěd";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Report Broken Site tool. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReportBrokenSite.Subtitle.v132" = "K wěsći daś";
+
+/* On the main menu, the accessibility label for the action that will take the user to the site where they can report a broken website to our web compatibility team. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReportBrokenSite.Title.v132" = "Wobškóźone sedło k wěsći daś";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Report Share tool. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Share.Subtitle.v132" = "Źěliś";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Share module in the application. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Share.Title.v132" = "Źěliś";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Zoom tool. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Zoom.Subtitle.v132" = "Skalěrowaś";
+
+/* On the main menu, in the tools submenu, the accessibility label for the menu component that indicates the current zoom level. Placeholder is for the current zoom level percentage. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Zoom.Title.v132" = "Skalěrowanje (%@)";
 
 /* On the main menu, the title for the action that will turn Night Mode off in the application. */
 "MainMenu.Submenus.Tools.NightMode.Off.Title.v131" = "Nocny modus znjemóžniś";
@@ -115,11 +235,35 @@
 /* On the main menu, in the tools submenu, the title for the menu component that indicates the current zoom level. Placeholder is for the current zoom level percentage. */
 "MainMenu.Submenus.Tools.Zoom.Title.v131" = "Skalěrowanje (%@)";
 
+/* The accessibility label for the Main Menu. */
+"MainMenu.TabsSection.AccessibilityLabels.MainMenu.v132" = "Głowny meni";
+
+/* On the main menu, the accessibility label for the action that will create a new private tab. */
+"MainMenu.TabsSection.AccessibilityLabels.NewPrivateTab.v132" = "Nowy priwatny rejtarik";
+
+/* On the main menu, the accessibility label for the action that will create a new, non-private, tab. */
+"MainMenu.TabsSection.AccessibilityLabels.NewTab.v132" = "Nowy rejtarik";
+
 /* On the main menu, the title for the action that will create a new private tab. */
 "MainMenu.TabsSection.NewPrivateTab.Title.v131" = "Nowy priwatny rejtarik";
 
 /* On the main menu, the title for the action that will create a new, non-private, tab. */
 "MainMenu.TabsSection.NewTab.Title.v131" = "Nowy rejtarik";
+
+/* On the main menu, the accessibility label for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
+"MainMenu.ToolsSection.AccessibilityLabels.FindInPage.v132" = "Na boku pytaś";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "Składowaś";
+
+/* On the main menu, the accessibility label for the action that will switch a site from mobile version to the desktop version, if available. */
+"MainMenu.ToolsSection.AccessibilityLabels.SwitchToDesktopSite.v132" = "K websedłoju za desktop";
+
+/* On the main menu, the accessibility label for the action that will switch a site from the desktop version to the mobile version. */
+"MainMenu.ToolsSection.AccessibilityLabels.SwitchToMobileSite.v132" = "K mobilnemu sedłoju";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.Tools.v132" = "Rědy";
 
 /* On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.FindInPage.Title.v131" = "Na boku pytaś…";

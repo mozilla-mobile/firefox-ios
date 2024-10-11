@@ -1,3 +1,12 @@
+/* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
+"ContextualHints.MainMenu.NewMenu.Title.v132" = "Nuevo: menú simplificado";
+
+/* The accessibility label for the back button in the Main menu header navigation view. */
+"MainMenu.Account.AccessibilityLabels.BackButton.v132" = "Atrás";
+
+/* The accessibility label for the close button in the Main menu. */
+"MainMenu.Account.AccessibilityLabels.CloseButton.v132" = "Cerrar";
+
 /* On the main menu, at the top, when the user is signed out. The description for the sign in action */
 "MainMenu.Account.SignedOut.Description.v131" = "Sincronizar contraseñas, pestañas y más";
 
@@ -10,6 +19,18 @@
 /* On the main menu, at the top, when the user is signed in but there was an error syncing. The title for this state. */
 "MainMenu.Account.SyncError.Title.v131" = "Vuelve a iniciar sesión para sincronizar";
 
+/* On the main menu, the accessibility label for the action that will take the user to the Bookmarks panel. Please keep as short as possible, <15 chars of space available. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks.v132" = "Marcadores";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Downloads panel. Please keep as short as possible, <15 chars of space available. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.Downloads.v132" = "Descargas";
+
+/* On the main menu, the accessibility label for the action that will take the user to the History panel. Please keep as short as possible, <15 chars of space available. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.History.v132" = "Historial";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Passwords panel in the settings screen. Please keep as short as possible, <15 chars of space available. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.Passwords.v132" = "Contraseñas";
+
 /* On the main menu, the title for the action that will take the user to the Bookmarks panel. Please keep as short as possible, <15 chars of space available. */
 "MainMenu.PanelLinkSection.Bookmarks.Title.v131" = "Marcadores";
 
@@ -21,6 +42,9 @@
 
 /* On the main menu, the title for the action that will take the user to the Passwords panel in the settings screen. Please keep as short as possible, <15 chars of space available. */
 "MainMenu.PanelLinkSection.Passwords.Title.v131" = "Contraseñas";
+
+/* On the main menu, the accessibility labels for the action that will take the user to the Customize Homepage section in the settings screen. */
+"MainMenu.SettingsSection.AccessibilityLabels.CustomizeHomepage.v132" = "Personalizar página de inicio";
 
 /* On the main menu, the title for the action that will take the user to the Customize Hopegape section in the settings screen. */
 "MainMenu.SettingsSection.CustomizeHomepage.Title.v131" = "Personalizar página de inicio";
