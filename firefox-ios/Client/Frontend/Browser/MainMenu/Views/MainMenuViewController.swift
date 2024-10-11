@@ -17,7 +17,7 @@ class MainMenuViewController: UIViewController,
                               Themeable,
                               Notifiable,
                               StoreSubscriber,
-                              UIPopoverPresentationControllerDelegate {
+                              FeatureFlaggable {
     private struct UX {
         static let hintViewCornerRadius: CGFloat = 20
         static let hintViewHeight: CGFloat = 120
@@ -287,9 +287,10 @@ class MainMenuViewController: UIViewController,
 
     private func shouldDisplayHintView() -> Bool {
         // 1. Do not present hint for new users/fresh install
-        // 2. Do not present hint if it has been already presented before
+        // 2. Do not present hint if hint feature is not enabled
+        // 3. Do not present hint if it has been already presented before
         guard profile.prefs.boolForKey(PrefsKeys.mainMenuHintKey) != nil else {
-            if InstallType.get() == .fresh {
+            if InstallType.get() == .fresh || !featureFlags.isFeatureEnabled(.menuRefactorHint, checking: .buildOnly) {
                 return false
             }
             profile.prefs.setBool(true, forKey: PrefsKeys.mainMenuHintKey)

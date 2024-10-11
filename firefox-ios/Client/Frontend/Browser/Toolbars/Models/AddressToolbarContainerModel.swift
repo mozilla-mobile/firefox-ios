@@ -24,7 +24,6 @@ class AddressToolbarContainerModel: Equatable {
     let shouldSelectSearchTerm: Bool
     let shouldDisplayCompact: Bool
     let canShowNavigationHint: Bool
-    let canShowMenuHint: Bool
 
     let windowUUID: UUID
 
@@ -102,7 +101,6 @@ class AddressToolbarContainerModel: Equatable {
         self.shouldSelectSearchTerm = state.addressToolbar.shouldSelectSearchTerm
         self.shouldDisplayCompact = state.isShowingNavigationToolbar
         self.canShowNavigationHint = state.canShowNavigationHint
-        self.canShowMenuHint = state.canShowMenuHint
     }
 
     func searchTermFromURL(_ url: URL?, searchEngines: SearchEngines) -> String? {

@@ -41,7 +41,7 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         case .action:
             copyToReturn = getActionCopyFor(hint)
         case .title:
-            copyToReturn = getTitleCopyFor(hint)
+            return ""
         case .description:
             copyToReturn = getDescriptionCopyFor(hint)
         }
@@ -50,14 +50,6 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
     }
 
     // MARK: - Private helpers
-
-    private func getTitleCopyFor(_ hint: ContextualHintType) -> String {
-        if hint == .menuRedesign {
-            return CFRStrings.MainMenu.NewMenu.Title
-        }
-        return ""
-    }
-
     private func getDescriptionCopyFor(_ hint: ContextualHintType) -> String {
         var descriptionCopy = ""
 
@@ -75,9 +67,6 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
 
         case .toolbarLocation:
             return getToolbarDescriptionCopy(with: arrowDirection)
-
-        case .menuRedesign:
-            descriptionCopy = CFRStrings.MainMenu.NewMenu.Body
 
         case .shoppingExperience:
             descriptionCopy = getShoppingCopy(.description)
@@ -98,8 +87,6 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
             actionCopy = CFRStrings.TabsTray.InactiveTabs.Action
         case .toolbarLocation:
             actionCopy = CFRStrings.Toolbar.SearchBarPlacementButtonText
-        case .menuRedesign:
-            actionCopy = ""
         case .shoppingExperience:
             actionCopy = getShoppingCopy(.action)
         case .jumpBackIn,

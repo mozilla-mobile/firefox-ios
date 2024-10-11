@@ -94,7 +94,6 @@ class BrowserViewController: UIViewController,
     var overlayManager: OverlayModeManager
     var appAuthenticator: AppAuthenticationProtocol
     var toolbarContextHintVC: ContextualHintViewController
-    var menuContextHintVC: ContextualHintViewController
     var dataClearanceContextHintVC: ContextualHintViewController
     var navigationContextHintVC: ContextualHintViewController
     let shoppingContextHintVC: ContextualHintViewController
@@ -127,12 +126,6 @@ class BrowserViewController: UIViewController,
     lazy var isTabTrayRefactorEnabled: Bool = TabTrayFlagManager.isRefactorEnabled
     var isToolbarRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
-    }
-    var isNewMenuEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.menuRefactor, checking: .buildOnly)
-    }
-    var isNewMenuHintEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.menuRefactorHint, checking: .buildOnly)
     }
     var isUnifiedSearchEnabled: Bool {
         return featureFlags.isFeatureEnabled(.unifiedSearch, checking: .buildOnly)
@@ -269,8 +262,6 @@ class BrowserViewController: UIViewController,
                                                                 with: profile)
         self.toolbarContextHintVC = ContextualHintViewController(with: contextualViewProvider,
                                                                  windowUUID: windowUUID)
-        let menuViewProvider = ContextualHintViewProvider(forHintType: .menuRedesign, with: profile)
-        self.menuContextHintVC = ContextualHintViewController(with: menuViewProvider, windowUUID: windowUUID)
         let shoppingViewProvider = ContextualHintViewProvider(forHintType: .shoppingExperience,
                                                               with: profile)
         shoppingContextHintVC = ContextualHintViewController(with: shoppingViewProvider,
@@ -1080,9 +1071,6 @@ class BrowserViewController: UIViewController,
             }
             if navigationContextHintVC.isPresenting {
                 navigationContextHintVC.dismiss(animated: true)
-            }
-            if menuContextHintVC.isPresenting {
-                menuContextHintVC.dismiss(animated: true)
             }
         }
     }
@@ -2595,15 +2583,6 @@ class BrowserViewController: UIViewController,
                 urlBar.locationView.hasSecureContent = webView.hasOnlySecureContent
             }
 
-            if let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
-               !toolbarState.canShowMenuHint {
-                if isToolbarRefactorEnabled, isNewMenuEnabled, isNewMenuHintEnabled {
-                    let action = ToolbarAction(windowUUID: self.windowUUID,
-                                               actionType: ToolbarActionType.showMenuHint)
-                    store.dispatch(action)
-                }
-            }
-
             if !isSelectedTab, let webView = tab.webView, tab.screenshot == nil {
                 // To Screenshot a tab that is hidden we must add the webView,
                 // then wait enough time for the webview to render.
@@ -3159,8 +3138,6 @@ class BrowserViewController: UIViewController,
             configureDataClearanceContextualHint(button)
         case ContextualHintType.navigation.rawValue:
             configureNavigationContextualHint(button)
-        case ContextualHintType.menuRedesign.rawValue:
-            configureMenuContextualHint(button)
         default:
             return
         }

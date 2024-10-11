@@ -136,8 +136,7 @@ class ContextualHintViewController: UIViewController,
         andActionForButton buttonAction: (() -> Void)? = nil,
         andShouldStartTimerRightAway shouldStartTimer: Bool = true,
         overlayState: OverlayStateProtocol? = nil,
-        ignoreSafeArea: Bool = false,
-        rightSafeAreaMargin: CGFloat? = nil
+        ignoreSafeArea: Bool = false
     ) {
         stopTimer()
         modalPresentationStyle = .popover
@@ -151,7 +150,7 @@ class ContextualHintViewController: UIViewController,
                 top: -anchor.safeAreaInsets.top,
                 left: -anchor.safeAreaInsets.left,
                 bottom: -anchor.safeAreaInsets.bottom,
-                right: -(rightSafeAreaMargin ?? anchor.safeAreaInsets.right)
+                right: -anchor.safeAreaInsets.right
             )
         }
 

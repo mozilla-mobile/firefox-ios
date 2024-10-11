@@ -104,14 +104,8 @@ extension NavigationToolbarContainer: BrowserNavigationToolbarDelegate {
         guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
         else { return }
 
-        guard let contextualHintType = ContextualHintType(rawValue: contextualHintType) else { return }
+        if contextualHintType == ContextualHintType.navigation.rawValue && !toolbarState.canShowNavigationHint { return }
 
-        switch contextualHintType {
-        case .navigation where toolbarState.canShowNavigationHint:
-            toolbarDelegate?.configureContextualHint(for: button, with: contextualHintType.rawValue)
-        case .menuRedesign where toolbarState.canShowMenuHint:
-            toolbarDelegate?.configureContextualHint(for: button, with: contextualHintType.rawValue)
-        default: break
-        }
+        toolbarDelegate?.configureContextualHint(for: button, with: contextualHintType)
     }
 }

@@ -84,7 +84,6 @@ enum ToolbarActionType: ActionType {
     case searchEngineDidChange
     case navigationButtonDoubleTapped
     case navigationHintFinishedPresenting
-    case showMenuHint
 }
 
 class ToolbarMiddlewareAction: Action {
