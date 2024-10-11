@@ -399,6 +399,8 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
                 zombie: Bool,
                 isPrivate: Bool = false
     ) -> Tab {
+        print("NB -- 4 Add tab request request \(String(describing: request))")
+        print("NB -- 4.1 Add tab request url \(String(describing: request?.url))")
         let tab = Tab(profile: profile, isPrivate: isPrivate, windowUUID: windowUUID)
         configureTab(tab, request: request, afterTab: afterTab, flushToDisk: flushToDisk, zombie: zombie)
         return tab
@@ -408,7 +410,10 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         let popup = Tab(profile: profile,
                         isPrivate: parentTab.isPrivate,
                         windowUUID: windowUUID)
-
+        print("NB -- 5 addPopupForParentTab popup webView title \(String(describing: popup.webView?.title))")
+        print("NB -- 5.1 addPopupForParentTab popup webView url \(String(describing: popup.webView?.url))")
+        print("NB -- 5.2 addPopupForParentTab parent webView title \(String(describing: parentTab.webView?.title))")
+        print("NB -- 5.3 addPopupForParentTab parent webView url \(String(describing: parentTab.webView?.url))")
         // Configure the tab for the child popup webview. In this scenario we need to be sure to pass along
         // the specific `configuration` that we are given by the WKUIDelegate callback, since if we do not
         // use this configuration WebKit will throw an exception.

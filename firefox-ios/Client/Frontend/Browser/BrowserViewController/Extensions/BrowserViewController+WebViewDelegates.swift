@@ -17,6 +17,13 @@ extension BrowserViewController: WKUIDelegate {
         for navigationAction: WKNavigationAction,
         windowFeatures: WKWindowFeatures
     ) -> WKWebView? {
+        print("NB -- 1 parent tab webview url \(String(describing: tabManager[webView]?.webView?.url))")
+        print("NB -- 1.1 parent tab webview title \(String(describing: tabManager[webView]?.webView?.title))")
+        print("NB -- 2 webView url \(String(describing: webView.url))")
+        print("NB -- 2.1 webView title \(String(describing: webView.title))")
+        print("NB -- 2.2 webView tag \(webView.tag)")
+        print("NB -- 3 navigationAction request \(navigationAction.request)")
+        print("NB -- 3.1 navigationAction request url \(String(describing: navigationAction.request.url))")
         guard let parentTab = tabManager[webView] else { return nil }
         guard !navigationAction.isInternalUnprivileged,
               shouldRequestBeOpenedAsPopup(navigationAction.request)
@@ -35,6 +42,18 @@ extension BrowserViewController: WKUIDelegate {
             return nil
         }
 
+        let navigationUrl = navigationAction.request.url
+        let navigationUrlString = navigationUrl?.absoluteString ?? ""
+
+        // Check for "data" scheme using WebViewNavigationHandlerImplementation
+        let navigationHandler = WebViewNavigationHandlerImplementation { _ in }
+        var shouldAllowDataScheme = true
+        if navigationHandler.shouldFilterDataScheme(url: navigationUrl) {
+            shouldAllowDataScheme = navigationHandler.shouldAllowDataScheme(for: navigationUrl)
+        }
+
+        guard shouldAllowDataScheme else { return nil }
+
         // If the page uses `window.open()` or `[target="_blank"]`, open the page in a new tab.
         // IMPORTANT!!: WebKit will perform the `URLRequest` automatically!! Attempting to do
         // the request here manually leads to incorrect results!!
@@ -44,7 +63,7 @@ extension BrowserViewController: WKUIDelegate {
             configuration: configuration
         )
 
-        if navigationAction.request.url == nil {
+        if navigationUrl == nil || navigationUrlString.isEmpty {
             newTab.url = URL(string: "about:blank")
         }
 
@@ -512,6 +531,8 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         let navigationHandler = WebViewNavigationHandlerImplementation(decisionHandler: decisionHandler)
+        print("NB -- 0 Data scheme \(url)")
+        print("NB -- 0 Data shouldFilterDataScheme \(navigationHandler.shouldFilterDataScheme(url: url))")
         if navigationHandler.shouldFilterDataScheme(url: url) {
             navigationHandler.filterDataScheme(url: url, navigationAction: navigationAction)
             return
