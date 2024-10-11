@@ -11,6 +11,12 @@ public class DefaultLogger: Logger {
     private var crashManager: CrashManager?
     private var fileManager: LoggerFileManager
 
+    private var automaticallyFilterSpam = true
+    private var spamLastLogMessage = ""
+    private var spamLastLogCategory: LoggerCategory = .lifecycle
+    private var spamMessagesFiltered = 0
+    private let spamCountWarningThreshold = 5
+
     public var crashedLastLaunch: Bool {
         return crashManager?.crashedLastLaunch ?? false
     }
@@ -52,16 +58,21 @@ public class DefaultLogger: Logger {
             loggerMessage.append("\(prefix)\(reducedExtra)")
         }
 
+        // Handle automatic spam filtering for redundant logging
+        let isSpam = detectLoggerSpam(loggerMessage, category: category)
+
         // Log locally and in console
-        switch level {
-        case .debug:
-            logger.debug(loggerMessage, file: file, function: function, line: line, context: category)
-        case .info:
-            logger.info(loggerMessage, file: file, function: function, line: line, context: category)
-        case .warning:
-            logger.warning(loggerMessage, file: file, function: function, line: line, context: category)
-        case .fatal:
-            logger.error(loggerMessage, file: file, function: function, line: line, context: category)
+        if !isSpam {
+            switch level {
+            case .debug:
+                logger.debug(loggerMessage, file: file, function: function, line: line, context: category)
+            case .info:
+                logger.info(loggerMessage, file: file, function: function, line: line, context: category)
+            case .warning:
+                logger.warning(loggerMessage, file: file, function: function, line: line, context: category)
+            case .fatal:
+                logger.error(loggerMessage, file: file, function: function, line: line, context: category)
+            }
         }
 
         // Log to sentry
@@ -82,6 +93,31 @@ public class DefaultLogger: Logger {
     }
 
     // MARK: - Private
+
+    private func detectLoggerSpam(_ loggerMessage: String, category: LoggerCategory) -> Bool {
+        guard automaticallyFilterSpam else { return false }
+        let isSpam = (spamLastLogMessage == loggerMessage)
+
+        if isSpam {
+            spamMessagesFiltered += 1
+        } else {
+            if spamMessagesFiltered > spamCountWarningThreshold {
+                // If the spam was considerable, log a separate note so that we will have something in
+                // the log to reflect what was happening in the app
+                let count = spamMessagesFiltered
+                spamMessagesFiltered = 0
+                let category = spamLastLogCategory
+                let msg = spamLastLogMessage
+                // Reminder: this is a recursive (reentrant) call to log()
+                self.log("Redacted \(count) redundant messages: \"\(msg)\"", level: .info, category: category)
+            } else if spamMessagesFiltered > 0 {
+                spamMessagesFiltered = 0
+            }
+            spamLastLogMessage = loggerMessage
+            spamLastLogCategory = category
+        }
+        return isSpam
+    }
 
     private func bundleExtraEvents(extra: [String: String]?,
                                    description: String?) -> [String: String] {
