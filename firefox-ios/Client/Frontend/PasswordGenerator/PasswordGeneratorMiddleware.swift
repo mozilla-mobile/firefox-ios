@@ -29,6 +29,8 @@ final class PasswordGeneratorMiddleware {
     }
 
     private func showPasswordGenerator(tab: Tab, windowUUID: WindowUUID) {
+        // TODO: FXIOS-10279 - change password to be associated with the iframe origin that
+        // contains the password field rather than tab origin
         guard let origin = tab.url?.origin else {return}
         if let password = generatedPasswordStorage.getPasswordForOrigin(origin: origin) {
             let newAction = PasswordGeneratorAction(
