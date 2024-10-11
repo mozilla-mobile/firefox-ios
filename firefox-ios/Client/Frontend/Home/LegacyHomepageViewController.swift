@@ -289,13 +289,19 @@ class LegacyHomepageViewController:
     }
 
     func createLayout() -> UICollectionViewLayout {
-        // swiftlint:disable line_length
-        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
-        // swiftlint:enable line_length
-            guard let self = self,
+        let zeroLayoutSize = NSCollectionLayoutSize(widthDimension: .absolute(0.0), heightDimension: .absolute(0.0))
+        let emptyGroup = NSCollectionLayoutGroup.horizontal(layoutSize: zeroLayoutSize,
+                                                            subitems: [NSCollectionLayoutItem(layoutSize: zeroLayoutSize)])
+        let emptyDefaultLayoutSection = NSCollectionLayoutSection(group: emptyGroup)
+
+        // swiftlint: disable line_length
+        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment)
+            -> NSCollectionLayoutSection? in
+        // swiftlint: enable line_length
+            guard let self,
                   let viewModel = self.viewModel.getSectionViewModel(shownSection: sectionIndex),
                   viewModel.shouldShow
-            else { return nil }
+            else { return emptyDefaultLayoutSection }
             self.logger.log(
                 "Section \(viewModel.sectionType) is going to show",
                 level: .debug,
