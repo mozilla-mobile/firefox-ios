@@ -14,12 +14,17 @@ struct DefaultHTMLDataRequest: HTMLDataRequest {
 
         // swiftlint:disable line_length
         static let userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Safari/605.1.15"
+        static let accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
         // swiftlint:enable line_length
     }
 
     func fetchDataForURL(_ url: URL) async throws -> Data {
         let configuration = URLSessionConfiguration.ephemeral
-        configuration.httpAdditionalHeaders = ["User-Agent": RequestConstants.userAgent]
+        // Some websites (e.g. crates.io as a search engine) respond with 404 if we are missing the Accept header
+        configuration.httpAdditionalHeaders = [
+            "User-Agent": RequestConstants.userAgent,
+            "Accept": RequestConstants.accept
+        ]
         configuration.timeoutIntervalForRequest = RequestConstants.timeout
 
         let urlSession = URLSession(configuration: configuration)
