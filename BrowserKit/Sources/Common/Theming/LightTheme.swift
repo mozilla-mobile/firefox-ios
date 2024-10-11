@@ -36,7 +36,8 @@ private struct LightColourPalette: ThemeColourPalette {
     var layerConfirmation: UIColor = FXColors.Green20
     var layerWarning: UIColor = FXColors.Yellow20
     var layerError: UIColor = FXColors.Red10
-    var layerSelectedText: UIColor = FXColors.DarkGrey05.withAlphaComponent(0.73)
+    var layerSelectedText: UIColor = FXColors.Blue50
+    var layerAutofillText: UIColor = FXColors.DarkGrey05.withAlphaComponent(0.73)
     var layerSearch: UIColor = FXColors.LightGrey30
     var layerGradientURL = Gradient(colors: [
         FXColors.LightGrey30.withAlphaComponent(0),

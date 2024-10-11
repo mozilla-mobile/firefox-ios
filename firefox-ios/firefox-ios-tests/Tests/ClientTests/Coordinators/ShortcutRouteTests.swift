@@ -38,8 +38,7 @@ final class ShortcutRouteTests: XCTestCase {
         let route = subject.makeRoute(shortcutItem: shortcutItem, tabSetting: .blankPage)
 
         XCTAssertEqual(route, .search(url: URL(string: "https://www.example.com"),
-                                      isPrivate: false,
-                                      options: [.switchToNormalMode]))
+                                      isPrivate: false))
     }
 
     // FXIOS-8107: Disabled test as history highlights has been disabled to fix app hangs / slowness
