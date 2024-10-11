@@ -9,7 +9,11 @@ import Common
 import Shared
 import struct MozillaAppServices.UpdatableAddressFields
 
-class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler, Themeable, KeyboardHelperDelegate {
+class EditAddressViewController: UIViewController,
+                                 WKNavigationDelegate,
+                                 WKScriptMessageHandler,
+                                 Themeable,
+                                 KeyboardHelperDelegate {
     private lazy var removeButton: RemoveAddressButton = {
         let button = RemoveAddressButton()
         button.setTitle(.Addresses.Settings.Edit.RemoveAddressButtonTitle, for: .normal)
