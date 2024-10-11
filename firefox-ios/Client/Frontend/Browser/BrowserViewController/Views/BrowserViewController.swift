@@ -198,7 +198,7 @@ class BrowserViewController: UIViewController,
     private lazy var navigationToolbarContainer: NavigationToolbarContainer = .build { view in
         view.windowUUID = self.windowUUID
     }
-    var toolbar = TabToolbar()
+    lazy var toolbar = TabToolbar()
     var navigationToolbar: TabToolbarProtocol {
         return toolbar.isHidden ? urlBar : toolbar
     }
@@ -877,10 +877,6 @@ class BrowserViewController: UIViewController,
         view.addSubview(header)
         view.addSubview(bottomContentStackView)
         view.addSubview(overKeyboardContainer)
-
-        if isToolbarRefactorEnabled {
-            toolbar = TabToolbar()
-        }
 
         let toolbarToShow = isToolbarRefactorEnabled ? navigationToolbarContainer : toolbar
 
