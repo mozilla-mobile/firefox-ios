@@ -139,7 +139,7 @@ struct ToolbarState: ScreenState, Equatable {
             return handleNavigationHintFinishedPresenting(state: state, action: action)
 
         default:
-            return handleDefaultActionType(state: state)
+            return state
         }
     }
 
