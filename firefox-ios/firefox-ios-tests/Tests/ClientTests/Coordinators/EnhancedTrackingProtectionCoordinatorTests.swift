@@ -8,7 +8,7 @@ import Common
 @testable import Client
 
 class MockSSLTrackingProtectionDelegate: ETPCoordinatorSSLStatusDelegate {
-    var showHasOnlySecureContentInTrackingPanel: Bool = true
+    var showHasOnlySecureContentInTrackingPanel = true
 }
 
 final class EnhancedTrackingProtectionCoordinatorTests: XCTestCase {
