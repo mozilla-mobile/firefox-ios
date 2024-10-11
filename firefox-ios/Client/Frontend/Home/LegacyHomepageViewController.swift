@@ -301,6 +301,7 @@ class LegacyHomepageViewController:
             guard let self,
                   let viewModel = self.viewModel.getSectionViewModel(shownSection: sectionIndex),
                   viewModel.shouldShow
+            // Returning a default section to prevent the app to crash with invalid section definition
             else { return emptyDefaultLayoutSection }
             self.logger.log(
                 "Section \(viewModel.sectionType) is going to show",
