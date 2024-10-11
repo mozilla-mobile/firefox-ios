@@ -294,8 +294,7 @@ export class FormAutofillSection {
       if (detail.fieldName == "cc-csc") {
         continue;
       }
-
-      const { filledValue } = formFilledData.get(detail.elementId);
+      const { filledValue } = formFilledData.get(detail.elementId) ?? {};
 
       if (
         !filledValue ||
@@ -334,12 +333,14 @@ export class FormAutofillSection {
 
       // When both visible and invisible <select> elements exist, we only autofill the
       // visible <select>.
-      if (fieldDetail.localName == "select" && !fieldDetail.isVisible) {
-        return !this.fieldDetails.some(
-          field => field.fieldName == fieldDetail.fieldName && field.isVisible
-        );
+      if (fieldDetail.localName == "select") {
+        if (!fieldDetail.isVisible) {
+          return !this.fieldDetails.some(
+            field => field.fieldName == fieldDetail.fieldName && field.isVisible
+          );
+        }
       }
-      return true;
+      return fieldDetail.isVisible;
     });
   }
 

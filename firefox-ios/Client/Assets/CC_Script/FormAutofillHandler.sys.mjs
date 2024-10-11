@@ -49,7 +49,7 @@ export class FormAutofillHandler {
    * A direct reference to the associated element cannot be sent to the user
    * interface because processing may be done in the parent process.
    */
-  fieldDetails = [];
+  #fieldDetails = null;
 
   /**
    * Initialize the form from `FormLike` object to handle the section or form
@@ -74,6 +74,48 @@ export class FormAutofillHandler {
     ChromeUtils.defineLazyGetter(this, "log", () =>
       FormAutofill.defineLogGetter(this, "FormAutofillHandler")
     );
+  }
+
+  /**
+   * Retrieves the 'fieldDetails' property, ensuring it has been initialized by
+   * `setIdentifiedFieldDetails`. Throws an error if accessed before initialization.
+   *
+   * This is because 'fieldDetail'' contains information that need to be computed
+   * in the parent side first.
+   *
+   * @throws {Error} If `setIdentifiedFieldDetails` has not been called.
+   * @returns {Array<FieldDetail>}
+   *          The list of autofillable field details for this form.
+   */
+  get fieldDetails() {
+    if (!this.#fieldDetails) {
+      throw new Error(
+        `Should only use 'fieldDetails' after 'setIdentifiedFieldDetails' is called`
+      );
+    }
+    return this.#fieldDetails;
+  }
+
+  /**
+   * Sets the list of 'FieldDetail' objects for autofillable fields within the form.
+   *
+   * @param {Array<FieldDetail>} fieldDetails
+   *        An array of field details that has been computed on the parent side.
+   *        This method should be called before accessing `fieldDetails`.
+   */
+  setIdentifiedFieldDetails(fieldDetails) {
+    this.#fieldDetails = fieldDetails;
+  }
+
+  /**
+   * Determines whether 'setIdentifiedFieldDetails' has been called and the
+   * `fieldDetails` have been initialized.
+   *
+   * @returns {boolean}
+   *          True if 'fieldDetails' has been initialized; otherwise, False.
+   */
+  hasIdentifiedFields() {
+    return !!this.#fieldDetails;
   }
 
   handleEvent(event) {
@@ -167,23 +209,37 @@ export class FormAutofillHandler {
   _updateForm(form) {
     this.form = form;
 
-    this.fieldDetails = [];
+    this.#fieldDetails = null;
   }
 
   /**
-   * Set fieldDetails from the form about fields that can be autofilled.
+   * Collect <input>, <select>, and <iframe> elements from the specified form
+   * and return the correspond 'FieldDetail' objects.
    *
-   * @param {boolean} ignoreUnknown
-   *        True to only keep fields that have a field name
+   * @param {HTMLFormElement} form
+   *        The form that we collect information from.
    *
-   * @returns {Array} The valid address and credit card details.
+   * @returns {Array<FieldDeail>}
+   *        An array containing eliglble fields for autofill, also
+   *        including iframe.
    */
-  collectFormFields(ignoreUnknown = true) {
-    const fields = lazy.FormAutofillHeuristics.getFormInfo(this.form) ?? [];
-    this.fieldDetails = ignoreUnknown
-      ? fields.filter(field => field.fieldName)
-      : fields;
-    return this.fieldDetails;
+  static collectFormFields(form) {
+    const fieldDetails = lazy.FormAutofillHeuristics.getFormInfo(form) ?? [];
+
+    let index = 0;
+    const fieldDetailsIncludeIframe = [];
+    const elements = form.rootElement.querySelectorAll("input, select, iframe");
+
+    for (const element of elements) {
+      if (fieldDetails[index]?.element == element) {
+        fieldDetailsIncludeIframe.push(fieldDetails[index]);
+        index++;
+      } else if (element.localName == "iframe") {
+        const iframeFd = lazy.FieldDetail.create(element, form, "iframe");
+        fieldDetailsIncludeIframe.push(iframeFd);
+      }
+    }
+    return fieldDetailsIncludeIframe;
   }
 
   /**
@@ -948,28 +1004,6 @@ export class FormAutofillHandler {
       });
     }
     return filledData;
-  }
-
-  /**
-   * Add <iframe> into the list of the identified fields.
-   */
-  getFieldsInfoIncludeIframe() {
-    const fieldDetails = this.fieldDetails;
-
-    let index = 0;
-    const nodes = [];
-    const elements = this.form.rootElement.querySelectorAll(
-      "input, select, iframe"
-    );
-    for (const element of elements) {
-      if (fieldDetails[index]?.element == element) {
-        nodes.push(fieldDetails[index]);
-        index++;
-      } else if (element.localName == "iframe") {
-        nodes.push(new lazy.FieldDetail(element, this.form, "iframe"));
-      }
-    }
-    return nodes;
   }
 
   isFieldAutofillable(fieldDetail, profile) {
