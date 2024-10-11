@@ -11,12 +11,11 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
         static let contentMargin: CGFloat = 10
         static let iconSize: CGFloat = 24
         static let largeIconSize: CGFloat = 48
-        static let iconMargin: CGFloat = 25
         static let contentSpacing: CGFloat = 2
     }
 
     private var separatorInsetSize: CGFloat {
-        return UX.contentMargin + UX.iconSize + UX.iconMargin + UX.contentSpacing
+        return UX.contentMargin * 2 + UX.iconSize
     }
 
     // MARK: - UI Elements
@@ -73,7 +72,7 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
         contentStackView.addArrangedSubview(titleLabel)
         contentStackView.addArrangedSubview(descriptionLabel)
         NSLayoutConstraint.activate([
-            icon.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.iconMargin),
+            icon.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.contentMargin),
             icon.centerYAnchor.constraint(equalTo: centerYAnchor),
 
             contentStackView.leadingAnchor.constraint(equalTo: icon.trailingAnchor, constant: UX.contentMargin),
