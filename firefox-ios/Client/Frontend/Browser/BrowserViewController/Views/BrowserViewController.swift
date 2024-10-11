@@ -843,6 +843,17 @@ class BrowserViewController: UIViewController,
             object: nil)
     }
 
+    private func createLegacyUrlBar() {
+        urlBar = URLBarView(profile: profile, windowUUID: windowUUID)
+        urlBar.translatesAutoresizingMaskIntoConstraints = false
+        urlBar.delegate = self
+        urlBar.tabToolbarDelegate = self
+        urlBar.applyTheme(theme: currentTheme())
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        urlBar.applyUIMode(isPrivate: isPrivate, theme: currentTheme())
+        urlBar.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
+    }
+
     func addSubviews() {
         view.addSubviews(webViewContainerBackdrop, contentStackView)
 
@@ -864,14 +875,7 @@ class BrowserViewController: UIViewController,
             addressToolbarContainer.applyTheme(theme: currentTheme())
             addressToolbarContainer.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
         } else {
-            urlBar = URLBarView(profile: profile, windowUUID: windowUUID)
-            urlBar.translatesAutoresizingMaskIntoConstraints = false
-            urlBar.delegate = self
-            urlBar.tabToolbarDelegate = self
-            urlBar.applyTheme(theme: currentTheme())
-            let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-            urlBar.applyUIMode(isPrivate: isPrivate, theme: currentTheme())
-            urlBar.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
+            createLegacyUrlBar()
         }
 
         view.addSubview(header)
