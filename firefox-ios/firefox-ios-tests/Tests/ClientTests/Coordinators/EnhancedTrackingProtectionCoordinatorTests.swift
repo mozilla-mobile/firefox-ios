@@ -7,6 +7,10 @@ import Common
 
 @testable import Client
 
+class MockSSLTrackingProtectionDelegate: ETPCoordinatorSSLStatusDelegate {
+    var showHasOnlySecureContentInTrackingPanel: Bool = true
+}
+
 final class EnhancedTrackingProtectionCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
     private var profile: MockProfile!
@@ -61,7 +65,9 @@ final class EnhancedTrackingProtectionCoordinatorTests: XCTestCase {
     }
 
     func createSubject() -> EnhancedTrackingProtectionCoordinator {
-        let subject = EnhancedTrackingProtectionCoordinator(router: mockRouter, tabManager: MockTabManager())
+        let subject = EnhancedTrackingProtectionCoordinator(router: mockRouter,
+                                                            tabManager: MockTabManager(),
+                                                            secureConnectionDelegate: MockSSLTrackingProtectionDelegate())
         trackForMemoryLeaks(subject)
         return subject
     }
