@@ -17,6 +17,7 @@ protocol AddressToolbarContainerDelegate: AnyObject {
     func addressToolbarDidEnterOverlayMode(_ view: UIView)
     func addressToolbar(_ view: UIView, didLeaveOverlayModeForReason: URLBarLeaveOverlayModeReason)
     func addressToolbarDidBeginDragInteraction()
+    func addressToolbarDidTapSearchEngine(_ searchEngineView: UIView)
 }
 
 final class AddressToolbarContainer: UIView,
@@ -287,6 +288,10 @@ final class AddressToolbarContainer: UIView,
 
     func openBrowser(searchTerm: String) {
         delegate?.openBrowser(searchTerm: searchTerm)
+    }
+
+    func addressToolbarDidTapSearchEngine(_ searchEngineView: UIView) {
+        delegate?.addressToolbarDidTapSearchEngine(searchEngineView)
     }
 
     func openSuggestions(searchTerm: String) {
