@@ -338,24 +338,6 @@ struct ToolbarState: ScreenState, Equatable {
             canShowNavigationHint: false)
     }
 
-    private static func handleDefaultActionType(state: Self) -> ToolbarState {
-        return ToolbarState(
-            windowUUID: state.windowUUID,
-            toolbarPosition: state.toolbarPosition,
-            isPrivateMode: state.isPrivateMode,
-            addressToolbar: state.addressToolbar,
-            navigationToolbar: state.navigationToolbar,
-            isShowingNavigationToolbar: state.isShowingNavigationToolbar,
-            isShowingTopTabs: state.isShowingTopTabs,
-            canGoBack: state.canGoBack,
-            canGoForward: state.canGoForward,
-            numberOfTabs: state.numberOfTabs,
-            showMenuWarningBadge: state.showMenuWarningBadge,
-            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-            canShowDataClearanceAction: state.canShowDataClearanceAction,
-            canShowNavigationHint: state.canShowNavigationHint)
-    }
-
     private static func addressToolbarPositionFromSearchBarPosition(_ position: SearchBarPosition)
     -> AddressToolbarPosition {
         switch position {
