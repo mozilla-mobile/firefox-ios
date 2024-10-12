@@ -207,7 +207,6 @@ window.Localization = function () {
 window.Glean = {
   formautofillCreditcards: undefinedProxy(),
   formautofill: undefinedProxy(),
-  creditcard: undefinedProxy(),
   _mapGleanToLegacy: (eventName, { value, ...extra }) => {
     const eventMapping = {
       filledModifiedAddressForm: {

@@ -197,9 +197,8 @@ export const HeuristicsRegExp = {
         "cc-?name" +
         "|card-?name" +
         "|cardholder-?name" +
-        "|cardholder" +
+        "|cardholder",
         // "|(^name$)" + // Removed to avoid overwriting "name", above.
-        "|(^nom$)",
 
       "cc-number":
         "cc-?number" +
