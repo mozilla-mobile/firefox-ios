@@ -58,8 +58,8 @@ class StartAtHomeHelper: FeatureFlaggable {
             timeSinceLastActivity = dateComponents.hour ?? 0
             timeToOpenNewHome = 4
         } else if setting == .always {
-            timeSinceLastActivity = dateComponents.second ?? 0
-            timeToOpenNewHome = 5
+            // When "always", time to open new home should be immediate, no delay
+            return true
         }
 
         return timeSinceLastActivity >= timeToOpenNewHome
