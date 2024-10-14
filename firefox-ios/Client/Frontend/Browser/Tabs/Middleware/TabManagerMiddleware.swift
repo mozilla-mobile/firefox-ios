@@ -653,39 +653,13 @@ class TabManagerMiddleware {
     // MARK: - Main menu actions
     private func resolveMainMenuActions(with action: MainMenuAction, appState: AppState) {
         switch action.actionType {
-        case MainMenuMiddlewareActionType.requestTabInfo:
-            store.dispatch(
-                MainMenuAction(
-                    windowUUID: action.windowUUID,
-                    actionType: MainMenuActionType.updateCurrentTabInfo,
-                    currentTabInfo: getTabInfo(forWindow: action.windowUUID)
-                )
-            )
         case MainMenuActionType.toggleUserAgent:
             changeUserAgent(forWindow: action.windowUUID)
+        case MainMenuMiddlewareActionType.requestTabInfo:
+            provideTabInfo(forWindow: action.windowUUID)
         default:
             break
         }
-    }
-
-    private func getTabInfo(forWindow windowUUID: WindowUUID) -> MainMenuTabInfo? {
-        guard let selectedTab = tabManager(for: windowUUID).selectedTab else {
-            logger.log(
-                "Attempted to get `selectedTab` but it was `nil` when in shouldn't be",
-                level: .fatal,
-                category: .tabs
-            )
-            return nil
-        }
-        let defaultUAisDesktop = UserAgent.isDesktop(ua: UserAgent.getUserAgent())
-
-        return MainMenuTabInfo(
-            url: selectedTab.url,
-            isHomepage: selectedTab.isFxHomeTab,
-            isDefaultUserAgentDesktop: defaultUAisDesktop,
-            hasChangedUserAgent: selectedTab.changedUserAgent,
-            readerModeIsAvailable: selectedTab.readerModeAvailableOrActive
-        )
     }
 
     private func changeUserAgent(forWindow windowUUID: WindowUUID) {
@@ -701,6 +675,132 @@ class TabManagerMiddleware {
         }
     }
 
+    private struct ProfileTabInfo {
+        let isBookmarked: Bool
+        let isInReadingList: Bool
+        let isPinned: Bool
+    }
+
+    private func provideTabInfo(forWindow windowUUID: WindowUUID) {
+        guard let selectedTab = tabManager(for: windowUUID).selectedTab else {
+            logger.log(
+                "Attempted to get `selectedTab` but it was `nil` when in shouldn't be",
+                level: .fatal,
+                category: .tabs
+            )
+            return
+        }
+
+        fetchProfileTabInfo(for: selectedTab.url) { profileTabInfo in
+            store.dispatch(
+                MainMenuAction(
+                    windowUUID: windowUUID,
+                    actionType: MainMenuActionType.updateCurrentTabInfo,
+                    currentTabInfo: MainMenuTabInfo(
+                        url: selectedTab.url,
+                        isHomepage: selectedTab.isFxHomeTab,
+                        isDefaultUserAgentDesktop: UserAgent.isDesktop(ua: UserAgent.getUserAgent()),
+                        hasChangedUserAgent: selectedTab.changedUserAgent,
+                        readerModeIsAvailable: selectedTab.readerModeAvailableOrActive,
+                        isBookmarked: profileTabInfo.isBookmarked,
+                        isInReadingList: profileTabInfo.isInReadingList,
+                        isPinned: profileTabInfo.isPinned
+                    )
+                )
+            )
+        }
+    }
+
+    private func fetchProfileTabInfo(
+        for tabURL: URL?,
+        dataLoadingCompletion: ((ProfileTabInfo) -> Void)?
+    ) {
+        guard let tabURL = tabURL, let url = absoluteStringFrom(tabURL) else {
+            dataLoadingCompletion?(
+                ProfileTabInfo(
+                    isBookmarked: false,
+                    isInReadingList: false,
+                    isPinned: false
+                )
+            )
+            return
+        }
+
+        let group = DispatchGroup()
+        let dataQueue = DispatchQueue.global()
+
+        var isBookmarkedResult = false
+        var isPinnedResult = false
+        var isInReadingListResult = false
+
+        group.enter()
+        getIsBookmarked(url: url, dataQueue: dataQueue) { result in
+            isBookmarkedResult = result
+            group.leave()
+        }
+
+        group.enter()
+        getIsPinned(url: url, dataQueue: dataQueue) { result in
+            isPinnedResult = result
+            group.leave()
+        }
+
+        group.enter()
+        getIsInReadingList(url: url, dataQueue: dataQueue) { result in
+            isInReadingListResult = result
+            group.leave()
+        }
+
+        group.notify(queue: dataQueue) {
+            dataLoadingCompletion?(
+                ProfileTabInfo(
+                    isBookmarked: isBookmarkedResult,
+                    isInReadingList: isInReadingListResult,
+                    isPinned: isPinnedResult
+                )
+            )
+        }
+    }
+
+    private func absoluteStringFrom(_ url: URL) -> String? {
+        if let urlDecoded = url.decodeReaderModeURL {
+            return urlDecoded.absoluteString
+        }
+
+        return url.absoluteString
+    }
+
+    private func getIsBookmarked(
+        url: String,
+        dataQueue: DispatchQueue,
+        completion: @escaping (Bool) -> Void
+    ) {
+        profile.places.isBookmarked(url: url).uponQueue(dataQueue) { result in
+            completion(result.successValue ?? false)
+        }
+    }
+
+    private func getIsPinned(
+        url: String,
+        dataQueue: DispatchQueue,
+        completion: @escaping (Bool) -> Void
+    ) {
+        profile.pinnedSites.isPinnedTopSite(url).uponQueue(dataQueue) { result in
+            completion(result.successValue ?? false)
+        }
+    }
+
+    private func getIsInReadingList(
+        url: String,
+        dataQueue: DispatchQueue,
+        completion: @escaping (Bool) -> Void
+    ) {
+        profile.readingList.getRecordWithURL(url).uponQueue(dataQueue) { result in
+            completion(result.successValue != nil)
+        }
+    }
+
+    // MARK: - Homepage Header Actions
     private func resolveHomepageHeaderActions(with action: HeaderAction) {
         switch action.actionType {
         case HeaderActionType.toggleHomepageMode:

@@ -13,6 +13,9 @@ struct MainMenuTabInfo: Equatable {
     let isDefaultUserAgentDesktop: Bool
     let hasChangedUserAgent: Bool
     let readerModeIsAvailable: Bool
+    let isBookmarked: Bool
+    let isInReadingList: Bool
+    let isPinned: Bool
 }
 
 struct MainMenuState: ScreenState, Equatable {
