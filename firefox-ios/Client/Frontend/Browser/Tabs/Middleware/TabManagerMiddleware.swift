@@ -96,6 +96,14 @@ class TabManagerMiddleware {
                                                   actionType: TabPanelMiddlewareActionType.didLoadTabPanel)
             store.dispatch(action)
 
+        case TabPanelViewActionType.tabPanelWillAppear:
+            let isPrivate = action.panelType == .privateTabs
+            let tabState = self.getTabsDisplayModel(for: isPrivate, shouldScrollToTab: true, uuid: action.windowUUID)
+            let action = TabPanelMiddlewareAction(tabDisplayModel: tabState,
+                                                  windowUUID: action.windowUUID,
+                                                  actionType: TabPanelMiddlewareActionType.willAppearTabPanel)
+            store.dispatch(action)
+
         case TabPanelViewActionType.addNewTab:
             let isPrivateMode = action.panelType == .privateTabs
             addNewTab(with: action.urlRequest, isPrivate: isPrivateMode, for: action.windowUUID)
