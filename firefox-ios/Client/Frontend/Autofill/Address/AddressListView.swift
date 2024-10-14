@@ -71,7 +71,7 @@ struct AddressListView: View {
             NavigationView {
                 switch destination {
                 case .add:
-                    handleAddAddress
+                    showAddAddressViewController
 
                 case .edit:
                     handleEditAddress()
@@ -91,7 +91,7 @@ struct AddressListView: View {
         }
     }
 
-    private var handleAddAddress: some View {
+    private var showAddAddressViewController: some View {
         return EditAddressViewControllerRepresentable(model: viewModel)
             .navigationBarTitle(String.Addresses.Settings.Edit.AutofillAddAddressTitle, displayMode: .inline)
             .navigationBarItems(
