@@ -511,7 +511,8 @@ extension XCUIElement {
         return self.exists && isPartiallyIncluded(rectangleArea: visibleScreenFrame, rectangleToBeIncluded: self.frame)
     }
     
-    func waitAndTap(timeout: TimeInterval? = TIMEOUT){
+    /// Waits for the UI element and then taps it if it exists.
+    func waitAndTap(timeout: TimeInterval? = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(self,timeout:timeout)
         if self.exists {
             self.tap()
