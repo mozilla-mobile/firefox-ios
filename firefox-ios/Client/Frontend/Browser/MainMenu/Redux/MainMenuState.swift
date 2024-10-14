@@ -8,6 +8,7 @@ import Shared
 import Redux
 
 struct MainMenuTabInfo: Equatable {
+    let tabID: TabUUID
     let url: URL?
     let isHomepage: Bool
     let isDefaultUserAgentDesktop: Bool

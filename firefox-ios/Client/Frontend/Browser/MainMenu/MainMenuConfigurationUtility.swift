@@ -28,7 +28,9 @@ struct MainMenuConfigurationUtility: Equatable {
         static let print = StandardImageIdentifiers.Large.print
         static let share = StandardImageIdentifiers.Large.share
         static let addToShortcuts = StandardImageIdentifiers.Large.pin
+        static let removeFromShortcuts = StandardImageIdentifiers.Large.pinSlash
         static let saveToReadingList = StandardImageIdentifiers.Large.readingListAdd
+        static let removeFromReadingList = StandardImageIdentifiers.Large.readingListSlashFill
         static let bookmarkThisPage = StandardImageIdentifiers.Large.bookmark
         static let reportBrokenSite = StandardImageIdentifiers.Large.lightbulb
         static let customizeHomepage = StandardImageIdentifiers.Large.gridAdd
@@ -337,7 +339,7 @@ struct MainMenuConfigurationUtility: Equatable {
                                 )
                             )
                         }
-                    ),
+                    )
                 ]
             )
         ]
@@ -350,62 +352,99 @@ struct MainMenuConfigurationUtility: Equatable {
     ) -> [MenuSection] {
         return [MenuSection(
             options: [
-                MenuElement(
-                    title: .MainMenu.Submenus.Save.BookmarkThisPage,
-                    iconName: Icons.bookmarkThisPage,
-                    isEnabled: true,
-                    isActive: false,
-                    a11yLabel: .MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage,
-                    a11yHint: "",
-                    a11yId: AccessibilityIdentifiers.MainMenu.bookmarkThisPage,
-                    action: {
-                        store.dispatch(
-                            MainMenuAction(
-                                windowUUID: uuid,
-                                actionType: MainMenuActionType.closeMenu
-                            )
-                        )
-                    }
-                ),
-                MenuElement(
-                    title: .MainMenu.Submenus.Save.AddToShortcuts,
-                    iconName: Icons.addToShortcuts,
-                    isEnabled: true,
-                    isActive: false,
-                    a11yLabel: .MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts,
-                    a11yHint: "",
-                    a11yId: AccessibilityIdentifiers.MainMenu.addToShortcuts,
-                    action: {
-                        store.dispatch(
-                            MainMenuAction(
-                                windowUUID: uuid,
-                                actionType: MainMenuActionType.closeMenu
-                            )
-                        )
-                    }
-                ),
+                configureBookmarkItem(with: uuid, and: tabInfo),
+                configureShortcutsItem(with: uuid, and: tabInfo),
                 configureReadingListItem(with: uuid, and: tabInfo)
             ]
         )]
+    }
+
+    private func configureBookmarkItem(
+        with uuid: WindowUUID,
+        and tabInfo: MainMenuTabInfo
+    ) -> MenuElement {
+        typealias SaveMenu = String.MainMenu.Submenus.Save
+        typealias A11y = SaveMenu.AccessibilityLabels
+
+        let title = tabInfo.isBookmarked ? SaveMenu.EditBookmark : SaveMenu.BookmarkThisPage
+        let a11yLabel = tabInfo.isBookmarked ? A11y.EditBookmark : A11y.BookmarkThisPage
+        let actionType: MainMenuDetailsActionType = tabInfo.isBookmarked ? .editBookmark : .addToBookmarks
+
+        return MenuElement(
+            title: title,
+            iconName: Icons.bookmarkThisPage,
+            isEnabled: true,
+            isActive: tabInfo.isBookmarked,
+            a11yLabel: a11yLabel,
+            a11yHint: "",
+            a11yId: AccessibilityIdentifiers.MainMenu.bookmarkThisPage,
+            action: {
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: uuid,
+                        actionType: actionType
+                    )
+                )
+            }
+        )
+    }
+
+    private func configureShortcutsItem(
+        with uuid: WindowUUID,
+        and tabInfo: MainMenuTabInfo
+    ) -> MenuElement {
+        typealias SaveMenu = String.MainMenu.Submenus.Save
+        typealias A11y = SaveMenu.AccessibilityLabels
+
+        let title = tabInfo.isPinned ? SaveMenu.RemoveFromShortcuts : SaveMenu.AddToShortcuts
+        let icon = tabInfo.isPinned ? Icons.removeFromShortcuts : Icons.addToShortcuts
+        let a11yLabel = tabInfo.isPinned ? A11y.RemoveFromShortcuts : A11y.AddToShortcuts
+        let actionType: MainMenuDetailsActionType = tabInfo.isPinned ? .removeFromShortcuts : .addToShortcuts
+
+        return MenuElement(
+            title: title,
+            iconName: icon,
+            isEnabled: true,
+            isActive: tabInfo.isPinned,
+            a11yLabel: a11yLabel,
+            a11yHint: "",
+            a11yId: AccessibilityIdentifiers.MainMenu.addToShortcuts,
+            action: {
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: uuid,
+                        actionType: actionType
+                    )
+                )
+            }
+        )
     }
 
     private func configureReadingListItem(
         with uuid: WindowUUID,
         and tabInfo: MainMenuTabInfo
     ) -> MenuElement {
+        typealias SaveMenu = String.MainMenu.Submenus.Save
+        typealias A11y = SaveMenu.AccessibilityLabels
+
+        let title = tabInfo.isInReadingList ? SaveMenu.RemoveFromReadingList : SaveMenu.SaveToReadingList
+        let icon = tabInfo.isInReadingList ? Icons.removeFromReadingList : Icons.saveToReadingList
+        let a11yLabel = tabInfo.isInReadingList ? A11y.RemoveFromReadingList : A11y.SaveToReadingList
+        let actionType: MainMenuDetailsActionType = tabInfo.isInReadingList ? .removeFromReadingList : .addToReadingRist
+
         return MenuElement(
-            title: .MainMenu.Submenus.Save.SaveToReadingList,
-            iconName: Icons.saveToReadingList,
+            title: title,
+            iconName: icon,
             isEnabled: tabInfo.readerModeIsAvailable,
-            isActive: false,
-            a11yLabel: .MainMenu.Submenus.Save.AccessibilityLabels.SaveToReadingList,
+            isActive: tabInfo.isInReadingList,
+            a11yLabel: a11yLabel,
             a11yHint: "",
             a11yId: AccessibilityIdentifiers.MainMenu.saveToReadingList,
             action: {
                 store.dispatch(
                     MainMenuAction(
                         windowUUID: uuid,
-                        actionType: MainMenuActionType.closeMenu
+                        actionType: actionType
                     )
                 )
             }
