@@ -31,6 +31,8 @@
 		0AFF7F6C2C7C7BBA00265214 /* CertificatesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFF7F692C7C7BB800265214 /* CertificatesCell.swift */; };
 		0AFF7F6D2C7C7BBA00265214 /* CertificatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFF7F6A2C7C7BB900265214 /* CertificatesViewController.swift */; };
 		0AFF7F6E2C7C7BBA00265214 /* CertificatesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFF7F6B2C7C7BB900265214 /* CertificatesViewModel.swift */; };
+		0B11AF022CB412D100AD51D5 /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B11AF002CB412D100AD51D5 /* Metrics.swift */; };
+		0B11AF042CB4130F00AD51D5 /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B11AF032CB4130F00AD51D5 /* Metrics.swift */; };
 		0B305E1B1E3A98A900BE0767 /* BookmarksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B305E1A1E3A98A900BE0767 /* BookmarksTests.swift */; };
 		0B3D670E1E09B90B00C1EFC7 /* AuthenticationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3D670D1E09B90B00C1EFC7 /* AuthenticationTest.swift */; };
 		0B3F8C5E2CA4471C00DB5367 /* EditBookmarkViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3F8C5D2CA4471C00DB5367 /* EditBookmarkViewModel.swift */; };
@@ -476,7 +478,6 @@
 		45355B272A269EAC00B1EA8E /* PushConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45355B252A269EAC00B1EA8E /* PushConfiguration.swift */; };
 		4590912E2A2E4F7700061F0C /* AutopushTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4590912D2A2E4F7700061F0C /* AutopushTests.swift */; };
 		4590912F2A2E558000061F0C /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
-		45CC573F28AD8B9B006D55AA /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CC573E28AD8B9A006D55AA /* Metrics.swift */; };
 		45D5EDA729269F7500311934 /* DataObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D5EDA629269F7500311934 /* DataObserver.swift */; };
 		45D5EDC0292D619000311934 /* MockablePinnedSites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D5EDBF292D619000311934 /* MockablePinnedSites.swift */; };
 		45D5EDCA292D65D600311934 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
@@ -575,7 +576,6 @@
 		6025B10E267B6C7F00F59F6B /* LoginRecordExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6025B10B267B6BEA00F59F6B /* LoginRecordExtension.swift */; };
 		6025B10F267B6C7F00F59F6B /* LoginRecordExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6025B10B267B6BEA00F59F6B /* LoginRecordExtension.swift */; };
 		6025B111267B6EE100F59F6B /* CredentialWelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6025B110267B6EE100F59F6B /* CredentialWelcomeViewController.swift */; };
-		602A2B9727F6243A00C3CB78 /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = C86E4F702493BA8E0087BFD9 /* Metrics.swift */; };
 		602A2B9827F6256200C3CB78 /* FxNimbus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455880A027B42F720078DEBB /* FxNimbus.swift */; };
 		602B3D6729B0E1DB0066DEF8 /* ConversionValueUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 602B3D6629B0E1DB0066DEF8 /* ConversionValueUtil.swift */; };
 		60CE80C12667780D004026C7 /* CredentialListPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CE80C02667780C004026C7 /* CredentialListPresenter.swift */; };
@@ -2264,6 +2264,8 @@
 		0AFF7F692C7C7BB800265214 /* CertificatesCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CertificatesCell.swift; sourceTree = "<group>"; };
 		0AFF7F6A2C7C7BB900265214 /* CertificatesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CertificatesViewController.swift; sourceTree = "<group>"; };
 		0AFF7F6B2C7C7BB900265214 /* CertificatesViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CertificatesViewModel.swift; sourceTree = "<group>"; };
+		0B11AF002CB412D100AD51D5 /* Metrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metrics.swift; sourceTree = "<group>"; };
+		0B11AF032CB4130F00AD51D5 /* Metrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metrics.swift; sourceTree = "<group>"; };
 		0B305E1A1E3A98A900BE0767 /* BookmarksTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksTests.swift; sourceTree = "<group>"; };
 		0B3D670D1E09B90B00C1EFC7 /* AuthenticationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationTest.swift; sourceTree = "<group>"; };
 		0B3F8C5D2CA4471C00DB5367 /* EditBookmarkViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBookmarkViewModel.swift; sourceTree = "<group>"; };
@@ -6207,7 +6209,6 @@
 		45AD4685A96876B6D2682E0F /* eu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eu; path = eu.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		45CB4750BCEF0741D15058B0 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Storage.strings; sourceTree = "<group>"; };
 		45CC573828AD8881006D55AA /* metrics.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = metrics.yaml; sourceTree = "<group>"; };
-		45CC573E28AD8B9A006D55AA /* Metrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metrics.swift; sourceTree = "<group>"; };
 		45D5EDA629269F7500311934 /* DataObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataObserver.swift; sourceTree = "<group>"; };
 		45D5EDBF292D619000311934 /* MockablePinnedSites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockablePinnedSites.swift; sourceTree = "<group>"; };
 		45D5EDC1292D636000311934 /* nimbus.fml.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = nimbus.fml.yaml; sourceTree = "<group>"; };
@@ -7900,7 +7901,6 @@
 		C869914F289177A6007ACC5C /* WallpaperNetworkingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WallpaperNetworkingTests.swift; sourceTree = "<group>"; };
 		C869916228918C36007ACC5C /* WallpaperNetworkingModuleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperNetworkingModuleTests.swift; sourceTree = "<group>"; };
 		C869916428918C8E007ACC5C /* WallpaperURLSessionMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperURLSessionMock.swift; sourceTree = "<group>"; };
-		C86E4F702493BA8E0087BFD9 /* Metrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metrics.swift; sourceTree = "<group>"; };
 		C8741FE828C4D30F00030029 /* FileManagerInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerInterface.swift; sourceTree = "<group>"; };
 		C874FB392660E8B900EBE86E /* CredentialProviderPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderPresenter.swift; sourceTree = "<group>"; };
 		C874FC2726612BFF00EBE86E /* AlertControllerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertControllerView.swift; sourceTree = "<group>"; };
@@ -9354,7 +9354,15 @@
 			path = SearchQuickLinksMedium;
 			sourceTree = "<group>";
 		};
-		0B7CF8842CAC1B7000DC02F8 /* Legacy */ = {
+		0B11AF062CB416FE00AD51D5 /* Metrics */ = {
+			isa = PBXGroup;
+			children = (
+				0B11AF002CB412D100AD51D5 /* Metrics.swift */,
+			);
+			path = Metrics;
+			sourceTree = "<group>";
+		};
+				0B7CF8842CAC1B7000DC02F8 /* Legacy */ = {
 			isa = PBXGroup;
 			children = (
 				8A8629E52880B69C0096DDB1 /* LegacyBookmarksPanelTests.swift */,
@@ -10320,7 +10328,7 @@
 		45CC573D28AD8B64006D55AA /* Generated */ = {
 			isa = PBXGroup;
 			children = (
-				45CC573E28AD8B9A006D55AA /* Metrics.swift */,
+				0B11AF032CB4130F00AD51D5 /* Metrics.swift */,
 			);
 			path = Generated;
 			sourceTree = "<group>";
@@ -12080,9 +12088,9 @@
 		C86E4F6F2493BA8E0087BFD9 /* Generated */ = {
 			isa = PBXGroup;
 			children = (
+				0B11AF062CB416FE00AD51D5 /* Metrics */,
 				455880A027B42F720078DEBB /* FxNimbus.swift */,
 				39673BC02B6D82F400653F4A /* FxNimbusMessaging.swift */,
-				C86E4F702493BA8E0087BFD9 /* Metrics.swift */,
 			);
 			path = Generated;
 			sourceTree = "<group>";
@@ -14919,7 +14927,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "rm -rf .venv; bash $PWD/bin/sdk_generator.sh -g Glean -o $SRCROOT/Storage/Generated\n";
+			shellScript = "INPUT_FILE=\"${SRCROOT}/Storage/metrics.yaml\"\nOUTPUT_FILE=\"${SRCROOT}/Storage/Generated/Metrics.swift\"\n\nif [[ ! -f \"$OUTPUT_FILE\" ]]; then\n    echo \"Output file $OUTPUT_FILE does not exist. Running the command.\"\n    rm -rf .venv; bash $PWD/bin/sdk_generator.sh -g Glean -o $SRCROOT/Storage/Generated\n    exit 0\nfi\n\nMODIFIED_FILES=$(git diff --name-only \"$INPUT_FILE\")\n\nif [[ -z \"$MODIFIED_FILES\" ]]; then\n    echo \"No changes detected in input file: $INPUT_FILE. Exiting script.\"\n    exit 0\nfi\n\necho \"Changes detected in input file. Running the command...\"\nrm -rf .venv; bash $PWD/bin/sdk_generator.sh -g Glean -o $SRCROOT/Storage/Generated\n";
 		};
 		5FA2232B27F6FA00005B3D87 /* Glean SDK Generator Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -14937,15 +14945,14 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(SRCROOT)/Client/Generated/Metrics.swift",
+				"$(SRCROOT)/Client/Generated/Metrics/Metrics.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "rm -rf .venv; bash $PWD/bin/sdk_generator.sh -g Glean\n";
+			shellScript = "OUTPUT_FILE=\"${SRCROOT}/Client/Generated/Metrics.swift\"\nOUTPUT_DIR=\"${SRCROOT}/Client/Generated/Metrics/\"\n\nif [ ! -f \"$OUTPUT_FILE\" ]; then\n    echo \"Output file does not exist: $OUTPUT_FILE\"\n    echo \"Skipping input file checks and running the command...\"\n    rm -rf .venv; bash $PWD/bin/sdk_generator.sh -g Glean -o $OUTPUT_DIR\n    exit 0\nfi\n\nCHANGED_FILES=false\n\nfor (( i=0; i<$SCRIPT_INPUT_FILE_COUNT; i++ ))\ndo\n    INPUT_FILE_VAR=\"SCRIPT_INPUT_FILE_$i\"\n    INPUT_FILE=${!INPUT_FILE_VAR}\n\n    if git diff --quiet -- \"$INPUT_FILE\"; then\n        echo \"$INPUT_FILE has no changes.\"\n    else\n        echo \"$INPUT_FILE has changes.\"\n        CHANGED_FILES=true\n    fi\ndone\n\nif [ \"$CHANGED_FILES\" = false ]; then\n    echo \"No input files have changes. Exiting script.\"\n    exit 0\nfi\n\necho \"Input files have changed. Running the command...\"\nrm -rf .venv; bash $PWD/bin/sdk_generator.sh -g Glean -o $OUTPUT_DIR\n";
 		};
 		5FA2232C27F6FA69005B3D87 /* Nimbus Feature Manifest Generator Script */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
 			buildActionMask = 12;
 			files = (
 			);
@@ -14963,7 +14970,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ $ACTION != \"indexbuild\" ]; then\n   /usr/bin/env -i HOME=$HOME PROJECT=$PROJECT CONFIGURATION=$CONFIGURATION SOURCE_ROOT=$SOURCE_ROOT bash $SOURCE_ROOT/bin/nimbus-fml.sh --verbose\nfi\n";
+			shellScript = "GENERATED_FILE_1=\"${SRCROOT}/Client/Generated/FxNimbus.swift\"\nGENERATED_FILE_2=\"${SRCROOT}/Client/Generated/FxNimbusMessaging.swift\"\n\nif [[ ! -f \"$GENERATED_FILE_1\" || ! -f \"$GENERATED_FILE_2\" && $ACTION != \"indexbuild\" ]]; then\n    echo \"One or both generated files do not exist. Running the command.\"\n    /usr/bin/env -i HOME=$HOME PROJECT=$PROJECT CONFIGURATION=$CONFIGURATION SOURCE_ROOT=$SOURCE_ROOT bash $SOURCE_ROOT/bin/nimbus-fml.sh --verbose\n    exit 0\nfi\n\n# Get a list of modified files in the nimbus-features folder and the nimbus.fml.yaml file\nMODIFIED_FILES=$(git diff --name-only \"${SOURCE_ROOT}/nimbus-features\" \"${SOURCE_ROOT}/nimbus.fml.yaml\")\n\nif [[ -z \"$MODIFIED_FILES\" ]]; then\n    echo \"No changes detected in 'nimbus-features/' or 'nimbus.fml.yaml'. Exiting script.\"\n    exit 0\nfi\n\nif [ $ACTION != \"indexbuild\" ]; then\n   /usr/bin/env -i HOME=$HOME PROJECT=$PROJECT CONFIGURATION=$CONFIGURATION SOURCE_ROOT=$SOURCE_ROOT bash $SOURCE_ROOT/bin/nimbus-fml.sh --verbose\nfi\n";
 		};
 		C874A4E327F62C5B006F54E5 /* Swiftlint */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -14974,6 +14981,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
+				"$(SRCROOT)/../.swiftlint.yml",
 			);
 			name = Swiftlint;
 			outputFileListPaths = (
@@ -14982,7 +14990,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif which swiftlint > /dev/null; then\n    swiftlint --config \"../.swiftlint.yml\"\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\n# Get the list of modified Swift files\nMODIFIED_FILES=$(git diff --name-only --diff-filter=ACM | grep -e '\\.swift$')\nif [[ -z \"$MODIFIED_FILES\" ]]; then \n    echo \"No Swift files to lint\" exit 0\nfi\n\nif which swiftlint > /dev/null; then\n    for file in $MODIFIED_FILES; do\n        swiftlint lint \"${SRCROOT}/../${file}\" --config \"${SRCROOT}/../.swiftlint.yml\"\n    done\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\" \nfi\n";
 		};
 		E6639F191BF11E3A002D0853 /* Conditionally Add Settings Bundle */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -15140,6 +15148,7 @@
 				D05434E3225BBC4100FDE4EF /* RustShared.swift in Sources */,
 				2829D3A01C2F0AD400DCF931 /* Sharing.swift in Sources */,
 				28C4AB721AD42D4300D9ACE3 /* Clients.swift in Sources */,
+				0B11AF042CB4130F00AD51D5 /* Metrics.swift in Sources */,
 				74B195441CF503FC007F36EF /* RecentlyClosedTabs.swift in Sources */,
 				D07696F820697F9C00FACFD8 /* ReadingListSchema.swift in Sources */,
 				D0769743206C19E900FACFD8 /* SQLiteReadingList.swift in Sources */,
@@ -15159,7 +15168,6 @@
 				E18BAB0028E4AEBB00098AE2 /* ImageIdentifiers.swift in Sources */,
 				45D5EDCC292D839800311934 /* PinnedSites.swift in Sources */,
 				2FCAE2611ABB531100877008 /* FileAccessor.swift in Sources */,
-				45CC573F28AD8B9B006D55AA /* Metrics.swift in Sources */,
 				D37DE2831CA2047500A5EC69 /* CertStore.swift in Sources */,
 				D018F93E1F44A71A0098F8CA /* Schema.swift in Sources */,
 				2FCAE2661ABB531100877008 /* Site.swift in Sources */,
@@ -15418,7 +15426,6 @@
 				C2A72A672A76938C002ACCE2 /* DownloadsCoordinator.swift in Sources */,
 				5FC276552894AEFF00AF2721 /* LibraryPanelHelper.swift in Sources */,
 				602A2B9827F6256200C3CB78 /* FxNimbus.swift in Sources */,
-				602A2B9727F6243A00C3CB78 /* Metrics.swift in Sources */,
 				E1CD81C5290C6D5800124B27 /* HelpView.swift in Sources */,
 				5A47CFF52860FB8900B2B7BF /* AppLaunchUtil.swift in Sources */,
 				C8B0F5ED283B7C9F007AE65D /* PocketStandardCell.swift in Sources */,
@@ -16042,6 +16049,7 @@
 				81122E212B221AC0003DD9F8 /* SearchScreenState.swift in Sources */,
 				8A4490952BF3C42B00E7E682 /* MicrosurveyConfirmationView.swift in Sources */,
 				1DA6F6512B48B42900BB5AD6 /* WindowEventCoordinator.swift in Sources */,
+				0B11AF022CB412D100AD51D5 /* Metrics.swift in Sources */,
 				C4E3984C1D21F2FD004E89BA /* TabTrayButtonExtensions.swift in Sources */,
 				437A857827E43FE100E42764 /* FxAWebViewTelemetry.swift in Sources */,
 				E13E9AB42AAB0FB5001A0E9D /* FakespotCoordinator.swift in Sources */,
@@ -23036,6 +23044,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E60961861B62B8A700DD640F /* Fennec.xcconfig */;
 			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				EAGER_LINKING = YES;
+				FUSE_BUILD_SCRIPT_PHASES = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -23430,6 +23441,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E60961891B62B8C800DD640F /* Firefox.xcconfig */;
 			buildSettings = {
+				EAGER_LINKING = YES;
+				FUSE_BUILD_SCRIPT_PHASES = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -23678,6 +23691,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E6DCC1ED1DCBB6AA00CEC4B7 /* Fennec.enterprise.xcconfig */;
 			buildSettings = {
+				EAGER_LINKING = YES;
+				FUSE_BUILD_SCRIPT_PHASES = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -23939,6 +23954,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E6FCC43C1C40565200DF6113 /* FirefoxBeta.xcconfig */;
 			buildSettings = {
+				EAGER_LINKING = YES;
+				FUSE_BUILD_SCRIPT_PHASES = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -24430,6 +24447,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E60961861B62B8A700DD640F /* Fennec.xcconfig */;
 			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				EAGER_LINKING = YES;
+				FUSE_BUILD_SCRIPT_PHASES = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
