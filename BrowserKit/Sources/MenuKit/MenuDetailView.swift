@@ -60,13 +60,9 @@ public final class MenuDetailView: UIView,
     }
 
     private func handleUpdateHeaderLineView() {
-        tableView.updateHeaderLineView = { [weak self] scrollOffset in
+        tableView.updateHeaderLineView = { [weak self] isHidden in
             guard let self else { return }
-            if scrollOffset >= UX.headerLineOffset {
-                self.detailHeaderView.updateHeaderLineView(isHidden: false)
-            } else {
-                self.detailHeaderView.updateHeaderLineView(isHidden: true)
-            }
+            self.detailHeaderView.updateHeaderLineView(isHidden: isHidden)
         }
     }
 
