@@ -44,8 +44,7 @@ class URLValidationTests: BaseTestCase {
     private func clearURL() {
         if iPad() {
             navigator.goto(URLBarOpen)
-            mozWaitForElementToExist(app.buttons["Clear text"])
-            app.buttons["Clear text"].tap()
+            app.buttons["Clear text"].waitAndTap()
         }
     }
 }

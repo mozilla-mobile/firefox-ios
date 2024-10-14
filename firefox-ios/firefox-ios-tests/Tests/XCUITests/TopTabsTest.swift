@@ -36,8 +36,8 @@ class TopTabsTest: BaseTestCase {
 
         // The tab tray shows the correct tabs
         if iPad() {
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
-            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
+//            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
         } else {
             navigator.goto(TabTray)
         }
@@ -73,8 +73,7 @@ class TopTabsTest: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
 
-        mozWaitForElementToExist(app.cells.staticTexts[urlLabel])
-        app.cells.staticTexts[urlLabel].firstMatch.tap()
+        app.cells.staticTexts[urlLabel].firstMatch.waitAndTap()
         let valueMozilla = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as! String
         XCTAssertEqual(valueMozilla, urlValueLong)
 
@@ -82,8 +81,7 @@ class TopTabsTest: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
 
-        mozWaitForElementToExist(app.cells.staticTexts[urlLabelExample])
-        app.cells.staticTexts[urlLabelExample].firstMatch.tap()
+        app.cells.staticTexts[urlLabelExample].firstMatch.waitAndTap()
         let value = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as! String
         XCTAssertEqual(value, urlValueLongExample)
     }
@@ -126,10 +124,8 @@ class TopTabsTest: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(BrowserTab)
         if iPad() {
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
-            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton])
-            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].tap()
+            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
+            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
         } else {
             navigator.performAction(Action.OpenNewTabFromTabTray)
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
@@ -145,8 +141,7 @@ class TopTabsTest: BaseTestCase {
         // Close all tabs, undo it and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
 
-        mozWaitForElementToExist(app.otherElements.buttons.staticTexts["Undo"])
-        app.otherElements.buttons.staticTexts["Undo"].tap()
+        app.otherElements.buttons.staticTexts["Undo"].waitAndTap()
 
         mozWaitForElementToExist(
             app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
@@ -180,10 +175,8 @@ class TopTabsTest: BaseTestCase {
         waitForTabsButton()
 
         if iPad() {
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
-            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton])
-            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].tap()
+            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
+            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
         } else {
             navigator.performAction(Action.OpenNewTabFromTabTray)
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
@@ -252,13 +245,9 @@ class TopTabsTest: BaseTestCase {
         XCUIDevice.shared.orientation = .landscapeLeft
         // Verify the '+' icon is shown and open a tab with it
         if iPad() {
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
-            app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].tap()
+            app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
         } else {
-            mozWaitForElementToExist(
-                app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton]
-            )
-            app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].tap()
+            app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
         }
         app.typeText("google.com\n")
         waitUntilPageLoad()
@@ -288,8 +277,7 @@ class TopTabsTest: BaseTestCase {
 
             waitForTabsButton()
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-            mozWaitForElementToExist(app.cells.staticTexts["Homepage"])
-            app.cells.staticTexts["Homepage"].firstMatch.tap()
+            app.cells.staticTexts["Homepage"].firstMatch.waitAndTap()
             mozWaitForElementToExist(
                 app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
             )
@@ -306,8 +294,7 @@ class TopTabsTest: BaseTestCase {
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
 
             // Go to Private Mode
-            mozWaitForElementToExist(app.cells.staticTexts["Homepage"])
-            app.cells.staticTexts["Homepage"].firstMatch.tap()
+            app.cells.staticTexts["Homepage"].firstMatch.waitAndTap()
             mozWaitForElementToExist(
                 app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
             )
@@ -315,8 +302,7 @@ class TopTabsTest: BaseTestCase {
             navigator.nowAt(NewTabScreen)
             mozWaitForElementToExist(app.buttons["Show Tabs"])
             app.buttons["Show Tabs"].press(forDuration: 1)
-            mozWaitForElementToExist(app.tables.cells.otherElements["Private Browsing Mode"])
-            app.tables.cells.otherElements["Private Browsing Mode"].tap()
+            app.tables.cells.otherElements["Private Browsing Mode"].waitAndTap()
             navigator.nowAt(NewTabScreen)
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         }
@@ -564,8 +550,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         app.webViews.links.firstMatch.press(forDuration: 1)
         mozWaitForElementToExist(app.buttons["Open in New Tab"])
         app.buttons["Open in New Tab"].press(forDuration: 1)
-        mozWaitForElementToExist(app.buttons["Switch"])
-        app.buttons["Switch"].tap()
+        app.buttons["Switch"].waitAndTap()
 
         // Check that the tab has changed
         waitUntilPageLoad()
@@ -588,8 +573,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         app.webViews.links.firstMatch.press(forDuration: 1)
         mozWaitForElementToExist(app.buttons["Open in New Tab"])
         app.buttons["Open in New Private Tab"].press(forDuration: 1)
-        mozWaitForElementToExist(app.buttons["Switch"])
-        app.buttons["Switch"].tap()
+        app.buttons["Switch"].waitAndTap()
 
         // Check that the tab has changed to the new open one and that the user is in private mode
         waitUntilPageLoad()

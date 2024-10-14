@@ -433,9 +433,8 @@ class CreditCardsTests: BaseTestCase {
         // The prompt contains two buttons: "Save" and "x".
         mozWaitForElementToExist(app.staticTexts["Update card?"])
         mozWaitForElementToExist(app.buttons["Save"])
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.SaveCardPrompt.Prompt.closeButton])
         // Tapping 'x' will dismiss the prompt
-        app.buttons[AccessibilityIdentifiers.SaveCardPrompt.Prompt.closeButton].tap()
+        app.buttons[AccessibilityIdentifiers.SaveCardPrompt.Prompt.closeButton].waitAndTap()
         mozWaitForElementToNotExist(app.staticTexts["Update card?"])
         // Go to the Settings --> Payment methods
         swipeDown(nrOfSwipes: 3)
@@ -457,10 +456,8 @@ class CreditCardsTests: BaseTestCase {
         let cardNumber = app.webViews["Web content"].textFields["Card number"]
         mozWaitForElementToExist(cardNumber)
         cardNumber.tapOnApp()
-        // Use saved card prompt is displayed
-        mozWaitForElementToExist(app.buttons[useSavedCard])
-        // Expand the prompt
-        app.buttons[useSavedCard].tap()
+        // Expand the saved card prompt
+        app.buttons[useSavedCard].waitAndTap()
         unlockLoginsView()
         mozWaitForElementToExist(app.staticTexts["Use saved card"])
         // Select the saved credit card
@@ -502,8 +499,7 @@ class CreditCardsTests: BaseTestCase {
         restartInBackground()
         unlockLoginsView()
         let addCardButton = app.buttons[creditCardsStaticTexts.AutoFillCreditCard.addCard]
-        mozWaitForElementToExist(addCardButton)
-        addCardButton.tap()
+        addCardButton.waitAndTap()
         addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
         restartInBackground()
         unlockLoginsView()
@@ -648,8 +644,7 @@ class CreditCardsTests: BaseTestCase {
         if !app.buttons[useSavedCard].exists {
             cardNumber.tapOnApp()
         }
-        mozWaitForElementToExist(app.buttons[useSavedCard])
-        app.buttons[useSavedCard].tap()
+        app.buttons[useSavedCard].waitAndTap()
         unlockLoginsView()
         mozWaitForElementToExist(app.staticTexts["Use saved card"])
     }

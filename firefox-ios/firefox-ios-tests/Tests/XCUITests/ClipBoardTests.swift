@@ -16,14 +16,12 @@ class ClipBoardTests: BaseTestCase {
     // Copy url from the browser
     func copyUrl() {
         navigator.goto(URLBarOpen)
-        mozWaitForElementToExist(app.textFields["address"])
-        app.textFields["address"].tap()
+        app.textFields["address"].waitAndTap()
         if iPad() {
             app.textFields["address"].press(forDuration: 1)
             app.menuItems["Select All"].tap()
         }
-        mozWaitForElementToExist(app.menuItems["Copy"])
-        app.menuItems["Copy"].tap()
+        app.menuItems["Copy"].waitAndTap()
         app.typeText("\r")
         navigator.nowAt(BrowserTab)
     }

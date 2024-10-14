@@ -105,8 +105,7 @@ class DomainAutocompleteTests: BaseTestCase {
     func test6DeleteEntireString() {
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("www.moz")
-        mozWaitForElementToExist(app.buttons["Clear text"])
-        app.buttons["Clear text"].tap()
+        app.buttons["Clear text"].waitAndTap()
 
         // Check that the address field is empty and that the home panels are shown
         let value = app.textFields["address"].value

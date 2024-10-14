@@ -246,8 +246,7 @@ class BaseTestCase: XCTestCase {
 
     func unbookmark() {
         navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkSlash])
-        app.otherElements[StandardImageIdentifiers.Large.bookmarkSlash].tap()
+        app.otherElements[StandardImageIdentifiers.Large.bookmarkSlash].waitAndTap()
         navigator.nowAt(BrowserTab)
     }
 
@@ -510,6 +509,13 @@ extension XCUIElement {
     func isVisible(app: XCUIApplication = XCUIApplication()) -> Bool {
         let visibleScreenFrame = getVisibleScreenFrame(app: app)
         return self.exists && isPartiallyIncluded(rectangleArea: visibleScreenFrame, rectangleToBeIncluded: self.frame)
+    }
+    
+    func waitAndTap(timeout: TimeInterval? = TIMEOUT){
+        BaseTestCase().mozWaitForElementToExist(self,timeout:timeout)
+        if self.exists {
+            self.tap()
+        }
     }
 }
 

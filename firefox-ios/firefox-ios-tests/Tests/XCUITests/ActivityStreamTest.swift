@@ -107,8 +107,7 @@ class ActivityStreamTest: BaseTestCase {
 
         // navigator.performAction(Action.AcceptRemovingAllTabs)
         navigator.goto(TabTray)
-        mozWaitForElementToExist(app.collectionViews.buttons["crossLarge"])
-        app.collectionViews.buttons["crossLarge"].tap()
+        app.collectionViews.buttons["crossLarge"].waitAndTap()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -193,8 +192,7 @@ class ActivityStreamTest: BaseTestCase {
         // Long tap on Wikipedia top site
         waitForExistence(app.collectionViews.cells.staticTexts["Wikipedia"])
         app.collectionViews.cells.staticTexts["Wikipedia"].press(forDuration: 1)
-        mozWaitForElementToExist(app.tables["Context Menu"].cells.otherElements["Open in a Private Tab"])
-        app.tables["Context Menu"].cells.otherElements["Open in a Private Tab"].tap()
+        app.tables["Context Menu"].cells.otherElements["Open in a Private Tab"].waitAndTap()
 
         mozWaitForElementToExist(TopSiteCellgroup)
 
@@ -246,8 +244,7 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
-        mozWaitForElementToExist(app.cells[TopSites.itemCell])
-        mozWaitForElementToExist(app.cells[TopSites.itemCell])
+        mozWaitForElementToExist(app.cells[TopSites.itemCell],timeout: 20)
         let numberOfTopSites = app.collectionViews.cells.matching(identifier: TopSites.itemCell).count
         mozWaitForElementToExist(app.collectionViews.cells.matching(identifier: TopSites.itemCell).firstMatch)
         XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites, "The number of Top Sites is not correct")
