@@ -35,10 +35,6 @@ public struct StandardImageIdentifiers {
         public static let sunFill = "sunFillMedium"
     }
 
-    // Icon size 30x30
-    public struct ExtraLarge {
-        public static let crossCircleFill = "crossCircleFillExtraLarge"
-    }
     // Icon size 24x24
     public struct Large {
         public static let addToHomescreen = "addToHomescreenLarge"
@@ -131,4 +127,8 @@ public struct StandardImageIdentifiers {
         public static let whatsNew = "whatsNewLarge"
     }
 
+    // Icon size 30x30
+    public struct ExtraLarge {
+        public static let crossCircleFill = "crossCircleFillExtraLarge"
+    }
 }

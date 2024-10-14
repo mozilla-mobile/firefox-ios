@@ -4,6 +4,8 @@ import os
 import shutil
 import subprocess
 
+# List the target sizes that now are supported from FXIOS
+# Only those sizes are synced for updates.
 _TARGET_SIZES = [
     (8, "ExtraSmall"),
     (16, "Small"),
@@ -86,6 +88,17 @@ def download_icons_and_save_in_assets():
     subprocess.run(["rm", "-rf", temp_dir_folder_name])
 
 def sort_icons_by_size() -> dict:
+    '''
+    Sort all the Acorns icons in firefox-ios/Client/Assets/Images.xcassets/ by their respective size
+
+    Returns:
+        dict: A dictionary with the title sizes as key and as value the list of acorn folders with the respective size
+        {
+            "ExtraSmall": [],
+            "Small": [],
+            ...
+        }
+    '''
     icons_by_size = {}
     for _, titleSize in _TARGET_SIZES:
         icons_by_size[titleSize] = []
@@ -94,10 +107,15 @@ def sort_icons_by_size() -> dict:
     for folder in os.listdir(asset_folder_path):
         if folder.endswith(".imageset"):
             file_name = folder.split(".")[0]
-            
+
             size_key = next((key for key in icons_by_size if key in file_name), None)
             
             if size_key:
+                # Check wether Extra not in the size_key while the file name has Extra size
+                # this means the next method pulled the wrong size_key
+                if "Extra" not in size_key and "Extra" in file_name:
+                    size_key = f"Extra{size_key}"
+                
                 icon_name = file_name.replace(size_key, "")
                 icons_by_size[size_key].append((icon_name, file_name))
 
