@@ -41,6 +41,8 @@ class MainMenuViewController: UIViewController,
 
     private var hintView: ContextualHintView = .build()
 
+    let viewProvider: ContextualHintViewProvider
+
     var currentWindowUUID: UUID? { return windowUUID }
 
     // MARK: - Initializers
@@ -57,6 +59,8 @@ class MainMenuViewController: UIViewController,
         self.themeManager = themeManager
         self.logger = logger
         menuState = MainMenuState(windowUUID: windowUUID)
+        viewProvider = ContextualHintViewProvider(forHintType: .mainMenu,
+                                                  with: profile)
         super.init(nibName: nil, bundle: nil)
 
         setupNotifications(forObserver: self,
@@ -160,10 +164,10 @@ class MainMenuViewController: UIViewController,
 
     private func setupHintView() {
         var viewModel = ContextualHintViewModel(
-            isActionType: false,
-            actionButtonTitle: "",
-            title: .ContextualHints.MainMenu.NewMenu.Title,
-            description: .ContextualHints.MainMenu.NewMenu.Body,
+            isActionType: viewProvider.isActionType,
+            actionButtonTitle: viewProvider.getCopyFor(.action),
+            title: viewProvider.getCopyFor(.title),
+            description: viewProvider.getCopyFor(.description),
             arrowDirection: .unknown,
             closeButtonA11yLabel: .ContextualHints.ContextualHintsCloseAccessibility,
             actionButtonA11yId: AccessibilityIdentifiers.ContextualHints.actionButton
@@ -172,6 +176,7 @@ class MainMenuViewController: UIViewController,
             self?.hintView.removeFromSuperview()
         }
         hintView.configure(viewModel: viewModel)
+        viewProvider.markContextualHintPresented()
         hintView.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
            let window = windowScene.windows.first {
@@ -286,14 +291,12 @@ class MainMenuViewController: UIViewController,
     }
 
     private func shouldDisplayHintView() -> Bool {
-        // 1. Do not present hint for new users/fresh install
-        // 2. Do not present hint if hint feature is not enabled
-        // 3. Do not present hint if it has been already presented before
-        guard profile.prefs.boolForKey(PrefsKeys.mainMenuHintKey) != nil else {
-            if InstallType.get() == .fresh || !featureFlags.isFeatureEnabled(.menuRefactorHint, checking: .buildOnly) {
-                return false
-            }
-            profile.prefs.setBool(true, forKey: PrefsKeys.mainMenuHintKey)
+        // 1. Present hint if it was not presented before,
+        // 2. feature is enabled and
+        // 3. is not fresh install
+        if viewProvider.shouldPresentContextualHint() &&
+            featureFlags.isFeatureEnabled(.menuRefactorHint, checking: .buildOnly) &&
+            InstallType.get() != .fresh {
             return true
         }
         return false
