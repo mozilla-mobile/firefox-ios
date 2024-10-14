@@ -222,7 +222,8 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - ETPCoordinatorSSLStatusDelegate
 
     var showHasOnlySecureContentInTrackingPanel: Bool {
-        return browserViewController.urlBar.locationView.hasSecureContent
+        guard let bar = browserViewController.urlBar else { return false }
+        return bar.locationView.hasSecureContent
     }
 
     // MARK: - Route handling
