@@ -409,13 +409,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
     }
 
     private func tabManager(for uuid: WindowUUID) -> TabManager {
-        let windowManager: WindowManager = AppContainer.shared.resolve()
-        guard uuid != .unavailable else {
-            assertionFailure()
-            logger.log("Unexpected or unavailable window UUID for requested TabManager.", level: .fatal, category: .tabs)
-            return windowManager.allWindowTabManagers().first!
-        }
-
-        return windowManager.tabManager(for: uuid)
+        return (AppContainer.shared.resolve() as WindowManager).tabManager(for: uuid)
     }
 }
