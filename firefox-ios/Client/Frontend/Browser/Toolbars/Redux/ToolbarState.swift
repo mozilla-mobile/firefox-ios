@@ -289,7 +289,7 @@ struct ToolbarState: ScreenState, Equatable {
             isPrivateMode: state.isPrivateMode,
             addressToolbar: AddressBarState.reducer(state.addressToolbar, toolbarAction),
             navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, toolbarAction),
-            isShowingNavigationToolbar: state.isShowingNavigationToolbar,
+            isShowingNavigationToolbar: toolbarAction.isShowingNavigationToolbar ?? state.isShowingNavigationToolbar,
             isShowingTopTabs: toolbarAction.isShowingTopTabs ?? state.isShowingTopTabs,
             canGoBack: state.canGoBack,
             canGoForward: state.canGoForward,

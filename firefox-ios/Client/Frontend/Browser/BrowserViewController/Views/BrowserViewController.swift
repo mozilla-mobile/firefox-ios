@@ -453,17 +453,11 @@ class BrowserViewController: UIViewController,
         view.layoutSubviews()
 
         if let tab = tabManager.selectedTab,
-           let webView = tab.webView {
+           let webView = tab.webView,
+           !isToolbarRefactorEnabled {
             updateURLBarDisplayURL(tab)
-
-            if isToolbarRefactorEnabled {
-                dispatchBackForwardToolbarAction(canGoBack: webView.canGoBack,
-                                                 canGoForward: webView.canGoForward,
-                                                 windowUUID: windowUUID)
-            } else {
-                navigationToolbar.updateBackStatus(webView.canGoBack)
-                navigationToolbar.updateForwardStatus(webView.canGoForward)
-            }
+            navigationToolbar.updateBackStatus(webView.canGoBack)
+            navigationToolbar.updateForwardStatus(webView.canGoForward)
         }
     }
 
@@ -2340,14 +2334,16 @@ class BrowserViewController: UIViewController,
     /// This requires an update of the toolbars.
     private func updateToolbarStateTraitCollectionIfNecessary(_ newCollection: UITraitCollection) {
         let showTopTabs = ToolbarHelper().shouldShowTopTabs(for: newCollection)
+        let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: newCollection)
 
         // Only dispatch action when the value of top tabs being shown is different from what is saved in the state
         // to avoid having the toolbar re-displayed
         guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID),
-              toolbarState.isShowingTopTabs != showTopTabs
+              toolbarState.isShowingTopTabs != showTopTabs || toolbarState.isShowingNavigationToolbar != showNavToolbar
         else { return }
 
         let action = ToolbarAction(
+            isShowingNavigationToolbar: showNavToolbar,
             isShowingTopTabs: showTopTabs,
             windowUUID: windowUUID,
             actionType: ToolbarActionType.traitCollectionDidChange
