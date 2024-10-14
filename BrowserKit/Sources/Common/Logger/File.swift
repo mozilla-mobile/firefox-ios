@@ -28,12 +28,12 @@ public final class DefaultLoggerSpamFilter: LoggerSpamFilter {
 
         // TODO: Investigate alternative solutions for this.
         // Discussion: Currently this filter only examines log messages sent on the
-        // main thread. This will catch the majority of logs, notably everything
+        // main thread. This will catch the majority of log spam, notably everything
         // for Redux (which is all processed on MT). This is the tradeoff for avoiding
-        // a lock or serial queue that would potentially add a performance hindrance to
+        // a lock or serial queue etc. that would potentially incur a performance hit to
         // our logging. Becuse we log frequently, and in many places, this code needs
         // to be as fast as possible. This check is necessary because the spam filter
-        // has mutable internal state that should not be read/written concurrently. 
+        // has mutable internal state that should not be read/written concurrently.
         guard Thread.isMainThread else { return false }
         let isSpam = (spamLastLogMessage == loggerMessage)
 
