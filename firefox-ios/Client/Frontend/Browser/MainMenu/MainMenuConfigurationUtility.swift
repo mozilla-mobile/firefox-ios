@@ -382,7 +382,8 @@ struct MainMenuConfigurationUtility: Equatable {
                 store.dispatch(
                     MainMenuAction(
                         windowUUID: uuid,
-                        actionType: actionType
+                        actionType: actionType,
+                        tabID: tabInfo.tabID
                     )
                 )
             }
@@ -413,7 +414,8 @@ struct MainMenuConfigurationUtility: Equatable {
                 store.dispatch(
                     MainMenuAction(
                         windowUUID: uuid,
-                        actionType: actionType
+                        actionType: actionType,
+                        tabID: tabInfo.tabID
                     )
                 )
             }
@@ -430,7 +432,7 @@ struct MainMenuConfigurationUtility: Equatable {
         let title = tabInfo.isInReadingList ? SaveMenu.RemoveFromReadingList : SaveMenu.SaveToReadingList
         let icon = tabInfo.isInReadingList ? Icons.removeFromReadingList : Icons.saveToReadingList
         let a11yLabel = tabInfo.isInReadingList ? A11y.RemoveFromReadingList : A11y.SaveToReadingList
-        let actionType: MainMenuDetailsActionType = tabInfo.isInReadingList ? .removeFromReadingList : .addToReadingRist
+        let actionType: MainMenuDetailsActionType = tabInfo.isInReadingList ? .removeFromReadingList : .addToReadingList
 
         return MenuElement(
             title: title,
@@ -444,7 +446,8 @@ struct MainMenuConfigurationUtility: Equatable {
                 store.dispatch(
                     MainMenuAction(
                         windowUUID: uuid,
-                        actionType: actionType
+                        actionType: actionType,
+                        tabID: tabInfo.tabID
                     )
                 )
             }

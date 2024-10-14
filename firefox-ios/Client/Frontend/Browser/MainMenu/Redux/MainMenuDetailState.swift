@@ -106,7 +106,13 @@ struct MainMenuDetailsState: ScreenState, Equatable {
                 submenuType: state.submenuType,
                 shouldGoBackToMenu: true
             )
-        case MainMenuDetailsActionType.dismissView:
+        case MainMenuDetailsActionType.dismissView,
+            MainMenuDetailsActionType.addToBookmarks,
+            MainMenuDetailsActionType.editBookmark,
+            MainMenuDetailsActionType.addToShortcuts,
+            MainMenuDetailsActionType.removeFromShortcuts,
+            MainMenuDetailsActionType.addToReadingList,
+            MainMenuDetailsActionType.removeFromReadingList:
             return MainMenuDetailsState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
