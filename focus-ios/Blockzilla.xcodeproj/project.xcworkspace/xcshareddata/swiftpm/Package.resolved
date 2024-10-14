@@ -28,6 +28,15 @@
           "version": null
         }
       },
+        {
+        "package": "Glean",
+        "repositoryURL": "https://github.com/mozilla/glean-swift",
+        "state": {
+          "branch": null,
+          "revision": "51794f8b74c55ebde6d1502b641eacc19176e139",
+          "version": "61.2.0"
+        }
+      },
       {
         "package": "Kingfisher",
         "repositoryURL": "https://github.com/onevcat/Kingfisher.git",
@@ -35,6 +44,15 @@
           "branch": null,
           "revision": "2ef543ee21d63734e1c004ad6c870255e8716c50",
           "version": "7.12.0"
+        }
+      },
+        {
+        "package": "MozillaRustComponentsSwift",
+        "repositoryURL": "https://github.com/mozilla/rust-components-swift",
+        "state": {
+          "branch": null,
+          "revision": "e535bbe6d66996f32d0e4f632e9d8588372cd489",
+          "version": "133.0.20241009050322"
         }
       },
       {
