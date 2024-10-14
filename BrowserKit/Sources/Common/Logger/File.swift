@@ -60,5 +60,3 @@ public final class DefaultLoggerSpamFilter: LoggerSpamFilter {
         return isSpam
     }
 }
-
-
