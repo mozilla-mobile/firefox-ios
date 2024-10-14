@@ -4,14 +4,39 @@ import os
 import shutil
 import subprocess
 
+"""
+This script automates the process of fetching, syncing, and organizing Acorn icons for the Firefox iOS project.
+It performs the following tasks:
+1. Fetches the latest release of the Acorn icons repository from GitHub.
+2. Saves the latest release information locally to detect if a new release needs to be synced.
+3. Downloads the icons from the latest release and synchronizes them with the project's asset folder.
+4. Sorts icons into categories based on their size (e.g., ExtraSmall, Small, Large, etc.).
+5. Generates the StandardImageIdentifiers.swift from BrowserKit's Common package.
+
+Important:
+- If a new size needs to be added, modify the `TARGET_SIZES` list by adding the appropriate tuple item.
+  The tuple is composed of:
+  - The first item: the directory name where the Acorn icons for that size are stored (e.g., for the "ExtraSmall" category, 
+    the icons are stored in `mobile/8`).
+  - The second item: the size category used in the file names and in the `StandardImageIdentifiers.swift` structures (e.g., "ExtraSmall").
+
+Usage:
+- This script is designed to be run periodically by a Github action.
+- It will automatically detect and download new releases, update the asset folder, and regenerate the image identifiers.
+
+If you want to test the script locally make sure to have all the required packages installed and remove the root json file `latest_acorn_release.json`.
+Then run `python3 sync_acorn_icons.py`. All the time the script is run the `latest_acorn_release.json` is created so if you see nothing in the console
+remove this file first.
+"""
+
 # List the target sizes that now are supported from FXIOS
 # Only those sizes are synced for updates.
-_TARGET_SIZES = [
-    (8, "ExtraSmall"),
-    (16, "Small"),
-    (20, "Medium"),
-    (24, "Large"),
-    (30, "ExtraLarge")
+TARGET_SIZES = [
+    ("8", "ExtraSmall"),
+    ("16", "Small"),
+    ("20", "Medium"),
+    ("24", "Large"),
+    ("30", "ExtraLarge")
 ]
 
 def fetch_latest_release_from_acorn() -> dict|None:
@@ -64,7 +89,7 @@ def download_icons_and_save_in_assets():
         exit()
     asset_folder_path = "../firefox-ios/Client/Assets/Images.xcassets/"
     asset_folder_list = os.listdir(asset_folder_path)
-    sizes_to_copy = map(lambda x: x[0], _TARGET_SIZES)
+    sizes_to_copy = map(lambda x: x[0], TARGET_SIZES)
     for size in sizes_to_copy:
         icons_dir_path = f"acorn-icons/icons/mobile/{size}/pdf"
         directory_tree = os.walk(icons_dir_path)
@@ -100,7 +125,7 @@ def sort_icons_by_size() -> dict:
         }
     '''
     icons_by_size = {}
-    for _, titleSize in _TARGET_SIZES:
+    for _, titleSize in TARGET_SIZES:
         icons_by_size[titleSize] = []
 
     asset_folder_path = "firefox-ios/Client/Assets/Images.xcassets/"
@@ -134,7 +159,7 @@ import Foundation
 public struct StandardImageIdentifiers {
 """
     size_struct_map = {}
-    for image_size, image_size_title in _TARGET_SIZES:
+    for image_size, image_size_title in TARGET_SIZES:
         size_struct_map[image_size_title] = f"{image_size}x{image_size}"
 
     for size, struct_name in size_struct_map.items():
