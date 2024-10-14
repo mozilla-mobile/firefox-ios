@@ -4,6 +4,14 @@ import os
 import shutil
 import subprocess
 
+_TARGET_SIZES = [
+    (8, "ExtraSmall"),
+    (16, "Small"),
+    (20, "Medium"),
+    (24, "Large"),
+    (30, "ExtraLarge")
+]
+
 def fetch_latest_release_from_acorn() -> dict|None:
     owner = "FirefoxUX" 
     repo = "acorn-icons"    
@@ -52,10 +60,10 @@ def download_icons_and_save_in_assets():
     if clone_response.returncode != 0:
         print(f"Couldn't clone acorn icon repository")
         exit()
-    target_size_to_copy = [16, 20, 24, 30]
     asset_folder_path = "../firefox-ios/Client/Assets/Images.xcassets/"
     asset_folder_list = os.listdir(asset_folder_path)
-    for size in target_size_to_copy:
+    sizes_to_copy = map(lambda x: x[0], _TARGET_SIZES)
+    for size in sizes_to_copy:
         icons_dir_path = f"acorn-icons/icons/mobile/{size}/pdf"
         directory_tree = os.walk(icons_dir_path)
 
@@ -78,13 +86,9 @@ def download_icons_and_save_in_assets():
     subprocess.run(["rm", "-rf", temp_dir_folder_name])
 
 def sort_icons_by_size() -> dict:
-    icons_by_size: dict[str, list[tuple[str]]] = {
-        "Small": [],
-        "Medium": [],
-        # Extra Large should be before Large since next() will pick Large also for ExtraLarge case
-        "ExtraLarge": [],
-        "Large": []
-    }
+    icons_by_size = {}
+    for _, titleSize in _TARGET_SIZES:
+        icons_by_size[titleSize] = []
 
     asset_folder_path = "firefox-ios/Client/Assets/Images.xcassets/"
     for folder in os.listdir(asset_folder_path):
@@ -111,13 +115,9 @@ import Foundation
 /// Sing the song if you must.
 public struct StandardImageIdentifiers {
 """
-
-    size_struct_map = {
-        "Small": "16x16",
-        "Medium": "20x20",
-        "Large": "24x24",
-        "ExtraLarge": "30x30"
-    }
+    size_struct_map = {}
+    for image_size, image_size_title in _TARGET_SIZES:
+        size_struct_map[image_size_title] = f"{image_size}x{image_size}"
 
     for size, struct_name in size_struct_map.items():
         if sorted_icons[size]:
