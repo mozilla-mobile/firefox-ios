@@ -198,7 +198,7 @@ class BrowserViewController: UIViewController,
     private lazy var navigationToolbarContainer: NavigationToolbarContainer = .build { view in
         view.windowUUID = self.windowUUID
     }
-    var toolbar = TabToolbar()
+    lazy var toolbar = TabToolbar()
     var navigationToolbar: TabToolbarProtocol {
         return toolbar.isHidden ? urlBar : toolbar
     }
@@ -843,6 +843,67 @@ class BrowserViewController: UIViewController,
             object: nil)
     }
 
+    private func switchToolbarIfNeeded() {
+        var updateNeeded = false
+
+        if isToolbarRefactorEnabled, addressToolbarContainer.superview == nil {
+            // Show toolbar refactor
+            updateNeeded = true
+            overKeyboardContainer.removeArrangedView(urlBar, animated: false)
+            header.removeArrangedView(urlBar, animated: false)
+            bottomContainer.removeArrangedView(toolbar, animated: false)
+
+            addAddressToolbar()
+        } else if !isToolbarRefactorEnabled && (urlBar == nil || urlBar.superview == nil) {
+            // Show legacy toolbars
+            updateNeeded = true
+
+            overKeyboardContainer.removeArrangedView(addressToolbarContainer, animated: false)
+            header.removeArrangedView(addressToolbarContainer, animated: false)
+            bottomContainer.removeArrangedView(navigationToolbarContainer, animated: false)
+
+            createLegacyUrlBar()
+
+            urlBar.snp.makeConstraints { make in
+                urlBarHeightConstraint = make.height.equalTo(UIConstants.TopToolbarHeightMax).constraint
+            }
+        }
+
+        if updateNeeded {
+            let toolbarToShow = isToolbarRefactorEnabled ? navigationToolbarContainer : toolbar
+            bottomContainer.addArrangedViewToBottom(toolbarToShow, animated: false)
+            overlayManager.setURLBar(urlBarView: isToolbarRefactorEnabled ? addressToolbarContainer : urlBar)
+            updateToolbarStateForTraitCollection(traitCollection)
+            updateViewConstraints()
+        }
+    }
+
+    private func createLegacyUrlBar() {
+        guard !isToolbarRefactorEnabled else { return }
+
+        urlBar = URLBarView(profile: profile, windowUUID: windowUUID)
+        urlBar.translatesAutoresizingMaskIntoConstraints = false
+        urlBar.delegate = self
+        urlBar.tabToolbarDelegate = self
+        urlBar.applyTheme(theme: currentTheme())
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        urlBar.applyUIMode(isPrivate: isPrivate, theme: currentTheme())
+        urlBar.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
+    }
+
+    private func addAddressToolbar() {
+        guard isToolbarRefactorEnabled else { return }
+
+        addressToolbarContainer.configure(
+            windowUUID: windowUUID,
+            profile: profile,
+            delegate: self,
+            isUnifiedSearchEnabled: isUnifiedSearchEnabled
+        )
+        addressToolbarContainer.applyTheme(theme: currentTheme())
+        addressToolbarContainer.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
+    }
+
     func addSubviews() {
         view.addSubviews(webViewContainerBackdrop, contentStackView)
 
@@ -855,32 +916,14 @@ class BrowserViewController: UIViewController,
 
         // Setup the URL bar, wrapped in a view to get transparency effect
         if isToolbarRefactorEnabled {
-            addressToolbarContainer.configure(
-                windowUUID: windowUUID,
-                profile: profile,
-                delegate: self,
-                isUnifiedSearchEnabled: isUnifiedSearchEnabled
-            )
-            addressToolbarContainer.applyTheme(theme: currentTheme())
-            addressToolbarContainer.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
+            addAddressToolbar()
         } else {
-            urlBar = URLBarView(profile: profile, windowUUID: windowUUID)
-            urlBar.translatesAutoresizingMaskIntoConstraints = false
-            urlBar.delegate = self
-            urlBar.tabToolbarDelegate = self
-            urlBar.applyTheme(theme: currentTheme())
-            let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-            urlBar.applyUIMode(isPrivate: isPrivate, theme: currentTheme())
-            urlBar.addToParent(parent: isBottomSearchBar ? overKeyboardContainer : header)
+            createLegacyUrlBar()
         }
 
         view.addSubview(header)
         view.addSubview(bottomContentStackView)
         view.addSubview(overKeyboardContainer)
-
-        if isToolbarRefactorEnabled {
-            toolbar = TabToolbar()
-        }
 
         let toolbarToShow = isToolbarRefactorEnabled ? navigationToolbarContainer : toolbar
 
@@ -905,6 +948,7 @@ class BrowserViewController: UIViewController,
             tabManager.restoreTabs()
         }
 
+        switchToolbarIfNeeded()
         updateTabCountUsingTabManager(tabManager, animated: false)
 
         if !isToolbarRefactorEnabled {
@@ -973,6 +1017,7 @@ class BrowserViewController: UIViewController,
         view.layoutIfNeeded()
 
         showQueuedAlertIfAvailable()
+        switchToolbarIfNeeded()
         adjustURLBarHeightBasedOnLocationViewHeight()
     }
 
