@@ -1,3 +1,6 @@
+/* Title label for the view where user can add their credit card info */
+"CreditCard.EditCard.AddCreditCardTitle.v122" = "Cuir cairt ris";
+
 /* Button label for cancelling editing of the credit card details shown in the form */
 "CreditCard.EditCard.CancelNavBarButtonLabel.v113" = "Sguir dheth";
 
@@ -39,4 +42,7 @@
 
 /* Button label for saving the credit card details user entered in the form */
 "CreditCard.EditCard.SaveNavBarButtonLabel.v113" = "Sàbhail";
+
+/* Title label for the view where user can view their credit card info */
+"CreditCard.EditCard.ViewCreditCardTitle.v116" = "Seall a’ chairt";
 
