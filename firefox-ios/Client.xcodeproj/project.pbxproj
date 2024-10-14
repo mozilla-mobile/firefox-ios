@@ -10714,6 +10714,13 @@
 			path = PrivateHome;
 			sourceTree = "<group>";
 		};
+		8A1188EF2CBD600400281F9A /* CustomizeHomepage */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = CustomizeHomepage;
+			sourceTree = "<group>";
+		};
 		8A171A6029F82AD90085770E /* Application */ = {
 			isa = PBXGroup;
 			children = (
@@ -11045,6 +11052,7 @@
 		8A7D08E12CAAF79F0035999C /* Homepage Rebuild */ = {
 			isa = PBXGroup;
 			children = (
+				8A1188EF2CBD600400281F9A /* CustomizeHomepage */,
 				8ABDBAA42CB6BF3A00B51F63 /* View */,
 				8A7D08E22CAAF7C30035999C /* HomepageViewController.swift */,
 				8AA0A6622CAC40AA00AC7EB3 /* HomepageDiffableDataSource.swift */,

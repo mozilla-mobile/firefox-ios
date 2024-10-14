@@ -11,6 +11,7 @@ final class HomepageSectionLayoutProvider {
         static let bottomSpacing: CGFloat = 30
         static let standardInset: CGFloat = 16
         static let iPadInset: CGFloat = 50
+        static let spacingBetweenSections: CGFloat = 62
 
         static func leadingInset(
             traitCollection: UITraitCollection,
@@ -55,6 +56,8 @@ final class HomepageSectionLayoutProvider {
             return createFirstSectionLayout()
         case .pocket:
             return createDefaultSectionLayout()
+        case .customizeHomepage:
+            return createCustomizeSectionLayout(for: traitCollection)
         }
     }
 
@@ -110,6 +113,25 @@ final class HomepageSectionLayoutProvider {
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
 
+        return section
+    }
+
+    private func createCustomizeSectionLayout(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                              heightDimension: .estimated(100))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                               heightDimension: .estimated(100))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
+
+        let horizontalInsets = UX.leadingInset(traitCollection: traitCollection)
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(
+            top: UX.spacingBetweenSections,
+            leading: horizontalInsets,
+            bottom: UX.spacingBetweenSections,
+            trailing: horizontalInsets)
         return section
     }
 }
