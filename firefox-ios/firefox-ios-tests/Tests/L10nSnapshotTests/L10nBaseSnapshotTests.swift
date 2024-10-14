@@ -131,9 +131,9 @@ extension XCUIElement {
     func tapOnApp() {
         coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
     }
-    
-    func waitAndTap(timeout: TimeInterval? = TIMEOUT){
-        L10nBaseSnapshotTests().mozWaitForElementToExist(self,timeout:timeout)
+
+    func waitAndTap(timeout: TimeInterval? = TIMEOUT) {
+        L10nBaseSnapshotTests().mozWaitForElementToExist(self, timeout: timeout)
         if self.exists {
             self.tap()
         }

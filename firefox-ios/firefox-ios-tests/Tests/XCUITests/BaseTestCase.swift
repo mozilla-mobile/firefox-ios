@@ -510,10 +510,9 @@ extension XCUIElement {
         let visibleScreenFrame = getVisibleScreenFrame(app: app)
         return self.exists && isPartiallyIncluded(rectangleArea: visibleScreenFrame, rectangleToBeIncluded: self.frame)
     }
-    
     /// Waits for the UI element and then taps it if it exists.
     func waitAndTap(timeout: TimeInterval? = TIMEOUT) {
-        BaseTestCase().mozWaitForElementToExist(self,timeout:timeout)
+        BaseTestCase().mozWaitForElementToExist(self, timeout: timeout)
         if self.exists {
             self.tap()
         }
