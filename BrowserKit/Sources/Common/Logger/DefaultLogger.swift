@@ -7,24 +7,21 @@ import Foundation
 public class DefaultLogger: Logger {
     public static let shared = DefaultLogger()
 
-    private var logger: SwiftyBeaverWrapper.Type
+    private let logger: SwiftyBeaverWrapper.Type
     private var crashManager: CrashManager?
-    private var fileManager: LoggerFileManager
-
-    private var automaticallyFilterSpam = true
-    private var spamLastLogMessage = ""
-    private var spamLastLogCategory: LoggerCategory = .lifecycle
-    private var spamMessagesFiltered = 0
-    private let spamCountWarningThreshold = 5
+    private let fileManager: LoggerFileManager
+    private let spamFilter: LoggerSpamFilter
 
     public var crashedLastLaunch: Bool {
         return crashManager?.crashedLastLaunch ?? false
     }
 
     init(swiftyBeaverBuilder: SwiftyBeaverBuilder = DefaultSwiftyBeaverBuilder(),
-         fileManager: LoggerFileManager = DefaultLoggerFileManager()) {
+         fileManager: LoggerFileManager = DefaultLoggerFileManager(),
+         spamFilter: LoggerSpamFilter = DefaultLoggerSpamFilter()) {
         self.fileManager = fileManager
         self.logger = swiftyBeaverBuilder.setup(with: fileManager.getLogDestination())
+        self.spamFilter = spamFilter
     }
 
     public func configure(crashManager: CrashManager) {
@@ -59,7 +56,7 @@ public class DefaultLogger: Logger {
         }
 
         // Handle automatic spam filtering for redundant logging
-        let isSpam = detectLoggerSpam(loggerMessage, category: category)
+        let isSpam = spamFilter.detectLoggerSpam(loggerMessage, category: category, for: self)
 
         // Log locally and in console
         if !isSpam {
@@ -90,33 +87,6 @@ public class DefaultLogger: Logger {
 
     public func deleteCachedLogFiles() {
         fileManager.deleteCachedLogFiles()
-    }
-
-    // MARK: - Private
-
-    private func detectLoggerSpam(_ loggerMessage: String, category: LoggerCategory) -> Bool {
-        guard automaticallyFilterSpam else { return false }
-        let isSpam = (spamLastLogMessage == loggerMessage)
-
-        if isSpam {
-            spamMessagesFiltered += 1
-        } else {
-            if spamMessagesFiltered > spamCountWarningThreshold {
-                // If the spam was considerable, log a separate note so that we will have something in
-                // the log to reflect what was happening in the app
-                let count = spamMessagesFiltered
-                spamMessagesFiltered = 0
-                let category = spamLastLogCategory
-                let msg = spamLastLogMessage
-                // Reminder: this is a recursive (reentrant) call to log()
-                self.log("Redacted \(count) redundant messages: \"\(msg)\"", level: .info, category: category)
-            } else if spamMessagesFiltered > 0 {
-                spamMessagesFiltered = 0
-            }
-            spamLastLogMessage = loggerMessage
-            spamLastLogCategory = category
-        }
-        return isSpam
     }
 
     private func bundleExtraEvents(extra: [String: String]?,
