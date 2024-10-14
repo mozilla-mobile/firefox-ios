@@ -5,7 +5,10 @@
 "New Tab" = "Nueva pestanya";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Esto te permite de fer fotos y de puyar-las.";
+"NSCameraUsageDescription" = "Firefox usa a tuya camara ta escanear QRs y fer fotos y video.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox necesita Face ID pa acceder a os tuyos logins guardaus.";
 
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "Los puestos web que vesites pueden solicitar conoixer lo tuyo plazamiento.";

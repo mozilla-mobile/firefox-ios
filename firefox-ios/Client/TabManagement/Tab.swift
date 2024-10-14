@@ -1136,6 +1136,17 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
         return super.hitTest(point, with: event)
     }
 
+    // swiftlint:disable unneeded_override
+#if compiler(>=6)
+    override func evaluateJavaScript(
+        _ javaScriptString: String,
+        completionHandler: (
+            @MainActor @Sendable (Any?, (any Error)?) -> Void
+        )? = nil
+    ) {
+        super.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
+    }
+#else
     /// Override evaluateJavascript - should not be called directly on TabWebViews any longer
     /// We should only be calling evaluateJavascriptInDefaultContentWorld in the future
     @available(*,
@@ -1144,6 +1155,8 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     override func evaluateJavaScript(_ javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
         super.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
     }
+#endif
+    // swiftlint:enable unneeded_override
 
     // MARK: - ThemeApplicable
 

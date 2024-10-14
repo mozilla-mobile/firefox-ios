@@ -38,35 +38,8 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.numberOfSections, 3)
         XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .topSites, .pocket])
 
-        XCTAssertEqual(snapshot.itemIdentifiers(inSection: .header).count, 3)
-        XCTAssertEqual(snapshot.itemIdentifiers(inSection: .topSites).count, 2)
-        XCTAssertEqual(snapshot.itemIdentifiers(inSection: .pocket).count, 1)
-    }
-
-    // MARK: - updateHeaderSection
-    func test_updateHeaderSection_hasCorrectData() throws {
-        let dataSource = try XCTUnwrap(diffableDataSource)
-
-        dataSource.applyInitialSnapshot()
-        dataSource.updateHeaderSection()
-
-        let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfSections, 3)
-        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .topSites, .pocket])
-
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .header).count, 1)
-        XCTAssertEqual(snapshot.itemIdentifiers(inSection: .topSites).count, 2)
-        XCTAssertEqual(snapshot.itemIdentifiers(inSection: .pocket).count, 1)
-    }
-
-    func test_updateHeaderSection_withoutInitialSection_hasCorrectData() throws {
-        let dataSource = try XCTUnwrap(diffableDataSource)
-
-        dataSource.updateHeaderSection()
-
-        let snapshot = dataSource.snapshot()
-        XCTAssertEqual(snapshot.numberOfSections, 1)
-        XCTAssertEqual(snapshot.sectionIdentifiers, [.header])
-        XCTAssertEqual(snapshot.itemIdentifiers(inSection: .header).count, 1)
+        XCTAssertEqual(snapshot.itemIdentifiers(inSection: .topSites).count, 0)
+        XCTAssertEqual(snapshot.itemIdentifiers(inSection: .pocket).count, 0)
     }
 }

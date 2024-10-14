@@ -6,7 +6,7 @@ run the following:
 
 ```
 $ pipenv install --python 3.12
-$ pipenv run pytest test_integration.py::test_sync_history_from_desktop <...other test names...> --tps ../../../../test-fixtures/tps.xpi
+$ pipenv run pytest
 ```
 
 The tests will build and install the application to the simulator, which can

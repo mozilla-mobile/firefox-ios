@@ -392,8 +392,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             SentryIDSetting(settings: self, settingsDelegate: self),
             FasterInactiveTabs(settings: self, settingsDelegate: self),
             OpenFiftyTabsDebugOption(settings: self, settingsDelegate: self),
-            FirefoxSuggestSettings(settings: self, settingsDelegate: self),
-            PasswordGeneratorSetting(settings: self, settingsDelegate: self, windowUUID: windowUUID)
+            FirefoxSuggestSettings(settings: self, settingsDelegate: self)
         ]
 
         #if MOZ_CHANNEL_BETA || MOZ_CHANNEL_FENNEC

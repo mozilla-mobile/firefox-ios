@@ -67,7 +67,7 @@ extension LocalDesktopFolder: BookmarksFolderCell {
         let viewModel = BookmarksPanelViewModel(profile: profile,
                                                 bookmarksHandler: profile.places,
                                                 bookmarkFolderGUID: guid)
-        let nextController = BookmarksPanel(viewModel: viewModel, windowUUID: windowUUID)
+        let nextController = LegacyBookmarksPanel(viewModel: viewModel, windowUUID: windowUUID)
         nextController.title = .Bookmarks.Menu.DesktopBookmarks
         if let localizedString = LocalizedRootBookmarkFolderStrings[guid] {
             nextController.title = localizedString

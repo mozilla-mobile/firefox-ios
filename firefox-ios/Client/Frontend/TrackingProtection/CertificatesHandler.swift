@@ -70,18 +70,20 @@ class CertificateDelegate: NSObject, URLSessionDelegate {
         self.completion = completion
     }
 
-    func urlSession(_ session: URLSession, didReceive
-                    challenge: URLAuthenticationChallenge,
-                    completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+    func urlSession(
+        _ session: URLSession,
+        didReceive challenge: URLAuthenticationChallenge
+    ) async -> (
+        URLSession.AuthChallengeDisposition,
+        URLCredential?
+    ) {
         if let serverTrust = challenge.protectionSpace.serverTrust {
             let certificatesHandler = CertificatesHandler(serverTrust: serverTrust)
             self.completion(certificatesHandler.handleCertificates())
-            // Use the server trust
-            completionHandler(.useCredential, URLCredential(trust: serverTrust))
+            return (.useCredential, URLCredential(trust: serverTrust))
         } else {
-            // Call the completion handler with nil if serverTrust is not available
             self.completion(nil)
-            completionHandler(.cancelAuthenticationChallenge, nil)
+            return (.cancelAuthenticationChallenge, nil)
         }
     }
 }

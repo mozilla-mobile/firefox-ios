@@ -9,6 +9,7 @@ import ToolbarKit
 
 enum AppScreenState: Equatable {
     case browserViewController(BrowserViewControllerState)
+    case homepage(HomepageState)
     case mainMenu(MainMenuState)
     case mainMenuDetails(MainMenuDetailsState)
     case microsurvey(MicrosurveyState)
@@ -26,6 +27,8 @@ enum AppScreenState: Equatable {
         switch state {
         case .browserViewController(let state):
             return .browserViewController(BrowserViewControllerState.reducer(state, action))
+        case .homepage(let state):
+            return .homepage(HomepageState.reducer(state, action))
         case .mainMenu(let state):
             return .mainMenu(MainMenuState.reducer(state, action))
         case .mainMenuDetails(let state):
@@ -57,6 +60,7 @@ enum AppScreenState: Equatable {
     var associatedAppScreen: AppScreen {
         switch self {
         case .browserViewController: return .browserViewController
+        case .homepage: return .homepage
         case .mainMenu: return .mainMenu
         case .mainMenuDetails: return .mainMenuDetails
         case .microsurvey: return .microsurvey
@@ -75,6 +79,7 @@ enum AppScreenState: Equatable {
     var windowUUID: WindowUUID? {
         switch self {
         case .browserViewController(let state): return state.windowUUID
+        case .homepage(let state): return state.windowUUID
         case .mainMenu(let state): return state.windowUUID
         case .mainMenuDetails(let state): return state.windowUUID
         case .microsurvey(let state): return state.windowUUID
@@ -127,6 +132,8 @@ struct ActiveScreensState: Equatable {
             switch action.screen {
             case .browserViewController:
                 screens.append(.browserViewController(BrowserViewControllerState(windowUUID: uuid)))
+            case .homepage:
+                screens.append(.homepage(HomepageState(windowUUID: uuid)))
             case .mainMenu:
                 screens.append(.mainMenu(MainMenuState(windowUUID: uuid)))
             case .mainMenuDetails:

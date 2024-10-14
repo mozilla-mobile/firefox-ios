@@ -83,7 +83,7 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     private lazy var reloadButton: PrimaryRoundedButton = .build { button in
-        button.addTarget(self, action: #selector(self.didTapSubmit), for: .touchUpInside)
+        button.addTarget(self, action: #selector(self.didTapReload), for: .touchUpInside)
         button.isEnabled = true
     }
 
@@ -221,8 +221,14 @@ final class NativeErrorPageViewController: UIViewController,
         reloadButton.applyTheme(theme: theme)
     }
 
-    // TODO: FXIOS-9860 #21645 Integration with Redux - reload button
     @objc
-    private func didTapSubmit() {
+    private func didTapReload() {
+        store.dispatch(
+            GeneralBrowserAction(
+                isNativeErrorPage: true,
+                windowUUID: windowUUID,
+                actionType: GeneralBrowserActionType.reloadWebsite
+            )
+        )
     }
 }

@@ -4,9 +4,15 @@
 
 import Foundation
 import Common
+import Redux
 
-final class HomepageViewController: UIViewController, ContentContainable, Themeable {
+final class HomepageViewController: UIViewController,
+                                    UICollectionViewDelegate,
+                                    ContentContainable,
+                                    Themeable,
+                                    StoreSubscriber {
     // MARK: - Typealiases
+    typealias SubscriberStateType = HomepageState
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
 
     // MARK: - ContentContainable variables
@@ -25,6 +31,7 @@ final class HomepageViewController: UIViewController, ContentContainable, Themea
     private var dataSource: HomepageDiffableDataSource?
     private var layoutConfiguration = HomepageSectionLayoutProvider().createCompositionalLayout()
     private var logger: Logger
+    private var homepageState: HomepageState
 
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
@@ -36,7 +43,10 @@ final class HomepageViewController: UIViewController, ContentContainable, Themea
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.logger = logger
+        homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
+
+        subscribeToRedux()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -44,6 +54,7 @@ final class HomepageViewController: UIViewController, ContentContainable, Themea
     }
 
     deinit {
+        unsubscribeFromRedux()
         notificationCenter.removeObserver(self)
     }
 
@@ -54,12 +65,54 @@ final class HomepageViewController: UIViewController, ContentContainable, Themea
         configureCollectionView()
         configureDataSource()
 
-        dataSource?.applyInitialSnapshot()
+        store.dispatch(
+            HomepageAction(
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.initialize
+            )
+        )
 
         listenForThemeChange(view)
         applyTheme()
     }
 
+    // MARK: - Redux
+    func subscribeToRedux() {
+        let action = ScreenAction(
+            windowUUID: windowUUID,
+            actionType: ScreenActionType.showScreen,
+            screen: .homepage
+        )
+        store.dispatch(action)
+
+        let uuid = windowUUID
+        store.subscribe(self, transform: {
+            return $0.select({ appState in
+                return HomepageState(
+                    appState: appState,
+                    uuid: uuid
+                )
+            })
+        })
+    }
+
+    func newState(state: HomepageState) {
+        homepageState = state
+        if homepageState.loadInitialData {
+            dataSource?.applyInitialSnapshot()
+        }
+    }
+
+    func unsubscribeFromRedux() {
+        let action = ScreenAction(
+            windowUUID: windowUUID,
+            actionType: ScreenActionType.closeScreen,
+            screen: .homepage
+        )
+        store.dispatch(action)
+    }
+
+    // MARK: - Theming
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer1
@@ -88,14 +141,14 @@ final class HomepageViewController: UIViewController, ContentContainable, Themea
     private func configureCollectionView() {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layoutConfiguration)
 
-        // TODO: FXIOS-10163 - Update with proper cells
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.register(HomepageHeaderCell.self, forCellWithReuseIdentifier: HomepageHeaderCell.cellIdentifier)
 
         collectionView.keyboardDismissMode = .onDrag
         collectionView.showsVerticalScrollIndicator = false
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.backgroundColor = .clear
         collectionView.accessibilityIdentifier = a11y.collectionView
+        collectionView.delegate = self
 
         self.collectionView = collectionView
 
@@ -123,21 +176,53 @@ final class HomepageViewController: UIViewController, ContentContainable, Themea
         for item: HomepageDiffableDataSource.HomeItem,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
-        // TODO: FXIOS-10163 - Dummy collection cells, to update with proper cells
-        guard let cell: UICollectionViewCell = collectionView?.dequeueReusableCell(
-            withReuseIdentifier: "cell",
-            for: indexPath
-        ) else {
+        guard let section = HomepageSection(rawValue: indexPath.section) else {
+            self.logger.log(
+                "Section should not have been nil, something went wrong",
+                level: .fatal,
+                category: .homepage
+            )
             return UICollectionViewCell()
         }
 
-        cell.contentView.backgroundColor = .systemBlue
+        switch section {
+        case .header:
+            let cell = collectionView?.dequeueReusableCell(
+                withReuseIdentifier: HomepageHeaderCell.cellIdentifier,
+                for: indexPath
+            )
+            guard let headerCell = cell as? HomepageHeaderCell else {
+                return UICollectionViewCell()
+            }
+            headerCell.configure(
+                headerState: homepageState.headerState,
+                showiPadSetup: shouldUseiPadSetup()
+            ) { [weak self] in
+                guard let self else { return }
+                store.dispatch(
+                    HeaderAction(
+                        windowUUID: self.windowUUID,
+                        actionType: HeaderActionType.toggleHomepageMode
+                    )
+                )
+            }
+            headerCell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            return headerCell
+        default:
+            return UICollectionViewCell()
+        }
+    }
 
-        let label = UILabel(frame: cell.contentView.bounds)
-        label.textAlignment = .center
-        label.text = item.title
-        label.textColor = .white
-        cell.contentView.addSubview(label)
-        return cell
+    // MARK: UICollectionViewDelegate
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // TODO: FXIOS-10162 - Dummy trigger to update with proper triggers
+
+        guard let section = HomepageSection(rawValue: indexPath.section) else {
+            return
+        }
+        switch section {
+        default:
+            return
+        }
     }
 }

@@ -8,10 +8,6 @@ import ComponentLibrary
 
 public final class MenuMainView: UIView,
                                  MenuTableViewDataDelegate, ThemeApplicable {
-    private struct UX {
-        static let headerLineOffset: CGFloat = 35
-    }
-
     // MARK: - UI Elements
     private var tableView: MenuTableView = .build()
     public var accountHeaderView: HeaderView = .build()
@@ -72,13 +68,9 @@ public final class MenuMainView: UIView,
     }
 
     private func handleUpdateHeaderLineView() {
-        tableView.updateHeaderLineView = { [weak self] scrollOffset in
+        tableView.updateHeaderLineView = { [weak self] isHidden in
             guard let self else { return }
-            if scrollOffset >= UX.headerLineOffset {
-                self.accountHeaderView.updateHeaderLineView(isHidden: false)
-            } else {
-                self.accountHeaderView.updateHeaderLineView(isHidden: true)
-            }
+            self.accountHeaderView.updateHeaderLineView(isHidden: isHidden)
         }
     }
 

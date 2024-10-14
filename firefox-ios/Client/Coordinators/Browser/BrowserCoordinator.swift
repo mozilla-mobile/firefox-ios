@@ -129,7 +129,8 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showHomepage() {
-        let homepageController = HomepageViewController(windowUUID: windowUUID)
+        let homepageController = self.homepageViewController ?? HomepageViewController(windowUUID: windowUUID)
+
         guard browserViewController.embedContent(homepageController) else {
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
             return
@@ -247,8 +248,8 @@ class BrowserCoordinator: BaseCoordinator,
 
         logger.log("Handling a route", level: .info, category: .coordinator)
         switch route {
-        case let .searchQuery(query):
-            handle(query: query)
+        case let .searchQuery(query, isPrivate):
+            handle(query: query, isPrivate: isPrivate)
 
         case let .search(url, isPrivate, options):
             handle(url: url, isPrivate: isPrivate, options: options)
@@ -325,8 +326,8 @@ class BrowserCoordinator: BaseCoordinator,
         }
     }
 
-    private func handle(query: String) {
-        browserViewController.handle(query: query)
+    private func handle(query: String, isPrivate: Bool) {
+        browserViewController.handle(query: query, isPrivate: isPrivate)
     }
 
     private func handle(url: URL?, isPrivate: Bool, options: Set<Route.SearchOptions>? = nil) {
@@ -490,9 +491,12 @@ class BrowserCoordinator: BaseCoordinator,
         guard !childCoordinators.contains(where: { $0 is MainMenuCoordinator }) else { return nil }
 
         let navigationController = DismissableNavigationViewController()
-        navigationController.sheetPresentationController?.detents = [.medium(), .large()]
-        navigationController.sheetPresentationController?.prefersGrabberVisible = true
-        setiPadLayoutDetents(for: navigationController)
+        if navigationController.shouldUseiPadSetup() {
+            navigationController.modalPresentationStyle = .formSheet
+        } else {
+            navigationController.sheetPresentationController?.detents = [.medium(), .large()]
+            navigationController.sheetPresentationController?.prefersGrabberVisible = true
+        }
 
         let coordinator = MainMenuCoordinator(
             router: DefaultRouter(navigationController: navigationController),
@@ -636,6 +640,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     @MainActor
+    @preconcurrency
     func showSavedLoginAutofill(tabURL: URL, currentRequestId: String, field: FocusFieldType) {
         let bottomSheetCoordinator = makeCredentialAutofillCoordinator()
         bottomSheetCoordinator.showSavedLoginAutofill(tabURL: tabURL, currentRequestId: currentRequestId, field: field)

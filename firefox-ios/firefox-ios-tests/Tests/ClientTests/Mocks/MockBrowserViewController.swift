@@ -78,7 +78,7 @@ class MockBrowserViewController: BrowserViewController {
         openBlankNewTabCount += 1
     }
 
-    override func handle(query: String) {
+    override func handle(query: String, isPrivate: Bool) {
         handleQueryCalled = true
         handleQuery = query
         handleQueryCount += 1

@@ -158,7 +158,7 @@ class AutofillTelemetryBase {
     const extra = this.#initFormEventExtra("unavailable");
 
     for (const fieldDetail of fieldDetails) {
-      let { filledState, filledValue } = data.get(fieldDetail.elementId);
+      let { filledState, filledValue } = data.get(fieldDetail.elementId) ?? {};
       switch (filledState) {
         case FIELD_STATES.AUTO_FILLED:
           filledState = "autofilled";
@@ -187,14 +187,8 @@ class AutofillTelemetryBase {
     this.recordGleanFormEvent("formCleared", flowId, extra);
   }
 
-  recordFormEvent(method, flowId, extra) {
-    Services.telemetry.recordEvent(
-      this.EVENT_CATEGORY,
-      method,
-      this.EVENT_OBJECT_FORM_INTERACTION,
-      flowId,
-      extra
-    );
+  recordFormEvent(_method, _flowId, _extra) {
+    throw new Error("Not implemented.");
   }
 
   recordGleanFormEvent(_eventName, _flowId, _extra) {
@@ -223,11 +217,16 @@ class AutofillTelemetryBase {
   }
 
   recordDoorhangerEvent(method, object, flowId) {
-    Services.telemetry.recordEvent(this.EVENT_CATEGORY, method, object, flowId);
+    const eventName = `${method}_${object}`.replace(/(_[a-z])/g, c =>
+      c[1].toUpperCase()
+    );
+    Glean[this.EVENT_CATEGORY][eventName]?.record({ value: flowId });
   }
 
   recordManageEvent(method) {
-    Services.telemetry.recordEvent(this.EVENT_CATEGORY, method, "manage");
+    const eventName =
+      method.replace(/(_[a-z])/g, c => c[1].toUpperCase()) + "Manage";
+    Glean[this.EVENT_CATEGORY][eventName]?.record();
   }
 
   recordAutofillProfileCount(_count) {
@@ -302,8 +301,8 @@ class AutofillTelemetryBase {
 
 export class AddressTelemetry extends AutofillTelemetryBase {
   EVENT_CATEGORY = "address";
-  EVENT_OBJECT_FORM_INTERACTION = "address_form";
-  EVENT_OBJECT_FORM_INTERACTION_EXT = "address_form_ext";
+  EVENT_OBJECT_FORM_INTERACTION = "AddressForm";
+  EVENT_OBJECT_FORM_INTERACTION_EXT = "AddressFormExt";
 
   SCALAR_DETECTED_SECTION_COUNT =
     "formautofill.addresses.detected_sections_count";
@@ -372,22 +371,16 @@ export class AddressTelemetry extends AutofillTelemetryBase {
       }
     }
 
-    Services.telemetry.recordEvent(
-      this.EVENT_CATEGORY,
-      method,
-      this.EVENT_OBJECT_FORM_INTERACTION,
-      flowId,
-      extra
-    );
+    const eventMethod = method.replace(/(_[a-z])/g, c => c[1].toUpperCase());
+    Glean.address[eventMethod + this.EVENT_OBJECT_FORM_INTERACTION]?.record({
+      value: flowId,
+      ...extra,
+    });
 
     if (Object.keys(extExtra).length) {
-      Services.telemetry.recordEvent(
-        this.EVENT_CATEGORY,
-        method,
-        this.EVENT_OBJECT_FORM_INTERACTION_EXT,
-        flowId,
-        extExtra
-      );
+      Glean.address[
+        eventMethod + this.EVENT_OBJECT_FORM_INTERACTION_EXT
+      ]?.record({ value: flowId, ...extExtra });
     }
   }
 
@@ -398,7 +391,7 @@ export class AddressTelemetry extends AutofillTelemetryBase {
 
 class CreditCardTelemetry extends AutofillTelemetryBase {
   EVENT_CATEGORY = "creditcard";
-  EVENT_OBJECT_FORM_INTERACTION = "cc_form_v2";
+  EVENT_OBJECT_FORM_INTERACTION = "CcFormV2";
 
   SCALAR_DETECTED_SECTION_COUNT =
     "formautofill.creditCards.detected_sections_count";
@@ -423,6 +416,15 @@ class CreditCardTelemetry extends AutofillTelemetryBase {
   recordGleanFormEvent(eventName, flowId, extra) {
     extra.flow_id = flowId;
     Glean.formautofillCreditcards[eventName].record(extra);
+  }
+
+  recordFormEvent(method, flowId, aExtra) {
+    // Don't modify the passed-in aExtra as it's reused.
+    const extra = Object.assign({ value: flowId }, aExtra);
+    const eventMethod = method.replace(/(_[a-z])/g, c => c[1].toUpperCase());
+    Glean.creditcard[eventMethod + this.EVENT_OBJECT_FORM_INTERACTION]?.record(
+      extra
+    );
   }
 
   recordNumberOfUse(records) {

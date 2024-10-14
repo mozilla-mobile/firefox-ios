@@ -27,7 +27,7 @@ enum HomepageSectionType: Int, CaseIterable {
 
     var cellIdentifier: String {
         switch self {
-        case .homepageHeader: return HomepageHeaderCell.cellIdentifier
+        case .homepageHeader: return LegacyHomepageHeaderCell.cellIdentifier
         case .messageCard: return HomepageMessageCardCell.cellIdentifier
         // Top sites has more than 1 cell type, dequeuing is done through FxHomeSectionHandler protocol
         case .topSites: return ""
@@ -42,7 +42,7 @@ enum HomepageSectionType: Int, CaseIterable {
     }
 
     static var cellTypes: [ReusableCell.Type] {
-        return [HomepageHeaderCell.self,
+        return [LegacyHomepageHeaderCell.self,
                 HomepageMessageCardCell.self,
                 TopSiteItemCell.self,
                 EmptyTopSiteCell.self,

@@ -8,6 +8,11 @@ import Foundation
 /// When adding new identifiers, please respect alphabetical order.
 /// Sing the song if you must.
 public struct StandardImageIdentifiers {
+    // Icon size 8x8
+    public struct ExtraSmall {
+        public static let chevronDown = "chevronDownExtraSmall"
+    }
+
     // Icon size 16x16
     public struct Small {
         public static let externalLink = "externalLinkSmall"

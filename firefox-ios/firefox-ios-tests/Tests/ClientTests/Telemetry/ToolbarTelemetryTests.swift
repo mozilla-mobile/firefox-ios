@@ -160,4 +160,9 @@ final class ToolbarTelemetryTests: XCTestCase {
         let resultValue = try XCTUnwrap(GleanMetrics.Toolbar.dataClearanceButtonTapped.testGetValue())
         XCTAssertEqual(resultValue[0].extra?["is_private"], "true")
     }
+
+    func testRecordToolbarWhenLocationDraggedThenGleanIsCalled() throws {
+        subject?.dragInteractionStarted()
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Awesomebar.dragLocationBar)
+    }
 }

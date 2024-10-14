@@ -7,6 +7,22 @@ import Common
 
 /// Holds section layout logic for the new homepage as part of the rebuild project
 final class HomepageSectionLayoutProvider {
+    struct UX {
+        static let bottomSpacing: CGFloat = 30
+        static let standardInset: CGFloat = 16
+        static let iPadInset: CGFloat = 50
+
+        static func leadingInset(
+            traitCollection: UITraitCollection,
+            interfaceIdiom: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom
+        ) -> CGFloat {
+            guard interfaceIdiom != .phone else { return standardInset }
+
+            // Handles multitasking on iPad
+            return traitCollection.horizontalSizeClass == .regular ? iPadInset : standardInset
+        }
+    }
+
     private var logger: Logger
 
     init(logger: Logger = DefaultLogger.shared) {
@@ -23,22 +39,46 @@ final class HomepageSectionLayoutProvider {
                 )
                 return nil
             }
-            return self.createLayoutSection(for: section)
+            return self.createLayoutSection(for: section, with: environment.traitCollection)
         }
     }
 
-    // TODO: FXIOS-10163 - Update layout section with appropriate views + integrate with redux
+    // TODO: FXIOS-10162 - Update layout section with appropriate views + integrate with redux
     private func createLayoutSection(
-        for section: HomepageSection
+        for section: HomepageSection,
+        with traitCollection: UITraitCollection
     ) -> NSCollectionLayoutSection {
         switch section {
         case .header:
-            return createDefaultSectionLayout()
+            return createHeaderSectionLayout(for: traitCollection)
         case .topSites:
             return createFirstSectionLayout()
         case .pocket:
             return createDefaultSectionLayout()
         }
+    }
+
+    private func createHeaderSectionLayout(for traitCollection: UITraitCollection) -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                              heightDimension: .estimated(100))
+
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                               heightDimension: .estimated(100))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
+
+        let section = NSCollectionLayoutSection(group: group)
+
+        let leadingInset = UX.leadingInset(traitCollection: traitCollection)
+
+        section.contentInsets = NSDirectionalEdgeInsets(
+            top: UX.standardInset,
+            leading: leadingInset,
+            bottom: UX.bottomSpacing,
+            trailing: leadingInset)
+
+        return section
     }
 
     // TODO: FXIOS-10165 - Update with proper top sites section layout
