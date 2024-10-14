@@ -89,6 +89,8 @@ public class DefaultLogger: Logger {
         fileManager.deleteCachedLogFiles()
     }
 
+    // MARK: - Private
+
     private func bundleExtraEvents(extra: [String: String]?,
                                    description: String?) -> [String: String] {
         var extraEvents: [String: String] = [:]
