@@ -50,7 +50,6 @@ class TrackingProtectionTests: BaseTestCase {
             )
         }
         app.otherElements.element(matching: .any, identifier: reloadWithWithoutProtectionButton).tap()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: 5)
     }
 
     private func enableStrictMode() {
@@ -61,14 +60,21 @@ class TrackingProtectionTests: BaseTestCase {
 
     func checkTrackingProtectionOn() -> Bool {
         var trackingProtection = true
-        if iPad() {
-            sleep(1)
-        }
-        if app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].label
-            == secureTrackingProtectionOffLabel {
+        waitElementHittable(element: app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon], timeout: 5)
+        app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].tap()
+        mozWaitForElementToExist(app.buttons["TrackingProtection.CloseButton"])
+        if app.otherElements.staticTexts["You turned off protections"].exists {
             trackingProtection = false
         }
+        app.buttons["TrackingProtection.CloseButton"].tap()
         return trackingProtection
+    }
+
+    func waitElementHittable(element: XCUIElement, timeout: Double) {
+        let predicate = NSPredicate(format: "exists == true && hittable == true")
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
+        let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
+        XCTAssertEqual(result, .completed, "Element did not become hittable in time.")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307059
@@ -244,39 +250,53 @@ class TrackingProtectionTests: BaseTestCase {
         enableStrictMode()
         navigator.nowAt(BrowserTab)
         navigator.openURL(trackingProtectionTestUrl)
-
+        // Check Tracking protection On
         if checkTrackingProtectionOn() {
-            XCTAssertEqual(
-                app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].label,
-                secureTrackingProtectionOnLabel
-            )
-            navigator.nowAt(BrowserTab)
+            app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].tap()
+            mozWaitForElementToExist(app.otherElements.staticTexts["Firefox is on guard"])
+            XCTAssertTrue(app.otherElements.staticTexts["Firefox is on guard"].exists)
+            XCTAssertTrue(app.otherElements.staticTexts["TrackingProtection.TrackersBlockedLabel"]
+                .label == "No trackers found")
+            app.buttons["TrackingProtection.CloseButton"].tap()
             reloadWithWithoutTrackingProtection(label: "Without Tracking Protection")
-            XCTAssertEqual(
-                app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].label,
-                secureTrackingProtectionOffLabel
-            )
+            navigator.nowAt(BrowserTab)
+            waitElementHittable(element: app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon], timeout: 5)
+            app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].tap()
+            mozWaitForElementToExist(app.otherElements.staticTexts["You turned off protections"])
+            XCTAssertTrue(app.otherElements.staticTexts["You turned off protections"].exists)
+            XCTAssertFalse(app.otherElements.staticTexts["TrackingProtection.TrackersBlockedLabel"].exists)
+            app.buttons["TrackingProtection.CloseButton"].tap()
             reloadWithWithoutTrackingProtection(label: "With Tracking Protection")
-            XCTAssertEqual(
-                app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].label,
-                secureTrackingProtectionOnLabel
-            )
+            navigator.nowAt(BrowserTab)
+            waitElementHittable(element: app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon], timeout: 5)
+            app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].tap()
+            mozWaitForElementToExist(app.otherElements.staticTexts["Firefox is on guard"])
+            XCTAssertTrue(app.otherElements.staticTexts["Firefox is on guard"].exists)
+            XCTAssertTrue(app.otherElements.staticTexts["TrackingProtection.TrackersBlockedLabel"].exists)
+            app.buttons["TrackingProtection.CloseButton"].tap()
         } else {
-            XCTAssertEqual(
-                app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].label,
-                secureTrackingProtectionOffLabel
-            )
+            app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].tap()
+            mozWaitForElementToExist(app.otherElements.staticTexts["You turned off protections"])
+            XCTAssertTrue(app.otherElements.staticTexts["You turned off protections"].exists)
+            XCTAssertFalse(app.otherElements.staticTexts["TrackingProtection.TrackersBlockedLabel"].exists)
+            app.buttons["TrackingProtection.CloseButton"].tap()
             navigator.nowAt(BrowserTab)
             reloadWithWithoutTrackingProtection(label: "With Tracking Protection")
-            XCTAssertEqual(
-                app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].label,
-                secureTrackingProtectionOnLabel
-            )
+            navigator.nowAt(BrowserTab)
+            waitElementHittable(element: app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon], timeout: 5)
+            app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].tap()
+            mozWaitForElementToExist(app.otherElements.staticTexts["Firefox is on guard"])
+            XCTAssertTrue(app.otherElements.staticTexts["Firefox is on guard"].exists)
+            XCTAssertTrue(app.otherElements.staticTexts["TrackingProtection.TrackersBlockedLabel"].exists)
+            app.buttons["TrackingProtection.CloseButton"].tap()
             reloadWithWithoutTrackingProtection(label: "Without Tracking Protection")
-            XCTAssertEqual(
-                app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].label,
-                secureTrackingProtectionOffLabel
-            )
+            navigator.nowAt(BrowserTab)
+            waitElementHittable(element: app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon], timeout: 5)
+            app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon].tap()
+            mozWaitForElementToExist(app.otherElements.staticTexts["You turned off protections"])
+            XCTAssertTrue(app.otherElements.staticTexts["You turned off protections"].exists)
+            XCTAssertFalse(app.otherElements.staticTexts["TrackingProtection.TrackersBlockedLabel"].exists)
+            app.buttons["TrackingProtection.CloseButton"].tap()
         }
     }
 }
