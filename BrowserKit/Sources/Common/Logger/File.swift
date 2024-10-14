@@ -8,6 +8,7 @@ protocol LoggerSpamFilter {
     /// - Parameters:
     ///   - loggerMessage: the message about to be logged.
     ///   - category: the log category.
+    ///   - logger: a reference to the Logger itself.
     /// - Returns: true if the message is redudant spam.
     func detectLoggerSpam(_ loggerMessage: String,
                           category: LoggerCategory,
