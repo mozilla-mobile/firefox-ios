@@ -397,17 +397,17 @@ class CreditCardBottomSheetViewModelTests: XCTestCase {
         waitForExpectations(timeout: 5.0)
     }
 
-//    func test_updateCreditCardList_withoutSelectedSavedCardState_doesNotCallListCreditCards() throws {
-//        let subject = try XCTUnwrap(viewModel)
-//
-//        let expectation = expectation(description: "wait for credit card to be added")
-//        expectation.isInverted = true
-//        subject.creditCard = nil
-//        subject.decryptedCreditCard = nil
-//
-//        subject.updateCreditCardList({ cards in
-//            expectation.fulfill()
-//        })
-//        waitForExpectations(timeout: 1.0)
-//    }
+    func test_updateCreditCardList_withoutSelectedSavedCardState_doesNotCallListCreditCards() throws {
+        let subject = try XCTUnwrap(viewModel)
+
+        let expectation = expectation(description: "wait for credit card to be added")
+        expectation.isInverted = true
+        subject.creditCard = nil
+        subject.decryptedCreditCard = nil
+
+        subject.updateCreditCardList({ cards in
+            expectation.fulfill()
+        })
+        waitForExpectations(timeout: 1.0)
+    }
 }
