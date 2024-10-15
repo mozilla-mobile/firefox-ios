@@ -68,12 +68,12 @@ class TabPanelMiddlewareAction: Action {
     let tabDisplayModel: TabDisplayModel?
     let inactiveTabModels: [InactiveTabsModel]?
     let toastType: ToastType??
-    let scrollBehavior: TabScrollBehaviorModel?
+    let scrollBehavior: TabScrollBehavior?
 
     init(tabDisplayModel: TabDisplayModel? = nil,
          inactiveTabModels: [InactiveTabsModel]? = nil,
          toastType: ToastType? = nil,
-         scrollBehavior: TabScrollBehaviorModel? = nil,
+         scrollBehavior: TabScrollBehavior? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.tabDisplayModel = tabDisplayModel

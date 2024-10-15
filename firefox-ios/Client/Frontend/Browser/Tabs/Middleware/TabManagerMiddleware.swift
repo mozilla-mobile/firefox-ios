@@ -398,7 +398,7 @@ class TabManagerMiddleware {
         // Scroll to the restored tab so the user knows it was restored, especially if it was restored off screen
         // (e.g. restoring the tab in the last row, first column)
         let tabRestorePosition = tabManager.backupCloseTab?.restorePosition
-        let scrollBehavior: TabScrollBehaviorModel = tabRestorePosition != nil
+        let scrollBehavior: TabScrollBehavior = tabRestorePosition != nil
             ? .scrollToTabAtIndex(index: tabRestorePosition!, shouldAnimate: true)
             : .scrollToSelectedTab(shouldAnimate: true)
         let scrollAction = TabPanelMiddlewareAction(tabDisplayModel: model,

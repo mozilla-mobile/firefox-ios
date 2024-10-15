@@ -4,8 +4,7 @@
 
 import Foundation
 
-enum TabScrollBehaviorModel: Equatable {
-    case noScroll
+enum TabScrollBehavior: Equatable {
     case scrollToSelectedTab(shouldAnimate: Bool)
     case scrollToTabAtIndex(index: Int, shouldAnimate: Bool)
 }
