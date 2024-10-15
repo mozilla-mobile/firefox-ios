@@ -92,10 +92,10 @@ class TabManagerMiddleware {
             let isPrivate = action.panelType == .privateTabs
             let tabState = self.getTabsDisplayModel(
                 for: isPrivate,
-                scrollBehavior: .scrollToSelectedTab(shouldAnimate: false),
                 uuid: action.windowUUID
             )
             let action = TabPanelMiddlewareAction(tabDisplayModel: tabState,
+                                                  scrollBehavior: .scrollToSelectedTab(shouldAnimate: false),
                                                   windowUUID: action.windowUUID,
                                                   actionType: TabPanelMiddlewareActionType.didLoadTabPanel)
             store.dispatch(action)
@@ -104,7 +104,6 @@ class TabManagerMiddleware {
             let isPrivate = action.panelType == .privateTabs
             let tabState = self.getTabsDisplayModel(
                 for: isPrivate,
-                scrollBehavior: .scrollToSelectedTab(shouldAnimate: false),
                 uuid: action.windowUUID
             )
             let action = TabPanelMiddlewareAction(tabDisplayModel: tabState,
@@ -204,7 +203,6 @@ class TabManagerMiddleware {
     /// - Parameter isPrivateMode: if Private mode is enabled or not
     /// - Returns:  initial model for `TabDisplayPanel`
     private func getTabsDisplayModel(for isPrivateMode: Bool,
-                                     scrollBehavior: TabScrollBehaviorModel,
                                      uuid: WindowUUID) -> TabDisplayModel {
         let tabs = refreshTabs(for: isPrivateMode, uuid: uuid)
         let inactiveTabs = refreshInactiveTabs(for: isPrivateMode, uuid: uuid)
@@ -212,8 +210,7 @@ class TabManagerMiddleware {
                                               tabs: tabs,
                                               normalTabsCount: normalTabsCountText(for: uuid),
                                               inactiveTabs: inactiveTabs,
-                                              isInactiveTabsExpanded: false,
-                                              scrollBehavior: scrollBehavior)
+                                              isInactiveTabsExpanded: false)
         return tabDisplayModel
     }
 
@@ -273,11 +270,7 @@ class TabManagerMiddleware {
         let tab = tabManager.addTab(urlRequest, isPrivate: isPrivate)
         tabManager.selectTab(tab)
 
-        let model = getTabsDisplayModel(
-            for: isPrivate,
-            scrollBehavior: .scrollToSelectedTab(shouldAnimate: false),
-            uuid: uuid
-        )
+        let model = getTabsDisplayModel(for: isPrivate, uuid: uuid)
         let refreshAction = TabPanelMiddlewareAction(tabDisplayModel: model,
                                                      windowUUID: uuid,
                                                      actionType: TabPanelMiddlewareActionType.refreshTabs)
@@ -291,6 +284,12 @@ class TabManagerMiddleware {
                                                  windowUUID: uuid,
                                                  actionType: GeneralBrowserActionType.showOverlay)
         store.dispatch(overlayAction)
+
+        let scrollAction = TabPanelMiddlewareAction(tabDisplayModel: model,
+                                                    scrollBehavior: .scrollToSelectedTab(shouldAnimate: false),
+                                                    windowUUID: uuid,
+                                                    actionType: TabPanelMiddlewareActionType.scrollToTab)
+        store.dispatch(scrollAction)
     }
 
     /// Move tab on `TabManager` array to support drag and drop
@@ -310,9 +309,7 @@ class TabManagerMiddleware {
                                fromIndex: moveTabData.originIndex,
                                toIndex: moveTabData.destinationIndex)
 
-        let model = getTabsDisplayModel(for: moveTabData.isPrivate,
-                                        scrollBehavior: .noScroll,
-                                        uuid: uuid)
+        let model = getTabsDisplayModel(for: moveTabData.isPrivate, uuid: uuid)
         let action = TabPanelMiddlewareAction(tabDisplayModel: model,
                                               windowUUID: uuid,
                                               actionType: TabPanelMiddlewareActionType.refreshTabs)
@@ -343,7 +340,7 @@ class TabManagerMiddleware {
     private func closeTabFromTabPanel(with tabUUID: TabUUID, uuid: WindowUUID, isPrivate: Bool) {
         Task {
             let shouldDismiss = await self.closeTab(with: tabUUID, uuid: uuid, isPrivate: isPrivate)
-            await self.triggerRefresh(shouldScrollToTab: false, uuid: uuid, isPrivate: isPrivate)
+            await self.triggerRefresh(uuid: uuid, isPrivate: isPrivate)
 
             if isPrivate && tabManager(for: uuid).privateTabs.isEmpty {
                 let didLoadAction = TabPanelViewAction(panelType: isPrivate ? .privateTabs : .tabs,
@@ -375,11 +372,8 @@ class TabManagerMiddleware {
 
     /// Trigger refreshTabs action after a change in `TabManager`
     @MainActor
-    private func triggerRefresh(shouldScrollToTab: Bool, uuid: WindowUUID, isPrivate: Bool) {
-        let model = getTabsDisplayModel(
-            for: isPrivate,
-            scrollBehavior: shouldScrollToTab ? .scrollToSelectedTab(shouldAnimate: false) : .noScroll,
-            uuid: uuid)
+    private func triggerRefresh(uuid: WindowUUID, isPrivate: Bool) {
+        let model = getTabsDisplayModel(for: isPrivate, uuid: uuid)
         let action = TabPanelMiddlewareAction(tabDisplayModel: model,
                                               windowUUID: uuid,
                                               actionType: TabPanelMiddlewareActionType.refreshTabs)
@@ -393,19 +387,25 @@ class TabManagerMiddleware {
               tabManager.backupCloseTab != nil
         else { return }
 
+        tabManager.undoCloseTab()
+
+        let model = getTabsDisplayModel(for: tabsState.isPrivateMode, uuid: uuid)
+        let refreshAction = TabPanelMiddlewareAction(tabDisplayModel: model,
+                                                     windowUUID: uuid,
+                                                     actionType: TabPanelMiddlewareActionType.refreshTabs)
+        store.dispatch(refreshAction)
+
         // Scroll to the restored tab so the user knows it was restored, especially if it was restored off screen
-        // (e.g. the tab in the last row, first column was restored)
+        // (e.g. restoring the tab in the last row, first column)
         let tabRestorePosition = tabManager.backupCloseTab?.restorePosition
         let scrollBehavior: TabScrollBehaviorModel = tabRestorePosition != nil
             ? .scrollToTabAtIndex(index: tabRestorePosition!, shouldAnimate: true)
             : .scrollToSelectedTab(shouldAnimate: true)
-        tabManager.undoCloseTab()
-
-        let model = getTabsDisplayModel(for: tabsState.isPrivateMode, scrollBehavior: scrollBehavior, uuid: uuid)
-        let action = TabPanelMiddlewareAction(tabDisplayModel: model,
-                                              windowUUID: uuid,
-                                              actionType: TabPanelMiddlewareActionType.refreshTabs)
-        store.dispatch(action)
+        let scrollAction = TabPanelMiddlewareAction(tabDisplayModel: model,
+                                                    scrollBehavior: scrollBehavior,
+                                                    windowUUID: uuid,
+                                                    actionType: TabPanelMiddlewareActionType.scrollToTab)
+        store.dispatch(scrollAction)
     }
 
     private func closeAllTabs(state: AppState, uuid: WindowUUID) {
@@ -417,7 +417,7 @@ class TabManagerMiddleware {
             await tabManager.removeAllTabs(isPrivateMode: tabsState.isPrivateMode)
 
             ensureMainThread { [self] in
-                let model = getTabsDisplayModel(for: tabsState.isPrivateMode, scrollBehavior: .noScroll, uuid: uuid)
+                let model = getTabsDisplayModel(for: tabsState.isPrivateMode, uuid: uuid)
                 let action = TabPanelMiddlewareAction(tabDisplayModel: model,
                                                       windowUUID: uuid,
                                                       actionType: TabPanelMiddlewareActionType.refreshTabs)
@@ -449,11 +449,18 @@ class TabManagerMiddleware {
         tabManager.undoCloseAllTabs()
 
         // The private tab panel is the only panel that stays open after a close all tabs action
-        let model = getTabsDisplayModel(for: true, scrollBehavior: .noScroll, uuid: uuid)
-        let action = TabPanelMiddlewareAction(tabDisplayModel: model,
-                                              windowUUID: uuid,
-                                              actionType: TabPanelMiddlewareActionType.refreshTabs)
-        store.dispatch(action)
+        let model = getTabsDisplayModel(for: true, uuid: uuid)
+        let refreshAction = TabPanelMiddlewareAction(tabDisplayModel: model,
+                                                     windowUUID: uuid,
+                                                     actionType: TabPanelMiddlewareActionType.refreshTabs)
+        store.dispatch(refreshAction)
+
+        // Scroll to the selected tab if all closed tabs are restored
+        let scrollAction = TabPanelMiddlewareAction(tabDisplayModel: model,
+                                                    scrollBehavior: .scrollToSelectedTab(shouldAnimate: true),
+                                                    windowUUID: uuid,
+                                                    actionType: TabPanelMiddlewareActionType.scrollToTab)
+        store.dispatch(scrollAction)
     }
 
     // MARK: - Inactive tabs helper
@@ -472,7 +479,7 @@ class TabManagerMiddleware {
 
             // Refresh the active tabs panel. Can only happen if the user is in normal browsering mode (not private).
             // Related: FXIOS-10010, FXIOS-9954, FXIOS-9999
-            let model = getTabsDisplayModel(for: false, scrollBehavior: .noScroll, uuid: uuid)
+            let model = getTabsDisplayModel(for: false, uuid: uuid)
             let refreshActiveTabsPanelAction = TabPanelMiddlewareAction(tabDisplayModel: model,
                                                                         windowUUID: uuid,
                                                                         actionType: TabPanelMiddlewareActionType.refreshTabs)
@@ -639,7 +646,7 @@ class TabManagerMiddleware {
     private func changePanel(_ panel: TabTrayPanelType, uuid: WindowUUID) {
         self.trackPanelChange(panel)
         let isPrivate = panel == TabTrayPanelType.privateTabs
-        let tabState = self.getTabsDisplayModel(for: isPrivate, scrollBehavior: .noScroll, uuid: uuid)
+        let tabState = self.getTabsDisplayModel(for: isPrivate, uuid: uuid)
         if panel != .syncedTabs {
             let action = TabPanelMiddlewareAction(tabDisplayModel: tabState,
                                                   windowUUID: uuid,

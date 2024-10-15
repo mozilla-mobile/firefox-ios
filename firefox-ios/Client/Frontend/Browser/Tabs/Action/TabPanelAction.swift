@@ -68,15 +68,18 @@ class TabPanelMiddlewareAction: Action {
     let tabDisplayModel: TabDisplayModel?
     let inactiveTabModels: [InactiveTabsModel]?
     let toastType: ToastType??
+    let scrollBehavior: TabScrollBehaviorModel?
 
     init(tabDisplayModel: TabDisplayModel? = nil,
          inactiveTabModels: [InactiveTabsModel]? = nil,
          toastType: ToastType? = nil,
+         scrollBehavior: TabScrollBehaviorModel? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.tabDisplayModel = tabDisplayModel
         self.inactiveTabModels = inactiveTabModels
         self.toastType = toastType
+        self.scrollBehavior = scrollBehavior
         super.init(windowUUID: windowUUID,
                    actionType: actionType)
     }
@@ -89,4 +92,5 @@ enum TabPanelMiddlewareActionType: ActionType {
     case refreshTabs
     case refreshInactiveTabs
     case showToast
+    case scrollToTab
 }
