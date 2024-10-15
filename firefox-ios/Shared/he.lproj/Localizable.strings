@@ -482,7 +482,7 @@
 "HomePanel.ContextMenu.Remove" = "הסרה";
 
 /* The title for the Remove Bookmark context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.RemoveBookmark" = "הסרה מהמועדפים";
+"HomePanel.ContextMenu.RemoveBookmark" = "הסרת סימנייה";
 
 /* The title for the Share context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Share" = "שיתוף";

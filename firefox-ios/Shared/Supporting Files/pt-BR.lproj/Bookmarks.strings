@@ -4,6 +4,9 @@
 /* Name of the top level bookmarks folder present in the folder selection menu of the`Edit Bookmark` screen */
 "Bookmarks.Menu.BookmarksTopLevelTitle.v131" = "Favoritos";
 
+/* The title for the Delete Bookmark button, in the Edit Bookmark popup screen which is summoned from the main menu's Save submenu, which will delete the currently bookmarked site from the user's bookmarks. */
+"Bookmarks.Menu.DeleteBookmark.v132" = "Excluir favorito";
+
 /* Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark. */
 "Bookmarks.Menu.DeletedBookmark.v131" = "“%@” excluído";
 

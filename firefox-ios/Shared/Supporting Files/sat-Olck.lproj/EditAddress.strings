@@ -136,3 +136,9 @@
 /* Suggestion to try again after an error occurred while trying to save an address. */
 "Addresses.Toast.AddressSaveRetrySuggestion.v129" = "ᱫᱩᱦᱲᱟᱹ ᱠᱩᱨᱩᱢᱩᱴᱩᱭ ᱢᱮ";
 
+/* Toast message confirming that an address has been successfully updated. */
+"Addresses.Toast.AddressUpdatedConfirmation.v129" = "ᱴᱷᱤᱠᱬᱟᱹ ᱠᱷᱚᱵᱚᱨ ᱦᱟᱹᱞᱤᱭᱟᱹᱠ ᱮᱱᱟ";
+
+/* Toast message confirming that an address has been successfully updated. */
+"Addresses.Toast.AddressUpdatedConfirmation.v132.v2" = "ᱴᱷᱤᱠᱬᱟᱹᱠᱚ ᱥᱟᱧᱪᱟᱣ ᱮᱱᱟ";
+
