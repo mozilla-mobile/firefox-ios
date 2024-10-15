@@ -37,21 +37,22 @@ export let FormLikeFactory = {
   },
 
   /**
-   * Create a FormLike object from an HTMLHtmlElement that is the root of the document
+   * Create a FormLike object from an element that is the root of the document
    *
    * Currently all <input> not in a <form> are one LoginForm but this
    * shouldn't be relied upon as the heuristics may change to detect multiple
    * "forms" (e.g. registration and login) on one page with a <form>.
    *
-   * @param {HTMLHtmlElement} aDocumentRoot
-   * @return {FormLike}
-   * @throws Error if aDocumentRoot isn't an HTMLHtmlElement
+   * @param {HTMLElement} aDocumentRoot
+   * @param {Object} aOptions
+   * @param {boolean} [aOptions.ignoreForm = false]
+   *        True to always use owner document as the `form`
+   * @return {formLike}
+   * @throws Error if aDocumentRoot is null
    */
-  createFromDocumentRoot(aDocumentRoot) {
-    if (!HTMLHtmlElement.isInstance(aDocumentRoot)) {
-      throw new Error(
-        "createFromDocumentRoot: aDocumentRoot must be an HTMLHtmlElement"
-      );
+  createFromDocumentRoot(aDocumentRoot, aOptions = {}) {
+    if (!aDocumentRoot) {
+      throw new Error("createFromDocumentRoot: aDocumentRoot is null");
     }
 
     let formLike = {
@@ -71,7 +72,7 @@ export let FormLikeFactory = {
       for (let el of aDocumentRoot.querySelectorAll("input, select")) {
         // Exclude elements inside the rootElement that are already in a <form> as
         // they will be handled by their own FormLike.
-        if (!el.form) {
+        if (!el.form || aOptions.ignoreForm) {
           elements.push(el);
         }
       }
@@ -95,23 +96,28 @@ export let FormLikeFactory = {
    * Note that two FormLikes created from the same field won't return the same FormLike object.
    * Use the `rootElement` property on the FormLike as a key instead.
    *
-   * @param {HTMLInputElement|HTMLSelectElement} aField - an <input> or <select> field in a document
+   * @param {HTMLInputElement|HTMLSelectElement} aField
+   *        an <input>, <select> or <iframe> field in a document
+   * @param {Object} aOptions
+   * @param {boolean} [aOptions.ignoreForm = false]
+   *        True to always use owner document as the `form`
    * @return {FormLike}
    * @throws Error if aField isn't a password or username field in a document
    */
-  createFromField(aField) {
+  createFromField(aField, aOptions = {}) {
     if (
       (!HTMLInputElement.isInstance(aField) &&
+        !HTMLIFrameElement.isInstance(aField) &&
         !HTMLSelectElement.isInstance(aField)) ||
       !aField.ownerDocument
     ) {
       throw new Error("createFromField requires a field in a document");
     }
 
-    const rootElement = this.findRootForField(aField);
+    const rootElement = this.findRootForField(aField, aOptions);
     return HTMLFormElement.isInstance(rootElement)
       ? this.createFromForm(rootElement)
-      : this.createFromDocumentRoot(rootElement);
+      : this.createFromDocumentRoot(rootElement, aOptions);
   },
 
   /**
@@ -142,13 +148,16 @@ export let FormLikeFactory = {
    * an ancestor Element of the username and password fields which doesn't
    * include any of the checkout fields.
    *
-   * @param {HTMLInputElement|HTMLSelectElement} aField - a field in a document
+   * @param {HTMLInputElement|HTMLSelectElement} aField
+   *        a field in a document
    * @return {HTMLElement} - the root element surrounding related fields
    */
-  findRootForField(aField) {
-    let form = aField.form || this.closestFormIgnoringShadowRoots(aField);
-    if (form) {
-      return form;
+  findRootForField(aField, { ignoreForm = false } = {}) {
+    if (!ignoreForm) {
+      const form = aField.form || this.closestFormIgnoringShadowRoots(aField);
+      if (form) {
+        return form;
+      }
     }
 
     return aField.ownerDocument.documentElement;

@@ -51,6 +51,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
     weak var parentCoordinator: SettingsFlowDelegate?
 
+    // MARK: - Data Settings
+    private var sendAnonymousUsageDataSetting: BoolSetting?
+    private var studiesToggleSetting: BoolSetting?
+
     // MARK: - Initializers
     init(with profile: Profile,
          and tabManager: TabManager,
@@ -65,6 +69,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         self.tabManager = tabManager
         self.settingsDelegate = delegate
         setupNavigationBar()
+        setupDataSettings()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -158,6 +163,31 @@ class AppSettingsTableViewController: SettingsTableViewController,
         default:
             break
         }
+    }
+
+    // MARK: Data settings setup
+
+    private func setupDataSettings() {
+        let anonymousUsageDataSetting = SendAnonymousUsageDataSetting(
+            prefs: profile.prefs,
+            delegate: settingsDelegate,
+            theme: themeManager.getCurrentTheme(for: windowUUID),
+            settingsDelegate: parentCoordinator
+        )
+
+        let studiesSetting = StudiesToggleSetting(
+            prefs: profile.prefs,
+            delegate: settingsDelegate,
+            theme: themeManager.getCurrentTheme(for: windowUUID),
+            settingsDelegate: parentCoordinator
+        )
+
+        anonymousUsageDataSetting.shouldSendUsageData = { value in
+            studiesSetting.updateSetting(for: value)
+        }
+
+        sendAnonymousUsageDataSetting = anonymousUsageDataSetting
+        studiesToggleSetting = studiesSetting
     }
 
     // MARK: - Generate Settings
@@ -318,17 +348,12 @@ class AppSettingsTableViewController: SettingsTableViewController,
     }
 
     private func getSupportSettings() -> [SettingSection] {
+        guard let sendAnonymousUsageDataSetting, let studiesToggleSetting else { return [] }
         let supportSettings = [
             ShowIntroductionSetting(settings: self, settingsDelegate: self),
             SendFeedbackSetting(settingsDelegate: parentCoordinator),
-            SendAnonymousUsageDataSetting(prefs: profile.prefs,
-                                          delegate: settingsDelegate,
-                                          theme: themeManager.getCurrentTheme(for: windowUUID),
-                                          settingsDelegate: parentCoordinator),
-            StudiesToggleSetting(prefs: profile.prefs,
-                                 delegate: settingsDelegate,
-                                 theme: themeManager.getCurrentTheme(for: windowUUID),
-                                 settingsDelegate: parentCoordinator),
+            sendAnonymousUsageDataSetting,
+            studiesToggleSetting,
             OpenSupportPageSetting(delegate: settingsDelegate,
                                    theme: themeManager.getCurrentTheme(for: windowUUID),
                                    settingsDelegate: parentCoordinator),
@@ -367,7 +392,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             SentryIDSetting(settings: self, settingsDelegate: self),
             FasterInactiveTabs(settings: self, settingsDelegate: self),
             OpenFiftyTabsDebugOption(settings: self, settingsDelegate: self),
-            FirefoxSuggestSettings(settings: self, settingsDelegate: self),
+            FirefoxSuggestSettings(settings: self, settingsDelegate: self)
         ]
 
         #if MOZ_CHANNEL_BETA || MOZ_CHANNEL_FENNEC

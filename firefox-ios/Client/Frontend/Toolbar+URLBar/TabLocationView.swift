@@ -46,6 +46,7 @@ class TabLocationView: UIView, FeatureFlaggable {
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     private var themeManager: ThemeManager = AppContainer.shared.resolve()
     let windowUUID: WindowUUID
+    let logger: Logger
 
     /// Tracking protection button, gets updated from tabDidChangeContentBlocking
     var blockerStatus: BlockerStatus = .noBlockedURLs {
@@ -169,8 +170,9 @@ class TabLocationView: UIView, FeatureFlaggable {
         return reloadButton
     }()
 
-    init(windowUUID: WindowUUID) {
+    init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
         self.windowUUID = windowUUID
+        self.logger = logger
         super.init(frame: .zero)
         setupNotifications(
             forObserver: self,
@@ -368,10 +370,11 @@ class TabLocationView: UIView, FeatureFlaggable {
     }
 
     func showTrackingProtectionButton(for url: URL?) {
+        guard let url else { return }
         ensureMainThread {
             let isValidHttpUrlProtocol = self.isValidHttpUrlProtocol(url)
-            let isReaderModeURL = url?.isReaderModeURL ?? false
-            let isFxHomeUrl = url?.isFxHomeUrl ?? false
+            let isReaderModeURL = url.isReaderModeURL
+            let isFxHomeUrl = url.isFxHomeUrl
             if !isFxHomeUrl, !isReaderModeURL, isValidHttpUrlProtocol, self.trackingProtectionButton.isHidden {
                 self.trackingProtectionButton.transform = UX.trackingProtectionxOffset
                 self.trackingProtectionButton.alpha = 0
@@ -538,6 +541,7 @@ extension TabLocationView: TabEventHandler {
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
 
     func tabDidChangeContentBlocking(_ tab: Tab) {
+        logger.log("Tab did change content blocking", level: .info, category: .adblock)
         guard let blocker = tab.contentBlocker else { return }
 
         ensureMainThread { [self] in

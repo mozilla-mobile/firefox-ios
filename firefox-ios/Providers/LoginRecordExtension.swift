@@ -22,7 +22,7 @@ extension LoginRecord {
     }
 }
 
-extension LoginRecord: Comparable {
+extension LoginRecord: Swift.Comparable {
     public static func < (lhs: LoginRecord, rhs: LoginRecord) -> Bool {
         lhs.hostname.titleFromHostname < rhs.hostname.titleFromHostname
     }

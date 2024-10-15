@@ -12,12 +12,16 @@ import WebKit
 private var debugTabCount = 0
 
 func mostRecentTab(inTabs tabs: [Tab]) -> Tab? {
-    var recent = tabs.first
+    guard var recent = tabs.first else {
+        return nil
+    }
+
     tabs.forEach { tab in
-        if let time = tab.lastExecutedTime, time > (recent?.lastExecutedTime ?? 0) {
+        if tab.lastExecutedTime > recent.lastExecutedTime {
             recent = tab
         }
     }
+
     return recent
 }
 
@@ -62,7 +66,7 @@ enum TabUrlType: String {
 
 typealias TabUUID = String
 
-class Tab: NSObject, ThemeApplicable {
+class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
     static let privateModeKey = "PrivateModeKey"
     private var _isPrivate = false
     private(set) var isPrivate: Bool {
@@ -74,6 +78,22 @@ class Tab: NSObject, ThemeApplicable {
                 _isPrivate = newValue
             }
         }
+    }
+
+    var isInactiveTabsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
+    }
+
+    var isNormal: Bool {
+        return !isPrivate
+    }
+
+    var isNormalActive: Bool {
+        return !isPrivate && (isInactiveTabsEnabled ? isActive : true)
+    }
+
+    var isNormalAndInactive: Bool {
+        return !isPrivate && (isInactiveTabsEnabled ? isInactive : false)
     }
 
     /// The window associated with the tab (where the tab lives and will be displayed).
@@ -253,14 +273,18 @@ class Tab: NSObject, ThemeApplicable {
     var webView: TabWebView?
     weak var tabDelegate: LegacyTabDelegate?
     var bars = [SnackBar]()
-    var lastExecutedTime: Timestamp?
-    var firstCreatedTime: Timestamp?
+    var lastExecutedTime: Timestamp
+    var firstCreatedTime: Timestamp
     private let faviconHelper: SiteImageHandler
     var faviconURL: String? {
         didSet {
+            guard let url = url,
+                  let faviconURLString = faviconURL,
+                  let faviconUrl = URL(string: faviconURLString, invalidCharacters: false)
+            else { return }
             faviconHelper.cacheFaviconURL(
                 siteURL: url,
-                faviconURL: URL(string: faviconURL ?? "", invalidCharacters: false)
+                faviconURL: faviconUrl
             )
         }
     }
@@ -401,10 +425,36 @@ class Tab: NSObject, ThemeApplicable {
 
     var profile: Profile
 
+    /// Returns true if this tab is considered inactive (has not been executed for more than a specific number of days).
+    /// Note: When `FasterInactiveTabsOverride` is enabled, tabs become inactive very quickly for testing purposes.
+    var isInactive: Bool {
+        let currentDate = Date()
+        let inactiveDate: Date
+
+        // Debug for inactive tabs to easily test in code
+        if UserDefaults.standard.bool(forKey: PrefsKeys.FasterInactiveTabsOverride) {
+            inactiveDate = Calendar.current.date(byAdding: .second, value: -10, to: currentDate) ?? Date()
+        } else {
+            // FIXME Is there a reason we use noon of the current day instead of the exact time, when calculating -14 days?
+            inactiveDate = Calendar.current.date(byAdding: .day, value: -14, to: currentDate.noon) ?? Date()
+        }
+
+        // If the tabDate is older than our inactive date cutoff, return true
+        let tabDate = Date.fromTimestamp(lastExecutedTime)
+        return tabDate <= inactiveDate
+    }
+
+    /// Returns true if this tab is considered active (has been executed within a specific numbers of days).
+    /// Note: When `FasterInactiveTabsOverride` is enabled, tabs become inactive very quickly for testing purposes.
+    var isActive: Bool {
+        return !isInactive
+    }
+
     init(profile: Profile,
          isPrivate: Bool = false,
          windowUUID: WindowUUID,
          faviconHelper: SiteImageHandler = DefaultSiteImageHandler.factory(),
+         tabCreatedTime: Date = Date(),
          logger: Logger = DefaultLogger.shared) {
         self.nightMode = false
         self.windowUUID = windowUUID
@@ -412,12 +462,12 @@ class Tab: NSObject, ThemeApplicable {
         self.profile = profile
         self.metadataManager = LegacyTabMetadataManager(metadataObserver: profile.places)
         self.faviconHelper = faviconHelper
+        self.lastExecutedTime = tabCreatedTime.toTimestamp()
+        self.firstCreatedTime = tabCreatedTime.toTimestamp()
         self.logger = logger
         super.init()
         self.isPrivate = isPrivate
-        let tabCreatedTime = Date().toTimestamp()
-        self.lastExecutedTime = tabCreatedTime
-        self.firstCreatedTime = tabCreatedTime
+
         debugTabCount += 1
 
         TelemetryWrapper.recordEvent(
@@ -441,7 +491,7 @@ class Tab: NSObject, ThemeApplicable {
                 URL: displayURL,
                 title: tab.title ?? tab.displayTitle,
                 history: history,
-                lastUsed: tab.lastExecutedTime ?? 0,
+                lastUsed: tab.lastExecutedTime,
                 icon: icon,
                 inactive: inactive
             )
@@ -854,6 +904,25 @@ class Tab: NSObject, ThemeApplicable {
     func applyTheme(theme: Theme) {
         UITextField.appearance().keyboardAppearance = theme.type.keyboardAppearence(isPrivate: isPrivate)
     }
+
+    // MARK: - Static Helpers
+
+    /// Returns true if the tabs both have the same type of private, normal active, and normal inactive.
+    /// Simply checks the `isPrivate` and `isActive` flags of both tabs.
+    func isSameTypeAs(_ otherTab: Tab) -> Bool {
+        switch (self.isPrivate, otherTab.isPrivate) {
+        case (true, true):
+            // Two private tabs are always lumped together in the same type regardless of their last execution time
+            return true
+        case (false, false):
+            // Two normal tabs are only the same type if they're both active, or both inactive
+            return isInactiveTabsEnabled
+                ? self.isActive == otherTab.isActive
+                : true
+        default:
+            return false
+        }
+    }
 }
 
 extension Tab: UIGestureRecognizerDelegate {
@@ -1067,6 +1136,17 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
         return super.hitTest(point, with: event)
     }
 
+    // swiftlint:disable unneeded_override
+#if compiler(>=6)
+    override func evaluateJavaScript(
+        _ javaScriptString: String,
+        completionHandler: (
+            @MainActor @Sendable (Any?, (any Error)?) -> Void
+        )? = nil
+    ) {
+        super.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
+    }
+#else
     /// Override evaluateJavascript - should not be called directly on TabWebViews any longer
     /// We should only be calling evaluateJavascriptInDefaultContentWorld in the future
     @available(*,
@@ -1075,6 +1155,8 @@ class TabWebView: WKWebView, MenuHelperWebViewInterface, ThemeApplicable {
     override func evaluateJavaScript(_ javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
         super.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
     }
+#endif
+    // swiftlint:enable unneeded_override
 
     // MARK: - ThemeApplicable
 

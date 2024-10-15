@@ -4,51 +4,59 @@
 
 import UIKit
 
-/// Used to fill in information throughout the lifetime of an image request inside SiteImageView
+/// Stores information related to an image request inside SiteImageView.
 public struct SiteImageModel {
-    /// A unique ID to tie the request to a certain image view
+    // A unique ID to tie the request to a certain image view
     let id: UUID
 
-    /// The image type expected when making a request
-    let expectedImageType: SiteImageType
+    // The image type expected when making a request
+    let imageType: SiteImageType
 
-    /// Represents the website and not the resource
-    let siteURLString: String?
+    // Represents the website (not the associated image resource)
+    let siteURL: URL
 
-    /// URL can be nil in case the urlStringRequest cannot be used to build a URL
-    var siteURL: URL?
+    // Used to cache any resources related to this request
+    let cacheKey: String
 
-    /// Used to cache any resources related to this request
-    var cacheKey: String = ""
+    // The bundled resource or remote URL (e.g. faviconURL, preferrably high resolution) for this image.
+    var siteResource: SiteResource?
 
-    /// Domain can be nil in case we don't have a siteURL to get the domain from
-    var domain: ImageDomain?
-
-    /// The favicon URL scrapped from the webpage, high resolution found at preference
-    var faviconURL: URL?
-
-    /// The fetched or generated favicon image
-    public var faviconImage: UIImage?
-
-    /// The fetched hero image
-    var heroImage: UIImage?
+    // Loaded image asset
+    public var image: UIImage?
 
     public init(id: UUID,
-                expectedImageType: SiteImageType,
-                siteURLString: String? = nil,
-                siteURL: URL? = nil,
-                cacheKey: String = "",
-                faviconURL: URL? = nil,
-                faviconImage: UIImage? = nil,
-                heroImage: UIImage? = nil) {
+                imageType: SiteImageType,
+                siteURL: URL,
+                siteResource: SiteResource? = nil,
+                image: UIImage? = nil) {
         self.id = id
-        self.expectedImageType = expectedImageType
-        self.siteURLString = siteURLString
+        self.imageType = imageType
         self.siteURL = siteURL
-        self.cacheKey = cacheKey
-        self.domain = nil
-        self.faviconURL = faviconURL
-        self.faviconImage = faviconImage
-        self.heroImage = heroImage
+        if case .favicon = imageType, case .remoteURL(let faviconURL) = siteResource {
+            // If we already have a favicon url, use the url as the cache key.
+            // This is a special case where we want to use the exact URL that's provided (e.g. sponsored site, default
+            // top sites without a bundled asset, etc.).
+            self.cacheKey = faviconURL.absoluteString
+        } else {
+            self.cacheKey = SiteImageModel.generateCacheKey(siteURL: siteURL, type: imageType)
+        }
+        self.siteResource = siteResource
+        self.image = image
+    }
+
+    /// Generates a cache key for the given image type by using its associated site URL.
+    /// - Parameters:
+    ///   - siteURL: The website with which this image is associated.
+    ///   - type: The image type.
+    /// - Returns: A cache key value for storing this image in an image cache.
+    static func generateCacheKey(siteURL: URL, type: SiteImageType) -> String {
+        switch type {
+        case .heroImage:
+            // Always use the full site URL as the cache key for hero images
+            return siteURL.absoluteString
+        case .favicon:
+            // Use the domain as the key to avoid caching and fetching unnecessary duplicates
+            return siteURL.shortDomain ?? siteURL.shortDisplayString
+        }
     }
 }

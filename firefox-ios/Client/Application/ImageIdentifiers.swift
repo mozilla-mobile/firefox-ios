@@ -41,6 +41,7 @@ public struct ImageIdentifiers {
             public static let syncv106 = "onboardingSync"
             public static let notification = "onboardingNotification"
             public static let searchWidget = "onboardingSearchWidget"
+            public static let setDefaultSteps = "onboardingSetDefaultSteps"
             public static let setToDock = "onboardingDock"
             public static let theming = "onboardingThemeing"
             public static let toolbar = "onboardingToolbar"
@@ -62,13 +63,13 @@ public struct ImageIdentifiers {
         }
     }
 
-    public struct TrackingProtection {
-        public static let protectionAlert = "protectionAlert"
-        public static let protectionOn = "protectionOn"
-        public static let protectionOff = "protectionOff"
+    public struct NativeErrorPage {
+        public static let noInternetConnection = "noInternetConnection"
+    }
 
-        public static let socialMediaTrackers = "socialMediaTrackersImage"
-        public static let fingerprintersTrackers = "fingerprintersTrackersImage"
-        public static let crossSiteTrackers = "crossSiteTrackersImage"
+    public struct TrackingProtection {
+        public static let protectionAlert = "protectionPanelAlert"
+        public static let protectionOff = "protectionPanelOff"
+        public static let protectionOn = "protectionPanelOn"
     }
 }

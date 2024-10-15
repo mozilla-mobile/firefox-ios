@@ -446,7 +446,7 @@ extension HistoryHighlightsViewModel: HistoryHighlightsDelegate {
             self.historyItems = self.historyHighlightsDataAdaptor.getHistoryHighlights()
             self.logger.log("HistoryHighlights didLoadNewData and section shouldShow \(self.shouldShow)",
                             level: .debug,
-                            category: .homepage)
+                            category: .legacyHomepage)
             guard self.isEnabled else { return }
             self.delegate?.reloadView()
         }

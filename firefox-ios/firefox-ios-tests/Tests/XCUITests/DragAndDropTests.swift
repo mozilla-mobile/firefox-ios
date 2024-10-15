@@ -107,9 +107,9 @@ class DragAndDropTests: BaseTestCase {
             )
             checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
             if !iPad() {
+                let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
                 XCTAssert(
-                    secondWebsite.url.contains(app.textFields["url"].value! as! String),
-                    "The tab has not been dropped correctly"
+                    secondWebsite.url.contains(url.value! as! String), "The tab has not been dropped correctly"
                 ) } else {
                     XCTAssertEqual(app.otherElements["Tabs Tray"].cells.element(boundBy: 0).label, secondWebsite.tabName)
                 }
@@ -135,9 +135,9 @@ class DragAndDropTests: BaseTestCase {
             checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: homeTabName)
             // Check that focus is kept on last website open
             if !iPad() {
+                let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
                 XCTAssert(
-                    secondWebsite.url.contains(app.textFields["url"].value! as! String),
-                    "The tab has not been dropped correctly"
+                    secondWebsite.url.contains(url.value! as! String), "The tab has not been dropped correctly"
                 ) } else {
                     XCTAssertEqual(app.otherElements["Tabs Tray"].cells.element(boundBy: 0).label, secondWebsite.tabName)
                 }
@@ -266,7 +266,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
         // Check that focus is kept on last website open
         XCTAssert(
-            secondWebsite.url.contains(app.textFields["url"].value! as! String),
+            secondWebsite.url.contains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value! as! String),
             "The tab has not been dropped correctly"
         )
     }
@@ -302,7 +302,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         mozWaitForElementToExist(searchField)
 
         // DragAndDrop the url for only one second so that the TP menu is not shown and the search box is not covered
-        app.textFields["url"].press(forDuration: 1, thenDragTo: searchField)
+        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].press(forDuration: 1, thenDragTo: searchField)
 
         // Verify that the text in the search field is the same as the text in the url text field
         searchField.tap()

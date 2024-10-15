@@ -37,7 +37,6 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     }
 
     override func tearDown() {
-        super.tearDown()
         self.mockRouter = nil
         self.profile = nil
         self.overlayModeManager = nil
@@ -46,7 +45,8 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         self.applicationHelper = nil
         self.glean = nil
         self.scrollDelegate = nil
-        AppContainer.shared.reset()
+        DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testInitialState() {
@@ -91,39 +91,69 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     func testShowHomepage_addsOneHomepageOnly() {
         let subject = createSubject()
-        subject.showHomepage(inline: true,
-                             toastContainer: UIView(),
-                             homepanelDelegate: subject.browserViewController,
-                             libraryPanelDelegate: subject.browserViewController,
-                             statusBarScrollDelegate: scrollDelegate,
-                             overlayManager: overlayModeManager)
+        subject.showLegacyHomepage(
+            inline: true,
+            toastContainer: UIView(),
+            homepanelDelegate: subject.browserViewController,
+            libraryPanelDelegate: subject.browserViewController,
+            statusBarScrollDelegate: scrollDelegate,
+            overlayManager: overlayModeManager
+        )
 
-        let secondHomepage = HomepageViewController(profile: profile,
-                                                    toastContainer: UIView(),
-                                                    tabManager: tabManager,
-                                                    overlayManager: overlayModeManager)
+        let secondHomepage = LegacyHomepageViewController(
+            profile: profile,
+            toastContainer: UIView(),
+            tabManager: tabManager,
+            overlayManager: overlayModeManager
+        )
         XCTAssertFalse(subject.browserViewController.contentContainer.canAdd(content: secondHomepage))
-        XCTAssertNotNil(subject.homepageViewController)
+        XCTAssertNotNil(subject.legacyHomepageViewController)
         XCTAssertNil(subject.webviewController)
     }
 
     func testShowHomepage_reuseExistingHomepage() {
         let subject = createSubject()
-        subject.showHomepage(inline: true,
-                             toastContainer: UIView(),
-                             homepanelDelegate: subject.browserViewController,
-                             libraryPanelDelegate: subject.browserViewController,
-                             statusBarScrollDelegate: scrollDelegate,
-                             overlayManager: overlayModeManager)
+        subject.showLegacyHomepage(
+            inline: true,
+            toastContainer: UIView(),
+            homepanelDelegate: subject.browserViewController,
+            libraryPanelDelegate: subject.browserViewController,
+            statusBarScrollDelegate: scrollDelegate,
+            overlayManager: overlayModeManager
+        )
+        let firstHomepage = subject.legacyHomepageViewController
+        XCTAssertNotNil(subject.legacyHomepageViewController)
+
+        subject.showLegacyHomepage(
+            inline: true,
+            toastContainer: UIView(),
+            homepanelDelegate: subject.browserViewController,
+            libraryPanelDelegate: subject.browserViewController,
+            statusBarScrollDelegate: scrollDelegate,
+            overlayManager: overlayModeManager
+        )
+        let secondHomepage = subject.legacyHomepageViewController
+        XCTAssertEqual(firstHomepage, secondHomepage)
+    }
+
+    // MARK: - Show new homepage
+
+    func testShowNewHomepage_setsProperViewController() {
+        let subject = createSubject()
+        subject.showHomepage()
+
+        XCTAssertNotNil(subject.homepageViewController)
+        XCTAssertNil(subject.webviewController)
+        XCTAssertNil(subject.privateViewController)
+    }
+
+    func testShowNewHomepage_hasSameInstance() {
+        let subject = createSubject()
+        subject.showHomepage()
         let firstHomepage = subject.homepageViewController
         XCTAssertNotNil(subject.homepageViewController)
 
-        subject.showHomepage(inline: true,
-                             toastContainer: UIView(),
-                             homepanelDelegate: subject.browserViewController,
-                             libraryPanelDelegate: subject.browserViewController,
-                             statusBarScrollDelegate: scrollDelegate,
-                             overlayManager: overlayModeManager)
+        subject.showHomepage()
         let secondHomepage = subject.homepageViewController
         XCTAssertEqual(firstHomepage, secondHomepage)
     }
@@ -137,7 +167,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         subject.browserViewController = mbvc
         subject.show(webView: webview)
 
-        XCTAssertNil(subject.homepageViewController)
+        XCTAssertNil(subject.legacyHomepageViewController)
         XCTAssertNotNil(subject.webviewController)
         XCTAssertEqual(mbvc.embedContentCalled, 1)
         XCTAssertEqual(mbvc.saveEmbeddedContent?.contentType, .webview)
@@ -323,6 +353,16 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
+    func testShowPasswordGenerator_presentsPasswordGeneratorBottomSheet() {
+        let subject = createSubject()
+        let mockTab = Tab(profile: profile, windowUUID: windowUUID)
+
+        subject.showPasswordGenerator(tab: mockTab)
+
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is BottomSheetViewController)
+    }
+
     // MARK: - ParentCoordinatorDelegate
 
     func testRemoveChildCoordinator_whenDidFinishCalled() {
@@ -348,7 +388,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         subject.browserViewController = mbvc
         subject.browserHasLoaded()
 
-        let result = testCanHandleAndHandle(subject, route: .searchQuery(query: query))
+        let result = testCanHandleAndHandle(subject, route: .searchQuery(query: query, isPrivate: false))
 
         XCTAssertTrue(result)
         XCTAssertTrue(mbvc.handleQueryCalled)
@@ -379,11 +419,10 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         subject.browserHasLoaded()
 
         let result = testCanHandleAndHandle(subject, route: .search(url: URL(string: "https://example.com")!,
-                                                                    isPrivate: false,
-                                                                    options: [.switchToNormalMode]))
+                                                                    isPrivate: false))
 
         XCTAssertTrue(result)
-        XCTAssertTrue(mbvc.switchToPrivacyModeCalled)
+        XCTAssertFalse(mbvc.switchToPrivacyModeCalled)
         XCTAssertFalse(mbvc.switchToPrivacyModeIsPrivate)
         XCTAssertTrue(mbvc.switchToTabForURLOrOpenCalled)
         XCTAssertEqual(mbvc.switchToTabForURLOrOpenURL, URL(string: "https://example.com")!)
@@ -997,13 +1036,15 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
     // MARK: - Menu
     func testShowMainMenu_addsMainMenuCoordinator() {
         let subject = createSubject()
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
 
         subject.showMainMenu()
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is MainMenuCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
-        XCTAssertTrue(mockRouter.presentedViewController is MainMenuViewController)
+        XCTAssertTrue(mockRouter.presentedViewController is DismissableNavigationViewController)
+        XCTAssertTrue(mockRouter.presentedViewController?.children.first is MainMenuViewController)
     }
 
     func testMainMenuCoordinatorDelegate_didDidDismiss_removesChild() {
@@ -1011,11 +1052,30 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         subject.browserHasLoaded()
 
         subject.showMainMenu()
-        let menuCoordinator = subject.childCoordinators[0] as! MainMenuCoordinator
-        menuCoordinator.dismissModal(animated: false)
+        guard let menuCoordinator = subject.childCoordinators[0] as? MainMenuCoordinator else {
+            XCTFail("Main menu coordinator was expected to be resolved")
+            return
+        }
 
-        XCTAssertEqual(mockRouter.dismissCalled, 1)
+        menuCoordinator.dismissMenuModal(animated: false)
+
         XCTAssertTrue(subject.childCoordinators.isEmpty)
+    }
+
+    func testMainMenuCoordinatorDelegate_navigatesToSettings() {
+        let subject = createSubject()
+        subject.browserHasLoaded()
+
+        subject.showMainMenu()
+        guard let menuCoordinator = subject.childCoordinators[0] as? MainMenuCoordinator else {
+            XCTFail("Main menu coordinator was expected to be resolved")
+            return
+        }
+
+        menuCoordinator.navigateTo(MenuNavigationDestination(.customizeHomepage), animated: false)
+
+        XCTAssertTrue(subject.childCoordinators[0] is SettingsCoordinator)
+        XCTAssertTrue(mockRouter.presentedViewController?.children.first is AppSettingsTableViewController)
     }
 
     // MARK: - Microsurvey

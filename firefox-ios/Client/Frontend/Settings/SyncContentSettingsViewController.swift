@@ -9,6 +9,8 @@ import Sync
 import Account
 
 class ManageFxAccountSetting: Setting {
+    private var notification: NSObjectProtocol?
+
     let profile: Profile
 
     override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
@@ -27,6 +29,14 @@ class ManageFxAccountSetting: Setting {
                 ]
             )
         )
+
+        notification = NotificationCenter.default.addObserver(
+            forName: .accountLoggedOut,
+            object: nil,
+            queue: .main
+        ) { [weak settings] _ in
+            settings?.dismiss(animated: true, completion: nil)
+        }
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -36,6 +46,12 @@ class ManageFxAccountSetting: Setting {
                                                   dismissalStyle: .popToRootVC,
                                                   deepLinkParams: fxaParams)
         navigationController?.pushViewController(viewController, animated: true)
+    }
+
+    deinit {
+        if let notification = notification {
+            NotificationCenter.default.removeObserver(notification)
+        }
     }
 }
 

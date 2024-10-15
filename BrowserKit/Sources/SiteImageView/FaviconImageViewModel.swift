@@ -6,14 +6,14 @@ import UIKit
 
 public struct FaviconImageViewModel {
     var siteURLString: String?
-    var faviconURL: URL?
+    var siteResource: SiteResource?
     var faviconCornerRadius: CGFloat
 
     public init(siteURLString: String? = nil,
-                faviconURL: URL? = nil,
+                siteResource: SiteResource? = nil,
                 faviconCornerRadius: CGFloat = 4) {
         self.siteURLString = siteURLString
-        self.faviconURL = faviconURL
+        self.siteResource = siteResource
         self.faviconCornerRadius = faviconCornerRadius
     }
 }

@@ -29,6 +29,10 @@ class TabManagerMiddleware {
             self.resolveTabTrayActions(action: action, state: state)
         } else if let action = action as? TabPanelViewAction {
             self.resovleTabPanelViewActions(action: action, state: state)
+        } else if let action = action as? MainMenuAction {
+            self.resolveMainMenuActions(with: action, appState: state)
+        } else if let action = action as? HeaderAction {
+            self.resolveHomepageHeaderActions(with: action)
         }
     }
 
@@ -90,6 +94,14 @@ class TabManagerMiddleware {
             let action = TabPanelMiddlewareAction(tabDisplayModel: tabState,
                                                   windowUUID: action.windowUUID,
                                                   actionType: TabPanelMiddlewareActionType.didLoadTabPanel)
+            store.dispatch(action)
+
+        case TabPanelViewActionType.tabPanelWillAppear:
+            let isPrivate = action.panelType == .privateTabs
+            let tabState = self.getTabsDisplayModel(for: isPrivate, scrollBehavior: .scrollToSelectedTab(shouldAnimate: false), uuid: action.windowUUID)
+            let action = TabPanelMiddlewareAction(tabDisplayModel: tabState,
+                                                  windowUUID: action.windowUUID,
+                                                  actionType: TabPanelMiddlewareActionType.willAppearTabPanel)
             store.dispatch(action)
 
         case TabPanelViewActionType.addNewTab:
@@ -204,6 +216,7 @@ class TabManagerMiddleware {
         var tabs = [TabModel]()
         let tabManager = tabManager(for: uuid)
         let selectedTab = tabManager.selectedTab
+        // Be careful to use active tabs and not inactive tabs
         let tabManagerTabs = isPrivateMode ? tabManager.privateTabs : tabManager.normalActiveTabs
         tabManagerTabs.forEach { tab in
             let tabModel = TabModel(tabUUID: tab.tabUUID,
@@ -302,10 +315,15 @@ class TabManagerMiddleware {
     /// - Returns: If is the last tab to be closed used to trigger dismissTabTray action
     private func closeTab(with tabUUID: TabUUID, uuid: WindowUUID, isPrivate: Bool) async -> Bool {
         let tabManager = tabManager(for: uuid)
-        let isLastTab = isPrivate ? tabManager.privateTabs.count == 1 : tabManager.normalTabs.count == 1
-
+        // In non-private mode, if:
+        //      A) the last normal active tab is closed, or
+        //      B) the last of ALL normal tabs are closed (i.e. all tabs are inactive and closed at once),
+        // then we want to close the tray.
+        let isLastActiveTab = isPrivate
+                            ? tabManager.privateTabs.count == 1
+                            : (tabManager.normalActiveTabs.count <= 1 || tabManager.normalTabs.count == 1)
         await tabManager.removeTab(tabUUID)
-        return isLastTab
+        return isLastActiveTab
     }
 
     /// Close tab and trigger refresh
@@ -428,8 +446,8 @@ class TabManagerMiddleware {
 
     // MARK: - Inactive tabs helper
 
-    /// Close all inactive tabs removing them from the tabs array on `TabManager`.
-    /// Makes a backup of tabs to be deleted in case undo option is selected
+    /// Close all inactive tabs, removing them from the tabs array on `TabManager`.
+    /// Makes a backup of tabs to be deleted in case the undo option is selected.
     private func closeAllInactiveTabs(state: AppState, uuid: WindowUUID) {
         guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
         let tabManager = tabManager(for: uuid)
@@ -439,6 +457,14 @@ class TabManagerMiddleware {
                                                          windowUUID: uuid,
                                                          actionType: TabPanelMiddlewareActionType.refreshInactiveTabs)
             store.dispatch(refreshAction)
+
+            // Refresh the active tabs panel. Can only happen if the user is in normal browsering mode (not private).
+            // Related: FXIOS-10010, FXIOS-9954, FXIOS-9999
+            let model = getTabsDisplayModel(for: false, scrollBehavior: .noScroll, uuid: uuid)
+            let refreshActiveTabsPanelAction = TabPanelMiddlewareAction(tabDisplayModel: model,
+                                                                        windowUUID: uuid,
+                                                                        actionType: TabPanelMiddlewareActionType.refreshTabs)
+            store.dispatch(refreshActiveTabsPanelAction)
 
             let inactiveTabsCount = tabsState.inactiveTabs.count
             let toastAction = TabPanelMiddlewareAction(toastType: .closedAllInactiveTabs(count: inactiveTabsCount),
@@ -451,8 +477,8 @@ class TabManagerMiddleware {
     /// Handles undo close all inactive tabs. Adding back the backup tabs saved previously
     private func undoCloseAllInactiveTabs(uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
-        ensureMainThread {
-            tabManager.undoCloseInactiveTabs()
+        Task {
+            await tabManager.undoCloseInactiveTabs()
             let inactiveTabs = self.refreshInactiveTabs(uuid: uuid)
             let refreshAction = TabPanelMiddlewareAction(inactiveTabModels: inactiveTabs,
                                                          windowUUID: uuid,
@@ -630,6 +656,65 @@ class TabManagerMiddleware {
                                          object: .libraryPanel,
                                          value: .syncPanel,
                                          extras: nil)
+        }
+    }
+
+    // MARK: - Main menu actions
+    private func resolveMainMenuActions(with action: MainMenuAction, appState: AppState) {
+        switch action.actionType {
+        case MainMenuMiddlewareActionType.requestTabInfo:
+            store.dispatch(
+                MainMenuAction(
+                    windowUUID: action.windowUUID,
+                    actionType: MainMenuActionType.updateCurrentTabInfo,
+                    currentTabInfo: getTabInfo(forWindow: action.windowUUID)
+                )
+            )
+        case MainMenuActionType.toggleUserAgent:
+            changeUserAgent(forWindow: action.windowUUID)
+        default:
+            break
+        }
+    }
+
+    private func getTabInfo(forWindow windowUUID: WindowUUID) -> MainMenuTabInfo? {
+        guard let selectedTab = tabManager(for: windowUUID).selectedTab else {
+            logger.log(
+                "Attempted to get `selectedTab` but it was `nil` when in shouldn't be",
+                level: .fatal,
+                category: .tabs
+            )
+            return nil
+        }
+        let defaultUAisDesktop = UserAgent.isDesktop(ua: UserAgent.getUserAgent())
+
+        return MainMenuTabInfo(
+            url: selectedTab.url,
+            isHomepage: selectedTab.isFxHomeTab,
+            isDefaultUserAgentDesktop: defaultUAisDesktop,
+            hasChangedUserAgent: selectedTab.changedUserAgent
+        )
+    }
+
+    private func changeUserAgent(forWindow windowUUID: WindowUUID) {
+        guard let selectedTab = tabManager(for: windowUUID).selectedTab else { return }
+
+        if let url = selectedTab.url {
+            selectedTab.toggleChangeUserAgent()
+            Tab.ChangeUserAgent.updateDomainList(
+                forUrl: url,
+                isChangedUA: selectedTab.changedUserAgent,
+                isPrivate: selectedTab.isPrivate
+            )
+        }
+    }
+
+    private func resolveHomepageHeaderActions(with action: HeaderAction) {
+        switch action.actionType {
+        case HeaderActionType.toggleHomepageMode:
+            tabManager(for: action.windowUUID).switchPrivacyMode()
+        default:
+            break
         }
     }
 }

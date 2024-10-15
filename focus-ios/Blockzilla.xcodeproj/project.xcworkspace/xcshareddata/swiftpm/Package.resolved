@@ -28,13 +28,13 @@
           "version": null
         }
       },
-      {
+        {
         "package": "Glean",
         "repositoryURL": "https://github.com/mozilla/glean-swift",
         "state": {
           "branch": null,
-          "revision": "2185e2eea2d5ce272ff5c0e851eed42d52104ce4",
-          "version": "60.5.0"
+          "revision": "51794f8b74c55ebde6d1502b641eacc19176e139",
+          "version": "61.2.0"
         }
       },
       {
@@ -42,17 +42,17 @@
         "repositoryURL": "https://github.com/onevcat/Kingfisher.git",
         "state": {
           "branch": null,
-          "revision": "5b92f029fab2cce44386d28588098b5be0824ef5",
-          "version": "7.11.0"
+          "revision": "2ef543ee21d63734e1c004ad6c870255e8716c50",
+          "version": "7.12.0"
         }
       },
-      {
+        {
         "package": "MozillaRustComponentsSwift",
         "repositoryURL": "https://github.com/mozilla/rust-components-swift",
         "state": {
           "branch": null,
-          "revision": "368989055f07f4e2c135ebed7f4d649b22c1dae2",
-          "version": "131.0.20240821050323"
+          "revision": "3901044888019e0db324ebb14ec78ca49c859eee",
+          "version": "133.0.20241012050320"
         }
       },
       {
@@ -60,8 +60,8 @@
         "repositoryURL": "https://github.com/getsentry/sentry-cocoa",
         "state": {
           "branch": null,
-          "revision": "d2ced2d961b34573ebd2ea0567a2f1408e90f0ae",
-          "version": "8.34.0"
+          "revision": "38f4f70d07117b9f958a76b1bff278c2f29ffe0e",
+          "version": "8.21.0"
         }
       },
       {
@@ -71,6 +71,15 @@
           "branch": null,
           "revision": "e74fe2a978d1216c3602b129447c7301573cc2d8",
           "version": "5.7.0"
+        }
+      },
+      {
+        "package": "SwiftDraw",
+        "repositoryURL": "https://github.com/swhitty/SwiftDraw",
+        "state": {
+          "branch": null,
+          "revision": "a5c680f07b33f4cc9a451491b417b8119de23c6e",
+          "version": "0.17.0"
         }
       },
       {

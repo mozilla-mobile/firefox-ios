@@ -4,7 +4,7 @@
 
 import Foundation
 import Common
-import WebKit
+@preconcurrency import WebKit
 import Shared
 import UIKit
 import Photos
@@ -57,14 +57,14 @@ extension BrowserViewController: WKUIDelegate {
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping () -> Void
     ) {
-        let messageAlert = MessageAlert(message: message, frame: frame)
+        let messageAlert = MessageAlert(message: message, frame: frame, completionHandler: {
+            completionHandler()
+            self.logger.log("Javascript message alert was completed.", level: .info, category: .webview)
+        })
         if shouldDisplayJSAlertForWebView(webView) {
             logger.log("Javascript message alert will be presented.", level: .info, category: .webview)
 
-            present(messageAlert.alertController(), animated: true) {
-                completionHandler()
-                self.logger.log("Javascript message alert was completed.", level: .info, category: .webview)
-            }
+            present(messageAlert.alertController(), animated: true)
         } else if let promptingTab = tabManager[webView] {
             logger.log("Javascript message alert is queued.", level: .info, category: .webview)
 
@@ -324,7 +324,7 @@ extension BrowserViewController: WKUIDelegate {
                  type: WKMediaCaptureType,
                  decisionHandler: @escaping (WKPermissionDecision) -> Void) {
         // If the tab isn't the selected one or we're on the homepage, do not show the media capture prompt
-        guard tabManager.selectedTab?.webView == webView, !contentContainer.hasHomepage else {
+        guard tabManager.selectedTab?.webView == webView, !contentContainer.hasLegacyHomepage else {
             decisionHandler(.deny)
             return
         }
@@ -378,7 +378,10 @@ extension BrowserViewController: WKNavigationDelegate {
         // (orange color) as soon as the page has loaded.
         if let url = webView.url {
             guard !url.isReaderModeURL else { return }
-            updateReaderModeState(for: tabManager.selectedTab, readerModeState: .unavailable)
+            // FXIOS-10239: Reader mode icon shifts when toolbar refactor is enabled
+            if !isToolbarRefactorEnabled {
+                updateReaderModeState(for: tabManager.selectedTab, readerModeState: .unavailable)
+            }
             hideReaderModeBar(animated: false)
         }
     }
@@ -527,7 +530,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // We always allow this. Additionally, data URIs are also handled just like normal web pages.
         if ["http", "https", "blob", "file"].contains(url.scheme) {
             if navigationAction.targetFrame?.isMainFrame ?? false {
-                tab.changedUserAgent = Tab.ChangeUserAgent.contains(url: url)
+                tab.changedUserAgent = Tab.ChangeUserAgent.contains(url: url, isPrivate: tab.isPrivate)
             }
 
             pendingRequests[url.absoluteString] = navigationAction.request
@@ -540,7 +543,7 @@ extension BrowserViewController: WKNavigationDelegate {
             }
 
             if navigationAction.navigationType == .linkActivated {
-                if tab.isPrivate || (profile.prefs.boolForKey(PrefsKeys.BlockOpeningExternalApps) ?? false) {
+                if profile.prefs.boolForKey(PrefsKeys.BlockOpeningExternalApps) ?? false {
                     decisionHandler(.cancel)
                     webView.load(navigationAction.request)
                     return
@@ -734,10 +737,19 @@ extension BrowserViewController: WKNavigationDelegate {
                 if isToolbarRefactorEnabled {
                     let action = ToolbarAction(
                         url: tab.url?.displayURL,
+                        isPrivate: tab.isPrivate,
+                        canGoBack: tab.canGoBack,
+                        canGoForward: tab.canGoForward,
                         windowUUID: windowUUID,
                         actionType: ToolbarActionType.urlDidChange
                     )
                     store.dispatch(action)
+                    let middlewareAction = ToolbarMiddlewareAction(
+                        scrollOffset: scrollController.contentOffset,
+                        windowUUID: windowUUID,
+                        actionType: ToolbarMiddlewareActionType.urlDidChange
+                    )
+                    store.dispatch(middlewareAction)
                 } else {
                     urlBar.currentURL = tab.url?.displayURL
                 }
@@ -830,7 +842,10 @@ extension BrowserViewController: WKNavigationDelegate {
         // When tab url changes after web content starts loading on the page
         // We notify the content blocker change so that content blocker status
         // can be correctly shown on beside the URL bar
+
+        // TODO: content blocking hasn't really changed, can we improve code clarity here? [FXIOS-10091]
         tab.contentBlocker?.notifyContentBlockingChanged()
+
         self.scrollController.resetZoomState()
 
         if tabManager.selectedTab === tab {
@@ -949,7 +964,7 @@ private extension BrowserViewController {
 
     func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
         // Only display a JS Alert if we are selected and there isn't anything being shown
-        return ((tabManager.selectedTab == nil ? false : tabManager.selectedTab!.webView == webView))
+        return (tabManager.selectedTab == nil ? false : tabManager.selectedTab!.webView == webView)
             && (self.presentedViewController == nil)
     }
 

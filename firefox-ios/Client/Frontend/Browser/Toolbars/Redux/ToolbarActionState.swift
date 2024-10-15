@@ -30,10 +30,9 @@ struct ToolbarActionState: Equatable, FeatureFlaggable {
     var maskImageName: String?
     var numberOfTabs: Int?
     var isFlippedForRTL = false
-    var isShowingTopTabs: Bool?
     var isEnabled: Bool
     var shouldDisplayAsHighlighted = false
-    var hasContextualHint = false
+    var contextualHintType: String?
     var a11yLabel: String
     var a11yHint: String?
     var a11yId: String

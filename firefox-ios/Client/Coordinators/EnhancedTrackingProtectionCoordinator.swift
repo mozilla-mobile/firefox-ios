@@ -12,6 +12,10 @@ protocol EnhancedTrackingProtectionCoordinatorDelegate: AnyObject {
     func settingsOpenPage(settings: Route.SettingsSection)
 }
 
+protocol ETPCoordinatorSSLStatusDelegate: AnyObject {
+    var showHasOnlySecureContentInTrackingPanel: Bool { get }
+}
+
 class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
                                              TrackingProtectionMenuDelegate,
                                              EnhancedTrackingProtectionMenuDelegate,
@@ -27,14 +31,15 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
 
     init(router: Router,
          profile: Profile = AppContainer.shared.resolve(),
-         tabManager: TabManager
+         tabManager: TabManager,
+         secureConnectionDelegate: ETPCoordinatorSSLStatusDelegate
     ) {
         let tab = tabManager.selectedTab
         let url = tab?.url ?? URL(fileURLWithPath: "")
         let displayTitle = tab?.displayTitle ?? ""
         let contentBlockerStatus = tab?.contentBlocker?.status ?? .blocking
         let contentBlockerStats = tab?.contentBlocker?.stats
-        let connectionSecure = tab?.webView?.hasOnlySecureContent ?? true
+        let connectionSecure = secureConnectionDelegate.showHasOnlySecureContentInTrackingPanel
         self.profile = profile
         self.tabManager = tabManager
         super.init(router: router)
@@ -50,6 +55,7 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
             )
 
             enhancedTrackingProtectionMenuVC = TrackingProtectionViewController(viewModel: etpViewModel,
+                                                                                profile: profile,
                                                                                 windowUUID: tabManager.windowUUID)
             enhancedTrackingProtectionMenuVC?.enhancedTrackingProtectionMenuDelegate = self
         } else {

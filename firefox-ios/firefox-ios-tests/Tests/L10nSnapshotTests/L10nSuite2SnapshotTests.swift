@@ -164,46 +164,4 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         app.tables["Login Detail List"].cells.element(boundBy: 4).tap()
         snapshot("RemoveLoginDetailedView")
     }
-
-    @MainActor
-    func testFakespotAvailable() throws {
-        navigator.openURL("https://www.walmart.com")
-        waitUntilPageLoad()
-
-        // Search for and open a shoe listing
-        let website = app.webViews["contentView"].firstMatch
-        mozWaitForElementToExist(website.searchFields["Search"])
-        website.searchFields["Search"].tap()
-        website.searchFields["Search"].typeText("end table")
-        mozWaitForElementToExist(website.otherElements.buttons.firstMatch, timeout: 30)
-        website.otherElements.buttons.element(boundBy: 1).tap()
-        waitUntilPageLoad()
-        app.swipeUp()
-        mozWaitForElementToExist(website.staticTexts["Sponsored"].firstMatch)
-        mozWaitForElementToExist(website.staticTexts["Options"].firstMatch)
-        website.staticTexts["Options"].firstMatch.tap()
-
-        // Tap the shopping cart icon
-        waitUntilPageLoad()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton])
-        app.buttons[AccessibilityIdentifiers.Toolbar.shoppingButton].tap()
-        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
-        snapshot("ReviewChecker")
-
-        // Open Menu
-        app.buttons["Shopping.OptInCard.MainButton"].tap()
-        snapshot("YesTryIt")
-
-        // Tap on each option in that menu
-        mozWaitForElementToExist(app.buttons["Shopping.ReviewQualityCard.ExpandButton"])
-        app.buttons["Shopping.ReviewQualityCard.ExpandButton"].tap()
-        snapshot("ReviewQualityCard-1")
-        app.swipeUp(velocity: 15)
-        snapshot("ReviewQualityCard-2")
-        app.buttons["Shopping.ReviewQualityCard.ExpandButton"].tap()
-
-        mozWaitForElementToExist(app.buttons["Shopping.SettingsCard.ExpandButton"])
-        app.buttons["Shopping.SettingsCard.ExpandButton"].tap()
-        snapshot("SettingsCard")
-    }
 }

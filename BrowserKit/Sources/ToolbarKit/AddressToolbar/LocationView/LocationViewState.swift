@@ -13,15 +13,16 @@ public struct LocationViewState {
 
     public let urlTextFieldPlaceholder: String
     public let urlTextFieldA11yId: String
-    public let urlTextFieldA11yLabel: String
 
     public let searchEngineImage: UIImage?
     public let lockIconImageName: String?
     public let url: URL?
+    public let droppableUrl: URL?
     public let searchTerm: String?
     public let isEditing: Bool
+    public let isScrollingDuringEdit: Bool
     public let shouldSelectSearchTerm: Bool
-    public var onTapLockIcon: (() -> Void)?
+    public var onTapLockIcon: ((UIButton) -> Void)?
     public var onLongPress: (() -> Void)?
 
     public init(
@@ -31,14 +32,15 @@ public struct LocationViewState {
         lockIconButtonA11yLabel: String,
         urlTextFieldPlaceholder: String,
         urlTextFieldA11yId: String,
-        urlTextFieldA11yLabel: String,
         searchEngineImage: UIImage?,
         lockIconImageName: String?,
         url: URL?,
+        droppableUrl: URL?,
         searchTerm: String?,
         isEditing: Bool,
+        isScrollingDuringEdit: Bool,
         shouldSelectSearchTerm: Bool,
-        onTapLockIcon: (() -> Void)? = nil,
+        onTapLockIcon: ((UIButton) -> Void)? = nil,
         onLongPress: (() -> Void)? = nil
     ) {
         self.searchEngineImageViewA11yId = searchEngineImageViewA11yId
@@ -47,12 +49,13 @@ public struct LocationViewState {
         self.lockIconButtonA11yLabel = lockIconButtonA11yLabel
         self.urlTextFieldPlaceholder = urlTextFieldPlaceholder
         self.urlTextFieldA11yId = urlTextFieldA11yId
-        self.urlTextFieldA11yLabel = urlTextFieldA11yLabel
         self.searchEngineImage = searchEngineImage
         self.lockIconImageName = lockIconImageName
         self.url = url
+        self.droppableUrl = droppableUrl
         self.searchTerm = searchTerm
         self.isEditing = isEditing
+        self.isScrollingDuringEdit = isScrollingDuringEdit
         self.shouldSelectSearchTerm = shouldSelectSearchTerm
         self.onTapLockIcon = onTapLockIcon
         self.onLongPress = onLongPress

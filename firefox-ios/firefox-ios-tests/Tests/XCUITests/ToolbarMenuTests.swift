@@ -47,8 +47,7 @@ class ToolbarMenuTests: BaseTestCase {
         XCUIDevice.shared.orientation = .landscapeLeft
         mozWaitForElementToExist(hamburgerMenu)
         mozWaitForElementToNotExist(app.tables["Context Menu"])
-        mozWaitForElementToExist(app.textFields["url"])
-        mozWaitForElementToExist(app.webViews["contentView"])
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
         if iPad() {
             mozWaitForElementToExist(bookmarksButton)
             XCTAssertTrue(

@@ -7,10 +7,10 @@ import Security
 import CryptoKit
 import X509
 import SwiftASN1
+import Common
 
 class CertificatesHandler {
     private let serverTrust: SecTrust
-    var certificates = [Certificate]()
 
     /// Initializes a new `CertificatesHandler` with the given server trust.
     /// - Parameters:
@@ -20,17 +20,70 @@ class CertificatesHandler {
     }
 
     /// Extracts and handles the certificate chain.
-    func handleCertificates() {
+    /// - Parameters:
+    ///   - completion: A completion block that provides the extracted certificates.
+    func handleCertificates() -> [Certificate] {
+        var certificates = [Certificate]()
         guard let certificateChain = SecTrustCopyCertificateChain(serverTrust) as? [SecCertificate] else {
-            return
+            return certificates
         }
-        for (_, certificate) in certificateChain.enumerated() {
+        for certificate in certificateChain {
             let certificateData = SecCertificateCopyData(certificate) as Data
             do {
                 let certificate = try Certificate(derEncoded: Array(certificateData))
                 certificates.append(certificate)
             } catch {
+                DefaultLogger.shared.log("\(error)",
+                                         level: .warning,
+                                         category: .certificate)
             }
+        }
+        return certificates
+    }
+}
+
+// Define a function to get the certificates for a given URL
+func getCertificates(for url: URL, completion: @escaping ([Certificate]?) -> Void) {
+    // Create a URL session with a custom delegate
+    let session = URLSession(configuration: .default,
+                             delegate: CertificateDelegate(completion: completion),
+                             delegateQueue: nil)
+
+    // Start a data task to trigger the certificate retrieval
+    let task = session.dataTask(with: url) { _, _, error in
+        if let error = error {
+            DefaultLogger.shared.log("\(error)",
+                                     level: .warning,
+                                     category: .certificate)
+            completion(nil)
+        }
+    }
+
+    task.resume()
+}
+
+// Custom delegate to handle the authentication challenge
+class CertificateDelegate: NSObject, URLSessionDelegate {
+    private let completion: ([Certificate]?) -> Void
+
+    init(completion: @escaping ([Certificate]?) -> Void) {
+        self.completion = completion
+    }
+
+    func urlSession(
+        _ session: URLSession,
+        didReceive challenge: URLAuthenticationChallenge
+    ) async -> (
+        URLSession.AuthChallengeDisposition,
+        URLCredential?
+    ) {
+        if let serverTrust = challenge.protectionSpace.serverTrust {
+            let certificatesHandler = CertificatesHandler(serverTrust: serverTrust)
+            self.completion(certificatesHandler.handleCertificates())
+            return (.useCredential, URLCredential(trust: serverTrust))
+        } else {
+            self.completion(nil)
+            return (.cancelAuthenticationChallenge, nil)
         }
     }
 }

@@ -5,7 +5,7 @@
 import Storage
 import struct MozillaAppServices.UpdatableAddressFields
 
-extension UpdatableAddressFields: Decodable {
+extension UpdatableAddressFields: Swift.Decodable {
     enum KebabCodingKeys: String, CodingKey {
         case name
         case organization

@@ -7,6 +7,7 @@ import ToolbarKit
 
 struct NavigationToolbarContainerModel: Equatable {
     let actions: [ToolbarElement]
+    let canShowNavigationHint: Bool
     let displayBorder: Bool
     let windowUUID: WindowUUID
 
@@ -16,6 +17,7 @@ struct NavigationToolbarContainerModel: Equatable {
 
     init(state: ToolbarState, windowUUID: WindowUUID) {
         self.displayBorder = state.navigationToolbar.displayBorder
+        self.canShowNavigationHint = state.canShowNavigationHint
         self.actions = state.navigationToolbar.actions.map { action in
             ToolbarElement(
                 iconName: action.iconName,
@@ -25,7 +27,7 @@ struct NavigationToolbarContainerModel: Equatable {
                 isEnabled: action.isEnabled,
                 isFlippedForRTL: action.isFlippedForRTL,
                 shouldDisplayAsHighlighted: action.shouldDisplayAsHighlighted,
-                hasContextualHint: action.hasContextualHint,
+                contextualHintType: action.contextualHintType,
                 a11yLabel: action.a11yLabel,
                 a11yHint: action.a11yHint,
                 a11yId: action.a11yId,
@@ -36,6 +38,7 @@ struct NavigationToolbarContainerModel: Equatable {
                                                          actionType: ToolbarMiddlewareActionType.customA11yAction)
                     store.dispatch(action)
                 } : nil,
+                hasLongPressAction: action.canPerformLongPressAction(isShowingTopTabs: state.isShowingTopTabs),
                 onSelected: { button in
                     let action = ToolbarMiddlewareAction(buttonType: action.actionType,
                                                          buttonTapped: button,
@@ -43,7 +46,7 @@ struct NavigationToolbarContainerModel: Equatable {
                                                          windowUUID: windowUUID,
                                                          actionType: ToolbarMiddlewareActionType.didTapButton)
                     store.dispatch(action)
-                }, onLongPress: action.canPerformLongPressAction(isShowingTopTabs: action.isShowingTopTabs) ? { button in
+                }, onLongPress: action.canPerformLongPressAction(isShowingTopTabs: state.isShowingTopTabs) ? { button in
                     let action = ToolbarMiddlewareAction(buttonType: action.actionType,
                                                          buttonTapped: button,
                                                          gestureType: .longPress,

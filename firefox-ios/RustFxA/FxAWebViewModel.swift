@@ -22,14 +22,14 @@ enum FxAPageType: Equatable {
 // See https://mozilla.github.io/ecosystem-platform/docs/fxa-engineering/fxa-webchannel-protocol
 // For details on message types.
 private enum RemoteCommand: String {
-    // case canLinkAccount = "can_link_account"
+     case canLinkAccount = "fxaccounts:can_link_account"
     // case loaded = "fxaccounts:loaded"
     case status = "fxaccounts:fxa_status"
     case oauthLogin = "fxaccounts:oauth_login"
     case login = "fxaccounts:login"
     case changePassword = "fxaccounts:change_password"
     case signOut = "fxaccounts:logout"
-    case deleteAccount = "fxaccounts:delete_account"
+    case deleteAccount = "fxaccounts:delete"
     case profileChanged = "profile:change"
 }
 
@@ -283,6 +283,10 @@ extension FxAWebViewModel {
                                         email: email,
                                         verified: verified)
                 profile.rustFxA.accountManager?.setUserData(userData: userData) { }
+            case .canLinkAccount:
+                if let id = id {
+                    onCanLinkAccount(msgId: id, webView: webView)
+                }
             }
         }
     }
@@ -391,6 +395,19 @@ extension FxAWebViewModel {
         profile.rustFxA.accountManager?.handlePasswordChanged(newSessionToken: sessionToken) {
             NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
         }
+    }
+
+    private func onCanLinkAccount(msgId: Int, webView: WKWebView) {
+        let cmd = RemoteCommand.canLinkAccount.rawValue
+        let typeId = "account_updates"
+        // Respond with an 'ok' message immediately today so FxA does not need to support conditional logic on the
+        // server-side just for iOS.
+        // For proper account merging support, see: https://github.com/mozilla-mobile/firefox-ios/issues/21873
+        let data = """
+            { "ok": true }
+        """
+
+        runJS(webView: webView, typeId: typeId, messageId: msgId, command: cmd, data: data)
     }
 
     func shouldAllowRedirectAfterLogIn(basedOn navigationURL: URL?) -> WKNavigationActionPolicy {

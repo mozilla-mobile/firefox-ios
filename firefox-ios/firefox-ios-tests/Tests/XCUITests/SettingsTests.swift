@@ -29,7 +29,8 @@ class SettingsTests: BaseTestCase {
         helpMenu.tap()
 
         waitUntilPageLoad()
-        mozWaitForValueContains(app.textFields["url"], value: "support.mozilla.org")
+        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+        mozWaitForValueContains(url, value: "support.mozilla.org")
         mozWaitForElementToExist(app.webViews.staticTexts["Firefox for iOS Support"])
 
         let numTabs = app.buttons["Show Tabs"].value

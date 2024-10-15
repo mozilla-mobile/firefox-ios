@@ -1,0 +1,156 @@
+/* The accessibility label for the back button in the Main menu header navigation view. */
+"MainMenu.Account.AccessibilityLabels.BackButton.v132" = "Distreiñ";
+
+/* The accessibility label for the close button in the Main menu. */
+"MainMenu.Account.AccessibilityLabels.CloseButton.v132" = "Serriñ";
+
+/* On the main menu, at the top, when the user is signed out. The title for the sign in action */
+"MainMenu.Account.SignedOut.Title.v131" = "Kennaskañ";
+
+/* On the main menu, at the top, when the user is signed in but there was an error syncing. The description subtitle for the sync error state. */
+"MainMenu.Account.SyncError.Description.v131" = "Ehanet eo ar goubredañ";
+
+/* On the main menu, at the top, when the user is signed in but there was an error syncing. The title for this state. */
+"MainMenu.Account.SyncError.Title.v131" = "Kennaskañ en-dro evit goubredañ";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Bookmarks panel. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks.v132" = "Sinedoù";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Downloads panel. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.Downloads.v132" = "Pellgargadurioù";
+
+/* On the main menu, the accessibility label for the action that will take the user to the History panel. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.History.v132" = "Roll istor";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Passwords panel in the settings screen. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.Passwords.v132" = "Gerioù-tremen";
+
+/* On the main menu, the title for the action that will take the user to the Bookmarks panel. */
+"MainMenu.PanelLinkSection.Bookmarks.Title.v131" = "Sinedoù";
+
+/* On the main menu, the title for the action that will take the user to the Downloads panel. */
+"MainMenu.PanelLinkSection.Downloads.Title.v131" = "Pellgargadurioù";
+
+/* On the main menu, the title for the action that will take the user to the History panel. */
+"MainMenu.PanelLinkSection.History.Title.v131" = "Roll istor";
+
+/* On the main menu, the title for the action that will take the user to the Passwords panel in the settings screen. */
+"MainMenu.PanelLinkSection.Passwords.Title.v131" = "Gerioù-tremen";
+
+/* On the main menu, the accessibility labels for the action that will take the user to the Customize Homepage section in the settings screen. */
+"MainMenu.SettingsSection.AccessibilityLabels.CustomizeHomepage.v132" = "Personelaat an degemer";
+
+/* On the main menu, the accessibility labels for the action that will take the user to a website to get help from Mozilla. */
+"MainMenu.SettingsSection.AccessibilityLabels.GetHelp.v132" = "Kaout skoazell";
+
+/* On the main menu, the accessibility labels for the action that will take the user to the Settings menu. */
+"MainMenu.SettingsSection.AccessibilityLabels.Settings.v132" = "Arventennoù";
+
+/* On the main menu, the title for the action that will take the user to the Customize Hopegape section in the settings screen. */
+"MainMenu.SettingsSection.CustomizeHomepage.Title.v131" = "Personelaat an degemer";
+
+/* On the main menu, the title for the action that will take the user to a website to get help from Mozilla. */
+"MainMenu.SettingsSection.GetHelp.Title.v131" = "Kaout skoazell";
+
+/* On the main menu, the title for the action that will take the user to the Settings menu. */
+"MainMenu.SettingsSection.Settings.Title.v131" = "Arventennoù";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Add to Home screen tool for iOS Home screen. */
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132" = "Degemer";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to add a website to the iOS home screen. */
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Title.v132" = "Ouzhpennañ dʼar skramm degemer";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Shortcuts tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Subtitle.v132" = "Berradenn";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to add the current website to the shortcuts on the homepage. */
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Title.v132" = "Ouzhpennañ d’ar berradennoù";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Bookmarks tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Subtitle.v132" = "Ouzhpennañ ur sined";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to save a bookmark for this particular page.. */
+"MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Title.v132" = "Lakaat ur sined war ar bajenn-mañ";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to edit the bookmark for this particular page. */
+"MainMenu.Submenus.Save.AccessibilityLabels.EditBookmark.Title.v132" = "Kemmañ ar sined";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to remove the current website from the shortcuts on the homepage. */
+"MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromShortcuts.Title.v132" = "Lemel diouzh ar berradennoù";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Save as PDF tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveAsPDF.Subtitle.v132" = "PDF";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows the user to use the Save to PDF tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveAsPDF.Title.v132" = "Enrollañ evel PDF";
+
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Add to Homescreen tool. */
+"MainMenu.Submenus.Save.AddToHomeScreen.Subtitle.v131" = "Degemer";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to add a website to the home screen. */
+"MainMenu.Submenus.Save.AddToHomeScreen.Title.v131" = "Ouzhpennañ dʼar skramm degemer";
+
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Shortcuts tool. */
+"MainMenu.Submenus.Save.AddToShortcuts.Subtitle.v131" = "Berradenn";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to add the current website to the shortcuts on the homepage. */
+"MainMenu.Submenus.Save.AddToShortcuts.Title.v131" = "Ouzhpennañ d’ar berradennoù";
+
+/* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Reader View tool. */
+"MainMenu.Submenus.Tools.ReaderView.Subtitle.v131" = "Mod lenn";
+
+/* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Broken Site tool. */
+"MainMenu.Submenus.Tools.ReportBrokenSite.Subtitle.v131" = "Danevelliñ";
+
+/* On the main menu, the title for the action that will take the user to the site where they can report a broken website to our web compatibility team. */
+"MainMenu.Submenus.Tools.ReportBrokenSite.Title.v131" = "Danevelliñ ul lec’hienn torret";
+
+/* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Share tool. */
+"MainMenu.Submenus.Tools.Share.Subtitle.v131" = "Rannañ";
+
+/* On the main menu, the title for the action that will take the user to the Share module in the application. */
+"MainMenu.Submenus.Tools.Share.Title.v131" = "Rannañ";
+
+/* On the main menu, a string below the Tool submenu title, indicating what kind of tools are available in that menu. This string is for the Zoom tool. */
+"MainMenu.Submenus.Tools.Zoom.Subtitle.v131" = "Zoum";
+
+/* On the main menu, in the tools submenu, the title for the menu component that indicates the current zoom level. Placeholder is for the current zoom level percentage. */
+"MainMenu.Submenus.Tools.Zoom.Title.v131" = "Zoum (%@)";
+
+/* On the main menu, the accessibility label for the action that will create a new private tab. */
+"MainMenu.TabsSection.AccessibilityLabels.NewPrivateTab.v132" = "Ivinell brevez nevez";
+
+/* On the main menu, the accessibility label for the action that will create a new, non-private, tab. */
+"MainMenu.TabsSection.AccessibilityLabels.NewTab.v132" = "Ivinell nevez";
+
+/* On the main menu, the title for the action that will create a new private tab. */
+"MainMenu.TabsSection.NewPrivateTab.Title.v131" = "Ivinell prevez nevez";
+
+/* On the main menu, the title for the action that will create a new, non-private, tab. */
+"MainMenu.TabsSection.NewTab.Title.v131" = "Ivinell nevez";
+
+/* On the main menu, the accessibility label for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
+"MainMenu.ToolsSection.AccessibilityLabels.FindInPage.v132" = "Kavout er bajennad";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
+"MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "Enrollañ";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.Tools.v132" = "Ostilhoù";
+
+/* On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
+"MainMenu.ToolsSection.FindInPage.Title.v131" = "Kavout er bajennad…";
+
+/* On the main menu, the title for the action that will take the user to the Save submenu in the menu. */
+"MainMenu.ToolsSection.SaveSubmenu.Title.v131" = "Enrollañ";
+
+/* On the main menu, the title for the action that will switch a site from mobile version to the desktop version, if available. */
+"MainMenu.ToolsSection.SwitchToDesktopSite.Title.v131" = "Mont d'ar stumm evit an urzhiataer";
+
+/* On the main menu, the title for the action that will switch a site from the desktop version to the mobile version. */
+"MainMenu.ToolsSection.SwitchToMobileSite.Title.v131" = "Lec’hienn hezoug";
+
+/* On the main menu, the title for the action that will take the user to the Tools submenu in the menu. */
+"MainMenu.ToolsSection.ToolsSubmenu.Title.v131" = "Ostilhoù";
+

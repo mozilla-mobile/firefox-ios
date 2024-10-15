@@ -26,19 +26,23 @@ struct TabProvider: TimelineProvider {
         let siteImageFetcher = DefaultSiteImageHandler.factory()
 
         Task {
-            let tabFaviconDictionary = await withTaskGroup(of: (String, SiteImageModel).self,
+            let tabFaviconDictionary = await withTaskGroup(of: (String, UIImage).self,
                                                            returning: [String: Image].self) { group in
                 for (_, tab) in simpleTabs {
+                    guard let siteURL = tab.url else {
+                        continue
+                    }
+
                     let siteImageModel = SiteImageModel(id: UUID(),
-                                                        expectedImageType: .favicon,
-                                                        siteURLString: tab.url?.absoluteString ?? "")
+                                                        imageType: .favicon,
+                                                        siteURL: siteURL)
                     group.addTask {
-                        await (tab.imageKey,
-                               siteImageFetcher.getImage(site: siteImageModel))
+                        let image = await siteImageFetcher.getImage(model: siteImageModel)
+                        return (tab.imageKey, image)
                     }
                 }
 
-                return await group.reduce(into: [:]) { $0[$1.0] = Image(uiImage: $1.1.faviconImage ?? UIImage()) }
+                return await group.reduce(into: [:]) { $0[$1.0] = Image(uiImage: $1.1) }
             }
 
             let openTabsEntry = OpenTabsEntry(date: Date(), favicons: tabFaviconDictionary, tabs: openTabs)

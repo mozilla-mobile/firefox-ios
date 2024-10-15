@@ -6,7 +6,7 @@ import UIKit
 import Common
 
 public protocol BrowserNavigationToolbarDelegate: AnyObject {
-    func configureContextualHint(for button: UIButton)
+    func configureContextualHint(for button: UIButton, with contextualHintType: String)
 }
 
 /// Navigation toolbar implementation.
@@ -61,6 +61,12 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
             actionStack.bottomAnchor.constraint(equalTo: bottomAnchor),
             actionStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalEdgeSpace),
         ])
+
+        setupAccessibility()
+    }
+
+    private func setupAccessibility() {
+        addInteraction(UILargeContentViewerInteraction())
     }
 
     private func updateActionStack(toolbarElements: [ToolbarElement]) {
@@ -80,8 +86,8 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
                 button.applyTheme(theme: theme)
             }
 
-            if toolbarElement.hasContextualHint == true {
-                toolbarDelegate?.configureContextualHint(for: button)
+            if let contextualHintType = toolbarElement.contextualHintType {
+                toolbarDelegate?.configureContextualHint(for: button, with: contextualHintType)
             }
         }
     }

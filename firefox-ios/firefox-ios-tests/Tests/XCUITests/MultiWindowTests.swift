@@ -25,22 +25,43 @@ class MultiWindowTests: IpadOnlyTestCase {
         super.tearDown()
     }
 
-    func testMultiWindowFromHomeScreen() {
+    // https://mozilla.testrail.io/index.php?/cases/view/2711015
+    func testMultiWindowSplitView() {
         if skipPlatform { return }
         dismissSurveyPrompt()
         splitViewFromHomeScreen()
         XCTAssertEqual(dotMenuIdentifier.count, 2, "There are not 2 instances opened")
-        // Tap menu button on first and second window
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2711016
+    func testMultiWindowNewTab() {
+        if skipPlatform { return }
+        splitViewFromHomeScreen()
+        // Access hamburger menu and tap on "new tab"
         let menuButton = AccessibilityIdentifiers.Toolbar.settingsMenuButton
-        mozWaitForElementToExist(app.buttons.matching(identifier: menuButton).element(boundBy: 0))
+        let newTab = StandardImageIdentifiers.Large.plus
+        let tabsButtonIdentifier = AccessibilityIdentifiers.Toolbar.tabsButton
+        let topSites = AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell
+        let homeButtom = AccessibilityIdentifiers.Toolbar.homeButton
+        // A new tab is opened in the same window
+        mozWaitForElementToExist(app.collectionViews.cells.matching(identifier: topSites).firstMatch)
+        app.collectionViews.cells.matching(identifier: topSites).firstMatch.tap()
+        mozWaitForElementToExist(app.buttons[homeButtom])
         app.buttons.matching(identifier: menuButton).element(boundBy: 0).tap()
-        mozWaitForElementToExist(app.buttons.matching(identifier: menuButton).element(boundBy: 1))
+        mozWaitForElementToExist(app.tables.otherElements[newTab])
+        app.tables.otherElements[newTab].tap()
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
+        let tabButtonSecondWindow = app.buttons.matching(identifier: tabsButtonIdentifier).element(boundBy: 0)
+        XCTAssertEqual(tabButtonSecondWindow.value as! String, "2", "Number of tabs opened should be equal to 2")
+        // A new tab is opened in the same window
+        mozWaitForElementToExist(app.collectionViews.cells.matching(identifier: topSites).element(boundBy: 6))
+        app.collectionViews.cells.matching(identifier: topSites).element(boundBy: 6).tap()
+        mozWaitForElementToExist(app.buttons[homeButtom])
         app.buttons.matching(identifier: menuButton).element(boundBy: 1).tap()
-        // Tap on settings on first and second window
-        let settings = StandardImageIdentifiers.Large.settings
-        let settingsOption = app.tables.otherElements.matching(identifier: settings).element(boundBy: 0)
-        settingsOption.tap()
-        settingsOption.tap()
+        app.tables.otherElements[newTab].tap()
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
+        let tabButtonFirstWindow = app.buttons.matching(identifier: tabsButtonIdentifier).element(boundBy: 1)
+        XCTAssertEqual(tabButtonFirstWindow.value as! String, "2", "Number of tabs opened should be equal to 2")
     }
 
     func testOpenWindowFromTabSwitcher() {

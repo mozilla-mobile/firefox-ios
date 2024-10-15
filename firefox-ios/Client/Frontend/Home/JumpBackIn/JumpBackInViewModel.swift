@@ -360,7 +360,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         refreshData(maxItemsToDisplay: maxItemsToDisplay)
         logger.log("JumpBackIn section shouldShow \(shouldShow)",
                    level: .debug,
-                   category: .homepage)
+                   category: .legacyHomepage)
     }
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {
@@ -452,7 +452,7 @@ extension JumpBackInViewModel: JumpBackInDelegate {
             await self.updateJumpBackInData()
             logger.log("JumpBack didLoadNewData and section shouldShow \(self.shouldShow)",
                        level: .debug,
-                       category: .homepage)
+                       category: .legacyHomepage)
             reloadView()
         }
     }

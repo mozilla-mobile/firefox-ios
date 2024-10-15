@@ -52,7 +52,7 @@ class ReadingListTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
@@ -76,7 +76,7 @@ class ReadingListTests: BaseTestCase {
         // Check that it appears on regular mode
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
@@ -235,7 +235,10 @@ class ReadingListTests: BaseTestCase {
         savedToReadingList.tap()
         // The article is displayed in Reader View
         mozWaitForElementToExist(app.buttons["Reader View"])
-        XCTAssertTrue(app.buttons["Reader View"].isSelected)
+        // iOS 18 only: Reader View icon is enabled but is not selected.
+        if #unavailable(iOS 18) {
+            XCTAssertTrue(app.buttons["Reader View"].isSelected)
+        }
         XCTAssertTrue(app.buttons["Reader View"].isEnabled)
         app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
         navigator.nowAt(NewTabScreen)

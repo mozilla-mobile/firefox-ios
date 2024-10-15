@@ -55,16 +55,19 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
     // MARK: - NSCoding
 
     required init?(coder aDecoder: NSCoder) {
+        // NOTE: As per NSSecureCoding documentation, we must securely decode objects using `decodeObject(of:forKey:)` (or
+        // use the correct typed methods). Do not use `decodeObject` and then `as?` to convert to the desired type.
         let isCustomEngine = aDecoder.decodeBool(forKey: CodingKeys.isCustomEngine.rawValue)
-        guard let searchTemplate = aDecoder.decodeObject(forKey: CodingKeys.searchTemplate.rawValue) as? String,
-              let shortName = aDecoder.decodeObject(forKey: CodingKeys.shortName.rawValue) as? String,
-              let image = aDecoder.decodeObject(forKey: CodingKeys.image.rawValue) as? UIImage else {
+        guard let searchTemplate = aDecoder.decodeObject(of: NSString.self, forKey: CodingKeys.searchTemplate.rawValue),
+              let shortName = aDecoder.decodeObject(of: NSString.self, forKey: CodingKeys.shortName.rawValue),
+              let image = aDecoder.decodeObject(of: UIImage.self, forKey: CodingKeys.image.rawValue) else {
             assertionFailure()
             return nil
         }
 
-        self.searchTemplate = searchTemplate
-        self.shortName = shortName
+        assert(image.size != CGSize.zero, "Decoded images should not be empty")
+        self.searchTemplate = searchTemplate as String
+        self.shortName = shortName as String
         self.isCustomEngine = isCustomEngine
         self.image = image
         self.engineID = aDecoder.decodeObject(forKey: CodingKeys.engineID.rawValue) as? String
@@ -75,8 +78,14 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
         aCoder.encode(searchTemplate, forKey: CodingKeys.searchTemplate.rawValue)
         aCoder.encode(shortName, forKey: CodingKeys.shortName.rawValue)
         aCoder.encode(isCustomEngine, forKey: CodingKeys.isCustomEngine.rawValue)
-        aCoder.encode(image, forKey: CodingKeys.image.rawValue)
         aCoder.encode(engineID, forKey: CodingKeys.engineID.rawValue)
+
+        // Images loaded from the BrowserKit bundle will not directly contain image data to encode. Here we force the UIImage
+        // to contain PNG data prior to encoding (especially for when writing to a file). [FXIOS-10216]
+        // More discussion here: https://stackoverflow.com/a/7962295
+        let imageWithData = UIImage(data: image.pngData() ?? Data())
+        assert(imageWithData != nil, "Image data should never be nil, even for assets that originate from the bundle")
+        aCoder.encode(imageWithData, forKey: CodingKeys.image.rawValue)
     }
 
     // MARK: - Public

@@ -1,11 +1,11 @@
 /* Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
-"-" = "-";
+"-" = "−";
 
 /* Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar. */
 "+" = "+";
 
 /* Authentication prompt message with no realm. Parameter is the hostname of the site */
-"A username and password are being requested by %@." = "%@ zahtjeva korisničko ime i lozinku.";
+"A username and password are being requested by %@." = "%@ zahtijeva korisničko ime i lozinku.";
 
 /* Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string */
 "A username and password are being requested by %@. The site says: %@" = "%1$@ zahtjeva korisničko ime i lozinku. Stranica kaže: %2$@";
@@ -14,7 +14,7 @@
 "Aa" = "Aa";
 
 /* About settings section title */
-"About" = "O Firefoxu";
+"About" = "O postavkama";
 
 /* The title for the pinning a shortcut action */
 "ActivityStream.ContextMenu.AddToShortcuts" = "Dodaj u prečace";
@@ -290,7 +290,7 @@
 "Downloads.Toast.Progress.DescriptionText" = "%1$@/%2$@";
 
 /* Action button for deleting downloaded files in the Downloads panel. */
-"DownloadsPanel.Delete.Title" = "Obriši";
+"DownloadsPanel.Delete.Title" = "Izbriši";
 
 /* Title for the Downloads Panel empty state. */
 "DownloadsPanel.EmptyState.Title" = "Preuzete datoteke će se prikazati ovdje.";
@@ -392,7 +392,7 @@
 "fxa.signin.qr-link-instruction" = "Na računalu otvori Firefox i idi na firefox.com/pair";
 
 /* FxA sign in view qr code scan button */
-"fxa.signin.ready-to-scan" = "Spremno za skeniranje";
+"fxa.signin.ready-to-scan" = "Spremno za snimanje";
 
 /* FxA sign in view email login button */
 "fxa.signin.use-email-instead" = "Umjesto toga koristi e-mail";
@@ -470,7 +470,7 @@
 "HomePanel.ContextMenu.Bookmark" = "Zabilješka";
 
 /* The title for the Delete from History context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.DeleteFromHistory" = "Obriši iz povijesti";
+"HomePanel.ContextMenu.DeleteFromHistory" = "Izbriši iz povijesti";
 
 /* The title for the Open in New Private Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "Otvori u privatnoj kartici";
@@ -506,10 +506,10 @@
 "Hotkeys.NewTab.DiscoveryTitle" = "Nova kartica";
 
 /* A label indicating the keyboard shortcut of switching from Private Browsing to Normal Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Hotkeys.NormalMode.DiscoveryTitle" = "Uobičajeni način pregledavanja";
+"Hotkeys.NormalMode.DiscoveryTitle" = "Modus normalnog pregledavanja";
 
 /* A label indicating the keyboard shortcut of switching from Normal Browsing mode to Private Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Hotkeys.PrivateMode.DiscoveryTitle" = "Privatni način pregledavanja";
+"Hotkeys.PrivateMode.DiscoveryTitle" = "Modus privatnog pregledavanja";
 
 /* A label indicating the keyboard shortcut of reloading the current page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.Reload.DiscoveryTitle" = "Ponovno učitaj stranicu";
@@ -653,7 +653,7 @@
 "Logins.Onboarding.LearnMoreButtonTitle" = "Saznaj više";
 
 /* Warning message shown when you try to enable or use native AutoFill without a device passcode setup */
-"Logins.PasscodeRequirement.Warning" = "Za korištenje automatskog ispunjavanja u Firefoxu, moraš omogućiti lozinku uređaja.";
+"Logins.PasscodeRequirement.Warning" = "Za korištenje funkcije automatskog ispunjavanja za Firefox lozinka uređaja mora biti aktivirana.";
 
 /* Label displaying welcome view tagline under the title */
 "Logins.WelcomeView.Tagline" = "Ponesi svoje lozinke sa sobom";
@@ -764,10 +764,10 @@
 "Menu.NewTab.v99" = "Nova kartica";
 
 /* Label for the button, displayed in the menu, turns off night mode. */
-"Menu.NightModeTurnOff.Label2" = "Isključi noćni način";
+"Menu.NightModeTurnOff.Label2" = "Isključi noćni modus";
 
 /* Label for the button, displayed in the menu, turns on night mode. */
-"Menu.NightModeTurnOn.Label2" = "Uključi noćni način";
+"Menu.NightModeTurnOn.Label2" = "Uključi noćni modus";
 
 /* Label for the button, displayed in the menu, takes you to passwords screen when pressed. */
 "Menu.Passwords.Label" = "Lozinke";
@@ -914,7 +914,7 @@
 "Password" = "Lozinka";
 
 /* See http://mzl.la/1G7uHo7 */
-"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Ovo omogućuje spremanje slike u skup snimaka.";
+"PhotoLibrary.FirefoxWouldLikeAccessMessage" = "Ovo omogućuje spremanje slike u album snimaka.";
 
 /* See http://mzl.la/1G7uHo7 */
 "PhotoLibrary.FirefoxWouldLikeAccessTitle" = "Firefox želi pristupiti tvojim fotografijama";
@@ -947,7 +947,7 @@
 "Reader View" = "Prikaz za čitanje";
 
 /* Accessibility message e.g. spoken by VoiceOver when Reader Mode becomes available. */
-"ReaderMode.Available.VoiceOverAnnouncement" = "Dostupan je način rada za čitanje";
+"ReaderMode.Available.VoiceOverAnnouncement" = "Dostupan je modus čitanja";
 
 /* Name for Mark as read button in reader mode */
 "ReaderModeBar.MarkAsRead.v106" = "Označi kao pročitano";
@@ -986,7 +986,7 @@
 "ReopenAlert.Title" = "Ponovo otvori posljednju zatvorenu karticu";
 
 /* Accessibility label for button resetting font size in display settings of reader mode */
-"Reset text size" = "Vrati veličinu teksta na zadanu veličinu";
+"Reset text size" = "Obnovi veličinu teksta";
 
 /* Font type setting in the reading view settings */
 "Sans-serif" = "Sans-serif";
@@ -998,16 +998,16 @@
 "ScanQRCode.Error.OK.Button" = "U redu";
 
 /* Text for the instructions label, displayed in the QR scanner view */
-"ScanQRCode.Instructions.Label" = "Za skeniranje, poravnaj QR kȏd unutar okvira";
+"ScanQRCode.Instructions.Label" = "Za snimanje koda poravnaj QR kod unutar okvira";
 
 /* Text of the prompt that is shown to the user when the data is invalid */
 "ScanQRCode.InvalidDataError.Message" = "Podaci nisu valjani";
 
 /* Text of the prompt to setup the camera authorization for the Scan QR Code feature. */
-"ScanQRCode.PermissionError.Message.v100" = "Idi u ‘Postavke’ uređaja > ‘Firefox’. Dopusti Firefoxu pristup kameri.";
+"ScanQRCode.PermissionError.Message.v100" = "Idi u „Postavke” > „Firefox”. Dozvoli Firefoxu pristup kameri.";
 
 /* Title for the QR code scanner view. */
-"ScanQRCode.View.Title" = "Skeniraj QR kȏd";
+"ScanQRCode.View.Title" = "Snimi QR kod";
 
 /* Open search section of settings */
 "Search" = "Traži";
@@ -1214,7 +1214,7 @@
 "Settings.DisplayTheme.StatusTitle" = "Automatski";
 
 /* Switch mode settings section title */
-"Settings.DisplayTheme.SwitchMode.SectionHeader" = "Prebacivanje modusa";
+"Settings.DisplayTheme.SwitchMode.SectionHeader" = "Promijeni modus";
 
 /* Display (theme) settings switch subtitle, explaining the title 'Automatically'. */
 "Settings.DisplayTheme.SwitchSubtitle" = "Prebaci automatski na osnovi svjetline ekrana";
@@ -1736,7 +1736,7 @@
 "TranslationToastHandler.PromptTranslate.OK" = "Da";
 
 /* Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language. The third is the name of the service. */
-"TranslationToastHandler.PromptTranslate.Title" = "Čini se da je jezik ove stranice %1$@. Želiš li je prevesti na %2$@ pomoću %3$@?";
+"TranslationToastHandler.PromptTranslate.Title" = "Čini se da je jezik ove stranice %1$@. Želiš li je prevesti na %2$@ pomoću usluge %3$@?";
 
 /* Tile title for Twitter */
 "Twitter" = "Twitter";

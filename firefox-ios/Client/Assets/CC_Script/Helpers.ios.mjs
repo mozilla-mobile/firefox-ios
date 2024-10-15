@@ -8,10 +8,17 @@ import Overrides from "resource://gre/modules/Overrides.ios.js";
 /* eslint mozilla/use-isInstance: 0 */
 HTMLSelectElement.isInstance = element => element instanceof HTMLSelectElement;
 HTMLInputElement.isInstance = element => element instanceof HTMLInputElement;
+HTMLIFrameElement.isInstance = element => element instanceof HTMLIFrameElement;
 HTMLFormElement.isInstance = element => element instanceof HTMLFormElement;
 ShadowRoot.isInstance = element => element instanceof ShadowRoot;
 
 HTMLElement.prototype.ownerGlobal = window;
+
+// We cannot mock this in WebKit because we lack access to low-level APIs.
+// For completeness, we simply return true when the input type is "password".
+HTMLInputElement.prototype.hasBeenTypePassword = function () {
+  return this.type === "password";
+};
 
 HTMLInputElement.prototype.setUserInput = function (value) {
   this.value = value;
@@ -121,7 +128,8 @@ export const XPCOMUtils = withNotImplementedError({
 // eslint-disable-next-line no-shadow
 export const ChromeUtils = withNotImplementedError({
   defineLazyGetter: (obj, prop, getFn) => {
-    obj[prop] = getFn?.call(obj);
+    const callback = prop === "log" ? genericLogger : getFn;
+    obj[prop] = callback?.call(obj);
   },
   defineESModuleGetters(obj, modules) {
     internalModuleResolvers.resolveModules(obj, modules);
@@ -178,34 +186,6 @@ export const Services = withNotImplementedError({
         })
       );
     },
-    recordEvent: (category, method, object, value, extra) => {
-      // For now, we only care about the address form telemetry
-      // TODO(FXCM-935): move address telemetry to Glean so we can remove this
-      // Data format of the sent message is:
-      // {
-      //   type: "event",
-      //   category: "address",
-      //   method: "detected" | "filled" | "filled_modified",
-      //   object: "address_form" | "address_form_ext",
-      //   value: String,
-      //   extra: Any,
-      // }
-      if (category !== "address") {
-        return;
-      }
-
-      // eslint-disable-next-line no-undef
-      webkit.messageHandlers.addressFormTelemetryMessageHandler.postMessage(
-        JSON.stringify({
-          type: "event",
-          category,
-          method,
-          object,
-          value,
-          extra,
-        })
-      );
-    },
   }),
   // TODO(FXCM-936): we should use crypto.randomUUID() instead of Services.uuid.generateUUID() in our codebase
   // Underneath crypto.randomUUID() uses the same implementation as generateUUID()
@@ -221,12 +201,60 @@ window.Localization = function () {
   return { formatValueSync: () => "" };
 };
 
-// For now, we ignore all calls to glean.
-// TODO(FXCM-935): move address telemetry to Glean so we can create a universal mock for glean that
-// dispatches telemetry messages to the iOS.
+// TODO(issam, FXCM-935): In order to create create a universal mock for glean that
+// dispatches telemetry messages to the iOS, we need to modify typedefs in swift. For now, we map the telemetry events
+// to the expected shape. FXCM-935 will tackle cleaning this up.
 window.Glean = {
   formautofillCreditcards: undefinedProxy(),
   formautofill: undefinedProxy(),
+  creditcard: undefinedProxy(),
+  _mapGleanToLegacy: (eventName, { value, ...extra }) => {
+    const eventMapping = {
+      filledModifiedAddressForm: {
+        method: "filled_modified",
+        object: "address_form",
+      },
+      filledAddressForm: { method: "filled", object: "address_form" },
+      detectedAddressForm: { method: "detected", object: "address_form" },
+      filledModifiedAddressFormExt: {
+        method: "filled_modified",
+        object: "address_form_ext",
+      },
+      filledAddressFormExt: { method: "filled", object: "address_form_ext" },
+      detectedAddressFormExt: {
+        method: "detected",
+        object: "address_form_ext",
+      },
+    };
+    // eslint-disable-next-line no-undef
+    webkit.messageHandlers.addressFormTelemetryMessageHandler.postMessage(
+      JSON.stringify({
+        type: "event",
+        category: "address",
+        ...eventMapping[eventName],
+        value,
+        extra,
+      })
+    );
+  },
+  address: new Proxy(
+    {},
+    {
+      get(_target, prop) {
+        return {
+          record: extras => Glean._mapGleanToLegacy(prop, extras),
+        };
+      },
+    }
+  ),
 };
+
+const genericLogger = () =>
+  withNotImplementedError({
+    info: () => {},
+    error: () => {},
+    warn: () => {},
+    debug: () => {},
+  });
 
 export { IOSAppConstants as AppConstants } from "resource://gre/modules/shared/Constants.ios.mjs";

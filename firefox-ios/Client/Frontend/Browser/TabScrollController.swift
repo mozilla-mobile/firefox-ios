@@ -457,8 +457,8 @@ extension TabScrollingController: UIGestureRecognizerDelegate {
 
 extension TabScrollingController: UIScrollViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        lastContentOffsetY = scrollView.contentOffset.y
-    }
+            lastContentOffsetY = scrollView.contentOffset.y
+        }
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard !tabIsLoading(), !isBouncingAtBottom(), isAbleToScroll, let tab else { return }
@@ -482,15 +482,16 @@ extension TabScrollingController: UIScrollViewDelegate {
             setOffset(y: 0, for: scrollView)
         }
 
-        let scrolledToTop = lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0
-        let scrolledDown = lastContentOffsetY == 0 && scrollView.contentOffset.y > 0
-
-        if scrolledDown || scrolledToTop {
+        // this action controls the address toolbar's border position, and to prevent spamming redux with actions for every
+        // change in content offset, we keep track of lastContentOffsetY to know if the border needs to be updated
+        if (lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0) ||
+            (lastContentOffsetY <= 0 && scrollView.contentOffset.y > 0) {
             lastContentOffsetY = scrollView.contentOffset.y
-            let action = GeneralBrowserMiddlewareAction(scrollOffset: scrollView.contentOffset,
-                                                        windowUUID: windowUUID,
-                                                        actionType: GeneralBrowserMiddlewareActionType.websiteDidScroll)
-            store.dispatch(action)
+            store.dispatch(
+                GeneralBrowserMiddlewareAction(
+                    scrollOffset: scrollView.contentOffset,
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserMiddlewareActionType.websiteDidScroll))
         }
 
         guard isAnimatingToolbar else { return }

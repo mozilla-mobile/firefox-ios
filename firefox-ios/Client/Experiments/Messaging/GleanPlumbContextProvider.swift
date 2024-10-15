@@ -14,6 +14,8 @@ class GleanPlumbContextProvider {
         case isInactiveNewUser = "is_inactive_new_user"
         case allowedTipsNotifications = "allowed_tips_notifications"
         case numberOfAppLaunches = "number_of_app_launches"
+        case numberOfSyncedDevices = "number_of_sync_devices"
+        case signedInFxaAccount = "is_fxa_signed_in"
     }
 
     struct Constant {
@@ -40,6 +42,14 @@ class GleanPlumbContextProvider {
 
     private var numberOfAppLaunches: Int32 {
         return profile.prefs.intForKey(PrefsKeys.Session.Count) ?? 0
+    }
+
+    private var numberOfSyncedDevices: Int32 {
+        return profile.prefs.intForKey(PrefsKeys.Sync.numberOfSyncedDevices) ?? 0
+    }
+
+    private var signedInFxaAccount: Bool {
+        return profile.prefs.boolForKey(PrefsKeys.Sync.signedInFxaAccount) ?? false
     }
 
     var isInactiveNewUser: Bool {
@@ -73,6 +83,9 @@ class GleanPlumbContextProvider {
                 ContextKey.isDefaultBrowser.rawValue: isDefaultBrowser,
                 ContextKey.isInactiveNewUser.rawValue: isInactiveNewUser,
                 ContextKey.numberOfAppLaunches.rawValue: numberOfAppLaunches,
-                ContextKey.allowedTipsNotifications.rawValue: allowedTipsNotifications]
+                ContextKey.numberOfSyncedDevices.rawValue: numberOfSyncedDevices,
+                ContextKey.allowedTipsNotifications.rawValue: allowedTipsNotifications,
+                ContextKey.signedInFxaAccount.rawValue: signedInFxaAccount
+        ]
     }
 }

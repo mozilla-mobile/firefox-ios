@@ -974,7 +974,7 @@
 "Remove" = "Elimina";
 
 /* Name for button removing current article from reading list in reader mode */
-"Remove from Reading List" = "Elimina da Elenco lettura";
+"Remove from Reading List" = "Rimuovi da Elenco lettura";
 
 /* Cancel button text shown in reopen-alert at home page. */
 "ReopenAlert.Actions.Cancel" = "Annulla";

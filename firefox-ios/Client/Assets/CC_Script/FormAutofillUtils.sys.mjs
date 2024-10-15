@@ -1361,6 +1361,27 @@ FormAutofillUtils = {
     }
     return element;
   },
+
+  /**
+   * This function is used to determine the frames that can also be autofilled
+   * when users trigger autofill on the focusd frame.
+   *
+   * Currently we also autofill when for frames that
+   * 1. is top-level.
+   * 2. is same origin with the top-level.
+   * 3. is same origin with the frame that triggers autofill.
+   *
+   * @param {BrowsingContext} browsingContext
+   *        frame to be checked whether we can also autofill
+   */
+  isBCSameOriginWithTop(browsingContext) {
+    return (
+      browsingContext.top == browsingContext ||
+      browsingContext.currentWindowGlobal.documentPrincipal.equals(
+        browsingContext.top.currentWindowGlobal.documentPrincipal
+      )
+    );
+  },
 };
 
 ChromeUtils.defineLazyGetter(FormAutofillUtils, "stringBundle", function () {

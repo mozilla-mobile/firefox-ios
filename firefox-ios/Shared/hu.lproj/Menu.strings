@@ -50,7 +50,7 @@
 "Menu.ViewDekstopSiteAction.Title" = "Asztali oldal kérése";
 
 /* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
-"Menu.ViewMobileSiteAction.Title" = "Mobil oldal kérése";
+"Menu.ViewMobileSiteAction.Title" = "Mobilos oldal kérése";
 
 /* Label for the button, displayed in the menu, used to navigate to the home page. */
 "SettingsMenu.OpenHomePageAction.Title" = "Kezdőlap";

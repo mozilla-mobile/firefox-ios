@@ -11,6 +11,35 @@ struct NavigationBarState: StateType, Equatable {
     var actions: [ToolbarActionState]
     var displayBorder: Bool
 
+    private static let searchAction = ToolbarActionState(
+        actionType: .search,
+        iconName: StandardImageIdentifiers.Large.search,
+        isEnabled: true,
+        a11yLabel: .TabToolbarSearchAccessibilityLabel,
+        a11yId: AccessibilityIdentifiers.Toolbar.searchButton)
+
+    private static let homeAction = ToolbarActionState(
+        actionType: .home,
+        iconName: StandardImageIdentifiers.Large.home,
+        isEnabled: true,
+        a11yLabel: .TabToolbarHomeAccessibilityLabel,
+        a11yId: AccessibilityIdentifiers.Toolbar.homeButton)
+
+    private static let dataClearanceAction = ToolbarActionState(
+        actionType: .dataClearance,
+        iconName: StandardImageIdentifiers.Large.dataClearance,
+        isEnabled: true,
+        contextualHintType: ContextualHintType.dataClearance.rawValue,
+        a11yLabel: .TabToolbarDataClearanceAccessibilityLabel,
+        a11yId: AccessibilityIdentifiers.Toolbar.fireButton)
+
+    private static let newTabAction = ToolbarActionState(
+        actionType: .newTab,
+        iconName: StandardImageIdentifiers.Large.plus,
+        isEnabled: true,
+        a11yLabel: .Toolbars.NewTabButton,
+        a11yId: AccessibilityIdentifiers.Toolbar.addNewTabButton)
+
     init(windowUUID: WindowUUID) {
         self.init(windowUUID: windowUUID,
                   actions: [],
@@ -29,47 +58,61 @@ struct NavigationBarState: StateType, Equatable {
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
 
         switch action.actionType {
-        case ToolbarActionType.didLoadToolbars,
-            ToolbarActionType.urlDidChange:
-            guard let model = (action as? ToolbarAction)?.navigationToolbarModel else { return state }
+        case ToolbarActionType.didLoadToolbars:
+            guard let displayBorder = (action as? ToolbarAction)?.displayNavBorder else { return state }
 
+            let actions = [
+                backAction(enabled: false),
+                forwardAction(enabled: false),
+                searchAction,
+                tabsAction(),
+                menuAction()
+            ]
             return NavigationBarState(
                 windowUUID: state.windowUUID,
-                actions: model.actions ?? state.actions,
-                displayBorder: model.displayBorder ?? state.displayBorder
+                actions: actions,
+                displayBorder: displayBorder
             )
 
-        case ToolbarActionType.numberOfTabsChanged:
-            guard let navToolbarModel = (action as? ToolbarAction)?.navigationToolbarModel else { return state }
+        case ToolbarActionType.urlDidChange:
+            guard let toolbarAction = action as? ToolbarAction else { return state }
 
             return NavigationBarState(
                 windowUUID: state.windowUUID,
-                actions: navToolbarModel.actions ?? state.actions,
+                actions: navigationActions(action: toolbarAction, navigationBarState: state),
                 displayBorder: state.displayBorder
             )
 
-        case ToolbarActionType.backForwardButtonStatesChanged:
-            guard let model = (action as? ToolbarAction)?.navigationToolbarModel else { return state }
+        case ToolbarActionType.numberOfTabsChanged:
+            guard let toolbarAction = action as? ToolbarAction else { return state }
 
             return NavigationBarState(
                 windowUUID: state.windowUUID,
-                actions: model.actions ?? state.actions,
+                actions: navigationActions(action: toolbarAction, navigationBarState: state),
+                displayBorder: state.displayBorder
+            )
+
+        case ToolbarActionType.backForwardButtonStateChanged:
+            guard let toolbarAction = action as? ToolbarAction else { return state }
+
+            return NavigationBarState(
+                windowUUID: state.windowUUID,
+                actions: navigationActions(action: toolbarAction, navigationBarState: state),
                 displayBorder: state.displayBorder
             )
 
         case ToolbarActionType.showMenuWarningBadge:
-            guard let model = (action as? ToolbarAction)?.navigationToolbarModel else { return state }
+            guard let toolbarAction = action as? ToolbarAction else { return state }
 
             return NavigationBarState(
                 windowUUID: state.windowUUID,
-                actions: model.actions ?? state.actions,
+                actions: navigationActions(action: toolbarAction, navigationBarState: state),
                 displayBorder: state.displayBorder
             )
 
-        case ToolbarActionType.scrollOffsetChanged,
+        case ToolbarActionType.borderPositionChanged,
             ToolbarActionType.toolbarPositionChanged:
-            guard let displayBorder = (action as? ToolbarAction)?.navigationToolbarModel?.displayBorder
-            else { return state }
+            guard let displayBorder = (action as? ToolbarAction)?.displayNavBorder else { return state }
 
             return NavigationBarState(
                 windowUUID: state.windowUUID,
@@ -84,5 +127,105 @@ struct NavigationBarState: StateType, Equatable {
                 displayBorder: state.displayBorder
             )
         }
+    }
+
+    // MARK: - Navigation Toolbar Actions
+
+    private static func navigationActions(
+        action: ToolbarAction,
+        navigationBarState: NavigationBarState)
+    -> [ToolbarActionState] {
+        var actions = [ToolbarActionState]()
+
+        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
+        else { return actions }
+
+        let isUrlChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
+        let url = isUrlChangeAction ? action.url : toolbarState.addressToolbar.url
+
+        let middleAction = getMiddleButtonAction(url: url,
+                                                 isPrivateMode: toolbarState.isPrivateMode,
+                                                 canShowDataClearanceAction: toolbarState.canShowDataClearanceAction,
+                                                 isNewTabFeatureEnabled: toolbarState.isNewTabFeatureEnabled)
+
+        let canGoBack = action.canGoBack ?? toolbarState.canGoBack
+        let canGoForward = action.canGoForward ?? toolbarState.canGoForward
+        let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
+
+        let isShowMenuWarningAction = action.actionType as? ToolbarActionType == .showMenuWarningBadge
+        let showActionWarningBadge = action.showMenuWarningBadge ?? toolbarState.showMenuWarningBadge
+        let showWarningBadge = isShowMenuWarningAction ? showActionWarningBadge : toolbarState.showMenuWarningBadge
+
+        actions = [
+            backAction(enabled: canGoBack),
+            forwardAction(enabled: canGoForward),
+            middleAction,
+            tabsAction(numberOfTabs: numberOfTabs, isPrivateMode: toolbarState.isPrivateMode),
+            menuAction(showWarningBadge: showWarningBadge)
+        ]
+
+        return actions
+    }
+
+    private static func getMiddleButtonAction(url: URL?,
+                                              isPrivateMode: Bool,
+                                              canShowDataClearanceAction: Bool,
+                                              isNewTabFeatureEnabled: Bool)
+    -> ToolbarActionState {
+        // WT ToDo
+        let canShowDataClearanceAction = canShowDataClearanceAction && isPrivateMode
+        let isNewTabEnabled = isNewTabFeatureEnabled
+        let middleActionForWebpage = canShowDataClearanceAction ?
+                                     dataClearanceAction : isNewTabEnabled ? newTabAction : homeAction
+        let middleActionForHomepage = searchAction
+        let middleAction = url == nil ? middleActionForHomepage : middleActionForWebpage
+
+        return middleAction
+    }
+
+    // MARK: - Helper
+    private static func backAction(enabled: Bool) -> ToolbarActionState {
+        return ToolbarActionState(
+            actionType: .back,
+            iconName: StandardImageIdentifiers.Large.back,
+            isFlippedForRTL: true,
+            isEnabled: enabled,
+            contextualHintType: ContextualHintType.navigation.rawValue,
+            a11yLabel: .TabToolbarBackAccessibilityLabel,
+            a11yId: AccessibilityIdentifiers.Toolbar.backButton)
+    }
+
+    private static func forwardAction(enabled: Bool) -> ToolbarActionState {
+        return ToolbarActionState(
+            actionType: .forward,
+            iconName: StandardImageIdentifiers.Large.forward,
+            isFlippedForRTL: true,
+            isEnabled: enabled,
+            a11yLabel: .TabToolbarForwardAccessibilityLabel,
+            a11yId: AccessibilityIdentifiers.Toolbar.forwardButton)
+    }
+
+    private static func tabsAction(numberOfTabs: Int = 1,
+                                   isPrivateMode: Bool = false) -> ToolbarActionState {
+        return ToolbarActionState(
+            actionType: .tabs,
+            iconName: StandardImageIdentifiers.Large.tab,
+            badgeImageName: isPrivateMode ? StandardImageIdentifiers.Medium.privateModeCircleFillPurple : nil,
+            maskImageName: isPrivateMode ? ImageIdentifiers.badgeMask : nil,
+            numberOfTabs: numberOfTabs,
+            isEnabled: true,
+            a11yLabel: .TabsButtonShowTabsAccessibilityLabel,
+            a11yId: AccessibilityIdentifiers.Toolbar.tabsButton)
+    }
+
+    private static func menuAction(showWarningBadge: Bool = false) -> ToolbarActionState {
+        return ToolbarActionState(
+            actionType: .menu,
+            iconName: StandardImageIdentifiers.Large.appMenu,
+            badgeImageName: showWarningBadge ? StandardImageIdentifiers.Large.warningFill : nil,
+            maskImageName: showWarningBadge ? ImageIdentifiers.menuWarningMask : nil,
+            isEnabled: true,
+            a11yLabel: .LegacyAppMenu.Toolbar.MenuButtonAccessibilityLabel,
+            a11yId: AccessibilityIdentifiers.Toolbar.settingsMenuButton)
     }
 }

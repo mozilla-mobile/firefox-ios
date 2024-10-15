@@ -5,7 +5,7 @@
 "New Tab" = "Skedë e Re";
 
 /* Privacy - Camera Usage Description */
-"NSCameraUsageDescription" = "Kjo ju lejon të bëni dhe ngarkoni foto.";
+"NSCameraUsageDescription" = "Firefox-i përdor kamerën tuaj për të skanuar kode QR dhe për të bërë foto dhe video.";
 
 /* Privacy - Face ID Usage Description */
 "NSFaceIDUsageDescription" = "Firefox-i lyp Face ID që të hyjë në fjalëkalimet dhe metoda pagesash tuajat të ruajtura.";

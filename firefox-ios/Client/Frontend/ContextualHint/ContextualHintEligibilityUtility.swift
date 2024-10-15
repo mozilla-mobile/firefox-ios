@@ -44,10 +44,14 @@ struct ContextualHintEligibilityUtility: ContextualHintEligibilityUtilityProtoco
             hintTypeShouldBePresented = canPresentJumpBackInSyncedTab
         case .toolbarLocation:
             hintTypeShouldBePresented = isSearchBarLocationFeatureEnabled
+        case .mainMenu:
+            hintTypeShouldBePresented = true
         case .inactiveTabs:
             hintTypeShouldBePresented = true
         case .shoppingExperience:
             return canPresentShoppingCFR
+        case .navigation:
+            hintTypeShouldBePresented = true
         }
 
         return hintTypeShouldBePresented && !hasAlreadyBeenPresented(hintType)

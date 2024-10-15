@@ -10,15 +10,15 @@ import UIKit
 /// Image cache wrapper around Kingfisher image cache
 /// Used in SiteImageCache
 protocol DefaultImageCache {
-    func retrieveImage(forKey key: String) async throws -> UIImage?
+    func retrieve(forKey key: String) async throws -> UIImage?
 
     func store(image: UIImage, forKey key: String)
 
-    func clearCache()
+    func clear()
 }
 
 extension ImageCache: DefaultImageCache {
-    func retrieveImage(forKey key: String) async throws -> UIImage? {
+    func retrieve(forKey key: String) async throws -> UIImage? {
         return try await withCheckedThrowingContinuation { continuation in
             retrieveImage(forKey: key) { result in
                 switch result {
@@ -35,7 +35,7 @@ extension ImageCache: DefaultImageCache {
         self.store(image, forKey: key)
     }
 
-    func clearCache() {
+    func clear() {
         clearMemoryCache()
         clearDiskCache()
     }

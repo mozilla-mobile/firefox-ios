@@ -1,8 +1,26 @@
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Description.v108" = "إن تعيين Firefox كمتصفحك الافتراضي هو تصويت لإنترنت مفتوح ومتاح.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.BetterInternet.Title.v108" = "جعله متصفحك الدائم هو طريق إلى إنترنت أفضل";
+
 /* Button string to learn how to set your default browser. */
 "DefaultBrowserCard.Button.v2" = "اطّلع على الطريقة";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "اضبط روابط المواقع والبريد الإلكتروني والرسائل لتفتح تلقائيًا في Firefox.";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Description.v108" = "اختر Firefox كمتصفحك الافتراضي لجعل السرعة والأمان والخصوصية تلقائية.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.NextLevel.Title.v108" = "اِرتَقي بالتصفح اليومي";
+
+/* Description for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Description.v108" = "في المتوسط يحظر Firefox أكثر من 3000 متتبع لكل مستخدم شهريًا. اجعلنا متصفحك الافتراضي للحصول على راحة الخصوصية.";
+
+/* Title for small home tab banner shown that allows the user to switch their default browser to Firefox. */
+"DefaultBrowserCard.PeaceOfMind.Title.v108" = "Firefox تولّى مسألة الخصوصية";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Title" = "بدّل متصفّحك المبدئي";

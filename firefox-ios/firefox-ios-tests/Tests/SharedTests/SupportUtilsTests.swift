@@ -21,7 +21,6 @@ class SupportUtilsTests: XCTestCase {
     }
 
     func testURLForPrivacyNotice_withoutContentParam() {
-        let appVersion = AppInfo.appVersion
         let languageIdentifier = Locale.preferredLanguages.first!
 
         let urlString = SupportUtils.URLForPrivacyNotice(
@@ -37,7 +36,6 @@ class SupportUtilsTests: XCTestCase {
     }
 
     func testURLForPrivacyNotice_withContentParam() {
-        let appVersion = AppInfo.appVersion
         let languageIdentifier = Locale.preferredLanguages.first!
 
         let urlString = SupportUtils.URLForPrivacyNotice(

@@ -38,22 +38,22 @@
 "Microsurvey.Survey.LogoImage.AccessibilityLabel.v129" = "%@ логотипі";
 
 /* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
-"Microsurvey.Survey.Options.LikertScaleOption1.v127" = "Өте жақсы";
+"Microsurvey.Survey.Options.Dissatisfied.v132" = "Нашар";
 
 /* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
-"Microsurvey.Survey.Options.LikertScaleOption2.v127" = "Жақсы";
-
-/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
-"Microsurvey.Survey.Options.LikertScaleOption3.v127" = "Бейтарап";
-
-/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
-"Microsurvey.Survey.Options.LikertScaleOption4.v127" = "Нашар";
-
-/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
-"Microsurvey.Survey.Options.LikertScaleOption5.v127" = "Өте нашар";
+"Microsurvey.Survey.Options.Neutral.v132" = "Бейтарап";
 
 /* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. It indicates that the user has not use the feature that the survey is inquiring about. */
-"Microsurvey.Survey.Options.LikertScaleOption6.v129" = "Мен оны қолданбаймын";
+"Microsurvey.Survey.Options.NotApplicable.v132" = "Мен оны қолданбаймын";
+
+/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
+"Microsurvey.Survey.Options.Satisfied.v132" = "Жақсы";
+
+/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
+"Microsurvey.Survey.Options.VeryDissatisfied.v132" = "Өте нашар";
+
+/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
+"Microsurvey.Survey.Options.VerySatisfied.v132" = "Өте жақсы";
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label that states the order the survey option in the list of options. First placeholder is the number the option is in the list and the second placeholder is the total number of options such as 1 out of 6. */
 "Microsurvey.Survey.OptionsOrder.AccessibilityLabel.v129" = "%2$@ ішінен %1$@";

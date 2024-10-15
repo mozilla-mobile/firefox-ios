@@ -10,7 +10,12 @@ import Common
 /// | navigation  | indicators | url       [ page    ] | browser  |
 /// |   actions   |            |           [ actions ] | actions  |
 /// +-------------+------------+-----------------------+----------+
-public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, LocationViewDelegate {
+public class BrowserAddressToolbar: UIView,
+                                    Notifiable,
+                                    AddressToolbar,
+                                    ThemeApplicable,
+                                    LocationViewDelegate,
+                                    UIDragInteractionDelegate {
     private enum UX {
         static let horizontalEdgeSpace: CGFloat = 16
         static let verticalEdgeSpace: CGFloat = 8
@@ -21,10 +26,15 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         static let actionSpacing: CGFloat = 0
         static let buttonSize = CGSize(width: 44, height: 44)
         static let locationHeight: CGFloat = 44
+        // This could be changed at some point, depending on the a11y UX design.
+        static let locationMaxHeight: CGFloat = 54
     }
 
+    public var notificationCenter: any Common.NotificationProtocol = NotificationCenter.default
     private weak var toolbarDelegate: AddressToolbarDelegate?
     private var theme: Theme?
+    private var isUnifiedSearchEnabled = false
+    private var droppableUrl: URL?
 
     private lazy var toolbarContainerView: UIView = .build()
     private lazy var navigationActionStack: UIStackView = .build()
@@ -50,10 +60,14 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
     private var toolbarBottomBorderHeightConstraint: NSLayoutConstraint?
     private var leadingNavigationActionStackConstraint: NSLayoutConstraint?
     private var trailingBrowserActionStackConstraint: NSLayoutConstraint?
+    private var locationContainerHeightConstraint: NSLayoutConstraint?
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
         setupLayout()
+        setupNotifications(forObserver: self, observing: [UIContentSizeCategory.didChangeNotification])
+        adjustHeightConstraintForA11ySizeCategory()
+        setupDragInteraction()
     }
 
     required init?(coder: NSCoder) {
@@ -62,18 +76,20 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
 
     public func configure(state: AddressToolbarState,
                           toolbarDelegate: any AddressToolbarDelegate,
-                          leadingSpace: CGFloat?,
-                          trailingSpace: CGFloat?) {
+                          leadingSpace: CGFloat? = nil,
+                          trailingSpace: CGFloat? = nil,
+                          isUnifiedSearchEnabled: Bool) {
         self.toolbarDelegate = toolbarDelegate
-        configure(state: state)
+        configure(state: state, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
         updateSpacing(leading: leadingSpace, trailing: trailingSpace)
     }
 
-    public func configure(state: AddressToolbarState) {
+    public func configure(state: AddressToolbarState, isUnifiedSearchEnabled: Bool) {
         updateActions(state: state)
         updateBorder(borderPosition: state.borderPosition)
 
-        locationView.configure(state.locationViewState, delegate: self)
+        locationView.configure(state.locationViewState, delegate: self, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
+        droppableUrl = state.locationViewState.droppableUrl
 
         setNeedsLayout()
         layoutIfNeeded()
@@ -135,6 +151,9 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
             constant: -UX.horizontalEdgeSpace)
         trailingBrowserActionStackConstraint?.isActive = true
 
+        locationContainerHeightConstraint = locationContainer.heightAnchor.constraint(equalToConstant: UX.locationHeight)
+        locationContainerHeightConstraint?.isActive = true
+
         NSLayoutConstraint.activate([
             toolbarContainerView.leadingAnchor.constraint(equalTo: leadingAnchor),
             toolbarContainerView.topAnchor.constraint(equalTo: toolbarTopBorderView.topAnchor,
@@ -156,7 +175,6 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
 
             locationContainer.topAnchor.constraint(equalTo: toolbarContainerView.topAnchor),
             locationContainer.bottomAnchor.constraint(equalTo: toolbarContainerView.bottomAnchor),
-            locationContainer.heightAnchor.constraint(equalToConstant: UX.locationHeight),
 
             locationView.leadingAnchor.constraint(equalTo: locationContainer.leadingAnchor),
             locationView.topAnchor.constraint(equalTo: locationContainer.topAnchor),
@@ -176,6 +194,33 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         ])
 
         updateActionSpacing()
+
+        setupAccessibility()
+    }
+
+    private func setupDragInteraction() {
+        // Setup UIDragInteraction to handle dragging the location
+        // bar for dropping its URL into other apps.
+        let dragInteraction = UIDragInteraction(delegate: self)
+        dragInteraction.allowsSimultaneousRecognitionDuringLift = true
+        locationContainer.addInteraction(dragInteraction)
+    }
+
+    // MARK: - Accessibility
+    private func setupAccessibility() {
+        addInteraction(UILargeContentViewerInteraction())
+    }
+
+    private func adjustHeightConstraintForA11ySizeCategory() {
+        let height = min(UIFontMetrics.default.scaledValue(for: UX.locationHeight), UX.locationMaxHeight)
+        let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+
+        if contentSizeCategory.isAccessibilityCategory {
+            locationContainerHeightConstraint?.constant = height
+        } else {
+            locationContainerHeightConstraint?.constant = UX.locationHeight
+        }
+        setNeedsLayout()
     }
 
     internal func updateActions(state: AddressToolbarState) {
@@ -219,8 +264,8 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
                 button.applyTheme(theme: theme)
             }
 
-            if toolbarElement.hasContextualHint == true {
-                toolbarDelegate?.configureContextualHint(self, for: button)
+            if let contextualHintType = toolbarElement.contextualHintType {
+                toolbarDelegate?.configureContextualHint(self, for: button, with: contextualHintType)
             }
         }
     }
@@ -254,6 +299,15 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         }
     }
 
+    // MARK: - Notifiable
+    public func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIContentSizeCategory.didChangeNotification:
+            adjustHeightConstraintForA11ySizeCategory()
+        default: break
+        }
+    }
+
     // MARK: - LocationViewDelegate
     func locationViewDidRestoreSearchTerm(_ text: String) {
         toolbarDelegate?.openSuggestions(searchTerm: text)
@@ -263,21 +317,31 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         toolbarDelegate?.searchSuggestions(searchTerm: text)
     }
 
-    func locationViewDidBeginEditing(_ text: String) {
-        toolbarDelegate?.openSuggestions(searchTerm: text.lowercased())
+    func locationViewDidClearText() {
+        toolbarDelegate?.didClearSearch()
+    }
+
+    func locationViewDidBeginEditing(_ text: String, shouldShowSuggestions: Bool) {
+        toolbarDelegate?.addressToolbarDidBeginEditing(searchTerm: text, shouldShowSuggestions: shouldShowSuggestions)
     }
 
     func locationViewDidSubmitText(_ text: String) {
         guard !text.isEmpty else { return }
 
-        toolbarDelegate?.openBrowser(searchTerm: text.lowercased())
+        toolbarDelegate?.openBrowser(searchTerm: text)
+    }
+
+    func locationViewDidTapSearchEngine<T: SearchEngineView>(_ searchEngine: T) {
+            // TODO: FXIOS-10191 - To be implemented
     }
 
     func locationViewAccessibilityActions() -> [UIAccessibilityCustomAction]? {
         toolbarDelegate?.addressToolbarAccessibilityActions()
     }
 
-    func locationViewDidCancelEditing() {}
+    func locationViewDidBeginDragInteraction() {
+        toolbarDelegate?.addressToolbarDidBeginDragInteraction()
+    }
 
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
@@ -288,5 +352,20 @@ public class BrowserAddressToolbar: UIView, AddressToolbar, ThemeApplicable, Loc
         toolbarBottomBorderView.backgroundColor = theme.colors.borderPrimary
         locationView.applyTheme(theme: theme)
         self.theme = theme
+    }
+
+    // MARK: - UIDragInteractionDelegate
+    public func dragInteraction(_ interaction: UIDragInteraction,
+                                itemsForBeginning session: UIDragSession) -> [UIDragItem] {
+        guard let url = droppableUrl, let itemProvider = NSItemProvider(contentsOf: url) else { return [] }
+
+        toolbarDelegate?.addressToolbarDidProvideItemsForDragInteraction()
+
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        return [dragItem]
+    }
+
+    public func dragInteraction(_ interaction: UIDragInteraction, sessionWillBegin session: UIDragSession) {
+        toolbarDelegate?.addressToolbarDidBeginDragInteraction()
     }
 }

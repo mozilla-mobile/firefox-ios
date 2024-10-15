@@ -179,18 +179,14 @@ export class FormAutofillSection {
 
     const autofillableSections = [];
     for (const section of sections) {
-      // We don't support csc field, so remove csc fields from section
-      const fieldDetails = section.fieldDetails.filter(
-        f => !["cc-csc"].includes(f.fieldName)
-      );
-      if (!fieldDetails.length) {
+      if (!section.fieldDetails.length) {
         continue;
       }
 
       const autofillableSection =
         section.type == FormSection.ADDRESS
-          ? new FormAutofillAddressSection(fieldDetails)
-          : new FormAutofillCreditCardSection(fieldDetails);
+          ? new FormAutofillAddressSection(section.fieldDetails)
+          : new FormAutofillCreditCardSection(section.fieldDetails);
 
       if (ignoreInvalid && !autofillableSection.isValidSection()) {
         continue;
@@ -294,7 +290,11 @@ export class FormAutofillSection {
     };
 
     for (const detail of this.fieldDetails) {
-      const { filledValue } = formFilledData.get(detail.elementId);
+      // Do not save security code.
+      if (detail.fieldName == "cc-csc") {
+        continue;
+      }
+      const { filledValue } = formFilledData.get(detail.elementId) ?? {};
 
       if (
         !filledValue ||
@@ -317,6 +317,31 @@ export class FormAutofillSection {
     }
 
     return data;
+  }
+
+  /**
+   * Heuristics to determine which fields to autofill when a section contains
+   * multiple fields of the same type.
+   */
+  getAutofillFields() {
+    return this.fieldDetails.filter(fieldDetail => {
+      // We don't save security code, but if somehow the profile has securty code,
+      // make sure we don't autofill it.
+      if (fieldDetail.fieldName == "cc-csc") {
+        return false;
+      }
+
+      // When both visible and invisible <select> elements exist, we only autofill the
+      // visible <select>.
+      if (fieldDetail.localName == "select") {
+        if (!fieldDetail.isVisible) {
+          return !this.fieldDetails.some(
+            field => field.fieldName == fieldDetail.fieldName && field.isVisible
+          );
+        }
+      }
+      return fieldDetail.isVisible;
+    });
   }
 
   /*
@@ -363,6 +388,8 @@ export class FormAutofillSection {
   }
 
   onSubmitted(formFilledData) {
+    this.submitted = true;
+
     lazy.AutofillTelemetry.recordSubmittedSectionCount(this.fieldDetails, 1);
     lazy.AutofillTelemetry.recordFormInteractionEvent(
       "submitted",
@@ -384,6 +411,29 @@ export class FormAutofillSection {
    */
   getFieldDetailByElementId(elementId) {
     return this.fieldDetails.find(detail => detail.elementId == elementId);
+  }
+
+  /**
+   * Groups an array of field details by their browsing context IDs.
+   *
+   * @param {Array} fieldDetails
+   *        Array of fieldDetails object
+   *
+   * @returns {object}
+   *        An object keyed by BrowsingContext Id, value is an array that
+   *        contains all fieldDetails with the same BrowsingContext id.
+   */
+  static groupFieldDetailsByBrowsingContext(fieldDetails) {
+    const detailsByBC = {};
+    for (const fieldDetail of fieldDetails) {
+      const bcid = fieldDetail.browsingContextId;
+      if (detailsByBC[bcid]) {
+        detailsByBC[bcid].push(fieldDetail);
+      } else {
+        detailsByBC[bcid] = [fieldDetail];
+      }
+    }
+    return detailsByBC;
   }
 }
 

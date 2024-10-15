@@ -12,12 +12,15 @@ let PDF_website = [
     "bookmarkLabel": "https://storage.googleapis.com/mobile_test_assets/public/pdf-test.pdf",
     "longUrlValue": "http://www.education.gov.yk.ca/"
 ]
+
 class BrowsingPDFTests: BaseTestCase {
+    let url = XCUIApplication().textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+
     // https://mozilla.testrail.io/index.php?/cases/view/2307116
     func testOpenPDFViewer() {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
-        mozWaitForValueContains(app.textFields["url"], value: PDF_website["pdfValue"]!)
+        mozWaitForValueContains(url, value: PDF_website["pdfValue"]!)
         // Swipe Up and Down
         app.swipeUp()
         mozWaitForElementToExist(app.staticTexts["1 of 1"])
@@ -34,12 +37,16 @@ class BrowsingPDFTests: BaseTestCase {
         // Click on a link on the pdf and check that the website is shown
         app.links.element(boundBy: 0).tapOnApp()
         waitUntilPageLoad()
-        mozWaitForValueContains(app.textFields["url"], value: PDF_website["urlValue"]!)
+        let checkboxValidation = app.webViews["Web content"].staticTexts["Verify you are human"]
+        if checkboxValidation.exists {
+            checkboxValidation.tap()
+        }
+        mozWaitForValueContains(url, value: PDF_website["urlValue"]!)
         mozWaitForElementToExist(app.staticTexts["Education and schools"])
 
         // Go back to pdf view
         app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
-        mozWaitForValueContains(app.textFields["url"], value: PDF_website["pdfValue"]!)
+        mozWaitForValueContains(url, value: PDF_website["pdfValue"]!)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307118
@@ -97,7 +104,7 @@ class BrowsingPDFTests: BaseTestCase {
             .element(boundBy: 0)
         pdfTopSite.tap()
         waitUntilPageLoad()
-        mozWaitForValueContains(app.textFields["url"], value: PDF_website["pdfValue"]!)
+        mozWaitForValueContains(url, value: PDF_website["pdfValue"]!)
 
         // Remove pdf pinned site
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -115,7 +122,6 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
         navigator.performAction(Action.BookmarkThreeDots)
-        waitUntilPageLoad()
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Bookmarks)
         mozWaitForElementToExist(app.tables["Bookmarks List"])

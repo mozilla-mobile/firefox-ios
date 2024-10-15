@@ -16,7 +16,7 @@ enum FormatStyle {
 
 struct FormatStyleError: Error {}
 
-extension Address: Encodable {
+extension Address: Swift.Encodable {
     enum KebabCodingKeys: String, CodingKey {
         case guid
         case name

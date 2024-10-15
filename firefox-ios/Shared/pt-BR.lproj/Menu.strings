@@ -47,10 +47,10 @@
 "Menu.SharePageAction.Title" = "Compartilhar página com…";
 
 /* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
-"Menu.ViewDekstopSiteAction.Title" = "Versão do site para desktop";
+"Menu.ViewDekstopSiteAction.Title" = "Site de computador";
 
 /* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
-"Menu.ViewMobileSiteAction.Title" = "Versão do site para dispositivo móvel";
+"Menu.ViewMobileSiteAction.Title" = "Site de dispositivo móvel";
 
 /* Label for the button, displayed in the menu, used to navigate to the home page. */
 "SettingsMenu.OpenHomePageAction.Title" = "Tela inicial";

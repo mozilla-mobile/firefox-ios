@@ -48,6 +48,7 @@ class TrackingProtectionModel {
     let toggleViewTitleLabelA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.toggleViewTitleLabel
     let toggleViewBodyLabelA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.toggleViewBodyLabel
     let closeButtonA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.closeButton
+    let closeButtonA11yLabel = String.Menu.EnhancedTrackingProtection.closeButtonAccessibilityLabel
     let faviconImageA11yId = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.faviconImage
 
     var websiteTitle: String {
@@ -127,6 +128,15 @@ class TrackingProtectionModel {
         return theme.colors.layer3
     }
 
+    func getDetailsModel() -> TrackingProtectionDetailsModel {
+        return TrackingProtectionDetailsModel(topLevelDomain: websiteTitle,
+                                              title: displayTitle,
+                                              URL: url.absoluteDisplayString,
+                                              getLockIcon: getConnectionStatusImage(themeType:),
+                                              connectionStatusMessage: connectionStatusString,
+                                              connectionSecure: connectionSecure)
+    }
+
     func getConnectionStatusImage(themeType: ThemeType) -> UIImage {
         if connectionSecure {
             return UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.lock)
@@ -134,6 +144,13 @@ class TrackingProtectionModel {
         } else {
             return UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.lockSlash)
         }
+    }
+
+    func getCertificatesViewModel() -> CertificatesViewModel {
+        return CertificatesViewModel(topLevelDomain: websiteTitle,
+                                     title: displayTitle,
+                                     URL: url.absoluteDisplayString,
+                                     certificates: certificates)
     }
 
     func toggleSiteSafelistStatus() {

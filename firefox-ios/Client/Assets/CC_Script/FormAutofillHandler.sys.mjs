@@ -7,12 +7,14 @@ import { FormAutofillUtils } from "resource://gre/modules/shared/FormAutofillUti
 
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
+  AutofillFormFactory:
+    "resource://gre/modules/shared/AutofillFormFactory.sys.mjs",
   CreditCard: "resource://gre/modules/CreditCard.sys.mjs",
+  FieldDetail: "resource://gre/modules/shared/FieldScanner.sys.mjs",
   FormAutofillHeuristics:
     "resource://gre/modules/shared/FormAutofillHeuristics.sys.mjs",
   FormAutofillNameUtils:
     "resource://gre/modules/shared/FormAutofillNameUtils.sys.mjs",
-  FormLikeFactory: "resource://gre/modules/FormLikeFactory.sys.mjs",
   LabelUtils: "resource://gre/modules/shared/LabelUtils.sys.mjs",
 });
 
@@ -47,7 +49,7 @@ export class FormAutofillHandler {
    * A direct reference to the associated element cannot be sent to the user
    * interface because processing may be done in the parent process.
    */
-  fieldDetails = [];
+  #fieldDetails = null;
 
   /**
    * Initialize the form from `FormLike` object to handle the section or form
@@ -72,6 +74,48 @@ export class FormAutofillHandler {
     ChromeUtils.defineLazyGetter(this, "log", () =>
       FormAutofill.defineLogGetter(this, "FormAutofillHandler")
     );
+  }
+
+  /**
+   * Retrieves the 'fieldDetails' property, ensuring it has been initialized by
+   * `setIdentifiedFieldDetails`. Throws an error if accessed before initialization.
+   *
+   * This is because 'fieldDetail'' contains information that need to be computed
+   * in the parent side first.
+   *
+   * @throws {Error} If `setIdentifiedFieldDetails` has not been called.
+   * @returns {Array<FieldDetail>}
+   *          The list of autofillable field details for this form.
+   */
+  get fieldDetails() {
+    if (!this.#fieldDetails) {
+      throw new Error(
+        `Should only use 'fieldDetails' after 'setIdentifiedFieldDetails' is called`
+      );
+    }
+    return this.#fieldDetails;
+  }
+
+  /**
+   * Sets the list of 'FieldDetail' objects for autofillable fields within the form.
+   *
+   * @param {Array<FieldDetail>} fieldDetails
+   *        An array of field details that has been computed on the parent side.
+   *        This method should be called before accessing `fieldDetails`.
+   */
+  setIdentifiedFieldDetails(fieldDetails) {
+    this.#fieldDetails = fieldDetails;
+  }
+
+  /**
+   * Determines whether 'setIdentifiedFieldDetails' has been called and the
+   * `fieldDetails` have been initialized.
+   *
+   * @returns {boolean}
+   *          True if 'fieldDetails' has been initialized; otherwise, False.
+   */
+  hasIdentifiedFields() {
+    return !!this.#fieldDetails;
   }
 
   handleEvent(event) {
@@ -99,13 +143,6 @@ export class FormAutofillHandler {
 
   getFieldDetailByName(fieldName) {
     return this.fieldDetails.find(detail => detail.fieldName == fieldName);
-  }
-
-  getFieldDetailByNamePreferVisible(fieldName) {
-    const fieldDetail = this.fieldDetails.find(
-      detail => detail.fieldName == fieldName && detail.isVisible
-    );
-    return fieldDetail || this.getFieldDetailByName(fieldName);
   }
 
   getFieldDetailByElement(element) {
@@ -142,12 +179,12 @@ export class FormAutofillHandler {
     let _formLike;
     const getFormLike = () => {
       if (!_formLike) {
-        _formLike = lazy.FormLikeFactory.createFromField(element);
+        _formLike = lazy.AutofillFormFactory.createFromField(element);
       }
       return _formLike;
     };
 
-    const currentForm = element.form ?? getFormLike();
+    const currentForm = getFormLike();
     if (currentForm.elements.length != this.form.elements.length) {
       this.log.debug("The count of form elements is changed.");
       this._updateForm(getFormLike());
@@ -172,18 +209,37 @@ export class FormAutofillHandler {
   _updateForm(form) {
     this.form = form;
 
-    this.fieldDetails = [];
+    this.#fieldDetails = null;
   }
 
   /**
-   * Set fieldDetails from the form about fields that can be autofilled.
+   * Collect <input>, <select>, and <iframe> elements from the specified form
+   * and return the correspond 'FieldDetail' objects.
    *
-   * @returns {Array} The valid address and credit card details.
+   * @param {HTMLFormElement} form
+   *        The form that we collect information from.
+   *
+   * @returns {Array<FieldDeail>}
+   *        An array containing eliglble fields for autofill, also
+   *        including iframe.
    */
-  collectFormFields() {
-    const fields = lazy.FormAutofillHeuristics.getFormInfo(this.form) ?? [];
-    this.fieldDetails = fields.filter(field => !!field.fieldName);
-    return this.fieldDetails;
+  static collectFormFields(form) {
+    const fieldDetails = lazy.FormAutofillHeuristics.getFormInfo(form) ?? [];
+
+    let index = 0;
+    const fieldDetailsIncludeIframe = [];
+    const elements = form.rootElement.querySelectorAll("input, select, iframe");
+
+    for (const element of elements) {
+      if (fieldDetails[index]?.element == element) {
+        fieldDetailsIncludeIframe.push(fieldDetails[index]);
+        index++;
+      } else if (element.localName == "iframe") {
+        const iframeFd = lazy.FieldDetail.create(element, form, "iframe");
+        fieldDetailsIncludeIframe.push(iframeFd);
+      }
+    }
+    return fieldDetailsIncludeIframe;
   }
 
   /**
@@ -256,11 +312,8 @@ export class FormAutofillHandler {
       } else if (HTMLSelectElement.isInstance(element)) {
         // Unlike text input, select element is always previewed even if
         // the option is already selected.
-        if (value) {
-          const cache = this.#matchingSelectOption.get(element) ?? {};
-          const option = cache[value]?.deref();
-          value = option?.text ?? "";
-        }
+        const option = this.matchSelectOptions(fieldDetail, profile);
+        value = option?.text ?? "";
       } else {
         continue;
       }
@@ -274,12 +327,14 @@ export class FormAutofillHandler {
    * Processes form fields that can be autofilled, and populates them with the
    * profile provided by backend.
    *
-   * @param {string} focusedElementId
+   * @param {string} focusedId
+   *        The id of the element that triggers autofilling.
    * @param {Array} elementIds
+   *        An array of IDs for the elements that should be autofilled.
    * @param {object} profile
-   *        A profile to be filled in.
+   *        The data profile containing the values to be autofilled into the form fields.
    */
-  async fillFields(focusedElementId, elementIds, profile) {
+  fillFields(focusedId, elementIds, profile) {
     this.getAdaptedProfiles([profile]);
 
     for (const fieldDetail of this.fieldDetails) {
@@ -293,42 +348,43 @@ export class FormAutofillHandler {
       }
 
       element.previewValue = "";
-      // Bug 1687679: Since profile appears to be presentation ready data, we need to utilize the "x-formatted" field
-      // that is generated when presentation ready data doesn't fit into the autofilling element.
-      // For example, autofilling expiration month into an input element will not work as expected if
-      // the month is less than 10, since the input is expected a zero-padded string.
-      // See Bug 1722941 for follow up.
-      const value = this.getFilledValueFromProfile(fieldDetail, profile);
-      if (!value) {
-        continue;
-      }
 
       if (HTMLInputElement.isInstance(element)) {
+        // Bug 1687679: Since profile appears to be presentation ready data, we need to utilize the "x-formatted" field
+        // that is generated when presentation ready data doesn't fit into the autofilling element.
+        // For example, autofilling expiration month into an input element will not work as expected if
+        // the month is less than 10, since the input is expected a zero-padded string.
+        // See Bug 1722941 for follow up.
+        const value = this.getFilledValueFromProfile(fieldDetail, profile);
+        if (!value) {
+          continue;
+        }
+
         // For the focused input element, it will be filled with a valid value
         // anyway.
         // For the others, the fields should be only filled when their values are empty
         // or their values are equal to the site prefill value
         // or are the result of an earlier auto-fill.
         if (
-          elementId == focusedElementId ||
-          (elementId != focusedElementId &&
-            (!element.value || element.value == element.defaultValue)) ||
+          elementId == focusedId ||
+          !element.value ||
+          element.value == element.defaultValue ||
           element.autofillState == FIELD_STATES.AUTO_FILLED
         ) {
-          this.fillFieldValue(element, value);
+          FormAutofillHandler.fillFieldValue(element, value);
           this.changeFieldState(fieldDetail, FIELD_STATES.AUTO_FILLED);
         }
       } else if (HTMLSelectElement.isInstance(element)) {
-        let cache = this.#matchingSelectOption.get(element) || {};
-        let option = cache[value] && cache[value].deref();
+        const option = this.matchSelectOptions(fieldDetail, profile);
         if (!option) {
           continue;
         }
+
         // Do not change value or dispatch events if the option is already selected.
         // Use case for multiple select is not considered here.
         if (!option.selected) {
           option.selected = true;
-          this.fillFieldValue(element, option.value);
+          FormAutofillHandler.fillFieldValue(element, option.value);
         }
         // Autofill highlight appears regardless if value is changed or not
         this.changeFieldState(fieldDetail, FIELD_STATES.AUTO_FILLED);
@@ -337,7 +393,7 @@ export class FormAutofillHandler {
       }
     }
 
-    FormAutofillUtils.getElementByIdentifier(focusedElementId)?.focus({
+    FormAutofillUtils.getElementByIdentifier(focusedId)?.focus({
       preventScroll: true,
     });
 
@@ -458,16 +514,11 @@ export class FormAutofillHandler {
    * @override
    */
   applyTransformers(profile) {
-    // The matchSelectOptions transformer must be placed after the expiry transformers.
-    // This ensures that the expiry value that is cached in the matchSelectOptions
-    // matches the expiry value that is stored in the profile ensuring that autofill works
-    // correctly when dealing with option elements.
     this.addressTransformer(profile);
     this.telTransformer(profile);
     this.creditCardExpiryDateTransformer(profile);
     this.creditCardExpMonthAndYearTransformer(profile);
     this.creditCardNameTransformer(profile);
-    this.matchSelectOptions(profile);
     this.adaptFieldMaxLength(profile);
   }
 
@@ -478,54 +529,46 @@ export class FormAutofillHandler {
     return originalProfiles;
   }
 
-  // This is only used by test cases
-  get matchingSelectOption() {
-    return this.#matchingSelectOption;
-  }
-
-  matchSelectOptions(profile) {
+  /**
+   * Match the select option for a field if we autofill with the given profile.
+   * This function caches the matching result in the `#matchingSelectionOption`
+   * variable.
+   *
+   * @param {FieldDetail} fieldDetail
+   *        The field information of the matching element.
+   * @param {object} profile
+   *        The profile used for autofill.
+   *
+   * @returns {Option}
+   *        The matched option, or undefined if no matching option is found.
+   */
+  matchSelectOptions(fieldDetail, profile) {
     if (!this.#matchingSelectOption) {
       this.#matchingSelectOption = new WeakMap();
     }
 
-    for (const fieldName in profile) {
-      const fieldDetail = this.getFieldDetailByNamePreferVisible(fieldName);
-      const element = fieldDetail?.element;
+    const { element, fieldName } = fieldDetail;
+    if (!HTMLSelectElement.isInstance(element)) {
+      return undefined;
+    }
 
-      if (!HTMLSelectElement.isInstance(element)) {
-        continue;
-      }
+    const cache = this.#matchingSelectOption.get(element) || {};
+    const value = profile[fieldName];
 
-      const cache = this.#matchingSelectOption.get(element) || {};
-      const value = profile[fieldName];
-      if (cache[value] && cache[value].deref()) {
-        continue;
-      }
-
-      const option = FormAutofillUtils.findSelectOption(
-        element,
-        profile,
-        fieldName
-      );
+    let option = cache[value]?.deref();
+    if (!option) {
+      option = FormAutofillUtils.findSelectOption(element, profile, fieldName);
 
       if (option) {
         cache[value] = new WeakRef(option);
         this.#matchingSelectOption.set(element, cache);
-      } else {
-        if (cache[value]) {
-          delete cache[value];
-          this.#matchingSelectOption.set(element, cache);
-        }
-        // Skip removing cc-type since this is needed for displaying the icon for credit card network
-        // TODO(Bug 1874339): Cleanup transformation and normalization of data to not remove any
-        // fields and be more consistent
-        if (!["cc-type"].includes(fieldName)) {
-          // Delete the field so the phishing hint won't treat it as a "also fill"
-          // field.
-          delete profile[fieldName];
-        }
+      } else if (cache[value]) {
+        delete cache[value];
+        this.#matchingSelectOption.set(element, cache);
       }
     }
+
+    return option;
   }
 
   adaptFieldMaxLength(profile) {
@@ -658,7 +701,7 @@ export class FormAutofillHandler {
     let newExpiryString = null;
     const month = profile["cc-exp-month"].toString();
     const year = profile["cc-exp-year"].toString();
-    if (element.tagName == "INPUT") {
+    if (element.localName == "input") {
       // Use the placeholder or label to determine the expiry string format.
       const possibleExpiryStrings = [];
       if (element.placeholder) {
@@ -669,7 +712,7 @@ export class FormAutofillHandler {
         // Not consider multiple lable for now.
         possibleExpiryStrings.push(element.labels[0]?.textContent);
       }
-      if (element.previousElementSibling?.tagName == "LABEL") {
+      if (element.previousElementSibling?.localName == "label") {
         possibleExpiryStrings.push(element.previousElementSibling.textContent);
       }
 
@@ -700,7 +743,7 @@ export class FormAutofillHandler {
         return null;
       }
       const element = detail.element;
-      return element.tagName === "INPUT" ? element : null;
+      return element.localName === "input" ? element : null;
     };
     const month = getInputElementByField("cc-exp-month", this);
     if (month) {
@@ -857,8 +900,13 @@ export class FormAutofillHandler {
     }
     return value;
   }
-
-  fillFieldValue(element, value) {
+  /**
+   * Fills the provided element with the specified value.
+   *
+   * @param {HTMLInputElement| HTMLSelectElement} element - The form field element to be filled.
+   * @param {string} value - The value to be filled into the form field.
+   */
+  static fillFieldValue(element, value) {
     if (FormAutofillUtils.focusOnAutofill) {
       element.focus({ preventScroll: true });
     }
@@ -894,11 +942,13 @@ export class FormAutofillHandler {
   }
 
   clearFilledFields(elementIds) {
-    for (const elementId of elementIds) {
-      const fieldDetail = this.getFieldDetailByElementId(elementId);
+    const fieldDetails = elementIds.map(id =>
+      this.getFieldDetailByElementId(id)
+    );
+    for (const fieldDetail of fieldDetails) {
       const element = fieldDetail?.element;
       if (!element) {
-        this.log.warn(fieldDetail.fieldName, "is unreachable");
+        this.log.warn(fieldDetail?.fieldName, "is unreachable");
         continue;
       }
 
@@ -941,8 +991,7 @@ export class FormAutofillHandler {
    * @returns {object} An object keyed by element id, and the value is
    *                   an object that includes the following properties:
    * filledState: The autofill state of the element
-   * filledValue: The computed value for autofilling
-   * value: The value of the element
+   * filledvalue: The value of the element
    */
   collectFormFilledData() {
     const filledData = new Map();
@@ -952,9 +1001,15 @@ export class FormAutofillHandler {
       filledData.set(fieldDetail.elementId, {
         filledState: element.autofillState,
         filledValue: this.computeFillingValue(fieldDetail),
-        value: element.value,
       });
     }
     return filledData;
+  }
+
+  isFieldAutofillable(fieldDetail, profile) {
+    if (HTMLInputElement.isInstance(fieldDetail.element)) {
+      return !!profile[fieldDetail.fieldName];
+    }
+    return !!this.matchSelectOptions(fieldDetail, profile);
   }
 }

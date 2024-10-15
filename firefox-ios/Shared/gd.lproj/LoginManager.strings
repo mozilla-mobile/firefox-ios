@@ -16,6 +16,21 @@
 /* Label for the button used to delete the current login. */
 "Delete" = "Sguab às";
 
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Sguir dheth";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Thoir air falbh";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Chan urrainn dhut seo a neo-dhèanamh.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Bheir seo air falbh am facal-faire o gach uidheam sioncronaichte agad.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "A bheil thu airson am facal-faire a thoirt air falbh?";
+
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "Dì-thagh na h-uile";
 
@@ -36,6 +51,9 @@
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "Cha deach login a lorg";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Cha deach facal-faire sam bith a lorg";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "Fosgail ⁊ lìon";

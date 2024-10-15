@@ -8,7 +8,6 @@ export const HeuristicsRegExp = {
   RULES: {
     email: undefined,
     tel: undefined,
-    organization: undefined,
     "street-address": undefined,
     "address-line1": undefined,
     "address-line2": undefined,
@@ -16,6 +15,10 @@ export const HeuristicsRegExp = {
     "address-level2": undefined,
     "address-level1": undefined,
     "postal-code": undefined,
+    // Note: We place the `organization` field after the `address` fields, to 
+    // ensure that all address-related fields that might contain organization 
+    // info are matched as address fields first.
+    organization: undefined,
     country: undefined,
     // Note: We place the `cc-name` field for Credit Card first, because
     // it is more specific than the `name` field below and we want to check
@@ -46,7 +49,8 @@ export const HeuristicsRegExp = {
       "address-line1": "addrline1|address_1|addl1",
       "address-line2": "addrline2|address_2|addl2",
       "address-line3": "addrline3|address_3|addl3",
-      "address-level1": "land", // de-DE
+      "country": "land", // de-DE
+      "postal-code": "^PLZ(\\b|\\*)", // de-DE
       "additional-name": "apellido.?materno|lastlastname",
       "cc-name":
         "accountholdername" +
@@ -73,7 +77,7 @@ export const HeuristicsRegExp = {
         "|(anno|año)" +      // es-ES
         "|jaar",             // nl-NL
       "cc-type":
-        "type" +
+        "(cc|card).*(type)" +
         "|kartenmarke" +     // de-DE
         "|typ.*karty",       // pl-PL
       "cc-csc":
@@ -193,9 +197,8 @@ export const HeuristicsRegExp = {
         "cc-?name" +
         "|card-?name" +
         "|cardholder-?name" +
-        "|cardholder" +
+        "|cardholder",
         // "|(^name$)" + // Removed to avoid overwriting "name", above.
-        "|(^nom$)",
 
       "cc-number":
         "cc-?number" +
@@ -636,6 +639,7 @@ export const HeuristicsRegExp = {
     {
       "address-line2":
         "address|line" +
+        "|house|building|apartment|floor" +    // de-DE
         "|adresse" +      // fr-FR
         "|indirizzo" +    // it-IT
         "|地址" +         // zh-CN

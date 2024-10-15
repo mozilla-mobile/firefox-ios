@@ -13,7 +13,7 @@ enum ReadabilityOperationResult {
     case timeout
 }
 
-class ReadabilityOperation: Operation {
+class ReadabilityOperation: Operation, @unchecked Sendable {
     let profile: Profile
 
     var url: URL

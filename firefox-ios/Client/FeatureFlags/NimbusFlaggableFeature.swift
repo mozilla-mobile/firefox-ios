@@ -11,6 +11,7 @@ import UIKit
 enum NimbusFeatureFlagID: String, CaseIterable {
     case accountSettingsRedux
     case addressAutofillEdit
+    case bookmarksRefactor
     case bottomSearchBar
     case contextualHintForToolbar
     case creditCardAutofillStatus
@@ -21,11 +22,13 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case feltPrivacyFeltDeletion
     case firefoxSuggestFeature
     case historyHighlights
+    case homepageRebuild
     case inactiveTabs
     case isToolbarCFREnabled
     case jumpBackIn
     case loginAutofill
     case menuRefactor
+    case menuRefactorHint
     case microsurvey
     case nativeErrorPage
     case nightMode
@@ -37,14 +40,20 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case searchHighlights
     case splashScreen
     case tabTrayRefactor
+    case unifiedSearch
     case toolbarRefactor
     case toolbarOneTapNewTab
+    case toolbarNavigationHint
     case trackingProtectionRefactor
     case zoomFeature
 
     var debugKey: String? {
         switch self {
-        case .microsurvey, .closeRemoteTabs:
+        case .closeRemoteTabs,
+                .homepageRebuild,
+                .microsurvey,
+                .menuRefactor,
+                .nativeErrorPage:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil
@@ -79,6 +88,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.JumpBackInSection
         // Cases where users do not have the option to manipulate a setting.
         case .contextualHintForToolbar,
+                .bookmarksRefactor,
                 .accountSettingsRedux,
                 .addressAutofillEdit,
                 .creditCardAutofillStatus,
@@ -86,10 +96,12 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .fakespotBackInStock,
                 .fakespotFeature,
                 .fakespotProductAds,
+                .homepageRebuild,
                 .isToolbarCFREnabled,
                 .loginAutofill,
                 .microsurvey,
                 .menuRefactor,
+                .menuRefactorHint,
                 .nativeErrorPage,
                 .nightMode,
                 .passwordGenerator,
@@ -101,8 +113,10 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .searchHighlights,
                 .splashScreen,
                 .tabTrayRefactor,
+                .unifiedSearch,
                 .toolbarRefactor,
                 .toolbarOneTapNewTab,
+                .toolbarNavigationHint,
                 .trackingProtectionRefactor,
                 .zoomFeature:
             return nil

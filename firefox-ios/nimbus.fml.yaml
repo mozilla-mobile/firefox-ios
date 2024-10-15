@@ -16,12 +16,14 @@ include:
   - nimbus-features/accountSettingsReduxFeature.yaml
   - nimbus-features/addressAutofillFeature.yaml
   - nimbus-features/autofillFeature.yaml
+  - nimbus-features/bookmarkRefactorFeature.yaml
   - nimbus-features/contextualHintFeature.yaml
   - nimbus-features/fakespotFeature.yaml
   - nimbus-features/feltPrivacyFeature.yaml
   - nimbus-features/firefoxSuggestFeature.yaml
   - nimbus-features/generalFeatures.yaml
   - nimbus-features/gleanServerKnobs.yaml
+  - nimbus-features/homepageRebuildFeature.yaml
   - nimbus-features/homescreenFeature.yaml
   - nimbus-features/menuRefactorFeature.yaml
   - nimbus-features/messagingFeature.yaml

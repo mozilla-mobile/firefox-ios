@@ -162,6 +162,11 @@ class ZoomingTests: BaseTestCase {
     }
 
     func zoomIn() {
+        // If there are multiple matches for this element, then both the normal tab and the private tab views may be
+        // in the view hierarchy simultaneously. This should not change unintentionally! Check the Debug View Hierarchy.
+        let viewCount = app.buttons.matching(identifier: AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel).count
+        XCTAssertLessThanOrEqual(viewCount, 1, "Too many matches")
+
         for i in 0...3 {
             zoomLevel = app.buttons[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
             let previoustTextSize = bookOfMozillaTxt.frame.size.height

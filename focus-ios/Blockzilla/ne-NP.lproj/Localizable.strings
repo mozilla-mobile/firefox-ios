@@ -103,6 +103,9 @@
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "शीर्ष साइटहरु";
 
+/* Title for the action button shown on the Splash Screen which gives the user the ability to log in with biometrics. */
+"BiometricAuthentication.UnlockButton.Title" = "अनलक गर्नुहोस्";
+
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "नयाँ सत्र";
 
@@ -175,17 +178,71 @@
 /* Button label used to close a menu that displays as a popup. */
 "Menu.Close" = "बन्द गर्नुहोस्";
 
+/* Text for a label that indicates the title of button from onboarding screen version 2. */
+"NewOnboarding.Button.Title.V2" = "सुरु गर्नुहोस्";
+
+/* Text for a label that indicates the subtitle for the onboarding screen version 2. */
+"NewOnboarding.Subtitle.V2" = "छिटो। गोप्य। ध्यान बिथोल्ने कुराहरू छैनन्।";
+
+/* Text for a label that indicates the title of button from onboarding screen */
+"Onboarding.Button.Title" = "ब्राउजिङ्ग सुरु गर्नुहोस्";
+
+/* Text for a label that indicates the title of the bottom button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.BottomButtonTitle.V2" = "छोड्नुहोस्";
+
+/* Text for a label that indicates the first subtitle for the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.FirstSubtitle.V2" = "जब तपाईं अतिरिक्त गोपनीयताको लागि एप बन्द गर्नुहुन्छ हामी तपाईंको इतिहास खाली गर्छौं।";
+
+/* Text for a label that indicates the second subtitle for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.SecondSubtitle.V2" = "तपाईंले खोल्नु भएको प्रत्येक लिङ्कसँग आफ्नो डाटा सुरक्षित गर्न %@ लाई आफ्नो पूर्वनिर्धारित बनाउनुहोस्।";
+
+/* Text for a label that indicates the title for the default browser onboarding screen version 2. %@ is the name of the app (Focus/Klar) */
+"Onboarding.DefaultBrowser.Title.V2" = "%@ अन्य ब्राउजरहरू जस्तै होइन";
+
+/* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "पूर्वनिर्धारित ब्राउजरको रूपमा सेट गर्नुहोस्";
+
+/* Text for a label that indicates the description of history section from onboarding screen. */
+"Onboarding.History.Description" = "आफ्नो ब्राउजिङ्ग इतिहास, पासवर्डहरू, कुकीजहरू मेटाउनुहोस्, र नचाहिने विज्ञापनहरूलाई एक साधारण क्लिकमा तपाईंलाई पछ्याउनबाट रोक्नुहोस्!";
+
+/* Text for a label that indicates the title of history section from onboarding screen. */
+"Onboarding.History.Title" = "तपाईंको इतिहासले तपाईंलाई पछ्याउँदैन";
+
+/* Text for a label that indicates the description of incognito section from onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Incognito.Description" = "%@ ट्र्याकिङ्ग सुरक्षा र सामग्री ब्लकिङ्गको साथ एक समर्पित गोपनीयता ब्राउजर हो।";
+
+/* Text for a label that indicates the title of incognito section from onboarding screen. */
+"Onboarding.Incognito.Title" = "इन्कोग्निटो मोडमा मात्र भन्दा बढी";
+
+/* Text for a label that indicates the description of protection section from onboarding screen. */
+"Onboarding.Protection.Description" = "तपाईंले कति वा कति थोरै साझेदारी गर्ने निर्णय गर्न सक्नुहुन्छ भनेर सेटिङहरू कन्फिगर गर्नुहोस्।";
+
+/* Text for a label that indicates the title of protection section from onboarding screen. */
+"Onboarding.Protection.Title" = "तपाईंको आफ्नै विवेकमा सुरक्षा";
+
+/* Text for a label that indicates the subtitle for onboarding screen. */
+"Onboarding.Subtitle" = "आफ्नो निजी ब्राउजिङ्गलाई अर्को स्तरमा लिनुहोस्।";
+
+/* Text for a label that indicates the title for onboarding screen. Placeholder can be (Focus or Klar). */
+"Onboarding.Title" = "Firefox %@मा स्वागत छ!";
+
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "सफारी ट्याप गर्नुहोस्, त्यसपछि सामग्री अवरोधकहरूको चयन गर्नुहोस्";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsEnable" = "%@ सक्षम पार्नुहोस्";
 
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsExtentions" = "सफारी चयन गर्नुहोस्, त्यसपछि विस्तार चयन गर्नुहोस्";
+
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
 "Safari.instructionsNotEnabled" = "%@ सक्षम पारिएको छैन ।";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "सेटिङ्ग अनुप्रयोग खोल्नुहोस्";
+
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.openInstruction" = "यन्त्रको सेटिङहरू खोल्नुहोस्";
 
 /* Save button label */
 "Save" = "सङ्ग्रह गर्नुहोस्";
@@ -234,6 +291,9 @@
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "थप जान्नुहोस् ।";
+
+/* Lincese option in settings menu. Tapping the cell will take the user to a list of licences for the 3rd parties used in the app. */
+"Settings.licenses" = "इजाजतपत्रहरू";
 
 /* Light theme option in settings menu */
 "Settings.lightTheme" = "उज्यालो";
@@ -291,6 +351,12 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "PRIVACY";
+
+/* Label title for set as default browser row */
+"Settings.setAsDefaultBrowser" = "पूर्वनिर्धारित ब्राउजरको रूपमा सेट गर्नुहोस्";
+
+/* %@ is the name of the app. Description for set as default browser option */
+"Settings.setAsDefaultBrowserDescription" = "वेबसाइटहरू, इमेल र सन्देशहरूका लिङ्कहरू %@ मा स्वचालित रूपमा खोल्नको लागि सेट गर्नुहोस्।";
 
 /* System value for theme section in settings menu */
 "Settings.systemTheme" = "प्रणाली थीम";
@@ -358,6 +424,9 @@
 /* Text for the share menu option when a user wants to add the site to Shortcuts */
 "ShareMenu.AddToShortcuts" = "सर्टकटहरुमा थप्नुहोस्";
 
+/* Toast displayed to the user after adding the item to the Shortcuts. */
+"ShareMenu.AddToShortcuts.Confirm" = "सर्टकटहरुमा थपियो";
+
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "ठेगाना कपि गर्नुहोस्";
 
@@ -366,6 +435,9 @@
 
 /* Text for the share menu option when a user wants to remove the site from Shortcuts */
 "ShareMenu.RemoveFromShortcuts" = "सर्टकटहरु बाट हटाउनुहोस्";
+
+/* Toast displayed to the user after removing the item from the Shortcuts. */
+"ShareMenu.RemoveShortcut.Confirm" = "सर्टकट हटाइयो";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "डेस्कटप साइट अनुरोध गर्नुहोस्";
@@ -381,6 +453,9 @@
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
 "ShareMenu.ShareOpenFirefox" = "Firefox मा खोल्नुहोस्";
+
+/* Text for the share menu option when a user wants to open the current website inside the app. */
+"ShareMenu.ShareOpenLink" = "लिङ्क खोल्नुहोस्";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
 "ShareMenu.SharePage" = "यससँग पृष्ठ सेयर गर्नुहोस्…";
@@ -399,6 +474,21 @@
 
 /* Text for the rename shortcut alert secondary action. */
 "ShortcutView.RenameShortcutAlertSecondaryAction" = "रद्द गर्नुहोस्";
+
+/* This is the button text that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.ButtonText.V2" = "सम्पन्न भयो";
+
+/* This is the subtitle text for step one that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepOne.V2" = "आइकनहरूले पल्टाउन सुरु नगरेसम्म गृह स्क्रिनमा थिच्नुहोस्।";
+
+/* This is the subtitle text for step three that is displayed in the Show Me How onboarding screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.SubtitleStepThree.V2" = "%@को खोजी गर्नुहोस्। त्यसपछि विजेट छान्नुहोस्।";
+
+/* This is the subtitle text for step two that is displayed in the Show Me How Onboarding Screen */
+"ShowMeHowOnboarding.SubtitleStepTwo.V2" = "प्लस आइकनमा ट्याप गर्नुहोस्।";
+
+/* This is the title text that is displayed in the Show Me How Onboarding Screen. %@ is the name of the app (Focus/Klar) */
+"ShowMeHowOnboarding.Title.V2" = "%@ विजेट थप्नुहोस्";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "थप्नुहोस्";
@@ -469,6 +559,33 @@
 /* Text for a label that indicates the title for sites not working tip. */
 "Tip.SitesNotWorking.Title" = "साइट हराइरहेको सामग्री वा अनौठो कार्य अनुभव गर्नुभएको छ?";
 
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp.Instruction" = "%@मा खोज्नुहोस्";
+
+/* This is the body text that is displayed for the Context Menu icon tooltip */
+"TooltipBodyText.ContextMenu" = "विशिष्ट गोपनीयता & सुरक्षा विकल्पहरू व्यवस्थापन गर्न सेटिङ्गहरूमा जानुहोस्।";
+
+/* This is the body text that is displayed for the Privacy tooltip */
+"TooltipBodyText.Privacy" = "यी पूर्वनिर्धारित सेटिङ्गहरूले बलियो सुरक्षा प्रदान गर्दछन्। तर तपाईंको विशेष आवश्यकताहरू पूरा गर्न सेटिङ्गहरू ट्वीक गर्न सजिलो छ।";
+
+/* This is the body text that is displayed for the Search Bar tooltip */
+"TooltipBodyText.SearchBar" = "आफ्नो निजी ब्राउजिङ्ग सत्र सुरु गर्नुहोस्, र हामी तपाईँलाई जाँदा ट्र्याकरहरू र अन्य नराम्रो सामग्री रोक्नेछौं।";
+
+/* This is the body text that is displayed for the Shield icon tooltip. Where placeholder can be (Focus or Klar). */
+"TooltipBodyText.ShieldIcon" = "%@ले यो साइटलाई तपाईँको जासुसी गर्नबाट रोक्यो। हामीले के रोक्यौं भन्ने जानकारीको लागि शिल्ड ट्याप गर्नुहोस्।";
+
+/* This is the body text that is displayed for the Shield icon tooltip when we block trackers for the first time on a website */
+"TooltipBodyText.ShieldIconTrackerBlocked.V2" = "तिनीहरूलाई बुझे! हामीले यो साइटलाई तपाईंको जासुसी गर्नबाट रोक्यौं। हामीले के रोक्दै छौँ भनेर हेर्न कुनै पनि समय शिल्डमा ट्याप गर्नुहोस्।";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon" = "तपाईंको हालको सत्रका सबै निशानहरू हटाउन कुनै पनि समय रद्दीको टोकरीमा ट्याप गर्नुहोस्।";
+
+/* This is the body text that is displayed for the Trash icon tooltip */
+"TooltipBodyText.TrashIcon.V2" = "यो सबै रद्दी टोकरीमा गर्न यहाँ ट्याप गर्नुहोस् - इतिहास, कुकीहरू, सबै कुरा — र नयाँ ट्याबमा ताजा सुरु गर्नुहोस्।";
+
+/* This is the title text that is displayed for the Privacy tooltip */
+"TooltipTitleText.Privacy" = "तपाईं सुरक्षित हुनुहुन्छ! ";
+
 /* Text for tracking protection screen showing the connection is not secure */
 "trackingProtection.connectionNotSecureLabel" = "यो जडान सुरक्षित छैन";
 
@@ -519,4 +636,13 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "त्ट्रयाकरहरु अवरुद्ध गरियो";
+
+/* Title for the action button shown on card view that will take the user to a tutorial explaining the user how to add an widget */
+"WidgetOnboardingCard.ActionButton" = "कसरी देखाउनुहोस्";
+
+/* Subtitle shown on card view explaining the app has a widget option. %@ is the name of the app (Focus/Klar). */
+"WidgetOnboardingCard.Subtitle" = "हामी तपाईंलाई तपाईंको निजी ब्राउजिङ्ग गर्न छोड्नेछौं, तर तपाईंको गृह स्क्रिनमा %@ विजेटको साथ अर्को पटक छिटो सुरुवात प्राप्त गर्नुहोस्।";
+
+/* Title shown on card view explaining the app has a widget option */
+"WidgetOnboardingCard.Title" = "ब्राउजिङ्ग इतिहास खाली गरियो! 🎉";
 

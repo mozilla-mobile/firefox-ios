@@ -34,4 +34,14 @@ extension XCTestCase {
             )
         }
     }
+
+    /// Unwraps un async method return value.
+    ///
+    /// It is a wrapper of XCTUnwrap. Since is not possible to do ```XCTUnwrap(await asyncMethod())```
+    ///
+    /// it has to be done always in two steps, this method make it one line for users.
+    func unwrapAsync<T>(asyncMethod: () async throws -> T?) async throws -> T {
+        let returnValue = try await asyncMethod()
+        return try XCTUnwrap(returnValue)
+    }
 }

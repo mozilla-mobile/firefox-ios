@@ -121,10 +121,12 @@ class DownloadsTests: BaseTestCase {
         shareButton.tap(force: true)
         mozWaitForElementToExist(app.tables["DownloadsTable"])
         mozWaitForElementToExist(app.tables["DownloadsTable"].staticTexts[testFileNameDownloadPanel])
-        if #available(iOS 16, *) {
+        if #available(iOS 17, *) {
             mozWaitForElementToExist(app.collectionViews.cells["Copy"])
             mozWaitForElementToExist(app.collectionViews.cells["Add Tags"])
             mozWaitForElementToExist(app.collectionViews.cells["Save to Files"])
+        } else if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.collectionViews.cells["Copy"])
         } else {
             mozWaitForElementToExist(app.collectionViews.buttons["Copy"])
         }
@@ -148,10 +150,12 @@ class DownloadsTests: BaseTestCase {
         app.tables.cells.staticTexts[testFileNameDownloadPanel].press(forDuration: 2)
         mozWaitForElementToExist(app.otherElements["ActivityListView"])
         mozWaitForElementToExist(app.tables["DownloadsTable"].staticTexts[testFileNameDownloadPanel])
-        if #available(iOS 16, *) {
+        if #available(iOS 17, *) {
             mozWaitForElementToExist(app.collectionViews.cells["Copy"])
             mozWaitForElementToExist(app.collectionViews.cells["Add Tags"])
             mozWaitForElementToExist(app.collectionViews.cells["Save to Files"])
+        } else if #available(iOS 16, *) {
+            mozWaitForElementToExist(app.collectionViews.cells["Copy"])
         } else {
             mozWaitForElementToExist(app.collectionViews.buttons["Copy"])
         }
@@ -219,7 +223,7 @@ class DownloadsTests: BaseTestCase {
 
         // Remove private data once the switch to remove downloaded files is enabled
         navigator.goto(NewTabScreen)
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         navigator.goto(ClearPrivateDataSettings)

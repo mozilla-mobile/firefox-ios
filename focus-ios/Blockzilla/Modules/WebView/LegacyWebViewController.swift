@@ -455,6 +455,13 @@ extension LegacyWebViewController: WKNavigationDelegate {
             break
         }
 
+        // Prevent Focus from opening deeplinks from links
+        if let scheme = navigationAction.request.url?.scheme,
+           scheme.caseInsensitiveCompare(AppInfo.appScheme) == .orderedSame {
+            decisionHandler(.cancel, preferences)
+            return
+        }
+
         currentBackForwardItem = webView.backForwardList.currentItem
         // prevent Focus from opening universal links
         // https://stackoverflow.com/questions/38450586/prevent-universal-links-from-opening-in-wkwebview-uiwebview
@@ -538,6 +545,12 @@ extension LegacyWebViewController: WKUIDelegate {
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         // check if this is a new frame / window
         guard navigationAction.targetFrame == nil else { return nil }
+
+        // Prevent Focus from opening deeplinks from links
+        if let scheme = navigationAction.request.url?.scheme,
+           scheme.caseInsensitiveCompare(AppInfo.appScheme) == .orderedSame {
+            return nil
+        }
 
         // If URL is a file:// when web application calls window.open() or fails validation, prevent loading
         guard let url = navigationAction.request.url,

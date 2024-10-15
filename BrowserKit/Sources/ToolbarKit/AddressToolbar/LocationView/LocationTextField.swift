@@ -11,8 +11,6 @@ protocol LocationTextFieldDelegate: AnyObject {
     func locationTextField(_ textField: LocationTextField, didEnterText text: String)
     func locationTextFieldShouldReturn(_ textField: LocationTextField) -> Bool
     func locationTextFieldShouldClear(_ textField: LocationTextField) -> Bool
-    func locationTextFieldDidCancel(_ textField: LocationTextField)
-    func locationPasteAndGo(_ textField: LocationTextField)
     func locationTextFieldDidBeginEditing(_ textField: UITextField)
     func locationTextFieldDidEndEditing(_ textField: UITextField)
 }
@@ -21,7 +19,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     private var tintedClearImage: UIImage?
     private var clearButtonTintColor: UIColor?
 
-    var autocompleteDelegate: LocationTextFieldDelegate?
+    weak var autocompleteDelegate: LocationTextFieldDelegate?
 
     // This variable is a solution to get the right behaviour for refocusing
     // the LocationTextField. The initial transition into Overlay Mode
@@ -94,7 +92,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     }
 
     override func deleteBackward() {
-        lastReplacement = nil
+        lastReplacement = ""
         hideCursor = false
 
         guard markedTextRange == nil else {
@@ -108,6 +106,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard isEditing else { return }
         applyCompletion()
         super.touchesBegan(touches, with: event)
     }
@@ -139,14 +138,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
 
         let suggestionText = String(suggestion.dropFirst(normalized.count))
         setMarkedText(suggestionText, selectedRange: NSRange())
-
-        // Only call forceResetCursor() if `hideCursor` changes.
-        // Because forceResetCursor() auto accept iOS user's text replacement
-        // (e.g. mu->μ) which makes user unable to type "mu".
-        if !hideCursor {
-            hideCursor = true
-            forceResetCursor()
-        }
+        hideCursor = true
     }
 
     // MARK: - ThemeApplicable
@@ -154,11 +146,16 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
         let colors = theme.colors
         tintColor = colors.layerSelectedText
         clearButtonTintColor = colors.iconPrimary
-        markedTextStyle = [NSAttributedString.Key.backgroundColor: colors.layerSelectedText]
+        markedTextStyle = [NSAttributedString.Key.backgroundColor: colors.layerAutofillText]
 
         if isEditing {
             textColor = colors.textPrimary
         }
+
+        attributedPlaceholder = NSAttributedString(
+            string: placeholder ?? "",
+            attributes: [NSAttributedString.Key.foregroundColor: colors.textSecondary]
+        )
 
         tintClearButton()
     }
@@ -258,6 +255,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
 
     public func textFieldDidEndEditing(_ textField: UITextField) {
         lastReplacement = nil
+        textField.selectedTextRange = nil
         autocompleteDelegate?.locationTextFieldDidEndEditing(self)
     }
 
@@ -303,9 +301,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
 
          return {
              // If calling again, invalidate the last timer.
-             if let timer = timer {
-                 timer.invalidate()
-             }
+             if let timer { timer.invalidate() }
              timer = Timer(
                  timeInterval: delay,
                  target: callback,

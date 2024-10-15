@@ -27,7 +27,7 @@ public struct ToolbarElement: Equatable {
     let shouldDisplayAsHighlighted: Bool
 
     /// Indicates that there is an associated contextual hint
-    let hasContextualHint: Bool?
+    let contextualHintType: String?
 
     /// Accessibility label of the toolbar element
     let a11yLabel: String
@@ -44,6 +44,10 @@ public struct ToolbarElement: Equatable {
     /// Action to be performed for custom accessibility action
     let a11yCustomAction: (() -> Void)?
 
+    /// Indicates whether the toolbar element has a long press action or not
+    /// this is only used to compare for equality as closures can't be compared
+    let hasLongPressAction: Bool
+
     /// Closure that is executed when the toolbar element is tapped
     let onSelected: ((UIButton) -> Void)?
 
@@ -59,12 +63,13 @@ public struct ToolbarElement: Equatable {
                 isEnabled: Bool,
                 isFlippedForRTL: Bool = false,
                 shouldDisplayAsHighlighted: Bool = false,
-                hasContextualHint: Bool = false,
+                contextualHintType: String? = nil,
                 a11yLabel: String,
                 a11yHint: String?,
                 a11yId: String,
                 a11yCustomActionName: String? = nil,
                 a11yCustomAction: (() -> Void)? = nil,
+                hasLongPressAction: Bool,
                 onSelected: ((UIButton) -> Void)?,
                 onLongPress: ((UIButton) -> Void)? = nil) {
         self.iconName = iconName
@@ -74,7 +79,7 @@ public struct ToolbarElement: Equatable {
         self.isEnabled = isEnabled
         self.isFlippedForRTL = isFlippedForRTL
         self.shouldDisplayAsHighlighted = shouldDisplayAsHighlighted
-        self.hasContextualHint = hasContextualHint
+        self.contextualHintType = contextualHintType
         self.onSelected = onSelected
         self.onLongPress = onLongPress
         self.a11yLabel = a11yLabel
@@ -82,6 +87,7 @@ public struct ToolbarElement: Equatable {
         self.a11yId = a11yId
         self.a11yCustomActionName = a11yCustomActionName
         self.a11yCustomAction = a11yCustomAction
+        self.hasLongPressAction = hasLongPressAction
     }
 
     public static func == (lhs: ToolbarElement, rhs: ToolbarElement) -> Bool {
@@ -92,8 +98,11 @@ public struct ToolbarElement: Equatable {
         lhs.isEnabled == rhs.isEnabled &&
         lhs.isFlippedForRTL == rhs.isFlippedForRTL &&
         lhs.shouldDisplayAsHighlighted == rhs.shouldDisplayAsHighlighted &&
+        lhs.contextualHintType == rhs.contextualHintType &&
+        lhs.hasLongPressAction == rhs.hasLongPressAction &&
         lhs.a11yLabel == rhs.a11yLabel &&
         lhs.a11yHint == rhs.a11yHint &&
-        lhs.a11yId == rhs.a11yId
+        lhs.a11yId == rhs.a11yId &&
+        lhs.a11yCustomActionName == rhs.a11yCustomActionName
     }
 }

@@ -262,7 +262,7 @@ class RouteTests: XCTestCase {
 
         let route = subject.makeRoute(url: url)
 
-        XCTAssertEqual(route, .searchQuery(query: "test search text"))
+        XCTAssertEqual(route, .searchQuery(query: "test search text", isPrivate: false))
     }
 
     func testWidgetSmallQuicklinkOpenCopiedWithUrl() {
@@ -344,7 +344,7 @@ class RouteTests: XCTestCase {
 
         let route = subject.makeRoute(url: url)
 
-        XCTAssertEqual(route, .searchQuery(query: "google"))
+        XCTAssertEqual(route, .searchQuery(query: "google", isPrivate: false))
     }
 
     // MARK: - AppAction
