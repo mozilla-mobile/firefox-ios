@@ -148,10 +148,18 @@ class CertificatesViewController: UIViewController,
         certificatesTableView.dataSource = self
         view.addSubview(certificatesTableView)
         NSLayoutConstraint.activate([
-            certificatesTableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor,
-                                                       constant: UX.titleLabelTopMargin),
-            certificatesTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            certificatesTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            certificatesTableView.topAnchor.constraint(
+                equalTo: titleLabel.bottomAnchor,
+                constant: UX.titleLabelTopMargin
+            ),
+            certificatesTableView.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor,
+                constant: UX.headerStackViewMargin
+            ),
+            certificatesTableView.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor,
+                constant: -UX.headerStackViewMargin
+            ),
             certificatesTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
