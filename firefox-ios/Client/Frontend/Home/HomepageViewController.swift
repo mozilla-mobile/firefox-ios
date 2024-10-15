@@ -288,14 +288,22 @@ class HomepageViewController:
     }
 
     func createLayout() -> UICollectionViewLayout {
-        // swiftlint:disable line_length
-        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection? in
-        // swiftlint:enable line_length
-            guard let self = self,
+        // swiftlint: disable line_length
+        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment)
+            -> NSCollectionLayoutSection? in
+        // swiftlint: enable line_length
+            guard let self,
                   let viewModel = self.viewModel.getSectionViewModel(shownSection: sectionIndex),
                   viewModel.shouldShow
-            else { return nil }
-            self.logger.log(
+            // Returning a default section to prevent the app to crash with invalid section definition
+            else {
+                let shownSection = self?.viewModel.shownSections[safe: sectionIndex]
+                self?.logger.log("The current section index: \(sectionIndex) didn't load a valid section. The associated section type if present is: \(String(describing: shownSection))",
+                                 level: .fatal,
+                                 category: .legacyHomepage)
+                return Self.makeEmptyLayoutSection()
+            }
+            logger.log(
                 "Section \(viewModel.sectionType) is going to show",
                 level: .debug,
                 category: .homepage
@@ -306,6 +314,16 @@ class HomepageViewController:
             )
         }
         return layout
+    }
+
+    // making the method static so in the create layout we return always a valid layout
+    // even when self is nil to avoid app crash
+    private static func makeEmptyLayoutSection() -> NSCollectionLayoutSection {
+        let zeroLayoutSize = NSCollectionLayoutSize(widthDimension: .absolute(0.0),
+                                                    heightDimension: .absolute(0.0))
+        let emptyGroup = NSCollectionLayoutGroup.horizontal(layoutSize: zeroLayoutSize,
+                                                            subitems: [NSCollectionLayoutItem(layoutSize: zeroLayoutSize)])
+        return NSCollectionLayoutSection(group: emptyGroup)
     }
 
     // MARK: Long press
