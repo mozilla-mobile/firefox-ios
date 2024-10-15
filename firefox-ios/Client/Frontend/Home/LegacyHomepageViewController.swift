@@ -429,9 +429,9 @@ class LegacyHomepageViewController:
         if featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly),
            let toolbarState,
            toolbarState.addressToolbar.isEditing {
-            // When the user scrolls the homepage we cancel edit mode
+            // When the user scrolls the homepage (not overlaid on a webpage when searching) we cancel edit mode
             // On a website we just dismiss the keyboard
-            if toolbarState.addressToolbar.url == nil {
+            if toolbarState.addressToolbar.url == nil && tabManager.selectedTab?.isFxHomeTab == true {
                 let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
                 store.dispatch(action)
             } else {
