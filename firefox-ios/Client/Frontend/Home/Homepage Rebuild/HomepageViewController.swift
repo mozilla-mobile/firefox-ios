@@ -14,6 +14,7 @@ final class HomepageViewController: UIViewController,
                                     UICollectionViewDelegate,
                                     ContentContainable,
                                     Themeable,
+                                    Notifiable,
                                     StoreSubscriber {
     // MARK: - Typealiases
     typealias SubscriberStateType = HomepageState
@@ -56,6 +57,8 @@ final class HomepageViewController: UIViewController,
         self.logger = logger
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
+
+        setupNotifications(forObserver: self, observing: [UIApplication.didBecomeActiveNotification])
 
         subscribeToRedux()
     }
@@ -109,9 +112,8 @@ final class HomepageViewController: UIViewController,
 
     func newState(state: HomepageState) {
         homepageState = state
-        if homepageState.loadInitialData {
-            dataSource?.applyInitialSnapshot()
-        }
+        dataSource?.applyInitialSnapshot(state: state)
+
         if homepageState.navigateTo == .customizeHomepage {
             parentCoordinator?.showSettings(at: .homePage)
         }
@@ -192,16 +194,7 @@ final class HomepageViewController: UIViewController,
         for item: HomepageDiffableDataSource.HomeItem,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
-        guard let section = HomepageSection(rawValue: indexPath.section) else {
-            self.logger.log(
-                "Section should not have been nil, something went wrong",
-                level: .fatal,
-                category: .homepage
-            )
-            return UICollectionViewCell()
-        }
-
-        switch section {
+        switch item {
         case .header:
             guard let headerCell = collectionView?.dequeueReusableCell(
                 cellType: HomepageHeaderCell.self,
@@ -219,6 +212,27 @@ final class HomepageViewController: UIViewController,
             headerCell.applyTheme(theme: currentTheme)
 
             return headerCell
+        case .pocket(let story):
+            guard let pocketCell = collectionView?.dequeueReusableCell(
+                cellType: PocketStandardCell.self,
+                for: indexPath
+            )  else {
+                return UICollectionViewCell()
+            }
+            pocketCell.configure(item: story, theme: currentTheme)
+
+            return pocketCell
+        case .pocketDiscover(let title):
+            guard let pocketDiscoverCell = collectionView?.dequeueReusableCell(
+                cellType: PocketDiscoverCell.self,
+                for: indexPath
+            )  else {
+                return UICollectionViewCell()
+            }
+
+            pocketDiscoverCell.configure(text: title, theme: currentTheme)
+
+            return pocketDiscoverCell
         case .customizeHomepage:
             guard let customizeHomeCell = collectionView?.dequeueReusableCell(
                 cellType: CustomizeHomepageSectionCell.self,
@@ -232,8 +246,6 @@ final class HomepageViewController: UIViewController,
             }, theme: currentTheme)
 
             return customizeHomeCell
-        default:
-            return UICollectionViewCell()
         }
     }
 
@@ -256,7 +268,7 @@ final class HomepageViewController: UIViewController,
         )
     }
 
-    // MARK: UICollectionViewDelegate
+    // MARK: - UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // TODO: FXIOS-10162 - Dummy trigger to update with proper triggers
 
@@ -266,6 +278,20 @@ final class HomepageViewController: UIViewController,
         switch section {
         default:
             return
+        }
+    }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIApplication.willEnterForegroundNotification:
+            store.dispatch(
+                PocketAction(
+                    windowUUID: self.windowUUID,
+                    actionType: PocketActionType.enteredForeground
+                )
+            )
+        default: break
         }
     }
 }

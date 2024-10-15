@@ -753,6 +753,13 @@
 		8A4490922BF3BC2700E7E682 /* MicrosurveyPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4490912BF3BC2700E7E682 /* MicrosurveyPromptView.swift */; };
 		8A4490952BF3C42B00E7E682 /* MicrosurveyConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4490942BF3C42B00E7E682 /* MicrosurveyConfirmationView.swift */; };
 		8A44F20E2B585E1F0016BC81 /* HomepageTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A44F20D2B585E1F0016BC81 /* HomepageTelemetry.swift */; };
+		8A454D292CB7078D009436D9 /* PocketState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D282CB7078D009436D9 /* PocketState.swift */; };
+		8A454D2C2CB81153009436D9 /* PocketStandardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D2B2CB81153009436D9 /* PocketStandardCell.swift */; };
+		8A454D2E2CB81668009436D9 /* PocketAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D2D2CB81668009436D9 /* PocketAction.swift */; };
+		8A454D302CB81697009436D9 /* PocketMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D2F2CB81697009436D9 /* PocketMiddleware.swift */; };
+		8A454D322CB8170D009436D9 /* PocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D312CB8170D009436D9 /* PocketManager.swift */; };
+		8A454D362CB86993009436D9 /* PocketItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D352CB86993009436D9 /* PocketItem.swift */; };
+		8A454D372CB86B86009436D9 /* PocketStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D332CB85C7D009436D9 /* PocketStateTests.swift */; };
 		8A4593C72BF7BECA002758DE /* MicrosurveyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4593C32BF7BEC9002758DE /* MicrosurveyTableViewCell.swift */; };
 		8A4593C82BF7BECA002758DE /* MicrosurveyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4593C42BF7BECA002758DE /* MicrosurveyViewController.swift */; };
 		8A4593C92BF7BECA002758DE /* MicrosurveyTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4593C52BF7BECA002758DE /* MicrosurveyTableHeaderView.swift */; };
@@ -1324,7 +1331,7 @@
 		C8A4137428BE58C900D8EFEA /* WallpaperMetadataCodableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A4137328BE58C900D8EFEA /* WallpaperMetadataCodableProtocol.swift */; };
 		C8B07A4128199500000AFCE7 /* NimbusFlaggableFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B07A4028199500000AFCE7 /* NimbusFlaggableFeature.swift */; };
 		C8B0F5EB283B7BF9007AE65D /* pocketsponsoredfeed.json in Resources */ = {isa = PBXBuildFile; fileRef = C8B0F5EA283B7BF9007AE65D /* pocketsponsoredfeed.json */; };
-		C8B0F5ED283B7C9F007AE65D /* PocketStandardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B0F5EC283B7C9F007AE65D /* PocketStandardCell.swift */; };
+		C8B0F5ED283B7C9F007AE65D /* LegacyPocketStandardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B0F5EC283B7C9F007AE65D /* LegacyPocketStandardCell.swift */; };
 		C8B0F5F4283B7CCE007AE65D /* PocketProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B0F5EF283B7CCE007AE65D /* PocketProvider.swift */; };
 		C8B0F5F5283B7CCE007AE65D /* PocketSponsoredStory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B0F5F1283B7CCE007AE65D /* PocketSponsoredStory.swift */; };
 		C8B0F5F6283B7CCE007AE65D /* PocketStory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B0F5F2283B7CCE007AE65D /* PocketStory.swift */; };
@@ -6928,6 +6935,13 @@
 		8A4490912BF3BC2700E7E682 /* MicrosurveyPromptView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicrosurveyPromptView.swift; sourceTree = "<group>"; };
 		8A4490942BF3C42B00E7E682 /* MicrosurveyConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosurveyConfirmationView.swift; sourceTree = "<group>"; };
 		8A44F20D2B585E1F0016BC81 /* HomepageTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageTelemetry.swift; sourceTree = "<group>"; };
+		8A454D282CB7078D009436D9 /* PocketState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketState.swift; sourceTree = "<group>"; };
+		8A454D2B2CB81153009436D9 /* PocketStandardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketStandardCell.swift; sourceTree = "<group>"; };
+		8A454D2D2CB81668009436D9 /* PocketAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketAction.swift; sourceTree = "<group>"; };
+		8A454D2F2CB81697009436D9 /* PocketMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketMiddleware.swift; sourceTree = "<group>"; };
+		8A454D312CB8170D009436D9 /* PocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketManager.swift; sourceTree = "<group>"; };
+		8A454D332CB85C7D009436D9 /* PocketStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketStateTests.swift; sourceTree = "<group>"; };
+		8A454D352CB86993009436D9 /* PocketItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketItem.swift; sourceTree = "<group>"; };
 		8A4593C32BF7BEC9002758DE /* MicrosurveyTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicrosurveyTableViewCell.swift; sourceTree = "<group>"; };
 		8A4593C42BF7BECA002758DE /* MicrosurveyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicrosurveyViewController.swift; sourceTree = "<group>"; };
 		8A4593C52BF7BECA002758DE /* MicrosurveyTableHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicrosurveyTableHeaderView.swift; sourceTree = "<group>"; };
@@ -7948,7 +7962,7 @@
 		C8A74FF69C3971EDBE73157F /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C8B07A4028199500000AFCE7 /* NimbusFlaggableFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusFlaggableFeature.swift; sourceTree = "<group>"; };
 		C8B0F5EA283B7BF9007AE65D /* pocketsponsoredfeed.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = pocketsponsoredfeed.json; sourceTree = "<group>"; };
-		C8B0F5EC283B7C9F007AE65D /* PocketStandardCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PocketStandardCell.swift; sourceTree = "<group>"; };
+		C8B0F5EC283B7C9F007AE65D /* LegacyPocketStandardCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegacyPocketStandardCell.swift; sourceTree = "<group>"; };
 		C8B0F5EF283B7CCE007AE65D /* PocketProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PocketProvider.swift; sourceTree = "<group>"; };
 		C8B0F5F1283B7CCE007AE65D /* PocketSponsoredStory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PocketSponsoredStory.swift; sourceTree = "<group>"; };
 		C8B0F5F2283B7CCE007AE65D /* PocketStory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PocketStory.swift; sourceTree = "<group>"; };
@@ -10910,6 +10924,16 @@
 			path = Debug;
 			sourceTree = "<group>";
 		};
+		8A454D2A2CB7079A009436D9 /* Header */ = {
+			isa = PBXGroup;
+			children = (
+				8ABDBAA52CB6BF6600B51F63 /* HomepageHeaderCell.swift */,
+				8AD0110C2CB42FE700368BF3 /* HeaderState.swift */,
+				8AD0110E2CB4314B00368BF3 /* HeaderAction.swift */,
+			);
+			path = Header;
+			sourceTree = "<group>";
+		};
 		8A46F5A62C9E4389005B6422 /* RemoteRecords */ = {
 			isa = PBXGroup;
 			children = (
@@ -10953,6 +10977,7 @@
 			children = (
 				8A552AC62CB43AB300564C98 /* HeaderStateTests.swift */,
 				8A552AC52CB43AB300564C98 /* HomepageStateTests.swift */,
+				8A454D332CB85C7D009436D9 /* PocketStateTests.swift */,
 			);
 			path = Redux;
 			sourceTree = "<group>";
@@ -11070,7 +11095,8 @@
 		8A7D08E12CAAF79F0035999C /* Homepage Rebuild */ = {
 			isa = PBXGroup;
 			children = (
-				8ABDBAA42CB6BF3A00B51F63 /* View */,
+				8A454D2A2CB7079A009436D9 /* Header */,
+				8ABDBAA42CB6BF3A00B51F63 /* Pocket */,
 				8A7D08E22CAAF7C30035999C /* HomepageViewController.swift */,
 				8AA0A6622CAC40AA00AC7EB3 /* HomepageDiffableDataSource.swift */,
 				8AA0A6642CAC6B7100AC7EB3 /* HomepageSectionLayoutProvider.swift */,
@@ -11300,12 +11326,17 @@
 			path = FeatureFlags;
 			sourceTree = "<group>";
 		};
-		8ABDBAA42CB6BF3A00B51F63 /* View */ = {
+		8ABDBAA42CB6BF3A00B51F63 /* Pocket */ = {
 			isa = PBXGroup;
 			children = (
-				8ABDBAA52CB6BF6600B51F63 /* HomepageHeaderCell.swift */,
+				8A454D282CB7078D009436D9 /* PocketState.swift */,
+				8A454D2F2CB81697009436D9 /* PocketMiddleware.swift */,
+				8A454D312CB8170D009436D9 /* PocketManager.swift */,
+				8A454D2D2CB81668009436D9 /* PocketAction.swift */,
+				8A454D2B2CB81153009436D9 /* PocketStandardCell.swift */,
+				8A454D352CB86993009436D9 /* PocketItem.swift */,
 			);
-			path = View;
+			path = Pocket;
 			sourceTree = "<group>";
 		};
 		8AC225632B6D3F9600CDA7FD /* Telemetry */ = {
@@ -11552,8 +11583,6 @@
 		8AF347DC2CADD0E100624036 /* Redux */ = {
 			isa = PBXGroup;
 			children = (
-				8AD0110C2CB42FE700368BF3 /* HeaderState.swift */,
-				8AD0110E2CB4314B00368BF3 /* HeaderAction.swift */,
 				8AF347DD2CADD1B200624036 /* HomepageState.swift */,
 				8AF347DF2CADD1C300624036 /* HomepageAction.swift */,
 			);
@@ -12177,7 +12206,7 @@
 		C87DC86127B2CC27006EFCE2 /* Pocket */ = {
 			isa = PBXGroup;
 			children = (
-				C8B0F5EC283B7C9F007AE65D /* PocketStandardCell.swift */,
+				C8B0F5EC283B7C9F007AE65D /* LegacyPocketStandardCell.swift */,
 				8A7653BE28A2C92600924ABF /* PocketStandardCellViewModel.swift */,
 				8A9AC46A276D11280047F5B0 /* PocketViewModel.swift */,
 				8A7653BC28A2C61D00924ABF /* PocketDataAdaptor.swift */,
@@ -15454,7 +15483,7 @@
 				602A2B9827F6256200C3CB78 /* FxNimbus.swift in Sources */,
 				E1CD81C5290C6D5800124B27 /* HelpView.swift in Sources */,
 				5A47CFF52860FB8900B2B7BF /* AppLaunchUtil.swift in Sources */,
-				C8B0F5ED283B7C9F007AE65D /* PocketStandardCell.swift in Sources */,
+				C8B0F5ED283B7C9F007AE65D /* LegacyPocketStandardCell.swift in Sources */,
 				D04CD74A216CF86B004FF5B0 /* SiriShortcuts.swift in Sources */,
 				EB9A179F20E6C1A200B12184 /* ThemedTableViewController.swift in Sources */,
 				E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */,
@@ -15595,6 +15624,7 @@
 				2137785D297F1F2800D01309 /* DownloadedFile.swift in Sources */,
 				745DAB301CDAAFAA00D44181 /* RecentlyClosedTabsPanel.swift in Sources */,
 				D0B9483D22A18B78002F4AA1 /* TextFieldTableViewCell.swift in Sources */,
+				8A454D322CB8170D009436D9 /* PocketManager.swift in Sources */,
 				8AF99B4F29EF1BA700108DEC /* BrowserDelegate.swift in Sources */,
 				C87D8B802818333F00A6307D /* NimbusManager.swift in Sources */,
 				8A4AC0EB28C929D700439F83 /* URLSessionDataTaskProtocol.swift in Sources */,
@@ -15655,6 +15685,7 @@
 				8ABDBAA62CB6BF6600B51F63 /* HomepageHeaderCell.swift in Sources */,
 				8AD0110F2CB4314B00368BF3 /* HeaderAction.swift in Sources */,
 				8CE1E4372B8C76C80026530B /* LoginAutofillView.swift in Sources */,
+				8A454D2E2CB81668009436D9 /* PocketAction.swift in Sources */,
 				DD31E0FB1B382B520077078A /* TabPrintPageRenderer.swift in Sources */,
 				D81E45131F82C56D004EFFBA /* NewTabContentSettingsViewController.swift in Sources */,
 				E4CD9E911A6897FB00318571 /* ReaderMode.swift in Sources */,
@@ -15855,6 +15886,7 @@
 				8ADC2A122A3375B900543DAA /* FxAEntryPoint.swift in Sources */,
 				8AEAD9F32C3D7B3E001A2C5A /* FeatureFlagsSettings.swift in Sources */,
 				216A0D7B2A40F08B008077BA /* ThemeSettingsAction.swift in Sources */,
+				8A454D302CB81697009436D9 /* PocketMiddleware.swift in Sources */,
 				C2506C932A6A863600F2B76E /* HistoryCoordinator.swift in Sources */,
 				8A46F5AE2C9E4389005B6422 /* RemoteSettingsUtils.swift in Sources */,
 				8A3EF8012A2FCFC900796E3A /* FasterInactiveTabs.swift in Sources */,
@@ -16015,6 +16047,7 @@
 				AB3DB0C92B596739001D32CB /* AppStartupTelemetry.swift in Sources */,
 				D8AA923421A602DC002605C0 /* HomePageSettingViewController.swift in Sources */,
 				8A161411282C035D00DDBB02 /* CustomizeHomepageSectionViewModel.swift in Sources */,
+				8A454D2C2CB81153009436D9 /* PocketStandardCell.swift in Sources */,
 				AB9CBC042C53B64C00102610 /* TrackingProtectionModel.swift in Sources */,
 				C8DC90C52A066B6A0008832B /* MarkupTokenizingUtility.swift in Sources */,
 				EBC4869D2195F58300CDA48D /* ErrorPageHelper.swift in Sources */,
@@ -16065,6 +16098,7 @@
 				274A36CE239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift in Sources */,
 				C869912D28917688007ACC5C /* WallpaperImageLoader.swift in Sources */,
 				96A5F73829928B3700234E5F /* GeneralizedImageFetcher.swift in Sources */,
+				8A454D362CB86993009436D9 /* PocketItem.swift in Sources */,
 				1D7B78992ADF328E0011E9F2 /* AppEvent.swift in Sources */,
 				43F7952525795F69005AEE40 /* SearchTelemetry.swift in Sources */,
 				E65075541E37F6FC006961AC /* LegacyDynamicFontHelper.swift in Sources */,
@@ -16186,6 +16220,7 @@
 				8A720C602A4C8B700003018A /* SharedSettingsDelegate.swift in Sources */,
 				211046CD2A7D842A00A7309F /* TPAccessoryInfo.swift in Sources */,
 				8CEDF0802BFE138B00D2617B /* AddressProvider.swift in Sources */,
+				8A454D292CB7078D009436D9 /* PocketState.swift in Sources */,
 				21E77E502AA8BAEC00FABA10 /* TabTrayState.swift in Sources */,
 				0EC57D0A2CA6FCC5002E3F04 /* PasswordGeneratorPasswordFieldView.swift in Sources */,
 				5AE371872A4E11750092A760 /* AboutSettingsDelegate.swift in Sources */,
@@ -16505,6 +16540,7 @@
 				8A4190D22A6B0848001E8401 /* StatusBarOverlayTests.swift in Sources */,
 				C8EDDBF029DD83FC003A4C07 /* RouteTests.swift in Sources */,
 				0A7693612C7DD19600103A6D /* CertificatesViewModelTests.swift in Sources */,
+				8A454D372CB86B86009436D9 /* PocketStateTests.swift in Sources */,
 				8AED868328CA3B3400351A50 /* BookmarkPanelViewModelTests.swift in Sources */,
 				434CD57829F6FC4500A0D04B /* MockAppAuthenticator.swift in Sources */,
 				DACDE996225E537900C8F37F /* VersionSettingTests.swift in Sources */,
