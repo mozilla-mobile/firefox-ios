@@ -378,7 +378,10 @@ extension BrowserViewController: WKNavigationDelegate {
         // (orange color) as soon as the page has loaded.
         if let url = webView.url {
             guard !url.isReaderModeURL else { return }
-            urlBar.updateReaderModeState(.unavailable)
+            // FXIOS-10239: Reader mode icon shifts when toolbar refactor is enabled
+            if !isToolbarRefactorEnabled {
+                updateReaderModeState(for: tabManager.selectedTab, readerModeState: .unavailable)
+            }
             hideReaderModeBar(animated: false)
         }
     }
