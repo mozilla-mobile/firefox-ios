@@ -37,8 +37,7 @@ struct HomepageState: ScreenState, Equatable {
         self.init(
             windowUUID: windowUUID,
             loadInitialData: false,
-            headerState: HeaderState(windowUUID: windowUUID),
-            navigateTo: nil
+            headerState: HeaderState(windowUUID: windowUUID)
         )
     }
 
@@ -46,7 +45,7 @@ struct HomepageState: ScreenState, Equatable {
         windowUUID: WindowUUID,
         loadInitialData: Bool,
         headerState: HeaderState,
-        navigateTo: NavigationDestination?
+        navigateTo: NavigationDestination? = nil
     ) {
         self.windowUUID = windowUUID
         self.loadInitialData = loadInitialData
@@ -60,8 +59,7 @@ struct HomepageState: ScreenState, Equatable {
             return HomepageState(
                 windowUUID: state.windowUUID,
                 loadInitialData: false,
-                headerState: HeaderState.reducer(state.headerState, action),
-                navigateTo: nil
+                headerState: HeaderState.reducer(state.headerState, action)
             )
         }
 
@@ -70,8 +68,7 @@ struct HomepageState: ScreenState, Equatable {
             return HomepageState(
                 windowUUID: state.windowUUID,
                 loadInitialData: true,
-                headerState: HeaderState.reducer(state.headerState, action),
-                navigateTo: nil
+                headerState: HeaderState.reducer(state.headerState, action)
             )
         case HomepageActionType.tappedOnCustomizeHomepage:
             return HomepageState(
@@ -84,8 +81,7 @@ struct HomepageState: ScreenState, Equatable {
             return HomepageState(
                 windowUUID: state.windowUUID,
                 loadInitialData: false,
-                headerState: HeaderState.reducer(state.headerState, action),
-                navigateTo: nil
+                headerState: HeaderState.reducer(state.headerState, action)
             )
         }
     }
