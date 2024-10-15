@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import UIKit
 
 typealias HomepageSection = HomepageDiffableDataSource.HomeSection
@@ -14,19 +15,29 @@ final class HomepageDiffableDataSource:
         case header
         case topSites
         case pocket
+        case customizeHomepage
     }
 
     enum HomeItem: Hashable {
         case header
+        case customizeHomepage
+
+        static var cellTypes: [ReusableCell.Type] {
+            return [
+                HomepageHeaderCell.self,
+                CustomizeHomepageSectionCell.self
+            ]
+        }
     }
 
     func applyInitialSnapshot() {
         var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeItem>()
 
-        snapshot.appendSections([.header, .topSites, .pocket])
+        snapshot.appendSections([.header, .topSites, .pocket, .customizeHomepage])
         snapshot.appendItems([.header], toSection: .header)
         snapshot.appendItems([], toSection: .topSites)
         snapshot.appendItems([], toSection: .pocket)
+        snapshot.appendItems([.customizeHomepage], toSection: .customizeHomepage)
 
         apply(snapshot, animatingDifferences: true)
     }

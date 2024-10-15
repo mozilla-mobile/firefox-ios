@@ -6,9 +6,14 @@ import Common
 import Redux
 
 struct HomepageState: ScreenState, Equatable {
+    enum NavigationDestination {
+        case customizeHomepage
+    }
+
     var windowUUID: WindowUUID
     var loadInitialData: Bool
     var headerState: HeaderState
+    var navigateTo: NavigationDestination?
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let homepageState = store.state.screenState(
@@ -23,7 +28,8 @@ struct HomepageState: ScreenState, Equatable {
         self.init(
             windowUUID: homepageState.windowUUID,
             loadInitialData: homepageState.loadInitialData,
-            headerState: homepageState.headerState
+            headerState: homepageState.headerState,
+            navigateTo: homepageState.navigateTo
         )
     }
 
@@ -38,11 +44,13 @@ struct HomepageState: ScreenState, Equatable {
     private init(
         windowUUID: WindowUUID,
         loadInitialData: Bool,
-        headerState: HeaderState
+        headerState: HeaderState,
+        navigateTo: NavigationDestination? = nil
     ) {
         self.windowUUID = windowUUID
         self.loadInitialData = loadInitialData
         self.headerState = headerState
+        self.navigateTo = navigateTo
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -61,6 +69,13 @@ struct HomepageState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 loadInitialData: true,
                 headerState: HeaderState.reducer(state.headerState, action)
+            )
+        case HomepageActionType.tappedOnCustomizeHomepage:
+            return HomepageState(
+                windowUUID: state.windowUUID,
+                loadInitialData: true,
+                headerState: HeaderState.reducer(state.headerState, action),
+                navigateTo: .customizeHomepage
             )
         default:
             return HomepageState(

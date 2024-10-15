@@ -6,6 +6,10 @@ import Foundation
 import Common
 import Redux
 
+protocol HomepageCoordinatorDelegate: AnyObject {
+    func showSettings(at destination: Route.SettingsSection)
+}
+
 final class HomepageViewController: UIViewController,
                                     UICollectionViewDelegate,
                                     ContentContainable,
@@ -26,12 +30,19 @@ final class HomepageViewController: UIViewController,
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
 
+    // MARK: Navigation variables
+    weak var parentCoordinator: HomepageCoordinatorDelegate?
+
     // MARK: - Private variables
     private var collectionView: UICollectionView?
     private var dataSource: HomepageDiffableDataSource?
     private var layoutConfiguration = HomepageSectionLayoutProvider().createCompositionalLayout()
     private var logger: Logger
     private var homepageState: HomepageState
+
+    private var currentTheme: Theme {
+        themeManager.getCurrentTheme(for: windowUUID)
+    }
 
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
@@ -101,6 +112,9 @@ final class HomepageViewController: UIViewController,
         if homepageState.loadInitialData {
             dataSource?.applyInitialSnapshot()
         }
+        if homepageState.navigateTo == .customizeHomepage {
+            parentCoordinator?.showSettings(at: .homePage)
+        }
     }
 
     func unsubscribeFromRedux() {
@@ -141,7 +155,9 @@ final class HomepageViewController: UIViewController,
     private func configureCollectionView() {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layoutConfiguration)
 
-        collectionView.register(HomepageHeaderCell.self, forCellWithReuseIdentifier: HomepageHeaderCell.cellIdentifier)
+        HomepageItem.cellTypes.forEach {
+            collectionView.register($0, forCellWithReuseIdentifier: $0.cellIdentifier)
+        }
 
         collectionView.keyboardDismissMode = .onDrag
         collectionView.showsVerticalScrollIndicator = false
@@ -187,30 +203,57 @@ final class HomepageViewController: UIViewController,
 
         switch section {
         case .header:
-            let cell = collectionView?.dequeueReusableCell(
-                withReuseIdentifier: HomepageHeaderCell.cellIdentifier,
+            guard let headerCell = collectionView?.dequeueReusableCell(
+                cellType: HomepageHeaderCell.self,
                 for: indexPath
-            )
-            guard let headerCell = cell as? HomepageHeaderCell else {
+            )  else {
                 return UICollectionViewCell()
             }
+
             headerCell.configure(
                 headerState: homepageState.headerState,
                 showiPadSetup: shouldUseiPadSetup()
             ) { [weak self] in
-                guard let self else { return }
-                store.dispatch(
-                    HeaderAction(
-                        windowUUID: self.windowUUID,
-                        actionType: HeaderActionType.toggleHomepageMode
-                    )
-                )
+                self?.toggleHomepageMode()
             }
-            headerCell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            headerCell.applyTheme(theme: currentTheme)
+
             return headerCell
+        case .customizeHomepage:
+            guard let customizeHomeCell = collectionView?.dequeueReusableCell(
+                cellType: CustomizeHomepageSectionCell.self,
+                for: indexPath
+            ) else {
+                return UICollectionViewCell()
+            }
+
+            customizeHomeCell.configure(onTapAction: { [weak self] _ in
+                self?.navigateToHomepageSettings()
+            }, theme: currentTheme)
+
+            return customizeHomeCell
         default:
             return UICollectionViewCell()
         }
+    }
+
+    // MARK: Dispatch Actions
+    private func toggleHomepageMode() {
+        store.dispatch(
+            HeaderAction(
+                windowUUID: windowUUID,
+                actionType: HeaderActionType.toggleHomepageMode
+            )
+        )
+    }
+
+    private func navigateToHomepageSettings() {
+        store.dispatch(
+            HomepageAction(
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.tappedOnCustomizeHomepage
+            )
+        )
     }
 
     // MARK: UICollectionViewDelegate
