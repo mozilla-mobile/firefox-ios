@@ -3234,6 +3234,10 @@ class BrowserViewController: UIViewController,
     func addressToolbarDidBeginDragInteraction() {
         dismissVisibleMenus()
     }
+
+    func addressToolbarDidTapSearchEngine(_ searchEngineView: UIView) {
+        // TODO FXIOS-10273 Use coordinator to handle search engine bottom sheet display
+    }
 }
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {

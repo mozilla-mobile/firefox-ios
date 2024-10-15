@@ -17,4 +17,5 @@ public protocol AddressToolbarDelegate: AnyObject {
                                  with contextualHintType: String)
     func addressToolbarDidBeginDragInteraction()
     func addressToolbarDidProvideItemsForDragInteraction()
+    func addressToolbarDidTapSearchEngine(_ searchEngineView: UIView)
 }
