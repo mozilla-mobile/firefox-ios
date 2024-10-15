@@ -284,12 +284,6 @@ class TabManagerMiddleware {
                                                  windowUUID: uuid,
                                                  actionType: GeneralBrowserActionType.showOverlay)
         store.dispatch(overlayAction)
-
-        let scrollAction = TabPanelMiddlewareAction(tabDisplayModel: model,
-                                                    scrollBehavior: .scrollToSelectedTab(shouldAnimate: false),
-                                                    windowUUID: uuid,
-                                                    actionType: TabPanelMiddlewareActionType.scrollToTab)
-        store.dispatch(scrollAction)
     }
 
     /// Move tab on `TabManager` array to support drag and drop
