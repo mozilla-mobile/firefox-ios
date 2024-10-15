@@ -122,6 +122,67 @@ export const FormAutofillHeuristics = {
   },
 
   /**
+   * In some languages such French (nom) and German (Name), name can mean either family name or
+   * full name in a form, depending on the context. We want to be sure that if "name" is
+   * detected in the context of "family-name" or "given-name", it is updated accordingly.
+   *
+   * Look for "given-name", "family-name", and "name" fields. If any two of those fields are detected
+   * and one of them is "name", then replace "name" with "family-name" if "name" is accompanied by
+   * "given-name" or vise-versa.
+   *
+   * @param {FieldScanner} scanner
+   *        The current parsing status for all elements
+   * @returns {boolean}
+   *        Return true if any field is recognized and updated, otherwise false.
+   */
+  _parseNameFields(scanner, fieldDetail) {
+    const TARGET_FIELDS = ["name", "given-name", "family-name"];
+
+    if (!TARGET_FIELDS.includes(fieldDetail.fieldName)) {
+      return false;
+    }
+
+    const fields = [];
+    let nameIndex = -1;
+
+    for (let idx = scanner.parsingIndex; ; idx++) {
+      const detail = scanner.getFieldDetailByIndex(idx);
+      if (!TARGET_FIELDS.includes(detail?.fieldName)) {
+        break;
+      }
+      if (detail.fieldName === "name") {
+        nameIndex = idx;
+      }
+      fields.push(detail);
+    }
+
+    if (nameIndex != -1 && fields.length == 2) {
+      //if name is detected and the other of the two fields detected is 'given-name'
+      //then update name to 'name' to 'family-name'
+      if (
+        fields[0].fieldName == "given-name" ||
+        fields[1].fieldName == "given-name"
+      ) {
+        scanner.updateFieldName(nameIndex, "family-name");
+        //if name is detected and the other of the two fields detected is 'family-name'
+        //then update name to 'name' to 'given-name'
+      } else if (
+        fields[0].fieldName == "family-name" ||
+        fields[1].fieldName == "family-name"
+      ) {
+        scanner.updateFieldName(nameIndex, "given-name");
+      } else {
+        return false;
+      }
+
+      scanner.parsingIndex += fields.length;
+      return true;
+    }
+
+    return false;
+  },
+
+  /**
    * Try to match the telephone related fields to the grammar
    * list to see if there is any valid telephone set and correct their
    * field names.
@@ -626,6 +687,7 @@ export const FormAutofillHeuristics = {
 
       // Attempt to parse the field using different parsers.
       if (
+        this._parseNameFields(scanner, fieldDetail) ||
         this._parseStreetAddressFields(scanner, fieldDetail) ||
         this._parseAddressFields(scanner, fieldDetail) ||
         this._parseCreditCardExpiryFields(scanner, fieldDetail) ||
