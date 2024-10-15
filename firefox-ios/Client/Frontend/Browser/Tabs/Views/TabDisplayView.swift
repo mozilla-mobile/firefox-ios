@@ -124,11 +124,21 @@ class TabDisplayView: UIView,
 
     private func scrollToTab(_ index: Int, shouldAnimate animated: Bool) {
         let section = shouldHideInactiveTabs ? 0 : 1
-        let indexPath = IndexPath(row: index,
-                                  section: section)
-            collectionView.scrollToItem(at: indexPath,
-                                        at: .centeredVertically,
-                                        animated: animated)
+        let indexPath = IndexPath(row: index, section: section)
+
+        // Only scroll to the view if it is not visible.
+        collectionView.layoutIfNeeded() // We cannot get the visible cells unless all layout / reloadData has finished
+        guard !collectionView.indexPathsForFullyVisibleItems.contains(indexPath) else { return }
+
+        // Scrolling to an invalid cell will crash the app, so check indexPath first
+        guard collectionView.isValid(indexPath: indexPath) else {
+            assertionFailure("You cannot scroll to an invalid indexPath: \(indexPath)")
+            return
+        }
+
+        collectionView.scrollToItem(at: indexPath,
+                                    at: .centeredVertically,
+                                    animated: animated)
     }
 
     private func setupLayout() {
