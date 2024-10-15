@@ -106,6 +106,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard isEditing else { return }
         applyCompletion()
         super.touchesBegan(touches, with: event)
     }
