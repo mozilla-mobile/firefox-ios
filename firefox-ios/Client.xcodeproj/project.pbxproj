@@ -63,6 +63,7 @@
 		0BDDB3412CA6B23300D501DF /* EditFolderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDDB3402CA6B23300D501DF /* EditFolderCell.swift */; };
 		0BDDB3442CA6E43100D501DF /* FolderHierarchyFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDDB3432CA6E43100D501DF /* FolderHierarchyFetcher.swift */; };
 		0BDDB3462CA6E43A00D501DF /* BookmarksSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDDB3452CA6E43A00D501DF /* BookmarksSaver.swift */; };
+		0BE181E72CBED065002DE979 /* LegacyBookmarkDetailPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE181E62CBED065002DE979 /* LegacyBookmarkDetailPanel.swift */; };
 		0BE4158B2CA16B5300F3B7A1 /* libStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* libStorage.a */; };
 		0BF0DB4A1E57B05E009172B0 /* LaunchArguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075861E37F7AB006961AC /* LaunchArguments.swift */; };
 		0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF0DB931A8545800039F300 /* URLBarView.swift */; };
@@ -1420,7 +1421,6 @@
 		D09A0CDC1FAA24CC009A0273 /* libAccount.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA435FB1ABB83B4008031D1 /* libAccount.a */; };
 		D0A627662270C982006AFA2E /* photon-colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C49854D206173C800893DAE /* photon-colors.swift */; };
 		D0B693D5206C5BB9008A8B11 /* TestSQLiteReadingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B693D4206C5BB9008A8B11 /* TestSQLiteReadingList.swift */; };
-		D0B9483422A03468002F4AA1 /* LegacyBookmarkDetailPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B9483322A03468002F4AA1 /* LegacyBookmarkDetailPanel.swift */; };
 		D0B9483D22A18B78002F4AA1 /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B9483C22A18B78002F4AA1 /* TextFieldTableViewCell.swift */; };
 		D0C95E0E200FD3B200E4E51C /* PrintHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C95E0D200FD3B200E4E51C /* PrintHelper.swift */; };
 		D0C95E36200FDC5500E4E51C /* MetadataParserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C95E35200FDC5400E4E51C /* MetadataParserHelper.swift */; };
@@ -2303,6 +2303,7 @@
 		0BDDB3402CA6B23300D501DF /* EditFolderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFolderCell.swift; sourceTree = "<group>"; };
 		0BDDB3432CA6E43100D501DF /* FolderHierarchyFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderHierarchyFetcher.swift; sourceTree = "<group>"; };
 		0BDDB3452CA6E43A00D501DF /* BookmarksSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksSaver.swift; sourceTree = "<group>"; };
+		0BE181E62CBED065002DE979 /* LegacyBookmarkDetailPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegacyBookmarkDetailPanel.swift; sourceTree = "<group>"; };
 		0BE44233918B5168E5028D9E /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Menu.strings; sourceTree = "<group>"; };
 		0BE84E0CA7385E5C7E816F0A /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/Search.strings; sourceTree = "<group>"; };
 		0BEE4E1D8F737D9B5F6DA666 /* anp */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = anp; path = anp.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
@@ -8078,7 +8079,6 @@
 		D08245ADBF1AC954FBD578DF /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/Intro.strings"; sourceTree = "<group>"; };
 		D09B407EBB9EECBF5A45B08A /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		D0B693D4206C5BB9008A8B11 /* TestSQLiteReadingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSQLiteReadingList.swift; sourceTree = "<group>"; };
-		D0B9483322A03468002F4AA1 /* LegacyBookmarkDetailPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyBookmarkDetailPanel.swift; sourceTree = "<group>"; };
 		D0B94837A84544B66CE78383 /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		D0B9483C22A18B78002F4AA1 /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
 		D0C95DF1200EAD3000E4E51C /* FindInPage.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = FindInPage.js; sourceTree = "<group>"; };
@@ -9421,7 +9421,7 @@
 		0BBC50962CA1F86F00CB7248 /* Legacy */ = {
 			isa = PBXGroup;
 			children = (
-				D0B9483322A03468002F4AA1 /* LegacyBookmarkDetailPanel.swift */,
+				0BE181E62CBED065002DE979 /* LegacyBookmarkDetailPanel.swift */,
 				8A3233FB286270CF003E1C33 /* FxBookmarkNode.swift */,
 				8A8629E1288096C40096DDB1 /* BookmarksFolderCell.swift */,
 				59A6839879D615FC1C0D71CE /* LegacyBookmarksPanel.swift */,
@@ -14946,7 +14946,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "INPUT_FILE=\"${SRCROOT}/Storage/metrics.yaml\"\nOUTPUT_FILE=\"${SRCROOT}/Storage/Generated/Metrics.swift\"\n\nif [[ ! -f \"$OUTPUT_FILE\" ]]; then\n    echo \"Output file $OUTPUT_FILE does not exist. Running the command.\"\n    rm -rf .venv; bash $PWD/bin/sdk_generator.sh -g Glean -o $SRCROOT/Storage/Generated\n    exit 0\nfi\n\nMODIFIED_FILES=$(git diff --name-only \"$INPUT_FILE\")\n\nif [[ -z \"$MODIFIED_FILES\" ]]; then\n    echo \"No changes detected in input file: $INPUT_FILE. Exiting script.\"\n    exit 0\nfi\n\necho \"Changes detected in input file. Running the command...\"\nrm -rf .venv; bash $PWD/bin/sdk_generator.sh -g Glean -o $SRCROOT/Storage/Generated\n";
+			shellScript = "INPUT_FILE=\"${SRCROOT}/Storage/metrics.yaml\"\nOUTPUT_FILE=\"${SRCROOT}/Storage/Generated/Metrics.swift\"\n\nif [[ ! -f \"$OUTPUT_FILE\" ]]; then\n    echo \"Output file $OUTPUT_FILE does not exist. Running the command.\"\n    rm -rf .venv; bash $PWD/bin/sdk_generator.sh -g Glean -o $SRCROOT/Storage/Generated\n    exit 0\nfi\n\nMODIFIED_FILES=$(git diff --name-only \"$INPUT_FILE\")\nMODIFIED_FILES_PREVIOUS_COMMIT=$(git diff --name-only HEAD^ HEAD \"$INPUT_FILE\")\n\nif [[ -z \"$MODIFIED_FILES\" || -z \"$MODIFIED_FILES_PREVIOUS_COMMIT\" ]] then\n    echo \"No changes detected in input file: $INPUT_FILE. Exiting script.\"\n    exit 0\nfi\n\necho \"Changes detected in input file. Running the command...\"\nrm -rf .venv; bash $PWD/bin/sdk_generator.sh -g Glean -o $SRCROOT/Storage/Generated\n";
 		};
 		5FA2232B27F6FA00005B3D87 /* Glean SDK Generator Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -14972,6 +14972,7 @@
 		};
 		5FA2232C27F6FA69005B3D87 /* Nimbus Feature Manifest Generator Script */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 12;
 			files = (
 			);
@@ -14989,7 +14990,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "GENERATED_FILE_1=\"${SRCROOT}/Client/Generated/FxNimbus.swift\"\nGENERATED_FILE_2=\"${SRCROOT}/Client/Generated/FxNimbusMessaging.swift\"\n\nif [[ ! -f \"$GENERATED_FILE_1\" || ! -f \"$GENERATED_FILE_2\" && $ACTION != \"indexbuild\" ]]; then\n    echo \"One or both generated files do not exist. Running the command.\"\n    /usr/bin/env -i HOME=$HOME PROJECT=$PROJECT CONFIGURATION=$CONFIGURATION SOURCE_ROOT=$SOURCE_ROOT bash $SOURCE_ROOT/bin/nimbus-fml.sh --verbose\n    exit 0\nfi\n\n# Get a list of modified files in the nimbus-features folder and the nimbus.fml.yaml file\nMODIFIED_FILES=$(git diff --name-only \"${SOURCE_ROOT}/nimbus-features\" \"${SOURCE_ROOT}/nimbus.fml.yaml\")\n\nif [[ -z \"$MODIFIED_FILES\" ]]; then\n    echo \"No changes detected in 'nimbus-features/' or 'nimbus.fml.yaml'. Exiting script.\"\n    exit 0\nfi\n\nif [ $ACTION != \"indexbuild\" ]; then\n   /usr/bin/env -i HOME=$HOME PROJECT=$PROJECT CONFIGURATION=$CONFIGURATION SOURCE_ROOT=$SOURCE_ROOT bash $SOURCE_ROOT/bin/nimbus-fml.sh --verbose\nfi\n";
+			shellScript = "if [ \"$ACTION\" != \"indexbuild\" ]; then\n    /usr/bin/env -i HOME=$HOME PROJECT=$PROJECT CONFIGURATION=$CONFIGURATION SOURCE_ROOT=$SOURCE_ROOT bash \"$SOURCE_ROOT/bin/nimbus-fml.sh\" --verbose\nfi\n\n";
 		};
 		C874A4E327F62C5B006F54E5 /* Swiftlint */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -15009,7 +15010,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\n# Get the list of modified Swift files\nMODIFIED_FILES=$(git diff --name-only --diff-filter=ACM | grep -e '\\.swift$')\nif [[ -z \"$MODIFIED_FILES\" ]]; then \n    echo \"No Swift files to lint\" exit 0\nfi\n\nif which swiftlint > /dev/null; then\n    for file in $MODIFIED_FILES; do\n        swiftlint lint \"${SRCROOT}/../${file}\" --config \"${SRCROOT}/../.swiftlint.yml\"\n    done\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\" \nfi\n";
+			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]; then\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nMODIFIED_FILES=$(git diff --name-only --diff-filter=ACM | grep -e '\\.swift$')\n\nif which swiftlint > /dev/null; then\n    for file in $MODIFIED_FILES; do\n        swiftlint lint \"${SRCROOT}/../${file}\" --config \"${SRCROOT}/../.swiftlint.yml\"\n    done\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\" \nfi\n";
 		};
 		E6639F191BF11E3A002D0853 /* Conditionally Add Settings Bundle */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -15468,6 +15469,7 @@
 				8A5D1CB42A30D7D9005AD35C /* NoImageModeSetting.swift in Sources */,
 				8A3EF8152A2FD08800796E3A /* OpenFiftyTabsDebugOption.swift in Sources */,
 				D38F02D11C05127100175932 /* Authenticator.swift in Sources */,
+				0BE181E72CBED065002DE979 /* LegacyBookmarkDetailPanel.swift in Sources */,
 				CAA3B7E62497DCB60094E3C1 /* LoginDataSource.swift in Sources */,
 				8ADC2A1B2A33998100543DAA /* AppStoreReviewSetting.swift in Sources */,
 				8A5D1CA82A30D6D3005AD35C /* HomeSetting.swift in Sources */,
@@ -16142,10 +16144,8 @@
 				437A9B6A2681257F00FB41C1 /* LegacyInactiveTabViewModel.swift in Sources */,
 				C838FD5E289981240068F60B /* WallpaperURLProvider.swift in Sources */,
 				E18259DB29AEB34900E6BE76 /* OnboardingNotificationCardHelper.swift in Sources */,
-				D0B9483422A03468002F4AA1 /* LegacyBookmarkDetailPanel.swift in Sources */,
 				0B3F8C5E2CA4471C00DB5367 /* EditBookmarkViewModel.swift in Sources */,
 				8AD0110D2CB42FE700368BF3 /* HeaderState.swift in Sources */,
-				D0B9483422A03468002F4AA1 /* LegacyBookmarkDetailPanel.swift in Sources */,
 				968BD7EB27DFF0F8003148B3 /* ASGroup.swift in Sources */,
 				392ED7E41D0AEF56009D9B62 /* NewTabAccessors.swift in Sources */,
 				1D2F68AD2ACB266300524B92 /* RemoteTabsPanelState.swift in Sources */,
