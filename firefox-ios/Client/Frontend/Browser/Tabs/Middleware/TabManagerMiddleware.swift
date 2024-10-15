@@ -90,7 +90,11 @@ class TabManagerMiddleware {
         switch action.actionType {
         case TabPanelViewActionType.tabPanelDidLoad:
             let isPrivate = action.panelType == .privateTabs
-            let tabState = self.getTabsDisplayModel(for: isPrivate, scrollBehavior: .scrollToSelectedTab(shouldAnimate: false), uuid: action.windowUUID)
+            let tabState = self.getTabsDisplayModel(
+                for: isPrivate,
+                scrollBehavior: .scrollToSelectedTab(shouldAnimate: false),
+                uuid: action.windowUUID
+            )
             let action = TabPanelMiddlewareAction(tabDisplayModel: tabState,
                                                   windowUUID: action.windowUUID,
                                                   actionType: TabPanelMiddlewareActionType.didLoadTabPanel)
@@ -98,7 +102,11 @@ class TabManagerMiddleware {
 
         case TabPanelViewActionType.tabPanelWillAppear:
             let isPrivate = action.panelType == .privateTabs
-            let tabState = self.getTabsDisplayModel(for: isPrivate, scrollBehavior: .scrollToSelectedTab(shouldAnimate: false), uuid: action.windowUUID)
+            let tabState = self.getTabsDisplayModel(
+                for: isPrivate,
+                scrollBehavior: .scrollToSelectedTab(shouldAnimate: false),
+                uuid: action.windowUUID
+            )
             let action = TabPanelMiddlewareAction(tabDisplayModel: tabState,
                                                   windowUUID: action.windowUUID,
                                                   actionType: TabPanelMiddlewareActionType.willAppearTabPanel)
@@ -265,7 +273,11 @@ class TabManagerMiddleware {
         let tab = tabManager.addTab(urlRequest, isPrivate: isPrivate)
         tabManager.selectTab(tab)
 
-        let model = getTabsDisplayModel(for: isPrivate, scrollBehavior: .scrollToSelectedTab(shouldAnimate: false), uuid: uuid)
+        let model = getTabsDisplayModel(
+            for: isPrivate,
+            scrollBehavior: .scrollToSelectedTab(shouldAnimate: false),
+            uuid: uuid
+        )
         let refreshAction = TabPanelMiddlewareAction(tabDisplayModel: model,
                                                      windowUUID: uuid,
                                                      actionType: TabPanelMiddlewareActionType.refreshTabs)
