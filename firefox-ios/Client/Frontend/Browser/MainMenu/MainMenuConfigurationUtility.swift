@@ -15,7 +15,7 @@ struct MainMenuConfigurationUtility: Equatable {
         static let findInPage = StandardImageIdentifiers.Large.search
         static let tools = StandardImageIdentifiers.Large.tool
         static let save = StandardImageIdentifiers.Large.save
-        static let bookmarks = StandardImageIdentifiers.Large.bookmarkTrayFill
+        static let bookmarks = StandardImageIdentifiers.Large.bookmark
         static let history = StandardImageIdentifiers.Large.history
         static let downloads = StandardImageIdentifiers.Large.download
         static let passwords = StandardImageIdentifiers.Large.login
@@ -32,6 +32,7 @@ struct MainMenuConfigurationUtility: Equatable {
         static let saveToReadingList = StandardImageIdentifiers.Large.readingListAdd
         static let removeFromReadingList = StandardImageIdentifiers.Large.readingListSlashFill
         static let bookmarkThisPage = StandardImageIdentifiers.Large.bookmark
+        static let editThisBookmark = StandardImageIdentifiers.Large.bookmarkFill
         static let reportBrokenSite = StandardImageIdentifiers.Large.lightbulb
         static let customizeHomepage = StandardImageIdentifiers.Large.gridAdd
         static let saveAsPDF = StandardImageIdentifiers.Large.folder
@@ -367,12 +368,13 @@ struct MainMenuConfigurationUtility: Equatable {
         typealias A11y = SaveMenu.AccessibilityLabels
 
         let title = tabInfo.isBookmarked ? SaveMenu.EditBookmark : SaveMenu.BookmarkThisPage
+        let icon = tabInfo.isBookmarked ? Icons.editThisBookmark : Icons.bookmarkThisPage
         let a11yLabel = tabInfo.isBookmarked ? A11y.EditBookmark : A11y.BookmarkThisPage
         let actionType: MainMenuDetailsActionType = tabInfo.isBookmarked ? .editBookmark : .addToBookmarks
 
         return MenuElement(
             title: title,
-            iconName: Icons.bookmarkThisPage,
+            iconName: icon,
             isEnabled: true,
             isActive: tabInfo.isBookmarked,
             a11yLabel: a11yLabel,

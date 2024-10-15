@@ -13,6 +13,7 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     func showLibraryPanel(_ panel: Route.HomepanelSection)
     func showSettings(at destination: Route.SettingsSection)
     func showFindInPage()
+    func editLatestBookmark()
 }
 
 class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
@@ -62,6 +63,8 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
                 self.navigationHandler?.showSettings(at: .homePage)
             case .downloads:
                 self.navigationHandler?.showLibraryPanel(.downloads)
+            case .editBookmark:
+                self.navigationHandler?.editLatestBookmark()
             case .findInPage:
                 self.navigationHandler?.showFindInPage()
             case .goToURL:

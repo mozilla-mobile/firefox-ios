@@ -12,7 +12,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
     var menuElements: [MenuSection]
     var shouldDismiss: Bool
     var shouldGoBackToMainMenu: Bool
-    var navigationDestination: MainMenuNavigationDestination?
+    var navigationDestination: MenuNavigationDestination?
     var submenuType: MainMenuDetailsViewType?
 
     var title: String {
@@ -57,7 +57,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
         windowUUID: WindowUUID,
         menuElements: [MenuSection],
         submenuType: MainMenuDetailsViewType?,
-        navigationDestination: MainMenuNavigationDestination? = nil,
+        navigationDestination: MenuNavigationDestination? = nil,
         shouldDismiss: Bool = false,
         shouldGoBackToMenu: Bool = false
     ) {
@@ -108,7 +108,6 @@ struct MainMenuDetailsState: ScreenState, Equatable {
             )
         case MainMenuDetailsActionType.dismissView,
             MainMenuDetailsActionType.addToBookmarks,
-            MainMenuDetailsActionType.editBookmark,
             MainMenuDetailsActionType.addToShortcuts,
             MainMenuDetailsActionType.removeFromShortcuts,
             MainMenuDetailsActionType.addToReadingList,
@@ -118,6 +117,13 @@ struct MainMenuDetailsState: ScreenState, Equatable {
                 menuElements: state.menuElements,
                 submenuType: state.submenuType,
                 shouldDismiss: true
+            )
+        case MainMenuDetailsActionType.editBookmark:
+            return MainMenuDetailsState(
+                windowUUID: state.windowUUID,
+                menuElements: state.menuElements,
+                submenuType: state.submenuType,
+                navigationDestination: MenuNavigationDestination(.editBookmark)
             )
         default:
             return MainMenuDetailsState(

@@ -167,6 +167,11 @@ class MainMenuDetailsViewController: UIViewController,
     func newState(state: MainMenuDetailsState) {
         submenuState = state
 
+        if let destination = submenuState.navigationDestination {
+            coordinator?.navigateTo(destination, animated: true)
+            return
+        }
+
         if submenuState.shouldGoBackToMainMenu {
             coordinator?.dismissDetailViewController()
             return

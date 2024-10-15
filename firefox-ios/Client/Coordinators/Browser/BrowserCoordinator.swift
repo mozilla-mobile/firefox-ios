@@ -493,6 +493,10 @@ class BrowserCoordinator: BaseCoordinator,
         }
     }
 
+    func editLatestBookmark() {
+        browserViewController.openBookmarkEditPanel()
+    }
+
     func showFindInPage() {
         browserViewController.showFindInPage()
     }

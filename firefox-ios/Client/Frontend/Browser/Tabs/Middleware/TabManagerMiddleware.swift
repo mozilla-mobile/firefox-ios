@@ -43,12 +43,9 @@ class TabManagerMiddleware {
             didLoadTabPeek(tabID: tabUUID, uuid: action.windowUUID)
 
         case TabPeekActionType.addToBookmarks:
-            addToBookmarks(with: tabUUID, uuid: action.windowUUID)
-            TelemetryWrapper.recordEvent(category: .action,
-                                         method: .add,
-                                         object: .bookmark,
-                                         value: .tabTray)
-
+            let shareItem = createShareItem(with: tabUUID, and: action.windowUUID)
+            addToBookmarks(shareItem)
+            setBookmarkQuickActions(with: shareItem, uuid: action.windowUUID)
         case TabPeekActionType.copyURL:
             copyURL(tabID: tabUUID, uuid: action.windowUUID)
 
@@ -365,6 +362,29 @@ class TabManagerMiddleware {
         }
     }
 
+    private func setBookmarkQuickActions(with shareItem: ShareItem?, uuid: WindowUUID) {
+        guard let shareItem else { return }
+
+        var userData = [QuickActionInfos.tabURLKey: shareItem.url]
+        if let title = shareItem.title {
+            userData[QuickActionInfos.tabTitleKey] = title
+        }
+
+        QuickActionsImplementation().addDynamicApplicationShortcutItemOfType(.openLastBookmark,
+                                                                             withUserData: userData,
+                                                                             toApplication: .shared)
+
+        let toastAction = TabPanelMiddlewareAction(toastType: .addBookmark,
+                                                   windowUUID: uuid,
+                                                   actionType: TabPanelMiddlewareActionType.showToast)
+        store.dispatch(toastAction)
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .add,
+                                     object: .bookmark,
+                                     value: .tabTray)
+    }
+
     /// Trigger refreshTabs action after a change in `TabManager`
     @MainActor
     private func triggerRefresh(shouldScrollToTab: Bool, uuid: WindowUUID, isPrivate: Bool) {
@@ -627,7 +647,16 @@ class TabManagerMiddleware {
             provideTabInfo(forWindow: action.windowUUID)
         case MainMenuDetailsActionType.addToBookmarks:
             guard let tabID = action.tabID else { return }
-            addToBookmarks(with: tabID, uuid: action.windowUUID)
+            let shareItem = createShareItem(with: tabID, and: action.windowUUID)
+            addToBookmarks(shareItem)
+
+            store.dispatch(
+                GeneralBrowserAction(
+                    toastType: .addBookmark,
+                    windowUUID: action.windowUUID,
+                    actionType: GeneralBrowserActionType.showToast
+                )
+            )
         case MainMenuDetailsActionType.addToReadingList:
             addToReadingList(with: action.tabID, uuid: action.windowUUID)
         case MainMenuDetailsActionType.removeFromReadingList:
@@ -793,35 +822,26 @@ class TabManagerMiddleware {
     }
 
     // MARK: - Tab Manager Helper functions
-    private func addToBookmarks(with tabID: TabUUID, uuid: WindowUUID) {
+    private func createShareItem(with tabID: TabUUID, and uuid: WindowUUID) -> ShareItem? {
         let tabManager = tabManager(for: uuid)
         guard let tab = tabManager.getTabForUUID(uuid: tabID),
               let url = tab.url?.absoluteString, !url.isEmpty
-        else { return }
+        else { return nil }
 
         var title = (tab.tabState.title ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
         if title.isEmpty {
             title = url
         }
-        let shareItem = ShareItem(url: url, title: title)
+        return ShareItem(url: url, title: title)
+    }
+
+    private func addToBookmarks(_ shareItem: ShareItem?) {
+        guard let shareItem else { return }
         // Add new mobile bookmark at the top of the list
         profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID,
                                       url: shareItem.url,
                                       title: shareItem.title,
                                       position: 0)
-
-        var userData = [QuickActionInfos.tabURLKey: shareItem.url]
-        if let title = shareItem.title {
-            userData[QuickActionInfos.tabTitleKey] = title
-        }
-        QuickActionsImplementation().addDynamicApplicationShortcutItemOfType(.openLastBookmark,
-                                                                             withUserData: userData,
-                                                                             toApplication: .shared)
-
-        let toastAction = TabPanelMiddlewareAction(toastType: .addBookmark,
-                                                   windowUUID: uuid,
-                                                   actionType: TabPanelMiddlewareActionType.showToast)
-        store.dispatch(toastAction)
     }
 
     private func addToReadingList(with tabID: TabUUID?, uuid: WindowUUID) {
