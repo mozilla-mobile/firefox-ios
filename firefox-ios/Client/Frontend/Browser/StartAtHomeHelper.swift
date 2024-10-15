@@ -44,26 +44,23 @@ class StartAtHomeHelper: FeatureFlaggable {
     /// the user's last activity and whether, based on their settings, Start at Home feature
     /// should perform its function.
     public func shouldStartAtHome() -> Bool {
-        let setting = startAtHomeSetting
-        guard setting != .disabled else { return false }
+            let setting = startAtHomeSetting
 
-        let lastActiveTimestamp = UserDefaults.standard.object(forKey: "LastActiveTimestamp") as? Date ?? Date()
-        let dateComponents = Calendar.current.dateComponents([.hour, .second],
-                                                             from: lastActiveTimestamp,
-                                                             to: Date())
-        var timeSinceLastActivity = 0
-        var timeToOpenNewHome = 0
+            let lastActiveTimestamp = UserDefaults.standard.object(forKey: "LastActiveTimestamp") as? Date ?? Date()
+            let dateComponents = Calendar.current.dateComponents([.hour, .second],
+                                                                 from: lastActiveTimestamp,
+                                                                 to: Date())
 
-        if setting == .afterFourHours {
-            timeSinceLastActivity = dateComponents.hour ?? 0
-            timeToOpenNewHome = 4
-        } else if setting == .always {
-            // When "always", time to open new home should be immediate, no delay
-            return true
+            switch setting {
+            case .afterFourHours:
+                return 4 >= dateComponents.hour ?? 0
+            case .always:
+                // When "always", time to open new home should be immediate, no delay
+                return true
+            case .disabled:
+                return false
+            }
         }
-
-        return timeSinceLastActivity >= timeToOpenNewHome
-    }
 
     /// Looks to see if the user already has a homepage tab open (as per their preferences)
     /// and, if they do, returns that tab, in order to avoid opening multiple duplicate
