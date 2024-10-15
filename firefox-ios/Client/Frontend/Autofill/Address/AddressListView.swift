@@ -74,7 +74,7 @@ struct AddressListView: View {
                     addAddressView
 
                 case .edit:
-                    showEditAddressViewController
+                    editAddressView
                 }
             }
         }
@@ -104,7 +104,7 @@ struct AddressListView: View {
             )
     }
 
-    private var showEditAddressViewController: some View {
+    private var editAddressView: some View {
         return EditAddressViewControllerRepresentable(model: viewModel)
             .navigationBarTitle(viewModel.editNavigationbarTitle, displayMode: .inline)
             .toolbar {
