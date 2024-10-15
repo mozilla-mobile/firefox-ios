@@ -52,11 +52,6 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifia
         self.layer.borderWidth = UX.passwordFieldBorderWidth
         self.layer.cornerRadius = UX.passwordFieldCornerRadius
         self.accessibilityIdentifier = AccessibilityIdentifiers.PasswordGenerator.passwordField
-        self.isUserInteractionEnabled = true
-       let longPressGesture = UILongPressGestureRecognizer(
-           target: self,
-           action: #selector(self.handleLongPress(_:)))
-        self.addGestureRecognizer(longPressGesture)
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
         setupLayout()
@@ -94,6 +89,12 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifia
     func configure(password: String) {
         passwordLabel.text = password
         passwordLabel.accessibilityAttributedLabel = generateAccessibilityAttributedLabel(password: password)
+        self.becomeFirstResponder()
+        let longPressGesture = UILongPressGestureRecognizer(
+            target: self,
+            action: #selector(self.handleLongPress))
+        longPressGesture.cancelsTouchesInView = true
+        self.addGestureRecognizer(longPressGesture)
     }
 
     private func generateAccessibilityAttributedLabel(password: String) -> NSMutableAttributedString {
@@ -106,10 +107,14 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifia
 
     @objc
     private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
+        let copyItem = UIMenuItem(title: .PasswordGenerator.CopyPasswordButtonLabel, action: #selector(self.copyText))
         let menuController = UIMenuController.shared
-        let copyItem = UIMenuItem(title: .PasswordGenerator.CopyPasswordButtonLabel, action: #selector(copyText(_:)))
         menuController.menuItems = [copyItem]
         menuController.showMenu(from: passwordLabel, rect: passwordLabel.bounds)
+    }
+
+    override var canBecomeFirstResponder: Bool {
+        return true
     }
 
     @objc
