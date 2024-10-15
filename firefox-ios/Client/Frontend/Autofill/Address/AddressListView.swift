@@ -117,7 +117,7 @@ struct AddressListView: View {
                         }
                     }
                 }
-                
+
                 ToolbarItemGroup(placement: .primaryAction) {
                     Button(viewModel.primaryButtonLabel) {
                         if viewModel.isEditMode {
