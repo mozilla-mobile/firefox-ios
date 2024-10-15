@@ -9,14 +9,17 @@ import ToolbarKit
 final class ToolbarMiddleware: FeatureFlaggable {
     private let profile: Profile
     private let manager: ToolbarManager
+    private let windowManager: WindowManager
     private let logger: Logger
     private let toolbarTelemetry = ToolbarTelemetry()
 
     init(profile: Profile = AppContainer.shared.resolve(),
          manager: ToolbarManager = DefaultToolbarManager(),
+         windowManager: WindowManager = AppContainer.shared.resolve() as WindowManager,
          logger: Logger = DefaultLogger.shared) {
         self.profile = profile
         self.manager = manager
+        self.windowManager = windowManager
         self.logger = logger
     }
 
@@ -409,6 +412,6 @@ final class ToolbarMiddleware: FeatureFlaggable {
     }
 
     private func tabManager(for uuid: WindowUUID) -> TabManager {
-        return (AppContainer.shared.resolve() as WindowManager).tabManager(for: uuid)
+        return windowManager.tabManager(for: uuid)
     }
 }
