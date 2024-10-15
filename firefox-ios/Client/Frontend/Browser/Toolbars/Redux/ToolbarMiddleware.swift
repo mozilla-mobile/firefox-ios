@@ -15,7 +15,7 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
     init(profile: Profile = AppContainer.shared.resolve(),
          manager: ToolbarManager = DefaultToolbarManager(),
-         windowManager: WindowManager = AppContainer.shared.resolve() as WindowManager,
+         windowManager: WindowManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared) {
         self.profile = profile
         self.manager = manager
