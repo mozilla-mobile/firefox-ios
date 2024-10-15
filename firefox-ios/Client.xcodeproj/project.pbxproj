@@ -14500,11 +14500,8 @@
 				3B61CD631F2A769D00D38DE1 /* pocketglobalfeed.json in Resources */,
 				8A11C80F2731916E00AC7318 /* defaultOnlyTestList.json in Resources */,
 				C869915828917811007ACC5C /* wallpaperNoAvailabilityRange.json in Resources */,
-<<<<<<< HEAD
-=======
 				8ABE9F1B2CB4620A0080E1DF /* RemoteSettingsFetchConfig.json in Resources */,
 				EDC3D34F2CB5E70500C62DE3 /* SearchEngineTestAssets.xcassets in Resources */,
->>>>>>> 7f8e89bbf (Bugfix FXIOS-10216 Fix disappearing custom search engine favicons [Favicon Refactor] (#22469))
 				C869915B28917811007ACC5C /* wallpaperNewUpdates.json in Resources */,
 				C869915D28917811007ACC5C /* wallpaperAvailabilityStart.json in Resources */,
 				C87BE0A428A2ED3F00BAADF5 /* wallpaperNoLearnMoreURL.json in Resources */,
