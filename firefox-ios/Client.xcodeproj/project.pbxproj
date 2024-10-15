@@ -14946,7 +14946,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "INPUT_FILE=\"${SRCROOT}/Storage/metrics.yaml\"\nOUTPUT_FILE=\"${SRCROOT}/Storage/Generated/Metrics.swift\"\n\nif [[ ! -f \"$OUTPUT_FILE\" ]]; then\n    echo \"Output file $OUTPUT_FILE does not exist. Running the command.\"\n    rm -rf .venv; bash $PWD/bin/sdk_generator.sh -g Glean -o $SRCROOT/Storage/Generated\n    exit 0\nfi\n\nMODIFIED_FILES=$(git diff --name-only \"$INPUT_FILE\")\nMODIFIED_FILES_PREVIOUS_COMMIT=$(git diff --name-only HEAD^ HEAD \"$INPUT_FILE\")\n\nif [[ -z \"$MODIFIED_FILES\" || -z \"$MODIFIED_FILES_PREVIOUS_COMMIT\" ]] then\n    echo \"No changes detected in input file: $INPUT_FILE. Exiting script.\"\n    exit 0\nfi\n\necho \"Changes detected in input file. Running the command...\"\nrm -rf .venv; bash $PWD/bin/sdk_generator.sh -g Glean -o $SRCROOT/Storage/Generated\n";
+			shellScript = "rm -rf .venv; bash $PWD/bin/sdk_generator.sh -g Glean -o $SRCROOT/Storage/Generated\n";
 		};
 		5FA2232B27F6FA00005B3D87 /* Glean SDK Generator Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -14968,11 +14968,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "OUTPUT_FILE=\"${SRCROOT}/Client/Generated/Metrics/Metrics.swift\"\nOUTPUT_DIR=\"${SRCROOT}/Client/Generated/Metrics/\"\n\nif [ ! -f \"$OUTPUT_FILE\" ]; then\n    # remove old reference to Metrics file if present\n    rm \"${SRCROOT}/Client/Generated/Metrics.swift\"\n    echo \"Output file does not exist: $OUTPUT_FILE\"\n    echo \"Skipping input file checks and running the command...\"\n    rm -rf .venv; bash $PWD/bin/sdk_generator.sh -g Glean -o $OUTPUT_DIR\n    exit 0\nfi\n\nCHANGED_FILES=false\n\nfor (( i=0; i<$SCRIPT_INPUT_FILE_COUNT; i++ ))\ndo\n    INPUT_FILE_VAR=\"SCRIPT_INPUT_FILE_$i\"\n    INPUT_FILE=${!INPUT_FILE_VAR}\n\n    if git diff --quiet -- \"$INPUT_FILE\"; then\n        echo \"$INPUT_FILE has no changes.\"\n    else\n        echo \"$INPUT_FILE has changes.\"\n        CHANGED_FILES=true\n    fi\ndone\n\nif [ \"$CHANGED_FILES\" = false ]; then\n    echo \"No input files have changes. Exiting script.\"\n    exit 0\nfi\n\necho \"Input files have changed. Running the command...\"\nrm -rf .venv; bash $PWD/bin/sdk_generator.sh -g Glean -o $OUTPUT_DIR\n";
+			shellScript = "OUTPUT_DIR=\"${SRCROOT}/Client/Generated/Metrics/\"\nrm -rf .venv; bash $PWD/bin/sdk_generator.sh -g Glean -o $OUTPUT_DIR\n";
 		};
 		5FA2232C27F6FA69005B3D87 /* Nimbus Feature Manifest Generator Script */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
 			buildActionMask = 12;
 			files = (
 			);
