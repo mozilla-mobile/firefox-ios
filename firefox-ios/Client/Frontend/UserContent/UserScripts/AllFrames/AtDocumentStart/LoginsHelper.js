@@ -8,6 +8,7 @@
 import "Assets/CC_Script/Helpers.ios.mjs";
 import { Logic } from "Assets/CC_Script/LoginManager.shared.sys.mjs";
 import { PasswordGenerator } from "resource://gre/modules/PasswordGenerator.sys.mjs";
+import { LoginFormFactory } from "resource://gre/modules/shared/LoginFormFactory.sys.mjs";
 
 // Ensure this module only gets included once. This is
 // required for user scripts injected into all frames.
@@ -45,7 +46,6 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     receiveMessage: function (msg) {
       switch (msg.name) {
         case "RemoteLogins:loginsFound": {
-          console.log("ooooo ---- here ?? ", this.activeField.form, this.activeField)
           this.loginsFound(this.activeField.form, msg.logins);
           break;
         }
@@ -466,13 +466,13 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     return generatedPassword;
   };
 
-  const fillGeneratedPassword = (password) => {
-    LoginManagerContent.yieldFocusBackToField();
-    LoginManagerContent.activeField.setUserInput(password);
-    Logic.fillConfirmFieldWithGeneratedPassword(
-      LoginManagerContent.activeField
-    );
-  };
+  function fillGeneratedPassword(password) {
+    this.yieldFocusBackToField();
+    const passwordField = LoginManagerContent.activeField;
+    passwordField?.setUserInput(password);
+    const confirmationField = Logic.findConfirmationField(passwordField, LoginFormFactory);
+    confirmationField?.setUserInput(password);
+  }
 
   function yieldFocusBackToField() {
     LoginManagerContent.activeField?.blur();
@@ -496,9 +496,9 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     const formHasNewPassword =
       password && Logic.isProbablyANewPasswordField(password);
     const isPasswordField = field === password;
-
+    const isYieldingFocus = LoginManagerContent.activeField === field;
     LoginManagerContent.activeField = field;
-    if (formHasNewPassword && isPasswordField) {
+    if (formHasNewPassword && isPasswordField && !isYieldingFocus) {
       webkit.messageHandlers.loginsManagerMessageHandler.postMessage({
         type: "generatePassword",
       });
