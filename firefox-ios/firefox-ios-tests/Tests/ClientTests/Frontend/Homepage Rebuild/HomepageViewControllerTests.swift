@@ -18,6 +18,8 @@ final class HomepageViewControllerTests: XCTestCase {
     }
 
     override func tearDown() {
+        mockNotificationCenter = nil
+        mockThemeManager = nil
         DependencyHelperMock().reset()
         super.tearDown()
     }
@@ -35,17 +37,19 @@ final class HomepageViewControllerTests: XCTestCase {
         XCTAssertEqual(sut.currentWindowUUID, .XCTestDefaultUUID)
     }
 
-    func test_viewDidLoad_setsUpTheming() {
+    func test_viewDidLoad_setsUpThemingAndNotifications() {
         let sut = createSubject()
 
         XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 0)
-        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 0)
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 1)
+        XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification])
 
         sut.loadViewIfNeeded()
 
         // Called in listenForThemeChange() and applyTheme(), so counted twice
         XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 1)
-        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 1)
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 2)
+        XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification, .ThemeDidChange])
     }
 
     // MARK: - Deinit State
