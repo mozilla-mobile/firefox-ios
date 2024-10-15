@@ -378,6 +378,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // (orange color) as soon as the page has loaded.
         if let url = webView.url {
             guard !url.isReaderModeURL else { return }
+            urlBar.updateReaderModeState(.unavailable)
             hideReaderModeBar(animated: false)
         }
     }
