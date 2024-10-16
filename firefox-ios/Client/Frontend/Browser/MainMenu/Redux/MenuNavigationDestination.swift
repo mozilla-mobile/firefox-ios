@@ -16,6 +16,7 @@ enum MainMenuNavigationDestination: Equatable, CaseIterable {
     case newPrivateTab
     case passwords
     case settings
+    case syncSignIn
 }
 
 enum MainMenuDetailsViewType {
@@ -26,12 +27,15 @@ enum MainMenuDetailsViewType {
 struct MenuNavigationDestination: Equatable {
     let destination: MainMenuNavigationDestination
     let urlToVisit: URL?
+    let fxaSignInViewParameters: FxASignInViewParameters?
 
     init(
         _ destination: MainMenuNavigationDestination,
-        urlToVisit: URL? = nil
+        urlToVisit: URL? = nil,
+        fxaSingInViewParameters: FxASignInViewParameters? = nil
     ) {
         self.destination = destination
         self.urlToVisit = urlToVisit
+        self.fxaSignInViewParameters = fxaSingInViewParameters
     }
 }

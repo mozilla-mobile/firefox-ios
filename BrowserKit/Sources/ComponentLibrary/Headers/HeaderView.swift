@@ -75,7 +75,7 @@ public final class HeaderView: UIView, ThemeApplicable {
     private func setupViews() {
         headerLabelsContainer.addArrangedSubview(titleLabel)
         headerLabelsContainer.addArrangedSubview(subtitleLabel)
-        addSubviews(mainButton, iconMask, favicon, headerLabelsContainer, closeButton, horizontalLine)
+        addSubviews(iconMask, favicon, headerLabelsContainer, mainButton, closeButton, horizontalLine)
     }
 
     private func updateLayout(isAccessibilityCategory: Bool, isWebsiteIcon: Bool) {
