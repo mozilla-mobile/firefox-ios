@@ -136,6 +136,14 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
             usePasswordButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
+    // MARK: - Interaction Handlers
+    @objc
+    func useButtonOnClick() {
+        store.dispatch(PasswordGeneratorAction(windowUUID: windowUUID,
+                                               actionType: PasswordGeneratorActionType.userTappedUsePassword,
+                                               currentTab: currentTab))
+        dismiss(animated: true)
+    }
 
     // MARK: - Themable
     func applyTheme() {
@@ -152,6 +160,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
             title: .PasswordGenerator.UsePasswordButtonLabel,
             a11yIdentifier: AccessibilityIdentifiers.PasswordGenerator.usePasswordButton)
         usePasswordButton.configure(viewModel: usePasswordButtonVM)
+        usePasswordButton.addTarget(self, action: #selector(useButtonOnClick), for: .touchUpInside)
     }
 
     // MARK: - Redux

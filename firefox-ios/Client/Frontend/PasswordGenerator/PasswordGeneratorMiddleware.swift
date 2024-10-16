@@ -23,6 +23,11 @@ final class PasswordGeneratorMiddleware {
         switch action.actionType {
         case PasswordGeneratorActionType.showPasswordGenerator:
             self.showPasswordGenerator(tab: currentTab, windowUUID: windowUUID)
+        case PasswordGeneratorActionType.userTappedUsePassword:
+            guard let password = state.screenState(PasswordGeneratorState.self,
+                                                   for: .passwordGenerator,
+                                                   window: action.windowUUID)?.password else {return}
+            self.userTappedUsePassword(with: currentTab, password: password)
         default:
             break
         }
@@ -53,16 +58,27 @@ final class PasswordGeneratorMiddleware {
     }
 
     private func generateNewPassword(with tab: Tab, completion: @escaping (String) -> Void) {
-            let jsFunctionCall = "window.__firefox__.logins.generatePassword()"
-            tab.webView?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall) { (result, error) in
-                if let error = error {
-                    self.logger.log("JavaScript evaluation error",
-                                    level: .warning,
-                                    category: .webview,
-                                    description: "\(error.localizedDescription)")
-                } else if let result = result as? String {
-                    completion(result)
-                }
+        let jsFunctionCall = "window.__firefox__.logins.generatePassword()"
+        tab.webView?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall) { (result, error) in
+            if let error = error {
+                self.logger.log("JavaScript evaluation error",
+                                level: .warning,
+                                category: .webview,
+                                description: "\(error.localizedDescription)")
+            } else if let result = result as? String {
+                completion(result)
             }
         }
+    }
+
+    private func userTappedUsePassword(with tab: Tab, password: String) {
+        let jsFunctionCall = "window.__firefox__.logins.fillGeneratedPassword(\"\(password)\")"
+        tab.webView?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall) { (result, error) in
+            if error != nil {
+                self.logger.log("Error filling in password info",
+                                level: .warning,
+                                category: .webview)
+            }
+        }
+    }
 }
