@@ -661,19 +661,32 @@ class BrowserViewController: UIViewController,
     }
 
     private func showToastType(toast: ToastType) {
-        let viewModel = ButtonToastViewModel(
-            labelText: toast.title,
-            buttonText: toast.buttonText)
-        let uuid = windowUUID
-        let toast = ButtonToast(viewModel: viewModel,
-                                theme: currentTheme(),
-                                completion: { buttonPressed in
-            if let action = toast.reduxAction(for: uuid), buttonPressed {
-                store.dispatch(action)
-            }
-        })
+        switch toast {
+        case .addShortcut,
+                .addToReadingList,
+                .removeShortcut,
+                .removeFromReadingList,
+                .addBookmark:
+            SimpleToast().showAlertWithText(
+                toast.title,
+                bottomContainer: contentContainer,
+                theme: currentTheme()
+            )
+        default:
+            let viewModel = ButtonToastViewModel(
+                labelText: toast.title,
+                buttonText: toast.buttonText)
+            let uuid = windowUUID
+            let toast = ButtonToast(viewModel: viewModel,
+                                    theme: currentTheme(),
+                                    completion: { buttonPressed in
+                if let action = toast.reduxAction(for: uuid), buttonPressed {
+                    store.dispatch(action)
+                }
+            })
 
-        show(toast: toast)
+            show(toast: toast)
+        }
     }
 
     private func handleMicrosurvey(state: BrowserViewControllerState) {

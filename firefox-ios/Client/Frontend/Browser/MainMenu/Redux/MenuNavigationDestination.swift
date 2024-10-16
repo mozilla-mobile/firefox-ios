@@ -8,6 +8,7 @@ enum MainMenuNavigationDestination: Equatable, CaseIterable {
     case bookmarks
     case customizeHomepage
     case downloads
+    case editBookmark
     case findInPage
     case goToURL
     case history
