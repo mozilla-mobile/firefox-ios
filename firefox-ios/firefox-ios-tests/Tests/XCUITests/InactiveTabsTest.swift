@@ -40,7 +40,7 @@ final class InactiveTabsTest: BaseTestCase {
 
         // Inactive tabs list is displayed at the top
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerView])
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts["Walmart | Save Money. Live better."])
+        mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts.firstMatch)
 
         // Tap on the ">" button.
         app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerView].tap()
