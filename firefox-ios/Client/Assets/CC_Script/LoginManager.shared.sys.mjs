@@ -8,7 +8,6 @@
 
 import { XPCOMUtils } from "resource://gre/modules/XPCOMUtils.sys.mjs";
 import { NewPasswordModel } from "resource://gre/modules/shared/NewPasswordModel.sys.mjs";
-import { LoginFormFactory } from "resource://gre/modules/shared/LoginFormFactory.sys.mjs";
 
 class Logic {
   static inputTypeIsCompatibleWithUsername(input) {
@@ -197,8 +196,8 @@ class Logic {
     return score >= Logic.newPasswordFieldFathomThreshold;
   }
 
-  static findConfirmationField(passwordField) {
-    const form = LoginFormFactory.createFromField(passwordField);
+  static findConfirmationField(passwordField, formFactory) {
+    const form = formFactory.createFromField(passwordField);
     let confirmPasswordInput = null;
     const MAX_CONFIRM_PASSWORD_DISTANCE = 3;
 
