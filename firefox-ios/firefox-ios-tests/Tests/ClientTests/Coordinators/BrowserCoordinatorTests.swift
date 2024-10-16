@@ -232,7 +232,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(mockRouter.presentCalled, 1)
 
         if featureFlags.isFeatureEnabled(.trackingProtectionRefactor, checking: .buildOnly) {
-            XCTAssertTrue(mockRouter.presentedViewController is TrackingProtectionViewController)
+            XCTAssertTrue(mockRouter.presentedViewController is UINavigationController)
         } else {
             XCTAssertTrue(mockRouter.presentedViewController is EnhancedTrackingProtectionMenuVC)
         }
