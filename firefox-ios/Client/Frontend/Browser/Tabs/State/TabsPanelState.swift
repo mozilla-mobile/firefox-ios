@@ -143,6 +143,9 @@ struct TabsPanelState: ScreenState, Equatable {
                                   toastType: type)
 
         case TabPanelMiddlewareActionType.scrollToTab:
+            // FIXME Where is the best place for this mapping logic?
+            // FIXME Just realized that the TabDisplayView doesn't know how to take an index into `tabs` and convert that to
+            // an index into the subset of normal tabs (active/inactive) or the subset of private tabs.
             guard let scrollBehavior = action.scrollBehavior else { return state }
             var scroll: TabsPanelState.Scroll?
             if case .scrollToSelectedTab(let shouldAnimate) = scrollBehavior,
