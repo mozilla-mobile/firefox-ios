@@ -15,8 +15,8 @@ final class InactiveTabsTest: BaseTestCase {
             LaunchArguments.SkipETPCoverSheet,
             LaunchArguments.SkipContextualHints,
             LaunchArguments.DisableAnimations,
-            LaunchArguments.LoadTabsStateArchive + tabsDatabase
         ]
+        launchArguments.append(LaunchArguments.LoadTabsStateArchive + tabsDatabase)
 
         super.setUp()
 
