@@ -150,7 +150,7 @@ class LabelButtonHeaderView: UICollectionReusableView,
 
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
-        // enter textColor
+        // TODO: FXIOS-10312 Update color for section header when wallpaper is configured with redux
         let titleColor = theme.colors.textPrimary
         let moreButtonColor = theme.colors.textAccent
 
