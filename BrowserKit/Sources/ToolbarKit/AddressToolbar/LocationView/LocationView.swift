@@ -97,7 +97,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         notifyTextChanged = { [self] in
             guard urlTextField.isEditing else { return }
 
-            urlAbsolutePath = urlTextField.text?.lowercased()
+            urlAbsolutePath = urlTextField.text?.lowercased().trimmingCharacters(in: .whitespaces)
             delegate?.locationViewDidEnterText(urlAbsolutePath ?? "")
         }
     }
