@@ -40,7 +40,7 @@ protocol JSAlertInfo {
 struct MessageAlert: JSAlertInfo {
     let message: String
     let frame: WKFrameInfo
-    let completionHandler: (() -> Void)?
+    let completionHandler: () -> Void
 
     func alertController() -> JSPromptAlertController {
         let alertController = JSPromptAlertController(
@@ -48,7 +48,7 @@ struct MessageAlert: JSAlertInfo {
             message: message,
             preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: .OKString, style: .default) { _ in
-            completionHandler?()
+            completionHandler()
         })
         alertController.alertInfo = self
         return alertController
