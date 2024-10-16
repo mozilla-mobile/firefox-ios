@@ -6,19 +6,17 @@ import XCTest
 
 final class InactiveTabsTest: BaseTestCase {
     override func setUp() {
+        // Load 20 tabs. 19 tabs are inactive.
+        let tabsDatabase = "tabsState20.archive"
         launchArguments = [
             LaunchArguments.PerformanceTest,
             LaunchArguments.SkipIntro,
             LaunchArguments.SkipWhatsNew,
             LaunchArguments.SkipETPCoverSheet,
             LaunchArguments.SkipContextualHints,
-            LaunchArguments.DisableAnimations
+            LaunchArguments.DisableAnimations,
+            LaunchArguments.LoadTabsStateArchive + tabsDatabase
         ]
-
-        // Load 20 tabs. 19 tabs are inactive.
-        let tabsDatabase = "tabsState20.archive"
-        launchArguments.append(LaunchArguments.LoadTabsStateArchive + tabsDatabase)
-        launchArguments.append(LaunchArguments.LoadDatabasePrefix + tabsDatabase)
 
         super.setUp()
 
@@ -26,7 +24,6 @@ final class InactiveTabsTest: BaseTestCase {
         waitForTabsButton()
         waitUntilPageLoad()
         app.terminate()
-        sleep(2)
         app.launch()
     }
 
