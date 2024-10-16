@@ -14966,7 +14966,6 @@
 		};
 		45CC573928AD89CB006D55AA /* Glean SDK Generator Script */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -14987,7 +14986,6 @@
 		};
 		5FA2232B27F6FA00005B3D87 /* Glean SDK Generator Script */ = {
 			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
