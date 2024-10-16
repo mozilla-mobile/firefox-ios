@@ -5,6 +5,7 @@
 import Common
 import Shared
 import Storage
+import Redux
 
 import Security
 import CryptoKit
@@ -14,13 +15,13 @@ import SwiftASN1
 class TrackingProtectionModel {
     // MARK: - Constants
     let contentBlockerStatus: BlockerStatus
-    let contentBlockerStats: TPPageStats?
+    var contentBlockerStats: TPPageStats?
     var certificates = [Certificate]()
     let url: URL
     let displayTitle: String
     let connectionSecure: Bool
     let globalETPIsEnabled: Bool
-    private var selectedTab: Tab?
+    var selectedTab: Tab?
 
     let clearCookiesButtonTitle: String = .Menu.EnhancedTrackingProtection.clearDataButtonTitle
     let clearCookiesButtonA11yId: String = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.clearCookiesButton
@@ -134,7 +135,18 @@ class TrackingProtectionModel {
                                               URL: url.absoluteDisplayString,
                                               getLockIcon: getConnectionStatusImage(themeType:),
                                               connectionStatusMessage: connectionStatusString,
-                                              connectionSecure: connectionSecure)
+                                              connectionSecure: connectionSecure,
+                                              certificates: certificates)
+    }
+
+    func getBlockedTrackersModel() -> BlockedTrackersTableModel {
+        return BlockedTrackersTableModel(
+            topLevelDomain: websiteTitle,
+            title: displayTitle,
+            URL: url.absoluteDisplayString,
+            contentBlockerStats: contentBlockerStats,
+            connectionSecure: connectionSecure
+        )
     }
 
     func getConnectionStatusImage(themeType: ThemeType) -> UIImage {
@@ -146,17 +158,14 @@ class TrackingProtectionModel {
         }
     }
 
-    func getCertificatesViewModel() -> CertificatesViewModel {
-        return CertificatesViewModel(topLevelDomain: websiteTitle,
-                                     title: displayTitle,
-                                     URL: url.absoluteDisplayString,
-                                     certificates: certificates)
-    }
-
     func toggleSiteSafelistStatus() {
         TelemetryWrapper.recordEvent(category: .action, method: .add, object: .trackingProtectionSafelist)
         ContentBlocker.shared.safelist(enable: contentBlockerStatus != .safelisted, url: url) {
         }
+    }
+
+    func isURLSafelisted() -> Bool {
+        return ContentBlocker.shared.isSafelisted(url: url)
     }
 
     func onTapClearCookiesAndSiteData(controller: UIViewController) {
