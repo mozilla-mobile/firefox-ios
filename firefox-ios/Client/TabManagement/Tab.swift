@@ -431,7 +431,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
         let currentDate = Date()
         let inactiveDate: Date
 
-        // Debug for inactive tabs to easily test in code
+        // Check if we're debugging for inactive tabs to easily test in code
         let rawValue = UserDefaults.standard.integer(forKey: PrefsKeys.FasterInactiveTabsOverride)
         let option = FasterInactiveTabsOption(rawValue: rawValue) ?? .normal
         switch option {
