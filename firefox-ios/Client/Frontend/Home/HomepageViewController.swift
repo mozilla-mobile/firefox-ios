@@ -300,7 +300,7 @@ class HomepageViewController:
                 let shownSection = self?.viewModel.shownSections[safe: sectionIndex]
                 self?.logger.log("The current section index: \(sectionIndex) didn't load a valid section. The associated section type if present is: \(String(describing: shownSection))",
                                  level: .fatal,
-                                 category: .legacyHomepage)
+                                 category: .homepage)
                 return Self.makeEmptyLayoutSection()
             }
             logger.log(
