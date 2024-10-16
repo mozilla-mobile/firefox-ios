@@ -102,6 +102,9 @@ class TabDisplayView: UIView,
     }
 
     func newState(state: TabsPanelState) {
+        // Temporary workaround to not repeat scroll action for identical state updates
+        guard tabsState != state else { return }
+
         tabsState = state
 
         collectionView.reloadData()
