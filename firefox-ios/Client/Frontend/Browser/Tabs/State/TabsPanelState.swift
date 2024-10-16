@@ -78,6 +78,15 @@ struct TabsPanelState: ScreenState, Equatable {
         self.urlRequest = urlRequest
     }
 
+    /// Returns a new `TabsPanelState` which clears any transient data (e.g. scroll animations).
+    static func defaultState(fromPreviousState state: TabsPanelState) -> TabsPanelState {
+        return TabsPanelState(windowUUID: state.windowUUID,
+                              isPrivateMode: state.isPrivateMode,
+                              tabs: state.tabs,
+                              inactiveTabs: state.inactiveTabs,
+                              isInactiveTabsExpanded: state.isInactiveTabsExpanded)
+    }
+
     static let reducer: Reducer<Self> = { state, action in
         // Only process actions for the current window
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
@@ -88,7 +97,7 @@ struct TabsPanelState: ScreenState, Equatable {
             return TabsPanelState.reduceTabsPanelViewAction(action: action, state: state)
         }
 
-        return state
+        return defaultState(fromPreviousState: state)
     }
 
     static func reduceTabPanelMiddlewareAction(action: TabPanelMiddlewareAction,
@@ -173,11 +182,7 @@ struct TabsPanelState: ScreenState, Equatable {
 //        didTapAddTab: didTapNewTab)
 
         default:
-            return TabsPanelState(windowUUID: state.windowUUID,
-                                  isPrivateMode: state.isPrivateMode,
-                                  tabs: state.tabs,
-                                  inactiveTabs: state.inactiveTabs,
-                                  isInactiveTabsExpanded: state.isInactiveTabsExpanded)
+            return defaultState(fromPreviousState: state)
         }
     }
 
@@ -199,11 +204,7 @@ struct TabsPanelState: ScreenState, Equatable {
                                   isInactiveTabsExpanded: state.isInactiveTabsExpanded)
 
         default:
-            return TabsPanelState(windowUUID: state.windowUUID,
-                                  isPrivateMode: state.isPrivateMode,
-                                  tabs: state.tabs,
-                                  inactiveTabs: state.inactiveTabs,
-                                  isInactiveTabsExpanded: state.isInactiveTabsExpanded)
+            return defaultState(fromPreviousState: state)
         }
     }
 }
