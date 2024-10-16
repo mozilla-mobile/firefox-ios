@@ -23,7 +23,7 @@ struct LabelButtonHeaderViewModel {
 }
 
 // Firefox home view controller header view
-class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
+class LegacyLabelButtonHeaderView: UICollectionReusableView, ReusableCell {
     struct UX {
         static let inBetweenSpace: CGFloat = 12
         static let bottomSpace: CGFloat = 10
@@ -159,7 +159,7 @@ class LabelButtonHeaderView: UICollectionReusableView, ReusableCell {
 }
 
 // MARK: - Theme
-extension LabelButtonHeaderView: ThemeApplicable {
+extension LegacyLabelButtonHeaderView: ThemeApplicable {
     func applyTheme(theme: Theme) {
         let titleColor = viewModel?.textColor ?? theme.colors.textPrimary
         let moreButtonColor = viewModel?.textColor ?? theme.colors.textAccent
@@ -170,7 +170,7 @@ extension LabelButtonHeaderView: ThemeApplicable {
 }
 
 // MARK: - Notifiable
-extension LabelButtonHeaderView: Notifiable {
+extension LegacyLabelButtonHeaderView: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
         case .DynamicFontChanged:

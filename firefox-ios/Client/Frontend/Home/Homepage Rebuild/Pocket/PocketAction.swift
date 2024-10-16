@@ -7,10 +7,10 @@ import Foundation
 import Redux
 
 final class PocketAction: Action {
-    var pocketStories: [PocketItem]?
+    var pocketStories: [PocketStoryState]?
 
     init(
-        pocketStories: [PocketItem]? = nil,
+        pocketStories: [PocketStoryState]? = nil,
         windowUUID: WindowUUID,
         actionType: any ActionType
     ) {

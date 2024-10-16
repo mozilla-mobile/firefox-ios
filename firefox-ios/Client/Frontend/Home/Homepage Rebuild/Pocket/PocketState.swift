@@ -6,11 +6,25 @@ import Common
 import Foundation
 import Redux
 
+struct SectionHeaderState: Equatable {
+    var sectionHeaderTitle: String
+    var sectionTitleA11yIdentifier: String
+    var isSectionHeaderButtonHidden: Bool
+    var sectionHeaderColor: UIColor
+    var sectionButtonA11yIdentifier: String?
+}
+
 /// State for the pocket section that is used in the homepage
 struct PocketState: StateType, Equatable {
     var windowUUID: WindowUUID
-    var pocketData: [PocketItem]
+    var pocketData: [PocketStoryState]
     var pocketDiscoverTitle: String
+    // TODO: FXIOS-10312 Update color for section header when wallpaper is configured with redux
+    var sectionHeaderState = SectionHeaderState(
+        sectionHeaderTitle: .FirefoxHomepage.Pocket.SectionTitle,
+        sectionTitleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket,
+        isSectionHeaderButtonHidden: true,
+        sectionHeaderColor: .systemRed)
 
     init(windowUUID: WindowUUID) {
         self.init(
@@ -22,7 +36,7 @@ struct PocketState: StateType, Equatable {
 
     private init(
         windowUUID: WindowUUID,
-        pocketData: [PocketItem],
+        pocketData: [PocketStoryState],
         pocketDiscoverTitle: String
     ) {
         self.windowUUID = windowUUID

@@ -20,7 +20,7 @@ final class HomepageDiffableDataSource:
 
     enum HomeItem: Hashable {
         case header
-        case pocket(PocketItem)
+        case pocket(PocketStoryState)
         case pocketDiscover(String)
         case customizeHomepage
 
