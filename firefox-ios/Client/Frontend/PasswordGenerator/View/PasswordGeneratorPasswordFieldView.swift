@@ -4,7 +4,6 @@
 
 import Foundation
 import Common
-import Redux
 
 final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifiable {
     private enum UX {
