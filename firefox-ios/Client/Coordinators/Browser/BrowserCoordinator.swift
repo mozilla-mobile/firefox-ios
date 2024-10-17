@@ -22,12 +22,14 @@ class BrowserCoordinator: BaseCoordinator,
                           LibraryCoordinatorDelegate,
                           EnhancedTrackingProtectionCoordinatorDelegate,
                           FakespotCoordinatorDelegate,
+                          HomepageCoordinatorDelegate,
                           ParentCoordinatorDelegate,
                           TabManagerDelegate,
                           TabTrayCoordinatorDelegate,
                           PrivateHomepageDelegate,
                           WindowEventCoordinator,
-                          MainMenuCoordinatorDelegate {
+                          MainMenuCoordinatorDelegate,
+                          ETPCoordinatorSSLStatusDelegate {
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var legacyHomepageViewController: LegacyHomepageViewController?
@@ -130,7 +132,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     func showHomepage() {
         let homepageController = self.homepageViewController ?? HomepageViewController(windowUUID: windowUUID)
-
+        homepageController.parentCoordinator = self
         guard browserViewController.embedContent(homepageController) else {
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
             return
@@ -216,6 +218,13 @@ class BrowserCoordinator: BaseCoordinator,
 
             return legacyHomepageViewController
         }
+    }
+
+    // MARK: - ETPCoordinatorSSLStatusDelegate
+
+    var showHasOnlySecureContentInTrackingPanel: Bool {
+        guard let bar = browserViewController.urlBar else { return false }
+        return bar.locationView.hasSecureContent
     }
 
     // MARK: - Route handling
@@ -395,7 +404,8 @@ class BrowserCoordinator: BaseCoordinator,
 
     private func showETPMenu(sourceView: UIView) {
         let enhancedTrackingProtectionCoordinator = EnhancedTrackingProtectionCoordinator(router: router,
-                                                                                          tabManager: tabManager)
+                                                                                          tabManager: tabManager,
+                                                                                          secureConnectionDelegate: self)
         enhancedTrackingProtectionCoordinator.parentCoordinator = self
         add(child: enhancedTrackingProtectionCoordinator)
         enhancedTrackingProtectionCoordinator.start(sourceView: sourceView)
@@ -483,6 +493,10 @@ class BrowserCoordinator: BaseCoordinator,
         }
     }
 
+    func editLatestBookmark() {
+        browserViewController.openBookmarkEditPanel()
+    }
+
     func showFindInPage() {
         browserViewController.showFindInPage()
     }
@@ -500,7 +514,8 @@ class BrowserCoordinator: BaseCoordinator,
 
         let coordinator = MainMenuCoordinator(
             router: DefaultRouter(navigationController: navigationController),
-            windowUUID: tabManager.windowUUID
+            windowUUID: tabManager.windowUUID,
+            profile: profile
         )
         coordinator.parentCoordinator = self
         coordinator.navigationHandler = self

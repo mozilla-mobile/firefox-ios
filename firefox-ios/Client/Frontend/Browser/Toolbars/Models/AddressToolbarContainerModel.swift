@@ -45,7 +45,6 @@ class AddressToolbarContainerModel: Equatable {
             lockIconButtonA11yLabel: .AddressToolbar.PrivacyAndSecuritySettingsA11yLabel,
             urlTextFieldPlaceholder: .AddressToolbar.LocationPlaceholder,
             urlTextFieldA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField,
-            urlTextFieldA11yLabel: .AddressToolbar.LocationA11yLabel,
             searchEngineImage: searchEngineImage,
             lockIconImageName: lockIconImageName,
             url: url,

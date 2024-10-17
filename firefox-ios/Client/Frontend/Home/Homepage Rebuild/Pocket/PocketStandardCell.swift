@@ -3,13 +3,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import UIKit
-import Shared
+import Foundation
 import SiteImageView
 
-// MARK: - PocketStandardCell
-/// A cell used in FxHomeScreen's Pocket section
-class PocketStandardCell: UICollectionViewCell, ReusableCell {
+/// The standard cell used in homepage pocket section
+class PocketStandardCell: UICollectionViewCell, ReusableCell, ThemeApplicable, Blurrable {
     struct UX {
         static let cellHeight: CGFloat = 112
         static let cellWidth: CGFloat = 350
@@ -87,16 +85,16 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
 
     // MARK: - Helpers
 
-    func configure(viewModel: PocketStandardCellViewModel, theme: Theme) {
-        titleLabel.text = viewModel.title
-        descriptionLabel.text = viewModel.description
-        accessibilityLabel = viewModel.accessibilityLabel
+    func configure(item: PocketItem, theme: Theme) {
+        titleLabel.text = item.title
+        descriptionLabel.text = item.description
+        accessibilityLabel = item.accessibilityLabel
 
-        let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: viewModel.imageURL.absoluteString,
+        let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: item.imageURL.absoluteString,
                                                             heroImageSize: UX.heroImageSize)
         heroImageView.setHeroImage(heroImageViewModel)
-        sponsoredStack.isHidden = viewModel.shouldHideSponsor
-        descriptionLabel.font = viewModel.shouldHideSponsor
+        sponsoredStack.isHidden = item.shouldHideSponsor
+        descriptionLabel.font = item.shouldHideSponsor
         ? FXFontStyles.Regular.caption1.scaledFont()
         : FXFontStyles.Bold.caption1.scaledFont()
 
@@ -163,10 +161,18 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell {
         contentView.layer.shadowPath = UIBezierPath(roundedRect: contentView.bounds,
                                                     cornerRadius: HomepageViewModel.UX.generalCornerRadius).cgPath
     }
-}
 
-// MARK: - Blurrable
-extension PocketStandardCell: Blurrable {
+    // MARK: - ThemeApplicable
+    func applyTheme(theme: Theme) {
+        titleLabel.textColor = theme.colors.textPrimary
+        descriptionLabel.textColor = theme.colors.textSecondary
+        sponsoredLabel.textColor = theme.colors.textSecondary
+        sponsoredIcon.tintColor = theme.colors.iconSecondary
+
+        adjustBlur(theme: theme)
+    }
+
+    // MARK: - Blurrable
     func adjustBlur(theme: Theme) {
         // Add blur
         if shouldApplyWallpaperBlur {
@@ -177,17 +183,5 @@ extension PocketStandardCell: Blurrable {
             contentView.backgroundColor = theme.colors.layer5
             setupShadow(theme: theme)
         }
-    }
-}
-
-// MARK: - ThemeApplicable
-extension PocketStandardCell: ThemeApplicable {
-    func applyTheme(theme: Theme) {
-        titleLabel.textColor = theme.colors.textPrimary
-        descriptionLabel.textColor = theme.colors.textSecondary
-        sponsoredLabel.textColor = theme.colors.textSecondary
-        sponsoredIcon.tintColor = theme.colors.iconSecondary
-
-        adjustBlur(theme: theme)
     }
 }

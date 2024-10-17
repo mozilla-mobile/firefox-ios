@@ -6485,11 +6485,6 @@ extension String {
             tableName: "AddressToolbar",
             value: "Search or enter address",
             comment: "Placeholder for the address field in the address toolbar.")
-        public static let LocationA11yLabel = MZLocalizedString(
-            key: "AddressToolbar.Location.A11y.Label.v128",
-            tableName: "AddressToolbar",
-            value: "Search or enter address",
-            comment: "Accessibility label for the address field in the address toolbar.")
         public static let SearchEngineA11yLabel = MZLocalizedString(
             key: "AddressToolbar.SearchEngine.A11y.Label.v128",
             tableName: "AddressToolbar",
@@ -7398,6 +7393,13 @@ extension String {
                 tableName: "PrivateBrowsing",
                 value: nil,
                 comment: "Accessiblity hint for toggling on/off private mode")
+        }
+        struct v133 {
+            public static let LocationA11yLabel = MZLocalizedString(
+                key: "AddressToolbar.Location.A11y.Label.v128",
+                tableName: "AddressToolbar",
+                value: "Search or enter address",
+                comment: "Accessibility label for the address field in the address toolbar.")
         }
     }
 }

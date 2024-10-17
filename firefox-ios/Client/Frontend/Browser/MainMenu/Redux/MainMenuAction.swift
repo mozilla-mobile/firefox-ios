@@ -8,6 +8,7 @@ import MenuKit
 import Redux
 
 final class MainMenuAction: Action {
+    var tabID: TabUUID?
     var navigationDestination: MenuNavigationDestination?
     var currentTabInfo: MainMenuTabInfo?
     var detailsViewToShow: MainMenuDetailsViewType?
@@ -17,19 +18,21 @@ final class MainMenuAction: Action {
         actionType: any ActionType,
         navigationDestination: MenuNavigationDestination? = nil,
         changeMenuViewTo: MainMenuDetailsViewType? = nil,
-        currentTabInfo: MainMenuTabInfo? = nil
+        currentTabInfo: MainMenuTabInfo? = nil,
+        tabID: TabUUID? = nil
     ) {
         self.navigationDestination = navigationDestination
         self.detailsViewToShow = changeMenuViewTo
         self.currentTabInfo = currentTabInfo
+        self.tabID = tabID
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 
 enum MainMenuActionType: ActionType {
+    case closeMenuAndNavigateToDestination
     case closeMenu
     case showDetailsView
-    case closeMenuAndNavigateToDestination
     case toggleUserAgent
     case updateCurrentTabInfo
     case viewDidLoad
@@ -40,6 +43,12 @@ enum MainMenuMiddlewareActionType: ActionType {
 }
 
 enum MainMenuDetailsActionType: ActionType {
-    case dismissView
+    case addToBookmarks
+    case addToReadingList
+    case addToShortcuts
     case backToMainMenu
+    case dismissView
+    case editBookmark
+    case removeFromShortcuts
+    case removeFromReadingList
 }

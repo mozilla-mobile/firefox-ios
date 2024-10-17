@@ -71,42 +71,10 @@ struct AddressListView: View {
             NavigationView {
                 switch destination {
                 case .add:
-                    EditAddressViewControllerRepresentable(model: viewModel)
-                        .navigationBarTitle(String.Addresses.Settings.Edit.AutofillAddAddressTitle, displayMode: .inline)
-                        .navigationBarItems(
-                            leading: Button(String.Addresses.Settings.Edit.CloseNavBarButtonLabel) {
-                                viewModel.cancelAddButtonTap()
-                            },
-                            trailing: Button(String.Addresses.Settings.Edit.AutofillSaveButton) {
-                                viewModel.saveAddressButtonTap()
-                            }
-                        )
+                    addAddressView
 
                 case .edit:
-                    EditAddressViewControllerRepresentable(model: viewModel)
-                        .navigationBarTitle(viewModel.editNavigationbarTitle, displayMode: .inline)
-                        .toolbar {
-                            ToolbarItemGroup(placement: .cancellationAction) {
-                                Button(viewModel.cancelButtonLabel) {
-                                    if viewModel.isEditMode {
-                                        viewModel.cancelEditButtonTap()
-                                    } else {
-                                        viewModel.closeEditButtonTap()
-                                    }
-                                }
-                            }
-
-                            ToolbarItemGroup(placement: .primaryAction) {
-                                Button(viewModel.primaryButtonLabel) {
-                                    if viewModel.isEditMode {
-                                        viewModel.saveEditButtonTap()
-                                    } else {
-                                        viewModel.editButtonTap()
-                                    }
-                                }
-                            }
-                        }
-                    .ignoresSafeArea(.keyboard)
+                    editAddressView
                 }
             }
         }
@@ -121,6 +89,46 @@ struct AddressListView: View {
         .onDisappear {
             viewModel.editAddressWebViewManager.teardownWebView()
         }
+    }
+
+    private var addAddressView: some View {
+        return EditAddressViewControllerRepresentable(model: viewModel)
+            .navigationBarTitle(String.Addresses.Settings.Edit.AutofillAddAddressTitle, displayMode: .inline)
+            .navigationBarItems(
+                leading: Button(String.Addresses.Settings.Edit.CloseNavBarButtonLabel) {
+                    viewModel.cancelAddButtonTap()
+                },
+                trailing: Button(String.Addresses.Settings.Edit.AutofillSaveButton) {
+                    viewModel.saveAddressButtonTap()
+                }
+            )
+    }
+
+    private var editAddressView: some View {
+        return EditAddressViewControllerRepresentable(model: viewModel)
+            .navigationBarTitle(viewModel.editNavigationbarTitle, displayMode: .inline)
+            .toolbar {
+                ToolbarItemGroup(placement: .cancellationAction) {
+                    Button(viewModel.cancelButtonLabel) {
+                        if viewModel.isEditMode {
+                            viewModel.cancelEditButtonTap()
+                        } else {
+                            viewModel.closeEditButtonTap()
+                        }
+                    }
+                }
+
+                ToolbarItemGroup(placement: .primaryAction) {
+                    Button(viewModel.primaryButtonLabel) {
+                        if viewModel.isEditMode {
+                            viewModel.saveEditButtonTap()
+                        } else {
+                            viewModel.editButtonTap()
+                        }
+                    }
+                }
+            }
+            .ignoresSafeArea(.keyboard)
     }
 
     // MARK: - Theme Application

@@ -92,12 +92,20 @@ struct TabsPanelState: ScreenState, Equatable {
         case TabPanelMiddlewareActionType.didLoadTabPanel,
             TabPanelMiddlewareActionType.didChangeTabPanel:
             guard let tabsModel = action.tabDisplayModel else { return state }
-            let selectedTabIndex = tabsModel.tabs.firstIndex(where: { $0.isSelected })
             return TabsPanelState(windowUUID: state.windowUUID,
                                   isPrivateMode: tabsModel.isPrivateMode,
                                   tabs: tabsModel.tabs,
                                   inactiveTabs: tabsModel.inactiveTabs,
-                                  isInactiveTabsExpanded: tabsModel.isInactiveTabsExpanded,
+                                  isInactiveTabsExpanded: tabsModel.isInactiveTabsExpanded)
+
+        case TabPanelMiddlewareActionType.willAppearTabPanel:
+            guard let tabsModel = action.tabDisplayModel else { return state }
+            let selectedTabIndex = tabsModel.tabs.firstIndex(where: { $0.isSelected })
+            return TabsPanelState(windowUUID: state.windowUUID,
+                                  isPrivateMode: state.isPrivateMode,
+                                  tabs: state.tabs,
+                                  inactiveTabs: state.inactiveTabs,
+                                  isInactiveTabsExpanded: state.isInactiveTabsExpanded,
                                   scrollToIndex: selectedTabIndex)
 
         case TabPanelMiddlewareActionType.refreshTabs:

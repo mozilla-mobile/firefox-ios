@@ -37,7 +37,6 @@ FILES_TO_DOWNLOAD = [
     "toolkit/components/formautofill/Helpers.ios.mjs",
     "toolkit/components/formautofill/shared/HeuristicsRegExp.sys.mjs",
     "toolkit/components/formautofill/shared/LabelUtils.sys.mjs",
-    "toolkit/components/passwordmgr/LoginManager.shared.mjs",
     "toolkit/components/formautofill/Overrides.ios.js",
     "toolkit/modules/third_party/fathom/fathom.mjs",
     "toolkit/components/passwordmgr/shared/LoginFormFactory.sys.mjs",

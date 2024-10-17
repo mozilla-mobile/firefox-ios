@@ -11,8 +11,10 @@ final class HomepageStateTests: XCTestCase {
     func tests_initialState_returnsExpectedState() {
         let initialState = createSubject()
 
-        XCTAssertFalse(initialState.loadInitialData)
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
+
+        XCTAssertFalse(initialState.headerState.isPrivate)
+        XCTAssertTrue(initialState.headerState.showPrivateModeToggle)
     }
 
     func test_initializeAction_returnsExpectedState() {
@@ -28,9 +30,25 @@ final class HomepageStateTests: XCTestCase {
         )
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertTrue(newState.loadInitialData)
+
         XCTAssertFalse(newState.headerState.isPrivate)
         XCTAssertTrue(newState.headerState.showPrivateModeToggle)
+    }
+
+    func test_tappedOnCustomizeHomepage_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = homepageReducer()
+
+        let newState = reducer(
+            initialState,
+            HomepageAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: HomepageActionType.tappedOnCustomizeHomepage
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(newState.navigateTo, .customizeHomepage)
     }
 
     // MARK: - Private

@@ -97,7 +97,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         notifyTextChanged = { [self] in
             guard urlTextField.isEditing else { return }
 
-            urlAbsolutePath = urlTextField.text?.lowercased()
+            urlAbsolutePath = urlTextField.text?.lowercased().trimmingCharacters(in: .whitespaces)
             delegate?.locationViewDidEnterText(urlAbsolutePath ?? "")
         }
     }
@@ -172,7 +172,7 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
 
             urlTextField.topAnchor.constraint(equalTo: topAnchor),
             urlTextField.bottomAnchor.constraint(equalTo: bottomAnchor),
-            urlTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalSpace),
+            urlTextField.trailingAnchor.constraint(equalTo: trailingAnchor),
 
             iconContainerBackgroundView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
             iconContainerBackgroundView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor),
@@ -399,7 +399,6 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         lockIconButton.accessibilityLabel = state.lockIconButtonA11yLabel
 
         urlTextField.accessibilityIdentifier = state.urlTextFieldA11yId
-        urlTextField.accessibilityLabel = state.urlTextFieldA11yLabel
     }
 
     func accessibilityCustomActionsForView(_ view: UIView) -> [UIAccessibilityCustomAction]? {

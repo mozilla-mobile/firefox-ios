@@ -43,8 +43,9 @@ class TabManagerMiddleware {
             didLoadTabPeek(tabID: tabUUID, uuid: action.windowUUID)
 
         case TabPeekActionType.addToBookmarks:
-            addToBookmarks(with: tabUUID, uuid: action.windowUUID)
-
+            let shareItem = createShareItem(with: tabUUID, and: action.windowUUID)
+            addToBookmarks(shareItem)
+            setBookmarkQuickActions(with: shareItem, uuid: action.windowUUID)
         case TabPeekActionType.copyURL:
             copyURL(tabID: tabUUID, uuid: action.windowUUID)
 
@@ -94,6 +95,14 @@ class TabManagerMiddleware {
             let action = TabPanelMiddlewareAction(tabDisplayModel: tabState,
                                                   windowUUID: action.windowUUID,
                                                   actionType: TabPanelMiddlewareActionType.didLoadTabPanel)
+            store.dispatch(action)
+
+        case TabPanelViewActionType.tabPanelWillAppear:
+            let isPrivate = action.panelType == .privateTabs
+            let tabState = self.getTabsDisplayModel(for: isPrivate, shouldScrollToTab: true, uuid: action.windowUUID)
+            let action = TabPanelMiddlewareAction(tabDisplayModel: tabState,
+                                                  windowUUID: action.windowUUID,
+                                                  actionType: TabPanelMiddlewareActionType.willAppearTabPanel)
             store.dispatch(action)
 
         case TabPanelViewActionType.addNewTab:
@@ -353,6 +362,29 @@ class TabManagerMiddleware {
         }
     }
 
+    private func setBookmarkQuickActions(with shareItem: ShareItem?, uuid: WindowUUID) {
+        guard let shareItem else { return }
+
+        var userData = [QuickActionInfos.tabURLKey: shareItem.url]
+        if let title = shareItem.title {
+            userData[QuickActionInfos.tabTitleKey] = title
+        }
+
+        QuickActionsImplementation().addDynamicApplicationShortcutItemOfType(.openLastBookmark,
+                                                                             withUserData: userData,
+                                                                             toApplication: .shared)
+
+        let toastAction = TabPanelMiddlewareAction(toastType: .addBookmark,
+                                                   windowUUID: uuid,
+                                                   actionType: TabPanelMiddlewareActionType.showToast)
+        store.dispatch(toastAction)
+
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .add,
+                                     object: .bookmark,
+                                     value: .tabTray)
+    }
+
     /// Trigger refreshTabs action after a change in `TabManager`
     @MainActor
     private func triggerRefresh(shouldScrollToTab: Bool, uuid: WindowUUID, isPrivate: Bool) {
@@ -558,42 +590,6 @@ class TabManagerMiddleware {
         }
     }
 
-    private func addToBookmarks(with tabID: TabUUID, uuid: WindowUUID) {
-        let tabManager = tabManager(for: uuid)
-        guard let tab = tabManager.getTabForUUID(uuid: tabID),
-              let url = tab.url?.absoluteString, !url.isEmpty
-        else { return }
-
-        var title = (tab.tabState.title ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-        if title.isEmpty {
-            title = url
-        }
-        let shareItem = ShareItem(url: url, title: title)
-        // Add new mobile bookmark at the top of the list
-        profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID,
-                                      url: shareItem.url,
-                                      title: shareItem.title,
-                                      position: 0)
-
-        var userData = [QuickActionInfos.tabURLKey: shareItem.url]
-        if let title = shareItem.title {
-            userData[QuickActionInfos.tabTitleKey] = title
-        }
-        QuickActionsImplementation().addDynamicApplicationShortcutItemOfType(.openLastBookmark,
-                                                                             withUserData: userData,
-                                                                             toApplication: .shared)
-
-        let toastAction = TabPanelMiddlewareAction(toastType: .addBookmark,
-                                                   windowUUID: uuid,
-                                                   actionType: TabPanelMiddlewareActionType.showToast)
-        store.dispatch(toastAction)
-
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .add,
-                                     object: .bookmark,
-                                     value: .tabTray)
-    }
-
     private func copyURL(tabID: TabUUID, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
         UIPasteboard.general.url = tabManager.selectedTab?.canonicalURL
@@ -645,38 +641,34 @@ class TabManagerMiddleware {
     // MARK: - Main menu actions
     private func resolveMainMenuActions(with action: MainMenuAction, appState: AppState) {
         switch action.actionType {
-        case MainMenuMiddlewareActionType.requestTabInfo:
-            store.dispatch(
-                MainMenuAction(
-                    windowUUID: action.windowUUID,
-                    actionType: MainMenuActionType.updateCurrentTabInfo,
-                    currentTabInfo: getTabInfo(forWindow: action.windowUUID)
-                )
-            )
         case MainMenuActionType.toggleUserAgent:
             changeUserAgent(forWindow: action.windowUUID)
+        case MainMenuMiddlewareActionType.requestTabInfo:
+            provideTabInfo(forWindow: action.windowUUID)
+        case MainMenuDetailsActionType.addToBookmarks:
+            guard let tabID = action.tabID else { return }
+            let shareItem = createShareItem(with: tabID, and: action.windowUUID)
+            addToBookmarks(shareItem)
+
+            store.dispatch(
+                GeneralBrowserAction(
+                    toastType: .addBookmark,
+                    windowUUID: action.windowUUID,
+                    actionType: GeneralBrowserActionType.showToast
+                )
+            )
+        case MainMenuDetailsActionType.addToReadingList:
+            addToReadingList(with: action.tabID, uuid: action.windowUUID)
+        case MainMenuDetailsActionType.removeFromReadingList:
+            removeFromReadingList(with: action.tabID, uuid: action.windowUUID)
+        case MainMenuDetailsActionType.addToShortcuts:
+            addToShortcuts(with: action.tabID, uuid: action.windowUUID)
+        case MainMenuDetailsActionType.removeFromShortcuts:
+            removeFromShortcuts(with: action.tabID, uuid: action.windowUUID)
+
         default:
             break
         }
-    }
-
-    private func getTabInfo(forWindow windowUUID: WindowUUID) -> MainMenuTabInfo? {
-        guard let selectedTab = tabManager(for: windowUUID).selectedTab else {
-            logger.log(
-                "Attempted to get `selectedTab` but it was `nil` when in shouldn't be",
-                level: .fatal,
-                category: .tabs
-            )
-            return nil
-        }
-        let defaultUAisDesktop = UserAgent.isDesktop(ua: UserAgent.getUserAgent())
-
-        return MainMenuTabInfo(
-            url: selectedTab.url,
-            isHomepage: selectedTab.isFxHomeTab,
-            isDefaultUserAgentDesktop: defaultUAisDesktop,
-            hasChangedUserAgent: selectedTab.changedUserAgent
-        )
     }
 
     private func changeUserAgent(forWindow windowUUID: WindowUUID) {
@@ -692,12 +684,245 @@ class TabManagerMiddleware {
         }
     }
 
+    /// A helper struct for getting tab info for the main menu
+    private struct ProfileTabInfo {
+        let isBookmarked: Bool
+        let isInReadingList: Bool
+        let isPinned: Bool
+    }
+
+    private func provideTabInfo(forWindow windowUUID: WindowUUID) {
+        guard let selectedTab = tabManager(for: windowUUID).selectedTab else {
+            logger.log(
+                "Attempted to get `selectedTab` but it was `nil` when in shouldn't be",
+                level: .fatal,
+                category: .tabs
+            )
+            return
+        }
+
+        fetchProfileTabInfo(for: selectedTab.url) { profileTabInfo in
+            store.dispatch(
+                MainMenuAction(
+                    windowUUID: windowUUID,
+                    actionType: MainMenuActionType.updateCurrentTabInfo,
+                    currentTabInfo: MainMenuTabInfo(
+                        tabID: selectedTab.tabUUID,
+                        url: selectedTab.url,
+                        isHomepage: selectedTab.isFxHomeTab,
+                        isDefaultUserAgentDesktop: UserAgent.isDesktop(ua: UserAgent.getUserAgent()),
+                        hasChangedUserAgent: selectedTab.changedUserAgent,
+                        readerModeIsAvailable: selectedTab.readerModeAvailableOrActive,
+                        isBookmarked: profileTabInfo.isBookmarked,
+                        isInReadingList: profileTabInfo.isInReadingList,
+                        isPinned: profileTabInfo.isPinned
+                    )
+                )
+            )
+        }
+    }
+
+    private func fetchProfileTabInfo(
+        for tabURL: URL?,
+        dataLoadingCompletion: ((ProfileTabInfo) -> Void)?
+    ) {
+        guard let tabURL = tabURL, let url = absoluteStringFrom(tabURL) else {
+            dataLoadingCompletion?(
+                ProfileTabInfo(
+                    isBookmarked: false,
+                    isInReadingList: false,
+                    isPinned: false
+                )
+            )
+            return
+        }
+
+        let group = DispatchGroup()
+        let dataQueue = DispatchQueue.global()
+
+        var isBookmarkedResult = false
+        var isPinnedResult = false
+        var isInReadingListResult = false
+
+        group.enter()
+        getIsBookmarked(url: url, dataQueue: dataQueue) { result in
+            isBookmarkedResult = result
+            group.leave()
+        }
+
+        group.enter()
+        getIsPinned(url: url, dataQueue: dataQueue) { result in
+            isPinnedResult = result
+            group.leave()
+        }
+
+        group.enter()
+        getIsInReadingList(url: url, dataQueue: dataQueue) { result in
+            isInReadingListResult = result
+            group.leave()
+        }
+
+        group.notify(queue: dataQueue) {
+            dataLoadingCompletion?(
+                ProfileTabInfo(
+                    isBookmarked: isBookmarkedResult,
+                    isInReadingList: isInReadingListResult,
+                    isPinned: isPinnedResult
+                )
+            )
+        }
+    }
+
+    private func absoluteStringFrom(_ url: URL) -> String? {
+        if let urlDecoded = url.decodeReaderModeURL {
+            return urlDecoded.absoluteString
+        }
+
+        return url.absoluteString
+    }
+
+    private func getIsBookmarked(
+        url: String,
+        dataQueue: DispatchQueue,
+        completion: @escaping (Bool) -> Void
+    ) {
+        profile.places.isBookmarked(url: url).uponQueue(dataQueue) { result in
+            completion(result.successValue ?? false)
+        }
+    }
+
+    private func getIsPinned(
+        url: String,
+        dataQueue: DispatchQueue,
+        completion: @escaping (Bool) -> Void
+    ) {
+        profile.pinnedSites.isPinnedTopSite(url).uponQueue(dataQueue) { result in
+            completion(result.successValue ?? false)
+        }
+    }
+
+    private func getIsInReadingList(
+        url: String,
+        dataQueue: DispatchQueue,
+        completion: @escaping (Bool) -> Void
+    ) {
+        profile.readingList.getRecordWithURL(url).uponQueue(dataQueue) { result in
+            completion(result.successValue != nil)
+        }
+    }
+
+    // MARK: - Homepage Header Actions
     private func resolveHomepageHeaderActions(with action: HeaderAction) {
         switch action.actionType {
         case HeaderActionType.toggleHomepageMode:
             tabManager(for: action.windowUUID).switchPrivacyMode()
         default:
             break
+        }
+    }
+
+    // MARK: - Tab Manager Helper functions
+    private func createShareItem(with tabID: TabUUID, and uuid: WindowUUID) -> ShareItem? {
+        let tabManager = tabManager(for: uuid)
+        guard let tab = tabManager.getTabForUUID(uuid: tabID),
+              let url = tab.url?.absoluteString, !url.isEmpty
+        else { return nil }
+
+        var title = (tab.tabState.title ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        if title.isEmpty {
+            title = url
+        }
+        return ShareItem(url: url, title: title)
+    }
+
+    private func addToBookmarks(_ shareItem: ShareItem?) {
+        guard let shareItem else { return }
+        // Add new mobile bookmark at the top of the list
+        profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID,
+                                      url: shareItem.url,
+                                      title: shareItem.title,
+                                      position: 0)
+    }
+
+    private func addToReadingList(with tabID: TabUUID?, uuid: WindowUUID) {
+        let tabManager = tabManager(for: uuid)
+        guard let tabID = tabID,
+              let tab = tabManager.getTabForUUID(uuid: tabID),
+              let url = tab.url?.displayURL?.absoluteString
+        else { return }
+
+        profile.readingList.createRecordWithURL(
+            url,
+            title: tab.title ?? "",
+            addedBy: UIDevice.current.name
+        )
+
+        store.dispatch(
+            GeneralBrowserAction(
+                toastType: .addToReadingList,
+                windowUUID: uuid,
+                actionType: GeneralBrowserActionType.showToast
+            )
+        )
+    }
+
+    private func removeFromReadingList(with tabID: TabUUID?, uuid: WindowUUID) {
+        let tabManager = tabManager(for: uuid)
+        guard let tabID = tabID,
+              let tab = tabManager.getTabForUUID(uuid: tabID),
+              let url = tab.url?.displayURL?.absoluteString,
+              let record = profile.readingList.getRecordWithURL(url).value.successValue
+        else { return }
+
+        profile.readingList.deleteRecord(record, completion: nil)
+
+        store.dispatch(
+            GeneralBrowserAction(
+                toastType: .removeFromReadingList,
+                windowUUID: uuid,
+                actionType: GeneralBrowserActionType.showToast
+            )
+        )
+    }
+
+    private func addToShortcuts(with tabID: TabUUID?, uuid: WindowUUID) {
+        let tabManager = tabManager(for: uuid)
+        guard let tabID = tabID,
+              let tab = tabManager.getTabForUUID(uuid: tabID),
+              let url = tab.url?.displayURL?.absoluteString
+        else { return }
+
+        let site = Site(url: url, title: tab.displayTitle)
+        profile.pinnedSites.addPinnedTopSite(site).uponQueue(.main) { result in
+            guard result.isSuccess else { return }
+
+            store.dispatch(
+                GeneralBrowserAction(
+                    toastType: .addShortcut,
+                    windowUUID: uuid,
+                    actionType: GeneralBrowserActionType.showToast
+                )
+            )
+        }
+    }
+
+    private func removeFromShortcuts(with tabID: TabUUID?, uuid: WindowUUID) {
+        let tabManager = tabManager(for: uuid)
+        guard let tabID = tabID,
+              let tab = tabManager.getTabForUUID(uuid: tabID),
+              let url = tab.url?.displayURL?.absoluteString
+        else { return }
+
+        let site = Site(url: url, title: tab.displayTitle)
+        profile.pinnedSites.removeFromPinnedTopSites(site).uponQueue(.main) { result in
+            guard result.isSuccess else { return }
+            store.dispatch(
+                GeneralBrowserAction(
+                    toastType: .removeShortcut,
+                    windowUUID: uuid,
+                    actionType: GeneralBrowserActionType.showToast
+                )
+            )
         }
     }
 }

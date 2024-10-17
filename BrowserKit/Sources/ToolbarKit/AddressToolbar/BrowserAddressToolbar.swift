@@ -332,7 +332,7 @@ public class BrowserAddressToolbar: UIView,
     }
 
     func locationViewDidTapSearchEngine<T: SearchEngineView>(_ searchEngine: T) {
-            // TODO: FXIOS-10191 - To be implemented
+        toolbarDelegate?.addressToolbarDidTapSearchEngine(searchEngine)
     }
 
     func locationViewAccessibilityActions() -> [UIAccessibilityCustomAction]? {

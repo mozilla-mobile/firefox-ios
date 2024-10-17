@@ -8,10 +8,15 @@ import Shared
 import Redux
 
 struct MainMenuTabInfo: Equatable {
+    let tabID: TabUUID
     let url: URL?
     let isHomepage: Bool
     let isDefaultUserAgentDesktop: Bool
     let hasChangedUserAgent: Bool
+    let readerModeIsAvailable: Bool
+    let isBookmarked: Bool
+    let isInReadingList: Bool
+    let isPinned: Bool
 }
 
 struct MainMenuState: ScreenState, Equatable {
@@ -84,15 +89,18 @@ struct MainMenuState: ScreenState, Equatable {
 
         switch action.actionType {
         case MainMenuActionType.updateCurrentTabInfo:
-            guard let action = action as? MainMenuAction else { return state }
+            guard let action = action as? MainMenuAction,
+                  let currentTabInfo = action.currentTabInfo
+            else { return state }
+
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuConfigurator.generateMenuElements(
-                    with: action.currentTabInfo,
+                    with: currentTabInfo,
                     for: state.currentSubmenuView,
                     and: state.windowUUID
                 ),
-                currentTabInfo: action.currentTabInfo
+                currentTabInfo: currentTabInfo
             )
         case MainMenuActionType.showDetailsView:
             guard let action = action as? MainMenuAction else { return state }

@@ -9,14 +9,17 @@ import ToolbarKit
 final class ToolbarMiddleware: FeatureFlaggable {
     private let profile: Profile
     private let manager: ToolbarManager
+    private let windowManager: WindowManager
     private let logger: Logger
     private let toolbarTelemetry = ToolbarTelemetry()
 
     init(profile: Profile = AppContainer.shared.resolve(),
          manager: ToolbarManager = DefaultToolbarManager(),
+         windowManager: WindowManager = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared) {
         self.profile = profile
         self.manager = manager
+        self.windowManager = windowManager
         self.logger = logger
     }
 
@@ -91,6 +94,8 @@ final class ToolbarMiddleware: FeatureFlaggable {
         case ToolbarMiddlewareActionType.didClearSearch:
             guard let toolbarState = state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
             else { return }
+            let action = ToolbarAction(windowUUID: action.windowUUID, actionType: ToolbarActionType.clearSearch)
+            store.dispatch(action)
             toolbarTelemetry.clearSearchButtonTapped(isPrivate: toolbarState.isPrivateMode)
 
         case ToolbarMiddlewareActionType.didStartDragInteraction:
@@ -358,7 +363,11 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
     // MARK: - Helper
     private func cancelEditMode(windowUUID: WindowUUID) {
-        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
+        var url = tabManager(for: windowUUID).selectedTab?.url
+        if let urlIsWebpage = url?.isWebPage() {
+            url = urlIsWebpage ? url : nil
+        }
+        let action = ToolbarAction(url: url, windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
         store.dispatch(action)
 
         let browserAction = GeneralBrowserAction(showOverlay: false,
@@ -400,5 +409,9 @@ final class ToolbarMiddleware: FeatureFlaggable {
         }
 
         toolbarTelemetry.readerModeButtonTapped(isPrivate: toolbarState.isPrivateMode, isEnabled: isReaderModeEnabled)
+    }
+
+    private func tabManager(for uuid: WindowUUID) -> TabManager {
+        return windowManager.tabManager(for: uuid)
     }
 }

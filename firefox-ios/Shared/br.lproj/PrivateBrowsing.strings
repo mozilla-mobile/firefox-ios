@@ -22,6 +22,9 @@
 /* Accessibility label for toggling on/off private mode */
 "Private Mode" = "Mod prevez";
 
+/* Accessibility label for toggling on/off private mode */
+"PrivateBrowsing.Toggle.A11y.Label.v132" = "Merdeiñ prevez";
+
 /* Accessiblity hint for toggling on/off private mode */
 "Turns private mode on or off" = "Trec’haoliñ ar mod prevez";
 

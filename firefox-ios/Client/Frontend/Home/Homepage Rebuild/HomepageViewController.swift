@@ -6,10 +6,15 @@ import Foundation
 import Common
 import Redux
 
+protocol HomepageCoordinatorDelegate: AnyObject {
+    func showSettings(at destination: Route.SettingsSection)
+}
+
 final class HomepageViewController: UIViewController,
                                     UICollectionViewDelegate,
                                     ContentContainable,
                                     Themeable,
+                                    Notifiable,
                                     StoreSubscriber {
     // MARK: - Typealiases
     typealias SubscriberStateType = HomepageState
@@ -26,12 +31,19 @@ final class HomepageViewController: UIViewController,
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
 
+    // MARK: Navigation variables
+    weak var parentCoordinator: HomepageCoordinatorDelegate?
+
     // MARK: - Private variables
     private var collectionView: UICollectionView?
     private var dataSource: HomepageDiffableDataSource?
     private var layoutConfiguration = HomepageSectionLayoutProvider().createCompositionalLayout()
     private var logger: Logger
     private var homepageState: HomepageState
+
+    private var currentTheme: Theme {
+        themeManager.getCurrentTheme(for: windowUUID)
+    }
 
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
@@ -45,6 +57,8 @@ final class HomepageViewController: UIViewController,
         self.logger = logger
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
+
+        setupNotifications(forObserver: self, observing: [UIApplication.didBecomeActiveNotification])
 
         subscribeToRedux()
     }
@@ -98,8 +112,10 @@ final class HomepageViewController: UIViewController,
 
     func newState(state: HomepageState) {
         homepageState = state
-        if homepageState.loadInitialData {
-            dataSource?.applyInitialSnapshot()
+        dataSource?.applyInitialSnapshot(state: state)
+
+        if homepageState.navigateTo == .customizeHomepage {
+            parentCoordinator?.showSettings(at: .homePage)
         }
     }
 
@@ -141,7 +157,9 @@ final class HomepageViewController: UIViewController,
     private func configureCollectionView() {
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layoutConfiguration)
 
-        collectionView.register(HomepageHeaderCell.self, forCellWithReuseIdentifier: HomepageHeaderCell.cellIdentifier)
+        HomepageItem.cellTypes.forEach {
+            collectionView.register($0, forCellWithReuseIdentifier: $0.cellIdentifier)
+        }
 
         collectionView.keyboardDismissMode = .onDrag
         collectionView.showsVerticalScrollIndicator = false
@@ -176,44 +194,81 @@ final class HomepageViewController: UIViewController,
         for item: HomepageDiffableDataSource.HomeItem,
         at indexPath: IndexPath
     ) -> UICollectionViewCell {
-        guard let section = HomepageSection(rawValue: indexPath.section) else {
-            self.logger.log(
-                "Section should not have been nil, something went wrong",
-                level: .fatal,
-                category: .homepage
-            )
-            return UICollectionViewCell()
-        }
-
-        switch section {
+        switch item {
         case .header:
-            let cell = collectionView?.dequeueReusableCell(
-                withReuseIdentifier: HomepageHeaderCell.cellIdentifier,
+            guard let headerCell = collectionView?.dequeueReusableCell(
+                cellType: HomepageHeaderCell.self,
                 for: indexPath
-            )
-            guard let headerCell = cell as? HomepageHeaderCell else {
+            )  else {
                 return UICollectionViewCell()
             }
+
             headerCell.configure(
                 headerState: homepageState.headerState,
                 showiPadSetup: shouldUseiPadSetup()
             ) { [weak self] in
-                guard let self else { return }
-                store.dispatch(
-                    HeaderAction(
-                        windowUUID: self.windowUUID,
-                        actionType: HeaderActionType.toggleHomepageMode
-                    )
-                )
+                self?.toggleHomepageMode()
             }
-            headerCell.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+            headerCell.applyTheme(theme: currentTheme)
+
             return headerCell
-        default:
-            return UICollectionViewCell()
+        case .pocket(let story):
+            guard let pocketCell = collectionView?.dequeueReusableCell(
+                cellType: PocketStandardCell.self,
+                for: indexPath
+            )  else {
+                return UICollectionViewCell()
+            }
+            pocketCell.configure(item: story, theme: currentTheme)
+
+            return pocketCell
+        case .pocketDiscover(let title):
+            guard let pocketDiscoverCell = collectionView?.dequeueReusableCell(
+                cellType: PocketDiscoverCell.self,
+                for: indexPath
+            )  else {
+                return UICollectionViewCell()
+            }
+
+            pocketDiscoverCell.configure(text: title, theme: currentTheme)
+
+            return pocketDiscoverCell
+        case .customizeHomepage:
+            guard let customizeHomeCell = collectionView?.dequeueReusableCell(
+                cellType: CustomizeHomepageSectionCell.self,
+                for: indexPath
+            ) else {
+                return UICollectionViewCell()
+            }
+
+            customizeHomeCell.configure(onTapAction: { [weak self] _ in
+                self?.navigateToHomepageSettings()
+            }, theme: currentTheme)
+
+            return customizeHomeCell
         }
     }
 
-    // MARK: UICollectionViewDelegate
+    // MARK: Dispatch Actions
+    private func toggleHomepageMode() {
+        store.dispatch(
+            HeaderAction(
+                windowUUID: windowUUID,
+                actionType: HeaderActionType.toggleHomepageMode
+            )
+        )
+    }
+
+    private func navigateToHomepageSettings() {
+        store.dispatch(
+            HomepageAction(
+                windowUUID: windowUUID,
+                actionType: HomepageActionType.tappedOnCustomizeHomepage
+            )
+        )
+    }
+
+    // MARK: - UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // TODO: FXIOS-10162 - Dummy trigger to update with proper triggers
 
@@ -223,6 +278,20 @@ final class HomepageViewController: UIViewController,
         switch section {
         default:
             return
+        }
+    }
+
+    // MARK: - Notifiable
+    func handleNotifications(_ notification: Notification) {
+        switch notification.name {
+        case UIApplication.willEnterForegroundNotification:
+            store.dispatch(
+                PocketAction(
+                    windowUUID: self.windowUUID,
+                    actionType: PocketActionType.enteredForeground
+                )
+            )
+        default: break
         }
     }
 }

@@ -340,7 +340,7 @@ class ReaderMode: TabContentScript {
 
     fileprivate func handleReaderModeStateChange(_ state: ReaderModeState) {
         self.state = state
-        guard let tab = tab else { return }
+        guard let tab else { return }
         delegate?.readerMode(self, didChangeReaderModeState: state, forTab: tab)
     }
 

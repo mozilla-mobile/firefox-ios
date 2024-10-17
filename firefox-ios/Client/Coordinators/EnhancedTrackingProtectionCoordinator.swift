@@ -12,10 +12,18 @@ protocol EnhancedTrackingProtectionCoordinatorDelegate: AnyObject {
     func settingsOpenPage(settings: Route.SettingsSection)
 }
 
+protocol ETPCoordinatorSSLStatusDelegate: AnyObject {
+    var showHasOnlySecureContentInTrackingPanel: Bool { get }
+}
+
 class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
                                              TrackingProtectionMenuDelegate,
                                              EnhancedTrackingProtectionMenuDelegate,
                                              FeatureFlaggable {
+    private struct UX {
+        static let popoverPreferredSize = CGSize(width: 480, height: 540)
+    }
+
     private let profile: Profile
     private let tabManager: TabManager
     private var legacyEnhancedTrackingProtectionMenuVC: EnhancedTrackingProtectionMenuVC?
@@ -24,17 +32,19 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
     private var trackingProtectionRefactorStatus: Bool {
         featureFlags.isFeatureEnabled(.trackingProtectionRefactor, checking: .buildOnly)
     }
+    private var trackingProtectionNavController: UINavigationController?
 
     init(router: Router,
          profile: Profile = AppContainer.shared.resolve(),
-         tabManager: TabManager
+         tabManager: TabManager,
+         secureConnectionDelegate: ETPCoordinatorSSLStatusDelegate
     ) {
         let tab = tabManager.selectedTab
         let url = tab?.url ?? URL(fileURLWithPath: "")
         let displayTitle = tab?.displayTitle ?? ""
         let contentBlockerStatus = tab?.contentBlocker?.status ?? .blocking
         let contentBlockerStats = tab?.contentBlocker?.stats
-        let connectionSecure = tab?.webView?.hasOnlySecureContent ?? true
+        let connectionSecure = secureConnectionDelegate.showHasOnlySecureContentInTrackingPanel
         self.profile = profile
         self.tabManager = tabManager
         super.init(router: router)
@@ -53,6 +63,10 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
                                                                                 profile: profile,
                                                                                 windowUUID: tabManager.windowUUID)
             enhancedTrackingProtectionMenuVC?.enhancedTrackingProtectionMenuDelegate = self
+            trackingProtectionNavController = UINavigationController(
+                rootViewController: enhancedTrackingProtectionMenuVC ?? UIViewController()
+            )
+            trackingProtectionNavController?.isNavigationBarHidden = true
         } else {
             let oldEtpViewModel = EnhancedTrackingProtectionMenuVM(
                 url: url,
@@ -77,16 +91,15 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
                     sheetPresentationController.preferredCornerRadius = TPMenuUX.UX.modalMenuCornerRadius
                 }
                 enhancedTrackingProtectionMenuVC.asPopover = true
-                router.present(enhancedTrackingProtectionMenuVC, animated: true, completion: nil)
+                guard let trackingProtectionNavController = trackingProtectionNavController else { return }
+                router.present(trackingProtectionNavController, animated: true, completion: nil)
             } else {
-                enhancedTrackingProtectionMenuVC.asPopover = true
-                if trackingProtectionRefactorStatus {
-                    enhancedTrackingProtectionMenuVC.preferredContentSize = CGSize(width: 480, height: 517)
-                }
-                enhancedTrackingProtectionMenuVC.modalPresentationStyle = .popover
-                enhancedTrackingProtectionMenuVC.popoverPresentationController?.sourceView = sourceView
-                enhancedTrackingProtectionMenuVC.popoverPresentationController?.permittedArrowDirections = .up
-                router.present(enhancedTrackingProtectionMenuVC, animated: true, completion: nil)
+                guard let trackingProtectionNavController = trackingProtectionNavController else { return }
+                trackingProtectionNavController.preferredContentSize = UX.popoverPreferredSize
+                trackingProtectionNavController.modalPresentationStyle = .popover
+                trackingProtectionNavController.popoverPresentationController?.sourceView = sourceView
+                trackingProtectionNavController.popoverPresentationController?.permittedArrowDirections = .up
+                router.present(trackingProtectionNavController, animated: true, completion: nil)
             }
         } else if let legacyEnhancedTrackingProtectionMenuVC {
             if UIDevice.current.userInterfaceIdiom == .phone {

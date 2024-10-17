@@ -431,12 +431,19 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
         let currentDate = Date()
         let inactiveDate: Date
 
-        // Debug for inactive tabs to easily test in code
-        if UserDefaults.standard.bool(forKey: PrefsKeys.FasterInactiveTabsOverride) {
-            inactiveDate = Calendar.current.date(byAdding: .second, value: -10, to: currentDate) ?? Date()
-        } else {
-            // FIXME Is there a reason we use noon of the current day instead of the exact time, when calculating -14 days?
+        // Check if we're debugging for inactive tabs to easily test in code
+        let rawValue = UserDefaults.standard.integer(forKey: PrefsKeys.FasterInactiveTabsOverride)
+        let option = FasterInactiveTabsOption(rawValue: rawValue) ?? .normal
+        switch option {
+        case .normal:
+            // Normal operation when no debug setting overrides the inactive tabs timeout
             inactiveDate = Calendar.current.date(byAdding: .day, value: -14, to: currentDate.noon) ?? Date()
+        case .tenSeconds:
+            inactiveDate = Calendar.current.date(byAdding: .second, value: -10, to: currentDate) ?? Date()
+        case .oneMinute:
+            inactiveDate = Calendar.current.date(byAdding: .minute, value: -1, to: currentDate) ?? Date()
+        case .twoMinutes:
+            inactiveDate = Calendar.current.date(byAdding: .minute, value: -2, to: currentDate) ?? Date()
         }
 
         // If the tabDate is older than our inactive date cutoff, return true

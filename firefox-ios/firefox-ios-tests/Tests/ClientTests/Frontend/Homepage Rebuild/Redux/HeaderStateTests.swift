@@ -13,7 +13,7 @@ final class HeaderStateTests: XCTestCase {
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
         XCTAssertFalse(initialState.isPrivate)
-        XCTAssertFalse(initialState.showPrivateModeToggle)
+        XCTAssertTrue(initialState.showPrivateModeToggle)
     }
 
     func test_initializeAction_returnsExpectedState() {

@@ -6,6 +6,8 @@ import Common
 import Redux
 
 final class HomepageAction: Action {
+    var navigationDestination: HomepageState.NavigationDestination?
+
     override init(windowUUID: WindowUUID, actionType: any ActionType) {
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
@@ -13,4 +15,5 @@ final class HomepageAction: Action {
 
 enum HomepageActionType: ActionType {
     case initialize
+    case tappedOnCustomizeHomepage
 }

@@ -7,7 +7,7 @@ import Shared
 import Common
 
 enum ContextualHintCopyType {
-    case action, description
+    case action, title, description
 }
 
 /// `ContextualHintCopyProvider` exists to provide the requested description or action strings back
@@ -40,6 +40,8 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         switch copyType {
         case .action:
             copyToReturn = getActionCopyFor(hint)
+        case .title:
+            copyToReturn = getTitleCopyFor(hint)
         case .description:
             copyToReturn = getDescriptionCopyFor(hint)
         }
@@ -48,6 +50,13 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
     }
 
     // MARK: - Private helpers
+    private func getTitleCopyFor(_ hint: ContextualHintType) -> String {
+        switch hint {
+        case .mainMenu:
+            return CFRStrings.MainMenu.NewMenu.Title
+        default: return ""
+        }
+    }
 
     private func getDescriptionCopyFor(_ hint: ContextualHintType) -> String {
         var descriptionCopy = ""
@@ -66,6 +75,9 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
 
         case .toolbarLocation:
             return getToolbarDescriptionCopy(with: arrowDirection)
+
+        case .mainMenu:
+            descriptionCopy = CFRStrings.MainMenu.NewMenu.Body
 
         case .shoppingExperience:
             descriptionCopy = getShoppingCopy(.description)
@@ -86,6 +98,8 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
             actionCopy = CFRStrings.TabsTray.InactiveTabs.Action
         case .toolbarLocation:
             actionCopy = CFRStrings.Toolbar.SearchBarPlacementButtonText
+        case .mainMenu:
+            actionCopy = ""
         case .shoppingExperience:
             actionCopy = getShoppingCopy(.action)
         case .jumpBackIn,
@@ -121,6 +135,8 @@ struct ContextualHintCopyProvider: FeatureFlaggable {
         switch copyType {
         case .action:
             copy = hasOptedIn ? CFRStrings.Shopping.OptedInAction : CFRStrings.Shopping.NotOptedInAction
+        case .title:
+            copy = ""
         case .description:
             copy = hasOptedIn ? CFRStrings.Shopping.OptedInBody : CFRStrings.Shopping.NotOptedInBody
         }

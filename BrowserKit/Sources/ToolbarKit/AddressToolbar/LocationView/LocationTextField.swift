@@ -106,6 +106,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard isEditing else { return }
         applyCompletion()
         super.touchesBegan(touches, with: event)
     }
@@ -137,14 +138,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
 
         let suggestionText = String(suggestion.dropFirst(normalized.count))
         setMarkedText(suggestionText, selectedRange: NSRange())
-
-        // Only call forceResetCursor() if `hideCursor` changes.
-        // Because forceResetCursor() auto accept iOS user's text replacement
-        // (e.g. mu->μ) which makes user unable to type "mu".
-        if !hideCursor {
-            hideCursor = true
-            forceResetCursor()
-        }
+        hideCursor = true
     }
 
     // MARK: - ThemeApplicable

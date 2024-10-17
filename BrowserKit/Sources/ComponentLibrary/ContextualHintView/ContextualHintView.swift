@@ -34,6 +34,12 @@ public class ContextualHintView: UIView, ThemeApplicable {
         button.configuration?.contentInsets = UX.closeButtonInsets
     }
 
+    private lazy var titleLabel: UILabel = .build { label in
+        label.font = FXFontStyles.Regular.headline.scaledFont()
+        label.textAlignment = .left
+        label.numberOfLines = 0
+    }
+
     private lazy var descriptionLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.textAlignment = .left
@@ -94,6 +100,10 @@ public class ContextualHintView: UIView, ThemeApplicable {
         scrollView.addSubview(contentContainer)
         contentContainer.addSubview(stackView)
 
+        if !viewModel.title.isEmpty {
+            titleLabel.text = viewModel.title
+            stackView.addArrangedSubview(titleLabel)
+        }
         stackView.addArrangedSubview(descriptionLabel)
         if viewModel.isActionType { stackView.addArrangedSubview(actionButton) }
 
@@ -149,6 +159,7 @@ public class ContextualHintView: UIView, ThemeApplicable {
 
     public func applyTheme(theme: Theme) {
         closeButton.tintColor = theme.colors.textOnDark
+        titleLabel.textColor = theme.colors.textOnDark
         descriptionLabel.textColor = theme.colors.textOnDark
         gradient.colors = theme.colors.layerGradient.cgColors
 

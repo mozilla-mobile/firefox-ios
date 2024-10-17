@@ -93,7 +93,6 @@ final class DropDownSearchEngineView: UIView, SearchEngineView, ThemeApplicable 
     @objc
     private func didTapSearchEngine() {
         delegate?.locationViewDidTapSearchEngine(self)
-        // TODO FXIOS-10191 Actual selector implementation to come later.
     }
 
     // MARK: - ThemeApplicable

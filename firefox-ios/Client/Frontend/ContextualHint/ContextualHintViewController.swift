@@ -166,6 +166,7 @@ class ContextualHintViewController: UIViewController,
         var viewModel = ContextualHintViewModel(
             isActionType: viewProvider.isActionType,
             actionButtonTitle: viewProvider.getCopyFor(.action),
+            title: viewProvider.getCopyFor(.title),
             description: viewProvider.getCopyFor(.description),
             arrowDirection: arrowDirection,
             closeButtonA11yLabel: .ContextualHints.ContextualHintsCloseAccessibility,

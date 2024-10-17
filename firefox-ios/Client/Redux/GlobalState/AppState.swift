@@ -64,7 +64,8 @@ let middlewares = [
     ThemeManagerMiddleware().themeManagerProvider,
     ToolbarMiddleware().toolbarProvider,
     TrackingProtectionMiddleware().trackingProtectionProvider,
-    PasswordGeneratorMiddleware().passwordGeneratorProvider
+    PasswordGeneratorMiddleware().passwordGeneratorProvider,
+    PocketMiddleware().pocketSectionProvider
 ]
 
 // In order for us to mock and test the middlewares easier,

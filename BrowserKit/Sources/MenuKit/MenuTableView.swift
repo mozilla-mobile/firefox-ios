@@ -13,7 +13,7 @@ public protocol MenuTableViewDataDelegate: AnyObject {
 class MenuTableView: UIView,
                      UITableViewDelegate,
                      UITableViewDataSource, ThemeApplicable {
-    struct UX {
+    private struct UX {
         static let topPadding: CGFloat = 10
     }
 
@@ -21,7 +21,7 @@ class MenuTableView: UIView,
     private var menuData: [MenuSection]
     private var theme: Theme?
 
-    public var updateHeaderLineView: ((_ scrollViewOffset: CGFloat) -> Void)?
+    public var updateHeaderLineView: ((_ isHidden: Bool) -> Void)?
 
     override init(frame: CGRect) {
         tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -122,7 +122,11 @@ class MenuTableView: UIView,
     }
 
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        updateHeaderLineView?(scrollView.contentOffset.y)
+        if scrollView.contentOffset.y >= UX.topPadding {
+            updateHeaderLineView?(false)
+        } else {
+            updateHeaderLineView?(true)
+        }
     }
 
     // MARK: - Theme Applicable
