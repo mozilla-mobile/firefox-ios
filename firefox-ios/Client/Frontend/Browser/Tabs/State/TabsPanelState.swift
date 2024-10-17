@@ -16,8 +16,7 @@ struct TabsPanelState: ScreenState, Equatable {
     var isPrivateMode: Bool
     var tabs: [TabModel]
     var inactiveTabs: [InactiveTabsModel]
-    var isInactiveTabsExpanded: Bool
-    var toastType: ToastType?
+    var isInactiveTabsExpanded: Bool    
     var windowUUID: WindowUUID
     var scrollState: ScrollState?
     var didTapAddTab: Bool
@@ -41,7 +40,6 @@ struct TabsPanelState: ScreenState, Equatable {
                   tabs: panelState.tabs,
                   inactiveTabs: panelState.inactiveTabs,
                   isInactiveTabsExpanded: panelState.isInactiveTabsExpanded,
-                  toastType: panelState.toastType,
                   scrollState: panelState.scrollState,
                   didTapAddTab: panelState.didTapAddTab,
                   urlRequest: panelState.urlRequest)
@@ -54,7 +52,6 @@ struct TabsPanelState: ScreenState, Equatable {
             tabs: [TabModel](),
             inactiveTabs: [InactiveTabsModel](),
             isInactiveTabsExpanded: false,
-            toastType: nil,
             scrollState: nil,
             didTapAddTab: false,
             urlRequest: nil)
@@ -64,8 +61,7 @@ struct TabsPanelState: ScreenState, Equatable {
          isPrivateMode: Bool,
          tabs: [TabModel],
          inactiveTabs: [InactiveTabsModel],
-         isInactiveTabsExpanded: Bool,
-         toastType: ToastType? = nil,
+         isInactiveTabsExpanded: Bool,         
          scrollState: ScrollState? = nil,
          didTapAddTab: Bool = false,
          urlRequest: URLRequest? = nil) {
@@ -73,7 +69,6 @@ struct TabsPanelState: ScreenState, Equatable {
         self.tabs = tabs
         self.inactiveTabs = inactiveTabs
         self.isInactiveTabsExpanded = isInactiveTabsExpanded
-        self.toastType = toastType
         self.windowUUID = windowUUID
         self.scrollState = scrollState
         self.didTapAddTab = didTapAddTab
@@ -91,7 +86,9 @@ struct TabsPanelState: ScreenState, Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         // Only process actions for the current window
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
+            return defaultState(fromPreviousState: state)
+        }
 
         if let action = action as? TabPanelMiddlewareAction {
             return TabsPanelState.reduceTabPanelMiddlewareAction(action: action, state: state)
@@ -143,15 +140,6 @@ struct TabsPanelState: ScreenState, Equatable {
                                   inactiveTabs: inactiveTabs,
                                   isInactiveTabsExpanded: state.isInactiveTabsExpanded)
 
-        case TabPanelMiddlewareActionType.showToast:
-            guard let type = action.toastType else { return state }
-            return TabsPanelState(windowUUID: state.windowUUID,
-                                  isPrivateMode: state.isPrivateMode,
-                                  tabs: state.tabs,
-                                  inactiveTabs: state.inactiveTabs,
-                                  isInactiveTabsExpanded: state.isInactiveTabsExpanded,
-                                  toastType: type)
-
         case TabPanelMiddlewareActionType.scrollToTab:
             guard let scrollBehavior = action.scrollBehavior else { return defaultState(fromPreviousState: state) }
             let scrollModel = createTabScrollBehavior(forState: state, withScrollBehavior: scrollBehavior)
@@ -187,13 +175,6 @@ struct TabsPanelState: ScreenState, Equatable {
                                   tabs: state.tabs,
                                   inactiveTabs: state.inactiveTabs,
                                   isInactiveTabsExpanded: !state.isInactiveTabsExpanded)
-
-        case TabPanelViewActionType.hideUndoToast:
-            return TabsPanelState(windowUUID: state.windowUUID,
-                                  isPrivateMode: state.isPrivateMode,
-                                  tabs: state.tabs,
-                                  inactiveTabs: state.inactiveTabs,
-                                  isInactiveTabsExpanded: state.isInactiveTabsExpanded)
 
         default:
             return defaultState(fromPreviousState: state)

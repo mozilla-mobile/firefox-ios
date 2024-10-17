@@ -21,7 +21,7 @@ class TabPanelViewAction: Action {
     let toastType: ToastType?
     let shareSheetURL: URL?
 
-    init(panelType: TabTrayPanelType,
+    init(panelType: TabTrayPanelType?,
          isPrivateModeActive: Bool? = nil,
          urlRequest: URLRequest? = nil,
          tabUUID: TabUUID? = nil,
