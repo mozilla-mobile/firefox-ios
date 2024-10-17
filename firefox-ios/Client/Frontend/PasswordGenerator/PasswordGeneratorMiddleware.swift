@@ -23,13 +23,19 @@ final class PasswordGeneratorMiddleware {
         switch action.actionType {
         case PasswordGeneratorActionType.showPasswordGenerator:
             self.showPasswordGenerator(tab: currentTab, windowUUID: windowUUID)
+
         case PasswordGeneratorActionType.userTappedUsePassword:
             guard let password = state.screenState(PasswordGeneratorState.self,
                                                    for: .passwordGenerator,
                                                    window: action.windowUUID)?.password else {return}
             self.userTappedUsePassword(with: currentTab, password: password)
+
         case PasswordGeneratorActionType.userTappedRefreshPassword:
             self.userTappedRefreshPassword(with: currentTab, windowUUID: windowUUID)
+
+        case PasswordGeneratorActionType.clearGeneratedPasswordForSite:
+            self.clearGeneratedPasswordForSite(with: currentTab, windowUUID: windowUUID)
+
         default:
             break
         }
@@ -95,5 +101,10 @@ final class PasswordGeneratorMiddleware {
             )
             store.dispatch(newAction)
         })
+    }
+
+    private func clearGeneratedPasswordForSite(with tab: Tab, windowUUID: WindowUUID) {
+        guard let origin = tab.url?.origin else {return}
+        generatedPasswordStorage.deletePasswordForOrigin(origin: origin)
     }
 }

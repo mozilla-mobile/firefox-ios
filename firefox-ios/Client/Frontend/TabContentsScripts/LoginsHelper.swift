@@ -125,8 +125,7 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
         else { return }
 
         if self.featureFlags.isFeatureEnabled(.passwordGenerator, checking: .buildOnly) {
-            if type == "generatePassword" {
-                guard let tab = self.tab, !tab.isPrivate else {return}
+            if type == "generatePassword", let tab = self.tab, !tab.isPrivate {
                 let newAction = GeneralBrowserAction(
                     windowUUID: tab.windowUUID,
                     actionType: GeneralBrowserActionType.showPasswordGenerator)
@@ -268,6 +267,11 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
         ) { bar in
             self.tab?.removeSnackbar(bar)
             self.snackBar = nil
+            guard let windowUUID = self.tab?.windowUUID else {return}
+            let action = PasswordGeneratorAction(windowUUID: windowUUID,
+                                                 actionType: PasswordGeneratorActionType.clearGeneratedPasswordForSite,
+                                                 currentTab: self.tab)
+            store.dispatch(action)
             return
         }
         let save = SnackButton(
@@ -279,6 +283,11 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
             self.snackBar = nil
             self.sendLoginsSavedTelemetry()
             self.profile.logins.addLogin(login: login, completionHandler: { _ in })
+            guard let windowUUID = self.tab?.windowUUID else {return}
+            let action = PasswordGeneratorAction(windowUUID: windowUUID,
+                                                 actionType: PasswordGeneratorActionType.clearGeneratedPasswordForSite,
+                                                 currentTab: self.tab)
+            store.dispatch(action)
         }
 
         applyTheme(for: dontSave, save)
