@@ -296,13 +296,28 @@ export const FormAutofillHeuristics = {
       "address-line3",
     ];
 
+    let houseNumberFields = 0;
+
+    // We need to build a list of the address fields. A list of the indicies
+    // is also needed as the fields with a given name can change positions
+    // during the update.
     const fields = [];
+    const fieldIndicies = [];
     for (let idx = scanner.parsingIndex; !scanner.parsingFinished; idx++) {
       const detail = scanner.getFieldDetailByIndex(idx);
+
+      // Skip over any house number fields. There should only be zero or one,
+      // but we'll skip over them all anyway.
+      if (detail?.fieldName == "address-housenumber") {
+        houseNumberFields++;
+        continue;
+      }
+
       if (!INTERESTED_FIELDS.includes(detail?.fieldName)) {
         break;
       }
       fields.push(detail);
+      fieldIndicies.push(idx);
     }
 
     if (!fields.length) {
@@ -315,7 +330,7 @@ export const FormAutofillHeuristics = {
           fields[0].reason != "autocomplete" &&
           ["address-line2", "address-line3"].includes(fields[0].fieldName)
         ) {
-          scanner.updateFieldName(scanner.parsingIndex, "address-line1");
+          scanner.updateFieldName(fieldIndicies[0], "address-line1");
         }
         break;
       case 2:
@@ -325,27 +340,22 @@ export const FormAutofillHeuristics = {
             (fields[1].fieldName == "address-line2" ||
               fields[1].reason != "autocomplete")
           ) {
-            scanner.updateFieldName(
-              scanner.parsingIndex,
-              "address-line1",
-              true
-            );
+            scanner.updateFieldName(fieldIndicies[0], "address-line1", true);
           }
         } else {
-          scanner.updateFieldName(scanner.parsingIndex, "address-line1");
+          scanner.updateFieldName(fieldIndicies[0], "address-line1");
         }
-
-        scanner.updateFieldName(scanner.parsingIndex + 1, "address-line2");
+        scanner.updateFieldName(fieldIndicies[1], "address-line2");
         break;
       case 3:
       default:
-        scanner.updateFieldName(scanner.parsingIndex, "address-line1");
-        scanner.updateFieldName(scanner.parsingIndex + 1, "address-line2");
-        scanner.updateFieldName(scanner.parsingIndex + 2, "address-line3");
+        scanner.updateFieldName(fieldIndicies[0], "address-line1");
+        scanner.updateFieldName(fieldIndicies[1], "address-line2");
+        scanner.updateFieldName(fieldIndicies[2], "address-line3");
         break;
     }
 
-    scanner.parsingIndex += fields.length;
+    scanner.parsingIndex += fields.length + houseNumberFields;
     return true;
   },
 

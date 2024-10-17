@@ -23,6 +23,7 @@ FILES_TO_DOWNLOAD = [
     "toolkit/components/formautofill/shared/AddressMetaDataExtension.sys.mjs",
     "toolkit/components/formautofill/shared/AddressMetaDataLoader.sys.mjs",
     "toolkit/components/formautofill/shared/AddressRecord.sys.mjs",
+    "toolkit/components/formautofill/shared/AddressParser.sys.mjs",
     "toolkit/components/formautofill/shared/AutofillTelemetry.sys.mjs",
     "toolkit/components/formautofill/shared/FormAutofillHandler.sys.mjs",
     "toolkit/components/formautofill/shared/FormAutofillHeuristics.sys.mjs",
