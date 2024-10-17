@@ -228,7 +228,7 @@ struct TabsPanelState: ScreenState, Equatable {
             }
         }
 
-        // We can arrive here if the user changes tab panels and one of the panels is empty (nothing to scroll to)
+        // This can happen if the user changes tab panels and one of the panels is empty (nothing to scroll to)
         return nil
     }
 }

@@ -125,7 +125,7 @@ final class TabDisplayViewTests: XCTestCase {
 
         var tabs = [TabModel]()
         for index in 0...2 {
-            let tabModel = TabModel.emptyTabState(tabUUID: "", title: "Tab \(index)")
+            let tabModel = TabModel.emptyState(tabUUID: "", title: "Tab \(index)")
             tabs.append(tabModel)
         }
         return tabs
