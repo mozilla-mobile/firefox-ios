@@ -28,6 +28,8 @@ final class PasswordGeneratorMiddleware {
                                                    for: .passwordGenerator,
                                                    window: action.windowUUID)?.password else {return}
             self.userTappedUsePassword(with: currentTab, password: password)
+        case PasswordGeneratorActionType.userTappedRefreshPassword:
+            self.userTappedRefreshPassword(with: currentTab, windowUUID: windowUUID)
         default:
             break
         }
@@ -80,5 +82,18 @@ final class PasswordGeneratorMiddleware {
                                 category: .webview)
             }
         }
+    }
+
+    private func userTappedRefreshPassword(with tab: Tab, windowUUID: WindowUUID) {
+        guard let origin = tab.url?.origin else {return}
+        generateNewPassword(with: tab, completion: { generatedPassword in
+            self.generatedPasswordStorage.setPasswordForOrigin(origin: origin, password: generatedPassword)
+            let newAction = PasswordGeneratorAction(
+                windowUUID: windowUUID,
+                actionType: PasswordGeneratorActionType.updateGeneratedPassword,
+                password: generatedPassword
+            )
+            store.dispatch(newAction)
+        })
     }
 }
