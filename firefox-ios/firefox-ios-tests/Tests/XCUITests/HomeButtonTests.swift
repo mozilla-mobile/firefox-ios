@@ -17,8 +17,7 @@ class HomeButtonTests: BaseTestCase {
             navigator.nowAt(NewTabScreen)
         }
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"), waitForLoading: true)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
-        app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].waitAndTap()
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].label, "Search")
@@ -41,8 +40,7 @@ class HomeButtonTests: BaseTestCase {
         waitUntilPageLoad()
 
         // Switch to Homepage by taping the home button
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
-        app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].waitAndTap()
 
         validateHomePageAndKeyboardNotRaisedUp()
     }

@@ -357,8 +357,7 @@ class HistoryTests: BaseTestCase {
         let urlBarBackButton = app.windows.otherElements.buttons[AccessibilityIdentifiers.Toolbar.backButton]
         let urlBarForwardButton = app.windows.otherElements.buttons[AccessibilityIdentifiers.Toolbar.forwardButton]
         urlBarBackButton.press(forDuration: 1)
-        mozWaitForElementToExist(app.tables.staticTexts["The Book of Mozilla"])
-        app.tables.staticTexts["The Book of Mozilla"].tap()
+        app.tables.staticTexts["The Book of Mozilla"].waitAndTap()
         mozWaitForElementToNotExist(app.tables.staticTexts["The Book of Mozilla"])
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -369,8 +368,7 @@ class HistoryTests: BaseTestCase {
         urlBarBackButton.tap()
         XCTAssertFalse(urlBarBackButton.isEnabled)
         urlBarForwardButton.press(forDuration: 1)
-        mozWaitForElementToExist(app.tables.staticTexts["The Book of Mozilla"])
-        app.tables.staticTexts["The Book of Mozilla"].tap()
+        app.tables.staticTexts["The Book of Mozilla"].waitAndTap()
         let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
         mozWaitForValueContains(url, value: "test-fixture/test-mozilla-book.html")
     }
@@ -479,8 +477,7 @@ class HistoryTests: BaseTestCase {
         navigator.goto(LibraryPanel_History)
         mozWaitForElementToExist(app.cells.staticTexts["http://example.com/"])
         app.cells.staticTexts["http://example.com/"].firstMatch.swipeLeft()
-        mozWaitForElementToExist(app.buttons["Delete"])
-        app.buttons["Delete"].tap()
+        app.buttons["Delete"].waitAndTap()
         mozWaitForElementToNotExist(app.staticTexts["http://example.com"])
         mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
     }

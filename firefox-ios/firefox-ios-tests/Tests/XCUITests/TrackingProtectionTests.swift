@@ -107,8 +107,7 @@ class TrackingProtectionTests: BaseTestCase {
             app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
         )
         navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.settings])
-        app.tables.otherElements[StandardImageIdentifiers.Large.settings].tap()
+        app.tables.otherElements[StandardImageIdentifiers.Large.settings].waitAndTap()
         navigator.nowAt(SettingsScreen)
         mozWaitForElementToExist(app.tables.cells["NewTab"])
         app.tables.cells["NewTab"].swipeUp()
