@@ -88,6 +88,7 @@
         "HomePageSettingsUITests\/testShortcutsRows()",
         "HomePageSettingsUITests\/testTopSitesCustomNumberOfRows()",
         "HomePageSettingsUITests\/testTyping()",
+        "InactiveTabsTest",
         "IntegrationTests",
         "JumpBackInTests\/testJumpBackInSection()",
         "JumpBackInTests\/testLongTapOnJumpBackInLink()",
