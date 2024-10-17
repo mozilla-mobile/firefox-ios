@@ -872,9 +872,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     func showNativeErrorPage(overlayManager: OverlayModeManager) {
         // TODO: FXIOS-9641 #21239 Integration with Redux - presenting view
-        let errorPageModel = ErrorPageModel(errorTitle: "", errorDecription: "", errorCode: "")
-        let errorpageController = NativeErrorPageViewController(model: errorPageModel,
-                                                                windowUUID: windowUUID,
+        let errorpageController = NativeErrorPageViewController(windowUUID: windowUUID,
                                                                 overlayManager: overlayManager)
         guard browserViewController.embedContent(errorpageController) else {
             logger.log("Unable to embed private homepage", level: .debug, category: .coordinator)
