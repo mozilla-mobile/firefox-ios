@@ -200,7 +200,7 @@
 "Onboarding.DefaultBrowser.Title.V2" = "%@ er ikkje som andre nettlesarar";
 
 /* Text for a label that indicates the title of the top button from the default browser onboarding screen version 2. */
-"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Bruk som standard nettleser";
+"Onboarding.DefaultBrowser.TopButtonTitle.V2" = "Bruk som standard nettlesar";
 
 /* Text for a label that indicates the description of history section from onboarding screen. */
 "Onboarding.History.Description" = "Slett nettlesarhistorikken, passorda, infokapslane og hindre uønskte annonsar frå å følgje deg med eit enkelt klikk!";
@@ -353,7 +353,7 @@
 "Settings.sectionPrivacy" = "PERSONVERN";
 
 /* Label title for set as default browser row */
-"Settings.setAsDefaultBrowser" = "Bruk som standard nettleser";
+"Settings.setAsDefaultBrowser" = "Bruk som standard nettlesar";
 
 /* %@ is the name of the app. Description for set as default browser option */
 "Settings.setAsDefaultBrowserDescription" = "Spesifiser at lenker frå nettstadar, e-postmeldingar og meldingar skal opnast automatisk i %@.";
