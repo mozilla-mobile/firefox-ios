@@ -16,9 +16,9 @@ class ClipBoardTests: BaseTestCase {
     // Copy url from the browser
     func copyUrl() {
         navigator.goto(URLBarOpen)
-        app.textFields["address"].waitAndTap()
+        urlBarAddress.waitAndTap()
         if iPad() {
-            app.textFields["address"].press(forDuration: 1)
+            urlBarAddress.press(forDuration: 1)
             app.menuItems["Select All"].tap()
         }
         app.menuItems["Copy"].waitAndTap()
@@ -60,9 +60,9 @@ class ClipBoardTests: BaseTestCase {
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         navigator.nowAt(NewTabScreen)
         navigator.goto(URLBarOpen)
-        app.textFields["address"].press(forDuration: 3)
+        urlBarAddress.press(forDuration: 3)
         app.menuItems["Paste"].tap()
-        mozWaitForValueContains(app.textFields["address"], value: "www.example.com")
+        mozWaitForValueContains(urlBarAddress, value: "www.example.com")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307051

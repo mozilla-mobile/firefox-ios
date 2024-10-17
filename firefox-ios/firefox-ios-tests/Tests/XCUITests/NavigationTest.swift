@@ -194,11 +194,11 @@ class NavigationTest: BaseTestCase {
         throw XCTSkip("Test needs to be updated")
         /*
             // This test is for populated clipboard only so we need to make sure there's something in Pasteboard
-            app.textFields["address"].typeText("www.google.com")
+            urlBarAddress.typeText("www.google.com")
             // Tapping two times when the text is not selected will reveal the menu
-            app.textFields["address"].tap()
-            mozWaitForElementToExist(app.textFields["address"])
-            app.textFields["address"].tap()
+            urlBarAddress.tap()
+            mozWaitForElementToExist(urlBarAddress)
+            urlBarAddress.tap()
             mozWaitForElementToExist(app.menuItems["Select All"])
             XCTAssertTrue(app.menuItems["Select All"].exists)
             XCTAssertTrue(app.menuItems["Select"].exists)
@@ -221,7 +221,7 @@ class NavigationTest: BaseTestCase {
                 XCTAssertTrue(app.menuItems["Open Link"].exists)
             }
 
-            app.textFields["address"].typeText("\n")
+            urlBarAddress.typeText("\n")
             waitUntilPageLoad()
             mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
 
@@ -233,7 +233,7 @@ class NavigationTest: BaseTestCase {
             // Since the textField value appears all selected first time is clicked
             // this workaround is necessary
             mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-            app.textFields["address"].tap()
+            urlBarAddress.tap()
             mozWaitForElementToExist(app.menuItems["Copy"])
             if iPad() {
                 XCTAssertTrue(app.menuItems["Cut"].exists)
@@ -423,8 +423,7 @@ class NavigationTest: BaseTestCase {
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
         urlBar.waitAndTap()
 
-        let addressBar = app.textFields["address"]
-        XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+        XCTAssertTrue(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
 
         // These instances are false positives of the swiftlint configuration
         // swiftlint:disable empty_count

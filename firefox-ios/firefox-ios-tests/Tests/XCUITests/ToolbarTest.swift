@@ -86,9 +86,9 @@ class ToolbarTests: BaseTestCase {
 
         // Simulate pressing on backspace key should remove the text
         app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
-        app.textFields["address"].typeText("\u{8}")
+        urlBarAddress.typeText("\u{8}")
 
-        let value = app.textFields["address"].value
+        let value = urlBarAddress.value
         XCTAssertEqual(value as? String, "", "The url has not been removed correctly")
     }
 

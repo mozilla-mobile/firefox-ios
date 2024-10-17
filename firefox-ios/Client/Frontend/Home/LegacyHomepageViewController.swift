@@ -244,9 +244,9 @@ class LegacyHomepageViewController:
         HomepageSectionType.cellTypes.forEach {
             collectionView.register($0, forCellWithReuseIdentifier: $0.cellIdentifier)
         }
-        collectionView.register(LabelButtonHeaderView.self,
+        collectionView.register(LegacyLabelButtonHeaderView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                withReuseIdentifier: LabelButtonHeaderView.cellIdentifier)
+                                withReuseIdentifier: LegacyLabelButtonHeaderView.cellIdentifier)
         collectionView.register(PocketFooterView.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
                                 withReuseIdentifier: PocketFooterView.cellIdentifier)
@@ -503,7 +503,7 @@ class LegacyHomepageViewController:
 
     // MARK: - Contextual hint
 
-    private func prepareJumpBackInContextualHint(onView headerView: LabelButtonHeaderView) {
+    private func prepareJumpBackInContextualHint(onView headerView: LegacyLabelButtonHeaderView) {
         guard jumpBackInContextualHintViewController.shouldPresentHint(),
               !viewModel.shouldDisplayHomeTabBanner,
               !headerView.frame.isEmpty
@@ -567,8 +567,8 @@ extension LegacyHomepageViewController: UICollectionViewDelegate, UICollectionVi
         if kind == UICollectionView.elementKindSectionHeader {
             guard let headerView = collectionView.dequeueReusableSupplementaryView(
                 ofKind: kind,
-                withReuseIdentifier: LabelButtonHeaderView.cellIdentifier,
-                for: indexPath) as? LabelButtonHeaderView else { return reusableView }
+                withReuseIdentifier: LegacyLabelButtonHeaderView.cellIdentifier,
+                for: indexPath) as? LegacyLabelButtonHeaderView else { return reusableView }
             guard let sectionViewModel = viewModel.getSectionViewModel(shownSection: indexPath.section)
             else { return reusableView }
 

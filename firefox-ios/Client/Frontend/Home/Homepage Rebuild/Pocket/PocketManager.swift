@@ -13,8 +13,8 @@ class PocketManager {
         self.storyProvider = StoryProvider(pocketAPI: pocketAPI)
     }
 
-    func getPocketItems() async -> [PocketItem] {
+    func getPocketItems() async -> [PocketStoryState] {
         let stories = await storyProvider.fetchPocketStories()
-        return stories.compactMap { PocketItem(story: $0) }
+        return stories.compactMap { PocketStoryState(story: $0) }
     }
 }

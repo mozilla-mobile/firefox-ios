@@ -127,8 +127,8 @@ class BookmarksTests: BaseTestCase {
         typeOnSearchBar(text: "www.google")
         mozWaitForElementToExist(app.tables["SiteTable"])
         mozWaitForElementToExist(app.tables["SiteTable"].cells.staticTexts["www.google"])
-        app.textFields["address"].typeText(".com")
-        app.textFields["address"].typeText("\r")
+        urlBarAddress.typeText(".com")
+        urlBarAddress.typeText("\r")
         navigator.nowAt(BrowserTab)
 
         // Clear text and enter new url
@@ -140,7 +140,7 @@ class BookmarksTests: BaseTestCase {
         // Site table exists but is empty
         mozWaitForElementToExist(app.tables["SiteTable"])
         XCTAssertEqual(app.tables["SiteTable"].cells.count, 0)
-        app.textFields["address"].typeText("\r")
+        urlBarAddress.typeText("\r")
         navigator.nowAt(BrowserTab)
 
         // Add page to bookmarks
@@ -267,7 +267,7 @@ class BookmarksTests: BaseTestCase {
 
     private func typeOnSearchBar(text: String) {
         app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].waitAndTap()
-        app.textFields["address"].typeText(text)
+        urlBarAddress.typeText(text)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306909
