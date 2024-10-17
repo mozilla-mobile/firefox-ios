@@ -175,7 +175,7 @@ class FindInPageTests: BaseTestCase {
 
         // Before reloading, it is necessary to hide the keyboard
         app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
-        app.textFields["address"].typeText("\n")
+        urlBarAddress.typeText("\n")
 
         // Once the page is reloaded the search bar should not appear
         if #available(iOS 16, *) {

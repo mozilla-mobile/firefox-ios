@@ -136,7 +136,7 @@ private func createTestGraph(for test: XCTestCase, with app: XCUIApplication) ->
     map.addScreenState(URLBarOpen) { screenState in
         screenState.gesture(forAction: TestActions.LoadURLByTyping, TestActions.LoadURL) { userState in
             let urlString = userState.url ?? defaultURL
-            app.textFields["address"].typeText("\(urlString)\r")
+            urlBarAddress.typeText("\(urlString)\r")
         }
     }
 
