@@ -358,8 +358,14 @@ extension AppDelegate {
             }
         }
 
+        Glean.shared.registerPings(GleanMetrics.Pings.shared)
+
         let channel = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" ? "testflight" : "release"
-        Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData), configuration: Configuration(channel: channel), buildInfo: GleanMetrics.GleanBuild.info)
+        let configuration = Configuration(
+            channel: channel,
+            pingSchedule: ["baseline": ["dau-reporting"]]
+        )
+        Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData), configuration: configuration, buildInfo: GleanMetrics.GleanBuild.info)
 
         let url = URL(string: "firefox://", invalidCharacters: false)!
         // Send "at startup" telemetry
