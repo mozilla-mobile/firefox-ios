@@ -7,7 +7,7 @@ import Common
 import Shared
 
 enum AccessoryType {
-    case standard, creditCard, address, login
+    case standard, creditCard, address, login, passwordGenerator
 }
 
 class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
@@ -35,6 +35,7 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
     var savedCardsClosure: (() -> Void)?
     var savedAddressesClosure: (() -> Void)?
     var savedLoginsClosure: (() -> Void)?
+    var useStrongPasswordClosure: (() -> Void)?
 
     // MARK: - UI Elements
     private let toolbar: UIToolbar = .build {
@@ -127,6 +128,20 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
         return accessoryView
     }()
 
+    private lazy var passwordGeneratorView: AutofillAccessoryViewButtonItem = {
+        let accessoryView = AutofillAccessoryViewButtonItem(
+            image: UIImage(named: StandardImageIdentifiers.Large.login),
+            labelText: .PasswordGenerator.KeyboardAccessoryButtonLabel,
+            tappedAction: { [weak self] in
+                self?.tappedUseStrongPasswordButton()
+            })
+        accessoryView.accessibilityTraits = .button
+        accessoryView.accessibilityLabel = .PasswordAutofill.UseSavedPasswordFromKeyboard
+        accessoryView.accessibilityIdentifier = AccessibilityIdentifiers.Autofill.footerPrimaryAction
+        accessoryView.isAccessibilityElement = true
+        return accessoryView
+    }()
+
     // MARK: - Initialization
     init(themeManager: ThemeManager = AppContainer.shared.resolve(),
          windowUUID: WindowUUID,
@@ -169,6 +184,8 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
             currentAccessoryView = addressAutofillView
         case .login:
             currentAccessoryView = loginAutofillView
+        case .passwordGenerator:
+            currentAccessoryView = passwordGeneratorView
         }
 
         setNeedsLayout()
@@ -224,7 +241,7 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
             $0.customView?.tintColor = theme.colors.iconAccentBlue
         }
 
-        [creditCardAutofillView, addressAutofillView, loginAutofillView].forEach {
+        [creditCardAutofillView, addressAutofillView, loginAutofillView, passwordGeneratorView].forEach {
             $0.accessoryImageViewTintColor = theme.colors.iconPrimary
             $0.backgroundColor = theme.colors.layer5Hover
         }
@@ -260,6 +277,11 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
     @objc
     private func tappedLoginsButton() {
         savedLoginsClosure?()
+    }
+
+    @objc
+    private func tappedUseStrongPasswordButton() {
+        useStrongPasswordClosure?()
     }
 
     // MARK: - Telemetry
