@@ -6,5 +6,5 @@ import Foundation
 
 enum TabScrollBehavior: Equatable {
     case scrollToSelectedTab(shouldAnimate: Bool)
-    case scrollToTabAtIndex(index: Int, shouldAnimate: Bool)
+    case scrollToTab(withTabUUID: TabUUID, shouldAnimate: Bool)
 }

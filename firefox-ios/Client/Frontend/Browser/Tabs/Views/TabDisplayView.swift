@@ -102,6 +102,18 @@ class TabDisplayView: UIView,
     }
 
     func newState(state: TabsPanelState) {
+        // We only want to respond to `TabsPanelState` for the current `panelType` (e.g. don't scroll the regular tabs for
+        // a private tabs scroll)
+        switch panelType {
+        case .tabs:
+            guard !state.isPrivateMode else { return }
+        case .privateTabs:
+            guard state.isPrivateMode else { return }
+        case .syncedTabs:
+            // FIXME what about the synced tab panel?
+            break
+        }
+
         tabsState = state
 
         collectionView.reloadData()
