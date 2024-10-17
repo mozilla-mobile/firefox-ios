@@ -110,8 +110,8 @@ class TabDisplayView: UIView,
         case .privateTabs:
             guard state.isPrivateMode else { return }
         case .syncedTabs:
-            // FIXME what about the synced tab panel?
-            break
+            // This view does not handle synced tabs
+            return
         }
 
         tabsState = state
