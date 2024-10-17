@@ -385,7 +385,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.LoadURLByTyping) { userState in
             let url = userState.url ?? defaultURL
             // Workaround BB iOS13 be sure tap happens on url bar
+            sleep(1)
             app.textFields.firstMatch.tap()
+            sleep(1)
             app.textFields.firstMatch.tap()
             app.textFields.firstMatch.typeText(url)
             app.textFields.firstMatch.typeText("\r")
@@ -932,6 +934,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     func makeURLBarAvailable(_ screenState: MMScreenStateNode<FxUserState>) {
+        sleep(3)
         screenState.tap(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], to: URLBarOpen)
         screenState.gesture(to: URLBarLongPressMenu) {
             app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].press(forDuration: 1.0)
@@ -1085,7 +1088,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(BrowserTabMenu) { screenState in
-        sleep(1)
+        sleep(3)
         screenState.tap(
             app.tables.otherElements[StandardImageIdentifiers.Large.settings],
             to: SettingsScreen
@@ -1204,6 +1207,7 @@ extension MMNavigator where T == FxUserState {
         UIPasteboard.general.string = urlString
         userState.url = urlString
         userState.waitForLoading = waitForLoading
+        sleep(3)
         // Using LoadURLByTyping for Intel too on Xcode14
         if #available (iOS 16, *) {
             performAction(Action.LoadURLByTyping)
