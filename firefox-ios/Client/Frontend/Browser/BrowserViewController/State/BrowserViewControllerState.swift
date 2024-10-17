@@ -16,6 +16,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case reloadNoCache
         case stopLoading
         case newTab
+        case url
     }
 
     enum DisplayType {

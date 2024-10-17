@@ -11,9 +11,11 @@ struct HomepageState: ScreenState, Equatable {
     }
 
     var windowUUID: WindowUUID
+
+    // Homepage sections state in the order they appear on the collection view
     var headerState: HeaderState
+    var topSitesState: TopSitesState
     var pocketState: PocketState
-    var navigateTo: NavigationDestination?
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let homepageState = store.state.screenState(
@@ -28,8 +30,8 @@ struct HomepageState: ScreenState, Equatable {
         self.init(
             windowUUID: homepageState.windowUUID,
             headerState: homepageState.headerState,
-            pocketState: homepageState.pocketState,
-            navigateTo: homepageState.navigateTo
+            topSitesState: homepageState.topSitesState,
+            pocketState: homepageState.pocketState
         )
     }
 
@@ -37,6 +39,7 @@ struct HomepageState: ScreenState, Equatable {
         self.init(
             windowUUID: windowUUID,
             headerState: HeaderState(windowUUID: windowUUID),
+            topSitesState: TopSitesState(windowUUID: windowUUID),
             pocketState: PocketState(windowUUID: windowUUID)
         )
     }
@@ -44,13 +47,13 @@ struct HomepageState: ScreenState, Equatable {
     private init(
         windowUUID: WindowUUID,
         headerState: HeaderState,
-        pocketState: PocketState,
-        navigateTo: NavigationDestination? = nil
+        topSitesState: TopSitesState,
+        pocketState: PocketState
     ) {
         self.windowUUID = windowUUID
         self.headerState = headerState
+        self.topSitesState = topSitesState
         self.pocketState = pocketState
-        self.navigateTo = navigateTo
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -59,6 +62,7 @@ struct HomepageState: ScreenState, Equatable {
             return HomepageState(
                 windowUUID: state.windowUUID,
                 headerState: HeaderState.reducer(state.headerState, action),
+                topSitesState: TopSitesState.reducer(state.topSitesState, action),
                 pocketState: PocketState.reducer(state.pocketState, action)
             )
         }
@@ -68,19 +72,14 @@ struct HomepageState: ScreenState, Equatable {
             return HomepageState(
                 windowUUID: state.windowUUID,
                 headerState: HeaderState.reducer(state.headerState, action),
+                topSitesState: TopSitesState.reducer(state.topSitesState, action),
                 pocketState: PocketState.reducer(state.pocketState, action)
-            )
-        case HomepageActionType.tappedOnCustomizeHomepage:
-            return HomepageState(
-                windowUUID: state.windowUUID,
-                headerState: HeaderState.reducer(state.headerState, action),
-                pocketState: PocketState.reducer(state.pocketState, action),
-                navigateTo: .customizeHomepage
             )
         default:
             return HomepageState(
                 windowUUID: state.windowUUID,
                 headerState: HeaderState.reducer(state.headerState, action),
+                topSitesState: TopSitesState.reducer(state.topSitesState, action),
                 pocketState: PocketState.reducer(state.pocketState, action)
             )
         }
