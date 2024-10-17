@@ -104,8 +104,14 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
             GleanMetrics.LegacyIds.clientId.set(uuid)
         }
 
+        glean.registerPings(GleanMetrics.Pings.shared)
+
         // Initialize Glean telemetry
-        let gleanConfig = Configuration(channel: AppConstants.buildChannel.rawValue, logLevel: .off)
+        let gleanConfig = Configuration(
+            channel: AppConstants.buildChannel.rawValue,
+            logLevel: .off,
+            pingSchedule: ["baseline": ["dau-reporting"]]
+        )
         glean.initialize(uploadEnabled: sendUsageData,
                          configuration: gleanConfig,
                          buildInfo: GleanMetrics.GleanBuild.info)
