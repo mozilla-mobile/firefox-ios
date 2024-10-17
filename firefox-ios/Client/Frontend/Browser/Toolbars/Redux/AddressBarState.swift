@@ -403,23 +403,6 @@ struct AddressBarState: StateType, Equatable {
                 readerModeState: state.readerModeState
             )
 
-        case GeneralBrowserActionType.showQRcodeReader:
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: navigationActions(action: action, addressBarState: state),
-                pageActions: pageActions(action: action, addressBarState: state, isEditing: false),
-                browserActions: browserActions(action: action, addressBarState: state),
-                borderPosition: state.borderPosition,
-                url: state.url,
-                searchTerm: state.searchTerm,
-                lockIconImageName: state.lockIconImageName,
-                isEditing: false,
-                isScrollingDuringEdit: state.isScrollingDuringEdit,
-                shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-                isLoading: state.isLoading,
-                readerModeState: state.readerModeState
-            )
-
         default:
             return AddressBarState(
                 windowUUID: state.windowUUID,
@@ -441,25 +424,24 @@ struct AddressBarState: StateType, Equatable {
 
     // MARK: - Address Toolbar Actions
     private static func navigationActions(
-        action: Action,
+        action: ToolbarAction,
         addressBarState: AddressBarState,
         isEditing: Bool = false
     ) -> [ToolbarActionState] {
         var actions = [ToolbarActionState]()
-        let toolbarAction = action as? ToolbarAction
 
         guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: action.windowUUID)
         else { return actions }
 
-        let isShowingNavigationToolbar = toolbarAction?.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
+        let isShowingNavigationToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
 
         if isEditing {
             // back carrot when in edit mode
             actions.append(cancelEditAction)
         } else if !isShowingNavigationToolbar {
             // otherwise back/forward and maybe data clearance when navigation toolbar is hidden
-            let canGoBack = toolbarAction?.canGoBack ?? toolbarState.canGoBack
-            let canGoForward = toolbarAction?.canGoForward ?? toolbarState.canGoForward
+            let canGoBack = action.canGoBack ?? toolbarState.canGoBack
+            let canGoForward = action.canGoForward ?? toolbarState.canGoForward
             actions.append(backAction(enabled: canGoBack))
             actions.append(forwardAction(enabled: canGoForward))
 
@@ -472,17 +454,16 @@ struct AddressBarState: StateType, Equatable {
     }
 
     private static func pageActions(
-        action: Action,
+        action: ToolbarAction,
         addressBarState: AddressBarState,
         isEditing: Bool
     ) -> [ToolbarActionState] {
         var actions = [ToolbarActionState]()
-        let toolbarAction = action as? ToolbarAction
 
         let isUrlChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
         let isReaderModeAction = action.actionType as? ToolbarActionType == .readerModeStateChanged
-        let readerModeState = isReaderModeAction ? toolbarAction?.readerModeState : addressBarState.readerModeState
-        let url = isUrlChangeAction ? toolbarAction?.url : addressBarState.url
+        let readerModeState = isReaderModeAction ? action.readerModeState : addressBarState.readerModeState
+        let url = isUrlChangeAction ? action.url : addressBarState.url
 
         guard url != nil, !isEditing else {
             // On homepage we only show the QR code button
@@ -512,7 +493,7 @@ struct AddressBarState: StateType, Equatable {
         actions.append(shareAction)
 
         let isLoadingChangeAction = action.actionType as? ToolbarActionType == .websiteLoadingStateDidChange
-        let isLoading = isLoadingChangeAction ? toolbarAction?.isLoading : addressBarState.isLoading
+        let isLoading = isLoadingChangeAction ? action.isLoading : addressBarState.isLoading
 
         if isLoading == true {
             actions.append(stopLoadingAction)
@@ -524,24 +505,23 @@ struct AddressBarState: StateType, Equatable {
     }
 
     private static func browserActions(
-        action: Action,
+        action: ToolbarAction,
         addressBarState: AddressBarState
     ) -> [ToolbarActionState] {
         var actions = [ToolbarActionState]()
-        let toolbarAction = action as? ToolbarAction
 
         guard let toolbarState = store.state.screenState(ToolbarState.self,
                                                          for: .toolbar,
                                                          window: action.windowUUID)
         else { return actions }
 
-        if !(toolbarAction?.isShowingTopTabs ?? toolbarState.isShowingTopTabs) {
+        if !(action.isShowingTopTabs ?? toolbarState.isShowingTopTabs) {
             actions.append(newTabAction)
         }
 
-        let numberOfTabs = toolbarAction?.numberOfTabs ?? toolbarState.numberOfTabs
-        let isShowMenuWarningAction = toolbarAction?.actionType as? ToolbarActionType == .showMenuWarningBadge
-        let showActionWarningBadge = toolbarAction?.showMenuWarningBadge ?? toolbarState.showMenuWarningBadge
+        let numberOfTabs = action.numberOfTabs ?? toolbarState.numberOfTabs
+        let isShowMenuWarningAction = action.actionType as? ToolbarActionType == .showMenuWarningBadge
+        let showActionWarningBadge = action.showMenuWarningBadge ?? toolbarState.showMenuWarningBadge
         let showWarningBadge = isShowMenuWarningAction ? showActionWarningBadge : toolbarState.showMenuWarningBadge
 
         actions.append(contentsOf: [

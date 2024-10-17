@@ -138,23 +138,6 @@ struct ToolbarState: ScreenState, Equatable {
         case ToolbarActionType.navigationHintFinishedPresenting:
             return handleNavigationHintFinishedPresenting(state: state, action: action)
 
-        case GeneralBrowserActionType.showQRcodeReader:
-            return ToolbarState(
-                windowUUID: state.windowUUID,
-                toolbarPosition: state.toolbarPosition,
-                isPrivateMode: state.isPrivateMode,
-                addressToolbar: AddressBarState.reducer(state.addressToolbar, action),
-                navigationToolbar: state.navigationToolbar,
-                isShowingNavigationToolbar: state.isShowingNavigationToolbar,
-                isShowingTopTabs: state.isShowingTopTabs,
-                canGoBack: state.canGoBack,
-                canGoForward: state.canGoForward,
-                numberOfTabs: state.numberOfTabs,
-                showMenuWarningBadge: state.showMenuWarningBadge,
-                isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
-                canShowDataClearanceAction: state.canShowDataClearanceAction,
-                canShowNavigationHint: state.canShowNavigationHint)
-
         default:
             return state
         }
