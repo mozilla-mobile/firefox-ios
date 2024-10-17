@@ -30,8 +30,7 @@ final class TabPanelStateTests: XCTestCase {
                                               tabs: tabs,
                                               normalTabsCount: "\(tabs.count)",
                                               inactiveTabs: [InactiveTabsModel](),
-                                              isInactiveTabsExpanded: false,
-                                              scrollBehavior: .noScroll)
+                                              isInactiveTabsExpanded: false)
         let action = TabPanelMiddlewareAction(tabDisplayModel: tabDisplayModel,
                                               windowUUID: .XCTestDefaultUUID,
                                               actionType: TabPanelMiddlewareActionType.didLoadTabPanel)

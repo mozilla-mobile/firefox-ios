@@ -106,8 +106,8 @@ class TabDisplayView: UIView,
 
         collectionView.reloadData()
 
-        if let scroll = state.scroll {
-            scrollToTab(scroll.toIndex, shouldAnimate: scroll.withAnimation)
+        if let scrollState = state.scrollState {
+            scrollToTab(scrollState)
         }
 
         if state.didTapAddTab {
@@ -122,12 +122,14 @@ class TabDisplayView: UIView,
         }
     }
 
-    private func scrollToTab(_ index: Int, shouldAnimate animated: Bool) {
-        let section = shouldHideInactiveTabs ? 0 : 1
-        let indexPath = IndexPath(row: index, section: section)
+    private func scrollToTab(_ scrollState: TabsPanelState.ScrollState) {
+        let section: Int = scrollState.isInactiveTabSection ? 1 : 0
+        let indexPath = IndexPath(row: scrollState.toIndex, section: section)
+
+        // We cannot get the visible cells unless all layout operations have finished finished (e.g. after `reloadData()`)
+        collectionView.layoutIfNeeded()
 
         // Only scroll to the view if it is not visible.
-        collectionView.layoutIfNeeded() // We cannot get the visible cells unless all layout / reloadData has finished
         guard !collectionView.indexPathsForFullyVisibleItems.contains(indexPath) else { return }
 
         // Scrolling to an invalid cell will crash the app, so check indexPath first
@@ -138,7 +140,7 @@ class TabDisplayView: UIView,
 
         collectionView.scrollToItem(at: indexPath,
                                     at: .centeredVertically,
-                                    animated: animated)
+                                    animated: scrollState.withAnimation)
     }
 
     private func setupLayout() {
