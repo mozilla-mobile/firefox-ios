@@ -10,6 +10,7 @@ export const HeuristicsRegExp = {
     tel: undefined,
     "street-address": undefined,
     "address-line1": undefined,
+    "address-housenumber": undefined,
     "address-line2": undefined,
     "address-line3": undefined,
     "address-level2": undefined,
@@ -388,7 +389,7 @@ export const HeuristicsRegExp = {
       "address-line1":
         "^address$|address[_-]?line(one)?|address1|addr1|street" +
         "|(?:shipping|billing)address$" +
-        "|strasse|straße|hausnummer|housenumber" + // de-DE
+        "|strasse|straße" + // de-DE
         "|house.?name" + // en-GB
         "|direccion|dirección" + // es
         "|adresse" + // fr-FR
@@ -465,6 +466,9 @@ export const HeuristicsRegExp = {
         "|राज्य" + // hi
         "|((\\b|_|\\*)(eyalet|[şs]ehir|[İii̇]l(imiz)?|kent)(\\b|_|\\*))" + // tr
         "|^시[·・]?도", // ko-KR
+
+      "address-housenumber":
+        "housenumber|hausnummer|haus",
 
       "postal-code":
         "zip|postal|post.*code|pcode" +
