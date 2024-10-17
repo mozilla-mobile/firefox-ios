@@ -134,4 +134,44 @@ struct MainMenuState: ScreenState, Equatable {
             )
         }
     }
+
+    // Farcaseanu
+    // we should probably add this somewhere in either the screen showing actionType
+    // from the VC, or the updateCurrentTabInfo action.
+        // private func syncMenuButton() -> PhotonRowActions? {
+    //
+    //     let rustAccount = RustFirefoxAccounts.shared
+    //     let needsReAuth = rustAccount.accountNeedsReauth()
+    //
+    //     guard let userProfile = rustAccount.userProfile else {
+    //         return SingleActionViewModel(title: .LegacyAppMenu.SyncAndSaveData,
+    //                                      iconString: StandardImageIdentifiers.Large.sync,
+    //                                      tapHandler: action).items
+    //     }
+    //
+    //     let title: String = {
+    //         if rustAccount.accountNeedsReauth() {
+    //             return .FxAAccountVerifyPassword
+    //         }
+    //         return userProfile.displayName ?? userProfile.email
+    //     }()
+    //
+    //     let warningImage = StandardImageIdentifiers.Large.warningFill
+    //     let avatarImage = StandardImageIdentifiers.Large.avatarCircle
+    //     let iconString = needsReAuth ? warningImage : avatarImage
+    //
+    //     var iconURL: URL?
+    //     if let str = rustAccount.userProfile?.avatarUrl,
+    //         let url = URL(string: str, invalidCharacters: false) {
+    //         iconURL = url
+    //     }
+    //     let iconType: PhotonActionSheetIconType = needsReAuth ? .Image : .URL
+    //     let syncOption = SingleActionViewModel(title: title,
+    //                                            iconString: iconString,
+    //                                            iconURL: iconURL,
+    //                                            iconType: iconType,
+    //                                            needsIconActionableTint: needsReAuth,
+    //                                            tapHandler: action).items
+    //     return syncOption
+    // }
 }

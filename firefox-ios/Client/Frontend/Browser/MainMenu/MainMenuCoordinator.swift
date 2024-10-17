@@ -81,7 +81,12 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
             case .settings:
                 self.navigationHandler?.showSettings(at: .general)
             case .syncSignIn:
-                self.navigationHandler?.showSignInView(fxaParameters: destination.fxaSignInViewParameters)
+                let fxaParameters = FxASignInViewParameters(
+                    launchParameters: FxALaunchParams(entrypoint: .browserMenu, query: [:]),
+                    flowType: .emailLoginFlow,
+                    referringPage: .appMenu
+                )
+                self.navigationHandler?.showSignInView(fxaParameters: fxaParameters)
             }
 
             self.parentCoordinator?.didFinish(from: self)

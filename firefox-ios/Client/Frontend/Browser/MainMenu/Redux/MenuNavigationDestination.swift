@@ -27,15 +27,12 @@ enum MainMenuDetailsViewType {
 struct MenuNavigationDestination: Equatable {
     let destination: MainMenuNavigationDestination
     let urlToVisit: URL?
-    let fxaSignInViewParameters: FxASignInViewParameters?
 
     init(
         _ destination: MainMenuNavigationDestination,
-        urlToVisit: URL? = nil,
-        fxaSingInViewParameters: FxASignInViewParameters? = nil
+        urlToVisit: URL? = nil
     ) {
         self.destination = destination
         self.urlToVisit = urlToVisit
-        self.fxaSignInViewParameters = fxaSingInViewParameters
     }
 }

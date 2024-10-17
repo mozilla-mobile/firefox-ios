@@ -98,67 +98,13 @@ class MainMenuViewController: UIViewController,
             )
         }
 
-    // private func syncMenuButton() -> PhotonRowActions? {
-    //     let action: (SingleActionViewModel) -> Void = { [weak self] action in
-    //         let fxaParams = FxALaunchParams(entrypoint: .browserMenu, query: [:])
-    //         let parameters = FxASignInViewParameters(launchParameters: fxaParams,
-    //                                                  flowType: .emailLoginFlow,
-    //                                                  referringPage: .appMenu)
-    //         self?.delegate?.showSignInView(fxaParameters: parameters)
-    //         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .signIntoSync)
-    //     }
-    //
-    //     let rustAccount = RustFirefoxAccounts.shared
-    //     let needsReAuth = rustAccount.accountNeedsReauth()
-    //
-    //     guard let userProfile = rustAccount.userProfile else {
-    //         return SingleActionViewModel(title: .LegacyAppMenu.SyncAndSaveData,
-    //                                      iconString: StandardImageIdentifiers.Large.sync,
-    //                                      tapHandler: action).items
-    //     }
-    //
-    //     let title: String = {
-    //         if rustAccount.accountNeedsReauth() {
-    //             return .FxAAccountVerifyPassword
-    //         }
-    //         return userProfile.displayName ?? userProfile.email
-    //     }()
-    //
-    //     let warningImage = StandardImageIdentifiers.Large.warningFill
-    //     let avatarImage = StandardImageIdentifiers.Large.avatarCircle
-    //     let iconString = needsReAuth ? warningImage : avatarImage
-    //
-    //     var iconURL: URL?
-    //     if let str = rustAccount.userProfile?.avatarUrl,
-    //         let url = URL(string: str, invalidCharacters: false) {
-    //         iconURL = url
-    //     }
-    //     let iconType: PhotonActionSheetIconType = needsReAuth ? .Image : .URL
-    //     let syncOption = SingleActionViewModel(title: title,
-    //                                            iconString: iconString,
-    //                                            iconURL: iconURL,
-    //                                            iconType: iconType,
-    //                                            needsIconActionableTint: needsReAuth,
-    //                                            tapHandler: action).items
-    //     return syncOption
-    // }
         menuContent.accountHeaderView.mainButtonCallback = { [weak self] in
             guard let self else { return }
             store.dispatch(
                 MainMenuAction(
                     windowUUID: self.windowUUID,
                     actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
-                    navigationDestination: MenuNavigationDestination(
-                        .syncSignIn,
-                        fxaSingInViewParameters: FxASignInViewParameters(
-                            launchParameters: FxALaunchParams(
-                                entrypoint: .browserMenu,
-                                query: [:]
-                            ),
-                            flowType: .emailLoginFlow,
-                            referringPage: .appMenu
-                        )
-                    )
+                    navigationDestination: MenuNavigationDestination(.syncSignIn)
                 )
             )
         }
