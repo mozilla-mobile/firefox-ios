@@ -223,7 +223,7 @@ struct TabsPanelState: ScreenState, Equatable {
             } else if let tabIndex = state.inactiveTabs.firstIndex(where: { $0.tabUUID == tabUUID }) {
                 return ScrollState(toIndex: tabIndex, isInactiveTabSection: true, withAnimation: shouldAnimate)
             } else {
-                assertionFailure("Couldn't find a tab with the given TabUUID for scrolling")
+                // This can happen if the user closes a tab, switches to a different tab panel, and then taps "undo"
                 return nil
             }
         }
