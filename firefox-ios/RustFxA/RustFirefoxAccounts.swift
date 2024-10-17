@@ -29,8 +29,6 @@ final class Unknown: NSObject, NSCoding {
 public struct RustFxAFeatures: OptionSet {
     public let rawValue: Int
 
-    public static let closeRemoteTabs = RustFxAFeatures(rawValue: 1 << 0)
-
     public init(rawValue: Int) {
         self.rawValue = rawValue
     }
@@ -177,10 +175,7 @@ open class RustFirefoxAccounts {
 
         let type = UIDevice.current.userInterfaceIdiom == .pad ? DeviceType.tablet : DeviceType.mobile
 
-        var capabilities: [DeviceCapability] = [.sendTab]
-        if features.contains(.closeRemoteTabs) {
-            capabilities.append(.closeTabs)
-        }
+        let capabilities: [DeviceCapability] = [.sendTab, .closeTabs]
         let deviceConfig = DeviceConfig(
             name: DeviceInfo.defaultClientName(),
             deviceType: type,

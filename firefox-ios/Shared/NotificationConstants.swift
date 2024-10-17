@@ -73,6 +73,10 @@ extension Notification.Name {
 
     public static let OpenClearRecentHistory = Notification.Name("OpenClearRecentHistory")
 
+    public static let RemoteTabNotificationTapped = Notification.Name("RemoteTabNotificationTapped")
+
+    public static let OpenRecentlyClosedTabs = Notification.Name("OpenRecentlyClosedTabs")
+
     public static let LibraryPanelStateDidChange = Notification.Name("LibraryPanelStateDidChange")
 
     public static let SearchSettingsChanged = Notification.Name("SearchSettingsChanged")

@@ -133,8 +133,13 @@ class SyncDataDisplay {
         }
 
         switch message {
-        case .commandReceived(let tab):
-            displayNewSentTabNotification(tab: tab)
+        case .commandReceived(let command):
+            switch command {
+                case .tabReceived(let tab):
+                    displayNewSentTabNotification(tab: tab)
+                case .tabsClosed(let urls):
+                    displayClosedTabNotification(urls: urls)
+                }
         case .deviceConnected(let deviceName):
             displayDeviceConnectedNotification(deviceName)
         case .deviceDisconnected:
@@ -212,6 +217,18 @@ class SyncDataDisplay {
                 body: url.absoluteDisplayExternalString
             )
         }
+    }
+
+    func displayClosedTabNotification(urls: [String]) {
+        notificationContent.userInfo[NotificationCloseTabs.closeTabsKey]
+        = [NotificationCloseTabs.messageIdKey: "closeRemoteTab"]
+
+        notificationContent.categoryIdentifier = NotificationCloseTabs.notificationCategoryId
+
+        presentNotification(
+            title: String(format: .CloseTab_ArrivingNotification_title, "\(urls.count)"),
+            body: .CloseTabViewActionTitle
+        )
     }
 
     func presentNotification(title: String, body: String, titleArg: String? = nil, bodyArg: String? = nil) {

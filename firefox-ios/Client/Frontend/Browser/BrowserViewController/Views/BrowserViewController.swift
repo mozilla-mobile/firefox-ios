@@ -848,6 +848,12 @@ class BrowserViewController: UIViewController,
             selector: #selector(handlePageZoomLevelUpdated),
             name: .PageZoomLevelUpdated,
             object: nil)
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(openRecentlyClosedTabs),
+            name: .RemoteTabNotificationTapped,
+            object: nil
+        )
     }
 
     private func switchToolbarIfNeeded() {
@@ -3588,6 +3594,14 @@ extension BrowserViewController: HomePanelDelegate {
     func homePanelDidRequestBookmarkToast(url: URL?, action: BookmarkAction) {
         showBookmarkToast(bookmarkURL: url, action: action)
     }
+
+    @objc
+    func openRecentlyClosedTabs() {
+        DispatchQueue.main.async {
+            self.navigationHandler?.show(homepanelSection: .history)
+            self.notificationCenter.post(name: .OpenRecentlyClosedTabs)
+        }
+     }
 }
 
 // MARK: - SearchViewController

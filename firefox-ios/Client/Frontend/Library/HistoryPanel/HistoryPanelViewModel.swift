@@ -83,7 +83,8 @@ class HistoryPanelViewModel: FeatureFlaggable {
                                      Notification.Name.PrivateDataClearedHistory,
                                      Notification.Name.DynamicFontChanged,
                                      Notification.Name.DatabaseWasReopened,
-                                     Notification.Name.OpenClearRecentHistory]
+                                     Notification.Name.OpenClearRecentHistory,
+                                     Notification.Name.OpenRecentlyClosedTabs]
 
     // MARK: - Inits
 
