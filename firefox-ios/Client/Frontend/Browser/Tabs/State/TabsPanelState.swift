@@ -16,7 +16,7 @@ struct TabsPanelState: ScreenState, Equatable {
     var isPrivateMode: Bool
     var tabs: [TabModel]
     var inactiveTabs: [InactiveTabsModel]
-    var isInactiveTabsExpanded: Bool    
+    var isInactiveTabsExpanded: Bool
     var windowUUID: WindowUUID
     var scrollState: ScrollState?
     var didTapAddTab: Bool
@@ -61,7 +61,7 @@ struct TabsPanelState: ScreenState, Equatable {
          isPrivateMode: Bool,
          tabs: [TabModel],
          inactiveTabs: [InactiveTabsModel],
-         isInactiveTabsExpanded: Bool,         
+         isInactiveTabsExpanded: Bool,
          scrollState: ScrollState? = nil,
          didTapAddTab: Bool = false,
          urlRequest: URLRequest? = nil) {
