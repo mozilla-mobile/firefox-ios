@@ -15,4 +15,15 @@ struct InactiveTabsModel: Equatable {
 
         return url.absoluteString
     }
+
+    static func emptyState(
+        tabUUID: TabUUID,
+        title: String
+    ) -> InactiveTabsModel {
+        return InactiveTabsModel(
+            tabUUID: tabUUID,
+            title: title,
+            url: nil
+        )
+    }
 }

@@ -326,8 +326,8 @@ final class NimbusFeatureFlagLayer {
     }
 
     private func checkMenuRefactorHint(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.menuRefactorFeature.value()
-        return config.menuHint
+//        let config = nimbus.features.menuRefactorFeature.value()
+        return false // config.menuHint
     }
 
     private func checkMicrosurveyFeature(from nimbus: FxNimbus) -> Bool {
