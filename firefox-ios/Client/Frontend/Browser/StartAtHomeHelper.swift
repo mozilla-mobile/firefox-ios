@@ -44,23 +44,23 @@ class StartAtHomeHelper: FeatureFlaggable {
     /// the user's last activity and whether, based on their settings, Start at Home feature
     /// should perform its function.
     public func shouldStartAtHome() -> Bool {
-            let setting = startAtHomeSetting
+        let setting = startAtHomeSetting
 
-            let lastActiveTimestamp = UserDefaults.standard.object(forKey: "LastActiveTimestamp") as? Date ?? Date()
-            let dateComponents = Calendar.current.dateComponents([.hour, .second],
-                                                                 from: lastActiveTimestamp,
-                                                                 to: Date())
+        let lastActiveTimestamp = UserDefaults.standard.object(forKey: "LastActiveTimestamp") as? Date ?? Date()
+        let dateComponents = Calendar.current.dateComponents([.hour, .second],
+                                                             from: lastActiveTimestamp,
+                                                             to: Date())
 
-            switch setting {
-            case .afterFourHours:
-                return 4 >= dateComponents.hour ?? 0
-            case .always:
-                // When "always", time to open new home should be immediate, no delay
-                return true
-            case .disabled:
-                return false
-            }
+        switch setting {
+        case .afterFourHours:
+            return 4 >= dateComponents.hour ?? 0
+        case .always:
+            // When "always", time to open new home should be immediate, no delay
+            return true
+        case .disabled:
+            return false
         }
+    }
 
     /// Looks to see if the user already has a homepage tab open (as per their preferences)
     /// and, if they do, returns that tab, in order to avoid opening multiple duplicate
