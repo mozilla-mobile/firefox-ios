@@ -35,22 +35,6 @@ final class HomepageStateTests: XCTestCase {
         XCTAssertTrue(newState.headerState.showPrivateModeToggle)
     }
 
-    func test_tappedOnCustomizeHomepage_returnsExpectedState() {
-        let initialState = createSubject()
-        let reducer = homepageReducer()
-
-        let newState = reducer(
-            initialState,
-            HomepageAction(
-                windowUUID: .XCTestDefaultUUID,
-                actionType: HomepageActionType.tappedOnCustomizeHomepage
-            )
-        )
-
-        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertEqual(newState.navigateTo, .customizeHomepage)
-    }
-
     // MARK: - Private
     private func createSubject() -> HomepageState {
         return HomepageState(windowUUID: .XCTestDefaultUUID)

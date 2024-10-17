@@ -68,6 +68,7 @@ class LabelButtonHeaderView: UICollectionReusableView,
 
         stackViewLeadingConstraint = stackView.leadingAnchor.constraint(equalTo: leadingAnchor,
                                                                         constant: UX.leadingInset)
+
         stackViewLeadingConstraint?.isActive = true
 
         NSLayoutConstraint.activate([
