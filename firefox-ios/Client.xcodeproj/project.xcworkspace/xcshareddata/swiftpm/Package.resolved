@@ -95,13 +95,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mozilla/rust-components-swift.git",
       "state" : {
-<<<<<<< HEAD
-        "revision" : "2e82cebc4fc89afbb3b2e880eccf5243e401b0e2",
-        "version" : "132.0.0"
-=======
         "revision" : "e535bbe6d66996f32d0e4f632e9d8588372cd489",
         "version" : "133.0.20241009050322"
->>>>>>> 5a0621db2 (Refactor [v133] Auto update SPM with latest rust-component 133.0.20241009050322 (#22462))
       }
     },
     {

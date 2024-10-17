@@ -7159,11 +7159,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-<<<<<<< HEAD
-				version = 132.0.0;
-=======
 				version = 133.0.20241009050322;
->>>>>>> 5a0621db2 (Refactor [v133] Auto update SPM with latest rust-component 133.0.20241009050322 (#22462))
 			};
 		};
 		8A0E7F2C2BA0F0E0006BC6B6 /* XCRemoteSwiftPackageReference "Fuzi" */ = {
