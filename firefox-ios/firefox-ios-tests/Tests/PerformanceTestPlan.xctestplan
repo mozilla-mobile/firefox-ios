@@ -73,6 +73,7 @@
         "SyncUITests",
         "TabCounterTests",
         "ThirdPartySearchTest",
+        "TodayWidgetTests",
         "ToolbarMenuTests",
         "ToolbarTests",
         "TopTabsTest",

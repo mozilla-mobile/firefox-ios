@@ -90,6 +90,7 @@
         "SiteLoadTest",
         "SyncUITests",
         "ThirdPartySearchTest",
+        "TodayWidgetTests",
         "TopTabsTestIpad",
         "TrackingProtectionTests",
         "URLValidationTests",
