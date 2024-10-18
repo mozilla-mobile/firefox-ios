@@ -245,6 +245,8 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
     private func promptSave(_ login: LoginEntry) {
         guard login.isValid.isSuccess else { return }
 
+        clearStoredPassword()
+
         let promptMessage: String
         let https = "^https:\\/\\/"
         let url = login.hostname.replacingOccurrences(of: https, with: "", options: .regularExpression, range: nil)
@@ -267,11 +269,6 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
         ) { bar in
             self.tab?.removeSnackbar(bar)
             self.snackBar = nil
-            guard let windowUUID = self.tab?.windowUUID else {return}
-            let action = PasswordGeneratorAction(windowUUID: windowUUID,
-                                                 actionType: PasswordGeneratorActionType.clearGeneratedPasswordForSite,
-                                                 currentTab: self.tab)
-            store.dispatch(action)
             return
         }
         let save = SnackButton(
@@ -283,11 +280,6 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
             self.snackBar = nil
             self.sendLoginsSavedTelemetry()
             self.profile.logins.addLogin(login: login, completionHandler: { _ in })
-            guard let windowUUID = self.tab?.windowUUID else {return}
-            let action = PasswordGeneratorAction(windowUUID: windowUUID,
-                                                 actionType: PasswordGeneratorActionType.clearGeneratedPasswordForSite,
-                                                 currentTab: self.tab)
-            store.dispatch(action)
         }
 
         applyTheme(for: dontSave, save)
@@ -347,6 +339,15 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
         else { return }
 
         currentRequestId = requestId
+    }
+
+    private func clearStoredPassword() {
+        if let windowUUID = self.tab?.windowUUID {
+            let action = PasswordGeneratorAction(windowUUID: windowUUID,
+                                                 actionType: PasswordGeneratorActionType.clearGeneratedPasswordForSite,
+                                                 currentTab: self.tab)
+            store.dispatch(action)
+        }
     }
 
     public static func fillLoginDetails(with tab: Tab,
