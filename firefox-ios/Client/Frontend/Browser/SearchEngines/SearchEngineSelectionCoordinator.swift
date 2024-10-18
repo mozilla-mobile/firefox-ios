@@ -28,10 +28,6 @@ class SearchEngineSelectionCoordinator: BaseCoordinator, FeatureFlaggable {
         )
     }
 
-    func dismissDetailViewController() {
-        router.popViewController(animated: true)
-    }
-
     func navigateToSearchSettings(animated: Bool) {
         router.dismiss(animated: animated, completion: { [weak self] in
             guard let self else { return }

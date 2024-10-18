@@ -1078,6 +1078,20 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(mockRouter.presentedViewController?.children.first is AppSettingsTableViewController)
     }
 
+    // MARK: - Menu
+    func testShowSearchEngineSelection_addsSearchEngineSelectionCoordinator() {
+        let subject = createSubject()
+        XCTAssertTrue(subject.childCoordinators.isEmpty)
+
+        subject.showSearchEngineSelection(forSourceView: UIView())
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is SearchEngineSelectionCoordinator)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is DismissableNavigationViewController)
+        XCTAssertTrue(mockRouter.presentedViewController?.children.first is SearchEngineSelectionViewController)
+    }
+
     // MARK: - Microsurvey
     func testShowMicrosurvey_addsMicrosurveyCoordinator() {
         let subject = createSubject()
