@@ -6,8 +6,8 @@ import Foundation
 import Storage
 import Shared
 
-// Top site UI class, used in the home top site section
-final class TopSite {
+/// Top site UI class, used in the homepage top site section
+final class TopSite: Hashable, Equatable {
     var site: Site
     var title: String
 
@@ -71,5 +71,15 @@ final class TopSite {
         }
 
         return "history-based"
+    }
+
+    // MARK: - Equatable
+    static func == (lhs: TopSite, rhs: TopSite) -> Bool {
+        lhs.site == rhs.site
+    }
+
+    // MARK: - Hashable
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(self.site)
     }
 }
