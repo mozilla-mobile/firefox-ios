@@ -69,6 +69,7 @@ extension BrowserViewController: WKUIDelegate {
             logger.log("Javascript message alert is queued.", level: .info, category: .webview)
 
             promptingTab.queueJavascriptAlertPrompt(messageAlert)
+            completionHandler()
         }
     }
 
