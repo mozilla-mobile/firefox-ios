@@ -10,7 +10,10 @@ import Shared
 
 final class NativeErrorPageViewController: UIViewController,
                                            Themeable,
-                                           ContentContainable {
+                                           ContentContainable,
+                                           StoreSubscriber {
+    typealias SubscriberStateType = NativeErrorPageState
+
     private let model: ErrorPageModel
     private let windowUUID: WindowUUID
 
@@ -24,6 +27,7 @@ final class NativeErrorPageViewController: UIViewController,
 
     private var overlayManager: OverlayModeManager
     var contentType: ContentType = .nativeErrorPage
+    private var nativeErrorPageState: NativeErrorPageState
 
     // MARK: UI Elements
     private struct UX {
@@ -109,15 +113,43 @@ final class NativeErrorPageViewController: UIViewController,
         self.themeManager = themeManager
         self.overlayManager = overlayManager
         self.notificationCenter = notificationCenter
+        nativeErrorPageState = NativeErrorPageState(windowUUID: windowUUID)
+
         super.init(
             nibName: nil,
             bundle: nil
         )
 
+        subscribeToRedux()
         configureUI()
         setupLayout()
         adjustConstraints()
         showViewForCurrentOrientation()
+    }
+
+    // MARK: Redux
+    func newState(state: NativeErrorPageState) {
+        nativeErrorPageState = state
+    }
+
+    func subscribeToRedux() {
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.showScreen,
+                                  screen: .nativeErrorPage)
+        store.dispatch(action)
+        let uuid = windowUUID
+        store.subscribe(self, transform: {
+            return $0.select({ appState in
+                return NativeErrorPageState(appState: appState, uuid: uuid)
+            })
+        })
+    }
+
+    func unsubscribeFromRedux() {
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.closeScreen,
+                                  screen: .nativeErrorPage)
+        store.dispatch(action)
     }
 
     override func viewDidLoad() {
@@ -136,6 +168,10 @@ final class NativeErrorPageViewController: UIViewController,
         )
         adjustConstraints()
         showViewForCurrentOrientation()
+    }
+
+    deinit {
+        unsubscribeFromRedux()
     }
 
     // TODO: FXIOS-9639 #21237 [a11y] Verify accessibility for Voice Over, Dynamic text
