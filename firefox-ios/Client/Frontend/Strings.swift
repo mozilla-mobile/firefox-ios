@@ -4386,6 +4386,77 @@ extension String {
         }
     }
 
+    // MARK: - Unified Search
+    extension String {
+        public struct UnifiedSearch {
+            public struct SearchEngineSelection {
+                public static let TopTitle = MZLocalizedString(
+                    key: "UnifiedSearch.SearchEngineSelection.TopTitle.Title.v134",
+                    tableName: "SearchEngineSelection",
+                    value: "This time search in:", // TODO Waiting on designer to confirm this string
+                    comment: "When the user taps the search engine icon in the toolbar, a popup with a list of alternative search engines appears. This is the title for the popup.")
+
+                public static let SearchSettings = MZLocalizedString(
+                    key: "UnifiedSearch.SearchEngineSelection.SearchSettings.Title.v134",
+                    tableName: "SearchEngineSelection",
+                    value: "Search Settings",
+                    comment: "When the user taps the search engine icon in the toolbar, a popup with a list of alternative search engines appears. This string is the label for the button at the bottom of the list. When this row is tapped, the app's search settings screen appears.")
+
+                public struct AccessibilityLabels {
+                    public static let TopTitleLabel = MZLocalizedString(
+                        key: "UnifiedSearch.SearchEngineSelection.AccessibilityLabels.TopTitle.Label.v134"
+                        tableName: "SearchEngineSelection",
+                        value: "This time search in", // TODO Need official accessibility strings
+                        comment: "When the user taps the search engine icon in the toolbar, a popup with a list of alternative search engines appears. This is the accessibility label for the title of that popup.")
+
+                    public static let SearchSettingsLabel = MZLocalizedString(
+                        key: "UnifiedSearch.SearchEngineSelection.AccessibilityLabels.SearchSettings.Label.v134",
+                        tableName: "SearchEngineSelection",
+                        value: "Search Settings", // TODO Need official accessibility strings
+                        comment: "When the user taps the search engine icon in the toolbar, a popup with a list of alternative search engines appears. This string is the label for the row at the bottom of the list. When this row is tapped, the app's search settings screen appears.")
+
+                    public static let SearchSettingsHint = MZLocalizedString(
+                        key: "UnifiedSearch.SearchEngineSelection.AccessibilityLabels.SearchSettings.Hint.v134",
+                        tableName: "SearchEngineSelection",
+                        value: "Opens the search engine settings screen", // TODO Need official accessibility strings
+                        comment: "When the user taps the search engine icon in the toolbar, a popup with a list of alternative search engines appears. This string is the label for the row at the bottom of the list. When tapped, this button opens the app's search settings screen.")
+
+                    public static let CloseButtonLabel = MZLocalizedString(
+                        key: "UnifiedSearch.SearchEngineSelection.AccessibilityLabels.CloseButton.Label.v134",
+                        tableName: "SearchEngineSelection",
+                        value: "Close", // TODO Need official accessibility strings
+                        comment: "When the user taps the search engine icon in the toolbar, a popup with a list of alternative search engines appears. This is the accessibility label for the popup's close button.")
+
+                    public static let SearchEngineDropDownButtonLabel = MZLocalizedString(
+                        key: "UnifiedSearch.SearchEngineSelection.AccessibilityLabels.SearchEngineDropDownButton.Label.v134",
+                        tableName: "SearchEngineSelection",
+                        value: "Close", // TODO Need official accessibility strings
+                        comment: "When the user taps the search engine icon in the toolbar, a popup with a list of alternative search engines appears. This is the accessibility label for the popup's close button.")
+
+                    public static let SearchEngineDropDownButtonHint = MZLocalizedString(
+                        key: "UnifiedSearch.SearchEngineSelection.AccessibilityLabels.SearchEngineDropDownButton.Hint.v134",
+                        tableName: "SearchEngineSelection",
+                        value: "Close", // TODO Need official accessibility strings
+                        comment: "When the user taps the search engine icon in the toolbar, a popup with a list of alternative search engines appears. This is the accessibility label for the popup's close button.")
+
+                    public static let CloseButtonHint = MZLocalizedString(
+                        key: "UnifiedSearch.SearchEngineSelection.AccessibilityLabels.CloseButton.Hint.v134",
+                        tableName: "SearchEngineSelection",
+                        value: "Closes the search engine selection", // TODO Need official accessibility strings
+                        comment: "When the user taps the search engine icon in the toolbar, a popup with a list of alternative search engines appears. This is the accessibility hint for what happens when the popup's close button is tapped. Tapping the button closes the popup.")
+
+                    // TODO Do we need a search engine row label if all the values are search engine names, not text strings?
+
+                    public static let AlternativeSearchEngineHint = MZLocalizedString(
+                        key: "UnifiedSearch.SearchEngineSelection.AccessibilityLabels.AlternativeSearchEngineLabel.Label.v134",
+                        tableName: "SearchEngineSelection",
+                        value: "Shows alternative search engine selection",  // TODO Need official accessibility strings
+                        comment: "This is the accessibility hint for what happens when the user taps the search engine icon in the toolbar. Tapping the icon will popup the list of alternative search engines.")
+                }
+            }
+        }
+    }
+
     // MARK: - LegacyAppMenu
     // These strings may still be in use, thus have not been moved to the `OldStrings` struct
     public struct LegacyAppMenu {
