@@ -21,6 +21,8 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     private var onLongPress: (() -> Void)?
     private weak var delegate: LocationViewDelegate?
     private var isUnifiedSearchEnabled = false
+    private var safeListedURLImageName: String?
+    private var lockIconImageName: String?
 
     private var isEditing = false
     private var isURLTextFieldEmpty: Bool {
@@ -48,6 +50,8 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
 
     private lazy var urlTextFieldColor: UIColor = .black
     private lazy var urlTextFieldSubdomainColor: UIColor = .clear
+    private lazy var lockIconImageColor: UIColor = .clear
+    private lazy var safeListedURLImageColor: UIColor = .clear
     private lazy var gradientLayer = CAGradientLayer()
     private lazy var gradientView: UIView = .build()
 
@@ -315,15 +319,32 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
 
     // MARK: - `lockIconButton` Configuration
     private func configureLockIconButton(_ state: LocationViewState) {
-        guard let lockIconImageName = state.lockIconImageName else {
+        lockIconImageName = state.lockIconImageName
+        safeListedURLImageName = state.safeListedURLImageName
+        guard lockIconImageName != nil else {
             updateWidthForLockIcon(0)
             return
         }
         updateWidthForLockIcon(UX.lockIconImageViewSize.width)
-
-        let lockImage = UIImage(named: lockIconImageName)?.withRenderingMode(.alwaysTemplate)
-        lockIconButton.setImage(lockImage, for: .normal)
         onTapLockIcon = state.onTapLockIcon
+
+        setLockIconImage()
+    }
+
+    private func setLockIconImage() {
+        guard let lockIconImageName else { return }
+        var lockImage: UIImage?
+
+        if let safeListedURLImageName {
+            lockImage = UIImage(named: lockIconImageName)?.withTintColor(lockIconImageColor)
+            if let dotImage = UIImage(named: safeListedURLImageName)?.withTintColor(safeListedURLImageColor) {
+                let image = lockImage!.overlayWith(image: dotImage, modifier: 0.4, origin: CGPoint(x: 15, y: 15))
+                lockIconButton.setImage(image, for: .normal)
+            }
+        } else {
+            lockImage = UIImage(named: lockIconImageName)?.withRenderingMode(.alwaysTemplate)
+            lockIconButton.setImage(lockImage, for: .normal)
+        }
     }
 
     // MARK: - Gesture Recognizers
@@ -417,6 +438,9 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         lockIconButton.tintColor = colors.iconPrimary
         lockIconButton.backgroundColor = colors.layerSearch
         urlTextField.applyTheme(theme: theme)
+        lockIconImageColor = colors.iconPrimary
+        safeListedURLImageColor = colors.iconAccentBlue
+        setLockIconImage()
     }
 
     // MARK: - UIGestureRecognizerDelegate
@@ -426,5 +450,22 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     ) -> Bool {
         // When long pressing a button make sure the textfield's long press gesture is not triggered
         return !(otherGestureRecognizer.view is UIButton)
+    }
+}
+
+fileprivate extension UIImage {
+    func overlayWith(image: UIImage,
+                     modifier: CGFloat = 0.35,
+                     origin: CGPoint = CGPoint(x: 15, y: 16)) -> UIImage {
+        let newSize = CGSize(width: size.width, height: size.height)
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
+        draw(in: CGRect(origin: CGPoint.zero, size: newSize))
+        image.draw(in: CGRect(origin: origin,
+                              size: CGSize(width: size.width * modifier,
+                                           height: size.height * modifier)))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+
+        return newImage
     }
 }
