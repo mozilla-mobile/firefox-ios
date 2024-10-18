@@ -67,6 +67,9 @@ final class InactiveTabsTest: BaseTestCase {
 
         // Return to tabs tray
         navigator.goto(TabTray)
+        app.otherElements["Tabs Tray"].swipeDown()
+        app.otherElements["Tabs Tray"].swipeDown()
+        app.otherElements["Tabs Tray"].swipeDown()
         mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts["Homepage"])
         mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts["Google"])
         mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts["Facebook - log in or sign up"])
@@ -106,12 +109,16 @@ final class InactiveTabsTest: BaseTestCase {
         app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerView].tap()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerButton])
         mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts["Google"])
-        mozWaitForElementToNotExist(app.otherElements["Tabs Tray"].staticTexts["Homepage"])
+        if !iPad() {
+            // The active tabs on iPhone is so far down that "Homepage" is invisible.
+            // iPad is large enough that "Homepage" is still visible"
+            mozWaitForElementToNotExist(app.otherElements["Tabs Tray"].staticTexts["Homepage"])
+        }
 
         // Swipe on a tab from the list to delete
         app.otherElements["Tabs Tray"].staticTexts["Google"].swipeLeft()
-        mozWaitForElementToExist(app.buttons["Close"])
-        app.buttons["Close"].tap() // Note: No AccessibilityIdentifier
+        mozWaitForElementToExist(app.otherElements["Tabs Tray"].buttons["Close"])
+        app.otherElements["Tabs Tray"].buttons["Close"].tap() // Note: No AccessibilityIdentifier
         mozWaitForElementToNotExist(app.otherElements["Tabs Tray"].staticTexts["Google"])
         mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts["Facebook - log in or sign up"])
         mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts["Amazon.com. Spend less. Smile more."])
