@@ -244,7 +244,7 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
-        mozWaitForElementToExist(app.cells[TopSites.itemCell], timeout: 20)
+        mozWaitForElementToExist(app.cells[TopSites.itemCell])
         let numberOfTopSites = app.collectionViews.cells.matching(identifier: TopSites.itemCell).count
         mozWaitForElementToExist(app.collectionViews.cells.matching(identifier: TopSites.itemCell).firstMatch)
         XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites, "The number of Top Sites is not correct")
