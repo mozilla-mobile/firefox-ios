@@ -245,7 +245,7 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
     private func promptSave(_ login: LoginEntry) {
         guard login.isValid.isSuccess else { return }
 
-        clearStoredPassword()
+        clearStoredPasswordPassGen()
 
         let promptMessage: String
         let https = "^https:\\/\\/"
@@ -341,7 +341,7 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
         currentRequestId = requestId
     }
 
-    private func clearStoredPassword() {
+    private func clearStoredPasswordPassGen() {
         if let windowUUID = self.tab?.windowUUID {
             let action = PasswordGeneratorAction(windowUUID: windowUUID,
                                                  actionType: PasswordGeneratorActionType.clearGeneratedPasswordForSite,
