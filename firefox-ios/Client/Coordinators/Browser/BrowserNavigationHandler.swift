@@ -98,7 +98,7 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     func showMainMenu()
 
     /// Shows the toolbar's search engine selection bottom sheet (iPhone) or popup (iPad)
-    func showSearchEngineSelection()
+    func showSearchEngineSelection(forSourceView sourceView: UIView)
 }
 
 extension BrowserNavigationHandler {
