@@ -16,7 +16,6 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
 
     private var urlAbsolutePath: String?
     private var searchTerm: String?
-    private var notifyTextChanged: (() -> Void)?
     private var onTapLockIcon: ((UIButton) -> Void)?
     private var onLongPress: (() -> Void)?
     private weak var delegate: LocationViewDelegate?
@@ -92,14 +91,6 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         setupLayout()
         setupGradientLayer()
         addLongPressGestureRecognizer()
-
-        urlTextField.addTarget(self, action: #selector(LocationView.textDidChange), for: .editingChanged)
-        notifyTextChanged = { [self] in
-            guard urlTextField.isEditing else { return }
-
-            urlAbsolutePath = urlTextField.text?.lowercased().trimmingCharacters(in: .whitespaces)
-            delegate?.locationViewDidEnterText(urlAbsolutePath ?? "")
-        }
     }
 
     required init?(coder: NSCoder) {
@@ -334,11 +325,6 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     }
 
     // MARK: - Selectors
-    @objc
-    func textDidChange(_ textField: UITextField) {
-        notifyTextChanged?()
-    }
-
     @objc
     private func didTapLockIcon() {
         onTapLockIcon?(lockIconButton)

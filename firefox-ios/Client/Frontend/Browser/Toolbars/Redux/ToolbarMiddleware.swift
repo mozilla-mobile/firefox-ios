@@ -146,6 +146,13 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
         case .qrCode:
             toolbarTelemetry.qrCodeButtonTapped(isPrivate: toolbarState.isPrivateMode)
+
+            if toolbarState.addressToolbar.isEditing {
+                let toolbarAction = ToolbarAction(windowUUID: action.windowUUID,
+                                                  actionType: ToolbarActionType.cancelEdit)
+                store.dispatch(toolbarAction)
+            }
+
             let action = GeneralBrowserAction(windowUUID: action.windowUUID,
                                               actionType: GeneralBrowserActionType.showQRcodeReader)
             store.dispatch(action)
