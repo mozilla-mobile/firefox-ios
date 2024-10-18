@@ -145,10 +145,7 @@ class TabDisplayView: UIView,
         guard !collectionView.indexPathsForFullyVisibleItems.contains(indexPath) else { return }
 
         // Scrolling to an invalid cell will crash the app, so check indexPath first
-        guard collectionView.isValid(indexPath: indexPath) else {
-            assertionFailure("You cannot scroll to an invalid indexPath: \(indexPath)")
-            return
-        }
+        guard collectionView.isValid(indexPath: indexPath) else { return }
 
         collectionView.scrollToItem(at: indexPath,
                                     at: .centeredVertically,
