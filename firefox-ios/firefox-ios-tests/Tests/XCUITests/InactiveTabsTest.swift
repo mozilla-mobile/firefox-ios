@@ -67,7 +67,6 @@ final class InactiveTabsTest: BaseTestCase {
 
         // Return to tabs tray
         navigator.goto(TabTray)
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"])
         app.otherElements["Tabs Tray"].swipeDown()
         app.otherElements["Tabs Tray"].swipeDown()
         app.otherElements["Tabs Tray"].swipeDown()
