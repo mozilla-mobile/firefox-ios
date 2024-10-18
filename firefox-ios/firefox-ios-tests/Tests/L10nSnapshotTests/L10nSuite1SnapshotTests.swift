@@ -216,17 +216,14 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         navigator.nowAt(NewTabScreen)
         navigator.goto(TrackingProtectionSettings)
 
-        mozWaitForElementToExist(app.cells["Settings.TrackingProtectionOption.BlockListBasic"])
-        app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons.firstMatch.tap()
+        app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons.firstMatch.waitAndTap()
         snapshot("TrackingProtectionBasicMoreInfo-01")
 
-        mozWaitForElementToExist(app.navigationBars["Client.TPAccessoryInfo"])
         // Go back to TP settings
-        app.navigationBars["Client.TPAccessoryInfo"].buttons.firstMatch.tap()
+        app.navigationBars["Client.TPAccessoryInfo"].buttons.firstMatch.waitAndTap()
 
         // See Strict mode info
-        mozWaitForElementToExist(app.cells["Settings.TrackingProtectionOption.BlockListStrict"])
-        app.cells["Settings.TrackingProtectionOption.BlockListStrict"].buttons.firstMatch.tap()
+        app.cells["Settings.TrackingProtectionOption.BlockListStrict"].buttons.firstMatch.waitAndTap()
         app.tables.cells.staticTexts.firstMatch.swipeUp()
         snapshot("TrackingProtectionStrictMoreInfo-02")
     }

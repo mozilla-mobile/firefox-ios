@@ -44,8 +44,7 @@ class MultiWindowTests: IpadOnlyTestCase {
         let topSites = AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell
         let homeButtom = AccessibilityIdentifiers.Toolbar.homeButton
         // A new tab is opened in the same window
-        mozWaitForElementToExist(app.collectionViews.cells.matching(identifier: topSites).firstMatch)
-        app.collectionViews.cells.matching(identifier: topSites).firstMatch.tap()
+        app.collectionViews.cells.matching(identifier: topSites).firstMatch.waitAndTap()
         mozWaitForElementToExist(app.buttons[homeButtom])
         app.buttons.matching(identifier: menuButton).element(boundBy: 0).tap()
         mozWaitForElementToExist(app.tables.otherElements[newTab])
@@ -54,8 +53,7 @@ class MultiWindowTests: IpadOnlyTestCase {
         let tabButtonSecondWindow = app.buttons.matching(identifier: tabsButtonIdentifier).element(boundBy: 0)
         XCTAssertEqual(tabButtonSecondWindow.value as! String, "2", "Number of tabs opened should be equal to 2")
         // A new tab is opened in the same window
-        mozWaitForElementToExist(app.collectionViews.cells.matching(identifier: topSites).element(boundBy: 6))
-        app.collectionViews.cells.matching(identifier: topSites).element(boundBy: 6).tap()
+        app.collectionViews.cells.matching(identifier: topSites).element(boundBy: 6).waitAndTap()
         mozWaitForElementToExist(app.buttons[homeButtom])
         app.buttons.matching(identifier: menuButton).element(boundBy: 1).tap()
         app.tables.otherElements[newTab].tap()
@@ -71,18 +69,15 @@ class MultiWindowTests: IpadOnlyTestCase {
     }
 
     private func splitViewFromHomeScreen() {
-        mozWaitForElementToExist(dotMenu)
-        dotMenu.tap()
-        mozWaitForElementToExist(splitView)
-        splitView.tap()
+        dotMenu.waitAndTap()
+        splitView.waitAndTap()
         springboard.icons.elementContainingText("split view with Fennec").tap()
     }
 
     // Param windowsNumber - number of tab windows to open from switcher
     private func openWindowFromTabSwitcher(windowsNumber: Int) {
         for  _ in 1...windowsNumber {
-            mozWaitForElementToExist(dotMenu)
-            dotMenu.tap()
+            dotMenu.waitAndTap()
             let cardOrgMozillaIosFennecButton = springboard.buttons["card:org.mozilla.ios.Fennec:"]
             cardOrgMozillaIosFennecButton.tap()
         }
@@ -90,10 +85,8 @@ class MultiWindowTests: IpadOnlyTestCase {
 
     // Param windowToClose - 0 for the first window, 1 for the second window
     func closeSplitViewWindow(windowToClose: Int) {
-        mozWaitForElementToExist(dotMenuIdentifier.element(boundBy: windowToClose))
-        dotMenuIdentifier.element(boundBy: windowToClose).tap()
-        mozWaitForElementToExist(springboard.buttons["top-affordance-close-window"])
-        springboard.buttons["top-affordance-close-window"].tap()
+        dotMenuIdentifier.element(boundBy: windowToClose).waitAndTap()
+        springboard.buttons["top-affordance-close-window"].waitAndTap()
     }
 
     // Coudn't find a way to select a tab from switcher

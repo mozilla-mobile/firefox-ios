@@ -90,8 +90,7 @@ class HomePageSettingsUITests: BaseTestCase {
 
         // Now check open home page should load the previously saved home page
         let homePageMenuItem = app.buttons[AccessibilityIdentifiers.Toolbar.homeButton]
-        mozWaitForElementToExist(homePageMenuItem)
-        homePageMenuItem.tap()
+        homePageMenuItem.waitAndTap()
         waitUntilPageLoad()
         mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "example")
     }
@@ -114,8 +113,7 @@ class HomePageSettingsUITests: BaseTestCase {
             textField.press(forDuration: 3)
             nrOfTaps -= 1
         }
-        mozWaitForElementToExist(app.menuItems["Paste"])
-        app.menuItems["Paste"].tap()
+        app.menuItems["Paste"].waitAndTap()
         mozWaitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
         // Check that the webpage has been correctly copied into the correct field
         mozWaitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: websiteUrl1)
@@ -231,10 +229,7 @@ class HomePageSettingsUITests: BaseTestCase {
         mozWaitForElementToExist(app.otherElements
             .cells[AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell]
             .staticTexts[urlExampleLabel])
-        mozWaitForElementToExist(
-            app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn]
-        )
-        app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].tap()
+        app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].waitAndTap()
         // Tab tray is open with recently open tab
         if !iPad() {
             mozWaitForElementToExist(
@@ -422,8 +417,7 @@ class HomePageSettingsUITests: BaseTestCase {
     private func validateNumberOfTopSitesDisplayed(row: Int, minBoundary: Int, maxBoundary: Int) {
         navigator.goto(HomeSettings)
         app.staticTexts["Shortcuts"].tap()
-        mozWaitForElementToExist(app.staticTexts["Rows"])
-        app.staticTexts["Rows"].tap()
+        app.staticTexts["Rows"].waitAndTap()
         let expectedRowValues = ["1", "2", "3", "4"]
         for i in 0...3 {
             XCTAssertEqual(app.tables.cells.element(boundBy: i).label, expectedRowValues[i])
@@ -443,8 +437,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.openURL(website)
         waitUntilPageLoad()
         navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.pin])
-        app.tables.otherElements[StandardImageIdentifiers.Large.pin].tap()
+        app.tables.otherElements[StandardImageIdentifiers.Large.pin].waitAndTap()
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.performAction(Action.CloseURLBarOpen)

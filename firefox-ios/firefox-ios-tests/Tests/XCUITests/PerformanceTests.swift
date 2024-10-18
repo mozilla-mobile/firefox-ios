@@ -96,10 +96,8 @@ class PerformanceTests: BaseTestCase {
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
             // go to tab tray
-            mozWaitForElementToExist(tabsButton)
-            tabsButton.tap()
-            mozWaitForElementToExist(doneButton)
-            doneButton.tap()
+            tabsButton.waitAndTap()
+            doneButton.waitAndTap()
         }
         // Handle termination ourselves as it sometimes hangs when given to xctrunner
         app.terminate()
@@ -120,10 +118,8 @@ class PerformanceTests: BaseTestCase {
             XCTStorageMetric(), // to measure storage consuming
             XCTMemoryMetric()]) {
             // go to tab tray
-            mozWaitForElementToExist(tabsButton)
-            tabsButton.tap()
-            mozWaitForElementToExist(doneButton)
-            doneButton.tap()
+            tabsButton.waitAndTap()
+            doneButton.waitAndTap()
         }
         // Handle termination ourselves as it sometimes hangs when given to xctrunner
         app.terminate()

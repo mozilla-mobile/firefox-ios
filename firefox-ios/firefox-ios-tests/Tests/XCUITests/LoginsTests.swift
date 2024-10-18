@@ -28,8 +28,7 @@ class LoginTest: BaseTestCase {
     private func saveLogin(givenUrl: String) {
         navigator.openURL(givenUrl)
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.buttons["submit"])
-        app.buttons["submit"].tap()
+        app.buttons["submit"].waitAndTap()
         mozWaitForElementToExist(app.buttons["SaveLoginPrompt.saveLoginButton"])
         app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
     }
@@ -149,10 +148,9 @@ class LoginTest: BaseTestCase {
         app.buttons["Edit"].tap()
 
         mozWaitForElementToExist(app.buttons["Select All"])
-        mozWaitForElementToExist(app.staticTexts[domain])
         mozWaitForElementToExist(app.staticTexts[domainLogin])
 
-        app.staticTexts[domain].tap()
+        app.staticTexts[domain].waitAndTap()
         mozWaitForElementToExist(app.buttons["Deselect All"])
         mozWaitForElementToExist(app.buttons["Delete"])
     }
@@ -161,9 +159,8 @@ class LoginTest: BaseTestCase {
     func testDeleteLogin() {
         saveLogin(givenUrl: testLoginPage)
         openLoginsSettings()
-        mozWaitForElementToExist(app.staticTexts[domain])
         mozWaitForElementToExist(app.staticTexts[domainLogin])
-        app.staticTexts[domain].tap()
+        app.staticTexts[domain].waitAndTap()
         app.cells.staticTexts["Delete"].tap()
         mozWaitForElementToExist(app.alerts["Remove Password?"])
         app.alerts.buttons["Remove"].tap()
@@ -194,8 +191,7 @@ class LoginTest: BaseTestCase {
         app.tables["Login Detail List"].cells.elementContainingText("Username").tap()
         mozWaitForElementToExist(app.menuItems["Select All"])
         app.menuItems["Select All"].tap()
-        mozWaitForElementToExist(app.menuItems["Cut"])
-        app.menuItems["Cut"].tap()
+        app.menuItems["Cut"].waitAndTap()
         enterTextInField(typedText: "foo")
         waitForExistence(app.buttons["Done"])
         app.buttons["Done"].tap()
@@ -246,8 +242,7 @@ class LoginTest: BaseTestCase {
 
         // Submit form and choose to save the logins
         app.buttons["submit"].tap()
-        mozWaitForElementToExist(app.buttons["SaveLoginPrompt.saveLoginButton"])
-        app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
+        app.buttons["SaveLoginPrompt.saveLoginButton"].waitAndTap()
 
         // Clear Data and go to test page, fields should be filled in
         navigator.goto(SettingsScreen)

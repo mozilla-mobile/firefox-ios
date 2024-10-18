@@ -142,8 +142,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         // Workaround to be sure the snackbar disappears
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton])
-        app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.reloadButton].waitAndTap()
         navigator.goto(BrowserTabMenu)
         navigator.goto(RequestDesktopSite) // toggle off
         waitUntilPageLoad()

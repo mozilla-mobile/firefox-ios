@@ -26,8 +26,7 @@ class DownloadsTests: BaseTestCase {
             for _ in 0...list-1 {
                 mozWaitForElementToExist(app.tables["DownloadsTable"].cells.element(boundBy: 0))
                 app.tables["DownloadsTable"].cells.element(boundBy: 0).swipeLeft(velocity: 200)
-                mozWaitForElementToExist(app.tables.cells.buttons["Delete"])
-                app.tables.cells.buttons["Delete"].tap()
+                app.tables.cells.buttons["Delete"].waitAndTap()
             }
         }
         super.tearDown()
@@ -35,8 +34,7 @@ class DownloadsTests: BaseTestCase {
 
     private func deleteItem(itemName: String) {
         app.tables.cells.staticTexts[itemName].swipeLeft(velocity: 200)
-        mozWaitForElementToExist(app.tables.cells.buttons["Delete"])
-        app.tables.cells.buttons["Delete"].tap()
+        app.tables.cells.buttons["Delete"].waitAndTap()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306896
@@ -247,8 +245,7 @@ class DownloadsTests: BaseTestCase {
     // Smoketest
     func testToastButtonToGoToDownloads() {
         downloadFile(fileName: testFileName, numberOfDownloads: 1)
-        mozWaitForElementToExist(app.buttons["Downloads"])
-        app.buttons["Downloads"].tap()
+        app.buttons["Downloads"].waitAndTap()
         mozWaitForElementToExist(app.tables["DownloadsTable"])
         checkTheNumberOfDownloadedItems(items: 1)
     }
