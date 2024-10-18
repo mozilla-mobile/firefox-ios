@@ -1225,12 +1225,11 @@ class BrowserViewController: UIViewController,
     }
 
     fileprivate func showQueuedAlertIfAvailable() {
-        // See also: similar safety checks in `shouldDisplayJSAlertForWebView`
-        guard presentedViewController == nil else { return }
-        guard let queuedAlertInfo = tabManager.selectedTab?.dequeueJavascriptAlertPrompt() else { return }
-        let alertController = queuedAlertInfo.alertController()
-        alertController.delegate = self
-        present(alertController, animated: true, completion: nil)
+        if let queuedAlertInfo = tabManager.selectedTab?.dequeueJavascriptAlertPrompt() {
+            let alertController = queuedAlertInfo.alertController()
+            alertController.delegate = self
+            present(alertController, animated: true, completion: nil)
+        }
     }
 
     func resetBrowserChrome() {
@@ -3938,9 +3937,6 @@ extension BrowserViewController: TabTrayDelegate {
 
 extension BrowserViewController: JSPromptAlertControllerDelegate {
     func promptAlertControllerDidDismiss(_ alertController: JSPromptAlertController) {
-        logger.log("JS prompt was dismissed. Will dequeue next alert.",
-                   level: .info,
-                   category: .webview)
         showQueuedAlertIfAvailable()
     }
 }
