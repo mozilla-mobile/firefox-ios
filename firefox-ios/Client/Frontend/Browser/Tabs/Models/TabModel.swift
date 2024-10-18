@@ -15,11 +15,16 @@ struct TabModel: Equatable {
     let screenshot: UIImage?
     let hasHomeScreenshot: Bool
 
-    static func emptyTabState(tabUUID: TabUUID, title: String) -> TabModel {
+    static func emptyState(
+        tabUUID: TabUUID,
+        title: String,
+        isPrivate: Bool = false,
+        isSelected: Bool = false
+    ) -> TabModel {
         return TabModel(
             tabUUID: tabUUID,
-            isSelected: false,
-            isPrivate: false,
+            isSelected: isSelected,
+            isPrivate: isPrivate,
             isFxHomeTab: false,
             tabTitle: title,
             url: nil,

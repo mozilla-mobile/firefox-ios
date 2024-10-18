@@ -102,12 +102,24 @@ class TabDisplayView: UIView,
     }
 
     func newState(state: TabsPanelState) {
+        // We only want to respond to `TabsPanelState` for the current `panelType` (e.g. don't scroll the regular tabs for
+        // a private tabs scroll)
+        switch panelType {
+        case .tabs:
+            guard !state.isPrivateMode else { return }
+        case .privateTabs:
+            guard state.isPrivateMode else { return }
+        case .syncedTabs:
+            // This view does not handle synced tabs
+            return
+        }
+
         tabsState = state
 
         collectionView.reloadData()
 
-        if let index = state.scrollToIndex {
-            scrollToTab(index)
+        if let scrollState = state.scrollState {
+            scrollToTab(scrollState)
         }
 
         if state.didTapAddTab {
@@ -122,13 +134,22 @@ class TabDisplayView: UIView,
         }
     }
 
-    private func scrollToTab(_ index: Int) {
-        let section = shouldHideInactiveTabs ? 0 : 1
-        let indexPath = IndexPath(row: index,
-                                  section: section)
-            collectionView.scrollToItem(at: indexPath,
-                                        at: .centeredVertically,
-                                        animated: false)
+    private func scrollToTab(_ scrollState: TabsPanelState.ScrollState) {
+        let section: Int = scrollState.isInactiveTabSection ? 1 : 0
+        let indexPath = IndexPath(row: scrollState.toIndex, section: section)
+
+        // We cannot get the visible cells unless all layout operations have finished finished (e.g. after `reloadData()`)
+        collectionView.layoutIfNeeded()
+
+        // Only scroll to the view if it is not visible.
+        guard !collectionView.indexPathsForFullyVisibleItems.contains(indexPath) else { return }
+
+        // Scrolling to an invalid cell will crash the app, so check indexPath first
+        guard collectionView.isValid(indexPath: indexPath) else { return }
+
+        collectionView.scrollToItem(at: indexPath,
+                                    at: .centeredVertically,
+                                    animated: scrollState.withAnimation)
     }
 
     private func setupLayout() {

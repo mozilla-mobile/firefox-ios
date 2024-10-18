@@ -1832,6 +1832,7 @@
 		EBE26B57220C959D00D1D99A /* BrowserViewController+TabToolbarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE26B4E220C959D00D1D99A /* BrowserViewController+TabToolbarDelegate.swift */; };
 		EBF47E701F7979DF00899189 /* TelemetryWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBF47E6F1F7979DF00899189 /* TelemetryWrapper.swift */; };
 		EBFDB790211C83A5005CCA2F /* BrowserViewController+FindInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFDB787211C83A5005CCA2F /* BrowserViewController+FindInPage.swift */; };
+		ED28DAC92C45A95F00D2641C /* TabScrollBehaviorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED28DAC82C45A95F00D2641C /* TabScrollBehaviorModel.swift */; };
 		EDC3D34F2CB5E70500C62DE3 /* SearchEngineTestAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EDC3D34E2CB5E70500C62DE3 /* SearchEngineTestAssets.xcassets */; };
 		EDC3D3552CB70A3F00C62DE3 /* OpenSearchEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC3D3542CB70A3F00C62DE3 /* OpenSearchEngineTests.swift */; };
 		EDF567A02C8B51DC00FDB09D /* SiteImageView in Frameworks */ = {isa = PBXBuildFile; productRef = EDF5679F2C8B51DC00FDB09D /* SiteImageView */; };
@@ -8976,6 +8977,7 @@
 		EC934F7BB2F8B247BC714BE2 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/ClearPrivateData.strings"; sourceTree = "<group>"; };
 		ECDA4593850BA4E08FDAC5AF /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
 		ED264785844AD63AD616A882 /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = cy.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		ED28DAC82C45A95F00D2641C /* TabScrollBehaviorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabScrollBehaviorModel.swift; sourceTree = "<group>"; };
 		ED364EECB95B96AB639A82DE /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/Localizable.strings; sourceTree = "<group>"; };
 		ED5144A0BE3A8C7B15047C3F /* anp */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = anp; path = anp.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		ED84423D8666C751BBFC76AC /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/Storage.strings; sourceTree = "<group>"; };
@@ -9660,6 +9662,7 @@
 				219935EB2B07110900E5966F /* TabTrayModel.swift */,
 				21F2A2D12B0BC85200626AEC /* InactiveTabsModel.swift */,
 				5A9F83432B2B8CE900272819 /* TabPeekModel.swift */,
+				ED28DAC82C45A95F00D2641C /* TabScrollBehaviorModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -16380,6 +16383,7 @@
 				8A9F0B5627C595F300FE09AE /* ImageIdentifiers.swift in Sources */,
 				7B844E3D1BBDDB9D00E733A2 /* ChevronView.swift in Sources */,
 				43A5643823CD1E1C00B6857D /* UpdateViewController.swift in Sources */,
+				ED28DAC92C45A95F00D2641C /* TabScrollBehaviorModel.swift in Sources */,
 				8AD248F12C0F735200500AB7 /* BehavioralTargetingEvent.swift in Sources */,
 				E192C1412B57DC860003BC0B /* FakespotMessageCardButton.swift in Sources */,
 				437A9B682681256800FB41C1 /* LegacyInactiveTabCell.swift in Sources */,
