@@ -189,6 +189,8 @@ public struct PrefsKeys {
 
     // Used to show splash screen only during first time on fresh install
     public static let splashScreenShownKey = "splashScreenShownKey"
+
+    public static let PasswordGeneratorShown = "PasswordGeneratorShown"
 }
 
 public protocol Prefs {

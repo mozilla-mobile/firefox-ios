@@ -221,5 +221,5 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
 }
 
 extension PasswordGeneratorViewController: BottomSheetChild {
-    func willDismiss() { }
+    func willDismiss() { currentTab.webView?.accessoryView.reloadViewFor(.standard)}
 }
