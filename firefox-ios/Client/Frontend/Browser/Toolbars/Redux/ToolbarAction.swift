@@ -85,6 +85,8 @@ enum ToolbarActionType: ActionType {
     case navigationButtonDoubleTapped
     case navigationHintFinishedPresenting
     case clearSearch
+    case showQrButton
+    case hideQrButton
 }
 
 class ToolbarMiddlewareAction: Action {

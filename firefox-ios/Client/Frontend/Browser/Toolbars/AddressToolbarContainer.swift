@@ -273,6 +273,16 @@ final class AddressToolbarContainer: UIView,
 
     // MARK: - AddressToolbarDelegate
     func searchSuggestions(searchTerm: String) {
+        if let windowUUID,
+           let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID) {
+            if searchTerm.isEmpty, toolbarState.addressToolbar.didStartTyping {
+                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.showQrButton)
+                store.dispatch(action)
+            } else if !searchTerm.isEmpty, !toolbarState.addressToolbar.didStartTyping {
+                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.hideQrButton)
+                store.dispatch(action)
+            }
+        }
         delegate?.searchSuggestions(searchTerm: searchTerm)
     }
 
