@@ -4393,7 +4393,7 @@ extension String {
                 public static let TopTitle = MZLocalizedString(
                     key: "UnifiedSearch.SearchEngineSelection.TopTitle.Title.v134",
                     tableName: "SearchEngineSelection",
-                    value: "This time search in:", // TODO Waiting on designer to confirm this string
+                    value: "This time search in:",
                     comment: "When the user taps the search engine icon in the toolbar, a popup with a list of alternative search engines appears. This is the title for the popup.")
 
                 public static let SearchSettings = MZLocalizedString(
