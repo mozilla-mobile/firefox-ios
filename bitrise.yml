@@ -1469,6 +1469,12 @@ workflows:
               bash install.sh --disable-prompts
               source $HOME/google-cloud-sdk/path.bash.inc
             fi
+    - script@1:
+        title: Pin Python version
+        content: |-
+            brew unlink python@3.12
+            brew unlink python@3.11
+            brew link --force python@3.11
     - cache-push@2.7.1:
         inputs:
         - cache_paths: "$HOME/google-cloud-sdk"
