@@ -27,7 +27,8 @@ let centerRightX = screenSize.width * 0.95  // Adjust this value if you want sli
 let centerRightY = screenSize.height / 2
 
 // Create the coordinate using the calculated points
-let coordinate = springboard.coordinate(withNormalizedOffset: CGVector(dx: centerRightX / screenSize.width, dy: centerRightY / screenSize.height))
+let coordinate = springboard.coordinate(withNormalizedOffset: CGVector(
+    dx: centerRightX / screenSize.width, dy: centerRightY / screenSize.height))
 
 class TodayWidgetTests: BaseTestCase {
     enum SwipeDirection {
@@ -440,4 +441,3 @@ class TodayWidgetTests: BaseTestCase {
                       "URL does not contain the copied string.")
     }
 }
-
