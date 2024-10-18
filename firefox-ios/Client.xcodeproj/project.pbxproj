@@ -855,6 +855,9 @@
 		8A8629E2288096C40096DDB1 /* BookmarksFolderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8629E1288096C40096DDB1 /* BookmarksFolderCell.swift */; };
 		8A8629E72880B7330096DDB1 /* LegacyBookmarksPanelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8629E52880B69C0096DDB1 /* LegacyBookmarksPanelTests.swift */; };
 		8A86DAD8277298DE00D7BFFF /* ClosedTabsStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A86DAD7277298DE00D7BFFF /* ClosedTabsStoreTests.swift */; };
+		8A87B4322CC1A3C0003A9239 /* PocketManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A87B4302CC1A3BA003A9239 /* PocketManagerTests.swift */; };
+		8A87B4342CC1A731003A9239 /* PocketMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A87B42E2CC1A3AA003A9239 /* PocketMiddlewareTests.swift */; };
+		8A87B4382CC1A92D003A9239 /* MockPocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A87B4362CC1A910003A9239 /* MockPocketManager.swift */; };
 		8A88815A2B20FFE0009635AE /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A8881592B20FFE0009635AE /* GCDWebServers */; };
 		8A88815C2B2103AD009635AE /* WebEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 8A88815B2B2103AD009635AE /* WebEngine */; };
 		8A88815E2B21071E009635AE /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A88815D2B21071E009635AE /* GCDWebServers */; };
@@ -7050,6 +7053,9 @@
 		8A8629E52880B69C0096DDB1 /* LegacyBookmarksPanelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyBookmarksPanelTests.swift; sourceTree = "<group>"; };
 		8A86DAD7277298DE00D7BFFF /* ClosedTabsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClosedTabsStoreTests.swift; sourceTree = "<group>"; };
 		8A87AEE02C1B4D17007428B2 /* SearchViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModelTests.swift; sourceTree = "<group>"; };
+		8A87B42E2CC1A3AA003A9239 /* PocketMiddlewareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketMiddlewareTests.swift; sourceTree = "<group>"; };
+		8A87B4302CC1A3BA003A9239 /* PocketManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PocketManagerTests.swift; path = "firefox-ios-tests/Tests/ClientTests/Frontend/Homepage Rebuild/PocketManagerTests.swift"; sourceTree = SOURCE_ROOT; };
+		8A87B4362CC1A910003A9239 /* MockPocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPocketManager.swift; sourceTree = "<group>"; };
 		8A880C432C63CFE200B77F23 /* MockLoginViewModelDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLoginViewModelDelegate.swift; sourceTree = "<group>"; };
 		8A8917682B57283B008B01EA /* LegacyHomepageHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyHomepageHeaderCell.swift; sourceTree = "<group>"; };
 		8A8BAE152B2119E600D774EB /* InternalURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalURL.swift; sourceTree = "<group>"; };
@@ -10733,6 +10739,8 @@
 		8A00BD852CAB3FC200680AF9 /* Homepage Rebuild */ = {
 			isa = PBXGroup;
 			children = (
+				8A87B4352CC1A8FD003A9239 /* Mock */,
+				8A87B4302CC1A3BA003A9239 /* PocketManagerTests.swift */,
 				8A552AC22CB43A7000564C98 /* Redux */,
 				8A00BD862CAB3FE500680AF9 /* HomepageViewControllerTests.swift */,
 				8AA0A6662CAC745300AC7EB3 /* HomepageDiffableDataSourceTests.swift */,
@@ -10985,6 +10993,7 @@
 				8A552AC62CB43AB300564C98 /* HeaderStateTests.swift */,
 				8A552AC52CB43AB300564C98 /* HomepageStateTests.swift */,
 				8A454D332CB85C7D009436D9 /* PocketStateTests.swift */,
+				8A87B42E2CC1A3AA003A9239 /* PocketMiddlewareTests.swift */,
 			);
 			path = Redux;
 			sourceTree = "<group>";
@@ -11144,6 +11153,14 @@
 				8A827E342C20CB44008D5E3C /* MicrosurveyPromptMiddlewareTests.swift */,
 			);
 			path = Microsurvey;
+			sourceTree = "<group>";
+		};
+		8A87B4352CC1A8FD003A9239 /* Mock */ = {
+			isa = PBXGroup;
+			children = (
+				8A87B4362CC1A910003A9239 /* MockPocketManager.swift */,
+			);
+			path = Mock;
 			sourceTree = "<group>";
 		};
 		8A93F85C29D36D9F004159D9 /* Coordinators */ = {
@@ -16682,6 +16699,7 @@
 				8A6E8DEB2B275BA9000C4301 /* PrivateHomepageViewControllerTests.swift in Sources */,
 				8A93F86529D37331004159D9 /* DefaultRouterTests.swift in Sources */,
 				8AF10D8A29D713F50086351D /* LaunchScreenViewModelTests.swift in Sources */,
+				8A87B4322CC1A3C0003A9239 /* PocketManagerTests.swift in Sources */,
 				2F13E79B1AC0C02700D75081 /* StringExtensionsTests.swift in Sources */,
 				CA24B52224ABD7D40093848C /* PasswordManagerViewModelTests.swift in Sources */,
 				E169C6E82979CA0E0017B8D7 /* URLMailTests.swift in Sources */,
@@ -16727,6 +16745,7 @@
 				2173326829CCDA8E007F20C7 /* TabScrollControllerTests.swift in Sources */,
 				BA1C68BA2B7E9EA0000D9397 /* WKFrameInfoExtensionsTest.swift in Sources */,
 				9614BF4228A53FDF00D3F7EA /* ContextualHintEligibilityUtilityTests.swift in Sources */,
+				8A87B4342CC1A731003A9239 /* PocketMiddlewareTests.swift in Sources */,
 				21B548972B1E6AC300DC1DF8 /* MockInactiveTabsManager.swift in Sources */,
 				21B337BB29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift in Sources */,
 				6ADB651B285C03B100947EA4 /* DownloadHelperTests.swift in Sources */,
@@ -16768,6 +16787,7 @@
 				E1390FB828B42EF200C9EF3E /* WallpaperManagerMock.swift in Sources */,
 				ABB507CF2A136FB2009CAA67 /* UserConversionMetricsTests.swift in Sources */,
 				21FA8FB22AE856EB0013B815 /* MockTabTrayCoordinatorDelegate.swift in Sources */,
+				8A87B4382CC1A92D003A9239 /* MockPocketManager.swift in Sources */,
 				C8699152289177F5007ACC5C /* WallpaperNetworkingTests.swift in Sources */,
 				C818AD452A2100BA007F30BC /* OnboardingNotificationCardHelperTests.swift in Sources */,
 				E1AEC178286E0CF500062E29 /* LegacyHomepageViewControllerTests.swift in Sources */,
