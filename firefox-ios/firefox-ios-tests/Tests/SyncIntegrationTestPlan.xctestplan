@@ -95,6 +95,7 @@
         "TabTraySearchTabsTests",
         "TabsPerformanceTest",
         "ThirdPartySearchTest",
+        "TodayWidgetTests",
         "ToolbarMenuTests",
         "ToolbarTests",
         "TopTabsTest",
