@@ -38,7 +38,10 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifia
         button.contentVerticalAlignment = .fill
         button.accessibilityLabel = .PasswordGenerator.RefreshPasswordButtonA11yLabel
         button.accessibilityIdentifier = AccessibilityIdentifiers.PasswordGenerator.passwordRefreshButton
+        button.addTarget(self, action: #selector(self.refreshOnClick), for: .touchUpInside)
     }
+
+    var refreshPasswordButtonOnClick: (() -> Void)?
 
     convenience init(frame: CGRect, notificationCenter: NotificationProtocol = NotificationCenter.default) {
         self.init(frame: frame)
@@ -120,6 +123,11 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifia
     @objc
     private func copyText(_ sender: Any?) {
         UIPasteboard.general.string = passwordLabel.text
+    }
+
+    @objc
+    private func refreshOnClick() {
+        self.refreshPasswordButtonOnClick?()
     }
 
     func applyTheme(theme: any Common.Theme) {
