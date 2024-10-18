@@ -213,7 +213,10 @@ class TrackingProtectionTests: BaseTestCase {
             timeout: TIMEOUT_LONG
         )
         mozWaitForElementToExist(app.staticTexts.elementContainingText("Firefox has not connected to this website."))
-        XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label, "Connection not secure")
+
+        // The lock icon is no longer here.
+        // https://github.com/mozilla-mobile/firefox-ios/issues/22600
+        // XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label, "Connection not secure")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2693741
@@ -240,6 +243,7 @@ class TrackingProtectionTests: BaseTestCase {
         enableStrictMode()
         navigator.nowAt(BrowserTab)
         navigator.openURL(trackingProtectionTestUrl)
+        waitUntilPageLoad()
 
         if checkTrackingProtectionOn() {
             XCTAssertEqual(

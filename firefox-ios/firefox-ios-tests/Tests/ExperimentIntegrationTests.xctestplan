@@ -67,6 +67,7 @@
         "FxScreenGraphTests",
         "HomeButtonTests",
         "HomePageSettingsUITests\/testRecentlyVisited()",
+        "InactiveTabsTest",
         "IntegrationTests",
         "IpadOnlyTestCase",
         "IphoneOnlyTestCase",
