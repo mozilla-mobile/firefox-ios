@@ -68,7 +68,7 @@ final class MainMenuStateTests: XCTestCase {
                 initialState,
                 MainMenuAction(
                     windowUUID: .XCTestDefaultUUID,
-                    actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
+                    actionType: MainMenuActionType.tapNavigateToDestination,
                     navigationDestination: MenuNavigationDestination(destination)
                 )
             )
@@ -91,7 +91,7 @@ final class MainMenuStateTests: XCTestCase {
             initialState,
             MainMenuAction(
                 windowUUID: .XCTestDefaultUUID,
-                actionType: MainMenuActionType.toggleUserAgent
+                actionType: MainMenuActionType.tapToggleUserAgent
             )
         )
 
@@ -108,7 +108,7 @@ final class MainMenuStateTests: XCTestCase {
             initialState,
             MainMenuAction(
                 windowUUID: .XCTestDefaultUUID,
-                actionType: MainMenuActionType.closeMenu
+                actionType: MainMenuActionType.tapCloseMenu
             )
         )
 

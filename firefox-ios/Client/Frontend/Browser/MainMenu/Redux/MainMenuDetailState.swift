@@ -99,31 +99,38 @@ struct MainMenuDetailsState: ScreenState, Equatable {
                 ),
                 submenuType: currentSubmenu
             )
-        case MainMenuDetailsActionType.backToMainMenu:
+        case MainMenuDetailsActionType.tapBackToMainMenu:
             return MainMenuDetailsState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
                 submenuType: state.submenuType,
                 shouldGoBackToMenu: true
             )
-        case MainMenuDetailsActionType.dismissView,
-            MainMenuDetailsActionType.addToBookmarks,
-            MainMenuDetailsActionType.addToShortcuts,
-            MainMenuDetailsActionType.removeFromShortcuts,
-            MainMenuDetailsActionType.addToReadingList,
-            MainMenuDetailsActionType.removeFromReadingList:
+        case MainMenuDetailsActionType.tapDismissView,
+            MainMenuDetailsActionType.tapAddToBookmarks,
+            MainMenuDetailsActionType.tapAddToShortcuts,
+            MainMenuDetailsActionType.tapRemoveFromShortcuts,
+            MainMenuDetailsActionType.tapAddToReadingList,
+            MainMenuDetailsActionType.tapRemoveFromReadingList:
             return MainMenuDetailsState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
                 submenuType: state.submenuType,
                 shouldDismiss: true
             )
-        case MainMenuDetailsActionType.editBookmark:
+        case MainMenuDetailsActionType.tapEditBookmark:
             return MainMenuDetailsState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
                 submenuType: state.submenuType,
                 navigationDestination: MenuNavigationDestination(.editBookmark)
+            )
+        case MainMenuDetailsActionType.tapZoom:
+            return MainMenuDetailsState(
+                windowUUID: state.windowUUID,
+                menuElements: state.menuElements,
+                submenuType: state.submenuType,
+                navigationDestination: MenuNavigationDestination(.zoom)
             )
         default:
             return MainMenuDetailsState(
