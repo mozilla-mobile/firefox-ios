@@ -23,6 +23,7 @@ struct InactiveTabsModel: Equatable, Identifiable, Hashable {
         title: String
     ) -> InactiveTabsModel {
         return InactiveTabsModel(
+            id: tabUUID,
             tabUUID: tabUUID,
             title: title,
             url: nil
