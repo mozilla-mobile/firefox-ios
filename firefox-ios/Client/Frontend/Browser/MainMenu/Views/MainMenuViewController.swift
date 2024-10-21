@@ -295,8 +295,11 @@ class MainMenuViewController: UIViewController,
         // 2. feature is enabled and
         // 3. is not fresh install
         if viewProvider.shouldPresentContextualHint() &&
-            featureFlags.isFeatureEnabled(.menuRefactorHint, checking: .buildOnly) &&
-            InstallType.get() != .fresh {
+            featureFlags.isFeatureEnabled(.menuRefactorHint, checking: .buildOnly) {
+            if InstallType.get() == .fresh {
+                viewProvider.markContextualHintPresented()
+                return false
+            }
             return true
         }
         return false

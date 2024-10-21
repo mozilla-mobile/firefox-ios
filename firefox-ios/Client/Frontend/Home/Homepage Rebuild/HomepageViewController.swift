@@ -161,6 +161,15 @@ final class HomepageViewController: UIViewController,
             collectionView.register($0, forCellWithReuseIdentifier: $0.cellIdentifier)
         }
 
+        collectionView.registerSupplementary(
+            of: UICollectionView.elementKindSectionHeader,
+            cellType: LabelButtonHeaderView.self
+        )
+        collectionView.registerSupplementary(
+            of: UICollectionView.elementKindSectionFooter,
+            cellType: PocketFooterView.self
+        )
+
         collectionView.keyboardDismissMode = .onDrag
         collectionView.showsVerticalScrollIndicator = false
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -187,6 +196,10 @@ final class HomepageViewController: UIViewController,
             collectionView: collectionView
         ) { [weak self] (collectionView, indexPath, item) -> UICollectionViewCell? in
             return self?.configureCell(for: item, at: indexPath)
+        }
+
+        dataSource?.supplementaryViewProvider = { [weak self] (collectionView, kind, indexPath) in
+            return self?.configureSupplementaryCell(with: collectionView, for: kind, at: indexPath)
         }
     }
 
@@ -219,7 +232,7 @@ final class HomepageViewController: UIViewController,
             )  else {
                 return UICollectionViewCell()
             }
-            pocketCell.configure(item: story, theme: currentTheme)
+            pocketCell.configure(story: story, theme: currentTheme)
 
             return pocketCell
         case .pocketDiscover(let title):
@@ -246,6 +259,59 @@ final class HomepageViewController: UIViewController,
             }, theme: currentTheme)
 
             return customizeHomeCell
+        }
+    }
+
+    private func configureSupplementaryCell(
+        with collectionView: UICollectionView,
+        for kind: String,
+        at indexPath: IndexPath
+    ) -> UICollectionReusableView? {
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            guard let sectionHeaderView = collectionView.dequeueSupplementary(
+                of: kind,
+                cellType: LabelButtonHeaderView.self,
+                for: indexPath)
+            else { return UICollectionReusableView() }
+            guard let section = dataSource?.sectionIdentifier(for: indexPath.section) else {
+                self.logger.log(
+                    "Section should not have been nil, something went wrong",
+                    level: .fatal,
+                    category: .homepage
+                )
+                return UICollectionReusableView()
+            }
+            return self.configureSectionHeader(for: section, with: sectionHeaderView)
+        case UICollectionView.elementKindSectionFooter:
+            guard let footerView = collectionView.dequeueSupplementary(
+                of: kind,
+                cellType: PocketFooterView.self,
+                for: indexPath)
+            else { return UICollectionReusableView() }
+            footerView.onTapLearnMore = {
+                // TODO: FXIOS-10164: Navigation for Pocket section
+            }
+            footerView.applyTheme(theme: currentTheme)
+            return footerView
+        default:
+            return nil
+        }
+    }
+
+    private func configureSectionHeader(
+        for section: HomepageSection,
+        with sectionLabelCell: LabelButtonHeaderView
+    ) -> LabelButtonHeaderView? {
+        switch section {
+        case .pocket:
+            sectionLabelCell.configure(
+                state: homepageState.pocketState.sectionHeaderState,
+                theme: currentTheme
+            )
+            return sectionLabelCell
+        default:
+            return nil
         }
     }
 

@@ -35,12 +35,11 @@ class UrlBarTests: BaseTestCase {
         waitUntilPageLoad()
         app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
         // The keyboard is brought up.
-        let addressBar = app.textFields["address"]
-        XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+        XCTAssertTrue(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
         // Scroll on the page
         app.swipeUp()
         // The keyboard is dismissed
-        XCTAssertFalse(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? true)
+        XCTAssertFalse(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? true)
         // Select the tab tray and add a new tab
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -77,23 +76,21 @@ class UrlBarTests: BaseTestCase {
         waitForTabsButton()
         app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].tap()
         // The keyboard pops up and the default search icon is correctly displayed in the URL bar
-        let addressBar = app.textFields["address"]
-        XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+        XCTAssertTrue(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
         let keyboardCount = app.keyboards.count
         XCTAssert(keyboardCount > 0, "The keyboard is not shown")
         if iPad() {
             XCTAssertTrue(iPadSearchIcon.exists)
-            XCTAssertTrue(iPadSearchIcon.isLeftOf(rightElement: addressBar))
+            XCTAssertTrue(iPadSearchIcon.isLeftOf(rightElement: urlBarAddress))
         } else {
             XCTAssertTrue(iPhoneSearchIcon.exists)
-            XCTAssertTrue(iPhoneSearchIcon.isLeftOf(rightElement: addressBar))
+            XCTAssertTrue(iPhoneSearchIcon.isLeftOf(rightElement: urlBarAddress))
         }
     }
 
     private func typeSearchTermAndHitGo(searchTerm: String) {
-        app.textFields["address"].typeText(searchTerm)
+        urlBarAddress.typeText(searchTerm)
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.buttons["Go"])
-        app.buttons["Go"].tap()
+        app.buttons["Go"].waitAndTap()
     }
 }

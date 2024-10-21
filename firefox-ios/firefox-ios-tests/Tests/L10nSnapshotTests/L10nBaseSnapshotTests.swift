@@ -56,12 +56,15 @@ class L10nBaseSnapshotTests: XCTestCase {
     func mozWaitForElementToExist(_ element: XCUIElement, timeout: TimeInterval? = TIMEOUT) {
         let startTime = Date()
 
-        while !element.exists {
-            if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
-                XCTFail("Timed out waiting for element \(element) to exist")
-                break
+        guard element.exists else {
+            while !element.exists {
+                if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
+                    XCTFail("Timed out waiting for element \(element) to exist in \(timeout) seconds")
+                    break
+                }
+                usleep(10000)
             }
-            usleep(10000)
+            return
         }
     }
 
@@ -130,5 +133,11 @@ class L10nBaseSnapshotTests: XCTestCase {
 extension XCUIElement {
     func tapOnApp() {
         coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+    }
+
+    /// Waits for the UI element and then taps if it exists.
+    func waitAndTap(timeout: TimeInterval? = TIMEOUT) {
+        L10nBaseSnapshotTests().mozWaitForElementToExist(self, timeout: timeout)
+        self.tap()
     }
 }

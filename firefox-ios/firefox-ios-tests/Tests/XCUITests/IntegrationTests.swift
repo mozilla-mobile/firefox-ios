@@ -114,8 +114,7 @@ class IntegrationTests: BaseTestCase {
         navigator.openURL("example.com")
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
         navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.bookmark])
-        app.tables.otherElements[StandardImageIdentifiers.Large.bookmark].tap()
+        app.tables.otherElements[StandardImageIdentifiers.Large.bookmark].waitAndTap()
         navigator.nowAt(BrowserTab)
         signInFxAccounts()
 
@@ -143,8 +142,7 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         // This is only to check that the device's name changed
         navigator.goto(SettingsScreen)
-        mozWaitForElementToExist(app.tables.cells.element(boundBy: 1))
-        app.tables.cells.element(boundBy: 1).tap()
+        app.tables.cells.element(boundBy: 1).waitAndTap()
         mozWaitForElementToExist(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"])
         XCTAssertEqual(
             app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as! String,
@@ -163,19 +161,16 @@ class IntegrationTests: BaseTestCase {
         waitUntilPageLoad()
 
         // Log in in order to save it
-        mozWaitForElementToExist(app.webViews.textFields["Email or phone"])
-        app.webViews.textFields["Email or phone"].tap()
+        app.webViews.textFields["Email or phone"].waitAndTap()
         app.webViews.textFields["Email or phone"].typeText(userName)
         app.webViews.buttons["Next"].tap()
-        mozWaitForElementToExist(app.webViews.secureTextFields["Password"])
-        app.webViews.secureTextFields["Password"].tap()
+        app.webViews.secureTextFields["Password"].waitAndTap()
         app.webViews.secureTextFields["Password"].typeText(userPassword)
 
         app.webViews.buttons["Sign in"].tap()
 
         // Save the login
-        mozWaitForElementToExist(app.buttons["SaveLoginPrompt.saveLoginButton"])
-        app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
+        app.buttons["SaveLoginPrompt.saveLoginButton"].waitAndTap()
 
         // Sign in with FxAccount
         signInFxAccounts()
@@ -276,8 +271,7 @@ class IntegrationTests: BaseTestCase {
 
         app.cells["SignOut"].tap()
 
-        mozWaitForElementToExist(app.buttons["Disconnect"])
-        app.buttons["Disconnect"].tap()
+        app.buttons["Disconnect"].waitAndTap()
         sleep(3)
 
         // Connect same account again
