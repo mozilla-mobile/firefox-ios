@@ -15,8 +15,9 @@ protocol Blurrable: UICollectionViewCell {
 
 extension Blurrable {
     var shouldApplyWallpaperBlur: Bool {
-        guard !UIAccessibility.isReduceTransparencyEnabled else { return false }
+        return true
+        // guard !UIAccessibility.isReduceTransparencyEnabled else { return false }
 
-        return WallpaperManager().currentWallpaper.type != .defaultWallpaper
+        // return WallpaperManager().currentWallpaper.type != .defaultWallpaper
     }
 }
