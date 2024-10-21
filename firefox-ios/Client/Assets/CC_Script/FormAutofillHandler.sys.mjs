@@ -235,7 +235,10 @@ export class FormAutofillHandler {
       if (fieldDetails[index]?.element == element) {
         fieldDetailsIncludeIframe.push(fieldDetails[index]);
         index++;
-      } else if (element.localName == "iframe") {
+      } else if (
+        element.localName == "iframe" &&
+        FormAutofillUtils.isFieldVisible(element)
+      ) {
         const iframeFd = lazy.FieldDetail.create(element, form, "iframe");
         fieldDetailsIncludeIframe.push(iframeFd);
       }

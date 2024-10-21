@@ -629,16 +629,28 @@ export const FormAutofillHeuristics = {
       lazy.FormAutofillUtils.isCreditCardOrAddressFieldType(element)
     );
 
-    const fieldDetails = elements.map(element => {
+    const fieldDetails = [];
+    for (const element of elements) {
+      // Ignore invisible <input>, we still keep invisible <select> since
+      // some websites implements their custom dropdown and use invisible <select>
+      // to store the value.
+      const isVisible = lazy.FormAutofillUtils.isFieldVisible(element);
+      if (!HTMLSelectElement.isInstance(element) && !isVisible) {
+        continue;
+      }
+
       const [fieldName, autocompleteInfo, confidence] = this.inferFieldInfo(
         element,
         elements
       );
-      return lazy.FieldDetail.create(element, form, fieldName, {
-        autocompleteInfo,
-        confidence,
-      });
-    });
+      fieldDetails.push(
+        lazy.FieldDetail.create(element, form, fieldName, {
+          autocompleteInfo,
+          confidence,
+          isVisible,
+        })
+      );
+    }
 
     this.parseAndUpdateFieldNamesContent(fieldDetails);
 

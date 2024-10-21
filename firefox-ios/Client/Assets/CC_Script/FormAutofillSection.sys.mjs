@@ -331,16 +331,14 @@ export class FormAutofillSection {
         return false;
       }
 
-      // When both visible and invisible <select> elements exist, we only autofill the
-      // visible <select>.
-      if (fieldDetail.localName == "select") {
-        if (!fieldDetail.isVisible) {
-          return !this.fieldDetails.some(
-            field => field.fieldName == fieldDetail.fieldName && field.isVisible
-          );
-        }
+      // When both visible and invisible elements exist, we only autofill the
+      // visible element.
+      if (!fieldDetail.isVisible) {
+        return !this.fieldDetails.some(
+          field => field.fieldName == fieldDetail.fieldName && field.isVisible
+        );
       }
-      return fieldDetail.isVisible;
+      return true;
     });
   }
 
