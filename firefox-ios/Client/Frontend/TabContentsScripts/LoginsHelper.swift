@@ -129,7 +129,7 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
         if self.featureFlags.isFeatureEnabled(.passwordGenerator, checking: .buildOnly) {
             if type == "generatePassword", let tab = self.tab, !tab.isPrivate {
                 let userDefaults = UserDefaults.standard
-                let showPassGenClosure = {
+                let showPasswordGeneratorClosure = {
                     let newAction = GeneralBrowserAction(
                         windowUUID: tab.windowUUID,
                         actionType: GeneralBrowserActionType.showPasswordGenerator)
@@ -137,9 +137,9 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
                 }
                 if userDefaults.value(forKey: PrefsKeys.PasswordGeneratorShown) == nil {
                     userDefaults.set(true, forKey: PrefsKeys.PasswordGeneratorShown)
-                    showPassGenClosure()
+                    showPasswordGeneratorClosure()
                 } else {
-                    tab.webView?.accessoryView.useStrongPasswordClosure = showPassGenClosure
+                    tab.webView?.accessoryView.useStrongPasswordClosure = showPasswordGeneratorClosure
                     tab.webView?.accessoryView.reloadViewFor(.passwordGenerator)
                 }
             }
