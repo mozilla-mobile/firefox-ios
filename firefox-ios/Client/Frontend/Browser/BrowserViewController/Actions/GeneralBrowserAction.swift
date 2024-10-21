@@ -5,6 +5,7 @@
 import Foundation
 import Redux
 import Common
+import WebKit
 
 class GeneralBrowserAction: Action {
     let selectedTabURL: URL?
@@ -57,7 +58,7 @@ enum GeneralBrowserActionType: ActionType {
     case showNewTabLongPressActions
     case addToReadingListLongPressAction
     case clearData
-    case showPasswordGenerator
+    case showPasswordGenerator(frame: WKFrameInfo)
 }
 
 class GeneralBrowserMiddlewareAction: Action {

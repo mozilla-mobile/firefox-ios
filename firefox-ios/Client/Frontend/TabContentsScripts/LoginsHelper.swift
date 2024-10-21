@@ -132,7 +132,7 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
                 let showPasswordGeneratorClosure = {
                     let newAction = GeneralBrowserAction(
                         windowUUID: tab.windowUUID,
-                        actionType: GeneralBrowserActionType.showPasswordGenerator)
+                        actionType: GeneralBrowserActionType.showPasswordGenerator(frame: message.frameInfo))
                     store.dispatch(newAction)
                 }
                 if userDefaults.value(forKey: PrefsKeys.PasswordGeneratorShown) == nil {
@@ -249,6 +249,7 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
                 case .failure:
                     break
                 }
+
                 self.promptSave(login)
             }
         }
@@ -257,11 +258,14 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
     private func promptSave(_ login: LoginEntry) {
         guard login.isValid.isSuccess else { return }
 
-        clearStoredPasswordAfterGeneration()
+        clearStoredPasswordAfterGeneration(origin: login.hostname)
+        print("origin")
+        print(login.hostname)
 
         let promptMessage: String
         let https = "^https:\\/\\/"
         let url = login.hostname.replacingOccurrences(of: https, with: "", options: .regularExpression, range: nil)
+
         let userName = login.username
         if !userName.isEmpty {
             promptMessage = String(format: .SaveLoginUsernamePrompt, userName, url)
@@ -353,11 +357,11 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
         currentRequestId = requestId
     }
 
-    private func clearStoredPasswordAfterGeneration() {
+    private func clearStoredPasswordAfterGeneration(origin: String) {
         if let windowUUID = self.tab?.windowUUID {
             let action = PasswordGeneratorAction(windowUUID: windowUUID,
                                                  actionType: PasswordGeneratorActionType.clearGeneratedPasswordForSite,
-                                                 currentTab: self.tab)
+                                                 origin: origin)
             store.dispatch(action)
         }
     }

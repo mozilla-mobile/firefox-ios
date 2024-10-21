@@ -6,6 +6,7 @@ import Foundation
 import Redux
 import Shared
 import Common
+import WebKit
 
 struct BrowserViewControllerState: ScreenState, Equatable {
     enum NavigationType {
@@ -18,7 +19,10 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case newTab
     }
 
-    enum DisplayType {
+    enum DisplayType: Equatable {
+        static func == (lhs: DisplayType, rhs: DisplayType) -> Bool {
+            return false
+        }
         case qrCodeReader
         case backForwardList
         case trackingProtectionDetails
@@ -32,7 +36,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case newTabLongPressActions
         case readerModeLongPressAction
         case dataClearance
-        case passwordGenerator
+        case passwordGenerator(frame: WKFrameInfo)
     }
 
     let windowUUID: WindowUUID
@@ -409,14 +413,14 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 browserViewType: state.browserViewType,
                 displayView: .dataClearance,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
-        case GeneralBrowserActionType.showPasswordGenerator:
+        case GeneralBrowserActionType.showPasswordGenerator(let frame):
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
-                displayView: .passwordGenerator,
+                displayView: .passwordGenerator(frame: frame),
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action)
                 )
         default:

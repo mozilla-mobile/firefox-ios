@@ -6,6 +6,7 @@ import Foundation
 import Redux
 import Shared
 import Common
+import WebKit
 
 final class PasswordGeneratorMiddleware {
     private let logger: Logger
@@ -19,32 +20,36 @@ final class PasswordGeneratorMiddleware {
 
     lazy var passwordGeneratorProvider: Middleware<AppState> = { state, action in
         let windowUUID = action.windowUUID
-        guard let currentTab = (action as? PasswordGeneratorAction)?.currentTab else { return }
+
         switch action.actionType {
         case PasswordGeneratorActionType.showPasswordGenerator:
-            self.showPasswordGenerator(tab: currentTab, windowUUID: windowUUID)
+            guard let currentFrame = (action as? PasswordGeneratorAction)?.currentFrame else { return }
+            self.showPasswordGenerator(frame: currentFrame, windowUUID: windowUUID)
 
         case PasswordGeneratorActionType.userTappedUsePassword:
+            guard let currentFrame = (action as? PasswordGeneratorAction)?.currentFrame else { return }
             guard let password = state.screenState(PasswordGeneratorState.self,
                                                    for: .passwordGenerator,
                                                    window: action.windowUUID)?.password else {return}
-            self.userTappedUsePassword(with: currentTab, password: password)
+            self.userTappedUsePassword(frame: currentFrame, password: password)
 
         case PasswordGeneratorActionType.userTappedRefreshPassword:
-            self.userTappedRefreshPassword(with: currentTab, windowUUID: windowUUID)
+            guard let currentFrame = (action as? PasswordGeneratorAction)?.currentFrame else { return }
+            self.userTappedRefreshPassword(frame: currentFrame, windowUUID: windowUUID)
 
         case PasswordGeneratorActionType.clearGeneratedPasswordForSite:
-            self.clearGeneratedPasswordForSite(with: currentTab, windowUUID: windowUUID)
+            guard let origin = (action as? PasswordGeneratorAction)?.origin else { return }
+            self.clearGeneratedPasswordForSite(origin: origin, windowUUID: windowUUID)
 
         default:
             break
         }
     }
 
-    private func showPasswordGenerator(tab: Tab, windowUUID: WindowUUID) {
+    private func showPasswordGenerator(frame: WKFrameInfo, windowUUID: WindowUUID) {
         // TODO: FXIOS-10279 - change password to be associated with the iframe origin that
         // contains the password field rather than tab origin
-        guard let origin = tab.url?.origin else {return}
+        guard let origin = frame.request.url?.origin else {return}
         if let password = generatedPasswordStorage.getPasswordForOrigin(origin: origin) {
             let newAction = PasswordGeneratorAction(
                 windowUUID: windowUUID,
@@ -53,7 +58,7 @@ final class PasswordGeneratorMiddleware {
             )
             store.dispatch(newAction)
         } else {
-            generateNewPassword(with: tab, completion: { generatedPassword in
+            generateNewPassword(frame: frame, completion: { generatedPassword in
                 self.generatedPasswordStorage.setPasswordForOrigin(origin: origin, password: generatedPassword)
                 let newAction = PasswordGeneratorAction(
                     windowUUID: windowUUID,
@@ -65,9 +70,9 @@ final class PasswordGeneratorMiddleware {
         }
     }
 
-    private func generateNewPassword(with tab: Tab, completion: @escaping (String) -> Void) {
+    private func generateNewPassword(frame: WKFrameInfo, completion: @escaping (String) -> Void) {
         let jsFunctionCall = "window.__firefox__.logins.generatePassword()"
-        tab.webView?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall) { (result, error) in
+        frame.webView?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall, frame) { (result, error) in
             if let error = error {
                 self.logger.log("JavaScript evaluation error",
                                 level: .warning,
@@ -79,9 +84,9 @@ final class PasswordGeneratorMiddleware {
         }
     }
 
-    private func userTappedUsePassword(with tab: Tab, password: String) {
+    private func userTappedUsePassword(frame: WKFrameInfo, password: String) {
         let jsFunctionCall = "window.__firefox__.logins.fillGeneratedPassword(\"\(password)\")"
-        tab.webView?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall) { (result, error) in
+        frame.webView?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall, frame) { (result, error) in
             if error != nil {
                 self.logger.log("Error filling in password info",
                                 level: .warning,
@@ -90,9 +95,9 @@ final class PasswordGeneratorMiddleware {
         }
     }
 
-    private func userTappedRefreshPassword(with tab: Tab, windowUUID: WindowUUID) {
-        guard let origin = tab.url?.origin else {return}
-        generateNewPassword(with: tab, completion: { generatedPassword in
+    private func userTappedRefreshPassword(frame: WKFrameInfo, windowUUID: WindowUUID) {
+        guard let origin = frame.request.url?.origin else {return}
+        generateNewPassword(frame: frame, completion: { generatedPassword in
             self.generatedPasswordStorage.setPasswordForOrigin(origin: origin, password: generatedPassword)
             let newAction = PasswordGeneratorAction(
                 windowUUID: windowUUID,
@@ -103,8 +108,7 @@ final class PasswordGeneratorMiddleware {
         })
     }
 
-    private func clearGeneratedPasswordForSite(with tab: Tab, windowUUID: WindowUUID) {
-        guard let origin = tab.url?.origin else {return}
+    private func clearGeneratedPasswordForSite(origin: String, windowUUID: WindowUUID) {
         generatedPasswordStorage.deletePasswordForOrigin(origin: origin)
     }
 }

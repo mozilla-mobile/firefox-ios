@@ -2086,9 +2086,9 @@ class BrowserViewController: UIViewController,
             presentNewTabLongPressActionSheet(from: view)
         case .dataClearance:
             didTapOnDataClearance()
-        case .passwordGenerator:
+        case .passwordGenerator(let frame):
             if let tab = tabManager.selectedTab {
-                navigationHandler?.showPasswordGenerator(tab: tab)
+                navigationHandler?.showPasswordGenerator(tab: tab, frame: frame)
             }
         }
     }
