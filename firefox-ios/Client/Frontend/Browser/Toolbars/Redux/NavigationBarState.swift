@@ -75,13 +75,7 @@ struct NavigationBarState: StateType, Equatable {
 
         case ToolbarActionType.borderPositionChanged,
             ToolbarActionType.toolbarPositionChanged:
-            guard let displayBorder = (action as? ToolbarAction)?.displayNavBorder else { return state }
-
-            return NavigationBarState(
-                windowUUID: state.windowUUID,
-                actions: state.actions,
-                displayBorder: displayBorder
-            )
+            return handleToolbarPositionChanged(state: state, action: action)
 
         default:
             return NavigationBarState(
