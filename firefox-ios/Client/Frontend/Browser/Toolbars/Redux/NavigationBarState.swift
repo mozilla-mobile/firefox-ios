@@ -121,6 +121,16 @@ struct NavigationBarState: StateType, Equatable {
         )
     }
 
+    private static func handleToolbarUrlDidChange(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return state }
+
+        return NavigationBarState(
+            windowUUID: state.windowUUID,
+            actions: navigationActions(action: toolbarAction, navigationBarState: state),
+            displayBorder: state.displayBorder
+        )
+    }
+
     private static func handleToolbarNumberOfTabsChanged(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return state }
 
