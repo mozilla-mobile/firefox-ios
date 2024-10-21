@@ -42,6 +42,8 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
 
     public var foundFieldValues: ((FocusFieldType, String) -> Void)?
 
+    public var passwordFieldInteraction: (() -> Void)?
+
     // Exposed for mocking purposes
     var logins: RustLogins {
         return profile.logins
@@ -126,10 +128,20 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
 
         if self.featureFlags.isFeatureEnabled(.passwordGenerator, checking: .buildOnly) {
             if type == "generatePassword", let tab = self.tab, !tab.isPrivate {
-                let newAction = GeneralBrowserAction(
-                    windowUUID: tab.windowUUID,
-                    actionType: GeneralBrowserActionType.showPasswordGenerator)
-                store.dispatch(newAction)
+                let userDefaults = UserDefaults.standard
+                let showPasswordGeneratorClosure = {
+                    let newAction = GeneralBrowserAction(
+                        windowUUID: tab.windowUUID,
+                        actionType: GeneralBrowserActionType.showPasswordGenerator)
+                    store.dispatch(newAction)
+                }
+                if userDefaults.value(forKey: PrefsKeys.PasswordGeneratorShown) == nil {
+                    userDefaults.set(true, forKey: PrefsKeys.PasswordGeneratorShown)
+                    showPasswordGeneratorClosure()
+                } else {
+                    tab.webView?.accessoryView.useStrongPasswordClosure = showPasswordGeneratorClosure
+                    tab.webView?.accessoryView.reloadViewFor(.passwordGenerator)
+                }
             }
         }
 
