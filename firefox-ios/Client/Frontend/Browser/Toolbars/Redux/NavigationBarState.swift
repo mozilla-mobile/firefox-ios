@@ -74,13 +74,7 @@ struct NavigationBarState: StateType, Equatable {
             return handleToolbarNumberOfTabsChanged(state: state, action: action)
 
         case ToolbarActionType.backForwardButtonStateChanged:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-
-            return NavigationBarState(
-                windowUUID: state.windowUUID,
-                actions: navigationActions(action: toolbarAction, navigationBarState: state),
-                displayBorder: state.displayBorder
-            )
+            return handleToolbarBackForwardButtonStateChanged(state: state, action: action)
 
         case ToolbarActionType.showMenuWarningBadge:
             guard let toolbarAction = action as? ToolbarAction else { return state }
