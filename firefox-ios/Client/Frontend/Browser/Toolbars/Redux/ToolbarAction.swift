@@ -88,7 +88,6 @@ enum ToolbarActionType: ActionType {
     case navigationButtonDoubleTapped
     case navigationHintFinishedPresenting
     case clearSearch
-    case toggleSafeListStatus
 }
 
 class ToolbarMiddlewareAction: Action {

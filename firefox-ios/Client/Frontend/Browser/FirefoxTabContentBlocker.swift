@@ -75,7 +75,6 @@ final class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript, Featu
             guard let tab = tab as? Tab else { return }
             setupForTab()
             TabEvent.post(.didChangeContentBlocking, for: tab)
-            dispatchSafeListStatusAction(for: tab.contentBlocker?.status)
             tab.reload()
         }
     }
@@ -114,28 +113,11 @@ final class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript, Featu
         )
     }
 
-    private func dispatchSafeListStatusAction(for blockerStatus: BlockerStatus?) {
-        guard featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly) else { return }
-
-        let safeListedURLImageName = (
-            blockerStatus == .safelisted
-        ) ? StandardImageIdentifiers.Small.notificationDotFill : nil
-
-        let action = ToolbarAction(
-            safeListedURLImageName: safeListedURLImageName,
-            windowUUID: .unavailable,
-            actionType: ToolbarActionType.toggleSafeListStatus
-        )
-
-        store.dispatch(action)
-    }
-
     override func notifiedTabSetupRequired() {
         guard let tab = self.tab as? Tab else { return }
         logger.log("Notified tab setup required", level: .info, category: .adblock)
         setupForTab(completion: { tab.reloadPage() })
         TabEvent.post(.didChangeContentBlocking, for: tab)
-        dispatchSafeListStatusAction(for: tab.contentBlocker?.status)
     }
 
     override func currentlyEnabledLists() -> [String] {
@@ -145,7 +127,6 @@ final class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript, Featu
     override func notifyContentBlockingChanged() {
         guard let tab = tab as? Tab else { return }
         TabEvent.post(.didChangeContentBlocking, for: tab)
-        dispatchSafeListStatusAction(for: tab.contentBlocker?.status)
     }
 
     func noImageMode(enabled: Bool) {

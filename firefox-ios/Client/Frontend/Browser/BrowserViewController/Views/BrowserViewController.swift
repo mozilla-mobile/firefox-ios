@@ -1957,6 +1957,11 @@ class BrowserViewController: UIViewController,
     /// Call this whenever the page URL changes.
     fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
         guard !isToolbarRefactorEnabled else {
+            var safeListedURLImageName: String? {
+                return (tab.contentBlocker?.status == .safelisted) ?
+                StandardImageIdentifiers.Small.notificationDotFill : nil
+            }
+
             let action = ToolbarAction(
                 url: tab.url?.displayURL,
                 isPrivate: tab.isPrivate,
@@ -1964,6 +1969,7 @@ class BrowserViewController: UIViewController,
                 canGoBack: tab.canGoBack,
                 canGoForward: tab.canGoForward,
                 lockIconImageName: lockIconImageName(for: tab),
+                safeListedURLImageName: safeListedURLImageName,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange)
             store.dispatch(action)

@@ -211,7 +211,7 @@ struct AddressBarState: StateType, Equatable {
                 url: toolbarAction.url,
                 searchTerm: nil,
                 lockIconImageName: toolbarAction.lockIconImageName ?? state.lockIconImageName,
-                safeListedURLImageName: state.safeListedURLImageName,
+                safeListedURLImageName: toolbarAction.safeListedURLImageName,
                 isEditing: state.isEditing,
                 isScrollingDuringEdit: state.isScrollingDuringEdit,
                 shouldSelectSearchTerm: state.shouldSelectSearchTerm,
@@ -421,13 +421,23 @@ struct AddressBarState: StateType, Equatable {
                 readerModeState: state.readerModeState
             )
 
-        case ToolbarActionType.toggleSafeListStatus:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-            var state = state
-            state.safeListedURLImageName = toolbarAction.safeListedURLImageName
-            return state
         default:
-            return state
+            return AddressBarState(
+                windowUUID: state.windowUUID,
+                navigationActions: state.navigationActions,
+                pageActions: state.pageActions,
+                browserActions: state.browserActions,
+                borderPosition: state.borderPosition,
+                url: state.url,
+                searchTerm: state.searchTerm,
+                lockIconImageName: state.lockIconImageName,
+                safeListedURLImageName: state.safeListedURLImageName,
+                isEditing: state.isEditing,
+                isScrollingDuringEdit: state.isScrollingDuringEdit,
+                shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+                isLoading: state.isLoading,
+                readerModeState: state.readerModeState
+            )
         }
     }
 
