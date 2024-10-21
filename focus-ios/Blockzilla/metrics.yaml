@@ -572,12 +572,15 @@ browser_search:
     send_in_pings:
       - metrics
       - baseline
+      - dau-reporting
     no_lint:
       - BASELINE_PING
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/3330
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1925211
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/3367
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22609#issuecomment-2419002541
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
     expires: never
@@ -589,12 +592,15 @@ browser_search:
     send_in_pings:
       - metrics
       - baseline
+      - dau-reporting
     no_lint:
       - BASELINE_PING
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/3330
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1925211
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/3367
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22609#issuecomment-2419002541
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
     expires: never
@@ -612,12 +618,15 @@ browser_search:
     send_in_pings:
       - metrics
       - baseline
+      - dau-reporting
     no_lint:
       - BASELINE_PING
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/3479
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1925211
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/3483
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22609#issuecomment-2419002541
     data_sensitivity:
       - technical
       - interaction
@@ -630,14 +639,17 @@ browser_search:
       Records the type of interaction a user has on SERP pages.
     bugs:
       - https://github.com/mozilla-mobile/focus-ios/issues/3478
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1925211
     data_reviews:
       - https://github.com/mozilla-mobile/focus-ios/pull/3492
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22609#issuecomment-2419002541
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
     expires: never
     send_in_pings:
       - metrics
       - baseline
+      - dau-reporting
     no_lint:
       - BASELINE_PING
 

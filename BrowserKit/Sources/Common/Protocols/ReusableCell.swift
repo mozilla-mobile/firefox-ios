@@ -40,6 +40,20 @@ public extension UICollectionView {
         return cell
     }
 
+    func dequeueSupplementary<T: ReusableCell>(of kind: String, cellType: T.Type, for indexPath: IndexPath) -> T? {
+        guard let cell = dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: T.cellIdentifier,
+            for: indexPath) as? T
+        else { return nil }
+
+        return cell
+    }
+
+    func registerSupplementary<T: ReusableCell>(of kind: String, cellType: T.Type) {
+        register(T.self, forSupplementaryViewOfKind: kind, withReuseIdentifier: T.cellIdentifier)
+    }
+
     func register<T: ReusableCell>(cellType: T.Type) {
         register(T.self, forCellWithReuseIdentifier: T.cellIdentifier)
     }

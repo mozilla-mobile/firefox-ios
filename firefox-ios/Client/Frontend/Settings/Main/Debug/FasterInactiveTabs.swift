@@ -5,6 +5,39 @@
 import Foundation
 import Shared
 
+enum FasterInactiveTabsOption: Int {
+    case normal
+    case tenSeconds
+    case oneMinute
+    case twoMinutes
+
+    var nextOption: FasterInactiveTabsOption {
+        switch self {
+        case .normal:
+            return .tenSeconds
+        case .tenSeconds:
+            return .oneMinute
+        case .oneMinute:
+            return .twoMinutes
+        case .twoMinutes:
+            return .normal
+        }
+    }
+
+    var title: String {
+        switch self {
+        case .normal:
+            return "default"
+        case .tenSeconds:
+            return "ten seconds"
+        case .oneMinute:
+            return "one minute"
+        case .twoMinutes:
+            return "two minutes"
+        }
+    }
+}
+
 class FasterInactiveTabs: HiddenSetting {
     private weak var settingsDelegate: DebugSettingsDelegate?
 
@@ -15,8 +48,10 @@ class FasterInactiveTabs: HiddenSetting {
     }
 
     override var title: NSAttributedString? {
-        let isFasterEnabled = UserDefaults.standard.bool(forKey: PrefsKeys.FasterInactiveTabsOverride)
-        let buttonTitle = isFasterEnabled ? "Set Inactive Tab Timeout to Default" : "Set Inactive Tab Timeout to 10s"
+        let rawValue = UserDefaults.standard.integer(forKey: PrefsKeys.FasterInactiveTabsOverride)
+        let fasterInactiveTabOption = FasterInactiveTabsOption(rawValue: rawValue) ?? .normal
+
+        let buttonTitle = "Set Inactive Tab Timeout (\(fasterInactiveTabOption.title))"
         return NSAttributedString(
             string: buttonTitle,
             attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
@@ -24,8 +59,10 @@ class FasterInactiveTabs: HiddenSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let isFasterEnabled = UserDefaults.standard.bool(forKey: PrefsKeys.FasterInactiveTabsOverride)
-        UserDefaults.standard.set(!isFasterEnabled, forKey: PrefsKeys.FasterInactiveTabsOverride)
+        let rawValue = UserDefaults.standard.integer(forKey: PrefsKeys.FasterInactiveTabsOverride)
+        let fasterInactiveTabOption = FasterInactiveTabsOption(rawValue: rawValue) ?? .normal
+
+        UserDefaults.standard.set(fasterInactiveTabOption.nextOption.rawValue, forKey: PrefsKeys.FasterInactiveTabsOverride)
         settingsDelegate?.askedToReload()
     }
 }

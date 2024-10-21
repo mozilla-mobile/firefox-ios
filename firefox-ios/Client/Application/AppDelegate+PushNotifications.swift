@@ -85,12 +85,23 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         let content = response.notification.request.content
 
         if content.categoryIdentifier == NotificationSurfaceManager.Constant.notificationCategoryId {
-           switch response.actionIdentifier {
-           case UNNotificationDismissActionIdentifier:
-               notificationSurfaceManager.didDismissNotification(content.userInfo)
-           default:
-               notificationSurfaceManager.didTapNotification(content.userInfo)
-           }
+            switch response.actionIdentifier {
+            case UNNotificationDismissActionIdentifier:
+                notificationSurfaceManager.didDismissNotification(content.userInfo)
+            default:
+                notificationSurfaceManager.didTapNotification(content.userInfo)
+            }
+        } else if content.categoryIdentifier == NotificationCloseTabs.notificationCategoryId {
+            switch response.actionIdentifier {
+            case UNNotificationDefaultActionIdentifier:
+                // Since the notification is coming from the background, we should give a little
+                // time to ensure we can show the recently closed tabs panel
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    NotificationCenter.default.post(name: .RemoteTabNotificationTapped, object: nil)
+                }
+            default:
+                break
+            }
         }
         // We don't poll for commands here because we do that once the application wakes up
         // The notification service ensures that when the application wakes up, the application will check

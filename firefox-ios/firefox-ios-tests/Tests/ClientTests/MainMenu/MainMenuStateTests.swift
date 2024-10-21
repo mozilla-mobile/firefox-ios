@@ -32,10 +32,15 @@ final class MainMenuStateTests: XCTestCase {
         let reducer = mainMenuReducer()
 
         let expectedResult = MainMenuTabInfo(
+            tabID: "1234",
             url: URL(string: "https://mozilla.com"),
             isHomepage: true,
             isDefaultUserAgentDesktop: true,
-            hasChangedUserAgent: true
+            hasChangedUserAgent: true,
+            readerModeIsAvailable: false,
+            isBookmarked: false,
+            isInReadingList: false,
+            isPinned: false
         )
 
         XCTAssertNil(initialState.currentTabInfo)

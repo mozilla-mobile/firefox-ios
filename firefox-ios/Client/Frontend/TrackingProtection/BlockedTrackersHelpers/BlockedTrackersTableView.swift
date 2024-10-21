@@ -48,7 +48,7 @@ class BlockedTrackersTableView: UITableView,
         var snapshot = NSDiffableDataSourceSnapshot<Int, BlockedTrackerItem>()
         snapshot.appendSections([0])
         snapshot.appendItems(items, toSection: 0)
-        diffableDataSource?.apply(snapshot, animatingDifferences: true)
+        diffableDataSource?.apply(snapshot, animatingDifferences: false)
     }
 
     // MARK: Themable

@@ -384,7 +384,7 @@ extension QRCodeViewController: AVCaptureMetadataOutputObjectsDelegate {
                let text = metaData.stringValue {
                 captureSession.stopRunning()
                 // Open QR codes only when they are recognized as webpages, otherwise open as text
-                if let url = URIFixup.getURL(text), url.isWebPage() {
+                if let url = URIFixup.getURL(text), url.isWebPage(), url.baseDomain != nil {
                     let shouldPrompt = qrCodeDelegate.qrCodeScanningPermissionLevel != .allowURLsWithoutPrompt
 
                     if shouldPrompt {

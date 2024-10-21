@@ -350,6 +350,11 @@ class HistoryPanel: UIViewController,
             }
 
             showClearRecentHistory()
+            break
+        case .OpenRecentlyClosedTabs:
+            historyCoordinatorDelegate?.showRecentlyClosedTab()
+            applySnapshot(animatingDifferences: true)
+            break
         default:
             // no need to do anything at all
             break

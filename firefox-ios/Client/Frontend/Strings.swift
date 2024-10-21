@@ -3725,6 +3725,20 @@ extension String {
         tableName: nil,
         value: "View",
         comment: "Label for an action used to view one or more tabs from a notification.")
+
+// MARK: - Close tab notifications
+    public static let CloseTab_ArrivingNotification_title = MZLocalizedString(
+        key: "CloseTab_ArrivingNotification_title",
+        tableName: "FxANotification",
+        value: "Firefox tabs closed: %1$@",
+        comment: "Title of notification shown when a remote device has requested to close a number of tabs defined by ($1)")
+
+    // Notification Actions
+    public static let CloseTabViewActionTitle = MZLocalizedString(
+        key: "CloseTab.ViewAction.title",
+        tableName: "FxANotification",
+        value: "View recently closed tabs",
+        comment: "Label for an action used to view recently closed tabs.")
 }
 
 // MARK: - Engagement notification

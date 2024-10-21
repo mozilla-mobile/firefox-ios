@@ -6,6 +6,7 @@ import Common
 import Foundation
 import Redux
 
+/// State for the header cell that is used in the homepage header section
 struct HeaderState: StateType, Equatable {
     var windowUUID: WindowUUID
     var isPrivate: Bool
@@ -15,7 +16,7 @@ struct HeaderState: StateType, Equatable {
         self.init(
             windowUUID: windowUUID,
             isPrivate: false,
-            showPrivateModeToggle: false
+            showPrivateModeToggle: true
         )
     }
 

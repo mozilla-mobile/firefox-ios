@@ -61,8 +61,7 @@ class NavigationTest: BaseTestCase {
             app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].tap()
         } else {
             // Go forward to next visited web site
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton])
-            app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].tap()
+            app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].waitAndTap()
         }
         waitUntilPageLoad()
         mozWaitForValueContains(url, value: "test-mozilla-org")
@@ -87,19 +86,16 @@ class NavigationTest: BaseTestCase {
         // Open FxAccount from settings menu and check the Sign in to Firefox screen
         let signInToFirefoxStaticText = app.tables[AccessibilityIdentifiers.Settings.tableViewController]
             .staticTexts[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton]
-        mozWaitForElementToExist(signInToFirefoxStaticText)
-        signInToFirefoxStaticText.tap()
+        signInToFirefoxStaticText.waitAndTap()
         checkFirefoxSyncScreenShownViaSettings()
 
         // After that it is possible to go back to Settings
         let closeButton = app.navigationBars["Client.FxAWebView"].buttons.element(boundBy: 0)
-        mozWaitForElementToExist(closeButton)
-        closeButton.tap()
+        closeButton.waitAndTap()
 
         let closeButtonFxView = app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar]
             .buttons["Settings"]
-        mozWaitForElementToExist(closeButtonFxView)
-        closeButtonFxView.tap()
+        closeButtonFxView.waitAndTap()
     }
 
     // Because the Settings menu does not stretch tot the top we need a different function to check
@@ -186,8 +182,7 @@ class NavigationTest: BaseTestCase {
         app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].press(forDuration: 2)
 
         app.tables.otherElements[AccessibilityIdentifiers.Photon.pasteAction].tap()
-        mozWaitForElementToExist(app.buttons["Go"])
-        app.buttons["Go"].tap()
+        app.buttons["Go"].waitAndTap()
         waitUntilPageLoad()
         let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
         mozWaitForValueContains(url, value: website_2["moreLinkLongPressInfo"]!)
@@ -199,11 +194,11 @@ class NavigationTest: BaseTestCase {
         throw XCTSkip("Test needs to be updated")
         /*
             // This test is for populated clipboard only so we need to make sure there's something in Pasteboard
-            app.textFields["address"].typeText("www.google.com")
+            urlBarAddress.typeText("www.google.com")
             // Tapping two times when the text is not selected will reveal the menu
-            app.textFields["address"].tap()
-            mozWaitForElementToExist(app.textFields["address"])
-            app.textFields["address"].tap()
+            urlBarAddress.tap()
+            mozWaitForElementToExist(urlBarAddress)
+            urlBarAddress.tap()
             mozWaitForElementToExist(app.menuItems["Select All"])
             XCTAssertTrue(app.menuItems["Select All"].exists)
             XCTAssertTrue(app.menuItems["Select"].exists)
@@ -226,7 +221,7 @@ class NavigationTest: BaseTestCase {
                 XCTAssertTrue(app.menuItems["Open Link"].exists)
             }
 
-            app.textFields["address"].typeText("\n")
+            urlBarAddress.typeText("\n")
             waitUntilPageLoad()
             mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
 
@@ -238,7 +233,7 @@ class NavigationTest: BaseTestCase {
             // Since the textField value appears all selected first time is clicked
             // this workaround is necessary
             mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-            app.textFields["address"].tap()
+            urlBarAddress.tap()
             mozWaitForElementToExist(app.menuItems["Copy"])
             if iPad() {
                 XCTAssertTrue(app.menuItems["Cut"].exists)
@@ -377,11 +372,9 @@ class NavigationTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
 
         navigator.openURL("https://expired.badssl.com/")
-        mozWaitForElementToExist(app.buttons["Advanced"], timeout: TIMEOUT_LONG)
-        app.buttons["Advanced"].tap()
+        app.buttons["Advanced"].waitAndTap()
 
-        mozWaitForElementToExist(app.links["Visit site anyway"])
-        app.links["Visit site anyway"].tap()
+        app.links["Visit site anyway"].waitAndTap()
         mozWaitForElementToExist(app.webViews.otherElements["expired.badssl.com"], timeout: TIMEOUT_LONG)
     }
 
@@ -428,11 +421,9 @@ class NavigationTest: BaseTestCase {
     // Smoketest
     func testURLBar() {
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
-        mozWaitForElementToExist(urlBar)
-        urlBar.tap()
+        urlBar.waitAndTap()
 
-        let addressBar = app.textFields["address"]
-        XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+        XCTAssertTrue(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
 
         // These instances are false positives of the swiftlint configuration
         // swiftlint:disable empty_count
@@ -448,8 +439,7 @@ class NavigationTest: BaseTestCase {
     func testOpenInNewTab() {
         // Long-tap on an article link. Choose "Open in New Tab".
         openContextMenuForArticleLink()
-        mozWaitForElementToExist(app.buttons["Open in New Tab"])
-        app.buttons["Open in New Tab"].tap()
+        app.buttons["Open in New Tab"].waitAndTap()
         // A new tab loading the article page should open
         navigator.goto(TabTray)
         mozWaitForElementToExist(app.otherElements["Tabs Tray"].cells.staticTexts["Example Domain"])
@@ -462,8 +452,7 @@ class NavigationTest: BaseTestCase {
     func testOpenInNewPrivateTab() {
         // Long-tap on an article link. Choose "Open in New Private Tab".
         openContextMenuForArticleLink()
-        mozWaitForElementToExist(app.buttons["Open in New Private Tab"])
-        app.buttons["Open in New Private Tab"].tap()
+        app.buttons["Open in New Private Tab"].waitAndTap()
         // The article is loaded in a new private tab
         navigator.goto(TabTray)
         var numTabs = app.otherElements["Tabs Tray"].cells.count

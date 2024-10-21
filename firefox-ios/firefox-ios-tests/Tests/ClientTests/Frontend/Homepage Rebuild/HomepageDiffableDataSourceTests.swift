@@ -32,7 +32,7 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     func test_applyInitialSnapshot_hasCorrectData() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        dataSource.applyInitialSnapshot()
+        dataSource.applyInitialSnapshot(state: HomepageState(windowUUID: .XCTestDefaultUUID))
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfSections, 4)

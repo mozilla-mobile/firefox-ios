@@ -151,6 +151,10 @@ public struct AccessibilityIdentifiers {
             static let fingerprintersImage = "BlockedTrackers.FingerprintersImage"
             static let blockedTrackersLabel = "BlockedTrackers.BlockedTrackersLabel"
         }
+
+        struct CertificatesScreen {
+            static let headerView = "CertificatesViewController.HeaderView"
+        }
     }
 
     struct FirefoxHomepage {
@@ -708,6 +712,12 @@ public struct AccessibilityIdentifiers {
 
         struct Tabs {
             static let title = "TabsSetting"
+
+            struct Customize {
+                static let title = "CUSTOMIZE TAB TRAY"
+                static let inactiveTabsSwitch = "Inactive Tabs"
+                static let doneButton = "Done"
+            }
         }
 
         struct Theme {

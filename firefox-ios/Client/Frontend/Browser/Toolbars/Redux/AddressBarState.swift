@@ -339,7 +339,7 @@ struct AddressBarState: StateType, Equatable {
                 pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: false),
                 browserActions: browserActions(action: toolbarAction, addressBarState: state),
                 borderPosition: state.borderPosition,
-                url: state.url,
+                url: toolbarAction.url ?? state.url,
                 searchTerm: nil,
                 lockIconImageName: state.lockIconImageName,
                 isEditing: false,
@@ -379,6 +379,25 @@ struct AddressBarState: StateType, Equatable {
                 lockIconImageName: state.lockIconImageName,
                 isEditing: state.isEditing,
                 isScrollingDuringEdit: true,
+                shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+                isLoading: state.isLoading,
+                readerModeState: state.readerModeState
+            )
+
+        case ToolbarActionType.clearSearch:
+            guard let toolbarAction = action as? ToolbarAction else { return state }
+
+            return AddressBarState(
+                windowUUID: state.windowUUID,
+                navigationActions: state.navigationActions,
+                pageActions: state.pageActions,
+                browserActions: state.browserActions,
+                borderPosition: state.borderPosition,
+                url: nil,
+                searchTerm: nil,
+                lockIconImageName: state.lockIconImageName,
+                isEditing: state.isEditing,
+                isScrollingDuringEdit: state.isScrollingDuringEdit,
                 shouldSelectSearchTerm: state.shouldSelectSearchTerm,
                 isLoading: state.isLoading,
                 readerModeState: state.readerModeState
