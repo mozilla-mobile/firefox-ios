@@ -4393,38 +4393,38 @@ extension String {
                 key: "UnifiedSearch.SearchEngineSelection.TopTitle.Title.v133",
                 tableName: "SearchEngineSelection",
                 value: "This time search in:",
-                comment: "When the user taps the search engine icon in the toolbar, a popup with a list of alternative search engines appears. This is the title for the popup.")
+                comment: "When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the title for the sheet.")
 
             public static let SearchSettings = MZLocalizedString(
                 key: "UnifiedSearch.SearchEngineSelection.SearchSettings.Title.v133",
                 tableName: "SearchEngineSelection",
                 value: "Search Settings",
-                comment: "When the user taps the search engine icon in the toolbar, a popup with a list of alternative search engines appears. This string is the label for the button at the bottom of the list. When this row is tapped, the app's search settings screen appears.")
+                comment: "When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This string is the label for the button at the bottom of the list. When this row is tapped, the app's search settings screen appears.")
 
             public struct AccessibilityLabels {
                 public static let TopTitleLabel = MZLocalizedString(
                     key: "UnifiedSearch.SearchEngineSelection.AccessibilityLabels.TopTitle.Label.v133",
                     tableName: "SearchEngineSelection",
                     value: "This time search in:",
-                    comment: "When the user taps the search engine icon in the toolbar, a popup with a list of alternative search engines appears. This is the accessibility label for the title of that popup.")
+                    comment: "When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility label for the title of that sheet.")
 
                 public static let SearchSettingsLabel = MZLocalizedString(
                     key: "UnifiedSearch.SearchEngineSelection.AccessibilityLabels.SearchSettings.Label.v133",
                     tableName: "SearchEngineSelection",
                     value: "Search settings",
-                    comment: "When the user taps the search engine icon in the toolbar, a popup with a list of alternative search engines appears. This string is the label for the row at the bottom of the list. When this row is tapped, the app's search settings screen appears.")
+                    comment: "When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This string is the label for the row at the bottom of the list. When this row is tapped, the app's search settings screen appears.")
 
                 public static let SearchSettingsHint = MZLocalizedString(
                     key: "UnifiedSearch.SearchEngineSelection.AccessibilityLabels.SearchSettings.Hint.v133",
                     tableName: "SearchEngineSelection",
                     value: "Opens search settings",
-                    comment: "When the user taps the search engine icon in the toolbar, a popup with a list of alternative search engines appears. This is the accessibility hint for tapping the search settings row at the bottom of the list, which opens the app's search settings screen.")
+                    comment: "When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility hint for tapping the search settings row at the bottom of the list, which opens the app's search settings screen.")
 
                 public static let CloseButtonLabel = MZLocalizedString(
                     key: "UnifiedSearch.SearchEngineSelection.AccessibilityLabels.CloseButton.Label.v133",
                     tableName: "SearchEngineSelection",
                     value: "Close",
-                    comment: "When the user taps the search engine icon in the toolbar, a popup with a list of alternative search engines appears. This is the accessibility label for the popup's close button.")
+                    comment: "When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility label for the sheet's close button.")
             }
         }
     }
@@ -6539,7 +6539,7 @@ extension String {
             key: "AddressToolbar.SearchEngine.A11y.Hint.v133",
             tableName: "AddressToolbar",
             value: "Opens search engine selection",
-            comment: "When the user taps the search engine icon in the toolbar, a popup with a list of alternative search engines appears. This is the accessibility hint describing what tapping the search engine icon does.")
+            comment: "When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility hint describing what tapping the search engine icon does.")
 
         public static let PrivacyAndSecuritySettingsA11yLabel = MZLocalizedString(
             key: "AddressToolbar.PrivacyAndSecuriySettings.A11y.Label.v128",
