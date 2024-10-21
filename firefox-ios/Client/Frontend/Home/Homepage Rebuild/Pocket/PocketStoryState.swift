@@ -13,6 +13,7 @@ class PocketStoryState: Equatable, Hashable {
     }
 
     var title: String { story.title }
+    var url: URL? { story.url }
     var imageURL: URL { story.imageURL }
     var description: String {
         if let sponsor = story.sponsor {
