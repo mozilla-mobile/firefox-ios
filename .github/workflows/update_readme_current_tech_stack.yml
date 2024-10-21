@@ -1,0 +1,42 @@
+name: Update README with current tech stack
+
+on: 
+    workflow_dispatch:
+    schedule:
+      - cron: '0 12 * * SUN'
+
+jobs:
+    update_readme_with_current_stack:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3    
+    
+            - name: Update README
+              run: |
+               sh update_readme_project_stack.sh
+            
+            - name: Check changes
+              run: |
+                if [[ $(git status --porcelain) ]]; then
+                    echo "changes_detected=true" >> $GITHUB_ENV 
+                fi
+
+            - name: Commit if needed 
+              if: ${{ env.changes_detected }}
+              run: |
+                git config --global user.name "github-actions[bot]"
+                git config --global user.email "github-actions[bot]@users.noreply.github.com"
+                git add README.md
+                git commit -m "Update README with latest tech stack"
+
+            - name: Create Pull Request
+              if: ${{ env.changes_detected }}
+              uses: peter-evans/create-pull-request@v6
+              with:
+                  author: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
+                  committer: GitHub <noreply@github.com>
+                  title: Update Firefox icons from Acorn repo
+                  branch: update-firefox-project-with-acorn-icons
+                  token: ${{ secrets.GITHUB_TOKEN }}

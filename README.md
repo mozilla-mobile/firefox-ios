@@ -2,6 +2,12 @@
 
 Download [Firefox iOS](https://apps.apple.com/app/firefox-web-browser/id989804926) and [Focus iOS](https://itunes.apple.com/app/id1055677337) on the App Store.
 
+|          |                |               | |
+|----------|----------------|---------------|--|
+| **Firefox-iOS**| ![Xcode 15.4](https://img.shields.io/badge/Xcode-15.4-blue?logo=Xcode&logoColor=white) | ![Swift 5.6](https://img.shields.io/badge/Swift-5.6-red?logo=Swift&logoColor=white) | ![iOS 15.0+](https://img.shields.io/badge/iOS-15.0+-green?logo=apple&logoColor=white) |
+| **Focus-iOS**| ![Xcode 15.4](https://img.shields.io/badge/Xcode-15.4-blue?logo=Xcode&logoColor=white) | ![Swift 5.6](https://img.shields.io/badge/Swift-5.6-red?logo=Swift&logoColor=white) | ![iOS 15.0+](https://img.shields.io/badge/iOS-15.0+-green?logo=apple&logoColor=white)
+---
+
 ## Building the code
 This is a mono repository containing both Firefox and Focus iOS projects. For their related build instructions, please follow the project readme.
 - [Firefox for iOS](https://github.com/mozilla-mobile/firefox-ios/blob/main/firefox-ios/README.md)
