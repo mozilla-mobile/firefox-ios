@@ -40,7 +40,6 @@ struct TabsPanelState: ScreenState, Equatable {
                   tabs: panelState.tabs,
                   inactiveTabs: panelState.inactiveTabs,
                   isInactiveTabsExpanded: panelState.isInactiveTabsExpanded,
-                  toastType: panelState.toastType,
                   scrollState: panelState.scrollState,
                   didTapAddTab: panelState.didTapAddTab,
                   urlRequest: panelState.urlRequest)
@@ -142,16 +141,6 @@ struct TabsPanelState: ScreenState, Equatable {
                                   tabs: state.tabs,
                                   inactiveTabs: inactiveTabs,
                                   isInactiveTabsExpanded: state.isInactiveTabsExpanded)
-
-        case TabPanelMiddlewareActionType.scrollToTab:
-            guard let scrollBehavior = action.scrollBehavior else { return defaultState(fromPreviousState: state) }
-            let scrollModel = createTabScrollBehavior(forState: state, withScrollBehavior: scrollBehavior)
-            return TabsPanelState(windowUUID: state.windowUUID,
-                                  isPrivateMode: state.isPrivateMode,
-                                  tabs: state.tabs,
-                                  inactiveTabs: state.inactiveTabs,
-                                  isInactiveTabsExpanded: state.isInactiveTabsExpanded,
-                                  scrollState: scrollModel)
 
         case TabPanelMiddlewareActionType.scrollToTab:
             guard let scrollBehavior = action.scrollBehavior else { return defaultState(fromPreviousState: state) }
