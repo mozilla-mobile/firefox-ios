@@ -149,6 +149,16 @@ struct NavigationBarState: StateType, Equatable {
         )
     }
 
+    private static func handleToolbarPositionChanged(state: Self, action: Action) -> Self {
+        guard let displayBorder = (action as? ToolbarAction)?.displayNavBorder else { return state }
+
+        return NavigationBarState(
+            windowUUID: state.windowUUID,
+            actions: state.actions,
+            displayBorder: displayBorder
+        )
+    }
+
     // MARK: - Navigation Toolbar Actions
 
     private static func navigationActions(
