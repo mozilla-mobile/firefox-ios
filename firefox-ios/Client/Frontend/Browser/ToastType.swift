@@ -45,11 +45,8 @@ enum ToastType: Equatable {
         return .TabsTray.CloseTabsToast.Action
     }
 
-    func reduxAction(
-        for uuid: WindowUUID,
-        panelType: TabTrayPanelType = .tabs
-    ) -> TabPanelViewAction? {
-        var actionType = TabPanelViewActionType.undoClose
+    func reduxAction(for uuid: WindowUUID) -> TabPanelViewAction? {
+        var actionType: TabPanelViewActionType
         switch self {
         case .closedSingleTab: actionType = TabPanelViewActionType.undoClose
         case .closedSingleInactiveTab: actionType = TabPanelViewActionType.undoCloseInactiveTab
@@ -64,7 +61,8 @@ enum ToastType: Equatable {
             return nil
         }
 
-        return TabPanelViewAction(panelType: panelType,
+        // None of the above handled toast actions require a specific panelType
+        return TabPanelViewAction(panelType: nil,
                                   windowUUID: uuid,
                                   actionType: actionType)
     }
