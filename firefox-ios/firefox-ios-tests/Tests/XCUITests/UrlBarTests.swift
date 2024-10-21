@@ -91,7 +91,6 @@ class UrlBarTests: BaseTestCase {
     private func typeSearchTermAndHitGo(searchTerm: String) {
         urlBarAddress.typeText(searchTerm)
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.buttons["Go"])
-        app.buttons["Go"].tap()
+        app.buttons["Go"].waitAndTap()
     }
 }
