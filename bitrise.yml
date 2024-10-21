@@ -1471,7 +1471,8 @@ workflows:
             fi
     - script@1:
         title: Pin Python version
-        content: |-
+        inputs:
+        - content: |-
             brew unlink python@3.12
             brew unlink python@3.11
             brew link --force python@3.11
