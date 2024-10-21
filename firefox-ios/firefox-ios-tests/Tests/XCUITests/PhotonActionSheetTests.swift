@@ -91,8 +91,7 @@ class PhotonActionSheetTests: BaseTestCase {
         if #unavailable(iOS 17) {
             fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 2)
         }
-        mozWaitForElementToExist(fennecElement)
-        fennecElement.tap()
+        fennecElement.waitAndTap()
         mozWaitForElementToExist(app.navigationBars["ShareTo.ShareView"])
     }
 
@@ -110,8 +109,7 @@ class PhotonActionSheetTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2323203
     func testShareSheetSendToDevice() {
         openNewShareSheet()
-        mozWaitForElementToExist(app.staticTexts["Send to Device"])
-        app.staticTexts["Send to Device"].tap()
+        app.staticTexts["Send to Device"].waitAndTap()
         mozWaitForElementToExist(
             app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton]
         )

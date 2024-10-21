@@ -12,8 +12,7 @@ class ReadingListTests: BaseTestCase {
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         navigator.nowAt(BrowserTab)
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
-        mozWaitForElementToExist(app.buttons["Reader View"])
-        app.buttons["Reader View"].tap()
+        app.buttons["Reader View"].waitAndTap()
         // The settings of reader view are shown as well as the content of the web site
         mozWaitForElementToExist(app.buttons["Display Settings"])
         mozWaitForElementToExist(app.webViews.staticTexts["The Book of Mozilla"])
@@ -101,8 +100,7 @@ class ReadingListTests: BaseTestCase {
     func testRemoveFromReadingView() {
         addContentToReaderView()
         // Once the content has been added, remove it
-        mozWaitForElementToExist(app.buttons["Remove from Reading List"])
-        app.buttons["Remove from Reading List"].tap()
+        app.buttons["Remove from Reading List"].waitAndTap()
 
         // Check that instead of the remove icon now it is shown the add to read list
         mozWaitForElementToExist(app.buttons["Add to Reading List"])
@@ -144,8 +142,7 @@ class ReadingListTests: BaseTestCase {
 
         // Remove the item from reading list
         savedToReadingList.swipeLeft()
-        mozWaitForElementToExist(app.buttons["Remove"])
-        app.buttons["Remove"].tap()
+        app.buttons["Remove"].waitAndTap()
         mozWaitForElementToNotExist(savedToReadingList)
 
         // Reader list view should be empty
@@ -269,8 +266,7 @@ class ReadingListTests: BaseTestCase {
     func testAddToReaderListOptions() {
         addContentToReaderView()
         // Check that Settings layouts options are shown
-        mozWaitForElementToExist(app.buttons["ReaderModeBarView.settingsButton"])
-        app.buttons["ReaderModeBarView.settingsButton"].tap()
+        app.buttons["ReaderModeBarView.settingsButton"].waitAndTap()
         let layoutOptions = ["Light", "Sepia", "Dark", "Decrease text size", "Reset text size", "Increase text size",
                              "Remove from Reading List", "Mark as Read"]
         for option in layoutOptions {

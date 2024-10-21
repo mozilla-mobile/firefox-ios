@@ -45,16 +45,14 @@ class SearchSettingsUITests: BaseTestCase {
     }
 
     private func addCustomSearchEngine() {
-        mozWaitForElementToExist(app.tables.cells[AccessibilityIdentifiers.Settings.Search.customEngineViewButton])
-        app.tables.cells[AccessibilityIdentifiers.Settings.Search.customEngineViewButton].tap()
+        app.tables.cells[AccessibilityIdentifiers.Settings.Search.customEngineViewButton].waitAndTap()
         mozWaitForElementToExist(app.tables.cells.staticTexts["Search Engine"])
         app.tables.cells.textViews["customEngineTitle"].tap()
         app.tables.cells.textViews["customEngineTitle"].typeText(customSearchEngine["name"]!)
 
         app.tables.cells.textViews["customEngineUrl"].tap()
         app.tables.cells.textViews["customEngineUrl"].typeText(customSearchEngine["url"]!)
-        mozWaitForElementToExist(app.buttons["Save"], timeout: 5)
-        app.buttons["Save"].tap()
+        app.buttons["Save"].waitAndTap(timeout: 5)
         // Check that custom engine has been added successfully
         mozWaitForElementToExist(app.tables.cells.staticTexts[customSearchEngine["name"]!])
     }

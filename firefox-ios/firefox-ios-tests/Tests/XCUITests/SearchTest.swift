@@ -15,8 +15,7 @@ private let SuggestedSite6: String = "foobar bomb baby"
 
 class SearchTests: BaseTestCase {
     private func typeOnSearchBar(text: String) {
-        mozWaitForElementToExist(app.textFields.firstMatch)
-        app.textFields.firstMatch.tap()
+        app.textFields.firstMatch.waitAndTap()
         app.textFields.firstMatch.tap()
         app.textFields.firstMatch.typeText(text)
     }
@@ -129,22 +128,17 @@ class SearchTests: BaseTestCase {
         typeOnSearchBar(text: "www.mozilla.org")
         urlBarAddress.press(forDuration: 5)
         app.menuItems["Select All"].tap()
-        mozWaitForElementToExist(app.menuItems["Copy"])
-        app.menuItems["Copy"].tap()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
-        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
+        app.menuItems["Copy"].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
 
         navigator.nowAt(HomePanelsScreen)
         mozWaitForElementToExist(
             app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         )
-        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
-        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
-        mozWaitForElementToExist(urlBarAddress)
-        urlBarAddress.tap()
+        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].waitAndTap()
+        urlBarAddress.waitAndTap()
 
-        mozWaitForElementToExist(app.menuItems["Paste"])
-        app.menuItems["Paste"].tap()
+        app.menuItems["Paste"].waitAndTap()
 
         // Verify that the Paste shows the search controller with prompt
         mozWaitForElementToNotExist(app.staticTexts[LabelPrompt])
@@ -223,8 +217,7 @@ class SearchTests: BaseTestCase {
             }
         }
 
-        mozWaitForElementToExist(app.menuItems["Search with Firefox"])
-        app.menuItems["Search with Firefox"].tap()
+        app.menuItems["Search with Firefox"].waitAndTap()
         waitUntilPageLoad()
         let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
         mozWaitForValueContains(url, value: "google")
@@ -255,8 +248,7 @@ class SearchTests: BaseTestCase {
             // Search icon is displayed.
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton])
             XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].label, "Search")
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton])
-            app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].tap()
+            app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].waitAndTap()
 
             let addressBar = urlBarAddress
             mozWaitForElementToExist(addressBar)
@@ -271,8 +263,7 @@ class SearchTests: BaseTestCase {
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
             XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Home")
             app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.backButton])
-            app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
+            app.buttons[AccessibilityIdentifiers.Toolbar.backButton].waitAndTap()
 
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
             XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Home")
@@ -375,8 +366,7 @@ class SearchTests: BaseTestCase {
         XCTAssertEqual(app.tables.cells.count, 4, "There should be 4 search suggestions")
 
         // Delete the text and type "g"
-        mozWaitForElementToExist(app.buttons["Clear text"])
-        app.buttons["Clear text"].tap()
+        app.buttons["Clear text"].waitAndTap()
         typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: true)
 
         // Tap on the text letter "g"

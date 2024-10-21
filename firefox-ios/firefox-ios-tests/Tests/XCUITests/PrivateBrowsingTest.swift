@@ -231,8 +231,7 @@ class PrivateBrowsingTest: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["Private Browsing"])
 
         // "Undo" toast message is displayed. Tap on "Undo" button
-        mozWaitForElementToExist(app.buttons["Undo"])
-        app.buttons["Undo"].tap()
+        app.buttons["Undo"].waitAndTap()
 
         // All the private tabs are restored
         navigator.goto(TabTray)
@@ -300,8 +299,7 @@ class PrivateBrowsingTestIphone: IphoneOnlyTestCase {
         app.webViews.links.firstMatch.press(forDuration: 1)
         mozWaitForElementToExist(app.buttons["Open in New Private Tab"])
         app.buttons["Open in New Private Tab"].press(forDuration: 1)
-        mozWaitForElementToExist(app.buttons["Switch"])
-        app.buttons["Switch"].tap()
+        app.buttons["Switch"].waitAndTap()
 
         // Check that the tab has changed
         waitUntilPageLoad()

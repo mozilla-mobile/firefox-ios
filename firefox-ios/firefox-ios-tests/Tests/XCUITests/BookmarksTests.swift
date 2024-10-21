@@ -24,11 +24,9 @@ class BookmarksTests: BaseTestCase {
 
     private func undoBookmarkRemoval() {
         navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkSlash])
-        app.otherElements[StandardImageIdentifiers.Large.bookmarkSlash].tap()
+        app.otherElements[StandardImageIdentifiers.Large.bookmarkSlash].waitAndTap()
         navigator.nowAt(BrowserTab)
-        mozWaitForElementToExist(app.buttons["Undo"])
-        app.buttons["Undo"].tap()
+        app.buttons["Undo"].waitAndTap()
     }
 
     private func checkUnbookmarked() {
@@ -217,8 +215,7 @@ class BookmarksTests: BaseTestCase {
         addNewBookmark()
         // Remove by swiping
         app.tables["Bookmarks List"].staticTexts["BBC"].swipeLeft()
-        mozWaitForElementToExist(app.buttons["Delete"])
-        app.buttons["Delete"].tap()
+        app.buttons["Delete"].waitAndTap()
         // Verify that there are only 1 cell (desktop bookmark folder)
         checkItemsInBookmarksList(items: 1)
     }
@@ -269,8 +266,7 @@ class BookmarksTests: BaseTestCase {
     }
 
     private func typeOnSearchBar(text: String) {
-        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
-        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
+        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].waitAndTap()
         urlBarAddress.typeText(text)
     }
 
@@ -384,8 +380,7 @@ class BookmarksTests: BaseTestCase {
 
     private func bookmarkPageAndTapEdit() {
         bookmark()
-        mozWaitForElementToExist(app.buttons["Edit"])
-        app.buttons["Edit"].tap()
+        app.buttons["Edit"].waitAndTap()
         mozWaitForElementToExist(app.navigationBars["Edit Bookmark"])
     }
 }
