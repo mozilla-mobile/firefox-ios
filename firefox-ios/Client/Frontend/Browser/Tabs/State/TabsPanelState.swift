@@ -200,8 +200,6 @@ struct TabsPanelState: ScreenState, Equatable {
         }
     }
 
-    // Note that the `TabsPanelState` contains a subset of all available tabs (i.e. private, normal). That means we can
-    // provide a scroll index within this tabs subarray directly as this is what the UI consumes (e.g. `TabsDisplayView`).
     static func createTabScrollBehavior(
         forState state: TabsPanelState,
         withScrollBehavior scrollBehavior: TabScrollBehavior
