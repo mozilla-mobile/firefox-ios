@@ -125,8 +125,7 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
         else { return }
 
         if self.featureFlags.isFeatureEnabled(.passwordGenerator, checking: .buildOnly) {
-            if type == "generatePassword" {
-                guard let tab = self.tab, !tab.isPrivate else {return}
+            if type == "generatePassword", let tab = self.tab, !tab.isPrivate {
                 let newAction = GeneralBrowserAction(
                     windowUUID: tab.windowUUID,
                     actionType: GeneralBrowserActionType.showPasswordGenerator)
@@ -246,6 +245,8 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
     private func promptSave(_ login: LoginEntry) {
         guard login.isValid.isSuccess else { return }
 
+        clearStoredPasswordAfterGeneration()
+
         let promptMessage: String
         let https = "^https:\\/\\/"
         let url = login.hostname.replacingOccurrences(of: https, with: "", options: .regularExpression, range: nil)
@@ -338,6 +339,15 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
         else { return }
 
         currentRequestId = requestId
+    }
+
+    private func clearStoredPasswordAfterGeneration() {
+        if let windowUUID = self.tab?.windowUUID {
+            let action = PasswordGeneratorAction(windowUUID: windowUUID,
+                                                 actionType: PasswordGeneratorActionType.clearGeneratedPasswordForSite,
+                                                 currentTab: self.tab)
+            store.dispatch(action)
+        }
     }
 
     public static func fillLoginDetails(with tab: Tab,
