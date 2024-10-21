@@ -6,12 +6,9 @@ import Common
 import Redux
 
 final class PocketMiddleware {
-    private let logger: Logger
-    private let pocketManager: PocketManager
-
-    init(profile: Profile = AppContainer.shared.resolve(), logger: Logger = DefaultLogger.shared) {
-        self.logger = logger
-        self.pocketManager = PocketManager(pocketAPI: PocketProvider(prefs: profile.prefs))
+    private let pocketManager: PocketManagerProvider
+    init(pocketManager: PocketManagerProvider = AppContainer.shared.resolve()) {
+        self.pocketManager = pocketManager
     }
 
     lazy var pocketSectionProvider: Middleware<AppState> = { state, action in
