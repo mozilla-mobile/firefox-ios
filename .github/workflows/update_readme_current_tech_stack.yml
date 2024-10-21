@@ -37,6 +37,6 @@ jobs:
               with:
                   author: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
                   committer: GitHub <noreply@github.com>
-                  title: Update Firefox icons from Acorn repo
-                  branch: update-firefox-project-with-acorn-icons
+                  title: Update README with recent tech stack
+                  branch: update-readme-with-tech-stack
                   token: ${{ secrets.GITHUB_TOKEN }}
