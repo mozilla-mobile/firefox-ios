@@ -59,20 +59,7 @@ struct NavigationBarState: StateType, Equatable {
 
         switch action.actionType {
         case ToolbarActionType.didLoadToolbars:
-            guard let displayBorder = (action as? ToolbarAction)?.displayNavBorder else { return state }
-
-            let actions = [
-                backAction(enabled: false),
-                forwardAction(enabled: false),
-                searchAction,
-                tabsAction(),
-                menuAction()
-            ]
-            return NavigationBarState(
-                windowUUID: state.windowUUID,
-                actions: actions,
-                displayBorder: displayBorder
-            )
+            return handleToolbarDidLoadToolbars(state: state, action: action)
 
         case ToolbarActionType.urlDidChange:
             guard let toolbarAction = action as? ToolbarAction else { return state }
