@@ -34,8 +34,8 @@ features:
           navigation_hint: false
       - channel: developer
         value:
-          enabled: false
-          unified_search: false
+          enabled: true
+          unified_search: true
           one_tap_new_tab: false
           navigation_hint: false
 

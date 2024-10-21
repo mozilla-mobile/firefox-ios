@@ -31,6 +31,10 @@ class BrowserCoordinator: BaseCoordinator,
                           MainMenuCoordinatorDelegate,
                           ETPCoordinatorSSLStatusDelegate,
                           SearchEngineSelectionCoordinatorDelegate {
+    private struct UX {
+        static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
+    }
+
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var legacyHomepageViewController: LegacyHomepageViewController?
@@ -533,7 +537,7 @@ class BrowserCoordinator: BaseCoordinator,
         let navigationController = DismissableNavigationViewController()
         if navigationController.shouldUseiPadSetup() {
             navigationController.modalPresentationStyle = .popover
-            navigationController.preferredContentSize = CGSize(width: 250, height: 536) // FIXME constants
+            navigationController.preferredContentSize = UX.searchEnginePopoverSize
             navigationController.popoverPresentationController?.sourceView = sourceView
             navigationController.popoverPresentationController?.canOverlapSourceViewRect = false
         } else {
@@ -545,6 +549,7 @@ class BrowserCoordinator: BaseCoordinator,
             router: DefaultRouter(navigationController: navigationController),
             windowUUID: tabManager.windowUUID
         )
+
         coordinator.parentCoordinator = self
         coordinator.navigationHandler = self
         add(child: coordinator)
