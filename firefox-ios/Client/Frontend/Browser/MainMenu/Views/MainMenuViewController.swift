@@ -8,6 +8,7 @@ import UIKit
 import Shared
 import Redux
 import MenuKit
+import SiteImageView
 
 class MainMenuViewController: UIViewController,
                               UIAdaptivePresentationControllerDelegate,
@@ -240,6 +241,17 @@ class MainMenuViewController: UIViewController,
     func newState(state: MainMenuState) {
         menuState = state
 
+        if let accountData = menuState.accountData {
+            if let iconURL = accountData.iconURL {
+                GeneralizedImageFetcher().getImageFor(url: iconURL) { [weak self] image in
+                    guard let self else { return }
+                    self.updateHeaderWith(accountData: accountData, icon: image)
+                }
+            } else {
+                updateHeaderWith(accountData: accountData, icon: nil)
+            }
+        }
+
         if menuState.currentSubmenuView != nil {
             coordinator?.showDetailViewController()
             return
@@ -263,6 +275,14 @@ class MainMenuViewController: UIViewController,
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer3
         menuContent.applyTheme(theme: theme)
+    }
+
+    private func updateHeaderWith(accountData: AccountData, icon: UIImage?) {
+        menuContent.accountHeaderView.setupDetails(subtitle: accountData.subtitle ?? "",
+                                                   title: accountData.title,
+                                                   icon: icon,
+                                                   warningIcon: accountData.warningIcon,
+                                                   theme: themeManager.getCurrentTheme(for: windowUUID))
     }
 
     // MARK: - A11y

@@ -6,6 +6,14 @@ import Common
 import MenuKit
 import Shared
 import Redux
+import Account
+
+struct AccountData: Equatable {
+    let title: String
+    let subtitle: String?
+    let warningIcon: String?
+    let iconURL: URL?
+}
 
 struct MainMenuTabInfo: Equatable {
     let tabID: TabUUID
@@ -24,6 +32,8 @@ struct MainMenuState: ScreenState, Equatable {
     var menuElements: [MenuSection]
 
     var shouldDismiss: Bool
+
+    var accountData: AccountData?
 
     var navigationDestination: MenuNavigationDestination?
     var currentTabInfo: MainMenuTabInfo?
@@ -47,7 +57,8 @@ struct MainMenuState: ScreenState, Equatable {
             currentTabInfo: mainMenuState.currentTabInfo,
             submenuDestination: mainMenuState.currentSubmenuView,
             navigationDestination: mainMenuState.navigationDestination,
-            shouldDismiss: mainMenuState.shouldDismiss
+            shouldDismiss: mainMenuState.shouldDismiss,
+            accountData: mainMenuState.accountData
         )
     }
 
@@ -58,7 +69,8 @@ struct MainMenuState: ScreenState, Equatable {
             currentTabInfo: nil,
             submenuDestination: nil,
             navigationDestination: nil,
-            shouldDismiss: false
+            shouldDismiss: false,
+            accountData: nil
         )
     }
 
@@ -68,7 +80,8 @@ struct MainMenuState: ScreenState, Equatable {
         currentTabInfo: MainMenuTabInfo?,
         submenuDestination: MainMenuDetailsViewType? = nil,
         navigationDestination: MenuNavigationDestination? = nil,
-        shouldDismiss: Bool = false
+        shouldDismiss: Bool = false,
+        accountData: AccountData? = nil
     ) {
         self.windowUUID = windowUUID
         self.menuElements = menuElements
@@ -76,6 +89,7 @@ struct MainMenuState: ScreenState, Equatable {
         self.currentTabInfo = currentTabInfo
         self.navigationDestination = navigationDestination
         self.shouldDismiss = shouldDismiss
+        self.accountData = accountData
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -88,6 +102,13 @@ struct MainMenuState: ScreenState, Equatable {
         }
 
         switch action.actionType {
+        case MainMenuActionType.viewDidLoad:
+            return MainMenuState(
+                windowUUID: state.windowUUID,
+                menuElements: state.menuElements,
+                currentTabInfo: state.currentTabInfo,
+                accountData: state.getAccountData()
+            )
         case MainMenuActionType.updateCurrentTabInfo:
             guard let action = action as? MainMenuAction,
                   let currentTabInfo = action.currentTabInfo
@@ -135,43 +156,33 @@ struct MainMenuState: ScreenState, Equatable {
         }
     }
 
-    // Farcaseanu
-    // we should probably add this somewhere in either the screen showing actionType
-    // from the VC, or the updateCurrentTabInfo action.
-        // private func syncMenuButton() -> PhotonRowActions? {
-    //
-    //     let rustAccount = RustFirefoxAccounts.shared
-    //     let needsReAuth = rustAccount.accountNeedsReauth()
-    //
-    //     guard let userProfile = rustAccount.userProfile else {
-    //         return SingleActionViewModel(title: .LegacyAppMenu.SyncAndSaveData,
-    //                                      iconString: StandardImageIdentifiers.Large.sync,
-    //                                      tapHandler: action).items
-    //     }
-    //
-    //     let title: String = {
-    //         if rustAccount.accountNeedsReauth() {
-    //             return .FxAAccountVerifyPassword
-    //         }
-    //         return userProfile.displayName ?? userProfile.email
-    //     }()
-    //
-    //     let warningImage = StandardImageIdentifiers.Large.warningFill
-    //     let avatarImage = StandardImageIdentifiers.Large.avatarCircle
-    //     let iconString = needsReAuth ? warningImage : avatarImage
-    //
-    //     var iconURL: URL?
-    //     if let str = rustAccount.userProfile?.avatarUrl,
-    //         let url = URL(string: str, invalidCharacters: false) {
-    //         iconURL = url
-    //     }
-    //     let iconType: PhotonActionSheetIconType = needsReAuth ? .Image : .URL
-    //     let syncOption = SingleActionViewModel(title: title,
-    //                                            iconString: iconString,
-    //                                            iconURL: iconURL,
-    //                                            iconType: iconType,
-    //                                            needsIconActionableTint: needsReAuth,
-    //                                            tapHandler: action).items
-    //     return syncOption
-    // }
+    private func getAccountData() -> AccountData? {
+        let rustAccount = RustFirefoxAccounts.shared
+        let needsReAuth = rustAccount.accountNeedsReauth()
+
+        guard let userProfile = rustAccount.userProfile else {
+            return nil
+        }
+
+        let title: String = {
+            if needsReAuth {
+                return .MainMenu.Account.SyncErrorTitle
+            }
+            return userProfile.displayName ?? userProfile.email
+        }()
+
+        let subtitle: String? = needsReAuth ? .MainMenu.Account.SyncErrorDescription : nil
+        let warningIcon: String? = needsReAuth ? StandardImageIdentifiers.Large.warningFill : nil
+
+        var iconURL: URL?
+        if let str = rustAccount.userProfile?.avatarUrl,
+           let url = URL(string: str, invalidCharacters: false) {
+            iconURL = url
+        }
+
+        return AccountData(title: title,
+                           subtitle: subtitle,
+                           warningIcon: warningIcon,
+                           iconURL: iconURL)
+    }
 }
