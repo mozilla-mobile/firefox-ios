@@ -1,3 +1,18 @@
+/* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the body text for the hint. */
+"ContextualHints.MainMenu.NewMenu.Body.v132" = "Find what you need faster, from private browsing to save actions.";
+
+/* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
+"ContextualHints.MainMenu.NewMenu.Title.v132" = "New: streamlined menu";
+
+/* The accessibility label for the back button in the Main menu header navigation view. */
+"MainMenu.Account.AccessibilityLabels.BackButton.v132" = "Back";
+
+/* The accessibility label for the close button in the Main menu. */
+"MainMenu.Account.AccessibilityLabels.CloseButton.v132" = "Close";
+
+/* The accessibility label for the sign in button in the Main menu header view. */
+"MainMenu.Account.AccessibilityLabels.MainButton.v132" = "Sign in to sync passwords, tabs, and more";
+
 /* On the main menu, at the top, when the user is signed out. The description for the sign in action */
 "MainMenu.Account.SignedOut.Description.v131" = "Sync passwords, tabs, and more";
 
@@ -9,6 +24,18 @@
 
 /* On the main menu, at the top, when the user is signed in but there was an error syncing. The title for this state. */
 "MainMenu.Account.SyncError.Title.v131" = "Sign back in to sync";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Bookmarks panel. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks.v132" = "Bookmarks";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Downloads panel. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.Downloads.v132" = "Downloads";
+
+/* On the main menu, the accessibility label for the action that will take the user to the History panel. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.History.v132" = "History";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Passwords panel in the settings screen. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.Passwords.v132" = "Passwords";
 
 /* On the main menu, the title for the action that will take the user to the Bookmarks panel. */
 "MainMenu.PanelLinkSection.Bookmarks.Title.v131" = "Bookmarks";
@@ -22,6 +49,18 @@
 /* On the main menu, the title for the action that will take the user to the Passwords panel in the settings screen. */
 "MainMenu.PanelLinkSection.Passwords.Title.v131" = "Passwords";
 
+/* On the main menu, the accessibility labels for the action that will take the user to the Customize Homepage section in the settings screen. */
+"MainMenu.SettingsSection.AccessibilityLabels.CustomizeHomepage.v132" = "Customize Homepage";
+
+/* On the main menu, the accessibility labels for the action that will take the user to a website to get help from Mozilla. */
+"MainMenu.SettingsSection.AccessibilityLabels.GetHelp.v132" = "Get help";
+
+/* On the main menu, the accessibility labels for the action that will take the user to the Settings menu. */
+"MainMenu.SettingsSection.AccessibilityLabels.Settings.v132" = "Settings";
+
+/* On the main menu, the accessibility labels for the action that will take the user to a What's New in Firefox popup. Placeholder is for the app name. */
+"MainMenu.SettingsSection.AccessibilityLabels.WhatsNew.v132" = "New in %@";
+
 /* On the main menu, the title for the action that will take the user to the Customize Hopegape section in the settings screen. */
 "MainMenu.SettingsSection.CustomizeHomepage.Title.v131" = "Customize Homepage";
 
@@ -33,6 +72,42 @@
 
 /* On the main menu, the title for the action that will take the user to a What's New in Firefox popup. Placeholder is for the app name. */
 "MainMenu.SettingsSection.WhatsNew.Title.v131" = "New in %@";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Add to Home screen tool for iOS Home screen. */
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132" = "Home";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to add a website to the iOS home screen. */
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Title.v132" = "Add to Home Screen";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Shortcuts tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Subtitle.v132" = "Shortcut";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to add the current website to the shortcuts on the homepage. */
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Title.v132" = "Add to Shortcuts";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Bookmarks tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Subtitle.v132" = "Add Bookmark";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to save a bookmark for this particular page.. */
+"MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Title.v132" = "Bookmark This Page";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to edit the bookmark for this particular page. */
+"MainMenu.Submenus.Save.AccessibilityLabels.EditBookmark.Title.v132" = "Edit Bookmark";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows the user to remove this site from the reading list. */
+"MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromReadingList.Title.v132" = "Remove from Reading List";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to remove the current website from the shortcuts on the homepage. */
+"MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromShortcuts.Title.v132" = "Remove from Shortcuts";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Save as PDF tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveAsPDF.Subtitle.v132" = "PDF";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows the user to use the Save to PDF tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveAsPDF.Title.v132" = "Save as PDF";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Reading List tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveToReadingList.Subtitle.v132" = "Reading List";
 
 /* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Add to Homescreen tool. */
 "MainMenu.Submenus.Save.AddToHomeScreen.Subtitle.v131" = "Home";

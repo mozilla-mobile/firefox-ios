@@ -11,7 +11,7 @@
 "MainMenu.Account.AccessibilityLabels.CloseButton.v132" = "Fechar";
 
 /* The accessibility label for the sign in button in the Main menu header view. */
-"MainMenu.Account.AccessibilityLabels.MainButton.v132" = "Iniciar sessão para sincronizar palavras-passe, separadores e mais";
+"MainMenu.Account.AccessibilityLabels.MainButton.v132" = "Iniciar sessão para sincronizar palavras-passe, separadores e muito mais";
 
 /* On the main menu, at the top, when the user is signed out. The description for the sign in action */
 "MainMenu.Account.SignedOut.Description.v131" = "Sincronize palavras-passe, separadores e mais";
@@ -59,7 +59,7 @@
 "MainMenu.SettingsSection.AccessibilityLabels.Settings.v132" = "Definições";
 
 /* On the main menu, the accessibility labels for the action that will take the user to a What's New in Firefox popup. Placeholder is for the app name. */
-"MainMenu.SettingsSection.AccessibilityLabels.WhatsNew.v132" = "Novo em %@";
+"MainMenu.SettingsSection.AccessibilityLabels.WhatsNew.v132" = "Novo no %@";
 
 /* On the main menu, the title for the action that will take the user to the Customize Hopegape section in the settings screen. */
 "MainMenu.SettingsSection.CustomizeHomepage.Title.v131" = "Personalizar página inicial";
@@ -95,7 +95,7 @@
 "MainMenu.Submenus.Save.AccessibilityLabels.EditBookmark.Title.v132" = "Editar marcador";
 
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows the user to remove this site from the reading list. */
-"MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromReadingList.Title.v132" = "Remover da lista de leitura";
+"MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromReadingList.Title.v132" = "Remover da Lista de leitura";
 
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to remove the current website from the shortcuts on the homepage. */
 "MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromShortcuts.Title.v132" = "Remover dos Atalhos";
@@ -110,7 +110,7 @@
 "MainMenu.Submenus.Save.AccessibilityLabels.SaveToReadingList.Subtitle.v132" = "Lista de leitura";
 
 /* On the main menu, in the Save submenu, the accessibility label for the menu component that allows the user to add this site to the reading list. */
-"MainMenu.Submenus.Save.AccessibilityLabels.SaveToReadingList.Title.v132" = "Guardar na lista de leitura";
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveToReadingList.Title.v132" = "Guardar na Lista de leitura";
 
 /* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Add to Homescreen tool. */
 "MainMenu.Submenus.Save.AddToHomeScreen.Subtitle.v131" = "Início";
@@ -152,10 +152,10 @@
 "MainMenu.Submenus.Save.SaveToReadingList.Title.v131" = "Guardar na lista de leitura";
 
 /* On the main menu, the accessibility label for the action that will turn Night Mode off in the application. */
-"MainMenu.Submenus.Tools.AccessibilityLabels.NightMode.Off.Title.v132" = "Desligar modo noturno";
+"MainMenu.Submenus.Tools.AccessibilityLabels.NightMode.Off.Title.v132" = "Desativar modo noturno";
 
 /* On the main menu, the accessibility label for the action that will turn Night Mode on in the application. */
-"MainMenu.Submenus.Tools.AccessibilityLabels.NightMode.On.Title.v132" = "Ligar modo noturno";
+"MainMenu.Submenus.Tools.AccessibilityLabels.NightMode.On.Title.v132" = "Ativar modo noturno";
 
 /* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Night Mode tool. */
 "MainMenu.Submenus.Tools.AccessibilityLabels.NightMode.Subtitle.v132" = "Modo noturno";
@@ -191,7 +191,7 @@
 "MainMenu.Submenus.Tools.AccessibilityLabels.Zoom.Subtitle.v132" = "Zoom";
 
 /* On the main menu, in the tools submenu, the accessibility label for the menu component that indicates the current zoom level. Placeholder is for the current zoom level percentage. */
-"MainMenu.Submenus.Tools.AccessibilityLabels.Zoom.Title.v132" = "Ampliação (%@)";
+"MainMenu.Submenus.Tools.AccessibilityLabels.Zoom.Title.v132" = "Zoom (%@)";
 
 /* On the main menu, the title for the action that will turn Night Mode off in the application. */
 "MainMenu.Submenus.Tools.NightMode.Off.Title.v131" = "Desligar modo noturno";
@@ -236,7 +236,7 @@
 "MainMenu.Submenus.Tools.Zoom.Title.v131" = "Zoom (%@)";
 
 /* The accessibility label for the Main Menu. */
-"MainMenu.TabsSection.AccessibilityLabels.MainMenu.v132" = "Menu Principal";
+"MainMenu.TabsSection.AccessibilityLabels.MainMenu.v132" = "Menu principal";
 
 /* On the main menu, the accessibility label for the action that will create a new private tab. */
 "MainMenu.TabsSection.AccessibilityLabels.NewPrivateTab.v132" = "Novo separador privado";

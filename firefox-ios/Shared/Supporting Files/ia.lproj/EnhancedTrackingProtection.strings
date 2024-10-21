@@ -41,10 +41,10 @@
 "Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "Remover cookies e datos de sito pro %@ pote disconnecter te de sitos web e vacuar carrettos de compras.";
 
 /* The title for the clear cookies and site data alert inside the enhanced tracking protection screen. */
-"Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "Clarar le cookies e le datos de sito";
+"Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "Rader le cookies e le datos de sito";
 
 /* The title for the clear cookies and site data button inside the enhanced tracking protection screen. */
-"Menu.EnhancedTrackingProtection.ClearData.ButtonTitle.v128" = "Clarar le cookies e le datos de sito";
+"Menu.EnhancedTrackingProtection.ClearData.ButtonTitle.v128" = "Rader le cookies e le datos de sito";
 
 /* The text for the clear cookies and site data toast that appears when the user selects to clear the cookies */
 "Menu.EnhancedTrackingProtection.ClearData.ToastMessage.v128" = "Cookies e datos de sitos removite";
