@@ -11,10 +11,11 @@ let editWidgetButton = "com.apple.springboardhome.application-shortcut-item.conf
 let editHomeScreenButton = "com.apple.springboardhome.application-shortcut-item.rearrange-icons"
 let removeWidgetButton = "com.apple.springboardhome.application-shortcut-item.remove-widget"
 
-// Buttons Identifier
-let goToCopiedLink = "Go to Copied Link"
-let privateModeButtonToggle = "FirefoxHomepage.OtherButtons.PrivateModeToggle"
-let privateModeButtonToggleiPad = "TopTabsViewController.privateModeButton"
+// Widget Buttons Identifier
+let goToCopiedLink = springboard.buttons["Go to Copied Link"]
+let newPrivateSearch = springboard.buttons["New Private Search"]
+let newSearch = springboard.buttons["New Search"]
+let clearPrivateTabs = springboard.buttons["Clear Private Tabs"]
 
 // Widget coordinates
 let normalized = springboard.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
@@ -36,7 +37,7 @@ class TodayWidgetTests: BaseTestCase {
         case right
     }
 
-    private func widgertExist() -> Bool {
+    private func widgetExist() -> Bool {
         let firefoxWidgetButton = springboard
             .buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", "Firefox")).element.exists
         let firefoxWidgetSecureSearchButton = springboard
@@ -46,19 +47,19 @@ class TodayWidgetTests: BaseTestCase {
         return firefoxWidgetButton || firefoxWidgetSecureSearchButton || firefoxCopiedLinkWidget
     }
 
-    private func checkPresenceFifefoxWidget() -> Bool {
+    private func checkPresenceFirefoxWidget() -> Bool {
         let maxSwipes = 3
         var firefoxWidgetExists = false
         var numberOfSwipes = 0
 
         // Initial check for widget presence
-        if widgertExist() {
+        if widgetExist() {
             firefoxWidgetExists = true
         } else {
             // Perform swipe up until the widget is found or maxSwipes reached
             while !springboard.buttons["Edit"].exists && numberOfSwipes < maxSwipes {
                 springboard.swipeUp()
-                if widgertExist() {
+                if widgetExist() {
                     firefoxWidgetExists = true
                     break
                 }
@@ -110,19 +111,19 @@ class TodayWidgetTests: BaseTestCase {
         var widgetCount = maxWidgetCount
 
         // Check existence of widgets by swiping left through the widget list
-        XCTAssertTrue(springboard.staticTexts["Quick Actions"].exists, "Quick Actions widget not found.")
+        mozWaitForElementToExist(springboard.staticTexts["Quick Actions"])
         springboard.swipeLeft()
 
-        XCTAssertTrue(springboard.staticTexts["Firefox Shortcuts"].exists, "Firefox Shortcuts widget not found.")
+        mozWaitForElementToExist(springboard.staticTexts["Firefox Shortcuts"])
         springboard.swipeLeft()
 
-        XCTAssertTrue(springboard.staticTexts["Quick View"].exists, "Quick View widget not found (first check).")
+        mozWaitForElementToExist(springboard.staticTexts["Quick View"])
         springboard.swipeLeft()
 
-        XCTAssertTrue(springboard.staticTexts["Quick View"].exists, "Quick View widget not found (second check).")
+        mozWaitForElementToExist(springboard.staticTexts["Quick View"])
         springboard.swipeLeft()
 
-        XCTAssertTrue(springboard.staticTexts["Website Shortcuts"].exists, "Website Shortcuts widget not found.")
+        mozWaitForElementToExist(springboard.staticTexts["Website Shortcuts"])
 
         // Reset swipes and navigate back to "Quick Actions" if needed
         var quickActionExists = springboard.staticTexts["Quick Actions"].exists
@@ -236,7 +237,7 @@ class TodayWidgetTests: BaseTestCase {
     }
 
     private func removeWidgetIfExists(widgetType: String) {
-        if checkPresenceFifefoxWidget() {
+        if checkPresenceFirefoxWidget() {
             removeFirefoxWidget()
         }
     }
@@ -282,15 +283,15 @@ class TodayWidgetTests: BaseTestCase {
 
         // Edit Widget and check the options
         springboard.buttons[editWidgetButton].tap()
-        mozWaitElementHittable(element: springboard.buttons["New Search"], timeout: 5)
-        springboard.buttons["New Search"].tap()
+        mozWaitElementHittable(element: newSearch, timeout: 5)
+        newSearch.tap()
 
         // Verify widget actions
-        mozWaitForElementToExist(springboard.buttons[goToCopiedLink])
-        XCTAssertTrue(springboard.buttons[goToCopiedLink].exists)
-        XCTAssertTrue(springboard.buttons["New Private Search"].exists)
-        XCTAssertTrue(springboard.buttons["Clear Private Tabs"].exists)
-        springboard.buttons["New Search"].tap()
+        mozWaitForElementToExist(goToCopiedLink)
+        XCTAssertTrue(goToCopiedLink.exists)
+        XCTAssertTrue(newPrivateSearch.exists)
+        XCTAssertTrue(clearPrivateTabs.exists)
+        newSearch.tap()
 
         // Tap outside alert to close it
         coordinate.tap()
@@ -299,7 +300,8 @@ class TodayWidgetTests: BaseTestCase {
         tapOnWidget(widgetType: "Firefox")
 
         // Verify private mode toggle based on device type
-        let elementToAssert = iPad() ? privateModeButtonToggleiPad : privateModeButtonToggle
+        // let elementToAssert = iPad() ? privateModeButtonToggleiPad : privateModeToggleButton
+        let elementToAssert = iPad() ? AccessibilityIdentifiers.Browser.TopTabs.privateModeButton : AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.privateModeToggleButton
         XCTAssertTrue(app.buttons[elementToAssert].value as! String == "Off")
     }
 
@@ -312,7 +314,7 @@ class TodayWidgetTests: BaseTestCase {
         goToTodayWidgetPage()
 
         // Remove Firefox Widget if it exists
-        if checkPresenceFifefoxWidget() {
+        if checkPresenceFirefoxWidget() {
             removeFirefoxWidget()
         }
 
@@ -335,18 +337,18 @@ class TodayWidgetTests: BaseTestCase {
 
         // Edit widget and interact with options
         springboard.buttons[editWidgetButton].tap()
-        mozWaitElementHittable(element: springboard.buttons["New Search"], timeout: 5)
-        springboard.buttons["New Search"].tap()
+        mozWaitElementHittable(element: newSearch, timeout: 5)
+        newSearch.tap()
 
         // Verify the existence of New Search-related buttons
-        mozWaitForElementToExist(springboard.buttons[goToCopiedLink], timeout: 5)
-        XCTAssertTrue(springboard.buttons[goToCopiedLink].exists, "Go to Copied Link button not found.")
-        XCTAssertTrue(springboard.buttons["New Private Search"].exists, "New Private Search button not found.")
-        XCTAssertTrue(springboard.buttons["Clear Private Tabs"].exists, "Clear Private Tabs button not found.")
+        mozWaitForElementToExist(goToCopiedLink, timeout: 5)
+        XCTAssertTrue(goToCopiedLink.exists, "Go to Copied Link button not found.")
+        XCTAssertTrue(newPrivateSearch.exists, "New Private Search button not found.")
+        XCTAssertTrue(clearPrivateTabs.exists, "Clear Private Tabs button not found.")
 
         // Start a new private search
-        mozWaitElementHittable(element: springboard.buttons["New Private Search"], timeout: 5)
-        springboard.buttons["New Private Search"].tap()
+        mozWaitElementHittable(element: newPrivateSearch, timeout: 5)
+        newPrivateSearch.tap()
 
         // Tap outside the alert to dismiss it
         coordinate.tap()
@@ -367,7 +369,8 @@ class TodayWidgetTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["Leave no traces on this device"])
 
         // Verify private mode toggle is on
-        let elementToAssert = iPad() ? privateModeButtonToggleiPad : privateModeButtonToggle
+        //let elementToAssert = iPad() ? privateModeButtonToggleiPad : privateModeToggleButton
+        let elementToAssert = iPad() ? AccessibilityIdentifiers.Browser.TopTabs.privateModeButton : AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.privateModeToggleButton
         XCTAssertTrue(app.buttons[elementToAssert].value as! String == "On", "Private Mode toggle is not set to 'On'.")
     }
 
@@ -380,7 +383,7 @@ class TodayWidgetTests: BaseTestCase {
         goToTodayWidgetPage()
 
         // Remove Firefox Widget if it already exists
-        if checkPresenceFifefoxWidget() {
+        if checkPresenceFirefoxWidget() {
             removeFirefoxWidget()
         }
 
@@ -401,18 +404,18 @@ class TodayWidgetTests: BaseTestCase {
 
         // Tap on Edit Widget and check the available options
         springboard.buttons[editWidgetButton].tap()
-        mozWaitElementHittable(element: springboard.buttons["New Search"], timeout: 3)
-        springboard.buttons["New Search"].tap()
+        mozWaitElementHittable(element: newSearch, timeout: 3)
+        newSearch.tap()
 
         // Ensure the Go To Copied Link option exists
-        mozWaitForElementToExist(springboard.buttons[goToCopiedLink], timeout: 3)
-        XCTAssertTrue(springboard.buttons[goToCopiedLink].exists, "Go To Copied Link button not found.")
-        XCTAssertTrue(springboard.buttons["New Private Search"].exists, "New Private Search button not found.")
+        mozWaitForElementToExist(goToCopiedLink, timeout: 3)
+        XCTAssertTrue(goToCopiedLink.exists, "Go To Copied Link button not found.")
+        XCTAssertTrue(newPrivateSearch.exists, "New Private Search button not found.")
         XCTAssertTrue(springboard.buttons["Clear Private Tabs"].exists, "Clear Private Tabs button not found.")
 
         // Tap Go To Copied Link
-        mozWaitElementHittable(element: springboard.buttons[goToCopiedLink], timeout: 3)
-        springboard.buttons[goToCopiedLink].tap()
+        mozWaitElementHittable(element: goToCopiedLink, timeout: 3)
+        goToCopiedLink.tap()
 
         // Tap outside the alert to close it
         coordinate.tap()
