@@ -5,7 +5,6 @@
 import XCTest
 
 // Selectors
-
 // Widget buttons
 let editWidgetButton = "com.apple.springboardhome.application-shortcut-item.configure-widget"
 let editHomeScreenButton = "com.apple.springboardhome.application-shortcut-item.rearrange-icons"
@@ -73,7 +72,6 @@ class TodayWidgetTests: BaseTestCase {
     private func removeFirefoxWidget() {
         let maxSwipes = 3
         var numberOfSwipes = 0
-
         // Function to press and hold on a widget if it exists
         func pressAndHoldWidget(matching label: String) {
             let widget = springboard.buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", label)).element
@@ -268,7 +266,10 @@ class TodayWidgetTests: BaseTestCase {
         // Check New Search action
         tapOnWidget(widgetType: "Firefox")
         // Verify private mode toggle based on device type
-        let elementToAssert = iPad() ? AccessibilityIdentifiers.Browser.TopTabs.privateModeButton : AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.privateModeToggleButton
+        var elementToAssert = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.privateModeToggleButton
+        if iPad() {
+            elementToAssert = AccessibilityIdentifiers.Browser.TopTabs.privateModeButton
+        }
         guard let buttonValue = app.buttons[elementToAssert].value as? String else {
             XCTFail("Expected value to be a String but found \(type(of: app.buttons[elementToAssert].value))")
             return
@@ -325,7 +326,10 @@ class TodayWidgetTests: BaseTestCase {
         // Verify the presence of Private Mode message
         mozWaitForElementToExist(app.staticTexts["Leave no traces on this device"])
         // Verify private mode toggle is on
-        let elementToAssert = iPad() ? AccessibilityIdentifiers.Browser.TopTabs.privateModeButton : AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.privateModeToggleButton
+        var elementToAssert = AccessibilityIdentifiers.FirefoxHomepage.OtherButtons.privateModeToggleButton
+        if iPad() {
+            elementToAssert = AccessibilityIdentifiers.Browser.TopTabs.privateModeButton
+        }
         guard let buttonValue = app.buttons[elementToAssert].value as? String else {
             XCTFail("Expected value to be a String but found \(type(of: app.buttons[elementToAssert].value))")
             return
