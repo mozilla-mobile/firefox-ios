@@ -30,10 +30,10 @@ final class MainMenuAction: Action {
 }
 
 enum MainMenuActionType: ActionType {
-    case closeMenuAndNavigateToDestination
-    case closeMenu
-    case showDetailsView
-    case toggleUserAgent
+    case tapNavigateToDestination
+    case tapCloseMenu
+    case tapShowDetailsView
+    case tapToggleUserAgent
     case updateCurrentTabInfo
     case viewDidLoad
 }
@@ -43,12 +43,16 @@ enum MainMenuMiddlewareActionType: ActionType {
 }
 
 enum MainMenuDetailsActionType: ActionType {
-    case addToBookmarks
-    case addToReadingList
-    case addToShortcuts
-    case backToMainMenu
-    case dismissView
-    case editBookmark
-    case removeFromShortcuts
-    case removeFromReadingList
+    // Tools submenu actions
+    case tapZoom
+
+    // Save submenu actions
+    case tapAddToBookmarks
+    case tapAddToReadingList
+    case tapAddToShortcuts
+    case tapBackToMainMenu
+    case tapDismissView
+    case tapEditBookmark
+    case tapRemoveFromShortcuts
+    case tapRemoveFromReadingList
 }

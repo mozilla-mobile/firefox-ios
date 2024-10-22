@@ -14,6 +14,7 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     func showSettings(at destination: Route.SettingsSection)
     func showFindInPage()
     func editLatestBookmark()
+    func updateZoomPageBarVisibility()
 }
 
 class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
@@ -79,6 +80,8 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
                 self.navigationHandler?.showSettings(at: .password)
             case .settings:
                 self.navigationHandler?.showSettings(at: .general)
+            case .zoom:
+                self.navigationHandler?.updateZoomPageBarVisibility()
             }
 
             self.parentCoordinator?.didFinish(from: self)

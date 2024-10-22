@@ -662,11 +662,11 @@ class TabManagerMiddleware {
     // MARK: - Main menu actions
     private func resolveMainMenuActions(with action: MainMenuAction, appState: AppState) {
         switch action.actionType {
-        case MainMenuActionType.toggleUserAgent:
+        case MainMenuActionType.tapToggleUserAgent:
             changeUserAgent(forWindow: action.windowUUID)
         case MainMenuMiddlewareActionType.requestTabInfo:
             provideTabInfo(forWindow: action.windowUUID)
-        case MainMenuDetailsActionType.addToBookmarks:
+        case MainMenuDetailsActionType.tapAddToBookmarks:
             guard let tabID = action.tabID else { return }
             let shareItem = createShareItem(with: tabID, and: action.windowUUID)
             addToBookmarks(shareItem)
@@ -678,13 +678,13 @@ class TabManagerMiddleware {
                     actionType: GeneralBrowserActionType.showToast
                 )
             )
-        case MainMenuDetailsActionType.addToReadingList:
+        case MainMenuDetailsActionType.tapAddToReadingList:
             addToReadingList(with: action.tabID, uuid: action.windowUUID)
-        case MainMenuDetailsActionType.removeFromReadingList:
+        case MainMenuDetailsActionType.tapRemoveFromReadingList:
             removeFromReadingList(with: action.tabID, uuid: action.windowUUID)
-        case MainMenuDetailsActionType.addToShortcuts:
+        case MainMenuDetailsActionType.tapAddToShortcuts:
             addToShortcuts(with: action.tabID, uuid: action.windowUUID)
-        case MainMenuDetailsActionType.removeFromShortcuts:
+        case MainMenuDetailsActionType.tapRemoveFromShortcuts:
             removeFromShortcuts(with: action.tabID, uuid: action.windowUUID)
 
         default:
@@ -733,6 +733,7 @@ class TabManagerMiddleware {
                         isHomepage: selectedTab.isFxHomeTab,
                         isDefaultUserAgentDesktop: UserAgent.isDesktop(ua: UserAgent.getUserAgent()),
                         hasChangedUserAgent: selectedTab.changedUserAgent,
+                        zoomLevel: selectedTab.pageZoom,
                         readerModeIsAvailable: selectedTab.readerModeAvailableOrActive,
                         isBookmarked: profileTabInfo.isBookmarked,
                         isInReadingList: profileTabInfo.isInReadingList,
