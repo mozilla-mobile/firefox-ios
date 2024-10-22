@@ -1,12 +1,31 @@
-# Firefox for iOS [![codebeat badge](https://codebeat.co/badges/67e58b6d-bc89-4f22-ba8f-7668a9c15c5a)](https://codebeat.co/projects/github-com-mozilla-firefox-ios) [![codecov](https://codecov.io/gh/mozilla-mobile/firefox-ios/branch/main/graph/badge.svg)](https://codecov.io/gh/mozilla-mobile/firefox-ios/branch/main) and Focus iOS
+# Firefox for iOS and Focus iOS
 
 Download [Firefox iOS](https://apps.apple.com/app/firefox-web-browser/id989804926) and [Focus iOS](https://itunes.apple.com/app/id1055677337) on the App Store.
 
-|          |                |               | |
-|----------|----------------|---------------|--|
-| **Firefox-iOS**| ![Xcode 15.4](https://img.shields.io/badge/Xcode-15.4-blue?logo=Xcode&logoColor=white) | ![Swift 5.6](https://img.shields.io/badge/Swift-5.6-red?logo=Swift&logoColor=white) | ![iOS 15.0+](https://img.shields.io/badge/iOS-15.0+-green?logo=apple&logoColor=white) |
-| **Focus-iOS**| ![Xcode 15.4](https://img.shields.io/badge/Xcode-15.4-blue?logo=Xcode&logoColor=white) | ![Swift 5.6](https://img.shields.io/badge/Swift-5.6-red?logo=Swift&logoColor=white) | ![iOS 15.0+](https://img.shields.io/badge/iOS-15.0+-green?logo=apple&logoColor=white)
----
+<table>
+  <tr>
+    <th style="border: none;"><strong>Firefox iOS</strong></th>
+    <td style="border: none;"><img src="https://img.shields.io/badge/Xcode-15.4-blue?logo=Xcode&logoColor=white" alt="Firefox-iOS"></td>
+    <td style="border: none;"><img src="https://img.shields.io/badge/Swift-5.6-red?logo=Swift&logoColor=white" alt="Firefox-iOS"></td>
+    <td style="border: none;"><img src="https://img.shields.io/badge/iOS-15.0+-green?logo=apple&logoColor=white" alt="Firefox-iOS"></td>
+    <th rowspan="2" style="border: none;">
+        <a href="https://codebeat.co/projects/github-com-mozilla-firefox-ios">
+            <img src="https://codebeat.co/badges/67e58b6d-bc89-4f22-ba8f-7668a9c15c5a" alt="">
+        </a>
+    </th>
+    <th rowspan="2" style="border: none;">
+        <a href="https://codecov.io/gh/mozilla-mobile/firefox-ios/branch/main">
+            <img src="https://codecov.io/gh/mozilla-mobile/firefox-ios/branch/main/graph/badge.svg" alt="">
+        </a>
+    </th>
+  </tr>
+  <tr>
+    <th style="border: none;"><strong>Focus iOS</strong></th>
+    <td style="border: none;"><img src="https://img.shields.io/badge/Xcode-15.4-blue?logo=Xcode&logoColor=white" alt="Focus-iOS"></td>
+    <td style="border: none;"><img src="https://img.shields.io/badge/Swift-5.6-red?logo=Swift&logoColor=white" alt="Focus-iOS"></td>
+    <td style="border: none;"><img src="https://img.shields.io/badge/iOS-15.0+-green?logo=apple&logoColor=white" alt="Focus-iOS"></td>
+  </tr>
+</table>
 
 ## Building the code
 This is a mono repository containing both Firefox and Focus iOS projects. For their related build instructions, please follow the project readme.

@@ -12,32 +12,26 @@ function deployment_target() {
 function build_sed_string() {
     ICON=$1
     VERSION=$2
-    BADGE=$3
-    echo "!\[$ICON $VERSION\]($BADGE)"
-}
-
-function badge() {
-    APP=$1
-    VERSION=$2
     COLOR=$3
     LOGO=$4
-    echo "https:\/\/img.shields.io\/badge\/$APP-$VERSION-$COLOR\?logo=$LOGO\&logoColor=white"
+    APP=$5
+    echo "<img src=\"https:\/\/img.shields.io\/badge\/$ICON-$VERSION-$COLOR\?logo=$LOGO\&logoColor=white\" alt=\"$APP\"><\/td>"
 }
 
 function sed_into_readme() {
     APP=$1
     DEPLOYMENT_TARGET=$2
     VERSION_GREP="[0-9.].*"
-    XCODE_GREP=$(build_sed_string Xcode $VERSION_GREP $(badge Xcode $VERSION_GREP "blue" "Xcode"))
-    SWIFT_GREP=$(build_sed_string Swift $VERSION_GREP $(badge Swift $VERSION_GREP "red" "Swift"))
-    TARGET_GREP=$(build_sed_string iOS "$VERSION_GREP+" $(badge iOS "$VERSION_GREP+" "green" "apple"))
+    XCODE_GREP=$(build_sed_string "Xcode" $VERSION_GREP "blue" "Xcode" $APP)
+    XCODE=$(build_sed_string "Xcode" $XCODE_VERSION "blue" "Xcode" $APP)
+    SWIFT_GREP=$(build_sed_string "Swift" $VERSION_GREP "red" "Swift" $APP)
+    SWIFT=$(build_sed_string "Swift" $SWIFT_VERSION "red" "Swift" $APP)
+    IOS_GREP=$(build_sed_string "iOS" "$VERSION_GREP+" "green" "apple" $APP)
+    IOS=$(build_sed_string "iOS" "$DEPLOYMENT_TARGET+" "green" "apple" $APP)
 
-    XCODE=$(build_sed_string Xcode $XCODE_VERSION $(badge Xcode $XCODE_VERSION "blue" "Xcode"))
-    SWIFT=$(build_sed_string Swift $SWIFT_VERSION $(badge Swift $SWIFT_VERSION "red" "Swift"))
-    TARGET=$(build_sed_string iOS "$DEPLOYMENT_TARGET+" $(badge iOS "$DEPLOYMENT_TARGET+" "green" "apple"))
-
-    echo "s/$APP\*\*\| $XCODE_GREP \| $SWIFT_GREP \| $TARGET_GREP/$APP\*\*\| $XCODE \| $SWIFT \| $TARGET/"
-    sed -i "" "s/$APP\*\*\| $XCODE_GREP \| $SWIFT_GREP \| $TARGET_GREP/$APP\*\*\| $XCODE \| $SWIFT \| $TARGET/" $README_FILE
+    sed -i "" "s/$XCODE_GREP/$XCODE/" $README_FILE
+    sed -i "" "s/$SWIFT_GREP/$SWIFT/" $README_FILE
+    sed -i "" "s/$IOS_GREP/$IOS/" $README_FILE
 }
 
 PROJECT_FIREFOX_FILE="firefox-ios/Client.xcodeproj/project.pbxproj"
