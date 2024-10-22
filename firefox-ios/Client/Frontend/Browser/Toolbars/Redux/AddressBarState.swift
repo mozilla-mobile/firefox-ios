@@ -599,6 +599,29 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
+    private static func handleToolbarPositionChanged(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return state }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            pageActions: state.pageActions,
+            browserActions: state.browserActions,
+            borderPosition: toolbarAction.addressBorderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: state.didStartTyping,
+            showQRPageAction: state.showQRPageAction
+        )
+    }
+
     // MARK: - Address Toolbar Actions
     private static func navigationActions(
         action: ToolbarAction,
