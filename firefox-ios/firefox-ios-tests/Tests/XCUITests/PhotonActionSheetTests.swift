@@ -26,10 +26,12 @@ class PhotonActionSheetTests: BaseTestCase {
         // Remove pin
         cell.press(forDuration: 2)
         app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash].tap()
-
         // Check that it has been unpinned
-        // Adding sleep as an workaround until https://github.com/mozilla-mobile/firefox-ios/issues/22323 is fixed
-        sleep(5)
+        /* FIXME: Adding a workaround until https://github.com/mozilla-mobile/firefox-ios/issues/22323 is fixed
+         * We will wait for the pinned icon on the example.com tile to disappear (max 8 seconds polling)
+         */
+        waitForNoExistence(app.cells["Example Domain"].images[StandardImageIdentifiers.Small.pinBadgeFill], timeoutValue: 8)
+
         cell.press(forDuration: 2)
         mozWaitForElementToExist(app.tables.cells.otherElements[StandardImageIdentifiers.Large.pin])
     }
