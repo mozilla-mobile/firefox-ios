@@ -8,7 +8,7 @@ class URLValidationTests: BaseTestCase {
     let urlTypes = ["www.mozilla.org", "www.mozilla.org/", "https://www.mozilla.org", "www.mozilla.org/en", "www.mozilla.org/en-",
                     "www.mozilla.org/en-US", "https://www.mozilla.org/", "https://www.mozilla.org/en", "https://www.mozilla.org/en-US"]
     let urlHttpTypes = ["http://example.com", "http://example.com/"]
-    let url = XCUIApplication().textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+    let urlField = XCUIApplication().textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
 
     override func setUp() {
         super.setUp()
@@ -23,20 +23,26 @@ class URLValidationTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2460854
     // Smoketest
     func testDifferentURLTypes() {
-        for i in urlTypes {
-            navigator.openURL(i)
+        for url in urlTypes {
+            navigator.openURL(url)
             waitUntilPageLoad()
             mozWaitForElementToExist(app.otherElements.staticTexts["Mozilla"])
             mozWaitForElementToExist(app.buttons["Menu"])
-            mozWaitForValueContains(url, value: "www.mozilla.org/en-US/")
+            // Getting the current system locale ex:- en-US
+            var locale = Locale.preferredLanguages[0]
+            // Only the below url suffixes should lead to en-US website
+            if url.hasSuffix("en") || url.hasSuffix("en-") || url.hasSuffix("en-US") {
+                locale = "en-US"
+            }
+            mozWaitForValueContains(urlField, value: "www.mozilla.org/\(locale)/")
             clearURL()
         }
 
-        for i in urlHttpTypes {
-            navigator.openURL(i)
+        for url in urlHttpTypes {
+            navigator.openURL(url)
             waitUntilPageLoad()
             mozWaitForElementToExist(app.otherElements.staticTexts["Example Domain"])
-            mozWaitForValueContains(url, value: "example.com/")
+            mozWaitForValueContains(urlField, value: "example.com/")
             clearURL()
         }
     }

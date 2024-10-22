@@ -57,6 +57,24 @@ public extension UICollectionView {
     func register<T: ReusableCell>(cellType: T.Type) {
         register(T.self, forCellWithReuseIdentifier: T.cellIdentifier)
     }
+
+    /// Returns `true` if the `indexPath` is not out of bounds.
+    func isValid(indexPath: IndexPath) -> Bool {
+        return 0..<numberOfSections ~= indexPath.section
+               && 0..<numberOfItems(inSection: indexPath.section) ~= indexPath.row
+    }
+
+    /// Returns the list of UICollectionViewCells which are fully visible within the UICollectionView's bounds.
+    /// Note: This list will be empty if there are pending layout updates.
+    var fullyVisibleCells: [UICollectionViewCell] {
+        return visibleCells.filter({ self.bounds.contains($0.frame) })
+    }
+
+    /// Returns the list of cell IndexPaths which are fully visible within the UICollectionView's bounds.
+    /// Note: This list will be empty if there are pending layout updates.
+    var indexPathsForFullyVisibleItems: [IndexPath] {
+        return fullyVisibleCells.compactMap({ indexPath(for: $0) })
+    }
 }
 
 public extension UITableView {
