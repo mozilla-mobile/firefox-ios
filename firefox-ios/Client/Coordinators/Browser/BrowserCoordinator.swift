@@ -29,7 +29,12 @@ class BrowserCoordinator: BaseCoordinator,
                           PrivateHomepageDelegate,
                           WindowEventCoordinator,
                           MainMenuCoordinatorDelegate,
-                          ETPCoordinatorSSLStatusDelegate {
+                          ETPCoordinatorSSLStatusDelegate,
+                          SearchEngineSelectionCoordinatorDelegate {
+    private struct UX {
+        static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
+    }
+
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var legacyHomepageViewController: LegacyHomepageViewController?
@@ -468,6 +473,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - MainMenuCoordinatorDelegate
+
     func showMainMenu() {
         guard let menuNavViewController = makeMenuNavViewController() else { return }
         present(menuNavViewController)
@@ -527,6 +533,36 @@ class BrowserCoordinator: BaseCoordinator,
         coordinator.start()
 
         return navigationController
+    }
+
+    // MARK: - SearchEngineSelectionCoordinatorDelegate
+
+    func showSearchEngineSelection(forSourceView sourceView: UIView) {
+        guard !childCoordinators.contains(where: { $0 is SearchEngineSelectionCoordinator }) else { return }
+
+        let navigationController = DismissableNavigationViewController()
+        if navigationController.shouldUseiPadSetup() {
+            navigationController.modalPresentationStyle = .popover
+            navigationController.preferredContentSize = UX.searchEnginePopoverSize
+            navigationController.popoverPresentationController?.sourceView = sourceView
+            navigationController.popoverPresentationController?.canOverlapSourceViewRect = false
+        } else {
+            navigationController.modalPresentationStyle = .pageSheet
+            navigationController.sheetPresentationController?.detents = [.medium(), .large()]
+            navigationController.sheetPresentationController?.prefersGrabberVisible = true
+        }
+
+        let coordinator = DefaultSearchEngineSelectionCoordinator(
+            router: DefaultRouter(navigationController: navigationController),
+            windowUUID: tabManager.windowUUID
+        )
+
+        coordinator.parentCoordinator = self
+        coordinator.navigationHandler = self
+        add(child: coordinator)
+        coordinator.start()
+
+        present(navigationController)
     }
 
     // MARK: - BrowserNavigationHandler
@@ -769,6 +805,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: Microsurvey
+
     func showMicrosurvey(model: MicrosurveyModel) {
         guard !childCoordinators.contains(where: { $0 is MicrosurveyCoordinator }) else {
             return
@@ -820,7 +857,8 @@ class BrowserCoordinator: BaseCoordinator,
         router.present(viewController)
     }
 
-// MARK: - Password Generator
+    // MARK: - Password Generator
+
     func showPasswordGenerator(tab: Tab) {
         let passwordGenVC = PasswordGeneratorViewController(windowUUID: windowUUID, currentTab: tab)
 
@@ -847,11 +885,13 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - ParentCoordinatorDelegate
+
     func didFinish(from childCoordinator: Coordinator) {
         remove(child: childCoordinator)
     }
 
     // MARK: - TabManagerDelegate
+
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
         // Once tab restore is made, if there's any saved route we make sure to call it
         if let savedRoute {
@@ -863,6 +903,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - TabTrayCoordinatorDelegate
+
     func didDismissTabTray(from coordinator: TabTrayCoordinator) {
         router.dismiss(animated: true, completion: nil)
         remove(child: coordinator)

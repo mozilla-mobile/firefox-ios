@@ -3256,7 +3256,7 @@ class BrowserViewController: UIViewController,
     }
 
     func addressToolbarDidTapSearchEngine(_ searchEngineView: UIView) {
-        // TODO FXIOS-10273 Use coordinator to handle search engine bottom sheet display
+        navigationHandler?.showSearchEngineSelection(forSourceView: searchEngineView)
     }
 }
 
