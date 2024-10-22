@@ -239,24 +239,7 @@ struct AddressBarState: StateType, Equatable {
             )
 
         default:
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: state.navigationActions,
-                pageActions: state.pageActions,
-                browserActions: state.browserActions,
-                borderPosition: state.borderPosition,
-                url: state.url,
-                searchTerm: state.searchTerm,
-                lockIconImageName: state.lockIconImageName,
-                safeListedURLImageName: state.safeListedURLImageName,
-                isEditing: state.isEditing,
-                isScrollingDuringEdit: state.isScrollingDuringEdit,
-                shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-                isLoading: state.isLoading,
-                readerModeState: state.readerModeState,
-                didStartTyping: state.didStartTyping,
-                showQRPageAction: state.showQRPageAction
-            )
+            return state
         }
     }
 
