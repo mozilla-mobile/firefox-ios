@@ -6,14 +6,14 @@ import XCTest
 @testable import Client
 
 final class ShareExtensionCoordinatorTests: XCTestCase {
-    private var parentCoordinator: MockParentCoordinatorDelegate!
+    private var parentCoordinator: MockParentCoordinator!
     private var mockRouter: MockRouter!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
-        parentCoordinator = MockParentCoordinatorDelegate()
+        parentCoordinator = MockParentCoordinator()
     }
 
     override func tearDown() {
