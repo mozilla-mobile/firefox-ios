@@ -124,16 +124,7 @@ struct AddressBarState: StateType, Equatable {
 
         switch action.actionType {
         case ToolbarActionType.didLoadToolbars:
-            guard let borderPosition = (action as? ToolbarAction)?.addressBorderPosition else { return state }
-
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: [ToolbarActionState](),
-                pageActions: [qrCodeScanAction],
-                browserActions: [tabsAction(), menuAction()],
-                borderPosition: borderPosition,
-                url: nil
-            )
+            return handleToolbarDidLoadToolbars(state: state, action: action)
 
         case ToolbarActionType.numberOfTabsChanged:
             guard let toolbarAction = action as? ToolbarAction else { return state }
