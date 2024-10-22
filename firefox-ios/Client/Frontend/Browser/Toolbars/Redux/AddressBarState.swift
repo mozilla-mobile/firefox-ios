@@ -567,6 +567,19 @@ struct AddressBarState: StateType, Equatable {
         }
     }
 
+    private static func handleToolbarDidLoadToolbars(state: Self, action: Action) -> Self {
+        guard let borderPosition = (action as? ToolbarAction)?.addressBorderPosition else { return state }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: [ToolbarActionState](),
+            pageActions: [qrCodeScanAction],
+            browserActions: [tabsAction(), menuAction()],
+            borderPosition: borderPosition,
+            url: nil
+        )
+    }
+
     // MARK: - Address Toolbar Actions
     private static func navigationActions(
         action: ToolbarAction,
