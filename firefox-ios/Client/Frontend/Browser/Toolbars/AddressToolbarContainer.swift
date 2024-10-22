@@ -281,6 +281,9 @@ final class AddressToolbarContainer: UIView,
             } else if !searchTerm.isEmpty, toolbarState.addressToolbar.showQRPageAction {
                 let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didEnterSearchTerm)
                 store.dispatch(action)
+            } else if !toolbarState.addressToolbar.didStartTyping {
+                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didStartTyping)
+                store.dispatch(action)
             }
         }
         delegate?.searchSuggestions(searchTerm: searchTerm)
