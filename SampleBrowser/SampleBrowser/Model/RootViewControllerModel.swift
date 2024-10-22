@@ -108,7 +108,7 @@ class RootViewControllerModel {
             urlTextFieldPlaceholder: "Search or enter address",
             urlTextFieldA11yId: "urlTextField",
             searchEngineImage: UIImage(named: "bingSearchEngine"),
-            lockIconImageName: StandardImageIdentifiers.Large.lock, 
+            lockIconImageName: StandardImageIdentifiers.Large.lock,
             url: url,
             droppableUrl: nil,
             searchTerm: nil,

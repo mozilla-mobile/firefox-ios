@@ -222,7 +222,6 @@ class RootViewController: UIViewController,
         searchVC.requestSearch(term: searchTerm)
     }
 
-
     func didClearSearch() {}
 
     func openBrowser(searchTerm: String) {
