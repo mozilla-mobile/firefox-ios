@@ -130,29 +130,7 @@ struct AddressBarState: StateType, Equatable {
             return handleToolbarNumberOfTabsChanged(state: state, action: action)
 
         case ToolbarActionType.readerModeStateChanged:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: state.navigationActions,
-                pageActions: pageActions(action: toolbarAction,
-                                         addressBarState: state,
-                                         isEditing: state.isEditing,
-                                         showQRPageAction: state.showQRPageAction),
-                browserActions: state.browserActions,
-                borderPosition: state.borderPosition,
-                url: state.url,
-                searchTerm: state.searchTerm,
-                lockIconImageName: state.lockIconImageName,
-                safeListedURLImageName: state.safeListedURLImageName,
-                isEditing: state.isEditing,
-                isScrollingDuringEdit: state.isScrollingDuringEdit,
-                shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-                isLoading: state.isLoading,
-                readerModeState: toolbarAction.readerModeState,
-                didStartTyping: state.didStartTyping,
-                showQRPageAction: state.showQRPageAction
-            )
+            return handleToolbarReaderModeStateChanged(state: state, action: action)
 
         case ToolbarActionType.websiteLoadingStateDidChange:
             guard let toolbarAction = action as? ToolbarAction else { return state }
