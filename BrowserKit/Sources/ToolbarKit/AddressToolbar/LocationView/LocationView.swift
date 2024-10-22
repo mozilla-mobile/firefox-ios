@@ -382,6 +382,10 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         }
     }
 
+    func locationTextFieldNeedsSearchReset(_ textField: UITextField) {
+        delegate?.locationTextFieldNeedsSearchReset()
+    }
+
     // MARK: - Accessibility
     private func configureA11y(_ state: LocationViewState) {
         lockIconButton.accessibilityIdentifier = state.lockIconButtonA11yId

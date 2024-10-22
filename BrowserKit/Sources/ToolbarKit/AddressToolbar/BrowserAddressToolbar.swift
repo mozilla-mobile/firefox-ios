@@ -339,6 +339,10 @@ public class BrowserAddressToolbar: UIView,
         toolbarDelegate?.addressToolbarDidBeginDragInteraction()
     }
 
+    func locationTextFieldNeedsSearchReset() {
+        toolbarDelegate?.addressToolbarNeedsSearchReset()
+    }
+
     // MARK: - ThemeApplicable
     public func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer1

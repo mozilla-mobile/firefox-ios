@@ -342,6 +342,10 @@ final class AddressToolbarContainer: UIView,
         delegate?.addressToolbarDidBeginDragInteraction()
     }
 
+    func addressToolbarNeedsSearchReset() {
+        delegate?.searchSuggestions(searchTerm: "")
+    }
+
     // MARK: - MenuHelperURLBarInterface
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         if action == MenuHelperURLBarModel.selectorPasteAndGo {
