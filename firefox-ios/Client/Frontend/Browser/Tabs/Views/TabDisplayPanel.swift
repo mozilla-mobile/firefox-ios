@@ -24,6 +24,7 @@ class TabDisplayPanel: UIViewController,
     var tabsState: TabsPanelState
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
+    private var viewHasAppeared = false
 
     // MARK: UI elements
     private lazy var tabDisplayView: TabDisplayView = {
@@ -64,6 +65,18 @@ class TabDisplayPanel: UIViewController,
         listenForThemeChange(view)
         applyTheme()
         subscribeToRedux()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        if !viewHasAppeared {
+            tabDisplayView.layoutIfNeeded()
+            store.dispatch(TabPanelViewAction(panelType: panelType,
+                                              windowUUID: windowUUID,
+                                              actionType: TabPanelViewActionType.tabPanelWillAppear))
+            viewHasAppeared = true
+        }
     }
 
     private func setupView() {
@@ -166,6 +179,7 @@ class TabDisplayPanel: UIViewController,
                                                windowUUID: windowUUID,
                                                actionType: TabPanelViewActionType.tabPanelDidLoad)
         store.dispatch(didLoadAction)
+
         let uuid = windowUUID
         store.subscribe(self, transform: {
             return $0.select({ appState in
