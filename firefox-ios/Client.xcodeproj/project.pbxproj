@@ -1199,7 +1199,7 @@
 		C23889DF2A4EFCE500429673 /* ShareExtensionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23889DE2A4EFCE500429673 /* ShareExtensionCoordinator.swift */; };
 		C23889E12A4F3E7200429673 /* ParentCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23889E02A4F3E7200429673 /* ParentCoordinatorDelegate.swift */; };
 		C23889E32A50319A00429673 /* ShareExtensionCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23889E22A50319A00429673 /* ShareExtensionCoordinatorTests.swift */; };
-		C23889E52A50329200429673 /* MockParentCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23889E42A50329200429673 /* MockParentCoordinatorDelegate.swift */; };
+		C23889E52A50329200429673 /* MockParentCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23889E42A50329200429673 /* MockParentCoordinator.swift */; };
 		C2446B312A856D13000C527D /* MockLibraryCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2446B302A856D13000C527D /* MockLibraryCoordinatorDelegate.swift */; };
 		C2506C932A6A863600F2B76E /* HistoryCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2506C922A6A863600F2B76E /* HistoryCoordinator.swift */; };
 		C2506C952A6A8D2600F2B76E /* HistoryCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2506C942A6A8D2600F2B76E /* HistoryCoordinatorTests.swift */; };
@@ -1833,6 +1833,7 @@
 		EBFDB790211C83A5005CCA2F /* BrowserViewController+FindInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBFDB787211C83A5005CCA2F /* BrowserViewController+FindInPage.swift */; };
 		ED28DAC92C45A95F00D2641C /* TabScrollBehaviorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED28DAC82C45A95F00D2641C /* TabScrollBehaviorModel.swift */; };
 		ED371A682CB881EF0099F3C8 /* SearchEngineSelectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED371A672CB881EF0099F3C8 /* SearchEngineSelectionCoordinator.swift */; };
+		ED45893E2CC800D9006F2C0B /* SearchEngineSelectionViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED45893D2CC800D9006F2C0B /* SearchEngineSelectionViewControllerTests.swift */; };
 		ED55DC8C2CC2D7DA00E3FE3A /* SearchEngineSelectionCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED55DC8B2CC2D7DA00E3FE3A /* SearchEngineSelectionCoordinatorTests.swift */; };
 		EDC3D34F2CB5E70500C62DE3 /* SearchEngineTestAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EDC3D34E2CB5E70500C62DE3 /* SearchEngineTestAssets.xcassets */; };
 		EDC3D3552CB70A3F00C62DE3 /* OpenSearchEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC3D3542CB70A3F00C62DE3 /* OpenSearchEngineTests.swift */; };
@@ -7806,7 +7807,7 @@
 		C23889DE2A4EFCE500429673 /* ShareExtensionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareExtensionCoordinator.swift; sourceTree = "<group>"; };
 		C23889E02A4F3E7200429673 /* ParentCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentCoordinatorDelegate.swift; sourceTree = "<group>"; };
 		C23889E22A50319A00429673 /* ShareExtensionCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareExtensionCoordinatorTests.swift; sourceTree = "<group>"; };
-		C23889E42A50329200429673 /* MockParentCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockParentCoordinatorDelegate.swift; sourceTree = "<group>"; };
+		C23889E42A50329200429673 /* MockParentCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockParentCoordinator.swift; sourceTree = "<group>"; };
 		C2446B302A856D13000C527D /* MockLibraryCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLibraryCoordinatorDelegate.swift; sourceTree = "<group>"; };
 		C2506C922A6A863600F2B76E /* HistoryCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCoordinator.swift; sourceTree = "<group>"; };
 		C2506C942A6A8D2600F2B76E /* HistoryCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryCoordinatorTests.swift; sourceTree = "<group>"; };
@@ -8981,6 +8982,7 @@
 		ED28DAC82C45A95F00D2641C /* TabScrollBehaviorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabScrollBehaviorModel.swift; sourceTree = "<group>"; };
 		ED364EECB95B96AB639A82DE /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/Localizable.strings; sourceTree = "<group>"; };
 		ED371A672CB881EF0099F3C8 /* SearchEngineSelectionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineSelectionCoordinator.swift; sourceTree = "<group>"; };
+		ED45893D2CC800D9006F2C0B /* SearchEngineSelectionViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineSelectionViewControllerTests.swift; sourceTree = "<group>"; };
 		ED5144A0BE3A8C7B15047C3F /* anp */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = anp; path = anp.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		ED55DC8B2CC2D7DA00E3FE3A /* SearchEngineSelectionCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineSelectionCoordinatorTests.swift; sourceTree = "<group>"; };
 		ED84423D8666C751BBFC76AC /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/Storage.strings; sourceTree = "<group>"; };
@@ -10485,7 +10487,7 @@
 			children = (
 				5AE371812A4DD0D70092A760 /* PasswordManagerCoordinatorDelegateMock.swift */,
 				5AE371832A4DD6F50092A760 /* PasswordManagerListViewControllerSpy.swift */,
-				C23889E42A50329200429673 /* MockParentCoordinatorDelegate.swift */,
+				C23889E42A50329200429673 /* MockParentCoordinator.swift */,
 				C2446B302A856D13000C527D /* MockLibraryCoordinatorDelegate.swift */,
 				8A7AE4452BAC76B00072DAEC /* MockLibraryNavigationHandler.swift */,
 				C2D80BEC2AAF3C6B00CDF7A9 /* MockBrowserCoordinator.swift */,
@@ -10854,6 +10856,7 @@
 			children = (
 				EDC3D3542CB70A3F00C62DE3 /* OpenSearchEngineTests.swift */,
 				2F697F7D1A9FD22D009E03AE /* SearchEnginesTests.swift */,
+				ED45893D2CC800D9006F2C0B /* SearchEngineSelectionViewControllerTests.swift */,
 				D3FA777A1A43B2990010CD32 /* SearchTests.swift */,
 				96A5F734298D8EB900234E5F /* MockSearchEngineProvider.swift */,
 				EDC3D34E2CB5E70500C62DE3 /* SearchEngineTestAssets.xcassets */,
@@ -16699,7 +16702,7 @@
 				D8BA1790206D47830023AC00 /* DeferredTestUtils.swift in Sources */,
 				5AA75A652A46274A00533F8D /* MockThemeManager.swift in Sources */,
 				8A5038142A5DFCE000A1B02A /* MockBrowserProfile.swift in Sources */,
-				C23889E52A50329200429673 /* MockParentCoordinatorDelegate.swift in Sources */,
+				C23889E52A50329200429673 /* MockParentCoordinator.swift in Sources */,
 				21D8843F2A7959D000AF144C /* HomePageSettingViewControllerTests.swift in Sources */,
 				C2D80BED2AAF3C6B00CDF7A9 /* MockBrowserCoordinator.swift in Sources */,
 				45D5EDC0292D619000311934 /* MockablePinnedSites.swift in Sources */,
@@ -16737,6 +16740,7 @@
 				8AB893A72C73AFCC00DAEED7 /* MockLoginViewModelDelegate.swift in Sources */,
 				8A11C8132731E54800AC7318 /* DictionaryExtensionsTests.swift in Sources */,
 				5A475E8F29DB89CE009C13FD /* MockTabDataStore.swift in Sources */,
+				ED45893E2CC800D9006F2C0B /* SearchEngineSelectionViewControllerTests.swift in Sources */,
 				8A7A93EE2810ADF2005E7E1B /* ContileProviderTests.swift in Sources */,
 				5A3A7DDA2889EC4D0065F81A /* ReadingListMock.swift in Sources */,
 				8A33221F27DFE318008F809E /* TopSitesDataAdaptorTests.swift in Sources */,

@@ -1078,7 +1078,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(mockRouter.presentedViewController?.children.first is AppSettingsTableViewController)
     }
 
-    // MARK: - Menu
+    // MARK: - Search Engine Selection
     func testShowSearchEngineSelection_addsSearchEngineSelectionCoordinator() {
         let subject = createSubject()
         XCTAssertTrue(subject.childCoordinators.isEmpty)
@@ -1090,6 +1090,22 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is DismissableNavigationViewController)
         XCTAssertTrue(mockRouter.presentedViewController?.children.first is SearchEngineSelectionViewController)
+    }
+
+    func testSearchEngineSelectionCoordinatorDelegate_navigatesToSettings() {
+        let subject = createSubject()
+        subject.browserHasLoaded()
+
+        subject.showSearchEngineSelection(forSourceView: UIView())
+        guard let searchEngineSelectionCoordinator = subject.childCoordinators[0] as? SearchEngineSelectionCoordinator else {
+            XCTFail("Search engine selection coordinator was expected to be resolved")
+            return
+        }
+
+        searchEngineSelectionCoordinator.navigateToSearchSettings(animated: false)
+
+        XCTAssertTrue(subject.childCoordinators[0] is SettingsCoordinator)
+        XCTAssertTrue(mockRouter.presentedViewController?.children.first is AppSettingsTableViewController)
     }
 
     // MARK: - Microsurvey

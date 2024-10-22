@@ -9,11 +9,13 @@ import XCTest
 
 final class SearchEngineSelectionCoordinatorTests: XCTestCase {
     private var mockRouter: MockRouter!
+    private var mockParentCoordinator: MockParentCoordinator!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         mockRouter = MockRouter(navigationController: MockNavigationController())
+        mockParentCoordinator = MockParentCoordinator()
     }
 
     func testInitialState() {
@@ -32,9 +34,28 @@ final class SearchEngineSelectionCoordinatorTests: XCTestCase {
 
         XCTAssertTrue(mockRouter.rootViewController is SearchEngineSelectionViewController)
         XCTAssertEqual(mockRouter.setRootViewControllerCalled, 1)
+        XCTAssertEqual(mockRouter.isNavigationBarHidden, true)
     }
 
-    func testNavigateToSearchSettings_callsDismiss() throws {
+    func testDismissModal_callsRouterDismiss() throws {
+        let subject = createSubject()
+
+        subject.start()
+        subject.dismissModal(animated: false)
+
+        XCTAssertEqual(mockRouter.dismissCalled, 1)
+    }
+
+    func testDismissModal_callsParentCoordinatorDidFinish() throws {
+        let subject = createSubject()
+
+        subject.start()
+        subject.dismissModal(animated: false)
+
+        XCTAssertEqual(mockParentCoordinator.didFinishCalled, 1)
+    }
+
+    func testNavigateToSearchSettings_callsRouterDismiss() throws {
         let subject = createSubject()
 
         subject.start()
@@ -45,6 +66,7 @@ final class SearchEngineSelectionCoordinatorTests: XCTestCase {
 
     private func createSubject(file: StaticString = #file, line: UInt = #line) -> SearchEngineSelectionCoordinator {
         let subject = SearchEngineSelectionCoordinator(router: mockRouter, windowUUID: .XCTestDefaultUUID)
+        subject.parentCoordinator = mockParentCoordinator
 
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
