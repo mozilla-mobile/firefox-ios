@@ -21,6 +21,7 @@ struct AddressBarState: StateType, Equatable {
     var isLoading: Bool
     let readerModeState: ReaderModeState?
     let didStartTyping: Bool
+    let showQRPageAction: Bool
 
     private static let qrCodeScanAction = ToolbarActionState(
         actionType: .qrCode,
@@ -96,7 +97,8 @@ struct AddressBarState: StateType, Equatable {
          shouldSelectSearchTerm: Bool = true,
          isLoading: Bool = false,
          readerModeState: ReaderModeState? = nil,
-         didStartTyping: Bool = false) {
+         didStartTyping: Bool = false,
+         showQRPageAction: Bool = true) {
         self.windowUUID = windowUUID
         self.navigationActions = navigationActions
         self.pageActions = pageActions
@@ -111,6 +113,7 @@ struct AddressBarState: StateType, Equatable {
         self.isLoading = isLoading
         self.readerModeState = readerModeState
         self.didStartTyping = didStartTyping
+        self.showQRPageAction = showQRPageAction
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -146,7 +149,8 @@ struct AddressBarState: StateType, Equatable {
                 shouldSelectSearchTerm: state.shouldSelectSearchTerm,
                 isLoading: state.isLoading,
                 readerModeState: toolbarAction.readerModeState,
-                didStartTyping: state.didStartTyping
+                didStartTyping: state.didStartTyping,
+                showQRPageAction: state.showQRPageAction
             )
 
         case ToolbarActionType.readerModeStateChanged:
@@ -158,7 +162,7 @@ struct AddressBarState: StateType, Equatable {
                 pageActions: pageActions(action: toolbarAction,
                                          addressBarState: state,
                                          isEditing: state.isEditing,
-                                         didStartTyping: state.didStartTyping),
+                                         showQRPageAction: state.showQRPageAction),
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,
@@ -169,7 +173,8 @@ struct AddressBarState: StateType, Equatable {
                 shouldSelectSearchTerm: state.shouldSelectSearchTerm,
                 isLoading: state.isLoading,
                 readerModeState: toolbarAction.readerModeState,
-                didStartTyping: state.didStartTyping
+                didStartTyping: state.didStartTyping,
+                showQRPageAction: state.showQRPageAction
             )
 
         case ToolbarActionType.websiteLoadingStateDidChange:
@@ -189,7 +194,8 @@ struct AddressBarState: StateType, Equatable {
                 shouldSelectSearchTerm: state.shouldSelectSearchTerm,
                 isLoading: toolbarAction.isLoading ?? state.isLoading,
                 readerModeState: state.readerModeState,
-                didStartTyping: state.didStartTyping
+                didStartTyping: state.didStartTyping,
+                showQRPageAction: state.showQRPageAction
             )
 
         case ToolbarActionType.urlDidChange:
@@ -211,7 +217,8 @@ struct AddressBarState: StateType, Equatable {
                 shouldSelectSearchTerm: state.shouldSelectSearchTerm,
                 isLoading: state.isLoading,
                 readerModeState: state.readerModeState,
-                didStartTyping: state.didStartTyping
+                didStartTyping: state.didStartTyping,
+                showQRPageAction: toolbarAction.url == nil
             )
 
         case ToolbarActionType.backForwardButtonStateChanged:
@@ -233,7 +240,8 @@ struct AddressBarState: StateType, Equatable {
                 shouldSelectSearchTerm: state.shouldSelectSearchTerm,
                 isLoading: state.isLoading,
                 readerModeState: state.readerModeState,
-                didStartTyping: state.didStartTyping
+                didStartTyping: state.didStartTyping,
+                showQRPageAction: state.showQRPageAction
             )
 
         case ToolbarActionType.traitCollectionDidChange:
@@ -255,7 +263,8 @@ struct AddressBarState: StateType, Equatable {
                 shouldSelectSearchTerm: state.shouldSelectSearchTerm,
                 isLoading: state.isLoading,
                 readerModeState: state.readerModeState,
-                didStartTyping: state.didStartTyping
+                didStartTyping: state.didStartTyping,
+                showQRPageAction: state.showQRPageAction
             )
 
         case ToolbarActionType.showMenuWarningBadge:
@@ -275,7 +284,8 @@ struct AddressBarState: StateType, Equatable {
                 shouldSelectSearchTerm: state.shouldSelectSearchTerm,
                 isLoading: state.isLoading,
                 readerModeState: state.readerModeState,
-                didStartTyping: state.didStartTyping
+                didStartTyping: state.didStartTyping,
+                showQRPageAction: state.showQRPageAction
             )
 
         case ToolbarActionType.borderPositionChanged,
@@ -296,19 +306,23 @@ struct AddressBarState: StateType, Equatable {
                 shouldSelectSearchTerm: state.shouldSelectSearchTerm,
                 isLoading: state.isLoading,
                 readerModeState: state.readerModeState,
-                didStartTyping: state.didStartTyping
+                didStartTyping: state.didStartTyping,
+                showQRPageAction: state.showQRPageAction
             )
 
         case ToolbarActionType.didPasteSearchTerm:
             guard let toolbarAction = action as? ToolbarAction else { return state }
 
-            print("WT ### didPasteSearchTerm didStartTyping \(toolbarAction.searchTerm?.isEmpty == false)")
+            let isEmptySearch = toolbarAction.searchTerm == nil || toolbarAction.searchTerm?.isEmpty == true
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
-                navigationActions: state.navigationActions,
-                pageActions: state.pageActions,
-                browserActions: state.browserActions,
+                navigationActions: navigationActions(action: toolbarAction, addressBarState: state, isEditing: true),
+                pageActions: pageActions(action: toolbarAction,
+                                         addressBarState: state,
+                                         isEditing: true,
+                                         showQRPageAction: isEmptySearch),
+                browserActions: browserActions(action: toolbarAction, addressBarState: state),
                 borderPosition: state.borderPosition,
                 url: state.url,
                 searchTerm: toolbarAction.searchTerm,
@@ -318,19 +332,24 @@ struct AddressBarState: StateType, Equatable {
                 shouldSelectSearchTerm: false,
                 isLoading: state.isLoading,
                 readerModeState: state.readerModeState,
-                didStartTyping: toolbarAction.searchTerm?.isEmpty == false
+                didStartTyping: false,
+                showQRPageAction: isEmptySearch
             )
 
         case ToolbarActionType.didStartEditingUrl:
             guard let toolbarAction = action as? ToolbarAction else { return state }
 
             let searchTerm = toolbarAction.searchTerm ?? state.searchTerm
-            print("WT ### didStartEditingUrl didStartTyping \(searchTerm?.isEmpty == false  )")
+            let locationText = searchTerm ?? state.url?.absoluteString
+            let showQRPageAction = locationText == nil || locationText?.isEmpty == true
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
                 navigationActions: navigationActions(action: toolbarAction, addressBarState: state, isEditing: true),
-                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: true),
+                pageActions: pageActions(action: toolbarAction,
+                                         addressBarState: state,
+                                         isEditing: true,
+                                         showQRPageAction: showQRPageAction),
                 browserActions: browserActions(action: toolbarAction, addressBarState: state),
                 borderPosition: state.borderPosition,
                 url: state.url,
@@ -341,11 +360,15 @@ struct AddressBarState: StateType, Equatable {
                 shouldSelectSearchTerm: true,
                 isLoading: state.isLoading,
                 readerModeState: state.readerModeState,
-                didStartTyping: searchTerm?.isEmpty == false
+                didStartTyping: false,
+                showQRPageAction: showQRPageAction
             )
 
         case ToolbarActionType.cancelEdit:
             guard let toolbarAction = action as? ToolbarAction else { return state }
+
+            let url = toolbarAction.url ?? state.url
+            let showQRPageAction = url == nil
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
@@ -353,10 +376,10 @@ struct AddressBarState: StateType, Equatable {
                 pageActions: pageActions(action: toolbarAction,
                                          addressBarState: state,
                                          isEditing: false,
-                                         didStartTyping: false),
+                                         showQRPageAction: showQRPageAction),
                 browserActions: browserActions(action: toolbarAction, addressBarState: state),
                 borderPosition: state.borderPosition,
-                url: toolbarAction.url ?? state.url,
+                url: url,
                 searchTerm: nil,
                 lockIconImageName: state.lockIconImageName,
                 isEditing: false,
@@ -364,11 +387,14 @@ struct AddressBarState: StateType, Equatable {
                 shouldSelectSearchTerm: true,
                 isLoading: state.isLoading,
                 readerModeState: state.readerModeState,
-                didStartTyping: false
+                didStartTyping: false,
+                showQRPageAction: showQRPageAction
             )
 
         case ToolbarActionType.didSetTextInLocationView:
             guard let toolbarAction = action as? ToolbarAction else { return state }
+
+            let isEmptySearch = toolbarAction.searchTerm == nil || toolbarAction.searchTerm?.isEmpty == true
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
@@ -376,7 +402,7 @@ struct AddressBarState: StateType, Equatable {
                 pageActions: pageActions(action: toolbarAction,
                                          addressBarState: state,
                                          isEditing: true,
-                                         didStartTyping: true),
+                                         showQRPageAction: isEmptySearch),
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,
@@ -386,7 +412,8 @@ struct AddressBarState: StateType, Equatable {
                 shouldSelectSearchTerm: false,
                 isLoading: state.isLoading,
                 readerModeState: state.readerModeState,
-                didStartTyping: true
+                didStartTyping: false,
+                showQRPageAction: isEmptySearch
             )
 
         case ToolbarActionType.didScrollDuringEdit:
@@ -404,7 +431,8 @@ struct AddressBarState: StateType, Equatable {
                 shouldSelectSearchTerm: state.shouldSelectSearchTerm,
                 isLoading: state.isLoading,
                 readerModeState: state.readerModeState,
-                didStartTyping: state.didStartTyping
+                didStartTyping: state.didStartTyping,
+                showQRPageAction: state.showQRPageAction
             )
 
         case ToolbarActionType.clearSearch:
@@ -416,7 +444,7 @@ struct AddressBarState: StateType, Equatable {
                 pageActions: pageActions(action: toolbarAction,
                                          addressBarState: state,
                                          isEditing: state.isEditing,
-                                         didStartTyping: false),
+                                         showQRPageAction: true),
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
                 url: nil,
@@ -427,7 +455,8 @@ struct AddressBarState: StateType, Equatable {
                 shouldSelectSearchTerm: state.shouldSelectSearchTerm,
                 isLoading: state.isLoading,
                 readerModeState: state.readerModeState,
-                didStartTyping: false
+                didStartTyping: state.didStartTyping,
+                showQRPageAction: true
             )
 
         case ToolbarActionType.showQrButton:
@@ -439,7 +468,7 @@ struct AddressBarState: StateType, Equatable {
                 pageActions: pageActions(action: toolbarAction,
                                          addressBarState: state,
                                          isEditing: state.isEditing,
-                                         didStartTyping: false),
+                                         showQRPageAction: true),
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,
@@ -450,7 +479,8 @@ struct AddressBarState: StateType, Equatable {
                 shouldSelectSearchTerm: state.shouldSelectSearchTerm,
                 isLoading: state.isLoading,
                 readerModeState: state.readerModeState,
-                didStartTyping: false
+                didStartTyping: true,
+                showQRPageAction: true
             )
 
         case ToolbarActionType.hideQrButton:
@@ -462,7 +492,7 @@ struct AddressBarState: StateType, Equatable {
                 pageActions: pageActions(action: toolbarAction,
                                          addressBarState: state,
                                          isEditing: state.isEditing,
-                                         didStartTyping: true),
+                                         showQRPageAction: false),
                 browserActions: state.browserActions,
                 borderPosition: state.borderPosition,
                 url: state.url,
@@ -473,7 +503,8 @@ struct AddressBarState: StateType, Equatable {
                 shouldSelectSearchTerm: state.shouldSelectSearchTerm,
                 isLoading: state.isLoading,
                 readerModeState: state.readerModeState,
-                didStartTyping: true
+                didStartTyping: true,
+                showQRPageAction: false
             )
 
         default:
@@ -491,7 +522,8 @@ struct AddressBarState: StateType, Equatable {
                 shouldSelectSearchTerm: state.shouldSelectSearchTerm,
                 isLoading: state.isLoading,
                 readerModeState: state.readerModeState,
-                didStartTyping: state.didStartTyping
+                didStartTyping: state.didStartTyping,
+                showQRPageAction: state.showQRPageAction
             )
         }
     }
@@ -531,14 +563,14 @@ struct AddressBarState: StateType, Equatable {
         action: ToolbarAction,
         addressBarState: AddressBarState,
         isEditing: Bool,
-        didStartTyping: Bool? = nil
+        showQRPageAction: Bool? = nil
     ) -> [ToolbarActionState] {
         var actions = [ToolbarActionState]()
 
         let isReaderModeAction = action.actionType as? ToolbarActionType == .readerModeStateChanged
         let readerModeState = isReaderModeAction ? action.readerModeState : addressBarState.readerModeState
 
-        let showQrCodeButton = !(didStartTyping ?? addressBarState.didStartTyping)
+        let showQrCodeButton = showQRPageAction ?? addressBarState.showQRPageAction
 
         guard !showQrCodeButton else {
             // On homepage we only show the QR code button

@@ -275,10 +275,10 @@ final class AddressToolbarContainer: UIView,
     func searchSuggestions(searchTerm: String) {
         if let windowUUID,
            let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID) {
-            if searchTerm.isEmpty, toolbarState.addressToolbar.didStartTyping {
+            if searchTerm.isEmpty, !toolbarState.addressToolbar.showQRPageAction {
                 let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.showQrButton)
                 store.dispatch(action)
-            } else if !searchTerm.isEmpty, !toolbarState.addressToolbar.didStartTyping {
+            } else if !searchTerm.isEmpty, toolbarState.addressToolbar.showQRPageAction {
                 let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.hideQrButton)
                 store.dispatch(action)
             }
@@ -305,12 +305,11 @@ final class AddressToolbarContainer: UIView,
     }
 
     func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool) {
-        enterOverlayMode(nil, pasted: false, search: false)
         let locationText = shouldShowSuggestions ? searchTerm : nil
         enterOverlayMode(locationText, pasted: false, search: false)
 
         if shouldShowSuggestions {
-            delegate?.openSuggestions(searchTerm: searchTerm)
+            delegate?.openSuggestions(searchTerm: locationText ?? "")
         }
     }
 
