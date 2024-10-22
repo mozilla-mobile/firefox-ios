@@ -613,7 +613,7 @@ class TabManagerMiddleware {
 
     private func copyURL(tabID: TabUUID, uuid: WindowUUID) {
         let tabManager = tabManager(for: uuid)
-        UIPasteboard.general.url = tabManager.selectedTab?.canonicalURL
+        UIPasteboard.general.url = tabManager.getTabForUUID(uuid: tabID)?.canonicalURL
         let toastAction = TabPanelMiddlewareAction(toastType: .copyURL,
                                                    windowUUID: uuid,
                                                    actionType: TabPanelMiddlewareActionType.showToast)
