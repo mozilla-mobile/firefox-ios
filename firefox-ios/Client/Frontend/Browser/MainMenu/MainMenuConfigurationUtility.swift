@@ -447,10 +447,11 @@ struct MainMenuConfigurationUtility: Equatable {
         typealias SaveMenu = String.MainMenu.Submenus.Save
         typealias A11y = SaveMenu.AccessibilityLabels
 
-        let title = tabInfo.isInReadingList ? SaveMenu.RemoveFromReadingList : SaveMenu.SaveToReadingList
-        let icon = tabInfo.isInReadingList ? Icons.removeFromReadingList : Icons.saveToReadingList
-        let a11yLabel = tabInfo.isInReadingList ? A11y.RemoveFromReadingList : A11y.SaveToReadingList
-        let actionType: MainMenuDetailsActionType = tabInfo.isInReadingList ? .tapRemoveFromReadingList : .tapAddToReadingList
+        let isInReadingList = tabInfo.isInReadingList
+        let title = isInReadingList ? SaveMenu.RemoveFromReadingList : SaveMenu.SaveToReadingList
+        let icon = isInReadingList ? Icons.removeFromReadingList : Icons.saveToReadingList
+        let a11yLabel = isInReadingList ? A11y.RemoveFromReadingList : A11y.SaveToReadingList
+        let actionType: MainMenuDetailsActionType = isInReadingList ? .tapRemoveFromReadingList : .tapAddToReadingList
 
         return MenuElement(
             title: title,
