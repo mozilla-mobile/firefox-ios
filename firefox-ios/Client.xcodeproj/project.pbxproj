@@ -9729,8 +9729,8 @@
 				214EF4142AC5D5D0005BCCDA /* TabDisplayView.swift */,
 				1DDE3DB22AC34E1E0039363B /* TabCell.swift */,
 				21E77E4D2AA8BA5200FABA10 /* TabTrayViewController.swift */,
-				219A0FD32ACC84C5009A6D1A /* InactiveTabs */,
 				F605DD572CC73469009A671B /* TabDisplayDiffableDataSource.swift */,
+				219A0FD32ACC84C5009A6D1A /* InactiveTabs */,
 			);
 			path = Views;
 			sourceTree = "<group>";

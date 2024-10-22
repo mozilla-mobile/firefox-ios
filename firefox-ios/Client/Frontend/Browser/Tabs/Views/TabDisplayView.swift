@@ -82,8 +82,10 @@ class TabDisplayView: UIView,
     }()
 
     private func configureDataSource() {
-        dataSource = TabDisplayDiffableDataSource(collectionView: collectionView)
-         { [weak self] (collectionView, indexPath, sectionItem) -> UICollectionViewCell in
+        // swiftlint:disable line_length
+        dataSource = TabDisplayDiffableDataSource(collectionView: collectionView) { [weak self] (collectionView, indexPath, sectionItem) ->
+            UICollectionViewCell in
+            // swiftlint:enable line_length
             guard let self else { return UICollectionViewCell() }
 
             switch sectionItem {
@@ -113,11 +115,9 @@ class TabDisplayView: UIView,
             }
         }
 
-        dataSource?.supplementaryViewProvider = { [weak self] (
-            collectionView,
-            kind,
-            indexPath
-        ) -> UICollectionReusableView? in
+        // swiftlint:disable line_length
+        dataSource?.supplementaryViewProvider = { [weak self] (collectionView, kind, indexPath) -> UICollectionReusableView? in
+            // swiftlint:enable line_length
             let reusableView = UICollectionReusableView()
             let section = self?.getTabDisplay(for: indexPath.section)
 
