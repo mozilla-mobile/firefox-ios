@@ -17,16 +17,6 @@ class TabDisplayView: UIView,
         static let cornerRadius: CGFloat = 6.0
     }
 
-    enum TabDisplaySection: Int, CaseIterable {
-        case inactiveTabs
-        case tabs
-    }
-
-    enum SectionTabItem: Hashable {
-        case inactiveTab(InactiveTabsModel)
-        case tab(TabModel)
-    }
-
     let panelType: TabTrayPanelType
     private(set) var tabsState: TabsPanelState
     private var performingChainedOperations = false
@@ -36,8 +26,7 @@ class TabDisplayView: UIView,
     private let animationQueue: TabTrayAnimationQueue
     var theme: Theme?
 
-    // Using tabUUID as it's a way to identify the Tab object which is hashable
-    private var dataSource: UICollectionViewDiffableDataSource<TabDisplaySection, SectionTabItem>?
+    private var dataSource: TabDisplayDiffableDataSource?
 
     private var shouldHideInactiveTabs: Bool {
         if tabsState.isPrivateMode {
@@ -92,13 +81,9 @@ class TabDisplayView: UIView,
         return collectionView
     }()
 
-    // We now use this to set up the cells instead of cellForItemAt
     private func configureDataSource() {
-        // Create the diffable data source and its cell provider.
-        dataSource = UICollectionViewDiffableDataSource<TabDisplaySection, SectionTabItem>(collectionView: collectionView)
+        dataSource = TabDisplayDiffableDataSource(collectionView: collectionView)
          { [weak self] (collectionView, indexPath, sectionItem) -> UICollectionViewCell in
-            // `identifier/item` is an instance of `tabModel`. Use it to
-            // retrieve the tab from the backing data store.
             guard let self else { return UICollectionViewCell() }
 
             switch sectionItem {
@@ -114,6 +99,7 @@ class TabDisplayView: UIView,
                     cell.applyTheme(theme: theme)
                 }
                 return cell
+
             case .tab(let tab):
                 guard
                     let cell = collectionView.dequeueReusableCell(
@@ -127,7 +113,6 @@ class TabDisplayView: UIView,
             }
         }
 
-        // Configure supplementary view provider for section headers
         dataSource?.supplementaryViewProvider = { [weak self] (
             collectionView,
             kind,
@@ -135,7 +120,6 @@ class TabDisplayView: UIView,
         ) -> UICollectionReusableView? in
             let reusableView = UICollectionReusableView()
             let section = self?.getTabDisplay(for: indexPath.section)
-
 
             guard let self, section == .inactiveTabs else {
                 return nil
@@ -232,18 +216,18 @@ class TabDisplayView: UIView,
     }
 
     private func updateCollectionView(state: TabsPanelState) {
-        var snapshot = NSDiffableDataSourceSnapshot<TabDisplaySection, SectionTabItem>()
+        var snapshot = NSDiffableDataSourceSnapshot<TabDisplayViewSection, TabDisplayItem>()
 
         snapshot.deleteAllItems()
         snapshot.appendSections([.inactiveTabs, .tabs])
         snapshot.reloadSections([.inactiveTabs])
 
         if state.isInactiveTabsExpanded {
-            let inactiveTabs = state.inactiveTabs.map { SectionTabItem.inactiveTab($0) }
+            let inactiveTabs = state.inactiveTabs.map { TabDisplayItem.inactiveTab($0) }
             snapshot.appendItems(inactiveTabs, toSection: .inactiveTabs)
         }
 
-        let tabs = state.tabs.map { SectionTabItem.tab($0) }
+        let tabs = state.tabs.map { TabDisplayItem.tab($0) }
         snapshot.appendItems(tabs, toSection: .tabs)
 
         dataSource?.apply(snapshot, animatingDifferences: true)
@@ -290,7 +274,7 @@ class TabDisplayView: UIView,
                 return self.tabsSectionManager.layoutSection(layoutEnvironment)
             }
 
-            let section = TabDisplaySection(rawValue: sectionIndex)
+            let section = TabDisplayViewSection(rawValue: sectionIndex)
             switch section {
             case .inactiveTabs:
                 return self.inactiveTabsSectionManager.layoutSection(
@@ -310,11 +294,10 @@ class TabDisplayView: UIView,
         collectionView.backgroundColor = theme.colors.layer3
     }
 
-    // SOPHIE - comment out to check what needs to be removed after diffable datasource implementation
-    private func getTabDisplay(for section: Int) -> TabDisplaySection {
+    private func getTabDisplay(for section: Int) -> TabDisplayViewSection {
         guard !shouldHideInactiveTabs else { return .tabs }
 
-        return TabDisplaySection(rawValue: section) ?? .tabs
+        return TabDisplayViewSection(rawValue: section) ?? .tabs
     }
 
     func deleteInactiveTab(for index: Int) {

@@ -5,7 +5,6 @@
 import Foundation
 
 struct InactiveTabsModel: Equatable, Identifiable, Hashable {
-    // why are these var instead of let??
     let id: String
     var tabUUID: TabUUID
     var title: String
