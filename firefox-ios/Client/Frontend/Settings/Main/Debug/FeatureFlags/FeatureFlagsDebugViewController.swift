@@ -66,6 +66,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     statusText: format(string: "Toggle to display natively created error pages")
                 ) { [weak self] _ in
                     self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .toolbarRefactor,
+                    titleText: format(string: "Toolbar Redesign"),
+                    statusText: format(string: "Toggle to enable the toolbar redesign")
+                ) { [weak self] _ in
+                    self?.reloadView()
                 }
             ]
         )

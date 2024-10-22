@@ -54,7 +54,8 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .microsurvey,
                 .menuRefactor,
                 .nativeErrorPage,
-                .trackingProtectionRefactor:
+                .trackingProtectionRefactor,
+                .toolbarRefactor:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil
