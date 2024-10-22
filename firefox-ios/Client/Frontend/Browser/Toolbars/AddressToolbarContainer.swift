@@ -276,10 +276,10 @@ final class AddressToolbarContainer: UIView,
         if let windowUUID,
            let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID) {
             if searchTerm.isEmpty, !toolbarState.addressToolbar.showQRPageAction {
-                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.showQrButton)
+                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didDeleteSearchTerm)
                 store.dispatch(action)
             } else if !searchTerm.isEmpty, toolbarState.addressToolbar.showQRPageAction {
-                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.hideQrButton)
+                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didEnterSearchTerm)
                 store.dispatch(action)
             }
         }

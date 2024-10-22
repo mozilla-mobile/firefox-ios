@@ -459,7 +459,7 @@ struct AddressBarState: StateType, Equatable {
                 showQRPageAction: true
             )
 
-        case ToolbarActionType.showQrButton:
+        case ToolbarActionType.didDeleteSearchTerm:
             guard let toolbarAction = action as? ToolbarAction else { return state }
 
             return AddressBarState(
@@ -483,7 +483,7 @@ struct AddressBarState: StateType, Equatable {
                 showQRPageAction: true
             )
 
-        case ToolbarActionType.hideQrButton:
+        case ToolbarActionType.didEnterSearchTerm:
             guard let toolbarAction = action as? ToolbarAction else { return state }
 
             return AddressBarState(
