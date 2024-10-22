@@ -152,31 +152,7 @@ struct AddressBarState: StateType, Equatable {
             return handleToolbarPositionChanged(state: state, action: action)
 
         case ToolbarActionType.didPasteSearchTerm:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-
-            let isEmptySearch = toolbarAction.searchTerm == nil || toolbarAction.searchTerm?.isEmpty == true
-
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: navigationActions(action: toolbarAction, addressBarState: state, isEditing: true),
-                pageActions: pageActions(action: toolbarAction,
-                                         addressBarState: state,
-                                         isEditing: true,
-                                         showQRPageAction: isEmptySearch),
-                browserActions: browserActions(action: toolbarAction, addressBarState: state),
-                borderPosition: state.borderPosition,
-                url: state.url,
-                searchTerm: toolbarAction.searchTerm,
-                lockIconImageName: state.lockIconImageName,
-                safeListedURLImageName: state.safeListedURLImageName,
-                isEditing: true,
-                isScrollingDuringEdit: state.isScrollingDuringEdit,
-                shouldSelectSearchTerm: false,
-                isLoading: state.isLoading,
-                readerModeState: state.readerModeState,
-                didStartTyping: false,
-                showQRPageAction: isEmptySearch
-            )
+            return handleToolbarDidPasteSearchTerm(state: state, action: action)
 
         case ToolbarActionType.didStartEditingUrl:
             guard let toolbarAction = action as? ToolbarAction else { return state }
