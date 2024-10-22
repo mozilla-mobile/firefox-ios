@@ -3728,14 +3728,14 @@ extension String {
 
 // MARK: - Close tab notifications
     public static let CloseTab_ArrivingNotification_title = MZLocalizedString(
-        key: "CloseTab_ArrivingNotification_title",
+        key: "CloseTab.ArrivingNotification.title.v133",
         tableName: "FxANotification",
-        value: "Firefox tabs closed: %1$@",
+        value: "%1$@ tabs closed: %2$@",
         comment: "Title of notification shown when a remote device has requested to close a number of tabs defined by ($1)")
 
     // Notification Actions
     public static let CloseTabViewActionTitle = MZLocalizedString(
-        key: "CloseTab.ViewAction.title",
+        key: "CloseTab.ViewAction.title.v133",
         tableName: "FxANotification",
         value: "View recently closed tabs",
         comment: "Label for an action used to view recently closed tabs.")
