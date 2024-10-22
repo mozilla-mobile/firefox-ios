@@ -607,6 +607,36 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
+    private static func handleToolbarDidStartEditingUrl(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return state }
+
+        let searchTerm = toolbarAction.searchTerm ?? state.searchTerm
+        let locationText = searchTerm ?? state.url?.absoluteString
+        let showQRPageAction = locationText == nil || locationText?.isEmpty == true
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: navigationActions(action: toolbarAction, addressBarState: state, isEditing: true),
+            pageActions: pageActions(action: toolbarAction,
+                                     addressBarState: state,
+                                     isEditing: true,
+                                     showQRPageAction: showQRPageAction),
+            browserActions: browserActions(action: toolbarAction, addressBarState: state),
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: true,
+            isScrollingDuringEdit: false,
+            shouldSelectSearchTerm: true,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: false,
+            showQRPageAction: showQRPageAction
+        )
+    }
+
     // MARK: - Address Toolbar Actions
     private static func navigationActions(
         action: ToolbarAction,
