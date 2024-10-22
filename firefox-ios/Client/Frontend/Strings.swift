@@ -6667,6 +6667,19 @@ extension String {
         tableName: nil,
         value: nil,
         comment: "See http://mzl.la/1Qtkf0j")
+
+    public struct RemoteTabPanel {
+        public static let CloseTab_SendingNotification_title = MZLocalizedString(
+            key: "CloseTab.SendingNotification.title.v133",
+            tableName: "RemoteTabPanel",
+            value: "Tab closed",
+            comment: "Text in notification after sending close remote tab command.")
+        public static let CloseTab_UndoButton_title = MZLocalizedString(
+            key: "CloseTab.UndoButton.title.v133",
+            tableName: "RemoteTabPanel",
+            value: "Undo",
+            comment: "Label for undo button in notification after sending close remote tab command.")
+    }
 }
 
 // MARK: - Login list
