@@ -270,7 +270,11 @@ struct MainMenuConfigurationUtility: Equatable {
                             store.dispatch(
                                 MainMenuAction(
                                     windowUUID: uuid,
-                                    actionType: MainMenuActionType.tapCloseMenu
+                                    actionType: MainMenuActionType.tapNavigateToDestination,
+                                    navigationDestination: MenuNavigationDestination(
+                                        .goToURL,
+                                        urlToVisit: SupportUtils.URLForReportSiteIssue(tabInfo.url?.absoluteString)
+                                    )
                                 )
                             )
                         }
@@ -279,23 +283,6 @@ struct MainMenuConfigurationUtility: Equatable {
             ),
             MenuSection(
                 options: [
-                    MenuElement(
-                        title: .MainMenu.Submenus.Tools.Print,
-                        iconName: Icons.print,
-                        isEnabled: true,
-                        isActive: false,
-                        a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.Print,
-                        a11yHint: "",
-                        a11yId: AccessibilityIdentifiers.MainMenu.print,
-                        action: {
-                            store.dispatch(
-                                MainMenuAction(
-                                    windowUUID: uuid,
-                                    actionType: MainMenuActionType.tapCloseMenu
-                                )
-                            )
-                        }
-                    ),
                     MenuElement(
                         title: .MainMenu.Submenus.Tools.Share,
                         iconName: Icons.share,
