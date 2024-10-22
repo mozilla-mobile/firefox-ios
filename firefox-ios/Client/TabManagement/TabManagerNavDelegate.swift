@@ -15,8 +15,7 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-        // restore webView content background color to default
-        webView.evaluateJavascriptInDefaultContentWorld("document.body.style.backgroundColor = '';")
+        restoreWebViewContentBackgroundToDefault(webView)
         for delegate in delegates {
             delegate.webView?(webView, didCommit: navigation)
         }
@@ -27,6 +26,7 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
         didFail navigation: WKNavigation!,
         withError error: Error
     ) {
+        restoreWebViewContentBackgroundToDefault(webView)
         for delegate in delegates {
             delegate.webView?(webView, didFail: navigation, withError: error)
         }
@@ -37,6 +37,7 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
         didFailProvisionalNavigation navigation: WKNavigation!,
         withError error: Error
     ) {
+        restoreWebViewContentBackgroundToDefault(webView)
         for delegate in delegates {
             delegate.webView?(webView, didFailProvisionalNavigation: navigation, withError: error)
         }
@@ -49,6 +50,7 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
     }
 
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+        restoreWebViewContentBackgroundToDefault(webView)
         for delegate in delegates {
             delegate.webViewWebContentProcessDidTerminate?(webView)
         }
@@ -115,5 +117,9 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
         }
 
         decisionHandler(res)
+    }
+    
+    private func restoreWebViewContentBackgroundToDefault(_ webView: WKWebView) {
+        webView.evaluateJavascriptInDefaultContentWorld("document.body.style.backgroundColor = '';")
     }
 }
