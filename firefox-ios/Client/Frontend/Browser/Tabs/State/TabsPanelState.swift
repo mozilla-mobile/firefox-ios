@@ -66,7 +66,6 @@ struct TabsPanelState: ScreenState, Equatable {
          toastType: ToastType? = nil,
          scrollState: ScrollState? = nil,
          didTapAddTab: Bool = false,
-         didMoveTab: Bool = false,
          urlRequest: URLRequest? = nil) {
         self.isPrivateMode = isPrivateMode
         self.tabs = tabs

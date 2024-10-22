@@ -29,13 +29,8 @@ class TabDisplayView: UIView,
     private var dataSource: TabDisplayDiffableDataSource?
 
     private var shouldHideInactiveTabs: Bool {
-        if tabsState.isPrivateMode {
-            return true
-        } else if tabsState.inactiveTabs.isEmpty {
-            return true
-        } else {
-            return false
-        }
+        guard !tabsState.isPrivateMode else { return true }
+        return tabsState.inactiveTabs.isEmpty
     }
 
     // Dragging on the collection view is either an 'active drag' where the item is moved, or
