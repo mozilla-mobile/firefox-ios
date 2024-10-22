@@ -24,7 +24,8 @@ struct MainMenuConfigurationUtility: Equatable {
         static let whatsNew = StandardImageIdentifiers.Large.whatsNew
         static let zoom = StandardImageIdentifiers.Large.pageZoom
         static let readerViewOn = StandardImageIdentifiers.Large.readerView
-        static let nightModeOn = StandardImageIdentifiers.Large.nightMode
+        static let nightModeOff = StandardImageIdentifiers.Large.nightMode
+        static let nightModeOn = StandardImageIdentifiers.Large.nightModeFill
         static let print = StandardImageIdentifiers.Large.print
         static let share = StandardImageIdentifiers.Large.share
         static let addToShortcuts = StandardImageIdentifiers.Large.pin
@@ -256,23 +257,7 @@ struct MainMenuConfigurationUtility: Equatable {
                             )
                         }
                     ),
-                    MenuElement(
-                        title: .MainMenu.Submenus.Tools.NightModeOn,
-                        iconName: Icons.nightModeOn,
-                        isEnabled: true,
-                        isActive: false,
-                        a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.NightModeOn,
-                        a11yHint: "",
-                        a11yId: AccessibilityIdentifiers.MainMenu.nightModeOn,
-                        action: {
-                            store.dispatch(
-                                MainMenuAction(
-                                    windowUUID: uuid,
-                                    actionType: MainMenuActionType.tapCloseMenu
-                                )
-                            )
-                        }
-                    ),
+                    configureNightModeItem(with: uuid),
                     MenuElement(
                         title: .MainMenu.Submenus.Tools.ReportBrokenSite,
                         iconName: Icons.reportBrokenSite,
@@ -356,6 +341,34 @@ struct MainMenuConfigurationUtility: Equatable {
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: MainMenuDetailsActionType.tapZoom
+                    )
+                )
+            }
+        )
+    }
+
+    private func configureNightModeItem(with uuid: WindowUUID) -> MenuElement {
+        typealias Strings = String.MainMenu.Submenus.Tools
+        typealias A11y = String.MainMenu.Submenus.Tools.AccessibilityLabels
+
+        let nightModeIsOn = NightModeHelper.isActivated()
+        let title = nightModeIsOn ? Strings.NightModeOff : Strings.NightModeOn
+        let icon = nightModeIsOn ? Icons.nightModeOn : Icons.nightModeOff
+        let a11yLabel = nightModeIsOn ? A11y.NightModeOff : A11y.NightModeOn
+
+        return MenuElement(
+            title: title,
+            iconName: icon,
+            isEnabled: true,
+            isActive: nightModeIsOn,
+            a11yLabel: a11yLabel,
+            a11yHint: "",
+            a11yId: AccessibilityIdentifiers.MainMenu.nightMode,
+            action: {
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: uuid,
+                        actionType: MainMenuDetailsActionType.tapToggleNightMode
                     )
                 )
             }

@@ -111,7 +111,8 @@ struct MainMenuDetailsState: ScreenState, Equatable {
             MainMenuDetailsActionType.tapAddToShortcuts,
             MainMenuDetailsActionType.tapRemoveFromShortcuts,
             MainMenuDetailsActionType.tapAddToReadingList,
-            MainMenuDetailsActionType.tapRemoveFromReadingList:
+            MainMenuDetailsActionType.tapRemoveFromReadingList,
+            MainMenuDetailsActionType.tapToggleNightMode:
             return MainMenuDetailsState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
