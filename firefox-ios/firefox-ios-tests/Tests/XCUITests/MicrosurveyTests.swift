@@ -13,13 +13,7 @@ final class MicrosurveyTests: BaseTestCase {
         super.setUp()
     }
 
-    func testShowMicrosurveyPromptFromHomepageTrigger() {
-        generateTriggerForMicrosurvey()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton])
-        mozWaitForElementToExist(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.firefoxLogo])
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton])
-    }
-
+    // https://mozilla.testrail.io/index.php?/cases/view/2776932
     func testURLBorderHiddenWhenMicrosurveyPromptShown() throws {
         guard !iPad() else {
             throw XCTSkip("Toolbar option not available for iPad")
@@ -37,14 +31,19 @@ final class MicrosurveyTests: BaseTestCase {
         XCTAssertFalse(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].exists)
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2776933
     func testCloseButtonDismissesMicrosurveyPrompt() {
         generateTriggerForMicrosurvey()
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton])
+        mozWaitForElementToExist(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.firefoxLogo])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton])
         app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].waitAndTap()
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton])
         mozWaitForElementToNotExist(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.firefoxLogo])
         mozWaitForElementToNotExist(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2776931
     func testShowMicrosurvey() {
         generateTriggerForMicrosurvey()
         let continueButton = app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton]
@@ -65,6 +64,7 @@ final class MicrosurveyTests: BaseTestCase {
         mozWaitForValueContains(secondOption, value: "Unselected, 3 out of 6")
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2776934
     func testCloseButtonDismissesSurveyAndPrompt() {
         generateTriggerForMicrosurvey()
         let continueButton = app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton]
