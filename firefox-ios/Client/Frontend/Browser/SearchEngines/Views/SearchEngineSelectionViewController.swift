@@ -9,7 +9,8 @@ import Shared
 import Redux
 
 class SearchEngineSelectionViewController: UIViewController,
-                                           BottomSheetChild,
+                                           UISheetPresentationControllerDelegate,
+                                           UIPopoverPresentationControllerDelegate,
                                            Themeable {
     // MARK: - Properties
     var notificationCenter: NotificationProtocol
@@ -22,12 +23,13 @@ class SearchEngineSelectionViewController: UIViewController,
     private let logger: Logger
 
     // MARK: - UI/UX elements
-    // FXIOS-10192 This button is a temporary placeholder for setting up the navigation / coordinators
+    // FXIOS-10192 This button is a temporary placeholder used to set up the navigation / coordinators. Will be removed.
     private lazy var placeholderOpenSettingsButton: UIButton = .build { view in
         view.setTitle(.UnifiedSearch.SearchEngineSelection.SearchSettings, for: .normal)
         view.setTitleColor(.blue, for: .normal)
         view.titleLabel?.numberOfLines = 0
         view.titleLabel?.textAlignment = .center
+
         view.addTarget(self, action: #selector(self.didTapOpenSettings), for: .touchUpInside)
     }
 
@@ -56,12 +58,16 @@ class SearchEngineSelectionViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        sheetPresentationController?.delegate = self // For non-iPad setup
+        popoverPresentationController?.delegate = self // For iPad setup
+
         setupView()
         listenForThemeChange(view)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
         applyTheme()
     }
 
@@ -81,7 +87,14 @@ class SearchEngineSelectionViewController: UIViewController,
 
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
+
         view.backgroundColor = theme.colors.layer3
+    }
+
+    // MARK: - UISheetPresentationControllerDelegate inheriting UIAdaptivePresentationControllerDelegate
+
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        coordinator?.dismissModal(animated: true)
     }
 
     // MARK: - Navigation
@@ -89,9 +102,5 @@ class SearchEngineSelectionViewController: UIViewController,
     @objc
     func didTapOpenSettings(sender: UIButton) {
         coordinator?.navigateToSearchSettings(animated: true)
-    }
-
-    func willDismiss() {
-        // TODO
     }
 }

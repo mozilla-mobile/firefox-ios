@@ -534,6 +534,8 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - SearchEngineSelectionCoordinatorDelegate
 
     func showSearchEngineSelection(forSourceView sourceView: UIView) {
+        guard !childCoordinators.contains(where: { $0 is SearchEngineSelectionCoordinator }) else { return }
+
         let navigationController = DismissableNavigationViewController()
         if navigationController.shouldUseiPadSetup() {
             navigationController.modalPresentationStyle = .popover
@@ -541,6 +543,7 @@ class BrowserCoordinator: BaseCoordinator,
             navigationController.popoverPresentationController?.sourceView = sourceView
             navigationController.popoverPresentationController?.canOverlapSourceViewRect = false
         } else {
+            navigationController.modalPresentationStyle = .pageSheet
             navigationController.sheetPresentationController?.detents = [.medium(), .large()]
             navigationController.sheetPresentationController?.prefersGrabberVisible = true
         }

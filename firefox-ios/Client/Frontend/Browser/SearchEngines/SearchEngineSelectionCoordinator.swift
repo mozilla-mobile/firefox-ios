@@ -7,7 +7,7 @@ import Foundation
 import Shared
 
 protocol SearchEngineSelectionCoordinatorDelegate: AnyObject {
-    func showSettings(at destination: Route.SettingsSection) // TODO search settings
+    func showSettings(at destination: Route.SettingsSection)
 }
 
 class SearchEngineSelectionCoordinator: BaseCoordinator, FeatureFlaggable {
@@ -24,7 +24,7 @@ class SearchEngineSelectionCoordinator: BaseCoordinator, FeatureFlaggable {
     func start() {
         router.setRootViewController(
             createSearchEngineSelectionViewController(),
-            hideBar: true // TODO ?
+            hideBar: true
         )
     }
 
@@ -38,7 +38,13 @@ class SearchEngineSelectionCoordinator: BaseCoordinator, FeatureFlaggable {
         })
     }
 
+    func dismissModal(animated: Bool) {
+        router.dismiss(animated: animated, completion: nil)
+        parentCoordinator?.didFinish(from: self)
+    }
+
     // MARK: - Private helpers
+
     private func createSearchEngineSelectionViewController() -> SearchEngineSelectionViewController {
         let vc = SearchEngineSelectionViewController(windowUUID: windowUUID)
         vc.coordinator = self
