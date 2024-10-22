@@ -136,28 +136,7 @@ struct AddressBarState: StateType, Equatable {
             return handleToolbarWebsiteLoadingStateDidChange(state: state, action: action)
 
         case ToolbarActionType.urlDidChange:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: navigationActions(action: toolbarAction,
-                                                     addressBarState: state,
-                                                     isEditing: state.isEditing),
-                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
-                browserActions: browserActions(action: toolbarAction, addressBarState: state),
-                borderPosition: state.borderPosition,
-                url: toolbarAction.url,
-                searchTerm: nil,
-                lockIconImageName: toolbarAction.lockIconImageName ?? state.lockIconImageName,
-                safeListedURLImageName: toolbarAction.safeListedURLImageName,
-                isEditing: state.isEditing,
-                isScrollingDuringEdit: state.isScrollingDuringEdit,
-                shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-                isLoading: state.isLoading,
-                readerModeState: state.readerModeState,
-                didStartTyping: state.didStartTyping,
-                showQRPageAction: toolbarAction.url == nil
-            )
+            return handleToolbarUrlDidChange(state: state, action: action)
 
         case ToolbarActionType.backForwardButtonStateChanged:
             guard let toolbarAction = action as? ToolbarAction else { return state }
