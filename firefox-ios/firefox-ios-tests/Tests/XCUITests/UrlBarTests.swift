@@ -3,29 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-let iPadSearchIcon = XCUIApplication()
-    .children(matching: .window).element(boundBy: 0)
-    .children(matching: .other).element
-    .children(matching: .other).element
-    .children(matching: .other).element
-    .children(matching: .other).element
-    .children(matching: .other).element
-    .children(matching: .other).element
-    .children(matching: .other).element
-    .children(matching: .other).element(boundBy: 1)
-    .children(matching: .other).element(boundBy: 1)
-    .children(matching: .image).element
-let iPhoneSearchIcon = XCUIApplication()
-    .children(matching: .window).element(boundBy: 0)
-    .children(matching: .other).element
-    .children(matching: .other).element
-    .children(matching: .other).element
-    .children(matching: .other).element
-    .children(matching: .other).element
-    .children(matching: .other).element
-    .children(matching: .other).element(boundBy: 1)
-    .children(matching: .other).element
-    .children(matching: .image).element
 
 class UrlBarTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306888
@@ -54,8 +31,10 @@ class UrlBarTests: BaseTestCase {
         // Type a search term and hit "go"
         typeSearchTermAndHitGo(searchTerm: "Firefox")
         // The search is conducted correctly trough the default search engine
-        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "google")
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "Firefox")
+        mozWaitForElementToExist(app.staticTexts["Google Search"])
         // Add a custom search engine and add it as default search engine
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
         navigator.goto(SearchSettings)
         let defaultSearchEngine = app.tables.cells.element(boundBy: 0)
         mozWaitForElementToExist(app.tables.cells.staticTexts[defaultSearchEngine1])
@@ -64,28 +43,28 @@ class UrlBarTests: BaseTestCase {
         mozWaitForElementToExist(app.tables.cells.staticTexts[defaultSearchEngine2])
         navigator.goto(SettingsScreen)
         app.navigationBars.buttons["Done"].tap()
-        app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].tap()
         tapUrlBarValidateKeyboardAndIcon()
         typeSearchTermAndHitGo(searchTerm: "Firefox")
         // The search is conducted correctly trough the default search engine
-        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "bing")
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "Firefox")
+        mozWaitForElementToExist(app.staticTexts["Bing search"])
     }
 
     private func tapUrlBarValidateKeyboardAndIcon() {
         // Tap on the URL bar
         waitForTabsButton()
+        if app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].exists {
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
+        }
         app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].tap()
         // The keyboard pops up and the default search icon is correctly displayed in the URL bar
         XCTAssertTrue(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
         let keyboardCount = app.keyboards.count
         XCTAssert(keyboardCount > 0, "The keyboard is not shown")
-        if iPad() {
-            XCTAssertTrue(iPadSearchIcon.exists)
-            XCTAssertTrue(iPadSearchIcon.isLeftOf(rightElement: urlBarAddress))
-        } else {
-            XCTAssertTrue(iPhoneSearchIcon.exists)
-            XCTAssertTrue(iPhoneSearchIcon.isLeftOf(rightElement: urlBarAddress))
-        }
+        let searchEngineLogo = app.images[AccessibilityIdentifiers.Browser.AddressToolbar.searchEngine]
+        mozWaitForElementToExist(searchEngineLogo)
+        XCTAssertTrue(searchEngineLogo.isLeftOf(rightElement: urlBarAddress))
     }
 
     private func typeSearchTermAndHitGo(searchTerm: String) {

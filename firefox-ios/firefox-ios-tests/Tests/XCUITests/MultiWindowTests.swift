@@ -42,7 +42,7 @@ class MultiWindowTests: IpadOnlyTestCase {
         let newTab = StandardImageIdentifiers.Large.plus
         let tabsButtonIdentifier = AccessibilityIdentifiers.Toolbar.tabsButton
         let topSites = AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell
-        let homeButtom = AccessibilityIdentifiers.Toolbar.homeButton
+        let homeButtom = AccessibilityIdentifiers.Toolbar.addNewTabButton
         // A new tab is opened in the same window
         app.collectionViews.cells.matching(identifier: topSites).firstMatch.waitAndTap()
         mozWaitForElementToExist(app.buttons[homeButtom])

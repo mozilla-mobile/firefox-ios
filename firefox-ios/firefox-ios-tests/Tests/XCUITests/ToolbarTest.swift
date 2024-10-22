@@ -51,7 +51,7 @@ class ToolbarTests: BaseTestCase {
         navigator.openURL(website2)
         waitUntilPageLoad()
         let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
-        mozWaitForValueContains(url, value: "localhost:\(serverPort)")
+        mozWaitForValueContains(url, value: "localhost")
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
         XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
 
@@ -89,7 +89,7 @@ class ToolbarTests: BaseTestCase {
         urlBarAddress.typeText("\u{8}")
 
         let value = urlBarAddress.value
-        XCTAssertEqual(value as? String, "", "The url has not been removed correctly")
+        XCTAssertEqual(value as? String, "Search or enter address", "The url has not been removed correctly")
     }
 
     // Check that after scrolling on a page, the URL bar is hidden. Tapping one on the status bar will reveal
@@ -101,7 +101,7 @@ class ToolbarTests: BaseTestCase {
             // Workaround when testing on iPhone. If the orientation is in landscape on iPhone the tests will fail.
 
             XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
-            mozWaitForElementToExist(app.otherElements["Navigation Toolbar"])
+            mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
 
             navigator.openURL(website1["url"]!, waitForLoading: true)
             // Adding the waiter right after navigating to the webpage in order to make the test more stable
@@ -147,15 +147,12 @@ class ToolbarTests: BaseTestCase {
     }
 
     private func validateAddNewTabButtonOnToolbar(isPrivate: Bool) {
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton])
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
         restartInBackground()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton])
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
         // Swipe up to close the app does not work on iOS 15.
         if #available(iOS 16, *) {
             closeFromAppSwitcherAndRelaunch()
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton])
             let addNewTabButton = app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton]
             mozWaitForElementToExist(addNewTabButton)
             addNewTabButton.tapOnApp()

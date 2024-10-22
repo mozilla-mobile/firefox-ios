@@ -370,7 +370,7 @@ class HistoryTests: BaseTestCase {
         urlBarForwardButton.press(forDuration: 1)
         app.tables.staticTexts["The Book of Mozilla"].waitAndTap()
         let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
-        mozWaitForValueContains(url, value: "test-fixture/test-mozilla-book.html")
+        mozWaitForValueContains(url, value: "localhost")
     }
 
     // Private function created to select desired option from the "Clear Recent History" list

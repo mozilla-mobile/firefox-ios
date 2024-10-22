@@ -19,7 +19,7 @@ public struct AccessibilityIdentifiers {
         static let urlBarBorder = "TabToolbar.urlBarBorder"
         static let settingsMenuButton = "TabToolbar.menuButton"
         static let homeButton = "TabToolbar.homeButton"
-        static let trackingProtection = "TabLocationView.trackingProtectionButton"
+        static let trackingProtection = "AddressToolbar.lockIcon"
         static let readerModeButton = "TabLocationView.readerModeButton"
         static let reloadButton = "TabLocationView.reloadButton"
         static let shareButton = "TabLocationView.shareButton"
@@ -44,7 +44,7 @@ public struct AccessibilityIdentifiers {
             static let scanQRCodeButton = "urlBar-scanQRCode"
             static let cancelButton = "urlBar-cancel"
             static let searchTextField = "address"
-            static let url = "url"
+            static let url = "AddressToolbar.address"
         }
 
         struct KeyboardAccessory {

@@ -237,7 +237,7 @@ class ReadingListTests: BaseTestCase {
             XCTAssertTrue(app.buttons["Reader View"].isSelected)
         }
         XCTAssertTrue(app.buttons["Reader View"].isEnabled)
-        app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].tap()
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_ReadingList)
         // Swipe the article left

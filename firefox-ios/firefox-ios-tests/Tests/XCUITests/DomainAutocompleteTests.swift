@@ -109,7 +109,7 @@ class DomainAutocompleteTests: BaseTestCase {
 
         // Check that the address field is empty and that the home panels are shown
         let value = urlBarAddress.value
-        XCTAssertEqual(value as? String, "", "The url has not been removed correctly")
+        XCTAssertEqual(value as? String, "Search or enter address", "The url has not been removed correctly")
 
         mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
     }
@@ -122,7 +122,7 @@ class DomainAutocompleteTests: BaseTestCase {
         navigator.goto(URLBarOpen)
         urlBarAddress.typeText("ex")
         if #available(iOS 16, *) {
-            mozWaitForValueContains(app.otherElements.textFields["Address Bar"], value: "www.example.com/")
+            mozWaitForValueContains(urlBarAddress, value: "example.com")
             let value = urlBarAddress.value
             XCTAssertEqual(value as? String, "example.com", "Wrong autocompletion")
         }

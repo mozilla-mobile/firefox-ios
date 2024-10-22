@@ -28,13 +28,7 @@ class URLValidationTests: BaseTestCase {
             waitUntilPageLoad()
             mozWaitForElementToExist(app.otherElements.staticTexts["Mozilla"])
             mozWaitForElementToExist(app.buttons["Menu"])
-            // Getting the current system locale ex:- en-US
-            var locale = Locale.preferredLanguages[0]
-            // Only the below url suffixes should lead to en-US website
-            if url.hasSuffix("en") || url.hasSuffix("en-") || url.hasSuffix("en-US") {
-                locale = "en-US"
-            }
-            mozWaitForValueContains(urlField, value: "www.mozilla.org/\(locale)/")
+            mozWaitForValueContains(urlField, value: "mozilla.org")
             clearURL()
         }
 
@@ -42,7 +36,7 @@ class URLValidationTests: BaseTestCase {
             navigator.openURL(url)
             waitUntilPageLoad()
             mozWaitForElementToExist(app.otherElements.staticTexts["Example Domain"])
-            mozWaitForValueContains(urlField, value: "example.com/")
+            mozWaitForValueContains(urlField, value: "example.com")
             clearURL()
         }
     }

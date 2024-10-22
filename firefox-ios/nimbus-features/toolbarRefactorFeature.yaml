@@ -28,14 +28,14 @@ features:
     defaults:
       - channel: beta
         value:
-          enabled: false
+          enabled: true
           unified_search: false
-          one_tap_new_tab: false
-          navigation_hint: false
+          one_tap_new_tab: true
+          navigation_hint: true
       - channel: developer
         value:
-          enabled: false
+          enabled: true
           unified_search: false
-          one_tap_new_tab: false
-          navigation_hint: false
+          one_tap_new_tab: true
+          navigation_hint: true
 

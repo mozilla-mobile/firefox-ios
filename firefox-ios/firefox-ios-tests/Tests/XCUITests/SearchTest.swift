@@ -147,7 +147,7 @@ class SearchTests: BaseTestCase {
 
         // Check that the website is loaded
         let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
-        mozWaitForValueContains(url, value: "www.mozilla.org")
+        mozWaitForValueContains(url, value: "mozilla.org")
         waitUntilPageLoad()
 
         // Go back, write part of moz, check the autocompletion
@@ -260,14 +260,11 @@ class SearchTests: BaseTestCase {
             waitUntilPageLoad()
 
             // Reload icon is displayed.
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
-            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Home")
-            app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
-            app.buttons[AccessibilityIdentifiers.Toolbar.backButton].waitAndTap()
-
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
-            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].label, "Home")
-            app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
+            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].label, "New Tab")
+            navigator.performAction(Action.CloseURLBarOpen)
+            app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].tap()
+            navigator.performAction(Action.CloseURLBarOpen)
             XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].label, "Search")
             app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].tap()
 
@@ -375,7 +372,7 @@ class SearchTests: BaseTestCase {
 
         // The search is conducted through the default search engine
         let urlBar = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
-        waitForValueContains(urlBar, value: "www.google.com/search?q=")
+        waitForValueContains(urlBar, value: "google.com")
 
         // Disable "Show search suggestions" from Settings and type text in a new tab
         createNewTabAfterModifyingSearchSuggestions(turnOnSwitch: false)

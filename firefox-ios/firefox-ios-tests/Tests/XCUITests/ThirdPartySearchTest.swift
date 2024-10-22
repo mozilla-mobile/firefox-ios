@@ -23,7 +23,7 @@ class ThirdPartySearchTest: BaseTestCase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         UIPasteboard.general.string = "window"
         app.textFields.firstMatch.press(forDuration: 1)
-        app.staticTexts["Paste"].tap()
+        app.otherElements["Paste"].tap()
         app.scrollViews.otherElements.buttons["Mozilla Engine search"].tap()
         waitUntilPageLoad()
 
@@ -50,11 +50,9 @@ class ThirdPartySearchTest: BaseTestCase {
         waitUntilPageLoad()
 
         // Ensure that the default search is MDN
-        var url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as! String
-        if url.hasPrefix("https://") == false {
-            url = "https://\(url)"
-        }
-        XCTAssert(url.hasPrefix("https://developer.mozilla.org/en-US/search"), "The URL should indicate that the search was performed on MDN and not the default")
+        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as! String
+        XCTAssert(url.hasPrefix("developer.mozilla.org"), "The URL should indicate that the search was performed on MDN and not the default")
+        mozWaitForElementToExist(app.staticTexts["MDN"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306941
@@ -67,7 +65,7 @@ class ThirdPartySearchTest: BaseTestCase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         UIPasteboard.general.string = "window"
         app.textFields.firstMatch.press(forDuration: 1)
-        app.staticTexts["Paste"].tap()
+        app.otherElements["Paste"].tap()
         mozWaitForElementToExist(app.scrollViews.otherElements.buttons["Mozilla Engine search"])
 
         // Need to go step by step to Search Settings. The ScreenGraph will fail to go to the Search Settings Screen

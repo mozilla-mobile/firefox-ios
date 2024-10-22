@@ -8,7 +8,7 @@ import XCTest
 let url = "www.mozilla.org"
 let urlLabel = "Internet for people, not profit — Mozilla"
 let urlValue = "mozilla.org"
-let urlValueLong = "localhost:\(serverPort)/test-fixture/test-mozilla-org.html"
+let urlValueLong = "localhost"
 
 let urlExample = path(forTestPage: "test-example.html")
 let urlLabelExample = "Example Domain"
@@ -83,7 +83,7 @@ class TopTabsTest: BaseTestCase {
 
         app.cells.staticTexts[urlLabelExample].firstMatch.waitAndTap()
         let value = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as! String
-        XCTAssertEqual(value, urlValueLongExample)
+        XCTAssertEqual(value, urlValueLong)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2354449
@@ -250,10 +250,8 @@ class TopTabsTest: BaseTestCase {
 
         // Go back to portrait mode
         XCUIDevice.shared.orientation = .portrait
-        // Verify that the '+' is not displayed
-        if !iPad() {
-            mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
-        }
+        // Verify that the '+' is displayed
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306838
@@ -298,8 +296,9 @@ class TopTabsTest: BaseTestCase {
             navigator.nowAt(NewTabScreen)
             mozWaitForElementToExist(app.buttons["Show Tabs"])
             app.buttons["Show Tabs"].press(forDuration: 1)
-            app.tables.cells.otherElements["Private Browsing Mode"].waitAndTap()
+            app.tables.cells.otherElements["New Private Tab"].waitAndTap()
             navigator.nowAt(NewTabScreen)
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
         }
     }

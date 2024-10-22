@@ -41,21 +41,21 @@ class NavigationTest: BaseTestCase {
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
         let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
-        mozWaitForValueContains(url, value: "test-example.html")
+        mozWaitForValueContains(url, value: "localhost")
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
         XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
 
         // Once a second url is open, back button is enabled but not the forward one till we go back to url_1
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
-        mozWaitForValueContains(url, value: "test-mozilla-org.html")
+        mozWaitForValueContains(url, value: "localhost")
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
         XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
         // Go back to previous visited web site
         app.buttons[AccessibilityIdentifiers.Toolbar.backButton].tap()
 
         waitUntilPageLoad()
-        mozWaitForValueContains(url, value: "test-example.html")
+        mozWaitForValueContains(url, value: "localhost")
 
         if iPad() {
             app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].tap()
@@ -64,7 +64,7 @@ class NavigationTest: BaseTestCase {
             app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].waitAndTap()
         }
         waitUntilPageLoad()
-        mozWaitForValueContains(url, value: "test-mozilla-org")
+        mozWaitForValueContains(url, value: "localhost")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441489
@@ -430,7 +430,7 @@ class NavigationTest: BaseTestCase {
         XCTAssert(app.keyboards.count > 0, "The keyboard is not shown")
         app.typeText("example.com\n")
 
-        mozWaitForValueContains(urlBar, value: "example.com/")
+        mozWaitForValueContains(urlBar, value: "example.com")
         XCTAssertFalse(app.keyboards.count > 0, "The keyboard is shown")
         // swiftlint:enable empty_count
     }
@@ -497,7 +497,7 @@ class NavigationTest: BaseTestCase {
         waitUntilPageLoad()
         if #available(iOS 16, *) {
             let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
-            mozWaitForValueContains(url, value: "test-example.html")
+            mozWaitForValueContains(url, value: "localhost")
             XCTAssertTrue(backButton.isHittable, "Back button is not hittable")
             XCTAssertTrue(backButton.isEnabled, "Back button is disabled")
             backButton.tap()

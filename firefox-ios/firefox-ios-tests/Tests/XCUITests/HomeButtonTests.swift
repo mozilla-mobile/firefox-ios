@@ -17,7 +17,7 @@ class HomeButtonTests: BaseTestCase {
             navigator.nowAt(NewTabScreen)
         }
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"), waitForLoading: true)
-        app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].label, "Search")
@@ -25,11 +25,11 @@ class HomeButtonTests: BaseTestCase {
             navigator.nowAt(NewTabScreen)
         }
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"), waitForLoading: true)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
 
         XCUIDevice.shared.orientation = .landscapeRight
-        XCTAssertTrue(app.buttons["Home"].exists)
-        app.buttons["Home"].tap()
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
+        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].tap()
         navigator.nowAt(NewTabScreen)
     }
 
@@ -40,7 +40,7 @@ class HomeButtonTests: BaseTestCase {
         waitUntilPageLoad()
 
         // Switch to Homepage by taping the home button
-        app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
 
         validateHomePageAndKeyboardNotRaisedUp()
     }

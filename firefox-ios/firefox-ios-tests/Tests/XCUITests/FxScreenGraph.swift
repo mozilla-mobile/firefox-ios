@@ -913,7 +913,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 transitionTo: HomePanelsScreen
             )
             screenState.tap(
-                app.otherElements[StandardImageIdentifiers.Large.tab],
+                app.otherElements[StandardImageIdentifiers.Large.privateMode],
                 forAction: Action.OpenPrivateTabLongPressTabsButton,
                 transitionTo: NewTabScreen
             ) { userState in
@@ -962,7 +962,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         )
 
         screenState.tap(
-            app.buttons[AccessibilityIdentifiers.Toolbar.homeButton],
+            app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton],
             forAction: Action.GoToHomePage
         ) { userState in
         }

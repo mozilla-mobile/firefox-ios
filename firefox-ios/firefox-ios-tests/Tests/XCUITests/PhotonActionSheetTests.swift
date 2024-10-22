@@ -127,6 +127,6 @@ class PhotonActionSheetTests: BaseTestCase {
         // User is back to the BrowserTab where the sharesheet was launched
         let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
         mozWaitForElementToExist(url)
-        mozWaitForValueContains(url, value: "example.com/")
+        mozWaitForValueContains(url, value: "example.com")
     }
 }
