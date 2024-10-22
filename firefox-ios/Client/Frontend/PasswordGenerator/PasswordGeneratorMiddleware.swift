@@ -10,6 +10,7 @@ import Common
 final class PasswordGeneratorMiddleware {
     private let logger: Logger
     private let generatedPasswordStorage: GeneratedPasswordStorageProtocol
+    private let passwordGeneratorTelemetry = PasswordGeneratorTelemetry()
 
     init(logger: Logger = DefaultLogger.shared,
          generatedPasswordStorage: GeneratedPasswordStorageProtocol = GeneratedPasswordStorage()) {
@@ -38,6 +39,7 @@ final class PasswordGeneratorMiddleware {
     private func showPasswordGenerator(tab: Tab, windowUUID: WindowUUID) {
         // TODO: FXIOS-10279 - change password to be associated with the iframe origin that
         // contains the password field rather than tab origin
+        passwordGeneratorTelemetry.passwordGeneratorDialogShown()
         guard let origin = tab.url?.origin else {return}
         if let password = generatedPasswordStorage.getPasswordForOrigin(origin: origin) {
             let newAction = PasswordGeneratorAction(
@@ -74,6 +76,7 @@ final class PasswordGeneratorMiddleware {
     }
 
     private func userTappedUsePassword(with tab: Tab, password: String) {
+        passwordGeneratorTelemetry.usePasswordButtonPressed()
         let jsFunctionCall = "window.__firefox__.logins.fillGeneratedPassword(\"\(password)\")"
         tab.webView?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall) { (result, error) in
             if error != nil {
