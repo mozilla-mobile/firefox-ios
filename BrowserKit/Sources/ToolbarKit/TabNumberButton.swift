@@ -9,6 +9,7 @@ final class TabNumberButton: ToolbarButton {
     // MARK: - UX Constants
     struct UX {
         static let cornerRadius: CGFloat = 2
+        static let dimmedOpacity: CGFloat = 0.2
         static let titleFont = FXFontStyles.Bold.caption2.systemFont()
 
         // Tab count related constants
@@ -42,11 +43,12 @@ final class TabNumberButton: ToolbarButton {
         updateTabCount(numberOfTabs)
     }
 
-    override public func updateConfiguration() {
-        super.updateConfiguration()
+    override func tintColorDidChange() {
+        super.tintColorDidChange()
 
-        // Use image view tint color for tab number label as it gets dimmed when a modal gets displayed
-        countLabel.textColor = imageView?.tintColor ?? configuration?.baseForegroundColor
+        if tintAdjustmentMode == .dimmed {
+            UIView.performWithoutAnimation { countLabel.alpha = UX.dimmedOpacity }
+        } else { countLabel.alpha = 1.0 }
     }
 
     private func updateTabCount(_ count: Int) {

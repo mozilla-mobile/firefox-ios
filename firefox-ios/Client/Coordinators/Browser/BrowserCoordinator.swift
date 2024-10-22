@@ -501,6 +501,10 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.showFindInPage()
     }
 
+    func updateZoomPageBarVisibility() {
+        browserViewController.updateZoomPageBarVisibility(visible: true)
+    }
+
     private func makeMenuNavViewController() -> DismissableNavigationViewController? {
         guard !childCoordinators.contains(where: { $0 is MainMenuCoordinator }) else { return nil }
 

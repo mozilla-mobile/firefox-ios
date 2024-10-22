@@ -27,7 +27,7 @@ final class MainMenuMiddlewareTests: XCTestCase {
             middlewares: [MainMenuMiddleware().mainMenuProvider]
         )
 
-        let action = getAction(for: .closeMenu)
+        let action = getAction(for: .tapCloseMenu)
         mockStore.dispatch(action)
     }
 

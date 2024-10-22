@@ -54,6 +54,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
+                    with: .trackingProtectionRefactor,
+                    titleText: format(string: "Enable New Tracking Protection"),
+                    statusText: format(string: "Toggle to use the new tracking protection")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .nativeErrorPage,
                     titleText: format(string: "Enable Native Error Page"),
                     statusText: format(string: "Toggle to display natively created error pages")

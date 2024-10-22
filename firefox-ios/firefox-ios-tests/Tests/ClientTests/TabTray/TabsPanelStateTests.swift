@@ -40,8 +40,7 @@ final class TabPanelStateTests: XCTestCase {
                                               tabs: tabs,
                                               normalTabsCount: "\(tabs.count)",
                                               inactiveTabs: [InactiveTabsModel](),
-                                              isInactiveTabsExpanded: false,
-                                              shouldScrollToTab: false)
+                                              isInactiveTabsExpanded: false)
         let action = TabPanelMiddlewareAction(tabDisplayModel: tabDisplayModel,
                                               windowUUID: .XCTestDefaultUUID,
                                               actionType: TabPanelMiddlewareActionType.didChangeTabPanel)
@@ -136,7 +135,213 @@ final class TabPanelStateTests: XCTestCase {
         XCTAssertTrue(newState.isInactiveTabsExpanded)
     }
 
+    // MARK: - createTabScrollBehavior
+
+    func testCreateTabScrollBehavior_forScrollToSelectedTab_noTabs() {
+        let scrollBehavior: TabScrollBehavior = .scrollToSelectedTab(shouldAnimate: false)
+
+        let initialState = TabsPanelState(
+            windowUUID: .XCTestDefaultUUID,
+            isPrivateMode: false,
+            tabs: [],
+            inactiveTabs: [],
+            isInactiveTabsExpanded: true
+        )
+
+        let scrollState = TabsPanelState.createTabScrollBehavior(forState: initialState, withScrollBehavior: scrollBehavior)
+
+        XCTAssertNil(scrollState)
+    }
+
+    func testCreateTabScrollBehavior_forScrollToSelectedTab_forOnlyInactiveTabs() {
+        let inactiveTabModels = createInactiveTabs()
+        let scrollBehavior: TabScrollBehavior = .scrollToSelectedTab(shouldAnimate: false)
+
+        let initialState = TabsPanelState(
+            windowUUID: .XCTestDefaultUUID,
+            isPrivateMode: false,
+            tabs: [],
+            inactiveTabs: inactiveTabModels,
+            isInactiveTabsExpanded: true
+        )
+
+        let scrollState = TabsPanelState.createTabScrollBehavior(forState: initialState, withScrollBehavior: scrollBehavior)
+
+        XCTAssertNil(scrollState)
+    }
+
+    func testCreateTabScrollBehavior_forScrollToSelectedTab_forTabsAndInactiveTabs() {
+        let tabCount = 3
+        var tabModels = createTabs(count: tabCount)
+        let selectedTab = TabModel.emptyState(tabUUID: createTabUUID(), title: "Selected Tab", isSelected: true)
+        tabModels.append(selectedTab) // At index tabCount
+
+        let inactiveTabModels = createInactiveTabs()
+        let scrollBehavior: TabScrollBehavior = .scrollToSelectedTab(shouldAnimate: false)
+
+        let initialState = TabsPanelState(
+            windowUUID: .XCTestDefaultUUID,
+            isPrivateMode: false,
+            tabs: tabModels,
+            inactiveTabs: inactiveTabModels,
+            isInactiveTabsExpanded: true
+        )
+
+        let scrollState = TabsPanelState.createTabScrollBehavior(forState: initialState, withScrollBehavior: scrollBehavior)
+
+        XCTAssertNotNil(scrollState)
+        XCTAssertEqual(scrollState?.toIndex, tabCount)
+        XCTAssertEqual(scrollState?.isInactiveTabSection, false)
+    }
+
+    func testCreateTabScrollBehavior_forScrollToSelectedTab_noSelectedTab_returnsLastTab_ifTabsNotEmpty() {
+        let tabCount = 3
+        let tabModels: [TabModel] = createTabs(count: tabCount)
+        let scrollBehavior: TabScrollBehavior = .scrollToSelectedTab(shouldAnimate: false)
+
+        let initialState = TabsPanelState(
+            windowUUID: .XCTestDefaultUUID,
+            isPrivateMode: false,
+            tabs: tabModels,
+            inactiveTabs: [],
+            isInactiveTabsExpanded: true
+        )
+
+        let scrollState = TabsPanelState.createTabScrollBehavior(forState: initialState, withScrollBehavior: scrollBehavior)
+
+        XCTAssertNotNil(scrollState)
+        XCTAssertEqual(scrollState?.toIndex, tabCount - 1, "Should return the last tab if there is no selected tab")
+        XCTAssertEqual(scrollState?.isInactiveTabSection, false)
+    }
+
+    func testCreateTabScrollBehavior_forScrollToSelectedTab_noSelectedTab_returnsNil_ifTabsEmpty() {
+        let inactiveTabModels = createInactiveTabs()
+        let scrollBehavior: TabScrollBehavior = .scrollToSelectedTab(shouldAnimate: false)
+
+        let initialState = TabsPanelState(
+            windowUUID: .XCTestDefaultUUID,
+            isPrivateMode: false,
+            tabs: [],
+            inactiveTabs: inactiveTabModels,
+            isInactiveTabsExpanded: true
+        )
+
+        let scrollState = TabsPanelState.createTabScrollBehavior(forState: initialState, withScrollBehavior: scrollBehavior)
+
+        XCTAssertNil(scrollState)
+    }
+
+    func testCreateTabScrollBehavior_forScrollToTab_noTabs() {
+        let scrollBehavior: TabScrollBehavior = .scrollToTab(withTabUUID: createTabUUID(), shouldAnimate: false)
+
+        let initialState = TabsPanelState(
+            windowUUID: .XCTestDefaultUUID,
+            isPrivateMode: false,
+            tabs: [],
+            inactiveTabs: [],
+            isInactiveTabsExpanded: true
+        )
+
+        let scrollState = TabsPanelState.createTabScrollBehavior(forState: initialState, withScrollBehavior: scrollBehavior)
+
+        XCTAssertNil(scrollState)
+    }
+
+    func testCreateTabScrollBehavior_forScrollToTab_anInactiveTab_forOnlyInactiveTabs() {
+        let inactiveTabCount = 3
+        let testTabUUID = createTabUUID()
+        var inactiveTabModels = createInactiveTabs(count: inactiveTabCount)
+        let inactiveTab = InactiveTabsModel.emptyState(tabUUID: testTabUUID, title: "Special")
+        inactiveTabModels.append(inactiveTab) // At index inactiveTabCount
+        let scrollBehavior: TabScrollBehavior = .scrollToTab(withTabUUID: testTabUUID, shouldAnimate: false)
+
+        let initialState = TabsPanelState(
+            windowUUID: .XCTestDefaultUUID,
+            isPrivateMode: false,
+            tabs: [],
+            inactiveTabs: inactiveTabModels,
+            isInactiveTabsExpanded: true
+        )
+
+        let scrollState = TabsPanelState.createTabScrollBehavior(forState: initialState, withScrollBehavior: scrollBehavior)
+
+        XCTAssertNotNil(scrollState)
+        XCTAssertEqual(scrollState?.toIndex, inactiveTabCount)
+        XCTAssertEqual(scrollState?.isInactiveTabSection, true)
+    }
+
+    func testCreateTabScrollBehavior_forScrollToTab_anInactiveTab_forTabsAndInactiveTabs() {
+        let inactiveTabCount = 3
+        let testTabUUID = createTabUUID()
+        let tabs = createTabs()
+        var inactiveTabModels = createInactiveTabs(count: inactiveTabCount)
+        let inactiveTab = InactiveTabsModel.emptyState(tabUUID: testTabUUID, title: "Special")
+        inactiveTabModels.append(inactiveTab) // At index inactiveTabCount
+        let scrollBehavior: TabScrollBehavior = .scrollToTab(withTabUUID: testTabUUID, shouldAnimate: false)
+
+        let initialState = TabsPanelState(
+            windowUUID: .XCTestDefaultUUID,
+            isPrivateMode: false,
+            tabs: tabs,
+            inactiveTabs: inactiveTabModels,
+            isInactiveTabsExpanded: true
+        )
+
+        let scrollState = TabsPanelState.createTabScrollBehavior(forState: initialState, withScrollBehavior: scrollBehavior)
+
+        XCTAssertNotNil(scrollState)
+        XCTAssertEqual(scrollState?.toIndex, inactiveTabCount)
+        XCTAssertEqual(scrollState?.isInactiveTabSection, true)
+    }
+
+    func testCreateTabScrollBehavior_forScrollToTab_aNormalOrPrivateTab_forTabsAndInactiveTabs() {
+        let testTabUUID = createTabUUID()
+        let tabCount = 3
+        var tabModels = createTabs(count: tabCount)
+        let selectedTab = TabModel.emptyState(tabUUID: testTabUUID, title: "Selected Tab", isSelected: true)
+        tabModels.append(selectedTab) // At index tabCount
+
+        let inactiveTabModels = createInactiveTabs()
+        let scrollBehavior: TabScrollBehavior = .scrollToTab(withTabUUID: testTabUUID, shouldAnimate: false)
+
+        let initialState = TabsPanelState(
+            windowUUID: .XCTestDefaultUUID,
+            isPrivateMode: false,
+            tabs: tabModels,
+            inactiveTabs: inactiveTabModels,
+            isInactiveTabsExpanded: true
+        )
+
+        let scrollState = TabsPanelState.createTabScrollBehavior(forState: initialState, withScrollBehavior: scrollBehavior)
+
+        XCTAssertNotNil(scrollState)
+        XCTAssertEqual(scrollState?.toIndex, tabCount)
+        XCTAssertEqual(scrollState?.isInactiveTabSection, false)
+    }
+
+    func testCreateTabScrollBehavior_forScrollToTab_tabDoesntExist() {
+        let tabModels = createTabs()
+        let inactiveTabModels = createInactiveTabs()
+        let scrollBehavior: TabScrollBehavior = .scrollToTab(withTabUUID: createTabUUID(), shouldAnimate: false)
+
+        let initialState = TabsPanelState(
+            windowUUID: .XCTestDefaultUUID,
+            isPrivateMode: false,
+            tabs: tabModels,
+            inactiveTabs: inactiveTabModels,
+            isInactiveTabsExpanded: true
+        )
+
+        let scrollState = TabsPanelState.createTabScrollBehavior(forState: initialState, withScrollBehavior: scrollBehavior)
+
+        XCTAssertNil(scrollState)
+    }
+
     // MARK: - Private
+    private func createTabUUID() -> TabUUID {
+        return UUID().uuidString
+    }
+
     private func tabsPanelReducer() -> Reducer<TabsPanelState> {
         return TabsPanelState.reducer
     }
