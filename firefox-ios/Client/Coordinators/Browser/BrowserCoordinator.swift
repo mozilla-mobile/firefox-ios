@@ -22,7 +22,6 @@ class BrowserCoordinator: BaseCoordinator,
                           LibraryCoordinatorDelegate,
                           EnhancedTrackingProtectionCoordinatorDelegate,
                           FakespotCoordinatorDelegate,
-                          HomepageCoordinatorDelegate,
                           ParentCoordinatorDelegate,
                           TabManagerDelegate,
                           TabTrayCoordinatorDelegate,
@@ -132,7 +131,6 @@ class BrowserCoordinator: BaseCoordinator,
 
     func showHomepage() {
         let homepageController = self.homepageViewController ?? HomepageViewController(windowUUID: windowUUID)
-        homepageController.parentCoordinator = self
         guard browserViewController.embedContent(homepageController) else {
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
             return
@@ -150,8 +148,11 @@ class BrowserCoordinator: BaseCoordinator,
         self.privateViewController = privateHomepageController
     }
 
-    // MARK: - PrivateHomepageDelegate
+    func navigateFromHomePanel(to url: URL, visitType: VisitType, isGoogleTopSite: Bool) {
+        browserViewController.homePanel(didSelectURL: url, visitType: visitType, isGoogleTopSite: isGoogleTopSite)
+    }
 
+    // MARK: - PrivateHomepageDelegate
     func homePanelDidRequestToOpenInNewTab(with url: URL, isPrivate: Bool, selectNewTab: Bool) {
         browserViewController.homePanelDidRequestToOpenInNewTab(
             url,
