@@ -66,7 +66,7 @@ class TabManagerMiddleware {
         switch action.actionType {
         case RemoteTabsPanelActionType.openSelectedURL:
             guard let url = action.url else { return }
-            openSelectedURL(url: url, windowUUID: action.windowUUID)
+            openSelectedURL(url: url, showOverlay: false, windowUUID: action.windowUUID)
 
         default:
             break
@@ -114,7 +114,7 @@ class TabManagerMiddleware {
 
         case TabPanelViewActionType.addNewTab:
             let isPrivateMode = action.panelType == .privateTabs
-            addNewTab(with: action.urlRequest, isPrivate: isPrivateMode, for: action.windowUUID)
+            addNewTab(with: action.urlRequest, isPrivate: isPrivateMode, showOverlay: true, for: action.windowUUID)
 
         case TabPanelViewActionType.moveTab:
             guard let moveTabData = action.moveTabData else { return }
@@ -179,12 +179,12 @@ class TabManagerMiddleware {
         return (tabManager.normalTabs.count < 100) ? tabManager.normalTabs.count.description : "\u{221E}"
     }
 
-    private func openSelectedURL(url: URL, windowUUID: WindowUUID) {
+    private func openSelectedURL(url: URL, showOverlay: Bool, windowUUID: WindowUUID) {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .open,
                                      object: .syncTab)
         let urlRequest = URLRequest(url: url)
-        self.addNewTab(with: urlRequest, isPrivate: false, for: windowUUID)
+        self.addNewTab(with: urlRequest, isPrivate: false, showOverlay: showOverlay, for: windowUUID)
     }
 
     /// Gets initial state for TabTrayModel includes panelType, if is on Private mode,
@@ -264,7 +264,7 @@ class TabManagerMiddleware {
     /// - Parameters:
     ///   - urlRequest: URL request to load
     ///   - isPrivate: if the tab should be created in private mode or not
-    private func addNewTab(with urlRequest: URLRequest?, isPrivate: Bool, for uuid: WindowUUID) {
+    private func addNewTab(with urlRequest: URLRequest?, isPrivate: Bool, showOverlay: Bool, for uuid: WindowUUID) {
         // TODO: Legacy class has a guard to cancel adding new tab if dragging was enabled,
         // check if change is still needed
         let tabManager = tabManager(for: uuid)
@@ -281,7 +281,7 @@ class TabManagerMiddleware {
                                           actionType: TabTrayActionType.dismissTabTray)
         store.dispatch(dismissAction)
 
-        let overlayAction = GeneralBrowserAction(showOverlay: true,
+        let overlayAction = GeneralBrowserAction(showOverlay: showOverlay,
                                                  windowUUID: uuid,
                                                  actionType: GeneralBrowserActionType.showOverlay)
         store.dispatch(overlayAction)
@@ -562,7 +562,7 @@ class TabManagerMiddleware {
     }
 
     private func didTapLearnMoreAboutPrivate(with urlRequest: URLRequest, uuid: WindowUUID) {
-        addNewTab(with: urlRequest, isPrivate: true, for: uuid)
+        addNewTab(with: urlRequest, isPrivate: true, showOverlay: false, for: uuid)
     }
 
     private func selectTab(for tabUUID: TabUUID, uuid: WindowUUID) {
