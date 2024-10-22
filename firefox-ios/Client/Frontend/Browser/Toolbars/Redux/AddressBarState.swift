@@ -158,32 +158,7 @@ struct AddressBarState: StateType, Equatable {
             return handleToolbarDidStartEditingUrl(state: state, action: action)
 
         case ToolbarActionType.cancelEdit:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-
-            let url = toolbarAction.url ?? state.url
-            let showQRPageAction = url == nil
-
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: navigationActions(action: toolbarAction, addressBarState: state),
-                pageActions: pageActions(action: toolbarAction,
-                                         addressBarState: state,
-                                         isEditing: false,
-                                         showQRPageAction: showQRPageAction),
-                browserActions: browserActions(action: toolbarAction, addressBarState: state),
-                borderPosition: state.borderPosition,
-                url: url,
-                searchTerm: nil,
-                lockIconImageName: state.lockIconImageName,
-                safeListedURLImageName: state.safeListedURLImageName,
-                isEditing: false,
-                isScrollingDuringEdit: false,
-                shouldSelectSearchTerm: true,
-                isLoading: state.isLoading,
-                readerModeState: state.readerModeState,
-                didStartTyping: false,
-                showQRPageAction: showQRPageAction
-            )
+            return handleToolbarCancelEdit(state: state, action: action)
 
         case ToolbarActionType.didSetTextInLocationView:
             guard let toolbarAction = action as? ToolbarAction else { return state }
