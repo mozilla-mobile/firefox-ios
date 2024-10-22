@@ -619,6 +619,27 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
+    private static func handleToolbarDidScrollDuringEdit(state: Self) -> Self {
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            pageActions: state.pageActions,
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            isScrollingDuringEdit: true,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: state.didStartTyping,
+            showQRPageAction: state.showQRPageAction
+        )
+    }
+
     // MARK: - Address Toolbar Actions
     private static func navigationActions(
         action: ToolbarAction,
