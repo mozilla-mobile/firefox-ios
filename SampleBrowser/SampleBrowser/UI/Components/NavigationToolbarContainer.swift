@@ -79,7 +79,7 @@ class NavigationToolbarContainer: UIView,
     }
 
     // MARK: - BrowserNavigationToolbarDelegate
-    func configureContextualHint(for button: UIButton) {
+    func configureContextualHint(for button: UIButton, with contextualHintType: String) {
     }
 
     // MARK: - ThemeApplicable
