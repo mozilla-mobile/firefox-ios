@@ -548,7 +548,7 @@ class BrowserCoordinator: BaseCoordinator,
             navigationController.sheetPresentationController?.prefersGrabberVisible = true
         }
 
-        let coordinator = SearchEngineSelectionCoordinator(
+        let coordinator = DefaultSearchEngineSelectionCoordinator(
             router: DefaultRouter(navigationController: navigationController),
             windowUUID: tabManager.windowUUID
         )

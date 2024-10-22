@@ -10,7 +10,14 @@ protocol SearchEngineSelectionCoordinatorDelegate: AnyObject {
     func showSettings(at destination: Route.SettingsSection)
 }
 
-class SearchEngineSelectionCoordinator: BaseCoordinator, FeatureFlaggable {
+protocol SearchEngineSelectionCoordinator: AnyObject {
+    func navigateToSearchSettings(animated: Bool)
+    func dismissModal(animated: Bool)
+}
+
+class DefaultSearchEngineSelectionCoordinator: BaseCoordinator,
+                                               FeatureFlaggable,
+                                               SearchEngineSelectionCoordinator {
     weak var parentCoordinator: ParentCoordinatorDelegate?
     weak var navigationHandler: SearchEngineSelectionCoordinatorDelegate?
 
