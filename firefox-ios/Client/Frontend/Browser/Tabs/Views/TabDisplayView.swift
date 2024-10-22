@@ -250,7 +250,7 @@ class TabDisplayView: UIView,
     }
 
     private func scrollToTab(_ scrollState: TabsPanelState.ScrollState) {
-        let section: Int = scrollState.isInactiveTabSection ? 1 : 0
+        let section: Int = scrollState.isInactiveTabSection ? 0 : 1
         let indexPath = IndexPath(row: scrollState.toIndex, section: section)
 
         // We cannot get the visible cells unless all layout operations have finished finished (e.g. after `reloadData()`)
