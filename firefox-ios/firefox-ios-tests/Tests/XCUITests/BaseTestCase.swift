@@ -9,7 +9,7 @@ import XCTest
 let page1 = "http://localhost:\(serverPort)/test-fixture/find-in-page-test.html"
 let page2 = "http://localhost:\(serverPort)/test-fixture/test-example.html"
 let serverPort = ProcessInfo.processInfo.environment["WEBSERVER_PORT"] ?? "\(Int.random(in: 1025..<65000))"
-let urlBarAddress = XCUIApplication().textFields[AccessibilityIdentifiers.Browser.UrlBar.searchTextField]
+let urlBarAddress = XCUIApplication().textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
 
 func path(forTestPage page: String) -> String {
     return "http://localhost:\(serverPort)/test-fixture/\(page)"
@@ -235,7 +235,7 @@ class BaseTestCase: XCTestCase {
 
     func bookmark() {
         mozWaitForElementToExist(
-            app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection],
+            app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon],
             timeout: TIMEOUT
         )
         navigator.goto(BrowserTabMenu)
@@ -270,8 +270,10 @@ class BaseTestCase: XCTestCase {
 
     func checkBookmarksUpdated() {
         waitForTabsButton()
-        let numberOfRecentlyVisitedBookmarks = app.scrollViews
+        let bookmarksCell = app.scrollViews
             .cells[AccessibilityIdentifiers.FirefoxHomepage.Bookmarks.itemCell]
+        scrollToElement(bookmarksCell)
+        let numberOfRecentlyVisitedBookmarks = bookmarksCell
             .otherElements
             .otherElements
             .otherElements
@@ -322,7 +324,7 @@ class BaseTestCase: XCTestCase {
     func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true, file: String = #file, line: UInt = #line) {
         let app = XCUIApplication()
         UIPasteboard.general.string = url
-        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].press(forDuration: 2.0)
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 2.0)
         app.tables["Context Menu"].cells[AccessibilityIdentifiers.Photon.pasteAndGoAction].firstMatch.tap()
 
         if waitForLoadToFinish {
@@ -408,6 +410,7 @@ class BaseTestCase: XCTestCase {
         let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
         XCTAssertEqual(result, .completed, "Element did not become hittable in time.")
     }
+
     func switchThemeToDarkOrLight(theme: String) {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(BrowserTab)

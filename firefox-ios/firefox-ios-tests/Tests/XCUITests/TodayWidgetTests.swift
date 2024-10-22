@@ -458,7 +458,7 @@ class TodayWidgetTests: BaseTestCase {
         if #available(iOS 18, *) {
             throw XCTSkip("This test is only for iOS versions 17.5 and lower.")
         }
-        let copiedString = "www.mozilla.org"
+        let copiedString = "mozilla.org"
         // Press Home and navigate to Today Widget Page
         XCUIDevice.shared.press(.home)
         goToTodayWidgetPage()
@@ -520,10 +520,10 @@ class TodayWidgetTests: BaseTestCase {
             app.buttons["CloseButton"].tap()
         }
         // Verify the copied string is in the URL field
-        mozWaitForElementToExist(app.textFields["url"], timeout: TIMEOUT)
-        mozWaitForValueContains(app.textFields["url"], value: copiedString, timeout: TIMEOUT)
-        guard let urlField = app.textFields["url"].value as? String else {
-            XCTFail("Expected value to be a String but found \(type(of: app.textFields["url"].value))")
+        mozWaitForElementToExist(urlBarAddress, timeout: TIMEOUT)
+        mozWaitForValueContains(urlBarAddress, value: copiedString, timeout: TIMEOUT)
+        guard let urlField = urlBarAddress.value as? String else {
+            XCTFail("Expected value to be a String but found \(type(of: urlBarAddress.value))")
             return
         }
         XCTAssertTrue(urlField.contains(copiedString),
@@ -621,7 +621,7 @@ class TodayWidgetTests: BaseTestCase {
         if #available(iOS 18, *) {
             throw XCTSkip("This test is only for iOS versions 17.5 and lower.")
         }
-        let copiedString = "www.mozilla.org"
+        let copiedString = "mozilla.org"
         UIPasteboard.general.string = copiedString
         XCUIDevice.shared.press(.home)
         app.terminate()
@@ -658,10 +658,10 @@ class TodayWidgetTests: BaseTestCase {
             mozWaitElementHittable(element: app.buttons["CloseButton"], timeout: TIMEOUT)
             app.buttons["CloseButton"].tap()
         }
-        mozWaitForElementToExist(app.textFields["url"], timeout: TIMEOUT)
-        mozWaitForValueContains(app.textFields["url"], value: copiedString, timeout: TIMEOUT)
-        guard let urlField = app.textFields["url"].value as? String else {
-            XCTFail("Expected value to be a String but found \(type(of: app.textFields["url"].value))")
+        mozWaitForElementToExist(urlBarAddress, timeout: TIMEOUT)
+        mozWaitForValueContains(urlBarAddress, value: copiedString, timeout: TIMEOUT)
+        guard let urlField = urlBarAddress.value as? String else {
+            XCTFail("Expected value to be a String but found \(type(of: urlBarAddress.value))")
             return
         }
         XCTAssertTrue(urlField.contains(copiedString),
