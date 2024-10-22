@@ -265,6 +265,8 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
             urlTextField.removeInteraction(dropInteraction)
         }
 
+        // Once the user started typing we should not update the text anymore as that interferes with
+        // setting the autocomplete suggestions which is done using a delegate method.
         guard !state.didStartTyping else { return }
 
         let text = (state.searchTerm != nil) && state.isEditing ? state.searchTerm : state.url?.absoluteString
