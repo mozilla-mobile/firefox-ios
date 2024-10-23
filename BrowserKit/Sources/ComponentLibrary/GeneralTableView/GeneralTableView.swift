@@ -6,10 +6,12 @@ import Foundation
 import UIKit
 import Common
 
+// FIXME Improve naming, separate file
 public protocol ElementData {
     var action: (() -> Void)? { get }
 }
 
+// FIXME Improve naming, separate file
 public protocol SectionData {
     associatedtype E: ElementData
 

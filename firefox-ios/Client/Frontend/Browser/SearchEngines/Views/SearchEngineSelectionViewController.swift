@@ -8,12 +8,14 @@ import UIKit
 import Shared
 import Redux
 
+// FIXME Equatable, separate file, fix naming
 struct SearchEngineSection: SectionData {
     typealias E = SearchEngineSelectionCellModel
 
     var elementData: [SearchEngineSelectionCellModel]
 }
 
+// FIXME Separate file, audit naming
 struct SearchEngineSelectionCellModel: GeneralImageTableViewCellModel {
     let title: String
     let description: String?
@@ -41,6 +43,7 @@ struct SearchEngineSelectionCellModel: GeneralImageTableViewCellModel {
     }
 }
 
+// FIXME Separate file, audit naming
 class SearchEngineSelectionCell: GeneralImageTableViewCell<SearchEngineSelectionCellModel> {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
