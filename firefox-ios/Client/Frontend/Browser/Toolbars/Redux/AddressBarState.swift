@@ -161,7 +161,7 @@ struct AddressBarState: StateType, Equatable {
             return handleCancelEditAction(state: state, action: action)
 
         case ToolbarActionType.didSetTextInLocationView:
-            return handleToolbarDidSetTextInLocationView(state: state, action: action)
+            return handleDidSetTextInLocationViewAction(state: state, action: action)
 
         case ToolbarActionType.didScrollDuringEdit:
             return handleToolbarDidScrollDuringEdit(state: state)
@@ -476,7 +476,7 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
-    private static func handleToolbarDidSetTextInLocationView(state: Self, action: Action) -> Self {
+    private static func handleDidSetTextInLocationViewAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return state }
 
         let isEmptySearch = toolbarAction.searchTerm == nil || toolbarAction.searchTerm?.isEmpty == true
