@@ -21,8 +21,6 @@ struct SearchEngineSection: SectionData {
 }
 
 class SearchEngineSelectionCell: UITableViewCell, ConfigurableTableViewCell {
-//    typealias E = SearchEngineData
-
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -100,6 +98,7 @@ class SearchEngineSelectionViewController: UIViewController,
         setupView()
         listenForThemeChange(view)
 
+        // FIXME Mock data for testing. Hookups to search engines to come later.
         let fakeData: [SearchEngineSection] = [
             SearchEngineSection(elementData: [
                 ImageLabelRowData(titleLabel: "Search engine 1"),
@@ -130,14 +129,6 @@ class SearchEngineSelectionViewController: UIViewController,
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
-
-//        view.addSubview(placeholderOpenSettingsButton)
-//
-//        NSLayoutConstraint.activate([
-//            placeholderOpenSettingsButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 80),
-//            placeholderOpenSettingsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            placeholderOpenSettingsButton.widthAnchor.constraint(equalToConstant: 200)
-//        ])
     }
 
     // MARK: - Theme
