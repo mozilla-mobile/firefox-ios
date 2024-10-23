@@ -7,6 +7,7 @@ import UIKit
 import Common
 
 public protocol ElementData {
+    var action: (() -> Void)? { get }
 }
 
 public protocol SectionData {
@@ -18,17 +19,17 @@ public protocol SectionData {
 public protocol GeneralTableViewDelegate: AnyObject {
     associatedtype S: SectionData
 
-    func didSelectRowAt(indexPath: IndexPath, withModel: S.E)
     func scrollViewDidScroll(_ scrollView: UIScrollView, inScrollViewWithTopPadding topPadding: CGFloat)
 }
 
-public protocol ConfigurableTableViewCell: UITableViewCell {
-    associatedtype E: ElementData
-
-    func configureCellWith(model: E)
-    func applyTheme(theme: Theme)
-}
-
+/// Renders an `insetGrouped` style `UITableView` which matches existing design specifications.
+///
+/// - generic S: Underlying data for each section of the table. Must conform to `SectionData`. Contains an array of items
+///              conforming to `ElementData`.
+/// - generic Cell: The UITableViewCell subclass to use to render data. Must conform to `ConfigurableTableViewCell`. Its
+///                 associated type must be of the same type as `S`'s associated type.
+/// - generic D: Type of delegate. Must conform to `GeneralTableViewDelegate`. Associated type must be of the same type as
+///              `S`'s associated type.
 public class GeneralTableView<
     S: SectionData,
     Cell: ConfigurableTableViewCell,
@@ -123,9 +124,13 @@ where S.E == Cell.E, D.S == S {
 
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        delegate?.didSelectRowAt(indexPath: indexPath, withModel: sectionData[indexPath.section].elementData[indexPath.row])
+
+        if let action = sectionData[indexPath.section].elementData[indexPath.row].action {
+            action()
+        }
     }
 
+    // TODO
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0 {
             let headerView = UIView()
@@ -137,6 +142,7 @@ where S.E == Cell.E, D.S == S {
 
     // MARK: - UITableViewDelegate
 
+    // FIXME Alternatively could pass in an action instead as with `performAction()` in the model
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         delegate?.scrollViewDidScroll(scrollView, inScrollViewWithTopPadding: UX.topPadding)
     }

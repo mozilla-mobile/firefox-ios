@@ -8,39 +8,32 @@ import UIKit
 import Shared
 import Redux
 
-// struct ImageLabelRowData: ElementData {
-//    // FIXME Pass image later
-//    var testPlaceholderImage: UIImage = UIImage(named: "globeLarge")!.withRenderingMode(.alwaysTemplate)
-//    var titleLabel: String
-// }
-
 struct SearchEngineSection: SectionData {
     typealias E = SearchEngineSelectionCellModel
 
     var elementData: [SearchEngineSelectionCellModel]
 }
 
-struct SearchEngineSelectionCellModel: ImageLabelTableViewCellModel {
+struct SearchEngineSelectionCellModel: GeneralImageTableViewCellModel {
     let title: String
     let description: String?
     let image: UIImage
+    var isEnabled = true
+    var isActive = false
+    var hasDisclosure = false
 
     // Accessibility
     let a11yLabel: String
     let a11yHint: String?
     let a11yId: String
 
-    var isEnabled = true
-    var isActive = false // FIXME isHighlighted?
-    var hasDisclosure = false
-
     var action: (() -> Void)?
 
     init(title: String) {
-        // TODO
+        // FIXME Temporary placeholder initialization
         self.title = title
         self.description = nil
-        self.image = UIImage(named: "globeLarge")! // For testing
+        self.image = UIImage(named: "globeLarge")!
         self.a11yLabel = ""
         self.a11yHint = ""
         self.a11yId = ""
@@ -48,21 +41,10 @@ struct SearchEngineSelectionCellModel: ImageLabelTableViewCellModel {
     }
 }
 
-class SearchEngineSelectionCell: ImageLabelTableViewCell<SearchEngineSelectionCellModel> {
-    // MARK: - Initializers
-//    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-//        super.init(style: style, reuseIdentifier: reuseIdentifier)
-//
-//        self.backgroundColor = .green
-//    }
-
+class SearchEngineSelectionCell: GeneralImageTableViewCell<SearchEngineSelectionCellModel> {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-//    func applyTheme(theme: any Common.Theme) {
-//        // TODO apply theme
-//    }
 
     override func configureCellWith(model: SearchEngineSelectionCellModel) {
         super.configureCellWith(model: model)
@@ -184,13 +166,7 @@ class SearchEngineSelectionViewController: UIViewController,
 
     // MARK: - GeneralTableViewDataDelegate
 
-    func didSelectRowAt(indexPath: IndexPath, withModel: SearchEngineSelectionCellModel) {
-        // TODO
-        print("** didSelectRowAt \(indexPath)")
-    }
-
     func scrollViewDidScroll(_ scrollView: UIScrollView, inScrollViewWithTopPadding topPadding: CGFloat) {
-        // TODO
-        print("** scrollViewDidScroll \(scrollView.contentOffset.y)")
+        // TODO scrollViewDidScroll
     }
 }

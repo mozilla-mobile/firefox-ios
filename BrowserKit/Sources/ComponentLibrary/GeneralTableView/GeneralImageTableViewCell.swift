@@ -6,33 +6,34 @@ import Foundation
 import Common
 import UIKit
 
-public protocol ImageLabelTableViewCellModel: ElementData {
+/// Model used to configure the appearance and behaviour of `GeneralImageTableViewCell` cells.
+public protocol GeneralImageTableViewCellModel: ElementData {
     var title: String { get }
     var description: String? { get }
     var image: UIImage { get }
+    var isEnabled: Bool { get }
+    var isActive: Bool { get }
+    var hasDisclosure: Bool { get }
 
     // Accessibility
     var a11yLabel: String { get }
     var a11yHint: String? { get }
     var a11yId: String { get }
 
-    // Extra props for unique type?
-    var isEnabled: Bool { get }
-    var isActive: Bool { get }
-    var hasDisclosure: Bool { get }
-
     var action: (() -> Void)? { get }
 }
 
-open class ImageLabelTableViewCell<
-    Model: ImageLabelTableViewCellModel
+/// Renders a simple `UITableViewCell` with a leading image and some text. Optionally supports an information disclosure
+/// arrow as well as cell `isActive` and `isEnabled` visual states.
+open class GeneralImageTableViewCell<
+    Model: GeneralImageTableViewCellModel
 >: UITableViewCell,
    ConfigurableTableViewCell,
    ReusableCell,
    ThemeApplicable {
-    public typealias E = Model
+    public typealias E = Model // For ConfigurableTableViewCell conformance
 
-    // Static stored properties not supported in generic types :(
+    // FIXME Static stored properties not supported in generic types :(
     private struct UXType {
         let contentMargin: CGFloat = 10
         let iconSize: CGFloat = 24
@@ -68,6 +69,7 @@ open class ImageLabelTableViewCell<
     public var model: Model?
 
     // MARK: - Initializers
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
@@ -79,13 +81,15 @@ open class ImageLabelTableViewCell<
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - View Setup
+
     open func configureCellWith(model: Model) {
         self.model = model
         self.titleLabel.text = model.title
         self.descriptionLabel.text = model.description
         self.icon.image = model.image.withRenderingMode(.alwaysTemplate)
-        self.accessoryArrowView.image =
-        UIImage(named: StandardImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
+        self.accessoryArrowView.image = UIImage(named: StandardImageIdentifiers.Large.chevronRight)?
+                                        .withRenderingMode(.alwaysTemplate)
         self.isAccessibilityElement = true
         self.accessibilityIdentifier = model.a11yId
         self.accessibilityLabel = model.a11yLabel
@@ -100,6 +104,7 @@ open class ImageLabelTableViewCell<
         self.addSubview(accessoryArrowView)
         contentStackView.addArrangedSubview(titleLabel)
         contentStackView.addArrangedSubview(descriptionLabel)
+
         NSLayoutConstraint.activate([
             icon.leadingAnchor.constraint(equalTo: leadingAnchor, constant: UX.contentMargin),
             icon.centerYAnchor.constraint(equalTo: centerYAnchor),
@@ -115,6 +120,7 @@ open class ImageLabelTableViewCell<
             accessoryArrowView.widthAnchor.constraint(equalToConstant: UX.iconSize),
             accessoryArrowView.heightAnchor.constraint(equalToConstant: UX.iconSize)
         ])
+
         adjustLayout(isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory)
     }
 
@@ -130,6 +136,7 @@ open class ImageLabelTableViewCell<
     }
 
     // MARK: - Theme Applicable
+
     open func applyTheme(theme: Theme) {
         guard let model else { return }
         backgroundColor = theme.colors.layer2
