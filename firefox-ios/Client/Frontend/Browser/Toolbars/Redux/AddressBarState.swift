@@ -124,7 +124,7 @@ struct AddressBarState: StateType, Equatable {
 
         switch action.actionType {
         case ToolbarActionType.didLoadToolbars:
-            return handleToolbarDidLoadToolbars(state: state, action: action)
+            return handleDidLoadToolbarsAction(state: state, action: action)
 
         case ToolbarActionType.numberOfTabsChanged:
             return handleToolbarNumberOfTabsChanged(state: state, action: action)
@@ -183,7 +183,7 @@ struct AddressBarState: StateType, Equatable {
         }
     }
 
-    private static func handleToolbarDidLoadToolbars(state: Self, action: Action) -> Self {
+    private static func handleDidLoadToolbarsAction(state: Self, action: Action) -> Self {
         guard let borderPosition = (action as? ToolbarAction)?.addressBorderPosition else { return state }
 
         return AddressBarState(
