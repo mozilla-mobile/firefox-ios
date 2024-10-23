@@ -127,7 +127,7 @@ struct AddressBarState: StateType, Equatable {
             return handleNumberOfTabsChangedAction(state: state, action: action)
 
         case ToolbarActionType.readerModeStateChanged:
-            return handleToolbarReaderModeStateChanged(state: state, action: action)
+            return handleReaderModeStateChangedAction(state: state, action: action)
 
         case ToolbarActionType.websiteLoadingStateDidChange:
             return handleToolbarWebsiteLoadingStateDidChange(state: state, action: action)
@@ -215,7 +215,7 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
-    private static func handleToolbarReaderModeStateChanged(state: Self, action: Action) -> Self {
+    private static func handleReaderModeStateChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return state }
 
         return AddressBarState(
