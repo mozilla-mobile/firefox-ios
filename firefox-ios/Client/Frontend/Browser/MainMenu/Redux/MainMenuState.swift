@@ -160,9 +160,7 @@ struct MainMenuState: ScreenState, Equatable {
         let rustAccount = RustFirefoxAccounts.shared
         let needsReAuth = rustAccount.accountNeedsReauth()
 
-        guard let userProfile = rustAccount.userProfile else {
-            return nil
-        }
+        guard let userProfile = rustAccount.userProfile else { return nil }
 
         let title: String = {
             if needsReAuth { return .MainMenu.Account.SyncErrorTitle }
