@@ -610,6 +610,31 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
+    private static func handleDidDeleteSearchTerm(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return state }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            pageActions: pageActions(action: toolbarAction,
+                                     addressBarState: state,
+                                     isEditing: state.isEditing,
+                                     showQRPageAction: true),
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            isEditing: state.isEditing,
+            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: true,
+            showQRPageAction: true
+        )
+    }
+
     // MARK: - Address Toolbar Actions
     private static func navigationActions(
         action: ToolbarAction,
