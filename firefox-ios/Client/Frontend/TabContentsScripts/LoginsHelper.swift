@@ -261,8 +261,6 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
         guard login.isValid.isSuccess else { return }
 
         clearStoredPasswordAfterGeneration(origin: login.hostname)
-        print("origin")
-        print(login.hostname)
 
         let promptMessage: String
         let https = "^https:\\/\\/"
