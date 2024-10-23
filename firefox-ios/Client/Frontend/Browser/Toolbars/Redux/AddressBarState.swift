@@ -152,7 +152,7 @@ struct AddressBarState: StateType, Equatable {
             return handlePositionChangedAction(state: state, action: action)
 
         case ToolbarActionType.didPasteSearchTerm:
-            return handleToolbarDidPasteSearchTerm(state: state, action: action)
+            return handleDidPasteSearchTermAction(state: state, action: action)
 
         case ToolbarActionType.didStartEditingUrl:
             return handleToolbarDidStartEditingUrl(state: state, action: action)
@@ -389,7 +389,7 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
-    private static func handleToolbarDidPasteSearchTerm(state: Self, action: Action) -> Self {
+    private static func handleDidPasteSearchTermAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return state }
 
         let isEmptySearch = toolbarAction.searchTerm == nil || toolbarAction.searchTerm?.isEmpty == true
