@@ -78,7 +78,16 @@ export const LabelUtils = {
       if (!id) {
         control = label.control;
         if (!control) {
-          continue;
+          // If the label has no control, yet there is a single control
+          // adjacent to the label, assume that is meant to be the control.
+          let nodes = label.parentNode.querySelectorAll(
+            ":scope > :is(input,select)"
+          );
+          if (nodes.length == 1) {
+            control = nodes[0];
+          } else {
+            continue;
+          }
         }
         id = control.id;
       }
