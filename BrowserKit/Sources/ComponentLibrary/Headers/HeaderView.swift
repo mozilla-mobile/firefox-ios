@@ -37,6 +37,7 @@ public final class HeaderView: UIView, ThemeApplicable {
     }
 
     private let titleLabel: UILabel = .build { label in
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = UX.headerLinesLimit
         label.adjustsFontForContentSizeCategory = true
     }
@@ -184,14 +185,12 @@ public final class HeaderView: UIView, ThemeApplicable {
     }
 
     public func setupDetails(subtitle: String, title: String, icon: UIImage?) {
-        titleLabel.font = FXFontStyles.Regular.body.scaledFont()
         if let icon { favicon.manuallySetImage(icon) }
         subtitleLabel.text = subtitle
         titleLabel.text = title
     }
 
     public func setupDetails(subtitle: String, title: String, icon: UIImage?, warningIcon: String?, theme: Theme) {
-        titleLabel.font = FXFontStyles.Regular.body.scaledFont()
         titleLabel.text  = title
         subtitleLabel.text = subtitle
         subtitleLabel.textColor = theme.colors.textWarning
