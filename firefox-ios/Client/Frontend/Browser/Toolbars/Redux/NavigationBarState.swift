@@ -75,7 +75,7 @@ struct NavigationBarState: StateType, Equatable {
 
         case ToolbarActionType.borderPositionChanged,
             ToolbarActionType.toolbarPositionChanged:
-            return handleToolbarPositionChanged(state: state, action: action)
+            return handlePositionChangedAction(state: state, action: action)
 
         default:
             return NavigationBarState(
@@ -143,7 +143,7 @@ struct NavigationBarState: StateType, Equatable {
         )
     }
 
-    private static func handleToolbarPositionChanged(state: Self, action: Action) -> Self {
+    private static func handlePositionChangedAction(state: Self, action: Action) -> Self {
         guard let displayBorder = (action as? ToolbarAction)?.displayNavBorder else { return state }
 
         return NavigationBarState(
