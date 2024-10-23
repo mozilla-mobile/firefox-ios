@@ -170,7 +170,7 @@ struct AddressBarState: StateType, Equatable {
             return handleClearSearchAction(state: state, action: action)
 
         case ToolbarActionType.didDeleteSearchTerm:
-            return handleDidDeleteSearchTerm(state: state, action: action)
+            return handleDidDeleteSearchTermAction(state: state, action: action)
 
         case ToolbarActionType.didEnterSearchTerm:
             return handleDidEnterSearchTerm(state: state, action: action)
@@ -550,7 +550,7 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
-    private static func handleDidDeleteSearchTerm(state: Self, action: Action) -> Self {
+    private static func handleDidDeleteSearchTermAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return state }
 
         return AddressBarState(
