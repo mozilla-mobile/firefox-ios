@@ -20,9 +20,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     }
 
     enum DisplayType: Equatable {
-        static func == (lhs: DisplayType, rhs: DisplayType) -> Bool {
-            return false
-        }
         case qrCodeReader
         case backForwardList
         case trackingProtectionDetails
@@ -36,7 +33,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         case newTabLongPressActions
         case readerModeLongPressAction
         case dataClearance
-        case passwordGenerator(frame: WKFrameInfo)
+        case passwordGenerator
     }
 
     let windowUUID: WindowUUID
@@ -50,6 +47,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     var navigateTo: NavigationType? // use default value when re-creating
     var displayView: DisplayType? // use default value when re-creating
     var buttonTapped: UIButton?
+    var frame: WKFrameInfo?
     var microsurveyState: MicrosurveyPromptState
 
     init(appState: AppState, uuid: WindowUUID) {
@@ -73,6 +71,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                   navigateTo: bvcState.navigateTo,
                   displayView: bvcState.displayView,
                   buttonTapped: bvcState.buttonTapped,
+                  frame: bvcState.frame,
                   microsurveyState: bvcState.microsurveyState)
     }
 
@@ -103,6 +102,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         navigateTo: NavigationType? = nil,
         displayView: DisplayType? = nil,
         buttonTapped: UIButton? = nil,
+        frame: WKFrameInfo? = nil,
         microsurveyState: MicrosurveyPromptState
     ) {
         self.searchScreenState = searchScreenState
@@ -116,6 +116,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         self.navigateTo = navigateTo
         self.displayView = displayView
         self.buttonTapped = buttonTapped
+        self.frame = frame
         self.microsurveyState = microsurveyState
     }
 
@@ -413,14 +414,15 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 browserViewType: state.browserViewType,
                 displayView: .dataClearance,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
-        case GeneralBrowserActionType.showPasswordGenerator(let frame):
+        case GeneralBrowserActionType.showPasswordGenerator:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
                 showDataClearanceFlow: state.showDataClearanceFlow,
                 fakespotState: state.fakespotState,
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
-                displayView: .passwordGenerator(frame: frame),
+                displayView: .passwordGenerator,
+                frame: action.frame,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action)
                 )
         default:

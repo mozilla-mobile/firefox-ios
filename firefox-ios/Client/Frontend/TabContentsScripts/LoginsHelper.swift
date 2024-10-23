@@ -131,8 +131,10 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
                 let userDefaults = UserDefaults.standard
                 let showPasswordGeneratorClosure = {
                     let newAction = GeneralBrowserAction(
+                        frame: message.frameInfo,
                         windowUUID: tab.windowUUID,
-                        actionType: GeneralBrowserActionType.showPasswordGenerator(frame: message.frameInfo))
+                        actionType: GeneralBrowserActionType.showPasswordGenerator)
+
                     store.dispatch(newAction)
                 }
                 if userDefaults.value(forKey: PrefsKeys.PasswordGeneratorShown) == nil {

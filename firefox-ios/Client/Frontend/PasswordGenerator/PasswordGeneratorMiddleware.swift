@@ -47,9 +47,7 @@ final class PasswordGeneratorMiddleware {
     }
 
     private func showPasswordGenerator(frame: WKFrameInfo, windowUUID: WindowUUID) {
-        // TODO: FXIOS-10279 - change password to be associated with the iframe origin that
-        // contains the password field rather than tab origin
-        guard let origin = frame.request.url?.origin else {return}
+        guard let origin = frame.webView?.url?.origin else {return}
         if let password = generatedPasswordStorage.getPasswordForOrigin(origin: origin) {
             let newAction = PasswordGeneratorAction(
                 windowUUID: windowUUID,
@@ -96,7 +94,7 @@ final class PasswordGeneratorMiddleware {
     }
 
     private func userTappedRefreshPassword(frame: WKFrameInfo, windowUUID: WindowUUID) {
-        guard let origin = frame.request.url?.origin else {return}
+        guard let origin = frame.webView?.url?.origin else {return}
         generateNewPassword(frame: frame, completion: { generatedPassword in
             self.generatedPasswordStorage.setPasswordForOrigin(origin: origin, password: generatedPassword)
             let newAction = PasswordGeneratorAction(

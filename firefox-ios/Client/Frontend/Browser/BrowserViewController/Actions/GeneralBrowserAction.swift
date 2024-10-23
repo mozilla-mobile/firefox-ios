@@ -14,12 +14,14 @@ class GeneralBrowserAction: Action {
     let showOverlay: Bool?
     let buttonTapped: UIButton?
     let isNativeErrorPage: Bool?
+    let frame: WKFrameInfo?
     init(selectedTabURL: URL? = nil,
          isPrivateBrowsing: Bool? = nil,
          toastType: ToastType? = nil,
          showOverlay: Bool? = nil,
          buttonTapped: UIButton? = nil,
          isNativeErrorPage: Bool? = nil,
+         frame: WKFrameInfo? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.selectedTabURL = selectedTabURL
@@ -28,6 +30,7 @@ class GeneralBrowserAction: Action {
         self.buttonTapped = buttonTapped
         self.showOverlay = showOverlay
         self.isNativeErrorPage = isNativeErrorPage
+        self.frame = frame
         super.init(windowUUID: windowUUID,
                    actionType: actionType)
     }
@@ -58,7 +61,7 @@ enum GeneralBrowserActionType: ActionType {
     case showNewTabLongPressActions
     case addToReadingListLongPressAction
     case clearData
-    case showPasswordGenerator(frame: WKFrameInfo)
+    case showPasswordGenerator
 }
 
 class GeneralBrowserMiddlewareAction: Action {
