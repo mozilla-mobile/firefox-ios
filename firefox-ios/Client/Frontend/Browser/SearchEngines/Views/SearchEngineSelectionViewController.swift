@@ -8,10 +8,48 @@ import UIKit
 import Shared
 import Redux
 
+struct ImageLabelRowData: ElementData {
+    // FIXME Pass image later
+    var testPlaceholderImage: UIImage = UIImage(named: "globeLarge")!.withRenderingMode(.alwaysTemplate)
+    var titleLabel: String
+}
+
+struct SearchEngineSection: SectionData {
+    typealias E = ImageLabelRowData
+
+    var elementData: [ImageLabelRowData]
+}
+
+class SearchEngineSelectionCell: UITableViewCell, ConfigurableTableViewCell {
+//    typealias E = SearchEngineData
+
+    // MARK: - Initializers
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+
+        self.backgroundColor = .green
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func applyTheme(theme: any Common.Theme) {
+        // TODO apply theme
+    }
+
+    func configureCellWith(model: ImageLabelRowData) {
+        // TODO set label and image
+    }
+}
+
 class SearchEngineSelectionViewController: UIViewController,
                                            UISheetPresentationControllerDelegate,
                                            UIPopoverPresentationControllerDelegate,
-                                           Themeable {
+                                           Themeable,
+                                           GeneralTableViewDataDelegate {
+    typealias S = SearchEngineSection // For GeneralTableViewDataDelegate conformance
+
     // MARK: - Properties
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
@@ -23,15 +61,11 @@ class SearchEngineSelectionViewController: UIViewController,
     private let logger: Logger
 
     // MARK: - UI/UX elements
-    // FXIOS-10192 This button is a temporary placeholder used to set up the navigation / coordinators. Will be removed.
-    private lazy var placeholderOpenSettingsButton: UIButton = .build { view in
-        view.setTitle(.UnifiedSearch.SearchEngineSelection.SearchSettings, for: .normal)
-        view.setTitleColor(.blue, for: .normal)
-        view.titleLabel?.numberOfLines = 0
-        view.titleLabel?.textAlignment = .center
-
-        view.addTarget(self, action: #selector(self.didTapOpenSettings), for: .touchUpInside)
-    }
+    private var tableView: GeneralTableView<
+        SearchEngineSection,
+            SearchEngineSelectionCell,
+            SearchEngineSelectionViewController
+    > = .build()
 
     // MARK: - Initializers and Lifecycle
 
@@ -46,6 +80,8 @@ class SearchEngineSelectionViewController: UIViewController,
         self.themeManager = themeManager
         self.logger = logger
         super.init(nibName: nil, bundle: nil)
+
+        tableView.delegate = self
 
         // TODO Additional setup to come
         // ...
@@ -63,6 +99,18 @@ class SearchEngineSelectionViewController: UIViewController,
 
         setupView()
         listenForThemeChange(view)
+
+        let fakeData: [SearchEngineSection] = [
+            SearchEngineSection(elementData: [
+                ImageLabelRowData(titleLabel: "Search engine 1"),
+                ImageLabelRowData(titleLabel: "Search engine 2"),
+                ImageLabelRowData(titleLabel: "Search engine 3")
+            ]),
+            SearchEngineSection(elementData: [
+                ImageLabelRowData(titleLabel: "Search Settings")
+            ])
+        ]
+        tableView.reloadTableView(with: fakeData)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -74,13 +122,22 @@ class SearchEngineSelectionViewController: UIViewController,
     // MARK: - UI / UX
 
     private func setupView() {
-        view.addSubview(placeholderOpenSettingsButton)
+        view.addSubviews(tableView)
 
         NSLayoutConstraint.activate([
-            placeholderOpenSettingsButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 80),
-            placeholderOpenSettingsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            placeholderOpenSettingsButton.widthAnchor.constraint(equalToConstant: 200)
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
         ])
+
+//        view.addSubview(placeholderOpenSettingsButton)
+//
+//        NSLayoutConstraint.activate([
+//            placeholderOpenSettingsButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 80),
+//            placeholderOpenSettingsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+//            placeholderOpenSettingsButton.widthAnchor.constraint(equalToConstant: 200)
+//        ])
     }
 
     // MARK: - Theme
@@ -102,5 +159,17 @@ class SearchEngineSelectionViewController: UIViewController,
     @objc
     func didTapOpenSettings(sender: UIButton) {
         coordinator?.navigateToSearchSettings(animated: true)
+    }
+
+    // MARK: - GeneralTableViewDataDelegate
+
+    func didSelectRowAt(indexPath: IndexPath, withModel: ImageLabelRowData) {
+        // TODO
+        print("** didSelectRowAt \(indexPath)")
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView, inScrollViewWithTopPadding topPadding: CGFloat) {
+        // TODO
+        print("** scrollViewDidScroll \(scrollView.contentOffset.y)")
     }
 }
