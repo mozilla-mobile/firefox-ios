@@ -176,7 +176,7 @@ struct AddressBarState: StateType, Equatable {
             return handleDidEnterSearchTermAction(state: state, action: action)
 
         case ToolbarActionType.didStartTyping:
-            return handleDidStartTyping(state: state, action: action)
+            return handleDidStartTypingAction(state: state, action: action)
 
         default:
             return state
@@ -600,7 +600,7 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
-    private static func handleDidStartTyping(state: Self, action: Action) -> Self {
+    private static func handleDidStartTypingAction(state: Self, action: Action) -> Self {
         guard action is ToolbarAction else { return state }
 
         return AddressBarState(
