@@ -145,7 +145,7 @@ struct AddressBarState: StateType, Equatable {
             return handleTraitCollectionDidChangeAction(state: state, action: action)
 
         case ToolbarActionType.showMenuWarningBadge:
-            return handleToolbarShowMenuWarningBadge(state: state, action: action)
+            return handleShowMenuWarningBadgeAction(state: state, action: action)
 
         case ToolbarActionType.borderPositionChanged,
             ToolbarActionType.toolbarPositionChanged:
@@ -343,7 +343,7 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
-    private static func handleToolbarShowMenuWarningBadge(state: Self, action: Action) -> Self {
+    private static func handleShowMenuWarningBadgeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return state }
 
         return AddressBarState(
