@@ -200,7 +200,7 @@ class TrackingProtectionTests: BaseTestCase {
             "Secure connection"
         )
         // Dismiss the view and visit "badssl.com". Tap on "expired"
-        app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].tap(force: true)
+        navigator.performAction(Action.CloseTPContextMenu)
         navigator.nowAt(BrowserTab)
         navigator.openNewURL(urlString: "https://www.badssl.com")
         waitUntilPageLoad()
@@ -231,9 +231,11 @@ class TrackingProtectionTests: BaseTestCase {
         // Tap "Secure connection"
         navigator.nowAt(BrowserTab)
         navigator.goto(TrackingProtectionContextMenuDetails)
-        mozWaitForElementToExist(app.staticTexts["Secure connection"])
+        mozWaitForElementToExist(
+            app.staticTexts[AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.securityStatusLabel])
         navigator.performAction(Action.CloseTPContextMenu)
-        mozWaitForElementToNotExist(app.staticTexts["Secure connection"])
+        mozWaitForElementToNotExist(
+            app.staticTexts[AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.securityStatusLabel])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307063
@@ -245,38 +247,40 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.openURL(trackingProtectionTestUrl)
         waitUntilPageLoad()
 
-        if checkTrackingProtectionOn() {
-            XCTAssertEqual(
-                app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
-                secureTrackingProtectionOnLabel
-            )
-            navigator.nowAt(BrowserTab)
-            reloadWithWithoutTrackingProtection(label: "Without Tracking Protection")
-            XCTAssertEqual(
-                app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
-                secureTrackingProtectionOffLabel
-            )
-            reloadWithWithoutTrackingProtection(label: "With Tracking Protection")
-            XCTAssertEqual(
-                app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
-                secureTrackingProtectionOnLabel
-            )
-        } else {
-            XCTAssertEqual(
-                app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
-                secureTrackingProtectionOffLabel
-            )
-            navigator.nowAt(BrowserTab)
-            reloadWithWithoutTrackingProtection(label: "With Tracking Protection")
-            XCTAssertEqual(
-                app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
-                secureTrackingProtectionOnLabel
-            )
-            reloadWithWithoutTrackingProtection(label: "Without Tracking Protection")
-            XCTAssertEqual(
-                app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
-                secureTrackingProtectionOffLabel
-            )
+        if #available(iOS 17, *) {
+            if checkTrackingProtectionOn() {
+                XCTAssertEqual(
+                    app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
+                    secureTrackingProtectionOnLabel
+                )
+                navigator.nowAt(BrowserTab)
+                reloadWithWithoutTrackingProtection(label: "Without Tracking Protection")
+                XCTAssertEqual(
+                    app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
+                    secureTrackingProtectionOffLabel
+                )
+                reloadWithWithoutTrackingProtection(label: "With Tracking Protection")
+                XCTAssertEqual(
+                    app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
+                    secureTrackingProtectionOnLabel
+                )
+            } else {
+                XCTAssertEqual(
+                    app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
+                    secureTrackingProtectionOffLabel
+                )
+                navigator.nowAt(BrowserTab)
+                reloadWithWithoutTrackingProtection(label: "With Tracking Protection")
+                XCTAssertEqual(
+                    app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
+                    secureTrackingProtectionOnLabel
+                )
+                reloadWithWithoutTrackingProtection(label: "Without Tracking Protection")
+                XCTAssertEqual(
+                    app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
+                    secureTrackingProtectionOffLabel
+                )
+            }
         }
     }
 }
