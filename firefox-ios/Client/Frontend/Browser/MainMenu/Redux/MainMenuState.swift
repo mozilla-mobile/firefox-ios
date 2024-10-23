@@ -165,9 +165,7 @@ struct MainMenuState: ScreenState, Equatable {
         }
 
         let title: String = {
-            if needsReAuth {
-                return .MainMenu.Account.SyncErrorTitle
-            }
+            if needsReAuth { return .MainMenu.Account.SyncErrorTitle }
             return userProfile.displayName ?? userProfile.email
         }()
 
