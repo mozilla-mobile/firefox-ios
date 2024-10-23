@@ -176,25 +176,7 @@ struct AddressBarState: StateType, Equatable {
             return handleDidEnterSearchTerm(state: state, action: action)
 
         case ToolbarActionType.didStartTyping:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: state.navigationActions,
-                pageActions: state.pageActions,
-                browserActions: state.browserActions,
-                borderPosition: state.borderPosition,
-                url: state.url,
-                searchTerm: state.searchTerm,
-                lockIconImageName: state.lockIconImageName,
-                isEditing: state.isEditing,
-                isScrollingDuringEdit: state.isScrollingDuringEdit,
-                shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-                isLoading: state.isLoading,
-                readerModeState: state.readerModeState,
-                didStartTyping: true,
-                showQRPageAction: state.showQRPageAction
-            )
+            return handleDidStartTyping(state: state, action: action)
 
         default:
             return state
