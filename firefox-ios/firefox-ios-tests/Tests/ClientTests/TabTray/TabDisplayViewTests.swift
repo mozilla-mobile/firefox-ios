@@ -7,16 +7,18 @@ import XCTest
 
 @testable import Client
 final class TabDisplayViewTests: XCTestCase {
-    var tabDisplayView: TabDisplayView?
     var diffableDataSource: TabDisplayDiffableDataSource?
 
-    override func tearDown() {
-        diffableDataSource = nil
-        tabDisplayView = nil
-        super.tearDown()
+    override func setUp() {
+        super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
     }
 
-    // TODO: Add Tests Using Diffable Datasource
+    override func tearDown() {
+        DependencyHelperMock().reset()
+        diffableDataSource = nil
+        super.tearDown()
+    }
 
     func testNumberOfSections_ForRegularTabsWithInactiveTabs() {
         let subject = createSubject(isPrivateMode: false,
@@ -40,19 +42,13 @@ final class TabDisplayViewTests: XCTestCase {
 
     func testNumberOfSections_PrivateTabsAndInactiveTabs() {
         let subject = createSubject(isPrivateMode: true,
-                                    numberInactiveTabs: 4,
+                                    numberInactiveTabs: 2,
                                     numberActiveTabs: 2)
 
         XCTAssertEqual(subject.collectionView.numberOfSections, 2)
-        XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 0), 4)
+        // if in private mode we should not have any inactive tabs added to the section
+        XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 0), 0)
         XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 1), 2)
-
-//        let subject = createSubject(isPrivateMode: true,
-//                                    emptyTabs: false,
-//                                    emptyInactiveTabs: false)
-//
-//        let numberOfSections = subject.collectionView.numberOfSections
-//        XCTAssertEqual(numberOfSections, 2)
     }
 
     func testNumberOfSections_PrivateTabsWithoutInactiveTabs() {
@@ -63,13 +59,6 @@ final class TabDisplayViewTests: XCTestCase {
         XCTAssertEqual(subject.collectionView.numberOfSections, 2)
         XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 0), 0)
         XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 1), 9)
-
-//        let subject = createSubject(isPrivateMode: true,
-//                                    emptyTabs: false,
-//                                    emptyInactiveTabs: true)
-//
-//        let numberOfSections = subject.collectionView.numberOfSections
-//        XCTAssertEqual(numberOfSections, 2)
     }
 
     func testNumberOfSections_PrivateTabsWithEmptyTabs() {
@@ -80,13 +69,6 @@ final class TabDisplayViewTests: XCTestCase {
         XCTAssertEqual(subject.collectionView.numberOfSections, 2)
         XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 0), 0)
         XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 1), 0)
-
-//        let subject = createSubject(isPrivateMode: true,
-//                                    emptyTabs: true,
-//                                    emptyInactiveTabs: true)
-//
-//        let numberOfSections = subject.collectionView.numberOfSections
-//        XCTAssertEqual(numberOfSections, 2)
     }
 
     func testAmountOfSections_ForPrivateTabsWithoutInactiveTabs() {
@@ -97,21 +79,7 @@ final class TabDisplayViewTests: XCTestCase {
         XCTAssertEqual(subject.collectionView.numberOfSections, 2)
         XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 0), 0)
         XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 1), 4)
-
-//        let subject = createSubject(isPrivateMode: true,
-//                                    emptyTabs: false,
-//                                    emptyInactiveTabs: true)
-//
-//        XCTAssertEqual(subject.collectionView.numberOfSections, 2)
     }
-
-//    func testAmountOfSections_ForPrivateTabsWithInactiveTabs() {
-//        let subject = createSubject(isPrivateMode: true,
-//                                    emptyTabs: false,
-//                                    emptyInactiveTabs: false)
-//
-//        XCTAssertEqual(subject.collectionView.numberOfSections, 1)
-//    }
 
     // MARK: - Private
     private func createSubject(isPrivateMode: Bool,
