@@ -2643,9 +2643,6 @@ class BrowserViewController: UIViewController,
             if isSelectedTab && !isToolbarRefactorEnabled {
                 // Refresh secure content state after completed navigation
                 urlBar.locationView.hasSecureContent = webView.hasOnlySecureContent
-                if let url = webView.url {
-                    urlBar.locationView.showTrackingProtectionButton(for: url)
-                }
             }
 
             if !isSelectedTab, let webView = tab.webView, tab.screenshot == nil {
