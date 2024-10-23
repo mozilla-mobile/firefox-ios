@@ -3731,7 +3731,7 @@ extension String {
         key: "CloseTab.ArrivingNotification.title.v133",
         tableName: "FxANotification",
         value: "%1$@ tabs closed: %2$@",
-        comment: "Title of notification shown when a remote device has requested to close a number of tabs defined by ($1)")
+        comment: "Title of notification shown when a remote device has requested to close a number of tabs. First parameter is the app name and the second parameter is the number of tabs.")
 
     // Notification Actions
     public static let CloseTabViewActionTitle = MZLocalizedString(
