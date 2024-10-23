@@ -273,7 +273,7 @@ struct MainMenuConfigurationUtility: Equatable {
                                     actionType: MainMenuActionType.tapNavigateToDestination,
                                     navigationDestination: MenuNavigationDestination(
                                         .goToURL,
-                                        urlToVisit: SupportUtils.URLForReportSiteIssue(tabInfo.url?.absoluteString)
+                                        url: SupportUtils.URLForReportSiteIssue(tabInfo.url?.absoluteString)
                                     )
                                 )
                             )
@@ -295,7 +295,11 @@ struct MainMenuConfigurationUtility: Equatable {
                             store.dispatch(
                                 MainMenuAction(
                                     windowUUID: uuid,
-                                    actionType: MainMenuActionType.tapCloseMenu
+                                    actionType: MainMenuActionType.tapNavigateToDestination,
+                                    navigationDestination: MenuNavigationDestination(
+                                        .shareSheet,
+                                        url: tabInfo.canonicalURL
+                                    )
                                 )
                             )
                         }
@@ -593,7 +597,7 @@ struct MainMenuConfigurationUtility: Equatable {
                             actionType: MainMenuActionType.tapNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(
                                 .goToURL,
-                                urlToVisit: SupportUtils.URLForWhatsNew
+                                url: SupportUtils.URLForWhatsNew
                             )
                         )
                     )
@@ -617,7 +621,7 @@ struct MainMenuConfigurationUtility: Equatable {
                             actionType: MainMenuActionType.tapNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(
                                 .goToURL,
-                                urlToVisit: SupportUtils.URLForGetHelp
+                                url: SupportUtils.URLForGetHelp
                             )
                         )
                     )

@@ -10,6 +10,7 @@ import Redux
 struct MainMenuTabInfo: Equatable {
     let tabID: TabUUID
     let url: URL?
+    let canonicalURL: URL?
     let isHomepage: Bool
     let isDefaultUserAgentDesktop: Bool
     let hasChangedUserAgent: Bool
