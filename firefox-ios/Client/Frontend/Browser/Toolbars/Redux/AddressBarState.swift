@@ -158,7 +158,7 @@ struct AddressBarState: StateType, Equatable {
             return handleDidStartEditingUrlAction(state: state, action: action)
 
         case ToolbarActionType.cancelEdit:
-            return handleToolbarCancelEdit(state: state, action: action)
+            return handleCancelEditAction(state: state, action: action)
 
         case ToolbarActionType.didSetTextInLocationView:
             return handleToolbarDidSetTextInLocationView(state: state, action: action)
@@ -447,7 +447,7 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
-    private static func handleToolbarCancelEdit(state: Self, action: Action) -> Self {
+    private static func handleCancelEditAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return state }
 
         let url = toolbarAction.url ?? state.url
