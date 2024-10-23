@@ -6,26 +6,25 @@ import Foundation
 import Common
 import UIKit
 
-// Image comes from bundle vs. uiimage from cache/internet?
 public protocol ImageLabelTableViewCellModel: ElementData {
     var title: String { get }
     var description: String? { get }
-    var iconName: String { get } // UIImage?
+    var image: UIImage { get }
 
     // Accessibility
     var a11yLabel: String { get }
     var a11yHint: String? { get }
     var a11yId: String { get }
 
-//    // Extra props for unique type?
-//    var isEnabled: Bool { get }
-//    var isActive: Bool { get }
-//    var hasSubmenu: Bool { get }
+    // Extra props for unique type?
+    var isEnabled: Bool { get }
+    var isActive: Bool { get }
+    var hasDisclosure: Bool { get }
 
     var action: (() -> Void)? { get }
 }
 
-public class ImageLabelTableViewCell<
+open class ImageLabelTableViewCell<
     Model: ImageLabelTableViewCellModel
 >: UITableViewCell,
    ConfigurableTableViewCell,
@@ -61,7 +60,6 @@ public class ImageLabelTableViewCell<
     private var contentStackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.distribution = .fillProportionally
-        stackView.spacing = 20 // FIXME UX.contentSpacing
     }
 
     private var accessoryArrowView: UIImageView = .build()
@@ -72,17 +70,20 @@ public class ImageLabelTableViewCell<
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+
+        // FIXME can't use UX in build atm because self isn't available :/
+        contentStackView.spacing = UX.contentSpacing
     }
 
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public func configureCellWith(model: Model) {
+    open func configureCellWith(model: Model) {
         self.model = model
         self.titleLabel.text = model.title
         self.descriptionLabel.text = model.description
-        self.icon.image = UIImage(named: model.iconName)?.withRenderingMode(.alwaysTemplate)
+        self.icon.image = model.image.withRenderingMode(.alwaysTemplate)
         self.accessoryArrowView.image =
         UIImage(named: StandardImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
         self.isAccessibilityElement = true
@@ -129,26 +130,25 @@ public class ImageLabelTableViewCell<
     }
 
     // MARK: - Theme Applicable
-    public func applyTheme(theme: Theme) {
+    open func applyTheme(theme: Theme) {
         guard let model else { return }
         backgroundColor = theme.colors.layer2
 
-        print("** TODO model \(model)")
-//        accessoryArrowView.isHidden = !model.hasSubmenu || model.isActive ? true : false
-//        if model.isActive {
-//            titleLabel.textColor = theme.colors.textAccent
-//            descriptionLabel.textColor = theme.colors.textSecondary
-//            icon.tintColor = theme.colors.iconAccentBlue
-//        } else if !model.isEnabled {
-//            titleLabel.textColor = theme.colors.textDisabled
-//            descriptionLabel.textColor = theme.colors.textDisabled
-//            icon.tintColor = theme.colors.iconDisabled
-//            accessoryArrowView.tintColor = theme.colors.iconDisabled
-//        } else {
-//            titleLabel.textColor = theme.colors.textPrimary
-//            descriptionLabel.textColor = theme.colors.textSecondary
-//            icon.tintColor = theme.colors.iconSecondary
-//            accessoryArrowView.tintColor = theme.colors.iconSecondary
-//        }
+        accessoryArrowView.isHidden = !model.hasDisclosure || model.isActive ? true : false
+        if model.isActive {
+            titleLabel.textColor = theme.colors.textAccent
+            descriptionLabel.textColor = theme.colors.textSecondary
+            icon.tintColor = theme.colors.iconAccentBlue
+        } else if !model.isEnabled {
+            titleLabel.textColor = theme.colors.textDisabled
+            descriptionLabel.textColor = theme.colors.textDisabled
+            icon.tintColor = theme.colors.iconDisabled
+            accessoryArrowView.tintColor = theme.colors.iconDisabled
+        } else {
+            titleLabel.textColor = theme.colors.textPrimary
+            descriptionLabel.textColor = theme.colors.textSecondary
+            icon.tintColor = theme.colors.iconSecondary
+            accessoryArrowView.tintColor = theme.colors.iconSecondary
+        }
     }
 }

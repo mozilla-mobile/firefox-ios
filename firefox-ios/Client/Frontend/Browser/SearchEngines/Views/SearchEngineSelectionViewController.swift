@@ -8,36 +8,65 @@ import UIKit
 import Shared
 import Redux
 
-struct ImageLabelRowData: ElementData {
-    // FIXME Pass image later
-    var testPlaceholderImage: UIImage = UIImage(named: "globeLarge")!.withRenderingMode(.alwaysTemplate)
-    var titleLabel: String
-}
+// struct ImageLabelRowData: ElementData {
+//    // FIXME Pass image later
+//    var testPlaceholderImage: UIImage = UIImage(named: "globeLarge")!.withRenderingMode(.alwaysTemplate)
+//    var titleLabel: String
+// }
 
 struct SearchEngineSection: SectionData {
-    typealias E = ImageLabelRowData
+    typealias E = SearchEngineSelectionCellModel
 
-    var elementData: [ImageLabelRowData]
+    var elementData: [SearchEngineSelectionCellModel]
 }
 
-class SearchEngineSelectionCell: UITableViewCell, ConfigurableTableViewCell {
-    // MARK: - Initializers
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+struct SearchEngineSelectionCellModel: ImageLabelTableViewCellModel {
+    let title: String
+    let description: String?
+    let image: UIImage
 
-        self.backgroundColor = .green
+    // Accessibility
+    let a11yLabel: String
+    let a11yHint: String?
+    let a11yId: String
+
+    var isEnabled = true
+    var isActive = false // FIXME isHighlighted?
+    var hasDisclosure = false
+
+    var action: (() -> Void)?
+
+    init(title: String) {
+        // TODO
+        self.title = title
+        self.description = nil
+        self.image = UIImage(named: "globeLarge")! // For testing
+        self.a11yLabel = ""
+        self.a11yHint = ""
+        self.a11yId = ""
+        self.action =  nil
     }
+}
+
+class SearchEngineSelectionCell: ImageLabelTableViewCell<SearchEngineSelectionCellModel> {
+    // MARK: - Initializers
+//    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+//        super.init(style: style, reuseIdentifier: reuseIdentifier)
+//
+//        self.backgroundColor = .green
+//    }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func applyTheme(theme: any Common.Theme) {
-        // TODO apply theme
-    }
+//    func applyTheme(theme: any Common.Theme) {
+//        // TODO apply theme
+//    }
 
-    func configureCellWith(model: ImageLabelRowData) {
-        // TODO set label and image
+    override func configureCellWith(model: SearchEngineSelectionCellModel) {
+        super.configureCellWith(model: model)
+        // TODO additional customization
     }
 }
 
@@ -45,7 +74,7 @@ class SearchEngineSelectionViewController: UIViewController,
                                            UISheetPresentationControllerDelegate,
                                            UIPopoverPresentationControllerDelegate,
                                            Themeable,
-                                           GeneralTableViewDataDelegate {
+                                           GeneralTableViewDelegate {
     typealias S = SearchEngineSection // For GeneralTableViewDataDelegate conformance
 
     // MARK: - Properties
@@ -61,8 +90,8 @@ class SearchEngineSelectionViewController: UIViewController,
     // MARK: - UI/UX elements
     private var tableView: GeneralTableView<
         SearchEngineSection,
-            SearchEngineSelectionCell,
-            SearchEngineSelectionViewController
+        SearchEngineSelectionCell,
+        SearchEngineSelectionViewController
     > = .build()
 
     // MARK: - Initializers and Lifecycle
@@ -101,12 +130,12 @@ class SearchEngineSelectionViewController: UIViewController,
         // FIXME Mock data for testing. Hookups to search engines to come later.
         let fakeData: [SearchEngineSection] = [
             SearchEngineSection(elementData: [
-                ImageLabelRowData(titleLabel: "Search engine 1"),
-                ImageLabelRowData(titleLabel: "Search engine 2"),
-                ImageLabelRowData(titleLabel: "Search engine 3")
+                SearchEngineSelectionCellModel(title: "Search engine 1"),
+                SearchEngineSelectionCellModel(title: "Search engine 2"),
+                SearchEngineSelectionCellModel(title: "Search engine 3")
             ]),
             SearchEngineSection(elementData: [
-                ImageLabelRowData(titleLabel: "Search Settings")
+                SearchEngineSelectionCellModel(title: "Search Settings"), // TODO include disclosure?
             ])
         ]
         tableView.reloadTableView(with: fakeData)
@@ -124,7 +153,7 @@ class SearchEngineSelectionViewController: UIViewController,
         view.addSubviews(tableView)
 
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 12), // TODO Temporary constant
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -137,6 +166,7 @@ class SearchEngineSelectionViewController: UIViewController,
         let theme = themeManager.getCurrentTheme(for: windowUUID)
 
         view.backgroundColor = theme.colors.layer3
+        tableView.applyTheme(theme: theme)
     }
 
     // MARK: - UISheetPresentationControllerDelegate inheriting UIAdaptivePresentationControllerDelegate
@@ -154,7 +184,7 @@ class SearchEngineSelectionViewController: UIViewController,
 
     // MARK: - GeneralTableViewDataDelegate
 
-    func didSelectRowAt(indexPath: IndexPath, withModel: ImageLabelRowData) {
+    func didSelectRowAt(indexPath: IndexPath, withModel: SearchEngineSelectionCellModel) {
         // TODO
         print("** didSelectRowAt \(indexPath)")
     }

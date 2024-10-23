@@ -15,7 +15,7 @@ public protocol SectionData {
     var elementData: [E] { get set }
 }
 
-public protocol GeneralTableViewDataDelegate: AnyObject {
+public protocol GeneralTableViewDelegate: AnyObject {
     associatedtype S: SectionData
 
     func didSelectRowAt(indexPath: IndexPath, withModel: S.E)
@@ -32,7 +32,7 @@ public protocol ConfigurableTableViewCell: UITableViewCell {
 public class GeneralTableView<
     S: SectionData,
     Cell: ConfigurableTableViewCell,
-    D: GeneralTableViewDataDelegate
+    D: GeneralTableViewDelegate
 >: UIView,
    UITableViewDelegate,
    UITableViewDataSource,
