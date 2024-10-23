@@ -23428,6 +23428,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = "firefox-ios-tests/Tests/ClientTests/Info.plist";
+				LOCALIZATION_EXPORT_SUPPORTED = NO;
 				PRODUCT_NAME = ClientTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -23653,6 +23654,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = "firefox-ios-tests/Tests/ClientTests/Info.plist";
+				LOCALIZATION_EXPORT_SUPPORTED = NO;
 				PRODUCT_NAME = ClientTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -24000,6 +24002,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = "firefox-ios-tests/Tests/ClientTests/Info.plist";
+				LOCALIZATION_EXPORT_SUPPORTED = NO;
 				PRODUCT_NAME = ClientTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -24166,6 +24169,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = "firefox-ios-tests/Tests/ClientTests/Info.plist";
+				LOCALIZATION_EXPORT_SUPPORTED = NO;
 				PRODUCT_NAME = ClientTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
@@ -24660,6 +24664,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = "firefox-ios-tests/Tests/ClientTests/Info.plist";
+				LOCALIZATION_EXPORT_SUPPORTED = NO;
 				PRODUCT_NAME = ClientTests;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
