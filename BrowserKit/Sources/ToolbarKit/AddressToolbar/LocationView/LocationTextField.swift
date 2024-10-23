@@ -42,7 +42,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
         super.init(frame: .zero)
         super.addTarget(self, action: #selector(LocationTextField.textDidChange), for: .editingChanged)
 
-        font = UIFont.preferredFont(forTextStyle: .body)
+        font = FXFontStyles.Regular.body.scaledFont()
         adjustsFontForContentSizeCategory = true
         clearButtonMode = .whileEditing
         keyboardType = .webSearch
