@@ -73,7 +73,14 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     statusText: format(string: "Toggle to enable the toolbar redesign")
                 ) { [weak self] _ in
                     self?.reloadView()
-                }
+                },
+                FeatureFlagsBoolSetting(
+                    with: .unifiedSearch,
+                    titleText: format(string: "Enable Unified Search"),
+                    statusText: format(string: "Toggle to use unified search within the new toolbar")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
             ]
         )
     }
