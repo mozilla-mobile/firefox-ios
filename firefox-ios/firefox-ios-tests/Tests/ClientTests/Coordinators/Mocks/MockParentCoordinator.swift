@@ -5,7 +5,7 @@
 import Foundation
 @testable import Client
 
-class MockParentCoordinatorDelegate: ParentCoordinatorDelegate {
+class MockParentCoordinator: ParentCoordinatorDelegate {
     var didFinishCalled = 0
 
     func didFinish(from childCoordinator: Coordinator) {

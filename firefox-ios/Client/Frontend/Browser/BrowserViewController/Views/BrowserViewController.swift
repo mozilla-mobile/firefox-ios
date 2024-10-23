@@ -1029,6 +1029,7 @@ class BrowserViewController: UIViewController,
         // Ensure the layout is updated immediately
         view.layoutIfNeeded()
 
+        // TODO: [FXIOS-10334] Needs investigation. Dequeuing JS alerts as part of subview layout is problematic.
         showQueuedAlertIfAvailable()
         switchToolbarIfNeeded()
         adjustURLBarHeightBasedOnLocationViewHeight()
@@ -3261,7 +3262,7 @@ class BrowserViewController: UIViewController,
     }
 
     func addressToolbarDidTapSearchEngine(_ searchEngineView: UIView) {
-        // TODO FXIOS-10273 Use coordinator to handle search engine bottom sheet display
+        navigationHandler?.showSearchEngineSelection(forSourceView: searchEngineView)
     }
 }
 

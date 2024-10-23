@@ -211,7 +211,6 @@ class RootViewController: UIViewController,
     }
 
     // MARK: - AddressToolbarDelegate
-
     func searchSuggestions(searchTerm: String) {
         guard !searchTerm.isEmpty else {
             searchVC.viewModel.resetSearch()
@@ -223,28 +222,32 @@ class RootViewController: UIViewController,
         searchVC.requestSearch(term: searchTerm)
     }
 
-    func openSuggestions(searchTerm: String) {
-        addSearchView()
-        searchVC.openSuggestions()
-    }
+    func didClearSearch() {}
 
     func openBrowser(searchTerm: String) {
         browse(to: searchTerm)
     }
 
-    func shouldDisplayTextForURL(_ url: URL?) -> String? {
-        return nil
+    func openSuggestions(searchTerm: String) {
+        addSearchView()
+        searchVC.openSuggestions()
     }
 
-    func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool) {
-    }
+    func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool) {}
 
     func addressToolbarAccessibilityActions() -> [UIAccessibilityCustomAction]? {
         return []
     }
 
-    func configureContextualHint(_ addressToolbar: BrowserAddressToolbar, for button: UIButton) {
+    func configureContextualHint(_ addressToolbar: BrowserAddressToolbar,
+                                 for button: UIButton,
+                                 with contextualHintType: String) {
     }
+    func addressToolbarDidBeginDragInteraction() {}
+
+    func addressToolbarDidProvideItemsForDragInteraction() {}
+
+    func addressToolbarDidTapSearchEngine(_ searchEngineView: UIView) {}
 
     // MARK: - SearchViewDelegate
 

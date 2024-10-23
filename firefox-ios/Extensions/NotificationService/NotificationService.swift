@@ -226,7 +226,7 @@ class SyncDataDisplay {
         notificationContent.categoryIdentifier = NotificationCloseTabs.notificationCategoryId
 
         presentNotification(
-            title: String(format: .CloseTab_ArrivingNotification_title, "\(urls.count)"),
+            title: String(format: .CloseTab_ArrivingNotification_title, AppInfo.displayName, "\(urls.count)"),
             body: .CloseTabViewActionTitle
         )
     }

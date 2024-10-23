@@ -36,7 +36,7 @@ final class MainMenuDetailsStateTests: XCTestCase {
             initialState,
             MainMenuAction(
                 windowUUID: .XCTestDefaultUUID,
-                actionType: MainMenuDetailsActionType.dismissView
+                actionType: MainMenuDetailsActionType.tapDismissView
             )
         )
 
@@ -51,7 +51,7 @@ final class MainMenuDetailsStateTests: XCTestCase {
             initialState,
             MainMenuAction(
                 windowUUID: .XCTestDefaultUUID,
-                actionType: MainMenuDetailsActionType.editBookmark,
+                actionType: MainMenuDetailsActionType.tapEditBookmark,
                 navigationDestination: MenuNavigationDestination(.editBookmark)
             )
         )
@@ -73,7 +73,7 @@ final class MainMenuDetailsStateTests: XCTestCase {
             initialState,
             MainMenuAction(
                 windowUUID: .XCTestDefaultUUID,
-                actionType: MainMenuDetailsActionType.backToMainMenu
+                actionType: MainMenuDetailsActionType.tapBackToMainMenu
             )
         )
 
@@ -90,7 +90,7 @@ final class MainMenuDetailsStateTests: XCTestCase {
             initialState,
             MainMenuAction(
                 windowUUID: .XCTestDefaultUUID,
-                actionType: MainMenuDetailsActionType.addToBookmarks
+                actionType: MainMenuDetailsActionType.tapAddToBookmarks
             )
         )
 
@@ -107,7 +107,7 @@ final class MainMenuDetailsStateTests: XCTestCase {
             initialState,
             MainMenuAction(
                 windowUUID: .XCTestDefaultUUID,
-                actionType: MainMenuDetailsActionType.addToShortcuts
+                actionType: MainMenuDetailsActionType.tapAddToShortcuts
             )
         )
 
@@ -124,7 +124,7 @@ final class MainMenuDetailsStateTests: XCTestCase {
             initialState,
             MainMenuAction(
                 windowUUID: .XCTestDefaultUUID,
-                actionType: MainMenuDetailsActionType.addToReadingList
+                actionType: MainMenuDetailsActionType.tapAddToReadingList
             )
         )
 
@@ -141,7 +141,7 @@ final class MainMenuDetailsStateTests: XCTestCase {
             initialState,
             MainMenuAction(
                 windowUUID: .XCTestDefaultUUID,
-                actionType: MainMenuDetailsActionType.removeFromShortcuts
+                actionType: MainMenuDetailsActionType.tapRemoveFromShortcuts
             )
         )
 
@@ -158,7 +158,7 @@ final class MainMenuDetailsStateTests: XCTestCase {
             initialState,
             MainMenuAction(
                 windowUUID: .XCTestDefaultUUID,
-                actionType: MainMenuDetailsActionType.removeFromReadingList
+                actionType: MainMenuDetailsActionType.tapRemoveFromReadingList
             )
         )
 

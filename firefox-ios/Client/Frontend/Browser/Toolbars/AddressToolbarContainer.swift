@@ -273,6 +273,19 @@ final class AddressToolbarContainer: UIView,
 
     // MARK: - AddressToolbarDelegate
     func searchSuggestions(searchTerm: String) {
+        if let windowUUID,
+           let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID) {
+            if searchTerm.isEmpty, !toolbarState.addressToolbar.showQRPageAction {
+                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didDeleteSearchTerm)
+                store.dispatch(action)
+            } else if !searchTerm.isEmpty, toolbarState.addressToolbar.showQRPageAction {
+                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didEnterSearchTerm)
+                store.dispatch(action)
+            } else if !toolbarState.addressToolbar.didStartTyping {
+                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didStartTyping)
+                store.dispatch(action)
+            }
+        }
         delegate?.searchSuggestions(searchTerm: searchTerm)
     }
 
@@ -294,20 +307,12 @@ final class AddressToolbarContainer: UIView,
         delegate?.addressToolbarDidTapSearchEngine(searchEngineView)
     }
 
-    func openSuggestions(searchTerm: String) {
-        delegate?.openSuggestions(searchTerm: searchTerm)
-
-        guard let windowUUID else { return }
-
-        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didStartEditingUrl)
-        store.dispatch(action)
-    }
-
     func addressToolbarDidBeginEditing(searchTerm: String, shouldShowSuggestions: Bool) {
-        enterOverlayMode(nil, pasted: false, search: false)
+        let locationText = shouldShowSuggestions ? searchTerm : nil
+        enterOverlayMode(locationText, pasted: false, search: false)
 
         if shouldShowSuggestions {
-            delegate?.openSuggestions(searchTerm: searchTerm)
+            delegate?.openSuggestions(searchTerm: locationText ?? "")
         }
     }
 
@@ -339,6 +344,10 @@ final class AddressToolbarContainer: UIView,
 
     func addressToolbarDidBeginDragInteraction() {
         delegate?.addressToolbarDidBeginDragInteraction()
+    }
+
+    func addressToolbarNeedsSearchReset() {
+        delegate?.searchSuggestions(searchTerm: "")
     }
 
     // MARK: - MenuHelperURLBarInterface
@@ -374,18 +383,25 @@ final class AddressToolbarContainer: UIView,
             )
             store.dispatch(action)
         } else {
-            let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didStartEditingUrl)
+            let action = ToolbarAction(searchTerm: locationText,
+                                       windowUUID: windowUUID,
+                                       actionType: ToolbarActionType.didStartEditingUrl)
             store.dispatch(action)
         }
     }
 
     func leaveOverlayMode(reason: URLBarLeaveOverlayModeReason, shouldCancelLoading cancel: Bool) {
-        guard let windowUUID else { return }
+        guard let windowUUID,
+              let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        else { return }
+
         _ = toolbar.resignFirstResponder()
         inOverlayMode = false
         delegate?.addressToolbar(self, didLeaveOverlayModeForReason: reason)
 
-        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
-        store.dispatch(action)
+        if toolbarState.addressToolbar.isEditing {
+            let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
+            store.dispatch(action)
+        }
     }
 }

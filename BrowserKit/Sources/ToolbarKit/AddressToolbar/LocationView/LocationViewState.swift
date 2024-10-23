@@ -21,6 +21,7 @@ public struct LocationViewState {
     public let droppableUrl: URL?
     public let searchTerm: String?
     public let isEditing: Bool
+    public let didStartTyping: Bool
     public let isScrollingDuringEdit: Bool
     public let shouldSelectSearchTerm: Bool
     public var onTapLockIcon: ((UIButton) -> Void)?
@@ -40,6 +41,7 @@ public struct LocationViewState {
         droppableUrl: URL?,
         searchTerm: String?,
         isEditing: Bool,
+        didStartTyping: Bool,
         isScrollingDuringEdit: Bool,
         shouldSelectSearchTerm: Bool,
         onTapLockIcon: ((UIButton) -> Void)? = nil,
@@ -58,6 +60,7 @@ public struct LocationViewState {
         self.droppableUrl = droppableUrl
         self.searchTerm = searchTerm
         self.isEditing = isEditing
+        self.didStartTyping = didStartTyping
         self.isScrollingDuringEdit = isScrollingDuringEdit
         self.shouldSelectSearchTerm = shouldSelectSearchTerm
         self.onTapLockIcon = onTapLockIcon

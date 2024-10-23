@@ -13,6 +13,7 @@ protocol LocationTextFieldDelegate: AnyObject {
     func locationTextFieldShouldClear(_ textField: LocationTextField) -> Bool
     func locationTextFieldDidBeginEditing(_ textField: UITextField)
     func locationTextFieldDidEndEditing(_ textField: UITextField)
+    func locationTextFieldNeedsSearchReset(_ textField: UITextField)
 }
 
 class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
@@ -273,7 +274,7 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
         // can reset itself since it will only lookup results if the new text is
         // longer than the previous text.
         if lastReplacement == nil {
-            autocompleteDelegate?.locationTextField(self, didEnterText: "")
+            autocompleteDelegate?.locationTextFieldNeedsSearchReset(textField)
         }
 
         lastReplacement = string

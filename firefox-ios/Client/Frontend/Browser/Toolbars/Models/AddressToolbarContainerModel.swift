@@ -20,6 +20,7 @@ class AddressToolbarContainerModel: Equatable {
     let url: URL?
     let searchTerm: String?
     let isEditing: Bool
+    let didStartTyping: Bool
     let isScrollingDuringEdit: Bool
     let isPrivateMode: Bool
     let shouldSelectSearchTerm: Bool
@@ -53,6 +54,7 @@ class AddressToolbarContainerModel: Equatable {
             droppableUrl: droppableUrl,
             searchTerm: term,
             isEditing: isEditing,
+            didStartTyping: didStartTyping,
             isScrollingDuringEdit: isScrollingDuringEdit,
             shouldSelectSearchTerm: shouldSelectSearchTerm,
             onTapLockIcon: { button in
@@ -98,6 +100,7 @@ class AddressToolbarContainerModel: Equatable {
         self.url = state.addressToolbar.url
         self.searchTerm = state.addressToolbar.searchTerm
         self.isEditing = state.addressToolbar.isEditing
+        self.didStartTyping = state.addressToolbar.didStartTyping
         self.isScrollingDuringEdit = state.addressToolbar.isScrollingDuringEdit
         self.isPrivateMode = state.isPrivateMode
         self.shouldSelectSearchTerm = state.addressToolbar.shouldSelectSearchTerm
