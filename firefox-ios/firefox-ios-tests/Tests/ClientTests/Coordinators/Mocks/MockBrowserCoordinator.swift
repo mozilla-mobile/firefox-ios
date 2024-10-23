@@ -136,7 +136,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
         showMicrosurveyCalled += 1
     }
 
-    func showPasswordGenerator(tab: Tab) {
+    func showPasswordGenerator(tab: Tab, frame: WKFrameInfo) {
         showPasswordGeneratorCalled += 1
     }
 }

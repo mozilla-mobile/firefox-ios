@@ -2087,8 +2087,8 @@ class BrowserViewController: UIViewController,
         case .dataClearance:
             didTapOnDataClearance()
         case .passwordGenerator:
-            if let tab = tabManager.selectedTab {
-                navigationHandler?.showPasswordGenerator(tab: tab)
+            if let tab = tabManager.selectedTab, let frame = state.frame {
+                navigationHandler?.showPasswordGenerator(tab: tab, frame: frame)
             }
         }
     }
