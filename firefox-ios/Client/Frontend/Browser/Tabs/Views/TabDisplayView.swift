@@ -196,7 +196,7 @@ class TabDisplayView: UIView,
 
         tabsState = state
 
-        updateCollectionView(state: tabsState)
+        dataSource?.updateSnapshot(state: tabsState)
 
         if let scrollState = state.scrollState {
             scrollToTab(scrollState)
@@ -208,24 +208,6 @@ class TabDisplayView: UIView,
                                             actionType: TabPanelViewActionType.addNewTab)
             store.dispatch(action)
         }
-    }
-
-    private func updateCollectionView(state: TabsPanelState) {
-        var snapshot = NSDiffableDataSourceSnapshot<TabDisplayViewSection, TabDisplayItem>()
-
-        snapshot.deleteAllItems()
-        snapshot.appendSections([.inactiveTabs, .tabs])
-        snapshot.reloadSections([.inactiveTabs])
-
-        if state.isInactiveTabsExpanded {
-            let inactiveTabs = state.inactiveTabs.map { TabDisplayItem.inactiveTab($0) }
-            snapshot.appendItems(inactiveTabs, toSection: .inactiveTabs)
-        }
-
-        let tabs = state.tabs.map { TabDisplayItem.tab($0) }
-        snapshot.appendItems(tabs, toSection: .tabs)
-
-        dataSource?.apply(snapshot, animatingDifferences: true)
     }
 
     private func scrollToTab(_ scrollState: TabsPanelState.ScrollState) {
