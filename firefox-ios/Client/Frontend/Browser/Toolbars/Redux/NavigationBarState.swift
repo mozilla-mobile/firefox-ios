@@ -62,7 +62,7 @@ struct NavigationBarState: StateType, Equatable {
             return handleDidLoadToolbarsAction(state: state, action: action)
 
         case ToolbarActionType.urlDidChange:
-            return handleToolbarUrlDidChange(state: state, action: action)
+            return handleUrlDidChangeAction(state: state, action: action)
 
         case ToolbarActionType.numberOfTabsChanged:
             return handleToolbarNumberOfTabsChanged(state: state, action: action)
@@ -103,7 +103,7 @@ struct NavigationBarState: StateType, Equatable {
         )
     }
 
-    private static func handleToolbarUrlDidChange(state: Self, action: Action) -> Self {
+    private static func handleUrlDidChangeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return state }
 
         return NavigationBarState(
