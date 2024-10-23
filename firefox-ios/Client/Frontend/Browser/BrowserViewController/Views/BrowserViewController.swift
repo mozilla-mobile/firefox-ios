@@ -1036,6 +1036,13 @@ class BrowserViewController: UIViewController,
     }
 
     private func adjustURLBarHeightBasedOnLocationViewHeight() {
+        guard isToolbarRefactorEnabled else {
+            adjustLegacyURLBarHeightBasedOnLocationViewHeight()
+            return
+        }
+    }
+
+    private func adjustLegacyURLBarHeightBasedOnLocationViewHeight() {
         // Make sure that we have a height to actually base our calculations on
         guard !isToolbarRefactorEnabled, urlBar.locationContainer.bounds.height != 0 else { return }
         let locationViewHeight = urlBar.locationView.bounds.height
