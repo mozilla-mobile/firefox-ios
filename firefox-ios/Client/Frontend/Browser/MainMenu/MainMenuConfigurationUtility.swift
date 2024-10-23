@@ -24,6 +24,7 @@ struct MainMenuConfigurationUtility: Equatable {
         static let whatsNew = StandardImageIdentifiers.Large.whatsNew
         static let zoom = StandardImageIdentifiers.Large.pageZoom
         static let readerViewOn = StandardImageIdentifiers.Large.readerView
+        static let readerViewOff = StandardImageIdentifiers.Large.readerViewFill
         static let nightModeOff = StandardImageIdentifiers.Large.nightMode
         static let nightModeOn = StandardImageIdentifiers.Large.nightModeFill
         static let print = StandardImageIdentifiers.Large.print
@@ -46,12 +47,18 @@ struct MainMenuConfigurationUtility: Equatable {
     public func generateMenuElements(
         with tabInfo: MainMenuTabInfo,
         for viewType: MainMenuDetailsViewType?,
-        and uuid: WindowUUID
+        and uuid: WindowUUID,
+        readerState: ReaderModeState? = nil
     ) -> [MenuSection] {
         switch viewType {
-        case .tools: return getToolsSubmenu(with: uuid, and: tabInfo)
-        case .save: return getSaveSubmenu(with: uuid, and: tabInfo)
-        default: return getMainMenuElements(with: uuid, and: tabInfo)
+        case .tools:
+            return getToolsSubmenu(with: uuid, tabInfo: tabInfo, and: readerState)
+
+        case .save:
+            return getSaveSubmenu(with: uuid, and: tabInfo)
+
+        default:
+            return getMainMenuElements(with: uuid, and: tabInfo)
         }
     }
 
@@ -234,29 +241,14 @@ struct MainMenuConfigurationUtility: Equatable {
     // MARK: - Tools Submenu
     private func getToolsSubmenu(
         with uuid: WindowUUID,
-        and tabInfo: MainMenuTabInfo
+        tabInfo: MainMenuTabInfo,
+        and readerModeState: ReaderModeState?
     ) -> [MenuSection] {
         return [
             MenuSection(
                 options: [
                     configureZoomItem(with: uuid, and: tabInfo),
-                    MenuElement(
-                        title: .MainMenu.Submenus.Tools.ReaderViewOn,
-                        iconName: Icons.readerViewOn,
-                        isEnabled: true,
-                        isActive: false,
-                        a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.ReaderViewOn,
-                        a11yHint: "",
-                        a11yId: AccessibilityIdentifiers.MainMenu.readerViewOn,
-                        action: {
-                            store.dispatch(
-                                MainMenuAction(
-                                    windowUUID: uuid,
-                                    actionType: MainMenuActionType.tapCloseMenu
-                                )
-                            )
-                        }
-                    ),
+                    configureReaderModeItem(with: uuid, tabInfo: tabInfo, and: readerModeState),
                     configureNightModeItem(with: uuid),
                     MenuElement(
                         title: .MainMenu.Submenus.Tools.ReportBrokenSite,
@@ -332,6 +324,39 @@ struct MainMenuConfigurationUtility: Equatable {
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: MainMenuDetailsActionType.tapZoom
+                    )
+                )
+            }
+        )
+    }
+
+    private func configureReaderModeItem(
+        with uuid: WindowUUID,
+        tabInfo: MainMenuTabInfo,
+        and readerModeState: ReaderModeState?
+    ) -> MenuElement {
+        typealias Strings = String.MainMenu.Submenus.Tools
+        typealias A11y = String.MainMenu.Submenus.Tools.AccessibilityLabels
+
+        let readerModeState = readerModeState ?? .unavailable
+        let readerModeIsActive = readerModeState == .active
+        let title = readerModeIsActive ? Strings.ReaderViewOff : Strings.ReaderViewOn
+        let icon = readerModeIsActive ? Icons.readerViewOff : Icons.readerViewOn
+        let a11yLabel = readerModeIsActive ? A11y.ReaderViewOff : A11y.ReaderViewOn
+
+        return MenuElement(
+            title: title,
+            iconName: icon,
+            isEnabled: readerModeState != .unavailable,
+            isActive: readerModeState == .active,
+            a11yLabel: a11yLabel,
+            a11yHint: "",
+            a11yId: AccessibilityIdentifiers.MainMenu.readerView,
+            action: {
+                store.dispatch(
+                    GeneralBrowserAction(
+                        windowUUID: uuid,
+                        actionType: GeneralBrowserActionType.showReaderMode
                     )
                 )
             }
