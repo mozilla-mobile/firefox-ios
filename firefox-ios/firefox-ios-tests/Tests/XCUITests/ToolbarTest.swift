@@ -155,11 +155,7 @@ class ToolbarTests: BaseTestCase {
         // Swipe up to close the app does not work on iOS 15.
         if #available(iOS 16, *) {
             closeFromAppSwitcherAndRelaunch()
-            if isPrivate {
-                mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.fireButton])
-            } else {
-                mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton])
-            }
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton])
             let addNewTabButton = app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton]
             mozWaitForElementToExist(addNewTabButton)
             addNewTabButton.tapOnApp()
