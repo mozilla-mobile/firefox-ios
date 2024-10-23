@@ -1040,6 +1040,18 @@ class BrowserViewController: UIViewController,
             adjustLegacyURLBarHeightBasedOnLocationViewHeight()
             return
         }
+
+        // Adjustment for landscape on the urlbar
+        // need to account for inset and remove it when keyboard is showing
+        let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection)
+        let isKeyboardShowing = keyboardState != nil
+
+        if !showNavToolbar && isBottomSearchBar &&
+        !isKeyboardShowing && UIDevice.current.orientation.isLandscape {
+            overKeyboardContainer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
+        } else {
+            overKeyboardContainer.removeBottomInsetSpacer()
+        }
     }
 
     private func adjustLegacyURLBarHeightBasedOnLocationViewHeight() {
