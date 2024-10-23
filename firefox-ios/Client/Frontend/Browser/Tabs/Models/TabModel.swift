@@ -23,7 +23,7 @@ struct TabModel: Equatable, Identifiable, Hashable {
         isSelected: Bool = false
     ) -> TabModel {
         return TabModel(
-            id: tabUUID, 
+            id: tabUUID,
             tabUUID: tabUUID,
             isSelected: isSelected,
             isPrivate: isPrivate,
