@@ -167,7 +167,7 @@ struct AddressBarState: StateType, Equatable {
             return handleDidScrollDuringEditAction(state: state)
 
         case ToolbarActionType.clearSearch:
-            return handleToolbarClearSearch(state: state, action: action)
+            return handleClearSearchAction(state: state, action: action)
 
         case ToolbarActionType.didDeleteSearchTerm:
             return handleDidDeleteSearchTerm(state: state, action: action)
@@ -524,7 +524,7 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
-    private static func handleToolbarClearSearch(state: Self, action: Action) -> Self {
+    private static func handleClearSearchAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return state }
 
         return AddressBarState(
