@@ -441,7 +441,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         }
 
         return BrowserViewControllerState(
-            searchScreenState: state.searchScreenState,
+            searchScreenState: SearchScreenState(inPrivateMode: isPrivateBrowsing),
             showDataClearanceFlow: state.showDataClearanceFlow,
             fakespotState: state.fakespotState,
             windowUUID: state.windowUUID,
