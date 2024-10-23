@@ -136,7 +136,7 @@ struct AddressBarState: StateType, Equatable {
             return handleWebsiteLoadingStateDidChangeAction(state: state, action: action)
 
         case ToolbarActionType.urlDidChange:
-            return handleToolbarUrlDidChange(state: state, action: action)
+            return handleUrlDidChangeAction(state: state, action: action)
 
         case ToolbarActionType.backForwardButtonStateChanged:
             return handleToolbarBackForwardButtonStateChanged(state: state, action: action)
@@ -268,7 +268,7 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
-    private static func handleToolbarUrlDidChange(state: Self, action: Action) -> Self {
+    private static func handleUrlDidChangeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return state }
 
         return AddressBarState(
