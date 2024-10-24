@@ -30,6 +30,7 @@ struct AppState: StateType {
                 case (.tabsTray(let state), .tabsTray): return state as? S
                 case (.themeSettings(let state), .themeSettings): return state as? S
                 case (.toolbar(let state), .toolbar): return state as? S
+                case (.searchEngineSelection(let state), .searchEngineSelection): return state as? S
                 case (.trackingProtection(let state), .trackingProtection): return state as? S
                 case (.passwordGenerator(let state), .passwordGenerator): return state as? S
                 default: return nil
@@ -63,6 +64,7 @@ let middlewares = [
     TabManagerMiddleware().tabsPanelProvider,
     ThemeManagerMiddleware().themeManagerProvider,
     ToolbarMiddleware().toolbarProvider,
+    SearchEngineSelectionMiddleware().searchEngineSelectionProvider,
     TrackingProtectionMiddleware().trackingProtectionProvider,
     PasswordGeneratorMiddleware().passwordGeneratorProvider,
     PocketMiddleware().pocketSectionProvider

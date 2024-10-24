@@ -42,8 +42,8 @@ final class SearchEngineSelectionMiddleware {
     private func notifyDidLoad(windowUUID: WindowUUID, searchEngines: [OpenSearchEngine]) {
         let action = SearchEngineSelectionAction(
             windowUUID: windowUUID,
-            searchEngines: searchEngines,
-            actionType: SearchEngineSelectionMiddlewareActionType.didLoadSearchEngines
+            actionType: SearchEngineSelectionMiddlewareActionType.didLoadSearchEngines,
+            searchEngines: searchEngines
         )
         store.dispatch(action)
     }

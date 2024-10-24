@@ -57,7 +57,16 @@ struct SearchEngineSelectionState: ScreenState, Equatable {
         }
 
         switch action.actionType {
-        // TODO Actions
+        case SearchEngineSelectionMiddlewareActionType.didLoadSearchEngines:
+            guard let action = action as? SearchEngineSelectionAction,
+                  let searchEngines = action.searchEngines
+            else { return defaultState(fromPreviousState: state) }
+
+            return SearchEngineSelectionState(
+                windowUUID: state.windowUUID,
+                searchEngines: searchEngines
+            )
+
         default:
             return defaultState(fromPreviousState: state)
         }
