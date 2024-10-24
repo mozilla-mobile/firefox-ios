@@ -18,8 +18,7 @@ final class SearchEngineSelectionAction: Action {
 
 enum SearchEngineSelectionActionType: ActionType {
     case viewDidLoad
-}
-
-enum SearchEngineSelectionMiddlewareActionType: ActionType {
     case didLoadSearchEngines
 }
+
+enum SearchEngineSelectionMiddlewareActionType: ActionType {}
