@@ -82,15 +82,7 @@ struct AddressBarState: StateType, Equatable {
                   pageActions: [],
                   browserActions: [],
                   borderPosition: nil,
-                  url: nil,
-                  searchTerm: nil,
-                  lockIconImageName: nil,
-                  safeListedURLImageName: nil,
-                  isEditing: false,
-                  isScrollingDuringEdit: false,
-                  shouldSelectSearchTerm: true,
-                  isLoading: false,
-                  readerModeState: nil)
+                  url: nil)
     }
 
     init(windowUUID: WindowUUID,
