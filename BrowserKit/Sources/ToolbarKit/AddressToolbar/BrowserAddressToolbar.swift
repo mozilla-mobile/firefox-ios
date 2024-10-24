@@ -76,8 +76,8 @@ public class BrowserAddressToolbar: UIView,
 
     public func configure(state: AddressToolbarState,
                           toolbarDelegate: any AddressToolbarDelegate,
-                          leadingSpace: CGFloat? = nil,
-                          trailingSpace: CGFloat? = nil,
+                          leadingSpace: CGFloat,
+                          trailingSpace: CGFloat,
                           isUnifiedSearchEnabled: Bool) {
         self.toolbarDelegate = toolbarDelegate
         configure(state: state, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
@@ -142,25 +142,23 @@ public class BrowserAddressToolbar: UIView,
         toolbarBottomBorderHeightConstraint?.isActive = true
 
         leadingNavigationActionStackConstraint = navigationActionStack.leadingAnchor.constraint(
-            equalTo: toolbarContainerView.leadingAnchor,
-            constant: UX.horizontalEdgeSpace)
+            equalTo: toolbarContainerView.leadingAnchor)
         leadingNavigationActionStackConstraint?.isActive = true
 
         trailingBrowserActionStackConstraint = browserActionStack.trailingAnchor.constraint(
-            equalTo: toolbarContainerView.trailingAnchor,
-            constant: -UX.horizontalEdgeSpace)
+            equalTo: toolbarContainerView.trailingAnchor)
         trailingBrowserActionStackConstraint?.isActive = true
 
         locationContainerHeightConstraint = locationContainer.heightAnchor.constraint(equalToConstant: UX.locationHeight)
         locationContainerHeightConstraint?.isActive = true
 
         NSLayoutConstraint.activate([
-            toolbarContainerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            toolbarContainerView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
             toolbarContainerView.topAnchor.constraint(equalTo: toolbarTopBorderView.topAnchor,
                                                       constant: UX.verticalEdgeSpace),
             toolbarContainerView.bottomAnchor.constraint(equalTo: toolbarBottomBorderView.bottomAnchor,
                                                          constant: -UX.verticalEdgeSpace),
-            toolbarContainerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            toolbarContainerView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
 
             toolbarTopBorderView.leadingAnchor.constraint(equalTo: leadingAnchor),
             toolbarTopBorderView.topAnchor.constraint(equalTo: topAnchor),
@@ -236,9 +234,9 @@ public class BrowserAddressToolbar: UIView,
         updateActionSpacing()
     }
 
-    private func updateSpacing(leading: CGFloat?, trailing: CGFloat?) {
-        leadingNavigationActionStackConstraint?.constant = leading ?? UX.horizontalEdgeSpace
-        trailingBrowserActionStackConstraint?.constant = trailing ?? -UX.horizontalEdgeSpace
+    private func updateSpacing(leading: CGFloat, trailing: CGFloat) {
+        leadingNavigationActionStackConstraint?.constant = leading
+        trailingBrowserActionStackConstraint?.constant = -trailing
     }
 
     private func setZeroWidthConstraint(_ stackView: UIStackView) {
