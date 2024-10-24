@@ -11,7 +11,8 @@ import Redux
 class SearchEngineSelectionViewController: UIViewController,
                                            UISheetPresentationControllerDelegate,
                                            UIPopoverPresentationControllerDelegate,
-                                           Themeable {
+                                           Themeable,
+                                           StoreSubscriber {
     // MARK: - Properties
     var notificationCenter: NotificationProtocol
     var themeManager: ThemeManager
@@ -20,6 +21,7 @@ class SearchEngineSelectionViewController: UIViewController,
 
     weak var coordinator: SearchEngineSelectionCoordinator?
     private let windowUUID: WindowUUID
+    private var state: SearchEngineSelectionState
     private let logger: Logger
 
     // MARK: - UI/UX elements
@@ -51,10 +53,14 @@ class SearchEngineSelectionViewController: UIViewController,
         logger: Logger = DefaultLogger.shared
     ) {
         self.windowUUID = windowUUID
+        self.state = SearchEngineSelectionState(windowUUID: windowUUID)
+        self.logger = logger
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
-        self.logger = logger
+
         super.init(nibName: nil, bundle: nil)
+
+        subscribeToRedux()
 
         // TODO Additional setup to come
         // ...
@@ -64,6 +70,10 @@ class SearchEngineSelectionViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        unsubscribeFromRedux()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -72,6 +82,13 @@ class SearchEngineSelectionViewController: UIViewController,
 
         setupView()
         listenForThemeChange(view)
+
+        store.dispatch(
+            SearchEngineSelectionAction(
+                windowUUID: self.windowUUID,
+                actionType: SearchEngineSelectionActionType.viewDidLoad
+            )
+        )
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -94,6 +111,44 @@ class SearchEngineSelectionViewController: UIViewController,
             placeholderSwitchSearchEngineButton.topAnchor.constraint(equalTo: placeholderOpenSettingsButton.bottomAnchor),
             placeholderSwitchSearchEngineButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         ])
+    }
+
+    // MARK: - Redux
+
+    func subscribeToRedux() {
+        store.dispatch(
+            ScreenAction(
+                windowUUID: windowUUID,
+                actionType: ScreenActionType.showScreen,
+                screen: .searchEngineSelection
+            )
+        )
+
+        let uuid = windowUUID
+        store.subscribe(self, transform: {
+            return $0.select({ appState in
+                return SearchEngineSelectionState(appState: appState, uuid: uuid)
+            })
+        })
+    }
+
+    func unsubscribeFromRedux() {
+        store.dispatch(
+            ScreenAction(
+                windowUUID: windowUUID,
+                actionType: ScreenActionType.closeScreen,
+                screen: .searchEngineSelection
+            )
+        )
+    }
+
+    func newState(state: SearchEngineSelectionState) {
+        self.state = state
+
+        print("** loaded new state! \(state)")
+
+        // FIXME FXIOS-10189 Eventually we'll have a tableview. Placeholder for temporary testing redux.
+        placeholderSwitchSearchEngineButton.setTitle(state.searchEngines.last?.shortName ?? "Empty!", for: .normal)
     }
 
     // MARK: - Theme

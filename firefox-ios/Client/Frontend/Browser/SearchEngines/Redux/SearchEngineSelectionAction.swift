@@ -10,7 +10,7 @@ import Redux
 final class SearchEngineSelectionAction: Action {
     let searchEngines: [OpenSearchEngine]?
 
-    init(windowUUID: WindowUUID, searchEngines: [OpenSearchEngine]?, actionType: ActionType) {
+    init(windowUUID: WindowUUID, actionType: ActionType, searchEngines: [OpenSearchEngine]? = nil) {
         self.searchEngines = searchEngines
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
