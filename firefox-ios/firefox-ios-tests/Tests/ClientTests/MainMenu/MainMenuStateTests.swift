@@ -34,6 +34,7 @@ final class MainMenuStateTests: XCTestCase {
         let expectedResult = MainMenuTabInfo(
             tabID: "1234",
             url: URL(string: "https://mozilla.com"),
+            canonicalURL: URL(string: "https://mozilla.com"),
             isHomepage: true,
             isDefaultUserAgentDesktop: true,
             hasChangedUserAgent: true,
