@@ -11,26 +11,26 @@ protocol SearchEngineDelegate: AnyObject {
     func searchEnginesDidUpdate()
 }
 
-/// Manage a set of Open Search engines.
+/// Manages a set of `OpenSearchEngine`s.
 ///
-/// The search engines are ordered.
+/// The search engines are ordered (order is stored in Prefs, i.e. UserDefaults). Custom search engines entered by the user
+/// are saved to a file. Default search engines are localized and given by the `SearchEngineProvider` (from list.json).
 ///
 /// Individual search engines can be enabled and disabled.
 ///
 /// The first search engine is distinguished and labeled the "default" search engine; it can never be
-/// disabled.  Search suggestions should always be sourced from the default search engine.
-/// 
-/// Two additional bits of information are maintained: whether search suggestions are enabled and whether
-/// search suggestions in private mode is disabled
+/// disabled. FIXME FXIOS-10187 this will change: Search suggestions should always be sourced from the default search engine
 ///
-/// Consumers will almost always use `defaultEngine` if they want a single search engine, and
-/// `quickSearchEngines()` if they want a list of enabled quick search engines (possibly empty,
-/// since the default engine is never included in the list of enabled quick search engines, and
-/// it is possible to disable every non-default quick search engine).
+/// Two additional bits of information are maintained: whether search suggestions are enabled and whether search suggestions
+/// in private mode is disabled.
 ///
-/// The search engines are backed by a write-through cache into a ProfilePrefs instance.  This class
-/// is not thread-safe -- you should only access it on a single thread (usually, the main thread)!
-class SearchEngines {
+/// Consumers will almost always use `defaultEngine` if they want a single search engine, and `quickSearchEngines()` if they
+/// want a list of enabled quick search engines (possibly empty, since the default engine is never included in the list of
+/// enabled quick search engines, and it is possible to disable every non-default quick search engine).
+///
+/// The search engines are backed by a write-through cache into a ProfilePrefs instance.  This class is not thread-safe --
+/// you should only access it on a single thread (usually, the main thread)!
+class SearchEnginesManager {
     private let prefs: Prefs
     private let fileAccessor: FileAccessor
     private let orderedEngineNames = "search.orderedEngineNames"
@@ -300,22 +300,5 @@ class SearchEngines {
                        level: .debug,
                        category: .storage)
         }
-    }
-}
-
-extension Locale {
-    func possibilitiesForLanguageIdentifier() -> [String] {
-        var possibilities: [String] = []
-        let languageIdentifier = self.identifier
-        let components = languageIdentifier.components(separatedBy: "-")
-        possibilities.append(languageIdentifier)
-
-        if components.count == 3, let first = components.first, let last = components.last {
-            possibilities.append("\(first)-\(last)")
-        }
-        if components.count >= 2, let first = components.first {
-            possibilities.append("\(first)")
-        }
-        return possibilities
     }
 }
