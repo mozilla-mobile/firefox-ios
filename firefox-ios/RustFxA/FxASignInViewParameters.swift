@@ -5,7 +5,7 @@
 import Foundation
 
 /// Used to determine the sign in flow, used mostly with deeplinks
-struct FxASignInViewParameters {
+struct FxASignInViewParameters: Equatable {
     var launchParameters: FxALaunchParams
     var flowType: FxAPageType
     var referringPage: ReferringPage

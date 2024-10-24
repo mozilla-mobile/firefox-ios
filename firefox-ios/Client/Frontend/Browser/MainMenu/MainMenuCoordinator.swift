@@ -14,6 +14,7 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     func showSettings(at destination: Route.SettingsSection)
     func showFindInPage()
     func editLatestBookmark()
+    func showSignInView(fxaParameters: FxASignInViewParameters?)
     func updateZoomPageBarVisibility()
 }
 
@@ -80,6 +81,13 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
                 self.navigationHandler?.showSettings(at: .password)
             case .settings:
                 self.navigationHandler?.showSettings(at: .general)
+            case .syncSignIn:
+                let fxaParameters = FxASignInViewParameters(
+                    launchParameters: FxALaunchParams(entrypoint: .browserMenu, query: [:]),
+                    flowType: .emailLoginFlow,
+                    referringPage: .appMenu
+                )
+                self.navigationHandler?.showSignInView(fxaParameters: fxaParameters)
             case .zoom:
                 self.navigationHandler?.updateZoomPageBarVisibility()
             }
