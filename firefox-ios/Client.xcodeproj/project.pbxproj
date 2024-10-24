@@ -1845,6 +1845,7 @@
 		F018F84C2719AE8300B9A52D /* ThemedDefaultNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F018F84B2719AE8300B9A52D /* ThemedDefaultNavigationController.swift */; };
 		F18859502A3E454E0004AA7B /* EnhancedTrackingProtectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F188594F2A3E454E0004AA7B /* EnhancedTrackingProtectionCoordinator.swift */; };
 		F1BC457E2A40F6D2005541D5 /* EnhancedTrackingProtectionCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18859512A3E46020004AA7B /* EnhancedTrackingProtectionCoordinatorTests.swift */; };
+		F605DD582CC73469009A671B /* TabDisplayDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F605DD572CC73469009A671B /* TabDisplayDiffableDataSource.swift */; };
 		F80D53CF2A09A3350047ED14 /* RustSyncManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80D53CD2A09A30F0047ED14 /* RustSyncManagerTests.swift */; };
 		F80DF73F27034F6400E4C37D /* LegacyDynamicFontHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075531E37F6FC006961AC /* LegacyDynamicFontHelper.swift */; };
 		F80DF7412703BC8E00E4C37D /* CredentialPasscodeRequirementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F80DF7402703BC8E00E4C37D /* CredentialPasscodeRequirementViewController.swift */; };
@@ -9055,6 +9056,7 @@
 		F5CC4C0ABF114E4553AFA780 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		F5E84699B672AEC4CE4D5871 /* af */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = af; path = af.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		F5F94E989BFE5C0AAD2FFCFD /* bo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bo; path = bo.lproj/LoginManager.strings; sourceTree = "<group>"; };
+		F605DD572CC73469009A671B /* TabDisplayDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabDisplayDiffableDataSource.swift; sourceTree = "<group>"; };
 		F63D438AB501007BE110524A /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
 		F6AA4920A08DE9E2F0BC44C2 /* br */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = br; path = br.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		F6EA434FA5D8305063BC630B /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -9727,6 +9729,7 @@
 				214EF4142AC5D5D0005BCCDA /* TabDisplayView.swift */,
 				1DDE3DB22AC34E1E0039363B /* TabCell.swift */,
 				21E77E4D2AA8BA5200FABA10 /* TabTrayViewController.swift */,
+				F605DD572CC73469009A671B /* TabDisplayDiffableDataSource.swift */,
 				219A0FD32ACC84C5009A6D1A /* InactiveTabs */,
 			);
 			path = Views;
@@ -16295,6 +16298,7 @@
 				8A720C602A4C8B700003018A /* SharedSettingsDelegate.swift in Sources */,
 				211046CD2A7D842A00A7309F /* TPAccessoryInfo.swift in Sources */,
 				8CEDF0802BFE138B00D2617B /* AddressProvider.swift in Sources */,
+				F605DD582CC73469009A671B /* TabDisplayDiffableDataSource.swift in Sources */,
 				8A454D292CB7078D009436D9 /* PocketState.swift in Sources */,
 				21E77E502AA8BAEC00FABA10 /* TabTrayState.swift in Sources */,
 				0EC57D0A2CA6FCC5002E3F04 /* PasswordGeneratorPasswordFieldView.swift in Sources */,
