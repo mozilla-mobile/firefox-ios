@@ -210,9 +210,8 @@ class LoginTest: BaseTestCase {
         // Enter on Search mode
         mozWaitForElementToExist(app.searchFields[searchPasswords])
         XCTAssert(app.searchFields[searchPasswords].isEnabled)
-        app.searchFields[searchPasswords].tap()
         // Type Text that matches user, website
-        app.searchFields[searchPasswords].typeText("test")
+        app.searchFields[searchPasswords].tapAndTypeText("test")
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
 
         // Type Text that does not match
@@ -234,11 +233,9 @@ class LoginTest: BaseTestCase {
         mozWaitForElementToExist(app.webViews.staticTexts["Username:"])
 
         // Fill in the username text box
-        app.webViews.textFields.element(boundBy: 0).tap()
-        app.webViews.textFields.element(boundBy: 0).typeText(mailLogin)
+        app.webViews.textFields.element(boundBy: 0).tapAndTypeText(mailLogin)
         // Fill in the password text box
-        app.webViews.secureTextFields.element(boundBy: 0).tap()
-        app.webViews.secureTextFields.element(boundBy: 0).typeText("test15mz")
+        app.webViews.secureTextFields.element(boundBy: 0).tapAndTypeText("test15mz")
 
         // Submit form and choose to save the logins
         app.buttons["submit"].tap()
