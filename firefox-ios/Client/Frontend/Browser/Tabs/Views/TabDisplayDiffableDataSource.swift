@@ -3,9 +3,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 typealias TabDisplayViewSection = TabDisplayDiffableDataSource.TabSection
-typealias TabDisplayItem = TabDisplayDiffableDataSource.TabItem
+typealias TabDisplayViewItem = TabDisplayDiffableDataSource.TabItem
 
-final class TabDisplayDiffableDataSource: UICollectionViewDiffableDataSource<TabDisplayViewSection, TabDisplayItem> {
+final class TabDisplayDiffableDataSource: UICollectionViewDiffableDataSource<TabDisplayViewSection, TabDisplayViewItem> {
     enum TabSection: Int, CaseIterable {
         case inactiveTabs
         case tabs
@@ -17,7 +17,7 @@ final class TabDisplayDiffableDataSource: UICollectionViewDiffableDataSource<Tab
     }
 
     func updateSnapshot(state: TabsPanelState) {
-        var snapshot = NSDiffableDataSourceSnapshot<TabDisplayViewSection, TabDisplayItem>()
+        var snapshot = NSDiffableDataSourceSnapshot<TabDisplayViewSection, TabDisplayViewItem>()
 
         snapshot.appendSections([.inactiveTabs, .tabs])
 
@@ -25,11 +25,11 @@ final class TabDisplayDiffableDataSource: UICollectionViewDiffableDataSource<Tab
         snapshot.reloadSections([.inactiveTabs])
 
         if state.isInactiveTabsExpanded {
-            let inactiveTabs = state.inactiveTabs.map { TabDisplayItem.inactiveTab($0) }
+            let inactiveTabs = state.inactiveTabs.map { TabDisplayViewItem.inactiveTab($0) }
             snapshot.appendItems(inactiveTabs, toSection: .inactiveTabs)
         }
 
-        let tabs = state.tabs.map { TabDisplayItem.tab($0) }
+        let tabs = state.tabs.map { TabDisplayViewItem.tab($0) }
         snapshot.appendItems(tabs, toSection: .tabs)
 
         apply(snapshot, animatingDifferences: true)
