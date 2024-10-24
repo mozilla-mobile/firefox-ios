@@ -76,6 +76,73 @@ class TabDisplayView: UIView,
         return collectionView
     }()
 
+    public init(panelType: TabTrayPanelType,
+                state: TabsPanelState,
+                windowUUID: WindowUUID,
+                animationQueue: TabTrayAnimationQueue = TabTrayAnimationQueueImplementation()) {
+        self.panelType = panelType
+        self.tabsState = state
+        self.inactiveTabsSectionManager = InactiveTabsSectionManager()
+        self.tabsSectionManager = TabsSectionManager()
+        self.windowUUID = windowUUID
+        self.animationQueue = animationQueue
+        super.init(frame: .zero)
+        self.inactiveTabsSectionManager.delegate = self
+        setupLayout()
+        configureDataSource()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func newState(state: TabsPanelState) {
+        // We only want to respond to `TabsPanelState` for the current `panelType` (e.g. don't scroll the regular tabs for
+        // a private tabs scroll)
+        switch panelType {
+        case .tabs:
+            guard !state.isPrivateMode else { return }
+        case .privateTabs:
+            guard state.isPrivateMode else { return }
+        case .syncedTabs:
+            // This view does not handle synced tabs
+            return
+        }
+
+        tabsState = state
+
+        dataSource?.updateSnapshot(state: tabsState)
+
+        if let scrollState = state.scrollState {
+            scrollToTab(scrollState)
+        }
+
+        if state.didTapAddTab {
+            let action = TabPanelViewAction(panelType: self.panelType,
+                                            windowUUID: self.windowUUID,
+                                            actionType: TabPanelViewActionType.addNewTab)
+            store.dispatch(action)
+        }
+    }
+
+    private func scrollToTab(_ scrollState: TabsPanelState.ScrollState) {
+        let section: Int = scrollState.isInactiveTabSection ? 0 : 1
+        let indexPath = IndexPath(row: scrollState.toIndex, section: section)
+
+        // We cannot get the visible cells unless all layout operations have finished finished (e.g. after `reloadData()`)
+        collectionView.layoutIfNeeded()
+
+        // Only scroll to the view if it is not visible.
+        guard !collectionView.indexPathsForFullyVisibleItems.contains(indexPath) else { return }
+
+        // Scrolling to an invalid cell will crash the app, so check indexPath first
+        guard collectionView.isValid(indexPath: indexPath) else { return }
+
+        collectionView.scrollToItem(at: indexPath,
+                                    at: .centeredVertically,
+                                    animated: scrollState.withAnimation)
+    }
+
     private func configureDataSource() {
         // swiftlint:disable line_length
         dataSource = TabDisplayDiffableDataSource(collectionView: collectionView) { [weak self] (collectionView, indexPath, sectionItem) ->
@@ -159,73 +226,6 @@ class TabDisplayView: UIView,
             }
             return reusableView
         }
-    }
-
-    public init(panelType: TabTrayPanelType,
-                state: TabsPanelState,
-                windowUUID: WindowUUID,
-                animationQueue: TabTrayAnimationQueue = TabTrayAnimationQueueImplementation()) {
-        self.panelType = panelType
-        self.tabsState = state
-        self.inactiveTabsSectionManager = InactiveTabsSectionManager()
-        self.tabsSectionManager = TabsSectionManager()
-        self.windowUUID = windowUUID
-        self.animationQueue = animationQueue
-        super.init(frame: .zero)
-        self.inactiveTabsSectionManager.delegate = self
-        setupLayout()
-        configureDataSource()
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func newState(state: TabsPanelState) {
-        // We only want to respond to `TabsPanelState` for the current `panelType` (e.g. don't scroll the regular tabs for
-        // a private tabs scroll)
-        switch panelType {
-        case .tabs:
-            guard !state.isPrivateMode else { return }
-        case .privateTabs:
-            guard state.isPrivateMode else { return }
-        case .syncedTabs:
-            // This view does not handle synced tabs
-            return
-        }
-
-        tabsState = state
-
-        dataSource?.updateSnapshot(state: tabsState)
-
-        if let scrollState = state.scrollState {
-            scrollToTab(scrollState)
-        }
-
-        if state.didTapAddTab {
-            let action = TabPanelViewAction(panelType: self.panelType,
-                                            windowUUID: self.windowUUID,
-                                            actionType: TabPanelViewActionType.addNewTab)
-            store.dispatch(action)
-        }
-    }
-
-    private func scrollToTab(_ scrollState: TabsPanelState.ScrollState) {
-        let section: Int = scrollState.isInactiveTabSection ? 0 : 1
-        let indexPath = IndexPath(row: scrollState.toIndex, section: section)
-
-        // We cannot get the visible cells unless all layout operations have finished finished (e.g. after `reloadData()`)
-        collectionView.layoutIfNeeded()
-
-        // Only scroll to the view if it is not visible.
-        guard !collectionView.indexPathsForFullyVisibleItems.contains(indexPath) else { return }
-
-        // Scrolling to an invalid cell will crash the app, so check indexPath first
-        guard collectionView.isValid(indexPath: indexPath) else { return }
-
-        collectionView.scrollToItem(at: indexPath,
-                                    at: .centeredVertically,
-                                    animated: scrollState.withAnimation)
     }
 
     private func setupLayout() {
