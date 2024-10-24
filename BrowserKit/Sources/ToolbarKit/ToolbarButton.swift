@@ -25,7 +25,6 @@ class ToolbarButton: UIButton, ThemeApplicable {
     private var badgeImageView: UIImageView?
     private var maskImageView: UIImageView?
 
-    private var shouldDisplayAsHighlighted = false
     private var onLongPress: ((UIButton) -> Void)?
 
     override init(frame: CGRect) {
@@ -43,7 +42,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
         removeAllGestureRecognizers()
         configureLongPressGestureRecognizerIfNeeded(for: element)
         configureCustomA11yActionIfNeeded(for: element)
-        shouldDisplayAsHighlighted = element.isSelected
+        isSelected = element.isSelected
 
         let image = imageConfiguredForRTL(for: element)
         let action = UIAction(title: element.a11yLabel,
@@ -86,7 +85,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
         case .disabled:
             updatedConfiguration.baseForegroundColor = foregroundColorDisabled
         default:
-            updatedConfiguration.baseForegroundColor = shouldDisplayAsHighlighted ?
+            updatedConfiguration.baseForegroundColor = isSelected ?
                                                        foregroundColorHighlighted :
                                                        foregroundColorNormal
         }
