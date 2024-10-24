@@ -121,8 +121,7 @@ final class TabDisplayViewTests: XCTestCase {
         var inactiveTabs = [InactiveTabsModel]()
         let tabUUID = "UUID"
         for index in 0..<numberOfTabs {
-            let inactiveTabModel = InactiveTabsModel(id: tabUUID,
-                                                     tabUUID: tabUUID,
+            let inactiveTabModel = InactiveTabsModel(tabUUID: tabUUID,
                                                      title: "InactiveTab\(index)",
                                                      url: nil)
             inactiveTabs.append(inactiveTabModel)

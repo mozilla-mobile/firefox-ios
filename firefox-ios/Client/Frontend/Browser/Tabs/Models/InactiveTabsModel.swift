@@ -5,10 +5,10 @@
 import Foundation
 
 struct InactiveTabsModel: Equatable, Identifiable, Hashable {
-    let id: String
-    var tabUUID: TabUUID
-    var title: String
-    var url: URL?
+    var id: String { return tabUUID }
+    let tabUUID: TabUUID
+    let title: String
+    let url: URL?
     var favIconURL: String?
 
     var displayURL: String {
@@ -22,7 +22,6 @@ struct InactiveTabsModel: Equatable, Identifiable, Hashable {
         title: String
     ) -> InactiveTabsModel {
         return InactiveTabsModel(
-            id: tabUUID,
             tabUUID: tabUUID,
             title: title,
             url: nil
