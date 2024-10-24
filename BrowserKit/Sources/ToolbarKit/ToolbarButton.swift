@@ -53,6 +53,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
 
         config.image = image
         isEnabled = element.isEnabled
+        isAccessibilityElement = true
         accessibilityIdentifier = element.a11yId
         accessibilityLabel = element.a11yLabel
         accessibilityHint = element.a11yHint
