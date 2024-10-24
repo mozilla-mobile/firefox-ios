@@ -249,7 +249,6 @@ struct MainMenuConfigurationUtility: Equatable {
             MenuSection(
                 options: [
                     configureZoomItem(with: uuid, and: tabInfo),
-//                    configureReaderModeItem(with: uuid, tabInfo: tabInfo, and: readerModeState),
                     configureNightModeItem(with: uuid),
                     MenuElement(
                         title: .MainMenu.Submenus.Tools.ReportBrokenSite,
