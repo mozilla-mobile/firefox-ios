@@ -175,6 +175,7 @@ class SearchEngineSelectionViewController: UIViewController,
     // FIXME FXIOS-10189 This will be deleted later.
     @objc
     func testDidChangeSearchEngine(sender: UIButton) {
-        // TODO
+        // TODO FXIOS-10384 Push action to the toolbar to update the search engine selection for the next search and
+        // to focus the toolbar (if it isn't already focused).
     }
 }
