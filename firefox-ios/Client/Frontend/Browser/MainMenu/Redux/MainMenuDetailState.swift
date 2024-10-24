@@ -69,9 +69,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
         self.shouldGoBackToMainMenu = shouldGoBackToMenu
     }
 
-    static let reducer: Reducer<Self> = {
-        state,
-        action in
+    static let reducer: Reducer<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
             return MainMenuDetailsState(
                 windowUUID: state.windowUUID,
