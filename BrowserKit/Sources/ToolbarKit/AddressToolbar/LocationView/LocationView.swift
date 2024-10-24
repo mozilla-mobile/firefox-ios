@@ -5,7 +5,11 @@
 import UIKit
 import Common
 
-final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, AccessibilityActionsSource {
+final class LocationView: UIView,
+                          LocationTextFieldDelegate,
+                          ThemeApplicable,
+                          AccessibilityActionsSource,
+                          MenuHelperLoginInterface {
     // MARK: - Properties
     private enum UX {
         static let horizontalSpace: CGFloat = 8
@@ -361,6 +365,21 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         if recognizer.state == .began {
             onLongPress?()
         }
+    }
+
+    // MARK: - MenuHelperURLBarInterface
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        if action == MenuHelperURLBarModel.selectorPasteAndGo {
+            return UIPasteboard.general.hasStrings
+        }
+
+        return super.canPerformAction(action, withSender: sender)
+    }
+
+    func menuHelperPasteAndGo() {
+        guard let pasteboardContents = UIPasteboard.general.string else { return }
+        delegate?.locationViewDidSubmitText(pasteboardContents)
+        urlTextField.text = pasteboardContents
     }
 
     // MARK: - LocationTextFieldDelegate
