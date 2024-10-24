@@ -77,7 +77,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
                 submenuType: state.submenuType
             )
         }
-        
+
         switch action.actionType {
         case ScreenActionType.showScreen:
             guard let screenAction = action as? ScreenAction,
