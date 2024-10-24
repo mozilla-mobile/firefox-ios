@@ -12,6 +12,7 @@ struct MainMenuConfigurationUtility: Equatable {
         static let newTab = StandardImageIdentifiers.Large.plus
         static let newPrivateTab = StandardImageIdentifiers.Large.privateModeCircleFill
         static let deviceDesktop = StandardImageIdentifiers.Large.deviceDesktop
+        static let deviceMobile = StandardImageIdentifiers.Large.deviceMobile
         static let findInPage = StandardImageIdentifiers.Large.search
         static let tools = StandardImageIdentifiers.Large.tool
         static let save = StandardImageIdentifiers.Large.save
@@ -130,14 +131,20 @@ struct MainMenuConfigurationUtility: Equatable {
         return MenuSection(
             options: [
                 MenuElement(
-                    title: getUserAgentTitle(
+                    title: getUserAgentData(
                         defaultIsDesktop: configuration.isDefaultUserAgentDesktop,
                         tabHasChangedUserAgent: configuration.hasChangedUserAgent
                     ),
-                    iconName: Icons.deviceDesktop,
+                    iconName: getUserAgentIcon(
+                        defaultIsDesktop: configuration.isDefaultUserAgentDesktop,
+                        tabHasChangedUserAgent: configuration.hasChangedUserAgent
+                    ),
                     isEnabled: true,
                     isActive: false,
-                    a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.SwitchToDesktopSite,
+                    a11yLabel: getUserAgentData(
+                        isAccessibilityLabel: true,
+                        defaultIsDesktop: configuration.isDefaultUserAgentDesktop,
+                        tabHasChangedUserAgent: configuration.hasChangedUserAgent),
                     a11yHint: "",
                     a11yId: AccessibilityIdentifiers.MainMenu.switchToDesktopSite,
                     action: {
@@ -209,9 +216,9 @@ struct MainMenuConfigurationUtility: Equatable {
         )
     }
 
-    private func getUserAgentTitle(
-        defaultIsDesktop: Bool,
-        tabHasChangedUserAgent: Bool
+    private func getUserAgentData(isAccessibilityLabel: Bool = false,
+                                  defaultIsDesktop: Bool,
+                                  tabHasChangedUserAgent: Bool
     ) -> String {
         typealias Menu = String.MainMenu.ToolsSection
 
@@ -222,14 +229,31 @@ struct MainMenuConfigurationUtility: Equatable {
         //   1) which architecture we've started from and
         //   2) whether or not we've requested to change the user agent in the tab
         // Using this information, we're able to present the correct string for
-        // the "Request Mobile/Desktop Site" menu option
+        // the "Request Mobile/Desktop Site" menu option and the correct accessibility label
         if defaultIsDesktop {
+            if isAccessibilityLabel {
+                return tabHasChangedUserAgent ?
+                Menu.AccessibilityLabels.SwitchToDesktopSite :Menu.AccessibilityLabels.SwitchToMobileSite
+            }
             return tabHasChangedUserAgent ? Menu.SwitchToDesktopSite : Menu.SwitchToMobileSite
         } else {
+            if isAccessibilityLabel {
+                return tabHasChangedUserAgent ?
+                Menu.AccessibilityLabels.SwitchToMobileSite :Menu.AccessibilityLabels.SwitchToDesktopSite
+            }
             return tabHasChangedUserAgent ? Menu.SwitchToMobileSite : Menu.SwitchToDesktopSite
         }
     }
 
+    private func getUserAgentIcon(defaultIsDesktop: Bool,
+                                  tabHasChangedUserAgent: Bool
+    ) -> String {
+        if defaultIsDesktop {
+            return tabHasChangedUserAgent ? Icons.deviceDesktop : Icons.deviceMobile
+        } else {
+            return tabHasChangedUserAgent ? Icons.deviceMobile : Icons.deviceDesktop
+        }
+    }
     // MARK: - Tools Submenu
     private func getToolsSubmenu(
         with uuid: WindowUUID,
@@ -583,7 +607,8 @@ struct MainMenuConfigurationUtility: Equatable {
                 iconName: Icons.whatsNew,
                 isEnabled: true,
                 isActive: false,
-                a11yLabel: .MainMenu.OtherToolsSection.AccessibilityLabels.WhatsNew,
+                a11yLabel: String(format: .MainMenu.OtherToolsSection.AccessibilityLabels.WhatsNew,
+                                  AppName.shortName.rawValue),
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.whatsNew,
                 action: {
