@@ -2140,6 +2140,8 @@ class BrowserViewController: UIViewController,
             tabManager.selectedTab?.stop()
         case .newTab:
             topTabsDidPressNewTab(tabManager.selectedTab?.isPrivate ?? false)
+        case .url:
+            homePanel(didSelectURL: <#T##URL#>, visitType: <#T##VisitType#>, isGoogleTopSite: <#T##Bool#>)
         }
     }
 
