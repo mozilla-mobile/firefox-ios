@@ -9,7 +9,7 @@ final class LocationView: UIView,
                           LocationTextFieldDelegate,
                           ThemeApplicable,
                           AccessibilityActionsSource,
-                          MenuHelperLoginInterface {
+                          MenuHelperURLBarInterface {
     // MARK: - Properties
     private enum UX {
         static let horizontalSpace: CGFloat = 8
