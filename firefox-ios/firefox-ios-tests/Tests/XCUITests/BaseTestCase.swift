@@ -402,6 +402,13 @@ class BaseTestCase: XCTestCase {
             app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].tap()
         }
     }
+
+    func mozWaitElementHittable(element: XCUIElement, timeout: Double) {
+        let predicate = NSPredicate(format: "exists == true && hittable == true")
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
+        let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
+        XCTAssertEqual(result, .completed, "Element did not become hittable in time.")
+    }
 }
 
 class IpadOnlyTestCase: BaseTestCase {

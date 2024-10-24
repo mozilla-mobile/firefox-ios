@@ -20,8 +20,8 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     private var onLongPress: (() -> Void)?
     private weak var delegate: LocationViewDelegate?
     private var isUnifiedSearchEnabled = false
-    private var safeListedURLImageName: String?
     private var lockIconImageName: String?
+    private var safeListedURLImageName: String?
 
     private var isEditing = false
     private var isURLTextFieldEmpty: Bool {

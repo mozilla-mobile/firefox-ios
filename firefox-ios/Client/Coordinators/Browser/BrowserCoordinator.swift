@@ -857,15 +857,14 @@ class BrowserCoordinator: BaseCoordinator,
         router.present(viewController)
     }
 
-    // MARK: - Password Generator
-
-    func showPasswordGenerator(tab: Tab) {
-        let passwordGenVC = PasswordGeneratorViewController(windowUUID: windowUUID, currentTab: tab)
+// MARK: - Password Generator
+    func showPasswordGenerator(tab: Tab, frame: WKFrameInfo) {
+        let passwordGenVC = PasswordGeneratorViewController(windowUUID: windowUUID, currentTab: tab, currentFrame: frame)
 
         let action = PasswordGeneratorAction(
             windowUUID: windowUUID,
             actionType: PasswordGeneratorActionType.showPasswordGenerator,
-            currentTab: tab
+            currentFrame: frame
         )
         store.dispatch(action)
 
