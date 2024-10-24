@@ -32,6 +32,15 @@ class SearchEngineSelectionViewController: UIViewController,
 
         view.addTarget(self, action: #selector(self.didTapOpenSettings), for: .touchUpInside)
     }
+    // FIXME FXIOS-10189 This will be deleted later.
+    private lazy var placeholderSwitchSearchEngineButton: UIButton = .build { view in
+        view.setTitle("Test changing search engine", for: .normal)
+        view.setTitleColor(.systemPink, for: .normal)
+        view.titleLabel?.numberOfLines = 0
+        view.titleLabel?.textAlignment = .center
+
+        view.addTarget(self, action: #selector(self.testDidChangeSearchEngine), for: .touchUpInside)
+    }
 
     // MARK: - Initializers and Lifecycle
 
@@ -75,11 +84,15 @@ class SearchEngineSelectionViewController: UIViewController,
 
     private func setupView() {
         view.addSubview(placeholderOpenSettingsButton)
+        view.addSubviews(placeholderSwitchSearchEngineButton)
 
         NSLayoutConstraint.activate([
             placeholderOpenSettingsButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 80),
             placeholderOpenSettingsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            placeholderOpenSettingsButton.widthAnchor.constraint(equalToConstant: 200)
+            placeholderOpenSettingsButton.widthAnchor.constraint(equalToConstant: 200),
+
+            placeholderSwitchSearchEngineButton.topAnchor.constraint(equalTo: placeholderOpenSettingsButton.bottomAnchor),
+            placeholderSwitchSearchEngineButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
         ])
     }
 
@@ -102,5 +115,11 @@ class SearchEngineSelectionViewController: UIViewController,
     @objc
     func didTapOpenSettings(sender: UIButton) {
         coordinator?.navigateToSearchSettings(animated: true)
+    }
+
+    // FIXME FXIOS-10189 This will be deleted later.
+    @objc
+    func testDidChangeSearchEngine(sender: UIButton) {
+        // TODO
     }
 }
