@@ -461,6 +461,8 @@ public struct AccessibilityIdentifiers {
 
         struct BookmarksPanel {
             static let tableView = "Bookmarks List"
+            static let title = "bookmarkTitle"
+            static let url = "bookmarkUrl"
         }
 
         struct HistoryPanel {

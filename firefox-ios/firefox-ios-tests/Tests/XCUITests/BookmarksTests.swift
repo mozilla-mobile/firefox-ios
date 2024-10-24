@@ -173,7 +173,6 @@ class BookmarksTests: BaseTestCase {
         navigator.performAction(Action.AddNewFolder)
         mozWaitForElementToExist(app.navigationBars["Bookmarks"])
         // XCTAssertFalse(app.buttons["Save"].isEnabled), is this a bug allowing empty folder name?
-        app.tables.cells.textFields.element(boundBy: 0).tap()
         app.tables.cells.textFields.element(boundBy: 0).typeText("Test Folder")
         app.buttons["Save"].tap()
         app.buttons["Done"].tap()
@@ -210,12 +209,11 @@ class BookmarksTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306916
-    // Test failing in M1s because the swipe gesture. Needs work to run only on Intel.
     func testDeleteBookmarkSwiping() {
         addNewBookmark()
         // Remove by swiping
         app.tables["Bookmarks List"].staticTexts["BBC"].swipeLeft()
-        app.buttons["Delete"].waitAndTap()
+        app.buttons["Delete"].tap()
         // Verify that there are only 1 cell (desktop bookmark folder)
         checkItemsInBookmarksList(items: 1)
     }
@@ -249,13 +247,10 @@ class BookmarksTests: BaseTestCase {
         navigator.performAction(Action.AddNewBookmark)
         mozWaitForElementToExist(app.navigationBars["Bookmarks"])
         // Enter the bookmarks details
-        app.tables.cells.textFields.element(boundBy: 0).tap()
-        app.tables.cells.textFields.element(boundBy: 0).typeText("BBC")
-
-        app.tables.cells.textFields["https://"].tap()
-        app.tables.cells.textFields["https://"].typeText("bbc.com")
+        app.textFields[AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.title].tapAndTypeText("BBC")
+        app.textFields[AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.url].tapAndTypeText("bbc.com")
         navigator.performAction(Action.SaveCreatedBookmark)
-        app.buttons["Done"].tap()
+        app.buttons["Done"].tap(force: true)
         // There is one item plus the default Desktop Bookmarks folder
         checkItemsInBookmarksList(items: 2)
     }

@@ -16,8 +16,7 @@ private let SuggestedSite6: String = "foobar bomb baby"
 class SearchTests: BaseTestCase {
     private func typeOnSearchBar(text: String) {
         app.textFields.firstMatch.waitAndTap()
-        app.textFields.firstMatch.tap()
-        app.textFields.firstMatch.typeText(text)
+        app.textFields.firstMatch.tapAndTypeText(text)
     }
 
     private func suggestionsOnOff() {

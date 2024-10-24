@@ -161,11 +161,9 @@ class IntegrationTests: BaseTestCase {
         waitUntilPageLoad()
 
         // Log in in order to save it
-        app.webViews.textFields["Email or phone"].waitAndTap()
-        app.webViews.textFields["Email or phone"].typeText(userName)
+        app.webViews.textFields["Email or phone"].tapAndTypeText(userName)
         app.webViews.buttons["Next"].tap()
-        app.webViews.secureTextFields["Password"].waitAndTap()
-        app.webViews.secureTextFields["Password"].typeText(userPassword)
+        app.webViews.secureTextFields["Password"].tapAndTypeText(userPassword)
 
         app.webViews.buttons["Sign in"].tap()
 
@@ -205,8 +203,7 @@ class IntegrationTests: BaseTestCase {
 
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         let passcodeInput = springboard.secureTextFields["Passcode field"]
-        passcodeInput.tap()
-        passcodeInput.typeText("foo\n")
+        passcodeInput.tapAndTypeText("foo\n")
 
         navigator.goto(LoginsSettings)
         mozWaitForElementToExist(app.tables["Login List"])
@@ -257,8 +254,7 @@ class IntegrationTests: BaseTestCase {
 
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         let passcodeInput = springboard.secureTextFields["Passcode field"]
-        passcodeInput.tap()
-        passcodeInput.typeText("foo\n")
+        passcodeInput.tapAndTypeText("foo\n")
 
         mozWaitForElementToExist(app.tables["Login List"])
         // Verify the login
@@ -302,8 +298,7 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(SettingsScreen)
         navigator.goto(LoginsSettings)
 
-        passcodeInput.tap()
-        passcodeInput.typeText("foo\n")
+        passcodeInput.tapAndTypeText("foo\n")
 
         mozWaitForElementToExist(app.tables["Login List"])
         mozWaitForElementToExist(app.staticTexts["https://accounts.google.com"])

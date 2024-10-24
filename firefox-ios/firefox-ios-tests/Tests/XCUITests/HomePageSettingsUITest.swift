@@ -14,8 +14,7 @@ let urlMozillaLabel = "Internet for people, not profit — Mozilla (US)"
 
 class HomePageSettingsUITests: BaseTestCase {
     private func enterWebPageAsHomepage(text: String) {
-        app.textFields["HomeAsCustomURLTextField"].tap()
-        app.textFields["HomeAsCustomURLTextField"].typeText(text)
+        app.textFields["HomeAsCustomURLTextField"].tapAndTypeText(text)
         let value = app.textFields["HomeAsCustomURLTextField"].value
         XCTAssertEqual(value as? String, text, "The webpage typed does not match with the one saved")
     }

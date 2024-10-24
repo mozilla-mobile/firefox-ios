@@ -93,8 +93,7 @@ class FakespotTests: BaseTestCase {
         if #available(iOS 17, *) {
             // Open a product detail page and check the address bar
             let searchField = app.webViews["contentView"].webViews.textFields["Search for anything"]
-            searchField.waitAndTap()
-            searchField.typeText("Shoe")
+            searchField.tapAndTypeText("Shoe")
             app.webViews["contentView"].webViews.buttons["Search"].waitAndTap()
             waitUntilPageLoad()
             app.webViews["contentView"].links.element(boundBy: 7).tap()
@@ -268,8 +267,7 @@ class FakespotTests: BaseTestCase {
         waitUntilPageLoad()
         if isWalmart {
             let searchWalmart = app.webViews["contentView"].searchFields["Search Walmart"]
-            searchWalmart.waitAndTap()
-            searchWalmart.typeText("shoe")
+            searchWalmart.tapAndTypeText("shoe")
             app.webViews["contentView"].buttons["Search icon"].waitAndTap()
             waitUntilPageLoad()
             scrollToElement(app.links.element(boundBy: 5))
@@ -286,8 +284,7 @@ class FakespotTests: BaseTestCase {
                 let searchText = "Type to search. Navigate forward to hear suggestions"
                 searchBestBuy = app.webViews["contentView"].textFields[searchText]
             }
-            searchBestBuy.waitAndTap()
-            searchBestBuy.typeText("macbook air")
+            searchBestBuy.tapAndTypeText("macbook air")
             app.webViews["contentView"].buttons["submit search"].waitAndTap()
             waitUntilPageLoad()
             scrollToElement(app.webViews["contentView"].links.elementContainingText("Apple").firstMatch)
