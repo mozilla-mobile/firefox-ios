@@ -73,7 +73,7 @@ class SearchEngineSelectionViewController: UIViewController,
     deinit {
         unsubscribeFromRedux()
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -144,8 +144,6 @@ class SearchEngineSelectionViewController: UIViewController,
 
     func newState(state: SearchEngineSelectionState) {
         self.state = state
-
-        print("** loaded new state! \(state)")
 
         // FIXME FXIOS-10189 Eventually we'll have a tableview. Placeholder for temporary testing redux.
         placeholderSwitchSearchEngineButton.setTitle(state.searchEngines.last?.shortName ?? "Empty!", for: .normal)
