@@ -1835,6 +1835,7 @@
 		ED07C0EB2CCADCD5006C0627 /* SearchEngineSelectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED07C0E92CCADCD5006C0627 /* SearchEngineSelectionState.swift */; };
 		ED07C0ED2CCAE745006C0627 /* SearchEngineSelectionAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED07C0EC2CCAE745006C0627 /* SearchEngineSelectionAction.swift */; };
 		ED07C0EF2CCAE856006C0627 /* SearchEngineSelectionMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED07C0EE2CCAE856006C0627 /* SearchEngineSelectionMiddleware.swift */; };
+		ED07C0F22CCAFED1006C0627 /* SearchEngineSelectionStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED07C0F02CCAFEC2006C0627 /* SearchEngineSelectionStateTests.swift */; };
 		ED28DAC92C45A95F00D2641C /* TabScrollBehaviorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED28DAC82C45A95F00D2641C /* TabScrollBehaviorModel.swift */; };
 		ED371A682CB881EF0099F3C8 /* SearchEngineSelectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED371A672CB881EF0099F3C8 /* SearchEngineSelectionCoordinator.swift */; };
 		ED45893E2CC800D9006F2C0B /* SearchEngineSelectionViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED45893D2CC800D9006F2C0B /* SearchEngineSelectionViewControllerTests.swift */; };
@@ -8990,6 +8991,7 @@
 		ED07C0E92CCADCD5006C0627 /* SearchEngineSelectionState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchEngineSelectionState.swift; sourceTree = "<group>"; };
 		ED07C0EC2CCAE745006C0627 /* SearchEngineSelectionAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineSelectionAction.swift; sourceTree = "<group>"; };
 		ED07C0EE2CCAE856006C0627 /* SearchEngineSelectionMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineSelectionMiddleware.swift; sourceTree = "<group>"; };
+		ED07C0F02CCAFEC2006C0627 /* SearchEngineSelectionStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineSelectionStateTests.swift; sourceTree = "<group>"; };
 		ED264785844AD63AD616A882 /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = cy.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		ED28DAC82C45A95F00D2641C /* TabScrollBehaviorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabScrollBehaviorModel.swift; sourceTree = "<group>"; };
 		ED364EECB95B96AB639A82DE /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -10879,6 +10881,7 @@
 				D3FA777A1A43B2990010CD32 /* SearchTests.swift */,
 				96A5F734298D8EB900234E5F /* MockSearchEngineProvider.swift */,
 				EDC3D34E2CB5E70500C62DE3 /* SearchEngineTestAssets.xcassets */,
+				ED07C0F02CCAFEC2006C0627 /* SearchEngineSelectionStateTests.swift */,
 			);
 			path = SearchEngines;
 			sourceTree = "<group>";
@@ -16653,6 +16656,7 @@
 				8CEDF07E2BFE04B100D2617B /* AddressListViewModelTests.swift in Sources */,
 				21D884412A79628E00AF144C /* MockSettingsDelegate.swift in Sources */,
 				F1BC457E2A40F6D2005541D5 /* EnhancedTrackingProtectionCoordinatorTests.swift in Sources */,
+				ED07C0F22CCAFED1006C0627 /* SearchEngineSelectionStateTests.swift in Sources */,
 				8A13FA8F2AD83F00007527AB /* DefaultBackgroundTabLoaderTests.swift in Sources */,
 				8A827E362C20CB5B008D5E3C /* MicrosurveyPromptMiddlewareTests.swift in Sources */,
 				5A31275828906422001F30FA /* BookmarksDelegateMock.swift in Sources */,
