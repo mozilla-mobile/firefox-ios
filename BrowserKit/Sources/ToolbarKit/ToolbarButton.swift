@@ -43,7 +43,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
         removeAllGestureRecognizers()
         configureLongPressGestureRecognizerIfNeeded(for: element)
         configureCustomA11yActionIfNeeded(for: element)
-        shouldDisplayAsHighlighted = element.shouldDisplayAsHighlighted
+        shouldDisplayAsHighlighted = element.isSelected
 
         let image = imageConfiguredForRTL(for: element)
         let action = UIAction(title: element.a11yLabel,
