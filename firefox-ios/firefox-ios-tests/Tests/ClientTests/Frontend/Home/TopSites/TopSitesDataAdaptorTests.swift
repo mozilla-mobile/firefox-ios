@@ -546,7 +546,7 @@ extension TopSitesDataAdaptorTests {
     }
 
     func add(searchEngine: OpenSearchEngine) {
-        profile.searchEngines.defaultEngine = searchEngine
+        profile.searchEnginesManager.defaultEngine = searchEngine
     }
 }
 

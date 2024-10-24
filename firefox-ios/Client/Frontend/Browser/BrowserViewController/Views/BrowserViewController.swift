@@ -1572,12 +1572,12 @@ class BrowserViewController: UIViewController,
         let searchViewModel = SearchViewModel(isPrivate: isPrivate,
                                               isBottomSearchBar: isBottomSearchBar,
                                               profile: profile,
-                                              model: profile.searchEngines,
+                                              model: profile.searchEnginesManager,
                                               tabManager: tabManager)
         let searchController = SearchViewController(profile: profile,
                                                     viewModel: searchViewModel,
                                                     tabManager: tabManager)
-        searchViewModel.searchEngines = profile.searchEngines
+        searchViewModel.searchEnginesManager = profile.searchEnginesManager
         searchController.searchDelegate = self
 
         let searchLoader = SearchLoader(
@@ -2581,7 +2581,7 @@ class BrowserViewController: UIViewController,
     func openSearchNewTab(isPrivate: Bool = false, _ text: String) {
         popToBVC()
 
-        guard let engine = profile.searchEngines.defaultEngine,
+        guard let engine = profile.searchEnginesManager.defaultEngine,
               let searchURL = engine.searchURLForQuery(text)
         else {
             DefaultLogger.shared.log("Error handling URL entry: \"\(text)\".", level: .warning, category: .tabs)
@@ -2994,7 +2994,7 @@ class BrowserViewController: UIViewController,
             .searchScreenState
             .showSearchSugestionsView ?? false
 
-        let isSettingEnabled = profile.searchEngines.shouldShowPrivateModeSearchSuggestions
+        let isSettingEnabled = profile.searchEnginesManager.shouldShowPrivateModeSearchSuggestions
 
         return featureFlagEnabled && !alwaysShowSearchSuggestionsView && !isSettingEnabled
     }

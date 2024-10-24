@@ -80,7 +80,7 @@ extension BookmarkItemData: BookmarksFolderCell {
         // (e.g., "http://foo.com/bar/?query=%s"), and this will get them the same behavior as if
         // they'd copied and pasted into the URL bar.
         // See BrowserViewController.urlBar:didSubmitText:.
-        guard let url = URIFixup.getURL(url) ?? profile.searchEngines.defaultEngine?.searchURLForQuery(url) else {
+        guard let url = URIFixup.getURL(url) ?? profile.searchEnginesManager.defaultEngine?.searchURLForQuery(url) else {
             logger.log("Invalid URL, and couldn't generate a search URL for it.",
                        level: .warning,
                        category: .library)

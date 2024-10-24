@@ -328,7 +328,7 @@ class SearchViewController: SiteTableViewController,
                 ]
             )
 
-            if engine === self.viewModel.searchEngines?.quickSearchEngines.last {
+            if engine === self.viewModel.searchEnginesManager?.quickSearchEngines.last {
                 engineButton.trailingAnchor.constraint(
                     equalTo: searchEngineScrollViewContent.trailingAnchor
                 ).isActive = true
@@ -436,7 +436,7 @@ class SearchViewController: SiteTableViewController,
         searchTelemetry?.engagementType = .tap
         switch SearchListSection(rawValue: indexPath.section)! {
         case .searchSuggestions:
-            guard let defaultEngine = viewModel.searchEngines?.defaultEngine else { return }
+            guard let defaultEngine = viewModel.searchEnginesManager?.defaultEngine else { return }
 
             searchTelemetry?.selectedResult = .searchSuggest
             // Assume that only the default search engine can provide search suggestions.
@@ -525,7 +525,7 @@ class SearchViewController: SiteTableViewController,
         case SearchListSection.firefoxSuggestions.rawValue:
             title = .Search.SuggestSectionTitle
         case SearchListSection.searchSuggestions.rawValue:
-            title = viewModel.searchEngines?.defaultEngine?.headerSearchTitle ?? ""
+            title = viewModel.searchEnginesManager?.defaultEngine?.headerSearchTitle ?? ""
         default:  title = ""
         }
 

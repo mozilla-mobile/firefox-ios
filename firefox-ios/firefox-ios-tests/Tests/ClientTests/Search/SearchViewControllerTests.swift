@@ -11,7 +11,7 @@ import XCTest
 
 class SearchViewControllerTest: XCTestCase {
     var profile: MockProfile!
-    var engines: SearchEngines!
+    var searchEnginesManager: SearchEnginesManager!
     var searchViewController: SearchViewController!
 
     override func setUp() {
@@ -22,7 +22,7 @@ class SearchViewControllerTest: XCTestCase {
         LegacyFeatureFlagsManager.shared.set(feature: .firefoxSuggestFeature, to: true)
 
         let mockSearchEngineProvider = MockSearchEngineProvider()
-        engines = SearchEngines(
+        searchEnginesManager = SearchEnginesManager(
             prefs: profile.prefs,
             files: profile.files,
             engineProvider: mockSearchEngineProvider
@@ -31,7 +31,7 @@ class SearchViewControllerTest: XCTestCase {
             isPrivate: false,
             isBottomSearchBar: false,
             profile: profile,
-            model: engines,
+            model: searchEnginesManager,
             tabManager: MockTabManager()
         )
 
@@ -48,7 +48,7 @@ class SearchViewControllerTest: XCTestCase {
     }
 
     func testHistoryAndBookmarksAreFilteredWhenShowSponsoredSuggestionsIsTrue() {
-        engines.shouldShowSponsoredSuggestions = true
+        searchEnginesManager.shouldShowSponsoredSuggestions = true
         let data = ArrayCursor<Site>(data: [ Site(url: "https://example.com?mfadid=adm", title: "Test1"),
                                              Site(url: "https://example.com", title: "Test2"),
                                              Site(url: "https://example.com?a=b&c=d", title: "Test3")])
@@ -58,7 +58,7 @@ class SearchViewControllerTest: XCTestCase {
     }
 
     func testHistoryAndBookmarksAreNotFilteredWhenShowSponsoredSuggestionsIsFalse() {
-        engines.shouldShowSponsoredSuggestions = false
+        searchEnginesManager.shouldShowSponsoredSuggestions = false
         let data = ArrayCursor<Site>(data: [ Site(url: "https://example.com?mfadid=adm", title: "Test1"),
                                              Site(url: "https://example.com", title: "Test2"),
                                              Site(url: "https://example.com?a=b&c=d", title: "Test3")])

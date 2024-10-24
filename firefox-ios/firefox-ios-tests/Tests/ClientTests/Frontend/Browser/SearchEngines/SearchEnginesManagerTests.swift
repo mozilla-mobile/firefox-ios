@@ -7,11 +7,11 @@ import Foundation
 import XCTest
 import Shared
 
-class SearchEnginesTests: XCTestCase {
+class SearchEnginesManagerTests: XCTestCase {
     private let defaultSearchEngineName = "ATester"
     private let expectedEngineNames = ["ATester", "BTester", "CTester", "DTester", "ETester", "FTester"]
     private var profile: Profile!
-    private var engines: SearchEngines!
+    private var searchEnginesManager: SearchEnginesManager!
     private var orderedEngines: [OpenSearchEngine]!
     private var mockSearchEngineProvider: MockSearchEngineProvider!
 
@@ -20,7 +20,7 @@ class SearchEnginesTests: XCTestCase {
 
         profile = MockProfile()
         mockSearchEngineProvider = MockSearchEngineProvider()
-        engines = SearchEngines(
+        searchEnginesManager = SearchEnginesManager(
             prefs: profile.prefs,
             files: profile.files,
             engineProvider: mockSearchEngineProvider
@@ -32,15 +32,15 @@ class SearchEnginesTests: XCTestCase {
 
         profile = nil
         mockSearchEngineProvider = nil
-        engines = nil
+        searchEnginesManager = nil
     }
 
     func testIncludesExpectedEngines() {
         // Verify that the set of shipped engines includes the expected subset.
         let expectation = expectation(description: "Completed parse engines")
 
-        engines.getOrderedEngines { result in
-            XCTAssertEqual(self.engines.orderedEngines.count, 6)
+        searchEnginesManager.getOrderedEngines { result in
+            XCTAssertEqual(self.searchEnginesManager.orderedEngines.count, 6)
             expectation.fulfill()
         }
 
@@ -49,12 +49,12 @@ class SearchEnginesTests: XCTestCase {
 
     func testDefaultEngineOnStartup() {
         // If this is our first run, Google should be first for the en locale.
-        XCTAssertEqual(engines.defaultEngine?.shortName, defaultSearchEngineName)
-        XCTAssertEqual(engines.orderedEngines[0].shortName, defaultSearchEngineName)
+        XCTAssertEqual(searchEnginesManager.defaultEngine?.shortName, defaultSearchEngineName)
+        XCTAssertEqual(searchEnginesManager.orderedEngines[0].shortName, defaultSearchEngineName)
     }
 
     func testAddingAndDeletingCustomEngines() {
-        guard let testImage = UIImage(named: "wikipedia", in: Bundle(for: SearchEnginesTests.self), with: nil) else {
+        guard let testImage = UIImage(named: "wikipedia", in: Bundle(for: SearchEnginesManagerTests.self), with: nil) else {
             XCTFail("Check that image is bundled for testing")
             return
         }
@@ -65,32 +65,32 @@ class SearchEnginesTests: XCTestCase {
                                           suggestTemplate: nil,
                                           isCustomEngine: true)
 
-        engines.orderedEngines[0] = testEngine
-        engines.addSearchEngine(testEngine)
-        XCTAssertEqual(engines.orderedEngines[1].engineID, testEngine.engineID)
+        searchEnginesManager.orderedEngines[0] = testEngine
+        searchEnginesManager.addSearchEngine(testEngine)
+        XCTAssertEqual(searchEnginesManager.orderedEngines[1].engineID, testEngine.engineID)
 
         var deleted: [OpenSearchEngine] = []
-        engines.deleteCustomEngine(testEngine) { [self] in
-            deleted = engines.orderedEngines.filter { $0 == testEngine }
+        searchEnginesManager.deleteCustomEngine(testEngine) { [self] in
+            deleted = searchEnginesManager.orderedEngines.filter { $0 == testEngine }
         }
 
         XCTAssertEqual(deleted, [])
     }
 
     func testDefaultEngine() {
-        let engineSet = engines.orderedEngines
+        let engineSet = searchEnginesManager.orderedEngines
 
-        engines.defaultEngine = (engineSet?[0])!
-        XCTAssertTrue(engines.isEngineDefault((engineSet?[0])!))
-        XCTAssertFalse(engines.isEngineDefault((engineSet?[1])!))
+        searchEnginesManager.defaultEngine = (engineSet?[0])!
+        XCTAssertTrue(searchEnginesManager.isEngineDefault((engineSet?[0])!))
+        XCTAssertFalse(searchEnginesManager.isEngineDefault((engineSet?[1])!))
         // The first ordered engine is the default.
-        XCTAssertEqual(engines.orderedEngines[0].shortName, engineSet?[0].shortName)
+        XCTAssertEqual(searchEnginesManager.orderedEngines[0].shortName, engineSet?[0].shortName)
 
-        engines.defaultEngine = (engineSet?[1])!
-        XCTAssertFalse(engines.isEngineDefault((engineSet?[0])!))
-        XCTAssertTrue(engines.isEngineDefault((engineSet?[1])!))
+        searchEnginesManager.defaultEngine = (engineSet?[1])!
+        XCTAssertFalse(searchEnginesManager.isEngineDefault((engineSet?[0])!))
+        XCTAssertTrue(searchEnginesManager.isEngineDefault((engineSet?[1])!))
         // The first ordered engine is the default.
-        XCTAssertEqual(engines.orderedEngines[0].shortName, engineSet?[1].shortName)
+        XCTAssertEqual(searchEnginesManager.orderedEngines[0].shortName, engineSet?[1].shortName)
 
         // Persistence can't be tested without the fixture changing. 
     }
@@ -99,7 +99,7 @@ class SearchEnginesTests: XCTestCase {
         // Persistence can't be tested without the default fixture changing.
         // Remaining engines should be appended in alphabetical order.
         let expectation = expectation(description: "Completed parse engines")
-        engines.getOrderedEngines { [weak self] orderedEngines in
+        searchEnginesManager.getOrderedEngines { [weak self] orderedEngines in
             guard let self = self else {
                 XCTFail("Could not weakify self.")
                 return
@@ -115,45 +115,45 @@ class SearchEnginesTests: XCTestCase {
     }
 
     func testQuickSearchEngines() {
-        let engineSet = engines.orderedEngines
+        let engineSet = searchEnginesManager.orderedEngines
 
         // You can't disable the default engine.
-        engines.defaultEngine = (engineSet?[1])!
-        engines.disableEngine((engineSet?[1])!)
-        XCTAssertTrue(engines.isEngineEnabled((engineSet?[1])!))
+        searchEnginesManager.defaultEngine = (engineSet?[1])!
+        searchEnginesManager.disableEngine((engineSet?[1])!)
+        XCTAssertTrue(searchEnginesManager.isEngineEnabled((engineSet?[1])!))
 
         // The default engine is not included in the quick search engines.
         XCTAssertEqual(
             0,
-            engines.quickSearchEngines.filter { engine in engine.shortName == engineSet?[1].shortName }.count)
+            searchEnginesManager.quickSearchEngines.filter { engine in engine.shortName == engineSet?[1].shortName }.count)
 
         // Enable and disable work.
-        engines.enableEngine((engineSet?[0])!)
-        XCTAssertTrue(engines.isEngineEnabled((engineSet?[0])!))
+        searchEnginesManager.enableEngine((engineSet?[0])!)
+        XCTAssertTrue(searchEnginesManager.isEngineEnabled((engineSet?[0])!))
         XCTAssertEqual(
             1,
-            engines.quickSearchEngines.filter { engine in engine.shortName == engineSet?[0].shortName }.count)
+            searchEnginesManager.quickSearchEngines.filter { engine in engine.shortName == engineSet?[0].shortName }.count)
 
-        engines.disableEngine((engineSet?[0])!)
-        XCTAssertFalse(engines.isEngineEnabled((engineSet?[0])!))
+        searchEnginesManager.disableEngine((engineSet?[0])!)
+        XCTAssertFalse(searchEnginesManager.isEngineEnabled((engineSet?[0])!))
         XCTAssertEqual(
             0,
-            engines.quickSearchEngines.filter { engine in engine.shortName == engineSet?[0].shortName }.count)
+            searchEnginesManager.quickSearchEngines.filter { engine in engine.shortName == engineSet?[0].shortName }.count)
         // Setting the default engine enables it.
-        engines.defaultEngine = (engineSet?[0])!
-        XCTAssertTrue(engines.isEngineEnabled((engineSet?[1])!))
+        searchEnginesManager.defaultEngine = (engineSet?[0])!
+        XCTAssertTrue(searchEnginesManager.isEngineEnabled((engineSet?[1])!))
 
         // Setting the order may change the default engine, which enables it.
-        engines.orderedEngines = [(engineSet?[2])!, (engineSet?[1])!, (engineSet?[0])!]
-        XCTAssertTrue(engines.isEngineDefault((engineSet?[2])!))
-        XCTAssertTrue(engines.isEngineEnabled((engineSet?[2])!))
+        searchEnginesManager.orderedEngines = [(engineSet?[2])!, (engineSet?[1])!, (engineSet?[0])!]
+        XCTAssertTrue(searchEnginesManager.isEngineDefault((engineSet?[2])!))
+        XCTAssertTrue(searchEnginesManager.isEngineEnabled((engineSet?[2])!))
 
         // The enabling should be persisted.
-        engines.enableEngine((engineSet?[2])!)
-        engines.disableEngine((engineSet?[1])!)
-        engines.enableEngine((engineSet?[0])!)
+        searchEnginesManager.enableEngine((engineSet?[2])!)
+        searchEnginesManager.disableEngine((engineSet?[1])!)
+        searchEnginesManager.enableEngine((engineSet?[0])!)
 
-        let engines2 = SearchEngines(prefs: profile.prefs, files: profile.files)
+        let engines2 = SearchEnginesManager(prefs: profile.prefs, files: profile.files)
         XCTAssertTrue(engines2.isEngineEnabled((engineSet?[2])!))
         XCTAssertFalse(engines2.isEngineEnabled((engineSet?[1])!))
         XCTAssertTrue(engines2.isEngineEnabled((engineSet?[0])!))
@@ -161,27 +161,27 @@ class SearchEnginesTests: XCTestCase {
 
     func testSearchSuggestionSettings() {
         // By default, you should see search suggestions
-        XCTAssertTrue(engines.shouldShowSearchSuggestions)
+        XCTAssertTrue(searchEnginesManager.shouldShowSearchSuggestions)
 
         // Persistence can't be tested without the default fixture changing.
         // Setting should be persisted.
-        engines.shouldShowSearchSuggestions = false
-        XCTAssertFalse(engines.shouldShowSearchSuggestions)
+        searchEnginesManager.shouldShowSearchSuggestions = false
+        XCTAssertFalse(searchEnginesManager.shouldShowSearchSuggestions)
     }
 
     func testShowSearchSuggestionSettingsInPrivateMode() {
         // Disable search suggestions by default
-        XCTAssertFalse(engines.shouldShowPrivateModeSearchSuggestions)
+        XCTAssertFalse(searchEnginesManager.shouldShowPrivateModeSearchSuggestions)
         XCTAssertEqual(profile.prefs.boolForKey(PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions), false)
 
         // Turn off setting
-        engines.shouldShowPrivateModeSearchSuggestions = false
-        XCTAssertFalse(engines.shouldShowPrivateModeSearchSuggestions)
+        searchEnginesManager.shouldShowPrivateModeSearchSuggestions = false
+        XCTAssertFalse(searchEnginesManager.shouldShowPrivateModeSearchSuggestions)
         XCTAssertEqual(profile.prefs.boolForKey(PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions), false)
 
         // Turn on setting
-        engines.shouldShowPrivateModeSearchSuggestions = true
-        XCTAssertTrue(engines.shouldShowPrivateModeSearchSuggestions)
+        searchEnginesManager.shouldShowPrivateModeSearchSuggestions = true
+        XCTAssertTrue(searchEnginesManager.shouldShowPrivateModeSearchSuggestions)
         XCTAssertEqual(profile.prefs.boolForKey(PrefsKeys.SearchSettings.showPrivateModeSearchSuggestions), true)
     }
 
@@ -189,9 +189,9 @@ class SearchEnginesTests: XCTestCase {
         // Verify that the set of shipped engines includes the expected subset.
         let expectation = expectation(description: "Completed parse engines")
 
-        engines.getOrderedEngines { result in
-            XCTAssert(self.engines.orderedEngines.count > 1, "There should be more than one search engine")
-            XCTAssertEqual(self.engines.orderedEngines.first?.shortName, "ATester")
+        searchEnginesManager.getOrderedEngines { result in
+            XCTAssert(self.searchEnginesManager.orderedEngines.count > 1, "There should be more than one search engine")
+            XCTAssertEqual(self.searchEnginesManager.orderedEngines.first?.shortName, "ATester")
             expectation.fulfill()
         }
 

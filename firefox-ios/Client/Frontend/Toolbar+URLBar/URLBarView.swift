@@ -89,7 +89,7 @@ class URLBarView: UIView,
     }
 
     var parent: UIStackView?
-    var searchEngines: SearchEngines?
+    var searchEnginesManager: SearchEnginesManager?
     weak var delegate: URLBarDelegate?
     weak var tabToolbarDelegate: TabToolbarDelegate?
     var helper: TabToolbarHelper?
@@ -245,7 +245,7 @@ class URLBarView: UIView,
     init(profile: Profile, windowUUID: WindowUUID) {
         self.profile = profile
         self.windowUUID = windowUUID
-        self.searchEngines = SearchEngines(prefs: profile.prefs, files: profile.files)
+        self.searchEnginesManager = SearchEnginesManager(prefs: profile.prefs, files: profile.files)
         super.init(frame: CGRect())
         commonInit()
     }
@@ -255,7 +255,7 @@ class URLBarView: UIView,
     }
 
     func searchEnginesDidUpdate() {
-        let engineID = profile.searchEngines.defaultEngine?.engineID ?? "custom"
+        let engineID = profile.searchEnginesManager.defaultEngine?.engineID ?? "custom"
         TelemetryWrapper.recordEvent(
             category: .information,
             method: .change,
@@ -264,8 +264,8 @@ class URLBarView: UIView,
             extras: [TelemetryWrapper.EventExtraKey.recordSearchEngineID.rawValue: engineID]
         )
 
-        self.searchIconImageView.image = profile.searchEngines.defaultEngine?.image
-        self.searchIconImageView.largeContentTitle = profile.searchEngines.defaultEngine?.shortName
+        self.searchIconImageView.image = profile.searchEnginesManager.defaultEngine?.image
+        self.searchIconImageView.largeContentTitle = profile.searchEnginesManager.defaultEngine?.shortName
         self.searchIconImageView.largeContentImage = nil
     }
 
@@ -291,7 +291,7 @@ class URLBarView: UIView,
             addSubview($0)
         }
 
-        profile.searchEngines.delegate = self
+        profile.searchEnginesManager.delegate = self
 
         privateModeBadge.add(toParent: self)
         warningMenuBadge.add(toParent: self)

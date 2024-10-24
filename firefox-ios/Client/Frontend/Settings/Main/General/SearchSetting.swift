@@ -16,7 +16,7 @@ class SearchSetting: Setting {
 
     override var status: NSAttributedString {
         return NSAttributedString(
-            string: profile.searchEngines.defaultEngine?.shortName ?? ""
+            string: profile.searchEnginesManager.defaultEngine?.shortName ?? ""
         )
     }
 

@@ -88,7 +88,7 @@ protocol Profile: AnyObject {
     var prefs: Prefs { get }
     var queue: TabQueue { get }
     #if !MOZ_TARGET_NOTIFICATIONSERVICE && !MOZ_TARGET_SHARETO && !MOZ_TARGET_CREDENTIAL_PROVIDER
-    var searchEngines: SearchEngines { get }
+    var searchEnginesManager: SearchEnginesManager { get }
     #endif
     var files: FileAccessor { get }
     var pinnedSites: PinnedSites { get }
@@ -470,8 +470,8 @@ open class BrowserProfile: Profile {
     lazy var autofill = RustAutofill(databasePath: autofillDbPath)
 
     #if !MOZ_TARGET_NOTIFICATIONSERVICE && !MOZ_TARGET_SHARETO && !MOZ_TARGET_CREDENTIAL_PROVIDER
-    lazy var searchEngines: SearchEngines = {
-        return SearchEngines(prefs: self.prefs, files: self.files)
+    lazy var searchEnginesManager: SearchEnginesManager = {
+        return SearchEnginesManager(prefs: self.prefs, files: self.files)
     }()
     #endif
 

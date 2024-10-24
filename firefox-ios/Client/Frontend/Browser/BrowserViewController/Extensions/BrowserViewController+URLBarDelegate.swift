@@ -206,7 +206,7 @@ extension BrowserViewController: URLBarDelegate {
         if let url = searchURL, InternalURL.isValid(url: url) {
             searchURL = url
         }
-        if let query = profile.searchEngines.queryForSearchURL(searchURL as URL?) {
+        if let query = profile.searchEnginesManager.queryForSearchURL(searchURL as URL?) {
             return (query, true)
         } else {
             return (url?.absoluteString, false)
@@ -255,7 +255,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func submitSearchText(_ text: String, forTab tab: Tab) {
-        guard let engine = profile.searchEngines.defaultEngine,
+        guard let engine = profile.searchEnginesManager.defaultEngine,
               let searchURL = engine.searchURLForQuery(text)
         else {
             DefaultLogger.shared.log("Error handling URL entry: \"\(text)\".", level: .warning, category: .tabs)

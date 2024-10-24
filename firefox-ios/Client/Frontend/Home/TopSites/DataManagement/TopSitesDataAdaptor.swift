@@ -173,7 +173,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
         if sponsoredTileSpaces > 0 {
             sites.addSponsoredTiles(sponsoredTileSpaces: sponsoredTileSpaces,
                                     contiles: contiles,
-                                    defaultSearchEngine: profile.searchEngines.defaultEngine)
+                                    defaultSearchEngine: profile.searchEnginesManager.defaultEngine)
         }
     }
 
