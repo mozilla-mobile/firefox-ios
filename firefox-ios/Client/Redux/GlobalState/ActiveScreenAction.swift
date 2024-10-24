@@ -33,6 +33,7 @@ enum AppScreen {
     case trackingProtection
     case toolbar
     case passwordGenerator
+    case nativeErrorPage
 }
 
 enum ScreenActionType: ActionType {
