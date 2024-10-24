@@ -95,6 +95,7 @@ public struct StandardImageIdentifiers {
         public static let notificationDotFill = "notificationDotFillLarge"
         public static let packaging = "packagingLarge"
         public static let pageZoom = "pageZoomLarge"
+        public static let pageZoomFilled = "pageZoomFillLarge"
         public static let pin = "pinLarge"
         public static let pinSlash = "pinSlashLarge"
         public static let plus = "plusLarge"

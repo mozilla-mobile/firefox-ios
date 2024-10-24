@@ -22,7 +22,8 @@ struct MainMenuConfigurationUtility: Equatable {
         static let getHelp = StandardImageIdentifiers.Large.helpCircle
         static let settings = StandardImageIdentifiers.Large.settings
         static let whatsNew = StandardImageIdentifiers.Large.whatsNew
-        static let zoom = StandardImageIdentifiers.Large.pageZoom
+        static let zoomOff = StandardImageIdentifiers.Large.pageZoom
+        static let zoomOn = StandardImageIdentifiers.Large.pageZoomFilled
         static let readerViewOn = StandardImageIdentifiers.Large.readerView
         static let readerViewOff = StandardImageIdentifiers.Large.readerViewFill
         static let nightModeOff = StandardImageIdentifiers.Large.nightMode
@@ -248,7 +249,7 @@ struct MainMenuConfigurationUtility: Equatable {
             MenuSection(
                 options: [
                     configureZoomItem(with: uuid, and: tabInfo),
-                    configureReaderModeItem(with: uuid, tabInfo: tabInfo, and: readerModeState),
+//                    configureReaderModeItem(with: uuid, tabInfo: tabInfo, and: readerModeState),
                     configureNightModeItem(with: uuid),
                     MenuElement(
                         title: .MainMenu.Submenus.Tools.ReportBrokenSite,
@@ -310,10 +311,11 @@ struct MainMenuConfigurationUtility: Equatable {
             number: .percent
         )
         let title = String(format: .MainMenu.Submenus.Tools.Zoom, zoomLevel)
+        let icon = tabInfo.zoomLevel == 1.0 ? Icons.zoomOff : Icons.zoomOn
 
         return MenuElement(
             title: title,
-            iconName: Icons.zoom,
+            iconName: icon,
             isEnabled: true,
             isActive: tabInfo.zoomLevel != 1.0,
             a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.Zoom,
