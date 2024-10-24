@@ -26,7 +26,6 @@ final class AddressToolbarContainer: UIView,
                                      AlphaDimmable,
                                      StoreSubscriber,
                                      AddressToolbarDelegate,
-                                     MenuHelperURLBarInterface,
                                      Autocompletable,
                                      URLBarViewProtocol {
     private enum UX {
@@ -348,20 +347,6 @@ final class AddressToolbarContainer: UIView,
 
     func addressToolbarNeedsSearchReset() {
         delegate?.searchSuggestions(searchTerm: "")
-    }
-
-    // MARK: - MenuHelperURLBarInterface
-    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        if action == MenuHelperURLBarModel.selectorPasteAndGo {
-            return UIPasteboard.general.hasStrings
-        }
-
-        return super.canPerformAction(action, withSender: sender)
-    }
-
-    func menuHelperPasteAndGo() {
-        guard let pasteboardContents = UIPasteboard.general.string else { return }
-        delegate?.openBrowser(searchTerm: pasteboardContents)
     }
 
     // MARK: - Autocompletable
