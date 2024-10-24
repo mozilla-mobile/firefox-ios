@@ -8,6 +8,8 @@ import Common
 import Shared
 import Redux
 
+import struct MozillaAppServices.Device
+
 class RemoteTabsPanelMiddleware {
     private let profile: Profile
     var notificationCenter: NotificationProtocol
@@ -35,13 +37,15 @@ class RemoteTabsPanelMiddleware {
             store.dispatch(accountChangeAction)
         case RemoteTabsPanelActionType.refreshTabs:
             self.getSyncState(window: uuid)
+        case RemoteTabsPanelActionType.refreshTabsWithCache:
+            self.getSyncState(window: uuid, useCache: true)
         default:
             break
         }
     }
 
     // MARK: - Internal Utilities
-    private func getSyncState(window: WindowUUID) {
+    private func getSyncState(window: WindowUUID, useCache: Bool = false) {
         ensureMainThread { [self] in
             guard self.hasSyncableAccount else {
                 let action = RemoteTabsPanelAction(reason: .notLoggedIn,
@@ -67,12 +71,15 @@ class RemoteTabsPanelMiddleware {
                                                actionType: RemoteTabsPanelActionType.refreshDidBegin)
             store.dispatch(action)
 
-            getRemoteTabs(window: window)
+            getTabsAndDevices(window: window, useCache: useCache)
         }
     }
 
-    private func getRemoteTabs(window: WindowUUID) {
-        profile.getClientsAndTabs { result in
+    private func getTabsAndDevices(window: WindowUUID, useCache: Bool = false) {
+        let fetchClientsAndTabs: (@escaping ([ClientAndTabs]?) -> Void) -> Void = useCache ?
+            profile.getCachedClientsAndTabs :
+            profile.getClientsAndTabs
+        fetchClientsAndTabs { result in
             guard let clientAndTabs = result else {
                 let action = RemoteTabsPanelAction(reason: .failedToSync,
                                                    windowUUID: window,
@@ -80,10 +87,21 @@ class RemoteTabsPanelMiddleware {
                 store.dispatch(action)
                 return
             }
+            var action: RemoteTabsPanelAction
 
-            let action = RemoteTabsPanelAction(clientAndTabs: clientAndTabs,
+            if let constellation = self.profile.rustFxA.accountManager?.deviceConstellation() {
+                constellation.refreshState()
+
+                action = RemoteTabsPanelAction(clientAndTabs: clientAndTabs,
+                                               devices: constellation.state()?.remoteDevices,
                                                windowUUID: window,
                                                actionType: RemoteTabsPanelActionType.refreshDidSucceed)
+            } else {
+                action = RemoteTabsPanelAction(clientAndTabs: clientAndTabs,
+                                               devices: nil,
+                                               windowUUID: window,
+                                               actionType: RemoteTabsPanelActionType.refreshDidSucceed)
+            }
             store.dispatch(action)
         }
     }
@@ -99,6 +117,10 @@ class RemoteTabsPanelMiddleware {
                                        selector: #selector(notificationReceived),
                                        name: .ProfileDidFinishSyncing,
                                        object: nil)
+        notificationCenter.addObserver(self,
+                                       selector: #selector(notificationReceived),
+                                       name: .constellationStateUpdate,
+                                       object: nil)
     }
 
     @objc
@@ -113,6 +135,10 @@ class RemoteTabsPanelMiddleware {
                                                     windowUUID: WindowUUID.unavailable,
                                                     actionType: TabTrayActionType.firefoxAccountChanged)
             store.dispatch(accountChangeAction)
+        case .constellationStateUpdate:
+            let action = RemoteTabsPanelAction(windowUUID: WindowUUID.unavailable,
+                                               actionType: RemoteTabsPanelActionType.remoteDevicesChanged)
+            store.dispatch(action)
         default: break
         }
     }

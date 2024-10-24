@@ -67,7 +67,15 @@ class TabManagerMiddleware {
         case RemoteTabsPanelActionType.openSelectedURL:
             guard let url = action.url else { return }
             openSelectedURL(url: url, showOverlay: false, windowUUID: action.windowUUID)
-
+        case RemoteTabsPanelActionType.closeSelectedRemoteURL:
+            guard let url = action.url, let deviceId = action.targetDeviceId else { return }
+            closeSelectedRemoteTab(deviceId: deviceId, url: url, windowUUID: action.windowUUID)
+        case RemoteTabsPanelActionType.undoCloseSelectedRemoteURL:
+            guard let url = action.url, let deviceId = action.targetDeviceId else { return }
+            undoCloseSelectedRemoteTab(deviceId: deviceId, url: url, windowUUID: action.windowUUID)
+        case RemoteTabsPanelActionType.flushTabCommands:
+            guard let deviceId = action.targetDeviceId else { return }
+            flushTabCommands(deviceId: deviceId, windowUUID: action.windowUUID)
         default:
             break
         }
@@ -185,6 +193,18 @@ class TabManagerMiddleware {
                                      object: .syncTab)
         let urlRequest = URLRequest(url: url)
         self.addNewTab(with: urlRequest, isPrivate: false, showOverlay: showOverlay, for: windowUUID)
+    }
+
+    private func closeSelectedRemoteTab(deviceId: String, url: URL, windowUUID: WindowUUID) {
+        self.profile.addTabToCommandQueue(deviceId, url: url)
+    }
+
+    private func undoCloseSelectedRemoteTab(deviceId: String, url: URL, windowUUID: WindowUUID) {
+        self.profile.removeTabFromCommandQueue(deviceId, url: url)
+    }
+
+    private func flushTabCommands(deviceId: String, windowUUID: WindowUUID) {
+        self.profile.flushTabCommands(toDeviceId: deviceId)
     }
 
     /// Gets initial state for TabTrayModel includes panelType, if is on Private mode,
