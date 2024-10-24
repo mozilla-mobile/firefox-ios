@@ -7,18 +7,21 @@ import Foundation
 public class DefaultLogger: Logger {
     public static let shared = DefaultLogger()
 
-    private var logger: SwiftyBeaverWrapper.Type
+    private let logger: SwiftyBeaverWrapper.Type
     private var crashManager: CrashManager?
-    private var fileManager: LoggerFileManager
+    private let fileManager: LoggerFileManager
+    private let spamFilter: LoggerSpamFilter
 
     public var crashedLastLaunch: Bool {
         return crashManager?.crashedLastLaunch ?? false
     }
 
     init(swiftyBeaverBuilder: SwiftyBeaverBuilder = DefaultSwiftyBeaverBuilder(),
-         fileManager: LoggerFileManager = DefaultLoggerFileManager()) {
+         fileManager: LoggerFileManager = DefaultLoggerFileManager(),
+         spamFilter: LoggerSpamFilter = DefaultLoggerSpamFilter()) {
         self.fileManager = fileManager
         self.logger = swiftyBeaverBuilder.setup(with: fileManager.getLogDestination())
+        self.spamFilter = spamFilter
     }
 
     public func configure(crashManager: CrashManager) {
@@ -52,16 +55,21 @@ public class DefaultLogger: Logger {
             loggerMessage.append("\(prefix)\(reducedExtra)")
         }
 
+        // Handle automatic spam filtering for redundant logging
+        let isSpam = spamFilter.detectLoggerSpam(loggerMessage, category: category, for: self)
+
         // Log locally and in console
-        switch level {
-        case .debug:
-            logger.debug(loggerMessage, file: file, function: function, line: line, context: category)
-        case .info:
-            logger.info(loggerMessage, file: file, function: function, line: line, context: category)
-        case .warning:
-            logger.warning(loggerMessage, file: file, function: function, line: line, context: category)
-        case .fatal:
-            logger.error(loggerMessage, file: file, function: function, line: line, context: category)
+        if !isSpam {
+            switch level {
+            case .debug:
+                logger.debug(loggerMessage, file: file, function: function, line: line, context: category)
+            case .info:
+                logger.info(loggerMessage, file: file, function: function, line: line, context: category)
+            case .warning:
+                logger.warning(loggerMessage, file: file, function: function, line: line, context: category)
+            case .fatal:
+                logger.error(loggerMessage, file: file, function: function, line: line, context: category)
+            }
         }
 
         // Log to sentry
