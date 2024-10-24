@@ -15,6 +15,8 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
+        // restore webView content background color to default
+        webView.evaluateJavascriptInDefaultContentWorld("document.body.style.backgroundColor = '';")
         for delegate in delegates {
             delegate.webView?(webView, didCommit: navigation)
         }
@@ -77,6 +79,8 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        // Set webView content background to transparent so that WKCompositingView doesn't show gray background while loading
+        webView.evaluateJavascriptInDefaultContentWorld("document.body.style.backgroundColor = 'transparent';")
         for delegate in delegates {
             delegate.webView?(webView, didStartProvisionalNavigation: navigation)
         }
