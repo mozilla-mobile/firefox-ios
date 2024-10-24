@@ -116,6 +116,7 @@ class SearchEnginesManager {
         }
     }
 
+    // The subset of search engines that are enabled and not the default search engine.
     var quickSearchEngines: [OpenSearchEngine]! {
         return self.orderedEngines.filter({ (engine) in !self.isEngineDefault(engine) && self.isEngineEnabled(engine) })
     }
