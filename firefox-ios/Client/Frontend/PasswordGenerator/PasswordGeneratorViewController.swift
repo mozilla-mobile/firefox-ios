@@ -7,6 +7,7 @@ import ComponentLibrary
 import Shared
 import UIKit
 import Redux
+import WebKit
 
 class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themeable, Notifiable {
     private enum UX {
@@ -26,6 +27,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
     private var currentTab: Tab
+    private var currentFrame: WKFrameInfo
 
     // MARK: - Views
 
@@ -43,7 +45,16 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
 
     private lazy var header: PasswordGeneratorHeaderView = .build()
 
-    private lazy var passwordField: PasswordGeneratorPasswordFieldView = .build()
+    private lazy var passwordField: PasswordGeneratorPasswordFieldView = .build { [weak self] view in
+        view.refreshPasswordButtonOnClick = {
+            guard let self else {return}
+            store.dispatch(PasswordGeneratorAction(
+                windowUUID: self.windowUUID,
+                actionType: PasswordGeneratorActionType.userTappedRefreshPassword,
+                currentFrame: self.currentFrame)
+            )
+        }
+    }
 
     private lazy var usePasswordButton: PrimaryRoundedButton = .build()
 
@@ -52,12 +63,14 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     init(windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         currentTab: Tab) {
+         currentTab: Tab,
+         currentFrame: WKFrameInfo) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.passwordGeneratorState = PasswordGeneratorState(windowUUID: windowUUID)
         self.currentTab = currentTab
+        self.currentFrame = currentFrame
         super.init(nibName: nil, bundle: nil)
         self.subscribeToRedux()
         setupNotifications(forObserver: self,
@@ -136,6 +149,14 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
             usePasswordButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
+    // MARK: - Interaction Handlers
+    @objc
+    func useButtonOnClick() {
+        store.dispatch(PasswordGeneratorAction(windowUUID: windowUUID,
+                                               actionType: PasswordGeneratorActionType.userTappedUsePassword,
+                                               currentFrame: currentFrame))
+        dismiss(animated: true)
+    }
 
     // MARK: - Themable
     func applyTheme() {
@@ -152,6 +173,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
             title: .PasswordGenerator.UsePasswordButtonLabel,
             a11yIdentifier: AccessibilityIdentifiers.PasswordGenerator.usePasswordButton)
         usePasswordButton.configure(viewModel: usePasswordButtonVM)
+        usePasswordButton.addTarget(self, action: #selector(useButtonOnClick), for: .touchUpInside)
     }
 
     // MARK: - Redux
@@ -203,5 +225,5 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
 }
 
 extension PasswordGeneratorViewController: BottomSheetChild {
-    func willDismiss() { }
+    func willDismiss() { currentTab.webView?.accessoryView.reloadViewFor(.standard)}
 }

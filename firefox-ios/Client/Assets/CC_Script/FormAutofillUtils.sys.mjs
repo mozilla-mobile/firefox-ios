@@ -135,6 +135,10 @@ FormAutofillUtils = {
     "address-line3": "address",
     "address-level1": "address",
     "address-level2": "address",
+    // DE addresses are often split into street name and house number;
+    // combined they form address-line1
+    "address-streetname": "address",
+    "address-housenumber": "address",
     "postal-code": "address",
     country: "address",
     "country-name": "address",
@@ -378,6 +382,15 @@ FormAutofillUtils = {
   toOneLineAddress(address, delimiter = "\n") {
     let addressParts = this._toStreetAddressParts(address, delimiter);
     return addressParts.join(this.getAddressSeparator());
+  },
+
+  /**
+   * Returns false if an address is written <number> <street>
+   * and true if an address is written <street> <number>. In the future, this
+   * can be expanded to format an address
+   */
+  getAddressReversed(region) {
+    return this.getCountryAddressData(region).address_reversed;
   },
 
   /**

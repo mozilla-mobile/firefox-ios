@@ -26,10 +26,12 @@ class PhotonActionSheetTests: BaseTestCase {
         // Remove pin
         cell.press(forDuration: 2)
         app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash].tap()
-
         // Check that it has been unpinned
-        // Adding sleep as an workaround until https://github.com/mozilla-mobile/firefox-ios/issues/22323 is fixed
-        sleep(5)
+        /* FIXME: Adding a workaround until https://github.com/mozilla-mobile/firefox-ios/issues/22323 is fixed
+         * We will wait for the pinned icon on the example.com tile to disappear (max 8 seconds polling)
+         */
+        waitForNoExistence(app.cells["Example Domain"].images[StandardImageIdentifiers.Small.pinBadgeFill], timeoutValue: 8)
+
         cell.press(forDuration: 2)
         mozWaitForElementToExist(app.tables.cells.otherElements[StandardImageIdentifiers.Large.pin])
     }
@@ -91,8 +93,7 @@ class PhotonActionSheetTests: BaseTestCase {
         if #unavailable(iOS 17) {
             fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 2)
         }
-        mozWaitForElementToExist(fennecElement)
-        fennecElement.tap()
+        fennecElement.waitAndTap()
         mozWaitForElementToExist(app.navigationBars["ShareTo.ShareView"])
     }
 
@@ -110,8 +111,7 @@ class PhotonActionSheetTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2323203
     func testShareSheetSendToDevice() {
         openNewShareSheet()
-        mozWaitForElementToExist(app.staticTexts["Send to Device"])
-        app.staticTexts["Send to Device"].tap()
+        app.staticTexts["Send to Device"].waitAndTap()
         mozWaitForElementToExist(
             app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton]
         )

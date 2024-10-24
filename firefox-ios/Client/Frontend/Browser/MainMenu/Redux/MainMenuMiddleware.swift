@@ -18,7 +18,7 @@ final class MainMenuMiddleware {
         guard let action = action as? MainMenuAction else { return }
 
         switch action.actionType {
-        case MainMenuActionType.closeMenu:
+        case MainMenuActionType.tapCloseMenu:
             self.telemetry.mainMenuDismissed()
         case MainMenuActionType.viewDidLoad:
             store.dispatch(

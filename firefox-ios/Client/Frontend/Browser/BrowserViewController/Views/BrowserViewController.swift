@@ -848,6 +848,12 @@ class BrowserViewController: UIViewController,
             selector: #selector(handlePageZoomLevelUpdated),
             name: .PageZoomLevelUpdated,
             object: nil)
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(openRecentlyClosedTabs),
+            name: .RemoteTabNotificationTapped,
+            object: nil
+        )
     }
 
     private func switchToolbarIfNeeded() {
@@ -1023,6 +1029,7 @@ class BrowserViewController: UIViewController,
         // Ensure the layout is updated immediately
         view.layoutIfNeeded()
 
+        // TODO: [FXIOS-10334] Needs investigation. Dequeuing JS alerts as part of subview layout is problematic.
         showQueuedAlertIfAvailable()
         switchToolbarIfNeeded()
         adjustURLBarHeightBasedOnLocationViewHeight()
@@ -2080,8 +2087,8 @@ class BrowserViewController: UIViewController,
         case .dataClearance:
             didTapOnDataClearance()
         case .passwordGenerator:
-            if let tab = tabManager.selectedTab {
-                navigationHandler?.showPasswordGenerator(tab: tab)
+            if let tab = tabManager.selectedTab, let frame = state.frame {
+                navigationHandler?.showPasswordGenerator(tab: tab, frame: frame)
             }
         }
     }
@@ -3249,7 +3256,7 @@ class BrowserViewController: UIViewController,
     }
 
     func addressToolbarDidTapSearchEngine(_ searchEngineView: UIView) {
-        // TODO FXIOS-10273 Use coordinator to handle search engine bottom sheet display
+        navigationHandler?.showSearchEngineSelection(forSourceView: searchEngineView)
     }
 }
 
@@ -3587,6 +3594,14 @@ extension BrowserViewController: HomePanelDelegate {
     func homePanelDidRequestBookmarkToast(url: URL?, action: BookmarkAction) {
         showBookmarkToast(bookmarkURL: url, action: action)
     }
+
+    @objc
+    func openRecentlyClosedTabs() {
+        DispatchQueue.main.async {
+            self.navigationHandler?.show(homepanelSection: .history)
+            self.notificationCenter.post(name: .OpenRecentlyClosedTabs)
+        }
+     }
 }
 
 // MARK: - SearchViewController

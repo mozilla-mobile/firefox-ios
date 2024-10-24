@@ -42,6 +42,8 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
 
     public var foundFieldValues: ((FocusFieldType, String) -> Void)?
 
+    public var passwordFieldInteraction: (() -> Void)?
+
     // Exposed for mocking purposes
     var logins: RustLogins {
         return profile.logins
@@ -125,12 +127,23 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
         else { return }
 
         if self.featureFlags.isFeatureEnabled(.passwordGenerator, checking: .buildOnly) {
-            if type == "generatePassword" {
-                guard let tab = self.tab, !tab.isPrivate else {return}
-                let newAction = GeneralBrowserAction(
-                    windowUUID: tab.windowUUID,
-                    actionType: GeneralBrowserActionType.showPasswordGenerator)
-                store.dispatch(newAction)
+            if type == "generatePassword", let tab = self.tab, !tab.isPrivate {
+                let userDefaults = UserDefaults.standard
+                let showPasswordGeneratorClosure = {
+                    let newAction = GeneralBrowserAction(
+                        frame: message.frameInfo,
+                        windowUUID: tab.windowUUID,
+                        actionType: GeneralBrowserActionType.showPasswordGenerator)
+
+                    store.dispatch(newAction)
+                }
+                if userDefaults.value(forKey: PrefsKeys.PasswordGeneratorShown) == nil {
+                    userDefaults.set(true, forKey: PrefsKeys.PasswordGeneratorShown)
+                    showPasswordGeneratorClosure()
+                } else {
+                    tab.webView?.accessoryView.useStrongPasswordClosure = showPasswordGeneratorClosure
+                    tab.webView?.accessoryView.reloadViewFor(.passwordGenerator)
+                }
             }
         }
 
@@ -238,6 +251,7 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
                 case .failure:
                     break
                 }
+
                 self.promptSave(login)
             }
         }
@@ -246,9 +260,12 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
     private func promptSave(_ login: LoginEntry) {
         guard login.isValid.isSuccess else { return }
 
+        clearStoredPasswordAfterGeneration(origin: login.hostname)
+
         let promptMessage: String
         let https = "^https:\\/\\/"
         let url = login.hostname.replacingOccurrences(of: https, with: "", options: .regularExpression, range: nil)
+
         let userName = login.username
         if !userName.isEmpty {
             promptMessage = String(format: .SaveLoginUsernamePrompt, userName, url)
@@ -338,6 +355,15 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
         else { return }
 
         currentRequestId = requestId
+    }
+
+    private func clearStoredPasswordAfterGeneration(origin: String) {
+        if let windowUUID = self.tab?.windowUUID {
+            let action = PasswordGeneratorAction(windowUUID: windowUUID,
+                                                 actionType: PasswordGeneratorActionType.clearGeneratedPasswordForSite,
+                                                 origin: origin)
+            store.dispatch(action)
+        }
     }
 
     public static func fillLoginDetails(with tab: Tab,

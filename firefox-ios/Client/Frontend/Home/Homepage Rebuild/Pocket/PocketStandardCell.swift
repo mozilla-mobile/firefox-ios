@@ -85,16 +85,16 @@ class PocketStandardCell: UICollectionViewCell, ReusableCell, ThemeApplicable, B
 
     // MARK: - Helpers
 
-    func configure(item: PocketItem, theme: Theme) {
-        titleLabel.text = item.title
-        descriptionLabel.text = item.description
-        accessibilityLabel = item.accessibilityLabel
+    func configure(story: PocketStoryState, theme: Theme) {
+        titleLabel.text = story.title
+        descriptionLabel.text = story.description
+        accessibilityLabel = story.accessibilityLabel
 
-        let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: item.imageURL.absoluteString,
+        let heroImageViewModel = HomepageHeroImageViewModel(urlStringRequest: story.imageURL.absoluteString,
                                                             heroImageSize: UX.heroImageSize)
         heroImageView.setHeroImage(heroImageViewModel)
-        sponsoredStack.isHidden = item.shouldHideSponsor
-        descriptionLabel.font = item.shouldHideSponsor
+        sponsoredStack.isHidden = story.shouldHideSponsor
+        descriptionLabel.font = story.shouldHideSponsor
         ? FXFontStyles.Regular.caption1.scaledFont()
         : FXFontStyles.Bold.caption1.scaledFont()
 

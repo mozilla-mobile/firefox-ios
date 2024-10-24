@@ -17,6 +17,7 @@ enum MainMenuNavigationDestination: Equatable, CaseIterable {
     case passwords
     case settings
     case syncSignIn
+    case zoom
 }
 
 enum MainMenuDetailsViewType {

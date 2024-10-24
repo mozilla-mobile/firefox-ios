@@ -21,6 +21,7 @@ struct MainMenuTabInfo: Equatable {
     let isHomepage: Bool
     let isDefaultUserAgentDesktop: Bool
     let hasChangedUserAgent: Bool
+    let zoomLevel: CGFloat
     let readerModeIsAvailable: Bool
     let isBookmarked: Bool
     let isInReadingList: Bool
@@ -123,7 +124,7 @@ struct MainMenuState: ScreenState, Equatable {
                 ),
                 currentTabInfo: currentTabInfo
             )
-        case MainMenuActionType.showDetailsView:
+        case MainMenuActionType.tapShowDetailsView:
             guard let action = action as? MainMenuAction else { return state }
             return MainMenuState(
                 windowUUID: state.windowUUID,
@@ -131,7 +132,7 @@ struct MainMenuState: ScreenState, Equatable {
                 currentTabInfo: state.currentTabInfo,
                 submenuDestination: action.detailsViewToShow
             )
-        case MainMenuActionType.closeMenuAndNavigateToDestination:
+        case MainMenuActionType.tapNavigateToDestination:
             guard let action = action as? MainMenuAction else { return state }
             return MainMenuState(
                 windowUUID: state.windowUUID,
@@ -139,8 +140,8 @@ struct MainMenuState: ScreenState, Equatable {
                 currentTabInfo: state.currentTabInfo,
                 navigationDestination: action.navigationDestination
             )
-        case MainMenuActionType.toggleUserAgent,
-            MainMenuActionType.closeMenu:
+        case MainMenuActionType.tapToggleUserAgent,
+            MainMenuActionType.tapCloseMenu:
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,

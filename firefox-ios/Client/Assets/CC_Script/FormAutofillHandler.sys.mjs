@@ -7,6 +7,7 @@ import { FormAutofillUtils } from "resource://gre/modules/shared/FormAutofillUti
 
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
+  AddressParser: "resource://gre/modules/shared/AddressParser.sys.mjs",
   AutofillFormFactory:
     "resource://gre/modules/shared/AutofillFormFactory.sys.mjs",
   CreditCard: "resource://gre/modules/CreditCard.sys.mjs",
@@ -234,7 +235,10 @@ export class FormAutofillHandler {
       if (fieldDetails[index]?.element == element) {
         fieldDetailsIncludeIframe.push(fieldDetails[index]);
         index++;
-      } else if (element.localName == "iframe") {
+      } else if (
+        element.localName == "iframe" &&
+        FormAutofillUtils.isFieldVisible(element)
+      ) {
         const iframeFd = lazy.FieldDetail.create(element, form, "iframe");
         fieldDetailsIncludeIframe.push(iframeFd);
       }
@@ -821,6 +825,21 @@ export class FormAutofillHandler {
           }
           waitForConcat = [];
         }
+      }
+    }
+
+    // If a house number field exists, split the address up into house number
+    // and street name.
+    if (this.getFieldDetailByName("address-housenumber")) {
+      let address = lazy.AddressParser.parseStreetAddress(
+        profile["street-address"]
+      );
+      if (address) {
+        profile["address-housenumber"] = address.street_number;
+        let field = this.getFieldDetailByName("address-line1")
+          ? "address-line1"
+          : "street-address";
+        profile[field] = address.street_name;
       }
     }
   }

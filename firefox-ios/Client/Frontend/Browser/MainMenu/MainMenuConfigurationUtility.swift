@@ -48,7 +48,7 @@ struct MainMenuConfigurationUtility: Equatable {
         and uuid: WindowUUID
     ) -> [MenuSection] {
         switch viewType {
-        case .tools: return getToolsSubmenu(with: uuid)
+        case .tools: return getToolsSubmenu(with: uuid, and: tabInfo)
         case .save: return getSaveSubmenu(with: uuid, and: tabInfo)
         default: return getMainMenuElements(with: uuid, and: tabInfo)
         }
@@ -95,7 +95,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
+                            actionType: MainMenuActionType.tapNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(.newTab)
                         )
                     )
@@ -113,7 +113,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
+                            actionType: MainMenuActionType.tapNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(.newPrivateTab)
                         )
                     )
@@ -144,7 +144,7 @@ struct MainMenuConfigurationUtility: Equatable {
                         store.dispatch(
                             MainMenuAction(
                                 windowUUID: uuid,
-                                actionType: MainMenuActionType.toggleUserAgent
+                                actionType: MainMenuActionType.tapToggleUserAgent
                             )
                         )
                     }
@@ -161,7 +161,7 @@ struct MainMenuConfigurationUtility: Equatable {
                         store.dispatch(
                             MainMenuAction(
                                 windowUUID: uuid,
-                                actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
+                                actionType: MainMenuActionType.tapNavigateToDestination,
                                 navigationDestination: MenuNavigationDestination(.findInPage)
                             )
                         )
@@ -180,7 +180,7 @@ struct MainMenuConfigurationUtility: Equatable {
                         store.dispatch(
                             MainMenuAction(
                                 windowUUID: uuid,
-                                actionType: MainMenuActionType.showDetailsView,
+                                actionType: MainMenuActionType.tapShowDetailsView,
                                 changeMenuViewTo: .tools
                             )
                         )
@@ -199,7 +199,7 @@ struct MainMenuConfigurationUtility: Equatable {
                         store.dispatch(
                             MainMenuAction(
                                 windowUUID: uuid,
-                                actionType: MainMenuActionType.showDetailsView,
+                                actionType: MainMenuActionType.tapShowDetailsView,
                                 changeMenuViewTo: .save
                             )
                         )
@@ -231,27 +231,14 @@ struct MainMenuConfigurationUtility: Equatable {
     }
 
     // MARK: - Tools Submenu
-    private func getToolsSubmenu(with uuid: WindowUUID) -> [MenuSection] {
+    private func getToolsSubmenu(
+        with uuid: WindowUUID,
+        and tabInfo: MainMenuTabInfo
+    ) -> [MenuSection] {
         return [
             MenuSection(
                 options: [
-                    MenuElement(
-                        title: .MainMenu.Submenus.Tools.Zoom,
-                        iconName: Icons.zoom,
-                        isEnabled: true,
-                        isActive: false,
-                        a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.Zoom,
-                        a11yHint: "",
-                        a11yId: AccessibilityIdentifiers.MainMenu.zoom,
-                        action: {
-                            store.dispatch(
-                                MainMenuAction(
-                                    windowUUID: uuid,
-                                    actionType: MainMenuActionType.closeMenu
-                                )
-                            )
-                        }
-                    ),
+                    configureZoomItem(with: uuid, and: tabInfo),
                     MenuElement(
                         title: .MainMenu.Submenus.Tools.ReaderViewOn,
                         iconName: Icons.readerViewOn,
@@ -264,7 +251,7 @@ struct MainMenuConfigurationUtility: Equatable {
                             store.dispatch(
                                 MainMenuAction(
                                     windowUUID: uuid,
-                                    actionType: MainMenuActionType.closeMenu
+                                    actionType: MainMenuActionType.tapCloseMenu
                                 )
                             )
                         }
@@ -281,7 +268,7 @@ struct MainMenuConfigurationUtility: Equatable {
                             store.dispatch(
                                 MainMenuAction(
                                     windowUUID: uuid,
-                                    actionType: MainMenuActionType.closeMenu
+                                    actionType: MainMenuActionType.tapCloseMenu
                                 )
                             )
                         }
@@ -298,7 +285,7 @@ struct MainMenuConfigurationUtility: Equatable {
                             store.dispatch(
                                 MainMenuAction(
                                     windowUUID: uuid,
-                                    actionType: MainMenuActionType.closeMenu
+                                    actionType: MainMenuActionType.tapCloseMenu
                                 )
                             )
                         }
@@ -319,7 +306,7 @@ struct MainMenuConfigurationUtility: Equatable {
                             store.dispatch(
                                 MainMenuAction(
                                     windowUUID: uuid,
-                                    actionType: MainMenuActionType.closeMenu
+                                    actionType: MainMenuActionType.tapCloseMenu
                                 )
                             )
                         }
@@ -336,7 +323,7 @@ struct MainMenuConfigurationUtility: Equatable {
                             store.dispatch(
                                 MainMenuAction(
                                     windowUUID: uuid,
-                                    actionType: MainMenuActionType.closeMenu
+                                    actionType: MainMenuActionType.tapCloseMenu
                                 )
                             )
                         }
@@ -344,6 +331,35 @@ struct MainMenuConfigurationUtility: Equatable {
                 ]
             )
         ]
+    }
+
+    private func configureZoomItem(
+        with uuid: WindowUUID,
+        and tabInfo: MainMenuTabInfo
+    ) -> MenuElement {
+        let zoomLevel = NumberFormatter.localizedString(
+            from: NSNumber(value: tabInfo.zoomLevel),
+            number: .percent
+        )
+        let title = String(format: .MainMenu.Submenus.Tools.Zoom, zoomLevel)
+
+        return MenuElement(
+            title: title,
+            iconName: Icons.zoom,
+            isEnabled: true,
+            isActive: tabInfo.zoomLevel != 1.0,
+            a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.Zoom,
+            a11yHint: "",
+            a11yId: AccessibilityIdentifiers.MainMenu.zoom,
+            action: {
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: uuid,
+                        actionType: MainMenuDetailsActionType.tapZoom
+                    )
+                )
+            }
+        )
     }
 
     // MARK: - Save Submenu
@@ -370,7 +386,7 @@ struct MainMenuConfigurationUtility: Equatable {
         let title = tabInfo.isBookmarked ? SaveMenu.EditBookmark : SaveMenu.BookmarkThisPage
         let icon = tabInfo.isBookmarked ? Icons.editThisBookmark : Icons.bookmarkThisPage
         let a11yLabel = tabInfo.isBookmarked ? A11y.EditBookmark : A11y.BookmarkThisPage
-        let actionType: MainMenuDetailsActionType = tabInfo.isBookmarked ? .editBookmark : .addToBookmarks
+        let actionType: MainMenuDetailsActionType = tabInfo.isBookmarked ? .tapEditBookmark : .tapAddToBookmarks
 
         return MenuElement(
             title: title,
@@ -402,7 +418,7 @@ struct MainMenuConfigurationUtility: Equatable {
         let title = tabInfo.isPinned ? SaveMenu.RemoveFromShortcuts : SaveMenu.AddToShortcuts
         let icon = tabInfo.isPinned ? Icons.removeFromShortcuts : Icons.addToShortcuts
         let a11yLabel = tabInfo.isPinned ? A11y.RemoveFromShortcuts : A11y.AddToShortcuts
-        let actionType: MainMenuDetailsActionType = tabInfo.isPinned ? .removeFromShortcuts : .addToShortcuts
+        let actionType: MainMenuDetailsActionType = tabInfo.isPinned ? .tapRemoveFromShortcuts : .tapAddToShortcuts
 
         return MenuElement(
             title: title,
@@ -431,10 +447,11 @@ struct MainMenuConfigurationUtility: Equatable {
         typealias SaveMenu = String.MainMenu.Submenus.Save
         typealias A11y = SaveMenu.AccessibilityLabels
 
-        let title = tabInfo.isInReadingList ? SaveMenu.RemoveFromReadingList : SaveMenu.SaveToReadingList
-        let icon = tabInfo.isInReadingList ? Icons.removeFromReadingList : Icons.saveToReadingList
-        let a11yLabel = tabInfo.isInReadingList ? A11y.RemoveFromReadingList : A11y.SaveToReadingList
-        let actionType: MainMenuDetailsActionType = tabInfo.isInReadingList ? .removeFromReadingList : .addToReadingList
+        let isInReadingList = tabInfo.isInReadingList
+        let title = isInReadingList ? SaveMenu.RemoveFromReadingList : SaveMenu.SaveToReadingList
+        let icon = isInReadingList ? Icons.removeFromReadingList : Icons.saveToReadingList
+        let a11yLabel = isInReadingList ? A11y.RemoveFromReadingList : A11y.SaveToReadingList
+        let actionType: MainMenuDetailsActionType = isInReadingList ? .tapRemoveFromReadingList : .tapAddToReadingList
 
         return MenuElement(
             title: title,
@@ -471,7 +488,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
+                            actionType: MainMenuActionType.tapNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(.bookmarks)
                         )
                     )
@@ -489,7 +506,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
+                            actionType: MainMenuActionType.tapNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(.history)
                         )
                     )
@@ -507,7 +524,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
+                            actionType: MainMenuActionType.tapNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(.downloads)
                         )
                     )
@@ -525,7 +542,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
+                            actionType: MainMenuActionType.tapNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(.passwords)
                         )
                     )
@@ -552,7 +569,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
+                            actionType: MainMenuActionType.tapNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(.customizeHomepage)
                         )
                     )
@@ -573,7 +590,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
+                            actionType: MainMenuActionType.tapNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(
                                 .goToURL,
                                 urlToVisit: SupportUtils.URLForWhatsNew
@@ -597,7 +614,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
+                            actionType: MainMenuActionType.tapNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(
                                 .goToURL,
                                 urlToVisit: SupportUtils.URLForGetHelp
@@ -618,7 +635,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     store.dispatch(
                         MainMenuAction(
                             windowUUID: uuid,
-                            actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
+                            actionType: MainMenuActionType.tapNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(.settings)
                         )
                     )

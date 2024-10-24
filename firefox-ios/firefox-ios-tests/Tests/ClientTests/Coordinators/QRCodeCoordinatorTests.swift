@@ -7,12 +7,12 @@ import XCTest
 
 final class QRCodeCoordinatorTests: XCTestCase {
     private var router: MockRouter!
-    private var parentCoordinator: MockParentCoordinatorDelegate!
+    private var parentCoordinator: MockParentCoordinator!
 
     override func setUp() {
         super.setUp()
         router = MockRouter(navigationController: UINavigationController())
-        parentCoordinator = MockParentCoordinatorDelegate()
+        parentCoordinator = MockParentCoordinator()
     }
 
     override func tearDown() {

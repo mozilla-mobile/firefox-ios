@@ -92,10 +92,13 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 
     func showMicrosurvey(model: MicrosurveyModel)
 
-    func showPasswordGenerator(tab: Tab)
+    func showPasswordGenerator(tab: Tab, frame: WKFrameInfo)
 
     /// Shows the app menu
     func showMainMenu()
+
+    /// Shows the toolbar's search engine selection bottom sheet (iPhone) or popup (iPad)
+    func showSearchEngineSelection(forSourceView sourceView: UIView)
 }
 
 extension BrowserNavigationHandler {

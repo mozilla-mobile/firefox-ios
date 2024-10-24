@@ -16,7 +16,6 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
 
     private var urlAbsolutePath: String?
     private var searchTerm: String?
-    private var notifyTextChanged: (() -> Void)?
     private var onTapLockIcon: ((UIButton) -> Void)?
     private var onLongPress: (() -> Void)?
     private weak var delegate: LocationViewDelegate?
@@ -92,14 +91,6 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         setupLayout()
         setupGradientLayer()
         addLongPressGestureRecognizer()
-
-        urlTextField.addTarget(self, action: #selector(LocationView.textDidChange), for: .editingChanged)
-        notifyTextChanged = { [self] in
-            guard urlTextField.isEditing else { return }
-
-            urlAbsolutePath = urlTextField.text?.lowercased().trimmingCharacters(in: .whitespaces)
-            delegate?.locationViewDidEnterText(urlAbsolutePath ?? "")
-        }
     }
 
     required init?(coder: NSCoder) {
@@ -261,8 +252,6 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
     // MARK: - `urlTextField` Configuration
     private func configureURLTextField(_ state: LocationViewState) {
         isEditing = state.isEditing
-        let text = (state.searchTerm != nil) && state.isEditing ? state.searchTerm : state.url?.absoluteString
-        urlTextField.text = text
 
         urlTextField.placeholder = state.urlTextFieldPlaceholder
         urlAbsolutePath = state.url?.absoluteString
@@ -270,18 +259,25 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         let shouldShowKeyboard = state.isEditing && !state.isScrollingDuringEdit
         _ = shouldShowKeyboard ? becomeFirstResponder() : resignFirstResponder()
 
+        // Remove the default drop interaction from the URL text field so that our
+        // custom drop interaction on the BVC can accept dropped URLs.
+        if let dropInteraction = urlTextField.textDropInteraction {
+            urlTextField.removeInteraction(dropInteraction)
+        }
+
+        // Once the user started typing we should not update the text anymore as that interferes with
+        // setting the autocomplete suggestions which is done using a delegate method.
+        guard !state.didStartTyping else { return }
+
+        let text = (state.searchTerm != nil) && state.isEditing ? state.searchTerm : state.url?.absoluteString
+        urlTextField.text = text
+
         // Start overlay mode & select text when in edit mode with a search term
         if shouldShowKeyboard == true && state.shouldSelectSearchTerm == true {
             DispatchQueue.main.async {
                 self.urlTextField.text = text
                 self.urlTextField.selectAll(nil)
             }
-        }
-
-        // Remove the default drop interaction from the URL text field so that our
-        // custom drop interaction on the BVC can accept dropped URLs.
-        if let dropInteraction = urlTextField.textDropInteraction {
-            urlTextField.removeInteraction(dropInteraction)
         }
     }
 
@@ -335,11 +331,6 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
 
     // MARK: - Selectors
     @objc
-    func textDidChange(_ textField: UITextField) {
-        notifyTextChanged?()
-    }
-
-    @objc
     private func didTapLockIcon() {
         onTapLockIcon?(lockIconButton)
     }
@@ -391,6 +382,10 @@ final class LocationView: UIView, LocationTextFieldDelegate, ThemeApplicable, Ac
         } else {
             updateUIForLockIconDisplay()
         }
+    }
+
+    func locationTextFieldNeedsSearchReset(_ textField: UITextField) {
+        delegate?.locationTextFieldNeedsSearchReset()
     }
 
     // MARK: - Accessibility

@@ -57,18 +57,20 @@ extension BrowserViewController: WKUIDelegate {
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping () -> Void
     ) {
-        let messageAlert = MessageAlert(message: message, frame: frame, completionHandler: {
-            completionHandler()
-            self.logger.log("Javascript message alert was completed.", level: .info, category: .webview)
-        })
+        let messageAlert = MessageAlert(message: message, frame: frame)
         if shouldDisplayJSAlertForWebView(webView) {
             logger.log("Javascript message alert will be presented.", level: .info, category: .webview)
 
-            present(messageAlert.alertController(), animated: true)
+            present(messageAlert.alertController(), animated: true) {
+                // TODO: [FXIOS-10334] This should be called when the alert is dismissed, not presented
+                completionHandler()
+                self.logger.log("Javascript message alert was completed.", level: .info, category: .webview)
+            }
         } else if let promptingTab = tabManager[webView] {
             logger.log("Javascript message alert is queued.", level: .info, category: .webview)
 
             promptingTab.queueJavascriptAlertPrompt(messageAlert)
+            // TODO: [FXIOS-10334] This should be called when the alert is dismissed, not enqueued
             completionHandler()
         }
     }
@@ -964,7 +966,7 @@ private extension BrowserViewController {
 
     func shouldDisplayJSAlertForWebView(_ webView: WKWebView) -> Bool {
         // Only display a JS Alert if we are selected and there isn't anything being shown
-        return (tabManager.selectedTab == nil ? false : tabManager.selectedTab!.webView == webView)
+        return ((tabManager.selectedTab == nil ? false : tabManager.selectedTab!.webView == webView))
             && (self.presentedViewController == nil)
     }
 

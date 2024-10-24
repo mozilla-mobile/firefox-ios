@@ -15,6 +15,7 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     func showFindInPage()
     func editLatestBookmark()
     func showSignInView(fxaParameters: FxASignInViewParameters?)
+    func updateZoomPageBarVisibility()
 }
 
 class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
@@ -87,6 +88,8 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
                     referringPage: .appMenu
                 )
                 self.navigationHandler?.showSignInView(fxaParameters: fxaParameters)
+            case .zoom:
+                self.navigationHandler?.updateZoomPageBarVisibility()
             }
 
             self.parentCoordinator?.didFinish(from: self)

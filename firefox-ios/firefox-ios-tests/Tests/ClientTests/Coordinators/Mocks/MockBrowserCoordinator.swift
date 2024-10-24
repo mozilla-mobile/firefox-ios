@@ -26,6 +26,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
     var showFakespotFlowAsModalCalled = 0
     var showFakespotFlowAsSidebarCalled = 0
     var showBackForwardListCalled = 0
+    var showSearchEngineSelectionCalled = 0
     var dismissFakespotModalCalled = 0
     var dismissFakespotSidebarCalled = 0
     var updateFakespotSidebarCalled = 0
@@ -112,6 +113,10 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
         showFakespotFlowAsSidebarCalled += 1
     }
 
+    func showSearchEngineSelection(forSourceView sourceView: UIView) {
+        showSearchEngineSelectionCalled += 1
+    }
+
     func dismissFakespotModal(animated: Bool) {
         dismissFakespotModalCalled += 1
     }
@@ -131,7 +136,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
         showMicrosurveyCalled += 1
     }
 
-    func showPasswordGenerator(tab: Tab) {
+    func showPasswordGenerator(tab: Tab, frame: WKFrameInfo) {
         showPasswordGeneratorCalled += 1
     }
 }

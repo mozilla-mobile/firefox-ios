@@ -71,13 +71,22 @@ final class BrowserViewControllerStateTests: XCTestCase {
     func testShowPasswordGeneratorAction() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()
+        let URL = URL(string: "https://foo.com")!
+        let webView = WKWebViewMock(URL)
+        let frame = WKFrameInfoMock(webView: webView, frameURL: URL, isMainFrame: true)
 
         XCTAssertNil(initialState.displayView)
 
-        let action = getAction(for: .showPasswordGenerator)
+        let action = GeneralBrowserAction(frame: frame,
+                                          windowUUID: .XCTestDefaultUUID,
+                                          actionType: GeneralBrowserActionType.showPasswordGenerator)
         let newState = reducer(initialState, action)
+        let displayView = newState.displayView!
+        let desiredDisplayView =
+        BrowserViewControllerState.DisplayType.passwordGenerator
 
-        XCTAssertEqual(newState.displayView, .passwordGenerator)
+        XCTAssertEqual(displayView, desiredDisplayView)
+        XCTAssertNotNil(newState.frame)
     }
 
     func testReloadWebsiteAction() {

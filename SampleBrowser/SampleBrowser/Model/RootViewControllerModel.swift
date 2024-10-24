@@ -25,6 +25,7 @@ class RootViewControllerModel {
             a11yLabel: "Navigate Back",
             a11yHint: nil,
             a11yId: "backButton",
+            hasLongPressAction: false,
             onSelected: { _ in
                 self.navigationToolbarDelegate?.backButtonTapped()
             })
@@ -34,6 +35,7 @@ class RootViewControllerModel {
             a11yLabel: "Navigate Forward",
             a11yHint: nil,
             a11yId: "forwardButton",
+            hasLongPressAction: false,
             onSelected: { _ in
                 self.navigationToolbarDelegate?.forwardButtonTapped()
             })
@@ -43,6 +45,7 @@ class RootViewControllerModel {
             a11yLabel: isReloading ? "Stop loading website" : "Reload website",
             a11yHint: nil,
             a11yId: isReloading ? "stopButton" : "reloadButton",
+            hasLongPressAction: false,
             onSelected: { _ in
                 if self.isReloading {
                     self.navigationToolbarDelegate?.stopButtonTapped()
@@ -56,6 +59,7 @@ class RootViewControllerModel {
             a11yLabel: "Open Menu",
             a11yHint: nil,
             a11yId: "appMenuButton",
+            hasLongPressAction: false,
             onSelected: { _ in
                 self.navigationToolbarDelegate?.menuButtonTapped()
             })
@@ -82,6 +86,7 @@ class RootViewControllerModel {
             a11yLabel: "Read QR Code",
             a11yHint: nil,
             a11yId: "qrCodeButton",
+            hasLongPressAction: false,
             onSelected: nil)]
 
         let browserActions = [ToolbarElement(
@@ -90,6 +95,7 @@ class RootViewControllerModel {
             a11yLabel: "Open Menu",
             a11yHint: nil,
             a11yId: "appMenuButton",
+            hasLongPressAction: false,
             onSelected: { _ in
                 self.addressToolbarDelegate?.didTapMenu()
             })]
@@ -101,10 +107,10 @@ class RootViewControllerModel {
             lockIconButtonA11yLabel: "Tracking Protection",
             urlTextFieldPlaceholder: "Search or enter address",
             urlTextFieldA11yId: "urlTextField",
-            urlTextFieldA11yLabel: "Address Bar",
             searchEngineImage: UIImage(named: "bingSearchEngine"),
             lockIconImageName: StandardImageIdentifiers.Large.lock,
             url: url,
+            droppableUrl: nil,
             searchTerm: nil,
             isEditing: false,
             isScrollingDuringEdit: false,

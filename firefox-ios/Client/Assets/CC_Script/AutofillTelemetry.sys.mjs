@@ -166,7 +166,7 @@ class AutofillTelemetryBase {
         case FIELD_STATES.NORMAL:
         default:
           filledState =
-            fieldDetail.localName == "select" || filledValue.length
+            fieldDetail.localName == "select" || filledValue?.length
               ? "user_filled"
               : "not_filled";
           break;
