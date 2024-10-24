@@ -399,6 +399,8 @@ class BrowserViewController: UIViewController,
         let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: newCollection)
         let showTopTabs = ToolbarHelper().shouldShowTopTabs(for: newCollection)
 
+        switchToolbarIfNeeded()
+
         if isToolbarRefactorEnabled {
             if showNavToolbar {
                 navigationToolbarContainer.isHidden = false
