@@ -45,6 +45,8 @@ enum MainMenuMiddlewareActionType: ActionType {
 enum MainMenuDetailsActionType: ActionType {
     // Tools submenu actions
     case tapZoom
+    case tapToggleNightMode
+    case tapReportBrokenSite
 
     // Save submenu actions
     case tapAddToBookmarks
