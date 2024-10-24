@@ -523,7 +523,6 @@ extension XCUIElement {
         self.tap()
         self.typeText(text)
     }
-    
 }
 
 extension XCUIElementQuery {

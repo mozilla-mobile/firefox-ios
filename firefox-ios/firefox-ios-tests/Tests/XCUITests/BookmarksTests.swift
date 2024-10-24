@@ -173,7 +173,7 @@ class BookmarksTests: BaseTestCase {
         navigator.performAction(Action.AddNewFolder)
         mozWaitForElementToExist(app.navigationBars["Bookmarks"])
         // XCTAssertFalse(app.buttons["Save"].isEnabled), is this a bug allowing empty folder name?
-        app.tables.cells.textFields.element(boundBy: 0).typeText("Test Folder")
+        app.tables.cells.textFields.element(boundBy: 0).tapAndTypeText("Test Folder")
         app.buttons["Save"].tap()
         app.buttons["Done"].tap()
         checkItemsInBookmarksList(items: 2)
@@ -213,7 +213,7 @@ class BookmarksTests: BaseTestCase {
         addNewBookmark()
         // Remove by swiping
         app.tables["Bookmarks List"].staticTexts["BBC"].swipeLeft()
-        app.buttons["Delete"].tap()
+        app.buttons["Delete"].waitAndTap()
         // Verify that there are only 1 cell (desktop bookmark folder)
         checkItemsInBookmarksList(items: 1)
     }
