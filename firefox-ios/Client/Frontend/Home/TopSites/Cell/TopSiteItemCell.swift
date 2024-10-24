@@ -268,6 +268,7 @@ extension TopSiteItemCell: ThemeApplicable {
 extension TopSiteItemCell: Blurrable {
     func adjustBlur(theme: Theme) {
         if shouldApplyWallpaperBlur {
+            rootContainer.layoutIfNeeded()
             rootContainer.addBlurEffectWithClearBackgroundAndClipping(using: .systemThickMaterial)
         } else {
             // If blur is disabled set background color
