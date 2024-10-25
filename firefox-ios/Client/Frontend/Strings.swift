@@ -1332,6 +1332,11 @@ extension String {
     /// Identifiers of all new strings should begin with `LibraryPanel.{PanelName}.`
     public struct LibraryPanel {
         public struct Sections {
+            public static let LastHour = MZLocalizedString(
+                key: "Last Hour",
+                tableName: nil,
+                value: "Last Hour",
+                comment: "This label is meant to signify the section containing a group of items from the past hour")
             public static let Today = MZLocalizedString(
                 key: "Today",
                 tableName: nil,

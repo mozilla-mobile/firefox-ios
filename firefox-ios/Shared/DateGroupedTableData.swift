@@ -12,84 +12,72 @@ private func getDate(dayOffset: Int) -> Date {
 }
 
 public struct DateGroupedTableData<T: Equatable> {
-    let todayTimestamp = getDate(dayOffset: 0).timeIntervalSince1970
-    let yesterdayTimestamp = getDate(dayOffset: -1).timeIntervalSince1970
-    let lastWeekTimestamp = getDate(dayOffset: -7).timeIntervalSince1970
-    let lastMonthTimestamp = getDate(dayOffset: -30).timeIntervalSince1970
+    // Timestamps at which we want the data to be split
+    var timestamps: [TimeInterval] = []
 
-    var today: [(item: T, timing: TimeInterval)] = []
-    var yesterday: [(item: T, timing: TimeInterval)] = []
-    var lastWeek: [(item: T, timing: TimeInterval)] = []
-    var lastMonth: [(item: T, timing: TimeInterval)] = []
-    var older: [(item: T, timing: TimeInterval)] = []
+    // Data associated with timestamps -- in each section
+    var timestampData: [[(item: T, timing: TimeInterval)]] = []
 
-    public var isEmpty: Bool {
-        return today.isEmpty && yesterday.isEmpty && lastWeek.isEmpty && lastMonth.isEmpty && older.isEmpty
+    var timestampDataNumSections: Int {
+        return timestampData.count
     }
 
-    public init() {}
+    public var isEmpty: Bool {
+        return timestampData.allSatisfy { $0.isEmpty }
+    }
+
+    public init(includeLastHour: Bool = false) {
+        var timestamps: [TimeInterval] = []
+        if includeLastHour {
+            timestamps.append(Date().lastHour.timeIntervalSince1970)
+        }
+        timestamps.append(contentsOf: [
+            getDate(dayOffset: 0).timeIntervalSince1970,
+            getDate(dayOffset: -1).timeIntervalSince1970,
+            getDate(dayOffset: -7).timeIntervalSince1970,
+            getDate(dayOffset: -30).timeIntervalSince1970])
+        self.init(timestamps: timestamps)
+    }
+
+    // Timestamps should be ordered chronolgically
+    public init(timestamps: [TimeInterval]) {
+        self.timestamps = timestamps
+        // Arrays maintaining data, split by timestamp. Additional array included for elements older than the last timestamp
+        timestampData = Array(repeating: [(item: T, timing: TimeInterval)](), count: timestamps.count + 1)
+    }
 
     @discardableResult
     public mutating func add(_ item: T, timestamp: TimeInterval) -> IndexPath {
-        if timestamp > todayTimestamp {
-            today.append((item, timestamp))
-            return IndexPath(row: today.count - 1, section: 0)
-        } else if timestamp > yesterdayTimestamp {
-            yesterday.append((item, timestamp))
-            return IndexPath(row: yesterday.count - 1, section: 1)
-        } else if timestamp > lastWeekTimestamp {
-            lastWeek.append((item, timestamp))
-            return IndexPath(row: lastWeek.count - 1, section: 2)
-        } else if timestamp > lastMonthTimestamp {
-            lastMonth.append((item, timestamp))
-            return IndexPath(row: lastMonth.count - 1, section: 3)
-        } else {
-            older.append((item, timestamp))
-            return IndexPath(row: older.count - 1, section: 4)
+        for i in 0..<timestamps.count where timestamp > timestamps[i] {
+                timestampData[i].append((item, timestamp))
+                return IndexPath(row: timestampData[i].count - 1, section: i)
         }
+        // if we don't match any of the timestamps above, return the older data
+        timestampData[timestampDataNumSections - 1].append((item, timestamp))
+        return IndexPath(row: timestampData[timestampDataNumSections - 1].count - 1, section: timestampDataNumSections - 1)
     }
 
     public mutating func remove(_ item: T) {
-        if let index = today.firstIndex(where: { item == $0.item }) {
-            today.remove(at: index)
-        } else if let index = yesterday.firstIndex(where: { item == $0.item }) {
-            yesterday.remove(at: index)
-        } else if let index = lastWeek.firstIndex(where: { item == $0.item }) {
-            lastWeek.remove(at: index)
-        } else if let index = lastMonth.firstIndex(where: { item == $0.item }) {
-            lastMonth.remove(at: index)
-        } else if let index = older.firstIndex(where: { item == $0.item }) {
-            older.remove(at: index)
+        for i in 0..<timestampDataNumSections {
+            if let index = timestampData[i].firstIndex(where: { item == $0.item }) {
+                timestampData[i].remove(at: index)
+                return
+            }
         }
     }
 
     public func numberOfItemsForSection(_ section: Int) -> Int {
-        switch section {
-        case 0: return today.count
-        case 1: return yesterday.count
-        case 2: return lastWeek.count
-        case 3: return lastMonth.count
-        case 4: return older.count
-        default: return 0
-        }
+        guard section >= 0 && section < timestampDataNumSections else {return 0}
+        return timestampData[section].count
     }
 
     public func itemsForSection(_ section: Int) -> [T] {
-        switch section {
-        case 0: return today.map({ $0.item })
-        case 1: return yesterday.map({ $0.item })
-        case 2: return lastWeek.map({ $0.item })
-        case 3: return lastMonth.map({ $0.item })
-        case 4: return older.map({ $0.item })
-        default: return []
-        }
+        guard section >= 0 && section < timestampDataNumSections else {return []}
+        return timestampData[section].map({ $0.item })
     }
 
     /// Returns all currently fetched items in a single array: `[T.item]`.
     public func allItems() -> [T] {
-        let allItems = (today + yesterday + lastWeek + lastMonth + older)
-            .map { $0.item }
-
-        return allItems
+        return timestampData.flatMap({ $0 }).map { $0.item }
     }
 }
