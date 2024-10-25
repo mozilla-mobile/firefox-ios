@@ -198,17 +198,53 @@ struct MainMenuConfigurationUtility: Equatable {
         typealias Menu = String.MainMenu.ToolsSection
         typealias A11y = String.MainMenu.ToolsSection.AccessibilityLabels
 
-        let title = tabInfo.isDefaultUserAgentDesktop ?
-        tabInfo.hasChangedUserAgent ? Menu.SwitchToDesktopSite : Menu.SwitchToMobileSite :
-        tabInfo.hasChangedUserAgent ? Menu.SwitchToMobileSite : Menu.SwitchToDesktopSite
+        let title: String = {
+            if tabInfo.isDefaultUserAgentDesktop {
+                if tabInfo.hasChangedUserAgent {
+                    return Menu.SwitchToDesktopSite
+                } else {
+                    return Menu.SwitchToMobileSite
+                }
+            } else {
+                if tabInfo.hasChangedUserAgent {
+                    return Menu.SwitchToMobileSite
+                } else {
+                    return Menu.SwitchToDesktopSite
+                }
+            }
+        }()
 
-        let icon = tabInfo.isDefaultUserAgentDesktop ?
-        tabInfo.hasChangedUserAgent ? Icons.deviceDesktop : Icons.deviceMobile :
-        tabInfo.hasChangedUserAgent ? Icons.deviceMobile : Icons.deviceDesktop
+        let icon: String = {
+            if tabInfo.isDefaultUserAgentDesktop {
+                if tabInfo.hasChangedUserAgent {
+                    return Icons.deviceDesktop
+                } else {
+                    return Icons.deviceMobile
+                }
+            } else {
+                if tabInfo.hasChangedUserAgent {
+                    return Icons.deviceMobile
+                } else {
+                    return Icons.deviceDesktop
+                }
+            }
+        }()
 
-        let a11yLabel = tabInfo.isDefaultUserAgentDesktop ?
-        tabInfo.hasChangedUserAgent ? A11y.SwitchToDesktopSite : A11y.SwitchToMobileSite :
-        tabInfo.hasChangedUserAgent ? A11y.SwitchToMobileSite : A11y.SwitchToDesktopSite
+        let a11yLabel: String = {
+            if tabInfo.isDefaultUserAgentDesktop {
+                if tabInfo.hasChangedUserAgent {
+                    return A11y.SwitchToDesktopSite
+                } else {
+                    return A11y.SwitchToMobileSite
+                }
+            } else {
+                if tabInfo.hasChangedUserAgent {
+                    return A11y.SwitchToMobileSite
+                } else {
+                    return A11y.SwitchToDesktopSite
+                }
+            }
+        }()
 
         return MenuElement(
             title: title,
