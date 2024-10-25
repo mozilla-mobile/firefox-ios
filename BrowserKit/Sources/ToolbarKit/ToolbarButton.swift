@@ -175,7 +175,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
 
         badgeImageView?.layer.borderColor = colors.layer1.cgColor
         badgeImageView?.backgroundColor = maskImageView == nil ? colors.layer1 : .clear
-        badgeImageView?.tintColor = maskImageView == nil ? .clear : colors.actionInfo
+        badgeImageView?.tintColor = maskImageView == nil ? .clear : colors.actionInformation
         maskImageView?.tintColor = colors.layer1
 
         setNeedsUpdateConfiguration()

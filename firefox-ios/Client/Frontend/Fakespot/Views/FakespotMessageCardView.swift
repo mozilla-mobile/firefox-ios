@@ -33,7 +33,7 @@ class FakespotMessageCardViewModel: ObservableObject {
             switch self {
             case .confirmation: return theme.colors.actionSuccess
             case .warning: return theme.colors.actionWarning
-            case .info: return theme.colors.actionInfo
+            case .info: return theme.colors.actionInformation
             case .infoLoading: return theme.colors.actionSecondary
             case .error: return theme.colors.actionCritical
             case .infoTransparent: return theme.colors.actionSecondary
