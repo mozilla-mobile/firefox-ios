@@ -94,7 +94,7 @@ class MainMenuViewController: UIViewController,
             store.dispatch(
                 MainMenuAction(
                     windowUUID: self.windowUUID,
-                    actionType: MainMenuActionType.closeMenu
+                    actionType: MainMenuActionType.tapCloseMenu
                 )
             )
         }
@@ -104,7 +104,7 @@ class MainMenuViewController: UIViewController,
             store.dispatch(
                 MainMenuAction(
                     windowUUID: self.windowUUID,
-                    actionType: MainMenuActionType.closeMenuAndNavigateToDestination,
+                    actionType: MainMenuActionType.tapNavigateToDestination,
                     navigationDestination: MenuNavigationDestination(.syncSignIn)
                 )
             )
