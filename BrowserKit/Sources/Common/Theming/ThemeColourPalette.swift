@@ -65,7 +65,7 @@ public protocol ThemeColourPalette {
     var textPrimary: UIColor { get }
     var textSecondary: UIColor { get }
     var textDisabled: UIColor { get }
-    var textWarning: UIColor { get }
+    var textCritical: UIColor { get }
     var textAccent: UIColor { get }
     var textOnDark: UIColor { get }
     var textOnLight: UIColor { get }

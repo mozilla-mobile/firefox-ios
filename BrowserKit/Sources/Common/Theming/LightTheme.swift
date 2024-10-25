@@ -77,7 +77,7 @@ private struct LightColourPalette: ThemeColourPalette {
     var textPrimary: UIColor = FXColors.DarkGrey90
     var textSecondary: UIColor = FXColors.DarkGrey05
     var textDisabled: UIColor = FXColors.DarkGrey90.withAlphaComponent(0.4)
-    var textWarning: UIColor = FXColors.Red70
+    var textCritical: UIColor = FXColors.Red70
     var textAccent: UIColor = FXColors.Blue50
     var textOnDark: UIColor = FXColors.LightGrey05
     var textOnLight: UIColor = FXColors.DarkGrey90
