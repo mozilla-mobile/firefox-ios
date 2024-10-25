@@ -4,11 +4,14 @@ import PackageDescription
 
 let package = Package(
     name: "BrowserKit",
+    defaultLocalization: "en",
     platforms: [
         .iOS(.v15),
         .macOS(.v10_15)
     ],
     products: [
+        .library(name: "Shared",
+                 targets: ["Shared"]),
         .library(
             name: "SiteImageView",
             targets: ["SiteImageView"]),
@@ -64,6 +67,15 @@ let package = Package(
             exact: "0.17.0"),
     ],
     targets: [
+        .target(name: "Shared",
+                dependencies: ["Common",
+                               "WebEngine",
+                               .product(name: "Sentry",
+                                        package: "sentry-cocoa")],
+                resources: [.process("Resources")],
+                swiftSettings: [.unsafeFlags(["-enable-testing"])]),
+        .testTarget(name: "SharedTests",
+                    dependencies: ["Shared"]),
         .target(
             name: "ComponentLibrary",
             dependencies: ["Common", "SiteImageView"],

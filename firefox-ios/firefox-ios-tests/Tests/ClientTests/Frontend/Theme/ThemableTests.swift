@@ -4,7 +4,7 @@
 
 import XCTest
 import Common
-@testable import Shared
+import Shared
 
 class ThemableTests: XCTestCaseRootViewController {
     private var tableViewDelegate: TestsTableView!

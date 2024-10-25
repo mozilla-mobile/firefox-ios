@@ -5,6 +5,7 @@
 import MappaMundi
 import XCTest
 import Common
+import Shared
 
 class ScreenGraphTest: XCTestCase {
     var navigator: MMNavigator<TestUserState>!

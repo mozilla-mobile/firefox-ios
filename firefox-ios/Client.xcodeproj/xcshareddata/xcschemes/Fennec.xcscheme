@@ -88,20 +88,6 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E6F9650B1B2F1CF20034B023"
-               BuildableName = "SharedTests.xctest"
-               BlueprintName = "SharedTests"
-               ReferencedContainer = "container:Client.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "NO"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "2FCAE2231ABB51F800877008"
                BuildableName = "StorageTests.xctest"
                BlueprintName = "StorageTests"
@@ -130,10 +116,10 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "28F9520519D0F9FB00DCE892"
-               BuildableName = "FxATests.xctest"
-               BlueprintName = "FxATests"
-               ReferencedContainer = "container:FxA/FxA.xcodeproj">
+               BlueprintIdentifier = "SharedTests"
+               BuildableName = "SharedTests"
+               BlueprintName = "SharedTests"
+               ReferencedContainer = "container:../BrowserKit">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -393,16 +379,6 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E6F9650B1B2F1CF20034B023"
-               BuildableName = "SharedTests.xctest"
-               BlueprintName = "SharedTests"
-               ReferencedContainer = "container:Client.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "282731671ABC9BE700AA1954"
                BuildableName = "SyncTests.xctest"
                BlueprintName = "SyncTests"
@@ -416,26 +392,6 @@
                   Identifier = "LiveStorageClientTests">
                </Test>
             </SkippedTests>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "28F9520519D0F9FB00DCE892"
-               BuildableName = "FxATests.xctest"
-               BlueprintName = "FxATests"
-               ReferencedContainer = "container:FxA/FxA.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "LoggerTests"
-               BuildableName = "LoggerTests"
-               BlueprintName = "LoggerTests"
-               ReferencedContainer = "container:BrowserKit">
-            </BuildableReference>
          </TestableReference>
          <TestableReference
             skipped = "NO">

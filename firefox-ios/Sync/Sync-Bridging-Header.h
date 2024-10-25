@@ -4,7 +4,6 @@
 #import <Foundation/Foundation.h>
 
 #import "Account-Bridging-Header.h"
-#import "Shared-Bridging-Header.h"
 #import "Storage-Bridging-Header.h"
 
 #endif

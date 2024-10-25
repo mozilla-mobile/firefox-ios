@@ -4,6 +4,7 @@
 
 import Common
 import Shared
+import UIKit
 
 class MockThemeManager: ThemeManager {
     var getCurrentThemeCallCount = 0

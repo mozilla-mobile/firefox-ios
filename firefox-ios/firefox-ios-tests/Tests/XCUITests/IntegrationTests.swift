@@ -4,6 +4,7 @@
 
 import Common
 import XCTest
+import Shared
 
 private let testingURL = "example.com"
 private let userName = "iosmztest"

@@ -4,6 +4,7 @@
 
 import Common
 import XCTest
+import Shared
 
 let webpage = [
     "url": "www.mozilla.org",

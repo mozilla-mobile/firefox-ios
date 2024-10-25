@@ -1139,15 +1139,15 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             }
 
             // Write open file handles.
-            let openDescriptors = FSUtils.openFileDescriptors()
+//            let openDescriptors = FSUtils.openFileDescriptors()
             logger.log("Open file descriptors: ",
                        level: .info,
                        category: .storage)
-            for (k, v) in openDescriptors {
-                logger.log("  \(k): \(v)",
-                           level: .info,
-                           category: .storage)
-            }
+//            for (k, v) in openDescriptors {
+//                logger.log("  \(k): \(v)",
+//                           level: .info,
+//                           category: .storage)
+//            }
 
             SwiftData.corruptionLogsWritten.insert(dbFilename)
         }

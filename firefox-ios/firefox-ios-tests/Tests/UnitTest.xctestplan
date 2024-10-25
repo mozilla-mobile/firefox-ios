@@ -90,6 +90,11 @@
           "containerPath" : "container:Client.xcodeproj",
           "identifier" : "2FCAE2191ABB51F800877008",
           "name" : "Storage"
+        },
+        {
+          "containerPath" : "container:..\/BrowserKit",
+          "identifier" : "Shared",
+          "name" : "Shared"
         }
       ]
     }
@@ -130,13 +135,6 @@
       }
     },
     {
-      "target" : {
-        "containerPath" : "container:Client.xcodeproj",
-        "identifier" : "E6F9650B1B2F1CF20034B023",
-        "name" : "SharedTests"
-      }
-    },
-    {
       "skippedTests" : [
         "RustLoginsTests\/testUpdateLogin()",
         "TestBrowserDB\/testMovesDB()"
@@ -145,6 +143,13 @@
         "containerPath" : "container:Client.xcodeproj",
         "identifier" : "2FCAE2231ABB51F800877008",
         "name" : "StorageTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/BrowserKit",
+        "identifier" : "SharedTests",
+        "name" : "SharedTests"
       }
     },
     {
