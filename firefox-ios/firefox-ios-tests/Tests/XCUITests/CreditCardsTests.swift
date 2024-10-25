@@ -147,6 +147,9 @@ class CreditCardsTests: BaseTestCase {
             let cardNumber = app.webViews["Web content"].textFields["Card Number:"]
             cardNumber.waitAndTap()
             mozWaitForElementToNotExist(app.buttons[useSavedCard])
+            // If Keyboard is open, hit return button
+            let keyboardReturn = app.keyboards.buttons["return"]
+            if keyboardReturn.waitForExistence(timeout: 5) { keyboardReturn.tap() }
             navigator.goto(CreditCardsSettings)
             unlockLoginsView()
             mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
@@ -159,7 +162,7 @@ class CreditCardsTests: BaseTestCase {
             app.buttons["Done"].tap()
             cardNumber.waitAndTap()
             // The autofill option (Use saved card prompt) is displayed
-            if !app.buttons[useSavedCard].exists {
+            if !app.buttons[useSavedCard].waitForExistence(timeout: 3) {
                 app.webViews["Web content"].staticTexts["Card Number:"].tap()
             }
             mozWaitForElementToExist(app.buttons[useSavedCard])
