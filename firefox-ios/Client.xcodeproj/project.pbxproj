@@ -4755,6 +4755,7 @@
 				45D5EDCB292D839700311934 /* PinnedSites.swift */,
 				285D3B671B4380B70035FD22 /* Queue.swift */,
 				D076971E206AC60900FACFD8 /* ReadingList.swift */,
+				D057B2AC22022617000614E0 /* Rust */,
 				74B195431CF503FC007F36EF /* RecentlyClosedTabs.swift */,
 				2FCAE2471ABB531100877008 /* RemoteTabs.swift */,
 				2829D39F1C2F0AD400DCF931 /* Sharing.swift */,
@@ -4821,7 +4822,6 @@
 			children = (
 				E65075811E37F7AB006961AC /* FSUtils.h */,
 				E65075821E37F7AB006961AC /* FSUtils.m */,
-				D057B2AC22022617000614E0 /* Rust */,
 				2FCAE25B1ABB531100877008 /* SwiftData.swift */,
 			);
 			path = ThirdParty;
@@ -7285,7 +7285,8 @@
 				B2999FEC2B044A5900F0FEC1 /* UnencryptedCreditCardFields.swift */,
 				B28BF6612B7ACC17006357CA /* UnencryptedAddressFields.swift */,
 			);
-			path = Rust;
+			name = Rust;
+			path = ThirdParty/Rust;
 			sourceTree = "<group>";
 		};
 		D0FCF7E71FE44CA9004A7995 /* UserScripts */ = {
