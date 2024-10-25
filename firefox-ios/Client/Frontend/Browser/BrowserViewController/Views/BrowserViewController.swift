@@ -399,6 +399,8 @@ class BrowserViewController: UIViewController,
         let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: newCollection)
         let showTopTabs = ToolbarHelper().shouldShowTopTabs(for: newCollection)
 
+        switchToolbarIfNeeded()
+
         if isToolbarRefactorEnabled {
             if showNavToolbar {
                 navigationToolbarContainer.isHidden = false
@@ -2667,9 +2669,6 @@ class BrowserViewController: UIViewController,
             if isSelectedTab && !isToolbarRefactorEnabled {
                 // Refresh secure content state after completed navigation
                 urlBar.locationView.hasSecureContent = webView.hasOnlySecureContent
-                if let url = webView.url {
-                    urlBar.locationView.showTrackingProtectionButton(for: url)
-                }
             }
 
             if !isSelectedTab, let webView = tab.webView, tab.screenshot == nil {
@@ -3050,14 +3049,7 @@ class BrowserViewController: UIViewController,
         webViewContainerBackdrop.backgroundColor = currentTheme.colors.layer3
         setNeedsStatusBarAppearanceUpdate()
 
-        // Update the `background-color` of any blank webviews.
-        let webViews = tabManager.tabs.compactMap({ $0.webView })
-        webViews.forEach({ $0.applyTheme(theme: currentTheme) })
-
-        let tabs = tabManager.tabs
-        tabs.forEach {
-            $0.applyTheme(theme: currentTheme)
-        }
+        tabManager.selectedTab?.applyTheme(theme: currentTheme)
 
         if !isToolbarRefactorEnabled {
             let isPrivate = tabManager.selectedTab?.isPrivate ?? false

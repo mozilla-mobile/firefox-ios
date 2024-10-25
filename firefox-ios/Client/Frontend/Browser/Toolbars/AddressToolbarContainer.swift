@@ -26,12 +26,10 @@ final class AddressToolbarContainer: UIView,
                                      AlphaDimmable,
                                      StoreSubscriber,
                                      AddressToolbarDelegate,
-                                     MenuHelperURLBarInterface,
                                      Autocompletable,
                                      URLBarViewProtocol {
     private enum UX {
-        static let compactLeadingEdgeEditing: CGFloat = 8
-        static let compactHorizontalEdge: CGFloat = 16
+        static let toolbarHorizontalPadding: CGFloat = 16
     }
 
     typealias SubscriberStateType = ToolbarState
@@ -67,20 +65,9 @@ final class AddressToolbarContainer: UIView,
     private var progressBarTopConstraint: NSLayoutConstraint?
     private var progressBarBottomConstraint: NSLayoutConstraint?
 
-    private func calculateToolbarSpace(isLeading: Bool) -> CGFloat? {
-        guard let toolbarState = store.state.screenState(ToolbarState.self,
-                                                         for: .toolbar,
-                                                         window: windowUUID)
-        else { return nil }
-
-        let isCompact = shouldDisplayCompact
-        let isEditing = toolbarState.addressToolbar.isEditing
-
-        if isCompact && isEditing {
-            return isLeading ? UX.compactLeadingEdgeEditing : -UX.compactHorizontalEdge
-        }
-
-        return nil
+    private func calculateToolbarSpace() -> CGFloat {
+        // Provide 0 padding in iPhone landscape due to safe area insets
+        return shouldDisplayCompact || UIDevice.current.userInterfaceIdiom == .pad ? UX.toolbarHorizontalPadding : 0
     }
 
     /// Overlay mode is the state where the lock/reader icons are hidden, the home panels are shown,
@@ -182,13 +169,13 @@ final class AddressToolbarContainer: UIView,
             updateProgressBarPosition(toolbarState.toolbarPosition)
             compactToolbar.configure(state: newModel.addressToolbarState,
                                      toolbarDelegate: self,
-                                     leadingSpace: calculateToolbarSpace(isLeading: true),
-                                     trailingSpace: calculateToolbarSpace(isLeading: false),
+                                     leadingSpace: calculateToolbarSpace(),
+                                     trailingSpace: calculateToolbarSpace(),
                                      isUnifiedSearchEnabled: isUnifiedSearchEnabled)
             regularToolbar.configure(state: newModel.addressToolbarState,
                                      toolbarDelegate: self,
-                                     leadingSpace: calculateToolbarSpace(isLeading: true),
-                                     trailingSpace: calculateToolbarSpace(isLeading: false),
+                                     leadingSpace: calculateToolbarSpace(),
+                                     trailingSpace: calculateToolbarSpace(),
                                      isUnifiedSearchEnabled: isUnifiedSearchEnabled)
 
             // the layout (compact/regular) that should be displayed is driven by the state
@@ -348,20 +335,6 @@ final class AddressToolbarContainer: UIView,
 
     func addressToolbarNeedsSearchReset() {
         delegate?.searchSuggestions(searchTerm: "")
-    }
-
-    // MARK: - MenuHelperURLBarInterface
-    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        if action == MenuHelperURLBarModel.selectorPasteAndGo {
-            return UIPasteboard.general.hasStrings
-        }
-
-        return super.canPerformAction(action, withSender: sender)
-    }
-
-    func menuHelperPasteAndGo() {
-        guard let pasteboardContents = UIPasteboard.general.string else { return }
-        delegate?.openBrowser(searchTerm: pasteboardContents)
     }
 
     // MARK: - Autocompletable

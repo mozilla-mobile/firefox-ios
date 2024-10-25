@@ -730,6 +730,7 @@ class TabManagerMiddleware {
                     currentTabInfo: MainMenuTabInfo(
                         tabID: selectedTab.tabUUID,
                         url: selectedTab.url,
+                        canonicalURL: selectedTab.canonicalURL?.displayURL,
                         isHomepage: selectedTab.isFxHomeTab,
                         isDefaultUserAgentDesktop: UserAgent.isDesktop(ua: UserAgent.getUserAgent()),
                         hasChangedUserAgent: selectedTab.changedUserAgent,

@@ -8,13 +8,14 @@ import MenuKit
 import Shared
 
 protocol MainMenuCoordinatorDelegate: AnyObject {
+    func editLatestBookmark()
     func openURLInNewTab(_ url: URL?)
     func openNewTab(inPrivateMode: Bool)
     func showLibraryPanel(_ panel: Route.HomepanelSection)
     func showSettings(at destination: Route.SettingsSection)
     func showFindInPage()
-    func editLatestBookmark()
     func updateZoomPageBarVisibility()
+    func showShareSheet(with url: URL?)
 }
 
 class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
@@ -69,7 +70,7 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
             case .findInPage:
                 self.navigationHandler?.showFindInPage()
             case .goToURL:
-                self.navigationHandler?.openURLInNewTab(destination.urlToVisit)
+                self.navigationHandler?.openURLInNewTab(destination.url)
             case .history:
                 self.navigationHandler?.showLibraryPanel(.history)
             case .newTab:
@@ -80,6 +81,8 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
                 self.navigationHandler?.showSettings(at: .password)
             case .settings:
                 self.navigationHandler?.showSettings(at: .general)
+            case .shareSheet:
+                self.navigationHandler?.showShareSheet(with: destination.url)
             case .zoom:
                 self.navigationHandler?.updateZoomPageBarVisibility()
             }

@@ -7,106 +7,91 @@ import XCTest
 
 @testable import Client
 final class TabDisplayViewTests: XCTestCase {
-    var profile: MockProfile!
+    var diffableDataSource: TabDisplayDiffableDataSource?
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        profile = MockProfile()
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
-        profile = nil
+        diffableDataSource = nil
+        super.tearDown()
     }
 
     func testNumberOfSections_ForRegularTabsWithInactiveTabs() {
         let subject = createSubject(isPrivateMode: false,
-                                    emptyTabs: false,
-                                    emptyInactiveTabs: false)
+                                    numberInactiveTabs: 2,
+                                    numberActiveTabs: 5)
 
         XCTAssertEqual(subject.collectionView.numberOfSections, 2)
+        XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 0), 2)
+        XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 1), 5)
     }
 
     func testNumberOfSections_ForRegularTabsWithoutInactiveTabs() {
         let subject = createSubject(isPrivateMode: false,
-                                    emptyTabs: false,
-                                    emptyInactiveTabs: true)
+                                    numberInactiveTabs: 0,
+                                    numberActiveTabs: 2)
 
-        XCTAssertEqual(subject.collectionView.numberOfSections, 1)
+        XCTAssertEqual(subject.collectionView.numberOfSections, 2)
+        XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 0), 0)
+        XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 1), 2)
     }
 
     func testNumberOfSections_PrivateTabsAndInactiveTabs() {
         let subject = createSubject(isPrivateMode: true,
-                                    emptyTabs: false,
-                                    emptyInactiveTabs: false)
+                                    numberInactiveTabs: 2,
+                                    numberActiveTabs: 2)
 
-        let numberOfSections = subject.collectionView.numberOfSections
-        XCTAssertEqual(numberOfSections, 1)
+        XCTAssertEqual(subject.collectionView.numberOfSections, 2)
+        // if in private mode we should not have any inactive tabs added to the section
+        XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 0), 0)
+        XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 1), 2)
     }
 
     func testNumberOfSections_PrivateTabsWithoutInactiveTabs() {
         let subject = createSubject(isPrivateMode: true,
-                                    emptyTabs: false,
-                                    emptyInactiveTabs: true)
+                                    numberInactiveTabs: 0,
+                                    numberActiveTabs: 9)
 
-        let numberOfSections = subject.collectionView.numberOfSections
-        XCTAssertEqual(numberOfSections, 1)
+        XCTAssertEqual(subject.collectionView.numberOfSections, 2)
+        XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 0), 0)
+        XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 1), 9)
     }
 
     func testNumberOfSections_PrivateTabsWithEmptyTabs() {
         let subject = createSubject(isPrivateMode: true,
-                                    emptyTabs: true,
-                                    emptyInactiveTabs: true)
+                                    numberInactiveTabs: 0,
+                                    numberActiveTabs: 0)
 
-        let numberOfSections = subject.collectionView.numberOfSections
-        XCTAssertEqual(numberOfSections, 0)
+        XCTAssertEqual(subject.collectionView.numberOfSections, 2)
+        XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 0), 0)
+        XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 1), 0)
     }
 
     func testAmountOfSections_ForPrivateTabsWithoutInactiveTabs() {
         let subject = createSubject(isPrivateMode: true,
-                                    emptyTabs: false,
-                                    emptyInactiveTabs: true)
+                                    numberInactiveTabs: 0,
+                                    numberActiveTabs: 4)
 
-        XCTAssertEqual(subject.collectionView.numberOfSections, 1)
-    }
-
-    // This case is not possible adding the test to check the logic still
-    func testAmountOfSections_ForPrivateTabsWithInactiveTabs() {
-        let subject = createSubject(isPrivateMode: true,
-                                    emptyTabs: false,
-                                    emptyInactiveTabs: false)
-
-        XCTAssertEqual(subject.collectionView.numberOfSections, 1)
-    }
-
-    func testNumberOfItemsSection_ForRegularTabsWithInactiveTabs() {
-        let subject = createSubject(isPrivateMode: false,
-                                    emptyTabs: false,
-                                    emptyInactiveTabs: false)
-
-        XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 0), 2)
-        XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 1), 3)
+        XCTAssertEqual(subject.collectionView.numberOfSections, 2)
+        XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 0), 0)
+        XCTAssertEqual(subject.collectionView.numberOfItems(inSection: 1), 4)
     }
 
     // MARK: - Private
     private func createSubject(isPrivateMode: Bool,
-                               emptyTabs: Bool,
-                               emptyInactiveTabs: Bool,
+                               numberInactiveTabs: Int,
+                               numberActiveTabs: Int,
                                file: StaticString = #file,
                                line: UInt = #line) -> TabDisplayView {
-        let tabs = createTabs(emptyTabs)
-        var inactiveTabs = [InactiveTabsModel]()
-        if !emptyInactiveTabs {
-            for index in 0..<2 {
-                let inactiveTabModel = InactiveTabsModel(tabUUID: "UUID",
-                                                         title: "InactiveTab\(index)",
-                                                         url: nil)
-                inactiveTabs.append(inactiveTabModel)
-            }
-        }
+        let tabs = createTabs(numberOfTabs: numberActiveTabs)
+
+        let inactiveTabs = createInactiveTabs(numberOfTabs: numberInactiveTabs)
         let isInactiveTabsExpanded = !isPrivateMode && !inactiveTabs.isEmpty
+
         let tabState = TabsPanelState(windowUUID: .XCTestDefaultUUID,
                                       isPrivateMode: isPrivateMode,
                                       tabs: tabs,
@@ -116,15 +101,39 @@ final class TabDisplayViewTests: XCTestCase {
         let subject = TabDisplayView(panelType: isPrivateMode ? .privateTabs : .tabs,
                                      state: tabState,
                                      windowUUID: .XCTestDefaultUUID)
+
+        let tabCollectionView = subject.collectionView
+
+        diffableDataSource = TabDisplayDiffableDataSource(
+            collectionView: tabCollectionView
+        ) { (collectionView, indexPath, item) -> UICollectionViewCell? in
+            return UICollectionViewCell()
+        }
+
+        diffableDataSource?.updateSnapshot(state: tabState)
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
     }
 
-    private func createTabs(_ emptyTabs: Bool) -> [TabModel] {
-        guard !emptyTabs else { return [TabModel]() }
+    private func createInactiveTabs(numberOfTabs: Int) -> [InactiveTabsModel] {
+        guard numberOfTabs != 0 else { return [InactiveTabsModel]() }
+
+        var inactiveTabs = [InactiveTabsModel]()
+        let tabUUID = "UUID"
+        for index in 0..<numberOfTabs {
+            let inactiveTabModel = InactiveTabsModel(tabUUID: tabUUID,
+                                                     title: "InactiveTab\(index)",
+                                                     url: nil)
+            inactiveTabs.append(inactiveTabModel)
+        }
+        return inactiveTabs
+    }
+
+    private func createTabs(numberOfTabs: Int) -> [TabModel] {
+        guard numberOfTabs != 0 else { return [TabModel]() }
 
         var tabs = [TabModel]()
-        for index in 0...2 {
+        for index in 0..<numberOfTabs {
             let tabModel = TabModel.emptyState(tabUUID: "", title: "Tab \(index)")
             tabs.append(tabModel)
         }
