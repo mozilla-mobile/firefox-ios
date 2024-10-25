@@ -101,6 +101,28 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.browserActions[2].actionType, .menu)
     }
 
+    func test_didEnterSearchTermAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: ToolbarActionType.didEnterSearchTerm
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+
+        XCTAssertEqual(newState.pageActions.count, 2)
+        XCTAssertEqual(newState.pageActions[0].actionType, .share)
+        XCTAssertEqual(newState.pageActions[1].actionType, .reload)
+
+        XCTAssertTrue(newState.didStartTyping)
+        XCTAssertFalse(newState.showQRPageAction)
+    }
+
     func test_didStartTypingAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = addressBarReducer()
