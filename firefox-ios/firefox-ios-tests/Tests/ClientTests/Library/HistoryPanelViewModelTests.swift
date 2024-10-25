@@ -174,7 +174,7 @@ class HistoryPanelViewModelTests: XCTestCase {
         let searchTermGroup = createSearchTermGroup(timestamp: Date().toMicrosecondsSince1970())
         XCTAssertNil(self.subject.shouldAddGroupToSections(group: searchTermGroup))
     }
-    
+
     func testGroupBelongToSection_ForLastHour() {
         let searchTermGroup = createSearchTermGroup(timestamp: Date().toMicrosecondsSince1970())
 
