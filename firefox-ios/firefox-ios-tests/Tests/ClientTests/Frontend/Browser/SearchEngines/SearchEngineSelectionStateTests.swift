@@ -25,7 +25,7 @@ final class SearchEngineSelectionStateTests: XCTestCase {
         XCTAssertEqual(initialState.searchEngines, [])
     }
 
-    func testUpdatingCurrentTabInfo() {
+    func testDidLoadSearchEngines() {
         let initialState = createSubject()
         let reducer = searchEngineSelectionReducer()
 

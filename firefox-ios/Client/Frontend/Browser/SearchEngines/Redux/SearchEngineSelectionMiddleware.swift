@@ -9,7 +9,6 @@ import ToolbarKit
 final class SearchEngineSelectionMiddleware {
     private let profile: Profile
     private let logger: Logger
-    private let telemetry = MainMenuTelemetry()
     private let searchEnginesManager: SearchEnginesManager
 
     init(profile: Profile = AppContainer.shared.resolve(),
@@ -26,7 +25,7 @@ final class SearchEngineSelectionMiddleware {
         switch action.actionType {
         case SearchEngineSelectionActionType.viewDidLoad:
             guard let searchEngines = searchEnginesManager.orderedEngines, !searchEngines.isEmpty else {
-                // This should basically never happen, but if it does, attempt to fetch the search engines.
+                // The SearchEngineManager should have loaded these by now, but if not, attempt to fetch the search engines
                 self.searchEnginesManager.getOrderedEngines { [weak self] searchEngines in
                     self?.notifyDidLoad(windowUUID: action.windowUUID, searchEngines: searchEngines)
                 }
