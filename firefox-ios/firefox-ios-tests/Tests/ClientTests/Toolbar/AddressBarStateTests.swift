@@ -101,54 +101,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.browserActions[2].actionType, .menu)
     }
 
-    func test_readerModeStateChangedAction_returnsExpectedState() {
-    }
-
-    func test_websiteLoadingStateDidChangeAction_returnsExpectedState() {
-    }
-
-    func test_urlDidChangeAction_returnsExpectedState() {
-    }
-
-    func test_backForwardButtonStateChangedAction_returnsExpectedState() {
-    }
-
-    func test_traitCollectionDidChangedAction_returnsExpectedState() {
-    }
-
-    func test_showMenuWarningBadgeAction_returnsExpectedState() {
-    }
-
-    func test_borderPositionChangedAction_returnsExpectedState() {
-    }
-
-    func test_toolbarPositionChangedAction_returnsExpectedState() {
-    }
-
-    func test_didPasteSearchTermAction_returnsExpectedState() {
-    }
-
-    func test_didStartEditingUrlAction_returnsExpectedState() {
-    }
-
-    func test_cancelEditAction_returnsExpectedState() {
-    }
-
-    func test_didSetTextInLocationViewAction_returnsExpectedState() {
-    }
-
-    func test_didScrollDuringEditAction_returnsExpectedState() {
-    }
-
-    func test_clearSearchAction_returnsExpectedState() {
-    }
-
-    func test_didDeleteSearchTermAction_returnsExpectedState() {
-    }
-
-    func test_didEnterSearchTermAction_returnsExpectedState() {
-    }
-
     func test_didStartTypingAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = addressBarReducer()
