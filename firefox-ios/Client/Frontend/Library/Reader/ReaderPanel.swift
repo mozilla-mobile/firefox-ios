@@ -120,7 +120,7 @@ class ReadingListTableViewCell: UITableViewCell, ThemeApplicable {
         selectedBackgroundView?.backgroundColor = theme.colors.layer5Hover
         titleLabel.textColor = unread ? theme.colors.textPrimary : theme.colors.textDisabled
         hostnameLabel.textColor = unread ? theme.colors.textPrimary : theme.colors.textDisabled
-        readStatusImageView.tintColor = theme.colors.iconAction
+        readStatusImageView.tintColor = theme.colors.iconAccent
     }
 
     required init?(coder aDecoder: NSCoder) {

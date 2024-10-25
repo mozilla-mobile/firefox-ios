@@ -90,7 +90,7 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
     var iconPrimary: UIColor = FXColors.LightGrey05
     var iconSecondary: UIColor = FXColors.LightGrey40
     var iconDisabled: UIColor = FXColors.LightGrey05.withAlphaComponent(0.4)
-    var iconAction: UIColor = FXColors.Blue30
+    var iconAccent: UIColor = FXColors.Blue30
     var iconOnColor: UIColor = FXColors.LightGrey05
     var iconWarning: UIColor = FXColors.Red20
     var iconSpinner: UIColor = FXColors.White

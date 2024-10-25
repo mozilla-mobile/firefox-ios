@@ -360,7 +360,7 @@ class ShareViewController: UIViewController {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.addBackground(color: theme.colors.iconAction)
+        stackView.addBackground(color: theme.colors.iconAccent)
         stackView.rightLeftEdges(inset: UX.rowInset)
         parent.addArrangedSubview(stackView)
         stackView.heightAnchor.constraint(equalToConstant: CGFloat(UX.pageInfoRowHeight)).isActive = true

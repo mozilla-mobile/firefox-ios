@@ -87,7 +87,7 @@ class SyncNowSetting: WithAccountSetting {
 
         switch syncStatus {
         case .inProgress:
-            return syncIcon?.tinted(withColor: theme.colors.iconAction)
+            return syncIcon?.tinted(withColor: theme.colors.iconAccent)
         default:
             return syncIcon?.tinted(withColor: theme.colors.iconPrimary)
         }
