@@ -309,7 +309,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         placeholderLabel.isHidden = !textField.text.isEmpty
         settingDidChange?(textView.text)
-        let color = isValid(textField.text) ? theme.colors.textPrimary : theme.colors.textWarning
+        let color = isValid(textField.text) ? theme.colors.textPrimary : theme.colors.textCritical
         textField.textColor = color
     }
 
