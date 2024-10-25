@@ -31,7 +31,7 @@ class FakespotMessageCardViewModel: ObservableObject {
 
         func primaryButtonBackground(theme: Theme) -> UIColor {
             switch self {
-            case .confirmation: return theme.colors.actionConfirmation
+            case .confirmation: return theme.colors.actionSuccess
             case .warning: return theme.colors.actionWarning
             case .info: return theme.colors.actionInfo
             case .infoLoading: return theme.colors.actionSecondary

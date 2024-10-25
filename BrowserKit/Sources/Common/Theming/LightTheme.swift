@@ -66,7 +66,7 @@ private struct LightColourPalette: ThemeColourPalette {
     var formKnob: UIColor = FXColors.White
     var indicatorActive: UIColor = FXColors.LightGrey50
     var indicatorInactive: UIColor = FXColors.LightGrey30
-    var actionConfirmation: UIColor = FXColors.Green60
+    var actionSuccess: UIColor = FXColors.Green60
     var actionWarning: UIColor = FXColors.Yellow60.withAlphaComponent(0.4)
     var actionError: UIColor = FXColors.Red30
     var actionInfo: UIColor = FXColors.Blue50

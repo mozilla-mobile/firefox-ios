@@ -54,7 +54,7 @@ public protocol ThemeColourPalette {
     var formKnob: UIColor { get }
     var indicatorActive: UIColor { get }
     var indicatorInactive: UIColor { get }
-    var actionConfirmation: UIColor { get }
+    var actionSuccess: UIColor { get }
     var actionWarning: UIColor { get }
     var actionError: UIColor { get }
     var actionInfo: UIColor { get }
