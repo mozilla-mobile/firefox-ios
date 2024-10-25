@@ -56,7 +56,7 @@ public protocol ThemeColourPalette {
     var indicatorInactive: UIColor { get }
     var actionSuccess: UIColor { get }
     var actionWarning: UIColor { get }
-    var actionError: UIColor { get }
+    var actionCritical: UIColor { get }
     var actionInfo: UIColor { get }
     var actionTabActive: UIColor { get }
     var actionTabInactive: UIColor { get }
