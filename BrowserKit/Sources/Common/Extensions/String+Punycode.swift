@@ -164,7 +164,7 @@ extension String {
         return true
     }
 
-    func isValidPunycodeScala(_ string: String) -> Bool {
+    private func isValidPunycodeScala(_ string: String) -> Bool {
         return string.hasPrefix(prefixPunycode)
     }
 
