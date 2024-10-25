@@ -159,7 +159,9 @@ final class URLExtensionTests: XCTestCase {
             ("https://example.com:8080#fragment", (nil, "example.com")),
             ("http://username:password@subdomain.example.com:8080#fragment", ("subdomain.", "subdomain.example.com")),
             ("https://www.amazon.co.uk", (nil, "amazon.co.uk")),
-            ("https://mobile.co.uk", (nil, "mobile.co.uk"))
+            ("https://mobile.co.uk", (nil, "mobile.co.uk")),
+            ("http://www.xn--google-e4d.com", (nil, "xn--google-e4d.com")),
+            ("http://xn--pple-43d.com/", (nil, "xn--pple-43d.com"))
         ]
 
         for testCase in testCases {
