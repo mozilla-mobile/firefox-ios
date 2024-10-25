@@ -13,10 +13,11 @@ final class SearchEngineSelectionMiddleware {
     private let searchEnginesManager: SearchEnginesManager
 
     init(profile: Profile = AppContainer.shared.resolve(),
+         searchEnginesManager: SearchEnginesManager? = nil,
          logger: Logger = DefaultLogger.shared) {
         self.profile = profile
         self.logger = logger
-        self.searchEnginesManager = SearchEnginesManager(prefs: profile.prefs, files: profile.files)
+        self.searchEnginesManager = searchEnginesManager ?? SearchEnginesManager(prefs: profile.prefs, files: profile.files)
     }
 
     lazy var searchEngineSelectionProvider: Middleware<AppState> = { [self] state, action in

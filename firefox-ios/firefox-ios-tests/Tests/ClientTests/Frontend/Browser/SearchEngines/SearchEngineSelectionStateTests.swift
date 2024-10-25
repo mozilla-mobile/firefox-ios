@@ -25,13 +25,13 @@ final class SearchEngineSelectionStateTests: XCTestCase {
         XCTAssertEqual(initialState.searchEngines, [])
     }
 
-    func testUpdatingCurrentTabInfo() throws {
+    func testUpdatingCurrentTabInfo() {
         let initialState = createSubject()
         let reducer = searchEngineSelectionReducer()
 
         let expectedResult: [OpenSearchEngine] = [
-            try OpenSearchEngineTests.generateOpenSearchEngine(type: .wikipedia),
-            try OpenSearchEngineTests.generateOpenSearchEngine(type: .youtube)
+            OpenSearchEngineTests.generateOpenSearchEngine(type: .wikipedia, withImage: UIImage()),
+            OpenSearchEngineTests.generateOpenSearchEngine(type: .youtube, withImage: UIImage())
         ]
 
         XCTAssertEqual(initialState.searchEngines, [])

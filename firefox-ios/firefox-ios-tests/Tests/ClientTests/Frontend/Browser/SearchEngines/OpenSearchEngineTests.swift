@@ -128,6 +128,10 @@ class OpenSearchEngineTests: XCTestCase {
             throw OpenSearchEngineError.imageNotInBundle
         }
 
+        return generateOpenSearchEngine(type: type, withImage: testImage)
+    }
+
+    public static func generateOpenSearchEngine(type: TestSearchEngine, withImage testImage: UIImage) -> OpenSearchEngine {
         return OpenSearchEngine(
             engineID: type.engineID,
             shortName: type.name,
