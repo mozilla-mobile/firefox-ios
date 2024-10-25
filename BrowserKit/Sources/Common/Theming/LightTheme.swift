@@ -32,7 +32,7 @@ private struct LightColourPalette: ThemeColourPalette {
         FXColors.LightGrey10.withAlphaComponent(1),
         FXColors.LightGrey10.withAlphaComponent(1)
     ])
-    var layerInfo: UIColor = FXColors.Blue50.withAlphaComponent(0.44)
+    var layerInformation: UIColor = FXColors.Blue50.withAlphaComponent(0.44)
     var layerSuccess: UIColor = FXColors.Green20
     var layerWarning: UIColor = FXColors.Yellow20
     var layerCritical: UIColor = FXColors.Red10

@@ -23,7 +23,7 @@ public protocol ThemeColourPalette {
     var layerAccentPrivateNonOpaque: UIColor { get }
     var layerSepia: UIColor { get }
     var layerHomepage: Gradient { get }
-    var layerInfo: UIColor { get }
+    var layerInformation: UIColor { get }
     var layerSuccess: UIColor { get }
     var layerWarning: UIColor { get }
     var layerCritical: UIColor { get }

@@ -43,7 +43,7 @@ private struct DarkColourPalette: ThemeColourPalette {
         FXColors.DarkGrey60.withAlphaComponent(1),
         FXColors.DarkGrey60.withAlphaComponent(1)
     ])
-    var layerInfo: UIColor = FXColors.Blue50
+    var layerInformation: UIColor = FXColors.Blue50
     var layerSuccess: UIColor = FXColors.Green80
     var layerWarning: UIColor = FXColors.Yellow70.withAlphaComponent(0.77)
     var layerCritical: UIColor = FXColors.Pink80

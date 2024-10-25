@@ -34,7 +34,7 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
         FXColors.Violet80,
         FXColors.Purple70
     ])
-    var layerInfo: UIColor = FXColors.Blue50
+    var layerInformation: UIColor = FXColors.Blue50
     var layerSuccess: UIColor = FXColors.Green80
     var layerWarning: UIColor = FXColors.Yellow70.withAlphaComponent(0.77)
     var layerCritical: UIColor = FXColors.Pink80
