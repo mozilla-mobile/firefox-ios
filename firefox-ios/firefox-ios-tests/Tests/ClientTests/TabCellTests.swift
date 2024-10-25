@@ -50,7 +50,8 @@ class TabCellTests: XCTestCase {
     }
 
     private func createDefaultState() -> TabModel {
-        return TabModel(tabUUID: "0022-22D3",
+        let tabUUID = "0022-22D3"
+        return TabModel(tabUUID: tabUUID,
                         isSelected: false,
                         isPrivate: false,
                         isFxHomeTab: false,

@@ -16,6 +16,7 @@ class AddressToolbarContainerModel: Equatable {
     let searchEngineImage: UIImage?
     let searchEngines: SearchEngines
     let lockIconImageName: String?
+    let safeListedURLImageName: String?
     let url: URL?
     let searchTerm: String?
     let isEditing: Bool
@@ -48,6 +49,7 @@ class AddressToolbarContainerModel: Equatable {
             urlTextFieldA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField,
             searchEngineImage: searchEngineImage,
             lockIconImageName: lockIconImageName,
+            safeListedURLImageName: safeListedURLImageName,
             url: url,
             droppableUrl: droppableUrl,
             searchTerm: term,
@@ -94,6 +96,7 @@ class AddressToolbarContainerModel: Equatable {
         self.searchEngineImage = profile.searchEngines.defaultEngine?.image
         self.searchEngines = profile.searchEngines
         self.lockIconImageName = state.addressToolbar.lockIconImageName
+        self.safeListedURLImageName = state.addressToolbar.safeListedURLImageName
         self.url = state.addressToolbar.url
         self.searchTerm = state.addressToolbar.searchTerm
         self.isEditing = state.addressToolbar.isEditing
@@ -127,7 +130,7 @@ class AddressToolbarContainerModel: Equatable {
                 numberOfTabs: action.numberOfTabs,
                 isEnabled: action.isEnabled,
                 isFlippedForRTL: action.isFlippedForRTL,
-                shouldDisplayAsHighlighted: action.shouldDisplayAsHighlighted,
+                isSelected: action.isSelected,
                 contextualHintType: action.contextualHintType,
                 a11yLabel: action.a11yLabel,
                 a11yHint: action.a11yHint,
@@ -167,6 +170,7 @@ class AddressToolbarContainerModel: Equatable {
         lhs.borderPosition == rhs.borderPosition &&
         lhs.searchEngineImage == rhs.searchEngineImage &&
         lhs.lockIconImageName == rhs.lockIconImageName &&
+        lhs.safeListedURLImageName == rhs.safeListedURLImageName &&
         lhs.url == rhs.url &&
         lhs.searchTerm == rhs.searchTerm &&
         lhs.isEditing == rhs.isEditing &&

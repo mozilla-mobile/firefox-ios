@@ -87,7 +87,12 @@ struct MainMenuDetailsState: ScreenState, Equatable {
                     for: .mainMenu,
                     window: action.windowUUID),
                   let currentTabInfo = menuState.currentTabInfo,
-                  let currentSubmenu = menuState.currentSubmenuView
+                  let currentSubmenu = menuState.currentSubmenuView,
+                  let toolbarState = store.state.screenState(
+                    ToolbarState.self,
+                    for: .toolbar,
+                    window: action.windowUUID),
+                  let readerModeState = toolbarState.addressToolbar.readerModeState
             else { return state }
 
             return MainMenuDetailsState(
@@ -95,7 +100,8 @@ struct MainMenuDetailsState: ScreenState, Equatable {
                 menuElements: state.menuConfigurator.generateMenuElements(
                     with: currentTabInfo,
                     for: currentSubmenu,
-                    and: action.windowUUID
+                    and: action.windowUUID,
+                    readerState: readerModeState
                 ),
                 submenuType: currentSubmenu
             )
@@ -111,7 +117,9 @@ struct MainMenuDetailsState: ScreenState, Equatable {
             MainMenuDetailsActionType.tapAddToShortcuts,
             MainMenuDetailsActionType.tapRemoveFromShortcuts,
             MainMenuDetailsActionType.tapAddToReadingList,
-            MainMenuDetailsActionType.tapRemoveFromReadingList:
+            MainMenuDetailsActionType.tapRemoveFromReadingList,
+            MainMenuDetailsActionType.tapToggleNightMode,
+            GeneralBrowserActionType.showReaderMode:
             return MainMenuDetailsState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,

@@ -511,6 +511,36 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.updateZoomPageBarVisibility(visible: true)
     }
 
+    func showShareSheet(with url: URL?) {
+        guard let url else { return }
+
+        let showShareSheet = { url in
+            self.showShareExtension(
+                url: url,
+                sourceView: self.browserViewController.addressToolbarContainer,
+                toastContainer: self.browserViewController.contentContainer,
+                popoverArrowDirection: .any
+            )
+        }
+
+        guard let temporaryDocument = browserViewController.tabManager.selectedTab?.temporaryDocument else {
+            showShareSheet(url)
+            return
+        }
+
+        temporaryDocument.getURL { tempDocURL in
+            DispatchQueue.main.async {
+                // If we successfully got a temp file URL, share it like a downloaded file,
+                // otherwise present the ordinary share menu for the web URL.
+                if let tempDocURL = tempDocURL, tempDocURL.isFileURL {
+                    showShareSheet(tempDocURL)
+                } else {
+                    showShareSheet(url)
+                }
+            }
+        }
+    }
+
     private func makeMenuNavViewController() -> DismissableNavigationViewController? {
         guard !childCoordinators.contains(where: { $0 is MainMenuCoordinator }) else { return nil }
 

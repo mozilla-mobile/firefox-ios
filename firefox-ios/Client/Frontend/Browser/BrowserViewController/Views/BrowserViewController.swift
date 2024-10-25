@@ -399,6 +399,8 @@ class BrowserViewController: UIViewController,
         let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: newCollection)
         let showTopTabs = ToolbarHelper().shouldShowTopTabs(for: newCollection)
 
+        switchToolbarIfNeeded()
+
         if isToolbarRefactorEnabled {
             if showNavToolbar {
                 navigationToolbarContainer.isHidden = false
@@ -1036,6 +1038,24 @@ class BrowserViewController: UIViewController,
     }
 
     private func adjustURLBarHeightBasedOnLocationViewHeight() {
+        guard isToolbarRefactorEnabled else {
+            adjustLegacyURLBarHeightBasedOnLocationViewHeight()
+            return
+        }
+
+        // Adjustment for landscape on the urlbar
+        // need to account for inset and remove it when keyboard is showing
+        let showNavToolbar = ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection)
+        let isKeyboardShowing = keyboardState != nil
+
+        if !showNavToolbar && isBottomSearchBar && !isKeyboardShowing {
+            overKeyboardContainer.addBottomInsetSpacer(spacerHeight: UIConstants.BottomInset)
+        } else {
+            overKeyboardContainer.removeBottomInsetSpacer()
+        }
+    }
+
+    private func adjustLegacyURLBarHeightBasedOnLocationViewHeight() {
         // Make sure that we have a height to actually base our calculations on
         guard !isToolbarRefactorEnabled, urlBar.locationContainer.bounds.height != 0 else { return }
         let locationViewHeight = urlBar.locationView.bounds.height
@@ -1958,6 +1978,11 @@ class BrowserViewController: UIViewController,
     /// Call this whenever the page URL changes.
     fileprivate func updateURLBarDisplayURL(_ tab: Tab) {
         guard !isToolbarRefactorEnabled else {
+            var safeListedURLImageName: String? {
+                return (tab.contentBlocker?.status == .safelisted) ?
+                StandardImageIdentifiers.Small.notificationDotFill : nil
+            }
+
             let action = ToolbarAction(
                 url: tab.url?.displayURL,
                 isPrivate: tab.isPrivate,
@@ -1965,6 +1990,7 @@ class BrowserViewController: UIViewController,
                 canGoBack: tab.canGoBack,
                 canGoForward: tab.canGoForward,
                 lockIconImageName: lockIconImageName(for: tab),
+                safeListedURLImageName: safeListedURLImageName,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange)
             store.dispatch(action)
@@ -2643,9 +2669,6 @@ class BrowserViewController: UIViewController,
             if isSelectedTab && !isToolbarRefactorEnabled {
                 // Refresh secure content state after completed navigation
                 urlBar.locationView.hasSecureContent = webView.hasOnlySecureContent
-                if let url = webView.url {
-                    urlBar.locationView.showTrackingProtectionButton(for: url)
-                }
             }
 
             if !isSelectedTab, let webView = tab.webView, tab.screenshot == nil {
@@ -3026,14 +3049,7 @@ class BrowserViewController: UIViewController,
         webViewContainerBackdrop.backgroundColor = currentTheme.colors.layer3
         setNeedsStatusBarAppearanceUpdate()
 
-        // Update the `background-color` of any blank webviews.
-        let webViews = tabManager.tabs.compactMap({ $0.webView })
-        webViews.forEach({ $0.applyTheme(theme: currentTheme) })
-
-        let tabs = tabManager.tabs
-        tabs.forEach {
-            $0.applyTheme(theme: currentTheme)
-        }
+        tabManager.selectedTab?.applyTheme(theme: currentTheme)
 
         if !isToolbarRefactorEnabled {
             let isPrivate = tabManager.selectedTab?.isPrivate ?? false
