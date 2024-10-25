@@ -42,7 +42,7 @@ class FakespotMessageCardViewModel: ObservableObject {
 
         func cardBackground(theme: Theme) -> UIColor {
             switch self {
-            case .confirmation: return theme.colors.layerConfirmation
+            case .confirmation: return theme.colors.layerSuccess
             case .warning: return theme.colors.layerWarning
             case .info: return theme.colors.layerInfo
             case .infoLoading: return .clear

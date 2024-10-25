@@ -24,7 +24,7 @@ public protocol ThemeColourPalette {
     var layerSepia: UIColor { get }
     var layerHomepage: Gradient { get }
     var layerInfo: UIColor { get }
-    var layerConfirmation: UIColor { get }
+    var layerSuccess: UIColor { get }
     var layerWarning: UIColor { get }
     var layerError: UIColor { get }
     var layerSelectedText: UIColor { get }
