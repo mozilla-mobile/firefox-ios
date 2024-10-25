@@ -78,7 +78,7 @@ public protocol ThemeColourPalette {
     var iconDisabled: UIColor { get }
     var iconAccent: UIColor { get }
     var iconOnColor: UIColor { get }
-    var iconWarning: UIColor { get }
+    var iconCritical: UIColor { get }
     var iconSpinner: UIColor { get }
     var iconAccentViolet: UIColor { get }
     var iconAccentBlue: UIColor { get }

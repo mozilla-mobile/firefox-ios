@@ -166,13 +166,13 @@ class SyncNowSetting: WithAccountSetting {
 
     private lazy var warningIcon: UIImageView = {
         let image = UIImage(named: StandardImageIdentifiers.Large.warningFill)?
-            .tinted(withColor: theme.colors.iconWarning)
+            .tinted(withColor: theme.colors.iconCritical)
         return UIImageView(image: image)
     }()
 
     private lazy var errorIcon: UIImageView = {
         let image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.warningFill)?
-            .tinted(withColor: theme.colors.iconWarning)
+            .tinted(withColor: theme.colors.iconCritical)
         return UIImageView(image: image)
     }()
 

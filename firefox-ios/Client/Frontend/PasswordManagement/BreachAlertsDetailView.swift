@@ -218,7 +218,7 @@ class BreachAlertsDetailView: UIView, ThemeApplicable {
         let colors = theme.colors
         layer.shadowColor = colors.shadowDefault.cgColor
         backgroundColor = colors.layer2
-        titleIcon.tintColor = colors.iconWarning
+        titleIcon.tintColor = colors.iconCritical
         titleLabel.textColor = colors.textCritical
         breachDateLabel.textColor = colors.textCritical
         descriptionLabel.textColor = colors.textCritical
