@@ -35,7 +35,7 @@ private struct LightColourPalette: ThemeColourPalette {
     var layerInfo: UIColor = FXColors.Blue50.withAlphaComponent(0.44)
     var layerSuccess: UIColor = FXColors.Green20
     var layerWarning: UIColor = FXColors.Yellow20
-    var layerError: UIColor = FXColors.Red10
+    var layerCritical: UIColor = FXColors.Red10
     var layerSelectedText: UIColor = FXColors.Blue50
     var layerAutofillText: UIColor = FXColors.DarkGrey05.withAlphaComponent(0.73)
     var layerSearch: UIColor = FXColors.LightGrey30

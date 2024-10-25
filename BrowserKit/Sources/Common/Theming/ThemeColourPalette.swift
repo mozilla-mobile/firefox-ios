@@ -26,7 +26,7 @@ public protocol ThemeColourPalette {
     var layerInfo: UIColor { get }
     var layerSuccess: UIColor { get }
     var layerWarning: UIColor { get }
-    var layerError: UIColor { get }
+    var layerCritical: UIColor { get }
     var layerSelectedText: UIColor { get }
     var layerAutofillText: UIColor { get }
     var layerSearch: UIColor { get }

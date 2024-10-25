@@ -46,7 +46,7 @@ class FakespotMessageCardViewModel: ObservableObject {
             case .warning: return theme.colors.layerWarning
             case .info: return theme.colors.layerInfo
             case .infoLoading: return .clear
-            case .error: return theme.colors.layerError
+            case .error: return theme.colors.layerCritical
             case .infoTransparent: return .clear
             }
         }
