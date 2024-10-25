@@ -92,7 +92,7 @@ private struct LightColourPalette: ThemeColourPalette {
     var iconOnColor: UIColor = FXColors.LightGrey05
     var iconCritical: UIColor = FXColors.Red70
     var iconSpinner: UIColor = FXColors.LightGrey80
-    var iconAccentViolet: UIColor = FXColors.Violet60
+    var iconAccentViolet: UIColor = FXColors.Violet70
     var iconAccentBlue: UIColor = FXColors.Blue60
     var iconAccentPink: UIColor = FXColors.Pink60
     var iconAccentGreen: UIColor = FXColors.Green60
