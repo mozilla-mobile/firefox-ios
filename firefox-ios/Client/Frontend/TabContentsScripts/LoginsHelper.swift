@@ -263,7 +263,11 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
     private func promptSave(_ login: LoginEntry) {
         guard login.isValid.isSuccess else { return }
 
-        clearStoredPasswordAfterGeneration(origin: login.hostname)
+        if self.featureFlags.isFeatureEnabled(.passwordGenerator, checking: .buildOnly) &&
+            profile.prefs.boolForKey("saveLogins") ?? true &&
+            tab?.isPrivate == false {
+            clearStoredPasswordAfterGeneration(origin: login.hostname)
+        }
 
         let promptMessage: String
         let https = "^https:\\/\\/"
