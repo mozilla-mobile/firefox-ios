@@ -134,27 +134,19 @@ class CreditCardsTests: BaseTestCase {
         }
         XCTAssertEqual(saveAndFillPaymentMethodsSwitch.value! as! String, "0")
         app.buttons[creditCardsStaticTexts.AutoFillCreditCard.addCard].tap()
-        addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: "0540")
+        let dateFiveYearsFromNow = Calendar.current.date(byAdding: .year, value: 5, to: Date())
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMyy"
+        let futureExpiryMonthYear = formatter.string(from: dateFiveYearsFromNow!)
+        addCreditCard(name: "Test", cardNumber: cards[0], expirationDate: futureExpiryMonthYear)
         if #available(iOS 16, *) {
             navigator.goto(NewTabScreen) // Not working on iOS 15
-            navigator.openURL("https://checkout.stripe.dev/preview")
+            navigator.openURL("https://mozilla.github.io/form-fill-examples/basic_cc.html")
             waitUntilPageLoad()
             // The autofill option (Use saved card prompt) is not displayed
-            let cardNumber = app.webViews["Web content"].textFields["Card number"]
-            app.swipeUp()
-            app.swipeUp()
-            mozWaitForElementToExist(cardNumber)
-            if !cardNumber.isHittable {
-                swipeUp(nrOfSwipes: 2)
-            }
-            cardNumber.tapOnApp()
-            let menuButton = AccessibilityIdentifiers.Toolbar.settingsMenuButton
-            if !app.buttons[menuButton].isHittable {
-                cardNumber.tapOnApp()
-            }
+            let cardNumber = app.webViews["Web content"].textFields["Card Number:"]
+            cardNumber.waitAndTap()
             mozWaitForElementToNotExist(app.buttons[useSavedCard])
-            dismissSavedCardsPrompt()
-            swipeDown(nrOfSwipes: 3)
             navigator.goto(CreditCardsSettings)
             unlockLoginsView()
             mozWaitForElementToExist(app.staticTexts[creditCardsStaticTexts.AutoFillCreditCard.autoFillCreditCards])
@@ -165,13 +157,10 @@ class CreditCardsTests: BaseTestCase {
             navigator.nowAt(SettingsScreen)
             waitForExistence(app.buttons["Done"])
             app.buttons["Done"].tap()
-            app.swipeUp()
-            mozWaitForElementToExist(app.webViews["Web content"].staticTexts["Explore Checkout"], timeout: TIMEOUT)
-            mozWaitForElementToExist(cardNumber)
-            cardNumber.tapOnApp()
+            cardNumber.waitAndTap()
             // The autofill option (Use saved card prompt) is displayed
             if !app.buttons[useSavedCard].exists {
-                app.webViews["Web content"].textFields["Full name on card"].tapOnApp()
+                app.webViews["Web content"].staticTexts["Card Number:"].tap()
             }
             mozWaitForElementToExist(app.buttons[useSavedCard])
         }
