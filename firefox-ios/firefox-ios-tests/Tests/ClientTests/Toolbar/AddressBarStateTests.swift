@@ -101,6 +101,49 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.browserActions[2].actionType, .menu)
     }
 
+    func test_clearSearchAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: ToolbarActionType.clearSearch
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+
+        XCTAssertEqual(newState.pageActions.count, 1)
+        XCTAssertEqual(newState.pageActions[0].actionType, .qrCode)
+
+        XCTAssertTrue(newState.isEditing)
+        XCTAssertTrue(newState.showQRPageAction)
+    }
+
+    func test_didDeleteSearchTermAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: ToolbarActionType.didDeleteSearchTerm
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+
+        XCTAssertEqual(newState.pageActions.count, 1)
+        XCTAssertEqual(newState.pageActions[0].actionType, .qrCode)
+
+        XCTAssertTrue(newState.isEditing)
+        XCTAssertTrue(newState.didStartTyping)
+        XCTAssertTrue(newState.showQRPageAction)
+    }
+
     func test_didEnterSearchTermAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = addressBarReducer()
@@ -114,11 +157,8 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-
-        XCTAssertEqual(newState.pageActions.count, 2)
-        XCTAssertEqual(newState.pageActions[0].actionType, .share)
-        XCTAssertEqual(newState.pageActions[1].actionType, .reload)
-
+        XCTAssertEqual(newState.pageActions.count, 0)
+        XCTAssertTrue(newState.isEditing)
         XCTAssertTrue(newState.didStartTyping)
         XCTAssertFalse(newState.showQRPageAction)
     }
