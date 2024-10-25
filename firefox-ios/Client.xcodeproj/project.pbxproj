@@ -7881,13 +7881,6 @@
 			path = Entitlements;
 			sourceTree = "<group>";
 		};
-		E4E0BB141AFBC9E4008D6260 /* Shared */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Shared;
-			sourceTree = "<group>";
-		};
 		E60961841B62B7E100DD640F /* Configuration */ = {
 			isa = PBXGroup;
 			children = (
@@ -8122,7 +8115,6 @@
 				D34DC84C1A16C40C00D49B7B /* Providers */,
 				39F99FC71E3A6DB700F353B4 /* Push */,
 				C8E2E80623D20FB3005AACE6 /* RustFxA */,
-				E4E0BB141AFBC9E4008D6260 /* Shared */,
 				7B3632E71C29879300D12AF9 /* Snapshot */,
 				962C6C3B297054EC00354BE8 /* Sources */,
 				2FCAE21B1ABB51F800877008 /* Storage */,
