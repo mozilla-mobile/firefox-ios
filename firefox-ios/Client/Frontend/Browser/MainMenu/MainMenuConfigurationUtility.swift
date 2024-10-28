@@ -160,6 +160,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 ),
                 MenuElement(
                     title: .MainMenu.ToolsSection.Tools,
+                    description: getToolsSubmenuDescription(with: configuration),
                     iconName: Icons.tools,
                     isEnabled: true,
                     isActive: false,
@@ -179,6 +180,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 ),
                 MenuElement(
                     title: .MainMenu.ToolsSection.Save,
+                    description: getSaveSubmenuDescription(with: configuration),
                     iconName: Icons.save,
                     isEnabled: true,
                     isActive: false,
@@ -198,6 +200,37 @@ struct MainMenuConfigurationUtility: Equatable {
                 )
             ]
         )
+    }
+
+    private func getToolsSubmenuDescription(with tabInfo: MainMenuTabInfo) -> String {
+        typealias Preview = String.MainMenu.Submenus.Tools
+        var description = ""
+
+        description += "\(Preview.ZoomSubtitle)"
+
+        if tabInfo.readerModeIsAvailable {
+            description += ", \(Preview.ReaderViewSubtitle)"
+        }
+
+        description += ", \(Preview.NightModeSubtitle)"
+        description += ", \(Preview.ReportBrokenSiteSubtitle)"
+        description += ", \(Preview.ShareSubtitle)"
+
+        return description
+    }
+
+    private func getSaveSubmenuDescription(with tabInfo: MainMenuTabInfo) -> String {
+        typealias Preview = String.MainMenu.Submenus.Save
+        var description = ""
+
+        description += "\(Preview.BookmarkThisPageSubtitle)"
+        description += ", \(Preview.AddToShortcutsSubtitle)"
+
+        if tabInfo.readerModeIsAvailable {
+            description += ", \(Preview.SaveToReadingListSubtitle)"
+        }
+
+        return description
     }
 
     private func configureUserAgentItem(
