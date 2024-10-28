@@ -43,10 +43,10 @@ private struct DarkColourPalette: ThemeColourPalette {
         FXColors.DarkGrey60.withAlphaComponent(1),
         FXColors.DarkGrey60.withAlphaComponent(1)
     ])
-    var layerInfo: UIColor = FXColors.Blue50
-    var layerConfirmation: UIColor = FXColors.Green80
+    var layerInformation: UIColor = FXColors.Blue50
+    var layerSuccess: UIColor = FXColors.Green80
     var layerWarning: UIColor = FXColors.Yellow70.withAlphaComponent(0.77)
-    var layerError: UIColor = FXColors.Pink80
+    var layerCritical: UIColor = FXColors.Pink80
     var layerSelectedText: UIColor = FXColors.Blue40
     var layerAutofillText: UIColor = FXColors.LightGrey05.withAlphaComponent(0.34)
     var layerSearch: UIColor = FXColors.DarkGrey80
@@ -77,10 +77,10 @@ private struct DarkColourPalette: ThemeColourPalette {
     var formKnob: UIColor = FXColors.White
     var indicatorActive: UIColor = FXColors.LightGrey90
     var indicatorInactive: UIColor = FXColors.DarkGrey05
-    var actionConfirmation: UIColor = FXColors.Green70
+    var actionSuccess: UIColor = FXColors.Green70
     var actionWarning: UIColor = FXColors.Yellow40.withAlphaComponent(0.41)
-    var actionError: UIColor = FXColors.Pink70.withAlphaComponent(0.69)
-    var actionInfo: UIColor = FXColors.Blue60
+    var actionCritical: UIColor = FXColors.Pink70.withAlphaComponent(0.69)
+    var actionInformation: UIColor = FXColors.Blue60
     var actionTabActive: UIColor = FXColors.DarkGrey30
     var actionTabInactive: UIColor = FXColors.DarkGrey80
 
@@ -88,7 +88,7 @@ private struct DarkColourPalette: ThemeColourPalette {
     var textPrimary: UIColor = FXColors.LightGrey05
     var textSecondary: UIColor = FXColors.LightGrey40
     var textDisabled: UIColor = FXColors.LightGrey05.withAlphaComponent(0.4)
-    var textWarning: UIColor = FXColors.Red20
+    var textCritical: UIColor = FXColors.Red20
     var textAccent: UIColor = FXColors.Blue30
     var textOnDark: UIColor = FXColors.LightGrey05
     var textOnLight: UIColor = FXColors.DarkGrey90
@@ -99,9 +99,9 @@ private struct DarkColourPalette: ThemeColourPalette {
     var iconPrimary: UIColor = FXColors.LightGrey05
     var iconSecondary: UIColor = FXColors.LightGrey40
     var iconDisabled: UIColor = FXColors.LightGrey05.withAlphaComponent(0.4)
-    var iconAction: UIColor = FXColors.Blue30
+    var iconAccent: UIColor = FXColors.Blue30
     var iconOnColor: UIColor = FXColors.LightGrey05
-    var iconWarning: UIColor = FXColors.Red20
+    var iconCritical: UIColor = FXColors.Red20
     var iconSpinner: UIColor = FXColors.White
     var iconAccentViolet: UIColor = FXColors.Violet20
     var iconAccentBlue: UIColor = FXColors.Blue30

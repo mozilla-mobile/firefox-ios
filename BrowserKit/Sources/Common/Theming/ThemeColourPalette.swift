@@ -23,10 +23,10 @@ public protocol ThemeColourPalette {
     var layerAccentPrivateNonOpaque: UIColor { get }
     var layerSepia: UIColor { get }
     var layerHomepage: Gradient { get }
-    var layerInfo: UIColor { get }
-    var layerConfirmation: UIColor { get }
+    var layerInformation: UIColor { get }
+    var layerSuccess: UIColor { get }
     var layerWarning: UIColor { get }
-    var layerError: UIColor { get }
+    var layerCritical: UIColor { get }
     var layerSelectedText: UIColor { get }
     var layerAutofillText: UIColor { get }
     var layerSearch: UIColor { get }
@@ -54,10 +54,10 @@ public protocol ThemeColourPalette {
     var formKnob: UIColor { get }
     var indicatorActive: UIColor { get }
     var indicatorInactive: UIColor { get }
-    var actionConfirmation: UIColor { get }
+    var actionSuccess: UIColor { get }
     var actionWarning: UIColor { get }
-    var actionError: UIColor { get }
-    var actionInfo: UIColor { get }
+    var actionCritical: UIColor { get }
+    var actionInformation: UIColor { get }
     var actionTabActive: UIColor { get }
     var actionTabInactive: UIColor { get }
 
@@ -65,7 +65,7 @@ public protocol ThemeColourPalette {
     var textPrimary: UIColor { get }
     var textSecondary: UIColor { get }
     var textDisabled: UIColor { get }
-    var textWarning: UIColor { get }
+    var textCritical: UIColor { get }
     var textAccent: UIColor { get }
     var textOnDark: UIColor { get }
     var textOnLight: UIColor { get }
@@ -76,9 +76,9 @@ public protocol ThemeColourPalette {
     var iconPrimary: UIColor { get }
     var iconSecondary: UIColor { get }
     var iconDisabled: UIColor { get }
-    var iconAction: UIColor { get }
+    var iconAccent: UIColor { get }
     var iconOnColor: UIColor { get }
-    var iconWarning: UIColor { get }
+    var iconCritical: UIColor { get }
     var iconSpinner: UIColor { get }
     var iconAccentViolet: UIColor { get }
     var iconAccentBlue: UIColor { get }

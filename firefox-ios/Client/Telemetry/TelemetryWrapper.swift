@@ -96,7 +96,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         // If there's no default search engine, (there's not, at this point), we will
         // send "unavailable" in order not to send `null`, but still differentiate
         // the event in the startup sequence.
-        let defaultEngine = profile.searchEngines.defaultEngine
+        let defaultEngine = profile.searchEnginesManager.defaultEngine
         GleanMetrics.Search.defaultEngine.set(defaultEngine?.engineID ?? "unavailable")
 
         // Get the legacy telemetry ID and record it in Glean for the deletion-request ping
@@ -161,7 +161,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         }
 
         // Record default search engine setting
-        let defaultEngine = profile.searchEngines.defaultEngine
+        let defaultEngine = profile.searchEnginesManager.defaultEngine
         GleanMetrics.Search.defaultEngine.set(defaultEngine?.engineID ?? "custom")
 
         // Record the open tab count

@@ -14,7 +14,7 @@ class AddressToolbarContainerModel: Equatable {
     let borderPosition: AddressToolbarBorderPosition?
     let searchEngineName: String?
     let searchEngineImage: UIImage?
-    let searchEngines: SearchEngines
+    let searchEnginesManager: SearchEnginesManager
     let lockIconImageName: String?
     let safeListedURLImageName: String?
     let url: URL?
@@ -30,7 +30,7 @@ class AddressToolbarContainerModel: Equatable {
     let windowUUID: UUID
 
     var addressToolbarState: AddressToolbarState {
-        let term = searchTerm ?? searchTermFromURL(url, searchEngines: searchEngines)
+        let term = searchTerm ?? searchTermFromURL(url, searchEnginesManager: searchEnginesManager)
 
         var droppableUrl: URL?
         if let url, !InternalURL.isValid(url: url) {
@@ -92,9 +92,9 @@ class AddressToolbarContainerModel: Equatable {
                                                                       isShowingTopTabs: state.isShowingTopTabs,
                                                                       windowUUID: windowUUID)
         self.windowUUID = windowUUID
-        self.searchEngineName = profile.searchEngines.defaultEngine?.shortName
-        self.searchEngineImage = profile.searchEngines.defaultEngine?.image
-        self.searchEngines = profile.searchEngines
+        self.searchEngineName = profile.searchEnginesManager.defaultEngine?.shortName
+        self.searchEngineImage = profile.searchEnginesManager.defaultEngine?.image
+        self.searchEnginesManager = profile.searchEnginesManager
         self.lockIconImageName = state.addressToolbar.lockIconImageName
         self.safeListedURLImageName = state.addressToolbar.safeListedURLImageName
         self.url = state.addressToolbar.url
@@ -108,14 +108,14 @@ class AddressToolbarContainerModel: Equatable {
         self.canShowNavigationHint = state.canShowNavigationHint
     }
 
-    func searchTermFromURL(_ url: URL?, searchEngines: SearchEngines) -> String? {
+    func searchTermFromURL(_ url: URL?, searchEnginesManager: SearchEnginesManager) -> String? {
         var searchURL: URL? = url
 
         if let url = searchURL, InternalURL.isValid(url: url) {
             searchURL = url
         }
 
-        guard let query = searchEngines.queryForSearchURL(searchURL) else { return nil }
+        guard let query = searchEnginesManager.queryForSearchURL(searchURL) else { return nil }
         return query
     }
 

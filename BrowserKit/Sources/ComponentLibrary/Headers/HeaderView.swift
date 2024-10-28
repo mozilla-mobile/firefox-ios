@@ -193,7 +193,7 @@ public final class HeaderView: UIView, ThemeApplicable {
     public func setupDetails(subtitle: String, title: String, icon: UIImage?, warningIcon: String?, theme: Theme) {
         titleLabel.text  = title
         subtitleLabel.text = subtitle
-        subtitleLabel.textColor = theme.colors.textWarning
+        subtitleLabel.textColor = theme.colors.textCritical
         if let icon {
             favicon.manuallySetImage(icon)
             let isAccessibilityCategory = UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory
@@ -201,7 +201,7 @@ public final class HeaderView: UIView, ThemeApplicable {
             favicon.layer.cornerRadius = 0.5 * maskButtonSizes
         }
         if let warningIcon {
-            warningIconView.tintColor = theme.colors.iconWarning
+            warningIconView.tintColor = theme.colors.iconCritical
             warningIconView.isHidden = false
             warningIconView.image = UIImage(named: warningIcon)?.withRenderingMode(.alwaysTemplate)
         }

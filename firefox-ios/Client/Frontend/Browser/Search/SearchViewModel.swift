@@ -24,7 +24,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     var filteredOpenedTabs = [Tab]()
     var searchHighlights = [HighlightItem]()
     var firefoxSuggestions = [RustFirefoxSuggestion]()
-    let model: SearchEngines
+    let model: SearchEnginesManager
     var suggestions: [String]? = []
     static var userAgent: String?
     var searchFeature: FeatureHolder<Search>
@@ -52,22 +52,22 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
     }
 
     var quickSearchEngines: [OpenSearchEngine] {
-        guard let defaultEngine = searchEngines?.defaultEngine else { return [] }
+        guard let defaultEngine = searchEnginesManager?.defaultEngine else { return [] }
 
-        var engines = searchEngines?.quickSearchEngines
+        var engines = searchEnginesManager?.quickSearchEngines
 
         // If we're not showing search suggestions, the default search engine won't be visible
         // at the top of the table. Show it with the others in the bottom search bar.
-        if !(searchEngines?.shouldShowSearchSuggestions ?? false) {
+        if !(searchEnginesManager?.shouldShowSearchSuggestions ?? false) {
             engines?.insert(defaultEngine, at: 0)
         }
 
         return engines!
     }
 
-    var searchEngines: SearchEngines? {
+    var searchEnginesManager: SearchEnginesManager? {
         didSet {
-            guard let defaultEngine = searchEngines?.defaultEngine else { return }
+            guard let defaultEngine = searchEnginesManager?.defaultEngine else { return }
 
             suggestClient?.cancelPendingRequest()
 
@@ -95,7 +95,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
 
     /// Whether to show suggestions from the search engine.
     var shouldShowSearchEngineSuggestions: Bool {
-        return searchEngines?.shouldShowSearchSuggestions ?? false
+        return searchEnginesManager?.shouldShowSearchSuggestions ?? false
     }
 
     var shouldShowSyncedTabsSuggestions: Bool {
@@ -146,7 +146,7 @@ class SearchViewModel: FeatureFlaggable, LoaderListener {
 
     init(isPrivate: Bool, isBottomSearchBar: Bool,
          profile: Profile,
-         model: SearchEngines,
+         model: SearchEnginesManager,
          tabManager: TabManager,
          featureConfig: FeatureHolder<Search> = FxNimbus.shared.features.search,
          highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager()
