@@ -518,7 +518,7 @@ class LegacyBookmarkDetailPanel: SiteTableViewController {
                 textFieldText: bookmarkItemOrFolderTitle ?? "",
                 autocapitalizationType: .sentences,
                 keyboardType: .default,
-                textFieldAccessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.title
+                textFieldAccessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.titleTextField
             )
             return cell
         case BookmarkDetailFieldsRow.url.rawValue:
@@ -527,7 +527,7 @@ class LegacyBookmarkDetailPanel: SiteTableViewController {
                 textFieldText: bookmarkItemURL ?? "",
                 autocapitalizationType: .none,
                 keyboardType: .URL,
-                textFieldAccessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.url
+                textFieldAccessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.urlTextField
             )
             return cell
         default:
