@@ -167,11 +167,3 @@ class TabDisplayPanel: UIViewController,
         store.dispatch(action)
     }
 }
-
-extension TabDisplayPanel: LegacyTabPeekDelegate {
-    func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListItem? { return nil }
-    func tabPeekDidAddBookmark(_ tab: Tab) {}
-    func tabPeekRequestsPresentationOf(_ viewController: UIViewController) {}
-    func tabPeekDidCloseTab(_ tab: Tab) {}
-    func tabPeekDidCopyUrl() {}
-}
