@@ -199,45 +199,21 @@ struct MainMenuConfigurationUtility: Equatable {
         typealias A11y = String.MainMenu.ToolsSection.AccessibilityLabels
 
         let title: String = if tabInfo.isDefaultUserAgentDesktop {
-            if tabInfo.hasChangedUserAgent {
-                return Menu.SwitchToDesktopSite
-            } else {
-                return Menu.SwitchToMobileSite
-            }
+            tabInfo.hasChangedUserAgent ? Menu.SwitchToDesktopSite : Menu.SwitchToMobileSite
         } else {
-            if tabInfo.hasChangedUserAgent {
-                return Menu.SwitchToMobileSite
-            } else {
-                return Menu.SwitchToDesktopSite
-            }
+            tabInfo.hasChangedUserAgent ? Menu.SwitchToMobileSite : Menu.SwitchToDesktopSite
         }
 
         let icon: String = if tabInfo.isDefaultUserAgentDesktop {
-            if tabInfo.hasChangedUserAgent {
-                return Icons.deviceDesktop
-            } else {
-                return Icons.deviceMobile
-            }
+            tabInfo.hasChangedUserAgent ? Icons.deviceDesktop : Icons.deviceMobile
         } else {
-            if tabInfo.hasChangedUserAgent {
-                return Icons.deviceMobile
-            } else {
-                return Icons.deviceDesktop
-            }
+            tabInfo.hasChangedUserAgent ? Icons.deviceMobile : Icons.deviceDesktop
         }
 
         let a11yLabel: String = if tabInfo.isDefaultUserAgentDesktop {
-            if tabInfo.hasChangedUserAgent {
-                return A11y.SwitchToDesktopSite
-            } else {
-                return A11y.SwitchToMobileSite
-            }
+            tabInfo.hasChangedUserAgent ? A11y.SwitchToDesktopSite : A11y.SwitchToMobileSite
         } else {
-            if tabInfo.hasChangedUserAgent {
-                return A11y.SwitchToMobileSite
-            } else {
-                return A11y.SwitchToDesktopSite
-            }
+            tabInfo.hasChangedUserAgent ? A11y.SwitchToMobileSite : A11y.SwitchToDesktopSite
         }
 
         return MenuElement(
