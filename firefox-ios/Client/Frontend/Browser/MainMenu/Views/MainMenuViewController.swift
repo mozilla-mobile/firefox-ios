@@ -242,14 +242,7 @@ class MainMenuViewController: UIViewController,
         menuState = state
 
         if let accountData = menuState.accountData {
-            if let iconURL = accountData.iconURL {
-                GeneralizedImageFetcher().getImageFor(url: iconURL) { [weak self] image in
-                    guard let self else { return }
-                    self.updateHeaderWith(accountData: accountData, icon: image)
-                }
-            } else {
-                updateHeaderWith(accountData: accountData, icon: nil)
-            }
+            updateHeaderWith(accountData: accountData, icon: menuState.accountIcon)
         }
 
         if menuState.currentSubmenuView != nil {

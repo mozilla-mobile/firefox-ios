@@ -6,7 +6,6 @@ import Common
 import MenuKit
 import Shared
 import Redux
-import Account
 
 struct AccountData: Equatable {
     let title: String
@@ -36,6 +35,7 @@ struct MainMenuState: ScreenState, Equatable {
     var shouldDismiss: Bool
 
     var accountData: AccountData?
+    var accountIcon: UIImage?
 
     var navigationDestination: MenuNavigationDestination?
     var currentTabInfo: MainMenuTabInfo?
@@ -60,7 +60,8 @@ struct MainMenuState: ScreenState, Equatable {
             submenuDestination: mainMenuState.currentSubmenuView,
             navigationDestination: mainMenuState.navigationDestination,
             shouldDismiss: mainMenuState.shouldDismiss,
-            accountData: mainMenuState.accountData
+            accountData: mainMenuState.accountData,
+            accountIcon: mainMenuState.accountIcon
         )
     }
 
@@ -72,7 +73,8 @@ struct MainMenuState: ScreenState, Equatable {
             submenuDestination: nil,
             navigationDestination: nil,
             shouldDismiss: false,
-            accountData: nil
+            accountData: nil,
+            accountIcon: nil
         )
     }
 
@@ -83,7 +85,8 @@ struct MainMenuState: ScreenState, Equatable {
         submenuDestination: MainMenuDetailsViewType? = nil,
         navigationDestination: MenuNavigationDestination? = nil,
         shouldDismiss: Bool = false,
-        accountData: AccountData? = nil
+        accountData: AccountData?,
+        accountIcon: UIImage?
     ) {
         self.windowUUID = windowUUID
         self.menuElements = menuElements
@@ -92,6 +95,7 @@ struct MainMenuState: ScreenState, Equatable {
         self.navigationDestination = navigationDestination
         self.shouldDismiss = shouldDismiss
         self.accountData = accountData
+        self.accountIcon = accountIcon
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -99,7 +103,9 @@ struct MainMenuState: ScreenState, Equatable {
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
-                currentTabInfo: state.currentTabInfo
+                currentTabInfo: state.currentTabInfo,
+                accountData: state.accountData,
+                accountIcon: state.accountIcon
             )
         }
 
@@ -109,7 +115,20 @@ struct MainMenuState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
                 currentTabInfo: state.currentTabInfo,
-                accountData: state.getAccountData()
+                accountData: state.accountData,
+                accountIcon: state.accountIcon
+            )
+        case MainMenuMiddlewareActionType.updateAccountHeader:
+            guard let action = action as? MainMenuAction,
+                  let accountData = action.accountData
+            else { return state }
+
+            return MainMenuState(
+                windowUUID: state.windowUUID,
+                menuElements: state.menuElements,
+                currentTabInfo: state.currentTabInfo,
+                accountData: accountData,
+                accountIcon: action.accountIcon
             )
         case MainMenuActionType.updateCurrentTabInfo:
             guard let action = action as? MainMenuAction,
@@ -123,7 +142,9 @@ struct MainMenuState: ScreenState, Equatable {
                     for: state.currentSubmenuView,
                     and: state.windowUUID
                 ),
-                currentTabInfo: currentTabInfo
+                currentTabInfo: currentTabInfo,
+                accountData: state.accountData,
+                accountIcon: state.accountIcon
             )
         case MainMenuActionType.tapShowDetailsView:
             guard let action = action as? MainMenuAction else { return state }
@@ -131,7 +152,9 @@ struct MainMenuState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
                 currentTabInfo: state.currentTabInfo,
-                submenuDestination: action.detailsViewToShow
+                submenuDestination: action.detailsViewToShow,
+                accountData: state.accountData,
+                accountIcon: state.accountIcon
             )
         case MainMenuActionType.tapNavigateToDestination:
             guard let action = action as? MainMenuAction else { return state }
@@ -139,7 +162,9 @@ struct MainMenuState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
                 currentTabInfo: state.currentTabInfo,
-                navigationDestination: action.navigationDestination
+                navigationDestination: action.navigationDestination,
+                accountData: state.accountData,
+                accountIcon: state.accountIcon
             )
         case MainMenuActionType.tapToggleUserAgent,
             MainMenuActionType.tapCloseMenu:
@@ -147,40 +172,18 @@ struct MainMenuState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
                 currentTabInfo: state.currentTabInfo,
-                shouldDismiss: true
+                shouldDismiss: true,
+                accountData: state.accountData,
+                accountIcon: state.accountIcon
             )
         default:
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
-                currentTabInfo: state.currentTabInfo
+                currentTabInfo: state.currentTabInfo,
+                accountData: state.accountData,
+                accountIcon: state.accountIcon
             )
         }
-    }
-
-    private func getAccountData() -> AccountData? {
-        let rustAccount = RustFirefoxAccounts.shared
-        let needsReAuth = rustAccount.accountNeedsReauth()
-
-        guard let userProfile = rustAccount.userProfile else { return nil }
-
-        let title: String = {
-            if needsReAuth { return .MainMenu.Account.SyncErrorTitle }
-            return userProfile.displayName ?? userProfile.email
-        }()
-
-        let subtitle: String? = needsReAuth ? .MainMenu.Account.SyncErrorDescription : nil
-        let warningIcon: String? = needsReAuth ? StandardImageIdentifiers.Large.warningFill : nil
-
-        var iconURL: URL?
-        if let str = rustAccount.userProfile?.avatarUrl,
-           let url = URL(string: str, invalidCharacters: false) {
-            iconURL = url
-        }
-
-        return AccountData(title: title,
-                           subtitle: subtitle,
-                           warningIcon: warningIcon,
-                           iconURL: iconURL)
     }
 }
