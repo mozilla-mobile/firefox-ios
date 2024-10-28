@@ -1,0 +1,12 @@
+/* The accessibility label for the back button in the Main menu header navigation view. */
+"MainMenu.Account.AccessibilityLabels.BackButton.v132" = "ກັບຄືນ";
+
+/* The accessibility label for the close button in the Main menu. */
+"MainMenu.Account.AccessibilityLabels.CloseButton.v132" = "ປິດ";
+
+/* On the main menu, the title for the action that will take the user to a website to get help from Mozilla. */
+"MainMenu.SettingsSection.GetHelp.Title.v131" = "ຂໍຄວາມຊ່ວຍເຫລືອ";
+
+/* On the main menu, the title for the action that will take the user to the Settings menu. */
+"MainMenu.SettingsSection.Settings.Title.v131" = "ການຕັ້ງຄ່າ";
+
