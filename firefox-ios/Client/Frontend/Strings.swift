@@ -1333,8 +1333,8 @@ extension String {
     public struct LibraryPanel {
         public struct Sections {
             public static let LastHour = MZLocalizedString(
-                key: "Last Hour",
-                tableName: nil,
+                key: "LibraryPanel.Sections.LastHour.v134",
+                tableName: "LibraryPanel",
                 value: "Last Hour",
                 comment: "This label is meant to signify the section containing a group of items from the past hour")
             public static let Today = MZLocalizedString(
