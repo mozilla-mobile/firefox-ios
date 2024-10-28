@@ -198,21 +198,19 @@ struct MainMenuConfigurationUtility: Equatable {
         typealias Menu = String.MainMenu.ToolsSection
         typealias A11y = String.MainMenu.ToolsSection.AccessibilityLabels
 
-        let title: String = {
-            if tabInfo.isDefaultUserAgentDesktop {
-                if tabInfo.hasChangedUserAgent {
-                    return Menu.SwitchToDesktopSite
-                } else {
-                    return Menu.SwitchToMobileSite
-                }
+        let title: String = if tabInfo.isDefaultUserAgentDesktop {
+            if tabInfo.hasChangedUserAgent {
+                return Menu.SwitchToDesktopSite
             } else {
-                if tabInfo.hasChangedUserAgent {
-                    return Menu.SwitchToMobileSite
-                } else {
-                    return Menu.SwitchToDesktopSite
-                }
+                return Menu.SwitchToMobileSite
             }
-        }()
+        } else {
+            if tabInfo.hasChangedUserAgent {
+                return Menu.SwitchToMobileSite
+            } else {
+                return Menu.SwitchToDesktopSite
+            }
+        }
 
         let icon: String = {
             if tabInfo.isDefaultUserAgentDesktop {
