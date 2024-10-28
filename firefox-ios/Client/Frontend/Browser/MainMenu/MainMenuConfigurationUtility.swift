@@ -12,6 +12,7 @@ struct MainMenuConfigurationUtility: Equatable {
         static let newTab = StandardImageIdentifiers.Large.plus
         static let newPrivateTab = StandardImageIdentifiers.Large.privateModeCircleFill
         static let deviceDesktop = StandardImageIdentifiers.Large.deviceDesktop
+        static let deviceMobile = StandardImageIdentifiers.Large.deviceMobile
         static let findInPage = StandardImageIdentifiers.Large.search
         static let tools = StandardImageIdentifiers.Large.tool
         static let save = StandardImageIdentifiers.Large.save
@@ -138,26 +139,7 @@ struct MainMenuConfigurationUtility: Equatable {
     ) -> MenuSection {
         return MenuSection(
             options: [
-                MenuElement(
-                    title: getUserAgentTitle(
-                        defaultIsDesktop: configuration.isDefaultUserAgentDesktop,
-                        tabHasChangedUserAgent: configuration.hasChangedUserAgent
-                    ),
-                    iconName: Icons.deviceDesktop,
-                    isEnabled: true,
-                    isActive: false,
-                    a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.SwitchToDesktopSite,
-                    a11yHint: "",
-                    a11yId: AccessibilityIdentifiers.MainMenu.switchToDesktopSite,
-                    action: {
-                        store.dispatch(
-                            MainMenuAction(
-                                windowUUID: uuid,
-                                actionType: MainMenuActionType.tapToggleUserAgent
-                            )
-                        )
-                    }
-                ),
+                configureUserAgentItem(with: uuid, tabInfo: configuration),
                 MenuElement(
                     title: .MainMenu.ToolsSection.FindInPage,
                     iconName: Icons.findInPage,
@@ -218,25 +200,48 @@ struct MainMenuConfigurationUtility: Equatable {
         )
     }
 
-    private func getUserAgentTitle(
-        defaultIsDesktop: Bool,
-        tabHasChangedUserAgent: Bool
-    ) -> String {
+    private func configureUserAgentItem(
+        with uuid: WindowUUID,
+        tabInfo: MainMenuTabInfo
+    ) -> MenuElement {
         typealias Menu = String.MainMenu.ToolsSection
+        typealias A11y = String.MainMenu.ToolsSection.AccessibilityLabels
 
-        // Our default User Agent gets set depending on the architecture we're
-        // running on. For example, if we're building on an Intel Mac, we get
-        // desktop User Agent by default. Thus, to determine which string to use,
-        // we need to know:
-        //   1) which architecture we've started from and
-        //   2) whether or not we've requested to change the user agent in the tab
-        // Using this information, we're able to present the correct string for
-        // the "Request Mobile/Desktop Site" menu option
-        if defaultIsDesktop {
-            return tabHasChangedUserAgent ? Menu.SwitchToDesktopSite : Menu.SwitchToMobileSite
+        let title: String = if tabInfo.isDefaultUserAgentDesktop {
+            tabInfo.hasChangedUserAgent ? Menu.SwitchToDesktopSite : Menu.SwitchToMobileSite
         } else {
-            return tabHasChangedUserAgent ? Menu.SwitchToMobileSite : Menu.SwitchToDesktopSite
+            tabInfo.hasChangedUserAgent ? Menu.SwitchToMobileSite : Menu.SwitchToDesktopSite
         }
+
+        let icon: String = if tabInfo.isDefaultUserAgentDesktop {
+            tabInfo.hasChangedUserAgent ? Icons.deviceDesktop : Icons.deviceMobile
+        } else {
+            tabInfo.hasChangedUserAgent ? Icons.deviceMobile : Icons.deviceDesktop
+        }
+
+        let a11yLabel: String = if tabInfo.isDefaultUserAgentDesktop {
+            tabInfo.hasChangedUserAgent ? A11y.SwitchToDesktopSite : A11y.SwitchToMobileSite
+        } else {
+            tabInfo.hasChangedUserAgent ? A11y.SwitchToMobileSite : A11y.SwitchToDesktopSite
+        }
+
+        return MenuElement(
+            title: title,
+            iconName: icon,
+            isEnabled: true,
+            isActive: false,
+            a11yLabel: a11yLabel,
+            a11yHint: "",
+            a11yId: AccessibilityIdentifiers.MainMenu.switchToDesktopSite,
+            action: {
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: uuid,
+                        actionType: MainMenuActionType.tapToggleUserAgent
+                    )
+                )
+            }
+        )
     }
 
     // MARK: - Tools Submenu
@@ -613,7 +618,8 @@ struct MainMenuConfigurationUtility: Equatable {
                 iconName: Icons.whatsNew,
                 isEnabled: true,
                 isActive: false,
-                a11yLabel: .MainMenu.OtherToolsSection.AccessibilityLabels.WhatsNew,
+                a11yLabel: String(format: .MainMenu.OtherToolsSection.AccessibilityLabels.WhatsNew,
+                                  AppName.shortName.rawValue),
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.whatsNew,
                 action: {
