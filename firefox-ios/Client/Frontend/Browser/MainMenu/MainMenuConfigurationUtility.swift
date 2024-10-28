@@ -228,21 +228,19 @@ struct MainMenuConfigurationUtility: Equatable {
             }
         }()
 
-        let a11yLabel: String = {
-            if tabInfo.isDefaultUserAgentDesktop {
-                if tabInfo.hasChangedUserAgent {
-                    return A11y.SwitchToDesktopSite
-                } else {
-                    return A11y.SwitchToMobileSite
-                }
+        let a11yLabel: String = if tabInfo.isDefaultUserAgentDesktop {
+            if tabInfo.hasChangedUserAgent {
+                return A11y.SwitchToDesktopSite
             } else {
-                if tabInfo.hasChangedUserAgent {
-                    return A11y.SwitchToMobileSite
-                } else {
-                    return A11y.SwitchToDesktopSite
-                }
+                return A11y.SwitchToMobileSite
             }
-        }()
+        } else {
+            if tabInfo.hasChangedUserAgent {
+                return A11y.SwitchToMobileSite
+            } else {
+                return A11y.SwitchToDesktopSite
+            }
+        }
 
         return MenuElement(
             title: title,
