@@ -212,21 +212,19 @@ struct MainMenuConfigurationUtility: Equatable {
             }
         }
 
-        let icon: String = {
-            if tabInfo.isDefaultUserAgentDesktop {
-                if tabInfo.hasChangedUserAgent {
-                    return Icons.deviceDesktop
-                } else {
-                    return Icons.deviceMobile
-                }
+        let icon: String = if tabInfo.isDefaultUserAgentDesktop {
+            if tabInfo.hasChangedUserAgent {
+                return Icons.deviceDesktop
             } else {
-                if tabInfo.hasChangedUserAgent {
-                    return Icons.deviceMobile
-                } else {
-                    return Icons.deviceDesktop
-                }
+                return Icons.deviceMobile
             }
-        }()
+        } else {
+            if tabInfo.hasChangedUserAgent {
+                return Icons.deviceMobile
+            } else {
+                return Icons.deviceDesktop
+            }
+        }
 
         let a11yLabel: String = if tabInfo.isDefaultUserAgentDesktop {
             if tabInfo.hasChangedUserAgent {
