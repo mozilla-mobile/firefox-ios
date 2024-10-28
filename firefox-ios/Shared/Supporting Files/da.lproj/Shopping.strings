@@ -176,10 +176,10 @@
 "Shopping.ReviewQualityCard.AdjustedRating.Label.v120" = "Den *justerede bedømmelse* er udelukkende baseret på anmeldelser, som vi vurderer er pålidelige.";
 
 /* Accessibility label for the up chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
-"Shopping.ReviewQualityCard.Collapse.AccessibilityLabel.v120" = "Skjul kortet \"Sådan afgør vi kvaliteten af anmeldelser\"";
+"Shopping.ReviewQualityCard.Collapse.AccessibilityLabel.v120" = "Sammenfold kortet \"Sådan afgør vi kvaliteten af anmeldelser\"";
 
 /* Accessibility label for the down chevron, from 'How we determine review quality' card displayed in the shopping review quality bottom sheet. */
-"Shopping.ReviewQualityCard.Expand.AccessibilityLabel.v120" = "Vis kortet \"Sådan afgør vi kvaliteten af anmeldelser\"";
+"Shopping.ReviewQualityCard.Expand.AccessibilityLabel.v120" = "Udvid kortet \"Sådan afgør vi kvaliteten af anmeldelser\"";
 
 /* Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
 "Shopping.ReviewQualityCard.Headline.Label.v120" = "Vi bruger kunstig intelligens fra %1$@ fra %2$@ til at kontrollere pålideligheden af produktanmeldelser. Dette hjælper dig kun med at bedømme kvaliteten af anmeldelserne, ikke selve produkternes kvalitet.";
@@ -209,10 +209,10 @@
 "Shopping.ReviewQualityCard.UnreliableReviews.Label.v120" = "Upålidelige anmeldelser. Vi vurderer, at anmeldelserne sandsynligvis er forfalskede eller stammer fra partiske anmeldere.";
 
 /* Accessibility label for the up chevron icon used to collapse or minimize the Settings Card within the shopping product review bottom sheet. */
-"Shopping.SettingsCard.Collapse.AccessibilityLabel.v120" = "Skjul kortet \"Indstillinger\"";
+"Shopping.SettingsCard.Collapse.AccessibilityLabel.v120" = "Sammenfold kortet \"Indstillinger\"";
 
 /* Accessibility label for the down chevron icon used to expand or show the details of the Settings Card within the shopping product review bottom sheet. */
-"Shopping.SettingsCard.Expand.AccessibilityLabel.v120" = "Vis kortet \"Indstillinger\"";
+"Shopping.SettingsCard.Expand.AccessibilityLabel.v120" = "Udvid kortet \"Indstillinger\"";
 
 /* Accessibility hint for the recommended products label and switch, grouped together. When the group is selected in VoiceOver mode, the hint is read to help the user understand what action can be performed. */
 "Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityHint.v123" = "Dobbelt-tryk for at slå indstilling til/fra.";
