@@ -12,6 +12,8 @@ final class MainMenuAction: Action {
     var navigationDestination: MenuNavigationDestination?
     var currentTabInfo: MainMenuTabInfo?
     var detailsViewToShow: MainMenuDetailsViewType?
+    var accountData: AccountData?
+    var accountIcon: UIImage?
 
     init(
         windowUUID: WindowUUID,
@@ -19,12 +21,16 @@ final class MainMenuAction: Action {
         navigationDestination: MenuNavigationDestination? = nil,
         changeMenuViewTo: MainMenuDetailsViewType? = nil,
         currentTabInfo: MainMenuTabInfo? = nil,
-        tabID: TabUUID? = nil
+        tabID: TabUUID? = nil,
+        accountData: AccountData? = nil,
+        accountIcon: UIImage? = nil
     ) {
         self.navigationDestination = navigationDestination
         self.detailsViewToShow = changeMenuViewTo
         self.currentTabInfo = currentTabInfo
         self.tabID = tabID
+        self.accountData = accountData
+        self.accountIcon = accountIcon
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -40,6 +46,7 @@ enum MainMenuActionType: ActionType {
 
 enum MainMenuMiddlewareActionType: ActionType {
     case requestTabInfo
+    case updateAccountHeader
 }
 
 enum MainMenuDetailsActionType: ActionType {
