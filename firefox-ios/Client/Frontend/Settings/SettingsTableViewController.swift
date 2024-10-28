@@ -632,7 +632,7 @@ class StringSetting: Setting, UITextFieldDelegate {
 
     @objc
     func textFieldDidChange(_ textField: UITextField) {
-        let color = isValid(textField.text) ? theme.colors.textPrimary : theme.colors.textWarning
+        let color = isValid(textField.text) ? theme.colors.textPrimary : theme.colors.textCritical
         textField.textColor = color
     }
 
@@ -794,7 +794,7 @@ class ButtonSetting: Setting {
         super.onConfigureCell(cell, theme: theme)
 
         if isEnabled?() ?? true {
-            cell.textLabel?.textColor = destructive ? theme.colors.textWarning : theme.colors.actionPrimary
+            cell.textLabel?.textColor = destructive ? theme.colors.textCritical : theme.colors.actionPrimary
         } else {
             cell.textLabel?.textColor = theme.colors.textDisabled
         }

@@ -50,7 +50,12 @@ class TrackingProtectionTests: BaseTestCase {
             )
         }
         app.otherElements.element(matching: .any, identifier: reloadWithWithoutProtectionButton).tap()
+        waitUntilPageLoad()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: 5)
+        if #unavailable(iOS 16) {
+            XCTAssert(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].isHittable)
+            sleep(2)
+        }
     }
 
     private func enableStrictMode() {
@@ -200,7 +205,7 @@ class TrackingProtectionTests: BaseTestCase {
             "Secure connection"
         )
         // Dismiss the view and visit "badssl.com". Tap on "expired"
-        app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].tap(force: true)
+        navigator.performAction(Action.CloseTPContextMenu)
         navigator.nowAt(BrowserTab)
         navigator.openNewURL(urlString: "https://www.badssl.com")
         waitUntilPageLoad()
@@ -214,9 +219,7 @@ class TrackingProtectionTests: BaseTestCase {
         )
         mozWaitForElementToExist(app.staticTexts.elementContainingText("Firefox has not connected to this website."))
 
-        // The lock icon is no longer here.
-        // https://github.com/mozilla-mobile/firefox-ios/issues/22600
-        // XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label, "Connection not secure")
+        XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label, "Connection not secure")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2693741
@@ -231,9 +234,11 @@ class TrackingProtectionTests: BaseTestCase {
         // Tap "Secure connection"
         navigator.nowAt(BrowserTab)
         navigator.goto(TrackingProtectionContextMenuDetails)
-        mozWaitForElementToExist(app.staticTexts["Secure connection"])
+        mozWaitForElementToExist(
+            app.staticTexts[AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.securityStatusLabel])
         navigator.performAction(Action.CloseTPContextMenu)
-        mozWaitForElementToNotExist(app.staticTexts["Secure connection"])
+        mozWaitForElementToNotExist(
+            app.staticTexts[AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.securityStatusLabel])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307063
@@ -246,6 +251,7 @@ class TrackingProtectionTests: BaseTestCase {
         waitUntilPageLoad()
 
         if checkTrackingProtectionOn() {
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
             XCTAssertEqual(
                 app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
                 secureTrackingProtectionOnLabel
@@ -262,6 +268,7 @@ class TrackingProtectionTests: BaseTestCase {
                 secureTrackingProtectionOnLabel
             )
         } else {
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
             XCTAssertEqual(
                 app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
                 secureTrackingProtectionOffLabel

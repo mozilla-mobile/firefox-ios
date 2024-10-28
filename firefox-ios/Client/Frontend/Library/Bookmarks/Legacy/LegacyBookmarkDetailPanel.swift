@@ -247,7 +247,7 @@ class LegacyBookmarkDetailPanel: SiteTableViewController {
         deleteBookmarkButton.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
         deleteBookmarkButton.backgroundColor = currentTheme().colors.layer5
         deleteBookmarkButton.setTitle(.Bookmarks.Menu.DeleteBookmark, for: .normal)
-        deleteBookmarkButton.setTitleColor(currentTheme().colors.textWarning, for: .normal)
+        deleteBookmarkButton.setTitleColor(currentTheme().colors.textCritical, for: .normal)
     }
 
     override func reloadData() {

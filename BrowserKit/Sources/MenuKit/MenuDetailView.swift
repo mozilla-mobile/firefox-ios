@@ -10,6 +10,7 @@ public final class MenuDetailView: UIView,
                                    MenuTableViewDataDelegate, ThemeApplicable {
     private struct UX {
         static let headerLineOffset: CGFloat = 35
+        static let headerTopMargin: CGFloat = 10
     }
 
     // MARK: - UI Elements
@@ -34,7 +35,7 @@ public final class MenuDetailView: UIView,
         addSubview(tableView)
 
         NSLayoutConstraint.activate([
-            detailHeaderView.topAnchor.constraint(equalTo: self.topAnchor),
+            detailHeaderView.topAnchor.constraint(equalTo: self.topAnchor, constant: UX.headerTopMargin),
             detailHeaderView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             detailHeaderView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
 

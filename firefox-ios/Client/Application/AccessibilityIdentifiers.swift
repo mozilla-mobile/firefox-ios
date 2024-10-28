@@ -106,8 +106,8 @@ public struct AccessibilityIdentifiers {
         static let share = "MainMenu.Share"
         static let print = "MainMenu.Print"
         static let reportBrokenSite = "MainMenu.ReportBrokenSite"
-        static let readerViewOn = "MainMenu.ReaderViewOn"
-        static let nightModeOn = "MainMenu.NightModeOn"
+        static let readerView = "MainMenu.ReaderViewOn"
+        static let nightMode = "MainMenu.NightModeOn"
         static let zoom = "MainMenu.Zoom"
     }
 

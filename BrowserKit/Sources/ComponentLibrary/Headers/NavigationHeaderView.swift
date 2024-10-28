@@ -141,7 +141,7 @@ public final class NavigationHeaderView: UIView {
             .withTintColor(theme.colors.iconSecondary)
         closeButton.setImage(buttonImage, for: .normal)
         closeButton.backgroundColor = theme.colors.layer2
-        backButton.tintColor = theme.colors.iconAction
+        backButton.tintColor = theme.colors.iconAccent
         backButton.setTitleColor(theme.colors.textAccent, for: .normal)
         horizontalLine.backgroundColor = theme.colors.borderPrimary
         titleLabel.textColor = theme.colors.textPrimary

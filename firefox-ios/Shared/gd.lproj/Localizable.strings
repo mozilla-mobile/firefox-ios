@@ -848,13 +848,13 @@
 "Menu.TrackingProtectionDescription.CryptominersNew" = "Cleachdaidh criopto-mhèinneadairean comasan an t-siostaim agad airson airgead digiteach a chosnadh gun fhiosta. Traoghaidh criopto-mhèinneadairean am bataraidh agad, nì iad an coimpiutair agad slaodach agus faodaidh gun èirich cosgaisean dealain dhut.";
 
 /* Description of fingerprinters. */
-"Menu.TrackingProtectionDescription.Fingerprinters" = "Tha na roghainnean àraidh aig a’ bhrabhsair agus aig a’ choimpiutair agad. Tha lorgaichean-meur ann a chruinnicheas badan dhe na roghainnean àraidh seo airson pròifil a chruthachadh dhìot agus gabhaidh do thracadh air an lìon leotha.";
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Tha na roghainnean àraidh aig a’ bhrabhsair agus aig a’ choimpiutair agad. Tha lorgairean-meòir ann a chruinnicheas badan dhe na roghainnean àraidh seo airson pròifil a chruthachadh dhìot agus gabhaidh do thracadh air an lìon leotha.";
 
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "Cuiridh lìonraidhean sòisealta tracaichean air làraichean-lìn eile airson pròifil nas iomlaine dhìot a chruthachadh. Ma bhacas tu na tracaichean seo, chì companaidhean nam meadhan sòisealta nas lugha dhe na nì thu air loidhne.";
 
 /* The title that shows the number of fingerprinting scripts blocked */
-"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Lorgaichean-meur";
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Lorgairean-meòir";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "Na tha ùr";

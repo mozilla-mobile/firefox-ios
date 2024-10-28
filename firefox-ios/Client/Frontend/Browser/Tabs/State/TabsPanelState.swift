@@ -152,17 +152,6 @@ struct TabsPanelState: ScreenState, Equatable {
                                   isInactiveTabsExpanded: state.isInactiveTabsExpanded,
                                   scrollState: scrollModel)
 
-//        case TabPanelAction.didTapAddTab:
-//        let didTapNewTab = context.didTapAddTab
-//        let urlRequest = context.urlRequest
-//        let isPrivateMode = context.isPrivate
-//        return TabsPanelState(windowUUID: state.windowUUID,
-//        isPrivateMode: isPrivateMode,
-//        tabs: state.tabs,
-//        inactiveTabs: state.inactiveTabs,
-//        isInactiveTabsExpanded: state.isInactiveTabsExpanded,
-//        didTapAddTab: didTapNewTab)
-
         default:
             return defaultState(fromPreviousState: state)
         }

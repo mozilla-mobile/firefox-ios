@@ -8,6 +8,7 @@ import UIKit
 import Shared
 import Redux
 import MenuKit
+import SiteImageView
 
 class MainMenuViewController: UIViewController,
                               UIAdaptivePresentationControllerDelegate,
@@ -89,7 +90,24 @@ class MainMenuViewController: UIViewController,
         )
 
         menuContent.accountHeaderView.closeButtonCallback = { [weak self] in
-            self?.coordinator?.dismissMenuModal(animated: true)
+            guard let self else { return }
+            store.dispatch(
+                MainMenuAction(
+                    windowUUID: self.windowUUID,
+                    actionType: MainMenuActionType.tapCloseMenu
+                )
+            )
+        }
+
+        menuContent.accountHeaderView.mainButtonCallback = { [weak self] in
+            guard let self else { return }
+            store.dispatch(
+                MainMenuAction(
+                    windowUUID: self.windowUUID,
+                    actionType: MainMenuActionType.tapNavigateToDestination,
+                    navigationDestination: MenuNavigationDestination(.syncSignIn)
+                )
+            )
         }
 
         setupAccessibilityIdentifiers()
@@ -223,6 +241,10 @@ class MainMenuViewController: UIViewController,
     func newState(state: MainMenuState) {
         menuState = state
 
+        if let accountData = menuState.accountData {
+            updateHeaderWith(accountData: accountData, icon: menuState.accountIcon)
+        }
+
         if menuState.currentSubmenuView != nil {
             coordinator?.showDetailViewController()
             return
@@ -246,6 +268,14 @@ class MainMenuViewController: UIViewController,
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer3
         menuContent.applyTheme(theme: theme)
+    }
+
+    private func updateHeaderWith(accountData: AccountData, icon: UIImage?) {
+        menuContent.accountHeaderView.setupDetails(subtitle: accountData.subtitle ?? "",
+                                                   title: accountData.title,
+                                                   icon: icon,
+                                                   warningIcon: accountData.warningIcon,
+                                                   theme: themeManager.getCurrentTheme(for: windowUUID))
     }
 
     // MARK: - A11y
