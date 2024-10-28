@@ -1336,7 +1336,7 @@ extension String {
                 key: "LibraryPanel.Sections.LastHour.v134",
                 tableName: "LibraryPanel",
                 value: "Last Hour",
-                comment: "This label is meant to signify the section containing a group of items from the past hour")
+                comment: "This label is meant to signify the section containing a group of items from the past hour. This is primarily used in the history library panel when grouping sites that have been visited in the last hour.")
             public static let Today = MZLocalizedString(
                 key: "Today",
                 tableName: nil,
