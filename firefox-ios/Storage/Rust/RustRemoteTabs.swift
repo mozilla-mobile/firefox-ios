@@ -17,8 +17,9 @@ import struct MozillaAppServices.PendingCommand
 public class RustRemoteTabs {
     let databasePath: String
     let queue: DispatchQueue
+    let commandQueue: DispatchQueue
     var store: TabsStore?
-    internal var commandQueue: RemoteTabsCommandQueue?
+    internal var tabsCommandQueue: RemoteTabsCommandQueue?
 
     private(set) var isOpen = false
     private var didAttemptToMoveToBackup = false
@@ -30,19 +31,20 @@ public class RustRemoteTabs {
         self.logger = logger
 
         queue = DispatchQueue(label: "RustRemoteTabs queue: \(databasePath)", attributes: [])
+        commandQueue = DispatchQueue(label: "RustRemoteTabs command queue", attributes: [])
     }
 
     private func open() -> NSError? {
         store = TabsStore(path: databasePath)
         isOpen = true
-        commandQueue = RemoteTabsCommandQueue()
-        commandQueue?.openCommandStore(tabsStore: store!)
+        tabsCommandQueue = RemoteTabsCommandQueue(tabsStore: store!)
         return nil
     }
 
     private func close() -> NSError? {
         store = nil
         isOpen = false
+        tabsCommandQueue = nil
         return nil
     }
 
@@ -175,140 +177,137 @@ public class RustRemoteTabs {
 
     // MARK: Remote Command APIs
     public func addRemoteCommand(deviceId: String, url: URL) {
-        DispatchQueue.global().async { [unowned self] in
-            guard let commandQueue = self.commandQueue else {
+        commandQueue.async {
+            guard let tabsCommandQueue = self.tabsCommandQueue else {
                 let err = TabsApiError.UnexpectedTabsError(reason: "Command queue is not initialized") as MaybeErrorType
                 self.logger.log(err.description,
                                 level: .warning,
                                 category: .tabs)
                 return
             }
-            commandQueue
+            tabsCommandQueue
                 .addRemoteCommand(deviceId: deviceId, command: RemoteCommand.closeTab(url: url.absoluteString)) { result in
-                    self.handleCommandQueueErrors(result: result)
+                    switch result {
+                    case .failure(let error):
+                        self.logger.log("Failed to update command queue: \(String(describing: error))",
+                                        level: .warning,
+                                        category: .tabs)
+                    default:
+                        break
+                    }
                 }
         }
-    }
+}
 
     public func removeRemoteCommand(deviceId: String, url: URL) {
-        DispatchQueue.global().async { [unowned self] in
-            guard let commandQueue = self.commandQueue else {
+        commandQueue.async {
+            guard let tabsCommandQueue = self.tabsCommandQueue else {
                 let err = TabsApiError.UnexpectedTabsError(reason: "Command queue is not initialized") as MaybeErrorType
                 self.logger.log(err.description,
                                 level: .warning,
                                 category: .tabs)
                 return
             }
-            commandQueue
+
+            tabsCommandQueue
                 .removeRemoteCommand(deviceId: deviceId,
                                      command: RemoteCommand.closeTab(url: url.absoluteString)) { result in
-                    self.handleCommandQueueErrors(result: result)
+                    switch result {
+                    case .failure(let error):
+                        self.logger.log("Failed to update command queue: \(String(describing: error))",
+                                        level: .warning,
+                                        category: .tabs)
+                    default:
+                        break
+                    }
                 }
         }
     }
 
     public func getUnsentCommandUrlsByDeviceId(deviceId: String, completion: @escaping ([String]) -> Void) {
-        DispatchQueue.global().async { [unowned self] in
-            self.getUnsentCommandsByDeviceId(deviceId: deviceId) { commands in
-                let urls = commands.map { item in
-                    switch item.command {
-                    case .closeTab(let url):
-                        return url
-                    }
+        self.getUnsentCommandsByDeviceId(deviceId: deviceId) { commands in
+            let urls = commands.map { item in
+                switch item.command {
+                case .closeTab(let url):
+                    return url
                 }
-                completion(urls)
             }
+            completion(urls)
         }
     }
 
     public func setPendingCommandsSent(deviceId: String) {
-        DispatchQueue.global().async { [unowned self] in
-            guard let commandQueue = self.commandQueue else {
-                let err = TabsApiError.UnexpectedTabsError(reason: "Command queue is not initialized") as MaybeErrorType
-                self.logger.log(err.description,
-                                level: .warning,
-                                category: .tabs)
-                return
-            }
+        guard let tabsCommandQueue = self.tabsCommandQueue else {
+            let err = TabsApiError.UnexpectedTabsError(reason: "Command queue is not initialized") as MaybeErrorType
+            self.logger.log(err.description,
+                            level: .warning,
+                            category: .tabs)
+            return
+        }
 
-            self.getUnsentCommandsByDeviceId(deviceId: deviceId) { commands in
-                commandQueue.setPendingCommandsSent(deviceId: deviceId, commands: commands) { errors in
-                    if errors.isEmpty {
-                        return
-                    } else {
-                        let errHeader = "Failed to set some pending commands as sent:\n"
-                        let errMessages: String = errors.reduce(errHeader, { result, err in
-                            result.appending("  - \(err.localizedDescription)\n")
-                        })
-                        self.logger.log(errMessages,
-                                        level: .warning,
-                                        category: .tabs)
-                    }
+        self.getUnsentCommandsByDeviceId(deviceId: deviceId) { commands in
+            tabsCommandQueue.setPendingCommandsSent(deviceId: deviceId, commands: commands) { errors in
+                if errors.isEmpty {
+                    return
+                } else {
+                    let errHeader = "Failed to set some pending commands as sent:\n"
+                    let errMessages: String = errors.reduce(errHeader, { result, err in
+                        result.appending("  - \(err.localizedDescription)\n")
+                    })
+                    self.logger.log(errMessages,
+                                    level: .warning,
+                                    category: .tabs)
                 }
             }
         }
     }
 
     private func getUnsentCommandsByDeviceId(deviceId: String, completion: @escaping ([PendingCommand]) -> Void) {
-        guard let commandQueue = self.commandQueue else {
-            let err = TabsApiError.UnexpectedTabsError(reason: "Command queue is not initialized") as MaybeErrorType
-            self.logger.log(err.description,
-                            level: .warning,
-                            category: .tabs)
-            completion([PendingCommand]())
-            return
-        }
-
-        commandQueue.getUnsentCommands { result in
-            switch result {
-            case .success(let commands):
-                let filteredCommands = commands.filter { $0.deviceId == deviceId }
-                completion(filteredCommands)
-            case .failure(let error):
-                self.logger.log("Failed to get unsent commands: \(String(describing: error))",
+        commandQueue.async {
+            guard let tabsCommandQueue = self.tabsCommandQueue else {
+                let err = TabsApiError.UnexpectedTabsError(reason: "Command queue is not initialized") as MaybeErrorType
+                self.logger.log(err.description,
                                 level: .warning,
                                 category: .tabs)
                 completion([PendingCommand]())
+                return
             }
-        }
-    }
 
-    private func handleCommandQueueErrors(result: Result<Bool, any Error>) {
-        switch result {
-        case .success(let didSucceed):
-            if !didSucceed {
-                self.logger.log("Unexpected error while attempting to update command queue",
-                                level: .warning,
-                                category: .tabs)
+            tabsCommandQueue.getUnsentCommands { result in
+                switch result {
+                case .success(let commands):
+                    let filteredCommands = commands.filter { $0.deviceId == deviceId }
+                    completion(filteredCommands)
+                case .failure(let error):
+                    self.logger.log("Failed to get unsent commands: \(String(describing: error))",
+                                    level: .warning,
+                                    category: .tabs)
+                    completion([PendingCommand]())
+                }
             }
-        case .failure(let error):
-            self.logger.log("Failed to update command queue: \(String(describing: error))",
-                            level: .warning,
-                            category: .tabs)
         }
     }
 }
 
 internal class RemoteTabsCommandQueue {
-    var commandStore: RemoteCommandStore?
+    var commandStore: RemoteCommandStore
 
-    init() {}
-
-    func openCommandStore(tabsStore: TabsStore) {
+    init(tabsStore: TabsStore) {
         self.commandStore = tabsStore.newRemoteCommandStore()
     }
 
     func addRemoteCommand(deviceId: String,
                           command: RemoteCommand,
                           completion: @escaping (Result<Bool, Error>) -> Void) {
-        guard let commandStore = self.commandStore else {
-            completion(.failure(TabsApiError.UnexpectedTabsError(reason: "Command store is not initialized")))
-            return
-        }
-
         do {
-            let didSucceed = try commandStore.addRemoteCommand(deviceId: deviceId, command: command)
-            completion(.success(didSucceed))
+            let didQueueCommand = try commandStore.addRemoteCommand(deviceId: deviceId, command: command)
+
+            if didQueueCommand {
+                completion(.success(didQueueCommand))
+            } else {
+                let err = TabsApiError.UnexpectedTabsError(reason: "Command already existed")
+                completion(.failure(err))
+            }
         } catch {
             completion(.failure(error))
         }
@@ -317,25 +316,21 @@ internal class RemoteTabsCommandQueue {
     func removeRemoteCommand(deviceId: String,
                              command: RemoteCommand,
                              completion: @escaping (Result<Bool, Error>) -> Void) {
-        guard let commandStore = self.commandStore else {
-            completion(.failure(TabsApiError.UnexpectedTabsError(reason: "Command store is not initialized")))
-            return
-        }
-
         do {
-            let didSucceed = try commandStore.removeRemoteCommand(deviceId: deviceId, command: command)
-            completion(.success(didSucceed))
+            let didRemoveCommand = try commandStore.removeRemoteCommand(deviceId: deviceId, command: command)
+
+            if didRemoveCommand {
+                completion(.success(didRemoveCommand))
+            } else {
+                let err = TabsApiError.UnexpectedTabsError(reason: "Command to remove wasn't found")
+                completion(.failure(err))
+            }
         } catch {
             completion(.failure(error))
         }
     }
 
     func getUnsentCommands(completion: @escaping (Result<[PendingCommand], Error>) -> Void) {
-        guard let commandStore = self.commandStore else {
-            completion(.failure(TabsApiError.UnexpectedTabsError(reason: "Command store is not initialized")))
-            return
-        }
-
         do {
             let commands = try commandStore.getUnsentCommands()
             completion(.success(commands))
@@ -347,11 +342,6 @@ internal class RemoteTabsCommandQueue {
     func setPendingCommandsSent(deviceId: String,
                                 commands: [PendingCommand],
                                 completion: @escaping ([Error]) -> Void) {
-        guard let commandStore = self.commandStore else {
-            completion([TabsApiError.UnexpectedTabsError(reason: "Command store is not initialized")])
-            return
-        }
-
         var errors = [Error]()
         commands.forEach {
             do {
