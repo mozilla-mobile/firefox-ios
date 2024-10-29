@@ -370,11 +370,10 @@ class TabLocationView: UIView, FeatureFlaggable {
     }
 
     func showTrackingProtectionButton(for url: URL?) {
-        guard let url else { return }
         ensureMainThread {
             let isValidHttpUrlProtocol = self.isValidHttpUrlProtocol(url)
-            let isReaderModeURL = url.isReaderModeURL
-            let isFxHomeUrl = url.isFxHomeUrl
+            let isReaderModeURL = url?.isReaderModeURL ?? false
+            let isFxHomeUrl = url?.isFxHomeUrl ?? false
             if !isFxHomeUrl, !isReaderModeURL, isValidHttpUrlProtocol, self.trackingProtectionButton.isHidden {
                 self.trackingProtectionButton.transform = UX.trackingProtectionxOffset
                 self.trackingProtectionButton.alpha = 0
