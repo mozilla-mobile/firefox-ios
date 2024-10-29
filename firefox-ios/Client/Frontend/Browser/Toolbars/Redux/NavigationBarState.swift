@@ -153,6 +153,14 @@ struct NavigationBarState: StateType, Equatable {
         )
     }
 
+    private static func handleDefaultAction(state: Self) -> Self {
+        return NavigationBarState(
+            windowUUID: state.windowUUID,
+            actions: state.actions,
+            displayBorder: state.displayBorder
+        )
+    }
+
     // MARK: - Navigation Toolbar Actions
 
     private static func navigationActions(
