@@ -100,7 +100,7 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 
     /// Shows the toolbar's search engine selection bottom sheet (iPhone) or popup (iPad)
     func showSearchEngineSelection(forSourceView sourceView: UIView)
-    
+
     /// Navigates from home page to a new link
     func navigateFromHomePanel(to url: URL, visitType: VisitType, isGoogleTopSite: Bool)
 }
