@@ -78,7 +78,11 @@ struct NavigationBarState: StateType, Equatable {
             return handlePositionChangedAction(state: state, action: action)
 
         default:
-            return state
+            return NavigationBarState(
+                windowUUID: state.windowUUID,
+                actions: state.actions,
+                displayBorder: state.displayBorder
+            )
         }
     }
 
