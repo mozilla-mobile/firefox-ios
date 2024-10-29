@@ -87,12 +87,12 @@ struct MainMenuDetailsState: ScreenState, Equatable {
                     for: .mainMenu,
                     window: action.windowUUID),
                   let currentTabInfo = menuState.currentTabInfo,
-                  let currentSubmenu = menuState.currentSubmenuView,
-                  let toolbarState = store.state.screenState(
-                    ToolbarState.self,
-                    for: .toolbar,
-                    window: action.windowUUID),
-                  let readerModeState = toolbarState.addressToolbar.readerModeState
+                  let currentSubmenu = menuState.currentSubmenuView
+                  // let toolbarState = store.state.screenState(
+                  //   ToolbarState.self,
+                  //   for: .toolbar,
+                  //   window: action.windowUUID),
+                  // let readerModeState = toolbarState.addressToolbar.readerModeState
             else { return state }
 
             return MainMenuDetailsState(
@@ -101,7 +101,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
                     with: currentTabInfo,
                     for: currentSubmenu,
                     and: action.windowUUID,
-                    readerState: readerModeState
+                    readerState: nil
                 ),
                 submenuType: currentSubmenu
             )
