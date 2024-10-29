@@ -554,7 +554,6 @@
 		5A9F83442B2B8CE900272819 /* TabPeekModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9F83432B2B8CE900272819 /* TabPeekModel.swift */; };
 		5A9FF8492942454600DF9FBB /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 5A9FF8482942454600DF9FBB /* Common */; };
 		5AA0CC662A4B8F6100014E2A /* PasswordManagerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA0CC652A4B8F6100014E2A /* PasswordManagerCoordinator.swift */; };
-		5AA1D8272BC09ECB00957516 /* TabTrayAnimationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA1D8262BC09ECB00957516 /* TabTrayAnimationQueue.swift */; };
 		5AA75A652A46274A00533F8D /* MockThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA75A622A46272000533F8D /* MockThemeManager.swift */; };
 		5AB4237C28A1947A003BC40C /* MockNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4237B28A1947A003BC40C /* MockNotificationCenter.swift */; };
 		5AB4237E28A2BA9C003BC40C /* HistoryHighlightsDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4237D28A2BA9C003BC40C /* HistoryHighlightsDataAdaptor.swift */; };
@@ -6512,7 +6511,6 @@
 		5A9F83412B2B796800272819 /* TabPeekState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabPeekState.swift; sourceTree = "<group>"; };
 		5A9F83432B2B8CE900272819 /* TabPeekModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabPeekModel.swift; sourceTree = "<group>"; };
 		5AA0CC652A4B8F6100014E2A /* PasswordManagerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordManagerCoordinator.swift; sourceTree = "<group>"; };
-		5AA1D8262BC09ECB00957516 /* TabTrayAnimationQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayAnimationQueue.swift; sourceTree = "<group>"; };
 		5AA75A622A46272000533F8D /* MockThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockThemeManager.swift; sourceTree = "<group>"; };
 		5AB4237B28A1947A003BC40C /* MockNotificationCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockNotificationCenter.swift; sourceTree = "<group>"; };
 		5AB4237D28A2BA9C003BC40C /* HistoryHighlightsDataAdaptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryHighlightsDataAdaptor.swift; sourceTree = "<group>"; };
@@ -9902,7 +9900,6 @@
 				21C5B3582AF2A7130093F366 /* Views */,
 				21E77E512AA8BE5C00FABA10 /* TabTrayFlagManager.swift */,
 				21B548942B1E5F1400DC1DF8 /* InactiveTabsManager.swift */,
-				5AA1D8262BC09ECB00957516 /* TabTrayAnimationQueue.swift */,
 			);
 			path = Tabs;
 			sourceTree = "<group>";
@@ -16311,7 +16308,6 @@
 				8A5D1CB92A30DBDB005AD35C /* ChinaSyncServiceSetting.swift in Sources */,
 				8AB893A92C73CBBD00DAEED7 /* CreditCardProvider.swift in Sources */,
 				1D8487B42AD0C6C100F7527C /* RemoteTabsPanelMiddleware.swift in Sources */,
-				5AA1D8272BC09ECB00957516 /* TabTrayAnimationQueue.swift in Sources */,
 				C849E46526B9C3DD00260F0B /* SlideoverPresentationController.swift in Sources */,
 				819656152C80C55300E62323 /* MainMenuState.swift in Sources */,
 				E18F44072A951C330056160F /* FakespotHighlightGroup.swift in Sources */,
