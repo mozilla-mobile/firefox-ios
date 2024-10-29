@@ -101,6 +101,48 @@ final class BrowserViewControllerStateTests: XCTestCase {
         XCTAssertEqual(newState.navigateTo, .reload)
     }
 
+    // MARK: - Navigation Browser Action
+    func test_customizeHomepage_navigationBrowserAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.navigationDestination)
+
+        let action = getNavigationBrowserAction(for: .tapOnCustomizeHomepage)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.navigationDestination?.destination, .customizeHomepage)
+        XCTAssertEqual(newState.navigationDestination?.url, nil)
+    }
+
+    func test_tapOnCell_navigationBrowserAction_returnsExpectedState() throws {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.navigationDestination)
+
+        let url = try XCTUnwrap(URL(string: "www.example.com"))
+        let action = getNavigationBrowserAction(for: .tapOnCell, url: url)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.navigationDestination?.destination, .link)
+        XCTAssertEqual(newState.navigationDestination?.url?.absoluteString, "www.example.com")
+    }
+
+    func test_tapOnLink_navigationBrowserAction_returnsExpectedState() throws {
+        let initialState = createSubject()
+        let reducer = browserViewControllerReducer()
+
+        XCTAssertNil(initialState.navigationDestination)
+
+        let url = try XCTUnwrap(URL(string: "www.example.com"))
+        let action = getNavigationBrowserAction(for: .tapOnLink, url: url)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.navigationDestination?.destination, .link)
+        XCTAssertEqual(newState.navigationDestination?.url?.absoluteString, "www.example.com")
+    }
+
     // MARK: - Private
     private func createSubject() -> BrowserViewControllerState {
         return BrowserViewControllerState(windowUUID: .XCTestDefaultUUID)
@@ -112,6 +154,17 @@ final class BrowserViewControllerStateTests: XCTestCase {
 
     private func getAction(for actionType: GeneralBrowserActionType) -> GeneralBrowserAction {
         return  GeneralBrowserAction(windowUUID: .XCTestDefaultUUID, actionType: actionType)
+    }
+
+    private func getNavigationBrowserAction(
+        for actionType: NavigationBrowserActionType,
+        url: URL? = nil
+    ) -> NavigationBrowserAction {
+        return NavigationBrowserAction(
+            url: url,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: actionType
+        )
     }
 
     private func getPrivateModeAction(isPrivate: Bool, for actionType: PrivateModeActionType) -> PrivateModeAction {
