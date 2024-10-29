@@ -208,9 +208,9 @@ struct MainMenuConfigurationUtility: Equatable {
 
         description += "\(Preview.ZoomSubtitle)"
 
-        if tabInfo.readerModeIsAvailable {
-            description += ", \(Preview.ReaderViewSubtitle)"
-        }
+        // if tabInfo.readerModeIsAvailable {
+        //     description += ", \(Preview.ReaderViewSubtitle)"
+        // }
 
         description += ", \(Preview.NightModeSubtitle)"
         description += ", \(Preview.ReportBrokenSiteSubtitle)"
