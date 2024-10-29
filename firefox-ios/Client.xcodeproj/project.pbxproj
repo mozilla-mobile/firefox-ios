@@ -864,6 +864,8 @@
 		8A8BAE122B2107E400D774EB /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A8BAE112B2107E400D774EB /* GCDWebServers */; };
 		8A8BAE142B21110000D774EB /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A8BAE132B21110000D774EB /* GCDWebServers */; };
 		8A8BAE162B2119E600D774EB /* InternalURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8BAE152B2119E600D774EB /* InternalURL.swift */; };
+		8A8D277B2CBFFD710076AD3A /* BrowserNavigationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D277A2CBFFD710076AD3A /* BrowserNavigationType.swift */; };
+		8A8D277D2CC000BE0076AD3A /* NavigationBrowserAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D277C2CC000BE0076AD3A /* NavigationBrowserAction.swift */; };
 		8A8DDEBF276259A900E7B97A /* RatingPromptManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8DDEBE276259A900E7B97A /* RatingPromptManager.swift */; };
 		8A93080927BFE88F0052167D /* PhotonActionSheetContainerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A93080827BFE88F0052167D /* PhotonActionSheetContainerCell.swift */; };
 		8A93080B27C01AD60052167D /* SingleActionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A93080A27C01AD60052167D /* SingleActionViewModel.swift */; };
@@ -7141,6 +7143,8 @@
 		8A880C432C63CFE200B77F23 /* MockLoginViewModelDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLoginViewModelDelegate.swift; sourceTree = "<group>"; };
 		8A8917682B57283B008B01EA /* LegacyHomepageHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyHomepageHeaderCell.swift; sourceTree = "<group>"; };
 		8A8BAE152B2119E600D774EB /* InternalURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalURL.swift; sourceTree = "<group>"; };
+		8A8D277A2CBFFD710076AD3A /* BrowserNavigationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserNavigationType.swift; sourceTree = "<group>"; };
+		8A8D277C2CC000BE0076AD3A /* NavigationBrowserAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBrowserAction.swift; sourceTree = "<group>"; };
 		8A8DDEBE276259A900E7B97A /* RatingPromptManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingPromptManager.swift; sourceTree = "<group>"; };
 		8A93080827BFE88F0052167D /* PhotonActionSheetContainerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetContainerCell.swift; sourceTree = "<group>"; };
 		8A93080A27C01AD60052167D /* SingleActionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleActionViewModel.swift; sourceTree = "<group>"; };
@@ -10495,6 +10499,7 @@
 			children = (
 				5A2918CA2B522338002B197E /* GeneralBrowserAction.swift */,
 				7ADC1D182C27D35B003ED924 /* ActionProviderBuilder.swift */,
+				8A8D277C2CC000BE0076AD3A /* NavigationBrowserAction.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -10738,6 +10743,7 @@
 				81CAE4DA2B1A2C220040C78A /* BrowserViewControllerState.swift */,
 				81122E202B221AC0003DD9F8 /* SearchScreenState.swift */,
 				5A1947142B8FA9E0009C7A6C /* BrowserViewType.swift */,
+				8A8D277A2CBFFD710076AD3A /* BrowserNavigationType.swift */,
 			);
 			path = State;
 			sourceTree = "<group>";
@@ -15690,6 +15696,7 @@
 				1DFE57FF27BAE3150025DE58 /* HomepageSectionType.swift in Sources */,
 				C2D1A10D2A66C70000205DCC /* BookmarksCoordinator.swift in Sources */,
 				8C46E1B72B2209F000F56521 /* FakespotAdsEvent.swift in Sources */,
+				8A8D277D2CC000BE0076AD3A /* NavigationBrowserAction.swift in Sources */,
 				396E38F11EE0C8EC00CC180F /* FxAPushMessageHandler.swift in Sources */,
 				8A76B01629F6EB3900A82607 /* ScreenshotService.swift in Sources */,
 				8C1953322B85EAB500761B20 /* AutofillHeaderView.swift in Sources */,
@@ -15900,6 +15907,7 @@
 				43D00493296FC48F00CB0F31 /* CreditCardSettingsEmptyView.swift in Sources */,
 				CEFA977E1FAA6B490016F365 /* SyncContentSettingsViewController.swift in Sources */,
 				C8CD80DC2A1E8C970097C3AE /* OnboardingTelemetryUtility.swift in Sources */,
+				8A8D277B2CBFFD710076AD3A /* BrowserNavigationType.swift in Sources */,
 				96C11E9B2864C2DD00840E7C /* DependencyHelper.swift in Sources */,
 				8CE1E4382B8C76C80026530B /* LoginListViewModel.swift in Sources */,
 				0B8BF3722CA2DA4600E9812D /* EditBookmarkViewController.swift in Sources */,
