@@ -76,10 +76,7 @@ class RemoteTabsPanelMiddleware {
     }
 
     private func getTabsAndDevices(window: WindowUUID, useCache: Bool = false) {
-        let fetchClientsAndTabs: (@escaping ([ClientAndTabs]?) -> Void) -> Void = useCache ?
-            profile.getCachedClientsAndTabs :
-            profile.getClientsAndTabs
-        fetchClientsAndTabs { result in
+        let completion = { (result: [ClientAndTabs]?) -> Void in
             guard let clientAndTabs = result else {
                 let action = RemoteTabsPanelAction(reason: .failedToSync,
                                                    windowUUID: window,
@@ -103,6 +100,12 @@ class RemoteTabsPanelMiddleware {
                                                actionType: RemoteTabsPanelActionType.refreshDidSucceed)
             }
             store.dispatch(action)
+        }
+
+        if useCache {
+            profile.getCachedClientsAndTabs(completion: completion)
+        } else {
+            profile.getClientsAndTabs(completion: completion)
         }
     }
 
