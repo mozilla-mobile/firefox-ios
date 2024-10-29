@@ -91,9 +91,6 @@ final class NimbusFeatureFlagLayer {
         case .splashScreen:
             return checkSplashScreenFeature(for: featureID, from: nimbus)
 
-        case .tabTrayRefactor:
-            return checkTabTrayRefactorFeature(from: nimbus)
-
         case .toolbarRefactor:
             return checkToolbarRefactorFeature(from: nimbus)
 
@@ -183,11 +180,6 @@ final class NimbusFeatureFlagLayer {
 
         guard let status = config.featuresEnabled[nimbusID] else { return false }
         return status
-    }
-
-    private func checkTabTrayRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.tabTrayRefactorFeature.value()
-        return config.enabled
     }
 
     private func checkToolbarRefactorFeature(from nimbus: FxNimbus) -> Bool {

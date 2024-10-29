@@ -93,7 +93,7 @@ protocol TabManager: AnyObject {
     /// - Returns: Return list of tabs considered inactive
     func getInactiveTabs() -> [Tab]
 
-    /// Async Remove all inactive tabs, used when user closes all inactive tabs and TabTrayFlagManager is enabled
+    /// Async Remove all inactive tabs, used when user closes all inactive tabs
     func removeAllInactiveTabs() async
 
     /// Undo all inactive tabs closure. All inactive tabs are added back to the list of tabs

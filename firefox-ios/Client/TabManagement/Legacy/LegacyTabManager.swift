@@ -582,12 +582,11 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
 
         let tab = tabs[index]
-        if TabTrayFlagManager.isRefactorEnabled {
-            backupCloseTab = BackupCloseTab(
-                tab: tab,
-                restorePosition: index,
-                isSelected: selectedTab?.tabUUID == tab.tabUUID)
-        }
+        backupCloseTab = BackupCloseTab(
+            tab: tab,
+            restorePosition: index,
+            isSelected: selectedTab?.tabUUID == tab.tabUUID)
+
         self.removeTab(tab, flushToDisk: true)
         self.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
 
