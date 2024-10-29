@@ -565,6 +565,13 @@ class BrowserCoordinator: BaseCoordinator,
         return navigationController
     }
 
+    func showSignInView(fxaParameters: FxASignInViewParameters?) {
+        guard let fxaParameters else { return }
+        browserViewController.presentSignInViewController(fxaParameters.launchParameters,
+                                                          flowType: fxaParameters.flowType,
+                                                          referringPage: fxaParameters.referringPage)
+    }
+
     // MARK: - SearchEngineSelectionCoordinatorDelegate
 
     func showSearchEngineSelection(forSourceView sourceView: UIView) {

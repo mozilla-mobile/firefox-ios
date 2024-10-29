@@ -10,7 +10,7 @@ import Storage
 
 class OpenSearchEngineTests: XCTestCase {
     func testEncodeDecodeOpenSearchEngine_withBundledImages_Single() throws {
-        let searchEngine = try generateOpenSearchEngine(type: .wikipedia)
+        let searchEngine = try Self.generateOpenSearchEngine(type: .wikipedia)
 
         // Encode the data
         let data = try NSKeyedArchiver.archivedData(withRootObject: searchEngine, requiringSecureCoding: true)
@@ -30,8 +30,8 @@ class OpenSearchEngineTests: XCTestCase {
     }
 
     func testEncodeDecodeOpenSearchEngine_withBundledImages_Array() throws {
-        let searchEngine1 = try generateOpenSearchEngine(type: .wikipedia)
-        let searchEngine2 = try generateOpenSearchEngine(type: .youtube)
+        let searchEngine1 = try Self.generateOpenSearchEngine(type: .wikipedia)
+        let searchEngine2 = try Self.generateOpenSearchEngine(type: .youtube)
 
         let dataToEncode = [searchEngine1, searchEngine2]
 
@@ -52,8 +52,8 @@ class OpenSearchEngineTests: XCTestCase {
 
     func testCustomSearchEnginesSavedToFile_canRetrievesImageData() throws {
         // Test reading and writing OpenSearchEngines to the same customEngines plist file as done within the app.
-        let searchEngine1 = try generateOpenSearchEngine(type: .wikipedia)
-        let searchEngine2 = try generateOpenSearchEngine(type: .youtube)
+        let searchEngine1 = try Self.generateOpenSearchEngine(type: .wikipedia)
+        let searchEngine2 = try Self.generateOpenSearchEngine(type: .youtube)
 
         // Encode the data
         let searchEngines = [searchEngine1, searchEngine2]
@@ -90,7 +90,7 @@ class OpenSearchEngineTests: XCTestCase {
     }
 
     /// For generating test `OpenSearchEngine` data.
-    private enum TestSearchEngine {
+    public enum TestSearchEngine {
         case youtube, wikipedia
 
         var engineID: String {
@@ -119,7 +119,7 @@ class OpenSearchEngineTests: XCTestCase {
     }
 
     /// Creates a single `OpenSearchEngine` with valid image data pulled from the test's asset catalog.
-    private func generateOpenSearchEngine(type: TestSearchEngine) throws -> OpenSearchEngine {
+    public static func generateOpenSearchEngine(type: TestSearchEngine) throws -> OpenSearchEngine {
         guard let testImage = UIImage(
             named: type.imageName,
             in: Bundle(for: OpenSearchEngineTests.self),
@@ -128,6 +128,10 @@ class OpenSearchEngineTests: XCTestCase {
             throw OpenSearchEngineError.imageNotInBundle
         }
 
+        return generateOpenSearchEngine(type: type, withImage: testImage)
+    }
+
+    public static func generateOpenSearchEngine(type: TestSearchEngine, withImage testImage: UIImage) -> OpenSearchEngine {
         return OpenSearchEngine(
             engineID: type.engineID,
             shortName: type.name,

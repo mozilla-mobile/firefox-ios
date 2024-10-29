@@ -8,7 +8,7 @@
 "NativeErrorPage.GenericError.TitleLabel.v131" = "当心，看来有异常情况。";
 
 /* On error page, this is the description for no internet connection. */
-"NativeErrorPage.NoInternetConnection.Description.v131" = "请尝试通过其他设备连接，检查调制解调器或路由器，断开 Wi-Fi 连接后重新连接。";
+"NativeErrorPage.NoInternetConnection.Description.v131" = "请尝试通过其他设备连接、检查调制解调器或路由器、断开 Wi-Fi 连接后重新连接。";
 
 /* On error page, this is the title for no internet connection */
 "NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "您的网络连接似乎出了点问题。";

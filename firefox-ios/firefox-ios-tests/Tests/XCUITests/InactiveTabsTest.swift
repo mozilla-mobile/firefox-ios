@@ -132,7 +132,7 @@ final class InactiveTabsTest: BaseTestCase {
         // All inactive tabs are deleted
         navigator.nowAt(TabTray)
         mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts["Homepage"])
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts["Walmart | Save Money. Live better."])
+        XCTAssertEqual(app.otherElements["Tabs Tray"].collectionViews.cells.count, 2)
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerView])
         mozWaitForElementToNotExist(app.otherElements["Tabs Tray"].staticTexts["Google"])
         mozWaitForElementToNotExist(app.otherElements["Tabs Tray"].staticTexts["Facebook - log in or sign up"])

@@ -123,7 +123,6 @@ class BrowserViewController: UIViewController,
     let profile: Profile
     let tabManager: TabManager
     let ratingPromptManager: RatingPromptManager
-    lazy var isTabTrayRefactorEnabled: Bool = TabTrayFlagManager.isRefactorEnabled
     var isToolbarRefactorEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
     }
@@ -2414,15 +2413,10 @@ class BrowserViewController: UIViewController,
         else { return }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500), execute: {
-            let urlRequest = URLRequest(url: url)
-            if TabTrayFlagManager.isRefactorEnabled {
-                let action = TabPanelViewAction(panelType: .tabs,
-                                                windowUUID: self.windowUUID,
-                                                actionType: TabPanelViewActionType.addNewTab)
-                store.dispatch(action)
-            } else {
-                self.tabManager.addTab(urlRequest)
-            }
+            let action = TabPanelViewAction(panelType: .tabs,
+                                            windowUUID: self.windowUUID,
+                                            actionType: TabPanelViewActionType.addNewTab)
+            store.dispatch(action)
 
             self.debugOpen(numberOfNewTabs: numberOfNewTabs - 1, at: url)
         })
