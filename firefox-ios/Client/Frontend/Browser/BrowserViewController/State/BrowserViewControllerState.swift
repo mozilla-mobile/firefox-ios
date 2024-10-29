@@ -74,7 +74,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                   buttonTapped: bvcState.buttonTapped,
                   frame: bvcState.frame,
                   microsurveyState: bvcState.microsurveyState,
-                  navigationDestination: bvcState.navigationDestination))
+                  navigationDestination: bvcState.navigationDestination)
     }
 
     init(windowUUID: WindowUUID) {
