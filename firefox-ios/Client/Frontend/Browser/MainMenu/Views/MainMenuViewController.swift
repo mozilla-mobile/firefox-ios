@@ -94,7 +94,8 @@ class MainMenuViewController: UIViewController,
             store.dispatch(
                 MainMenuAction(
                     windowUUID: self.windowUUID,
-                    actionType: MainMenuActionType.tapCloseMenu
+                    actionType: MainMenuActionType.tapCloseMenu,
+                    currentTabInfo: menuState.currentTabInfo
                 )
             )
         }
@@ -105,7 +106,8 @@ class MainMenuViewController: UIViewController,
                 MainMenuAction(
                     windowUUID: self.windowUUID,
                     actionType: MainMenuActionType.tapNavigateToDestination,
-                    navigationDestination: MenuNavigationDestination(.syncSignIn)
+                    navigationDestination: MenuNavigationDestination(.syncSignIn),
+                    currentTabInfo: menuState.currentTabInfo
                 )
             )
         }
@@ -337,6 +339,13 @@ class MainMenuViewController: UIViewController,
 
     // MARK: - UIAdaptivePresentationControllerDelegate
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        store.dispatch(
+            MainMenuAction(
+                windowUUID: self.windowUUID,
+                actionType: MainMenuActionType.menuDismissed,
+                currentTabInfo: menuState.currentTabInfo
+            )
+        )
         coordinator?.dismissMenuModal(animated: true)
     }
 

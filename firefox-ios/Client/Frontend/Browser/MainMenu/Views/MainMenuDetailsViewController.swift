@@ -116,7 +116,8 @@ class MainMenuDetailsViewController: UIViewController,
             store.dispatch(
                 MainMenuAction(
                     windowUUID: self.windowUUID,
-                    actionType: MainMenuDetailsActionType.tapBackToMainMenu
+                    actionType: MainMenuDetailsActionType.tapBackToMainMenu,
+                    currentTabInfo: submenuState.currentTabInfo
                 )
             )
         }
@@ -125,7 +126,8 @@ class MainMenuDetailsViewController: UIViewController,
             store.dispatch(
                 MainMenuAction(
                     windowUUID: self.windowUUID,
-                    actionType: MainMenuDetailsActionType.tapDismissView
+                    actionType: MainMenuDetailsActionType.tapDismissView,
+                    currentTabInfo: submenuState.currentTabInfo
                 )
             )
         }

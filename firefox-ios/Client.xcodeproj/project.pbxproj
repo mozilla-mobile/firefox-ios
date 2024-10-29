@@ -16,6 +16,7 @@
 		047F9B3E24E1FF4000CD7DF7 /* SearchQuickLinks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047F9B3A24E1FF4000CD7DF7 /* SearchQuickLinks.swift */; };
 		047F9B4224E1FF4000CD7DF7 /* ImageButtonWithLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047F9B3C24E1FF4000CD7DF7 /* ImageButtonWithLabel.swift */; };
 		0A49784A2C53E63200B1E82A /* TrackingProtectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4978492C53E63200B1E82A /* TrackingProtectionViewController.swift */; };
+		0A5E1B672CCB9052009538B2 /* MainMenuDetailMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A5E1B662CCB9052009538B2 /* MainMenuDetailMiddleware.swift */; };
 		0A6875152C91886A00606F53 /* CertificatesHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6875142C91886A00606F53 /* CertificatesHeaderView.swift */; };
 		0A7693612C7DD19600103A6D /* CertificatesViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7693602C7DD19500103A6D /* CertificatesViewModelTests.swift */; };
 		0A7693692C81F2A300103A6D /* TrackingProtectionConnectionDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7693682C81F2A200103A6D /* TrackingProtectionConnectionDetailsView.swift */; };
@@ -2274,6 +2275,7 @@
 		0A4978492C53E63200B1E82A /* TrackingProtectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionViewController.swift; sourceTree = "<group>"; };
 		0A574D09BF8D9E37D6C9C654 /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		0A5B4CE9B0996AE804491134 /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/Shared.strings; sourceTree = "<group>"; };
+		0A5E1B662CCB9052009538B2 /* MainMenuDetailMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuDetailMiddleware.swift; sourceTree = "<group>"; };
 		0A6875142C91886A00606F53 /* CertificatesHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificatesHeaderView.swift; sourceTree = "<group>"; };
 		0A734328A164466314ECE4BE /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/Menu.strings; sourceTree = "<group>"; };
 		0A7693602C7DD19500103A6D /* CertificatesViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificatesViewModelTests.swift; sourceTree = "<group>"; };
@@ -10815,6 +10817,7 @@
 				81F617C82C8755AB003799BF /* MainMenuAction.swift */,
 				81C297F82CA3117200B8BE78 /* MenuNavigationDestination.swift */,
 				818302D72C988DFD009645EC /* MainMenuDetailState.swift */,
+				0A5E1B662CCB9052009538B2 /* MainMenuDetailMiddleware.swift */,
 			);
 			path = Redux;
 			sourceTree = "<group>";
@@ -16553,6 +16556,7 @@
 				EBB89506219398E500EB91A0 /* TabContentBlocker.swift in Sources */,
 				E1B9A2C22CAD91EF00F6A0E9 /* ToolbarTelemetry.swift in Sources */,
 				21F2A2D22B0BC85200626AEC /* InactiveTabsModel.swift in Sources */,
+				0A5E1B672CCB9052009538B2 /* MainMenuDetailMiddleware.swift in Sources */,
 				966206CD2698DE1E005C0A55 /* BookmarksViewModel.swift in Sources */,
 				D3E8EF101B97BE69001900FB /* ClearPrivateDataTableViewController.swift in Sources */,
 				C8F457AA1F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift in Sources */,
