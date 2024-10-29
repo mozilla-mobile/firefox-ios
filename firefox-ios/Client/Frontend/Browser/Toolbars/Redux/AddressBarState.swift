@@ -591,6 +591,7 @@ struct AddressBarState: StateType, Equatable {
             url: state.url,
             searchTerm: state.searchTerm,
             lockIconImageName: state.lockIconImageName,
+            safeListedURLImageName: state.safeListedURLImageName,
             isEditing: state.isEditing,
             isScrollingDuringEdit: state.isScrollingDuringEdit,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
