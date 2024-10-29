@@ -439,7 +439,7 @@ class HistoryTests: BaseTestCase {
             mozWaitForElementToExist(app.tables.cells.staticTexts[entry])
         }
         mozWaitForElementToNotExist(app.staticTexts["Today"])
-        mozWaitForElementToExist(app.staticTexts["Older"])
+        mozWaitForElementToExist(app.staticTexts["Last month"])
 
         // Begin Test for Today and Yesterday
         // Visit a page to create a recent history entry.
@@ -452,7 +452,7 @@ class HistoryTests: BaseTestCase {
             XCTAssertTrue(app.tables.cells.staticTexts[entry].exists)
         }
         mozWaitForElementToNotExist(app.staticTexts["Today"])
-        mozWaitForElementToExist(app.staticTexts["Older"])
+        mozWaitForElementToExist(app.staticTexts["Last month"])
 
         // Begin Test for Everything
         // Visit a page to create a recent history entry.
@@ -464,7 +464,7 @@ class HistoryTests: BaseTestCase {
             mozWaitForElementToNotExist(app.tables.cells.staticTexts[entry])
         }
         mozWaitForElementToNotExist(app.staticTexts["Today"])
-        mozWaitForElementToNotExist(app.staticTexts["Older"])
+        mozWaitForElementToNotExist(app.staticTexts["Last month"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306890
