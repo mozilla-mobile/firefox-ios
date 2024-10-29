@@ -20,7 +20,7 @@ private struct LightColourPalette: ThemeColourPalette {
     var layer5: UIColor = FXColors.White
     var layer5Hover: UIColor = FXColors.LightGrey20
     var layerScrim: UIColor = FXColors.DarkGrey30.withAlphaComponent(0.95)
-    var layerGradient = Gradient(colors: [FXColors.Violet60, FXColors.Violet70])
+    var layerGradient = Gradient(colors: [FXColors.Violet70, FXColors.Violet60])
     var layerGradientOverlay = Gradient(colors: [FXColors.DarkGrey40.withAlphaComponent(0),
                                                  FXColors.DarkGrey40.withAlphaComponent(0.4)])
     var layerAccentNonOpaque: UIColor = FXColors.Blue50.withAlphaComponent(0.3)
@@ -92,7 +92,7 @@ private struct LightColourPalette: ThemeColourPalette {
     var iconOnColor: UIColor = FXColors.LightGrey05
     var iconCritical: UIColor = FXColors.Red70
     var iconSpinner: UIColor = FXColors.LightGrey80
-    var iconAccentViolet: UIColor = FXColors.Violet60
+    var iconAccentViolet: UIColor = FXColors.Violet70
     var iconAccentBlue: UIColor = FXColors.Blue60
     var iconAccentPink: UIColor = FXColors.Pink60
     var iconAccentGreen: UIColor = FXColors.Green60
@@ -108,5 +108,5 @@ private struct LightColourPalette: ThemeColourPalette {
     var borderToolbarDivider: UIColor = FXColors.LightGrey10
 
     // MARK: - Shadow
-    var shadowDefault: UIColor = FXColors.DarkGrey40.withAlphaComponent(0.16)
+    var shadowDefault: UIColor = FXColors.DarkGrey40.withAlphaComponent(0.12)
 }
