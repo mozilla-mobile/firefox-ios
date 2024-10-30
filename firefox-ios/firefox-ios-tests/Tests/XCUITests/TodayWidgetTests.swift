@@ -1,4 +1,3 @@
-// swiftlint:disable type_body_length
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
@@ -108,6 +107,7 @@ private func checkFirefoxShortcutsOptions() {
     )
 }
 
+// swiftlint:disable:next type_body_length
 class TodayWidgetTests: BaseTestCase {
     private func removeFirefoxWidget() {
         let maxSwipes = 3
@@ -129,11 +129,9 @@ class TodayWidgetTests: BaseTestCase {
         }
         // Attempt to press and hold on any of the Firefox widget elements
         var widgetFound = false
-        for label in widgetLabels {
-            if pressAndHoldWidget(matching: label) {
+        for label in widgetLabels where pressAndHoldWidget(matching: label) {
                 widgetFound = true
                 break
-            }
         }
 
         guard widgetFound else {
