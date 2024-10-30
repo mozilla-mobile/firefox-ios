@@ -26,7 +26,6 @@ class LegacyTabCell: UICollectionViewCell,
                LegacyTabTrayCell,
                ReusableCell,
                ThemeApplicable {
-
     struct UX {
         static let cornerRadius: CGFloat = 6
         static let textBoxHeight: CGFloat = 32
