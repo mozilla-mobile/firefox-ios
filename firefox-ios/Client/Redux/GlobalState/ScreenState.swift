@@ -11,4 +11,14 @@ import Common
 /// to ensure screens can be displayed across multiple windows on iPad.
 protocol ScreenState {
     var windowUUID: WindowUUID { get }
+
+    /// Returns a default state by clearing any transient state from previous one
+    static func defaultState(fromPreviousState state: Self) -> Self
+}
+
+extension ScreenState {
+    static func defaultState(fromPreviousState state: Self) -> Self {
+        // Adding this default implementation so all states are not forced to implement it yet.
+        return state
+    }
 }
