@@ -456,8 +456,7 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
         object: TelemetryWrapper.EventObject,
         method: TelemetryWrapper.EventMethod
     ) {
-        let isTabTray = tabDisplayerDelegate as? LegacyGridTabViewController != nil
-        let eventValue = isTabTray ? TelemetryWrapper.EventValue.tabTray : TelemetryWrapper.EventValue.topTabs
+        let eventValue = TelemetryWrapper.EventValue.topTabs
         TelemetryWrapper.recordEvent(category: .action, method: method, object: object, value: eventValue)
     }
 
@@ -646,10 +645,6 @@ extension LegacyTabDisplayManager: LegacyInactiveTabsDelegate {
                                      object: .inactiveTabTray,
                                      value: .openInactiveTab,
                                      extras: nil)
-        if let tabTray = tabDisplayerDelegate as? LegacyGridTabViewController {
-            tabManager.selectTab(tab)
-            tabTray.dismissTabTray()
-        }
     }
 
     func toggleInactiveTabSection(hasExpanded: Bool) {
