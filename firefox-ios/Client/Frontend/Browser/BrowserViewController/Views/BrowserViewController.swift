@@ -22,7 +22,7 @@ import struct MozillaAppServices.EncryptedLogin
 import enum MozillaAppServices.BookmarkRoots
 import enum MozillaAppServices.VisitType
 
-class BrowserViewController: UIViewController,
+final class BrowserViewController: UIViewController,
                              SearchBarLocationProvider,
                              Themeable,
                              LibraryPanelDelegate,
