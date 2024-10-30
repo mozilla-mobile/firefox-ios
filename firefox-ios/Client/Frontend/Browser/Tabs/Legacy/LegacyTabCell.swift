@@ -26,6 +26,24 @@ class LegacyTabCell: UICollectionViewCell,
                LegacyTabTrayCell,
                ReusableCell,
                ThemeApplicable {
+
+    struct UX {
+        static let cornerRadius: CGFloat = 6
+        static let textBoxHeight: CGFloat = 32
+        static let faviconSize: CGFloat = 20
+        static let margin: CGFloat = 15
+        static let toolbarButtonOffset: CGFloat = 10
+        static let closeButtonSize: CGFloat = 32
+        static let closeButtonMargin: CGFloat = 6
+        static let closeButtonEdgeInset: CGFloat = 7
+        static let numberOfColumnsThin = 1
+        static let numberOfColumnsWide = 3
+        static let compactNumberOfColumnsThin = 2
+        static let menuFixedWidth: CGFloat = 320
+        static let undoToastDelay = DispatchTimeInterval.seconds(0)
+        static let undoToastDuration = DispatchTimeInterval.seconds(3)
+    }
+
     // MARK: - Constants
     enum Style {
         case light
@@ -36,7 +54,7 @@ class LegacyTabCell: UICollectionViewCell,
 
     // MARK: - UI Vars
     private lazy var backgroundHolder: UIView = .build { view in
-        view.layer.cornerRadius = LegacyGridTabViewController.UX.cornerRadius + LegacyTabCell.borderWidth
+        view.layer.cornerRadius = UX.cornerRadius + LegacyTabCell.borderWidth
         view.clipsToBounds = true
     }
 
@@ -66,12 +84,12 @@ class LegacyTabCell: UICollectionViewCell,
         button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross), for: [])
         button.imageView?.contentMode = .scaleAspectFit
         button.contentMode = .center
-        button.configuration?.imagePadding = LegacyGridTabViewController.UX.closeButtonEdgeInset
+        button.configuration?.imagePadding = UX.closeButtonEdgeInset
         button.configuration?.contentInsets =  NSDirectionalEdgeInsets(
-            top: LegacyGridTabViewController.UX.closeButtonEdgeInset,
-            leading: LegacyGridTabViewController.UX.closeButtonEdgeInset,
-            bottom: LegacyGridTabViewController.UX.closeButtonEdgeInset,
-            trailing: LegacyGridTabViewController.UX.closeButtonEdgeInset
+            top: UX.closeButtonEdgeInset,
+            leading: UX.closeButtonEdgeInset,
+            bottom: UX.closeButtonEdgeInset,
+            trailing: UX.closeButtonEdgeInset
         )
     }
 
@@ -123,20 +141,20 @@ class LegacyTabCell: UICollectionViewCell,
                 title.topAnchor.constraint(equalTo: backgroundHolder.topAnchor),
                 title.leftAnchor.constraint(equalTo: backgroundHolder.leftAnchor),
                 title.rightAnchor.constraint(equalTo: backgroundHolder.rightAnchor),
-                title.heightAnchor.constraint(equalToConstant: LegacyGridTabViewController.UX.textBoxHeight),
+                title.heightAnchor.constraint(equalToConstant: UX.textBoxHeight),
 
                 favicon.leadingAnchor.constraint(equalTo: title.leadingAnchor, constant: 6),
                 favicon.topAnchor.constraint(
                     equalTo: title.topAnchor,
                     constant: (
-                        LegacyGridTabViewController.UX.textBoxHeight - LegacyGridTabViewController.UX.faviconSize
+                        UX.textBoxHeight - UX.faviconSize
                     ) / 2
                 ),
-                favicon.heightAnchor.constraint(equalToConstant: LegacyGridTabViewController.UX.faviconSize),
-                favicon.widthAnchor.constraint(equalToConstant: LegacyGridTabViewController.UX.faviconSize),
+                favicon.heightAnchor.constraint(equalToConstant: UX.faviconSize),
+                favicon.widthAnchor.constraint(equalToConstant: UX.faviconSize),
 
-                closeButton.heightAnchor.constraint(equalToConstant: LegacyGridTabViewController.UX.closeButtonSize),
-                closeButton.widthAnchor.constraint(equalToConstant: LegacyGridTabViewController.UX.closeButtonSize),
+                closeButton.heightAnchor.constraint(equalToConstant: UX.closeButtonSize),
+                closeButton.widthAnchor.constraint(equalToConstant: UX.closeButtonSize),
                 closeButton.centerYAnchor.constraint(equalTo: title.contentView.centerYAnchor),
                 closeButton.trailingAnchor.constraint(equalTo: title.trailingAnchor),
 
@@ -188,7 +206,7 @@ class LegacyTabCell: UICollectionViewCell,
             layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             layer.borderColor = UIColor.clear.cgColor
             layer.borderWidth = 0
-            layer.cornerRadius = LegacyGridTabViewController.UX.cornerRadius + LegacyTabCell.borderWidth
+            layer.cornerRadius = UX.cornerRadius + LegacyTabCell.borderWidth
         }
 
         faviconBG.isHidden = true
@@ -275,7 +293,7 @@ class LegacyTabCell: UICollectionViewCell,
                                      right: LegacyTabCell.borderWidth)
         layer.borderColor = (isPrivate ? theme.colors.borderAccentPrivate : theme.colors.borderAccent).cgColor
         layer.borderWidth = LegacyTabCell.borderWidth
-        layer.cornerRadius = LegacyGridTabViewController.UX.cornerRadius + LegacyTabCell.borderWidth
+        layer.cornerRadius = UX.cornerRadius + LegacyTabCell.borderWidth
     }
 }
 
