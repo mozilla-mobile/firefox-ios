@@ -21,13 +21,17 @@ class MainMenuViewController: UIViewController,
                               FeatureFlaggable {
     private struct UX {
         static let hintViewCornerRadius: CGFloat = 20
-        static let hintViewHeight: CGFloat = 120
+        static let hintViewHeight: CGFloat = 140
         static let hintViewMargin: CGFloat = 20
     }
     typealias SubscriberStateType = MainMenuState
 
     // MARK: - UI/UX elements
     private lazy var menuContent: MenuMainView = .build()
+    private var hintView: ContextualHintView = .build { view in
+        view.isAccessibilityElement = true
+    }
+    private var hintViewHeightConstraint: NSLayoutConstraint?
 
     // MARK: - Properties
     var notificationCenter: NotificationProtocol
@@ -39,8 +43,6 @@ class MainMenuViewController: UIViewController,
     private let profile: Profile
     private var menuState: MainMenuState
     private let logger: Logger
-
-    private var hintView: ContextualHintView = .build()
 
     let viewProvider: ContextualHintViewProvider
 
@@ -203,12 +205,14 @@ class MainMenuViewController: UIViewController,
                 hintView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.hintViewMargin),
                 hintView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.hintViewMargin),
                 hintView.bottomAnchor.constraint(equalTo: menuContent.accountHeaderView.topAnchor,
-                                                 constant: -UX.hintViewMargin),
-                hintView.heightAnchor.constraint(equalToConstant: UX.hintViewHeight)
+                                                 constant: -UX.hintViewMargin)
             ])
+            hintViewHeightConstraint = hintView.heightAnchor.constraint(equalToConstant: UX.hintViewHeight)
+            hintViewHeightConstraint?.isActive = true
         }
         hintView.layer.cornerRadius = UX.hintViewCornerRadius
         hintView.layer.masksToBounds = true
+        adjustLayout()
     }
 
     // MARK: - Redux
@@ -318,6 +322,20 @@ class MainMenuViewController: UIViewController,
 
     private func adjustLayout() {
         menuContent.accountHeaderView.adjustLayout()
+        if let screenHeight = view.window?.windowScene?.screen.bounds.height {
+            let isPad = UIDevice.current.userInterfaceIdiom == .pad
+            let maxHeight: CGFloat = if isPad {
+                (screenHeight - view.frame.height) / 2 - UX.hintViewMargin * 2
+            } else {
+                screenHeight - view.frame.height - UX.hintViewMargin * 4
+            }
+            let height = min(UIFontMetrics.default.scaledValue(for: UX.hintViewHeight), maxHeight)
+            let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+            hintViewHeightConstraint?.constant =
+            contentSizeCategory.isAccessibilityCategory ? height : UX.hintViewHeight
+        }
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
     }
 
     private func shouldDisplayHintView() -> Bool {
