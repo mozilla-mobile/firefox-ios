@@ -139,17 +139,17 @@ class TodayWidgetTests: BaseTestCase {
                 return
         }
         if #unavailable(iOS 16) {
-            mozWaitElementHittable(element: springboard.buttons["Remove Widget"], timeout: 5)
+            mozWaitElementHittable(element: springboard.buttons["Remove Widget"], timeout: TIMEOUT)
             springboard.buttons["Remove Widget"].tap()
         } else {
-            mozWaitElementHittable(element: springboard.buttons[removeWidgetButton], timeout: 5)
+            mozWaitElementHittable(element: springboard.buttons[removeWidgetButton], timeout: TIMEOUT)
             springboard.buttons[removeWidgetButton].tap()
         }
 
         mozWaitForElementToExist(springboard.alerts.buttons["Remove"])
         mozWaitForElementToExist(springboard.alerts.buttons["Cancel"])
 
-        mozWaitElementHittable(element: springboard.alerts.buttons["Remove"], timeout: 5)
+        mozWaitElementHittable(element: springboard.alerts.buttons["Remove"], timeout: TIMEOUT)
         springboard.alerts.buttons["Remove"].tap()
     }
 
@@ -205,13 +205,13 @@ class TodayWidgetTests: BaseTestCase {
             pressAndHoldWidget(matching: "Firefox")
         }
 
-        mozWaitElementHittable(element: springboard.buttons[removeWidgetButton], timeout: 5)
+        mozWaitElementHittable(element: springboard.buttons[removeWidgetButton], timeout: TIMEOUT)
         springboard.buttons[removeWidgetButton].tap()
 
         mozWaitForElementToExist(springboard.alerts.buttons["Remove"])
         mozWaitForElementToExist(springboard.alerts.buttons["Cancel"])
 
-        mozWaitElementHittable(element: springboard.alerts.buttons["Remove"], timeout: 5)
+        mozWaitElementHittable(element: springboard.alerts.buttons["Remove"], timeout: TIMEOUT)
         springboard.alerts.buttons["Remove"].tap()
     }
 
@@ -252,7 +252,7 @@ class TodayWidgetTests: BaseTestCase {
 
     private func tapOnWidget(widgetType: String) {
         let widget = springboard.buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", widgetType)).element
-        mozWaitElementHittable(element: widget, timeout: 10)
+        mozWaitElementHittable(element: widget, timeout: TIMEOUT)
         widget.tap()
     }
 
@@ -280,7 +280,7 @@ class TodayWidgetTests: BaseTestCase {
             mozWaitForElementToExist(springboard.buttons["Add Widget"])
             springboard.buttons["Add Widget"].tap()
         }
-        mozWaitElementHittable(element: springboard.searchFields["Search Widgets"], timeout: 5)
+        mozWaitElementHittable(element: springboard.searchFields["Search Widgets"], timeout: TIMEOUT)
         springboard.searchFields["Search Widgets"].tap()
         springboard.searchFields["Search Widgets"].typeText(widgetName)
         let predicate = NSPredicate(format: "label CONTAINS[c] %@", widgetName+" (")
@@ -302,7 +302,7 @@ class TodayWidgetTests: BaseTestCase {
 
     private func addAndSearchForWidget(widgetName: String) {
         addWidget(widgetName: widgetName)
-        mozWaitElementHittable(element: springboard.searchFields["Search Widgets"], timeout: 5)
+        mozWaitElementHittable(element: springboard.searchFields["Search Widgets"], timeout: TIMEOUT)
         springboard.searchFields["Search Widgets"].tap()
         springboard.searchFields["Search Widgets"].typeText(widgetName)
         let predicate = NSPredicate(format: "label CONTAINS[c] %@", widgetName + " (")
@@ -337,7 +337,7 @@ class TodayWidgetTests: BaseTestCase {
         } else {
             springboard.buttons[editWidgetButton].tap()
         }
-        mozWaitElementHittable(element: newSearch, timeout: 5)
+        mozWaitElementHittable(element: newSearch, timeout: TIMEOUT)
         newSearch.tap()
         // Verify widget actions
         if #unavailable(iOS 17) {
@@ -399,7 +399,7 @@ class TodayWidgetTests: BaseTestCase {
         } else {
             springboard.buttons[editWidgetButton].tap()
         }
-        mozWaitElementHittable(element: newSearch, timeout: 5)
+        mozWaitElementHittable(element: newSearch, timeout: TIMEOUT)
         newSearch.tap()
         if #unavailable(iOS 17) {
             if #available(iOS 16, *) {
@@ -410,12 +410,12 @@ class TodayWidgetTests: BaseTestCase {
             }
         }
         // Verify the existence of New Search-related buttons
-        mozWaitForElementToExist(goToCopiedLink, timeout: 5)
+        mozWaitForElementToExist(goToCopiedLink, timeout: TIMEOUT)
         XCTAssertTrue(goToCopiedLink.exists, "Go to Copied Link button not found.")
         XCTAssertTrue(newPrivateSearch.exists, "New Private Search button not found.")
         XCTAssertTrue(clearPrivateTabs.exists, "Clear Private Tabs button not found.")
         // Start a new private search
-        mozWaitElementHittable(element: newPrivateSearch, timeout: 5)
+        mozWaitElementHittable(element: newPrivateSearch, timeout: TIMEOUT)
         newPrivateSearch.tap()
         // Tap outside the alert to dismiss it
         mozWaitForElementToExist(newPrivateSearch)
@@ -426,7 +426,7 @@ class TodayWidgetTests: BaseTestCase {
         tapOnWidget(widgetType: "Private Tab")
         // Handle different UI behavior on iPad and iPhone
         if !iPad() {
-            mozWaitElementHittable(element: app.buttons["CloseButton"], timeout: 10)
+            mozWaitElementHittable(element: app.buttons["CloseButton"], timeout: TIMEOUT)
             app.buttons["CloseButton"].tap()
         }
         // Verify the presence of Private Mode message
@@ -471,7 +471,7 @@ class TodayWidgetTests: BaseTestCase {
         } else {
             springboard.buttons[editWidgetButton].tap()
         }
-        mozWaitElementHittable(element: newSearch, timeout: 3)
+        mozWaitElementHittable(element: newSearch, timeout: TIMEOUT)
         newSearch.tap()
         if #unavailable(iOS 17) {
             if #available(iOS 16, *) {
@@ -482,12 +482,12 @@ class TodayWidgetTests: BaseTestCase {
             }
         }
         // Ensure the Go To Copied Link option exists
-        mozWaitForElementToExist(goToCopiedLink, timeout: 3)
+        mozWaitForElementToExist(goToCopiedLink, timeout: TIMEOUT)
         XCTAssertTrue(goToCopiedLink.exists, "Go To Copied Link button not found.")
         XCTAssertTrue(newPrivateSearch.exists, "New Private Search button not found.")
         XCTAssertTrue(clearPrivateTabs.exists, "Clear Private Tabs button not found.")
         // Tap Go To Copied Link
-        mozWaitElementHittable(element: goToCopiedLink, timeout: 3)
+        mozWaitElementHittable(element: goToCopiedLink, timeout: TIMEOUT)
         goToCopiedLink.tap()
         // Tap outside the alert to close it
         coordinate.tap()
@@ -498,19 +498,17 @@ class TodayWidgetTests: BaseTestCase {
         tapOnWidget(widgetType: "Copied Link")
         // Handle paste alert
         if #available(iOS 16, *) {
-            mozWaitElementHittable(element: springboard.alerts.buttons["Allow Paste"], timeout: 3)
+            mozWaitElementHittable(element: springboard.alerts.buttons["Allow Paste"], timeout: TIMEOUT)
             springboard.alerts.buttons["Allow Paste"].tap()
         }
-        // mozWaitElementHittable(element: springboard.alerts.buttons["Allow Paste"], timeout: 3)
-        // springboard.alerts.buttons["Allow Paste"].tap()
         // Handle iPad/iPhone UI differences
         if !iPad() {
-            mozWaitElementHittable(element: app.buttons["CloseButton"], timeout: 10)
+            mozWaitElementHittable(element: app.buttons["CloseButton"], timeout: TIMEOUT)
             app.buttons["CloseButton"].tap()
         }
         // Verify the copied string is in the URL field
-        mozWaitForElementToExist(app.textFields["url"], timeout: 10)
-        mozWaitForValueContains(app.textFields["url"], value: copiedString, timeout: 5)
+        mozWaitForElementToExist(app.textFields["url"], timeout: TIMEOUT)
+        mozWaitForValueContains(app.textFields["url"], value: copiedString, timeout: TIMEOUT)
         guard let urlField = app.textFields["url"].value as? String else {
             XCTFail("Expected value to be a String but found \(type(of: app.textFields["url"].value))")
             return
@@ -577,12 +575,12 @@ class TodayWidgetTests: BaseTestCase {
         checkFirefoxShortcutsOptions()
         mozWaitElementHittable(element: springboard.buttons.matching(
             NSPredicate(format: "label CONTAINS[c] %@", "Private Tab")
-        ).element.firstMatch, timeout: 5)
+        ).element.firstMatch, timeout: TIMEOUT)
         springboard.buttons.matching(NSPredicate(
             format: "label CONTAINS[c] %@", "Private Tab")
         ).element.firstMatch.tap()
         if !iPad() {
-            mozWaitElementHittable(element: app.buttons["CloseButton"], timeout: 10)
+            mozWaitElementHittable(element: app.buttons["CloseButton"], timeout: TIMEOUT)
             app.buttons["CloseButton"].tap()
         }
         // Verify the presence of Private Mode message
@@ -625,21 +623,21 @@ class TodayWidgetTests: BaseTestCase {
         checkFirefoxShortcutsOptions()
         mozWaitElementHittable(element: springboard.buttons.matching(
             NSPredicate(format: "label CONTAINS[c] %@", "Copied Link")
-        ).element, timeout: 5)
+        ).element, timeout: TIMEOUT)
         springboard.buttons.matching(NSPredicate(
             format: "label CONTAINS[c] %@", "Copied Link")
         ).element.tap()
         if #available(iOS 16, *) {
-            mozWaitElementHittable(element: springboard.alerts.buttons["Allow Paste"], timeout: 3)
+            mozWaitElementHittable(element: springboard.alerts.buttons["Allow Paste"], timeout: TIMEOUT)
             springboard.alerts.buttons["Allow Paste"].tap()
         }
         // Verify the copied string is in the URL field
         if !iPad() {
-            mozWaitElementHittable(element: app.buttons["CloseButton"], timeout: 10)
+            mozWaitElementHittable(element: app.buttons["CloseButton"], timeout: TIMEOUT)
             app.buttons["CloseButton"].tap()
         }
-        mozWaitForElementToExist(app.textFields["url"], timeout: 10)
-        mozWaitForValueContains(app.textFields["url"], value: copiedString, timeout: 5)
+        mozWaitForElementToExist(app.textFields["url"], timeout: TIMEOUT)
+        mozWaitForValueContains(app.textFields["url"], value: copiedString, timeout: TIMEOUT)
         guard let urlField = app.textFields["url"].value as? String else {
             XCTFail("Expected value to be a String but found \(type(of: app.textFields["url"].value))")
             return
