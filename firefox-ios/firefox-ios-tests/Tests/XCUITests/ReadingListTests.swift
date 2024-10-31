@@ -10,6 +10,7 @@ class ReadingListTests: BaseTestCase {
     // Smoketest
     func testLoadReaderContent() {
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
+        waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
         app.buttons["Reader View"].waitAndTap()
