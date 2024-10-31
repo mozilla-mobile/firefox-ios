@@ -147,11 +147,19 @@ class ToolbarTests: BaseTestCase {
     }
 
     private func validateAddNewTabButtonOnToolbar(isPrivate: Bool) {
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton])
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
+        waitForElementsToExist(
+            [
+                app.buttons[AccessibilityIdentifiers.Toolbar.searchButton],
+                app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton]
+            ]
+        )
         restartInBackground()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton])
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
+        waitForElementsToExist(
+            [
+                app.buttons[AccessibilityIdentifiers.Toolbar.searchButton],
+                app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton]
+            ]
+        )
         // Swipe up to close the app does not work on iOS 15.
         if #available(iOS 16, *) {
             closeFromAppSwitcherAndRelaunch()

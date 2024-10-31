@@ -96,9 +96,11 @@ class TrackingProtectionTests: BaseTestCase {
         waitUntilPageLoad()
 
         // The lock icon should still be there
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
-        mozWaitForElementToExist(
-            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
+        waitForElementsToExist(
+            [
+                app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection],
+                app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
+            ]
         )
 
         // Switch to Private Browsing
@@ -107,9 +109,11 @@ class TrackingProtectionTests: BaseTestCase {
         waitUntilPageLoad()
 
         // Make sure TP is also there in PBM
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
-        mozWaitForElementToExist(
-            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
+        waitForElementsToExist(
+            [
+                app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection],
+                app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
+            ]
         )
         navigator.goto(BrowserTabMenu)
         app.tables.otherElements[StandardImageIdentifiers.Large.settings].waitAndTap()
@@ -167,11 +171,15 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.goto(TrackingProtectionSettings)
         // See Basic mode info
         app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons["More Info"].tap()
-        mozWaitForElementToExist(app.navigationBars["Client.TPAccessoryInfo"])
-        mozWaitForElementToExist(app.cells.staticTexts["Social Trackers"])
-        mozWaitForElementToExist(app.cells.staticTexts["Cross-Site Trackers"])
-        mozWaitForElementToExist(app.cells.staticTexts["Fingerprinters"])
-        mozWaitForElementToExist(app.cells.staticTexts["Cryptominers"])
+        waitForElementsToExist(
+            [
+                app.navigationBars["Client.TPAccessoryInfo"],
+                app.cells.staticTexts["Social Trackers"],
+                app.cells.staticTexts["Cross-Site Trackers"],
+                app.cells.staticTexts["Fingerprinters"],
+                app.cells.staticTexts["Cryptominers"]
+            ]
+        )
         mozWaitForElementToNotExist(app.cells.staticTexts["Tracking content"])
 
         // Go back to TP settings
@@ -198,8 +206,12 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.goto(TrackingProtectionContextMenuDetails)
         // A page displaying the connection is secure
-        mozWaitForElementToExist(app.staticTexts["mozilla.org"])
-        mozWaitForElementToExist(app.staticTexts["Secure connection"])
+        waitForElementsToExist(
+            [
+                app.staticTexts["mozilla.org"],
+                app.staticTexts["Secure connection"]
+            ]
+        )
         XCTAssertEqual(
             app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
             "Secure connection"

@@ -23,8 +23,12 @@ class AuthenticationTest: BaseTestCase {
         mozWaitForValueContains(placeholderValueUsername, value: "Username")
         mozWaitForValueContains(placeholderValuePassword, value: "Password")
 
-        mozWaitForElementToExist(app.alerts.buttons["Cancel"])
-        mozWaitForElementToExist(app.alerts.buttons["Log in"])
+        waitForElementsToExist(
+            [
+                app.alerts.buttons["Cancel"],
+                app.alerts.buttons["Log in"]
+            ]
+        )
 
         // Skip login due to HTTP Basic Authentication crash in #5757
         // Dismiss authentication prompt

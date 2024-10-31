@@ -238,8 +238,12 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(SettingsScreen)
         // Check Bookmarks
         navigator.goto(LibraryPanel_Bookmarks)
-        mozWaitForElementToExist(app.tables["Bookmarks List"])
-        mozWaitForElementToExist(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"])
+        waitForElementsToExist(
+            [
+                app.tables["Bookmarks List"],
+                app.tables["Bookmarks List"].cells.staticTexts["Example Domain"]
+            ]
+        )
 
         // Check Login
         navigator.performAction(Action.CloseBookmarkPanel)
@@ -300,7 +304,11 @@ class IntegrationTests: BaseTestCase {
 
         passcodeInput.tapAndTypeText("foo\n")
 
-        mozWaitForElementToExist(app.tables["Login List"])
-        mozWaitForElementToExist(app.staticTexts["https://accounts.google.com"])
+        waitForElementsToExist(
+            [
+                app.tables["Login List"],
+                app.staticTexts["https://accounts.google.com"]
+            ]
+        )
     }
 }

@@ -60,8 +60,12 @@ class LoginTest: BaseTestCase {
         // Make sure you can access empty Login List from Browser Tab Menu
         navigator.goto(LoginsSettings)
         unlockLoginsView()
-        mozWaitForElementToExist(app.tables["Login List"])
-        mozWaitForElementToExist(app.searchFields[searchPasswords])
+        waitForElementsToExist(
+            [
+                app.tables["Login List"],
+                app.searchFields[searchPasswords]
+            ]
+        )
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
         app.buttons["Settings"].tap()
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -69,10 +73,14 @@ class LoginTest: BaseTestCase {
         // Make sure you can access populated Login List from Browser Tab Menu
         navigator.goto(LoginsSettings)
         unlockLoginsView()
-        mozWaitForElementToExist(app.tables["Login List"])
-        mozWaitForElementToExist(app.searchFields[searchPasswords])
-        mozWaitForElementToExist(app.staticTexts[domain])
-        mozWaitForElementToExist(app.staticTexts[domainLogin])
+        waitForElementsToExist(
+            [
+                app.tables["Login List"],
+                app.searchFields[searchPasswords],
+                app.staticTexts[domain],
+                app.staticTexts[domainLogin]
+            ]
+        )
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
     }
 
@@ -279,8 +287,12 @@ class LoginTest: BaseTestCase {
         openLoginsSettingsFromBrowserTab()
         createLoginManually()
         // The login is correctly created.
-        mozWaitForElementToExist(app.tables["Login List"].staticTexts["https://testweb"])
-        mozWaitForElementToExist(app.tables["Login List"].staticTexts["foo"])
+        waitForElementsToExist(
+            [
+                app.tables["Login List"].staticTexts["https://testweb"],
+                app.tables["Login List"].staticTexts["foo"]
+            ]
+        )
         // Repeat previous step, adding the same login
         createLoginManually()
         // The login cannot be duplicated
@@ -290,10 +302,14 @@ class LoginTest: BaseTestCase {
 
     private func createLoginManually() {
         app.buttons["Add"].tap()
-        mozWaitForElementToExist(app.tables["Add Credential"])
-        mozWaitForElementToExist(app.tables["Add Credential"].cells.staticTexts.containingText("Web").element)
-        mozWaitForElementToExist(app.tables["Add Credential"].cells.staticTexts["Username"])
-        mozWaitForElementToExist(app.tables["Add Credential"].cells.staticTexts["Password"])
+        waitForElementsToExist(
+            [
+                app.tables["Add Credential"],
+                app.tables["Add Credential"].cells.staticTexts.containingText("Web").element,
+                app.tables["Add Credential"].cells.staticTexts["Username"],
+                app.tables["Add Credential"].cells.staticTexts["Password"]
+            ]
+        )
 
         app.tables["Add Credential"].cells["Website, "].tap()
         enterTextInField(typedText: "testweb")

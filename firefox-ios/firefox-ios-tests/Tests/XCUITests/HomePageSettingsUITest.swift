@@ -42,10 +42,14 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(HomeSettings)
 
-        mozWaitForElementToExist(app.navigationBars["Homepage"])
-        mozWaitForElementToExist(app.tables.otherElements["OPENING SCREEN"])
-        mozWaitForElementToExist(app.tables.otherElements["INCLUDE ON HOMEPAGE"])
-        mozWaitForElementToExist(app.tables.otherElements["CURRENT HOMEPAGE"])
+        waitForElementsToExist(
+            [
+                app.navigationBars["Homepage"],
+                app.tables.otherElements["OPENING SCREEN"],
+                app.tables.otherElements["INCLUDE ON HOMEPAGE"],
+                app.tables.otherElements["CURRENT HOMEPAGE"]
+            ]
+        )
 
         // Opening Screen
         XCTAssertFalse(app.tables.cells["StartAtHomeAlways"].isSelected)
@@ -222,12 +226,13 @@ class HomePageSettingsUITests: BaseTestCase {
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
             navigator.performAction(Action.CloseURLBarOpen)
         }
-        mozWaitForElementToExist(
-            app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn]
+        waitForElementsToExist(
+            [
+                app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn],
+                app.otherElements
+                    .cells[AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell]
+                    .staticTexts[urlExampleLabel]]
         )
-        mozWaitForElementToExist(app.otherElements
-            .cells[AccessibilityIdentifiers.FirefoxHomepage.JumpBackIn.itemCell]
-            .staticTexts[urlExampleLabel])
         app.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.jumpBackIn].waitAndTap()
         // Tab tray is open with recently open tab
         if !iPad() {
@@ -358,15 +363,12 @@ class HomePageSettingsUITests: BaseTestCase {
         }
         app.cells.otherElements.buttons[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.customizeHomePage].tap()
         // Verify default settings
-        mozWaitForElementToExist(
+        waitForElementsToExist(
+            [
             app.navigationBars[AccessibilityIdentifiers.Settings.Homepage.homePageNavigationBar],
-            timeout: TIMEOUT_LONG
-        )
-        mozWaitForElementToExist(
-            app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.always]
-        )
-        mozWaitForElementToExist(
+            app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.always],
             app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.disabled]
+            ]
         )
         mozWaitForElementToExist(
             app.tables.cells[AccessibilityIdentifiers.Settings.Homepage.StartAtHome.afterFourHours]

@@ -12,10 +12,14 @@ class NewTabSettingsTest: BaseTestCase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         navigator.goto(NewTabSettings)
-        mozWaitForElementToExist(app.navigationBars["New Tab"])
-        mozWaitForElementToExist(app.tables.cells["Firefox Home"])
-        mozWaitForElementToExist(app.tables.cells["Blank Page"])
-        mozWaitForElementToExist(app.tables.cells["NewTabAsCustomURL"])
+        waitForElementsToExist(
+            [
+                app.navigationBars["New Tab"],
+                app.tables.cells["Firefox Home"],
+                app.tables.cells["Blank Page"],
+                app.tables.cells["NewTabAsCustomURL"]
+            ]
+        )
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307027

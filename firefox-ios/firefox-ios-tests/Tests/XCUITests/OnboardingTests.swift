@@ -23,22 +23,30 @@ class OnboardingTests: BaseTestCase {
     func testFirstRunTour() {
         // Complete the First run from first screen to the latest one
         // Check that the first's tour screen is shown as well as all the elements in there
-        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"])
-        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
-        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)DescriptionLabel"])
-        mozWaitForElementToExist(app.buttons["\(rootA11yId)PrimaryButton"])
-        mozWaitForElementToExist(app.buttons["\(rootA11yId)SecondaryButton"])
-        mozWaitForElementToExist(app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"])
-        mozWaitForElementToExist(app.pageIndicators["\(AccessibilityIdentifiers.Onboarding.pageControl)"])
+        waitForElementsToExist(
+            [
+                app.images["\(rootA11yId)ImageView"],
+                app.staticTexts["\(rootA11yId)TitleLabel"],
+                app.staticTexts["\(rootA11yId)DescriptionLabel"],
+                app.buttons["\(rootA11yId)PrimaryButton"],
+                app.buttons["\(rootA11yId)SecondaryButton"],
+                app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"],
+                app.pageIndicators["\(AccessibilityIdentifiers.Onboarding.pageControl)"]
+            ]
+        )
 
         // Swipe to the second screen
         app.buttons["\(rootA11yId)SecondaryButton"].tap()
         currentScreen += 1
-        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"])
-        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
-        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)DescriptionLabel"])
-        mozWaitForElementToExist(app.buttons["\(rootA11yId)PrimaryButton"])
-        mozWaitForElementToExist(app.buttons["\(rootA11yId)SecondaryButton"])
+        waitForElementsToExist(
+            [
+                app.images["\(rootA11yId)ImageView"],
+                app.staticTexts["\(rootA11yId)TitleLabel"],
+                app.staticTexts["\(rootA11yId)DescriptionLabel"],
+                app.buttons["\(rootA11yId)PrimaryButton"],
+                app.buttons["\(rootA11yId)SecondaryButton"]
+            ]
+        )
 
         // Swipe to the third screen
         app.buttons["\(rootA11yId)SecondaryButton"].tap()
@@ -111,7 +119,11 @@ class OnboardingTests: BaseTestCase {
                 app.staticTexts["Firefox for iOS \(releaseVersion), See All New Features, Updates and Fixes"]
             )
         }
-        mozWaitForElementToExist(app.staticTexts["Firefox for iOS Release"])
-        mozWaitForElementToExist(app.staticTexts["Get the most recent version"])
+        waitForElementsToExist(
+            [
+                app.staticTexts["Firefox for iOS Release"],
+                app.staticTexts["Get the most recent version"]
+            ]
+        )
     }
 }
