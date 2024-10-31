@@ -151,6 +151,19 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     }
 
     // MARK: - Navigation Browser Action
+    
+    static func defaultActionState(from state: BrowserViewControllerState, action: Action) -> BrowserViewControllerState {
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            showDataClearanceFlow: state.showDataClearanceFlow,
+            fakespotState: FakespotState.reducer(state.fakespotState, action),
+            windowUUID: state.windowUUID,
+            browserViewType: state.browserViewType,
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+            navigationDestination: nil
+        )
+    }
+    
     static func reduceStateForNavigationBrowserAction(
         action: NavigationBrowserAction,
         state: BrowserViewControllerState
@@ -180,15 +193,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             )
 
         default:
-            return BrowserViewControllerState(
-                searchScreenState: state.searchScreenState,
-                showDataClearanceFlow: state.showDataClearanceFlow,
-                fakespotState: FakespotState.reducer(state.fakespotState, action),
-                windowUUID: state.windowUUID,
-                browserViewType: state.browserViewType,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-                navigationDestination: nil
-            )
+            return defaultActionState(from: state, action: action)
         }
     }
 
@@ -476,7 +481,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action)
                 )
         default:
-            return state
+            return defaultActionState(from: state, action: action)
         }
     }
 

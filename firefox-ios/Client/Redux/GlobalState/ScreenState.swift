@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
+import Redux
 import Common
 
 /// Defines the state related to a screen used `AppState` reducer to 
@@ -15,12 +16,5 @@ protocol ScreenState {
     /// Returns a default state by clearing any transient state from previous one.
     ///
     /// All the state properties that have a default value into the initializer should be restore to default.
-    static func defaultState(fromPreviousState state: Self) -> Self
-}
-
-extension ScreenState {
-    static func defaultState(fromPreviousState state: Self) -> Self {
-        // Adding this default implementation so all states are not forced to implement it yet.
-        return state
-    }
+    static func defaultActionState(from state: Self, action: Action) -> Self
 }

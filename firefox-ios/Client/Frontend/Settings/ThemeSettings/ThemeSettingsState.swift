@@ -119,4 +119,8 @@ struct ThemeSettingsState: ScreenState, Equatable {
         && lhs.manualThemeSelected == rhs.manualThemeSelected
         && lhs.userBrightnessThreshold == rhs.userBrightnessThreshold
     }
+    
+    static func defaultActionState(from state: ThemeSettingsState, action: Action) -> ThemeSettingsState {
+        return ThemeSettingsState(windowUUID: state.windowUUID)
+    }
 }

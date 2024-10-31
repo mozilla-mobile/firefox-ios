@@ -61,11 +61,15 @@ struct MicrosurveyState: ScreenState, Equatable {
                 showPrivacy: true
             )
         default:
-            return MicrosurveyState(
-                windowUUID: state.windowUUID,
-                shouldDismiss: false,
-                showPrivacy: false
-            )
+            return defaultActionState(from: state, action: action)
         }
+    }
+    
+    static func defaultActionState(from state: MicrosurveyState, action: Action) -> MicrosurveyState {
+        return MicrosurveyState(
+            windowUUID: state.windowUUID,
+            shouldDismiss: false,
+            showPrivacy: false
+        )
     }
 }
