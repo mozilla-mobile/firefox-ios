@@ -59,74 +59,102 @@ struct NavigationBarState: StateType, Equatable {
 
         switch action.actionType {
         case ToolbarActionType.didLoadToolbars:
-            guard let displayBorder = (action as? ToolbarAction)?.displayNavBorder else { return state }
-
-            let actions = [
-                backAction(enabled: false),
-                forwardAction(enabled: false),
-                searchAction,
-                tabsAction(),
-                menuAction()
-            ]
-            return NavigationBarState(
-                windowUUID: state.windowUUID,
-                actions: actions,
-                displayBorder: displayBorder
-            )
+            return handleDidLoadToolbarsAction(state: state, action: action)
 
         case ToolbarActionType.urlDidChange:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-
-            return NavigationBarState(
-                windowUUID: state.windowUUID,
-                actions: navigationActions(action: toolbarAction, navigationBarState: state),
-                displayBorder: state.displayBorder
-            )
+            return handleUrlDidChangeAction(state: state, action: action)
 
         case ToolbarActionType.numberOfTabsChanged:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-
-            return NavigationBarState(
-                windowUUID: state.windowUUID,
-                actions: navigationActions(action: toolbarAction, navigationBarState: state),
-                displayBorder: state.displayBorder
-            )
+            return handleNumberOfTabsChangedAction(state: state, action: action)
 
         case ToolbarActionType.backForwardButtonStateChanged:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-
-            return NavigationBarState(
-                windowUUID: state.windowUUID,
-                actions: navigationActions(action: toolbarAction, navigationBarState: state),
-                displayBorder: state.displayBorder
-            )
+            return handleBackForwardButtonStateChangedAction(state: state, action: action)
 
         case ToolbarActionType.showMenuWarningBadge:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-
-            return NavigationBarState(
-                windowUUID: state.windowUUID,
-                actions: navigationActions(action: toolbarAction, navigationBarState: state),
-                displayBorder: state.displayBorder
-            )
+            return handleShowMenuWarningBadgeAction(state: state, action: action)
 
         case ToolbarActionType.borderPositionChanged,
             ToolbarActionType.toolbarPositionChanged:
-            guard let displayBorder = (action as? ToolbarAction)?.displayNavBorder else { return state }
-
-            return NavigationBarState(
-                windowUUID: state.windowUUID,
-                actions: state.actions,
-                displayBorder: displayBorder
-            )
+            return handlePositionChangedAction(state: state, action: action)
 
         default:
-            return NavigationBarState(
-                windowUUID: state.windowUUID,
-                actions: state.actions,
-                displayBorder: state.displayBorder
-            )
+            return handleDefaultAction(state: state)
         }
+    }
+
+    private static func handleDidLoadToolbarsAction(state: Self, action: Action) -> Self {
+        guard let displayBorder = (action as? ToolbarAction)?.displayNavBorder else { return state }
+
+        let actions = [
+            backAction(enabled: false),
+            forwardAction(enabled: false),
+            searchAction,
+            tabsAction(),
+            menuAction()
+        ]
+        return NavigationBarState(
+            windowUUID: state.windowUUID,
+            actions: actions,
+            displayBorder: displayBorder
+        )
+    }
+
+    private static func handleUrlDidChangeAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return state }
+
+        return NavigationBarState(
+            windowUUID: state.windowUUID,
+            actions: navigationActions(action: toolbarAction, navigationBarState: state),
+            displayBorder: state.displayBorder
+        )
+    }
+
+    private static func handleNumberOfTabsChangedAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return state }
+
+        return NavigationBarState(
+            windowUUID: state.windowUUID,
+            actions: navigationActions(action: toolbarAction, navigationBarState: state),
+            displayBorder: state.displayBorder
+        )
+    }
+
+    private static func handleBackForwardButtonStateChangedAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return state }
+
+        return NavigationBarState(
+            windowUUID: state.windowUUID,
+            actions: navigationActions(action: toolbarAction, navigationBarState: state),
+            displayBorder: state.displayBorder
+        )
+    }
+
+    private static func handleShowMenuWarningBadgeAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return state }
+
+        return NavigationBarState(
+            windowUUID: state.windowUUID,
+            actions: navigationActions(action: toolbarAction, navigationBarState: state),
+            displayBorder: state.displayBorder
+        )
+    }
+
+    private static func handlePositionChangedAction(state: Self, action: Action) -> Self {
+        guard let displayBorder = (action as? ToolbarAction)?.displayNavBorder else { return state }
+
+        return NavigationBarState(
+            windowUUID: state.windowUUID,
+            actions: state.actions,
+            displayBorder: displayBorder
+        )
+    }
+
+    private static func handleDefaultAction(state: Self) -> Self {
+        return NavigationBarState(
+            windowUUID: state.windowUUID,
+            actions: state.actions,
+            displayBorder: state.displayBorder
+        )
     }
 
     // MARK: - Navigation Toolbar Actions
