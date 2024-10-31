@@ -43,25 +43,20 @@ struct SearchEngineSelectionState: ScreenState, Equatable {
         self.shouldDismiss = shouldDismiss
     }
 
-    /// Returns a new `SearchEngineSelectionState` which clears any transient data.
-    static func defaultState(fromPreviousState state: SearchEngineSelectionState) -> SearchEngineSelectionState {
-        return SearchEngineSelectionState(
-            windowUUID: state.windowUUID,
-            searchEngines: state.searchEngines
-        )
-    }
-
     static let reducer: Reducer<Self> = { state, action in
         // Only process actions for the current window
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
-            return defaultState(fromPreviousState: state)
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
+        else {
+            return defaultActionState(from: state, action: action)
         }
 
         switch action.actionType {
         case SearchEngineSelectionActionType.didLoadSearchEngines:
             guard let action = action as? SearchEngineSelectionAction,
                   let searchEngines = action.searchEngines
-            else { return defaultState(fromPreviousState: state) }
+            else {
+                return defaultActionState(from: state, action: action)
+            }
 
             return SearchEngineSelectionState(
                 windowUUID: state.windowUUID,
@@ -69,7 +64,14 @@ struct SearchEngineSelectionState: ScreenState, Equatable {
             )
 
         default:
-            return defaultState(fromPreviousState: state)
+            return defaultActionState(from: state, action: action)
         }
+    }
+
+    static func defaultActionState(from state: SearchEngineSelectionState, action: Action) -> SearchEngineSelectionState {
+        return SearchEngineSelectionState(
+            windowUUID: state.windowUUID,
+            searchEngines: state.searchEngines
+        )
     }
 }

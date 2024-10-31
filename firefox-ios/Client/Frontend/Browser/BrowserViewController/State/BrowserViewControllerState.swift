@@ -151,19 +151,6 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     }
 
     // MARK: - Navigation Browser Action
-    
-    static func defaultActionState(from state: BrowserViewControllerState, action: Action) -> BrowserViewControllerState {
-        return BrowserViewControllerState(
-            searchScreenState: state.searchScreenState,
-            showDataClearanceFlow: state.showDataClearanceFlow,
-            fakespotState: FakespotState.reducer(state.fakespotState, action),
-            windowUUID: state.windowUUID,
-            browserViewType: state.browserViewType,
-            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-            navigationDestination: nil
-        )
-    }
-    
     static func reduceStateForNavigationBrowserAction(
         action: NavigationBrowserAction,
         state: BrowserViewControllerState
@@ -481,8 +468,27 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action)
                 )
         default:
-            return defaultActionState(from: state, action: action)
+            let defaultState = defaultActionState(from: state)
+            return BrowserViewControllerState(
+                searchScreenState: defaultState.searchScreenState,
+                showDataClearanceFlow: defaultState.showDataClearanceFlow,
+                fakespotState: FakespotState.reducer(state.fakespotState, action),
+                windowUUID: defaultState.windowUUID,
+                browserViewType: defaultState.browserViewType,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action)
+            )
         }
+    }
+
+    static func defaultActionState(from state: BrowserViewControllerState) -> BrowserViewControllerState {
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            showDataClearanceFlow: state.showDataClearanceFlow,
+            fakespotState: state.fakespotState,
+            windowUUID: state.windowUUID,
+            browserViewType: state.browserViewType,
+            microsurveyState: state.microsurveyState
+        )
     }
 
     static func resolveStateForUpdateSelectedTab(action: GeneralBrowserAction,

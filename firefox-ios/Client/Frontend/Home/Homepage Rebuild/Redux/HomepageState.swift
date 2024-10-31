@@ -63,15 +63,18 @@ struct HomepageState: ScreenState, Equatable {
                 pocketState: PocketState.reducer(state.pocketState, action)
             )
         default:
-            return defaultActionState(from: state, action: action)
+            let defaultState = defaultActionState(from: state)
+            return HomepageState(windowUUID: defaultState.windowUUID,
+                                 headerState: HeaderState.reducer(state.headerState, action),
+                                 pocketState: PocketState.reducer(state.pocketState, action))
         }
     }
-    
-    static func defaultActionState(from state: HomepageState, action: Action) -> HomepageState {
+
+    static func defaultActionState(from state: HomepageState) -> HomepageState {
         return HomepageState(
             windowUUID: state.windowUUID,
-            headerState: HeaderState.reducer(state.headerState, action),
-            pocketState: PocketState.reducer(state.pocketState, action)
+            headerState: state.headerState,
+            pocketState: state.pocketState
         )
     }
 }

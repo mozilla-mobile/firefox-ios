@@ -141,11 +141,15 @@ struct MainMenuDetailsState: ScreenState, Equatable {
                 navigationDestination: MenuNavigationDestination(.zoom)
             )
         default:
-            return MainMenuDetailsState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                submenuType: state.submenuType
-            )
+            return defaultActionState(from: state)
         }
+    }
+
+    static func defaultActionState(from state: MainMenuDetailsState) -> MainMenuDetailsState {
+        return MainMenuDetailsState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            submenuType: state.submenuType
+        )
     }
 }

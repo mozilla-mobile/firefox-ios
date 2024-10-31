@@ -86,7 +86,7 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
     }
 
     static let reducer: Reducer<TrackingProtectionState> = { state, action in
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return defaultActionState(from: state) }
 
         switch action.actionType {
         case TrackingProtectionMiddlewareActionType.clearCookies:
@@ -207,18 +207,22 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
                 shouldUpdateBlockedTrackerStats: false
             )
         default:
-            return TrackingProtectionState(
-                windowUUID: state.windowUUID,
-                shouldDismiss: false,
-                showTrackingProtectionSettings: false,
-                trackingProtectionEnabled: state.trackingProtectionEnabled,
-                connectionSecure: state.connectionSecure,
-                showDetails: false,
-                showBlockedTrackers: false,
-                showsClearCookiesAlert: false,
-                shouldClearCookies: false,
-                shouldUpdateBlockedTrackerStats: false
-            )
+            return defaultActionState(from: state)
         }
+    }
+
+    static func defaultActionState(from state: TrackingProtectionState) -> TrackingProtectionState {
+        return TrackingProtectionState(
+            windowUUID: state.windowUUID,
+            shouldDismiss: false,
+            showTrackingProtectionSettings: false,
+            trackingProtectionEnabled: state.trackingProtectionEnabled,
+            connectionSecure: state.connectionSecure,
+            showDetails: false,
+            showBlockedTrackers: false,
+            showsClearCookiesAlert: false,
+            shouldClearCookies: false,
+            shouldUpdateBlockedTrackerStats: false
+        )
     }
 }

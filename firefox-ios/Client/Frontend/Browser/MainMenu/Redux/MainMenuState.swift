@@ -100,13 +100,7 @@ struct MainMenuState: ScreenState, Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
-            return MainMenuState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                currentTabInfo: state.currentTabInfo,
-                accountData: state.accountData,
-                accountIcon: state.accountIcon
-            )
+            return defaultActionState(from: state)
         }
 
         switch action.actionType {
@@ -177,13 +171,17 @@ struct MainMenuState: ScreenState, Equatable {
                 accountIcon: state.accountIcon
             )
         default:
-            return MainMenuState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                currentTabInfo: state.currentTabInfo,
-                accountData: state.accountData,
-                accountIcon: state.accountIcon
-            )
+            return defaultActionState(from: state)
         }
+    }
+
+    static func defaultActionState(from state: MainMenuState) -> MainMenuState {
+        return MainMenuState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            currentTabInfo: state.currentTabInfo,
+            accountData: state.accountData,
+            accountIcon: state.accountIcon
+        )
     }
 }

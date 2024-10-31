@@ -103,7 +103,7 @@ struct FakespotState: ScreenState, Equatable {
             return handleAdsExposureEvent(action: action, state: state)
 
         default:
-            return state
+            return defaultActionState(from: state)
         }
     }
 
@@ -207,5 +207,12 @@ struct FakespotState: ScreenState, Equatable {
         }
         state.telemetryState[state.currentTabUUID]?.adEvents[productId]?.sendAdExposureEvent = false
         return state
+    }
+
+    static func defaultActionState(from state: FakespotState) -> FakespotState {
+        return FakespotState(windowUUID: state.windowUUID,
+                             isOpen: state.isOpen,
+                             sidebarOpenForiPadLandscape: state.sidebarOpenForiPadLandscape,
+                             currentTabUUID: state.currentTabUUID)
     }
 }

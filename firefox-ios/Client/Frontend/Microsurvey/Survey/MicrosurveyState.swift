@@ -64,7 +64,7 @@ struct MicrosurveyState: ScreenState, Equatable {
             return defaultActionState(from: state, action: action)
         }
     }
-    
+
     static func defaultActionState(from state: MicrosurveyState, action: Action) -> MicrosurveyState {
         return MicrosurveyState(
             windowUUID: state.windowUUID,

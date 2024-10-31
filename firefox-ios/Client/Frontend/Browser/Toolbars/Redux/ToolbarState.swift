@@ -141,7 +141,7 @@ struct ToolbarState: ScreenState, Equatable {
             return handleNavigationHintFinishedPresenting(state: state, action: action)
 
         default:
-            return state
+            return defaultActionState(from: state)
         }
     }
 
@@ -346,5 +346,22 @@ struct ToolbarState: ScreenState, Equatable {
         case .top: return .top
         case .bottom: return .bottom
         }
+    }
+
+    static func defaultActionState(from state: ToolbarState) -> ToolbarState {
+        return ToolbarState(windowUUID: state.windowUUID,
+                            toolbarPosition: state.toolbarPosition,
+                            isPrivateMode: state.isPrivateMode,
+                            addressToolbar: state.addressToolbar,
+                            navigationToolbar: state.navigationToolbar,
+                            isShowingNavigationToolbar: state.isShowingNavigationToolbar,
+                            isShowingTopTabs: state.isShowingTopTabs,
+                            canGoBack: state.canGoBack,
+                            canGoForward: state.canGoForward,
+                            numberOfTabs: state.numberOfTabs,
+                            showMenuWarningBadge: state.showMenuWarningBadge,
+                            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
+                            canShowDataClearanceAction: state.canShowDataClearanceAction,
+                            canShowNavigationHint: state.canShowNavigationHint)
     }
 }

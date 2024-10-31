@@ -62,11 +62,11 @@ struct TabPeekState: ScreenState, Equatable {
                                 previewAccessibilityLabel: tabPeekModel.accessiblityLabel,
                                 screenshot: tabPeekModel.screenshot)
         default:
-            return defaultActionState(from: state, action: action)
+            return defaultActionState(from: state)
         }
     }
-    
-    static func defaultActionState(from state: TabPeekState, action: Action) -> TabPeekState {
+
+    static func defaultActionState(from state: TabPeekState) -> TabPeekState {
         return TabPeekState(windowUUID: state.windowUUID)
     }
 }

@@ -36,7 +36,8 @@ struct PasswordGeneratorState: ScreenState, Equatable {
     }
 
     static let reducer: Reducer<Self> = { state, action in
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
+        else { return state }
 
         switch action.actionType {
         case PasswordGeneratorActionType.updateGeneratedPassword:
@@ -47,10 +48,14 @@ struct PasswordGeneratorState: ScreenState, Equatable {
                 password: password)
 
         default:
-            return PasswordGeneratorState(
-                windowUUID: state.windowUUID,
-                password: state.password
-            )
+            return defaultActionState(from: state)
         }
+    }
+
+    static func defaultActionState(from state: PasswordGeneratorState) -> PasswordGeneratorState {
+        return PasswordGeneratorState(
+            windowUUID: state.windowUUID,
+            password: state.password
+        )
     }
 }

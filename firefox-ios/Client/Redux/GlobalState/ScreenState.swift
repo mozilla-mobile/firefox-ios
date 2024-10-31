@@ -13,8 +13,9 @@ import Common
 protocol ScreenState {
     var windowUUID: WindowUUID { get }
 
-    /// Returns a default state by clearing any transient state from previous one.
+    /// Returns the state for a default action by clearing any transient state from previous one.
     ///
     /// All the state properties that have a default value into the initializer should be restore to default.
-    static func defaultActionState(from state: Self, action: Action) -> Self
+    /// A default action could be the default case for a reducer switch case.
+    static func defaultActionState(from state: Self) -> Self
 }
