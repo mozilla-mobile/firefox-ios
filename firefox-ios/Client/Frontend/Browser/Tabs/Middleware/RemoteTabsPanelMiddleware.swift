@@ -76,7 +76,7 @@ class RemoteTabsPanelMiddleware {
     }
 
     private func getTabsAndDevices(window: WindowUUID, useCache: Bool = false) {
-        let completion = { (result: [ClientAndTabs]?) -> Void in
+        let completion = { (result: [ClientAndTabs]?) in
             guard let clientAndTabs = result else {
                 let action = RemoteTabsPanelAction(reason: .failedToSync,
                                                    windowUUID: window,

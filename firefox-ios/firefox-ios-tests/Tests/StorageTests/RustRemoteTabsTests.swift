@@ -139,7 +139,7 @@ class RustRemoteTabsTests: XCTestCase {
     }
 
     func testAddRemoteCommand() {
-        mockTabs.commandQueue?.getUnsentCommands { getResult in
+        mockTabs.tabsCommandQueue?.getUnsentCommands { getResult in
             switch getResult {
             case .success(let commands):
                 // checking that the command queue is empty
@@ -148,13 +148,14 @@ class RustRemoteTabsTests: XCTestCase {
                 // adding the record to the command queue
                 let deviceId = "AAAAAA"
                 let url = "https://test.com"
-                self.mockTabs.commandQueue?.addRemoteCommand(deviceId: deviceId, command: .closeTab(url: url)) { addResult in
+                self.mockTabs.tabsCommandQueue?.addRemoteCommand(deviceId: deviceId,
+                                                                 command: .closeTab(url: url)) { addResult in
                     switch addResult {
                     case .success(let didAddCommand):
                         XCTAssert(didAddCommand)
 
                         // checking that the command queue has the added record
-                        self.mockTabs.commandQueue?.getUnsentCommands { getResult2 in
+                        self.mockTabs.tabsCommandQueue?.getUnsentCommands { getResult2 in
                             switch getResult2 {
                             case .success(let commands2):
                                 XCTAssertEqual(commands2.count, 1)
@@ -178,27 +179,27 @@ class RustRemoteTabsTests: XCTestCase {
         let deviceId = "BBBBBB"
         let url = "https://test.com"
 
-        self.mockTabs.commandQueue?.addRemoteCommand(deviceId: deviceId, command: .closeTab(url: url)) { addResult in
+        self.mockTabs.tabsCommandQueue?.addRemoteCommand(deviceId: deviceId, command: .closeTab(url: url)) { addResult in
             switch addResult {
             case .success(let didAddCommand):
                 XCTAssertTrue(didAddCommand)
 
                 // checking that the command queue has the added record
-                self.mockTabs.commandQueue?.getUnsentCommands { getResult in
+                self.mockTabs.tabsCommandQueue?.getUnsentCommands { getResult in
                     switch getResult {
                     case .success(let commands):
                         XCTAssertEqual(commands.count, 1)
                         XCTAssertEqual(commands[0].deviceId, deviceId)
 
                         // removing the record from the command queue
-                        self.mockTabs.commandQueue?.removeRemoteCommand(deviceId: deviceId,
-                                                                        command: .closeTab(url: url)) { removeResult in
+                        self.mockTabs.tabsCommandQueue?.removeRemoteCommand(deviceId: deviceId,
+                                                                            command: .closeTab(url: url)) { removeResult in
                             switch removeResult {
                             case .success(let didRemove):
                                 XCTAssert(didRemove)
 
                                 // checking that record is removed from command queue
-                                self.mockTabs.commandQueue?.getUnsentCommands { getResult2 in
+                                self.mockTabs.tabsCommandQueue?.getUnsentCommands { getResult2 in
                                     switch getResult2 {
                                     case .success(let commands2):
                                         XCTAssert(commands2.isEmpty)
@@ -225,13 +226,13 @@ class RustRemoteTabsTests: XCTestCase {
         let deviceId = "CCCCC"
         let url = "https://test.com"
 
-        mockTabs.commandQueue?.addRemoteCommand(deviceId: deviceId, command: .closeTab(url: url)) { addResult in
+        mockTabs.tabsCommandQueue?.addRemoteCommand(deviceId: deviceId, command: .closeTab(url: url)) { addResult in
             switch addResult {
             case .success(let didAddCommand):
                 XCTAssertTrue(didAddCommand)
 
                 // retrieving unsent commands
-                self.mockTabs.commandQueue?.getUnsentCommands { getResult in
+                self.mockTabs.tabsCommandQueue?.getUnsentCommands { getResult in
                     switch getResult {
                     case .success(let commands):
                         XCTAssertEqual(commands.count, 1)
@@ -242,12 +243,12 @@ class RustRemoteTabsTests: XCTestCase {
                                                      command: .closeTab(url: url),
                                                      timeRequested: Date().toMillisecondsSince1970(),
                                                      timeSent: nil)
-                        self.mockTabs.commandQueue?.setPendingCommandsSent(deviceId: deviceId,
-                                                                           commands: [command]) { errors in
+                        self.mockTabs.tabsCommandQueue?.setPendingCommandsSent(deviceId: deviceId,
+                                                                               commands: [command]) { errors in
                             XCTAssert(errors.isEmpty)
 
                             // retrieving unsent commands
-                            self.mockTabs.commandQueue?.getUnsentCommands { getResult2 in
+                            self.mockTabs.tabsCommandQueue?.getUnsentCommands { getResult2 in
                                 switch getResult2 {
                                 case .success(let commands):
                                     XCTAssert(commands.isEmpty)
@@ -272,14 +273,14 @@ class RustRemoteTabsTests: XCTestCase {
         let url = "https://test.com"
         let url2 = "https://test2.com"
 
-        mockTabs.commandQueue?.addRemoteCommand(deviceId: deviceId, command: .closeTab(url: url)) { addResult in
+        mockTabs.tabsCommandQueue?.addRemoteCommand(deviceId: deviceId, command: .closeTab(url: url)) { addResult in
             switch addResult {
             case .success(let didAddCommand):
                 XCTAssert(didAddCommand)
 
                 // adding another record to the command queue
-                self.mockTabs.commandQueue?.addRemoteCommand(deviceId: deviceId,
-                                                             command: .closeTab(url: url2)) { addResult2 in
+                self.mockTabs.tabsCommandQueue?.addRemoteCommand(deviceId: deviceId,
+                                                                 command: .closeTab(url: url2)) { addResult2 in
                     switch addResult2 {
                     case .success(let didAddCommit2):
                         XCTAssert(didAddCommit2)
@@ -297,6 +298,30 @@ class RustRemoteTabsTests: XCTestCase {
             case .failure(let error):
                 XCTFail("Expected to add a command succesfully \(error)")
             }
+        }
+    }
+
+    func testGetSentCommands() {
+        let commandUrl1 = "https://test3.com"
+        let commandUrl2 = "https://test4.com"
+        let unsentCommandUrls = [commandUrl1]
+        let command1 = PendingCommand(deviceId: "EEEEEE",
+                                      command: .closeTab(url: commandUrl1),
+                                      timeRequested: Date().toMillisecondsSince1970(),
+                                      timeSent: nil)
+        let command2 = PendingCommand(deviceId: "EEEEEE",
+                                      command: .closeTab(url: commandUrl2),
+                                      timeRequested: Date().toMillisecondsSince1970(),
+                                      timeSent: nil)
+        let commands = [command1, command2]
+
+        let sentCommands = mockTabs.getSentCommands(unsentCommandUrls: unsentCommandUrls, commands: commands)
+
+        XCTAssertEqual(sentCommands.count, 1)
+
+        switch sentCommands[0].command {
+        case .closeTab(let url):
+            XCTAssertEqual(url, commandUrl2)
         }
     }
 }

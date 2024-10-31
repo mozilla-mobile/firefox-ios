@@ -602,11 +602,26 @@ open class BrowserProfile: Profile {
 
         // send all unsent close tab commands
         self.tabs.getUnsentCommandUrlsByDeviceId(deviceId: deviceId) { urls in
-            constellation.sendEventToDevice(targetDeviceId: deviceId, e: .closeTabs(urls: urls))
+            constellation.sendEventToDevice(targetDeviceId: deviceId,
+                                            e: .closeTabs(urls: urls)) { result in
+                switch result {
+                case .success:
+                    // mark all pending tab commands as sent
+                    self.tabs.setPendingCommandsSent(deviceId: deviceId)
+                case .failure(let error):
+                    switch error {
+                    case .tabsNotClosed(let urls):
+                        // mark pending tab commands as sent excluding unsentUrls
+                        self.tabs.setPendingCommandsSent(deviceId: deviceId, unsentCommandUrls: urls)
+                    default:
+                        // technically this should not be possible here as a non-tabsNotClosed error would
+                        // result after a sendTab sendEventToDevice call but we are covering this case to
+                        // make the compiler happy
+                        break
+                    }
+                }
+            }
         }
-
-        // mark tab commands as sent
-        self.tabs.setPendingCommandsSent(deviceId: deviceId)
     }
 
     public func setCommandArrived() {

@@ -177,7 +177,7 @@ public class RustRemoteTabs {
 
     // MARK: Remote Command APIs
     public func addRemoteCommand(deviceId: String, url: URL) {
-        commandQueue.async {
+        commandQueue.async { [unowned self] in
             guard let tabsCommandQueue = self.tabsCommandQueue else {
                 let err = TabsApiError.UnexpectedTabsError(reason: "Command queue is not initialized") as MaybeErrorType
                 self.logger.log(err.description,
@@ -197,10 +197,10 @@ public class RustRemoteTabs {
                     }
                 }
         }
-}
+    }
 
     public func removeRemoteCommand(deviceId: String, url: URL) {
-        commandQueue.async {
+        commandQueue.async { [unowned self] in
             guard let tabsCommandQueue = self.tabsCommandQueue else {
                 let err = TabsApiError.UnexpectedTabsError(reason: "Command queue is not initialized") as MaybeErrorType
                 self.logger.log(err.description,
@@ -236,7 +236,7 @@ public class RustRemoteTabs {
         }
     }
 
-    public func setPendingCommandsSent(deviceId: String) {
+    public func setPendingCommandsSent(deviceId: String, unsentCommandUrls: [String] = [String]()) {
         guard let tabsCommandQueue = self.tabsCommandQueue else {
             let err = TabsApiError.UnexpectedTabsError(reason: "Command queue is not initialized") as MaybeErrorType
             self.logger.log(err.description,
@@ -246,7 +246,11 @@ public class RustRemoteTabs {
         }
 
         self.getUnsentCommandsByDeviceId(deviceId: deviceId) { commands in
-            tabsCommandQueue.setPendingCommandsSent(deviceId: deviceId, commands: commands) { errors in
+            let sentCommands = self.getSentCommands(unsentCommandUrls: unsentCommandUrls, commands: commands)
+
+            // mark the commands we know to be successfully sent as sent so we don't attempt to send the
+            // commands again
+            tabsCommandQueue.setPendingCommandsSent(deviceId: deviceId, commands: sentCommands) { errors in
                 if errors.isEmpty {
                     return
                 } else {
@@ -262,8 +266,29 @@ public class RustRemoteTabs {
         }
     }
 
+    func getSentCommands(unsentCommandUrls: [String], commands: [PendingCommand]) -> [PendingCommand] {
+        var sentCommands = [PendingCommand]()
+        if unsentCommandUrls.isEmpty {
+            // All of the commands we attempted to send were successfully sent so we do not need to filter
+            // against `unsentCommandUrls`.
+            sentCommands = commands
+        } else {
+            // Filtering the commands we retrieved against the `unsentCommandUrls` we received after
+            // attempting to send close tab commands. This will leave the commands associated with the
+            // `unsentCommandUrls` in the command queue for a future potentially successful close tab
+            // command execution.
+            sentCommands = commands.filter({
+                switch $0.command {
+                case .closeTab(let commandUrl):
+                    return !unsentCommandUrls.contains(commandUrl)
+                }
+            })
+        }
+        return sentCommands
+    }
+
     private func getUnsentCommandsByDeviceId(deviceId: String, completion: @escaping ([PendingCommand]) -> Void) {
-        commandQueue.async {
+        commandQueue.async { [unowned self] in
             guard let tabsCommandQueue = self.tabsCommandQueue else {
                 let err = TabsApiError.UnexpectedTabsError(reason: "Command queue is not initialized") as MaybeErrorType
                 self.logger.log(err.description,
