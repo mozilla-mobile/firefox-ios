@@ -408,32 +408,23 @@ class BaseTestCase: XCTestCase {
         let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
         XCTAssertEqual(result, .completed, "Element did not become hittable in time.")
     }
-    func waitForElementsToExist(
-        _ elements: [XCUIElement],
-        timeout: TimeInterval = TIMEOUT,
-        message: String? = nil
-    ) {
+    func waitForElementsToExist(_ elements: [XCUIElement], timeout: TimeInterval = TIMEOUT, message: String? = nil) {
         var elementsDict = [XCUIElement: String]()
         for element in elements {
             elementsDict[element] = "exists == true"
         }
-        let expectations = elementsDict.map( {
-            XCTNSPredicateExpectation(
-                predicate: NSPredicate(
-                    format: $0.value
-                ),
-                object: $0.key
-            )
-        })
-        let result = XCTWaiter.wait(
-            for: expectations,
-            timeout: timeout
+        let expectations = elementsDict.map(
+            {
+                XCTNSPredicateExpectation(
+                    predicate: NSPredicate(
+                        format: $0.value
+                    ),
+                    object: $0.key
+                )
+            }
         )
-        if result == .timedOut {
-            XCTFail(
-                message ?? expectations.description
-            )
-        }
+        let result = XCTWaiter.wait(for: expectations, timeout: timeout)
+        if result == .timedOut { XCTFail(message ?? expectations.description) }
     }
 }
 
