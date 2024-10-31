@@ -24,7 +24,7 @@ struct MainMenuConfigurationUtility: Equatable {
         static let settings = StandardImageIdentifiers.Large.settings
         static let whatsNew = StandardImageIdentifiers.Large.whatsNew
         static let zoomOff = StandardImageIdentifiers.Large.pageZoom
-        static let zoomOn = StandardImageIdentifiers.Large.pageZoomFilled
+        static let zoomOn = StandardImageIdentifiers.Large.pageZoomFill
         static let readerViewOn = StandardImageIdentifiers.Large.readerView
         static let readerViewOff = StandardImageIdentifiers.Large.readerViewFill
         static let nightModeOff = StandardImageIdentifiers.Large.nightMode
