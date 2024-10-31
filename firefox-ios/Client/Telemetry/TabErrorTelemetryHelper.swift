@@ -53,6 +53,9 @@ final class TabErrorTelemetryHelper {
     // MARK: - Internal Utility
 
     private func getTabCount(window: WindowUUID) -> Int {
+        // This check indicates that the app was backgrounded while in the onboarding state,
+        // and the TabManager has not been initialized still.
+        guard windowManager.windows.first?.value.tabManager != nil else { return 0 }
         return windowManager.tabManager(for: window).normalTabs.count
     }
 

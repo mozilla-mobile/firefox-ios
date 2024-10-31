@@ -81,6 +81,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 ) { [weak self] _ in
                     self?.reloadView()
                 },
+                FeatureFlagsBoolSetting(
+                    with: .passwordGenerator,
+                    titleText: format(string: "Enable Password Generator"),
+                    statusText: format(string: "Toggle to enable password generator feature")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
             ]
         )
     }

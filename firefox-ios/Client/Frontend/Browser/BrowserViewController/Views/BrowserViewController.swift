@@ -117,7 +117,6 @@ class BrowserViewController: UIViewController,
 
     var navigationHintDoubleTapTimer: Timer?
 
-    weak var gridTabTrayController: LegacyGridTabViewController?
     var tabTrayViewController: TabTrayController?
 
     let profile: Profile
@@ -2064,6 +2063,9 @@ class BrowserViewController: UIViewController,
             handleNavigationActions(for: state)
         case _ where state.displayView != nil:
             handleDisplayActions(for: state)
+        case _ where state.navigationDestination != nil:
+            guard let destination = state.navigationDestination else { return }
+            handleNavigation(to: destination)
         default: break
         }
     }
@@ -2077,6 +2079,20 @@ class BrowserViewController: UIViewController,
                                    windowUUID: windowUUID,
                                    actionType: ToolbarActionType.backForwardButtonStateChanged)
         store.dispatch(action)
+    }
+
+    private func handleNavigation(to type: NavigationDestination) {
+        switch type.destination {
+        case .customizeHomepage:
+            navigationHandler?.show(settings: .homePage)
+        case .link:
+            guard let url = type.url else {
+                logger.log("url should not be nil when navigating for a link type", level: .warning, category: .coordinator)
+                return
+            }
+            // TODO: FXIOS-10165 - Pass in the proper values based on top sites and other homepage links
+            navigationHandler?.navigateFromHomePanel(to: url, visitType: .link, isGoogleTopSite: false)
+        }
     }
 
     private func handleDisplayActions(for state: BrowserViewControllerState) {
@@ -2483,10 +2499,6 @@ class BrowserViewController: UIViewController,
     }
 
     func switchToPrivacyMode(isPrivate: Bool) {
-        if let tabTrayController = self.gridTabTrayController,
-           tabTrayController.tabDisplayManager.isPrivate != isPrivate {
-            tabTrayController.didTogglePrivateMode(isPrivate)
-        }
         topTabsViewController?.applyUIMode(isPrivate: isPrivate, theme: currentTheme())
     }
 
@@ -3129,7 +3141,8 @@ class BrowserViewController: UIViewController,
     // MARK: - RecentlyClosedPanelDelegate
 
     func openRecentlyClosedSiteInSameTab(_ url: URL) {
-        tabTrayOpenRecentlyClosedTab(url)
+        guard let tab = self.tabManager.selectedTab else { return }
+        self.finishEditingAndSubmit(url, visitType: .link, forTab: tab)
     }
 
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
@@ -4074,51 +4087,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
         if newTabChoice != .topSites, newTabChoice != .blankPage {
             overlayManager.cancelEditing(shouldCancelLoading: false)
         }
-    }
-}
-
-extension BrowserViewController: TabTrayDelegate {
-    func tabTrayDidCloseLastTab(toast: ButtonToast) {
-        toast.applyTheme(theme: currentTheme())
-        show(toast: toast, afterWaiting: ButtonToast.UX.delay)
-    }
-
-    func tabTrayOpenRecentlyClosedTab(_ url: URL) {
-        guard let tab = self.tabManager.selectedTab else { return }
-        self.finishEditingAndSubmit(url, visitType: .link, forTab: tab)
-    }
-
-    // This function animates and resets the tab chrome transforms when
-    // the tab tray dismisses.
-    func tabTrayDidDismiss(_ tabTray: LegacyGridTabViewController) {
-        resetBrowserChrome()
-    }
-
-    func tabTrayDidAddTab(_ tabTray: LegacyGridTabViewController, tab: Tab) {}
-
-    func tabTrayDidAddBookmark(_ tab: Tab) {
-        guard let url = tab.url?.absoluteString, !url.isEmpty else { return }
-        let tabState = tab.tabState
-        addBookmark(url: url, title: tabState.title)
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .add,
-            object: .bookmark,
-            value: .tabTray
-        )
-    }
-
-    func tabTrayDidAddToReadingList(_ tab: Tab) -> ReadingListItem? {
-        guard let url = tab.url?.absoluteString, !url.isEmpty else { return nil }
-        return profile.readingList.createRecordWithURL(
-            url,
-            title: tab.title ?? url,
-            addedBy: UIDevice.current.name
-        ).value.successValue
-    }
-
-    func tabTrayDidRequestTabsSettings() {
-        navigationHandler?.show(settings: .tabs)
     }
 }
 

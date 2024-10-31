@@ -9,6 +9,7 @@ import WebKit
 @testable import Client
 
 import struct MozillaAppServices.CreditCard
+import enum MozillaAppServices.VisitType
 
 class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegate {
     var showSettingsCalled = 0
@@ -33,6 +34,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
     var showMicrosurveyCalled = 0
     var showMainMenuCalled = 0
     var showPasswordGeneratorCalled = 0
+    var navigateFromHomePanelCalled = 0
 
     func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {
         showSettingsCalled += 1
@@ -115,6 +117,10 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
 
     func showSearchEngineSelection(forSourceView sourceView: UIView) {
         showSearchEngineSelectionCalled += 1
+    }
+
+    func navigateFromHomePanel(to url: URL, visitType: VisitType, isGoogleTopSite: Bool) {
+        navigateFromHomePanelCalled += 1
     }
 
     func dismissFakespotModal(animated: Bool) {
