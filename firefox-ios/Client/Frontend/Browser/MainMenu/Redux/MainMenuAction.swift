@@ -14,7 +14,7 @@ final class MainMenuAction: Action {
     var detailsViewToShow: MainMenuDetailsViewType?
     var accountData: AccountData?
     var accountIcon: UIImage?
-    var isActive: Bool?
+    var telemetryInfo: TelemetryInfo?
 
     init(
         windowUUID: WindowUUID,
@@ -25,7 +25,7 @@ final class MainMenuAction: Action {
         tabID: TabUUID? = nil,
         accountData: AccountData? = nil,
         accountIcon: UIImage? = nil,
-        isActive: Bool? = nil
+        telemetryInfo: TelemetryInfo? = nil
     ) {
         self.navigationDestination = navigationDestination
         self.detailsViewToShow = changeMenuViewTo
@@ -33,7 +33,7 @@ final class MainMenuAction: Action {
         self.tabID = tabID
         self.accountData = accountData
         self.accountIcon = accountIcon
-        self.isActive = isActive
+        self.telemetryInfo = telemetryInfo
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }

@@ -9,7 +9,7 @@ import Account
 import Shared
 
 final class MainMenuMiddleware {
-    private struct Options {
+    private enum TelemetryAction {
         static let newTab = "new_tab"
         static let newPrivateTab = "new_private_tab"
         static let findInPage = "find_in_page"
@@ -29,6 +29,17 @@ final class MainMenuMiddleware {
         static let readerViewTurnOn = "reader_view_turn_on"
         static let readerViewTurnOff = "reader_view_turn_off"
         static let signInAccount = "sign_in_account"
+        static let zoom = "zoom"
+        static let reportBrokenSite = "report_broken_site"
+        static let bookmarkThisPage = "bookmark_this_page"
+        static let editBookmark = "edit_bookmark"
+        static let addToShortcuts = "add_to_shortcuts"
+        static let removeFromShortcuts = "remove_from_shortcuts"
+        static let saveToReadingList = "save_to_reading_list"
+        static let removeFromReadingList = "remove_from_reading_list"
+        static let nightModeTurnOn = "night_mode_turn_on"
+        static let nightModeTurnOff = "night_mode_turn_off"
+        static let back = "back"
     }
 
     private let logger: Logger
@@ -44,37 +55,32 @@ final class MainMenuMiddleware {
 
         switch action.actionType {
         case MainMenuActionType.tapNavigateToDestination:
-            self.handleNavigationDestination(for: action.navigationDestination?.destination,
-                                             currentTabInfo: action.currentTabInfo,
-                                             and: action.navigationDestination?.url)
+            guard let destination = action.navigationDestination?.destination else { return }
+            self.handleTelemetryFor(for: destination,
+                                    currentTabInfo: action.currentTabInfo,
+                                    and: action.navigationDestination?.url)
         case MainMenuActionType.tapShowDetailsView:
             if action.detailsViewToShow == .tools {
-                self.telemetry.optionTapped(with: isHomepage, and: Options.tools)
+                self.telemetry.optionTapped(with: isHomepage, and: TelemetryAction.tools)
             } else if action.detailsViewToShow == .save {
-                self.telemetry.optionTapped(with: isHomepage, and: Options.save)
+                self.telemetry.optionTapped(with: isHomepage, and: TelemetryAction.save)
             }
         case MainMenuActionType.tapToggleUserAgent:
             guard let defaultIsDesktop = action.currentTabInfo?.isDefaultUserAgentDesktop,
                   let hasChangedUserAgent = action.currentTabInfo?.hasChangedUserAgent
             else { return }
             if defaultIsDesktop {
-                if hasChangedUserAgent {
-                    self.telemetry.optionTapped(with: isHomepage, and: Options.switchToDesktopSite)
-                } else {
-                    self.telemetry.optionTapped(with: isHomepage, and: Options.switchToMobileSite)
-                }
+                let option = hasChangedUserAgent ? TelemetryAction.switchToDesktopSite : TelemetryAction.switchToMobileSite
+                self.telemetry.optionTapped(with: isHomepage, and: option)
             } else {
-                if hasChangedUserAgent {
-                    self.telemetry.optionTapped(with: isHomepage, and: Options.switchToMobileSite)
-                } else {
-                    self.telemetry.optionTapped(with: isHomepage, and: Options.switchToDesktopSite)
-                }
+                let option = hasChangedUserAgent ? TelemetryAction.switchToMobileSite : TelemetryAction.switchToDesktopSite
+                self.telemetry.optionTapped(with: isHomepage, and: option)
             }
         case MainMenuActionType.tapCloseMenu:
             self.telemetry.closeButtonTapped(isHomepage: isHomepage)
         case GeneralBrowserActionType.showReaderMode:
             guard let isActive = action.isActive else { return }
-            let option = isActive ? Options.readerViewTurnOn : Options.readerViewTurnOff
+            let option = isActive ? TelemetryAction.readerViewTurnOn : TelemetryAction.readerViewTurnOff
             self.telemetry.optionTapped(with: false, and: option)
         case MainMenuActionType.viewDidLoad:
             if let accountData = self.getAccountData() {
@@ -101,8 +107,31 @@ final class MainMenuMiddleware {
             )
         case MainMenuActionType.menuDismissed:
             self.telemetry.menuDismissed(isHomepage: isHomepage)
-        default:
-            break
+        case MainMenuDetailsActionType.tapZoom:
+            self.telemetry.optionTapped(with: isHomepage, and: TelemetryAction.zoom)
+        case MainMenuDetailsActionType.tapReportBrokenSite:
+            self.telemetry.optionTapped(with: isHomepage, and: TelemetryAction.reportBrokenSite)
+        case MainMenuDetailsActionType.tapAddToBookmarks:
+            self.telemetry.optionTapped(with: isHomepage, and: TelemetryAction.bookmarkThisPage)
+        case MainMenuDetailsActionType.tapEditBookmark:
+            self.telemetry.optionTapped(with: isHomepage, and: TelemetryAction.editBookmark)
+        case MainMenuDetailsActionType.tapAddToShortcuts:
+            self.telemetry.optionTapped(with: isHomepage, and: TelemetryAction.addToShortcuts)
+        case MainMenuDetailsActionType.tapRemoveFromShortcuts:
+            self.telemetry.optionTapped(with: isHomepage, and: TelemetryAction.removeFromShortcuts)
+        case MainMenuDetailsActionType.tapAddToReadingList:
+            self.telemetry.optionTapped(with: isHomepage, and: TelemetryAction.saveToReadingList)
+        case MainMenuDetailsActionType.tapRemoveFromReadingList:
+            self.telemetry.optionTapped(with: isHomepage, and: TelemetryAction.removeFromReadingList)
+        case MainMenuDetailsActionType.tapToggleNightMode:
+            guard let isActive = action.isActive else { return }
+            let option = isActive ? TelemetryAction.nightModeTurnOn : TelemetryAction.nightModeTurnOff
+            self.telemetry.optionTapped(with: isHomepage, and: option)
+        case MainMenuDetailsActionType.tapBackToMainMenu:
+            self.telemetry.optionTapped(with: isHomepage, and: TelemetryAction.back)
+        case MainMenuDetailsActionType.tapDismissView:
+            self.telemetry.closeButtonTapped(isHomepage: isHomepage)
+        default: break
         }
     }
 
@@ -145,40 +174,43 @@ final class MainMenuMiddleware {
                            iconURL: iconURL)
     }
 
-    private func handleNavigationDestination(for destination: MainMenuNavigationDestination?,
-                                             currentTabInfo: MainMenuTabInfo?,
-                                             and urlToVisit: URL?) {
+    private func handleTelemetryFor(for navigationDestination: MainMenuNavigationDestination,
+                                    currentTabInfo: MainMenuTabInfo?,
+                                    and urlToVisit: URL?) {
         let isHomepage = currentTabInfo?.isHomepage ?? false
-        switch destination {
+        switch navigationDestination {
         case .newTab:
-            telemetry.optionTapped(with: isHomepage, and: Options.newTab)
+            telemetry.optionTapped(with: isHomepage, and: TelemetryAction.newTab)
         case .newPrivateTab:
-            telemetry.optionTapped(with: isHomepage, and: Options.newPrivateTab)
+            telemetry.optionTapped(with: isHomepage, and: TelemetryAction.newPrivateTab)
         case .findInPage:
-            telemetry.optionTapped(with: isHomepage, and: Options.findInPage)
+            telemetry.optionTapped(with: isHomepage, and: TelemetryAction.findInPage)
         case .bookmarks:
-            telemetry.optionTapped(with: isHomepage, and: Options.bookmarks)
+            telemetry.optionTapped(with: isHomepage, and: TelemetryAction.bookmarks)
         case .history:
-            telemetry.optionTapped(with: isHomepage, and: Options.history)
+            telemetry.optionTapped(with: isHomepage, and: TelemetryAction.history)
         case .downloads:
-            telemetry.optionTapped(with: isHomepage, and: Options.downloads)
+            telemetry.optionTapped(with: isHomepage, and: TelemetryAction.downloads)
         case .passwords:
-            telemetry.optionTapped(with: isHomepage, and: Options.passwords)
+            telemetry.optionTapped(with: isHomepage, and: TelemetryAction.passwords)
         case .settings:
-            telemetry.optionTapped(with: isHomepage, and: Options.settings)
+            telemetry.optionTapped(with: isHomepage, and: TelemetryAction.settings)
         case .customizeHomepage:
-            telemetry.optionTapped(with: isHomepage, and: Options.customizeHomepage)
+            telemetry.optionTapped(with: isHomepage, and: TelemetryAction.customizeHomepage)
         case .goToURL:
             if urlToVisit == SupportUtils.URLForGetHelp {
-                telemetry.optionTapped(with: isHomepage, and: Options.getHelp)
+                telemetry.optionTapped(with: isHomepage, and: TelemetryAction.getHelp)
             } else if urlToVisit == SupportUtils.URLForWhatsNew {
-                telemetry.optionTapped(with: isHomepage, and: Options.newInFirefox)
+                telemetry.optionTapped(with: isHomepage, and: TelemetryAction.newInFirefox)
             }
         case .shareSheet:
-            telemetry.optionTapped(with: isHomepage, and: Options.share)
+            telemetry.optionTapped(with: isHomepage, and: TelemetryAction.share)
         case .syncSignIn:
-            telemetry.optionTapped(with: isHomepage, and: Options.signInAccount)
-        default: break
+            telemetry.optionTapped(with: isHomepage, and: TelemetryAction.signInAccount)
+        case .editBookmark:
+            self.telemetry.optionTapped(with: isHomepage, and: TelemetryAction.editBookmark)
+        case .zoom:
+            self.telemetry.optionTapped(with: isHomepage, and: TelemetryAction.zoom)
         }
     }
 }

@@ -15,7 +15,6 @@ class GeneralBrowserAction: Action {
     let buttonTapped: UIButton?
     let isNativeErrorPage: Bool?
     let frame: WKFrameInfo?
-    let isActive: Bool?
     init(selectedTabURL: URL? = nil,
          isPrivateBrowsing: Bool? = nil,
          toastType: ToastType? = nil,
@@ -33,7 +32,6 @@ class GeneralBrowserAction: Action {
         self.showOverlay = showOverlay
         self.isNativeErrorPage = isNativeErrorPage
         self.frame = frame
-        self.isActive = isActive
         super.init(windowUUID: windowUUID,
                    actionType: actionType)
     }
