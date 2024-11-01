@@ -36,11 +36,13 @@ class TrackingProtectionTests: BaseTestCase {
         mozWaitForElementToExist(app.buttons.element(matching: .button, identifier: reloadButton), timeout: 10)
         app.buttons.element(matching: .button, identifier: reloadButton).press(forDuration: 3)
         if label == "Without Tracking Protection" {
+            mozWaitForElementToExist(app.otherElements[reloadWithWithoutProtectionButton], timeout: 5)
             XCTAssertEqual(
                 "Reload Without Tracking Protection",
                 app.otherElements.element(matching: .any, identifier: reloadWithWithoutProtectionButton).label
             )
         } else {
+            mozWaitForElementToExist(app.otherElements[reloadWithWithoutProtectionButton], timeout: 5)
             XCTAssertEqual(
                 "Reload With Tracking Protection",
                 app.otherElements.element(
@@ -251,35 +253,39 @@ class TrackingProtectionTests: BaseTestCase {
         waitUntilPageLoad()
 
         if checkTrackingProtectionOn() {
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: 5)
             XCTAssertEqual(
                 app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
                 secureTrackingProtectionOnLabel
             )
             navigator.nowAt(BrowserTab)
             reloadWithWithoutTrackingProtection(label: "Without Tracking Protection")
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: 5)
             XCTAssertEqual(
                 app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
                 secureTrackingProtectionOffLabel
             )
             reloadWithWithoutTrackingProtection(label: "With Tracking Protection")
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: 5)
             XCTAssertEqual(
                 app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
                 secureTrackingProtectionOnLabel
             )
         } else {
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: 5)
             XCTAssertEqual(
                 app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
                 secureTrackingProtectionOffLabel
             )
             navigator.nowAt(BrowserTab)
             reloadWithWithoutTrackingProtection(label: "With Tracking Protection")
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: 5)
             XCTAssertEqual(
                 app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
                 secureTrackingProtectionOnLabel
             )
             reloadWithWithoutTrackingProtection(label: "Without Tracking Protection")
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection], timeout: 5)
             XCTAssertEqual(
                 app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].label,
                 secureTrackingProtectionOffLabel
