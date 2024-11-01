@@ -27,6 +27,7 @@ final class TabErrorTelemetryHelper {
     /// we attempt to detect any issues which could indicate potential tab loss.
     func recordTabCountForBackgroundedScene(_ window: WindowUUID) {
         ensureMainThread {
+            guard self.tabManagerAvailable(for: window) else { return }
             var tabCounts = self.defaults.object(forKey: self.defaultsKey) as? [String: Int] ?? [String: Int]()
             let tabCount = self.getTabCount(window: window)
             tabCounts[window.uuidString] = tabCount
@@ -39,6 +40,7 @@ final class TabErrorTelemetryHelper {
     /// a potential bug impacting users, and a MetricKit event is logged.
     func validateTabCountForForegroundedScene(_ window: WindowUUID) {
         ensureMainThread {
+            guard self.tabManagerAvailable(for: window) else { return }
             guard let tabCounts = self.defaults.object(forKey: self.defaultsKey) as? [String: Int],
                   let expectedTabCount = tabCounts[window.uuidString] else { return }
             let currentTabCount = self.getTabCount(window: window)
@@ -52,10 +54,16 @@ final class TabErrorTelemetryHelper {
 
     // MARK: - Internal Utility
 
+    /// It's possible for this telemetry helper to be called during onboarding flow before
+    /// any tab managers have been configured.
+    private func tabManagerAvailable(for uuid: WindowUUID) -> Bool {
+        guard let info = windowManager.windows[uuid],
+              info.tabManager != nil else { return false }
+        return true
+    }
+
     private func getTabCount(window: WindowUUID) -> Int {
-        // This check indicates that the app was backgrounded while in the onboarding state,
-        // and the TabManager has not been initialized still.
-        guard windowManager.windows.first?.value.tabManager != nil else { return 0 }
+        assert(tabManagerAvailable(for: window), "getTabCount() should not be called prior to TabManager config.")
         return windowManager.tabManager(for: window).normalTabs.count
     }
 
