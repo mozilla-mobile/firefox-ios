@@ -128,7 +128,6 @@
 		1DFE57FB27B2CB870025DE58 /* HighlightItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFE57FA27B2CB870025DE58 /* HighlightItem.swift */; };
 		1DFE57FD27BADD7D0025DE58 /* HomepageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFE57FC27BADD7C0025DE58 /* HomepageViewModel.swift */; };
 		1DFE57FF27BAE3150025DE58 /* HomepageSectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DFE57FE27BAE3150025DE58 /* HomepageSectionType.swift */; };
-		210887CC293E8800000AB4EE /* LegacyRemoteTabsErrorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210887CB293E8800000AB4EE /* LegacyRemoteTabsErrorCell.swift */; };
 		2109478928AFD24C00B73D44 /* OnboardingViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2109478828AFD24C00B73D44 /* OnboardingViewControllerProtocol.swift */; };
 		210E0EB8298D9D4500BB4F33 /* DefaultSearchEngineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A5F72F298D8BEE00234E5F /* DefaultSearchEngineProvider.swift */; };
 		210E0EB9298D9D4B00BB4F33 /* DefaultSearchEngineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A5F72F298D8BEE00234E5F /* DefaultSearchEngineProvider.swift */; };
@@ -144,7 +143,6 @@
 		2128E2802934FBB400FB91BE /* CopyLinkActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2128E27F2934FBB400FB91BE /* CopyLinkActivity.swift */; };
 		212985E42A6F078800546684 /* ScreenState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212985E32A6F078800546684 /* ScreenState.swift */; };
 		212985E72A72B39D00546684 /* ThemeSettingsControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212985E52A72B22800546684 /* ThemeSettingsControllerTests.swift */; };
-		21357F2D293FDB60004BF9FD /* LegacyRemoteTabsErrorDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21357F2C293FDB60004BF9FD /* LegacyRemoteTabsErrorDataSource.swift */; };
 		21357F2F294237D8004BF9FD /* RemoteTabsClientAndTabsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21357F2E294237D8004BF9FD /* RemoteTabsClientAndTabsDataSource.swift */; };
 		21371FA228A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21371FA128A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift */; };
 		21371FA428AA7A8D00BC3F37 /* OnboardingViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21371FA328AA7A8D00BC3F37 /* OnboardingViewModelProtocol.swift */; };
@@ -215,7 +213,6 @@
 		21D8843F2A7959D000AF144C /* HomePageSettingViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D8843E2A7959D000AF144C /* HomePageSettingViewControllerTests.swift */; };
 		21D884412A79628E00AF144C /* MockSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D884402A79628E00AF144C /* MockSettingsDelegate.swift */; };
 		21D8EA932ABE04F7003FF16E /* TabTrayViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D8EA922ABE04F7003FF16E /* TabTrayViewControllerTests.swift */; };
-		21DB34342B20FE35008CCB8E /* LegacyRemoteTabsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DB34332B20FE35008CCB8E /* LegacyRemoteTabsTableViewController.swift */; };
 		21E77E4E2AA8BA5200FABA10 /* TabTrayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E77E4D2AA8BA5200FABA10 /* TabTrayViewController.swift */; };
 		21E77E502AA8BAEC00FABA10 /* TabTrayState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E77E4F2AA8BAEC00FABA10 /* TabTrayState.swift */; };
 		21E78A7028F9A8C500F8D687 /* MockUIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21E78A6F28F9A8C500F8D687 /* MockUIDevice.swift */; };
@@ -298,7 +295,6 @@
 		2FCAE2781ABB531100877008 /* Visit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE25C1ABB531100877008 /* Visit.swift */; };
 		2FCAE2841ABB533A00877008 /* MockFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2791ABB533A00877008 /* MockFiles.swift */; };
 		2FDB10931A9FBEC5006CF312 /* PrefsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB10921A9FBEC5006CF312 /* PrefsTests.swift */; };
-		2FDE87FE1ABB3817005317B1 /* LegacyRemoteTabsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDE87FD1ABB3817005317B1 /* LegacyRemoteTabsPanel.swift */; };
 		318FB6EB1DB5600D0004E40F /* SQLiteHistoryFactories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318FB6EA1DB5600D0004E40F /* SQLiteHistoryFactories.swift */; };
 		31ADB5DA1E58CEC300E87909 /* ClipboardBarDisplayHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31ADB5D91E58CEC300E87909 /* ClipboardBarDisplayHandler.swift */; };
 		39012F281F8ED262002E3D31 /* ScreenGraphTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39012F271F8ED262002E3D31 /* ScreenGraphTest.swift */; };
@@ -2528,7 +2524,6 @@
 		20C24CE7AEFE559B0B06390C /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		20C6401CAC4ACAA189D446BC /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/Today.strings; sourceTree = "<group>"; };
 		20F2414BA51A5BFAF5098D35 /* bs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bs; path = bs.lproj/Menu.strings; sourceTree = "<group>"; };
-		210887CB293E8800000AB4EE /* LegacyRemoteTabsErrorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyRemoteTabsErrorCell.swift; sourceTree = "<group>"; };
 		2109478828AFD24C00B73D44 /* OnboardingViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewControllerProtocol.swift; sourceTree = "<group>"; };
 		211046C82A7ADE9000A7309F /* BlockPopupSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockPopupSetting.swift; sourceTree = "<group>"; };
 		211046CC2A7D842A00A7309F /* TPAccessoryInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPAccessoryInfo.swift; sourceTree = "<group>"; };
@@ -2539,7 +2534,6 @@
 		2128E27F2934FBB400FB91BE /* CopyLinkActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyLinkActivity.swift; sourceTree = "<group>"; };
 		212985E32A6F078800546684 /* ScreenState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenState.swift; sourceTree = "<group>"; };
 		212985E52A72B22800546684 /* ThemeSettingsControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSettingsControllerTests.swift; sourceTree = "<group>"; };
-		21357F2C293FDB60004BF9FD /* LegacyRemoteTabsErrorDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyRemoteTabsErrorDataSource.swift; sourceTree = "<group>"; };
 		21357F2E294237D8004BF9FD /* RemoteTabsClientAndTabsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteTabsClientAndTabsDataSource.swift; sourceTree = "<group>"; };
 		21371FA128A6C4A200BC3F37 /* OnboardingTelemetryUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTelemetryUtilityTests.swift; sourceTree = "<group>"; };
 		21371FA328AA7A8D00BC3F37 /* OnboardingViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModelProtocol.swift; sourceTree = "<group>"; };
@@ -2610,7 +2604,6 @@
 		21D8843E2A7959D000AF144C /* HomePageSettingViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageSettingViewControllerTests.swift; sourceTree = "<group>"; };
 		21D884402A79628E00AF144C /* MockSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSettingsDelegate.swift; sourceTree = "<group>"; };
 		21D8EA922ABE04F7003FF16E /* TabTrayViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayViewControllerTests.swift; sourceTree = "<group>"; };
-		21DB34332B20FE35008CCB8E /* LegacyRemoteTabsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyRemoteTabsTableViewController.swift; sourceTree = "<group>"; };
 		21DD4778B3C11A24D552AB34 /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/Localizable.strings; sourceTree = "<group>"; };
 		21E77E4D2AA8BA5200FABA10 /* TabTrayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayViewController.swift; sourceTree = "<group>"; };
 		21E77E4F2AA8BAEC00FABA10 /* TabTrayState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayState.swift; sourceTree = "<group>"; };
@@ -2790,7 +2783,6 @@
 		2FCF4713ABA14D85F70567AC /* kk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kk; path = kk.lproj/Today.strings; sourceTree = "<group>"; };
 		2FDB10921A9FBEC5006CF312 /* PrefsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefsTests.swift; sourceTree = "<group>"; };
 		2FDE46BCA5E27EF7DC02CE20 /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/FindInPage.strings; sourceTree = "<group>"; };
-		2FDE87FD1ABB3817005317B1 /* LegacyRemoteTabsPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegacyRemoteTabsPanel.swift; sourceTree = "<group>"; };
 		2FEBABAE1AB3659000DB5728 /* ResultTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultTests.swift; sourceTree = "<group>"; };
 		30144AD1A59EDCE27EEAC079 /* ast */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ast; path = ast.lproj/Storage.strings; sourceTree = "<group>"; };
 		307540CEA37CBA7C3163075C /* mr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = mr; path = mr.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
@@ -9620,7 +9612,6 @@
 		212429F22AA27204002D57A8 /* Legacy */ = {
 			isa = PBXGroup;
 			children = (
-				21DB34352B2103F0008CCB8E /* RemoteTabs */,
 				216E9A3829D2119300ABE69B /* LegacyInactiveTabs */,
 			);
 			path = Legacy;
@@ -9819,17 +9810,6 @@
 				21D8EA922ABE04F7003FF16E /* TabTrayViewControllerTests.swift */,
 			);
 			path = TabTray;
-			sourceTree = "<group>";
-		};
-		21DB34352B2103F0008CCB8E /* RemoteTabs */ = {
-			isa = PBXGroup;
-			children = (
-				2FDE87FD1ABB3817005317B1 /* LegacyRemoteTabsPanel.swift */,
-				21DB34332B20FE35008CCB8E /* LegacyRemoteTabsTableViewController.swift */,
-				210887CB293E8800000AB4EE /* LegacyRemoteTabsErrorCell.swift */,
-				21357F2C293FDB60004BF9FD /* LegacyRemoteTabsErrorDataSource.swift */,
-			);
-			path = RemoteTabs;
 			sourceTree = "<group>";
 		};
 		21FA8FAC2AE8561C0013B815 /* TabTray */ = {
@@ -15640,7 +15620,6 @@
 				E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */,
 				E1A6AB4628CA6A4C00EBEBDD /* String+Extension.swift in Sources */,
 				1D2F68AF2ACB272500524B92 /* RemoteTabsTableViewController.swift in Sources */,
-				210887CC293E8800000AB4EE /* LegacyRemoteTabsErrorCell.swift in Sources */,
 				ED07C0ED2CCAE745006C0627 /* SearchEngineSelectionAction.swift in Sources */,
 				8AABBCFC2A0010900089941E /* GleanWrapper.swift in Sources */,
 				8C92DE912A7128CB0090BD28 /* ProductAnalysisResponse.swift in Sources */,
@@ -16081,7 +16060,6 @@
 				9636D92A27F767EC00771F5E /* NimbusMessagingEvaluationUtility.swift in Sources */,
 				E127313F28B6C194006F39D2 /* WallpaperSettingsHeaderView.swift in Sources */,
 				0BBC50952CA1F7F900CB7248 /* BookmarksRefactorFeatureFlagProvider.swift in Sources */,
-				2FDE87FE1ABB3817005317B1 /* LegacyRemoteTabsPanel.swift in Sources */,
 				8A3EF80F2A2FD05D00796E3A /* ToggleInactiveTabs.swift in Sources */,
 				96EB6C3E27D9266500A9D159 /* HistoryActionables.swift in Sources */,
 				8C6F94662A972EB300415FF6 /* FakespotStarRatingView.swift in Sources */,
@@ -16237,7 +16215,6 @@
 				8AE80BBA2891C0C300BC12EA /* JumpBackInSectionLayout.swift in Sources */,
 				21618A612A4201E500A5189E /* ThemeSettingsController.swift in Sources */,
 				AB4FB4DB2C89FB10005EF0CC /* BlockedTrackersHeaderView.swift in Sources */,
-				21357F2D293FDB60004BF9FD /* LegacyRemoteTabsErrorDataSource.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
 				DFACDFAA274D489B00A94EEC /* HistoryHighlightsViewModel.swift in Sources */,
 				C84655FF2887A06B00861B4A /* WallpaperFilePathProvider.swift in Sources */,
@@ -16416,7 +16393,6 @@
 				E4A961181AC041C40069AD6F /* ReadabilityService.swift in Sources */,
 				AB42CC752A1F5240003C9594 /* CreditCardBottomSheetHeaderView.swift in Sources */,
 				21371FA428AA7A8D00BC3F37 /* OnboardingViewModelProtocol.swift in Sources */,
-				21DB34342B20FE35008CCB8E /* LegacyRemoteTabsTableViewController.swift in Sources */,
 				8ABCFEA32B45C36100C2988A /* PrivateBrowsingTelemetry.swift in Sources */,
 				8ADC2A1F2A3399BD00543DAA /* LicenseAndAcknowledgementsSetting.swift in Sources */,
 				8CCCB08B2AE26B5C0073ADB9 /* ReportResponse.swift in Sources */,
