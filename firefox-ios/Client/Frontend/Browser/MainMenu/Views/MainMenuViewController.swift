@@ -48,6 +48,11 @@ class MainMenuViewController: UIViewController,
 
     var currentWindowUUID: UUID? { return windowUUID }
 
+    private let isPad = UIDevice.current.userInterfaceIdiom == .pad
+
+    // Used to save the last screen orientation
+    private var lastOrientation: UIDeviceOrientation
+
     // MARK: - Initializers
     init(
         windowUUID: WindowUUID,
@@ -64,6 +69,7 @@ class MainMenuViewController: UIViewController,
         menuState = MainMenuState(windowUUID: windowUUID)
         viewProvider = ContextualHintViewProvider(forHintType: .mainMenu,
                                                   with: profile)
+        self.lastOrientation = UIDevice.current.orientation
         super.init(nibName: nil, bundle: nil)
 
         setupNotifications(forObserver: self,
@@ -155,8 +161,15 @@ class MainMenuViewController: UIViewController,
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        coordinator.animate(alongsideTransition: { _ in
-            self.adjustLayout()
+        coordinator.animate(alongsideTransition: { [weak self] _ in
+            guard let self else { return }
+            // We should dismiss CFR when device is rotating
+            if UIDevice.current.orientation != lastOrientation {
+                lastOrientation = UIDevice.current.orientation
+                self.adjustLayout(isDeviceRotating: true)
+            } else {
+                self.adjustLayout()
+            }
         }, completion: nil)
     }
 
@@ -201,12 +214,21 @@ class MainMenuViewController: UIViewController,
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
            let window = windowScene.windows.first {
             window.addSubview(hintView)
-            NSLayoutConstraint.activate([
-                hintView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.hintViewMargin),
-                hintView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.hintViewMargin),
-                hintView.bottomAnchor.constraint(equalTo: menuContent.accountHeaderView.topAnchor,
-                                                 constant: -UX.hintViewMargin)
-            ])
+            if isPad {
+                NSLayoutConstraint.activate([
+                    hintView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.hintViewMargin * 4),
+                    hintView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.hintViewMargin * 4),
+                    hintView.topAnchor.constraint(equalTo: menuContent.accountHeaderView.topAnchor,
+                                                  constant: UX.hintViewMargin)
+                ])
+            } else {
+                NSLayoutConstraint.activate([
+                    hintView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.hintViewMargin),
+                    hintView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.hintViewMargin),
+                    hintView.bottomAnchor.constraint(equalTo: menuContent.accountHeaderView.topAnchor,
+                                                     constant: -UX.hintViewMargin)
+                ])
+            }
             hintViewHeightConstraint = hintView.heightAnchor.constraint(equalToConstant: UX.hintViewHeight)
             hintViewHeightConstraint?.isActive = true
         }
@@ -320,37 +342,39 @@ class MainMenuViewController: UIViewController,
             menuA11yLabel: .MainMenu.TabsSection.AccessibilityLabels.MainMenu)
     }
 
-    private func adjustLayout() {
+    private func adjustLayout(isDeviceRotating: Bool = false) {
         menuContent.accountHeaderView.adjustLayout()
-        if let screenHeight = view.window?.windowScene?.screen.bounds.height {
-            let isPad = UIDevice.current.userInterfaceIdiom == .pad
-            let maxHeight: CGFloat = if isPad {
-                (screenHeight - view.frame.height) / 2 - UX.hintViewMargin * 2
-            } else {
-                screenHeight - view.frame.height - UX.hintViewMargin * 4
+        if isDeviceRotating {
+            hintView.removeFromSuperview()
+        } else {
+            if let screenHeight = view.window?.windowScene?.screen.bounds.height {
+                let maxHeight: CGFloat = if isPad {
+                    view.frame.height / 2
+                } else {
+                    screenHeight - view.frame.height - UX.hintViewMargin * 4
+                }
+                let height = min(UIFontMetrics.default.scaledValue(for: UX.hintViewHeight), maxHeight)
+                let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
+                hintViewHeightConstraint?.constant =
+                contentSizeCategory.isAccessibilityCategory ? height : UX.hintViewHeight
             }
-            let height = min(UIFontMetrics.default.scaledValue(for: UX.hintViewHeight), maxHeight)
-            let contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
-            hintViewHeightConstraint?.constant =
-            contentSizeCategory.isAccessibilityCategory ? height : UX.hintViewHeight
         }
         view.setNeedsLayout()
         view.layoutIfNeeded()
     }
 
     private func shouldDisplayHintView() -> Bool {
-        // 1. Present hint if it was not presented before,
-        // 2. feature is enabled and
-        // 3. is not fresh install
-        if viewProvider.shouldPresentContextualHint() &&
-            featureFlags.isFeatureEnabled(.menuRefactorHint, checking: .buildOnly) {
-            if InstallType.get() == .fresh {
-                viewProvider.markContextualHintPresented()
-                return false
-            }
-            return true
+        // Don't display CFR in landscape mode for iPhones
+        if !isPad && UIDevice.current.orientation != .portrait {
+            return false
         }
-        return false
+
+        // Don't display CFR for fresh installs
+        if InstallType.get() == .fresh {
+            viewProvider.markContextualHintPresented()
+            return false
+        }
+        return viewProvider.shouldPresentContextualHint() ? true : false
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate
