@@ -48,7 +48,10 @@ class MainMenuViewController: UIViewController,
 
     var currentWindowUUID: UUID? { return windowUUID }
 
-    private let isPad = UIDevice.current.userInterfaceIdiom == .pad
+    private var isRegularSizeClass: Bool {
+        traitCollection.horizontalSizeClass == .regular &&
+        traitCollection.verticalSizeClass == .regular
+    }
 
     // Used to save the last screen orientation
     private var lastOrientation: UIDeviceOrientation
@@ -214,7 +217,7 @@ class MainMenuViewController: UIViewController,
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
            let window = windowScene.windows.first {
             window.addSubview(hintView)
-            if isPad {
+            if isRegularSizeClass {
                 NSLayoutConstraint.activate([
                     hintView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.hintViewMargin * 4),
                     hintView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.hintViewMargin * 4),
@@ -348,7 +351,7 @@ class MainMenuViewController: UIViewController,
             hintView.removeFromSuperview()
         } else {
             if let screenHeight = view.window?.windowScene?.screen.bounds.height {
-                let maxHeight: CGFloat = if isPad {
+                let maxHeight: CGFloat = if isRegularSizeClass {
                     view.frame.height / 2
                 } else {
                     screenHeight - view.frame.height - UX.hintViewMargin * 4
@@ -365,7 +368,7 @@ class MainMenuViewController: UIViewController,
 
     private func shouldDisplayHintView() -> Bool {
         // Don't display CFR in landscape mode for iPhones
-        if !isPad && UIDevice.current.orientation != .portrait {
+        if !isRegularSizeClass && UIDevice.current.orientation != .portrait {
             return false
         }
 
