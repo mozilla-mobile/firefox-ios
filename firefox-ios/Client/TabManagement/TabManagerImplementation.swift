@@ -252,10 +252,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
     }
 
     private func generateTabDataForSaving() -> [TabData] {
-        var tabsToSave = tabs
-        if shouldClearPrivateTabs() {
-            tabsToSave = normalTabs
-        }
+        let tabsToSave = tabs
 
         let tabData = tabsToSave.map { tab in
             let oldTabGroupData = tab.metadataManager?.tabGroupData
