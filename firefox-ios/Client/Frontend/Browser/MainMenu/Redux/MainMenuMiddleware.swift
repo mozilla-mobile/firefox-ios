@@ -51,7 +51,7 @@ final class MainMenuMiddleware {
 
     lazy var mainMenuProvider: Middleware<AppState> = { state, action in
         guard let action = action as? MainMenuAction else { return }
-        let isHomepage = action.currentTabInfo?.isHomepage ?? false
+        let isHomepage = action.telemetryInfo?.isHomepage ?? false
 
         switch action.actionType {
         case MainMenuActionType.tapNavigateToDestination:
@@ -79,8 +79,8 @@ final class MainMenuMiddleware {
         case MainMenuActionType.tapCloseMenu:
             self.telemetry.closeButtonTapped(isHomepage: isHomepage)
         case GeneralBrowserActionType.showReaderMode:
-            guard let isActive = action.isActive else { return }
-            let option = isActive ? TelemetryAction.readerViewTurnOn : TelemetryAction.readerViewTurnOff
+            guard let isActionOn = action.telemetryInfo?.isActionOn else { return }
+            let option = isActionOn ? TelemetryAction.readerViewTurnOn : TelemetryAction.readerViewTurnOff
             self.telemetry.optionTapped(with: false, and: option)
         case MainMenuActionType.viewDidLoad:
             if let accountData = self.getAccountData() {
@@ -124,8 +124,8 @@ final class MainMenuMiddleware {
         case MainMenuDetailsActionType.tapRemoveFromReadingList:
             self.telemetry.optionTapped(with: isHomepage, and: TelemetryAction.removeFromReadingList)
         case MainMenuDetailsActionType.tapToggleNightMode:
-            guard let isActive = action.isActive else { return }
-            let option = isActive ? TelemetryAction.nightModeTurnOn : TelemetryAction.nightModeTurnOff
+            guard let isActionOn = action.telemetryInfo?.isActionOn else { return }
+            let option = isActionOn ? TelemetryAction.nightModeTurnOn : TelemetryAction.nightModeTurnOff
             self.telemetry.optionTapped(with: isHomepage, and: option)
         case MainMenuDetailsActionType.tapBackToMainMenu:
             self.telemetry.optionTapped(with: isHomepage, and: TelemetryAction.back)
