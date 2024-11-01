@@ -420,7 +420,7 @@ struct MainMenuConfigurationUtility: Equatable {
         )
     }
 
-    private func configureNightModeItem(with uuid: WindowUUID,and tabInfo: MainMenuTabInfo) -> MenuElement {
+    private func configureNightModeItem(with uuid: WindowUUID, and tabInfo: MainMenuTabInfo) -> MenuElement {
         typealias Strings = String.MainMenu.Submenus.Tools
         typealias A11y = String.MainMenu.Submenus.Tools.AccessibilityLabels
 
