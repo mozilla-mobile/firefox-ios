@@ -15,74 +15,75 @@ public final class HeaderView: UIView, ThemeApplicable {
         static let smallFaviconImageSize: CGFloat = 20
         static let maskFaviconImageSize: CGFloat = 32
         static let horizontalMargin: CGFloat = 16
+        static let iconAndLabelSpacing: CGFloat = 12
         static let headerLabelDistance: CGFloat = 2
         static let separatorHeight: CGFloat = 1
         static let closeButtonSize: CGFloat = 30
         static let warningIconSize: CGFloat = 24
     }
-
+    
     public var closeButtonCallback: (() -> Void)?
     public var mainButtonCallback: (() -> Void)?
-
+    
     private lazy var headerLabelsContainer: UIStackView = .build { stack in
         stack.backgroundColor = .clear
         stack.alignment = .leading
         stack.axis = .vertical
         stack.spacing = UX.headerLabelDistance
     }
-
+    
     private var favicon: FaviconImageView = .build { favicon in
         favicon.manuallySetImage(
             UIImage(named: StandardImageIdentifiers.Large.globe)?.withRenderingMode(.alwaysTemplate) ?? UIImage())
     }
-
+    
     private let titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = UX.headerLinesLimit
         label.adjustsFontForContentSizeCategory = true
     }
-
+    
     private let subtitleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.caption1.scaledFont()
         label.numberOfLines = 2
         label.adjustsFontForContentSizeCategory = true
     }
-
+    
     private lazy var warningIconView: UIImageView = .build()
-
+    
     private lazy var closeButton: CloseButton = .build { button in
         button.addTarget(self, action: #selector(self.closeButtonTapped), for: .touchUpInside)
     }
-
+    
     private lazy var mainButton: UIButton = .build { button in
         button.backgroundColor = .clear
         button.addTarget(self, action: #selector(self.mainButtonTapped), for: .touchUpInside)
     }
-
+    
     private var iconMask: UIView = .build { view in
         view.backgroundColor = .clear
     }
-
+    
     private let horizontalLine: UIView = .build()
-
+    
     private var viewConstraints: [NSLayoutConstraint] = []
-
+    
     init() {
         super.init(frame: .zero)
         setupViews()
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     private func setupViews() {
         headerLabelsContainer.addArrangedSubview(titleLabel)
         headerLabelsContainer.addArrangedSubview(subtitleLabel)
         addSubviews(iconMask, favicon, headerLabelsContainer, mainButton, closeButton, warningIconView, horizontalLine)
         warningIconView.isHidden = true
     }
-
+    
     private func updateLayout(isAccessibilityCategory: Bool, isWebsiteIcon: Bool) {
         removeConstraints(constraints)
         favicon.removeConstraints(favicon.constraints)
@@ -95,7 +96,10 @@ public final class HeaderView: UIView, ThemeApplicable {
                 equalTo: self.leadingAnchor,
                 constant: UX.horizontalMargin
             ),
-
+            headerLabelsContainer.leadingAnchor.constraint(
+                equalTo: favicon.trailingAnchor,
+                constant: UX.iconAndLabelSpacing
+            ),
             headerLabelsContainer.topAnchor.constraint(
                 equalTo: self.topAnchor,
                 constant: UX.siteDomainLabelsVerticalSpacing
@@ -112,18 +116,18 @@ public final class HeaderView: UIView, ThemeApplicable {
                 equalTo: warningIconView.leadingAnchor,
                 constant: -UX.horizontalMargin
             ),
-
+            
             warningIconView.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: -UX.horizontalMargin),
             closeButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -UX.horizontalMargin),
-
+            
             horizontalLine.leadingAnchor.constraint(equalTo: leadingAnchor),
             horizontalLine.trailingAnchor.constraint(equalTo: trailingAnchor),
             horizontalLine.bottomAnchor.constraint(equalTo: bottomAnchor),
             horizontalLine.heightAnchor.constraint(equalToConstant: UX.separatorHeight),
-
+            
             iconMask.centerXAnchor.constraint(equalTo: favicon.centerXAnchor),
             iconMask.centerYAnchor.constraint(equalTo: favicon.centerYAnchor),
-
+            
             mainButton.leadingAnchor.constraint(equalTo: iconMask.leadingAnchor),
             mainButton.trailingAnchor.constraint(equalTo: headerLabelsContainer.trailingAnchor),
             mainButton.topAnchor.constraint(equalTo: headerLabelsContainer.topAnchor),
@@ -133,21 +137,21 @@ public final class HeaderView: UIView, ThemeApplicable {
         isWebsiteIcon ? UX.favIconImageSize: UX.smallFaviconImageSize
         viewConstraints.append(favicon.heightAnchor.constraint(equalToConstant: favIconSizes))
         viewConstraints.append(favicon.widthAnchor.constraint(equalToConstant: favIconSizes))
-
+        
         let closeButtonSizes = isAccessibilityCategory ? UX.largeFaviconImageSize : UX.closeButtonSize
         viewConstraints.append(closeButton.heightAnchor.constraint(equalToConstant: closeButtonSizes))
         viewConstraints.append(closeButton.widthAnchor.constraint(equalToConstant: closeButtonSizes))
         closeButton.layer.cornerRadius = 0.5 * closeButtonSizes
-
+        
         let warningIconSizes = isAccessibilityCategory ? UX.largeFaviconImageSize : UX.warningIconSize
         viewConstraints.append(warningIconView.heightAnchor.constraint(equalToConstant: warningIconSizes))
         viewConstraints.append(warningIconView.widthAnchor.constraint(equalToConstant: warningIconSizes))
-
+        
         let maskButtonSizes = isAccessibilityCategory ? UX.largeFaviconImageSize : UX.maskFaviconImageSize
         viewConstraints.append(iconMask.heightAnchor.constraint(equalToConstant: maskButtonSizes))
         viewConstraints.append(iconMask.widthAnchor.constraint(equalToConstant: maskButtonSizes))
         iconMask.layer.cornerRadius = 0.5 * maskButtonSizes
-
+        
         if isAccessibilityCategory {
             viewConstraints.append(favicon.topAnchor.constraint(equalTo: headerLabelsContainer.topAnchor))
             viewConstraints.append(closeButton.topAnchor.constraint(equalTo: headerLabelsContainer.topAnchor))
@@ -159,7 +163,7 @@ public final class HeaderView: UIView, ThemeApplicable {
         }
         NSLayoutConstraint.activate(viewConstraints)
     }
-
+    
     public func setupAccessibility(closeButtonA11yLabel: String,
                                    closeButtonA11yId: String,
                                    mainButtonA11yLabel: String? = nil,
@@ -176,20 +180,20 @@ public final class HeaderView: UIView, ThemeApplicable {
             mainButton.isAccessibilityElement = false
         }
     }
-
+    
     public func setupDetails(subtitle: String, title: String, icon: FaviconImageViewModel) {
         titleLabel.font = FXFontStyles.Regular.headline.scaledFont()
         favicon.setFavicon(icon)
         subtitleLabel.text = subtitle
         titleLabel.text = title
     }
-
+    
     public func setupDetails(subtitle: String, title: String, icon: UIImage?) {
         if let icon { favicon.manuallySetImage(icon) }
         subtitleLabel.text = subtitle
         titleLabel.text = title
     }
-
+    
     public func setupDetails(subtitle: String, title: String, icon: UIImage?, warningIcon: String?, theme: Theme) {
         titleLabel.text  = title
         subtitleLabel.text = subtitle
@@ -206,21 +210,21 @@ public final class HeaderView: UIView, ThemeApplicable {
             warningIconView.image = UIImage(named: warningIcon)?.withRenderingMode(.alwaysTemplate)
         }
     }
-
+    
     public func setIconTheme(with theme: Theme) {
         iconMask.backgroundColor = theme.colors.layer2
         favicon.tintColor = theme.colors.iconSecondary
     }
-
+    
     func setTitle(with text: String) {
         titleLabel.text = text
     }
-
+    
     public func adjustLayout(isWebsiteIcon: Bool = false) {
         updateLayout(isAccessibilityCategory: UIApplication.shared.preferredContentSizeCategory.isAccessibilityCategory,
                      isWebsiteIcon: isWebsiteIcon)
     }
-
+    
     public func updateHeaderLineView(isHidden: Bool) {
         if (isHidden && !horizontalLine.isHidden) || (!isHidden && horizontalLine.isHidden) {
             UIView.animate(withDuration: 0.3) { [weak self] in
@@ -228,17 +232,17 @@ public final class HeaderView: UIView, ThemeApplicable {
             }
         }
     }
-
+    
     @objc
     func closeButtonTapped() {
         closeButtonCallback?()
     }
-
+    
     @objc
     func mainButtonTapped() {
         mainButtonCallback?()
     }
-
+    
     public func applyTheme(theme: Theme) {
         let buttonImage = UIImage(named: StandardImageIdentifiers.Medium.cross)?
             .withTintColor(theme.colors.iconSecondary)
