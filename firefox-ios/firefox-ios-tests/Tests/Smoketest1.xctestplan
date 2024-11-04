@@ -177,6 +177,7 @@
         "NewTabSettingsTest\/testChangeNewTabSettingsLabel()",
         "NewTabSettingsTest\/testChangeNewTabSettingsShowFirefoxHome()",
         "NightModeTests",
+        "OnboardingTests\/testFirstRunTourDarkMode()",
         "OnboardingTests\/testWhatsNewPage()",
         "OpeningScreenTests",
         "PerformanceTests",

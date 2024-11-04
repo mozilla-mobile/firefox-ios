@@ -26,7 +26,6 @@ class OnboardingTests: BaseTestCase {
 
     // Smoketest
     // https://mozilla.testrail.io/index.php?/cases/view/2575178
-    // swiftlint:disable:next function_body_length
     func testFirstRunTour() {
         // Complete the First run from first screen to the latest one
         // Check that the first's tour screen is shown as well as all the elements in there
@@ -80,12 +79,16 @@ class OnboardingTests: BaseTestCase {
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
         let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         mozWaitForElementToExist(topSites)
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2793818
+    func testFirstRunTourDarkMode() {
+        app.buttons["CloseButton"].tap()
         switchThemeToDarkOrLight(theme: "Dark")
         app.terminate()
         app.launch()
         // Check that the first's tour screen is shown as well as all the elements in there
         navigator.nowAt(FirstRun)
-        currentScreen = 0
         mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"])
         mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
         mozWaitForElementToExist(app.staticTexts["\(rootA11yId)DescriptionLabel"])
@@ -133,6 +136,7 @@ class OnboardingTests: BaseTestCase {
         XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
 
         // Finish onboarding
+        let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
         mozWaitForElementToExist(topSites)
     }
