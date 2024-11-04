@@ -150,6 +150,12 @@ final class NativeErrorPageViewController: UIViewController,
         showViewForCurrentOrientation()
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        adjustConstraints()
+        showViewForCurrentOrientation()
+    }
+
     // TODO: FXIOS-9639 #21237 [a11y] Verify accessibility for Voice Over, Dynamic text
     private func configureUI() {
         let viewModel = PrimaryRoundedButtonViewModel(
@@ -235,7 +241,7 @@ final class NativeErrorPageViewController: UIViewController,
 
         NSLayoutConstraint.activate(commonContraintsList)
 
-        if UIDevice().userInterfaceIdiom == .pad {
+        if shouldUseiPadSetup() {
             NSLayoutConstraint.activate(iPadContraintsList)
         } else {
             NSLayoutConstraint.activate(iPhoneContraintsList)
@@ -248,12 +254,10 @@ final class NativeErrorPageViewController: UIViewController,
 
     private func showViewForCurrentOrientation() {
         commonContainer.distribution = .equalCentering
-        if UIDevice().userInterfaceIdiom == .pad {
-            scrollContainer.axis = .horizontal
-        } else if isLandscape {
-            scrollContainer.axis = .horizontal
+        if shouldUseiPadSetup() {
+            scrollContainer.axis = .horizontal // Use horizontal layout for iPad setup
         } else {
-            scrollContainer.axis = .vertical
+            scrollContainer.axis = self.isLandscape ? .horizontal : .vertical // For non-iPad or compact size classes
         }
     }
 
