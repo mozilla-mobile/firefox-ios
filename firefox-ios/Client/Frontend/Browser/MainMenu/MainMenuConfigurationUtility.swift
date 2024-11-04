@@ -16,7 +16,7 @@ struct MainMenuConfigurationUtility: Equatable {
         static let findInPage = StandardImageIdentifiers.Large.search
         static let tools = StandardImageIdentifiers.Large.tool
         static let save = StandardImageIdentifiers.Large.save
-        static let bookmarks = StandardImageIdentifiers.Large.bookmark
+        static let bookmarks = StandardImageIdentifiers.Large.bookmarkTrayFill
         static let history = StandardImageIdentifiers.Large.history
         static let downloads = StandardImageIdentifiers.Large.download
         static let passwords = StandardImageIdentifiers.Large.login
@@ -24,7 +24,7 @@ struct MainMenuConfigurationUtility: Equatable {
         static let settings = StandardImageIdentifiers.Large.settings
         static let whatsNew = StandardImageIdentifiers.Large.whatsNew
         static let zoomOff = StandardImageIdentifiers.Large.pageZoom
-        static let zoomOn = StandardImageIdentifiers.Large.pageZoomFilled
+        static let zoomOn = StandardImageIdentifiers.Large.pageZoomFill
         static let readerViewOn = StandardImageIdentifiers.Large.readerView
         static let readerViewOff = StandardImageIdentifiers.Large.readerViewFill
         static let nightModeOff = StandardImageIdentifiers.Large.nightMode

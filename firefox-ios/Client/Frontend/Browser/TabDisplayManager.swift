@@ -324,32 +324,6 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
                                         userInfo: tabManager.windowUUID.userInfo)
     }
 
-    /// Find the previously selected cell, which is still displayed as selected
-    /// - Parameters:
-    ///   - currentlySelected: The currently selected tab
-    ///   - inSection: In which section should this tab be searched
-    /// - Returns: The index path of the found previously selected tab
-    private func indexOfCellDrawnAsPreviouslySelectedTab(currentlySelected: Tab?, inSection: Int) -> IndexPath? {
-        guard let currentlySelected = currentlySelected else { return nil }
-
-        for index in 0..<collectionView.numberOfItems(inSection: inSection) {
-            guard let cell = collectionView.cellForItem(
-                at: IndexPath(
-                    row: index,
-                    section: inSection
-                )
-            ) as? LegacyTabTrayCell,
-                  cell.isSelectedTab,
-                  let tab = dataStore.at(index),
-                  tab != currentlySelected
-            else { continue }
-
-            return IndexPath(row: index, section: inSection)
-        }
-
-        return nil
-    }
-
     func refreshStore(evenIfHidden: Bool = false,
                       shouldAnimate: Bool = false,
                       completion: (() -> Void)? = nil) {
@@ -422,15 +396,6 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
             }
 
             self.tabManager.removeTab(tab)
-        }
-    }
-
-    func undoCloseTab(tab: Tab, index: Int?) {
-        tabManager.undoCloseTab()
-        _ = profile.recentlyClosedTabs.popFirstTab()
-
-        refreshStore { [weak self] in
-            self?.updateCellFor(tab: tab, selectedTabChanged: true)
         }
     }
 
@@ -860,67 +825,11 @@ extension LegacyTabDisplayManager: UICollectionViewDropDelegate {
 extension LegacyTabDisplayManager: TabEventHandler {
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
 
-    func tabDidSetScreenshot(_ tab: Tab, hasHomeScreenshot: Bool) {
-        guard let indexPath = getIndexPath(tab: tab) else { return }
-        refreshCell(atIndexPath: indexPath)
-    }
-
-    func tab(_ tab: Tab, didChangeURL url: URL) {
-        guard let indexPath = getIndexPath(tab: tab) else { return }
-        refreshCell(atIndexPath: indexPath)
-    }
-
     private func getIndexPath(tab: Tab) -> IndexPath? {
         guard let index = dataStore.index(of: tab) else { return nil }
         let section = tabDisplayType == .TopTabTray ? 0 : TabDisplaySection.regularTabs.rawValue
 
         return IndexPath(row: index, section: section)
-    }
-
-    private func updateCellFor(tab: Tab, selectedTabChanged: Bool) {
-        let selectedTab = tabManager.selectedTab
-
-        updateWith(animationType: .updateTab) { [weak self] in
-            guard let index = self?.dataStore.index(of: tab) else { return }
-            let section = self?.tabDisplayType == .TopTabTray ? 0 : TabDisplaySection.regularTabs.rawValue
-
-            var indexPaths = [IndexPath(row: index, section: section)]
-
-            if selectedTabChanged {
-                self?.tabDisplayerDelegate?.focusSelectedTab()
-
-                // Append the previously selected tab to refresh it's state. Useful when the selected tab has change.
-                // This method avoids relying on the state of the "previous" selected tab,
-                // instead it iterates the displayed tabs to see which appears selected.
-                if let previousSelectedIndexPath = self?.indexOfCellDrawnAsPreviouslySelectedTab(
-                    currentlySelected: selectedTab,
-                    inSection: section
-                ) {
-                    indexPaths.append(previousSelectedIndexPath)
-                }
-            }
-
-            for indexPath in indexPaths {
-                self?.refreshCell(atIndexPath: indexPath)
-
-                // Due to https://github.com/mozilla-mobile/firefox-ios/issues/9526 - Refresh next cell to avoid two selected cells
-                let nextTabIndex = IndexPath(row: indexPath.row + 1, section: indexPath.section)
-                self?.refreshCell(atIndexPath: nextTabIndex, forceUpdate: false)
-            }
-        }
-    }
-
-    private func refreshCell(atIndexPath indexPath: IndexPath, forceUpdate: Bool = true) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? LegacyTabTrayCell,
-              let tab = dataStore.at(indexPath.row) else { return }
-
-        // Only update from nextTabIndex if needed
-        guard forceUpdate || cell.isSelectedTab else { return }
-
-        let isSelected = tab == tabManager.selectedTab
-        cell.configureLegacyCellWith(tab: tab,
-                                     isSelected: isSelected,
-                                     theme: theme)
     }
 
     func removeAllTabsFromView() {
@@ -932,21 +841,6 @@ extension LegacyTabDisplayManager: TabEventHandler {
 
 // MARK: - TabManagerDelegate
 extension LegacyTabDisplayManager: TabManagerDelegate {
-    func tabManager(_ tabManager: TabManager, didSelectedTabChange selectedTab: Tab, previousTab: Tab?, isRestoring: Bool) {
-        cancelDragAndGestures()
-
-        // A tab can be re-selected during deletion
-        let changedTab = selectedTab != previousTab
-        updateCellFor(tab: selectedTab, selectedTabChanged: changedTab)
-
-        // Rather than using 'previous' Tab to deselect, just check if the selected tab
-        // is different, and update the required cells. The refreshStore() cancels
-        // pending operations are reloads data, so we don't want functions that rely on
-        // any assumption of previous state of the view. Passing a previous tab (and
-        // relying on that to redraw the previous tab as unselected) would be making
-        // this assumption about the state of the view.
-    }
-
     func tabManager(
         _ tabManager: TabManager,
         didAddTab tab: Tab,
