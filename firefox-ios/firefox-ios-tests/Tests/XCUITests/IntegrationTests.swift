@@ -5,7 +5,7 @@
 import Common
 import XCTest
 
-private let testingURL = "example.com"
+private let testingURL = "https://example.com"
 private let userName = "iosmztest"
 private let userPassword = "test15mz"
 private let historyItemSavedOnDesktop = "https://www.example.com/"
