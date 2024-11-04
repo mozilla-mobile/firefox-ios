@@ -8,9 +8,9 @@ import XCTest
 private let testingURL = "example.com"
 private let userName = "iosmztest"
 private let userPassword = "test15mz"
-private let historyItemSavedOnDesktop = "http://www.example.com/"
+private let historyItemSavedOnDesktop = "https://www.example.com/"
 private let loginEntry = "https://accounts.google.com"
-private let tabOpenInDesktop = "http://example.com/"
+private let tabOpenInDesktop = "https://example.com/"
 
 class IntegrationTests: BaseTestCase {
     let testWithDB = ["testFxASyncHistory"]
@@ -146,7 +146,7 @@ class IntegrationTests: BaseTestCase {
         mozWaitForElementToExist(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"])
         XCTAssertEqual(
             app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as! String,
-            "Fennec (administrator) on iOS"
+            "Fennec (cso) on iOS"
         )
 
         // Sync again just to make sure to sync after new name is shown
