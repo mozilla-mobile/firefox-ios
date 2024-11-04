@@ -785,7 +785,6 @@
 		8A5BC1EB2C4AA13F009A40A4 /* FeatureFlagsBoolSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5BC1EA2C4AA13F009A40A4 /* FeatureFlagsBoolSetting.swift */; };
 		8A5BD95A28788A3D000FE773 /* TopSitesHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5BD9582878871B000FE773 /* TopSitesHelperTests.swift */; };
 		8A5BD95F2878B7B6000FE773 /* TopSitesWidgetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5BD95E2878B7B6000FE773 /* TopSitesWidgetManager.swift */; };
-		8A5C3BC5282ABF8E003A8CCF /* LegacyRemoteTabsPanelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5C3BC4282ABF8E003A8CCF /* LegacyRemoteTabsPanelTests.swift */; };
 		8A5CDEED27E510F500CC60FF /* pocketglobalfeed.json in Resources */ = {isa = PBXBuildFile; fileRef = 3B61CD621F2A769D00D38DE1 /* pocketglobalfeed.json */; };
 		8A5D1CA02A30C9D7005AD35C /* MockAppSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5D1C9F2A30C9D7005AD35C /* MockAppSettingsDelegate.swift */; };
 		8A5D1CA42A30D69A005AD35C /* SearchSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5D1CA32A30D69A005AD35C /* SearchSetting.swift */; };
@@ -7043,7 +7042,6 @@
 		8A5BD9582878871B000FE773 /* TopSitesHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesHelperTests.swift; sourceTree = "<group>"; };
 		8A5BD95B2878AA74000FE773 /* PinnedSite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedSite.swift; sourceTree = "<group>"; };
 		8A5BD95E2878B7B6000FE773 /* TopSitesWidgetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesWidgetManager.swift; sourceTree = "<group>"; };
-		8A5C3BC4282ABF8E003A8CCF /* LegacyRemoteTabsPanelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyRemoteTabsPanelTests.swift; sourceTree = "<group>"; };
 		8A5D1C9F2A30C9D7005AD35C /* MockAppSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAppSettingsDelegate.swift; sourceTree = "<group>"; };
 		8A5D1CA32A30D69A005AD35C /* SearchSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSetting.swift; sourceTree = "<group>"; };
 		8A5D1CA52A30D6BD005AD35C /* NewTabPageSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTabPageSetting.swift; sourceTree = "<group>"; };
@@ -13717,7 +13715,6 @@
 				8ACA8F722919870B00D3075D /* Helpers */,
 				C889D7D32858CD4500121E1D /* HistoryHighlights */,
 				8A2825342760399B00395E66 /* KeyboardPressesHandlerTests.swift */,
-				8A5C3BC4282ABF8E003A8CCF /* LegacyRemoteTabsPanelTests.swift */,
 				8AED868128CA3A1F00351A50 /* Library */,
 				C8445AD026443C7F00B83F53 /* LibraryPanelViewStateTests.swift */,
 				81DAB2EF2C88EFEE00F4BE98 /* MainMenu */,
@@ -16811,7 +16808,6 @@
 				630FE1342C7FB42500D9D6B2 /* NativeErrorPageMockModel.swift in Sources */,
 				C807CCCC28367446008E6A5A /* FeatureFlagManagerTests.swift in Sources */,
 				8A552AC72CB43AB400564C98 /* HomepageStateTests.swift in Sources */,
-				8A5C3BC5282ABF8E003A8CCF /* LegacyRemoteTabsPanelTests.swift in Sources */,
 				8AABBD032A001CBC0089941E /* MockApplicationHelper.swift in Sources */,
 				8A1E3BE328CBACDD003388C4 /* SponsoredContentFilterUtilityTests.swift in Sources */,
 				2173326829CCDA8E007F20C7 /* TabScrollControllerTests.swift in Sources */,
