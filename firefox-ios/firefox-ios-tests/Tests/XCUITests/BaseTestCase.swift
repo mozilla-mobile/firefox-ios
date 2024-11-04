@@ -432,16 +432,14 @@ class BaseTestCase: XCTestCase {
         for element in elements {
             elementsDict[element] = "exists == true"
         }
-        let expectations = elementsDict.map(
-            {
+        let expectations = elementsDict.map({
                 XCTNSPredicateExpectation(
                     predicate: NSPredicate(
                         format: $0.value
                     ),
                     object: $0.key
                 )
-            }
-        )
+            })
         let result = XCTWaiter.wait(for: expectations, timeout: timeout)
         if result == .timedOut { XCTFail(message ?? expectations.description) }
     }
