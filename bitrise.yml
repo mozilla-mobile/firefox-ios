@@ -102,7 +102,7 @@ workflows:
             "$BITRISE_SOURCE_DIR/firefox-ios/Client/" \
             "$BITRISE_SOURCE_DIR/xcodebuild.log"
     - deploy-to-bitrise-io@2:
-        run_if: '{{ getenv "RUN_UI_TESTS" | eq "Run_UI_Tests" }} && {{ getenv "BITRISE_XCRESULT_PATH" | ne "" }}'
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests" | and (getenv "BITRISE_XCRESULT_PATH" | ne "")}}'
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
         - pipeline_intermediate_files: |-
