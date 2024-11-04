@@ -106,12 +106,8 @@ class OnboardingTests: BaseTestCase {
             value: "www.mozilla.org/en-US/firefox/ios/" + releaseVersion + "/releasenotes/"
         )
         mozWaitForElementToExist(app.staticTexts["Release Notes"])
-        if iPad() {
-            mozWaitForElementToExist(
-                app.staticTexts["Firefox for iOS \(releaseVersion), See All New Features, Updates and Fixes"]
-            )
-        }
         mozWaitForElementToExist(app.staticTexts["Firefox for iOS Release"])
+        mozWaitForElementToExist(app.staticTexts["\(releaseVersion)"])
         mozWaitForElementToExist(app.staticTexts["Get the most recent version"])
     }
 }
