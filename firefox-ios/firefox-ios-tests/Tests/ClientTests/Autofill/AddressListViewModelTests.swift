@@ -131,7 +131,7 @@ final class AddressListViewModelTests: XCTestCase {
 
         viewModel.fetchAddresses()
 
-        XCTAssertFalse(viewModel.addresses.isEmpty)
+        XCTAssertTrue(viewModel.addresses.isEmpty)
         XCTAssertFalse(viewModel.showSection)
     }
 
