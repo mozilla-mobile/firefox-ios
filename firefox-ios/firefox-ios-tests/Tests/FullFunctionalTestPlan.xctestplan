@@ -114,6 +114,7 @@
         "NewTabSettingsTest\/testToggleOffOnAdditionalContentBookmarks()",
         "OnboardingTests\/testCloseTour()",
         "OnboardingTests\/testFirstRunTour()",
+        "OnboardingTests\/testOnboardingSignIn()",
         "PerformanceTests",
         "PhotonActionSheetTests\/testPinToShortcuts()",
         "PhotonActionSheetTests\/testShareOptionIsShown()",

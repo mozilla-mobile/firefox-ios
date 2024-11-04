@@ -408,6 +408,26 @@ class BaseTestCase: XCTestCase {
         let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
         XCTAssertEqual(result, .completed, "Element did not become hittable in time.")
     }
+
+    func switchThemeToDarkOrLight(theme: String) {
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+        navigator.nowAt(BrowserTab)
+        navigator.goto(SettingsScreen)
+        navigator.goto(DisplaySettings)
+        mozWaitForElementToExist(app.switches["SystemThemeSwitchValue"])
+        if (app.switches["SystemThemeSwitchValue"].value as? String) == "1" {
+            navigator.performAction(Action.SystemThemeSwitch)
+        }
+        mozWaitForElementToExist(app.cells.staticTexts["Dark"])
+        if theme == "Dark" {
+            app.cells.staticTexts["Dark"].tap()
+        } else {
+            app.cells.staticTexts["Light"].tap()
+        }
+        app.buttons["Settings"].tap()
+        navigator.nowAt(SettingsScreen)
+        app.buttons["Done"].waitAndTap()
+    }
 }
 
 class IpadOnlyTestCase: BaseTestCase {
