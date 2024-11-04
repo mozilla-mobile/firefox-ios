@@ -31,8 +31,9 @@ final class NativeErrorPageViewController: UIViewController,
         static let logoSizeWidthiPad: CGFloat = 240
         static let mainStackSpacing: CGFloat = 24
         static let textStackSpacing: CGFloat = 16
+        static let reloadButtonIpadMultiplier = 0.7146
         static let portraitPadding = NSDirectionalEdgeInsets(
-            top: 76,
+            top: 120,
             leading: 32,
             bottom: -16,
             trailing: -32
@@ -45,9 +46,9 @@ final class NativeErrorPageViewController: UIViewController,
         )
         static let iPadPadding = NSDirectionalEdgeInsets(
             top: 100,
-            leading: 165.5,
+            leading: 166,
             bottom: -16,
-            trailing: -145.5
+            trailing: -144
         )
     }
 
@@ -226,7 +227,10 @@ final class NativeErrorPageViewController: UIViewController,
                 constant: UX.iPadPadding.bottom
             ),
             logoImage.widthAnchor.constraint(equalToConstant: UX.logoSizeWidthiPad),
-            reloadButton.widthAnchor.constraint(equalTo: commonContainer.widthAnchor, multiplier: 0.7145)
+            reloadButton.widthAnchor.constraint(
+                equalTo: commonContainer.widthAnchor,
+                multiplier: UX.reloadButtonIpadMultiplier
+            )
         ]
 
         NSLayoutConstraint.activate(commonContraintsList)
