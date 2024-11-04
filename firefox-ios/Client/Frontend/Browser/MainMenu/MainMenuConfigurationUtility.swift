@@ -16,7 +16,7 @@ struct MainMenuConfigurationUtility: Equatable {
         static let findInPage = StandardImageIdentifiers.Large.search
         static let tools = StandardImageIdentifiers.Large.tool
         static let save = StandardImageIdentifiers.Large.save
-        static let bookmarks = StandardImageIdentifiers.Large.bookmark
+        static let bookmarks = StandardImageIdentifiers.Large.bookmarkTrayFill
         static let history = StandardImageIdentifiers.Large.history
         static let downloads = StandardImageIdentifiers.Large.download
         static let passwords = StandardImageIdentifiers.Large.login
