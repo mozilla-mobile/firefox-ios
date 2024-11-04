@@ -27,6 +27,7 @@ class NativeErrorPageHelper {
     func parseErrorDetails() -> ErrorPageModel {
         var title = ""
         var description = ""
+
         switch error.code {
         case Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue):
             title = .NativeErrorPage.NoInternetConnection.TitleLabel

@@ -771,22 +771,21 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        if isNativeErrorPageEnabled {
-            guard var errorURLpath = URLComponents(string: "\(InternalURL.baseUrl)/\(ErrorPageHandler.path)" ) else { return }
-            errorURLpath.queryItems = [URLQueryItem(
-                name: InternalURL.Param.url.rawValue,
-                value: webView.url?.absoluteString
-            )]
-            guard let errorPageURL = errorURLpath.url else { return }
-            let action = NativeErrorPageAction(networkError: error,
-                                               windowUUID: windowUUID,
-                                               actionType: NativeErrorPageActionType.receivedError
-            )
-            store.dispatch(action)
-
-            webView.load(PrivilegedRequest(url: errorPageURL) as URLRequest)
-        } else {
-            if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL {
+        if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL {
+            if isNativeErrorPageEnabled {
+                guard var errorURLpath = URLComponents(string: "\(InternalURL.baseUrl)/\(ErrorPageHandler.path)" ) else { return }
+                errorURLpath.queryItems = [URLQueryItem(
+                    name: InternalURL.Param.url.rawValue,
+                    value: url.absoluteString
+                )]
+                guard let errorPageURL = errorURLpath.url else { return }
+                let action = NativeErrorPageAction(networkError: error,
+                                                   windowUUID: windowUUID,
+                                                   actionType: NativeErrorPageActionType.receivedError
+                )
+                store.dispatch(action)
+                webView.load(PrivilegedRequest(url: errorPageURL) as URLRequest)
+            } else {
                 ErrorPageHelper(certStore: profile.certStore).loadPage(error, forUrl: url, inWebView: webView)
             }
         }

@@ -127,11 +127,9 @@ final class NativeErrorPageViewController: UIViewController,
 
     // MARK: Redux
     func newState(state: NativeErrorPageState) {
-//        if state.title != nil {
-            nativeErrorPageState = state
-            titleLabel.text = state.title
-            errorDescriptionLabel.text = state.description
-//        }
+        nativeErrorPageState = state
+        titleLabel.text = state.title
+        errorDescriptionLabel.text = state.description
     }
 
     func subscribeToRedux() {

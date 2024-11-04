@@ -8,6 +8,7 @@ import Common
 final class NativeErrorPageAction: Action {
     let networkError: NSError?
     let nativePageErrorModel: ErrorPageModel?
+
     init(
         networkError: NSError? = nil,
         nativePageErrorModel: ErrorPageModel? = nil,
