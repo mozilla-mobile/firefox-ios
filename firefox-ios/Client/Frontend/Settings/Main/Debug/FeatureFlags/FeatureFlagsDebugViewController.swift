@@ -25,6 +25,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             title: nil,
             children: [
                 FeatureFlagsBoolSetting(
+                    with: .bookmarksRefactor,
+                    titleText: format(string: "Enable Bookmarks Redesign"),
+                    statusText: format(string: "Toggle to use the new bookmarks design")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .closeRemoteTabs,
                     titleText: format(string: "Enable Close Remote Tabs"),
                     statusText: format(string: "Toggle to enable closing tabs remotely feature")
