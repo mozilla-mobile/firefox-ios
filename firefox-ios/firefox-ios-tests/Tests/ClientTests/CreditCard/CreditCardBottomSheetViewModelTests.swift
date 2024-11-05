@@ -2,15 +2,15 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import MozillaAppServices
-import Shared
-import Storage
-import UIKit
-import XCTest
+// import MozillaAppServices
+// import Shared
+// import Storage
+// import UIKit
+// import XCTest
+//
+// @testable import Client
 
-@testable import Client
-
-//class CreditCardBottomSheetViewModelTests: XCTestCase {
+// class CreditCardBottomSheetViewModelTests: XCTestCase {
 //    private var viewModel: CreditCardBottomSheetViewModel?
 //    private var mockAutofill: MockCreditCardProvider?
 //    private var samplePlainTextCard = UnencryptedCreditCardFields(ccName: "Allen Burges",
@@ -410,4 +410,4 @@ import XCTest
 //        })
 //        waitForExpectations(timeout: 1.0)
 //    }
-//}
+// }
