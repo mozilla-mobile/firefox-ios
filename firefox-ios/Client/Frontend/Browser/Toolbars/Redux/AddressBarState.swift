@@ -663,7 +663,11 @@ struct AddressBarState: StateType, Equatable {
                                                          window: action.windowUUID)
         else { return actions }
 
-        if !(action.isShowingTopTabs ?? toolbarState.isShowingTopTabs) {
+        let isURLDidChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
+        let isShowingTopTabs = action.isShowingTopTabs ?? toolbarState.isShowingTopTabs
+        let isHomepage = (isURLDidChangeAction ? action.url : toolbarState.addressToolbar.url) == nil
+
+        if !isShowingTopTabs, !isHomepage {
             actions.append(newTabAction)
         }
 
