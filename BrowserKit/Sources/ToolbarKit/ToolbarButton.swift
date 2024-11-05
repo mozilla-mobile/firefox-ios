@@ -49,6 +49,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
                               image: image,
                               handler: { _ in
             element.onSelected?(self)
+            UIAccessibility.post(notification: .announcement, argument: element.a11yLabel)
         })
 
         config.image = image

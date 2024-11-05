@@ -16,8 +16,7 @@ private let SuggestedSite6: String = "foobar bomb baby"
 class SearchTests: BaseTestCase {
     private func typeOnSearchBar(text: String) {
         app.textFields.firstMatch.waitAndTap()
-        app.textFields.firstMatch.tap()
-        app.textFields.firstMatch.typeText(text)
+        app.textFields.firstMatch.tapAndTypeText(text)
     }
 
     private func suggestionsOnOff() {
@@ -206,14 +205,22 @@ class SearchTests: BaseTestCase {
         if #available(iOS 16, *) {
             while !app.collectionViews.menuItems["Search with Firefox"].exists {
                 app.buttons["Forward"].firstMatch.tap()
-                mozWaitForElementToExist(app.collectionViews.menuItems.firstMatch)
-                mozWaitForElementToExist(app.buttons["Forward"])
+                waitForElementsToExist(
+                    [
+                        app.collectionViews.menuItems.firstMatch,
+                        app.buttons["Forward"]
+                    ]
+                )
             }
         } else {
             while !app.menuItems["Search with Firefox"].exists {
                 app.menuItems["Show more items"].firstMatch.tap()
-                mozWaitForElementToExist(app.menuItems.firstMatch)
-                mozWaitForElementToExist(app.menuItems["Show more items"])
+                waitForElementsToExist(
+                    [
+                        app.menuItems.firstMatch,
+                        app.menuItems["Show more items"]
+                    ]
+                )
             }
         }
 

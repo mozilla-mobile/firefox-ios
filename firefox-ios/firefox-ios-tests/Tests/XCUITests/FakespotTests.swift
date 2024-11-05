@@ -93,8 +93,7 @@ class FakespotTests: BaseTestCase {
         if #available(iOS 17, *) {
             // Open a product detail page and check the address bar
             let searchField = app.webViews["contentView"].webViews.textFields["Search for anything"]
-            searchField.waitAndTap()
-            searchField.typeText("Shoe")
+            searchField.tapAndTypeText("Shoe")
             app.webViews["contentView"].webViews.buttons["Search"].waitAndTap()
             waitUntilPageLoad()
             app.webViews["contentView"].links.element(boundBy: 7).tap()
@@ -112,8 +111,12 @@ class FakespotTests: BaseTestCase {
         // Check the 'Settings' collapsible section
         let settingsSection = app.staticTexts[AccessibilityIdentifiers.Shopping.SettingsCard.title]
         let expandButton = app.buttons[AccessibilityIdentifiers.Shopping.SettingsCard.expandButton]
-        mozWaitForElementToExist(settingsSection)
-        mozWaitForElementToExist(expandButton)
+        waitForElementsToExist(
+            [
+                settingsSection,
+                expandButton
+            ]
+        )
         // Tap to open the section
         expandButton.tap()
         mozWaitForElementToExist(settingsSection)
@@ -177,8 +180,12 @@ class FakespotTests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         reachReviewChecker()
         // Opt-in card is displayed
-        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton])
+        waitForElementsToExist(
+            [
+                app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle],
+                app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton]
+            ]
+        )
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2358894
@@ -243,8 +250,12 @@ class FakespotTests: BaseTestCase {
             mozWaitForElementToExist(app.staticTexts["Adjusted rating"])
             validateHighlightsSection()
         } else {
-            mozWaitForElementToExist(app.staticTexts["No info about these reviews yet"])
-            mozWaitForElementToExist(app.buttons["Check Review Quality"])
+            waitForElementsToExist(
+                [
+                    app.staticTexts["No info about these reviews yet"],
+                    app.buttons["Check Review Quality"]
+                ]
+            )
         }
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.ReviewQualityCard.title])
         XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.ReviewQualityCard.title].label,
@@ -268,8 +279,7 @@ class FakespotTests: BaseTestCase {
         waitUntilPageLoad()
         if isWalmart {
             let searchWalmart = app.webViews["contentView"].searchFields["Search Walmart"]
-            searchWalmart.waitAndTap()
-            searchWalmart.typeText("shoe")
+            searchWalmart.tapAndTypeText("shoe")
             app.webViews["contentView"].buttons["Search icon"].waitAndTap()
             waitUntilPageLoad()
             scrollToElement(app.links.element(boundBy: 5))
@@ -286,8 +296,7 @@ class FakespotTests: BaseTestCase {
                 let searchText = "Type to search. Navigate forward to hear suggestions"
                 searchBestBuy = app.webViews["contentView"].textFields[searchText]
             }
-            searchBestBuy.waitAndTap()
-            searchBestBuy.typeText("macbook air")
+            searchBestBuy.tapAndTypeText("macbook air")
             app.webViews["contentView"].buttons["submit search"].waitAndTap()
             waitUntilPageLoad()
             scrollToElement(app.webViews["contentView"].links.elementContainingText("Apple").firstMatch)

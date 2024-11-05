@@ -124,8 +124,12 @@ class NavigationTest: BaseTestCase {
         navigator.performAction(Action.ToggleSyncMode)
 
         app.tables.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaSettingsButton].tap()
-        mozWaitForElementToExist(app.navigationBars["Sync and Save Data"])
-        mozWaitForElementToExist(app.buttons["Use Email Instead"])
+        waitForElementsToExist(
+            [
+                app.navigationBars["Sync and Save Data"],
+                app.buttons["Use Email Instead"]
+            ]
+        )
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441495
@@ -150,12 +154,16 @@ class NavigationTest: BaseTestCase {
     // Smoketest
     func testLongPressLinkOptions() {
         openContextMenuForArticleLink()
-        mozWaitForElementToExist(app.buttons["Open in New Tab"])
-        mozWaitForElementToExist(app.buttons["Open in New Private Tab"])
-        mozWaitForElementToExist(app.buttons["Copy Link"])
-        mozWaitForElementToExist(app.buttons["Download Link"])
-        mozWaitForElementToExist(app.buttons["Share Link"])
-        mozWaitForElementToExist(app.buttons["Bookmark Link"])
+        waitForElementsToExist(
+            [
+                app.buttons["Open in New Tab"],
+                app.buttons["Open in New Private Tab"],
+                app.buttons["Copy Link"],
+                app.buttons["Download Link"],
+                app.buttons["Share Link"],
+                app.buttons["Bookmark Link"]
+            ]
+        )
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441496
@@ -402,19 +410,22 @@ class NavigationTest: BaseTestCase {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables["Context Menu"])
-
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkTrayFill])
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.history])
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.download])
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.readingList])
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.login])
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.sync])
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.nightMode])
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.whatsNew])
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.helpCircle])
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.edit])
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.settings])
+        waitForElementsToExist(
+            [
+                app.tables["Context Menu"],
+                app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkTrayFill],
+                app.tables.otherElements[StandardImageIdentifiers.Large.history],
+                app.tables.otherElements[StandardImageIdentifiers.Large.download],
+                app.tables.otherElements[StandardImageIdentifiers.Large.readingList],
+                app.tables.otherElements[StandardImageIdentifiers.Large.login],
+                app.tables.otherElements[StandardImageIdentifiers.Large.sync],
+                app.tables.otherElements[StandardImageIdentifiers.Large.nightMode],
+                app.tables.otherElements[StandardImageIdentifiers.Large.whatsNew],
+                app.tables.otherElements[StandardImageIdentifiers.Large.helpCircle],
+                app.tables.otherElements[StandardImageIdentifiers.Large.edit],
+                app.tables.otherElements[StandardImageIdentifiers.Large.settings]
+            ]
+        )
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2441775
@@ -476,8 +487,12 @@ class NavigationTest: BaseTestCase {
         app.buttons["Bookmark Link"].tap()
         // The link has been added to the Bookmarks panel in Library
         navigator.goto(LibraryPanel_Bookmarks)
-        mozWaitForElementToExist(app.tables["Bookmarks List"])
-        mozWaitForElementToExist(app.tables["Bookmarks List"].staticTexts[website_2["link"]!])
+        waitForElementsToExist(
+            [
+                app.tables["Bookmarks List"],
+                app.tables["Bookmarks List"].staticTexts[website_2["link"]!]
+            ]
+        )
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2695828

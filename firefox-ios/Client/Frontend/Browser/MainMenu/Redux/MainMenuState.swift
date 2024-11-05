@@ -113,15 +113,14 @@ struct MainMenuState: ScreenState, Equatable {
                 accountIcon: state.accountIcon
             )
         case MainMenuMiddlewareActionType.updateAccountHeader:
-            guard let action = action as? MainMenuAction,
-                  let accountData = action.accountData
+            guard let action = action as? MainMenuAction
             else { return state }
 
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
                 currentTabInfo: state.currentTabInfo,
-                accountData: accountData,
+                accountData: action.accountData,
                 accountIcon: action.accountIcon
             )
         case MainMenuActionType.updateCurrentTabInfo:

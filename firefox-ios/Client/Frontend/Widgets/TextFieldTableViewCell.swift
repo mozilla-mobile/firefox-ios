@@ -57,12 +57,14 @@ class TextFieldTableViewCell: UITableViewCell, ThemeApplicable {
         title: String,
         textFieldText: String,
         autocapitalizationType: UITextAutocapitalizationType,
-        keyboardType: UIKeyboardType
+        keyboardType: UIKeyboardType,
+        textFieldAccessibilityIdentifier: String? = nil
     ) {
         titleLabel.text = title
         textField.text = textFieldText
         textField.autocapitalizationType = autocapitalizationType
         textField.keyboardType = keyboardType
+        textField.accessibilityIdentifier = textFieldAccessibilityIdentifier
     }
 
     func focusTextField() {
