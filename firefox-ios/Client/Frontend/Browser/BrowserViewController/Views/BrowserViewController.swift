@@ -1971,7 +1971,9 @@ class BrowserViewController: UIViewController,
                 StandardImageIdentifiers.Small.notificationDotFill : nil
             }
 
-            var lockIconImageName: String? = nil
+            var lockIconImageName: String?
+            var lockIconNeedsTheming: Bool = false
+
             if let hasSecureContent = tab.webView?.hasOnlySecureContent {
                 lockIconImageName = hasSecureContent ?
                 StandardImageIdentifiers.Large.lockFill :
@@ -1979,6 +1981,7 @@ class BrowserViewController: UIViewController,
 
                 let isWebsiteMode = tab.url?.isReaderModeURL == false
                 lockIconImageName = isWebsiteMode ? lockIconImageName : nil
+                lockIconNeedsTheming = isWebsiteMode ? hasSecureContent : false
             }
 
             let action = ToolbarAction(
@@ -1988,6 +1991,7 @@ class BrowserViewController: UIViewController,
                 canGoBack: tab.canGoBack,
                 canGoForward: tab.canGoForward,
                 lockIconImageName: lockIconImageName,
+                lockIconNeedsTheming: lockIconNeedsTheming,
                 safeListedURLImageName: safeListedURLImageName,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange)
