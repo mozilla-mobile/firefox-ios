@@ -56,24 +56,8 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
                 if let url = URL(string: url, invalidCharacters: false), url.isWebPage() {
                     do {
                         let readabilityResult = try readerModeCache.get(url)
-                        // We have this page in our cache, so we can display it. Just grab the correct style from the
-                        // profile and then generate HTML from the Readability results.
-                        if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle),
-                           let style = ReaderModeStyle(windowUUID: nil, dict: dict) {
-                            readerModeStyle = style
-                        } else {
-                            readerModeStyle.theme = ReaderModeTheme.preferredTheme(window: nil)
-                        }
-
-                        guard let html = ReaderModeUtils.generateReaderContent(
-                            readabilityResult,
-                            initialStyle: readerModeStyle
-                        ),
-                              let response = GCDWebServerDataResponse(html: html) else { return nil }
-                        // Apply a Content Security Policy that disallows everything except images from
-                        // anywhere and fonts and css from our internal server
-                        response.setValue("default-src 'none'; img-src *; style-src http://localhost:* '\(ReaderModeStyleHash)'; font-src http://localhost:*",
-                                          forAdditionalHeader: "Content-Security-Policy")
+                        guard let response = generateHtmlFor(readabilityResult: readabilityResult,
+                                                             profile: profile) else { return nil }
                         return response
                     } catch {
                         // This page has not been converted to reader mode yet. This happens when you for example add an
