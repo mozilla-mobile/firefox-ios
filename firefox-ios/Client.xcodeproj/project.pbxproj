@@ -605,7 +605,6 @@
 		74E36D781B71323500D69DA1 /* SettingsContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E36D771B71323500D69DA1 /* SettingsContentViewController.swift */; };
 		74F80D342A0A52D700013C3D /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F80D332A0A52D700013C3D /* PrivacyPolicyViewController.swift */; };
 		781C19CF2A780BEC0000DF46 /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 781C19CE2A780BEC0000DF46 /* Common */; };
-		782B0A362AB41DFC0049EE1A /* FakespotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 782B0A352AB41DFC0049EE1A /* FakespotTests.swift */; };
 		787EDD852943EE75002B93AE /* JumpBackInTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787EDD832943EE75002B93AE /* JumpBackInTests.swift */; };
 		78F28FC02CB81FDF00DA862E /* InactiveTabsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F28FBF2CB81FDF00DA862E /* InactiveTabsTest.swift */; };
 		78FE1E892B040E7000338465 /* FirefoxSuggestTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FE1E872B040E7000338465 /* FirefoxSuggestTest.swift */; };
@@ -6741,7 +6740,6 @@
 		7817451F8C836E21F734506D /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Menu.strings; sourceTree = "<group>"; };
 		7819488D9C50ED2293FA92B1 /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		781F4692919CC38F17A90EE3 /* anp */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = anp; path = anp.lproj/Intro.strings; sourceTree = "<group>"; };
-		782B0A352AB41DFC0049EE1A /* FakespotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotTests.swift; sourceTree = "<group>"; };
 		786E4F899C9E14715D44C1D2 /* gu-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "gu-IN"; path = "gu-IN.lproj/PrivateBrowsing.strings"; sourceTree = "<group>"; };
 		78784AF7A74084713651DC6D /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		787EDD832943EE75002B93AE /* JumpBackInTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpBackInTests.swift; sourceTree = "<group>"; };
@@ -10253,7 +10251,6 @@
 				2C4A07DB20246EAD0083E320 /* DragAndDropTests.swift */,
 				E1AF27352A13BDFE00CE5991 /* EngagementNotificationTests.swift */,
 				D4AFA84D2AFA5482000BFEAA /* ExperimentIntegrationTests.swift */,
-				782B0A352AB41DFC0049EE1A /* FakespotTests.swift */,
 				2C8C07761E7800EA00DC1237 /* FindInPageTests.swift */,
 				78FE1E872B040E7000338465 /* FirefoxSuggestTest.swift */,
 				39C261CB2018DE20009D97BD /* FxScreenGraphTests.swift */,
@@ -15471,7 +15468,6 @@
 				D4C35391283500A600F7DC7D /* PerformanceTests.swift in Sources */,
 				2CF449A51E7BFE2C00FD7595 /* NavigationTest.swift in Sources */,
 				2C2A91291FA2410D002E36BD /* HistoryTests.swift in Sources */,
-				782B0A362AB41DFC0049EE1A /* FakespotTests.swift in Sources */,
 				580B0C4221748CFE00448DF8 /* DataManagementTests.swift in Sources */,
 				3BF4B8E91D38497A00493393 /* BaseTestCase.swift in Sources */,
 				3D9CAA1C1EFCD655002434DD /* ClipBoardTests.swift in Sources */,

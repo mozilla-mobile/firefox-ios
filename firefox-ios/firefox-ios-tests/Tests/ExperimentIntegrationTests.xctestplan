@@ -61,7 +61,6 @@
         "DragAndDropTestIpad",
         "DragAndDropTests",
         "EngagementNotificationTests",
-        "FakespotTests",
         "FirefoxSuggestTest",
         "FirefoxSuggestTest\/testFirefoxSuggestExists()",
         "FxScreenGraphTests",
