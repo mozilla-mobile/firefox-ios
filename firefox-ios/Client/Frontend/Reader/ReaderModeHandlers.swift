@@ -89,7 +89,8 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
         }
     }
 
-    private static func generateHtmlFor(readabilityResult: ReadabilityResult, profile: Profile) -> GCDWebServerDataResponse? {
+    private static func generateHtmlFor(readabilityResult: ReadabilityResult,
+                                        profile: Profile) -> GCDWebServerDataResponse? {
         var readerModeStyle = ReaderModeStyle.defaultStyle()
 
         // We have this page in our cache, so we can display it. Just grab the correct style from the
