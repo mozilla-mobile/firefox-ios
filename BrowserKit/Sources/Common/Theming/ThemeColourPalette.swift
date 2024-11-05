@@ -97,4 +97,7 @@ public protocol ThemeColourPalette {
 
     // MARK: - Shadow
     var shadowDefault: UIColor { get }
+
+    // MARK: - Separators
+    var separatorDefault: UIColor { get }
 }
