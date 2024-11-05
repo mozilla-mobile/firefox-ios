@@ -39,7 +39,6 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .topSites, .pocket, .customizeHomepage])
 
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .header).count, 1)
-        XCTAssertEqual(snapshot.itemIdentifiers(inSection: .topSites).count, 0)
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .pocket).count, 1)
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .customizeHomepage).count, 1)
     }

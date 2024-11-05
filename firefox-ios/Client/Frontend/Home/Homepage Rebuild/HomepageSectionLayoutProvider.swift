@@ -9,6 +9,8 @@ import Common
 final class HomepageSectionLayoutProvider {
     struct UX {
         static let standardInset: CGFloat = 16
+        static let standardSpacing: CGFloat = 16
+        static let interGroupSpacing: CGFloat = 8
         static let iPadInset: CGFloat = 50
         static let spacingBetweenSections: CGFloat = 62
 
@@ -34,7 +36,6 @@ final class HomepageSectionLayoutProvider {
             static let fractionalWidthiPhoneLandscape: CGFloat = 0.46
             static let headerFooterHeight: CGFloat = 34
             static let interItemSpacing = NSCollectionLayoutSpacing.fixed(8)
-            static let interGroupSpacing: CGFloat = 8
 
             // The dimension of a cell
             // Fractions for iPhone to only show a slight portion of the next column
@@ -48,6 +49,11 @@ final class HomepageSectionLayoutProvider {
                     return .fractionalWidth(UX.PocketConstants.fractionalWidthiPhonePortrait)
                 }
             }
+        }
+
+        struct TopSitesConstants {
+            static let cellEstimatedSize = CGSize(width: 85, height: 94)
+            static let numberOfTilesPerRow = 4
         }
     }
 
@@ -80,7 +86,10 @@ final class HomepageSectionLayoutProvider {
         case .header:
             return createHeaderSectionLayout(for: traitCollection)
         case .topSites:
-            return createDefaultSectionLayout()
+            return createTopSitesSectionLayout(
+                for: traitCollection,
+                numberOfTilesPerRow: UX.TopSitesConstants.numberOfTilesPerRow
+            )
         case .pocket:
             return createPocketSectionLayout(for: traitCollection)
         case .customizeHomepage:
@@ -130,7 +139,7 @@ final class HomepageSectionLayoutProvider {
             top: 0,
             leading: 0,
             bottom: 0,
-            trailing: UX.PocketConstants.interGroupSpacing)
+            trailing: UX.interGroupSpacing)
 
         let section = NSCollectionLayoutSection(group: group)
 
@@ -153,18 +162,36 @@ final class HomepageSectionLayoutProvider {
         return section
     }
 
-    // TODO: FXIOS-10161 - Update with proper section layout
-    private func createDefaultSectionLayout() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
+    func createTopSitesSectionLayout(
+        for traitCollection: UITraitCollection,
+        numberOfTilesPerRow: Int
+    ) -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(UX.TopSitesConstants.cellEstimatedSize.height)
+        )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-        item.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0)
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1),
+            heightDimension: .estimated(UX.TopSitesConstants.cellEstimatedSize.height)
+        )
 
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(100))
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
+                                                       subitem: item,
+                                                       count: numberOfTilesPerRow)
 
+        group.interItemSpacing = NSCollectionLayoutSpacing.fixed(UX.standardSpacing)
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+
+        let leadingInset = UX.leadingInset(traitCollection: traitCollection)
+        section.contentInsets = NSDirectionalEdgeInsets(
+            top: 0,
+            leading: leadingInset,
+            bottom: UX.spacingBetweenSections - UX.interGroupSpacing,
+            trailing: leadingInset
+        )
+        section.interGroupSpacing = UX.standardSpacing
 
         return section
     }

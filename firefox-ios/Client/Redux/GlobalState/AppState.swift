@@ -65,6 +65,7 @@ let middlewares = [
     ThemeManagerMiddleware().themeManagerProvider,
     ToolbarMiddleware().toolbarProvider,
     SearchEngineSelectionMiddleware().searchEngineSelectionProvider,
+    TopSitesMiddleware().topSitesProvider,
     TrackingProtectionMiddleware().trackingProtectionProvider,
     PasswordGeneratorMiddleware().passwordGeneratorProvider,
     PocketMiddleware().pocketSectionProvider

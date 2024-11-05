@@ -41,15 +41,25 @@ final class HomepageViewControllerTests: XCTestCase {
         let sut = createSubject()
 
         XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 0)
-        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 1)
-        XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification])
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 6)
+        XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification,
+                                                           .FirefoxAccountChanged,
+                                                           .PrivateDataClearedHistory,
+                                                           .ProfileDidFinishSyncing,
+                                                           .TopSitesUpdated,
+                                                           .DefaultSearchEngineUpdated])
 
         sut.loadViewIfNeeded()
 
-        // Called in listenForThemeChange() and applyTheme(), so counted twice
         XCTAssertEqual(mockThemeManager?.getCurrentThemeCallCount, 1)
-        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 2)
-        XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification, .ThemeDidChange])
+        XCTAssertEqual(mockNotificationCenter?.addObserverCallCount, 7)
+        XCTAssertEqual(mockNotificationCenter?.observers, [UIApplication.didBecomeActiveNotification,
+                                                           .FirefoxAccountChanged,
+                                                           .PrivateDataClearedHistory,
+                                                           .ProfileDidFinishSyncing,
+                                                           .TopSitesUpdated,
+                                                           .DefaultSearchEngineUpdated,
+                                                           .ThemeDidChange])
     }
 
     // MARK: - Deinit State
