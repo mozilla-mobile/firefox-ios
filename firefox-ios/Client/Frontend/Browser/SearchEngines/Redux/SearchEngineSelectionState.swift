@@ -47,7 +47,7 @@ struct SearchEngineSelectionState: ScreenState, Equatable {
         // Only process actions for the current window
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
         else {
-            return defaultActionState(from: state, action: action)
+            return defaultActionState(from: state)
         }
 
         switch action.actionType {
@@ -55,7 +55,7 @@ struct SearchEngineSelectionState: ScreenState, Equatable {
             guard let action = action as? SearchEngineSelectionAction,
                   let searchEngines = action.searchEngines
             else {
-                return defaultActionState(from: state, action: action)
+                return defaultActionState(from: state)
             }
 
             return SearchEngineSelectionState(
@@ -64,11 +64,11 @@ struct SearchEngineSelectionState: ScreenState, Equatable {
             )
 
         default:
-            return defaultActionState(from: state, action: action)
+            return defaultActionState(from: state)
         }
     }
 
-    static func defaultActionState(from state: SearchEngineSelectionState, action: Action) -> SearchEngineSelectionState {
+    static func defaultActionState(from state: SearchEngineSelectionState) -> SearchEngineSelectionState {
         return SearchEngineSelectionState(
             windowUUID: state.windowUUID,
             searchEngines: state.searchEngines

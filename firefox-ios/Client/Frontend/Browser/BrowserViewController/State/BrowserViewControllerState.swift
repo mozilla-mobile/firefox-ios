@@ -180,7 +180,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             )
 
         default:
-            return defaultActionState(from: state, action: action)
+            return defaultActionState(from: state)
         }
     }
 

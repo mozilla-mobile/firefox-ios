@@ -77,12 +77,24 @@ struct AddressBarState: StateType, Equatable {
         a11yId: AccessibilityIdentifiers.Toolbar.fireButton)
 
     init(windowUUID: WindowUUID) {
-        self.init(windowUUID: windowUUID,
-                  navigationActions: [],
-                  pageActions: [],
-                  browserActions: [],
-                  borderPosition: nil,
-                  url: nil)
+        self.init(
+            windowUUID: windowUUID,
+            navigationActions: [],
+            pageActions: [],
+            browserActions: [],
+            borderPosition: nil,
+            url: nil,
+            searchTerm: nil,
+            lockIconImageName: nil,
+            safeListedURLImageName: nil,
+            isEditing: false,
+            isScrollingDuringEdit: false,
+            shouldSelectSearchTerm: true,
+            isLoading: false,
+            readerModeState: nil,
+            didStartTyping: false,
+            showQRPageAction: true
+        )
     }
 
     init(windowUUID: WindowUUID,
@@ -91,16 +103,16 @@ struct AddressBarState: StateType, Equatable {
          browserActions: [ToolbarActionState],
          borderPosition: AddressToolbarBorderPosition?,
          url: URL?,
-         searchTerm: String? = nil,
-         lockIconImageName: String? = nil,
-         safeListedURLImageName: String? = nil,
-         isEditing: Bool = false,
-         isScrollingDuringEdit: Bool = false,
-         shouldSelectSearchTerm: Bool = true,
-         isLoading: Bool = false,
-         readerModeState: ReaderModeState? = nil,
-         didStartTyping: Bool = false,
-         showQRPageAction: Bool = true) {
+         searchTerm: String?,
+         lockIconImageName: String?,
+         safeListedURLImageName: String?,
+         isEditing: Bool,
+         isScrollingDuringEdit: Bool,
+         shouldSelectSearchTerm: Bool,
+         isLoading: Bool,
+         readerModeState: ReaderModeState?,
+         didStartTyping: Bool,
+         showQRPageAction: Bool) {
         self.windowUUID = windowUUID
         self.navigationActions = navigationActions
         self.pageActions = pageActions
@@ -120,11 +132,17 @@ struct AddressBarState: StateType, Equatable {
     }
 
     static let reducer: Reducer<Self> = { state, action in
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
+        else {
+            return defaultActionState(from: state)
+        }
 
         switch action.actionType {
         case ToolbarActionType.didLoadToolbars:
-            guard let borderPosition = (action as? ToolbarAction)?.addressBorderPosition else { return state }
+            guard let borderPosition = (action as? ToolbarAction)?.addressBorderPosition
+            else {
+                return defaultActionState(from: state)
+            }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
@@ -132,11 +150,21 @@ struct AddressBarState: StateType, Equatable {
                 pageActions: [qrCodeScanAction],
                 browserActions: [tabsAction(), menuAction()],
                 borderPosition: borderPosition,
-                url: nil
+                url: nil,
+                searchTerm: nil,
+                lockIconImageName: nil,
+                safeListedURLImageName: nil,
+                isEditing: false,
+                isScrollingDuringEdit: false,
+                shouldSelectSearchTerm: true,
+                isLoading: false,
+                readerModeState: nil,
+                didStartTyping: false,
+                showQRPageAction: true
             )
 
         case ToolbarActionType.numberOfTabsChanged:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
+            guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
@@ -158,7 +186,7 @@ struct AddressBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.readerModeStateChanged:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
+            guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
@@ -183,7 +211,7 @@ struct AddressBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.websiteLoadingStateDidChange:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
+            guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
@@ -205,7 +233,7 @@ struct AddressBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.urlDidChange:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
+            guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
@@ -229,7 +257,7 @@ struct AddressBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.backForwardButtonStateChanged:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
+            guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
@@ -253,7 +281,7 @@ struct AddressBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.traitCollectionDidChange:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
+            guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
@@ -277,7 +305,7 @@ struct AddressBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.showMenuWarningBadge:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
+            guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
@@ -322,7 +350,7 @@ struct AddressBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.didPasteSearchTerm:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
+            guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
 
             let isEmptySearch = toolbarAction.searchTerm == nil || toolbarAction.searchTerm?.isEmpty == true
 
@@ -349,7 +377,7 @@ struct AddressBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.didStartEditingUrl:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
+            guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
 
             let searchTerm = toolbarAction.searchTerm ?? state.searchTerm
             let locationText = searchTerm ?? state.url?.absoluteString
@@ -378,7 +406,7 @@ struct AddressBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.cancelEdit:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
+            guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
 
             let url = toolbarAction.url ?? state.url
             let showQRPageAction = url == nil
@@ -406,7 +434,7 @@ struct AddressBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.didSetTextInLocationView:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
+            guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
 
             let isEmptySearch = toolbarAction.searchTerm == nil || toolbarAction.searchTerm?.isEmpty == true
 
@@ -424,6 +452,7 @@ struct AddressBarState: StateType, Equatable {
                 lockIconImageName: state.lockIconImageName,
                 safeListedURLImageName: state.safeListedURLImageName,
                 isEditing: true,
+                isScrollingDuringEdit: false,
                 shouldSelectSearchTerm: false,
                 isLoading: state.isLoading,
                 readerModeState: state.readerModeState,
@@ -452,7 +481,7 @@ struct AddressBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.clearSearch:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
+            guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
@@ -477,7 +506,7 @@ struct AddressBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.didDeleteSearchTerm:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
+            guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
@@ -491,6 +520,7 @@ struct AddressBarState: StateType, Equatable {
                 url: state.url,
                 searchTerm: state.searchTerm,
                 lockIconImageName: state.lockIconImageName,
+                safeListedURLImageName: state.safeListedURLImageName,
                 isEditing: state.isEditing,
                 isScrollingDuringEdit: state.isScrollingDuringEdit,
                 shouldSelectSearchTerm: state.shouldSelectSearchTerm,
@@ -501,7 +531,7 @@ struct AddressBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.didEnterSearchTerm:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
+            guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
 
             return AddressBarState(
                 windowUUID: state.windowUUID,
@@ -515,6 +545,7 @@ struct AddressBarState: StateType, Equatable {
                 url: state.url,
                 searchTerm: state.searchTerm,
                 lockIconImageName: state.lockIconImageName,
+                safeListedURLImageName: state.safeListedURLImageName,
                 isEditing: state.isEditing,
                 isScrollingDuringEdit: state.isScrollingDuringEdit,
                 shouldSelectSearchTerm: state.shouldSelectSearchTerm,
@@ -525,27 +556,8 @@ struct AddressBarState: StateType, Equatable {
             )
 
         case ToolbarActionType.didStartTyping:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
+            guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
 
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: state.navigationActions,
-                pageActions: state.pageActions,
-                browserActions: state.browserActions,
-                borderPosition: state.borderPosition,
-                url: state.url,
-                searchTerm: state.searchTerm,
-                lockIconImageName: state.lockIconImageName,
-                isEditing: state.isEditing,
-                isScrollingDuringEdit: state.isScrollingDuringEdit,
-                shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-                isLoading: state.isLoading,
-                readerModeState: state.readerModeState,
-                didStartTyping: true,
-                showQRPageAction: state.showQRPageAction
-            )
-
-        default:
             return AddressBarState(
                 windowUUID: state.windowUUID,
                 navigationActions: state.navigationActions,
@@ -561,10 +573,34 @@ struct AddressBarState: StateType, Equatable {
                 shouldSelectSearchTerm: state.shouldSelectSearchTerm,
                 isLoading: state.isLoading,
                 readerModeState: state.readerModeState,
-                didStartTyping: state.didStartTyping,
+                didStartTyping: true,
                 showQRPageAction: state.showQRPageAction
             )
+
+        default:
+            return defaultActionState(from: state)
         }
+    }
+
+    static func defaultActionState(from state: AddressBarState) -> AddressBarState {
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            pageActions: state.pageActions,
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: state.didStartTyping,
+            showQRPageAction: state.showQRPageAction
+        )
     }
 
     // MARK: - Address Toolbar Actions

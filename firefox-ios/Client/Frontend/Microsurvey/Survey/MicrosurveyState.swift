@@ -45,7 +45,10 @@ struct MicrosurveyState: ScreenState, Equatable {
     }
 
     static let reducer: Reducer<Self> = { state, action in
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
+        else {
+            return defaultActionState(from: state)
+        }
 
         switch action.actionType {
         case MicrosurveyActionType.closeSurvey:
@@ -61,11 +64,11 @@ struct MicrosurveyState: ScreenState, Equatable {
                 showPrivacy: true
             )
         default:
-            return defaultActionState(from: state, action: action)
+            return defaultActionState(from: state)
         }
     }
 
-    static func defaultActionState(from state: MicrosurveyState, action: Action) -> MicrosurveyState {
+    static func defaultActionState(from state: MicrosurveyState) -> MicrosurveyState {
         return MicrosurveyState(
             windowUUID: state.windowUUID,
             shouldDismiss: false,

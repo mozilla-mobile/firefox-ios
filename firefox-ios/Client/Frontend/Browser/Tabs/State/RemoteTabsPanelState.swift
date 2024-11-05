@@ -98,7 +98,7 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
     static let reducer: Reducer<Self> = { state, action in
         // Only process actions for the current window
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID,
-              let action = action as? RemoteTabsPanelAction else { return state }
+              let action = action as? RemoteTabsPanelAction else { return defaultActionState(from: state) }
 
         switch action.actionType {
         case RemoteTabsPanelActionType.refreshDidBegin:
@@ -110,7 +110,7 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
                                                 devices: state.devices)
             return newState
         case RemoteTabsPanelActionType.refreshDidFail:
-            guard let reason = action.reason else { return state }
+            guard let reason = action.reason else { return defaultActionState(from: state) }
             // Refresh failed. Show error empty state.
             let allowsRefresh = reason.allowsRefresh
             let newState = RemoteTabsPanelState(windowUUID: state.windowUUID,
@@ -121,7 +121,7 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
                                                 devices: state.devices)
             return newState
         case RemoteTabsPanelActionType.refreshDidSucceed:
-            guard let clientAndTabs = action.clientAndTabs else { return state }
+            guard let clientAndTabs = action.clientAndTabs else { return defaultActionState(from: state) }
             let newState = RemoteTabsPanelState(windowUUID: state.windowUUID,
                                                 refreshState: .idle,
                                                 allowsRefresh: true,
@@ -130,7 +130,7 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
                                                 devices: action.devices ?? state.devices)
             return newState
         case RemoteTabsPanelActionType.remoteDevicesChanged:
-            guard let devices = action.devices else { return state }
+            guard let devices = action.devices else { return defaultActionState(from: state) }
             let newState = RemoteTabsPanelState(windowUUID: state.windowUUID,
                                                 refreshState: .idle,
                                                 allowsRefresh: state.allowsRefresh,
@@ -139,11 +139,11 @@ struct RemoteTabsPanelState: ScreenState, Equatable {
                                                 devices: devices)
             return newState
         default:
-            return defaultActionState(from: state, action: action)
+            return defaultActionState(from: state)
         }
     }
 
-    static func defaultActionState(from state: RemoteTabsPanelState, action: Action) -> RemoteTabsPanelState {
+    static func defaultActionState(from state: RemoteTabsPanelState) -> RemoteTabsPanelState {
         return RemoteTabsPanelState(windowUUID: state.windowUUID,
                                     refreshState: state.refreshState,
                                     allowsRefresh: state.allowsRefresh,

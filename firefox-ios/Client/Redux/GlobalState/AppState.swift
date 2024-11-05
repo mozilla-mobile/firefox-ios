@@ -10,7 +10,7 @@ struct AppState: StateType {
     let activeScreens: ActiveScreensState
 
     static let reducer: Reducer<Self> = { state, action in
-        AppState(activeScreens: ActiveScreensState.reducer(state.activeScreens, action))
+        return AppState(activeScreens: ActiveScreensState.reducer(state.activeScreens, action))
     }
 
     func screenState<S: ScreenState>(_ s: S.Type,
@@ -46,6 +46,10 @@ struct AppState: StateType {
 
                 return $0.windowUUID == expectedUUID
             })
+    }
+
+    static func defaultActionState(from state: AppState) -> AppState {
+        return AppState(activeScreens: state.activeScreens)
     }
 }
 
