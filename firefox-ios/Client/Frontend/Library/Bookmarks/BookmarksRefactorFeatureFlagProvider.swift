@@ -7,7 +7,7 @@ import Foundation
 protocol BookmarksRefactorFeatureFlagProvider {}
 
 extension BookmarksRefactorFeatureFlagProvider {
-    var featureFlags: LegacyFeatureFlagsManager {
+    private var featureFlags: LegacyFeatureFlagsManager {
         return LegacyFeatureFlagsManager.shared
     }
 
