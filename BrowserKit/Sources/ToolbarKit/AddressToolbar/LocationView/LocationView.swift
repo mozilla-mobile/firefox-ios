@@ -25,6 +25,7 @@ final class LocationView: UIView,
     private weak var delegate: LocationViewDelegate?
     private var isUnifiedSearchEnabled = false
     private var lockIconImageName: String?
+    private var lockIconNeedsTheming: Bool = false
     private var safeListedURLImageName: String?
 
     private var isEditing = false
@@ -320,6 +321,7 @@ final class LocationView: UIView,
     // MARK: - `lockIconButton` Configuration
     private func configureLockIconButton(_ state: LocationViewState) {
         lockIconImageName = state.lockIconImageName
+        lockIconNeedsTheming = state.lockIconNeedsTheming
         safeListedURLImageName = state.safeListedURLImageName
         guard lockIconImageName != nil else {
             updateWidthForLockIcon(0)
@@ -336,13 +338,23 @@ final class LocationView: UIView,
         var lockImage: UIImage?
 
         if let safeListedURLImageName {
-            lockImage = UIImage(named: lockIconImageName)?.withTintColor(lockIconImageColor)
+            lockImage = UIImage(named: lockIconImageName)
+
+            if lockIconNeedsTheming {
+                lockImage = lockImage?.withTintColor(lockIconImageColor)
+            }
+
             if let dotImage = UIImage(named: safeListedURLImageName)?.withTintColor(safeListedURLImageColor) {
                 let image = lockImage!.overlayWith(image: dotImage, modifier: 0.4, origin: CGPoint(x: 13.5, y: 13))
                 lockIconButton.setImage(image, for: .normal)
             }
         } else {
-            lockImage = UIImage(named: lockIconImageName)?.withRenderingMode(.alwaysTemplate)
+            lockImage = UIImage(named: lockIconImageName)
+
+            if lockIconNeedsTheming {
+                lockImage = lockImage?.withRenderingMode(.alwaysTemplate)
+            }
+
             lockIconButton.setImage(lockImage, for: .normal)
         }
     }
@@ -449,11 +461,14 @@ final class LocationView: UIView,
         gradientLayer.colors = colors.layerGradientURL.cgColors.reversed()
         searchEngineContentView.applyTheme(theme: theme)
         iconContainerBackgroundView.backgroundColor = colors.layerSearch
-        lockIconButton.tintColor = colors.iconPrimary
         lockIconButton.backgroundColor = colors.layerSearch
         urlTextField.applyTheme(theme: theme)
-        lockIconImageColor = colors.iconPrimary
         safeListedURLImageColor = colors.iconAccentBlue
+
+        if lockIconNeedsTheming {
+            lockIconButton.tintColor = colors.iconPrimary
+            lockIconImageColor = colors.iconPrimary
+        }
         setLockIconImage()
     }
 
