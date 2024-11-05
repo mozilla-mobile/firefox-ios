@@ -8,16 +8,28 @@ import Common
 import Shared
 
 struct TrackingProtectionState: StateType, Equatable, ScreenState {
+    enum NavType {
+        case home
+        case back
+        case close
+        case settings
+    }
+
+    enum DisplayType: Equatable {
+        case blockedTrackersDetails
+        case trackingProtectionDetails
+        case certificatesDetails
+        case clearCookiesAlert
+    }
+
     let windowUUID: WindowUUID
-    var shouldDismiss: Bool
-    var showTrackingProtectionSettings: Bool
-    var showDetails: Bool
-    var showBlockedTrackers: Bool
     var trackingProtectionEnabled: Bool
     var connectionSecure: Bool
-    var showsClearCookiesAlert: Bool
     var shouldClearCookies: Bool
     var shouldUpdateBlockedTrackerStats: Bool
+    var shouldUpdateConnectionStatus: Bool
+    var navigateTo: NavType?
+    var displayView: DisplayType?
 
     init(appState: AppState,
          uuid: WindowUUID) {
@@ -32,15 +44,13 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
 
         self.init(
             windowUUID: trackingProtectionState.windowUUID,
-            shouldDismiss: trackingProtectionState.shouldDismiss,
-            showTrackingProtectionSettings: trackingProtectionState.showTrackingProtectionSettings,
             trackingProtectionEnabled: trackingProtectionState.trackingProtectionEnabled,
             connectionSecure: trackingProtectionState.connectionSecure,
-            showDetails: trackingProtectionState.showDetails,
-            showBlockedTrackers: trackingProtectionState.showBlockedTrackers,
-            showsClearCookiesAlert: trackingProtectionState.showsClearCookiesAlert,
             shouldClearCookies: trackingProtectionState.shouldClearCookies,
-            shouldUpdateBlockedTrackerStats: trackingProtectionState.shouldUpdateBlockedTrackerStats
+            shouldUpdateBlockedTrackerStats: trackingProtectionState.shouldUpdateBlockedTrackerStats,
+            shouldUpdateConnectionStatus: trackingProtectionState.shouldUpdateConnectionStatus,
+            navigateTo: trackingProtectionState.navigateTo,
+            displayView: trackingProtectionState.displayView
         )
     }
 
@@ -49,40 +59,34 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
     ) {
         self.init(
             windowUUID: windowUUID,
-            shouldDismiss: false,
-            showTrackingProtectionSettings: false,
             trackingProtectionEnabled: true,
             connectionSecure: true,
-            showDetails: false,
-            showBlockedTrackers: false,
-            showsClearCookiesAlert: false,
             shouldClearCookies: false,
-            shouldUpdateBlockedTrackerStats: false
+            shouldUpdateBlockedTrackerStats: false,
+            shouldUpdateConnectionStatus: false,
+            navigateTo: .home,
+            displayView: nil
         )
     }
 
     private init(
         windowUUID: WindowUUID,
-        shouldDismiss: Bool,
-        showTrackingProtectionSettings: Bool,
         trackingProtectionEnabled: Bool,
         connectionSecure: Bool,
-        showDetails: Bool,
-        showBlockedTrackers: Bool,
-        showsClearCookiesAlert: Bool,
         shouldClearCookies: Bool,
-        shouldUpdateBlockedTrackerStats: Bool
+        shouldUpdateBlockedTrackerStats: Bool,
+        shouldUpdateConnectionStatus: Bool,
+        navigateTo: NavType? = nil,
+        displayView: DisplayType? = nil
     ) {
         self.windowUUID = windowUUID
-        self.shouldDismiss = shouldDismiss
-        self.showTrackingProtectionSettings = showTrackingProtectionSettings
         self.trackingProtectionEnabled = trackingProtectionEnabled
         self.connectionSecure = connectionSecure
-        self.showDetails = showDetails
-        self.showBlockedTrackers = showBlockedTrackers
-        self.showsClearCookiesAlert = showsClearCookiesAlert
         self.shouldClearCookies = shouldClearCookies
         self.shouldUpdateBlockedTrackerStats = shouldUpdateBlockedTrackerStats
+        self.shouldUpdateConnectionStatus = shouldUpdateConnectionStatus
+        self.navigateTo = navigateTo
+        self.displayView = displayView
     }
 
     static let reducer: Reducer<TrackingProtectionState> = { state, action in
@@ -95,119 +99,112 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
         case TrackingProtectionMiddlewareActionType.clearCookies:
             return TrackingProtectionState(
                 windowUUID: state.windowUUID,
-                shouldDismiss: false,
-                showTrackingProtectionSettings: false,
                 trackingProtectionEnabled: !state.trackingProtectionEnabled,
                 connectionSecure: state.connectionSecure,
-                showDetails: false,
-                showBlockedTrackers: false,
-                showsClearCookiesAlert: false,
                 shouldClearCookies: true,
-                shouldUpdateBlockedTrackerStats: false
+                shouldUpdateBlockedTrackerStats: false,
+                shouldUpdateConnectionStatus: false,
+                navigateTo: .home,
+                displayView: nil
             )
         case TrackingProtectionMiddlewareActionType.navigateToSettings:
             return TrackingProtectionState(
                 windowUUID: state.windowUUID,
-                shouldDismiss: true,
-                showTrackingProtectionSettings: true,
                 trackingProtectionEnabled: state.trackingProtectionEnabled,
                 connectionSecure: state.connectionSecure,
-                showDetails: false,
-                showBlockedTrackers: false,
-                showsClearCookiesAlert: false,
                 shouldClearCookies: false,
-                shouldUpdateBlockedTrackerStats: false
+                shouldUpdateBlockedTrackerStats: false,
+                shouldUpdateConnectionStatus: false,
+                navigateTo: .settings,
+                displayView: nil
             )
         case TrackingProtectionMiddlewareActionType.showTrackingProtectionDetails:
             return TrackingProtectionState(
                 windowUUID: state.windowUUID,
-                shouldDismiss: false,
-                showTrackingProtectionSettings: false,
                 trackingProtectionEnabled: state.trackingProtectionEnabled,
                 connectionSecure: state.connectionSecure,
-                showDetails: true,
-                showBlockedTrackers: false,
-                showsClearCookiesAlert: false,
                 shouldClearCookies: false,
-                shouldUpdateBlockedTrackerStats: false
+                shouldUpdateBlockedTrackerStats: false,
+                shouldUpdateConnectionStatus: false,
+                navigateTo: nil,
+                displayView: .trackingProtectionDetails
             )
         case TrackingProtectionMiddlewareActionType.showBlockedTrackersDetails:
             return TrackingProtectionState(
                 windowUUID: state.windowUUID,
-                shouldDismiss: false,
-                showTrackingProtectionSettings: false,
                 trackingProtectionEnabled: state.trackingProtectionEnabled,
                 connectionSecure: state.connectionSecure,
-                showDetails: false,
-                showBlockedTrackers: true,
-                showsClearCookiesAlert: false,
                 shouldClearCookies: false,
-                shouldUpdateBlockedTrackerStats: false
+                shouldUpdateBlockedTrackerStats: false,
+                shouldUpdateConnectionStatus: false,
+                navigateTo: nil,
+                displayView: .blockedTrackersDetails
             )
         case TrackingProtectionActionType.goBack:
             return TrackingProtectionState(
                 windowUUID: state.windowUUID,
-                shouldDismiss: false,
-                showTrackingProtectionSettings: false,
                 trackingProtectionEnabled: state.trackingProtectionEnabled,
                 connectionSecure: state.connectionSecure,
-                showDetails: false,
-                showBlockedTrackers: false,
-                showsClearCookiesAlert: false,
                 shouldClearCookies: false,
-                shouldUpdateBlockedTrackerStats: false
+                shouldUpdateBlockedTrackerStats: false,
+                shouldUpdateConnectionStatus: false,
+                navigateTo: .back,
+                displayView: nil
             )
         case TrackingProtectionActionType.updateBlockedTrackerStats:
             return TrackingProtectionState(
                 windowUUID: state.windowUUID,
-                shouldDismiss: false,
-                showTrackingProtectionSettings: false,
                 trackingProtectionEnabled: state.trackingProtectionEnabled,
                 connectionSecure: state.connectionSecure,
-                showDetails: false,
-                showBlockedTrackers: false,
-                showsClearCookiesAlert: false,
+                shouldClearCookies: state.shouldClearCookies,
+                shouldUpdateBlockedTrackerStats: true,
+                shouldUpdateConnectionStatus: false,
+                navigateTo: nil,
+                displayView: nil
+            )
+        case TrackingProtectionActionType.updateConnectionStatus:
+            return TrackingProtectionState(
+                windowUUID: state.windowUUID,
+                trackingProtectionEnabled: state.trackingProtectionEnabled,
+                connectionSecure: state.connectionSecure,
                 shouldClearCookies: false,
-                shouldUpdateBlockedTrackerStats: true
+                shouldUpdateBlockedTrackerStats: false,
+                shouldUpdateConnectionStatus: true,
+                navigateTo: nil,
+                displayView: nil
             )
         case TrackingProtectionMiddlewareActionType.showAlert:
             return TrackingProtectionState(
                 windowUUID: state.windowUUID,
-                shouldDismiss: false,
-                showTrackingProtectionSettings: false,
                 trackingProtectionEnabled: state.trackingProtectionEnabled,
                 connectionSecure: state.connectionSecure,
-                showDetails: false,
-                showBlockedTrackers: false,
-                showsClearCookiesAlert: true,
                 shouldClearCookies: false,
-                shouldUpdateBlockedTrackerStats: false
+                shouldUpdateBlockedTrackerStats: false,
+                shouldUpdateConnectionStatus: false,
+                navigateTo: nil,
+                displayView: .clearCookiesAlert
             )
         case TrackingProtectionActionType.toggleTrackingProtectionStatus:
             return TrackingProtectionState(
                 windowUUID: state.windowUUID,
-                shouldDismiss: false,
-                showTrackingProtectionSettings: false,
                 trackingProtectionEnabled: !state.trackingProtectionEnabled,
                 connectionSecure: state.connectionSecure,
-                showDetails: false,
-                showBlockedTrackers: false,
-                showsClearCookiesAlert: false,
                 shouldClearCookies: false,
-                shouldUpdateBlockedTrackerStats: false
+                shouldUpdateBlockedTrackerStats: false,
+                shouldUpdateConnectionStatus: false,
+                navigateTo: nil,
+                displayView: nil
             )
         case TrackingProtectionMiddlewareActionType.dismissTrackingProtection:
             return TrackingProtectionState(
                 windowUUID: state.windowUUID,
-                shouldDismiss: true,
-                showTrackingProtectionSettings: false,
                 trackingProtectionEnabled: state.trackingProtectionEnabled,
                 connectionSecure: state.connectionSecure,
-                showDetails: false,
-                showBlockedTrackers: false,
-                showsClearCookiesAlert: false,
                 shouldClearCookies: false,
-                shouldUpdateBlockedTrackerStats: false
+                shouldUpdateBlockedTrackerStats: false,
+                shouldUpdateConnectionStatus: false,
+                navigateTo: .close,
+                displayView: nil
             )
         default:
             return defaultState(from: state)
@@ -217,15 +214,13 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
     static func defaultState(from state: TrackingProtectionState) -> TrackingProtectionState {
         return TrackingProtectionState(
             windowUUID: state.windowUUID,
-            shouldDismiss: false,
-            showTrackingProtectionSettings: false,
             trackingProtectionEnabled: state.trackingProtectionEnabled,
             connectionSecure: state.connectionSecure,
-            showDetails: false,
-            showBlockedTrackers: false,
-            showsClearCookiesAlert: false,
             shouldClearCookies: false,
-            shouldUpdateBlockedTrackerStats: false
+            shouldUpdateBlockedTrackerStats: false,
+            shouldUpdateConnectionStatus: false,
+            navigateTo: nil,
+            displayView: nil
         )
     }
 }
