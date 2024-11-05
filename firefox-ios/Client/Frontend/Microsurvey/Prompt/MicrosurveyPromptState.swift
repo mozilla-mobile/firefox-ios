@@ -76,4 +76,13 @@ struct MicrosurveyPromptState: StateType, Equatable {
             model: model
         )
     }
+
+    private static func handleClosePromptAction(state: Self) -> Self {
+        return MicrosurveyPromptState(
+            windowUUID: state.windowUUID,
+            showPrompt: false,
+            showSurvey: false,
+            model: state.model
+        )
+    }
 }
