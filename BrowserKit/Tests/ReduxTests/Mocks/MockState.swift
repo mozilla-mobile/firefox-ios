@@ -27,7 +27,7 @@ struct MockState: StateType, Equatable {
 
         return defaultActionState(from: state)
     }
-    
+
     static func defaultActionState(from state: MockState) -> MockState {
         return state
     }

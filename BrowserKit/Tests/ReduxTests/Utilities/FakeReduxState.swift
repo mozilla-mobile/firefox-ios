@@ -26,7 +26,7 @@ struct FakeReduxState: StateType, Equatable {
             return defaultActionState(from: state)
         }
     }
-    
+
     static func defaultActionState(from state: FakeReduxState) -> FakeReduxState {
         return state
     }
