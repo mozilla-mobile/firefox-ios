@@ -23,6 +23,7 @@ final class NativeErrorPageAction: Action {
 
 enum NativeErrorPageActionType: ActionType {
     case receivedError
+    case errorPageLoaded
 }
 
 enum NativeErrorPageMiddlewareActionType: ActionType {

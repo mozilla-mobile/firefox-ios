@@ -8,25 +8,27 @@ import Shared
 import Common
 
 final class NativeErrorPageMiddleware {
-    lazy var nativeErrorPageProvider: Middleware<AppState> = { state, action in
+    private var nativeErrorPageHelper: NativeErrorPageHelper?
+    lazy var nativeErrorPageProvider: Middleware<AppState> = { [self] state, action in
         let windowUUID = action.windowUUID
-
         switch action.actionType {
         case NativeErrorPageActionType.receivedError:
             guard let action = action as? NativeErrorPageAction, let error = action.networkError else {return}
-            self.initializeNativeErrorPage(windowUUID: windowUUID, error: error)
-            break
+            nativeErrorPageHelper = NativeErrorPageHelper(error: error)
+        case NativeErrorPageActionType.errorPageLoaded:
+            self.initializeNativeErrorPage(windowUUID: windowUUID)
         default:
             break
         }
     }
 
-    private func initializeNativeErrorPage(windowUUID: WindowUUID, error: NSError) {
-        let model = NativeErrorPageHelper(error: error).parseErrorDetails()
-
-        store.dispatch(NativeErrorPageAction(nativePageErrorModel: model,
-                                             windowUUID: windowUUID,
-                                             actionType: NativeErrorPageMiddlewareActionType.initialize)
-        )
+    private func initializeNativeErrorPage(windowUUID: WindowUUID) {
+        if let helper = nativeErrorPageHelper {
+            let model = helper.parseErrorDetails()
+            store.dispatch(NativeErrorPageAction(nativePageErrorModel: model,
+                                                 windowUUID: windowUUID,
+                                                 actionType: NativeErrorPageMiddlewareActionType.initialize)
+            )
+        }
     }
 }

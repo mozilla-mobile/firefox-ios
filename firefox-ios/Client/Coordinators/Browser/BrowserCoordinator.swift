@@ -187,6 +187,7 @@ class BrowserCoordinator: BaseCoordinator,
         }
 
         screenshotService.screenshotableView = webviewController
+        self.errorViewController = nil
     }
 
     func browserHasLoaded() {
@@ -872,10 +873,12 @@ class BrowserCoordinator: BaseCoordinator,
 
     func showNativeErrorPage(overlayManager: OverlayModeManager) {
         // TODO: FXIOS-9641 #21239 Integration with Redux - presenting view
-        let errorpageController = NativeErrorPageViewController(windowUUID: windowUUID,
-                                                                overlayManager: overlayManager)
+        let errorpageController = self.errorViewController ?? NativeErrorPageViewController(
+            windowUUID: windowUUID,
+            overlayManager: overlayManager
+        )
         guard browserViewController.embedContent(errorpageController) else {
-            logger.log("Unable to embed private homepage", level: .debug, category: .coordinator)
+            logger.log("Unable to embed error page", level: .debug, category: .coordinator)
             return
         }
         self.errorViewController = errorpageController
