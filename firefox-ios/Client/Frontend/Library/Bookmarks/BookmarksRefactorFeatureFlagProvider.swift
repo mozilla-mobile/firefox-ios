@@ -7,7 +7,11 @@ import Foundation
 protocol BookmarksRefactorFeatureFlagProvider {}
 
 extension BookmarksRefactorFeatureFlagProvider {
+    var featureFlags: LegacyFeatureFlagsManager {
+        return LegacyFeatureFlagsManager.shared
+    }
+
     var isBookmarkRefactorEnabled: Bool {
-        NimbusManager.shared.featureFlagLayer.checkNimbusConfigFor(.bookmarksRefactor)
+        return featureFlags.isFeatureEnabled(.bookmarksRefactor, checking: .buildOnly)
     }
 }
