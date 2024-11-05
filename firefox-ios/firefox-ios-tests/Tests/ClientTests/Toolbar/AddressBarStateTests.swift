@@ -94,11 +94,10 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertEqual(newState.browserActions.count, 3)
-        XCTAssertEqual(newState.browserActions[0].actionType, .newTab)
-        XCTAssertEqual(newState.browserActions[1].actionType, .tabs)
-        XCTAssertEqual(newState.browserActions[1].numberOfTabs, 2)
-        XCTAssertEqual(newState.browserActions[2].actionType, .menu)
+        XCTAssertEqual(newState.browserActions.count, 2)
+        XCTAssertEqual(newState.browserActions[0].actionType, .tabs)
+        XCTAssertEqual(newState.browserActions[0].numberOfTabs, 2)
+        XCTAssertEqual(newState.browserActions[1].actionType, .menu)
     }
 
     func test_clearSearchAction_returnsExpectedState() {
