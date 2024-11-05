@@ -28,19 +28,27 @@ final class NativeErrorPageViewController: UIViewController,
     // MARK: UI Elements
     private struct UX {
         static let logoSizeWidth: CGFloat = 221
+        static let logoSizeWidthiPad: CGFloat = 240
         static let mainStackSpacing: CGFloat = 24
         static let textStackSpacing: CGFloat = 16
+        static let reloadButtonIpadMultiplier = 0.7146
         static let portraitPadding = NSDirectionalEdgeInsets(
-            top: 76,
-            leading: 16,
+            top: 120,
+            leading: 32,
             bottom: -16,
-            trailing: -16
+            trailing: -32
         )
         static let landscapePadding = NSDirectionalEdgeInsets(
             top: 60,
             leading: 64,
             bottom: -16,
             trailing: -64
+        )
+        static let iPadPadding = NSDirectionalEdgeInsets(
+            top: 100,
+            leading: 166,
+            bottom: -16,
+            trailing: -144
         )
     }
 
@@ -73,6 +81,7 @@ final class NativeErrorPageViewController: UIViewController,
         label.font = FXFontStyles.Bold.title2.scaledFont()
         label.numberOfLines = 0
         label.text = .NativeErrorPage.NoInternetConnection.TitleLabel
+        label.textAlignment = .left
     }
 
     private lazy var errorDescriptionLabel: UILabel = .build { label in
@@ -80,6 +89,7 @@ final class NativeErrorPageViewController: UIViewController,
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.text = .NativeErrorPage.NoInternetConnection.Description
+        label.textAlignment = .left
     }
 
     private lazy var reloadButton: PrimaryRoundedButton = .build { button in
@@ -87,7 +97,9 @@ final class NativeErrorPageViewController: UIViewController,
         button.isEnabled = true
     }
 
-    private var contraintsList = [NSLayoutConstraint]()
+    private var commonContraintsList = [NSLayoutConstraint]()
+    private var iPhoneContraintsList = [NSLayoutConstraint]()
+    private var iPadContraintsList = [NSLayoutConstraint]()
 
     required init?(
         coder aDecoder: NSCoder
@@ -138,6 +150,12 @@ final class NativeErrorPageViewController: UIViewController,
         showViewForCurrentOrientation()
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        adjustConstraints()
+        showViewForCurrentOrientation()
+    }
+
     // TODO: FXIOS-9639 #21237 [a11y] Verify accessibility for Voice Over, Dynamic text
     private func configureUI() {
         let viewModel = PrimaryRoundedButtonViewModel(
@@ -161,8 +179,8 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     func adjustConstraints() {
-        NSLayoutConstraint.deactivate(contraintsList)
-        contraintsList = [
+        NSLayoutConstraint.deactivate(iPhoneContraintsList + iPadContraintsList + commonContraintsList)
+        commonContraintsList = [
             scrollView.topAnchor.constraint(
                 equalTo: view.safeAreaLayoutGuide.topAnchor
             ),
@@ -174,7 +192,10 @@ final class NativeErrorPageViewController: UIViewController,
             ),
             scrollView.bottomAnchor.constraint(
                 equalTo: view.bottomAnchor
-            ),
+            )
+        ]
+
+        iPhoneContraintsList = [
             scrollContainer.topAnchor.constraint(
                 equalTo: scrollView.topAnchor,
                 constant: self.isLandscape ? UX.landscapePadding.top : UX.portraitPadding.top
@@ -193,7 +214,38 @@ final class NativeErrorPageViewController: UIViewController,
             ),
             logoImage.widthAnchor.constraint(equalToConstant: UX.logoSizeWidth)
         ]
-        NSLayoutConstraint.activate(contraintsList)
+
+        iPadContraintsList = [
+            scrollContainer.topAnchor.constraint(
+                equalTo: scrollView.topAnchor,
+                constant: UX.iPadPadding.top
+            ),
+            scrollContainer.leadingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor,
+                constant: UX.iPadPadding.leading
+            ),
+            scrollContainer.trailingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
+                constant: UX.iPadPadding.trailing
+            ),
+            scrollContainer.bottomAnchor.constraint(
+                equalTo: scrollView.bottomAnchor,
+                constant: UX.iPadPadding.bottom
+            ),
+            logoImage.widthAnchor.constraint(equalToConstant: UX.logoSizeWidthiPad),
+            reloadButton.widthAnchor.constraint(
+                equalTo: commonContainer.widthAnchor,
+                multiplier: UX.reloadButtonIpadMultiplier
+            )
+        ]
+
+        NSLayoutConstraint.activate(commonContraintsList)
+
+        if shouldUseiPadSetup() {
+            NSLayoutConstraint.activate(iPadContraintsList)
+        } else {
+            NSLayoutConstraint.activate(iPhoneContraintsList)
+        }
     }
 
     private var isLandscape: Bool {
@@ -201,14 +253,11 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     private func showViewForCurrentOrientation() {
-        if isLandscape {
-            scrollContainer.axis = .horizontal
-            titleLabel.textAlignment = .left
-            errorDescriptionLabel.textAlignment = .left
+        commonContainer.distribution = .equalCentering
+        if shouldUseiPadSetup() {
+            scrollContainer.axis = .horizontal // Use horizontal layout for iPad setup
         } else {
-            scrollContainer.axis = .vertical
-            titleLabel.textAlignment = .center
-            errorDescriptionLabel.textAlignment = .center
+            scrollContainer.axis = self.isLandscape ? .horizontal : .vertical // For non-iPad or compact size classes
         }
     }
 
