@@ -57,11 +57,11 @@ struct ThemeSettingsState: ScreenState, Equatable {
     static let reducer: Reducer<Self> = { state, action in
         // Only process actions for the current window
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID,
-         let action = action as? ThemeSettingsMiddlewareAction else { return state }
+         let action = action as? ThemeSettingsMiddlewareAction else { return defaultActionState(from: state) }
 
         switch action.actionType {
         case ThemeSettingsMiddlewareActionType.receivedThemeManagerValues:
-            return action.themeSettingsState ?? state
+            return action.themeSettingsState ?? defaultActionState(from: state)
 
         case ThemeSettingsMiddlewareActionType.systemThemeChanged:
             let useSystemAppearance = action.themeSettingsState?.useSystemAppearance ?? state.useSystemAppearance
@@ -113,13 +113,6 @@ struct ThemeSettingsState: ScreenState, Equatable {
         }
     }
 
-    static func == (lhs: ThemeSettingsState, rhs: ThemeSettingsState) -> Bool {
-        return lhs.useSystemAppearance == rhs.useSystemAppearance
-        && lhs.isAutomaticBrightnessEnabled == rhs.isAutomaticBrightnessEnabled
-        && lhs.manualThemeSelected == rhs.manualThemeSelected
-        && lhs.userBrightnessThreshold == rhs.userBrightnessThreshold
-    }
-
     static func defaultActionState(from state: ThemeSettingsState) -> ThemeSettingsState {
         return ThemeSettingsState(windowUUID: state.windowUUID,
                                   useSystemAppearance: state.useSystemAppearance,
@@ -127,5 +120,12 @@ struct ThemeSettingsState: ScreenState, Equatable {
                                   manualThemeSelected: state.manualThemeSelected,
                                   userBrightnessThreshold: state.userBrightnessThreshold,
                                   systemBrightness: state.systemBrightness)
+    }
+
+    static func == (lhs: ThemeSettingsState, rhs: ThemeSettingsState) -> Bool {
+        return lhs.useSystemAppearance == rhs.useSystemAppearance
+        && lhs.isAutomaticBrightnessEnabled == rhs.isAutomaticBrightnessEnabled
+        && lhs.manualThemeSelected == rhs.manualThemeSelected
+        && lhs.userBrightnessThreshold == rhs.userBrightnessThreshold
     }
 }

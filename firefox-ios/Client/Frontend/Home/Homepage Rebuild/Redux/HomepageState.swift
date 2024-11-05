@@ -48,11 +48,7 @@ struct HomepageState: ScreenState, Equatable {
     static let reducer: Reducer<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
         else {
-            return HomepageState(
-                windowUUID: state.windowUUID,
-                headerState: HeaderState.reducer(state.headerState, action),
-                pocketState: PocketState.reducer(state.pocketState, action)
-            )
+            return defaultActionState(from: state, action: action)
         }
 
         switch action.actionType {
@@ -63,14 +59,20 @@ struct HomepageState: ScreenState, Equatable {
                 pocketState: PocketState.reducer(state.pocketState, action)
             )
         default:
-            let defaultState = defaultActionState(from: state)
-            return HomepageState(windowUUID: defaultState.windowUUID,
-                                 headerState: HeaderState.reducer(state.headerState, action),
-                                 pocketState: PocketState.reducer(state.pocketState, action))
+            return defaultActionState(from: state, action: action)
         }
     }
 
+    private static func defaultActionState(from state: HomepageState, action: Action) -> HomepageState {
+        let defaultState = defaultActionState(from: state)
+        return HomepageState(windowUUID: defaultState.windowUUID,
+                             headerState: HeaderState.reducer(state.headerState, action),
+                             pocketState: PocketState.reducer(state.pocketState, action))
+    }
+
     static func defaultActionState(from state: HomepageState) -> HomepageState {
+        // since the default state would depend on other reducers use `defaultActionState(for: ,action:)`
+        // as method for default action state
         return HomepageState(
             windowUUID: state.windowUUID,
             headerState: state.headerState,

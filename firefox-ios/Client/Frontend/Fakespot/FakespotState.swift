@@ -63,7 +63,7 @@ struct FakespotState: ScreenState, Equatable {
     static let reducer: Reducer<Self> = { state, action in
         // Only process actions for the current window
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID,
-            let action = action as? FakespotAction else { return state }
+            let action = action as? FakespotAction else { return defaultActionState(from: state) }
 
         switch action.actionType {
         case FakespotActionType.settingsStateDidChange:
@@ -143,7 +143,7 @@ struct FakespotState: ScreenState, Equatable {
         guard let tabUUID = action.tabUUID,
                 state.currentTabUUID == tabUUID,
                 let productId = action.productId
-        else { return state }
+        else { return defaultActionState(from: state) }
 
         var state = state
         state.telemetryState[tabUUID]?.adEvents[productId] = AdTelemetryState()
@@ -190,7 +190,7 @@ struct FakespotState: ScreenState, Equatable {
     }
 
     private static func handleAdsImpressionEvent(action: FakespotAction, state: FakespotState) -> FakespotState {
-        guard let productId = action.productId else { return state }
+        guard let productId = action.productId else { return defaultActionState(from: state) }
         var state = state
         if state.telemetryState[state.currentTabUUID]?.adEvents[productId] == nil {
             state.telemetryState[state.currentTabUUID]?.adEvents[productId] = AdTelemetryState()
@@ -200,7 +200,7 @@ struct FakespotState: ScreenState, Equatable {
     }
 
     private static func handleAdsExposureEvent(action: FakespotAction, state: FakespotState) -> FakespotState {
-        guard let productId = action.productId else { return state }
+        guard let productId = action.productId else { return defaultActionState(from: state) }
         var state = state
         if state.telemetryState[state.currentTabUUID]?.adEvents[productId] == nil {
             state.telemetryState[state.currentTabUUID]?.adEvents[productId] = AdTelemetryState()

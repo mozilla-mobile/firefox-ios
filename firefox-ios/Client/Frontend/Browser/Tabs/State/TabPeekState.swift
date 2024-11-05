@@ -51,7 +51,7 @@ struct TabPeekState: ScreenState, Equatable {
         // Only process actions for the current window
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID,
               let action = action as? TabPeekAction
-        else { return state }
+        else { return defaultActionState(from: state) }
 
         switch action.actionType {
         case TabPeekActionType.loadTabPeek:

@@ -99,7 +99,8 @@ struct MainMenuState: ScreenState, Equatable {
     }
 
     static let reducer: Reducer<Self> = { state, action in
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
+        else {
             return defaultActionState(from: state)
         }
 
@@ -114,7 +115,7 @@ struct MainMenuState: ScreenState, Equatable {
             )
         case MainMenuMiddlewareActionType.updateAccountHeader:
             guard let action = action as? MainMenuAction
-            else { return state }
+            else { return defaultActionState(from: state) }
 
             return MainMenuState(
                 windowUUID: state.windowUUID,
@@ -126,7 +127,7 @@ struct MainMenuState: ScreenState, Equatable {
         case MainMenuActionType.updateCurrentTabInfo:
             guard let action = action as? MainMenuAction,
                   let currentTabInfo = action.currentTabInfo
-            else { return state }
+            else { return defaultActionState(from: state) }
 
             return MainMenuState(
                 windowUUID: state.windowUUID,
@@ -140,7 +141,7 @@ struct MainMenuState: ScreenState, Equatable {
                 accountIcon: state.accountIcon
             )
         case MainMenuActionType.tapShowDetailsView:
-            guard let action = action as? MainMenuAction else { return state }
+            guard let action = action as? MainMenuAction else { return defaultActionState(from: state) }
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
@@ -150,7 +151,7 @@ struct MainMenuState: ScreenState, Equatable {
                 accountIcon: state.accountIcon
             )
         case MainMenuActionType.tapNavigateToDestination:
-            guard let action = action as? MainMenuAction else { return state }
+            guard let action = action as? MainMenuAction else { return defaultActionState(from: state) }
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,

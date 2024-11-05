@@ -89,16 +89,17 @@ struct TabTrayState: ScreenState, Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         // Only process actions for the current window
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
+        else {
             return defaultActionState(from: state)
         }
 
         if let action  = action as? TabTrayAction {
-            return TabTrayState.reduceTabTrayAction(action: action, state: state)
+            return reduceTabTrayAction(action: action, state: state)
         } else if let action = action as? TabPanelMiddlewareAction {
-            return TabTrayState.reduceTabPanelMiddlewareAction(action: action, state: state)
+            return reduceTabPanelMiddlewareAction(action: action, state: state)
         } else if let action = action as? TabPanelViewAction {
-            return TabTrayState.reduceTabPanelViewAction(action: action, state: state)
+            return reduceTabPanelViewAction(action: action, state: state)
         }
 
         return defaultActionState(from: state)
@@ -141,11 +142,7 @@ struct TabTrayState: ScreenState, Equatable {
                                 hasSyncableAccount: isSyncAccountEnabled)
 
         default:
-            return TabTrayState(windowUUID: state.windowUUID,
-                                isPrivateMode: state.isPrivateMode,
-                                selectedPanel: state.selectedPanel,
-                                normalTabsCount: state.normalTabsCount,
-                                hasSyncableAccount: state.hasSyncableAccount)
+            return defaultActionState(from: state)
         }
     }
 
