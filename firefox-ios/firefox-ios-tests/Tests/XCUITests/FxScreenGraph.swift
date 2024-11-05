@@ -369,7 +369,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 // There is no Cancel option in iPad.
                 app.otherElements["PopoverDismissRegion"].tap()
             } else {
-                app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].tapOnApp()
+                app.buttons[AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.closeButton].tap()
             }
         }
     }
@@ -668,21 +668,17 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.gesture(forAction: Action.FxATypeEmail) { userState in
             if isTablet {
-                app.webViews.textFields.firstMatch.tap()
-                app.webViews.textFields.firstMatch.typeText(userState.fxaUsername!)
+                app.webViews.textFields.firstMatch.tapAndTypeText(userState.fxaUsername!)
             } else {
-                app.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField].tap()
                 app.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField]
-                    .typeText(userState.fxaUsername!)
+                    .tapAndTypeText(userState.fxaUsername!)
             }
         }
         screenState.gesture(forAction: Action.FxATypePasswordNewAccount) { userState in
-            app.secureTextFields.element(boundBy: 1).tap()
-            app.secureTextFields.element(boundBy: 1).typeText(userState.fxaPassword!)
+            app.secureTextFields.element(boundBy: 1).tapAndTypeText(userState.fxaPassword!)
         }
         screenState.gesture(forAction: Action.FxATypePasswordExistingAccount) { userState in
-            app.secureTextFields.element(boundBy: 0).tap()
-            app.secureTextFields.element(boundBy: 0).typeText(userState.fxaPassword!)
+            app.secureTextFields.element(boundBy: 0).tapAndTypeText(userState.fxaPassword!)
         }
         screenState.gesture(forAction: Action.FxATapOnContinueButton) { userState in
             app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton].tap()

@@ -9,8 +9,12 @@ class DisplaySettingTests: BaseTestCase {
     func testCheckDisplaySettingsDefault() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(DisplaySettings)
-        mozWaitForElementToExist(app.navigationBars["Theme"])
-        mozWaitForElementToExist(app.tables["DisplayTheme.Setting.Options"])
+        waitForElementsToExist(
+            [
+                app.navigationBars["Theme"],
+                app.tables["DisplayTheme.Setting.Options"]
+            ]
+        )
         let switchValue = app.switches["SystemThemeSwitchValue"].value!
         XCTAssertEqual(switchValue as! String, "1")
     }
@@ -21,8 +25,12 @@ class DisplaySettingTests: BaseTestCase {
         navigator.goto(DisplaySettings)
         mozWaitForElementToExist(app.switches["SystemThemeSwitchValue"])
         navigator.performAction(Action.SystemThemeSwitch)
-        mozWaitForElementToExist(app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["SWITCH MODE"])
-        mozWaitForElementToExist(app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["THEME PICKER"])
+        waitForElementsToExist(
+            [
+                app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["SWITCH MODE"],
+                app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["THEME PICKER"]
+            ]
+        )
 
         // Going back to Settings and Display settings keeps the value
         navigator.goto(SettingsScreen)
@@ -30,8 +38,12 @@ class DisplaySettingTests: BaseTestCase {
         mozWaitForElementToExist(app.switches["SystemThemeSwitchValue"])
         let switchValue = app.switches["SystemThemeSwitchValue"].value!
         XCTAssertEqual(switchValue as! String, "0")
-        mozWaitForElementToExist(app.cells.staticTexts["Light"])
-        mozWaitForElementToExist(app.cells.staticTexts["Dark"])
+        waitForElementsToExist(
+            [
+                app.cells.staticTexts["Light"],
+                app.cells.staticTexts["Dark"]
+            ]
+        )
 
         // Select the Automatic mode
         navigator.performAction(Action.SelectAutomatically)
@@ -42,8 +54,12 @@ class DisplaySettingTests: BaseTestCase {
         // Now select the Manual mode
         navigator.performAction(Action.SelectManually)
         mozWaitForElementToNotExist(app.tables.otherElements["THRESHOLD"])
-        mozWaitForElementToExist(app.cells.staticTexts["Light"])
-        mozWaitForElementToExist(app.cells.staticTexts["Dark"])
+        waitForElementsToExist(
+            [
+                app.cells.staticTexts["Light"],
+                app.cells.staticTexts["Dark"]
+            ]
+        )
 
         // Enable back system theme
         navigator.performAction(Action.SystemThemeSwitch)

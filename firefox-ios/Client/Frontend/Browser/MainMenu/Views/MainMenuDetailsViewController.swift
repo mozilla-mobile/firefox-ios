@@ -116,7 +116,7 @@ class MainMenuDetailsViewController: UIViewController,
             store.dispatch(
                 MainMenuAction(
                     windowUUID: self.windowUUID,
-                    actionType: MainMenuDetailsActionType.backToMainMenu
+                    actionType: MainMenuDetailsActionType.tapBackToMainMenu
                 )
             )
         }
@@ -125,7 +125,7 @@ class MainMenuDetailsViewController: UIViewController,
             store.dispatch(
                 MainMenuAction(
                     windowUUID: self.windowUUID,
-                    actionType: MainMenuDetailsActionType.dismissView
+                    actionType: MainMenuDetailsActionType.tapDismissView
                 )
             )
         }

@@ -54,12 +54,40 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
+                    with: .trackingProtectionRefactor,
+                    titleText: format(string: "Enable New Tracking Protection"),
+                    statusText: format(string: "Toggle to use the new tracking protection")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .nativeErrorPage,
                     titleText: format(string: "Enable Native Error Page"),
                     statusText: format(string: "Toggle to display natively created error pages")
                 ) { [weak self] _ in
                     self?.reloadView()
-                }
+                },
+                FeatureFlagsBoolSetting(
+                    with: .toolbarRefactor,
+                    titleText: format(string: "Toolbar Redesign"),
+                    statusText: format(string: "Toggle to enable the toolbar redesign")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .unifiedSearch,
+                    titleText: format(string: "Enable Unified Search"),
+                    statusText: format(string: "Toggle to use unified search within the new toolbar")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .passwordGenerator,
+                    titleText: format(string: "Enable Password Generator"),
+                    statusText: format(string: "Toggle to enable password generator feature")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
             ]
         )
     }

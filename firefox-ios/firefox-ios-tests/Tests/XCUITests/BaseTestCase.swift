@@ -363,8 +363,7 @@ class BaseTestCase: XCTestCase {
 
         let passcodeInput = springboard.otherElements.secureTextFields.firstMatch
         mozWaitForElementToExist(passcodeInput)
-        passcodeInput.tap()
-        passcodeInput.typeText("foo\n")
+        passcodeInput.tapAndTypeText("foo\n")
         mozWaitForElementToNotExist(passcodeInput)
     }
 
@@ -401,6 +400,48 @@ class BaseTestCase: XCTestCase {
         if app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].exists {
             app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].tap()
         }
+    }
+
+    func mozWaitElementHittable(element: XCUIElement, timeout: Double) {
+        let predicate = NSPredicate(format: "exists == true && hittable == true")
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
+        let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
+        XCTAssertEqual(result, .completed, "Element did not become hittable in time.")
+    }
+    func switchThemeToDarkOrLight(theme: String) {
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+        navigator.nowAt(BrowserTab)
+        navigator.goto(SettingsScreen)
+        navigator.goto(DisplaySettings)
+        mozWaitForElementToExist(app.switches["SystemThemeSwitchValue"])
+        if (app.switches["SystemThemeSwitchValue"].value as? String) == "1" {
+            navigator.performAction(Action.SystemThemeSwitch)
+        }
+        mozWaitForElementToExist(app.cells.staticTexts["Dark"])
+        if theme == "Dark" {
+            app.cells.staticTexts["Dark"].tap()
+        } else {
+            app.cells.staticTexts["Light"].tap()
+        }
+        app.buttons["Settings"].tap()
+        navigator.nowAt(SettingsScreen)
+        app.buttons["Done"].waitAndTap()
+    }
+    func waitForElementsToExist(_ elements: [XCUIElement], timeout: TimeInterval = TIMEOUT, message: String? = nil) {
+        var elementsDict = [XCUIElement: String]()
+        for element in elements {
+            elementsDict[element] = "exists == true"
+        }
+        let expectations = elementsDict.map({
+                XCTNSPredicateExpectation(
+                    predicate: NSPredicate(
+                        format: $0.value
+                    ),
+                    object: $0.key
+                )
+            })
+        let result = XCTWaiter.wait(for: expectations, timeout: timeout)
+        if result == .timedOut { XCTFail(message ?? expectations.description) }
     }
 }
 
@@ -517,6 +558,12 @@ extension XCUIElement {
     func waitAndTap(timeout: TimeInterval? = TIMEOUT) {
         BaseTestCase().mozWaitForElementToExist(self, timeout: timeout)
         self.tap()
+    }
+    /// Waits for the UI element and then taps and types the provided text if it exists.
+    func tapAndTypeText(_ text: String, timeout: TimeInterval? = TIMEOUT) {
+        BaseTestCase().mozWaitForElementToExist(self, timeout: timeout)
+        self.tap()
+        self.typeText(text)
     }
 }
 

@@ -14,8 +14,12 @@ class FindInPageTests: BaseTestCase {
 
         navigator.goto(FindInPage)
 
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.FindInPage.findNextButton])
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.FindInPage.findPreviousButton])
+        waitForElementsToExist(
+            [
+                app.buttons[AccessibilityIdentifiers.FindInPage.findNextButton],
+                app.buttons[AccessibilityIdentifiers.FindInPage.findPreviousButton]
+            ]
+        )
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.searchFields["find.searchField"])
         } else {

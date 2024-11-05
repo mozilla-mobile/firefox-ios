@@ -22,14 +22,18 @@ class BrowserCoordinator: BaseCoordinator,
                           LibraryCoordinatorDelegate,
                           EnhancedTrackingProtectionCoordinatorDelegate,
                           FakespotCoordinatorDelegate,
-                          HomepageCoordinatorDelegate,
                           ParentCoordinatorDelegate,
                           TabManagerDelegate,
                           TabTrayCoordinatorDelegate,
                           PrivateHomepageDelegate,
                           WindowEventCoordinator,
                           MainMenuCoordinatorDelegate,
-                          ETPCoordinatorSSLStatusDelegate {
+                          ETPCoordinatorSSLStatusDelegate,
+                          SearchEngineSelectionCoordinatorDelegate {
+    private struct UX {
+        static let searchEnginePopoverSize = CGSize(width: 250, height: 536)
+    }
+
     var browserViewController: BrowserViewController
     var webviewController: WebviewViewController?
     var legacyHomepageViewController: LegacyHomepageViewController?
@@ -132,7 +136,6 @@ class BrowserCoordinator: BaseCoordinator,
 
     func showHomepage() {
         let homepageController = self.homepageViewController ?? HomepageViewController(windowUUID: windowUUID)
-        homepageController.parentCoordinator = self
         guard browserViewController.embedContent(homepageController) else {
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
             return
@@ -150,8 +153,11 @@ class BrowserCoordinator: BaseCoordinator,
         self.privateViewController = privateHomepageController
     }
 
-    // MARK: - PrivateHomepageDelegate
+    func navigateFromHomePanel(to url: URL, visitType: VisitType, isGoogleTopSite: Bool) {
+        browserViewController.homePanel(didSelectURL: url, visitType: visitType, isGoogleTopSite: isGoogleTopSite)
+    }
 
+    // MARK: - PrivateHomepageDelegate
     func homePanelDidRequestToOpenInNewTab(with url: URL, isPrivate: Bool, selectNewTab: Bool) {
         browserViewController.homePanelDidRequestToOpenInNewTab(
             url,
@@ -468,6 +474,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - MainMenuCoordinatorDelegate
+
     func showMainMenu() {
         guard let menuNavViewController = makeMenuNavViewController() else { return }
         present(menuNavViewController)
@@ -501,6 +508,40 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.showFindInPage()
     }
 
+    func updateZoomPageBarVisibility() {
+        browserViewController.updateZoomPageBarVisibility(visible: true)
+    }
+
+    func showShareSheet(with url: URL?) {
+        guard let url else { return }
+
+        let showShareSheet = { url in
+            self.showShareExtension(
+                url: url,
+                sourceView: self.browserViewController.addressToolbarContainer,
+                toastContainer: self.browserViewController.contentContainer,
+                popoverArrowDirection: .any
+            )
+        }
+
+        guard let temporaryDocument = browserViewController.tabManager.selectedTab?.temporaryDocument else {
+            showShareSheet(url)
+            return
+        }
+
+        temporaryDocument.getURL { tempDocURL in
+            DispatchQueue.main.async {
+                // If we successfully got a temp file URL, share it like a downloaded file,
+                // otherwise present the ordinary share menu for the web URL.
+                if let tempDocURL = tempDocURL, tempDocURL.isFileURL {
+                    showShareSheet(tempDocURL)
+                } else {
+                    showShareSheet(url)
+                }
+            }
+        }
+    }
+
     private func makeMenuNavViewController() -> DismissableNavigationViewController? {
         guard !childCoordinators.contains(where: { $0 is MainMenuCoordinator }) else { return nil }
 
@@ -523,6 +564,43 @@ class BrowserCoordinator: BaseCoordinator,
         coordinator.start()
 
         return navigationController
+    }
+
+    func showSignInView(fxaParameters: FxASignInViewParameters?) {
+        guard let fxaParameters else { return }
+        browserViewController.presentSignInViewController(fxaParameters.launchParameters,
+                                                          flowType: fxaParameters.flowType,
+                                                          referringPage: fxaParameters.referringPage)
+    }
+
+    // MARK: - SearchEngineSelectionCoordinatorDelegate
+
+    func showSearchEngineSelection(forSourceView sourceView: UIView) {
+        guard !childCoordinators.contains(where: { $0 is SearchEngineSelectionCoordinator }) else { return }
+
+        let navigationController = DismissableNavigationViewController()
+        if navigationController.shouldUseiPadSetup() {
+            navigationController.modalPresentationStyle = .popover
+            navigationController.preferredContentSize = UX.searchEnginePopoverSize
+            navigationController.popoverPresentationController?.sourceView = sourceView
+            navigationController.popoverPresentationController?.canOverlapSourceViewRect = false
+        } else {
+            navigationController.modalPresentationStyle = .pageSheet
+            navigationController.sheetPresentationController?.detents = [.medium(), .large()]
+            navigationController.sheetPresentationController?.prefersGrabberVisible = true
+        }
+
+        let coordinator = DefaultSearchEngineSelectionCoordinator(
+            router: DefaultRouter(navigationController: navigationController),
+            windowUUID: tabManager.windowUUID
+        )
+
+        coordinator.parentCoordinator = self
+        coordinator.navigationHandler = self
+        add(child: coordinator)
+        coordinator.start()
+
+        present(navigationController)
     }
 
     // MARK: - BrowserNavigationHandler
@@ -765,6 +843,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: Microsurvey
+
     func showMicrosurvey(model: MicrosurveyModel) {
         guard !childCoordinators.contains(where: { $0 is MicrosurveyCoordinator }) else {
             return
@@ -817,13 +896,13 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
 // MARK: - Password Generator
-    func showPasswordGenerator(tab: Tab) {
-        let passwordGenVC = PasswordGeneratorViewController(windowUUID: windowUUID, currentTab: tab)
+    func showPasswordGenerator(tab: Tab, frame: WKFrameInfo) {
+        let passwordGenVC = PasswordGeneratorViewController(windowUUID: windowUUID, currentTab: tab, currentFrame: frame)
 
         let action = PasswordGeneratorAction(
             windowUUID: windowUUID,
             actionType: PasswordGeneratorActionType.showPasswordGenerator,
-            currentTab: tab
+            currentFrame: frame
         )
         store.dispatch(action)
 
@@ -843,11 +922,13 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - ParentCoordinatorDelegate
+
     func didFinish(from childCoordinator: Coordinator) {
         remove(child: childCoordinator)
     }
 
     // MARK: - TabManagerDelegate
+
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
         // Once tab restore is made, if there's any saved route we make sure to call it
         if let savedRoute {
@@ -859,6 +940,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - TabTrayCoordinatorDelegate
+
     func didDismissTabTray(from coordinator: TabTrayCoordinator) {
         router.dismiss(animated: true, completion: nil)
         remove(child: coordinator)

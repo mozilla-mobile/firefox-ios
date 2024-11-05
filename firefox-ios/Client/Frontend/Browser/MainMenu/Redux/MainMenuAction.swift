@@ -12,6 +12,8 @@ final class MainMenuAction: Action {
     var navigationDestination: MenuNavigationDestination?
     var currentTabInfo: MainMenuTabInfo?
     var detailsViewToShow: MainMenuDetailsViewType?
+    var accountData: AccountData?
+    var accountIcon: UIImage?
 
     init(
         windowUUID: WindowUUID,
@@ -19,36 +21,47 @@ final class MainMenuAction: Action {
         navigationDestination: MenuNavigationDestination? = nil,
         changeMenuViewTo: MainMenuDetailsViewType? = nil,
         currentTabInfo: MainMenuTabInfo? = nil,
-        tabID: TabUUID? = nil
+        tabID: TabUUID? = nil,
+        accountData: AccountData? = nil,
+        accountIcon: UIImage? = nil
     ) {
         self.navigationDestination = navigationDestination
         self.detailsViewToShow = changeMenuViewTo
         self.currentTabInfo = currentTabInfo
         self.tabID = tabID
+        self.accountData = accountData
+        self.accountIcon = accountIcon
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
 
 enum MainMenuActionType: ActionType {
-    case closeMenuAndNavigateToDestination
-    case closeMenu
-    case showDetailsView
-    case toggleUserAgent
+    case tapNavigateToDestination
+    case tapCloseMenu
+    case tapShowDetailsView
+    case tapToggleUserAgent
     case updateCurrentTabInfo
     case viewDidLoad
 }
 
 enum MainMenuMiddlewareActionType: ActionType {
     case requestTabInfo
+    case updateAccountHeader
 }
 
 enum MainMenuDetailsActionType: ActionType {
-    case addToBookmarks
-    case addToReadingList
-    case addToShortcuts
-    case backToMainMenu
-    case dismissView
-    case editBookmark
-    case removeFromShortcuts
-    case removeFromReadingList
+    // Tools submenu actions
+    case tapZoom
+    case tapToggleNightMode
+    case tapReportBrokenSite
+
+    // Save submenu actions
+    case tapAddToBookmarks
+    case tapAddToReadingList
+    case tapAddToShortcuts
+    case tapBackToMainMenu
+    case tapDismissView
+    case tapEditBookmark
+    case tapRemoveFromShortcuts
+    case tapRemoveFromReadingList
 }

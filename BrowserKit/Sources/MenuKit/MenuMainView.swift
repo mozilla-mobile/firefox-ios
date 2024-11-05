@@ -8,6 +8,10 @@ import ComponentLibrary
 
 public final class MenuMainView: UIView,
                                  MenuTableViewDataDelegate, ThemeApplicable {
+    private struct UX {
+        static let headerTopMargin: CGFloat = 10
+    }
+
     // MARK: - UI Elements
     private var tableView: MenuTableView = .build()
     public var accountHeaderView: HeaderView = .build()
@@ -32,7 +36,7 @@ public final class MenuMainView: UIView,
         self.addSubview(tableView)
 
         NSLayoutConstraint.activate([
-            accountHeaderView.topAnchor.constraint(equalTo: self.topAnchor),
+            accountHeaderView.topAnchor.constraint(equalTo: self.topAnchor, constant: UX.headerTopMargin),
             accountHeaderView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             accountHeaderView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
 

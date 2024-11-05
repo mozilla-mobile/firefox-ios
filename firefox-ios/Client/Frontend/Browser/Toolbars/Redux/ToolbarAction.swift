@@ -21,6 +21,7 @@ final class ToolbarAction: Action {
     let addressBorderPosition: AddressToolbarBorderPosition?
     let displayNavBorder: Bool?
     let lockIconImageName: String?
+    let safeListedURLImageName: String?
     let isLoading: Bool?
     let isNewTabFeatureEnabled: Bool?
     let canShowDataClearanceAction: Bool?
@@ -39,6 +40,7 @@ final class ToolbarAction: Action {
          addressBorderPosition: AddressToolbarBorderPosition = .none,
          displayNavBorder: Bool? = nil,
          lockIconImageName: String? = nil,
+         safeListedURLImageName: String? = nil,
          isLoading: Bool? = nil,
          isNewTabFeatureEnabled: Bool? = nil,
          canShowDataClearanceAction: Bool? = nil,
@@ -58,6 +60,7 @@ final class ToolbarAction: Action {
         self.addressBorderPosition = addressBorderPosition
         self.displayNavBorder = displayNavBorder
         self.lockIconImageName = lockIconImageName
+        self.safeListedURLImageName = safeListedURLImageName
         self.isLoading = isLoading
         self.isNewTabFeatureEnabled = isNewTabFeatureEnabled
         self.canShowDataClearanceAction = canShowDataClearanceAction
@@ -85,6 +88,9 @@ enum ToolbarActionType: ActionType {
     case navigationButtonDoubleTapped
     case navigationHintFinishedPresenting
     case clearSearch
+    case didDeleteSearchTerm
+    case didEnterSearchTerm
+    case didStartTyping
 }
 
 class ToolbarMiddlewareAction: Action {

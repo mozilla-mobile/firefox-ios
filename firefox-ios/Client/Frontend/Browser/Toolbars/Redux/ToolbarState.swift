@@ -111,7 +111,9 @@ struct ToolbarState: ScreenState, Equatable {
             ToolbarActionType.didSetTextInLocationView, ToolbarActionType.didPasteSearchTerm,
             ToolbarActionType.didStartEditingUrl, ToolbarActionType.cancelEdit,
             ToolbarActionType.didScrollDuringEdit, ToolbarActionType.websiteLoadingStateDidChange,
-            ToolbarActionType.searchEngineDidChange, ToolbarActionType.clearSearch:
+            ToolbarActionType.searchEngineDidChange, ToolbarActionType.clearSearch,
+            ToolbarActionType.didDeleteSearchTerm, ToolbarActionType.didEnterSearchTerm,
+            ToolbarActionType.didStartTyping:
             return handleToolbarUpdates(state: state, action: action)
 
         case ToolbarActionType.showMenuWarningBadge:

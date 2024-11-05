@@ -63,7 +63,7 @@ extension BlockingStrength {
 }
 
 /// Firefox-specific implementation of tab content blocking.
-class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
+final class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
     let userPrefs: Prefs
 
     class func name() -> String {

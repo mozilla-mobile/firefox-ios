@@ -16,10 +16,12 @@ public struct LocationViewState {
 
     public let searchEngineImage: UIImage?
     public let lockIconImageName: String?
+    public let safeListedURLImageName: String?
     public let url: URL?
     public let droppableUrl: URL?
     public let searchTerm: String?
     public let isEditing: Bool
+    public let didStartTyping: Bool
     public let isScrollingDuringEdit: Bool
     public let shouldSelectSearchTerm: Bool
     public var onTapLockIcon: ((UIButton) -> Void)?
@@ -34,10 +36,12 @@ public struct LocationViewState {
         urlTextFieldA11yId: String,
         searchEngineImage: UIImage?,
         lockIconImageName: String?,
+        safeListedURLImageName: String?,
         url: URL?,
         droppableUrl: URL?,
         searchTerm: String?,
         isEditing: Bool,
+        didStartTyping: Bool,
         isScrollingDuringEdit: Bool,
         shouldSelectSearchTerm: Bool,
         onTapLockIcon: ((UIButton) -> Void)? = nil,
@@ -51,10 +55,12 @@ public struct LocationViewState {
         self.urlTextFieldA11yId = urlTextFieldA11yId
         self.searchEngineImage = searchEngineImage
         self.lockIconImageName = lockIconImageName
+        self.safeListedURLImageName = safeListedURLImageName
         self.url = url
         self.droppableUrl = droppableUrl
         self.searchTerm = searchTerm
         self.isEditing = isEditing
+        self.didStartTyping = didStartTyping
         self.isScrollingDuringEdit = isScrollingDuringEdit
         self.shouldSelectSearchTerm = shouldSelectSearchTerm
         self.onTapLockIcon = onTapLockIcon

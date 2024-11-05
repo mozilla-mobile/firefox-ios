@@ -21,7 +21,7 @@ final class HomepageDiffableDataSource:
     enum HomeItem: Hashable {
         case header
         case pocket(PocketStoryState)
-        case pocketDiscover(String)
+        case pocketDiscover
         case customizeHomepage
 
         static var cellTypes: [ReusableCell.Type] {
@@ -43,10 +43,7 @@ final class HomepageDiffableDataSource:
 
         let stories: [HomeItem] = state.pocketState.pocketData.compactMap { .pocket($0) }
         snapshot.appendItems(stories, toSection: .pocket)
-        let discoverItem = state.pocketState.pocketDiscoverTitle
-        if !discoverItem.isEmpty {
-            snapshot.appendItems([.pocketDiscover(discoverItem)], toSection: .pocket)
-        }
+        snapshot.appendItems([.pocketDiscover], toSection: .pocket)
 
         snapshot.appendItems([], toSection: .pocket)
         snapshot.appendItems([.customizeHomepage], toSection: .customizeHomepage)

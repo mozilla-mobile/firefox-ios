@@ -907,6 +907,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
 
     func applyTheme(theme: Theme) {
         UITextField.appearance().keyboardAppearance = theme.type.keyboardAppearence(isPrivate: isPrivate)
+        webView?.applyTheme(theme: theme)
     }
 
     // MARK: - Static Helpers

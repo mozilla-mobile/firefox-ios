@@ -3728,14 +3728,14 @@ extension String {
 
 // MARK: - Close tab notifications
     public static let CloseTab_ArrivingNotification_title = MZLocalizedString(
-        key: "CloseTab_ArrivingNotification_title",
+        key: "CloseTab.ArrivingNotification.title.v133",
         tableName: "FxANotification",
-        value: "Firefox tabs closed: %1$@",
-        comment: "Title of notification shown when a remote device has requested to close a number of tabs defined by ($1)")
+        value: "%1$@ tabs closed: %2$@",
+        comment: "Title of notification shown when a remote device has requested to close a number of tabs. First parameter is the app name and the second parameter is the number of tabs.")
 
     // Notification Actions
     public static let CloseTabViewActionTitle = MZLocalizedString(
-        key: "CloseTab.ViewAction.title",
+        key: "CloseTab.ViewAction.title.v133",
         tableName: "FxANotification",
         value: "View recently closed tabs",
         comment: "Label for an action used to view recently closed tabs.")
@@ -4011,14 +4011,14 @@ extension String {
                     value: "Find in page",
                     comment: "On the main menu, the accessibility label for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page.")
                 public static let Tools = MZLocalizedString(
-                    key: "MainMenu.ToolsSection.AccessibilityLabels.Tools.v132",
+                    key: "MainMenu.ToolsSection.AccessibilityLabels.Tools.v133",
                     tableName: "MainMenu",
-                    value: "Tools",
+                    value: "Tools submenu",
                     comment: "On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu.")
                 public static let Save = MZLocalizedString(
-                    key: "MainMenu.ToolsSection.AccessibilityLabels.Save.v132",
+                    key: "MainMenu.ToolsSection.AccessibilityLabels.Save.v133",
                     tableName: "MainMenu",
-                    value: "Save",
+                    value: "Save submenu",
                     comment: "On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on.")
             }
         }
@@ -7465,6 +7465,16 @@ extension String {
                 tableName: "AddressToolbar",
                 value: "Search or enter address",
                 comment: "Accessibility label for the address field in the address toolbar.")
+            public static let Tools = MZLocalizedString(
+                key: "MainMenu.ToolsSection.AccessibilityLabels.Tools.v132",
+                tableName: "MainMenu",
+                value: "Tools",
+                comment: "On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu.")
+            public static let Save = MZLocalizedString(
+                key: "MainMenu.ToolsSection.AccessibilityLabels.Save.v132",
+                tableName: "MainMenu",
+                value: "Save",
+                comment: "On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on.")
         }
     }
 }

@@ -62,7 +62,7 @@
 "Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite.v129" = "Briosgaidean tracaidh thar làraichean: %@";
 
 /* Text to let users know how many fingerprinters were blocked on the current website. The placeholder will show the number of fingerprinters detected */
-"Menu.EnhancedTrackingProtection.Details.Trackers.Fingerprinter.v129" = "Lorgaichean-meur: %@";
+"Menu.EnhancedTrackingProtection.Details.Trackers.Fingerprinter.v129" = "Lorgairean-meòir: %@";
 
 /* Text to let users know how many social media trackers were blocked on the current website. The placeholder will show the number of such cookies detected */
 "Menu.EnhancedTrackingProtection.Details.Trackers.SocialMedia.v129" = "Tracaichean nam meadhanan sòisealta: %@";

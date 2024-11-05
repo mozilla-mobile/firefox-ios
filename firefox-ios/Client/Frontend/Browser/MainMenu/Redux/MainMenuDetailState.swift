@@ -88,6 +88,11 @@ struct MainMenuDetailsState: ScreenState, Equatable {
                     window: action.windowUUID),
                   let currentTabInfo = menuState.currentTabInfo,
                   let currentSubmenu = menuState.currentSubmenuView
+                  // let toolbarState = store.state.screenState(
+                  //   ToolbarState.self,
+                  //   for: .toolbar,
+                  //   window: action.windowUUID),
+                  // let readerModeState = toolbarState.addressToolbar.readerModeState
             else { return state }
 
             return MainMenuDetailsState(
@@ -95,35 +100,45 @@ struct MainMenuDetailsState: ScreenState, Equatable {
                 menuElements: state.menuConfigurator.generateMenuElements(
                     with: currentTabInfo,
                     for: currentSubmenu,
-                    and: action.windowUUID
+                    and: action.windowUUID,
+                    readerState: nil
                 ),
                 submenuType: currentSubmenu
             )
-        case MainMenuDetailsActionType.backToMainMenu:
+        case MainMenuDetailsActionType.tapBackToMainMenu:
             return MainMenuDetailsState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
                 submenuType: state.submenuType,
                 shouldGoBackToMenu: true
             )
-        case MainMenuDetailsActionType.dismissView,
-            MainMenuDetailsActionType.addToBookmarks,
-            MainMenuDetailsActionType.addToShortcuts,
-            MainMenuDetailsActionType.removeFromShortcuts,
-            MainMenuDetailsActionType.addToReadingList,
-            MainMenuDetailsActionType.removeFromReadingList:
+        case MainMenuDetailsActionType.tapDismissView,
+            MainMenuDetailsActionType.tapAddToBookmarks,
+            MainMenuDetailsActionType.tapAddToShortcuts,
+            MainMenuDetailsActionType.tapRemoveFromShortcuts,
+            MainMenuDetailsActionType.tapAddToReadingList,
+            MainMenuDetailsActionType.tapRemoveFromReadingList,
+            MainMenuDetailsActionType.tapToggleNightMode,
+            GeneralBrowserActionType.showReaderMode:
             return MainMenuDetailsState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
                 submenuType: state.submenuType,
                 shouldDismiss: true
             )
-        case MainMenuDetailsActionType.editBookmark:
+        case MainMenuDetailsActionType.tapEditBookmark:
             return MainMenuDetailsState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
                 submenuType: state.submenuType,
                 navigationDestination: MenuNavigationDestination(.editBookmark)
+            )
+        case MainMenuDetailsActionType.tapZoom:
+            return MainMenuDetailsState(
+                windowUUID: state.windowUUID,
+                menuElements: state.menuElements,
+                submenuType: state.submenuType,
+                navigationDestination: MenuNavigationDestination(.zoom)
             )
         default:
             return MainMenuDetailsState(

@@ -40,7 +40,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
     }
 
     private let profile: Profile
-    private let model: SearchEngines
+    private let model: SearchEnginesManager
 
     var shouldHidePrivateModeFirefoxSuggestSetting: Bool {
         return !model.shouldShowBookmarksSuggestions &&
@@ -82,7 +82,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
 
     init(profile: Profile, windowUUID: WindowUUID) {
         self.profile = profile
-        model = profile.searchEngines
+        model = profile.searchEnginesManager
 
         super.init(windowUUID: windowUUID)
     }

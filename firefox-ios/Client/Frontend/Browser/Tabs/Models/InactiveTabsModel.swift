@@ -4,10 +4,11 @@
 
 import Foundation
 
-struct InactiveTabsModel: Equatable {
-    var tabUUID: TabUUID
-    var title: String
-    var url: URL?
+struct InactiveTabsModel: Equatable, Identifiable, Hashable {
+    var id: String { return tabUUID }
+    let tabUUID: TabUUID
+    let title: String
+    let url: URL?
     var favIconURL: String?
 
     var displayURL: String {
