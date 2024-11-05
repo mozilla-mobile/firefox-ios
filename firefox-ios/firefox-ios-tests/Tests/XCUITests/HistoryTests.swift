@@ -61,9 +61,13 @@ class HistoryTests: BaseTestCase {
 
         // Go to History List from Top Sites and check it is empty
         navigator.goto(LibraryPanel_History)
-        mozWaitForElementToExist(app.tables.cells[HistoryPanelA11y.recentlyClosedCell])
-        mozWaitForElementToExist(app.tables.cells[HistoryPanelA11y.recentlyClosedCell].staticTexts["Recently Closed"])
-        mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
+        waitForElementsToExist(
+            [
+                app.tables.cells[HistoryPanelA11y.recentlyClosedCell],
+                app.tables.cells[HistoryPanelA11y.recentlyClosedCell].staticTexts["Recently Closed"],
+                app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg]
+            ]
+        )
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307301
@@ -72,8 +76,12 @@ class HistoryTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(TabTray)
         navigator.performAction(Action.ToggleSyncMode)
-        mozWaitForElementToExist(app.otherElements.staticTexts["Firefox Sync"])
-        mozWaitForElementToExist(app.otherElements.buttons["Sync and Save Data"])
+        waitForElementsToExist(
+            [
+                app.otherElements.staticTexts["Firefox Sync"],
+                app.otherElements.buttons["Sync and Save Data"]
+            ]
+        )
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307487
@@ -82,8 +90,12 @@ class HistoryTests: BaseTestCase {
             navigator.nowAt(NewTabScreen)
             // Browse to have an item in history list
             navigator.goto(LibraryPanel_History)
-            mozWaitForElementToExist(app.tables.cells[HistoryPanelA11y.recentlyClosedCell])
-            mozWaitForElementToExist(app.tables.cells.staticTexts[oldHistoryEntries[0]])
+            waitForElementsToExist(
+                [
+                    app.tables.cells[HistoryPanelA11y.recentlyClosedCell],
+                    app.tables.cells.staticTexts[oldHistoryEntries[0]]
+                ]
+            )
             mozWaitForElementToNotExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
 
             // Clear all private data via the settings
@@ -95,8 +107,12 @@ class HistoryTests: BaseTestCase {
 
             // Back on History panel view check that there is not any item
             navigator.goto(LibraryPanel_History)
-            mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
-            mozWaitForElementToExist(app.tables.cells[HistoryPanelA11y.recentlyClosedCell])
+            waitForElementsToExist(
+                [
+                    app.tables[HistoryPanelA11y.tableView],
+                    app.tables.cells[HistoryPanelA11y.recentlyClosedCell]
+                ]
+            )
             mozWaitForElementToNotExist(app.tables.cells.staticTexts[oldHistoryEntries[0]])
             mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
         }
@@ -149,16 +165,24 @@ class HistoryTests: BaseTestCase {
         // On regular mode, the closed tab is listed in "Recently Closed" list
         navigator.nowAt(NewTabScreen)
         navigator.goto(HistoryRecentlyClosed)
-        mozWaitForElementToExist(app.tables["Recently Closed Tabs List"])
-        mozWaitForElementToExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
+        waitForElementsToExist(
+            [
+                app.tables["Recently Closed Tabs List"],
+                app.tables.cells.staticTexts[bookOfMozilla["label"]!]
+            ]
+        )
 
         // On private mode, the closed tab on regular mode is listed in "Recently Closed" list as well
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         closeKeyboard()
         navigator.goto(HistoryRecentlyClosed)
-        mozWaitForElementToExist(app.tables["Recently Closed Tabs List"])
-        mozWaitForElementToExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
+        waitForElementsToExist(
+            [
+                app.tables["Recently Closed Tabs List"],
+                app.tables.cells.staticTexts[bookOfMozilla["label"]!]
+            ]
+        )
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307475
@@ -176,8 +200,12 @@ class HistoryTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         closeKeyboard()
         navigator.goto(LibraryPanel_History)
-        mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
-        mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
+        waitForElementsToExist(
+            [
+                app.tables[HistoryPanelA11y.tableView],
+                app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg]
+            ]
+        )
         mozWaitForElementToNotExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
     }
 
@@ -196,8 +224,12 @@ class HistoryTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
         navigator.goto(HistoryRecentlyClosed)
-        mozWaitForElementToExist(app.tables["Recently Closed Tabs List"])
-        mozWaitForElementToExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
+        waitForElementsToExist(
+            [
+                app.tables["Recently Closed Tabs List"],
+                app.tables.cells.staticTexts[bookOfMozilla["label"]!]
+            ]
+        )
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307482
@@ -209,8 +241,12 @@ class HistoryTests: BaseTestCase {
         // Once the website is visited and closed it will appear in Recently Closed Tabs list
         navigator.nowAt(NewTabScreen)
         navigator.goto(HistoryRecentlyClosed)
-        mozWaitForElementToExist(app.tables["Recently Closed Tabs List"])
-        mozWaitForElementToExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
+        waitForElementsToExist(
+            [
+                app.tables["Recently Closed Tabs List"],
+                app.tables.cells.staticTexts[bookOfMozilla["label"]!]
+            ]
+        )
 
         // Clear all private data via the settings
         navigator.goto(HomePanelsScreen)
@@ -221,8 +257,12 @@ class HistoryTests: BaseTestCase {
 
         // The closed tab is *not* listed in "Recently Closed Tabs List"
         navigator.goto(LibraryPanel_History)
-        mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
-        mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg])
+        waitForElementsToExist(
+            [
+                app.tables[HistoryPanelA11y.tableView],
+                app.tables[HistoryPanelA11y.tableView].staticTexts[emptyRecentlyClosedMesg]
+            ]
+        )
         mozWaitForElementToNotExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
     }
 
@@ -235,12 +275,20 @@ class HistoryTests: BaseTestCase {
         // Long tap a recently closed item launches a context menu
         navigator.nowAt(NewTabScreen)
         navigator.goto(HistoryRecentlyClosed)
-        mozWaitForElementToExist(app.tables["Recently Closed Tabs List"])
-        mozWaitForElementToExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
+        waitForElementsToExist(
+            [
+                app.tables["Recently Closed Tabs List"],
+                app.tables.cells.staticTexts[bookOfMozilla["label"]!]
+            ]
+        )
         app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
-        mozWaitForElementToExist(app.tables["Context Menu"])
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.plus])
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.privateMode])
+        waitForElementsToExist(
+            [
+                app.tables["Context Menu"],
+                app.tables.otherElements[StandardImageIdentifiers.Large.plus],
+                app.tables.otherElements[StandardImageIdentifiers.Large.privateMode]
+            ]
+        )
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307484
@@ -252,8 +300,12 @@ class HistoryTests: BaseTestCase {
         // Open the page on a new tab from History Recently Closed screen
         navigator.nowAt(NewTabScreen)
         navigator.goto(HistoryRecentlyClosed)
-        mozWaitForElementToExist(app.tables["Recently Closed Tabs List"])
-        mozWaitForElementToExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
+        waitForElementsToExist(
+            [
+                app.tables["Recently Closed Tabs List"],
+                app.tables.cells.staticTexts[bookOfMozilla["label"]!]
+            ]
+        )
         XCTAssertEqual(userState.numTabs, 1)
         app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
         mozWaitForElementToExist(app.tables["Context Menu"])
@@ -283,8 +335,12 @@ class HistoryTests: BaseTestCase {
         // Open the page on a new private tab from History Recently Closed screen
         navigator.nowAt(NewTabScreen)
         navigator.goto(HistoryRecentlyClosed)
-        mozWaitForElementToExist(app.tables["Recently Closed Tabs List"])
-        mozWaitForElementToExist(app.tables.cells.staticTexts[bookOfMozilla["label"]!])
+        waitForElementsToExist(
+            [
+                app.tables["Recently Closed Tabs List"],
+                app.tables.cells.staticTexts[bookOfMozilla["label"]!]
+            ]
+        )
         app.tables.cells.staticTexts[bookOfMozilla["label"]!].press(forDuration: 1)
         mozWaitForElementToExist(app.tables["Context Menu"])
         app.tables.otherElements[StandardImageIdentifiers.Large.privateMode].tap()
@@ -392,8 +448,12 @@ class HistoryTests: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_History)
-        mozWaitForElementToExist(app.tables[HistoryPanelA11y.tableView])
-        mozWaitForElementToExist(app.tables.cells.staticTexts["Example Domain"])
+        waitForElementsToExist(
+            [
+                app.tables[HistoryPanelA11y.tableView],
+                app.tables.cells.staticTexts["Example Domain"]
+            ]
+        )
     }
 
     private func openBookOfMozilla() {

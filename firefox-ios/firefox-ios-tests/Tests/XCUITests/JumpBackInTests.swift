@@ -162,10 +162,14 @@ class JumpBackInTests: BaseTestCase {
         app.cells["JumpBackInCell"].firstMatch.press(forDuration: 2)
         // The context menu opens, having the correct options
         let ContextMenuTable = app.tables["Context Menu"]
-        mozWaitForElementToExist(ContextMenuTable)
-        mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.plus])
-        mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.privateMode])
-        mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.bookmark])
-        mozWaitForElementToExist(ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.share])
+        waitForElementsToExist(
+            [
+                ContextMenuTable,
+                ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.plus],
+                ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.privateMode],
+                ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.bookmark],
+                ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.share]
+            ]
+        )
     }
 }

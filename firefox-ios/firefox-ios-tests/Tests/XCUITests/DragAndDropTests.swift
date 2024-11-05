@@ -206,8 +206,16 @@ private extension BaseTestCase {
     }
 
     func checkTabsOrder(dragAndDropTab: Bool, firstTab: String, secondTab: String) {
-        mozWaitForElementToExist(app.collectionViews.cells.element(boundBy: 0))
-        mozWaitForElementToExist(app.collectionViews.cells.element(boundBy: 1))
+        waitForElementsToExist(
+            [
+                app.collectionViews.cells.element(
+                    boundBy: 0
+                ),
+                app.collectionViews.cells.element(
+                    boundBy: 1
+                )
+            ]
+        )
         let firstTabCell = app.collectionViews.cells.element(boundBy: 0).label
         let secondTabCell = app.collectionViews.cells.element(boundBy: 1).label
 

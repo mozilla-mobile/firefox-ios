@@ -111,8 +111,12 @@ class FakespotTests: BaseTestCase {
         // Check the 'Settings' collapsible section
         let settingsSection = app.staticTexts[AccessibilityIdentifiers.Shopping.SettingsCard.title]
         let expandButton = app.buttons[AccessibilityIdentifiers.Shopping.SettingsCard.expandButton]
-        mozWaitForElementToExist(settingsSection)
-        mozWaitForElementToExist(expandButton)
+        waitForElementsToExist(
+            [
+                settingsSection,
+                expandButton
+            ]
+        )
         // Tap to open the section
         expandButton.tap()
         mozWaitForElementToExist(settingsSection)
@@ -176,8 +180,12 @@ class FakespotTests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         reachReviewChecker()
         // Opt-in card is displayed
-        mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle])
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton])
+        waitForElementsToExist(
+            [
+                app.staticTexts[AccessibilityIdentifiers.Shopping.sheetHeaderTitle],
+                app.buttons[AccessibilityIdentifiers.Shopping.OptInCard.mainButton]
+            ]
+        )
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2358894
@@ -242,8 +250,12 @@ class FakespotTests: BaseTestCase {
             mozWaitForElementToExist(app.staticTexts["Adjusted rating"])
             validateHighlightsSection()
         } else {
-            mozWaitForElementToExist(app.staticTexts["No info about these reviews yet"])
-            mozWaitForElementToExist(app.buttons["Check Review Quality"])
+            waitForElementsToExist(
+                [
+                    app.staticTexts["No info about these reviews yet"],
+                    app.buttons["Check Review Quality"]
+                ]
+            )
         }
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.Shopping.ReviewQualityCard.title])
         XCTAssertEqual(app.staticTexts[AccessibilityIdentifiers.Shopping.ReviewQualityCard.title].label,
