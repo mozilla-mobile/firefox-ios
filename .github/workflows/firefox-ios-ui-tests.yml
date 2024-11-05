@@ -61,6 +61,7 @@ jobs:
       needs: compile
       strategy:
         fail-fast: false
+        max-parallel: 1
         matrix:
           ios_simulator: ['iPhone 15 Plus', 'iPad Pro 13-inch (M4)']
       steps:
