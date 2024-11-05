@@ -329,7 +329,9 @@ class AppSettingsTableViewController: SettingsTableViewController,
                         prefKey: PrefsKeys.Settings.closePrivateTabs,
                         defaultValue: true,
                         titleText: .AppSettingsClosePrivateTabsTitle,
-                        statusText: .AppSettingsClosePrivateTabsDescription)
+                        statusText: .AppSettingsClosePrivateTabsDescription) { _ in
+                            NotificationCenter.default.post(name: .ClosePrivateTabsToggleDidChange, object: nil)
+            }
         ]
 
         privacySettings.append(ContentBlockerSetting(settings: self, settingsDelegate: parentCoordinator))
