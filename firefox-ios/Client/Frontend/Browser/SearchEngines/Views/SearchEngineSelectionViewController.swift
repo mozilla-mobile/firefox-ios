@@ -27,25 +27,6 @@ class SearchEngineSelectionViewController: UIViewController,
     private let logger: Logger
 
     // MARK: - UI/UX elements
-//    // FXIOS-10192 This button is a temporary placeholder used to set up the navigation / coordinators. Will be removed.
-//    private lazy var placeholderOpenSettingsButton: UIButton = .build { view in
-//        view.setTitle(.UnifiedSearch.SearchEngineSelection.SearchSettings, for: .normal)
-//        view.setTitleColor(.blue, for: .normal)
-//        view.titleLabel?.numberOfLines = 0
-//        view.titleLabel?.textAlignment = .center
-//
-//        view.addTarget(self, action: #selector(self.didTapOpenSettings), for: .touchUpInside)
-//    }
-//    // FIXME FXIOS-10189 This will be deleted later.
-//    private lazy var placeholderSwitchSearchEngineButton: UIButton = .build { view in
-//        view.setTitle("Test changing search engine", for: .normal)
-//        view.setTitleColor(.systemPink, for: .normal)
-//        view.titleLabel?.numberOfLines = 0
-//        view.titleLabel?.textAlignment = .center
-//
-//        view.addTarget(self, action: #selector(self.testDidChangeSearchEngine), for: .touchUpInside)
-//    }
-
     private var searchEngineTableView: SearchEngineTableView = .build()
 
     // MARK: - Initializers and Lifecycle
@@ -104,18 +85,6 @@ class SearchEngineSelectionViewController: UIViewController,
     // MARK: - UI / UX
 
     private func setupView() {
-//        view.addSubview(placeholderOpenSettingsButton)
-//        view.addSubviews(placeholderSwitchSearchEngineButton)
-//
-//        NSLayoutConstraint.activate([
-//            placeholderOpenSettingsButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 80),
-//            placeholderOpenSettingsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//            placeholderOpenSettingsButton.widthAnchor.constraint(equalToConstant: 200),
-//
-//            placeholderSwitchSearchEngineButton.topAnchor.constraint(equalTo: placeholderOpenSettingsButton.bottomAnchor),
-//            placeholderSwitchSearchEngineButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-//        ])
-
         view.addSubview(searchEngineTableView)
 
         NSLayoutConstraint.activate([
@@ -158,9 +127,6 @@ class SearchEngineSelectionViewController: UIViewController,
     func newState(state: SearchEngineSelectionState) {
         self.state = state
 
-        // FIXME FXIOS-10189 Eventually we'll have a tableview. Placeholder for temporary testing redux.
-//        placeholderSwitchSearchEngineButton.setTitle(state.searchEngines.last?.shortName ?? "Empty!", for: .normal)
-
         let searchEngineElements = state.searchEngines.map { engine in
             return MenuElement(
                 title: engine.shortName,
@@ -170,7 +136,9 @@ class SearchEngineSelectionViewController: UIViewController,
                 a11yLabel: "", // TODO
                 a11yHint: nil, // TODO
                 a11yId: "", // TODO
-                action: nil
+                action: { [weak self] in
+                    self?.didTap(searchEngine: engine)
+                }
             )
         }
 
@@ -215,10 +183,9 @@ class SearchEngineSelectionViewController: UIViewController,
         coordinator?.navigateToSearchSettings(animated: true)
     }
 
-    // FIXME FXIOS-10189 This will be deleted later.
-    @objc
-    func testDidChangeSearchEngine(sender: UIButton) {
+    func didTap(searchEngine: OpenSearchEngine) {
         // TODO FXIOS-10384 Push action to the toolbar to update the search engine selection for the next search and
         // to focus the toolbar (if it isn't already focused).
+        print("Tapped \(searchEngine.shortName)")
     }
 }
