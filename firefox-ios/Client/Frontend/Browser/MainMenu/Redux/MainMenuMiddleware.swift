@@ -32,11 +32,10 @@ final class MainMenuMiddleware {
                             icon: image)
                     }
                 } else {
-                    self.dispatchUpdateAccountHeader(
-                        accountData: accountData,
-                        action: action,
-                        icon: nil)
+                    self.dispatchUpdateAccountHeader(accountData: accountData, action: action)
                 }
+            } else {
+                self.dispatchUpdateAccountHeader(action: action)
             }
             store.dispatch(
                 MainMenuAction(
@@ -49,9 +48,9 @@ final class MainMenuMiddleware {
         }
     }
 
-    private func dispatchUpdateAccountHeader(accountData: AccountData?,
+    private func dispatchUpdateAccountHeader(accountData: AccountData? = nil,
                                              action: MainMenuAction,
-                                             icon: UIImage?) {
+                                             icon: UIImage? = nil) {
         store.dispatch(
             MainMenuAction(
                 windowUUID: action.windowUUID,
