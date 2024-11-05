@@ -240,12 +240,10 @@ struct MainMenuConfigurationUtility: Equatable {
         typealias Menu = String.MainMenu.ToolsSection
         typealias A11y = String.MainMenu.ToolsSection.AccessibilityLabels
 
-        let userAgentStringSelector: ((String, String) -> String) = { desktopString, mobileString in
-            if tabInfo.isDefaultUserAgentDesktop {
-                return tabInfo.hasChangedUserAgent ? desktopString : mobileString
-            } else {
-                return tabInfo.hasChangedUserAgent ? mobileString : desktopString
-            }
+        // isDefaultUserAgentDesktop is only true if we're building on an "intel mac"
+        // hasChangedUserAgent describes if we've changed form the initial starting state
+        let userAgentStringSelector = { (desktopString: String, mobileString: String) in
+            tabInfo.isDefaultUserAgentDesktop == tabInfo.hasChangedUserAgent ? desktopString : mobileString
         }
 
         let title = userAgentStringSelector(Menu.SwitchToDesktopSite, Menu.SwitchToMobileSite)
