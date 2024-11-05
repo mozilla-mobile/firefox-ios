@@ -38,7 +38,7 @@ struct MicrosurveyPromptState: StateType, Equatable {
 
         switch action.actionType {
         case MicrosurveyPromptMiddlewareActionType.initialize:
-            return handleInitialize(state: state, action: action)
+            return handleInitializeAction(state: state, action: action)
         case MicrosurveyPromptActionType.closePrompt:
             return MicrosurveyPromptState(
                 windowUUID: state.windowUUID,
@@ -67,7 +67,7 @@ struct MicrosurveyPromptState: StateType, Equatable {
         )
     }
 
-    private static func handleInitialize(state: Self, action: Action) -> Self {
+    private static func handleInitializeAction(state: Self, action: Action) -> Self {
         let model = (action as? MicrosurveyPromptMiddlewareAction)?.microsurveyModel
         return MicrosurveyPromptState(
             windowUUID: state.windowUUID,
