@@ -101,7 +101,7 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
         } else {
             readerModeStyle.theme = ReaderModeTheme.preferredTheme(window: nil)
         }
-        
+
         guard let html = ReaderModeUtils.generateReaderContent(
             readabilityResult,
             initialStyle: readerModeStyle
