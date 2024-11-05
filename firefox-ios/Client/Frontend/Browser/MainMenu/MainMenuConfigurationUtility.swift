@@ -252,13 +252,13 @@ struct MainMenuConfigurationUtility: Equatable {
         let icon = userAgentStringSelector(Icons.deviceDesktop, Icons.deviceMobile)
         let a11yLabel = userAgentStringSelector(A11y.SwitchToDesktopSite, A11y.SwitchToMobileSite)
 
-        let isEnabled = tabInfo.isDefaultUserAgentDesktop ? !tabInfo.hasChangedUserAgent : tabInfo.hasChangedUserAgent
+        let isActive = tabInfo.isDefaultUserAgentDesktop ? !tabInfo.hasChangedUserAgent : tabInfo.hasChangedUserAgent
 
         return MenuElement(
             title: title,
             iconName: icon,
             isEnabled: true,
-            isActive: isEnabled,
+            isActive: isActive,
             a11yLabel: a11yLabel,
             a11yHint: "",
             a11yId: AccessibilityIdentifiers.MainMenu.switchToDesktopSite,
