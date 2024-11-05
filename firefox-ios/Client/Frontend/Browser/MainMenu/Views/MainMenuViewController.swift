@@ -272,6 +272,7 @@ class MainMenuViewController: UIViewController,
 
         if let accountData = menuState.accountData {
             updateHeaderWith(accountData: accountData, icon: menuState.accountIcon)
+            setupAccessibilityIdentifiers(mainButtonA11yLabel: accountData.title)
         }
 
         if menuState.currentSubmenuView != nil {
@@ -335,11 +336,12 @@ class MainMenuViewController: UIViewController,
         return sheetController.selectedDetentIdentifier
     }
 
-    private func setupAccessibilityIdentifiers() {
+    private func setupAccessibilityIdentifiers(
+        mainButtonA11yLabel: String = .MainMenu.Account.AccessibilityLabels.MainButton) {
         menuContent.setupAccessibilityIdentifiers(
             closeButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.CloseButton,
             closeButtonA11yId: AccessibilityIdentifiers.MainMenu.HeaderView.closeButton,
-            mainButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.MainButton,
+            mainButtonA11yLabel: mainButtonA11yLabel,
             mainButtonA11yId: AccessibilityIdentifiers.MainMenu.HeaderView.mainButton,
             menuA11yId: AccessibilityIdentifiers.MainMenu.mainMenu,
             menuA11yLabel: .MainMenu.TabsSection.AccessibilityLabels.MainMenu)
