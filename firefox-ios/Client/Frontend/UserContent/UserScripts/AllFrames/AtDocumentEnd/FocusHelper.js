@@ -38,7 +38,7 @@ window.__firefox__.includeOnce("FocusHelper", function() {
   };
 
   const body = window.document.body;
-  ["focus", "blur"].forEach((eventType) => {
-    body.addEventListener(eventType, handler, options);
-  });
+  // In certain contexts, like PDF documents, the body might not exist, hence the optional chaining.
+  body?.addEventListener("focus", handler, options);
+  body?.addEventListener("blur", handler, options);
 });
