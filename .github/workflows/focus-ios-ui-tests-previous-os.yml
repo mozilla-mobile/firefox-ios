@@ -18,12 +18,11 @@ jobs:
       max-parallel: 1
       matrix:
         include:
-          # - ios_version: 16.4
-          #  ios_simulator: iPhone 14
-          # - ios_version: 15.5
-          #  ios_simulator: iPhone 13
-          - ios_version: 18.0
-            ios_simulator: iPhone 16
+          - ios_version: 16.4
+            ios_simulator: iPhone 14
+          - ios_version: 15.5
+            ios_simulator: iPhone 13
+
     steps:
       - name: Check out source code
         uses: actions/checkout@v4.1.7
