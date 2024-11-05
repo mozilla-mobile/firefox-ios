@@ -32,7 +32,7 @@ struct MainMenuConfigurationUtility: Equatable {
         static let print = StandardImageIdentifiers.Large.print
         static let share = StandardImageIdentifiers.Large.share
         static let addToShortcuts = StandardImageIdentifiers.Large.pin
-        static let removeFromShortcuts = StandardImageIdentifiers.Large.pinSlash
+        static let removeFromShortcuts = StandardImageIdentifiers.Large.pinSlashFilled
         static let saveToReadingList = StandardImageIdentifiers.Large.readingListAdd
         static let removeFromReadingList = StandardImageIdentifiers.Large.readingListSlashFill
         static let bookmarkThisPage = StandardImageIdentifiers.Large.bookmark
