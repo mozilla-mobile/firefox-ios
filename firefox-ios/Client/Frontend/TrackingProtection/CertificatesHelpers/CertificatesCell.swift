@@ -76,7 +76,7 @@ final class CertificatesCell: UITableViewCell, ReusableCell, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        backgroundColor = .clear
+        backgroundColor = theme.colors.layer5
         sectionLabel.textColor = theme.colors.textPrimary
     }
 

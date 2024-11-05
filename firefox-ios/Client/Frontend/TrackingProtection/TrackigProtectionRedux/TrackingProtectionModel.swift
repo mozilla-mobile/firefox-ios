@@ -19,7 +19,7 @@ class TrackingProtectionModel {
     var certificates = [Certificate]()
     let url: URL
     let displayTitle: String
-    let connectionSecure: Bool
+    var connectionSecure: Bool
     let globalETPIsEnabled: Bool
     var selectedTab: Tab?
 
@@ -126,7 +126,7 @@ class TrackingProtectionModel {
         if !connectionSecure {
             return theme.colors.layerRatingFSubdued
         }
-        return theme.colors.layer3
+        return theme.type == .privateMode ? theme.colors.layerAccentPrivateNonOpaque : theme.colors.layer3
     }
 
     func getDetailsModel() -> TrackingProtectionDetailsModel {
