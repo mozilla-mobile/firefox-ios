@@ -111,7 +111,7 @@ class IntegrationTests: BaseTestCase {
     func testFxASyncBookmark () {
         // Bookmark is added by the DB
         // Sign into Mozilla Account
-        navigator.openURL("example.com")
+        navigator.openURL(testingURL)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
         navigator.goto(BrowserTabMenu)
         app.tables.otherElements[StandardImageIdentifiers.Large.bookmark].waitAndTap()
