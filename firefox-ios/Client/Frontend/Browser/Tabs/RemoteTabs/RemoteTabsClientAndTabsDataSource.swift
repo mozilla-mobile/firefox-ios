@@ -14,7 +14,7 @@ protocol RemoteTabsClientAndTabsDataSourceDelegate: AnyObject {
     func remoteTabsClientAndTabsDataSourceDidSelectURL(_ url: URL, visitType: VisitType)
 }
 
-class RemoteTabsClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSource {
+class RemoteTabsClientAndTabsDataSource: NSObject {
     struct UX {
         static let headerHeight = SiteTableViewControllerUX.RowHeight
     }
