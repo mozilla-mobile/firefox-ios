@@ -7,6 +7,8 @@ import UIKit
 import Common
 import MenuKit
 
+// FXIOS-10189 This class will be refactored into a generic UITableView solution later. For now, it is largely a clone of
+// MenuKit's work. Eventually both this target and the MenuKit target will leverage a common component.
 public final class SearchEngineTableView: UIView,
                              UITableViewDelegate,
                              UITableViewDataSource, ThemeApplicable {
@@ -15,7 +17,7 @@ public final class SearchEngineTableView: UIView,
     }
 
     private var tableView: UITableView
-    private var menuData: [MenuSection] // FIXME will be different later...
+    private var menuData: [MenuSection] // FIXME FXIOS-10189 Will be refactored to use a generic table along with Menu later
     private var theme: Theme?
 
     override init(frame: CGRect) {
@@ -25,7 +27,7 @@ public final class SearchEngineTableView: UIView,
         setupView()
     }
 
-    required public init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
