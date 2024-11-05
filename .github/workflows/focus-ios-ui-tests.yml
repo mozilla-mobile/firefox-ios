@@ -55,7 +55,7 @@ jobs:
             fail-fast: false
             max-parallel: 1
             matrix:
-                xcodebuild_test_plan: ['SmokeTest'] # , 'FullFunctionalTests']
+                xcodebuild_test_plan: ['SmokeTest', 'FullFunctionalTests']
                 ios_simulator: [ 'iPhone 15', 'iPad Pro (12.9-inch) (6th generation)']
         steps:
             - name: Check out source code
