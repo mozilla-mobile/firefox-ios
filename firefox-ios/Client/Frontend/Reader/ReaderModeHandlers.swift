@@ -44,8 +44,6 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
             return GCDWebServerResponse(statusCode: status)
         }
 
-        var readerModeStyle = ReaderModeStyle.defaultStyle()
-
         // Register the handler that accepts /reader-mode/page?url=http://www.example.com requests.
         webServer.registerHandlerForMethod(
             "GET",
