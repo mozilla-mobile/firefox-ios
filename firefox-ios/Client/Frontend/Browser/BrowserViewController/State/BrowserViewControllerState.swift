@@ -130,13 +130,13 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
 
         if let action = action as? FakespotAction {
-            return BrowserViewControllerState.reduceStateForFakeSpotAction(action: action, state: state)
+            return reduceStateForFakeSpotAction(action: action, state: state)
         } else if let action = action as? MicrosurveyPromptAction {
-            return BrowserViewControllerState.reduceStateForMicrosurveyAction(action: action, state: state)
+            return reduceStateForMicrosurveyAction(action: action, state: state)
         } else if let action = action as? GeneralBrowserAction {
-            return BrowserViewControllerState.reduceStateForGeneralBrowserAction(action: action, state: state)
+            return reduceStateForGeneralBrowserAction(action: action, state: state)
         } else if let action = action as? NavigationBrowserAction {
-                return BrowserViewControllerState.reduceStateForNavigationBrowserAction(action: action, state: state)
+                return reduceStateForNavigationBrowserAction(action: action, state: state)
         } else {
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
@@ -180,7 +180,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             )
 
         default:
-            return defaultActionState(from: state)
+            return defaultActionState(from: state, action: action)
         }
     }
 
@@ -233,7 +233,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
 
         case GeneralBrowserActionType.updateSelectedTab:
-            return BrowserViewControllerState.resolveStateForUpdateSelectedTab(action: action, state: state)
+            return resolveStateForUpdateSelectedTab(action: action, state: state)
 
         case GeneralBrowserActionType.goToHomepage:
             return BrowserViewControllerState(
@@ -468,19 +468,26 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action)
                 )
         default:
-            let defaultState = defaultActionState(from: state)
-            return BrowserViewControllerState(
-                searchScreenState: defaultState.searchScreenState,
-                showDataClearanceFlow: defaultState.showDataClearanceFlow,
-                fakespotState: FakespotState.reducer(state.fakespotState, action),
-                windowUUID: defaultState.windowUUID,
-                browserViewType: defaultState.browserViewType,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action)
-            )
+            return defaultActionState(from: state, action: action)
         }
     }
 
+    private static func defaultActionState(from state: BrowserViewControllerState,
+                                           action: Action) -> BrowserViewControllerState {
+        let defaultState = defaultActionState(from: state)
+        return BrowserViewControllerState(
+            searchScreenState: defaultState.searchScreenState,
+            showDataClearanceFlow: defaultState.showDataClearanceFlow,
+            fakespotState: FakespotState.reducer(defaultState.fakespotState, action),
+            windowUUID: defaultState.windowUUID,
+            browserViewType: defaultState.browserViewType,
+            microsurveyState: MicrosurveyPromptState.reducer(defaultState.microsurveyState, action)
+        )
+    }
+
     static func defaultActionState(from state: BrowserViewControllerState) -> BrowserViewControllerState {
+        // This method should be used only in `defaultActionState(from: ,action: )` since the default state for this
+        // state depends on the action as well
         return BrowserViewControllerState(
             searchScreenState: state.searchScreenState,
             showDataClearanceFlow: state.showDataClearanceFlow,
