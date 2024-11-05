@@ -11,7 +11,7 @@ struct FakeReduxState: StateType, Equatable {
     var isInPrivateMode = false
 
     static let reducer: Reducer<Self> = { state, action in
-        guard let action = action as? FakeReduxAction else { return state }
+        guard let action = action as? FakeReduxAction else { return defaultActionState(from: state) }
 
         switch action.actionType {
         case FakeReduxActionType.initialValueLoaded,
@@ -23,7 +23,11 @@ struct FakeReduxState: StateType, Equatable {
             return FakeReduxState(counter: state.counter,
                                   isInPrivateMode: action.privateMode ?? state.isInPrivateMode)
         default:
-            return state
+            return defaultActionState(from: state)
         }
+    }
+    
+    static func defaultActionState(from state: FakeReduxState) -> FakeReduxState {
+        return state
     }
 }

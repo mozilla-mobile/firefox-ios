@@ -25,6 +25,10 @@ struct MockState: StateType, Equatable {
             MockState.midReducerActions?()
         }
 
+        return defaultActionState(from: state)
+    }
+    
+    static func defaultActionState(from state: MockState) -> MockState {
         return state
     }
 }
