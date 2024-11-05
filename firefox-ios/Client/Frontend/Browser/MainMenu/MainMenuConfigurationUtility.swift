@@ -355,7 +355,7 @@ struct MainMenuConfigurationUtility: Equatable {
             iconName: icon,
             isEnabled: true,
             isActive: tabInfo.zoomLevel != 1.0,
-            a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.Zoom,
+            a11yLabel: String(format: .MainMenu.Submenus.Tools.AccessibilityLabels.Zoom, zoomLevel),
             a11yHint: "",
             a11yId: AccessibilityIdentifiers.MainMenu.zoom,
             action: {
