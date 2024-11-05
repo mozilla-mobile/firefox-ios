@@ -86,7 +86,10 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
     }
 
     static let reducer: Reducer<TrackingProtectionState> = { state, action in
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return defaultActionState(from: state) }
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
+        else {
+            return defaultActionState(from: state)
+        }
 
         switch action.actionType {
         case TrackingProtectionMiddlewareActionType.clearCookies:

@@ -157,7 +157,7 @@ struct NavigationBarState: StateType, Equatable {
             displayBorder: displayBorder
         )
     }
-    
+
     static func defaultActionState(from state: NavigationBarState) -> NavigationBarState {
         return NavigationBarState(
             windowUUID: state.windowUUID,

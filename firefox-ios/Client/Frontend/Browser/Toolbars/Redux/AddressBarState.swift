@@ -671,7 +671,7 @@ struct AddressBarState: StateType, Equatable {
             showQRPageAction: state.showQRPageAction
         )
     }
-    
+
     // MARK: - Address Toolbar Actions
     private static func navigationActions(
         action: ToolbarAction,
