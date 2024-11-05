@@ -33,6 +33,7 @@
         "ActivityStreamTest\/testTopSitesShareDefaultTopSite()",
         "ActivityStreamTest\/testTopSitesShiftAfterRemovingOne()",
         "AuthenticationTest\/testBasicHTTPAuthenticationPromptVisible()",
+        "AuthenticationTest\/testBasicHTTPAuthenticationPromptVisibleAndLogin()",
         "AuthenticationTest\/testChangePassCode()",
         "AuthenticationTest\/testChangePasscodeShowsErrorStates()",
         "AuthenticationTest\/testChangeRequirePasscodeInterval()",
