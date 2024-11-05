@@ -109,7 +109,4 @@ private struct LightColourPalette: ThemeColourPalette {
 
     // MARK: - Shadow
     var shadowDefault: UIColor = FXColors.DarkGrey40.withAlphaComponent(0.12)
-
-    // MARK: - Separators
-    var separatorDefault: UIColor = FXColors.LightGrey30
 }

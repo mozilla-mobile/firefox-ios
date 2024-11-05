@@ -134,6 +134,6 @@ class MenuTableView: UIView,
         self.theme = theme
         backgroundColor = .clear
         tableView.backgroundColor = .clear
-        tableView.separatorColor = theme.colors.separatorDefault
+        tableView.separatorColor = theme.colors.borderPrimary
     }
 }

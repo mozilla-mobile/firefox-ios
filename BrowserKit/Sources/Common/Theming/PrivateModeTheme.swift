@@ -111,7 +111,4 @@ private struct PrivateModeColorPalette: ThemeColourPalette {
 
     // MARK: - Shadow
     var shadowDefault: UIColor = FXColors.DarkGrey80.withAlphaComponent(0.12)
-
-    // MARK: - Separators
-    var separatorDefault: UIColor = FXColors.LightGrey30
 }
