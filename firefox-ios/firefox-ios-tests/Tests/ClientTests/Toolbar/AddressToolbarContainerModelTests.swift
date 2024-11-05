@@ -9,7 +9,7 @@ import XCTest
 class AddressToolbarContainerModelTests: XCTestCase {
     private var viewModel: AddressToolbarContainerModel!
     private var mockProfile: MockProfile!
-    private var engines: SearchEngines!
+    private var searchEnginesManager: SearchEnginesManager!
     private let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
@@ -44,7 +44,7 @@ class AddressToolbarContainerModelTests: XCTestCase {
                                                  windowUUID: windowUUID)
 
         let mockSearchEngineProvider = MockSearchEngineProvider()
-        engines = SearchEngines(
+        searchEnginesManager = SearchEnginesManager(
             prefs: mockProfile.prefs,
             files: mockProfile.files,
             engineProvider: mockSearchEngineProvider
@@ -55,23 +55,23 @@ class AddressToolbarContainerModelTests: XCTestCase {
         super.tearDown()
         viewModel = nil
         mockProfile = nil
-        engines = nil
+        searchEnginesManager = nil
     }
 
     func testSearchWordFromURLWhenUrlIsNilThenSearchWordIsNil() {
-        XCTAssertNil(viewModel.searchTermFromURL(nil, searchEngines: engines))
+        XCTAssertNil(viewModel.searchTermFromURL(nil, searchEnginesManager: searchEnginesManager))
     }
 
     func testSearchWordFromURLWhenUsingGoogleSearchThenSearchWordIsCorrect() {
         let searchTerm = "test"
         let url = URL(string: "http://firefox.com/find?q=\(searchTerm)")
-        let result = viewModel.searchTermFromURL(url, searchEngines: engines)
+        let result = viewModel.searchTermFromURL(url, searchEnginesManager: searchEnginesManager)
         XCTAssertEqual(searchTerm, result)
     }
 
     func testSearchWordFromURLWhenUsingInternalUrlThenSearchWordIsNil() {
         let searchTerm = "test"
         let url = URL(string: "internal://local?q=\(searchTerm)")
-        XCTAssertNil(viewModel.searchTermFromURL(url, searchEngines: engines))
+        XCTAssertNil(viewModel.searchTermFromURL(url, searchEnginesManager: searchEnginesManager))
     }
 }

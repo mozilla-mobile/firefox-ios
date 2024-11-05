@@ -126,6 +126,8 @@
         "NightModeTests",
         "OnboardingTests\/testCloseTour()",
         "OnboardingTests\/testFirstRunTour()",
+        "OnboardingTests\/testFirstRunTourDarkMode()",
+        "OnboardingTests\/testOnboardingSignIn()",
         "OnboardingTests\/testWhatsNewPage()",
         "OpeningScreenTests",
         "PerformanceTests",

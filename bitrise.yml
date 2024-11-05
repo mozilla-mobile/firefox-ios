@@ -102,13 +102,13 @@ workflows:
             "$BITRISE_SOURCE_DIR/firefox-ios/Client/" \
             "$BITRISE_SOURCE_DIR/xcodebuild.log"
     - deploy-to-bitrise-io@2:
-        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
+        run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests" | and (getenv "BITRISE_XCRESULT_PATH" | ne "")}}'
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
         - pipeline_intermediate_files: |-
             $BITRISE_XCRESULT_PATH:BITRISE_XCRESULT_PATH
             ${BITRISE_SOURCE_DIR}/DerivedData.zip:DERIVED_DATA_DIR
-        is_always_run: false
+        is_always_run: true
     - script@1.1:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         title: Run Danger 2
@@ -2116,17 +2116,17 @@ app:
     BITRISE_NIGHTLY_VERSION: '9000'
   - opts:
       is_expand: false
-    BITRISE_RELEASE_VERSION: '133.0'
+    BITRISE_RELEASE_VERSION: '134.0'
   - opts:
       is_expand: false
-    BITRISE_BETA_VERSION: '133.0'
+    BITRISE_BETA_VERSION: '134.0'
 
 trigger_map:
 - push_branch: main
   pipeline: pipeline_build_and_test
 - push_branch: epic-branch/*
   pipeline: pipeline_build_and_test
-- push_branch: release/v133
+- push_branch: release/v134
   pipeline: pipeline_build_and_test
 - pull_request_target_branch: main
   pipeline: pipeline_build_and_test

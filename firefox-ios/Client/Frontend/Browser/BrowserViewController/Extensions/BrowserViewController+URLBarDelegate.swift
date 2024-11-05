@@ -36,68 +36,9 @@ extension BrowserViewController: URLBarDelegate {
                      focusedSegment: TabTrayPanelType? = nil) {
         updateFindInPageVisibility(isVisible: false)
 
-        if isTabTrayRefactorEnabled {
-            let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
-            let selectedSegment: TabTrayPanelType = focusedSegment ?? (isPrivateTab ? .privateTabs : .tabs)
-            navigationHandler?.showTabTray(selectedPanel: selectedSegment)
-        } else {
-            willNavigateAway()
-            showLegacyTabTrayViewController(withFocusOnUnselectedTab: tabToFocus,
-                                            focusedSegment: focusedSegment)
-        }
-    }
-
-    private func showLegacyTabTrayViewController(withFocusOnUnselectedTab tabToFocus: Tab? = nil,
-                                                 focusedSegment: TabTrayPanelType? = nil) {
-        tabTrayViewController = LegacyTabTrayViewController(
-            tabTrayDelegate: self,
-            profile: profile,
-            tabToFocus: tabToFocus,
-            tabManager: tabManager,
-            overlayManager: overlayManager,
-            focusedSegment: focusedSegment)
-        (tabTrayViewController as? LegacyTabTrayViewController)?.qrCodeNavigationHandler = navigationHandler
-        tabTrayViewController?.openInNewTab = { url, isPrivate in
-            let tab = self.tabManager.addTab(
-                URLRequest(url: url),
-                afterTab: self.tabManager.selectedTab,
-                isPrivate: isPrivate
-            )
-            // If we are showing toptabs a user can just use the top tab bar
-            // If in overlay mode switching doesnt correctly dismiss the homepanels
-            guard !self.topTabsVisible,
-                  !self.isToolbarRefactorEnabled,
-                  !self.urlBar.inOverlayMode else { return }
-            // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
-            let viewModel = ButtonToastViewModel(labelText: .ContextMenuButtonToastNewTabOpenedLabelText,
-                                                 buttonText: .ContextMenuButtonToastNewTabOpenedButtonText)
-            let toast = ButtonToast(viewModel: viewModel,
-                                    theme: self.currentTheme(),
-                                    completion: { buttonPressed in
-                if buttonPressed {
-                    self.tabManager.selectTab(tab)
-                }
-            })
-            self.show(toast: toast)
-        }
-
-        tabTrayViewController?.didSelectUrl = { url, visitType in
-            guard let tab = self.tabManager.selectedTab else { return }
-            self.finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
-        }
-
-        guard self.tabTrayViewController != nil else { return }
-
-        let navigationController = ThemedDefaultNavigationController(rootViewController: tabTrayViewController!,
-                                                                     windowUUID: windowUUID)
-        navigationController.presentationController?.delegate = tabTrayViewController
-
-        self.present(navigationController, animated: true, completion: nil)
-
-        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .tabTray)
-
-        // App store review in-app prompt
-        ratingPromptManager.showRatingPromptIfNeeded()
+        let isPrivateTab = tabManager.selectedTab?.isPrivate ?? false
+        let selectedSegment: TabTrayPanelType = focusedSegment ?? (isPrivateTab ? .privateTabs : .tabs)
+        navigationHandler?.showTabTray(selectedPanel: selectedSegment)
     }
 
     func urlBarDidPressReload(_ urlBar: URLBarView) {
@@ -206,7 +147,7 @@ extension BrowserViewController: URLBarDelegate {
         if let url = searchURL, InternalURL.isValid(url: url) {
             searchURL = url
         }
-        if let query = profile.searchEngines.queryForSearchURL(searchURL as URL?) {
+        if let query = profile.searchEnginesManager.queryForSearchURL(searchURL as URL?) {
             return (query, true)
         } else {
             return (url?.absoluteString, false)
@@ -255,7 +196,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func submitSearchText(_ text: String, forTab tab: Tab) {
-        guard let engine = profile.searchEngines.defaultEngine,
+        guard let engine = profile.searchEnginesManager.defaultEngine,
               let searchURL = engine.searchURLForQuery(text)
         else {
             DefaultLogger.shared.log("Error handling URL entry: \"\(text)\".", level: .warning, category: .tabs)

@@ -16,6 +16,7 @@ enum MainMenuNavigationDestination: Equatable, CaseIterable {
     case newPrivateTab
     case passwords
     case settings
+    case syncSignIn
     case shareSheet
     case zoom
 }

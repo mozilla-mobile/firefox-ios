@@ -169,8 +169,8 @@ open class MockProfile: Client.Profile {
         return CertStore()
     }()
 
-    public lazy var searchEngines: SearchEngines = {
-        return SearchEngines(prefs: self.prefs, files: self.files)
+    public lazy var searchEnginesManager: SearchEnginesManager = {
+        return SearchEnginesManager(prefs: self.prefs, files: self.files)
     }()
 
     public lazy var prefs: Prefs = {
@@ -286,6 +286,18 @@ open class MockProfile: Client.Profile {
 
     public func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
         return deferMaybe(0)
+    }
+
+    public func addTabToCommandQueue(_ deviceId: String, url: URL) {
+        return
+    }
+
+    public func removeTabFromCommandQueue(_ deviceId: String, url: URL) {
+        return
+    }
+
+    public func flushTabCommands(toDeviceId: String?) {
+        return
     }
 
     public func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success {

@@ -60,9 +60,13 @@ class BrowsingPDFTests: BaseTestCase {
         // Long press on a link on the pdf and check the options shown
         app.webViews.links.element(boundBy: 0).pressAtPoint(CGPoint(x: 10, y: 0), forDuration: 3)
 
-        mozWaitForElementToExist(app.staticTexts[PDF_website["longUrlValue"]!])
-        mozWaitForElementToExist(app.buttons["Open"])
-        mozWaitForElementToExist(app.buttons["Add to Reading List"])
+        waitForElementsToExist(
+            [
+                app.staticTexts[PDF_website["longUrlValue"]!],
+                app.buttons["Open"],
+                app.buttons["Add to Reading List"]
+            ]
+        )
         if #available(iOS 16, *) {
             mozWaitForElementToExist(app.buttons["Copy Link"])
         } else {
@@ -95,8 +99,12 @@ class BrowsingPDFTests: BaseTestCase {
         waitUntilPageLoad()
         navigator.performAction(Action.PinToTopSitesPAM)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
-        mozWaitForElementToExist(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!])
+        waitForElementsToExist(
+            [
+                app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell],
+                app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!]
+            ]
+        )
 
         // Open pdf from pinned site
         let pdfTopSite = app
@@ -116,8 +124,12 @@ class BrowsingPDFTests: BaseTestCase {
         pdfTopSite.press(forDuration: 1)
         mozWaitForElementToExist(app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash])
         app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash].tap()
-        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
-        mozWaitForElementToExist(app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!])
+        waitForElementsToExist(
+            [
+            app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell],
+            app.collectionViews.cells.staticTexts[PDF_website["bookmarkLabel"]!]
+            ]
+        )
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307121
@@ -128,7 +140,11 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.performAction(Action.BookmarkThreeDots)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_Bookmarks)
-        mozWaitForElementToExist(app.tables["Bookmarks List"])
-        mozWaitForElementToExist(app.tables["Bookmarks List"].staticTexts[PDF_website["bookmarkLabel"]!])
+        waitForElementsToExist(
+            [
+                app.tables["Bookmarks List"],
+                app.tables["Bookmarks List"].staticTexts[PDF_website["bookmarkLabel"]!]
+            ]
+        )
     }
 }

@@ -6,11 +6,13 @@ import XCTest
 
 let firstWebsite = (
     url: path(forTestPage: "test-mozilla-org.html"),
-    tabName: "Internet for people, not profit — Mozilla"
+    tabName: "Internet for people, not profit — Mozilla",
+    browserTabName: "http://localhost:7777/test-fixture/test-mozilla-book.html. Currently selected tab."
 )
 let secondWebsite = (
     url: path(forTestPage: "test-mozilla-book.html"),
-    tabName: "The Book of Mozilla. Currently selected tab."
+    tabName: "The Book of Mozilla. Currently selected tab.",
+    browserTabName: "http://localhost:7777/test-fixture/test-mozilla-book.html. Currently selected tab."
 )
 let secondWebsiteUnselected = (
     url: path(forTestPage: "test-mozilla-book.html"),
@@ -204,8 +206,16 @@ private extension BaseTestCase {
     }
 
     func checkTabsOrder(dragAndDropTab: Bool, firstTab: String, secondTab: String) {
-        mozWaitForElementToExist(app.collectionViews.cells.element(boundBy: 0))
-        mozWaitForElementToExist(app.collectionViews.cells.element(boundBy: 1))
+        waitForElementsToExist(
+            [
+                app.collectionViews.cells.element(
+                    boundBy: 0
+                ),
+                app.collectionViews.cells.element(
+                    boundBy: 1
+                )
+            ]
+        )
         let firstTabCell = app.collectionViews.cells.element(boundBy: 0).label
         let secondTabCell = app.collectionViews.cells.element(boundBy: 1).label
 
@@ -257,13 +267,13 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         if skipPlatform { return }
 
         openTwoWebsites()
-        checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
+        checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.browserTabName)
         // Drag first tab on the second one
         dragAndDrop(
             dragElement: app.collectionViews.cells[firstWebsite.tabName],
-            dropOnElement: app.collectionViews.cells[secondWebsite.tabName]
+            dropOnElement: app.collectionViews.cells[secondWebsite.browserTabName]
         )
-        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
+        checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.browserTabName, secondTab: firstWebsite.tabName)
         // Check that focus is kept on last website open
         XCTAssert(
             secondWebsite.url.contains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value! as! String),
@@ -275,7 +285,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
     func testRearrangeTabsTabTrayIsKeptinTopTabs() {
         if skipPlatform { return }
         openTwoWebsites()
-        checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
+        checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.browserTabName)
         navigator.goto(TabTray)
 
         // Drag first tab on the second one

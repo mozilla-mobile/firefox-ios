@@ -172,7 +172,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate, The
         let error: UILabel = .build { label in
             if self.settingsTitle != nil {
                 label.text = .SettingsContentPageLoadError
-                label.textColor = self.currentTheme().colors.textWarning
+                label.textColor = self.currentTheme().colors.textCritical
                 label.textAlignment = .center
             }
             label.isHidden = true

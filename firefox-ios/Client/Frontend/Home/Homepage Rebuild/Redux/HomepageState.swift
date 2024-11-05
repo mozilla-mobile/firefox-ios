@@ -6,14 +6,9 @@ import Common
 import Redux
 
 struct HomepageState: ScreenState, Equatable {
-    enum NavigationDestination {
-        case customizeHomepage
-    }
-
     var windowUUID: WindowUUID
     var headerState: HeaderState
     var pocketState: PocketState
-    var navigateTo: NavigationDestination?
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let homepageState = store.state.screenState(
@@ -28,8 +23,7 @@ struct HomepageState: ScreenState, Equatable {
         self.init(
             windowUUID: homepageState.windowUUID,
             headerState: homepageState.headerState,
-            pocketState: homepageState.pocketState,
-            navigateTo: homepageState.navigateTo
+            pocketState: homepageState.pocketState
         )
     }
 
@@ -44,13 +38,11 @@ struct HomepageState: ScreenState, Equatable {
     private init(
         windowUUID: WindowUUID,
         headerState: HeaderState,
-        pocketState: PocketState,
-        navigateTo: NavigationDestination? = nil
+        pocketState: PocketState
     ) {
         self.windowUUID = windowUUID
         self.headerState = headerState
         self.pocketState = pocketState
-        self.navigateTo = navigateTo
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -69,13 +61,6 @@ struct HomepageState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 headerState: HeaderState.reducer(state.headerState, action),
                 pocketState: PocketState.reducer(state.pocketState, action)
-            )
-        case HomepageActionType.tappedOnCustomizeHomepage:
-            return HomepageState(
-                windowUUID: state.windowUUID,
-                headerState: HeaderState.reducer(state.headerState, action),
-                pocketState: PocketState.reducer(state.pocketState, action),
-                navigateTo: .customizeHomepage
             )
         default:
             return HomepageState(

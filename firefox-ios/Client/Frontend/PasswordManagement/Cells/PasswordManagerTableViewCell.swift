@@ -120,6 +120,6 @@ class PasswordManagerTableViewCell: ThemedTableViewCell {
         super.applyTheme(theme: theme)
         hostnameLabel.textColor = theme.colors.textPrimary
         usernameLabel.textColor = theme.colors.textSecondary
-        breachAlertImageView.tintColor = theme.colors.iconWarning
+        breachAlertImageView.tintColor = theme.colors.iconCritical
     }
 }

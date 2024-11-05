@@ -23,7 +23,6 @@ class TabDisplayView: UIView,
     private var inactiveTabsSectionManager: InactiveTabsSectionManager
     private var tabsSectionManager: TabsSectionManager
     private let windowUUID: WindowUUID
-    private let animationQueue: TabTrayAnimationQueue
     var theme: Theme?
 
     private var dataSource: TabDisplayDiffableDataSource?
@@ -78,14 +77,12 @@ class TabDisplayView: UIView,
 
     public init(panelType: TabTrayPanelType,
                 state: TabsPanelState,
-                windowUUID: WindowUUID,
-                animationQueue: TabTrayAnimationQueue = TabTrayAnimationQueueImplementation()) {
+                windowUUID: WindowUUID) {
         self.panelType = panelType
         self.tabsState = state
         self.inactiveTabsSectionManager = InactiveTabsSectionManager()
         self.tabsSectionManager = TabsSectionManager()
         self.windowUUID = windowUUID
-        self.animationQueue = animationQueue
         super.init(frame: .zero)
         self.inactiveTabsSectionManager.delegate = self
         setupLayout()
@@ -329,14 +326,11 @@ class TabDisplayView: UIView,
 
     // MARK: - TabCellDelegate
     func tabCellDidClose(for tabUUID: TabUUID) {
-        animationQueue.addAnimation(for: collectionView) { [weak self] in
-            guard let self else { return }
-            let action = TabPanelViewAction(panelType: panelType,
-                                            tabUUID: tabUUID,
-                                            windowUUID: windowUUID,
-                                            actionType: TabPanelViewActionType.closeTab)
-            store.dispatch(action)
-        }
+        let action = TabPanelViewAction(panelType: panelType,
+                                        tabUUID: tabUUID,
+                                        windowUUID: windowUUID,
+                                        actionType: TabPanelViewActionType.closeTab)
+        store.dispatch(action)
     }
 
     // MARK: - SwipeAnimatorDelegate

@@ -56,7 +56,7 @@ class AccountStatusSetting: WithAccountSetting {
     override var status: NSAttributedString? {
         if RustFirefoxAccounts.shared.isActionNeeded {
             let string: String = .FxAAccountVerifyPassword
-            let color = theme.colors.textWarning
+            let color = theme.colors.textCritical
             let range = NSRange(location: 0, length: string.count)
             let attrs = [NSAttributedString.Key.foregroundColor: color]
             let res = NSMutableAttributedString(string: string)

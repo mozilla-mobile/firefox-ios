@@ -48,7 +48,7 @@ class RemoveAddressButton: UIButton, ThemeApplicable {
     func applyTheme(theme: any Theme) {
         let color = theme.colors
         backgroundColor = color.layer2
-        setTitleColor(color.textWarning, for: .normal)
+        setTitleColor(color.textCritical, for: .normal)
         topSeparator.backgroundColor = color.borderPrimary
         bottomSeparator.backgroundColor = color.borderPrimary
     }

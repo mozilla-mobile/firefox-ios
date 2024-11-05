@@ -247,7 +247,7 @@ class LegacyBookmarkDetailPanel: SiteTableViewController {
         deleteBookmarkButton.titleLabel?.font = FXFontStyles.Regular.body.scaledFont()
         deleteBookmarkButton.backgroundColor = currentTheme().colors.layer5
         deleteBookmarkButton.setTitle(.Bookmarks.Menu.DeleteBookmark, for: .normal)
-        deleteBookmarkButton.setTitleColor(currentTheme().colors.textWarning, for: .normal)
+        deleteBookmarkButton.setTitleColor(currentTheme().colors.textCritical, for: .normal)
     }
 
     override func reloadData() {
@@ -517,7 +517,8 @@ class LegacyBookmarkDetailPanel: SiteTableViewController {
                 title: .BookmarkDetailFieldTitle,
                 textFieldText: bookmarkItemOrFolderTitle ?? "",
                 autocapitalizationType: .sentences,
-                keyboardType: .default
+                keyboardType: .default,
+                textFieldAccessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.titleTextField
             )
             return cell
         case BookmarkDetailFieldsRow.url.rawValue:
@@ -525,7 +526,8 @@ class LegacyBookmarkDetailPanel: SiteTableViewController {
                 title: .BookmarkDetailFieldURL,
                 textFieldText: bookmarkItemURL ?? "",
                 autocapitalizationType: .none,
-                keyboardType: .URL
+                keyboardType: .URL,
+                textFieldAccessibilityIdentifier: AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.urlTextField
             )
             return cell
         default:

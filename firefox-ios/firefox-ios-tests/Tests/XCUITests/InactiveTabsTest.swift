@@ -39,16 +39,24 @@ final class InactiveTabsTest: BaseTestCase {
         navigator.goto(TabTray)
 
         // Inactive tabs list is displayed at the top
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerView])
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts.firstMatch)
+        waitForElementsToExist(
+            [
+                app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerView],
+                app.otherElements["Tabs Tray"].staticTexts.firstMatch
+            ]
+        )
 
         // Tap on the ">" button.
         app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerView].tap()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerButton])
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts["Homepage"])
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts["Google"])
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts["Facebook - log in or sign up"])
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts["Amazon.com. Spend less. Smile more."])
+        waitForElementsToExist(
+            [
+                app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerButton],
+                app.otherElements["Tabs Tray"].staticTexts["Homepage"],
+                app.otherElements["Tabs Tray"].staticTexts["Google"],
+                app.otherElements["Tabs Tray"].staticTexts["Facebook - log in or sign up"],
+                app.otherElements["Tabs Tray"].staticTexts["Amazon.com. Spend less. Smile more."]
+            ]
+        )
         app.buttons[AccessibilityIdentifiers.TabTray.doneButton].tap()
 
         // Go to Settings -> Tabs and disable "Inactive tabs"
@@ -70,10 +78,14 @@ final class InactiveTabsTest: BaseTestCase {
         app.otherElements["Tabs Tray"].swipeDown()
         app.otherElements["Tabs Tray"].swipeDown()
         app.otherElements["Tabs Tray"].swipeDown()
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts["Homepage"])
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts["Google"])
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts["Facebook - log in or sign up"])
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts["Amazon.com. Spend less. Smile more."])
+        waitForElementsToExist(
+            [
+                app.otherElements["Tabs Tray"].staticTexts["Homepage"],
+                app.otherElements["Tabs Tray"].staticTexts["Google"],
+                app.otherElements["Tabs Tray"].staticTexts["Facebook - log in or sign up"],
+                app.otherElements["Tabs Tray"].staticTexts["Amazon.com. Spend less. Smile more."],
+            ]
+        )
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerButton])
         app.buttons[AccessibilityIdentifiers.TabTray.doneButton].tap()
         navigator.nowAt(NewTabScreen)
@@ -95,20 +107,32 @@ final class InactiveTabsTest: BaseTestCase {
 
         // Tap on a tab from the inactive list
         app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerView].tap()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerButton])
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts["Homepage"])
+        waitForElementsToExist(
+            [
+                app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerButton],
+                app.otherElements["Tabs Tray"].staticTexts["Homepage"]
+            ]
+        )
         app.otherElements["Tabs Tray"].staticTexts["Homepage"].tap()
         mozWaitForElementToNotExist(app.otherElements["Tabs Tray"])
 
         navigator.nowAt(NewTabScreen)
         navigator.goto(TabTray)
-        mozWaitForElementToExist(app.staticTexts["Homepage"])
+        waitForElementsToExist(
+            [
+                app.staticTexts["Homepage"],
+                app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerView]
+            ]
+        )
 
         // Expand inactive list
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerView])
         app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerView].tap()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerButton])
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts["Google"])
+        waitForElementsToExist(
+            [
+                app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerButton],
+                app.otherElements["Tabs Tray"].staticTexts["Google"]
+            ]
+        )
         if !iPad() {
             // The active tabs on iPhone is so far down that "Homepage" is invisible.
             // iPad is large enough that "Homepage" is still visible"
@@ -120,8 +144,12 @@ final class InactiveTabsTest: BaseTestCase {
         mozWaitForElementToExist(app.otherElements["Tabs Tray"].buttons["Close"])
         app.otherElements["Tabs Tray"].buttons["Close"].tap() // Note: No AccessibilityIdentifier
         mozWaitForElementToNotExist(app.otherElements["Tabs Tray"].staticTexts["Google"])
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts["Facebook - log in or sign up"])
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts["Amazon.com. Spend less. Smile more."])
+        waitForElementsToExist(
+            [
+                app.otherElements["Tabs Tray"].staticTexts["Facebook - log in or sign up"],
+                app.otherElements["Tabs Tray"].staticTexts["Amazon.com. Spend less. Smile more."]
+            ]
+        )
 
         // Tap "Close All Inactive Tabs"
         app.swipeUp()
@@ -132,7 +160,7 @@ final class InactiveTabsTest: BaseTestCase {
         // All inactive tabs are deleted
         navigator.nowAt(TabTray)
         mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts["Homepage"])
-        mozWaitForElementToExist(app.otherElements["Tabs Tray"].staticTexts["Walmart | Save Money. Live better."])
+        XCTAssertEqual(app.otherElements["Tabs Tray"].collectionViews.cells.count, 2)
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.TabTray.InactiveTabs.headerView])
         mozWaitForElementToNotExist(app.otherElements["Tabs Tray"].staticTexts["Google"])
         mozWaitForElementToNotExist(app.otherElements["Tabs Tray"].staticTexts["Facebook - log in or sign up"])
