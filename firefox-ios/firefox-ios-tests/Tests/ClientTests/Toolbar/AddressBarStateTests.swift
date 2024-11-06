@@ -4,6 +4,7 @@
 
 import Redux
 import XCTest
+import Common
 
 @testable import Client
 
@@ -98,6 +99,37 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.browserActions[0].actionType, .tabs)
         XCTAssertEqual(newState.browserActions[0].numberOfTabs, 2)
         XCTAssertEqual(newState.browserActions[1].actionType, .menu)
+    }
+
+    func test_urlDidChangeAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                url: URL(string: "http://mozilla.com", invalidCharacters: false),
+                isPrivate: false,
+                isShowingNavigationToolbar: true,
+                canGoBack: true,
+                canGoForward: false,
+                lockIconImageName: StandardImageIdentifiers.Large.lockFill,
+                safeListedURLImageName: nil,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: ToolbarActionType.urlDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+
+        XCTAssertEqual(newState.pageActions.count, 2)
+        XCTAssertEqual(newState.pageActions[0].actionType, .share)
+        XCTAssertEqual(newState.pageActions[1].actionType, .reload)
+
+        XCTAssertEqual(newState.browserActions.count, 3)
+        XCTAssertEqual(newState.browserActions[0].actionType, .newTab)
+        XCTAssertEqual(newState.browserActions[1].actionType, .tabs)
+        XCTAssertEqual(newState.browserActions[2].actionType, .menu)
     }
 
     func test_clearSearchAction_returnsExpectedState() {
