@@ -117,7 +117,7 @@ class MainMenuDetailsViewController: UIViewController,
                 MainMenuAction(
                     windowUUID: self.windowUUID,
                     actionType: MainMenuDetailsActionType.tapBackToMainMenu,
-                    currentTabInfo: submenuState.currentTabInfo
+                    telemetryInfo: TelemetryInfo(isHomepage: submenuState.isHomepage ?? false)
                 )
             )
         }
@@ -127,7 +127,7 @@ class MainMenuDetailsViewController: UIViewController,
                 MainMenuAction(
                     windowUUID: self.windowUUID,
                     actionType: MainMenuDetailsActionType.tapDismissView,
-                    currentTabInfo: submenuState.currentTabInfo
+                    telemetryInfo: TelemetryInfo(isHomepage: submenuState.isHomepage ?? false)
                 )
             )
         }

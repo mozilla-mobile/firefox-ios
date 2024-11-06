@@ -14,7 +14,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
     var shouldGoBackToMainMenu: Bool
     var navigationDestination: MenuNavigationDestination?
     var submenuType: MainMenuDetailsViewType?
-    var currentTabInfo: MainMenuTabInfo?
+    var isHomepage: Bool?
 
     var title: String {
         typealias Titles = String.MainMenu.ToolsSection
@@ -37,7 +37,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
             windowUUID: currentState.windowUUID,
             menuElements: currentState.menuElements,
             submenuType: currentState.submenuType,
-            currentTabInfo: currentState.currentTabInfo,
+            isHomepage: currentState.isHomepage,
             navigationDestination: currentState.navigationDestination,
             shouldDismiss: currentState.shouldDismiss,
             shouldGoBackToMenu: currentState.shouldGoBackToMainMenu
@@ -49,7 +49,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
             windowUUID: windowUUID,
             menuElements: [],
             submenuType: nil,
-            currentTabInfo: nil,
+            isHomepage: nil,
             navigationDestination: nil,
             shouldDismiss: false,
             shouldGoBackToMenu: false
@@ -60,7 +60,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
         windowUUID: WindowUUID,
         menuElements: [MenuSection],
         submenuType: MainMenuDetailsViewType?,
-        currentTabInfo: MainMenuTabInfo?,
+        isHomepage: Bool?,
         navigationDestination: MenuNavigationDestination? = nil,
         shouldDismiss: Bool = false,
         shouldGoBackToMenu: Bool = false
@@ -68,7 +68,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
         self.windowUUID = windowUUID
         self.menuElements = menuElements
         self.submenuType = submenuType
-        self.currentTabInfo = currentTabInfo
+        self.isHomepage = isHomepage
         self.navigationDestination = navigationDestination
         self.shouldDismiss = shouldDismiss
         self.shouldGoBackToMainMenu = shouldGoBackToMenu
@@ -80,7 +80,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
                 submenuType: state.submenuType,
-                currentTabInfo: state.currentTabInfo
+                isHomepage: state.isHomepage
             )
         }
 
@@ -110,14 +110,14 @@ struct MainMenuDetailsState: ScreenState, Equatable {
                     readerState: readerModeState
                 ),
                 submenuType: currentSubmenu,
-                currentTabInfo: state.currentTabInfo
+                isHomepage: state.isHomepage
             )
         case MainMenuDetailsActionType.tapBackToMainMenu:
             return MainMenuDetailsState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
                 submenuType: state.submenuType,
-                currentTabInfo: state.currentTabInfo,
+                isHomepage: state.isHomepage,
                 shouldGoBackToMenu: true
             )
         case MainMenuDetailsActionType.tapDismissView,
@@ -132,7 +132,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
                 submenuType: state.submenuType,
-                currentTabInfo: state.currentTabInfo,
+                isHomepage: state.isHomepage,
                 shouldDismiss: true
             )
         case MainMenuDetailsActionType.tapEditBookmark:
@@ -140,7 +140,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
                 submenuType: state.submenuType,
-                currentTabInfo: state.currentTabInfo,
+                isHomepage: state.isHomepage,
                 navigationDestination: MenuNavigationDestination(.editBookmark)
             )
         case MainMenuDetailsActionType.tapZoom:
@@ -148,7 +148,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
                 submenuType: state.submenuType,
-                currentTabInfo: state.currentTabInfo,
+                isHomepage: state.isHomepage,
                 navigationDestination: MenuNavigationDestination(.zoom)
             )
         default:
@@ -156,7 +156,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
                 submenuType: state.submenuType,
-                currentTabInfo: state.currentTabInfo
+                isHomepage: state.isHomepage
             )
         }
     }

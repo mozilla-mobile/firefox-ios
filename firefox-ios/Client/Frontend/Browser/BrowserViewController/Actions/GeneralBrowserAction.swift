@@ -22,7 +22,6 @@ class GeneralBrowserAction: Action {
          buttonTapped: UIButton? = nil,
          isNativeErrorPage: Bool? = nil,
          frame: WKFrameInfo? = nil,
-         isActive: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.selectedTabURL = selectedTabURL
