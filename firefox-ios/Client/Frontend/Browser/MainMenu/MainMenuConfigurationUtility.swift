@@ -240,29 +240,23 @@ struct MainMenuConfigurationUtility: Equatable {
         typealias Menu = String.MainMenu.ToolsSection
         typealias A11y = String.MainMenu.ToolsSection.AccessibilityLabels
 
-        let title: String = if tabInfo.isDefaultUserAgentDesktop {
-            tabInfo.hasChangedUserAgent ? Menu.SwitchToDesktopSite : Menu.SwitchToMobileSite
-        } else {
-            tabInfo.hasChangedUserAgent ? Menu.SwitchToMobileSite : Menu.SwitchToDesktopSite
+        // isDefaultUserAgentDesktop is only true if we're building on an "intel mac"
+        // hasChangedUserAgent describes if we've changed form the initial starting state
+        let userAgentStringSelector = { (desktopString: String, mobileString: String) in
+            tabInfo.isDefaultUserAgentDesktop == tabInfo.hasChangedUserAgent ? desktopString : mobileString
         }
 
-        let icon: String = if tabInfo.isDefaultUserAgentDesktop {
-            tabInfo.hasChangedUserAgent ? Icons.deviceDesktop : Icons.deviceMobile
-        } else {
-            tabInfo.hasChangedUserAgent ? Icons.deviceMobile : Icons.deviceDesktop
-        }
+        let title = userAgentStringSelector(Menu.SwitchToDesktopSite, Menu.SwitchToMobileSite)
+        let icon = userAgentStringSelector(Icons.deviceDesktop, Icons.deviceMobile)
+        let a11yLabel = userAgentStringSelector(A11y.SwitchToDesktopSite, A11y.SwitchToMobileSite)
 
-        let a11yLabel: String = if tabInfo.isDefaultUserAgentDesktop {
-            tabInfo.hasChangedUserAgent ? A11y.SwitchToDesktopSite : A11y.SwitchToMobileSite
-        } else {
-            tabInfo.hasChangedUserAgent ? A11y.SwitchToMobileSite : A11y.SwitchToDesktopSite
-        }
+        let isActive = tabInfo.isDefaultUserAgentDesktop ? !tabInfo.hasChangedUserAgent : tabInfo.hasChangedUserAgent
 
         return MenuElement(
             title: title,
             iconName: icon,
             isEnabled: true,
-            isActive: false,
+            isActive: isActive,
             a11yLabel: a11yLabel,
             a11yHint: "",
             a11yId: AccessibilityIdentifiers.MainMenu.switchToDesktopSite,
