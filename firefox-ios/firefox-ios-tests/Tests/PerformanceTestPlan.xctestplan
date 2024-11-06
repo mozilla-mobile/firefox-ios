@@ -35,7 +35,6 @@
         "DragAndDropTests",
         "EngagementNotificationTests",
         "ExperimentIntegrationTests",
-        "FakespotTests",
         "FindInPageTests",
         "FirefoxSuggestTest",
         "FxScreenGraphTests",

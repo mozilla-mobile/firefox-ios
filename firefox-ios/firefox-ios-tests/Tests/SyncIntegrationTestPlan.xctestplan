@@ -55,7 +55,6 @@
         "DragAndDropTestIpad",
         "DragAndDropTests",
         "EngagementNotificationTests",
-        "FakespotTests",
         "FindInPageTests",
         "FirefoxSuggestTest",
         "FirstRunTourTests",
