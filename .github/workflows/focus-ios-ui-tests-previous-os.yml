@@ -18,12 +18,12 @@ jobs:
       max-parallel: 1
       matrix:
         include:
-          #- ios_version: 16.4
-          #  ios_simulator: iPhone 14
-          #- ios_version: 15.5
-          #  ios_simulator: iPhone' 13
-          - ios_version: 18.1
-            ios_simulator: iPhone 15
+          - ios_version: 16.4
+            ios_simulator: iPhone 14
+          - ios_version: 15.5
+            ios_simulator: iPhone 13
+          # - ios_version: 18.1
+          #   ios_simulator: iPhone 15
 
     steps:
       - name: Check out source code
@@ -49,7 +49,7 @@ jobs:
           ./bootstrap.sh --force
       - name: Create iOS ${{ matrix.ios_version }} simulator
         id: setup-simulator
-        if: ${{ matrix.ios_version != '18.1' }}
+        if: ${{ startsWith(matrix.ios_version,  '18') }}
         run: |
           # "xcodes runtime install" does not support iOS 18 at this point.
           # macos-14 Github Actions runner contains iOS 18 runtime, so we can 
