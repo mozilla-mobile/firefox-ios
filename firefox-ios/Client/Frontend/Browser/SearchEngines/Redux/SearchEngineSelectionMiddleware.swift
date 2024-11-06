@@ -34,6 +34,13 @@ final class SearchEngineSelectionMiddleware {
 
             notifyDidLoad(windowUUID: action.windowUUID, searchEngines: searchEngines)
 
+        case SearchEngineSelectionActionType.didTapSearchEngine:
+            let action = SearchEngineSelectionAction(
+                windowUUID: action.windowUUID,
+                actionType: SearchEngineSelectionMiddlewareActionType.didSelectAlternativeSearchEngine
+            )
+            store.dispatch(action)
+
         default:
             break
         }
