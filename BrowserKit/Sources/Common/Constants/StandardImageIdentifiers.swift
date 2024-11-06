@@ -7,14 +7,14 @@ import Foundation
 /// This struct defines all the standard image identifiers of icons and images used in the app.
 /// When adding new identifiers, please respect alphabetical order.
 /// Sing the song if you must.
-public struct StandardImageIdentifiers {
+public enum StandardImageIdentifiers {
     // Icon size 8x8
-    public struct ExtraSmall {
+    public enum ExtraSmall {
         public static let chevronDown = "chevronDownExtraSmall"
     }
 
     // Icon size 16x16
-    public struct Small {
+    public enum Small {
         public static let externalLink = "externalLinkSmall"
         public static let notificationDot = "notificationDotSmall"
         public static let notificationDotFill = "notificationDotFillSmall"
@@ -23,7 +23,7 @@ public struct StandardImageIdentifiers {
     }
 
     // Icon size 20x20
-    public struct Medium {
+    public enum Medium {
         public static let bookmarkBadgeFillBlue50 = "bookmarkBadgeFillMediumBlue50"
         public static let cross = "crossMedium"
         public static let crossCircleFill = "crossCircleFillMedium"
@@ -36,7 +36,7 @@ public struct StandardImageIdentifiers {
     }
 
     // Icon size 24x24
-    public struct Large {
+    public enum Large {
         public static let addToHomescreen = "addToHomescreenLarge"
         public static let appendUpLeft = "appendUpLeftLarge"
         public static let appMenu = "appMenuLarge"
@@ -98,7 +98,7 @@ public struct StandardImageIdentifiers {
         public static let pageZoomFill = "pageZoomFillLarge"
         public static let pin = "pinLarge"
         public static let pinSlash = "pinSlashLarge"
-        public static let pinSlashFilled = "pinSlashFillLarge"
+        public static let pinSlashFill = "pinSlashFillLarge"
         public static let plus = "plusLarge"
         public static let price = "priceLarge"
         public static let print = "printLarge"
@@ -132,7 +132,7 @@ public struct StandardImageIdentifiers {
     }
 
     // Icon size 30x30
-    public struct ExtraLarge {
+    public enum ExtraLarge {
         public static let crossCircleFill = "crossCircleFillExtraLarge"
     }
 }
