@@ -13,7 +13,8 @@ class ReadingListTests: BaseTestCase {
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
-        app.buttons["Reader View"].waitAndTap()
+        mozWaitForElementToExist(app.buttons["Reader View"])
+        app.buttons["Reader View"].tapOnApp()
         // The settings of reader view are shown as well as the content of the web site
         waitForElementsToExist(
             [
