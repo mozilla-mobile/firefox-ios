@@ -48,6 +48,28 @@ final class SearchEngineSelectionStateTests: XCTestCase {
         XCTAssertEqual(newState.searchEngines, expectedResult)
     }
 
+    func testDidTapSearchEngine() {
+        let initialState = createSubject()
+        let reducer = searchEngineSelectionReducer()
+
+        let selectedSearchEngine = OpenSearchEngineTests.generateOpenSearchEngine(type: .wikipedia, withImage: UIImage())
+
+        XCTAssertEqual(initialState.searchEngines, [])
+        XCTAssertNil(initialState.selectedSearchEngine)
+
+        let newState = reducer(
+            initialState,
+            SearchEngineSelectionAction(
+                windowUUID: .XCTestDefaultUUID,
+                actionType: SearchEngineSelectionActionType.didLoadSearchEngines,
+                selectedSearchEngine: selectedSearchEngine
+            )
+        )
+
+        XCTAssertTrue(newState.searchEngines.isEmpty)
+        XCTAssertEqual(newState.selectedSearchEngine, selectedSearchEngine)
+    }
+
     // MARK: - Private
     private func createSubject() -> SearchEngineSelectionState {
         return SearchEngineSelectionState(windowUUID: .XCTestDefaultUUID)
