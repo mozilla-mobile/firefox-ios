@@ -304,8 +304,6 @@ class OnboardingTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2575177
     func testCloseOptionToolbarCard() {
-        // let toolbar = app.textFields["url"]
-
         // Wait for the initial title label to appear
         mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
 
