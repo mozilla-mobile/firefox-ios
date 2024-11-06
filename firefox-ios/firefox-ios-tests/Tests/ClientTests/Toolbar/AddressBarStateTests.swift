@@ -141,6 +141,26 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.pageActions[2].actionType, .reload)
     }
 
+    func test_websiteLoadingStateDidChangeAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let urlDidChangeState = loadWebsiteAction(state: initialState, reducer: reducer)
+        let newState = reducer(
+            urlDidChangeState,
+            ToolbarAction(
+                isLoading: true,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: ToolbarActionType.websiteLoadingStateDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(newState.pageActions.count, 2)
+        XCTAssertEqual(newState.pageActions[0].actionType, .share)
+        XCTAssertEqual(newState.pageActions[1].actionType, .stopLoading)
+    }
+
     func test_urlDidChangeAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = addressBarReducer()
