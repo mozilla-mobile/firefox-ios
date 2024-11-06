@@ -3902,7 +3902,7 @@ extension String {
     public struct MainMenu {
         public struct AccessibilityLabels {
             public static let OptionDisabledHint = MZLocalizedString(
-                key: "MainMenu.AccessibilityLabels.OptionDisabled.Hint.v134",
+                key: "MainMenu.AccessibilityLabels.OptionDisabled.Hint.v133",
                 tableName: "MainMenu",
                 value: "Dimmed",
                 comment: "On the main menu, the accessibility label hint for any action/option inside the menu, that is disabled. For example: 'Save to Reading List' option, from Menu, in some cases is disabled and the voice over should indicate that. 'Save To Reading List dimmed'")
