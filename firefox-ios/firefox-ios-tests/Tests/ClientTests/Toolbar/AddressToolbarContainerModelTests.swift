@@ -88,7 +88,8 @@ class AddressToolbarContainerModelTests: XCTestCase {
                                browserActions: [],
                                borderPosition: nil,
                                url: nil,
-                               lockIconImageName: "")
+                               lockIconImageName: "",
+                               lockIconNeedsTheming: false)
     }
 
     private func createBasicNavigationBarState() -> NavigationBarState {
