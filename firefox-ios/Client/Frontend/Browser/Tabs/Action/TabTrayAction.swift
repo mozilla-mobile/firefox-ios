@@ -31,5 +31,5 @@ enum  TabTrayActionType: ActionType {
     case didLoadTabTray
     case dismissTabTray
     case firefoxAccountChanged
-    case preserveTabs
+    case closePrivateTabsSettingToggled
 }

@@ -90,7 +90,7 @@ class TabManagerMiddleware {
             guard let panelType = action.panelType else { return }
             changePanel(panelType, uuid: action.windowUUID)
 
-        case TabTrayActionType.preserveTabs:
+        case TabTrayActionType.closePrivateTabsSettingToggled:
             preserveTabs(uuid: action.windowUUID)
         default:
             break
