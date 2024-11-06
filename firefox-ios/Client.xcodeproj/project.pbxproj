@@ -1845,6 +1845,8 @@
 		EDC3D34F2CB5E70500C62DE3 /* SearchEngineTestAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EDC3D34E2CB5E70500C62DE3 /* SearchEngineTestAssets.xcassets */; };
 		EDC3D3552CB70A3F00C62DE3 /* OpenSearchEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC3D3542CB70A3F00C62DE3 /* OpenSearchEngineTests.swift */; };
 		EDD21F2E2CAEFB8F00AF7D1F /* SearchEngineSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD21F2D2CAEFB8F00AF7D1F /* SearchEngineSelectionViewController.swift */; };
+		EDD2A7F82CDACE7C00ED464C /* UnifiedSearchKit in Frameworks */ = {isa = PBXBuildFile; productRef = EDD2A7F72CDACE7C00ED464C /* UnifiedSearchKit */; };
+		EDD2A7FA2CDBD1D100ED464C /* SearchEngineElement+initFromSearchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD2A7F92CDBD1D000ED464C /* SearchEngineElement+initFromSearchEngine.swift */; };
 		EDF567A02C8B51DC00FDB09D /* SiteImageView in Frameworks */ = {isa = PBXBuildFile; productRef = EDF5679F2C8B51DC00FDB09D /* SiteImageView */; };
 		EDF567A22C8B51E100FDB09D /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = EDF567A12C8B51E100FDB09D /* Kingfisher */; };
 		F018F84C2719AE8300B9A52D /* ThemedDefaultNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F018F84B2719AE8300B9A52D /* ThemedDefaultNavigationController.swift */; };
@@ -9079,6 +9081,7 @@
 		EDC3D3542CB70A3F00C62DE3 /* OpenSearchEngineTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenSearchEngineTests.swift; sourceTree = "<group>"; };
 		EDCA4CBC8077FC37971CC0C7 /* kn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kn; path = kn.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EDD21F2D2CAEFB8F00AF7D1F /* SearchEngineSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineSelectionViewController.swift; sourceTree = "<group>"; };
+		EDD2A7F92CDBD1D000ED464C /* SearchEngineElement+initFromSearchEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchEngineElement+initFromSearchEngine.swift"; sourceTree = "<group>"; };
 		EDEE4CC7BD65892525632A4E /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Today.strings; sourceTree = "<group>"; };
 		EE294A97B40C4FDBD67AE536 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		EE4D49BBA90C11374B6718A4 /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/LoginManager.strings; sourceTree = "<group>"; };
@@ -9315,6 +9318,7 @@
 				AB2AC6632BCFD0A200022AAB /* X509 in Frameworks */,
 				433F87CE2788EAB600693368 /* GCDWebServers in Frameworks */,
 				5A06135A29D6052E008F3D38 /* TabDataStore in Frameworks */,
+				EDD2A7F82CDACE7C00ED464C /* UnifiedSearchKit in Frameworks */,
 				216A0D762A40E7AB008077BA /* Redux in Frameworks */,
 				7B8A47F61D01D3B400C07734 /* PassKit.framework in Frameworks */,
 				5A8FD0EC293A7D5E00333AA7 /* SnapKit in Frameworks */,
@@ -10918,6 +10922,7 @@
 				ED371A692CB885B20099F3C8 /* Views */,
 				EDC3C2552CCAC9CB005A047F /* SearchEnginesManager.swift */,
 				8A1E3BE528CBBF44003388C4 /* OpenSearchEngine.swift */,
+				EDD2A7F92CDBD1D000ED464C /* SearchEngineElement+initFromSearchEngine.swift */,
 				D3FA77831A43B2CE0010CD32 /* OpenSearchParser.swift */,
 				96A5F72F298D8BEE00234E5F /* DefaultSearchEngineProvider.swift */,
 				ED371A672CB881EF0099F3C8 /* SearchEngineSelectionCoordinator.swift */,
@@ -14436,6 +14441,7 @@
 				E177989F2BD8043800F6F0EB /* ToolbarKit */,
 				5A984D352C8A3407007938C9 /* Kingfisher */,
 				819656162C80C6F300E62323 /* MenuKit */,
+				EDD2A7F72CDACE7C00ED464C /* UnifiedSearchKit */,
 			);
 			productName = Client;
 			productReference = F84B21BE1A090F8100AAB793 /* Client.app */;
@@ -16018,6 +16024,7 @@
 				CDB3BE8724746787009320EE /* FirefoxAccountSignInViewController.swift in Sources */,
 				8A471183287F6D9C00F5A6EA /* BookmarksPanelViewModel.swift in Sources */,
 				8A44F20E2B585E1F0016BC81 /* HomepageTelemetry.swift in Sources */,
+				EDD2A7FA2CDBD1D100ED464C /* SearchEngineElement+initFromSearchEngine.swift in Sources */,
 				B236204D2B8673DE000B1DE7 /* AddressScrollView.swift in Sources */,
 				E1FF93E428A2E74600E6360E /* WallpaperSelectorViewModel.swift in Sources */,
 				81055B562BAB7CE200E166B3 /* OnboardingMultipeChoiceButtonModel.swift in Sources */,
@@ -25460,6 +25467,10 @@
 		E177989F2BD8043800F6F0EB /* ToolbarKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ToolbarKit;
+		};
+		EDD2A7F72CDACE7C00ED464C /* UnifiedSearchKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = UnifiedSearchKit;
 		};
 		EDF5679F2C8B51DC00FDB09D /* SiteImageView */ = {
 			isa = XCSwiftPackageProductDependency;
