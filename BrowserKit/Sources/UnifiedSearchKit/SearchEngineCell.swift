@@ -6,6 +6,8 @@ import Foundation
 import Common
 import UIKit
 
+// FXIOS-10189 This class will be refactored into a generic UITableView solution later. For now, it is largely a clone of
+// MenuKit's work. Eventually both this target and the MenuKit target will leverage a common reusable tableView component.
 public class SearchEngineCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
         static let contentMargin: CGFloat = 11
@@ -87,7 +89,6 @@ public class SearchEngineCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     // MARK: - Theme Applicable
     public func applyTheme(theme: Theme) {
-        guard let model else { return }
         backgroundColor = theme.colors.layer2
         titleLabel.textColor = theme.colors.textPrimary
         icon.tintColor = theme.colors.iconSecondary

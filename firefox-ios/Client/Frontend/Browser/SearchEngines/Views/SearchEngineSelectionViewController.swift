@@ -9,6 +9,20 @@ import Shared
 import Redux
 import UnifiedSearchKit
 
+// FXIOS-10189 FIXME This will be refactored later.
+extension SearchEngineElement {
+    init(fromSearchEngine searchEngine: OpenSearchEngine, withAction action: @escaping () -> Void) {
+        self.init(
+            title: searchEngine.shortName,
+            image: searchEngine.image,
+            a11yLabel: searchEngine.shortName,
+            a11yHint: nil,
+            a11yId: AccessibilityIdentifiers.UnifiedSearch.BottomSheetRow.engine,
+            action: action
+        )
+    }
+}
+
 class SearchEngineSelectionViewController: UIViewController,
                                            UISheetPresentationControllerDelegate,
                                            UIPopoverPresentationControllerDelegate,
@@ -126,20 +140,19 @@ class SearchEngineSelectionViewController: UIViewController,
     func newState(state: SearchEngineSelectionState) {
         self.state = state
 
-        let searchEngineElements = state.searchEngines.map { engine in
-            return SearchEngineElement(
-                title: engine.shortName,
-                image: engine.image,
-                a11yLabel: engine.shortName,
-                a11yHint: nil,
-                a11yId: AccessibilityIdentifiers.UnifiedSearch.BottomSheetRow.engine,
-                action: { [weak self] in
-                    self?.didTap(searchEngine: engine)
-                }
-            )
+        searchEngineTableView.reloadTableView(
+            with: createSearchEngineTableData(withSearchEngines: state.searchEngines)
+        )
+    }
+
+    func createSearchEngineTableData(withSearchEngines: [OpenSearchEngine]) -> [SearchEngineSection] {
+        let searchEngineElements = withSearchEngines.map { engine in
+            SearchEngineElement(fromSearchEngine: engine, withAction: { [weak self] in
+                self?.didTap(searchEngine: engine)
+            })
         }
 
-        let searchButton = SearchEngineElement(
+        let searchSettingsElement = SearchEngineElement(
             title: String.UnifiedSearch.SearchEngineSelection.SearchSettings,
             image: UIImage(named: StandardImageIdentifiers.Large.settings)?.withRenderingMode(.alwaysTemplate) ?? UIImage(),
             a11yLabel: String.UnifiedSearch.SearchEngineSelection.AccessibilityLabels.SearchSettingsLabel,
@@ -149,12 +162,10 @@ class SearchEngineSelectionViewController: UIViewController,
                 self?.didTapOpenSettings()
             })
 
-        let searchEngineSections: [SearchEngineSection] = [
+        return [
             SearchEngineSection(options: searchEngineElements),
-            SearchEngineSection(options: [searchButton])
+            SearchEngineSection(options: [searchSettingsElement])
         ]
-
-        searchEngineTableView.reloadTableView(with: searchEngineSections)
     }
 
     // MARK: - Theme
