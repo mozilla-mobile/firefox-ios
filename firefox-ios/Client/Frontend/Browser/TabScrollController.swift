@@ -267,17 +267,37 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
     }
 }
 
+class CustomRefresh: UIRefreshControl {
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        backgroundColor = .red
+    }
+}
+
 // MARK: - Private
 private extension TabScrollingController {
     func configureRefreshControl(isEnabled: Bool) {
-        scrollView?.refreshControl = isEnabled ? UIRefreshControl() : nil
-        scrollView?.refreshControl?.addTarget(self, action: #selector(reload), for: .valueChanged)
+        if let refresh = scrollView?.subviews.first(where: {
+            $0 is CustomRefresh
+        }) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                refresh.removeFromSuperview()
+                self.scrollView?.contentInset = .zero
+                self.scrollView?.layoutIfNeeded()
+            }
+        }
+        if isEnabled {
+            let refresh = CustomRefresh()
+            scrollView?.addSubview(refresh)
+            refresh.addTarget(self, action: #selector(reload), for: .valueChanged)
+        }
     }
 
     @objc
     func reload() {
         guard let tab = tab else { return }
         tab.reloadPage()
+        configureRefreshControl(isEnabled: true)
         TelemetryWrapper.recordEvent(category: .action, method: .pull, object: .reload)
     }
 

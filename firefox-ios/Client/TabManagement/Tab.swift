@@ -518,7 +518,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
             configuration.allowsInlineMediaPlayback = true
             let webView = TabWebView(frame: .zero, configuration: configuration, windowUUID: windowUUID)
             webView.configure(delegate: self, navigationDelegate: navigationDelegate)
-
             webView.accessibilityLabel = .WebViewAccessibilityLabel
             webView.allowsBackForwardNavigationGestures = true
             webView.allowsLinkPreview = true
@@ -527,10 +526,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
             if #available(iOS 16.4, *) {
                 webView.isInspectable = true
             }
-
-            // Set Opaque as false to customize background color for web view
-            webView.isOpaque = false
-            webView.backgroundColor = nightMode ? .black : .clear
 
             // Turning off masking allows the web content to flow outside of the scrollView's frame
             // which allows the content appear beneath the toolbars in the BrowserViewController
@@ -908,6 +903,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
     func applyTheme(theme: Theme) {
         UITextField.appearance().keyboardAppearance = theme.type.keyboardAppearence(isPrivate: isPrivate)
         webView?.applyTheme(theme: theme)
+        webView?.underPageBackgroundColor = nightMode ? .black : nil
     }
 
     // MARK: - Static Helpers
