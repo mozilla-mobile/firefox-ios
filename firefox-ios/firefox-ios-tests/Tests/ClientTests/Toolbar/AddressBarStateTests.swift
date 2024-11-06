@@ -101,24 +101,51 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.browserActions[1].actionType, .menu)
     }
 
-    func test_urlDidChangeAction_returnsExpectedState() {
+    func test_readerModeStateChangedAction_onHomepage_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
         let newState = reducer(
             initialState,
             ToolbarAction(
-                url: URL(string: "http://mozilla.com", invalidCharacters: false),
-                isPrivate: false,
-                isShowingNavigationToolbar: true,
-                canGoBack: true,
-                canGoForward: false,
-                lockIconImageName: StandardImageIdentifiers.Large.lockFill,
-                safeListedURLImageName: nil,
+                readerModeState: .available,
                 windowUUID: .XCTestDefaultUUID,
-                actionType: ToolbarActionType.urlDidChange
+                actionType: ToolbarActionType.readerModeStateChanged
             )
         )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(newState.pageActions.count, 1)
+        XCTAssertEqual(newState.pageActions[0].actionType, .qrCode)
+    }
+
+    func test_readerModeStateChangedAction_onWebsite_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let urlDidChangeState = loadWebsiteAction(state: initialState, reducer: reducer)
+        let newState = reducer(
+            urlDidChangeState,
+            ToolbarAction(
+                readerModeState: .available,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: ToolbarActionType.readerModeStateChanged
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(newState.pageActions.count, 3)
+        XCTAssertEqual(newState.pageActions[0].actionType, .readerMode)
+        XCTAssertEqual(newState.pageActions[0].iconName, StandardImageIdentifiers.Large.readerView)
+        XCTAssertEqual(newState.pageActions[1].actionType, .share)
+        XCTAssertEqual(newState.pageActions[2].actionType, .reload)
+    }
+
+    func test_urlDidChangeAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = loadWebsiteAction(state: initialState, reducer: reducer)
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
 
@@ -217,6 +244,23 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
     private func addressBarReducer() -> Reducer<AddressBarState> {
         return AddressBarState.reducer
+    }
+
+    private func loadWebsiteAction(state: AddressBarState, reducer: Reducer<AddressBarState>) -> AddressBarState {
+        return reducer(
+            state,
+            ToolbarAction(
+                url: URL(string: "http://mozilla.com", invalidCharacters: false),
+                isPrivate: false,
+                isShowingNavigationToolbar: true,
+                canGoBack: true,
+                canGoForward: false,
+                lockIconImageName: StandardImageIdentifiers.Large.lockFill,
+                safeListedURLImageName: nil,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: ToolbarActionType.urlDidChange
+            )
+        )
     }
 
     // MARK: StoreTestUtility
