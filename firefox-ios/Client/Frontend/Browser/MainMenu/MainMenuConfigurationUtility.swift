@@ -378,7 +378,7 @@ struct MainMenuConfigurationUtility: Equatable {
 
     private func configureReaderModeItem(
         with uuid: WindowUUID,
-        tabInfo _: MainMenuTabInfo,
+        tabInfo: MainMenuTabInfo,
         and readerModeState: ReaderModeState?
     ) -> MenuElement {
         typealias Strings = String.MainMenu.Submenus.Tools
