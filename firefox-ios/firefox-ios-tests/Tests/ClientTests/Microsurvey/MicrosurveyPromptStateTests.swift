@@ -65,6 +65,24 @@ final class MicrosurveyPromptStateTests: XCTestCase {
         XCTAssertEqual(newState.showPrompt, true)
     }
 
+    func testDefaultAction() {
+        let initialState = MicrosurveyPromptState(
+            windowUUID: .XCTestDefaultUUID,
+            showPrompt: true,
+            showSurvey: true,
+            model: MicrosurveyMock.model
+        )
+        let reducer = microsurveyReducer()
+
+        let action = getInvalidAction()
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.windowUUID, initialState.windowUUID)
+        XCTAssertEqual(newState.showPrompt, initialState.showPrompt)
+        XCTAssertEqual(newState.showSurvey, false)
+        XCTAssertEqual(newState.model, initialState.model)
+    }
+
     // MARK: - Private
     private func createSubject() -> MicrosurveyPromptState {
         return MicrosurveyPromptState(windowUUID: .XCTestDefaultUUID)
@@ -76,5 +94,13 @@ final class MicrosurveyPromptStateTests: XCTestCase {
 
     private func getAction(for actionType: MicrosurveyPromptActionType) -> MicrosurveyPromptAction {
         return  MicrosurveyPromptAction(windowUUID: .XCTestDefaultUUID, actionType: actionType)
+    }
+
+    private func getInvalidAction() -> MicrosurveyPromptAction {
+        return MicrosurveyPromptAction(windowUUID: .XCTestDefaultUUID, actionType: InvalidActionType.invalid)
+    }
+
+    enum InvalidActionType: ActionType {
+        case invalid
     }
 }
