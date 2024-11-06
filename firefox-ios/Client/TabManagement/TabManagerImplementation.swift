@@ -22,12 +22,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
     var notificationCenter: NotificationProtocol
     var inactiveTabsManager: InactiveTabsManagerProtocol
 
-    private var shouldClearPrivateTabs: Bool {
-        didSet {
-            preserveTabs()
-        }
-    }
-
     override var normalActiveTabs: [Tab] {
         let inactiveTabs = getInactiveTabs()
         let activeTabs = tabs.filter { $0.isPrivate == false && !inactiveTabs.contains($0) }
@@ -53,13 +47,11 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         self.inactiveTabsManager = inactiveTabsManager
         self.windowManager = windowManager
         self.windowIsNew = uuid.isNew
-        // FXIOS-9519: By default if no bool value is set we close the private tabs and mark it true
-        shouldClearPrivateTabs = profile.prefs.boolForKey(PrefsKeys.Settings.closePrivateTabs) ?? true
         super.init(profile: profile, uuid: uuid.uuid)
 
         setupNotifications(forObserver: self,
                            observing: [UIApplication.willResignActiveNotification,
-                                       .TabMimeTypeDidSet, .ClosePrivateTabsToggleDidChange])
+                                       .TabMimeTypeDidSet])
     }
 
     // MARK: - Restore tabs
@@ -162,7 +154,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
     @MainActor
     private func generateTabs(from windowData: WindowData) async {
         let filteredTabs = filterPrivateTabs(from: windowData,
-                                             clearPrivateTabs: shouldClearPrivateTabs)
+                                             clearPrivateTabs: shouldClearPrivateTabs())
         var tabToSelect: Tab?
 
         for tabData in filteredTabs {
@@ -260,7 +252,10 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
     }
 
     private func generateTabDataForSaving() -> [TabData] {
-        let tabsToSave = shouldClearPrivateTabs ? normalTabs : tabs
+        var tabsToSave = tabs
+        if shouldClearPrivateTabs() {
+            tabsToSave = normalTabs
+        }
 
         let tabData = tabsToSave.map { tab in
             let oldTabGroupData = tab.metadataManager?.tabGroupData
@@ -356,7 +351,7 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         tab.metadataManager?.updateTimerAndObserving(state: .tabSelected, isPrivate: tab.isPrivate)
 
         // Make sure to wipe the private tabs if the user has the pref turned on
-        if shouldClearPrivateTabs, !tab.isPrivate {
+        if shouldClearPrivateTabs(), !tab.isPrivate {
             removeAllPrivateTabs()
         }
 
@@ -570,8 +565,6 @@ class TabManagerImplementation: LegacyTabManager, Notifiable, WindowSimpleTabsPr
         case .TabMimeTypeDidSet:
             guard windowUUID == notification.windowUUID else { return }
             updateMenuItemsForSelectedTab()
-        case .ClosePrivateTabsToggleDidChange:
-            shouldClearPrivateTabs = profile.prefs.boolForKey(PrefsKeys.Settings.closePrivateTabs) ?? true
         default:
             break
         }

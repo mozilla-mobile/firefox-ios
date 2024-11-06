@@ -89,8 +89,6 @@ extension Notification.Name {
 
     public static let TabMimeTypeDidSet = Notification.Name("TabMimeTypeDidSet")
 
-    public static let ClosePrivateTabsToggleDidChange = Notification.Name("ClosePrivateTabsToggleDidChange")
-
     // MARK: Tab manager
 
     // Tab manager creates a toast for undo recently closed tabs and a notification is

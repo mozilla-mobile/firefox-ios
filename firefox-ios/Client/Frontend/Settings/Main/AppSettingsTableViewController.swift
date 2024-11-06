@@ -330,7 +330,9 @@ class AppSettingsTableViewController: SettingsTableViewController,
                         defaultValue: true,
                         titleText: .AppSettingsClosePrivateTabsTitle,
                         statusText: .AppSettingsClosePrivateTabsDescription) { _ in
-                            NotificationCenter.default.post(name: .ClosePrivateTabsToggleDidChange, object: nil)
+                            let action = TabTrayAction(windowUUID: self.windowUUID,
+                                                       actionType: TabTrayActionType.preserveTabs)
+                            store.dispatch(action)
             }
         ]
 
