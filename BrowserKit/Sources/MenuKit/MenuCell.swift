@@ -27,7 +27,6 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     private var descriptionLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.caption1.scaledFont()
-        label.numberOfLines = 0
     }
 
     private var icon: UIImageView = .build()
