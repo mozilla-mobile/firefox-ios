@@ -7,14 +7,14 @@ import Foundation
 /// This struct defines all the standard image identifiers of icons and images used in the app.
 /// When adding new identifiers, please respect alphabetical order.
 /// Sing the song if you must.
-public enum StandardImageIdentifiers {
+public struct StandardImageIdentifiers {
     // Icon size 8x8
-    public enum ExtraSmall {
+    public struct ExtraSmall {
         public static let chevronDown = "chevronDownExtraSmall"
     }
 
     // Icon size 16x16
-    public enum Small {
+    public struct Small {
         public static let externalLink = "externalLinkSmall"
         public static let notificationDot = "notificationDotSmall"
         public static let notificationDotFill = "notificationDotFillSmall"
@@ -23,7 +23,7 @@ public enum StandardImageIdentifiers {
     }
 
     // Icon size 20x20
-    public enum Medium {
+    public struct Medium {
         public static let bookmarkBadgeFillBlue50 = "bookmarkBadgeFillMediumBlue50"
         public static let cross = "crossMedium"
         public static let crossCircleFill = "crossCircleFillMedium"
@@ -36,7 +36,7 @@ public enum StandardImageIdentifiers {
     }
 
     // Icon size 24x24
-    public enum Large {
+    public struct Large {
         public static let addToHomescreen = "addToHomescreenLarge"
         public static let appendUpLeft = "appendUpLeftLarge"
         public static let appMenu = "appMenuLarge"
@@ -132,7 +132,7 @@ public enum StandardImageIdentifiers {
     }
 
     // Icon size 30x30
-    public enum ExtraLarge {
+    public struct ExtraLarge {
         public static let crossCircleFill = "crossCircleFillExtraLarge"
     }
 }

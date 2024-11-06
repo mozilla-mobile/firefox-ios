@@ -8,7 +8,7 @@ import MenuKit
 import Shared
 
 struct MainMenuConfigurationUtility: Equatable {
-    private enum Icons {
+    private struct Icons {
         static let newTab = StandardImageIdentifiers.Large.plus
         static let newPrivateTab = StandardImageIdentifiers.Large.privateModeCircleFill
         static let deviceDesktop = StandardImageIdentifiers.Large.deviceDesktop
@@ -285,7 +285,7 @@ struct MainMenuConfigurationUtility: Equatable {
     private func getToolsSubmenu(
         with uuid: WindowUUID,
         tabInfo: MainMenuTabInfo,
-        and _: ReaderModeState?
+        and readerModeState: ReaderModeState?
     ) -> [MenuSection] {
         return [
             MenuSection(
