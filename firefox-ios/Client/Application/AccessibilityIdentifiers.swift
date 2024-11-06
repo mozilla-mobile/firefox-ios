@@ -111,6 +111,13 @@ public struct AccessibilityIdentifiers {
         static let zoom = "MainMenu.Zoom"
     }
 
+    struct UnifiedSearch {
+        struct BottomSheetRow {
+            static let engine = "UnifiedSearch.BottomSheetRow.Engine"
+            static let searchSettings = "UnifiedSearch.BottomSheetRow.SearchSettings"
+        }
+    }
+
     struct EnhancedTrackingProtection {
         struct MainScreen {
             static let clearCookiesButton = "TrackingProtection.ClearCookiesButton"

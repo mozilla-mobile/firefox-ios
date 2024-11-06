@@ -9,8 +9,7 @@ final class NativeErrorPageMock {
     static var model: ErrorPageModel {
         return ErrorPageModel(
             errorTitle: "NoInternetConnection",
-            errorDecription: "There’s a problem with your internet connection.",
-            errorCode: "-1009"
+            errorDescription: "There’s a problem with your internet connection."
         )
     }
 }

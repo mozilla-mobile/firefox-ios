@@ -16,6 +16,7 @@ class AddressToolbarContainerModel: Equatable {
     let searchEngineImage: UIImage?
     let searchEnginesManager: SearchEnginesManager
     let lockIconImageName: String?
+    let lockIconNeedsTheming: Bool
     let safeListedURLImageName: String?
     let url: URL?
     let searchTerm: String?
@@ -49,6 +50,7 @@ class AddressToolbarContainerModel: Equatable {
             urlTextFieldA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField,
             searchEngineImage: searchEngineImage,
             lockIconImageName: lockIconImageName,
+            lockIconNeedsTheming: lockIconNeedsTheming,
             safeListedURLImageName: safeListedURLImageName,
             url: url,
             droppableUrl: droppableUrl,
@@ -96,6 +98,7 @@ class AddressToolbarContainerModel: Equatable {
         self.searchEngineImage = profile.searchEnginesManager.defaultEngine?.image
         self.searchEnginesManager = profile.searchEnginesManager
         self.lockIconImageName = state.addressToolbar.lockIconImageName
+        self.lockIconNeedsTheming = state.addressToolbar.lockIconNeedsTheming
         self.safeListedURLImageName = state.addressToolbar.safeListedURLImageName
         self.url = state.addressToolbar.url
         self.searchTerm = state.addressToolbar.searchTerm

@@ -3,7 +3,7 @@ name: "Firefox UI Tests"
 on:
     workflow_dispatch: {}
     schedule:
-      - cron: "0 2 * * *"
+      - cron: "0 11 * * *"
 
 env:
     browser: firefox-ios
@@ -61,6 +61,7 @@ jobs:
       needs: compile
       strategy:
         fail-fast: false
+        max-parallel: 1
         matrix:
           ios_simulator: ['iPhone 15 Plus', 'iPad Pro 13-inch (M4)']
       steps:

@@ -7,7 +7,7 @@ import Foundation
 import MenuKit
 import Shared
 
-struct MainMenuConfigurationUtility: Equatable {
+struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     private struct Icons {
         static let newTab = StandardImageIdentifiers.Large.plus
         static let newPrivateTab = StandardImageIdentifiers.Large.privateModeCircleFill
@@ -46,6 +46,10 @@ struct MainMenuConfigurationUtility: Equatable {
         //        static let addToHomescreen = StandardImageIdentifiers.Large.addToHomescreen
     }
 
+    private var shouldShowReportSiteIssue: Bool {
+        featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .buildOnly)
+    }
+
     public func generateMenuElements(
         with tabInfo: MainMenuTabInfo,
         for viewType: MainMenuDetailsViewType?,
@@ -54,7 +58,7 @@ struct MainMenuConfigurationUtility: Equatable {
     ) -> [MenuSection] {
         switch viewType {
         case .tools:
-            return getToolsSubmenu(with: uuid, tabInfo: tabInfo, and: readerState)
+            return getToolsSubmenu(with: uuid, tabInfo: tabInfo)
 
         case .save:
             return getSaveSubmenu(with: uuid, and: tabInfo)
@@ -221,7 +225,9 @@ struct MainMenuConfigurationUtility: Equatable {
         // }
 
         description += ", \(Preview.NightModeSubtitle)"
-        description += ", \(Preview.ReportBrokenSiteSubtitle)"
+        if shouldShowReportSiteIssue {
+            description += ", \(Preview.ReportBrokenSiteSubtitle)"
+        }
         description += ", \(Preview.ShareSubtitle)"
 
         return description
@@ -284,65 +290,81 @@ struct MainMenuConfigurationUtility: Equatable {
 
     private func getToolsSubmenu(
         with uuid: WindowUUID,
-        tabInfo: MainMenuTabInfo,
-        and readerModeState: ReaderModeState?
+        tabInfo: MainMenuTabInfo
     ) -> [MenuSection] {
+        let firstSection = if shouldShowReportSiteIssue {
+            MenuSection(options: [
+                configureZoomItem(with: uuid, and: tabInfo),
+                configureNightModeItem(with: uuid, and: tabInfo),
+                configureReportSiteIssueItem(with: uuid, tabInfo: tabInfo),
+            ])
+        } else {
+            MenuSection(options: [
+                configureZoomItem(with: uuid, and: tabInfo),
+                configureNightModeItem(with: uuid, and: tabInfo),
+            ])
+        }
+
         return [
-            MenuSection(
-                options: [
-                    configureZoomItem(with: uuid, and: tabInfo),
-                    configureNightModeItem(with: uuid, and: tabInfo),
-                    MenuElement(
-                        title: .MainMenu.Submenus.Tools.ReportBrokenSite,
-                        iconName: Icons.reportBrokenSite,
-                        isEnabled: true,
-                        isActive: false,
-                        a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.ReportBrokenSite,
-                        a11yHint: "",
-                        a11yId: AccessibilityIdentifiers.MainMenu.reportBrokenSite,
-                        action: {
-                            store.dispatch(
-                                MainMenuAction(
-                                    windowUUID: uuid,
-                                    actionType: MainMenuActionType.tapNavigateToDestination,
-                                    navigationDestination: MenuNavigationDestination(
-                                        .goToURL,
-                                        url: SupportUtils.URLForReportSiteIssue(tabInfo.url?.absoluteString)
-                                    ),
-                                    telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
-                                )
-                            )
-                        }
-                    ),
-                ]
-            ),
-            MenuSection(
-                options: [
-                    MenuElement(
-                        title: .MainMenu.Submenus.Tools.Share,
-                        iconName: Icons.share,
-                        isEnabled: true,
-                        isActive: false,
-                        a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.Share,
-                        a11yHint: "",
-                        a11yId: AccessibilityIdentifiers.MainMenu.share,
-                        action: {
-                            store.dispatch(
-                                MainMenuAction(
-                                    windowUUID: uuid,
-                                    actionType: MainMenuActionType.tapNavigateToDestination,
-                                    navigationDestination: MenuNavigationDestination(
-                                        .shareSheet,
-                                        url: tabInfo.canonicalURL
-                                    ),
-                                    telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
-                                )
-                            )
-                        }
-                    ),
-                ]
-            ),
+            firstSection,
+            MenuSection(options: [configureShareItem(with: uuid, tabInfo: tabInfo)]),
         ]
+    }
+
+    private func configureReportSiteIssueItem(
+        with uuid: WindowUUID,
+        tabInfo: MainMenuTabInfo
+    ) -> MenuElement {
+        return MenuElement(
+            title: .MainMenu.Submenus.Tools.ReportBrokenSite,
+            iconName: Icons.reportBrokenSite,
+            isEnabled: true,
+            isActive: false,
+            a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.ReportBrokenSite,
+            a11yHint: "",
+            a11yId: AccessibilityIdentifiers.MainMenu.reportBrokenSite,
+            action: {
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: uuid,
+                        actionType: MainMenuActionType.tapNavigateToDestination,
+                        navigationDestination: MenuNavigationDestination(
+                            .goToURL,
+                            url: SupportUtils.URLForReportSiteIssue(tabInfo.url?.absoluteString)
+                        ),
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                    )
+                )
+            }
+        )
+    }
+
+    private func configureShareItem(
+        with uuid: WindowUUID,
+        tabInfo: MainMenuTabInfo
+    ) -> MenuElement {
+        return MenuElement(
+            title: .MainMenu.Submenus.Tools.Share,
+            iconName: Icons.share,
+            isEnabled: true,
+            isActive: false,
+            a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.Share,
+            a11yHint: "",
+            a11yId: AccessibilityIdentifiers.MainMenu.share,
+            action: {
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: uuid,
+                        actionType: MainMenuActionType.tapNavigateToDestination,
+                        navigationDestination: MenuNavigationDestination(
+                            .shareSheet,
+                            url: tabInfo.canonicalURL
+                        ),
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                    )
+                )
+            }
+        )
     }
 
     private func configureZoomItem(
