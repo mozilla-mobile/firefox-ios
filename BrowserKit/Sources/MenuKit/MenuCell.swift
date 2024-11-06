@@ -22,11 +22,12 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
     // MARK: - UI Elements
     private var titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.body.scaledFont()
-        label.numberOfLines = 2
+        label.numberOfLines = 0
     }
 
     private var descriptionLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.caption1.scaledFont()
+        label.numberOfLines = 0
     }
 
     private var icon: UIImageView = .build()
