@@ -13,6 +13,12 @@ final class PasswordGeneratorMiddleware {
     private let generatedPasswordStorage: GeneratedPasswordStorageProtocol
     private let passwordGeneratorTelemetry = PasswordGeneratorTelemetry()
 
+    // The JS password generator generates a password using a list of DEFAULT_RULES.
+    // Some websites, however, fail when generating the password using the default rules.
+    // For these websites we have specific rules hosted in remote settings in the password-rules collection.
+    // We cache them so we don't have to parse the JSON everytime.
+    private static var cachedPasswordRules: [PasswordRuleRecord]?
+
     init(logger: Logger = DefaultLogger.shared,
          generatedPasswordStorage: GeneratedPasswordStorageProtocol = GeneratedPasswordStorage()) {
         self.logger = logger
@@ -71,15 +77,18 @@ final class PasswordGeneratorMiddleware {
     }
 
     private func generateNewPassword(frame: WKFrameInfo, completion: @escaping (String) -> Void) {
-        let jsFunctionCall = "window.__firefox__.logins.generatePassword()"
-        frame.webView?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall, frame) { (result, error) in
-            if let error = error {
-                self.logger.log("JavaScript evaluation error",
-                                level: .warning,
-                                category: .webview,
-                                description: "\(error.localizedDescription)")
-            } else if let result = result as? String {
-                completion(result)
+        Task {
+            let originRules = await PasswordGeneratorMiddleware.getPasswordRule(for: frame.securityOrigin.host)
+            let jsFunctionCall = "window.__firefox__.logins.generatePassword(\(originRules ?? "" ))"
+            await frame.webView?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall, frame) { (result, error) in
+                if let error = error {
+                    self.logger.log("JavaScript evaluation error",
+                                    level: .warning,
+                                    category: .webview,
+                                    description: "\(error.localizedDescription)")
+                } else if let result = result as? String {
+                    completion(result)
+                }
             }
         }
     }
@@ -111,5 +120,27 @@ final class PasswordGeneratorMiddleware {
 
     private func clearGeneratedPasswordForSite(origin: String, windowUUID: WindowUUID) {
         generatedPasswordStorage.deletePasswordForOrigin(origin: origin)
+    }
+
+    private static func loadPasswordRules() async -> [PasswordRuleRecord]? {
+        if let cachedRules = cachedPasswordRules {
+            return cachedRules
+        }
+
+        let remoteSettingsUtils = RemoteSettingsUtils()
+        let rules: [PasswordRuleRecord]? = await remoteSettingsUtils.fetchLocalRecords(for: .passwordRules)
+        cachedPasswordRules = rules
+        return rules
+    }
+
+    private static func getPasswordRule(for frameOrigin: String) async -> String? {
+        let passwordRules = await loadPasswordRules()
+        let matchingRecord = passwordRules?.first(where: { frameOrigin.hasSuffix($0.domain) })
+        guard let record = matchingRecord,
+              let jsonData = try? JSONEncoder().encode(record),
+              let jsonString = String(data: jsonData, encoding: .utf8) else {
+            return nil
+        }
+        return jsonString
     }
 }
