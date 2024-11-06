@@ -38,12 +38,14 @@ public class ContextualHintView: UIView, ThemeApplicable {
         label.font = FXFontStyles.Regular.headline.scaledFont()
         label.textAlignment = .left
         label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
     }
 
     private lazy var descriptionLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.textAlignment = .left
         label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
     }
 
     private lazy var actionButton: LinkButton = .build { button in

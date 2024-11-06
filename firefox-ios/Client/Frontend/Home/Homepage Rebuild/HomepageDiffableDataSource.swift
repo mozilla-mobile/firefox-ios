@@ -20,6 +20,8 @@ final class HomepageDiffableDataSource:
 
     enum HomeItem: Hashable {
         case header
+        case topSite(TopSiteState)
+        case topSiteEmpty
         case pocket(PocketStoryState)
         case pocketDiscover
         case customizeHomepage
@@ -27,6 +29,8 @@ final class HomepageDiffableDataSource:
         static var cellTypes: [ReusableCell.Type] {
             return [
                 HomepageHeaderCell.self,
+                TopSiteCell.self,
+                EmptyTopSiteCell.self,
                 PocketStandardCell.self,
                 PocketDiscoverCell.self,
                 CustomizeHomepageSectionCell.self
@@ -40,6 +44,9 @@ final class HomepageDiffableDataSource:
         snapshot.appendSections([.header, .topSites, .pocket, .customizeHomepage])
         snapshot.appendItems([.header], toSection: .header)
         snapshot.appendItems([], toSection: .topSites)
+
+        let topSites: [HomeItem] = state.topSitesState.topSitesData.compactMap { .topSite($0) }
+        snapshot.appendItems(topSites, toSection: .topSites)
 
         let stories: [HomeItem] = state.pocketState.pocketData.compactMap { .pocket($0) }
         snapshot.appendItems(stories, toSection: .pocket)

@@ -16,7 +16,7 @@ struct MainMenuConfigurationUtility: Equatable {
         static let findInPage = StandardImageIdentifiers.Large.search
         static let tools = StandardImageIdentifiers.Large.tool
         static let save = StandardImageIdentifiers.Large.save
-        static let bookmarks = StandardImageIdentifiers.Large.bookmark
+        static let bookmarks = StandardImageIdentifiers.Large.bookmarkTrayFill
         static let history = StandardImageIdentifiers.Large.history
         static let downloads = StandardImageIdentifiers.Large.download
         static let passwords = StandardImageIdentifiers.Large.login
@@ -355,7 +355,7 @@ struct MainMenuConfigurationUtility: Equatable {
             iconName: icon,
             isEnabled: true,
             isActive: tabInfo.zoomLevel != 1.0,
-            a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.Zoom,
+            a11yLabel: String(format: .MainMenu.Submenus.Tools.AccessibilityLabels.Zoom, zoomLevel),
             a11yHint: "",
             a11yId: AccessibilityIdentifiers.MainMenu.zoom,
             action: {

@@ -1332,6 +1332,11 @@ extension String {
     /// Identifiers of all new strings should begin with `LibraryPanel.{PanelName}.`
     public struct LibraryPanel {
         public struct Sections {
+            public static let LastHour = MZLocalizedString(
+                key: "LibraryPanel.Sections.LastHour.v134",
+                tableName: "LibraryPanel",
+                value: "Last Hour",
+                comment: "This label is meant to signify the section containing a group of items from the past hour. This is primarily used in the history library panel when grouping sites that have been visited in the last hour.")
             public static let Today = MZLocalizedString(
                 key: "Today",
                 tableName: nil,
@@ -4011,14 +4016,14 @@ extension String {
                     value: "Find in page",
                     comment: "On the main menu, the accessibility label for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page.")
                 public static let Tools = MZLocalizedString(
-                    key: "MainMenu.ToolsSection.AccessibilityLabels.Tools.v132",
+                    key: "MainMenu.ToolsSection.AccessibilityLabels.Tools.v133",
                     tableName: "MainMenu",
-                    value: "Tools",
+                    value: "Tools submenu",
                     comment: "On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu.")
                 public static let Save = MZLocalizedString(
-                    key: "MainMenu.ToolsSection.AccessibilityLabels.Save.v132",
+                    key: "MainMenu.ToolsSection.AccessibilityLabels.Save.v133",
                     tableName: "MainMenu",
-                    value: "Save",
+                    value: "Save submenu",
                     comment: "On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on.")
             }
         }
@@ -7465,6 +7470,16 @@ extension String {
                 tableName: "AddressToolbar",
                 value: "Search or enter address",
                 comment: "Accessibility label for the address field in the address toolbar.")
+            public static let Tools = MZLocalizedString(
+                key: "MainMenu.ToolsSection.AccessibilityLabels.Tools.v132",
+                tableName: "MainMenu",
+                value: "Tools",
+                comment: "On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu.")
+            public static let Save = MZLocalizedString(
+                key: "MainMenu.ToolsSection.AccessibilityLabels.Save.v132",
+                tableName: "MainMenu",
+                value: "Save",
+                comment: "On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on.")
         }
     }
 }

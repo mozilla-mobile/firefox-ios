@@ -408,6 +408,41 @@ class BaseTestCase: XCTestCase {
         let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
         XCTAssertEqual(result, .completed, "Element did not become hittable in time.")
     }
+    func switchThemeToDarkOrLight(theme: String) {
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
+        navigator.nowAt(BrowserTab)
+        navigator.goto(SettingsScreen)
+        navigator.goto(DisplaySettings)
+        mozWaitForElementToExist(app.switches["SystemThemeSwitchValue"])
+        if (app.switches["SystemThemeSwitchValue"].value as? String) == "1" {
+            navigator.performAction(Action.SystemThemeSwitch)
+        }
+        mozWaitForElementToExist(app.cells.staticTexts["Dark"])
+        if theme == "Dark" {
+            app.cells.staticTexts["Dark"].tap()
+        } else {
+            app.cells.staticTexts["Light"].tap()
+        }
+        app.buttons["Settings"].tap()
+        navigator.nowAt(SettingsScreen)
+        app.buttons["Done"].waitAndTap()
+    }
+    func waitForElementsToExist(_ elements: [XCUIElement], timeout: TimeInterval = TIMEOUT, message: String? = nil) {
+        var elementsDict = [XCUIElement: String]()
+        for element in elements {
+            elementsDict[element] = "exists == true"
+        }
+        let expectations = elementsDict.map({
+                XCTNSPredicateExpectation(
+                    predicate: NSPredicate(
+                        format: $0.value
+                    ),
+                    object: $0.key
+                )
+            })
+        let result = XCTWaiter.wait(for: expectations, timeout: timeout)
+        if result == .timedOut { XCTFail(message ?? expectations.description) }
+    }
 }
 
 class IpadOnlyTestCase: BaseTestCase {
