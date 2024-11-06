@@ -182,6 +182,12 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
                 updateToolbarState()
             }
         }
+        
+        if let refresh = scrollView?.subviews.first(where: {
+            $0 is CustomRefresh
+        }) {
+            refresh.isHidden = false
+        }
     }
 
     func showToolbars(animated: Bool) {
@@ -267,10 +273,15 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
     }
 }
 
-class CustomRefresh: UIRefreshControl {
+class CustomRefresh: UIView, ThemeApplicable {
     override func layoutSubviews() {
         super.layoutSubviews()
         backgroundColor = .red
+    }
+    
+    func applyTheme(theme: any Theme) {
+        layer.cornerRadius = 12.0
+        backgroundColor = theme.colors.layer1
     }
 }
 
@@ -280,24 +291,37 @@ private extension TabScrollingController {
         if let refresh = scrollView?.subviews.first(where: {
             $0 is CustomRefresh
         }) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                refresh.removeFromSuperview()
+            UIView.animate(withDuration: 0.3,
+                           animations: {
+                refresh.alpha = 0.0
+            }, completion: {_ in
                 self.scrollView?.contentInset = .zero
                 self.scrollView?.layoutIfNeeded()
+                refresh.removeFromSuperview()
+                if isEnabled {
+                    let refresh = CustomRefresh(frame: CGRect(origin: .zero, size: CGSize(width: 100, height: -300)))
+                    refresh.applyTheme(theme: DefaultThemeManager(sharedContainerIdentifier: "").getCurrentTheme(for: self.windowUUID))
+                    self.scrollView?.addSubview(refresh)
+                    // refresh.addTarget(self, action: #selector(self.reload), for: .valueChanged)
+                }
+            })
+        } else {
+            if isEnabled {
+                let refresh = CustomRefresh(frame: CGRect(origin: .zero, size: CGSize(width: 100, height: -300)))
+                refresh.applyTheme(theme: DefaultThemeManager(sharedContainerIdentifier: "").getCurrentTheme(for: self.windowUUID))
+                scrollView?.addSubview(refresh)
+                // refresh.addTarget(self, action: #selector(reload), for: .valueChanged)
             }
-        }
-        if isEnabled {
-            let refresh = CustomRefresh()
-            scrollView?.addSubview(refresh)
-            refresh.addTarget(self, action: #selector(reload), for: .valueChanged)
         }
     }
 
     @objc
     func reload() {
         guard let tab = tab else { return }
-        tab.reloadPage()
-        configureRefreshControl(isEnabled: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            self.configureRefreshControl(isEnabled: true)
+            tab.reloadPage()
+        }
         TelemetryWrapper.recordEvent(category: .action, method: .pull, object: .reload)
     }
 
