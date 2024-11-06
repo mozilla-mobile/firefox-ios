@@ -130,9 +130,9 @@ class SearchEngineSelectionViewController: UIViewController,
             return SearchEngineElement(
                 title: engine.shortName,
                 image: engine.image,
-                a11yLabel: "", // TODO
-                a11yHint: nil, // TODO
-                a11yId: "", // TODO
+                a11yLabel: engine.shortName,
+                a11yHint: nil,
+                a11yId: AccessibilityIdentifiers.UnifiedSearch.BottomSheetRow.engine,
                 action: { [weak self] in
                     self?.didTap(searchEngine: engine)
                 }
@@ -140,11 +140,11 @@ class SearchEngineSelectionViewController: UIViewController,
         }
 
         let searchButton = SearchEngineElement(
-            title: "Search Settings", // TODO l10n
+            title: String.UnifiedSearch.SearchEngineSelection.SearchSettings,
             image: UIImage(named: StandardImageIdentifiers.Large.settings)?.withRenderingMode(.alwaysTemplate) ?? UIImage(),
-            a11yLabel: "", // TODO
-            a11yHint: nil, // TODO
-            a11yId: "", // TODO
+            a11yLabel: String.UnifiedSearch.SearchEngineSelection.AccessibilityLabels.SearchSettingsLabel,
+            a11yHint: String.UnifiedSearch.SearchEngineSelection.AccessibilityLabels.SearchSettingsHint,
+            a11yId: AccessibilityIdentifiers.UnifiedSearch.BottomSheetRow.searchSettings,
             action: { [weak self] in
                 self?.didTapOpenSettings()
             })
