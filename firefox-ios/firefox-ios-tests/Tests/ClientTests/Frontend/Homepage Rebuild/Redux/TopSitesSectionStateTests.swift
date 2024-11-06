@@ -66,6 +66,6 @@ final class TopsSitesSectionStateTests: XCTestCase {
     }
 
     private func defaultState(with state: TopSitesSectionState) -> TopSitesSectionState {
-        return TopSitesSectionState.defaultState(fromPreviousState: state)
+        return TopSitesSectionState.defaultState(from: state)
     }
 }
