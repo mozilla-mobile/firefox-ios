@@ -74,15 +74,18 @@ struct HomepageState: ScreenState, Equatable {
     private static func defaultState(from state: HomepageState, action: Action?) -> HomepageState {
         var headerState = state.headerState
         var pocketState = state.pocketState
-        
+        var topSitesState = state.topSitesState
+
         if let action {
             headerState = HeaderState.reducer(state.headerState, action)
             pocketState = PocketState.reducer(state.pocketState, action)
+            topSitesState = TopSitesSectionState.reducer(state.topSitesState, action)
         }
-        
+
         return HomepageState(
             windowUUID: state.windowUUID,
             headerState: headerState,
+            topSitesState: topSitesState,
             pocketState: pocketState
         )
     }

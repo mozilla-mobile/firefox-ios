@@ -480,7 +480,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             fakespotState = FakespotState.reducer(state.fakespotState, action)
             microsurveyState = MicrosurveyPromptState.reducer(state.microsurveyState, action)
         }
-        
+
         return BrowserViewControllerState(
             searchScreenState: state.searchScreenState,
             showDataClearanceFlow: state.showDataClearanceFlow,
