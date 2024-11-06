@@ -51,8 +51,7 @@ struct MainMenuConfigurationUtility: Equatable {
         for viewType: MainMenuDetailsViewType?,
         and uuid: WindowUUID,
         readerState: ReaderModeState? = nil
-    )
-        -> [MenuSection] {
+    ) -> [MenuSection] {
         switch viewType {
         case .tools:
             return getToolsSubmenu(with: uuid, tabInfo: tabInfo, and: readerState)
@@ -70,8 +69,7 @@ struct MainMenuConfigurationUtility: Equatable {
     private func getMainMenuElements(
         with uuid: WindowUUID,
         and tabInfo: MainMenuTabInfo
-    )
-        -> [MenuSection] {
+    ) -> [MenuSection] {
         // Always include these sections
         var menuSections: [MenuSection] = [
             getNewTabSection(with: uuid),
@@ -104,7 +102,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 isActive: false,
                 a11yLabel: .MainMenu.TabsSection.AccessibilityLabels.NewTab,
                 a11yHint: "",
-                a11yID: AccessibilityIdentifiers.MainMenu.newTab,
+                a11yId: AccessibilityIdentifiers.MainMenu.newTab,
                 action: {
                     store.dispatch(
                         MainMenuAction(
@@ -122,7 +120,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 isActive: false,
                 a11yLabel: .MainMenu.TabsSection.AccessibilityLabels.NewPrivateTab,
                 a11yHint: "",
-                a11yID: AccessibilityIdentifiers.MainMenu.newPrivateTab,
+                a11yId: AccessibilityIdentifiers.MainMenu.newPrivateTab,
                 action: {
                     store.dispatch(
                         MainMenuAction(
@@ -141,8 +139,7 @@ struct MainMenuConfigurationUtility: Equatable {
     private func getToolsSection(
         with uuid: WindowUUID,
         and configuration: MainMenuTabInfo
-    )
-        -> MenuSection {
+    ) -> MenuSection {
         return MenuSection(
             options: [
                 configureUserAgentItem(with: uuid, tabInfo: configuration),
@@ -153,7 +150,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     isActive: false,
                     a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.FindInPage,
                     a11yHint: "",
-                    a11yID: AccessibilityIdentifiers.MainMenu.findInPage,
+                    a11yId: AccessibilityIdentifiers.MainMenu.findInPage,
                     action: {
                         store.dispatch(
                             MainMenuAction(
@@ -173,7 +170,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     hasSubmenu: true,
                     a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.Tools,
                     a11yHint: "",
-                    a11yID: AccessibilityIdentifiers.MainMenu.tools,
+                    a11yId: AccessibilityIdentifiers.MainMenu.tools,
                     action: {
                         store.dispatch(
                             MainMenuAction(
@@ -193,7 +190,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     hasSubmenu: true,
                     a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.Save,
                     a11yHint: "",
-                    a11yID: AccessibilityIdentifiers.MainMenu.save,
+                    a11yId: AccessibilityIdentifiers.MainMenu.save,
                     action: {
                         store.dispatch(
                             MainMenuAction(
@@ -265,7 +262,7 @@ struct MainMenuConfigurationUtility: Equatable {
             isActive: isActive,
             a11yLabel: a11yLabel,
             a11yHint: "",
-            a11yID: AccessibilityIdentifiers.MainMenu.switchToDesktopSite,
+            a11yId: AccessibilityIdentifiers.MainMenu.switchToDesktopSite,
             action: {
                 store.dispatch(
                     MainMenuAction(
@@ -283,8 +280,7 @@ struct MainMenuConfigurationUtility: Equatable {
         with uuid: WindowUUID,
         tabInfo: MainMenuTabInfo,
         and _: ReaderModeState?
-    )
-        -> [MenuSection] {
+    ) -> [MenuSection] {
         return [
             MenuSection(
                 options: [
@@ -297,7 +293,7 @@ struct MainMenuConfigurationUtility: Equatable {
                         isActive: false,
                         a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.ReportBrokenSite,
                         a11yHint: "",
-                        a11yID: AccessibilityIdentifiers.MainMenu.reportBrokenSite,
+                        a11yId: AccessibilityIdentifiers.MainMenu.reportBrokenSite,
                         action: {
                             store.dispatch(
                                 MainMenuAction(
@@ -322,7 +318,7 @@ struct MainMenuConfigurationUtility: Equatable {
                         isActive: false,
                         a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.Share,
                         a11yHint: "",
-                        a11yID: AccessibilityIdentifiers.MainMenu.share,
+                        a11yId: AccessibilityIdentifiers.MainMenu.share,
                         action: {
                             store.dispatch(
                                 MainMenuAction(
@@ -344,8 +340,7 @@ struct MainMenuConfigurationUtility: Equatable {
     private func configureZoomItem(
         with uuid: WindowUUID,
         and tabInfo: MainMenuTabInfo
-    )
-        -> MenuElement {
+    ) -> MenuElement {
         let zoomLevel = NumberFormatter.localizedString(
             from: NSNumber(value: tabInfo.zoomLevel),
             number: .percent
@@ -360,7 +355,7 @@ struct MainMenuConfigurationUtility: Equatable {
             isActive: tabInfo.zoomLevel != 1.0,
             a11yLabel: String(format: .MainMenu.Submenus.Tools.AccessibilityLabels.Zoom, zoomLevel),
             a11yHint: "",
-            a11yID: AccessibilityIdentifiers.MainMenu.zoom,
+            a11yId: AccessibilityIdentifiers.MainMenu.zoom,
             action: {
                 store.dispatch(
                     MainMenuAction(
@@ -376,8 +371,7 @@ struct MainMenuConfigurationUtility: Equatable {
         with uuid: WindowUUID,
         tabInfo _: MainMenuTabInfo,
         and readerModeState: ReaderModeState?
-    )
-        -> MenuElement {
+    ) -> MenuElement {
         typealias Strings = String.MainMenu.Submenus.Tools
         typealias A11y = String.MainMenu.Submenus.Tools.AccessibilityLabels
 
@@ -394,7 +388,7 @@ struct MainMenuConfigurationUtility: Equatable {
             isActive: readerModeState == .active,
             a11yLabel: a11yLabel,
             a11yHint: "",
-            a11yID: AccessibilityIdentifiers.MainMenu.readerView,
+            a11yId: AccessibilityIdentifiers.MainMenu.readerView,
             action: {
                 store.dispatch(
                     GeneralBrowserAction(
@@ -422,7 +416,7 @@ struct MainMenuConfigurationUtility: Equatable {
             isActive: nightModeIsOn,
             a11yLabel: a11yLabel,
             a11yHint: "",
-            a11yID: AccessibilityIdentifiers.MainMenu.nightMode,
+            a11yId: AccessibilityIdentifiers.MainMenu.nightMode,
             action: {
                 store.dispatch(
                     MainMenuAction(
@@ -439,8 +433,7 @@ struct MainMenuConfigurationUtility: Equatable {
     private func getSaveSubmenu(
         with uuid: WindowUUID,
         and tabInfo: MainMenuTabInfo
-    )
-        -> [MenuSection] {
+    ) -> [MenuSection] {
         return [MenuSection(
             options: [
                 configureBookmarkItem(with: uuid, and: tabInfo),
@@ -453,8 +446,7 @@ struct MainMenuConfigurationUtility: Equatable {
     private func configureBookmarkItem(
         with uuid: WindowUUID,
         and tabInfo: MainMenuTabInfo
-    )
-        -> MenuElement {
+    ) -> MenuElement {
         typealias SaveMenu = String.MainMenu.Submenus.Save
         typealias A11y = SaveMenu.AccessibilityLabels
 
@@ -470,7 +462,7 @@ struct MainMenuConfigurationUtility: Equatable {
             isActive: tabInfo.isBookmarked,
             a11yLabel: a11yLabel,
             a11yHint: "",
-            a11yID: AccessibilityIdentifiers.MainMenu.bookmarkThisPage,
+            a11yId: AccessibilityIdentifiers.MainMenu.bookmarkThisPage,
             action: {
                 store.dispatch(
                     MainMenuAction(
@@ -486,8 +478,7 @@ struct MainMenuConfigurationUtility: Equatable {
     private func configureShortcutsItem(
         with uuid: WindowUUID,
         and tabInfo: MainMenuTabInfo
-    )
-        -> MenuElement {
+    ) -> MenuElement {
         typealias SaveMenu = String.MainMenu.Submenus.Save
         typealias A11y = SaveMenu.AccessibilityLabels
 
@@ -503,7 +494,7 @@ struct MainMenuConfigurationUtility: Equatable {
             isActive: tabInfo.isPinned,
             a11yLabel: a11yLabel,
             a11yHint: "",
-            a11yID: AccessibilityIdentifiers.MainMenu.addToShortcuts,
+            a11yId: AccessibilityIdentifiers.MainMenu.addToShortcuts,
             action: {
                 store.dispatch(
                     MainMenuAction(
@@ -519,8 +510,7 @@ struct MainMenuConfigurationUtility: Equatable {
     private func configureReadingListItem(
         with uuid: WindowUUID,
         and tabInfo: MainMenuTabInfo
-    )
-        -> MenuElement {
+    ) -> MenuElement {
         typealias SaveMenu = String.MainMenu.Submenus.Save
         typealias A11y = SaveMenu.AccessibilityLabels
 
@@ -537,7 +527,7 @@ struct MainMenuConfigurationUtility: Equatable {
             isActive: tabInfo.isInReadingList,
             a11yLabel: a11yLabel,
             a11yHint: "",
-            a11yID: AccessibilityIdentifiers.MainMenu.saveToReadingList,
+            a11yId: AccessibilityIdentifiers.MainMenu.saveToReadingList,
             action: {
                 store.dispatch(
                     MainMenuAction(
@@ -561,7 +551,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 isActive: false,
                 a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks,
                 a11yHint: "",
-                a11yID: AccessibilityIdentifiers.MainMenu.bookmarks,
+                a11yId: AccessibilityIdentifiers.MainMenu.bookmarks,
                 action: {
                     store.dispatch(
                         MainMenuAction(
@@ -579,7 +569,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 isActive: false,
                 a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.History,
                 a11yHint: "",
-                a11yID: AccessibilityIdentifiers.MainMenu.history,
+                a11yId: AccessibilityIdentifiers.MainMenu.history,
                 action: {
                     store.dispatch(
                         MainMenuAction(
@@ -597,7 +587,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 isActive: false,
                 a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.Downloads,
                 a11yHint: "",
-                a11yID: AccessibilityIdentifiers.MainMenu.downloads,
+                a11yId: AccessibilityIdentifiers.MainMenu.downloads,
                 action: {
                     store.dispatch(
                         MainMenuAction(
@@ -615,7 +605,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 isActive: false,
                 a11yLabel: .MainMenu.PanelLinkSection.AccessibilityLabels.Passwords,
                 a11yHint: "",
-                a11yID: AccessibilityIdentifiers.MainMenu.passwords,
+                a11yId: AccessibilityIdentifiers.MainMenu.passwords,
                 action: {
                     store.dispatch(
                         MainMenuAction(
@@ -634,8 +624,7 @@ struct MainMenuConfigurationUtility: Equatable {
     private func getOtherToolsSection(
         with uuid: WindowUUID,
         isHomepage: Bool
-    )
-        -> MenuSection {
+    ) -> MenuSection {
         let homepageOptions = [
             MenuElement(
                 title: .MainMenu.OtherToolsSection.CustomizeHomepage,
@@ -644,7 +633,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 isActive: false,
                 a11yLabel: .MainMenu.OtherToolsSection.AccessibilityLabels.CustomizeHomepage,
                 a11yHint: "",
-                a11yID: AccessibilityIdentifiers.MainMenu.customizeHomepage,
+                a11yId: AccessibilityIdentifiers.MainMenu.customizeHomepage,
                 action: {
                     store.dispatch(
                         MainMenuAction(
@@ -668,7 +657,7 @@ struct MainMenuConfigurationUtility: Equatable {
                     AppName.shortName.rawValue
                 ),
                 a11yHint: "",
-                a11yID: AccessibilityIdentifiers.MainMenu.whatsNew,
+                a11yId: AccessibilityIdentifiers.MainMenu.whatsNew,
                 action: {
                     store.dispatch(
                         MainMenuAction(
@@ -692,7 +681,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 isActive: false,
                 a11yLabel: .MainMenu.OtherToolsSection.AccessibilityLabels.GetHelp,
                 a11yHint: "",
-                a11yID: AccessibilityIdentifiers.MainMenu.getHelp,
+                a11yId: AccessibilityIdentifiers.MainMenu.getHelp,
                 action: {
                     store.dispatch(
                         MainMenuAction(
@@ -713,7 +702,7 @@ struct MainMenuConfigurationUtility: Equatable {
                 isActive: false,
                 a11yLabel: .MainMenu.OtherToolsSection.AccessibilityLabels.Settings,
                 a11yHint: "",
-                a11yID: AccessibilityIdentifiers.MainMenu.settings,
+                a11yId: AccessibilityIdentifiers.MainMenu.settings,
                 action: {
                     store.dispatch(
                         MainMenuAction(
