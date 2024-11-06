@@ -64,13 +64,13 @@ struct HomepageState: ScreenState, Equatable {
     }
 
     private static func defaultActionState(from state: HomepageState, action: Action) -> HomepageState {
-        let defaultState = defaultActionState(from: state)
+        let defaultState = defaultState(from: state)
         return HomepageState(windowUUID: defaultState.windowUUID,
                              headerState: HeaderState.reducer(state.headerState, action),
                              pocketState: PocketState.reducer(state.pocketState, action))
     }
 
-    static func defaultActionState(from state: HomepageState) -> HomepageState {
+    static func defaultState(from state: HomepageState) -> HomepageState {
         // since the default state would depend on other reducers use `defaultActionState(for: ,action:)`
         // as method for default action state
         return HomepageState(

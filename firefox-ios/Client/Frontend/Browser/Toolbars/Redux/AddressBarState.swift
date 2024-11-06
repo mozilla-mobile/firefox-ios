@@ -134,7 +134,7 @@ struct AddressBarState: StateType, Equatable {
     static let reducer: Reducer<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
         else {
-            return defaultActionState(from: state)
+            return defaultState(from: state)
         }
 
         switch action.actionType {
@@ -194,7 +194,7 @@ struct AddressBarState: StateType, Equatable {
             return handleDidStartTypingAction(state: state, action: action)
 
         default:
-            return defaultActionState(from: state)
+            return defaultState(from: state)
         }
     }
 
@@ -222,7 +222,7 @@ struct AddressBarState: StateType, Equatable {
     }
 
     private static func handleNumberOfTabsChangedAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         return AddressBarState(
             windowUUID: state.windowUUID,
@@ -245,7 +245,7 @@ struct AddressBarState: StateType, Equatable {
     }
 
     private static func handleReaderModeStateChangedAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         return AddressBarState(
             windowUUID: state.windowUUID,
@@ -271,7 +271,7 @@ struct AddressBarState: StateType, Equatable {
     }
 
     private static func handleWebsiteLoadingStateDidChangeAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         return AddressBarState(
             windowUUID: state.windowUUID,
@@ -294,7 +294,7 @@ struct AddressBarState: StateType, Equatable {
     }
 
     private static func handleUrlDidChangeAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         return AddressBarState(
             windowUUID: state.windowUUID,
@@ -319,7 +319,7 @@ struct AddressBarState: StateType, Equatable {
     }
 
     private static func handleBackForwardButtonStateChangedAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         return AddressBarState(
             windowUUID: state.windowUUID,
@@ -344,7 +344,7 @@ struct AddressBarState: StateType, Equatable {
     }
 
     private static func handleTraitCollectionDidChangeAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         return AddressBarState(
             windowUUID: state.windowUUID,
@@ -369,7 +369,7 @@ struct AddressBarState: StateType, Equatable {
     }
 
     private static func handleShowMenuWarningBadgeAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         return AddressBarState(
             windowUUID: state.windowUUID,
@@ -392,7 +392,7 @@ struct AddressBarState: StateType, Equatable {
     }
 
     private static func handlePositionChangedAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         return AddressBarState(
             windowUUID: state.windowUUID,
@@ -415,7 +415,7 @@ struct AddressBarState: StateType, Equatable {
     }
 
     private static func handleDidPasteSearchTermAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         let isEmptySearch = toolbarAction.searchTerm == nil || toolbarAction.searchTerm?.isEmpty == true
 
@@ -443,7 +443,7 @@ struct AddressBarState: StateType, Equatable {
     }
 
     private static func handleDidStartEditingUrlAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         let searchTerm = toolbarAction.searchTerm ?? state.searchTerm
         let locationText = searchTerm ?? state.url?.absoluteString
@@ -473,7 +473,7 @@ struct AddressBarState: StateType, Equatable {
     }
 
     private static func handleCancelEditAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         let url = toolbarAction.url ?? state.url
         let showQRPageAction = url == nil
@@ -502,7 +502,7 @@ struct AddressBarState: StateType, Equatable {
     }
 
     private static func handleDidSetTextInLocationViewAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         let isEmptySearch = toolbarAction.searchTerm == nil || toolbarAction.searchTerm?.isEmpty == true
 
@@ -551,7 +551,7 @@ struct AddressBarState: StateType, Equatable {
     }
 
     private static func handleClearSearchAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         return AddressBarState(
             windowUUID: state.windowUUID,
@@ -577,7 +577,7 @@ struct AddressBarState: StateType, Equatable {
     }
 
     private static func handleDidDeleteSearchTermAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         return AddressBarState(
             windowUUID: state.windowUUID,
@@ -603,7 +603,7 @@ struct AddressBarState: StateType, Equatable {
     }
 
     private static func handleDidEnterSearchTermAction(state: Self, action: Action) -> Self {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         return AddressBarState(
             windowUUID: state.windowUUID,
@@ -629,7 +629,7 @@ struct AddressBarState: StateType, Equatable {
     }
 
     private static func handleDidStartTypingAction(state: Self, action: Action) -> Self {
-        guard action is ToolbarAction else { return defaultActionState(from: state) }
+        guard action is ToolbarAction else { return defaultState(from: state) }
 
         return AddressBarState(
             windowUUID: state.windowUUID,
@@ -651,7 +651,7 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
-    static func defaultActionState(from state: AddressBarState) -> AddressBarState {
+    static func defaultState(from state: AddressBarState) -> AddressBarState {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,

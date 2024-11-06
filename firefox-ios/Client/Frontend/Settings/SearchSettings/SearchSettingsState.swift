@@ -17,10 +17,10 @@ struct SearchSettingsState: ScreenState, Equatable {
     }
 
     static let reducer: Reducer<Self> = { state, action in
-        return defaultActionState(from: state)
+        return defaultState(from: state)
     }
 
-    static func defaultActionState(from state: SearchSettingsState) -> SearchSettingsState {
+    static func defaultState(from state: SearchSettingsState) -> SearchSettingsState {
         return SearchSettingsState(windowUUID: state.windowUUID)
     }
 }

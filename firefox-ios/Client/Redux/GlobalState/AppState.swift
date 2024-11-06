@@ -48,7 +48,7 @@ struct AppState: StateType {
             })
     }
 
-    static func defaultActionState(from state: AppState) -> AppState {
+    static func defaultState(from state: AppState) -> AppState {
         return AppState(activeScreens: state.activeScreens)
     }
 }

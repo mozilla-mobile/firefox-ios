@@ -474,7 +474,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
 
     private static func defaultActionState(from state: BrowserViewControllerState,
                                            action: Action) -> BrowserViewControllerState {
-        let defaultState = defaultActionState(from: state)
+        let defaultState = defaultState(from: state)
         return BrowserViewControllerState(
             searchScreenState: defaultState.searchScreenState,
             showDataClearanceFlow: defaultState.showDataClearanceFlow,
@@ -485,7 +485,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         )
     }
 
-    static func defaultActionState(from state: BrowserViewControllerState) -> BrowserViewControllerState {
+    static func defaultState(from state: BrowserViewControllerState) -> BrowserViewControllerState {
         // This method should be used only in `defaultActionState(from: ,action: )` since the default state for this
         // state depends on the action as well
         return BrowserViewControllerState(

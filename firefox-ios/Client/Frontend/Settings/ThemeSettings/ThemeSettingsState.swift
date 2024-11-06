@@ -57,11 +57,11 @@ struct ThemeSettingsState: ScreenState, Equatable {
     static let reducer: Reducer<Self> = { state, action in
         // Only process actions for the current window
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID,
-         let action = action as? ThemeSettingsMiddlewareAction else { return defaultActionState(from: state) }
+         let action = action as? ThemeSettingsMiddlewareAction else { return defaultState(from: state) }
 
         switch action.actionType {
         case ThemeSettingsMiddlewareActionType.receivedThemeManagerValues:
-            return action.themeSettingsState ?? defaultActionState(from: state)
+            return action.themeSettingsState ?? defaultState(from: state)
 
         case ThemeSettingsMiddlewareActionType.systemThemeChanged:
             let useSystemAppearance = action.themeSettingsState?.useSystemAppearance ?? state.useSystemAppearance
@@ -109,11 +109,11 @@ struct ThemeSettingsState: ScreenState, Equatable {
                                       userBrightnessThreshold: state.userBrightnessThreshold,
                                       systemBrightness: brightnessValue)
         default:
-            return defaultActionState(from: state)
+            return defaultState(from: state)
         }
     }
 
-    static func defaultActionState(from state: ThemeSettingsState) -> ThemeSettingsState {
+    static func defaultState(from state: ThemeSettingsState) -> ThemeSettingsState {
         return ThemeSettingsState(windowUUID: state.windowUUID,
                                   useSystemAppearance: state.useSystemAppearance,
                                   isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,

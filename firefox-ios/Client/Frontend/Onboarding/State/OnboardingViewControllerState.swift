@@ -31,16 +31,16 @@ struct OnboardingViewControllerState: ScreenState, Equatable {
         // Only process actions for the current window
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
         else {
-            return defaultActionState(from: state)
+            return defaultState(from: state)
         }
 
         switch action {
         default:
-            return defaultActionState(from: state)
+            return defaultState(from: state)
         }
     }
 
-    static func defaultActionState(from state: OnboardingViewControllerState) -> OnboardingViewControllerState {
+    static func defaultState(from state: OnboardingViewControllerState) -> OnboardingViewControllerState {
         return OnboardingViewControllerState(windowUUID: state.windowUUID)
     }
 }

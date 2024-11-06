@@ -8,9 +8,8 @@ import Foundation
 /// This state is stored inside of the `Store`, then you have views and other subscribers that will get notified
 /// every single time that state updates into the entire app.
 public protocol StateType {
-    /// Returns the state for a default action by clearing any transient state from previous one.
+    /// Returns a default State by clearing any transient data from previous one.
     ///
     /// All the state properties that have a default value into the initializer should be restore to default.
-    /// A default action could be the default case for a reducer switch case.
-    static func defaultActionState(from state: Self) -> Self
+    static func defaultState(from state: Self) -> Self
 }

@@ -33,7 +33,7 @@ struct MicrosurveyPromptState: StateType, Equatable {
     static let reducer: Reducer<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
         else {
-            return defaultActionState(from: state)
+            return defaultState(from: state)
         }
 
         switch action.actionType {
@@ -60,11 +60,11 @@ struct MicrosurveyPromptState: StateType, Equatable {
                 model: state.model
             )
         default:
-            return defaultActionState(from: state)
+            return defaultState(from: state)
         }
     }
 
-    static func defaultActionState(from state: MicrosurveyPromptState) -> MicrosurveyPromptState {
+    static func defaultState(from state: MicrosurveyPromptState) -> MicrosurveyPromptState {
         return MicrosurveyPromptState(
             windowUUID: state.windowUUID,
             showPrompt: state.showPrompt,

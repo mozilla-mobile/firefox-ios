@@ -101,7 +101,7 @@ struct MainMenuState: ScreenState, Equatable {
     static let reducer: Reducer<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
         else {
-            return defaultActionState(from: state)
+            return defaultState(from: state)
         }
 
         switch action.actionType {
@@ -115,7 +115,7 @@ struct MainMenuState: ScreenState, Equatable {
             )
         case MainMenuMiddlewareActionType.updateAccountHeader:
             guard let action = action as? MainMenuAction
-            else { return defaultActionState(from: state) }
+            else { return defaultState(from: state) }
 
             return MainMenuState(
                 windowUUID: state.windowUUID,
@@ -127,7 +127,7 @@ struct MainMenuState: ScreenState, Equatable {
         case MainMenuActionType.updateCurrentTabInfo:
             guard let action = action as? MainMenuAction,
                   let currentTabInfo = action.currentTabInfo
-            else { return defaultActionState(from: state) }
+            else { return defaultState(from: state) }
 
             return MainMenuState(
                 windowUUID: state.windowUUID,
@@ -141,7 +141,7 @@ struct MainMenuState: ScreenState, Equatable {
                 accountIcon: state.accountIcon
             )
         case MainMenuActionType.tapShowDetailsView:
-            guard let action = action as? MainMenuAction else { return defaultActionState(from: state) }
+            guard let action = action as? MainMenuAction else { return defaultState(from: state) }
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
@@ -151,7 +151,7 @@ struct MainMenuState: ScreenState, Equatable {
                 accountIcon: state.accountIcon
             )
         case MainMenuActionType.tapNavigateToDestination:
-            guard let action = action as? MainMenuAction else { return defaultActionState(from: state) }
+            guard let action = action as? MainMenuAction else { return defaultState(from: state) }
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
@@ -171,11 +171,11 @@ struct MainMenuState: ScreenState, Equatable {
                 accountIcon: state.accountIcon
             )
         default:
-            return defaultActionState(from: state)
+            return defaultState(from: state)
         }
     }
 
-    static func defaultActionState(from state: MainMenuState) -> MainMenuState {
+    static func defaultState(from state: MainMenuState) -> MainMenuState {
         return MainMenuState(
             windowUUID: state.windowUUID,
             menuElements: state.menuElements,

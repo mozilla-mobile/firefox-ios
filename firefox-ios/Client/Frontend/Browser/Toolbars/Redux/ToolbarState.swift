@@ -103,7 +103,7 @@ struct ToolbarState: ScreenState, Equatable {
         // Only process actions for the current window
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
         else {
-            return defaultActionState(from: state)
+            return defaultState(from: state)
         }
 
         switch action.actionType {
@@ -144,14 +144,14 @@ struct ToolbarState: ScreenState, Equatable {
             return handleNavigationHintFinishedPresenting(state: state, action: action)
 
         default:
-            return defaultActionState(from: state)
+            return defaultState(from: state)
         }
     }
 
     private static func handleDidLoadToolbars(state: Self, action: Action) -> ToolbarState {
         guard let toolbarAction = action as? ToolbarAction,
               let toolbarPosition = toolbarAction.toolbarPosition
-        else { return defaultActionState(from: state) }
+        else { return defaultState(from: state) }
 
         let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
         return ToolbarState(
@@ -172,7 +172,7 @@ struct ToolbarState: ScreenState, Equatable {
     }
 
     private static func handleToolbarUpdates(state: Self, action: Action) -> ToolbarState {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
         return ToolbarState(
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
@@ -191,7 +191,7 @@ struct ToolbarState: ScreenState, Equatable {
     }
 
     private static func handleShowMenuWarningBadge(state: Self, action: Action) -> ToolbarState {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
         return ToolbarState(
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
@@ -210,7 +210,7 @@ struct ToolbarState: ScreenState, Equatable {
     }
 
     private static func handleNumberOfTabsChanged(state: Self, action: Action) -> ToolbarState {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
         return ToolbarState(
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
@@ -231,7 +231,7 @@ struct ToolbarState: ScreenState, Equatable {
     private static func handleToolbarPositionChanged(state: Self, action: Action) -> ToolbarState {
         guard let toolbarPosition = (action as? ToolbarAction)?.toolbarPosition
         else {
-            return defaultActionState(from: state)
+            return defaultState(from: state)
         }
 
         let position = addressToolbarPositionFromSearchBarPosition(toolbarPosition)
@@ -253,7 +253,7 @@ struct ToolbarState: ScreenState, Equatable {
     }
 
     private static func handleReaderModeStateChanged(state: Self, action: Action) -> ToolbarState {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
         return ToolbarState(
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
@@ -272,7 +272,7 @@ struct ToolbarState: ScreenState, Equatable {
     }
 
     private static func handleBackForwardButtonStateChanged(state: Self, action: Action) -> ToolbarState {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
         return ToolbarState(
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
@@ -291,7 +291,7 @@ struct ToolbarState: ScreenState, Equatable {
     }
 
     private static func handleTraitCollectionDidChange(state: Self, action: Action) -> ToolbarState {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
         return ToolbarState(
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
@@ -310,7 +310,7 @@ struct ToolbarState: ScreenState, Equatable {
     }
 
     private static func handleNavigationButtonDoubleTapped(state: Self, action: Action) -> ToolbarState {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
         return ToolbarState(
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
@@ -329,7 +329,7 @@ struct ToolbarState: ScreenState, Equatable {
     }
 
     private static func handleNavigationHintFinishedPresenting(state: Self, action: Action) -> ToolbarState {
-        guard let toolbarAction = action as? ToolbarAction else { return defaultActionState(from: state) }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
         return ToolbarState(
             windowUUID: state.windowUUID,
             toolbarPosition: state.toolbarPosition,
@@ -355,7 +355,7 @@ struct ToolbarState: ScreenState, Equatable {
         }
     }
 
-    static func defaultActionState(from state: ToolbarState) -> ToolbarState {
+    static func defaultState(from state: ToolbarState) -> ToolbarState {
         return ToolbarState(windowUUID: state.windowUUID,
                             toolbarPosition: state.toolbarPosition,
                             isPrivateMode: state.isPrivateMode,

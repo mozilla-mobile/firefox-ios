@@ -88,7 +88,7 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
     static let reducer: Reducer<TrackingProtectionState> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
         else {
-            return defaultActionState(from: state)
+            return defaultState(from: state)
         }
 
         switch action.actionType {
@@ -210,11 +210,11 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
                 shouldUpdateBlockedTrackerStats: false
             )
         default:
-            return defaultActionState(from: state)
+            return defaultState(from: state)
         }
     }
 
-    static func defaultActionState(from state: TrackingProtectionState) -> TrackingProtectionState {
+    static func defaultState(from state: TrackingProtectionState) -> TrackingProtectionState {
         return TrackingProtectionState(
             windowUUID: state.windowUUID,
             shouldDismiss: false,
