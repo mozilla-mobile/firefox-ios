@@ -380,8 +380,6 @@ class URLBarView: UIView,
     }
 
     override func updateConstraints() {
-        super.updateConstraints()
-
         line.snp.remakeConstraints { make in
             if isBottomSearchBar {
                 make.top.equalTo(self)
@@ -467,6 +465,7 @@ class URLBarView: UIView,
                 )
             }
         }
+        super.updateConstraints()
     }
 
     @objc

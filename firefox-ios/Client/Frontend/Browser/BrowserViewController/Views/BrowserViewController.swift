@@ -412,7 +412,6 @@ class BrowserViewController: UIViewController,
         } else {
             urlBar.topTabsIsShowing = showTopTabs
             urlBar.setShowToolbar(!showNavToolbar)
-            toolbar.addNewTabButton.isHidden = showNavToolbar
 
             if showNavToolbar {
                 toolbar.isHidden = false
