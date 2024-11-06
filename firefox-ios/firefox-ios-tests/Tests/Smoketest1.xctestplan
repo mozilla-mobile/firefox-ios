@@ -41,6 +41,7 @@
         "AddressesTests\/testAddNewAddressPostalCodeFilled()",
         "AddressesTests\/testAddNewAddressStreetAddressFilled()",
         "AuthenticationTest\/testBasicHTTPAuthenticationPromptVisible()",
+        "AuthenticationTest\/testBasicHTTPAuthenticationPromptVisibleAndLogin()",
         "AuthenticationTest\/testChangePassCode()",
         "AuthenticationTest\/testChangePasscodeShowsErrorStates()",
         "AuthenticationTest\/testChangeRequirePasscodeInterval()",

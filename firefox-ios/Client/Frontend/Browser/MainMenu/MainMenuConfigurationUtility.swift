@@ -72,12 +72,13 @@ struct MainMenuConfigurationUtility: Equatable {
     ) -> [MenuSection] {
         // Always include these sections
         var menuSections: [MenuSection] = [
-            getNewTabSection(with: uuid),
-            getLibrariesSection(with: uuid),
+            getNewTabSection(with: uuid, tabInfo: tabInfo),
+            getLibrariesSection(with: uuid, tabInfo: tabInfo),
             getOtherToolsSection(
                 with: uuid,
-                isHomepage: tabInfo.isHomepage
-            ),
+                isHomepage: tabInfo.isHomepage,
+                tabInfo: tabInfo
+            )
         ]
 
         // Conditionally add tools section if this is a website
@@ -92,8 +93,7 @@ struct MainMenuConfigurationUtility: Equatable {
     }
 
     // MARK: - New Tabs Section
-
-    private func getNewTabSection(with uuid: WindowUUID) -> MenuSection {
+    private func getNewTabSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo) -> MenuSection {
         return MenuSection(options: [
             MenuElement(
                 title: .MainMenu.TabsSection.NewTab,
@@ -108,7 +108,8 @@ struct MainMenuConfigurationUtility: Equatable {
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
-                            navigationDestination: MenuNavigationDestination(.newTab)
+                            navigationDestination: MenuNavigationDestination(.newTab),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                         )
                     )
                 }
@@ -126,7 +127,8 @@ struct MainMenuConfigurationUtility: Equatable {
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
-                            navigationDestination: MenuNavigationDestination(.newPrivateTab)
+                            navigationDestination: MenuNavigationDestination(.newPrivateTab),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                         )
                     )
                 }
@@ -156,7 +158,8 @@ struct MainMenuConfigurationUtility: Equatable {
                             MainMenuAction(
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.tapNavigateToDestination,
-                                navigationDestination: MenuNavigationDestination(.findInPage)
+                                navigationDestination: MenuNavigationDestination(.findInPage),
+                                telemetryInfo: TelemetryInfo(isHomepage: configuration.isHomepage)
                             )
                         )
                     }
@@ -176,7 +179,8 @@ struct MainMenuConfigurationUtility: Equatable {
                             MainMenuAction(
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.tapShowDetailsView,
-                                changeMenuViewTo: .tools
+                                changeMenuViewTo: .tools,
+                                telemetryInfo: TelemetryInfo(isHomepage: configuration.isHomepage)
                             )
                         )
                     }
@@ -196,7 +200,8 @@ struct MainMenuConfigurationUtility: Equatable {
                             MainMenuAction(
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.tapShowDetailsView,
-                                changeMenuViewTo: .save
+                                changeMenuViewTo: .save,
+                                telemetryInfo: TelemetryInfo(isHomepage: configuration.isHomepage)
                             )
                         )
                     }
@@ -267,7 +272,8 @@ struct MainMenuConfigurationUtility: Equatable {
                 store.dispatch(
                     MainMenuAction(
                         windowUUID: uuid,
-                        actionType: MainMenuActionType.tapToggleUserAgent
+                        actionType: MainMenuActionType.tapToggleUserAgent,
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                     )
                 )
             }
@@ -285,7 +291,7 @@ struct MainMenuConfigurationUtility: Equatable {
             MenuSection(
                 options: [
                     configureZoomItem(with: uuid, and: tabInfo),
-                    configureNightModeItem(with: uuid),
+                    configureNightModeItem(with: uuid, and: tabInfo),
                     MenuElement(
                         title: .MainMenu.Submenus.Tools.ReportBrokenSite,
                         iconName: Icons.reportBrokenSite,
@@ -302,7 +308,8 @@ struct MainMenuConfigurationUtility: Equatable {
                                     navigationDestination: MenuNavigationDestination(
                                         .goToURL,
                                         url: SupportUtils.URLForReportSiteIssue(tabInfo.url?.absoluteString)
-                                    )
+                                    ),
+                                    telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                                 )
                             )
                         }
@@ -327,7 +334,8 @@ struct MainMenuConfigurationUtility: Equatable {
                                     navigationDestination: MenuNavigationDestination(
                                         .shareSheet,
                                         url: tabInfo.canonicalURL
-                                    )
+                                    ),
+                                    telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                                 )
                             )
                         }
@@ -360,7 +368,8 @@ struct MainMenuConfigurationUtility: Equatable {
                 store.dispatch(
                     MainMenuAction(
                         windowUUID: uuid,
-                        actionType: MainMenuDetailsActionType.tapZoom
+                        actionType: MainMenuDetailsActionType.tapZoom,
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                     )
                 )
             }
@@ -387,9 +396,17 @@ struct MainMenuConfigurationUtility: Equatable {
             isEnabled: readerModeState != .unavailable,
             isActive: readerModeState == .active,
             a11yLabel: a11yLabel,
-            a11yHint: "",
+            a11yHint: readerModeState != .unavailable ? "" : .MainMenu.AccessibilityLabels.OptionDisabledHint,
             a11yId: AccessibilityIdentifiers.MainMenu.readerView,
             action: {
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: uuid,
+                        actionType: GeneralBrowserActionType.showReaderMode,
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage,
+                                                     isActionOn: readerModeState == .active)
+                    )
+                )
                 store.dispatch(
                     GeneralBrowserAction(
                         windowUUID: uuid,
@@ -400,7 +417,7 @@ struct MainMenuConfigurationUtility: Equatable {
         )
     }
 
-    private func configureNightModeItem(with uuid: WindowUUID) -> MenuElement {
+    private func configureNightModeItem(with uuid: WindowUUID, and tabInfo: MainMenuTabInfo) -> MenuElement {
         typealias Strings = String.MainMenu.Submenus.Tools
         typealias A11y = String.MainMenu.Submenus.Tools.AccessibilityLabels
 
@@ -421,7 +438,9 @@ struct MainMenuConfigurationUtility: Equatable {
                 store.dispatch(
                     MainMenuAction(
                         windowUUID: uuid,
-                        actionType: MainMenuDetailsActionType.tapToggleNightMode
+                        actionType: MainMenuDetailsActionType.tapToggleNightMode,
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage,
+                                                     isActionOn: nightModeIsOn)
                     )
                 )
             }
@@ -468,7 +487,8 @@ struct MainMenuConfigurationUtility: Equatable {
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: actionType,
-                        tabID: tabInfo.tabID
+                        tabID: tabInfo.tabID,
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                     )
                 )
             }
@@ -500,7 +520,8 @@ struct MainMenuConfigurationUtility: Equatable {
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: actionType,
-                        tabID: tabInfo.tabID
+                        tabID: tabInfo.tabID,
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                     )
                 )
             }
@@ -526,14 +547,15 @@ struct MainMenuConfigurationUtility: Equatable {
             isEnabled: tabInfo.readerModeIsAvailable,
             isActive: tabInfo.isInReadingList,
             a11yLabel: a11yLabel,
-            a11yHint: "",
+            a11yHint: tabInfo.readerModeIsAvailable ? "" : .MainMenu.AccessibilityLabels.OptionDisabledHint,
             a11yId: AccessibilityIdentifiers.MainMenu.saveToReadingList,
             action: {
                 store.dispatch(
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: actionType,
-                        tabID: tabInfo.tabID
+                        tabID: tabInfo.tabID,
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                     )
                 )
             }
@@ -541,8 +563,7 @@ struct MainMenuConfigurationUtility: Equatable {
     }
 
     // MARK: - Libraries Section
-
-    private func getLibrariesSection(with uuid: WindowUUID) -> MenuSection {
+    private func getLibrariesSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo) -> MenuSection {
         return MenuSection(options: [
             MenuElement(
                 title: .MainMenu.PanelLinkSection.Bookmarks,
@@ -557,7 +578,8 @@ struct MainMenuConfigurationUtility: Equatable {
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
-                            navigationDestination: MenuNavigationDestination(.bookmarks)
+                            navigationDestination: MenuNavigationDestination(.bookmarks),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                         )
                     )
                 }
@@ -575,7 +597,8 @@ struct MainMenuConfigurationUtility: Equatable {
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
-                            navigationDestination: MenuNavigationDestination(.history)
+                            navigationDestination: MenuNavigationDestination(.history),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                         )
                     )
                 }
@@ -593,7 +616,8 @@ struct MainMenuConfigurationUtility: Equatable {
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
-                            navigationDestination: MenuNavigationDestination(.downloads)
+                            navigationDestination: MenuNavigationDestination(.downloads),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                         )
                     )
                 }
@@ -611,7 +635,8 @@ struct MainMenuConfigurationUtility: Equatable {
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
-                            navigationDestination: MenuNavigationDestination(.passwords)
+                            navigationDestination: MenuNavigationDestination(.passwords),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                         )
                     )
                 }
@@ -623,7 +648,8 @@ struct MainMenuConfigurationUtility: Equatable {
 
     private func getOtherToolsSection(
         with uuid: WindowUUID,
-        isHomepage: Bool
+        isHomepage: Bool,
+        tabInfo: MainMenuTabInfo
     ) -> MenuSection {
         let homepageOptions = [
             MenuElement(
@@ -639,7 +665,8 @@ struct MainMenuConfigurationUtility: Equatable {
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
-                            navigationDestination: MenuNavigationDestination(.customizeHomepage)
+                            navigationDestination: MenuNavigationDestination(.customizeHomepage),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                         )
                     )
                 }
@@ -666,7 +693,8 @@ struct MainMenuConfigurationUtility: Equatable {
                             navigationDestination: MenuNavigationDestination(
                                 .goToURL,
                                 url: SupportUtils.URLForWhatsNew
-                            )
+                            ),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                         )
                     )
                 }
@@ -690,7 +718,8 @@ struct MainMenuConfigurationUtility: Equatable {
                             navigationDestination: MenuNavigationDestination(
                                 .goToURL,
                                 url: SupportUtils.URLForGetHelp
-                            )
+                            ),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                         )
                     )
                 }
@@ -708,7 +737,8 @@ struct MainMenuConfigurationUtility: Equatable {
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
-                            navigationDestination: MenuNavigationDestination(.settings)
+                            navigationDestination: MenuNavigationDestination(.settings),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                         )
                     )
                 }
