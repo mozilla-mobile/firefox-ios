@@ -176,7 +176,7 @@ class SearchEngineSelectionViewController: UIViewController,
         store.dispatch(
             SearchEngineSelectionAction(
                 windowUUID: self.windowUUID,
-                actionType: SearchEngineSelectionActionType.didLoadSearchEngines,
+                actionType: SearchEngineSelectionActionType.didTapSearchEngine,
                 selectedSearchEngine: searchEngine
             )
         )

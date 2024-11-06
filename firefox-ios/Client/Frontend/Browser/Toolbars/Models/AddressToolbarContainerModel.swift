@@ -93,9 +93,13 @@ class AddressToolbarContainerModel: Equatable {
         self.browserActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.browserActions,
                                                                       isShowingTopTabs: state.isShowingTopTabs,
                                                                       windowUUID: windowUUID)
+
+        // If the user has selected an alternative search engine, use that. Otherwise, use the default engine.
+        let searchEngine = state.alternativeSearchEngine ?? profile.searchEnginesManager.defaultEngine
+
         self.windowUUID = windowUUID
-        self.searchEngineName = profile.searchEnginesManager.defaultEngine?.shortName
-        self.searchEngineImage = profile.searchEnginesManager.defaultEngine?.image
+        self.searchEngineName = searchEngine?.shortName ?? ""
+        self.searchEngineImage = searchEngine?.image ?? UIImage()
         self.searchEnginesManager = profile.searchEnginesManager
         self.lockIconImageName = state.addressToolbar.lockIconImageName
         self.lockIconNeedsTheming = state.addressToolbar.lockIconNeedsTheming
