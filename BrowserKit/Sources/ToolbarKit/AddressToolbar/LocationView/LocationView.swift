@@ -25,7 +25,7 @@ final class LocationView: UIView,
     private weak var delegate: LocationViewDelegate?
     private var isUnifiedSearchEnabled = false
     private var lockIconImageName: String?
-    private var lockIconNeedsTheming: Bool = false
+    private var lockIconNeedsTheming = false
     private var safeListedURLImageName: String?
 
     private var isEditing = false
