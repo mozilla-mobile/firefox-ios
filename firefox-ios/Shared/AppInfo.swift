@@ -7,7 +7,10 @@ import Foundation
 
 extension AppInfo {
     public static var displayName: String {
-        return applicationBundle.object(forInfoDictionaryKey: "CFBundleDisplayName") as! String
+        guard let displayNmae = applicationBundle.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String else {
+            return ""
+        }
+        return displayNmae
     }
 
     public static var majorAppVersion: String {
