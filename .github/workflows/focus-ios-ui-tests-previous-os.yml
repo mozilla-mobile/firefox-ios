@@ -22,7 +22,7 @@ jobs:
           #  ios_simulator: iPhone 14
           #- ios_version: 15.5
           #  ios_simulator: iPhone' 13
-          - ios_version: '18.0'
+          - ios_version: 18.1
             ios_simulator: iPhone 15
 
     steps:
