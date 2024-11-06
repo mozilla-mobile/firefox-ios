@@ -8,7 +8,6 @@ import UIKit
 import Shared
 import Redux
 import UnifiedSearchKit
-import MenuKit
 
 class SearchEngineSelectionViewController: UIViewController,
                                            UISheetPresentationControllerDelegate,
@@ -128,11 +127,9 @@ class SearchEngineSelectionViewController: UIViewController,
         self.state = state
 
         let searchEngineElements = state.searchEngines.map { engine in
-            return MenuElement(
+            return SearchEngineElement(
                 title: engine.shortName,
-                iconName: "", // TODO
-                isEnabled: true,
-                isActive: false,
+                image: engine.image,
                 a11yLabel: "", // TODO
                 a11yHint: nil, // TODO
                 a11yId: "", // TODO
@@ -142,21 +139,19 @@ class SearchEngineSelectionViewController: UIViewController,
             )
         }
 
-        let searchButton = MenuElement(
+        let searchButton = SearchEngineElement(
             title: "Search Settings", // TODO l10n
-            iconName: "", // TODO
-            isEnabled: true,
-            isActive: false,
+            image: UIImage(named: StandardImageIdentifiers.Large.settings)?.withRenderingMode(.alwaysTemplate) ?? UIImage(),
             a11yLabel: "", // TODO
             a11yHint: nil, // TODO
-            a11yId: "",
+            a11yId: "", // TODO
             action: { [weak self] in
                 self?.didTapOpenSettings()
             })
 
-        let searchEngineSections: [MenuSection] = [
-            MenuSection(options: searchEngineElements),
-            MenuSection(options: [searchButton])
+        let searchEngineSections: [SearchEngineSection] = [
+            SearchEngineSection(options: searchEngineElements),
+            SearchEngineSection(options: [searchButton])
         ]
 
         searchEngineTableView.reloadTableView(with: searchEngineSections)

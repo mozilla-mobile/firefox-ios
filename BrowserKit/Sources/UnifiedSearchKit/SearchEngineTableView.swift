@@ -8,7 +8,7 @@ import Common
 import MenuKit
 
 // FXIOS-10189 This class will be refactored into a generic UITableView solution later. For now, it is largely a clone of
-// MenuKit's work. Eventually both this target and the MenuKit target will leverage a common component.
+// MenuKit's work. Eventually both this target and the MenuKit target will leverage a common reusable tableView component.
 public final class SearchEngineTableView: UIView,
                              UITableViewDelegate,
                              UITableViewDataSource, ThemeApplicable {
@@ -17,12 +17,12 @@ public final class SearchEngineTableView: UIView,
     }
 
     private var tableView: UITableView
-    private var menuData: [MenuSection] // FIXME FXIOS-10189 Will be refactored to use a generic table along with Menu later
+    private var searchEngineData: [SearchEngineSection]
     private var theme: Theme?
 
     override init(frame: CGRect) {
         tableView = UITableView(frame: .zero, style: .insetGrouped)
-        menuData = []
+        searchEngineData = []
         super.init(frame: .zero)
         setupView()
     }
@@ -52,37 +52,31 @@ public final class SearchEngineTableView: UIView,
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(
-            MenuCell.self,
-            forCellReuseIdentifier: MenuCell.cellIdentifier
+            SearchEngineCell.self,
+            forCellReuseIdentifier: SearchEngineCell.cellIdentifier
         )
     }
 
     // MARK: - UITableView Methods
     public func numberOfSections(in tableView: UITableView) -> Int {
-        return menuData.count
+        return searchEngineData.count
     }
 
-    public func tableView(
-        _ tableView: UITableView,
-        heightForHeaderInSection section: Int
-    ) -> CGFloat {
+    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return section == 0 ? UX.topPadding : UITableView.automaticDimension
     }
 
-    public func tableView(
-        _ tableView: UITableView,
-        numberOfRowsInSection section: Int
-    ) -> Int {
-        return menuData[section].options.count
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return searchEngineData[section].options.count
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
-            withIdentifier: MenuCell.cellIdentifier,
+            withIdentifier: SearchEngineCell.cellIdentifier,
             for: indexPath
-        ) as! MenuCell
+        ) as! SearchEngineCell
 
-        cell.configureCellWith(model: menuData[indexPath.section].options[indexPath.row])
+        cell.configureCellWith(model: searchEngineData[indexPath.section].options[indexPath.row])
         if let theme { cell.applyTheme(theme: theme) }
         return cell
     }
@@ -90,22 +84,13 @@ public final class SearchEngineTableView: UIView,
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
 
-        if let action = menuData[indexPath.section].options[indexPath.row].action {
+        if let action = searchEngineData[indexPath.section].options[indexPath.row].action {
             action()
         }
     }
 
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        if section == 0 {
-//            let headerView = UIView()
-//            headerView.backgroundColor = .clear
-//            return headerView
-//        }
-//        return nil
-//    }
-
-    public func reloadTableView(with data: [MenuSection]) {
-        menuData = data
+    public func reloadTableView(with data: [SearchEngineSection]) {
+        searchEngineData = data
         tableView.reloadData()
     }
 
