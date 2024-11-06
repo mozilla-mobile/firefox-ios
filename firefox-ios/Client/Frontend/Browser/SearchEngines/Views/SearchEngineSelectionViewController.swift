@@ -180,5 +180,8 @@ class SearchEngineSelectionViewController: UIViewController,
                 selectedSearchEngine: searchEngine
             )
         )
+
+        // Close the view after a selection has been made
+        coordinator?.dismissModal(animated: true)
     }
 }
