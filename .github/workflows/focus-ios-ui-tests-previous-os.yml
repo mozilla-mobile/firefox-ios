@@ -22,8 +22,6 @@ jobs:
             ios_simulator: iPhone 14
           - ios_version: 15.5
             ios_simulator: iPhone 13
-          # - ios_version: 18.1
-          #   ios_simulator: iPhone 15
 
     steps:
       - name: Check out source code
@@ -49,11 +47,7 @@ jobs:
           ./bootstrap.sh --force
       - name: Create iOS ${{ matrix.ios_version }} simulator
         id: setup-simulator
-        if: ${{ ! startsWith(matrix.ios_version,  '18') }}
         run: |
-          # "xcodes runtime install" does not support iOS 18 at this point.
-          # macos-14 Github Actions runner contains iOS 18 runtime, so we can 
-          # skip this step.
           sudo xcodes runtimes install "iOS ${{ matrix.ios_version }}"
           xcrun simctl list devices iphone
       - name: Build Focus
