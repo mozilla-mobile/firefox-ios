@@ -15,6 +15,7 @@ jobs:
     runs-on: macos-14
     strategy:
       fail-fast: false
+      max-parallel: 1
       matrix:
         include:
           - ios_version: 16.4
