@@ -12,7 +12,7 @@ struct SearchSettingsState: ScreenState, Equatable {
         self.windowUUID = windowUUID
     }
 
-    private init(windowUUID: WindowUUID) {
+    init(windowUUID: WindowUUID) {
         self.windowUUID = windowUUID
     }
 
