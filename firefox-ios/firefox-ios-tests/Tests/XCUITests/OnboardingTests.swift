@@ -215,4 +215,112 @@ class OnboardingTests: BaseTestCase {
             ]
         )
     }
+
+    // TOOLBAR THEME
+    // https://mozilla.testrail.io/index.php?/cases/view/2575175
+    func testSelectTopPlacement() {
+        let toolbar = app.textFields["url"]
+
+        // Wait for the initial title label to appear
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+        app.buttons["\(rootA11yId)PrimaryButton"].tap()
+        currentScreen += 1
+
+        let buttons = app.buttons.matching(identifier: "\(rootA11yId)MultipleChoiceButton")
+        for i in 0..<buttons.count {
+            let button = buttons.element(boundBy: i)
+            if button.label == "Top" {
+                button.tap()
+                break
+            }
+        }
+
+        app.buttons["Save and Start Browsing"].waitAndTap()
+        let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        mozWaitForElementToExist(topSites)
+
+        // Check if the toolbar exists
+        if toolbar.exists {
+            // Get the screen height
+            let screenHeight = app.windows.element(boundBy: 0).frame.height
+
+            XCTAssertTrue(toolbar.frame.origin.y < screenHeight / 2, "Toolbar is not near the top")
+        }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2575176
+    func testSelectBottomPlacement() throws {
+        guard !iPad() else {
+            throw XCTSkip("Toolbar option not available for iPad")
+        }
+        let toolbar = app.textFields["url"]
+
+        // Wait for the initial title label to appear
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+        app.buttons["\(rootA11yId)PrimaryButton"].tap()
+        currentScreen += 1
+
+        let buttons = app.buttons.matching(identifier: "\(rootA11yId)MultipleChoiceButton")
+        for i in 0..<buttons.count {
+            let button = buttons.element(boundBy: i)
+            if button.label == "Bottom" {
+                button.tap()
+                break
+            }
+        }
+
+        app.buttons["Save and Start Browsing"].waitAndTap()
+        let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        mozWaitForElementToExist(topSites)
+
+        // Check if the toolbar exists
+        if toolbar.exists {
+            // Get the screen height
+            let screenHeight = app.windows.element(boundBy: 0).frame.height
+
+            XCTAssertFalse(toolbar.frame.origin.y < screenHeight / 2, "Toolbar is not near the bottom")
+        }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2575177
+    func testCloseOptionToolbarCard() {
+        // let toolbar = app.textFields["url"]
+
+        // Wait for the initial title label to appear
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+        app.buttons["\(rootA11yId)PrimaryButton"].tap()
+        app.buttons["CloseButton"].waitAndTap()
+        let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        mozWaitForElementToExist(topSites)
+    }
 }
