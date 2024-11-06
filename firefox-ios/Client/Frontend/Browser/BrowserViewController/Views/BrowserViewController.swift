@@ -412,10 +412,10 @@ class BrowserViewController: UIViewController,
         } else {
             urlBar.topTabsIsShowing = showTopTabs
             urlBar.setShowToolbar(!showNavToolbar)
-            toolbar.addNewTabButton.isHidden = showNavToolbar
 
             if showNavToolbar {
                 toolbar.isHidden = false
+                toolbar.addNewTabButton.isHidden = true
                 toolbar.tabToolbarDelegate = self
                 toolbar.applyUIMode(
                     isPrivate: tabManager.selectedTab?.isPrivate ?? false,
