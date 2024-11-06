@@ -66,7 +66,7 @@ class OnboardingTests: BaseTestCase {
         // Swipe to the fourth screen
         app.buttons["\(rootA11yId)SecondaryButton"].tap()
         currentScreen += 1
-        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: 15)
+        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
         XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
@@ -76,7 +76,7 @@ class OnboardingTests: BaseTestCase {
         // Swipe to the fifth screen
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
         currentScreen += 1
-        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: 15)
+        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
         XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
@@ -97,21 +97,29 @@ class OnboardingTests: BaseTestCase {
         app.launch()
         // Check that the first's tour screen is shown as well as all the elements in there
         navigator.nowAt(FirstRun)
-        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"])
-        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
-        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)DescriptionLabel"])
-        mozWaitForElementToExist(app.buttons["\(rootA11yId)PrimaryButton"])
-        mozWaitForElementToExist(app.buttons["\(rootA11yId)SecondaryButton"])
-        mozWaitForElementToExist(app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"])
-        mozWaitForElementToExist(app.pageIndicators["\(AccessibilityIdentifiers.Onboarding.pageControl)"])
+        waitForElementsToExist(
+            [
+                app.images["\(rootA11yId)ImageView"],
+                app.staticTexts["\(rootA11yId)TitleLabel"],
+                app.staticTexts["\(rootA11yId)DescriptionLabel"],
+                app.buttons["\(rootA11yId)PrimaryButton"],
+                app.buttons["\(rootA11yId)SecondaryButton"],
+                app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"],
+                app.pageIndicators["\(AccessibilityIdentifiers.Onboarding.pageControl)"]
+            ]
+        )
 
         // Swipe to the second screen
         app.buttons["\(rootA11yId)SecondaryButton"].tap()
         currentScreen += 1
-        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"])
-        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
-        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)DescriptionLabel"])
-        mozWaitForElementToExist(app.buttons["\(rootA11yId)PrimaryButton"])
+        waitForElementsToExist(
+            [
+                app.images["\(rootA11yId)ImageView"],
+                app.staticTexts["\(rootA11yId)TitleLabel"],
+                app.staticTexts["\(rootA11yId)DescriptionLabel"],
+                app.buttons["\(rootA11yId)PrimaryButton"]
+            ]
+        )
 
         // Swipe to the third screen
         app.buttons["\(rootA11yId)SecondaryButton"].waitAndTap()
@@ -126,7 +134,7 @@ class OnboardingTests: BaseTestCase {
         // Swipe to the fourth screen
         app.buttons["\(rootA11yId)SecondaryButton"].tap()
         currentScreen += 1
-        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: 15)
+        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
         XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
@@ -136,7 +144,7 @@ class OnboardingTests: BaseTestCase {
         // Swipe to the fifth screen
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
         currentScreen += 1
-        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: 15)
+        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
         XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
