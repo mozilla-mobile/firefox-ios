@@ -7,7 +7,10 @@ import Redux
 
 struct HomepageState: ScreenState, Equatable {
     var windowUUID: WindowUUID
+
+    // Homepage sections state in the order they appear on the collection view
     var headerState: HeaderState
+    var topSitesState: TopSitesSectionState
     var pocketState: PocketState
 
     init(appState: AppState, uuid: WindowUUID) {
@@ -23,6 +26,7 @@ struct HomepageState: ScreenState, Equatable {
         self.init(
             windowUUID: homepageState.windowUUID,
             headerState: homepageState.headerState,
+            topSitesState: homepageState.topSitesState,
             pocketState: homepageState.pocketState
         )
     }
@@ -31,6 +35,7 @@ struct HomepageState: ScreenState, Equatable {
         self.init(
             windowUUID: windowUUID,
             headerState: HeaderState(windowUUID: windowUUID),
+            topSitesState: TopSitesSectionState(windowUUID: windowUUID),
             pocketState: PocketState(windowUUID: windowUUID)
         )
     }
@@ -38,10 +43,12 @@ struct HomepageState: ScreenState, Equatable {
     private init(
         windowUUID: WindowUUID,
         headerState: HeaderState,
+        topSitesState: TopSitesSectionState,
         pocketState: PocketState
     ) {
         self.windowUUID = windowUUID
         self.headerState = headerState
+        self.topSitesState = topSitesState
         self.pocketState = pocketState
     }
 
@@ -51,6 +58,7 @@ struct HomepageState: ScreenState, Equatable {
             return HomepageState(
                 windowUUID: state.windowUUID,
                 headerState: HeaderState.reducer(state.headerState, action),
+                topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
                 pocketState: PocketState.reducer(state.pocketState, action)
             )
         }
@@ -60,12 +68,14 @@ struct HomepageState: ScreenState, Equatable {
             return HomepageState(
                 windowUUID: state.windowUUID,
                 headerState: HeaderState.reducer(state.headerState, action),
+                topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
                 pocketState: PocketState.reducer(state.pocketState, action)
             )
         default:
             return HomepageState(
                 windowUUID: state.windowUUID,
                 headerState: HeaderState.reducer(state.headerState, action),
+                topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
                 pocketState: PocketState.reducer(state.pocketState, action)
             )
         }

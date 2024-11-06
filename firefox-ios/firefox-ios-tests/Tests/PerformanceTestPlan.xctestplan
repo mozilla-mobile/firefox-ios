@@ -15,6 +15,14 @@
     {
       "skippedTests" : [
         "ActivityStreamTest",
+        "AddressesTests\/testAddNewAddressAllFieldsFilled()",
+        "AddressesTests\/testAddNewAddressCityFilled()",
+        "AddressesTests\/testAddNewAddressEmailFilled()",
+        "AddressesTests\/testAddNewAddressNameFilled()",
+        "AddressesTests\/testAddNewAddressOrganizationFilled()",
+        "AddressesTests\/testAddNewAddressPhoneFilled()",
+        "AddressesTests\/testAddNewAddressPostalCodeFilled()",
+        "AddressesTests\/testAddNewAddressStreetAddressFilled()",
         "AuthenticationTest",
         "BookmarksTests",
         "BrowsingPDFTests",
@@ -35,7 +43,6 @@
         "DragAndDropTests",
         "EngagementNotificationTests",
         "ExperimentIntegrationTests",
-        "FakespotTests",
         "FindInPageTests",
         "FirefoxSuggestTest",
         "FxScreenGraphTests",
