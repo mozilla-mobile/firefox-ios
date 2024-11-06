@@ -9,20 +9,6 @@ import Shared
 import Redux
 import UnifiedSearchKit
 
-// FXIOS-10189 FIXME This will be refactored later.
-extension SearchEngineElement {
-    init(fromSearchEngine searchEngine: OpenSearchEngine, withAction action: @escaping () -> Void) {
-        self.init(
-            title: searchEngine.shortName,
-            image: searchEngine.image,
-            a11yLabel: searchEngine.shortName,
-            a11yHint: nil,
-            a11yId: AccessibilityIdentifiers.UnifiedSearch.BottomSheetRow.engine,
-            action: action
-        )
-    }
-}
-
 class SearchEngineSelectionViewController: UIViewController,
                                            UISheetPresentationControllerDelegate,
                                            UIPopoverPresentationControllerDelegate,
