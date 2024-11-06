@@ -1972,7 +1972,7 @@ class BrowserViewController: UIViewController,
             }
 
             var lockIconImageName: String?
-            var lockIconNeedsTheming: Bool = false
+            var lockIconNeedsTheming: Bool = true
 
             if let hasSecureContent = tab.webView?.hasOnlySecureContent {
                 lockIconImageName = hasSecureContent ?
@@ -1981,7 +1981,7 @@ class BrowserViewController: UIViewController,
 
                 let isWebsiteMode = tab.url?.isReaderModeURL == false
                 lockIconImageName = isWebsiteMode ? lockIconImageName : nil
-                lockIconNeedsTheming = isWebsiteMode ? hasSecureContent : false
+                lockIconNeedsTheming = isWebsiteMode ? hasSecureContent : true
             }
 
             let action = ToolbarAction(
