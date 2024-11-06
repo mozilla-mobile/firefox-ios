@@ -11,6 +11,8 @@ struct SearchEngineSelectionState: ScreenState, Equatable {
     var shouldDismiss: Bool
     // Default search engine should appear in position 0
     var searchEngines: [OpenSearchEngine]
+    // The currently selected search engine, if different from the default. Nil means the user hasn't changed the default.
+    var selectedSearchEngine: OpenSearchEngine?
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let state = store.state.screenState(
@@ -25,22 +27,34 @@ struct SearchEngineSelectionState: ScreenState, Equatable {
         self.init(
             windowUUID: state.windowUUID,
             searchEngines: state.searchEngines,
+            selectedSearchEngine: state.selectedSearchEngine,
             shouldDismiss: state.shouldDismiss
         )
     }
 
     init(windowUUID: WindowUUID) {
-        self.init(windowUUID: windowUUID, searchEngines: [])
+        self.init(windowUUID: windowUUID, searchEngines: [], selectedSearchEngine: nil)
     }
 
     private init(
         windowUUID: WindowUUID,
         searchEngines: [OpenSearchEngine],
+        selectedSearchEngine: OpenSearchEngine?,
         shouldDismiss: Bool = false
     ) {
         self.windowUUID = windowUUID
         self.searchEngines = searchEngines
+        self.selectedSearchEngine = selectedSearchEngine
         self.shouldDismiss = shouldDismiss
+    }
+
+    /// Returns a new `SearchEngineSelectionState` which clears any transient data.
+    static func defaultState(fromPreviousState state: SearchEngineSelectionState) -> SearchEngineSelectionState {
+        return SearchEngineSelectionState(
+            windowUUID: state.windowUUID,
+            searchEngines: state.searchEngines,
+            selectedSearchEngine: state.selectedSearchEngine
+        )
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -60,7 +74,19 @@ struct SearchEngineSelectionState: ScreenState, Equatable {
 
             return SearchEngineSelectionState(
                 windowUUID: state.windowUUID,
-                searchEngines: searchEngines
+                searchEngines: searchEngines, 
+                selectedSearchEngine: state.selectedSearchEngine // TODO Should this be nil?
+            )
+
+        case SearchEngineSelectionActionType.didTapSearchEngine:
+            guard let action = action as? SearchEngineSelectionAction,
+                  let selectedSearchEngine = action.selectedSearchEngine
+            else { return defaultState(fromPreviousState: state) }
+
+            return SearchEngineSelectionState(
+                windowUUID: state.windowUUID,
+                searchEngines: state.searchEngines,
+                selectedSearchEngine: selectedSearchEngine
             )
 
         default:

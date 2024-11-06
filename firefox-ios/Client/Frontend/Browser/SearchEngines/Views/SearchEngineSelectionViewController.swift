@@ -45,9 +45,6 @@ class SearchEngineSelectionViewController: UIViewController,
         super.init(nibName: nil, bundle: nil)
 
         subscribeToRedux()
-
-        // TODO Additional setup to come
-        // ...
     }
 
     required init?(coder: NSCoder) {
@@ -176,8 +173,12 @@ class SearchEngineSelectionViewController: UIViewController,
     }
 
     func didTap(searchEngine: OpenSearchEngine) {
-        // TODO FXIOS-10384 Push action to the toolbar to update the search engine selection for the next search and
-        // to focus the toolbar (if it isn't already focused).
-        print("Tapped \(searchEngine.shortName)")
+        store.dispatch(
+            SearchEngineSelectionAction(
+                windowUUID: self.windowUUID,
+                actionType: SearchEngineSelectionActionType.didLoadSearchEngines,
+                selectedSearchEngine: searchEngine
+            )
+        )
     }
 }

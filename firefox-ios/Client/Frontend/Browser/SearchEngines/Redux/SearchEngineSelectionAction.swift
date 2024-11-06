@@ -9,9 +9,16 @@ import Redux
 
 final class SearchEngineSelectionAction: Action {
     let searchEngines: [OpenSearchEngine]?
+    let selectedSearchEngine: OpenSearchEngine?
 
-    init(windowUUID: WindowUUID, actionType: ActionType, searchEngines: [OpenSearchEngine]? = nil) {
+    init(
+        windowUUID: WindowUUID,
+        actionType: ActionType,
+        searchEngines: [OpenSearchEngine]? = nil,
+        selectedSearchEngine: OpenSearchEngine? = nil
+    ) {
         self.searchEngines = searchEngines
+        self.selectedSearchEngine = selectedSearchEngine
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -19,6 +26,7 @@ final class SearchEngineSelectionAction: Action {
 enum SearchEngineSelectionActionType: ActionType {
     case viewDidLoad
     case didLoadSearchEngines
+    case didTapSearchEngine
 }
 
 enum SearchEngineSelectionMiddlewareActionType: ActionType {}
