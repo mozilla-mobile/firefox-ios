@@ -708,6 +708,31 @@ downloads:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
 
+# Password Generator
+password_generator:
+  shown:
+    type: counter
+    description: |
+        The password generator bottom sheet was shown and is visible
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/21248
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/21248
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-01-01"
+  filled:
+    type: counter
+    description: |
+        The "use password button" of the password generator bottom sheet was clicked.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/21248
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/21248
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-01-01"
+    
 # Microsurvey
 microsurvey:
   shown:

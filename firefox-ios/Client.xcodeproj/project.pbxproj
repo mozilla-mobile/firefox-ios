@@ -69,11 +69,13 @@
 		0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF0DB931A8545800039F300 /* URLBarView.swift */; };
 		0BF1B7E31AC60DEA00A7B407 /* InsetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF1B7E21AC60DEA00A7B407 /* InsetButton.swift */; };
 		0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */ = {isa = PBXBuildFile; fileRef = 0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */; };
+		0E12A3152CC2D8410037F8EE /* PasswordGeneratorTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E12A3142CC2D8410037F8EE /* PasswordGeneratorTelemetry.swift */; };
 		0E456F152C541CB300EE93BF /* PasswordGeneratorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E456F142C541CB300EE93BF /* PasswordGeneratorViewController.swift */; };
 		0E6C1E212C909AD7001A43BB /* PasswordGeneratorAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6C1E202C909AD7001A43BB /* PasswordGeneratorAction.swift */; };
 		0E6C1E232C909E04001A43BB /* PasswordGeneratorState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6C1E222C909E04001A43BB /* PasswordGeneratorState.swift */; };
 		0E6C1E252C90B0E0001A43BB /* PasswordGeneratorMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6C1E242C90B0E0001A43BB /* PasswordGeneratorMiddleware.swift */; };
 		0E77DF0F2CB8220000B80BA1 /* GeneratedPasswordStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E77DF0E2CB8220000B80BA1 /* GeneratedPasswordStorage.swift */; };
+		0E9702742CC2F2FB00C357B7 /* PasswordGeneratorTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E12A3162CC2EE8C0037F8EE /* PasswordGeneratorTelemetryTests.swift */; };
 		0EC57CE32CA31C5B002E3F04 /* PasswordGeneratorViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC57CE22CA31C5B002E3F04 /* PasswordGeneratorViewControllerTests.swift */; };
 		0EC57CE52CA31E59002E3F04 /* PasswordGeneratorStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC57CE42CA31E59002E3F04 /* PasswordGeneratorStateTests.swift */; };
 		0EC57D082CA6FCA5002E3F04 /* PasswordGeneratorHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC57D072CA6FCA5002E3F04 /* PasswordGeneratorHeaderView.swift */; };
@@ -2356,6 +2358,8 @@
 		0DB0424587EE7A01E376643F /* pa-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pa-IN"; path = "pa-IN.lproj/ClearHistoryConfirm.strings"; sourceTree = "<group>"; };
 		0DB446798061E493F304EDC4 /* az */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = az; path = az.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		0DC14F8BB480069DC6D962D0 /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/LoginManager.strings; sourceTree = "<group>"; };
+		0E12A3142CC2D8410037F8EE /* PasswordGeneratorTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordGeneratorTelemetry.swift; sourceTree = "<group>"; };
+		0E12A3162CC2EE8C0037F8EE /* PasswordGeneratorTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordGeneratorTelemetryTests.swift; sourceTree = "<group>"; };
 		0E134A0087CE6D183E5DA1D4 /* jv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = jv; path = jv.lproj/Search.strings; sourceTree = "<group>"; };
 		0E2440E3AD220D7C5EB7BB50 /* ia */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ia; path = ia.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0E2D4E0FA5490EF048AEE106 /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
@@ -9593,6 +9597,7 @@
 				0E6C1E222C909E04001A43BB /* PasswordGeneratorState.swift */,
 				0E6C1E242C90B0E0001A43BB /* PasswordGeneratorMiddleware.swift */,
 				0E77DF0E2CB8220000B80BA1 /* GeneratedPasswordStorage.swift */,
+				0E12A3142CC2D8410037F8EE /* PasswordGeneratorTelemetry.swift */,
 			);
 			path = PasswordGenerator;
 			sourceTree = "<group>";
@@ -9602,6 +9607,7 @@
 			children = (
 				0EC57CE22CA31C5B002E3F04 /* PasswordGeneratorViewControllerTests.swift */,
 				0EC57CE42CA31E59002E3F04 /* PasswordGeneratorStateTests.swift */,
+				0E12A3162CC2EE8C0037F8EE /* PasswordGeneratorTelemetryTests.swift */,
 			);
 			path = PasswordGenerator;
 			sourceTree = "<group>";
@@ -15721,6 +15727,7 @@
 				81F617C92C8755AB003799BF /* MainMenuAction.swift in Sources */,
 				E13E9AB52AAB0FB5001A0E9D /* FakespotViewModel.swift in Sources */,
 				8A5D1CBD2A30DC4E005AD35C /* AccountStatusSetting.swift in Sources */,
+				0E12A3152CC2D8410037F8EE /* PasswordGeneratorTelemetry.swift in Sources */,
 				E1CD81BC290C5C3F00124B27 /* DevicePickerTableViewCell.swift in Sources */,
 				1DDE3DB72AC3820A0039363B /* TabModel.swift in Sources */,
 				8A19ACB02A329078001C2147 /* AutofillCreditCardSettings.swift in Sources */,
@@ -16903,6 +16910,7 @@
 				21B337BB29B67E4100E4F806 /* BrowserViewControllerWebViewDelegateTests.swift in Sources */,
 				6ADB651B285C03B100947EA4 /* DownloadHelperTests.swift in Sources */,
 				8A6B77CC2811C468001110D2 /* URLProtocolStub.swift in Sources */,
+				0E9702742CC2F2FB00C357B7 /* PasswordGeneratorTelemetryTests.swift in Sources */,
 				CA7BD568248189E800A0A61B /* BreachAlertsTests.swift in Sources */,
 				253648E12B2111C100D5C2C5 /* SearchViewControllerTests.swift in Sources */,
 				4A59B58AD11B5EE1F80BBDEB /* TestHistory.swift in Sources */,
