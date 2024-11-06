@@ -182,6 +182,9 @@ extension Date {
 extension Date {
     public static var yesterday: Date { return Date().dayBefore }
     public static var tomorrow: Date { return Date().dayAfter }
+    public var lastHour: Date {
+        return Calendar.current.date(byAdding: .hour, value: -1, to: Date()) ?? Date()
+    }
     public var lastTwoWeek: Date {
         return Calendar.current.date(byAdding: .day, value: -14, to: noon) ?? Date()
     }
@@ -218,6 +221,10 @@ extension Date {
 
     public func isWithinLast14Days() -> Bool {
         return (Date().lastTwoWeek ... Date()).contains(self)
+    }
+
+    public func isWithinLastHour() -> Bool {
+        return (Date().lastHour ... Date()).contains(self)
     }
 }
 

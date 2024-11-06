@@ -51,8 +51,12 @@ final class HomepageViewController: UIViewController,
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
 
-        setupNotifications(forObserver: self, observing: [UIApplication.didBecomeActiveNotification])
-
+        setupNotifications(forObserver: self, observing: [UIApplication.didBecomeActiveNotification,
+                                                          .FirefoxAccountChanged,
+                                                          .PrivateDataClearedHistory,
+                                                          .ProfileDidFinishSyncing,
+                                                          .TopSitesUpdated,
+                                                          .DefaultSearchEngineUpdated])
         subscribeToRedux()
     }
 
@@ -201,7 +205,7 @@ final class HomepageViewController: UIViewController,
             guard let headerCell = collectionView?.dequeueReusableCell(
                 cellType: HomepageHeaderCell.self,
                 for: indexPath
-            )  else {
+            ) else {
                 return UICollectionViewCell()
             }
 
@@ -211,14 +215,36 @@ final class HomepageViewController: UIViewController,
             ) { [weak self] in
                 self?.toggleHomepageMode()
             }
+
             headerCell.applyTheme(theme: currentTheme)
 
             return headerCell
+
+        case .topSite(let site):
+            guard let topSiteCell = collectionView?.dequeueReusableCell(cellType: TopSiteCell.self, for: indexPath) else {
+                return UICollectionViewCell()
+            }
+            // TODO: FXIOS-10312 - Handle textColor when working on wallpapers
+            topSiteCell.configure(
+                site,
+                position: indexPath.row,
+                theme: currentTheme,
+                textColor: .systemPink
+            )
+            return topSiteCell
+
+        case .topSiteEmpty:
+            guard let emptyCell = collectionView?.dequeueReusableCell(cellType: EmptyTopSiteCell.self, for: indexPath) else {
+                return UICollectionViewCell()
+            }
+            emptyCell.applyTheme(theme: currentTheme)
+            return emptyCell
+
         case .pocket(let story):
             guard let pocketCell = collectionView?.dequeueReusableCell(
                 cellType: PocketStandardCell.self,
                 for: indexPath
-            )  else {
+            ) else {
                 return UICollectionViewCell()
             }
             pocketCell.configure(story: story, theme: currentTheme)
@@ -228,13 +254,14 @@ final class HomepageViewController: UIViewController,
             guard let pocketDiscoverCell = collectionView?.dequeueReusableCell(
                 cellType: PocketDiscoverCell.self,
                 for: indexPath
-            )  else {
+            ) else {
                 return UICollectionViewCell()
             }
 
             pocketDiscoverCell.configure(text: homepageState.pocketState.pocketDiscoverItem.title, theme: currentTheme)
 
             return pocketDiscoverCell
+
         case .customizeHomepage:
             guard let customizeHomeCell = collectionView?.dequeueReusableCell(
                 cellType: CustomizeHomepageSectionCell.self,
@@ -373,6 +400,17 @@ final class HomepageViewController: UIViewController,
                 PocketAction(
                     windowUUID: self.windowUUID,
                     actionType: PocketActionType.enteredForeground
+                )
+            )
+        case .ProfileDidFinishSyncing,
+                .PrivateDataClearedHistory,
+                .FirefoxAccountChanged,
+                .TopSitesUpdated,
+                .DefaultSearchEngineUpdated:
+            store.dispatch(
+                TopSitesAction(
+                    windowUUID: self.windowUUID,
+                    actionType: TopSitesActionType.fetchTopSites
                 )
             )
         default: break

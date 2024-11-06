@@ -58,6 +58,7 @@ let RequestMobileSite = "RequestMobileSite"
 let CreditCardsSettings = "AutofillCreditCard"
 let PageZoom = "PageZoom"
 let NotificationsSettings = "NotificationsSetting"
+let AddressesSettings = "AutofillAddress"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
@@ -604,6 +605,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(table.cells["SiriSettings"], to: SiriSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Logins.title], to: LoginsSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.CreditCards.title], to: CreditCardsSettings)
+        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Address.title], to: AddressesSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.ClearData.title], to: ClearPrivateDataSettings)
         screenState.tap(
             table.cells[AccessibilityIdentifiers.Settings.ContentBlocker.title],
@@ -1073,6 +1075,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(CreditCardsSettings) { screenState in
+        screenState.backAction = navigationControllerBackAction
+    }
+
+    map.addScreenState(AddressesSettings) { screenState in
         screenState.backAction = navigationControllerBackAction
     }
 

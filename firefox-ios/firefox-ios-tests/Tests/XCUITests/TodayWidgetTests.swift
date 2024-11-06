@@ -146,8 +146,12 @@ class TodayWidgetTests: BaseTestCase {
             springboard.buttons[removeWidgetButton].tap()
         }
 
-        mozWaitForElementToExist(springboard.alerts.buttons["Remove"])
-        mozWaitForElementToExist(springboard.alerts.buttons["Cancel"])
+        waitForElementsToExist(
+            [
+                springboard.alerts.buttons["Remove"],
+                springboard.alerts.buttons["Cancel"]
+            ]
+        )
 
         mozWaitElementHittable(element: springboard.alerts.buttons["Remove"], timeout: TIMEOUT)
         springboard.alerts.buttons["Remove"].tap()

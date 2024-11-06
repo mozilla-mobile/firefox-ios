@@ -10,6 +10,10 @@ import SiteImageView
 
 import enum MozillaAppServices.VisitType
 
+protocol CollapsibleTableViewSection: AnyObject {
+    func hideTableViewSection(_ section: Int)
+}
+
 class RemoteTabsTableViewController: UITableViewController,
                                      Themeable,
                                      CollapsibleTableViewSection,

@@ -5,12 +5,12 @@
 import Common
 import XCTest
 
-private let testingURL = "example.com"
+private let testingURL = "https://example.com"
 private let userName = "iosmztest"
 private let userPassword = "test15mz"
-private let historyItemSavedOnDesktop = "http://www.example.com/"
+private let historyItemSavedOnDesktop = "https://www.example.com/"
 private let loginEntry = "https://accounts.google.com"
-private let tabOpenInDesktop = "http://example.com/"
+private let tabOpenInDesktop = "https://example.com/"
 
 class IntegrationTests: BaseTestCase {
     let testWithDB = ["testFxASyncHistory"]
@@ -111,7 +111,7 @@ class IntegrationTests: BaseTestCase {
     func testFxASyncBookmark () {
         // Bookmark is added by the DB
         // Sign into Mozilla Account
-        navigator.openURL("example.com")
+        navigator.openURL(testingURL)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
         navigator.goto(BrowserTabMenu)
         app.tables.otherElements[StandardImageIdentifiers.Large.bookmark].waitAndTap()
@@ -238,8 +238,12 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(SettingsScreen)
         // Check Bookmarks
         navigator.goto(LibraryPanel_Bookmarks)
-        mozWaitForElementToExist(app.tables["Bookmarks List"])
-        mozWaitForElementToExist(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"])
+        waitForElementsToExist(
+            [
+                app.tables["Bookmarks List"],
+                app.tables["Bookmarks List"].cells.staticTexts["Example Domain"]
+            ]
+        )
 
         // Check Login
         navigator.performAction(Action.CloseBookmarkPanel)
@@ -300,7 +304,11 @@ class IntegrationTests: BaseTestCase {
 
         passcodeInput.tapAndTypeText("foo\n")
 
-        mozWaitForElementToExist(app.tables["Login List"])
-        mozWaitForElementToExist(app.staticTexts["https://accounts.google.com"])
+        waitForElementsToExist(
+            [
+                app.tables["Login List"],
+                app.staticTexts["https://accounts.google.com"]
+            ]
+        )
     }
 }

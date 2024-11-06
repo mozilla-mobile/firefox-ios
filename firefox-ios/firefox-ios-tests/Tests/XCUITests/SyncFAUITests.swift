@@ -29,11 +29,11 @@ class SyncUITests: BaseTestCase {
     }
 
     private func verifyFxASigninScreen() {
-        mozWaitForElementToExist(
-            app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar]
-        )
-        mozWaitForElementToExist(
-            app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField]
+        waitForElementsToExist(
+            [
+                app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar],
+                app.webViews.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField]
+            ]
         )
 
         // Verify the placeholdervalues here for the textFields
@@ -131,11 +131,12 @@ class SyncUITests: BaseTestCase {
         navigator.goto(Intro_FxASignin)
         // QR does not work on sim but checking that the button works, no crash
         navigator.performAction(Action.OpenEmailToQR)
-        mozWaitForElementToExist(
-            app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar]
+        waitForElementsToExist(
+            [
+                app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar],
+                app.buttons["Ready to Scan"],
+                app.buttons["Use Email Instead"]]
         )
-        mozWaitForElementToExist(app.buttons["Ready to Scan"])
-        mozWaitForElementToExist(app.buttons["Use Email Instead"])
         app.navigationBars[AccessibilityIdentifiers.Settings.FirefoxAccount.fxaNavigationBar].buttons["Close"].tap()
         mozWaitForElementToExist(app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
     }
