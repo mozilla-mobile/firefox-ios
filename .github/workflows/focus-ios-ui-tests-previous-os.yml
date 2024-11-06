@@ -22,7 +22,6 @@ jobs:
             ios_simulator: iPhone 14
           - ios_version: 15.5
             ios_simulator: iPhone 13
-
     steps:
       - name: Check out source code
         uses: actions/checkout@v4.1.7
