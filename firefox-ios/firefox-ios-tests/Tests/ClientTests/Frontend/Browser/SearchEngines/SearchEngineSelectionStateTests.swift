@@ -46,6 +46,7 @@ final class SearchEngineSelectionStateTests: XCTestCase {
         )
 
         XCTAssertEqual(newState.searchEngines, expectedResult)
+        XCTAssertNil(newState.selectedSearchEngine)
     }
 
     func testDidTapSearchEngine() {
@@ -61,7 +62,7 @@ final class SearchEngineSelectionStateTests: XCTestCase {
             initialState,
             SearchEngineSelectionAction(
                 windowUUID: .XCTestDefaultUUID,
-                actionType: SearchEngineSelectionActionType.didLoadSearchEngines,
+                actionType: SearchEngineSelectionActionType.didTapSearchEngine,
                 selectedSearchEngine: selectedSearchEngine
             )
         )

@@ -74,8 +74,9 @@ struct SearchEngineSelectionState: ScreenState, Equatable {
 
             return SearchEngineSelectionState(
                 windowUUID: state.windowUUID,
-                searchEngines: searchEngines, 
-                selectedSearchEngine: state.selectedSearchEngine // TODO Should this be nil?
+                searchEngines: searchEngines,
+                // With the current usage, we don't want to reset the selectedSearchEngine to nil for didLoadSearchEngines
+                selectedSearchEngine: state.selectedSearchEngine
             )
 
         case SearchEngineSelectionActionType.didTapSearchEngine:
