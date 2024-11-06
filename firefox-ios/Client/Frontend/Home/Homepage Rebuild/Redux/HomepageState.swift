@@ -48,7 +48,7 @@ struct HomepageState: ScreenState, Equatable {
     static let reducer: Reducer<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
         else {
-            return defaultActionState(from: state, action: action)
+            return defaultState(from: state, action: action)
         }
 
         switch action.actionType {
@@ -59,24 +59,27 @@ struct HomepageState: ScreenState, Equatable {
                 pocketState: PocketState.reducer(state.pocketState, action)
             )
         default:
-            return defaultActionState(from: state, action: action)
+            return defaultState(from: state, action: action)
         }
     }
 
-    private static func defaultActionState(from state: HomepageState, action: Action) -> HomepageState {
-        let defaultState = defaultState(from: state)
-        return HomepageState(windowUUID: defaultState.windowUUID,
-                             headerState: HeaderState.reducer(state.headerState, action),
-                             pocketState: PocketState.reducer(state.pocketState, action))
+    private static func defaultState(from state: HomepageState, action: Action?) -> HomepageState {
+        var headerState = state.headerState
+        var pocketState = state.pocketState
+        
+        if let action {
+            headerState = HeaderState.reducer(state.headerState, action)
+            pocketState = PocketState.reducer(state.pocketState, action)
+        }
+        
+        return HomepageState(
+            windowUUID: state.windowUUID,
+            headerState: headerState,
+            pocketState: pocketState
+        )
     }
 
     static func defaultState(from state: HomepageState) -> HomepageState {
-        // since the default state would depend on other reducers use `defaultActionState(for: ,action:)`
-        // as method for default action state
-        return HomepageState(
-            windowUUID: state.windowUUID,
-            headerState: state.headerState,
-            pocketState: state.pocketState
-        )
+        return defaultState(from: state, action: nil)
     }
 }

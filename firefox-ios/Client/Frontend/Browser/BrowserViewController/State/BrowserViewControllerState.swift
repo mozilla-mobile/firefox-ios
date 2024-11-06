@@ -180,7 +180,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             )
 
         default:
-            return defaultActionState(from: state, action: action)
+            return defaultState(from: state, action: action)
         }
     }
 
@@ -468,34 +468,31 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action)
                 )
         default:
-            return defaultActionState(from: state, action: action)
+            return defaultState(from: state, action: action)
         }
     }
 
-    private static func defaultActionState(from state: BrowserViewControllerState,
-                                           action: Action) -> BrowserViewControllerState {
-        let defaultState = defaultState(from: state)
+    private static func defaultState(from state: BrowserViewControllerState,
+                                     action: Action?) -> BrowserViewControllerState {
+        var fakespotState = state.fakespotState
+        var microsurveyState = state.microsurveyState
+        if let action {
+            fakespotState = FakespotState.reducer(state.fakespotState, action)
+            microsurveyState = MicrosurveyPromptState.reducer(state.microsurveyState, action)
+        }
+        
         return BrowserViewControllerState(
-            searchScreenState: defaultState.searchScreenState,
-            showDataClearanceFlow: defaultState.showDataClearanceFlow,
-            fakespotState: FakespotState.reducer(defaultState.fakespotState, action),
-            windowUUID: defaultState.windowUUID,
-            browserViewType: defaultState.browserViewType,
-            microsurveyState: MicrosurveyPromptState.reducer(defaultState.microsurveyState, action)
+            searchScreenState: state.searchScreenState,
+            showDataClearanceFlow: state.showDataClearanceFlow,
+            fakespotState: fakespotState,
+            windowUUID: state.windowUUID,
+            browserViewType: state.browserViewType,
+            microsurveyState: microsurveyState
         )
     }
 
     static func defaultState(from state: BrowserViewControllerState) -> BrowserViewControllerState {
-        // This method should be used only in `defaultActionState(from: ,action: )` since the default state for this
-        // state depends on the action as well
-        return BrowserViewControllerState(
-            searchScreenState: state.searchScreenState,
-            showDataClearanceFlow: state.showDataClearanceFlow,
-            fakespotState: state.fakespotState,
-            windowUUID: state.windowUUID,
-            browserViewType: state.browserViewType,
-            microsurveyState: state.microsurveyState
-        )
+        return defaultState(from: state, action: nil)
     }
 
     static func resolveStateForUpdateSelectedTab(action: GeneralBrowserAction,
