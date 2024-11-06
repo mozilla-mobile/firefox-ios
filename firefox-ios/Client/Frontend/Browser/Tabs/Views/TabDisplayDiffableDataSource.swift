@@ -21,12 +21,19 @@ final class TabDisplayDiffableDataSource: UICollectionViewDiffableDataSource<Tab
 
         snapshot.appendSections([.inactiveTabs, .tabs])
 
-        // reloading .inactiveTabs is necessary to animate the caret moving when we show or hide inactive tabs
-        snapshot.reloadSections([.inactiveTabs])
-
         if state.isInactiveTabsExpanded {
             let inactiveTabs = state.inactiveTabs.map { TabDisplayViewItem.inactiveTab($0) }
             snapshot.appendItems(inactiveTabs, toSection: .inactiveTabs)
+        }
+
+        // reloading .inactiveTabs is necessary to animate the caret moving when we show or hide inactive tabs
+        if #available(iOS 16, *) {
+            snapshot.reloadSections([.inactiveTabs])
+        } else {
+            let inactiveTabItems = snapshot.itemIdentifiers(inSection: .inactiveTabs)
+            if !inactiveTabItems.isEmpty {
+                snapshot.reloadSections([.inactiveTabs])
+            }
         }
 
         let tabs = state.tabs.map { TabDisplayViewItem.tab($0) }
