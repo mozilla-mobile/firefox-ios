@@ -40,7 +40,7 @@ class EditFolderViewModel {
     }
 
     private func title(for folder: BookmarkFolderData) -> String {
-        return LegacyLocalizedRootBookmarkFolderStrings[folder.guid] ?? folder.title
+        return LocalizedRootBookmarkFolderStrings[folder.guid] ?? folder.title
     }
 
     func shouldShowDisclosureIndicator(isFolderSelected: Bool) -> Bool {

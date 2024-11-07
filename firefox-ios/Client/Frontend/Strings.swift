@@ -3292,7 +3292,7 @@ extension String {
         value: nil,
         comment: "The legacy title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
     public static let BookmarksFolderTitleMobile = MZLocalizedString(
-        key: "Bookmarks.v133",
+        key: "Bookmarks",
         tableName: "Storage",
         value: nil,
         comment: "The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
