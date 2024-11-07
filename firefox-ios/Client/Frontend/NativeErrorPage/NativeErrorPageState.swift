@@ -57,7 +57,7 @@ struct NativeErrorPageState: ScreenState, Equatable {
             return defaultState(from: state)
         }
     }
-    
+
     static func defaultState(from state: NativeErrorPageState) -> NativeErrorPageState {
         return NativeErrorPageState(
             windowUUID: state.windowUUID,
