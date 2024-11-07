@@ -39,7 +39,8 @@ final class TopSitesManagerTests: XCTestCase {
     }
 
     // MARK: Sponsored Top Site
-    func test_getTopSites_shouldShowSponsoredTiles_returnExpectedTopSites() async throws {
+    func test_getTopSites_shouldShowSponsoredTiles_returnOnlyMaxSponsoredSites() async throws {
+        // Max contiles is currently at 2, so it should add 2 contiles only.
         let subject = try createSubject(
             contileProvider: MockContileProvider(
                 result: .success(MockContileProvider.defaultSuccessData)
@@ -47,9 +48,9 @@ final class TopSitesManagerTests: XCTestCase {
         )
 
         let topSites = await subject.getTopSites()
-        XCTAssertEqual(topSites.count, 3)
-        XCTAssertEqual(topSites.compactMap { $0.isSponsoredTile }, [true, true, true])
-        XCTAssertEqual(topSites.compactMap { $0.title }, ["Firefox", "Mozilla", "Focus"])
+        XCTAssertEqual(topSites.count, 2)
+        XCTAssertEqual(topSites.compactMap { $0.isSponsoredTile }, [true, true])
+        XCTAssertEqual(topSites.compactMap { $0.title }, ["Firefox Sponsored Tile", "Mozilla Sponsored Tile"])
     }
 
     func test_getTopSites_shouldNotShowSponsoredTiles_returnNoSponsoredSites() async throws {
@@ -78,12 +79,15 @@ final class TopSitesManagerTests: XCTestCase {
 
     // MARK: History-based Top Site
     func test_getTopSites_withHistoryBasedTiles_returnExpectedTopSites() async throws {
-        let subject = try createSubject(topSiteHistoryManager: MockTopSiteHistoryManager())
+        let subject = try createSubject(
+            topSiteHistoryManager: MockTopSiteHistoryManager(sites: MockTopSiteHistoryManager.defaultSuccessData)
+        )
 
         let topSites = await subject.getTopSites()
-        XCTAssertEqual(topSites.count, 1)
-        XCTAssertEqual(topSites.compactMap { $0.title }, ["History-Based Tile Test"])
-        XCTAssertEqual(topSites.compactMap { $0.site.url }, ["www.example.com"])
+        XCTAssertEqual(topSites.count, 3)
+        let expectedTitles = ["Pinned Site Test", "Pinned Site 2 Test", "History-Based Tile Test"]
+        XCTAssertEqual(topSites.compactMap { $0.title }, expectedTitles)
+        XCTAssertEqual(topSites.compactMap { $0.site.url }, ["www.mozilla.com", "www.firefox.com", "www.example.com"])
     }
 
     func test_getTopSites_withEmptyHistoryBasedTiles_returnNoTopSites() async throws {
@@ -95,11 +99,75 @@ final class TopSitesManagerTests: XCTestCase {
 
     func test_getTopSites_withNilHistoryBasedTiles_returnNoTopSites() async throws {
         let subject = try createSubject(
-            topSiteHistoryManager: MockTopSiteHistoryManager(historyBasedSites: nil)
+            topSiteHistoryManager: MockTopSiteHistoryManager(sites: nil)
         )
 
         let topSites = await subject.getTopSites()
         XCTAssertEqual(topSites.count, 0)
+    }
+
+    // MARK: Tiles space calculation
+    func test_getTopSites_noAvailableSpace_returnOnlyPinnedSites() async throws {
+        let subject = try createSubject(
+            googleTopSiteManager: MockGoogleTopSiteManager(),
+            contileProvider: MockContileProvider(
+                result: .success(MockContileProvider.defaultSuccessData)
+            ),
+            topSiteHistoryManager: MockTopSiteHistoryManager(sites: MockTopSiteHistoryManager.defaultSuccessData),
+            maxCount: 2
+        )
+
+        let topSites = await subject.getTopSites()
+        XCTAssertEqual(topSites.count, 2)
+        XCTAssertEqual(topSites.compactMap { $0.title }, ["Pinned Site Test", "Pinned Site 2 Test"])
+        XCTAssertEqual(topSites.compactMap { $0.site.url }, ["www.mozilla.com", "www.firefox.com"])
+    }
+
+    func test_getTopSites_andNoPinnedSites_returnGoogleAndSponsoredSites() async throws {
+        let subject = try createSubject(
+            googleTopSiteManager: MockGoogleTopSiteManager(),
+            contileProvider: MockContileProvider(
+                result: .success(MockContileProvider.defaultSuccessData)
+            ),
+            topSiteHistoryManager: MockTopSiteHistoryManager(sites: MockTopSiteHistoryManager.noPinnedData),
+            maxCount: 2
+        )
+
+        let topSites = await subject.getTopSites()
+        XCTAssertEqual(topSites.count, 2)
+        XCTAssertEqual(topSites.compactMap { $0.title }, ["Google Test", "Firefox Sponsored Tile"])
+        XCTAssertEqual(topSites.compactMap { $0.site.url }, ["https://www.google.com/webhp?client=firefox-b-1-m&channel=ts", "https://firefox.com"])
+    }
+
+    func test_getTopSites_availableSpace_returnSitesInOrder() async throws {
+        let subject = try createSubject(
+            googleTopSiteManager: MockGoogleTopSiteManager(),
+            contileProvider: MockContileProvider(
+                result: .success(MockContileProvider.defaultSuccessData)
+            ),
+            topSiteHistoryManager: MockTopSiteHistoryManager(sites: MockTopSiteHistoryManager.defaultSuccessData)
+        )
+
+        let topSites = await subject.getTopSites()
+        XCTAssertEqual(topSites.count, 6)
+        let expectedTitles = [
+            "Google Test",
+            "Firefox Sponsored Tile",
+            "Mozilla Sponsored Tile",
+            "Pinned Site Test",
+            "Pinned Site 2 Test",
+            "History-Based Tile Test"
+        ]
+        XCTAssertEqual(topSites.compactMap { $0.title }, expectedTitles)
+        let expectedURLs = [
+            "https://www.google.com/webhp?client=firefox-b-1-m&channel=ts",
+            "https://firefox.com",
+            "https://mozilla.com",
+            "www.mozilla.com",
+            "www.firefox.com",
+            "www.example.com"
+        ]
+        XCTAssertEqual(topSites.compactMap { $0.site.url }, expectedURLs)
     }
 
     private func createSubject(
@@ -107,7 +175,8 @@ final class TopSitesManagerTests: XCTestCase {
         contileProvider: ContileProviderInterface = MockContileProvider(
             result: .success(MockContileProvider.emptySuccessData)
         ),
-        topSiteHistoryManager: TopSiteHistoryManagerProvider = MockTopSiteHistoryManager(historyBasedSites: []),
+        topSiteHistoryManager: TopSiteHistoryManagerProvider = MockTopSiteHistoryManager(sites: []),
+        maxCount: Int = 10,
         file: StaticString = #file,
         line: UInt = #line
     ) throws -> TopSitesManager {
@@ -116,7 +185,8 @@ final class TopSitesManagerTests: XCTestCase {
             prefs: mockProfile.prefs,
             contileProvider: contileProvider,
             googleTopSiteManager: googleTopSiteManager,
-            topSiteHistoryManager: topSiteHistoryManager
+            topSiteHistoryManager: topSiteHistoryManager,
+            maxTopSites: maxCount
         )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
