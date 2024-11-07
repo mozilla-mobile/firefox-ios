@@ -205,8 +205,8 @@ struct AddressBarState: StateType, Equatable {
         case SearchEngineSelectionActionType.didTapSearchEngine:
             return handleDidTapSearchEngine(state: state, action: action)
 
-        case SearchEngineSelectionMiddlewareActionType.didSelectAlternativeSearchEngine:
-            return handleDidSelectAlternativeSearchEngine(state: state, action: action)
+        case SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine:
+            return handleDidClearAlternativeSearchEngine(state: state, action: action)
 
         default:
             return defaultState(from: state)
@@ -731,8 +731,8 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
-    private static func handleDidSelectAlternativeSearchEngine(state: Self, action: Action) -> AddressBarState {
-        guard action is SearchEngineSelectionAction else { return state }
+    private static func handleDidClearAlternativeSearchEngine(state: Self, action: Action) -> AddressBarState {
+        guard action is SearchEngineSelectionAction else { return defaultState(from: state) }
 
         return AddressBarState(
             windowUUID: state.windowUUID,
@@ -745,14 +745,14 @@ struct AddressBarState: StateType, Equatable {
             lockIconImageName: state.lockIconImageName,
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: true, // Start editing
+            isEditing: state.isEditing,
             isScrollingDuringEdit: state.isScrollingDuringEdit,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: state.didStartTyping,
             showQRPageAction: state.showQRPageAction,
-            alternativeSearchEngine: state.alternativeSearchEngine
+            alternativeSearchEngine: nil
         )
     }
 
