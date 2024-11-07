@@ -98,7 +98,8 @@ struct SearchEngineSelectionState: ScreenState, Equatable {
     static func defaultState(from state: SearchEngineSelectionState) -> SearchEngineSelectionState {
         return SearchEngineSelectionState(
             windowUUID: state.windowUUID,
-            searchEngines: state.searchEngines
+            searchEngines: state.searchEngines,
+            selectedSearchEngine: state.selectedSearchEngine
         )
     }
 }
