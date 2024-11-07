@@ -203,6 +203,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
         return historyUrls
     }
 
+    // Hanna: TODO define textTitle here?
     var title: String? {
         if let title = webView?.title, !title.isEmpty {
             return webView?.title
