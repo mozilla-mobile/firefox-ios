@@ -14,16 +14,19 @@ class TopSitesManager {
     private let prefs: Prefs
     private let contileProvider: ContileProviderInterface
     private let googleTopSiteManager: GoogleTopSiteManagerProvider
+    private let topSiteHistoryManager: TopSiteHistoryManagerProvider
 
     init(
         prefs: Prefs,
         contileProvider: ContileProviderInterface = ContileProvider(),
         googleTopSiteManager: GoogleTopSiteManagerProvider,
+        topSiteHistoryManager: TopSiteHistoryManagerProvider,
         logger: Logger = DefaultLogger.shared
     ) {
         self.prefs = prefs
         self.contileProvider = contileProvider
         self.googleTopSiteManager = googleTopSiteManager
+        self.topSiteHistoryManager = topSiteHistoryManager
         self.logger = logger
     }
 
@@ -32,8 +35,10 @@ class TopSitesManager {
 
         let googleTopSite = addGoogleTopSite()
         let sponsoredTopSites = await getSponsoredSites()
+        let historyBasedTopSites = await getHistoryBasedSites()
 
-        topSites = googleTopSite + sponsoredTopSites
+        topSites = googleTopSite + sponsoredTopSites + historyBasedTopSites
+
         return topSites
     }
 
@@ -70,5 +75,16 @@ class TopSitesManager {
         return contiles.compactMap {
             TopSiteState(site: SponsoredTile(contile: $0))
         }
+    }
+
+    // MARK: History-based (Frencency) + Pinned + Default suggested tiles
+    private func getHistoryBasedSites() async -> [TopSiteState] {
+        let frecencySites = await withCheckedContinuation { continuation in
+            topSiteHistoryManager.getTopSites { sites in
+                continuation.resume(returning: sites)
+            }
+        }
+
+        return frecencySites?.compactMap { TopSiteState(site: $0) } ?? []
     }
 }

@@ -76,11 +76,38 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertEqual(topSites.count, 0)
     }
 
+    // MARK: History-based Top Site
+    func test_getTopSites_withHistoryBasedTiles_returnExpectedTopSites() async throws {
+        let subject = try createSubject(topSiteHistoryManager: MockTopSiteHistoryManager())
+
+        let topSites = await subject.getTopSites()
+        XCTAssertEqual(topSites.count, 1)
+        XCTAssertEqual(topSites.compactMap { $0.title }, ["History-Based Tile Test"])
+        XCTAssertEqual(topSites.compactMap { $0.site.url }, ["www.example.com"])
+    }
+
+    func test_getTopSites_withEmptyHistoryBasedTiles_returnNoTopSites() async throws {
+        let subject = try createSubject()
+
+        let topSites = await subject.getTopSites()
+        XCTAssertEqual(topSites.count, 0)
+    }
+
+    func test_getTopSites_withNilHistoryBasedTiles_returnNoTopSites() async throws {
+        let subject = try createSubject(
+            topSiteHistoryManager: MockTopSiteHistoryManager(historyBasedSites: nil)
+        )
+
+        let topSites = await subject.getTopSites()
+        XCTAssertEqual(topSites.count, 0)
+    }
+
     private func createSubject(
         googleTopSiteManager: GoogleTopSiteManagerProvider = MockGoogleTopSiteManager(mockSiteData: nil),
         contileProvider: ContileProviderInterface = MockContileProvider(
             result: .success(MockContileProvider.emptySuccessData)
         ),
+        topSiteHistoryManager: TopSiteHistoryManagerProvider = MockTopSiteHistoryManager(historyBasedSites: []),
         file: StaticString = #file,
         line: UInt = #line
     ) throws -> TopSitesManager {
@@ -88,7 +115,8 @@ final class TopSitesManagerTests: XCTestCase {
         let subject = TopSitesManager(
             prefs: mockProfile.prefs,
             contileProvider: contileProvider,
-            googleTopSiteManager: googleTopSiteManager
+            googleTopSiteManager: googleTopSiteManager,
+            topSiteHistoryManager: topSiteHistoryManager
         )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
