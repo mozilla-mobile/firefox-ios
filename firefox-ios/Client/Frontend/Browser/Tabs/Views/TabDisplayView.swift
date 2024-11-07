@@ -178,11 +178,9 @@ class TabDisplayView: UIView,
         dataSource?.supplementaryViewProvider = { [weak self] (collectionView, kind, indexPath) -> UICollectionReusableView? in
             // swiftlint:enable line_length
             let reusableView = UICollectionReusableView()
-            let section = self?.getTabDisplay(for: indexPath.section)
+            let section = self?.getSection(for: indexPath.section)
 
-            guard let self, section == .inactiveTabs else {
-                return nil
-            }
+            guard let self, section != .tabs else { return nil }
 
             if kind == UICollectionView.elementKindSectionHeader,
                let headerView = collectionView.dequeueReusableSupplementaryView(
@@ -248,15 +246,13 @@ class TabDisplayView: UIView,
                 return self.tabsSectionManager.layoutSection(layoutEnvironment)
             }
 
-            let section = TabDisplayViewSection(rawValue: sectionIndex)
+            let section = getSection(for: sectionIndex)
             switch section {
             case .inactiveTabs:
                 return self.inactiveTabsSectionManager.layoutSection(
                     layoutEnvironment,
                     isExpanded: tabsState.isInactiveTabsExpanded)
             case .tabs:
-                return self.tabsSectionManager.layoutSection(layoutEnvironment)
-            case .none:
                 return self.tabsSectionManager.layoutSection(layoutEnvironment)
             }
         }
@@ -268,10 +264,22 @@ class TabDisplayView: UIView,
         collectionView.backgroundColor = theme.colors.layer3
     }
 
-    private func getTabDisplay(for section: Int) -> TabDisplayViewSection {
-        guard !shouldHideInactiveTabs else { return .tabs }
+//    private func getTabDisplay(for section: Int) -> TabDisplayViewSection {
+//        guard !shouldHideInactiveTabs else { return .tabs }
+//
+//        return TabDisplayViewSection(rawValue: section) ?? .tabs
+//    }
 
-        return TabDisplayViewSection(rawValue: section) ?? .tabs
+   private func getSection(for sectionIndex: Int) -> TabDisplayViewSection {
+        // Get the current snapshot
+
+        // Check if the section index is valid
+       guard let snapshot = dataSource?.snapshot(),
+             sectionIndex >= 0, sectionIndex < snapshot.sectionIdentifiers.count
+       else { return TabDisplayViewSection.tabs }
+
+        // Return the section at the specified index
+        return snapshot.sectionIdentifiers[sectionIndex]
     }
 
     func deleteInactiveTab(for index: Int) {
@@ -307,7 +315,7 @@ class TabDisplayView: UIView,
     func collectionView(_ collectionView: UICollectionView,
                         contextMenuConfigurationForItemAt indexPath: IndexPath,
                         point: CGPoint) -> UIContextMenuConfiguration? {
-        guard getTabDisplay(for: indexPath.section) == .tabs
+        guard getSection(for: indexPath.section) == .tabs
         else { return nil }
 
         let tabVC = TabPeekViewController(tab: tabsState.tabs[indexPath.row], windowUUID: windowUUID)
@@ -358,7 +366,7 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
     func collectionView(_ collectionView: UICollectionView,
                         itemsForBeginning session: UIDragSession,
                         at indexPath: IndexPath) -> [UIDragItem] {
-        guard getTabDisplay(for: indexPath.section) == .tabs else { return [] }
+        guard getSection(for: indexPath.section) == .tabs else { return [] }
 
         let itemProvider = NSItemProvider()
         let dragItem = UIDragItem(itemProvider: itemProvider)

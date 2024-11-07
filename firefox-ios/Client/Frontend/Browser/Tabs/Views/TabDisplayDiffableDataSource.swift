@@ -6,8 +6,8 @@ typealias TabDisplayViewSection = TabDisplayDiffableDataSource.TabSection
 typealias TabDisplayViewItem = TabDisplayDiffableDataSource.TabItem
 
 final class TabDisplayDiffableDataSource: UICollectionViewDiffableDataSource<TabDisplayViewSection, TabDisplayViewItem> {
-    enum TabSection: Int, CaseIterable {
-        case inactiveTabs
+    enum TabSection: Hashable {
+        case inactiveTabs(UUID)
         case tabs
     }
 
@@ -19,21 +19,12 @@ final class TabDisplayDiffableDataSource: UICollectionViewDiffableDataSource<Tab
     func updateSnapshot(state: TabsPanelState) {
         var snapshot = NSDiffableDataSourceSnapshot<TabDisplayViewSection, TabDisplayViewItem>()
 
-        snapshot.appendSections([.inactiveTabs, .tabs])
+        let inactiveTabsUUID = UUID()
+        snapshot.appendSections([.inactiveTabs(inactiveTabsUUID), .tabs])
 
         if state.isInactiveTabsExpanded {
             let inactiveTabs = state.inactiveTabs.map { TabDisplayViewItem.inactiveTab($0) }
-            snapshot.appendItems(inactiveTabs, toSection: .inactiveTabs)
-        }
-
-        // reloading .inactiveTabs is necessary to animate the caret moving when we show or hide inactive tabs
-        if #available(iOS 16, *) {
-            snapshot.reloadSections([.inactiveTabs])
-        } else {
-            let inactiveTabItems = snapshot.itemIdentifiers(inSection: .inactiveTabs)
-            if !inactiveTabItems.isEmpty {
-                snapshot.reloadSections([.inactiveTabs])
-            }
+            snapshot.appendItems(inactiveTabs, toSection: .inactiveTabs(inactiveTabsUUID))
         }
 
         let tabs = state.tabs.map { TabDisplayViewItem.tab($0) }
