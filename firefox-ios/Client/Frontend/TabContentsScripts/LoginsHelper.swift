@@ -127,7 +127,10 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
         else { return }
 
         if self.featureFlags.isFeatureEnabled(.passwordGenerator, checking: .buildOnly) {
-            if type == "generatePassword", let tab = self.tab, !tab.isPrivate {
+            if type == "generatePassword",
+                let tab = self.tab,
+                !tab.isPrivate,
+                profile.prefs.boolForKey("saveLogins") ?? true {
                 let userDefaults = UserDefaults.standard
                 let showPasswordGeneratorClosure = {
                     let newAction = GeneralBrowserAction(
@@ -260,7 +263,11 @@ class LoginsHelper: TabContentScript, FeatureFlaggable {
     private func promptSave(_ login: LoginEntry) {
         guard login.isValid.isSuccess else { return }
 
-        clearStoredPasswordAfterGeneration(origin: login.hostname)
+        if self.featureFlags.isFeatureEnabled(.passwordGenerator, checking: .buildOnly) &&
+            profile.prefs.boolForKey("saveLogins") ?? true &&
+            tab?.isPrivate == false {
+            clearStoredPasswordAfterGeneration(origin: login.hostname)
+        }
 
         let promptMessage: String
         let https = "^https:\\/\\/"
