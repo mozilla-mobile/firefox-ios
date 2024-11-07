@@ -12,8 +12,8 @@ class AddressToolbarContainerModel: Equatable {
     let browserActions: [ToolbarElement]
 
     let borderPosition: AddressToolbarBorderPosition?
-    let searchEngineName: String?
-    let searchEngineImage: UIImage?
+    let searchEngineName: String
+    let searchEngineImage: UIImage
     let searchEnginesManager: SearchEnginesManager
     let lockIconImageName: String?
     let lockIconNeedsTheming: Bool
@@ -42,7 +42,7 @@ class AddressToolbarContainerModel: Equatable {
             searchEngineImageViewA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchEngine,
             searchEngineImageViewA11yLabel: String(
                 format: .AddressToolbar.SearchEngineA11yLabel,
-                searchEngineName ?? ""
+                searchEngineName
             ),
             lockIconButtonA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon,
             lockIconButtonA11yLabel: .AddressToolbar.PrivacyAndSecuritySettingsA11yLabel,
