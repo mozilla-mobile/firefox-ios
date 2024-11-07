@@ -59,7 +59,7 @@ final class RouteBuilder {
                         query: url.getQuery()
                     )
                 )
-            
+
             case .openUrl:
                 // If we have a URL query, then make sure to check its a webpage
                 if urlQuery == nil || urlQuery?.isWebPage() ?? false {
@@ -67,25 +67,25 @@ final class RouteBuilder {
                 } else {
                     return nil
                 }
-        
+
             case .openText:
                 return .searchQuery(query: urlScanner.value(query: "text") ?? "", isPrivate: isPrivate)
-                
+
             case .glean:
                 return .glean(url: url)
-                
+
             case .widgetMediumTopSitesOpenUrl:
                 // Widget Top sites - open url
                 return .search(url: urlQuery, isPrivate: isPrivate)
-                
+
             case .widgetSmallQuickLinkOpenUrl:
                 // Widget Quick links - small - open url private or regular
                 return .search(url: urlQuery, isPrivate: isPrivate, options: [.focusLocationField])
-                
+
             case .widgetMediumQuickLinkOpenUrl:
                 // Widget Quick Actions - medium - open url private or regular
                 return .search(url: urlQuery, isPrivate: isPrivate, options: [.focusLocationField])
-                
+
             case .widgetSmallQuickLinkOpenCopied, .widgetMediumQuickLinkOpenCopied:
                 // Widget Quick links - medium - open copied url
                 if !UIPasteboard.general.hasURLs {
@@ -95,11 +95,11 @@ final class RouteBuilder {
                     let url = UIPasteboard.general.url
                     return .search(url: url, isPrivate: isPrivate)
                 }
-                
+
             case .widgetSmallQuickLinkClosePrivateTabs, .widgetMediumQuickLinkClosePrivateTabs:
                 // Widget Quick links - medium - close private tabs
                 return .action(action: .closePrivateTabs)
-                
+
             case .widgetTabsMediumOpenUrl:
                 // Widget Tabs Quick View - medium
                 let tabs = SimpleTab.getSimpleTabs()
@@ -108,7 +108,7 @@ final class RouteBuilder {
                 } else {
                     return .search(url: nil, isPrivate: false)
                 }
-                
+
             case .widgetTabsLargeOpenUrl:
                 // Widget Tabs Quick View - large
                 let tabs = SimpleTab.getSimpleTabs()
@@ -118,10 +118,10 @@ final class RouteBuilder {
                 } else {
                     return .search(url: nil, isPrivate: false)
                 }
-                
+
             case .fxaSignIn:
                 return nil
-                
+
             case .sharesheet:
                 let linkString = urlScanner.value(query: "url")
                 //                let titleText = urlScanner.value(query: "text")

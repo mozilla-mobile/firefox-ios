@@ -272,10 +272,10 @@ class BrowserCoordinator: BaseCoordinator,
 
         case let .searchURL(url, tabId):
             handle(searchURL: url, tabId: tabId)
-          
+
         case let .sharesheet(url):
             showShareSheet(with: url)
-          
+
         case let .glean(url):
             glean.handleDeeplinkUrl(url: url)
 

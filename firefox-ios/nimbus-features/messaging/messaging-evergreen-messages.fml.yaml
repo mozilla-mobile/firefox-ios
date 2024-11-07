@@ -29,7 +29,6 @@ import:
                 style: FALLBACK
                 trigger-if-all:
                   - SUPPORTS_DEFAULT_BROWSER
-                  - ON_FOURTH_LAUNCH_THIS_YEAR
                 except-if-any:
                   - I_AM_DEFAULT_BROWSER
                 title: Default Browser/DefaultBrowserCard.Title
@@ -37,8 +36,8 @@ import:
                 button-label: Default Browser/DefaultBrowserCard.Button.v2
                 action: OPEN_SHARE_SHEET
                 action-params:
-                    url: example.com
-                    text: "TEST"
+                    url: https://www.mozilla.org/en-US/firefox/new/
+                    text: "TEST TEST share Firefox!!!"
             triggers:
               ON_FOURTH_LAUNCH_THIS_YEAR: "'app_cycle.foreground'|eventSum('Years', 1, 0) > 3"
 
