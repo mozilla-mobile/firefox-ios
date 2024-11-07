@@ -81,28 +81,25 @@ class AddressToolbarContainerModelTests: XCTestCase {
                                             windowUUID: windowUUID)
     }
 
-    private func createBasicAddressBarState() -> AddressBarState {
+    private func createAddressBarState(withSearchEngine: SearchEngineModel?) -> AddressBarState {
         return AddressBarState(windowUUID: windowUUID,
                                navigationActions: [],
                                pageActions: [],
                                browserActions: [],
                                borderPosition: nil,
                                url: nil,
-                               lockIconImageName: "",
-                               lockIconNeedsTheming: false,
-                               alternativeSearchEngine: nil)
-    }
-
-    private func createAddressBarStateWithAlternativeSearchEngine(searchEngine: SearchEngineModel) -> AddressBarState {
-        return AddressBarState(windowUUID: windowUUID,
-                               navigationActions: [],
-                               pageActions: [],
-                               browserActions: [],
-                               borderPosition: nil,
-                               url: nil,
-                               lockIconImageName: "",
-                               lockIconNeedsTheming: false,
-                               alternativeSearchEngine: searchEngine)
+                               searchTerm: nil,
+                               lockIconImageName: nil,
+                               lockIconNeedsTheming: true,
+                               safeListedURLImageName: nil,
+                               isEditing: false,
+                               isScrollingDuringEdit: false,
+                               shouldSelectSearchTerm: true,
+                               isLoading: false,
+                               readerModeState: nil,
+                               didStartTyping: false,
+                               showQRPageAction: true,
+                               alternativeSearchEngine: withSearchEngine)
     }
 
     private func createBasicNavigationBarState() -> NavigationBarState {
@@ -113,7 +110,7 @@ class AddressToolbarContainerModelTests: XCTestCase {
         return ToolbarState(windowUUID: windowUUID,
                             toolbarPosition: .top,
                             isPrivateMode: false,
-                            addressToolbar: createBasicAddressBarState(),
+                            addressToolbar: createAddressBarState(withSearchEngine: nil),
                             navigationToolbar: createBasicNavigationBarState(),
                             isShowingNavigationToolbar: true,
                             isShowingTopTabs: true,
@@ -130,7 +127,7 @@ class AddressToolbarContainerModelTests: XCTestCase {
         return ToolbarState(windowUUID: windowUUID,
                             toolbarPosition: .top,
                             isPrivateMode: false,
-                            addressToolbar: createAddressBarStateWithAlternativeSearchEngine(searchEngine: searchEngine),
+                            addressToolbar: createAddressBarState(withSearchEngine: searchEngine),
                             navigationToolbar: createBasicNavigationBarState(),
                             isShowingNavigationToolbar: true,
                             isShowingTopTabs: true,
