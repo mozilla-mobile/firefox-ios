@@ -4193,7 +4193,7 @@ extension String {
                 public static let ReportBrokenSite = MZLocalizedString(
                     key: "MainMenu.Submenus.Tools.ReportBrokenSite.Title.v133",
                     tableName: "MainMenu",
-                    value: "Report Broken Site...",
+                    value: "Report Broken Site…",
                     comment: "On the main menu, the title for the action that will take the user to the site where they can report a broken website to our web compatibility team.")
                 public static let ReportBrokenSiteSubtitle = MZLocalizedString(
                     key: "MainMenu.Submenus.Tools.ReportBrokenSite.Subtitle.v131",
