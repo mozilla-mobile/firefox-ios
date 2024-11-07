@@ -16,7 +16,7 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     func showFindInPage()
     func showSignInView(fxaParameters: FxASignInViewParameters?)
     func updateZoomPageBarVisibility()
-    func showShareSheet(with url: URL?)
+    func showShareSheet(with url: URL?, title: String?)
 }
 
 class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
@@ -90,7 +90,7 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
                 )
                 self.navigationHandler?.showSignInView(fxaParameters: fxaParameters)
             case .shareSheet:
-                self.navigationHandler?.showShareSheet(with: destination.url)
+              self.navigationHandler?.showShareSheet(with: destination.url, title: destination.title)
             case .zoom:
                 self.navigationHandler?.updateZoomPageBarVisibility()
             }

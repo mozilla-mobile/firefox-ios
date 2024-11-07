@@ -273,8 +273,8 @@ class BrowserCoordinator: BaseCoordinator,
         case let .searchURL(url, tabId):
             handle(searchURL: url, tabId: tabId)
 
-        case let .sharesheet(url):
-            showShareSheet(with: url)
+        case let .sharesheet(url, title):
+          showShareSheet(with: url, title: title)
 
         case let .glean(url):
             glean.handleDeeplinkUrl(url: url)
@@ -516,12 +516,13 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.updateZoomPageBarVisibility(visible: true)
     }
 
-    func showShareSheet(with url: URL?) {
+  func showShareSheet(with url: URL?, title: String?) {
         guard let url else { return }
 
         let showShareSheet = { url in
             self.showShareExtension(
                 url: url,
+                title: title,
                 sourceView: self.browserViewController.addressToolbarContainer,
                 toastContainer: self.browserViewController.contentContainer,
                 popoverArrowDirection: .any
@@ -694,6 +695,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     func showShareExtension(
         url: URL,
+        title: String?,
         sourceView: UIView,
         sourceRect: CGRect?,
         toastContainer: UIView,
@@ -715,6 +717,7 @@ class BrowserCoordinator: BaseCoordinator,
         add(child: shareExtensionCoordinator)
         shareExtensionCoordinator.start(
             url: url,
+            title: title,
             sourceView: sourceView,
             sourceRect: sourceRect,
             popoverArrowDirection: popoverArrowDirection
