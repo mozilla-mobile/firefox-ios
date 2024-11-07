@@ -75,7 +75,10 @@
       "featureValidationOptOut": false,
       "localizations": null,
       "locales": null,
-      "publishedDate": "2024-03-05T16:11:17.007782Z"
+      "publishedDate": "2024-03-05T16:11:17.007782Z",
+      "isFirefoxLabsOptIn": false,
+      "firefoxLabsTitle": null,
+      "firefoxLabsDescription": null
     },
     {
       "schemaVersion": "1.12.0",
@@ -271,7 +274,10 @@
       "featureValidationOptOut": false,
       "localizations": null,
       "locales": null,
-      "publishedDate": "2024-10-18T19:26:21.181472Z"
+      "publishedDate": "2024-10-18T19:26:21.181472Z",
+      "isFirefoxLabsOptIn": false,
+      "firefoxLabsTitle": null,
+      "firefoxLabsDescription": null
     },
     {
       "schemaVersion": "1.12.0",
@@ -334,7 +340,10 @@
       "featureValidationOptOut": false,
       "localizations": null,
       "locales": null,
-      "publishedDate": null
+      "publishedDate": null,
+      "isFirefoxLabsOptIn": false,
+      "firefoxLabsTitle": null,
+      "firefoxLabsDescription": null
     },
     {
       "schemaVersion": "1.12.0",
@@ -428,7 +437,10 @@
       "featureValidationOptOut": false,
       "localizations": null,
       "locales": null,
-      "publishedDate": "2024-10-09T19:01:25.915786Z"
+      "publishedDate": "2024-10-09T19:01:25.915786Z",
+      "isFirefoxLabsOptIn": false,
+      "firefoxLabsTitle": null,
+      "firefoxLabsDescription": null
     },
     {
       "schemaVersion": "1.12.0",
@@ -499,7 +511,10 @@
       "featureValidationOptOut": false,
       "localizations": null,
       "locales": null,
-      "publishedDate": "2024-09-19T17:57:04.754326Z"
+      "publishedDate": "2024-09-19T17:57:04.754326Z",
+      "isFirefoxLabsOptIn": false,
+      "firefoxLabsTitle": null,
+      "firefoxLabsDescription": null
     }
   ]
 }
