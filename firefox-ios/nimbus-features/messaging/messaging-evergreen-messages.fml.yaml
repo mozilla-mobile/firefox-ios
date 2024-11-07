@@ -37,7 +37,7 @@ import:
                 action: OPEN_SHARE_SHEET
                 action-params:
                     url: https://www.mozilla.org/en-US/firefox/new/
-                    text: "TEST TEST share Firefox!!!"
+                    title: "TEST Share Firefox with friends!!!"
             triggers:
               ON_FOURTH_LAUNCH_THIS_YEAR: "'app_cycle.foreground'|eventSum('Years', 1, 0) > 3"
 
