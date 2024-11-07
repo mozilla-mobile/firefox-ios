@@ -13101,13 +13101,13 @@
 			path = Toolbars;
 			sourceTree = "<group>";
 		};
-		E17EFC2E2CD16F5A00169A1F /* sticker */ = {
+		E17EFC2E2CD16F5A00169A1F /* Sticker */ = {
 			isa = PBXGroup;
 			children = (
 				E17EFC312CD16F5B00169A1F /* Info.plist */,
 				8ADAA6D32CD175FB00E3D3E8 /* StickersCatalog.xcstickers */,
 			);
-			path = sticker;
+			path = Sticker;
 			sourceTree = "<group>";
 		};
 		E1877A7F286E0EFD00F5BDF2 /* WebView */ = {
@@ -13667,7 +13667,7 @@
 				962C6C3F2971F5D400354BE8 /* Dangerfile.swift */,
 				F8708D1E1A0970990051AB07 /* Extensions */,
 				D4AFA84B2AFA4FC6000BFEAA /* firefox-ios-tests */,
-				E17EFC2E2CD16F5A00169A1F /* sticker */,
+				E17EFC2E2CD16F5A00169A1F /* Sticker */,
 				7B604FC11C496005006EEEC3 /* Frameworks */,
 				45D5EDC1292D636000311934 /* nimbus.fml.yaml */,
 				962C6C39297054A700354BE8 /* Package.swift */,
