@@ -24,6 +24,8 @@ struct AddressBarState: StateType, Equatable {
     let readerModeState: ReaderModeState?
     let didStartTyping: Bool
     let showQRPageAction: Bool
+    /// Stores the alternative search engine that the user has temporarily selected (otherwise use the default)
+    let alternativeSearchEngine: OpenSearchEngine?
 
     private static let qrCodeScanAction = ToolbarActionState(
         actionType: .qrCode,
@@ -133,6 +135,7 @@ struct AddressBarState: StateType, Equatable {
         self.readerModeState = readerModeState
         self.didStartTyping = didStartTyping
         self.showQRPageAction = showQRPageAction
+        self.alternativeSearchEngine = alternativeSearchEngine
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -196,6 +199,9 @@ struct AddressBarState: StateType, Equatable {
 
         case ToolbarActionType.didStartTyping:
             return handleDidStartTypingAction(state: state, action: action)
+
+        case SearchEngineSelectionActionType.didTapSearchEngine:
+            return handleDidTapSearchEngine(state: state, action: action)
 
         default:
             return defaultState(from: state)
@@ -673,7 +679,34 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
-    static func defaultState(from state: AddressBarState) -> AddressBarState {
+    private static func handleDidTapSearchEngine(state: Self, action: Action) -> AddressBarState {
+        guard let searchEngineSelectionAction = action as? SearchEngineSelectionAction,
+              let selectedSearchEngine = searchEngineSelectionAction.selectedSearchEngine
+        else { return state }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            pageActions: state.pageActions,
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: state.didStartTyping,
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: selectedSearchEngine
+        )
+    }
+
+    private static func handleDefaultAction(state: Self) -> Self {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,

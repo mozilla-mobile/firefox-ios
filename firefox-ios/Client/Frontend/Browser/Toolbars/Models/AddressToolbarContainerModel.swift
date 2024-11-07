@@ -95,7 +95,7 @@ class AddressToolbarContainerModel: Equatable {
                                                                       windowUUID: windowUUID)
 
         // If the user has selected an alternative search engine, use that. Otherwise, use the default engine.
-        let searchEngine = state.alternativeSearchEngine ?? profile.searchEnginesManager.defaultEngine
+        let searchEngine = state.addressToolbar.alternativeSearchEngine ?? profile.searchEnginesManager.defaultEngine
 
         self.windowUUID = windowUUID
         self.searchEngineName = searchEngine?.shortName ?? ""
