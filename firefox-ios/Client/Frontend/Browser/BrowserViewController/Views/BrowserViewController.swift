@@ -1951,16 +1951,6 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    func lockIconImageName(for tab: Tab?) -> String? {
-        guard let tab, let hasSecureContent = tab.webView?.hasOnlySecureContent else { return nil }
-
-        let lockIconImageName = hasSecureContent ?
-        StandardImageIdentifiers.Large.lockFill :
-        StandardImageIdentifiers.Large.lockSlashFill
-
-        return tab.url?.isReaderModeURL == false ? lockIconImageName : nil
-    }
-
     func updateReaderModeState(for tab: Tab?, readerModeState: ReaderModeState) {
         if isToolbarRefactorEnabled {
             let action = ToolbarAction(
@@ -1983,13 +1973,27 @@ class BrowserViewController: UIViewController,
                 StandardImageIdentifiers.Small.notificationDotFill : nil
             }
 
+            var lockIconImageName: String?
+            var lockIconNeedsTheming = true
+
+            if let hasSecureContent = tab.webView?.hasOnlySecureContent {
+                lockIconImageName = hasSecureContent ?
+                StandardImageIdentifiers.Large.lockFill :
+                StandardImageIdentifiers.Large.lockSlashFill
+
+                let isWebsiteMode = tab.url?.isReaderModeURL == false
+                lockIconImageName = isWebsiteMode ? lockIconImageName : nil
+                lockIconNeedsTheming = isWebsiteMode ? hasSecureContent : true
+            }
+
             let action = ToolbarAction(
                 url: tab.url?.displayURL,
                 isPrivate: tab.isPrivate,
                 isShowingNavigationToolbar: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection),
                 canGoBack: tab.canGoBack,
                 canGoForward: tab.canGoForward,
-                lockIconImageName: lockIconImageName(for: tab),
+                lockIconImageName: lockIconImageName,
+                lockIconNeedsTheming: lockIconNeedsTheming,
                 safeListedURLImageName: safeListedURLImageName,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange)
