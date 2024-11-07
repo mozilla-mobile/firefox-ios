@@ -63,7 +63,7 @@ public class BrowserAddressToolbar: UIView,
 
     // FXIOS-10210 Temporary to support updating the Unified Search feature flag during runtime
     private var previousLocationViewState: LocationViewState?
-    public var isUnifiedSearchEnabled: Bool = false {
+    public var isUnifiedSearchEnabled = false {
         didSet {
             guard let previousLocationViewState, oldValue != isUnifiedSearchEnabled else { return }
 
