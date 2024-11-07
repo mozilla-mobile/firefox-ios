@@ -33,6 +33,8 @@ class AddressToolbarContainerModelTests: XCTestCase {
                                            readerModeState: nil,
                                            didStartTyping: false,
                                            showQRPageAction: true)
+                                           lockIconImageName: "",
+                                           lockIconNeedsTheming: true)
         let navigationState = NavigationBarState(windowUUID: windowUUID, actions: [], displayBorder: false)
         let state = ToolbarState(windowUUID: windowUUID,
                                  toolbarPosition: .top,

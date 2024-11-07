@@ -33,6 +33,7 @@ struct AppState: StateType {
                 case (.searchEngineSelection(let state), .searchEngineSelection): return state as? S
                 case (.trackingProtection(let state), .trackingProtection): return state as? S
                 case (.passwordGenerator(let state), .passwordGenerator): return state as? S
+                case (.nativeErrorPage(let state), .nativeErrorPage): return state as? S
                 default: return nil
                 }
             }.first(where: {
@@ -72,7 +73,8 @@ let middlewares = [
     TopSitesMiddleware().topSitesProvider,
     TrackingProtectionMiddleware().trackingProtectionProvider,
     PasswordGeneratorMiddleware().passwordGeneratorProvider,
-    PocketMiddleware().pocketSectionProvider
+    PocketMiddleware().pocketSectionProvider,
+    NativeErrorPageMiddleware().nativeErrorPageProvider
 ]
 
 // In order for us to mock and test the middlewares easier,

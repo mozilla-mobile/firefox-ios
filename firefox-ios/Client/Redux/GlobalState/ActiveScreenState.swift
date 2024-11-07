@@ -23,6 +23,7 @@ enum AppScreenState: Equatable {
     case toolbar(ToolbarState)
     case searchEngineSelection(SearchEngineSelectionState)
     case passwordGenerator(PasswordGeneratorState)
+    case nativeErrorPage(NativeErrorPageState)
 
     static let reducer: Reducer<Self> = { state, action in
         switch state {
@@ -56,6 +57,8 @@ enum AppScreenState: Equatable {
             return .searchEngineSelection(SearchEngineSelectionState.reducer(state, action))
         case .passwordGenerator(let state):
             return .passwordGenerator(PasswordGeneratorState.reducer(state, action))
+        case .nativeErrorPage(let state):
+            return .nativeErrorPage(NativeErrorPageState.reducer(state, action))
         }
     }
 
@@ -77,6 +80,7 @@ enum AppScreenState: Equatable {
         case .toolbar: return .toolbar
         case .searchEngineSelection: return .searchEngineSelection
         case .passwordGenerator: return .passwordGenerator
+        case .nativeErrorPage: return .nativeErrorPage
         }
     }
 
@@ -97,6 +101,7 @@ enum AppScreenState: Equatable {
         case .toolbar(let state): return state.windowUUID
         case .searchEngineSelection(let state): return state.windowUUID
         case .passwordGenerator(let state): return state.windowUUID
+        case .nativeErrorPage(let state): return state.windowUUID
         }
     }
 }
@@ -165,6 +170,8 @@ struct ActiveScreensState: Equatable {
                 screens.append(.searchEngineSelection(SearchEngineSelectionState(windowUUID: uuid)))
             case .passwordGenerator:
                 screens.append(.passwordGenerator(PasswordGeneratorState(windowUUID: uuid)))
+            case .nativeErrorPage:
+                screens.append(.nativeErrorPage(NativeErrorPageState(windowUUID: uuid)))
             }
         default:
             return screens

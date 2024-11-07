@@ -14,6 +14,16 @@ struct AccountData: Equatable {
     let iconURL: URL?
 }
 
+struct TelemetryInfo: Equatable {
+    let isHomepage: Bool
+    let isActionOn: Bool?
+
+    init(isHomepage: Bool, isActionOn: Bool? = nil) {
+        self.isHomepage = isHomepage
+        self.isActionOn = isActionOn
+    }
+}
+
 struct MainMenuTabInfo: Equatable {
     let tabID: TabUUID
     let url: URL?
