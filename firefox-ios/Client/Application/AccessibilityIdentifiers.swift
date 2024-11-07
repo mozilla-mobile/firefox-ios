@@ -111,6 +111,13 @@ public struct AccessibilityIdentifiers {
         static let zoom = "MainMenu.Zoom"
     }
 
+    struct UnifiedSearch {
+        struct BottomSheetRow {
+            static let engine = "UnifiedSearch.BottomSheetRow.Engine"
+            static let searchSettings = "UnifiedSearch.BottomSheetRow.SearchSettings"
+        }
+    }
+
     struct EnhancedTrackingProtection {
         struct MainScreen {
             static let clearCookiesButton = "TrackingProtection.ClearCookiesButton"
@@ -628,6 +635,11 @@ public struct AccessibilityIdentifiers {
 
         struct Address {
             static let title = "AutofillAddress"
+
+            struct Addresses {
+                static let title = "Addresses"
+                static let addAddress = "Add address"
+            }
         }
 
         struct ConnectSetting {

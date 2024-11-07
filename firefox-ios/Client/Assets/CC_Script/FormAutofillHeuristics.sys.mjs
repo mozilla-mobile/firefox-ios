@@ -377,7 +377,38 @@ export const FormAutofillHeuristics = {
           fields[0].reason != "autocomplete" &&
           ["address-line2", "address-line3"].includes(fields[0].fieldName)
         ) {
-          scanner.updateFieldName(fieldIndicies[0], "address-line1");
+          // If an earlier address field was already found, ignore any
+          // address-related fields from the OTHER_ADDRESS_FIELDS
+          // list since those can appear in-between the address-level1
+          // and additional address info fields. If no address field
+          // exists, update the field to be address-line1.
+          const OTHER_ADDRESS_FIELDS = [
+            "address-level1",
+            "address-level2",
+            "postal-code",
+            "organization",
+          ];
+          let canUpdate = true;
+
+          for (let idx = scanner.parsingIndex - 1; idx >= 0; idx--) {
+            const detail = scanner.getFieldDetailByIndex(idx);
+            if (
+              detail?.fieldName == "street-address" ||
+              detail?.fieldName == "address-line1" ||
+              detail?.fieldName == "address-housenumber"
+            ) {
+              canUpdate = false;
+              break;
+            }
+
+            if (!OTHER_ADDRESS_FIELDS.includes(detail?.fieldName)) {
+              break;
+            }
+          }
+
+          if (canUpdate) {
+            scanner.updateFieldName(fieldIndicies[0], "address-line1");
+          }
         }
         break;
       case 2:

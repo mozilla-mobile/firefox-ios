@@ -11,6 +11,7 @@ import WebKit
 final class PasswordGeneratorMiddleware {
     private let logger: Logger
     private let generatedPasswordStorage: GeneratedPasswordStorageProtocol
+    private let passwordGeneratorTelemetry = PasswordGeneratorTelemetry()
 
     init(logger: Logger = DefaultLogger.shared,
          generatedPasswordStorage: GeneratedPasswordStorageProtocol = GeneratedPasswordStorage()) {
@@ -48,6 +49,7 @@ final class PasswordGeneratorMiddleware {
 
     private func showPasswordGenerator(frame: WKFrameInfo, windowUUID: WindowUUID) {
         guard let origin = frame.webView?.url?.origin else {return}
+        passwordGeneratorTelemetry.passwordGeneratorDialogShown()
         if let password = generatedPasswordStorage.getPasswordForOrigin(origin: origin) {
             let newAction = PasswordGeneratorAction(
                 windowUUID: windowUUID,
@@ -83,6 +85,7 @@ final class PasswordGeneratorMiddleware {
     }
 
     private func userTappedUsePassword(frame: WKFrameInfo, password: String) {
+        passwordGeneratorTelemetry.usePasswordButtonPressed()
         let jsFunctionCall = "window.__firefox__.logins.fillGeneratedPassword(\"\(password)\")"
         frame.webView?.evaluateJavascriptInDefaultContentWorld(jsFunctionCall, frame) { (result, error) in
             if error != nil {

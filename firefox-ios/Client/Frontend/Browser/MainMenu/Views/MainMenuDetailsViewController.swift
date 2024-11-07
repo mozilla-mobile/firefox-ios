@@ -116,7 +116,8 @@ class MainMenuDetailsViewController: UIViewController,
             store.dispatch(
                 MainMenuAction(
                     windowUUID: self.windowUUID,
-                    actionType: MainMenuDetailsActionType.tapBackToMainMenu
+                    actionType: MainMenuDetailsActionType.tapBackToMainMenu,
+                    telemetryInfo: TelemetryInfo(isHomepage: submenuState.isHomepage ?? false)
                 )
             )
         }
@@ -125,7 +126,8 @@ class MainMenuDetailsViewController: UIViewController,
             store.dispatch(
                 MainMenuAction(
                     windowUUID: self.windowUUID,
-                    actionType: MainMenuDetailsActionType.tapDismissView
+                    actionType: MainMenuDetailsActionType.tapDismissView,
+                    telemetryInfo: TelemetryInfo(isHomepage: submenuState.isHomepage ?? false)
                 )
             )
         }

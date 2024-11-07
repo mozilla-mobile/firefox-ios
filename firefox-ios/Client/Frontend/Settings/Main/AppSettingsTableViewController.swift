@@ -329,7 +329,11 @@ class AppSettingsTableViewController: SettingsTableViewController,
                         prefKey: PrefsKeys.Settings.closePrivateTabs,
                         defaultValue: true,
                         titleText: .AppSettingsClosePrivateTabsTitle,
-                        statusText: .AppSettingsClosePrivateTabsDescription)
+                        statusText: .AppSettingsClosePrivateTabsDescription) { _ in
+                            let action = TabTrayAction(windowUUID: self.windowUUID,
+                                                       actionType: TabTrayActionType.closePrivateTabsSettingToggled)
+                            store.dispatch(action)
+            }
         ]
 
         privacySettings.append(ContentBlockerSetting(settings: self, settingsDelegate: parentCoordinator))

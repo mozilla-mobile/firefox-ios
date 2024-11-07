@@ -44,8 +44,6 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
             return GCDWebServerResponse(statusCode: status)
         }
 
-        var readerModeStyle = ReaderModeStyle.defaultStyle()
-
         // Register the handler that accepts /reader-mode/page?url=http://www.example.com requests.
         webServer.registerHandlerForMethod(
             "GET",
@@ -56,24 +54,8 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
                 if let url = URL(string: url, invalidCharacters: false), url.isWebPage() {
                     do {
                         let readabilityResult = try readerModeCache.get(url)
-                        // We have this page in our cache, so we can display it. Just grab the correct style from the
-                        // profile and then generate HTML from the Readability results.
-                        if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle),
-                           let style = ReaderModeStyle(windowUUID: nil, dict: dict) {
-                            readerModeStyle = style
-                        } else {
-                            readerModeStyle.theme = ReaderModeTheme.preferredTheme(window: nil)
-                        }
-
-                        guard let html = ReaderModeUtils.generateReaderContent(
-                            readabilityResult,
-                            initialStyle: readerModeStyle
-                        ),
-                              let response = GCDWebServerDataResponse(html: html) else { return nil }
-                        // Apply a Content Security Policy that disallows everything except images from
-                        // anywhere and fonts and css from our internal server
-                        response.setValue("default-src 'none'; img-src *; style-src http://localhost:* '\(ReaderModeStyleHash)'; font-src http://localhost:*",
-                                          forAdditionalHeader: "Content-Security-Policy")
+                        guard let response = generateHtmlFor(readabilityResult: readabilityResult,
+                                                             profile: profile) else { return nil }
                         return response
                     } catch {
                         // This page has not been converted to reader mode yet. This happens when you for example add an
@@ -93,26 +75,7 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
                                     contentsOfFile: readerViewLoadingPath,
                                     encoding: String.Encoding.utf8.rawValue
                                 )
-                                readerViewLoading.replaceOccurrences(
-                                    of: "%ORIGINAL-URL%",
-                                    with: url.absoluteString,
-                                    options: .literal,
-                                    range: NSRange(location: 0, length: readerViewLoading.length))
-                                readerViewLoading.replaceOccurrences(
-                                    of: "%LOADING-TEXT%",
-                                    with: .ReaderModeHandlerLoadingContent,
-                                    options: .literal,
-                                    range: NSRange(location: 0, length: readerViewLoading.length))
-                                readerViewLoading.replaceOccurrences(
-                                    of: "%LOADING-FAILED-TEXT%",
-                                    with: .ReaderModeHandlerPageCantDisplay,
-                                    options: .literal,
-                                    range: NSRange(location: 0, length: readerViewLoading.length))
-                                readerViewLoading.replaceOccurrences(
-                                    of: "%LOAD-ORIGINAL-TEXT%",
-                                    with: .ReaderModeHandlerLoadOriginalPage,
-                                    options: .literal,
-                                    range: NSRange(location: 0, length: readerViewLoading.length))
+                                replaceOccurrencesIn(readerViewLoading: readerViewLoading, url: url)
                                 return GCDWebServerDataResponse(html: readerViewLoading as String)
                             } catch _ {
                             }
@@ -124,5 +87,53 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
             let errorString: String = .ReaderModeHandlerError
             return GCDWebServerDataResponse(html: errorString) // TODO Needs a proper error page
         }
+    }
+
+    private static func generateHtmlFor(readabilityResult: ReadabilityResult,
+                                        profile: Profile) -> GCDWebServerDataResponse? {
+        var readerModeStyle = ReaderModeStyle.defaultStyle()
+
+        // We have this page in our cache, so we can display it. Just grab the correct style from the
+        // profile and then generate HTML from the Readability results.
+        if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle),
+           let style = ReaderModeStyle(windowUUID: nil, dict: dict) {
+            readerModeStyle = style
+        } else {
+            readerModeStyle.theme = ReaderModeTheme.preferredTheme(window: nil)
+        }
+
+        guard let html = ReaderModeUtils.generateReaderContent(
+            readabilityResult,
+            initialStyle: readerModeStyle
+        ),
+              let response = GCDWebServerDataResponse(html: html) else { return nil }
+        // Apply a Content Security Policy that disallows everything except images from
+        // anywhere and fonts and css from our internal server
+        response.setValue("default-src 'none'; img-src *; style-src http://localhost:* '\(ReaderModeStyleHash)'; font-src http://localhost:*",
+                          forAdditionalHeader: "Content-Security-Policy")
+        return response
+    }
+
+    private static func replaceOccurrencesIn(readerViewLoading: NSMutableString, url: URL) {
+        readerViewLoading.replaceOccurrences(
+            of: "%ORIGINAL-URL%",
+            with: url.absoluteString,
+            options: .literal,
+            range: NSRange(location: 0, length: readerViewLoading.length))
+        readerViewLoading.replaceOccurrences(
+            of: "%LOADING-TEXT%",
+            with: .ReaderModeHandlerLoadingContent,
+            options: .literal,
+            range: NSRange(location: 0, length: readerViewLoading.length))
+        readerViewLoading.replaceOccurrences(
+            of: "%LOADING-FAILED-TEXT%",
+            with: .ReaderModeHandlerPageCantDisplay,
+            options: .literal,
+            range: NSRange(location: 0, length: readerViewLoading.length))
+        readerViewLoading.replaceOccurrences(
+            of: "%LOAD-ORIGINAL-TEXT%",
+            with: .ReaderModeHandlerLoadOriginalPage,
+            options: .literal,
+            range: NSRange(location: 0, length: readerViewLoading.length))
     }
 }

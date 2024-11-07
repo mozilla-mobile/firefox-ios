@@ -31,7 +31,7 @@ final class SearchEngineSelectionViewControllerTests: XCTestCase {
         let controller = SearchEngineSelectionViewController(windowUUID: windowUUID)
         controller.coordinator = mockCoordinator
 
-        controller.didTapOpenSettings(sender: UIButton())
+        controller.didTapOpenSettings()
 
         XCTAssertEqual(mockCoordinator.navigateToSearchSettingsCalled, 1)
     }
@@ -40,7 +40,7 @@ final class SearchEngineSelectionViewControllerTests: XCTestCase {
         let controller = SearchEngineSelectionViewController(windowUUID: windowUUID)
         controller.coordinator = mockCoordinator
 
-        controller.didTapOpenSettings(sender: UIButton())
+        controller.didTapOpenSettings()
 
         XCTAssertEqual(mockCoordinator.navigateToSearchSettingsCalled, 1)
     }
