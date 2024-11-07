@@ -7,8 +7,8 @@ typealias TabDisplayViewItem = TabDisplayDiffableDataSource.TabItem
 
 final class TabDisplayDiffableDataSource: UICollectionViewDiffableDataSource<TabDisplayViewSection, TabDisplayViewItem> {
     enum TabSection: Hashable {
-        /// Adding a UUID to the section allows us to trigger a reload on the header by updating the UUID (which creates a diff) while updating the snapshot.
-        /// This avoids calling reloadSections on inactiveTabs when there are no inactiveTabs in the section, which triggers a crash on iOS 15.
+        /// Adding a UUID to the section allows us to trigger a reload on the header by updating the UUID (which creates a diff)
+        /// while updating the snapshot. This avoids calling reloadSections on inactiveTabs when there are no inactiveTabs in the section, which triggers a crash on iOS 15.
         case inactiveTabs(UUID)
         case tabs
     }
