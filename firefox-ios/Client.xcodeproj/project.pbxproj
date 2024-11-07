@@ -1641,7 +1641,7 @@
 		E17798A02BD8043800F6F0EB /* ToolbarKit in Frameworks */ = {isa = PBXBuildFile; productRef = E177989F2BD8043800F6F0EB /* ToolbarKit */; };
 		E17798A22BD804D300F6F0EB /* AddressToolbarContainerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17798A12BD804D300F6F0EB /* AddressToolbarContainerModel.swift */; };
 		E17BE4C42A94BA6900C5124E /* FakespotHighlightGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17BE4C32A94BA6900C5124E /* FakespotHighlightGroupView.swift */; };
-		E17EFC342CD16F5B00169A1F /* sticker.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E17EFC2D2CD16F5900169A1F /* sticker.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E17EFC342CD16F5B00169A1F /* Sticker.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E17EFC2D2CD16F5900169A1F /* Sticker.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E18259DB29AEB34900E6BE76 /* OnboardingNotificationCardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18259DA29AEB34900E6BE76 /* OnboardingNotificationCardHelper.swift */; };
 		E18259DF29B25E4F00E6BE76 /* UserNotificationCenterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18259DE29B25E4F00E6BE76 /* UserNotificationCenterProtocol.swift */; };
 		E18259E329B2A51B00E6BE76 /* MockNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E18259E229B2A51B00E6BE76 /* MockNotificationManager.swift */; };
@@ -2207,7 +2207,7 @@
 				047F9B3224E1FE1F00CD7DF7 /* WidgetKitExtension.appex in Embed App Extensions */,
 				397848E21ED86605004C0C0B /* NotificationService.appex in Embed App Extensions */,
 				F8324A122649A188007E4BFA /* CredentialProvider.appex in Embed App Extensions */,
-				E17EFC342CD16F5B00169A1F /* sticker.appex in Embed App Extensions */,
+				E17EFC342CD16F5B00169A1F /* Sticker.appex in Embed App Extensions */,
 				F84B22541A0920C600AAB793 /* ShareTo.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
@@ -8803,7 +8803,7 @@
 		E177989D2BD7D75A00F6F0EB /* ToolbarMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarMiddleware.swift; sourceTree = "<group>"; };
 		E17798A12BD804D300F6F0EB /* AddressToolbarContainerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressToolbarContainerModel.swift; sourceTree = "<group>"; };
 		E17BE4C32A94BA6900C5124E /* FakespotHighlightGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakespotHighlightGroupView.swift; sourceTree = "<group>"; };
-		E17EFC2D2CD16F5900169A1F /* sticker.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = sticker.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		E17EFC2D2CD16F5900169A1F /* Sticker.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Sticker.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		E17EFC312CD16F5B00169A1F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E18259DA29AEB34900E6BE76 /* OnboardingNotificationCardHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingNotificationCardHelper.swift; sourceTree = "<group>"; };
 		E18259DE29B25E4F00E6BE76 /* UserNotificationCenterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationCenterProtocol.swift; sourceTree = "<group>"; };
@@ -13710,7 +13710,7 @@
 				047F9B2724E1FE1C00CD7DF7 /* WidgetKitExtension.appex */,
 				F8324A052649A188007E4BFA /* CredentialProvider.appex */,
 				43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */,
-				E17EFC2D2CD16F5900169A1F /* sticker.appex */,
+				E17EFC2D2CD16F5900169A1F /* Sticker.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -14348,9 +14348,9 @@
 			productReference = D39FA15F1A83E0EC00EE869C /* UITests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		E17EFC2C2CD16F5900169A1F /* sticker */ = {
+		E17EFC2C2CD16F5900169A1F /* Sticker */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E17EFC3A2CD16F5B00169A1F /* Build configuration list for PBXNativeTarget "sticker" */;
+			buildConfigurationList = E17EFC3A2CD16F5B00169A1F /* Build configuration list for PBXNativeTarget "Sticker" */;
 			buildPhases = (
 				E17EFC2B2CD16F5900169A1F /* Resources */,
 			);
@@ -14358,9 +14358,9 @@
 			);
 			dependencies = (
 			);
-			name = sticker;
+			name = Sticker;
 			productName = sticker;
-			productReference = E17EFC2D2CD16F5900169A1F /* sticker.appex */;
+			productReference = E17EFC2D2CD16F5900169A1F /* Sticker.appex */;
 			productType = "com.apple.product-type.app-extension.messages-sticker-pack";
 		};
 		E69DB07C1E97DEA9008A67E6 /* SyncTelemetryTests */ = {
@@ -14822,7 +14822,7 @@
 				43BE5774278BA4D900491291 /* RustMozillaAppServices */,
 				288A2D851AB8B3260023ABC3 /* Shared */,
 				2827315D1ABC9BE600AA1954 /* Sync */,
-				E17EFC2C2CD16F5900169A1F /* sticker */,
+				E17EFC2C2CD16F5900169A1F /* Sticker */,
 			);
 		};
 /* End PBXProject section */
@@ -17178,7 +17178,7 @@
 		};
 		E17EFC332CD16F5B00169A1F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E17EFC2C2CD16F5900169A1F /* sticker */;
+			target = E17EFC2C2CD16F5900169A1F /* Sticker */;
 			targetProxy = E17EFC322CD16F5B00169A1F /* PBXContainerItemProxy */;
 		};
 		E69DB0821E97DEAA008A67E6 /* PBXTargetDependency */ = {
@@ -23915,8 +23915,9 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = sticker/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = sticker;
 				INFOPLIST_KEY_NSStickerSharingLevel = OS;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -23984,8 +23985,9 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = sticker/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = sticker;
 				INFOPLIST_KEY_NSStickerSharingLevel = OS;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -24054,8 +24056,9 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = sticker/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = sticker;
 				INFOPLIST_KEY_NSStickerSharingLevel = OS;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -24123,8 +24126,9 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = sticker/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = sticker;
 				INFOPLIST_KEY_NSStickerSharingLevel = OS;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -24192,13 +24196,14 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = sticker/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = sticker;
 				INFOPLIST_KEY_NSStickerSharingLevel = OS;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Fennec.sticker;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.Fennec.Sticker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -25450,7 +25455,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
 		};
-		E17EFC3A2CD16F5B00169A1F /* Build configuration list for PBXNativeTarget "sticker" */ = {
+		E17EFC3A2CD16F5B00169A1F /* Build configuration list for PBXNativeTarget "Sticker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E17EFC352CD16F5B00169A1F /* Fennec */,
