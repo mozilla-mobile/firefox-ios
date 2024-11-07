@@ -10,7 +10,21 @@ class AuthenticationTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2360560
     func testBasicHTTPAuthenticationPromptVisibleAndLogin() {
         navigator.openURL(testBasicHTTPAuthURL)
-        mozWaitForElementToExist(app.staticTexts["Authentication required"], timeout: 100)
+
+        // Predicate to wait for element to exist
+        let existsPredicate = NSPredicate(format: "exists == true")
+
+        // Wait for the element to appear within the timeout
+        let expectation = XCTNSPredicateExpectation(
+            predicate: existsPredicate,
+            object: app.staticTexts["Authentication required"]
+        )
+        let result = XCTWaiter().wait(for: [expectation], timeout: 5)
+
+        if result != .completed {
+            // User already logged, tap on reload button
+            app.buttons["TabLocationView.reloadButton"].tap()
+        }
         mozWaitForElementToExist(app.staticTexts[
             "A username and password are being requested by jigsaw.w3.org. The site says: test"
         ])
@@ -26,6 +40,7 @@ class AuthenticationTest: BaseTestCase {
         )
         app.alerts.textFields["Username"].typeText("guest")
         app.alerts.secureTextFields["Password"].tapAndTypeText("guest")
+        mozWaitElementHittable(element: app.alerts.buttons["Log in"], timeout: TIMEOUT)
         app.alerts.buttons["Log in"].tap()
         /* There is no other way to verify basic auth is successful as the webview is
          inaccessible after sign in to verify the success text. */
