@@ -297,7 +297,7 @@ private extension TabScrollingController {
             refresh.leadingAnchor.constraint(equalTo: webView.leadingAnchor),
             refresh.trailingAnchor.constraint(equalTo: webView.trailingAnchor),
             refresh.bottomAnchor.constraint(equalTo: scrollView.topAnchor),
-            refresh.heightAnchor.constraint(equalToConstant: 200),
+            refresh.heightAnchor.constraint(equalToConstant: scrollView.frame.height / 3.0),
             refresh.widthAnchor.constraint(equalToConstant: scrollView.frame.width)
         ])
         refresh.applyTheme(theme: DefaultThemeManager(sharedContainerIdentifier: "").getCurrentTheme(for: self.windowUUID))
@@ -635,11 +635,9 @@ class CustomRefresh: UIView,
                 self.triggerReloadAnimation()
                 return
             }
-            if scrollView.contentOffset.y < -(self.frame.height / 1.5) {
+            if scrollView.contentOffset.y < -100.0 {
                 self.blinkBackgroundProgressView()
-                self.spinProgressView()
             } else {
-                self.stopProgressViewSpin()
                 self.restoreBackgroundProgressViewIfNeeded()
                 let rotationAngle = -(scrollView.contentOffset.y / self.frame.height) * .pi * 2
                 UIView.animate(withDuration: 0.1) {
@@ -650,16 +648,14 @@ class CustomRefresh: UIView,
     }
     
     private func triggerReloadAnimation() {
-        UIView.animate(withDuration: 0.3,
+        UIView.animate(withDuration: 0.1,
                        delay: 0,
                        options: .curveEaseOut,
                        animations: {
             self.progressContainerView.transform = UX.progressViewAnimatedBackgroundFinalAnimationTransform
         }, completion: { _ in
-            // self.scrollView?.setContentOffset(.zero, animated: true)
             self.progressContainerView.backgroundColor = .clear
             self.progressContainerView.transform = .identity
-            self.stopProgressViewSpin()
             self.progressView.transform = .identity
             self.onRefreshCallback()
         })
@@ -668,6 +664,9 @@ class CustomRefresh: UIView,
     private func blinkBackgroundProgressView() {
         refreshIconHasFocus = true
         UIView.animate(withDuration: 0.3,
+                       delay: 0,
+                       usingSpringWithDamping: 0.6,
+                       initialSpringVelocity: 10,
                        animations: {
             self.progressContainerView.transform = UX.progressViewAnimatedBackgroundBlinkTransform
             self.progressContainerView.backgroundColor = self.currentTheme?.colors.layer4
@@ -683,24 +682,6 @@ class CustomRefresh: UIView,
             self.progressContainerView.transform = .identity
             self.progressContainerView.backgroundColor = .clear
         }
-    }
-
-    private func spinProgressView() {
-        guard progressView.layer.animation(forKey: "rotationAnimation") == nil else { return }
-        let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
-        let currentAngle = atan2(progressView.transform.b, progressView.transform.a)
-        rotationAnimation.fromValue = NSNumber(value: currentAngle)
-        rotationAnimation.byValue = NSNumber(value: Double.pi * 2)
-        rotationAnimation.duration = 1.0
-        rotationAnimation.isAdditive = true
-        rotationAnimation.repeatCount = .infinity
-        rotationAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
-
-        progressView.layer.add(rotationAnimation, forKey: "rotationAnimation")
-    }
-
-    private func stopProgressViewSpin() {
-        progressView.layer.removeAllAnimations()
     }
 
     func stopObserving() {
