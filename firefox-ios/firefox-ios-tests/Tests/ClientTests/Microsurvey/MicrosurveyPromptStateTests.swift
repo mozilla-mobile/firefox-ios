@@ -77,10 +77,10 @@ final class MicrosurveyPromptStateTests: XCTestCase {
         let action = getInvalidAction()
         let newState = reducer(initialState, action)
 
-        XCTAssertEqual(newState.windowUUID, initialState.windowUUID)
-        XCTAssertEqual(newState.showPrompt, initialState.showPrompt)
+        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(newState.showPrompt, true)
         XCTAssertEqual(newState.showSurvey, false)
-        XCTAssertEqual(newState.model, initialState.model)
+        XCTAssertEqual(newState.model, MicrosurveyMock.model)
     }
 
     // MARK: - Private
