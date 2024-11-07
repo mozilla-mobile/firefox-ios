@@ -37,6 +37,14 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
             scrollView?.delegate = self
             scrollView?.keyboardDismissMode = .onDrag
             configureRefreshControl()
+            tab?.onLoading = {
+                if self.tabIsLoading() {
+                    self.pullToRefreshView?.stopObserving()
+                    self.pullToRefreshView?.removeFromSuperview()
+                } else {
+                    self.configureRefreshControl()
+                }
+            }
         }
     }
 
@@ -306,12 +314,8 @@ private extension TabScrollingController {
     @objc
     func reload() {
         guard let tab = tab else { return }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            self.scrollView?.setContentOffset(.zero, animated: false)
-            tab.reloadPage()
-            self.configureRefreshControl()
-            TelemetryWrapper.recordEvent(category: .action, method: .pull, object: .reload)
-        }
+        tab.reloadPage()
+        TelemetryWrapper.recordEvent(category: .action, method: .pull, object: .reload)
     }
 
     func roundNum(_ num: CGFloat) -> CGFloat {

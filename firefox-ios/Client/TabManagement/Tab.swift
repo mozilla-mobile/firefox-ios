@@ -572,8 +572,15 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
             )
 
             tabDelegate?.tab(self, didCreateWebView: webView)
+            webViewLoadingObserver = webView.observe(\.isLoading) { _, _ in
+                print("FF \(webView.isLoading)")
+                self.onLoading?()
+            }
         }
     }
+    
+    var onLoading: VoidReturnCallback?
+    private var webViewLoadingObserver: NSObjectProtocol?
 
     func restore(_ webView: WKWebView, interactionState: Data? = nil) {
         if let url = url {
