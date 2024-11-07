@@ -8,14 +8,14 @@ import MenuKit
 import Redux
 
 final class SearchEngineSelectionAction: Action {
-    let searchEngines: [OpenSearchEngine]?
-    let selectedSearchEngine: OpenSearchEngine?
+    let searchEngines: [SearchEngineModel]?
+    let selectedSearchEngine: SearchEngineModel?
 
     init(
         windowUUID: WindowUUID,
         actionType: ActionType,
-        searchEngines: [OpenSearchEngine]? = nil,
-        selectedSearchEngine: OpenSearchEngine? = nil
+        searchEngines: [SearchEngineModel]? = nil,
+        selectedSearchEngine: SearchEngineModel? = nil
     ) {
         self.searchEngines = searchEngines
         self.selectedSearchEngine = selectedSearchEngine

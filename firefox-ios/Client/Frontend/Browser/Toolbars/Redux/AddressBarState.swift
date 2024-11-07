@@ -25,7 +25,7 @@ struct AddressBarState: StateType, Equatable {
     let didStartTyping: Bool
     let showQRPageAction: Bool
     /// Stores the alternative search engine that the user has temporarily selected (otherwise use the default)
-    let alternativeSearchEngine: OpenSearchEngine?
+    let alternativeSearchEngine: SearchEngineModel?
 
     private static let qrCodeScanAction = ToolbarActionState(
         actionType: .qrCode,
@@ -117,7 +117,8 @@ struct AddressBarState: StateType, Equatable {
          isLoading: Bool,
          readerModeState: ReaderModeState?,
          didStartTyping: Bool,
-         showQRPageAction: Bool) {
+         showQRPageAction: Bool,
+         alternativeSearchEngine: SearchEngineModel? = nil) {
         self.windowUUID = windowUUID
         self.navigationActions = navigationActions
         self.pageActions = pageActions

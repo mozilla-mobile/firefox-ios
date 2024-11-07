@@ -178,3 +178,9 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
         return nil
     }
 }
+
+extension OpenSearchEngine {
+    func generateModel() -> SearchEngineModel {
+        return SearchEngineModel(name: self.shortName, image: self.image)
+    }
+}

@@ -10,9 +10,9 @@ struct SearchEngineSelectionState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     var shouldDismiss: Bool
     // Default search engine should appear in position 0
-    var searchEngines: [OpenSearchEngine]
+    var searchEngines: [SearchEngineModel]
     // The currently selected search engine, if different from the default. Nil means the user hasn't changed the default.
-    var selectedSearchEngine: OpenSearchEngine?
+    var selectedSearchEngine: SearchEngineModel?
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let state = store.state.screenState(
@@ -38,8 +38,8 @@ struct SearchEngineSelectionState: ScreenState, Equatable {
 
     private init(
         windowUUID: WindowUUID,
-        searchEngines: [OpenSearchEngine],
-        selectedSearchEngine: OpenSearchEngine?,
+        searchEngines: [SearchEngineModel],
+        selectedSearchEngine: SearchEngineModel?,
         shouldDismiss: Bool = false
     ) {
         self.windowUUID = windowUUID

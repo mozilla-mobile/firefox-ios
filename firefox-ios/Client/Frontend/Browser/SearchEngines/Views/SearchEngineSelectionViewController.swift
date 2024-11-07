@@ -128,10 +128,10 @@ class SearchEngineSelectionViewController: UIViewController,
         )
     }
 
-    func createSearchEngineTableData(withSearchEngines: [OpenSearchEngine]) -> [SearchEngineSection] {
+    func createSearchEngineTableData(withSearchEngines: [SearchEngineModel]) -> [SearchEngineSection] {
         let searchEngineElements = withSearchEngines.map { engine in
             SearchEngineElement(fromSearchEngine: engine, withAction: { [weak self] in
-                self?.didTap(searchEngine: engine)
+                self?.didTap(searchEngineModel: engine)
             })
         }
 
@@ -172,12 +172,12 @@ class SearchEngineSelectionViewController: UIViewController,
         coordinator?.navigateToSearchSettings(animated: true)
     }
 
-    func didTap(searchEngine: OpenSearchEngine) {
+    func didTap(searchEngineModel: SearchEngineModel) {
         store.dispatch(
             SearchEngineSelectionAction(
                 windowUUID: self.windowUUID,
                 actionType: SearchEngineSelectionActionType.didTapSearchEngine,
-                selectedSearchEngine: searchEngine
+                selectedSearchEngine: searchEngineModel
             )
         )
 

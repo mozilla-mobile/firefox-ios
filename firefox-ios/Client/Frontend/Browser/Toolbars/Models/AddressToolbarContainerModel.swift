@@ -95,11 +95,12 @@ class AddressToolbarContainerModel: Equatable {
                                                                       windowUUID: windowUUID)
 
         // If the user has selected an alternative search engine, use that. Otherwise, use the default engine.
-        let searchEngine = state.addressToolbar.alternativeSearchEngine ?? profile.searchEnginesManager.defaultEngine
+        let searchEngineModel = state.addressToolbar.alternativeSearchEngine
+                                ?? profile.searchEnginesManager.defaultEngine?.generateModel()
 
         self.windowUUID = windowUUID
-        self.searchEngineName = searchEngine?.shortName ?? ""
-        self.searchEngineImage = searchEngine?.image ?? UIImage()
+        self.searchEngineName = searchEngineModel?.name ?? ""
+        self.searchEngineImage = searchEngineModel?.image ?? UIImage()
         self.searchEnginesManager = profile.searchEnginesManager
         self.lockIconImageName = state.addressToolbar.lockIconImageName
         self.lockIconNeedsTheming = state.addressToolbar.lockIconNeedsTheming
