@@ -592,6 +592,8 @@ class CustomRefresh: UIView,
     private var obeserveTicket: NSKeyValueObservation?
     private var currentTheme: Theme?
     private var refreshIconHasFocus = false
+    private lazy var easterEggGif = loadGifFromBundle(named: "gif")
+    private var easterEggTimer: Timer?
 
     
     init(scrollView: UIScrollView?,
@@ -607,6 +609,18 @@ class CustomRefresh: UIView,
         fatalError()
     }
     private func setupSubviews() {
+        if let easterEggGif {
+            addSubview(easterEggGif)
+            easterEggGif.translatesAutoresizingMaskIntoConstraints = false
+            easterEggGif.transform = .init(translationX: 0, y: 200)
+            NSLayoutConstraint.activate([
+                easterEggGif.topAnchor.constraint(equalTo: topAnchor, constant: 30.0),
+                easterEggGif.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 50.0),
+                easterEggGif.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -250),
+                easterEggGif.bottomAnchor.constraint(equalTo: bottomAnchor)
+            ])
+        }
+        
         progressContainerView.layer.cornerRadius = 15.0
         progressContainerView.backgroundColor = .clear
         addSubview(progressContainerView)
@@ -641,6 +655,11 @@ class CustomRefresh: UIView,
             }
             if scrollView.contentOffset.y < -100.0 {
                 self.blinkBackgroundProgressView()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+                    UIView.animate(withDuration: 0.3) {
+                        self.easterEggGif?.transform = .identity
+                    }
+                }
             } else {
                 self.restoreBackgroundProgressViewIfNeeded()
                 let rotationAngle = -(scrollView.contentOffset.y / self.frame.height) * .pi * 2
@@ -698,6 +717,28 @@ class CustomRefresh: UIView,
         currentTheme = theme
         backgroundColor = theme.colors.layer1
         progressView.tintColor = theme.colors.iconPrimary
+    }
+    
+    func loadGifFromBundle(named name: String) -> UIImageView? {
+        guard let gifPath = Bundle.main.path(forResource: name, ofType: "gif"),
+              let gifData = NSData(contentsOfFile: gifPath) as Data?,
+              let source = CGImageSourceCreateWithData(gifData as CFData, nil) else {
+            return nil
+        }
+        
+        var frames: [UIImage] = []
+        let frameCount = CGImageSourceGetCount(source)
+        
+        for i in 0..<frameCount {
+            if let cgImage = CGImageSourceCreateImageAtIndex(source, i, nil) {
+                frames.append(UIImage(cgImage: cgImage))
+            }
+        }
+        
+        let animatedImage = UIImage.animatedImage(with: frames, duration: Double(frameCount) * 0.1)
+        let imageView = UIImageView(image: animatedImage)
+        imageView.contentMode = .scaleAspectFill
+        return imageView
     }
 
     deinit {
