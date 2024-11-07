@@ -32,7 +32,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
         static let print = StandardImageIdentifiers.Large.print
         static let share = StandardImageIdentifiers.Large.share
         static let addToShortcuts = StandardImageIdentifiers.Large.pin
-        static let removeFromShortcuts = StandardImageIdentifiers.Large.pinSlash
+        static let removeFromShortcuts = StandardImageIdentifiers.Large.pinSlashFill
         static let saveToReadingList = StandardImageIdentifiers.Large.readingListAdd
         static let removeFromReadingList = StandardImageIdentifiers.Large.readingListSlashFill
         static let bookmarkThisPage = StandardImageIdentifiers.Large.bookmark
@@ -69,6 +69,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     }
 
     // MARK: - Main Menu
+
     private func getMainMenuElements(
         with uuid: WindowUUID,
         and tabInfo: MainMenuTabInfo
@@ -135,11 +136,12 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                         )
                     )
                 }
-            )
+            ),
         ])
     }
 
     // MARK: - Tools Section
+
     private func getToolsSection(
         with uuid: WindowUUID,
         and configuration: MainMenuTabInfo
@@ -207,12 +209,12 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                             )
                         )
                     }
-                )
+                ),
             ]
         )
     }
 
-    private func getToolsSubmenuDescription(with tabInfo: MainMenuTabInfo) -> String {
+    private func getToolsSubmenuDescription(with _: MainMenuTabInfo) -> String {
         typealias Preview = String.MainMenu.Submenus.Tools
         var description = ""
 
@@ -285,6 +287,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     }
 
     // MARK: - Tools Submenu
+
     private func getToolsSubmenu(
         with uuid: WindowUUID,
         tabInfo: MainMenuTabInfo
@@ -467,6 +470,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     }
 
     // MARK: - Save Submenu
+
     private func getSaveSubmenu(
         with uuid: WindowUUID,
         and tabInfo: MainMenuTabInfo
@@ -475,7 +479,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             options: [
                 configureBookmarkItem(with: uuid, and: tabInfo),
                 configureShortcutsItem(with: uuid, and: tabInfo),
-                configureReadingListItem(with: uuid, and: tabInfo)
+                configureReadingListItem(with: uuid, and: tabInfo),
             ]
         )]
     }
@@ -658,11 +662,12 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                         )
                     )
                 }
-            )
+            ),
         ])
     }
 
     // MARK: - Other Tools Section
+
     private func getOtherToolsSection(
         with uuid: WindowUUID,
         isHomepage: Bool,
@@ -696,8 +701,10 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                 iconName: Icons.whatsNew,
                 isEnabled: true,
                 isActive: false,
-                a11yLabel: String(format: .MainMenu.OtherToolsSection.AccessibilityLabels.WhatsNew,
-                                  AppName.shortName.rawValue),
+                a11yLabel: String(
+                    format: .MainMenu.OtherToolsSection.AccessibilityLabels.WhatsNew,
+                    AppName.shortName.rawValue
+                ),
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.whatsNew,
                 action: {
@@ -713,7 +720,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                         )
                     )
                 }
-            )
+            ),
         ]
 
         let standardOptions = [
@@ -757,7 +764,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                         )
                     )
                 }
-            )
+            ),
         ]
 
         return MenuSection(options: isHomepage ? homepageOptions + standardOptions : standardOptions)
