@@ -25,7 +25,7 @@ struct Folder: Equatable {
     }
 
     static func localizedTitle(_ guid: String) -> String? {
-        return LocalizedRootBookmarkFolderStrings[guid]
+        return LegacyLocalizedRootBookmarkFolderStrings[guid]
     }
 }
 

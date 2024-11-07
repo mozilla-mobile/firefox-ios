@@ -167,11 +167,6 @@ extension String {
                 tableName: "Bookmarks",
                 value: "Deleted “%@”",
                 comment: "Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark.")
-            public static let BookmarksTopLevelTitle = MZLocalizedString(
-                key: "Bookmarks.Menu.BookmarksTopLevelTitle.v131",
-                tableName: "Bookmarks",
-                value: "Bookmarks",
-                comment: "Name of the top level bookmarks folder present in the folder selection menu of the`Edit Bookmark` screen")
             public static let DeleteBookmark = MZLocalizedString(
                 key: "Bookmarks.Menu.DeleteBookmark.v132",
                 tableName: "Bookmarks",
@@ -3291,8 +3286,13 @@ extension String {
 
 // MARK: - Root Bookmarks folders
 extension String {
-    public static let BookmarksFolderTitleMobile = MZLocalizedString(
+    public static let LegacyBookmarksFolderTitleMobile = MZLocalizedString(
         key: "Mobile Bookmarks",
+        tableName: "Storage",
+        value: nil,
+        comment: "The legacy title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
+    public static let BookmarksFolderTitleMobile = MZLocalizedString(
+        key: "Bookmarks.v133",
         tableName: "Storage",
         value: nil,
         comment: "The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
