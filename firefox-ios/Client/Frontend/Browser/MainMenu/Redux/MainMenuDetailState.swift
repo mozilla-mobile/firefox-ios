@@ -156,7 +156,8 @@ struct MainMenuDetailsState: ScreenState, Equatable {
         return MainMenuDetailsState(
             windowUUID: state.windowUUID,
             menuElements: state.menuElements,
-            submenuType: state.submenuType
+            submenuType: state.submenuType,
+            isHomepage: state.isHomepage
         )
     }
 }

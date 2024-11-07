@@ -25,6 +25,7 @@ class AddressToolbarContainerModelTests: XCTestCase {
                                            url: nil,
                                            searchTerm: nil,
                                            lockIconImageName: nil,
+                                           lockIconNeedsTheming: true,
                                            safeListedURLImageName: nil,
                                            isEditing: false,
                                            isScrollingDuringEdit: false,
@@ -33,8 +34,6 @@ class AddressToolbarContainerModelTests: XCTestCase {
                                            readerModeState: nil,
                                            didStartTyping: false,
                                            showQRPageAction: true)
-                                           lockIconImageName: "",
-                                           lockIconNeedsTheming: true)
         let navigationState = NavigationBarState(windowUUID: windowUUID, actions: [], displayBorder: false)
         let state = ToolbarState(windowUUID: windowUUID,
                                  toolbarPosition: .top,
