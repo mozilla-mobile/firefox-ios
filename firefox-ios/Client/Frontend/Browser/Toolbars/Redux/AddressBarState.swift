@@ -704,7 +704,7 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
-    private static func handleDidTapSearchEngine(state: Self, action: Action) -> AddressBarState {
+    private static func handleDidTapSearchEngine(state: Self, action: Action) -> Self {
         guard let searchEngineSelectionAction = action as? SearchEngineSelectionAction,
               let selectedSearchEngine = searchEngineSelectionAction.selectedSearchEngine
         else { return defaultState(from: state) }
@@ -731,7 +731,7 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
-    private static func handleDidClearAlternativeSearchEngine(state: Self, action: Action) -> AddressBarState {
+    private static func handleDidClearAlternativeSearchEngine(state: Self, action: Action) -> Self {
         guard action is SearchEngineSelectionAction else { return defaultState(from: state) }
 
         return AddressBarState(
@@ -756,7 +756,7 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
-    static func defaultState(from state: AddressBarState) -> AddressBarState {
+    static func defaultState(from state: AddressBarState) -> Self {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
@@ -793,7 +793,7 @@ struct AddressBarState: StateType, Equatable {
         let isShowingNavigationToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
 
         if isEditing {
-            // back carrot when in edit mode
+            // back caret when in edit mode
             actions.append(cancelEditAction)
         } else if !isShowingNavigationToolbar {
             // otherwise back/forward and maybe data clearance when navigation toolbar is hidden
