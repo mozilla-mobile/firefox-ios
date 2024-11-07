@@ -33,6 +33,11 @@ class TabTrayCoordinator: BaseCoordinator,
         initializeTabTrayViewController(selectedTab: tabTraySection)
     }
 
+    func dismissChildTabTrayPanels() {
+        let childVCs: [UIViewController] =  tabTrayViewController.childPanelControllers.flatMap { $0.viewControllers }
+        childVCs.forEach { $0.removeFromParent() }
+    }
+
     private func initializeTabTrayViewController(selectedTab: TabTrayPanelType) {
         tabTrayViewController = TabTrayViewController(selectedTab: selectedTab, windowUUID: tabManager.windowUUID)
         router.setRootViewController(tabTrayViewController)
