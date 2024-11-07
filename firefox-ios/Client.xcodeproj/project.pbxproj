@@ -691,6 +691,7 @@
 		8A19ACB42A3290D9001C2147 /* ContentBlockerSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A19ACB32A3290D9001C2147 /* ContentBlockerSetting.swift */; };
 		8A19ACB62A3290F9001C2147 /* NotificationsSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A19ACB52A3290F9001C2147 /* NotificationsSetting.swift */; };
 		8A19ACB82A329128001C2147 /* PrivacyPolicySetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A19ACB72A329128001C2147 /* PrivacyPolicySetting.swift */; };
+		8A1A66072CDD168A00DD883C /* MockTopSiteHistoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1A66062CDD168A00DD883C /* MockTopSiteHistoryManager.swift */; };
 		8A1A93582B757C7C0069C190 /* gradient.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A1A93522B757C7B0069C190 /* gradient.json */; };
 		8A1A93592B757C7C0069C190 /* landscape.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A1A93532B757C7B0069C190 /* landscape.json */; };
 		8A1A935A2B757C7C0069C190 /* portrait.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A1A93542B757C7B0069C190 /* portrait.json */; };
@@ -6975,6 +6976,7 @@
 		8A19ACB32A3290D9001C2147 /* ContentBlockerSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentBlockerSetting.swift; sourceTree = "<group>"; };
 		8A19ACB52A3290F9001C2147 /* NotificationsSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSetting.swift; sourceTree = "<group>"; };
 		8A19ACB72A329128001C2147 /* PrivacyPolicySetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicySetting.swift; sourceTree = "<group>"; };
+		8A1A66062CDD168A00DD883C /* MockTopSiteHistoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTopSiteHistoryManager.swift; sourceTree = "<group>"; };
 		8A1A93522B757C7B0069C190 /* gradient.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = gradient.json; sourceTree = "<group>"; };
 		8A1A93532B757C7B0069C190 /* landscape.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = landscape.json; sourceTree = "<group>"; };
 		8A1A93542B757C7B0069C190 /* portrait.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = portrait.json; sourceTree = "<group>"; };
@@ -11289,6 +11291,7 @@
 				8A87B4362CC1A910003A9239 /* MockPocketManager.swift */,
 				8A6B799C2CDBDAE4003C3077 /* MockContileProvider.swift */,
 				8A6B799F2CDBDB0C003C3077 /* MockGoogleTopSiteManager.swift */,
+				8A1A66062CDD168A00DD883C /* MockTopSiteHistoryManager.swift */,
 			);
 			path = Mock;
 			sourceTree = "<group>";
@@ -16795,6 +16798,7 @@
 				0EC57CE52CA31E59002E3F04 /* PasswordGeneratorStateTests.swift in Sources */,
 				212985E72A72B39D00546684 /* ThemeSettingsControllerTests.swift in Sources */,
 				8A9E46BD2A6599E5003327D4 /* MockStatusBarScrollDelegate.swift in Sources */,
+				8A1A66072CDD168A00DD883C /* MockTopSiteHistoryManager.swift in Sources */,
 				8A5189C92C1B614E00CDB668 /* SearchViewModelTests.swift in Sources */,
 				E1463D0629830E4F0074E16E /* MockUserNotificationCenter.swift in Sources */,
 				439B78182A09721600CAAE37 /* FormAutofillHelperTests.swift in Sources */,

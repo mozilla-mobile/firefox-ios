@@ -94,6 +94,15 @@ final class TopSitesManagerTests: XCTestCase {
         XCTAssertEqual(topSites.count, 0)
     }
 
+    func test_getTopSites_withNilHistoryBasedTiles_returnNoTopSites() async throws {
+        let subject = try createSubject(
+            topSiteHistoryManager: MockTopSiteHistoryManager(historyBasedSites: nil)
+        )
+
+        let topSites = await subject.getTopSites()
+        XCTAssertEqual(topSites.count, 0)
+    }
+
     private func createSubject(
         googleTopSiteManager: GoogleTopSiteManagerProvider = MockGoogleTopSiteManager(mockSiteData: nil),
         contileProvider: ContileProviderInterface = MockContileProvider(
@@ -112,19 +121,5 @@ final class TopSitesManagerTests: XCTestCase {
         )
         trackForMemoryLeaks(subject, file: file, line: line)
         return subject
-    }
-}
-
-class MockTopSiteHistoryManager: TopSiteHistoryManagerProvider {
-    private let historyBasedSites: [Site]
-
-    init(historyBasedSites: [Site] = [
-        Site(url: "www.example.com", title: "History-Based Tile Test")
-    ]) {
-        self.historyBasedSites = historyBasedSites
-    }
-
-    func getTopSites(completion: @escaping ([Site]?) -> Void) {
-        completion(historyBasedSites)
     }
 }
