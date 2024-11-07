@@ -20,15 +20,24 @@ open class AppInfo {
     }
 
     public static var bundleIdentifier: String {
-        return applicationBundle.object(forInfoDictionaryKey: "CFBundleIdentifier") as! String
+        guard let bundleIdentifier = applicationBundle.object(forInfoDictionaryKey: "CFBundleIdentifier") as? String else {
+            return ""
+        }
+        return bundleIdentifier
     }
 
     public static var appVersion: String {
-        return applicationBundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
+        guard let appVersion = applicationBundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String else {
+            return ""
+        }
+        return appVersion
     }
 
     public static var buildNumber: String {
-        return applicationBundle.object(forInfoDictionaryKey: String(kCFBundleVersionKey)) as! String
+        guard let buildNumber = applicationBundle.object(forInfoDictionaryKey: String(kCFBundleVersionKey)) as? String else {
+            return ""
+        }
+        return buildNumber
     }
 
     /// Return the base bundle identifier.
@@ -38,7 +47,7 @@ open class AppInfo {
     /// of the *base* bundle identifier.
     public static var baseBundleIdentifier: String {
         let bundle = Bundle.main
-        let packageType = bundle.object(forInfoDictionaryKey: "CFBundlePackageType") as! String
+        guard let packageType = bundle.object(forInfoDictionaryKey: "CFBundlePackageType") as? String else { return "" }
         let baseBundleIdentifier = bundle.bundleIdentifier!
         if packageType == "XPC!" {
             let components = baseBundleIdentifier.components(separatedBy: ".")
