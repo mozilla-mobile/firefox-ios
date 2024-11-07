@@ -264,13 +264,12 @@ class TabDisplayView: UIView,
         collectionView.backgroundColor = theme.colors.layer3
     }
 
-
-   private func getSection(for sectionIndex: Int) -> TabDisplayViewSection {
-       guard 
+    private func getSection(for sectionIndex: Int) -> TabDisplayViewSection {
+        guard
             let snapshot = dataSource?.snapshot(),
             sectionIndex >= 0,
             sectionIndex < snapshot.sectionIdentifiers.count
-       else { return TabDisplayViewSection.tabs }
+        else { return TabDisplayViewSection.tabs }
 
         return snapshot.sectionIdentifiers[sectionIndex]
     }
