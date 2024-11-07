@@ -28,7 +28,7 @@ class TabManagerMiddleware {
         } else if let action = action as? TabTrayAction {
             self.resolveTabTrayActions(action: action, state: state)
         } else if let action = action as? TabPanelViewAction {
-            self.resovleTabPanelViewActions(action: action, state: state)
+            self.resolveTabPanelViewActions(action: action, state: state)
         } else if let action = action as? MainMenuAction {
             self.resolveMainMenuActions(with: action, appState: state)
         } else if let action = action as? HeaderAction {
@@ -82,12 +82,14 @@ class TabManagerMiddleware {
             guard let panelType = action.panelType else { return }
             changePanel(panelType, uuid: action.windowUUID)
 
+        case TabTrayActionType.closePrivateTabsSettingToggled:
+            preserveTabs(uuid: action.windowUUID)
         default:
             break
         }
     }
 
-    private func resovleTabPanelViewActions(action: TabPanelViewAction, state: AppState) {
+    private func resolveTabPanelViewActions(action: TabPanelViewAction, state: AppState) {
         switch action.actionType {
         case TabPanelViewActionType.tabPanelDidLoad:
             let isPrivate = action.panelType == .privateTabs
@@ -947,5 +949,10 @@ class TabManagerMiddleware {
                 )
             )
         }
+    }
+
+    private func preserveTabs(uuid: WindowUUID) {
+        let tabManager = tabManager(for: uuid)
+        tabManager.preserveTabs()
     }
 }
