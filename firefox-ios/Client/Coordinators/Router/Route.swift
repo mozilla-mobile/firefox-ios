@@ -65,6 +65,7 @@ enum Route: Equatable {
     /// - Parameter section: An instance of `DefaultBrowserSection` indicating the section of the default browser
     ///                      settings to be displayed.
     case defaultBrowser(section: DefaultBrowserSection)
+    case sharesheet(url: URL)
 
     /// An enumeration representing different sections of the home panel.
     enum HomepanelSection: String, CaseIterable, Equatable {

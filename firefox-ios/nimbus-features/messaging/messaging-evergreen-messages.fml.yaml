@@ -35,7 +35,10 @@ import:
                 title: Default Browser/DefaultBrowserCard.Title
                 text: Default Browser/DefaultBrowserCard.Description
                 button-label: Default Browser/DefaultBrowserCard.Button.v2
-                action: MAKE_DEFAULT_BROWSER_WITH_TUTORIAL
+                action: OPEN_SHARE_SHEET
+                action-params:
+                    url: example.com
+                    text: "TEST"
             triggers:
               ON_FOURTH_LAUNCH_THIS_YEAR: "'app_cycle.foreground'|eventSum('Years', 1, 0) > 3"
 

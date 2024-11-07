@@ -247,7 +247,7 @@ class BrowserCoordinator: BaseCoordinator,
         }
 
         switch route {
-        case .searchQuery, .search, .searchURL, .glean, .homepanel, .action, .fxaSignIn, .defaultBrowser:
+        case .searchQuery, .search, .searchURL, .glean, .homepanel, .action, .fxaSignIn, .defaultBrowser, .sharesheet:
             return true
         case let .settings(section):
             return canHandleSettings(with: section)
@@ -272,7 +272,10 @@ class BrowserCoordinator: BaseCoordinator,
 
         case let .searchURL(url, tabId):
             handle(searchURL: url, tabId: tabId)
-
+          
+        case let .sharesheet(url):
+            showShareSheet(with: url)
+          
         case let .glean(url):
             glean.handleDeeplinkUrl(url: url)
 
