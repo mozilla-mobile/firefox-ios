@@ -118,7 +118,7 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
 
         decisionHandler(res)
     }
-    
+
     private func restoreWebViewContentBackgroundToDefault(_ webView: WKWebView) {
         webView.evaluateJavascriptInDefaultContentWorld("document.body.style.backgroundColor = '';")
     }

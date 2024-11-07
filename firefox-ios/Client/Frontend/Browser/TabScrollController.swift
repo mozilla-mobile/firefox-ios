@@ -36,7 +36,7 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
             self.scrollView?.addGestureRecognizer(panGesture)
             scrollView?.delegate = self
             scrollView?.keyboardDismissMode = .onDrag
-//            configureRefreshControl(isEnabled: true)
+            configureRefreshControl()
         }
     }
 
@@ -100,6 +100,11 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
     }()
 
     private var scrollView: UIScrollView? { return tab?.webView?.scrollView }
+    private var pullToRefreshView: CustomRefresh? {
+        return tab?.webView?.scrollView.subviews.first(where: {
+            $0 is CustomRefresh
+        }) as? CustomRefresh
+    }
     var contentOffset: CGPoint { return scrollView?.contentOffset ?? .zero }
     private var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
     private var topScrollHeight: CGFloat { header?.frame.height ?? 0 }
@@ -182,7 +187,7 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
                 updateToolbarState()
             }
         }
-        
+
         if let refresh = scrollView?.subviews.first(where: {
             $0 is CustomRefresh
         }) {
@@ -273,92 +278,40 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
     }
 }
 
-class CustomRefresh: UIView,
-                     ThemeApplicable {
-    private struct UX {
-        static let progressViewPadding: CGFloat = 10.0
-    }
-    
-    private let onRefreshCallback: VoidReturnCallback
-    private let progressView = UIActivityIndicatorView()
-    private weak var scrollView: UIScrollView?
-    private var obeserveTicket: NSKeyValueObservation?
-    
-    init(scrollView: UIScrollView?,
-         onRefreshCallback: @escaping VoidReturnCallback) {
-        self.scrollView = scrollView
-        self.onRefreshCallback = onRefreshCallback
-        super.init(frame: .zero)
-        setupSubviews()
-    }
-    required init?(coder: NSCoder) {
-        fatalError()
-    }
-    private func setupSubviews() {
-        // scrollView?.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handleScrollViewPan)))
-        obeserveTicket = scrollView?.observe(\.contentOffset) { _, _ in
-            guard let contentOffset = self.scrollView?.contentOffset else { return }
-            if contentOffset.y > -(self.frame.height / 1.4) {
-                // self.onRefreshCallback()
-                UIView.animate(withDuration: 0.6, animations: {
-                    self.progressView.backgroundColor = .cyan
-                }, completion: { _ in
-                    UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-                    self.obeserveTicket?.invalidate()
-                    self.onRefreshCallback()
-                })
-            }
-        }
-        addSubview(progressView)
-        progressView.startAnimating()
-        progressView.style = .large
-        progressView.layer.cornerRadius = 30.0
-        progressView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            progressView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            progressView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.progressViewPadding)
-        ])
-    }
-    
-    // MARK: - ThemeApplicable
-    
-    func applyTheme(theme: any Theme) {
-        backgroundColor = theme.colors.layer5
-        progressView.color = theme.colors.textPrimary
-    }
-}
-
 // MARK: - Private
 private extension TabScrollingController {
-    func configureRefreshControl(isEnabled: Bool) {
-        if isEnabled {
-            guard let scrollView, !scrollView.subviews.contains(where: {
-                $0 is CustomRefresh
-            }) else { return }
-            let refresh = CustomRefresh(scrollView: self.scrollView) {
-                self.reload()
-            }
-            self.scrollView?.addSubview(refresh)
-            refresh.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                refresh.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-                refresh.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-                refresh.bottomAnchor.constraint(equalTo: scrollView.topAnchor),
-                refresh.heightAnchor.constraint(equalToConstant: 200),
-                refresh.widthAnchor.constraint(equalToConstant: scrollView.contentSize.width)
-            ])
-            refresh.applyTheme(theme: DefaultThemeManager(sharedContainerIdentifier: "").getCurrentTheme(for: self.windowUUID))
+    func configureRefreshControl() {
+        guard let scrollView,
+              let webView = tab?.webView,
+              !scrollView.subviews.contains(where: { $0 is CustomRefresh })
+        else {
+            pullToRefreshView?.startObserving()
+            return
         }
+        let refresh = CustomRefresh(scrollView: self.scrollView) {
+            self.reload()
+        }
+        self.scrollView?.addSubview(refresh)
+        refresh.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            refresh.leadingAnchor.constraint(equalTo: webView.leadingAnchor),
+            refresh.trailingAnchor.constraint(equalTo: webView.trailingAnchor),
+            refresh.bottomAnchor.constraint(equalTo: scrollView.topAnchor),
+            refresh.heightAnchor.constraint(equalToConstant: 200),
+            refresh.widthAnchor.constraint(equalToConstant: scrollView.frame.width)
+        ])
+        refresh.applyTheme(theme: DefaultThemeManager(sharedContainerIdentifier: "").getCurrentTheme(for: self.windowUUID))
     }
 
     @objc
     func reload() {
         guard let tab = tab else { return }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-            self.configureRefreshControl(isEnabled: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            self.scrollView?.setContentOffset(.zero, animated: false)
             tab.reloadPage()
+            self.configureRefreshControl()
+            TelemetryWrapper.recordEvent(category: .action, method: .pull, object: .reload)
         }
-        TelemetryWrapper.recordEvent(category: .action, method: .pull, object: .reload)
     }
 
     func roundNum(_ num: CGFloat) -> CGFloat {
@@ -538,7 +491,6 @@ extension TabScrollingController: UIGestureRecognizerDelegate {
 extension TabScrollingController: UIScrollViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         lastContentOffsetY = scrollView.contentOffset.y
-        configureRefreshControl(isEnabled: true)
     }
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
@@ -600,12 +552,13 @@ extension TabScrollingController: UIScrollViewDelegate {
     }
 
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-        configureRefreshControl(isEnabled: false)
+        pullToRefreshView?.stopObserving()
+        pullToRefreshView?.removeFromSuperview()
         self.isUserZoom = true
     }
 
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        configureRefreshControl(isEnabled: true)
+        configureRefreshControl()
         self.isUserZoom = false
     }
 
@@ -615,5 +568,154 @@ extension TabScrollingController: UIScrollViewDelegate {
             return false
         }
         return true
+    }
+}
+
+class CustomRefresh: UIView,
+                     ThemeApplicable {
+    private struct UX {
+        static let progressViewPadding: CGFloat = 24.0
+        static let progressViewSize: CGFloat = 40.0
+        static let progressViewAnimatedBackgroundSize: CGFloat = 30.0
+        static let progressViewAnimatedBackgroundBlinkTransform = CGAffineTransform(scaleX: 2.0, y: 2.0)
+        static let progressViewAnimatedBackgroundFinalAnimationTransform = CGAffineTransform(scaleX: 15.0, y: 15.0)
+    }
+
+    private let onRefreshCallback: VoidReturnCallback
+    private let progressView = UIImageView(image: UIImage(resource: .arrowClockwiseLarge).withRenderingMode(.alwaysTemplate))
+    private let progressContainerView = UIView()
+    private weak var scrollView: UIScrollView?
+    private var obeserveTicket: NSKeyValueObservation?
+    private var currentTheme: Theme?
+    private var refreshIconHasFocus = false
+
+    
+    init(scrollView: UIScrollView?,
+         onRefreshCallback: @escaping VoidReturnCallback) {
+        self.scrollView = scrollView
+        self.onRefreshCallback = onRefreshCallback
+        super.init(frame: .zero)
+        clipsToBounds = true
+        setupSubviews()
+        startObserving()
+    }
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
+    private func setupSubviews() {
+        progressContainerView.layer.cornerRadius = 15.0
+        progressContainerView.backgroundColor = .clear
+        addSubview(progressContainerView)
+        progressContainerView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            progressContainerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.progressViewPadding),
+            progressContainerView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            progressContainerView.heightAnchor.constraint(equalToConstant: UX.progressViewAnimatedBackgroundSize),
+            progressContainerView.widthAnchor.constraint(equalToConstant: UX.progressViewAnimatedBackgroundSize)
+        ])
+
+        addSubview(progressView)
+        progressView.contentMode = .scaleAspectFit
+        progressView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            progressView.centerYAnchor.constraint(equalTo: progressContainerView.centerYAnchor),
+            progressView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            progressView.heightAnchor.constraint(equalToConstant: UX.progressViewSize),
+            progressView.widthAnchor.constraint(equalToConstant: UX.progressViewSize)
+        ])
+    }
+
+    func startObserving() {
+        obeserveTicket = scrollView?.observe(\.contentOffset) { _, _ in
+            guard let scrollView = self.scrollView, scrollView.isDragging
+            else {
+                guard self.refreshIconHasFocus else { return }
+                self.refreshIconHasFocus = false
+                self.obeserveTicket?.invalidate()
+                self.triggerReloadAnimation()
+                return
+            }
+            if scrollView.contentOffset.y < -(self.frame.height / 1.5) {
+                self.blinkBackgroundProgressView()
+                self.spinProgressView()
+            } else {
+                self.stopProgressViewSpin()
+                self.restoreBackgroundProgressViewIfNeeded()
+                let rotationAngle = -(scrollView.contentOffset.y / self.frame.height) * .pi * 2
+                UIView.animate(withDuration: 0.1) {
+                    self.progressView.transform = CGAffineTransform(rotationAngle: rotationAngle)
+                }
+            }
+        }
+    }
+    
+    private func triggerReloadAnimation() {
+        UIView.animate(withDuration: 0.3,
+                       delay: 0,
+                       options: .curveEaseOut,
+                       animations: {
+            self.progressContainerView.transform = UX.progressViewAnimatedBackgroundFinalAnimationTransform
+        }, completion: { _ in
+            // self.scrollView?.setContentOffset(.zero, animated: true)
+            self.progressContainerView.backgroundColor = .clear
+            self.progressContainerView.transform = .identity
+            self.stopProgressViewSpin()
+            self.progressView.transform = .identity
+            self.onRefreshCallback()
+        })
+    }
+
+    private func blinkBackgroundProgressView() {
+        refreshIconHasFocus = true
+        UIView.animate(withDuration: 0.3,
+                       animations: {
+            self.progressContainerView.transform = UX.progressViewAnimatedBackgroundBlinkTransform
+            self.progressContainerView.backgroundColor = self.currentTheme?.colors.layer4
+        }, completion: { _ in
+            UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+        })
+    }
+    
+    private func restoreBackgroundProgressViewIfNeeded() {
+        guard refreshIconHasFocus else { return }
+        refreshIconHasFocus = false
+        UIView.animate(withDuration: 0.3) {
+            self.progressContainerView.transform = .identity
+            self.progressContainerView.backgroundColor = .clear
+        }
+    }
+
+    private func spinProgressView() {
+        guard progressView.layer.animation(forKey: "rotationAnimation") == nil else { return }
+        let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
+        let currentAngle = atan2(progressView.transform.b, progressView.transform.a)
+        rotationAnimation.fromValue = NSNumber(value: currentAngle)
+        rotationAnimation.byValue = NSNumber(value: Double.pi * 2)
+        rotationAnimation.duration = 1.0
+        rotationAnimation.isAdditive = true
+        rotationAnimation.repeatCount = .infinity
+        rotationAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
+
+        progressView.layer.add(rotationAnimation, forKey: "rotationAnimation")
+    }
+
+    private func stopProgressViewSpin() {
+        progressView.layer.removeAllAnimations()
+    }
+
+    func stopObserving() {
+        obeserveTicket?.invalidate()
+    }
+
+    // MARK: - ThemeApplicable
+
+    func applyTheme(theme: any Theme) {
+        currentTheme = theme
+        backgroundColor = theme.colors.layer1
+        progressView.tintColor = theme.colors.iconPrimary
+    }
+
+    deinit {
+        obeserveTicket?.invalidate()
     }
 }
