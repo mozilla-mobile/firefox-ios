@@ -21,16 +21,16 @@ class AuthenticationTest: BaseTestCase {
         waitForElementsToExist(
             [
                 app.alerts.buttons["Cancel"],
-                app.alerts.buttons["Sign in"]
+                app.alerts.buttons["Log in"]
             ]
         )
         app.alerts.textFields["Username"].typeText("guest")
         app.alerts.secureTextFields["Password"].tapAndTypeText("guest")
-        app.alerts.buttons["Sign in"].tap()
+        app.alerts.buttons["Log in"].tap()
         /* There is no other way to verify basic auth is successful as the webview is
          inaccessible after sign in to verify the success text. */
         waitForNoExistence(app.alerts.buttons["Cancel"], timeoutValue: 5)
-        waitForNoExistence(app.alerts.buttons["Sign in"], timeoutValue: 5)
+        waitForNoExistence(app.alerts.buttons["Log in"], timeoutValue: 5)
         // Added this check to ensure the BasicAuth login is persisting after app restart as well.
         app.terminate()
         app.launch()
