@@ -97,10 +97,10 @@ final class MicrosurveyPromptStateTests: XCTestCase {
     }
 
     private func getInvalidAction() -> MicrosurveyPromptAction {
-        return MicrosurveyPromptAction(windowUUID: .XCTestDefaultUUID, actionType: FakeActionType.invalid)
+        return MicrosurveyPromptAction(windowUUID: .XCTestDefaultUUID, actionType: FakeActionType.testAction)
     }
 
     enum FakeActionType: ActionType {
-        case invalid
+        case testAction
     }
 }
