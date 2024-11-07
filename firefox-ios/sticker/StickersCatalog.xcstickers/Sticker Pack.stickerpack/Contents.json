@@ -4,71 +4,71 @@
     "version" : 1
   },
   "properties" : {
-    "grid-size" : "medium"
+    "grid-size" : "regular"
   },
   "stickers" : [
     {
-      "filename" : "12.sticker"
+      "filename" : "1.sticker"
     },
     {
       "filename" : "2.sticker"
     },
     {
-      "filename" : "11.sticker"
-    },
-    {
-      "filename" : "14.sticker"
-    },
-    {
-      "filename" : "5.sticker"
-    },
-    {
-      "filename" : "20.sticker"
-    },
-    {
-      "filename" : "18.sticker"
+      "filename" : "3.sticker"
     },
     {
       "filename" : "4.sticker"
     },
     {
-      "filename" : "8.sticker"
-    },
-    {
-      "filename" : "19.sticker"
-    },
-    {
-      "filename" : "10.sticker"
-    },
-    {
-      "filename" : "15.sticker"
-    },
-    {
-      "filename" : "7.sticker"
-    },
-    {
-      "filename" : "9.sticker"
-    },
-    {
-      "filename" : "13.sticker"
-    },
-    {
-      "filename" : "21.sticker"
-    },
-    {
-      "filename" : "3.sticker"
-    },
-    {
-      "filename" : "1.sticker"
-    },
-    {
-      "filename" : "16.sticker"
+      "filename" : "5.sticker"
     },
     {
       "filename" : "6.sticker"
     },
     {
+      "filename" : "7.sticker"
+    },
+    {
+      "filename" : "8.sticker"
+    },
+    {
+      "filename" : "9.sticker"
+    },
+    {
+      "filename" : "10.sticker"
+    },
+    {
+      "filename" : "11.sticker"
+    },
+    {
+      "filename" : "12.sticker"
+    },
+    {
+      "filename" : "13.sticker"
+    },
+    {
+      "filename" : "14.sticker"
+    },
+    {
+      "filename" : "15.sticker"
+    },
+    {
+      "filename" : "16.sticker"
+    },
+    {
       "filename" : "17.sticker"
+    },
+    {
+      "filename" : "18.sticker"
+    },
+    {
+      "filename" : "19.sticker"
+    },
+    {
+      "filename" : "20.sticker"
+    },
+    {
+      "filename" : "21.sticker"
     }
   ]
 }
