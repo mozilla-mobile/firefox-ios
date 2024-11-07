@@ -55,10 +55,7 @@ struct PocketState: StateType, Equatable {
     static let reducer: Reducer<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
         else {
-            return PocketState(
-                windowUUID: state.windowUUID,
-                pocketData: state.pocketData
-            )
+            return defaultState(from: state)
         }
 
         switch action.actionType {
@@ -66,10 +63,7 @@ struct PocketState: StateType, Equatable {
             guard let pocketAction = action as? PocketAction,
                   let stories = pocketAction.pocketStories
             else {
-                return PocketState(
-                    windowUUID: state.windowUUID,
-                    pocketData: state.pocketData
-                )
+                return defaultState(from: state)
             }
 
             return PocketState(
@@ -77,10 +71,14 @@ struct PocketState: StateType, Equatable {
                 pocketData: stories
             )
         default:
-            return PocketState(
-                windowUUID: state.windowUUID,
-                pocketData: state.pocketData
-            )
+            return defaultState(from: state)
         }
+    }
+
+    static func defaultState(from state: PocketState) -> PocketState {
+        return PocketState(
+            windowUUID: state.windowUUID,
+            pocketData: state.pocketData
+        )
     }
 }

@@ -55,12 +55,7 @@ struct HomepageState: ScreenState, Equatable {
     static let reducer: Reducer<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
         else {
-            return HomepageState(
-                windowUUID: state.windowUUID,
-                headerState: HeaderState.reducer(state.headerState, action),
-                topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
-                pocketState: PocketState.reducer(state.pocketState, action)
-            )
+            return defaultState(from: state, action: action)
         }
 
         switch action.actionType {
@@ -72,12 +67,30 @@ struct HomepageState: ScreenState, Equatable {
                 pocketState: PocketState.reducer(state.pocketState, action)
             )
         default:
-            return HomepageState(
-                windowUUID: state.windowUUID,
-                headerState: HeaderState.reducer(state.headerState, action),
-                topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
-                pocketState: PocketState.reducer(state.pocketState, action)
-            )
+            return defaultState(from: state, action: action)
         }
+    }
+
+    private static func defaultState(from state: HomepageState, action: Action?) -> HomepageState {
+        var headerState = state.headerState
+        var pocketState = state.pocketState
+        var topSitesState = state.topSitesState
+
+        if let action {
+            headerState = HeaderState.reducer(state.headerState, action)
+            pocketState = PocketState.reducer(state.pocketState, action)
+            topSitesState = TopSitesSectionState.reducer(state.topSitesState, action)
+        }
+
+        return HomepageState(
+            windowUUID: state.windowUUID,
+            headerState: headerState,
+            topSitesState: topSitesState,
+            pocketState: pocketState
+        )
+    }
+
+    static func defaultState(from state: HomepageState) -> HomepageState {
+        return defaultState(from: state, action: nil)
     }
 }

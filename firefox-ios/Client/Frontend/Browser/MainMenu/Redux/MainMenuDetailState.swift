@@ -75,13 +75,9 @@ struct MainMenuDetailsState: ScreenState, Equatable {
     }
 
     static let reducer: Reducer<Self> = { state, action in
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
-            return MainMenuDetailsState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                submenuType: state.submenuType,
-                isHomepage: state.isHomepage
-            )
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
+        else {
+            return defaultState(from: state)
         }
 
         switch action.actionType {
@@ -99,7 +95,7 @@ struct MainMenuDetailsState: ScreenState, Equatable {
                   //   for: .toolbar,
                   //   window: action.windowUUID),
                   // let readerModeState = toolbarState.addressToolbar.readerModeState
-            else { return state }
+            else { return defaultState(from: state) }
 
             return MainMenuDetailsState(
                 windowUUID: state.windowUUID,
@@ -152,12 +148,16 @@ struct MainMenuDetailsState: ScreenState, Equatable {
                 navigationDestination: MenuNavigationDestination(.zoom)
             )
         default:
-            return MainMenuDetailsState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                submenuType: state.submenuType,
-                isHomepage: state.isHomepage
-            )
+            return defaultState(from: state)
         }
+    }
+
+    static func defaultState(from state: MainMenuDetailsState) -> MainMenuDetailsState {
+        return MainMenuDetailsState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            submenuType: state.submenuType,
+            isHomepage: state.isHomepage
+        )
     }
 }

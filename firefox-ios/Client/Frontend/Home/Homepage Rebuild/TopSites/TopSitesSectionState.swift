@@ -29,7 +29,7 @@ struct TopSitesSectionState: StateType, Equatable {
     static let reducer: Reducer<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
         else {
-            return defaultState(fromPreviousState: state)
+            return defaultState(from: state)
         }
 
         switch action.actionType {
@@ -37,7 +37,7 @@ struct TopSitesSectionState: StateType, Equatable {
             guard let topSitesAction = action as? TopSitesAction,
                   let sites = topSitesAction.topSites
             else {
-                return defaultState(fromPreviousState: state)
+                return defaultState(from: state)
             }
 
             return TopSitesSectionState(
@@ -45,11 +45,11 @@ struct TopSitesSectionState: StateType, Equatable {
                 topSitesData: sites
             )
         default:
-            return defaultState(fromPreviousState: state)
+            return defaultState(from: state)
         }
     }
 
-    static func defaultState(fromPreviousState state: TopSitesSectionState) -> TopSitesSectionState {
+    static func defaultState(from state: TopSitesSectionState) -> TopSitesSectionState {
         return TopSitesSectionState(
             windowUUID: state.windowUUID,
             topSitesData: state.topSitesData
