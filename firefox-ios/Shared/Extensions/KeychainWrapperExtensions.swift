@@ -11,7 +11,9 @@ import enum MozillaAppServices.MZKeychainItemAccessibility
 public extension MZKeychainWrapper {
     static var sharedClientAppContainerKeychain: MZKeychainWrapper {
         let baseBundleIdentifier = AppInfo.baseBundleIdentifier
-        let accessGroupPrefix = Bundle.main.object(forInfoDictionaryKey: "MozDevelopmentTeam") as! String
+        guard let accessGroupPrefix = Bundle.main.object(forInfoDictionaryKey: "MozDevelopmentTeam") as? String else {
+            return MZKeychainWrapper(serviceName: baseBundleIdentifier)
+        }
         let accessGroupIdentifier = AppInfo.keychainAccessGroupWithPrefix(accessGroupPrefix)
         return MZKeychainWrapper(serviceName: baseBundleIdentifier, accessGroup: accessGroupIdentifier)
     }
