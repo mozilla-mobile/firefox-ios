@@ -415,7 +415,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             isEnabled: readerModeState != .unavailable,
             isActive: readerModeState == .active,
             a11yLabel: a11yLabel,
-            a11yHint: "",
+            a11yHint: readerModeState != .unavailable ? "" : .MainMenu.AccessibilityLabels.OptionDisabledHint,
             a11yId: AccessibilityIdentifiers.MainMenu.readerView,
             action: {
                 store.dispatch(
@@ -565,7 +565,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
             isEnabled: tabInfo.readerModeIsAvailable,
             isActive: tabInfo.isInReadingList,
             a11yLabel: a11yLabel,
-            a11yHint: "",
+            a11yHint: tabInfo.readerModeIsAvailable ? "" : .MainMenu.AccessibilityLabels.OptionDisabledHint,
             a11yId: AccessibilityIdentifiers.MainMenu.saveToReadingList,
             action: {
                 store.dispatch(
