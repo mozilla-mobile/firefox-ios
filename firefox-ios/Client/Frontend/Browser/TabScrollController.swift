@@ -36,7 +36,7 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
             self.scrollView?.addGestureRecognizer(panGesture)
             scrollView?.delegate = self
             scrollView?.keyboardDismissMode = .onDrag
-            configureRefreshControl(isEnabled: true)
+//            configureRefreshControl(isEnabled: true)
         }
     }
 
@@ -273,45 +273,81 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
     }
 }
 
-class CustomRefresh: UIView, ThemeApplicable {
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        backgroundColor = .red
+class CustomRefresh: UIView,
+                     ThemeApplicable {
+    private struct UX {
+        static let progressViewPadding: CGFloat = 10.0
     }
     
+    private let onRefreshCallback: VoidReturnCallback
+    private let progressView = UIActivityIndicatorView()
+    private weak var scrollView: UIScrollView?
+    private var obeserveTicket: NSKeyValueObservation?
+    
+    init(scrollView: UIScrollView?,
+         onRefreshCallback: @escaping VoidReturnCallback) {
+        self.scrollView = scrollView
+        self.onRefreshCallback = onRefreshCallback
+        super.init(frame: .zero)
+        setupSubviews()
+    }
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
+    private func setupSubviews() {
+        // scrollView?.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handleScrollViewPan)))
+        obeserveTicket = scrollView?.observe(\.contentOffset) { _, _ in
+            guard let contentOffset = self.scrollView?.contentOffset else { return }
+            if contentOffset.y > -(self.frame.height / 1.4) {
+                // self.onRefreshCallback()
+                UIView.animate(withDuration: 0.6, animations: {
+                    self.progressView.backgroundColor = .cyan
+                }, completion: { _ in
+                    UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+                    self.obeserveTicket?.invalidate()
+                    self.onRefreshCallback()
+                })
+            }
+        }
+        addSubview(progressView)
+        progressView.startAnimating()
+        progressView.style = .large
+        progressView.layer.cornerRadius = 30.0
+        progressView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            progressView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            progressView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.progressViewPadding)
+        ])
+    }
+    
+    // MARK: - ThemeApplicable
+    
     func applyTheme(theme: any Theme) {
-        layer.cornerRadius = 12.0
-        backgroundColor = theme.colors.layer1
+        backgroundColor = theme.colors.layer5
+        progressView.color = theme.colors.textPrimary
     }
 }
 
 // MARK: - Private
 private extension TabScrollingController {
     func configureRefreshControl(isEnabled: Bool) {
-        if let refresh = scrollView?.subviews.first(where: {
-            $0 is CustomRefresh
-        }) {
-            UIView.animate(withDuration: 0.3,
-                           animations: {
-                refresh.alpha = 0.0
-            }, completion: {_ in
-                self.scrollView?.contentInset = .zero
-                self.scrollView?.layoutIfNeeded()
-                refresh.removeFromSuperview()
-                if isEnabled {
-                    let refresh = CustomRefresh(frame: CGRect(origin: .zero, size: CGSize(width: 100, height: -300)))
-                    refresh.applyTheme(theme: DefaultThemeManager(sharedContainerIdentifier: "").getCurrentTheme(for: self.windowUUID))
-                    self.scrollView?.addSubview(refresh)
-                    // refresh.addTarget(self, action: #selector(self.reload), for: .valueChanged)
-                }
-            })
-        } else {
-            if isEnabled {
-                let refresh = CustomRefresh(frame: CGRect(origin: .zero, size: CGSize(width: 100, height: -300)))
-                refresh.applyTheme(theme: DefaultThemeManager(sharedContainerIdentifier: "").getCurrentTheme(for: self.windowUUID))
-                scrollView?.addSubview(refresh)
-                // refresh.addTarget(self, action: #selector(reload), for: .valueChanged)
+        if isEnabled {
+            guard let scrollView, !scrollView.subviews.contains(where: {
+                $0 is CustomRefresh
+            }) else { return }
+            let refresh = CustomRefresh(scrollView: self.scrollView) {
+                self.reload()
             }
+            self.scrollView?.addSubview(refresh)
+            refresh.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                refresh.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+                refresh.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+                refresh.bottomAnchor.constraint(equalTo: scrollView.topAnchor),
+                refresh.heightAnchor.constraint(equalToConstant: 200),
+                refresh.widthAnchor.constraint(equalToConstant: scrollView.contentSize.width)
+            ])
+            refresh.applyTheme(theme: DefaultThemeManager(sharedContainerIdentifier: "").getCurrentTheme(for: self.windowUUID))
         }
     }
 
@@ -501,8 +537,9 @@ extension TabScrollingController: UIGestureRecognizerDelegate {
 
 extension TabScrollingController: UIScrollViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-            lastContentOffsetY = scrollView.contentOffset.y
-        }
+        lastContentOffsetY = scrollView.contentOffset.y
+        configureRefreshControl(isEnabled: true)
+    }
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard !tabIsLoading(), !isBouncingAtBottom(), isAbleToScroll, let tab else { return }
