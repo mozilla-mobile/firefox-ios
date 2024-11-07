@@ -14,7 +14,8 @@ final class TopSitesMiddleware {
             prefs: profile.prefs,
             googleTopSiteManager: GoogleTopSiteManager(
                 prefs: profile.prefs
-            )
+            ),
+            topSiteHistoryManager: TopSiteHistoryManager(profile: profile)
         )
     }
 
