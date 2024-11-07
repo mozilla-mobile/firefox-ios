@@ -4191,9 +4191,9 @@ extension String {
                     value: "Share",
                     comment: "On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Share tool.")
                 public static let ReportBrokenSite = MZLocalizedString(
-                    key: "MainMenu.Submenus.Tools.ReportBrokenSite.Title.v131",
+                    key: "MainMenu.Submenus.Tools.ReportBrokenSite.Title.v133",
                     tableName: "MainMenu",
-                    value: "Report Broken Site",
+                    value: "Report Broken Site...",
                     comment: "On the main menu, the title for the action that will take the user to the site where they can report a broken website to our web compatibility team.")
                 public static let ReportBrokenSiteSubtitle = MZLocalizedString(
                     key: "MainMenu.Submenus.Tools.ReportBrokenSite.Subtitle.v131",
@@ -7459,6 +7459,13 @@ extension String {
                 tableName: "Microsurvey",
                 value: "Selected",
                 comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label that states whether the survey option was selected.")
+        }
+        struct v131 {
+            public static let ReportBrokenSite = MZLocalizedString(
+                key: "MainMenu.Submenus.Tools.ReportBrokenSite.Title.v131",
+                tableName: "MainMenu",
+                value: "Report Broken Site",
+                comment: "On the main menu, the title for the action that will take the user to the site where they can report a broken website to our web compatibility team.")
         }
         struct v132 {
             public static let TabTrayToggleAccessibilityLabel = MZLocalizedString(
