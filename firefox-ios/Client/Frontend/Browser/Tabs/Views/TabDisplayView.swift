@@ -264,21 +264,14 @@ class TabDisplayView: UIView,
         collectionView.backgroundColor = theme.colors.layer3
     }
 
-//    private func getTabDisplay(for section: Int) -> TabDisplayViewSection {
-//        guard !shouldHideInactiveTabs else { return .tabs }
-//
-//        return TabDisplayViewSection(rawValue: section) ?? .tabs
-//    }
 
    private func getSection(for sectionIndex: Int) -> TabDisplayViewSection {
-        // Get the current snapshot
-
-        // Check if the section index is valid
-       guard let snapshot = dataSource?.snapshot(),
-             sectionIndex >= 0, sectionIndex < snapshot.sectionIdentifiers.count
+       guard 
+            let snapshot = dataSource?.snapshot(),
+            sectionIndex >= 0,
+            sectionIndex < snapshot.sectionIdentifiers.count
        else { return TabDisplayViewSection.tabs }
 
-        // Return the section at the specified index
         return snapshot.sectionIdentifiers[sectionIndex]
     }
 
