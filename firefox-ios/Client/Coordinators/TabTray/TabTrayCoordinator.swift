@@ -34,7 +34,7 @@ class TabTrayCoordinator: BaseCoordinator,
     }
 
     func dismissChildTabTrayPanels() {
-        let childVCs: [UIViewController] =  tabTrayViewController.childPanelControllers.flatMap { $0.viewControllers }
+        let childVCs: [UIViewController] = tabTrayViewController.childPanelControllers.flatMap { $0.viewControllers }
         childVCs.forEach { $0.removeFromParent() }
     }
 
