@@ -49,14 +49,16 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`
     var debugKey: String? {
         switch self {
-        case .closeRemoteTabs,
+        case    .bookmarksRefactor,
+                .closeRemoteTabs,
                 .microsurvey,
                 .homepageRebuild,
                 .menuRefactor,
                 .trackingProtectionRefactor,
                 .nativeErrorPage,
                 .toolbarRefactor,
-                .unifiedSearch:
+                .unifiedSearch,
+                .passwordGenerator:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil

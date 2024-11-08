@@ -22,7 +22,6 @@ class BrowserCoordinator: BaseCoordinator,
                           LibraryCoordinatorDelegate,
                           EnhancedTrackingProtectionCoordinatorDelegate,
                           FakespotCoordinatorDelegate,
-                          HomepageCoordinatorDelegate,
                           ParentCoordinatorDelegate,
                           TabManagerDelegate,
                           TabTrayCoordinatorDelegate,
@@ -137,7 +136,6 @@ class BrowserCoordinator: BaseCoordinator,
 
     func showHomepage() {
         let homepageController = self.homepageViewController ?? HomepageViewController(windowUUID: windowUUID)
-        homepageController.parentCoordinator = self
         guard browserViewController.embedContent(homepageController) else {
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
             return
@@ -155,8 +153,11 @@ class BrowserCoordinator: BaseCoordinator,
         self.privateViewController = privateHomepageController
     }
 
-    // MARK: - PrivateHomepageDelegate
+    func navigateFromHomePanel(to url: URL, visitType: VisitType, isGoogleTopSite: Bool) {
+        browserViewController.homePanel(didSelectURL: url, visitType: visitType, isGoogleTopSite: isGoogleTopSite)
+    }
 
+    // MARK: - PrivateHomepageDelegate
     func homePanelDidRequestToOpenInNewTab(with url: URL, isPrivate: Bool, selectNewTab: Bool) {
         browserViewController.homePanelDidRequestToOpenInNewTab(
             url,
@@ -186,6 +187,7 @@ class BrowserCoordinator: BaseCoordinator,
         }
 
         screenshotService.screenshotableView = webviewController
+        self.errorViewController = nil
     }
 
     func browserHasLoaded() {
@@ -871,12 +873,12 @@ class BrowserCoordinator: BaseCoordinator,
 
     func showNativeErrorPage(overlayManager: OverlayModeManager) {
         // TODO: FXIOS-9641 #21239 Integration with Redux - presenting view
-        let errorPageModel = ErrorPageModel(errorTitle: "", errorDecription: "", errorCode: "")
-        let errorpageController = NativeErrorPageViewController(model: errorPageModel,
-                                                                windowUUID: windowUUID,
-                                                                overlayManager: overlayManager)
+        let errorpageController = self.errorViewController ?? NativeErrorPageViewController(
+            windowUUID: windowUUID,
+            overlayManager: overlayManager
+        )
         guard browserViewController.embedContent(errorpageController) else {
-            logger.log("Unable to embed private homepage", level: .debug, category: .coordinator)
+            logger.log("Unable to embed error page", level: .debug, category: .coordinator)
             return
         }
         self.errorViewController = errorpageController

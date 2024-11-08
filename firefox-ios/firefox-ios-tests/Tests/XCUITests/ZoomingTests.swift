@@ -138,8 +138,12 @@ class ZoomingTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(PageZoom)
         // The zoom bar is displayed
-        mozWaitForElementToExist(zoomInButton)
-        mozWaitForElementToExist(zoomOutButton)
+        waitForElementsToExist(
+            [
+                zoomInButton,
+                zoomOutButton
+            ]
+        )
         zoomLevel = app.staticTexts[AccessibilityIdentifiers.ZoomPageBar.zoomPageZoomLevelLabel]
         XCTAssertEqual(zoomLevel.label, "Current Zoom Level: 100%")
         // Tap on + and - buttons

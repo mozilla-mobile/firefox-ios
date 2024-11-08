@@ -14,6 +14,7 @@ final class MainMenuAction: Action {
     var detailsViewToShow: MainMenuDetailsViewType?
     var accountData: AccountData?
     var accountIcon: UIImage?
+    var telemetryInfo: TelemetryInfo?
 
     init(
         windowUUID: WindowUUID,
@@ -23,7 +24,8 @@ final class MainMenuAction: Action {
         currentTabInfo: MainMenuTabInfo? = nil,
         tabID: TabUUID? = nil,
         accountData: AccountData? = nil,
-        accountIcon: UIImage? = nil
+        accountIcon: UIImage? = nil,
+        telemetryInfo: TelemetryInfo? = nil
     ) {
         self.navigationDestination = navigationDestination
         self.detailsViewToShow = changeMenuViewTo
@@ -31,6 +33,7 @@ final class MainMenuAction: Action {
         self.tabID = tabID
         self.accountData = accountData
         self.accountIcon = accountIcon
+        self.telemetryInfo = telemetryInfo
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -42,6 +45,7 @@ enum MainMenuActionType: ActionType {
     case tapToggleUserAgent
     case updateCurrentTabInfo
     case viewDidLoad
+    case menuDismissed
 }
 
 enum MainMenuMiddlewareActionType: ActionType {

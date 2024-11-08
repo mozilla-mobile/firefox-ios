@@ -7,7 +7,7 @@ import Foundation
 import Shared
 import SiteImageView
 
-class TopTabCell: UICollectionViewCell, ThemeApplicable, LegacyTabTrayCell, ReusableCell, FeatureFlaggable {
+class TopTabCell: UICollectionViewCell, ThemeApplicable, ReusableCell, FeatureFlaggable {
     struct UX {
         // MARK: - Favicon and Title Constants
         static let faviconSize: CGFloat = 20
@@ -186,5 +186,17 @@ class TopTabCell: UICollectionViewCell, ThemeApplicable, LegacyTabTrayCell, Reus
         )
 
         clipsToBounds = false
+    }
+
+    func getA11yTitleLabel(tab: Tab) -> String? {
+        let baseName = tab.getTabTrayTitle()
+
+        if isSelectedTab, !tab.getTabTrayTitle().isEmpty {
+            return baseName + ". " + String.TabTrayCurrentlySelectedTabAccessibilityLabel
+        } else if isSelectedTab {
+            return String.TabTrayCurrentlySelectedTabAccessibilityLabel
+        } else {
+            return baseName
+        }
     }
 }

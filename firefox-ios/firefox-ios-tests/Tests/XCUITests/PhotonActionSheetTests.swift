@@ -80,12 +80,20 @@ class PhotonActionSheetTests: BaseTestCase {
         app.otherElements[StandardImageIdentifiers.Large.share].tap()
 
         if #unavailable(iOS 16) {
-            mozWaitForElementToExist(app.otherElements["ActivityListView"].navigationBars["UIActivityContentView"])
-            mozWaitForElementToExist(app.buttons["Copy"])
+            waitForElementsToExist(
+                [
+                    app.otherElements["ActivityListView"].navigationBars["UIActivityContentView"],
+                    app.buttons["Copy"]
+                ]
+            )
         } else {
-            mozWaitForElementToExist(app.otherElements["ActivityListView"].otherElements["Example Domain"])
-            mozWaitForElementToExist(app.otherElements["ActivityListView"].otherElements["example.com"])
-            mozWaitForElementToExist(app.collectionViews.cells["Copy"])
+            waitForElementsToExist(
+                [
+                app.otherElements["ActivityListView"].otherElements["Example Domain"],
+                app.otherElements["ActivityListView"].otherElements["example.com"],
+                app.collectionViews.cells["Copy"]
+                ]
+            )
         }
         var fennecElement = app.collectionViews.scrollViews.cells.elementContainingText("Fennec")
         // This is not ideal but only way to get the element on iPhone 8
@@ -101,10 +109,14 @@ class PhotonActionSheetTests: BaseTestCase {
     // Smoketest
     func testSharePageWithShareSheetOptions() {
         openNewShareSheet()
-        mozWaitForElementToExist(app.staticTexts["Open in Firefox"])
-        mozWaitForElementToExist(app.staticTexts["Load in Background"])
-        mozWaitForElementToExist(app.staticTexts["Bookmark This Page"])
-        mozWaitForElementToExist(app.staticTexts["Add to Reading List"])
+        waitForElementsToExist(
+            [
+                app.staticTexts["Open in Firefox"],
+                app.staticTexts["Load in Background"],
+                app.staticTexts["Bookmark This Page"],
+                app.staticTexts["Add to Reading List"]
+            ]
+        )
         mozWaitForElementToExist(app.staticTexts["Send to Device"])
     }
 
@@ -112,11 +124,12 @@ class PhotonActionSheetTests: BaseTestCase {
     func testShareSheetSendToDevice() {
         openNewShareSheet()
         app.staticTexts["Send to Device"].waitAndTap()
-        mozWaitForElementToExist(
-            app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton]
+        waitForElementsToExist(
+            [
+                app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton],
+                app.staticTexts["You are not signed in to your account."]
+            ]
         )
-
-        mozWaitForElementToExist(app.staticTexts["You are not signed in to your account."])
         app.navigationBars.buttons[AccessibilityIdentifiers.ShareTo.HelpView.doneButton].tap()
     }
 

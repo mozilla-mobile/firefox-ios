@@ -34,9 +34,13 @@ final class MicrosurveyTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2776933
     func testCloseButtonDismissesMicrosurveyPrompt() {
         generateTriggerForMicrosurvey()
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton])
-        mozWaitForElementToExist(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.firefoxLogo])
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton])
+        waitForElementsToExist(
+            [
+                app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton],
+                app.images[AccessibilityIdentifiers.Microsurvey.Prompt.firefoxLogo],
+                app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton]
+            ]
+        )
         app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.closeButton].waitAndTap()
         mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton])
         mozWaitForElementToNotExist(app.images[AccessibilityIdentifiers.Microsurvey.Prompt.firefoxLogo])
@@ -49,8 +53,12 @@ final class MicrosurveyTests: BaseTestCase {
         let continueButton = app.buttons[AccessibilityIdentifiers.Microsurvey.Prompt.takeSurveyButton]
         continueButton.tap()
 
-        mozWaitForElementToExist(app.images[AccessibilityIdentifiers.Microsurvey.Survey.firefoxLogo])
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Microsurvey.Survey.closeButton])
+        waitForElementsToExist(
+            [
+                app.images[AccessibilityIdentifiers.Microsurvey.Survey.firefoxLogo],
+                app.buttons[AccessibilityIdentifiers.Microsurvey.Survey.closeButton]
+            ]
+        )
         let tablesQuery = app.scrollViews.otherElements.tables
         let firstOption = tablesQuery.cells.firstMatch
         firstOption.tap()

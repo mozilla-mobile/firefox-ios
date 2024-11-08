@@ -87,36 +87,28 @@ struct TabTrayState: ScreenState, Equatable {
         self.showCloseConfirmation = showCloseConfirmation
     }
 
-    /// Returns a new `TabsPanelState` which clears any transient data (e.g. scroll animations).
-    static func defaultState(fromPreviousState state: TabTrayState) -> TabTrayState {
-        return TabTrayState(windowUUID: state.windowUUID,
-                            isPrivateMode: state.isPrivateMode,
-                            selectedPanel: state.selectedPanel,
-                            normalTabsCount: state.normalTabsCount,
-                            hasSyncableAccount: state.hasSyncableAccount)
-    }
-
     static let reducer: Reducer<Self> = { state, action in
         // Only process actions for the current window
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
-            return defaultState(fromPreviousState: state)
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
+        else {
+            return defaultState(from: state)
         }
 
         if let action  = action as? TabTrayAction {
-            return TabTrayState.reduceTabTrayAction(action: action, state: state)
+            return reduceTabTrayAction(action: action, state: state)
         } else if let action = action as? TabPanelMiddlewareAction {
-            return TabTrayState.reduceTabPanelMiddlewareAction(action: action, state: state)
+            return reduceTabPanelMiddlewareAction(action: action, state: state)
         } else if let action = action as? TabPanelViewAction {
-            return TabTrayState.reduceTabPanelViewAction(action: action, state: state)
+            return reduceTabPanelViewAction(action: action, state: state)
         }
 
-        return defaultState(fromPreviousState: state)
+        return defaultState(from: state)
     }
 
     static func reduceTabTrayAction(action: TabTrayAction, state: TabTrayState) -> TabTrayState {
         switch action.actionType {
         case TabTrayActionType.didLoadTabTray:
-            guard let tabTrayModel = action.tabTrayModel else { return defaultState(fromPreviousState: state) }
+            guard let tabTrayModel = action.tabTrayModel else { return defaultState(from: state) }
             return TabTrayState(windowUUID: state.windowUUID,
                                 isPrivateMode: tabTrayModel.isPrivateMode,
                                 selectedPanel: tabTrayModel.selectedPanel,
@@ -124,7 +116,7 @@ struct TabTrayState: ScreenState, Equatable {
                                 hasSyncableAccount: tabTrayModel.hasSyncableAccount)
 
         case TabTrayActionType.changePanel:
-            guard let panelType = action.panelType else { return defaultState(fromPreviousState: state) }
+            guard let panelType = action.panelType else { return defaultState(from: state) }
             return TabTrayState(windowUUID: state.windowUUID,
                                 isPrivateMode: panelType == .privateTabs,
                                 selectedPanel: panelType,
@@ -140,7 +132,7 @@ struct TabTrayState: ScreenState, Equatable {
                                 shouldDismiss: true)
 
         case TabTrayActionType.firefoxAccountChanged:
-            guard let isSyncAccountEnabled = action.hasSyncableAccount else { return defaultState(fromPreviousState: state) }
+            guard let isSyncAccountEnabled = action.hasSyncableAccount else { return defaultState(from: state) }
             // Account updates may occur in a global manner, independent of specific windows.
             let uuid = state.windowUUID
             return TabTrayState(windowUUID: uuid,
@@ -150,18 +142,14 @@ struct TabTrayState: ScreenState, Equatable {
                                 hasSyncableAccount: isSyncAccountEnabled)
 
         default:
-            return TabTrayState(windowUUID: state.windowUUID,
-                                isPrivateMode: state.isPrivateMode,
-                                selectedPanel: state.selectedPanel,
-                                normalTabsCount: state.normalTabsCount,
-                                hasSyncableAccount: state.hasSyncableAccount)
+            return defaultState(from: state)
         }
     }
 
     static func reduceTabPanelMiddlewareAction(action: TabPanelMiddlewareAction, state: TabTrayState) -> TabTrayState {
         switch action.actionType {
         case TabPanelMiddlewareActionType.didChangeTabPanel:
-            guard let tabDisplayModel = action.tabDisplayModel else { return defaultState(fromPreviousState: state) }
+            guard let tabDisplayModel = action.tabDisplayModel else { return defaultState(from: state) }
             let panelType = tabDisplayModel.isPrivateMode ? TabTrayPanelType.privateTabs : TabTrayPanelType.tabs
             return TabTrayState(windowUUID: state.windowUUID,
                                 isPrivateMode: tabDisplayModel.isPrivateMode,
@@ -171,7 +159,7 @@ struct TabTrayState: ScreenState, Equatable {
 
         case TabPanelMiddlewareActionType.refreshTabs:
             // Only update the nomal tab count if the tabs being refreshed are not private
-            guard let tabDisplayModel = action.tabDisplayModel else { return defaultState(fromPreviousState: state) }
+            guard let tabDisplayModel = action.tabDisplayModel else { return defaultState(from: state) }
             let isPrivate = tabDisplayModel.tabs.first?.isPrivate ?? false
             let tabCount = isPrivate ? state.normalTabsCount : tabDisplayModel.normalTabsCount
             return TabTrayState(windowUUID: state.windowUUID,
@@ -181,7 +169,7 @@ struct TabTrayState: ScreenState, Equatable {
                                 hasSyncableAccount: state.hasSyncableAccount)
 
         case TabPanelMiddlewareActionType.showToast:
-            guard let type = action.toastType else { return defaultState(fromPreviousState: state) }
+            guard let type = action.toastType else { return defaultState(from: state) }
 
             return TabTrayState(windowUUID: state.windowUUID,
                                 isPrivateMode: state.isPrivateMode,
@@ -191,14 +179,14 @@ struct TabTrayState: ScreenState, Equatable {
                                 toastType: type)
 
         default:
-            return defaultState(fromPreviousState: state)
+            return defaultState(from: state)
         }
     }
 
     static func reduceTabPanelViewAction(action: TabPanelViewAction, state: TabTrayState) -> TabTrayState {
         switch action.actionType {
         case TabPanelViewActionType.showShareSheet:
-            guard let shareURL = action.shareSheetURL else { return defaultState(fromPreviousState: state) }
+            guard let shareURL = action.shareSheetURL else { return defaultState(from: state) }
             return TabTrayState(windowUUID: state.windowUUID,
                                 isPrivateMode: state.isPrivateMode,
                                 selectedPanel: state.selectedPanel,
@@ -215,11 +203,15 @@ struct TabTrayState: ScreenState, Equatable {
                                 showCloseConfirmation: true)
 
         default:
-            return TabTrayState(windowUUID: state.windowUUID,
-                                isPrivateMode: state.isPrivateMode,
-                                selectedPanel: state.selectedPanel,
-                                normalTabsCount: state.normalTabsCount,
-                                hasSyncableAccount: state.hasSyncableAccount)
+            return defaultState(from: state)
         }
+    }
+
+    static func defaultState(from state: TabTrayState) -> TabTrayState {
+        return TabTrayState(windowUUID: state.windowUUID,
+                            isPrivateMode: state.isPrivateMode,
+                            selectedPanel: state.selectedPanel,
+                            normalTabsCount: state.normalTabsCount,
+                            hasSyncableAccount: state.hasSyncableAccount)
     }
 }

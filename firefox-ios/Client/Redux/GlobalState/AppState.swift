@@ -10,7 +10,7 @@ struct AppState: StateType {
     let activeScreens: ActiveScreensState
 
     static let reducer: Reducer<Self> = { state, action in
-        AppState(activeScreens: ActiveScreensState.reducer(state.activeScreens, action))
+        return AppState(activeScreens: ActiveScreensState.reducer(state.activeScreens, action))
     }
 
     func screenState<S: ScreenState>(_ s: S.Type,
@@ -33,6 +33,7 @@ struct AppState: StateType {
                 case (.searchEngineSelection(let state), .searchEngineSelection): return state as? S
                 case (.trackingProtection(let state), .trackingProtection): return state as? S
                 case (.passwordGenerator(let state), .passwordGenerator): return state as? S
+                case (.nativeErrorPage(let state), .nativeErrorPage): return state as? S
                 default: return nil
                 }
             }.first(where: {
@@ -46,6 +47,10 @@ struct AppState: StateType {
 
                 return $0.windowUUID == expectedUUID
             })
+    }
+
+    static func defaultState(from state: AppState) -> AppState {
+        return AppState(activeScreens: state.activeScreens)
     }
 }
 
@@ -65,9 +70,11 @@ let middlewares = [
     ThemeManagerMiddleware().themeManagerProvider,
     ToolbarMiddleware().toolbarProvider,
     SearchEngineSelectionMiddleware().searchEngineSelectionProvider,
+    TopSitesMiddleware().topSitesProvider,
     TrackingProtectionMiddleware().trackingProtectionProvider,
     PasswordGeneratorMiddleware().passwordGeneratorProvider,
-    PocketMiddleware().pocketSectionProvider
+    PocketMiddleware().pocketSectionProvider,
+    NativeErrorPageMiddleware().nativeErrorPageProvider
 ]
 
 // In order for us to mock and test the middlewares easier,

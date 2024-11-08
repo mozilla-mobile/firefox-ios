@@ -26,8 +26,12 @@ class URLValidationTests: BaseTestCase {
         for url in urlTypes {
             navigator.openURL(url)
             waitUntilPageLoad()
-            mozWaitForElementToExist(app.otherElements.staticTexts["Mozilla"])
-            mozWaitForElementToExist(app.buttons["Menu"])
+            waitForElementsToExist(
+                [
+                    app.otherElements.staticTexts["Mozilla"],
+                    app.buttons["Menu"]
+                ]
+            )
             // Getting the current system locale ex:- en-US
             var locale = Locale.preferredLanguages[0]
             // Only the below url suffixes should lead to en-US website

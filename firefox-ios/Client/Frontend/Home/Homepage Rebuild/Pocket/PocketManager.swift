@@ -4,12 +4,14 @@
 
 import Foundation
 
-class PocketManager {
-    private let pocketAPI: PocketStoriesProviding
+protocol PocketManagerProvider {
+    func getPocketItems() async -> [PocketStoryState]
+}
+
+final class PocketManager: PocketManagerProvider {
     private let storyProvider: StoryProvider
 
     init(pocketAPI: PocketStoriesProviding) {
-        self.pocketAPI = pocketAPI
         self.storyProvider = StoryProvider(pocketAPI: pocketAPI)
     }
 

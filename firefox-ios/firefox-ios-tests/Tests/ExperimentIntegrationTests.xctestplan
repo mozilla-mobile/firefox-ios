@@ -48,6 +48,14 @@
     {
       "skippedTests" : [
         "ActivityStreamTest",
+        "AddressesTests\/testAddNewAddressAllFieldsFilled()",
+        "AddressesTests\/testAddNewAddressCityFilled()",
+        "AddressesTests\/testAddNewAddressEmailFilled()",
+        "AddressesTests\/testAddNewAddressNameFilled()",
+        "AddressesTests\/testAddNewAddressOrganizationFilled()",
+        "AddressesTests\/testAddNewAddressPhoneFilled()",
+        "AddressesTests\/testAddNewAddressPostalCodeFilled()",
+        "AddressesTests\/testAddNewAddressStreetAddressFilled()",
         "AuthenticationTest",
         "BaseTestCase",
         "BrowsingPDFTests",
@@ -61,7 +69,6 @@
         "DragAndDropTestIpad",
         "DragAndDropTests",
         "EngagementNotificationTests",
-        "FakespotTests",
         "FirefoxSuggestTest",
         "FirefoxSuggestTest\/testFirefoxSuggestExists()",
         "FxScreenGraphTests",

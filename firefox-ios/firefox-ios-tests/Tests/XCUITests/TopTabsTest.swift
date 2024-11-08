@@ -264,8 +264,12 @@ class TopTabsTest: BaseTestCase {
             navigator.nowAt(NewTabScreen)
             mozWaitForElementToExist(app.buttons["Show Tabs"])
             app.buttons["Show Tabs"].press(forDuration: 1)
-            mozWaitForElementToExist(app.cells.otherElements[StandardImageIdentifiers.Large.plus])
-            mozWaitForElementToExist(app.cells.otherElements[StandardImageIdentifiers.Large.cross])
+            waitForElementsToExist(
+                [
+                    app.cells.otherElements[StandardImageIdentifiers.Large.plus],
+                    app.cells.otherElements[StandardImageIdentifiers.Large.cross]
+                ]
+            )
 
             // Open New Tab
             app.cells.otherElements[StandardImageIdentifiers.Large.plus].tap()
@@ -415,12 +419,20 @@ class TopTabsTest: BaseTestCase {
         for _ in 0...3 {
             app.collectionViews.cells["Homepage. Currently selected tab."].buttons["crossLarge"].tap()
             // A toast notification is displayed with the message "Tab Closed" and the Undo option
-            mozWaitForElementToExist(app.buttons["Undo"])
-            mozWaitForElementToExist(app.staticTexts["Tab Closed"])
+            waitForElementsToExist(
+                [
+                    app.buttons["Undo"],
+                    app.staticTexts["Tab Closed"]
+                ]
+            )
         }
         app.collectionViews.buttons["crossLarge"].tap()
-        mozWaitForElementToExist(app.buttons["Undo"])
-        mozWaitForElementToExist(app.staticTexts["Tab Closed"])
+        waitForElementsToExist(
+            [
+                app.buttons["Undo"],
+                app.staticTexts["Tab Closed"]
+            ]
+        )
     }
 
     private func addTabsAndUndoCloseTabAction(nrOfTabs: Int) {
@@ -438,13 +450,21 @@ class TopTabsTest: BaseTestCase {
         let tabsTrayCell = app.otherElements["Tabs Tray"].cells
         app.otherElements["Tabs Tray"].cells.staticTexts.element(boundBy: 3).press(forDuration: 1.6)
         // Context menu opens
-        mozWaitForElementToExist(app.buttons["Close Tab"])
-        mozWaitForElementToExist(app.buttons["Copy URL"])
+        waitForElementsToExist(
+            [
+                app.buttons["Close Tab"],
+                app.buttons["Copy URL"]
+            ]
+        )
         // Choose to close the tab
         app.buttons["Close Tab"].tap()
         // A toast notification is displayed with the message "Tab Closed" and the Undo option
-        mozWaitForElementToExist(app.buttons["Undo"])
-        mozWaitForElementToExist(app.staticTexts["Tab Closed"])
+        waitForElementsToExist(
+            [
+                app.buttons["Undo"],
+                app.staticTexts["Tab Closed"]
+            ]
+        )
         app.buttons["Undo"].tap()
         mozWaitForElementToNotExist(app.buttons["Undo"])
         mozWaitForElementToNotExist(app.staticTexts["Tab Closed"])

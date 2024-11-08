@@ -6,10 +6,6 @@ import Foundation
 import Common
 import Redux
 
-protocol HomepageCoordinatorDelegate: AnyObject {
-    func showSettings(at destination: Route.SettingsSection)
-}
-
 final class HomepageViewController: UIViewController,
                                     UICollectionViewDelegate,
                                     ContentContainable,
@@ -30,9 +26,6 @@ final class HomepageViewController: UIViewController,
 
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
-
-    // MARK: Navigation variables
-    weak var parentCoordinator: HomepageCoordinatorDelegate?
 
     // MARK: - Private variables
     private var collectionView: UICollectionView?
@@ -58,8 +51,12 @@ final class HomepageViewController: UIViewController,
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
 
-        setupNotifications(forObserver: self, observing: [UIApplication.didBecomeActiveNotification])
-
+        setupNotifications(forObserver: self, observing: [UIApplication.didBecomeActiveNotification,
+                                                          .FirefoxAccountChanged,
+                                                          .PrivateDataClearedHistory,
+                                                          .ProfileDidFinishSyncing,
+                                                          .TopSitesUpdated,
+                                                          .DefaultSearchEngineUpdated])
         subscribeToRedux()
     }
 
@@ -113,10 +110,6 @@ final class HomepageViewController: UIViewController,
     func newState(state: HomepageState) {
         homepageState = state
         dataSource?.applyInitialSnapshot(state: state)
-
-        if homepageState.navigateTo == .customizeHomepage {
-            parentCoordinator?.showSettings(at: .homePage)
-        }
     }
 
     func unsubscribeFromRedux() {
@@ -212,7 +205,7 @@ final class HomepageViewController: UIViewController,
             guard let headerCell = collectionView?.dequeueReusableCell(
                 cellType: HomepageHeaderCell.self,
                 for: indexPath
-            )  else {
+            ) else {
                 return UICollectionViewCell()
             }
 
@@ -222,30 +215,53 @@ final class HomepageViewController: UIViewController,
             ) { [weak self] in
                 self?.toggleHomepageMode()
             }
+
             headerCell.applyTheme(theme: currentTheme)
 
             return headerCell
+
+        case .topSite(let site):
+            guard let topSiteCell = collectionView?.dequeueReusableCell(cellType: TopSiteCell.self, for: indexPath) else {
+                return UICollectionViewCell()
+            }
+            // TODO: FXIOS-10312 - Handle textColor when working on wallpapers
+            topSiteCell.configure(
+                site,
+                position: indexPath.row,
+                theme: currentTheme,
+                textColor: .systemPink
+            )
+            return topSiteCell
+
+        case .topSiteEmpty:
+            guard let emptyCell = collectionView?.dequeueReusableCell(cellType: EmptyTopSiteCell.self, for: indexPath) else {
+                return UICollectionViewCell()
+            }
+            emptyCell.applyTheme(theme: currentTheme)
+            return emptyCell
+
         case .pocket(let story):
             guard let pocketCell = collectionView?.dequeueReusableCell(
                 cellType: PocketStandardCell.self,
                 for: indexPath
-            )  else {
+            ) else {
                 return UICollectionViewCell()
             }
             pocketCell.configure(story: story, theme: currentTheme)
 
             return pocketCell
-        case .pocketDiscover(let title):
+        case .pocketDiscover:
             guard let pocketDiscoverCell = collectionView?.dequeueReusableCell(
                 cellType: PocketDiscoverCell.self,
                 for: indexPath
-            )  else {
+            ) else {
                 return UICollectionViewCell()
             }
 
-            pocketDiscoverCell.configure(text: title, theme: currentTheme)
+            pocketDiscoverCell.configure(text: homepageState.pocketState.pocketDiscoverItem.title, theme: currentTheme)
 
             return pocketDiscoverCell
+
         case .customizeHomepage:
             guard let customizeHomeCell = collectionView?.dequeueReusableCell(
                 cellType: CustomizeHomepageSectionCell.self,
@@ -290,7 +306,7 @@ final class HomepageViewController: UIViewController,
                 for: indexPath)
             else { return UICollectionReusableView() }
             footerView.onTapLearnMore = {
-                // TODO: FXIOS-10164: Navigation for Pocket section
+                self.navigateToPocketLearnMore()
             }
             footerView.applyTheme(theme: currentTheme)
             return footerView
@@ -327,21 +343,50 @@ final class HomepageViewController: UIViewController,
 
     private func navigateToHomepageSettings() {
         store.dispatch(
-            HomepageAction(
-                windowUUID: windowUUID,
-                actionType: HomepageActionType.tappedOnCustomizeHomepage
+            NavigationBrowserAction(
+                windowUUID: self.windowUUID,
+                actionType: NavigationBrowserActionType.tapOnCustomizeHomepage
+            )
+        )
+    }
+
+    private func navigateToPocketLearnMore() {
+        store.dispatch(
+            NavigationBrowserAction(
+                url: homepageState.pocketState.footerURL,
+                windowUUID: self.windowUUID,
+                actionType: NavigationBrowserActionType.tapOnLink
             )
         )
     }
 
     // MARK: - UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        // TODO: FXIOS-10162 - Dummy trigger to update with proper triggers
-
-        guard let section = HomepageSection(rawValue: indexPath.section) else {
+        guard let item = dataSource?.itemIdentifier(for: indexPath) else {
+            self.logger.log(
+                "Item selected at \(indexPath) but does not navigate anywhere",
+                level: .debug,
+                category: .homepage
+            )
             return
         }
-        switch section {
+        switch item {
+        case .pocket(let story):
+            store.dispatch(
+                NavigationBrowserAction(
+                    url: story.url,
+                    windowUUID: self.windowUUID,
+                    actionType: NavigationBrowserActionType.tapOnCell
+                )
+            )
+        case .pocketDiscover:
+            store.dispatch(
+                NavigationBrowserAction(
+                    url: homepageState.pocketState.pocketDiscoverItem.url,
+                    windowUUID: self.windowUUID,
+                    actionType: NavigationBrowserActionType.tapOnCell
+                )
+            )
         default:
             return
         }
@@ -355,6 +400,17 @@ final class HomepageViewController: UIViewController,
                 PocketAction(
                     windowUUID: self.windowUUID,
                     actionType: PocketActionType.enteredForeground
+                )
+            )
+        case .ProfileDidFinishSyncing,
+                .PrivateDataClearedHistory,
+                .FirefoxAccountChanged,
+                .TopSitesUpdated,
+                .DefaultSearchEngineUpdated:
+            store.dispatch(
+                TopSitesAction(
+                    windowUUID: self.windowUUID,
+                    actionType: TopSitesActionType.fetchTopSites
                 )
             )
         default: break

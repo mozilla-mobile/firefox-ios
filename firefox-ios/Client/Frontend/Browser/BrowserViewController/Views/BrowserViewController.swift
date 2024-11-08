@@ -117,7 +117,6 @@ class BrowserViewController: UIViewController,
 
     var navigationHintDoubleTapTimer: Timer?
 
-    weak var gridTabTrayController: LegacyGridTabViewController?
     var tabTrayViewController: TabTrayController?
 
     let profile: Profile
@@ -135,6 +134,11 @@ class BrowserViewController: UIViewController,
     var isToolbarNavigationHintEnabled: Bool {
         return featureFlags.isFeatureEnabled(.toolbarNavigationHint, checking: .buildOnly)
     }
+
+    var isNativeErrorPageEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly)
+    }
+
     private var browserViewControllerState: BrowserViewControllerState?
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
@@ -413,7 +417,6 @@ class BrowserViewController: UIViewController,
         } else {
             urlBar.topTabsIsShowing = showTopTabs
             urlBar.setShowToolbar(!showNavToolbar)
-            toolbar.addNewTabButton.isHidden = showNavToolbar
 
             if showNavToolbar {
                 toolbar.isHidden = false
@@ -1492,10 +1495,6 @@ class BrowserViewController: UIViewController,
 
     // MARK: - Native Error Page
 
-    private func isNativeErrorPage() -> Bool {
-        featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly)
-    }
-
     func showEmbeddedNativeErrorPage() {
     // TODO: FXIOS-9641 #21239 Implement Redux for Native Error Pages
         browserDelegate?.showNativeErrorPage(overlayManager: overlayManager)
@@ -1543,7 +1542,7 @@ class BrowserViewController: UIViewController,
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
-        } else if isErrorURL && isNativeErrorPage() {
+        } else if isErrorURL && isNativeErrorPageEnabled {
             showEmbeddedNativeErrorPage()
         } else {
             showEmbeddedWebview()
@@ -1950,16 +1949,6 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    func lockIconImageName(for tab: Tab?) -> String? {
-        guard let tab, let hasSecureContent = tab.webView?.hasOnlySecureContent else { return nil }
-
-        let lockIconImageName = hasSecureContent ?
-        StandardImageIdentifiers.Large.lockFill :
-        StandardImageIdentifiers.Large.lockSlashFill
-
-        return tab.url?.isReaderModeURL == false ? lockIconImageName : nil
-    }
-
     func updateReaderModeState(for tab: Tab?, readerModeState: ReaderModeState) {
         if isToolbarRefactorEnabled {
             let action = ToolbarAction(
@@ -1982,13 +1971,27 @@ class BrowserViewController: UIViewController,
                 StandardImageIdentifiers.Small.notificationDotFill : nil
             }
 
+            var lockIconImageName: String?
+            var lockIconNeedsTheming = true
+
+            if let hasSecureContent = tab.webView?.hasOnlySecureContent {
+                lockIconImageName = hasSecureContent ?
+                StandardImageIdentifiers.Large.lockFill :
+                StandardImageIdentifiers.Large.lockSlashFill
+
+                let isWebsiteMode = tab.url?.isReaderModeURL == false
+                lockIconImageName = isWebsiteMode ? lockIconImageName : nil
+                lockIconNeedsTheming = isWebsiteMode ? hasSecureContent : true
+            }
+
             let action = ToolbarAction(
                 url: tab.url?.displayURL,
                 isPrivate: tab.isPrivate,
                 isShowingNavigationToolbar: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection),
                 canGoBack: tab.canGoBack,
                 canGoForward: tab.canGoForward,
-                lockIconImageName: lockIconImageName(for: tab),
+                lockIconImageName: lockIconImageName,
+                lockIconNeedsTheming: lockIconNeedsTheming,
                 safeListedURLImageName: safeListedURLImageName,
                 windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange)
@@ -2064,6 +2067,9 @@ class BrowserViewController: UIViewController,
             handleNavigationActions(for: state)
         case _ where state.displayView != nil:
             handleDisplayActions(for: state)
+        case _ where state.navigationDestination != nil:
+            guard let destination = state.navigationDestination else { return }
+            handleNavigation(to: destination)
         default: break
         }
     }
@@ -2077,6 +2083,20 @@ class BrowserViewController: UIViewController,
                                    windowUUID: windowUUID,
                                    actionType: ToolbarActionType.backForwardButtonStateChanged)
         store.dispatch(action)
+    }
+
+    private func handleNavigation(to type: NavigationDestination) {
+        switch type.destination {
+        case .customizeHomepage:
+            navigationHandler?.show(settings: .homePage)
+        case .link:
+            guard let url = type.url else {
+                logger.log("url should not be nil when navigating for a link type", level: .warning, category: .coordinator)
+                return
+            }
+            // TODO: FXIOS-10165 - Pass in the proper values based on top sites and other homepage links
+            navigationHandler?.navigateFromHomePanel(to: url, visitType: .link, isGoogleTopSite: false)
+        }
     }
 
     private func handleDisplayActions(for state: BrowserViewControllerState) {
@@ -2483,10 +2503,6 @@ class BrowserViewController: UIViewController,
     }
 
     func switchToPrivacyMode(isPrivate: Bool) {
-        if let tabTrayController = self.gridTabTrayController,
-           tabTrayController.tabDisplayManager.isPrivate != isPrivate {
-            tabTrayController.didTogglePrivateMode(isPrivate)
-        }
         topTabsViewController?.applyUIMode(isPrivate: isPrivate, theme: currentTheme())
     }
 
@@ -2638,9 +2654,12 @@ class BrowserViewController: UIViewController,
 
         self.screenshotHelper.takeScreenshot(tab)
 
-        // when navigate in tab, if the tab mime type is pdf, we should scroll to top
+        // when navigating in a tab, if the tab's mime type is pdf, we should:
+        // - scroll to top
+        // - set readermode state to unavailable
         if tab.mimeType == MIMEType.PDF {
             tab.shouldScrollToTop = true
+            updateReaderModeState(for: tab, readerModeState: .unavailable)
         }
 
         if let url = webView.url {
@@ -3129,7 +3148,8 @@ class BrowserViewController: UIViewController,
     // MARK: - RecentlyClosedPanelDelegate
 
     func openRecentlyClosedSiteInSameTab(_ url: URL) {
-        tabTrayOpenRecentlyClosedTab(url)
+        guard let tab = self.tabManager.selectedTab else { return }
+        self.finishEditingAndSubmit(url, visitType: .link, forTab: tab)
     }
 
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
@@ -4074,51 +4094,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
         if newTabChoice != .topSites, newTabChoice != .blankPage {
             overlayManager.cancelEditing(shouldCancelLoading: false)
         }
-    }
-}
-
-extension BrowserViewController: TabTrayDelegate {
-    func tabTrayDidCloseLastTab(toast: ButtonToast) {
-        toast.applyTheme(theme: currentTheme())
-        show(toast: toast, afterWaiting: ButtonToast.UX.delay)
-    }
-
-    func tabTrayOpenRecentlyClosedTab(_ url: URL) {
-        guard let tab = self.tabManager.selectedTab else { return }
-        self.finishEditingAndSubmit(url, visitType: .link, forTab: tab)
-    }
-
-    // This function animates and resets the tab chrome transforms when
-    // the tab tray dismisses.
-    func tabTrayDidDismiss(_ tabTray: LegacyGridTabViewController) {
-        resetBrowserChrome()
-    }
-
-    func tabTrayDidAddTab(_ tabTray: LegacyGridTabViewController, tab: Tab) {}
-
-    func tabTrayDidAddBookmark(_ tab: Tab) {
-        guard let url = tab.url?.absoluteString, !url.isEmpty else { return }
-        let tabState = tab.tabState
-        addBookmark(url: url, title: tabState.title)
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .add,
-            object: .bookmark,
-            value: .tabTray
-        )
-    }
-
-    func tabTrayDidAddToReadingList(_ tab: Tab) -> ReadingListItem? {
-        guard let url = tab.url?.absoluteString, !url.isEmpty else { return nil }
-        return profile.readingList.createRecordWithURL(
-            url,
-            title: tab.title ?? url,
-            addedBy: UIDevice.current.name
-        ).value.successValue
-    }
-
-    func tabTrayDidRequestTabsSettings() {
-        navigationHandler?.show(settings: .tabs)
     }
 }
 

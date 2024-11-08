@@ -31,7 +31,7 @@ private struct DarkColourPalette: ThemeColourPalette {
     var layer5: UIColor = FXColors.DarkGrey40
     var layer5Hover: UIColor = FXColors.DarkGrey20
     var layerScrim: UIColor = FXColors.DarkGrey90.withAlphaComponent(0.95)
-    var layerGradient = Gradient(colors: [FXColors.Violet60, FXColors.Violet70])
+    var layerGradient = Gradient(colors: [FXColors.Violet70, FXColors.Violet60])
     var layerGradientOverlay = Gradient(colors: [FXColors.DarkGrey40.withAlphaComponent(0),
                                                  FXColors.DarkGrey40.withAlphaComponent(0.4)])
     var layerAccentNonOpaque: UIColor = FXColors.Blue20.withAlphaComponent(0.2)
@@ -119,5 +119,5 @@ private struct DarkColourPalette: ThemeColourPalette {
     var borderToolbarDivider: UIColor = FXColors.DarkGrey60
 
     // MARK: - Shadow
-    var shadowDefault: UIColor = FXColors.DarkGrey90.withAlphaComponent(0.16)
+    var shadowDefault: UIColor = FXColors.DarkGrey80.withAlphaComponent(0.12)
 }
