@@ -211,7 +211,6 @@ extension BrowserViewController: WKUIDelegate {
 
         let tab = tabManager.addTab(
             URLRequest(url: rURL as URL),
-            afterTab: currentTab,
             isPrivate: isPrivate
         )
 

@@ -3114,7 +3114,6 @@ class BrowserViewController: UIViewController,
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
         let tab = self.tabManager.addTab(
             URLRequest(url: url),
-            afterTab: self.tabManager.selectedTab,
             isPrivate: isPrivate
         )
         let toolbar: URLBarViewProtocol = isToolbarRefactorEnabled ? addressToolbarContainer : urlBar
@@ -3583,7 +3582,7 @@ extension BrowserViewController: HomePanelDelegate {
     }
 
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool, selectNewTab: Bool = false) {
-        let tab = tabManager.addTab(URLRequest(url: url), afterTab: tabManager.selectedTab, isPrivate: isPrivate)
+        let tab = tabManager.addTab(URLRequest(url: url), isPrivate: isPrivate)
         // Select new tab automatically if needed
         guard !selectNewTab else {
             tabManager.selectTab(tab)
