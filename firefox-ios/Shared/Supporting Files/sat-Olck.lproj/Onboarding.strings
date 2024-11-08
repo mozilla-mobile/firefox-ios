@@ -1,6 +1,9 @@
 /* The title of the button on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
 "DefaultBrowserPopup.ButtonTitle.v114" = "ᱥᱟᱡᱟᱣ ᱠᱚ ᱨᱮ ᱪᱟᱞᱟᱜ ᱢᱮ";
 
+/* The footer label on the Default Browser Popup, which is below all the instructions asking the users if their Firefox browser is the default browser. If it is then close this message and tap skip. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
+"DefaultBrowserPopup.DescriptionFooter.v124" = "*ᱪᱮᱫ %@ ᱞᱟᱦᱟ ᱠᱷᱚᱱ ᱜᱮ ᱟᱢᱟᱜ ᱰᱤᱯᱷᱚᱞᱴ ᱠᱟᱱᱟ?* ᱱᱚᱶᱟ ᱠᱷᱚᱵᱚᱨ ᱵᱚᱱᱫᱚ ᱢᱮ ᱟᱨ ᱵᱟᱹᱜᱤ ᱨᱮ ᱞᱤᱱ ᱢᱮ ᱾";
+
 /* The first label on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "DefaultBrowserPopup.FirstLabel.v114" = "1. *ᱥᱟᱡᱟᱣ* ᱛᱮ ᱪᱟᱞᱟᱜ ᱢᱮ";
 
@@ -12,6 +15,57 @@
 
 /* The title on the Default Browser Popup, which is a card with instructions telling the user how to set Firefox as their default browser. */
 "DefaultBrowserPopup.Title.v114" = "ᱟᱢᱟᱜ ᱢᱩᱞ ᱯᱟᱱᱛᱮᱭᱟᱜ ᱵᱚᱫᱚᱞ ᱢᱮ";
+
+/* String used to describe the option to continue to the next onboarding card in Firefox Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Customization.Intro.Continue.Action.v123" = "%@ ᱠᱩᱥᱤᱭᱟᱜ ᱛᱮᱭᱟᱨ";
+
+/* String used to describe the description label of the customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Intro.Description.v123" = "ᱟᱢᱟᱜ ᱵᱷᱮᱜᱟᱨ ᱵᱽᱨᱟᱣᱩᱡᱤᱝ ᱥᱴᱟᱭᱤᱞ ᱥᱟᱶ ᱢᱤᱞᱟᱹᱣ ᱞᱟᱹᱜᱤᱫ ᱟᱢᱟᱜ ᱛᱷᱤᱢ ᱟᱨ ᱴᱩᱞᱵᱟᱨ ᱥᱮᱴ ᱢᱮ ᱾";
+
+/* String used to describe the option to skip the customization cards in Firefox Onboarding screens and start browsing. */
+"Onboarding.Customization.Intro.Skip.Action.v123" = "ᱵᱽᱨᱟᱣᱩᱡᱤᱝ ᱮᱦᱚᱵᱽ ᱢᱮ";
+
+/* String used to describe the title of the customization onboarding page in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Customization.Intro.Title.v123" = "%@ ᱫᱚ ᱠᱚᱵᱚᱡᱽ ᱨᱮ ᱫᱚᱦᱚ ᱢᱮᱭᱟᱭ";
+
+/* String used to describe the option to save the user setting and continue to the next onboarding in Firefox Onboarding screens. */
+"Onboarding.Customization.Theme.Continue.Action.v123" = "ᱥᱟᱧᱪᱟᱣ ᱟᱨ ᱞᱟᱦᱟᱜ ᱢᱮ";
+
+/* On the theme customization onboarding card, the string used to describe the option to set the theme to dark theme from the available choices. */
+"Onboarding.Customization.Theme.Dark.Action.v123" = "ᱧᱩᱛ";
+
+/* String used to describe the description label of the theme customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Theme.Description.v123" = "ᱣᱮᱵᱽ ᱥᱚᱨᱮᱥ ᱢᱟᱨᱥᱟᱞ ᱨᱮ ᱧᱮᱞ ᱢᱮ᱾";
+
+/* On the theme customization onboarding card, the string used to describe the option to set the theme to light theme from the available choices. */
+"Onboarding.Customization.Theme.Light.Action.v123" = "ᱢᱟᱨᱥᱟᱞ";
+
+/* String used to describe the option to skip the theme customization in Firefox Onboarding screens. */
+"Onboarding.Customization.Theme.Skip.Action.v123" = "ᱟᱲᱟᱜ";
+
+/* On the theme customization onboarding card, the string used to describe the option to set the theme to system theme from the available choices. */
+"Onboarding.Customization.Theme.System.Action.v123" = "ᱥᱤᱥᱴᱟᱢ ᱚᱴᱚ";
+
+/* String used to describe the title of the theme customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Theme.Title.v123" = "ᱢᱤᱫᱴᱟᱹᱝ ᱛᱷᱤᱢ ᱵᱟᱪᱷᱟᱣ ᱢᱮ";
+
+/* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the bottom of the screen. */
+"Onboarding.Customization.Toolbar.Bottom.Action.v123" = "ᱞᱟᱛᱟᱨ";
+
+/* String used to describe the option to save set preferences and leave onboarding to start browsing in the app. */
+"Onboarding.Customization.Toolbar.Continue.Action.v123" = "ᱥᱟᱸᱪᱟᱣ ᱢᱮ ᱟᱨ ᱵᱽᱨᱟᱣᱩᱡᱤᱝ ᱮᱦᱚᱵ ᱢᱮ";
+
+/* String used to describe the description label of the toolbar customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Toolbar.Description.v123" = "ᱥᱮᱸᱫᱽᱨᱟ ᱫᱚ ᱥᱮᱴᱮᱨ ᱵᱷᱤᱛᱨᱤ ᱨᱮ ᱫᱚᱦᱚ ᱠᱟᱜ ᱢᱮ᱾";
+
+/* String used to describe the option to skip the toolbar customization in Firefox Onboarding screens and start browisg in the app. */
+"Onboarding.Customization.Toolbar.Skip.Action.v123" = "ᱟᱲᱟᱜ";
+
+/* String used to describe the title of the toolbar customization onboarding page in our Onboarding screens. */
+"Onboarding.Customization.Toolbar.Title.v123" = "ᱢᱤᱫᱴᱟᱹᱝ ᱴᱩᱞᱵᱟᱨ ᱯᱞᱮᱥᱢᱮᱱᱴ ᱨᱟᱠᱟᱵᱽ ᱢᱮ";
+
+/* On the toolbar customization onboarding card, the string used to describe the option to set the toolbar at the top of the screen. */
+"Onboarding.Customization.Toolbar.Top.Action.v123" = "ᱪᱮᱛᱟᱱ";
 
 /* String used to describes what Firefox is on the first onboarding page in our Onboarding screens. Indie means small independant. */
 "Onboarding.IntroDescriptionPart1.v114" = "ᱥᱟᱹᱫᱷᱤᱱ ᱾ ᱵᱟᱝ ᱞᱟᱵᱷ ᱾ ᱵᱮᱥ ᱞᱟᱹᱜᱤᱫ ᱾";
@@ -25,17 +79,32 @@
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Continue.Action.v114" = "ᱞᱮᱛᱟᱲ";
 
+/* String used to describe the description of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Notification.Description.v120" = "ᱟᱢᱟᱜ ᱥᱟᱫᱷᱚᱱ ᱠᱚ ᱛᱟᱞᱟ ᱛᱮ ᱨᱩᱠᱷᱤᱭᱟ ᱛᱮ ᱴᱮᱵᱽ ᱠᱚ ᱵᱚᱫᱚᱞ ᱢᱮ ᱟᱨ %@ ᱨᱮ ᱮᱴᱟᱜ ᱯᱨᱟᱭᱵᱷᱮᱴ ᱯᱷᱤᱪᱚᱨ ᱠᱚ ᱯᱟᱱᱛᱮ ᱧᱟᱢ ᱢᱮ ᱾";
+
 /* String used to describe the option to skip the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.Skip.Action.v115" = "ᱟᱲᱟᱜ";
 
+/* String used to describe the title of the notification onboarding page in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Notification.Title.v120" = "%@ ᱮᱛᱞᱟᱤᱭᱟᱹ ᱥᱟᱞᱟᱜ ᱟᱢ ᱴᱷᱤᱠ ᱨᱮ ᱫᱚᱦᱚᱢᱮ ᱞᱟᱹᱜᱤᱫ ᱜᱚᱲᱚ ᱮᱢᱚᱜᱼᱟᱭ";
+
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "ᱠᱷᱚᱵᱚᱨ ᱠᱚ ᱦᱮᱡ ᱪᱷᱚᱭ ᱢᱮ";
+
+/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Sync.Description.v120" = "ᱡᱟᱦᱟᱸ ᱛᱤ ᱨᱮ ᱟᱢ ᱥᱩᱦᱤ ᱮᱢ ᱠᱟᱜᱼᱟᱢ ᱟᱨ ᱟᱹᱭᱩᱨ ᱢᱤᱫ ᱮᱢ ᱛᱟᱦᱮᱸᱱᱟ, ᱟᱢ ᱫᱚ ᱴᱷᱤᱴ ᱨᱮᱢ ᱛᱟᱦᱮᱸᱟ ᱾ %@ ᱟᱢᱟᱜ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫ, ᱯᱩᱛᱷᱤᱪᱤᱱᱦᱟᱹ, ᱟᱨᱦᱚᱸ ᱟᱭᱢᱟ ᱮᱴᱟᱜ ᱠᱚ ᱡᱤᱱᱤᱥ ᱠᱟᱨᱮ ᱫᱟᱱᱟᱝ ᱨᱮ ᱫᱟᱦᱚ ᱢᱮᱭᱟᱭ ᱾";
+
+/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Sync.Description.v123" = "ᱟᱢᱟᱜ ᱟᱹᱭᱩᱨ ᱢᱤᱫ ᱡᱷᱚᱜ %@ ᱫᱚ ᱟᱢᱟᱜ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ, ᱵᱩᱩᱠᱢᱟᱨᱠ ᱟᱨ ᱰᱷᱮᱨ ᱡᱤᱱᱤᱥ ᱥᱟᱣᱛᱤ ᱫᱚᱦᱚᱭᱟᱭ ᱾";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.SignIn.Action.v114" = "ᱵᱚᱞᱚᱱ ᱥᱩᱦᱤ";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.Skip.Action.v114" = "ᱟᱲᱟᱜ";
+
+/* String used to describes the title of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. */
+"Onboarding.Sync.Title.v120" = "ᱮᱴᱟᱜ ᱥᱟᱫᱷᱟᱱ ᱛᱮ ᱫᱚᱱ ᱡᱷᱚᱜ ᱫᱟᱱᱟᱝ ᱨᱮ ᱛᱟᱦᱮᱸᱱ ᱢᱮ";
 
 /* Accessibility label for the wallpaper onboarding modal displayed on top of the homepage. This describes to the user that which type of wallpaper they are seeing. */
 "Onboarding.Wallpaper.Accessibility.Classic.v114" = "ᱠᱞᱟᱥᱤᱠ ᱠᱟᱱᱛᱷᱪᱤᱛᱟᱹᱨ";
@@ -61,11 +130,23 @@
 /* Describes the action on the first onboarding page in our Onboarding screen. This indicates that the user will set their default browser to Firefox. */
 "Onboarding.Welcome.ActionTreatementA.v114" = "ᱢᱩᱞ ᱯᱟᱱᱛᱮᱭᱟᱜ ᱞᱮᱠᱟ ᱥᱟᱡᱟᱣ ᱢᱮ";
 
+/* Accessibility label for close button that dismisses the welcome onboarding screen. Placeholder is for the app name. */
+"Onboarding.Welcome.Close.AccessibilityLabel.v121" = "ᱵᱚᱱᱫᱚ ᱢᱮ ᱟᱨ ᱚᱰᱚᱠᱚᱜ ᱢᱮ %@ ᱚᱱᱵᱚᱨᱰᱤᱝ";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Description.TreatementA.v120" = "ᱟᱞᱮᱭᱟᱜ ᱵᱮᱼᱯᱷᱟᱭᱫᱟ ᱵᱽᱨᱟᱣᱡᱚᱨ ᱫᱚ ᱵᱟᱦᱨᱮ ᱠᱚᱢᱯᱟᱱᱤ ᱠᱚ ᱣᱮᱵᱽ ᱨᱮ ᱟᱢ ᱯᱟᱸᱡᱟ ᱠᱚ ᱵᱚᱸᱫᱚᱜᱼᱟ ᱾";
+
+/* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
+"Onboarding.Welcome.Description.v120" = "ᱟᱞᱮᱭᱟᱜ ᱵᱮᱼᱯᱷᱟᱭᱫᱟ ᱵᱽᱨᱟᱣᱡᱚᱨ ᱫᱚ ᱵᱟᱦᱨᱮ ᱠᱚᱢᱯᱟᱱᱤ ᱠᱚ ᱣᱮᱵᱽ ᱨᱮ ᱟᱢ ᱯᱟᱸᱡᱟ ᱠᱚ ᱵᱚᱸᱫᱚᱜᱼᱟ ᱾";
+
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Link.Action.v114" = "ᱟᱞᱮᱭᱟᱜ ᱱᱤᱥᱚᱱ ᱱᱚᱴᱤᱥ ᱨᱮ ᱰᱷᱮᱨ ᱵᱟᱲᱟᱭ ᱢᱮ";
 
 /* Describes the action on the first onboarding page in our Onboarding screen. This string will be on a button so user can skip this onboarding card. */
 "Onboarding.Welcome.Skip.v114" = "ᱟᱲᱟᱜ";
+
+/* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
+"Onboarding.Welcome.Title.TreatementA.v120" = "ᱟᱢ ᱴᱷᱤᱠ ᱨᱮ ᱫᱚᱦᱚᱢᱮᱪᱷᱚ ᱞᱟᱹᱜᱤᱫ ᱠᱩᱥᱤᱭᱟᱜᱼᱟ ᱞᱮ";
 
 /* String used to describes the title of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Title.v114" = "ᱥᱟᱹᱫᱷᱤᱱ ᱤᱱᱴᱚᱨᱱᱮᱴ ᱨᱮ ᱟᱢᱟᱜ ᱥᱟᱹᱜᱩᱱ ᱫᱟᱨᱟᱢ";
