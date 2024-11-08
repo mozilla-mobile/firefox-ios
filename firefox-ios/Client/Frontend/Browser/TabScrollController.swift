@@ -36,7 +36,9 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
             self.scrollView?.addGestureRecognizer(panGesture)
             scrollView?.delegate = self
             scrollView?.keyboardDismissMode = .onDrag
-            configureRefreshControl(isEnabled: true)
+            webViewIsLoadingObserver = tab?.webView?.observe(\.isLoading, changeHandler: { [weak self] webView, _ in
+                self?.configureRefreshControl(isEnabled: !webView.isLoading)
+            })
         }
     }
 
@@ -46,6 +48,7 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
 
     weak var zoomPageBar: ZoomPageBar?
     private var observedScrollViews = WeakList<UIScrollView>()
+    private var webViewIsLoadingObserver: NSKeyValueObservation?
 
     var overKeyboardContainerConstraint: Constraint?
     var bottomContainerConstraint: Constraint?
@@ -125,6 +128,7 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
     }
 
     deinit {
+        webViewIsLoadingObserver?.invalidate()
         logger.log("TabScrollController deallocating", level: .info, category: .lifecycle)
         observedScrollViews.forEach({ stopObserving(scrollView: $0) })
     }
@@ -457,8 +461,8 @@ extension TabScrollingController: UIGestureRecognizerDelegate {
 
 extension TabScrollingController: UIScrollViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-            lastContentOffsetY = scrollView.contentOffset.y
-        }
+        lastContentOffsetY = scrollView.contentOffset.y
+    }
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard !tabIsLoading(), !isBouncingAtBottom(), isAbleToScroll, let tab else { return }

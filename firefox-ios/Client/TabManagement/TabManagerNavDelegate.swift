@@ -15,6 +15,7 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
+        restoreWebViewBackgroundColorToDefault(webView)
         for delegate in delegates {
             delegate.webView?(webView, didCommit: navigation)
         }
@@ -25,6 +26,7 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
         didFail navigation: WKNavigation!,
         withError error: Error
     ) {
+        restoreWebViewBackgroundColorToDefault(webView)
         for delegate in delegates {
             delegate.webView?(webView, didFail: navigation, withError: error)
         }
@@ -35,6 +37,7 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
         didFailProvisionalNavigation navigation: WKNavigation!,
         withError error: Error
     ) {
+        restoreWebViewBackgroundColorToDefault(webView)
         for delegate in delegates {
             delegate.webView?(webView, didFailProvisionalNavigation: navigation, withError: error)
         }
@@ -47,6 +50,7 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
     }
 
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+        restoreWebViewBackgroundColorToDefault(webView)
         for delegate in delegates {
             delegate.webViewWebContentProcessDidTerminate?(webView)
         }
@@ -77,6 +81,7 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        webView.evaluateJavascriptInDefaultContentWorld("document.body.style.backgroundColor = 'transparent';")
         for delegate in delegates {
             delegate.webView?(webView, didStartProvisionalNavigation: navigation)
         }
@@ -111,5 +116,9 @@ class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
         }
 
         decisionHandler(res)
+    }
+
+    private func restoreWebViewBackgroundColorToDefault(_ webView: WKWebView) {
+        webView.evaluateJavascriptInDefaultContentWorld("document.body.style.backgroundColor = '';")
     }
 }
