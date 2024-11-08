@@ -43,7 +43,7 @@ final class SearchEngineSelectionMiddleware {
         let action = SearchEngineSelectionAction(
             windowUUID: windowUUID,
             actionType: SearchEngineSelectionActionType.didLoadSearchEngines,
-            searchEngines: searchEngines
+            searchEngines: searchEngines.map({ $0.generateModel() })
         )
         store.dispatch(action)
     }

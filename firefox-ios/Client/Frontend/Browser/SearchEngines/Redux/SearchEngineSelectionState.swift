@@ -10,7 +10,9 @@ struct SearchEngineSelectionState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     var shouldDismiss: Bool
     // Default search engine should appear in position 0
-    var searchEngines: [OpenSearchEngine]
+    var searchEngines: [SearchEngineModel]
+    // The currently selected search engine, if different from the default. Nil means the user hasn't changed the default.
+    var selectedSearchEngine: SearchEngineModel?
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let state = store.state.screenState(
@@ -25,21 +27,24 @@ struct SearchEngineSelectionState: ScreenState, Equatable {
         self.init(
             windowUUID: state.windowUUID,
             searchEngines: state.searchEngines,
+            selectedSearchEngine: state.selectedSearchEngine,
             shouldDismiss: state.shouldDismiss
         )
     }
 
     init(windowUUID: WindowUUID) {
-        self.init(windowUUID: windowUUID, searchEngines: [])
+        self.init(windowUUID: windowUUID, searchEngines: [], selectedSearchEngine: nil)
     }
 
     private init(
         windowUUID: WindowUUID,
-        searchEngines: [OpenSearchEngine],
+        searchEngines: [SearchEngineModel],
+        selectedSearchEngine: SearchEngineModel?,
         shouldDismiss: Bool = false
     ) {
         self.windowUUID = windowUUID
         self.searchEngines = searchEngines
+        self.selectedSearchEngine = selectedSearchEngine
         self.shouldDismiss = shouldDismiss
     }
 
@@ -60,7 +65,20 @@ struct SearchEngineSelectionState: ScreenState, Equatable {
 
             return SearchEngineSelectionState(
                 windowUUID: state.windowUUID,
-                searchEngines: searchEngines
+                searchEngines: searchEngines,
+                // With the current usage, we don't want to reset the selectedSearchEngine to nil for didLoadSearchEngines
+                selectedSearchEngine: state.selectedSearchEngine
+            )
+
+        case SearchEngineSelectionActionType.didTapSearchEngine:
+            guard let action = action as? SearchEngineSelectionAction,
+                  let selectedSearchEngine = action.selectedSearchEngine
+            else { return defaultState(from: state) }
+
+            return SearchEngineSelectionState(
+                windowUUID: state.windowUUID,
+                searchEngines: state.searchEngines,
+                selectedSearchEngine: selectedSearchEngine
             )
 
         default:
@@ -71,7 +89,8 @@ struct SearchEngineSelectionState: ScreenState, Equatable {
     static func defaultState(from state: SearchEngineSelectionState) -> SearchEngineSelectionState {
         return SearchEngineSelectionState(
             windowUUID: state.windowUUID,
-            searchEngines: state.searchEngines
+            searchEngines: state.searchEngines,
+            selectedSearchEngine: state.selectedSearchEngine
         )
     }
 }
