@@ -20,71 +20,86 @@ final class TabPanelStateTests: XCTestCase {
         super.tearDown()
         DependencyHelperMock().reset()
     }
+
     // MARK: - TabPanelMiddlewareActionType
-    func testTabsState_DidLoadTabPanel() {
-        testTabsState_newTabsIsEmptyHelper(actionType: TabPanelMiddlewareActionType.didLoadTabPanel)
+    func testTabsState_didLoadTabPanel() {
+        let initialState = createInitialState()
+        XCTAssertTrue(initialState.tabs.isEmpty)
+        let reducer = tabsPanelReducer()
+        let tabs = createTabs()
+        let inactiveTabs = createInactiveTabs()
+        let tabDisplayModel = TabDisplayModel(isPrivateMode: true,
+                                              tabs: tabs,
+                                              normalTabsCount: "\(tabs.count)",
+                                              inactiveTabs: inactiveTabs,
+                                              isInactiveTabsExpanded: false)
+        let action = TabPanelMiddlewareAction(tabDisplayModel: tabDisplayModel,
+                                              windowUUID: .XCTestDefaultUUID,
+                                              actionType: TabPanelMiddlewareActionType.didLoadTabPanel)
+        let newState = reducer(initialState, action)
+        XCTAssertEqual(newState.tabs, tabs)
+        XCTAssertTrue(newState.isPrivateMode)
+        XCTAssertEqual(newState.inactiveTabs, inactiveTabs)
+        XCTAssertFalse(newState.isInactiveTabsExpanded)
     }
 
     func testTabsState_didChangeTabPanel() {
-        testTabsState_newTabsIsEmptyHelper(actionType: TabPanelMiddlewareActionType.didChangeTabPanel)
-    }
-
-    private func testTabsState_newTabsIsEmptyHelper(actionType: TabPanelMiddlewareActionType,
-                                                    file: StaticString = #file,
-                                                    line: UInt = #line) {
         let initialState = createInitialState()
-        XCTAssertTrue(initialState.tabs.isEmpty, file: file, line: line)
+        XCTAssertTrue(initialState.tabs.isEmpty)
         let reducer = tabsPanelReducer()
         let tabs = createTabs()
-        let tabDisplayModel = TabDisplayModel(isPrivateMode: false,
+        let inactiveTabs = createInactiveTabs()
+        let tabDisplayModel = TabDisplayModel(isPrivateMode: true,
                                               tabs: tabs,
                                               normalTabsCount: "\(tabs.count)",
-                                              inactiveTabs: [InactiveTabsModel](),
+                                              inactiveTabs: inactiveTabs,
                                               isInactiveTabsExpanded: false)
         let action = TabPanelMiddlewareAction(tabDisplayModel: tabDisplayModel,
                                               windowUUID: .XCTestDefaultUUID,
                                               actionType: TabPanelMiddlewareActionType.didChangeTabPanel)
         let newState = reducer(initialState, action)
-        XCTAssertFalse(newState.tabs.isEmpty, file: file, line: line)
+        XCTAssertEqual(newState.tabs, tabs)
+        XCTAssertTrue(newState.isPrivateMode)
+        XCTAssertEqual(newState.inactiveTabs, inactiveTabs)
+        XCTAssertFalse(newState.isInactiveTabsExpanded)
     }
 
     func testTabsState_willAppearTabPanel() throws {
         let tabs = createOneSelectedTab()
-        let tabDisplayModel = TabDisplayModel(isPrivateMode: false,
-                                              tabs: tabs,
-                                              normalTabsCount: "\(tabs.count)",
-                                              inactiveTabs: [InactiveTabsModel](),
-                                              isInactiveTabsExpanded: false,
-                                              shouldScrollToTab: false)
-        try testTabsState_scrollToIndexHelper(actionType: .willAppearTabPanel, tabDisplayModel: tabDisplayModel)
+        let expectedIndex = tabs.firstIndex(where: \.isSelected)
+        let initialState = TabsPanelState(windowUUID: .XCTestDefaultUUID,
+                                          isPrivateMode: false,
+                                          tabs: tabs,
+                                          inactiveTabs: createInactiveTabs(),
+                                          isInactiveTabsExpanded: false)
+        let reducer = tabsPanelReducer()
+        let action = TabPanelMiddlewareAction(
+            windowUUID: .XCTestDefaultUUID,
+            actionType: TabPanelMiddlewareActionType.willAppearTabPanel
+        )
+        let newState = reducer(initialState, action)
+
+        let scrollState = try XCTUnwrap(newState.scrollState)
+        XCTAssertEqual(expectedIndex, scrollState.toIndex)
     }
 
     func testTabsState_refreshTabs() throws {
+        let initialState = createInitialState()
+        let reducer = tabsPanelReducer()
         let tabs = createOneSelectedTab()
         let tabDisplayModel = TabDisplayModel(isPrivateMode: false,
                                               tabs: tabs,
                                               normalTabsCount: "\(tabs.count)",
                                               inactiveTabs: [InactiveTabsModel](),
-                                              isInactiveTabsExpanded: false,
-                                              shouldScrollToTab: true)
-        try testTabsState_scrollToIndexHelper(actionType: .refreshTabs, tabDisplayModel: tabDisplayModel)
-    }
-
-    func testTabsState_scrollToIndexHelper(actionType: TabPanelMiddlewareActionType,
-                                           tabDisplayModel: TabDisplayModel,
-                                           file: StaticString = #file,
-                                           line: UInt = #line) throws {
-        let initialState = createInitialState()
-        XCTAssertNil(initialState.scrollToIndex, file: file, line: line)
-        let selectedIndex = try XCTUnwrap(tabDisplayModel.tabs.firstIndex(where: \.isSelected), file: file, line: line)
-        let reducer = tabsPanelReducer()
+                                              isInactiveTabsExpanded: false)
         let action = TabPanelMiddlewareAction(
             tabDisplayModel: tabDisplayModel,
             windowUUID: .XCTestDefaultUUID,
-            actionType: actionType
+            actionType: TabPanelMiddlewareActionType.refreshTabs
         )
         let newState = reducer(initialState, action)
-        XCTAssertEqual(newState.scrollToIndex, selectedIndex, "Expected index was: \(selectedIndex)", file: file, line: line)
+
+        XCTAssertEqual(newState.tabs, tabs)
     }
 
     func testTabsState_refreshInactiveTabs() throws {
@@ -97,8 +112,7 @@ final class TabPanelStateTests: XCTestCase {
                                               tabs: tabs,
                                               normalTabsCount: "\(tabs.count)",
                                               inactiveTabs: [InactiveTabsModel](),
-                                              isInactiveTabsExpanded: false,
-                                              shouldScrollToTab: false)
+                                              isInactiveTabsExpanded: false)
         let action = TabPanelMiddlewareAction(
             tabDisplayModel: tabDisplayModel,
             inactiveTabModels: inactiveTabs,
@@ -107,21 +121,6 @@ final class TabPanelStateTests: XCTestCase {
         )
         let newState = reducer(initialState, action)
         XCTAssertEqual(newState.inactiveTabs, inactiveTabs, "Expected inactive tabs were: \(inactiveTabs)")
-    }
-
-    func testTabsState_showToast() {
-        for toastType in toastTypes() {
-            let initialState = createInitialState()
-            XCTAssertNil(initialState.toastType)
-            let reducer = tabsPanelReducer()
-            let action = TabPanelMiddlewareAction(
-                toastType: toastType,
-                windowUUID: .XCTestDefaultUUID,
-                actionType: TabPanelMiddlewareActionType.showToast
-            )
-            let newState = reducer(initialState, action)
-            XCTAssertEqual(newState.toastType, toastType, "Failed toast type: \(toastType)")
-        }
     }
 
     func testTabsState_IsInactiveTabsExpanded() {
@@ -358,14 +357,14 @@ final class TabPanelStateTests: XCTestCase {
         ]
     }
 
-    private func createTabs() -> [TabModel] {
-        return (0...2).map { index in
-            MockTabModel(tabTitle: "Tab\(index)")
+    private func createTabs(count: Int = 3, isPrivate: Bool = false) -> [TabModel] {
+        return (0 ..< count).map { index in
+            MockTabModel(isPrivate: isPrivate, tabTitle: "Tab\(index)")
         }
     }
 
-    private func createInactiveTabs() -> [InactiveTabsModel] {
-        return (0...2).map { index in
+    private func createInactiveTabs(count: Int = 3) -> [InactiveTabsModel] {
+        return (0 ..< count).map { index in
             InactiveTabsModel(tabUUID: "4233-2323-3578",
                               title: "InactiveTab\(index)",
                               url: URL(string: "https://www.test\(index).com"))
@@ -388,20 +387,5 @@ final class TabPanelStateTests: XCTestCase {
                  url: url,
                  screenshot: screenshot,
                  hasHomeScreenshot: hasHomeScreenshot)
-    }
-
-    private func toastTypes() -> [ToastType] {
-        return [
-            .addBookmark,
-            .addToReadingList,
-            .addShortcut,
-            .closedSingleTab,
-            .closedSingleInactiveTab,
-            .closedAllTabs(count: 3),
-            .closedAllInactiveTabs(count: 3),
-            .copyURL,
-            .removeFromReadingList,
-            .removeShortcut
-        ]
     }
 }
