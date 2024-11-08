@@ -38,27 +38,11 @@ struct MicrosurveyPromptState: StateType, Equatable {
 
         switch action.actionType {
         case MicrosurveyPromptMiddlewareActionType.initialize:
-            let model = (action as? MicrosurveyPromptMiddlewareAction)?.microsurveyModel
-            return MicrosurveyPromptState(
-                windowUUID: state.windowUUID,
-                showPrompt: true,
-                showSurvey: false,
-                model: model
-            )
+            return handleInitializeAction(state: state, action: action)
         case MicrosurveyPromptActionType.closePrompt:
-            return MicrosurveyPromptState(
-                windowUUID: state.windowUUID,
-                showPrompt: false,
-                showSurvey: false,
-                model: state.model
-            )
+            return handleClosePromptAction(state: state)
         case MicrosurveyPromptActionType.continueToSurvey:
-            return MicrosurveyPromptState(
-                windowUUID: state.windowUUID,
-                showPrompt: true,
-                showSurvey: true,
-                model: state.model
-            )
+            return handleContinueToSurveyAction(state: state)
         default:
             return defaultState(from: state)
         }
@@ -69,6 +53,34 @@ struct MicrosurveyPromptState: StateType, Equatable {
             windowUUID: state.windowUUID,
             showPrompt: state.showPrompt,
             showSurvey: false,
+            model: state.model
+        )
+    }
+
+    private static func handleInitializeAction(state: Self, action: Action) -> Self {
+        let model = (action as? MicrosurveyPromptMiddlewareAction)?.microsurveyModel
+        return MicrosurveyPromptState(
+            windowUUID: state.windowUUID,
+            showPrompt: true,
+            showSurvey: false,
+            model: model
+        )
+    }
+
+    private static func handleClosePromptAction(state: Self) -> Self {
+        return MicrosurveyPromptState(
+            windowUUID: state.windowUUID,
+            showPrompt: false,
+            showSurvey: false,
+            model: state.model
+        )
+    }
+
+    private static func handleContinueToSurveyAction(state: Self) -> Self {
+        return MicrosurveyPromptState(
+            windowUUID: state.windowUUID,
+            showPrompt: true,
+            showSurvey: true,
             model: state.model
         )
     }
