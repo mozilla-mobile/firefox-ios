@@ -1,0 +1,18 @@
+/* When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility label for the sheet's close button. */
+"UnifiedSearch.SearchEngineSelection.AccessibilityLabels.CloseButton.Label.v133" = "Mdel";
+
+/* When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility hint for tapping the search settings row at the bottom of the list, which opens the app's search settings screen. */
+"UnifiedSearch.SearchEngineSelection.AccessibilityLabels.SearchSettings.Hint.v133" = "Yettalday iɣewwaren n unadi";
+
+/* When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This string is the label for the row at the bottom of the list. When this row is tapped, the app's search settings screen appears. */
+"UnifiedSearch.SearchEngineSelection.AccessibilityLabels.SearchSettings.Label.v133" = "Nadi ismenyifen";
+
+/* When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility label for the title of that sheet. */
+"UnifiedSearch.SearchEngineSelection.AccessibilityLabels.TopTitle.Label.v133" = "I unadi-a:";
+
+/* When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This string is the label for the button at the bottom of the list. When this row is tapped, the app's search settings screen appears. */
+"UnifiedSearch.SearchEngineSelection.SearchSettings.Title.v133" = "Iɣewwaren n unadi";
+
+/* When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the title for the sheet. */
+"UnifiedSearch.SearchEngineSelection.TopTitle.Title.v133" = "I unadi-a:";
+

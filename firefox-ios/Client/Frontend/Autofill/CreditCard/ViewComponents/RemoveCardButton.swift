@@ -77,7 +77,7 @@ struct RemoveCardButton: View {
     func applyTheme(theme: Theme) {
         let color = theme.colors
         backgroundColor = Color(color.layer2)
-        removeButtonColor = Color(color.textWarning)
+        removeButtonColor = Color(color.textCritical)
         borderColor = Color(color.borderPrimary)
     }
 }

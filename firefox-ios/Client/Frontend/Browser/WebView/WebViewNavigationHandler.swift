@@ -11,7 +11,7 @@ protocol WebViewNavigationHandler {
 
     /// Whether we should filter that URL for data scheme or not
     /// - Returns: True when the URL needs to be filtered for the data scheme
-    func shouldFilterDataScheme(url: URL) -> Bool
+    func shouldFilterDataScheme(url: URL?) -> Bool
 
     /// Filter top-level data scheme has defined in:
     /// https://blog.mozilla.org/security/2017/11/27/blocking-top-level-navigations-data-urls-firefox-59/
@@ -38,7 +38,8 @@ struct WebViewNavigationHandlerImplementation: WebViewNavigationHandler {
         self.decisionHandler = decisionHandler
     }
 
-    func shouldFilterDataScheme(url: URL) -> Bool {
+    func shouldFilterDataScheme(url: URL?) -> Bool {
+        guard let url else { return false }
         return url.scheme == WebViewNavigationHandlerImplementation.Scheme.data.rawValue
     }
 
@@ -51,32 +52,39 @@ struct WebViewNavigationHandlerImplementation: WebViewNavigationHandler {
             return
         }
 
-        let url = url.absoluteString.lowercased()
-        // Allow certain image types
-        if url.hasPrefix("data:image/") && !url.hasPrefix("data:image/svg+xml") {
+        if shouldAllowDataScheme(for: url) {
             decisionHandler(.allow)
-            return
+        } else {
+            decisionHandler(.cancel)
+        }
+    }
+
+    func shouldAllowDataScheme(for url: URL?) -> Bool {
+        guard let url else { return false }
+        let urlString = url.absoluteString.lowercased()
+
+        // Allow certain image types
+        if urlString.hasPrefix("data:image/") && !urlString.hasPrefix("data:image/svg+xml") {
+            return true
         }
 
         // Allow video, and certain application types
-        if url.hasPrefix("data:video/")
-            || url.hasPrefix("data:application/pdf")
-            || url.hasPrefix("data:application/json") {
-            decisionHandler(.allow)
-            return
+        if urlString.hasPrefix("data:video/")
+            || urlString.hasPrefix("data:application/pdf")
+            || urlString.hasPrefix("data:application/json") {
+            return true
         }
 
         // Allow plain text types.
-        // Note the format of data URLs is `data:[<media type>][;base64],<data>` 
+        // Note the format of data URLs is `data:[<media type>][;base64],<data>`
         // with empty <media type> indicating plain text.
-        if url.hasPrefix("data:;base64,")
-            || url.hasPrefix("data:,")
-            || url.hasPrefix("data:text/plain,")
-            || url.hasPrefix("data:text/plain;") {
-            decisionHandler(.allow)
-            return
+        if urlString.hasPrefix("data:;base64,")
+            || urlString.hasPrefix("data:,")
+            || urlString.hasPrefix("data:text/plain,")
+            || urlString.hasPrefix("data:text/plain;") {
+            return true
         }
 
-        decisionHandler(.cancel)
+        return false
     }
 }

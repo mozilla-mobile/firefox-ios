@@ -25,6 +25,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
             title: nil,
             children: [
                 FeatureFlagsBoolSetting(
+                    with: .bookmarksRefactor,
+                    titleText: format(string: "Enable Bookmarks Redesign"),
+                    statusText: format(string: "Toggle to use the new bookmarks design")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .closeRemoteTabs,
                     titleText: format(string: "Enable Close Remote Tabs"),
                     statusText: format(string: "Toggle to enable closing tabs remotely feature")
@@ -66,7 +73,28 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     statusText: format(string: "Toggle to display natively created error pages")
                 ) { [weak self] _ in
                     self?.reloadView()
-                }
+                },
+                FeatureFlagsBoolSetting(
+                    with: .toolbarRefactor,
+                    titleText: format(string: "Toolbar Redesign"),
+                    statusText: format(string: "Toggle to enable the toolbar redesign")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .unifiedSearch,
+                    titleText: format(string: "Enable Unified Search"),
+                    statusText: format(string: "Toggle to use unified search within the new toolbar")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
+                    with: .passwordGenerator,
+                    titleText: format(string: "Enable Password Generator"),
+                    statusText: format(string: "Toggle to enable password generator feature")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
             ]
         )
     }

@@ -146,7 +146,7 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
 
         selectionButton.setTitleColor(theme.colors.textInverted, for: [])
         selectionButton.backgroundColor = theme.colors.actionPrimary
-        deleteButton.tintColor = theme.colors.textWarning
+        deleteButton.tintColor = theme.colors.textCritical
 
         // Search bar text and placeholder color
         let searchTextField = searchController.searchBar.searchTextField

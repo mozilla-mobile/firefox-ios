@@ -16,6 +16,8 @@ enum MainMenuNavigationDestination: Equatable, CaseIterable {
     case newPrivateTab
     case passwords
     case settings
+    case syncSignIn
+    case shareSheet
     case zoom
 }
 
@@ -26,13 +28,13 @@ enum MainMenuDetailsViewType {
 
 struct MenuNavigationDestination: Equatable {
     let destination: MainMenuNavigationDestination
-    let urlToVisit: URL?
+    let url: URL?
 
     init(
         _ destination: MainMenuNavigationDestination,
-        urlToVisit: URL? = nil
+        url: URL? = nil
     ) {
         self.destination = destination
-        self.urlToVisit = urlToVisit
+        self.url = url
     }
 }

@@ -92,7 +92,7 @@ export class FieldDetail {
     element,
     form,
     fieldName = null,
-    { autocompleteInfo = {}, confidence = null } = {}
+    { autocompleteInfo = {}, confidence = null, isVisible = true } = {}
   ) {
     const fieldDetail = new FieldDetail(element);
 
@@ -154,7 +154,7 @@ export class FieldDetail {
       /* unit test doesn't have ownerGlobal */
     }
 
-    fieldDetail.isVisible = lazy.FormAutofillUtils.isFieldVisible(element);
+    fieldDetail.isVisible = isVisible;
 
     // Info required by heuristics
     fieldDetail.maxLength = element.maxLength;

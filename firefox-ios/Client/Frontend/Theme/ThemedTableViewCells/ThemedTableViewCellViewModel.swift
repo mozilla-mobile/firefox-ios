@@ -34,7 +34,7 @@ class ThemedTableViewCellViewModel {
         case .actionPrimary:
             textColor = theme.colors.actionPrimary
         case .destructive:
-            textColor = theme.colors.textWarning
+            textColor = theme.colors.textCritical
         case .disabled:
             textColor = theme.colors.textDisabled
         }

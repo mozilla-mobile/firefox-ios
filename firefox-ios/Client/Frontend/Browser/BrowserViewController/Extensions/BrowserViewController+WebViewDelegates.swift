@@ -35,6 +35,18 @@ extension BrowserViewController: WKUIDelegate {
             return nil
         }
 
+        let navigationUrl = navigationAction.request.url
+        let navigationUrlString = navigationUrl?.absoluteString ?? ""
+
+        // Check for "data" scheme using WebViewNavigationHandlerImplementation
+        let navigationHandler = WebViewNavigationHandlerImplementation { _ in }
+        var shouldAllowDataScheme = true
+        if navigationHandler.shouldFilterDataScheme(url: navigationUrl) {
+            shouldAllowDataScheme = navigationHandler.shouldAllowDataScheme(for: navigationUrl)
+        }
+
+        guard shouldAllowDataScheme else { return nil }
+
         // If the page uses `window.open()` or `[target="_blank"]`, open the page in a new tab.
         // IMPORTANT!!: WebKit will perform the `URLRequest` automatically!! Attempting to do
         // the request here manually leads to incorrect results!!
@@ -44,7 +56,7 @@ extension BrowserViewController: WKUIDelegate {
             configuration: configuration
         )
 
-        if navigationAction.request.url == nil {
+        if navigationUrl == nil || navigationUrlString.isEmpty {
             newTab.url = URL(string: "about:blank")
         }
 
@@ -760,7 +772,22 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL {
-            ErrorPageHelper(certStore: profile.certStore).loadPage(error, forUrl: url, inWebView: webView)
+            if isNativeErrorPageEnabled {
+                guard var errorURLpath = URLComponents(string: "\(InternalURL.baseUrl)/\(ErrorPageHandler.path)" ) else { return }
+                errorURLpath.queryItems = [URLQueryItem(
+                    name: InternalURL.Param.url.rawValue,
+                    value: url.absoluteString
+                )]
+                guard let errorPageURL = errorURLpath.url else { return }
+                let action = NativeErrorPageAction(networkError: error,
+                                                   windowUUID: windowUUID,
+                                                   actionType: NativeErrorPageActionType.receivedError
+                )
+                store.dispatch(action)
+                webView.load(PrivilegedRequest(url: errorPageURL) as URLRequest)
+            } else {
+                ErrorPageHelper(certStore: profile.certStore).loadPage(error, forUrl: url, inWebView: webView)
+            }
         }
     }
 

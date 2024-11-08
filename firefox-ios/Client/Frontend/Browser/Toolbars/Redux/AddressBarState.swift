@@ -15,11 +15,17 @@ struct AddressBarState: StateType, Equatable {
     var url: URL?
     var searchTerm: String?
     var lockIconImageName: String?
+    var lockIconNeedsTheming: Bool
+    var safeListedURLImageName: String?
     var isEditing: Bool
     var isScrollingDuringEdit: Bool
     var shouldSelectSearchTerm: Bool
     var isLoading: Bool
     let readerModeState: ReaderModeState?
+    let didStartTyping: Bool
+    let showQRPageAction: Bool
+    /// Stores the alternative search engine that the user has temporarily selected (otherwise use the default)
+    let alternativeSearchEngine: SearchEngineModel?
 
     private static let qrCodeScanAction = ToolbarActionState(
         actionType: .qrCode,
@@ -74,19 +80,26 @@ struct AddressBarState: StateType, Equatable {
         a11yId: AccessibilityIdentifiers.Toolbar.fireButton)
 
     init(windowUUID: WindowUUID) {
-        self.init(windowUUID: windowUUID,
-                  navigationActions: [],
-                  pageActions: [],
-                  browserActions: [],
-                  borderPosition: nil,
-                  url: nil,
-                  searchTerm: nil,
-                  lockIconImageName: nil,
-                  isEditing: false,
-                  isScrollingDuringEdit: false,
-                  shouldSelectSearchTerm: true,
-                  isLoading: false,
-                  readerModeState: nil)
+        self.init(
+            windowUUID: windowUUID,
+            navigationActions: [],
+            pageActions: [],
+            browserActions: [],
+            borderPosition: nil,
+            url: nil,
+            searchTerm: nil,
+            lockIconImageName: nil,
+            lockIconNeedsTheming: true,
+            safeListedURLImageName: nil,
+            isEditing: false,
+            isScrollingDuringEdit: false,
+            shouldSelectSearchTerm: true,
+            isLoading: false,
+            readerModeState: nil,
+            didStartTyping: false,
+            showQRPageAction: true,
+            alternativeSearchEngine: nil
+        )
     }
 
     init(windowUUID: WindowUUID,
@@ -95,13 +108,18 @@ struct AddressBarState: StateType, Equatable {
          browserActions: [ToolbarActionState],
          borderPosition: AddressToolbarBorderPosition?,
          url: URL?,
-         searchTerm: String? = nil,
-         lockIconImageName: String? = nil,
-         isEditing: Bool = false,
-         isScrollingDuringEdit: Bool = false,
-         shouldSelectSearchTerm: Bool = true,
-         isLoading: Bool = false,
-         readerModeState: ReaderModeState? = nil) {
+         searchTerm: String?,
+         lockIconImageName: String?,
+         lockIconNeedsTheming: Bool,
+         safeListedURLImageName: String?,
+         isEditing: Bool,
+         isScrollingDuringEdit: Bool,
+         shouldSelectSearchTerm: Bool,
+         isLoading: Bool,
+         readerModeState: ReaderModeState?,
+         didStartTyping: Bool,
+         showQRPageAction: Bool,
+         alternativeSearchEngine: SearchEngineModel?) {
         self.windowUUID = windowUUID
         self.navigationActions = navigationActions
         self.pageActions = pageActions
@@ -110,316 +128,627 @@ struct AddressBarState: StateType, Equatable {
         self.url = url
         self.searchTerm = searchTerm
         self.lockIconImageName = lockIconImageName
+        self.lockIconNeedsTheming = lockIconNeedsTheming
+        self.safeListedURLImageName = safeListedURLImageName
         self.isEditing = isEditing
         self.isScrollingDuringEdit = isScrollingDuringEdit
         self.shouldSelectSearchTerm = shouldSelectSearchTerm
         self.isLoading = isLoading
         self.readerModeState = readerModeState
+        self.didStartTyping = didStartTyping
+        self.showQRPageAction = showQRPageAction
+        self.alternativeSearchEngine = alternativeSearchEngine
     }
 
     static let reducer: Reducer<Self> = { state, action in
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
+        else {
+            return defaultState(from: state)
+        }
 
         switch action.actionType {
         case ToolbarActionType.didLoadToolbars:
-            guard let borderPosition = (action as? ToolbarAction)?.addressBorderPosition else { return state }
-
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: [ToolbarActionState](),
-                pageActions: [qrCodeScanAction],
-                browserActions: [tabsAction(), menuAction()],
-                borderPosition: borderPosition,
-                url: nil
-            )
+            return handleDidLoadToolbarsAction(state: state, action: action)
 
         case ToolbarActionType.numberOfTabsChanged:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: state.navigationActions,
-                pageActions: state.pageActions,
-                browserActions: browserActions(action: toolbarAction, addressBarState: state),
-                borderPosition: state.borderPosition,
-                url: state.url,
-                searchTerm: state.searchTerm,
-                lockIconImageName: state.lockIconImageName,
-                isEditing: state.isEditing,
-                isScrollingDuringEdit: state.isScrollingDuringEdit,
-                shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-                isLoading: state.isLoading,
-                readerModeState: toolbarAction.readerModeState
-            )
+            return handleNumberOfTabsChangedAction(state: state, action: action)
 
         case ToolbarActionType.readerModeStateChanged:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: state.navigationActions,
-                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
-                browserActions: state.browserActions,
-                borderPosition: state.borderPosition,
-                url: state.url,
-                searchTerm: state.searchTerm,
-                lockIconImageName: state.lockIconImageName,
-                isEditing: state.isEditing,
-                isScrollingDuringEdit: state.isScrollingDuringEdit,
-                shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-                isLoading: state.isLoading,
-                readerModeState: toolbarAction.readerModeState
-            )
+            return handleReaderModeStateChangedAction(state: state, action: action)
 
         case ToolbarActionType.websiteLoadingStateDidChange:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: state.navigationActions,
-                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
-                browserActions: state.browserActions,
-                borderPosition: state.borderPosition,
-                url: state.url,
-                searchTerm: state.searchTerm,
-                lockIconImageName: state.lockIconImageName,
-                isEditing: state.isEditing,
-                isScrollingDuringEdit: state.isScrollingDuringEdit,
-                shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-                isLoading: toolbarAction.isLoading ?? state.isLoading,
-                readerModeState: state.readerModeState
-            )
+            return handleWebsiteLoadingStateDidChangeAction(state: state, action: action)
 
         case ToolbarActionType.urlDidChange:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: navigationActions(action: toolbarAction,
-                                                     addressBarState: state,
-                                                     isEditing: state.isEditing),
-                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
-                browserActions: browserActions(action: toolbarAction, addressBarState: state),
-                borderPosition: state.borderPosition,
-                url: toolbarAction.url,
-                searchTerm: nil,
-                lockIconImageName: toolbarAction.lockIconImageName ?? state.lockIconImageName,
-                isEditing: state.isEditing,
-                isScrollingDuringEdit: state.isScrollingDuringEdit,
-                shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-                isLoading: state.isLoading,
-                readerModeState: state.readerModeState
-            )
+            return handleUrlDidChangeAction(state: state, action: action)
 
         case ToolbarActionType.backForwardButtonStateChanged:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: navigationActions(action: toolbarAction,
-                                                     addressBarState: state,
-                                                     isEditing: state.isEditing),
-                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
-                browserActions: state.browserActions,
-                borderPosition: state.borderPosition,
-                url: state.url,
-                searchTerm: nil,
-                lockIconImageName: state.lockIconImageName,
-                isEditing: state.isEditing,
-                isScrollingDuringEdit: state.isScrollingDuringEdit,
-                shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-                isLoading: state.isLoading,
-                readerModeState: state.readerModeState
-            )
+            return handleBackForwardButtonStateChangedAction(state: state, action: action)
 
         case ToolbarActionType.traitCollectionDidChange:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: navigationActions(action: toolbarAction,
-                                                     addressBarState: state,
-                                                     isEditing: state.isEditing),
-                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
-                browserActions: browserActions(action: toolbarAction, addressBarState: state),
-                borderPosition: state.borderPosition,
-                url: state.url,
-                searchTerm: nil,
-                lockIconImageName: state.lockIconImageName,
-                isEditing: state.isEditing,
-                isScrollingDuringEdit: state.isScrollingDuringEdit,
-                shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-                isLoading: state.isLoading,
-                readerModeState: state.readerModeState
-            )
+            return handleTraitCollectionDidChangeAction(state: state, action: action)
 
         case ToolbarActionType.showMenuWarningBadge:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: state.navigationActions,
-                pageActions: state.pageActions,
-                browserActions: browserActions(action: toolbarAction, addressBarState: state),
-                borderPosition: state.borderPosition,
-                url: state.url,
-                searchTerm: state.searchTerm,
-                lockIconImageName: state.lockIconImageName,
-                isEditing: state.isEditing,
-                isScrollingDuringEdit: state.isScrollingDuringEdit,
-                shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-                isLoading: state.isLoading,
-                readerModeState: state.readerModeState
-            )
+            return handleShowMenuWarningBadgeAction(state: state, action: action)
 
         case ToolbarActionType.borderPositionChanged,
             ToolbarActionType.toolbarPositionChanged:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: state.navigationActions,
-                pageActions: state.pageActions,
-                browserActions: state.browserActions,
-                borderPosition: toolbarAction.addressBorderPosition,
-                url: state.url,
-                searchTerm: state.searchTerm,
-                lockIconImageName: state.lockIconImageName,
-                isEditing: state.isEditing,
-                isScrollingDuringEdit: state.isScrollingDuringEdit,
-                shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-                isLoading: state.isLoading,
-                readerModeState: state.readerModeState
-            )
+            return handlePositionChangedAction(state: state, action: action)
 
         case ToolbarActionType.didPasteSearchTerm:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: state.navigationActions,
-                pageActions: state.pageActions,
-                browserActions: state.browserActions,
-                borderPosition: state.borderPosition,
-                url: state.url,
-                searchTerm: toolbarAction.searchTerm,
-                lockIconImageName: state.lockIconImageName,
-                isEditing: true,
-                isScrollingDuringEdit: state.isScrollingDuringEdit,
-                shouldSelectSearchTerm: false,
-                isLoading: state.isLoading,
-                readerModeState: state.readerModeState
-            )
+            return handleDidPasteSearchTermAction(state: state, action: action)
 
         case ToolbarActionType.didStartEditingUrl:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: navigationActions(action: toolbarAction, addressBarState: state, isEditing: true),
-                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: true),
-                browserActions: browserActions(action: toolbarAction, addressBarState: state),
-                borderPosition: state.borderPosition,
-                url: state.url,
-                searchTerm: toolbarAction.searchTerm ?? state.searchTerm,
-                lockIconImageName: state.lockIconImageName,
-                isEditing: true,
-                isScrollingDuringEdit: false,
-                shouldSelectSearchTerm: true,
-                isLoading: state.isLoading,
-                readerModeState: state.readerModeState
-            )
+            return handleDidStartEditingUrlAction(state: state, action: action)
 
         case ToolbarActionType.cancelEdit:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: navigationActions(action: toolbarAction, addressBarState: state),
-                pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: false),
-                browserActions: browserActions(action: toolbarAction, addressBarState: state),
-                borderPosition: state.borderPosition,
-                url: toolbarAction.url ?? state.url,
-                searchTerm: nil,
-                lockIconImageName: state.lockIconImageName,
-                isEditing: false,
-                isScrollingDuringEdit: false,
-                shouldSelectSearchTerm: true,
-                isLoading: state.isLoading,
-                readerModeState: state.readerModeState
-            )
+            return handleCancelEditAction(state: state, action: action)
 
         case ToolbarActionType.didSetTextInLocationView:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
-
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: state.navigationActions,
-                pageActions: state.pageActions,
-                browserActions: state.browserActions,
-                borderPosition: state.borderPosition,
-                url: state.url,
-                searchTerm: toolbarAction.searchTerm,
-                lockIconImageName: state.lockIconImageName,
-                isEditing: true,
-                shouldSelectSearchTerm: false,
-                isLoading: state.isLoading,
-                readerModeState: state.readerModeState
-            )
+            return handleDidSetTextInLocationViewAction(state: state, action: action)
 
         case ToolbarActionType.didScrollDuringEdit:
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: state.navigationActions,
-                pageActions: state.pageActions,
-                browserActions: state.browserActions,
-                borderPosition: state.borderPosition,
-                url: state.url,
-                searchTerm: state.searchTerm,
-                lockIconImageName: state.lockIconImageName,
-                isEditing: state.isEditing,
-                isScrollingDuringEdit: true,
-                shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-                isLoading: state.isLoading,
-                readerModeState: state.readerModeState
-            )
+            return handleDidScrollDuringEditAction(state: state)
 
         case ToolbarActionType.clearSearch:
-            guard let toolbarAction = action as? ToolbarAction else { return state }
+            return handleClearSearchAction(state: state, action: action)
 
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: state.navigationActions,
-                pageActions: state.pageActions,
-                browserActions: state.browserActions,
-                borderPosition: state.borderPosition,
-                url: nil,
-                searchTerm: nil,
-                lockIconImageName: state.lockIconImageName,
-                isEditing: state.isEditing,
-                isScrollingDuringEdit: state.isScrollingDuringEdit,
-                shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-                isLoading: state.isLoading,
-                readerModeState: state.readerModeState
-            )
+        case ToolbarActionType.didDeleteSearchTerm:
+            return handleDidDeleteSearchTermAction(state: state, action: action)
+
+        case ToolbarActionType.didEnterSearchTerm:
+            return handleDidEnterSearchTermAction(state: state, action: action)
+
+        case ToolbarActionType.didStartTyping:
+            return handleDidStartTypingAction(state: state, action: action)
+
+        case SearchEngineSelectionActionType.didTapSearchEngine:
+            return handleDidTapSearchEngine(state: state, action: action)
 
         default:
-            return AddressBarState(
-                windowUUID: state.windowUUID,
-                navigationActions: state.navigationActions,
-                pageActions: state.pageActions,
-                browserActions: state.browserActions,
-                borderPosition: state.borderPosition,
-                url: state.url,
-                searchTerm: state.searchTerm,
-                lockIconImageName: state.lockIconImageName,
-                isEditing: state.isEditing,
-                isScrollingDuringEdit: state.isScrollingDuringEdit,
-                shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-                isLoading: state.isLoading,
-                readerModeState: state.readerModeState
-            )
+            return defaultState(from: state)
         }
+    }
+
+    private static func handleDidLoadToolbarsAction(state: Self, action: Action) -> Self {
+        guard let borderPosition = (action as? ToolbarAction)?.addressBorderPosition else {
+            return defaultState(from: state)
+        }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: [ToolbarActionState](),
+            pageActions: [qrCodeScanAction],
+            browserActions: [tabsAction(), menuAction()],
+            borderPosition: borderPosition,
+            url: nil,
+            searchTerm: nil,
+            lockIconImageName: nil,
+            lockIconNeedsTheming: true,
+            safeListedURLImageName: nil,
+            isEditing: false,
+            isScrollingDuringEdit: false,
+            shouldSelectSearchTerm: true,
+            isLoading: false,
+            readerModeState: nil,
+            didStartTyping: false,
+            showQRPageAction: true,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    private static func handleNumberOfTabsChangedAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            pageActions: state.pageActions,
+            browserActions: browserActions(action: toolbarAction, addressBarState: state),
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: toolbarAction.readerModeState,
+            didStartTyping: state.didStartTyping,
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    private static func handleReaderModeStateChangedAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            pageActions: pageActions(action: toolbarAction,
+                                     addressBarState: state,
+                                     isEditing: state.isEditing,
+                                     showQRPageAction: state.showQRPageAction),
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: toolbarAction.readerModeState,
+            didStartTyping: state.didStartTyping,
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    private static func handleWebsiteLoadingStateDidChangeAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: toolbarAction.isLoading ?? state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: state.didStartTyping,
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    private static func handleUrlDidChangeAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: navigationActions(action: toolbarAction,
+                                                 addressBarState: state,
+                                                 isEditing: state.isEditing),
+            pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
+            browserActions: browserActions(action: toolbarAction, addressBarState: state),
+            borderPosition: state.borderPosition,
+            url: toolbarAction.url,
+            searchTerm: nil,
+            lockIconImageName: toolbarAction.lockIconImageName ?? state.lockIconImageName,
+            lockIconNeedsTheming: toolbarAction.lockIconNeedsTheming ?? state.lockIconNeedsTheming,
+            safeListedURLImageName: toolbarAction.safeListedURLImageName,
+            isEditing: state.isEditing,
+            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: state.didStartTyping,
+            showQRPageAction: toolbarAction.url == nil,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    private static func handleBackForwardButtonStateChangedAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: navigationActions(action: toolbarAction,
+                                                 addressBarState: state,
+                                                 isEditing: state.isEditing),
+            pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: nil,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: state.didStartTyping,
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    private static func handleTraitCollectionDidChangeAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: navigationActions(action: toolbarAction,
+                                                 addressBarState: state,
+                                                 isEditing: state.isEditing),
+            pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
+            browserActions: browserActions(action: toolbarAction, addressBarState: state),
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: nil,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: state.didStartTyping,
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    private static func handleShowMenuWarningBadgeAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            pageActions: state.pageActions,
+            browserActions: browserActions(action: toolbarAction, addressBarState: state),
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: state.didStartTyping,
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    private static func handlePositionChangedAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            pageActions: state.pageActions,
+            browserActions: state.browserActions,
+            borderPosition: toolbarAction.addressBorderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: state.didStartTyping,
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    private static func handleDidPasteSearchTermAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
+        let isEmptySearch = toolbarAction.searchTerm == nil || toolbarAction.searchTerm?.isEmpty == true
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: navigationActions(action: toolbarAction, addressBarState: state, isEditing: true),
+            pageActions: pageActions(action: toolbarAction,
+                                     addressBarState: state,
+                                     isEditing: true,
+                                     showQRPageAction: isEmptySearch),
+            browserActions: browserActions(action: toolbarAction, addressBarState: state),
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: toolbarAction.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: true,
+            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldSelectSearchTerm: false,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: false,
+            showQRPageAction: isEmptySearch,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    private static func handleDidStartEditingUrlAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
+        let searchTerm = toolbarAction.searchTerm ?? state.searchTerm
+        let locationText = searchTerm ?? state.url?.absoluteString
+        let showQRPageAction = locationText == nil || locationText?.isEmpty == true
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: navigationActions(action: toolbarAction, addressBarState: state, isEditing: true),
+            pageActions: pageActions(action: toolbarAction,
+                                     addressBarState: state,
+                                     isEditing: true,
+                                     showQRPageAction: showQRPageAction),
+            browserActions: browserActions(action: toolbarAction, addressBarState: state),
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: true,
+            isScrollingDuringEdit: false,
+            shouldSelectSearchTerm: true,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: false,
+            showQRPageAction: showQRPageAction,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    private static func handleCancelEditAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
+        let url = toolbarAction.url ?? state.url
+        let showQRPageAction = url == nil
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: navigationActions(action: toolbarAction, addressBarState: state),
+            pageActions: pageActions(action: toolbarAction,
+                                     addressBarState: state,
+                                     isEditing: false,
+                                     showQRPageAction: showQRPageAction),
+            browserActions: browserActions(action: toolbarAction, addressBarState: state),
+            borderPosition: state.borderPosition,
+            url: url,
+            searchTerm: nil,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: false,
+            isScrollingDuringEdit: false,
+            shouldSelectSearchTerm: true,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: false,
+            showQRPageAction: showQRPageAction,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    private static func handleDidSetTextInLocationViewAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
+        let isEmptySearch = toolbarAction.searchTerm == nil || toolbarAction.searchTerm?.isEmpty == true
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            pageActions: pageActions(action: toolbarAction,
+                                     addressBarState: state,
+                                     isEditing: true,
+                                     showQRPageAction: isEmptySearch),
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: toolbarAction.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: true,
+            isScrollingDuringEdit: false,
+            shouldSelectSearchTerm: false,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: false,
+            showQRPageAction: isEmptySearch,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    private static func handleDidScrollDuringEditAction(state: Self) -> Self {
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            pageActions: state.pageActions,
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            isScrollingDuringEdit: true,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: state.didStartTyping,
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    private static func handleClearSearchAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            pageActions: pageActions(action: toolbarAction,
+                                     addressBarState: state,
+                                     isEditing: state.isEditing,
+                                     showQRPageAction: true),
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: nil,
+            searchTerm: nil,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: state.didStartTyping,
+            showQRPageAction: true,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    private static func handleDidDeleteSearchTermAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            pageActions: pageActions(action: toolbarAction,
+                                     addressBarState: state,
+                                     isEditing: state.isEditing,
+                                     showQRPageAction: true),
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: true,
+            showQRPageAction: true,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    private static func handleDidEnterSearchTermAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            pageActions: pageActions(action: toolbarAction,
+                                     addressBarState: state,
+                                     isEditing: state.isEditing,
+                                     showQRPageAction: false),
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: true,
+            showQRPageAction: false,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    private static func handleDidStartTypingAction(state: Self, action: Action) -> Self {
+        guard action is ToolbarAction else { return defaultState(from: state) }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            pageActions: state.pageActions,
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: true,
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    private static func handleDidTapSearchEngine(state: Self, action: Action) -> AddressBarState {
+        guard let searchEngineSelectionAction = action as? SearchEngineSelectionAction,
+              let selectedSearchEngine = searchEngineSelectionAction.selectedSearchEngine
+        else { return defaultState(from: state) }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            pageActions: state.pageActions,
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: state.didStartTyping,
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: selectedSearchEngine
+        )
+    }
+
+    static func defaultState(from state: AddressBarState) -> AddressBarState {
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            pageActions: state.pageActions,
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: state.didStartTyping,
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
     }
 
     // MARK: - Address Toolbar Actions
@@ -456,36 +785,39 @@ struct AddressBarState: StateType, Equatable {
     private static func pageActions(
         action: ToolbarAction,
         addressBarState: AddressBarState,
-        isEditing: Bool
+        isEditing: Bool,
+        showQRPageAction: Bool? = nil
     ) -> [ToolbarActionState] {
         var actions = [ToolbarActionState]()
 
-        let isUrlChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
         let isReaderModeAction = action.actionType as? ToolbarActionType == .readerModeStateChanged
         let readerModeState = isReaderModeAction ? action.readerModeState : addressBarState.readerModeState
-        let url = isUrlChangeAction ? action.url : addressBarState.url
 
-        guard url != nil, !isEditing else {
+        let showQrCodeButton = showQRPageAction ?? addressBarState.showQRPageAction
+
+        guard !showQrCodeButton else {
             // On homepage we only show the QR code button
             return [qrCodeScanAction]
         }
 
+        guard !isEditing else { return actions }
+
         switch readerModeState {
         case .active, .available:
-            let shouldDisplayAsHighlighted = readerModeState == .active
-            let iconName = shouldDisplayAsHighlighted ?
+            let isSelected = readerModeState == .active
+            let iconName = isSelected ?
             StandardImageIdentifiers.Large.readerViewFill :
             StandardImageIdentifiers.Large.readerView
 
-            var readerModeAction = ToolbarActionState(
+            let readerModeAction = ToolbarActionState(
                 actionType: .readerMode,
                 iconName: iconName,
                 isEnabled: true,
+                isSelected: isSelected,
                 a11yLabel: .TabLocationReaderModeAccessibilityLabel,
                 a11yHint: .TabLocationReloadAccessibilityHint,
                 a11yId: AccessibilityIdentifiers.Toolbar.readerModeButton,
                 a11yCustomActionName: .TabLocationReaderModeAddToReadingListAccessibilityLabel)
-            readerModeAction.shouldDisplayAsHighlighted = shouldDisplayAsHighlighted
             actions.append(readerModeAction)
         default: break
         }
@@ -515,7 +847,11 @@ struct AddressBarState: StateType, Equatable {
                                                          window: action.windowUUID)
         else { return actions }
 
-        if !(action.isShowingTopTabs ?? toolbarState.isShowingTopTabs) {
+        let isURLDidChangeAction = action.actionType as? ToolbarActionType == .urlDidChange
+        let isShowingTopTabs = action.isShowingTopTabs ?? toolbarState.isShowingTopTabs
+        let isHomepage = (isURLDidChangeAction ? action.url : toolbarState.addressToolbar.url) == nil
+
+        if !isShowingTopTabs, !isHomepage {
             actions.append(newTabAction)
         }
 

@@ -468,7 +468,7 @@ export const HeuristicsRegExp = {
         "|^시[·・]?도", // ko-KR
 
       "address-housenumber":
-        "housenumber|hausnummer|haus",
+        "housenumber|hausnummer|haus|house[a-z\-]*n(r|o)",
 
       "postal-code":
         "zip|postal|post.*code|pcode" +

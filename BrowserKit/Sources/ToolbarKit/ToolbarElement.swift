@@ -23,8 +23,8 @@ public struct ToolbarElement: Equatable {
     /// Indicates whether the toolbar element's image should be flipped for right-to-left layout direction
     let isFlippedForRTL: Bool
 
-    /// Indicates if the element should be displayed as highlighted
-    let shouldDisplayAsHighlighted: Bool
+    /// Indicates if the element is in the selected state and should be displayed as highlighted.
+    let isSelected: Bool
 
     /// Indicates that there is an associated contextual hint
     let contextualHintType: String?
@@ -62,7 +62,7 @@ public struct ToolbarElement: Equatable {
                 numberOfTabs: Int? = nil,
                 isEnabled: Bool,
                 isFlippedForRTL: Bool = false,
-                shouldDisplayAsHighlighted: Bool = false,
+                isSelected: Bool = false,
                 contextualHintType: String? = nil,
                 a11yLabel: String,
                 a11yHint: String?,
@@ -78,7 +78,7 @@ public struct ToolbarElement: Equatable {
         self.numberOfTabs = numberOfTabs
         self.isEnabled = isEnabled
         self.isFlippedForRTL = isFlippedForRTL
-        self.shouldDisplayAsHighlighted = shouldDisplayAsHighlighted
+        self.isSelected = isSelected
         self.contextualHintType = contextualHintType
         self.onSelected = onSelected
         self.onLongPress = onLongPress
@@ -97,7 +97,7 @@ public struct ToolbarElement: Equatable {
         lhs.numberOfTabs == rhs.numberOfTabs &&
         lhs.isEnabled == rhs.isEnabled &&
         lhs.isFlippedForRTL == rhs.isFlippedForRTL &&
-        lhs.shouldDisplayAsHighlighted == rhs.shouldDisplayAsHighlighted &&
+        lhs.isSelected == rhs.isSelected &&
         lhs.contextualHintType == rhs.contextualHintType &&
         lhs.hasLongPressAction == rhs.hasLongPressAction &&
         lhs.a11yLabel == rhs.a11yLabel &&

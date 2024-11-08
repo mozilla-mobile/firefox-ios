@@ -87,8 +87,12 @@ class PerformanceTests: BaseTestCase {
         let tabsButtonNumber = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["20"]
         let doneButton = app.buttons[AccessibilityIdentifiers.TabTray.doneButton]
 
-        mozWaitForElementToExist(tabsButton)
-        mozWaitForElementToExist(tabsButtonNumber)
+        waitForElementsToExist(
+            [
+                tabsButton,
+                tabsButtonNumber
+            ]
+        )
 
         measure(metrics: [
             XCTClockMetric(), // to measure timeClock Mon
@@ -109,8 +113,12 @@ class PerformanceTests: BaseTestCase {
         let tabsButtonNumber = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["∞"]
         let doneButton = app.buttons[AccessibilityIdentifiers.TabTray.doneButton]
 
-        mozWaitForElementToExist(tabsButton)
-        mozWaitForElementToExist(tabsButtonNumber)
+        waitForElementsToExist(
+            [
+                tabsButton,
+                tabsButtonNumber
+            ]
+        )
 
         measure(metrics: [
             XCTClockMetric(), // to measure timeClock Mon

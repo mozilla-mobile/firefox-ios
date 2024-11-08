@@ -58,6 +58,7 @@ let RequestMobileSite = "RequestMobileSite"
 let CreditCardsSettings = "AutofillCreditCard"
 let PageZoom = "PageZoom"
 let NotificationsSettings = "NotificationsSetting"
+let AddressesSettings = "AutofillAddress"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
@@ -369,7 +370,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 // There is no Cancel option in iPad.
                 app.otherElements["PopoverDismissRegion"].tap()
             } else {
-                app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection].tapOnApp()
+                app.buttons[AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.closeButton].tap()
             }
         }
     }
@@ -604,6 +605,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(table.cells["SiriSettings"], to: SiriSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Logins.title], to: LoginsSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.CreditCards.title], to: CreditCardsSettings)
+        screenState.tap(table.cells[AccessibilityIdentifiers.Settings.Address.title], to: AddressesSettings)
         screenState.tap(table.cells[AccessibilityIdentifiers.Settings.ClearData.title], to: ClearPrivateDataSettings)
         screenState.tap(
             table.cells[AccessibilityIdentifiers.Settings.ContentBlocker.title],
@@ -668,21 +670,17 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.gesture(forAction: Action.FxATypeEmail) { userState in
             if isTablet {
-                app.webViews.textFields.firstMatch.tap()
-                app.webViews.textFields.firstMatch.typeText(userState.fxaUsername!)
+                app.webViews.textFields.firstMatch.tapAndTypeText(userState.fxaUsername!)
             } else {
-                app.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField].tap()
                 app.textFields[AccessibilityIdentifiers.Settings.FirefoxAccount.emailTextField]
-                    .typeText(userState.fxaUsername!)
+                    .tapAndTypeText(userState.fxaUsername!)
             }
         }
         screenState.gesture(forAction: Action.FxATypePasswordNewAccount) { userState in
-            app.secureTextFields.element(boundBy: 1).tap()
-            app.secureTextFields.element(boundBy: 1).typeText(userState.fxaPassword!)
+            app.secureTextFields.element(boundBy: 1).tapAndTypeText(userState.fxaPassword!)
         }
         screenState.gesture(forAction: Action.FxATypePasswordExistingAccount) { userState in
-            app.secureTextFields.element(boundBy: 0).tap()
-            app.secureTextFields.element(boundBy: 0).typeText(userState.fxaPassword!)
+            app.secureTextFields.element(boundBy: 0).tapAndTypeText(userState.fxaPassword!)
         }
         screenState.gesture(forAction: Action.FxATapOnContinueButton) { userState in
             app.webViews.buttons[AccessibilityIdentifiers.Settings.FirefoxAccount.continueButton].tap()
@@ -1077,6 +1075,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(CreditCardsSettings) { screenState in
+        screenState.backAction = navigationControllerBackAction
+    }
+
+    map.addScreenState(AddressesSettings) { screenState in
         screenState.backAction = navigationControllerBackAction
     }
 

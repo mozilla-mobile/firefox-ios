@@ -48,7 +48,7 @@ class SyncNowSetting: WithAccountSetting {
             return NSAttributedString(
                 string: .FxANoInternetConnection,
                 attributes: [
-                    NSAttributedString.Key.foregroundColor: theme.colors.textWarning,
+                    NSAttributedString.Key.foregroundColor: theme.colors.textCritical,
                     NSAttributedString.Key.font: FXFontStyles.Regular.body.scaledFont()
                 ]
             )
@@ -87,7 +87,7 @@ class SyncNowSetting: WithAccountSetting {
 
         switch syncStatus {
         case .inProgress:
-            return syncIcon?.tinted(withColor: theme.colors.iconAction)
+            return syncIcon?.tinted(withColor: theme.colors.iconAccent)
         default:
             return syncIcon?.tinted(withColor: theme.colors.iconPrimary)
         }
@@ -106,7 +106,7 @@ class SyncNowSetting: WithAccountSetting {
             return NSAttributedString(
                 string: message,
                 attributes: [
-                    NSAttributedString.Key.foregroundColor: theme.colors.textWarning,
+                    NSAttributedString.Key.foregroundColor: theme.colors.textCritical,
                     NSAttributedString.Key.font: FXFontStyles.Regular.body.scaledFont()
                 ]
             )
@@ -153,7 +153,7 @@ class SyncNowSetting: WithAccountSetting {
         guard let self = self else { return }
         troubleshootButton.setTitle(.FirefoxSyncTroubleshootTitle, for: .normal)
         troubleshootButton.addTarget(self, action: #selector(self.troubleshoot), for: .touchUpInside)
-        troubleshootButton.setTitleColor(self.theme.colors.textWarning, for: .normal)
+        troubleshootButton.setTitleColor(self.theme.colors.textCritical, for: .normal)
         troubleshootButton.titleLabel?.font = FXFontStyles.Regular.caption1.scaledFont()
     }
 
@@ -166,13 +166,13 @@ class SyncNowSetting: WithAccountSetting {
 
     private lazy var warningIcon: UIImageView = {
         let image = UIImage(named: StandardImageIdentifiers.Large.warningFill)?
-            .tinted(withColor: theme.colors.iconWarning)
+            .tinted(withColor: theme.colors.iconCritical)
         return UIImageView(image: image)
     }()
 
     private lazy var errorIcon: UIImageView = {
         let image = UIImage.templateImageNamed(StandardImageIdentifiers.Large.warningFill)?
-            .tinted(withColor: theme.colors.iconWarning)
+            .tinted(withColor: theme.colors.iconCritical)
         return UIImageView(image: image)
     }()
 

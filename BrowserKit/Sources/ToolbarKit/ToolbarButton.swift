@@ -25,7 +25,6 @@ class ToolbarButton: UIButton, ThemeApplicable {
     private var badgeImageView: UIImageView?
     private var maskImageView: UIImageView?
 
-    private var shouldDisplayAsHighlighted = false
     private var onLongPress: ((UIButton) -> Void)?
 
     override init(frame: CGRect) {
@@ -43,17 +42,19 @@ class ToolbarButton: UIButton, ThemeApplicable {
         removeAllGestureRecognizers()
         configureLongPressGestureRecognizerIfNeeded(for: element)
         configureCustomA11yActionIfNeeded(for: element)
-        shouldDisplayAsHighlighted = element.shouldDisplayAsHighlighted
+        isSelected = element.isSelected
 
         let image = imageConfiguredForRTL(for: element)
         let action = UIAction(title: element.a11yLabel,
                               image: image,
                               handler: { _ in
             element.onSelected?(self)
+            UIAccessibility.post(notification: .announcement, argument: element.a11yLabel)
         })
 
         config.image = image
         isEnabled = element.isEnabled
+        isAccessibilityElement = true
         accessibilityIdentifier = element.a11yId
         accessibilityLabel = element.a11yLabel
         accessibilityHint = element.a11yHint
@@ -86,7 +87,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
         case .disabled:
             updatedConfiguration.baseForegroundColor = foregroundColorDisabled
         default:
-            updatedConfiguration.baseForegroundColor = shouldDisplayAsHighlighted ?
+            updatedConfiguration.baseForegroundColor = isSelected ?
                                                        foregroundColorHighlighted :
                                                        foregroundColorNormal
         }
@@ -175,7 +176,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
 
         badgeImageView?.layer.borderColor = colors.layer1.cgColor
         badgeImageView?.backgroundColor = maskImageView == nil ? colors.layer1 : .clear
-        badgeImageView?.tintColor = maskImageView == nil ? .clear : colors.actionInfo
+        badgeImageView?.tintColor = maskImageView == nil ? .clear : colors.actionInformation
         maskImageView?.tintColor = colors.layer1
 
         setNeedsUpdateConfiguration()

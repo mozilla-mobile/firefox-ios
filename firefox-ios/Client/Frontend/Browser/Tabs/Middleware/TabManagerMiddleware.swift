@@ -28,7 +28,7 @@ class TabManagerMiddleware {
         } else if let action = action as? TabTrayAction {
             self.resolveTabTrayActions(action: action, state: state)
         } else if let action = action as? TabPanelViewAction {
-            self.resovleTabPanelViewActions(action: action, state: state)
+            self.resolveTabPanelViewActions(action: action, state: state)
         } else if let action = action as? MainMenuAction {
             self.resolveMainMenuActions(with: action, appState: state)
         } else if let action = action as? HeaderAction {
@@ -66,8 +66,16 @@ class TabManagerMiddleware {
         switch action.actionType {
         case RemoteTabsPanelActionType.openSelectedURL:
             guard let url = action.url else { return }
-            openSelectedURL(url: url, windowUUID: action.windowUUID)
-
+            openSelectedURL(url: url, showOverlay: false, windowUUID: action.windowUUID)
+        case RemoteTabsPanelActionType.closeSelectedRemoteURL:
+            guard let url = action.url, let deviceId = action.targetDeviceId else { return }
+            closeSelectedRemoteTab(deviceId: deviceId, url: url, windowUUID: action.windowUUID)
+        case RemoteTabsPanelActionType.undoCloseSelectedRemoteURL:
+            guard let url = action.url, let deviceId = action.targetDeviceId else { return }
+            undoCloseSelectedRemoteTab(deviceId: deviceId, url: url, windowUUID: action.windowUUID)
+        case RemoteTabsPanelActionType.flushTabCommands:
+            guard let deviceId = action.targetDeviceId else { return }
+            flushTabCommands(deviceId: deviceId, windowUUID: action.windowUUID)
         default:
             break
         }
@@ -82,12 +90,14 @@ class TabManagerMiddleware {
             guard let panelType = action.panelType else { return }
             changePanel(panelType, uuid: action.windowUUID)
 
+        case TabTrayActionType.closePrivateTabsSettingToggled:
+            preserveTabs(uuid: action.windowUUID)
         default:
             break
         }
     }
 
-    private func resovleTabPanelViewActions(action: TabPanelViewAction, state: AppState) {
+    private func resolveTabPanelViewActions(action: TabPanelViewAction, state: AppState) {
         switch action.actionType {
         case TabPanelViewActionType.tabPanelDidLoad:
             let isPrivate = action.panelType == .privateTabs
@@ -114,7 +124,7 @@ class TabManagerMiddleware {
 
         case TabPanelViewActionType.addNewTab:
             let isPrivateMode = action.panelType == .privateTabs
-            addNewTab(with: action.urlRequest, isPrivate: isPrivateMode, for: action.windowUUID)
+            addNewTab(with: action.urlRequest, isPrivate: isPrivateMode, showOverlay: true, for: action.windowUUID)
 
         case TabPanelViewActionType.moveTab:
             guard let moveTabData = action.moveTabData else { return }
@@ -179,12 +189,24 @@ class TabManagerMiddleware {
         return (tabManager.normalTabs.count < 100) ? tabManager.normalTabs.count.description : "\u{221E}"
     }
 
-    private func openSelectedURL(url: URL, windowUUID: WindowUUID) {
+    private func openSelectedURL(url: URL, showOverlay: Bool, windowUUID: WindowUUID) {
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .open,
                                      object: .syncTab)
         let urlRequest = URLRequest(url: url)
-        self.addNewTab(with: urlRequest, isPrivate: false, for: windowUUID)
+        self.addNewTab(with: urlRequest, isPrivate: false, showOverlay: showOverlay, for: windowUUID)
+    }
+
+    private func closeSelectedRemoteTab(deviceId: String, url: URL, windowUUID: WindowUUID) {
+        self.profile.addTabToCommandQueue(deviceId, url: url)
+    }
+
+    private func undoCloseSelectedRemoteTab(deviceId: String, url: URL, windowUUID: WindowUUID) {
+        self.profile.removeTabFromCommandQueue(deviceId, url: url)
+    }
+
+    private func flushTabCommands(deviceId: String, windowUUID: WindowUUID) {
+        self.profile.flushTabCommands(toDeviceId: deviceId)
     }
 
     /// Gets initial state for TabTrayModel includes panelType, if is on Private mode,
@@ -264,7 +286,7 @@ class TabManagerMiddleware {
     /// - Parameters:
     ///   - urlRequest: URL request to load
     ///   - isPrivate: if the tab should be created in private mode or not
-    private func addNewTab(with urlRequest: URLRequest?, isPrivate: Bool, for uuid: WindowUUID) {
+    private func addNewTab(with urlRequest: URLRequest?, isPrivate: Bool, showOverlay: Bool, for uuid: WindowUUID) {
         // TODO: Legacy class has a guard to cancel adding new tab if dragging was enabled,
         // check if change is still needed
         let tabManager = tabManager(for: uuid)
@@ -281,7 +303,7 @@ class TabManagerMiddleware {
                                           actionType: TabTrayActionType.dismissTabTray)
         store.dispatch(dismissAction)
 
-        let overlayAction = GeneralBrowserAction(showOverlay: true,
+        let overlayAction = GeneralBrowserAction(showOverlay: showOverlay,
                                                  windowUUID: uuid,
                                                  actionType: GeneralBrowserActionType.showOverlay)
         store.dispatch(overlayAction)
@@ -562,7 +584,7 @@ class TabManagerMiddleware {
     }
 
     private func didTapLearnMoreAboutPrivate(with urlRequest: URLRequest, uuid: WindowUUID) {
-        addNewTab(with: urlRequest, isPrivate: true, for: uuid)
+        addNewTab(with: urlRequest, isPrivate: true, showOverlay: false, for: uuid)
     }
 
     private func selectTab(for tabUUID: TabUUID, uuid: WindowUUID) {
@@ -730,6 +752,7 @@ class TabManagerMiddleware {
                     currentTabInfo: MainMenuTabInfo(
                         tabID: selectedTab.tabUUID,
                         url: selectedTab.url,
+                        canonicalURL: selectedTab.canonicalURL?.displayURL,
                         isHomepage: selectedTab.isFxHomeTab,
                         isDefaultUserAgentDesktop: UserAgent.isDesktop(ua: UserAgent.getUserAgent()),
                         hasChangedUserAgent: selectedTab.changedUserAgent,
@@ -946,5 +969,10 @@ class TabManagerMiddleware {
                 )
             )
         }
+    }
+
+    private func preserveTabs(uuid: WindowUUID) {
+        let tabManager = tabManager(for: uuid)
+        tabManager.preserveTabs()
     }
 }

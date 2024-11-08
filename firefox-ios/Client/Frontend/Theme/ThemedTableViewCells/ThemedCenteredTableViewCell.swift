@@ -62,6 +62,6 @@ class ThemedCenteredTableViewCell: ThemedTableViewCell {
 
     override func applyTheme(theme: Theme) {
         super.applyTheme(theme: theme)
-        centeredLabel.textColor = theme.colors.textWarning
+        centeredLabel.textColor = theme.colors.textCritical
     }
 }

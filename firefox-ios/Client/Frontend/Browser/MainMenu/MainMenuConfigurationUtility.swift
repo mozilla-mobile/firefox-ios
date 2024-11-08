@@ -7,28 +7,32 @@ import Foundation
 import MenuKit
 import Shared
 
-struct MainMenuConfigurationUtility: Equatable {
+struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
     private struct Icons {
         static let newTab = StandardImageIdentifiers.Large.plus
         static let newPrivateTab = StandardImageIdentifiers.Large.privateModeCircleFill
         static let deviceDesktop = StandardImageIdentifiers.Large.deviceDesktop
+        static let deviceMobile = StandardImageIdentifiers.Large.deviceMobile
         static let findInPage = StandardImageIdentifiers.Large.search
         static let tools = StandardImageIdentifiers.Large.tool
         static let save = StandardImageIdentifiers.Large.save
-        static let bookmarks = StandardImageIdentifiers.Large.bookmark
+        static let bookmarks = StandardImageIdentifiers.Large.bookmarkTrayFill
         static let history = StandardImageIdentifiers.Large.history
         static let downloads = StandardImageIdentifiers.Large.download
         static let passwords = StandardImageIdentifiers.Large.login
         static let getHelp = StandardImageIdentifiers.Large.helpCircle
         static let settings = StandardImageIdentifiers.Large.settings
         static let whatsNew = StandardImageIdentifiers.Large.whatsNew
-        static let zoom = StandardImageIdentifiers.Large.pageZoom
+        static let zoomOff = StandardImageIdentifiers.Large.pageZoom
+        static let zoomOn = StandardImageIdentifiers.Large.pageZoomFill
         static let readerViewOn = StandardImageIdentifiers.Large.readerView
-        static let nightModeOn = StandardImageIdentifiers.Large.nightMode
+        static let readerViewOff = StandardImageIdentifiers.Large.readerViewFill
+        static let nightModeOff = StandardImageIdentifiers.Large.nightMode
+        static let nightModeOn = StandardImageIdentifiers.Large.nightModeFill
         static let print = StandardImageIdentifiers.Large.print
         static let share = StandardImageIdentifiers.Large.share
         static let addToShortcuts = StandardImageIdentifiers.Large.pin
-        static let removeFromShortcuts = StandardImageIdentifiers.Large.pinSlash
+        static let removeFromShortcuts = StandardImageIdentifiers.Large.pinSlashFill
         static let saveToReadingList = StandardImageIdentifiers.Large.readingListAdd
         static let removeFromReadingList = StandardImageIdentifiers.Large.readingListSlashFill
         static let bookmarkThisPage = StandardImageIdentifiers.Large.bookmark
@@ -42,30 +46,42 @@ struct MainMenuConfigurationUtility: Equatable {
         //        static let addToHomescreen = StandardImageIdentifiers.Large.addToHomescreen
     }
 
+    private var shouldShowReportSiteIssue: Bool {
+        featureFlags.isFeatureEnabled(.reportSiteIssue, checking: .buildOnly)
+    }
+
     public func generateMenuElements(
         with tabInfo: MainMenuTabInfo,
         for viewType: MainMenuDetailsViewType?,
-        and uuid: WindowUUID
+        and uuid: WindowUUID,
+        readerState: ReaderModeState? = nil
     ) -> [MenuSection] {
         switch viewType {
-        case .tools: return getToolsSubmenu(with: uuid, and: tabInfo)
-        case .save: return getSaveSubmenu(with: uuid, and: tabInfo)
-        default: return getMainMenuElements(with: uuid, and: tabInfo)
+        case .tools:
+            return getToolsSubmenu(with: uuid, tabInfo: tabInfo)
+
+        case .save:
+            return getSaveSubmenu(with: uuid, and: tabInfo)
+
+        default:
+            return getMainMenuElements(with: uuid, and: tabInfo)
         }
     }
 
     // MARK: - Main Menu
+
     private func getMainMenuElements(
         with uuid: WindowUUID,
         and tabInfo: MainMenuTabInfo
     ) -> [MenuSection] {
         // Always include these sections
         var menuSections: [MenuSection] = [
-            getNewTabSection(with: uuid),
-            getLibrariesSection(with: uuid),
+            getNewTabSection(with: uuid, tabInfo: tabInfo),
+            getLibrariesSection(with: uuid, tabInfo: tabInfo),
             getOtherToolsSection(
                 with: uuid,
-                isHomepage: tabInfo.isHomepage
+                isHomepage: tabInfo.isHomepage,
+                tabInfo: tabInfo
             )
         ]
 
@@ -81,7 +97,7 @@ struct MainMenuConfigurationUtility: Equatable {
     }
 
     // MARK: - New Tabs Section
-    private func getNewTabSection(with uuid: WindowUUID) -> MenuSection {
+    private func getNewTabSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo) -> MenuSection {
         return MenuSection(options: [
             MenuElement(
                 title: .MainMenu.TabsSection.NewTab,
@@ -96,7 +112,8 @@ struct MainMenuConfigurationUtility: Equatable {
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
-                            navigationDestination: MenuNavigationDestination(.newTab)
+                            navigationDestination: MenuNavigationDestination(.newTab),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                         )
                     )
                 }
@@ -114,41 +131,24 @@ struct MainMenuConfigurationUtility: Equatable {
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
-                            navigationDestination: MenuNavigationDestination(.newPrivateTab)
+                            navigationDestination: MenuNavigationDestination(.newPrivateTab),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                         )
                     )
                 }
-            )
+            ),
         ])
     }
 
     // MARK: - Tools Section
+
     private func getToolsSection(
         with uuid: WindowUUID,
         and configuration: MainMenuTabInfo
     ) -> MenuSection {
         return MenuSection(
             options: [
-                MenuElement(
-                    title: getUserAgentTitle(
-                        defaultIsDesktop: configuration.isDefaultUserAgentDesktop,
-                        tabHasChangedUserAgent: configuration.hasChangedUserAgent
-                    ),
-                    iconName: Icons.deviceDesktop,
-                    isEnabled: true,
-                    isActive: false,
-                    a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.SwitchToDesktopSite,
-                    a11yHint: "",
-                    a11yId: AccessibilityIdentifiers.MainMenu.switchToDesktopSite,
-                    action: {
-                        store.dispatch(
-                            MainMenuAction(
-                                windowUUID: uuid,
-                                actionType: MainMenuActionType.tapToggleUserAgent
-                            )
-                        )
-                    }
-                ),
+                configureUserAgentItem(with: uuid, tabInfo: configuration),
                 MenuElement(
                     title: .MainMenu.ToolsSection.FindInPage,
                     iconName: Icons.findInPage,
@@ -162,13 +162,15 @@ struct MainMenuConfigurationUtility: Equatable {
                             MainMenuAction(
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.tapNavigateToDestination,
-                                navigationDestination: MenuNavigationDestination(.findInPage)
+                                navigationDestination: MenuNavigationDestination(.findInPage),
+                                telemetryInfo: TelemetryInfo(isHomepage: configuration.isHomepage)
                             )
                         )
                     }
                 ),
                 MenuElement(
                     title: .MainMenu.ToolsSection.Tools,
+                    description: getToolsSubmenuDescription(with: configuration),
                     iconName: Icons.tools,
                     isEnabled: true,
                     isActive: false,
@@ -181,13 +183,15 @@ struct MainMenuConfigurationUtility: Equatable {
                             MainMenuAction(
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.tapShowDetailsView,
-                                changeMenuViewTo: .tools
+                                changeMenuViewTo: .tools,
+                                telemetryInfo: TelemetryInfo(isHomepage: configuration.isHomepage)
                             )
                         )
                     }
                 ),
                 MenuElement(
                     title: .MainMenu.ToolsSection.Save,
+                    description: getSaveSubmenuDescription(with: configuration),
                     iconName: Icons.save,
                     isEnabled: true,
                     isActive: false,
@@ -200,137 +204,167 @@ struct MainMenuConfigurationUtility: Equatable {
                             MainMenuAction(
                                 windowUUID: uuid,
                                 actionType: MainMenuActionType.tapShowDetailsView,
-                                changeMenuViewTo: .save
+                                changeMenuViewTo: .save,
+                                telemetryInfo: TelemetryInfo(isHomepage: configuration.isHomepage)
                             )
                         )
                     }
-                )
+                ),
             ]
         )
     }
 
-    private func getUserAgentTitle(
-        defaultIsDesktop: Bool,
-        tabHasChangedUserAgent: Bool
-    ) -> String {
-        typealias Menu = String.MainMenu.ToolsSection
+    private func getToolsSubmenuDescription(with _: MainMenuTabInfo) -> String {
+        typealias Preview = String.MainMenu.Submenus.Tools
+        var description = ""
 
-        // Our default User Agent gets set depending on the architecture we're
-        // running on. For example, if we're building on an Intel Mac, we get
-        // desktop User Agent by default. Thus, to determine which string to use,
-        // we need to know:
-        //   1) which architecture we've started from and
-        //   2) whether or not we've requested to change the user agent in the tab
-        // Using this information, we're able to present the correct string for
-        // the "Request Mobile/Desktop Site" menu option
-        if defaultIsDesktop {
-            return tabHasChangedUserAgent ? Menu.SwitchToDesktopSite : Menu.SwitchToMobileSite
-        } else {
-            return tabHasChangedUserAgent ? Menu.SwitchToMobileSite : Menu.SwitchToDesktopSite
+        description += "\(Preview.ZoomSubtitle)"
+
+        // if tabInfo.readerModeIsAvailable {
+        //     description += ", \(Preview.ReaderViewSubtitle)"
+        // }
+
+        description += ", \(Preview.NightModeSubtitle)"
+        if shouldShowReportSiteIssue {
+            description += ", \(Preview.ReportBrokenSiteSubtitle)"
         }
+        description += ", \(Preview.ShareSubtitle)"
+
+        return description
+    }
+
+    private func getSaveSubmenuDescription(with tabInfo: MainMenuTabInfo) -> String {
+        typealias Preview = String.MainMenu.Submenus.Save
+        var description = ""
+
+        description += "\(Preview.BookmarkThisPageSubtitle)"
+        description += ", \(Preview.AddToShortcutsSubtitle)"
+
+        if tabInfo.readerModeIsAvailable {
+            description += ", \(Preview.SaveToReadingListSubtitle)"
+        }
+
+        return description
+    }
+
+    private func configureUserAgentItem(
+        with uuid: WindowUUID,
+        tabInfo: MainMenuTabInfo
+    ) -> MenuElement {
+        typealias Menu = String.MainMenu.ToolsSection
+        typealias A11y = String.MainMenu.ToolsSection.AccessibilityLabels
+
+        // isDefaultUserAgentDesktop is only true if we're building on an "intel mac"
+        // hasChangedUserAgent describes if we've changed form the initial starting state
+        let userAgentStringSelector = { (desktopString: String, mobileString: String) in
+            tabInfo.isDefaultUserAgentDesktop == tabInfo.hasChangedUserAgent ? desktopString : mobileString
+        }
+
+        let title = userAgentStringSelector(Menu.SwitchToDesktopSite, Menu.SwitchToMobileSite)
+        let icon = userAgentStringSelector(Icons.deviceDesktop, Icons.deviceMobile)
+        let a11yLabel = userAgentStringSelector(A11y.SwitchToDesktopSite, A11y.SwitchToMobileSite)
+
+        let isActive = tabInfo.isDefaultUserAgentDesktop ? !tabInfo.hasChangedUserAgent : tabInfo.hasChangedUserAgent
+
+        return MenuElement(
+            title: title,
+            iconName: icon,
+            isEnabled: true,
+            isActive: isActive,
+            a11yLabel: a11yLabel,
+            a11yHint: "",
+            a11yId: AccessibilityIdentifiers.MainMenu.switchToDesktopSite,
+            action: {
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: uuid,
+                        actionType: MainMenuActionType.tapToggleUserAgent,
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                    )
+                )
+            }
+        )
     }
 
     // MARK: - Tools Submenu
+
     private func getToolsSubmenu(
         with uuid: WindowUUID,
-        and tabInfo: MainMenuTabInfo
+        tabInfo: MainMenuTabInfo
     ) -> [MenuSection] {
+        let firstSection = if shouldShowReportSiteIssue {
+            MenuSection(options: [
+                configureZoomItem(with: uuid, and: tabInfo),
+                configureNightModeItem(with: uuid, and: tabInfo),
+                configureReportSiteIssueItem(with: uuid, tabInfo: tabInfo),
+            ])
+        } else {
+            MenuSection(options: [
+                configureZoomItem(with: uuid, and: tabInfo),
+                configureNightModeItem(with: uuid, and: tabInfo),
+            ])
+        }
+
         return [
-            MenuSection(
-                options: [
-                    configureZoomItem(with: uuid, and: tabInfo),
-                    MenuElement(
-                        title: .MainMenu.Submenus.Tools.ReaderViewOn,
-                        iconName: Icons.readerViewOn,
-                        isEnabled: true,
-                        isActive: false,
-                        a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.ReaderViewOn,
-                        a11yHint: "",
-                        a11yId: AccessibilityIdentifiers.MainMenu.readerViewOn,
-                        action: {
-                            store.dispatch(
-                                MainMenuAction(
-                                    windowUUID: uuid,
-                                    actionType: MainMenuActionType.tapCloseMenu
-                                )
-                            )
-                        }
-                    ),
-                    MenuElement(
-                        title: .MainMenu.Submenus.Tools.NightModeOn,
-                        iconName: Icons.nightModeOn,
-                        isEnabled: true,
-                        isActive: false,
-                        a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.NightModeOn,
-                        a11yHint: "",
-                        a11yId: AccessibilityIdentifiers.MainMenu.nightModeOn,
-                        action: {
-                            store.dispatch(
-                                MainMenuAction(
-                                    windowUUID: uuid,
-                                    actionType: MainMenuActionType.tapCloseMenu
-                                )
-                            )
-                        }
-                    ),
-                    MenuElement(
-                        title: .MainMenu.Submenus.Tools.ReportBrokenSite,
-                        iconName: Icons.reportBrokenSite,
-                        isEnabled: true,
-                        isActive: false,
-                        a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.ReportBrokenSite,
-                        a11yHint: "",
-                        a11yId: AccessibilityIdentifiers.MainMenu.reportBrokenSite,
-                        action: {
-                            store.dispatch(
-                                MainMenuAction(
-                                    windowUUID: uuid,
-                                    actionType: MainMenuActionType.tapCloseMenu
-                                )
-                            )
-                        }
-                    )
-                ]
-            ),
-            MenuSection(
-                options: [
-                    MenuElement(
-                        title: .MainMenu.Submenus.Tools.Print,
-                        iconName: Icons.print,
-                        isEnabled: true,
-                        isActive: false,
-                        a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.Print,
-                        a11yHint: "",
-                        a11yId: AccessibilityIdentifiers.MainMenu.print,
-                        action: {
-                            store.dispatch(
-                                MainMenuAction(
-                                    windowUUID: uuid,
-                                    actionType: MainMenuActionType.tapCloseMenu
-                                )
-                            )
-                        }
-                    ),
-                    MenuElement(
-                        title: .MainMenu.Submenus.Tools.Share,
-                        iconName: Icons.share,
-                        isEnabled: true,
-                        isActive: false,
-                        a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.Share,
-                        a11yHint: "",
-                        a11yId: AccessibilityIdentifiers.MainMenu.share,
-                        action: {
-                            store.dispatch(
-                                MainMenuAction(
-                                    windowUUID: uuid,
-                                    actionType: MainMenuActionType.tapCloseMenu
-                                )
-                            )
-                        }
-                    )
-                ]
-            )
+            firstSection,
+            MenuSection(options: [configureShareItem(with: uuid, tabInfo: tabInfo)]),
         ]
+    }
+
+    private func configureReportSiteIssueItem(
+        with uuid: WindowUUID,
+        tabInfo: MainMenuTabInfo
+    ) -> MenuElement {
+        return MenuElement(
+            title: .MainMenu.Submenus.Tools.ReportBrokenSite,
+            iconName: Icons.reportBrokenSite,
+            isEnabled: true,
+            isActive: false,
+            a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.ReportBrokenSite,
+            a11yHint: "",
+            a11yId: AccessibilityIdentifiers.MainMenu.reportBrokenSite,
+            action: {
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: uuid,
+                        actionType: MainMenuActionType.tapNavigateToDestination,
+                        navigationDestination: MenuNavigationDestination(
+                            .goToURL,
+                            url: SupportUtils.URLForReportSiteIssue(tabInfo.url?.absoluteString)
+                        ),
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                    )
+                )
+            }
+        )
+    }
+
+    private func configureShareItem(
+        with uuid: WindowUUID,
+        tabInfo: MainMenuTabInfo
+    ) -> MenuElement {
+        return MenuElement(
+            title: .MainMenu.Submenus.Tools.Share,
+            iconName: Icons.share,
+            isEnabled: true,
+            isActive: false,
+            a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.Share,
+            a11yHint: "",
+            a11yId: AccessibilityIdentifiers.MainMenu.share,
+            action: {
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: uuid,
+                        actionType: MainMenuActionType.tapNavigateToDestination,
+                        navigationDestination: MenuNavigationDestination(
+                            .shareSheet,
+                            url: tabInfo.canonicalURL
+                        ),
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                    )
+                )
+            }
+        )
     }
 
     private func configureZoomItem(
@@ -342,20 +376,93 @@ struct MainMenuConfigurationUtility: Equatable {
             number: .percent
         )
         let title = String(format: .MainMenu.Submenus.Tools.Zoom, zoomLevel)
+        let icon = tabInfo.zoomLevel == 1.0 ? Icons.zoomOff : Icons.zoomOn
 
         return MenuElement(
             title: title,
-            iconName: Icons.zoom,
+            iconName: icon,
             isEnabled: true,
             isActive: tabInfo.zoomLevel != 1.0,
-            a11yLabel: .MainMenu.Submenus.Tools.AccessibilityLabels.Zoom,
+            a11yLabel: String(format: .MainMenu.Submenus.Tools.AccessibilityLabels.Zoom, zoomLevel),
             a11yHint: "",
             a11yId: AccessibilityIdentifiers.MainMenu.zoom,
             action: {
                 store.dispatch(
                     MainMenuAction(
                         windowUUID: uuid,
-                        actionType: MainMenuDetailsActionType.tapZoom
+                        actionType: MainMenuDetailsActionType.tapZoom,
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                    )
+                )
+            }
+        )
+    }
+
+    private func configureReaderModeItem(
+        with uuid: WindowUUID,
+        tabInfo: MainMenuTabInfo,
+        and readerModeState: ReaderModeState?
+    ) -> MenuElement {
+        typealias Strings = String.MainMenu.Submenus.Tools
+        typealias A11y = String.MainMenu.Submenus.Tools.AccessibilityLabels
+
+        let readerModeState = readerModeState ?? .unavailable
+        let readerModeIsActive = readerModeState == .active
+        let title = readerModeIsActive ? Strings.ReaderViewOff : Strings.ReaderViewOn
+        let icon = readerModeIsActive ? Icons.readerViewOff : Icons.readerViewOn
+        let a11yLabel = readerModeIsActive ? A11y.ReaderViewOff : A11y.ReaderViewOn
+
+        return MenuElement(
+            title: title,
+            iconName: icon,
+            isEnabled: readerModeState != .unavailable,
+            isActive: readerModeState == .active,
+            a11yLabel: a11yLabel,
+            a11yHint: readerModeState != .unavailable ? "" : .MainMenu.AccessibilityLabels.OptionDisabledHint,
+            a11yId: AccessibilityIdentifiers.MainMenu.readerView,
+            action: {
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: uuid,
+                        actionType: GeneralBrowserActionType.showReaderMode,
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage,
+                                                     isActionOn: readerModeState == .active)
+                    )
+                )
+                store.dispatch(
+                    GeneralBrowserAction(
+                        windowUUID: uuid,
+                        actionType: GeneralBrowserActionType.showReaderMode
+                    )
+                )
+            }
+        )
+    }
+
+    private func configureNightModeItem(with uuid: WindowUUID, and tabInfo: MainMenuTabInfo) -> MenuElement {
+        typealias Strings = String.MainMenu.Submenus.Tools
+        typealias A11y = String.MainMenu.Submenus.Tools.AccessibilityLabels
+
+        let nightModeIsOn = NightModeHelper.isActivated()
+        let title = nightModeIsOn ? Strings.NightModeOff : Strings.NightModeOn
+        let icon = nightModeIsOn ? Icons.nightModeOn : Icons.nightModeOff
+        let a11yLabel = nightModeIsOn ? A11y.NightModeOff : A11y.NightModeOn
+
+        return MenuElement(
+            title: title,
+            iconName: icon,
+            isEnabled: true,
+            isActive: nightModeIsOn,
+            a11yLabel: a11yLabel,
+            a11yHint: "",
+            a11yId: AccessibilityIdentifiers.MainMenu.nightMode,
+            action: {
+                store.dispatch(
+                    MainMenuAction(
+                        windowUUID: uuid,
+                        actionType: MainMenuDetailsActionType.tapToggleNightMode,
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage,
+                                                     isActionOn: nightModeIsOn)
                     )
                 )
             }
@@ -363,6 +470,7 @@ struct MainMenuConfigurationUtility: Equatable {
     }
 
     // MARK: - Save Submenu
+
     private func getSaveSubmenu(
         with uuid: WindowUUID,
         and tabInfo: MainMenuTabInfo
@@ -371,7 +479,7 @@ struct MainMenuConfigurationUtility: Equatable {
             options: [
                 configureBookmarkItem(with: uuid, and: tabInfo),
                 configureShortcutsItem(with: uuid, and: tabInfo),
-                configureReadingListItem(with: uuid, and: tabInfo)
+                configureReadingListItem(with: uuid, and: tabInfo),
             ]
         )]
     }
@@ -401,7 +509,8 @@ struct MainMenuConfigurationUtility: Equatable {
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: actionType,
-                        tabID: tabInfo.tabID
+                        tabID: tabInfo.tabID,
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                     )
                 )
             }
@@ -433,7 +542,8 @@ struct MainMenuConfigurationUtility: Equatable {
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: actionType,
-                        tabID: tabInfo.tabID
+                        tabID: tabInfo.tabID,
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                     )
                 )
             }
@@ -459,14 +569,15 @@ struct MainMenuConfigurationUtility: Equatable {
             isEnabled: tabInfo.readerModeIsAvailable,
             isActive: tabInfo.isInReadingList,
             a11yLabel: a11yLabel,
-            a11yHint: "",
+            a11yHint: tabInfo.readerModeIsAvailable ? "" : .MainMenu.AccessibilityLabels.OptionDisabledHint,
             a11yId: AccessibilityIdentifiers.MainMenu.saveToReadingList,
             action: {
                 store.dispatch(
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: actionType,
-                        tabID: tabInfo.tabID
+                        tabID: tabInfo.tabID,
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                     )
                 )
             }
@@ -474,7 +585,7 @@ struct MainMenuConfigurationUtility: Equatable {
     }
 
     // MARK: - Libraries Section
-    private func getLibrariesSection(with uuid: WindowUUID) -> MenuSection {
+    private func getLibrariesSection(with uuid: WindowUUID, tabInfo: MainMenuTabInfo) -> MenuSection {
         return MenuSection(options: [
             MenuElement(
                 title: .MainMenu.PanelLinkSection.Bookmarks,
@@ -489,7 +600,8 @@ struct MainMenuConfigurationUtility: Equatable {
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
-                            navigationDestination: MenuNavigationDestination(.bookmarks)
+                            navigationDestination: MenuNavigationDestination(.bookmarks),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                         )
                     )
                 }
@@ -507,7 +619,8 @@ struct MainMenuConfigurationUtility: Equatable {
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
-                            navigationDestination: MenuNavigationDestination(.history)
+                            navigationDestination: MenuNavigationDestination(.history),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                         )
                     )
                 }
@@ -525,7 +638,8 @@ struct MainMenuConfigurationUtility: Equatable {
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
-                            navigationDestination: MenuNavigationDestination(.downloads)
+                            navigationDestination: MenuNavigationDestination(.downloads),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                         )
                     )
                 }
@@ -543,18 +657,21 @@ struct MainMenuConfigurationUtility: Equatable {
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
-                            navigationDestination: MenuNavigationDestination(.passwords)
+                            navigationDestination: MenuNavigationDestination(.passwords),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                         )
                     )
                 }
-            )
+            ),
         ])
     }
 
     // MARK: - Other Tools Section
+
     private func getOtherToolsSection(
         with uuid: WindowUUID,
-        isHomepage: Bool
+        isHomepage: Bool,
+        tabInfo: MainMenuTabInfo
     ) -> MenuSection {
         let homepageOptions = [
             MenuElement(
@@ -570,7 +687,8 @@ struct MainMenuConfigurationUtility: Equatable {
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
-                            navigationDestination: MenuNavigationDestination(.customizeHomepage)
+                            navigationDestination: MenuNavigationDestination(.customizeHomepage),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                         )
                     )
                 }
@@ -583,7 +701,10 @@ struct MainMenuConfigurationUtility: Equatable {
                 iconName: Icons.whatsNew,
                 isEnabled: true,
                 isActive: false,
-                a11yLabel: .MainMenu.OtherToolsSection.AccessibilityLabels.WhatsNew,
+                a11yLabel: String(
+                    format: .MainMenu.OtherToolsSection.AccessibilityLabels.WhatsNew,
+                    AppName.shortName.rawValue
+                ),
                 a11yHint: "",
                 a11yId: AccessibilityIdentifiers.MainMenu.whatsNew,
                 action: {
@@ -593,12 +714,13 @@ struct MainMenuConfigurationUtility: Equatable {
                             actionType: MainMenuActionType.tapNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(
                                 .goToURL,
-                                urlToVisit: SupportUtils.URLForWhatsNew
-                            )
+                                url: SupportUtils.URLForWhatsNew
+                            ),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                         )
                     )
                 }
-            )
+            ),
         ]
 
         let standardOptions = [
@@ -617,8 +739,9 @@ struct MainMenuConfigurationUtility: Equatable {
                             actionType: MainMenuActionType.tapNavigateToDestination,
                             navigationDestination: MenuNavigationDestination(
                                 .goToURL,
-                                urlToVisit: SupportUtils.URLForGetHelp
-                            )
+                                url: SupportUtils.URLForGetHelp
+                            ),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                         )
                     )
                 }
@@ -636,11 +759,12 @@ struct MainMenuConfigurationUtility: Equatable {
                         MainMenuAction(
                             windowUUID: uuid,
                             actionType: MainMenuActionType.tapNavigateToDestination,
-                            navigationDestination: MenuNavigationDestination(.settings)
+                            navigationDestination: MenuNavigationDestination(.settings),
+                            telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
                         )
                     )
                 }
-            )
+            ),
         ]
 
         return MenuSection(options: isHomepage ? homepageOptions + standardOptions : standardOptions)

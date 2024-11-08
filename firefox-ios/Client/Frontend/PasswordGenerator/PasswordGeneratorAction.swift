@@ -5,17 +5,25 @@
 import Foundation
 import Redux
 import Common
+import WebKit
 
 final class PasswordGeneratorAction: Action {
     // Used in the middlwares
-    let currentTab: Tab?
+    let currentFrame: WKFrameInfo?
 
     // Used in some reducers
     let password: String?
 
-    init(windowUUID: WindowUUID, actionType: any ActionType, currentTab: Tab? = nil, password: String? = nil) {
-        self.currentTab = currentTab
+    let origin: String?
+
+    init(windowUUID: WindowUUID,
+         actionType: any ActionType,
+         currentFrame: WKFrameInfo? = nil,
+         password: String? = nil,
+         origin: String? = nil) {
+        self.currentFrame = currentFrame
         self.password = password
+        self.origin = origin
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }

@@ -161,6 +161,58 @@ accessibility:
     expires: "2025-01-01"
 # App menu
 app_menu:
+  main_menu_option_selected:
+    type: event
+    description: |
+      Record event when user has tapped on the main menu option.
+    extra_keys:
+      option:
+        type: string
+        description: |
+          The option type selected on the main menu.
+      is_homepage:
+        type: boolean
+        description: |
+          Indicate if is homepage when select an option.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19329
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22788
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+  close_button:
+    type: event
+    description: |
+      Record event when user has tapped the close menu button.
+    extra_keys:
+      is_homepage:
+        type: boolean
+        description: |
+          Indicate if is homepage when select an option.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19329
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22788
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
+  menu_dismissed:
+    type: event
+    description: |
+      Record event when user has dismissed the menu because of tapping outside or drag the menu.
+    extra_keys:
+      is_homepage:
+        type: boolean
+        description: |
+          Indicate if is homepage when select an option.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/19329
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/22788
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-06-01"
   homepage_menu:
     type: counter
     description: |
@@ -656,6 +708,31 @@ downloads:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
 
+# Password Generator
+password_generator:
+  shown:
+    type: counter
+    description: |
+        The password generator bottom sheet was shown and is visible
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/21248
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/21248
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-01-01"
+  filled:
+    type: counter
+    description: |
+        The "use password button" of the password generator bottom sheet was clicked.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/21248
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/21248
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-01-01"
+    
 # Microsurvey
 microsurvey:
   shown:

@@ -46,13 +46,13 @@
           "version": "7.12.0"
         }
       },
-        {
+      {
         "package": "MozillaRustComponentsSwift",
         "repositoryURL": "https://github.com/mozilla/rust-components-swift",
         "state": {
           "branch": null,
-          "revision": "89084ef67f53473c5312b9cafd5e9bf225ef888b",
-          "version": "133.0.20241022050402"
+          "revision": "eb7ef48d971787d810d6638a028e15b9e346e907",
+          "version": "134.0.20241108050318"
         }
       },
       {
@@ -60,8 +60,8 @@
         "repositoryURL": "https://github.com/getsentry/sentry-cocoa",
         "state": {
           "branch": null,
-          "revision": "38f4f70d07117b9f958a76b1bff278c2f29ffe0e",
-          "version": "8.21.0"
+          "revision": "5575af93efb776414f243e93d6af9f6258dc539a",
+          "version": "8.36.0"
         }
       },
       {

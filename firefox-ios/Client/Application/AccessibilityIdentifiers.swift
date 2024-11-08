@@ -106,9 +106,16 @@ public struct AccessibilityIdentifiers {
         static let share = "MainMenu.Share"
         static let print = "MainMenu.Print"
         static let reportBrokenSite = "MainMenu.ReportBrokenSite"
-        static let readerViewOn = "MainMenu.ReaderViewOn"
-        static let nightModeOn = "MainMenu.NightModeOn"
+        static let readerView = "MainMenu.ReaderViewOn"
+        static let nightMode = "MainMenu.NightModeOn"
         static let zoom = "MainMenu.Zoom"
+    }
+
+    struct UnifiedSearch {
+        struct BottomSheetRow {
+            static let engine = "UnifiedSearch.BottomSheetRow.Engine"
+            static let searchSettings = "UnifiedSearch.BottomSheetRow.SearchSettings"
+        }
     }
 
     struct EnhancedTrackingProtection {
@@ -461,6 +468,8 @@ public struct AccessibilityIdentifiers {
 
         struct BookmarksPanel {
             static let tableView = "Bookmarks List"
+            static let titleTextField = "BookmarkDetail.titleTextField"
+            static let urlTextField = "BookmarkDetail.urlTextField"
         }
 
         struct HistoryPanel {
@@ -626,6 +635,11 @@ public struct AccessibilityIdentifiers {
 
         struct Address {
             static let title = "AutofillAddress"
+
+            struct Addresses {
+                static let title = "Addresses"
+                static let addAddress = "Add address"
+            }
         }
 
         struct ConnectSetting {

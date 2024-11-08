@@ -12,6 +12,9 @@ final class MainMenuAction: Action {
     var navigationDestination: MenuNavigationDestination?
     var currentTabInfo: MainMenuTabInfo?
     var detailsViewToShow: MainMenuDetailsViewType?
+    var accountData: AccountData?
+    var accountIcon: UIImage?
+    var telemetryInfo: TelemetryInfo?
 
     init(
         windowUUID: WindowUUID,
@@ -19,12 +22,18 @@ final class MainMenuAction: Action {
         navigationDestination: MenuNavigationDestination? = nil,
         changeMenuViewTo: MainMenuDetailsViewType? = nil,
         currentTabInfo: MainMenuTabInfo? = nil,
-        tabID: TabUUID? = nil
+        tabID: TabUUID? = nil,
+        accountData: AccountData? = nil,
+        accountIcon: UIImage? = nil,
+        telemetryInfo: TelemetryInfo? = nil
     ) {
         self.navigationDestination = navigationDestination
         self.detailsViewToShow = changeMenuViewTo
         self.currentTabInfo = currentTabInfo
         self.tabID = tabID
+        self.accountData = accountData
+        self.accountIcon = accountIcon
+        self.telemetryInfo = telemetryInfo
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
@@ -36,15 +45,19 @@ enum MainMenuActionType: ActionType {
     case tapToggleUserAgent
     case updateCurrentTabInfo
     case viewDidLoad
+    case menuDismissed
 }
 
 enum MainMenuMiddlewareActionType: ActionType {
     case requestTabInfo
+    case updateAccountHeader
 }
 
 enum MainMenuDetailsActionType: ActionType {
     // Tools submenu actions
     case tapZoom
+    case tapToggleNightMode
+    case tapReportBrokenSite
 
     // Save submenu actions
     case tapAddToBookmarks

@@ -12,7 +12,8 @@ public protocol MenuTableViewDataDelegate: AnyObject {
 
 class MenuTableView: UIView,
                      UITableViewDelegate,
-                     UITableViewDataSource, ThemeApplicable {
+                     UITableViewDataSource,
+                     ThemeApplicable {
     private struct UX {
         static let topPadding: CGFloat = 10
     }
@@ -134,5 +135,6 @@ class MenuTableView: UIView,
         self.theme = theme
         backgroundColor = .clear
         tableView.backgroundColor = .clear
+        tableView.separatorColor = theme.colors.borderPrimary
     }
 }

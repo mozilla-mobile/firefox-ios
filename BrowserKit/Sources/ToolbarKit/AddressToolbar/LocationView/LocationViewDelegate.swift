@@ -39,4 +39,8 @@ protocol LocationViewDelegate: AnyObject {
     /// - Returns: An optional array of `UIAccessibilityCustomAction` objects.
     /// Return `nil` if no custom actions are provided.
     func locationViewAccessibilityActions() -> [UIAccessibilityCustomAction]?
+
+    /// Called when the user types over the old highlighted text immediately after
+    /// focusing the text field.
+    func locationTextFieldNeedsSearchReset()
 }

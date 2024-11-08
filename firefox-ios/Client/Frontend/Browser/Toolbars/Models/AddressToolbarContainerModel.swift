@@ -12,13 +12,16 @@ class AddressToolbarContainerModel: Equatable {
     let browserActions: [ToolbarElement]
 
     let borderPosition: AddressToolbarBorderPosition?
-    let searchEngineName: String?
-    let searchEngineImage: UIImage?
-    let searchEngines: SearchEngines
+    let searchEngineName: String
+    let searchEngineImage: UIImage
+    let searchEnginesManager: SearchEnginesManager
     let lockIconImageName: String?
+    let lockIconNeedsTheming: Bool
+    let safeListedURLImageName: String?
     let url: URL?
     let searchTerm: String?
     let isEditing: Bool
+    let didStartTyping: Bool
     let isScrollingDuringEdit: Bool
     let isPrivateMode: Bool
     let shouldSelectSearchTerm: Bool
@@ -28,7 +31,7 @@ class AddressToolbarContainerModel: Equatable {
     let windowUUID: UUID
 
     var addressToolbarState: AddressToolbarState {
-        let term = searchTerm ?? searchTermFromURL(url, searchEngines: searchEngines)
+        let term = searchTerm ?? searchTermFromURL(url, searchEnginesManager: searchEnginesManager)
 
         var droppableUrl: URL?
         if let url, !InternalURL.isValid(url: url) {
@@ -39,7 +42,7 @@ class AddressToolbarContainerModel: Equatable {
             searchEngineImageViewA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchEngine,
             searchEngineImageViewA11yLabel: String(
                 format: .AddressToolbar.SearchEngineA11yLabel,
-                searchEngineName ?? ""
+                searchEngineName
             ),
             lockIconButtonA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon,
             lockIconButtonA11yLabel: .AddressToolbar.PrivacyAndSecuritySettingsA11yLabel,
@@ -47,10 +50,13 @@ class AddressToolbarContainerModel: Equatable {
             urlTextFieldA11yId: AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField,
             searchEngineImage: searchEngineImage,
             lockIconImageName: lockIconImageName,
+            lockIconNeedsTheming: lockIconNeedsTheming,
+            safeListedURLImageName: safeListedURLImageName,
             url: url,
             droppableUrl: droppableUrl,
             searchTerm: term,
             isEditing: isEditing,
+            didStartTyping: didStartTyping,
             isScrollingDuringEdit: isScrollingDuringEdit,
             shouldSelectSearchTerm: shouldSelectSearchTerm,
             onTapLockIcon: { button in
@@ -87,14 +93,22 @@ class AddressToolbarContainerModel: Equatable {
         self.browserActions = AddressToolbarContainerModel.mapActions(state.addressToolbar.browserActions,
                                                                       isShowingTopTabs: state.isShowingTopTabs,
                                                                       windowUUID: windowUUID)
+
+        // If the user has selected an alternative search engine, use that. Otherwise, use the default engine.
+        let searchEngineModel = state.addressToolbar.alternativeSearchEngine
+                                ?? profile.searchEnginesManager.defaultEngine?.generateModel()
+
         self.windowUUID = windowUUID
-        self.searchEngineName = profile.searchEngines.defaultEngine?.shortName
-        self.searchEngineImage = profile.searchEngines.defaultEngine?.image
-        self.searchEngines = profile.searchEngines
+        self.searchEngineName = searchEngineModel?.name ?? ""
+        self.searchEngineImage = searchEngineModel?.image ?? UIImage()
+        self.searchEnginesManager = profile.searchEnginesManager
         self.lockIconImageName = state.addressToolbar.lockIconImageName
+        self.lockIconNeedsTheming = state.addressToolbar.lockIconNeedsTheming
+        self.safeListedURLImageName = state.addressToolbar.safeListedURLImageName
         self.url = state.addressToolbar.url
         self.searchTerm = state.addressToolbar.searchTerm
         self.isEditing = state.addressToolbar.isEditing
+        self.didStartTyping = state.addressToolbar.didStartTyping
         self.isScrollingDuringEdit = state.addressToolbar.isScrollingDuringEdit
         self.isPrivateMode = state.isPrivateMode
         self.shouldSelectSearchTerm = state.addressToolbar.shouldSelectSearchTerm
@@ -102,14 +116,14 @@ class AddressToolbarContainerModel: Equatable {
         self.canShowNavigationHint = state.canShowNavigationHint
     }
 
-    func searchTermFromURL(_ url: URL?, searchEngines: SearchEngines) -> String? {
+    func searchTermFromURL(_ url: URL?, searchEnginesManager: SearchEnginesManager) -> String? {
         var searchURL: URL? = url
 
         if let url = searchURL, InternalURL.isValid(url: url) {
             searchURL = url
         }
 
-        guard let query = searchEngines.queryForSearchURL(searchURL) else { return nil }
+        guard let query = searchEnginesManager.queryForSearchURL(searchURL) else { return nil }
         return query
     }
 
@@ -124,7 +138,7 @@ class AddressToolbarContainerModel: Equatable {
                 numberOfTabs: action.numberOfTabs,
                 isEnabled: action.isEnabled,
                 isFlippedForRTL: action.isFlippedForRTL,
-                shouldDisplayAsHighlighted: action.shouldDisplayAsHighlighted,
+                isSelected: action.isSelected,
                 contextualHintType: action.contextualHintType,
                 a11yLabel: action.a11yLabel,
                 a11yHint: action.a11yHint,
@@ -164,6 +178,7 @@ class AddressToolbarContainerModel: Equatable {
         lhs.borderPosition == rhs.borderPosition &&
         lhs.searchEngineImage == rhs.searchEngineImage &&
         lhs.lockIconImageName == rhs.lockIconImageName &&
+        lhs.safeListedURLImageName == rhs.safeListedURLImageName &&
         lhs.url == rhs.url &&
         lhs.searchTerm == rhs.searchTerm &&
         lhs.isEditing == rhs.isEditing &&

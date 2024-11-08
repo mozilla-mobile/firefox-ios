@@ -29,10 +29,18 @@ struct OnboardingViewControllerState: ScreenState, Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         // Only process actions for the current window
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
+        else {
+            return defaultState(from: state)
+        }
 
         switch action {
-        default: return OnboardingViewControllerState(windowUUID: state.windowUUID)
+        default:
+            return defaultState(from: state)
         }
+    }
+
+    static func defaultState(from state: OnboardingViewControllerState) -> OnboardingViewControllerState {
+        return OnboardingViewControllerState(windowUUID: state.windowUUID)
     }
 }

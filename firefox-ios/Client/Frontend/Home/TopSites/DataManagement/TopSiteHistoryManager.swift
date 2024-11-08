@@ -6,8 +6,12 @@ import Foundation
 import Shared
 import Storage
 
+protocol TopSiteHistoryManagerProvider {
+    func getTopSites(completion: @escaping ([Site]?) -> Void)
+}
+
 // Manages the top site
-class TopSiteHistoryManager: DataObserver {
+class TopSiteHistoryManager: DataObserver, TopSiteHistoryManagerProvider {
     private let profile: Profile
 
     weak var delegate: DataObserverDelegate?

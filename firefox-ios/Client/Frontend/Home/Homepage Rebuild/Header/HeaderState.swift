@@ -33,11 +33,7 @@ struct HeaderState: StateType, Equatable {
     static let reducer: Reducer<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
         else {
-            return HeaderState(
-                windowUUID: state.windowUUID,
-                isPrivate: state.isPrivate,
-                showPrivateModeToggle: state.showPrivateModeToggle
-            )
+            return defaultState(from: state)
         }
 
         switch action.actionType {
@@ -50,11 +46,15 @@ struct HeaderState: StateType, Equatable {
                 showPrivateModeToggle: true
             )
         default:
-            return HeaderState(
-                windowUUID: state.windowUUID,
-                isPrivate: state.isPrivate,
-                showPrivateModeToggle: state.showPrivateModeToggle
-            )
+            return defaultState(from: state)
         }
+    }
+
+    static func defaultState(from state: HeaderState) -> HeaderState {
+        return HeaderState(
+            windowUUID: state.windowUUID,
+            isPrivate: state.isPrivate,
+            showPrivateModeToggle: state.showPrivateModeToggle
+        )
     }
 }

@@ -39,7 +39,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case reportSiteIssue
     case searchHighlights
     case splashScreen
-    case tabTrayRefactor
     case unifiedSearch
     case toolbarRefactor
     case toolbarOneTapNewTab
@@ -47,14 +46,19 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case trackingProtectionRefactor
     case zoomFeature
 
+    // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`
     var debugKey: String? {
         switch self {
-        case .closeRemoteTabs,
-                .homepageRebuild,
+        case    .bookmarksRefactor,
+                .closeRemoteTabs,
                 .microsurvey,
+                .homepageRebuild,
                 .menuRefactor,
+                .trackingProtectionRefactor,
                 .nativeErrorPage,
-                .trackingProtectionRefactor:
+                .toolbarRefactor,
+                .unifiedSearch,
+                .passwordGenerator:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil
@@ -113,7 +117,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .feltPrivacyFeltDeletion,
                 .searchHighlights,
                 .splashScreen,
-                .tabTrayRefactor,
                 .unifiedSearch,
                 .toolbarRefactor,
                 .toolbarOneTapNewTab,
