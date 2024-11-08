@@ -10,8 +10,9 @@ import Shared
 
 final class NativeErrorPageViewController: UIViewController,
                                            Themeable,
-                                           ContentContainable {
-    private let model: ErrorPageModel
+                                           ContentContainable,
+                                           StoreSubscriber {
+    typealias SubscriberStateType = NativeErrorPageState
     private let windowUUID: WindowUUID
 
     // MARK: Themable Variables
@@ -24,6 +25,7 @@ final class NativeErrorPageViewController: UIViewController,
 
     private var overlayManager: OverlayModeManager
     var contentType: ContentType = .nativeErrorPage
+    private var nativeErrorPageState: NativeErrorPageState
 
     // MARK: UI Elements
     private struct UX {
@@ -80,7 +82,6 @@ final class NativeErrorPageViewController: UIViewController,
         label.adjustsFontForContentSizeCategory = true
         label.font = FXFontStyles.Bold.title2.scaledFont()
         label.numberOfLines = 0
-        label.text = .NativeErrorPage.NoInternetConnection.TitleLabel
         label.textAlignment = .left
     }
 
@@ -88,7 +89,6 @@ final class NativeErrorPageViewController: UIViewController,
         label.adjustsFontForContentSizeCategory = true
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
-        label.text = .NativeErrorPage.NoInternetConnection.Description
         label.textAlignment = .left
     }
 
@@ -101,41 +101,73 @@ final class NativeErrorPageViewController: UIViewController,
     private var iPhoneContraintsList = [NSLayoutConstraint]()
     private var iPadContraintsList = [NSLayoutConstraint]()
 
-    required init?(
-        coder aDecoder: NSCoder
-    ) {
-        fatalError(
-            "init(coder:) has not been implemented"
-        )
-    }
-
     init(
-        model: ErrorPageModel,
         windowUUID: WindowUUID,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         overlayManager: OverlayModeManager,
         notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
-        self.model = model
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.overlayManager = overlayManager
         self.notificationCenter = notificationCenter
+        nativeErrorPageState = NativeErrorPageState(windowUUID: windowUUID)
+
         super.init(
             nibName: nil,
             bundle: nil
         )
 
+        subscribeToRedux()
         configureUI()
         setupLayout()
         adjustConstraints()
         showViewForCurrentOrientation()
     }
 
+    // MARK: Redux
+    func newState(state: NativeErrorPageState) {
+        nativeErrorPageState = state
+        titleLabel.text = state.title
+        errorDescriptionLabel.text = state.description
+    }
+
+    func subscribeToRedux() {
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.showScreen,
+                                  screen: .nativeErrorPage)
+        store.dispatch(action)
+        let uuid = windowUUID
+        store.subscribe(self, transform: {
+            return $0.select({ appState in
+                return NativeErrorPageState(appState: appState, uuid: uuid)
+            })
+        })
+    }
+
+    func unsubscribeFromRedux() {
+        let action = ScreenAction(windowUUID: windowUUID,
+                                  actionType: ScreenActionType.closeScreen,
+                                  screen: .nativeErrorPage)
+        store.dispatch(action)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        unsubscribeFromRedux()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         listenForThemeChange(view)
         applyTheme()
+        store.dispatch(NativeErrorPageAction( windowUUID: windowUUID,
+                                              actionType: NativeErrorPageActionType.errorPageLoaded
+                                            )
+        )
     }
 
     override func viewWillTransition(

@@ -12,7 +12,7 @@ public final class HeaderView: UIView, ThemeApplicable {
         static let siteDomainLabelsVerticalSpacing: CGFloat = 12
         static let largeFaviconImageSize: CGFloat = 48
         static let favIconImageSize: CGFloat = 32
-        static let smallFaviconImageSize: CGFloat = 20
+        static let smallFaviconImageSize: CGFloat = 24
         static let maskFaviconImageSize: CGFloat = 32
         static let horizontalMargin: CGFloat = 16
         static let headerLabelDistance: CGFloat = 2
@@ -90,10 +90,12 @@ public final class HeaderView: UIView, ThemeApplicable {
         warningIconView.removeConstraints(warningIconView.constraints)
         iconMask.removeConstraints(iconMask.constraints)
         viewConstraints.removeAll()
+        let favIconPadding = (UX.maskFaviconImageSize / 2) - (UX.smallFaviconImageSize / 2)
+        let favIconLeadingConstant = isWebsiteIcon ? UX.horizontalMargin : UX.horizontalMargin + favIconPadding
         viewConstraints.append(contentsOf: [
             favicon.leadingAnchor.constraint(
                 equalTo: self.leadingAnchor,
-                constant: UX.horizontalMargin
+                constant: favIconLeadingConstant
             ),
 
             headerLabelsContainer.topAnchor.constraint(
@@ -105,7 +107,7 @@ public final class HeaderView: UIView, ThemeApplicable {
                 constant: -UX.siteDomainLabelsVerticalSpacing
             ),
             headerLabelsContainer.leadingAnchor.constraint(
-                equalTo: favicon.trailingAnchor,
+                equalTo: isWebsiteIcon ? favicon.trailingAnchor : iconMask.trailingAnchor,
                 constant: UX.siteDomainLabelsVerticalSpacing
             ),
             headerLabelsContainer.trailingAnchor.constraint(

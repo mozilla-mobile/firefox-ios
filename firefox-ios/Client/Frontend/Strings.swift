@@ -1332,6 +1332,11 @@ extension String {
     /// Identifiers of all new strings should begin with `LibraryPanel.{PanelName}.`
     public struct LibraryPanel {
         public struct Sections {
+            public static let LastHour = MZLocalizedString(
+                key: "LibraryPanel.Sections.LastHour.v134",
+                tableName: "LibraryPanel",
+                value: "Last Hour",
+                comment: "This label is meant to signify the section containing a group of items from the past hour. This is primarily used in the history library panel when grouping sites that have been visited in the last hour.")
             public static let Today = MZLocalizedString(
                 key: "Today",
                 tableName: nil,
@@ -3895,6 +3900,14 @@ extension String {
 // MARK: - Main Menu
 extension String {
     public struct MainMenu {
+        public struct AccessibilityLabels {
+            public static let OptionDisabledHint = MZLocalizedString(
+                key: "MainMenu.AccessibilityLabels.OptionDisabled.Hint.v133",
+                tableName: "MainMenu",
+                value: "Dimmed",
+                comment: "On the main menu, the accessibility label hint for any action/option inside the menu, that is disabled. For example: 'Save to Reading List' option, from Menu, in some cases is disabled and the voice over should indicate that. 'Save To Reading List dimmed'")
+        }
+
         public struct Account {
             public static let SignedOutTitle = MZLocalizedString(
                 key: "MainMenu.Account.SignedOut.Title.v131",
@@ -4178,9 +4191,9 @@ extension String {
                     value: "Share",
                     comment: "On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Share tool.")
                 public static let ReportBrokenSite = MZLocalizedString(
-                    key: "MainMenu.Submenus.Tools.ReportBrokenSite.Title.v131",
+                    key: "MainMenu.Submenus.Tools.ReportBrokenSite.Title.v133",
                     tableName: "MainMenu",
-                    value: "Report Broken Site",
+                    value: "Report Broken Site…",
                     comment: "On the main menu, the title for the action that will take the user to the site where they can report a broken website to our web compatibility team.")
                 public static let ReportBrokenSiteSubtitle = MZLocalizedString(
                     key: "MainMenu.Submenus.Tools.ReportBrokenSite.Subtitle.v131",
@@ -7446,6 +7459,13 @@ extension String {
                 tableName: "Microsurvey",
                 value: "Selected",
                 comment: "After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label that states whether the survey option was selected.")
+        }
+        struct v131 {
+            public static let ReportBrokenSite = MZLocalizedString(
+                key: "MainMenu.Submenus.Tools.ReportBrokenSite.Title.v131",
+                tableName: "MainMenu",
+                value: "Report Broken Site",
+                comment: "On the main menu, the title for the action that will take the user to the site where they can report a broken website to our web compatibility team.")
         }
         struct v132 {
             public static let TabTrayToggleAccessibilityLabel = MZLocalizedString(

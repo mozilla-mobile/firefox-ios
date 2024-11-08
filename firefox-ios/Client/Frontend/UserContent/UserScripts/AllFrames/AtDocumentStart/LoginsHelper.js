@@ -9,6 +9,7 @@ import "Assets/CC_Script/Helpers.ios.mjs";
 import { Logic } from "Assets/CC_Script/LoginManager.shared.sys.mjs";
 import { PasswordGenerator } from "resource://gre/modules/PasswordGenerator.sys.mjs";
 import { LoginFormFactory } from "resource://gre/modules/shared/LoginFormFactory.sys.mjs";
+import { PasswordRulesParser } from "Assets/CC_Script/PasswordRulesParser.sys.mjs"
 
 // Ensure this module only gets included once. This is
 // required for user scripts injected into all frames.
@@ -453,9 +454,9 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     // The rules are provided by swift depending on the domain
     if(rules) {
       const domainRules = PasswordRulesParser.parsePasswordRules(
-        rules
+        rules["password-rules"] ?? ""
       );
-      mapOfRules = transformRulesToMap(domainRules);
+      mapOfRules = Logic.transformRulesToMap(domainRules);
     }
 
     const generatedPassword = PasswordGenerator.generatePassword({

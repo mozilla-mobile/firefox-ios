@@ -249,6 +249,45 @@ class Logic {
 
     return confirmPasswordInput;
   }
+
+  /**
+   * Transforms the parsed rules returned from PasswordRulesParser into a Map for easier access.
+   * The returned Map could have the following keys: "allowed", "required", "maxlength", "minlength", and "max-consecutive"
+   * @example
+   * // Returns a Map with a key-value pair of "allowed": "ascii-printable"
+   * transformRulesToMap([{ _name: "allowed", value: [{ _name: "ascii-printable" }] }])
+   * @param {Object[]} rules rules from PasswordRulesParser.parsePasswordRules
+   * @return {Map} mapped rules
+   */
+  static transformRulesToMap(rules) {
+    let map = new Map();
+    for (let rule of rules) {
+      let { _name, value } = rule;
+      if (
+        _name === "minlength" ||
+        _name === "maxlength" ||
+        _name === "max-consecutive"
+      ) {
+        map.set(_name, value);
+      } else {
+        let _value = [];
+        if (map.get(_name)) {
+          _value = map.get(_name);
+        }
+        for (let _class of value) {
+          let { _name: _className } = _class;
+          if (_className) {
+            _value.push(_className);
+          } else {
+            let { _characters } = _class;
+            _value.push(_characters);
+          }
+        }
+        map.set(_name, _value);
+      }
+    }
+    return map;
+  }
 }
 
 XPCOMUtils.defineLazyPreferenceGetter(

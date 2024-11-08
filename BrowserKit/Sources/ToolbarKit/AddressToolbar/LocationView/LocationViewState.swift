@@ -16,6 +16,7 @@ public struct LocationViewState {
 
     public let searchEngineImage: UIImage?
     public let lockIconImageName: String?
+    public let lockIconNeedsTheming: Bool
     public let safeListedURLImageName: String?
     public let url: URL?
     public let droppableUrl: URL?
@@ -36,6 +37,7 @@ public struct LocationViewState {
         urlTextFieldA11yId: String,
         searchEngineImage: UIImage?,
         lockIconImageName: String?,
+        lockIconNeedsTheming: Bool,
         safeListedURLImageName: String?,
         url: URL?,
         droppableUrl: URL?,
@@ -55,6 +57,7 @@ public struct LocationViewState {
         self.urlTextFieldA11yId = urlTextFieldA11yId
         self.searchEngineImage = searchEngineImage
         self.lockIconImageName = lockIconImageName
+        self.lockIconNeedsTheming = lockIconNeedsTheming
         self.safeListedURLImageName = safeListedURLImageName
         self.url = url
         self.droppableUrl = droppableUrl

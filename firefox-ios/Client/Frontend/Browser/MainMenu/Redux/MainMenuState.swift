@@ -14,6 +14,16 @@ struct AccountData: Equatable {
     let iconURL: URL?
 }
 
+struct TelemetryInfo: Equatable {
+    let isHomepage: Bool
+    let isActionOn: Bool?
+
+    init(isHomepage: Bool, isActionOn: Bool? = nil) {
+        self.isHomepage = isHomepage
+        self.isActionOn = isActionOn
+    }
+}
+
 struct MainMenuTabInfo: Equatable {
     let tabID: TabUUID
     let url: URL?
@@ -99,14 +109,9 @@ struct MainMenuState: ScreenState, Equatable {
     }
 
     static let reducer: Reducer<Self> = { state, action in
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
-            return MainMenuState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                currentTabInfo: state.currentTabInfo,
-                accountData: state.accountData,
-                accountIcon: state.accountIcon
-            )
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
+        else {
+            return defaultState(from: state)
         }
 
         switch action.actionType {
@@ -120,7 +125,7 @@ struct MainMenuState: ScreenState, Equatable {
             )
         case MainMenuMiddlewareActionType.updateAccountHeader:
             guard let action = action as? MainMenuAction
-            else { return state }
+            else { return defaultState(from: state) }
 
             return MainMenuState(
                 windowUUID: state.windowUUID,
@@ -132,7 +137,7 @@ struct MainMenuState: ScreenState, Equatable {
         case MainMenuActionType.updateCurrentTabInfo:
             guard let action = action as? MainMenuAction,
                   let currentTabInfo = action.currentTabInfo
-            else { return state }
+            else { return defaultState(from: state) }
 
             return MainMenuState(
                 windowUUID: state.windowUUID,
@@ -146,7 +151,7 @@ struct MainMenuState: ScreenState, Equatable {
                 accountIcon: state.accountIcon
             )
         case MainMenuActionType.tapShowDetailsView:
-            guard let action = action as? MainMenuAction else { return state }
+            guard let action = action as? MainMenuAction else { return defaultState(from: state) }
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
@@ -156,7 +161,7 @@ struct MainMenuState: ScreenState, Equatable {
                 accountIcon: state.accountIcon
             )
         case MainMenuActionType.tapNavigateToDestination:
-            guard let action = action as? MainMenuAction else { return state }
+            guard let action = action as? MainMenuAction else { return defaultState(from: state) }
             return MainMenuState(
                 windowUUID: state.windowUUID,
                 menuElements: state.menuElements,
@@ -176,13 +181,17 @@ struct MainMenuState: ScreenState, Equatable {
                 accountIcon: state.accountIcon
             )
         default:
-            return MainMenuState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                currentTabInfo: state.currentTabInfo,
-                accountData: state.accountData,
-                accountIcon: state.accountIcon
-            )
+            return defaultState(from: state)
         }
+    }
+
+    static func defaultState(from state: MainMenuState) -> MainMenuState {
+        return MainMenuState(
+            windowUUID: state.windowUUID,
+            menuElements: state.menuElements,
+            currentTabInfo: state.currentTabInfo,
+            accountData: state.accountData,
+            accountIcon: state.accountIcon
+        )
     }
 }

@@ -267,7 +267,7 @@ class HistoryPanel: UIViewController,
         if let actionableItem = item as? HistoryActionablesModel {
             switch actionableItem.itemIdentity {
             case .clearHistory:
-                isEnabled = !viewModel.groupedSites.isEmpty
+                isEnabled = !viewModel.dateGroupedSites.isEmpty
             case .recentlyClosed:
                 isEnabled = viewModel.hasRecentlyClosed
                 recentlyClosedCell = cell
@@ -498,7 +498,7 @@ class HistoryPanel: UIViewController,
         snapshot.sectionIdentifiers.forEach { section in
             if !viewModel.hiddenSections.contains(where: { $0 == section }) {
                 snapshot.appendItems(
-                    viewModel.groupedSites.itemsForSection(section.rawValue - 1),
+                    viewModel.dateGroupedSites.itemsForSection(section.rawValue - 1),
                     toSection: section
                 )
             }
@@ -514,7 +514,7 @@ class HistoryPanel: UIViewController,
                 let groupTimeInterval = TimeInterval.fromMicrosecondTimestamp(lastVisit.date)
 
                 if let groupPlacedAfterItem = (
-                    viewModel.groupedSites.itemsForSection(groupSection.rawValue - 1)
+                    viewModel.dateGroupedSites.itemsForSection(groupSection.rawValue - 1)
                 ).first(where: { site in
                     guard let lastVisit = site.latestVisit else { return false }
                     return groupTimeInterval > TimeInterval.fromMicrosecondTimestamp(lastVisit.date)
@@ -938,7 +938,7 @@ extension HistoryPanel: UITableViewDataSourcePrefetching {
     func shouldLoadRow(for indexPath: IndexPath) -> Bool {
         guard HistoryPanelSections(rawValue: indexPath.section) != .additionalHistoryActions else { return false }
 
-        return indexPath.row >= viewModel.groupedSites.numberOfItemsForSection(
+        return indexPath.row >= viewModel.dateGroupedSites.numberOfItemsForSection(
             indexPath.section - 1
         ) - historyPanelPrefetchOffset
     }

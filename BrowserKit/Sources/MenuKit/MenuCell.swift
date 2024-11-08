@@ -8,10 +8,11 @@ import UIKit
 
 public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
-        static let contentMargin: CGFloat = 10
+        static let contentMargin: CGFloat = 11
         static let iconSize: CGFloat = 24
         static let largeIconSize: CGFloat = 48
-        static let contentSpacing: CGFloat = 2
+        static let contentSpacing: CGFloat = 5
+        static let noDescriptionContentSpacing: CGFloat = 0
     }
 
     private var separatorInsetSize: CGFloat {
@@ -21,7 +22,7 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
     // MARK: - UI Elements
     private var titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.body.scaledFont()
-        label.numberOfLines = 2
+        label.numberOfLines = 0
     }
 
     private var descriptionLabel: UILabel = .build { label in
@@ -33,7 +34,6 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private var contentStackView: UIStackView = .build { stackView in
         stackView.axis = .vertical
         stackView.distribution = .fillProportionally
-        stackView.spacing = UX.contentSpacing
     }
 
     private var accessoryArrowView: UIImageView = .build()
@@ -54,10 +54,12 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
         self.model = model
         self.titleLabel.text = model.title
         self.descriptionLabel.text = model.description
+        self.contentStackView.spacing = model.description != nil ? UX.contentSpacing : UX.noDescriptionContentSpacing
         self.icon.image = UIImage(named: model.iconName)?.withRenderingMode(.alwaysTemplate)
         self.accessoryArrowView.image =
         UIImage(named: StandardImageIdentifiers.Large.chevronRight)?.withRenderingMode(.alwaysTemplate)
         self.isAccessibilityElement = true
+        self.isUserInteractionEnabled = !model.isEnabled ? false : true
         self.accessibilityIdentifier = model.a11yId
         self.accessibilityLabel = model.a11yLabel
         self.accessibilityHint = model.a11yHint

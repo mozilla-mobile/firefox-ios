@@ -48,9 +48,9 @@ class MainMenuViewController: UIViewController,
 
     var currentWindowUUID: UUID? { return windowUUID }
 
-    private var isRegularSizeClass: Bool {
-        traitCollection.horizontalSizeClass == .regular &&
-        traitCollection.verticalSizeClass == .regular
+    private var isPad: Bool {
+        traitCollection.verticalSizeClass == .regular &&
+        !(UIDevice.current.userInterfaceIdiom == .phone)
     }
 
     // Used to save the last screen orientation
@@ -105,7 +105,8 @@ class MainMenuViewController: UIViewController,
             store.dispatch(
                 MainMenuAction(
                     windowUUID: self.windowUUID,
-                    actionType: MainMenuActionType.tapCloseMenu
+                    actionType: MainMenuActionType.tapCloseMenu,
+                    currentTabInfo: menuState.currentTabInfo
                 )
             )
         }
@@ -116,7 +117,8 @@ class MainMenuViewController: UIViewController,
                 MainMenuAction(
                     windowUUID: self.windowUUID,
                     actionType: MainMenuActionType.tapNavigateToDestination,
-                    navigationDestination: MenuNavigationDestination(.syncSignIn)
+                    navigationDestination: MenuNavigationDestination(.syncSignIn),
+                    currentTabInfo: menuState.currentTabInfo
                 )
             )
         }
@@ -217,7 +219,7 @@ class MainMenuViewController: UIViewController,
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
            let window = windowScene.windows.first {
             window.addSubview(hintView)
-            if isRegularSizeClass {
+            if isPad {
                 NSLayoutConstraint.activate([
                     hintView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.hintViewMargin * 4),
                     hintView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.hintViewMargin * 4),
@@ -353,7 +355,7 @@ class MainMenuViewController: UIViewController,
             hintView.removeFromSuperview()
         } else {
             if let screenHeight = view.window?.windowScene?.screen.bounds.height {
-                let maxHeight: CGFloat = if isRegularSizeClass {
+                let maxHeight: CGFloat = if isPad {
                     view.frame.height / 2
                 } else {
                     screenHeight - view.frame.height - UX.hintViewMargin * 4
@@ -370,7 +372,7 @@ class MainMenuViewController: UIViewController,
 
     private func shouldDisplayHintView() -> Bool {
         // Don't display CFR in landscape mode for iPhones
-        if !isRegularSizeClass && UIDevice.current.orientation != .portrait {
+        if UIDevice.current.isIphoneLandscape {
             return false
         }
 
@@ -384,6 +386,13 @@ class MainMenuViewController: UIViewController,
 
     // MARK: - UIAdaptivePresentationControllerDelegate
     func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        store.dispatch(
+            MainMenuAction(
+                windowUUID: self.windowUUID,
+                actionType: MainMenuActionType.menuDismissed,
+                currentTabInfo: menuState.currentTabInfo
+            )
+        )
         coordinator?.dismissMenuModal(animated: true)
     }
 

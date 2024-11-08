@@ -12,7 +12,15 @@ struct SearchSettingsState: ScreenState, Equatable {
         self.windowUUID = windowUUID
     }
 
+    init(windowUUID: WindowUUID) {
+        self.windowUUID = windowUUID
+    }
+
     static let reducer: Reducer<Self> = { state, action in
-        return state
+        return defaultState(from: state)
+    }
+
+    static func defaultState(from state: SearchSettingsState) -> SearchSettingsState {
+        return SearchSettingsState(windowUUID: state.windowUUID)
     }
 }

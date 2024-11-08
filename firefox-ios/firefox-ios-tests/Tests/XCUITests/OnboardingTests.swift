@@ -66,7 +66,7 @@ class OnboardingTests: BaseTestCase {
         // Swipe to the fourth screen
         app.buttons["\(rootA11yId)SecondaryButton"].tap()
         currentScreen += 1
-        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: 15)
+        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
         XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
@@ -76,7 +76,7 @@ class OnboardingTests: BaseTestCase {
         // Swipe to the fifth screen
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
         currentScreen += 1
-        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: 15)
+        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
         XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
@@ -97,21 +97,29 @@ class OnboardingTests: BaseTestCase {
         app.launch()
         // Check that the first's tour screen is shown as well as all the elements in there
         navigator.nowAt(FirstRun)
-        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"])
-        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
-        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)DescriptionLabel"])
-        mozWaitForElementToExist(app.buttons["\(rootA11yId)PrimaryButton"])
-        mozWaitForElementToExist(app.buttons["\(rootA11yId)SecondaryButton"])
-        mozWaitForElementToExist(app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"])
-        mozWaitForElementToExist(app.pageIndicators["\(AccessibilityIdentifiers.Onboarding.pageControl)"])
+        waitForElementsToExist(
+            [
+                app.images["\(rootA11yId)ImageView"],
+                app.staticTexts["\(rootA11yId)TitleLabel"],
+                app.staticTexts["\(rootA11yId)DescriptionLabel"],
+                app.buttons["\(rootA11yId)PrimaryButton"],
+                app.buttons["\(rootA11yId)SecondaryButton"],
+                app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"],
+                app.pageIndicators["\(AccessibilityIdentifiers.Onboarding.pageControl)"]
+            ]
+        )
 
         // Swipe to the second screen
         app.buttons["\(rootA11yId)SecondaryButton"].tap()
         currentScreen += 1
-        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"])
-        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
-        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)DescriptionLabel"])
-        mozWaitForElementToExist(app.buttons["\(rootA11yId)PrimaryButton"])
+        waitForElementsToExist(
+            [
+                app.images["\(rootA11yId)ImageView"],
+                app.staticTexts["\(rootA11yId)TitleLabel"],
+                app.staticTexts["\(rootA11yId)DescriptionLabel"],
+                app.buttons["\(rootA11yId)PrimaryButton"]
+            ]
+        )
 
         // Swipe to the third screen
         app.buttons["\(rootA11yId)SecondaryButton"].waitAndTap()
@@ -126,7 +134,7 @@ class OnboardingTests: BaseTestCase {
         // Swipe to the fourth screen
         app.buttons["\(rootA11yId)SecondaryButton"].tap()
         currentScreen += 1
-        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: 15)
+        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
         XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
@@ -136,7 +144,7 @@ class OnboardingTests: BaseTestCase {
         // Swipe to the fifth screen
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
         currentScreen += 1
-        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: 15)
+        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
         XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)TitleLabel"].exists)
         XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
@@ -206,5 +214,111 @@ class OnboardingTests: BaseTestCase {
                 app.staticTexts["Get the most recent version"]
             ]
         )
+    }
+
+    // TOOLBAR THEME
+    // https://mozilla.testrail.io/index.php?/cases/view/2575175
+    func testSelectTopPlacement() {
+        let toolbar = app.textFields["url"]
+
+        // Wait for the initial title label to appear
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+        app.buttons["\(rootA11yId)PrimaryButton"].tap()
+        currentScreen += 1
+
+        let buttons = app.buttons.matching(identifier: "\(rootA11yId)MultipleChoiceButton")
+        for i in 0..<buttons.count {
+            let button = buttons.element(boundBy: i)
+            if button.label == "Top" {
+                button.tap()
+                break
+            }
+        }
+
+        app.buttons["Save and Start Browsing"].waitAndTap()
+        let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        mozWaitForElementToExist(topSites)
+
+        // Check if the toolbar exists
+        if toolbar.exists {
+            // Get the screen height
+            let screenHeight = app.windows.element(boundBy: 0).frame.height
+
+            XCTAssertTrue(toolbar.frame.origin.y < screenHeight / 2, "Toolbar is not near the top")
+        }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2575176
+    func testSelectBottomPlacement() throws {
+        guard !iPad() else {
+            throw XCTSkip("Toolbar option not available for iPad")
+        }
+        let toolbar = app.textFields["url"]
+
+        // Wait for the initial title label to appear
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+        app.buttons["\(rootA11yId)PrimaryButton"].tap()
+        currentScreen += 1
+
+        let buttons = app.buttons.matching(identifier: "\(rootA11yId)MultipleChoiceButton")
+        for i in 0..<buttons.count {
+            let button = buttons.element(boundBy: i)
+            if button.label == "Bottom" {
+                button.tap()
+                break
+            }
+        }
+
+        app.buttons["Save and Start Browsing"].waitAndTap()
+        let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        mozWaitForElementToExist(topSites)
+
+        // Check if the toolbar exists
+        if toolbar.exists {
+            // Get the screen height
+            let screenHeight = app.windows.element(boundBy: 0).frame.height
+
+            XCTAssertFalse(toolbar.frame.origin.y < screenHeight / 2, "Toolbar is not near the bottom")
+        }
+    }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2575177
+    func testCloseOptionToolbarCard() {
+        // Wait for the initial title label to appear
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
+        app.buttons["\(rootA11yId)PrimaryButton"].tap()
+        app.buttons["CloseButton"].waitAndTap()
+        let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        mozWaitForElementToExist(topSites)
     }
 }

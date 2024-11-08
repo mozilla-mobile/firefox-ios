@@ -1,0 +1,33 @@
+/* Setting for closing private tabs */
+"Close Private Tabs" = "Ахатә абларҭақәа арктәуп";
+
+/* Context menu option for opening a link in a new private tab */
+"ContextMenu.OpenInNewPrivateTabButtonTitle" = "Иаарттәуп ахатә абларҭа ҿыц аҿы";
+
+/* Description text displayed when there are no open tabs while in private mode */
+"Firefox won’t remember any of your history or cookies, but new bookmarks will be saved." = "Firefox уҭоурых ма укукиқәа рҟынтә акгьы игәалашәом, аха аҭыжьымҭа ҿыцқәа еиқәырхахоит.";
+
+/* Text button displayed when there are no tabs open while in private mode */
+"Learn More" = "Еиҳаны аинформациа";
+
+/* Toggled OFF accessibility value */
+"Off" = "Аусура злымшо";
+
+/* Toggled ON accessibility value */
+"On" = "Аус арутәуп";
+
+/* Title displayed for when there are no open tabs while in private mode */
+"Private Browsing" = "Ахатә ԥшаара";
+
+/* Accessibility label for toggling on/off private mode */
+"Private Mode" = "Ахатә режим";
+
+/* Accessibility label for toggling on/off private mode */
+"PrivateBrowsing.Toggle.A11y.Label.v132" = "Ахатә ԥшаара";
+
+/* Accessiblity hint for toggling on/off private mode */
+"Turns private mode on or off" = "Ахатә режим аус арутәуп ма иаҿыхтәуп";
+
+/* Will be displayed in Settings under 'Close Private Tabs' */
+"When Leaving Private Browsing" = "Ахатә алаԥшхырԥара ааныжьраан";
+

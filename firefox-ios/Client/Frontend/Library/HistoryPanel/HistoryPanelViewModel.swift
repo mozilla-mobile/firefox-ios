@@ -19,6 +19,7 @@ private class FetchInProgressError: MaybeErrorType {
 class HistoryPanelViewModel: FeatureFlaggable {
     enum Sections: Int, CaseIterable {
         case additionalHistoryActions
+        case lastHour
         case today
         case yesterday
         case lastWeek
@@ -28,6 +29,8 @@ class HistoryPanelViewModel: FeatureFlaggable {
 
         var title: String? {
             switch self {
+            case .lastHour:
+                return .LibraryPanel.Sections.LastHour
             case .today:
                 return .LibraryPanel.Sections.Today
             case .yesterday:
@@ -65,7 +68,7 @@ class HistoryPanelViewModel: FeatureFlaggable {
     // Groups items we should have a single datasource containing sites and groups
     var searchTermGroups: [ASGroup<Site>] = []
     // Only individual sites
-    var groupedSites = DateGroupedTableData<Site>()
+    var dateGroupedSites = DateGroupedTableData<Site>(includeLastHour: true)
     var isFetchInProgress = false
     var shouldResetHistory = false
     // Collapsible sections
@@ -133,7 +136,7 @@ class HistoryPanelViewModel: FeatureFlaggable {
     func createGroupedSites(sites: [Site]) {
         sites.forEach { site in
             if let latestVisit = site.latestVisit {
-                self.groupedSites.add(site, timestamp: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
+                self.dateGroupedSites.add(site, timestamp: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
             }
         }
     }
@@ -166,7 +169,7 @@ class HistoryPanelViewModel: FeatureFlaggable {
     }
 
     func shouldShowEmptyState(searchText: String = "") -> Bool {
-        guard isSearchInProgress else { return groupedSites.isEmpty && searchTermGroups.isEmpty }
+        guard isSearchInProgress else { return dateGroupedSites.isEmpty && searchTermGroups.isEmpty }
 
         // if the search text is empty we show the regular history so the empty should not show
         return !searchText.isEmpty ? searchResultSites.isEmpty : false
@@ -188,7 +191,7 @@ class HistoryPanelViewModel: FeatureFlaggable {
         currentFetchOffset = 0
 
         searchTermGroups.removeAll()
-        groupedSites = DateGroupedTableData<Site>()
+        dateGroupedSites = DateGroupedTableData<Site>()
         buildVisibleSections()
     }
 
@@ -221,8 +224,9 @@ class HistoryPanelViewModel: FeatureFlaggable {
         let groupDate = TimeInterval.timeIntervalSince1970ToDate(
             timeInterval: TimeInterval.fromMicrosecondTimestamp(lastVisit.date)
         )
-
-        if groupDate.isToday() {
+        if groupDate.isWithinLastHour() {
+            return .lastHour
+        } else if groupDate.isToday() {
             return .today
         } else if groupDate.isYesterday() {
             return .yesterday
@@ -249,40 +253,13 @@ class HistoryPanelViewModel: FeatureFlaggable {
     }
 
     func deleteGroupsFor(dateOption: HistoryDeletionUtilityDateOptions) {
-        if dateOption == .lastHour {
-            deleteLastHourHistory()
-        } else {
-            deleteHistory(dateOption: dateOption)
-        }
-    }
-
-    private func deleteHistory(dateOption: HistoryDeletionUtilityDateOptions) {
         guard let deletableSections = getDeletableSection(for: dateOption) else { return }
         deletableSections.forEach { section in
             // Remove grouped items for delete section
             var sectionItems: [AnyHashable] = groupsForSection(section: section)
-            let singleItems = groupedSites.itemsForSection(section.rawValue - 1)
+            let singleItems = dateGroupedSites.itemsForSection(section.rawValue - 1)
             sectionItems.append(contentsOf: singleItems)
             removeHistoryItems(item: sectionItems, at: section.rawValue)
-        }
-    }
-
-    private func deleteLastHourHistory() {
-        // Get the sections in which history items from the last hour could exist
-        guard let deletableSections = getDeletableSection(for: .lastHour) else { return }
-
-        deletableSections.forEach { section in
-            let allHistoryItemsInSection = groupedSites.itemsForSection(section.rawValue - 1)
-
-            // Filter the history items to only include items from the last hour
-            let lastHourHistoryItems = allHistoryItemsInSection.filter { site in
-                guard let latestVisit = site.latestVisit else {return false}
-                let siteVisitTimeStamp = TimeInterval.fromMicrosecondTimestamp(latestVisit.date)
-                let oneHourAgoTimeStamp = TimeInterval.fromMicrosecondTimestamp(
-                    Date(timeIntervalSinceNow: -(60 * 60)).toMicrosecondsSince1970())
-                return siteVisitTimeStamp >= oneHourAgoTimeStamp
-            }
-            removeHistoryItems(item: lastHourHistoryItems, at: section.rawValue)
         }
     }
 
@@ -337,26 +314,26 @@ class HistoryPanelViewModel: FeatureFlaggable {
 
     private func buildGroupsVisibleSections() {
         self.visibleSections = Sections.allCases.filter { section in
-            return self.groupedSites.numberOfItemsForSection(section.rawValue - 1) > 0
+            return self.dateGroupedSites.numberOfItemsForSection(section.rawValue - 1) > 0
             || !self.groupsForSection(section: section).isEmpty
         }
     }
 
     private func buildVisibleSections() {
         self.visibleSections = Sections.allCases.filter { section in
-            self.groupedSites.numberOfItemsForSection(section.rawValue - 1) > 0
+            self.dateGroupedSites.numberOfItemsForSection(section.rawValue - 1) > 0
         }
     }
 
     /// Provide de-duplicated history and visible history sections.
     private func populateHistorySites(fetchedSites: [Site]) {
-        let allCurrentGroupedSites = self.groupedSites.allItems()
+        let allCurrentGroupedSites = self.dateGroupedSites.allItems()
         let allUniquedSitesToAdd = (allCurrentGroupedSites + fetchedSites)
             .filter { !allCurrentGroupedSites.contains($0) }
 
         allUniquedSitesToAdd.forEach { site in
             if let latestVisit = site.latestVisit {
-                self.groupedSites.add(site, timestamp: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
+                self.dateGroupedSites.add(site, timestamp: TimeInterval.fromMicrosecondTimestamp(latestVisit.date))
             }
         }
     }
@@ -376,7 +353,7 @@ class HistoryPanelViewModel: FeatureFlaggable {
     }
 
     private func deleteSingle(site: Site) {
-        groupedSites.remove(site)
+        dateGroupedSites.remove(site)
         self.profile.places.deleteVisitsFor(url: site.url).uponQueue(.main) { _ in
             NotificationCenter.default.post(name: .TopSitesUpdated, object: nil)
         }
@@ -389,11 +366,11 @@ class HistoryPanelViewModel: FeatureFlaggable {
     private func getDeletableSection(for dateOption: HistoryDeletionUtilityDateOptions) -> [Sections]? {
         switch dateOption {
         case .lastHour:
-            return [.today, .yesterday]
+            return [.lastHour]
         case .today:
-            return [.today]
+            return [.lastHour, .today]
         case .yesterday:
-            return [.today, .yesterday]
+            return [.lastHour, .today, .yesterday]
         default:
             return nil
         }
