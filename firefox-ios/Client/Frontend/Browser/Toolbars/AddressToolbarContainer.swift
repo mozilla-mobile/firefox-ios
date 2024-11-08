@@ -361,6 +361,8 @@ final class AddressToolbarContainer: UIView,
                 actionType: ToolbarActionType.didPasteSearchTerm
             )
             store.dispatch(action)
+
+            delegate?.openSuggestions(searchTerm: locationText ?? "")
         } else {
             let action = ToolbarAction(searchTerm: locationText,
                                        windowUUID: windowUUID,
