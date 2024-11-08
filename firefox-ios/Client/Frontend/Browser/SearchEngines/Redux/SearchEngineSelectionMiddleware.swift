@@ -34,6 +34,11 @@ final class SearchEngineSelectionMiddleware {
 
             notifyDidLoad(windowUUID: action.windowUUID, searchEngines: searchEngines)
 
+        case SearchEngineSelectionActionType.didTapSearchEngine:
+            // Trigger editing in the toolbar
+            let action = ToolbarAction(windowUUID: action.windowUUID, actionType: ToolbarActionType.didStartEditingUrl)
+            store.dispatch(action)
+
         default:
             break
         }
