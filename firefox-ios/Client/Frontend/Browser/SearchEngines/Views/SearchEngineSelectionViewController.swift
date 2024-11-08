@@ -45,9 +45,6 @@ class SearchEngineSelectionViewController: UIViewController,
         super.init(nibName: nil, bundle: nil)
 
         subscribeToRedux()
-
-        // TODO Additional setup to come
-        // ...
     }
 
     required init?(coder: NSCoder) {
@@ -131,10 +128,10 @@ class SearchEngineSelectionViewController: UIViewController,
         )
     }
 
-    func createSearchEngineTableData(withSearchEngines: [OpenSearchEngine]) -> [SearchEngineSection] {
+    func createSearchEngineTableData(withSearchEngines: [SearchEngineModel]) -> [SearchEngineSection] {
         let searchEngineElements = withSearchEngines.map { engine in
             SearchEngineElement(fromSearchEngine: engine, withAction: { [weak self] in
-                self?.didTap(searchEngine: engine)
+                self?.didTap(searchEngineModel: engine)
             })
         }
 
@@ -175,9 +172,16 @@ class SearchEngineSelectionViewController: UIViewController,
         coordinator?.navigateToSearchSettings(animated: true)
     }
 
-    func didTap(searchEngine: OpenSearchEngine) {
-        // TODO FXIOS-10384 Push action to the toolbar to update the search engine selection for the next search and
-        // to focus the toolbar (if it isn't already focused).
-        print("Tapped \(searchEngine.shortName)")
+    func didTap(searchEngineModel: SearchEngineModel) {
+        store.dispatch(
+            SearchEngineSelectionAction(
+                windowUUID: self.windowUUID,
+                actionType: SearchEngineSelectionActionType.didTapSearchEngine,
+                selectedSearchEngine: searchEngineModel
+            )
+        )
+
+        // Close the view after a selection has been made
+        coordinator?.dismissModal(animated: true)
     }
 }

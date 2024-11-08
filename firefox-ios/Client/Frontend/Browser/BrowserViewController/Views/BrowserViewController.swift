@@ -863,6 +863,11 @@ class BrowserViewController: UIViewController,
     private func switchToolbarIfNeeded() {
         var updateNeeded = false
 
+        // FXIOS-10210 Temporary to support updating the Unified Search feature flag during runtime
+        if isToolbarRefactorEnabled {
+            addressToolbarContainer.isUnifiedSearchEnabled = isUnifiedSearchEnabled
+        }
+
         if isToolbarRefactorEnabled, addressToolbarContainer.superview == nil {
             // Show toolbar refactor
             updateNeeded = true

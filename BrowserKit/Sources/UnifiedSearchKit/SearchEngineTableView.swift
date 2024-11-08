@@ -11,7 +11,8 @@ import MenuKit
 // MenuKit's work. Eventually both this target and the MenuKit target will leverage a common reusable tableView component.
 public final class SearchEngineTableView: UIView,
                              UITableViewDelegate,
-                             UITableViewDataSource, ThemeApplicable {
+                             UITableViewDataSource,
+                             ThemeApplicable {
     private struct UX {
         static let topPadding: CGFloat = 10
     }
