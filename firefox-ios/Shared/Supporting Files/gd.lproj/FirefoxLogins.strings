@@ -10,3 +10,9 @@
 /* Prompt for updating a password in the Update Password prompt. */
 "LoginsHelper.PromptUpdateLogin.Title.TwoArg.v122" = "A bheil thu airson am facal-faire ùrachadh?";
 
+/* Placeholder text for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder.v122" = "Lorg sna faclan-faire";
+
+/* Title for the list of logins saved by the app */
+"LoginsList.Title.v122" = "Faclan-faire a shàbhail thu";
+
