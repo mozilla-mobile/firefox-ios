@@ -388,7 +388,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             // Workaround BB iOS13 be sure tap happens on url bar
             app.textFields.firstMatch.tap()
             app.textFields.firstMatch.tap()
-            app.textFields.firstMatch.clearAndTypeText(url)
+            app.textFields.firstMatch.typeText(url)
             app.textFields.firstMatch.typeText("\r")
         }
 
@@ -1310,15 +1310,5 @@ extension XCUIElement {
             bottom.press(forDuration: 0.1, thenDragTo: top)
             screenNum += 1
         }
-    }
-    func clearAndTypeText(_ text: String) {
-        if let existingText = value as? String, !existingText.isEmpty {
-            if existingText != text {
-                doubleTap()
-            } else {
-                return
-            }
-        }
-        typeText(text)
     }
 }
