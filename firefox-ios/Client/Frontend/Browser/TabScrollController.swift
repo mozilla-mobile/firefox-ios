@@ -612,12 +612,12 @@ class CustomRefresh: UIView,
         if let easterEggGif {
             addSubview(easterEggGif)
             easterEggGif.translatesAutoresizingMaskIntoConstraints = false
-            easterEggGif.transform = .init(translationX: 0, y: 200)
+            easterEggGif.transform = .init(translationX: -100, y: 100).rotated(by: 0.35)
             NSLayoutConstraint.activate([
-                easterEggGif.topAnchor.constraint(equalTo: topAnchor, constant: 30.0),
-                easterEggGif.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 50.0),
-                easterEggGif.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -250),
-                easterEggGif.bottomAnchor.constraint(equalTo: bottomAnchor)
+                easterEggGif.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 15.0),
+                easterEggGif.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0.0),
+                easterEggGif.widthAnchor.constraint(equalToConstant: 60),
+                easterEggGif.heightAnchor.constraint(equalToConstant: 110)
             ])
         }
         
@@ -657,7 +657,7 @@ class CustomRefresh: UIView,
                 self.blinkBackgroundProgressView()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
                     UIView.animate(withDuration: 0.3) {
-                        self.easterEggGif?.transform = .identity
+                        self.easterEggGif?.transform = .identity.rotated(by: 0.35)
                     }
                 }
             } else {
