@@ -177,9 +177,8 @@ class OpenSearchEngine: NSObject, NSSecureCoding {
 
         return nil
     }
-}
 
-extension OpenSearchEngine {
+    /// Helper method for Redux state.
     func generateModel() -> SearchEngineModel {
         return SearchEngineModel(name: self.shortName, image: self.image)
     }

@@ -211,7 +211,9 @@ struct AddressBarState: StateType, Equatable {
     }
 
     private static func handleDidLoadToolbarsAction(state: Self, action: Action) -> Self {
-        guard let borderPosition = (action as? ToolbarAction)?.addressBorderPosition else { return state }
+        guard let borderPosition = (action as? ToolbarAction)?.addressBorderPosition else {
+            return defaultState(from: state)
+        }
 
         return AddressBarState(
             windowUUID: state.windowUUID,
@@ -702,7 +704,7 @@ struct AddressBarState: StateType, Equatable {
     private static func handleDidTapSearchEngine(state: Self, action: Action) -> AddressBarState {
         guard let searchEngineSelectionAction = action as? SearchEngineSelectionAction,
               let selectedSearchEngine = searchEngineSelectionAction.selectedSearchEngine
-        else { return state }
+        else { return defaultState(from: state) }
 
         return AddressBarState(
             windowUUID: state.windowUUID,
