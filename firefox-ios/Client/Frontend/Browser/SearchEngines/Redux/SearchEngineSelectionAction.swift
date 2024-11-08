@@ -29,6 +29,4 @@ enum SearchEngineSelectionActionType: ActionType {
     case didTapSearchEngine
 }
 
-enum SearchEngineSelectionMiddlewareActionType: ActionType {
-    case didSelectAlternativeSearchEngine
-}
+enum SearchEngineSelectionMiddlewareActionType: ActionType {}

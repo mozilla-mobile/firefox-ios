@@ -205,9 +205,6 @@ struct AddressBarState: StateType, Equatable {
         case SearchEngineSelectionActionType.didTapSearchEngine:
             return handleDidTapSearchEngine(state: state, action: action)
 
-        case SearchEngineSelectionMiddlewareActionType.didSelectAlternativeSearchEngine:
-            return handleDidSelectAlternativeSearchEngine(state: state, action: action)
-
         default:
             return defaultState(from: state)
         }
@@ -728,31 +725,6 @@ struct AddressBarState: StateType, Equatable {
             didStartTyping: state.didStartTyping,
             showQRPageAction: state.showQRPageAction,
             alternativeSearchEngine: selectedSearchEngine
-        )
-    }
-
-    private static func handleDidSelectAlternativeSearchEngine(state: Self, action: Action) -> AddressBarState {
-        guard action is SearchEngineSelectionAction else { return state }
-
-        return AddressBarState(
-            windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
-            pageActions: state.pageActions,
-            browserActions: state.browserActions,
-            borderPosition: state.borderPosition,
-            url: state.url,
-            searchTerm: state.searchTerm,
-            lockIconImageName: state.lockIconImageName,
-            lockIconNeedsTheming: state.lockIconNeedsTheming,
-            safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: true, // Start editing
-            isScrollingDuringEdit: state.isScrollingDuringEdit,
-            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
-            isLoading: state.isLoading,
-            readerModeState: state.readerModeState,
-            didStartTyping: state.didStartTyping,
-            showQRPageAction: state.showQRPageAction,
-            alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 

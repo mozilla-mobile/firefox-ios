@@ -144,8 +144,7 @@ struct ToolbarState: ScreenState, Equatable {
         case ToolbarActionType.navigationHintFinishedPresenting:
             return handleNavigationHintFinishedPresenting(state: state, action: action)
 
-        case SearchEngineSelectionActionType.didTapSearchEngine,
-            SearchEngineSelectionMiddlewareActionType.didSelectAlternativeSearchEngine:
+        case SearchEngineSelectionActionType.didTapSearchEngine:
             return handleSearchEngineSelectionAction(state: state, action: action)
 
         default:
