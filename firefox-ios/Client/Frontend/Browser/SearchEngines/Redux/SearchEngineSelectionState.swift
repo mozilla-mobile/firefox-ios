@@ -81,16 +81,6 @@ struct SearchEngineSelectionState: ScreenState, Equatable {
                 selectedSearchEngine: selectedSearchEngine
             )
 
-        case ToolbarActionType.cancelEdit:
-            guard let action = action as? ToolbarAction else { return defaultState(from: state) }
-
-            // If the user cancels editing, we must revert to the default search engine
-            return SearchEngineSelectionState(
-                windowUUID: state.windowUUID,
-                searchEngines: state.searchEngines,
-                selectedSearchEngine: nil
-            )
-
         default:
             return defaultState(from: state)
         }
