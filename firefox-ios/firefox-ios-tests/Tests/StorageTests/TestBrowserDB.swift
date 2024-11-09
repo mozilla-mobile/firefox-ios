@@ -54,7 +54,15 @@ class TestBrowserDB: XCTestCase {
         let results = db.runQuery("SELECT bmkUri, title FROM bookmarksLocal WHERE type = 1",
                                   args: nil,
                                   factory: { row in
-            (row[0] as! String, row[1] as! String)
+            guard let bmkUri = row[0] as? String else {
+                return ("", "")
+            }
+
+            guard let title = row[1] as? String else {
+                return (bmkUri, "")
+            }
+
+            return (bmkUri, title)
         }).value.successValue!
 
         // The bookmark with the long URL has been deleted.
@@ -79,8 +87,12 @@ class TestBrowserDB: XCTestCase {
 
         // Grab a pointer to the -shm so we can compare later.
         let shmAAttributes = try files.attributesForFileAt(relativePath: "foo.db-shm")
-        let creationA = shmAAttributes[FileAttributeKey.creationDate] as! Date
-        let inodeA = (shmAAttributes[FileAttributeKey.systemFileNumber] as! NSNumber).uintValue
+        guard let creationA = shmAAttributes[FileAttributeKey.creationDate] as? Date else {
+            return XCTFail("expected object was not a date")
+        }
+        guard let inodeA = (shmAAttributes[FileAttributeKey.systemFileNumber] as? NSNumber)?.uintValue else {
+            return XCTFail("expected object was not a number")
+        }
 
         XCTAssertFalse(files.exists("foo.db.bak.1"))
         XCTAssertFalse(files.exists("foo.db.bak.1-shm"))
