@@ -182,7 +182,7 @@ class BrowserViewController: UIViewController,
     var topTabsVisible: Bool {
         return topTabsViewController != nil
     }
-    // Backdrop used for displaying greyed background for private tabs
+    // Window used for displaying an opaque background for private tabs.
     private var privacyWindow: UIWindow?
     var keyboardBackdrop: UIView?
 
