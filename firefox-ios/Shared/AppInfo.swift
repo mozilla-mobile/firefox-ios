@@ -8,7 +8,7 @@ import Foundation
 extension AppInfo {
     public static var displayName: String {
         guard let displayName = applicationBundle.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String else {
-            return ""
+            fatalError("CFBundleDisplayName not found in info.plist")
         }
         return displayName
     }
