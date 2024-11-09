@@ -73,7 +73,7 @@ struct ThemeSettingsState: ScreenState, Equatable {
             return handleManualThemeChangedAction(state: state, action: action)
 
         case ThemeSettingsMiddlewareActionType.userBrightnessChanged:
-            return handleUserBrightnessChanged(state: state, action: action)
+            return handleUserBrightnessChangedAction(state: state, action: action)
 
         case ThemeSettingsMiddlewareActionType.systemBrightnessChanged:
             return handleSystemBrightnessChanged(state: state, action: action)
@@ -121,7 +121,7 @@ struct ThemeSettingsState: ScreenState, Equatable {
                                   systemBrightness: state.systemBrightness)
     }
 
-    private static func handleUserBrightnessChanged(state: Self, action: ThemeSettingsMiddlewareAction) -> Self {
+    private static func handleUserBrightnessChangedAction(state: Self, action: ThemeSettingsMiddlewareAction) -> Self {
         let brightnessValue = action.themeSettingsState?.userBrightnessThreshold ?? state.userBrightnessThreshold
         return ThemeSettingsState(windowUUID: state.windowUUID,
                                   useSystemAppearance: state.useSystemAppearance,
