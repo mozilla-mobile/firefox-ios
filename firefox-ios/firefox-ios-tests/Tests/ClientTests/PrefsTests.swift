@@ -80,15 +80,25 @@ class PrefsTests: XCTestCase {
     }
 
     func testMockProfilePrefsKeys() {
-        let prefs = MockProfilePrefs().branch("baz") as! MockProfilePrefs
+        guard let prefs = MockProfilePrefs().branch("baz") as? MockProfilePrefs else {
+            return XCTFail("Expected MockProfilePrefs instance from branch 'bar'")
+        }
         let val: Timestamp = Date.now()
         prefs.setLong(val, forKey: "foobar")
-        XCTAssertEqual(val, (prefs.things["baz.foobar"] as! NSNumber).uint64Value)
+        guard let numberValue = prefs.things["baz.foobar"] as? NSNumber else {
+            return XCTFail("Expected NSNumber for key 'baz.foobar'")
+        }
+        XCTAssertEqual(val, numberValue.uint64Value)
     }
 
     func testMockProfilePrefsClearAll() {
-        let prefs1 = MockProfilePrefs().branch("bar") as! MockProfilePrefs
-        let prefs2 = MockProfilePrefs().branch("baz") as! MockProfilePrefs
+        guard let prefs1 = MockProfilePrefs().branch("bar") as? MockProfilePrefs else {
+            return XCTFail("Failed to cast branch 'bar' to MockProfilePrefs")
+        }
+
+        guard let prefs2 = MockProfilePrefs().branch("baz") as? MockProfilePrefs else {
+            return XCTFail("Failed to cast branch 'baz' to MockProfilePrefs")
+        }
 
         // Ensure clearing prefs is branch-specific.
         prefs1.setInt(123, forKey: "foo")
