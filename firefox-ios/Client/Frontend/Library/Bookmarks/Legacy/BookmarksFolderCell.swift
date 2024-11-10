@@ -23,7 +23,7 @@ protocol BookmarksFolderCell {
 extension BookmarkFolderData: BookmarksFolderCell {
     func getViewModel() -> OneLineTableViewCellViewModel {
         var title: String
-        if isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[guid] {
+        if isRoot, let localizedString = LegacyLocalizedRootBookmarkFolderStrings[guid] {
             title = localizedString
         } else {
             title = self.title
@@ -44,7 +44,7 @@ extension BookmarkFolderData: BookmarksFolderCell {
                                                 bookmarksHandler: profile.places,
                                                 bookmarkFolderGUID: guid)
         let nextController = LegacyBookmarksPanel(viewModel: viewModel, windowUUID: windowUUID)
-        if isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[guid] {
+        if isRoot, let localizedString = LegacyLocalizedRootBookmarkFolderStrings[guid] {
             nextController.title = localizedString
         } else {
             nextController.title = title
