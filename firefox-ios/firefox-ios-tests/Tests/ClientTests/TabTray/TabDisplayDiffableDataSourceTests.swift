@@ -6,7 +6,7 @@ import Common
 import XCTest
 
 @testable import Client
-final class TabDisplayViewTests: XCTestCase {
+final class TabDisplayDiffableDataSourceTests: XCTestCase {
     var diffableDataSource: TabDisplayDiffableDataSource?
 
     override func setUp() {
