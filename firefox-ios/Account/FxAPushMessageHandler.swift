@@ -42,16 +42,8 @@ extension FxAPushMessageHandler {
 
                     switch event {
                     case .commandReceived(let deviceCommand):
-                        switch deviceCommand {
-                        case .tabReceived(_, let tabData):
-                            let title = tabData.entries.last?.title ?? ""
-                            let url = tabData.entries.last?.url ?? ""
-                            let command = CommandReceived.tabReceived(tab: ["title": title, "url": url])
-                            completion(.success(PushMessage.commandReceived(command: command)))
-                        case .tabsClosed(_, let payload):
-                            let command = CommandReceived.tabsClosed(urls: payload.urls)
-                            completion(.success(PushMessage.commandReceived(command: command)))
-                        }
+                        let pushMessage = self.getPushMessageBy(deviceCommand: deviceCommand)
+                        completion(.success(pushMessage))
                     case .deviceConnected(let deviceName):
                         completion(.success(PushMessage.deviceConnected(deviceName)))
                     case let .deviceDisconnected(_, isLocalDevice):
