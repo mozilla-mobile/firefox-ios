@@ -206,7 +206,7 @@ class RustAutofillTests: XCTestCase {
                         XCTAssertNil(err)
                         expectationUpdateCard.fulfill()
 
-                        self.autofill.getCreditCard(id: creditCard!.guid) { updatedCardVal, err in
+                        self.autofill.getCreditCard(id: creditCard.guid) { updatedCardVal, err in
                             XCTAssertNotNil(updatedCardVal)
                             XCTAssertNil(err)
                             XCTAssertEqual(updatedCardVal!.ccExpYear, updatedCreditCard.ccExpYear)
