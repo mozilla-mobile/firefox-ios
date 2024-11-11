@@ -518,7 +518,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
             configuration.allowsInlineMediaPlayback = true
             let webView = TabWebView(frame: .zero, configuration: configuration, windowUUID: windowUUID)
             webView.configure(delegate: self, navigationDelegate: navigationDelegate)
-
             webView.accessibilityLabel = .WebViewAccessibilityLabel
             webView.allowsBackForwardNavigationGestures = true
             webView.allowsLinkPreview = true
@@ -573,8 +572,15 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
             )
 
             tabDelegate?.tab(self, didCreateWebView: webView)
+            webViewLoadingObserver = webView.observe(\.isLoading) { _, _ in
+                print("FF \(webView.isLoading)")
+                self.onLoading?()
+            }
         }
     }
+    
+    var onLoading: VoidReturnCallback?
+    private var webViewLoadingObserver: NSObjectProtocol?
 
     func restore(_ webView: WKWebView, interactionState: Data? = nil) {
         if let url = url {
