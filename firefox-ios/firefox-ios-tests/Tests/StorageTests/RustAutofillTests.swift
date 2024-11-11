@@ -191,6 +191,7 @@ class RustAutofillTests: XCTestCase {
 
             self.autofill.getCreditCard(id: creditCard.guid) { card, error in
                 XCTAssertNotNil(card)
+                guard let card else { return }
                 XCTAssertNil(err)
                 XCTAssertEqual(creditCard.guid, card!.guid)
                 expectationGetCard.fulfill()
