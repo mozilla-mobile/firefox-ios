@@ -37,6 +37,9 @@
 /* The text for the clear cookies and site data alert button inside the enhanced tracking protection screen. */
 "Menu.EnhancedTrackingProtection.ClearData.AlertOkButton.v128" = "Falamhaich";
 
+/* The text for the clear cookies and site data alert inside the enhanced tracking protection screen. The placeholder will be replaced with the user's currently visited website */
+"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "Ma bheir thu air falbh briosgaidean is dàta na làraich airson %@, dh’fhaoidte gun dèid do chlàradh a-mach à làraichean-lìn agus gun dèid cairtean seopadaireachd fhalamhachadh.";
+
 /* The title for the clear cookies and site data alert inside the enhanced tracking protection screen. */
 "Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "Falamhaich na briosgaidean is dàta na làraich";
 
@@ -45,6 +48,9 @@
 
 /* The text for the clear cookies and site data toast that appears when the user selects to clear the cookies */
 "Menu.EnhancedTrackingProtection.ClearData.ToastMessage.v128" = "Chaidh na briosgaidean is dàta nan làraichean a thoirt air falbh";
+
+/* The accessibility label for the close button in the Enhanced Tracking protection menu. */
+"Menu.EnhancedTrackingProtection.CloseButton.AccessibilityLabel.v132" = "Dùin clàr-taice na prìobhaideachd is tèarainteachd";
 
 /* Text to let users know that the current website is secure. */
 "Menu.EnhancedTrackingProtection.Details.ConnectionSecure.v128" = "Ceangal tèarainte";
@@ -76,6 +82,9 @@
 /* The title for the button that allows users to view certificates inside the enhanced tracking protection details screen. */
 "Menu.EnhancedTrackingProtection.Details.ViewCertificatesTitle.v131" = "Seall an teisteanas";
 
+/* Header for the enhanced tracking protection screen when the user has opted out of the feature. Placeholder will be replaced by the app name */
+"Menu.EnhancedTrackingProtection.Off.Header.v128" = "Chan eil %@ ri caithris. Mholamaid dhut an dìon a chur air a-rithist.";
+
 /* Title for the enhanced tracking protection screen when the user has opted out of the feature. */
 "Menu.EnhancedTrackingProtection.Off.Title.v128" = "Chuir thu an dìon dheth";
 
@@ -88,9 +97,21 @@
 /* Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
 "Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128" = "Bi faiceallach air an làrach seo";
 
+/* Title for the enhanced tracking protection screen when the user has selected to be protected. The placeholder will have the value of the app name */
+"Menu.EnhancedTrackingProtection.On.Title.v128" = "Tha %@ ri caithris";
+
 /* The title for the privacy settings button inside the enhanced tracking protection screen. */
 "Menu.EnhancedTrackingProtection.PrivacySettings.Title.v128" = "Roghainnean prìobhaideachd";
 
 /* Title for the switch to enable/disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Dìon adhartach o thracadh";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Tha an dìon dheth. Mholamaid dhut a chur air a-rithist.";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Tha an dìon dheth. Mholamaid dhut an cur air a-rithist.";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.SwitchOn.Text.v128" = "Tha coltas gu bheil rudeigin briste air an làrach seo. Feuch ris a chur dheth.";
 
