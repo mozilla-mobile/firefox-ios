@@ -97,7 +97,7 @@ class ToolbarButton: UIButton, ThemeApplicable {
     }
 
     public func isButtonFor(toolbarElement: ToolbarElement) -> Bool {
-        guard var config = configuration else { return false }
+        guard let config = configuration else { return false }
 
         return isSelected == toolbarElement.isSelected &&
             config.image == imageConfiguredForRTL(for: toolbarElement) &&
