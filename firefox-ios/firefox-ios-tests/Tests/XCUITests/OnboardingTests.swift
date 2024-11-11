@@ -321,4 +321,42 @@ class OnboardingTests: BaseTestCase {
         let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         mozWaitForElementToExist(topSites)
     }
+
+    func testFirstRunTourAccessibility() throws {
+        guard #available(iOS 17.0, *), !skipPlatform else { return }
+
+        // Complete the First run from first screen to the latest one
+        // Wait until first's tour screen is shown then check accessibility
+        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"])
+        try app.performAccessibilityAudit()
+
+        // Swipe to the second screen
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"])
+        try app.performAccessibilityAudit()
+
+        // Swipe to the third screen
+        app.buttons["\(rootA11yId)SecondaryButton"].waitAndTap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"])
+        try app.performAccessibilityAudit()
+
+        // Swipe to the fourth screen
+        app.buttons["\(rootA11yId)SecondaryButton"].tap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
+        try app.performAccessibilityAudit()
+
+        // Swipe to the fifth screen
+        app.buttons["\(rootA11yId)PrimaryButton"].tap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
+        try app.performAccessibilityAudit()
+
+        // Finish onboarding
+        app.buttons["\(rootA11yId)PrimaryButton"].tap()
+        let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
+        mozWaitForElementToExist(topSites)
+    }
 }
