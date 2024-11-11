@@ -96,6 +96,17 @@ class ToolbarButton: UIButton, ThemeApplicable {
         configuration = updatedConfiguration
     }
 
+    public func isButtonFor(toolbarElement: ToolbarElement) -> Bool {
+        guard var config = configuration else { return false }
+
+        return isSelected == toolbarElement.isSelected &&
+            config.image == imageConfiguredForRTL(for: toolbarElement) &&
+            isEnabled == toolbarElement.isEnabled &&
+            accessibilityIdentifier == toolbarElement.a11yId &&
+            accessibilityLabel == toolbarElement.a11yLabel &&
+            accessibilityHint == toolbarElement.a11yHint
+    }
+
     private func addBadgeIcon(imageName: String) {
         badgeImageView = UIImageView(image: UIImage(named: imageName))
         guard let badgeImageView, configuration?.image != nil else { return }
