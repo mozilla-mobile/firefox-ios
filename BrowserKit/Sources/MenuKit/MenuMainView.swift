@@ -9,7 +9,8 @@ import ComponentLibrary
 public final class MenuMainView: UIView,
                                  MenuTableViewDataDelegate, ThemeApplicable {
     private struct UX {
-        static let headerTopMargin: CGFloat = 10
+        static let headerTopMargin: CGFloat = 15
+        static let horizontalTableViewMargin: CGFloat = 4
     }
 
     // MARK: - UI Elements
@@ -42,8 +43,8 @@ public final class MenuMainView: UIView,
 
             tableView.topAnchor.constraint(equalTo: accountHeaderView.bottomAnchor),
             tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+            tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: -UX.horizontalTableViewMargin),
+            tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: UX.horizontalTableViewMargin)
         ])
     }
 
