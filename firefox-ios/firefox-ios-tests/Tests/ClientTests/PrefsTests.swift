@@ -81,7 +81,7 @@ class PrefsTests: XCTestCase {
 
     func testMockProfilePrefsKeys() {
         guard let prefs = MockProfilePrefs().branch("baz") as? MockProfilePrefs else {
-            return XCTFail("Expected MockProfilePrefs instance from branch 'bar'")
+            return XCTFail("Expected MockProfilePrefs instance from branch 'baz'")
         }
         let val: Timestamp = Date.now()
         prefs.setLong(val, forKey: "foobar")
