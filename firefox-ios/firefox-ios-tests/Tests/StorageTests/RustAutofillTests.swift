@@ -185,7 +185,6 @@ class RustAutofillTests: XCTestCase {
 
         addCreditCard { creditCard, err in
             if let creditCard = creditCard {
-                XCTAssertNotNil(creditCard)
                 XCTAssertNil(err)
                 expectationAddCard.fulfill()
 
