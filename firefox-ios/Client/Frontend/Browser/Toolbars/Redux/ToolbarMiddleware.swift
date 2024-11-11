@@ -371,8 +371,8 @@ final class ToolbarMiddleware: FeatureFlaggable {
     // MARK: - Helper
     private func cancelEditMode(windowUUID: WindowUUID) {
         var url = tabManager(for: windowUUID).selectedTab?.url
-        if let urlIsWebpage = url?.isWebPage() {
-            url = urlIsWebpage ? url : nil
+        if let currentURL = url {
+            url = (currentURL.isWebPage() && !currentURL.isReaderModeURL) ? url : nil
         }
         let action = ToolbarAction(url: url, windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
         store.dispatch(action)
