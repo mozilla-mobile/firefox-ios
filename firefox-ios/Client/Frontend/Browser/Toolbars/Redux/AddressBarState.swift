@@ -24,6 +24,8 @@ struct AddressBarState: StateType, Equatable {
     let readerModeState: ReaderModeState?
     let didStartTyping: Bool
     let showQRPageAction: Bool
+    /// Stores the alternative search engine that the user has temporarily selected (otherwise use the default)
+    let alternativeSearchEngine: SearchEngineModel?
 
     private static let qrCodeScanAction = ToolbarActionState(
         actionType: .qrCode,
@@ -95,7 +97,8 @@ struct AddressBarState: StateType, Equatable {
             isLoading: false,
             readerModeState: nil,
             didStartTyping: false,
-            showQRPageAction: true
+            showQRPageAction: true,
+            alternativeSearchEngine: nil
         )
     }
 
@@ -115,7 +118,8 @@ struct AddressBarState: StateType, Equatable {
          isLoading: Bool,
          readerModeState: ReaderModeState?,
          didStartTyping: Bool,
-         showQRPageAction: Bool) {
+         showQRPageAction: Bool,
+         alternativeSearchEngine: SearchEngineModel?) {
         self.windowUUID = windowUUID
         self.navigationActions = navigationActions
         self.pageActions = pageActions
@@ -133,6 +137,7 @@ struct AddressBarState: StateType, Equatable {
         self.readerModeState = readerModeState
         self.didStartTyping = didStartTyping
         self.showQRPageAction = showQRPageAction
+        self.alternativeSearchEngine = alternativeSearchEngine
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -197,13 +202,18 @@ struct AddressBarState: StateType, Equatable {
         case ToolbarActionType.didStartTyping:
             return handleDidStartTypingAction(state: state, action: action)
 
+        case SearchEngineSelectionActionType.didTapSearchEngine:
+            return handleDidTapSearchEngine(state: state, action: action)
+
         default:
             return defaultState(from: state)
         }
     }
 
     private static func handleDidLoadToolbarsAction(state: Self, action: Action) -> Self {
-        guard let borderPosition = (action as? ToolbarAction)?.addressBorderPosition else { return state }
+        guard let borderPosition = (action as? ToolbarAction)?.addressBorderPosition else {
+            return defaultState(from: state)
+        }
 
         return AddressBarState(
             windowUUID: state.windowUUID,
@@ -222,7 +232,8 @@ struct AddressBarState: StateType, Equatable {
             isLoading: false,
             readerModeState: nil,
             didStartTyping: false,
-            showQRPageAction: true
+            showQRPageAction: true,
+            alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
@@ -246,7 +257,8 @@ struct AddressBarState: StateType, Equatable {
             isLoading: state.isLoading,
             readerModeState: toolbarAction.readerModeState,
             didStartTyping: state.didStartTyping,
-            showQRPageAction: state.showQRPageAction
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
@@ -273,7 +285,8 @@ struct AddressBarState: StateType, Equatable {
             isLoading: state.isLoading,
             readerModeState: toolbarAction.readerModeState,
             didStartTyping: state.didStartTyping,
-            showQRPageAction: state.showQRPageAction
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
@@ -297,7 +310,8 @@ struct AddressBarState: StateType, Equatable {
             isLoading: toolbarAction.isLoading ?? state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: state.didStartTyping,
-            showQRPageAction: state.showQRPageAction
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
@@ -323,7 +337,8 @@ struct AddressBarState: StateType, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: state.didStartTyping,
-            showQRPageAction: toolbarAction.url == nil
+            showQRPageAction: toolbarAction.url == nil,
+            alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
@@ -349,7 +364,8 @@ struct AddressBarState: StateType, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: state.didStartTyping,
-            showQRPageAction: state.showQRPageAction
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
@@ -375,7 +391,8 @@ struct AddressBarState: StateType, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: state.didStartTyping,
-            showQRPageAction: state.showQRPageAction
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
@@ -399,7 +416,8 @@ struct AddressBarState: StateType, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: state.didStartTyping,
-            showQRPageAction: state.showQRPageAction
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
@@ -423,7 +441,8 @@ struct AddressBarState: StateType, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: state.didStartTyping,
-            showQRPageAction: state.showQRPageAction
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
@@ -452,7 +471,8 @@ struct AddressBarState: StateType, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: false,
-            showQRPageAction: isEmptySearch
+            showQRPageAction: isEmptySearch,
+            alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
@@ -483,7 +503,8 @@ struct AddressBarState: StateType, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: false,
-            showQRPageAction: showQRPageAction
+            showQRPageAction: showQRPageAction,
+            alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
@@ -513,7 +534,8 @@ struct AddressBarState: StateType, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: false,
-            showQRPageAction: showQRPageAction
+            showQRPageAction: showQRPageAction,
+            alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
@@ -542,7 +564,8 @@ struct AddressBarState: StateType, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: false,
-            showQRPageAction: isEmptySearch
+            showQRPageAction: isEmptySearch,
+            alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
@@ -564,7 +587,8 @@ struct AddressBarState: StateType, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: state.didStartTyping,
-            showQRPageAction: state.showQRPageAction
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
@@ -591,7 +615,8 @@ struct AddressBarState: StateType, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: state.didStartTyping,
-            showQRPageAction: true
+            showQRPageAction: true,
+            alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
@@ -618,7 +643,8 @@ struct AddressBarState: StateType, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: true,
-            showQRPageAction: true
+            showQRPageAction: true,
+            alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
@@ -645,7 +671,8 @@ struct AddressBarState: StateType, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: true,
-            showQRPageAction: false
+            showQRPageAction: false,
+            alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
@@ -669,7 +696,35 @@ struct AddressBarState: StateType, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: true,
-            showQRPageAction: state.showQRPageAction
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    private static func handleDidTapSearchEngine(state: Self, action: Action) -> AddressBarState {
+        guard let searchEngineSelectionAction = action as? SearchEngineSelectionAction,
+              let selectedSearchEngine = searchEngineSelectionAction.selectedSearchEngine
+        else { return defaultState(from: state) }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            pageActions: state.pageActions,
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: state.didStartTyping,
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: selectedSearchEngine
         )
     }
 
@@ -691,7 +746,8 @@ struct AddressBarState: StateType, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: state.didStartTyping,
-            showQRPageAction: state.showQRPageAction
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 

@@ -9,7 +9,8 @@ import SiteImageView
 public final class HeaderView: UIView, ThemeApplicable {
     private struct UX {
         static let headerLinesLimit: Int = 2
-        static let siteDomainLabelsVerticalSpacing: CGFloat = 12
+        static let siteDomainLabelsVerticalSpacing: CGFloat = 13
+        static let siteDomainLabelsHorizontalSpacing: CGFloat = 12
         static let largeFaviconImageSize: CGFloat = 48
         static let favIconImageSize: CGFloat = 32
         static let smallFaviconImageSize: CGFloat = 24
@@ -108,7 +109,7 @@ public final class HeaderView: UIView, ThemeApplicable {
             ),
             headerLabelsContainer.leadingAnchor.constraint(
                 equalTo: isWebsiteIcon ? favicon.trailingAnchor : iconMask.trailingAnchor,
-                constant: UX.siteDomainLabelsVerticalSpacing
+                constant: UX.siteDomainLabelsHorizontalSpacing
             ),
             headerLabelsContainer.trailingAnchor.constraint(
                 equalTo: warningIconView.leadingAnchor,
