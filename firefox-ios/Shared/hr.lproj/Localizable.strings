@@ -1280,7 +1280,7 @@
 "Settings.Home.Option.StartAtHome.Never" = "Posljednja kartica";
 
 /* Title for the section in the settings menu where users can configure the behaviour of the Start at Home feature on the Firefox Homepage. */
-"Settings.Home.Option.StartAtHome.Title" = "Zaslon kod otvaranja aplikacije";
+"Settings.Home.Option.StartAtHome.Title" = "Uvodni ekran";
 
 /* In the settings menu, this is the title of the Firefox Homepage customization settings section */
 "Settings.Home.Option.Title.v101" = "Uključi u početnu stranicu";
@@ -1313,7 +1313,7 @@
 "Settings.Home.Option.Wallpaper.Classic.Title.v106" = "Klasični %@";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the title of the section that allows users to change the wallpaper settings for the application. */
-"Settings.Home.Option.Wallpaper.CollectionTitle" = "POČETNI EKRAN";
+"Settings.Home.Option.Wallpaper.CollectionTitle" = "UVODNI EKRAN";
 
 /* In the settings menu, on the Firefox wallpaper customization screen, this is the button title of the group of wallpapers that are seasonally available to the user. */
 "Settings.Home.Option.Wallpaper.LearnMore.v106" = "Saznaj više";
