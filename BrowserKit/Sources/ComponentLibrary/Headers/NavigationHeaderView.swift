@@ -9,7 +9,7 @@ public final class NavigationHeaderView: UIView {
     private struct UX {
         static let closeButtonSize: CGFloat = 30
         static let imageMargins: CGFloat = 10
-        static let baseDistance: CGFloat = 20
+        static let baseDistance: CGFloat = 21
         static let horizontalMargin: CGFloat = 16
         static let separatorHeight: CGFloat = 1
         static let largeFaviconImageSize: CGFloat = 48
