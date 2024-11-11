@@ -184,33 +184,35 @@ class RustAutofillTests: XCTestCase {
         let expectationCheckUpdateCard = expectation(description: "checking updated card")
 
         addCreditCard { creditCard, err in
-            XCTAssertNotNil(creditCard)
-            XCTAssertNil(err)
-            expectationAddCard.fulfill()
-
-            self.autofill.getCreditCard(id: creditCard!.guid) { card, error in
-                XCTAssertNotNil(card)
+            if let creditCard = creditCard {
+                XCTAssertNotNil(creditCard)
                 XCTAssertNil(err)
-                XCTAssertEqual(creditCard!.guid, card!.guid)
-                expectationGetCard.fulfill()
+                expectationAddCard.fulfill()
 
-                let expectedCcExpYear = Int64(2028)
-                let updatedCreditCard = self.createUnencryptedCreditCardFields(creditCard: creditCard!,
-                                                                               expectedCcExpYear: expectedCcExpYear)
-                self.autofill.updateCreditCard(id: creditCard!.guid,
-                                               creditCard: updatedCreditCard) { success, err in
-                    XCTAssertNotNil(success)
-                    if let updated = success {
-                        XCTAssert(updated)
-                    }
+                self.autofill.getCreditCard(id: creditCard!.guid) { card, error in
+                    XCTAssertNotNil(card)
                     XCTAssertNil(err)
-                    expectationUpdateCard.fulfill()
+                    XCTAssertEqual(creditCard!.guid, card!.guid)
+                    expectationGetCard.fulfill()
 
-                    self.autofill.getCreditCard(id: creditCard!.guid) { updatedCardVal, err in
-                        XCTAssertNotNil(updatedCardVal)
+                    let expectedCcExpYear = Int64(2028)
+                    let updatedCreditCard = self.createUnencryptedCreditCardFields(creditCard: creditCard!,
+                                                                                   expectedCcExpYear: expectedCcExpYear)
+                    self.autofill.updateCreditCard(id: creditCard!.guid,
+                                                   creditCard: updatedCreditCard) { success, err in
+                        XCTAssertNotNil(success)
+                        if let updated = success {
+                            XCTAssert(updated)
+                        }
                         XCTAssertNil(err)
-                        XCTAssertEqual(updatedCardVal!.ccExpYear, updatedCreditCard.ccExpYear)
-                        expectationCheckUpdateCard.fulfill()
+                        expectationUpdateCard.fulfill()
+
+                        self.autofill.getCreditCard(id: creditCard!.guid) { updatedCardVal, err in
+                            XCTAssertNotNil(updatedCardVal)
+                            XCTAssertNil(err)
+                            XCTAssertEqual(updatedCardVal!.ccExpYear, updatedCreditCard.ccExpYear)
+                            expectationCheckUpdateCard.fulfill()
+                        }
                     }
                 }
             }
