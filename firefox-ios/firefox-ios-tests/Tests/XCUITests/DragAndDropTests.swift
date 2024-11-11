@@ -114,7 +114,7 @@ class DragAndDropTests: BaseTestCase {
                 if let urlString = url.value as? String {
                     XCTAssert(secondWebsite.url.contains(urlString), "The tab has not been dropped correctly")
                 } else {
-                    XCTFail("Failed to retrieve a valid URL from the UrlBar")
+                    XCTFail("Failed to retrieve a valid URL string from the browser's URL bar")
                 }
             } else {
                 XCTAssertEqual(app.otherElements["Tabs Tray"].cells.element(boundBy: 0).label, secondWebsite.tabName)
@@ -146,7 +146,7 @@ class DragAndDropTests: BaseTestCase {
                 if let urlString = url.value as? String {
                     XCTAssert(secondWebsite.url.contains(urlString), "The tab has not been dropped correctly")
                 } else {
-                    XCTFail("Failed to retrieve a valid URL from the browser's URL bar")
+                    XCTFail("Failed to retrieve a valid URL string from the browser's URL bar")
                 }
             } else {
                 XCTAssertEqual(app.otherElements["Tabs Tray"].cells.element(boundBy: 0).label, secondWebsite.tabName)
@@ -283,11 +283,10 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         )
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.browserTabName, secondTab: firstWebsite.tabName)
         // Check that focus is kept on last website open
-        // Check that focus is kept on last website open
         if let urlString = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as? String {
             XCTAssert(secondWebsite.url.contains(urlString), "The tab has not been dropped correctly")
         } else {
-            XCTFail("Failed to retrieve a valid URL from the browser's URL bar")
+            XCTFail("Failed to retrieve a valid URL string from the browser's URL bar")
         }
     }
 
