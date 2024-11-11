@@ -53,7 +53,7 @@ class LocalDesktopFolder: FxBookmarkNode {
 
 extension LocalDesktopFolder: BookmarksFolderCell {
     func getViewModel() -> OneLineTableViewCellViewModel {
-        return OneLineTableViewCellViewModel(title: LocalizedRootBookmarkFolderStrings[guid],
+        return OneLineTableViewCellViewModel(title: LegacyLocalizedRootBookmarkFolderStrings[guid],
                                              leftImageView: leftImageView,
                                              accessoryView: nil,
                                              accessoryType: .disclosureIndicator)
@@ -69,7 +69,7 @@ extension LocalDesktopFolder: BookmarksFolderCell {
                                                 bookmarkFolderGUID: guid)
         let nextController = LegacyBookmarksPanel(viewModel: viewModel, windowUUID: windowUUID)
         nextController.title = .Bookmarks.Menu.DesktopBookmarks
-        if let localizedString = LocalizedRootBookmarkFolderStrings[guid] {
+        if let localizedString = LegacyLocalizedRootBookmarkFolderStrings[guid] {
             nextController.title = localizedString
         }
         nextController.libraryPanelDelegate = libraryPanelDelegate

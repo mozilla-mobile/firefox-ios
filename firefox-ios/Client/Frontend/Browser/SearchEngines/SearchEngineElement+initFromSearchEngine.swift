@@ -5,11 +5,11 @@
 import UnifiedSearchKit
 
 extension SearchEngineElement {
-    init(fromSearchEngine searchEngine: OpenSearchEngine, withAction action: @escaping () -> Void) {
+    init(fromSearchEngine searchEngineModel: SearchEngineModel, withAction action: @escaping () -> Void) {
         self.init(
-            title: searchEngine.shortName,
-            image: searchEngine.image,
-            a11yLabel: searchEngine.shortName,
+            title: searchEngineModel.name,
+            image: searchEngineModel.image,
+            a11yLabel: searchEngineModel.name,
             a11yHint: nil,
             a11yId: AccessibilityIdentifiers.UnifiedSearch.BottomSheetRow.engine,
             action: action
