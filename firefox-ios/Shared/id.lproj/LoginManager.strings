@@ -52,6 +52,9 @@
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "Tidak ada info masuk ditemukan";
 
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Tidak ada sandi ditemukan";
+
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "Buka & Isi";
 

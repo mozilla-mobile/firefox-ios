@@ -17,6 +17,9 @@ import struct MozillaAppServices.DeviceSettings
 import struct MozillaAppServices.SyncAuthInfo
 import struct MozillaAppServices.SyncParams
 import struct MozillaAppServices.SyncResult
+import struct MozillaAppServices.Device
+import struct MozillaAppServices.ScopedKey
+import struct MozillaAppServices.AccessTokenInfo
 
 // Extends NSObject so we can use timers.
 public class RustSyncManager: NSObject, SyncManager {
@@ -534,18 +537,13 @@ public class RustSyncManager: NSObject, SyncManager {
                             engines: SyncEngineSelection.some(engines: rustEngines),
                             enabledChanges: self.getEngineEnablementChangesForAccount(),
                             localEncryptionKeys: localEncryptionKeys,
-                            authInfo: SyncAuthInfo(
-                                kid: key.kid,
-                                fxaAccessToken: accessTokenInfo.token,
-                                syncKey: key.k,
-                                tokenserverUrl: tokenServerEndpointURL.absoluteString),
+                            authInfo: self.createSyncAuthInfo(key: key,
+                                                              accessTokenInfo: accessTokenInfo,
+                                                              tokenServerEndpointURL: tokenServerEndpointURL),
                             persistedState:
                                 self.prefs
                                     .stringForKey(PrefsKeys.RustSyncManagerPersistedState),
-                            deviceSettings: DeviceSettings(
-                                fxaDeviceId: device.id,
-                                name: device.displayName,
-                                kind: device.deviceType))
+                            deviceSettings: self.createDeviceSettings(device: device))
 
                         self.doSync(params: params) { syncResult in
                             deferred.fill(Maybe(success: syncResult))
@@ -555,6 +553,23 @@ public class RustSyncManager: NSObject, SyncManager {
             }
         }
         return deferred
+    }
+
+    private func createSyncAuthInfo(key: ScopedKey,
+                                    accessTokenInfo: AccessTokenInfo,
+                                    tokenServerEndpointURL: URL) -> SyncAuthInfo {
+        return SyncAuthInfo(
+            kid: key.kid,
+            fxaAccessToken: accessTokenInfo.token,
+            syncKey: key.k,
+            tokenserverUrl: tokenServerEndpointURL.absoluteString)
+    }
+
+    private func createDeviceSettings(device: Device) -> DeviceSettings {
+        return DeviceSettings(
+            fxaDeviceId: device.id,
+            name: device.displayName,
+            kind: device.deviceType)
     }
 
     @discardableResult
