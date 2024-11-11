@@ -35,6 +35,7 @@ class ContextualHintViewViewController: UIViewController, Themeable {
         var viewModel = ContextualHintViewModel(
             isActionType: true,
             actionButtonTitle: "This button has an action",
+            title: "CFR title",
             description: "This contextual hint gives you some context about a random feature",
             arrowDirection: .up,
             closeButtonA11yLabel: "a11yButton",
