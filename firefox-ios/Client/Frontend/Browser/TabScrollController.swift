@@ -36,8 +36,12 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
             self.scrollView?.addGestureRecognizer(panGesture)
             scrollView?.delegate = self
             scrollView?.keyboardDismissMode = .onDrag
-            webViewIsLoadingObserver = tab?.webView?.observe(\.isLoading, changeHandler: { [weak self] webView, _ in
-                self?.configureRefreshControl(isEnabled: !webView.isLoading)
+            let control = UIRefreshControl()
+            control.isHidden = true
+            control.addTarget(self, action: #selector(reload), for: .valueChanged)
+            scrollView?.refreshControl = control
+            webViewIsLoadingObserver = tab?.webView?.observe(\.isLoading, changeHandler: { webView, _ in
+                control.isHidden = webView.isLoading
             })
         }
     }
@@ -274,8 +278,8 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
 // MARK: - Private
 private extension TabScrollingController {
     func configureRefreshControl(isEnabled: Bool) {
-        scrollView?.refreshControl = isEnabled ? UIRefreshControl() : nil
-        scrollView?.refreshControl?.addTarget(self, action: #selector(reload), for: .valueChanged)
+//        scrollView?.refreshControl = isEnabled ? UIRefreshControl() : nil
+//        scrollView?.refreshControl?.addTarget(self, action: #selector(reload), for: .valueChanged)
     }
 
     @objc
