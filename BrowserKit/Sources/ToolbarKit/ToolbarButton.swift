@@ -70,6 +70,12 @@ class ToolbarButton: UIButton, ThemeApplicable {
             if let maskImageName = element.maskImageName {
                 addMaskIcon(maskImageName: maskImageName)
             }
+        } else {
+            // Remove badge & mask icons
+            imageView?.subviews.forEach { view in
+                guard view as? UIImageView != nil else { return }
+                view.removeFromSuperview()
+            }
         }
         layoutIfNeeded()
     }
