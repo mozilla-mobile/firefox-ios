@@ -42,6 +42,6 @@ class PocketTests: BaseTestCase {
         waitUntilPageLoad()
         // The url textField is not empty
         let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
-        XCTAssertNotEqual(url.value as! String, "", "The url textField is empty")
+        XCTAssertNotEqual(url.value as? String, "", "The url textField is empty")
     }
 }
