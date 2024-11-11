@@ -193,7 +193,7 @@ class RustAutofillTests: XCTestCase {
                 XCTAssertNotNil(card)
                 guard let card else { return }
                 XCTAssertNil(err)
-                XCTAssertEqual(creditCard.guid, card!.guid)
+                XCTAssertEqual(creditCard.guid, card.guid)
                 expectationGetCard.fulfill()
 
                 let expectedCcExpYear = Int64(2028)
