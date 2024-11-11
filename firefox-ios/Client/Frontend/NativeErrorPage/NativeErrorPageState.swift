@@ -40,20 +40,13 @@ struct NativeErrorPageState: ScreenState, Equatable {
 
     static let reducer: Reducer<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
-            return NativeErrorPageState(
-                windowUUID: state.windowUUID,
-                title: state.title,
-                description: state.description
-        )}
+            return defaultState(from: state)
+        }
 
         switch action.actionType {
         case NativeErrorPageMiddlewareActionType.initialize:
             guard let action = action as? NativeErrorPageAction, let model = action.nativePageErrorModel else {
-                return NativeErrorPageState(
-                    windowUUID: state.windowUUID,
-                    title: state.title,
-                    description: state.description
-                )
+                return defaultState(from: state)
             }
             return NativeErrorPageState(
                 windowUUID: state.windowUUID,
@@ -61,11 +54,15 @@ struct NativeErrorPageState: ScreenState, Equatable {
                 description: model.errorDescription
             )
         default:
-            return NativeErrorPageState(
-                windowUUID: state.windowUUID,
-                title: state.title,
-                description: state.description
-            )
+            return defaultState(from: state)
         }
+    }
+
+    static func defaultState(from state: NativeErrorPageState) -> NativeErrorPageState {
+        return NativeErrorPageState(
+            windowUUID: state.windowUUID,
+            title: state.title,
+            description: state.description
+        )
     }
 }

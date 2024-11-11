@@ -41,11 +41,7 @@ final class SearchEngineSelectionMiddlewareTests: XCTestCase {
 
         testStore.dispatch(action)
 
-        // Currently we have a testability problem with our redux archicture:
-        // 1) Every middleware calls the global `store`
-        // 2) We have one global store so every test (including tests running in parallel) accesses the same store
-        //
-        // Ideally we would be able to check that the middleware fired an action of a specific type with a specific payload.
+        // TODO FXIOS-10481 Flesh out middleware tests once we have decided on best practices
         throw XCTSkip("Need Store architecture changes if we want to implement tests")
     }
 

@@ -12,6 +12,14 @@ import class MozillaAppServices.BookmarkItemData
 import class MozillaAppServices.BookmarkSeparatorData
 import enum MozillaAppServices.BookmarkRoots
 
+let LegacyLocalizedRootBookmarkFolderStrings = [
+    BookmarkRoots.MenuFolderGUID: String.BookmarksFolderTitleMenu,
+    BookmarkRoots.ToolbarFolderGUID: String.BookmarksFolderTitleToolbar,
+    BookmarkRoots.UnfiledFolderGUID: String.BookmarksFolderTitleUnsorted,
+    BookmarkRoots.MobileFolderGUID: String.LegacyBookmarksFolderTitleMobile,
+    LocalDesktopFolder.localDesktopFolderGuid: String.Bookmarks.Menu.DesktopBookmarks
+]
+
 let LocalizedRootBookmarkFolderStrings = [
     BookmarkRoots.MenuFolderGUID: String.BookmarksFolderTitleMenu,
     BookmarkRoots.ToolbarFolderGUID: String.BookmarksFolderTitleToolbar,

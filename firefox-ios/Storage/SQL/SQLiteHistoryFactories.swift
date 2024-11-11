@@ -11,8 +11,9 @@ import Shared
 extension BrowserDBSQLite {
     class func basicHistoryColumnFactory(_ row: SDRow) -> Site {
         let id = row["historyID"] as? Int
-        let url = row["url"] as! String
-        let title = row["title"] as! String
+        guard let url = row["url"] as? String, let title = row["title"] as? String else {
+            return Site(url: "", title: "")
+        }
         let guid = row["guid"] as? String
 
         // Extract a boolean from the row if it's present.

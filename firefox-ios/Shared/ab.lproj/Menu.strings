@@ -1,0 +1,57 @@
+/* Label for the button, displayed in the menu, used to close all tabs currently open. */
+"Menu.CloseAllTabsAction.Title" = "Агәылаҵақәа зегьы арктәуп";
+
+/* Label for the button, displayed in the menu, used to copy the current page link to the clipboard. */
+"Menu.CopyLink.Title" = "Азхьарԥш ақәҭыхра";
+
+/* Toast displayed to user after downlaod pdf was pressed. */
+"Menu.DownloadPDF.Confirm.v129" = "PDF афаил қәҿиарала иҭагалоуп";
+
+/* Label for the button, displayed in the menu, downloads a pdf when pressed. */
+"Menu.DownloadPDF.Label.v129" = "Аҭагалара PDF";
+
+/* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
+"Menu.FindInPageAction.Title" = "Иԥшаатәуп адаҟьаҿы";
+
+/* Label for the button, displayed in the menu, used to open a new private tab. */
+"Menu.NewPrivateTabAction.Title" = "Ахатә абӷьыц ҿыц";
+
+/* Label for the button, displayed in the menu, used to open a new tab */
+"Menu.NewTabAction.Title" = "Абларҭа ҿыц";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Bookmarks home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenBookmarksAction.AccessibilityLabel.v2" = "Адыргақәа";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Downloads home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenDownloadsAction.AccessibilityLabel.v2" = "Аҭагаларақәа";
+
+/* Accessibility label for the button, displayed in the menu, used to open the History home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenHistoryAction.AccessibilityLabel.v2" = "Ахҭыс";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Reading list home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenReadingListAction.AccessibilityLabel.v2" = "Аԥхьара ахьӡынҵа";
+
+/* Label for the button, displayed in the menu, used to open the Settings menu. */
+"Menu.OpenSettingsAction.Title" = "Авариантқәа";
+
+/* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. Please keep as short as possible, <15 chars of space available. */
+"Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "Аԥсҭҳәа абларҭақәа";
+
+/* Label for the button, displayed in the menu, used to report a compatibility issue with the current page. */
+"Menu.ReportSiteIssueAction.Title" = "Асаит аҿы иҟоу апроблема азы адырраҭара";
+
+/* Label for the button, displayed in Firefox Home, used to see all Library panels. */
+"Menu.SeeAllAction.Title" = "Зегьы аарԥштәуп";
+
+/* Label for the button, displayed in the menu, used to open the share dialog. */
+"Menu.SharePageAction.Title" = "Ацеиҩшара ала…";
+
+/* Label for the button, displayed in the menu, used to request the desktop version of the current website. */
+"Menu.ViewDekstopSiteAction.Title" = "Асаит аверсиа зегьы азыҳәара";
+
+/* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
+"Menu.ViewMobileSiteAction.Title" = "Асаит амобильтә версиа азыҳәара";
+
+/* Label for the button, displayed in the menu, used to navigate to the home page. */
+"SettingsMenu.OpenHomePageAction.Title" = "Ахатә даҟьа";
+

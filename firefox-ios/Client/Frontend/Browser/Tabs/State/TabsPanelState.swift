@@ -77,19 +77,10 @@ struct TabsPanelState: ScreenState, Equatable {
         self.urlRequest = urlRequest
     }
 
-    /// Returns a new `TabsPanelState` which clears any transient data (e.g. scroll animations).
-    static func defaultState(fromPreviousState state: TabsPanelState) -> TabsPanelState {
-        return TabsPanelState(windowUUID: state.windowUUID,
-                              isPrivateMode: state.isPrivateMode,
-                              tabs: state.tabs,
-                              inactiveTabs: state.inactiveTabs,
-                              isInactiveTabsExpanded: state.isInactiveTabsExpanded)
-    }
-
     static let reducer: Reducer<Self> = { state, action in
         // Only process actions for the current window
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
-            return defaultState(fromPreviousState: state)
+            return defaultState(from: state)
         }
 
         if let action = action as? TabPanelMiddlewareAction {
@@ -98,7 +89,7 @@ struct TabsPanelState: ScreenState, Equatable {
             return TabsPanelState.reduceTabsPanelViewAction(action: action, state: state)
         }
 
-        return defaultState(fromPreviousState: state)
+        return defaultState(from: state)
     }
 
     static func reduceTabPanelMiddlewareAction(action: TabPanelMiddlewareAction,
@@ -106,7 +97,7 @@ struct TabsPanelState: ScreenState, Equatable {
         switch action.actionType {
         case TabPanelMiddlewareActionType.didLoadTabPanel,
             TabPanelMiddlewareActionType.didChangeTabPanel:
-            guard let tabsModel = action.tabDisplayModel else { return defaultState(fromPreviousState: state) }
+            guard let tabsModel = action.tabDisplayModel else { return defaultState(from: state) }
 
             return TabsPanelState(windowUUID: state.windowUUID,
                                   isPrivateMode: tabsModel.isPrivateMode,
@@ -127,7 +118,7 @@ struct TabsPanelState: ScreenState, Equatable {
                                   scrollState: scrollModel)
 
         case TabPanelMiddlewareActionType.refreshTabs:
-            guard let tabModel = action.tabDisplayModel else { return defaultState(fromPreviousState: state) }
+            guard let tabModel = action.tabDisplayModel else { return defaultState(from: state) }
             return TabsPanelState(windowUUID: state.windowUUID,
                                   isPrivateMode: state.isPrivateMode,
                                   tabs: tabModel.tabs,
@@ -135,7 +126,7 @@ struct TabsPanelState: ScreenState, Equatable {
                                   isInactiveTabsExpanded: state.isInactiveTabsExpanded)
 
         case TabPanelMiddlewareActionType.refreshInactiveTabs:
-            guard let inactiveTabs = action.inactiveTabModels else { return defaultState(fromPreviousState: state) }
+            guard let inactiveTabs = action.inactiveTabModels else { return defaultState(from: state) }
             return TabsPanelState(windowUUID: state.windowUUID,
                                   isPrivateMode: state.isPrivateMode,
                                   tabs: state.tabs,
@@ -143,7 +134,7 @@ struct TabsPanelState: ScreenState, Equatable {
                                   isInactiveTabsExpanded: state.isInactiveTabsExpanded)
 
         case TabPanelMiddlewareActionType.scrollToTab:
-            guard let scrollBehavior = action.scrollBehavior else { return defaultState(fromPreviousState: state) }
+            guard let scrollBehavior = action.scrollBehavior else { return defaultState(from: state) }
             let scrollModel = createTabScrollBehavior(forState: state, withScrollBehavior: scrollBehavior)
             return TabsPanelState(windowUUID: state.windowUUID,
                                   isPrivateMode: state.isPrivateMode,
@@ -153,7 +144,7 @@ struct TabsPanelState: ScreenState, Equatable {
                                   scrollState: scrollModel)
 
         default:
-            return defaultState(fromPreviousState: state)
+            return defaultState(from: state)
         }
     }
 
@@ -168,8 +159,16 @@ struct TabsPanelState: ScreenState, Equatable {
                                   isInactiveTabsExpanded: !state.isInactiveTabsExpanded)
 
         default:
-            return defaultState(fromPreviousState: state)
+            return defaultState(from: state)
         }
+    }
+
+    static func defaultState(from state: TabsPanelState) -> TabsPanelState {
+        return TabsPanelState(windowUUID: state.windowUUID,
+                              isPrivateMode: state.isPrivateMode,
+                              tabs: state.tabs,
+                              inactiveTabs: state.inactiveTabs,
+                              isInactiveTabsExpanded: state.isInactiveTabsExpanded)
     }
 
     static func createTabScrollBehavior(

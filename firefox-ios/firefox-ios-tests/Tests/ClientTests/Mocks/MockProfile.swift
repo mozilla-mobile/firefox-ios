@@ -170,7 +170,7 @@ open class MockProfile: Client.Profile {
     }()
 
     public lazy var searchEnginesManager: SearchEnginesManager = {
-        return SearchEnginesManager(prefs: self.prefs, files: self.files)
+        return SearchEnginesManager(prefs: self.prefs, files: self.files, engineProvider: MockSearchEngineProvider())
     }()
 
     public lazy var prefs: Prefs = {

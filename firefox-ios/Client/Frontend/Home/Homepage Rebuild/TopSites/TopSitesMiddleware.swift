@@ -11,9 +11,11 @@ final class TopSitesMiddleware {
 
     init(profile: Profile = AppContainer.shared.resolve()) {
         self.topSitesManager = TopSitesManager(
+            prefs: profile.prefs,
             googleTopSiteManager: GoogleTopSiteManager(
                 prefs: profile.prefs
-            )
+            ),
+            topSiteHistoryManager: TopSiteHistoryManager(profile: profile)
         )
     }
 
