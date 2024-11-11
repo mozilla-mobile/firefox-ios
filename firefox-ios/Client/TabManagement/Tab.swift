@@ -578,7 +578,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
             }
         }
     }
-    
+
     var onLoading: VoidReturnCallback?
     private var webViewLoadingObserver: NSObjectProtocol?
 

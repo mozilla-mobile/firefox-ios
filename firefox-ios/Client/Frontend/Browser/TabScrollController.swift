@@ -8,7 +8,10 @@ import Shared
 import Common
 
 private let ToolbarBaseAnimationDuration: CGFloat = 0.2
-class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvider {
+class TabScrollingController: NSObject,
+                              FeatureFlaggable,
+                              SearchBarLocationProvider,
+                              Themeable {
     private struct UX {
         static let abruptScrollEventOffset: CGFloat = 200
     }
@@ -39,7 +42,7 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
             configureRefreshControl()
             tab?.onLoading = {
                 if self.tabIsLoading() {
-                    self.pullToRefreshView?.stopObserving()
+                    self.pullToRefreshView?.stopObservingContentScroll()
                     self.pullToRefreshView?.removeFromSuperview()
                 } else {
                     self.configureRefreshControl()
@@ -109,10 +112,10 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
     }()
 
     private var scrollView: UIScrollView? { return tab?.webView?.scrollView }
-    private var pullToRefreshView: CustomRefresh? {
+    private var pullToRefreshView: PullRefreshView? {
         return tab?.webView?.scrollView.subviews.first(where: {
-            $0 is CustomRefresh
-        }) as? CustomRefresh
+            $0 is PullRefreshView
+        }) as? PullRefreshView
     }
     var contentOffset: CGPoint { return scrollView?.contentOffset ?? .zero }
     private var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
@@ -120,6 +123,13 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
     private var contentSize: CGSize { return scrollView?.contentSize ?? .zero }
     private var contentOffsetBeforeAnimation = CGPoint.zero
     private var isAnimatingToolbar = false
+
+    var themeManager: any Common.ThemeManager
+    var themeObserver: (any NSObjectProtocol)?
+    var notificationCenter: any Common.NotificationProtocol
+    var currentWindowUUID: Common.WindowUUID? {
+        return windowUUID
+    }
 
     // Over keyboard content and bottom content
     private var overKeyboardScrollHeight: CGFloat {
@@ -142,13 +152,24 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
         webViewIsLoadingObserver?.invalidate()
         logger.log("TabScrollController deallocating", level: .info, category: .lifecycle)
         observedScrollViews.forEach({ stopObserving(scrollView: $0) })
+        guard let themeObserver else { return }
+        notificationCenter.removeObserver(themeObserver)
     }
 
-    init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
+    init(windowUUID: WindowUUID,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         logger: Logger = DefaultLogger.shared) {
+        self.themeManager = themeManager
         self.windowUUID = windowUUID
+        self.notificationCenter = notificationCenter
         self.logger = logger
         super.init()
         setupNotifications()
+    }
+    
+    func traitCollectionDidChange(_ traits: UITraitCollection) {
+        
     }
 
     private func setupNotifications() {
@@ -199,7 +220,7 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
         }
 
         if let refresh = scrollView?.subviews.first(where: {
-            $0 is CustomRefresh
+            $0 is PullRefreshView
         }) {
             refresh.isHidden = false
         }
@@ -286,6 +307,12 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
         self.isZoomedOut = false
         self.lastZoomedScale = 0
     }
+
+    // MARK: - Themeable
+
+    func applyTheme() {
+        pullToRefreshView?.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+    }
 }
 
 // MARK: - Private
@@ -293,12 +320,13 @@ private extension TabScrollingController {
     func configureRefreshControl() {
         guard let scrollView,
               let webView = tab?.webView,
-              !scrollView.subviews.contains(where: { $0 is CustomRefresh })
+              !scrollView.subviews.contains(where: { $0 is PullRefreshView })
         else {
-            pullToRefreshView?.startObserving()
+            pullToRefreshView?.startObservingContentScroll()
             return
         }
-        let refresh = CustomRefresh(scrollView: self.scrollView) {
+        let refresh = PullRefreshView(parentScrollView: self.scrollView,
+                                      isPotraitOrientation: UIApplication.shared.stat) {
             self.reload()
         }
         self.scrollView?.addSubview(refresh)
@@ -307,10 +335,11 @@ private extension TabScrollingController {
             refresh.leadingAnchor.constraint(equalTo: webView.leadingAnchor),
             refresh.trailingAnchor.constraint(equalTo: webView.trailingAnchor),
             refresh.bottomAnchor.constraint(equalTo: scrollView.topAnchor),
-            refresh.heightAnchor.constraint(equalToConstant: scrollView.frame.height / 3.0),
+            refresh.heightAnchor.constraint(equalToConstant: scrollView.frame.height),
             refresh.widthAnchor.constraint(equalToConstant: scrollView.frame.width)
         ])
-        refresh.applyTheme(theme: DefaultThemeManager(sharedContainerIdentifier: "").getCurrentTheme(for: self.windowUUID))
+        refresh.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        listenForThemeChange(refresh)
     }
 
     @objc
@@ -558,7 +587,7 @@ extension TabScrollingController: UIScrollViewDelegate {
     }
 
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-        pullToRefreshView?.stopObserving()
+        pullToRefreshView?.stopObservingContentScroll()
         pullToRefreshView?.removeFromSuperview()
         self.isUserZoom = true
     }
@@ -574,176 +603,5 @@ extension TabScrollingController: UIScrollViewDelegate {
             return false
         }
         return true
-    }
-}
-
-class CustomRefresh: UIView,
-                     ThemeApplicable {
-    private struct UX {
-        static let progressViewPadding: CGFloat = 24.0
-        static let progressViewSize: CGFloat = 40.0
-        static let progressViewAnimatedBackgroundSize: CGFloat = 30.0
-        static let progressViewAnimatedBackgroundBlinkTransform = CGAffineTransform(scaleX: 2.0, y: 2.0)
-        static let progressViewAnimatedBackgroundFinalAnimationTransform = CGAffineTransform(scaleX: 15.0, y: 15.0)
-    }
-
-    private let onRefreshCallback: VoidReturnCallback
-    private let progressView = UIImageView(image: UIImage(resource: .arrowClockwiseLarge).withRenderingMode(.alwaysTemplate))
-    private let progressContainerView = UIView()
-    private weak var scrollView: UIScrollView?
-    private var obeserveTicket: NSKeyValueObservation?
-    private var currentTheme: Theme?
-    private var refreshIconHasFocus = false
-    private lazy var easterEggGif = loadGifFromBundle(named: "gif")
-    private var easterEggTimer: Timer?
-
-    
-    init(scrollView: UIScrollView?,
-         onRefreshCallback: @escaping VoidReturnCallback) {
-        self.scrollView = scrollView
-        self.onRefreshCallback = onRefreshCallback
-        super.init(frame: .zero)
-        clipsToBounds = true
-        setupSubviews()
-        startObserving()
-    }
-    required init?(coder: NSCoder) {
-        fatalError()
-    }
-    private func setupSubviews() {
-        if let easterEggGif {
-            addSubview(easterEggGif)
-            easterEggGif.translatesAutoresizingMaskIntoConstraints = false
-            easterEggGif.transform = .init(translationX: -100, y: 100).rotated(by: 0.35)
-            NSLayoutConstraint.activate([
-                easterEggGif.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 15.0),
-                easterEggGif.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0.0),
-                easterEggGif.widthAnchor.constraint(equalToConstant: 60),
-                easterEggGif.heightAnchor.constraint(equalToConstant: 110)
-            ])
-        }
-        
-        progressContainerView.layer.cornerRadius = 15.0
-        progressContainerView.backgroundColor = .clear
-        addSubview(progressContainerView)
-        progressContainerView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            progressContainerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.progressViewPadding),
-            progressContainerView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            progressContainerView.heightAnchor.constraint(equalToConstant: UX.progressViewAnimatedBackgroundSize),
-            progressContainerView.widthAnchor.constraint(equalToConstant: UX.progressViewAnimatedBackgroundSize)
-        ])
-
-        addSubview(progressView)
-        progressView.contentMode = .scaleAspectFit
-        progressView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            progressView.centerYAnchor.constraint(equalTo: progressContainerView.centerYAnchor),
-            progressView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            progressView.heightAnchor.constraint(equalToConstant: UX.progressViewSize),
-            progressView.widthAnchor.constraint(equalToConstant: UX.progressViewSize)
-        ])
-    }
-
-    func startObserving() {
-        obeserveTicket = scrollView?.observe(\.contentOffset) { _, _ in
-            guard let scrollView = self.scrollView, scrollView.isDragging
-            else {
-                guard self.refreshIconHasFocus else { return }
-                self.refreshIconHasFocus = false
-                self.obeserveTicket?.invalidate()
-                self.triggerReloadAnimation()
-                return
-            }
-            if scrollView.contentOffset.y < -100.0 {
-                self.blinkBackgroundProgressView()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
-                    UIView.animate(withDuration: 0.3) {
-                        self.easterEggGif?.transform = .identity.rotated(by: 0.35)
-                    }
-                }
-            } else {
-                self.restoreBackgroundProgressViewIfNeeded()
-                let rotationAngle = -(scrollView.contentOffset.y / self.frame.height) * .pi * 2
-                UIView.animate(withDuration: 0.1) {
-                    self.progressView.transform = CGAffineTransform(rotationAngle: rotationAngle)
-                }
-            }
-        }
-    }
-    
-    private func triggerReloadAnimation() {
-        UIView.animate(withDuration: 0.1,
-                       delay: 0,
-                       options: .curveEaseOut,
-                       animations: {
-            self.progressContainerView.transform = UX.progressViewAnimatedBackgroundFinalAnimationTransform
-        }, completion: { _ in
-            self.progressContainerView.backgroundColor = .clear
-            self.progressContainerView.transform = .identity
-            self.progressView.transform = .identity
-            self.onRefreshCallback()
-        })
-    }
-
-    private func blinkBackgroundProgressView() {
-        refreshIconHasFocus = true
-        UIView.animate(withDuration: 0.3,
-                       delay: 0,
-                       usingSpringWithDamping: 0.6,
-                       initialSpringVelocity: 10,
-                       animations: {
-            self.progressContainerView.transform = UX.progressViewAnimatedBackgroundBlinkTransform
-            self.progressContainerView.backgroundColor = self.currentTheme?.colors.layer4
-        }, completion: { _ in
-            UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
-        })
-    }
-    
-    private func restoreBackgroundProgressViewIfNeeded() {
-        guard refreshIconHasFocus else { return }
-        refreshIconHasFocus = false
-        UIView.animate(withDuration: 0.3) {
-            self.progressContainerView.transform = .identity
-            self.progressContainerView.backgroundColor = .clear
-        }
-    }
-
-    func stopObserving() {
-        obeserveTicket?.invalidate()
-    }
-
-    // MARK: - ThemeApplicable
-
-    func applyTheme(theme: any Theme) {
-        currentTheme = theme
-        backgroundColor = theme.colors.layer1
-        progressView.tintColor = theme.colors.iconPrimary
-    }
-    
-    func loadGifFromBundle(named name: String) -> UIImageView? {
-        guard let gifPath = Bundle.main.path(forResource: name, ofType: "gif"),
-              let gifData = NSData(contentsOfFile: gifPath) as Data?,
-              let source = CGImageSourceCreateWithData(gifData as CFData, nil) else {
-            return nil
-        }
-        
-        var frames: [UIImage] = []
-        let frameCount = CGImageSourceGetCount(source)
-        
-        for i in 0..<frameCount {
-            if let cgImage = CGImageSourceCreateImageAtIndex(source, i, nil) {
-                frames.append(UIImage(cgImage: cgImage))
-            }
-        }
-        
-        let animatedImage = UIImage.animatedImage(with: frames, duration: Double(frameCount) * 0.1)
-        let imageView = UIImageView(image: animatedImage)
-        imageView.contentMode = .scaleAspectFill
-        return imageView
-    }
-
-    deinit {
-        obeserveTicket?.invalidate()
     }
 }
