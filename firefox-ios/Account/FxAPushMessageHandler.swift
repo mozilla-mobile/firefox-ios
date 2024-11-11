@@ -87,6 +87,19 @@ extension FxAPushMessageHandler {
             return PushMessageError.messageIncomplete("empty message")
         }
     }
+
+    private func getPushMessageBy(deviceCommand: IncomingDeviceCommand) -> PushMessage {
+        switch deviceCommand {
+        case .tabReceived(_, let tabData):
+            let title = tabData.entries.last?.title ?? ""
+            let url = tabData.entries.last?.url ?? ""
+            let command = CommandReceived.tabReceived(tab: ["title": title, "url": url])
+            return PushMessage.commandReceived(command: command)
+        case .tabsClosed(_, let payload):
+            let command = CommandReceived.tabsClosed(urls: payload.urls)
+            return PushMessage.commandReceived(command: command)
+        }
+    }
 }
 
 enum PushMessageType: String {
