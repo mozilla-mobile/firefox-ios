@@ -4,153 +4,92 @@
 
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
-  FormLikeFactory: "resource://gre/modules/FormLikeFactory.sys.mjs",
+  AutofillFormFactory:
+    "resource://gre/modules/shared/AutofillFormFactory.sys.mjs",
   FormAutofillHandler:
     "resource://gre/modules/shared/FormAutofillHandler.sys.mjs",
+  FormAutofillUtils: "resource://gre/modules/shared/FormAutofillUtils.sys.mjs",
 });
 
 export class FormStateManager {
-  constructor(onSubmit, onAutofillCallback) {
+  #formHandlerByElement = new WeakMap();
+  #formHandlerByRootElement = new WeakMap();
+  #formHandlerByRootId = new Map();
+
+  constructor(onFilledModifiedCallback) {
     /**
      * @type {WeakMap} mapping FormLike root HTML elements to FormAutofillHandler objects.
      */
-    this._formsDetails = new WeakMap();
-    /**
-     * @type {object} The object where to store the active items, e.g. element,
-     * handler, section, and field detail.
-     */
-    this._activeItems = {};
 
-    this.onSubmit = onSubmit;
+    this.onFilledModifiedCallback = onFilledModifiedCallback;
+  }
 
-    this.onAutofillCallback = onAutofillCallback;
+  getWeakIdentifiedForms() {
+    return ChromeUtils.nondeterministicGetWeakMapKeys(
+      this.#formHandlerByRootElement
+    );
   }
 
   /**
-   * Get the active input's information from cache which is created after page
-   * identified.
+   * Get the form handler for the specified input element.
    *
-   * @returns {object | null}
-   *          Return the active input's information that cloned from content cache
-   *          (or return null if the information is not found in the cache).
+   * @param {HTMLInputElement} element
+   *        Focused input which triggered profile searching
+   * @returns {FormAutofillHandler | null}
+   *        The form handler associated with the specified input element.
    */
-  get activeFieldDetail() {
-    if (!this._activeItems.fieldDetail) {
-      let formDetails = this.activeFormDetails;
-      if (!formDetails) {
-        return null;
-      }
-      for (let detail of formDetails) {
-        let detailElement = detail.element;
-        if (detailElement && this.activeInput == detailElement) {
-          this._activeItems.fieldDetail = detail;
-          break;
-        }
-      }
-    }
-    return this._activeItems.fieldDetail;
-  }
-
-  /**
-   * Get the active form's information from cache which is created after page
-   * identified.
-   *
-   * @returns {Array<object> | null}
-   *          Return target form's information from content cache
-   *          (or return null if the information is not found in the cache).
-   *
-   */
-  get activeFormDetails() {
-    let formHandler = this.activeHandler;
-    return formHandler ? formHandler.fieldDetails : null;
-  }
-
-  get activeInput() {
-    return this._activeItems.elementWeakRef?.deref();
-  }
-
-  get activeHandler() {
-    const activeInput = this.activeInput;
-    if (!activeInput) {
+  getFormHandler(element) {
+    if (!element) {
       return null;
     }
 
-    // XXX: We are recomputing the activeHandler every time to avoid keeping a
-    // reference on the active element. This might be called quite frequently
-    // so if _getFormHandler/findRootForField become more costly, we should
-    // look into caching this result (eg by adding a weakmap).
-    let handler = this._getFormHandler(activeInput);
+    let handler = this.#formHandlerByElement.get(element);
     if (handler) {
-      handler.focusedInput = activeInput;
+      return handler;
+    }
+
+    const rootElement = lazy.AutofillFormFactory.findRootForField(element);
+    return this.#formHandlerByRootElement.get(rootElement);
+  }
+
+  /**
+   * Get the form handler for the specified root element.
+   *
+   * @param {string} rootElementId
+   *        the id of the root element
+   * @returns {FormAutofillHandler | null}
+   *        The form handler associated with the specified input element.
+   */
+  getFormHandlerByRootElementId(rootElementId) {
+    return this.#formHandlerByRootId.get(rootElementId);
+  }
+
+  /**
+   * Get the form handler for the specified input element. If no handler exists
+   * in the cache, this function creates a new one.
+   *
+   * @param {HTMLInputElement} element
+   *        Focused input which triggered profile searching
+   * @returns {FormAutofillHandler}
+   *        The form handler associated with the specified input element.
+   */
+  getOrCreateFormHandler(element) {
+    let handler = this.getFormHandler(element);
+    if (!handler) {
+      handler = new lazy.FormAutofillHandler(
+        lazy.AutofillFormFactory.createFromField(element),
+        this.onFilledModifiedCallback
+      );
+
+      const root = handler.form.rootElement;
+      const rootElementId = lazy.FormAutofillUtils.getElementIdentifier(root);
+      this.#formHandlerByRootId.set(rootElementId, handler);
+      this.#formHandlerByRootElement.set(root, handler);
+      handler.form.elements.forEach(ele =>
+        this.#formHandlerByElement.set(ele, handler)
+      );
     }
     return handler;
-  }
-
-  get activeSection() {
-    let formHandler = this.activeHandler;
-    return formHandler ? formHandler.activeSection : null;
-  }
-
-  /**
-   * Get the form's handler from cache which is created after page identified.
-   *
-   * @param {HTMLInputElement} element Focused input which triggered profile searching
-   * @returns {Array<object> | null}
-   *          Return target form's handler from content cache
-   *          (or return null if the information is not found in the cache).
-   *
-   */
-  _getFormHandler(element) {
-    if (!element) {
-      return null;
-    }
-    let rootElement = lazy.FormLikeFactory.findRootForField(element);
-    return this._formsDetails.get(rootElement);
-  }
-
-  identifyAutofillFields(element) {
-    let formHandler = this._getFormHandler(element);
-    if (!formHandler) {
-      let formLike = lazy.FormLikeFactory.createFromField(element);
-      formHandler = new lazy.FormAutofillHandler(
-        formLike,
-        this.onSubmit,
-        this.onAutofillCallback
-      );
-    } else if (!formHandler.updateFormIfNeeded(element)) {
-      return formHandler.fieldDetails;
-    }
-    this._formsDetails.set(formHandler.form.rootElement, formHandler);
-    return formHandler.collectFormFields();
-  }
-
-  updateActiveInput(element) {
-    if (!element) {
-      this._activeItems = {};
-      return;
-    }
-    this._activeItems = {
-      elementWeakRef: new WeakRef(element),
-      fieldDetail: null,
-    };
-  }
-
-  getRecords(formElement, handler) {
-    handler = handler || this._formsDetails.get(formElement);
-    const records = handler?.createRecords();
-
-    if (
-      !handler ||
-      !records ||
-      !Object.values(records).some(typeRecords => typeRecords.length)
-    ) {
-      return null;
-    }
-    return records;
-  }
-
-  didDestroy() {
-    this._activeItems = {};
   }
 }
 

@@ -10,7 +10,8 @@ import Shared
 
 // MARK: - TabManagerDelegate
 protocol TabManagerDelegate: AnyObject {
-    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool)
+    // Must be called on the main thread
+    func tabManager(_ tabManager: TabManager, didSelectedTabChange selectedTab: Tab, previousTab: Tab?, isRestoring: Bool)
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool)
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool)
 
@@ -21,7 +22,7 @@ protocol TabManagerDelegate: AnyObject {
 }
 
 extension TabManagerDelegate {
-    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {}
+    func tabManager(_ tabManager: TabManager, didSelectedTabChange selectedTab: Tab, previousTab: Tab?, isRestoring: Bool) {}
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {}
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {}
 
@@ -86,26 +87,29 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     var normalActiveTabs: [Tab] {
-        return LegacyInactiveTabViewModel.getActiveEligibleTabsFrom(normalTabs,
-                                                                    profile: profile)
+        if isInactiveTabsEnabled {
+            return normalTabs.filter({ $0.isActive })
+        } else {
+            return normalTabs
+        }
     }
 
     var inactiveTabs: [Tab] {
-        let normalTabs = Set(normalTabs)
-        let normalActiveTabs = Set(normalActiveTabs)
-
-        let inactiveTabs = normalTabs.subtracting(normalActiveTabs)
-        return Array(inactiveTabs)
+        return normalTabs.filter({ $0.isInactive })
     }
 
     var privateTabs: [Tab] {
         return tabs.filter { $0.isPrivate }
     }
 
-    /// This variable returns all normal tabs, sorted chronologically, excluding any
-    /// home page tabs.
+    var isInactiveTabsEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
+    }
+
+    /// This variable returns all normal tabs, sorted chronologically, excluding any home page tabs.
     var recentlyAccessedNormalTabs: [Tab] {
-        var eligibleTabs = viableTabs()
+        // If inactive tabs are enabled, do not include inactive tabs, as they are not "recently" accessed
+        var eligibleTabs = isInactiveTabsEnabled ? normalActiveTabs : normalTabs
 
         eligibleTabs = eligibleTabs.filter { tab in
             if tab.lastKnownUrl == nil {
@@ -120,11 +124,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         eligibleTabs = SponsoredContentFilterUtility().filterSponsoredTabs(from: eligibleTabs)
 
         // sort the tabs chronologically
-        eligibleTabs = eligibleTabs.sorted {
-            let firstTab = $0.lastExecutedTime ?? $0.firstCreatedTime ?? 0
-            let secondTab = $1.lastExecutedTime ?? $0.firstCreatedTime ?? 0
-            return firstTab > secondTab
-        }
+        eligibleTabs = eligibleTabs.sorted { $0.lastExecutedTime > $1.lastExecutedTime }
 
         return eligibleTabs
     }
@@ -138,6 +138,15 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
             return nil
         }
         return tabs[_selectedIndex]
+    }
+
+    var selectedTabUUID: UUID? {
+        guard let selectedTab = self.selectedTab,
+              let uuid = UUID(uuidString: selectedTab.tabUUID) else {
+            return nil
+        }
+
+        return uuid
     }
 
     subscript(index: Int) -> Tab? {
@@ -205,7 +214,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
     // MARK: - Webview configuration
     // A WKWebViewConfiguration used for normal tabs
-    private lazy var configuration: WKWebViewConfiguration = {
+    lazy var configuration: WKWebViewConfiguration = {
         return LegacyTabManager.makeWebViewConfig(isPrivate: false, prefs: profile.prefs)
     }()
 
@@ -274,6 +283,11 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     // TODO: FXIOS-7596 Remove when moving the TabManager protocol to TabManagerImplementation
     func preserveTabs() { fatalError("should never be called") }
 
+    func shouldClearPrivateTabs() -> Bool {
+        // FXIOS-9519: By default if no bool value is set we close the private tabs and mark it true
+        return profile.prefs.boolForKey(PrefsKeys.Settings.closePrivateTabs) ?? true
+    }
+
     func cleanupClosedTabs(_ closedTabs: [Tab], previous: Tab?, isPrivate: Bool = false) {
         DispatchQueue.main.async { [unowned self] in
             // select normal tab if there are no private tabs, we need to do this
@@ -297,6 +311,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
     // TODO: FXIOS-7596 Remove when moving the TabManager protocol to TabManagerImplementation
     func storeChanges() { fatalError("should never be called") }
+    func saveSessionData(forTab tab: Tab?) { fatalError("should never be called") }
 
     private func addTabForRestoration(isPrivate: Bool) -> Tab {
         return addTab(flushToDisk: false, zombie: true, isPrivate: isPrivate)
@@ -337,7 +352,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     // MARK: - Add tabs
     func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab {
         return addTab(request,
-                      configuration: nil,
                       afterTab: afterTab,
                       flushToDisk: true,
                       zombie: false,
@@ -346,27 +360,25 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
     @discardableResult
     func addTab(_ request: URLRequest! = nil,
-                configuration: WKWebViewConfiguration! = nil,
                 afterTab: Tab? = nil,
                 zombie: Bool = false,
                 isPrivate: Bool = false
     ) -> Tab {
         return addTab(request,
-                      configuration: configuration,
                       afterTab: afterTab,
                       flushToDisk: true,
                       zombie: zombie,
                       isPrivate: isPrivate)
     }
 
-    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool) {
+    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool, isPrivate: Bool) {
         if urls.isEmpty {
             return
         }
 
         var tab: Tab!
         for url in urls {
-            tab = addTab(URLRequest(url: url), flushToDisk: false, zombie: zombie)
+            tab = addTab(URLRequest(url: url), flushToDisk: false, zombie: zombie, isPrivate: isPrivate)
         }
 
         if shouldSelectTab {
@@ -382,26 +394,30 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     func addTab(_ request: URLRequest? = nil,
-                configuration: WKWebViewConfiguration? = nil,
                 afterTab: Tab? = nil,
                 flushToDisk: Bool,
                 zombie: Bool,
                 isPrivate: Bool = false
     ) -> Tab {
-        // Take the given configuration. Or if it was nil, take our default configuration for the current browsing mode.
-        let configuration: WKWebViewConfiguration = configuration ?? (isPrivate ? privateConfiguration : self.configuration)
-
-        let tab = Tab(profile: profile, configuration: configuration, isPrivate: isPrivate, windowUUID: windowUUID)
+        let tab = Tab(profile: profile, isPrivate: isPrivate, windowUUID: windowUUID)
         configureTab(tab, request: request, afterTab: afterTab, flushToDisk: flushToDisk, zombie: zombie)
         return tab
     }
 
     func addPopupForParentTab(profile: Profile, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab {
         let popup = Tab(profile: profile,
-                        configuration: configuration,
                         isPrivate: parentTab.isPrivate,
                         windowUUID: windowUUID)
-        configureTab(popup, request: nil, afterTab: parentTab, flushToDisk: true, zombie: false, isPopup: true)
+        // Configure the tab for the child popup webview. In this scenario we need to be sure to pass along
+        // the specific `configuration` that we are given by the WKUIDelegate callback, since if we do not
+        // use this configuration WebKit will throw an exception.
+        configureTab(popup,
+                     request: nil,
+                     afterTab: parentTab,
+                     flushToDisk: true,
+                     zombie: false,
+                     isPopup: true,
+                     requiredConfiguration: configuration)
 
         // Wait momentarily before selecting the new tab, otherwise the parent tab
         // may be unable to set `window.location` on the popup immediately after
@@ -413,12 +429,14 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         return popup
     }
 
+    /// Note: Inserts AND configures the given tab.
     func configureTab(_ tab: Tab,
                       request: URLRequest?,
                       afterTab parent: Tab? = nil,
                       flushToDisk: Bool,
                       zombie: Bool,
-                      isPopup: Bool = false
+                      isPopup: Bool = false,
+                      requiredConfiguration: WKWebViewConfiguration? = nil
     ) {
         // If network is not available webView(_:didCommit:) is not going to be called
         // We should set request url in order to show url in url bar even no network
@@ -448,7 +466,13 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         }
 
         if !zombie {
-            tab.createWebview()
+            let configuration: WKWebViewConfiguration
+            if let required = requiredConfiguration {
+                configuration = required
+            } else {
+                configuration = tab.isPrivate ? self.privateConfiguration : self.configuration
+            }
+            tab.createWebview(configuration: configuration)
         }
         tab.navigationDelegate = self.navDelegate
 
@@ -485,7 +509,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
     // MARK: - Move tabs
     func reorderTabs(isPrivate privateMode: Bool, fromIndex visibleFromIndex: Int, toIndex visibleToIndex: Int) {
-        let currentTabs = privateMode ? privateTabs : normalTabs
+        let currentTabs = privateMode ? privateTabs : normalActiveTabs
 
         guard visibleFromIndex < currentTabs.count, visibleToIndex < currentTabs.count else { return }
 
@@ -539,12 +563,9 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     // MARK: - Remove tabs
     func removeTab(_ tab: Tab, completion: (() -> Void)? = nil) {
         guard let index = tabs.firstIndex(where: { $0 === tab }) else { return }
-        DispatchQueue.main.async { [unowned self] in
-            // gather the index of the deleted tab within the viable tabs array
-            // so we can select the correct next tab after deletion
-            let viableTabsIndex = deletedIndexForViableTabs(tab)
-            self.removeTab(tab, flushToDisk: true)
-            self.updateIndexAfterRemovalOf(tab, deletedIndex: index, viableTabsIndex: viableTabsIndex)
+        DispatchQueue.main.async { [weak self] in
+            self?.removeTab(tab, flushToDisk: true)
+            self?.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
             completion?()
         }
 
@@ -561,18 +582,13 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         guard let index = tabs.firstIndex(where: { $0.tabUUID == tabUUID }) else { return }
 
         let tab = tabs[index]
-        let viableTabsIndex = deletedIndexForViableTabs(tab)
-        if TabTrayFlagManager.isRefactorEnabled {
-            backupCloseTab = BackupCloseTab(
-                tab: tab,
-                restorePosition: viableTabsIndex,
-                isSelected: selectedTab?.tabUUID == tab.tabUUID)
-        }
-        self.removeTab(tab, flushToDisk: true)
-        self.updateIndexAfterRemovalOf(tab, deletedIndex: index, viableTabsIndex: viableTabsIndex)
+        backupCloseTab = BackupCloseTab(
+            tab: tab,
+            restorePosition: index,
+            isSelected: selectedTab?.tabUUID == tab.tabUUID)
 
-        // TODO: FXIOS-9084 This is not ideal, follow up in this ticket to make tab selection reasonably synchronous
-        try? await Task.sleep(nanoseconds: NSEC_PER_SEC/10)
+        self.removeTab(tab, flushToDisk: true)
+        self.updateSelectedTabAfterRemovalOf(tab, deletedIndex: index)
 
         TelemetryWrapper.recordEvent(
             category: .action,
@@ -593,6 +609,11 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
                        category: .tabs,
                        description: "Tab count: \(count)")
             return
+        }
+
+        // Save the tab's session state before closing it and losing the webView
+        if flushToDisk {
+            saveSessionData(forTab: tab)
         }
 
         backupCloseTab = BackupCloseTab(tab: tab,
@@ -632,17 +653,40 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     @MainActor
+    func removeTabs(by urls: [URL]) async {
+        let urls = Set(urls)
+        let tabsToRemove = normalTabs.filter { tab in
+            guard let url = tab.url else { return false }
+            return urls.contains(url)
+        }
+        for tab in tabsToRemove {
+            await withCheckedContinuation { continuation in
+                removeTab(tab) { continuation.resume() }
+            }
+        }
+    }
+
+    @MainActor
     func removeAllTabs(isPrivateMode: Bool) async {
         let currentModeTabs = tabs.filter { $0.isPrivate == isPrivateMode }
+        var currentSelectedTab: BackupCloseTab?
+
+        // Backup the selected tab in separate variable as the `removeTab` method called below for each tab will
+        // automatically update tab selection as if there was a single tab removal.
         if let tab = selectedTab, tab.isPrivate == isPrivateMode {
-            backupCloseTab = BackupCloseTab(tab: tab,
-                                            restorePosition: tabs.firstIndex(of: tab),
-                                            isSelected: selectedTab?.tabUUID == tab.tabUUID)
+            currentSelectedTab = BackupCloseTab(tab: tab,
+                                                restorePosition: tabs.firstIndex(of: tab),
+                                                isSelected: selectedTab?.tabUUID == tab.tabUUID)
         }
         backupCloseTabs = tabs
+
         for tab in currentModeTabs {
             await self.removeTab(tab.tabUUID)
         }
+
+        // Save the tab state that existed prior to removals (preserves original selected tab)
+        backupCloseTab = currentSelectedTab
+
         storeChanges()
     }
 
@@ -665,7 +709,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     }
 
     @MainActor
-    func undoCloseInactiveTabs() { fatalError("should never be called") }
+    func undoCloseInactiveTabs() async { fatalError("should never be called") }
 
     func backgroundRemoveAllTabs(isPrivate: Bool = false,
                                  didClearTabs: @escaping (_ tabsToRemove: [Tab],
@@ -787,45 +831,99 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         privateConfiguration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
     }
 
-    // returns all activate tabs (private or normal)
-    private func viableTabs(isPrivate: Bool = false) -> [Tab] {
-        if !isPrivate, featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser) {
-            // only use active tabs as viable tabs
-            // we cannot use recentlyAccessedNormalTabs as this is filtering for sponsored and sorting tabs
-            return LegacyInactiveTabViewModel.getActiveEligibleTabsFrom(normalTabs, profile: profile)
-        } else {
-            return isPrivate ? privateTabs : normalTabs
-        }
-    }
-
-    // returns the index of a deleted tab in the viable tabs array
-    private func deletedIndexForViableTabs(_ tab: Tab) -> Int {
-        let viableTabs = viableTabs(isPrivate: tab.isPrivate)
-        return viableTabs.firstIndex(of: tab) ?? -1
-    }
-
-    private func updateIndexAfterRemovalOf(_ tab: Tab, deletedIndex: Int, viableTabsIndex: Int) {
-        let closedLastNormalTab = !tab.isPrivate && normalTabs.isEmpty
-        let closedLastPrivateTab = tab.isPrivate && privateTabs.isEmpty
-
-        if closedLastNormalTab {
-            selectTab(addTab(), previous: tab)
-        } else if closedLastPrivateTab {
-            selectTab(mostRecentTab(inTabs: tabs) ?? tabs.last, previous: tab)
-        } else if deletedIndex == _selectedIndex {
-            if !selectParentTab(afterRemoving: tab) {
-                let viableTabs = viableTabs(isPrivate: tab.isPrivate)
-
-                if let rightOrLeftTab = viableTabs[safe: viableTabsIndex] ?? viableTabs[safe: viableTabsIndex - 1] {
-                    selectTab(rightOrLeftTab, previous: tab)
+    /// After a tab is removed from the `tabs` array, it is necessary to select the previously selected tab. This method
+    /// will select the previously selected tab or, if that tab was deleted, select the next best alternative or create a
+    /// new normal active tab.
+    ///
+    /// We have to handle 3 different types of tabs: private tabs, normal active tabs, and normal inactive tabs.
+    /// These tabs are all in the `tabs` array but are differentiated by their respective flags.
+    ///
+    /// Once a tab has been removed, we must consider several situations:
+    /// - A change in the `tabs` array size, which may require us to shift the selected tab index 1 to the left
+    /// - If the removed tab was selected, we must choose an appropriate next selected tab from among the existing tabs
+    /// - When we close the last tab of a certain type, we may need to perform additional logic
+    ///      - For example, closing the last private tab should select the most recent active normal tab, if possible
+    ///
+    /// - Parameters:
+    ///   - removedTab: The tab that has already been removed from the `tabs` array.
+    ///   - deletedIndex: The index at which `removedTab` has been removed from the `tabs` array.
+    private func updateSelectedTabAfterRemovalOf(_ removedTab: Tab, deletedIndex: Int) {
+        // If the currently selected tab has been deleted, try to select the next most reasonable tab.
+        if deletedIndex == _selectedIndex {
+            // First, check if the user has closed the last viable tab of the current browsing mode: private or normal.
+            // If so, handle this gracefully (i.e. close the last private tab should open the most recent normal active tab).
+            let viableTabs = removedTab.isPrivate
+                                 ? privateTabs
+                                 : normalActiveTabs // We never want to surface an inactive tab, if inactive tabs enabled
+            guard !viableTabs.isEmpty else {
+                // If the selected tab is closed, and is private browsing, try to select a recent normal active tab. For all
+                // other cases, open a new normal active tab.
+                if removedTab.isPrivate,
+                   let mostRecentActiveTab = mostRecentTab(inTabs: normalActiveTabs) {
+                    selectTab(mostRecentActiveTab, previous: removedTab)
                 } else {
-                    selectTab(mostRecentTab(inTabs: viableTabs) ?? viableTabs.last, previous: tab)
+                    selectTab(addTab(), previous: removedTab)
                 }
+                return
+            }
+
+            if let mostRecentViableTab = mostRecentTab(inTabs: viableTabs), mostRecentViableTab == removedTab.parent {
+                // 1. Try to select the most recently used viable tab, if it's the removed tab's parent.
+                selectTab(mostRecentViableTab, previous: removedTab)
+            } else if !removedTab.isNormalAndInactive,
+                      let rightOrLeftTab = findRightOrLeftTab(forRemovedTab: removedTab, withDeletedIndex: deletedIndex) {
+                // 2. Try to select an array neighbour of the same tab type, except if the removed tab is inactive (unlikely
+                // edge case).
+                selectTab(rightOrLeftTab, previous: removedTab)
+            } else {
+                // 3. If there are no suitable active tabs to select, create a new normal active tab.
+                // (Note: It's possible to fall into here when all tabs have become inactive, especially when debugging.)
+                selectTab(addTab(), previous: removedTab)
             }
         } else if deletedIndex < _selectedIndex {
-            let selected = tabs[safe: _selectedIndex - 1]
-            selectTab(selected, previous: selected)
+            // If we delete a tab in the `tabs` array that's ahead of the selected tab, we need to shift our index.
+            // The selected tab itself hasn't actually changed; reselect it to call code paths related to saving, etc.
+            if let selectedTab = tabs[safe: _selectedIndex - 1] {
+                selectTab(selectedTab, previous: selectedTab)
+            } else {
+                assertionFailure("This should not happen, we should always be able to get the selected tab again.")
+                selectTab(addTab())
+            }
         }
+    }
+
+    /// Returns a direct neighbouring tab of the same type as the removed tab.
+    /// - Parameters:
+    ///   - removedTab: A tab that was just removed from the `tabs` array.
+    ///   - deletedIndex: The former index of the removed tab in the `tabs` array.
+    /// - Returns: Returns the neighbouring tab of the same type as removedTab. Preference given to the tab on the right.
+    func findRightOrLeftTab(forRemovedTab removedTab: Tab, withDeletedIndex deletedIndex: Int) -> Tab? {
+        // We know the fomer index of the removed tab in the full `tabs` array. However, if we want to get the closest
+        // neighbouring tab of the same type, we need to map this index into a subarray containing only tabs of that type.
+        //
+        // Example:
+        //          An array with private tabs (P), inactive normal tabs (I), and active normal tabs (A) is as follows. The
+        //          deleted index is 7, indicating normal active tab A3 was previously removed.
+        //          [P1, P2, A1, I1, A2, I2, P3, A3, A4, P4]
+        //                                       ^ deletedIndex is 7
+        //
+        //          We can map this deletedIndex to an index into a filtered subarray containing only normal active tabs.
+        //          To do this, we count the number of normal active tabs in the `tabs` array in the range 0..<deletedIndex.
+        //          In this case, there are two: A1 and A2.
+        //
+        //          [A1, A2, _, A4]
+        //                   ^ deletedIndex mapped to subarray of normal active tabs is 2
+        //
+        let arraySlice = tabs[0..<deletedIndex]
+
+        // Get the count of similar tabs on left side of the array
+        let mappedDeletedIndex = arraySlice.filter({ removedTab.isSameTypeAs($0) }).count
+        let filteredTabs = tabs.filter({ removedTab.isSameTypeAs($0) })
+
+        // Now that we know at which index in the subarray the removedTab was removed, we can look for its nearest left or
+        // right neighbours of the same type. This code checks the right tab first, then the left tab.
+        // Note: Use safe index into arrays to protect against out of bounds errors (e.g. deletedIndex is 0).
+        return filteredTabs[safe: mappedDeletedIndex] ?? filteredTabs[safe: mappedDeletedIndex - 1]
     }
 
     private func reAddTabs(tabsToAdd: [Tab], previousTabUUID: TabUUID, isPrivate: Bool = false) {
@@ -847,6 +945,7 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     func undoCloseTab() {
         guard let backupCloseTab = self.backupCloseTab else { return }
 
+        let previouslySelectedTab = selectedTab
         if let index = backupCloseTab.restorePosition {
             tabs.insert(backupCloseTab.tab, at: index)
         } else {
@@ -855,28 +954,12 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
 
         if backupCloseTab.isSelected {
             self.selectTab(backupCloseTab.tab)
+        } else if let tabToSelect = previouslySelectedTab {
+            self.selectTab(tabToSelect)
         }
 
         delegates.forEach { $0.get()?.tabManagerUpdateCount() }
         storeChanges()
-    }
-
-    // Select the most recently visited tab, IFF it is also the parent tab of the closed tab.
-    private func selectParentTab(afterRemoving tab: Tab) -> Bool {
-        let viableTabs = (tab.isPrivate ? privateTabs : normalTabs).filter { $0 != tab }
-        guard let parentTab = tab.parent,
-              parentTab != tab,
-              !viableTabs.isEmpty,
-              viableTabs.contains(parentTab)
-        else { return false }
-
-        let parentTabIsMostRecentUsed = mostRecentTab(inTabs: viableTabs) == parentTab
-
-        if parentTabIsMostRecentUsed, parentTab.lastExecutedTime != nil {
-            selectTab(parentTab, previous: tab)
-            return true
-        }
-        return false
     }
 
     // MARK: - Start at Home

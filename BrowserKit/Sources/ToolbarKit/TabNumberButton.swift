@@ -9,6 +9,7 @@ final class TabNumberButton: ToolbarButton {
     // MARK: - UX Constants
     struct UX {
         static let cornerRadius: CGFloat = 2
+        static let dimmedOpacity: CGFloat = 0.2
         static let titleFont = FXFontStyles.Bold.caption2.systemFont()
 
         // Tab count related constants
@@ -23,14 +24,6 @@ final class TabNumberButton: ToolbarButton {
         label.font = UX.titleFont
         label.layer.cornerRadius = UX.cornerRadius
         label.textAlignment = .center
-    }
-
-    override var isHighlighted: Bool {
-        didSet {
-            countLabel.textColor = isHighlighted ?
-            foregroundColorHighlighted :
-            foregroundColorNormal
-        }
     }
 
     // MARK: - Init
@@ -50,6 +43,14 @@ final class TabNumberButton: ToolbarButton {
         updateTabCount(numberOfTabs)
     }
 
+    override func tintColorDidChange() {
+        super.tintColorDidChange()
+
+        if tintAdjustmentMode == .dimmed {
+            UIView.performWithoutAnimation { countLabel.alpha = UX.dimmedOpacity }
+        } else { countLabel.alpha = 1.0 }
+    }
+
     private func updateTabCount(_ count: Int) {
         let count = max(count, 1)
         let countToBe = (count <= UX.maxTabCount) ? count.description : UX.infinitySymbol
@@ -66,11 +67,5 @@ final class TabNumberButton: ToolbarButton {
             countLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             countLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
-    }
-
-    // MARK: - Theming System
-    override func applyTheme(theme: any Theme) {
-        super.applyTheme(theme: theme)
-        countLabel.textColor = theme.colors.iconPrimary
     }
 }

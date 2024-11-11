@@ -11,15 +11,19 @@ class ToolbarMenuTests: BaseTestCase {
         super.tearDown()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306840
+    // https://mozilla.testrail.io/index.php?/cases/view/2306840
     func testToolbarMenu() {
         navigator.nowAt(NewTabScreen)
         let hamburgerMenu = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         let firstPocketCell = app.collectionViews.cells["PocketCell"].firstMatch
         let bookmarksButton = app.buttons[AccessibilityIdentifiers.Toolbar.bookmarksButton]
-        mozWaitForElementToExist(hamburgerMenu)
-        mozWaitForElementToExist(firstPocketCell)
+        waitForElementsToExist(
+            [
+                hamburgerMenu,
+                firstPocketCell
+            ]
+        )
         if iPad() {
             mozWaitForElementToExist(bookmarksButton)
             XCTAssertTrue(
@@ -45,10 +49,9 @@ class ToolbarMenuTests: BaseTestCase {
         mozWaitForElementToExist(app.tables["Context Menu"])
         validateMenuOptions()
         XCUIDevice.shared.orientation = .landscapeLeft
-        mozWaitForElementToExist(hamburgerMenu, timeout: 15)
+        mozWaitForElementToExist(hamburgerMenu)
         mozWaitForElementToNotExist(app.tables["Context Menu"])
-        mozWaitForElementToExist(app.textFields["url"])
-        mozWaitForElementToExist(app.webViews["contentView"])
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
         if iPad() {
             mozWaitForElementToExist(bookmarksButton)
             XCTAssertTrue(
@@ -62,7 +65,6 @@ class ToolbarMenuTests: BaseTestCase {
                 "Menu button is not on the right side of tabs button"
             )
         }
-        dismissSurveyPrompt()
         mozWaitForElementToExist(firstPocketCell)
         XCTAssertTrue(
             hamburgerMenu.isAbove(element: firstPocketCell),
@@ -76,16 +78,19 @@ class ToolbarMenuTests: BaseTestCase {
     }
 
     private func validateMenuOptions() {
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkTrayFill].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.history].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.download].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.readingList].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.login].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.sync].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.nightMode].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.whatsNew].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.helpCircle].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.edit].exists)
-        XCTAssertTrue(app.tables.otherElements[StandardImageIdentifiers.Large.settings].exists)
+        waitForElementsToExist(
+            [
+                app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkTrayFill],
+                app.tables.otherElements[StandardImageIdentifiers.Large.download],
+                app.tables.otherElements[StandardImageIdentifiers.Large.readingList],
+                app.tables.otherElements[StandardImageIdentifiers.Large.login],
+                app.tables.otherElements[StandardImageIdentifiers.Large.sync],
+                app.tables.otherElements[StandardImageIdentifiers.Large.nightMode],
+                app.tables.otherElements[StandardImageIdentifiers.Large.whatsNew],
+                app.tables.otherElements[StandardImageIdentifiers.Large.helpCircle],
+                app.tables.otherElements[StandardImageIdentifiers.Large.edit],
+                app.tables.otherElements[StandardImageIdentifiers.Large.settings]
+            ]
+        )
     }
 }

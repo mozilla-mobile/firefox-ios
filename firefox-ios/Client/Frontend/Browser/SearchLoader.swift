@@ -14,16 +14,16 @@ private let URLBeforePathRegex = try? NSRegularExpression(pattern: "^https?://([
  * Shared data source for the SearchViewController and the URLBar domain completion.
  * Since both of these use the same SQL query, we can perform the query once and dispatch the results.
  */
-class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggable {
+final class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggable {
     fileprivate let profile: Profile
-    fileprivate let urlBar: URLBarView
+    fileprivate let autocompleteView: Autocompletable
     private let logger: Logger
 
     private var skipNextAutocomplete: Bool
 
-    init(profile: Profile, urlBar: URLBarView, logger: Logger = DefaultLogger.shared) {
+    init(profile: Profile, autocompleteView: Autocompletable, logger: Logger = DefaultLogger.shared) {
         self.profile = profile
-        self.urlBar = urlBar
+        self.autocompleteView = autocompleteView
         self.skipNextAutocomplete = false
         self.logger = logger
 
@@ -115,49 +115,59 @@ class SearchLoader: Loader<Cursor<Site>, SearchViewModel>, FeatureFlaggable {
                 }
 
                 DispatchQueue.main.async {
-                    let results = queries
-                    defer {
-                        GleanMetrics.Awesomebar.queryTime.stopAndAccumulate(timerid)
-                    }
+                    self.updateUIWithBookmarksAsSitesResults(queries: queries,
+                                                             timerid: timerid,
+                                                             historyHighlightsEnabled: historyHighlightsEnabled,
+                                                             oldValue: oldValue)
+                }
+            }
+        }
+    }
 
-                    let bookmarksSites = results[safe: 0] ?? []
-                    var combinedSites = bookmarksSites
-                    if !historyHighlightsEnabled {
-                        let historySites = results[safe: 1] ?? []
-                        combinedSites += historySites
-                    }
+    private func updateUIWithBookmarksAsSitesResults(queries: [[Site]],
+                                                     timerid: TimerId,
+                                                     historyHighlightsEnabled: Bool,
+                                                     oldValue: String) {
+        let results = queries
+        defer {
+            GleanMetrics.Awesomebar.queryTime.stopAndAccumulate(timerid)
+        }
 
-                    // Load the data in the table view.
-                    self.load(ArrayCursor(data: combinedSites))
+        let bookmarksSites = results[safe: 0] ?? []
+        var combinedSites = bookmarksSites
+        if !historyHighlightsEnabled {
+            let historySites = results[safe: 1] ?? []
+            combinedSites += historySites
+        }
 
-                    // If the new search string is not longer than the previous
-                    // we don't need to find an autocomplete suggestion.
-                    guard oldValue.count < self.query.count else { return }
+        // Load the data in the table view.
+        load(ArrayCursor(data: combinedSites))
 
-                    // If we should skip the next autocomplete, reset
-                    // the flag and bail out here.
-                    guard !self.skipNextAutocomplete else {
-                        self.skipNextAutocomplete = false
-                        return
-                    }
+        // If the new search string is not longer than the previous
+        // we don't need to find an autocomplete suggestion.
+        guard oldValue.count < query.count else { return }
 
-                    // First, see if the query matches any URLs from the user's search history.
-                    for site in combinedSites {
-                        if let completion = self.completionForURL(site.url) {
-                            self.urlBar.setAutocompleteSuggestion(completion)
-                            return
-                        }
-                    }
+        // If we should skip the next autocomplete, reset
+        // the flag and bail out here.
+        guard !skipNextAutocomplete else {
+            skipNextAutocomplete = false
+            return
+        }
 
-                    // If there are no search history matches, try matching one of the Alexa top domains.
-                    if let topDomains = self.topDomains {
-                        for domain in topDomains {
-                            if let completion = self.completionForDomain(domain) {
-                                self.urlBar.setAutocompleteSuggestion(completion)
-                                return
-                            }
-                        }
-                    }
+        // First, see if the query matches any URLs from the user's search history.
+        for site in combinedSites {
+            if let completion = completionForURL(site.url) {
+                autocompleteView.setAutocompleteSuggestion(completion)
+                return
+            }
+        }
+
+        // If there are no search history matches, try matching one of the Alexa top domains.
+        if let topDomains = topDomains {
+            for domain in topDomains {
+                if let completion = completionForDomain(domain) {
+                    autocompleteView.setAutocompleteSuggestion(completion)
+                    return
                 }
             }
         }

@@ -5,7 +5,11 @@
 
 "use strict";
 
-import { Logic } from "Assets/CC_Script/LoginManager.shared.mjs";
+import "Assets/CC_Script/Helpers.ios.mjs";
+import { Logic } from "Assets/CC_Script/LoginManager.shared.sys.mjs";
+import { PasswordGenerator } from "resource://gre/modules/PasswordGenerator.sys.mjs";
+import { LoginFormFactory } from "resource://gre/modules/shared/LoginFormFactory.sys.mjs";
+import { PasswordRulesParser } from "Assets/CC_Script/PasswordRulesParser.sys.mjs"
 
 // Ensure this module only gets included once. This is
 // required for user scripts injected into all frames.
@@ -43,7 +47,6 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     receiveMessage: function (msg) {
       switch (msg.name) {
         case "RemoteLogins:loginsFound": {
-          console.log("ooooo ---- here ?? ", this.activeField.form, this.activeField)
           this.loginsFound(this.activeField.form, msg.logins);
           break;
         }
@@ -444,6 +447,33 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     },
   }
 
+  const generatePassword = (rules) => {
+    let mapOfRules = null;
+
+    // If the rules are not provided, we will use the default rules
+    // The rules are provided by swift depending on the domain
+    if(rules) {
+      const domainRules = PasswordRulesParser.parsePasswordRules(
+        rules["password-rules"] ?? ""
+      );
+      mapOfRules = Logic.transformRulesToMap(domainRules);
+    }
+
+    const generatedPassword = PasswordGenerator.generatePassword({
+      inputMaxLength: LoginManagerContent.activeField.maxLength,
+        ...(mapOfRules && { rules: mapOfRules }),
+    });
+
+    return generatedPassword;
+  };
+
+  function fillGeneratedPassword(password) {
+    this.yieldFocusBackToField();
+    const passwordField = LoginManagerContent.activeField;
+    passwordField?.setUserInput(password);
+    const confirmationField = Logic.findConfirmationField(passwordField, LoginFormFactory);
+    confirmationField?.setUserInput(password);
+  }
 
   function yieldFocusBackToField() {
     LoginManagerContent.activeField?.blur();
@@ -463,11 +493,21 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     }
 
     const [username, password] = LoginManagerContent._getFormFields(form, false);
-    if (password) {
-      LoginManagerContent.activeField = event.target;
+    const field = event.target;
+    const formHasNewPassword =
+      password && Logic.isProbablyANewPasswordField(password);
+    const isPasswordField = field === password;
+    const isYieldingFocus = LoginManagerContent.activeField === field;
+    LoginManagerContent.activeField = field;
+    if (formHasNewPassword && isPasswordField && !isYieldingFocus) {
+      webkit.messageHandlers.loginsManagerMessageHandler.postMessage({
+        type: "generatePassword",
+      });
+    } else if (!formHasNewPassword && password) {
       webkit.messageHandlers.loginsManagerMessageHandler.postMessage({
         type: "fieldType",
-        fieldType: event.target === username ? FocusFieldType.username : FocusFieldType.password,
+        fieldType:
+          field === username ? FocusFieldType.username : FocusFieldType.password,
       });
     }
   }
@@ -516,6 +556,8 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
       }
     };
     this.yieldFocusBackToField = yieldFocusBackToField;
+    this.generatePassword = generatePassword;
+    this.fillGeneratedPassword = fillGeneratedPassword;
   }
 
   Object.defineProperty(window.__firefox__, "logins", {

@@ -20,7 +20,6 @@ class ContextMenuHelperTests: XCTestCase {
         DependencyHelperMock().bootstrapDependencies()
 
         Glean.shared.resetGlean(clearStores: true)
-        Glean.shared.enableTestingMode()
     }
 
     override func tearDown() {

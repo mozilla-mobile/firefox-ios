@@ -4,7 +4,8 @@
 
 import Foundation
 
-struct TabModel: Equatable {
+struct TabModel: Equatable, Identifiable, Hashable {
+    var id: String { return tabUUID }
     let tabUUID: TabUUID
     let isSelected: Bool
     let isPrivate: Bool
@@ -15,11 +16,16 @@ struct TabModel: Equatable {
     let screenshot: UIImage?
     let hasHomeScreenshot: Bool
 
-    static func emptyTabState(tabUUID: TabUUID, title: String) -> TabModel {
+    static func emptyState(
+        tabUUID: TabUUID,
+        title: String,
+        isPrivate: Bool = false,
+        isSelected: Bool = false
+    ) -> TabModel {
         return TabModel(
             tabUUID: tabUUID,
-            isSelected: false,
-            isPrivate: false,
+            isSelected: isSelected,
+            isPrivate: isPrivate,
             isFxHomeTab: false,
             tabTitle: title,
             url: nil,

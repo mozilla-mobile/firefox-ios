@@ -5,71 +5,45 @@
 import XCTest
 
 class EngagementNotificationTests: BaseTestCase {
-    var currentScreen = 0
-    var rootA11yId: String {
-        return "\(AccessibilityIdentifiers.Onboarding.onboarding)\(currentScreen)"
-    }
-
     override func setUp() {
-        launchArguments = [LaunchArguments.ClearProfile,
-                           "\(LaunchArguments.LoadExperiment)engagementNotificationWithoutConditions",
-                           LaunchArguments.DisableAnimations]
+        // Fresh install the app
+        // removeApp() does not work on iOS 15 and 16 intermittently
+        if #available(iOS 17, *) {
+            removeApp()
+        }
+        // The app is correctly installed
         super.setUp()
     }
 
-    func testShowingNotification() throws {
-        throw XCTSkip("This test passes only right after the simulator is erased")
-        // goThroughOnboarding()
-
-        // As we cannot trigger the background refresh 
-        // XCUIDevice.shared.press(XCUIDevice.Button.home)
-
-        // let notification = springboard.otherElements["Notification"]
-        // XCTAssertTrue(notification.mozWaitForElementToExist(timeout: TIMEOUT_LONG)) // implicit wait
-        // notification.tap()
-
-        // mozWaitForElementToExist(app.textFields["url"])
-        // let url = app.textFields["url"].value as! String
-        // XCTAssertEqual(url, "mozilla.com", "Wrong url loaded")
-    }
-
-    // MARK: Helper
-
-    private func goThroughOnboarding() {
-        // Complete the First run from first screen to the latest one
-        // Check that the first's tour screen is shown as well as all the elements in there
-        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
-        XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
-        XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
-        XCTAssertTrue(app.buttons["\(AccessibilityIdentifiers.Onboarding.closeButton)"].exists)
-
-        // Go to the second screen
-        app.buttons["\(rootA11yId)PrimaryButton"].tap()
-        currentScreen += 1
-        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
-        XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
-        XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
-        XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
-
-        // Go to the third screen
-        app.buttons["\(rootA11yId)SecondaryButton"].tap()
-        currentScreen += 1
-        mozWaitForElementToExist(app.images["\(rootA11yId)ImageView"], timeout: TIMEOUT)
-        XCTAssertTrue(app.images["\(rootA11yId)ImageView"].exists)
-        XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
-        XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
-
-        // Finish onboarding
-        app.buttons["\(rootA11yId)PrimaryButton"].tap()
-
-        sleep(1)
-
-        // Allow notifications
-        if springboard.alerts.buttons["Allow"].exists {
-            springboard.alerts.buttons["Allow"].tap()
+    // https://mozilla.testrail.io/index.php?/cases/view/2307101
+    func testDontAllowNotifications() throws {
+        if #unavailable(iOS 17) {
+            throw XCTSkip("setUp() fails to remove app intermittently")
         }
-
-        let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
-        mozWaitForElementToExist(topSites)
+        // Skip login
+        navigator.nowAt(BrowserTab)
+        waitForTabsButton()
+        // Navigate to "Tips and Features"
+        // Toggle on switch position
+        navigator.goto(NotificationsSettings)
+        let tipsSwitch = app.switches["TipsAndFeaturesNotificationsUserPrefsKey"]
+        mozWaitForElementToExist(tipsSwitch)
+        app.switches["TipsAndFeaturesNotificationsUserPrefsKey"].tap()
+        let springBoard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let popUpTitle = "Would Like to Send You Notifications"
+        // Validate pop-up
+        mozWaitForElementToExist(springBoard.alerts.elementContainingText(popUpTitle))
+        // Choose "Don't allow"
+        springBoard.buttons["Don’t Allow"].tap()
+        // Toggle moves back to the "Off" position
+        mozWaitForValueContains(tipsSwitch, value: "0")
+        // Validate You turned off all Firefox notifications message
+        let notificationMessage1 = "You turned off all Firefox notifications. "
+        let notificationMessage2 = "Turn them on by going to device Settings > Notifications > Firefox"
+        // Workaround to validate message due to https://github.com/mozilla-mobile/firefox-ios/issues/13790
+        mozWaitForElementToNotExist(app.staticTexts[notificationMessage1 + notificationMessage2])
+        navigator.goto(SettingsScreen)
+        navigator.goto(NotificationsSettings)
+        mozWaitForElementToExist(app.staticTexts[notificationMessage1 + notificationMessage2])
     }
 }

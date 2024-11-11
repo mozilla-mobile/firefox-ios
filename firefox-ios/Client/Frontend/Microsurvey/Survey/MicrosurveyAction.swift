@@ -8,13 +8,14 @@ import Common
 
 final class MicrosurveyAction: Action {
     let userSelection: String?
+    let surveyId: String
 
-    init(userSelection: String? = nil, windowUUID: WindowUUID, actionType: any ActionType) {
+    init(surveyId: String, userSelection: String? = nil, windowUUID: WindowUUID, actionType: any ActionType) {
+        self.surveyId = surveyId
         self.userSelection = userSelection
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }
-final class MicrosurveyMiddlewareAction: Action { }
 
 enum MicrosurveyActionType: ActionType {
     case closeSurvey
@@ -22,9 +23,4 @@ enum MicrosurveyActionType: ActionType {
     case tapPrivacyNotice
     case surveyDidAppear
     case confirmationViewed
-}
-
-enum MicrosurveyMiddlewareActionType: ActionType {
-    case dismissSurvey
-    case navigateToPrivacyNotice
 }

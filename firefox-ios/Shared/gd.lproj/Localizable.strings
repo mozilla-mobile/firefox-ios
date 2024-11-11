@@ -757,6 +757,9 @@
 /* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "An eachdraidh";
 
+/* Label for the new private tab button in the menu page. Pressing this button opens a new private tab. */
+"Menu.NewPrivateTab.Label" = "Taba prìobhaideach ùr";
+
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
 "Menu.NewTab.v99" = "Taba ùr";
 
@@ -845,13 +848,13 @@
 "Menu.TrackingProtectionDescription.CryptominersNew" = "Cleachdaidh criopto-mhèinneadairean comasan an t-siostaim agad airson airgead digiteach a chosnadh gun fhiosta. Traoghaidh criopto-mhèinneadairean am bataraidh agad, nì iad an coimpiutair agad slaodach agus faodaidh gun èirich cosgaisean dealain dhut.";
 
 /* Description of fingerprinters. */
-"Menu.TrackingProtectionDescription.Fingerprinters" = "Tha na roghainnean àraidh aig a’ bhrabhsair agus aig a’ choimpiutair agad. Tha lorgaichean-meur ann a chruinnicheas badan dhe na roghainnean àraidh seo airson pròifil a chruthachadh dhìot agus gabhaidh do thracadh air an lìon leotha.";
+"Menu.TrackingProtectionDescription.Fingerprinters" = "Tha na roghainnean àraidh aig a’ bhrabhsair agus aig a’ choimpiutair agad. Tha lorgairean-meòir ann a chruinnicheas badan dhe na roghainnean àraidh seo airson pròifil a chruthachadh dhìot agus gabhaidh do thracadh air an lìon leotha.";
 
 /* Description of social network trackers. */
 "Menu.TrackingProtectionDescription.SocialNetworksNew" = "Cuiridh lìonraidhean sòisealta tracaichean air làraichean-lìn eile airson pròifil nas iomlaine dhìot a chruthachadh. Ma bhacas tu na tracaichean seo, chì companaidhean nam meadhan sòisealta nas lugha dhe na nì thu air loidhne.";
 
 /* The title that shows the number of fingerprinting scripts blocked */
-"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Lorgaichean-meur";
+"Menu.TrackingProtectionFingerprintersBlocked.Title" = "Lorgairean-meòir";
 
 /* The title for the option to view the What's new page. */
 "Menu.WhatsNew.Title" = "Na tha ùr";
@@ -1144,6 +1147,9 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (Cuir %s an àite na ceist)";
 
+/* Title of setting to block opening external apps when pressing links. */
+"Settings.BlockOpeningExternalApps.Title" = "Bac fosgladh de dh’aplacaidean on taobh a-muigh";
+
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Falamhaich dàta nan làraichean-lìn air fad";
 
@@ -1398,6 +1404,9 @@
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "Nuair a dh’fhosglas mi Firefox";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
+"Settings.OfferClipboardBar.Status.v128" = "Nuair a dh’fhosglas tu %@";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.StatusV2" = "Nuair a dh’fhosglas mi Firefox";

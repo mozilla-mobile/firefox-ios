@@ -15,17 +15,16 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         dataClearanceContextHintVC.stopTimer()
     }
 
-    func configureDataClearanceContextualHint() {
-        guard !isToolbarRefactorEnabled,
-                contentContainer.hasWebView,
+    func configureDataClearanceContextualHint(_ view: UIView) {
+        guard contentContainer.hasWebView,
                 tabManager.selectedTab?.url?.displayURL?.isWebPage() == true
         else {
             resetDataClearanceCFRTimer()
             return
         }
         dataClearanceContextHintVC.configure(
-            anchor: navigationToolbar.multiStateButton,
-            withArrowDirection: topTabsVisible ? .up : .down,
+            anchor: view,
+            withArrowDirection: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection) ? .down : .up,
             andDelegate: self,
             presentedUsing: { [weak self] in self?.presentDataClearanceContextualHint() },
             andActionForButton: { },
@@ -37,12 +36,70 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         UIAccessibility.post(notification: .layoutChanged, argument: dataClearanceContextHintVC)
     }
 
+    // Starts a timer to monitor for a navigation button double tap for the navigation contextual hint
+    func startNavigationButtonDoubleTapTimer() {
+        guard isToolbarRefactorEnabled, isToolbarNavigationHintEnabled else { return }
+        if navigationHintDoubleTapTimer == nil {
+            navigationHintDoubleTapTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { _ in
+                self.navigationHintDoubleTapTimer = nil
+            }
+        } else {
+            navigationHintDoubleTapTimer = nil
+            let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.navigationButtonDoubleTapped)
+            store.dispatch(action)
+        }
+    }
+
+    func configureNavigationContextualHint(_ view: UIView) {
+        guard isToolbarRefactorEnabled, isToolbarNavigationHintEnabled else { return }
+        navigationContextHintVC.configure(
+            anchor: view,
+            withArrowDirection: ToolbarHelper().shouldShowNavigationToolbar(for: traitCollection) ? .down : .up,
+            andDelegate: self,
+            presentedUsing: { [weak self] in self?.presentNavigationContextualHint() },
+            actionOnDismiss: {
+                let action = ToolbarAction(windowUUID: self.windowUUID,
+                                           actionType: ToolbarActionType.navigationHintFinishedPresenting)
+                store.dispatch(action)
+            },
+            andActionForButton: { },
+            overlayState: overlayManager,
+            ignoreSafeArea: true)
+    }
+
+    private func presentNavigationContextualHint() {
+        // Only show the contextual hint if:
+        // 1. The tab webpage is loaded OR we are on the home page, and the
+        // 2. Microsurvey prompt is not being displayed
+        // If the hint does not show,
+        // ToolbarActionType.navigationButtonDoubleTapped will have to be dispatched again through user action
+        guard let state = store.state.screenState(BrowserViewControllerState.self,
+                                                  for: .browserViewController,
+                                                  window: windowUUID)
+        else { return }
+
+        if let selectedTab = tabManager.selectedTab,
+            selectedTab.isFxHomeTab || !selectedTab.loading,
+            !state.microsurveyState.showPrompt {
+            present(navigationContextHintVC, animated: true)
+            UIAccessibility.post(notification: .layoutChanged, argument: navigationContextHintVC)
+        } else {
+            let action = ToolbarAction(windowUUID: self.windowUUID,
+                                       actionType: ToolbarActionType.navigationHintFinishedPresenting)
+            store.dispatch(action)
+        }
+    }
+
     func tabToolbarDidPressHome(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         didTapOnHome()
     }
 
     // Presents alert to clear users private session data
-    func tabToolbarDidPressFire(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+    func tabToolbarDidPressDataClearance(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        didTapOnDataClearance()
+    }
+
+    func didTapOnDataClearance() {
         let alert = UIAlertController(
             title: .Alerts.FeltDeletion.Title,
             message: .Alerts.FeltDeletion.Body,
@@ -104,9 +161,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let dataClearanceAnimation = DataClearanceAnimation()
         dataClearanceAnimation.startAnimation(
             with: view,
-            for: shouldShowTopTabsForTraitCollection(
-                traitCollection
-            )
+            for: ToolbarHelper().shouldShowTopTabs(for: traitCollection)
         )
 
         completion(timingToMatchGradientOverlay)
@@ -116,7 +171,9 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func dismissUrlBar() {
-        if !isToolbarRefactorEnabled, urlBar.inOverlayMode {
+        if isToolbarRefactorEnabled, addressToolbarContainer.inOverlayMode {
+            addressToolbarContainer.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
+        } else if !isToolbarRefactorEnabled, urlBar.inOverlayMode {
             urlBar.leaveOverlayMode(reason: .finished, shouldCancelLoading: false)
         }
     }
@@ -200,48 +257,80 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         if let tab = self.tabManager.selectedTab {
             return tab.isPrivate ? [normalBrowsingMode] : [privateBrowsingMode]
         }
+
         return [privateBrowsingMode]
     }
 
     func getMoreTabToolbarLongPressActions() -> [PhotonRowActions] {
-        let newTab = SingleActionViewModel(title: .KeyboardShortcuts.NewTab,
-                                           iconString: StandardImageIdentifiers.Large.plus,
-                                           iconType: .Image) { _ in
+        let newTab = getNewTabAction()
+        let newPrivateTab = getNewPrivateTabAction()
+        let closeTab = getCloseTabAction()
+
+        if let tab = self.tabManager.selectedTab {
+            return tab.isPrivate ? [newPrivateTab, closeTab] : [newTab, closeTab]
+        }
+
+        return [newTab, closeTab]
+    }
+
+    func getTabToolbarRefactorLongPressActions() -> [[PhotonRowActions]] {
+        let newTab = getNewTabAction()
+        let newPrivateTab = getNewPrivateTabAction()
+        let closeTab = getCloseTabAction()
+
+        return [[newTab, newPrivateTab], [closeTab]]
+    }
+
+    func getNewTabLongPressActions() -> [[PhotonRowActions]] {
+        let newTab = getNewTabAction()
+        let newPrivateTab = getNewPrivateTabAction()
+
+        return [[newTab, newPrivateTab]]
+    }
+
+    private func getNewTabAction() -> PhotonRowActions {
+        return SingleActionViewModel(title: .KeyboardShortcuts.NewTab,
+                                     iconString: StandardImageIdentifiers.Large.plus,
+                                     iconType: .Image) { _ in
             let shouldFocusLocationField = self.newTabSettings == .blankPage
             self.overlayManager.openNewTab(url: nil, newTabSettings: self.newTabSettings)
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)
         }.items
+    }
 
-        let newPrivateTab = SingleActionViewModel(title: .KeyboardShortcuts.NewPrivateTab,
-                                                  iconString: StandardImageIdentifiers.Large.plus,
-                                                  iconType: .Image) { _ in
+    private func getNewPrivateTabAction() -> PhotonRowActions {
+        let isRefactorEnabled = isToolbarRefactorEnabled && isOneTapNewTabEnabled
+        let iconString = isRefactorEnabled ? StandardImageIdentifiers.Large.privateMode : StandardImageIdentifiers.Large.plus
+        return SingleActionViewModel(title: .KeyboardShortcuts.NewPrivateTab,
+                                     iconString: iconString,
+                                     iconType: .Image) { _ in
             let shouldFocusLocationField = self.newTabSettings == .blankPage
             self.overlayManager.openNewTab(url: nil, newTabSettings: self.newTabSettings)
             self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .newPrivateTab, value: .tabTray)
         }.items
+    }
 
-        let closeTab = SingleActionViewModel(title: .KeyboardShortcuts.CloseCurrentTab,
-                                             iconString: StandardImageIdentifiers.Large.cross,
-                                             iconType: .Image) { _ in
+    private func getCloseTabAction() -> PhotonRowActions {
+        let isRefactorEnabled = isToolbarRefactorEnabled && isOneTapNewTabEnabled
+        let title = isRefactorEnabled ? String.Toolbars.TabToolbarLongPressActionsMenu.CloseThisTabButton :
+                                        String.KeyboardShortcuts.CloseCurrentTab
+        return SingleActionViewModel(title: title,
+                                     iconString: StandardImageIdentifiers.Large.cross,
+                                     iconType: .Image) { _ in
             if let tab = self.tabManager.selectedTab {
                 self.tabManager.removeTab(tab)
                 self.updateTabCountUsingTabManager(self.tabManager)
                 self.showToast(message: .TabsTray.CloseTabsToast.SingleTabTitle, toastAction: .closeTab)
             }
         }.items
-
-        if let tab = self.tabManager.selectedTab {
-            return tab.isPrivate ? [newPrivateTab, closeTab] : [newTab, closeTab]
-        }
-        return [newTab, closeTab]
     }
 
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
 
-        presentActionSheet(from: button)
+        presentTabsLongPressAction(from: button)
     }
 
     func tabToolbarDidPressSearch(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
@@ -331,7 +420,7 @@ extension BrowserViewController: ToolBarActionMenuDelegate, UIDocumentPickerDele
 
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         if !urls.isEmpty {
-            showToast(message: .AppMenu.AppMenuDownloadPDFConfirmMessage, toastAction: .downloadPDF)
+            showToast(message: .LegacyAppMenu.AppMenuDownloadPDFConfirmMessage, toastAction: .downloadPDF)
         }
     }
 

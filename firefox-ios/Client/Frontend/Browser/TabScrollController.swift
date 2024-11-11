@@ -31,6 +31,8 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
         }
 
         didSet {
+            // FXIOS-9781 This could result in scrolling not closing the toolbar
+            assert(scrollView != nil, "Can't set the scrollView delegate if the webView.scrollView is nil")
             self.scrollView?.addGestureRecognizer(panGesture)
             scrollView?.delegate = self
             scrollView?.keyboardDismissMode = .onDrag
@@ -197,6 +199,21 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
             completion: nil)
     }
 
+    func hideToolbars(animated: Bool, isFindInPageMode: Bool = false) {
+        guard toolbarState != .collapsed || isFindInPageMode else { return }
+        toolbarState = .collapsed
+
+        let actualDuration = TimeInterval(ToolbarBaseAnimationDuration * hideDurationRation)
+        self.animateToolbarsWithOffsets(
+            animated,
+            duration: actualDuration,
+            headerOffset: -topScrollHeight,
+            bottomContainerOffset: bottomContainerScrollHeight,
+            overKeyboardOffset: overKeyboardScrollHeight,
+            alpha: 0,
+            completion: nil)
+    }
+
     func beginObserving(scrollView: UIScrollView) {
         guard !observedScrollViews.contains(scrollView) else {
             logger.log("Duplicate observance of scroll view", level: .warning, category: .webview)
@@ -252,21 +269,6 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
 
 // MARK: - Private
 private extension TabScrollingController {
-    func hideToolbars(animated: Bool) {
-        guard toolbarState != .collapsed else { return }
-        toolbarState = .collapsed
-
-        let actualDuration = TimeInterval(ToolbarBaseAnimationDuration * hideDurationRation)
-        self.animateToolbarsWithOffsets(
-            animated,
-            duration: actualDuration,
-            headerOffset: -topScrollHeight,
-            bottomContainerOffset: bottomContainerScrollHeight,
-            overKeyboardOffset: overKeyboardScrollHeight,
-            alpha: 0,
-            completion: nil)
-    }
-
     func configureRefreshControl(isEnabled: Bool) {
         scrollView?.refreshControl = isEnabled ? UIRefreshControl() : nil
         scrollView?.refreshControl?.addTarget(self, action: #selector(reload), for: .valueChanged)
@@ -455,19 +457,19 @@ extension TabScrollingController: UIGestureRecognizerDelegate {
 
 extension TabScrollingController: UIScrollViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        lastContentOffsetY = scrollView.contentOffset.y
-    }
+            lastContentOffsetY = scrollView.contentOffset.y
+        }
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        guard !tabIsLoading(), !isBouncingAtBottom(), isAbleToScroll else { return }
+        guard !tabIsLoading(), !isBouncingAtBottom(), isAbleToScroll, let tab else { return }
 
-        tab?.shouldScrollToTop = false
+        tab.shouldScrollToTop = false
 
         if decelerate || (toolbarState == .animating && !decelerate) {
-            if scrollDirection == .up {
+            if scrollDirection == .up, !tab.isFindInPageMode {
                 showToolbars(animated: true)
             } else if scrollDirection == .down {
-                hideToolbars(animated: true)
+                hideToolbars(animated: true, isFindInPageMode: tab.isFindInPageMode)
             }
         }
     }
@@ -480,15 +482,16 @@ extension TabScrollingController: UIScrollViewDelegate {
             setOffset(y: 0, for: scrollView)
         }
 
-        let scrolledToTop = lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0
-        let scrolledDown = lastContentOffsetY == 0 && scrollView.contentOffset.y > 0
-
-        if scrolledDown || scrolledToTop {
+        // this action controls the address toolbar's border position, and to prevent spamming redux with actions for every
+        // change in content offset, we keep track of lastContentOffsetY to know if the border needs to be updated
+        if (lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0) ||
+            (lastContentOffsetY <= 0 && scrollView.contentOffset.y > 0) {
             lastContentOffsetY = scrollView.contentOffset.y
-            let action = GeneralBrowserMiddlewareAction(scrollOffset: scrollView.contentOffset,
-                                                        windowUUID: windowUUID,
-                                                        actionType: GeneralBrowserMiddlewareActionType.didScroll)
-            store.dispatch(action)
+            store.dispatch(
+                GeneralBrowserMiddlewareAction(
+                    scrollOffset: scrollView.contentOffset,
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserMiddlewareActionType.websiteDidScroll))
         }
 
         guard isAnimatingToolbar else { return }

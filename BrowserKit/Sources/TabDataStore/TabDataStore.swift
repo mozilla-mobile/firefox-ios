@@ -23,7 +23,11 @@ public protocol TabDataStore {
     /// saved files in the directory) it is faster than fetchWindowData() and is
     /// preferable when only the UUIDs are needed.
     /// - Returns: a list of UUIDs for any saved WindowData.
-    func fetchWindowDataUUIDs() -> [UUID]
+    func fetchWindowDataUUIDs() -> [WindowUUID]
+
+    /// Erases the on-disk data for tab windows matching the provided UUIDs.
+    /// - Parameter forUUIDs: the UUIDs to delete the on-disk tab files for.
+    func removeWindowData(forUUIDs: [WindowUUID]) async
 }
 
 public actor DefaultTabDataStore: TabDataStore {
@@ -49,27 +53,75 @@ public actor DefaultTabDataStore: TabDataStore {
     // MARK: Fetching Window Data
 
     public func fetchWindowData(uuid: UUID) async -> WindowData? {
-        logger.log("Attempting to fetch window/tab data", level: .debug, category: .tabs)
+        logger.log("Attempting to fetch window data", level: .debug, category: .tabs)
+
+        // Adding more logging for FXIOS-9517
+        var shouldLogFileFailure = false // Whether pulling from the main file failed
+        var shouldLogBackupFailure = false // Whether pulling from the backup file failed
+        var fileInfoMessage = "" // Specifics of main file failure
+        var backupInfoMessage = "" // Specifics of backup file failure
+        defer {
+            if shouldLogFileFailure {
+                let errorMessage: String
+                errorMessage = shouldLogBackupFailure
+                                ? "Failed to open window data (including backup data) for UUID: \(uuid)"
+                                : "Failed to open window data (but backup recovery worked) for UUID: \(uuid)"
+                logger.log(
+                    "\(errorMessage) File Info: [\(fileInfoMessage)] Backup File Info: [\(backupInfoMessage)]",
+                    level: .fatal,
+                    category: .tabs
+                )
+            }
+        }
+
         do {
-            guard let fileURL = windowURLPath(for: uuid, isBackup: false),
-                  fileManager.fileExists(atPath: fileURL),
-                  let windowData = parseWindowDataFile(fromURL: fileURL) else {
-                logger.log("Failed to open window/tab data for UUID: \(uuid)", level: .fatal, category: .tabs)
+            guard let fileURL = windowURLPath(for: uuid, isBackup: false) else {
+                fileInfoMessage += "fileURL nil"
+                shouldLogFileFailure = true
                 throw TabDataError.failedToFetchData
             }
+
+            guard fileManager.fileExists(atPath: fileURL) else {
+                fileInfoMessage += "file doesn't exist"
+                shouldLogFileFailure = true
+                throw TabDataError.failedToFetchData
+            }
+
+            guard let windowData = parseWindowDataFile(fromURL: fileURL) else {
+                fileInfoMessage += "file parsing failed"
+                shouldLogFileFailure = true
+                throw TabDataError.failedToFetchData
+            }
+
+            logger.log("Successfully fetched window data", level: .debug, category: .tabs)
             return windowData
         } catch {
-            logger.log("Error fetching window data: UUID = \(uuid) Error = \(error)", level: .warning, category: .tabs)
-            guard let backupURL = windowURLPath(for: uuid, isBackup: true),
-                  fileManager.fileExists(atPath: backupURL),
-                  let backupWindowData = parseWindowDataFile(fromURL: backupURL) else {
+            logger.log("Error fetching window data for UUID: \(uuid) Error: \(error)", level: .warning, category: .tabs)
+
+            guard let backupURL = windowURLPath(for: uuid, isBackup: true) else {
+                backupInfoMessage += "backup fileURL nil"
+                shouldLogBackupFailure = true
                 return nil
             }
+
+            guard fileManager.fileExists(atPath: backupURL) else {
+                backupInfoMessage += "backup file doesn't exist"
+                shouldLogBackupFailure = true
+                return nil
+            }
+
+            guard let backupWindowData = parseWindowDataFile(fromURL: backupURL) else {
+                backupInfoMessage += "backup file parsing failed"
+                shouldLogBackupFailure = true
+                return nil
+            }
+
+            logger.log("Returned backup window data for UUID: \(uuid)", level: .debug, category: .tabs)
             return backupWindowData
         }
     }
 
-    nonisolated public func fetchWindowDataUUIDs() -> [UUID] {
+    nonisolated public func fetchWindowDataUUIDs() -> [WindowUUID] {
         guard let directoryURL = fileManager.windowDataDirectory(isBackup: false) else {
             logger.log("Could not resolve window data directory", level: .warning, category: .tabs)
             return []
@@ -77,12 +129,7 @@ public actor DefaultTabDataStore: TabDataStore {
 
         let fileURLs = fileManager.contentsOfDirectory(at: directoryURL)
 
-        return fileURLs.compactMap {
-            let file = $0.lastPathComponent
-            guard file.hasPrefix(filePrefix) else { return nil }
-            let uuidString = String(file.dropFirst(filePrefix.count))
-            return UUID(uuidString: uuidString)
-        }
+        return fileURLs.compactMap { windowUUID(fromURL: $0) }
     }
 
     private func parseWindowDataFile(fromURL url: URL) -> WindowData? {
@@ -178,11 +225,38 @@ public actor DefaultTabDataStore: TabDataStore {
         fileManager.removeAllFilesAt(directory: backupURL)
     }
 
+    public func removeWindowData(forUUIDs uuids: [WindowUUID]) async {
+        guard let directoryURL = fileManager.windowDataDirectory(isBackup: false) else { return }
+
+        let fileURLs = fileManager.contentsOfDirectory(at: directoryURL)
+
+        for url in fileURLs {
+            guard let uuid = windowUUID(fromURL: url) else { continue }
+            guard uuids.contains(where: { $0 == uuid }) else {
+                logger.log("Will not remove window data for UUID: \(uuid)", level: .info, category: .tabs)
+                continue
+            }
+            logger.log("Removing window data for UUID: \(uuid)", level: .info, category: .tabs)
+            fileManager.removeFileAt(path: url)
+        }
+    }
+
     // MARK: - URL Utils
 
     private func windowURLPath(for windowID: UUID, isBackup: Bool) -> URL? {
         guard let baseURL = fileManager.windowDataDirectory(isBackup: isBackup) else { return nil }
         let baseFilePath = filePrefix + windowID.uuidString
         return baseURL.appendingPathComponent(baseFilePath)
+    }
+
+    /// For a URL that points to a window tab data file, returns the associated UUID
+    /// for that window based on the file name.
+    /// - Parameter url: the URL to parse.
+    /// - Returns: a window UUID or nil if the URL was invalid.
+    private nonisolated func windowUUID(fromURL url: URL) -> WindowUUID? {
+        let file = url.lastPathComponent
+        guard file.hasPrefix(filePrefix) else { return nil }
+        let uuidString = String(file.dropFirst(filePrefix.count))
+        return WindowUUID(uuidString: uuidString)
     }
 }

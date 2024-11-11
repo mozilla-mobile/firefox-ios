@@ -25,6 +25,7 @@ import struct MozillaAppServices.HistoryMigrationResult
 import struct MozillaAppServices.SyncParams
 import struct MozillaAppServices.SyncResult
 import struct MozillaAppServices.VisitObservation
+import struct MozillaAppServices.PendingCommand
 
 public protocol SyncManager {
     var isSyncing: Bool { get }
@@ -51,8 +52,9 @@ public protocol SyncManager {
 
 /// This exists to pass in external context: e.g., the UIApplication can
 /// expose notification functionality in this way.
-public protocol SendTabDelegate: AnyObject {
+public protocol FxACommandsDelegate: AnyObject {
     func openSendTabs(for urls: [URL])
+    func closeTabs(for urls: [URL])
 }
 
 class ProfileFileAccessor: FileAccessor {
@@ -87,7 +89,7 @@ protocol Profile: AnyObject {
     var prefs: Prefs { get }
     var queue: TabQueue { get }
     #if !MOZ_TARGET_NOTIFICATIONSERVICE && !MOZ_TARGET_SHARETO && !MOZ_TARGET_CREDENTIAL_PROVIDER
-    var searchEngines: SearchEngines { get }
+    var searchEnginesManager: SearchEnginesManager { get }
     #endif
     var files: FileAccessor { get }
     var pinnedSites: PinnedSites { get }
@@ -137,6 +139,10 @@ protocol Profile: AnyObject {
 
     @discardableResult
     func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
+
+    func addTabToCommandQueue(_ deviceId: String, url: URL)
+    func removeTabFromCommandQueue(_ deviceId: String, url: URL)
+    func flushTabCommands(toDeviceId: String?)
 
     func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success
     func pollCommands(forcePoll: Bool)
@@ -234,7 +240,7 @@ open class BrowserProfile: Profile {
     let readingListDB: BrowserDB
     var syncManager: SyncManager!
 
-    var sendTabDelegate: SendTabDelegate?
+    var fxaCommandsDelegate: FxACommandsDelegate?
 
     /**
      * N.B., BrowserProfile is used from our extensions, often via a pattern like
@@ -249,7 +255,7 @@ open class BrowserProfile: Profile {
      * However, if we provide it here, it's assumed that we're initializing it from the application.
      */
     init(localName: String,
-         sendTabDelegate: SendTabDelegate? = nil,
+         fxaCommandsDelegate: FxACommandsDelegate? = nil,
          creditCardAutofillEnabled: Bool = false,
          clear: Bool = false,
          logger: Logger = DefaultLogger.shared) {
@@ -260,7 +266,7 @@ open class BrowserProfile: Profile {
         self.files = ProfileFileAccessor(localName: localName)
         self.keychain = MZKeychainWrapper.sharedClientAppContainerKeychain
         self.logger = logger
-        self.sendTabDelegate = sendTabDelegate
+        self.fxaCommandsDelegate = fxaCommandsDelegate
 
         if clear {
             do {
@@ -469,8 +475,8 @@ open class BrowserProfile: Profile {
     lazy var autofill = RustAutofill(databasePath: autofillDbPath)
 
     #if !MOZ_TARGET_NOTIFICATIONSERVICE && !MOZ_TARGET_SHARETO && !MOZ_TARGET_CREDENTIAL_PROVIDER
-    lazy var searchEngines: SearchEngines = {
-        return SearchEngines(prefs: self.prefs, files: self.files)
+    lazy var searchEnginesManager: SearchEnginesManager = {
+        return SearchEnginesManager(prefs: self.prefs, files: self.files)
     }()
     #endif
 
@@ -559,6 +565,14 @@ open class BrowserProfile: Profile {
         return self.tabs.setLocalTabs(localTabs: tabs)
     }
 
+    func addTabToCommandQueue(_ deviceId: String, url: URL) {
+        tabs.addRemoteCommand(deviceId: deviceId, url: url)
+    }
+
+    func removeTabFromCommandQueue(_ deviceId: String, url: URL) {
+        tabs.removeRemoteCommand(deviceId: deviceId, url: url)
+    }
+
     public func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success {
         let deferred = Success()
         if let accountManager = RustFirefoxAccounts.shared.accountManager {
@@ -578,6 +592,21 @@ open class BrowserProfile: Profile {
             deferred.fill(Maybe(success: ()))
         }
         return deferred
+    }
+
+    public func flushTabCommands(toDeviceId: String?) {
+        guard let deviceId = toDeviceId,
+            let constellation = RustFirefoxAccounts.shared.accountManager?.deviceConstellation() else {
+            return
+        }
+
+        // send all unsent close tab commands
+        self.tabs.getUnsentCommandUrlsByDeviceId(deviceId: deviceId) { urls in
+            constellation.sendEventToDevice(targetDeviceId: deviceId, e: .closeTabs(urls: urls))
+        }
+
+        // mark tab commands as sent
+        self.tabs.setPendingCommandsSent(deviceId: deviceId)
     }
 
     public func setCommandArrived() {
@@ -603,16 +632,26 @@ open class BrowserProfile: Profile {
         if let accountManager = self.rustFxA.accountManager {
             accountManager.deviceConstellation()?.pollForCommands { commands in
                 guard let commands = try? commands.get() else { return }
-                let urls = commands.compactMap { command in
+
+                var receivedTabURLs: [URL] = []
+                var closedTabURLs: [URL] = []
+                for command in commands {
                     switch command {
                     case .tabReceived(_, let tabData):
-                        let url = tabData.entries.last?.url ?? ""
-                        return URL(string: url, invalidCharacters: false)
-                    default:
-                        return nil
+                        if let urlString = tabData.entries.last?.url, let url = URL(string: urlString) {
+                            receivedTabURLs.append(url)
+                        }
+                    case .tabsClosed(sender: _, let closeTabPayload):
+                        closedTabURLs.append(contentsOf: closeTabPayload.urls.compactMap { URL(string: $0) })
                     }
                 }
-                self.sendTabDelegate?.openSendTabs(for: urls)
+                if !receivedTabURLs.isEmpty {
+                    self.fxaCommandsDelegate?.openSendTabs(for: receivedTabURLs)
+                }
+
+                if !closedTabURLs.isEmpty {
+                    self.fxaCommandsDelegate?.closeTabs(for: closedTabURLs)
+                }
             }
         }
     }

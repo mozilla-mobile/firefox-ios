@@ -47,7 +47,8 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
         self.viewModel = PasswordManagerViewModel(
             profile: profile,
             searchController: searchController,
-            theme: themeManager.getCurrentTheme(for: windowUUID)
+            theme: themeManager.getCurrentTheme(for: windowUUID),
+            loginProvider: profile.logins
         )
         self.loginDataSource = LoginDataSource(viewModel: viewModel)
         self.themeManager = themeManager
@@ -145,7 +146,7 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
 
         selectionButton.setTitleColor(theme.colors.textInverted, for: [])
         selectionButton.backgroundColor = theme.colors.actionPrimary
-        deleteButton.tintColor = theme.colors.textWarning
+        deleteButton.tintColor = theme.colors.textCritical
 
         // Search bar text and placeholder color
         let searchTextField = searchController.searchBar.searchTextField

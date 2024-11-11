@@ -27,7 +27,7 @@ final class SiteImageCacheTests: XCTestCase {
         let cacheKey = "www.example.com"
 
         do {
-            _ = try await subject.getImageFromCache(cacheKey: cacheKey, type: .favicon)
+            _ = try await subject.getImage(cacheKey: cacheKey, type: .favicon)
         } catch let error as SiteImageError {
             XCTAssertEqual(imageCache.capturedRetrievalKey, "www.example.com-favicon")
             XCTAssertEqual("Unable to retrieve image from cache with reason: The request is empty or `nil`.",
@@ -42,7 +42,7 @@ final class SiteImageCacheTests: XCTestCase {
         let cacheKey = "www.example.com"
 
         do {
-            _ = try await subject.getImageFromCache(cacheKey: cacheKey, type: .heroImage)
+            _ = try await subject.getImage(cacheKey: cacheKey, type: .heroImage)
         } catch let error as SiteImageError {
             XCTAssertEqual(imageCache.capturedRetrievalKey, "www.example.com-heroImage")
             XCTAssertEqual("Unable to retrieve image from cache with reason: Image was nil",
@@ -59,7 +59,7 @@ final class SiteImageCacheTests: XCTestCase {
         let cacheKey = "www.example2.com"
 
         do {
-            let result = try await subject.getImageFromCache(cacheKey: cacheKey, type: .favicon)
+            let result = try await subject.getImage(cacheKey: cacheKey, type: .favicon)
             XCTAssertEqual(imageCache.capturedRetrievalKey, "www.example2.com-favicon")
             XCTAssertEqual(expectedImage, result)
         } catch {
@@ -81,7 +81,7 @@ final class SiteImageCacheTests: XCTestCase {
 
     func testClearCache() async {
         let subject = DefaultSiteImageCache(imageCache: imageCache)
-        await subject.clearCache()
+        await subject.clear()
 
         XCTAssertEqual(imageCache.clearCacheCalledCount, 1)
     }
@@ -95,7 +95,7 @@ private class MockDefaultImageCache: DefaultImageCache {
     var capturedStorageKey: String?
     var clearCacheCalledCount = 0
 
-    func retrieveImage(forKey key: String) async throws -> UIImage? {
+    func retrieve(forKey key: String) async throws -> UIImage? {
         capturedRetrievalKey = key
         if let error = retrievalError {
             throw error
@@ -109,7 +109,7 @@ private class MockDefaultImageCache: DefaultImageCache {
         capturedStorageKey = key
     }
 
-    func clearCache() {
+    func clear() {
         clearCacheCalledCount += 1
     }
 }

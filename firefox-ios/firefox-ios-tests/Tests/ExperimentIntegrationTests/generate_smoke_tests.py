@@ -38,8 +38,11 @@ def search_for_smoke_tests(tests_name):
         test_names.append(code[locations[0] + 1].strip(":"))
 
         for location in locations:
-            test_name = code[location + 2]
-            test_names.append(test_name)
+            for count in range(5): # loop forward to get 'func' location and then test name
+                if "func" in code[location + count]:
+                    test_name = code[location + count + 1]
+                    test_names.append(test_name)
+                    break
     return test_names
 
 
@@ -100,5 +103,8 @@ if __name__ == "__main__":
             tests = yaml.safe_load(file)
             test_modules = [test for test in tests.get("smoke_tests")]
     for item in test_modules:
-        tests = search_for_smoke_tests(item)
+        try: # incase a test file gets deleted this will alllow the program to run
+            tests = search_for_smoke_tests(item)
+        except TypeError:
+            continue
         generate_smoke_tests(tests)

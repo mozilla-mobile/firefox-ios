@@ -9,7 +9,6 @@ import Common
 protocol JumpBackInDataAdaptor: Actor {
     func hasSyncedTabFeatureEnabled() -> Bool
     func getRecentTabData() -> [Tab]
-    func getGroupsData() -> [ASGroup<Tab>]?
     func getSyncedTabData() -> JumpBackInSyncedTab?
 }
 
@@ -29,8 +28,11 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     private var hasSyncAccount: Bool?
 
     private let mainQueue: DispatchQueueInterface
-
     weak var delegate: JumpBackInDelegate?
+
+    private var windowUUID: WindowUUID {
+        return tabManager.windowUUID
+    }
 
     // MARK: Init
     init(profile: Profile,
@@ -76,10 +78,6 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
         return recentTabs
     }
 
-    func getGroupsData() -> [ASGroup<Tab>]? {
-        return recentGroups
-    }
-
     func getSyncedTabData() -> JumpBackInSyncedTab? {
         return mostRecentSyncedTab
     }
@@ -98,41 +96,30 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     private func updateTabsData() async {
         await withTaskGroup(of: Void.self) { group in
             group.addTask {
-                await self.setRecentTabs(recentTabs: await self.updateRecentTabs())
-                await self.delegate?.didLoadNewData()
+                let recentTabs = await self.updateRecentTabs()
+                await self.setRecentTabs(recentTabs: recentTabs)
             }
             group.addTask {
                 if let remoteTabs = await self.updateRemoteTabs() {
                     await self.createMostRecentSyncedTab(from: remoteTabs)
-                    await self.delegate?.didLoadNewData()
                 }
             }
-            group.addTask {
-                await self.setRecentGroups(recentGroups: await self.updateGroupsData())
-                await self.delegate?.didLoadNewData()
-            }
         }
+        delegate?.didLoadNewData()
     }
 
     private func setRecentTabs(recentTabs: [Tab]) {
         self.recentTabs = recentTabs
     }
 
-    private func setRecentGroups(recentGroups: [ASGroup<Tab>]?) {
-        self.recentGroups = recentGroups
-    }
-
     private func updateRecentTabs() async -> [Tab] {
         // Recent tabs need to be accessed from .main otherwise value isn't proper
         return await withCheckedContinuation { continuation in
-            mainQueue.async {
-                continuation.resume(returning: self.tabManager.recentlyAccessedNormalTabs)
+            ensureMainThread {
+                let recentTabs = self.tabManager.recentlyAccessedNormalTabs
+                continuation.resume(returning: recentTabs)
             }
         }
-    }
-
-    private func updateGroupsData() async -> [ASGroup<Tab>]? {
-        return nil
     }
 
     // MARK: Synced tab data
@@ -205,7 +192,7 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
                     .TabsTrayDidSelectHomeTab,
                     .TopTabsTabClosed:
                 guard let uuid = notification.windowUUID,
-                      uuid == tabManager.windowUUID
+                    await uuid == windowUUID
                 else { return }
                 await updateTabsData()
             case .ProfileDidFinishSyncing,

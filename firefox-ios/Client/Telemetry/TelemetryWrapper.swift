@@ -96,7 +96,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         // If there's no default search engine, (there's not, at this point), we will
         // send "unavailable" in order not to send `null`, but still differentiate
         // the event in the startup sequence.
-        let defaultEngine = profile.searchEngines.defaultEngine
+        let defaultEngine = profile.searchEnginesManager.defaultEngine
         GleanMetrics.Search.defaultEngine.set(defaultEngine?.engineID ?? "unavailable")
 
         // Get the legacy telemetry ID and record it in Glean for the deletion-request ping
@@ -104,8 +104,14 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
             GleanMetrics.LegacyIds.clientId.set(uuid)
         }
 
+        glean.registerPings(GleanMetrics.Pings.shared)
+
         // Initialize Glean telemetry
-        let gleanConfig = Configuration(channel: AppConstants.buildChannel.rawValue, logLevel: .off)
+        let gleanConfig = Configuration(
+            channel: AppConstants.buildChannel.rawValue,
+            logLevel: .off,
+            pingSchedule: ["baseline": ["dau-reporting"]]
+        )
         glean.initialize(uploadEnabled: sendUsageData,
                          configuration: gleanConfig,
                          buildInfo: GleanMetrics.GleanBuild.info)
@@ -155,7 +161,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         }
 
         // Record default search engine setting
-        let defaultEngine = profile.searchEngines.defaultEngine
+        let defaultEngine = profile.searchEnginesManager.defaultEngine
         GleanMetrics.Search.defaultEngine.set(defaultEngine?.engineID ?? "custom")
 
         // Record the open tab count
@@ -207,6 +213,13 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
             GleanMetrics.Preferences.showClipboardBar.set(showClipboardBar)
         } else {
             GleanMetrics.Preferences.showClipboardBar.set(false)
+        }
+
+        // Close private tabs
+        if let closePrivateTabs = prefs.boolForKey(PrefsKeys.Settings.closePrivateTabs) {
+            GleanMetrics.Preferences.closePrivateTabs.set(closePrivateTabs)
+        } else {
+            GleanMetrics.Preferences.closePrivateTabs.set(false)
         }
 
         // Tracking protection - enabled
@@ -305,8 +318,6 @@ extension TelemetryWrapper {
         case switchControl = "switch-control"
         case dynamicTextSize = "dynamic-text-size"
         case error = "error"
-        case engagement = "engagement"
-        case abandonment = "abandonment"
     }
 
     public enum EventObject: String {
@@ -631,6 +642,7 @@ extension TelemetryWrapper {
         case crashedLastLaunch = "crashed_last_launch"
         case cpuException = "cpu_exception"
         case hangException = "hang-exception"
+        case tabLossDetected = "tab_loss_detected"
         case fxSuggestionTelemetryInfo = "fx-suggestion-telemetry-info"
         case fxSuggestionPosition = "fx-suggestion-position"
         case fxSuggestionDidTap = "fx-suggestion-did-tap"
@@ -1920,10 +1932,6 @@ extension TelemetryWrapper {
             GleanMetrics.Awesomebar.shareButtonTapped.record()
         case (.action, .drag, .locationBar, _, _):
             GleanMetrics.Awesomebar.dragLocationBar.record()
-        case (.action, .engagement, .locationBar, _, _):
-            GleanMetrics.Awesomebar.engagement.record()
-        case (.action, .abandonment, .locationBar, _, _):
-            GleanMetrics.Awesomebar.abandonment.record()
         // MARK: - GleanPlumb Messaging
         case (.information, .view, .messaging, .messageImpression, let extras):
             guard let messageSurface = extras?[EventExtraKey.messageSurface.rawValue] as? String,
@@ -2010,6 +2018,8 @@ extension TelemetryWrapper {
             }
         case(.information, .error, .app, .crashedLastLaunch, _):
             GleanMetrics.AppErrors.crashedLastLaunch.record()
+        case(.information, .error, .app, .tabLossDetected, _):
+            GleanMetrics.AppErrors.tabLossDetected.record()
         case(.information, .error, .app, .cpuException, let extras):
             if let quantity = extras?[EventExtraKey.size.rawValue] as? Int32 {
                 let properties = GleanMetrics.AppErrors.CpuExceptionExtra(size: quantity)

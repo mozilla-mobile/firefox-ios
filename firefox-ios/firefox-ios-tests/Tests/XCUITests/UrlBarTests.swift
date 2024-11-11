@@ -28,33 +28,33 @@ let iPhoneSearchIcon = XCUIApplication()
     .children(matching: .image).element
 
 class UrlBarTests: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306888
+    // https://mozilla.testrail.io/index.php?/cases/view/2306888
     func testNewTabUrlBar() {
         // Visit any website and select the URL bar
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
         waitUntilPageLoad()
-        app.textFields["url"].tap()
+        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
         // The keyboard is brought up.
-        let addressBar = app.textFields["address"]
-        XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+        XCTAssertTrue(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
         // Scroll on the page
         app.swipeUp()
         // The keyboard is dismissed
-        XCTAssertFalse(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? true)
+        XCTAssertFalse(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? true)
         // Select the tab tray and add a new tab
         navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         // The URL bar is empty on the new tab
-        XCTAssertEqual(app.textFields["url"].value as! String, "Search or enter address")
+        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+        XCTAssertEqual(url.value as! String, "Search or enter address")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306887
+    // https://mozilla.testrail.io/index.php?/cases/view/2306887
     func testSearchEngineLogo() {
         tapUrlBarValidateKeyboardAndIcon()
         // Type a search term and hit "go"
         typeSearchTermAndHitGo(searchTerm: "Firefox")
         // The search is conducted correctly trough the default search engine
-        mozWaitForValueContains(app.textFields["url"], value: "google")
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "google")
         // Add a custom search engine and add it as default search engine
         navigator.goto(SearchSettings)
         let defaultSearchEngine = app.tables.cells.element(boundBy: 0)
@@ -68,7 +68,7 @@ class UrlBarTests: BaseTestCase {
         tapUrlBarValidateKeyboardAndIcon()
         typeSearchTermAndHitGo(searchTerm: "Firefox")
         // The search is conducted correctly trough the default search engine
-        mozWaitForValueContains(app.textFields["url"], value: "bing")
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "bing")
     }
 
     private func tapUrlBarValidateKeyboardAndIcon() {
@@ -76,23 +76,21 @@ class UrlBarTests: BaseTestCase {
         waitForTabsButton()
         app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].tap()
         // The keyboard pops up and the default search icon is correctly displayed in the URL bar
-        let addressBar = app.textFields["address"]
-        XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+        XCTAssertTrue(urlBarAddress.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
         let keyboardCount = app.keyboards.count
         XCTAssert(keyboardCount > 0, "The keyboard is not shown")
         if iPad() {
             XCTAssertTrue(iPadSearchIcon.exists)
-            XCTAssertTrue(iPadSearchIcon.isLeftOf(rightElement: addressBar))
+            XCTAssertTrue(iPadSearchIcon.isLeftOf(rightElement: urlBarAddress))
         } else {
             XCTAssertTrue(iPhoneSearchIcon.exists)
-            XCTAssertTrue(iPhoneSearchIcon.isLeftOf(rightElement: addressBar))
+            XCTAssertTrue(iPhoneSearchIcon.isLeftOf(rightElement: urlBarAddress))
         }
     }
 
     private func typeSearchTermAndHitGo(searchTerm: String) {
-        app.textFields["address"].typeText(searchTerm)
+        urlBarAddress.typeText(searchTerm)
         waitUntilPageLoad()
-        mozWaitForElementToExist(app.buttons["Go"])
-        app.buttons["Go"].tap()
+        app.buttons["Go"].waitAndTap()
     }
 }

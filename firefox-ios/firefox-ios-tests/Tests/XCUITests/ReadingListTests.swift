@@ -6,17 +6,22 @@ import Common
 import XCTest
 
 class ReadingListTests: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2287278f
+    // https://mozilla.testrail.io/index.php?/cases/view/2287278f
     // Smoketest
     func testLoadReaderContent() {
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
-        navigator.goto(BrowserTab)
+        waitUntilPageLoad()
+        navigator.nowAt(BrowserTab)
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
-        mozWaitForElementToExist(app.buttons["Reader View"], timeout: TIMEOUT)
-        app.buttons["Reader View"].tap()
+        mozWaitForElementToExist(app.buttons["Reader View"])
+        app.buttons["Reader View"].tapOnApp()
         // The settings of reader view are shown as well as the content of the web site
-        mozWaitForElementToExist(app.buttons["Display Settings"], timeout: TIMEOUT)
-        XCTAssertTrue(app.webViews.staticTexts["The Book of Mozilla"].exists)
+        waitForElementsToExist(
+            [
+                app.buttons["Display Settings"],
+                app.webViews.staticTexts["The Book of Mozilla"]
+            ]
+        )
     }
 
     private func checkReadingListNumberOfItems(items: Int) {
@@ -25,7 +30,7 @@ class ReadingListTests: BaseTestCase {
         XCTAssertEqual(list, items, "The number of items in the reading table is not correct")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306991
+    // https://mozilla.testrail.io/index.php?/cases/view/2306991
     // Smoketest
     func testAddToReadingList() {
         navigator.nowAt(NewTabScreen)
@@ -44,16 +49,15 @@ class ReadingListTests: BaseTestCase {
         // Check that there is one item
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
         mozWaitForElementToExist(savedToReadingList)
-        XCTAssertTrue(savedToReadingList.exists)
         checkReadingListNumberOfItems(items: 1)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306995
+    // https://mozilla.testrail.io/index.php?/cases/view/2306995
     func testAddToReadingListPrivateMode() {
         navigator.nowAt(NewTabScreen)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
@@ -71,14 +75,13 @@ class ReadingListTests: BaseTestCase {
         // Check that there is one item
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
         mozWaitForElementToExist(savedToReadingList)
-        XCTAssertTrue(savedToReadingList.exists)
         checkReadingListNumberOfItems(items: 1)
         app.buttons["Done"].tap()
         updateScreenGraph()
         // Check that it appears on regular mode
         navigator.toggleOff(userState.isPrivate, withAction: Action.ToggleRegularMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         navigator.performAction(Action.CloseURLBarOpen)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
@@ -86,7 +89,7 @@ class ReadingListTests: BaseTestCase {
         checkReadingListNumberOfItems(items: 1)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306992
+    // https://mozilla.testrail.io/index.php?/cases/view/2306992
     func testMarkAsReadAndUreadFromReaderView() {
         addContentToReaderView()
 
@@ -99,12 +102,11 @@ class ReadingListTests: BaseTestCase {
         mozWaitForElementToExist(app.buttons["Mark as Read"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306996
+    // https://mozilla.testrail.io/index.php?/cases/view/2306996
     func testRemoveFromReadingView() {
         addContentToReaderView()
         // Once the content has been added, remove it
-        mozWaitForElementToExist(app.buttons["Remove from Reading List"])
-        app.buttons["Remove from Reading List"].tap()
+        app.buttons["Remove from Reading List"].waitAndTap()
 
         // Check that instead of the remove icon now it is shown the add to read list
         mozWaitForElementToExist(app.buttons["Add to Reading List"])
@@ -116,7 +118,7 @@ class ReadingListTests: BaseTestCase {
         checkReadingListNumberOfItems(items: 0)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306997
+    // https://mozilla.testrail.io/index.php?/cases/view/2306997
     func testMarkAsReadAndUnreadFromReadingList() throws {
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
@@ -125,17 +127,17 @@ class ReadingListTests: BaseTestCase {
         mozWaitForElementToExist(app.tables["ReadingTable"])
         // Check that there is one item
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
-        XCTAssertTrue(savedToReadingList.exists)
+        mozWaitForElementToExist(savedToReadingList)
 
         // Mark it as read/unread
         savedToReadingList.swipeLeft()
-        mozWaitForElementToExist(app.tables.cells.buttons.staticTexts["Mark as  Read"], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.tables.cells.buttons.staticTexts["Mark as  Read"])
         app.tables["ReadingTable"].cells.buttons.element(boundBy: 1).tap()
         savedToReadingList.swipeLeft()
         mozWaitForElementToExist(app.tables.cells.buttons.staticTexts["Mark as  Unread"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306998
+    // https://mozilla.testrail.io/index.php?/cases/view/2306998
     func testRemoveFromReadingList() {
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
@@ -146,15 +148,14 @@ class ReadingListTests: BaseTestCase {
 
         // Remove the item from reading list
         savedToReadingList.swipeLeft()
-        mozWaitForElementToExist(app.buttons["Remove"])
-        app.buttons["Remove"].tap()
-        XCTAssertFalse(savedToReadingList.exists)
+        app.buttons["Remove"].waitAndTap()
+        mozWaitForElementToNotExist(savedToReadingList)
 
         // Reader list view should be empty
         checkReadingListNumberOfItems(items: 0)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306999
+    // https://mozilla.testrail.io/index.php?/cases/view/2306999
     func testAddToReadingListFromBrowserTabMenu() {
         navigator.nowAt(NewTabScreen)
         // First time Reading list is empty
@@ -172,7 +173,7 @@ class ReadingListTests: BaseTestCase {
         checkReadingListNumberOfItems(items: 1)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307000
+    // https://mozilla.testrail.io/index.php?/cases/view/2307000
     func testOpenSavedForReadingLongPressInNewTab() {
         let numTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual(numTab, "1")
@@ -197,7 +198,7 @@ class ReadingListTests: BaseTestCase {
 //        XCTAssertEqual(numTabAfter, "2")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307001
+    // https://mozilla.testrail.io/index.php?/cases/view/2307001
     func testRemoveSavedForReadingLongPress() {
         // Add item to Reading List
         addContentToReaderView()
@@ -212,10 +213,9 @@ class ReadingListTests: BaseTestCase {
 
         // Verify the item has been removed
         mozWaitForElementToNotExist(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"])
-        XCTAssertFalse(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"].exists)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306893
+    // https://mozilla.testrail.io/index.php?/cases/view/2306893
     // Smoketest
     func testReadingList() {
         navigator.nowAt(NewTabScreen)
@@ -224,9 +224,13 @@ class ReadingListTests: BaseTestCase {
         let emptyReadingList1 = AccessibilityIdentifiers.LibraryPanels.ReadingListPanel.emptyReadingList1
         let emptyReadingList2 = AccessibilityIdentifiers.LibraryPanels.ReadingListPanel.emptyReadingList2
         let emptyReadingList3 = AccessibilityIdentifiers.LibraryPanels.ReadingListPanel.emptyReadingList3
-        mozWaitForElementToExist(app.staticTexts[emptyReadingList1])
-        mozWaitForElementToExist(app.staticTexts[emptyReadingList2])
-        mozWaitForElementToExist(app.staticTexts[emptyReadingList3])
+        waitForElementsToExist(
+            [
+                app.staticTexts[emptyReadingList1],
+                app.staticTexts[emptyReadingList2],
+                app.staticTexts[emptyReadingList3]
+            ]
+        )
         app.buttons["Done"].tap()
         // Add item to reading list and check that it appears
         addContentToReaderView()
@@ -237,8 +241,11 @@ class ReadingListTests: BaseTestCase {
         // Tap on an article
         savedToReadingList.tap()
         // The article is displayed in Reader View
-        mozWaitForElementToExist(app.buttons["Reader View"], timeout: TIMEOUT)
-        XCTAssertTrue(app.buttons["Reader View"].isSelected)
+        mozWaitForElementToExist(app.buttons["Reader View"])
+        // iOS 18 only: Reader View icon is enabled but is not selected.
+        if #unavailable(iOS 18) {
+            XCTAssertTrue(app.buttons["Reader View"].isSelected)
+        }
         XCTAssertTrue(app.buttons["Reader View"].isEnabled)
         app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
         navigator.nowAt(NewTabScreen)
@@ -248,8 +255,12 @@ class ReadingListTests: BaseTestCase {
         mozWaitForElementToExist(app.tables["ReadingTable"].cells.elementContainingText("The Book of Mozilla, read"))
         savedToReadingList.swipeLeft()
         // Two options are revealed
-        mozWaitForElementToExist(app.tables.cells.buttons.staticTexts["Mark as  Unread"], timeout: TIMEOUT)
-        mozWaitForElementToExist(app.tables.cells.buttons.staticTexts["Remove"], timeout: TIMEOUT)
+        waitForElementsToExist(
+            [
+                app.tables.cells.buttons.staticTexts["Mark as  Unread"],
+                app.tables.cells.buttons.staticTexts["Remove"]
+            ]
+        )
         // Tap 'Mark as Unread'
         app.tables.cells.buttons.staticTexts["Mark as  Unread"].tap(force: true)
         // The article has been marked as Unread
@@ -259,18 +270,21 @@ class ReadingListTests: BaseTestCase {
         app.tables.cells.buttons.staticTexts["Remove"].tap(force: true)
         // The article is deleted from the Reading List
         checkReadingListNumberOfItems(items: 0)
-        mozWaitForElementToExist(app.staticTexts[emptyReadingList1])
-        mozWaitForElementToExist(app.staticTexts[emptyReadingList2])
-        mozWaitForElementToExist(app.staticTexts[emptyReadingList3])
+        waitForElementsToExist(
+            [
+                app.staticTexts[emptyReadingList1],
+                app.staticTexts[emptyReadingList2],
+                app.staticTexts[emptyReadingList3]
+            ]
+        )
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306993
+    // https://mozilla.testrail.io/index.php?/cases/view/2306993
     // Smoketest
     func testAddToReaderListOptions() {
         addContentToReaderView()
         // Check that Settings layouts options are shown
-        mozWaitForElementToExist(app.buttons["ReaderModeBarView.settingsButton"], timeout: TIMEOUT)
-        app.buttons["ReaderModeBarView.settingsButton"].tap()
+        app.buttons["ReaderModeBarView.settingsButton"].waitAndTap()
         let layoutOptions = ["Light", "Sepia", "Dark", "Decrease text size", "Reset text size", "Increase text size",
                              "Remove from Reading List", "Mark as Read"]
         for option in layoutOptions {

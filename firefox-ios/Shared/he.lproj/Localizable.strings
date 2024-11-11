@@ -482,7 +482,7 @@
 "HomePanel.ContextMenu.Remove" = "הסרה";
 
 /* The title for the Remove Bookmark context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.RemoveBookmark" = "הסרה מהמועדפים";
+"HomePanel.ContextMenu.RemoveBookmark" = "הסרת סימנייה";
 
 /* The title for the Share context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.Share" = "שיתוף";
@@ -756,6 +756,9 @@
 
 /* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "היסטוריה";
+
+/* Label for the new private tab button in the menu page. Pressing this button opens a new private tab. */
+"Menu.NewPrivateTab.Label" = "לשונית פרטית חדשה";
 
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
 "Menu.NewTab.v99" = "לשונית חדשה";

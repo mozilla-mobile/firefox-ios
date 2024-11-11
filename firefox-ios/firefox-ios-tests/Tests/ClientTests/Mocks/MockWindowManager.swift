@@ -18,11 +18,6 @@ final class MockWindowManager: WindowManager {
 
     // MARK: - WindowManager Protocol
 
-    var activeWindow: WindowUUID {
-        get { wrappedManager.activeWindow }
-        set { wrappedManager.activeWindow = newValue }
-    }
-
     var windows: [WindowUUID: AppWindowInfo] {
         wrappedManager.windows
     }
@@ -47,8 +42,8 @@ final class MockWindowManager: WindowManager {
         wrappedManager.windowWillClose(uuid: uuid)
     }
 
-    func reserveNextAvailableWindowUUID() -> WindowUUID {
-        wrappedManager.reserveNextAvailableWindowUUID()
+    func reserveNextAvailableWindowUUID(isIpad: Bool) -> ReservedWindowUUID {
+        wrappedManager.reserveNextAvailableWindowUUID(isIpad: isIpad)
     }
 
     func postWindowEvent(event: WindowEvent, windowUUID: WindowUUID) {

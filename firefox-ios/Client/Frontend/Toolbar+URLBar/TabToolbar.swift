@@ -27,11 +27,12 @@ class TabToolbar: UIView, SearchBarLocationProvider {
                                                      imageMask: ImageIdentifiers.menuWarningMask)
 
     var helper: TabToolbarHelper?
+    var isMicrosurveyShown = false
     private let contentView = UIStackView()
 
     // MARK: - Initializers
     override private init(frame: CGRect) {
-        actionButtons = [backButton, forwardButton, multiStateButton, addNewTabButton, tabsButton, appMenuButton]
+        actionButtons = [backButton, forwardButton, multiStateButton, tabsButton, appMenuButton]
         super.init(frame: frame)
         setupAccessibility()
 
@@ -70,7 +71,6 @@ class TabToolbar: UIView, SearchBarLocationProvider {
         backButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.backButton
         forwardButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.forwardButton
         tabsButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.tabsButton
-        addNewTabButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.addNewTabButton
         appMenuButton.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.settingsMenuButton
         accessibilityNavigationStyle = .combined
         accessibilityLabel = .TabToolbarNavigationToolbarAccessibilityLabel
@@ -81,8 +81,9 @@ class TabToolbar: UIView, SearchBarLocationProvider {
     }
 
     override func draw(_ rect: CGRect) {
-        // No line when the search bar is on top of the toolbar
-        guard !isBottomSearchBar else { return }
+        // No line when the search bar or microsurvey is on top of the toolbar
+        // In terms of the microsurvey, by not having the border, it makes it difficult for websites to replicate the prompt.
+        guard !isBottomSearchBar && !isMicrosurveyShown else { return }
 
         if let context = UIGraphicsGetCurrentContext() {
             drawLine(context, start: .zero, end: CGPoint(x: frame.width, y: 0))

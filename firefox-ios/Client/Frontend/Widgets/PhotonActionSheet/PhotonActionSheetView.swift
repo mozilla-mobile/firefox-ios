@@ -110,7 +110,7 @@ class PhotonActionSheetView: UIView, UIGestureRecognizerDelegate, ThemeApplicabl
     }
 
     private lazy var tabsLabel: UILabel = .build { label in
-        label.font = UIFont.boldSystemFont(ofSize: UIConstants.DefaultChromeSmallSize)
+        label.font = FXFontStyles.Bold.caption2.systemFont()
     }
 
     lazy var bottomBorder: UIView = .build { _ in }

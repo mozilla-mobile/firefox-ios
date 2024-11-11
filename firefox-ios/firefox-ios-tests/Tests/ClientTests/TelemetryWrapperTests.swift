@@ -13,14 +13,15 @@ class TelemetryWrapperTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
         Glean.shared.resetGlean(clearStores: true)
         Experiments.events.clearEvents()
     }
 
     override func tearDown() {
-        super.tearDown()
-        Glean.shared.resetGlean(clearStores: true)
         Experiments.events.clearEvents()
+        DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     // MARK: - Bookmarks
@@ -770,6 +771,7 @@ class TelemetryWrapperTests: XCTestCase {
 
     func test_backgroundWallpaperMetric_themedWallpaperIsSent() {
         let profile = MockProfile()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         TelemetryWrapper.shared.setup(profile: profile)
 
         let themedWallpaper = Wallpaper(id: "amethyst",
@@ -1446,7 +1448,7 @@ class TelemetryWrapperTests: XCTestCase {
         )
     }
 
-    func test_syncLogin_NimbusIsCalled() throws {
+    func test_syncLogin_NimbusIsCalled() {
         XCTAssertFalse(
             try Experiments.createJexlHelper()!.evalJexl(
                 expression: "'sync.login_completed_view'|eventSum('Days', 1, 0) > 0"
@@ -1508,6 +1510,15 @@ class TelemetryWrapperTests: XCTestCase {
                                      extras: eventExtra)
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.AppErrors.hangException)
+    }
+
+    func test_error_tabLossDetectedIsCalled() {
+        TelemetryWrapper.recordEvent(category: .information,
+                                     method: .error,
+                                     object: .app,
+                                     value: .tabLossDetected)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.AppErrors.tabLossDetected)
     }
 
     // MARK: - RecordSearch

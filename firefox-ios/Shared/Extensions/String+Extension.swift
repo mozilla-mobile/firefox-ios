@@ -52,16 +52,6 @@ public extension String {
         return self.removingPercentEncoding
     }
 
-    /// Returns a new string made by removing the leading String characters contained
-    /// in a given character set.
-    func stringByTrimmingLeadingCharactersInSet(_ set: CharacterSet) -> String {
-        var trimmed = self
-        while trimmed.rangeOfCharacter(from: set)?.lowerBound == trimmed.startIndex {
-            trimmed.remove(at: trimmed.startIndex)
-        }
-        return trimmed
-    }
-
     /// Adds a newline at the closest space from the middle of a string.
     /// Example turning "Mark as Read" into "Mark as\n Read"
     func stringSplitWithNewline() -> String {
@@ -110,6 +100,21 @@ public extension String {
         let range = NSRange(location: 0, length: nsString.length)
         guard let match = regex.firstMatch(in: self, range: range) else { return nil }
         return nsString.substring(with: match.range(at: 1))
+    }
+
+    /// Returning a dictionary [String: String] from string format: "Key1<valueSeparator> Value1<keySeparator>, ..."
+    func getDictionary(keySeparator: Character = ",", valueSeparator: Character = "=") -> [String: String] {
+        var result = [String: String]()
+        let components = self.split(separator: keySeparator)
+        for component in components {
+            let parts = component.split(separator: valueSeparator, maxSplits: 1, omittingEmptySubsequences: false)
+            if parts.count == 2 {
+                let key = parts[0].trimmingCharacters(in: .whitespacesAndNewlines)
+                let value = parts[1].trimmingCharacters(in: .whitespacesAndNewlines)
+                result[key] = value
+            }
+        }
+        return result
     }
 
     // MARK: - Private

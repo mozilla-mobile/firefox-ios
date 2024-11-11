@@ -57,6 +57,7 @@ extension AppDelegate {
             queue: nil
         ) { notification in
             if let newState = notification.userInfo?["newState"] as? ConstellationState {
+                self.setPreferencesForSyncedAccount(for: newState)
                 if newState.localDevice?.pushEndpointExpired ?? false {
                     NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
                     // Our endpoint expired, we should check for missed messages
@@ -64,6 +65,15 @@ extension AppDelegate {
                 }
             }
         }
+    }
+
+    private func setPreferencesForSyncedAccount(for newState: ConstellationState) {
+        guard self.profile.hasSyncableAccount() else { return }
+        profile.prefs.setBool(true, forKey: PrefsKeys.Sync.signedInFxaAccount)
+        let remoteCount = newState.remoteDevices.count
+        // The additional +1 is to also add a count for the local device being used
+        let devicesCount = Int32(remoteCount + 1)
+        self.profile.prefs.setInt(devicesCount, forKey: PrefsKeys.Sync.numberOfSyncedDevices)
     }
 }
 
@@ -75,12 +85,23 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         let content = response.notification.request.content
 
         if content.categoryIdentifier == NotificationSurfaceManager.Constant.notificationCategoryId {
-           switch response.actionIdentifier {
-           case UNNotificationDismissActionIdentifier:
-               notificationSurfaceManager.didDismissNotification(content.userInfo)
-           default:
-               notificationSurfaceManager.didTapNotification(content.userInfo)
-           }
+            switch response.actionIdentifier {
+            case UNNotificationDismissActionIdentifier:
+                notificationSurfaceManager.didDismissNotification(content.userInfo)
+            default:
+                notificationSurfaceManager.didTapNotification(content.userInfo)
+            }
+        } else if content.categoryIdentifier == NotificationCloseTabs.notificationCategoryId {
+            switch response.actionIdentifier {
+            case UNNotificationDefaultActionIdentifier:
+                // Since the notification is coming from the background, we should give a little
+                // time to ensure we can show the recently closed tabs panel
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    NotificationCenter.default.post(name: .RemoteTabNotificationTapped, object: nil)
+                }
+            default:
+                break
+            }
         }
         // We don't poll for commands here because we do that once the application wakes up
         // The notification service ensures that when the application wakes up, the application will check

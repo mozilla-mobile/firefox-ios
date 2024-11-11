@@ -60,7 +60,11 @@ extension BrowserDB {
 extension BrowserDB {
     func getGUIDs(_ sql: String) -> [GUID] {
         func guidFactory(_ row: SDRow) -> GUID {
-            return row[0] as! GUID
+            guard let guid = row[0] as? GUID else {
+                XCTFail("Expected GUID for first element in row, but cast failed.")
+                return GUID()
+            }
+            return guid
         }
 
         guard let cursor = self.runQuery(sql, args: nil, factory: guidFactory).value.successValue else {
@@ -72,8 +76,17 @@ extension BrowserDB {
 
     func getPositionsForChildrenOfParent(_ parent: GUID, fromTable table: String) -> [GUID: Int] {
         let args: Args = [parent]
-        let factory: (SDRow) -> (GUID, Int) = {
-            return ($0["child"] as! GUID, $0["idx"] as! Int)
+        let factory: (SDRow) -> (GUID, Int) = { row in
+            guard let guid = row["child"] as? GUID else {
+                XCTFail("Expected GUID for key 'child', but cast failed.")
+                return (GUID(), 0)
+            }
+
+            guard let index = row["idx"] as? Int else {
+                XCTFail("Expected Int for key 'idx', but cast failed.")
+                return (guid, 0)
+            }
+            return (guid, index)
         }
         let cursor = self.runQuery("SELECT child, idx FROM \(table) WHERE parent = ?", args: args, factory: factory).value.successValue!
         return cursor.reduce([:], { (dict, pair) in

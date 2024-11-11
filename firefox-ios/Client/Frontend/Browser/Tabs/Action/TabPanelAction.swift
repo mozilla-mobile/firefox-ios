@@ -21,7 +21,7 @@ class TabPanelViewAction: Action {
     let toastType: ToastType?
     let shareSheetURL: URL?
 
-    init(panelType: TabTrayPanelType,
+    init(panelType: TabTrayPanelType?,
          isPrivateModeActive: Bool? = nil,
          urlRequest: URLRequest? = nil,
          tabUUID: TabUUID? = nil,
@@ -44,6 +44,7 @@ class TabPanelViewAction: Action {
 
 enum TabPanelViewActionType: ActionType {
     case tabPanelDidLoad
+    case tabPanelWillAppear
     case tabPanelDidAppear
     case addNewTab
     case closeTab
@@ -67,15 +68,18 @@ class TabPanelMiddlewareAction: Action {
     let tabDisplayModel: TabDisplayModel?
     let inactiveTabModels: [InactiveTabsModel]?
     let toastType: ToastType??
+    let scrollBehavior: TabScrollBehavior?
 
     init(tabDisplayModel: TabDisplayModel? = nil,
          inactiveTabModels: [InactiveTabsModel]? = nil,
          toastType: ToastType? = nil,
+         scrollBehavior: TabScrollBehavior? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.tabDisplayModel = tabDisplayModel
         self.inactiveTabModels = inactiveTabModels
         self.toastType = toastType
+        self.scrollBehavior = scrollBehavior
         super.init(windowUUID: windowUUID,
                    actionType: actionType)
     }
@@ -83,8 +87,10 @@ class TabPanelMiddlewareAction: Action {
 
 enum TabPanelMiddlewareActionType: ActionType {
     case didLoadTabPanel
+    case willAppearTabPanel
     case didChangeTabPanel
     case refreshTabs
     case refreshInactiveTabs
     case showToast
+    case scrollToTab
 }

@@ -10,7 +10,7 @@ struct AppState: StateType {
     let activeScreens: ActiveScreensState
 
     static let reducer: Reducer<Self> = { state, action in
-        AppState(activeScreens: ActiveScreensState.reducer(state.activeScreens, action))
+        return AppState(activeScreens: ActiveScreensState.reducer(state.activeScreens, action))
     }
 
     func screenState<S: ScreenState>(_ s: S.Type,
@@ -19,14 +19,21 @@ struct AppState: StateType {
         return activeScreens.screens
             .compactMap {
                 switch ($0, screen) {
-                case (.tabPeek(let state), .tabPeek): return state as? S
-                case (.themeSettings(let state), .themeSettings): return state as? S
-                case (.tabsTray(let state), .tabsTray): return state as? S
-                case (.tabsPanel(let state), .tabsPanel): return state as? S
-                case (.remoteTabsPanel(let state), .remoteTabsPanel): return state as? S
                 case (.browserViewController(let state), .browserViewController): return state as? S
+                case (.homepage(let state), .homepage): return state as? S
+                case (.mainMenu(let state), .mainMenu): return state as? S
+                case (.mainMenuDetails(let state), .mainMenuDetails): return state as? S
                 case (.microsurvey(let state), .microsurvey): return state as? S
+                case (.remoteTabsPanel(let state), .remoteTabsPanel): return state as? S
+                case (.tabsPanel(let state), .tabsPanel): return state as? S
+                case (.tabPeek(let state), .tabPeek): return state as? S
+                case (.tabsTray(let state), .tabsTray): return state as? S
+                case (.themeSettings(let state), .themeSettings): return state as? S
                 case (.toolbar(let state), .toolbar): return state as? S
+                case (.searchEngineSelection(let state), .searchEngineSelection): return state as? S
+                case (.trackingProtection(let state), .trackingProtection): return state as? S
+                case (.passwordGenerator(let state), .passwordGenerator): return state as? S
+                case (.nativeErrorPage(let state), .nativeErrorPage): return state as? S
                 default: return nil
                 }
             }.first(where: {
@@ -41,6 +48,10 @@ struct AppState: StateType {
                 return $0.windowUUID == expectedUUID
             })
     }
+
+    static func defaultState(from state: AppState) -> AppState {
+        return AppState(activeScreens: state.activeScreens)
+    }
 }
 
 extension AppState {
@@ -49,14 +60,32 @@ extension AppState {
     }
 }
 
+let middlewares = [
+    FeltPrivacyMiddleware().privacyManagerProvider,
+    MainMenuMiddleware().mainMenuProvider,
+    MicrosurveyMiddleware().microsurveyProvider,
+    MicrosurveyPromptMiddleware().microsurveyProvider,
+    RemoteTabsPanelMiddleware().remoteTabsPanelProvider,
+    TabManagerMiddleware().tabsPanelProvider,
+    ThemeManagerMiddleware().themeManagerProvider,
+    ToolbarMiddleware().toolbarProvider,
+    SearchEngineSelectionMiddleware().searchEngineSelectionProvider,
+    TopSitesMiddleware().topSitesProvider,
+    TrackingProtectionMiddleware().trackingProtectionProvider,
+    PasswordGeneratorMiddleware().passwordGeneratorProvider,
+    PocketMiddleware().pocketSectionProvider,
+    NativeErrorPageMiddleware().nativeErrorPageProvider
+]
+
+// In order for us to mock and test the middlewares easier,
+// we change the store to be instantiated as a variable.
+// For non testing builds, we leave the store as a constant.
+#if TESTING
+var store = Store(state: AppState(),
+                  reducer: AppState.reducer,
+                  middlewares: middlewares)
+#else
 let store = Store(state: AppState(),
                   reducer: AppState.reducer,
-                  middlewares: [
-                    FeltPrivacyMiddleware().privacyManagerProvider,
-                    ThemeManagerMiddleware().themeManagerProvider,
-                    TabManagerMiddleware().tabsPanelProvider,
-                    RemoteTabsPanelMiddleware().remoteTabsPanelProvider,
-                    ToolbarMiddleware().toolbarProvider,
-                    MicrosurveyPromptMiddleware().microsurveyProvider,
-                    MicrosurveyMiddleware().microsurveyProvider
-                  ])
+                  middlewares: middlewares)
+#endif

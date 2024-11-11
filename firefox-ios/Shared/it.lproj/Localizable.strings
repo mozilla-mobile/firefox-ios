@@ -757,6 +757,9 @@
 /* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "Cronologia";
 
+/* Label for the new private tab button in the menu page. Pressing this button opens a new private tab. */
+"Menu.NewPrivateTab.Label" = "Nuova scheda anonima";
+
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
 "Menu.NewTab.v99" = "Nuova scheda";
 
@@ -971,7 +974,7 @@
 "Remove" = "Elimina";
 
 /* Name for button removing current article from reading list in reader mode */
-"Remove from Reading List" = "Elimina da Elenco lettura";
+"Remove from Reading List" = "Rimuovi da Elenco lettura";
 
 /* Cancel button text shown in reopen-alert at home page. */
 "ReopenAlert.Actions.Cancel" = "Annulla";

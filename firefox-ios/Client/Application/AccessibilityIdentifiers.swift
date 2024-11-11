@@ -16,6 +16,7 @@ public struct AccessibilityIdentifiers {
     /// Used for toolbar/URL bar buttons since our classes are built that buttons can live in one or the other
     /// Using only those a11y identifiers for both ensures we have standard way to refer to buttons from iPad to iPhone
     struct Toolbar {
+        static let urlBarBorder = "TabToolbar.urlBarBorder"
         static let settingsMenuButton = "TabToolbar.menuButton"
         static let homeButton = "TabToolbar.homeButton"
         static let trackingProtection = "TabLocationView.trackingProtectionButton"
@@ -69,6 +70,98 @@ public struct AccessibilityIdentifiers {
 
     struct ContextualHints {
         static let actionButton = "ContextualHints.ActionButton"
+    }
+
+    struct MainMenu {
+        struct HeaderView {
+            static let mainButton = "MainMenu.MainButton"
+            static let closeButton = "MainMenu.CloseMenuButton"
+        }
+
+        struct NavigationHeaderView {
+            static let backButton = "MainMenu.BackButton"
+            static let closeButton = "MainMenu.CloseMenuButton"
+        }
+
+        static let mainMenu = "MainMenu.Menu"
+        static let newTab = "MainMenu.NewTab"
+        static let newPrivateTab = "MainMenu.NewPrivateTab"
+        static let switchToDesktopSite = "MainMenu.SwitchToDesktopSite"
+        static let findInPage = "MainMenu.FindInPage"
+        static let tools = "MainMenu.Tools"
+        static let save = "MainMenu.Save"
+        static let bookmarks = "MainMenu.Bookmarks"
+        static let history = "MainMenu.History"
+        static let downloads = "MainMenu.Downloads"
+        static let passwords = "MainMenu.Passwords"
+        static let getHelp = "MainMenu.GetHelp"
+        static let settings = "MainMenu.Settings"
+        static let whatsNew = "MainMenu.WhatsNew"
+        static let customizeHomepage = "MainMenu.CustomizeHomepage"
+        static let saveAsPDF = "MainMenu.SaveAsPDF"
+        static let saveToReadingList = "MainMenu.SaveToReadingList"
+        static let addToHomeScreen = "MainMenu.AddToHomeScreen"
+        static let addToShortcuts = "MainMenu.AddToShortcuts"
+        static let bookmarkThisPage = "MainMenu.BookmarkThisPage"
+        static let share = "MainMenu.Share"
+        static let print = "MainMenu.Print"
+        static let reportBrokenSite = "MainMenu.ReportBrokenSite"
+        static let readerView = "MainMenu.ReaderViewOn"
+        static let nightMode = "MainMenu.NightModeOn"
+        static let zoom = "MainMenu.Zoom"
+    }
+
+    struct UnifiedSearch {
+        struct BottomSheetRow {
+            static let engine = "UnifiedSearch.BottomSheetRow.Engine"
+            static let searchSettings = "UnifiedSearch.BottomSheetRow.SearchSettings"
+        }
+    }
+
+    struct EnhancedTrackingProtection {
+        struct MainScreen {
+            static let clearCookiesButton = "TrackingProtection.ClearCookiesButton"
+            static let trackingProtectionSettingsButton = "TrackingProtection.SettingsButton"
+            static let foxImage = "TrackingProtection.FoxStatusImage"
+            static let shieldImage = "TrackingProtection.ShieldImage"
+            static let lockImage = "TrackingProtection.LockImage"
+            static let arrowImage = "TrackingProtection.ArrowImage"
+            static let domainLabel = "TrackingProtection.DomainTitleLabel"
+            static let domainHeaderLabel = "TrackingProtection.DomainHeaderLabel"
+            static let statusTitleLabel = "TrackingProtection.ConnectionStatusTitleLabel"
+            static let statusBodyLabel = "TrackingProtection.ConnectionStatusBodyLabel"
+            static let trackersBlockedLabel = "TrackingProtection.TrackersBlockedLabel"
+            static let securityStatusLabel = "TrackingProtection.ConnectionSecurityStatusLabel"
+            static let toggleViewTitleLabel = "TrackingProtection.ToggleViewTitleLabel"
+            static let toggleViewBodyLabel = "TrackingProtection.ToggleViewBodyLabel"
+            static let closeButton = "TrackingProtection.CloseButton"
+            static let faviconImage = "TrackingProtection.FaviconImage"
+        }
+
+        struct DetailsScreen {
+            static let headerView = "TrackingProtectionDetails.HeaderView"
+            static let mainView = "TrackingProtectionDetails.MainView"
+            static let containerView = "TrackingProtectionDetails.BaseView"
+            static let connectionView = "TrackingProtectionDetails.ConnectionView"
+            static let certificatesButton = "TrackingProtectionDetails.CertificatesButton"
+        }
+
+        struct BlockedTrackers {
+            static let headerView = "BlockedTrackers.HeaderView"
+            static let mainView = "BlockedTrackers.MainView"
+            static let containerView = "BlockedTrackers.BaseView"
+            static let crossSiteTrackersView = "BlockedTrackers.CrossSiteTrackersView"
+            static let socialMediaTrackersView = "BlockedTrackers.SocialMediaTrackersView"
+            static let fingerprintersView = "BlockedTrackers.FingerprintersView"
+            static let crossSiteTrackersImage = "BlockedTrackers.CrossSiteTrackersImage"
+            static let socialMediaTrackersImage = "BlockedTrackers.SocialMediaTrackersImage"
+            static let fingerprintersImage = "BlockedTrackers.FingerprintersImage"
+            static let blockedTrackersLabel = "BlockedTrackers.BlockedTrackersLabel"
+        }
+
+        struct CertificatesScreen {
+            static let headerView = "CertificatesViewController.HeaderView"
+        }
     }
 
     struct FirefoxHomepage {
@@ -348,6 +441,7 @@ public struct AccessibilityIdentifiers {
         static let syncTabsButton = "syncTabsButtonTabTray"
         static let navBarSegmentedControl = "navBarTabTray"
         static let syncDataButton = "syncDataButton"
+        static let learnMoreButton = "learnMoreButton"
 
         struct InactiveTabs {
             static let headerLabel = "InactiveTabs.headerLabel"
@@ -374,6 +468,8 @@ public struct AccessibilityIdentifiers {
 
         struct BookmarksPanel {
             static let tableView = "Bookmarks List"
+            static let titleTextField = "BookmarkDetail.titleTextField"
+            static let urlTextField = "BookmarkDetail.urlTextField"
         }
 
         struct HistoryPanel {
@@ -467,6 +563,7 @@ public struct AccessibilityIdentifiers {
             static let fxaSignInButton = "EmailSignIn.button"
             static let qrButton = "QRCodeSignIn.button"
             static let qrScanFailedAlertOkButton = "qrCodeAlert.okButton"
+            static let signInButton = "Sign in"
         }
 
         struct Search {
@@ -538,6 +635,11 @@ public struct AccessibilityIdentifiers {
 
         struct Address {
             static let title = "AutofillAddress"
+
+            struct Addresses {
+                static let title = "Addresses"
+                static let addAddress = "Add address"
+            }
         }
 
         struct ConnectSetting {
@@ -570,6 +672,10 @@ public struct AccessibilityIdentifiers {
 
         struct ShowLink {
             static let title = "showLinkPreviews"
+        }
+
+        struct ClosePrivateTabs {
+            static let title = "ClosePrivateTabs"
         }
 
         struct SearchBar {
@@ -620,6 +726,12 @@ public struct AccessibilityIdentifiers {
 
         struct Tabs {
             static let title = "TabsSetting"
+
+            struct Customize {
+                static let title = "CUSTOMIZE TAB TRAY"
+                static let inactiveTabsSwitch = "Inactive Tabs"
+                static let doneButton = "Done"
+            }
         }
 
         struct Theme {
@@ -682,6 +794,7 @@ public struct AccessibilityIdentifiers {
         static let zoomPageZoomInButton = "ZoomPage.zoomInButton"
         static let zoomPageZoomOutButton = "ZoomPage.zoomOutButton"
         static let zoomPageZoomLevelLabel = "ZoomPage.zoomLevelLabel"
+        static let doneButton = "find.doneButton"
     }
 
     struct FindInPage {
@@ -702,6 +815,19 @@ public struct AccessibilityIdentifiers {
         static let addressCloseButton = "Autofill.addressCloseButton"
         static let creditCardCloseButton = "Autofill.creditCardCloseButton"
         static let loginCloseButton = "Autofill.loginCloseButton"
+    }
+
+    enum PasswordGenerator {
+        static let closeButton = "PasswordGenerator.closeButton"
+        static let headerLabel = "PasswordGenerator.headerLabel"
+        static let usePasswordButton = "PasswordGenerator.usePasswordButton"
+        static let headerImage = "PasswordGenerator.headerImage"
+        static let descriptionLabel = "PasswordGenerator.descriptionLabel"
+        static let passwordField = "PasswordGenerator.passwordField"
+        static let passwordRefreshButton = "PasswordGenerator.passwordRefreshButton"
+        static let passwordlabel = "PasswordGenerator.passwordLabel"
+        static let content = "PasswordGenerator.content"
+        static let header = "PasswordGenerator.header"
     }
 }
 // swiftlint:enable line_length

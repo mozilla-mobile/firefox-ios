@@ -21,11 +21,9 @@ curl ${BITRISE_STACK_INFO} | jq ' . | keys'
 ]
 '''
 pattern = 'osx-xcode-'
-version_name = 'ventura'
-patterns = [pattern, version_name]
+patterns = [pattern]
 BITRISE_YML = 'bitrise.yml'
 WORKFLOW = 'NewXcodeVersions'
-
 
 resp = requests.get(BITRISE_STACK_INFO)
 resp.raise_for_status()
@@ -41,36 +39,26 @@ def parse_semver(raw_str):
         return False
 
 
-def available_stacks():
+def default_stack():
     try:
         resp = requests.get(BITRISE_STACK_INFO)
         resp_json = resp.json()
-        return resp_json['available_stacks']
+        return resp_json['project_types_with_default_stacks']['ios']['default_stack']
     except HTTPError as http_error:
         print('An HTTP error has occurred: {http_error}')
     except Exception as err:
         print('An exception has occurred: {err}')
 
-
-def largest_version():
-    stacks = available_stacks()
-    for item in stacks:
-        # only look at XCode versions that aren't in beta
-        if stacks[item]['beta-tag'] != '': continue
-        # use the first version in the list that matches both platform and version
-        if all([x in item for x in patterns]): 
-            return '{0}.x'.format('.'.join(item.split('.')[0:2]))
-
 if __name__ == '__main__':
     '''
     STEPS
-    1. check bitrise API stack info for latest XCode version
+    1. check bitrise API stack info for the default stack version
     2. compare latest with current bitrise.yml stack version in repo
     3. if same exit, if not, continue
     4. modify bitrise.yml (update stack value)
     '''
 
-    largest_semver = largest_version()
+    largest_semver = default_stack().split(pattern)[1]
     tmp_file = 'tmp.yml'
 
     with open(BITRISE_YML, 'r') as infile:
@@ -84,7 +72,7 @@ if __name__ == '__main__':
         y = obj_yaml.load(infile)
 
         current_semver = y['workflows'][WORKFLOW]['meta']['bitrise.io']['stack']
-
+        
         # remove pattern prefix from current_semver to compare with largest
         current_semver = current_semver.split(pattern)[1]
 

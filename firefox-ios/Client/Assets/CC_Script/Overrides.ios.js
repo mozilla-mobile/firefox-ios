@@ -11,8 +11,10 @@ const ModuleOverrides = {
   "XPCOMUtils.sys.mjs": "Helpers.ios.mjs",
   "Region.sys.mjs": "Helpers.ios.mjs",
   "OSKeyStore.sys.mjs": "Helpers.ios.mjs",
+  "ContentDOMReference.sys.mjs": "Helpers.ios.mjs",
   "FormAutofill.sys.mjs": "FormAutofill.ios.sys.mjs",
   "EntryFile.sys.mjs": "FormAutofillChild.ios.sys.mjs",
+  "LoginHelper.sys.mjs": "EmptyModule.sys.mjs",
 };
 
 // We need this because not all webpack libraries used in iOS are ES Modules

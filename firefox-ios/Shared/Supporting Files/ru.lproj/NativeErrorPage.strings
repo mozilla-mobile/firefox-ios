@@ -1,0 +1,15 @@
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v131" = "Обновить";
+
+/* On error page, this is the description for generic error. */
+"NativeErrorPage.GenericError.Description.v131" = "Произошла ошибка SSL, и не удалось установить защищённое соединение с сервером.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v131" = "Будьте осторожны. Что-то выглядит неправильно.";
+
+/* On error page, this is the description for no internet connection. */
+"NativeErrorPage.NoInternetConnection.Description.v131" = "Попробуйте подключиться на другом устройстве. Проверьте ваш модем или маршрутизатор. Отключитесь и снова подключитесь к Wi-Fi.";
+
+/* On error page, this is the title for no internet connection */
+"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Похоже, есть проблема с вашим интернет-соединением.";
+

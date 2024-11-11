@@ -6,9 +6,32 @@ import UIKit
 import WebKit
 import SwiftUI
 import Common
+import Shared
 import struct MozillaAppServices.UpdatableAddressFields
 
-class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler, Themeable {
+class EditAddressViewController: UIViewController,
+                                 WKNavigationDelegate,
+                                 WKScriptMessageHandler,
+                                 Themeable,
+                                 KeyboardHelperDelegate {
+    private lazy var removeButton: RemoveAddressButton = {
+        let button = RemoveAddressButton()
+        button.setTitle(.Addresses.Settings.Edit.RemoveAddressButtonTitle, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addAction(
+            UIAction { [weak self] _ in self?.presentRemoveAddressAlert() },
+            for: .touchUpInside
+        )
+        return button
+    }()
+
+    private lazy var stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
+
     var model: AddressListViewModel
     private let logger: Logger
     var themeManager: ThemeManager
@@ -35,7 +58,9 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
     override func viewDidLoad() {
         super.viewDidLoad()
         setupWebView()
+        setupRemoveButton()
         listenForThemeChange(view)
+        KeyboardHelper.defaultHelper.addDelegate(self)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -44,17 +69,31 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
         self.evaluateJavaScript("resetForm();")
     }
 
+    private func setupRemoveButton() {
+        stackView.addArrangedSubview(removeButton)
+        removeButton.isHidden = true
+        removeButton.applyTheme(
+            theme: themeManager.getCurrentTheme(for: currentWindowUUID)
+        )
+        NSLayoutConstraint.activate([
+            removeButton.heightAnchor.constraint(equalToConstant: 44)
+        ])
+    }
+
     private func setupWebView() {
         guard let webView else { return }
-        self.view.addSubview(webView)
+        view.addSubview(stackView)
+        stackView.addArrangedSubview(webView)
+        stackView.isLayoutMarginsRelativeArrangement = true
         NSLayoutConstraint.activate([
-            webView.topAnchor.constraint(equalTo: view.topAnchor),
-            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
 
         model.toggleEditModeAction = { [weak self] isEditMode in
+            self?.removeButton.isHidden = !isEditMode
             self?.evaluateJavaScript("toggleEditMode(\(isEditMode));")
         }
 
@@ -87,23 +126,9 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
     private func getCurrentFormData(completion: @escaping (UpdatableAddressFields) -> Void) {
         guard let webView else { return }
         webView.evaluateJavaScript("getCurrentFormData();") { [weak self] result, error in
-            if let error = error {
-                self?.logger.log(
-                    "JavaScript execution error",
-                    level: .warning,
-                    category: .autofill,
-                    description: "JavaScript execution error: \(error.localizedDescription)"
-                )
-                return
-            }
-
-            guard let resultDict = result as? [String: Any] else {
-                self?.logger.log(
-                    "Result is nil or not a dictionary",
-                    level: .warning,
-                    category: .autofill,
-                    description: "Result is nil or not a dictionary"
-                )
+            guard let resultDict = self?.unwrapGetCurrentFormDataResult(result: result,
+                                                                        error: error,
+                                                                        logger: self?.logger) else {
                 return
             }
 
@@ -124,11 +149,35 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
         }
     }
 
+    private func unwrapGetCurrentFormDataResult(result: Any?, error: (any Error)?, logger: Logger?) -> [String: Any]? {
+        if let error {
+            logger?.log(
+                "JavaScript execution error",
+                level: .warning,
+                category: .autofill,
+                description: "JavaScript execution error: \(error.localizedDescription)"
+            )
+            return nil
+        }
+
+        guard let result = result as? [String: Any] else {
+            logger?.log(
+                "Result is nil or not a dictionary",
+                level: .warning,
+                category: .autofill,
+                description: "Result is nil or not a dictionary"
+            )
+            return nil
+        }
+
+        return result
+    }
+
     private func evaluateJavaScript(_ jsCode: String) {
         guard let webView else { return }
-        webView.evaluateJavaScript(jsCode) { result, error in
+        webView.evaluateJavaScript(jsCode) { [weak self] result, error in
             if let error = error {
-                self.logger.log(
+                self?.logger.log(
                     "JavaScript execution error",
                     level: .warning,
                     category: .autofill,
@@ -140,8 +189,46 @@ class EditAddressViewController: UIViewController, WKNavigationDelegate, WKScrip
 
     func applyTheme() {
         guard let currentWindowUUID else { return }
-        let isDarkTheme = themeManager.getCurrentTheme(for: currentWindowUUID).type == .dark
+        let theme = themeManager.getCurrentTheme(for: currentWindowUUID)
+        removeButton.applyTheme(theme: theme)
+        let isDarkTheme = theme.type == .dark
         evaluateJavaScript("setTheme(\(isDarkTheme));")
+    }
+
+    func presentRemoveAddressAlert() {
+        let alertController = UIAlertController(
+            title: String.Addresses.Settings.Edit.RemoveAddressTitle,
+            message: model.hasSyncableAccount ? String.Addresses.Settings.Edit.RemoveAddressMessage : nil,
+            preferredStyle: .alert
+        )
+
+        alertController.addAction(UIAlertAction(
+            title: String.Addresses.Settings.Edit.CancelButtonTitle,
+            style: .cancel,
+            handler: nil
+        ))
+
+        alertController.addAction(UIAlertAction(
+            title: String.Addresses.Settings.Edit.RemoveButtonTitle,
+            style: .destructive,
+            handler: { [weak self] _ in
+                self?.model.removeConfimationButtonTap()
+            }
+        ))
+
+        self.present(alertController, animated: true, completion: nil)
+    }
+
+    // MARK: - KeyboardHelperDelegate
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
+        let coveredHeight = state.intersectionHeightForView(view)
+        // Adjust stackView's bottom inset when the keyboard appears
+        stackView.layoutMargins.bottom = removeButton.isHidden ? 0 : coveredHeight
+    }
+
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
+        // Reset the bottom inset when the keyboard hides
+        stackView.layoutMargins.bottom = 0
     }
 }
 

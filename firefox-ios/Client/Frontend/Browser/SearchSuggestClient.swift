@@ -22,7 +22,7 @@ class SearchSuggestClient {
 
     fileprivate lazy var urlSession: URLSession = makeURLSession(
         userAgent: self.userAgent,
-        configuration: URLSessionConfiguration.ephemeral
+        configuration: URLSessionConfiguration.ephemeralMPTCP
     )
 
     init(searchEngine: OpenSearchEngine, userAgent: String) {
@@ -54,12 +54,7 @@ class SearchSuggestClient {
             guard let data = data,
                   validatedHTTPResponse(response, statusCode: 200..<300) != nil
             else {
-                let error = NSError(
-                    domain: SearchSuggestClientErrorDomain,
-                    code: SearchSuggestClientErrorInvalidResponse,
-                    userInfo: nil
-                )
-                callback(nil, error as NSError?)
+                self.handleInvalidResponseError(callback: callback)
                 return
             }
 
@@ -71,28 +66,27 @@ class SearchSuggestClient {
             // That is, an array of at least two elements: the search term and an array of suggestions.
 
             if array?.count ?? 0 < 2 {
-                let error = NSError(
-                    domain: SearchSuggestClientErrorDomain,
-                    code: SearchSuggestClientErrorInvalidResponse,
-                    userInfo: nil
-                )
-                callback(nil, error)
+                self.handleInvalidResponseError(callback: callback)
                 return
             }
 
             guard let suggestions = array?[1] as? [String] else {
-                let error = NSError(
-                    domain: SearchSuggestClientErrorDomain,
-                    code: SearchSuggestClientErrorInvalidResponse,
-                    userInfo: nil
-                )
-                callback(nil, error)
+                self.handleInvalidResponseError(callback: callback)
                 return
             }
 
             callback(suggestions, nil)
         }
         task?.resume()
+    }
+
+    private func handleInvalidResponseError(callback: @escaping (_ response: [String]?, _ error: NSError?) -> Void) {
+        let error = NSError(
+            domain: SearchSuggestClientErrorDomain,
+            code: SearchSuggestClientErrorInvalidResponse,
+            userInfo: nil
+        )
+        callback(nil, error)
     }
 
     func cancelPendingRequest() {

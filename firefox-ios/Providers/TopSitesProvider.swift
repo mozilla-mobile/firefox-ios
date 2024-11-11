@@ -71,7 +71,7 @@ class TopSitesProviderImplementation: TopSitesProvider {
     }
 
     func defaultTopSites(_ prefs: Prefs) -> [Site] {
-        let suggested = SuggestedSites.asArray()
+        let suggested = DefaultSuggestedSites.defaultSites()
         let deleted = prefs.arrayForKey(defaultSuggestedSitesKey) as? [String] ?? []
         return suggested.filter({ deleted.firstIndex(of: $0.url) == .none })
     }
@@ -129,7 +129,7 @@ private extension TopSitesProviderImplementation {
         // Fetch the default sites
         let defaultSites = defaultTopSites(prefs)
         // Create PinnedSite objects. Used by the view layer to tell topsites apart
-        let pinnedSites: [Site] = pinnedSites.map({ PinnedSite(site: $0) })
+        let pinnedSites: [Site] = pinnedSites.map({ PinnedSite(site: $0, faviconResource: nil) })
         // Merge default topsites with a user's topsites.
         let mergedSites = sites.union(defaultSites, f: unionOnURL)
         // Filter out duplicates in merged sites, but do not remove duplicates within pinned sites

@@ -25,8 +25,8 @@ extension ContileProviderInterface {
 /// `Contile` is short for contextual tiles. This provider returns data that is used in
 /// Shortcuts (Top Sites) section on the Firefox home page.
 class ContileProvider: ContileProviderInterface, URLCaching, FeatureFlaggable {
-    private static let contileProdResourceEndpoint = "https://contile.services.mozilla.com/v1/tiles"
-    static let contileStagingResourceEndpoint = "https://contile-stage.topsites.nonprod.cloudops.mozgcp.net/v1/tiles"
+    private static let contileProdResourceEndpoint = "https://ads.mozilla.org/v1/tiles"
+    static let contileStagingResourceEndpoint = "https://ads.allizom.org/v1/tiles"
 
     var urlCache: URLCache
     private var logger: Logger
@@ -35,7 +35,7 @@ class ContileProvider: ContileProviderInterface, URLCaching, FeatureFlaggable {
     init(
         networking: ContileNetworking = DefaultContileNetwork(
             with: makeURLSession(userAgent: UserAgent.mobileUserAgent(),
-                                 configuration: URLSessionConfiguration.default)),
+                                 configuration: URLSessionConfiguration.defaultMPTCP)),
         urlCache: URLCache = URLCache.shared,
         logger: Logger = DefaultLogger.shared
     ) {
@@ -52,7 +52,7 @@ class ContileProvider: ContileProviderInterface, URLCaching, FeatureFlaggable {
         guard let resourceEndpoint = resourceEndpoint else {
             logger.log("The Contile resource URL is invalid: \(String(describing: resourceEndpoint))",
                        level: .warning,
-                       category: .homepage)
+                       category: .legacyHomepage)
             completion(.failure(Error.noDataAvailable))
             return
         }
@@ -96,7 +96,7 @@ class ContileProvider: ContileProviderInterface, URLCaching, FeatureFlaggable {
         } catch let error {
             self.logger.log("Unable to parse with error: \(error)",
                             level: .warning,
-                            category: .homepage)
+                            category: .legacyHomepage)
             completion(.failure(Error.noDataAvailable))
         }
     }

@@ -44,7 +44,7 @@ extension BrowserViewController {
         guard let tab = tabManager.selectedTab,
               let url = tab.canonicalURL?.displayURL else { return }
 
-        if !contentContainer.hasHomepage {
+        if !contentContainer.hasLegacyHomepage {
             addBookmark(url: url.absoluteString, title: tab.title)
         }
     }
@@ -55,11 +55,14 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "reload"])
-
         guard let tab = tabManager.selectedTab else { return }
-
-        if !contentContainer.hasHomepage {
-            tab.reload()
+        if isToolbarRefactorEnabled {
+            store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
+                                                actionType: GeneralBrowserActionType.reloadWebsite))
+        } else {
+            if !contentContainer.hasLegacyHomepage {
+                tab.reload()
+            }
         }
     }
 
@@ -70,9 +73,13 @@ extension BrowserViewController {
                                      object: .keyCommand,
                                      extras: ["action": "reload-no-cache"])
         guard let tab = tabManager.selectedTab else { return }
-
-        if !contentContainer.hasHomepage {
-            tab.reload(bypassCache: true)
+        if isToolbarRefactorEnabled {
+            store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
+                                                actionType: GeneralBrowserActionType.reloadWebsiteNoCache))
+        } else {
+            if !contentContainer.hasLegacyHomepage {
+                tab.reload(bypassCache: true)
+            }
         }
     }
 
@@ -82,11 +89,14 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "go-back"])
-
         guard let tab = tabManager.selectedTab, tab.canGoBack else { return }
-
-        if !contentContainer.hasHomepage {
-            tab.goBack()
+        if isToolbarRefactorEnabled {
+            store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
+                                                actionType: GeneralBrowserActionType.navigateBack))
+        } else {
+            if !contentContainer.hasLegacyHomepage {
+                tab.goBack()
+            }
         }
     }
 
@@ -96,11 +106,14 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "go-forward"])
-
         guard let tab = tabManager.selectedTab, tab.canGoForward else { return }
-
-        if !contentContainer.hasHomepage {
-            tab.goForward()
+        if isToolbarRefactorEnabled {
+            store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
+                                                actionType: GeneralBrowserActionType.navigateForward))
+        } else {
+            if !contentContainer.hasLegacyHomepage {
+                tab.goForward()
+            }
         }
     }
 
@@ -121,7 +134,7 @@ extension BrowserViewController {
     private func findInPage(withText text: String) {
         guard let tab = tabManager.selectedTab else { return }
 
-        if !contentContainer.hasHomepage {
+        if !contentContainer.hasLegacyHomepage {
             self.tab(tab, didSelectFindInPageForSelection: text)
         }
     }
@@ -134,7 +147,9 @@ extension BrowserViewController {
                                      extras: ["action": "select-location-bar"])
         scrollController.showToolbars(animated: true)
 
-        if !isToolbarRefactorEnabled {
+        if isToolbarRefactorEnabled {
+            store.dispatch(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didStartEditingUrl))
+        } else {
             urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
         }
     }
@@ -145,9 +160,15 @@ extension BrowserViewController {
                                      method: .press,
                                      object: .keyCommand,
                                      extras: ["action": "new-tab"])
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
-        keyboardPressesHandler().reset()
+
+        if isToolbarRefactorEnabled {
+            store.dispatch(GeneralBrowserAction(windowUUID: windowUUID,
+                                                actionType: GeneralBrowserActionType.addNewTab))
+        } else {
+            let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+            openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
+            keyboardPressesHandler().reset()
+        }
     }
 
     @objc
@@ -320,7 +341,7 @@ extension BrowserViewController {
     func zoomIn() {
         guard let currentTab = tabManager.selectedTab else { return }
 
-        if !contentContainer.hasHomepage {
+        if !contentContainer.hasLegacyHomepage {
             currentTab.zoomIn()
         }
     }
@@ -329,7 +350,7 @@ extension BrowserViewController {
     func zoomOut() {
         guard let currentTab = tabManager.selectedTab else { return }
 
-        if !contentContainer.hasHomepage {
+        if !contentContainer.hasLegacyHomepage {
             currentTab.zoomOut()
         }
     }
@@ -338,7 +359,7 @@ extension BrowserViewController {
     func resetZoom() {
         guard let currentTab = tabManager.selectedTab else { return }
 
-        if !contentContainer.hasHomepage {
+        if !contentContainer.hasLegacyHomepage {
             currentTab.resetZoom()
         }
     }

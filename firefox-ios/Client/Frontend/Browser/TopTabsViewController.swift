@@ -24,11 +24,16 @@ struct TopTabsUX {
 protocol TopTabsDelegate: AnyObject {
     func topTabsDidPressTabs()
     func topTabsDidPressNewTab(_ isPrivate: Bool)
+    func topTabsDidLongPressNewTab(button: UIButton)
     func topTabsDidChangeTab()
     func topTabsDidPressPrivateMode()
 }
 
-class TopTabsViewController: UIViewController, Themeable, Notifiable {
+class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFlaggable {
+    private struct UX {
+        static let trailingEdgeSpace: CGFloat = 10
+    }
+
     // MARK: - Properties
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
@@ -66,6 +71,14 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
         button.setImage(UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus), for: .normal)
         button.semanticContentAttribute = .forceLeftToRight
         button.addTarget(self, action: #selector(TopTabsViewController.newTabTapped), for: .touchUpInside)
+        if self.featureFlags.isFeatureEnabled(.toolbarOneTapNewTab, checking: .buildOnly) &&
+           self.featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly) {
+            let longPressRecognizer = UILongPressGestureRecognizer(
+                target: self,
+                action: #selector(TopTabsViewController.newTabLongPressed)
+            )
+            button.addGestureRecognizer(longPressRecognizer)
+        }
         button.accessibilityIdentifier = AccessibilityIdentifiers.Toolbar.addNewTabButton
         button.accessibilityLabel = .AddTabAccessibilityLabel
         button.showsLargeContentViewer = true
@@ -181,13 +194,19 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
         let currentTheme = themeManager.getCurrentTheme(for: windowUUID)
         let colors = currentTheme.colors
 
-        view.backgroundColor = ToolbarFlagManager.isRefactorEnabled ? colors.layer1 : colors.layer3
+        view.backgroundColor = colors.layer3
         tabsButton.applyTheme(theme: currentTheme)
         privateModeButton.applyTheme(theme: currentTheme)
         newTab.tintColor = colors.iconPrimary
         collectionView.backgroundColor = view.backgroundColor
         collectionView.reloadData()
         topTabDisplayManager.refreshStore()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        UserDefaults.standard.set(tabManager.selectedTab?.isPrivate ?? false,
+                                  forKey: PrefsKeys.LastSessionWasPrivate)
     }
 
     func updateTabCount(_ count: Int, animated: Bool = true) {
@@ -203,6 +222,13 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
     @objc
     func newTabTapped() {
         delegate?.topTabsDidPressNewTab(self.topTabDisplayManager.isPrivate)
+    }
+
+    @objc
+    func newTabLongPressed(_ gestureRecognizer: UILongPressGestureRecognizer) {
+        if gestureRecognizer.state == .began {
+            delegate?.topTabsDidLongPressNewTab(button: newTab)
+        }
     }
 
     @objc
@@ -251,7 +277,12 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
     private func setupLayout() {
         view.addSubview(topTabFader)
         topTabFader.addSubview(collectionView)
-        view.addSubview(tabsButton)
+
+        let isToolbarRefactorEnabled = featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly)
+        if !isToolbarRefactorEnabled {
+            view.addSubview(tabsButton)
+        }
+
         view.addSubview(newTab)
         view.addSubview(privateModeButton)
 
@@ -259,14 +290,8 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
             view.heightAnchor.constraint(equalToConstant: TopTabsUX.TopTabsViewHeight),
 
             newTab.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            newTab.trailingAnchor.constraint(equalTo: tabsButton.leadingAnchor),
             newTab.widthAnchor.constraint(equalTo: view.heightAnchor),
             newTab.heightAnchor.constraint(equalTo: view.heightAnchor),
-
-            tabsButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            tabsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            tabsButton.widthAnchor.constraint(equalTo: view.heightAnchor),
-            tabsButton.heightAnchor.constraint(equalTo: view.heightAnchor),
 
             privateModeButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             privateModeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
@@ -283,6 +308,20 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable {
             collectionView.leadingAnchor.constraint(equalTo: topTabFader.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: topTabFader.trailingAnchor),
         ])
+
+        if isToolbarRefactorEnabled {
+            newTab.trailingAnchor.constraint(equalTo: view.trailingAnchor,
+                                             constant: -UX.trailingEdgeSpace).isActive = true
+        } else {
+            NSLayoutConstraint.activate([
+                newTab.trailingAnchor.constraint(equalTo: tabsButton.leadingAnchor),
+
+                tabsButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                tabsButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.trailingEdgeSpace),
+                tabsButton.widthAnchor.constraint(equalTo: view.heightAnchor),
+                tabsButton.heightAnchor.constraint(equalTo: view.heightAnchor),
+            ])
+        }
     }
 
     private func handleFadeOutAfterTabSelection() {

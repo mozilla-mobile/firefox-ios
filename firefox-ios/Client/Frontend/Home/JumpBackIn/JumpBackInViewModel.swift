@@ -360,7 +360,7 @@ extension JumpBackInViewModel: HomepageViewModelProtocol {
         refreshData(maxItemsToDisplay: maxItemsToDisplay)
         logger.log("JumpBackIn section shouldShow \(shouldShow)",
                    level: .debug,
-                   category: .homepage)
+                   category: .legacyHomepage)
     }
 
     func updatePrivacyConcernedSection(isPrivate: Bool) {
@@ -449,15 +449,22 @@ extension JumpBackInViewModel: HomepageSectionHandler {
 extension JumpBackInViewModel: JumpBackInDelegate {
     func didLoadNewData() {
         Task { @MainActor in
-            self.recentTabs = await self.jumpBackInDataAdaptor.getRecentTabData()
-            self.recentSyncedTab = await self.jumpBackInDataAdaptor.getSyncedTabData()
-            self.isSyncTabFeatureEnabled = await self.jumpBackInDataAdaptor.hasSyncedTabFeatureEnabled()
+            await self.updateJumpBackInData()
             logger.log("JumpBack didLoadNewData and section shouldShow \(self.shouldShow)",
                        level: .debug,
-                       category: .homepage)
-            guard self.isEnabled else { return }
-
-            self.delegate?.reloadView()
+                       category: .legacyHomepage)
+            reloadView()
         }
+    }
+
+    private func updateJumpBackInData() async {
+        self.recentTabs = await self.jumpBackInDataAdaptor.getRecentTabData()
+        self.recentSyncedTab = await self.jumpBackInDataAdaptor.getSyncedTabData()
+        self.isSyncTabFeatureEnabled = await self.jumpBackInDataAdaptor.hasSyncedTabFeatureEnabled()
+    }
+
+    private func reloadView() {
+        guard self.isEnabled else { return }
+        self.delegate?.reloadView()
     }
 }

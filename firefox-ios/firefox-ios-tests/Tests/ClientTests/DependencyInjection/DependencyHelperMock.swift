@@ -11,7 +11,8 @@ import TabDataStore
 class DependencyHelperMock {
     func bootstrapDependencies(
         injectedTabManager: TabManager? = nil,
-        injectedMicrosurveyManager: MicrosurveyManager? = nil
+        injectedMicrosurveyManager: MicrosurveyManager? = nil,
+        injectedPocketManager: PocketManagerProvider? = nil
     ) {
         AppContainer.shared.reset()
 
@@ -30,7 +31,7 @@ class DependencyHelperMock {
         let windowManager: WindowManager = MockWindowManager(wrappedManager: WindowManagerImplementation())
         let tabManager: TabManager =
         injectedTabManager ?? TabManagerImplementation(profile: profile,
-                                                       uuid: windowUUID,
+                                                       uuid: ReservedWindowUUID(uuid: windowUUID, isNew: false),
                                                        windowManager: windowManager)
 
         let appSessionProvider: AppSessionProvider = AppSessionManager()
@@ -50,6 +51,9 @@ class DependencyHelperMock {
 
         let microsurveyManager: MicrosurveyManager = injectedMicrosurveyManager ?? MockMicrosurveySurfaceManager()
         AppContainer.shared.register(service: microsurveyManager)
+
+        let pocketManager: PocketManagerProvider = injectedPocketManager ?? MockPocketManager()
+        AppContainer.shared.register(service: pocketManager)
 
         // Tell the container we are done registering
         AppContainer.shared.bootstrap()

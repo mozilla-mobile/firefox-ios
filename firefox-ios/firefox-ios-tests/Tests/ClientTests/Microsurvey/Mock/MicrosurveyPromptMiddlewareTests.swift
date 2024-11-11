@@ -12,6 +12,7 @@ final class MicrosurveyPromptMiddlewareTests: XCTestCase {
     override func setUp() {
         super.setUp()
         let model = MicrosurveyModel(
+            id: "survey-id",
             promptTitle: "title",
             promptButtonLabel: "button label",
             surveyQuestion: "survey question",
@@ -28,8 +29,8 @@ final class MicrosurveyPromptMiddlewareTests: XCTestCase {
     }
 
     override func tearDown() {
-        super.tearDown()
         DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     func testShowPromptAction_withInvalidModel() {

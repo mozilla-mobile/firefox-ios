@@ -10,16 +10,17 @@ import Account
 import Common
 
 extension UIApplication {
-    var sendTabDelegate: SendTabDelegate {
-        return AppSendTabDelegate(app: self)
+    var fxaCommandsDelegate: FxACommandsDelegate {
+        return AppFxACommandsDelegate(app: self)
     }
 }
 
-/// Sent tabs can be displayed not only by receiving push notifications, but by sync.
+/// Close and Sent tabs can be displayed not only by receiving push notifications,
+/// but by sync.
 /// Sync will get the list of sent tabs, and try to display any in that list.
-/// Thus, push notifications are not needed to receive sent tabs, they can be handled
-/// when the app performs a sync.
-class AppSendTabDelegate: SendTabDelegate {
+/// Thus, push notifications are not needed to receive sent or closed tabs;
+/// they can be handled when the app performs a sync.
+class AppFxACommandsDelegate: FxACommandsDelegate {
     private let app: ApplicationStateProvider
     private let logger: Logger
     private var applicationHelper: ApplicationHelper
@@ -44,6 +45,12 @@ class AppSendTabDelegate: SendTabDelegate {
                 guard let url = URL(string: urlString) else { continue }
                 self.applicationHelper.open(url)
             }
+        }
+    }
+
+    func closeTabs(for urls: [URL]) {
+        Task {
+            await self.applicationHelper.closeTabs(urls)
         }
     }
 }

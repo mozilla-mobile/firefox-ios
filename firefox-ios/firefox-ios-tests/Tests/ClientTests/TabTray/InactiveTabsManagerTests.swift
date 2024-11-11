@@ -72,19 +72,20 @@ final class InactiveTabsManagerTests: XCTestCase {
                             amountOfInactiveTabs: Int = 0) -> [Tab] {
         var tabs = [Tab]()
         for _ in  0..<amountOfRegularTabs {
-            let tab = Tab(profile: profile, configuration: WKWebViewConfiguration(), windowUUID: windowUUID)
+            let tab = Tab(profile: profile, windowUUID: windowUUID)
             tabs.append(tab)
         }
 
         for _ in  0..<amountOfPrivateTabs {
-            let tab = Tab(profile: profile, configuration: WKWebViewConfiguration(), isPrivate: true, windowUUID: windowUUID)
+            let tab = Tab(profile: profile, isPrivate: true, windowUUID: windowUUID)
             tabs.append(tab)
         }
 
         for _ in 0..<amountOfInactiveTabs {
-            let tab = Tab(profile: profile, configuration: WKWebViewConfiguration(), windowUUID: windowUUID)
-            let lastExecutedDate = Calendar.current.add(numberOfDays: -15, to: Date())
-            tab.lastExecutedTime = lastExecutedDate?.toTimestamp()
+            let tab = Tab(profile: profile, windowUUID: windowUUID)
+            if let lastExecutedDate = Calendar.current.add(numberOfDays: -15, to: Date()) {
+                tab.lastExecutedTime = lastExecutedDate.toTimestamp()
+            }
             tabs.append(tab)
         }
 

@@ -7,6 +7,7 @@ import Storage
 import WebKit
 
 import struct MozillaAppServices.CreditCard
+import enum MozillaAppServices.VisitType
 
 protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     /// Asks to show a settings page, can be a general settings page or a child page
@@ -91,6 +92,17 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     func showBackForwardList()
 
     func showMicrosurvey(model: MicrosurveyModel)
+
+    func showPasswordGenerator(tab: Tab, frame: WKFrameInfo)
+
+    /// Shows the app menu
+    func showMainMenu()
+
+    /// Shows the toolbar's search engine selection bottom sheet (iPhone) or popup (iPad)
+    func showSearchEngineSelection(forSourceView sourceView: UIView)
+
+    /// Navigates from home page to a new link
+    func navigateFromHomePanel(to url: URL, visitType: VisitType, isGoogleTopSite: Bool)
 }
 
 extension BrowserNavigationHandler {

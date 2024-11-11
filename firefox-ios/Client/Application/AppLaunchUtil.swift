@@ -11,7 +11,7 @@ import Glean
 
 class AppLaunchUtil {
     private var logger: Logger
-    private var adjustHelper: AdjustHelper
+//    private var adjustHelper: AdjustHelper
     private var profile: Profile
     private let introScreenManager: IntroScreenManager
 
@@ -19,7 +19,7 @@ class AppLaunchUtil {
          profile: Profile) {
         self.logger = logger
         self.profile = profile
-        self.adjustHelper = AdjustHelper(profile: profile)
+//        self.adjustHelper = AdjustHelper(profile: profile)
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
     }
 
@@ -122,7 +122,7 @@ class AppLaunchUtil {
         }
 
         updateSessionCount()
-        adjustHelper.setupAdjust()
+//        adjustHelper.setupAdjust()
         AppEventQueue.signal(event: .postLaunchDependenciesComplete)
     }
 

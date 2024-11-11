@@ -7,7 +7,7 @@ import XCTest
 
 class BrowsingTest: BaseTestCase {
     // Smoke test
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1569888
+    // https://mozilla.testrail.io/index.php?/cases/view/1569888
     func testLaunchExternalApp() {
         // Load URL
         loadWebPage("https://www.example.com")
@@ -18,7 +18,7 @@ class BrowsingTest: BaseTestCase {
         app.buttons["HomeView.settingsButton"].tap()
 
         // Tap Share button
-        // https://testrail.stage.mozaws.net/index.php?/cases/view/1569888
+        // https://mozilla.testrail.io/index.php?/cases/view/1569888
         let shareButton: XCUIElement
         if #available(iOS 14, *) {
             shareButton = app.cells.buttons["Share Page With…"]
@@ -26,23 +26,28 @@ class BrowsingTest: BaseTestCase {
             shareButton = app.cells["Share Page With..."]
         }
         waitForExistence(shareButton)
+        waitForHittable(shareButton)
         shareButton.tap()
 
         // Launch external app
         let RemindersApp: XCUIElement
-        if iPad() {
-            RemindersApp = app.collectionViews.scrollViews.cells.element(boundBy: 0)
+        if #available(iOS 17, *) {
+            RemindersApp = app.collectionViews.scrollViews.cells["Reminders"]
         } else {
-            RemindersApp = app.collectionViews.scrollViews.cells.element(boundBy: 1)
+            if iPad() {
+                RemindersApp = app.collectionViews.scrollViews.cells.element(boundBy: 0)
+            } else {
+                RemindersApp = app.collectionViews.scrollViews.cells.element(boundBy: 1)
+            }
         }
-        waitForExistence(RemindersApp, timeout: 5)
+        waitForExistence(RemindersApp)
+        waitForHittable(RemindersApp)
         RemindersApp.tap()
-        waitForExistence(app.buttons["Add"], timeout: 10)
-        XCTAssertTrue(app.buttons["Add"].exists)
+        waitForExistence(app.buttons["Add"])
     }
 
     // Smoketest
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1569889
+    // https://mozilla.testrail.io/index.php?/cases/view/1569889
     func testNavigationToolbar() {
         loadWebPage("example.com")
         waitForWebPageLoad()
@@ -77,10 +82,8 @@ class BrowsingTest: BaseTestCase {
     }
 
     // Smoketest
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2587661
+    // https://mozilla.testrail.io/index.php?/cases/view/2587661
     func testActivityMenuRequestDesktopItem() {
-        let urlBarTextField = app.textFields["URLBar.urlText"]
-
         // Wait for existence rather than hittable because the textfield is technically disabled
         loadWebPage("facebook.com")
 
@@ -114,7 +117,7 @@ class BrowsingTest: BaseTestCase {
     }
 
     // Smoketest
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2587662
+    // https://mozilla.testrail.io/index.php?/cases/view/2587662
     func testCheckCollapsedURL() {
         // Test do not apply to iPad
         if !iPad() {
@@ -129,14 +132,13 @@ class BrowsingTest: BaseTestCase {
             let collapsedTruncatedurltextTextView = app.textViews["Collapsed.truncatedUrlText"]
             waitForExistence(collapsedTruncatedurltextTextView)
 
-            XCTAssertTrue(collapsedTruncatedurltextTextView.isHittable)
+            waitForHittable(collapsedTruncatedurltextTextView)
             XCTAssertEqual(collapsedTruncatedurltextTextView.value as? String, "news.ycombinator.com")
 
             // After swiping down, the collapsed URL should not be displayed
             app.swipeDown()
             app.swipeDown()
             waitForNoExistence(collapsedTruncatedurltextTextView)
-            XCTAssertFalse(collapsedTruncatedurltextTextView.exists)
         }
     }
 }

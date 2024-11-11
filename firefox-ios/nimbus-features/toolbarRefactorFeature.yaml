@@ -9,11 +9,33 @@ features:
           Enables the feature
         type: Boolean
         default: false
+      one_tap_new_tab:
+        description: >
+          If true, enables the one tap new tab feature for users.
+        type: Boolean
+        default: false
+      navigation_hint:
+        description: >
+          If true, enables the navigation contextual hint.
+        type: Boolean
+        default: false
+      unified_search:
+        description: >
+          Enables the unified search feature
+        type: Boolean
+        default: false
+        
     defaults:
       - channel: beta
         value:
           enabled: false
+          unified_search: false
+          one_tap_new_tab: false
+          navigation_hint: false
       - channel: developer
         value:
           enabled: false
+          unified_search: false
+          one_tap_new_tab: false
+          navigation_hint: false
 

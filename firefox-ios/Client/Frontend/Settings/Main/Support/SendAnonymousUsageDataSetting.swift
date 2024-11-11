@@ -9,6 +9,8 @@ import Shared
 class SendAnonymousUsageDataSetting: BoolSetting {
     private weak var settingsDelegate: SupportSettingsDelegate?
 
+    var shouldSendUsageData: ((Bool) -> Void)?
+
     init(prefs: Prefs,
          delegate: SettingsDelegate?,
          theme: Theme,
@@ -38,16 +40,23 @@ class SendAnonymousUsageDataSetting: BoolSetting {
             prefKey: AppConstants.prefSendUsageData,
             defaultValue: true,
             attributedTitleText: NSAttributedString(string: .SendUsageSettingTitle),
-            attributedStatusText: statusText,
-            settingDidChange: {
-                AdjustHelper.setEnabled($0)
-                DefaultGleanWrapper.shared.setUpload(isEnabled: $0)
-                Experiments.setTelemetrySetting($0)
-            }
+            attributedStatusText: statusText
         )
+
+        setupSettingDidChange()
+
         // We make sure to set this on initialization, in case the setting is turned off
         // in which case, we would to make sure that users are opted out of experiments
         Experiments.setTelemetrySetting(prefs.boolForKey(AppConstants.prefSendUsageData) ?? true)
+    }
+
+    private func setupSettingDidChange() {
+        self.settingDidChange = { [weak self] value in
+            // AdjustHelper.setEnabled($0)
+            DefaultGleanWrapper.shared.setUpload(isEnabled: value)
+            Experiments.setTelemetrySetting(value)
+            self?.shouldSendUsageData?(value)
+        }
     }
 
     override var accessibilityIdentifier: String? {

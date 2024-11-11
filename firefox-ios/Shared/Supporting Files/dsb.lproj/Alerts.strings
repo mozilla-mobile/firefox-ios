@@ -14,7 +14,7 @@
 "Alerts.RestoreTabs.Button.No.v109" = "Ně";
 
 /* The title for the affirmative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will restore existing tabs. */
-"Alerts.RestoreTabs.Button.Yes.v109" = "Rejtarki wótnowiś";
+"Alerts.RestoreTabs.Button.Yes.v109" = "Rejtariki wótnowiś";
 
 /* The body of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. */
 "Alerts.RestoreTabs.Message.v109" = "Wódajśo. Wótnowśo rejtariki, aby tam pókšacował, źož sćo pśestał.";

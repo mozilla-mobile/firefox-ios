@@ -5,22 +5,24 @@
 import Shared
 
 extension BrowserViewController {
-    func updateFindInPageVisibility(isVisible: Bool, tab: Tab? = nil) {
+    func updateFindInPageVisibility(isVisible: Bool, tab: Tab? = nil, withSearchText searchText: String? = nil) {
         // TODO: The find interactions for iOS 16 close themselves, so once the min deployment target is iOS 16,
         // we may be able to remove the `isVisible` flag and let the system manage dismissal.
         if #available(iOS 16, *) {
-            useSystemFindInteraction(isVisible: isVisible)
+            useSystemFindInteraction(isVisible: isVisible, withSearchText: searchText)
         } else {
             useCustomFindInteraction(isVisible: isVisible, tab: tab)
         }
+        tabManager.selectedTab?.isFindInPageMode = isVisible && isBottomSearchBar
     }
 
     @available(iOS 16, *)
-    private func useSystemFindInteraction(isVisible: Bool) {
+    private func useSystemFindInteraction(isVisible: Bool, withSearchText searchText: String?) {
         guard let webView = tabManager.selectedTab?.webView else { return }
 
         if isVisible {
             webView.isFindInteractionEnabled = true
+            webView.findInteraction?.searchText = searchText ?? ""
             webView.findInteraction?.presentFindNavigator(showingReplace: false)
         } else {
             webView.findInteraction?.dismissFindNavigator()

@@ -16,24 +16,28 @@ include:
   - nimbus-features/accountSettingsReduxFeature.yaml
   - nimbus-features/addressAutofillFeature.yaml
   - nimbus-features/autofillFeature.yaml
+  - nimbus-features/bookmarkRefactorFeature.yaml
   - nimbus-features/contextualHintFeature.yaml
   - nimbus-features/fakespotFeature.yaml
   - nimbus-features/feltPrivacyFeature.yaml
   - nimbus-features/firefoxSuggestFeature.yaml
   - nimbus-features/generalFeatures.yaml
   - nimbus-features/gleanServerKnobs.yaml
+  - nimbus-features/homepageRebuildFeature.yaml
   - nimbus-features/homescreenFeature.yaml
   - nimbus-features/menuRefactorFeature.yaml
   - nimbus-features/messagingFeature.yaml
   - nimbus-features/microsurveyFeature.yaml
+  - nimbus-features/nativeErrorPageFeature.yaml
   - nimbus-features/nightModeFeature.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
+  - nimbus-features/passwordGeneratorFeature.yaml
   - nimbus-features/reduxSearchSettingsFeature.yaml
+  - nimbus-features/remoteTabManagement.yaml
   - nimbus-features/searchFeature.yaml
   - nimbus-features/splashScreenFeature.yaml
   - nimbus-features/spotlightSearchFeature.yaml
   - nimbus-features/tabTrayFeature.yaml
-  - nimbus-features/tabTrayRefactorFeature.yaml
   - nimbus-features/toolbarRefactorFeature.yaml
   - nimbus-features/trackingProtectionRefactor.yaml
   - nimbus-features/zoomFeature.yaml

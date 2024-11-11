@@ -23,4 +23,9 @@ struct Bookmark: BookmarkItem {
         self.title = bookmark.title
         self.url = bookmark.url
     }
+
+    init(title: String, url: String) {
+        self.title = title
+        self.url = url
+    }
 }

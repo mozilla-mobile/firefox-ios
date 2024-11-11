@@ -45,24 +45,21 @@ class AccountSyncHandlerTests: XCTestCase {
         XCTAssertEqual(syncManager.syncNamedCollectionsCalled, 1)
     }
 
-    func testTabDidGainFocus_highThrottleTime_doesntSync() {
-        let subject = AccountSyncHandler(with: profile, throttleTime: 1000, queue: DispatchQueue.global())
+    func testTabDidGainFocus_highThrottleTime_executedAtMostOnce() {
+        let threshold: Double = 1000
+        let stepWaitTime = 2.0
+        let subject = AccountSyncHandler(with: profile, throttleTime: threshold, queue: DispatchQueue.global())
         let tab = createTab(profile: profile)
-        subject.tabDidGainFocus(tab)
 
-        XCTAssertEqual(syncManager.syncNamedCollectionsCalled, 0)
-    }
-
-    func testTabDidGainFocus_multipleThrottle_withoutWaitdoesntSync() {
-        let subject = AccountSyncHandler(with: profile, throttleTime: 0.2, queue: DispatchQueue.global())
-        let tab = createTab(profile: profile)
-        subject.tabDidGainFocus(tab)
-        subject.tabDidGainFocus(tab)
-        subject.tabDidGainFocus(tab)
         subject.tabDidGainFocus(tab)
         subject.tabDidGainFocus(tab)
 
-        XCTAssertEqual(syncManager.syncNamedCollectionsCalled, 0)
+        let expectation = XCTestExpectation(description: "SyncNamedCollectionsCalled value expectation")
+        DispatchQueue.main.asyncAfter(deadline: .now() + stepWaitTime) {
+            XCTAssertEqual(self.syncManager.syncNamedCollectionsCalled, 1)
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: stepWaitTime * 2)
     }
 
     func testTabDidGainFocus_multipleThrottle_withWaitSyncOnce() {
@@ -82,9 +79,8 @@ class AccountSyncHandlerTests: XCTestCase {
 // MARK: - Helper methods
 private extension AccountSyncHandlerTests {
     func createTab(profile: MockProfile,
-                   configuration: WKWebViewConfiguration = WKWebViewConfiguration(),
                    urlString: String? = "www.website.com") -> Tab {
-        let tab = Tab(profile: profile, configuration: configuration, windowUUID: windowUUID)
+        let tab = Tab(profile: profile, windowUUID: windowUUID)
 
         if let urlString = urlString {
             tab.url = URL(string: urlString)!

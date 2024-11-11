@@ -21,9 +21,10 @@ protocol TabManager: AnyObject {
     var tabs: [Tab] { get }
     var count: Int { get }
     var selectedTab: Tab? { get }
+    var selectedTabUUID: UUID? { get }
     var backupCloseTab: BackupCloseTab? { get set }
     var backupCloseTabs: [Tab] { get set }
-    var normalTabs: [Tab] { get }
+    var normalTabs: [Tab] { get } // Includes active and inactive tabs
     var normalActiveTabs: [Tab] { get }
     var inactiveTabs: [Tab] { get }
     var privateTabs: [Tab] { get }
@@ -36,7 +37,7 @@ protocol TabManager: AnyObject {
     func removeDelegate(_ delegate: TabManagerDelegate, completion: (() -> Void)?)
     func selectTab(_ tab: Tab?, previous: Tab?)
     func addTab(_ request: URLRequest?, afterTab: Tab?, isPrivate: Bool) -> Tab
-    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool)
+    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool, isPrivate: Bool)
     func removeTab(_ tab: Tab, completion: (() -> Void)?)
     func removeTabs(_ tabs: [Tab])
     func undoCloseTab()
@@ -59,10 +60,10 @@ protocol TabManager: AnyObject {
                                          isPrivate: Bool,
                                          previousTabUUID: TabUUID)
     func undoCloseAllTabsLegacy(recentlyClosedTabs: [Tab], previousTabUUID: TabUUID, isPrivate: Bool)
+    func findRightOrLeftTab(forRemovedTab removedTab: Tab, withDeletedIndex deletedIndex: Int) -> Tab?
 
     @discardableResult
     func addTab(_ request: URLRequest!,
-                configuration: WKWebViewConfiguration!,
                 afterTab: Tab?,
                 zombie: Bool,
                 isPrivate: Bool) -> Tab
@@ -83,17 +84,20 @@ protocol TabManager: AnyObject {
     /// Undo close all tabs, it will restore the tabs that were backed up when the close action was called.
     func undoCloseAllTabs()
 
+    /// Removes all tabs matching the urls, used when other clients request to close tabs on this device.
+    func removeTabs(by urls: [URL]) async
+
     /// Get inactive tabs from the list of tabs based on the time condition to be considered inactive.
     /// Replaces LegacyInactiveTabModel and related classes
     /// 
     /// - Returns: Return list of tabs considered inactive
     func getInactiveTabs() -> [Tab]
 
-    /// Async Remove all inactive tabs, used when user closes all inactive tabs and TabTrayFlagManager is enabled
+    /// Async Remove all inactive tabs, used when user closes all inactive tabs
     func removeAllInactiveTabs() async
 
     /// Undo all inactive tabs closure. All inactive tabs are added back to the list of tabs
-    func undoCloseInactiveTabs()
+    func undoCloseInactiveTabs() async
 }
 
 extension TabManager {
@@ -128,13 +132,11 @@ extension TabManager {
 
     @discardableResult
     func addTab(_ request: URLRequest! = nil,
-                configuration: WKWebViewConfiguration! = nil,
                 afterTab: Tab? = nil,
                 zombie: Bool = false,
                 isPrivate: Bool = false
     ) -> Tab {
         addTab(request,
-               configuration: configuration,
                afterTab: afterTab,
                zombie: zombie,
                isPrivate: isPrivate)
@@ -148,7 +150,7 @@ extension TabManager {
                                 didClearTabs: didClearTabs)
     }
 
-    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool = true) {
-        addTabsForURLs(urls, zombie: zombie, shouldSelectTab: shouldSelectTab)
+    func addTabsForURLs(_ urls: [URL], zombie: Bool, shouldSelectTab: Bool = true, isPrivate: Bool = false) {
+        addTabsForURLs(urls, zombie: zombie, shouldSelectTab: shouldSelectTab, isPrivate: isPrivate)
     }
 }

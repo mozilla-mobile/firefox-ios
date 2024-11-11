@@ -142,6 +142,7 @@
 		C8EADCD42742A0AB00E76AE6 /* MenuItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EADCD32742A0AB00E76AE6 /* MenuItemProvider.swift */; };
 		C8FB1E6427F59D9C00C60DC6 /* UIHelpers in Frameworks */ = {isa = PBXBuildFile; productRef = C8FB1E6327F59D9C00C60DC6 /* UIHelpers */; };
 		C8FB1E6627F5A79300C60DC6 /* DesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = C8FB1E6527F5A79300C60DC6 /* DesignSystem */; };
+		CD44FD932CC104320080D111 /* pings.yaml in Resources */ = {isa = PBXBuildFile; fileRef = CD44FD922CC104320080D111 /* pings.yaml */; };
 		CDFA746F27ABD43D0055FE55 /* Glean in Frameworks */ = {isa = PBXBuildFile; productRef = CDFA746E27ABD43D0055FE55 /* Glean */; };
 		D025F225218B64D600B262D8 /* SearchEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D025F224218B64D600B262D8 /* SearchEngineTests.swift */; };
 		D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0967A801EC50002009D937F /* TelemetryIntegration.swift */; };
@@ -411,6 +412,7 @@
 		433E9EA32A24086300B6A6D0 /* en-US */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-US"; path = "en-US.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		433F4D3828FCB94100005178 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/Localizable.strings; sourceTree = "<group>"; };
 		43428B802A240806003B5914 /* am */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = am; path = am.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		4343874F2CB3EC32009962A9 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		434B6DC12A2408A400EE7F9A /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/Intents.strings; sourceTree = "<group>"; };
 		434B6DC22A2408A400EE7F9A /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		434B6DC32A2408A400EE7F9A /* gl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gl; path = gl.lproj/Intro.strings; sourceTree = "<group>"; };
@@ -481,6 +483,7 @@
 		43D535F52959011100A7C85C /* be */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = be; path = be.lproj/Intro.strings; sourceTree = "<group>"; };
 		43D535F62959011100A7C85C /* be */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = be; path = be.lproj/Localizable.strings; sourceTree = "<group>"; };
 		43D535F72959011100A7C85C /* be */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = be; path = be.lproj/Localizable.strings; sourceTree = "<group>"; };
+		43D5D1B72CB3EAD7001137A4 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		43E1A65828FCB8F000DD9325 /* eu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eu; path = eu.lproj/Localizable.strings; sourceTree = "<group>"; };
 		43E1CAFB28FCB9B00098541B /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/Localizable.strings; sourceTree = "<group>"; };
 		43E28B8828FCBA2A00CCE798 /* zh-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-TW"; path = "zh-TW.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -748,6 +751,7 @@
 		C8EADCD12742A00300E76AE6 /* MenuActionable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuActionable.swift; sourceTree = "<group>"; };
 		C8EADCD32742A0AB00E76AE6 /* MenuItemProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItemProvider.swift; sourceTree = "<group>"; };
 		C8FB1E6227F59BC600C60DC6 /* BlockzillaPackage */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = BlockzillaPackage; sourceTree = "<group>"; };
+		CD44FD922CC104320080D111 /* pings.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = pings.yaml; sourceTree = "<group>"; };
 		D025F224218B64D600B262D8 /* SearchEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineTests.swift; sourceTree = "<group>"; };
 		D0967A801EC50002009D937F /* TelemetryIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TelemetryIntegration.swift; sourceTree = "<group>"; };
 		D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockerEnabledDetector.swift; sourceTree = "<group>"; };
@@ -1906,6 +1910,7 @@
 				E40AFC761DDDE96D00DA5651 /* InfoPlist.strings */,
 				D343DCC41C44356500D7EEE8 /* Localizable.strings */,
 				D5D067FA252F945D00C35227 /* metrics.yaml */,
+				CD44FD922CC104320080D111 /* pings.yaml */,
 				C82F45F8281A76EF000D7D84 /* ShortcutsPresenter.swift */,
 				1215EC0828D316B500AECC75 /* NavigationPath.swift */,
 				1D96A2D82BA2490D00EF7CC7 /* WebEngineRefactorFlagManager.swift */,
@@ -2402,6 +2407,7 @@
 				8A6445912BA3905100759319 /* disconnect-block-social.json in Resources */,
 				8A6445922BA3905100759319 /* web-fonts.json in Resources */,
 				1D3BEDF920C5E6C70019B722 /* FindInPage.js in Resources */,
+				CD44FD932CC104320080D111 /* pings.yaml in Resources */,
 				C83FB7D2273AA13300B78CC5 /* MetadataHelper.js in Resources */,
 				E4BF2DDE1BACE8CA00DA9D68 /* Assets.xcassets in Resources */,
 				B3F4A3171FA136E70029A6F2 /* preload.js in Resources */,
@@ -2461,7 +2467,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ $ACTION != \"indexbuild\" ]; then\n   bash $SOURCE_ROOT/bin/nimbus-fml.sh --verbose\nfi\n";
+			shellScript = "if [ $ACTION != \"indexbuild\" ]; then\n   /usr/bin/env -i HOME=$HOME PROJECT=$PROJECT CONFIGURATION=$CONFIGURATION SOURCE_ROOT=$SOURCE_ROOT bash $SOURCE_ROOT/bin/nimbus-fml.sh --verbose\nfi\n";
 		};
 		D48C953D27FF411800FF8AEF /* Run Swiftlint */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2491,6 +2497,7 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/Blockzilla/metrics.yaml",
+				"$(SRCROOT)/Blockzilla/pings.yaml",
 			);
 			name = Glean;
 			outputFileListPaths = (
@@ -2902,6 +2909,8 @@
 				43849FA72B1D3410006083D5 /* bg */,
 				43AECE282B1D342000D548A4 /* bs */,
 				4369C6E22C0493E800CA4991 /* hy-AM */,
+				43D5D1B72CB3EAD7001137A4 /* ar */,
+				4343874F2CB3EC32009962A9 /* ne-NP */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -7159,7 +7168,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 129.0.20240628050251;
+				version = 134.0.20241108050318;
 			};
 		};
 		8A0E7F2C2BA0F0E0006BC6B6 /* XCRemoteSwiftPackageReference "Fuzi" */ = {
@@ -7175,7 +7184,7 @@
 			repositoryURL = "https://github.com/mozilla/glean-swift";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 60.1.0;
+				minimumVersion = 61.2.0;
 			};
 		};
 		F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */ = {
@@ -7191,7 +7200,7 @@
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
 			requirement = {
 				kind = exactVersion;
-				version = 8.21.0;
+				version = 8.36.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

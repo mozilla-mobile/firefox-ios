@@ -190,7 +190,7 @@ struct ReaderModeStyle {
         self.theme = ReaderModeTheme.preferredTheme(for: self.theme, window: windowUUID)
     }
 
-    static func defaultStyle(for window: WindowUUID?) -> ReaderModeStyle {
+    static func defaultStyle(for window: WindowUUID? = nil) -> ReaderModeStyle {
         return ReaderModeStyle(
             windowUUID: window,
             theme: .light,
@@ -340,7 +340,7 @@ class ReaderMode: TabContentScript {
 
     fileprivate func handleReaderModeStateChange(_ state: ReaderModeState) {
         self.state = state
-        guard let tab = tab else { return }
+        guard let tab else { return }
         delegate?.readerMode(self, didChangeReaderModeState: state, forTab: tab)
     }
 

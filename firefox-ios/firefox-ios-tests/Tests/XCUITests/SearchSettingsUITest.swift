@@ -9,7 +9,7 @@ let defaultSearchEngine2 = "Bing"
 let customSearchEngine = ["name": "youtube", "url": "https://youtube.com/search?q=%s"]
 
 class SearchSettingsUITests: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2435664
+    // https://mozilla.testrail.io/index.php?/cases/view/2435664
     func testDefaultSearchEngine() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)
@@ -24,7 +24,7 @@ class SearchSettingsUITests: BaseTestCase {
         mozWaitForElementToExist(app.tables.cells.staticTexts[defaultSearchEngine2])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2353247
+    // https://mozilla.testrail.io/index.php?/cases/view/2353247
     func testCustomSearchEngineIsEditable() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)
@@ -45,21 +45,17 @@ class SearchSettingsUITests: BaseTestCase {
     }
 
     private func addCustomSearchEngine() {
-        mozWaitForElementToExist(app.tables.cells[AccessibilityIdentifiers.Settings.Search.customEngineViewButton])
-        app.tables.cells[AccessibilityIdentifiers.Settings.Search.customEngineViewButton].tap()
+        app.tables.cells[AccessibilityIdentifiers.Settings.Search.customEngineViewButton].waitAndTap()
         mozWaitForElementToExist(app.tables.cells.staticTexts["Search Engine"])
-        app.tables.cells.textViews["customEngineTitle"].tap()
-        app.tables.cells.textViews["customEngineTitle"].typeText(customSearchEngine["name"]!)
+        app.tables.cells.textViews["customEngineTitle"].tapAndTypeText(customSearchEngine["name"]!)
 
-        app.tables.cells.textViews["customEngineUrl"].tap()
-        app.tables.cells.textViews["customEngineUrl"].typeText(customSearchEngine["url"]!)
-        mozWaitForElementToExist(app.buttons["Save"], timeout: 5)
-        app.buttons["Save"].tap()
+        app.tables.cells.textViews["customEngineUrl"].tapAndTypeText(customSearchEngine["url"]!)
+        app.buttons["Save"].waitAndTap(timeout: 5)
         // Check that custom engine has been added successfully
         mozWaitForElementToExist(app.tables.cells.staticTexts[customSearchEngine["name"]!])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2353248
+    // https://mozilla.testrail.io/index.php?/cases/view/2353248
     func testCustomSearchEngineAsDefaultIsNotEditable() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)
@@ -79,7 +75,7 @@ class SearchSettingsUITests: BaseTestCase {
         XCTAssertFalse(app.buttons["Edit"].isEnabled)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2353249
+    // https://mozilla.testrail.io/index.php?/cases/view/2353249
     func testNavigateToSearchPickerTurnsOffEditing() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)
@@ -105,7 +101,7 @@ class SearchSettingsUITests: BaseTestCase {
         XCTAssertEqual(app.tables.cells.switches.count, app.tables.cells.count - 3)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2353250
+    // https://mozilla.testrail.io/index.php?/cases/view/2353250
     func testDeletingLastCustomEngineExitsEditing() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SearchSettings)

@@ -31,23 +31,29 @@
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the title for the header on the screen. */
 "Microsurvey.Survey.HeaderLabel.v127" = "Vyplňte tento prieskum";
 
+/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the title for the header on the screen. */
+"Microsurvey.Survey.HeaderLabel.v129" = "Vyplňte prieskum";
+
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the logo image that appears on the bottom sheet that informs the user that it is coming from the app specifically. Placeholder is for the app name. */
 "Microsurvey.Survey.LogoImage.AccessibilityLabel.v129" = "Logo %@";
 
 /* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
-"Microsurvey.Survey.Options.LikertScaleOption1.v127" = "veľmi spokojný";
+"Microsurvey.Survey.Options.Dissatisfied.v132" = "nespokojný";
 
 /* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
-"Microsurvey.Survey.Options.LikertScaleOption2.v127" = "spokojný";
+"Microsurvey.Survey.Options.Neutral.v132" = "neutrálny";
+
+/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. It indicates that the user has not use the feature that the survey is inquiring about. */
+"Microsurvey.Survey.Options.NotApplicable.v132" = "nepoužívam";
 
 /* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
-"Microsurvey.Survey.Options.LikertScaleOption3.v127" = "neutrálny";
+"Microsurvey.Survey.Options.Satisfied.v132" = "spokojný";
 
 /* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
-"Microsurvey.Survey.Options.LikertScaleOption4.v127" = "nespokojný";
+"Microsurvey.Survey.Options.VeryDissatisfied.v132" = "veľmi nespokojný";
 
 /* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
-"Microsurvey.Survey.Options.LikertScaleOption5.v127" = "veľmi nespokojný";
+"Microsurvey.Survey.Options.VerySatisfied.v132" = "veľmi spokojný";
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label that states the order the survey option in the list of options. First placeholder is the number the option is in the list and the second placeholder is the total number of options such as 1 out of 6. */
 "Microsurvey.Survey.OptionsOrder.AccessibilityLabel.v129" = "%1$@ z %2$@";
@@ -60,4 +66,7 @@
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label that states whether the survey option was not selected. */
 "Microsurvey.Survey.RadioButton.Unselected.AccessibilityLabel.v129" = "Nezvolená";
+
+/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label used to announce that the sheet has appeared. */
+"Microsurvey.Survey.Sheet.AccessibilityLabel.v130" = "Prieskum";
 

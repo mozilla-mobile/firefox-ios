@@ -16,6 +16,7 @@ class WebsiteDataManagementViewController: UIViewController,
     var notificationCenter: NotificationProtocol
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
+    private static let showMoreCellReuseIdentifier = "showMoreCell"
 
     private enum Section: Int {
         case sites = 0
@@ -46,7 +47,6 @@ class WebsiteDataManagementViewController: UIViewController,
 
     var tableView: UITableView!
     var searchController: UISearchController?
-    var showMoreButtonEnabled = true
 
     private lazy var searchResultsViewController = WebsiteDataSearchResultsViewController(viewModel: viewModel,
                                                                                           windowUUID: windowUUID)
@@ -68,6 +68,11 @@ class WebsiteDataManagementViewController: UIViewController,
         tableView.isEditing = true
         tableView.allowsMultipleSelectionDuringEditing = true
         tableView.allowsSelectionDuringEditing = true
+        tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: ThemedTableViewCell.cellIdentifier)
+        tableView.register(
+            ThemedTableViewCell.self,
+            forCellReuseIdentifier: WebsiteDataManagementViewController.showMoreCellReuseIdentifier
+        )
         tableView.register(cellType: ThemedTableViewCell.self)
         tableView.register(cellType: ThemedCenteredTableViewCell.self)
         tableView.register(
@@ -104,12 +109,6 @@ class WebsiteDataManagementViewController: UIViewController,
         viewModel.onViewModelChanged = { [weak self] in
             guard let self = self else { return }
             self.loadingView.isHidden = self.viewModel.state != .loading
-
-            // Show either 10, 8 or 6 records initially depending on the screen size.
-            let height = max(self.view.frame.width, self.view.frame.height)
-            let numberOfInitialRecords = height > 667 ? 10 : height > 568 ? 8 : 6
-            self.showMoreButtonEnabled = self.viewModel.siteRecords.count > numberOfInitialRecords
-
             self.searchResultsViewController.reloadData()
             self.tableView.reloadData()
         }
@@ -166,8 +165,7 @@ class WebsiteDataManagementViewController: UIViewController,
             return cell
         case .showMore:
             let cell = dequeueCellFor(indexPath: indexPath)
-            cell.applyTheme(theme: currentTheme())
-            let cellType: ThemedTableViewCellType = showMoreButtonEnabled ? .actionPrimary : .disabled
+            let cellType: ThemedTableViewCellType = viewModel.state != .displayAll ? .actionPrimary : .disabled
             let cellViewModel = ThemedTableViewCellViewModel(
                 theme: currentTheme(),
                 type: cellType
@@ -176,6 +174,7 @@ class WebsiteDataManagementViewController: UIViewController,
             cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = "ShowMoreWebsiteData"
             cell.configure(viewModel: cellViewModel)
+            cell.applyTheme(theme: currentTheme())
             showMoreButton = cell
             return cell
         case .clearButton:
@@ -194,9 +193,18 @@ class WebsiteDataManagementViewController: UIViewController,
             return ThemedTableViewCell()
         }
         switch section {
-        case .sites, .showMore:
+        case .sites:
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: ThemedTableViewCell.cellIdentifier,
+                for: indexPath
+            ) as? ThemedTableViewCell
+            else {
+                return ThemedTableViewCell()
+            }
+            return cell
+        case .showMore:
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: WebsiteDataManagementViewController.showMoreCellReuseIdentifier,
                 for: indexPath
             ) as? ThemedTableViewCell
             else {
@@ -221,16 +229,16 @@ class WebsiteDataManagementViewController: UIViewController,
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let section = Section(rawValue: section)!
+        let height = max(self.view.frame.width, self.view.frame.height)
+        let numberOfInitialRecords = height > 667 ? 10 : height > 568 ? 8 : 6
+
         switch section {
         case .sites:
             let numberOfRecords = viewModel.siteRecords.count
-
             // Show either 10, 8 or 6 records initially depending on the screen size.
-            let height = max(self.view.frame.width, self.view.frame.height)
-            let numberOfInitialRecords = height > 667 ? 10 : height > 568 ? 8 : 6
-            return showMoreButtonEnabled ? min(numberOfRecords, numberOfInitialRecords) : numberOfRecords
+            return viewModel.state == .displayAll ? numberOfRecords: min(numberOfRecords, numberOfInitialRecords)
         case .showMore:
-            return showMoreButtonEnabled ? 1 : 0
+            return (viewModel.state != .displayAll && viewModel.siteRecords.count > numberOfInitialRecords) ? 1 : 0
         case .clearButton:
             return 1
         }
@@ -244,7 +252,7 @@ class WebsiteDataManagementViewController: UIViewController,
             viewModel.selectItem(item)
             break
         case .showMore:
-            showMoreButtonEnabled = false
+            viewModel.showMoreButtonPressed()
             tableView.reloadData()
         case .clearButton:
             let generator = UIImpactFeedbackGenerator(style: .heavy)

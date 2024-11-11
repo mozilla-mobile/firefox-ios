@@ -1,0 +1,15 @@
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v131" = "Obnoviť";
+
+/* On error page, this is the description for generic error. */
+"NativeErrorPage.GenericError.Description.v131" = "Vyskytla sa chyba SSL a nie je možné vytvoriť zabezpečené pripojenie k serveru.";
+
+/* On error page, this is the title for generic error. */
+"NativeErrorPage.GenericError.TitleLabel.v131" = "Buďte opatrní. Niečo nie je v poriadku.";
+
+/* On error page, this is the description for no internet connection. */
+"NativeErrorPage.NoInternetConnection.Description.v131" = "Skúste sa pripojiť na inom zariadení. Skontrolujte modem alebo smerovač. Odpojte sa a znova sa pripojte k sieti Wi-Fi.";
+
+/* On error page, this is the title for no internet connection */
+"NativeErrorPage.NoInternetConnection.TitleLabel.v131" = "Zdá sa, že sa vyskytol problém s vaším internetovým pripojením.";
+

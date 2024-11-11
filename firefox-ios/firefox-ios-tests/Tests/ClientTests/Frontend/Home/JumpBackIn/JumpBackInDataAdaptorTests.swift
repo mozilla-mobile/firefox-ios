@@ -8,15 +8,10 @@ import XCTest
 import WebKit
 import Common
 
-// NOTE:
-// Tab groups not tested at the moment since it depends on RustPlaces concrete object.
-// Need protocol to be able to fix this
-
-class JumpBackInDataAdaptorTests: XCTestCase {
+final class JumpBackInDataAdaptorTests: XCTestCase {
     var mockTabManager: MockTabManager!
     var mockProfile: MockProfile!
     let sleepTime: UInt64 = 100_000_000
-    let webViewConfig = WKWebViewConfiguration()
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     override func setUp() {
@@ -33,7 +28,7 @@ class JumpBackInDataAdaptorTests: XCTestCase {
         mockTabManager = nil
     }
 
-    func testEmptyData_tabTrayGroupsDisabled() async {
+    func testEmptyData() async {
         let subject = createSubject()
         try? await Task.sleep(nanoseconds: sleepTime)
 
@@ -153,7 +148,7 @@ extension JumpBackInDataAdaptorTests {
 
     func createTab(profile: MockProfile,
                    urlString: String? = "www.website.com") -> Tab {
-        let tab = Tab(profile: profile, configuration: webViewConfig, windowUUID: windowUUID)
+        let tab = Tab(profile: profile, windowUUID: windowUUID)
 
         if let urlString = urlString {
             tab.url = URL(string: urlString)!

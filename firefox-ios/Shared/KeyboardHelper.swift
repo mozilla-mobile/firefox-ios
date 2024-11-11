@@ -14,7 +14,11 @@ public struct KeyboardState {
 
     fileprivate init(_ userInfo: [AnyHashable: Any]) {
         self.userInfo = userInfo
-        animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
+        if let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double {
+            animationDuration = duration
+        } else {
+            animationDuration = 0.0
+        }
         // HACK: UIViewAnimationCurve doesn't expose the keyboard animation used (curveValue = 7),
         // so UIViewAnimationCurve(rawValue: curveValue) returns nil. As a workaround, get a
         // reference to an EaseIn curve, then change the underlying pointer data with that ref.
@@ -46,12 +50,14 @@ public protocol KeyboardHelperDelegate: AnyObject {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState)
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState)
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidChangeWithState state: KeyboardState)
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState)
 }
 
 public extension KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState) {}
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillChangeWithState state: KeyboardState) {}
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidChangeWithState state: KeyboardState) {}
+    func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidHideWithState state: KeyboardState) {}
 }
 
 /**
@@ -89,6 +95,12 @@ open class KeyboardHelper: NSObject {
             self,
             selector: #selector(keyboardWillHide),
             name: UIResponder.keyboardWillHideNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardDidHide),
+            name: UIResponder.keyboardDidHideNotification,
             object: nil
         )
         NotificationCenter.default.addObserver(
@@ -149,6 +161,16 @@ open class KeyboardHelper: NSObject {
             for weakDelegate in delegates {
                 weakDelegate.delegate?.keyboardHelper(self,
                                                       keyboardWillHideWithState: KeyboardState(userInfo))
+            }
+        }
+    }
+
+    @objc
+    private func keyboardDidHide(_ notification: Notification) {
+        if let userInfo = notification.userInfo {
+            for weakDelegate in delegates {
+                weakDelegate.delegate?.keyboardHelper(self,
+                                                      keyboardDidHideWithState: KeyboardState(userInfo))
             }
         }
     }

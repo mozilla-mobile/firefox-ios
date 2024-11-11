@@ -194,11 +194,33 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
     func onMessagePressed(_ message: GleanPlumbMessage, window: WindowUUID?, shouldExpire: Bool = true) {
         messagingStore.onMessagePressed(message, shouldExpire: shouldExpire)
 
-        guard let helper = createMessagingHelper.createNimbusMessagingHelper() else { return }
+        var extras = baseTelemetryExtras(using: message)
+        if let action = message.action {
+            if let uuid = handleLinkAction(for: message, action: action, window: window) {
+                extras[MessagingKey.actionUUID.rawValue] = uuid
+            }
+        }
 
-        guard let (uuid, urlToOpen) = try? self.generateUuidAndFormatAction(for: message, with: helper) else {
+        TelemetryWrapper.recordEvent(category: .action,
+                                     method: .tap,
+                                     object: .messaging,
+                                     value: .messageInteracted,
+                                     extras: extras)
+    }
+
+    private func handleLinkAction(
+        for message: GleanPlumbMessage,
+        action: String,
+        window: WindowUUID?
+    ) -> String? {
+        guard let helper = createMessagingHelper.createNimbusMessagingHelper() else { return nil }
+        guard let (uuid, urlToOpen) = try? self.generateUuidAndFormatAction(
+            for: action,
+            with: message.data.actionParams,
+            with: helper
+        ) else {
             self.onMalformedMessage(id: message.id, surface: message.surface)
-            return
+            return nil
         }
 
         // With our well-formed URL, we can handle the action here.
@@ -207,25 +229,16 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         } else {
             applicationHelper.open(urlToOpen)
         }
-
-        var extras = baseTelemetryExtras(using: message)
-        if let uuid = uuid {
-            extras[MessagingKey.actionUUID.rawValue] = uuid
-        }
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .messaging,
-                                     value: .messageInteracted,
-                                     extras: extras)
+        return uuid
     }
 
-    private func generateUuidAndFormatAction(for message: GleanPlumbMessage,
+    private func generateUuidAndFormatAction(for action: String,
+                                             with actionParams: [String: String],
                                              with helper: NimbusMessagingHelperProtocol) throws -> (String?, URL) {
         // Make substitutions where they're needed.
-        let actionTemplate = message.action
+        let actionTemplate = action
         var uuid = helper.getUuid(template: actionTemplate)
         let action = helper.stringFormat(template: actionTemplate, uuid: uuid)
-        let actionParams = message.data.actionParams
 
         let urlString: String = action.hasPrefix("://") ? deepLinkScheme + action : action
         guard var components = URLComponents(string: urlString) else {
@@ -325,16 +338,19 @@ class GleanPlumbMessageManager: GleanPlumbMessageManagerProtocol {
         message: MessageData,
         lookupTables: Messaging
     ) -> Result<GleanPlumbMessage, CreateMessageError> {
-        var action: String
+        var action: String?
         if !message.isControl {
             // Guard against a message with a blank `text` property.
             guard !message.text.isEmpty else { return .failure(.malformed) }
 
-            // The message action should be either from the lookup table OR a URL.
-            guard let safeAction = sanitizeAction(message.action, table: lookupTables.actions) else {
-                return .failure(.malformed)
+            // Message action can be null. If not null,
+            // the message action should be either from the lookup table OR a URL.
+            if let messageAction = message.action {
+                guard let safeAction = sanitizeAction(messageAction, table: lookupTables.actions) else {
+                    return .failure(.malformed)
+                }
+                action = safeAction
             }
-            action = safeAction
         } else {
             action = "CONTROL_ACTION"
         }

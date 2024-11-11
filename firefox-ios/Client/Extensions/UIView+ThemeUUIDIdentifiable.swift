@@ -6,7 +6,7 @@ import UIKit
 import Common
 import Shared
 
-extension UIView: ThemeUUIDIdentifiable {
+extension UIView: Common.ThemeUUIDIdentifiable {
     /// Convenience that allows most UIViews to automatically reference their parent window UUID.
     /// If the view is installed in a view hierarchy that is part of a window, or is a type
     /// that has its UUID injected, this returns the window UUID. If not, returns nil.

@@ -19,7 +19,9 @@ extension ContextualHintPrefsKeysProvider {
         case .jumpBackIn: return CFRPrefsKeys.jumpBackinKey.rawValue
         case .jumpBackInSyncedTab: return CFRPrefsKeys.jumpBackInSyncedTabKey.rawValue
         case .toolbarLocation: return CFRPrefsKeys.toolbarOnboardingKey.rawValue
+        case .mainMenu: return CFRPrefsKeys.mainMenuKey.rawValue
         case .shoppingExperience: return CFRPrefsKeys.shoppingOnboardingKey.rawValue
+        case .navigation: return CFRPrefsKeys.navigationKey.rawValue
         }
     }
 }

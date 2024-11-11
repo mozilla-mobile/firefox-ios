@@ -7,6 +7,10 @@ import ToolbarKit
 import Redux
 import UIKit
 
+protocol NavigationToolbarContainerDelegate: AnyObject {
+    func configureContextualHint(for: UIButton, with contextualHintType: String)
+}
+
 class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
     typealias SubscriberStateType = ToolbarState
 
@@ -19,6 +23,7 @@ class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
             subscribeToRedux()
         }
     }
+    weak var toolbarDelegate: NavigationToolbarContainerDelegate?
     private var toolbarState: ToolbarState?
     private var model: NavigationToolbarContainerModel?
 
@@ -69,7 +74,7 @@ class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
 
         if self.model != model {
             self.model = model
-            toolbar.configure(state: model.navigationToolbarState)
+            toolbar.configure(state: model.navigationToolbarState, toolbarDelegate: self)
         }
     }
 
@@ -91,5 +96,16 @@ class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
     func applyTheme(theme: Theme) {
         toolbar.applyTheme(theme: theme)
         backgroundColor = theme.colors.layer1
+    }
+}
+
+extension NavigationToolbarContainer: BrowserNavigationToolbarDelegate {
+    func configureContextualHint(for button: UIButton, with contextualHintType: String) {
+        guard let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+        else { return }
+
+        if contextualHintType == ContextualHintType.navigation.rawValue && !toolbarState.canShowNavigationHint { return }
+
+        toolbarDelegate?.configureContextualHint(for: button, with: contextualHintType)
     }
 }

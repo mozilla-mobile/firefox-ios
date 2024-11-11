@@ -20,6 +20,7 @@ protocol SettingsFlowDelegate: AnyObject,
     func showExperiments()
     func showFirefoxSuggest()
     func openDebugTestTabs(count: Int)
+    func showDebugFeatureFlags()
     func showPasswordManager(shouldShowOnboarding: Bool)
     func didFinishShowingSettings()
 }
@@ -50,6 +51,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
     weak var parentCoordinator: SettingsFlowDelegate?
 
+    // MARK: - Data Settings
+    private var sendAnonymousUsageDataSetting: BoolSetting?
+    private var studiesToggleSetting: BoolSetting?
+
     // MARK: - Initializers
     init(with profile: Profile,
          and tabManager: TabManager,
@@ -64,6 +69,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         self.tabManager = tabManager
         self.settingsDelegate = delegate
         setupNavigationBar()
+        setupDataSettings()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -157,6 +163,31 @@ class AppSettingsTableViewController: SettingsTableViewController,
         default:
             break
         }
+    }
+
+    // MARK: Data settings setup
+
+    private func setupDataSettings() {
+        let anonymousUsageDataSetting = SendAnonymousUsageDataSetting(
+            prefs: profile.prefs,
+            delegate: settingsDelegate,
+            theme: themeManager.getCurrentTheme(for: windowUUID),
+            settingsDelegate: parentCoordinator
+        )
+
+        let studiesSetting = StudiesToggleSetting(
+            prefs: profile.prefs,
+            delegate: settingsDelegate,
+            theme: themeManager.getCurrentTheme(for: windowUUID),
+            settingsDelegate: parentCoordinator
+        )
+
+        anonymousUsageDataSetting.shouldSendUsageData = { value in
+            studiesSetting.updateSetting(for: value)
+        }
+
+        sendAnonymousUsageDataSetting = anonymousUsageDataSetting
+        studiesToggleSetting = studiesSetting
     }
 
     // MARK: - Generate Settings
@@ -283,7 +314,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             privacySettings.append(AutofillCreditCardSettings(settings: self, settingsDelegate: parentCoordinator))
         }
 
-        let autofillAddressStatus = featureFlags.isFeatureEnabled(.addressAutofill, checking: .buildOnly)
+        let autofillAddressStatus = AddressLocaleFeatureValidator.isValidRegion()
         if autofillAddressStatus {
             privacySettings.append(AddressAutofillSetting(theme: themeManager.getCurrentTheme(for: windowUUID),
                                                           profile: profile,
@@ -291,6 +322,19 @@ class AppSettingsTableViewController: SettingsTableViewController,
         }
 
         privacySettings.append(ClearPrivateDataSetting(settings: self, settingsDelegate: parentCoordinator))
+
+        privacySettings += [
+            BoolSetting(prefs: profile.prefs,
+                        theme: themeManager.getCurrentTheme(for: windowUUID),
+                        prefKey: PrefsKeys.Settings.closePrivateTabs,
+                        defaultValue: true,
+                        titleText: .AppSettingsClosePrivateTabsTitle,
+                        statusText: .AppSettingsClosePrivateTabsDescription) { _ in
+                            let action = TabTrayAction(windowUUID: self.windowUUID,
+                                                       actionType: TabTrayActionType.closePrivateTabsSettingToggled)
+                            store.dispatch(action)
+            }
+        ]
 
         privacySettings.append(ContentBlockerSetting(settings: self, settingsDelegate: parentCoordinator))
 
@@ -308,17 +352,12 @@ class AppSettingsTableViewController: SettingsTableViewController,
     }
 
     private func getSupportSettings() -> [SettingSection] {
+        guard let sendAnonymousUsageDataSetting, let studiesToggleSetting else { return [] }
         let supportSettings = [
             ShowIntroductionSetting(settings: self, settingsDelegate: self),
             SendFeedbackSetting(settingsDelegate: parentCoordinator),
-            SendAnonymousUsageDataSetting(prefs: profile.prefs,
-                                          delegate: settingsDelegate,
-                                          theme: themeManager.getCurrentTheme(for: windowUUID),
-                                          settingsDelegate: parentCoordinator),
-            StudiesToggleSetting(prefs: profile.prefs,
-                                 delegate: settingsDelegate,
-                                 theme: themeManager.getCurrentTheme(for: windowUUID),
-                                 settingsDelegate: parentCoordinator),
+            sendAnonymousUsageDataSetting,
+            studiesToggleSetting,
             OpenSupportPageSetting(delegate: settingsDelegate,
                                    theme: themeManager.getCurrentTheme(for: windowUUID),
                                    settingsDelegate: parentCoordinator),
@@ -341,7 +380,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     }
 
     private func getDebugSettings() -> [SettingSection] {
-        let hiddenDebugOptions = [
+        var hiddenDebugOptions = [
             ExperimentsSettings(settings: self, settingsDelegate: self),
             ExportLogDataSetting(settings: self),
             ExportBrowserDataSetting(settings: self),
@@ -357,8 +396,12 @@ class AppSettingsTableViewController: SettingsTableViewController,
             SentryIDSetting(settings: self, settingsDelegate: self),
             FasterInactiveTabs(settings: self, settingsDelegate: self),
             OpenFiftyTabsDebugOption(settings: self, settingsDelegate: self),
-            FirefoxSuggestSettings(settings: self, settingsDelegate: self),
+            FirefoxSuggestSettings(settings: self, settingsDelegate: self)
         ]
+
+        #if MOZ_CHANNEL_BETA || MOZ_CHANNEL_FENNEC
+        hiddenDebugOptions.append(FeatureFlagsSettings(settings: self, settingsDelegate: self))
+        #endif
 
         return [SettingSection(title: NSAttributedString(string: "Debug"), children: hiddenDebugOptions)]
     }
@@ -393,6 +436,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
     func pressedOpenFiftyTabs() {
         parentCoordinator?.openDebugTestTabs(count: 50)
+    }
+
+    func pressedDebugFeatureFlags() {
+        parentCoordinator?.showDebugFeatureFlags()
     }
 
     // MARK: SharedSettingsDelegate

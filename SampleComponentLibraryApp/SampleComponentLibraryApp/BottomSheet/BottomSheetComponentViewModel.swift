@@ -12,13 +12,16 @@ struct BottomSheetComponentViewModel: ComponentViewModel {
     private var viewModel: BottomSheetViewModel
 
     init() {
-        viewModel = BottomSheetViewModel(closeButtonA11yLabel: "Close button", closeButtonA11yIdentifier: "a11yCloseButton")
+        viewModel = BottomSheetViewModel(
+            closeButtonA11yLabel: "Close button",
+            closeButtonA11yIdentifier: "a11yCloseButton")
         viewModel.shouldDismissForTapOutside = true
 
         viewController = BottomSheetViewController(
             viewModel: viewModel,
             childViewController: BottomSheetChildViewController(),
-            usingDimmedBackground: true
+            usingDimmedBackground: true,
+            windowUUID: defaultSampleComponentUUID
         )
     }
 

@@ -71,6 +71,7 @@ public struct PrefsKeys {
 
     // For ease of use, please list keys alphabetically.
     public struct FeatureFlags {
+        public static let DebugSuffixKey = "DebugKey"
         public static let FirefoxSuggest = "FirefoxSuggest"
         public static let HistoryHighlightsSection = "HistoryHighlightsSectionUserPrefsKey"
         public static let InactiveTabs = "InactiveTabsUserPrefsKey"
@@ -87,6 +88,11 @@ public struct PrefsKeys {
         public static let showPrivateModeFirefoxSuggestions = "ShowPrivateModeFirefoxSuggestionsKey"
         public static let showPrivateModeSearchSuggestions = "ShowPrivateModeSearchSuggestionsKey"
         public static let showSearchSuggestions = "FirefoxSuggestShowSearchSuggestions"
+    }
+
+    public struct Sync {
+        public static let numberOfSyncedDevices = "numberOfSyncedDevicesKey"
+        public static let signedInFxaAccount = "signedInFxaAccountKey"
     }
 
     public struct UserFeatureFlagPrefs {
@@ -106,8 +112,15 @@ public struct PrefsKeys {
         case jumpBackInSyncedTabConfiguredKey = "JumpBackInSyncedTabConfigured"
         case inactiveTabsKey = "ContextualHintInactiveTabs"
         case toolbarOnboardingKey = "ContextualHintToolbarOnboardingKey"
+        case mainMenuKey = "MainMenuHintKey"
         case shoppingOnboardingKey = "ShoppingOnboardingCFRKey"
         case shoppingOnboardingCFRsCounterKey = "ShoppingOnboardingCFRsCounterKey"
+        case navigationKey = "ContextualHintNavigation"
+    }
+
+    // Firefox settings
+    public struct Settings {
+        public static let closePrivateTabs = "ClosePrivateTabs"
     }
 
     // Activity Stream
@@ -162,6 +175,9 @@ public struct PrefsKeys {
     // The last recorded CFR timestamp
     public static let FakespotLastCFRTimestamp = "FakespotLastCFRTimestamp"
 
+    // Representing whether or not the last user session was private
+    public static let LastSessionWasPrivate = "wasLastSessionPrivate"
+
     // Only used to force nimbus features to true with tests
     public static let NimbusFeatureTestsOverride = "NimbusFeatureTestsOverride"
 
@@ -173,6 +189,8 @@ public struct PrefsKeys {
 
     // Used to show splash screen only during first time on fresh install
     public static let splashScreenShownKey = "splashScreenShownKey"
+
+    public static let PasswordGeneratorShown = "PasswordGeneratorShown"
 }
 
 public protocol Prefs {
@@ -311,7 +329,7 @@ open class MockProfilePrefs: Prefs {
     }
 
     open func clearAll() {
-        let dictionary = things as! [String: Any]
+        guard let dictionary = things as? [String: Any] else { return }
         let keysToDelete: [String] = dictionary.keys.filter { $0.hasPrefix(self.prefix) }
         things.removeObjects(forKeys: keysToDelete)
     }

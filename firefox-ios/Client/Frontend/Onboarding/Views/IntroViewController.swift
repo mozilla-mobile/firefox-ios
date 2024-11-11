@@ -336,6 +336,11 @@ extension IntroViewController: OnboardingCardDelegate {
                 windowUUID: windowUUID,
                 from: cardName,
                 selector: #selector(dismissPrivacyPolicyViewController))
+        case .openIosFxSettings:
+            DefaultApplicationHelper().openSettings()
+            advance(numberOfPages: 1, from: cardName) {
+                self.showNextPageCompletionForLastCard()
+            }
         case .endOnboarding:
             closeOnboarding()
         }
@@ -347,20 +352,19 @@ extension IntroViewController: OnboardingCardDelegate {
     ) {
         switch action {
         case .themeDark:
+            turnSystemTheme(on: false)
             let action = ThemeSettingsViewAction(manualThemeType: .dark,
                                                  windowUUID: windowUUID,
                                                  actionType: ThemeSettingsViewActionType.switchManualTheme)
             store.dispatch(action)
         case .themeLight:
+            turnSystemTheme(on: false)
             let action = ThemeSettingsViewAction(manualThemeType: .light,
                                                  windowUUID: windowUUID,
                                                  actionType: ThemeSettingsViewActionType.switchManualTheme)
             store.dispatch(action)
         case .themeSystemDefault:
-            let action = ThemeSettingsViewAction(useSystemAppearance: true,
-                                                 windowUUID: windowUUID,
-                                                 actionType: ThemeSettingsViewActionType.toggleUseSystemAppearance)
-            store.dispatch(action)
+            turnSystemTheme(on: true)
         case .toolbarBottom:
             featureFlags.set(feature: .searchBarPosition, to: SearchBarPosition.bottom)
         case .toolbarTop:
@@ -370,6 +374,13 @@ extension IntroViewController: OnboardingCardDelegate {
             from: cardName,
             with: action
         )
+    }
+
+    private func turnSystemTheme(on state: Bool) {
+        let action = ThemeSettingsViewAction(useSystemAppearance: state,
+                                             windowUUID: windowUUID,
+                                             actionType: ThemeSettingsViewActionType.toggleUseSystemAppearance)
+        store.dispatch(action)
     }
 
     func sendCardViewTelemetry(from cardName: String) {

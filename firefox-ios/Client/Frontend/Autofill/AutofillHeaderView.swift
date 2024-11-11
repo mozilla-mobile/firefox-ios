@@ -39,6 +39,7 @@ struct AutofillHeaderView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: UX.logoSize, height: UX.logoSize)
+                    .accessibilityHidden(true)
                 VStack(alignment: .leading) {
                     Text(title)
                         .font(.body)
@@ -76,12 +77,25 @@ struct AutofillHeaderView: View {
     }
 }
 
-#Preview {
+@available(iOS 17, *)
+#Preview(traits: .sizeThatFitsLayout) {
     AutofillHeaderView(
         windowUUID: .XCTestDefaultUUID,
         title: "Use this login?",
         subtitle: "You’ll sign into cnn.com"
     )
-    .previewLayout(.sizeThatFits)
     .padding()
+}
+
+@available(iOS, deprecated: 17)
+struct AutoFillHeaderView_Previews: PreviewProvider {
+    static var previews: some View {
+        AutofillHeaderView(
+            windowUUID: .XCTestDefaultUUID,
+            title: "Use this login?",
+            subtitle: "You’ll sign into cnn.com"
+        )
+        .previewLayout(.sizeThatFits)
+        .padding()
+    }
 }

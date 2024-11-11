@@ -28,13 +28,13 @@
           "version": null
         }
       },
-      {
+        {
         "package": "Glean",
         "repositoryURL": "https://github.com/mozilla/glean-swift",
         "state": {
           "branch": null,
-          "revision": "116ebe9e9e054b278d9f69721d1495db7551a37b",
-          "version": "60.1.0"
+          "revision": "51794f8b74c55ebde6d1502b641eacc19176e139",
+          "version": "61.2.0"
         }
       },
       {
@@ -42,8 +42,8 @@
         "repositoryURL": "https://github.com/onevcat/Kingfisher.git",
         "state": {
           "branch": null,
-          "revision": "5b92f029fab2cce44386d28588098b5be0824ef5",
-          "version": "7.11.0"
+          "revision": "2ef543ee21d63734e1c004ad6c870255e8716c50",
+          "version": "7.12.0"
         }
       },
       {
@@ -51,8 +51,8 @@
         "repositoryURL": "https://github.com/mozilla/rust-components-swift",
         "state": {
           "branch": null,
-          "revision": "60d993ce59831432c871dccd2002ab59b08f37d9",
-          "version": "129.0.20240628050251"
+          "revision": "eb7ef48d971787d810d6638a028e15b9e346e907",
+          "version": "134.0.20241108050318"
         }
       },
       {
@@ -60,8 +60,8 @@
         "repositoryURL": "https://github.com/getsentry/sentry-cocoa",
         "state": {
           "branch": null,
-          "revision": "38f4f70d07117b9f958a76b1bff278c2f29ffe0e",
-          "version": "8.21.0"
+          "revision": "5575af93efb776414f243e93d6af9f6258dc539a",
+          "version": "8.36.0"
         }
       },
       {
@@ -71,6 +71,15 @@
           "branch": null,
           "revision": "e74fe2a978d1216c3602b129447c7301573cc2d8",
           "version": "5.7.0"
+        }
+      },
+      {
+        "package": "SwiftDraw",
+        "repositoryURL": "https://github.com/swhitty/SwiftDraw",
+        "state": {
+          "branch": null,
+          "revision": "a5c680f07b33f4cc9a451491b417b8119de23c6e",
+          "version": "0.17.0"
         }
       },
       {

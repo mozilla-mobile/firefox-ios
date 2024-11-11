@@ -23,24 +23,30 @@ class RootViewControllerModel {
             iconName: "Back",
             isEnabled: canGoBack,
             a11yLabel: "Navigate Back",
+            a11yHint: nil,
             a11yId: "backButton",
-            onSelected: {
+            hasLongPressAction: false,
+            onSelected: { _ in
                 self.navigationToolbarDelegate?.backButtonTapped()
             })
         let forwardButton = ToolbarElement(
             iconName: "Forward",
             isEnabled: canGoForward,
             a11yLabel: "Navigate Forward",
+            a11yHint: nil,
             a11yId: "forwardButton",
-            onSelected: {
+            hasLongPressAction: false,
+            onSelected: { _ in
                 self.navigationToolbarDelegate?.forwardButtonTapped()
             })
         let reloadButton = ToolbarElement(
             iconName: isReloading ? StandardImageIdentifiers.Large.cross : StandardImageIdentifiers.Large.sync,
             isEnabled: isReloading,
             a11yLabel: isReloading ? "Stop loading website" : "Reload website",
+            a11yHint: nil,
             a11yId: isReloading ? "stopButton" : "reloadButton",
-            onSelected: {
+            hasLongPressAction: false,
+            onSelected: { _ in
                 if self.isReloading {
                     self.navigationToolbarDelegate?.stopButtonTapped()
                 } else {
@@ -51,8 +57,10 @@ class RootViewControllerModel {
             iconName: StandardImageIdentifiers.Large.appMenu,
             isEnabled: true,
             a11yLabel: "Open Menu",
+            a11yHint: nil,
             a11yId: "appMenuButton",
-            onSelected: {
+            hasLongPressAction: false,
+            onSelected: { _ in
                 self.navigationToolbarDelegate?.menuButtonTapped()
             })
         let actions = [backButton, forwardButton, reloadButton, menuButton]
@@ -76,15 +84,19 @@ class RootViewControllerModel {
             iconName: StandardImageIdentifiers.Large.qrCode,
             isEnabled: true,
             a11yLabel: "Read QR Code",
+            a11yHint: nil,
             a11yId: "qrCodeButton",
+            hasLongPressAction: false,
             onSelected: nil)]
 
         let browserActions = [ToolbarElement(
             iconName: StandardImageIdentifiers.Large.appMenu,
             isEnabled: true,
             a11yLabel: "Open Menu",
+            a11yHint: nil,
             a11yId: "appMenuButton",
-            onSelected: {
+            hasLongPressAction: false,
+            onSelected: { _ in
                 self.addressToolbarDelegate?.didTapMenu()
             })]
 
@@ -95,12 +107,14 @@ class RootViewControllerModel {
             lockIconButtonA11yLabel: "Tracking Protection",
             urlTextFieldPlaceholder: "Search or enter address",
             urlTextFieldA11yId: "urlTextField",
-            urlTextFieldA11yLabel: "Address Bar",
             searchEngineImage: UIImage(named: "bingSearchEngine"),
-            lockIconImageName: StandardImageIdentifiers.Medium.lock,
+            lockIconImageName: StandardImageIdentifiers.Large.lock,
             url: url,
-            searchTerm: nil
-        )
+            droppableUrl: nil,
+            searchTerm: nil,
+            isEditing: false,
+            isScrollingDuringEdit: false,
+            shouldSelectSearchTerm: false)
 
         // FXIOS-8947: Use scroll position
         return AddressToolbarContainerModel(

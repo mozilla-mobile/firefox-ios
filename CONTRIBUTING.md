@@ -45,13 +45,15 @@ Since the bundle identifier we use for Firefox is tied to our developer account,
 If you submit a patch, be sure to exclude these files because they are only relevant for your personal build.
 
 # Looking for issues
-Want to contribute on the codebase but don't know where to start? Here is a list of [issues that are contributor friendly](https://github.com/mozilla-mobile/firefox-ios/labels/Contributor%20OK). 
+Want to contribute on the codebase but don't know where to start? Here is a list of [issues that are contributor friendly](https://github.com/mozilla-mobile/firefox-ios/labels/Contributor%20OK).
 
-Note that we try to mark "Contributor OK" tasks on work that can be easily picked up by contributors as much as we can. Please try to only pick "Contributor OK" tasks, or if you want to pick a task that isn't marked as such make sure to ask one of the team members if the work is available to be taken or not. There's multiple reasons behind this:
-- Sometimes the technical work is bigger than what it seems at first hand. We're often not looking for a quick band-aid fix, but rather a long term solution that requires tying into the other refactor project that we currently have ongoing, and without proper conversation with the rest of the team it would rather be difficult as a contributor to be aware of those. If you want to enable such work, it's always possible to discuss with the teammates on Element. But going forward without proper discussion means you risk your PR of being declined as it won't align with the direction we're working in. 
-- Sometimes it's also possible someone is already working on it in our team, since the status of "in progress" isn't reflected in GitHub from Jira.
+To ensure smooth collaboration, we recommend starting with issues labeled "Contributor OK." These issues have been recently categorized based on difficulty:
 
-Hence, if you want to work on a "non contributor OK" task, it's entirely possible but please just ask on it if it's available to be worked on.
+- **`Good first issue`**: These are beginner-friendly tasks, generally involving simple bug fixes or UX improvements.
+- **`Intermediate`**: These issues involve small feature development, simple pattern implementations, or bug/UI adjustments that may require a deeper dive into the codebase.
+- **`Advanced`**: These tasks require a thorough understanding of the project, often involving complex implementations, significant refactoring or just bugs that requires a deep dive into the codebase.
+
+Please prioritize tasks marked as "Contributor OK." If you wish to work on an issue that isn't marked as such, reach out to a team member first to confirm if the task is available for contributors. This approach ensures that we avoid potential conflicts and maintain an organized workflow.
 
 ## Contributor fix
 We add the "Contributor Fix" label on tasks that have a PR opened for it, or if a PR has been merged to fix this task. This means if you see this label on a task it's probably fixed and cannot be picked up. Note that tasks still stay opened before we close them as it's the Quality Assurance people that will close those tasks with their final approval of the work.

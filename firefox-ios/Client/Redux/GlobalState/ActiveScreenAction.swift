@@ -21,13 +21,20 @@ class ScreenAction: Action {
 enum AppScreen {
     case browserViewController
     case onboardingViewController
+    case homepage
     case themeSettings
     case tabsTray
     case tabsPanel
     case remoteTabsPanel
     case tabPeek
+    case mainMenu
+    case mainMenuDetails
     case microsurvey
+    case trackingProtection
     case toolbar
+    case searchEngineSelection
+    case passwordGenerator
+    case nativeErrorPage
 }
 
 enum ScreenActionType: ActionType {

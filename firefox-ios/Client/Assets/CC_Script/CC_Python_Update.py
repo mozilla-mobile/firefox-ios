@@ -12,6 +12,7 @@ FILES_TO_DOWNLOAD = [
     "browser/extensions/formautofill/content/addressFormLayout.mjs",
     "toolkit/components/formautofill/Constants.ios.mjs",
     "toolkit/modules/CreditCard.sys.mjs",
+    "toolkit/components/formautofill/shared/AutofillFormFactory.sys.mjs",
     "toolkit/components/formautofill/shared/CreditCardRuleset.sys.mjs",
     "toolkit/components/formautofill/shared/CreditCardRecord.sys.mjs",
     "toolkit/components/formautofill/shared/FieldScanner.sys.mjs",
@@ -22,6 +23,7 @@ FILES_TO_DOWNLOAD = [
     "toolkit/components/formautofill/shared/AddressMetaDataExtension.sys.mjs",
     "toolkit/components/formautofill/shared/AddressMetaDataLoader.sys.mjs",
     "toolkit/components/formautofill/shared/AddressRecord.sys.mjs",
+    "toolkit/components/formautofill/shared/AddressParser.sys.mjs",
     "toolkit/components/formautofill/shared/AutofillTelemetry.sys.mjs",
     "toolkit/components/formautofill/shared/FormAutofillHandler.sys.mjs",
     "toolkit/components/formautofill/shared/FormAutofillHeuristics.sys.mjs",
@@ -36,9 +38,13 @@ FILES_TO_DOWNLOAD = [
     "toolkit/components/formautofill/Helpers.ios.mjs",
     "toolkit/components/formautofill/shared/HeuristicsRegExp.sys.mjs",
     "toolkit/components/formautofill/shared/LabelUtils.sys.mjs",
-    "toolkit/components/passwordmgr/LoginManager.shared.mjs",
     "toolkit/components/formautofill/Overrides.ios.js",
     "toolkit/modules/third_party/fathom/fathom.mjs",
+    "toolkit/components/passwordmgr/shared/LoginFormFactory.sys.mjs",
+    "toolkit/components/passwordmgr/shared/NewPasswordModel.sys.mjs",
+    "toolkit/components/passwordmgr/shared/PasswordGenerator.sys.mjs",
+    "toolkit/components/passwordmgr/shared/PasswordRulesParser.sys.mjs",
+    "toolkit/components/passwordmgr/LoginManager.shared.sys.mjs",
 ]
 
 

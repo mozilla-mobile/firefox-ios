@@ -20,7 +20,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var sceneCoordinator: SceneCoordinator?
     var routeBuilder = RouteBuilder()
-    var logger: Logger = DefaultLogger.shared
+
+    private let logger: Logger = DefaultLogger.shared
+    private let tabErrorTelemetryHelper = TabErrorTelemetryHelper.shared
 
     // MARK: - Connecting / Disconnecting Scenes
 
@@ -35,13 +37,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         options connectionOptions: UIScene.ConnectionOptions
     ) {
         guard !AppConstants.isRunningUnitTest else { return }
+        logger.log("SceneDelegate: will connect to session", level: .info, category: .lifecycle)
 
         // Add hooks for the nimbus-cli to test experiments on device or involving deeplinks.
         if let url = connectionOptions.urlContexts.first?.url {
             Experiments.shared.initializeTooling(url: url)
         }
 
-        routeBuilder.configure(prefs: profile.prefs)
+        routeBuilder.configure(
+            isPrivate: UserDefaults.standard.bool(
+                forKey: PrefsKeys.LastSessionWasPrivate
+            ),
+            prefs: profile.prefs
+        )
 
         let sceneCoordinator = SceneCoordinator(scene: scene)
         self.sceneCoordinator = sceneCoordinator
@@ -51,6 +59,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
+        let logUUID = sceneCoordinator?.windowUUID.uuidString ?? "<nil>"
+        logger.log("SceneDelegate: scene did disconnect. UUID: \(logUUID)", level: .info, category: .lifecycle)
         // Handle clean-up here for closing windows on iPad
         guard let sceneCoordinator = (scene.delegate as? SceneDelegate)?.sceneCoordinator else { return }
 
@@ -73,10 +83,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     /// or other activities that need to begin.
     func sceneDidBecomeActive(_ scene: UIScene) {
         guard !AppConstants.isRunningUnitTest else { return }
+        let logUUID = sceneCoordinator?.windowUUID.uuidString ?? "<nil>"
+        logger.log("SceneDelegate: scene did become active. UUID: \(logUUID)", level: .info, category: .lifecycle)
 
         // Resume previously stopped downloads for, and on, THIS scene only.
         if let uuid = sceneCoordinator?.windowUUID {
             downloadQueue.resumeAll(for: uuid)
+            AppEventQueue.wait(for: .tabRestoration(uuid)) {
+                self.tabErrorTelemetryHelper.validateTabCountForForegroundedScene(uuid)
+            }
         }
     }
 
@@ -87,8 +102,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     /// Use this method to reduce the scene's memory usage, clear claims to resources & dependencies / services.
     /// UIKit takes a snapshot of the scene for the app switcher after this method returns.
     func sceneDidEnterBackground(_ scene: UIScene) {
+        let logUUID = sceneCoordinator?.windowUUID.uuidString ?? "<nil>"
+        logger.log("SceneDelegate: scene did enter background. UUID: \(logUUID)", level: .info, category: .lifecycle)
         if let uuid = sceneCoordinator?.windowUUID {
             downloadQueue.pauseAll(for: uuid)
+            tabErrorTelemetryHelper.recordTabCountForBackgroundedScene(uuid)
         }
     }
 
@@ -126,6 +144,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         performActionFor shortcutItem: UIApplicationShortcutItem,
         completionHandler: @escaping (Bool) -> Void
     ) {
+        routeBuilder.configure(
+            isPrivate: UserDefaults.standard.bool(
+                forKey: PrefsKeys.LastSessionWasPrivate
+            ),
+            prefs: profile.prefs
+        )
+
         guard let route = routeBuilder.makeRoute(shortcutItem: shortcutItem,
                                                  tabSetting: NewTabAccessors.getNewTabPage(profile.prefs))
         else { return }
@@ -133,7 +158,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func handleOpenURL(_ url: URL) {
-        routeBuilder.configure(prefs: profile.prefs)
+        routeBuilder.configure(
+            isPrivate: UserDefaults.standard.bool(
+                forKey: PrefsKeys.LastSessionWasPrivate
+            ),
+            prefs: profile.prefs
+        )
 
         // Before processing the incoming URL, check if it is a widget that is opening a tab via UUID.
         // If so, we want to be sure that we select the tab in the correct iPad window.

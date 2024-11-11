@@ -12,7 +12,7 @@ import XCTest
 final class SearchViewModelTests: XCTestCase {
     var profile: MockProfile!
     var mockDelegate: MockSearchDelegate!
-    var engines: SearchEngines!
+    var searchEnginesManager: SearchEnginesManager!
     var remoteClient: RemoteClient!
 
     override func setUp() {
@@ -25,7 +25,7 @@ final class SearchViewModelTests: XCTestCase {
         let mockSearchEngineProvider = MockSearchEngineProvider()
         mockDelegate = MockSearchDelegate()
 
-        engines = SearchEngines(
+        searchEnginesManager = SearchEnginesManager(
             prefs: profile.prefs,
             files: profile.files,
             engineProvider: mockSearchEngineProvider
@@ -54,16 +54,16 @@ final class SearchViewModelTests: XCTestCase {
                                     [.amp: false, .ampMobile: false, .wikipedia: false])
        })
 
-        engines.shouldShowFirefoxSuggestions = false
-        engines.shouldShowSponsoredSuggestions = false
+        searchEnginesManager.shouldShowFirefoxSuggestions = false
+        searchEnginesManager.shouldShowSponsoredSuggestions = false
 
         let subject = createSubject()
         await subject.loadFirefoxSuggestions()?.value
         XCTAssertEqual(subject.firefoxSuggestions.count, 0)
 
         // Providers set to false, so regardless of the prefs, we shouldn't see anything
-        engines.shouldShowFirefoxSuggestions = true
-        engines.shouldShowSponsoredSuggestions = true
+        searchEnginesManager.shouldShowFirefoxSuggestions = true
+        searchEnginesManager.shouldShowSponsoredSuggestions = true
         await subject.loadFirefoxSuggestions()?.value
         XCTAssertEqual(subject.firefoxSuggestions.count, 0)
     }
@@ -74,8 +74,8 @@ final class SearchViewModelTests: XCTestCase {
                                     [.amp: false, .ampMobile: true, .wikipedia: true])
        })
 
-        engines.shouldShowFirefoxSuggestions = false
-        engines.shouldShowSponsoredSuggestions = false
+        searchEnginesManager.shouldShowFirefoxSuggestions = false
+        searchEnginesManager.shouldShowSponsoredSuggestions = false
 
         let subject = createSubject()
 
@@ -90,8 +90,8 @@ final class SearchViewModelTests: XCTestCase {
                                     [.amp: false, .ampMobile: true, .wikipedia: true])
        })
 
-        engines.shouldShowFirefoxSuggestions = true
-        engines.shouldShowSponsoredSuggestions = true
+        searchEnginesManager.shouldShowFirefoxSuggestions = true
+        searchEnginesManager.shouldShowSponsoredSuggestions = true
         let subject = createSubject()
         await subject.loadFirefoxSuggestions()?.value
 
@@ -100,7 +100,7 @@ final class SearchViewModelTests: XCTestCase {
     }
 
     func testSyncedTabsAreFilteredWhenShowSponsoredSuggestionsIsTrue() {
-        engines.shouldShowSponsoredSuggestions = true
+        searchEnginesManager.shouldShowSponsoredSuggestions = true
         let remoteTab1 = RemoteTab(
             clientGUID: "1",
             URL: URL(string: "www.mozilla.org?mfadid=adm")!,
@@ -137,7 +137,7 @@ final class SearchViewModelTests: XCTestCase {
     }
 
     func testSyncedTabsAreNotFilteredWhenShowSponsoredSuggestionsIsFalse() {
-        engines.shouldShowSponsoredSuggestions = false
+        searchEnginesManager.shouldShowSponsoredSuggestions = false
 
         let remoteTab1 = RemoteTab(
             clientGUID: "1",
@@ -176,8 +176,8 @@ final class SearchViewModelTests: XCTestCase {
 
     func testSponsoredSuggestionsAreNotShownInPrivateBrowsingMode() async throws {
         let subject = createSubject(isPrivate: true, isBottomSearchBar: false)
-        engines.shouldShowFirefoxSuggestions = true
-        engines.shouldShowSponsoredSuggestions = true
+        searchEnginesManager.shouldShowFirefoxSuggestions = true
+        searchEnginesManager.shouldShowSponsoredSuggestions = true
 
         await subject.loadFirefoxSuggestions()?.value
         XCTAssertTrue(subject.firefoxSuggestions.isEmpty)
@@ -187,8 +187,8 @@ final class SearchViewModelTests: XCTestCase {
     func testNonSponsoredSuggestionsAreNotShownInPrivateBrowsingMode() async throws {
         let subject = createSubject(isPrivate: true, isBottomSearchBar: false)
 
-        engines.shouldShowFirefoxSuggestions = true
-        engines.shouldShowSponsoredSuggestions = true
+        searchEnginesManager.shouldShowFirefoxSuggestions = true
+        searchEnginesManager.shouldShowSponsoredSuggestions = true
 
         await subject.loadFirefoxSuggestions()?.value
 
@@ -199,9 +199,9 @@ final class SearchViewModelTests: XCTestCase {
     func testNonSponsoredAndSponsoredSuggestionsInPrivateModeWithPrivateSuggestionsOn() async throws {
         let subject = createSubject(isPrivate: true, isBottomSearchBar: false)
 
-        engines.shouldShowFirefoxSuggestions = true
-        engines.shouldShowSponsoredSuggestions = true
-        engines.shouldShowPrivateModeFirefoxSuggestions = true
+        searchEnginesManager.shouldShowFirefoxSuggestions = true
+        searchEnginesManager.shouldShowSponsoredSuggestions = true
+        searchEnginesManager.shouldShowPrivateModeFirefoxSuggestions = true
         await subject.loadFirefoxSuggestions()?.value
 
         XCTAssertTrue(subject.firefoxSuggestions.isEmpty)
@@ -210,9 +210,9 @@ final class SearchViewModelTests: XCTestCase {
 
     func testNonSponsoredInPrivateModeWithPrivateSuggestionsOn() async throws {
         let subject = createSubject(isPrivate: true, isBottomSearchBar: false)
-        engines.shouldShowFirefoxSuggestions = true
-        engines.shouldShowSponsoredSuggestions = false
-        engines.shouldShowPrivateModeFirefoxSuggestions = true
+        searchEnginesManager.shouldShowFirefoxSuggestions = true
+        searchEnginesManager.shouldShowSponsoredSuggestions = false
+        searchEnginesManager.shouldShowPrivateModeFirefoxSuggestions = true
         await subject.loadFirefoxSuggestions()?.value
 
         XCTAssertTrue(subject.firefoxSuggestions.isEmpty)
@@ -222,7 +222,7 @@ final class SearchViewModelTests: XCTestCase {
     func testNonSponsoredAndSponsoredSuggestionsAreNotShownInPrivateBrowsingMode() async throws {
         let subject = createSubject(isPrivate: true, isBottomSearchBar: false)
 
-        engines.shouldShowPrivateModeFirefoxSuggestions = false
+        searchEnginesManager.shouldShowPrivateModeFirefoxSuggestions = false
         await subject.loadFirefoxSuggestions()?.value
 
         XCTAssertTrue(subject.firefoxSuggestions.isEmpty)
@@ -235,8 +235,8 @@ final class SearchViewModelTests: XCTestCase {
                                     [.amp: false, .ampMobile: true, .wikipedia: true])
        })
 
-        engines.shouldShowFirefoxSuggestions = true
-        engines.shouldShowSponsoredSuggestions = true
+        searchEnginesManager.shouldShowFirefoxSuggestions = true
+        searchEnginesManager.shouldShowSponsoredSuggestions = true
         let subject = createSubject()
         await subject.loadFirefoxSuggestions()?.value
         await subject.loadFirefoxSuggestions()?.value
@@ -246,7 +246,7 @@ final class SearchViewModelTests: XCTestCase {
     }
 
     func testLoad_forHistoryAndBookmarks_doesNotTriggerReloadForSameSuggestions() async throws {
-        engines.shouldShowSponsoredSuggestions = false
+        searchEnginesManager.shouldShowSponsoredSuggestions = false
         let subject = createSubject()
         XCTAssertEqual(subject.delegate?.searchData.count, 0)
         let data = ArrayCursor<Site>(data: [ Site(url: "https://example.com?mfadid=adm", title: "Test1"),
@@ -258,7 +258,7 @@ final class SearchViewModelTests: XCTestCase {
     }
 
     func testLoad_multipleTimes_doesNotTriggerReloadForSameSuggestions() async throws {
-        engines.shouldShowSponsoredSuggestions = false
+        searchEnginesManager.shouldShowSponsoredSuggestions = false
         let subject = createSubject()
         let data = ArrayCursor<Site>(data: [ Site(url: "https://example.com?mfadid=adm", title: "Test1"),
                                              Site(url: "https://example.com", title: "Test2"),
@@ -275,8 +275,8 @@ final class SearchViewModelTests: XCTestCase {
                                     [.amp: false, .ampMobile: true, .wikipedia: true])
        })
 
-        engines.shouldShowFirefoxSuggestions = false
-        engines.shouldShowSponsoredSuggestions = true
+        searchEnginesManager.shouldShowFirefoxSuggestions = false
+        searchEnginesManager.shouldShowSponsoredSuggestions = true
         let subject = createSubject()
         await subject.loadFirefoxSuggestions()?.value
 
@@ -290,8 +290,8 @@ final class SearchViewModelTests: XCTestCase {
                                     [.amp: false, .ampMobile: true, .wikipedia: true])
        })
 
-        engines.shouldShowFirefoxSuggestions = true
-        engines.shouldShowSponsoredSuggestions = false
+        searchEnginesManager.shouldShowFirefoxSuggestions = true
+        searchEnginesManager.shouldShowSponsoredSuggestions = false
         let subject = createSubject()
         await subject.loadFirefoxSuggestions()?.value
 
@@ -301,26 +301,26 @@ final class SearchViewModelTests: XCTestCase {
 
     func testQuickSearchEnginesWithSearchSuggestionsEnabled() {
         let subject = createSubject()
-        subject.searchEngines = engines
+        subject.searchEnginesManager = searchEnginesManager
         let quickSearchEngines = subject.quickSearchEngines
 
         let expectedEngineNames = ["BTester", "CTester", "DTester", "ETester", "FTester"]
 
-        XCTAssertEqual(subject.searchEngines?.defaultEngine?.shortName, "ATester")
+        XCTAssertEqual(subject.searchEnginesManager?.defaultEngine?.shortName, "ATester")
         XCTAssertEqual(quickSearchEngines.map { $0.shortName }, expectedEngineNames)
         XCTAssertEqual(quickSearchEngines.count, 5)
     }
 
     func testQuickSearchEnginesWithSearchSuggestionsDisabled() {
-        engines.shouldShowSearchSuggestions = false
+        searchEnginesManager.shouldShowSearchSuggestions = false
         let subject = createSubject()
-        subject.searchEngines = engines
+        subject.searchEnginesManager = searchEnginesManager
         let quickSearchEngines = subject.quickSearchEngines
 
         let expectedEngineNames = ["ATester", "BTester", "CTester", "DTester", "ETester", "FTester"]
 
         XCTAssertEqual(quickSearchEngines.first?.shortName, "ATester")
-        XCTAssertEqual(subject.searchEngines?.defaultEngine?.shortName, "ATester")
+        XCTAssertEqual(subject.searchEnginesManager?.defaultEngine?.shortName, "ATester")
         XCTAssertEqual(quickSearchEngines.map { $0.shortName }, expectedEngineNames)
         XCTAssertEqual(quickSearchEngines.count, 6)
     }
@@ -335,7 +335,7 @@ final class SearchViewModelTests: XCTestCase {
             isPrivate: isPrivate,
             isBottomSearchBar: isBottomSearchBar,
             profile: profile,
-            model: engines,
+            model: searchEnginesManager,
             tabManager: MockTabManager()
         )
         subject.delegate = mockDelegate

@@ -11,3 +11,15 @@ extension StringProtocol {
         return replacingOccurrences(of: target, with: "")
     }
 }
+
+public extension String {
+    /// Returns a new string made by removing the leading String characters contained
+    /// in a given character set.
+    func stringByTrimmingLeadingCharactersInSet(_ set: CharacterSet) -> String {
+        var trimmed = self
+        while trimmed.rangeOfCharacter(from: set)?.lowerBound == trimmed.startIndex {
+            trimmed.remove(at: trimmed.startIndex)
+        }
+        return trimmed
+    }
+}

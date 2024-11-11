@@ -63,7 +63,7 @@ extension BlockingStrength {
 }
 
 /// Firefox-specific implementation of tab content blocking.
-class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
+final class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
     let userPrefs: Prefs
 
     class func name() -> String {
@@ -104,6 +104,7 @@ class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
     func setupForTab(completion: (() -> Void)? = nil) {
         guard let tab = tab else { return }
         let rules = BlocklistFileName.listsForMode(strict: blockingStrengthPref == .strict)
+        logger.log("Setup tracking protection for tab: \(tab)", level: .info, category: .adblock)
         ContentBlocker.shared.setupTrackingProtection(
             forTab: tab,
             isEnabled: isEnabled,
@@ -113,16 +114,13 @@ class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
     }
 
     override func notifiedTabSetupRequired() {
-        setupForTab(completion: { [weak self] in
-            guard let tab = self?.tab as? Tab else { return }
-            tab.reloadPage()
-        })
-        if let tab = tab as? Tab {
-            TabEvent.post(.didChangeContentBlocking, for: tab)
-        }
+        guard let tab = self.tab as? Tab else { return }
+        logger.log("Notified tab setup required", level: .info, category: .adblock)
+        setupForTab(completion: { tab.reloadPage() })
+        TabEvent.post(.didChangeContentBlocking, for: tab)
     }
 
-    override func currentlyEnabledLists() -> [BlocklistFileName] {
+    override func currentlyEnabledLists() -> [String] {
         return BlocklistFileName.listsForMode(strict: blockingStrengthPref == .strict)
     }
 

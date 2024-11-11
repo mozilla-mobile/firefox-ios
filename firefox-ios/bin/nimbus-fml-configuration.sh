@@ -13,6 +13,9 @@ case "${CONFIGURATION}" in
     Fennec)
         CHANNEL="developer"
         ;;
+    Fennec_Testing)
+        CHANNEL="developer"
+        ;;
     Fennec_Enterprise)
         CHANNEL="developer"
         ;;

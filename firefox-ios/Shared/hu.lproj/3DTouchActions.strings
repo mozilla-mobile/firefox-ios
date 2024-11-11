@@ -5,7 +5,7 @@
 "Close Tab" = "Lap bezárása";
 
 /* Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard */
-"Copy URL" = "URL másolása";
+"Copy URL" = "Webcím másolása";
 
 /* Label for preview action on Tab Tray Tab to send the current link to another device */
 "Menu.SendLinkToDevice" = "Hivatkozás küldése eszközre";

@@ -46,11 +46,15 @@ extension PhotonActionSheetProtocol {
         viewController.present(sheet, animated: true, completion: nil)
     }
 
-    func getLongPressLocationBarActions(with urlBar: URLBarView, alertContainer: UIView) -> [PhotonRowActions] {
+    func getLongPressLocationBarActions(with view: UIView, alertContainer: UIView) -> [PhotonRowActions] {
         let pasteGoAction = SingleActionViewModel(title: .PasteAndGoTitle,
                                                   iconString: StandardImageIdentifiers.Large.clipboard) { _ in
             if let pasteboardContents = UIPasteboard.general.string {
-                urlBar.delegate?.urlBar(urlBar, didSubmitText: pasteboardContents)
+                if let urlBar = view as? URLBarView {
+                    urlBar.delegate?.urlBar(urlBar, didSubmitText: pasteboardContents)
+                } else if let toolbar = view as? AddressToolbarContainer {
+                    toolbar.delegate?.openBrowser(searchTerm: pasteboardContents)
+                }
             }
         }
         pasteGoAction.accessibilityId = AccessibilityIdentifiers.Photon.pasteAndGoAction
@@ -58,26 +62,36 @@ extension PhotonActionSheetProtocol {
         let pasteAction = SingleActionViewModel(title: .PasteTitle,
                                                 iconString: StandardImageIdentifiers.Large.clipboard) { _ in
             if let pasteboardContents = UIPasteboard.general.string {
-                urlBar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
+                if let urlBar = view as? URLBarView {
+                    urlBar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
+                } else if let toolbar = view as? AddressToolbarContainer {
+                    toolbar.enterOverlayMode(pasteboardContents, pasted: true, search: true)
+                }
             }
         }
         pasteAction.accessibilityId = AccessibilityIdentifiers.Photon.pasteAction
 
         let copyAddressAction = SingleActionViewModel(title: .CopyAddressTitle,
                                                       iconString: StandardImageIdentifiers.Large.link) { _ in
-            if let url = tabManager.selectedTab?.canonicalURL?.displayURL ?? urlBar.currentURL {
+            let currentURL = tabManager.selectedTab?.currentURL()
+            if let url = tabManager.selectedTab?.canonicalURL?.displayURL ?? currentURL {
                 UIPasteboard.general.url = url
-                SimpleToast().showAlertWithText(.AppMenu.AppMenuCopyURLConfirmMessage,
+                SimpleToast().showAlertWithText(.LegacyAppMenu.AppMenuCopyURLConfirmMessage,
                                                 bottomContainer: alertContainer,
                                                 theme: themeManager.getCurrentTheme(for: tabManager.windowUUID))
             }
         }
 
+        var actionItems: [PhotonRowActions] = []
         if UIPasteboard.general.hasStrings {
-            return [pasteGoAction.items, pasteAction.items, copyAddressAction.items]
-        } else {
-            return [copyAddressAction.items]
+            actionItems.append(contentsOf: [pasteGoAction.items, pasteAction.items])
         }
+
+        if tabManager.selectedTab?.canonicalURL?.displayURL != nil {
+            actionItems.append(copyAddressAction.items)
+        }
+
+        return actionItems
     }
 
     func getRefreshLongPressMenu(for tab: Tab) -> [PhotonRowActions] {
@@ -89,9 +103,9 @@ extension PhotonActionSheetProtocol {
         let toggleActionTitle: String
         // swiftlint:disable line_length
         if defaultUAisDesktop {
-            toggleActionTitle = tab.changedUserAgent ? .AppMenu.AppMenuViewDesktopSiteTitleString : .AppMenu.AppMenuViewMobileSiteTitleString
+            toggleActionTitle = tab.changedUserAgent ? .LegacyAppMenu.AppMenuViewDesktopSiteTitleString : .LegacyAppMenu.AppMenuViewMobileSiteTitleString
         } else {
-            toggleActionTitle = tab.changedUserAgent ? .AppMenu.AppMenuViewMobileSiteTitleString : .AppMenu.AppMenuViewDesktopSiteTitleString
+            toggleActionTitle = tab.changedUserAgent ? .LegacyAppMenu.AppMenuViewMobileSiteTitleString : .LegacyAppMenu.AppMenuViewDesktopSiteTitleString
         }
         // swiftlint:enable line_length
         let toggleDesktopSite = SingleActionViewModel(title: toggleActionTitle,

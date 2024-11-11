@@ -226,6 +226,8 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
                                                   constant: -UX.horizontalPadding),
             emailButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8),
         ])
+        containerView.setNeedsLayout()
+        containerView.layoutIfNeeded()
     }
 
     func applyTheme() {
@@ -282,7 +284,7 @@ class FirefoxAccountSignInViewController: UIViewController, Themeable {
                     // password
                     scopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session]
                 ) { [weak self] result in
-                    guard let self = self else { return }
+                    guard self != nil else { return }
 
                     if case .success(let url) = result {
                         completion(url)
@@ -317,6 +319,10 @@ extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
         logger.log("FirefoxAccountSignInVC Error: `didScanQRCodeWithText` should not be called",
                    level: .info,
                    category: .sync)
+    }
+
+    var qrCodeScanningPermissionLevel: QRCodeScanPermissions {
+        return .allowURLsWithoutPrompt
     }
 }
 

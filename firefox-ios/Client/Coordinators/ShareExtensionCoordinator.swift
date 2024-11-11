@@ -78,7 +78,7 @@ class ShareExtensionCoordinator: BaseCoordinator,
             showSendToDevice(url: url)
         case CustomActivityAction.copyLink.actionType:
             SimpleToast().showAlertWithText(
-                .AppMenu.AppMenuCopyURLConfirmMessage,
+                .LegacyAppMenu.AppMenuCopyURLConfirmMessage,
                 bottomContainer: alertContainer,
                 theme: themeManager.getCurrentTheme(for: windowUUID))
             dequeueNotShownJSAlert()
@@ -163,7 +163,7 @@ class ShareExtensionCoordinator: BaseCoordinator,
             self.router.dismiss()
             self.parentCoordinator?.didFinish(from: self)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                SimpleToast().showAlertWithText(.AppMenu.AppMenuTabSentConfirmMessage,
+                SimpleToast().showAlertWithText(.LegacyAppMenu.AppMenuTabSentConfirmMessage,
                                                 bottomContainer: self.alertContainer,
                                                 theme: self.themeManager.getCurrentTheme(for: self.windowUUID))
             }

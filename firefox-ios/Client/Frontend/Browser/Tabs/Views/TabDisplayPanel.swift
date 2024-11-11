@@ -12,10 +12,6 @@ class TabDisplayPanel: UIViewController,
                        EmptyPrivateTabsViewDelegate,
                        StoreSubscriber {
     typealias SubscriberStateType = TabsPanelState
-    struct UX {
-        static let undoToastDelay = DispatchTimeInterval.seconds(0)
-        static let undoToastDuration = DispatchTimeInterval.seconds(3)
-    }
 
     let panelType: TabTrayPanelType
     var notificationCenter: NotificationProtocol
@@ -24,6 +20,7 @@ class TabDisplayPanel: UIViewController,
     var tabsState: TabsPanelState
     private let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
+    private var viewHasAppeared = false
 
     // MARK: UI elements
     private lazy var tabDisplayView: TabDisplayView = {
@@ -35,11 +32,6 @@ class TabDisplayPanel: UIViewController,
     }()
     private var backgroundPrivacyOverlay: UIView = .build()
     private lazy var emptyPrivateTabsView: EmptyPrivateTabsView = .build()
-    var shownToast: Toast?
-
-    var toolbarHeight: CGFloat {
-        return !shouldUseiPadSetup() ? view.safeAreaInsets.bottom : 0
-    }
 
     init(isPrivateMode: Bool,
          windowUUID: WindowUUID,
@@ -64,6 +56,18 @@ class TabDisplayPanel: UIViewController,
         listenForThemeChange(view)
         applyTheme()
         subscribeToRedux()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        if !viewHasAppeared {
+            tabDisplayView.layoutIfNeeded()
+            store.dispatch(TabPanelViewAction(panelType: panelType,
+                                              windowUUID: windowUUID,
+                                              actionType: TabPanelViewActionType.tabPanelWillAppear))
+            viewHasAppeared = true
+        }
     }
 
     private func setupView() {
@@ -119,41 +123,6 @@ class TabDisplayPanel: UIViewController,
         emptyPrivateTabsView.applyTheme(currentTheme())
     }
 
-    private func presentToast(toastType: ToastType,
-                              completion: @escaping (Bool) -> Void) {
-        if let currentToast = shownToast {
-            currentToast.dismiss(false)
-        }
-
-        if toastType.reduxAction(for: windowUUID, panelType: panelType) != nil {
-            let viewModel = ButtonToastViewModel(
-                labelText: toastType.title,
-                buttonText: toastType.buttonText)
-            let toast = ButtonToast(viewModel: viewModel,
-                                    theme: currentTheme(),
-                                    completion: { buttonPressed in
-                completion(buttonPressed)
-            })
-            toast.showToast(viewController: self,
-                            delay: UX.undoToastDelay,
-                            duration: UX.undoToastDuration) { toast in
-                [
-                    toast.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-                    toast.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-                    toast.bottomAnchor.constraint(equalTo: self.view.bottomAnchor,
-                                                  constant: -self.toolbarHeight)
-                ]
-            }
-            shownToast = toast
-        } else {
-            let toast = SimpleToast()
-            toast.showAlertWithText(toastType.title,
-                                    bottomContainer: view,
-                                    theme: currentTheme(),
-                                    bottomConstraintPadding: -toolbarHeight)
-        }
-    }
-
     // MARK: - Redux
 
     func subscribeToRedux() {
@@ -166,6 +135,7 @@ class TabDisplayPanel: UIViewController,
                                                windowUUID: windowUUID,
                                                actionType: TabPanelViewActionType.tabPanelDidLoad)
         store.dispatch(didLoadAction)
+
         let uuid = windowUUID
         store.subscribe(self, transform: {
             return $0.select({ appState in
@@ -185,37 +155,15 @@ class TabDisplayPanel: UIViewController,
         tabsState = state
         tabDisplayView.newState(state: tabsState)
         shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
-        let uuid = windowUUID
-
-        // Avoid showing toast multiple times
-        if let toastType = tabsState.toastType {
-            let action = TabPanelViewAction(panelType: panelType,
-                                            windowUUID: windowUUID,
-                                            actionType: TabPanelViewActionType.hideUndoToast)
-            store.dispatch(action)
-            presentToast(toastType: toastType) { undoClose in
-                if let action = toastType.reduxAction(for: uuid, panelType: self.panelType), undoClose {
-                    store.dispatch(action)
-                }
-                self.shownToast = nil
-            }
-        }
     }
 
     // MARK: EmptyPrivateTabsViewDelegate
 
     func didTapLearnMore(urlRequest: URLRequest) {
         let action = TabPanelViewAction(panelType: panelType,
+                                        urlRequest: urlRequest,
                                         windowUUID: windowUUID,
                                         actionType: TabPanelViewActionType.learnMorePrivateMode)
         store.dispatch(action)
     }
-}
-
-extension TabDisplayPanel: LegacyTabPeekDelegate {
-    func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListItem? { return nil }
-    func tabPeekDidAddBookmark(_ tab: Tab) {}
-    func tabPeekRequestsPresentationOf(_ viewController: UIViewController) {}
-    func tabPeekDidCloseTab(_ tab: Tab) {}
-    func tabPeekDidCopyUrl() {}
 }

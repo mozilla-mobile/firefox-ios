@@ -17,22 +17,22 @@
 "About" = "Acerca de";
 
 /* The title for the pinning a shortcut action */
-"ActivityStream.ContextMenu.AddToShortcuts" = "Agregar a los atajos";
+"ActivityStream.ContextMenu.AddToShortcuts" = "Agregar a atajos";
 
 /* The title for the pinning a topsite action */
-"ActivityStream.ContextMenu.PinTopsite2" = "Anclar";
+"ActivityStream.ContextMenu.PinTopsite2" = "Fijar";
 
 /* The title for the unpinning a topsite action */
-"ActivityStream.ContextMenu.UnpinTopsite" = "Desanclar";
+"ActivityStream.ContextMenu.UnpinTopsite" = "Desfijar";
 
 /* Title for the Jump Back In section. This section allows users to jump back in to a recently viewed tab */
-"ActivityStream.JumpBackIn.SectionTitle" = "Regresar hacia atrás";
+"ActivityStream.JumpBackIn.SectionTitle" = "Regresar a";
 
 /* On the Firefox homepage in the Jump Back In section, if a Tab group item - a collection of grouped tabs from a related search - exists underneath the search term for the tab group, there will be a subtitle with a number for how many tabs are in that group. The placeholder is for a number. It will read 'Tabs: 5' or similar. */
 "ActivityStream.JumpBackIn.TabGroup.SiteCount" = "Pestañas: %d";
 
 /* A string used to signify the start of the Recently Saved section in Home Screen. */
-"ActivityStream.Library.Title" = "Recientemente guardado";
+"ActivityStream.Library.Title" = "Guardados recientemente";
 
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Visitados recientemente";
@@ -757,6 +757,9 @@
 /* Label for the button, displayed in the menu, takes you to History screen when pressed. */
 "Menu.History.Label" = "Historial";
 
+/* Label for the new private tab button in the menu page. Pressing this button opens a new private tab. */
+"Menu.NewPrivateTab.Label" = "Nueva pestaña privada";
+
 /* Label for the new tab button in the menu page. Pressing this button opens a new tab. */
 "Menu.NewTab.v99" = "Nueva pestaña";
 
@@ -1144,6 +1147,9 @@
 /* The placeholder for URL Field when saving a custom search engine */
 "Settings.AddCustomEngine.URLPlaceholder" = "URL (Cambia búsqueda con %s)";
 
+/* Title of setting to block opening external apps when pressing links. */
+"Settings.BlockOpeningExternalApps.Title" = "Bloquear la apertura de aplicaciones externas";
+
 /* Button in Data Management that clears all items. */
 "Settings.ClearAllWebsiteData.Clear.Button" = "Borrar todos los datos del sitio";
 
@@ -1398,6 +1404,9 @@
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "Cuando esté abriendo Firefox";
+
+/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
+"Settings.OfferClipboardBar.Status.v128" = "Al abrir %@";
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.StatusV2" = "Cuando esté abriendo Firefox";

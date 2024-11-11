@@ -30,103 +30,18 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
 
         var profile: BrowserProfile
         let launchArguments = ProcessInfo.processInfo.arguments
-        let dirForTestProfile = self.dirForTestProfile
 
         launchArguments.forEach { arg in
             if arg.starts(with: LaunchArguments.ServerPort) {
-                let portString = arg.replacingOccurrences(of: LaunchArguments.ServerPort, with: "")
-                if let port = Int(portString) {
-                    AppInfo.webserverPort = port
-                } else {
-                    fatalError("Failed to set web server port override.")
-                }
+                configureWebserverPort(arg)
             }
 
             if arg.starts(with: LaunchArguments.LoadDatabasePrefix) {
-                if launchArguments.contains(LaunchArguments.ClearProfile) {
-                    fatalError("Clearing profile and loading a test database is not a supported combination.")
-                }
-
-                // Grab the name of file in the bundle's test-fixtures dir, and copy it to the runtime app dir.
-                let filename = arg.replacingOccurrences(of: LaunchArguments.LoadDatabasePrefix, with: "")
-                let input = URL(
-                    fileURLWithPath: Bundle(for: UITestAppDelegate.self).path(
-                        forResource: filename,
-                        ofType: nil,
-                        inDirectory: "test-fixtures"
-                    )!
-                )
-                try? FileManager.default.createDirectory(
-                    atPath: dirForTestProfile,
-                    withIntermediateDirectories: false,
-                    attributes: nil
-                )
-                let output = URL(fileURLWithPath: "\(dirForTestProfile)/places.db")
-
-                let enumerator = FileManager.default.enumerator(atPath: dirForTestProfile)
-                let filePaths = enumerator?.allObjects as! [String]
-                filePaths.filter { $0.contains(".db") }.forEach { item in
-                    try? FileManager.default.removeItem(
-                        at: URL(fileURLWithPath: "\(dirForTestProfile)/\(item)")
-                    )
-                }
-
-                do {
-                    try FileManager.default.copyItem(at: input, to: output)
-                } catch {
-                    fatalError("Could not copy items from \(input) to \(output): \(error)")
-                }
-
-                // Tests currently load a browserdb history, we make sure we migrate it everytime
-                UserDefaults.standard.setValue(false, forKey: PrefsKeys.PlacesHistoryMigrationSucceeded)
+                configureDatabase(arg, launchArguments: launchArguments)
             }
 
             if arg.starts(with: LaunchArguments.LoadTabsStateArchive) {
-                let tabDirectory = "\(self.appRootDir())/profile.profile"
-                if launchArguments.contains(LaunchArguments.ClearProfile) {
-                    fatalError("Clearing profile and loading tabs, not a supported combination.")
-                }
-
-                // Grab the name of file in the bundle's test-fixtures dir, and copy it to the runtime app dir.
-                let filenameArchive = arg.replacingOccurrences(of: LaunchArguments.LoadTabsStateArchive, with: "")
-                let input = URL(
-                    fileURLWithPath: Bundle(for: UITestAppDelegate.self).path(
-                        forResource: filenameArchive,
-                        ofType: nil,
-                        inDirectory: "test-fixtures"
-                    )!
-                )
-                try? FileManager.default.createDirectory(
-                    atPath: tabDirectory,
-                    withIntermediateDirectories: false,
-                    attributes: nil
-                )
-                let outputDir = URL(fileURLWithPath: "\(tabDirectory)/window-data")
-                let outputFile = URL(
-                    fileURLWithPath: "\(tabDirectory)/window-data/window-44BA0B7D-097A-484D-8358-91A6E374451D"
-                )
-                let enumerator = FileManager.default.enumerator(atPath: "\(tabDirectory)/window-data")
-                let filePaths = enumerator?.allObjects as? [String]
-                filePaths?.filter { $0.contains("window-") }.forEach { item in
-                    do {
-                        try FileManager.default.removeItem(
-                            at: URL(fileURLWithPath: "\(tabDirectory)/window-data/\(item)")
-                        )
-                    } catch {
-                        fatalError("Could not remove items at \(tabDirectory)/window-data/\(item): \(error)")
-                    }
-                }
-
-                try? FileManager.default.createDirectory(
-                    at: outputDir,
-                    withIntermediateDirectories: true
-                )
-
-                do {
-                    try FileManager.default.copyItem(at: input, to: outputFile)
-                } catch {
-                    fatalError("Could not copy items at from \(input) to \(outputFile): \(error)")
-                }
+                configureTabs(arg, launchArguments: launchArguments)
             }
         }
 
@@ -134,13 +49,13 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
             // Use a clean profile for each test session.
             profile = BrowserProfile(
                 localName: "testProfile",
-                sendTabDelegate: application.sendTabDelegate,
+                fxaCommandsDelegate: application.fxaCommandsDelegate,
                 clear: true
             )
         } else {
             profile = BrowserProfile(
                 localName: "testProfile",
-                sendTabDelegate: application.sendTabDelegate
+                fxaCommandsDelegate: application.fxaCommandsDelegate
             )
         }
 
@@ -189,8 +104,111 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
             profile.prefs.setBool(true, forKey: PrefsKeys.splashScreenShownKey)
         }
 
+        if launchArguments.contains(LaunchArguments.ResetMicrosurveyExpirationCount) {
+            // String is pulled from our "evergreen" messages configurations 
+            // that are displayed via the Nimbus Messaging system.
+            let microsurveyID = "homepage-microsurvey-message"
+            UserDefaults.standard.set(nil, forKey: "\(GleanPlumbMessageStore.rootKey)\(microsurveyID)")
+        }
+
         self.profile = profile
         return profile
+    }
+
+    private func configureWebserverPort(_ arg: String) {
+        let portString = arg.replacingOccurrences(of: LaunchArguments.ServerPort, with: "")
+        if let port = Int(portString) {
+            AppInfo.webserverPort = port
+        } else {
+            fatalError("Failed to set web server port override.")
+        }
+    }
+
+    private func configureDatabase(_ arg: String, launchArguments: [String]) {
+        if launchArguments.contains(LaunchArguments.ClearProfile) {
+            fatalError("Clearing profile and loading a test database is not a supported combination.")
+        }
+
+        // Grab the name of file in the bundle's test-fixtures dir, and copy it to the runtime app dir.
+        let filename = arg.replacingOccurrences(of: LaunchArguments.LoadDatabasePrefix, with: "")
+        let input = URL(
+            fileURLWithPath: Bundle(for: UITestAppDelegate.self).path(
+                forResource: filename,
+                ofType: nil,
+                inDirectory: "test-fixtures"
+            )!
+        )
+        try? FileManager.default.createDirectory(
+            atPath: dirForTestProfile,
+            withIntermediateDirectories: false,
+            attributes: nil
+        )
+        let output = URL(fileURLWithPath: "\(dirForTestProfile)/places.db")
+
+        let enumerator = FileManager.default.enumerator(atPath: dirForTestProfile)
+        let filePaths = enumerator?.allObjects as! [String]
+        filePaths.filter { $0.contains(".db") }.forEach { item in
+            try? FileManager.default.removeItem(
+                at: URL(fileURLWithPath: "\(dirForTestProfile)/\(item)")
+            )
+        }
+
+        do {
+            try FileManager.default.copyItem(at: input, to: output)
+        } catch {
+            fatalError("Could not copy items from \(input) to \(output): \(error)")
+        }
+
+        // Tests currently load a browserdb history, we make sure we migrate it everytime
+        UserDefaults.standard.setValue(false, forKey: PrefsKeys.PlacesHistoryMigrationSucceeded)
+    }
+
+    private func configureTabs(_ arg: String, launchArguments: [String]) {
+        let tabDirectory = "\(self.appRootDir())/profile.profile"
+        if launchArguments.contains(LaunchArguments.ClearProfile) {
+            fatalError("Clearing profile and loading tabs, not a supported combination.")
+        }
+
+        // Grab the name of file in the bundle's test-fixtures dir, and copy it to the runtime app dir.
+        let filenameArchive = arg.replacingOccurrences(of: LaunchArguments.LoadTabsStateArchive, with: "")
+        let input = URL(
+            fileURLWithPath: Bundle(for: UITestAppDelegate.self).path(
+                forResource: filenameArchive,
+                ofType: nil,
+                inDirectory: "test-fixtures"
+            )!
+        )
+        try? FileManager.default.createDirectory(
+            atPath: tabDirectory,
+            withIntermediateDirectories: false,
+            attributes: nil
+        )
+        let outputDir = URL(fileURLWithPath: "\(tabDirectory)/window-data")
+        let outputFile = URL(
+            fileURLWithPath: "\(tabDirectory)/window-data/window-44BA0B7D-097A-484D-8358-91A6E374451D"
+        )
+        let enumerator = FileManager.default.enumerator(atPath: "\(tabDirectory)/window-data")
+        let filePaths = enumerator?.allObjects as? [String]
+        filePaths?.filter { $0.contains("window-") }.forEach { item in
+            do {
+                try FileManager.default.removeItem(
+                    at: URL(fileURLWithPath: "\(tabDirectory)/window-data/\(item)")
+                )
+            } catch {
+                fatalError("Could not remove items at \(tabDirectory)/window-data/\(item): \(error)")
+            }
+        }
+
+        try? FileManager.default.createDirectory(
+            at: outputDir,
+            withIntermediateDirectories: true
+        )
+
+        do {
+            try FileManager.default.copyItem(at: input, to: outputFile)
+        } catch {
+            fatalError("Could not copy items at from \(input) to \(outputFile): \(error)")
+        }
     }
 
     override func application(

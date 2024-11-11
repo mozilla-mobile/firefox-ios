@@ -7,7 +7,7 @@ import Foundation
 import SwiftUI
 import Shared
 
-enum CreditCardInputType {
+enum CreditCardInputType: String {
     case name, number, expiration
 }
 
@@ -125,7 +125,7 @@ struct CreditCardInputField: View {
 
     func applyTheme(theme: Theme) {
         let color = theme.colors
-        errorColor = Color(color.textWarning)
+        errorColor = Color(color.textCritical)
         titleColor = Color(color.textSecondary)
         textFieldColor = Color(color.textPrimary)
         backgroundColor = Color(color.layer2)
@@ -204,7 +204,10 @@ struct CreditCardInputField: View {
             if inputType == .expiration {
                 _ = self.updateInputValidity()
             }
-        }.accessibilityLabel(fieldHeadline)
+        }
+        .accessibilityLabel(fieldHeadline)
+        .accessibilityIdentifier(inputType.rawValue)
+        .accessibility(addTraits: .isButton)
     }
 
     // MARK: Helper

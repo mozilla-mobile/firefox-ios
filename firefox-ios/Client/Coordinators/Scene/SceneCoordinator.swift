@@ -10,10 +10,11 @@ import Storage
 /// Each scene has it's own scene coordinator, which is the root coordinator for a scene.
 class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinishedLoadingDelegate {
     var window: UIWindow?
-    let windowUUID: WindowUUID
+    var windowUUID: WindowUUID { reservedWindowUUID.uuid }
     private let screenshotService: ScreenshotService
     private let sceneContainer: SceneContainer
     private let windowManager: WindowManager
+    private let reservedWindowUUID: ReservedWindowUUID
 
     init(scene: UIScene,
          sceneSetupHelper: SceneSetupHelper = SceneSetupHelper(),
@@ -24,9 +25,11 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
         // The logic is handled by `reserveNextAvailableWindowUUID`, but this is the point at which a window's UUID
         // is set; this same UUID will be injected throughout several of the window's related components
         // such as its TabManager instance, which also has the window UUID property as a convenience.
-        self.windowUUID = windowManager.reserveNextAvailableWindowUUID()
+        let isIpad = (UIDevice.current.userInterfaceIdiom == .pad)
+        let reserved = windowManager.reserveNextAvailableWindowUUID(isIpad: isIpad)
+        self.reservedWindowUUID = reserved
         self.window = sceneSetupHelper.configureWindowFor(scene,
-                                                          windowUUID: windowUUID,
+                                                          windowUUID: reserved.uuid,
                                                           screenshotServiceDelegate: screenshotService)
         self.screenshotService = screenshotService
         self.sceneContainer = sceneContainer
@@ -36,6 +39,7 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
         let router = DefaultRouter(navigationController: navigationController)
         super.init(router: router)
 
+        logger.log("SceneCoordinator init completed (UUID: \(reserved.uuid))", level: .debug, category: .lifecycle)
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
     }
@@ -117,7 +121,7 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
                    category: .coordinator)
 
         let tabManager = TabManagerImplementation(profile: AppContainer.shared.resolve(),
-                                                  uuid: windowUUID)
+                                                  uuid: reservedWindowUUID)
         let browserCoordinator = BrowserCoordinator(router: router,
                                                     screenshotService: screenshotService,
                                                     tabManager: tabManager)

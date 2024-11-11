@@ -9,22 +9,22 @@ class SettingTest: BaseTestCase {
 
     // Smoketest
     // Check for the basic appearance of the Settings Menu
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/394976
+    // https://mozilla.testrail.io/index.php?/cases/view/394976
     func testCheckSetting() {
         dismissURLBarFocused()
 
         // Navigate to Settings
-        waitForExistence(app.buttons["Settings"], timeout: 5)
+        waitForExistence(app.buttons["Settings"])
         app.buttons["Settings"].tap()
 
         let settingsButton = app.settingsButton
-        waitForExistence(settingsButton, timeout: 10)
+        waitForExistence(settingsButton)
         settingsButton.tap()
 
         // Check About page
         app.tables.firstMatch.swipeUp()
         let aboutCell = app.cells["settingsViewController.about"]
-        waitForExistence(aboutCell, timeout: 10)
+        waitForExistence(aboutCell)
         aboutCell.tap()
 
         let tablesQuery = app.tables
@@ -43,22 +43,21 @@ class SettingTest: BaseTestCase {
 
         // Check the initial state of the switch values
         let safariSwitch = app.tables.switches["Safari"]
-        waitForExistence(app.tables.switches["Safari"], timeout: 5)
+        waitForExistence(app.tables.switches["Safari"])
 
         XCTAssertEqual(safariSwitch.value as! String, "0")
         safariSwitch.tap()
 
         // Check the information page
-        waitForExistence(app.staticTexts["Open device settings"], timeout: 5)
-        XCTAssert(app.staticTexts["Open device settings"].exists)
-        XCTAssert(app.staticTexts["Select Safari, then select Extensions"].exists)
+        waitForExistence(app.staticTexts["Open device settings"])
+        waitForExistence(app.staticTexts["Select Safari, then select Extensions"])
         if app.label == "Firefox Focus" {
-            XCTAssert(app.staticTexts["Firefox Focus is not enabled."].exists)
-            XCTAssert(app.staticTexts["Enable Firefox Focus"].exists)
+            waitForExistence(app.staticTexts["Firefox Focus is not enabled."])
+            waitForExistence(app.staticTexts["Enable Firefox Focus"])
             app.navigationBars.buttons.element(boundBy: 0).tap()
         } else {
-            XCTAssert(app.staticTexts["Firefox Klar is not enabled."].exists)
-            XCTAssert(app.staticTexts["Enable Firefox Klar"].exists)
+            waitForExistence(app.staticTexts["Firefox Klar is not enabled."])
+            waitForExistence(app.staticTexts["Enable Firefox Klar"])
             app.navigationBars.buttons.element(boundBy: 0).tap()
         }
 
@@ -79,7 +78,7 @@ class SettingTest: BaseTestCase {
         XCTAssertEqual(app.tables.switches["BlockerToggle.BlockAnalytics"].value as! String, "1")
         XCTAssertEqual(app.tables.switches["BlockerToggle.BlockSocial"].value as! String, "1")
         let otherContentSwitch = app.tables.switches["BlockerToggle.BlockOther"]
-        waitForExistence(app.tables.switches["BlockerToggle.BlockOther"], timeout: 5)
+        waitForExistence(app.tables.switches["BlockerToggle.BlockOther"])
         XCTAssertEqual(otherContentSwitch.value as! String, "0")
 
         otherContentSwitch.tap()
@@ -108,7 +107,7 @@ class SettingTest: BaseTestCase {
             swipes = swipes - 1
         }
         reviewCell.tap()
-        waitForExistence(safariApp, timeout: 10)
+        waitForExistence(safariApp)
         XCTAssert(safariApp.state == .runningForeground)
 
         safariApp.terminate()
@@ -116,12 +115,12 @@ class SettingTest: BaseTestCase {
 
         // Let's be sure the app is backgrounded
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        waitForExistence(springboard.icons["XCUITest-Runner"], timeout: 15)
+        waitForExistence(springboard.icons["XCUITest-Runner"])
         app.activate()
-        waitForExistence(app.navigationBars["Settings"], timeout: 10)
+        waitForExistence(app.navigationBars["Settings"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2574974
+    // https://mozilla.testrail.io/index.php?/cases/view/2574974
     func testOpenInSafari() {
         let safariapp = XCUIApplication(privateWithPath: nil, bundleID: "com.apple.mobilesafari")!
         loadWebPage("https://www.google.com", waitForLoadToFinish: true)
@@ -151,7 +150,7 @@ class SettingTest: BaseTestCase {
         waitForExistence(app.staticTexts["Browsing history cleared"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2574975
+    // https://mozilla.testrail.io/index.php?/cases/view/2574975
     func testEnableDisableAutocomplete() {
         dismissURLBarFocused()
 
@@ -160,7 +159,7 @@ class SettingTest: BaseTestCase {
         app.buttons["HomeView.settingsButton"].tap()
 
         let settingsButton = app.settingsButton
-        waitForExistence(settingsButton, timeout: 10)
+        waitForExistence(settingsButton)
         settingsButton.tap()
 
         // Navigate to Autocomplete Settings
@@ -180,7 +179,7 @@ class SettingTest: BaseTestCase {
         toggle.tap()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2574976
+    // https://mozilla.testrail.io/index.php?/cases/view/2574976
     func testAddRemoveCustomDomain() {
         dismissURLBarFocused()
         // Navigate to Settings
@@ -188,7 +187,7 @@ class SettingTest: BaseTestCase {
         app.buttons["Settings"].tap()
 
         let settingsButton = app.settingsButton
-        waitForExistence(settingsButton, timeout: 10)
+        waitForExistence(settingsButton)
         settingsButton.tap()
 
         // Navigate to Autocomplete Settings
@@ -231,11 +230,11 @@ class SettingTest: BaseTestCase {
         app.navigationBars.buttons["editButton"].tap()
 
         // Validate that the domain is gone
-        XCTAssertFalse(app.tables.cells["mozilla.org"].exists)
+        waitForNoExistence(app.tables.cells["mozilla.org"])
     }
 
     // Smoketest
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/1569297
+    // https://mozilla.testrail.io/index.php?/cases/view/1569297
     func testSafariIntegration() {
         dismissURLBarFocused()
 
@@ -246,37 +245,39 @@ class SettingTest: BaseTestCase {
         let settingsButton = app.settingsButton
         waitForExistence(settingsButton, timeout: 10)
         settingsButton.tap()
-        waitForExistence(app.tables.cells["settingsViewController.themeCell"], timeout: 10)
+        waitForExistence(app.tables.cells["settingsViewController.themeCell"])
         app.tables.cells["settingsViewController.themeCell"].swipeUp()
 
         // Check that Safari toggle is off, swipe to get to Safari Integration menu
-        waitForExistence(app.otherElements["SIRI SHORTCUTS"], timeout: 10)
+        waitForExistence(app.otherElements["SIRI SHORTCUTS"])
         app.otherElements["SIRI SHORTCUTS"].swipeUp()
         XCTAssertEqual(app.switches["BlockerToggle.Safari"].value! as! String, "0")
 
         iOS_Settings.activate()
-        waitForExistence(iOS_Settings.cells["Safari"], timeout: 10)
-        iOS_Settings.cells["Safari"].tap()
-        iOS_Settings.cells["AutoFill"].swipeUp()
-        if #available(iOS 15.0, *) {
-            iOS_Settings.cells.staticTexts["Extensions"].tap()
-        } else {
-            iOS_Settings.cells.staticTexts["CONTENT_BLOCKERS"].tap()
+        if #unavailable(iOS 18) {
+            waitForExistence(iOS_Settings.cells["Safari"])
+            iOS_Settings.cells["Safari"].tap()
+            iOS_Settings.cells["AutoFill"].swipeUp()
+            if #available(iOS 15.0, *) {
+                iOS_Settings.cells.staticTexts["Extensions"].tap()
+            } else {
+                iOS_Settings.cells.staticTexts["CONTENT_BLOCKERS"].tap()
+            }
+            iOS_Settings.tables.cells.staticTexts["Firefox Focus"].tap()
+            iOS_Settings.tables.cells.switches.element(boundBy: 0).tap()
+            iOS_Settings.terminate()
+
+            XCUIDevice.shared.press(.home)
+            // Let's be sure the app is backgrounded
+            _ = app.wait(for: XCUIApplication.State.runningBackground, timeout: 45)
+            let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+            waitForExistence(springboard.icons["XCUITest-Runner"], timeout: 15)
+
+            // Go back to the app to verify that the toggle has changed its value
+            app.activate()
+            waitForExistence(app.navigationBars["Settings"], timeout: 15)
+            XCTAssertEqual(app.switches["BlockerToggle.Safari"].value! as! String, "1")
         }
-        iOS_Settings.tables.cells.staticTexts["Firefox Focus"].tap()
-        iOS_Settings.tables.cells.switches.element(boundBy: 0).tap()
-        iOS_Settings.terminate()
-
-        XCUIDevice.shared.press(.home)
-        // Let's be sure the app is backgrounded
-        _ = app.wait(for: XCUIApplication.State.runningBackground, timeout: 45)
-        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        waitForExistence(springboard.icons["XCUITest-Runner"], timeout: 15)
-
-        // Go back to the app to verify that the toggle has changed its value
-        app.activate()
-        waitForExistence(app.navigationBars["Settings"], timeout: 15)
-        XCTAssertEqual(app.switches["BlockerToggle.Safari"].value! as! String, "1")
     }
 
     func setUrlAutoCompleteTo(desiredAutoCompleteState: String) {
@@ -304,7 +305,7 @@ class SettingTest: BaseTestCase {
     }
 
     // Smoketest
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2584834
+    // https://mozilla.testrail.io/index.php?/cases/view/2584834
     func testVisitWebsite() {
         dismissURLBarFocused()
 
@@ -313,7 +314,7 @@ class SettingTest: BaseTestCase {
 
         // Enter 'mozilla' on the search field
         let searchOrEnterAddressTextField = app.textFields["URLBar.urlText"]
-        XCTAssertTrue(searchOrEnterAddressTextField.exists)
+        waitForExistence(searchOrEnterAddressTextField)
         XCTAssertTrue(searchOrEnterAddressTextField.isEnabled)
 
         // Check the text autocompletes to mozilla.org/, and also look for 'Search for mozilla' button below
@@ -335,7 +336,7 @@ class SettingTest: BaseTestCase {
         checkForHomeScreen()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/394967
+    // https://mozilla.testrail.io/index.php?/cases/view/394967
     func testDisableAutocomplete() {
         let urlTextField = app.urlTextField
         let searchSuggestionsOverlay = app.searchSuggestionsOverlay
@@ -351,8 +352,8 @@ class SettingTest: BaseTestCase {
         waitForExistence(searchSuggestionsOverlay)
         XCTAssertEqual(urlTextField.value as? String, "mozilla")
     }
- 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/394967
+
+    // https://mozilla.testrail.io/index.php?/cases/view/394967
     func testReEnableAutoComplete() {
         let urlTextField = app.urlTextField
         let searchSuggestionsOverlay = app.searchSuggestionsOverlay
@@ -370,7 +371,7 @@ class SettingTest: BaseTestCase {
         XCTAssertEqual(urlTextField.value as? String, "mozilla.org/")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/394967
+    // https://mozilla.testrail.io/index.php?/cases/view/394967
     func testAutocompleteCustomDomain() {
         dismissURLBarFocused()
         app.buttons["HomeView.settingsButton"].tap()
@@ -404,7 +405,7 @@ class SettingTest: BaseTestCase {
             app.buttons["URLBar.cancelButton"].tap()
         }
         app.buttons["Settings"].tap()
-        waitForExistence(settingsButton, timeout: 10)
+        waitForExistence(settingsButton)
         settingsButton.tap()
         waitForExistence(app.tables.cells["SettingsViewController.autocompleteCell"])
         app.tables.cells["SettingsViewController.autocompleteCell"].tap()

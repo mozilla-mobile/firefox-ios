@@ -229,8 +229,8 @@ extension TopSitesViewModel: TopSitesManagerDelegate {
 extension TopSitesViewModel: HomepageSectionHandler {
     func configure(_ collectionView: UICollectionView,
                    at indexPath: IndexPath) -> UICollectionViewCell {
-        if let cell = collectionView.dequeueReusableCell(cellType: TopSiteItemCell.self, for: indexPath),
-           let contentItem = topSites[safe: indexPath.row] {
+        if let contentItem = topSites[safe: indexPath.row],
+           let cell = collectionView.dequeueReusableCell(cellType: TopSiteItemCell.self, for: indexPath) {
             let textColor = wallpaperManager.currentWallpaper.textColor
 
             cell.configure(contentItem,

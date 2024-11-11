@@ -32,7 +32,7 @@ struct LoginItem: Codable {
     var hostname: String
 }
 
-class LoginsHelper: TabContentScript {
+class LoginsHelper: TabContentScript, FeatureFlaggable {
     private weak var tab: Tab?
     private let profile: Profile
     private let theme: Theme
@@ -41,6 +41,8 @@ class LoginsHelper: TabContentScript {
     private var logger: Logger = DefaultLogger.shared
 
     public var foundFieldValues: ((FocusFieldType, String) -> Void)?
+
+    public var passwordFieldInteraction: (() -> Void)?
 
     // Exposed for mocking purposes
     var logins: RustLogins {
@@ -123,6 +125,30 @@ class LoginsHelper: TabContentScript {
         guard let res = message.body as? [String: Any],
               let type = res["type"] as? String
         else { return }
+
+        if self.featureFlags.isFeatureEnabled(.passwordGenerator, checking: .buildOnly) {
+            if type == "generatePassword",
+                let tab = self.tab,
+                !tab.isPrivate,
+                profile.prefs.boolForKey("saveLogins") ?? true {
+                let userDefaults = UserDefaults.standard
+                let showPasswordGeneratorClosure = {
+                    let newAction = GeneralBrowserAction(
+                        frame: message.frameInfo,
+                        windowUUID: tab.windowUUID,
+                        actionType: GeneralBrowserActionType.showPasswordGenerator)
+
+                    store.dispatch(newAction)
+                }
+                if userDefaults.value(forKey: PrefsKeys.PasswordGeneratorShown) == nil {
+                    userDefaults.set(true, forKey: PrefsKeys.PasswordGeneratorShown)
+                    showPasswordGeneratorClosure()
+                } else {
+                    tab.webView?.accessoryView.useStrongPasswordClosure = showPasswordGeneratorClosure
+                    tab.webView?.accessoryView.reloadViewFor(.passwordGenerator)
+                }
+            }
+        }
 
         // NOTE: FXIOS-3856 will further enhance the logs into actual callback
         if let parsedMessage = parseFieldFocusMessage(from: res) {
@@ -228,6 +254,7 @@ class LoginsHelper: TabContentScript {
                 case .failure:
                     break
                 }
+
                 self.promptSave(login)
             }
         }
@@ -236,9 +263,16 @@ class LoginsHelper: TabContentScript {
     private func promptSave(_ login: LoginEntry) {
         guard login.isValid.isSuccess else { return }
 
+        if self.featureFlags.isFeatureEnabled(.passwordGenerator, checking: .buildOnly) &&
+            profile.prefs.boolForKey("saveLogins") ?? true &&
+            tab?.isPrivate == false {
+            clearStoredPasswordAfterGeneration(origin: login.hostname)
+        }
+
         let promptMessage: String
         let https = "^https:\\/\\/"
         let url = login.hostname.replacingOccurrences(of: https, with: "", options: .regularExpression, range: nil)
+
         let userName = login.username
         if !userName.isEmpty {
             promptMessage = String(format: .SaveLoginUsernamePrompt, userName, url)
@@ -328,6 +362,15 @@ class LoginsHelper: TabContentScript {
         else { return }
 
         currentRequestId = requestId
+    }
+
+    private func clearStoredPasswordAfterGeneration(origin: String) {
+        if let windowUUID = self.tab?.windowUUID {
+            let action = PasswordGeneratorAction(windowUUID: windowUUID,
+                                                 actionType: PasswordGeneratorActionType.clearGeneratedPasswordForSite,
+                                                 origin: origin)
+            store.dispatch(action)
+        }
     }
 
     public static func fillLoginDetails(with tab: Tab,

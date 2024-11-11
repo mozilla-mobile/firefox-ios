@@ -15,7 +15,7 @@ class SettingsTests: BaseTestCase {
         }
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2334757
+    // https://mozilla.testrail.io/index.php?/cases/view/2334757
     func testHelpOpensSUMOInTab() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
@@ -29,22 +29,23 @@ class SettingsTests: BaseTestCase {
         helpMenu.tap()
 
         waitUntilPageLoad()
-        mozWaitForValueContains(app.textFields["url"], value: "support.mozilla.org")
+        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+        mozWaitForValueContains(url, value: "support.mozilla.org")
         mozWaitForElementToExist(app.webViews.staticTexts["Firefox for iOS Support"])
 
         let numTabs = app.buttons["Show Tabs"].value
         XCTAssertEqual("2", numTabs as? String, "Sume should be open in a different tab")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2334760
+    // https://mozilla.testrail.io/index.php?/cases/view/2334760
     func testOpenSiriOption() {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.OpenSiriFromSettings)
-        mozWaitForElementToExist(app.cells["SiriSettings"], timeout: 5)
+        mozWaitForElementToExist(app.cells["SiriSettings"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2334756
+    // https://mozilla.testrail.io/index.php?/cases/view/2334756
     func testCopiedLinks() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
@@ -76,7 +77,7 @@ class SettingsTests: BaseTestCase {
         XCTAssertEqual(value3 as? String, "1")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307041
+    // https://mozilla.testrail.io/index.php?/cases/view/2307041
     func testOpenMailAppSettings() {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -84,10 +85,9 @@ class SettingsTests: BaseTestCase {
 
         // Check that the list is shown
         mozWaitForElementToExist(app.tables["OpenWithPage.Setting.Options"])
-        XCTAssertTrue(app.tables["OpenWithPage.Setting.Options"].exists)
 
         // Check that the list is shown with all elements disabled
-        XCTAssertTrue(app.tables.staticTexts["OPEN MAIL LINKS WITH"].exists)
+        mozWaitForElementToExist(app.tables.staticTexts["OPEN MAIL LINKS WITH"])
         XCTAssertFalse(app.tables.cells.staticTexts["Mail"].isSelected)
         XCTAssertFalse(app.tables.cells.staticTexts["Outlook"].isSelected)
         XCTAssertFalse(app.tables.cells.staticTexts["ProtonMail"].isSelected)
@@ -108,7 +108,7 @@ class SettingsTests: BaseTestCase {
         navigator.goto(SettingsScreen)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307058
+    // https://mozilla.testrail.io/index.php?/cases/view/2307058
     // Functionality is tested by UITests/NoImageModeTests, here only the UI is updated properly
     // SmokeTest
     func testImageOnOff() {
@@ -134,10 +134,10 @@ class SettingsTests: BaseTestCase {
         checkShowImages(showImages: true)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306808
+    // https://mozilla.testrail.io/index.php?/cases/view/2306808
     // Smoketest
     func testSettingsOptionSubtitles() {
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: TIMEOUT)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
         let table = app.tables.element(boundBy: 0)
@@ -153,6 +153,7 @@ class SettingsTests: BaseTestCase {
             table.cells[settingsQuery.NoImageMode.title], app.switches[settingsQuery.OfferToOpen.title],
             table.cells[settingsQuery.Logins.title], app.switches[settingsQuery.ShowLink.title],
             table.cells[settingsQuery.CreditCards.title], table.cells[settingsQuery.Address.title],
+            table.cells[settingsQuery.ClearData.title], app.switches[settingsQuery.ClosePrivateTabs.title],
             table.cells[settingsQuery.ContentBlocker.title], table.cells[settingsQuery.Notifications.title],
             table.cells[settingsQuery.ShowIntroduction.title], table.cells[settingsQuery.SendAnonymousUsageData.title],
             table.cells[settingsQuery.StudiesToggle.title], table.cells[settingsQuery.Version.title],

@@ -5,7 +5,7 @@
 import XCTest
 
 class PocketTests: BaseTestCase {
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306924
+    // https://mozilla.testrail.io/index.php?/cases/view/2306924
     func testPocketEnabledByDefault() {
         navigator.goto(NewTabScreen)
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
@@ -41,6 +41,7 @@ class PocketTests: BaseTestCase {
         app.collectionViews.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.Pocket.itemCell].firstMatch.tap()
         waitUntilPageLoad()
         // The url textField is not empty
-        XCTAssertNotEqual(app.textFields["url"].value as! String, "", "The url textField is empty")
+        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+        XCTAssertNotEqual(url.value as! String, "", "The url textField is empty")
     }
 }

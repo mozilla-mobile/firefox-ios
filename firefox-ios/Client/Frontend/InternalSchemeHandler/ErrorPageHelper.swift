@@ -148,10 +148,36 @@ private func cfErrorToName(_ err: CFNetworkErrors) -> String {
     }
 }
 
-class ErrorPageHandler: InternalSchemeResponse {
+class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
     static let path = InternalURL.Path.errorpage.rawValue
-
+    // When nativeErrorPage feature flag is true, only create
+    // html page with gray background similar to homepage or privatehomepage.
+    // TODO: responseForErrorWebPage() will be removed in future with rest of the old error page code.
     func response(forRequest request: URLRequest) -> (URLResponse, Data)? {
+        if featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly) {
+            responseForNativeErrorPage(request: request)
+        } else {
+            responseForErrorWebPage(request: request)
+        }
+    }
+
+    func responseForNativeErrorPage(request: URLRequest) -> (URLResponse, Data)? {
+        guard let url = request.url else { return nil }
+        let response = InternalSchemeHandler.response(forUrl: url)
+        let backgroundColor = UIColor.systemGray.hexString
+        // Blank page with a color matching the background of the panels which
+        // is displayed for a split-second until the panel shows.
+        let html = """
+            <!DOCTYPE html>
+            <html>
+              <body style='background-color:\(backgroundColor)'></body>
+            </html>
+        """
+        guard let data = html.data(using: .utf8) else { return nil }
+        return (response, data)
+    }
+
+    func responseForErrorWebPage(request: URLRequest) -> (URLResponse, Data)? {
         guard let requestUrl = request.url,
               let originalUrl = InternalURL(requestUrl)?.originalURLFromErrorPage
         else { return nil }

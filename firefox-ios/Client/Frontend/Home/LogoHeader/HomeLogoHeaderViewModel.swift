@@ -73,7 +73,7 @@ extension HomepageHeaderViewModel: HomepageViewModelProtocol, FeatureFlaggable {
 
 extension HomepageHeaderViewModel: HomepageSectionHandler {
     func configure(_ cell: UICollectionViewCell, at indexPath: IndexPath) -> UICollectionViewCell {
-        guard let headerCell = cell as? HomepageHeaderCell else { return UICollectionViewCell() }
+        guard let headerCell = cell as? LegacyHomepageHeaderCell else { return UICollectionViewCell() }
         headerCell.configure(
             with: HomepageHeaderCellViewModel(
                 isPrivate: false,

@@ -138,9 +138,8 @@ public class RustSyncManager: NSObject, SyncManager {
 
     public func applicationDidBecomeActive() {
         backgrounded = false
-
+        setPreferenceForSignIn()
         guard let profile = profile, profile.hasSyncableAccount() else { return }
-
         beginTimedSyncs()
 
         // Sync now if it's been more than our threshold.
@@ -164,6 +163,21 @@ public class RustSyncManager: NSObject, SyncManager {
 
     public func applicationDidEnterBackground() {
         backgrounded = true
+    }
+
+    private func setPreferenceForSignIn() {
+        let signedInFxaAccountValue = profile?.prefs.boolForKey(PrefsKeys.Sync.signedInFxaAccount)
+        // We only want to set the prefs if it has not been set (nil)
+        // There is a case where a user has a syncable account, but returns
+        // false so we check if nil here.
+        guard signedInFxaAccountValue == nil else { return }
+        let userHasSyncableAccount = profile?.hasSyncableAccount() ?? false
+        profile?.prefs.setBool(userHasSyncableAccount, forKey: PrefsKeys.Sync.signedInFxaAccount)
+    }
+
+    private func resetUserSyncPreferences() {
+        profile?.prefs.setBool(false, forKey: PrefsKeys.Sync.signedInFxaAccount)
+        profile?.prefs.setInt(0, forKey: PrefsKeys.Sync.numberOfSyncedDevices)
     }
 
     private func beginSyncing() {
@@ -236,12 +250,13 @@ public class RustSyncManager: NSObject, SyncManager {
         // Only sync if we're green lit. This makes sure that we don't sync unverified
         // accounts.
         guard let profile = profile, profile.hasSyncableAccount() else { return succeed() }
-
+        setPreferenceForSignIn()
         beginTimedSyncs()
         return syncEverything(why: .enabledChange)
     }
 
     public func onRemovedAccount() -> Success {
+        resetUserSyncPreferences()
         let clearPrefs: () -> Success = {
             withExtendedLifetime(self) {
                 // Clear prefs after we're done clearing everything else -- just in case

@@ -209,13 +209,13 @@
 "Shopping.ReviewQualityCard.UnreliableReviews.Label.v120" = "Avisi micca degni di cunfidenza. Pensemu chì l’avisi sò sicuramente falsi o ch’elli venenu da persone partigiane.";
 
 /* Accessibility label for the up chevron icon used to collapse or minimize the Settings Card within the shopping product review bottom sheet. */
-"Shopping.SettingsCard.Collapse.AccessibilityLabel.v120" = "Riduce a scheda di e preferenze";
+"Shopping.SettingsCard.Collapse.AccessibilityLabel.v120" = "Riduce a scheda di i parametri";
 
 /* Accessibility label for the down chevron icon used to expand or show the details of the Settings Card within the shopping product review bottom sheet. */
-"Shopping.SettingsCard.Expand.AccessibilityLabel.v120" = "Sviluppà a scheda di e preferenze";
+"Shopping.SettingsCard.Expand.AccessibilityLabel.v120" = "Sviluppà a scheda di i parametri";
 
 /* Accessibility hint for the recommended products label and switch, grouped together. When the group is selected in VoiceOver mode, the hint is read to help the user understand what action can be performed. */
-"Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityHint.v123" = "Picchichjà duie volte per cambià e preferenze.";
+"Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityHint.v123" = "Picchichjà duie volte per cambià i parametri.";
 
 /* Accessibility label for the recommended products label and switch, grouped together. The first placeholder is for the recommended products label, and the second placeholder is for the state of the switch: On/Off. */
 "Shopping.SettingsCard.Expand.GroupedRecommendedProductsAndSwitch.AccessibilityLabel.v123" = "%1$@, buttone per cambià, %2$@.";
@@ -224,7 +224,7 @@
 "Shopping.SettingsCard.Footer.Action.v120" = "U verificadore d’avisu funziuneghja grazia à %1$@ da %2$@";
 
 /* Title of the settings card displayed in the shopping review quality bottom sheet. */
-"Shopping.SettingsCard.Label.Title.v120" = "Preferenze";
+"Shopping.SettingsCard.Label.Title.v120" = "Parametri";
 
 /* Label of the switch from settings card displayed in the shopping review quality bottom sheet. The placeholder will be replaced with the app name. */
 "Shopping.SettingsCard.RecommendedProducts.Label.v120" = "Affissà i prudutti ricumandati da %@";
@@ -248,8 +248,8 @@
 "Shopping.Sheet.Title.v120" = "Verificadore d’avisu";
 
 /* Text for body of error card displayed to the user when the device is disconnected from the network. */
-"Shopping.WarningCard.CheckNoConnection.Description.v120" = "Verificate a vostra cunnessione di reta è pruvate di ricaricà a pagina.";
+"Shopping.WarningCard.CheckNoConnection.Description.v120" = "Verificate a vostra cunnessione à a reta è pruvate di ricaricà a pagina.";
 
 /* Title for error card displayed to the user when the device is disconnected from the network. */
-"Shopping.WarningCard.CheckNoConnection.Title.v120" = "Nisuna cunnessione di reta";
+"Shopping.WarningCard.CheckNoConnection.Title.v120" = "Nisuna cunnessione à a reta";
 

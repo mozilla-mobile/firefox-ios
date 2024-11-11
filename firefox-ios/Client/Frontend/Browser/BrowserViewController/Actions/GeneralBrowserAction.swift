@@ -5,6 +5,7 @@
 import Foundation
 import Redux
 import Common
+import WebKit
 
 class GeneralBrowserAction: Action {
     let selectedTabURL: URL?
@@ -12,12 +13,15 @@ class GeneralBrowserAction: Action {
     let toastType: ToastType?
     let showOverlay: Bool?
     let buttonTapped: UIButton?
-
+    let isNativeErrorPage: Bool?
+    let frame: WKFrameInfo?
     init(selectedTabURL: URL? = nil,
          isPrivateBrowsing: Bool? = nil,
          toastType: ToastType? = nil,
          showOverlay: Bool? = nil,
          buttonTapped: UIButton? = nil,
+         isNativeErrorPage: Bool? = nil,
+         frame: WKFrameInfo? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.selectedTabURL = selectedTabURL
@@ -25,6 +29,8 @@ class GeneralBrowserAction: Action {
         self.toastType = toastType
         self.buttonTapped = buttonTapped
         self.showOverlay = showOverlay
+        self.isNativeErrorPage = isNativeErrorPage
+        self.frame = frame
         super.init(windowUUID: windowUUID,
                    actionType: actionType)
     }
@@ -33,6 +39,7 @@ class GeneralBrowserAction: Action {
 enum GeneralBrowserActionType: ActionType {
     case showToast
     case showOverlay
+    case leaveOverlay
     case updateSelectedTab
     case goToHomepage
     case navigateBack
@@ -42,7 +49,19 @@ enum GeneralBrowserActionType: ActionType {
     case showBackForwardList
     case showTrackingProtectionDetails
     case showTabsLongPressActions
+    case showReloadLongPressAction
     case showMenu
+    case showLocationViewLongPressActionSheet
+    case stopLoadingWebsite
+    case reloadWebsite
+    case reloadWebsiteNoCache
+    case showShare
+    case showReaderMode
+    case addNewTab
+    case showNewTabLongPressActions
+    case addToReadingListLongPressAction
+    case clearData
+    case showPasswordGenerator
 }
 
 class GeneralBrowserMiddlewareAction: Action {
@@ -62,6 +81,6 @@ class GeneralBrowserMiddlewareAction: Action {
 
 enum GeneralBrowserMiddlewareActionType: ActionType {
     case browserDidLoad
-    case didScroll
     case toolbarPositionChanged
+    case websiteDidScroll
 }

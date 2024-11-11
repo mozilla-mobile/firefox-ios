@@ -26,10 +26,10 @@
 "DefaultBrowserCard.Title" = "Cambià di navigatore predefinitu";
 
 /* Button string to open settings that allows user to switch their default browser to Firefox. */
-"DefaultBrowserOnboarding.Button" = "Andà à e preferenze";
+"DefaultBrowserOnboarding.Button" = "Andà à i parametri";
 
 /* Description for default browser onboarding card. */
-"DefaultBrowserOnboarding.Description1" = "1. Andà à e preferenze";
+"DefaultBrowserOnboarding.Description1" = "1. Andà à i parametri";
 
 /* Description for default browser onboarding card. */
 "DefaultBrowserOnboarding.Description2" = "2. Picchichjà l’appiecazione predefinita di navigazione";

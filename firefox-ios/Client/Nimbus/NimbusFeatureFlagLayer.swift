@@ -13,11 +13,11 @@ final class NimbusFeatureFlagLayer {
         case .accountSettingsRedux:
             return checkAccountSettingsRedux(from: nimbus)
 
-        case .addressAutofill:
-            return checkAddressAutofill(from: nimbus)
-
         case .addressAutofillEdit:
             return checkAddressAutofillEditing(from: nimbus)
+
+        case .bookmarksRefactor:
+            return checkBookmarksRefactor(from: nimbus)
 
         case .bottomSearchBar,
                 .searchHighlights,
@@ -49,6 +49,9 @@ final class NimbusFeatureFlagLayer {
         case .fakespotBackInStock:
             return checkProductBackInStockFakespotFeature(from: nimbus)
 
+        case .homepageRebuild:
+            return checkHomepageFeature(from: nimbus)
+
         case .inactiveTabs:
             return checkTabTrayFeature(for: featureID, from: nimbus)
 
@@ -58,11 +61,20 @@ final class NimbusFeatureFlagLayer {
         case .menuRefactor:
             return checkMenuRefactor(from: nimbus)
 
+        case .menuRefactorHint:
+            return checkMenuRefactorHint(from: nimbus)
+
         case .microsurvey:
             return checkMicrosurveyFeature(from: nimbus)
 
+        case .nativeErrorPage:
+            return checkNativeErrorPageFeature(from: nimbus)
+
         case .nightMode:
             return checkNightModeFeature(from: nimbus)
+
+        case .passwordGenerator:
+            return checkPasswordGeneratorFeature(from: nimbus)
 
         case .preferSwitchToOpenTabOverDuplicate:
             return checkPreferSwitchToOpenTabOverDuplicate(from: nimbus)
@@ -70,17 +82,26 @@ final class NimbusFeatureFlagLayer {
         case .reduxSearchSettings:
             return checkReduxSearchSettingsFeature(from: nimbus)
 
+        case .closeRemoteTabs:
+            return checkCloseRemoteTabsFeature(from: nimbus)
+
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
 
         case .splashScreen:
             return checkSplashScreenFeature(for: featureID, from: nimbus)
 
-        case .tabTrayRefactor:
-            return checkTabTrayRefactorFeature(from: nimbus)
-
         case .toolbarRefactor:
             return checkToolbarRefactorFeature(from: nimbus)
+
+        case .unifiedSearch:
+            return checkUnifiedSearchFeature(from: nimbus)
+
+        case .toolbarOneTapNewTab:
+            return checkToolbarOneTapNewTabFeature(from: nimbus)
+
+        case .toolbarNavigationHint:
+            return checkToolbarNavigationHintFeature(from: nimbus)
 
         case .trackingProtectionRefactor:
             return checkTrackingProtectionRefactor(from: nimbus)
@@ -93,6 +114,10 @@ final class NimbusFeatureFlagLayer {
     // MARK: - Private methods
     private func checkAccountSettingsRedux(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.accountSettingsReduxFeature.value().enabled
+    }
+
+    private func checkBookmarksRefactor(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.bookmarkRefactorFeature.value().enabled
     }
 
     private func checkGeneralFeature(for featureID: NimbusFeatureFlagID,
@@ -136,6 +161,11 @@ final class NimbusFeatureFlagLayer {
         return status
     }
 
+    private func checkHomepageFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.homepageRebuildFeature.value()
+        return config.enabled
+    }
+
     private func checkNimbusForContextualHintsFeature(
         for featureID: NimbusFeatureFlagID,
         from nimbus: FxNimbus
@@ -152,14 +182,24 @@ final class NimbusFeatureFlagLayer {
         return status
     }
 
-    private func checkTabTrayRefactorFeature(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.tabTrayRefactorFeature.value()
-        return config.enabled
-    }
-
     private func checkToolbarRefactorFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.toolbarRefactorFeature.value()
         return config.enabled
+    }
+
+    private func checkUnifiedSearchFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.toolbarRefactorFeature.value()
+        return config.unifiedSearch
+    }
+
+    private func checkToolbarOneTapNewTabFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.toolbarRefactorFeature.value()
+        return config.oneTapNewTab
+    }
+
+    private func checkToolbarNavigationHintFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.toolbarRefactorFeature.value()
+        return config.navigationHint
     }
 
     private func checkTrackingProtectionRefactor(from nimbus: FxNimbus) -> Bool {
@@ -236,6 +276,10 @@ final class NimbusFeatureFlagLayer {
         return config.productAds
     }
 
+    private func checkPasswordGeneratorFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.passwordGeneratorFeature.value().enabled
+    }
+
     private func checkProductBackInStockFakespotFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.shopping2023.value()
 
@@ -244,12 +288,6 @@ final class NimbusFeatureFlagLayer {
 
     private func checkPreferSwitchToOpenTabOverDuplicate(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.homescreenFeature.value().preferSwitchToOpenTab
-    }
-
-    private func checkAddressAutofill(from nimbus: FxNimbus) -> Bool {
-        let config = nimbus.features.addressAutofillFeature.value()
-
-        return config.status
     }
 
     private func checkAddressAutofillEditing(from nimbus: FxNimbus) -> Bool {
@@ -279,6 +317,11 @@ final class NimbusFeatureFlagLayer {
         return nimbus.features.menuRefactorFeature.value().enabled
     }
 
+    private func checkMenuRefactorHint(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.menuRefactorFeature.value()
+        return config.menuHint
+    }
+
     private func checkMicrosurveyFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.microsurveyFeature.value()
 
@@ -289,5 +332,14 @@ final class NimbusFeatureFlagLayer {
         let config = nimbus.features.nightModeFeature.value()
 
         return config.enabled
+    }
+
+    private func checkCloseRemoteTabsFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.remoteTabManagement.value()
+        return config.closeTabsEnabled
+    }
+
+    private func checkNativeErrorPageFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.nativeErrorPageFeature.value().enabled
     }
 }

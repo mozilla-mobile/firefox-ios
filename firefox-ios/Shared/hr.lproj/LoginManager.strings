@@ -16,11 +16,26 @@
 /* Label for the button used to delete the current login. */
 "Delete" = "Izbriši";
 
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "Odustani";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "Ukloni";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "Ovu radnju ne možeš poništiti.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "Ovo će ukloniti lozinku sa svih tvojih sinkroniziranih uređaja.";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "Ukloniti lozinku?";
+
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "Poništi odabir";
 
 /* Accessibility label for entering search mode for logins */
-"Enter Search Mode" = "Uključi pretraživački način rada";
+"Enter Search Mode" = "Uključi modus pretraživanja";
 
 /* Hide password text selection menu item */
 "Hide" = "Sakrij";
@@ -36,6 +51,9 @@
 
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "Nema pronađenih prijava";
+
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "Nije pronađena nijedna lozinka";
 
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "Otvori i ispuni";

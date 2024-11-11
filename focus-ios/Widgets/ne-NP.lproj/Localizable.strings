@@ -1,0 +1,12 @@
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescription" = "आफ्नो गृह स्क्रिनमा %@ सर्टकट थप्नुहोस्। विजेट थपेपछि, यसलाई सम्पादन गर्न छुनुहोस् र होल्ड गर्नुहोस् र फरक सर्टकट चयन गर्नुहोस्।";
+
+/* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
+"TodayWidget.QuickActionGalleryDescriptionV2" = "आफ्नो पूर्वनिर्धारित खोज इन्जिनद्वारा %@मा निजी खोज सुरु गर्नुहोस्।";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "द्रुत कार्यहरु";
+
+/* Text shown on quick action widget inviting the user to browse in the app. %@ is the name of the app (Focus/Klar). */
+"TodayWidget.SearchInApp" = "%@मा खोज्नुहोस्";
+

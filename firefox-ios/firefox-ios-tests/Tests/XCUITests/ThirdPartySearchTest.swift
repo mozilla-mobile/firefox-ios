@@ -11,79 +11,70 @@ class ThirdPartySearchTest: BaseTestCase {
         app.buttons["Done"].tap()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2443998
+    // https://mozilla.testrail.io/index.php?/cases/view/2443998
     func testCustomSearchEngines() {
         addCustomSearchEngine()
 
-        mozWaitForElementToExist(app.navigationBars["Search"].buttons["Settings"], timeout: 3)
-        app.navigationBars["Search"].buttons["Settings"].tap()
-        mozWaitForElementToExist(app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem])
-        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
+        app.navigationBars["Search"].buttons["Settings"].waitAndTap()
+        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
 
         // Perform a search using a custom search engine
-        app.textFields["url"].tap()
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
+        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         UIPasteboard.general.string = "window"
         app.textFields.firstMatch.press(forDuration: 1)
         app.staticTexts["Paste"].tap()
         app.scrollViews.otherElements.buttons["Mozilla Engine search"].tap()
         waitUntilPageLoad()
 
-        var url = app.textFields["url"].value as! String
+        var url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as! String
         if url.hasPrefix("https://") == false {
             url = "https://\(url)"
         }
         XCTAssert(url.hasPrefix("https://developer.mozilla.org/en-US"), "The URL should indicate that the search was performed on MDN and not the default")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2444328
+    // https://mozilla.testrail.io/index.php?/cases/view/2444328
     func testCustomSearchEngineAsDefault() {
         addCustomSearchEngine()
 
         // Go to settings and set MDN as the default
-        mozWaitForElementToExist(app.tables.staticTexts["Google"])
-        app.tables.staticTexts["Google"].tap()
-        mozWaitForElementToExist(app.tables.staticTexts["Mozilla Engine"])
-        app.tables.staticTexts["Mozilla Engine"].tap()
+        app.tables.staticTexts["Google"].waitAndTap()
+        app.tables.staticTexts["Mozilla Engine"].waitAndTap()
         dismissSearchScreen()
 
         // Perform a search to check
-        app.textFields["url"].tap()
+        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
         app.textFields.firstMatch.typeText("window\n")
 
         waitUntilPageLoad()
 
         // Ensure that the default search is MDN
-        var url = app.textFields["url"].value as! String
+        var url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as! String
         if url.hasPrefix("https://") == false {
             url = "https://\(url)"
         }
         XCTAssert(url.hasPrefix("https://developer.mozilla.org/en-US/search"), "The URL should indicate that the search was performed on MDN and not the default")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2306941
+    // https://mozilla.testrail.io/index.php?/cases/view/2306941
     func testCustomSearchEngineDeletion() {
         addCustomSearchEngine()
-        mozWaitForElementToExist(app.navigationBars["Search"].buttons["Settings"], timeout: 3)
 
-        app.navigationBars["Search"].buttons["Settings"].tap()
-        mozWaitForElementToExist(app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem])
-        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
-        app.textFields["url"].tap()
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"])
+        app.navigationBars["Search"].buttons["Settings"].waitAndTap()
+        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
+        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         UIPasteboard.general.string = "window"
         app.textFields.firstMatch.press(forDuration: 1)
         app.staticTexts["Paste"].tap()
         mozWaitForElementToExist(app.scrollViews.otherElements.buttons["Mozilla Engine search"])
-        XCTAssertTrue(app.scrollViews.otherElements.buttons["Mozilla Engine search"].exists)
 
         // Need to go step by step to Search Settings. The ScreenGraph will fail to go to the Search Settings Screen
-        mozWaitForElementToExist(app.buttons["urlBar-cancel"], timeout: 3)
-        app.buttons["urlBar-cancel"].tap()
-        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].waitAndTap()
         app.tables["Context Menu"].otherElements["Settings"].tap()
-        mozWaitForElementToExist(app.tables.staticTexts["Google"])
-        app.tables.staticTexts["Google"].tap()
+        app.tables.staticTexts["Google"].waitAndTap()
 
         // Action.RemoveCustomSearchEngine does not work on iOS 15
         if #available(iOS 16, *) {
@@ -91,15 +82,13 @@ class ThirdPartySearchTest: BaseTestCase {
             dismissSearchScreen()
 
             // Perform a search to check
-            mozWaitForElementToExist(app.textFields["url"], timeout: 3)
-            app.textFields["url"].tap()
-            mozWaitForElementToExist(app.buttons["urlBar-cancel"])
+            app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].waitAndTap()
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
             UIPasteboard.general.string = "window"
             app.textFields.firstMatch.press(forDuration: 1)
             app.staticTexts["Paste"].tap()
 
             mozWaitForElementToNotExist(app.scrollViews.otherElements.buttons["Mozilla Engine search"])
-            XCTAssertFalse(app.scrollViews.otherElements.buttons["Mozilla Engine search"].exists)
         }
     }
 
@@ -107,8 +96,7 @@ class ThirdPartySearchTest: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.AddCustomSearchEngine)
-        mozWaitForElementToExist(app.buttons["customEngineSaveButton"], timeout: 3)
-        app.buttons["customEngineSaveButton"].tap()
+        app.buttons["customEngineSaveButton"].waitAndTap()
         if #unavailable(iOS 16) {
             // Wait for "Fennec pasted from XCUITests-Runner" banner to disappear
             sleep(2)
@@ -116,13 +104,11 @@ class ThirdPartySearchTest: BaseTestCase {
     }
 
     private func dismissSearchScreen() {
-        mozWaitForElementToExist(app.navigationBars["Search"].buttons["Settings"])
-        app.navigationBars["Search"].buttons["Settings"].tap()
-        mozWaitForElementToExist(app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem])
-        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].tap()
+        app.navigationBars["Search"].buttons["Settings"].waitAndTap()
+        app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2444333
+    // https://mozilla.testrail.io/index.php?/cases/view/2444333
     func testCustomEngineFromIncorrectTemplate() {
         waitForTabsButton()
         navigator.nowAt(NewTabScreen)
@@ -136,17 +122,25 @@ class ThirdPartySearchTest: BaseTestCase {
             .textViews["customEngineUrl"]
             .staticTexts["URL (Replace Query with %s)"]
 
-        XCTAssertTrue(customengineurlTextView.exists)
+        mozWaitForElementToExist(customengineurlTextView)
 
         UIPasteboard.general.string = searchUrl
         customengineurlTextView.tap()
         customengineurlTextView.press(forDuration: 2.0)
-        app.staticTexts["Paste"].tap()
+        let pasteOption = app.menuItems["Paste"]
+        if pasteOption.exists {
+            pasteOption.tap()
+        } else {
+            var nrOfTaps = 3
+            while !pasteOption.exists && nrOfTaps > 0 {
+                customengineurlTextView.press(forDuration: 2.0)
+                nrOfTaps -= 1
+            }
+            pasteOption.tap()
+        }
 
-        mozWaitForElementToExist(app.buttons["customEngineSaveButton"], timeout: 3)
-        app.buttons["customEngineSaveButton"].tap()
-        mozWaitForElementToExist(app.navigationBars["Add Search Engine"], timeout: 3)
-        app.navigationBars["Add Search Engine"].buttons["Save"].tap()
+        app.buttons["customEngineSaveButton"].waitAndTap()
+        app.navigationBars["Add Search Engine"].buttons["Save"].waitAndTap()
 
         // The alert appears on iOS 15 but it disappears by itself immediately.
         if #available(iOS 16, *) {

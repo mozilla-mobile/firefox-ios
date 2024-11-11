@@ -31,38 +31,57 @@ struct MicrosurveyPromptState: StateType, Equatable {
     }
 
     static let reducer: Reducer<Self> = { state, action in
-        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else { return state }
+        guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID
+        else {
+            return defaultState(from: state)
+        }
 
         switch action.actionType {
         case MicrosurveyPromptMiddlewareActionType.initialize:
-            let model = (action as? MicrosurveyPromptMiddlewareAction)?.microsurveyModel
-            return MicrosurveyPromptState(
-                windowUUID: state.windowUUID,
-                showPrompt: true,
-                showSurvey: false,
-                model: model
-            )
-        case MicrosurveyPromptMiddlewareActionType.dismissPrompt:
-            return MicrosurveyPromptState(
-                windowUUID: state.windowUUID,
-                showPrompt: false,
-                showSurvey: false,
-                model: state.model
-            )
-        case MicrosurveyPromptMiddlewareActionType.openSurvey:
-            return MicrosurveyPromptState(
-                windowUUID: state.windowUUID,
-                showPrompt: true,
-                showSurvey: true,
-                model: state.model
-            )
+            return handleInitializeAction(state: state, action: action)
+        case MicrosurveyPromptActionType.closePrompt:
+            return handleClosePromptAction(state: state)
+        case MicrosurveyPromptActionType.continueToSurvey:
+            return handleContinueToSurveyAction(state: state)
         default:
-            return MicrosurveyPromptState(
-                windowUUID: state.windowUUID,
-                showPrompt: state.showPrompt,
-                showSurvey: false,
-                model: state.model
-            )
+            return defaultState(from: state)
         }
+    }
+
+    static func defaultState(from state: MicrosurveyPromptState) -> MicrosurveyPromptState {
+        return MicrosurveyPromptState(
+            windowUUID: state.windowUUID,
+            showPrompt: state.showPrompt,
+            showSurvey: false,
+            model: state.model
+        )
+    }
+
+    private static func handleInitializeAction(state: Self, action: Action) -> Self {
+        let model = (action as? MicrosurveyPromptMiddlewareAction)?.microsurveyModel
+        return MicrosurveyPromptState(
+            windowUUID: state.windowUUID,
+            showPrompt: true,
+            showSurvey: false,
+            model: model
+        )
+    }
+
+    private static func handleClosePromptAction(state: Self) -> Self {
+        return MicrosurveyPromptState(
+            windowUUID: state.windowUUID,
+            showPrompt: false,
+            showSurvey: false,
+            model: state.model
+        )
+    }
+
+    private static func handleContinueToSurveyAction(state: Self) -> Self {
+        return MicrosurveyPromptState(
+            windowUUID: state.windowUUID,
+            showPrompt: true,
+            showSurvey: true,
+            model: state.model
+        )
     }
 }

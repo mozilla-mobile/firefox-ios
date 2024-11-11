@@ -8,14 +8,18 @@ export const HeuristicsRegExp = {
   RULES: {
     email: undefined,
     tel: undefined,
-    organization: undefined,
     "street-address": undefined,
     "address-line1": undefined,
+    "address-housenumber": undefined,
     "address-line2": undefined,
     "address-line3": undefined,
     "address-level2": undefined,
     "address-level1": undefined,
     "postal-code": undefined,
+    // Note: We place the `organization` field after the `address` fields, to 
+    // ensure that all address-related fields that might contain organization 
+    // info are matched as address fields first.
+    organization: undefined,
     country: undefined,
     // Note: We place the `cc-name` field for Credit Card first, because
     // it is more specific than the `name` field below and we want to check
@@ -46,7 +50,8 @@ export const HeuristicsRegExp = {
       "address-line1": "addrline1|address_1|addl1",
       "address-line2": "addrline2|address_2|addl2",
       "address-line3": "addrline3|address_3|addl3",
-      "address-level1": "land", // de-DE
+      "country": "land", // de-DE
+      "postal-code": "^PLZ(\\b|\\*)", // de-DE
       "additional-name": "apellido.?materno|lastlastname",
       "cc-name":
         "accountholdername" +
@@ -73,7 +78,7 @@ export const HeuristicsRegExp = {
         "|(anno|año)" +      // es-ES
         "|jaar",             // nl-NL
       "cc-type":
-        "type" +
+        "(cc|card).*(type)" +
         "|kartenmarke" +     // de-DE
         "|typ.*karty",       // pl-PL
       "cc-csc":
@@ -193,9 +198,8 @@ export const HeuristicsRegExp = {
         "cc-?name" +
         "|card-?name" +
         "|cardholder-?name" +
-        "|cardholder" +
+        "|cardholder",
         // "|(^name$)" + // Removed to avoid overwriting "name", above.
-        "|(^nom$)",
 
       "cc-number":
         "cc-?number" +
@@ -385,7 +389,7 @@ export const HeuristicsRegExp = {
       "address-line1":
         "^address$|address[_-]?line(one)?|address1|addr1|street" +
         "|(?:shipping|billing)address$" +
-        "|strasse|straße|hausnummer|housenumber" + // de-DE
+        "|strasse|straße" + // de-DE
         "|house.?name" + // en-GB
         "|direccion|dirección" + // es
         "|adresse" + // fr-FR
@@ -462,6 +466,9 @@ export const HeuristicsRegExp = {
         "|राज्य" + // hi
         "|((\\b|_|\\*)(eyalet|[şs]ehir|[İii̇]l(imiz)?|kent)(\\b|_|\\*))" + // tr
         "|^시[·・]?도", // ko-KR
+
+      "address-housenumber":
+        "housenumber|hausnummer|haus|house[a-z\-]*n(r|o)",
 
       "postal-code":
         "zip|postal|post.*code|pcode" +
@@ -555,7 +562,7 @@ export const HeuristicsRegExp = {
       // Note: `cc-name` expression has been moved up, above `name`, in
       // order to handle specialization through ordering.
       "cc-number":
-        "(add)?(?:card|cc|acct).?(?:number|#|no|num|field)" +
+        "(add)?(?:card|cc|acct).?(?:number|#|no|num|field(?!s)|pan)" +
         // In order to support webkit we convert all negative lookbehinds to a capture group
         // (?<!not)word -> (?<neg>notword)|word
         // TODO: Bug 1829583
@@ -636,6 +643,7 @@ export const HeuristicsRegExp = {
     {
       "address-line2":
         "address|line" +
+        "|house|building|apartment|floor" +    // de-DE
         "|adresse" +      // fr-FR
         "|indirizzo" +    // it-IT
         "|地址" +         // zh-CN

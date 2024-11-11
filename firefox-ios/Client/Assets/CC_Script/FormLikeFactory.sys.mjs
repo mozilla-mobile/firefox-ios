@@ -37,6 +37,54 @@ export let FormLikeFactory = {
   },
 
   /**
+   * Create a FormLike object from an element that is the root of the document
+   *
+   * Currently all <input> not in a <form> are one LoginForm but this
+   * shouldn't be relied upon as the heuristics may change to detect multiple
+   * "forms" (e.g. registration and login) on one page with a <form>.
+   *
+   * @param {HTMLElement} aDocumentRoot
+   * @param {Object} aOptions
+   * @param {boolean} [aOptions.ignoreForm = false]
+   *        True to always use owner document as the `form`
+   * @return {formLike}
+   * @throws Error if aDocumentRoot is null
+   */
+  createFromDocumentRoot(aDocumentRoot, aOptions = {}) {
+    if (!aDocumentRoot) {
+      throw new Error("createFromDocumentRoot: aDocumentRoot is null");
+    }
+
+    let formLike = {
+      action: aDocumentRoot.baseURI,
+      autocomplete: "on",
+      ownerDocument: aDocumentRoot.ownerDocument,
+      rootElement: aDocumentRoot,
+    };
+
+    // FormLikes can be created when fields are inserted into the DOM. When
+    // many, many fields are inserted one after the other, we create many
+    // FormLikes, and computing the elements list becomes more and more
+    // expensive. Making the elements list lazy means that it'll only
+    // be computed when it's eventually needed (if ever).
+    ChromeUtils.defineLazyGetter(formLike, "elements", function () {
+      let elements = [];
+      for (let el of aDocumentRoot.querySelectorAll("input, select")) {
+        // Exclude elements inside the rootElement that are already in a <form> as
+        // they will be handled by their own FormLike.
+        if (!el.form || aOptions.ignoreForm) {
+          elements.push(el);
+        }
+      }
+
+      return elements;
+    });
+
+    this._addToJSONProperty(formLike);
+    return formLike;
+  },
+
+  /**
    * Create a FormLike object from an <input>/<select> in a document.
    *
    * If the field is in a <form>, construct the FormLike from the form.
@@ -48,53 +96,28 @@ export let FormLikeFactory = {
    * Note that two FormLikes created from the same field won't return the same FormLike object.
    * Use the `rootElement` property on the FormLike as a key instead.
    *
-   * @param {HTMLInputElement|HTMLSelectElement} aField - an <input> or <select> field in a document
+   * @param {HTMLInputElement|HTMLSelectElement} aField
+   *        an <input>, <select> or <iframe> field in a document
+   * @param {Object} aOptions
+   * @param {boolean} [aOptions.ignoreForm = false]
+   *        True to always use owner document as the `form`
    * @return {FormLike}
    * @throws Error if aField isn't a password or username field in a document
    */
-  createFromField(aField) {
+  createFromField(aField, aOptions = {}) {
     if (
       (!HTMLInputElement.isInstance(aField) &&
+        !HTMLIFrameElement.isInstance(aField) &&
         !HTMLSelectElement.isInstance(aField)) ||
       !aField.ownerDocument
     ) {
       throw new Error("createFromField requires a field in a document");
     }
 
-    let rootElement = this.findRootForField(aField);
-    if (HTMLFormElement.isInstance(rootElement)) {
-      return this.createFromForm(rootElement);
-    }
-
-    let doc = aField.ownerDocument;
-
-    let formLike = {
-      action: doc.baseURI,
-      autocomplete: "on",
-      ownerDocument: doc,
-      rootElement,
-    };
-
-    // FormLikes can be created when fields are inserted into the DOM. When
-    // many, many fields are inserted one after the other, we create many
-    // FormLikes, and computing the elements list becomes more and more
-    // expensive. Making the elements list lazy means that it'll only
-    // be computed when it's eventually needed (if ever).
-    ChromeUtils.defineLazyGetter(formLike, "elements", function () {
-      let elements = [];
-      for (let el of this.rootElement.querySelectorAll("input, select")) {
-        // Exclude elements inside the rootElement that are already in a <form> as
-        // they will be handled by their own FormLike.
-        if (!el.form) {
-          elements.push(el);
-        }
-      }
-
-      return elements;
-    });
-
-    this._addToJSONProperty(formLike);
-    return formLike;
+    const rootElement = this.findRootForField(aField, aOptions);
+    return HTMLFormElement.isInstance(rootElement)
+      ? this.createFromForm(rootElement)
+      : this.createFromDocumentRoot(rootElement, aOptions);
   },
 
   /**
@@ -125,13 +148,16 @@ export let FormLikeFactory = {
    * an ancestor Element of the username and password fields which doesn't
    * include any of the checkout fields.
    *
-   * @param {HTMLInputElement|HTMLSelectElement} aField - a field in a document
+   * @param {HTMLInputElement|HTMLSelectElement} aField
+   *        a field in a document
    * @return {HTMLElement} - the root element surrounding related fields
    */
-  findRootForField(aField) {
-    let form = aField.form || this.closestFormIgnoringShadowRoots(aField);
-    if (form) {
-      return form;
+  findRootForField(aField, { ignoreForm = false } = {}) {
+    if (!ignoreForm) {
+      const form = aField.form || this.closestFormIgnoringShadowRoots(aField);
+      if (form) {
+        return form;
+      }
     }
 
     return aField.ownerDocument.documentElement;

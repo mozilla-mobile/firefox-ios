@@ -9,21 +9,19 @@ class ClipBoardTests: BaseTestCase {
 
     // Check for test url in the browser
     func checkUrl() {
-        let urlTextField = app.textFields["url"]
+        let urlTextField = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
         mozWaitForValueContains(urlTextField, value: "www.example")
     }
 
     // Copy url from the browser
     func copyUrl() {
         navigator.goto(URLBarOpen)
-        mozWaitForElementToExist(app.textFields["address"])
-        app.textFields["address"].tap()
+        urlBarAddress.waitAndTap()
         if iPad() {
-            app.textFields["address"].press(forDuration: 1)
+            urlBarAddress.press(forDuration: 1)
             app.menuItems["Select All"].tap()
         }
-        mozWaitForElementToExist(app.menuItems["Copy"])
-        app.menuItems["Copy"].tap()
+        app.menuItems["Copy"].waitAndTap()
         app.typeText("\r")
         navigator.nowAt(BrowserTab)
     }
@@ -34,11 +32,11 @@ class ClipBoardTests: BaseTestCase {
             if let myString = UIPasteboard.general.string {
                 let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
                 let allowBtn = springboard.buttons["Allow Paste"]
-                if allowBtn.waitForExistence(timeout: 10) {
+                if allowBtn.waitForExistence(timeout: TIMEOUT) {
                     allowBtn.tap()
                 }
 
-                var value = app.textFields["url"].value as! String
+                var value = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as! String
                 if value.hasPrefix("http") == false {
                     value = "http://\(value)"
                 }
@@ -49,7 +47,7 @@ class ClipBoardTests: BaseTestCase {
     }
 
     // This test is disabled in release, but can still run on master
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2325688
+    // https://mozilla.testrail.io/index.php?/cases/view/2325688
     func testClipboard() {
         navigator.nowAt(NewTabScreen)
         navigator.openURL(url)
@@ -62,12 +60,12 @@ class ClipBoardTests: BaseTestCase {
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         navigator.nowAt(NewTabScreen)
         navigator.goto(URLBarOpen)
-        app.textFields["address"].press(forDuration: 3)
+        urlBarAddress.press(forDuration: 3)
         app.menuItems["Paste"].tap()
-        mozWaitForValueContains(app.textFields["address"], value: "www.example.com")
+        mozWaitForValueContains(urlBarAddress, value: "www.example.com")
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2307051
+    // https://mozilla.testrail.io/index.php?/cases/view/2307051
     func testCopyLink() {
         // Tap on "Copy Link
         navigator.openURL(url_3)
@@ -87,7 +85,7 @@ class ClipBoardTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["Example Domain"])
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2325691
+    // https://mozilla.testrail.io/index.php?/cases/view/2325691
     // Smoketest
     func testClipboardPasteAndGo() {
         // Temporarily disabled until url bar redesign work FXIOS-8172
@@ -103,13 +101,13 @@ class ClipBoardTests: BaseTestCase {
 //        mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
 //        navigator.createNewTab()
 //        mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-//        app.textFields["url"].press(forDuration: 3)
+//        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].press(forDuration: 3)
 //        mozWaitForElementToExist(app.tables["Context Menu"])
 //        mozWaitForElementToExist(
 //            app.tables["Context Menu"].otherElements[AccessibilityIdentifiers.Photon.pasteAndGoAction]
 //        )
 //        app.tables["Context Menu"].otherElements[AccessibilityIdentifiers.Photon.pasteAndGoAction].tap()
-//        mozWaitForElementToExist(app.textFields["url"])
-//        mozWaitForValueContains(app.textFields["url"], value: "www.example.com")
+//        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
+//        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "www.example.com")
     }
 }

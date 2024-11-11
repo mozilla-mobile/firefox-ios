@@ -54,6 +54,22 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         // Swipe to the Homescreen
         app.buttons["\(rootA11yId)SecondaryButton"].tap()
         currentScreen += 1
+        mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)TitleLabel"])
+        mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)DescriptionLabel"])
+        mozWaitForElementToExist(app.buttons["\(rootA11yId)PrimaryButton"])
+        mozWaitForElementToExist(app.buttons["\(rootA11yId)SecondaryButton"])
+        snapshot("Onboarding-4")
+
+        app.buttons["\(rootA11yId)PrimaryButton"].tap()
+        currentScreen += 1
+        mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)TitleLabel"])
+        mozWaitForElementToExist(app.scrollViews.staticTexts["\(rootA11yId)DescriptionLabel"])
+        mozWaitForElementToExist(app.buttons["\(rootA11yId)PrimaryButton"])
+        mozWaitForElementToExist(app.buttons["\(rootA11yId)SecondaryButton"])
+        snapshot("Onboarding-5")
+
+        app.buttons["\(rootA11yId)PrimaryButton"].tap()
+        currentScreen += 1
         mozWaitForElementToExist(app.textFields["url"])
         mozWaitForElementToExist(app.webViews["contentView"])
         snapshot("Homescreen-first-visit")
@@ -200,17 +216,14 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         navigator.nowAt(NewTabScreen)
         navigator.goto(TrackingProtectionSettings)
 
-        mozWaitForElementToExist(app.cells["Settings.TrackingProtectionOption.BlockListBasic"])
-        app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons.firstMatch.tap()
+        app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons.firstMatch.waitAndTap()
         snapshot("TrackingProtectionBasicMoreInfo-01")
 
-        mozWaitForElementToExist(app.navigationBars["Client.TPAccessoryInfo"])
         // Go back to TP settings
-        app.navigationBars["Client.TPAccessoryInfo"].buttons.firstMatch.tap()
+        app.navigationBars["Client.TPAccessoryInfo"].buttons.firstMatch.waitAndTap()
 
         // See Strict mode info
-        mozWaitForElementToExist(app.cells["Settings.TrackingProtectionOption.BlockListStrict"])
-        app.cells["Settings.TrackingProtectionOption.BlockListStrict"].buttons.firstMatch.tap()
+        app.cells["Settings.TrackingProtectionOption.BlockListStrict"].buttons.firstMatch.waitAndTap()
         app.tables.cells.staticTexts.firstMatch.swipeUp()
         snapshot("TrackingProtectionStrictMoreInfo-02")
     }

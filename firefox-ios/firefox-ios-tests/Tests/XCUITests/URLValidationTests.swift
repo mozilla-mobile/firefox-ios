@@ -8,6 +8,7 @@ class URLValidationTests: BaseTestCase {
     let urlTypes = ["www.mozilla.org", "www.mozilla.org/", "https://www.mozilla.org", "www.mozilla.org/en", "www.mozilla.org/en-",
                     "www.mozilla.org/en-US", "https://www.mozilla.org/", "https://www.mozilla.org/en", "https://www.mozilla.org/en-US"]
     let urlHttpTypes = ["http://example.com", "http://example.com/"]
+    let urlField = XCUIApplication().textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
 
     override func setUp() {
         super.setUp()
@@ -19,23 +20,33 @@ class URLValidationTests: BaseTestCase {
         navigator.goto(NewTabScreen)
     }
 
-    // https://testrail.stage.mozaws.net/index.php?/cases/view/2460854
+    // https://mozilla.testrail.io/index.php?/cases/view/2460854
     // Smoketest
     func testDifferentURLTypes() {
-        for i in urlTypes {
-            navigator.openURL(i)
+        for url in urlTypes {
+            navigator.openURL(url)
             waitUntilPageLoad()
-            XCTAssertTrue(app.otherElements.staticTexts["Mozilla"].exists, "The website was not loaded properly")
-            XCTAssertTrue(app.buttons["Menu"].exists)
-            XCTAssertEqual(app.textFields["url"].value as? String, "www.mozilla.org/en-US/")
+            waitForElementsToExist(
+                [
+                    app.otherElements.staticTexts["Mozilla"],
+                    app.buttons["Menu"]
+                ]
+            )
+            // Getting the current system locale ex:- en-US
+            var locale = Locale.preferredLanguages[0]
+            // Only the below url suffixes should lead to en-US website
+            if url.hasSuffix("en") || url.hasSuffix("en-") || url.hasSuffix("en-US") {
+                locale = "en-US"
+            }
+            mozWaitForValueContains(urlField, value: "www.mozilla.org/\(locale)/")
             clearURL()
         }
 
-        for i in urlHttpTypes {
-            navigator.openURL(i)
+        for url in urlHttpTypes {
+            navigator.openURL(url)
             waitUntilPageLoad()
-            XCTAssertTrue(app.otherElements.staticTexts["Example Domain"].exists, "The website was not loaded properly")
-            XCTAssertEqual(app.textFields["url"].value as? String, "example.com/")
+            mozWaitForElementToExist(app.otherElements.staticTexts["Example Domain"])
+            mozWaitForValueContains(urlField, value: "example.com/")
             clearURL()
         }
     }
@@ -43,8 +54,7 @@ class URLValidationTests: BaseTestCase {
     private func clearURL() {
         if iPad() {
             navigator.goto(URLBarOpen)
-            mozWaitForElementToExist(app.buttons["Clear text"])
-            app.buttons["Clear text"].tap()
+            app.buttons["Clear text"].waitAndTap()
         }
     }
 }
