@@ -55,10 +55,12 @@ class TestBrowserDB: XCTestCase {
                                   args: nil,
                                   factory: { row in
             guard let bmkUri = row[0] as? String else {
+                XCTFail("Failed to cast value for key 'bmkUri' to String.")
                 return ("", "")
             }
 
             guard let title = row[1] as? String else {
+                XCTFail("Failed to cast value for key 'title' to String.")
                 return (bmkUri, "")
             }
 
@@ -88,10 +90,12 @@ class TestBrowserDB: XCTestCase {
         // Grab a pointer to the -shm so we can compare later.
         let shmAAttributes = try files.attributesForFileAt(relativePath: "foo.db-shm")
         guard let creationA = shmAAttributes[FileAttributeKey.creationDate] as? Date else {
-            return XCTFail("expected object was not a date")
+            XCTFail("Failed to cast value for key 'creationDate' to Date.")
+            return
         }
         guard let inodeA = (shmAAttributes[FileAttributeKey.systemFileNumber] as? NSNumber)?.uintValue else {
-            return XCTFail("expected object was not a number")
+            XCTFail("Failed to cast value for key 'systemFileNumber' to NSNumber.")
+            return
         }
 
         XCTAssertFalse(files.exists("foo.db.bak.1"))
