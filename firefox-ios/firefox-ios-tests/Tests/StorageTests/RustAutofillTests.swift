@@ -197,7 +197,7 @@ class RustAutofillTests: XCTestCase {
                     let expectedCcExpYear = Int64(2028)
                     let updatedCreditCard = self.createUnencryptedCreditCardFields(creditCard: creditCard,
                                                                                    expectedCcExpYear: expectedCcExpYear)
-                    self.autofill.updateCreditCard(id: creditCard!.guid,
+                    self.autofill.updateCreditCard(id: creditCard.guid,
                                                    creditCard: updatedCreditCard) { success, err in
                         XCTAssertNotNil(success)
                         if let updated = success {
