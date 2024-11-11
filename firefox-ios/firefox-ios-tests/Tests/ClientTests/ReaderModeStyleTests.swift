@@ -221,7 +221,7 @@ class MockDelegate: ReaderModeStyleViewModelDelegate {
     }
 }
 
-extension ReaderModeFontSize: Comparable {
+extension ReaderModeFontSize: Swift.Comparable {
     public static func < (lhs: ReaderModeFontSize, rhs: ReaderModeFontSize) -> Bool {
         lhs.rawValue < rhs.rawValue
     }
