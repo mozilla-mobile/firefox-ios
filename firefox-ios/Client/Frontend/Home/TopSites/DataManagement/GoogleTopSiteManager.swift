@@ -9,6 +9,7 @@ import SiteImageView
 
 public protocol GoogleTopSiteManagerProvider {
     var suggestedSiteData: PinnedSite? { get }
+    func shouldAddGoogleTopSite(hasSpace: Bool) -> Bool
 }
 // Manage the specific Google top site case
 class GoogleTopSiteManager: GoogleTopSiteManagerProvider {
