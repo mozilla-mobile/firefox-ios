@@ -72,4 +72,29 @@ class DataManagementTests: BaseTestCase {
             XCTAssertEqual(1, app.cells.staticTexts.count-1)
         }
     }
+
+    // https://mozilla.testrail.io/index.php?/cases/view/2802088
+    func testFilterWebsiteData() {
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.goto(NewTabScreen)
+        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
+        navigator.goto(WebsiteDataSettings)
+        mozWaitForElementToExist(app.tables.otherElements["Website Data"])
+        app.tables.otherElements["Website Data"].swipeDown()
+        mozWaitForElementToExist(app.searchFields["Filter Sites"])
+        navigator.performAction(Action.TapOnFilterWebsites)
+        app.typeText("mozilla")
+        mozWaitForElementToExist(app.tables["Search results"])
+        let expectedSearchResults = app.tables["Search results"].cells.count
+        XCTAssertEqual(expectedSearchResults-1, 1)
+        app.buttons["Cancel"].tap()
+        mozWaitForElementToExist(app.tables.otherElements["Website Data"])
+        if #available(iOS 17, *) {
+            XCTAssertGreaterThan(app.cells.images.count, 1)
+        } else {
+            XCTAssertGreaterThan(app.cells.staticTexts.count-1, 1)
+        }
+    }
  }
