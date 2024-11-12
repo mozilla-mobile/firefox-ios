@@ -15,34 +15,20 @@ protocol StoreTestUtility {
 /// Utility class used when replacing the global store for testing purposes
 class StoreTestUtilityHelper {
     func setupTestingStore(with appState: AppState, middlewares: [Middleware<AppState>]) {
-        #if TESTING
-        let mockStore: some DefaultDispatchStore<AppState> = MockStoreForMiddleware(state: AppState())
-
-        store = mockStore
-
-        // FIXME
-//        store = Store(
-//            state: AppState(),
-//            reducer: AppState.reducer,
-//            middlewares: middlewares
-//        )
-        #endif
+        store = Store(
+            state: appState,
+            reducer: AppState.reducer,
+            middlewares: middlewares
+        )
     }
 
     /// In order to avoid flaky tests, we should reset the store
     /// similar to production
     func resetTestingStore() {
-        #if TESTING
-        let mockStore: some DefaultDispatchStore<AppState> = MockStoreForMiddleware(state: AppState())
-
-        store = mockStore
-
-        // FIXME
-//        store = Store(
-//            state: AppState(),
-//            reducer: AppState.reducer,
-//            middlewares: middlewares
-//        )
-        #endif
+        store = Store(
+            state: AppState(),
+            reducer: AppState.reducer,
+            middlewares: middlewares
+        )
     }
 }

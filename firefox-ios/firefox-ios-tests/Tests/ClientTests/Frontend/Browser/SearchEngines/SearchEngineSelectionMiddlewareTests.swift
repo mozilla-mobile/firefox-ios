@@ -29,10 +29,8 @@ final class SearchEngineSelectionMiddlewareTests: XCTestCase {
 
         // We must reset and configure the global mock store prior to each test
         subject = createSubject(mockSearchEnginesManager: mockSearchEnginesManager)
-        let mockStore: some DefaultDispatchStore<AppState> = MockStoreForMiddleware(state: AppState())
-        #if TESTING
+        mockStore = MockStoreForMiddleware(state: AppState())
         store = mockStore
-        #endif
     }
 
     override func tearDown() {
@@ -43,7 +41,7 @@ final class SearchEngineSelectionMiddlewareTests: XCTestCase {
     func testViewDidLoad_dispatchesDidLoadSearchEngines() throws {
         let action = getAction(for: .viewDidLoad)
 
-        store.dispatch(action)
+        subject.searchEngineSelectionProvider(AppState(), action)
 
         guard let actionCalled = mockStore.dispatchCalled.withActions.first as? SearchEngineSelectionAction,
               case SearchEngineSelectionActionType.didLoadSearchEngines = actionCalled.actionType else {
