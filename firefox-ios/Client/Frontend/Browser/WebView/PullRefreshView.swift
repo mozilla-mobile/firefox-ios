@@ -110,7 +110,7 @@ class PullRefreshView: UIView,
                 self?.restoreBackgroundProgressViewIfNeeded()
                 let rotationAngle = -(scrollView.contentOffset.y / (self?.frame.height ?? 0.0)) * .pi * 2
                 UIView.animate(withDuration: 0.1) {
-                    self?.progressView.transform = CGAffineTransform(rotationAngle: rotationAngle)
+                    self?.progressView.transform = CGAffineTransform(rotationAngle: rotationAngle * 2.0)
                 }
             }
         }
