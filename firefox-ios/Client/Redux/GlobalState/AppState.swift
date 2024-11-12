@@ -81,9 +81,9 @@ let middlewares = [
 // we change the store to be instantiated as a variable.
 // For non testing builds, we leave the store as a constant.
 #if TESTING
-var store = Store(state: AppState(),
-                  reducer: AppState.reducer,
-                  middlewares: middlewares)
+var store: any DefaultDispatchStore = Store(state: AppState(), // TODO make it possible to override this type...
+                                            reducer: AppState.reducer,
+                                            middlewares: middlewares)
 #else
 let store = Store(state: AppState(),
                   reducer: AppState.reducer,

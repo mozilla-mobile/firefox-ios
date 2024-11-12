@@ -1856,6 +1856,7 @@
 		ED45893E2CC800D9006F2C0B /* SearchEngineSelectionViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED45893D2CC800D9006F2C0B /* SearchEngineSelectionViewControllerTests.swift */; };
 		ED4589402CC8220A006F2C0B /* MockSearchEngineSelectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED45893F2CC8220A006F2C0B /* MockSearchEngineSelectionCoordinator.swift */; };
 		ED55DC8C2CC2D7DA00E3FE3A /* SearchEngineSelectionCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED55DC8B2CC2D7DA00E3FE3A /* SearchEngineSelectionCoordinatorTests.swift */; };
+		ED70CD812CE3BD2C0018761B /* MockStoreForMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED70CD802CE3BD2C0018761B /* MockStoreForMiddleware.swift */; };
 		EDC3C2562CCAC9CB005A047F /* SearchEnginesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC3C2552CCAC9CB005A047F /* SearchEnginesManager.swift */; };
 		EDC3D34F2CB5E70500C62DE3 /* SearchEngineTestAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EDC3D34E2CB5E70500C62DE3 /* SearchEngineTestAssets.xcassets */; };
 		EDC3D3552CB70A3F00C62DE3 /* OpenSearchEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDC3D3542CB70A3F00C62DE3 /* OpenSearchEngineTests.swift */; };
@@ -9295,6 +9296,7 @@
 		ED45893F2CC8220A006F2C0B /* MockSearchEngineSelectionCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSearchEngineSelectionCoordinator.swift; sourceTree = "<group>"; };
 		ED5144A0BE3A8C7B15047C3F /* anp */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = anp; path = anp.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		ED55DC8B2CC2D7DA00E3FE3A /* SearchEngineSelectionCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineSelectionCoordinatorTests.swift; sourceTree = "<group>"; };
+		ED70CD802CE3BD2C0018761B /* MockStoreForMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStoreForMiddleware.swift; sourceTree = "<group>"; };
 		ED84423D8666C751BBFC76AC /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/Storage.strings; sourceTree = "<group>"; };
 		EDA240A8BBFD0A19FB2C3D7E /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Intro.strings; sourceTree = "<group>"; };
 		EDB94DDC89DE1F2C624C9841 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -10795,6 +10797,7 @@
 				C29B64822AD69C3E00F3244B /* MockQRCodeParentCoordinator.swift */,
 				21FA8FB12AE856EB0013B815 /* MockTabTrayCoordinatorDelegate.swift */,
 				E19443F72AF953B000964EA5 /* MockSidebarEnabledView.swift */,
+				ED70CD802CE3BD2C0018761B /* MockStoreForMiddleware.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -16987,6 +16990,7 @@
 				C8EDDBF029DD83FC003A4C07 /* RouteTests.swift in Sources */,
 				0A7693612C7DD19600103A6D /* CertificatesViewModelTests.swift in Sources */,
 				8A454D372CB86B86009436D9 /* PocketStateTests.swift in Sources */,
+				ED70CD812CE3BD2C0018761B /* MockStoreForMiddleware.swift in Sources */,
 				8AED868328CA3B3400351A50 /* BookmarkPanelViewModelTests.swift in Sources */,
 				434CD57829F6FC4500A0D04B /* MockAppAuthenticator.swift in Sources */,
 				8A94418A2CE3E190007FF4E5 /* MockSearchEngineManager.swift in Sources */,
