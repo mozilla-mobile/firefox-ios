@@ -42,7 +42,7 @@ extension FxAPushMessageHandler {
 
                     switch event {
                     case .commandReceived(let deviceCommand):
-                        let pushMessage = self.getPushMessageBy(deviceCommand: deviceCommand)
+                        let pushMessage = self.makePushMessageFrom(deviceCommand: deviceCommand)
                         completion(.success(pushMessage))
                     case .deviceConnected(let deviceName):
                         completion(.success(PushMessage.deviceConnected(deviceName)))
@@ -80,7 +80,7 @@ extension FxAPushMessageHandler {
         }
     }
 
-    private func getPushMessageBy(deviceCommand: IncomingDeviceCommand) -> PushMessage {
+    private func makePushMessageFrom(deviceCommand: IncomingDeviceCommand) -> PushMessage {
         switch deviceCommand {
         case .tabReceived(_, let tabData):
             let title = tabData.entries.last?.title ?? ""
