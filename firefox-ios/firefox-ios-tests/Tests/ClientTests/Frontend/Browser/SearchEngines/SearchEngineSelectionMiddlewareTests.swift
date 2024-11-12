@@ -29,9 +29,9 @@ final class SearchEngineSelectionMiddlewareTests: XCTestCase {
 
         // We must reset and configure the global mock store prior to each test
         subject = createSubject(mockSearchEnginesManager: mockSearchEnginesManager)
-        let mockStore = MockStoreForMiddleware(state: AppState())
+        let mockStore: some DefaultDispatchStore<AppState> = MockStoreForMiddleware(state: AppState())
         #if TESTING
-        store = mockStore as? DefaultDispatchStore
+        store = mockStore
         #endif
     }
 

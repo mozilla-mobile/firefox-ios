@@ -16,11 +16,16 @@ protocol StoreTestUtility {
 class StoreTestUtilityHelper {
     func setupTestingStore(with appState: AppState, middlewares: [Middleware<AppState>]) {
         #if TESTING
-        store = Store(
-            state: appState,
-            reducer: AppState.reducer,
-            middlewares: middlewares
-        )
+        let mockStore: some DefaultDispatchStore<AppState> = MockStoreForMiddleware(state: AppState())
+
+        store = mockStore
+
+        // FIXME
+//        store = Store(
+//            state: AppState(),
+//            reducer: AppState.reducer,
+//            middlewares: middlewares
+//        )
         #endif
     }
 
@@ -28,11 +33,16 @@ class StoreTestUtilityHelper {
     /// similar to production
     func resetTestingStore() {
         #if TESTING
-        store = Store(
-            state: AppState(),
-            reducer: AppState.reducer,
-            middlewares: middlewares
-        )
+        let mockStore: some DefaultDispatchStore<AppState> = MockStoreForMiddleware(state: AppState())
+
+        store = mockStore
+
+        // FIXME
+//        store = Store(
+//            state: AppState(),
+//            reducer: AppState.reducer,
+//            middlewares: middlewares
+//        )
         #endif
     }
 }
