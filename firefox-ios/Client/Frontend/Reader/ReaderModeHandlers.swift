@@ -94,9 +94,9 @@ struct ReaderModeHandlers: ReaderModeHandlersProtocol {
     }
 
     private static func generateHtmlFor(readabilityResult: ReadabilityResult,
-                                        style: consuming ReaderModeStyle,
+                                        style: ReaderModeStyle,
                                         profile: Profile) -> GCDWebServerDataResponse? {
-        var readerModeStyle = consume style
+        var readerModeStyle = style
         // We have this page in our cache, so we can display it. Just grab the correct style from the
         // profile and then generate HTML from the Readability results.
         if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle),
