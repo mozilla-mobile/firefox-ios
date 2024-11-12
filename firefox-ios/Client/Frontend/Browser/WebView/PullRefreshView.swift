@@ -36,6 +36,9 @@ class PullRefreshView: UIView,
         imageView?.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
+    private var isIpad: Bool {
+        traitCollection.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular
+    }
 
     init(parentScrollView: UIScrollView?,
          isPotraitOrientation: Bool,
@@ -52,12 +55,12 @@ class PullRefreshView: UIView,
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     private func setupEasterEgg(isPotrait: Bool) {
         if let easterEggGif {
             addSubview(easterEggGif)
             let layoutBuilder = EasterEggViewLayoutBuilder(easterEggSize: UX.easterEggSize)
-            layoutBuilder.layoutEasterEggView(easterEggGif, superview: self, isPotrait: isPotrait)
+            layoutBuilder.layoutEasterEggView(easterEggGif, superview: self, isPotrait: isPotrait, isIpad: isIpad)
         }
     }
 
@@ -142,7 +145,7 @@ class PullRefreshView: UIView,
             self.progressContainerView.backgroundColor = .clear
         }
     }
-    
+
     private func showEasterEgg() {
         guard let easterEggGif else { return }
         easterEggGif.isHidden = false
@@ -155,13 +158,13 @@ class PullRefreshView: UIView,
     func stopObservingContentScroll() {
         obeserveTicket?.invalidate()
     }
-    
+
     func updateEasterEggForOrientationChange(isPotrait: Bool) {
         guard let easterEggGif else { return }
         easterEggGif.removeFromSuperview()
         insertSubview(easterEggGif, at: 0)
         let layoutBuilder = EasterEggViewLayoutBuilder(easterEggSize: UX.easterEggSize)
-        layoutBuilder.layoutEasterEggView(easterEggGif, superview: self, isPotrait: isPotrait)
+        layoutBuilder.layoutEasterEggView(easterEggGif, superview: self, isPotrait: isPotrait, isIpad: isIpad)
     }
 
     // MARK: - ThemeApplicable
@@ -202,15 +205,15 @@ class PullRefreshView: UIView,
 struct EasterEggViewLayoutBuilder {
     let easterEggSize: CGSize
     let sidePadding: CGFloat = 32.0
-    
-    func layoutEasterEggView(_ view: UIView, superview: UIView, isPotrait: Bool) {
-        if isPotrait {
+
+    func layoutEasterEggView(_ view: UIView, superview: UIView, isPotrait: Bool, isIpad: Bool) {
+        if isPotrait || isIpad {
             layoutEasterEggView(view, superview: superview, position: randomPotraitLayoutPosition())
         } else {
-            layoutEasterEggView(view, superview: superview, position: randomLandscapeLayoutPosition())
+            layoutEasterEggView(view, superview: superview, position: randomLandscapeIphoneLayoutPosition())
         }
     }
-    
+
     private func layoutEasterEggView(_ view: UIView, superview: UIView, position: NSRectAlignment) {
         let constraints: [NSLayoutConstraint] = switch position {
         case .topLeading:
@@ -287,8 +290,9 @@ struct EasterEggViewLayoutBuilder {
         ]
         return allowedPositions.randomElement() ?? .bottomLeading
     }
-    
-    private func randomLandscapeLayoutPosition() -> NSRectAlignment {
+
+    private func randomLandscapeIphoneLayoutPosition() -> NSRectAlignment {
+        // For iphone only allows this position since the other don't work properly
         let allowedPositions: [NSRectAlignment] = [
             .bottomLeading,
             .bottomTrailing

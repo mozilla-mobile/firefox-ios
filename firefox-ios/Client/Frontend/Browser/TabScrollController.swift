@@ -167,9 +167,9 @@ class TabScrollingController: NSObject,
         super.init()
         setupNotifications()
     }
-    
-    func traitCollectionDidChange(_ traits: UITraitCollection) {
-        
+
+    func traitCollectionDidChange() {
+        pullToRefreshView?.updateEasterEggForOrientationChange(isPotrait: UIWindow.isPortrait)
     }
 
     private func setupNotifications() {
@@ -325,8 +325,9 @@ private extension TabScrollingController {
             pullToRefreshView?.startObservingContentScroll()
             return
         }
+
         let refresh = PullRefreshView(parentScrollView: self.scrollView,
-                                      isPotraitOrientation: UIApplication.shared.stat) {
+                                      isPotraitOrientation: UIWindow.isPortrait) {
             self.reload()
         }
         self.scrollView?.addSubview(refresh)

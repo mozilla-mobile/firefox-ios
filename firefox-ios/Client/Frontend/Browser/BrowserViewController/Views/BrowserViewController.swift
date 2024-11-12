@@ -1121,6 +1121,7 @@ class BrowserViewController: UIViewController,
         }
 
         coordinator.animate(alongsideTransition: { [self] context in
+            scrollController.traitCollectionDidChange()
             scrollController.updateMinimumZoom()
             topTabsViewController?.scrollToCurrentTab(false, centerCell: false)
             if let popover = displayedPopoverController {
