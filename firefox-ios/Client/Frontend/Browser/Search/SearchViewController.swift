@@ -542,13 +542,13 @@ class SearchViewController: SiteTableViewController,
             withIdentifier: TwoLineImageOverlayCell.cellIdentifier,
             for: indexPath
         ) as? TwoLineImageOverlayCell else {
-            fatalError("Failed to dequeue TwoLineImageOverlayCell")
+            fatalError("Failed to dequeue cell with identifier \(TwoLineImageOverlayCell.cellIdentifier)")
         }
         guard let oneLineTableViewCell = tableView.dequeueReusableCell(
             withIdentifier: OneLineTableViewCell.cellIdentifier,
             for: indexPath
         ) as? OneLineTableViewCell else {
-            fatalError("Failed to dequeue OneLineTableViewCell")
+            fatalError("Failed to dequeue cell with identifier \(OneLineTableViewCell.cellIdentifier)")
         }
         return getCellForSection(twoLineImageOverlayCell,
                                  oneLineCell: oneLineTableViewCell,

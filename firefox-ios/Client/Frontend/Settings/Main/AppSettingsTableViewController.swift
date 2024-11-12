@@ -460,7 +460,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             tableView,
             viewForHeaderInSection: section
         ) as? ThemedTableSectionHeaderFooterView else {
-            fatalError("Failed to dequeue ThemedTableSectionHeaderFooterView")
+            fatalError("Failed to dequeue ThemedTableSectionHeaderFooterView for section \(section)")
         }
         return headerView
     }

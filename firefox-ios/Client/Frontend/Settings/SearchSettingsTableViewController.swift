@@ -144,7 +144,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
             withIdentifier: ThemedSubtitleTableViewCell.cellIdentifier,
             for: indexPath
         ) as? ThemedSubtitleTableViewCell else {
-            fatalError("Failed to dequeue ThemedSubtitleTableViewCell")
+            fatalError("Failed to dequeue cell with identifier \(ThemedSubtitleTableViewCell.cellIdentifier)")
         }
 
         var engine: OpenSearchEngine!
