@@ -538,14 +538,18 @@ class SearchViewController: SiteTableViewController,
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let twoLineImageOverlayCell = tableView.dequeueReusableCell(
+        guard let twoLineImageOverlayCell = tableView.dequeueReusableCell(
             withIdentifier: TwoLineImageOverlayCell.cellIdentifier,
             for: indexPath
-        ) as! TwoLineImageOverlayCell
-        let oneLineTableViewCell = tableView.dequeueReusableCell(
+        ) as? TwoLineImageOverlayCell else {
+            fatalError("Failed to dequeue TwoLineImageOverlayCell")
+        }
+        guard let oneLineTableViewCell = tableView.dequeueReusableCell(
             withIdentifier: OneLineTableViewCell.cellIdentifier,
             for: indexPath
-        ) as! OneLineTableViewCell
+        ) as? OneLineTableViewCell else {
+            fatalError("Failed to dequeue OneLineTableViewCell")
+        }
         return getCellForSection(twoLineImageOverlayCell,
                                  oneLineCell: oneLineTableViewCell,
                                  for: SearchListSection(rawValue: indexPath.section)!,

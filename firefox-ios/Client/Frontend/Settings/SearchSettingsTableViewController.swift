@@ -140,10 +140,12 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
 
     // MARK: - UITableViewDataSource
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(
+        guard let cell = tableView.dequeueReusableCell(
             withIdentifier: ThemedSubtitleTableViewCell.cellIdentifier,
             for: indexPath
-        ) as! ThemedSubtitleTableViewCell
+        ) as? ThemedSubtitleTableViewCell else {
+            fatalError("Failed to dequeue ThemedSubtitleTableViewCell")
+        }
 
         var engine: OpenSearchEngine!
         let section = Section(rawValue: sectionsToDisplay[indexPath.section].rawValue) ?? .defaultEngine

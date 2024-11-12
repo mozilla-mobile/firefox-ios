@@ -456,10 +456,12 @@ class AppSettingsTableViewController: SettingsTableViewController,
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = super.tableView(
+        guard let headerView = super.tableView(
             tableView,
             viewForHeaderInSection: section
-        ) as! ThemedTableSectionHeaderFooterView
+        ) as? ThemedTableSectionHeaderFooterView else {
+            fatalError("Failed to dequeue ThemedTableSectionHeaderFooterView")
+        }
         return headerView
     }
 }
