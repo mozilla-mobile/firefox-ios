@@ -253,7 +253,8 @@ class LegacyBookmarkDetailPanel: SiteTableViewController, BookmarksRefactorFeatu
     override func reloadData() {
         // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
         if profile.isShutdown { return }
-        profile.places.getBookmarksTree(rootGUID: BookmarkRoots.RootGUID, recursive: true).uponQueue(.main) { bookmarksTreeResult in
+        profile.places.getBookmarksTree(rootGUID: BookmarkRoots.RootGUID, recursive: true)
+            .uponQueue(.main) { bookmarksTreeResult in
             self.profile.places.countBookmarksInTrees(folderGuids: BookmarkRoots.DesktopRoots.map { $0 })
                 .uponQueue(.main) { bookmarksCountResult in
                     guard let rootFolder = bookmarksTreeResult.successValue as? BookmarkFolderData else {
@@ -309,8 +310,8 @@ class LegacyBookmarkDetailPanel: SiteTableViewController, BookmarksRefactorFeatu
                     addFolderAndDescendants(rootFolder)
                     self.bookmarkFolders = bookmarkFolders
                     self.tableView.reloadData()
+                }
             }
-        }
     }
 
     func updateSaveButton() {
