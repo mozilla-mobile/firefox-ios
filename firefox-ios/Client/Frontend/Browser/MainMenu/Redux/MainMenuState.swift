@@ -17,10 +17,12 @@ struct AccountData: Equatable {
 struct TelemetryInfo: Equatable {
     let isHomepage: Bool
     let isActionOn: Bool?
+    let submenuType: MainMenuDetailsViewType?
 
-    init(isHomepage: Bool, isActionOn: Bool? = nil) {
+    init(isHomepage: Bool, isActionOn: Bool? = nil, submenuType: MainMenuDetailsViewType? = nil) {
         self.isHomepage = isHomepage
         self.isActionOn = isActionOn
+        self.submenuType = submenuType
     }
 }
 
