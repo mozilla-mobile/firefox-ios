@@ -168,7 +168,6 @@ class TrackingProtectionViewController: UIViewController,
                 }
             }
         }
-        resetReduxStoreState()
     }
 
     private func setupView() {
@@ -190,20 +189,36 @@ class TrackingProtectionViewController: UIViewController,
     // MARK: Redux
     func newState(state: TrackingProtectionState) {
         trackingProtectionState = state
-        if trackingProtectionState.showTrackingProtectionSettings {
-            enhancedTrackingProtectionMenuDelegate?.settingsOpenPage(settings: .contentBlocker)
-        } else if trackingProtectionState.showDetails {
-            showTrackersDetailsController()
-        } else if trackingProtectionState.showBlockedTrackers {
-            showBlockedTrackersController()
-        } else if trackingProtectionState.showsClearCookiesAlert {
-            onTapClearCookiesAndSiteData()
-        } else if trackingProtectionState.shouldClearCookies {
+        if let navigateTo = state.navigateTo {
+            switch navigateTo {
+            case .home:
+                navigationController?.popToRootViewController(animated: true)
+            case .back:
+                navigationController?.popViewController(animated: true)
+            case .close:
+                enhancedTrackingProtectionMenuDelegate?.didFinish()
+            case .settings:
+                enhancedTrackingProtectionMenuDelegate?.settingsOpenPage(settings: .contentBlocker)
+            }
+        }
+        if let displayView = state.displayView {
+            switch displayView {
+            case .blockedTrackersDetails:
+                showBlockedTrackersController()
+            case .trackingProtectionDetails:
+                showTrackersDetailsController()
+            case .certificatesDetails:
+                break
+            case .clearCookiesAlert:
+                onTapClearCookiesAndSiteData()
+            }
+        }
+        if trackingProtectionState.shouldClearCookies {
             clearCookies()
         } else if trackingProtectionState.shouldUpdateBlockedTrackerStats {
             updateBlockedTrackersCount()
-        } else if trackingProtectionState.shouldDismiss {
-            enhancedTrackingProtectionMenuDelegate?.didFinish()
+        } else if trackingProtectionState.shouldUpdateConnectionStatus {
+            updateConnectionStatus()
         }
     }
 
@@ -218,13 +233,6 @@ class TrackingProtectionViewController: UIViewController,
                 return TrackingProtectionState(appState: appState, uuid: uuid)
             })
         })
-    }
-
-    func resetReduxStoreState() {
-        store.dispatch(
-            TrackingProtectionAction(windowUUID: windowUUID,
-                                     actionType: TrackingProtectionActionType.goBack)
-        )
     }
 
     func unsubscribeFromRedux() {
@@ -412,13 +420,8 @@ class TrackingProtectionViewController: UIViewController,
                                      title: model.displayTitle,
                                      icon: headerIcon)
 
-        connectionDetailsHeaderView.setupDetails(title: model.connectionDetailsTitle,
-                                                 status: model.connectionDetailsHeader,
-                                                 image: model.connectionDetailsImage)
-
         updateBlockedTrackersCount()
-        connectionStatusView.setupDetails(image: model.getConnectionStatusImage(themeType: currentTheme().type),
-                                          text: model.connectionStatusString)
+        updateConnectionStatus()
 
         toggleView.setupDetails(isOn: !model.isURLSafelisted())
         model.isProtectionEnabled = toggleView.toggleIsOn
@@ -430,6 +433,18 @@ class TrackingProtectionViewController: UIViewController,
         blockedTrackersVC?.model.contentBlockerStats = model.selectedTab?.contentBlocker?.stats
         blockedTrackersVC?.applySnapshot()
         trackersView.setupDetails(for: model.contentBlockerStats?.total)
+        updateConnectionStatus()
+    }
+
+    private func updateConnectionStatus() {
+        model.connectionSecure = model.selectedTab?.webView?.hasOnlySecureContent ?? false
+        connectionStatusView.setConnectionStatus(image: model.getConnectionStatusImage(themeType: currentTheme().type),
+                                                 text: model.connectionStatusString,
+                                                 isConnectionSecure: model.connectionSecure,
+                                                 theme: currentTheme())
+        connectionDetailsHeaderView.setupDetails(title: model.connectionDetailsTitle,
+                                                 status: model.connectionDetailsHeader,
+                                                 image: model.connectionDetailsImage)
     }
 
     private func setupViewActions() {
@@ -540,7 +555,6 @@ class TrackingProtectionViewController: UIViewController,
 
     // MARK: Clear Cookies Alert
     func onTapClearCookiesAndSiteData() {
-        resetReduxStoreState()
         model.onTapClearCookiesAndSiteData(controller: self)
     }
 
@@ -609,18 +623,14 @@ extension TrackingProtectionViewController {
     func applyTheme() {
         let theme = currentTheme()
         overrideUserInterfaceStyle = theme.type.getInterfaceStyle()
-        view.backgroundColor = theme.colors.layer1
+        view.backgroundColor = theme.colors.layer3
         headerContainer.applyTheme(theme: theme)
-        connectionDetailsHeaderView.backgroundColor = theme.colors.layer2
+        connectionDetailsHeaderView.applyTheme(theme: theme)
         trackersView.applyTheme(theme: theme)
         connectionStatusView.applyTheme(theme: theme)
-        connectionStatusView.setConnectionStatus(image: model.getConnectionStatusImage(themeType: theme.type),
-                                                 isConnectionSecure: model.connectionSecure,
-                                                 theme: theme)
         connectionHorizontalLine.backgroundColor = theme.colors.borderPrimary
         toggleView.applyTheme(theme: theme)
         clearCookiesButton.applyTheme(theme: theme)
-        clearCookiesButton.layer.borderColor = theme.colors.borderPrimary.cgColor
         settingsLinkButton.applyTheme(theme: theme)
         setNeedsStatusBarAppearanceUpdate()
     }
