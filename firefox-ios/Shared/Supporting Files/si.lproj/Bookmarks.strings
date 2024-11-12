@@ -1,9 +1,6 @@
 /* When navigating through the bookmarks menu and bookmark folders, a back button with an `All` (bookmarks) label is present to take the user to the top level bookmarks menu. */
 "Bookmarks.Menu.AllBookmarks.v131" = "සියල්ල";
 
-/* Name of the top level bookmarks folder present in the folder selection menu of the`Edit Bookmark` screen */
-"Bookmarks.Menu.BookmarksTopLevelTitle.v131" = "පොත්යොමු";
-
 /* When a folder is longpressed in the bookmarks menu, a `Delete Folder` button is present. */
 "Bookmarks.Menu.DeleteFolder.v131" = "බහාලුම මකන්න";
 

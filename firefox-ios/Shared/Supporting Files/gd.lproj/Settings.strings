@@ -1,5 +1,50 @@
+/* This label is used for a button in the address list screen allowing users to manage their saved addresses. It's meant to direct users to where they can add, remove, or edit their saved addresses. */
+"Addresses.ManageAddressesButton.v130" = "Stiùirich na seòlaidhean";
+
+/* Accessibility label for an address list item in autofill settings screen. The %@ parameter is the address of the user that will read the name, street, city, state, postal code if available. */
+"Addresses.Settings.ListItemA11y.v130" = "An seòladh airson %@";
+
+/* On the autofill settings screen, a label for the section that displays the list of saved addresses. This label adds additional context for users regarding the toggle switch that allows saving and autofilling of addresses for webpages. */
+"Addresses.Settings.SavedAddressesSectionTitle.v124" = "Seòlaidhean a shàbhail thu";
+
+/* Title text for the content unavailable view informing users they can create or add new addresses. %@ is the name of the app. */
+"Addresses.Settings.SaveToFirefox.Title.v130" = "Sàbhail seòlaidhean ann am %@";
+
+/* Description text for the content unavailable view informing users they can create or add new addresses. */
+"Addresses.Settings.SecureSaveInfo.Description.v130" = "Sàbhail am fiosrachadh agad air dòigh thèarainte is faigh grad-ghreim air an ath-thuras.";
+
+/* On the autofill settings screen, a label under the title label to add additional context for user in regards to what the toggle switch that allow saving and autofilling of addresses for webpages does, letting users know that this action includes phone numbers and email addresses. */
+"Addresses.Settings.Switch.Description.v124" = "Gabhaidh seo a-staigh àireamhan-fòn is seòlaidhean puist-d";
+
+/* Title label for user to use the toggle settings to allow saving and autofilling of addresses for webpages. */
+"Addresses.Settings.Switch.Title.v124" = "Sàbhail is fèin-lìon seòlaidhean";
+
+/* Displayed inside the keyboard hint when a user is entering their address and has at least one saved address. Indicates that there are stored addresses available for use in filling out a form. */
+"Addresses.Settings.UseSavedAddressFromKeyboard.v124" = "Cleachd seòladh a shàbhail thu";
+
+/* Accessibility label for the add button in autofill settings screen. Pressing this button presents a modal that allows users to add a card by entering the credit card information. */
+"CreditCard.Settings.AddCard.AccessibilityLabel.v121" = "Cuir cairt ris";
+
 /* Description label for when there are no credit cards shown in credit card list in autofill settings screen. */
 "CreditCard.Settings.EmptyListDescription.v112" = "Sàbhail fiosrachadh na cairt agad ann an àite tèarainte airson seacadh a-mach nas luaithe an ath-thuras.";
+
+/* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
+"CreditCard.Settings.EmptyListTitle.v122" = "Sàbhail cairtean ann am %@";
+
+/* Accessibility label for a credit card list item in autofill settings screen. The first parameter is the credit card issuer (e.g. Visa). The second parameter is the name of the credit card holder. The third parameter is the last 4 digits of the credit card. The fourth parameter is the card's expiration date. */
+"CreditCard.Settings.ListItemA11y.v118" = "%1$@, air fhoillseachadh dha %2$@, a’ crìochnachadh le %3$@, falbhaidh an ùine air %4$@";
+
+/* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used. */
+"CreditCard.Settings.NotNow.v122" = "Chan ann an-dràsta";
+
+/* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string is a title string of the overall message that asks the user if they would like Firefox to remember the card that is being used. */
+"CreditCard.Settings.RememberThisCard.v122" = "A bheil thu airson a’ chairt seo a shàbhaladh air dòigh thèarainte?";
+
+/* When a user is in the process or has finished making a purchase with a remembered card, and if the credit card information doesn't match the contents of the stored information of that card, we show this string. We ask this user if they would like Firefox update the staled information of that credit card. */
+"CreditCard.Settings.UpdateThisCard.v122" = "A bheil thu airson a’ chairt ùrachadh?";
+
+/* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string asks users to confirm if they would like Firefox to remember the card that is being used. */
+"CreditCard.Settings.Yes.v122" = "Ùraich";
 
 /* When a user is in the process of making a purchase and has at least one saved credit card, a view above the keyboard shows actions a user can take. When tapping this label, the keyboard will dismiss from view. */
 "CreditCards.Settings.Done.v114" = "Deiseil";
@@ -7,8 +52,26 @@
 /* When a user is in the process or has finished making a purchase, and has at least one card saved, we show this tappable string. This indicates to users that they can navigate to their list of stored credit cards in the app's credit card list screen. */
 "CreditCards.Settings.ManageCards.v112" = "Stiùirich na cairtean";
 
+/* When a user is in the process of making a purchase, and has at least one saved card, we show this label used as a title. This indicates to the user that there are stored cards available for use on this pending purchase. */
+"CreditCards.Settings.UseASavedCard.v122" = "Cleachd cairt a shàbhail thu";
+
 /* When a user is in the process of making a purchase, and has at least one saved card, we show this label inside the keyboard hint. This indicates to the user that there are stored cards available for use on this pending purchase. */
 "CreditCards.Settings.UseSavedCardFromKeyboard.v112" = "Cleachd cairt a shàbhail thu";
+
+/* Settings section title for the old Firefox account */
+"FxA.FirefoxAccount.v119" = "Cunntas";
+
+/* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
+"Settings.AddressAutofill.Title.v124" = "Fèin-lìon seòlaidhean";
+
+/* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
+"Settings.AddressAutofill.Title.v126" = "Seòlaidhean";
+
+/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
+"Settings.AutofillCreditCard.Title.v122" = "Dòighean pàighidh";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title.v119" = "Cunntas";
 
 /* This is the description for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
 "Settings.Notifications.SyncNotificationsStatus.v112" = "Feumaidh seo a bhith air mus fhaigh thu tabaichean is mus fhaigh thu brath nuair a chlàraicheas tu a-steach air uidheam eile.";
@@ -33,4 +96,79 @@
 
 /* This is the title informing the user needs to turn on notifications in iOS Settings. */
 "Settings.Notifications.TurnOnNotificationsTitle.v112" = "Cuir na brathan air";
+
+/* Accessibility label for default search engine setting. */
+"Settings.Search.Accessibility.DefaultSearchEngine.v121" = "An t-einnsean-luirg bunaiteach";
+
+/* Accessibility label for Learn more about Firefox Suggest. */
+"Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "Barrachd fiosrachaidh mu Firefox Suggest";
+
+/* Title for alternate search engines settings section in the Search page in the Settings menu. */
+"Settings.Search.AlternateSearchEngines.Title.v124.v2" = "Einnseanan-luirg eile";
+
+/* Footer for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes. */
+"Settings.Search.DefaultSearchEngine.Footer.v122" = "Toraidhean o luirg, on eachdraidh, comharran-lìn is mòran a bharrachd";
+
+/* Title for the `default search engine` settings section in the Search page in the Settings menu. */
+"Settings.Search.DefaultSearchEngine.Title.v121" = "An t-einnsean-luirg bunaiteach";
+
+/* Title for the `Suggestions from Search Engines` settings section in the Search page in the Settings menu. */
+"Settings.Search.EnginesSuggestions.Title.v124" = "Molaidhean o einnseanan-luirg";
+
+/* Navigation title for search page in the Settings menu. */
+"Settings.Search.PageTitle.v121" = "Lorg";
+
+/* Description for `Show in Private Sessions` toggle, located in `Suggestions from Search Engines` section in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Description.v125" = "Seall molaidhean o einnseanan-luirg ann an seiseanan prìobhaideach";
+
+/* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Setting.v122" = "Seall molaidhean ann am brabhsadh prìobhaideach";
+
+/* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in `Suggestions from Search Engines` and `Address Bar - Firefox Suggest` sections in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Setting.v124" = "Seall ann an seiseanan prìobhaideach";
+
+/* Title for the `Private Browsing` settings section in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Title.v122" = "Brabhsadh prìobhaideach";
+
+/* Title for quick-search engines settings section in the Search page in the Settings menu. */
+"Settings.Search.QuickEnginesTitle.v121" = "Einnseanan grad-luirg";
+
+/* Label for the `show search suggestions` setting, in the Search Settings page. */
+"Settings.Search.ShowSuggestions.v121" = "Seall molaidhean-luirg";
+
+/* In the Search page of the Settings menu, the title for the Firefox Suggest settings section. */
+"Settings.Search.Suggest.AddressBarSetting.Title.v124" = "Bàr an t-seòlaidh – Firefox Suggest";
+
+/* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
+"Settings.Search.Suggest.LearnAboutSuggestions.v124" = "Barrachd fiosrachaidh mu Firefox Suggest";
+
+/* Description for `Show in Private Sessions` toggle, located in `Address Bar - Firefox Suggest` section in the Search page in the Settings menu. */
+"Settings.Search.Suggest.PrivateSession.Description.v125" = "Seall molaidhean o Firefox Suggest ann an seiseanan prìobhaideach";
+
+/* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
+"Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "Lorg san eachdraidh bhrabhsaidh";
+
+/* In the Search page of the Settings menu, the title for the setting to enable search bookmarks. */
+"Settings.Search.Suggest.SearchSearchBookmarks.Title.v124" = "Lorg sna comharran-lìn";
+
+/* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
+"Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "Lorg am measg nan tabaichean sioncronaichte";
+
+/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. */
+"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124" = "Faigh molaidhean on lìon co-cheangailte ris na lorg thu";
+
+/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
+"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124.v2" = "Faigh molaidhean o %@ co-cheangailte ris na lorg thu";
+
+/* In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
+"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124" = "Molaidhean o %@";
+
+/* In the Search page of the Settings menu, the title for setting to enable Suggestions from the web in Firefox. */
+"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124.v2" = "Molaidhean on lìon";
+
+/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from sponsors. Placeholder is for the app name - Firefox. */
+"Settings.Search.Suggest.ShowSponsoredSuggestions.Description.v124" = "Cùm taic ri %@ ’s tu ag aontachadh ri molaidhean sponsairichte o àm gu àm";
+
+/* In the Search page of the Settings menu, the title for the setting to enable Suggestions from sponsors. */
+"Settings.Search.Suggest.ShowSponsoredSuggestions.Title.v124" = "Molaidhean o na sponsairean";
 

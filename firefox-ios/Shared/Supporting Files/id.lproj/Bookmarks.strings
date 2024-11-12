@@ -1,0 +1,27 @@
+/* When navigating through the bookmarks menu and bookmark folders, a back button with an `All` (bookmarks) label is present to take the user to the top level bookmarks menu. */
+"Bookmarks.Menu.AllBookmarks.v131" = "Semua";
+
+/* The title for the Delete Bookmark button, in the Edit Bookmark popup screen which is summoned from the main menu's Save submenu, which will delete the currently bookmarked site from the user's bookmarks. */
+"Bookmarks.Menu.DeleteBookmark.v132" = "Hapus Markah";
+
+/* Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark. */
+"Bookmarks.Menu.DeletedBookmark.v131" = "“%@” Dihapus";
+
+/* When a folder is longpressed in the bookmarks menu, a `Delete Folder` button is present. */
+"Bookmarks.Menu.DeleteFolder.v131" = "Hapus Folder";
+
+/* When a bookmark is longpressed in the bookmarks menu, an `Edit Bookmark` button is present. */
+"Bookmarks.Menu.EditBookmark.v131" = "Edit Markah";
+
+/* When editing a bookmark, you can select the folder that the bookmark will be saved in. The label for this section of the view is `Save in`. */
+"Bookmarks.Menu.EditBookmarkSaveIn.v131" = "Simpan di";
+
+/* Label on the top of the `Edit Bookmarks` screen. */
+"Bookmarks.Menu.EditBookmarkTitle.v131" = "Edit Markah";
+
+/* When a folder is longpressed in the bookmarks menu, an `Edit Folder` button is present. */
+"Bookmarks.Menu.EditFolder.v131" = "Edit Folder";
+
+/* The title for the Edit context menu action for sites in Home Panels */
+"HomePanel.ContextMenu.Edit.v131" = "Edit";
+
