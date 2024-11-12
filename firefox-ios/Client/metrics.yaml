@@ -197,7 +197,7 @@ app_menu:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/23040
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/22788
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23046
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-06-01"
@@ -217,7 +217,7 @@ app_menu:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/23040
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/22788
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23046
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-06-01"
