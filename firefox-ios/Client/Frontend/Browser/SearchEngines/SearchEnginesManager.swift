@@ -7,6 +7,10 @@ import Common
 import Shared
 import Storage
 
+protocol SearchEnginesManagerProvider {
+    var defaultEngine: OpenSearchEngine? { get }
+}
+
 protocol SearchEngineDelegate: AnyObject {
     func searchEnginesDidUpdate()
 }
@@ -30,7 +34,7 @@ protocol SearchEngineDelegate: AnyObject {
 /// enabled quick search engines, and it is possible to disable every non-default quick search engine).
 ///
 /// This class is not thread-safe -- you should only access it on a single thread (usually, the main thread)!
-class SearchEnginesManager {
+class SearchEnginesManager: SearchEnginesManagerProvider {
     private let prefs: Prefs
     private let fileAccessor: FileAccessor
     private let orderedEngineNames = "search.orderedEngineNames"
