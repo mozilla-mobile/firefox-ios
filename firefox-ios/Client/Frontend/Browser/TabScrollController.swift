@@ -219,11 +219,7 @@ class TabScrollingController: NSObject,
             }
         }
 
-        if let refresh = scrollView?.subviews.first(where: {
-            $0 is PullRefreshView
-        }) {
-            refresh.isHidden = false
-        }
+        pullToRefreshView?.isHidden = false
     }
 
     func showToolbars(animated: Bool) {

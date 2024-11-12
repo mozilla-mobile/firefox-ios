@@ -419,6 +419,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
     /// tab instance, queue it for later until we become foregrounded.
     private var alertQueue = [JSAlertInfo]()
 
+    var onLoading: VoidReturnCallback?
+    private var webViewLoadingObserver: NSKeyValueObservation?
+
     var profile: Profile
 
     /// Returns true if this tab is considered inactive (has not been executed for more than a specific number of days).
@@ -572,15 +575,11 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
             )
 
             tabDelegate?.tab(self, didCreateWebView: webView)
-            webViewLoadingObserver = webView.observe(\.isLoading) { _, _ in
-                print("FF \(webView.isLoading)")
-                self.onLoading?()
+            webViewLoadingObserver = webView.observe(\.isLoading) { [weak self] _, _ in
+                self?.onLoading?()
             }
         }
     }
-
-    var onLoading: VoidReturnCallback?
-    private var webViewLoadingObserver: NSObjectProtocol?
 
     func restore(_ webView: WKWebView, interactionState: Data? = nil) {
         if let url = url {
@@ -593,6 +592,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
     }
 
     deinit {
+        webViewLoadingObserver?.invalidate()
         webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
         webView?.removeObserver(self, forKeyPath: KVOConstants.title.rawValue)
         webView?.removeObserver(self, forKeyPath: KVOConstants.hasOnlySecureContent.rawValue)
