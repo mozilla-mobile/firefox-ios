@@ -8,9 +8,9 @@ import XCTest
 @testable import Client
 
 final class SearchEngineSelectionMiddlewareTests: XCTestCase {
-    var subject: SearchEngineSelectionMiddleware!
     var mockStore: MockStoreForMiddleware<AppState>!
     var mockProfile: MockProfile!
+    var mockSearchEnginesManager: SearchEnginesManager!
     let mockSearchEngines: [OpenSearchEngine] = [
         OpenSearchEngineTests.generateOpenSearchEngine(type: .wikipedia, withImage: UIImage()),
         OpenSearchEngineTests.generateOpenSearchEngine(type: .youtube, withImage: UIImage()),
@@ -23,12 +23,10 @@ final class SearchEngineSelectionMiddlewareTests: XCTestCase {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         mockProfile = MockProfile()
-
-        let mockSearchEnginesManager = SearchEnginesManager(prefs: mockProfile.prefs, files: mockProfile.files)
+        mockSearchEnginesManager = SearchEnginesManager(prefs: mockProfile.prefs, files: mockProfile.files)
         mockSearchEnginesManager.orderedEngines = mockSearchEngines
 
-        // We must reset and configure the global mock store prior to each test
-        subject = createSubject(mockSearchEnginesManager: mockSearchEnginesManager)
+        // We must reset the global mock store prior to each test
         mockStore = MockStoreForMiddleware(state: AppState())
         store = mockStore
     }
@@ -39,6 +37,7 @@ final class SearchEngineSelectionMiddlewareTests: XCTestCase {
     }
 
     func testViewDidLoad_dispatchesDidLoadSearchEngines() throws {
+        let subject = createSubject(mockSearchEnginesManager: mockSearchEnginesManager)
         let action = getAction(for: .viewDidLoad)
 
         subject.searchEngineSelectionProvider(AppState(), action)
@@ -50,6 +49,20 @@ final class SearchEngineSelectionMiddlewareTests: XCTestCase {
         }
         XCTAssertEqual(mockStore.dispatchCalled.numberOfTimes, 1)
         XCTAssertEqual(actionCalled.searchEngines, mockSearchEngineModels)
+    }
+
+    func testDidTapSearchEngine_dispatchesDidStartEditingUrl() throws {
+        let subject = createSubject(mockSearchEnginesManager: mockSearchEnginesManager)
+        let action = getAction(for: .didTapSearchEngine)
+
+        subject.searchEngineSelectionProvider(AppState(), action)
+
+        guard let actionCalled = mockStore.dispatchCalled.withActions.first as? ToolbarAction,
+              case ToolbarActionType.didStartEditingUrl = actionCalled.actionType else {
+            XCTFail("Unexpected action type dispatched")
+            return
+        }
+        XCTAssertEqual(mockStore.dispatchCalled.numberOfTimes, 1)
     }
 
     // MARK: - Helpers
