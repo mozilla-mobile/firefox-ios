@@ -88,7 +88,7 @@ class JumpBackInTests: BaseTestCase {
         mozWaitForElementToNotExist(app.cells["JumpBackInCell"].staticTexts["YouTube"])
 
         // Visit "mozilla.org" and check the "Jump Back In" section
-        navigator.openURL("https://www.mozilla.org")
+        navigator.openURL("http://localhost:\(serverPort)/test-fixture/test-example.html")
         waitUntilPageLoad()
 
         navigator.goto(TabTray)
@@ -99,7 +99,7 @@ class JumpBackInTests: BaseTestCase {
         // Amazon and Twitter are visible in the "Jump Back In" section
         scrollDown()
         mozWaitForElementToExist(app.cells["JumpBackInCell"].firstMatch)
-        mozWaitForElementToExist(app.cells["JumpBackInCell"].staticTexts["Mozilla"])
+        mozWaitForElementToExist(app.cells["JumpBackInCell"].staticTexts["Example Domain"])
         mozWaitForElementToExist(app.cells["JumpBackInCell"].staticTexts["Wikipedia"])
         mozWaitForElementToNotExist(app.cells["JumpBackInCell"].staticTexts["YouTube"])
 
@@ -121,7 +121,7 @@ class JumpBackInTests: BaseTestCase {
         mozWaitForElementToExist(app.cells["JumpBackInCell"].firstMatch)
 
         // Amazon is visible in "Jump Back In"
-        mozWaitForElementToExist(app.cells["JumpBackInCell"].staticTexts["Mozilla"])
+        mozWaitForElementToExist(app.cells["JumpBackInCell"].staticTexts["Example Domain"])
 
         // Close the amazon tab
         navigator.goto(TabTray)
@@ -130,7 +130,7 @@ class JumpBackInTests: BaseTestCase {
         } else {
             mozWaitForElementToExist(app.navigationBars.staticTexts["Open Tabs"])
         }
-        app.cells["Internet for people, not profit"].buttons[StandardImageIdentifiers.Large.cross].tap()
+        app.cells["Example Domain"].buttons[StandardImageIdentifiers.Large.cross].tap()
 
         // Revisit the "Jump Back In" section
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
@@ -141,7 +141,7 @@ class JumpBackInTests: BaseTestCase {
         scrollDown()
         mozWaitForElementToExist(app.cells["JumpBackInCell"].firstMatch)
         // FXIOS-5448 - Amazon should not be listed because we've closed the Amazon tab
-        // mozWaitForElementToNotExist(app.cells["JumpBackInCell"].staticTexts["Amazon"])
+        // mozWaitForElementToNotExist(app.cells["JumpBackInCell"].staticTexts["Example Domain"])
         mozWaitForElementToExist(app.cells["JumpBackInCell"].staticTexts["Wikipedia"])
         mozWaitForElementToNotExist(app.cells["JumpBackInCell"].staticTexts["YouTube"])
     }
