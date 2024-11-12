@@ -15,6 +15,7 @@
     {
       "skippedTests" : [
         "ActivityStreamTest",
+        "AddressesTests",
         "AddressesTests\/testAddNewAddressAllFieldsFilled()",
         "AddressesTests\/testAddNewAddressCityFilled()",
         "AddressesTests\/testAddNewAddressEmailFilled()",

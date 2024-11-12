@@ -30,7 +30,7 @@ class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
             _ = try await subject.data(from: url)
             XCTFail("This test should throw an error, but it did not.")
         } catch {
-            XCTAssertEqual(error as! URLError,
+            XCTAssertEqual(error as? URLError,
                            URLError(.cannotConnectToHost))
         }
     }
@@ -46,7 +46,7 @@ class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
             _ = try await subject.data(from: url)
             XCTFail("This test should throw an error, but it did not.")
         } catch {
-            XCTAssertEqual(error as! URLError,
+            XCTAssertEqual(error as? URLError,
                            URLError(.badServerResponse))
         }
     }
@@ -62,7 +62,7 @@ class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
             _ = try await subject.data(from: url)
             XCTFail("This test should throw an error, but it did not.")
         } catch {
-            XCTAssertEqual(error as! URLError,
+            XCTAssertEqual(error as? URLError,
                            URLError(.badServerResponse))
         }
     }
@@ -94,7 +94,7 @@ class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
             _ = try await subject.data(from: url)
             XCTFail("This test should throw an error, but it did not.")
         } catch {
-            XCTAssertEqual(error as! WallpaperServiceError,
+            XCTAssertEqual(error as? WallpaperServiceError,
                            WallpaperServiceError.dataUnavailable)
         }
     }

@@ -64,50 +64,19 @@ struct ThemeSettingsState: ScreenState, Equatable {
             return action.themeSettingsState ?? defaultState(from: state)
 
         case ThemeSettingsMiddlewareActionType.systemThemeChanged:
-            let useSystemAppearance = action.themeSettingsState?.useSystemAppearance ?? state.useSystemAppearance
-            return ThemeSettingsState(windowUUID: state.windowUUID,
-                                      useSystemAppearance: useSystemAppearance,
-                                      isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,
-                                      manualThemeSelected: state.manualThemeSelected,
-                                      userBrightnessThreshold: state.userBrightnessThreshold,
-                                      systemBrightness: state.systemBrightness)
+            return handleSystemThemeChangedAction(state: state, action: action)
 
         case ThemeSettingsMiddlewareActionType.automaticBrightnessChanged:
-            let enabled = action.themeSettingsState?.isAutomaticBrightnessEnabled ??
-                            state.isAutomaticBrightnessEnabled
-            return ThemeSettingsState(windowUUID: state.windowUUID,
-                                      useSystemAppearance: state.useSystemAppearance,
-                                      isAutomaticBrightnessEnable: enabled,
-                                      manualThemeSelected: state.manualThemeSelected,
-                                      userBrightnessThreshold: state.userBrightnessThreshold,
-                                      systemBrightness: state.systemBrightness)
+            return handleAutomaticBrightnessChangedAction(state: state, action: action)
 
         case ThemeSettingsMiddlewareActionType.manualThemeChanged:
-            let theme = action.themeSettingsState?.manualThemeSelected ?? state.manualThemeSelected
-            return ThemeSettingsState(windowUUID: state.windowUUID,
-                                      useSystemAppearance: state.useSystemAppearance,
-                                      isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,
-                                      manualThemeSelected: theme,
-                                      userBrightnessThreshold: state.userBrightnessThreshold,
-                                      systemBrightness: state.systemBrightness)
+            return handleManualThemeChangedAction(state: state, action: action)
 
         case ThemeSettingsMiddlewareActionType.userBrightnessChanged:
-            let brightnessValue = action.themeSettingsState?.userBrightnessThreshold ?? state.userBrightnessThreshold
-            return ThemeSettingsState(windowUUID: state.windowUUID,
-                                      useSystemAppearance: state.useSystemAppearance,
-                                      isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,
-                                      manualThemeSelected: state.manualThemeSelected,
-                                      userBrightnessThreshold: brightnessValue,
-                                      systemBrightness: state.systemBrightness)
+            return handleUserBrightnessChangedAction(state: state, action: action)
 
         case ThemeSettingsMiddlewareActionType.systemBrightnessChanged:
-            let brightnessValue = action.themeSettingsState?.systemBrightness ?? state.systemBrightness
-            return ThemeSettingsState(windowUUID: state.windowUUID,
-                                      useSystemAppearance: state.useSystemAppearance,
-                                      isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,
-                                      manualThemeSelected: state.manualThemeSelected,
-                                      userBrightnessThreshold: state.userBrightnessThreshold,
-                                      systemBrightness: brightnessValue)
+            return handleSystemBrightnessChangedAction(state: state, action: action)
         default:
             return defaultState(from: state)
         }
@@ -120,6 +89,56 @@ struct ThemeSettingsState: ScreenState, Equatable {
                                   manualThemeSelected: state.manualThemeSelected,
                                   userBrightnessThreshold: state.userBrightnessThreshold,
                                   systemBrightness: state.systemBrightness)
+    }
+
+    private static func handleSystemThemeChangedAction(state: Self, action: ThemeSettingsMiddlewareAction) -> Self {
+        let useSystemAppearance = action.themeSettingsState?.useSystemAppearance ?? state.useSystemAppearance
+        return ThemeSettingsState(windowUUID: state.windowUUID,
+                                  useSystemAppearance: useSystemAppearance,
+                                  isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,
+                                  manualThemeSelected: state.manualThemeSelected,
+                                  userBrightnessThreshold: state.userBrightnessThreshold,
+                                  systemBrightness: state.systemBrightness)
+    }
+
+    private static func handleAutomaticBrightnessChangedAction(state: Self, action: ThemeSettingsMiddlewareAction) -> Self {
+        let enabled = action.themeSettingsState?.isAutomaticBrightnessEnabled ?? state.isAutomaticBrightnessEnabled
+        return ThemeSettingsState(windowUUID: state.windowUUID,
+                                  useSystemAppearance: state.useSystemAppearance,
+                                  isAutomaticBrightnessEnable: enabled,
+                                  manualThemeSelected: state.manualThemeSelected,
+                                  userBrightnessThreshold: state.userBrightnessThreshold,
+                                  systemBrightness: state.systemBrightness)
+    }
+
+    private static func handleManualThemeChangedAction(state: Self, action: ThemeSettingsMiddlewareAction) -> Self {
+        let theme = action.themeSettingsState?.manualThemeSelected ?? state.manualThemeSelected
+        return ThemeSettingsState(windowUUID: state.windowUUID,
+                                  useSystemAppearance: state.useSystemAppearance,
+                                  isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,
+                                  manualThemeSelected: theme,
+                                  userBrightnessThreshold: state.userBrightnessThreshold,
+                                  systemBrightness: state.systemBrightness)
+    }
+
+    private static func handleUserBrightnessChangedAction(state: Self, action: ThemeSettingsMiddlewareAction) -> Self {
+        let brightnessValue = action.themeSettingsState?.userBrightnessThreshold ?? state.userBrightnessThreshold
+        return ThemeSettingsState(windowUUID: state.windowUUID,
+                                  useSystemAppearance: state.useSystemAppearance,
+                                  isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,
+                                  manualThemeSelected: state.manualThemeSelected,
+                                  userBrightnessThreshold: brightnessValue,
+                                  systemBrightness: state.systemBrightness)
+    }
+
+    private static func handleSystemBrightnessChangedAction(state: Self, action: ThemeSettingsMiddlewareAction) -> Self {
+        let brightnessValue = action.themeSettingsState?.systemBrightness ?? state.systemBrightness
+        return ThemeSettingsState(windowUUID: state.windowUUID,
+                                  useSystemAppearance: state.useSystemAppearance,
+                                  isAutomaticBrightnessEnable: state.isAutomaticBrightnessEnabled,
+                                  manualThemeSelected: state.manualThemeSelected,
+                                  userBrightnessThreshold: state.userBrightnessThreshold,
+                                  systemBrightness: brightnessValue)
     }
 
     static func == (lhs: ThemeSettingsState, rhs: ThemeSettingsState) -> Bool {
