@@ -40,12 +40,13 @@ class TabScrollingController: NSObject,
             scrollView?.delegate = self
             scrollView?.keyboardDismissMode = .onDrag
             configureRefreshControl()
-            tab?.onLoading = {
-                if self.tabIsLoading() {
-                    self.pullToRefreshView?.stopObservingContentScroll()
-                    self.pullToRefreshView?.removeFromSuperview()
+            tab?.onLoading = { [weak self] in
+                guard let self else { return }
+                if tabIsLoading() {
+                    pullToRefreshView?.stopObservingContentScroll()
+                    pullToRefreshView?.removeFromSuperview()
                 } else {
-                    self.configureRefreshControl()
+                    configureRefreshControl()
                 }
             }
         }
@@ -169,7 +170,9 @@ class TabScrollingController: NSObject,
     }
 
     func traitCollectionDidChange() {
-        pullToRefreshView?.updateEasterEggForOrientationChange(isPotrait: UIWindow.isPortrait)
+        pullToRefreshView?.stopObservingContentScroll()
+        pullToRefreshView?.removeFromSuperview()
+        configureRefreshControl()
     }
 
     private func setupNotifications() {

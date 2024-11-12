@@ -1121,7 +1121,6 @@ class BrowserViewController: UIViewController,
         }
 
         coordinator.animate(alongsideTransition: { [self] context in
-            scrollController.traitCollectionDidChange()
             scrollController.updateMinimumZoom()
             topTabsViewController?.scrollToCurrentTab(false, centerCell: false)
             if let popover = displayedPopoverController {
@@ -1137,6 +1136,7 @@ class BrowserViewController: UIViewController,
                 handleFakespotFlow(productURL: productURL)
             }
         }, completion: { _ in
+            self.scrollController.traitCollectionDidChange()
             self.scrollController.setMinimumZoom()
         })
         microsurvey?.setNeedsUpdateConstraints()
