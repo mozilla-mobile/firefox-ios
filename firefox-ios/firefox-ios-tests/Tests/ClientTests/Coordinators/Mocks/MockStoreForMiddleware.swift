@@ -14,8 +14,8 @@ import Redux
 class MockStoreForMiddleware<State: StateType>: DefaultDispatchStore {
     var state: State
 
-    /// Stores the number of times dispatch is called, and the actions with which it is called. Use to ensure that your
-    /// middleware correctly dispatches the right actions in response to a given action.
+    /// Records the number of times dispatch is called, and the actions with which it is called. Check this property to
+    /// ensure that your middleware correctly dispatches the right action(s) in response to a given action.
     var dispatchCalled: (numberOfTimes: Int, withActions: [Redux.Action]) = (0, [])
 
     init(state: State) {
