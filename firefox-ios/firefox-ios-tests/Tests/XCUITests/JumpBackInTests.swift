@@ -87,8 +87,8 @@ class JumpBackInTests: BaseTestCase {
         mozWaitForElementToExist(app.cells["JumpBackInCell"].staticTexts["Wikipedia"])
         mozWaitForElementToNotExist(app.cells["JumpBackInCell"].staticTexts["YouTube"])
 
-        // Visit "amazon.com" and check the "Jump Back In" section
-        navigator.openURL("https://www.amazon.com")
+        // Visit "mozilla.org" and check the "Jump Back In" section
+        navigator.openURL("https://www.mozilla.org")
         waitUntilPageLoad()
 
         navigator.goto(TabTray)
@@ -99,7 +99,7 @@ class JumpBackInTests: BaseTestCase {
         // Amazon and Twitter are visible in the "Jump Back In" section
         scrollDown()
         mozWaitForElementToExist(app.cells["JumpBackInCell"].firstMatch)
-        mozWaitForElementToExist(app.cells["JumpBackInCell"].staticTexts["Amazon"])
+        mozWaitForElementToExist(app.cells["JumpBackInCell"].staticTexts["Mozilla"])
         mozWaitForElementToExist(app.cells["JumpBackInCell"].staticTexts["Wikipedia"])
         mozWaitForElementToNotExist(app.cells["JumpBackInCell"].staticTexts["YouTube"])
 
@@ -121,7 +121,7 @@ class JumpBackInTests: BaseTestCase {
         mozWaitForElementToExist(app.cells["JumpBackInCell"].firstMatch)
 
         // Amazon is visible in "Jump Back In"
-        mozWaitForElementToExist(app.cells["JumpBackInCell"].staticTexts["Amazon"])
+        mozWaitForElementToExist(app.cells["JumpBackInCell"].staticTexts["Mozilla"])
 
         // Close the amazon tab
         navigator.goto(TabTray)
@@ -130,7 +130,7 @@ class JumpBackInTests: BaseTestCase {
         } else {
             mozWaitForElementToExist(app.navigationBars.staticTexts["Open Tabs"])
         }
-        app.cells["Amazon.com. Spend less. Smile more."].buttons[StandardImageIdentifiers.Large.cross].tap()
+        app.cells["Internet for people, not profit"].buttons[StandardImageIdentifiers.Large.cross].tap()
 
         // Revisit the "Jump Back In" section
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
