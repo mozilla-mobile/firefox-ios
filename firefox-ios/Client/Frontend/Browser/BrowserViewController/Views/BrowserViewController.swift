@@ -3910,6 +3910,7 @@ extension BrowserViewController: TabManagerDelegate {
                                               title: tab.lastTitle,
                                               lastExecutedTime: tab.lastExecutedTime)
         }
+        urlBar.updateProgressBar(Float(0))
         updateTabCountUsingTabManager(tabManager)
     }
 
