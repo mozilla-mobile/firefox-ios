@@ -208,15 +208,19 @@ extension PocketViewModel: HomepageSectionHandler {
         recordSectionHasShown()
 
         if isStoryCell(index: indexPath.row) {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LegacyPocketStandardCell.cellIdentifier,
-                                                          for: indexPath) as! LegacyPocketStandardCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LegacyPocketStandardCell.cellIdentifier,
+                                                                for: indexPath) as? LegacyPocketStandardCell else {
+                fatalError("Failed to dequeue cell with identifier \(LegacyPocketStandardCell.cellIdentifier)")
+            }
             let viewModel = pocketStoriesViewModels[indexPath.row]
             viewModel.tag = indexPath.row
             cell.configure(viewModel: viewModel, theme: theme)
             return cell
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PocketDiscoverCell.cellIdentifier,
-                                                          for: indexPath) as! PocketDiscoverCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PocketDiscoverCell.cellIdentifier,
+                                                                for: indexPath) as? PocketDiscoverCell else {
+                fatalError("Failed to dequeue cell with identifier \(PocketDiscoverCell.cellIdentifier)")
+            }
             cell.configure(text: .FirefoxHomepage.Pocket.DiscoverMore, theme: theme)
             return cell
         }

@@ -171,8 +171,10 @@ class CertificatesViewController: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(
-            withIdentifier: CertificatesHeaderView.cellIdentifier) as! CertificatesHeaderView
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: CertificatesHeaderView.cellIdentifier) as? CertificatesHeaderView else {
+            fatalError("Failed to dequeue cell with identifier \(CertificatesHeaderView.cellIdentifier)")
+        }
         var items: [CertificatesHeaderItem] = []
         for (index, certificate) in model.certificates.enumerated() {
             let certificateValues = certificate.subject.description.getDictionary()

@@ -346,10 +346,12 @@ class ReadingListPanel: UITableViewController,
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(
+        guard let cell = tableView.dequeueReusableCell(
             withIdentifier: "ReadingListTableViewCell",
             for: indexPath
-        ) as! ReadingListTableViewCell
+        ) as? ReadingListTableViewCell else {
+            fatalError("Failed to dequeue cell with identifier 'ReadingListTableViewCell'")
+        }
         if let record = records?[indexPath.row] {
             cell.title = record.title
             cell.url = URL(string: record.url, invalidCharacters: false)!

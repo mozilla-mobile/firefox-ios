@@ -31,7 +31,9 @@ class FindInPageHelper: TabContentScript {
         _ userContentController: WKUserContentController,
         didReceiveScriptMessage message: WKScriptMessage
     ) {
-        let data = message.body as! [String: Int]
+        guard let data = message.body as? [String: Int] else {
+            fatalError("Invalid data message body: \(message.body)")
+        }
 
         if let currentResult = data["currentResult"] {
             delegate?.findInPageHelper(self, didUpdateCurrentResult: currentResult)

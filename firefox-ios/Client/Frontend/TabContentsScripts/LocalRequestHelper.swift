@@ -19,7 +19,9 @@ class LocalRequestHelper: TabContentScript {
               let internalUrl = InternalURL(requestUrl)
         else { return }
 
-        let params = message.body as! [String: String]
+        guard let params = message.body as? [String: String] else {
+            fatalError("Invalid params message body: \(message.body)")
+        }
 
         guard let token = params["appIdToken"],
               token == UserScriptManager.appIdToken
