@@ -74,7 +74,10 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.performAction(Action.SelectNewTabAsCustomURL)
         // Check the value typed
         app.textFields["NewTabAsCustomURLTextField"].typeText("mozilla.org")
-        let valueTyped = app.textFields["NewTabAsCustomURLTextField"].value as! String
+        guard let valueTyped = app.textFields["NewTabAsCustomURLTextField"].value as? String else {
+            XCTFail("Failed to retreive the value from 'NewTabAsCustomURLTextField' text field")
+            return
+        }
         mozWaitForValueContains(app.textFields["NewTabAsCustomURLTextField"], value: "mozilla")
         XCTAssertEqual(valueTyped, "mozilla.org")
         // Open new page and check that the custom url is used

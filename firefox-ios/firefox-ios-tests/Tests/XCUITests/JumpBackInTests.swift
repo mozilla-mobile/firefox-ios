@@ -27,7 +27,7 @@ class JumpBackInTests: BaseTestCase {
         // "Jump Back In" is enabled by default. See Settings -> Homepage
         navigator.goto(HomeSettings)
         mozWaitForElementToExist(app.switches["Jump Back In"])
-        XCTAssertEqual(app.switches["Jump Back In"].value as! String, "1")
+        XCTAssertEqual(app.switches["Jump Back In"].value as? String, "1")
 
         navigator.goto(NewTabScreen)
     }

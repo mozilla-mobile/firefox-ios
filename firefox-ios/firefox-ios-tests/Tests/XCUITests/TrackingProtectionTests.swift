@@ -142,21 +142,21 @@ class TrackingProtectionTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["Connection not secure"], timeout: 5)
         var switchValue = app.switches.firstMatch.value!
         // Need to make sure first the setting was not turned off previously
-        if switchValue as! String == "0" {
+        if switchValue as? String == "0" {
             app.switches.firstMatch.tap()
         }
         switchValue = app.switches.firstMatch.value!
-        XCTAssertEqual(switchValue as! String, "1")
+        XCTAssertEqual(switchValue as? String, "1")
 
         app.switches.firstMatch.tap()
         let switchValueOFF = app.switches.firstMatch.value!
-        XCTAssertEqual(switchValueOFF as! String, "0")
+        XCTAssertEqual(switchValueOFF as? String, "0")
 
         // Open TP Settings menu
         app.buttons["Privacy settings"].tap()
         mozWaitForElementToExist(app.navigationBars["Tracking Protection"], timeout: 5)
         let switchSettingsValue = app.switches["prefkey.trackingprotection.normalbrowsing"].value!
-        XCTAssertEqual(switchSettingsValue as! String, "1")
+        XCTAssertEqual(switchSettingsValue as? String, "1")
         app.switches["prefkey.trackingprotection.normalbrowsing"].tap()
         // Disable ETP from setting and check that it applies to the site
         app.buttons["Settings"].tap()
