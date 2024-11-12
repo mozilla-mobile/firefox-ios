@@ -96,6 +96,7 @@ public class Store<State: StateType>: DefaultDispatchStore {
         // (Note: this is true even if the action's UUID differs from the screen's window's UUID).
         // Typically, reducers should compare the action's UUID to the incoming state UUID and skip
         // processing for actions originating in other windows.
+        // Note that only reducers for active screens are processed.
         let newState = reducer(state, action)
 
         // Middlewares are all given an opportunity to respond to the action. This is only done once

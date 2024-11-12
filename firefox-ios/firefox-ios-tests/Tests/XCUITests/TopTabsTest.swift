@@ -74,7 +74,10 @@ class TopTabsTest: BaseTestCase {
         navigator.goto(TabTray)
 
         app.cells.staticTexts[urlLabel].firstMatch.waitAndTap()
-        let valueMozilla = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as! String
+        guard let valueMozilla = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as? String else {
+            XCTFail("Failed to retrieve the URL value from the Mozilla browser's URL bar")
+            return
+        }
         XCTAssertEqual(valueMozilla, urlValueLong)
 
         navigator.nowAt(BrowserTab)
@@ -82,7 +85,10 @@ class TopTabsTest: BaseTestCase {
         navigator.goto(TabTray)
 
         app.cells.staticTexts[urlLabelExample].firstMatch.waitAndTap()
-        let value = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as! String
+        guard let value = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as? String else {
+            XCTFail("Failed to retrieve the URL value from the Mozilla browser's URL bar")
+            return
+        }
         XCTAssertEqual(value, urlValueLongExample)
     }
 
