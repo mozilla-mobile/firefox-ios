@@ -182,8 +182,8 @@ class BrowserViewController: UIViewController,
     var topTabsVisible: Bool {
         return topTabsViewController != nil
     }
-    // Window used for displaying an opaque background for private tabs.
-    private var privacyWindow: UIWindow?
+    // Window helper used for displaying an opaque background for private tabs.
+    private lazy var privacyWindowHelper = PrivacyWindowHelper()
     var keyboardBackdrop: UIView?
 
     lazy var scrollController = TabScrollingController(windowUUID: windowUUID)
@@ -509,7 +509,7 @@ class BrowserViewController: UIViewController,
         else { return }
 
         contentStackView.alpha = 0
-        showPrivacyWindow()
+        privacyWindowHelper.showWindow(withThemedColor: currentTheme().colors.layer3)
 
         if isToolbarRefactorEnabled {
             addressToolbarContainer.alpha = 0
@@ -544,7 +544,7 @@ class BrowserViewController: UIViewController,
                 self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
                 self.presentedViewController?.view.alpha = 1
             }, completion: { _ in
-                self.removePrivacyWindow()
+                self.privacyWindowHelper.removeWindow()
             })
 
         if let tab = tabManager.selectedTab, !tab.isFindInPageMode {
@@ -593,24 +593,6 @@ class BrowserViewController: UIViewController,
 
         guard presentedViewController != nil else { return }
         dismissVC()
-    }
-
-    // MARK: - Privacy Window Protection
-    private func showPrivacyWindow() {
-        guard let windowScene = UIWindow.attachedKeyWindow?.windowScene else { return }
-        let backgroundColor = currentTheme().colors.layer3
-
-        privacyWindow = UIWindow(windowScene: windowScene)
-        privacyWindow?.rootViewController = UIViewController()
-        privacyWindow?.rootViewController?.view.backgroundColor = backgroundColor
-        // Set the privacy window level to be above alert windows (highest in importance).
-        privacyWindow?.windowLevel = .alert + 1
-        privacyWindow?.makeKeyAndVisible()
-    }
-
-    private func removePrivacyWindow() {
-        privacyWindow?.isHidden = true
-        privacyWindow = nil
     }
 
     // MARK: - Redux
