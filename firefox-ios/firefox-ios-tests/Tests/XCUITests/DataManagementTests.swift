@@ -20,8 +20,8 @@ class DataManagementTests: BaseTestCase {
     // Testing the search bar, and clear website data option
     // https://mozilla.testrail.io/index.php?/cases/view/2307015
     func testWebSiteDataOptions() {
-        navigator.openURL("www.youtube.com")
-        navigator.openNewURL(urlString: "www.facebook.com")
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(path(forTestPage: "test-example.html"))
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(WebsiteDataSettings)
