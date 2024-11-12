@@ -57,7 +57,7 @@ final class MainMenuMiddleware {
         case MainMenuActionType.tapNavigateToDestination:
             guard let destination = action.navigationDestination?.destination else { return }
             self.handleTelemetryFor(for: destination,
-                                    currentTabInfo: action.currentTabInfo,
+                                    isHomepage: isHomepage,
                                     and: action.navigationDestination?.url)
         case MainMenuActionType.tapShowDetailsView:
             if action.detailsViewToShow == .tools {
@@ -66,8 +66,8 @@ final class MainMenuMiddleware {
                 self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.save)
             }
         case MainMenuActionType.tapToggleUserAgent:
-            guard let defaultIsDesktop = action.currentTabInfo?.isDefaultUserAgentDesktop,
-                  let hasChangedUserAgent = action.currentTabInfo?.hasChangedUserAgent
+            guard let defaultIsDesktop = action.telemetryInfo?.isDefaultUserAgentDesktop,
+                  let hasChangedUserAgent = action.telemetryInfo?.hasChangedUserAgent
             else { return }
             if defaultIsDesktop {
                 let option = hasChangedUserAgent ? TelemetryAction.switchToDesktopSite : TelemetryAction.switchToMobileSite
@@ -179,9 +179,8 @@ final class MainMenuMiddleware {
     }
 
     private func handleTelemetryFor(for navigationDestination: MainMenuNavigationDestination,
-                                    currentTabInfo: MainMenuTabInfo?,
+                                    isHomepage: Bool,
                                     and urlToVisit: URL?) {
-        let isHomepage = currentTabInfo?.isHomepage ?? false
         switch navigationDestination {
         case .newTab:
             telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.newTab)

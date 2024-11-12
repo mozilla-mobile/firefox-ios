@@ -18,11 +18,19 @@ struct TelemetryInfo: Equatable {
     let isHomepage: Bool
     let isActionOn: Bool?
     let submenuType: MainMenuDetailsViewType?
+    let isDefaultUserAgentDesktop: Bool?
+    let hasChangedUserAgent: Bool?
 
-    init(isHomepage: Bool, isActionOn: Bool? = nil, submenuType: MainMenuDetailsViewType? = nil) {
+    init(isHomepage: Bool,
+         isActionOn: Bool? = nil,
+         submenuType: MainMenuDetailsViewType? = nil,
+         isDefaultUserAgentDesktop: Bool? = nil,
+         hasChangedUserAgent: Bool? = nil) {
         self.isHomepage = isHomepage
         self.isActionOn = isActionOn
         self.submenuType = submenuType
+        self.isDefaultUserAgentDesktop = isDefaultUserAgentDesktop
+        self.hasChangedUserAgent = hasChangedUserAgent
     }
 }
 
