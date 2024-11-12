@@ -133,6 +133,6 @@ final class TrackingProtectionConnectionDetailsView: UIView {
     }
 
     func applyTheme(theme: Theme) {
-        backgroundColor = theme.type == .privateMode ? theme.colors.layerAccentPrivateNonOpaque : theme.colors.layer2
+        backgroundColor = theme.colors.layerAccentPrivateNonOpaque
     }
 }
