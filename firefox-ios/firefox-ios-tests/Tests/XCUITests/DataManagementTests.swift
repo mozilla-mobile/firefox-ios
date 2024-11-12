@@ -5,35 +5,54 @@
 import XCTest
 
 class DataManagementTests: BaseTestCase {
+    func cleanAllData() {
+        navigator.goto(WebsiteDataSettings)
+        mozWaitForElementToExist(app.tables.otherElements["Website Data"])
+        navigator.performAction(Action.AcceptClearAllWebsiteData)
+        XCTAssertEqual(app.cells.buttons.images.count, 0, "The Website data has not cleared correctly")
+        // Navigate back to the browser
+        mozWaitElementHittable(element: app.buttons["Data Management"], timeout: TIMEOUT)
+        app.buttons["Data Management"].tap()
+        app.buttons["Settings"].waitAndTap()
+        app.buttons["Done"].waitAndTap()
+    }
+
     // Testing the search bar, and clear website data option
     // https://mozilla.testrail.io/index.php?/cases/view/2307015
     func testWebSiteDataOptions() {
+        navigator.openURL("www.youtube.com")
+        navigator.openNewURL(urlString: "www.facebook.com")
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         navigator.goto(WebsiteDataSettings)
         mozWaitForElementToExist(app.tables.otherElements["Website Data"])
-        app.tables.otherElements["Website Data"].swipeDown()
-        mozWaitForElementToExist(app.searchFields["Filter Sites"])
-        navigator.performAction(Action.TapOnFilterWebsites)
-        app.typeText("bing")
-        mozWaitForElementToExist(app.tables["Search results"])
-        let expectedSearchResults = app.tables["Search results"].cells.count
-        sleep(3)
-        XCTAssertEqual(expectedSearchResults, 1)
-        navigator.performAction(Action.TapOnFilterWebsites)
 
-        app.buttons["Cancel"].tap()
-        mozWaitForElementToExist(app.tables.otherElements["Website Data"])
+        var beforeDelete = 0
+        if #available(iOS 17, *) {
+            beforeDelete = app.cells.images.count
+            app.cells.images["circle"].firstMatch.tap()
+        } else {
+            beforeDelete = app.cells.staticTexts.count
+            app.cells.staticTexts.firstMatch.tap()
+        }
 
+        app.otherElements.staticTexts["Clear Items: 1"].tap()
+        app.alerts.buttons["OK"].tap()
+        if #available(iOS 17, *) {
+            XCTAssertEqual(beforeDelete-1, app.cells.images.count, "The first entry has not been deleted correctly")
+        } else {
+            XCTAssertEqual(beforeDelete-1, app.cells.staticTexts.count, "The first entry has not been deleted correctly")
+        }
         navigator.performAction(Action.AcceptClearAllWebsiteData)
         mozWaitForElementToExist(app.tables.cells["ClearAllWebsiteData"].staticTexts["Clear All Website Data"])
-        let expectedWebsitesCleared = app.tables.cells.count
-        XCTAssertEqual(expectedWebsitesCleared, 1)
+        XCTAssertEqual(0, app.cells.images.count)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307017
     // Smoketest
     func testWebSiteDataEnterFirstTime() {
+        cleanAllData()
+        navigator.nowAt(NewTabScreen)
         navigator.openURL("example.com")
         waitUntilPageLoad()
         navigator.goto(WebsiteDataSettings)
@@ -47,9 +66,10 @@ class DataManagementTests: BaseTestCase {
             app.cells["ShowMoreWebsiteData"].tap()
         }
         mozWaitForElementToExist(app.staticTexts["example.com"])
-        // There should be 4 entries. One is the website visited and 3 for extrainfo from the page.
-        // This assert will remain commented until a way is found of having website data clean on the first run
-        // This is to avoid intermittent failings
-        // XCTAssertEqual(app.tables.staticTexts.count, 4)
+        if #available(iOS 17, *) {
+            XCTAssertEqual(1, app.cells.images.count)
+        } else {
+            XCTAssertEqual(1, app.cells.staticTexts.count-1)
+        }
     }
  }
