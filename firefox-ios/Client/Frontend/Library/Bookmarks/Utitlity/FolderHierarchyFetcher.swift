@@ -29,36 +29,51 @@ struct Folder: Equatable {
     }
 }
 
-struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher {
+struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher, BookmarksRefactorFeatureFlagProvider {
     let profile: Profile
     let rootFolderGUID: String
 
     func fetchFolders() async -> [Folder] {
         return await withCheckedContinuation { continuation in
             profile.places.getBookmarksTree(rootGUID: rootFolderGUID,
-                                            recursive: true).uponQueue(.main) {  data in
-                var folders = [Folder]()
-                defer {
-                    continuation.resume(returning: folders)
-                }
-                guard let rootFolder = data.successValue as? BookmarkFolderData else { return }
-                let childrenFolders = rootFolder.children?.compactMap {
-                    return $0 as? BookmarkFolderData
-                }
-                for folder in childrenFolders ?? [] {
-                    recursiveAddSubFolders(folder, folders: &folders)
-                }
+                                            recursive: true).uponQueue(.main) { data in
+                self.profile.places.countBookmarksInTrees(folderGuids: BookmarkRoots.DesktopRoots.map { $0 })
+                    .uponQueue(.main) { bookmarksCountResult in
+                        var folders = [Folder]()
+                        defer {
+                            continuation.resume(returning: folders)
+                        }
+                        guard let rootFolder = data.successValue as? BookmarkFolderData,
+                              let desktopBookmarksCount = bookmarksCountResult.successValue else { return }
+                        let hasDesktopBookmarks = desktopBookmarksCount > 0
+
+                        let childrenFolders = rootFolder.children?.compactMap {
+                            return $0 as? BookmarkFolderData
+                        }
+
+                        for folder in childrenFolders ?? [] {
+                            recursiveAddSubFolders(folder, folders: &folders, hasDesktopBookmarks: hasDesktopBookmarks)
+                        }
+                    }
             }
         }
     }
 
     private func recursiveAddSubFolders(_ folder: BookmarkFolderData,
                                         folders: inout [Folder],
+                                        hasDesktopBookmarks: Bool = false,
                                         indent: Int = 0) {
-        folders.append(Folder(title: folder.title, guid: folder.guid, indentation: indent))
+        if !BookmarkRoots.DesktopRoots.contains(folder.guid) || hasDesktopBookmarks || !isBookmarkRefactorEnabled {
+            folders.append(Folder(title: folder.title, guid: folder.guid, indentation: indent))
+        } else { return }
         for case let subFolder as BookmarkFolderData in folder.children ?? [] {
             let indentation = subFolder.isRoot ? 0 : indent + 1
-            recursiveAddSubFolders(subFolder, folders: &folders, indent: indentation)
+            recursiveAddSubFolders(
+                subFolder,
+                folders: &folders,
+                hasDesktopBookmarks: hasDesktopBookmarks,
+                indent: indentation
+            )
         }
     }
 }
