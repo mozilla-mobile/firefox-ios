@@ -145,5 +145,6 @@ public final class NavigationHeaderView: UIView {
         backButton.setTitleColor(theme.colors.textAccent, for: .normal)
         horizontalLine.backgroundColor = theme.colors.borderPrimary
         titleLabel.textColor = theme.colors.textPrimary
+        backgroundColor = theme.colors.layer3
     }
 }

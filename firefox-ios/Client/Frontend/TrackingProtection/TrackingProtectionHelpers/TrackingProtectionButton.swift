@@ -96,6 +96,7 @@ class TrackingProtectionButton: ResizableButton, ThemeApplicable {
     // MARK: ThemeApplicable
 
     func applyTheme(theme: Theme) {
+        layer.borderColor = theme.colors.borderPrimary.cgColor
         backgroundColorNormal = theme.colors.layer2
         foregroundColor = theme.colors.textPrimary
         borderColor = theme.colors.borderPrimary

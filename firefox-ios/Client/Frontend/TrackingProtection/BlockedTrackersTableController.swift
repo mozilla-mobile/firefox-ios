@@ -108,8 +108,7 @@ class BlockedTrackersTableViewController: UIViewController,
         view.addSubview(trackersTable)
         let tableConstraints = [
             trackersTable.leadingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.leadingAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor
             ),
             trackersTable.topAnchor.constraint(
                 equalTo: navigationView.bottomAnchor,
@@ -120,8 +119,7 @@ class BlockedTrackersTableViewController: UIViewController,
                 constant: 0
             ),
             trackersTable.trailingAnchor.constraint(
-                equalTo: view.safeAreaLayoutGuide.trailingAnchor,
-                constant: -TPMenuUX.UX.horizontalMargin
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor
             )
         ]
         constraints.append(contentsOf: tableConstraints)
@@ -237,6 +235,6 @@ class BlockedTrackersTableViewController: UIViewController,
         let theme = currentTheme()
         navigationView.applyTheme(theme: theme)
         trackersTable.applyTheme(theme: theme)
-        view.backgroundColor = theme.colors.layer1
+        view.backgroundColor = theme.colors.layer3
     }
 }
