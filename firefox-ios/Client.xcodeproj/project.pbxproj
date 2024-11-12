@@ -1606,6 +1606,7 @@
 		E13E9AB42AAB0FB5001A0E9D /* FakespotCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13E9AB12AAB0FB4001A0E9D /* FakespotCoordinator.swift */; };
 		E13E9AB52AAB0FB5001A0E9D /* FakespotViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13E9AB22AAB0FB4001A0E9D /* FakespotViewModel.swift */; };
 		E13F8C342928194800BDC8B4 /* PhotonActionSheetSiteHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E13F8C332928194800BDC8B4 /* PhotonActionSheetSiteHeaderView.swift */; };
+		E143BF652CE36FFD00A1D2D9 /* TabTrayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E143BF642CE36FF800A1D2D9 /* TabTrayTests.swift */; };
 		E1442FBF294782B6003680B0 /* CGRect+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1442FBE294782B6003680B0 /* CGRect+Extension.swift */; };
 		E1442FC0294782B6003680B0 /* CGRect+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1442FBE294782B6003680B0 /* CGRect+Extension.swift */; };
 		E1442FCF294782D9003680B0 /* UIView+Screenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1442FC4294782D7003680B0 /* UIView+Screenshot.swift */; };
@@ -8965,6 +8966,7 @@
 		E13E9AB12AAB0FB4001A0E9D /* FakespotCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FakespotCoordinator.swift; path = Client/Frontend/Fakespot/FakespotCoordinator.swift; sourceTree = SOURCE_ROOT; };
 		E13E9AB22AAB0FB4001A0E9D /* FakespotViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FakespotViewModel.swift; path = Client/Frontend/Fakespot/FakespotViewModel.swift; sourceTree = SOURCE_ROOT; };
 		E13F8C332928194800BDC8B4 /* PhotonActionSheetSiteHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetSiteHeaderView.swift; sourceTree = "<group>"; };
+		E143BF642CE36FF800A1D2D9 /* TabTrayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayTests.swift; sourceTree = "<group>"; };
 		E1442FBE294782B6003680B0 /* CGRect+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+Extension.swift"; sourceTree = "<group>"; };
 		E1442FC4294782D7003680B0 /* UIView+Screenshot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Screenshot.swift"; sourceTree = "<group>"; };
 		E1442FC5294782D7003680B0 /* UIAlertController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Extension.swift"; sourceTree = "<group>"; };
@@ -10508,6 +10510,7 @@
 				0BC9C9C31F26F54D000E8AB5 /* SiteLoadTest.swift */,
 				2CEDADA120207EC400223A89 /* SyncFAUITests.swift */,
 				4F2A06BD26F8E46E0017DA05 /* TabCounterTests.swift */,
+				E143BF642CE36FF800A1D2D9 /* TabTrayTests.swift */,
 				3BFE4B4F1D34673D00DDF53F /* ThirdPartySearchTest.swift */,
 				5FF4AF5B2CC69CC900BABC62 /* TodayWidgetTests.swift */,
 				B12DDFEC2A8DE825008CE9CF /* ToolbarMenuTests.swift */,
@@ -15759,6 +15762,7 @@
 				B15058812AA0A878008B7382 /* OpeningScreenTests.swift in Sources */,
 				B1F90EC12BB3F6B600A4D431 /* ZoomingTests.swift in Sources */,
 				8AEAD9F92C3DB0CD001A2C5A /* MicrosurveyTests.swift in Sources */,
+				E143BF652CE36FFD00A1D2D9 /* TabTrayTests.swift in Sources */,
 				D4AFA84E2AFA5482000BFEAA /* ExperimentIntegrationTests.swift in Sources */,
 				3DEFED081F55EBE300F8620C /* TrackingProtectionTests.swift in Sources */,
 				2CEDADA220207EC400223A89 /* SyncFAUITests.swift in Sources */,
