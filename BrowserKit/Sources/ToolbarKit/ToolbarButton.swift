@@ -70,6 +70,12 @@ class ToolbarButton: UIButton, ThemeApplicable {
             if let maskImageName = element.maskImageName {
                 addMaskIcon(maskImageName: maskImageName)
             }
+        } else {
+            // Remove badge & mask icons
+            imageView?.subviews.forEach { view in
+                guard view as? UIImageView != nil else { return }
+                view.removeFromSuperview()
+            }
         }
         layoutIfNeeded()
     }
@@ -94,6 +100,17 @@ class ToolbarButton: UIButton, ThemeApplicable {
 
         updatedConfiguration.background.backgroundColor = backgroundColorNormal
         configuration = updatedConfiguration
+    }
+
+    public func isButtonFor(toolbarElement: ToolbarElement) -> Bool {
+        guard let config = configuration else { return false }
+
+        return isSelected == toolbarElement.isSelected &&
+            config.image == imageConfiguredForRTL(for: toolbarElement) &&
+            isEnabled == toolbarElement.isEnabled &&
+            accessibilityIdentifier == toolbarElement.a11yId &&
+            accessibilityLabel == toolbarElement.a11yLabel &&
+            accessibilityHint == toolbarElement.a11yHint
     }
 
     private func addBadgeIcon(imageName: String) {
