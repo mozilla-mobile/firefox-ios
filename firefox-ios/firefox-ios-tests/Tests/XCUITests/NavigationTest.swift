@@ -378,10 +378,15 @@ class NavigationTest: BaseTestCase {
     // Smoketest
     func testSSL() {
         navigator.nowAt(NewTabScreen)
-
         navigator.openURL("https://expired.badssl.com/")
+        mozWaitForElementToExist(app.webViews.otherElements["This Connection is Untrusted"])
+        XCTAssertTrue(app.webViews.otherElements["This Connection is Untrusted"].exists)
+        app.buttons["Go Back"].tap()
+        navigator.nowAt(NewTabScreen)
+        navigator.openURL("https://expired.badssl.com/")
+        mozWaitForElementToExist(app.webViews.otherElements["This Connection is Untrusted"])
+        XCTAssertTrue(app.webViews.otherElements["This Connection is Untrusted"].exists)
         app.buttons["Advanced"].waitAndTap()
-
         app.links["Visit site anyway"].waitAndTap()
         mozWaitForElementToExist(app.webViews.otherElements["expired.badssl.com"], timeout: TIMEOUT_LONG)
     }
