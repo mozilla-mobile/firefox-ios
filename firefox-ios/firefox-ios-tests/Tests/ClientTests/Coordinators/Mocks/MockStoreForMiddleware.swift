@@ -8,9 +8,9 @@ import Redux
 
 /// A mock Store used to test redux middlewares.
 ///
-/// You should subclass and/or make your own mock store implementation if you need to highly customize it to meet the needs
-/// of testing a particular middleware. (e.g. storing a completion handler for asynchronous middleware actions so you can
-/// await expectations in your tests)
+/// If you need to highly customize this mock to meet your testing needs, you should subclass it and/or make your own mock
+/// store implementation (e.g. storing a completion handler for asynchronous middleware actions so you can await expectations
+///  in your tests).
 class MockStoreForMiddleware<State: StateType>: DefaultDispatchStore {
     var state: State
 
