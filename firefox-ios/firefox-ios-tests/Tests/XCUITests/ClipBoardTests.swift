@@ -36,7 +36,10 @@ class ClipBoardTests: BaseTestCase {
                     allowBtn.tap()
                 }
 
-                var value = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as! String
+                guard var value = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as? String else {
+                    XCTFail("Failed to retrieve the value from the URL bar text field")
+                    return
+                }
                 if value.hasPrefix("http") == false {
                     value = "http://\(value)"
                 }
