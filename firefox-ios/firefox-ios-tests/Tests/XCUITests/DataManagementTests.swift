@@ -36,8 +36,9 @@ class DataManagementTests: BaseTestCase {
             app.cells.staticTexts.firstMatch.tap()
         }
 
-        app.otherElements.staticTexts["Clear Items: 1"].tap()
-        app.alerts.buttons["OK"].tap()
+        app.otherElements.staticTexts["Clear Items: 1"].waitAndTap()
+        app.alerts.buttons["OK"].waitAndTap()
+        mozWaitForElementToNotExist(app.alerts.buttons["OK"])
         if #available(iOS 17, *) {
             XCTAssertEqual(beforeDelete-1, app.cells.images.count, "The first entry has not been deleted correctly")
         } else {
