@@ -13,7 +13,7 @@ features:
         description: >
           If true, enables the menu contextual hint.
         type: Boolean
-        default: false
+        default: true
     defaults:
       - channel: beta
         value:
