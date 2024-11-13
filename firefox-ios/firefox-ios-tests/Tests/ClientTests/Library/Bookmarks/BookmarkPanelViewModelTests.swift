@@ -9,7 +9,7 @@ import XCTest
 
 @testable import Client
 
-class BookmarksPanelViewModelTests: XCTestCase {
+class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
     private var profile: MockProfile!
 
     override func setUp() {
@@ -58,12 +58,54 @@ class BookmarksPanelViewModelTests: XCTestCase {
 
     func testShouldReload_whenMobileEmptyBookmarks() throws {
         profile.reopen()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
         let expectation = expectation(description: "Subject reloaded")
         subject.reloadData {
             XCTAssertNotNil(subject.bookmarkFolder)
             XCTAssertEqual(subject.bookmarkNodes.count, 1, "Contains the local desktop folder")
             expectation.fulfill()
+        }
+        waitForExpectations(timeout: 5)
+    }
+
+    func testShouldReload_whenMobileEmptyBookmarksWithBookmarksRefactor() throws {
+        profile.reopen()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        featureFlags.set(feature: .bookmarksRefactor, to: true, isDebug: true)
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
+        let expectation = expectation(description: "Subject reloaded")
+        subject.reloadData {
+            XCTAssertNotNil(subject.bookmarkFolder)
+            XCTAssertEqual(subject.bookmarkNodes.count, 0, "Contains no folders")
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 5)
+    }
+
+    func testShouldReload_whenDesktopBookmarksExist() throws {
+        profile.reopen()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+        featureFlags.set(feature: .bookmarksRefactor, to: true)
+        let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
+
+        let expectation = expectation(description: "Subject reloaded")
+
+        profile.places.createBookmark(
+            parentGUID: BookmarkRoots.MenuFolderGUID,
+            url: "https://www.firefox.com",
+            title: "Firefox",
+            position: 0).uponQueue(.main) { result in
+            self.profile.places.countBookmarksInTrees(folderGuids: [BookmarkRoots.MenuFolderGUID]).uponQueue(.main) { res in
+                guard let bookmarkCount = res.successValue else { return }
+                XCTAssertEqual(bookmarkCount, 1, "Menu folder contains one bookmark")
+
+                subject.reloadData {
+                    XCTAssertNotNil(subject.bookmarkFolder)
+                    XCTAssertEqual(subject.bookmarkNodes.count, 1, "Mobile folder contains the local desktop folder")
+                    expectation.fulfill()
+                }
+            }
         }
         waitForExpectations(timeout: 5)
     }
