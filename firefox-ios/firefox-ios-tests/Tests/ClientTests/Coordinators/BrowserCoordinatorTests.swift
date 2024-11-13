@@ -697,7 +697,9 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         subject.browserHasLoaded()
 
         let result = testCanHandleAndHandle(subject, route: .settings(section: .general))
-        let settingsCoordinator = subject.childCoordinators[0] as! SettingsCoordinator
+        guard let settingsCoordinator = subject.childCoordinators[0] as? SettingsCoordinator else {
+            return XCTFail("settingsCoordinator was not found")
+        }
         subject.didFinishSettings(from: settingsCoordinator)
 
         XCTAssertTrue(result)
@@ -720,7 +722,9 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         subject.browserHasLoaded()
 
         subject.showEnhancedTrackingProtection(sourceView: UIView())
-        let etpCoordinator = subject.childCoordinators[0] as! EnhancedTrackingProtectionCoordinator
+        guard let etpCoordinator = subject.childCoordinators[0] as? EnhancedTrackingProtectionCoordinator else {
+            return XCTFail("etpCoordinator was not found")
+        }
         subject.didFinishEnhancedTrackingProtection(from: etpCoordinator)
 
         XCTAssertEqual(mockRouter.dismissCalled, 1)
@@ -778,7 +782,9 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
         // Then
         XCTAssertTrue(result)
-        let windowManager = (AppContainer.shared.resolve() as WindowManager) as! MockWindowManager
+        guard let windowManager = (AppContainer.shared.resolve() as WindowManager) as? MockWindowManager else {
+            return XCTFail("windowManager was not found")
+        }
         XCTAssertEqual(windowManager.closePrivateTabsMultiActionCalled, 1)
     }
 
@@ -937,7 +943,9 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         subject.browserHasLoaded()
 
         subject.showFakespotFlowAsModal(productURL: URL(string: "www.example.com")!)
-        let fakespotCoordinator = subject.childCoordinators[0] as! FakespotCoordinator
+        guard let fakespotCoordinator = subject.childCoordinators[0] as? FakespotCoordinator else {
+            return XCTFail("fakespotCoordinator was not found")
+        }
         fakespotCoordinator.dismissModal(animated: false)
 
         XCTAssertEqual(mockRouter.dismissCalled, 1)

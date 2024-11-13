@@ -19,4 +19,8 @@ class MockGoogleTopSiteManager: GoogleTopSiteManagerProvider {
     var suggestedSiteData: PinnedSite? {
         return mockSiteData
     }
+
+    func shouldAddGoogleTopSite(hasSpace: Bool) -> Bool {
+        return hasSpace
+    }
 }

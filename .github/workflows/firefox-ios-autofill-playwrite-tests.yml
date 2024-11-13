@@ -60,5 +60,5 @@ jobs:
           env:
             JOB_STATUS: ${{ job.status == 'success' && ':white_check_mark:' || job.status == 'failure' && ':x:' }}
             JOB_STATUS_COLOR: ${{ job.status == 'success' && '#36a64f' || job.status == 'failure' && '#FF0000' }}
-            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+            SLACK_WEBHOOK_URL: ${{ secrets.WEBHOOK_SLACK_TOKEN }}
             SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

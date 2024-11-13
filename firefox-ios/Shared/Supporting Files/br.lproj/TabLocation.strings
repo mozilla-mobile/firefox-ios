@@ -1,3 +1,9 @@
+/* Accessibility hint for the reload button */
+"Address.Bar.Reload.A11y.Hint.v124" = "Stokit div wech ha dalc'hit evit muioc’h a zibarzhioù";
+
+/* Accessibility label for the security icon in url bar */
+"TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "N'eo ket sur ar c’hennask. Diweredekaet eo ar gwarez heuliañ araoket.";
+
 /* Accessibility label for the security icon in url bar */
 "TabLocation.ETP.Off.Secure.A11y.Label.v119" = "Kennask suraet. Diweredekaet eo ar gwarez heuliañ araoket.";
 

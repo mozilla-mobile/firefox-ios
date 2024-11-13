@@ -66,10 +66,10 @@ final class InactiveTabsTest: BaseTestCase {
         app.cells[AccessibilityIdentifiers.Settings.Tabs.title].tap()
         mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Tabs.Customize.title])
         XCTAssertEqual(
-            app.switches[AccessibilityIdentifiers.Settings.Tabs.Customize.inactiveTabsSwitch].value as! String, "1")
+            app.switches[AccessibilityIdentifiers.Settings.Tabs.Customize.inactiveTabsSwitch].value as? String, "1")
         app.switches[AccessibilityIdentifiers.Settings.Tabs.Customize.inactiveTabsSwitch].tap()
         XCTAssertEqual(
-            app.switches[AccessibilityIdentifiers.Settings.Tabs.Customize.inactiveTabsSwitch].value as! String, "0")
+            app.switches[AccessibilityIdentifiers.Settings.Tabs.Customize.inactiveTabsSwitch].value as? String, "0")
         app.navigationBars.buttons["Settings"].tap() // Note: No AccessibilityIdentifiers
         navigator.nowAt(SettingsScreen)
 
@@ -97,7 +97,7 @@ final class InactiveTabsTest: BaseTestCase {
         mozWaitForElementToExist(app.tables.otherElements[AccessibilityIdentifiers.Settings.Tabs.Customize.title])
         app.switches[AccessibilityIdentifiers.Settings.Tabs.Customize.inactiveTabsSwitch].tap()
         XCTAssertEqual(
-            app.switches[AccessibilityIdentifiers.Settings.Tabs.Customize.inactiveTabsSwitch].value as! String, "1")
+            app.switches[AccessibilityIdentifiers.Settings.Tabs.Customize.inactiveTabsSwitch].value as? String, "1")
         app.navigationBars.buttons["Settings"].tap()
         navigator.nowAt(SettingsScreen)
 

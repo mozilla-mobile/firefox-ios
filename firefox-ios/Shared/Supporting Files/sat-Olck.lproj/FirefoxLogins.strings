@@ -1,0 +1,18 @@
+/* Prompt for saving the username in the Save Logins prompt. */
+"LoginsHelper.PromptSaveLogin.Title.v122" = "ᱵᱮᱵᱷᱟᱨᱤᱭᱟᱹ ᱧᱩᱛᱩᱢ ᱥᱟᱧᱪᱟᱣ ᱟ ?";
+
+/* Prompt for saving a password in the Save Logins prompt. */
+"LoginsHelper.PromptSavePassword.Title.v122" = "ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱠᱚ ᱥᱟᱺᱪᱟᱣᱟ ?";
+
+/* Prompt for updating the password in the Update Password prompt. */
+"LoginsHelper.PromptUpdateLogin.Title.OneArg.v122" = "ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱦᱟᱹᱞᱤᱭᱟᱹᱠ ᱟ ?";
+
+/* Prompt for updating a password in the Update Password prompt. */
+"LoginsHelper.PromptUpdateLogin.Title.TwoArg.v122" = "ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱦᱟᱹᱞᱤᱭᱟᱹᱠ ᱟ ?";
+
+/* Placeholder text for search box in logins list view. */
+"LoginsList.LoginsListSearchPlaceholder.v122" = "ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱽ ᱠᱚ ᱫᱮᱠᱷᱟᱣ ᱢᱮ";
+
+/* Title for the list of logins saved by the app */
+"LoginsList.Title.v122" = "ᱥᱟᱧᱪᱟᱣ ᱠᱟᱱ ᱫᱟᱱᱟᱝ ᱥᱟᱵᱟᱫᱠᱚ";
+

@@ -7168,7 +7168,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 134.0.20241106050321;
+				version = 134.0.20241109050310;
 			};
 		};
 		8A0E7F2C2BA0F0E0006BC6B6 /* XCRemoteSwiftPackageReference "Fuzi" */ = {
@@ -7200,7 +7200,7 @@
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
 			requirement = {
 				kind = exactVersion;
-				version = 8.36.0;
+				version = 8.21.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

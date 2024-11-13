@@ -6,6 +6,7 @@ import Shared
 import Account
 import Common
 import enum MozillaAppServices.IncomingDeviceCommand
+import enum MozillaAppServices.AccountEvent
 
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 
@@ -34,36 +35,15 @@ extension FxAPushMessageHandler {
             RustFirefoxAccounts.reconfig(prefs: self.profile.prefs) { accountManager in
                 accountManager.deviceConstellation()?.handlePushMessage(pushPayload: message) { result in
                     guard case .success(let event) = result else {
-                        let err: PushMessageError
-                        if case .failure(let error) = result {
-                            self.logger.log("Failed to get any events from FxA",
-                                            level: .warning,
-                                            category: .sync,
-                                            description: error.localizedDescription)
-                            err = PushMessageError.messageIncomplete(error.localizedDescription)
-                        } else {
-                            self.logger.log("Got zero events from FxA",
-                                            level: .warning,
-                                            category: .sync,
-                                            description: "No events retrieved from fxa")
-                            err = PushMessageError.messageIncomplete("empty message")
-                        }
+                        let err = self.makePushErrorMessageFrom(result: result)
                         completion(.failure(err))
                         return
                     }
 
                     switch event {
                     case .commandReceived(let deviceCommand):
-                        switch deviceCommand {
-                        case .tabReceived(_, let tabData):
-                            let title = tabData.entries.last?.title ?? ""
-                            let url = tabData.entries.last?.url ?? ""
-                            let command = CommandReceived.tabReceived(tab: ["title": title, "url": url])
-                            completion(.success(PushMessage.commandReceived(command: command)))
-                        case .tabsClosed(_, let payload):
-                            let command = CommandReceived.tabsClosed(urls: payload.urls)
-                            completion(.success(PushMessage.commandReceived(command: command)))
-                        }
+                        let pushMessage = self.makePushMessageFrom(deviceCommand: deviceCommand)
+                        completion(.success(pushMessage))
                     case .deviceConnected(let deviceName):
                         completion(.success(PushMessage.deviceConnected(deviceName)))
                     case let .deviceDisconnected(_, isLocalDevice):
@@ -81,6 +61,35 @@ extension FxAPushMessageHandler {
                     }
                 }
             }
+        }
+    }
+
+    private func makePushErrorMessageFrom(result: Result<AccountEvent, Error>) -> PushMessageError {
+        if case .failure(let error) = result {
+            self.logger.log("Failed to get any events from FxA",
+                            level: .warning,
+                            category: .sync,
+                            description: error.localizedDescription)
+            return PushMessageError.messageIncomplete(error.localizedDescription)
+        } else {
+            self.logger.log("Got zero events from FxA",
+                            level: .warning,
+                            category: .sync,
+                            description: "No events retrieved from fxa")
+            return PushMessageError.messageIncomplete("empty message")
+        }
+    }
+
+    private func makePushMessageFrom(deviceCommand: IncomingDeviceCommand) -> PushMessage {
+        switch deviceCommand {
+        case .tabReceived(_, let tabData):
+            let title = tabData.entries.last?.title ?? ""
+            let url = tabData.entries.last?.url ?? ""
+            let command = CommandReceived.tabReceived(tab: ["title": title, "url": url])
+            return PushMessage.commandReceived(command: command)
+        case .tabsClosed(_, let payload):
+            let command = CommandReceived.tabsClosed(urls: payload.urls)
+            return PushMessage.commandReceived(command: command)
         }
     }
 }

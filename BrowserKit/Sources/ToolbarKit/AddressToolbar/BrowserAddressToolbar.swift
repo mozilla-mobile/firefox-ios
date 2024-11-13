@@ -33,7 +33,6 @@ public class BrowserAddressToolbar: UIView,
     public var notificationCenter: any Common.NotificationProtocol = NotificationCenter.default
     private weak var toolbarDelegate: AddressToolbarDelegate?
     private var theme: Theme?
-    private var isUnifiedSearchEnabled = false
     private var droppableUrl: URL?
 
     private lazy var toolbarContainerView: UIView = .build()
@@ -62,6 +61,16 @@ public class BrowserAddressToolbar: UIView,
     private var trailingBrowserActionStackConstraint: NSLayoutConstraint?
     private var locationContainerHeightConstraint: NSLayoutConstraint?
 
+    // FXIOS-10210 Temporary to support updating the Unified Search feature flag during runtime
+    private var previousLocationViewState: LocationViewState?
+    public var isUnifiedSearchEnabled = false {
+        didSet {
+            guard let previousLocationViewState, oldValue != isUnifiedSearchEnabled else { return }
+
+            locationView.configure(previousLocationViewState, delegate: self, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
+        }
+    }
+
     override init(frame: CGRect) {
         super.init(frame: .zero)
         setupLayout()
@@ -80,6 +89,8 @@ public class BrowserAddressToolbar: UIView,
                           trailingSpace: CGFloat,
                           isUnifiedSearchEnabled: Bool) {
         self.toolbarDelegate = toolbarDelegate
+        self.isUnifiedSearchEnabled = isUnifiedSearchEnabled
+        self.previousLocationViewState = state.locationViewState
         configure(state: state, isUnifiedSearchEnabled: isUnifiedSearchEnabled)
         updateSpacing(leading: leadingSpace, trailing: trailingSpace)
     }
@@ -246,9 +257,15 @@ public class BrowserAddressToolbar: UIView,
     }
 
     private func updateActionStack(stackView: UIStackView, toolbarElements: [ToolbarElement]) {
+        let existingButtons = stackView.arrangedSubviews.compactMap { $0 as? ToolbarButton }
         stackView.removeAllArrangedViews()
+
         toolbarElements.forEach { toolbarElement in
-            let button = toolbarElement.numberOfTabs != nil ? TabNumberButton() : ToolbarButton()
+            // find existing button or create new one
+            // we do this to avoid having a new button every time we re-configure the address toolbar
+            // as this can result in button taps not resulting in correct action because the action
+            // as the reference to an old and not displayed button (e.g. the menu that is displayed from the menu button)
+            let button = newOrExistingToolbarButton(for: toolbarElement, existingButtons: existingButtons)
             button.configure(element: toolbarElement)
             stackView.addArrangedSubview(button)
 
@@ -266,6 +283,17 @@ public class BrowserAddressToolbar: UIView,
                 toolbarDelegate?.configureContextualHint(self, for: button, with: contextualHintType)
             }
         }
+    }
+
+    private func newOrExistingToolbarButton(for element: ToolbarElement,
+                                            existingButtons: [ToolbarButton]) -> ToolbarButton {
+        let existingButton = existingButtons.first { $0.isButtonFor(toolbarElement: element) }
+
+        guard let existingButton else {
+            return element.numberOfTabs != nil ? TabNumberButton() : ToolbarButton()
+        }
+
+        return existingButton
     }
 
     private func updateActionSpacing() {

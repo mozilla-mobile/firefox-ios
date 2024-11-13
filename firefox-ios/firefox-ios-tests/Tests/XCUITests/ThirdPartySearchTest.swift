@@ -27,7 +27,10 @@ class ThirdPartySearchTest: BaseTestCase {
         app.scrollViews.otherElements.buttons["Mozilla Engine search"].tap()
         waitUntilPageLoad()
 
-        var url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as! String
+        guard var url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as? String else {
+            XCTFail("Failed to retrieve the URL value from the browser's URL bar")
+            return
+        }
         if url.hasPrefix("https://") == false {
             url = "https://\(url)"
         }
@@ -50,7 +53,10 @@ class ThirdPartySearchTest: BaseTestCase {
         waitUntilPageLoad()
 
         // Ensure that the default search is MDN
-        var url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as! String
+        guard var url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as? String else {
+            XCTFail("Failed to retrieve the URL value from the browser's URL bar")
+            return
+        }
         if url.hasPrefix("https://") == false {
             url = "https://\(url)"
         }

@@ -89,6 +89,7 @@
         "CreditCardsTests\/testVerifyThatMultipleCardsCanBeAdded()",
         "CreditCardsTests\/testVerifyThatTheEditedCreditCardIsSaved()",
         "CronTabsPerformanceTest",
+        "DataManagementTests\/testFilterWebsiteData()",
         "DataManagementTests\/testWebSiteDataOptions()",
         "DatabaseFixtureTest",
         "DesktopModeTestsIphone\/testClearPrivateData()",

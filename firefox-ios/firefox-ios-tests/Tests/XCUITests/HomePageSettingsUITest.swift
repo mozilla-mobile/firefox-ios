@@ -390,7 +390,7 @@ class HomePageSettingsUITests: BaseTestCase {
 //            "1"
 //        )
         XCTAssertEqual(
-            app.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].value as! String,
+            app.cells.switches["Thought-Provoking Stories, Articles powered by Pocket"].value as? String,
             "1"
         )
     }

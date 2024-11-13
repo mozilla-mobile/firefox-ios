@@ -466,7 +466,7 @@ class LegacyBookmarkDetailPanel: SiteTableViewController {
                     return super.tableView(tableView, cellForRowAt: indexPath)
                 }
 
-                if item.folder.isRoot, let localizedString = LocalizedRootBookmarkFolderStrings[item.folder.guid] {
+                if item.folder.isRoot, let localizedString = LegacyLocalizedRootBookmarkFolderStrings[item.folder.guid] {
                     cell.titleLabel.text = localizedString
                 } else {
                     cell.titleLabel.text = item.folder.title
@@ -486,7 +486,7 @@ class LegacyBookmarkDetailPanel: SiteTableViewController {
                 }
             } else {
                 if parentBookmarkFolder.isRoot,
-                   let localizedString = LocalizedRootBookmarkFolderStrings[parentBookmarkFolder.guid] {
+                   let localizedString = LegacyLocalizedRootBookmarkFolderStrings[parentBookmarkFolder.guid] {
                     cell.titleLabel.text = localizedString
                 } else {
                     cell.titleLabel.text = parentBookmarkFolder.title

@@ -8,7 +8,6 @@ import XCTest
 @testable import Client
 
 final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
-    let storeUtilityHelper = StoreTestUtilityHelper()
     let pocketManager = MockPocketManager()
     override func setUp() {
         super.setUp()
@@ -68,7 +67,7 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
     }
 
     func setupTestingStore() {
-        storeUtilityHelper.setupTestingStore(
+        StoreTestUtilityHelper.setupTestingStore(
             with: setupAppState(),
             middlewares: [PocketMiddleware().pocketSectionProvider]
         )
@@ -77,6 +76,6 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
     // In order to avoid flaky tests, we should reset the store
     // similar to production
     func resetTestingStore() {
-        storeUtilityHelper.resetTestingStore()
+        StoreTestUtilityHelper.resetTestingStore()
     }
 }

@@ -340,48 +340,52 @@ class NavigationTest: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2441776
     // Smoketest
     func testPopUpBlocker() throws {
-        throw XCTSkip("This test is flakey")
-//        // Check that it is enabled by default
-//        navigator.nowAt(BrowserTab)
-//        mozWaitForElementToExist(app.buttons["TabToolbar.menuButton"], timeout: TIMEOUT)
-//        navigator.goto(SettingsScreen)
-//        mozWaitForElementToExist(app.tables[AccessibilityIdentifiers.Settings.tableViewController])
-//        let switchBlockPopUps = app.tables.cells.switches["blockPopups"]
-//        let switchValue = switchBlockPopUps.value!
-//        XCTAssertEqual(switchValue as? String, "1")
-//
-//        // Check that there are no pop ups
-//        navigator.openURL(popUpTestUrl)
-//        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "blocker.html")
-//        mozWaitForElementToExist(app.webViews.staticTexts["Blocked Element"])
-//
-//        let numTabs = app.buttons["Show Tabs"].value
-//        XCTAssertEqual("1", numTabs as? String, "There should be only on tab")
-//
-//        // Now disable the Block PopUps option
-//        navigator.goto(BrowserTabMenu)
-//        navigator.goto(SettingsScreen)
-//        mozWaitForElementToExist(switchBlockPopUps, timeout: TIMEOUT)
-//        switchBlockPopUps.tap()
-//        let switchValueAfter = switchBlockPopUps.value!
-//        XCTAssertEqual(switchValueAfter as? String, "0")
-//
-//        // Check that now pop ups are shown, two sites loaded
-//        navigator.openURL(popUpTestUrl)
-//        waitUntilPageLoad()
-//        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "example.com")
-//        let numTabsAfter = app.buttons["Show Tabs"].value
-//        XCTAssertNotEqual("1", numTabsAfter as? String, "Several tabs are open")
+        // Check that it is enabled by default
+        navigator.nowAt(BrowserTab)
+        mozWaitForElementToExist(app.buttons["TabToolbar.menuButton"], timeout: TIMEOUT)
+        navigator.goto(SettingsScreen)
+        mozWaitForElementToExist(app.tables[AccessibilityIdentifiers.Settings.tableViewController])
+        let switchBlockPopUps = app.tables.cells.switches["blockPopups"]
+        let switchValue = switchBlockPopUps.value!
+        XCTAssertEqual(switchValue as? String, "1")
+
+        // Check that there are no pop ups
+        navigator.openURL(popUpTestUrl)
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "blocker.html")
+        mozWaitForElementToExist(app.webViews.staticTexts["Blocked Element"])
+
+        let numTabs = app.buttons["Show Tabs"].value
+        XCTAssertEqual("1", numTabs as? String, "There should be only on tab")
+
+        // Now disable the Block PopUps option
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(SettingsScreen)
+        mozWaitForElementToExist(switchBlockPopUps, timeout: TIMEOUT)
+        switchBlockPopUps.tap()
+        let switchValueAfter = switchBlockPopUps.value!
+        XCTAssertEqual(switchValueAfter as? String, "0")
+
+        // Check that now pop ups are shown, two sites loaded
+        navigator.openURL(popUpTestUrl)
+        waitUntilPageLoad()
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "example.com")
+        let numTabsAfter = app.buttons["Show Tabs"].value
+        XCTAssertNotEqual("1", numTabsAfter as? String, "Several tabs are open")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306858
     // Smoketest
     func testSSL() {
         navigator.nowAt(NewTabScreen)
-
         navigator.openURL("https://expired.badssl.com/")
+        mozWaitForElementToExist(app.webViews.otherElements["This Connection is Untrusted"])
+        XCTAssertTrue(app.webViews.otherElements["This Connection is Untrusted"].exists)
+        app.buttons["Go Back"].tap()
+        navigator.nowAt(NewTabScreen)
+        navigator.openURL("https://expired.badssl.com/")
+        mozWaitForElementToExist(app.webViews.otherElements["This Connection is Untrusted"])
+        XCTAssertTrue(app.webViews.otherElements["This Connection is Untrusted"].exists)
         app.buttons["Advanced"].waitAndTap()
-
         app.links["Visit site anyway"].waitAndTap()
         mozWaitForElementToExist(app.webViews.otherElements["expired.badssl.com"], timeout: TIMEOUT_LONG)
     }

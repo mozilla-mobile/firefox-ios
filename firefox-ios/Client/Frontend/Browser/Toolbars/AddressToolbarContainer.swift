@@ -38,7 +38,16 @@ final class AddressToolbarContainer: UIView,
     private var profile: Profile?
     private var model: AddressToolbarContainerModel?
     private(set) weak var delegate: AddressToolbarContainerDelegate?
-    private var isUnifiedSearchEnabled = false
+
+    // FXIOS-10210 Temporary to support updating the Unified Search feature flag during runtime
+    public var isUnifiedSearchEnabled = false {
+        didSet {
+            guard oldValue != isUnifiedSearchEnabled else { return }
+
+            compactToolbar.isUnifiedSearchEnabled = isUnifiedSearchEnabled
+            regularToolbar.isUnifiedSearchEnabled = isUnifiedSearchEnabled
+        }
+    }
 
     private var toolbar: BrowserAddressToolbar {
         return shouldDisplayCompact ? compactToolbar : regularToolbar
@@ -164,8 +173,15 @@ final class AddressToolbarContainer: UIView,
         let newModel = AddressToolbarContainerModel(state: toolbarState,
                                                     profile: profile,
                                                     windowUUID: windowUUID)
+
         shouldDisplayCompact = newModel.shouldDisplayCompact
         if self.model != newModel {
+            // in case we are in edit mode but overlay is not active yet we have to activate it
+            // so that `inOverlayMode` is set to true so we avoid getting stuck in overlay mode
+            if newModel.isEditing, !inOverlayMode {
+                enterOverlayMode(nil, pasted: false, search: true)
+            }
+
             updateProgressBarPosition(toolbarState.toolbarPosition)
             compactToolbar.configure(state: newModel.addressToolbarState,
                                      toolbarDelegate: self,
@@ -355,6 +371,8 @@ final class AddressToolbarContainer: UIView,
                 actionType: ToolbarActionType.didPasteSearchTerm
             )
             store.dispatch(action)
+
+            delegate?.openSuggestions(searchTerm: locationText ?? "")
         } else {
             let action = ToolbarAction(searchTerm: locationText,
                                        windowUUID: windowUUID,
