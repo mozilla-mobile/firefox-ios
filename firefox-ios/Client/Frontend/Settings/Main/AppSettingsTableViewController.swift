@@ -48,6 +48,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     private var debugSettingsClickCount: Int = 0
     private var appAuthenticator: AppAuthenticationProtocol
     private var applicationHelper: ApplicationHelper
+    private let logger: Logger
 
     weak var parentCoordinator: SettingsFlowDelegate?
 
@@ -60,9 +61,11 @@ class AppSettingsTableViewController: SettingsTableViewController,
          and tabManager: TabManager,
          delegate: SettingsDelegate? = nil,
          appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
-         applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
+         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
+         logger: Logger = DefaultLogger.shared) {
         self.appAuthenticator = appAuthenticator
         self.applicationHelper = applicationHelper
+        self.logger = logger
 
         super.init(windowUUID: tabManager.windowUUID)
         self.profile = profile
@@ -460,7 +463,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
             tableView,
             viewForHeaderInSection: section
         ) as? ThemedTableSectionHeaderFooterView else {
-            fatalError("Failed to dequeue ThemedTableSectionHeaderFooterView for section \(section)")
+            logger.log("Failed to cast or retrieve ThemedTableSectionHeaderFooterView for section: \(section)",
+                       level: .fatal,
+                       category: .lifecycle)
+            return UIView()
         }
         return headerView
     }
