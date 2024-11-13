@@ -16,7 +16,7 @@ class DisplaySettingTests: BaseTestCase {
             ]
         )
         let switchValue = app.switches["SystemThemeSwitchValue"].value!
-        XCTAssertEqual(switchValue as! String, "1")
+        XCTAssertEqual(switchValue as? String, "1")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2337487
@@ -37,7 +37,7 @@ class DisplaySettingTests: BaseTestCase {
         navigator.goto(DisplaySettings)
         mozWaitForElementToExist(app.switches["SystemThemeSwitchValue"])
         let switchValue = app.switches["SystemThemeSwitchValue"].value!
-        XCTAssertEqual(switchValue as! String, "0")
+        XCTAssertEqual(switchValue as? String, "0")
         waitForElementsToExist(
             [
                 app.cells.staticTexts["Light"],
@@ -64,7 +64,7 @@ class DisplaySettingTests: BaseTestCase {
         // Enable back system theme
         navigator.performAction(Action.SystemThemeSwitch)
         let switchValueAfter = app.switches["SystemThemeSwitchValue"].value!
-        XCTAssertEqual(switchValueAfter as! String, "1")
+        XCTAssertEqual(switchValueAfter as? String, "1")
         mozWaitForElementToNotExist(app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["SWITCH MODE"])
         mozWaitForElementToNotExist(app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["THEME PICKER"])
     }

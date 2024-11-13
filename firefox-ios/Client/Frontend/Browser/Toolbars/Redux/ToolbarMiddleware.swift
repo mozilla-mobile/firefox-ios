@@ -32,6 +32,8 @@ final class ToolbarMiddleware: FeatureFlaggable {
             self.resolveMicrosurveyActions(windowUUID: action.windowUUID, actionType: action.actionType, state: state)
         } else if let action = action as? ToolbarMiddlewareAction {
             self.resolveToolbarMiddlewareActions(action: action, state: state)
+        } else if let action = action as? ToolbarAction {
+            self.resolveToolbarActions(action: action, state: state)
         }
     }
 
@@ -100,6 +102,21 @@ final class ToolbarMiddleware: FeatureFlaggable {
 
         case ToolbarMiddlewareActionType.didStartDragInteraction:
             toolbarTelemetry.dragInteractionStarted()
+
+        default:
+            break
+        }
+    }
+
+    private func resolveToolbarActions(action: ToolbarAction, state: AppState) {
+        switch action.actionType {
+        case ToolbarActionType.cancelEdit:
+            // When editing ends, we need to also clear the address bar's search engine selection (if not default)
+            let action = SearchEngineSelectionAction(
+                windowUUID: action.windowUUID,
+                actionType: SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine
+            )
+            store.dispatch(action)
 
         default:
             break
