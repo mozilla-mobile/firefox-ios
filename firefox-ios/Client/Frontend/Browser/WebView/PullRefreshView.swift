@@ -108,9 +108,9 @@ class PullRefreshView: UIView,
             } else if scrollView.contentOffset.y != 0.0 {
                 // This check prevents progressView re blink when scrolling the pull refresh before the web view is loaded
                 self?.restoreBackgroundProgressViewIfNeeded()
-                let rotationAngle = -(scrollView.contentOffset.y / (self?.frame.height ?? 0.0)) * .pi * 2
+                let rotationAngle = -(scrollView.contentOffset.y) / threshold
                 UIView.animate(withDuration: 0.1) {
-                    self?.progressView.transform = CGAffineTransform(rotationAngle: rotationAngle * 2.0)
+                    self?.progressView.transform = CGAffineTransform(rotationAngle: rotationAngle * 1.5)
                 }
             }
         }
