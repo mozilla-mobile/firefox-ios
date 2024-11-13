@@ -102,6 +102,7 @@ class MainMenuDetailsViewController: UIViewController,
         submenuContent.setupAccessibilityIdentifiers(
             closeButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.CloseButton,
             closeButtonA11yId: AccessibilityIdentifiers.MainMenu.NavigationHeaderView.closeButton,
+            titleA11yId: AccessibilityIdentifiers.MainMenu.NavigationHeaderView.title,
             backButtonA11yLabel: .MainMenu.Account.AccessibilityLabels.BackButton,
             backButtonA11yId: AccessibilityIdentifiers.MainMenu.NavigationHeaderView.backButton)
     }

@@ -80,6 +80,7 @@ public struct AccessibilityIdentifiers {
 
         struct NavigationHeaderView {
             static let backButton = "MainMenu.BackButton"
+            static let title = "MainMenu.Title"
             static let closeButton = "MainMenu.CloseMenuButton"
         }
 
