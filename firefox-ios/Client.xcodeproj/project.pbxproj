@@ -886,6 +886,7 @@
 		8A93F87029D3A597004159D9 /* SceneCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A93F86F29D3A597004159D9 /* SceneCoordinator.swift */; };
 		8A93F87229D3A5AD004159D9 /* BrowserCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A93F87129D3A5AD004159D9 /* BrowserCoordinator.swift */; };
 		8A93F87429D3A5C1004159D9 /* LaunchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A93F87329D3A5C1004159D9 /* LaunchCoordinator.swift */; };
+		8A94418A2CE3E190007FF4E5 /* MockSearchEngineManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9441892CE3E190007FF4E5 /* MockSearchEngineManager.swift */; };
 		8A95FF642B1E969E00AC303D /* TelemetryContextualIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A95FF632B1E969E00AC303D /* TelemetryContextualIdentifier.swift */; };
 		8A95FF672B1E97A800AC303D /* TelemetryContextualIdentifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A95FF652B1E977E00AC303D /* TelemetryContextualIdentifierTests.swift */; };
 		8A96C4BB28F9E7B300B75884 /* XCTestCaseRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */; };
@@ -7368,6 +7369,7 @@
 		8A93F86F29D3A597004159D9 /* SceneCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneCoordinator.swift; sourceTree = "<group>"; };
 		8A93F87129D3A5AD004159D9 /* BrowserCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserCoordinator.swift; sourceTree = "<group>"; };
 		8A93F87329D3A5C1004159D9 /* LaunchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchCoordinator.swift; sourceTree = "<group>"; };
+		8A9441892CE3E190007FF4E5 /* MockSearchEngineManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSearchEngineManager.swift; sourceTree = "<group>"; };
 		8A95FF632B1E969E00AC303D /* TelemetryContextualIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryContextualIdentifier.swift; sourceTree = "<group>"; };
 		8A95FF652B1E977E00AC303D /* TelemetryContextualIdentifierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelemetryContextualIdentifierTests.swift; sourceTree = "<group>"; };
 		8A96C4B828F9DD8700B75884 /* ThemableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemableTests.swift; sourceTree = "<group>"; };
@@ -11491,6 +11493,7 @@
 				8A6B799C2CDBDAE4003C3077 /* MockContileProvider.swift */,
 				8A6B799F2CDBDB0C003C3077 /* MockGoogleTopSiteManager.swift */,
 				8A1A66062CDD168A00DD883C /* MockTopSiteHistoryManager.swift */,
+				8A9441892CE3E190007FF4E5 /* MockSearchEngineManager.swift */,
 			);
 			path = Mock;
 			sourceTree = "<group>";
@@ -16978,6 +16981,7 @@
 				8A454D372CB86B86009436D9 /* PocketStateTests.swift in Sources */,
 				8AED868328CA3B3400351A50 /* BookmarkPanelViewModelTests.swift in Sources */,
 				434CD57829F6FC4500A0D04B /* MockAppAuthenticator.swift in Sources */,
+				8A94418A2CE3E190007FF4E5 /* MockSearchEngineManager.swift in Sources */,
 				DACDE996225E537900C8F37F /* VersionSettingTests.swift in Sources */,
 				8A83B74C2A265061002FF9AC /* LibraryCoordinatorTests.swift in Sources */,
 				8CEDF07E2BFE04B100D2617B /* AddressListViewModelTests.swift in Sources */,
