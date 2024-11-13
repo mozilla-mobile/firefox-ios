@@ -299,8 +299,7 @@ class LegacyBookmarkDetailPanel: SiteTableViewController, BookmarksRefactorFeatu
                                 addFolder(childFolder: childFolder)
                             } else {
                                 if let bookmarkCount = bookmarksCountResult.successValue,
-                                   bookmarkCount > 0,
-                                   BookmarkRoots.DesktopRoots.contains(childFolder.guid)
+                                   (bookmarkCount > 0 && BookmarkRoots.DesktopRoots.contains(childFolder.guid))
                                     || !self.isBookmarkRefactorEnabled {
                                     addFolder(childFolder: childFolder)
                                 }
