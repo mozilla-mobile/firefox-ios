@@ -285,7 +285,10 @@ class DownloadsPanel: UIViewController,
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TwoLineImageOverlayCell.cellIdentifier,
                                                        for: indexPath) as? TwoLineImageOverlayCell else {
-            fatalError("Failed to dequeue cell with identifier \(TwoLineImageOverlayCell.cellIdentifier)")
+            logger.log("Failed to dequeue TwoLineImageOverlayCell at indexPath: \(indexPath)",
+                       level: .fatal,
+                       category: .library)
+            return UITableViewCell()
         }
 
         return configureDownloadedFile(cell, for: indexPath)

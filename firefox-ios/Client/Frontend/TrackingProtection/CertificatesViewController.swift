@@ -65,17 +65,20 @@ class CertificatesViewController: UIViewController,
     var themeObserver: NSObjectProtocol?
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
+    private let logger: Logger
 
     // MARK: - View Lifecycle
 
     init(with viewModel: CertificatesModel,
          windowUUID: WindowUUID,
          and notificationCenter: NotificationProtocol = NotificationCenter.default,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         logger: Logger = DefaultLogger.shared) {
         self.model = viewModel
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
+        self.logger = logger
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -173,7 +176,10 @@ class CertificatesViewController: UIViewController,
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(
             withIdentifier: CertificatesHeaderView.cellIdentifier) as? CertificatesHeaderView else {
-            fatalError("Failed to dequeue cell with identifier \(CertificatesHeaderView.cellIdentifier)")
+            logger.log("Failed to dequeue CertificatesHeaderView with identifier \(CertificatesHeaderView.cellIdentifier)",
+                       level: .fatal,
+                       category: .certificate)
+            return UIView()
         }
         var items: [CertificatesHeaderItem] = []
         for (index, certificate) in model.certificates.enumerated() {

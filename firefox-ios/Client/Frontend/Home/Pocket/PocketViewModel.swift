@@ -30,17 +30,20 @@ class PocketViewModel {
     private var pocketStoriesViewModels = [PocketStandardCellViewModel]()
     private var wallpaperManager: WallpaperManager
     private var prefs: Prefs
+    private let logger: Logger
 
     init(pocketDataAdaptor: PocketDataAdaptor,
          isZeroSearch: Bool = false,
          theme: Theme,
          prefs: Prefs,
-         wallpaperManager: WallpaperManager) {
+         wallpaperManager: WallpaperManager,
+         logger: Logger = DefaultLogger.shared) {
         self.dataAdaptor = pocketDataAdaptor
         self.isZeroSearch = isZeroSearch
         self.theme = theme
         self.prefs = prefs
         self.wallpaperManager = wallpaperManager
+        self.logger = logger
     }
 
     // The dimension of a cell
@@ -210,7 +213,10 @@ extension PocketViewModel: HomepageSectionHandler {
         if isStoryCell(index: indexPath.row) {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LegacyPocketStandardCell.cellIdentifier,
                                                                 for: indexPath) as? LegacyPocketStandardCell else {
-                fatalError("Failed to dequeue cell with identifier \(LegacyPocketStandardCell.cellIdentifier)")
+                logger.log("Failed to dequeue LegacyPocketStandardCell at indexPath: \(indexPath)",
+                           level: .fatal,
+                           category: .homepage)
+                return UICollectionViewCell()
             }
             let viewModel = pocketStoriesViewModels[indexPath.row]
             viewModel.tag = indexPath.row
@@ -219,7 +225,10 @@ extension PocketViewModel: HomepageSectionHandler {
         } else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PocketDiscoverCell.cellIdentifier,
                                                                 for: indexPath) as? PocketDiscoverCell else {
-                fatalError("Failed to dequeue cell with identifier \(PocketDiscoverCell.cellIdentifier)")
+                logger.log("Failed to dequeue PocketDiscoverCell at indexPath: \(indexPath)",
+                           level: .fatal,
+                           category: .homepage)
+                return UICollectionViewCell()
             }
             cell.configure(text: .FirefoxHomepage.Pocket.DiscoverMore, theme: theme)
             return cell
