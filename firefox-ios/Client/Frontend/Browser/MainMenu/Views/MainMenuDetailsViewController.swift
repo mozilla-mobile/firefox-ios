@@ -117,7 +117,8 @@ class MainMenuDetailsViewController: UIViewController,
                 MainMenuAction(
                     windowUUID: self.windowUUID,
                     actionType: MainMenuDetailsActionType.tapBackToMainMenu,
-                    telemetryInfo: TelemetryInfo(isHomepage: submenuState.isHomepage ?? false)
+                    telemetryInfo: TelemetryInfo(isHomepage: submenuState.isHomepage ?? false,
+                                                 submenuType: submenuState.submenuType)
                 )
             )
         }
