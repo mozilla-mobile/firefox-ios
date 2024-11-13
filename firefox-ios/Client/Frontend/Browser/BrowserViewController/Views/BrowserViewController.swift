@@ -1132,6 +1132,7 @@ class BrowserViewController: UIViewController,
                 handleFakespotFlow(productURL: productURL)
             }
         }, completion: { _ in
+            self.scrollController.traitCollectionDidChange()
             self.scrollController.setMinimumZoom()
         })
         microsurvey?.setNeedsUpdateConstraints()

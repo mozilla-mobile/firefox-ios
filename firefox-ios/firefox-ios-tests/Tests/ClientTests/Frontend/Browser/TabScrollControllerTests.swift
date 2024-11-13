@@ -20,12 +20,12 @@ final class TabScrollControllerTests: XCTestCase {
     override func setUp() {
         super.setUp()
 
+        DependencyHelperMock().bootstrapDependencies()
         self.mockProfile = MockProfile()
         self.subject = TabScrollingController(windowUUID: windowUUID)
         self.tab = Tab(profile: mockProfile, windowUUID: windowUUID)
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         mockGesture = UIPanGestureRecognizerMock()
-        DependencyHelperMock().bootstrapDependencies()
     }
 
     override func tearDown() {
