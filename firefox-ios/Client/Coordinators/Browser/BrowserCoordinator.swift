@@ -589,13 +589,13 @@ class BrowserCoordinator: BaseCoordinator,
             navigationController.modalPresentationStyle = .pageSheet
             navigationController.sheetPresentationController?.detents = [.medium(), .large()]
             navigationController.sheetPresentationController?.prefersGrabberVisible = true
-            store.dispatch(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit))
         }
 
         let coordinator = DefaultSearchEngineSelectionCoordinator(
             router: DefaultRouter(navigationController: navigationController),
             windowUUID: tabManager.windowUUID
         )
+        store.dispatch(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.hideKeyboard))
 
         coordinator.parentCoordinator = self
         coordinator.navigationHandler = self
