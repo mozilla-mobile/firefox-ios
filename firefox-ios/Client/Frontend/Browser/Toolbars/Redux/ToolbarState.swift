@@ -144,7 +144,8 @@ struct ToolbarState: ScreenState, Equatable {
         case ToolbarActionType.navigationHintFinishedPresenting:
             return handleNavigationHintFinishedPresenting(state: state, action: action)
 
-        case SearchEngineSelectionActionType.didTapSearchEngine:
+        case SearchEngineSelectionActionType.didTapSearchEngine,
+            SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine:
             return handleSearchEngineSelectionAction(state: state, action: action)
 
         default:
@@ -362,7 +363,9 @@ struct ToolbarState: ScreenState, Equatable {
     }
 
     private static func handleSearchEngineSelectionAction(state: Self, action: Action) -> ToolbarState {
-        guard let searchEngineSelectionAction = action as? SearchEngineSelectionAction else { return state }
+        guard let searchEngineSelectionAction = action as? SearchEngineSelectionAction else {
+            return defaultState(from: state)
+        }
 
         return ToolbarState(
             windowUUID: state.windowUUID,

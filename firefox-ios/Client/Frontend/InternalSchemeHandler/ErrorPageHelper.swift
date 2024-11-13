@@ -170,7 +170,7 @@ class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
         let html = """
             <!DOCTYPE html>
             <html>
-              <body style='background-color:\(backgroundColor)'></body>
+              <body></body>
             </html>
         """
         guard let data = html.data(using: .utf8) else { return nil }

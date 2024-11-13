@@ -51,7 +51,7 @@ class MultiWindowTests: IpadOnlyTestCase {
         app.tables.otherElements[newTab].tap()
         app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
         let tabButtonSecondWindow = app.buttons.matching(identifier: tabsButtonIdentifier).element(boundBy: 0)
-        XCTAssertEqual(tabButtonSecondWindow.value as! String, "2", "Number of tabs opened should be equal to 2")
+        XCTAssertEqual(tabButtonSecondWindow.value as? String, "2", "Number of tabs opened should be equal to 2")
         // A new tab is opened in the same window
         app.collectionViews.cells.matching(identifier: topSites).element(boundBy: 6).waitAndTap()
         mozWaitForElementToExist(app.buttons[homeButtom])
@@ -59,7 +59,7 @@ class MultiWindowTests: IpadOnlyTestCase {
         app.tables.otherElements[newTab].tap()
         app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
         let tabButtonFirstWindow = app.buttons.matching(identifier: tabsButtonIdentifier).element(boundBy: 1)
-        XCTAssertEqual(tabButtonFirstWindow.value as! String, "2", "Number of tabs opened should be equal to 2")
+        XCTAssertEqual(tabButtonFirstWindow.value as? String, "2", "Number of tabs opened should be equal to 2")
     }
 
     func testOpenWindowFromTabSwitcher() {
