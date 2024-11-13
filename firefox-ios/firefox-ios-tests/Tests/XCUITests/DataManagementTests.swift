@@ -8,7 +8,11 @@ class DataManagementTests: BaseTestCase {
     func cleanAllData() {
         navigator.goto(WebsiteDataSettings)
         mozWaitForElementToExist(app.tables.otherElements["Website Data"])
-        navigator.performAction(Action.AcceptClearAllWebsiteData)
+        // navigator.performAction(Action.AcceptClearAllWebsiteData)
+        // We need to fix the method in FxScreenGraph file
+        // but there are many linter issues on that file, so this is a quick fix
+        app.tables.cells["ClearAllWebsiteData"].staticTexts["Clear All Website Data"].waitAndTap()
+        app.alerts.buttons["OK"].waitAndTap()
         XCTAssertEqual(app.cells.buttons.images.count, 0, "The Website data has not cleared correctly")
         // Navigate back to the browser
         mozWaitElementHittable(element: app.buttons["Data Management"], timeout: TIMEOUT)
