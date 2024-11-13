@@ -203,14 +203,12 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
         return historyUrls
     }
 
-    // Hanna: TODO define textTitle here?
     var title: String? {
         if let title = webView?.title, !title.isEmpty {
             return webView?.title
         }
 
         return nil
-//      return "TESTING 123"
     }
 
     /// This property returns, ideally, the web page's title. Otherwise, based on the page being internal

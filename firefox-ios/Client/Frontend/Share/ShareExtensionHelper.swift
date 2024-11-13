@@ -101,11 +101,9 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
             activityItems.append(TabPrintPageRenderer(tab: tab))
         }
 
-//      TODO HAnna: seems like we can define it here?
         if let title = selectedTab?.title {
             activityItems.append(TitleActivityItemProvider(title: title))
         }
-//      activityItems.append(TitleActivityItemProvider(title: "DUMMY"))
         activityItems.append(self)
 
         return activityItems
