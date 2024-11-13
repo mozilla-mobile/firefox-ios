@@ -29,4 +29,26 @@ extension UIImage {
 
         return newImage
     }
+    
+    /// Trys to load an `UIImage` from the content of a gif in the main `Bundle`
+    ///
+    /// The `frameDuration` it's set to 0.1 seconds as default but maybe adjusted depending on the loaded gif.
+    static func gifFromBundle(named name: String, frameDuration: CGFloat = 0.1) -> UIImage? {
+        guard let gifPath = Bundle.main.path(forResource: name, ofType: "gif"),
+              let gifData = NSData(contentsOfFile: gifPath) as Data?,
+              let source = CGImageSourceCreateWithData(gifData as CFData, nil) else {
+            return nil
+        }
+
+        var frames: [UIImage] = []
+        let frameCount = CGImageSourceGetCount(source)
+
+        for i in 0..<frameCount {
+            if let cgImage = CGImageSourceCreateImageAtIndex(source, i, nil) {
+                frames.append(UIImage(cgImage: cgImage))
+            }
+        }
+
+        return UIImage.animatedImage(with: frames, duration: Double(frameCount) * frameDuration)
+    }
 }
