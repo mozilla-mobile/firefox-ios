@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Common
 
 private let LabelPrompt: String = "Turn on search suggestions?"
 private let SuggestedSite: String = "foobar meaning"
@@ -360,17 +361,50 @@ class SearchTests: BaseTestCase {
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306942
-    func testSearchSuggestions() {
+    func testSearchSuggestions() throws {
+        guard #available(iOS 17.0, *) else { return }
+
         // Tap on URL Bar and type "g"
         navigator.nowAt(NewTabScreen)
         typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: true)
 
         // Tap on the "Append Arrow button"
-        app.tables.buttons["appendUpLeftLarge"].firstMatch.tap()
+        app.tables.buttons[StandardImageIdentifiers.Large.appendUpLeft].firstMatch.tap()
 
         // The search suggestion fills the URL bar but does not conduct the search
         waitForValueContains(urlBarAddress, value: "g")
         XCTAssertEqual(app.tables.cells.count, 4, "There should be 4 search suggestions")
+
+        // Check accessibility
+        // swiftlint:disable empty_count
+        try app.performAccessibilityAudit { issue in
+            guard let element = issue.element else { return false }
+
+            var shouldIgnore = false
+            // number of tabs in navigation toolbar
+            let isDynamicTypeTabButton = element.label == "1" &&
+                issue.auditType == .dynamicType
+
+            // clipped text on homepage
+            let homepage = self.app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView].firstMatch
+            let isDescendantOfHomepage = homepage.descendants(matching: element.elementType).containing(NSPredicate(format: "label CONTAINS[c] '\(element.label)'")).count > 0
+            let isClippedTextOnHomepage = issue.auditType == .textClipped && isDescendantOfHomepage
+
+            // clipped text in search suggestions
+            let suggestions = self.app.tables["SiteTable"].firstMatch
+            let isDescendantOfSuggestions = suggestions.descendants(matching: element.elementType).containing(NSPredicate(format: "label CONTAINS[c] '\(element.label)'")).count > 0
+            let isClippedTextInSuggestions = issue.auditType == .textClipped && isDescendantOfSuggestions
+
+            // text in the address toolbar text field
+            let isAddressField = element.elementType == .textField && issue.auditType == .textClipped
+
+            if isDynamicTypeTabButton || isClippedTextOnHomepage || isClippedTextInSuggestions || isAddressField {
+                shouldIgnore = true
+            }
+
+            return shouldIgnore
+        }
+        // swiftlint:enable empty_count
 
         // Delete the text and type "g"
         app.buttons["Clear text"].waitAndTap()
@@ -429,7 +463,7 @@ class SearchTests: BaseTestCase {
             mozWaitForElementToExist(app.tables.cells.staticTexts["g"])
             XCTAssertTrue(app.tables.cells.count >= 4)
         } else {
-            mozWaitForElementToNotExist(app.tables.buttons["appendUpLeftLarge"])
+            mozWaitForElementToNotExist(app.tables.buttons[StandardImageIdentifiers.Large.appendUpLeft])
             mozWaitForElementToExist(app.tables["SiteTable"].staticTexts["Firefox Suggest"])
             XCTAssertTrue(app.tables.cells.count <= 3)
         }
