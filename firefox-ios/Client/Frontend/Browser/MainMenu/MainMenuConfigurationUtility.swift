@@ -279,7 +279,9 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     MainMenuAction(
                         windowUUID: uuid,
                         actionType: MainMenuActionType.tapToggleUserAgent,
-                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage)
+                        telemetryInfo: TelemetryInfo(isHomepage: tabInfo.isHomepage,
+                                                     isDefaultUserAgentDesktop: tabInfo.isDefaultUserAgentDesktop,
+                                                     hasChangedUserAgent: tabInfo.hasChangedUserAgent)
                     )
                 )
             }
