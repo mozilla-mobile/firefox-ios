@@ -12939,7 +12939,6 @@
 		D0FCF7EC1FE44DBD004A7995 /* AtDocumentStart */ = {
 			isa = PBXGroup;
 			children = (
-				D0C95DF7200EAE3000E4E51C /* NightModeHelper.js */,
 				D0C95DF9200EAE5E00E4E51C /* NoImageModeHelper.js */,
 				D0C95E03200FCA8800E4E51C /* ReaderMode.js */,
 			);
@@ -12949,6 +12948,7 @@
 		D0FCF7ED1FE44DC3004A7995 /* AtDocumentEnd */ = {
 			isa = PBXGroup;
 			children = (
+				D0C95DF7200EAE3000E4E51C /* NightModeHelper.js */,
 				D0FCF8091FE47B49004A7995 /* CustomSearchHandler.js */,
 				D0C95DF1200EAD3000E4E51C /* FindInPage.js */,
 				D0C95E33200FDB3200E4E51C /* MetadataHelper.js */,
