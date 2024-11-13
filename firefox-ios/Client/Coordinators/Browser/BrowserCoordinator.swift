@@ -274,7 +274,7 @@ class BrowserCoordinator: BaseCoordinator,
             handle(searchURL: url, tabId: tabId)
 
         case let .sharesheet(url, title):
-          showShareSheet(with: url, title: title)
+            showShareSheet(with: url, title: title)
 
         case let .glean(url):
             glean.handleDeeplinkUrl(url: url)
@@ -516,7 +516,11 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.updateZoomPageBarVisibility(visible: true)
     }
 
-  func showShareSheet(with url: URL?, title: String?) {
+    func showShareSheet(with url: URL?) {
+        showShareSheet(with: url, title: nil)
+    }
+
+    func showShareSheet(with url: URL?, title: String?) {
         guard let url else { return }
 
         let showShareSheet = { url in
@@ -902,7 +906,7 @@ class BrowserCoordinator: BaseCoordinator,
         router.present(viewController)
     }
 
-// MARK: - Password Generator
+    // MARK: - Password Generator
     func showPasswordGenerator(tab: Tab, frame: WKFrameInfo) {
         let passwordGenVC = PasswordGeneratorViewController(windowUUID: windowUUID, currentTab: tab, currentFrame: frame)
 

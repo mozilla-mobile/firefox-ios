@@ -29,15 +29,12 @@ enum MainMenuDetailsViewType {
 struct MenuNavigationDestination: Equatable {
     let destination: MainMenuNavigationDestination
     let url: URL?
-    let title: String?
 
     init(
         _ destination: MainMenuNavigationDestination,
-        url: URL? = nil,
-        title: String? = nil
+        url: URL? = nil
     ) {
         self.destination = destination
         self.url = url
-        self.title = title
     }
 }
