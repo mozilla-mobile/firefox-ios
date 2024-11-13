@@ -45,4 +45,10 @@ class BookmarksHandlerMock: BookmarksHandler {
                             url: String?) -> Success {
         succeed()
     }
+
+    func countBookmarksInTrees(folderGuids: [GUID]) -> Deferred<Maybe<Int>> {
+        let deferred = Deferred<Maybe<Int>>()
+        deferred.fill(Maybe(success: 0))
+        return deferred
+    }
 }
