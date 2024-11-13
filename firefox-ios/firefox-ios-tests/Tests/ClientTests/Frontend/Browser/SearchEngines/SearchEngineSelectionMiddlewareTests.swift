@@ -10,7 +10,7 @@ import XCTest
 final class SearchEngineSelectionMiddlewareTests: XCTestCase, StoreTestUtility {
     var mockStore: MockStoreForMiddleware<AppState>!
     var mockProfile: MockProfile!
-    var mockSearchEnginesManager: SearchEnginesManager!
+    var mockSearchEnginesManager: SearchEnginesManagerProvider!
     let mockSearchEngines: [OpenSearchEngine] = [
         OpenSearchEngineTests.generateOpenSearchEngine(type: .wikipedia, withImage: UIImage()),
         OpenSearchEngineTests.generateOpenSearchEngine(type: .youtube, withImage: UIImage()),
@@ -24,8 +24,7 @@ final class SearchEngineSelectionMiddlewareTests: XCTestCase, StoreTestUtility {
 
         DependencyHelperMock().bootstrapDependencies()
         mockProfile = MockProfile()
-        mockSearchEnginesManager = SearchEnginesManager(prefs: mockProfile.prefs, files: mockProfile.files)
-        mockSearchEnginesManager.orderedEngines = mockSearchEngines
+        mockSearchEnginesManager = MockSearchEnginesManager(searchEngines: mockSearchEngines)
 
         // We must reset the global mock store prior to each test
         setupTestingStore()
@@ -68,7 +67,7 @@ final class SearchEngineSelectionMiddlewareTests: XCTestCase, StoreTestUtility {
 
     // MARK: - Helpers
 
-    private func createSubject(mockSearchEnginesManager: SearchEnginesManager) -> SearchEngineSelectionMiddleware {
+    private func createSubject(mockSearchEnginesManager: SearchEnginesManagerProvider) -> SearchEngineSelectionMiddleware {
         return SearchEngineSelectionMiddleware(profile: mockProfile, searchEnginesManager: mockSearchEnginesManager)
     }
 

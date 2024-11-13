@@ -241,7 +241,7 @@ final class TopSitesManagerTests: XCTestCase {
             contileProvider: MockContileProvider(
                 result: .success(MockContileProvider.defaultSuccessData)
             ),
-            searchEngineManager: MockSearchEnginesManager(searchEngine: searchEngine)
+            searchEngineManager: MockSearchEnginesManager(searchEngines: [searchEngine])
         )
 
         let topSites = await subject.getTopSites()

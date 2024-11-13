@@ -7,11 +7,21 @@ import Foundation
 @testable import Client
 
 class MockSearchEnginesManager: SearchEnginesManagerProvider {
-    private let searchEngine: OpenSearchEngine?
+    private let searchEngines: [OpenSearchEngine]
+
     var defaultEngine: OpenSearchEngine? {
-        return searchEngine
+        return searchEngines.first
     }
-    init(searchEngine: OpenSearchEngine? = nil) {
-        self.searchEngine = searchEngine
+
+    var orderedEngines: [OpenSearchEngine]! {
+        return searchEngines
+    }
+
+    init(searchEngines: [OpenSearchEngine] = []) {
+        self.searchEngines = searchEngines
+    }
+
+    func getOrderedEngines(completion: @escaping ([OpenSearchEngine]) -> Void) {
+        completion(searchEngines)
     }
 }
