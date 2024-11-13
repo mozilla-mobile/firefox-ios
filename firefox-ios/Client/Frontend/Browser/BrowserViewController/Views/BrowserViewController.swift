@@ -2090,7 +2090,11 @@ class BrowserViewController: UIViewController,
                 return
             }
             // TODO: FXIOS-10165 - Pass in the proper values based on top sites and other homepage links
-            navigationHandler?.navigateFromHomePanel(to: url, visitType: .link, isGoogleTopSite: false)
+            navigationHandler?.navigateFromHomePanel(
+                to: url,
+                visitType: .bookmark,
+                isGoogleTopSite: type.isGoogleTopSite ?? false
+            )
         }
     }
 

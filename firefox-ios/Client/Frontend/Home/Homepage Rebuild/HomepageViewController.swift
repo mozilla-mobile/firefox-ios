@@ -371,6 +371,15 @@ final class HomepageViewController: UIViewController,
             return
         }
         switch item {
+        case .topSite(let state):
+            store.dispatch(
+                NavigationBrowserAction(
+                    url: state.site.url.asURL,
+                    isGoogleTopSite: state.isGoogleURL,
+                    windowUUID: self.windowUUID,
+                    actionType: NavigationBrowserActionType.tapOnCell
+                )
+            )
         case .pocket(let story):
             store.dispatch(
                 NavigationBrowserAction(
