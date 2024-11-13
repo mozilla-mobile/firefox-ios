@@ -108,7 +108,7 @@ struct CustomUserAgentConstant {
         "yahoo.com": defaultMobileUA,
         "disneyplus.com": customDesktopUA
     ]
-    
+
     static let customDesktopUAForDomain = [
         "firefox.com": defaultMobileUA
     ]
