@@ -45,7 +45,7 @@ class UrlBarTests: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         // The URL bar is empty on the new tab
         let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
-        XCTAssertEqual(url.value as! String, "Search or enter address")
+        XCTAssertEqual(url.value as? String, "Search or enter address")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306887

@@ -1207,6 +1207,7 @@
 		BD57D9A729D4C42B00039394 /* ZoomLevelStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD57D9A629D4C42B00039394 /* ZoomLevelStoreTests.swift */; };
 		BD6B361E2B3C2511005E5345 /* CircularProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD6B361D2B3C2511005E5345 /* CircularProgressView.swift */; };
 		BD6CC84229CDDA3400546A5D /* ZoomLevelStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD6CC84129CDDA3400546A5D /* ZoomLevelStore.swift */; };
+		BDD262562CE3AC8200DF2C62 /* PrivacyWindowHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD262552CE3AC8200DF2C62 /* PrivacyWindowHelper.swift */; };
 		C2200A6A2B7D148C00DC062A /* ContentBlockerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2200A692B7D148C00DC062A /* ContentBlockerTests.swift */; };
 		C22753402A3C9E1300B9C0D1 /* WebsiteDataManagementViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C227533F2A3C9E1300B9C0D1 /* WebsiteDataManagementViewModel.swift */; };
 		C2296FCC2A601C190046ECA6 /* IntensityVisualEffectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2296FCB2A601C190046ECA6 /* IntensityVisualEffectView.swift */; };
@@ -8074,6 +8075,7 @@
 		BD7B4C6BBA14B1437A321E78 /* hi-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hi-IN"; path = "hi-IN.lproj/3DTouchActions.strings"; sourceTree = "<group>"; };
 		BDB24F4C850C4A269C205FDF /* br */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = br; path = br.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		BDB444F281416E39E6A11588 /* af */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = af; path = af.lproj/Menu.strings; sourceTree = "<group>"; };
+		BDD262552CE3AC8200DF2C62 /* PrivacyWindowHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyWindowHelper.swift; sourceTree = "<group>"; };
 		BDF24048A0CB24CA7CBDB0AF /* hsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hsb; path = hsb.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		BE3B484FBA5F1ECC0994D694 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		BE7C456B81F81CACE2AC654A /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
@@ -10409,6 +10411,7 @@
 				962F39492672D57A006BDA2A /* BookmarkItemsHelper.swift */,
 				39A359E31BFCCE94006B9E87 /* UserActivityHandler.swift */,
 				E18259DE29B25E4F00E6BE76 /* UserNotificationCenterProtocol.swift */,
+				BDD262552CE3AC8200DF2C62 /* PrivacyWindowHelper.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -16745,6 +16748,7 @@
 				EB98550124226EF70040F24B /* AppDelegate+SyncSentTabs.swift in Sources */,
 				744ED5611DBFEB8D00A2B5BE /* MailtoLinkHandler.swift in Sources */,
 				8A720C622A4CBB370003018A /* SupportSettingsDelegate.swift in Sources */,
+				BDD262562CE3AC8200DF2C62 /* PrivacyWindowHelper.swift in Sources */,
 				DF1E6AAB2A976FE7000D4854 /* FakespotNoAnalysisCardView.swift in Sources */,
 				DA4F826729AD221600189590 /* ZoomPageBar.swift in Sources */,
 				59A68E0B4ABBF55E14819668 /* LegacyBookmarksPanel.swift in Sources */,
@@ -25665,7 +25669,7 @@
 			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
 			requirement = {
 				kind = exactVersion;
-				version = 8.36.0;
+				version = 8.21.0;
 			};
 		};
 		5A984D322C8A31A0007938C9 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {

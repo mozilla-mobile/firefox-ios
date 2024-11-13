@@ -139,131 +139,61 @@ class RustRemoteTabsTests: XCTestCase {
     }
 
     func testAddRemoteCommand() {
-        mockTabs.commandQueue?.getUnsentCommands { getResult in
-            switch getResult {
-            case .success(let commands):
-                // checking that the command queue is empty
-                XCTAssert(commands.isEmpty)
+        let commands = mockTabs.tabsCommandQueue!.getUnsentCommands()
+        XCTAssert(commands.isEmpty)
 
-                // adding the record to the command queue
-                let deviceId = "AAAAAA"
-                let url = "https://test.com"
-                self.mockTabs.commandQueue?.addRemoteCommand(deviceId: deviceId, command: .closeTab(url: url)) { addResult in
-                    switch addResult {
-                    case .success(let didAddCommand):
-                        XCTAssert(didAddCommand)
+        // adding the record to the command queue
+        let deviceId = "AAAAAA"
+        let url = "https://test.com"
+        self.mockTabs.tabsCommandQueue?.addRemoteCommand(deviceId: deviceId, command: .closeTab(url: url))
 
-                        // checking that the command queue has the added record
-                        self.mockTabs.commandQueue?.getUnsentCommands { getResult2 in
-                            switch getResult2 {
-                            case .success(let commands2):
-                                XCTAssertEqual(commands2.count, 1)
-                                XCTAssertEqual(commands2[0].deviceId, deviceId)
-                            case .failure(let error):
-                                XCTFail("Expected to get unsent commands successfully after add \(error)")
-                            }
-                        }
-                    case .failure(let error):
-                        XCTFail("Expected to add a command successfully \(error)")
-                    }
-                }
-            case .failure(let error):
-                XCTFail("Expected to get unsent commands successfully \(error)")
-            }
-        }
+        // checking that the command queue has the added record
+        let commands2 = self.mockTabs.tabsCommandQueue!.getUnsentCommands()
+        XCTAssertEqual(commands2.count, 1)
+        XCTAssertEqual(commands2[0].deviceId, deviceId)
     }
 
     func testRemoveRemoteCommand() {
         // adding the record to the command queue
         let deviceId = "BBBBBB"
         let url = "https://test.com"
+        self.mockTabs.tabsCommandQueue!.addRemoteCommand(deviceId: deviceId, command: .closeTab(url: url))
 
-        self.mockTabs.commandQueue?.addRemoteCommand(deviceId: deviceId, command: .closeTab(url: url)) { addResult in
-            switch addResult {
-            case .success(let didAddCommand):
-                XCTAssertTrue(didAddCommand)
+        // checking that the command queue has the added record
+        let commands = self.mockTabs.tabsCommandQueue!.getUnsentCommands()
 
-                // checking that the command queue has the added record
-                self.mockTabs.commandQueue?.getUnsentCommands { getResult in
-                    switch getResult {
-                    case .success(let commands):
-                        XCTAssertEqual(commands.count, 1)
-                        XCTAssertEqual(commands[0].deviceId, deviceId)
+        XCTAssertEqual(commands.count, 1)
+        XCTAssertEqual(commands[0].deviceId, deviceId)
 
-                        // removing the record from the command queue
-                        self.mockTabs.commandQueue?.removeRemoteCommand(deviceId: deviceId,
-                                                                        command: .closeTab(url: url)) { removeResult in
-                            switch removeResult {
-                            case .success(let didRemove):
-                                XCTAssert(didRemove)
+        // removing the record from the command queue
+        self.mockTabs.tabsCommandQueue!.removeRemoteCommand(deviceId: deviceId, command: .closeTab(url: url))
 
-                                // checking that record is removed from command queue
-                                self.mockTabs.commandQueue?.getUnsentCommands { getResult2 in
-                                    switch getResult2 {
-                                    case .success(let commands2):
-                                        XCTAssert(commands2.isEmpty)
-                                    case .failure(let error):
-                                        XCTFail("Expected to get unsent commands after remove successfully \(error)")
-                                    }
-                                }
-                            case .failure(let error):
-                                XCTFail("Expected to remove command successfully \(error)")
-                            }
-                        }
-                    case .failure(let error):
-                        XCTFail("Expected to get unsent commands successfully \(error)")
-                    }
-                }
-            case .failure(let error):
-                XCTFail("Expected to add a command successfully \(error)")
-            }
-        }
+        // checking that record is removed from command queue
+        let commands2 = self.mockTabs.tabsCommandQueue!.getUnsentCommands()
+        XCTAssert(commands2.isEmpty)
     }
 
     func testSetPendingCommandsSent() {
         // adding the record to the command queue
         let deviceId = "CCCCC"
         let url = "https://test.com"
+        mockTabs.tabsCommandQueue!.addRemoteCommand(deviceId: deviceId, command: .closeTab(url: url))
 
-        mockTabs.commandQueue?.addRemoteCommand(deviceId: deviceId, command: .closeTab(url: url)) { addResult in
-            switch addResult {
-            case .success(let didAddCommand):
-                XCTAssertTrue(didAddCommand)
+        // retrieving unsent commands
+        let commands = self.mockTabs.tabsCommandQueue!.getUnsentCommands()
+        XCTAssertEqual(commands.count, 1)
+        XCTAssertEqual(commands[0].deviceId, deviceId)
 
-                // retrieving unsent commands
-                self.mockTabs.commandQueue?.getUnsentCommands { getResult in
-                    switch getResult {
-                    case .success(let commands):
-                        XCTAssertEqual(commands.count, 1)
-                        XCTAssertEqual(commands[0].deviceId, deviceId)
+        // setting command as sent
+        let command = PendingCommand(deviceId: deviceId,
+                                     command: .closeTab(url: url),
+                                     timeRequested: Date().toMillisecondsSince1970(),
+                                     timeSent: nil)
+        self.mockTabs.tabsCommandQueue!.setPendingCommandsSent(deviceId: deviceId, commands: [command])
 
-                        // setting command as sent
-                        let command = PendingCommand(deviceId: deviceId,
-                                                     command: .closeTab(url: url),
-                                                     timeRequested: Date().toMillisecondsSince1970(),
-                                                     timeSent: nil)
-                        self.mockTabs.commandQueue?.setPendingCommandsSent(deviceId: deviceId,
-                                                                           commands: [command]) { errors in
-                            XCTAssert(errors.isEmpty)
-
-                            // retrieving unsent commands
-                            self.mockTabs.commandQueue?.getUnsentCommands { getResult2 in
-                                switch getResult2 {
-                                case .success(let commands):
-                                    XCTAssert(commands.isEmpty)
-                                case .failure(let error):
-                                    XCTFail("Expected to retrieve unsent commands successfully \(error)")
-                                }
-                            }
-                        }
-                    case .failure(let error):
-                        XCTFail("Expected to retrieve added unsent command successfully \(error)")
-                    }
-                }
-            case .failure(let error):
-                XCTFail("Expected to add a command successfully \(error)")
-            }
-        }
+         // retrieving unsent commands
+        let commands2 = self.mockTabs.tabsCommandQueue!.getUnsentCommands()
+        XCTAssert(commands2.isEmpty)
     }
 
     func testGetUnsentCommandUrlsByDeviceId() {
@@ -271,32 +201,40 @@ class RustRemoteTabsTests: XCTestCase {
         let deviceId = "DDDD"
         let url = "https://test.com"
         let url2 = "https://test2.com"
+        mockTabs.tabsCommandQueue!.addRemoteCommand(deviceId: deviceId, command: .closeTab(url: url))
 
-        mockTabs.commandQueue?.addRemoteCommand(deviceId: deviceId, command: .closeTab(url: url)) { addResult in
-            switch addResult {
-            case .success(let didAddCommand):
-                XCTAssert(didAddCommand)
+        // adding another record to the command queue
+        self.mockTabs.tabsCommandQueue!.addRemoteCommand(deviceId: deviceId, command: .closeTab(url: url2))
 
-                // adding another record to the command queue
-                self.mockTabs.commandQueue?.addRemoteCommand(deviceId: deviceId,
-                                                             command: .closeTab(url: url2)) { addResult2 in
-                    switch addResult2 {
-                    case .success(let didAddCommit2):
-                        XCTAssert(didAddCommit2)
+        // getting unsent command urls
+        self.mockTabs.getUnsentCommandUrlsByDeviceId(deviceId: deviceId) { urls in
+            XCTAssertEqual(urls.count, 2)
+            XCTAssert(urls.contains(url))
+            XCTAssert(urls.contains(url2))
+        }
+    }
 
-                        // getting unsent command urls
-                        self.mockTabs.getUnsentCommandUrlsByDeviceId(deviceId: deviceId) { urls in
-                            XCTAssertEqual(urls.count, 2)
-                            XCTAssert(urls.contains(url))
-                            XCTAssert(urls.contains(url2))
-                        }
-                    case .failure(let error):
-                        XCTFail("Expected to add second command successfully \(error)")
-                    }
-                }
-            case .failure(let error):
-                XCTFail("Expected to add a command succesfully \(error)")
-            }
+    func testGetSentCommands() {
+        let commandUrl1 = "https://test3.com"
+        let commandUrl2 = "https://test4.com"
+        let unsentCommandUrls = [commandUrl1]
+        let command1 = PendingCommand(deviceId: "EEEEEE",
+                                      command: .closeTab(url: commandUrl1),
+                                      timeRequested: Date().toMillisecondsSince1970(),
+                                      timeSent: nil)
+        let command2 = PendingCommand(deviceId: "EEEEEE",
+                                      command: .closeTab(url: commandUrl2),
+                                      timeRequested: Date().toMillisecondsSince1970(),
+                                      timeSent: nil)
+        let commands = [command1, command2]
+
+        let sentCommands = filterSentCommands(unsentCommandUrls: unsentCommandUrls, commands: commands)
+
+        XCTAssertEqual(sentCommands.count, 1)
+
+        switch sentCommands[0].command {
+        case .closeTab(let url):
+            XCTAssertEqual(url, commandUrl2)
         }
     }
 }
