@@ -4472,13 +4472,13 @@ extension String {
                 comment: "When a user shares a link to social media, this is the shared text they'll see in the social media app. The first parameter is the shared website's URL. The second parameter is the Firefox app name. The third parameter is the link to download the Firefox app.")
 
             public static let SocialSettingsToggleTitle = MZLocalizedString(
-                key: "SentFromFirefox.SocialShare.WhatsApp.SettingsToggle.Title.v134",
+                key: "SentFromFirefox.SocialShare.SettingsToggle.Title.v134",
                 tableName: "SocialShare",
                 value: "Include %1$@ Download Link on %2$@ Shares",
                 comment: "On the Settings screen, this is the title text for a toggle which controls adding additional text to links shared to social media. The first parameter is the Firefox app name. The second parameter is the social media app name (e.g. WhatsApp).")
 
             public static let SocialSettingsToggleSubtitle = MZLocalizedString(
-                key: "SentFromFirefox.SocialShare.WhatsApp.SettingsToggle.Subtitle.v134",
+                key: "SentFromFirefox.SocialShare.SettingsToggle.Subtitle.v134",
                 tableName: "SocialShare",
                 value: "Spread the word about %1$@ every time you share a link on %2$@.",
                 comment: "On the Settings screen, this is the subtitle text for a toggle which controls adding additional text to links shared to social media. The first parameter is the Firefox app name. The second parameter is the social media app name (e.g. WhatsApp).")
