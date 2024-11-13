@@ -27,12 +27,12 @@ final class SearchEngineSelectionMiddlewareTests: XCTestCase, StoreTestUtility {
         mockSearchEnginesManager = MockSearchEnginesManager(searchEngines: mockSearchEngines)
 
         // We must reset the global mock store prior to each test
-        setupTestingStore()
+        setupStore()
     }
 
     override func tearDown() {
         DependencyHelperMock().reset()
-        resetTestingStore()
+        resetStore()
         super.tearDown()
     }
 
@@ -92,14 +92,14 @@ final class SearchEngineSelectionMiddlewareTests: XCTestCase, StoreTestUtility {
         )
     }
 
-    func setupTestingStore() {
+    func setupStore() {
         mockStore = MockStoreForMiddleware(state: setupAppState())
-        StoreTestUtilityHelper.setupTestingStore(with: mockStore)
+        StoreTestUtilityHelper.setupStore(with: mockStore)
     }
 
     // In order to avoid flaky tests, we should reset the store
     // similar to production
-    func resetTestingStore() {
-        StoreTestUtilityHelper.resetTestingStore()
+    func resetStore() {
+        StoreTestUtilityHelper.resetStore()
     }
 }
