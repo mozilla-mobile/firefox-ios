@@ -1569,9 +1569,9 @@ extension String {
                 value: "Be careful. Something doesn’t look right.",
                 comment: "On error page, this is the title for generic error.")
             public static let Description = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.Description.v131",
+                key: "NativeErrorPage.GenericError.Description.v134",
                 tableName: "NativeErrorPage",
-                value: "An SSL error has occurred and a secure connection to the server cannot be made.",
+                value: "The owner of %@ hasn’t set it up properly and a secure connection can’t be created.",
                 comment: "On error page, this is the description for generic error.")
         }
     }
