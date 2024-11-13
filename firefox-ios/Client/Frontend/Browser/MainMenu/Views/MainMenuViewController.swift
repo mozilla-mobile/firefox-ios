@@ -376,8 +376,12 @@ class MainMenuViewController: UIViewController,
             return false
         }
 
-        // Don't display CFR for fresh installs
+        // Don't display CFR for fresh installs for users that never saw before the photon main menu
         if InstallType.get() == .fresh {
+            if let photonMainMenuShown = profile.prefs.boolForKey(PrefsKeys.PhotonMainMenuShown),
+               photonMainMenuShown {
+                return viewProvider.shouldPresentContextualHint() ? true : false
+            }
             viewProvider.markContextualHintPresented()
             return false
         }

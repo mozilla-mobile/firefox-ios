@@ -2332,7 +2332,8 @@ class BrowserViewController: UIViewController,
         menuHelper.navigationHandler = navigationHandler
 
         updateZoomPageBarVisibility(visible: false)
-        menuHelper.getToolbarActions(navigationController: navigationController) { actions in
+        menuHelper.getToolbarActions(navigationController: navigationController) { [weak self] actions in
+            guard let self else { return }
             let shouldInverse = PhotonActionSheetViewModel.hasInvertedMainMenu(
                 trait: self.traitCollection,
                 isBottomSearchBar: self.isBottomSearchBar
@@ -2343,6 +2344,9 @@ class BrowserViewController: UIViewController,
                 isMainMenu: true,
                 isMainMenuInverted: shouldInverse
             )
+            if self.profile.prefs.boolForKey(PrefsKeys.PhotonMainMenuShown) == nil {
+                self.profile.prefs.setBool(true, forKey: PrefsKeys.PhotonMainMenuShown)
+            }
             self.presentSheetWith(viewModel: viewModel, on: self, from: button)
         }
     }
