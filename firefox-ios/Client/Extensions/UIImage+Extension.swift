@@ -29,7 +29,7 @@ extension UIImage {
 
         return newImage
     }
-    
+
     /// Trys to load an `UIImage` from the content of a gif in the main `Bundle`
     ///
     /// The `frameDuration` it's set to 0.1 seconds as default but maybe adjusted depending on the loaded gif.

@@ -40,7 +40,7 @@ class PullRefreshView: UIView,
         view.isHidden = true
         view.contentMode = .scaleAspectFill
     }
-    
+
     private var isIpad: Bool {
         traitCollection.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular
     }
@@ -102,12 +102,12 @@ class PullRefreshView: UIView,
                 self?.triggerReloadAnimation()
                 return
             }
-            
+
             let threshold = (self?.computeShrinkingFactor() ?? 1.0) * UX.blinkProgressViewStandardThreshold
-            
+
             if scrollView.contentOffset.y < -threshold {
                 self?.blinkBackgroundProgressViewIfNeeded()
-                
+
                 DispatchQueue.main.asyncAfter(deadline: .now() + UX.easterEggDelayInSeconds) {
                     self?.showEasterEgg()
                 }
@@ -115,7 +115,7 @@ class PullRefreshView: UIView,
                 // This check prevents progressView re blink when scrolling the pull refresh before the web view is loaded
                 self?.restoreBackgroundProgressViewIfNeeded()
                 let rotationAngle = -(scrollView.contentOffset.y) / threshold
-                
+
                 UIView.animate(withDuration: UX.rotateProgressViewAnimationDuration) {
                     self?.progressView.transform = CGAffineTransform(rotationAngle: rotationAngle * 1.5)
                 }
@@ -140,10 +140,10 @@ class PullRefreshView: UIView,
     private func blinkBackgroundProgressViewIfNeeded() {
         guard !refreshIconHasFocus else { return }
         refreshIconHasFocus = true
-        
+
         let shrinkFactor = computeShrinkingFactor()
         let blinkTransform = UX.progressViewAnimatedBackgroundBlinkTransform
-        
+
         UIView.animate(withDuration: UX.blinkAnimation.duration,
                        delay: 0,
                        usingSpringWithDamping: UX.blinkAnimation.damping,
