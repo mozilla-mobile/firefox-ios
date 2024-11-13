@@ -9,8 +9,8 @@ public protocol DispatchStore {
     func dispatch(_ action: Action)
 }
 
-public protocol DefaultDispatchStore: DispatchStore {
-    associatedtype State: StateType
+public protocol DefaultDispatchStore<State>: DispatchStore where State: StateType {
+    associatedtype State
 
     var state: State { get }
 

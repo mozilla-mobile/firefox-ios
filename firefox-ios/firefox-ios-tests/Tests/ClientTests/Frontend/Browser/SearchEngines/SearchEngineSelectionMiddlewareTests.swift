@@ -7,47 +7,67 @@ import XCTest
 
 @testable import Client
 
-final class SearchEngineSelectionMiddlewareTests: XCTestCase {
+final class SearchEngineSelectionMiddlewareTests: XCTestCase, StoreTestUtility {
+    var mockStore: MockStoreForMiddleware<AppState>!
     var mockProfile: MockProfile!
-    var mockSearchEngines: [OpenSearchEngine]!
+    var mockSearchEnginesManager: SearchEnginesManagerProvider!
+    let mockSearchEngines: [OpenSearchEngine] = [
+        OpenSearchEngineTests.generateOpenSearchEngine(type: .wikipedia, withImage: UIImage()),
+        OpenSearchEngineTests.generateOpenSearchEngine(type: .youtube, withImage: UIImage()),
+    ]
+    var mockSearchEngineModels: [SearchEngineModel] {
+        return mockSearchEngines.map({ $0.generateModel() })
+    }
 
     override func setUp() {
         super.setUp()
+
         DependencyHelperMock().bootstrapDependencies()
         mockProfile = MockProfile()
-        mockSearchEngines = [
-            OpenSearchEngineTests.generateOpenSearchEngine(type: .wikipedia, withImage: UIImage()),
-            OpenSearchEngineTests.generateOpenSearchEngine(type: .youtube, withImage: UIImage()),
-        ]
+        mockSearchEnginesManager = MockSearchEnginesManager(searchEngines: mockSearchEngines)
+
+        // We must reset the global mock store prior to each test
+        setupTestingStore()
     }
 
     override func tearDown() {
         DependencyHelperMock().reset()
+        resetTestingStore()
         super.tearDown()
     }
 
-    func testDismissMenuAction() throws {
-        let mockSearchEnginesManager = SearchEnginesManager(prefs: mockProfile.prefs, files: mockProfile.files)
-        mockSearchEnginesManager.orderedEngines = mockSearchEngines
-
+    func testViewDidLoad_dispatchesDidLoadSearchEngines() throws {
         let subject = createSubject(mockSearchEnginesManager: mockSearchEnginesManager)
         let action = getAction(for: .viewDidLoad)
 
-        let testStore = Store(
-            state: AppState(),
-            reducer: AppState.reducer,
-            middlewares: [subject.searchEngineSelectionProvider]
-        )
+        subject.searchEngineSelectionProvider(AppState(), action)
 
-        testStore.dispatch(action)
+        guard let actionCalled = mockStore.dispatchCalled.withActions.first as? SearchEngineSelectionAction,
+              case SearchEngineSelectionActionType.didLoadSearchEngines = actionCalled.actionType else {
+            XCTFail("Unexpected action type dispatched")
+            return
+        }
+        XCTAssertEqual(mockStore.dispatchCalled.numberOfTimes, 1)
+        XCTAssertEqual(actionCalled.searchEngines, mockSearchEngineModels)
+    }
 
-        // TODO FXIOS-10481 Flesh out middleware tests once we have decided on best practices
-        throw XCTSkip("Need Store architecture changes if we want to implement tests")
+    func testDidTapSearchEngine_dispatchesDidStartEditingUrl() throws {
+        let subject = createSubject(mockSearchEnginesManager: mockSearchEnginesManager)
+        let action = getAction(for: .didTapSearchEngine)
+
+        subject.searchEngineSelectionProvider(AppState(), action)
+
+        guard let actionCalled = mockStore.dispatchCalled.withActions.first as? ToolbarAction,
+              case ToolbarActionType.didStartEditingUrl = actionCalled.actionType else {
+            XCTFail("Unexpected action type dispatched")
+            return
+        }
+        XCTAssertEqual(mockStore.dispatchCalled.numberOfTimes, 1)
     }
 
     // MARK: - Helpers
 
-    private func createSubject(mockSearchEnginesManager: SearchEnginesManager) -> SearchEngineSelectionMiddleware {
+    private func createSubject(mockSearchEnginesManager: SearchEnginesManagerProvider) -> SearchEngineSelectionMiddleware {
         return SearchEngineSelectionMiddleware(profile: mockProfile, searchEnginesManager: mockSearchEnginesManager)
     }
 
@@ -56,5 +76,30 @@ final class SearchEngineSelectionMiddlewareTests: XCTestCase {
             windowUUID: .XCTestDefaultUUID,
             actionType: actionType
         )
+    }
+
+    // MARK: StoreTestUtility
+
+    func setupAppState() -> AppState {
+        return AppState(
+            activeScreens: ActiveScreensState(
+                screens: [
+                    .searchEngineSelection(
+                        SearchEngineSelectionState(windowUUID: .XCTestDefaultUUID)
+                    )
+                ]
+            )
+        )
+    }
+
+    func setupTestingStore() {
+        mockStore = MockStoreForMiddleware(state: setupAppState())
+        StoreTestUtilityHelper.setupTestingStore(with: mockStore)
+    }
+
+    // In order to avoid flaky tests, we should reset the store
+    // similar to production
+    func resetTestingStore() {
+        StoreTestUtilityHelper.resetTestingStore()
     }
 }

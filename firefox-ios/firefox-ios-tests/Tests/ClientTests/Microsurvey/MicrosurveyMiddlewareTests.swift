@@ -9,7 +9,6 @@ import XCTest
 @testable import Client
 
 final class MicrosurveyMiddlewareIntegrationTests: XCTestCase, StoreTestUtility {
-    let storeUtilityHelper = StoreTestUtilityHelper()
     override func setUp() {
         super.setUp()
         Glean.shared.resetGlean(clearStores: true)
@@ -118,7 +117,7 @@ final class MicrosurveyMiddlewareIntegrationTests: XCTestCase, StoreTestUtility 
     }
 
     func setupTestingStore() {
-        storeUtilityHelper.setupTestingStore(
+        StoreTestUtilityHelper.setupTestingStore(
             with: setupAppState(),
             middlewares: [MicrosurveyMiddleware().microsurveyProvider]
         )
@@ -127,6 +126,6 @@ final class MicrosurveyMiddlewareIntegrationTests: XCTestCase, StoreTestUtility 
     // In order to avoid flaky tests, we should reset the store
     // similar to production
     func resetTestingStore() {
-        storeUtilityHelper.resetTestingStore()
+        StoreTestUtilityHelper.resetTestingStore()
     }
 }

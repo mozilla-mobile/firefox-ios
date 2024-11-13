@@ -9,6 +9,8 @@ import Storage
 
 protocol SearchEnginesManagerProvider {
     var defaultEngine: OpenSearchEngine? { get }
+    var orderedEngines: [OpenSearchEngine]! { get }
+    func getOrderedEngines(completion: @escaping ([OpenSearchEngine]) -> Void)
 }
 
 protocol SearchEngineDelegate: AnyObject {
