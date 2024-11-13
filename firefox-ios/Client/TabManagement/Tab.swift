@@ -369,10 +369,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
             guard nightMode != oldValue else { return }
 
             webView?.evaluateJavascriptInDefaultContentWorld("window.__firefox__.NightMode.setEnabled(\(nightMode))")
-            // For WKWebView background color to take effect, isOpaque must be false,
-            // which is counter-intuitive. Default is true. The color is previously
-            // set to black in the WKWebView init.
-            webView?.isOpaque = !nightMode
 
             UserScriptManager.shared.injectUserScriptsIntoWebView(
                 webView,
@@ -422,6 +418,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
     /// Any time a tab tries to make requests to display a Javascript Alert and we are not the active
     /// tab instance, queue it for later until we become foregrounded.
     private var alertQueue = [JSAlertInfo]()
+
+    var onLoading: VoidReturnCallback?
+    private var webViewLoadingObserver: NSKeyValueObservation?
 
     var profile: Profile
 
@@ -522,7 +521,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
             configuration.allowsInlineMediaPlayback = true
             let webView = TabWebView(frame: .zero, configuration: configuration, windowUUID: windowUUID)
             webView.configure(delegate: self, navigationDelegate: navigationDelegate)
-
             webView.accessibilityLabel = .WebViewAccessibilityLabel
             webView.allowsBackForwardNavigationGestures = true
             webView.allowsLinkPreview = true
@@ -531,9 +529,6 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
             if #available(iOS 16.4, *) {
                 webView.isInspectable = true
             }
-
-            // Night mode enables this by toggling WKWebView.isOpaque, otherwise this has no effect.
-            webView.backgroundColor = .black
 
             // Turning off masking allows the web content to flow outside of the scrollView's frame
             // which allows the content appear beneath the toolbars in the BrowserViewController
@@ -580,6 +575,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
             )
 
             tabDelegate?.tab(self, didCreateWebView: webView)
+            webViewLoadingObserver = webView.observe(\.isLoading) { [weak self] _, _ in
+                self?.onLoading?()
+            }
         }
     }
 
@@ -594,6 +592,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
     }
 
     deinit {
+        webViewLoadingObserver?.invalidate()
         webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
         webView?.removeObserver(self, forKeyPath: KVOConstants.title.rawValue)
         webView?.removeObserver(self, forKeyPath: KVOConstants.hasOnlySecureContent.rawValue)
@@ -911,6 +910,7 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
     func applyTheme(theme: Theme) {
         UITextField.appearance().keyboardAppearance = theme.type.keyboardAppearence(isPrivate: isPrivate)
         webView?.applyTheme(theme: theme)
+        webView?.underPageBackgroundColor = nightMode ? .black : nil
     }
 
     // MARK: - Static Helpers
