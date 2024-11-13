@@ -71,25 +71,30 @@ final class NativeErrorPageViewController: UIViewController,
         stackView.distribution = .fill
     }
 
-    private lazy var logoImage: UIImageView = .build { imageView in
+    private lazy var foxImage: UIImageView = .build { imageView in
         imageView.image = UIImage(
             named: ImageIdentifiers.NativeErrorPage.noInternetConnection
         )
         imageView.contentMode = .scaleAspectFit
+        imageView.isAccessibilityElement = false
+        imageView.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.foxImage
     }
 
     private lazy var titleLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = FXFontStyles.Bold.title2.scaledFont()
         label.numberOfLines = 0
-        label.textAlignment = .left
+        label.textAlignment = .natural
+        label.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.titleLabel
+        label.accessibilityTraits = .header
     }
 
     private lazy var errorDescriptionLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
-        label.textAlignment = .left
+        label.textAlignment = .natural
+        label.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.errorDescriptionLabel
     }
 
     private lazy var reloadButton: PrimaryRoundedButton = .build { button in
@@ -188,11 +193,10 @@ final class NativeErrorPageViewController: UIViewController,
         showViewForCurrentOrientation()
     }
 
-    // TODO: FXIOS-9639 #21237 [a11y] Verify accessibility for Voice Over, Dynamic text
     private func configureUI() {
         let viewModel = PrimaryRoundedButtonViewModel(
             title: .NativeErrorPage.ButtonLabel,
-            a11yIdentifier: ""
+            a11yIdentifier: AccessibilityIdentifiers.NativeErrorPage.reloadButton
         )
         reloadButton.configure(
             viewModel: viewModel
@@ -204,7 +208,7 @@ final class NativeErrorPageViewController: UIViewController,
         textStack.addArrangedSubview(errorDescriptionLabel)
         commonContainer.addArrangedSubview(textStack)
         commonContainer.addArrangedSubview(reloadButton)
-        scrollContainer.addArrangedSubview(logoImage)
+        scrollContainer.addArrangedSubview(foxImage)
         scrollContainer.addArrangedSubview(commonContainer)
         scrollView.addSubview(scrollContainer)
         view.addSubview(scrollView)
@@ -244,7 +248,7 @@ final class NativeErrorPageViewController: UIViewController,
                 equalTo: scrollView.bottomAnchor,
                 constant: self.isLandscape ? UX.landscapePadding.bottom : UX.portraitPadding.bottom
             ),
-            logoImage.widthAnchor.constraint(equalToConstant: UX.logoSizeWidth)
+            foxImage.widthAnchor.constraint(equalToConstant: UX.logoSizeWidth)
         ]
 
         iPadContraintsList = [
@@ -264,7 +268,7 @@ final class NativeErrorPageViewController: UIViewController,
                 equalTo: scrollView.bottomAnchor,
                 constant: UX.iPadPadding.bottom
             ),
-            logoImage.widthAnchor.constraint(equalToConstant: UX.logoSizeWidthiPad),
+            foxImage.widthAnchor.constraint(equalToConstant: UX.logoSizeWidthiPad),
             reloadButton.widthAnchor.constraint(
                 equalTo: commonContainer.widthAnchor,
                 multiplier: UX.reloadButtonIpadMultiplier
