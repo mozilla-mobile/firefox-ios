@@ -98,11 +98,16 @@ public final class NavigationHeaderView: UIView {
 
     public func setupAccessibility(closeButtonA11yLabel: String,
                                    closeButtonA11yId: String,
+                                   titleA11yId: String? = nil,
                                    backButtonA11yLabel: String,
                                    backButtonA11yId: String) {
         let closeButtonViewModel = CloseButtonViewModel(a11yLabel: closeButtonA11yLabel,
                                                         a11yIdentifier: closeButtonA11yId)
         closeButton.configure(viewModel: closeButtonViewModel)
+        if let titleA11yId {
+            titleLabel.isAccessibilityElement = true
+            titleLabel.accessibilityIdentifier = titleA11yId
+        }
         backButton.accessibilityIdentifier = backButtonA11yId
         backButton.accessibilityLabel = backButtonA11yLabel
     }
