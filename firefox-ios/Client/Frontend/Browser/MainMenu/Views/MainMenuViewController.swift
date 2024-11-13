@@ -380,12 +380,12 @@ class MainMenuViewController: UIViewController,
         if InstallType.get() == .fresh {
             if let photonMainMenuShown = profile.prefs.boolForKey(PrefsKeys.PhotonMainMenuShown),
                photonMainMenuShown {
-                return viewProvider.shouldPresentContextualHint() ? true : false
+                return viewProvider.shouldPresentContextualHint()
             }
             viewProvider.markContextualHintPresented()
             return false
         }
-        return viewProvider.shouldPresentContextualHint() ? true : false
+        return viewProvider.shouldPresentContextualHint()
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate
