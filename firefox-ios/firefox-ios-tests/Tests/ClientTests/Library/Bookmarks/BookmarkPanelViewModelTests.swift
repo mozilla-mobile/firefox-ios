@@ -95,15 +95,23 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
             parentGUID: BookmarkRoots.MenuFolderGUID,
             url: "https://www.firefox.com",
             title: "Firefox",
-            position: 0).uponQueue(.main) { result in
-            self.profile.places.countBookmarksInTrees(folderGuids: [BookmarkRoots.MenuFolderGUID]).uponQueue(.main) { res in
-                guard let bookmarkCount = res.successValue else { return }
-                XCTAssertEqual(bookmarkCount, 1, "Menu folder contains one bookmark")
+            position: 0
+        ).uponQueue(.main) { _ in
+            self.profile.places.countBookmarksInTrees(folderGuids: [BookmarkRoots.MenuFolderGUID]) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let bookmarkCount):
+                        XCTAssertEqual(bookmarkCount, 1, "Menu folder contains one bookmark")
 
-                subject.reloadData {
-                    XCTAssertNotNil(subject.bookmarkFolder)
-                    XCTAssertEqual(subject.bookmarkNodes.count, 1, "Mobile folder contains the local desktop folder")
-                    expectation.fulfill()
+                        subject.reloadData {
+                            XCTAssertNotNil(subject.bookmarkFolder)
+                            XCTAssertEqual(subject.bookmarkNodes.count, 1, "Mobile folder contains the local desktop folder")
+                            expectation.fulfill()
+                        }
+                    case .failure(let error):
+                        XCTFail("Failed to count bookmarks: \(error)")
+                        expectation.fulfill()
+                    }
                 }
             }
         }

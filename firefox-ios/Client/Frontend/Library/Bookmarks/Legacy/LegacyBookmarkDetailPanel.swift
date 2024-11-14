@@ -113,6 +113,8 @@ class LegacyBookmarkDetailPanel: SiteTableViewController, BookmarksRefactorFeatu
         button.addTarget(self, action: #selector(self.deleteBookmarkButtonTapped), for: .touchUpInside)
     }
 
+    private var logger: Logger
+
     // MARK: - Initializers
     convenience init(
         profile: Profile,
@@ -181,13 +183,15 @@ class LegacyBookmarkDetailPanel: SiteTableViewController, BookmarksRefactorFeatu
         bookmarkNodeType: BookmarkNodeType,
         parentBookmarkFolder: FxBookmarkNode,
         presentedFromToast fromToast: Bool = false,
-        bookmarkItemURL: String? = nil
+        bookmarkItemURL: String? = nil,
+        logger: Logger = DefaultLogger.shared
     ) {
         self.bookmarkNodeGUID = bookmarkNodeGUID
         self.bookmarkNodeType = bookmarkNodeType
         self.parentBookmarkFolder = parentBookmarkFolder
         self.isPresentedFromToast = fromToast
         self.bookmarkItemURL = bookmarkItemURL
+        self.logger = logger
 
         super.init(profile: profile, windowUUID: windowUUID)
 
@@ -255,8 +259,8 @@ class LegacyBookmarkDetailPanel: SiteTableViewController, BookmarksRefactorFeatu
         if profile.isShutdown { return }
         profile.places.getBookmarksTree(rootGUID: BookmarkRoots.RootGUID, recursive: true)
             .uponQueue(.main) { bookmarksTreeResult in
-            self.profile.places.countBookmarksInTrees(folderGuids: BookmarkRoots.DesktopRoots.map { $0 })
-                .uponQueue(.main) { bookmarksCountResult in
+            self.profile.places.countBookmarksInTrees(folderGuids: BookmarkRoots.DesktopRoots.map { $0 }) { bookmarksCountResult in
+                DispatchQueue.main.async {
                     guard let rootFolder = bookmarksTreeResult.successValue as? BookmarkFolderData else {
                         // TODO: Handle error case?
                         self.bookmarkFolders = []
@@ -271,7 +275,6 @@ class LegacyBookmarkDetailPanel: SiteTableViewController, BookmarksRefactorFeatu
                         // bookmarks cannot be stored directly within it.
                         if folder.guid != BookmarkRoots.RootGUID && folder.guid != self.bookmarkNodeGUID {
                             bookmarkFolders.append((folder, indent))
-                            //                            self.tableView.reloadData()
                         }
 
                         var folderChildren: [BookmarkNodeData]?
@@ -298,10 +301,14 @@ class LegacyBookmarkDetailPanel: SiteTableViewController, BookmarksRefactorFeatu
                             if !BookmarkRoots.DesktopRoots.contains(childFolder.guid) {
                                 addFolder(childFolder: childFolder)
                             } else {
-                                if let bookmarkCount = bookmarksCountResult.successValue,
-                                   (bookmarkCount > 0 && BookmarkRoots.DesktopRoots.contains(childFolder.guid))
-                                    || !self.isBookmarkRefactorEnabled {
-                                    addFolder(childFolder: childFolder)
+                                switch bookmarksCountResult {
+                                case .success(let bookmarkCount):
+                                    if (bookmarkCount > 0 && BookmarkRoots.DesktopRoots.contains(childFolder.guid))
+                                        || !self.isBookmarkRefactorEnabled {
+                                        addFolder(childFolder: childFolder)
+                                    }
+                                case .failure(let error):
+                                    self.logger.log("Error counting bookmarks: \(error)", level: .debug, category: .library)
                                 }
                             }
                         }
@@ -311,6 +318,7 @@ class LegacyBookmarkDetailPanel: SiteTableViewController, BookmarksRefactorFeatu
                     self.tableView.reloadData()
                 }
             }
+        }
     }
 
     func updateSaveButton() {

@@ -46,9 +46,7 @@ class BookmarksHandlerMock: BookmarksHandler {
         succeed()
     }
 
-    func countBookmarksInTrees(folderGuids: [GUID]) -> Deferred<Maybe<Int>> {
-        let deferred = Deferred<Maybe<Int>>()
-        deferred.fill(Maybe(success: 0))
-        return deferred
+    func countBookmarksInTrees(folderGuids: [GUID], completion: @escaping (Result<Int, Error>) -> Void) {
+        completion(.success(0))
     }
 }

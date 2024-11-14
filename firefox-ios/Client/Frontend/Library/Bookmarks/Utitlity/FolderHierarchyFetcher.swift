@@ -58,7 +58,7 @@ struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher, BookmarksRefactorF
 
     private func recursiveAddSubFolders(_ folder: BookmarkFolderData,
                                         folders: inout [Folder],
-                                        hasDesktopBookmarks: Bool = false,
+                                        hasDesktopBookmarks: Bool,
                                         indent: Int = 0) {
         if !BookmarkRoots.DesktopRoots.contains(folder.guid) || hasDesktopBookmarks || !isBookmarkRefactorEnabled {
             folders.append(Folder(title: folder.title, guid: folder.guid, indentation: indent))
@@ -76,13 +76,14 @@ struct DefaultFolderHierarchyFetcher: FolderHierarchyFetcher, BookmarksRefactorF
 
     private func countDesktopBookmarks() async -> Int? {
         return await withCheckedContinuation { continuation in
-            profile.places.countBookmarksInTrees(folderGuids: BookmarkRoots.DesktopRoots.map { $0 })
-                .uponQueue(.main) { bookmarksCountResult in
-                    var desktopBookmarksCount: Int?
-                    defer { continuation.resume(returning: desktopBookmarksCount) }
-                    guard let count = bookmarksCountResult.successValue else { return }
-                    desktopBookmarksCount = count
+            profile.places.countBookmarksInTrees(folderGuids: BookmarkRoots.DesktopRoots.map { $0 }) { result in
+                switch result {
+                case .success(let count):
+                    continuation.resume(returning: count)
+                case .failure:
+                    continuation.resume(returning: nil)
                 }
+            }
         }
     }
 }

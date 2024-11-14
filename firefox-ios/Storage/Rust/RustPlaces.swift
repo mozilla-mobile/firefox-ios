@@ -33,7 +33,7 @@ import struct MozillaAppServices.VisitTransitionSet
 public protocol BookmarksHandler {
     func getRecentBookmarks(limit: UInt, completion: @escaping ([BookmarkItemData]) -> Void)
     func getBookmarksTree(rootGUID: GUID, recursive: Bool) -> Deferred<Maybe<BookmarkNodeData?>>
-    func countBookmarksInTrees(folderGuids: [GUID]) -> Deferred<Maybe<Int>>
+    func countBookmarksInTrees(folderGuids: [GUID], completion: @escaping (Result<Int, Error>) -> Void)
     func updateBookmarkNode(
         guid: GUID,
         parentGUID: GUID?,
@@ -139,6 +139,7 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         return deferred
     }
 
+    @discardableResult
     private func withReader<T>(
         _ callback: @escaping(_ connection: PlacesReadConnection) throws -> T
     ) -> Deferred<Maybe<T>> {
@@ -201,9 +202,14 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         }
     }
 
-    public func countBookmarksInTrees(folderGuids: [GUID]) -> Deferred<Maybe<Int>> {
-        return withReader { connection in
-            return try connection.countBookmarksInTrees(folderGuids: folderGuids)
+    public func countBookmarksInTrees(folderGuids: [GUID], completion: @escaping (Result<Int, Error>) -> Void) {
+        withReader { connection in
+            do {
+                let count = try connection.countBookmarksInTrees(folderGuids: folderGuids)
+                completion(.success(count))
+            } catch {
+                completion(.failure(error))
+            }
         }
     }
 
