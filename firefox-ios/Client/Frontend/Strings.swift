@@ -4458,6 +4458,14 @@ extension String {
 
     // MARK: - Sent from Firefox / Share Link Experiment
     public struct SentFromFirefox {
+        public struct SocialMediaApp {
+            public static let WhatsApp = MZLocalizedString(
+                key: "SentFromFirefox.SocialMediaApp.WhatsApp.Title.v134",
+                tableName: "SocialMediaApp",
+                value: "WhatsApp",
+                comment: "The name of WhatsApp, a popular instant messaging and video calling app.")
+        }
+
         public struct SocialShare {
             public static let ShareMessageA = MZLocalizedString(
                 key: "SentFromFirefox.SocialShare.ShareMessageA.Title.v134",
@@ -4475,13 +4483,13 @@ extension String {
                 key: "SentFromFirefox.SocialShare.SettingsToggle.Title.v134",
                 tableName: "SocialShare",
                 value: "Include %1$@ Download Link on %2$@ Shares",
-                comment: "On the Settings screen, this is the title text for a toggle which controls adding additional text to links shared to social media. The first parameter is the Firefox app name. The second parameter is the social media app name (e.g. WhatsApp).")
+                comment: "On the Settings screen, this is the title text for a toggle which controls adding additional text to links shared to social media apps. The first parameter is the Firefox app name. The second parameter is the social media app name (e.g. WhatsApp).")
 
             public static let SocialSettingsToggleSubtitle = MZLocalizedString(
                 key: "SentFromFirefox.SocialShare.SettingsToggle.Subtitle.v134",
                 tableName: "SocialShare",
                 value: "Spread the word about %1$@ every time you share a link on %2$@.",
-                comment: "On the Settings screen, this is the subtitle text for a toggle which controls adding additional text to links shared to social media. The first parameter is the Firefox app name. The second parameter is the social media app name (e.g. WhatsApp).")
+                comment: "On the Settings screen, this is the subtitle text for a toggle which controls adding additional text to links shared to social media apps. The first parameter is the Firefox app name. The second parameter is the social media app name (e.g. WhatsApp).")
         }
     }
 
