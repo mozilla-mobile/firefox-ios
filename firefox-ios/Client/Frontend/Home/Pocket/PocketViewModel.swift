@@ -215,7 +215,7 @@ extension PocketViewModel: HomepageSectionHandler {
                                                                 for: indexPath) as? LegacyPocketStandardCell else {
                 logger.log("Failed to dequeue LegacyPocketStandardCell at indexPath: \(indexPath)",
                            level: .fatal,
-                           category: .homepage)
+                           category: .legacyHomepage)
                 return UICollectionViewCell()
             }
             let viewModel = pocketStoriesViewModels[indexPath.row]
@@ -227,7 +227,7 @@ extension PocketViewModel: HomepageSectionHandler {
                                                                 for: indexPath) as? PocketDiscoverCell else {
                 logger.log("Failed to dequeue PocketDiscoverCell at indexPath: \(indexPath)",
                            level: .fatal,
-                           category: .homepage)
+                           category: .legacyHomepage)
                 return UICollectionViewCell()
             }
             cell.configure(text: .FirefoxHomepage.Pocket.DiscoverMore, theme: theme)
