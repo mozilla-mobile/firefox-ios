@@ -197,13 +197,13 @@ class AddressesTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
         if updateCountry {
             let addressInfo = ["Test2", "test address2", "city test2, 100000"]
-            for i in addressInfo {
-                mozWaitForElementToExist(app.staticTexts[i])
+            for index in addressInfo {
+                mozWaitForElementToExist(app.staticTexts[index])
             }
         } else {
             let addressInfo = ["Test2", "test address2", "city test2, AL, 100000"]
-            for i in addressInfo {
-                mozWaitForElementToExist(app.staticTexts[i])
+            for index in addressInfo {
+                mozWaitForElementToExist(app.staticTexts[index])
             }
         }
     }
