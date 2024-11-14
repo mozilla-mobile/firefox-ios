@@ -191,6 +191,9 @@ public struct PrefsKeys {
     public static let splashScreenShownKey = "splashScreenShownKey"
 
     public static let PasswordGeneratorShown = "PasswordGeneratorShown"
+
+    // Represents whether or not the user has seen the photon main menu once, at least.
+    public static let PhotonMainMenuShown = "PhotonMainMenuShown"
 }
 
 public protocol Prefs {
