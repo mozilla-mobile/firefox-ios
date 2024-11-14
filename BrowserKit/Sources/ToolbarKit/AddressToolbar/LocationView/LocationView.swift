@@ -16,6 +16,7 @@ final class LocationView: UIView,
         static let gradientViewWidth: CGFloat = 40
         static let iconContainerCornerRadius: CGFloat = 8
         static let lockIconImageViewSize = CGSize(width: 40, height: 24)
+        static let iconContainerNoLockLeadingSpace: CGFloat = 16
     }
 
     private var urlAbsolutePath: String?
@@ -248,7 +249,10 @@ final class LocationView: UIView,
         removeContainerIcons()
         iconContainerStackView.addArrangedSubview(lockIconButton)
         updateURLTextFieldLeadingConstraint()
-        iconContainerStackViewLeadingConstraint?.constant = 0
+
+        let leadingConstraint = lockIconImageName == nil ? UX.iconContainerNoLockLeadingSpace : 0.0
+
+        iconContainerStackViewLeadingConstraint?.constant = leadingConstraint
         updateGradient()
     }
 
@@ -282,7 +286,7 @@ final class LocationView: UIView,
         urlTextField.text = text
 
         // Start overlay mode & select text when in edit mode with a search term
-        if shouldShowKeyboard == true && state.shouldSelectSearchTerm == true {
+        if shouldShowKeyboard, state.shouldSelectSearchTerm {
             DispatchQueue.main.async {
                 self.urlTextField.text = text
                 self.urlTextField.selectAll(nil)

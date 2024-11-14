@@ -15,6 +15,7 @@
     {
       "skippedTests" : [
         "ActivityStreamTest",
+        "AddressesTests",
         "AddressesTests\/testAddNewAddressAllFieldsFilled()",
         "AddressesTests\/testAddNewAddressCityFilled()",
         "AddressesTests\/testAddNewAddressEmailFilled()",
@@ -23,6 +24,8 @@
         "AddressesTests\/testAddNewAddressPhoneFilled()",
         "AddressesTests\/testAddNewAddressPostalCodeFilled()",
         "AddressesTests\/testAddNewAddressStreetAddressFilled()",
+        "AddressesTests\/testDeleteAddress()",
+        "AddressesTests\/testUpdateAllAddressFields()",
         "AuthenticationTest",
         "BookmarksTests",
         "BrowsingPDFTests",

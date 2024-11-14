@@ -54,7 +54,17 @@ class TestBrowserDB: XCTestCase {
         let results = db.runQuery("SELECT bmkUri, title FROM bookmarksLocal WHERE type = 1",
                                   args: nil,
                                   factory: { row in
-            (row[0] as! String, row[1] as! String)
+            guard let bmkUri = row[0] as? String else {
+                XCTFail("Failed to cast value for key 'bmkUri' to String.")
+                return ("", "")
+            }
+
+            guard let title = row[1] as? String else {
+                XCTFail("Failed to cast value for key 'title' to String.")
+                return (bmkUri, "")
+            }
+
+            return (bmkUri, title)
         }).value.successValue!
 
         // The bookmark with the long URL has been deleted.
@@ -79,8 +89,14 @@ class TestBrowserDB: XCTestCase {
 
         // Grab a pointer to the -shm so we can compare later.
         let shmAAttributes = try files.attributesForFileAt(relativePath: "foo.db-shm")
-        let creationA = shmAAttributes[FileAttributeKey.creationDate] as! Date
-        let inodeA = (shmAAttributes[FileAttributeKey.systemFileNumber] as! NSNumber).uintValue
+        guard let creationA = shmAAttributes[FileAttributeKey.creationDate] as? Date else {
+            XCTFail("Failed to cast value for key 'creationDate' to Date.")
+            return
+        }
+        guard let inodeA = (shmAAttributes[FileAttributeKey.systemFileNumber] as? NSNumber)?.uintValue else {
+            XCTFail("Failed to cast value for key 'systemFileNumber' to NSNumber.")
+            return
+        }
 
         XCTAssertFalse(files.exists("foo.db.bak.1"))
         XCTAssertFalse(files.exists("foo.db.bak.1-shm"))

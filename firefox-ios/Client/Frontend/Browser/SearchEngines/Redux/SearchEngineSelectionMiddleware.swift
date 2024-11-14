@@ -9,10 +9,10 @@ import ToolbarKit
 final class SearchEngineSelectionMiddleware {
     private let profile: Profile
     private let logger: Logger
-    private let searchEnginesManager: SearchEnginesManager
+    private let searchEnginesManager: SearchEnginesManagerProvider
 
     init(profile: Profile = AppContainer.shared.resolve(),
-         searchEnginesManager: SearchEnginesManager? = nil,
+         searchEnginesManager: SearchEnginesManagerProvider? = nil,
          logger: Logger = DefaultLogger.shared) {
         self.profile = profile
         self.logger = logger

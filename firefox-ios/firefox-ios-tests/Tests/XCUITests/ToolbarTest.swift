@@ -43,7 +43,10 @@ class ToolbarTests: BaseTestCase {
         navigator.openURL(website1["url"]!)
         waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews.links["Mozilla"], timeout: 10)
-        let valueMozilla = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as! String
+        guard let valueMozilla = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as? String else {
+            XCTFail("Failed to retrieve the value from the Mozilla URL bar text field")
+            return
+        }
         XCTAssertEqual(valueMozilla, urlValueLong)
         XCTAssertTrue(app.buttons[AccessibilityIdentifiers.Toolbar.backButton].isEnabled)
         XCTAssertFalse(app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton].isEnabled)
@@ -81,7 +84,10 @@ class ToolbarTests: BaseTestCase {
         waitUntilPageLoad()
         waitForTabsButton()
         mozWaitForElementToExist(app.webViews.links["Mozilla"], timeout: 10)
-        let valueMozilla = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as! String
+        guard let valueMozilla = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as? String else {
+            XCTFail("Failed to retrieve the value from the Mozilla URL bar text field")
+            return
+        }
         XCTAssertEqual(valueMozilla, urlValueLong)
 
         // Simulate pressing on backspace key should remove the text
@@ -172,7 +178,7 @@ class ToolbarTests: BaseTestCase {
             }
             app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
-            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as! String, "2")
+            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String, "2")
         }
     }
 }

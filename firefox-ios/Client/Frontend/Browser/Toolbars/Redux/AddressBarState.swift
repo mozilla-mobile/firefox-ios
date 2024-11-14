@@ -205,6 +205,9 @@ struct AddressBarState: StateType, Equatable {
         case SearchEngineSelectionActionType.didTapSearchEngine:
             return handleDidTapSearchEngine(state: state, action: action)
 
+        case SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine:
+            return handleDidClearAlternativeSearchEngine(state: state, action: action)
+
         default:
             return defaultState(from: state)
         }
@@ -265,6 +268,8 @@ struct AddressBarState: StateType, Equatable {
     private static func handleReaderModeStateChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
+        let lockIconImageName = toolbarAction.readerModeState == .active ? nil : state.lockIconImageName
+
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
@@ -276,7 +281,7 @@ struct AddressBarState: StateType, Equatable {
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
-            lockIconImageName: state.lockIconImageName,
+            lockIconImageName: lockIconImageName,
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: state.isEditing,
@@ -701,7 +706,7 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
-    private static func handleDidTapSearchEngine(state: Self, action: Action) -> AddressBarState {
+    private static func handleDidTapSearchEngine(state: Self, action: Action) -> Self {
         guard let searchEngineSelectionAction = action as? SearchEngineSelectionAction,
               let selectedSearchEngine = searchEngineSelectionAction.selectedSearchEngine
         else { return defaultState(from: state) }
@@ -728,7 +733,32 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
-    static func defaultState(from state: AddressBarState) -> AddressBarState {
+    private static func handleDidClearAlternativeSearchEngine(state: Self, action: Action) -> Self {
+        guard action is SearchEngineSelectionAction else { return defaultState(from: state) }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            pageActions: state.pageActions,
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: state.didStartTyping,
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: nil
+        )
+    }
+
+    static func defaultState(from state: AddressBarState) -> Self {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
@@ -765,7 +795,7 @@ struct AddressBarState: StateType, Equatable {
         let isShowingNavigationToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
 
         if isEditing {
-            // back carrot when in edit mode
+            // back caret when in edit mode
             actions.append(cancelEditAction)
         } else if !isShowingNavigationToolbar {
             // otherwise back/forward and maybe data clearance when navigation toolbar is hidden

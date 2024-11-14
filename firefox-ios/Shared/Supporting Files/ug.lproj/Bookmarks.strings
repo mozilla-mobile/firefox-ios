@@ -1,9 +1,6 @@
 /* When navigating through the bookmarks menu and bookmark folders, a back button with an `All` (bookmarks) label is present to take the user to the top level bookmarks menu. */
 "Bookmarks.Menu.AllBookmarks.v131" = "ھەممىسى";
 
-/* Name of the top level bookmarks folder present in the folder selection menu of the`Edit Bookmark` screen */
-"Bookmarks.Menu.BookmarksTopLevelTitle.v131" = "خەتكۈچ";
-
 /* The title for the Delete Bookmark button, in the Edit Bookmark popup screen which is summoned from the main menu's Save submenu, which will delete the currently bookmarked site from the user's bookmarks. */
 "Bookmarks.Menu.DeleteBookmark.v132" = "خەتكۈچ ئۆچۈر";
 

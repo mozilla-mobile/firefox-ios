@@ -7,7 +7,10 @@ import Foundation
 
 extension AppInfo {
     public static var displayName: String {
-        return applicationBundle.object(forInfoDictionaryKey: "CFBundleDisplayName") as! String
+        guard let displayName = applicationBundle.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String else {
+            fatalError("CFBundleDisplayName not found in info.plist")
+        }
+        return displayName
     }
 
     public static var majorAppVersion: String {

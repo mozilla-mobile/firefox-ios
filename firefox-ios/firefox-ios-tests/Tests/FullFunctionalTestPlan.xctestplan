@@ -35,6 +35,8 @@
         "ActivityStreamTest\/testTopSitesOpenInNewPrivateTabDefaultTopSite()",
         "ActivityStreamTest\/testTopSitesOpenInNewTabDefaultTopSite()",
         "AddressesTests\/testAddNewAddressAllFieldsFilled()",
+        "AddressesTests\/testDeleteAddress()",
+        "AddressesTests\/testUpdateAllAddressFields()",
         "AuthenticationTest\/testPromptPassCodeUponReentry()",
         "BaseTestCase",
         "BookmarksTests\/testBookmarkLibraryAddDeleteBookmark()",
