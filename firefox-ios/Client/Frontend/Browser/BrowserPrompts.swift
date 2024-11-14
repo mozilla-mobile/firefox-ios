@@ -19,8 +19,8 @@ protocol JSPromptAlertControllerDelegate: AnyObject {
 class JSPromptAlertController: UIAlertController {
     var alertInfo: JSAlertInfo?
     var logger: Logger = DefaultLogger.shared
-    /// The completion handler that is expected to be called from the WebView delegate.
-    /// It is called in the alert de initializer if it is not nil.
+    /// The completion handler that is expected to be called by the WebView delegate.
+    /// It will be called in the de initializer if it is not nil.
     /// If the completion Handler is nil it means it was already called by the alert actions
     var completionHandler: VoidReturnCallback?
 

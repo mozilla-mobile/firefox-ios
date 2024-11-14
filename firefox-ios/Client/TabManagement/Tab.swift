@@ -593,9 +593,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
 
     deinit {
         alertQueue.forEach {
-            // it should go deinit suddendly and call the callback
+            // Creating the queued Alerts will also deinit them suddendly because there is no reference
+            // Thus calling the completion handler the WebView expects to be called once.
             _ = $0.alertController()
-            print("FF deinit Tab so calling alert controller")
         }
         webViewLoadingObserver?.invalidate()
         webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
