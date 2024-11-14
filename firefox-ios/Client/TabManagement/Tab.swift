@@ -592,6 +592,11 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
     }
 
     deinit {
+        alertQueue.forEach {
+            // it should go deinit suddendly and call the callback
+            _ = $0.alertController()
+            print("FF deinit Tab so calling alert controller")
+        }
         webViewLoadingObserver?.invalidate()
         webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
         webView?.removeObserver(self, forKeyPath: KVOConstants.title.rawValue)

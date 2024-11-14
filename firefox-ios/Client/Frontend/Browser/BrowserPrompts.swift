@@ -17,12 +17,20 @@ protocol JSPromptAlertControllerDelegate: AnyObject {
 /// a runtime exception is thrown.
 class JSPromptAlertController: UIAlertController {
     var alertInfo: JSAlertInfo?
+    /// The completion handler that is expected to be called from the WebView delegate.
+    /// It is called in the alert de initializer if it is not nil.
+    var completionHandler: VoidReturnCallback?
 
     weak var delegate: JSPromptAlertControllerDelegate?
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         delegate?.promptAlertControllerDidDismiss(self)
+    }
+
+    deinit {
+        print("FF calling completion handler in deinit \(String(describing: completionHandler))")
+        completionHandler?()
     }
 }
 
@@ -40,6 +48,7 @@ protocol JSAlertInfo {
 struct MessageAlert: JSAlertInfo {
     let message: String
     let frame: WKFrameInfo
+    let completionHandler: VoidReturnCallback
 
     func alertController() -> JSPromptAlertController {
         let alertController = JSPromptAlertController(
@@ -47,6 +56,7 @@ struct MessageAlert: JSAlertInfo {
             message: message,
             preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: .OKString, style: .default))
+        alertController.completionHandler = completionHandler
         alertController.alertInfo = self
         return alertController
     }
@@ -59,19 +69,24 @@ struct ConfirmPanelAlert: JSAlertInfo {
 
     func alertController() -> JSPromptAlertController {
         // Show JavaScript confirm dialogs.
-        let alertController = JSPromptAlertController(
+        let controller = JSPromptAlertController(
             title: titleForJavaScriptPanelInitiatedByFrame(frame),
             message: message,
             preferredStyle: .alert
         )
-        alertController.addAction(UIAlertAction(title: .OKString, style: .default) { _ in
-            self.completionHandler(true)
+        controller.addAction(UIAlertAction(title: .OKString, style: .default) { [weak controller] _ in
+            controller?.completionHandler = nil
+            completionHandler(true)
         })
-        alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel) { _ in
-            self.completionHandler(false)
+        controller.addAction(UIAlertAction(title: .CancelString, style: .cancel) { [weak controller] _ in
+            controller?.completionHandler = nil
+            completionHandler(false)
         })
-        alertController.alertInfo = self
-        return alertController
+        controller.completionHandler = {
+            completionHandler(false)
+        }
+        controller.alertInfo = self
+        return controller
     }
 }
 
@@ -80,26 +95,30 @@ struct TextInputAlert: JSAlertInfo {
     let frame: WKFrameInfo
     let defaultText: String?
     let completionHandler: (String?) -> Void
-
-    var input: UITextField!
+    var input: UITextField?
 
     func alertController() -> JSPromptAlertController {
-        let alertController = JSPromptAlertController(title: titleForJavaScriptPanelInitiatedByFrame(frame),
-                                                      message: message,
-                                                      preferredStyle: .alert)
-        var input: UITextField!
-        alertController.addTextField(configurationHandler: { (textField: UITextField) in
+        let controller = JSPromptAlertController(title: titleForJavaScriptPanelInitiatedByFrame(frame),
+                                                 message: message,
+                                                 preferredStyle: .alert)
+        var input: UITextField?
+        controller.addTextField(configurationHandler: { textField in
             input = textField
-            input.text = self.defaultText
+            input?.text = self.defaultText
         })
-        alertController.addAction(UIAlertAction(title: .OKString, style: .default) { _ in
-            self.completionHandler(input.text)
+        controller.addAction(UIAlertAction(title: .OKString, style: .default) { [weak controller] _ in
+            controller?.completionHandler = nil
+            completionHandler(input?.text)
         })
-        alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel) { _ in
-            self.completionHandler(nil)
+        controller.addAction(UIAlertAction(title: .CancelString, style: .cancel) { [weak controller] _ in
+            controller?.completionHandler = nil
+            completionHandler(nil)
         })
-        alertController.alertInfo = self
-        return alertController
+        controller.completionHandler = {
+            completionHandler(nil)
+        }
+        controller.alertInfo = self
+        return controller
     }
 }
 
