@@ -2089,10 +2089,9 @@ class BrowserViewController: UIViewController,
                 logger.log("url should not be nil when navigating for a link type", level: .warning, category: .coordinator)
                 return
             }
-            // TODO: FXIOS-10165 - Pass in the proper values based on top sites and other homepage links
             navigationHandler?.navigateFromHomePanel(
                 to: url,
-                visitType: .bookmark,
+                visitType: .link,
                 isGoogleTopSite: type.isGoogleTopSite ?? false
             )
         }
