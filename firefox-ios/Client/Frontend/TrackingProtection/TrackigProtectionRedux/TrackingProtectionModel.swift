@@ -126,7 +126,7 @@ class TrackingProtectionModel {
         if !connectionSecure {
             return theme.colors.layerRatingFSubdued
         }
-        return theme.colors.layer3
+        return theme.colors.layerAccentPrivateNonOpaque
     }
 
     func getDetailsModel() -> TrackingProtectionDetailsModel {

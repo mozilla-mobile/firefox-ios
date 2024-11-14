@@ -90,6 +90,7 @@ class BlockedTrackerCell: UITableViewCell,
     }
 
     func applyTheme(theme: Theme) {
+        backgroundColor = theme.colors.layer2
         trackerLabel.textColor = theme.colors.textPrimary
         trackerImageView.tintColor = theme.colors.iconPrimary
         dividerView.backgroundColor = theme.colors.borderPrimary
