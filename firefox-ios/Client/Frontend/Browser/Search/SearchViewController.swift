@@ -53,6 +53,7 @@ class SearchViewController: SiteTableViewController,
     var searchDelegate: SearchViewControllerDelegate?
     let viewModel: SearchViewModel
     private var tabManager: TabManager
+    private let logger: Logger
 
     var searchTelemetry: SearchTelemetry?
 
@@ -85,10 +86,12 @@ class SearchViewController: SiteTableViewController,
     init(profile: Profile,
          viewModel: SearchViewModel,
          tabManager: TabManager,
-         highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager()) {
+         highlightManager: HistoryHighlightsManagerProtocol = HistoryHighlightsManager(),
+         logger: Logger = DefaultLogger.shared) {
         self.viewModel = viewModel
         self.tabManager = tabManager
         self.searchTelemetry = SearchTelemetry(tabManager: tabManager)
+        self.logger = logger
         super.init(profile: profile, windowUUID: tabManager.windowUUID)
         viewModel.delegate = self
 
@@ -542,13 +545,19 @@ class SearchViewController: SiteTableViewController,
             withIdentifier: TwoLineImageOverlayCell.cellIdentifier,
             for: indexPath
         ) as? TwoLineImageOverlayCell else {
-            fatalError("Failed to dequeue cell with identifier \(TwoLineImageOverlayCell.cellIdentifier)")
+            logger.log("Failed to dequeue TwoLineImageOverlayCell at indexPath: \(indexPath)",
+                       level: .fatal,
+                       category: .lifecycle)
+            return UITableViewCell()
         }
         guard let oneLineTableViewCell = tableView.dequeueReusableCell(
             withIdentifier: OneLineTableViewCell.cellIdentifier,
             for: indexPath
         ) as? OneLineTableViewCell else {
-            fatalError("Failed to dequeue cell with identifier \(OneLineTableViewCell.cellIdentifier)")
+            logger.log("Failed to dequeue OneLineTableViewCell at indexPath: \(indexPath)",
+                       level: .fatal,
+                       category: .lifecycle)
+            return UITableViewCell()
         }
         return getCellForSection(twoLineImageOverlayCell,
                                  oneLineCell: oneLineTableViewCell,

@@ -105,11 +105,7 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
         setupLayout()
         guard shouldTriggerSplashScreenExperiment else { return }
         if !UIAccessibility.isReduceMotionEnabled {
-            if let launchScreen = launchScreen {
-                splashScreenAnimation.configureAnimation(with: launchScreen)
-            } else {
-                fatalError("LaunchScreen view is nil during splash screen animation setup")
-            }
+            splashScreenAnimation.configureAnimation(with: launchScreen!)
         }
     }
 }
