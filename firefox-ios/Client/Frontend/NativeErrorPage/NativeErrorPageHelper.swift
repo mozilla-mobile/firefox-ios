@@ -27,16 +27,20 @@ class NativeErrorPageHelper {
     func parseErrorDetails() -> ErrorPageModel {
         var title = ""
         var description = ""
+        var foxImageName = ""
 
         switch error.code {
         case Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue):
+            foxImageName = ImageIdentifiers.NativeErrorPage.noInternetConnection
             title = .NativeErrorPage.NoInternetConnection.TitleLabel
             description = .NativeErrorPage.NoInternetConnection.Description
         default:
-            break
+            foxImageName = ImageIdentifiers.NativeErrorPage.noInternetConnection
+            title = .NativeErrorPage.GenericError.TitleLabel
+            description = .NativeErrorPage.GenericError.Description
         }
 
-        let model = ErrorPageModel(errorTitle: title, errorDescription: description)
+        let model = ErrorPageModel(errorTitle: title, errorDescription: description, foxImageName: foxImageName)
         return model
     }
 }
