@@ -268,6 +268,8 @@ struct AddressBarState: StateType, Equatable {
     private static func handleReaderModeStateChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
+        let lockIconImageName = toolbarAction.readerModeState == .active ? nil : state.lockIconImageName
+
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
@@ -279,7 +281,7 @@ struct AddressBarState: StateType, Equatable {
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
-            lockIconImageName: state.lockIconImageName,
+            lockIconImageName: lockIconImageName,
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: state.isEditing,

@@ -15,6 +15,7 @@ class TopSitesManager {
     private let contileProvider: ContileProviderInterface
     private let googleTopSiteManager: GoogleTopSiteManagerProvider
     private let topSiteHistoryManager: TopSiteHistoryManagerProvider
+    private let searchEnginesManager: SearchEnginesManagerProvider
 
     // TODO: FXIOS-10477 - Add number of rows calculation and device size updates
     private let maxTopSites: Int
@@ -25,6 +26,7 @@ class TopSitesManager {
         contileProvider: ContileProviderInterface = ContileProvider(),
         googleTopSiteManager: GoogleTopSiteManagerProvider,
         topSiteHistoryManager: TopSiteHistoryManagerProvider,
+        searchEnginesManager: SearchEnginesManagerProvider,
         logger: Logger = DefaultLogger.shared,
         maxTopSites: Int = 4 * 14 // Max rows * max tiles on the largest screen plus some padding
     ) {
@@ -32,6 +34,7 @@ class TopSitesManager {
         self.contileProvider = contileProvider
         self.googleTopSiteManager = googleTopSiteManager
         self.topSiteHistoryManager = topSiteHistoryManager
+        self.searchEnginesManager = searchEnginesManager
         self.logger = logger
         self.maxTopSites = maxTopSites
     }
@@ -55,10 +58,12 @@ class TopSitesManager {
         let googleTopSite = addGoogleTopSite(with: availableSpaceCount)
 
         let updatedSpaceCount = getUpdatedSpaceCount(with: googleTopSite, and: availableSpaceCount)
-        let sponsoredSites = await getSponsoredSites(with: updatedSpaceCount)
+        let sponsoredSites = await getSponsoredSites(with: updatedSpaceCount, and: otherSites)
 
         let totalTopSites = googleTopSite + sponsoredSites + otherSites
-        return Array(totalTopSites.prefix(maxTopSites))
+
+        let uniqueSites = removeDuplicates(for: totalTopSites)
+        return Array(uniqueSites.prefix(maxTopSites))
     }
 
     // MARK: Google tile
@@ -76,13 +81,15 @@ class TopSitesManager {
         return prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts) ?? true
     }
 
-    private func getSponsoredSites(with availableSpaceCount: Int) async -> [TopSiteState] {
+    private func getSponsoredSites(with availableSpaceCount: Int, and otherSites: [TopSiteState]) async -> [TopSiteState] {
         guard availableSpaceCount > 0, shouldLoadSponsoredTiles else { return [] }
 
         let contiles = await fetchSponsoredSites()
 
+        guard !contiles.isEmpty else { return [] }
+
         let filteredContiles = contiles
-            .filter { shouldShowSponsoredSite(with: $0) }
+            .filter { shouldShowSponsoredSite(with: $0, and: otherSites) }
             .compactMap { TopSiteState(site: $0) }
 
         return filteredContiles
@@ -109,12 +116,20 @@ class TopSitesManager {
             .compactMap { SponsoredTile(contile: $0) }
     }
 
-    /// Show the next sponsored site if site is already present in the pinned sites
-    /// or if it's the default search engine
-    private func shouldShowSponsoredSite(with site: Site) -> Bool {
-        // TODO: FXIOS-10477 - To replace with proper logic in when to show sponsored sites 
-        // such as if there's duplicates or if default engine is showed
-        return true
+    /// Show the sponsored site only if site is not already present in the pinned sites 
+    /// and it's not the default search engine
+    private func shouldShowSponsoredSite(with sponsoredSite: Site, and otherSites: [TopSiteState]) -> Bool {
+        let siteDomain = sponsoredSite.url.asURL?.shortDomain
+        let sponsoredSiteIsAlreadyPresent = otherSites.contains {
+            ($0.site.url.asURL?.shortDomain == siteDomain) && (($0.site as? PinnedSite) != nil)
+        }
+
+        let shouldAddDefaultEngine = SponsoredTileDataUtility().shouldAdd(
+            site: sponsoredSite,
+            with: searchEnginesManager.defaultEngine
+        )
+
+        return !sponsoredSiteIsAlreadyPresent && shouldAddDefaultEngine
     }
 
     // MARK: Other Sites = History-based (Frencency) + Pinned + Default suggested tiles
@@ -141,5 +156,29 @@ class TopSitesManager {
     private func getUpdatedSpaceCount(with googleTopSite: [TopSiteState], and availableSpaceCount: Int) -> Int {
         guard !googleTopSite.isEmpty else { return availableSpaceCount }
         return availableSpaceCount - GoogleTopSiteManager.Constants.reservedSpaceCount
+    }
+
+    // Keeping the order of the sites, we remove duplicate tiles.
+    // Ex: If a sponsored tile is present then it has precedence over the history sites.
+    // Ex: A default site is present but user has recent history site of the same site.
+    // That recent history tile won't be added.
+    private func removeDuplicates(for sites: [TopSiteState]) -> [TopSiteState] {
+        var duplicates = Set<TopSiteState>()
+        return sites.compactMap { (state) -> TopSiteState? in
+            // Do not remove sponsored tiles or pinned tiles duplicates
+            guard (state.site as? SponsoredTile) == nil && (state.site as? PinnedSite) == nil else {
+                duplicates.insert(state)
+                return state
+            }
+
+            let siteDomain = state.site.url.asURL?.shortDomain
+            let shouldAddSite = !duplicates.contains(where: { $0.site.url.asURL?.shortDomain == siteDomain })
+
+            // If shouldAddSite or site domain was not found, then insert the site
+            guard shouldAddSite || siteDomain == nil else { return nil }
+            duplicates.insert(state)
+
+            return state
+        }
     }
 }

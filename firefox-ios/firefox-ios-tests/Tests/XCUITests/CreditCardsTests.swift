@@ -574,9 +574,6 @@ class CreditCardsTests: BaseTestCase {
         var nrOfRetries = 3
         if iPad() {
             while email.value(forKey: "hasKeyboardFocus") as? Bool == false && nrOfRetries > 0 {
-                swipeDown(nrOfSwipes: 1)
-                email.tapOnApp()
-                nrOfRetries -= 1
             }
         }
         email.typeText("foo@mozilla.org")
@@ -589,6 +586,10 @@ class CreditCardsTests: BaseTestCase {
             dismissSavedCardsPrompt()
             expiration.tapOnApp()
             expiration.typeText(expirationDate)
+        }
+
+        if app.keyboards.firstMatch.exists {
+            app.buttons["KeyboardAccessory.doneButton"].tap()
         }
         cvc.tapOnApp()
         cvc.typeText("123")
