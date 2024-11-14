@@ -10,6 +10,8 @@ import Common
 
 final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     let storeUtilityHelper = StoreTestUtilityHelper()
+    let windowUUID: WindowUUID = .XCTestDefaultUUID
+
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
@@ -25,7 +27,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     func tests_initialState_returnsExpectedState() {
         let initialState = createSubject()
 
-        XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(initialState.windowUUID, windowUUID)
         XCTAssertEqual(initialState.navigationActions, [])
         XCTAssertEqual(initialState.pageActions, [])
         XCTAssertEqual(initialState.browserActions, [])
@@ -51,12 +53,12 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             initialState,
             ToolbarAction(
                 addressBorderPosition: .top,
-                windowUUID: .XCTestDefaultUUID,
+                windowUUID: windowUUID,
                 actionType: ToolbarActionType.didLoadToolbars
             )
         )
 
-        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.navigationActions, [])
 
         XCTAssertEqual(newState.pageActions.count, 1)
@@ -89,12 +91,12 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             ToolbarAction(
                 numberOfTabs: 2,
                 isShowingTopTabs: false,
-                windowUUID: .XCTestDefaultUUID,
+                windowUUID: windowUUID,
                 actionType: ToolbarActionType.numberOfTabsChanged
             )
         )
 
-        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.browserActions.count, 2)
         XCTAssertEqual(newState.browserActions[0].actionType, .tabs)
         XCTAssertEqual(newState.browserActions[0].numberOfTabs, 2)
@@ -109,12 +111,12 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             initialState,
             ToolbarAction(
                 readerModeState: .available,
-                windowUUID: .XCTestDefaultUUID,
+                windowUUID: windowUUID,
                 actionType: ToolbarActionType.readerModeStateChanged
             )
         )
 
-        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.pageActions.count, 1)
         XCTAssertEqual(newState.pageActions[0].actionType, .qrCode)
     }
@@ -128,12 +130,12 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             urlDidChangeState,
             ToolbarAction(
                 readerModeState: .available,
-                windowUUID: .XCTestDefaultUUID,
+                windowUUID: windowUUID,
                 actionType: ToolbarActionType.readerModeStateChanged
             )
         )
 
-        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.pageActions.count, 3)
         XCTAssertEqual(newState.pageActions[0].actionType, .readerMode)
         XCTAssertEqual(newState.pageActions[0].iconName, StandardImageIdentifiers.Large.readerView)
@@ -150,12 +152,12 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
             urlDidChangeState,
             ToolbarAction(
                 isLoading: true,
-                windowUUID: .XCTestDefaultUUID,
+                windowUUID: windowUUID,
                 actionType: ToolbarActionType.websiteLoadingStateDidChange
             )
         )
 
-        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.pageActions.count, 2)
         XCTAssertEqual(newState.pageActions[0].actionType, .share)
         XCTAssertEqual(newState.pageActions[1].actionType, .stopLoading)
@@ -167,7 +169,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         let newState = loadWebsiteAction(state: initialState, reducer: reducer)
 
-        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(newState.windowUUID, windowUUID)
 
         XCTAssertEqual(newState.pageActions.count, 2)
         XCTAssertEqual(newState.pageActions[0].actionType, .share)
@@ -186,12 +188,12 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         let newState = reducer(
             initialState,
             ToolbarAction(
-                windowUUID: .XCTestDefaultUUID,
+                windowUUID: windowUUID,
                 actionType: ToolbarActionType.clearSearch
             )
         )
 
-        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(newState.windowUUID, windowUUID)
 
         XCTAssertEqual(newState.pageActions.count, 1)
         XCTAssertEqual(newState.pageActions[0].actionType, .qrCode)
@@ -207,12 +209,12 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         let newState = reducer(
             initialState,
             ToolbarAction(
-                windowUUID: .XCTestDefaultUUID,
+                windowUUID: windowUUID,
                 actionType: ToolbarActionType.didDeleteSearchTerm
             )
         )
 
-        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(newState.windowUUID, windowUUID)
 
         XCTAssertEqual(newState.pageActions.count, 1)
         XCTAssertEqual(newState.pageActions[0].actionType, .qrCode)
@@ -229,12 +231,12 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         let newState = reducer(
             initialState,
             ToolbarAction(
-                windowUUID: .XCTestDefaultUUID,
+                windowUUID: windowUUID,
                 actionType: ToolbarActionType.didEnterSearchTerm
             )
         )
 
-        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertEqual(newState.pageActions.count, 0)
         XCTAssertTrue(newState.isEditing)
         XCTAssertTrue(newState.didStartTyping)
@@ -248,18 +250,18 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         let newState = reducer(
             initialState,
             ToolbarAction(
-                windowUUID: .XCTestDefaultUUID,
+                windowUUID: windowUUID,
                 actionType: ToolbarActionType.didStartTyping
             )
         )
 
-        XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
+        XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertTrue(newState.didStartTyping)
     }
 
     // MARK: - Private
     private func createSubject() -> AddressBarState {
-        return AddressBarState(windowUUID: .XCTestDefaultUUID)
+        return AddressBarState(windowUUID: windowUUID)
     }
 
     private func addressBarReducer() -> Reducer<AddressBarState> {
@@ -277,7 +279,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
                 canGoForward: false,
                 lockIconImageName: StandardImageIdentifiers.Large.lockFill,
                 safeListedURLImageName: nil,
-                windowUUID: .XCTestDefaultUUID,
+                windowUUID: windowUUID,
                 actionType: ToolbarActionType.urlDidChange
             )
         )
@@ -290,12 +292,12 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
                 screens: [
                     .browserViewController(
                         BrowserViewControllerState(
-                            windowUUID: .XCTestDefaultUUID
+                            windowUUID: windowUUID
                         )
                     ),
                     .toolbar(
                         ToolbarState(
-                            windowUUID: .XCTestDefaultUUID
+                            windowUUID: windowUUID
                         )
                     )
                 ]
