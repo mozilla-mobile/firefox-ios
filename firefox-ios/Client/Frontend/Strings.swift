@@ -1569,10 +1569,10 @@ extension String {
                 value: "Be careful. Something doesn’t look right.",
                 comment: "On error page, this is the title for generic error.")
             public static let Description = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.Description.v131",
+                key: "NativeErrorPage.GenericError.Description.v134",
                 tableName: "NativeErrorPage",
-                value: "An SSL error has occurred and a secure connection to the server cannot be made.",
-                comment: "On error page, this is the description for generic error.")
+                value: "The owner of %@ hasn’t set it up properly and a secure connection can’t be created.",
+                comment: "On error page, this is the description for generic error. The placeholder will be replaced by the site url")
         }
     }
 }
@@ -7495,6 +7495,11 @@ extension String {
                 tableName: "MainMenu",
                 value: "Report Broken Site",
                 comment: "On the main menu, the title for the action that will take the user to the site where they can report a broken website to our web compatibility team.")
+            public static let Description = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.Description.v131",
+                tableName: "NativeErrorPage",
+                value: "An SSL error has occurred and a secure connection to the server cannot be made.",
+                comment: "On error page, this is the description for generic error.")
         }
         struct v132 {
             public static let TabTrayToggleAccessibilityLabel = MZLocalizedString(
