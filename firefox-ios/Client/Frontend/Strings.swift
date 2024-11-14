@@ -379,9 +379,9 @@ extension String {
                     comment: "Toast message confirming that an address has been successfully updated."
                 )
                  public static let AddressUpdatedConfirmationV2 = MZLocalizedString(
-                    key: "Addresses.Toast.AddressUpdatedConfirmation.v132.v2",
+                    key: "Addresses.Toast.AddressUpdatedConfirmation.v133",
                     tableName: "EditAddress",
-                    value: "Address Saved",
+                    value: "Address Information Updated",
                     comment: "Toast message confirming that an address has been successfully updated."
                 )
                 public static let RemoveAddressTitle = MZLocalizedString(
@@ -7478,6 +7478,12 @@ extension String {
                 tableName: "PrivateBrowsing",
                 value: nil,
                 comment: "Accessiblity hint for toggling on/off private mode")
+            public static let AddressUpdatedConfirmationV2 = MZLocalizedString(
+               key: "Addresses.Toast.AddressUpdatedConfirmation.v132.v2",
+               tableName: "EditAddress",
+               value: "Address Saved",
+               comment: "Toast message confirming that an address has been successfully updated."
+           )
         }
         struct v133 {
             public static let LocationA11yLabel = MZLocalizedString(
