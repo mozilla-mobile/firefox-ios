@@ -259,7 +259,8 @@ class LegacyBookmarkDetailPanel: SiteTableViewController, BookmarksRefactorFeatu
         if profile.isShutdown { return }
         profile.places.getBookmarksTree(rootGUID: BookmarkRoots.RootGUID, recursive: true)
             .uponQueue(.main) { bookmarksTreeResult in
-            self.profile.places.countBookmarksInTrees(folderGuids: BookmarkRoots.DesktopRoots.map { $0 }) { bookmarksCountResult in
+                self.profile.places.countBookmarksInTrees(
+                    folderGuids: BookmarkRoots.DesktopRoots.map { $0 }) { bookmarksCountResult in
                 DispatchQueue.main.async {
                     guard let rootFolder = bookmarksTreeResult.successValue as? BookmarkFolderData else {
                         // TODO: Handle error case?
@@ -317,8 +318,8 @@ class LegacyBookmarkDetailPanel: SiteTableViewController, BookmarksRefactorFeatu
                     self.bookmarkFolders = bookmarkFolders
                     self.tableView.reloadData()
                 }
+                }
             }
-        }
     }
 
     func updateSaveButton() {
