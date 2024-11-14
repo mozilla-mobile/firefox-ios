@@ -23,7 +23,7 @@ class TabTrayTests: BaseTestCase {
                element.elementType == .staticText,
                element.label.contains("Homepage"),
                issue.auditType == .textClipped {
-                   shouldIgnore = true
+                shouldIgnore = true
             }
             return shouldIgnore
         }
