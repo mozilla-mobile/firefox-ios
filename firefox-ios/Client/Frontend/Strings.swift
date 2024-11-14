@@ -379,7 +379,7 @@ extension String {
                     comment: "Toast message confirming that an address has been successfully updated."
                 )
                  public static let AddressUpdatedConfirmationV2 = MZLocalizedString(
-                    key: "Addresses.Toast.AddressUpdatedConfirmation.v133",
+                    key: "Addresses.Toast.AddressUpdatedConfirmation.v134",
                     tableName: "EditAddress",
                     value: "Address Information Updated",
                     comment: "Toast message confirming that an address has been successfully updated."
