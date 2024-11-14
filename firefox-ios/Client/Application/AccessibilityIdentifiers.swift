@@ -443,6 +443,8 @@ public struct AccessibilityIdentifiers {
         static let navBarSegmentedControl = "navBarTabTray"
         static let syncDataButton = "syncDataButton"
         static let learnMoreButton = "learnMoreButton"
+        static let collectionView = "TabDisplayView.collectionView"
+        static let tabCell = "TabDisplayView.tabCell"
 
         struct InactiveTabs {
             static let headerLabel = "InactiveTabs.headerLabel"

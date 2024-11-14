@@ -72,6 +72,7 @@ class TabDisplayView: UIView,
         collectionView.dragDelegate = self
         collectionView.dropDelegate = self
         collectionView.collectionViewLayout = createLayout()
+        collectionView.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.collectionView
         return collectionView
     }()
 
@@ -169,7 +170,8 @@ class TabDisplayView: UIView,
                     ) as? TabCell
                 else { return UICollectionViewCell() }
 
-                cell.configure(with: tab, theme: theme, delegate: self)
+                let a11yId = "\(AccessibilityIdentifiers.TabTray.tabCell)_\(indexPath.section)_\(indexPath.row)"
+                cell.configure(with: tab, theme: theme, delegate: self, a11yId: a11yId)
                 return cell
             }
         }

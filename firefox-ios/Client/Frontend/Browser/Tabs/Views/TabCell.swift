@@ -66,6 +66,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         label.numberOfLines = 1
         label.font = FXFontStyles.Bold.caption1.scaledFont()
         label.adjustsFontForContentSizeCategory = true
+        label.isAccessibilityElement = false
     }
 
     private lazy var closeButton: UIButton = .build { button in
@@ -106,7 +107,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) not yet supported") }
 
     // MARK: - Configuration
-    func configure(with tabModel: TabModel, theme: Theme?, delegate: TabCellDelegate) {
+    func configure(with tabModel: TabModel, theme: Theme?, delegate: TabCellDelegate, a11yId: String) {
         self.tabModel = tabModel
         self.delegate = delegate
 
@@ -120,6 +121,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         accessibilityLabel = getA11yTitleLabel(tabModel: tabModel)
         isAccessibilityElement = true
         accessibilityHint = .TabTraySwipeToCloseAccessibilityHint
+        accessibilityIdentifier = a11yId
 
         let identifier = StandardImageIdentifiers.Large.globe
         if let globeFavicon = UIImage(named: identifier)?.withRenderingMode(.alwaysTemplate) {
