@@ -6,6 +6,7 @@ import Foundation
 
 class AddressesTests: BaseTestCase {
     let addressSavedTxt = "Address Saved"
+    let addressUpdatedTxt = "Address Information Updated"
     let savedAddressesTxt = "SAVED ADDRESSES"
     let removedAddressTxt = "Address Removed"
 
@@ -190,8 +191,8 @@ class AddressesTests: BaseTestCase {
         tapEdit()
         updateAddress(updateCountry: updateCountry, isPostalCode: isPostalCode)
         tapSave()
-        // The "Address saved" toast message is displayed
-        mozWaitForElementToExist(app.staticTexts[addressSavedTxt])
+        // The "Address Information Updated" toast message is displayed
+        mozWaitForElementToExist(app.staticTexts[addressUpdatedTxt])
         // The address is saved
         // Update with correct toast message after https://mozilla-hub.atlassian.net/browse/FXIOS-10422 is fixed
         mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
