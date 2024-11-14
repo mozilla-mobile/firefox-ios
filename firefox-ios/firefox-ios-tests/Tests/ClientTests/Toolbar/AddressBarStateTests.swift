@@ -231,6 +231,72 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationActions[1].isEnabled, false)
     }
 
+    func test_didStartEditingUrlAction_onHomepage_returnsExpectedState() {
+        setupTestingStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                searchTerm: nil,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.didStartEditingUrl
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.navigationActions.count, 1)
+        XCTAssertEqual(newState.navigationActions[0].actionType, .cancelEdit)
+
+        XCTAssertEqual(newState.pageActions.count, 1)
+        XCTAssertEqual(newState.pageActions[0].actionType, .qrCode)
+
+        XCTAssertEqual(newState.browserActions.count, 2)
+        XCTAssertEqual(newState.browserActions[0].actionType, .tabs)
+        XCTAssertEqual(newState.browserActions[1].actionType, .menu)
+
+        XCTAssertEqual(newState.searchTerm, nil)
+        XCTAssertTrue(newState.isEditing)
+        XCTAssertFalse(newState.isScrollingDuringEdit)
+        XCTAssertTrue(newState.shouldSelectSearchTerm)
+        XCTAssertFalse(newState.didStartTyping)
+        XCTAssertTrue(newState.showQRPageAction)
+    }
+
+    func test_didStartEditingUrlAction_withWebsite_returnsExpectedState() {
+        setupTestingStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let urlDidChangeState = loadWebsiteAction(state: initialState, reducer: reducer)
+        let newState = reducer(
+            urlDidChangeState,
+            ToolbarAction(
+                searchTerm: nil,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.didStartEditingUrl
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.navigationActions.count, 1)
+        XCTAssertEqual(newState.navigationActions[0].actionType, .cancelEdit)
+
+        XCTAssertEqual(newState.pageActions.count, 0)
+
+        XCTAssertEqual(newState.browserActions.count, 2)
+        XCTAssertEqual(newState.browserActions[0].actionType, .tabs)
+        XCTAssertEqual(newState.browserActions[1].actionType, .menu)
+
+        XCTAssertEqual(newState.searchTerm, nil)
+        XCTAssertTrue(newState.isEditing)
+        XCTAssertFalse(newState.isScrollingDuringEdit)
+        XCTAssertTrue(newState.shouldSelectSearchTerm)
+        XCTAssertFalse(newState.didStartTyping)
+        XCTAssertFalse(newState.showQRPageAction)
+    }
+
     func test_clearSearchAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = addressBarReducer()
