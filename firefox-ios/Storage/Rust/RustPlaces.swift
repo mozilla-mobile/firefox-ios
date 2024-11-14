@@ -22,6 +22,7 @@ import struct MozillaAppServices.HistoryMetadataKey
 import struct MozillaAppServices.HistoryMetadataObservation
 import struct MozillaAppServices.HistoryMigrationResult
 import struct MozillaAppServices.HistoryVisitInfosWithBound
+import struct MozillaAppServices.NoteHistoryMetadataObservationOptions
 import struct MozillaAppServices.PlacesTimestamp
 import struct MozillaAppServices.SearchResult
 import struct MozillaAppServices.TopFrecentSiteInfo
@@ -410,7 +411,8 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
             if let title = observation.title {
                 let response: Void = try connection.noteHistoryMetadataObservationTitle(
                     key: key,
-                    title: title
+                    title: title,
+                    NoteHistoryMetadataObservationOptions(ifPageMissing: .insertPage)
                 )
                 self.notificationCenter.post(name: .HistoryUpdated, object: nil)
                 return response
@@ -418,7 +420,8 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
             if let documentType = observation.documentType {
                 let response: Void = try connection.noteHistoryMetadataObservationDocumentType(
                     key: key,
-                    documentType: documentType
+                    documentType: documentType,
+                    NoteHistoryMetadataObservationOptions(ifPageMissing: .insertPage)
                 )
                 self.notificationCenter.post(name: .HistoryUpdated, object: nil)
                 return response
@@ -426,7 +429,8 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
             if let viewTime = observation.viewTime {
                 let response: Void = try connection.noteHistoryMetadataObservationViewTime(
                     key: key,
-                    viewTime: viewTime
+                    viewTime: viewTime,
+                    NoteHistoryMetadataObservationOptions(ifPageMissing: .insertPage)
                 )
                 self.notificationCenter.post(name: .HistoryUpdated, object: nil)
                 return response
