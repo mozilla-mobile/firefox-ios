@@ -269,7 +269,7 @@ final class LocationView: UIView,
         urlTextField.placeholder = state.urlTextFieldPlaceholder
         urlAbsolutePath = state.url?.absoluteString
 
-        let shouldShowKeyboard = state.isEditing && !state.isScrollingDuringEdit
+        let shouldShowKeyboard = state.isEditing && state.shouldShowKeyboard
         _ = shouldShowKeyboard ? becomeFirstResponder() : resignFirstResponder()
 
         // Remove the default drop interaction from the URL text field so that our
