@@ -59,6 +59,7 @@ let CreditCardsSettings = "AutofillCreditCard"
 let PageZoom = "PageZoom"
 let NotificationsSettings = "NotificationsSetting"
 let AddressesSettings = "AutofillAddress"
+let PartialBrowserTabMenu = "PartialBrowserTabMenu"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
@@ -314,7 +315,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             }
         }
         makeURLBarAvailable(screenState)
-        screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], to: BrowserTabMenu)
+        screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], to: PartialBrowserTabMenu)
 
         if isTablet {
             screenState.tap(
@@ -591,6 +592,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(SettingsScreen) { screenState in
+        print("**** SettingsScreen")
         let table = app.tables.element(boundBy: 0)
 
         screenState.tap(table.cells["Sync"], to: SyncSettings, if: "fxaUsername != nil")
@@ -713,6 +715,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(WebsiteDataSettings) { screenState in
+        print("**** WebsiteDataSettings")
         screenState.gesture(forAction: Action.AcceptClearAllWebsiteData) { userState in
             app.tables.cells["ClearAllWebsiteData"].staticTexts["Clear All Website Data"].tap()
             app.alerts.buttons["OK"].tap()
@@ -797,6 +800,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(ClearPrivateDataSettings) { screenState in
+        print("**** ClearPrivateDataSettings")
         screenState.tap(
             app.cells[AccessibilityIdentifiers.Settings.ClearData.websiteDataSection],
             to: WebsiteDataSettings
@@ -937,7 +941,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     func makeToolBarAvailable(_ screenState: MMScreenStateNode<FxUserState>) {
-        screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], to: BrowserTabMenu)
+        screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], to: PartialBrowserTabMenu)
         if isTablet {
             screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], to: TabTray)
         } else {
@@ -948,10 +952,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(BrowserTab) { screenState in
+        print("**** BrowserTab")
         makeURLBarAvailable(screenState)
         screenState.tap(
             app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton],
-            to: BrowserTabMenu
+            to: PartialBrowserTabMenu
         )
 
         screenState.tap(
@@ -1004,6 +1009,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(ReloadLongPressMenu) { screenState in
+        print("**** ReloadLongPressMenu")
         screenState.backAction = cancelBackAction
         screenState.dismissOnUse = true
 
@@ -1037,10 +1043,12 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(FindInPage) { screenState in
+        print("**** FindInPage")
         screenState.tap(app.buttons[AccessibilityIdentifiers.FindInPage.findInPageCloseButton], to: BrowserTab)
     }
 
     map.addScreenState(PageZoom) { screenState in
+        print("**** PageZoom")
         screenState.tap(app.buttons[AccessibilityIdentifiers.ZoomPageBar.doneButton], to: BrowserTab)
     }
 
@@ -1049,6 +1057,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(RequestMobileSite) { _ in }
 
     map.addScreenState(HomePanel_Library) { screenState in
+        print("**** HomePanel_Library")
         screenState.dismissOnUse = true
         screenState.backAction = navigationControllerBackAction
 
@@ -1086,12 +1095,76 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
     }
 
+    map.addScreenState(PartialBrowserTabMenu) { screenState in
+        print("**** PartialBrowserTabMenu")
+        screenState.swipeUp(app.buttons["Sheet Grabber"], to: BrowserTabMenu)
+
+        screenState.dismissOnUse = true
+        screenState.backAction = cancelBackAction
+    }
+
     map.addScreenState(BrowserTabMenu) { screenState in
+        print("**** BrowserTabMenu")
         sleep(1)
+
+        // Sign In (if unauthenticated) (todo)
+        screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.HeaderView.mainButton], to: Intro_FxASignin, if: "fxaUsername == nil")
+        // New tab
+        screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.mainMenu], to: NewTabScreen)
+        // New private tab (TODO)
+        /*
+        screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.newPrivateTab], to: ???)
+        */
+        // Switch to Desktop Site
+        screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.switchToDesktopSite], to: RequestDesktopSite)
+        // Find in Page...
         screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.settings],
-            to: SettingsScreen
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.findInPage],
+            to: FindInPage)
+        // Tools (Zoom, NightMode, Report, Share) (TODO - need new screen)
+        // Save (Add Bookmark, Shortcut) (TODO - need new screen)
+        // Bookmarks
+        screenState.tap(    app.tables.cells[AccessibilityIdentifiers.MainMenu.bookmarks], to: LibraryPanel_Bookmarks)
+        // History
+        screenState.tap(
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.history],
+            to: LibraryPanel_History)
+        // Downloads
+        screenState.tap(
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.downloads],
+            to: LibraryPanel_Downloads
         )
+        // Passwords
+        screenState.tap(
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.passwords],
+            to: Intro_FxASignin,
+            if: "fxaUsername == nil"
+        )
+        // Customize Homepage (TODO)
+        /*
+        screenState.tap(
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.customizeHomepage],
+            to: ???
+        )
+         */
+        // New in Firefox (TODO: Find out what is Action.OpenWhatsNewPage)
+        /*
+        screenState.tap(
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.whatsNew],
+            forAction: Action.OpenWhatsNewPage
+        )
+        */
+        // Get Help (TODO: Actions to open support.mozilla.org)
+        /*
+        screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.getHelp], forAction: Action.OpenWhatsNewPage)
+         */
+        // SettingsScreen
+        screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.settings], to: SettingsScreen)
+
+        // "x" for close the menu and go back?
+        screenState.dismissOnUse = true
+        screenState.backAction = cancelBackAction
+        /*
         screenState.tap(
             app.tables.otherElements[StandardImageIdentifiers.Large.sync],
             to: Intro_FxASignin,
@@ -1190,6 +1263,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.dismissOnUse = true
         screenState.backAction = cancelBackAction
+         */
     }
 
     map.addScreenState(TabsSettings) { screenState in

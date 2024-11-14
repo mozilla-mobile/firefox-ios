@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Common
 
 class DataManagementTests: BaseTestCase {
     func cleanAllData() {
@@ -47,6 +48,19 @@ class DataManagementTests: BaseTestCase {
         navigator.performAction(Action.AcceptClearAllWebsiteData)
         mozWaitForElementToExist(app.tables.cells["ClearAllWebsiteData"].staticTexts["Clear All Website Data"])
         XCTAssertEqual(0, app.cells.images.count)
+    }
+
+    func testDummyNoWebsite() {
+        navigator.nowAt(NewTabScreen)
+        navigator.goto(SettingsScreen)
+        print(app.debugDescription)
+    }
+
+    func testDummyWebsite() {
+        navigator.nowAt(NewTabScreen)
+        navigator.openURL("https://www.wikipedia.org")
+        navigator.goto(FindInPage)
+        print(app.debugDescription)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307017
