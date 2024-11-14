@@ -40,6 +40,7 @@
         "AddressesTests\/testAddNewAddressPhoneFilled()",
         "AddressesTests\/testAddNewAddressPostalCodeFilled()",
         "AddressesTests\/testAddNewAddressStreetAddressFilled()",
+        "AddressesTests\/testUpdateAllAddressFields()",
         "AuthenticationTest\/testBasicHTTPAuthenticationPromptVisible()",
         "AuthenticationTest\/testBasicHTTPAuthenticationPromptVisibleAndLogin()",
         "AuthenticationTest\/testChangePassCode()",
