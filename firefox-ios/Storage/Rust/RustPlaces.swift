@@ -139,7 +139,6 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
         return deferred
     }
 
-    @discardableResult
     private func withReader<T>(
         _ callback: @escaping(_ connection: PlacesReadConnection) throws -> T
     ) -> Deferred<Maybe<T>> {
@@ -203,11 +202,14 @@ public class RustPlaces: BookmarksHandler, HistoryMetadataObserver {
     }
 
     public func countBookmarksInTrees(folderGuids: [GUID], completion: @escaping (Result<Int, Error>) -> Void) {
-        withReader { connection in
-            do {
-                let count = try connection.countBookmarksInTrees(folderGuids: folderGuids)
+        let deferredResponse = withReader { connection in
+            return try connection.countBookmarksInTrees(folderGuids: folderGuids)
+        }
+
+        deferredResponse.upon { result in
+            if let count = result.successValue {
                 completion(.success(count))
-            } catch {
+            } else if let error = result.failureValue {
                 completion(.failure(error))
             }
         }
