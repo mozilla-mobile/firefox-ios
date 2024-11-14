@@ -34,7 +34,7 @@ class TabTrayCoordinator: BaseCoordinator,
     }
 
     func dismissChildTabTrayPanels() {
-        // [FXIOS-10482] Initial fix for memory leak. Needs further investigation.
+        // [FXIOS-10482] Initial bandaid for memory leaking during tab tray open/close. Needs further investigation.
         guard let childVCs = tabTrayViewController.currentPanel?.viewControllers else { return }
         childVCs.forEach { ($0 as? TabDisplayPanel)?.removeTabPanel() }
     }
