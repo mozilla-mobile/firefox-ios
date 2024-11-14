@@ -15,7 +15,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        setupTestingStore()
     }
 
     override func tearDown() {
@@ -25,6 +24,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func tests_initialState_returnsExpectedState() {
+        setupTestingStore()
         let initialState = createSubject()
 
         XCTAssertEqual(initialState.windowUUID, windowUUID)
@@ -46,6 +46,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_didLoadToolbarsAction_returnsExpectedState() {
+        setupTestingStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
@@ -83,6 +84,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_numberOfTabsChangedAction_returnsExpectedState() {
+        setupTestingStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
@@ -104,6 +106,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_readerModeStateChangedAction_onHomepage_returnsExpectedState() {
+        setupTestingStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
@@ -122,6 +125,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_readerModeStateChangedAction_onWebsite_returnsExpectedState() {
+        setupTestingStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
@@ -144,6 +148,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_websiteLoadingStateDidChangeAction_returnsExpectedState() {
+        setupTestingStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
@@ -164,6 +169,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_urlDidChangeAction_returnsExpectedState() {
+        setupTestingStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
@@ -179,6 +185,50 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.browserActions[0].actionType, .newTab)
         XCTAssertEqual(newState.browserActions[1].actionType, .tabs)
         XCTAssertEqual(newState.browserActions[2].actionType, .menu)
+    }
+
+    func test_backForwardButtonStateChangedAction_withNavigationToolbar_returnsExpectedState() {
+        setupTestingStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let urlDidChangeState = loadWebsiteAction(state: initialState, reducer: reducer)
+        let newState = reducer(
+            urlDidChangeState,
+            ToolbarAction(
+                canGoBack: true,
+                canGoForward: false,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.backForwardButtonStateChanged
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.navigationActions.count, 0)
+    }
+
+    func test_backForwardButtonStateChangedAction_withoutNavigationToolbar_returnsExpectedState() {
+        setupTestingStore(with: initialToolbarState(isShowingNavigationToolbar: false))
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let urlDidChangeState = loadWebsiteAction(state: initialState, reducer: reducer)
+        let newState = reducer(
+            urlDidChangeState,
+            ToolbarAction(
+                canGoBack: true,
+                canGoForward: false,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.backForwardButtonStateChanged
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.navigationActions.count, 2)
+        XCTAssertEqual(newState.navigationActions[0].actionType, .back)
+        XCTAssertEqual(newState.navigationActions[0].isEnabled, true)
+        XCTAssertEqual(newState.navigationActions[1].actionType, .forward)
+        XCTAssertEqual(newState.navigationActions[1].isEnabled, false)
     }
 
     func test_clearSearchAction_returnsExpectedState() {
@@ -285,6 +335,48 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
     }
 
+    // MARK: Helper
+    func setupAppState(with initialToolbarState: ToolbarState) -> AppState {
+        return AppState(
+            activeScreens: ActiveScreensState(
+                screens: [
+                    .browserViewController(
+                        BrowserViewControllerState(
+                            windowUUID: windowUUID
+                        )
+                    ),
+                    .toolbar(initialToolbarState)
+                ]
+            )
+        )
+    }
+
+    func setupTestingStore(with initialToolbarState: ToolbarState) {
+        StoreTestUtilityHelper.setupTestingStore(
+            with: setupAppState(with: initialToolbarState),
+            middlewares: [ToolbarMiddleware().toolbarProvider]
+        )
+    }
+
+    func initialToolbarState(isShowingNavigationToolbar: Bool) -> ToolbarState {
+        let toolbarState = ToolbarState(windowUUID: windowUUID)
+        return ToolbarState(
+            windowUUID: windowUUID,
+            toolbarPosition: toolbarState.toolbarPosition,
+            isPrivateMode: toolbarState.isPrivateMode,
+            addressToolbar: toolbarState.addressToolbar,
+            navigationToolbar: toolbarState.navigationToolbar,
+            isShowingNavigationToolbar: isShowingNavigationToolbar,
+            isShowingTopTabs: toolbarState.isShowingTopTabs,
+            canGoBack: toolbarState.canGoBack,
+            canGoForward: toolbarState.canGoForward,
+            numberOfTabs: toolbarState.numberOfTabs,
+            showMenuWarningBadge: toolbarState.showMenuWarningBadge,
+            isNewTabFeatureEnabled: toolbarState.isNewTabFeatureEnabled,
+            canShowDataClearanceAction: toolbarState.canShowDataClearanceAction,
+            canShowNavigationHint: toolbarState.canShowNavigationHint)
+    }
+
     // MARK: StoreTestUtility
     func setupAppState() -> AppState {
         return AppState(
@@ -306,7 +398,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func setupTestingStore() {
-        storeUtilityHelper.setupTestingStore(
+        StoreTestUtilityHelper.setupTestingStore(
             with: setupAppState(),
             middlewares: [ToolbarMiddleware().toolbarProvider]
         )
@@ -315,6 +407,6 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     // In order to avoid flaky tests, we should reset the store
     // similar to production
     func resetTestingStore() {
-        storeUtilityHelper.resetTestingStore()
+        StoreTestUtilityHelper.resetTestingStore()
     }
 }
