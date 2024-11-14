@@ -1108,9 +1108,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         sleep(1)
 
         // Sign In (if unauthenticated) (todo)
+        /*
         screenState.tap(
             app.tables.cells[AccessibilityIdentifiers.MainMenu.HeaderView.mainButton],
             to: Intro_FxASignin, if: "fxaUsername == nil")
+        */
         // New tab
         screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.mainMenu], to: NewTabScreen)
         // New private tab (TODO)
