@@ -177,6 +177,7 @@ class ReadingListPanel: UITableViewController,
     var notificationCenter: NotificationProtocol
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
+    private let logger: Logger
 
     private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
@@ -188,12 +189,14 @@ class ReadingListPanel: UITableViewController,
         profile: Profile,
         windowUUID: WindowUUID,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
-        notificationCenter: NotificationProtocol = NotificationCenter.default
+        notificationCenter: NotificationProtocol = NotificationCenter.default,
+        logger: Logger = DefaultLogger.shared
     ) {
         self.profile = profile
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.logger = logger
         self.state = .readingList
         super.init(nibName: nil, bundle: nil)
 
@@ -346,10 +349,15 @@ class ReadingListPanel: UITableViewController,
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(
+        guard let cell = tableView.dequeueReusableCell(
             withIdentifier: "ReadingListTableViewCell",
             for: indexPath
-        ) as! ReadingListTableViewCell
+        ) as? ReadingListTableViewCell else {
+            logger.log("Failed to dequeue ReadingListTableViewCell at indexPath: \(indexPath)",
+                       level: .fatal,
+                       category: .library)
+            return UITableViewCell()
+        }
         if let record = records?[indexPath.row] {
             cell.title = record.title
             cell.url = URL(string: record.url, invalidCharacters: false)!
