@@ -49,10 +49,10 @@ class TabDisplayPanel: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func removeFromParent() {
+    func removeTabPanel() {
         view.removeConstraints(view.constraints)
         view.subviews.forEach { $0.removeFromSuperview() }
-        super.removeFromParent()
+        view.removeFromSuperview()
     }
 
     override func viewDidLoad() {

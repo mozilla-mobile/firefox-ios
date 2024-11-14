@@ -34,8 +34,9 @@ class TabTrayCoordinator: BaseCoordinator,
     }
 
     func dismissChildTabTrayPanels() {
-        let childVCs: [UIViewController] = tabTrayViewController.childPanelControllers.flatMap { $0.viewControllers }
-        childVCs.forEach { $0.removeFromParent() }
+        // [FXIOS-10482] Initial fix for memory leak. Needs further investigation.
+        guard let childVCs = tabTrayViewController.currentPanel?.viewControllers else { return }
+        childVCs.forEach { ($0 as? TabDisplayPanel)?.removeTabPanel() }
     }
 
     private func initializeTabTrayViewController(selectedTab: TabTrayPanelType) {
