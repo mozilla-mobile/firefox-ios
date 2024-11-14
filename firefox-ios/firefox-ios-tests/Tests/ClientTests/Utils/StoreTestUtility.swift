@@ -8,13 +8,13 @@ import Redux
 
 protocol StoreTestUtility {
     func setupAppState() -> AppState
-    func setupTestingStore()
-    func resetTestingStore()
+    func setupStore()
+    func resetStore()
 }
 
 /// Utility class used when replacing the global store for testing purposes
 class StoreTestUtilityHelper {
-    static func setupTestingStore(with appState: AppState, middlewares: [Middleware<AppState>]) {
+    static func setupStore(with appState: AppState, middlewares: [Middleware<AppState>]) {
         store = Store(
             state: appState,
             reducer: AppState.reducer,
@@ -22,12 +22,12 @@ class StoreTestUtilityHelper {
         )
     }
 
-    static func setupTestingStore(with mockStore: any DefaultDispatchStore<AppState>) {
+    static func setupStore(with mockStore: any DefaultDispatchStore<AppState>) {
         store = mockStore
     }
 
     /// In order to avoid flaky tests, we should reset the store similar to production
-    static func resetTestingStore() {
+    static func resetStore() {
         store = Store(
             state: AppState(),
             reducer: AppState.reducer,

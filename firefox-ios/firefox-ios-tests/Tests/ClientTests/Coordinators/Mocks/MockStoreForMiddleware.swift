@@ -18,6 +18,10 @@ class MockStoreForMiddleware<State: StateType>: DefaultDispatchStore {
     /// ensure that your middleware correctly dispatches the right action(s) in response to a given action.
     var dispatchCalled: (numberOfTimes: Int, withActions: [Redux.Action]) = (0, [])
 
+    /// Used to confirm that a dispatch action completed, this is useful when the middleware is making an asynchronous call 
+    /// and we can use the completion to wait for an expectation to be fulfilled.
+    var dispatchCalledCompletion: (() -> Void)?
+
     init(state: State) {
         self.state = state
     }
@@ -50,5 +54,6 @@ class MockStoreForMiddleware<State: StateType>: DefaultDispatchStore {
         dispatchActions.append(action)
 
         dispatchCalled = (dispatchCalled.numberOfTimes + 1, dispatchActions)
+        dispatchCalledCompletion?()
     }
 }
