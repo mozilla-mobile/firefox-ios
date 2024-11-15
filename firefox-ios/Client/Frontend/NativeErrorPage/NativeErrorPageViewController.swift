@@ -50,7 +50,7 @@ final class NativeErrorPageViewController: UIViewController,
             top: 100,
             leading: 166,
             bottom: -16,
-            trailing: -144
+            trailing: -166
         )
     }
 
@@ -72,9 +72,6 @@ final class NativeErrorPageViewController: UIViewController,
     }
 
     private lazy var foxImage: UIImageView = .build { imageView in
-        imageView.image = UIImage(
-            named: ImageIdentifiers.NativeErrorPage.noInternetConnection
-        )
         imageView.contentMode = .scaleAspectFit
         imageView.isAccessibilityElement = false
         imageView.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.foxImage
@@ -133,8 +130,22 @@ final class NativeErrorPageViewController: UIViewController,
     // MARK: Redux
     func newState(state: NativeErrorPageState) {
         nativeErrorPageState = state
+
+        if let validImageName = nativeErrorPageState.foxImage {
+            foxImage.image = UIImage(named: validImageName)
+        }
+
         titleLabel.text = state.title
-        errorDescriptionLabel.text = state.description
+
+        if let validURL = state.url, let validDescription = state.description {
+            let errorDescription = getDescriptionWithHostName(
+                errorURL: validURL,
+                description: validDescription
+            )
+            errorDescriptionLabel.attributedText = errorDescription
+        } else {
+            errorDescriptionLabel.text = state.description
+        }
     }
 
     func subscribeToRedux() {
@@ -315,5 +326,23 @@ final class NativeErrorPageViewController: UIViewController,
                 actionType: GeneralBrowserActionType.reloadWebsite
             )
         )
+    }
+
+    func getDescriptionWithHostName(errorURL: URL, description: String) -> NSAttributedString? {
+        guard let validHostName = errorURL.host else { return nil }
+        let errDescription = String(format: description, validHostName)
+        let attributedString = errDescription.attributedText(
+            boldString: validHostName,
+            font: errorDescriptionLabel.font
+        )
+        return attributedString
+    }
+}
+
+public extension NSMutableAttributedString {
+    func setFont(_ font: UIFont) -> NSMutableAttributedString {
+        addAttribute(NSAttributedString.Key.font, value: font, range: NSRange(location: 0, length: string.count))
+
+        return self
     }
 }
