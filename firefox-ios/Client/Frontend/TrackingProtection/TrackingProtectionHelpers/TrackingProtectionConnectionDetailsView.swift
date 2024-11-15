@@ -131,4 +131,8 @@ final class TrackingProtectionConnectionDetailsView: UIView {
     func setupAccessibilityIdentifiers(foxImageA11yId: String) {
         foxStatusImage.accessibilityIdentifier = foxImageA11yId
     }
+
+    func applyTheme(theme: Theme) {
+        backgroundColor = theme.colors.layerAccentPrivateNonOpaque
+    }
 }

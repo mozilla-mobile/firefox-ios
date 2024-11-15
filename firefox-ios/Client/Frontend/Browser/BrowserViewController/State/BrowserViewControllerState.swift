@@ -176,7 +176,11 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
-                navigationDestination: NavigationDestination(.link, url: action.url)
+                navigationDestination: NavigationDestination(
+                    .link,
+                    url: action.url,
+                    isGoogleTopSite: action.isGoogleTopSite
+                )
             )
 
         default:

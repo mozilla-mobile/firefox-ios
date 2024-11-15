@@ -23,10 +23,20 @@ class MockTopSiteHistoryManager: TopSiteHistoryManagerProvider {
         ]
     }
 
+    // Demonstrates a tile that exists under sponsored tile list
+    static var duplicateTile: [Site] {
+        return [
+            PinnedSite(
+                site: Site(url: "https://firefox.com", title: "Firefox Sponsored Tile"),
+                faviconResource: nil
+            )
+        ]
+    }
+
     static var noPinnedData: [Site] {
         return [
-            Site(url: "www.mozilla.com", title: "History-Based Tile Test"),
-            Site(url: "www.firefox.com", title: "History-Based Tile 2 Test")
+            Site(url: "https://firefox.com", title: "History-Based Tile Test"),
+            Site(url: "www.example.com", title: "History-Based Tile 2 Test")
         ]
     }
 

@@ -8,7 +8,10 @@ import Shared
 import Common
 
 private let ToolbarBaseAnimationDuration: CGFloat = 0.2
-class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvider {
+class TabScrollingController: NSObject,
+                              FeatureFlaggable,
+                              SearchBarLocationProvider,
+                              Themeable {
     private struct UX {
         static let abruptScrollEventOffset: CGFloat = 200
     }
@@ -36,7 +39,16 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
             self.scrollView?.addGestureRecognizer(panGesture)
             scrollView?.delegate = self
             scrollView?.keyboardDismissMode = .onDrag
-            configureRefreshControl(isEnabled: true)
+            configureRefreshControl()
+            tab?.onLoading = { [weak self] in
+                guard let self else { return }
+                if tabIsLoading() {
+                    pullToRefreshView?.stopObservingContentScroll()
+                    pullToRefreshView?.removeFromSuperview()
+                } else {
+                    configureRefreshControl()
+                }
+            }
         }
     }
 
@@ -46,6 +58,7 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
 
     weak var zoomPageBar: ZoomPageBar?
     private var observedScrollViews = WeakList<UIScrollView>()
+    private var webViewIsLoadingObserver: NSKeyValueObservation?
 
     var overKeyboardContainerConstraint: Constraint?
     var bottomContainerConstraint: Constraint?
@@ -100,12 +113,24 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
     }()
 
     private var scrollView: UIScrollView? { return tab?.webView?.scrollView }
+    private var pullToRefreshView: PullRefreshView? {
+        return tab?.webView?.scrollView.subviews.first(where: {
+            $0 is PullRefreshView
+        }) as? PullRefreshView
+    }
     var contentOffset: CGPoint { return scrollView?.contentOffset ?? .zero }
     private var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
     private var topScrollHeight: CGFloat { header?.frame.height ?? 0 }
     private var contentSize: CGSize { return scrollView?.contentSize ?? .zero }
     private var contentOffsetBeforeAnimation = CGPoint.zero
     private var isAnimatingToolbar = false
+
+    var themeManager: any Common.ThemeManager
+    var themeObserver: (any NSObjectProtocol)?
+    var notificationCenter: any Common.NotificationProtocol
+    var currentWindowUUID: Common.WindowUUID? {
+        return windowUUID
+    }
 
     // Over keyboard content and bottom content
     private var overKeyboardScrollHeight: CGFloat {
@@ -125,15 +150,29 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
     }
 
     deinit {
+        webViewIsLoadingObserver?.invalidate()
         logger.log("TabScrollController deallocating", level: .info, category: .lifecycle)
         observedScrollViews.forEach({ stopObserving(scrollView: $0) })
+        guard let themeObserver else { return }
+        notificationCenter.removeObserver(themeObserver)
     }
 
-    init(windowUUID: WindowUUID, logger: Logger = DefaultLogger.shared) {
+    init(windowUUID: WindowUUID,
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         notificationCenter: NotificationProtocol = NotificationCenter.default,
+         logger: Logger = DefaultLogger.shared) {
+        self.themeManager = themeManager
         self.windowUUID = windowUUID
+        self.notificationCenter = notificationCenter
         self.logger = logger
         super.init()
         setupNotifications()
+    }
+
+    func traitCollectionDidChange() {
+        pullToRefreshView?.stopObservingContentScroll()
+        pullToRefreshView?.removeFromSuperview()
+        configureRefreshControl()
     }
 
     private func setupNotifications() {
@@ -182,6 +221,8 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
                 updateToolbarState()
             }
         }
+
+        pullToRefreshView?.isHidden = false
     }
 
     func showToolbars(animated: Bool) {
@@ -265,13 +306,40 @@ class TabScrollingController: NSObject, FeatureFlaggable, SearchBarLocationProvi
         self.isZoomedOut = false
         self.lastZoomedScale = 0
     }
+
+    // MARK: - Themeable
+
+    func applyTheme() {
+        pullToRefreshView?.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+    }
 }
 
 // MARK: - Private
 private extension TabScrollingController {
-    func configureRefreshControl(isEnabled: Bool) {
-        scrollView?.refreshControl = isEnabled ? UIRefreshControl() : nil
-        scrollView?.refreshControl?.addTarget(self, action: #selector(reload), for: .valueChanged)
+    func configureRefreshControl() {
+        guard let scrollView,
+              let webView = tab?.webView,
+              !scrollView.subviews.contains(where: { $0 is PullRefreshView })
+        else {
+            pullToRefreshView?.startObservingContentScroll()
+            return
+        }
+
+        let refresh = PullRefreshView(parentScrollView: self.scrollView,
+                                      isPotraitOrientation: UIWindow.isPortrait) {
+            self.reload()
+        }
+        self.scrollView?.addSubview(refresh)
+        refresh.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            refresh.leadingAnchor.constraint(equalTo: webView.leadingAnchor),
+            refresh.trailingAnchor.constraint(equalTo: webView.trailingAnchor),
+            refresh.bottomAnchor.constraint(equalTo: scrollView.topAnchor),
+            refresh.heightAnchor.constraint(equalToConstant: scrollView.frame.height),
+            refresh.widthAnchor.constraint(equalToConstant: scrollView.frame.width)
+        ])
+        refresh.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
+        listenForThemeChange(refresh)
     }
 
     @objc
@@ -457,8 +525,8 @@ extension TabScrollingController: UIGestureRecognizerDelegate {
 
 extension TabScrollingController: UIScrollViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-            lastContentOffsetY = scrollView.contentOffset.y
-        }
+        lastContentOffsetY = scrollView.contentOffset.y
+    }
 
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard !tabIsLoading(), !isBouncingAtBottom(), isAbleToScroll, let tab else { return }
@@ -519,12 +587,13 @@ extension TabScrollingController: UIScrollViewDelegate {
     }
 
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
-        configureRefreshControl(isEnabled: false)
+        pullToRefreshView?.stopObservingContentScroll()
+        pullToRefreshView?.removeFromSuperview()
         self.isUserZoom = true
     }
 
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        configureRefreshControl(isEnabled: true)
+        configureRefreshControl()
         self.isUserZoom = false
     }
 

@@ -34,7 +34,7 @@ class CertificatesViewController: UIViewController,
     // MARK: - UI
     struct UX {
         static let titleLabelMargin = 8.0
-        static let titleLabelTopMargin = 20.0
+        static let titleLabelMinHeight = 60.0
         static let headerStackViewMargin = 8.0
         static let headerStackViewTopMargin = 20.0
     }
@@ -42,6 +42,7 @@ class CertificatesViewController: UIViewController,
     private let titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Bold.title1.scaledFont()
         label.text = .Menu.EnhancedTrackingProtection.certificatesTitle
+        label.textAlignment = .left
     }
 
     private let headerView: NavigationHeaderView = .build { header in
@@ -65,17 +66,20 @@ class CertificatesViewController: UIViewController,
     var themeObserver: NSObjectProtocol?
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
+    private let logger: Logger
 
     // MARK: - View Lifecycle
 
     init(with viewModel: CertificatesModel,
          windowUUID: WindowUUID,
          and notificationCenter: NotificationProtocol = NotificationCenter.default,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
+         themeManager: ThemeManager = AppContainer.shared.resolve(),
+         logger: Logger = DefaultLogger.shared) {
         self.model = viewModel
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.themeManager = themeManager
+        self.logger = logger
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -136,9 +140,20 @@ class CertificatesViewController: UIViewController,
     private func setupTitleConstraints() {
         view.addSubview(titleLabel)
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.titleLabelMargin),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.titleLabelMargin),
-            titleLabel.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: UX.titleLabelTopMargin)
+            titleLabel.heightAnchor.constraint(
+                greaterThanOrEqualToConstant: UX.titleLabelMinHeight
+            ),
+            titleLabel.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor,
+                constant: UX.titleLabelMargin
+            ),
+            titleLabel.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor,
+                constant: -UX.titleLabelMargin
+            ),
+            titleLabel.topAnchor.constraint(
+                equalTo: headerView.bottomAnchor
+            )
         ])
     }
 
@@ -149,8 +164,7 @@ class CertificatesViewController: UIViewController,
         view.addSubview(certificatesTableView)
         NSLayoutConstraint.activate([
             certificatesTableView.topAnchor.constraint(
-                equalTo: titleLabel.bottomAnchor,
-                constant: UX.titleLabelTopMargin
+                equalTo: titleLabel.bottomAnchor
             ),
             certificatesTableView.leadingAnchor.constraint(
                 equalTo: view.leadingAnchor,
@@ -171,8 +185,13 @@ class CertificatesViewController: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView.dequeueReusableHeaderFooterView(
-            withIdentifier: CertificatesHeaderView.cellIdentifier) as! CertificatesHeaderView
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: CertificatesHeaderView.cellIdentifier) as? CertificatesHeaderView else {
+            logger.log("Failed to dequeue CertificatesHeaderView with identifier \(CertificatesHeaderView.cellIdentifier)",
+                       level: .fatal,
+                       category: .certificate)
+            return UIView()
+        }
         var items: [CertificatesHeaderItem] = []
         for (index, certificate) in model.certificates.enumerated() {
             let certificateValues = certificate.subject.description.getDictionary()
@@ -229,9 +248,9 @@ class CertificatesViewController: UIViewController,
                            sectionTitle: .Menu.EnhancedTrackingProtection.certificateValidity,
                            items: [
                             (.Menu.EnhancedTrackingProtection.certificateValidityNotBefore,
-                                certificate.notValidBefore.toRFC822String()),
+                             certificate.notValidBefore.toRFC822String()),
                             (.Menu.EnhancedTrackingProtection.certificateValidityNotAfter,
-                                certificate.notValidAfter.toRFC822String())
+                             certificate.notValidAfter.toRFC822String())
                            ])
 
         case .subjectAltName:
@@ -282,7 +301,7 @@ class CertificatesViewController: UIViewController,
 extension CertificatesViewController {
     func applyTheme() {
         let theme = currentTheme()
-        view.backgroundColor = theme.colors.layer5
+        view.backgroundColor = theme.colors.layer3
         titleLabel.textColor = theme.colors.textPrimary
         titleLabel.backgroundColor = theme.colors.layer5
         headerView.applyTheme(theme: theme)

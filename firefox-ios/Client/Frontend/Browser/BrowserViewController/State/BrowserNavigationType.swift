@@ -17,12 +17,15 @@ enum BrowserNavigationDestination: Equatable {
 struct NavigationDestination: Equatable {
     let destination: BrowserNavigationDestination
     let url: URL?
+    let isGoogleTopSite: Bool?
 
     init(
         _ destination: BrowserNavigationDestination,
-        url: URL? = nil
+        url: URL? = nil,
+        isGoogleTopSite: Bool? = nil
     ) {
         self.destination = destination
         self.url = url
+        self.isGoogleTopSite = isGoogleTopSite
     }
 }
