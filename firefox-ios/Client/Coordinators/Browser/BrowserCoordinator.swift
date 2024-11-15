@@ -545,9 +545,9 @@ class BrowserCoordinator: BaseCoordinator,
         guard !childCoordinators.contains(where: { $0 is MainMenuCoordinator }) else { return nil }
 
         let navigationController = DismissableNavigationViewController()
-        if navigationController.shouldUseiPadSetup() {
+        navigationController.modalPresentationStyle = .formSheet
+        if !navigationController.shouldUseiPadSetup() {
             navigationController.modalPresentationStyle = .formSheet
-        } else {
             navigationController.sheetPresentationController?.detents = [.medium(), .large()]
             navigationController.sheetPresentationController?.prefersGrabberVisible = true
         }
