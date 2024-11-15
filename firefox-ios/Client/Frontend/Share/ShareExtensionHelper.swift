@@ -12,6 +12,7 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
     private weak var selectedTab: Tab?
 
     private let url: URL
+    private let title: String?
     private var onePasswordExtensionItem: NSExtensionItem!
     private let browserFillIdentifier = "org.appextension.fill-browser-action"
     private let pocketIconExtension = "com.ideashower.ReadItLaterPro.AddToPocketExtension"
@@ -22,8 +23,9 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
     }
 
     // Can be a file:// or http(s):// url
-    init(url: URL, tab: Tab?) {
+    init(url: URL, title: String? = nil, tab: Tab?) {
         self.url = url
+        self.title = title
         self.selectedTab = tab
     }
 
@@ -83,6 +85,12 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
         guard !url.isFileURL else { return [url] }
 
         var activityItems = [Any]()
+
+        // Add the title (if it exists)
+        if let title = self.title {
+            activityItems.append(title)
+        }
+
         let printInfo = UIPrintInfo(dictionary: nil)
         printInfo.jobName = (url.absoluteString as NSString).lastPathComponent
         printInfo.outputType = .general

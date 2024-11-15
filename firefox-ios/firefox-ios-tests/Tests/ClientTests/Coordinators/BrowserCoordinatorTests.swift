@@ -255,6 +255,24 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(mockRouter.presentedViewController is UIActivityViewController)
     }
 
+    func testShowShareExtension_addsShareExtensionCoordinatorWithTitle() {
+        let subject = createSubject()
+
+        subject.showShareExtension(
+            url: URL(
+                string: "https://www.google.com"
+            )!,
+            title: "TEST TITLE",
+            sourceView: UIView(),
+            toastContainer: UIView()
+        )
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is ShareExtensionCoordinator)
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertTrue(mockRouter.presentedViewController is UIActivityViewController)
+    }
+
     func testShowCreditCardAutofill_addsCredentialAutofillCoordinator() {
         let subject = createSubject()
 
