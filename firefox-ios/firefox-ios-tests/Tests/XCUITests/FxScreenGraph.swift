@@ -59,7 +59,6 @@ let CreditCardsSettings = "AutofillCreditCard"
 let PageZoom = "PageZoom"
 let NotificationsSettings = "NotificationsSetting"
 let AddressesSettings = "AutofillAddress"
-let PartialBrowserTabMenu = "PartialBrowserTabMenu"
 let ToolsBrowserTabMenu = "ToolsBrowserTabMenu"
 let SaveBrowserTabMenu = "SaveBrowserTabMenu"
 
@@ -317,7 +316,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             }
         }
         makeURLBarAvailable(screenState)
-        screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], to: PartialBrowserTabMenu)
+        screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], to: BrowserTabMenu)
 
         if isTablet {
             screenState.tap(
@@ -941,7 +940,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     func makeToolBarAvailable(_ screenState: MMScreenStateNode<FxUserState>) {
-        screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], to: PartialBrowserTabMenu)
+        screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], to: BrowserTabMenu)
         if isTablet {
             screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], to: TabTray)
         } else {
@@ -955,7 +954,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         makeURLBarAvailable(screenState)
         screenState.tap(
             app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton],
-            to: PartialBrowserTabMenu
+            to: BrowserTabMenu
         )
 
         screenState.tap(
@@ -1090,13 +1089,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
     }
 
-    map.addScreenState(PartialBrowserTabMenu) { screenState in
-        screenState.swipeUp(app.buttons["Sheet Grabber"], to: BrowserTabMenu)
-
-        screenState.dismissOnUse = true
-        screenState.backAction = cancelBackAction
-    }
-
     map.addScreenState(ToolsBrowserTabMenu) { screenState in
         // Zoom
         screenState.tap(
@@ -1123,21 +1115,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(SaveBrowserTabMenu) { screenState in
-        // bookmark this page (TODO: Check "to". Do we need this?)
-        screenState.tap(
-            app.tables.cells[AccessibilityIdentifiers.MainMenu.bookmarkThisPage],
-            to: BrowserTab)
-        // add to shortcuts (TODO: Check "to". Do we need this?)
-        screenState.tap(
-            app.tables.cells[AccessibilityIdentifiers.MainMenu.addToShortcuts],
-            to: BrowserTab)
-        // save to reading list (TODO: Check "to". Do we need this?)
-        screenState.tap(
-            app.tables.cells[AccessibilityIdentifiers.MainMenu.saveToReadingList],
-            to: BrowserTab)
-
-        screenState.dismissOnUse = true
-        screenState.backAction = cancelBackAction
+        screenState.backAction = navigationControllerBackAction
     }
 
     map.addScreenState(BrowserTabMenu) { screenState in
@@ -1176,6 +1154,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.save], to: SaveBrowserTabMenu)
         // Bookmarks
         screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.bookmarks], to: LibraryPanel_Bookmarks)
+        // Actions.BookmarkThreeDots?
         // History
         screenState.tap(
             app.tables.cells[AccessibilityIdentifiers.MainMenu.history],
