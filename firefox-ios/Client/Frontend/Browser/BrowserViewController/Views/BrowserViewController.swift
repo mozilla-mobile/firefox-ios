@@ -500,6 +500,7 @@ class BrowserViewController: UIViewController,
             self.updateDisplayedPopoverProperties = nil
             self.displayedPopoverController = nil
         }
+        store.dispatch(PasswordGeneratorAction(windowUUID: windowUUID, actionType: PasswordGeneratorActionType.blurPassword))
 
         // If we are displaying a private tab, hide any elements in the tab that we wouldn't want shown
         // when the app is in the home switcher
@@ -553,6 +554,7 @@ class BrowserViewController: UIViewController,
         }
 
         browserDidBecomeActive()
+        store.dispatch(PasswordGeneratorAction(windowUUID: windowUUID, actionType: PasswordGeneratorActionType.unblurPassword))
     }
 
     func browserDidBecomeActive() {

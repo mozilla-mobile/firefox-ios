@@ -41,6 +41,8 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifia
         button.addTarget(self, action: #selector(self.refreshOnClick), for: .touchUpInside)
     }
 
+    var blurEffectView: UIVisualEffectView?
+
     var refreshPasswordButtonOnClick: (() -> Void)?
 
     convenience init(frame: CGRect, notificationCenter: NotificationProtocol = NotificationCenter.default) {
@@ -106,6 +108,14 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifia
         let rangeOfPassword = (attributedString.string as NSString).range(of: password)
         attributedString.addAttributes([.accessibilitySpeechSpellOut: true], range: rangeOfPassword)
         return attributedString
+    }
+
+    func blurPassword() {
+        passwordLabel.alpha = 0
+    }
+
+    func unblurPassword() {
+        passwordLabel.alpha = 1
     }
 
     @objc
