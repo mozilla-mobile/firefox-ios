@@ -411,8 +411,10 @@ struct AddressBarState: StateType, Equatable {
 
         return AddressBarState(
             windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
-            pageActions: state.pageActions,
+            navigationActions: navigationActions(action: toolbarAction,
+                                                 addressBarState: state,
+                                                 isEditing: state.isEditing),
+            pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
             browserActions: browserActions(action: toolbarAction, addressBarState: state),
             borderPosition: state.borderPosition,
             url: state.url,

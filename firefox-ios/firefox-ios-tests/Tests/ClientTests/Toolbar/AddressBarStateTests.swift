@@ -262,6 +262,35 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.searchTerm, nil)
     }
 
+    func test_showMenuWarningBadgeAction_returnsExpectedState() {
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                showMenuWarningBadge: true,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.showMenuWarningBadge
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.navigationActions.count, 0)
+
+        XCTAssertEqual(newState.pageActions.count, 1)
+        XCTAssertEqual(newState.pageActions[0].actionType, .qrCode)
+
+        XCTAssertEqual(newState.browserActions.count, 2)
+        XCTAssertEqual(newState.browserActions[0].actionType, .tabs)
+        XCTAssertEqual(newState.browserActions[1].actionType, .menu)
+        XCTAssertNotNil(newState.browserActions[1].badgeImageName)
+        XCTAssertNotNil(newState.browserActions[1].maskImageName)
+
+        XCTAssertEqual(newState.searchTerm, nil)
+    }
+
     func test_didStartEditingUrlAction_onHomepage_returnsExpectedState() {
         setupStore()
         let initialState = createSubject()
