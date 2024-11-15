@@ -2,10 +2,17 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import UIKit
 import Shared
 
 class MenuBuilderHelper {
+    private let logger: Logger
+
+    init(logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
+    }
+
     struct MenuIdentifiers {
         static let history = UIMenu.Identifier("com.mozilla.firefox.menus.history")
         static let bookmarks = UIMenu.Identifier("com.mozilla.firefox.menus.bookmarks")
@@ -67,7 +74,13 @@ class MenuBuilderHelper {
             ]
         )
         fileMenu.children.forEach {
-            ($0 as! UIKeyCommand).wantsPriorityOverSystemBehavior = true
+            guard let fileMenuKeyCommand = $0 as? UIKeyCommand else {
+                logger.log("Failed to cast file menu child to UIKeyCommand in MenuBuilderHelper class",
+                           level: .fatal,
+                           category: .library)
+                return
+            }
+            fileMenuKeyCommand.wantsPriorityOverSystemBehavior = true
         }
 
         let findMenu = UIMenu(
@@ -90,7 +103,13 @@ class MenuBuilderHelper {
             ]
         )
         findMenu.children.forEach {
-            ($0 as! UIKeyCommand).wantsPriorityOverSystemBehavior = true
+            guard let findMenuKeyCommand = $0 as? UIKeyCommand else {
+                logger.log("Failed to cast find menu child to UIKeyCommand in MenuBuilderHelper class",
+                           level: .fatal,
+                           category: .library)
+                return
+            }
+            findMenuKeyCommand.wantsPriorityOverSystemBehavior = true
         }
 
         var viewMenuChildren: [UIMenuElement] = [
@@ -137,7 +156,13 @@ class MenuBuilderHelper {
 
         let viewMenu = UIMenu(options: .displayInline, children: viewMenuChildren)
         viewMenu.children.forEach {
-            ($0 as! UIKeyCommand).wantsPriorityOverSystemBehavior = true
+            guard let viewMenuKeyCommand = $0 as? UIKeyCommand else {
+                logger.log("Failed to cast view menu child to UIKeyCommand in MenuBuilderHelper class",
+                           level: .fatal,
+                           category: .library)
+                return
+            }
+            viewMenuKeyCommand.wantsPriorityOverSystemBehavior = true
         }
 
         let historyMenu = UIMenu(
@@ -255,7 +280,13 @@ class MenuBuilderHelper {
 
         if #available(iOS 15, *) {
             windowMenu.children.forEach {
-                ($0 as! UIKeyCommand).wantsPriorityOverSystemBehavior = true
+                guard let windowMenuKeyCommand = $0 as? UIKeyCommand else {
+                    logger.log("Failed to cast window menu child to UIKeyCommand in MenuBuilderHelper class",
+                               level: .fatal,
+                               category: .library)
+                    return
+                }
+                windowMenuKeyCommand.wantsPriorityOverSystemBehavior = true
             }
         }
 

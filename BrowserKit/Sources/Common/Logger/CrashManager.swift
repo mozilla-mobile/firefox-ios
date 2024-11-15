@@ -73,6 +73,7 @@ public class DefaultCrashManager: CrashManager {
     private var sentryWrapper: SentryWrapper
     private var isSimulator: Bool
     private var skipReleaseNameCheck: Bool
+    private let logger: Logger
 
     // Only enable app hang tracking in Beta for now
     private var shouldEnableAppHangTracking: Bool {
@@ -90,11 +91,13 @@ public class DefaultCrashManager: CrashManager {
     public init(appInfo: BrowserKitInformation = BrowserKitInformation.shared,
                 sentryWrapper: SentryWrapper = DefaultSentry(),
                 isSimulator: Bool = DeviceInfo.isSimulator(),
-                skipReleaseNameCheck: Bool = false) {
+                skipReleaseNameCheck: Bool = false,
+                logger: Logger = DefaultLogger.shared) {
         self.appInfo = appInfo
         self.sentryWrapper = sentryWrapper
         self.isSimulator = isSimulator
         self.skipReleaseNameCheck = skipReleaseNameCheck
+        self.logger = logger
     }
 
     // MARK: - CrashManager protocol
@@ -128,8 +131,12 @@ public class DefaultCrashManager: CrashManager {
             // Turn Sentry breadcrumbs off since we have our own log swizzling
             options.enableAutoBreadcrumbTracking = false
             options.beforeSend = { event in
-                if event.error.self is CustomCrashReport {
-                    self.alterEventForCustomCrash(event: event, crash: event.error as! CustomCrashReport)
+                if let crashReport = event.error.self as? CustomCrashReport {
+                    self.alterEventForCustomCrash(event: event, crash: crashReport)
+                } else {
+                    self.logger.log("Encountered an error that is not a CustomCrashReport: \(String(describing: event.error))",
+                                    level: .fatal,
+                                    category: .lifecycle)
                 }
                 return event
             }
