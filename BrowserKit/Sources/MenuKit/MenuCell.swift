@@ -8,10 +8,10 @@ import UIKit
 
 public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
     private struct UX {
-        static let contentMargin: CGFloat = 11
+        static let contentMargin: CGFloat = 12
         static let iconSize: CGFloat = 24
         static let largeIconSize: CGFloat = 48
-        static let contentSpacing: CGFloat = 5
+        static let contentSpacing: CGFloat = 3
         static let noDescriptionContentSpacing: CGFloat = 0
     }
 
