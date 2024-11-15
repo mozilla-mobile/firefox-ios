@@ -45,4 +45,8 @@ class BookmarksHandlerMock: BookmarksHandler {
                             url: String?) -> Success {
         succeed()
     }
+
+    func countBookmarksInTrees(folderGuids: [GUID], completion: @escaping (Result<Int, Error>) -> Void) {
+        completion(.success(0))
+    }
 }
