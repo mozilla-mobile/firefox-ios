@@ -49,7 +49,9 @@ class ShareExtensionCoordinator: BaseCoordinator,
         popoverArrowDirection: UIPopoverArrowDirection = .up
     ) {
         let shareExtension = ShareExtensionHelper(
-          url: url, title: title ?? tabManager.selectedTab?.title, tab: tabManager.selectedTab)
+            url: url,
+            title: title ?? tabManager.selectedTab?.title,
+            tab: tabManager.selectedTab)
         let controller = shareExtension.createActivityViewController(
             tabManager.selectedTab?.webView
         ) { [weak self] completed, activityType in

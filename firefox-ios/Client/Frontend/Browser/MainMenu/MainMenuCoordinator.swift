@@ -90,7 +90,7 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
                 )
                 self.navigationHandler?.showSignInView(fxaParameters: fxaParameters)
             case .shareSheet:
-              self.navigationHandler?.showShareSheet(with: destination.url)
+                self.navigationHandler?.showShareSheet(with: destination.url)
             case .zoom:
                 self.navigationHandler?.updateZoomPageBarVisibility()
             }

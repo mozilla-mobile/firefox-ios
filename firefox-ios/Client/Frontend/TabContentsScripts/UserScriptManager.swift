@@ -19,7 +19,7 @@ class UserScriptManager: FeatureFlaggable {
         forMainFrameOnly: true)
     private let nightModeUserScript = WKUserScript.createInDefaultContentWorld(
         source: "window.__firefox__.NightMode.setEnabled(true)",
-        injectionTime: .atDocumentStart,
+        injectionTime: .atDocumentEnd,
         forMainFrameOnly: true)
     private let printHelperUserScript = WKUserScript.createInPageContentWorld(
         source: "window.print = function () { window.webkit.messageHandlers.printHandler.postMessage({}) }",

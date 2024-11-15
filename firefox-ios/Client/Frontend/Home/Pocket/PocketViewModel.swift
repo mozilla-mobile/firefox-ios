@@ -30,17 +30,20 @@ class PocketViewModel {
     private var pocketStoriesViewModels = [PocketStandardCellViewModel]()
     private var wallpaperManager: WallpaperManager
     private var prefs: Prefs
+    private let logger: Logger
 
     init(pocketDataAdaptor: PocketDataAdaptor,
          isZeroSearch: Bool = false,
          theme: Theme,
          prefs: Prefs,
-         wallpaperManager: WallpaperManager) {
+         wallpaperManager: WallpaperManager,
+         logger: Logger = DefaultLogger.shared) {
         self.dataAdaptor = pocketDataAdaptor
         self.isZeroSearch = isZeroSearch
         self.theme = theme
         self.prefs = prefs
         self.wallpaperManager = wallpaperManager
+        self.logger = logger
     }
 
     // The dimension of a cell
@@ -208,15 +211,25 @@ extension PocketViewModel: HomepageSectionHandler {
         recordSectionHasShown()
 
         if isStoryCell(index: indexPath.row) {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LegacyPocketStandardCell.cellIdentifier,
-                                                          for: indexPath) as! LegacyPocketStandardCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LegacyPocketStandardCell.cellIdentifier,
+                                                                for: indexPath) as? LegacyPocketStandardCell else {
+                logger.log("Failed to dequeue LegacyPocketStandardCell at indexPath: \(indexPath)",
+                           level: .fatal,
+                           category: .legacyHomepage)
+                return UICollectionViewCell()
+            }
             let viewModel = pocketStoriesViewModels[indexPath.row]
             viewModel.tag = indexPath.row
             cell.configure(viewModel: viewModel, theme: theme)
             return cell
         } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PocketDiscoverCell.cellIdentifier,
-                                                          for: indexPath) as! PocketDiscoverCell
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PocketDiscoverCell.cellIdentifier,
+                                                                for: indexPath) as? PocketDiscoverCell else {
+                logger.log("Failed to dequeue PocketDiscoverCell at indexPath: \(indexPath)",
+                           level: .fatal,
+                           category: .legacyHomepage)
+                return UICollectionViewCell()
+            }
             cell.configure(text: .FirefoxHomepage.Pocket.DiscoverMore, theme: theme)
             return cell
         }

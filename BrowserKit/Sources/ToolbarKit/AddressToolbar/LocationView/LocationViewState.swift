@@ -23,7 +23,7 @@ public struct LocationViewState {
     public let searchTerm: String?
     public let isEditing: Bool
     public let didStartTyping: Bool
-    public let isScrollingDuringEdit: Bool
+    public let shouldShowKeyboard: Bool
     public let shouldSelectSearchTerm: Bool
     public var onTapLockIcon: ((UIButton) -> Void)?
     public var onLongPress: (() -> Void)?
@@ -44,7 +44,7 @@ public struct LocationViewState {
         searchTerm: String?,
         isEditing: Bool,
         didStartTyping: Bool,
-        isScrollingDuringEdit: Bool,
+        shouldShowKeyboard: Bool,
         shouldSelectSearchTerm: Bool,
         onTapLockIcon: ((UIButton) -> Void)? = nil,
         onLongPress: (() -> Void)? = nil
@@ -64,7 +64,7 @@ public struct LocationViewState {
         self.searchTerm = searchTerm
         self.isEditing = isEditing
         self.didStartTyping = didStartTyping
-        self.isScrollingDuringEdit = isScrollingDuringEdit
+        self.shouldShowKeyboard = shouldShowKeyboard
         self.shouldSelectSearchTerm = shouldSelectSearchTerm
         self.onTapLockIcon = onTapLockIcon
         self.onLongPress = onLongPress

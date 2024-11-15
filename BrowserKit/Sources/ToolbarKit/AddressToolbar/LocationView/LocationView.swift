@@ -16,6 +16,7 @@ final class LocationView: UIView,
         static let gradientViewWidth: CGFloat = 40
         static let iconContainerCornerRadius: CGFloat = 8
         static let lockIconImageViewSize = CGSize(width: 40, height: 24)
+        static let iconContainerNoLockLeadingSpace: CGFloat = 16
     }
 
     private var urlAbsolutePath: String?
@@ -248,7 +249,10 @@ final class LocationView: UIView,
         removeContainerIcons()
         iconContainerStackView.addArrangedSubview(lockIconButton)
         updateURLTextFieldLeadingConstraint()
-        iconContainerStackViewLeadingConstraint?.constant = 0
+
+        let leadingConstraint = lockIconImageName == nil ? UX.iconContainerNoLockLeadingSpace : 0.0
+
+        iconContainerStackViewLeadingConstraint?.constant = leadingConstraint
         updateGradient()
     }
 
@@ -265,7 +269,7 @@ final class LocationView: UIView,
         urlTextField.placeholder = state.urlTextFieldPlaceholder
         urlAbsolutePath = state.url?.absoluteString
 
-        let shouldShowKeyboard = state.isEditing && !state.isScrollingDuringEdit
+        let shouldShowKeyboard = state.isEditing && state.shouldShowKeyboard
         _ = shouldShowKeyboard ? becomeFirstResponder() : resignFirstResponder()
 
         // Remove the default drop interaction from the URL text field so that our

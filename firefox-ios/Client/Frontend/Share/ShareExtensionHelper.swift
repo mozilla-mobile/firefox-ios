@@ -12,7 +12,7 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
     private weak var selectedTab: Tab?
 
     private let url: URL
-  private let title: String?
+    private let title: String?
     private var onePasswordExtensionItem: NSExtensionItem!
     private let browserFillIdentifier = "org.appextension.fill-browser-action"
     private let pocketIconExtension = "com.ideashower.ReadItLaterPro.AddToPocketExtension"
@@ -86,10 +86,10 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
 
         var activityItems = [Any]()
 
-      // Add the title (if it exists)
-      if let title = self.title {
-          activityItems.append(title)
-      }
+        // Add the title (if it exists)
+        if let title = self.title {
+            activityItems.append(title)
+        }
 
         let printInfo = UIPrintInfo(dictionary: nil)
         printInfo.jobName = (url.absoluteString as NSString).lastPathComponent
