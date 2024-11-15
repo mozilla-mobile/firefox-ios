@@ -329,6 +329,39 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.borderPosition, .top)
     }
 
+    func test_didPasteSearchTermAction_returnsExpectedState() {
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+        let searchTerm = "mozilla"
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                searchTerm: searchTerm,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.didPasteSearchTerm
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.navigationActions.count, 1)
+        XCTAssertEqual(newState.navigationActions[0].actionType, .cancelEdit)
+
+        XCTAssertEqual(newState.pageActions.count, 0)
+
+        XCTAssertEqual(newState.browserActions.count, 2)
+        XCTAssertEqual(newState.browserActions[0].actionType, .tabs)
+        XCTAssertEqual(newState.browserActions[1].actionType, .menu)
+
+        XCTAssertEqual(newState.searchTerm, searchTerm)
+        XCTAssertTrue(newState.isEditing)
+        XCTAssertTrue(newState.shouldShowKeyboard)
+        XCTAssertFalse(newState.shouldSelectSearchTerm)
+        XCTAssertFalse(newState.didStartTyping)
+        XCTAssertFalse(newState.showQRPageAction)
+    }
+
     func test_didStartEditingUrlAction_onHomepage_returnsExpectedState() {
         setupStore()
         let initialState = createSubject()
