@@ -276,7 +276,8 @@ class CreditCardsTests: BaseTestCase {
                          ["9631", "Test3", "7/40"]]
         for index in 1...3 {
             mozWaitForElementToExist(app.tables.cells.element(boundBy: index).buttons.firstMatch)
-            XCTAssertTrue(app.tables.cells.element(boundBy: index).buttons.elementContainingText(cardsInfo[index-1][0]).exists,
+            XCTAssertTrue(app.tables.cells.element(boundBy: index).buttons
+                .elementContainingText(cardsInfo[index-1][0]).exists,
                           "\(cardsInfo[index-1][0]) info is not displayed")
             XCTAssertTrue(app.tables.cells.element(boundBy: index).buttons[cardsInfo[index-1][1]].exists,
                           "\(cardsInfo[index-1][1]) info is not displayed")
