@@ -240,7 +240,7 @@ class RustAutofillTests: XCTestCase {
                                            ccNumber: creditCard.ccNumberEnc,
                                            ccNumberLast4: creditCard.ccNumberLast4,
                                            ccExpMonth: creditCard.ccExpMonth,
-                                           ccExpYear: expectedCcExpYear,
+                                           ccExpYear: Int64(2028),
                                            ccType: creditCard.ccType)
     }
 
