@@ -217,6 +217,7 @@ class RustAutofillTests: XCTestCase {
                                     expectationCheckUpdateCard.fulfill()
                                 } catch {
                                     XCTFail("The updatedCardVal variable should not be nil.")
+                                    expectationCheckUpdateCard.fulfill()
                                 }
                             }
                         }
