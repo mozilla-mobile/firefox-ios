@@ -219,7 +219,7 @@ class RustAutofillTests: XCTestCase {
                             }
                         }
                     } catch {
-
+                        XCTFail("The card variable should not be nil.")
                     }
                 }
             } catch {
