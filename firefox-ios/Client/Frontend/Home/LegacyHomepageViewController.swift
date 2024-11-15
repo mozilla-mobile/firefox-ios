@@ -435,7 +435,7 @@ class LegacyHomepageViewController:
                 let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
                 store.dispatch(action)
             } else {
-                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didScrollDuringEdit)
+                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.hideKeyboard)
                 store.dispatch(action)
             }
         }

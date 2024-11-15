@@ -39,10 +39,12 @@ class BlockedTrackersHeaderView: UITableViewHeaderFooterView,
                 constant: -TPMenuUX.UX.horizontalMargin
             ),
             totalTrackersBlockedLabel.topAnchor.constraint(
-                equalTo: topAnchor
+                equalTo: topAnchor,
+                constant: TPMenuUX.UX.connectionDetailsHeaderMargins
             ),
             totalTrackersBlockedLabel.bottomAnchor.constraint(
-                equalTo: bottomAnchor
+                equalTo: bottomAnchor,
+                constant: -TPMenuUX.UX.connectionDetailsHeaderMargins
             )
         ])
     }

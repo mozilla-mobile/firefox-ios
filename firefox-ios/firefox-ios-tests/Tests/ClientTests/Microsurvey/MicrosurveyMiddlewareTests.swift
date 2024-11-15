@@ -13,12 +13,12 @@ final class MicrosurveyMiddlewareIntegrationTests: XCTestCase, StoreTestUtility 
         super.setUp()
         Glean.shared.resetGlean(clearStores: true)
         DependencyHelperMock().bootstrapDependencies()
-        setupTestingStore()
+        setupStore()
     }
 
     override func tearDown() {
         DependencyHelperMock().reset()
-        resetTestingStore()
+        resetStore()
         super.tearDown()
     }
 
@@ -116,8 +116,8 @@ final class MicrosurveyMiddlewareIntegrationTests: XCTestCase, StoreTestUtility 
         )
     }
 
-    func setupTestingStore() {
-        StoreTestUtilityHelper.setupTestingStore(
+    func setupStore() {
+        StoreTestUtilityHelper.setupStore(
             with: setupAppState(),
             middlewares: [MicrosurveyMiddleware().microsurveyProvider]
         )
@@ -125,7 +125,7 @@ final class MicrosurveyMiddlewareIntegrationTests: XCTestCase, StoreTestUtility 
 
     // In order to avoid flaky tests, we should reset the store
     // similar to production
-    func resetTestingStore() {
-        StoreTestUtilityHelper.resetTestingStore()
+    func resetStore() {
+        StoreTestUtilityHelper.resetStore()
     }
 }

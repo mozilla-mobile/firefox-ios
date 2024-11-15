@@ -830,5 +830,12 @@ public struct AccessibilityIdentifiers {
         static let content = "PasswordGenerator.content"
         static let header = "PasswordGenerator.header"
     }
+
+    struct NativeErrorPage {
+        static let foxImage = "NativeErrorPage.foxImage"
+        static let titleLabel = "NativeErrorPage.titleLabel"
+        static let errorDescriptionLabel = "NativeErrorPage.errorDescriptionLabel"
+        static let reloadButton = "NativeErrorPage.reloadButton"
+    }
 }
 // swiftlint:enable line_length

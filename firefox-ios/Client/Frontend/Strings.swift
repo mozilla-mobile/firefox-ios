@@ -1569,10 +1569,10 @@ extension String {
                 value: "Be careful. Something doesn’t look right.",
                 comment: "On error page, this is the title for generic error.")
             public static let Description = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.Description.v131",
+                key: "NativeErrorPage.GenericError.Description.v134",
                 tableName: "NativeErrorPage",
-                value: "An SSL error has occurred and a secure connection to the server cannot be made.",
-                comment: "On error page, this is the description for generic error.")
+                value: "The owner of %@ hasn’t set it up properly and a secure connection can’t be created.",
+                comment: "On error page, this is the description for generic error. The placeholder will be replaced by the site url")
         }
     }
 }
@@ -4453,6 +4453,35 @@ extension String {
                     value: "Close",
                     comment: "When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility label for the sheet's close button.")
             }
+        }
+    }
+
+    // MARK: - Sent from Firefox / Share Link Experiment
+    public struct SentFromFirefox {
+        public struct SocialShare {
+            public static let ShareMessageA = MZLocalizedString(
+                key: "SentFromFirefox.SocialShare.ShareMessageA.Title.v134",
+                tableName: "SocialShare",
+                value: "%1$@ %2$@ Sent from %3$@ 🦊 Try the mobile browser: %4$@",
+                comment: "When a user shares a link to social media, this is the shared text they'll see in the social media app. The first parameter is the shared website's page title. The second parameter is the shared website's URL. The third parameter is the Firefox app name. The fourth parameter is the link to download the Firefox app.")
+
+            public static let ShareMessageB = MZLocalizedString(
+                key: "SentFromFirefox.SocialShare.ShareMessageB.Title.v134",
+                tableName: "SocialShare",
+                value: "%1$@ Sent from %2$@ 🦊 %3$@",
+                comment: "When a user shares a link to social media, this is the shared text they'll see in the social media app. The first parameter is the shared website's URL. The second parameter is the Firefox app name. The third parameter is the link to download the Firefox app.")
+
+            public static let SocialSettingsToggleTitle = MZLocalizedString(
+                key: "SentFromFirefox.SocialShare.SettingsToggle.Title.v134",
+                tableName: "SocialShare",
+                value: "Include %1$@ Download Link on %2$@ Shares",
+                comment: "On the Settings screen, this is the title text for a toggle which controls adding additional text to links shared to social media. The first parameter is the Firefox app name. The second parameter is the social media app name (e.g. WhatsApp).")
+
+            public static let SocialSettingsToggleSubtitle = MZLocalizedString(
+                key: "SentFromFirefox.SocialShare.SettingsToggle.Subtitle.v134",
+                tableName: "SocialShare",
+                value: "Spread the word about %1$@ every time you share a link on %2$@.",
+                comment: "On the Settings screen, this is the subtitle text for a toggle which controls adding additional text to links shared to social media. The first parameter is the Firefox app name. The second parameter is the social media app name (e.g. WhatsApp).")
         }
     }
 
@@ -7466,6 +7495,11 @@ extension String {
                 tableName: "MainMenu",
                 value: "Report Broken Site",
                 comment: "On the main menu, the title for the action that will take the user to the site where they can report a broken website to our web compatibility team.")
+            public static let Description = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.Description.v131",
+                tableName: "NativeErrorPage",
+                value: "An SSL error has occurred and a secure connection to the server cannot be made.",
+                comment: "On error page, this is the description for generic error.")
         }
         struct v132 {
             public static let TabTrayToggleAccessibilityLabel = MZLocalizedString(

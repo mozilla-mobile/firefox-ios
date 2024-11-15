@@ -28,7 +28,7 @@
           "version": null
         }
       },
-        {
+      {
         "package": "Glean",
         "repositoryURL": "https://github.com/mozilla/glean-swift",
         "state": {
@@ -46,13 +46,13 @@
           "version": "7.12.0"
         }
       },
-        {
+      {
         "package": "MozillaRustComponentsSwift",
         "repositoryURL": "https://github.com/mozilla/rust-components-swift",
         "state": {
           "branch": null,
-          "revision": "f1439e4113262ae4291f6c12f0b7871b506e9f0e",
-          "version": "134.0.20241113050253"
+          "revision": "e546ddaf28ad10ccc99973fa6c2426c4c03ca115",
+          "version": "134.0.20241114050344"
         }
       },
       {
@@ -60,8 +60,8 @@
         "repositoryURL": "https://github.com/getsentry/sentry-cocoa",
         "state": {
           "branch": null,
-          "revision": "38f4f70d07117b9f958a76b1bff278c2f29ffe0e",
-          "version": "8.21.0"
+          "revision": "5575af93efb776414f243e93d6af9f6258dc539a",
+          "version": "8.36.0"
         }
       },
       {

@@ -11,8 +11,8 @@ class DataManagementTests: BaseTestCase {
         // navigator.performAction(Action.AcceptClearAllWebsiteData)
         // We need to fix the method in FxScreenGraph file
         // but there are many linter issues on that file, so this is a quick fix
-        app.tables.cells["ClearAllWebsiteData"].staticTexts["Clear All Website Data"].waitAndTap()
-        app.alerts.buttons["OK"].waitAndTap()
+        app.tables.cells["ClearAllWebsiteData"].staticTexts["Clear All Website Data"].waitAndTap(timeout: TIMEOUT)
+        app.alerts.buttons["OK"].waitAndTap(timeout: TIMEOUT)
         XCTAssertEqual(app.cells.buttons.images.count, 0, "The Website data has not cleared correctly")
         // Navigate back to the browser
         mozWaitElementHittable(element: app.buttons["Data Management"], timeout: TIMEOUT)
