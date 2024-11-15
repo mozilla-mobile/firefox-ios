@@ -369,7 +369,7 @@ class RouteTests: XCTestCase {
 
     func testAppAction_showIntroOnboarding() {
         let subject = createSubject()
-        let url = URL(string: "firefox://share-sheet?url=/action/show-intro-onboarding")!
+        let url = URL(string: "firefox://deep-link?url=/action/show-intro-onboarding")!
 
         let route = subject.makeRoute(url: url)
 

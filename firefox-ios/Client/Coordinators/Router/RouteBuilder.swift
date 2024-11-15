@@ -125,11 +125,9 @@ final class RouteBuilder {
             case .sharesheet:
                 let linkString = urlScanner.value(query: "url")
                 let titleText = urlScanner.value(query: "title")
-                // Convert the linkString (String?) to a URL? using URL(string:)
                 if let link = linkString, let url = URL(string: link) {
                   return .sharesheet(url: url, title: titleText)
                 } else {
-                    // Handle the case where the URL string is invalid or nil
                     return nil
                 }
             }
