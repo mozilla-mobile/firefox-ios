@@ -69,11 +69,15 @@ extension BrowserViewController: WKUIDelegate {
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping () -> Void
     ) {
-        let messageAlert = MessageAlert(message: message, frame: frame, completionHandler: completionHandler)
+        defer {
+            completionHandler()
+        }
+        let messageAlert = MessageAlert(message: message, frame: frame)
         if shouldDisplayJSAlertForWebView(webView) {
             logger.log("Javascript message alert will be presented.", level: .info, category: .webview)
-
-            present(messageAlert.alertController(), animated: true) {
+            let alert = messageAlert.alertController()
+            alert.delegate = self
+            present(alert, animated: true) {
                 self.logger.log("Javascript message alert was completed.", level: .info, category: .webview)
             }
         } else if let promptingTab = tabManager[webView] {
@@ -118,13 +122,14 @@ extension BrowserViewController: WKUIDelegate {
             self.logger.log("Javascript text input alert was completed.", level: .info, category: .webview)
             completionHandler(confirm)
         }
+        print("FF: webView requesting to show Prompt alert with default value: \(defaultText ?? "")")
         if shouldDisplayJSAlertForWebView(webView) {
             logger.log("Javascript text input alert will be presented.", level: .info, category: .webview)
 
             present(textInputAlert.alertController(), animated: true)
         } else if let promptingTab = tabManager[webView] {
             logger.log("Javascript text input alert is queued.", level: .info, category: .webview)
-
+            print("FF: queuing Textfield alert with default Text: \(defaultText ?? "")")
             promptingTab.queueJavascriptAlertPrompt(textInputAlert)
         }
     }

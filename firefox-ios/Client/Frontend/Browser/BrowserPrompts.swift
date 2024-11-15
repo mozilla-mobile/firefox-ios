@@ -32,6 +32,7 @@ class JSPromptAlertController: UIAlertController {
     }
 
     deinit {
+        print("FF: deinit alert controller with \(String(describing: completionHandler))")
         if let completionHandler {
             logger.log(
                 "JS Prompt Alert contrller was deinited with a non nil completionHandler",
@@ -55,7 +56,6 @@ protocol JSAlertInfo {
 struct MessageAlert: JSAlertInfo {
     let message: String
     let frame: WKFrameInfo
-    let completionHandler: VoidReturnCallback
 
     func alertController() -> JSPromptAlertController {
         let alertController = JSPromptAlertController(
@@ -63,7 +63,6 @@ struct MessageAlert: JSAlertInfo {
             message: message,
             preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: .OKString, style: .default))
-        alertController.completionHandler = completionHandler
         alertController.alertInfo = self
         return alertController
     }

@@ -592,10 +592,15 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
     }
 
     deinit {
-        alertQueue.forEach {
-            // Creating the queued Alerts will also deinit them suddendly because there is no reference
-            // Thus calling the completion handler the WebView expects to be called once.
-            _ = $0.alertController()
+        // Sync it on main thread so it should take precedence on the webView being deinited
+        ensureMainThread {
+            print("FF: alert not dequeued")
+            self.alertQueue.forEach {
+                // Creating the queued Alerts will also deinit them suddendly because there is no reference
+                // Thus calling the completion handler the WebView expects to be called once.
+                _ = $0.alertController()
+            }
+            self.alertQueue.removeAll()
         }
         webViewLoadingObserver?.invalidate()
         webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
