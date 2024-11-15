@@ -19,12 +19,12 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
     override func tearDown() {
         DependencyHelperMock().reset()
-        resetTestingStore()
+        resetStore()
         super.tearDown()
     }
 
     func tests_initialState_returnsExpectedState() {
-        setupTestingStore()
+        setupStore()
         let initialState = createSubject()
 
         XCTAssertEqual(initialState.windowUUID, windowUUID)
@@ -37,7 +37,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(initialState.lockIconImageName)
         XCTAssertNil(initialState.safeListedURLImageName)
         XCTAssertFalse(initialState.isEditing)
-        XCTAssertFalse(initialState.isScrollingDuringEdit)
+        XCTAssertTrue(initialState.shouldShowKeyboard)
         XCTAssertTrue(initialState.shouldSelectSearchTerm)
         XCTAssertFalse(initialState.isLoading)
         XCTAssertNil(initialState.readerModeState)
@@ -46,7 +46,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_didLoadToolbarsAction_returnsExpectedState() {
-        setupTestingStore()
+        setupStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
@@ -75,7 +75,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(newState.lockIconImageName)
         XCTAssertNil(newState.safeListedURLImageName)
         XCTAssertFalse(newState.isEditing)
-        XCTAssertFalse(newState.isScrollingDuringEdit)
+        XCTAssertTrue(newState.shouldShowKeyboard)
         XCTAssertTrue(newState.shouldSelectSearchTerm)
         XCTAssertFalse(newState.isLoading)
         XCTAssertNil(newState.readerModeState)
@@ -84,7 +84,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_numberOfTabsChangedAction_returnsExpectedState() {
-        setupTestingStore()
+        setupStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
@@ -106,7 +106,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_readerModeStateChangedAction_onHomepage_returnsExpectedState() {
-        setupTestingStore()
+        setupStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
@@ -125,7 +125,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_readerModeStateChangedAction_onWebsite_returnsExpectedState() {
-        setupTestingStore()
+        setupStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
@@ -148,7 +148,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_websiteLoadingStateDidChangeAction_returnsExpectedState() {
-        setupTestingStore()
+        setupStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
@@ -169,7 +169,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_urlDidChangeAction_returnsExpectedState() {
-        setupTestingStore()
+        setupStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
@@ -188,7 +188,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_backForwardButtonStateChangedAction_withNavigationToolbar_returnsExpectedState() {
-        setupTestingStore()
+        setupStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
@@ -208,7 +208,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_backForwardButtonStateChangedAction_withoutNavigationToolbar_returnsExpectedState() {
-        setupTestingStore(with: initialToolbarState(isShowingNavigationToolbar: false))
+        setupStore(with: initialToolbarState(isShowingNavigationToolbar: false))
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
@@ -232,7 +232,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
     }
 
     func test_didStartEditingUrlAction_onHomepage_returnsExpectedState() {
-        setupTestingStore()
+        setupStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
@@ -258,14 +258,14 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.searchTerm, nil)
         XCTAssertTrue(newState.isEditing)
-        XCTAssertFalse(newState.isScrollingDuringEdit)
+        XCTAssertTrue(newState.shouldShowKeyboard)
         XCTAssertTrue(newState.shouldSelectSearchTerm)
         XCTAssertFalse(newState.didStartTyping)
         XCTAssertTrue(newState.showQRPageAction)
     }
 
     func test_didStartEditingUrlAction_withWebsite_returnsExpectedState() {
-        setupTestingStore()
+        setupStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
@@ -291,14 +291,14 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.searchTerm, nil)
         XCTAssertTrue(newState.isEditing)
-        XCTAssertFalse(newState.isScrollingDuringEdit)
+        XCTAssertTrue(newState.shouldShowKeyboard)
         XCTAssertTrue(newState.shouldSelectSearchTerm)
         XCTAssertFalse(newState.didStartTyping)
         XCTAssertFalse(newState.showQRPageAction)
     }
 
     func test_cancelEditAction_onHomepage_returnsExpectedState() {
-        setupTestingStore()
+        setupStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
@@ -322,14 +322,14 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.searchTerm, nil)
         XCTAssertFalse(newState.isEditing)
-        XCTAssertFalse(newState.isScrollingDuringEdit)
+        XCTAssertTrue(newState.shouldShowKeyboard)
         XCTAssertTrue(newState.shouldSelectSearchTerm)
         XCTAssertFalse(newState.didStartTyping)
         XCTAssertTrue(newState.showQRPageAction)
     }
 
     func test_cancelEditAction_withWebsite_returnsExpectedState() {
-        setupTestingStore()
+        setupStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
 
@@ -356,14 +356,14 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.searchTerm, nil)
         XCTAssertFalse(newState.isEditing)
-        XCTAssertFalse(newState.isScrollingDuringEdit)
+        XCTAssertTrue(newState.shouldShowKeyboard)
         XCTAssertTrue(newState.shouldSelectSearchTerm)
         XCTAssertFalse(newState.didStartTyping)
         XCTAssertFalse(newState.showQRPageAction)
     }
 
     func test_didSetTextInLocationViewAction_returnsExpectedState() {
-        setupTestingStore()
+        setupStore()
         let initialState = createSubject()
         let reducer = addressBarReducer()
         let searchTerm = "mozilla"
@@ -389,7 +389,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.searchTerm, searchTerm)
         XCTAssertTrue(newState.isEditing)
-        XCTAssertFalse(newState.isScrollingDuringEdit)
+        XCTAssertTrue(newState.shouldShowKeyboard)
         XCTAssertFalse(newState.shouldSelectSearchTerm)
         XCTAssertFalse(newState.didStartTyping)
         XCTAssertFalse(newState.showQRPageAction)
@@ -515,8 +515,8 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
     }
 
-    func setupTestingStore(with initialToolbarState: ToolbarState) {
-        StoreTestUtilityHelper.setupTestingStore(
+    func setupStore(with initialToolbarState: ToolbarState) {
+        StoreTestUtilityHelper.setupStore(
             with: setupAppState(with: initialToolbarState),
             middlewares: [ToolbarMiddleware().toolbarProvider]
         )
@@ -561,8 +561,8 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         )
     }
 
-    func setupTestingStore() {
-        StoreTestUtilityHelper.setupTestingStore(
+    func setupStore() {
+        StoreTestUtilityHelper.setupStore(
             with: setupAppState(),
             middlewares: [ToolbarMiddleware().toolbarProvider]
         )
@@ -570,7 +570,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
     // In order to avoid flaky tests, we should reset the store
     // similar to production
-    func resetTestingStore() {
-        StoreTestUtilityHelper.resetTestingStore()
+    func resetStore() {
+        StoreTestUtilityHelper.resetStore()
     }
 }
