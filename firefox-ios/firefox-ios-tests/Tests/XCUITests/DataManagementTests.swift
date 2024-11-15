@@ -53,13 +53,15 @@ class DataManagementTests: BaseTestCase {
     func testDummyNoWebsite() {
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(Intro_FxASignin)
         print(app.debugDescription)
     }
 
     func testDummyWebsite() {
         navigator.nowAt(NewTabScreen)
         navigator.openURL("https://www.wikipedia.org")
-        navigator.goto(FindInPage)
+        navigator.goto(BrowserTabMenu)
         print(app.debugDescription)
     }
 
