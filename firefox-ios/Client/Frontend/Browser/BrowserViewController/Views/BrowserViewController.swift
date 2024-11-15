@@ -3906,6 +3906,7 @@ extension BrowserViewController: TabManagerDelegate {
                                               title: tab.lastTitle,
                                               lastExecutedTime: tab.lastExecutedTime)
         }
+        if !isToolbarRefactorEnabled { urlBar.updateProgressBar(Float(0)) }
         updateTabCountUsingTabManager(tabManager)
     }
 
