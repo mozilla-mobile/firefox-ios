@@ -395,6 +395,25 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertFalse(newState.showQRPageAction)
 }
 
+    func test_hideKeyboardAction_returnsExpectedState() {
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        XCTAssertTrue(initialState.shouldShowKeyboard)
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.hideKeyboard
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertFalse(newState.shouldShowKeyboard)
+    }
+
     func test_clearSearchAction_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = addressBarReducer()
