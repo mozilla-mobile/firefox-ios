@@ -88,7 +88,7 @@ final class NativeErrorPageViewController: UIViewController,
 
     private lazy var errorDescriptionLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = FXFontStyles.Regular.body.scaledFont()
+        label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.numberOfLines = 0
         label.textAlignment = .natural
         label.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.errorDescriptionLabel
@@ -331,9 +331,11 @@ final class NativeErrorPageViewController: UIViewController,
     func getDescriptionWithHostName(errorURL: URL, description: String) -> NSAttributedString? {
         guard let validHostName = errorURL.host else { return nil }
         let errDescription = String(format: description, validHostName)
-        let attributedString = errDescription.attributedText(
-            boldString: validHostName,
-            font: errorDescriptionLabel.font
+
+        let attributedString = errDescription.attributedString(
+            with: [.font: FXFontStyles.Regular.subheadline.scaledFont()],
+            and: validHostName,
+            with: [.font: FXFontStyles.Bold.body.scaledFont()]
         )
         return attributedString
     }

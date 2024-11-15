@@ -74,4 +74,13 @@ extension String {
         }
         return boldString
     }
+
+    func attributedString(with style: [NSAttributedString.Key: Any]? = nil,
+                          and highlightedText: String,
+                          with highlightedTextStyle: [NSAttributedString.Key: Any]? = nil) -> NSAttributedString {
+        let formattedString = NSMutableAttributedString(string: self, attributes: style)
+        let highlightedTextRange: NSRange = (self as NSString).range(of: highlightedText as String)
+        formattedString.setAttributes(highlightedTextStyle, range: highlightedTextRange)
+        return formattedString
+    }
 }
