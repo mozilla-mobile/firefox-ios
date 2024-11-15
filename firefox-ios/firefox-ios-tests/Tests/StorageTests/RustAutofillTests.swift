@@ -184,8 +184,6 @@ class RustAutofillTests: XCTestCase {
         let expectationCheckUpdateCard = expectation(description: "checking updated card")
 
         addCreditCard { creditCard, err in
-            XCTAssertNotNil(creditCard)
-
             do {
                 let creditCard = try XCTUnwrap(creditCard)
 
