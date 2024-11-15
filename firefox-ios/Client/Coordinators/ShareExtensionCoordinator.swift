@@ -43,11 +43,15 @@ class ShareExtensionCoordinator: BaseCoordinator,
     /// Presents the Share extension from the source view
     func start(
         url: URL,
+        title: String? = nil,
         sourceView: UIView,
         sourceRect: CGRect? = nil,
         popoverArrowDirection: UIPopoverArrowDirection = .up
     ) {
-        let shareExtension = ShareExtensionHelper(url: url, tab: tabManager.selectedTab)
+        let shareExtension = ShareExtensionHelper(
+            url: url,
+            title: title ?? tabManager.selectedTab?.title,
+            tab: tabManager.selectedTab)
         let controller = shareExtension.createActivityViewController(
             tabManager.selectedTab?.webView
         ) { [weak self] completed, activityType in

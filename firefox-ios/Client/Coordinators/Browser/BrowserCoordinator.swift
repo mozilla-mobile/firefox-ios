@@ -245,7 +245,7 @@ class BrowserCoordinator: BaseCoordinator,
         }
 
         switch route {
-        case .searchQuery, .search, .searchURL, .glean, .homepanel, .action, .fxaSignIn, .defaultBrowser:
+        case .searchQuery, .search, .searchURL, .glean, .homepanel, .action, .fxaSignIn, .defaultBrowser, .sharesheet:
             return true
         case let .settings(section):
             return canHandleSettings(with: section)
@@ -270,6 +270,9 @@ class BrowserCoordinator: BaseCoordinator,
 
         case let .searchURL(url, tabId):
             handle(searchURL: url, tabId: tabId)
+
+        case let .sharesheet(url, title):
+            showShareSheet(with: url, title: title)
 
         case let .glean(url):
             glean.handleDeeplinkUrl(url: url)
@@ -512,11 +515,16 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showShareSheet(with url: URL?) {
+        showShareSheet(with: url, title: nil)
+    }
+
+    func showShareSheet(with url: URL?, title: String?) {
         guard let url else { return }
 
         let showShareSheet = { url in
             self.showShareExtension(
                 url: url,
+                title: title,
                 sourceView: self.browserViewController.addressToolbarContainer,
                 toastContainer: self.browserViewController.contentContainer,
                 popoverArrowDirection: .any
@@ -705,6 +713,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     func showShareExtension(
         url: URL,
+        title: String?,
         sourceView: UIView,
         sourceRect: CGRect?,
         toastContainer: UIView,
@@ -726,6 +735,7 @@ class BrowserCoordinator: BaseCoordinator,
         add(child: shareExtensionCoordinator)
         shareExtensionCoordinator.start(
             url: url,
+            title: title,
             sourceView: sourceView,
             sourceRect: sourceRect,
             popoverArrowDirection: popoverArrowDirection
@@ -910,7 +920,7 @@ class BrowserCoordinator: BaseCoordinator,
         router.present(viewController)
     }
 
-// MARK: - Password Generator
+    // MARK: - Password Generator
     func showPasswordGenerator(tab: Tab, frame: WKFrameInfo) {
         let passwordGenVC = PasswordGeneratorViewController(windowUUID: windowUUID, currentTab: tab, currentFrame: frame)
 
