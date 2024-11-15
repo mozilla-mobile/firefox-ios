@@ -291,6 +291,24 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.searchTerm, nil)
     }
 
+    func test_borderPositionChangedAction_returnsExpectedState() {
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                addressBorderPosition: .bottom,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.borderPositionChanged
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.borderPosition, .bottom)
+    }
+
     func test_toolbarPositionChangedAction_returnsExpectedState() {
         setupStore()
         let initialState = createSubject()
