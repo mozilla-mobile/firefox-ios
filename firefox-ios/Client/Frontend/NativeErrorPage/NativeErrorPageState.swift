@@ -10,6 +10,8 @@ struct NativeErrorPageState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     var title: String?
     var description: String?
+    var foxImage: String?
+    var url: URL?
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let nativeErrorPageState = store.state.screenState(
@@ -24,18 +26,24 @@ struct NativeErrorPageState: ScreenState, Equatable {
         self.init(
             windowUUID: nativeErrorPageState.windowUUID,
             title: nativeErrorPageState.title,
-            description: nativeErrorPageState.description
+            description: nativeErrorPageState.description,
+            foxImage: nativeErrorPageState.foxImage,
+            url: nativeErrorPageState.url
         )
     }
 
     init(
         windowUUID: WindowUUID,
         title: String? = nil,
-        description: String? = nil
+        description: String? = nil,
+        foxImage: String? = nil,
+        url: URL? = nil
     ) {
         self.windowUUID = windowUUID
         self.title = title
         self.description = description
+        self.foxImage = foxImage
+        self.url = url
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -51,7 +59,9 @@ struct NativeErrorPageState: ScreenState, Equatable {
             return NativeErrorPageState(
                 windowUUID: state.windowUUID,
                 title: model.errorTitle,
-                description: model.errorDescription
+                description: model.errorDescription,
+                foxImage: model.foxImageName,
+                url: model.url
             )
         default:
             return defaultState(from: state)
@@ -62,7 +72,9 @@ struct NativeErrorPageState: ScreenState, Equatable {
         return NativeErrorPageState(
             windowUUID: state.windowUUID,
             title: state.title,
-            description: state.description
+            description: state.description,
+            foxImage: state.foxImage,
+            url: state.url
         )
     }
 }

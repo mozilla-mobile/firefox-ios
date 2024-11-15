@@ -9,7 +9,9 @@ final class NativeErrorPageMock {
     static var model: ErrorPageModel {
         return ErrorPageModel(
             errorTitle: "NoInternetConnection",
-            errorDescription: "There’s a problem with your internet connection."
+            errorDescription: "There’s a problem with your internet connection.",
+            foxImageName: "",
+            url: nil
         )
     }
 }

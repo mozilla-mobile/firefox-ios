@@ -27,16 +27,32 @@ class NativeErrorPageHelper {
     func parseErrorDetails() -> ErrorPageModel {
         var title = ""
         var description = ""
+        var foxImageName = ""
+        var errorURL: URL?
 
-        switch error.code {
-        case Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue):
-            title = .NativeErrorPage.NoInternetConnection.TitleLabel
-            description = .NativeErrorPage.NoInternetConnection.Description
-        default:
-            break
+        if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL {
+            switch error.code {
+            case Int(CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue):
+                foxImageName = ImageIdentifiers.NativeErrorPage.noInternetConnection
+                title = .NativeErrorPage.NoInternetConnection.TitleLabel
+                description = .NativeErrorPage.NoInternetConnection.Description
+                errorURL = nil
+            default:
+                foxImageName = ImageIdentifiers.NativeErrorPage.securityError
+                title = .NativeErrorPage.GenericError.TitleLabel
+                description = .NativeErrorPage.GenericError.Description
+                errorURL = url
+            }
+        } else {
+            errorURL = nil
         }
 
-        let model = ErrorPageModel(errorTitle: title, errorDescription: description)
+        let model = ErrorPageModel(
+            errorTitle: title,
+            errorDescription: description,
+            foxImageName: foxImageName,
+            url: errorURL
+        )
         return model
     }
 }
