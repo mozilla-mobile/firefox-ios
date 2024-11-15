@@ -42,12 +42,11 @@ final class SearchEngineSelectionMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.searchEngineSelectionProvider(AppState(), action)
 
-        guard let actionCalled = mockStore.dispatchCalled.withActions.first as? SearchEngineSelectionAction,
-              case SearchEngineSelectionActionType.didLoadSearchEngines = actionCalled.actionType else {
-            XCTFail("Unexpected action type dispatched")
-            return
-        }
-        XCTAssertEqual(mockStore.dispatchCalled.numberOfTimes, 1)
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? SearchEngineSelectionAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? SearchEngineSelectionActionType)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, SearchEngineSelectionActionType.didLoadSearchEngines)
         XCTAssertEqual(actionCalled.searchEngines, mockSearchEngineModels)
     }
 
@@ -57,12 +56,11 @@ final class SearchEngineSelectionMiddlewareTests: XCTestCase, StoreTestUtility {
 
         subject.searchEngineSelectionProvider(AppState(), action)
 
-        guard let actionCalled = mockStore.dispatchCalled.withActions.first as? ToolbarAction,
-              case ToolbarActionType.didStartEditingUrl = actionCalled.actionType else {
-            XCTFail("Unexpected action type dispatched")
-            return
-        }
-        XCTAssertEqual(mockStore.dispatchCalled.numberOfTimes, 1)
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? ToolbarAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? ToolbarActionType)
+
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertEqual(actionType, ToolbarActionType.didStartEditingUrl)
     }
 
     // MARK: - Helpers
