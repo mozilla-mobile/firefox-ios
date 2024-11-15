@@ -8,7 +8,7 @@ import Common
 let PDF_website = [
     "url": "https://storage.googleapis.com/mobile_test_assets/public/pdf-test.pdf",
     "pdfValue": "storage.googleapis.com/mobile_test_assets/public/pdf-test.pdf",
-    "urlValue": "yukon.ca/en/education-and-schools",
+    "urlValue": "www.education.gov.yk.ca/",
     "bookmarkLabel": "https://storage.googleapis.com/mobile_test_assets/public/pdf-test.pdf",
     "longUrlValue": "http://www.education.gov.yk.ca/"
 ]
