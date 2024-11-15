@@ -122,14 +122,13 @@ extension BrowserViewController: WKUIDelegate {
             self.logger.log("Javascript text input alert was completed.", level: .info, category: .webview)
             completionHandler(confirm)
         }
-        print("FF: webView requesting to show Prompt alert with default value: \(defaultText ?? "")")
         if shouldDisplayJSAlertForWebView(webView) {
             logger.log("Javascript text input alert will be presented.", level: .info, category: .webview)
 
             present(textInputAlert.alertController(), animated: true)
         } else if let promptingTab = tabManager[webView] {
             logger.log("Javascript text input alert is queued.", level: .info, category: .webview)
-            print("FF: queuing Textfield alert with default Text: \(defaultText ?? "")")
+
             promptingTab.queueJavascriptAlertPrompt(textInputAlert)
         }
     }

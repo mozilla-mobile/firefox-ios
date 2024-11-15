@@ -32,7 +32,6 @@ class JSPromptAlertController: UIAlertController {
     }
 
     deinit {
-        print("FF: deinit alert controller with \(String(describing: completionHandler))")
         if let completionHandler {
             logger.log(
                 "JS Prompt Alert contrller was deinited with a non nil completionHandler",
