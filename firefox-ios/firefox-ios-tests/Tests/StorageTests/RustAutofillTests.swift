@@ -236,12 +236,12 @@ class RustAutofillTests: XCTestCase {
     }
 
     private func makeAssertionsToCheckUpdatedCard(id: String,
-                                               updatedCreditCard: UnencryptedCreditCardFields,
-                                               expectationCheckUpdateCard: XCTestExpectation) {
+                                                  updatedCreditCard: UnencryptedCreditCardFields,
+                                                  expectationCheckUpdateCard: XCTestExpectation) {
         self.autofill.getCreditCard(id: id) { updatedCardVal, err in
             do {
                 let updatedCardVal = try XCTUnwrap(updatedCardVal)
-
+                
                 XCTAssertNil(err)
                 XCTAssertEqual(updatedCardVal.ccExpYear, updatedCreditCard.ccExpYear)
                 expectationCheckUpdateCard.fulfill()
