@@ -231,6 +231,37 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.navigationActions[1].isEnabled, false)
     }
 
+    func test_traitCollectionDidChangedAction_returnsExpectedState() {
+        setupStore()
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+
+        // iPhone in landscape
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                isShowingNavigationToolbar: false,
+                isShowingTopTabs: false,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.traitCollectionDidChange
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.navigationActions.count, 2)
+        XCTAssertEqual(newState.navigationActions[0].actionType, .back)
+        XCTAssertEqual(newState.navigationActions[1].actionType, .forward)
+
+        XCTAssertEqual(newState.pageActions.count, 1)
+        XCTAssertEqual(newState.pageActions[0].actionType, .qrCode)
+
+        XCTAssertEqual(newState.browserActions.count, 2)
+        XCTAssertEqual(newState.browserActions[0].actionType, .tabs)
+        XCTAssertEqual(newState.browserActions[1].actionType, .menu)
+
+        XCTAssertEqual(newState.searchTerm, nil)
+    }
+
     func test_didStartEditingUrlAction_onHomepage_returnsExpectedState() {
         setupStore()
         let initialState = createSubject()
