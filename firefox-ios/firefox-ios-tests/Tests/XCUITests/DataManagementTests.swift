@@ -50,21 +50,6 @@ class DataManagementTests: BaseTestCase {
         XCTAssertEqual(0, app.cells.images.count)
     }
 
-    func testDummyNoWebsite() {
-        navigator.nowAt(NewTabScreen)
-        navigator.goto(SettingsScreen)
-        navigator.goto(BrowserTabMenu)
-        navigator.goto(Intro_FxASignin)
-        print(app.debugDescription)
-    }
-
-    func testDummyWebsite() {
-        navigator.nowAt(NewTabScreen)
-        navigator.openURL("https://www.wikipedia.org")
-        navigator.goto(BrowserTabMenu)
-        print(app.debugDescription)
-    }
-
     // https://mozilla.testrail.io/index.php?/cases/view/2307017
     // Smoketest
     func testWebSiteDataEnterFirstTime() {
