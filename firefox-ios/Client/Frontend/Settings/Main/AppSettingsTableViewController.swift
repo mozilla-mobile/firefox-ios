@@ -48,6 +48,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     private var debugSettingsClickCount: Int = 0
     private var appAuthenticator: AppAuthenticationProtocol
     private var applicationHelper: ApplicationHelper
+    private let logger: Logger
 
     weak var parentCoordinator: SettingsFlowDelegate?
 
@@ -60,9 +61,11 @@ class AppSettingsTableViewController: SettingsTableViewController,
          and tabManager: TabManager,
          delegate: SettingsDelegate? = nil,
          appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
-         applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
+         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
+         logger: Logger = DefaultLogger.shared) {
         self.appAuthenticator = appAuthenticator
         self.applicationHelper = applicationHelper
+        self.logger = logger
 
         super.init(windowUUID: tabManager.windowUUID)
         self.profile = profile
@@ -460,10 +463,15 @@ class AppSettingsTableViewController: SettingsTableViewController,
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = super.tableView(
+        guard let headerView = super.tableView(
             tableView,
             viewForHeaderInSection: section
-        ) as! ThemedTableSectionHeaderFooterView
+        ) as? ThemedTableSectionHeaderFooterView else {
+            logger.log("Failed to cast or retrieve ThemedTableSectionHeaderFooterView for section: \(section)",
+                       level: .fatal,
+                       category: .lifecycle)
+            return UIView()
+        }
         return headerView
     }
 }

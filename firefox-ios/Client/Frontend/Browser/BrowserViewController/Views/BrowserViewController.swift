@@ -231,11 +231,13 @@ class BrowserViewController: UIViewController,
 
     @available(iOS 13.4, *)
     func keyboardPressesHandler() -> KeyboardPressesHandler {
-        guard let keyboardPressesHandlerValue = keyboardPressesHandlerValue as? KeyboardPressesHandler else {
-            keyboardPressesHandlerValue = KeyboardPressesHandler()
-            return keyboardPressesHandlerValue as! KeyboardPressesHandler
+        if let existingHandler = keyboardPressesHandlerValue as? KeyboardPressesHandler {
+            return existingHandler
+        } else {
+            let newHandler = KeyboardPressesHandler()
+            keyboardPressesHandlerValue = newHandler
+            return newHandler
         }
-        return keyboardPressesHandlerValue
     }
 
     init(

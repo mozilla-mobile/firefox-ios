@@ -41,6 +41,7 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
 
     private let profile: Profile
     private let model: SearchEnginesManager
+    private let logger: Logger
 
     var shouldHidePrivateModeFirefoxSuggestSetting: Bool {
         return !model.shouldShowBookmarksSuggestions &&
@@ -80,8 +81,11 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
         return defaultEngine.isCustomEngine ? customEngineCount > 1 : customEngineCount > 0
     }
 
-    init(profile: Profile, windowUUID: WindowUUID) {
+    init(profile: Profile,
+         windowUUID: WindowUUID,
+         logger: Logger = DefaultLogger.shared) {
         self.profile = profile
+        self.logger = logger
         model = profile.searchEnginesManager
 
         super.init(windowUUID: windowUUID)
@@ -140,10 +144,15 @@ final class SearchSettingsTableViewController: ThemedTableViewController, Featur
 
     // MARK: - UITableViewDataSource
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(
+        guard let cell = tableView.dequeueReusableCell(
             withIdentifier: ThemedSubtitleTableViewCell.cellIdentifier,
             for: indexPath
-        ) as! ThemedSubtitleTableViewCell
+        ) as? ThemedSubtitleTableViewCell else {
+            logger.log("Failed to dequeue ThemedSubtitleTableViewCell at indexPath: \(indexPath)",
+                       level: .fatal,
+                       category: .lifecycle)
+            return UITableViewCell()
+        }
 
         var engine: OpenSearchEngine!
         let section = Section(rawValue: sectionsToDisplay[indexPath.section].rawValue) ?? .defaultEngine
