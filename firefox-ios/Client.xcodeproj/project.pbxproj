@@ -1629,6 +1629,7 @@
 		E14792A32C2C5C660058211C /* ToolbarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14792A22C2C5C660058211C /* ToolbarHelper.swift */; };
 		E14BF33E2950B1230039758D /* MailProvidersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14BF33D2950B1230039758D /* MailProvidersTests.swift */; };
 		E14C78962C105488002AD3C7 /* AddressToolbarContainerModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14C78952C105488002AD3C7 /* AddressToolbarContainerModelTests.swift */; };
+		E14D6D342CCBA9FF0058B910 /* AddressBarStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14D6D332CCBA9FF0058B910 /* AddressBarStateTests.swift */; };
 		E14F7DF2288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E14F7DF1288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift */; };
 		E1516A3E2A7BC07E007819A4 /* ReliabilityGrade.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1516A3D2A7BC07E007819A4 /* ReliabilityGrade.swift */; };
 		E15DE7C0293A670700B32667 /* PhotonActionSheetSeparator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15DE7BF293A670700B32667 /* PhotonActionSheetSeparator.swift */; };
@@ -8991,6 +8992,7 @@
 		E14792A22C2C5C660058211C /* ToolbarHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarHelper.swift; sourceTree = "<group>"; };
 		E14BF33D2950B1230039758D /* MailProvidersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailProvidersTests.swift; sourceTree = "<group>"; };
 		E14C78952C105488002AD3C7 /* AddressToolbarContainerModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressToolbarContainerModelTests.swift; sourceTree = "<group>"; };
+		E14D6D332CCBA9FF0058B910 /* AddressBarStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressBarStateTests.swift; sourceTree = "<group>"; };
 		E14F7DF1288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedTableSectionHeaderFooterView.swift; sourceTree = "<group>"; };
 		E1516A3D2A7BC07E007819A4 /* ReliabilityGrade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReliabilityGrade.swift; sourceTree = "<group>"; };
 		E15C49D1BE35740E81701F21 /* dsb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = dsb; path = dsb.lproj/Menu.strings; sourceTree = "<group>"; };
@@ -13314,6 +13316,7 @@
 			isa = PBXGroup;
 			children = (
 				E14C78952C105488002AD3C7 /* AddressToolbarContainerModelTests.swift */,
+				E14D6D332CCBA9FF0058B910 /* AddressBarStateTests.swift */,
 			);
 			path = Toolbar;
 			sourceTree = "<group>";
@@ -16905,6 +16908,7 @@
 				96AF8C1C29FC14F700EC2219 /* CreditCardInputFieldHelperTests.swift in Sources */,
 				21FA8FB02AE856590013B815 /* RemoteTabsCoordinatorTests.swift in Sources */,
 				C80C11F428B3CD580062922A /* MockUserDefaultsTests.swift in Sources */,
+				E14D6D342CCBA9FF0058B910 /* AddressBarStateTests.swift in Sources */,
 				2F697F7E1A9FD22D009E03AE /* SearchEnginesManagerTests.swift in Sources */,
 				2197DF8A287624BF00215624 /* LibraryViewModelTests.swift in Sources */,
 				5A3A7DDC2889EC5D0065F81A /* BookmarksHandlerMock.swift in Sources */,

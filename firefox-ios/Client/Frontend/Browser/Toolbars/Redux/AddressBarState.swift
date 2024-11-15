@@ -323,12 +323,17 @@ struct AddressBarState: StateType, Equatable {
     private static func handleUrlDidChangeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
+        let showQRPageAction = toolbarAction.url == nil
+
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: navigationActions(action: toolbarAction,
                                                  addressBarState: state,
                                                  isEditing: state.isEditing),
-            pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
+            pageActions: pageActions(action: toolbarAction,
+                                     addressBarState: state,
+                                     isEditing: state.isEditing,
+                                     showQRPageAction: showQRPageAction),
             browserActions: browserActions(action: toolbarAction, addressBarState: state),
             borderPosition: state.borderPosition,
             url: toolbarAction.url,
@@ -342,7 +347,7 @@ struct AddressBarState: StateType, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: state.didStartTyping,
-            showQRPageAction: toolbarAction.url == nil,
+            showQRPageAction: showQRPageAction,
             alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
@@ -406,8 +411,10 @@ struct AddressBarState: StateType, Equatable {
 
         return AddressBarState(
             windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
-            pageActions: state.pageActions,
+            navigationActions: navigationActions(action: toolbarAction,
+                                                 addressBarState: state,
+                                                 isEditing: state.isEditing),
+            pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
             browserActions: browserActions(action: toolbarAction, addressBarState: state),
             borderPosition: state.borderPosition,
             url: state.url,
@@ -551,12 +558,12 @@ struct AddressBarState: StateType, Equatable {
 
         return AddressBarState(
             windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
+            navigationActions: navigationActions(action: toolbarAction, addressBarState: state, isEditing: true),
             pageActions: pageActions(action: toolbarAction,
                                      addressBarState: state,
                                      isEditing: true,
                                      showQRPageAction: isEmptySearch),
-            browserActions: state.browserActions,
+            browserActions: browserActions(action: toolbarAction, addressBarState: state),
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: toolbarAction.searchTerm,
@@ -605,7 +612,7 @@ struct AddressBarState: StateType, Equatable {
             navigationActions: state.navigationActions,
             pageActions: pageActions(action: toolbarAction,
                                      addressBarState: state,
-                                     isEditing: state.isEditing,
+                                     isEditing: true,
                                      showQRPageAction: true),
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
@@ -614,7 +621,7 @@ struct AddressBarState: StateType, Equatable {
             lockIconImageName: state.lockIconImageName,
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: state.isEditing,
+            isEditing: true,
             shouldShowKeyboard: state.shouldShowKeyboard,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
@@ -633,7 +640,7 @@ struct AddressBarState: StateType, Equatable {
             navigationActions: state.navigationActions,
             pageActions: pageActions(action: toolbarAction,
                                      addressBarState: state,
-                                     isEditing: state.isEditing,
+                                     isEditing: true,
                                      showQRPageAction: true),
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
@@ -642,7 +649,7 @@ struct AddressBarState: StateType, Equatable {
             lockIconImageName: state.lockIconImageName,
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: state.isEditing,
+            isEditing: true,
             shouldShowKeyboard: state.shouldShowKeyboard,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
@@ -661,7 +668,7 @@ struct AddressBarState: StateType, Equatable {
             navigationActions: state.navigationActions,
             pageActions: pageActions(action: toolbarAction,
                                      addressBarState: state,
-                                     isEditing: state.isEditing,
+                                     isEditing: true,
                                      showQRPageAction: false),
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
@@ -670,7 +677,7 @@ struct AddressBarState: StateType, Equatable {
             lockIconImageName: state.lockIconImageName,
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: state.isEditing,
+            isEditing: true,
             shouldShowKeyboard: state.shouldShowKeyboard,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
