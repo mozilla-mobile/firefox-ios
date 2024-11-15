@@ -208,7 +208,7 @@ class RustAutofillTests: XCTestCase {
                             XCTAssertNil(err)
                             expectationUpdateCard.fulfill()
 
-                            self.makeUpdateCreditCardAssertion(id: creditCard.guid,
+                            self.makeAssertionsToCheckUpdatedCard(id: creditCard.guid,
                                                                updatedCreditCard: updatedCreditCard,
                                                                expectationCheckUpdateCard: expectationCheckUpdateCard)
                         }
@@ -235,7 +235,7 @@ class RustAutofillTests: XCTestCase {
                                            ccType: creditCard.ccType)
     }
 
-    private func makeUpdateCreditCardAssertion(id: String,
+    private func makeAssertionsToCheckUpdatedCard(id: String,
                                                updatedCreditCard: UnencryptedCreditCardFields,
                                                expectationCheckUpdateCard: XCTestExpectation) {
         self.autofill.getCreditCard(id: id) { updatedCardVal, err in
