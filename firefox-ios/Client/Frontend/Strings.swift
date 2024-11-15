@@ -102,6 +102,29 @@ extension String {
                 value: "Cancel",
                 comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the cancel action for the alert, cancelling ending your session.")
         }
+
+        public struct AddToCalendar {
+            public static let Title = MZLocalizedString(
+                key: "Alerts.AddToCalendar.Title.v134",
+                tableName: "Alerts",
+                value: "Add to calendar?",
+                comment: "When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the title for the alert.")
+            public static let Body = MZLocalizedString(
+                key: "Alerts.AddToCalendar.Body.v134",
+                tableName: "Alerts",
+                value: "%@ is asking to download a file and add an event to your calendar.",
+                comment: "When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the body message for the alert. %@ is the name/domain of the website, for example 'google.com'")
+            public static let AddButton = MZLocalizedString(
+                key: "Alerts.AddToCalendar.Button.Add.v134",
+                tableName: "Alerts",
+                value: "Add",
+                comment: "When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the affirmative action for the alert, confirming that you do want to add the event to the calendar.")
+            public static let CancelButton = MZLocalizedString(
+                key: "Alerts.FeltDeletion.Button.Cancel.v134",
+                tableName: "Alerts",
+                value: "Cancel",
+                comment: "When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the cancel action for the alert, cancelling the action to add the event to the calendar.")
+        }
     }
 }
 
