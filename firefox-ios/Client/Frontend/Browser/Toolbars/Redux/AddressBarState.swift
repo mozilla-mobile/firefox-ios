@@ -556,12 +556,12 @@ struct AddressBarState: StateType, Equatable {
 
         return AddressBarState(
             windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
+            navigationActions: navigationActions(action: toolbarAction, addressBarState: state, isEditing: true),
             pageActions: pageActions(action: toolbarAction,
                                      addressBarState: state,
                                      isEditing: true,
                                      showQRPageAction: isEmptySearch),
-            browserActions: state.browserActions,
+            browserActions: browserActions(action: toolbarAction, addressBarState: state),
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: toolbarAction.searchTerm,
