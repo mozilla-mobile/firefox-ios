@@ -29,6 +29,7 @@ import:
                 style: FALLBACK
                 trigger-if-all:
                   - SUPPORTS_DEFAULT_BROWSER
+                  - ON_FOURTH_LAUNCH_THIS_YEAR
                 except-if-any:
                   - I_AM_DEFAULT_BROWSER
                 title: Default Browser/DefaultBrowserCard.Title
