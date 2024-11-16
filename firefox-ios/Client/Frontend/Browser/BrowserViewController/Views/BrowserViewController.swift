@@ -182,10 +182,8 @@ class BrowserViewController: UIViewController,
     var topTabsVisible: Bool {
         return topTabsViewController != nil
     }
-    // Backdrop used for displaying greyed background for private tabs
-    private lazy var webViewContainerBackdrop: UIView = .build { containerBackdrop in
-        containerBackdrop.alpha = 0
-    }
+    // Window helper used for displaying an opaque background for private tabs.
+    private lazy var privacyWindowHelper = PrivacyWindowHelper()
     var keyboardBackdrop: UIView?
 
     lazy var scrollController = TabScrollingController(windowUUID: windowUUID)
@@ -233,11 +231,13 @@ class BrowserViewController: UIViewController,
 
     @available(iOS 13.4, *)
     func keyboardPressesHandler() -> KeyboardPressesHandler {
-        guard let keyboardPressesHandlerValue = keyboardPressesHandlerValue as? KeyboardPressesHandler else {
-            keyboardPressesHandlerValue = KeyboardPressesHandler()
-            return keyboardPressesHandlerValue as! KeyboardPressesHandler
+        if let existingHandler = keyboardPressesHandlerValue as? KeyboardPressesHandler {
+            return existingHandler
+        } else {
+            let newHandler = KeyboardPressesHandler()
+            keyboardPressesHandlerValue = newHandler
+            return newHandler
         }
-        return keyboardPressesHandlerValue
     }
 
     init(
@@ -510,9 +510,8 @@ class BrowserViewController: UIViewController,
               canShowPrivacyView
         else { return }
 
-        view.bringSubviewToFront(webViewContainerBackdrop)
-        webViewContainerBackdrop.alpha = 1
         contentStackView.alpha = 0
+        privacyWindowHelper.showWindow(withThemedColor: currentTheme().colors.layer3)
 
         if isToolbarRefactorEnabled {
             addressToolbarContainer.alpha = 0
@@ -547,8 +546,7 @@ class BrowserViewController: UIViewController,
                 self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
                 self.presentedViewController?.view.alpha = 1
             }, completion: { _ in
-                self.webViewContainerBackdrop.alpha = 0
-                self.view.sendSubviewToBack(self.webViewContainerBackdrop)
+                self.privacyWindowHelper.removeWindow()
             })
 
         if let tab = tabManager.selectedTab, !tab.isFindInPageMode {
@@ -927,7 +925,7 @@ class BrowserViewController: UIViewController,
     }
 
     func addSubviews() {
-        view.addSubviews(webViewContainerBackdrop, contentStackView)
+        view.addSubviews(contentStackView)
 
         contentStackView.addArrangedSubview(contentContainer)
 
@@ -1136,6 +1134,7 @@ class BrowserViewController: UIViewController,
                 handleFakespotFlow(productURL: productURL)
             }
         }, completion: { _ in
+            self.scrollController.traitCollectionDidChange()
             self.scrollController.setMinimumZoom()
         })
         microsurvey?.setNeedsUpdateConstraints()
@@ -1169,13 +1168,6 @@ class BrowserViewController: UIViewController,
                 urlBarHeightConstraint = make.height.equalTo(UIConstants.TopToolbarHeightMax).constraint
             }
         }
-
-        NSLayoutConstraint.activate([
-            webViewContainerBackdrop.topAnchor.constraint(equalTo: view.topAnchor),
-            webViewContainerBackdrop.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            webViewContainerBackdrop.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            webViewContainerBackdrop.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
 
         NSLayoutConstraint.activate([
             contentStackView.topAnchor.constraint(equalTo: header.bottomAnchor),
@@ -2099,8 +2091,11 @@ class BrowserViewController: UIViewController,
                 logger.log("url should not be nil when navigating for a link type", level: .warning, category: .coordinator)
                 return
             }
-            // TODO: FXIOS-10165 - Pass in the proper values based on top sites and other homepage links
-            navigationHandler?.navigateFromHomePanel(to: url, visitType: .link, isGoogleTopSite: false)
+            navigationHandler?.navigateFromHomePanel(
+                to: url,
+                visitType: .link,
+                isGoogleTopSite: type.isGoogleTopSite ?? false
+            )
         }
     }
 
@@ -2343,7 +2338,8 @@ class BrowserViewController: UIViewController,
         menuHelper.navigationHandler = navigationHandler
 
         updateZoomPageBarVisibility(visible: false)
-        menuHelper.getToolbarActions(navigationController: navigationController) { actions in
+        menuHelper.getToolbarActions(navigationController: navigationController) { [weak self] actions in
+            guard let self else { return }
             let shouldInverse = PhotonActionSheetViewModel.hasInvertedMainMenu(
                 trait: self.traitCollection,
                 isBottomSearchBar: self.isBottomSearchBar
@@ -2354,6 +2350,9 @@ class BrowserViewController: UIViewController,
                 isMainMenu: true,
                 isMainMenuInverted: shouldInverse
             )
+            if self.profile.prefs.boolForKey(PrefsKeys.PhotonMainMenuShown) == nil {
+                self.profile.prefs.setBool(true, forKey: PrefsKeys.PhotonMainMenuShown)
+            }
             self.presentSheetWith(viewModel: viewModel, on: self, from: button)
         }
     }
@@ -3064,7 +3063,6 @@ class BrowserViewController: UIViewController,
         statusBarOverlay.hasTopTabs = ToolbarHelper().shouldShowTopTabs(for: traitCollection)
         statusBarOverlay.applyTheme(theme: currentTheme)
         keyboardBackdrop?.backgroundColor = currentTheme.colors.layer1
-        webViewContainerBackdrop.backgroundColor = currentTheme.colors.layer3
         setNeedsStatusBarAppearanceUpdate()
 
         tabManager.selectedTab?.applyTheme(theme: currentTheme)
@@ -3866,7 +3864,10 @@ extension BrowserViewController: TabManagerDelegate {
             }
         }
 
-        if let readerMode = selectedTab.getContentScript(name: ReaderMode.name()) as? ReaderMode {
+        // When the newly selected tab is the homepage or another internal tab,
+        // we need to explicitely set the reader mode state to be unavailable.
+        if let url = selectedTab.webView?.url, InternalURL.scheme != url.scheme,
+           let readerMode = selectedTab.getContentScript(name: ReaderMode.name()) as? ReaderMode {
             updateReaderModeState(for: selectedTab, readerModeState: readerMode.state)
             if readerMode.state == .active {
                 showReaderModeBar(animated: false)
@@ -3907,6 +3908,7 @@ extension BrowserViewController: TabManagerDelegate {
                                               title: tab.lastTitle,
                                               lastExecutedTime: tab.lastExecutedTime)
         }
+        if !isToolbarRefactorEnabled { urlBar.updateProgressBar(Float(0)) }
         updateTabCountUsingTabManager(tabManager)
     }
 

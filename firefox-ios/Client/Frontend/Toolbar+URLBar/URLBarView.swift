@@ -267,6 +267,9 @@ class URLBarView: UIView,
         self.searchIconImageView.image = profile.searchEnginesManager.defaultEngine?.image
         self.searchIconImageView.largeContentTitle = profile.searchEnginesManager.defaultEngine?.shortName
         self.searchIconImageView.largeContentImage = nil
+
+        guard let name = profile.searchEnginesManager.defaultEngine?.shortName else { return }
+        self.searchIconImageView.accessibilityLabel = String(format: .AddressToolbar.SearchEngineA11yLabel, name)
     }
 
     fileprivate func commonInit() {

@@ -19,7 +19,7 @@ class MockContileProvider: ContileProviderInterface {
     static var defaultSuccessData: [Contile] {
         return [
             Contile(id: 1,
-                    name: "Firefox",
+                    name: "Firefox Sponsored Tile",
                     url: "https://firefox.com",
                     clickUrl: "https://firefox.com/click",
                     imageUrl: "https://test.com/image1.jpg",
@@ -27,7 +27,7 @@ class MockContileProvider: ContileProviderInterface {
                     impressionUrl: "https://test.com",
                     position: 1),
             Contile(id: 2,
-                    name: "Mozilla",
+                    name: "Mozilla Sponsored Tile",
                     url: "https://mozilla.com",
                     clickUrl: "https://mozilla.com/click",
                     imageUrl: "https://test.com/image2.jpg",
@@ -35,7 +35,7 @@ class MockContileProvider: ContileProviderInterface {
                     impressionUrl: "https://example.com",
                     position: 2),
             Contile(id: 3,
-                    name: "Focus",
+                    name: "Focus Sponsored Tile",
                     url: "https://support.mozilla.org/en-US/kb/firefox-focus-ios",
                     clickUrl: "https://support.mozilla.org/en-US/kb/firefox-focus-ios/click",
                     imageUrl: "https://test.com/image3.jpg",

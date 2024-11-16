@@ -34,6 +34,7 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     ///                             from actions in the share extension
     /// - Parameter popoverArrowDirection: The arrow direction for the view controller presented as popover.
     func showShareExtension(url: URL,
+                            title: String?,
                             sourceView: UIView,
                             sourceRect: CGRect?,
                             toastContainer: UIView,
@@ -108,6 +109,7 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 extension BrowserNavigationHandler {
     func showShareExtension(
         url: URL,
+        title: String? = nil,
         sourceView: UIView,
         sourceRect: CGRect? = nil,
         toastContainer: UIView,
@@ -115,6 +117,7 @@ extension BrowserNavigationHandler {
     ) {
         showShareExtension(
             url: url,
+            title: title,
             sourceView: sourceView,
             sourceRect: sourceRect,
             toastContainer: toastContainer,

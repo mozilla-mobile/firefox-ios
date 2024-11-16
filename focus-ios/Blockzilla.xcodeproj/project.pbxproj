@@ -229,6 +229,7 @@
 		EB84F96F209380CE00BA6739 /* URLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB84F96E209380CE00BA6739 /* URLExtensions.swift */; };
 		EB84F9712093815500BA6739 /* effective_tld_names.dat in Resources */ = {isa = PBXBuildFile; fileRef = EB84F9702093815500BA6739 /* effective_tld_names.dat */; };
 		EBE44F4E20ADDF6A005AFEA6 /* SmartLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE44F4D20ADDF6A005AFEA6 /* SmartLabel.swift */; };
+		ED5ACDB02CE6AABF00A55506 /* Sentry-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = ED5ACDAF2CE6AABF00A55506 /* Sentry-Dynamic */; };
 		F74E8109218183F400D18535 /* SearchSuggestionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F74E8108218183F400D18535 /* SearchSuggestionsTest.swift */; };
 		F7B3E49D2165C32B00118785 /* SearchSuggestionsPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B3E49C2165C32B00118785 /* SearchSuggestionsPromptView.swift */; };
 		F805722F1DBEE504004339C1 /* WebCacheUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F805722E1DBEE504004339C1 /* WebCacheUtils.swift */; };
@@ -241,7 +242,6 @@
 		F861799F27961F4200CFD324 /* InternalSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F861799E27961F4200CFD324 /* InternalSettings.swift */; };
 		F86D00612790978700E83177 /* InternalSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86D00602790978700E83177 /* InternalSettingsView.swift */; };
 		F8714D2127A1E1F400CEB695 /* InternalCrashReportingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8714D2027A1E1F400CEB695 /* InternalCrashReportingSettingsView.swift */; };
-		F8B92FBE279EC73700183998 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = F8B92FBD279EC73700183998 /* Sentry */; };
 		F8BC6A0727224B170026AB9F /* NimbusExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BC6A0627224B170026AB9F /* NimbusExtensions.swift */; };
 		F8BC6A0927224B890026AB9F /* NimbusWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BC6A0827224B890026AB9F /* NimbusWrapper.swift */; };
 		F8DE0EC826CC887800A31419 /* SupportUtilsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DE0EC726CC887800A31419 /* SupportUtilsTest.swift */; };
@@ -1275,8 +1275,8 @@
 				CDFA746F27ABD43D0055FE55 /* Glean in Frameworks */,
 				C8FB1E6427F59D9C00C60DC6 /* UIHelpers in Frameworks */,
 				8A0E7F2E2BA0F0EE006BC6B6 /* Fuzi in Frameworks */,
-				F8B92FBE279EC73700183998 /* Sentry in Frameworks */,
 				C8FB1E6627F5A79300C60DC6 /* DesignSystem in Frameworks */,
+				ED5ACDB02CE6AABF00A55506 /* Sentry-Dynamic in Frameworks */,
 				C82F45F728193EE8000D7D84 /* AppShortcuts in Frameworks */,
 				C871586027FB29AC006224BB /* Onboarding in Frameworks */,
 				451B81BF2BA4DB9F00CF3C50 /* RustMozillaAppServices.framework in Frameworks */,
@@ -2123,7 +2123,6 @@
 			name = Blockzilla;
 			packageProductDependencies = (
 				F85F7A282655AD5800395515 /* SnapKit */,
-				F8B92FBD279EC73700183998 /* Sentry */,
 				CDFA746E27ABD43D0055FE55 /* Glean */,
 				C8FB1E6327F59D9C00C60DC6 /* UIHelpers */,
 				C8FB1E6527F5A79300C60DC6 /* DesignSystem */,
@@ -2131,6 +2130,7 @@
 				C82F45F628193EE8000D7D84 /* AppShortcuts */,
 				C809130D2A08F245000889B0 /* Licenses */,
 				8A0E7F2D2BA0F0EE006BC6B6 /* Fuzi */,
+				ED5ACDAF2CE6AABF00A55506 /* Sentry-Dynamic */,
 			);
 			productName = Blockzilla;
 			productReference = E4BF2DD31BACE8CA00DA9D68 /* Firefox Klar.app */;
@@ -7168,7 +7168,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 134.0.20241108050318;
+				version = 134.0.20241115050325;
 			};
 		};
 		8A0E7F2C2BA0F0E0006BC6B6 /* XCRemoteSwiftPackageReference "Fuzi" */ = {
@@ -7246,15 +7246,15 @@
 			package = CDFA746D27ABD43D0055FE55 /* XCRemoteSwiftPackageReference "glean-swift" */;
 			productName = Glean;
 		};
+		ED5ACDAF2CE6AABF00A55506 /* Sentry-Dynamic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F8B92FBC279EC73700183998 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = "Sentry-Dynamic";
+		};
 		F85F7A282655AD5800395515 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
-		};
-		F8B92FBD279EC73700183998 /* Sentry */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F8B92FBC279EC73700183998 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
-			productName = Sentry;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

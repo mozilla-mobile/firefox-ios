@@ -6,8 +6,11 @@ typealias TabDisplayViewSection = TabDisplayDiffableDataSource.TabSection
 typealias TabDisplayViewItem = TabDisplayDiffableDataSource.TabItem
 
 final class TabDisplayDiffableDataSource: UICollectionViewDiffableDataSource<TabDisplayViewSection, TabDisplayViewItem> {
-    enum TabSection: Int, CaseIterable {
-        case inactiveTabs
+    enum TabSection: Hashable {
+        // Adding a UUID to the section allows us to trigger a reload on the header by updating the UUID
+        // (which creates a diff) while updating the snapshot. This avoids calling reloadSections on inactiveTabs
+        // when there are no inactiveTabs in the section, which triggers a crash on iOS 15.
+        case inactiveTabs(UUID)
         case tabs
     }
 
@@ -19,14 +22,12 @@ final class TabDisplayDiffableDataSource: UICollectionViewDiffableDataSource<Tab
     func updateSnapshot(state: TabsPanelState) {
         var snapshot = NSDiffableDataSourceSnapshot<TabDisplayViewSection, TabDisplayViewItem>()
 
-        snapshot.appendSections([.inactiveTabs, .tabs])
-
-        // reloading .inactiveTabs is necessary to animate the caret moving when we show or hide inactive tabs
-        snapshot.reloadSections([.inactiveTabs])
+        let inactiveTabsUUID = UUID()
+        snapshot.appendSections([.inactiveTabs(inactiveTabsUUID), .tabs])
 
         if state.isInactiveTabsExpanded {
             let inactiveTabs = state.inactiveTabs.map { TabDisplayViewItem.inactiveTab($0) }
-            snapshot.appendItems(inactiveTabs, toSection: .inactiveTabs)
+            snapshot.appendItems(inactiveTabs, toSection: .inactiveTabs(inactiveTabsUUID))
         }
 
         let tabs = state.tabs.map { TabDisplayViewItem.tab($0) }

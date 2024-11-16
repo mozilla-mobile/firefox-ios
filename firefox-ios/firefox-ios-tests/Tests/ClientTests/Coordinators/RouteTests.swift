@@ -347,6 +347,24 @@ class RouteTests: XCTestCase {
         XCTAssertEqual(route, .searchQuery(query: "google", isPrivate: false))
     }
 
+    func testShareSheetRouteUrlOnly() {
+        let subject = createSubject()
+        let url = URL(string: "firefox://share-sheet?url=https://www.google.com")!
+
+        let route = subject.makeRoute(url: url)
+
+        XCTAssertEqual(route, .sharesheet(url: URL(string: "https://www.google.com")!, title: nil))
+    }
+
+    func testShareSheetRouteUrlAndTitle() {
+        let subject = createSubject()
+        let url = URL(string: "firefox://share-sheet?url=https://www.google.com&title=TEST TITLE")!
+
+        let route = subject.makeRoute(url: url)
+
+        XCTAssertEqual(route, .sharesheet(url: URL(string: "https://www.google.com")!, title: "TEST TITLE"))
+    }
+
     // MARK: - AppAction
 
     func testAppAction_showIntroOnboarding() {

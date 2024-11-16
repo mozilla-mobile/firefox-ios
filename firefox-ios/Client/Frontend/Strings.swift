@@ -102,6 +102,29 @@ extension String {
                 value: "Cancel",
                 comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the cancel action for the alert, cancelling ending your session.")
         }
+
+        public struct AddToCalendar {
+            public static let Title = MZLocalizedString(
+                key: "Alerts.AddToCalendar.Title.v134",
+                tableName: "Alerts",
+                value: "Add to calendar?",
+                comment: "When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the title for the alert.")
+            public static let Body = MZLocalizedString(
+                key: "Alerts.AddToCalendar.Body.v134",
+                tableName: "Alerts",
+                value: "%@ is asking to download a file and add an event to your calendar.",
+                comment: "When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the body message for the alert. %@ is the name/domain of the website, for example 'google.com'")
+            public static let AddButton = MZLocalizedString(
+                key: "Alerts.AddToCalendar.Button.Add.v134",
+                tableName: "Alerts",
+                value: "Add",
+                comment: "When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the affirmative action for the alert, confirming that you do want to add the event to the calendar.")
+            public static let CancelButton = MZLocalizedString(
+                key: "Alerts.FeltDeletion.Button.Cancel.v134",
+                tableName: "Alerts",
+                value: "Cancel",
+                comment: "When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the cancel action for the alert, cancelling the action to add the event to the calendar.")
+        }
     }
 }
 
@@ -167,11 +190,6 @@ extension String {
                 tableName: "Bookmarks",
                 value: "Deleted “%@”",
                 comment: "Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark.")
-            public static let BookmarksTopLevelTitle = MZLocalizedString(
-                key: "Bookmarks.Menu.BookmarksTopLevelTitle.v131",
-                tableName: "Bookmarks",
-                value: "Bookmarks",
-                comment: "Name of the top level bookmarks folder present in the folder selection menu of the`Edit Bookmark` screen")
             public static let DeleteBookmark = MZLocalizedString(
                 key: "Bookmarks.Menu.DeleteBookmark.v132",
                 tableName: "Bookmarks",
@@ -1574,10 +1592,10 @@ extension String {
                 value: "Be careful. Something doesn’t look right.",
                 comment: "On error page, this is the title for generic error.")
             public static let Description = MZLocalizedString(
-                key: "NativeErrorPage.GenericError.Description.v131",
+                key: "NativeErrorPage.GenericError.Description.v134",
                 tableName: "NativeErrorPage",
-                value: "An SSL error has occurred and a secure connection to the server cannot be made.",
-                comment: "On error page, this is the description for generic error.")
+                value: "The owner of %@ hasn’t set it up properly and a secure connection can’t be created.",
+                comment: "On error page, this is the description for generic error. The placeholder will be replaced by the site url")
         }
     }
 }
@@ -3291,8 +3309,13 @@ extension String {
 
 // MARK: - Root Bookmarks folders
 extension String {
-    public static let BookmarksFolderTitleMobile = MZLocalizedString(
+    public static let LegacyBookmarksFolderTitleMobile = MZLocalizedString(
         key: "Mobile Bookmarks",
+        tableName: "Storage",
+        value: nil,
+        comment: "The legacy title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
+    public static let BookmarksFolderTitleMobile = MZLocalizedString(
+        key: "Bookmarks",
         tableName: "Storage",
         value: nil,
         comment: "The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
@@ -4453,6 +4476,43 @@ extension String {
                     value: "Close",
                     comment: "When the user taps the search engine icon in the toolbar, a sheet with a list of alternative search engines appears. This is the accessibility label for the sheet's close button.")
             }
+        }
+    }
+
+    // MARK: - Sent from Firefox / Share Link Experiment
+    public struct SentFromFirefox {
+        public struct SocialMediaApp {
+            public static let WhatsApp = MZLocalizedString(
+                key: "SentFromFirefox.SocialMediaApp.WhatsApp.Title.v134",
+                tableName: "SocialMediaApp",
+                value: "WhatsApp",
+                comment: "The name of WhatsApp, a popular instant messaging and video calling app.")
+        }
+
+        public struct SocialShare {
+            public static let ShareMessageA = MZLocalizedString(
+                key: "SentFromFirefox.SocialShare.ShareMessageA.Title.v134",
+                tableName: "SocialShare",
+                value: "%1$@ %2$@ Sent from %3$@ 🦊 Try the mobile browser: %4$@",
+                comment: "When a user shares a link to social media, this is the shared text they'll see in the social media app. The first parameter is the shared website's page title. The second parameter is the shared website's URL. The third parameter is the Firefox app name. The fourth parameter is the link to download the Firefox app.")
+
+            public static let ShareMessageB = MZLocalizedString(
+                key: "SentFromFirefox.SocialShare.ShareMessageB.Title.v134",
+                tableName: "SocialShare",
+                value: "%1$@ Sent from %2$@ 🦊 %3$@",
+                comment: "When a user shares a link to social media, this is the shared text they'll see in the social media app. The first parameter is the shared website's URL. The second parameter is the Firefox app name. The third parameter is the link to download the Firefox app.")
+
+            public static let SocialSettingsToggleTitle = MZLocalizedString(
+                key: "SentFromFirefox.SocialShare.SettingsToggle.Title.v134",
+                tableName: "SocialShare",
+                value: "Include %1$@ Download Link on %2$@ Shares",
+                comment: "On the Settings screen, this is the title text for a toggle which controls adding additional text to links shared to social media apps. The first parameter is the Firefox app name. The second parameter is the social media app name (e.g. WhatsApp).")
+
+            public static let SocialSettingsToggleSubtitle = MZLocalizedString(
+                key: "SentFromFirefox.SocialShare.SettingsToggle.Subtitle.v134",
+                tableName: "SocialShare",
+                value: "Spread the word about %1$@ every time you share a link on %2$@.",
+                comment: "On the Settings screen, this is the subtitle text for a toggle which controls adding additional text to links shared to social media apps. The first parameter is the Firefox app name. The second parameter is the social media app name (e.g. WhatsApp).")
         }
     }
 
@@ -7466,6 +7526,11 @@ extension String {
                 tableName: "MainMenu",
                 value: "Report Broken Site",
                 comment: "On the main menu, the title for the action that will take the user to the site where they can report a broken website to our web compatibility team.")
+            public static let Description = MZLocalizedString(
+                key: "NativeErrorPage.GenericError.Description.v131",
+                tableName: "NativeErrorPage",
+                value: "An SSL error has occurred and a secure connection to the server cannot be made.",
+                comment: "On error page, this is the description for generic error.")
         }
         struct v132 {
             public static let TabTrayToggleAccessibilityLabel = MZLocalizedString(

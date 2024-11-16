@@ -92,7 +92,7 @@ let package = Package(
             name: "Common",
             dependencies: ["Dip",
                            "SwiftyBeaver",
-                           .product(name: "Sentry", package: "sentry-cocoa")],
+                           .product(name: "Sentry-Dynamic", package: "sentry-cocoa")],
             swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .testTarget(
             name: "CommonTests",

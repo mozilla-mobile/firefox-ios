@@ -1,9 +1,6 @@
 /* When navigating through the bookmarks menu and bookmark folders, a back button with an `All` (bookmarks) label is present to take the user to the top level bookmarks menu. */
 "Bookmarks.Menu.AllBookmarks.v131" = "Todo";
 
-/* Name of the top level bookmarks folder present in the folder selection menu of the`Edit Bookmark` screen */
-"Bookmarks.Menu.BookmarksTopLevelTitle.v131" = "Marcadores";
-
 /* Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark. */
 "Bookmarks.Menu.DeletedBookmark.v131" = "Eliminouse «%@»";
 

@@ -8,6 +8,7 @@ import Common
 import Shared
 import UIKit
 import Photos
+import SafariServices
 
 // MARK: - WKUIDelegate
 extension BrowserViewController: WKUIDelegate {
@@ -654,6 +655,21 @@ extension BrowserViewController: WKNavigationDelegate {
                 tab.temporaryDocument = nil
                 // We don't have a temporary document, fallthrough
             }
+        }
+
+        if let url = responseURL, tabManager[webView]?.mimeType == MIMEType.Calendar, let domain = url.baseDomain {
+            let alert = UIAlertController(title: .Alerts.AddToCalendar.Title,
+                                          message: String(format: .Alerts.AddToCalendar.Body, domain),
+                                          preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: .Alerts.AddToCalendar.CancelButton, style: .default))
+            alert.addAction(UIAlertAction(title: .Alerts.AddToCalendar.AddButton,
+                                          style: .default,
+                                          handler: { _ in
+                let safariVC = SFSafariViewController(url: url)
+                safariVC.modalPresentationStyle = .fullScreen
+                self.present(safariVC, animated: true, completion: nil)
+            }))
+            present(alert, animated: true)
         }
 
         // Check if this response should be downloaded.

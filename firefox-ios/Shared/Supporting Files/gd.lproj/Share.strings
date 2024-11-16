@@ -1,0 +1,6 @@
+/* Error message shown in the remote tabs panel */
+"SendTo.NoDevicesFound.Message.v119" = "Cha do cheangail thu uidheam sam bith eile ris a’ chunntas seo as urrainn dhut sioncronachadh.";
+
+/* This message appears when a user tries to use 'Send Link to Device' action while not logged in */
+"SendTo.NotSignedIn.Title.v119" = "Cha do rinn thu clàradh a-steach dhan chunntas agad.";
+

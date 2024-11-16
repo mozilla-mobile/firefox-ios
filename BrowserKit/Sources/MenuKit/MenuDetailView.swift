@@ -10,7 +10,8 @@ public final class MenuDetailView: UIView,
                                    MenuTableViewDataDelegate, ThemeApplicable {
     private struct UX {
         static let headerLineOffset: CGFloat = 35
-        static let headerTopMargin: CGFloat = 10
+        static let headerTopMargin: CGFloat = 15
+        static let horizontalTableViewMargin: CGFloat = 4
     }
 
     // MARK: - UI Elements
@@ -41,17 +42,19 @@ public final class MenuDetailView: UIView,
 
             tableView.topAnchor.constraint(equalTo: detailHeaderView.bottomAnchor),
             tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+            tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: -UX.horizontalTableViewMargin),
+            tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: UX.horizontalTableViewMargin)
         ])
     }
 
     public func setupAccessibilityIdentifiers(closeButtonA11yLabel: String,
                                               closeButtonA11yId: String,
+                                              titleA11yId: String? = nil,
                                               backButtonA11yLabel: String,
                                               backButtonA11yId: String) {
         detailHeaderView.setupAccessibility(closeButtonA11yLabel: closeButtonA11yLabel,
                                             closeButtonA11yId: closeButtonA11yId,
+                                            titleA11yId: titleA11yId,
                                             backButtonA11yLabel: backButtonA11yLabel,
                                             backButtonA11yId: backButtonA11yId)
     }

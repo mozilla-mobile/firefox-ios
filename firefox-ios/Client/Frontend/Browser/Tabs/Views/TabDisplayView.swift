@@ -72,6 +72,7 @@ class TabDisplayView: UIView,
         collectionView.dragDelegate = self
         collectionView.dropDelegate = self
         collectionView.collectionViewLayout = createLayout()
+        collectionView.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.collectionView
         return collectionView
     }()
 
@@ -169,7 +170,8 @@ class TabDisplayView: UIView,
                     ) as? TabCell
                 else { return UICollectionViewCell() }
 
-                cell.configure(with: tab, theme: theme, delegate: self)
+                let a11yId = "\(AccessibilityIdentifiers.TabTray.tabCell)_\(indexPath.section)_\(indexPath.row)"
+                cell.configure(with: tab, theme: theme, delegate: self, a11yId: a11yId)
                 return cell
             }
         }
@@ -178,11 +180,9 @@ class TabDisplayView: UIView,
         dataSource?.supplementaryViewProvider = { [weak self] (collectionView, kind, indexPath) -> UICollectionReusableView? in
             // swiftlint:enable line_length
             let reusableView = UICollectionReusableView()
-            let section = self?.getTabDisplay(for: indexPath.section)
+            let section = self?.getSection(for: indexPath.section)
 
-            guard let self, section == .inactiveTabs else {
-                return nil
-            }
+            guard let self, section != .tabs else { return nil }
 
             if kind == UICollectionView.elementKindSectionHeader,
                let headerView = collectionView.dequeueReusableSupplementaryView(
@@ -248,15 +248,13 @@ class TabDisplayView: UIView,
                 return self.tabsSectionManager.layoutSection(layoutEnvironment)
             }
 
-            let section = TabDisplayViewSection(rawValue: sectionIndex)
+            let section = getSection(for: sectionIndex)
             switch section {
             case .inactiveTabs:
                 return self.inactiveTabsSectionManager.layoutSection(
                     layoutEnvironment,
                     isExpanded: tabsState.isInactiveTabsExpanded)
             case .tabs:
-                return self.tabsSectionManager.layoutSection(layoutEnvironment)
-            case .none:
                 return self.tabsSectionManager.layoutSection(layoutEnvironment)
             }
         }
@@ -268,10 +266,14 @@ class TabDisplayView: UIView,
         collectionView.backgroundColor = theme.colors.layer3
     }
 
-    private func getTabDisplay(for section: Int) -> TabDisplayViewSection {
-        guard !shouldHideInactiveTabs else { return .tabs }
+    private func getSection(for sectionIndex: Int) -> TabDisplayViewSection {
+        guard
+            let snapshot = dataSource?.snapshot(),
+            sectionIndex >= 0,
+            sectionIndex < snapshot.sectionIdentifiers.count
+        else { return TabDisplayViewSection.tabs }
 
-        return TabDisplayViewSection(rawValue: section) ?? .tabs
+        return snapshot.sectionIdentifiers[sectionIndex]
     }
 
     func deleteInactiveTab(for index: Int) {
@@ -307,7 +309,7 @@ class TabDisplayView: UIView,
     func collectionView(_ collectionView: UICollectionView,
                         contextMenuConfigurationForItemAt indexPath: IndexPath,
                         point: CGPoint) -> UIContextMenuConfiguration? {
-        guard getTabDisplay(for: indexPath.section) == .tabs
+        guard getSection(for: indexPath.section) == .tabs
         else { return nil }
 
         let tabVC = TabPeekViewController(tab: tabsState.tabs[indexPath.row], windowUUID: windowUUID)
@@ -358,7 +360,7 @@ extension TabDisplayView: UICollectionViewDragDelegate, UICollectionViewDropDele
     func collectionView(_ collectionView: UICollectionView,
                         itemsForBeginning session: UIDragSession,
                         at indexPath: IndexPath) -> [UIDragItem] {
-        guard getTabDisplay(for: indexPath.section) == .tabs else { return [] }
+        guard getSection(for: indexPath.section) == .tabs else { return [] }
 
         let itemProvider = NSItemProvider()
         let dragItem = UIDragItem(itemProvider: itemProvider)

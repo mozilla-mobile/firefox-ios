@@ -145,7 +145,7 @@ class IntegrationTests: BaseTestCase {
         app.tables.cells.element(boundBy: 1).waitAndTap()
         mozWaitForElementToExist(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"])
         XCTAssertEqual(
-            app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as! String,
+            app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as? String,
             "Fennec (administrator) on iOS"
         )
 

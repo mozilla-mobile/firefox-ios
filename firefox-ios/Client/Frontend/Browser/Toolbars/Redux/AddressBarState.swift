@@ -18,7 +18,7 @@ struct AddressBarState: StateType, Equatable {
     var lockIconNeedsTheming: Bool
     var safeListedURLImageName: String?
     var isEditing: Bool
-    var isScrollingDuringEdit: Bool
+    var shouldShowKeyboard: Bool
     var shouldSelectSearchTerm: Bool
     var isLoading: Bool
     let readerModeState: ReaderModeState?
@@ -92,7 +92,7 @@ struct AddressBarState: StateType, Equatable {
             lockIconNeedsTheming: true,
             safeListedURLImageName: nil,
             isEditing: false,
-            isScrollingDuringEdit: false,
+            shouldShowKeyboard: true,
             shouldSelectSearchTerm: true,
             isLoading: false,
             readerModeState: nil,
@@ -113,7 +113,7 @@ struct AddressBarState: StateType, Equatable {
          lockIconNeedsTheming: Bool,
          safeListedURLImageName: String?,
          isEditing: Bool,
-         isScrollingDuringEdit: Bool,
+         shouldShowKeyboard: Bool,
          shouldSelectSearchTerm: Bool,
          isLoading: Bool,
          readerModeState: ReaderModeState?,
@@ -131,7 +131,7 @@ struct AddressBarState: StateType, Equatable {
         self.lockIconNeedsTheming = lockIconNeedsTheming
         self.safeListedURLImageName = safeListedURLImageName
         self.isEditing = isEditing
-        self.isScrollingDuringEdit = isScrollingDuringEdit
+        self.shouldShowKeyboard = shouldShowKeyboard
         self.shouldSelectSearchTerm = shouldSelectSearchTerm
         self.isLoading = isLoading
         self.readerModeState = readerModeState
@@ -187,8 +187,8 @@ struct AddressBarState: StateType, Equatable {
         case ToolbarActionType.didSetTextInLocationView:
             return handleDidSetTextInLocationViewAction(state: state, action: action)
 
-        case ToolbarActionType.didScrollDuringEdit:
-            return handleDidScrollDuringEditAction(state: state)
+        case ToolbarActionType.hideKeyboard:
+            return handleHideKeyboardAction(state: state)
 
         case ToolbarActionType.clearSearch:
             return handleClearSearchAction(state: state, action: action)
@@ -204,6 +204,9 @@ struct AddressBarState: StateType, Equatable {
 
         case SearchEngineSelectionActionType.didTapSearchEngine:
             return handleDidTapSearchEngine(state: state, action: action)
+
+        case SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine:
+            return handleDidClearAlternativeSearchEngine(state: state, action: action)
 
         default:
             return defaultState(from: state)
@@ -227,7 +230,7 @@ struct AddressBarState: StateType, Equatable {
             lockIconNeedsTheming: true,
             safeListedURLImageName: nil,
             isEditing: false,
-            isScrollingDuringEdit: false,
+            shouldShowKeyboard: true,
             shouldSelectSearchTerm: true,
             isLoading: false,
             readerModeState: nil,
@@ -252,7 +255,7 @@ struct AddressBarState: StateType, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: state.isEditing,
-            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldShowKeyboard: state.shouldShowKeyboard,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: toolbarAction.readerModeState,
@@ -265,6 +268,8 @@ struct AddressBarState: StateType, Equatable {
     private static func handleReaderModeStateChangedAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
+        let lockIconImageName = toolbarAction.readerModeState == .active ? nil : state.lockIconImageName
+
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
@@ -276,11 +281,11 @@ struct AddressBarState: StateType, Equatable {
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: state.searchTerm,
-            lockIconImageName: state.lockIconImageName,
+            lockIconImageName: lockIconImageName,
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: state.isEditing,
-            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldShowKeyboard: state.shouldShowKeyboard,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: toolbarAction.readerModeState,
@@ -305,7 +310,7 @@ struct AddressBarState: StateType, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: state.isEditing,
-            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldShowKeyboard: state.shouldShowKeyboard,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: toolbarAction.isLoading ?? state.isLoading,
             readerModeState: state.readerModeState,
@@ -318,12 +323,17 @@ struct AddressBarState: StateType, Equatable {
     private static func handleUrlDidChangeAction(state: Self, action: Action) -> Self {
         guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
+        let showQRPageAction = toolbarAction.url == nil
+
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: navigationActions(action: toolbarAction,
                                                  addressBarState: state,
                                                  isEditing: state.isEditing),
-            pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
+            pageActions: pageActions(action: toolbarAction,
+                                     addressBarState: state,
+                                     isEditing: state.isEditing,
+                                     showQRPageAction: showQRPageAction),
             browserActions: browserActions(action: toolbarAction, addressBarState: state),
             borderPosition: state.borderPosition,
             url: toolbarAction.url,
@@ -332,12 +342,12 @@ struct AddressBarState: StateType, Equatable {
             lockIconNeedsTheming: toolbarAction.lockIconNeedsTheming ?? state.lockIconNeedsTheming,
             safeListedURLImageName: toolbarAction.safeListedURLImageName,
             isEditing: state.isEditing,
-            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldShowKeyboard: state.shouldShowKeyboard,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: state.didStartTyping,
-            showQRPageAction: toolbarAction.url == nil,
+            showQRPageAction: showQRPageAction,
             alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
@@ -359,7 +369,7 @@ struct AddressBarState: StateType, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: state.isEditing,
-            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldShowKeyboard: state.shouldShowKeyboard,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
@@ -386,7 +396,7 @@ struct AddressBarState: StateType, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: state.isEditing,
-            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldShowKeyboard: state.shouldShowKeyboard,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
@@ -401,8 +411,10 @@ struct AddressBarState: StateType, Equatable {
 
         return AddressBarState(
             windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
-            pageActions: state.pageActions,
+            navigationActions: navigationActions(action: toolbarAction,
+                                                 addressBarState: state,
+                                                 isEditing: state.isEditing),
+            pageActions: pageActions(action: toolbarAction, addressBarState: state, isEditing: state.isEditing),
             browserActions: browserActions(action: toolbarAction, addressBarState: state),
             borderPosition: state.borderPosition,
             url: state.url,
@@ -411,7 +423,7 @@ struct AddressBarState: StateType, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: state.isEditing,
-            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldShowKeyboard: state.shouldShowKeyboard,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
@@ -436,7 +448,7 @@ struct AddressBarState: StateType, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: state.isEditing,
-            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldShowKeyboard: state.shouldShowKeyboard,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
@@ -466,7 +478,7 @@ struct AddressBarState: StateType, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: true,
-            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldShowKeyboard: state.shouldShowKeyboard,
             shouldSelectSearchTerm: false,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
@@ -498,7 +510,7 @@ struct AddressBarState: StateType, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: true,
-            isScrollingDuringEdit: false,
+            shouldShowKeyboard: true,
             shouldSelectSearchTerm: true,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
@@ -529,7 +541,7 @@ struct AddressBarState: StateType, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: false,
-            isScrollingDuringEdit: false,
+            shouldShowKeyboard: true,
             shouldSelectSearchTerm: true,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
@@ -546,12 +558,12 @@ struct AddressBarState: StateType, Equatable {
 
         return AddressBarState(
             windowUUID: state.windowUUID,
-            navigationActions: state.navigationActions,
+            navigationActions: navigationActions(action: toolbarAction, addressBarState: state, isEditing: true),
             pageActions: pageActions(action: toolbarAction,
                                      addressBarState: state,
                                      isEditing: true,
                                      showQRPageAction: isEmptySearch),
-            browserActions: state.browserActions,
+            browserActions: browserActions(action: toolbarAction, addressBarState: state),
             borderPosition: state.borderPosition,
             url: state.url,
             searchTerm: toolbarAction.searchTerm,
@@ -559,7 +571,7 @@ struct AddressBarState: StateType, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: true,
-            isScrollingDuringEdit: false,
+            shouldShowKeyboard: true,
             shouldSelectSearchTerm: false,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
@@ -569,7 +581,7 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
-    private static func handleDidScrollDuringEditAction(state: Self) -> Self {
+    private static func handleHideKeyboardAction(state: Self) -> Self {
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
@@ -582,7 +594,7 @@ struct AddressBarState: StateType, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: state.isEditing,
-            isScrollingDuringEdit: true,
+            shouldShowKeyboard: false,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
@@ -600,7 +612,7 @@ struct AddressBarState: StateType, Equatable {
             navigationActions: state.navigationActions,
             pageActions: pageActions(action: toolbarAction,
                                      addressBarState: state,
-                                     isEditing: state.isEditing,
+                                     isEditing: true,
                                      showQRPageAction: true),
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
@@ -609,8 +621,8 @@ struct AddressBarState: StateType, Equatable {
             lockIconImageName: state.lockIconImageName,
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: state.isEditing,
-            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            isEditing: true,
+            shouldShowKeyboard: state.shouldShowKeyboard,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
@@ -628,7 +640,7 @@ struct AddressBarState: StateType, Equatable {
             navigationActions: state.navigationActions,
             pageActions: pageActions(action: toolbarAction,
                                      addressBarState: state,
-                                     isEditing: state.isEditing,
+                                     isEditing: true,
                                      showQRPageAction: true),
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
@@ -637,8 +649,8 @@ struct AddressBarState: StateType, Equatable {
             lockIconImageName: state.lockIconImageName,
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: state.isEditing,
-            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            isEditing: true,
+            shouldShowKeyboard: state.shouldShowKeyboard,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
@@ -656,7 +668,7 @@ struct AddressBarState: StateType, Equatable {
             navigationActions: state.navigationActions,
             pageActions: pageActions(action: toolbarAction,
                                      addressBarState: state,
-                                     isEditing: state.isEditing,
+                                     isEditing: true,
                                      showQRPageAction: false),
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
@@ -665,8 +677,8 @@ struct AddressBarState: StateType, Equatable {
             lockIconImageName: state.lockIconImageName,
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
-            isEditing: state.isEditing,
-            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            isEditing: true,
+            shouldShowKeyboard: state.shouldShowKeyboard,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
@@ -691,7 +703,7 @@ struct AddressBarState: StateType, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: state.isEditing,
-            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldShowKeyboard: state.shouldShowKeyboard,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
@@ -701,7 +713,7 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
-    private static func handleDidTapSearchEngine(state: Self, action: Action) -> AddressBarState {
+    private static func handleDidTapSearchEngine(state: Self, action: Action) -> Self {
         guard let searchEngineSelectionAction = action as? SearchEngineSelectionAction,
               let selectedSearchEngine = searchEngineSelectionAction.selectedSearchEngine
         else { return defaultState(from: state) }
@@ -718,7 +730,7 @@ struct AddressBarState: StateType, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: state.isEditing,
-            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldShowKeyboard: state.shouldShowKeyboard,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
@@ -728,7 +740,9 @@ struct AddressBarState: StateType, Equatable {
         )
     }
 
-    static func defaultState(from state: AddressBarState) -> AddressBarState {
+    private static func handleDidClearAlternativeSearchEngine(state: Self, action: Action) -> Self {
+        guard action is SearchEngineSelectionAction else { return defaultState(from: state) }
+
         return AddressBarState(
             windowUUID: state.windowUUID,
             navigationActions: state.navigationActions,
@@ -741,7 +755,30 @@ struct AddressBarState: StateType, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: state.isEditing,
-            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldShowKeyboard: state.shouldShowKeyboard,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: state.didStartTyping,
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: nil
+        )
+    }
+
+    static func defaultState(from state: AddressBarState) -> Self {
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            pageActions: state.pageActions,
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            shouldShowKeyboard: state.shouldShowKeyboard,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
@@ -765,7 +802,7 @@ struct AddressBarState: StateType, Equatable {
         let isShowingNavigationToolbar = action.isShowingNavigationToolbar ?? toolbarState.isShowingNavigationToolbar
 
         if isEditing {
-            // back carrot when in edit mode
+            // back caret when in edit mode
             actions.append(cancelEditAction)
         } else if !isShowingNavigationToolbar {
             // otherwise back/forward and maybe data clearance when navigation toolbar is hidden

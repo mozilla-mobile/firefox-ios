@@ -80,6 +80,7 @@ public struct AccessibilityIdentifiers {
 
         struct NavigationHeaderView {
             static let backButton = "MainMenu.BackButton"
+            static let title = "MainMenu.Title"
             static let closeButton = "MainMenu.CloseMenuButton"
         }
 
@@ -442,6 +443,8 @@ public struct AccessibilityIdentifiers {
         static let navBarSegmentedControl = "navBarTabTray"
         static let syncDataButton = "syncDataButton"
         static let learnMoreButton = "learnMoreButton"
+        static let collectionView = "TabDisplayView.collectionView"
+        static let tabCell = "TabDisplayView.tabCell"
 
         struct InactiveTabs {
             static let headerLabel = "InactiveTabs.headerLabel"
@@ -828,6 +831,13 @@ public struct AccessibilityIdentifiers {
         static let passwordlabel = "PasswordGenerator.passwordLabel"
         static let content = "PasswordGenerator.content"
         static let header = "PasswordGenerator.header"
+    }
+
+    struct NativeErrorPage {
+        static let foxImage = "NativeErrorPage.foxImage"
+        static let titleLabel = "NativeErrorPage.titleLabel"
+        static let errorDescriptionLabel = "NativeErrorPage.errorDescriptionLabel"
+        static let reloadButton = "NativeErrorPage.reloadButton"
     }
 }
 // swiftlint:enable line_length
