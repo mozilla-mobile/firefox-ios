@@ -351,41 +351,23 @@ final class TabPanelStateTests: XCTestCase {
 
     private func createOneSelectedTab() -> [TabModel] {
         return [
-            MockTabModel(tabTitle: "Tab 0"),
-            MockTabModel(isSelected: true, tabTitle: "Tab 1"),
-            MockTabModel(tabTitle: "Tab 2")
+            .emptyState(tabUUID: createTabUUID(), title: "Tab 0"),
+            .emptyState(tabUUID: createTabUUID(), title: "Tab 1", isSelected: true),
+            .emptyState(tabUUID: createTabUUID(), title: "Tab 2")
         ]
     }
 
     private func createTabs(count: Int = 3, isPrivate: Bool = false) -> [TabModel] {
         return (0 ..< count).map { index in
-            MockTabModel(isPrivate: isPrivate, tabTitle: "Tab\(index)")
+            .emptyState(tabUUID: createTabUUID(), title: "Tab\(index)", isPrivate: isPrivate)
         }
     }
 
     private func createInactiveTabs(count: Int = 3) -> [InactiveTabsModel] {
         return (0 ..< count).map { index in
-            InactiveTabsModel(tabUUID: "4233-2323-3578",
+            InactiveTabsModel(tabUUID: createTabUUID(),
                               title: "InactiveTab\(index)",
                               url: URL(string: "https://www.test\(index).com"))
         }
-    }
-
-    private func MockTabModel(tabUUID: TabUUID = "",
-                              isSelected: Bool = false,
-                              isPrivate: Bool = false,
-                              isFxHomeTab: Bool = false,
-                              tabTitle: String = "",
-                              url: URL? = nil,
-                              screenshot: UIImage? = nil,
-                              hasHomeScreenshot: Bool = false) -> TabModel {
-        TabModel(tabUUID: tabUUID,
-                 isSelected: isSelected,
-                 isPrivate: isPrivate,
-                 isFxHomeTab: isFxHomeTab,
-                 tabTitle: tabTitle,
-                 url: url,
-                 screenshot: screenshot,
-                 hasHomeScreenshot: hasHomeScreenshot)
     }
 }
