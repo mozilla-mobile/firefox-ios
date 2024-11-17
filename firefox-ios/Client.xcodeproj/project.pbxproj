@@ -33,6 +33,7 @@
 		0AFF7F6D2C7C7BBA00265214 /* CertificatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AFF7F6A2C7C7BB900265214 /* CertificatesViewController.swift */; };
 		0B11AF022CB412D100AD51D5 /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B11AF002CB412D100AD51D5 /* Metrics.swift */; };
 		0B11AF042CB4130F00AD51D5 /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B11AF032CB4130F00AD51D5 /* Metrics.swift */; };
+		0B1C58D12CE5019A00F498F0 /* UserAgentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B1C58D02CE5019A00F498F0 /* UserAgentTests.swift */; };
 		0B305E1B1E3A98A900BE0767 /* BookmarksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B305E1A1E3A98A900BE0767 /* BookmarksTests.swift */; };
 		0B3D670E1E09B90B00C1EFC7 /* AuthenticationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3D670D1E09B90B00C1EFC7 /* AuthenticationTest.swift */; };
 		0B3F8C5E2CA4471C00DB5367 /* EditBookmarkViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3F8C5D2CA4471C00DB5367 /* EditBookmarkViewModel.swift */; };
@@ -50,6 +51,7 @@
 		0B8BF3752CA2EFC000E9812D /* EditBookmarkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B8BF3742CA2EFC000E9812D /* EditBookmarkCell.swift */; };
 		0B8E0FF41A932BD500161DC3 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B8E0FF31A932BD500161DC3 /* ImageIO.framework */; };
 		0BA02DB22942605600C92603 /* FormAutofillHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA02DB12942605600C92603 /* FormAutofillHelper.swift */; };
+		0BA152502CE78DAD0090B869 /* UserAgentBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA1524F2CE78DAD0090B869 /* UserAgentBuilderTests.swift */; };
 		0BA1E00E1B03FB0B007675AF /* NetError.html in Resources */ = {isa = PBXBuildFile; fileRef = 0BA1E00D1B03FB0B007675AF /* NetError.html */; };
 		0BA1E0301B051A07007675AF /* NetError.css in Resources */ = {isa = PBXBuildFile; fileRef = 0BA1E02F1B051A07007675AF /* NetError.css */; };
 		0BA8964B1A250E6500C1010C /* ProfileTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA896491A250E6500C1010C /* ProfileTest.swift */; };
@@ -2297,6 +2299,7 @@
 		0AFF7F6A2C7C7BB900265214 /* CertificatesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CertificatesViewController.swift; sourceTree = "<group>"; };
 		0B11AF002CB412D100AD51D5 /* Metrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metrics.swift; sourceTree = "<group>"; };
 		0B11AF032CB4130F00AD51D5 /* Metrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metrics.swift; sourceTree = "<group>"; };
+		0B1C58D02CE5019A00F498F0 /* UserAgentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgentTests.swift; sourceTree = "<group>"; };
 		0B305E1A1E3A98A900BE0767 /* BookmarksTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarksTests.swift; sourceTree = "<group>"; };
 		0B3D670D1E09B90B00C1EFC7 /* AuthenticationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationTest.swift; sourceTree = "<group>"; };
 		0B3F8C5D2CA4471C00DB5367 /* EditBookmarkViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditBookmarkViewModel.swift; sourceTree = "<group>"; };
@@ -2318,6 +2321,7 @@
 		0B9D40781E8D5AC80059E664 /* XCUITests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "XCUITests-Bridging-Header.h"; sourceTree = "<group>"; };
 		0BA02DB12942605600C92603 /* FormAutofillHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormAutofillHelper.swift; sourceTree = "<group>"; };
 		0BA049CE9929DAA536A2CB2F /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/3DTouchActions.strings"; sourceTree = "<group>"; };
+		0BA1524F2CE78DAD0090B869 /* UserAgentBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgentBuilderTests.swift; sourceTree = "<group>"; };
 		0BA1E00D1B03FB0B007675AF /* NetError.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = NetError.html; sourceTree = "<group>"; };
 		0BA1E02F1B051A07007675AF /* NetError.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = NetError.css; sourceTree = "<group>"; };
 		0BA896491A250E6500C1010C /* ProfileTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTest.swift; sourceTree = "<group>"; };
@@ -13700,6 +13704,8 @@
 				E6F9650E1B2F1CF20034B023 /* Supporting Files */,
 				E4E7EB6C1C4AED5E0094275D /* SupportUtilsTests.swift */,
 				28A6CE891AC082E200C1A2D4 /* UtilsTests.swift */,
+				0B1C58D02CE5019A00F498F0 /* UserAgentTests.swift */,
+				0BA1524F2CE78DAD0090B869 /* UserAgentBuilderTests.swift */,
 			);
 			path = SharedTests;
 			sourceTree = "<group>";
@@ -15766,6 +15772,7 @@
 			files = (
 				6F994AFD2AF56234008B8112 /* NetworkUtilsTests.swift in Sources */,
 				28532BEB1C472015000072D9 /* UtilsTests.swift in Sources */,
+				0B1C58D12CE5019A00F498F0 /* UserAgentTests.swift in Sources */,
 				28532BEA1C472008000072D9 /* DeferredTests.swift in Sources */,
 				0ECB6B6D2CCFF718006A7C82 /* DateGroupedTableDataTests.swift in Sources */,
 				5A292129295CA8A900242235 /* ThemableTests.swift in Sources */,
@@ -15777,6 +15784,7 @@
 				28532BE91C471FFB000072D9 /* ResultTests.swift in Sources */,
 				E6F9653C1B2F1D5D0034B023 /* NSURLExtensionsTests.swift in Sources */,
 				5A29212A295CAA1700242235 /* XCTestCaseRootViewController.swift in Sources */,
+				0BA152502CE78DAD0090B869 /* UserAgentBuilderTests.swift in Sources */,
 				3B4AA24B1D8B8C4C00A2E008 /* ArrayExtensionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
