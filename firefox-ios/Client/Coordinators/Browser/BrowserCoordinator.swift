@@ -542,7 +542,14 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func makeMenuNavViewController() -> DismissableNavigationViewController? {
-        guard !childCoordinators.contains(where: { $0 is MainMenuCoordinator }) else { return nil }
+        guard !childCoordinators.contains(where: { $0 is MainMenuCoordinator }) else {
+            logger.log(
+                "MainMenuCoordinator already exists when it technically shouldn't",
+                level: .fatal,
+                category: .mainMenu
+            )
+            return nil
+        }
 
         let navigationController = DismissableNavigationViewController()
         navigationController.modalPresentationStyle = .formSheet
@@ -561,6 +568,15 @@ class BrowserCoordinator: BaseCoordinator,
         coordinator.navigationHandler = self
         add(child: coordinator)
         coordinator.start()
+
+        navigationController.onViewDismissed = { [weak self] in
+            self?.logger.log(
+                "MainMenu NavigationController - onViewDismissed",
+                level: .info,
+                category: .mainMenu
+            )
+            self?.didFinish(from: coordinator)
+        }
 
         return navigationController
     }
