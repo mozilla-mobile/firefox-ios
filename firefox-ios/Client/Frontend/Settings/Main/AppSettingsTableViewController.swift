@@ -356,21 +356,32 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
     private func getSupportSettings() -> [SettingSection] {
         guard let sendAnonymousUsageDataSetting, let studiesToggleSetting else { return [] }
-        let supportSettings = [
+        let isSentFromFirefoxEnabled = featureFlags.isFeatureEnabled(.sentFromFirefox, checking: .buildOnly)
+
+        var supportSettings = [
             ShowIntroductionSetting(settings: self, settingsDelegate: self),
             SendFeedbackSetting(settingsDelegate: parentCoordinator),
-            SentFromFirefoxSetting(
-                prefs: profile.prefs,
-                delegate: settingsDelegate,
-                theme: themeManager.getCurrentTheme(for: windowUUID),
-                settingsDelegate: parentCoordinator
-            ),
+        ]
+
+        // Only add this toggle to the Settings if Sent from Firefox feature flag is enabled
+        if isSentFromFirefoxEnabled {
+            supportSettings.append(
+                SentFromFirefoxSetting(
+                    prefs: profile.prefs,
+                    delegate: settingsDelegate,
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    settingsDelegate: parentCoordinator
+                )
+            )
+        }
+
+        supportSettings.append(contentsOf: [
             sendAnonymousUsageDataSetting,
             studiesToggleSetting,
             OpenSupportPageSetting(delegate: settingsDelegate,
                                    theme: themeManager.getCurrentTheme(for: windowUUID),
                                    settingsDelegate: parentCoordinator),
-        ]
+        ])
 
         return [SettingSection(title: NSAttributedString(string: .AppSettingsSupport),
                                children: supportSettings)]
