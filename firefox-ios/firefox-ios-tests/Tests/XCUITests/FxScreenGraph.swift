@@ -1118,7 +1118,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         // Bookmark this page
         screenState.tap(
             app.tables.cells[AccessibilityIdentifiers.MainMenu.bookmarkThisPage],
-            forAction: Action.BookmarkThreeDots, Action.Bookmark
+            forAction: 
+                Action.BookmarkThreeDots,
+                Action.Bookmark
         )
         // Add to shortcuts
         // No Copy link available (Action.CopyAddressPAM)
