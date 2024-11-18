@@ -730,7 +730,6 @@ class CreditCardsTests: BaseTestCase {
         cardNumber.tapOnApp()
         mozWaitForElementToExist(app.buttons[useSavedCard])
         if !app.buttons[useSavedCard].isHittable {
-            // cardNumber.tapOnApp()
             cardNumber.waitAndTap()
         }
         // Use saved card prompt is displayed
