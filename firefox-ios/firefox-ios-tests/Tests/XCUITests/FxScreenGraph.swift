@@ -1150,7 +1150,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             if: "fxaUsername == nil")
         // Signed in (TODO)
         // New tab
-        screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.mainMenu], to: NewTabScreen)
+        screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.newTab], to: NewTabScreen)
         // New private tab (TODO: Not working)
         /*
         screenState.tap(
