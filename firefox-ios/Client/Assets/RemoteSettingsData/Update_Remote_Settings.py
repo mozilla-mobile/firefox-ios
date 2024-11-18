@@ -86,15 +86,18 @@ def main():
             for record in records:
                 attachment = record.get("attachment", None)
                 if attachment:
-                    attachment_subdir =  os.path.join(GITHUB_ACTIONS_TMP_PATH, "attachments", collection["collection_id"])
+                    attachment_subdir =  os.path.join("attachments", collection["collection_id"])
                     attachment_extension = mimetypes.guess_extension(attachment["mimetype"])
                     attachment_file_name = f"{record['name']}{attachment_extension}"
+                    attachment_file_tmp_path = os.path.join(GITHUB_ACTIONS_TMP_PATH, attachment_subdir, attachment_file_name)
                     attachment_file_path = os.path.join(attachment_subdir, attachment_file_name)
                     attachment_url = f"{base_url}{attachment['location']}"
                     attachment_content = fetch(attachment_url)
 
                     if attachment_content:
-                        save_content(attachment_content, attachment_file_path, attachment["mimetype"])
+                        save_content(attachment_content, attachment_file_tmp_path, attachment["mimetype"])
+                        if update_settings_file(attachment_file_tmp_path, attachment_file_path, record['name']):
+                            changes_detected = True
 
         # Don't save records if config has `save_records` set to False
         save_records = collection.get("save_records", True)
