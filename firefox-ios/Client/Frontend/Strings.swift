@@ -3410,6 +3410,38 @@ extension String {
         comment: "The label for the URL field when editing a bookmark")
 }
 
+// MARK: - Root Bookmarks Folder Empty State
+extension String {
+    public struct RootBookmarksFolderEmptyState {
+        public static let Title = MZLocalizedString(
+            key: "RootBookmarksFolderEmptyState.Title.v135",
+            tableName: "RootBookmarksFolderEmptyState",
+            value: "No bookmarks yet",
+            comment: "Title for the empty state of the root bookmarks folder that when it does not contain any items")
+        public static let Body = MZLocalizedString(
+            key: "RootBookmarksFolderEmptyState.Body.v135",
+            tableName: "RootBookmarksFolderEmptyState",
+            value: "Save sites as you browse. We’ll also grab bookmarks from other synced devices.",
+            comment: "Body for the empty state of the root bookmarks folder that when it does not contain any items")
+    }
+}
+
+// MARK: - Bookmark Folder Empty State
+extension String {
+    public struct BookmarksFolderEmptyState {
+        public static let Title = MZLocalizedString(
+            key: "BookmarksFolderEmptyState.Title.v135",
+            tableName: "BookmarksFolderEmptyState",
+            value: "This folder is empty",
+            comment: "Title for the empty state of any bookmarks folder that does not contain any items")
+        public static let Body = MZLocalizedString(
+            key: "BookmarksFolderEmptyState.Body.v135",
+            tableName: "BookmarksFolderEmptyState",
+            value: "Add bookmarks as you browse so you can find your favorite sites later.",
+            comment: "Body for the empty state of any bookmarks folder that does not contain any items")
+    }
+}
+
 // MARK: - Tab tray (chronological tabs)
 extension String {
     public static let TabTrayV2Title = MZLocalizedString(
