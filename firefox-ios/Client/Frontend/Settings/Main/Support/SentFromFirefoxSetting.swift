@@ -30,7 +30,7 @@ class SentFromFirefoxSetting: BoolSetting {
 
         super.init(
             prefs: prefs,
-            prefKey: AppConstants.prefStudiesToggle,
+            prefKey: PrefsKeys.Settings.sentFromFirefoxWhatsApp,
             defaultValue: true,
             attributedTitleText: titleAttributedString,
             attributedStatusText: subtitleAttributedString,

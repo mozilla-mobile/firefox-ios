@@ -122,6 +122,7 @@ public struct PrefsKeys {
     // Firefox settings
     public struct Settings {
         public static let closePrivateTabs = "ClosePrivateTabs"
+        public static let sentFromFirefoxWhatsApp = "SentFromFirefoxWhatsApp"
     }
 
     // Activity Stream
