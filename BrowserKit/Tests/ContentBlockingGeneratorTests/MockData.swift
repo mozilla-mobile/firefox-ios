@@ -40,7 +40,6 @@ struct ParserData {
     }
 }
 
-
 // MARK: - DictData
 enum DictData: String {
     case entity

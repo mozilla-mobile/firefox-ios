@@ -208,7 +208,9 @@ final class WKEngineSessionTests: XCTestCase {
         let subject = createSubject()
 
         subject?.findInPageDelegate = findInPageDelegate
-        guard let script = contentScriptManager.scripts[FindInPageContentScript.name()] as? FindInPageContentScript else { return }
+        guard let script = contentScriptManager.scripts[FindInPageContentScript.name()] as? FindInPageContentScript else {
+            return
+        }
         script.userContentController(didReceiveMessage: ["currentResult": 10])
 
         XCTAssertEqual(findInPageDelegate.didUpdateCurrentResultCalled, 1)
