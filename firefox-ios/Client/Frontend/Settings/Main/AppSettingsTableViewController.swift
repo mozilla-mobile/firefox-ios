@@ -59,7 +59,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
     // MARK: - Initializers
     init(with profile: Profile,
          and tabManager: TabManager,
-         delegate: SettingsDelegate? = nil,
+         settingsDelegate: SettingsDelegate,
+         parentCoordinator: SettingsFlowDelegate,
          appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
          applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
          logger: Logger = DefaultLogger.shared) {
@@ -70,7 +71,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
         super.init(windowUUID: tabManager.windowUUID)
         self.profile = profile
         self.tabManager = tabManager
-        self.settingsDelegate = delegate
+        self.settingsDelegate = settingsDelegate
+        self.parentCoordinator = parentCoordinator
         setupNavigationBar()
         setupDataSettings()
     }
