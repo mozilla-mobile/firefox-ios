@@ -6,9 +6,9 @@ import Common
 import Redux
 
 class WallpaperMiddleware {
-    private let wallpaperManager: WallpaperManager
+    private let wallpaperManager: WallpaperManagerInterface
 
-    init(wallpaperManager: WallpaperManager = WallpaperManager()) {
+    init(wallpaperManager: WallpaperManagerInterface = WallpaperManager()) {
         self.wallpaperManager = wallpaperManager
     }
 
