@@ -21,10 +21,12 @@ class MenuTableView: UIView,
     private var tableView: UITableView
     private var menuData: [MenuSection]
     private var theme: Theme?
+    private let logger: Logger
 
     public var updateHeaderLineView: ((_ isHidden: Bool) -> Void)?
 
     override init(frame: CGRect) {
+        self.logger = DefaultLogger.shared
         tableView = UITableView(frame: .zero, style: .insetGrouped)
         menuData = []
         super.init(frame: .zero)
@@ -84,10 +86,15 @@ class MenuTableView: UIView,
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(
+        guard let cell = tableView.dequeueReusableCell(
             withIdentifier: MenuCell.cellIdentifier,
             for: indexPath
-        ) as! MenuCell
+        ) as? MenuCell else {
+            logger.log("Failed tp dequeue MenuCell at indexPath: \(indexPath)",
+                       level: .warning,
+                       category: .lifecycle)
+            return UITableViewCell()
+        }
 
         cell.configureCellWith(model: menuData[indexPath.section].options[indexPath.row])
         if let theme { cell.applyTheme(theme: theme) }

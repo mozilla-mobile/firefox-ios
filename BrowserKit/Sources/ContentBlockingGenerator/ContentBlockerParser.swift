@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 
 /// Content Blocker Parser ingests the entity list first to then be able to parse the different file categories.
@@ -13,18 +14,32 @@ protocol ContentBlockerParser {
 class DefaultContentBlockerParser: ContentBlockerParser {
     // Key is each resource of an entity, so each properties for an entity's resource is easily accessible
     private var entities = [String: Entity]()
+    private let logger: Logger
+    
+    init(entities: [String : Entity] = [String: Entity](), logger: Logger = DefaultLogger.shared) {
+        self.entities = entities
+        self.logger = logger
+    }
 
     func parseEntityList(_ entitiesList: [String: Any]) {
         guard let entitiesRaw = entitiesList["entities"] as? [String: Any] else {
             return
         }
 
-        entitiesRaw.forEach {
-            let properties = ($0.value as! [String: [String]])["properties"]!
-            let resources = ($0.value as! [String: [String]])["resources"]!
-            let entity = Entity(properties: properties, resources: resources)
-            resources.forEach {
-                entities[$0] = entity
+        entitiesRaw.forEach { entitiesRawItem in
+            if let entitiesDict = entitiesRawItem.value as? [String: [String]],
+               let properties = entitiesDict["properties"],
+               let resources = entitiesDict["resources"] {
+
+                let entity = Entity(properties: properties, resources: resources)
+
+                resources.forEach {
+                    entities[$0] = entity
+                }
+            } else {
+                logger.log("Failed to parse entity for key: \(entitiesRawItem.key)",
+                           level: .info,
+                           category: .adblock)
             }
         }
     }
