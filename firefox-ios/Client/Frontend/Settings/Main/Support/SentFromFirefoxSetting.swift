@@ -6,7 +6,7 @@ import Common
 import Foundation
 import Shared
 
-class SentFromFirefoxSetting: BoolSetting {
+final class SentFromFirefoxSetting: BoolSetting {
     private weak var settingsDelegate: SupportSettingsDelegate?
 
     init(prefs: Prefs,
