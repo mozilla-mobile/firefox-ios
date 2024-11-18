@@ -39,7 +39,7 @@ class LegacyHomepageViewController:
     private var tabManager: TabManager
     private var overlayManager: OverlayModeManager
     private var userDefaults: UserDefaultsInterface
-    private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
+    private lazy var wallpaperView: LegacyWallpaperBackgroundView = .build { _ in }
     private var jumpBackInContextualHintViewController: ContextualHintViewController
     private var syncTabContextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
