@@ -2137,5 +2137,5 @@ trigger_map:
 
 meta:
   bitrise.io:
-    stack: osx-xcode-15.4.x
+    stack: osx-xcode-16.1.x
     machine_type_id: g2-m1.8core
