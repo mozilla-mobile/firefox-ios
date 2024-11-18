@@ -39,6 +39,9 @@ public enum LoggerCategory: String {
     /// Related to the application lifecycle.
     case lifecycle
 
+    /// Related to the application lifecycle.
+    case mainMenu
+
     /// Related to redux library or integration
     case redux
 

@@ -26,13 +26,22 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     private let windowUUID: WindowUUID
     private let profile: Profile
 
-    init(router: Router, windowUUID: WindowUUID, profile: Profile) {
+    init(
+        router: Router,
+        windowUUID: WindowUUID,
+        profile: Profile
+    ) {
         self.windowUUID = windowUUID
         self.profile = profile
         super.init(router: router)
     }
 
     func start() {
+        logger.log(
+            "MainMenuCoordinator - started",
+            level: .info,
+            category: .mainMenu
+        )
         router.setRootViewController(
             createMainMenuViewController(),
             hideBar: true
@@ -40,6 +49,11 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     }
 
     func showDetailViewController() {
+        logger.log(
+            "MainMenuCoordinator - pushing detail view controller",
+            level: .info,
+            category: .mainMenu
+        )
         router.push(
             createMainMenuDetailViewController(),
             animated: true
@@ -47,10 +61,20 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     }
 
     func dismissDetailViewController() {
+        logger.log(
+            "MainMenuCoordinator - popping detail view controller",
+            level: .info,
+            category: .mainMenu
+        )
         router.popViewController(animated: true)
     }
 
     func dismissMenuModal(animated: Bool) {
+        logger.log(
+            "MainMenuCoordinator - dismissing main menu",
+            level: .info,
+            category: .mainMenu
+        )
         router.dismiss(animated: animated, completion: nil)
         parentCoordinator?.didFinish(from: self)
     }
