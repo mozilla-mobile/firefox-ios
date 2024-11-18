@@ -41,7 +41,10 @@ final class WKContentScriptManagerTests: XCTestCase {
                                  forSession: session)
 
         XCTAssertEqual(script.scriptMessageHandlerNamesCalled, 1)
-        guard let config = session.webView.engineConfiguration as? MockWKEngineConfiguration else { return }
+        guard let config = session.webView.engineConfiguration as? MockWKEngineConfiguration else {
+            XCTFail("Failed to cast engine configuration in testAddContentGivenAddedThenCallsMessageHandlers")
+            return
+        }
         XCTAssertEqual(config.addInDefaultContentWorldCalled, 1)
         XCTAssertEqual(config.scriptNameAdded, "MockWKContentScriptHandler")
     }
@@ -69,7 +72,10 @@ final class WKContentScriptManagerTests: XCTestCase {
                                        forSession: session)
 
         XCTAssertEqual(script.scriptMessageHandlerNamesCalled, 1)
-        guard let config = session.webView.engineConfiguration as? MockWKEngineConfiguration else { return }
+        guard let config = session.webView.engineConfiguration as? MockWKEngineConfiguration else {
+            XCTFail("Failed to cast engine configuration in testAddContentToPageGivenAddedThenCallsMessageHandlers")
+            return
+        }
         XCTAssertEqual(config.addInPageContentWorldCalled, 1)
         XCTAssertEqual(config.scriptNameAdded, "MockWKContentScriptHandler")
     }

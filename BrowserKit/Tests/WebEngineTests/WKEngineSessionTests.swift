@@ -209,6 +209,7 @@ final class WKEngineSessionTests: XCTestCase {
 
         subject?.findInPageDelegate = findInPageDelegate
         guard let script = contentScriptManager.scripts[FindInPageContentScript.name()] as? FindInPageContentScript else {
+            XCTFail("Failed to cast script to FindInPageContentScript in testFindInPageDelegateIsSetProperly")
             return
         }
         script.userContentController(didReceiveMessage: ["currentResult": 10])
