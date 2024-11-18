@@ -9,14 +9,14 @@ import Shared
 class MenuBuilderHelper {
     private let logger: Logger
 
-    init(logger: Logger = DefaultLogger.shared) {
-        self.logger = logger
-    }
-
     struct MenuIdentifiers {
         static let history = UIMenu.Identifier("com.mozilla.firefox.menus.history")
         static let bookmarks = UIMenu.Identifier("com.mozilla.firefox.menus.bookmarks")
         static let tools = UIMenu.Identifier("com.mozilla.firefox.menus.tools")
+    }
+
+    init(logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
     }
 
     func mainMenu(for builder: UIMenuBuilder) {
@@ -76,8 +76,8 @@ class MenuBuilderHelper {
         fileMenu.children.forEach {
             guard let fileMenuKeyCommand = $0 as? UIKeyCommand else {
                 logger.log("Failed to cast file menu child to UIKeyCommand in MenuBuilderHelper class",
-                           level: .fatal,
-                           category: .library)
+                           level: .info,
+                           category: .lifecycle)
                 return
             }
             fileMenuKeyCommand.wantsPriorityOverSystemBehavior = true
@@ -105,8 +105,8 @@ class MenuBuilderHelper {
         findMenu.children.forEach {
             guard let findMenuKeyCommand = $0 as? UIKeyCommand else {
                 logger.log("Failed to cast find menu child to UIKeyCommand in MenuBuilderHelper class",
-                           level: .fatal,
-                           category: .library)
+                           level: .info,
+                           category: .lifecycle)
                 return
             }
             findMenuKeyCommand.wantsPriorityOverSystemBehavior = true
@@ -158,8 +158,8 @@ class MenuBuilderHelper {
         viewMenu.children.forEach {
             guard let viewMenuKeyCommand = $0 as? UIKeyCommand else {
                 logger.log("Failed to cast view menu child to UIKeyCommand in MenuBuilderHelper class",
-                           level: .fatal,
-                           category: .library)
+                           level: .info,
+                           category: .lifecycle)
                 return
             }
             viewMenuKeyCommand.wantsPriorityOverSystemBehavior = true
@@ -278,16 +278,14 @@ class MenuBuilderHelper {
             ]
         )
 
-        if #available(iOS 15, *) {
-            windowMenu.children.forEach {
-                guard let windowMenuKeyCommand = $0 as? UIKeyCommand else {
-                    logger.log("Failed to cast window menu child to UIKeyCommand in MenuBuilderHelper class",
-                               level: .fatal,
-                               category: .library)
-                    return
-                }
-                windowMenuKeyCommand.wantsPriorityOverSystemBehavior = true
+        windowMenu.children.forEach {
+            guard let windowMenuKeyCommand = $0 as? UIKeyCommand else {
+                logger.log("Failed to cast window menu child to UIKeyCommand in MenuBuilderHelper class",
+                           level: .info,
+                           category: .lifecycle)
+                return
             }
+            windowMenuKeyCommand.wantsPriorityOverSystemBehavior = true
         }
 
         builder.insertChild(applicationMenu, atStartOfMenu: .application)

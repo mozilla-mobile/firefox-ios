@@ -135,7 +135,7 @@ public class DefaultCrashManager: CrashManager {
                     self.alterEventForCustomCrash(event: event, crash: crashReport)
                 } else {
                     self.logger.log("Encountered an error that is not a CustomCrashReport: \(String(describing: event.error))",
-                                    level: .fatal,
+                                    level: .info,
                                     category: .lifecycle)
                 }
                 return event
