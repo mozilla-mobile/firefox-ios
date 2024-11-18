@@ -12,7 +12,7 @@ GITHUB_ACTIONS_TMP_PATH = f"{RS_DATA_PATH}tmp/"
 def fetch(url):
     try:
         response = requests.get(url)
-        response.raise_for_status()  # Raise exception for HTTP errors
+        response.raise_for_status()
         # Return JSON content if response is JSON, else return raw content
         mimetype = response.headers.get("Content-Type")
         return response.json() if "application/json" in mimetype else response.content
