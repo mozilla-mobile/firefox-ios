@@ -14,7 +14,7 @@ struct JsonHelper {
 
     func jsonEntityListFrom(filename: String) -> [String: Any] {
         let file = URL(fileURLWithPath: filename)
-        
+
         do {
             let data = try Data(contentsOf: file)
             if let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
@@ -32,7 +32,7 @@ struct JsonHelper {
 
     func jsonListFrom(filename: String) -> [String] {
         let file = URL(fileURLWithPath: filename)
-        
+
         do {
             let data = try Data(contentsOf: file)
             if let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String] {

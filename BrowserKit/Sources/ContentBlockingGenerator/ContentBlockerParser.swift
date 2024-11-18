@@ -15,9 +15,8 @@ class DefaultContentBlockerParser: ContentBlockerParser {
     // Key is each resource of an entity, so each properties for an entity's resource is easily accessible
     private var entities = [String: Entity]()
     private let logger: Logger
-    
-    init(entities: [String : Entity] = [String: Entity](), logger: Logger = DefaultLogger.shared) {
-        self.entities = entities
+
+    init(logger: Logger = DefaultLogger.shared) {
         self.logger = logger
     }
 
@@ -30,9 +29,7 @@ class DefaultContentBlockerParser: ContentBlockerParser {
             if let entitiesDict = entitiesRawItem.value as? [String: [String]],
                let properties = entitiesDict["properties"],
                let resources = entitiesDict["resources"] {
-
                 let entity = Entity(properties: properties, resources: resources)
-
                 resources.forEach {
                     entities[$0] = entity
                 }
