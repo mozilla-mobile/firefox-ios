@@ -47,19 +47,20 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case trackingProtectionRefactor
     case zoomFeature
 
-    // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`
+    // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
     var debugKey: String? {
         switch self {
         case    .bookmarksRefactor,
                 .closeRemoteTabs,
-                .microsurvey,
                 .homepageRebuild,
                 .menuRefactor,
-                .trackingProtectionRefactor,
+                .microsurvey,
                 .nativeErrorPage,
+                .sentFromFirefox,
                 .toolbarRefactor,
-                .unifiedSearch,
-                .passwordGenerator:
+                .trackingProtectionRefactor,
+                .passwordGenerator,
+                .unifiedSearch:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil
