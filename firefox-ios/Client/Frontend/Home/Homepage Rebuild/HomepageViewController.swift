@@ -30,6 +30,7 @@ final class HomepageViewController: UIViewController,
     // MARK: - Private variables
     private var collectionView: UICollectionView?
     private var dataSource: HomepageDiffableDataSource?
+    // TODO: FXIOS-10541 will handle scrolling for wallpaper and other scroll issues
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
     private var layoutConfiguration = HomepageSectionLayoutProvider().createCompositionalLayout()
     private var logger: Logger
@@ -87,6 +88,11 @@ final class HomepageViewController: UIViewController,
 
         listenForThemeChange(view)
         applyTheme()
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        wallpaperView.updateImageForOrientationChange()
     }
 
     // MARK: - Redux
