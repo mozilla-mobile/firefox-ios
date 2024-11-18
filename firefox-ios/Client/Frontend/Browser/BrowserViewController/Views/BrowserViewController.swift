@@ -2084,6 +2084,8 @@ class BrowserViewController: UIViewController,
 
     private func handleNavigation(to type: NavigationDestination) {
         switch type.destination {
+        case .contextMenu:
+            navigationHandler?.showContextMenu()
         case .customizeHomepage:
             navigationHandler?.show(settings: .homePage)
         case .link:

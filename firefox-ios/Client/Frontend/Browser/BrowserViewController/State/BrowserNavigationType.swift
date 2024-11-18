@@ -11,6 +11,9 @@ enum BrowserNavigationDestination: Equatable {
 
     // Webpage views
     case link
+
+    // Context menu views
+    case contextMenu
 }
 
 /// This type exists as a field on the BrowserViewControllerState
