@@ -50,7 +50,29 @@ final class MainMenuMiddleware {
     }
 
     lazy var mainMenuProvider: Middleware<AppState> = { state, action in
-        guard let action = action as? MainMenuAction else { return }
+        guard let action = action as? MainMenuAction else {
+            guard let action = action as? ScreenAction else { return }
+            switch action.actionType {
+            case ScreenActionType.showScreen:
+                if let accountData = self.getAccountData() {
+                    if let iconURL = accountData.iconURL {
+                        GeneralizedImageFetcher().getImageFor(url: iconURL) { [weak self] image in
+                            guard let self else { return }
+                            self.dispatchUpdateAccountHeader(
+                                accountData: accountData,
+                                windowUUID: action.windowUUID,
+                                icon: image)
+                        }
+                    } else {
+                        self.dispatchUpdateAccountHeader(accountData: accountData, windowUUID: action.windowUUID)
+                    }
+                } else {
+                    self.dispatchUpdateAccountHeader(windowUUID: action.windowUUID)
+                }
+            default: return
+            }
+            return
+        }
         let isHomepage = action.telemetryInfo?.isHomepage ?? false
 
         switch action.actionType {
@@ -83,21 +105,6 @@ final class MainMenuMiddleware {
             let option = isActionOn ? TelemetryAction.readerViewTurnOn : TelemetryAction.readerViewTurnOff
             self.telemetry.toolsSubmenuOptionTapped(with: false, and: option)
         case MainMenuActionType.viewDidLoad:
-            if let accountData = self.getAccountData() {
-                if let iconURL = accountData.iconURL {
-                    GeneralizedImageFetcher().getImageFor(url: iconURL) { [weak self] image in
-                        guard let self else { return }
-                        self.dispatchUpdateAccountHeader(
-                            accountData: accountData,
-                            action: action,
-                            icon: image)
-                    }
-                } else {
-                    self.dispatchUpdateAccountHeader(accountData: accountData, action: action)
-                }
-            } else {
-                self.dispatchUpdateAccountHeader(action: action)
-            }
             store.dispatch(
                 MainMenuAction(
                     windowUUID: action.windowUUID,
@@ -140,11 +147,11 @@ final class MainMenuMiddleware {
     }
 
     private func dispatchUpdateAccountHeader(accountData: AccountData? = nil,
-                                             action: MainMenuAction,
+                                             windowUUID: WindowUUID,
                                              icon: UIImage? = nil) {
         store.dispatch(
             MainMenuAction(
-                windowUUID: action.windowUUID,
+                windowUUID: windowUUID,
                 actionType: MainMenuMiddlewareActionType.updateAccountHeader,
                 accountData: accountData,
                 accountIcon: icon
