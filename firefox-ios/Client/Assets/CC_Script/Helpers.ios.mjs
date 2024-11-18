@@ -163,30 +163,6 @@ export const Services = withNotImplementedError({
         formatStringFromName: () => "",
       }),
   }),
-  telemetry: withNotImplementedError({
-    scalarAdd: (scalarName, scalarValue) => {
-      // For now, we only care about the address form telemetry
-      // TODO(FXCM-935): move address telemetry to Glean so we can remove this
-      // Data format of the sent message is:
-      // {
-      //   type: "scalar",
-      //   name: "formautofill.addresses.detected_sections_count",
-      //   value: Number,
-      // }
-      if (scalarName !== "formautofill.addresses.detected_sections_count") {
-        return;
-      }
-
-      // eslint-disable-next-line no-undef
-      webkit.messageHandlers.addressFormTelemetryMessageHandler.postMessage(
-        JSON.stringify({
-          type: "scalar",
-          object: scalarName,
-          value: scalarValue,
-        })
-      );
-    },
-  }),
   // TODO(FXCM-936): we should use crypto.randomUUID() instead of Services.uuid.generateUUID() in our codebase
   // Underneath crypto.randomUUID() uses the same implementation as generateUUID()
   // https://searchfox.org/mozilla-central/rev/d405168c4d3c0fb900a7354ae17bb34e939af996/dom/base/Crypto.cpp#96
@@ -247,6 +223,7 @@ window.Glean = {
       },
     }
   ),
+  formautofillAddresses: undefinedProxy(),
 };
 
 const genericLogger = () =>
