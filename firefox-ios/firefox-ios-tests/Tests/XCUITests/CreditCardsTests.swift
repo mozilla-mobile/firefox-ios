@@ -74,7 +74,6 @@ class CreditCardsTests: BaseTestCase {
         addCardAndReachViewCardPage()
         // Tap on the "Remove card" button
         app.buttons[creditCardsStaticTexts.ViewCreditCard.edit].tap()
-        // mozWaitForElementToExist(app.navigationBars[creditCardsStaticTexts.EditCreditCard.editCreditCard])
         app.buttons[creditCardsStaticTexts.EditCreditCard.removeCard].waitAndTap()
         // Validate the pop up displayed
         let removeThisCardAlert = app.alerts[creditCardsStaticTexts.EditCreditCard.removeThisCard]
@@ -708,7 +707,7 @@ class CreditCardsTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["Use saved card"])
     }
 
-    private func  addCreditCardAndReachAutofillWebsite() {
+    private func addCreditCardAndReachAutofillWebsite() {
         // Access any website with a credit card form and tap on the credit card number/ credit card name
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
