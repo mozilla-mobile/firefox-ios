@@ -23,7 +23,11 @@ class WallpaperMiddleware {
     private func resolveHomepageAction(action: HomepageAction, state: AppState) {
         switch action.actionType {
         case HomepageActionType.initialize:
-            let action = WallpaperAction(wallpaper: wallpaperManager.currentWallpaper, windowUUID: action.windowUUID, actionType: WallpaperMiddlewareActionType.wallpaperDidInitialize)
+            let action = WallpaperAction(
+                wallpaper: wallpaperManager.currentWallpaper,
+                windowUUID: action.windowUUID,
+                actionType: WallpaperMiddlewareActionType.wallpaperDidInitialize
+            )
             store.dispatch(action)
         default:
             break
@@ -33,7 +37,11 @@ class WallpaperMiddleware {
     private func resolveWallpaperAction(action: WallpaperAction, state: AppState) {
         switch action.actionType {
         case WallpaperActionType.wallpaperSelected:
-            let action = WallpaperAction(wallpaper: wallpaperManager.currentWallpaper, windowUUID: action.windowUUID, actionType: WallpaperMiddlewareActionType.wallpaperDidChange)
+            let action = WallpaperAction(
+                wallpaper: wallpaperManager.currentWallpaper,
+                windowUUID: action.windowUUID,
+                actionType: WallpaperMiddlewareActionType.wallpaperDidChange
+            )
             store.dispatch(action)
         default:
             break

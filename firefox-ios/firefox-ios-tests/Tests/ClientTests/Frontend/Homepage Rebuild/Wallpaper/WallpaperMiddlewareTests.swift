@@ -48,7 +48,11 @@ class WallpaperMiddlewareTests: XCTestCase {
     func test_wallpaperAction_returnsWallpaperManagerWallpaper() throws {
         let subject = WallpaperMiddleware(wallpaperManager: wallpaperManager)
         let testWallpaper = Wallpaper(id: "test", textColor: .green, cardColor: .yellow, logoTextColor: .orange)
-        let action = WallpaperAction(wallpaper: testWallpaper, windowUUID: .XCTestDefaultUUID, actionType: WallpaperActionType.wallpaperSelected)
+        let action = WallpaperAction(
+            wallpaper: testWallpaper,
+            windowUUID: .XCTestDefaultUUID,
+            actionType: WallpaperActionType.wallpaperSelected
+        )
         let expectation = XCTestExpectation(description: "Wallpaper selected action dispatched")
 
         mockStore.dispatchCalled = {
