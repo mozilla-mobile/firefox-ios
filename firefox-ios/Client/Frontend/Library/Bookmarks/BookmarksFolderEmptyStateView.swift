@@ -17,12 +17,10 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
     let themeManager: Common.ThemeManager
 
     private lazy var logoImage: UIImageView = .build { imageView in
-          imageView.image = UIImage(named: ImageIdentifiers.noBookmarks)
           imageView.contentMode = .scaleAspectFit
     }
 
     private lazy var titleLabel: UILabel = .build { label in
-        label.text = .RootBookmarksFolderEmptyState.Title
         label.textAlignment = .center
         label.font = FXFontStyles.Bold.headline.scaledFont()
         label.numberOfLines = 0
@@ -31,7 +29,6 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
     }
 
     private lazy var bodyLabel: UILabel = .build { label in
-        label.text = .RootBookmarksFolderEmptyState.Body
         label.textAlignment = .center
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
@@ -55,6 +52,12 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
         translatesAutoresizingMaskIntoConstraints = false
 
         setupLayout()
+    }
+
+    func configure(isRoot: Bool) {
+        titleLabel.text = isRoot ? .RootBookmarksFolderEmptyState.Title : .BookmarksFolderEmptyState.Title
+        bodyLabel.text = isRoot ? .RootBookmarksFolderEmptyState.Body : .BookmarksFolderEmptyState.Body
+        logoImage.image = UIImage(named: isRoot ? ImageIdentifiers.noBookmarksInRoot : ImageIdentifiers.noBookmarksInFolder)
     }
 
     private func setupLayout() {

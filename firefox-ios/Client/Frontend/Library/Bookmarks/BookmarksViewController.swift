@@ -81,8 +81,10 @@ class BookmarksViewController: SiteTableViewController,
         return button
     }()
 
-    private lazy var emptyStateView: UIView = {
-        return BookmarksFolderEmptyStateView(windowUUID: self.windowUUID)
+    private lazy var emptyStateView: BookmarksFolderEmptyStateView = {
+        let emptyStateView = BookmarksFolderEmptyStateView(windowUUID: self.windowUUID)
+        emptyStateView.translatesAutoresizingMaskIntoConstraints = false
+        return emptyStateView
     }()
 
     private lazy var a11yEmptyStateScrollView: UIScrollView = .build()
@@ -145,7 +147,7 @@ class BookmarksViewController: SiteTableViewController,
             if self?.viewModel.shouldFlashRow ?? false {
                 self?.flashRow()
             }
-            self?.a11yEmptyStateScrollView.isHidden = !(self?.viewModel.bookmarkNodes.isEmpty ?? false)
+            self?.updateEmptyState()
         }
     }
 
@@ -194,6 +196,7 @@ class BookmarksViewController: SiteTableViewController,
                     self.tableView.insertRows(at: [indexPath], with: .automatic)
                     self.tableView.endUpdates()
 
+                    self.updateEmptyState()
                     self.flashRow(at: indexPath)
                 }
             }
@@ -249,7 +252,7 @@ class BookmarksViewController: SiteTableViewController,
         viewModel.bookmarkNodes.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .left)
         tableView.endUpdates()
-        a11yEmptyStateScrollView.isHidden = !viewModel.bookmarkNodes.isEmpty
+        updateEmptyState()
     }
 
     // MARK: Button Actions helpers
@@ -313,6 +316,14 @@ class BookmarksViewController: SiteTableViewController,
             if self.indexPathIsValid(indexPath) {
                 self.tableView.deselectRow(at: indexPath, animated: true)
             }
+        }
+    }
+
+    private func updateEmptyState() {
+        a11yEmptyStateScrollView.isHidden = !viewModel.bookmarkNodes.isEmpty
+        if !a11yEmptyStateScrollView.isHidden {
+            let isRoot = viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID
+            emptyStateView.configure(isRoot: isRoot)
         }
     }
 

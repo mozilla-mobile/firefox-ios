@@ -26,7 +26,7 @@ public struct ImageIdentifiers {
     public static let logoVisa = "logo_visa"
     public static let menuBadge = "menuBadge"
     public static let menuWarningMask = "warning-mask"
-    public static let noBookmarks = "noBookmarks"
+    public static let noBookmarksInRoot = "noBookmarksInRoot"
     public static let noBookmarksInFolder = "noBookmarksInFolder"
     public static let qrCodeScanBorder = "qrcode-scanBorder"
     public static let qrCodeScanLine = "qrcode-scanLine"
