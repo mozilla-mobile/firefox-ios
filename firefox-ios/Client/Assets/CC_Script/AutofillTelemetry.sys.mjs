@@ -12,9 +12,6 @@ class AutofillTelemetryBase {
   EVENT_CATEGORY = null;
   EVENT_OBJECT_FORM_INTERACTION = null;
 
-  SCALAR_DETECTED_SECTION_COUNT = null;
-  SCALAR_SUBMITTED_SECTION_COUNT = null;
-
   HISTOGRAM_NUM_USES = null;
   HISTOGRAM_PROFILE_NUM_USES = null;
   HISTOGRAM_PROFILE_NUM_USES_KEY = null;
@@ -234,19 +231,11 @@ class AutofillTelemetryBase {
   }
 
   recordDetectedSectionCount() {
-    if (!this.SCALAR_DETECTED_SECTION_COUNT) {
-      return;
-    }
-
-    Services.telemetry.scalarAdd(this.SCALAR_DETECTED_SECTION_COUNT, 1);
+    throw new Error("Not implemented.");
   }
 
-  recordSubmittedSectionCount(count) {
-    if (!this.SCALAR_SUBMITTED_SECTION_COUNT || !count) {
-      return;
-    }
-
-    Services.telemetry.scalarAdd(this.SCALAR_SUBMITTED_SECTION_COUNT, count);
+  recordSubmittedSectionCount(_count) {
+    throw new Error("Not implemented.");
   }
 
   recordNumberOfUse(records) {
@@ -303,13 +292,6 @@ export class AddressTelemetry extends AutofillTelemetryBase {
   EVENT_CATEGORY = "address";
   EVENT_OBJECT_FORM_INTERACTION = "AddressForm";
   EVENT_OBJECT_FORM_INTERACTION_EXT = "AddressFormExt";
-
-  SCALAR_DETECTED_SECTION_COUNT =
-    "formautofill.addresses.detected_sections_count";
-  SCALAR_SUBMITTED_SECTION_COUNT =
-    "formautofill.addresses.submitted_sections_count";
-  SCALAR_AUTOFILL_PROFILE_COUNT =
-    "formautofill.addresses.autofill_profiles_count";
 
   HISTOGRAM_PROFILE_NUM_USES = "AUTOFILL_PROFILE_NUM_USES";
   HISTOGRAM_PROFILE_NUM_USES_KEY = "address";
@@ -385,18 +367,25 @@ export class AddressTelemetry extends AutofillTelemetryBase {
   }
 
   recordAutofillProfileCount(count) {
-    Services.telemetry.scalarSet(this.SCALAR_AUTOFILL_PROFILE_COUNT, count);
+    Glean.formautofillAddresses.autofillProfilesCount.set(count);
+  }
+
+  recordDetectedSectionCount() {
+    Glean.formautofillAddresses.detectedSectionsCount.add(1);
+  }
+
+  recordSubmittedSectionCount(count) {
+    if (!count) {
+      return;
+    }
+
+    Glean.formautofillAddresses.submittedSectionsCount.add(count);
   }
 }
 
 class CreditCardTelemetry extends AutofillTelemetryBase {
   EVENT_CATEGORY = "creditcard";
   EVENT_OBJECT_FORM_INTERACTION = "CcFormV2";
-
-  SCALAR_DETECTED_SECTION_COUNT =
-    "formautofill.creditCards.detected_sections_count";
-  SCALAR_SUBMITTED_SECTION_COUNT =
-    "formautofill.creditCards.submitted_sections_count";
 
   HISTOGRAM_NUM_USES = "CREDITCARD_NUM_USES";
   HISTOGRAM_PROFILE_NUM_USES = "AUTOFILL_PROFILE_NUM_USES";
@@ -446,6 +435,18 @@ class CreditCardTelemetry extends AutofillTelemetryBase {
 
   recordAutofillProfileCount(count) {
     Glean.formautofillCreditcards.autofillProfilesCount.set(count);
+  }
+
+  recordDetectedSectionCount() {
+    Glean.formautofillCreditCards.detectedSectionsCount.add(1);
+  }
+
+  recordSubmittedSectionCount(count) {
+    if (!count) {
+      return;
+    }
+
+    Glean.formautofillCreditCards.submittedSectionsCount.add(count);
   }
 }
 
