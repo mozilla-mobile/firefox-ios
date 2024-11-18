@@ -298,7 +298,7 @@ class CreditCardsTests: BaseTestCase {
             if !app.buttons[useSavedCard].exists {
                 app.webViews["Web content"].textFields["Card number"].tapOnApp()
             }
-            app.buttons[useSavedCard].tap()
+            app.buttons[useSavedCard].waitAndTap()
             unlockLoginsView()
             mozWaitForElementToExist(app.staticTexts["Use saved card"])
             app.scrollViews.otherElements.tables.cells["creditCardCell_1"].tap()
@@ -308,7 +308,7 @@ class CreditCardsTests: BaseTestCase {
             if !app.buttons[useSavedCard].exists {
                 app.webViews["Web content"].textFields["Full name on card"].tapOnApp()
             }
-            app.buttons[useSavedCard].tap()
+            app.buttons[useSavedCard].waitAndTap()
             unlockLoginsView()
             mozWaitForElementToExist(app.staticTexts["Use saved card"])
             app.scrollViews.element.swipeUp()
@@ -729,8 +729,10 @@ class CreditCardsTests: BaseTestCase {
         let cardNumber = app.webViews["Web content"].textFields["Card number"]
         mozWaitForElementToExist(cardNumber)
         cardNumber.tapOnApp()
+        mozWaitForElementToExist(app.buttons[useSavedCard])
         if !app.buttons[useSavedCard].isHittable {
-            cardNumber.tapOnApp()
+            // cardNumber.tapOnApp()
+            cardNumber.waitAndTap()
         }
         // Use saved card prompt is displayed
         app.buttons[useSavedCard].waitAndTap(timeout: TIMEOUT)
