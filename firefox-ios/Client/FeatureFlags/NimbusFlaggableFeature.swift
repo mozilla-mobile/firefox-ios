@@ -38,6 +38,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case closeRemoteTabs
     case reportSiteIssue
     case searchHighlights
+    case sentFromFirefox
     case splashScreen
     case unifiedSearch
     case toolbarRefactor
@@ -91,6 +92,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.InactiveTabs
         case .jumpBackIn:
             return FlagKeys.JumpBackInSection
+        case .sentFromFirefox:
+            return FlagKeys.SentFromFirefox
         // Cases where users do not have the option to manipulate a setting.
         case .contextualHintForToolbar,
                 .bookmarksRefactor,

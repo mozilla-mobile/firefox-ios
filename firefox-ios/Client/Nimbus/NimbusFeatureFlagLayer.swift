@@ -88,6 +88,9 @@ final class NimbusFeatureFlagLayer {
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
 
+        case .sentFromFirefox:
+            return checkSentFromFirefoxFeature(from: nimbus)
+
         case .splashScreen:
             return checkSplashScreenFeature(for: featureID, from: nimbus)
 
@@ -129,6 +132,11 @@ final class NimbusFeatureFlagLayer {
         case .reportSiteIssue: return config.reportSiteIssue.status
         default: return false
         }
+    }
+
+    private func checkSentFromFirefoxFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.sentFromFirefoxFeature.value()
+        return config.enabled
     }
 
     private func checkAwesomeBarFeature(for featureID: NimbusFeatureFlagID,
