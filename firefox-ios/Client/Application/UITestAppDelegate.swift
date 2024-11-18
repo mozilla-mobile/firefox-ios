@@ -147,7 +147,10 @@ class UITestAppDelegate: AppDelegate, FeatureFlaggable {
 
         let enumerator = FileManager.default.enumerator(atPath: dirForTestProfile)
         guard let filePaths = enumerator?.allObjects as? [String] else {
-            fatalError("Failed to cast enumerator.allObjects to [String] during filePaths extraction")
+            logger.log("Failed to retrieve file paths during database configuration in UITestAppDelegate class",
+                       level: .info,
+                       category: .lifecycle)
+            return
         }
         filePaths.filter { $0.contains(".db") }.forEach { item in
             try? FileManager.default.removeItem(
