@@ -1032,7 +1032,17 @@ open class BrowserSchema: Schema {
             }
 
             let urls = db.executeQuery("SELECT DISTINCT url FROM history WHERE url IS NOT NULL",
-                                       factory: { $0["url"] as! String })
+                                       factory: { row in
+                if let url = row["url"] as? String {
+                    return url
+                }
+                else {
+                    self.logger.log("Unexpected value for 'url'. Expected a String but got \(type(of: row["url"]))",
+                                    level: .warning,
+                                    category: .storage)
+                    return ""
+                }
+            })
             if !fillDomainNamesFromCursor(urls, db: db) {
                 return false
             }
