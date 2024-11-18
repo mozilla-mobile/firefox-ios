@@ -699,6 +699,10 @@ public struct AccessibilityIdentifiers {
             static let title = "ShowTour"
         }
 
+        struct SentFromFirefox {
+            static let whatsApp = "SentFromFirefox.WhatsApp"
+        }
+
         struct SendFeedback {
             static let title = "SendFeedback"
         }
