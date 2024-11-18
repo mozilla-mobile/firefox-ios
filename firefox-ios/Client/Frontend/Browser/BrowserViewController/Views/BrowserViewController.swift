@@ -2229,6 +2229,7 @@ class BrowserViewController: UIViewController,
             for: nil
         )
 
+        logger.log("Show MainMenu button tapped", level: .info, category: .mainMenu)
         if featureFlags.isFeatureEnabled(.menuRefactor, checking: .buildOnly) {
             navigationHandler?.showMainMenu()
         } else {

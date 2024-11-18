@@ -78,6 +78,12 @@ class MainMenuViewController: UIViewController,
         setupNotifications(forObserver: self,
                            observing: [.DynamicFontChanged])
         subscribeToRedux()
+        store.dispatch(
+            MainMenuAction(
+                windowUUID: windowUUID,
+                actionType: MainMenuActionType.didInstantiateView
+            )
+        )
     }
 
     required init?(coder: NSCoder) {
