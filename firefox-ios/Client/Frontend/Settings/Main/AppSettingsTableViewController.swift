@@ -359,6 +359,12 @@ class AppSettingsTableViewController: SettingsTableViewController,
         let supportSettings = [
             ShowIntroductionSetting(settings: self, settingsDelegate: self),
             SendFeedbackSetting(settingsDelegate: parentCoordinator),
+            SentFromFirefoxSetting(
+                prefs: profile.prefs,
+                delegate: settingsDelegate,
+                theme: themeManager.getCurrentTheme(for: windowUUID),
+                settingsDelegate: parentCoordinator
+            ),
             sendAnonymousUsageDataSetting,
             studiesToggleSetting,
             OpenSupportPageSetting(delegate: settingsDelegate,
