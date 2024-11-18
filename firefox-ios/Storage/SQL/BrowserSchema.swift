@@ -1035,8 +1035,7 @@ open class BrowserSchema: Schema {
                                        factory: { row in
                 if let url = row["url"] as? String {
                     return url
-                }
-                else {
+                } else {
                     self.logger.log("Unexpected value for 'url'. Expected a String but got \(type(of: row["url"]))",
                                     level: .warning,
                                     category: .storage)
