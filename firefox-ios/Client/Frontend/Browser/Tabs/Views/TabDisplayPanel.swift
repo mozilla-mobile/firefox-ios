@@ -49,6 +49,12 @@ class TabDisplayPanel: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
+    func removeTabPanel() {
+        view.removeConstraints(view.constraints)
+        view.subviews.forEach { $0.removeFromSuperview() }
+        view.removeFromSuperview()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.accessibilityLabel = .TabTrayViewAccessibilityLabel
