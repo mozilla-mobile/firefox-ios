@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 
 /// This Activity Item Provider subclass does two things that are non-standard behaviour:
@@ -15,12 +16,15 @@ import Foundation
 /// Note that not all applications use the Subject. For example OmniFocus ignores it, so we need to do both.
 
 class TitleActivityItemProvider: UIActivityItemProvider, @unchecked Sendable {
+    private let logger: Logger
+
     static let activityTypesToIgnore = [
         UIActivity.ActivityType.copyToPasteboard,
         UIActivity.ActivityType.message,
         UIActivity.ActivityType.mail]
 
-    init(title: String) {
+    init(title: String, logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
         super.init(placeholderItem: title)
     }
 
@@ -30,13 +34,26 @@ class TitleActivityItemProvider: UIActivityItemProvider, @unchecked Sendable {
                 return NSNull()
             }
         }
-        return placeholderItem! as AnyObject
+        if let item = placeholderItem as? AnyObject {
+            return item
+        } else {
+            logger.log("placeholderItem is not of expected type AnyObject",
+                       level: .fatal,
+                       category: .library)
+            return NSNull()
+        }
     }
 
     override func activityViewController(
         _ activityViewController: UIActivityViewController,
         subjectForActivityType activityType: UIActivity.ActivityType?
     ) -> String {
-        return placeholderItem as! String
+        guard let placeholderString = placeholderItem as? String else {
+            logger.log("Failed to cast placeholderItem to String",
+                       level: .fatal,
+                       category: .library)
+            return ""
+        }
+        return placeholderString
     }
 }

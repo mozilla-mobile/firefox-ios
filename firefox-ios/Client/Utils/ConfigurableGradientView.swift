@@ -2,11 +2,15 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 
 /// A view whose primary modifiable layer is a gradient layer
 public class ConfigurableGradientView: UIView {
-    init() {
+    private let logger: Logger
+
+    init(logger: Logger = DefaultLogger.shared) {
+        self.logger = logger
         super.init(frame: .zero)
     }
 
@@ -16,7 +20,13 @@ public class ConfigurableGradientView: UIView {
     }
 
     private var gradientLayer: CAGradientLayer {
-        return layer as! CAGradientLayer
+        guard let gradientLayer = layer as? CAGradientLayer else {
+            logger.log("Failed to cast layer to CAGradientLayer in ConfigurableGradientView class",
+                       level: .fatal,
+                       category: .library)
+            return CAGradientLayer()
+        }
+        return gradientLayer
     }
 
     override public class var layerClass: AnyClass {

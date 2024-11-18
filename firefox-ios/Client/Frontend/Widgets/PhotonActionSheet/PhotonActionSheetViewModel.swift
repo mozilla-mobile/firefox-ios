@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Storage
 import UIKit
 
@@ -15,6 +16,7 @@ class PhotonActionSheetViewModel: FeatureFlaggable {
     // MARK: - Properties
     var actions: [[PhotonRowActions]]
     var modalStyle: UIModalPresentationStyle
+    private let logger: Logger
 
     var closeButtonTitle: String?
     var site: Site?
@@ -42,10 +44,12 @@ class PhotonActionSheetViewModel: FeatureFlaggable {
     // MARK: - Initializers
     init(actions: [[PhotonRowActions]],
          site: Site? = nil,
-         modalStyle: UIModalPresentationStyle) {
+         modalStyle: UIModalPresentationStyle,
+         logger: Logger = DefaultLogger.shared) {
         self.actions = actions
         self.site = site
         self.modalStyle = modalStyle
+        self.logger = logger
     }
 
     init(actions: [[PhotonRowActions]],
@@ -53,7 +57,8 @@ class PhotonActionSheetViewModel: FeatureFlaggable {
          title: String? = nil,
          modalStyle: UIModalPresentationStyle,
          isMainMenu: Bool = false,
-         isMainMenuInverted: Bool = false) {
+         isMainMenuInverted: Bool = false,
+         logger: Logger = DefaultLogger.shared) {
         self.actions = actions
         self.closeButtonTitle = closeButtonTitle
         self.title = title
@@ -61,6 +66,7 @@ class PhotonActionSheetViewModel: FeatureFlaggable {
 
         self.isMainMenu = isMainMenu
         self.isMainMenuInverted = isMainMenuInverted
+        self.logger = logger
         setMainMenuStyle()
     }
 
@@ -103,8 +109,14 @@ class PhotonActionSheetViewModel: FeatureFlaggable {
         switch sheetStyle {
         case .site:
             guard let site = site else { break }
-            let header = tableView.dequeueReusableHeaderFooterView(
-                withIdentifier: PhotonActionSheetSiteHeaderView.cellIdentifier) as! PhotonActionSheetSiteHeaderView
+            guard let header = tableView.dequeueReusableHeaderFooterView(
+                withIdentifier: PhotonActionSheetSiteHeaderView.cellIdentifier
+            ) as? PhotonActionSheetSiteHeaderView else {
+                logger.log("Failed to dequeue PhotonActionSheetSiteHeaderView",
+                           level: .fatal,
+                           category: .library)
+                return UIView()
+            }
             header.configure(with: site)
             return header
 
@@ -114,9 +126,14 @@ class PhotonActionSheetViewModel: FeatureFlaggable {
                 return tableView.dequeueReusableHeaderFooterView(
                     withIdentifier: PhotonActionSheetLineSeparator.cellIdentifier)
             } else {
-                let header = tableView.dequeueReusableHeaderFooterView(
+                guard let header = tableView.dequeueReusableHeaderFooterView(
                     withIdentifier: PhotonActionSheetTitleHeaderView.cellIdentifier
-                ) as! PhotonActionSheetTitleHeaderView
+                ) as? PhotonActionSheetTitleHeaderView else {
+                    logger.log("Failed to dequeue PhotonActionSheetTitleHeaderView",
+                               level: .fatal,
+                               category: .library)
+                    return UIView()
+                }
                 header.configure(with: title)
                 return header
             }
