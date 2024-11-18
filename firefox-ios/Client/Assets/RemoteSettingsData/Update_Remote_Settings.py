@@ -6,8 +6,8 @@ import json
 import mimetypes
 
 CONFIG_FILE = "./firefox-ios/Client/Assets/RemoteSettingsData/RemoteSettingsFetchConfig.json"
-GITHUB_ACTIONS_PATH = "./firefox-ios/Client/Assets/RemoteSettingsData/"
-GITHUB_ACTIONS_TMP_PATH = f"{GITHUB_ACTIONS_PATH}tmp/"
+RS_DATA_PATH = "./firefox-ios/Client/Assets/RemoteSettingsData/"
+GITHUB_ACTIONS_TMP_PATH = f"{RS_DATA_PATH}tmp/"
 
 def fetch(url):
     try:
@@ -30,6 +30,14 @@ def save_content(file_content, file_path, file_mimetype = None):
         file.write(data)
     print(f"Saved file: {file_path}")
 
+def replace_file_with_dirs(tmp_file_path, target_file_path):
+    # Ensure the parent directory of the target path exists
+    target_dir = os.path.dirname(target_file_path)
+    os.makedirs(target_dir, exist_ok=True)
+    # Replace the file
+    os.replace(tmp_file_path, target_file_path)
+
+
 def update_settings_file(tmp_file_path, target_file_path, name):
     if os.path.exists(target_file_path):
         if filecmp.cmp(tmp_file_path, target_file_path):
@@ -37,13 +45,33 @@ def update_settings_file(tmp_file_path, target_file_path, name):
             os.remove(tmp_file_path)
             return False
         else:
-            os.replace(tmp_file_path, target_file_path)
+            replace_file_with_dirs(tmp_file_path, target_file_path)
             print(f"Updated {target_file_path} with new rules for {name}.")
             return True
     else:
-        os.replace(tmp_file_path, target_file_path)
+        replace_file_with_dirs(tmp_file_path, target_file_path)
         print(f"Created new rules file {target_file_path} for {name}.")
         return True
+
+
+def fetch_records_attachments(records, collection, base_url):
+    changes_detected = False
+    for record in records:
+        attachment = record.get("attachment", None)
+        if attachment:
+            attachment_subdir =  os.path.join("attachments", collection["collection_id"])
+            attachment_extension = mimetypes.guess_extension(attachment["mimetype"])
+            attachment_file_name = f"{record['name']}{attachment_extension}"
+            attachment_file_tmp_path = os.path.join(GITHUB_ACTIONS_TMP_PATH, attachment_subdir, attachment_file_name)
+            attachment_file_path = os.path.join(RS_DATA_PATH, attachment_subdir, attachment_file_name)
+            attachment_url = f"{base_url}{attachment['location']}"
+            attachment_content = fetch(attachment_url)
+
+            if attachment_content:
+                save_content(attachment_content, attachment_file_tmp_path, attachment["mimetype"])
+                if update_settings_file(attachment_file_tmp_path, attachment_file_path, record['name']):
+                    changes_detected = True
+    return changes_detected
 
 def main():
     if not os.path.exists(GITHUB_ACTIONS_TMP_PATH):
@@ -82,22 +110,7 @@ def main():
             if not base_url:
                 print(f"Attachment base URL not found for {collection['url']}")
                 continue
-
-            for record in records:
-                attachment = record.get("attachment", None)
-                if attachment:
-                    attachment_subdir =  os.path.join("attachments", collection["collection_id"])
-                    attachment_extension = mimetypes.guess_extension(attachment["mimetype"])
-                    attachment_file_name = f"{record['name']}{attachment_extension}"
-                    attachment_file_tmp_path = os.path.join(GITHUB_ACTIONS_TMP_PATH, attachment_subdir, attachment_file_name)
-                    attachment_file_path = os.path.join(attachment_subdir, attachment_file_name)
-                    attachment_url = f"{base_url}{attachment['location']}"
-                    attachment_content = fetch(attachment_url)
-
-                    if attachment_content:
-                        save_content(attachment_content, attachment_file_tmp_path, attachment["mimetype"])
-                        if update_settings_file(attachment_file_tmp_path, attachment_file_path, record['name']):
-                            changes_detected = True
+            changes_detected |= fetch_records_attachments(records, collection, base_url)
 
         # Don't save records if config has `save_records` set to False
         save_records = collection.get("save_records", True)
