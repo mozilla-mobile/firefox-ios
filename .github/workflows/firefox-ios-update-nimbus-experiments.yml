@@ -20,8 +20,6 @@ jobs:
           path: firefox-ios
           ref: main
           fetch-depth: 0
-          persist-credentials: false
-          token: ${{ secrets.GITHUB_TOKEN }}
       - name: "Update Experiments JSON"
         id: update-experiments-json
         uses: mozilla-mobile/update-experiments@v3
