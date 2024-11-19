@@ -4493,8 +4493,8 @@ extension String {
             public static let ShareMessageA = MZLocalizedString(
                 key: "SentFromFirefox.SocialShare.ShareMessageA.Title.v134",
                 tableName: "SocialShare",
-                value: "%1$@ %2$@ Sent from %3$@ 🦊 Try the mobile browser: %4$@",
-                comment: "When a user shares a link to social media, this is the shared text they'll see in the social media app. The first parameter is the shared website's page title. The second parameter is the shared website's URL. The third parameter is the Firefox app name. The fourth parameter is the link to download the Firefox app.")
+                value: "%1$@ Sent from %2$@ 🦊 Try the mobile browser: %3$@",
+                comment: "When a user shares a link to social media, this is the shared text they'll see in the social media app. The first parameter is the shared website's URL. The second parameter is the Firefox app name. The third parameter is the link to download the Firefox app.")
 
             public static let ShareMessageB = MZLocalizedString(
                 key: "SentFromFirefox.SocialShare.ShareMessageB.Title.v134",
