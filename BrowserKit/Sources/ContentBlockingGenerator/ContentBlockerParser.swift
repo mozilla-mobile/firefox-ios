@@ -14,11 +14,6 @@ protocol ContentBlockerParser {
 class DefaultContentBlockerParser: ContentBlockerParser {
     // Key is each resource of an entity, so each properties for an entity's resource is easily accessible
     private var entities = [String: Entity]()
-    private let logger: Logger
-
-    init(logger: Logger = DefaultLogger.shared) {
-        self.logger = logger
-    }
 
     func parseEntityList(_ entitiesList: [String: Any]) {
         guard let entitiesRaw = entitiesList["entities"] as? [String: Any] else {
@@ -26,17 +21,14 @@ class DefaultContentBlockerParser: ContentBlockerParser {
         }
 
         entitiesRaw.forEach { entitiesRawItem in
-            if let entitiesDict = entitiesRawItem.value as? [String: [String]],
-               let properties = entitiesDict["properties"],
-               let resources = entitiesDict["resources"] {
-                let entity = Entity(properties: properties, resources: resources)
-                resources.forEach {
-                    entities[$0] = entity
-                }
-            } else {
-                logger.log("Failed to parse entity for key: \(entitiesRawItem.key)",
-                           level: .info,
-                           category: .adblock)
+            guard let entitiesDict = entitiesRawItem.value as? [String: [String]],
+                  let properties = entitiesDict["properties"],
+                  let resources = entitiesDict["resources"] else {
+                return
+            }
+            let entity = Entity(properties: properties, resources: resources)
+            resources.forEach {
+                entities[$0] = entity
             }
         }
     }
