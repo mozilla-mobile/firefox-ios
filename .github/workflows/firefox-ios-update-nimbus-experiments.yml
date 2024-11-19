@@ -20,6 +20,8 @@ jobs:
           path: firefox-ios
           ref: main
           fetch-depth: 0
+          persist-credentials: false
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: "Update Experiments JSON"
         id: update-experiments-json
         uses: mozilla-mobile/update-experiments@v3
@@ -29,21 +31,29 @@ jobs:
           experimenter-url: https://experimenter.services.mozilla.com/api/v6/experiments-first-run/
           app-name: firefox_ios
           branch: automation/update-nimbus-experiments
+      - name: "Debug - workaround issue: 23215"
+        run: |-
+          cd firefox-ios
+          sudo chown runner:docker -R .git
       - name: Create Pull Request
         id: create-pull-request
         uses: peter-evans/create-pull-request@v6
         if: steps.update-experiments-json.outputs.changed == 1 && steps.update-experiments-json.outputs.changed-branch >= 1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          committer: GitHub <noreply@github.com>
           path: firefox-ios
+          add-paths: firefox-ios/Client/Experiments/initial_experiments.json
           branch: automation/update-nimbus-experiments
           commit-message: "update initial_experiments.json based on the current first-run experiments in experimenter"
           title: "Refactor [vXXX] Update initial experiments JSON for Nimbus"
           body: "This (automated) PR updates the initial_experiments.json on the `main` branch"
           delete-branch: true
           labels: Needs Code Review
-      - name: Enable Pull Request Automerge
-        if: steps.create-pull-request.outputs.pull-request-operation == 'created'
-        run: gh pr merge --squash "${{ steps.create-pull-request.outputs.pull-request-number }}"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Disabling Automerge
+      #- name: Enable Pull Request Automerge
+      #  if: steps.create-pull-request.outputs.pull-request-operation == 'created'
+      #  run: gh pr merge --squash "${{ steps.create-pull-request.outputs.pull-request-number }}"
+      #  env:
+      #    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
