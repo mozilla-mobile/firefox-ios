@@ -93,7 +93,6 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
             logoImage.heightAnchor.constraint(equalTo: logoImage.widthAnchor, multiplier: aspectRatio)
         ])
     }
-    }
 
     // MARK: ThemeApplicable
     func applyTheme(theme: Theme) {
