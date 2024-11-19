@@ -46,7 +46,7 @@ class LoginTest: BaseTestCase {
     private func openLoginsSettingsFromBrowserTab() {
         waitForExistence(app.buttons["TabToolbar.menuButton"])
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements[StandardImageIdentifiers.Large.login])
+        waitForExistence(app.buttons[AccessibilityIdentifiers.MainMenu.HeaderView.mainButton])
         navigator.goto(LoginsSettings)
 
         unlockLoginsView()
