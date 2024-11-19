@@ -585,7 +585,6 @@ class BrowserCoordinator: BaseCoordinator,
                 level: .info,
                 category: .mainMenu
             )
-            self?.didFinish(from: coordinator)
         }
 
         return navigationController
