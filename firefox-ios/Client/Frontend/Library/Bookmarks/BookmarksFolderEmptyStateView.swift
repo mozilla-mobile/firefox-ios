@@ -8,7 +8,7 @@ import Common
 final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
     private struct UX {
         static let a11yTopMargin: CGFloat = 20
-        static let TitleTopPadding: CGFloat = 16
+        static let TitleTopMargin: CGFloat = 16
         static let BodyTopMargin: CGFloat = 8
         static let ContentLeftRightMargins: CGFloat = 16
     }
@@ -66,7 +66,7 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
 
     private func setupLayout() {
         stackViewWrapper.addArrangedSubview(logoImage)
-        stackViewWrapper.setCustomSpacing(UX.TitleTopPadding, after: logoImage)
+        stackViewWrapper.setCustomSpacing(UX.TitleTopMargin, after: logoImage)
         stackViewWrapper.addArrangedSubview(titleLabel)
         stackViewWrapper.setCustomSpacing(UX.BodyTopMargin, after: titleLabel)
         stackViewWrapper.addArrangedSubview(bodyLabel)
