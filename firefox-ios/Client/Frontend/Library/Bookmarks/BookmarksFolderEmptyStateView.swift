@@ -11,6 +11,7 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
         static let TitleTopMargin: CGFloat = 16
         static let BodyTopMargin: CGFloat = 8
         static let ContentLeftRightMargins: CGFloat = 16
+        static let StackViewWidthMultiplier: CGFloat = 0.9
     }
 
     let windowUUID: WindowUUID
@@ -24,7 +25,6 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
         label.textAlignment = .center
         label.font = FXFontStyles.Bold.headline.scaledFont()
         label.numberOfLines = 0
-        label.textColor = self.currentTheme().colors.textPrimary
         label.adjustsFontForContentSizeCategory = true
     }
 
@@ -32,7 +32,6 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
         label.textAlignment = .center
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
-        label.textColor = self.currentTheme().colors.textPrimary
         label.adjustsFontForContentSizeCategory = true
     }
 
@@ -75,10 +74,10 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
         let aspectRatio = (logoImage.image?.size.height ?? 1) / (logoImage.image?.size.width ?? 1)
         NSLayoutConstraint.activate([
             stackViewWrapper.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: UX.a11yTopMargin),
-            stackViewWrapper.leadingAnchor.constraint(equalTo: leadingAnchor),
-            stackViewWrapper.trailingAnchor.constraint(equalTo: trailingAnchor),
             stackViewWrapper.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
+            stackViewWrapper.centerXAnchor.constraint(equalTo: centerXAnchor),
             stackViewWrapper.centerYAnchor.constraint(equalTo: centerYAnchor),
+            stackViewWrapper.widthAnchor.constraint(equalTo: widthAnchor, multiplier: UX.StackViewWidthMultiplier),
 
             titleLabel.leadingAnchor.constraint(
                 equalTo: stackViewWrapper.leadingAnchor, constant: UX.ContentLeftRightMargins),
@@ -94,14 +93,11 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
             logoImage.heightAnchor.constraint(equalTo: logoImage.widthAnchor, multiplier: aspectRatio)
         ])
     }
-
-    private func currentTheme() -> Theme {
-        return themeManager.getCurrentTheme(for: windowUUID)
     }
 
     // MARK: ThemeApplicable
-    func applyTheme(theme: any Theme) {
-        titleLabel.textColor = self.currentTheme().colors.textPrimary
-        bodyLabel.textColor = self.currentTheme().colors.textPrimary
+    func applyTheme(theme: Theme) {
+        titleLabel.textColor = theme.colors.textPrimary
+        bodyLabel.textColor = theme.colors.textPrimary
     }
 }

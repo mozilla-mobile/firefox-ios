@@ -372,6 +372,7 @@ class BookmarksViewController: SiteTableViewController,
                     greaterThanOrEqualTo: a11yEmptyStateScrollView.frameLayoutGuide.heightAnchor),
             ]
         )
+        emptyStateView.applyTheme(theme: currentTheme())
     }
 
     // MARK: - UITableViewDataSource | UITableViewDelegate
