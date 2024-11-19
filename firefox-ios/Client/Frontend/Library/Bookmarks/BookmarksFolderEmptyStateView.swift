@@ -99,6 +99,7 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
         return themeManager.getCurrentTheme(for: windowUUID)
     }
 
+    // MARK: ThemeApplicable
     func applyTheme(theme: any Theme) {
         titleLabel.textColor = self.currentTheme().colors.textPrimary
         bodyLabel.textColor = self.currentTheme().colors.textPrimary
