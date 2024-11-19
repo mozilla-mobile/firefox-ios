@@ -383,7 +383,7 @@ class BookmarksTests: BaseTestCase {
 
     private func bookmarkPageAndTapEdit() {
         bookmark()
-        app.buttons["Edit"].waitAndTap()
+        bookmark()
         mozWaitForElementToExist(app.navigationBars["Edit Bookmark"])
     }
 }

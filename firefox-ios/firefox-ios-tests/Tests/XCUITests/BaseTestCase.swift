@@ -244,8 +244,8 @@ class BaseTestCase: XCTestCase {
     }
 
     func unbookmark() {
-        navigator.goto(BrowserTabMenu)
-        app.otherElements[StandardImageIdentifiers.Large.bookmarkSlash].waitAndTap()
+        bookmark()
+        app.buttons["Delete Bookmark"].waitAndTap()
         navigator.nowAt(BrowserTab)
     }
 
