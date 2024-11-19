@@ -83,7 +83,6 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
 
     weak var tabDisplayCompletionDelegate: TabDisplayCompletionDelegate?
     private weak var tabDisplayerDelegate: TabDisplayerDelegate?
-    private weak var cfrDelegate: InactiveTabsCFRProtocol?
 
     lazy var filteredTabs = [Tab]()
     var tabDisplayOrder = TabDisplayOrder()
@@ -183,7 +182,6 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
          reuseID: String,
          tabDisplayType: TabDisplayType,
          profile: Profile,
-         cfrDelegate: InactiveTabsCFRProtocol? = nil,
          theme: Theme
     ) {
         self.collectionView = collectionView
@@ -193,7 +191,6 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
         self.tabReuseIdentifier = reuseID
         self.tabDisplayType = tabDisplayType
         self.profile = profile
-        self.cfrDelegate = cfrDelegate
         self.notificationCenter = NotificationCenter.default
         self.theme = theme
 
@@ -470,27 +467,7 @@ extension LegacyTabDisplayManager: UICollectionViewDataSource {
 
         switch TabDisplaySection(rawValue: indexPath.section) {
         case .inactiveTabs:
-            if let inactiveCell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: LegacyInactiveTabCell.cellIdentifier,
-                for: indexPath
-            ) as? LegacyInactiveTabCell {
-                inactiveCell.inactiveTabsViewModel = inactiveViewModel
-                inactiveCell.applyTheme(theme: theme)
-                inactiveCell.hasExpanded = isInactiveViewExpanded
-                inactiveCell.delegate = self
-                inactiveCell.tableView.reloadData()
-                cell = inactiveCell
-                if !hasSentInactiveTabShownEvent {
-                    hasSentInactiveTabShownEvent = true
-                    TelemetryWrapper.recordEvent(
-                        category: .action,
-                        method: .tap,
-                        object: .inactiveTabTray,
-                        value: .inactiveTabShown,
-                        extras: nil
-                    )
-                }
-            }
+            return cell
 
         case .regularTabs:
             guard let tab = dataStore.at(indexPath.row) else { return cell }
@@ -507,133 +484,6 @@ extension LegacyTabDisplayManager: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         if tabDisplayType == .TopTabTray { return 1 }
         return TabDisplaySection.allCases.count
-    }
-}
-
-// MARK: - InactiveTabsDelegate
-extension LegacyTabDisplayManager: LegacyInactiveTabsDelegate {
-    func closeInactiveTab(_ tab: Tab, index: Int) {
-        tabManager.backupCloseTab = BackupCloseTab(
-            tab: tab,
-            restorePosition: index,
-            isSelected: false)
-        removeSingleInactiveTab(tab)
-
-        cfrDelegate?.presentUndoSingleToast { [weak self] undoButtonPressed in
-            guard undoButtonPressed, let closedTab = self?.tabManager.backupCloseTab else {
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .tap,
-                                             object: .inactiveTabTray,
-                                             value: .inactiveTabSwipeClose,
-                                             extras: nil)
-                return
-            }
-            self?.undoDeleteInactiveTab(closedTab.tab, at: closedTab.restorePosition ?? 0)
-        }
-    }
-
-    func didTapCloseInactiveTabs(tabsCount: Int) {
-        // Haptic feedback for when a user closes all inactive tabs
-        let generator = UIImpactFeedbackGenerator(style: .light)
-        generator.impactOccurred()
-
-        // Hide inactive tabs and reload section to "simulate" deletion
-        inactiveViewModel?.shouldHideInactiveTabs = true
-        collectionView.reloadSections(IndexSet(integer: TabDisplaySection.inactiveTabs.rawValue))
-
-        cfrDelegate?.presentUndoToast(tabsCount: tabsCount,
-                                      completion: { [weak self] undoButtonPressed in
-            undoButtonPressed ? self?.undoInactiveTabsClose() : self?.closeAllInactiveTabs()
-        })
-    }
-
-    private func closeAllInactiveTabs() {
-        guard let inactiveTabs = inactiveViewModel?.inactiveTabs,
-              !inactiveTabs.isEmpty else { return }
-
-        removeInactiveTabAndReloadView(tabs: inactiveTabs)
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .inactiveTabTray,
-                                     value: .inactiveTabCloseAllButton,
-                                     extras: nil)
-    }
-
-    private func removeInactiveTabAndReloadView(tabs: [Tab]) {
-        // Remove inactive tabs from tab manager
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(50)) { [weak self] in
-            guard let self else { return }
-            self.tabManager.removeTabs(tabs)
-            let mostRecentTab = mostRecentTab(inTabs: self.tabManager.normalTabs) ?? self.tabManager.normalTabs.last
-            self.tabManager.selectTab(mostRecentTab)
-        }
-
-        let allTabs = isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-        inactiveViewModel?.updateInactiveTabs(with: tabManager.selectedTab, tabs: allTabs)
-        let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
-
-        // Refresh store when we have no inactive tabs in the list
-        guard let inactiveVm = inactiveViewModel,
-              !inactiveVm.inactiveTabs.isEmpty
-        else {
-            refreshStore()
-            return
-        }
-
-        collectionView.reloadItems(at: [indexPath])
-    }
-
-    private func removeSingleInactiveTab(_ tab: Tab) {
-        tabManager.removeTab(tab)
-        collectionView.reloadSections(IndexSet(integer: TabDisplaySection.inactiveTabs.rawValue))
-    }
-
-    private func undoDeleteInactiveTab(_ tab: Tab, at index: Int) {
-        tabManager.undoCloseTab()
-        inactiveViewModel?.inactiveTabs.insert(tab, at: index)
-
-        if inactiveViewModel?.inactiveTabs.count == 1 {
-            toggleInactiveTabSection(hasExpanded: true)
-        } else {
-            collectionView.reloadSections(IndexSet(integer: TabDisplaySection.inactiveTabs.rawValue))
-        }
-    }
-
-    private func undoInactiveTabsClose() {
-        inactiveViewModel?.shouldHideInactiveTabs = false
-        collectionView.reloadSections(IndexSet(integer: TabDisplaySection.inactiveTabs.rawValue))
-    }
-
-    func didSelectInactiveTab(tab: Tab?) {
-        TelemetryWrapper.recordEvent(category: .action,
-                                     method: .tap,
-                                     object: .inactiveTabTray,
-                                     value: .openInactiveTab,
-                                     extras: nil)
-    }
-
-    func toggleInactiveTabSection(hasExpanded: Bool) {
-        let hasExpandedEvent: TelemetryWrapper.EventValue = hasExpanded ? .inactiveTabExpand : .inactiveTabCollapse
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .tap,
-            object: .inactiveTabTray,
-            value: hasExpandedEvent,
-            extras: nil
-        )
-
-        isInactiveViewExpanded = hasExpanded
-        collectionView.reloadSections(IndexSet(integer: TabDisplaySection.inactiveTabs.rawValue))
-        let indexPath = IndexPath(row: 0, section: TabDisplaySection.inactiveTabs.rawValue)
-        collectionView.scrollToItem(at: indexPath, at: .top, animated: true)
-    }
-
-    func setupCFR(with view: UILabel) {
-        cfrDelegate?.setupCFR(with: view)
-    }
-
-    func presentCFR() {
-        cfrDelegate?.presentCFR()
     }
 }
 
