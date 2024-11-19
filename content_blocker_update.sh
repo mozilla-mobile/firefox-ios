@@ -14,4 +14,4 @@ npm run build
 # Clone shavar prod list
 rm -rf shavar-prod-lists && git clone https://github.com/mozilla-services/shavar-prod-lists.git && git -C shavar-prod-lists checkout $SHAVAR_COMMIT_HASH
 
-(cd BrowserKit && swift run --verbose)
+(cd BrowserKit && swift run --verbose --configuration release)
