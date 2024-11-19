@@ -210,8 +210,8 @@ final class SettingsCoordinatorTests: XCTestCase {
     func testDelegatesAreSet() {
         let subject = createSubject()
 
-        XCTAssertNotNil(subject.settingsViewController.settingsDelegate)
-        XCTAssertNotNil(subject.settingsViewController.parentCoordinator)
+        XCTAssertNotNil(subject.settingsViewController?.settingsDelegate)
+        XCTAssertNotNil(subject.settingsViewController?.parentCoordinator)
     }
 
     func testHandleRouteCalled_whenCreditCardRouteIsSet() {
