@@ -182,6 +182,7 @@ class AddressToolbarContainerModel: Equatable {
         lhs.url == rhs.url &&
         lhs.searchTerm == rhs.searchTerm &&
         lhs.isEditing == rhs.isEditing &&
+        lhs.shouldShowKeyboard == rhs.shouldShowKeyboard &&
         lhs.shouldSelectSearchTerm == rhs.shouldSelectSearchTerm &&
         lhs.shouldDisplayCompact == rhs.shouldDisplayCompact &&
 
