@@ -19,9 +19,8 @@ struct WallpaperState: ScreenState, Equatable {
         }
 
         switch action.actionType {
-        case WallpaperMiddlewareActionType.wallpaperDidInitialize:
-            return handleWallpaperAction(action: action, state: state)
-        case WallpaperMiddlewareActionType.wallpaperDidChange:
+        case WallpaperMiddlewareActionType.wallpaperDidInitialize,
+                WallpaperMiddlewareActionType.wallpaperDidChange:
             return handleWallpaperAction(action: action, state: state)
         default:
             return defaultState(from: state)

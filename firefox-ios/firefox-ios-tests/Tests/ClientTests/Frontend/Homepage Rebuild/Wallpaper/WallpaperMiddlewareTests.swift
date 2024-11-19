@@ -7,35 +7,28 @@ import XCTest
 
 @testable import Client
 
-class WallpaperMiddlewareTests: XCTestCase {
+class WallpaperMiddlewareTests: XCTestCase, StoreTestUtility {
     var mockStore: MockStoreForMiddleware<AppState>!
     let wallpaperManager = WallpaperManagerMock()
-    let appState = AppState()
+    var appState: AppState!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
-        mockStore = MockStoreForMiddleware(state: appState)
-        StoreTestUtilityHelper.setupStore(with: mockStore)
+
+        setupStore()
     }
 
     override func tearDown() {
+        resetStore()
         super.tearDown()
-        StoreTestUtilityHelper.resetStore()
     }
 
     func test_hompageAction_returnsWallpaperManagerWallpaper() throws {
         let subject = WallpaperMiddleware(wallpaperManager: wallpaperManager)
         let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
-        let expectation = XCTestExpectation(description: "Homepage action initialize dispatched")
-
-        mockStore.dispatchCalled = {
-            expectation.fulfill()
-        }
 
         subject.wallpaperProvider(appState, action)
-
-        wait(for: [expectation])
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? WallpaperAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? WallpaperMiddlewareActionType)
@@ -53,15 +46,8 @@ class WallpaperMiddlewareTests: XCTestCase {
             windowUUID: .XCTestDefaultUUID,
             actionType: WallpaperActionType.wallpaperSelected
         )
-        let expectation = XCTestExpectation(description: "Wallpaper selected action dispatched")
-
-        mockStore.dispatchCalled = {
-            expectation.fulfill()
-        }
 
         subject.wallpaperProvider(appState, action)
-
-        wait(for: [expectation])
 
         let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? WallpaperAction)
         let actionType = try XCTUnwrap(actionCalled.actionType as? WallpaperMiddlewareActionType)
@@ -70,5 +56,19 @@ class WallpaperMiddlewareTests: XCTestCase {
         XCTAssertEqual(actionType, WallpaperMiddlewareActionType.wallpaperDidChange)
         // TODO: FXIOS-10522 will make this test more meaningful by actually configuring the new current wallpaper
         XCTAssertEqual(actionCalled.wallpaper.id, "fxDefault")
+    }
+
+    func setupAppState() -> Client.AppState {
+        appState = AppState()
+        return appState
+    }
+
+    func setupStore() {
+        mockStore = MockStoreForMiddleware(state: setupAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+    }
+
+    func resetStore() {
+        StoreTestUtilityHelper.resetStore()
     }
 }
