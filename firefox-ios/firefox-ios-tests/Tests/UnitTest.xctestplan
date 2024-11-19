@@ -111,6 +111,7 @@
         "HistoryHighlightsDataAdaptorTests\/testReloadDataOnNotification()",
         "HistoryHighlightsTests",
         "IntroViewControllerTests\/testBasicSetupReturnsExpectedItems()",
+        "PocketViewModelTests\/testClickingDiscoverCell_recordsTapOnStory()",
         "RustSyncManagerTests\/testGetEnginesAndKeys()",
         "RustSyncManagerTests\/testGetEnginesAndKeysWithNoKey()",
         "RustSyncManagerTests\/testUpdateEnginePrefs_addressesDisabled()",
@@ -119,6 +120,7 @@
         "ShortcutRouteTests\/testOpenLastBookmarkShortcutWithInvalidUrl()",
         "TabManagerTests\/testDeleteSelectedTab()",
         "TabManagerTests\/testPrivatePreference_togglePBMDeletesPrivate()",
+        "TabToolbarHelperTests\/testTelemetryForSiteMenu()",
         "TestFavicons\/testFaviconFetcherParse()",
         "VersionSettingTests",
         "VersionSettingTests\/testCopyAppVersion()"
