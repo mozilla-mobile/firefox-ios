@@ -204,6 +204,8 @@ class TrackingProtectionViewController: UIViewController,
             updateBlockedTrackersCount()
         } else if trackingProtectionState.shouldDismiss {
             enhancedTrackingProtectionMenuDelegate?.didFinish()
+        } else if trackingProtectionState.showCookiesClearedToast {
+            showToast()
         }
     }
 
@@ -542,6 +544,12 @@ class TrackingProtectionViewController: UIViewController,
     func onTapClearCookiesAndSiteData() {
         resetReduxStoreState()
         model.onTapClearCookiesAndSiteData(controller: self)
+    }
+
+    func showToast() {
+        SimpleToast().showAlertWithText(model.clearCookiesToastMessage,
+                                        bottomContainer: view,
+                                        theme: self.themeManager.getCurrentTheme(for: self.windowUUID))
     }
 
     func clearCookies() {}

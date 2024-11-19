@@ -32,6 +32,7 @@ class TrackingProtectionModel {
     let clearCookiesAlertText: String = .Menu.EnhancedTrackingProtection.clearDataAlertText
     let clearCookiesAlertButton: String = .Menu.EnhancedTrackingProtection.clearDataAlertButton
     let clearCookiesAlertCancelButton: String = .Menu.EnhancedTrackingProtection.clearDataAlertCancelButton
+    let clearCookiesToastMessage: String = .Menu.EnhancedTrackingProtection.clearDataToastMessage
 
     // MARK: Accessibility Identifiers
     let foxImageA11yId: String = AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.foxImage
@@ -169,7 +170,7 @@ class TrackingProtectionModel {
     }
 
     func onTapClearCookiesAndSiteData(controller: UIViewController) {
-        let alertMessage = String(format: clearCookiesAlertText, url.absoluteDisplayString)
+        let alertMessage = String(format: clearCookiesAlertText, url.baseDomain ?? url.shortDisplayString)
         let alert = UIAlertController(
             title: clearCookiesAlertTitle,
             message: alertMessage,
@@ -181,15 +182,20 @@ class TrackingProtectionModel {
 
         let confirmAction = UIAlertAction(title: clearCookiesAlertButton,
                                           style: .destructive) { [weak self] _ in
-            self?.clearCookiesAndSiteData(cookiesClearable: CookiesClearable(), siteDataClearable: SiteDataClearable())
+            self?.clearCookiesAndSiteData()
             self?.selectedTab?.webView?.reload()
+            guard let windowUUID = self?.selectedTab?.windowUUID else { return }
+            store.dispatch(
+                TrackingProtectionAction(windowUUID: windowUUID,
+                                         actionType: TrackingProtectionActionType.showCookiesClearedToast)
+            )
         }
         alert.addAction(confirmAction)
         controller.present(alert, animated: true, completion: nil)
     }
 
-    func clearCookiesAndSiteData(cookiesClearable: Clearable, siteDataClearable: Clearable) {
-        _ = cookiesClearable.clear()
-        _ = siteDataClearable.clear()
+    func clearCookiesAndSiteData() {
+        _ = CookiesClearable().clear()
+        _ = SiteDataClearable().clear()
     }
 }
