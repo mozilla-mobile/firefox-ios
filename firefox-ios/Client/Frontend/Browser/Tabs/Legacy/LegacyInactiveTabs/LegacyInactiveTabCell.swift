@@ -41,8 +41,6 @@ class LegacyInactiveTabCell: UICollectionViewCell, ReusableCell, ThemeApplicable
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.register(LegacyInactiveTabButton.self,
                            forCellReuseIdentifier: LegacyInactiveTabButton.cellIdentifier)
-        tableView.register(LegacyInactiveTabHeader.self,
-                           forHeaderFooterViewReuseIdentifier: LegacyInactiveTabHeader.cellIdentifier)
         tableView.allowsMultipleSelectionDuringEditing = false
         tableView.sectionHeaderHeight = 0
         tableView.sectionFooterHeight = 0
@@ -206,26 +204,7 @@ extension LegacyInactiveTabCell: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         switch InactiveTabSection(rawValue: section) {
         case .inactive, .none:
-            guard let headerView = tableView.dequeueReusableHeaderFooterView(
-                withIdentifier: LegacyInactiveTabHeader.cellIdentifier
-            ) as? LegacyInactiveTabHeader else { return nil }
-            headerView.state = hasExpanded ? .down : .trailing
-            headerView.title = String.TabsTrayInactiveTabsSectionTitle
-            headerView.accessibilityLabel = hasExpanded ?
-                .TabsTray.InactiveTabs.TabsTrayInactiveTabsSectionOpenedAccessibilityTitle :
-                .TabsTray.InactiveTabs.TabsTrayInactiveTabsSectionClosedAccessibilityTitle
-            headerView.moreButton.isHidden = false
-            headerView.moreButton.addTarget(self,
-                                            action: #selector(toggleInactiveTabSection),
-                                            for: .touchUpInside)
-            headerView.contentView.backgroundColor = .clear
-
-            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(toggleInactiveTabSection))
-            headerView.addGestureRecognizer(tapGesture)
-
-            delegate?.setupCFR(with: headerView.titleLabel)
-
-            return headerView
+            return nil
 
         case .closeAllTabsButton:
             return nil
