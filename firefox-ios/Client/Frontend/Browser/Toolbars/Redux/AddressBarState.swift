@@ -514,6 +514,10 @@ struct AddressBarState: StateType, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: true,
+<<<<<<< HEAD
+=======
+            shouldShowKeyboard: false,
+>>>>>>> 507358ee1 (Bugfix FXIOS-10602 - [Toolbar Redesign] When long pressing the suggestions that are added in the location view, the keyboard should not show up (#23223))
             shouldSelectSearchTerm: false,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
