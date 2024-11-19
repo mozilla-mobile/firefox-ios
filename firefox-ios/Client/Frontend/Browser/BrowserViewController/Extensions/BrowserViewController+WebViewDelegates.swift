@@ -657,7 +657,8 @@ extension BrowserViewController: WKNavigationDelegate {
             }
         }
 
-        if let url = responseURL, tabManager[webView]?.mimeType == MIMEType.Calendar, let domain = url.baseDomain {
+        if let url = responseURL, tabManager[webView]?.mimeType == MIMEType.Calendar {
+            let domain = url.baseDomain ?? .Alerts.AddToCalendar.BodyDefaultDomain
             let alert = UIAlertController(title: .Alerts.AddToCalendar.Title,
                                           message: String(format: .Alerts.AddToCalendar.Body, domain),
                                           preferredStyle: .alert)
