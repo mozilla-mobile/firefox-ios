@@ -1590,8 +1590,6 @@
 		DFD1046D2B23539600938418 /* ProductAdsCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFD1046C2B23539600938418 /* ProductAdsCacheTests.swift */; };
 		DFEA639E279F468A00D489C3 /* DynamicHeightCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFEA639D279F468A00D489C3 /* DynamicHeightCollectionView.swift */; };
 		DFFC9AD12A681FA0002A6AAD /* NimbusFakespotFeatureLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFFC9AD02A681FA0002A6AAD /* NimbusFakespotFeatureLayer.swift */; };
-		E10A1F752863BC51001EEA80 /* LegacyInactiveTabItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10A1F742863BC51001EEA80 /* LegacyInactiveTabItemCell.swift */; };
-		E118B9292862674E00C84831 /* LegacyInactiveTabItemCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E118B9282862674E00C84831 /* LegacyInactiveTabItemCellModel.swift */; };
 		E127313C28B6AD99006F39D2 /* WallpaperSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E127313A28B6AD99006F39D2 /* WallpaperSettingsViewController.swift */; };
 		E127313D28B6AD99006F39D2 /* WallpaperSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E127313B28B6AD99006F39D2 /* WallpaperSettingsViewModel.swift */; };
 		E127313F28B6C194006F39D2 /* WallpaperSettingsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E127313E28B6C194006F39D2 /* WallpaperSettingsHeaderView.swift */; };
@@ -8957,8 +8955,6 @@
 		E09E4F50BC35F97B31C74197 /* su */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = su; path = su.lproj/Storage.strings; sourceTree = "<group>"; };
 		E0C04912B4FBCF45DBE8B00D /* lo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lo; path = lo.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		E0FA43418E1B0DC4B8E7D818 /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/FindInPage.strings; sourceTree = "<group>"; };
-		E10A1F742863BC51001EEA80 /* LegacyInactiveTabItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyInactiveTabItemCell.swift; sourceTree = "<group>"; };
-		E118B9282862674E00C84831 /* LegacyInactiveTabItemCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyInactiveTabItemCellModel.swift; sourceTree = "<group>"; };
 		E11B4025AC47F0E4AA12517F /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		E122487AA250D69EA8275912 /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		E127313A28B6AD99006F39D2 /* WallpaperSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WallpaperSettingsViewController.swift; sourceTree = "<group>"; };
@@ -9935,9 +9931,7 @@
 				437A9B672681256800FB41C1 /* LegacyInactiveTabCell.swift */,
 				21583E412B1A3703009D084D /* LegacyInactiveTabModel.swift */,
 				437A9B692681257F00FB41C1 /* LegacyInactiveTabViewModel.swift */,
-				E118B9282862674E00C84831 /* LegacyInactiveTabItemCellModel.swift */,
 				C889569927E8D1AC00E3779E /* LegacyInactiveTabHeader.swift */,
-				E10A1F742863BC51001EEA80 /* LegacyInactiveTabItemCell.swift */,
 			);
 			path = LegacyInactiveTabs;
 			sourceTree = "<group>";
@@ -16407,7 +16401,6 @@
 				C849E46326B9C3AF00260F0B /* EnhancedTrackingProtectionVM.swift in Sources */,
 				5A9F83402B2B4AE800272819 /* TabPeekAction.swift in Sources */,
 				C8EDDBF429DF119F003A4C07 /* DeeplinkInput.swift in Sources */,
-				E118B9292862674E00C84831 /* LegacyInactiveTabItemCellModel.swift in Sources */,
 				C88E7A552A0553180072E638 /* OnboardingViewModel.swift in Sources */,
 				8C29627C2B1F473800571655 /* AdEventsResponse.swift in Sources */,
 				962021E128B8078400BDF3D9 /* ContextualHintCopyProvider.swift in Sources */,
@@ -16656,7 +16649,6 @@
 				742BD99E2A13AC9000BA6B15 /* OnboardingInstructionPopupViewController.swift in Sources */,
 				9636D92C27F9E50100771F5E /* GleanPlumbMessageStore.swift in Sources */,
 				213B67A627CE682B000542F5 /* StartAtHomeHelper.swift in Sources */,
-				E10A1F752863BC51001EEA80 /* LegacyInactiveTabItemCell.swift in Sources */,
 				8A8629E2288096C40096DDB1 /* BookmarksFolderCell.swift in Sources */,
 				DAE6DF1B29AD78DA0094BD1B /* BrowserViewController+ZoomPage.swift in Sources */,
 				0EC57D082CA6FCA5002E3F04 /* PasswordGeneratorHeaderView.swift in Sources */,

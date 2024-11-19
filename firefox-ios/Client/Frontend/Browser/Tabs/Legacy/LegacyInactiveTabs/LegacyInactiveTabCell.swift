@@ -39,8 +39,6 @@ class LegacyInactiveTabCell: UICollectionViewCell, ReusableCell, ThemeApplicable
     // Views
     lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
-        tableView.register(LegacyInactiveTabItemCell.self,
-                           forCellReuseIdentifier: LegacyInactiveTabItemCell.cellIdentifier)
         tableView.register(LegacyInactiveTabButton.self,
                            forCellReuseIdentifier: LegacyInactiveTabButton.cellIdentifier)
         tableView.register(LegacyInactiveTabHeader.self,
@@ -145,22 +143,7 @@ extension LegacyInactiveTabCell: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch InactiveTabSection(rawValue: indexPath.section) {
         case .inactive:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: LegacyInactiveTabItemCell.cellIdentifier,
-                                                           for: indexPath) as? LegacyInactiveTabItemCell
-            else {
-                return UITableViewCell()
-            }
-
-            guard let tab = inactiveTabsViewModel?.inactiveTabs[indexPath.item] else { return cell }
-
-            let viewModel = LegacyInactiveTabItemCellModel(title: tab.getTabTrayTitle(),
-                                                           website: getTabDomainUrl(tab: tab))
-            cell.configureCell(viewModel: viewModel)
-            if let theme = inactiveTabsViewModel?.theme {
-                cell.applyTheme(theme: theme)
-            }
-
-            return cell
+            return UITableViewCell()
 
         case .closeAllTabsButton:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: LegacyInactiveTabButton.cellIdentifier,
