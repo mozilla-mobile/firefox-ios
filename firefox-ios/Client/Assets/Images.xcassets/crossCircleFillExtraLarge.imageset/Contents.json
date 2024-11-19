@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "crossCircleFillExtraLargeLight.pdf",
+      "filename" : "crossCircleFillExtraLarge 1.pdf",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "crossCircleFillExtraLargeDark.pdf",
+      "filename" : "crossCircleFillExtraLarge.pdf",
       "idiom" : "universal"
     }
   ],
