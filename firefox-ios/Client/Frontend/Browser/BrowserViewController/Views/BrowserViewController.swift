@@ -3819,18 +3819,20 @@ extension BrowserViewController: TabManagerDelegate {
 
         scrollController.tab = selectedTab
 
-        if !selectedTab.isFxHomeTab,
-           let webView = selectedTab.webView {
+        var needsReload = false
+        if let webView = selectedTab.webView {
             webView.accessibilityLabel = .WebViewAccessibilityLabel
             webView.accessibilityIdentifier = "contentView"
             webView.accessibilityElementsHidden = false
 
             browserDelegate?.show(webView: webView)
-
+            if selectedTab.isFxHomeTab {
+                needsReload = true
+            }
             if webView.url == nil {
                 // The webView can go gray if it was zombified due to memory pressure.
                 // When this happens, the URL is nil, so try restoring the page upon selection.
-                selectedTab.reload()
+                needsReload = true
             }
         }
 
@@ -3885,8 +3887,11 @@ extension BrowserViewController: TabManagerDelegate {
 
        /// If the selectedTab is showing an error page trigger a reload
         if let url = selectedTab.url, let internalUrl = InternalURL(url), internalUrl.isErrorPage {
+            needsReload = true
+        }
+
+        if needsReload {
             selectedTab.reloadPage()
-            return
         }
     }
 
