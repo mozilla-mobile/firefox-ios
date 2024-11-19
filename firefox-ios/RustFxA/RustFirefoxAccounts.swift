@@ -181,7 +181,9 @@ open class RustFirefoxAccounts {
             deviceType: type,
             capabilities: capabilities
         )
-        let accessGroupPrefix = Bundle.main.object(forInfoDictionaryKey: "MozDevelopmentTeam") as! String
+        guard let accessGroupPrefix = Bundle.main.object(forInfoDictionaryKey: "MozDevelopmentTeam") as? String else {
+            fatalError("Missing or invalid 'MozDevelopmentTeam' key in Info.plist")
+        }
         let accessGroupIdentifier = AppInfo.keychainAccessGroupWithPrefix(accessGroupPrefix)
 
         return FxAccountManager(
