@@ -3417,12 +3417,12 @@ extension String {
             key: "RootBookmarksFolderEmptyState.Title.v135",
             tableName: "RootBookmarksFolderEmptyState",
             value: "No bookmarks yet",
-            comment: "Title for the empty state of the root bookmarks folder that when it does not contain any items")
+            comment: "Title for the empty state of the root bookmarks folder when it does not contain any items")
         public static let Body = MZLocalizedString(
             key: "RootBookmarksFolderEmptyState.Body.v135",
             tableName: "RootBookmarksFolderEmptyState",
             value: "Save sites as you browse. We’ll also grab bookmarks from other synced devices.",
-            comment: "Body for the empty state of the root bookmarks folder that when it does not contain any items")
+            comment: "Body for the empty state of the root bookmarks folder when it does not contain any items")
     }
 }
 
