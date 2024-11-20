@@ -32,7 +32,10 @@ class RemoteSettingsFetchConfigTests: XCTestCase {
             collectionID: "password-rules"
         )
 
-        XCTAssertTrue(config.collections.contains { $0 == expectedCollection }, "Expected collection not found in the loaded config")
+        XCTAssertTrue(
+            config.collections.contains { $0 == expectedCollection },
+            "Expected collection not found in the loaded config"
+        )
     }
 
     func testConfigHasValidStructure() {
