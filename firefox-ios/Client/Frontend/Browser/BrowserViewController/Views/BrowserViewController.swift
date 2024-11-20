@@ -1543,14 +1543,14 @@ class BrowserViewController: UIViewController,
         }
 
         /// Used for checking if current error code is for no internet connection
-        let validNICError = url?.absoluteString.contains(String(Int(
+        let isNICErrorCode = url?.absoluteString.contains(String(Int(
             CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue))) ?? false
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
         } else if isErrorURL && isNativeErrorPageEnabled {
             showEmbeddedNativeErrorPage()
-        } else if validNICError && isNICErrorPageEnabled {
+        } else if isNICErrorCode && isNICErrorPageEnabled {
             showEmbeddedNativeErrorPage()
         } else {
             showEmbeddedWebview()

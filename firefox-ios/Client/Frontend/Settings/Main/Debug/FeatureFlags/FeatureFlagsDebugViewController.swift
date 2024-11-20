@@ -77,7 +77,7 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                 FeatureFlagsBoolSetting(
                     with: .noInternetConnectionErrorPage,
                     titleText: format(string: "Enable NIC Native Error Page"),
-                    statusText: format(string: "Toggle to display natively created no internet conneciton error page")
+                    statusText: format(string: "Toggle to display natively created no internet connection error page")
                 ) { [weak self] _ in
                     self?.reloadView()
                 },
