@@ -104,6 +104,14 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
             GleanMetrics.LegacyIds.clientId.set(uuid)
         }
 
+        // Set or generate profile id used for usage reporting
+        if let uuidString = profile.prefs.stringForKey(PrefsKeys.Usage.profileId), let uuid = UUID(uuidString: uuidString) {
+            GleanMetrics.Usage.profileId.set(uuid)
+        } else {
+            let uuid = GleanMetrics.Usage.profileId.generateAndSet()
+            profile.prefs.setString(uuid.uuidString, forKey: PrefsKeys.Usage.profileId)
+        }
+
         glean.registerPings(GleanMetrics.Pings.shared)
 
         // Initialize Glean telemetry
