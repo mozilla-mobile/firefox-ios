@@ -2,7 +2,6 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
-import Common
 import Foundation
 
 struct JsonHelper {
@@ -12,7 +11,7 @@ struct JsonHelper {
         do {
             let data = try Data(contentsOf: file)
             guard let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
-                return [:]
+                fatalError("Invalid JSON format: expected [String: Any] in \(filename)")
             }
             return jsonObject
         } catch {
@@ -26,7 +25,7 @@ struct JsonHelper {
         do {
             let data = try Data(contentsOf: file)
             guard let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String] else {
-                return []
+                fatalError("Invalid JSON format: expected [String] in \(filename)")
             }
             return jsonObject
         } catch {
