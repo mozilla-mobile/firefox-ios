@@ -3827,6 +3827,8 @@ extension BrowserViewController: TabManagerDelegate {
 
             browserDelegate?.show(webView: webView)
             if selectedTab.isFxHomeTab {
+                // Added as initial fix for WKWebView memory leak. Needs further investigation.
+                // See: [FXIOS-10612] + [FXIOS-10335]
                 needsReload = true
             }
             if webView.url == nil {
