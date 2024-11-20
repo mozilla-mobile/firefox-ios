@@ -10,7 +10,7 @@ import Common
 struct PasswordGeneratorState: ScreenState, Equatable {
     var windowUUID: WindowUUID
     var password: String
-    var passwordBlurred: Bool
+    var passwordHidden: Bool
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let passwordGeneratorState = store.state.screenState(
@@ -25,18 +25,18 @@ struct PasswordGeneratorState: ScreenState, Equatable {
         self.init(
             windowUUID: passwordGeneratorState.windowUUID,
             password: passwordGeneratorState.password,
-            passwordBlurred: passwordGeneratorState.passwordBlurred
+            passwordHidden: passwordGeneratorState.passwordHidden
         )
     }
 
     init(
         windowUUID: WindowUUID,
         password: String = "",
-        passwordBlurred: Bool = false
+        passwordHidden: Bool = false
     ) {
         self.windowUUID = windowUUID
         self.password = password
-        self.passwordBlurred = passwordBlurred
+        self.passwordHidden = passwordHidden
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -52,19 +52,19 @@ struct PasswordGeneratorState: ScreenState, Equatable {
             return PasswordGeneratorState(
                 windowUUID: action.windowUUID,
                 password: password,
-                passwordBlurred: state.passwordBlurred)
+                passwordHidden: state.passwordHidden)
 
-            case PasswordGeneratorActionType.blurPassword:
-                return PasswordGeneratorState(
-                    windowUUID: action.windowUUID,
-                    password: state.password,
-                    passwordBlurred: true)
+        case PasswordGeneratorActionType.hidePassword:
+            return PasswordGeneratorState(
+                windowUUID: action.windowUUID,
+                password: state.password,
+                passwordHidden: true)
 
-            case PasswordGeneratorActionType.unblurPassword:
-                return PasswordGeneratorState(
-                    windowUUID: action.windowUUID,
-                    password: state.password,
-                    passwordBlurred: false)
+        case PasswordGeneratorActionType.showPassword:
+            return PasswordGeneratorState(
+                windowUUID: action.windowUUID,
+                password: state.password,
+                passwordHidden: false)
 
         default:
             return defaultState(from: state)
@@ -75,7 +75,7 @@ struct PasswordGeneratorState: ScreenState, Equatable {
         return PasswordGeneratorState(
             windowUUID: state.windowUUID,
             password: state.password,
-            passwordBlurred: state.passwordBlurred
+            passwordHidden: state.passwordHidden
         )
     }
 }

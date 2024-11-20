@@ -41,8 +41,6 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifia
         button.addTarget(self, action: #selector(self.refreshOnClick), for: .touchUpInside)
     }
 
-    var blurEffectView: UIVisualEffectView?
-
     var refreshPasswordButtonOnClick: (() -> Void)?
 
     convenience init(frame: CGRect, notificationCenter: NotificationProtocol = NotificationCenter.default) {
@@ -110,11 +108,11 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifia
         return attributedString
     }
 
-    func blurPassword() {
+    func hidePassword() {
         passwordLabel.alpha = 0
     }
 
-    func unblurPassword() {
+    func showPassword() {
         passwordLabel.alpha = 1
     }
 

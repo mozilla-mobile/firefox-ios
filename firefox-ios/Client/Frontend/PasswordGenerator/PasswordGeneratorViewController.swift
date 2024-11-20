@@ -207,10 +207,10 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     func newState(state: PasswordGeneratorState) {
         passwordGeneratorState = state
         passwordField.configure(password: passwordGeneratorState.password)
-        if passwordGeneratorState.passwordBlurred {
-            passwordField.blurPassword()
+        if passwordGeneratorState.passwordHidden {
+            passwordField.hidePassword()
         } else {
-            passwordField.unblurPassword()
+            passwordField.showPassword()
         }
     }
 
