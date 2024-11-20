@@ -157,6 +157,16 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.homePanel(didSelectURL: url, visitType: visitType, isGoogleTopSite: isGoogleTopSite)
     }
 
+    func showContextMenu() {
+        // TODO: FXIOS-10613 - Add proper context menu actions
+        let state = ContextMenuState()
+        let viewModel = PhotonActionSheetViewModel(actions: state.actions,
+                                                   modalStyle: .overFullScreen)
+        let sheet = PhotonActionSheet(viewModel: viewModel, windowUUID: windowUUID)
+        sheet.modalTransitionStyle = .crossDissolve
+        present(sheet, animated: true)
+    }
+
     // MARK: - PrivateHomepageDelegate
     func homePanelDidRequestToOpenInNewTab(with url: URL, isPrivate: Bool, selectNewTab: Bool) {
         browserViewController.homePanelDidRequestToOpenInNewTab(

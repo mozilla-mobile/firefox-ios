@@ -35,6 +35,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
     var showMainMenuCalled = 0
     var showPasswordGeneratorCalled = 0
     var navigateFromHomePanelCalled = 0
+    var showContextMenuCalled = 0
 
     func show(settings: Client.Route.SettingsSection, onDismiss: (() -> Void)?) {
         showSettingsCalled += 1
@@ -121,6 +122,10 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
 
     func navigateFromHomePanel(to url: URL, visitType: VisitType, isGoogleTopSite: Bool) {
         navigateFromHomePanelCalled += 1
+    }
+
+    func showContextMenu() {
+        showContextMenuCalled += 1
     }
 
     func dismissFakespotModal(animated: Bool) {
