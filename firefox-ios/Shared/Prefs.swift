@@ -196,6 +196,10 @@ public struct PrefsKeys {
 
     // Represents whether or not the user has seen the photon main menu once, at least.
     public static let PhotonMainMenuShown = "PhotonMainMenuShown"
+
+    public struct Usage {
+        public static let profileId = "profileId"
+    }
 }
 
 public protocol Prefs {
