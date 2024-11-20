@@ -49,6 +49,8 @@ dau-reporting:
   description: |
     Minimal ping to measure DAU.
     Sent on the baseline schedule.
+
+    **NOTE**: This ping is deprecated and replaced by the `usage-reporting` ping.
   include_client_id: true
   send_if_empty: true
   bugs:
@@ -58,7 +60,7 @@ dau-reporting:
   notification_emails:
     - glean-team@mozilla.com
     - jrediger@mozilla.com
-    - fbertsch@mozilla.com
+    - loines@mozilla.com
   reasons:
     dirty_startup: |
       The ping was submitted at startup, because the application process was
@@ -69,6 +71,3 @@ dau-reporting:
     active: |
       The ping was submitted when the application became active again,
       which includes when the application starts.
-  metadata:
-    ping_schedule:
-      - baseline
