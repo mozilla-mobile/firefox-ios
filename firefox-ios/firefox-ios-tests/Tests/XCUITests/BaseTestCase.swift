@@ -565,6 +565,18 @@ extension XCUIElement {
         self.tap()
         self.typeText(text)
     }
+
+    func tapWithRetry() {
+        waitAndTap()
+        var nrOfTaps = 5
+        while self.isHittable && nrOfTaps > 0 {
+            tap(force: true)
+            nrOfTaps -= 1
+        }
+        if self.isHittable {
+            XCTFail("\(self) was not tapped")
+        }
+    }
 }
 
 extension XCUIElementQuery {
