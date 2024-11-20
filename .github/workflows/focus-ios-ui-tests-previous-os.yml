@@ -1,4 +1,4 @@
-name: Focus iOS 15 & 16 tests
+name: Focus iOS 15, 16 & 17 tests
 on:
   workflow_dispatch:
   schedule:
