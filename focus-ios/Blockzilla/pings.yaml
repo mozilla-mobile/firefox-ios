@@ -31,3 +31,23 @@ dau-reporting:
     active: |
       The ping was submitted when the application became active again,
       which includes when the application starts.
+
+usage-reporting:
+  description: |
+    Minimal ping to measure DAU.
+    Sent on the baseline schedule.
+  include_client_id: false
+  send_if_empty: true
+  bugs:
+    - https://bugzilla.mozilla.org/show_bug.cgi?id=1921440
+    - https://bugzilla.mozilla.org/show_bug.cgi?id=1929832
+  data_reviews:
+    - https://bugzilla.mozilla.org/show_bug.cgi?id=1921440
+  notification_emails:
+    - glean-team@mozilla.com
+    - jrediger@mozilla.com
+    - loines@mozilla.com
+  metadata:
+    include_info_sections: false
+    ping_schedule:
+      - baseline
