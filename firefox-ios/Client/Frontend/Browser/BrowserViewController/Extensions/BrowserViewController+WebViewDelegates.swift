@@ -664,7 +664,7 @@ extension BrowserViewController: WKNavigationDelegate {
             } else {
                 alertMessage = .Alerts.AddToCalendar.BodyDefault
             }
-            
+
             let alert = UIAlertController(title: .Alerts.AddToCalendar.Title,
                                           message: alertMessage,
                                           preferredStyle: .alert)
