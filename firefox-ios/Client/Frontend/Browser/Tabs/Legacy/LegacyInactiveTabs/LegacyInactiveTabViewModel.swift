@@ -7,13 +7,6 @@ import Storage
 import Shared
 import Common
 
-protocol InactiveTabsCFRProtocol: AnyObject {
-    func setupCFR(with view: UILabel)
-    func presentCFR()
-    func presentUndoToast(tabsCount: Int, completion: @escaping (Bool) -> Void)
-    func presentUndoSingleToast(completion: @escaping (Bool) -> Void)
-}
-
 class LegacyInactiveTabViewModel {
     private var inactiveTabModel = LegacyInactiveTabModel()
     private var allTabs = [Tab]()
