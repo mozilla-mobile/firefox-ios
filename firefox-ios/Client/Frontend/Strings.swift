@@ -196,6 +196,30 @@ extension String {
                 value: "Delete Bookmark",
                 comment: "The title for the Delete Bookmark button, in the Edit Bookmark popup screen which is summoned from the main menu's Save submenu, which will delete the currently bookmarked site from the user's bookmarks.")
         }
+        public struct RootFolderEmptyState {
+            public static let Title = MZLocalizedString(
+                key: "Bookmarks.RootFolderEmptyState.Title.v135",
+                tableName: "Bookmarks",
+                value: "No bookmarks yet",
+                comment: "The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal")
+            public static let Body = MZLocalizedString(
+                key: "Bookmarks.RootFolderEmptyState.Body.v135",
+                tableName: "Bookmarks",
+                value: "Save sites as you browse. We’ll also grab bookmarks from other synced devices.",
+                comment: "The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal")
+        }
+        public struct NestedFolderEmptyState {
+            public static let Title = MZLocalizedString(
+                key: "Bookmarks.NestedFolderEmptyState.Title.v135",
+                tableName: "Bookmarks",
+                value: "This folder is empty",
+                comment: "The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal")
+            public static let Body = MZLocalizedString(
+                key: "Bookmarks.NestedFolderEmptyState.Body.v135",
+                tableName: "Bookmarks",
+                value: "Add bookmarks as you browse so you can find your favorite sites later.",
+                comment: "The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal")
+        }
     }
 }
 
@@ -3408,38 +3432,6 @@ extension String {
         tableName: nil,
         value: "URL",
         comment: "The label for the URL field when editing a bookmark")
-}
-
-// MARK: - Root Bookmarks Folder Empty State
-extension String {
-    public struct RootBookmarksFolderEmptyState {
-        public static let Title = MZLocalizedString(
-            key: "RootBookmarksFolderEmptyState.Title.v135",
-            tableName: "RootBookmarksFolderEmptyState",
-            value: "No bookmarks yet",
-            comment: "Title for the empty state of the root bookmarks folder when it does not contain any items")
-        public static let Body = MZLocalizedString(
-            key: "RootBookmarksFolderEmptyState.Body.v135",
-            tableName: "RootBookmarksFolderEmptyState",
-            value: "Save sites as you browse. We’ll also grab bookmarks from other synced devices.",
-            comment: "Body for the empty state of the root bookmarks folder when it does not contain any items")
-    }
-}
-
-// MARK: - Bookmark Folder Empty State
-extension String {
-    public struct BookmarksFolderEmptyState {
-        public static let Title = MZLocalizedString(
-            key: "BookmarksFolderEmptyState.Title.v135",
-            tableName: "BookmarksFolderEmptyState",
-            value: "This folder is empty",
-            comment: "Title for the empty state of any bookmarks folder that does not contain any items")
-        public static let Body = MZLocalizedString(
-            key: "BookmarksFolderEmptyState.Body.v135",
-            tableName: "BookmarksFolderEmptyState",
-            value: "Add bookmarks as you browse so you can find your favorite sites later.",
-            comment: "Body for the empty state of any bookmarks folder that does not contain any items")
-    }
 }
 
 // MARK: - Tab tray (chronological tabs)

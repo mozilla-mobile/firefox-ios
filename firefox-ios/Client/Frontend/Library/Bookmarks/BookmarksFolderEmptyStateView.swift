@@ -15,9 +15,6 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
         static let imageWidth: CGFloat = 200
     }
 
-    let windowUUID: WindowUUID
-    let themeManager: Common.ThemeManager
-
     private lazy var logoImage: UIImageView = .build { imageView in
           imageView.contentMode = .scaleAspectFit
     }
@@ -43,13 +40,8 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
         stackView.spacing = 0
     }
 
-    init(windowUUID: WindowUUID,
-         frame: CGRect = .zero,
-         themeManager: ThemeManager = AppContainer.shared.resolve()) {
-        self.windowUUID = windowUUID
-        self.themeManager = themeManager
+    override init(frame: CGRect = .zero) {
         super.init(frame: frame)
-        translatesAutoresizingMaskIntoConstraints = false
 
         setupLayout()
     }
@@ -59,8 +51,8 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
     }
 
     func configure(isRoot: Bool) {
-        titleLabel.text = isRoot ? .RootBookmarksFolderEmptyState.Title : .BookmarksFolderEmptyState.Title
-        bodyLabel.text = isRoot ? .RootBookmarksFolderEmptyState.Body : .BookmarksFolderEmptyState.Body
+        titleLabel.text = isRoot ? .Bookmarks.RootFolderEmptyState.Title : .Bookmarks.NestedFolderEmptyState.Title
+        bodyLabel.text = isRoot ? .Bookmarks.RootFolderEmptyState.Body : .Bookmarks.NestedFolderEmptyState.Body
         logoImage.image = UIImage(named: isRoot ? ImageIdentifiers.noBookmarksInRoot : ImageIdentifiers.noBookmarksInFolder)
     }
 

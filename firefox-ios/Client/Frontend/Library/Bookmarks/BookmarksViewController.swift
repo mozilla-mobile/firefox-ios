@@ -81,11 +81,7 @@ class BookmarksViewController: SiteTableViewController,
         return button
     }()
 
-    private lazy var emptyStateView: BookmarksFolderEmptyStateView = {
-        let emptyStateView = BookmarksFolderEmptyStateView(windowUUID: self.windowUUID)
-        emptyStateView.translatesAutoresizingMaskIntoConstraints = false
-        return emptyStateView
-    }()
+    private lazy var emptyStateView: BookmarksFolderEmptyStateView = .build()
 
     private lazy var a11yEmptyStateScrollView: UIScrollView = .build()
 
