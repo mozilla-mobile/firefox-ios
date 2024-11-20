@@ -257,15 +257,9 @@ public class BrowserAddressToolbar: UIView,
     }
 
     private func updateActionStack(stackView: UIStackView, toolbarElements: [ToolbarElement]) {
-        let existingButtons = stackView.arrangedSubviews.compactMap { $0 as? ToolbarButton }
         stackView.removeAllArrangedViews()
-
         toolbarElements.forEach { toolbarElement in
-            // find existing button or create new one
-            // we do this to avoid having a new button every time we re-configure the address toolbar
-            // as this can result in button taps not resulting in correct action because the action
-            // as the reference to an old and not displayed button (e.g. the menu that is displayed from the menu button)
-            let button = newOrExistingToolbarButton(for: toolbarElement, existingButtons: existingButtons)
+            let button = toolbarElement.numberOfTabs != nil ? TabNumberButton() : ToolbarButton()
             button.configure(element: toolbarElement)
             stackView.addArrangedSubview(button)
 
@@ -283,17 +277,6 @@ public class BrowserAddressToolbar: UIView,
                 toolbarDelegate?.configureContextualHint(self, for: button, with: contextualHintType)
             }
         }
-    }
-
-    private func newOrExistingToolbarButton(for element: ToolbarElement,
-                                            existingButtons: [ToolbarButton]) -> ToolbarButton {
-        let existingButton = existingButtons.first { $0.isButtonFor(toolbarElement: element) }
-
-        guard let existingButton else {
-            return element.numberOfTabs != nil ? TabNumberButton() : ToolbarButton()
-        }
-
-        return existingButton
     }
 
     private func updateActionSpacing() {
