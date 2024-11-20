@@ -7,11 +7,12 @@ import Common
 
 final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
     private struct UX {
-        static let a11yTopMargin: CGFloat = 20
+        static let a11yTopMargin: CGFloat = 16
         static let TitleTopMargin: CGFloat = 16
         static let BodyTopMargin: CGFloat = 8
         static let ContentLeftRightMargins: CGFloat = 16
         static let StackViewWidthMultiplier: CGFloat = 0.9
+        static let imageWidth: CGFloat = 200
     }
 
     let windowUUID: WindowUUID
@@ -89,7 +90,7 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
             bodyLabel.trailingAnchor.constraint(
                 equalTo: stackViewWrapper.trailingAnchor, constant: -UX.ContentLeftRightMargins),
 
-            logoImage.widthAnchor.constraint(equalTo: stackViewWrapper.widthAnchor, multiplier: 0.5),
+            logoImage.widthAnchor.constraint(equalToConstant: UX.imageWidth),
             logoImage.heightAnchor.constraint(equalTo: logoImage.widthAnchor, multiplier: aspectRatio)
         ])
     }
