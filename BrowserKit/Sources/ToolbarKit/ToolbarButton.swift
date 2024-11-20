@@ -47,7 +47,8 @@ class ToolbarButton: UIButton, ThemeApplicable {
         let image = imageConfiguredForRTL(for: element)
         let action = UIAction(title: element.a11yLabel,
                               image: image,
-                              handler: { _ in
+                              handler: { [weak self] _ in
+            guard let self else { return }
             element.onSelected?(self)
         })
 
@@ -99,17 +100,6 @@ class ToolbarButton: UIButton, ThemeApplicable {
 
         updatedConfiguration.background.backgroundColor = backgroundColorNormal
         configuration = updatedConfiguration
-    }
-
-    public func isButtonFor(toolbarElement: ToolbarElement) -> Bool {
-        guard let config = configuration else { return false }
-
-        return isSelected == toolbarElement.isSelected &&
-            config.image == imageConfiguredForRTL(for: toolbarElement) &&
-            isEnabled == toolbarElement.isEnabled &&
-            accessibilityIdentifier == toolbarElement.a11yId &&
-            accessibilityLabel == toolbarElement.a11yLabel &&
-            accessibilityHint == toolbarElement.a11yHint
     }
 
     private func addBadgeIcon(imageName: String) {
