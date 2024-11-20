@@ -40,5 +40,6 @@ include:
   - nimbus-features/spotlightSearchFeature.yaml
   - nimbus-features/tabTrayFeature.yaml
   - nimbus-features/toolbarRefactorFeature.yaml
+  - nimbus-features/tosFeature.yaml
   - nimbus-features/trackingProtectionRefactor.yaml
   - nimbus-features/zoomFeature.yaml
