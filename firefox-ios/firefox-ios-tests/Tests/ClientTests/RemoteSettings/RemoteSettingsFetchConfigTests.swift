@@ -47,7 +47,7 @@ class RemoteSettingsFetchConfigTests: XCTestCase {
         for collection in config.collections {
             XCTAssertFalse(collection.name.isEmpty, "Collection name should not be empty for \(collection)")
             XCTAssertFalse(collection.url.isEmpty, "Collection URL should not be empty for \(collection)")
-            
+
             if let file = collection.file, collection.saveRecords ?? true {
                 XCTAssertFalse(file.isEmpty, "Collection file path should exist and not be empty for \(collection)")
             } else {
@@ -59,7 +59,6 @@ class RemoteSettingsFetchConfigTests: XCTestCase {
 
             // Validate URL format
             XCTAssertNotNil(URL(string: collection.url), "Collection URL is invalid: \(collection.url)")
-        }
         }
     }
 
