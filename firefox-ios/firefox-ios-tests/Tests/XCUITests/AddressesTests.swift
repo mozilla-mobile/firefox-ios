@@ -163,9 +163,9 @@ class AddressesTests: BaseTestCase {
         addNewAddress()
         tapSave()
         if iPad() {
-            app.collectionViews.buttons.element(boundBy: 0).waitAndTap()
+            app.collectionViews.buttons.element(boundBy: 0).tapWithRetry()
         } else {
-            app.collectionViews.buttons.element(boundBy: 1).waitAndTap()
+            app.collectionViews.buttons.element(boundBy: 1).tapWithRetry()
         }
         // Update the all addresses fields
         tapEdit()
@@ -182,9 +182,9 @@ class AddressesTests: BaseTestCase {
     private func updateFieldsWithWithoutState(updateCountry: Bool, isPostalCode: Bool) {
         // Choose to update an address
         if iPad() {
-            app.collectionViews.buttons.element(boundBy: 0).waitAndTap()
+            app.collectionViews.buttons.element(boundBy: 0).tapWithRetry()
         } else {
-            app.collectionViews.buttons.element(boundBy: 1).waitAndTap()
+            app.collectionViews.buttons.element(boundBy: 1).tapWithRetry()
         }
         // Update the all addresses fields
         tapEdit()
@@ -319,7 +319,7 @@ class AddressesTests: BaseTestCase {
     }
 
     private func tapSave() {
-        app.buttons["Save"].waitAndTap()
+        app.buttons["Save"].tapWithRetry()
     }
 
     private func tapEdit() {
