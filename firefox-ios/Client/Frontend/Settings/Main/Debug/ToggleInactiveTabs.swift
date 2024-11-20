@@ -22,7 +22,6 @@ class ToggleInactiveTabs: HiddenSetting, FeatureFlaggable {
     override func onClick(_ navigationController: UINavigationController?) {
         let newStatus = !featureFlags.isFeatureEnabled(.inactiveTabs, checking: .userOnly)
         featureFlags.set(feature: .inactiveTabs, to: newStatus)
-        LegacyInactiveTabModel.hasRunInactiveTabFeatureBefore = false
         settingsDelegate?.askedToReload()
     }
 }

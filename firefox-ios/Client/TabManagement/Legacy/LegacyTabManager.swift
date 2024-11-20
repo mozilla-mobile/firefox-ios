@@ -79,7 +79,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
     var backupCloseTab: BackupCloseTab?
     var backupCloseTabs = [Tab]()
 
-    var tabDisplayType: TabDisplayType = .TabGrid
     let delaySelectingNewPopupTab: TimeInterval = 0.1
 
     var normalTabs: [Tab] {
@@ -447,12 +446,6 @@ class LegacyTabManager: NSObject, FeatureFlaggable, TabManager, TabEventHandler 
         } else if let parent = parent, var insertIndex = tabs.firstIndex(of: parent) {
             placeNextToParentTab = true
             insertIndex += 1
-
-            // If we are on iPad (.TopTabTray), the new tab should be inserted immediately after the parent tab.
-            // In this scenario the while loop shouldn't be executed.
-            while insertIndex < tabs.count && tabs[insertIndex].isDescendentOf(parent) && tabDisplayType == .TabGrid {
-                insertIndex += 1
-            }
 
             tab.parent = parent
             tabs.insert(tab, at: insertIndex)
