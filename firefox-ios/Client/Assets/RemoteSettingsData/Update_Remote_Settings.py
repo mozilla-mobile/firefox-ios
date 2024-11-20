@@ -13,9 +13,7 @@ def fetch(url):
     try:
         response = requests.get(url)
         response.raise_for_status()
-        # Return JSON content if response is JSON, else return raw content
-        mimetype = response.headers.get("Content-Type")
-        return response.json() if "application/json" in mimetype else response.content
+        return response
     except requests.exceptions.RequestException as e:
         print(f"Failed to fetch data from {url}: {e}")
         return None
@@ -65,10 +63,10 @@ def fetch_records_attachments(records, collection, base_url):
             attachment_file_tmp_path = os.path.join(GITHUB_ACTIONS_TMP_PATH, attachment_subdir, attachment_file_name)
             attachment_file_path = os.path.join(RS_DATA_PATH, attachment_subdir, attachment_file_name)
             attachment_url = f"{base_url}{attachment['location']}"
-            attachment_content = fetch(attachment_url)
+            attachment_content = fetch(attachment_url).text
 
             if attachment_content:
-                save_content(attachment_content, attachment_file_tmp_path, attachment["mimetype"])
+                save_content(attachment_content, attachment_file_tmp_path)
                 if update_settings_file(attachment_file_tmp_path, attachment_file_path, record['name']):
                     changes_detected = True
     return changes_detected
@@ -85,7 +83,8 @@ def main():
     for collection in config["collections"]:
         print(f"Fetching rules for {collection['name']} from {collection['url']}")
         records_url = f"{collection['url']}/buckets/{collection['bucket_id']}/collections/{collection['collection_id']}/records"
-        records = fetch(records_url).get("data", None)
+        response = fetch(records_url).json()
+        records = response.get("data", None)
 
         # If no records found, skip to next collection
         if not records:
@@ -102,6 +101,7 @@ def main():
         if fetch_attachments:
             base_url = (
                 fetch(collection["url"])
+                .json()
                 .get("capabilities", {})
                 .get("attachments", {})
                 .get("base_url", None)
