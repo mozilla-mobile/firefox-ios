@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import Glean
 import Shared
 
 class SendAnonymousUsageDataSetting: BoolSetting {
@@ -54,6 +55,11 @@ class SendAnonymousUsageDataSetting: BoolSetting {
         self.settingDidChange = { [weak self] value in
             // AdjustHelper.setEnabled($0)
             DefaultGleanWrapper.shared.setUpload(isEnabled: value)
+
+            if !value {
+                self?.prefs?.removeObjectForKey(PrefsKeys.Usage.profileId)
+            }
+
             Experiments.setTelemetrySetting(value)
             self?.shouldSendUsageData?(value)
         }
