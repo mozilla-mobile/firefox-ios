@@ -816,6 +816,7 @@
 		8A5D1CBD2A30DC4E005AD35C /* AccountStatusSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5D1CBC2A30DC4E005AD35C /* AccountStatusSetting.swift */; };
 		8A5D1CBF2A30DC75005AD35C /* SyncNowSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5D1CBE2A30DC75005AD35C /* SyncNowSetting.swift */; };
 		8A5D1CC12A30DCA4005AD35C /* SettingDisclosureUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A5D1CC02A30DCA4005AD35C /* SettingDisclosureUtility.swift */; };
+		8A62B15D2CED408B0045F46E /* ContextMenuState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A62B15C2CED408B0045F46E /* ContextMenuState.swift */; };
 		8A635ECD289437A8006378BA /* SyncedTabCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A635ECC289437A8006378BA /* SyncedTabCellTests.swift */; };
 		8A6904802B97BBAE00E30047 /* SplashScreenAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A69047F2B97BBAE00E30047 /* SplashScreenAnimation.swift */; };
 		8A6A796D27F773550022D6C6 /* HomepageContextMenuHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6A796C27F773550022D6C6 /* HomepageContextMenuHelper.swift */; };
@@ -7295,6 +7296,7 @@
 		8A5D1CBC2A30DC4E005AD35C /* AccountStatusSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountStatusSetting.swift; sourceTree = "<group>"; };
 		8A5D1CBE2A30DC75005AD35C /* SyncNowSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncNowSetting.swift; sourceTree = "<group>"; };
 		8A5D1CC02A30DCA4005AD35C /* SettingDisclosureUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingDisclosureUtility.swift; sourceTree = "<group>"; };
+		8A62B15C2CED408B0045F46E /* ContextMenuState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextMenuState.swift; sourceTree = "<group>"; };
 		8A635ECC289437A8006378BA /* SyncedTabCellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncedTabCellTests.swift; sourceTree = "<group>"; };
 		8A69047F2B97BBAE00E30047 /* SplashScreenAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenAnimation.swift; sourceTree = "<group>"; };
 		8A6A796C27F773550022D6C6 /* HomepageContextMenuHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageContextMenuHelper.swift; sourceTree = "<group>"; };
@@ -11400,6 +11402,14 @@
 			path = Account;
 			sourceTree = "<group>";
 		};
+		8A62B15B2CED40800045F46E /* ContextMenu */ = {
+			isa = PBXGroup;
+			children = (
+				8A62B15C2CED408B0045F46E /* ContextMenuState.swift */,
+			);
+			path = ContextMenu;
+			sourceTree = "<group>";
+		};
 		8A6904812B97BC2000E30047 /* SplashScreenAnimation */ = {
 			isa = PBXGroup;
 			children = (
@@ -11442,6 +11452,7 @@
 		8A7D08E12CAAF79F0035999C /* Homepage Rebuild */ = {
 			isa = PBXGroup;
 			children = (
+				8A62B15B2CED40800045F46E /* ContextMenu */,
 				8A454D3D2CB9B896009436D9 /* TopSites */,
 				8A454D2A2CB7079A009436D9 /* Header */,
 				8ABDBAA42CB6BF3A00B51F63 /* Pocket */,
@@ -16002,6 +16013,7 @@
 				215B457F27D7FD4B00E5E800 /* LegacyTabGroupData.swift in Sources */,
 				E12BD0B028AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift in Sources */,
 				C2D80BE72AADE38100CDF7A9 /* CredentialAutofillCoordinator.swift in Sources */,
+				8A62B15D2CED408B0045F46E /* ContextMenuState.swift in Sources */,
 				C8BE692729BA2FBB0015C4A2 /* SurveySurfaceInfoModel.swift in Sources */,
 				D0152245229855A8009DE753 /* OneLineTableViewCell.swift in Sources */,
 				8AAAB0592C1B7240008830B3 /* MockRustFirefoxSuggest.swift in Sources */,

@@ -183,6 +183,17 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 )
             )
 
+        case NavigationBrowserActionType.longPressOnCell:
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                showDataClearanceFlow: state.showDataClearanceFlow,
+                fakespotState: FakespotState.reducer(state.fakespotState, action),
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                navigationDestination: NavigationDestination(.contextMenu)
+            )
+
         default:
             return defaultState(from: state, action: action)
         }

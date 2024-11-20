@@ -164,6 +164,7 @@ final class HomepageViewController: UIViewController,
         )
 
         collectionView.keyboardDismissMode = .onDrag
+        collectionView.addGestureRecognizer(longPressRecognizer)
         collectionView.showsVerticalScrollIndicator = false
         collectionView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         collectionView.backgroundColor = .clear
@@ -331,6 +332,18 @@ final class HomepageViewController: UIViewController,
         }
     }
 
+    // MARK: Long Press (Photon Action Sheet)
+    private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
+    }()
+
+    @objc
+    fileprivate func handleLongPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        guard longPressGestureRecognizer.state == .began else { return }
+        // TODO: FXIOS-10613 - Pass proper action data to context menu
+        navigateToContextMenu()
+    }
+
     // MARK: Dispatch Actions
     private func toggleHomepageMode() {
         store.dispatch(
@@ -356,6 +369,15 @@ final class HomepageViewController: UIViewController,
                 url: homepageState.pocketState.footerURL,
                 windowUUID: self.windowUUID,
                 actionType: NavigationBrowserActionType.tapOnLink
+            )
+        )
+    }
+
+    private func navigateToContextMenu() {
+        store.dispatch(
+            NavigationBrowserAction(
+                windowUUID: windowUUID,
+                actionType: NavigationBrowserActionType.longPressOnCell
             )
         )
     }
