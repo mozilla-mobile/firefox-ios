@@ -59,7 +59,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .nativeErrorPage,
                 .sentFromFirefox,
                 .toolbarRefactor,
-                .tosFeature,
                 .trackingProtectionRefactor,
                 .passwordGenerator,
                 .unifiedSearch:
