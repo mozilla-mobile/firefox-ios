@@ -34,11 +34,13 @@ class ScreenshotHelper {
         /// Handle home page snapshots, can not use Apple API snapshot function for this
         guard controller != nil else { return }
 
+        /// Added check for native error pages.
+        let isNativeErrorPage = controller?.contentContainer.hasNativeErrorPage ?? false
         /// If the tab is the homepage, take a screenshot of the homepage view.
         /// This is done by accessing the content view from the content container.
         /// The screenshot is then set for the tab, and a TabEvent is posted to indicate
         /// that a screenshot has been set for the homepage.
-        if tab.isFxHomeTab {
+        if tab.isFxHomeTab || isNativeErrorPage {
             if let homeview = controller?.contentContainer.contentView {
                 let screenshot = homeview.screenshot(quality: UIConstants.ActiveScreenshotQuality)
                 tab.hasHomeScreenshot = true
