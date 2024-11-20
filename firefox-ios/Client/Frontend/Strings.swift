@@ -114,11 +114,11 @@ extension String {
                 tableName: "Alerts",
                 value: "%@ is asking to download a file and add an event to your calendar.",
                 comment: "When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the body message for the alert. %@ is the name/domain of the website, for example 'google.com'")
-            public static let BodyDefaultDomain = MZLocalizedString(
-                key: "Alerts.AddToCalendar.BodyDefaultDomain.v134",
+            public static let BodyDefault = MZLocalizedString(
+                key: "Alerts.AddToCalendar.BodyDefault.v134",
                 tableName: "Alerts",
-                value: "This site",
-                comment: "When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is a default value for %@ from the body in cases when we don't have a base domain for a website.")
+                value: "This site is asking to download a file and add an event to your calendar.",
+                comment: "When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the body message for the alert in case the website doesn't have a base domain.")
             public static let AddButton = MZLocalizedString(
                 key: "Alerts.AddToCalendar.Button.Add.v134",
                 tableName: "Alerts",
