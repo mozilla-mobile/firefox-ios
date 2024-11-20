@@ -835,6 +835,7 @@ public struct AccessibilityIdentifiers {
         static let passwordlabel = "PasswordGenerator.passwordLabel"
         static let content = "PasswordGenerator.content"
         static let header = "PasswordGenerator.header"
+        static let keyboardButton = "PasswordGenerator.keyboardButton"
     }
 
     struct NativeErrorPage {
