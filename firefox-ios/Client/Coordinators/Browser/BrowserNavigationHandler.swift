@@ -104,6 +104,9 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 
     /// Navigates from home page to a new link
     func navigateFromHomePanel(to url: URL, visitType: VisitType, isGoogleTopSite: Bool)
+
+    /// Navigates to our custom context menu (Photon Action Sheet)
+    func showContextMenu()
 }
 
 extension BrowserNavigationHandler {
