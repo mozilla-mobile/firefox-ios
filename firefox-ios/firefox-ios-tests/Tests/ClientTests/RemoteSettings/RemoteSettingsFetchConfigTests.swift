@@ -18,7 +18,11 @@ class RemoteSettingsFetchConfigTests: XCTestCase {
             return
         }
 
-        XCTAssertGreaterThan(config.collections.count, 0, "Expected more than 0 collections in the config")
+        XCTAssertGreaterThan(
+            config.collections.count,
+            0,
+            "Expected more than 0 collections in the config"
+        )
 
         let expectedCollection = RemoteSettingsFetchConfig.Collection(
             name: "Password Rules",
