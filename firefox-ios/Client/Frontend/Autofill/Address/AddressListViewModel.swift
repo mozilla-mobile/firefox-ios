@@ -35,7 +35,10 @@ final class AddressListViewModel: ObservableObject, FeatureFlaggable {
 
     private let logger: Logger
 
-    var isEditingFeatureEnabled: Bool { featureFlags.isFeatureEnabled(.addressAutofillEdit, checking: .buildOnly) }
+    var isEditingFeatureEnabled: Bool {
+        AddressLocaleFeatureValidator.isValidRegion() ||
+        featureFlags.isFeatureEnabled(.addressAutofillEdit, checking: .buildOnly)
+    }
 
     var addressSelectionCallback: ((UnencryptedAddressFields) -> Void)?
     var saveAction: ((@escaping (UpdatableAddressFields) -> Void) -> Void)?
