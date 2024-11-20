@@ -133,6 +133,7 @@ class PullRefreshView: UIView,
             self.progressContainerView.backgroundColor = .clear
             self.progressContainerView.transform = .identity
             self.progressView.transform = .identity
+            TelemetryWrapper.shared.recordEvent(category: .action, method: .pull, object: .reload)
             self.onRefreshCallback()
         })
     }
@@ -168,6 +169,7 @@ class PullRefreshView: UIView,
 
     private func showEasterEgg() {
         guard let easterEggGif else { return }
+        TelemetryWrapper.shared.recordEvent(category: .action, method: .detect, object: .showPullRefreshEasterEgg)
         easterEggGif.isHidden = false
         let angle = atan2(easterEggGif.transform.b, easterEggGif.transform.a)
         UIView.animate(withDuration: UX.defaultAnimationDuration) {

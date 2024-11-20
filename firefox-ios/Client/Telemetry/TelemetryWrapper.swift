@@ -332,6 +332,7 @@ extension TelemetryWrapper {
         case downloadNowButton = "download-now-button"
         case downloadsPanel = "downloads-panel"
         case defaultSearchEngine = "default-search-engine"
+        case showPullRefreshEasterEgg = "show-pull-refresh-easter-egg"
         // MARK: Fakespot
         case shoppingButton = "shopping-button"
         case shoppingBottomSheet = "shopping-bottom-sheet"
@@ -911,8 +912,10 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.pressTabToolbar.record()
         case (.action, .press, .tab, _, _):
             GleanMetrics.Tabs.pressTopTab.record()
-        case(.action, .pull, .reload, _, _):
-            GleanMetrics.Tabs.pullToRefresh.add()
+        case (.action, .pull, .reload, _, _):
+            GleanMetrics.Tabs.pullToRefresh.record()
+        case (.action, .detect, .showPullRefreshEasterEgg, _, _):
+            GleanMetrics.Tabs.pullToRefreshEasterEgg.record()
         case(.action, .navigate, .tab, _, _):
             GleanMetrics.Tabs.normalAndPrivateUriCount.add()
         case(.action, .tap, .navigateTabHistoryBack, _, _), (.action, .press, .navigateTabHistoryBack, _, _):
