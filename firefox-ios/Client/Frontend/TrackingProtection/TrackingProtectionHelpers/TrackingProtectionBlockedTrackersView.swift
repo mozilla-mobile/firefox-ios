@@ -172,7 +172,7 @@ final class TrackingProtectionBlockedTrackersView: UIView, ThemeApplicable {
     func applyTheme(theme: Theme) {
         self.backgroundColor = theme.colors.layer2
         trackersDetailArrow.tintColor = theme.colors.iconSecondary
-        shieldImage.tintColor = theme.colors.iconPrimary
+        shieldImage.tintColor = theme.colors.iconSecondary
         trackersHorizontalLine.backgroundColor = theme.colors.borderPrimary
     }
 }

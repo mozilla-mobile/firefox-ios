@@ -10,7 +10,7 @@ final class TrackingProtectionConnectionDetailsView: UIView {
         static let foxImageSize: CGFloat = 100
         static let connectionDetailsLabelsVerticalSpacing: CGFloat = 12
         static let connectionDetailsLabelBottomSpacing: CGFloat = 28
-        static let connectionDetailsStackSpacing = 15.0
+        static let connectionDetailsStackSpacing = 8.0
     }
 
     private let connectionDetailsContentView: UIView = .build { view in
@@ -35,12 +35,14 @@ final class TrackingProtectionConnectionDetailsView: UIView {
         label.font = FXFontStyles.Bold.subheadline.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
+        label.textAlignment = .left
     }
 
     private let connectionDetailsStatusLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
+        label.textAlignment = .left
     }
 
     private var viewConstraints: [NSLayoutConstraint] = []
