@@ -73,7 +73,6 @@ public class DefaultCrashManager: CrashManager {
     private var sentryWrapper: SentryWrapper
     private var isSimulator: Bool
     private var skipReleaseNameCheck: Bool
-    private let logger: Logger
 
     // Only enable app hang tracking in Beta for now
     private var shouldEnableAppHangTracking: Bool {
@@ -91,13 +90,11 @@ public class DefaultCrashManager: CrashManager {
     public init(appInfo: BrowserKitInformation = BrowserKitInformation.shared,
                 sentryWrapper: SentryWrapper = DefaultSentry(),
                 isSimulator: Bool = DeviceInfo.isSimulator(),
-                skipReleaseNameCheck: Bool = false,
-                logger: Logger = DefaultLogger.shared) {
+                skipReleaseNameCheck: Bool = false) {
         self.appInfo = appInfo
         self.sentryWrapper = sentryWrapper
         self.isSimulator = isSimulator
         self.skipReleaseNameCheck = skipReleaseNameCheck
-        self.logger = logger
     }
 
     // MARK: - CrashManager protocol
