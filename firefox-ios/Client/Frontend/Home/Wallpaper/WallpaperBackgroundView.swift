@@ -15,7 +15,7 @@ class WallpaperBackgroundView: UIView {
     }
 
     // MARK: - Variables
-    var wallpaper: Wallpaper? {
+    var wallpaperState: WallpaperState? {
         didSet {
             updateImageToCurrentWallpaper()
         }
@@ -50,17 +50,19 @@ class WallpaperBackgroundView: UIView {
     }
 
     private func updateImageToCurrentWallpaper() {
-        guard let wallpaper = self.wallpaper else { return }
+        guard let state = wallpaperState else { return }
         ensureMainThread {
-            let currentWallpaperImage = self.currentWallpaperImage(from: wallpaper)
+            let currentWallpaperImage = self.currentWallpaperImage(from: state)
             UIView.animate(withDuration: 0.3) {
                 self.pictureView.image = currentWallpaperImage
             }
         }
     }
 
-    private func currentWallpaperImage(from wallpaper: Wallpaper) -> UIImage? {
+    private func currentWallpaperImage(from wallpaperState: WallpaperState) -> UIImage? {
         let isLandscape = UIDevice.current.orientation.isLandscape
-        return isLandscape ? wallpaper.landscape : wallpaper.portrait
+        return isLandscape ?
+        wallpaperState.wallpaperConfiguration.landscapeImage :
+         wallpaperState.wallpaperConfiguration.landscapeImage
     }
 }

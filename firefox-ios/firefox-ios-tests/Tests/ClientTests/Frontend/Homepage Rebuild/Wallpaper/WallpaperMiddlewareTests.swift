@@ -35,14 +35,14 @@ class WallpaperMiddlewareTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertEqual(actionType, WallpaperMiddlewareActionType.wallpaperDidInitialize)
-        XCTAssertEqual(actionCalled.wallpaper.id, "fxDefault")
+        XCTAssertEqual(actionCalled.wallpaperConfiguration.cardColor, .purple)
     }
 
     func test_wallpaperAction_returnsWallpaperManagerWallpaper() throws {
         let subject = WallpaperMiddleware(wallpaperManager: wallpaperManager)
-        let testWallpaper = Wallpaper(id: "test", textColor: .green, cardColor: .yellow, logoTextColor: .orange)
+        let testWallpaper = WallpaperConfiguration()
         let action = WallpaperAction(
-            wallpaper: testWallpaper,
+            wallpaperConfiguration: testWallpaper,
             windowUUID: .XCTestDefaultUUID,
             actionType: WallpaperActionType.wallpaperSelected
         )
@@ -55,7 +55,7 @@ class WallpaperMiddlewareTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertEqual(actionType, WallpaperMiddlewareActionType.wallpaperDidChange)
         // TODO: FXIOS-10522 will make this test more meaningful by actually configuring the new current wallpaper
-        XCTAssertEqual(actionCalled.wallpaper.id, "fxDefault")
+        XCTAssertEqual(actionCalled.wallpaperConfiguration.cardColor, .purple)
     }
 
     func setupAppState() -> Client.AppState {

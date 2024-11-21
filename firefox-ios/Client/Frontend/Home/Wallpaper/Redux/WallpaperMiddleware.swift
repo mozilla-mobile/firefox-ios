@@ -7,6 +7,16 @@ import Redux
 
 class WallpaperMiddleware {
     private let wallpaperManager: WallpaperManagerInterface
+    private var wallpaperConfiguration: WallpaperConfiguration {
+        let currentWallpaper = wallpaperManager.currentWallpaper
+        return WallpaperConfiguration(
+            landscapeImage: currentWallpaper.landscape,
+            portraitImage: currentWallpaper.portrait,
+            textColor: currentWallpaper.textColor,
+            cardColor: currentWallpaper.cardColor,
+            logoTextColor: currentWallpaper.logoTextColor
+        )
+    }
 
     init(wallpaperManager: WallpaperManagerInterface = WallpaperManager()) {
         self.wallpaperManager = wallpaperManager
@@ -24,7 +34,7 @@ class WallpaperMiddleware {
         switch action.actionType {
         case HomepageActionType.initialize:
             let action = WallpaperAction(
-                wallpaper: wallpaperManager.currentWallpaper,
+                wallpaperConfiguration: wallpaperConfiguration,
                 windowUUID: action.windowUUID,
                 actionType: WallpaperMiddlewareActionType.wallpaperDidInitialize
             )
@@ -38,7 +48,7 @@ class WallpaperMiddleware {
         switch action.actionType {
         case WallpaperActionType.wallpaperSelected:
             let action = WallpaperAction(
-                wallpaper: wallpaperManager.currentWallpaper,
+                wallpaperConfiguration: wallpaperConfiguration,
                 windowUUID: action.windowUUID,
                 actionType: WallpaperMiddlewareActionType.wallpaperDidChange
             )

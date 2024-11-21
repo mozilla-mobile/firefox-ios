@@ -6,11 +6,11 @@ import Common
 
 struct WallpaperState: ScreenState, Equatable {
     var windowUUID: WindowUUID
-    var wallpaper: Wallpaper
+    let wallpaperConfiguration: WallpaperConfiguration
 
-    init(windowUUID: WindowUUID, wallpaper: Wallpaper = Wallpaper.defaultWallpaper) {
+    init(windowUUID: WindowUUID, wallpaperConfiguration: WallpaperConfiguration = WallpaperConfiguration()) {
         self.windowUUID = windowUUID
-        self.wallpaper = wallpaper
+        self.wallpaperConfiguration = wallpaperConfiguration
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -31,13 +31,35 @@ struct WallpaperState: ScreenState, Equatable {
         guard let wallpaperAction = action as? WallpaperAction else { return defaultState(from: state) }
         return WallpaperState(
             windowUUID: state.windowUUID,
-            wallpaper: wallpaperAction.wallpaper
+            wallpaperConfiguration: wallpaperAction.wallpaperConfiguration
         )
     }
 
    static func defaultState(from state: WallpaperState) -> WallpaperState {
         return WallpaperState(
-            windowUUID: state.windowUUID, wallpaper: state.wallpaper
+            windowUUID: state.windowUUID, wallpaperConfiguration: state.wallpaperConfiguration
         )
    }
 }
+
+struct WallpaperConfiguration: Equatable {
+    var landscapeImage: UIImage?
+    var portraitImage: UIImage?
+    var textColor: UIColor?
+    var cardColor: UIColor?
+    var logoTextColor: UIColor?
+
+    init(
+        landscapeImage: UIImage? = nil,
+        portraitImage: UIImage? = nil,
+        textColor: UIColor? = nil,
+        cardColor: UIColor? = nil,
+        logoTextColor: UIColor? = nil
+    ) {
+        self.landscapeImage = landscapeImage
+        self.portraitImage = portraitImage
+        self.textColor = textColor
+        self.cardColor = cardColor
+        self.logoTextColor = logoTextColor
+    }
+ }

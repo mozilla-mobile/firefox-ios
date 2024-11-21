@@ -117,7 +117,7 @@ final class HomepageViewController: UIViewController,
 
     func newState(state: HomepageState) {
         homepageState = state
-        wallpaperView.wallpaper = state.wallpaperState.wallpaper
+        wallpaperView.wallpaperState = state.wallpaperState
         dataSource?.applyInitialSnapshot(state: state)
     }
 

@@ -7,13 +7,13 @@ import Redux
 import Common
 
 final class WallpaperAction: Action {
-    let wallpaper: Wallpaper
+    let wallpaperConfiguration: WallpaperConfiguration
 
-    init(wallpaper: Wallpaper,
+    init(wallpaperConfiguration: WallpaperConfiguration,
          windowUUID: WindowUUID,
          actionType: any ActionType
     ) {
-        self.wallpaper = wallpaper
+        self.wallpaperConfiguration = wallpaperConfiguration
         super.init(windowUUID: windowUUID, actionType: actionType)
     }
 }

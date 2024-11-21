@@ -8,56 +8,75 @@ import XCTest
 @testable import Client
 
 final class WallpaperStateTests: XCTestCase {
+    let image = UIImage.templateImageNamed(ImageIdentifiers.logo)
+
     func test_initialState_returnsExpectedState() {
         let initialState = createSubject()
 
         XCTAssertEqual(initialState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertEqual(initialState.wallpaper.id, "fxDefault")
-        XCTAssertNil(initialState.wallpaper.textColor)
-        XCTAssertNil(initialState.wallpaper.cardColor)
-        XCTAssertNil(initialState.wallpaper.logoTextColor)
+        XCTAssertNil(initialState.wallpaperConfiguration.landscapeImage)
+        XCTAssertNil(initialState.wallpaperConfiguration.portraitImage)
+        XCTAssertNil(initialState.wallpaperConfiguration.textColor)
+        XCTAssertNil(initialState.wallpaperConfiguration.cardColor)
+        XCTAssertNil(initialState.wallpaperConfiguration.logoTextColor)
     }
 
     func test_wallpaperDidInitialize_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = headerReducer()
 
-        let testWallpaper = Wallpaper(id: "123", textColor: .black, cardColor: .black, logoTextColor: .black)
+        let testWallpaper = WallpaperConfiguration(
+            landscapeImage: image,
+            portraitImage: image,
+            textColor: .black,
+            cardColor: .black,
+            logoTextColor: .black
+        )
+        
         let newState = reducer(
             initialState,
             WallpaperAction(
-                wallpaper: testWallpaper,
+                wallpaperConfiguration: testWallpaper,
                 windowUUID: .XCTestDefaultUUID,
                 actionType: WallpaperMiddlewareActionType.wallpaperDidInitialize
             )
         )
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertEqual(newState.wallpaper.id, "123")
-        XCTAssertEqual(newState.wallpaper.textColor, .black)
-        XCTAssertEqual(newState.wallpaper.cardColor, .black)
-        XCTAssertEqual(newState.wallpaper.logoTextColor, .black)
+        XCTAssertEqual(newState.wallpaperConfiguration.landscapeImage, image)
+        XCTAssertEqual(newState.wallpaperConfiguration.portraitImage, image)
+        XCTAssertEqual(newState.wallpaperConfiguration.textColor, .black)
+        XCTAssertEqual(newState.wallpaperConfiguration.cardColor, .black)
+        XCTAssertEqual(newState.wallpaperConfiguration.logoTextColor, .black)
     }
 
     func test_wallpaperDidChange_returnsExpectedState() {
         let initialState = createSubject()
         let reducer = headerReducer()
 
-        let testWallpaper = Wallpaper(id: "123", textColor: .black, cardColor: .black, logoTextColor: .black)
+        let testWallpaper = WallpaperConfiguration(
+            landscapeImage: image,
+            portraitImage: image,
+            textColor: .black,
+            cardColor: .black,
+            logoTextColor: .black
+        )
+
         let newState = reducer(
             initialState,
             WallpaperAction(
-                wallpaper: testWallpaper,
+                wallpaperConfiguration: testWallpaper,
                 windowUUID: .XCTestDefaultUUID,
                 actionType: WallpaperMiddlewareActionType.wallpaperDidChange
             )
         )
 
         XCTAssertEqual(newState.windowUUID, .XCTestDefaultUUID)
-        XCTAssertEqual(newState.wallpaper.id, "123")
-        XCTAssertEqual(newState.wallpaper.textColor, .black)
-        XCTAssertEqual(newState.wallpaper.cardColor, .black)
-        XCTAssertEqual(newState.wallpaper.logoTextColor, .black)
+        XCTAssertEqual(newState.wallpaperConfiguration.landscapeImage, image)
+        XCTAssertEqual(newState.wallpaperConfiguration.portraitImage, image)
+        XCTAssertEqual(newState.wallpaperConfiguration.textColor, .black)
+        XCTAssertEqual(newState.wallpaperConfiguration.cardColor, .black)
+        XCTAssertEqual(newState.wallpaperConfiguration.logoTextColor, .black)
     }
 
     // MARK: - Private

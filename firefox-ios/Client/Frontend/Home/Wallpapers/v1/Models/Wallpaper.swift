@@ -50,6 +50,7 @@ struct Wallpaper: Equatable {
     var portraitID: String { return "\(id)\(deviceVersionID)\(fileId.portrait)" }
     var landscapeID: String { return "\(id)\(deviceVersionID)\(fileId.landscape)" }
 
+    // TODO: This is actually just a nil wallpaper. Make this clearer in FXIOS-10633
     static var defaultWallpaper: Wallpaper {
         return Wallpaper(
             id: Wallpaper.defaultWallpaperName,
