@@ -20,7 +20,8 @@ Want to contribute to the codebase but don't know where to start? Here is a list
 1. **Check if the Issue is Currently Being Worked On**:
 Before starting, check for:
     - `Open PRs`: Ensure no PRs are already addressing the issue.
-    - `Comments from Contributors`: Look for recent comments. If the most recent comment is older than `3 weeks`, feel free to write a message saying that you are going to work on it.
+    - `Comments from Contributors`: Look for recent comments. If the most recent comment from another conributor wanting to work on the issue is older `3 weeks`, 
+    feel free to write a message saying that you are going to work on it.
 
 2. **Working on Contributor OK Issues**:
 For a smooth collaboration process, start with issues labeled `Contributor OK`.
