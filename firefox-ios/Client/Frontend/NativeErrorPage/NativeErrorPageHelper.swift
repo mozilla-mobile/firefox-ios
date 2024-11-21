@@ -33,7 +33,8 @@ class NativeErrorPageHelper {
             title = .NativeErrorPage.NoInternetConnection.TitleLabel
             description = .NativeErrorPage.NoInternetConnection.Description
         default:
-            break
+            title = .NativeErrorPage.NoInternetConnection.TitleLabel
+            description = .NativeErrorPage.NoInternetConnection.Description
         }
 
         let model = ErrorPageModel(errorTitle: title, errorDescription: description)
