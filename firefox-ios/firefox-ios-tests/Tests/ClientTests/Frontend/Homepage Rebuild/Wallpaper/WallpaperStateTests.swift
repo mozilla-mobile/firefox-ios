@@ -32,7 +32,7 @@ final class WallpaperStateTests: XCTestCase {
             cardColor: .black,
             logoTextColor: .black
         )
-        
+
         let newState = reducer(
             initialState,
             WallpaperAction(
