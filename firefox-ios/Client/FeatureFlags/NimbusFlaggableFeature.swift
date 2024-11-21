@@ -31,6 +31,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case menuRefactorHint
     case microsurvey
     case nativeErrorPage
+    case noInternetConnectionErrorPage
     case nightMode
     case passwordGenerator
     case preferSwitchToOpenTabOverDuplicate
@@ -57,6 +58,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .menuRefactor,
                 .microsurvey,
                 .nativeErrorPage,
+                .noInternetConnectionErrorPage,
                 .sentFromFirefox,
                 .toolbarRefactor,
                 .trackingProtectionRefactor,
@@ -113,6 +115,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .menuRefactor,
                 .menuRefactorHint,
                 .nativeErrorPage,
+                .noInternetConnectionErrorPage,
                 .nightMode,
                 .passwordGenerator,
                 .preferSwitchToOpenTabOverDuplicate,

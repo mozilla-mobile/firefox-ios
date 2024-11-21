@@ -139,6 +139,11 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly)
     }
 
+    /// Temporary flag for showing no internet connection native error page only.
+    var isNICErrorPageEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.noInternetConnectionErrorPage, checking: .buildOnly)
+    }
+
     private var browserViewControllerState: BrowserViewControllerState?
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
@@ -1535,9 +1540,15 @@ class BrowserViewController: UIViewController,
             return
         }
 
+        /// Used for checking if current error code is for no internet connection
+        let isNICErrorCode = url?.absoluteString.contains(String(Int(
+            CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue))) ?? false
+
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
         } else if isErrorURL && isNativeErrorPageEnabled {
+            showEmbeddedNativeErrorPage()
+        } else if isNICErrorCode && isNICErrorPageEnabled {
             showEmbeddedNativeErrorPage()
         } else {
             showEmbeddedWebview()
