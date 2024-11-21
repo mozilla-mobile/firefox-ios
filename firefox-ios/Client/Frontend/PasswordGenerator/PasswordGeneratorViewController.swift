@@ -161,7 +161,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     // MARK: - Themable
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
-        view.backgroundColor = theme.colors.layer1
+        view.backgroundColor = theme.colors.layer3
         descriptionLabel.textColor = theme.colors.textSecondary
         usePasswordButton.applyTheme(theme: theme)
         passwordField.applyTheme(theme: theme)
