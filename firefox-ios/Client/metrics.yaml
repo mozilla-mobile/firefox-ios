@@ -3751,17 +3751,28 @@ tabs:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
   pull_to_refresh:
-    type: counter
+    type: event
     description: |
-      Record the number of times a user pulls down
-      on a page to reload.
+      Record event when user has executed pull to refresh.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/9118
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23225
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9136
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
       - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23252
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-01-01"
+  pull_to_refresh_easter_egg:
+    type: event
+    description: |
+      Record event when user has discovered the Easter egg.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23225
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23252
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
