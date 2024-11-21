@@ -12,6 +12,46 @@ If you find a bug in the source code or a mistake in the documentation, you can 
   * Exception: we use 4-space indentation instead of 2.
 * We use [Swiftlint rules](https://github.com/mozilla-mobile/firefox-ios/blob/main/.swiftlint.yml) in both local and CI builds to ensure conformance to accepted rules. You can run Swiftlint locally by installing it [locally with Homebrew](https://github.com/realm/SwiftLint#using-homebrew). Swiftlint will then be run through Xcode Build Phases on the Client target.
 
+# Looking for issues
+Want to contribute to the codebase but don't know where to start? Here is a list of [issues that are contributor friendly](https://github.com/mozilla-mobile/firefox-ios/labels/Contributor%20OK).
+
+## Guidelines for Contributing
+
+1. **Check if the Issue is Currently Being Worked On**:
+Before starting, check for:
+    - `Open PRs`: Ensure no PRs are already addressing the issue.
+    - `Comments from Contributors`: Look for recent comments. If the most recent comment from another conributor wanting to work on the issue is older than `3 weeks`, 
+    feel free to write a message saying that you are going to work on it.
+
+2. **Working on Contributor OK Issues**:
+For a smooth collaboration process, start with issues labeled `Contributor OK`.
+    - These issues are designed specifically for contributors and do not require prior approval from team members.
+    - Simply leave a **`comment`** on the issue saying that you’ll work on it.
+
+3. **Working on Non-Contributor OK Issues**:
+If you’d like to work on an issue that isn’t labeled Contributor OK, please contact a team member to confirm whether it’s available for contributors.
+
+## Getting Support
+
+### Reference Person
+Each `Contributor OK` issue typically has a reference person assigned. If you need help or clarification:
+
+- Reach out on [Element Chat](https://chat.mozilla.org/#/home).
+- Alternatively, comment directly on the issue for assistance.
+
+### Missing Reference Person
+If no reference person is assigned, feel free to contact:
+
+- @FilippoZazzeroni
+- @MattLichtenstein
+
+### Issue Categories by Difficulty
+We’ve categorized Contributor OK issues by difficulty to help you get started:
+
+- `Good First Issue`: Beginner-friendly tasks such as simple bug fixes or minor UX improvements.
+- `Intermediate`: These involve tasks like small feature development, simple pattern implementations, or bug/UI adjustments that require some familiarity with the codebase.
+- `Advanced`: These tasks demand a deeper understanding of the project. They often include complex implementations, significant refactoring, or intricate bug fixes.
+
 ## Pull Requests
 * All pull requests must be associated with a specific Issue. If an issue doesn't exist, please first create it.
 * Before you submit your pull request, search the repository for an open or closed Pull Request that relates to your submission. We don't want to duplicate effort. 
@@ -43,17 +83,6 @@ Since the bundle identifier we use for Firefox is tied to our developer account,
 5. For each target, in the 'General' section, under 'Signing', select your personal development account.
 
 If you submit a patch, be sure to exclude these files because they are only relevant for your personal build.
-
-# Looking for issues
-Want to contribute on the codebase but don't know where to start? Here is a list of [issues that are contributor friendly](https://github.com/mozilla-mobile/firefox-ios/labels/Contributor%20OK).
-
-To ensure smooth collaboration, we recommend starting with issues labeled "Contributor OK." These issues have been recently categorized based on difficulty:
-
-- **`Good first issue`**: These are beginner-friendly tasks, generally involving simple bug fixes or UX improvements.
-- **`Intermediate`**: These issues involve small feature development, simple pattern implementations, or bug/UI adjustments that may require a deeper dive into the codebase.
-- **`Advanced`**: These tasks require a thorough understanding of the project, often involving complex implementations, significant refactoring or just bugs that requires a deep dive into the codebase.
-
-Please prioritize tasks marked as "Contributor OK." If you wish to work on an issue that isn't marked as such, reach out to a team member first to confirm if the task is available for contributors. This approach ensures that we avoid potential conflicts and maintain an organized workflow.
 
 ## Contributor fix
 We add the "Contributor Fix" label on tasks that have a PR opened for it, or if a PR has been merged to fix this task. This means if you see this label on a task it's probably fixed and cannot be picked up. Note that tasks still stay opened before we close them as it's the Quality Assurance people that will close those tasks with their final approval of the work.
