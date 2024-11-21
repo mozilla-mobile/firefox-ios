@@ -50,7 +50,7 @@ class AuthenticationTest: BaseTestCase {
         app.terminate()
         app.launch()
         navigator.openURL(testBasicHTTPAuthURL)
-        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
         navigator.nowAt(NewTabScreen)
         mozWaitForElementToExist(app.webViews["Web content"].staticTexts["Your browser made it!"])
     }

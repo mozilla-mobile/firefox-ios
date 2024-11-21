@@ -138,8 +138,8 @@ class PhotonActionSheetTests: BaseTestCase {
         openNewShareSheet()
         app.buttons["Cancel"].tap()
         // User is back to the BrowserTab where the sharesheet was launched
-        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         mozWaitForElementToExist(url)
-        mozWaitForValueContains(url, value: "example.com/")
+        mozWaitForValueContains(url, value: "example.com")
     }
 }

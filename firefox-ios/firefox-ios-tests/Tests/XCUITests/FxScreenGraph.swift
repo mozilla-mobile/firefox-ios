@@ -914,7 +914,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 transitionTo: HomePanelsScreen
             )
             screenState.tap(
-                app.otherElements[StandardImageIdentifiers.Large.tab],
+                app.otherElements[StandardImageIdentifiers.Large.privateMode],
                 forAction: Action.OpenPrivateTabLongPressTabsButton,
                 transitionTo: NewTabScreen
             ) { userState in
@@ -933,9 +933,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     func makeURLBarAvailable(_ screenState: MMScreenStateNode<FxUserState>) {
-        screenState.tap(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], to: URLBarOpen)
+        screenState.tap(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField], to: URLBarOpen)
         screenState.gesture(to: URLBarLongPressMenu) {
-            app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].press(forDuration: 1.0)
+            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 1.0)
         }
     }
 
@@ -958,12 +958,12 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         )
 
         screenState.tap(
-            app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection],
+            app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon],
             to: TrackingProtectionContextMenuDetails
         )
 
         screenState.tap(
-            app.buttons[AccessibilityIdentifiers.Toolbar.homeButton],
+            app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton],
             forAction: Action.GoToHomePage
         ) { userState in
         }
