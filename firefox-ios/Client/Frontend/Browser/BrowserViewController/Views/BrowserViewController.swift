@@ -517,9 +517,7 @@ class BrowserViewController: UIViewController,
             self.displayedPopoverController = nil
         }
 
-        // On iPad, we don't want to add a privacy window here due to multi-window support.
-        // This case is handled in scene notifications to manage multiple windows appropriately.
-        guard UIDevice.current.userInterfaceIdiom != .pad, canShowPrivacyWindow else { return }
+        guard canShowPrivacyWindow else { return }
         privacyWindowHelper.showWindow(windowScene: view.window?.windowScene, withThemedColor: currentTheme().colors.layer3)
     }
 
