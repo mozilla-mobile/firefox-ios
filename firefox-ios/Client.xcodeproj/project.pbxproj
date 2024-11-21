@@ -15,6 +15,7 @@
 		047F9B3224E1FE1F00CD7DF7 /* WidgetKitExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 047F9B2724E1FE1C00CD7DF7 /* WidgetKitExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		047F9B3E24E1FF4000CD7DF7 /* SearchQuickLinks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047F9B3A24E1FF4000CD7DF7 /* SearchQuickLinks.swift */; };
 		047F9B4224E1FF4000CD7DF7 /* ImageButtonWithLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047F9B3C24E1FF4000CD7DF7 /* ImageButtonWithLabel.swift */; };
+		0A3F57F92CEDD4CA0051B001 /* ToSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A3F57F82CEDD4CA0051B001 /* ToSViewController.swift */; };
 		0A49784A2C53E63200B1E82A /* TrackingProtectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A4978492C53E63200B1E82A /* TrackingProtectionViewController.swift */; };
 		0A686B3C2CDB70DC0090E146 /* MainMenuTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A686B3B2CDB70DC0090E146 /* MainMenuTelemetryTests.swift */; };
 		0A6875152C91886A00606F53 /* CertificatesHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6875142C91886A00606F53 /* CertificatesHeaderView.swift */; };
@@ -2288,6 +2289,7 @@
 		09D94B5E8CF4C06397168F78 /* my */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = my; path = "my.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		09F14D989587092C60A0078F /* ga */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ga; path = ga.lproj/Shared.strings; sourceTree = "<group>"; };
 		0A3A4A9EB784F7903FB13B7A /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/LoginManager.strings; sourceTree = "<group>"; };
+		0A3F57F82CEDD4CA0051B001 /* ToSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToSViewController.swift; sourceTree = "<group>"; };
 		0A4978492C53E63200B1E82A /* TrackingProtectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionViewController.swift; sourceTree = "<group>"; };
 		0A574D09BF8D9E37D6C9C654 /* bn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bn; path = bn.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		0A5B4CE9B0996AE804491134 /* an */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = an; path = an.lproj/Shared.strings; sourceTree = "<group>"; };
@@ -10979,6 +10981,7 @@
 				74F80D332A0A52D700013C3D /* PrivacyPolicyViewController.swift */,
 				742BD99D2A13AC9000BA6B15 /* OnboardingInstructionPopupViewController.swift */,
 				81020C912BB5AFA2007B8481 /* OnboardingMultipleChoiceButtonView.swift */,
+				0A3F57F82CEDD4CA0051B001 /* ToSViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -16441,6 +16444,7 @@
 				E18CE8DA2BDA3F6B00EE2BCD /* NavigationToolbarContainer.swift in Sources */,
 				C8E2E80E23D20FD2005AACE6 /* FxAWebViewController.swift in Sources */,
 				E14F7DF2288F3F9F00E3722C /* ThemedTableSectionHeaderFooterView.swift in Sources */,
+				0A3F57F92CEDD4CA0051B001 /* ToSViewController.swift in Sources */,
 				8A3EF7F22A2FCF4000796E3A /* DeleteExportedDataSetting.swift in Sources */,
 				8ADC2A142A33762900543DAA /* ReferringPage.swift in Sources */,
 				0E6C1E212C909AD7001A43BB /* PasswordGeneratorAction.swift in Sources */,

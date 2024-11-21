@@ -512,6 +512,10 @@ public struct AccessibilityIdentifiers {
         }
     }
 
+    struct TermsOfService {
+        static let agreeAndContinueButton = "TermsOfService.AgreeAndContinueButton"
+    }
+
     struct Upgrade {
         static let backgroundImage = "Upgrade.BackgroundImage"
         static let upgrade = "upgrade."
