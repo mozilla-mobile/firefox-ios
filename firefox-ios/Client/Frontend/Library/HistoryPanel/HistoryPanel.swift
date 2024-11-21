@@ -862,7 +862,7 @@ extension HistoryPanel {
             }
         }
     }
-    
+
     private func setupSearchBarTapGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(removedSearchBarWhenTapOutside))
         tapGesture.cancelsTouchesInView = false
@@ -872,15 +872,14 @@ extension HistoryPanel {
 
 // MARK: - User action helpers
 extension HistoryPanel {
-    
     @objc
-    private func removedSearchBarWhenTapOutside() {
-        if !searchbar.isHidden {
+    private func removedSearchBarWhenTapOutside(_ sender: UITapGestureRecognizer) {
+        if !bottomStackView.isHidden && !bottomStackView.frame.contains(sender.location(in: view)) {
             bottomStackView.isHidden = true
-            searchbar.resignFirstResponder()
+            bottomStackView.resignFirstResponder()
         }
     }
-    
+
     func handleLeftTopButton() {
         updatePanelState(newState: .history(state: .mainView))
     }
