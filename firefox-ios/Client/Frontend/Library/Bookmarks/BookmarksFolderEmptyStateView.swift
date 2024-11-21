@@ -16,7 +16,7 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
     }
 
     private lazy var logoImage: UIImageView = .build { imageView in
-          imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFit
     }
 
     private lazy var titleLabel: UILabel = .build { label in
@@ -51,8 +51,8 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
     }
 
     func configure(isRoot: Bool) {
-        titleLabel.text = isRoot ? .Bookmarks.RootFolderEmptyState.Title : .Bookmarks.NestedFolderEmptyState.Title
-        bodyLabel.text = isRoot ? .Bookmarks.RootFolderEmptyState.Body : .Bookmarks.NestedFolderEmptyState.Body
+        titleLabel.text = isRoot ? .Bookmarks.EmptyState.Root.Title : .Bookmarks.EmptyState.Nested.Title
+        bodyLabel.text = isRoot ? .Bookmarks.EmptyState.Root.Body : .Bookmarks.EmptyState.Nested.Body
         logoImage.image = UIImage(named: isRoot ? ImageIdentifiers.noBookmarksInRoot : ImageIdentifiers.noBookmarksInFolder)
     }
 

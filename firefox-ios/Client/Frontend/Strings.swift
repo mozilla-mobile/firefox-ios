@@ -146,7 +146,7 @@ extension String {
     }
 }
 
-// MARK: - Bookmarks Menu
+// MARK: - Bookmarks Panel
 extension String {
     public struct Bookmarks {
         public struct Menu {
@@ -196,29 +196,32 @@ extension String {
                 value: "Delete Bookmark",
                 comment: "The title for the Delete Bookmark button, in the Edit Bookmark popup screen which is summoned from the main menu's Save submenu, which will delete the currently bookmarked site from the user's bookmarks.")
         }
-        public struct RootFolderEmptyState {
-            public static let Title = MZLocalizedString(
-                key: "Bookmarks.RootFolderEmptyState.Title.v135",
-                tableName: "Bookmarks",
-                value: "No bookmarks yet",
-                comment: "The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal")
-            public static let Body = MZLocalizedString(
-                key: "Bookmarks.RootFolderEmptyState.Body.v135",
-                tableName: "Bookmarks",
-                value: "Save sites as you browse. We’ll also grab bookmarks from other synced devices.",
-                comment: "The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal")
-        }
-        public struct NestedFolderEmptyState {
-            public static let Title = MZLocalizedString(
-                key: "Bookmarks.NestedFolderEmptyState.Title.v135",
-                tableName: "Bookmarks",
-                value: "This folder is empty",
-                comment: "The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal")
-            public static let Body = MZLocalizedString(
-                key: "Bookmarks.NestedFolderEmptyState.Body.v135",
-                tableName: "Bookmarks",
-                value: "Add bookmarks as you browse so you can find your favorite sites later.",
-                comment: "The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal")
+
+        public struct EmptyState {
+            public struct Root {
+                public static let Title = MZLocalizedString(
+                    key: "Bookmarks.EmptyState.Root.Title.v135",
+                    tableName: "Bookmarks",
+                    value: "No bookmarks yet",
+                    comment: "The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal")
+                public static let Body = MZLocalizedString(
+                    key: "Bookmarks.EmptyState.Root.Body.v135",
+                    tableName: "Bookmarks",
+                    value: "Save sites as you browse. We’ll also grab bookmarks from other synced devices.",
+                    comment: "The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal")
+            }
+            public struct Nested {
+                public static let Title = MZLocalizedString(
+                    key: "Bookmarks.EmptyState.Nested.Title.v135",
+                    tableName: "Bookmarks",
+                    value: "This folder is empty",
+                    comment: "The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal")
+                public static let Body = MZLocalizedString(
+                    key: "Bookmarks.EmptyState.Nested.Body.v135",
+                    tableName: "Bookmarks",
+                    value: "Add bookmarks as you browse so you can find your favorite sites later.",
+                    comment: "The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal")
+            }
         }
     }
 }
