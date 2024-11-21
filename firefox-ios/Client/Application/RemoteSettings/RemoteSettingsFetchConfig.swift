@@ -5,19 +5,23 @@
 import Foundation
 
 struct RemoteSettingsFetchConfig: Codable, Equatable {
-    let rules: [Rule]
+    let collections: [Collection]
 
-    struct Rule: Codable, Equatable {
+    struct Collection: Codable, Equatable {
         let name: String
         let url: String
-        let file: String
+        var file: String?
         let bucketID: String
-        let collectionsID: String
+        let collectionID: String
+        var fetchAttachments: Bool?
+        var saveRecords: Bool?
 
         enum CodingKeys: String, CodingKey {
             case name, url, file
             case bucketID = "bucket_id"
-            case collectionsID = "collections_id"
+            case collectionID = "collection_id"
+            case fetchAttachments = "fetch_attachments"
+            case saveRecords = "save_records"
         }
     }
 

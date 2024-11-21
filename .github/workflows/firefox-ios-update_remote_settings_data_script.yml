@@ -44,7 +44,7 @@ jobs:
       - name: Add changes
         run: |
           git diff
-          git diff --quiet || git add firefox-ios/Client/Assets/RemoteSettingsData/RemotePasswordRules.json
+          git diff --quiet || git add firefox-ios/Client/Assets/RemoteSettingsData/
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
