@@ -16,9 +16,11 @@ HTMLElement.prototype.ownerGlobal = window;
 
 // We cannot mock this in WebKit because we lack access to low-level APIs.
 // For completeness, we simply return true when the input type is "password".
-HTMLInputElement.prototype.hasBeenTypePassword = function () {
-  return this.type === "password";
-};
+Object.defineProperty(HTMLInputElement.prototype, "hasBeenTypePassword", {
+  get() {
+    return this.type === "password";
+  },
+});
 
 HTMLInputElement.prototype.setUserInput = function (value) {
   this.value = value;
