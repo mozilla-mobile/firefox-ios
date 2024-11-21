@@ -342,9 +342,11 @@ class BookmarksTests: BaseTestCase {
         bookmarkPageAndTapEdit()
         app.buttons["crossLarge"].tap()
         waitForTabsButton()
+        navigator.nowAt(BrowserTab)
         unbookmark()
         bookmarkPageAndTapEdit()
         app.buttons["Save"].tap()
+        navigator.nowAt(BrowserTab)
         navigator.goto(LibraryPanel_Bookmarks)
         checkItemInBookmarkList(oneItemBookmarked: true)
     }
@@ -382,8 +384,8 @@ class BookmarksTests: BaseTestCase {
     }
 
     private func bookmarkPageAndTapEdit() {
-        bookmark()
-        bookmark()
+        bookmark() // Bookmark the page
+        bookmark() // Open the "Edit Bookmark" page
         mozWaitForElementToExist(app.navigationBars["Edit Bookmark"])
     }
 }
