@@ -187,7 +187,8 @@ class ActivityStreamTest: BaseTestCase {
         app.otherElements["Tabs Tray"].collectionViews.cells["Wikipedia"].tap()
         // The website is open
         mozWaitForElementToNotExist(TopSiteCellgroup)
-        waitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "wikipedia.org")
+        waitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
+                             value: "wikipedia.org")
     }
     // Smoketest
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {

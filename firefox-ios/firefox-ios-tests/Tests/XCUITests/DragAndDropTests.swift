@@ -109,7 +109,7 @@ class DragAndDropTests: BaseTestCase {
             )
             checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
             if !iPad() {
-                let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+                let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
 
                 if let urlString = url.value as? String {
                     XCTAssert(secondWebsite.url.contains(urlString), "The tab has not been dropped correctly")
@@ -141,7 +141,7 @@ class DragAndDropTests: BaseTestCase {
             checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: homeTabName)
             // Check that focus is kept on last website open
             if !iPad() {
-                let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+                let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
 
                 if let urlString = url.value as? String {
                     XCTAssert(secondWebsite.url.contains(urlString), "The tab has not been dropped correctly")
@@ -283,7 +283,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         )
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.browserTabName, secondTab: firstWebsite.tabName)
         // Check that focus is kept on last website open
-        if let urlString = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as? String {
+        if let urlString = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value as? String {
             XCTAssert(secondWebsite.url.contains(urlString), "The tab has not been dropped correctly")
         } else {
             XCTFail("Failed to retrieve a valid URL string from the browser's URL bar")
@@ -321,7 +321,8 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         mozWaitForElementToExist(searchField)
 
         // DragAndDrop the url for only one second so that the TP menu is not shown and the search box is not covered
-        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].press(forDuration: 1, thenDragTo: searchField)
+        let searchTextField = AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField
+        app.textFields[searchTextField].press(forDuration: 1, thenDragTo: searchField)
 
         // Verify that the text in the search field is the same as the text in the url text field
         searchField.tap()

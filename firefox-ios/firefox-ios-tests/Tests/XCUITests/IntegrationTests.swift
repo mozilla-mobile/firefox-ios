@@ -112,7 +112,7 @@ class IntegrationTests: BaseTestCase {
         // Bookmark is added by the DB
         // Sign into Mozilla Account
         navigator.openURL(testingURL)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon])
         navigator.goto(BrowserTabMenu)
         app.tables.otherElements[StandardImageIdentifiers.Large.bookmark].waitAndTap()
         navigator.nowAt(BrowserTab)

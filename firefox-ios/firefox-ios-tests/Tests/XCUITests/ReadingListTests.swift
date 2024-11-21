@@ -44,6 +44,9 @@ class ReadingListTests: BaseTestCase {
         // Add item to reading list and check that it appears
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tapOnApp()
+        }
         navigator.goto(LibraryPanel_ReadingList)
 
         // Check that there is one item
@@ -70,6 +73,9 @@ class ReadingListTests: BaseTestCase {
         // Add item to reading list and check that it appears
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tapOnApp()
+        }
         navigator.goto(LibraryPanel_ReadingList)
 
         // Check that there is one item
@@ -113,7 +119,9 @@ class ReadingListTests: BaseTestCase {
 
         // Go to reader list view to check that there is not any item there
         navigator.goto(BrowserTabMenu)
-        navigator.goto(LibraryPanel_ReadingList)
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tapOnApp()
+        }
         navigator.goto(LibraryPanel_ReadingList)
         checkReadingListNumberOfItems(items: 0)
     }
@@ -122,6 +130,9 @@ class ReadingListTests: BaseTestCase {
     func testMarkAsReadAndUnreadFromReadingList() throws {
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tapOnApp()
+        }
         navigator.goto(LibraryPanel_ReadingList)
 
         mozWaitForElementToExist(app.tables["ReadingTable"])
@@ -141,6 +152,9 @@ class ReadingListTests: BaseTestCase {
     func testRemoveFromReadingList() {
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tapOnApp()
+        }
         navigator.goto(LibraryPanel_ReadingList)
 
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
@@ -180,6 +194,9 @@ class ReadingListTests: BaseTestCase {
 
         // Add item to Reading List
         addContentToReaderView()
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tapOnApp()
+        }
         navigator.goto(LibraryPanel_ReadingList)
 
         // Long tap on the item just saved
@@ -202,6 +219,9 @@ class ReadingListTests: BaseTestCase {
     func testRemoveSavedForReadingLongPress() {
         // Add item to Reading List
         addContentToReaderView()
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tapOnApp()
+        }
         navigator.goto(LibraryPanel_ReadingList)
 
         // Long tap on the item just saved and choose remove
@@ -235,6 +255,9 @@ class ReadingListTests: BaseTestCase {
         // Add item to reading list and check that it appears
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tapOnApp()
+        }
         navigator.goto(LibraryPanel_ReadingList)
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
         mozWaitForElementToExist(savedToReadingList)
@@ -247,8 +270,12 @@ class ReadingListTests: BaseTestCase {
             XCTAssertTrue(app.buttons["Reader View"].isSelected)
         }
         XCTAssertTrue(app.buttons["Reader View"].isEnabled)
-        app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].tap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].tap()
         navigator.nowAt(NewTabScreen)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
+        navigator.performAction(Action.CloseURLBarOpen)
+        navigator.nowAt(NewTabScreen)
+        waitForTabsButton()
         navigator.goto(LibraryPanel_ReadingList)
         // Swipe the article left
         // The article has been marked as Read
