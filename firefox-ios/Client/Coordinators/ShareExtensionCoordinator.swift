@@ -50,7 +50,7 @@ class ShareExtensionCoordinator: BaseCoordinator,
     ) {
         let shareExtension = ShareExtensionHelper(
             url: url,
-            title: title ?? tabManager.selectedTab?.title,
+            title: title,
             tab: tabManager.selectedTab)
         let controller = shareExtension.createActivityViewController(
             tabManager.selectedTab?.webView
