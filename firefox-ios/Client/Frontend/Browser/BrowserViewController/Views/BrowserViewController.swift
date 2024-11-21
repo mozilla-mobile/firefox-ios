@@ -166,7 +166,7 @@ class BrowserViewController: UIViewController,
     // The content stack view contains the contentContainer with homepage or browser and the shopping sidebar
     var contentStackView: SidebarEnabledView = .build()
 
-    // The content container contains the homepage or webview. Embedded by the coordinator.
+    // The content container contains the homepage, error page or webview. Embedded by the coordinator.
     var contentContainer: ContentContainer = .build { _ in }
 
     lazy var isBottomSearchBar: Bool = {
@@ -1505,8 +1505,6 @@ class BrowserViewController: UIViewController,
                    category: .coordinator)
 
         switch browserViewType {
-        case .nativeErrorPage:
-            showEmbeddedNativeErrorPage()
         case .normalHomepage:
             showEmbeddedHomepage(inline: true, isPrivate: false)
         case .privateHomepage:
