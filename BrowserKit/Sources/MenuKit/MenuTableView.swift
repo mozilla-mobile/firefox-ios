@@ -84,10 +84,12 @@ class MenuTableView: UIView,
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(
+        guard let cell = tableView.dequeueReusableCell(
             withIdentifier: MenuCell.cellIdentifier,
             for: indexPath
-        ) as! MenuCell
+        ) as? MenuCell else {
+            return UITableViewCell()
+        }
 
         cell.configureCellWith(model: menuData[indexPath.section].options[indexPath.row])
         if let theme { cell.applyTheme(theme: theme) }
