@@ -124,10 +124,10 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
         topTabDisplayManager = TopTabDisplayManager(collectionView: self.collectionView,
-                                                       tabManager: self.tabManager,
-                                                       tabDisplayer: self,
-                                                       reuseID: TopTabCell.cellIdentifier,
-                                                       profile: profile)
+                                                    tabManager: self.tabManager,
+                                                    tabDisplayer: self,
+                                                    reuseID: TopTabCell.cellIdentifier,
+                                                    profile: profile)
         collectionView.dataSource = topTabDisplayManager
         collectionView.delegate = tabLayoutDelegate
     }
