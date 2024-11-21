@@ -44,8 +44,9 @@ class ToSViewController: UIViewController, Themeable {
     }
 
     private lazy var confirmationButton: PrimaryRoundedButton = .build { [weak self] button in
-        let viewModel = PrimaryRoundedButtonViewModel(title: .Onboarding.TermsOfService.AgreementButtonTitle,
-                                                      a11yIdentifier: AccessibilityIdentifiers.TermsOfService.agreeAndContinueButton)
+        let viewModel = PrimaryRoundedButtonViewModel(
+            title: .Onboarding.TermsOfService.AgreementButtonTitle,
+            a11yIdentifier: AccessibilityIdentifiers.TermsOfService.agreeAndContinueButton)
         button.configure(viewModel: viewModel)
         button.titleLabel?.textAlignment = .center
     }
