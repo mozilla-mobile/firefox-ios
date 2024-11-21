@@ -954,19 +954,8 @@ class BrowserViewController: UIViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        // Skip the 'restore tabs' alert on iPad; this avoids some potential UX issues with multi-window. [FXIOS-9079]
-        let iPadDevice = UIDevice.current.userInterfaceIdiom == .pad
-        if !iPadDevice && !displayedRestoreTabsAlert && crashedLastLaunch() {
-            logger.log("The application crashed on last session",
-                       level: .info,
-                       category: .lifecycle)
-            displayedRestoreTabsAlert = true
-            showRestoreTabsAlert()
-        } else {
-            // Tab restoration is triggered here for new installs, cold launches, or any BVC appearance.
-            // Note: `restoreTabs()` returns early if `tabs` is not-empty; repeated calls should have no effect.
-            tabManager.restoreTabs()
-        }
+        // Note: `restoreTabs()` returns early if `tabs` is not-empty; repeated calls should have no effect.
+        tabManager.restoreTabs()
 
         switchToolbarIfNeeded()
         updateTabCountUsingTabManager(tabManager, animated: false)
@@ -1288,40 +1277,9 @@ class BrowserViewController: UIViewController,
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
     }
 
-    // Because crashedLastLaunch is sticky, it does not get reset, we need to remember its
-    // value so that we do not keep asking the user to restore their tabs.
-    var displayedRestoreTabsAlert = false
-
-    fileprivate func crashedLastLaunch() -> Bool {
-        return logger.crashedLastLaunch
-    }
-
-    fileprivate func showRestoreTabsAlert() {
-        let alert = UIAlertController.restoreTabsAlert(
-            okayCallback: { _ in
-                let extra = [TelemetryWrapper.EventExtraKey.isRestoreTabsStarted.rawValue: true]
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .tap,
-                                             object: .restoreTabsAlert,
-                                             extras: extra)
-                self.isCrashAlertShowing = false
-                self.tabManager.restoreTabs(true)
-            },
-            noCallback: { _ in
-                let extra = [TelemetryWrapper.EventExtraKey.isRestoreTabsStarted.rawValue: false]
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .tap,
-                                             object: .restoreTabsAlert,
-                                             extras: extra)
-                self.isCrashAlertShowing = false
-                self.tabManager.selectTab(self.tabManager.addTab())
-                self.openUrlAfterRestore()
-                AppEventQueue.signal(event: .tabRestoration(self.tabManager.windowUUID))
-            }
-        )
-        self.present(alert, animated: true, completion: nil)
-        isCrashAlertShowing = true
-    }
+//    fileprivate func crashedLastLaunch() -> Bool {
+//        return logger.crashedLastLaunch
+//    }
 
     fileprivate func showQueuedAlertIfAvailable() {
         if let queuedAlertInfo = tabManager.selectedTab?.dequeueJavascriptAlertPrompt() {
