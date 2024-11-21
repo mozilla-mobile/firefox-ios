@@ -153,11 +153,33 @@ class ErrorPageHandler: InternalSchemeResponse, FeatureFlaggable {
     // When nativeErrorPage feature flag is true, only create
     // html page with gray background similar to homepage or privatehomepage.
     // TODO: responseForErrorWebPage() will be removed in future with rest of the old error page code.
+    var isNativeErrorPageEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly)
+    }
+
+    var isNICErrorPageEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.noInternetConnectionErrorPage, checking: .buildOnly)
+    }
+
     func response(forRequest request: URLRequest) -> (URLResponse, Data)? {
-        if featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly) {
-            responseForNativeErrorPage(request: request)
+        guard let url = request.url,
+              let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              let code = components.valueForQuery("code"),
+              let errCode = Int(code) else {
+            return nil
+        }
+
+        /// Used for checking if current error code is for no internet connection
+        let noInternetErrorCode = Int(
+            CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue
+        )
+
+        if isNativeErrorPageEnabled {
+            return responseForNativeErrorPage(request: request)
+        } else if isNICErrorPageEnabled && (errCode == noInternetErrorCode) {
+            return responseForNativeErrorPage(request: request)
         } else {
-            responseForErrorWebPage(request: request)
+            return responseForErrorWebPage(request: request)
         }
     }
 
