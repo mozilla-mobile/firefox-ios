@@ -1621,42 +1621,42 @@ extension String {
 
         public struct TermsOfService {
             public static let Title = MZLocalizedString(
-                key: "",
+                key: "", // Onboarding.TermsOfService.Title.v135
                 tableName: "Onboarding",
                 value: "Welcome to %@",
                 comment: "Title for the Terms of Service screen in the onboarding process. Placeholder is for app name.")
             public static let AgreementButtonTitle = MZLocalizedString(
-                key: "",
+                key: "", // Onboarding.TermsOfService.AgreementButtonTitle.v135
                 tableName: "Onboarding",
                 value: "Agree and continue",
                 comment: "Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen.")
             public static let TermsOfServiceAgreement = MZLocalizedString(
-                key: "",
+                key: "", // Onboarding.TermsOfService.TermsOfServiceAgreement.v135
                 tableName: "Onboarding",
                 value: "By continuing, you agree to the %@",
                 comment: "Agreement text for Terms of Service in the Terms of Service screen. Placeholder is for the Terms of Service link button that redirect the user to the Terms of Service page")
             public static let PrivacyNoticeAgreement = MZLocalizedString(
-                key: "",
+                key: "", // Onboarding.TermsOfService.PrivacyNoticeAgreement.v135
                 tableName: "Onboarding",
                 value: "%@ cares about your privacy. Read more in our %@",
                 comment: "Agreement text for Privacy Notice in the Terms of Service screen. First placeholder is for the app name. The second placeholder is for the Privacy Notice link button that redirect the user to the Privacy Notice page")
             public static let ManagePreferenceAgreement = MZLocalizedString(
-                key: "",
+                key: "", // Onboarding.TermsOfService.ManagePreferenceAgreement.v135
                 tableName: "Onboarding",
                 value: "To help improve the browser, %@ sends diagnostic and interaction data to Mozilla. %@",
                 comment: "Agreement text for sends diagnostic and interaction data to Mozilla in the Terms of Service screen. First placeholder is for the app name. The last placeholder is for for the Manage link button which redirect the user to another screen in order to manage the data collection preferences.")
             public static let TermsOfServiceLink = MZLocalizedString(
-                key: "",
+                key: "", // Onboarding.TermsOfService.TermsOfServiceLink.v135
                 tableName: "Onboarding",
                 value: "%@ Terms of Service.",
                 comment: "Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. Placeholder is for the app name.")
             public static let PrivacyNoticeLink = MZLocalizedString(
-                key: "",
+                key: "", // Onboarding.TermsOfService.PrivacyNoticeLink.v135
                 tableName: "Onboarding",
                 value: "Privacy Notice.",
                 comment: "Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page.")
             public static let ManageLink = MZLocalizedString(
-                key: "",
+                key: "", // Onboarding.TermsOfService.ManageLink.v135
                 tableName: "Onboarding",
                 value: "Manage",
                 comment: "Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen.")

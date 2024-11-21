@@ -513,6 +513,10 @@ public struct AccessibilityIdentifiers {
     }
 
     struct TermsOfService {
+        static let title = "TermsOfService.Title"
+        static let termsOfServiceAgreement = "TermsOfService.TermsOfServiceAgreement"
+        static let privacyNoticeAgreement = "TermsOfService.PrivacyNoticeAgreement"
+        static let manageDataCollectionAgreement = "TermsOfService.ManageDataCollectionAgreement"
         static let agreeAndContinueButton = "TermsOfService.AgreeAndContinueButton"
     }
 
