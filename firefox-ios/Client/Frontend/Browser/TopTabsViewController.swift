@@ -127,10 +127,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
                                                        tabManager: self.tabManager,
                                                        tabDisplayer: self,
                                                        reuseID: TopTabCell.cellIdentifier,
-                                                       tabDisplayType: .TopTabTray,
-                                                       profile: profile,
-                                                       theme: themeManager.getCurrentTheme(for: windowUUID))
-        self.tabManager.tabDisplayType = .TopTabTray
+                                                       profile: profile)
         collectionView.dataSource = topTabDisplayManager
         collectionView.delegate = tabLayoutDelegate
     }
@@ -148,7 +145,6 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         super.viewWillAppear(animated)
         view.setNeedsLayout()
         view.layoutIfNeeded()
-        topTabDisplayManager.tabDisplayType = .TopTabTray
         refreshTabs()
     }
 
