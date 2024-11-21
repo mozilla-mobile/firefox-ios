@@ -1009,6 +1009,7 @@
 		8AE1E1D227B1ADC40024C45E /* TopBottomInterchangeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE1E1D127B1ADC40024C45E /* TopBottomInterchangeable.swift */; };
 		8AE1E1D927B1BD380024C45E /* UIStackViewExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE1E1D827B1BD380024C45E /* UIStackViewExtensionsTests.swift */; };
 		8AE1E1DB27B1C1320024C45E /* SearchBarSettingsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE1E1DA27B1C1320024C45E /* SearchBarSettingsViewModelTests.swift */; };
+		8AE459922CEFB1DC002D6679 /* InactiveTabsTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE459912CEFB1DC002D6679 /* InactiveTabsTelemetry.swift */; };
 		8AE80BAD2891957C00BC12EA /* TopSitesDimensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE80BAC2891957C00BC12EA /* TopSitesDimensionTests.swift */; };
 		8AE80BAF2891960300BC12EA /* MockTraitCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE80BAE2891960300BC12EA /* MockTraitCollection.swift */; };
 		8AE80BB62891AEA100BC12EA /* MockDispatchGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE80BB42891AE6700BC12EA /* MockDispatchGroup.swift */; };
@@ -7596,6 +7597,7 @@
 		8AE1E1D127B1ADC40024C45E /* TopBottomInterchangeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBottomInterchangeable.swift; sourceTree = "<group>"; };
 		8AE1E1D827B1BD380024C45E /* UIStackViewExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStackViewExtensionsTests.swift; sourceTree = "<group>"; };
 		8AE1E1DA27B1C1320024C45E /* SearchBarSettingsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarSettingsViewModelTests.swift; sourceTree = "<group>"; };
+		8AE459912CEFB1DC002D6679 /* InactiveTabsTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InactiveTabsTelemetry.swift; sourceTree = "<group>"; };
 		8AE80BAC2891957C00BC12EA /* TopSitesDimensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesDimensionTests.swift; sourceTree = "<group>"; };
 		8AE80BAE2891960300BC12EA /* MockTraitCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTraitCollection.swift; sourceTree = "<group>"; };
 		8AE80BB42891AE6700BC12EA /* MockDispatchGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDispatchGroup.swift; sourceTree = "<group>"; };
@@ -9970,13 +9972,6 @@
 			path = TopSites;
 			sourceTree = "<group>";
 		};
-		212429F22AA27204002D57A8 /* Legacy */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Legacy;
-			sourceTree = "<group>";
-		};
 		21357F2B293FDB07004BF9FD /* RemoteTabs */ = {
 			isa = PBXGroup;
 			children = (
@@ -10192,14 +10187,14 @@
 			children = (
 				219914032AF963E000153598 /* Action */,
 				21C5B3572AF2A6D80093F366 /* LayoutManager */,
-				212429F22AA27204002D57A8 /* Legacy */,
 				21B548932B1E5EC000DC1DF8 /* Middleware */,
 				219935EA2B0710E900E5966F /* Models */,
 				21357F2B293FDB07004BF9FD /* RemoteTabs */,
 				21C5B3592AF2A73F0093F366 /* State */,
 				21C5B3582AF2A7130093F366 /* Views */,
-				21B548942B1E5F1400DC1DF8 /* InactiveTabsManager.swift */,
 				968BD7EA27DFF0F8003148B3 /* ASGroup.swift */,
+				8AE459912CEFB1DC002D6679 /* InactiveTabsTelemetry.swift */,
+				21B548942B1E5F1400DC1DF8 /* InactiveTabsManager.swift */,
 			);
 			path = Tabs;
 			sourceTree = "<group>";
@@ -16684,6 +16679,7 @@
 				C869912D28917688007ACC5C /* WallpaperImageLoader.swift in Sources */,
 				96A5F73829928B3700234E5F /* GeneralizedImageFetcher.swift in Sources */,
 				8A454D362CB86993009436D9 /* PocketStoryState.swift in Sources */,
+				8AE459922CEFB1DC002D6679 /* InactiveTabsTelemetry.swift in Sources */,
 				1D7B78992ADF328E0011E9F2 /* AppEvent.swift in Sources */,
 				43F7952525795F69005AEE40 /* SearchTelemetry.swift in Sources */,
 				E65075541E37F6FC006961AC /* LegacyDynamicFontHelper.swift in Sources */,

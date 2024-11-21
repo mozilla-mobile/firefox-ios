@@ -525,7 +525,6 @@ extension TelemetryWrapper {
         case syncedTabTileImpressions = "synced-tab-tile-impressions"
         case historyImpressions = "history-highlights-impressions"
         case bookmarkImpressions = "bookmark-impressions"
-        case inactiveTabTray = "inactiveTabTray"
         case reload = "reload"
         case reloadFromUrlBar = "reload-from-url-bar"
         case restoreTabsAlert = "restore-tabs-alert"
@@ -613,12 +612,6 @@ extension TelemetryWrapper {
         case addBookmarkToast = "add-bookmark-toast"
         case openHomeFromAwesomebar = "open-home-from-awesomebar"
         case openHomeFromPhotonMenuButton = "open-home-from-photon-menu-button"
-        case openInactiveTab = "openInactiveTab"
-        case inactiveTabShown = "inactive-Tab-Shown"
-        case inactiveTabExpand = "inactivetab-expand"
-        case inactiveTabCollapse = "inactivetab-collapse"
-        case inactiveTabCloseAllButton = "inactive-tab-close-all-button"
-        case inactiveTabSwipeClose = "inactive-tab-swipe-close"
         case openRecentlyClosedTab = "openRecentlyClosedTab"
         case tabGroupWithExtras = "tabGroupWithExtras"
         case closeGroupedTab = "recordCloseGroupedTab"
@@ -696,10 +689,6 @@ extension TelemetryWrapper {
 
         // Tabs Tray
         case done = "done"
-
-        // Inactive Tab
-        case inactiveTabsCollapsed = "collapsed"
-        case inactiveTabsExpanded = "expanded"
 
         // GleanPlumb
         case actionUUID = "action-uuid"
@@ -1766,21 +1755,6 @@ extension TelemetryWrapper {
             }
         case (.action, .tap, .newPrivateTab, .tabTray, _):
             GleanMetrics.TabsTray.newPrivateTabTapped.record()
-        // MARK: Inactive Tab Tray
-        case (.action, .tap, .inactiveTabTray, .openInactiveTab, _):
-            GleanMetrics.InactiveTabsTray.openInactiveTab.add()
-        case (.action, .tap, .inactiveTabTray, .inactiveTabExpand, _):
-            let expandedExtras = GleanMetrics.InactiveTabsTray.ToggleInactiveTabTrayExtra(toggleType: EventExtraKey.inactiveTabsExpanded.rawValue)
-            GleanMetrics.InactiveTabsTray.toggleInactiveTabTray.record(expandedExtras)
-        case (.action, .tap, .inactiveTabTray, .inactiveTabCollapse, _):
-            let collapsedExtras = GleanMetrics.InactiveTabsTray.ToggleInactiveTabTrayExtra(toggleType: EventExtraKey.inactiveTabsCollapsed.rawValue)
-            GleanMetrics.InactiveTabsTray.toggleInactiveTabTray.record(collapsedExtras)
-        case (.action, .tap, .inactiveTabTray, .inactiveTabSwipeClose, _):
-            GleanMetrics.InactiveTabsTray.inactiveTabSwipeClose.add()
-        case (.action, .tap, .inactiveTabTray, .inactiveTabCloseAllButton, _):
-            GleanMetrics.InactiveTabsTray.inactiveTabsCloseAllBtn.add()
-        case (.action, .tap, .inactiveTabTray, .inactiveTabShown, _):
-            GleanMetrics.InactiveTabsTray.inactiveTabShown.add()
 
         // MARK: Tab Groups
         case (.action, .view, .tabTray, .tabGroupWithExtras, let extras):

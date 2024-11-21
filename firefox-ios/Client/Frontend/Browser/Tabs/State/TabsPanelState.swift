@@ -152,6 +152,10 @@ struct TabsPanelState: ScreenState, Equatable {
                                           state: TabsPanelState) -> TabsPanelState {
         switch action.actionType {
         case TabPanelViewActionType.toggleInactiveTabs:
+            // Laurie - InactiveTabsTelemetry.section(hasExpanded: Bool)
+            // Question: this is a static func, I cannot call the inactiveTabTelemetry class from here
+            // I guess again this needs to go in the middleware, but now sure how. This is the only place I found where
+            // we invert the isInactiveTabsExpanded, aka deciding where we are opening or closing this section
             return TabsPanelState(windowUUID: state.windowUUID,
                                   isPrivateMode: state.isPrivateMode,
                                   tabs: state.tabs,

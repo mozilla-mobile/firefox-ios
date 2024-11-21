@@ -54,7 +54,7 @@ enum TabPanelViewActionType: ActionType {
     case undoCloseAllTabs
     case moveTab
     case toggleInactiveTabs
-    case closeInactiveTabs
+    case closeInactiveTab
     case undoCloseInactiveTab
     case closeAllInactiveTabs
     case undoCloseAllInactiveTabs

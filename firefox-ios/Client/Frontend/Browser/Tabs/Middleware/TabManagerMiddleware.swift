@@ -13,6 +13,7 @@ import enum MozillaAppServices.BookmarkRoots
 class TabManagerMiddleware {
     private let profile: Profile
     private let logger: Logger
+    private let inactiveTabTelemetry = InactiveTabsTelemetry()
 
     init(profile: Profile = AppContainer.shared.resolve(),
          logger: Logger = DefaultLogger.shared) {
@@ -155,7 +156,7 @@ class TabManagerMiddleware {
         case TabPanelViewActionType.undoCloseAllInactiveTabs:
             undoCloseAllInactiveTabs(uuid: action.windowUUID)
 
-        case TabPanelViewActionType.closeInactiveTabs:
+        case TabPanelViewActionType.closeInactiveTab:
             guard let tabUUID = action.tabUUID else { return }
             closeInactiveTab(for: tabUUID, state: state, uuid: action.windowUUID)
 
@@ -508,6 +509,7 @@ class TabManagerMiddleware {
     /// Makes a backup of tabs to be deleted in case the undo option is selected.
     private func closeAllInactiveTabs(state: AppState, uuid: WindowUUID) {
         guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
+        inactiveTabTelemetry.closedAllTabs()
         let tabManager = tabManager(for: uuid)
         Task {
             await tabManager.removeAllInactiveTabs()
@@ -547,6 +549,7 @@ class TabManagerMiddleware {
 
     private func closeInactiveTab(for tabUUID: String, state: AppState, uuid: WindowUUID) {
         guard let tabsState = state.screenState(TabsPanelState.self, for: .tabsPanel, window: uuid) else { return }
+        inactiveTabTelemetry.tabSwipedToClose()
         let tabManager = tabManager(for: uuid)
         Task {
             if let tabToClose = tabManager.getTabForUUID(uuid: tabUUID) {
