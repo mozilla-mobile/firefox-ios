@@ -23,12 +23,8 @@ final class TrackingProtectionConnectionDetailsView: UIView {
         image.clipsToBounds = true
     }
 
-    private var connectionDetailsLabelsContainer: UIStackView = .build { stack in
-        stack.backgroundColor = .clear
-        stack.distribution = .fillProportionally
-        stack.alignment = .leading
-        stack.axis = .vertical
-        stack.spacing = UX.connectionDetailsStackSpacing
+    private var connectionDetailsLabelsContainer: UIView = .build { view in
+        view.backgroundColor = .clear
     }
 
     private var connectionDetailsTitleLabel: UILabel = .build { label in
@@ -60,8 +56,8 @@ final class TrackingProtectionConnectionDetailsView: UIView {
         self.layer.cornerRadius = TPMenuUX.UX.viewCornerRadius
         self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         self.layer.masksToBounds = true
-        connectionDetailsLabelsContainer.addArrangedSubview(connectionDetailsTitleLabel)
-        connectionDetailsLabelsContainer.addArrangedSubview(connectionDetailsStatusLabel)
+        connectionDetailsLabelsContainer.addSubview(connectionDetailsTitleLabel)
+        connectionDetailsLabelsContainer.addSubview(connectionDetailsStatusLabel)
         connectionDetailsContentView.addSubviews(foxStatusImage, connectionDetailsLabelsContainer)
         self.addSubview(connectionDetailsContentView)
     }
@@ -85,6 +81,25 @@ final class TrackingProtectionConnectionDetailsView: UIView {
                                                               constant: TPMenuUX.UX.connectionDetailsHeaderMargins),
             connectionDetailsContentView.bottomAnchor.constraint(equalTo: self.bottomAnchor,
                                                                  constant: -TPMenuUX.UX.connectionDetailsHeaderMargins / 2),
+
+            // Labels
+            connectionDetailsTitleLabel.leadingAnchor.constraint(equalTo: connectionDetailsLabelsContainer.leadingAnchor),
+            connectionDetailsTitleLabel.trailingAnchor.constraint(equalTo: connectionDetailsLabelsContainer.trailingAnchor),
+            connectionDetailsTitleLabel.bottomAnchor.constraint(
+                equalTo: connectionDetailsLabelsContainer.centerYAnchor,
+                constant: -UX.connectionDetailsLabelsVerticalSpacing / 2
+            ),
+
+            connectionDetailsStatusLabel.leadingAnchor.constraint(equalTo: connectionDetailsLabelsContainer.leadingAnchor),
+            connectionDetailsStatusLabel.trailingAnchor.constraint(equalTo: connectionDetailsLabelsContainer.trailingAnchor),
+            connectionDetailsStatusLabel.topAnchor.constraint(
+                equalTo: connectionDetailsLabelsContainer.centerYAnchor,
+                constant: UX.connectionDetailsLabelsVerticalSpacing / 2
+            ),
+            connectionDetailsStatusLabel.bottomAnchor.constraint(
+                lessThanOrEqualTo: connectionDetailsLabelsContainer.bottomAnchor
+            ),
+
             // Image
             foxStatusImage.leadingAnchor.constraint(
                 equalTo: connectionDetailsContentView.leadingAnchor,

@@ -397,10 +397,17 @@ class TrackingProtectionViewController: UIViewController,
         baseView.addSubviews(settingsLinkButton)
 
         let protectionConstraints = [
-            settingsLinkButton.leadingAnchor.constraint(equalTo: baseView.leadingAnchor),
-            settingsLinkButton.trailingAnchor.constraint(equalTo: baseView.trailingAnchor),
-            settingsLinkButton.topAnchor.constraint(equalTo: clearCookiesButton.bottomAnchor,
-                                                    constant: TPMenuUX.UX.horizontalMargin),
+            settingsLinkButton.leadingAnchor.constraint(
+                equalTo: baseView.leadingAnchor,
+                constant: TPMenuUX.UX.horizontalMargin
+            ),
+            settingsLinkButton.trailingAnchor.constraint(
+                equalTo: baseView.trailingAnchor
+            ),
+            settingsLinkButton.topAnchor.constraint(
+                equalTo: clearCookiesButton.bottomAnchor,
+                constant: TPMenuUX.UX.horizontalMargin
+            ),
             settingsLinkButton.bottomAnchor.constraint(
                 equalTo: baseView.bottomAnchor,
                 constant: -TPMenuUX.UX.settingsLinkButtonBottomSpacing
