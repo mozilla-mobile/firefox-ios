@@ -8,7 +8,7 @@ import UIKit
 import ComponentLibrary
 
 class TermsOfServiceViewController: UIViewController,
-                                    Notifiable {
+                                    Themeable {
     struct UX {
         static let horizontalMargin: CGFloat = 24
         static let logoIconSize: CGFloat = 160
@@ -20,6 +20,8 @@ class TermsOfServiceViewController: UIViewController,
     // MARK: - Properties
     var windowUUID: WindowUUID
     var themeManager: ThemeManager
+    var themeObserver: (any NSObjectProtocol)?
+    var currentWindowUUID: Common.WindowUUID?
     var notificationCenter: any Common.NotificationProtocol = NotificationCenter.default
 
     // MARK: - UI elements
@@ -61,14 +63,18 @@ class TermsOfServiceViewController: UIViewController,
         self.themeManager = themeManager
         super.init(nibName: nil, bundle: nil)
 
-        setupNotifications(forObserver: self, observing: [.ThemeDidChange])
-        configure()
         setupLayout()
         applyTheme()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - View cycles
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        listenForThemeChange(view)
     }
 
     // MARK: - View setup
@@ -171,21 +177,12 @@ class TermsOfServiceViewController: UIViewController,
         agreementContent.addArrangedSubview(agreementLabel)
     }
 
-    // MARK: - Notifications
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .ThemeDidChange:
-            applyTheme()
-            configure()
-        default: break
-        }
-    }
-
     // MARK: - Themable
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer2
         titleLabel.textColor = theme.colors.textPrimary
         confirmationButton.applyTheme(theme: theme)
+        configure()
     }
 }
