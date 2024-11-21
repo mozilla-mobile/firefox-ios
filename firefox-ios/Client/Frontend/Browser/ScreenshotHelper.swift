@@ -36,18 +36,27 @@ class ScreenshotHelper {
 
         /// Added check for native error pages.
         let isNativeErrorPage = controller?.contentContainer.hasNativeErrorPage ?? false
+
         /// If the tab is the homepage, take a screenshot of the homepage view.
         /// This is done by accessing the content view from the content container.
         /// The screenshot is then set for the tab, and a TabEvent is posted to indicate
         /// that a screenshot has been set for the homepage.
-        if tab.isFxHomeTab || isNativeErrorPage {
+        if tab.isFxHomeTab {
             if let homeview = controller?.contentContainer.contentView {
                 let screenshot = homeview.screenshot(quality: UIConstants.ActiveScreenshotQuality)
                 tab.hasHomeScreenshot = true
                 tab.setScreenshot(screenshot)
                 TabEvent.post(.didSetScreenshot(isHome: true), for: tab)
             }
-        // Handle webview screenshots
+            // Handle error page screenshots
+        } else if isNativeErrorPage {
+            if let view = controller?.contentContainer.contentView {
+                let screenshot = view.screenshot(quality: UIConstants.ActiveScreenshotQuality)
+                tab.hasHomeScreenshot = false
+                tab.setScreenshot(screenshot)
+                TabEvent.post(.didSetScreenshot(isHome: false), for: tab)
+            }
+            // Handle webview screenshots
         } else {
             let configuration = WKSnapshotConfiguration()
             // This is for a bug in certain iOS 13 versions, snapshots cannot be taken
