@@ -55,8 +55,7 @@ class TermsOfServiceViewController: UIViewController,
     // MARK: - Initializers
     init(
         windowUUID: WindowUUID,
-        themeManager: ThemeManager = AppContainer.shared.resolve(),
-        notificationCenter: NotificationProtocol = NotificationCenter.default
+        themeManager: ThemeManager = AppContainer.shared.resolve()
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
