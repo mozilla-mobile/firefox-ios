@@ -7,6 +7,7 @@ import UIKit
 import Storage
 import Shared
 import SiteImageView
+import Account
 
 import class MozillaAppServices.BookmarkItemData
 import class MozillaAppServices.BookmarkSeparatorData
@@ -319,7 +320,8 @@ class BookmarksViewController: SiteTableViewController,
         a11yEmptyStateScrollView.isHidden = !viewModel.bookmarkNodes.isEmpty
         if !a11yEmptyStateScrollView.isHidden {
             let isRoot = viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID
-            emptyStateView.configure(isRoot: isRoot)
+            let isSignedIn = RustFirefoxAccounts.shared.userProfile != nil
+            emptyStateView.configure(isRoot: isRoot, isSignedIn: isSignedIn)
         }
     }
 

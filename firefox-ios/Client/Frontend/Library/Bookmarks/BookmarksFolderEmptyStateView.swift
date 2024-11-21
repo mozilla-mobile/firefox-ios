@@ -4,15 +4,18 @@
 
 import Foundation
 import Common
+import ComponentLibrary
 
 final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
     private struct UX {
-        static let a11yTopMargin: CGFloat = 16
+        static let A11yTopMargin: CGFloat = 16
         static let TitleTopMargin: CGFloat = 16
         static let BodyTopMargin: CGFloat = 8
+        static let ButtonTopMargin: CGFloat = 16
         static let ContentLeftRightMargins: CGFloat = 16
         static let StackViewWidthMultiplier: CGFloat = 0.9
-        static let imageWidth: CGFloat = 200
+        static let ImageWidth: CGFloat = 200
+        static let SignInButtonMaxWidth: CGFloat = 306
     }
 
     private lazy var logoImage: UIImageView = .build { imageView in
@@ -33,6 +36,15 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
         label.adjustsFontForContentSizeCategory = true
     }
 
+    private lazy var signInButton: PrimaryRoundedButton = .build { button in
+        let viewModel = PrimaryRoundedButtonViewModel(
+            title: .Bookmarks.EmptyState.Root.ButtonTitle,
+            a11yIdentifier: AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.EmptyState.signInButton
+        )
+        button.configure(viewModel: viewModel)
+        button.addTarget(self, action: #selector(self.didTapSignIn), for: .touchUpInside)
+    }
+
     private lazy var stackViewWrapper: UIStackView = .build { stackView in
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
@@ -50,10 +62,11 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(isRoot: Bool) {
+    func configure(isRoot: Bool, isSignedIn: Bool) {
         titleLabel.text = isRoot ? .Bookmarks.EmptyState.Root.Title : .Bookmarks.EmptyState.Nested.Title
         bodyLabel.text = isRoot ? .Bookmarks.EmptyState.Root.Body : .Bookmarks.EmptyState.Nested.Body
         logoImage.image = UIImage(named: isRoot ? ImageIdentifiers.noBookmarksInRoot : ImageIdentifiers.noBookmarksInFolder)
+        signInButton.isHidden = !isRoot || isSignedIn
     }
 
     private func setupLayout() {
@@ -62,11 +75,13 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
         stackViewWrapper.addArrangedSubview(titleLabel)
         stackViewWrapper.setCustomSpacing(UX.BodyTopMargin, after: titleLabel)
         stackViewWrapper.addArrangedSubview(bodyLabel)
+        stackViewWrapper.setCustomSpacing(UX.ButtonTopMargin, after: bodyLabel)
+        stackViewWrapper.addArrangedSubview(signInButton)
         addSubview(stackViewWrapper)
 
         let aspectRatio = (logoImage.image?.size.height ?? 1) / (logoImage.image?.size.width ?? 1)
         NSLayoutConstraint.activate([
-            stackViewWrapper.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: UX.a11yTopMargin),
+            stackViewWrapper.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: UX.A11yTopMargin),
             stackViewWrapper.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
             stackViewWrapper.centerXAnchor.constraint(equalTo: centerXAnchor),
             stackViewWrapper.centerYAnchor.constraint(equalTo: centerYAnchor),
@@ -82,14 +97,21 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
             bodyLabel.trailingAnchor.constraint(
                 equalTo: stackViewWrapper.trailingAnchor, constant: -UX.ContentLeftRightMargins),
 
-            logoImage.widthAnchor.constraint(equalToConstant: UX.imageWidth),
+            signInButton.widthAnchor.constraint(equalToConstant: UX.SignInButtonMaxWidth),
+
+            logoImage.widthAnchor.constraint(equalToConstant: UX.ImageWidth),
             logoImage.heightAnchor.constraint(equalTo: logoImage.widthAnchor, multiplier: aspectRatio)
         ])
     }
+
+    // MARK: Actions
+     @objc
+     private func didTapSignIn() {}
 
     // MARK: ThemeApplicable
     func applyTheme(theme: Theme) {
         titleLabel.textColor = theme.colors.textPrimary
         bodyLabel.textColor = theme.colors.textPrimary
+        signInButton.applyTheme(theme: theme)
     }
 }
