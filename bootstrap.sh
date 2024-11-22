@@ -46,6 +46,3 @@ cp -r .githooks/* .git/hooks/
 
 # Make the hooks are executable
 chmod +x .git/hooks/*
-
-# Run and update content blocker
-./content_blocker_update.sh
