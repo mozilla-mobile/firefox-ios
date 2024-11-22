@@ -267,6 +267,15 @@ class RustAutofillTests: XCTestCase {
     }
 
     func testUpdateCreditCard() async throws {
+        let creditCard = try await addCreditCard()
+        let card = try await getCreditCard(id: creditCard.guid)
+        let updatedCreditCard = createUnencryptedCreditCardFields(creditCard: creditCard)
+        let result = try await updateCreditCard(id: creditCard.guid, creditCard: updatedCreditCard)
+        let updatedCardVal = try await getCreditCard(id: creditCard.guid)
+
+        XCTAssertEqual(creditCard.guid, card.guid)
+        XCTAssert(result)
+        XCTAssertEqual(updatedCardVal.ccExpYear, updatedCreditCard.ccExpYear)
     }
 
     private func createUnencryptedCreditCardFields(creditCard: CreditCard) -> UnencryptedCreditCardFields {
