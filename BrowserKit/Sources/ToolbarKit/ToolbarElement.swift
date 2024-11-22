@@ -26,6 +26,9 @@ public struct ToolbarElement: Equatable {
     /// Indicates if the element is in the selected state and should be displayed as highlighted.
     let isSelected: Bool
 
+    /// Indicates whether the toolbar element's button should be retained and reused.
+    let shouldRetainReference: Bool
+
     /// Indicates that there is an associated contextual hint
     let contextualHintType: String?
 
@@ -63,6 +66,7 @@ public struct ToolbarElement: Equatable {
                 isEnabled: Bool,
                 isFlippedForRTL: Bool = false,
                 isSelected: Bool = false,
+                shouldRetainReference: Bool = false,
                 contextualHintType: String? = nil,
                 a11yLabel: String,
                 a11yHint: String?,
@@ -79,6 +83,7 @@ public struct ToolbarElement: Equatable {
         self.isEnabled = isEnabled
         self.isFlippedForRTL = isFlippedForRTL
         self.isSelected = isSelected
+        self.shouldRetainReference = shouldRetainReference
         self.contextualHintType = contextualHintType
         self.onSelected = onSelected
         self.onLongPress = onLongPress

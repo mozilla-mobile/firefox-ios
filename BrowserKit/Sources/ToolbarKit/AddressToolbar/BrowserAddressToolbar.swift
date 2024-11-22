@@ -34,6 +34,7 @@ public class BrowserAddressToolbar: UIView,
     private weak var toolbarDelegate: AddressToolbarDelegate?
     private var theme: Theme?
     private var droppableUrl: URL?
+    private var cachedButtonReferences = [String: ToolbarButton]()
 
     private lazy var toolbarContainerView: UIView = .build()
     private lazy var navigationActionStack: UIStackView = .build()
@@ -258,8 +259,16 @@ public class BrowserAddressToolbar: UIView,
 
     private func updateActionStack(stackView: UIStackView, toolbarElements: [ToolbarElement]) {
         stackView.removeAllArrangedViews()
+
         toolbarElements.forEach { toolbarElement in
-            let button = toolbarElement.numberOfTabs != nil ? TabNumberButton() : ToolbarButton()
+            let button: ToolbarButton
+            if let cachedButton = cachedButtonReferences[toolbarElement.a11yId], toolbarElement.shouldRetainReference {
+                button = cachedButton
+            } else {
+                button = toolbarElement.numberOfTabs != nil ? TabNumberButton() : ToolbarButton()
+                if toolbarElement.shouldRetainReference { cachedButtonReferences[toolbarElement.a11yId] = button }
+            }
+
             button.configure(element: toolbarElement)
             stackView.addArrangedSubview(button)
 

@@ -32,6 +32,7 @@ struct ToolbarActionState: Equatable, FeatureFlaggable {
     var isFlippedForRTL = false
     var isEnabled: Bool
     var isSelected = false
+    var shouldRetainReference = false
     var contextualHintType: String?
     var a11yLabel: String
     var a11yHint: String?
