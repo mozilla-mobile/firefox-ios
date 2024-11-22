@@ -78,6 +78,9 @@ class IntegrationTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["ACCOUNT"], timeout: TIMEOUT_LONG)
         mozWaitForElementToNotExist(app.staticTexts["Sync and Save Data"])
         sleep(5)
+        if app.tables.staticTexts["Sync is offline"].exists {
+            app.tables.staticTexts["Sync is offline"].tap()
+        }
         if app.tables.staticTexts["Sync Now"].exists {
             app.tables.staticTexts["Sync Now"].tap()
         }
@@ -146,7 +149,7 @@ class IntegrationTests: BaseTestCase {
         mozWaitForElementToExist(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"])
         XCTAssertEqual(
             app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as? String,
-            "Fennec (administrator) on iOS"
+            "Fennec (cso) on iOS"
         )
 
         // Sync again just to make sure to sync after new name is shown
