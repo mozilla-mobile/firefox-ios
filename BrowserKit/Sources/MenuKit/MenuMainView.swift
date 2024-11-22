@@ -43,8 +43,8 @@ public final class MenuMainView: UIView,
 
             tableView.topAnchor.constraint(equalTo: accountHeaderView.bottomAnchor),
             tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: -UX.horizontalTableViewMargin),
-            tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: UX.horizontalTableViewMargin)
+            tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: self.trailingAnchor)
         ])
     }
 
