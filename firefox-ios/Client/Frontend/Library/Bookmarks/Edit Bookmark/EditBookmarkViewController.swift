@@ -13,12 +13,15 @@ class EditBookmarkViewController: UIViewController,
     private enum Section: Int, CaseIterable {
         case bookmark
         case folder
+        case newFolder
 
         var allowsSelection: Bool {
             return switch self {
             case .bookmark:
                 false
             case .folder:
+                true
+            case .newFolder:
                 true
             }
         }
@@ -167,6 +170,8 @@ class EditBookmarkViewController: UIViewController,
             }
             configureParentFolderCell(cell, folder: folder)
             return cell
+        case .newFolder:
+            return UITableViewCell()
         }
     }
 
@@ -205,6 +210,8 @@ class EditBookmarkViewController: UIViewController,
             1
         case .folder:
             viewModel.folderStructures.count
+        case .newFolder:
+            1
         }
     }
 
