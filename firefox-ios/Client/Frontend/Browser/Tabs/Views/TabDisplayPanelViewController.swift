@@ -7,10 +7,10 @@ import Redux
 import Storage
 import UIKit
 
-class TabDisplayPanel: UIViewController,
-                       Themeable,
-                       EmptyPrivateTabsViewDelegate,
-                       StoreSubscriber {
+class TabDisplayPanelViewController: UIViewController,
+                                     Themeable,
+                                     EmptyPrivateTabsViewDelegate,
+                                     StoreSubscriber {
     typealias SubscriberStateType = TabsPanelState
 
     let panelType: TabTrayPanelType
