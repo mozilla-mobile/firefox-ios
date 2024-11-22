@@ -190,16 +190,7 @@ class TrackingProtectionViewController: UIViewController,
     func newState(state: TrackingProtectionState) {
         trackingProtectionState = state
         if let navigateTo = state.navigateTo {
-            switch navigateTo {
-            case .home:
-                navigationController?.popToRootViewController(animated: true)
-            case .back:
-                navigationController?.popViewController(animated: true)
-            case .close:
-                enhancedTrackingProtectionMenuDelegate?.didFinish()
-            case .settings:
-                enhancedTrackingProtectionMenuDelegate?.settingsOpenPage(settings: .contentBlocker)
-            }
+            // TODO: FXIOS-10657 connect the ETP navigation with the BVC general navigation
         }
         if let displayView = state.displayView {
             switch displayView {
