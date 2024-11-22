@@ -67,6 +67,10 @@ class EditBookmarkViewModel {
         }
     }
 
+    func createNewFolder() {
+        
+    }
+
     private func getFolderStructure(_ selectedFolder: Folder) {
         Task { @MainActor [weak self] in
             let folders = await self?.folderFetcher.fetchFolders()
