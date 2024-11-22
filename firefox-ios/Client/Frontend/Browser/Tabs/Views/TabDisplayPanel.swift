@@ -7,6 +7,8 @@ import Redux
 import Storage
 import UIKit
 
+// Laurie - thats the view controller
+// rename ? Ask team
 class TabDisplayPanel: UIViewController,
                        Themeable,
                        EmptyPrivateTabsViewDelegate,
@@ -62,6 +64,10 @@ class TabDisplayPanel: UIViewController,
         listenForThemeChange(view)
         applyTheme()
         subscribeToRedux()
+
+        if !tabDisplayView.shouldHideInactiveTabs {
+            InactiveTabsTelemetry().sectionShown()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {

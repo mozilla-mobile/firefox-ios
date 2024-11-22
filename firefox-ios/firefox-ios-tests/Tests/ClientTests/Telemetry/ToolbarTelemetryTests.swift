@@ -16,6 +16,11 @@ final class ToolbarTelemetryTests: XCTestCase {
         subject = ToolbarTelemetry()
     }
 
+    override func tearDown() {
+        subject = nil
+        super.tearDown()
+    }
+
     func testRecordToolbarWhenQrCodeTappedThenGleanIsCalled() throws {
         subject?.qrCodeButtonTapped(isPrivate: true)
         testEventMetricRecordingSuccess(metric: GleanMetrics.Toolbar.qrScanButtonTapped)

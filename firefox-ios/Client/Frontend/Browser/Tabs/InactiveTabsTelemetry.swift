@@ -7,7 +7,7 @@ import Glean
 
 // Laurie: TODO unit tests
 struct InactiveTabsTelemetry {
-    private enum EventExtraKey: String {
+    enum EventExtraKey: String {
         case inactiveTabsCollapsed = "collapsed"
         case inactiveTabsExpanded = "expanded"
     }
@@ -28,7 +28,7 @@ struct InactiveTabsTelemetry {
         GleanMetrics.InactiveTabsTray.openInactiveTab.add()
     }
 
-    func section(hasExpanded: Bool) {
+    func sectionToggled(hasExpanded: Bool) {
         let hasExpandedEvent: EventExtraKey = hasExpanded ? .inactiveTabsExpanded : .inactiveTabsCollapsed
         let expandedExtras = GleanMetrics.InactiveTabsTray.ToggleInactiveTabTrayExtra(toggleType: hasExpandedEvent.rawValue)
 

@@ -148,7 +148,7 @@ class TabManagerMiddleware {
 
         case TabPanelViewActionType.selectTab:
             guard let tabUUID = action.tabUUID else { return }
-            selectTab(for: tabUUID, uuid: action.windowUUID)
+            selectTab(for: tabUUID, uuid: action.windowUUID, isInactiveTab: action.isInactiveTab ?? false)
 
         case TabPanelViewActionType.closeAllInactiveTabs:
             closeAllInactiveTabs(state: state, uuid: action.windowUUID)
@@ -166,6 +166,15 @@ class TabManagerMiddleware {
         case TabPanelViewActionType.learnMorePrivateMode:
             guard let urlRequest = action.urlRequest else { return }
             didTapLearnMoreAboutPrivate(with: urlRequest, uuid: action.windowUUID)
+
+        case TabPanelViewActionType.toggleInactiveTabs:
+            guard let tabState = state.screenState(TabsPanelState.self,
+                                                   for: .tabsPanel,
+                                                   window: action.windowUUID)
+            else { return }
+            let expanded = tabState.isInactiveTabsExpanded
+            inactiveTabTelemetry.sectionToggled(hasExpanded: expanded)
+            break
 
         default:
             break
@@ -590,7 +599,7 @@ class TabManagerMiddleware {
         addNewTab(with: urlRequest, isPrivate: true, showOverlay: false, for: uuid)
     }
 
-    private func selectTab(for tabUUID: TabUUID, uuid: WindowUUID) {
+    private func selectTab(for tabUUID: TabUUID, uuid: WindowUUID, isInactiveTab: Bool) {
         let tabManager = tabManager(for: uuid)
         guard let tab = tabManager.getTabForUUID(uuid: tabUUID) else { return }
 
@@ -599,6 +608,10 @@ class TabManagerMiddleware {
         let action = TabTrayAction(windowUUID: uuid,
                                    actionType: TabTrayActionType.dismissTabTray)
         store.dispatch(action)
+
+        if isInactiveTab {
+            inactiveTabTelemetry.tabOpened()
+        }
     }
 
     private func tabManager(for uuid: WindowUUID) -> TabManager {

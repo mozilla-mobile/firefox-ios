@@ -28,10 +28,7 @@ class TabDisplayView: UIView,
 
     private var dataSource: TabDisplayDiffableDataSource?
 
-    private var shouldHideInactiveTabs: Bool {
-        // Laurie: InactiveTabsTelemetry.sectionShown()
-        // Question: We decide if we show the section here. I need to log if the section is shown
-        // but doesn't seem like the proper place to send telemetry when we use shouldHideInactiveTabs
+    var shouldHideInactiveTabs: Bool {
         guard !tabsState.isPrivateMode else { return true }
         return tabsState.inactiveTabs.isEmpty
     }
@@ -293,13 +290,11 @@ class TabDisplayView: UIView,
         if let selectedItem = dataSource?.itemIdentifier(for: indexPath) {
             switch selectedItem {
             case .inactiveTab(let inactiveTabsModel):
-                // Laurie - inactiveTabsTelemetry.tabOpened()
-                // Question: Should this go in the middleware? If so, can I add a parameter on
-                // the TabPanelViewAction to determine the selectTab comes from the inactive tab section
                 inactiveTabsTelemetry.tabOpened()
                 let tabUUID = inactiveTabsModel.tabUUID
                 let action = TabPanelViewAction(panelType: panelType,
                                                 tabUUID: tabUUID,
+                                                isInactiveTab: true,
                                                 windowUUID: windowUUID,
                                                 actionType: TabPanelViewActionType.selectTab)
                 store.dispatch(action)
