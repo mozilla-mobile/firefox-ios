@@ -21,8 +21,8 @@ class TermsOfServiceViewController: UIViewController,
     var windowUUID: WindowUUID
     var themeManager: ThemeManager
     var themeObserver: (any NSObjectProtocol)?
-    var currentWindowUUID: Common.WindowUUID?
-    var notificationCenter: any Common.NotificationProtocol = NotificationCenter.default
+    var currentWindowUUID: UUID? { windowUUID }
+    var notificationCenter: NotificationProtocol
 
     // MARK: - UI elements
     private lazy var contentScrollView: UIScrollView = .build()
@@ -40,6 +40,7 @@ class TermsOfServiceViewController: UIViewController,
 
     private lazy var logoImage: UIImageView = .build { logoImage in
         logoImage.image = UIImage(named: ImageIdentifiers.logo)
+        logoImage.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfService.logo
     }
 
     private lazy var confirmationButton: PrimaryRoundedButton = .build { [weak self] button in
@@ -57,10 +58,12 @@ class TermsOfServiceViewController: UIViewController,
     // MARK: - Initializers
     init(
         windowUUID: WindowUUID,
-        themeManager: ThemeManager = AppContainer.shared.resolve()
+        themeManager: ThemeManager = AppContainer.shared.resolve(),
+        notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
         self.windowUUID = windowUUID
         self.themeManager = themeManager
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
 
         setupLayout()
