@@ -15,6 +15,8 @@ class MenuTableView: UIView,
                      UITableViewDataSource, ThemeApplicable {
     private struct UX {
         static let topPadding: CGFloat = 12
+        static let tableViewMargin: CGFloat = 16
+        static let distanceBetweenSections: CGFloat = 32
     }
 
     private var tableView: UITableView
@@ -25,6 +27,8 @@ class MenuTableView: UIView,
 
     override init(frame: CGRect) {
         tableView = UITableView(frame: .zero, style: .insetGrouped)
+        tableView.layoutMargins = UIEdgeInsets(top: 0, left: UX.tableViewMargin, bottom: 0, right: UX.tableViewMargin)
+        tableView.sectionFooterHeight = 0
         menuData = []
         super.init(frame: .zero)
         setupView()
@@ -69,7 +73,7 @@ class MenuTableView: UIView,
         _ tableView: UITableView,
         heightForHeaderInSection section: Int
     ) -> CGFloat {
-        return section == 0 ? UX.topPadding : UITableView.automaticDimension
+        return section == 0 ? UX.topPadding : UX.distanceBetweenSections
     }
 
     func tableView(
