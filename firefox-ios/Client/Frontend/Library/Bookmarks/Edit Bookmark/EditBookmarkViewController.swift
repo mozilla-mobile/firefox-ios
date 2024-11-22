@@ -171,7 +171,13 @@ class EditBookmarkViewController: UIViewController,
             configureParentFolderCell(cell, folder: folder)
             return cell
         case .newFolder:
-            return UITableViewCell()
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
+                                                           for: indexPath) as? OneLineTableViewCell
+            else {
+                return UITableViewCell()
+            }
+            configureNewFolderCell(cell)
+            return cell
         }
     }
 
@@ -195,6 +201,16 @@ class EditBookmarkViewController: UIViewController,
         let isFolderSelected = folder == viewModel.selectedFolder
         let canShowAccessoryView = viewModel.shouldShowDisclosureIndicator(isFolderSelected: isFolderSelected)
         cell.accessoryType = canShowAccessoryView ? .checkmark : .none
+        cell.selectionStyle = .default
+        cell.applyTheme(theme: theme)
+    }
+
+    private func configureNewFolderCell(_ cell: OneLineTableViewCell) {
+        cell.titleLabel.text = .BookmarksNewFolder
+        let folderImage = UIImage(named: StandardImageIdentifiers.Large.newFolder)?.withRenderingMode(.alwaysTemplate)
+        cell.leftImageView.image = folderImage
+        cell.indentationLevel = 0
+        cell.accessoryType = .none
         cell.selectionStyle = .default
         cell.applyTheme(theme: theme)
     }
