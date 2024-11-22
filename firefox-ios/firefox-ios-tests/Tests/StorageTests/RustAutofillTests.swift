@@ -239,23 +239,6 @@ class RustAutofillTests: XCTestCase {
         XCTAssertEqual(updatedCardVal.ccExpYear, updatedCreditCard.ccExpYear)
     }
 
-    private func getCreditCardAndMakeAssertionsForCheckUpdateCard(id: String,
-                                                                  updatedCreditCard: UnencryptedCreditCardFields,
-                                                                  expectation: XCTestExpectation) {
-        self.autofill.getCreditCard(id: id) { updatedCardVal, err in
-            do {
-                let updatedCardVal = try XCTUnwrap(updatedCardVal)
-
-                XCTAssertNil(err)
-                XCTAssertEqual(updatedCardVal.ccExpYear, updatedCreditCard.ccExpYear)
-                expectation.fulfill()
-            } catch {
-                XCTFail("The updatedCardVal variable should not be nil.")
-                expectation.fulfill()
-            }
-        }
-    }
-
     func testDeleteCreditCard() {
         let expectationAddCard = expectation(description: "completed add card")
         let expectationGetCard = expectation(description: "completed getting card")
