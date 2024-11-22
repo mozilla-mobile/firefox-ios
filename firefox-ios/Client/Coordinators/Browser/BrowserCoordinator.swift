@@ -94,6 +94,9 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - LaunchCoordinatorDelegate
+    func didFinishTermsOfService(from coordinator: LaunchCoordinator) {
+        didFinishLaunch(from: coordinator)
+    }
 
     func didFinishLaunch(from coordinator: LaunchCoordinator) {
         router.dismiss(animated: true, completion: nil)

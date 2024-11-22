@@ -100,6 +100,8 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
         startBrowser(with: nil)
     }
 
+    func finishedLoadingLaunchOrder() { }
+
     // MARK: - Helper methods
 
     private func startLaunch(with launchType: LaunchType) {
@@ -138,6 +140,10 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
     }
 
     // MARK: - LaunchCoordinatorDelegate
+    func didFinishTermsOfService(from coordinator: LaunchCoordinator) {
+        router.dismiss(animated: true)
+        remove(child: coordinator)
+    }
 
     func didFinishLaunch(from coordinator: LaunchCoordinator) {
         router.dismiss(animated: true)

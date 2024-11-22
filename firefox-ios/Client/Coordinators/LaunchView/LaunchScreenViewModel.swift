@@ -9,13 +9,18 @@ import Shared
 protocol LaunchFinishedLoadingDelegate: AnyObject {
     func launchWith(launchType: LaunchType)
     func launchBrowser()
+    func finishedLoadingLaunchOrder()
 }
 
 class LaunchScreenViewModel {
+    private var termsOfServiceManager: TermsOfServiceManager
     private var introScreenManager: IntroScreenManager
     private var updateViewModel: UpdateViewModel
     private var surveySurfaceManager: SurveySurfaceManager
     private var profile: Profile
+
+    // order of screens to showing at launch
+    private(set) var launchOrder: [LaunchType]?
 
     weak var delegate: LaunchFinishedLoadingDelegate?
 
@@ -24,6 +29,7 @@ class LaunchScreenViewModel {
          messageManager: GleanPlumbMessageManagerProtocol = Experiments.messaging,
          onboardingModel: OnboardingViewModel = NimbusOnboardingFeatureLayer().getOnboardingModel(for: .upgrade)) {
         self.profile = profile
+        self.termsOfServiceManager = TermsOfServiceManager(prefs: profile.prefs)
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
         let telemetryUtility = OnboardingTelemetryUtility(with: onboardingModel)
         self.updateViewModel = UpdateViewModel(profile: profile,
@@ -45,19 +51,36 @@ class LaunchScreenViewModel {
         await loadLaunchType(appVersion: appVersion)
     }
 
+    func loadNextLaunchType() {
+        guard let launches = launchOrder else { return }
+
+        if let launchType = launches.first {
+            launchOrder?.removeFirst()
+            delegate?.launchWith(launchType: launchType)
+        } else {
+            self.delegate?.launchBrowser()
+        }
+    }
+
     private func loadLaunchType(appVersion: String) async {
-        var launchType: LaunchType?
+        var launchOrder = [LaunchType]()
+
         if introScreenManager.shouldShowIntroScreen {
-            launchType = .intro(manager: introScreenManager)
+            if termsOfServiceManager.shouldShowScreen {
+                launchOrder.append(.termsOfService(manager: termsOfServiceManager))
+            }
+
+            launchOrder.append(.intro(manager: introScreenManager))
         } else if updateViewModel.shouldShowUpdateSheet(appVersion: appVersion),
                   await updateViewModel.hasSyncableAccount() {
-            launchType = .update(viewModel: updateViewModel)
+            launchOrder.append(.update(viewModel: updateViewModel))
         } else if surveySurfaceManager.shouldShowSurveySurface {
-            launchType = .survey(manager: surveySurfaceManager)
+            launchOrder.append(.survey(manager: surveySurfaceManager))
         }
 
-        if let launchType = launchType {
-            self.delegate?.launchWith(launchType: launchType)
+        if !launchOrder.isEmpty {
+            self.launchOrder = launchOrder
+            self.delegate?.finishedLoadingLaunchOrder()
         } else {
             self.delegate?.launchBrowser()
         }

@@ -48,11 +48,13 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
             try await delayStart()
             await startLoading()
         }
+
+        setupLaunchScreen()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupLaunchScreen()
+        viewModel.loadNextLaunchType()
     }
 
     // MARK: - Loading
@@ -90,6 +92,10 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
         mainQueue.async {
             self.coordinator?.launchBrowser()
         }
+    }
+
+    func finishedLoadingLaunchOrder() {
+        viewModel.loadNextLaunchType()
     }
 
     // MARK: - Splash Screen
