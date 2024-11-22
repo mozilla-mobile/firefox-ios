@@ -952,12 +952,11 @@ class BrowserCoordinator: BaseCoordinator,
         )
         store.dispatch(action)
 
-        var bottomSheetVM = BottomSheetViewModel(
+        let bottomSheetVM = BottomSheetViewModel(
             shouldDismissForTapOutside: true,
             closeButtonA11yLabel: .PasswordGenerator.CloseButtonA11yLabel,
             closeButtonA11yIdentifier: AccessibilityIdentifiers.PasswordGenerator.closeButton
         )
-        bottomSheetVM.dismissCompletion = { tab.webView?.accessoryView.reloadViewFor(.passwordGenerator) }
 
         let bottomSheetVC = BottomSheetViewController(
             viewModel: bottomSheetVM,
@@ -966,7 +965,6 @@ class BrowserCoordinator: BaseCoordinator,
             windowUUID: windowUUID
         )
 
-        passwordGenVC.dismissDelegate = bottomSheetVC
         present(bottomSheetVC)
     }
 

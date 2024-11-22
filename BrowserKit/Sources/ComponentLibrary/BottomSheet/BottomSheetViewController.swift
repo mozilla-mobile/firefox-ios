@@ -291,13 +291,7 @@ public class BottomSheetViewController: UIViewController,
                 self.view.layoutIfNeeded()
                 self.view.backgroundColor = .clear
             }, completion: { _ in
-                self.dismiss(animated: false, completion: {
-                    if completion != nil {
-                        completion?()
-                    } else {
-                        self.viewModel.dismissCompletion?()
-                    }
-                })
+                self.dismiss(animated: false, completion: completion)
             }
         )
     }
