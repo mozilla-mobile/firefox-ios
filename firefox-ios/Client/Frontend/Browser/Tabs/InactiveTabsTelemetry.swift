@@ -5,7 +5,6 @@
 import Foundation
 import Glean
 
-// Laurie: TODO unit tests
 struct InactiveTabsTelemetry {
     enum EventExtraKey: String {
         case inactiveTabsCollapsed = "collapsed"

@@ -7,8 +7,6 @@ import Redux
 import Storage
 import UIKit
 
-// Laurie - thats the view controller
-// rename ? Ask team
 class TabDisplayPanel: UIViewController,
                        Themeable,
                        EmptyPrivateTabsViewDelegate,
