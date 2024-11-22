@@ -172,7 +172,7 @@ class OneLineTableViewCell: UITableViewCell,
             titleLabel.textColor = theme.colors.textPrimary
         case .newFolder:
             accessoryView?.tintColor = theme.colors.iconSecondary
-            leftImageView.tintColor = theme.colors.textPrimary
+            leftImageView.tintColor = theme.colors.textAccent
             titleLabel.textColor = theme.colors.textAccent
         }
     }
