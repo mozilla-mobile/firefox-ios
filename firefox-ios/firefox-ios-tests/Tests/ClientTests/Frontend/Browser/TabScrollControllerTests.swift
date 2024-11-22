@@ -27,7 +27,6 @@ final class TabScrollControllerTests: XCTestCase {
         subject = TabScrollingController(windowUUID: windowUUID, featureFlagManager: featureFlagManager)
         tab = Tab(profile: mockProfile, windowUUID: windowUUID)
         mockGesture = UIPanGestureRecognizerMock()
-        trackForMemoryLeaks(subject)
     }
 
     override func tearDown() {
@@ -133,6 +132,49 @@ final class TabScrollControllerTests: XCTestCase {
         setupTabScroll()
 
         XCTAssertNil(tab.onLoading)
+    }
+
+    func testScrollViewWillBeginZooming_removesPullRefresh_whenPullRefreshFeatureEnabled() throws {
+        featureFlagManager.overrideFeature(.pullToRefreshRefactor, value: true)
+        setupTabScroll()
+
+        let scrollView = try XCTUnwrap(tab.webView?.scrollView)
+        subject.scrollViewWillBeginZooming(scrollView, with: nil)
+
+        let pullRefresh = scrollView.subviews.first { $0 is PullRefreshView }
+        XCTAssertNil(pullRefresh)
+    }
+
+    func testScrollViewWillBeginZooming_removesUIRefreshControll_whenPullRefreshFeatureDisabled() throws {
+        featureFlagManager.overrideFeature(.pullToRefreshRefactor, value: false)
+        setupTabScroll()
+
+        let scrollView = try XCTUnwrap(tab.webView?.scrollView)
+        subject.scrollViewWillBeginZooming(scrollView, with: nil)
+
+        XCTAssertNil(scrollView.refreshControl)
+    }
+
+    func testScrollViewDidEndZooming_addsPullRefresh_whenPullRefreshFeatureEnabled() throws {
+        featureFlagManager.overrideFeature(.pullToRefreshRefactor, value: true)
+        setupTabScroll()
+
+        let scrollView = try XCTUnwrap(tab.webView?.scrollView)
+        scrollView.scrollRectToVisible(.zero, animated: true)
+        subject.scrollViewDidEndZooming(scrollView, with: nil, atScale: 0)
+
+        let pullRefresh = scrollView.subviews.first { $0 is PullRefreshView }
+        XCTAssertNotNil(pullRefresh)
+    }
+
+    func testScrollViewDidEndZooming_addsUIRefreshControll_whenPullRefreshFeatureDisabled() throws {
+        featureFlagManager.overrideFeature(.pullToRefreshRefactor, value: false)
+        setupTabScroll()
+
+        let scrollView = try XCTUnwrap(tab.webView?.scrollView)
+        subject.scrollViewDidEndZooming(scrollView, with: nil, atScale: 0)
+
+        XCTAssertNotNil(scrollView.refreshControl)
     }
 
     private func setupTabScroll() {

@@ -59,7 +59,6 @@ class TabScrollingController: NSObject,
 
     weak var zoomPageBar: ZoomPageBar?
     private var observedScrollViews = WeakList<UIScrollView>()
-    private var webViewIsLoadingObserver: NSKeyValueObservation?
 
     var overKeyboardContainerConstraint: Constraint?
     var bottomContainerConstraint: Constraint?
@@ -155,7 +154,6 @@ class TabScrollingController: NSObject,
     }
 
     deinit {
-        webViewIsLoadingObserver?.invalidate()
         logger.log("TabScrollController deallocating", level: .info, category: .lifecycle)
         observedScrollViews.forEach({ stopObserving(scrollView: $0) })
         guard let themeObserver else { return }
@@ -325,7 +323,7 @@ class TabScrollingController: NSObject,
 
 // MARK: - Private
 private extension TabScrollingController {
-    func configureRefreshControl(isEnabled: Bool) {
+    private func configureRefreshControl(isEnabled: Bool) {
         if isPullToRefreshRefactorEnabled {
             configureNewRefreshControl()
         } else {
