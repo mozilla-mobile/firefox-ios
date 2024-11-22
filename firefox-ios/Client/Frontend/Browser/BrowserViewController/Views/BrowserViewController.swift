@@ -501,6 +501,22 @@ class BrowserViewController: UIViewController,
     }
 
     @objc
+    func sceneDidEnterBackgroundNotification(notification: Notification) {
+        // Ensure the notification is for the current window scene
+        guard let currentWindowScene = view.window?.windowScene,
+              let notificationWindowScene = notification.object as? UIWindowScene,
+              currentWindowScene === notificationWindowScene else { return }
+        guard canShowPrivacyWindow else { return }
+
+        privacyWindowHelper.showWindow(windowScene: currentWindowScene, withThemedColor: currentTheme().colors.layer3)
+    }
+
+    @objc
+    func sceneDidActivateNotification() {
+        privacyWindowHelper.removeWindow()
+    }
+
+    @objc
     func appWillResignActiveNotification() {
         // Dismiss any popovers that might be visible
         displayedPopoverController?.dismiss(animated: false) {
@@ -508,51 +524,21 @@ class BrowserViewController: UIViewController,
             self.displayedPopoverController = nil
         }
 
-        // If we are displaying a private tab, hide any elements in the tab that we wouldn't want shown
-        // when the app is in the home switcher
-        guard let privateTab = tabManager.selectedTab,
-              privateTab.isPrivate,
-              canShowPrivacyView
-        else { return }
-
-        contentStackView.alpha = 0
-        privacyWindowHelper.showWindow(withThemedColor: currentTheme().colors.layer3)
-
-        if isToolbarRefactorEnabled {
-            addressToolbarContainer.alpha = 0
-        } else {
-            urlBar.locationContainer.alpha = 0
-        }
-        presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
-        presentedViewController?.view.alpha = 0
+        guard canShowPrivacyWindow else { return }
+        privacyWindowHelper.showWindow(windowScene: view.window?.windowScene, withThemedColor: currentTheme().colors.layer3)
     }
 
-    var canShowPrivacyView: Bool {
-        // Show privacy view if no view controller is presented
+    private var canShowPrivacyWindow: Bool {
+        // Ensure the selected tab is private and determine if the privacy window can be shown.
+        guard let privateTab = tabManager.selectedTab, privateTab.isPrivate else { return false }
+        // Show privacy window if no view controller is presented
         // or if the presented view is a PhotonActionSheet.
-        self.presentedViewController == nil || presentedViewController is PhotonActionSheet
+        return self.presentedViewController == nil || presentedViewController is PhotonActionSheet
     }
 
     @objc
     func appDidBecomeActiveNotification() {
-        // Re-show any components that might have been hidden because they were being displayed
-        // as part of a private mode tab
-        UIView.animate(
-            withDuration: 0.2,
-            delay: 0,
-            options: UIView.AnimationOptions(),
-            animations: {
-                self.contentStackView.alpha = 1
-                if self.isToolbarRefactorEnabled {
-                    self.addressToolbarContainer.alpha = 1
-                } else {
-                    self.urlBar.locationContainer.alpha = 1
-                }
-                self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
-                self.presentedViewController?.view.alpha = 1
-            }, completion: { _ in
-                self.privacyWindowHelper.removeWindow()
-            })
+        privacyWindowHelper.removeWindow()
 
         if let tab = tabManager.selectedTab, !tab.isFindInPageMode {
             // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
@@ -819,6 +805,16 @@ class BrowserViewController: UIViewController,
             self,
             selector: #selector(appDidEnterBackgroundNotification),
             name: UIApplication.didEnterBackgroundNotification,
+            object: nil)
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(sceneDidEnterBackgroundNotification),
+            name: UIScene.didEnterBackgroundNotification,
+            object: nil)
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(sceneDidActivateNotification),
+            name: UIScene.didActivateNotification,
             object: nil)
         notificationCenter.addObserver(
             self,
