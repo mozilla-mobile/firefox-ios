@@ -876,7 +876,7 @@ extension HistoryPanel {
     private func removedSearchBarWhenTapOutside(_ sender: UITapGestureRecognizer) {
         if !bottomStackView.isHidden && !bottomStackView.frame.contains(sender.location(in: view)) {
             bottomStackView.isHidden = true
-            bottomStackView.resignFirstResponder()
+            searchbar.resignFirstResponder()
         }
     }
 
