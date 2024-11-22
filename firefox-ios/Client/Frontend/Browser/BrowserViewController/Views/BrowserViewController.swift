@@ -1277,10 +1277,6 @@ class BrowserViewController: UIViewController,
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
     }
 
-//    fileprivate func crashedLastLaunch() -> Bool {
-//        return logger.crashedLastLaunch
-//    }
-
     fileprivate func showQueuedAlertIfAvailable() {
         if let queuedAlertInfo = tabManager.selectedTab?.dequeueJavascriptAlertPrompt() {
             let alertController = queuedAlertInfo.alertController()
