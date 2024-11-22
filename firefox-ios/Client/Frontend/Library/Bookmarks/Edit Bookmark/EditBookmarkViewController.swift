@@ -202,6 +202,7 @@ class EditBookmarkViewController: UIViewController,
         let canShowAccessoryView = viewModel.shouldShowDisclosureIndicator(isFolderSelected: isFolderSelected)
         cell.accessoryType = canShowAccessoryView ? .checkmark : .none
         cell.selectionStyle = .default
+        cell.customization = .regular
         cell.applyTheme(theme: theme)
     }
 
@@ -212,6 +213,7 @@ class EditBookmarkViewController: UIViewController,
         cell.indentationLevel = 0
         cell.accessoryType = .none
         cell.selectionStyle = .default
+        cell.customization = .newFolder
         cell.applyTheme(theme: theme)
     }
 
