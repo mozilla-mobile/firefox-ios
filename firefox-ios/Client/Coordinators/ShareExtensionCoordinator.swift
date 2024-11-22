@@ -50,7 +50,9 @@ class ShareExtensionCoordinator: BaseCoordinator,
     ) {
         let shareExtension = ShareExtensionHelper(
             url: url,
-            title: title ?? tabManager.selectedTab?.title,
+            // FXIOS-10646: We only want to pass a non-nil title here for the Info Card Referral experiment. Refactoring is
+            // needed in the ShareExtensionHelper to make it properly extensible to multiple share use cases like this.
+            title: title,
             tab: tabManager.selectedTab)
         let controller = shareExtension.createActivityViewController(
             tabManager.selectedTab?.webView
