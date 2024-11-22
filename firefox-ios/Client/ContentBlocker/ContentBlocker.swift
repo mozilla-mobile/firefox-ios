@@ -253,8 +253,14 @@ extension ContentBlocker {
                 let suffixLength = jsonSuffix.count
                 // Trim off .json suffix if needed, we only want the raw file name
                 let fileTrimmed = file.hasSuffix(jsonSuffix) ? String(file.dropLast(suffixLength)) : file
-                if let path = Bundle.main.path(forResource: fileTrimmed, ofType: "json") {
-                    source = try String(contentsOfFile: path, encoding: .utf8)
+
+                if fileTrimmed.hasPrefix(BlocklistFileName.customBlocklistJSONFilePrefix) {
+                    if let path = Bundle.main.path(forResource: fileTrimmed, ofType: "json") {
+                        source = try String(contentsOfFile: path, encoding: .utf8)
+                    }
+                } else {
+                    let json = try RemoteDataType.contentBlockingLists.loadLocalSettingsFileAsJSON(fileName: fileTrimmed)
+                    source = String(data: json, encoding: .utf8) ?? ""
                 }
             } catch let error {
                 logger.log("Error loading content-blocking JSON: \(error)", level: .warning, category: .adblock)

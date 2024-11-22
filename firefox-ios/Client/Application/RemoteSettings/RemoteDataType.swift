@@ -20,18 +20,23 @@ enum RemoteDataTypeError: Error, LocalizedError {
 
 enum RemoteDataType: String, Codable {
     case passwordRules
+    case contentBlockingLists
 
     var type: any RemoteDataTypeRecord.Type {
         switch self {
         case .passwordRules:
             return PasswordRuleRecord.self
+        case .contentBlockingLists:
+            return ContentBlockingListRecord.self
         }
     }
 
-    var fileName: String {
+    var fileNames: [String] {
         switch self {
         case .passwordRules:
-            return "RemotePasswordRules"
+            return ["RemotePasswordRules"]
+        case .contentBlockingLists:
+            return BlocklistFileName.allCases.map { $0.filename }
         }
     }
 
@@ -39,11 +44,19 @@ enum RemoteDataType: String, Codable {
         switch self {
         case .passwordRules:
             return "Password Rules"
+        case .contentBlockingLists:
+            return "Content Blocking Lists"
         }
     }
 
+    /// Loads the local settings for the given data type record, returning the
+    /// decoded objects.
+    /// - Returns: settings decoded to their RemoteDataTypeRecord.
     func loadLocalSettingsFromJSON<T: RemoteDataTypeRecord>() async throws -> [T] {
-        let fileName = self.fileName
+        guard let fileName = self.fileNames.first else {
+            assertionFailure("No filename available for setting type.")
+            throw RemoteDataTypeError.fileNotFound(fileName: "")
+        }
 
         guard let path = Bundle.main.path(forResource: fileName, ofType: "json") else {
             throw RemoteDataTypeError.fileNotFound(fileName: fileName)
@@ -59,6 +72,27 @@ enum RemoteDataType: String, Codable {
             }
             let singleObject = try JSONDecoder().decode(T.self, from: data)
             return [singleObject]
+        } catch {
+            throw RemoteDataTypeError.decodingError(fileName: fileName, error: error)
+        }
+    }
+
+    /// Loads the local settings JSON for the given setting file.
+    /// - Returns: the raw JSON file data.
+    func loadLocalSettingsFileAsJSON(fileName: String) throws -> Data {
+        guard fileNames.contains(fileName) else {
+            throw RemoteDataTypeError.fileNotFound(fileName: fileName)
+        }
+
+        guard let path = Bundle.main.path(forResource: fileName, ofType: "json") else {
+            throw RemoteDataTypeError.fileNotFound(fileName: fileName)
+        }
+
+        let url = URL(fileURLWithPath: path)
+
+        do {
+            let data = try Data(contentsOf: url)
+            return data
         } catch {
             throw RemoteDataTypeError.decodingError(fileName: fileName, error: error)
         }

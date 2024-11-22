@@ -129,6 +129,7 @@
 		1D91C1852CF11EA500B24960 /* disconnect-block-fingerprinting.json in Resources */ = {isa = PBXBuildFile; fileRef = 1D91C17B2CF11EA500B24960 /* disconnect-block-fingerprinting.json */; };
 		1D91C1862CF11EA500B24960 /* disconnect-block-social.json in Resources */ = {isa = PBXBuildFile; fileRef = 1D91C17C2CF11EA500B24960 /* disconnect-block-social.json */; };
 		1D91C1872CF11EA500B24960 /* disconnect-block-cookies-advertising.json in Resources */ = {isa = PBXBuildFile; fileRef = 1D91C17D2CF11EA500B24960 /* disconnect-block-cookies-advertising.json */; };
+		1D91C1892CF1203F00B24960 /* ContentBlockingListRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D91C1882CF1203F00B24960 /* ContentBlockingListRecord.swift */; };
 		1DA3CE5D24EEE73100422BB2 /* OpenTabsWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA3CE5C24EEE73100422BB2 /* OpenTabsWidget.swift */; };
 		1DA3CE5F24EEE7C600422BB2 /* LegacyTabDataRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA3CE5E24EEE7C600422BB2 /* LegacyTabDataRetriever.swift */; };
 		1DA3CE6724EEE86C00422BB2 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075641E37F7AB006961AC /* AppInfo.swift */; };
@@ -2542,6 +2543,7 @@
 		1D91C17B2CF11EA500B24960 /* disconnect-block-fingerprinting.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-fingerprinting.json"; path = "attachments/tracking-protection-lists-ios/disconnect-block-fingerprinting.json"; sourceTree = "<group>"; };
 		1D91C17C2CF11EA500B24960 /* disconnect-block-social.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-social.json"; path = "attachments/tracking-protection-lists-ios/disconnect-block-social.json"; sourceTree = "<group>"; };
 		1D91C17D2CF11EA500B24960 /* disconnect-block-cookies-advertising.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-cookies-advertising.json"; path = "attachments/tracking-protection-lists-ios/disconnect-block-cookies-advertising.json"; sourceTree = "<group>"; };
+		1D91C1882CF1203F00B24960 /* ContentBlockingListRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentBlockingListRecord.swift; sourceTree = "<group>"; };
 		1DA24C60879E7D4B2073FD63 /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kab; path = kab.lproj/Search.strings; sourceTree = "<group>"; };
 		1DA3CE5C24EEE73100422BB2 /* OpenTabsWidget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenTabsWidget.swift; sourceTree = "<group>"; };
 		1DA3CE5E24EEE7C600422BB2 /* LegacyTabDataRetriever.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyTabDataRetriever.swift; sourceTree = "<group>"; };
@@ -11402,6 +11404,7 @@
 			isa = PBXGroup;
 			children = (
 				8A46F5A52C9E4389005B6422 /* PasswordRuleRecord.swift */,
+				1D91C1882CF1203F00B24960 /* ContentBlockingListRecord.swift */,
 			);
 			path = RemoteRecords;
 			sourceTree = "<group>";
@@ -16415,6 +16418,7 @@
 				E63ED8E11BFD25580097D08E /* PasswordManagerListViewController.swift in Sources */,
 				8ADC2A162A33765E00543DAA /* UrlToOpenModel.swift in Sources */,
 				D0625CA8208FC47A0081F3B2 /* BrowserViewController+DownloadQueueDelegate.swift in Sources */,
+				1D91C1892CF1203F00B24960 /* ContentBlockingListRecord.swift in Sources */,
 				C22753402A3C9E1300B9C0D1 /* WebsiteDataManagementViewModel.swift in Sources */,
 				2F44FCC71A9E8CF500FD20CC /* SearchSettingsTableViewController.swift in Sources */,
 				0AFF7F682C78989000265214 /* CertificatesHeaderItem.swift in Sources */,
