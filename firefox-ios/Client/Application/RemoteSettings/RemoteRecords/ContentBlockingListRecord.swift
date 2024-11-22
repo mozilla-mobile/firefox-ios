@@ -4,8 +4,8 @@
 
 import Foundation
 
-/// Object model to represent array of content blocking rules.
-/// Currently this is not used (yet) since we load the JSON directly
-/// in order to modify it in some cases before injecting to WKWebView.
+/// Object model to represent content blocking rules.
+/// This is not used (yet) since we load the JSON directly
+/// in order to modify it before injecting to WKWebView.
 struct ContentBlockingListRecord: RemoteDataTypeRecord {
 }
