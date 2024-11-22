@@ -248,15 +248,6 @@ class RustAutofillTests: XCTestCase {
                                            ccType: creditCard.ccType)
     }
 
-    private func makeAssertionsForUpdateCard(success: Bool?, err: Error?, expectation: XCTestExpectation) {
-        XCTAssertNotNil(success)
-        if let updated = success {
-            XCTAssert(updated)
-        }
-        XCTAssertNil(err)
-        expectation.fulfill()
-    }
-
     private func getCreditCardAndMakeAssertionsForCheckUpdateCard(id: String,
                                                                   updatedCreditCard: UnencryptedCreditCardFields,
                                                                   expectation: XCTestExpectation) {
