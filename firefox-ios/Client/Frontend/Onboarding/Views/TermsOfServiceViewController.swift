@@ -7,8 +7,7 @@ import Shared
 import UIKit
 import ComponentLibrary
 
-class TermsOfServiceViewController: UIViewController,
-                                    Themeable {
+class TermsOfServiceViewController: UIViewController, Themeable {
     struct UX {
         static let horizontalMargin: CGFloat = 24
         static let logoIconSize: CGFloat = 160
@@ -20,9 +19,10 @@ class TermsOfServiceViewController: UIViewController,
     // MARK: - Properties
     var windowUUID: WindowUUID
     var themeManager: ThemeManager
-    var themeObserver: (any NSObjectProtocol)?
+    var themeObserver: NSObjectProtocol?
     var currentWindowUUID: UUID? { windowUUID }
     var notificationCenter: NotificationProtocol
+    var didFinishFlow: (() -> Void)?
 
     // MARK: - UI elements
     private lazy var contentScrollView: UIScrollView = .build()
@@ -43,11 +43,12 @@ class TermsOfServiceViewController: UIViewController,
         logoImage.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfService.logo
     }
 
-    private lazy var confirmationButton: PrimaryRoundedButton = .build { [weak self] button in
+    private lazy var confirmationButton: PrimaryRoundedButton = .build { button in
         let viewModel = PrimaryRoundedButtonViewModel(
             title: .Onboarding.TermsOfService.AgreementButtonTitle,
             a11yIdentifier: AccessibilityIdentifiers.TermsOfService.agreeAndContinueButton)
         button.configure(viewModel: viewModel)
+        button.addTarget(self, action: #selector(self.acceptTermsOfService), for: .touchUpInside)
     }
 
     private lazy var agreementContent: UIStackView = .build { stackView in
@@ -74,10 +75,16 @@ class TermsOfServiceViewController: UIViewController,
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - View cycles
+    // MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         listenForThemeChange(view)
+    }
+
+    // MARK: - Button actions
+    @objc
+    private func acceptTermsOfService() {
+        didFinishFlow?()
     }
 
     // MARK: - View setup
