@@ -164,7 +164,7 @@ class OneLineTableViewCell: UITableViewCell,
         selectedView.backgroundColor = theme.colors.layer5Hover
         backgroundColor = theme.colors.layer5
         bottomSeparatorView.backgroundColor = theme.colors.borderPrimary
-        
+
         switch customization {
         case .regular:
             accessoryView?.tintColor = theme.colors.iconSecondary
@@ -173,8 +173,7 @@ class OneLineTableViewCell: UITableViewCell,
         case .newFolder:
             accessoryView?.tintColor = theme.colors.iconSecondary
             leftImageView.tintColor = theme.colors.textPrimary
-            cell.titleLabel.textColor = theme.colors.textAccent
+            titleLabel.textColor = theme.colors.textAccent
         }
-
     }
 }
