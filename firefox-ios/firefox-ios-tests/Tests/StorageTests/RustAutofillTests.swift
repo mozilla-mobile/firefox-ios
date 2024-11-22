@@ -239,15 +239,6 @@ class RustAutofillTests: XCTestCase {
         XCTAssertEqual(updatedCardVal.ccExpYear, updatedCreditCard.ccExpYear)
     }
 
-    private func createUnencryptedCreditCardFields(creditCard: CreditCard) -> UnencryptedCreditCardFields {
-        return UnencryptedCreditCardFields(ccName: creditCard.ccName,
-                                           ccNumber: creditCard.ccNumberEnc,
-                                           ccNumberLast4: creditCard.ccNumberLast4,
-                                           ccExpMonth: creditCard.ccExpMonth,
-                                           ccExpYear: Int64(2028),
-                                           ccType: creditCard.ccType)
-    }
-
     private func getCreditCardAndMakeAssertionsForCheckUpdateCard(id: String,
                                                                   updatedCreditCard: UnencryptedCreditCardFields,
                                                                   expectation: XCTestExpectation) {
