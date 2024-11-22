@@ -17,7 +17,7 @@ struct TPMenuUX {
         static let headerLabelDistance: CGFloat = 2.0
         static let iconSize: CGFloat = 24
         static let connectionDetailsHeaderMargins: CGFloat = 8
-        static let faviconCornerRadius: CGFloat = 5
+        static let faviconCornerRadius: CGFloat = 16
         static let clearDataButtonTopDistance: CGFloat = 32
         static let clearDataButtonCornerRadius: CGFloat = 12
         static let clearDataButtonBorderWidth: CGFloat = 0
@@ -151,7 +151,7 @@ class TrackingProtectionViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        self.view.invalidateIntrinsicContentSize() // Adjusts size based on content.
+        self.view.invalidateIntrinsicContentSize()
         if !hasSetPointOrigin {
             hasSetPointOrigin = true
             pointOrigin = self.view.frame.origin
