@@ -500,7 +500,6 @@ class BrowserViewController: UIViewController,
             self.updateDisplayedPopoverProperties = nil
             self.displayedPopoverController = nil
         }
-        store.dispatch(PasswordGeneratorAction(windowUUID: windowUUID, actionType: PasswordGeneratorActionType.hidePassword))
 
         // If we are displaying a private tab, hide any elements in the tab that we wouldn't want shown
         // when the app is in the home switcher
@@ -544,8 +543,6 @@ class BrowserViewController: UIViewController,
                 }
                 self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
                 self.presentedViewController?.view.alpha = 1
-                store.dispatch(PasswordGeneratorAction(windowUUID: self.windowUUID,
-                                                       actionType: PasswordGeneratorActionType.showPassword))
             }, completion: { _ in
                 self.privacyWindowHelper.removeWindow()
             })

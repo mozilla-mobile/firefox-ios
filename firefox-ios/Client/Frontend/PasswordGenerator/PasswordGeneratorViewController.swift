@@ -74,7 +74,9 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
         super.init(nibName: nil, bundle: nil)
         self.subscribeToRedux()
         setupNotifications(forObserver: self,
-                           observing: [.DynamicFontChanged])
+                           observing: [.DynamicFontChanged,
+                                       UIApplication.willResignActiveNotification,
+                                       UIApplication.didBecomeActiveNotification])
     }
 
     deinit {
@@ -207,11 +209,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     func newState(state: PasswordGeneratorState) {
         passwordGeneratorState = state
         passwordField.configure(password: passwordGeneratorState.password)
-        if passwordGeneratorState.passwordHidden {
-            passwordField.hidePassword()
-        } else {
-            passwordField.showPassword()
-        }
+        passwordField.setPasswordHidden(passwordGeneratorState.passwordHidden)
     }
 
     // MARK: - Notifiable
@@ -224,6 +222,12 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
         switch notification.name {
         case .DynamicFontChanged:
             applyDynamicFontChange()
+        case UIApplication.willResignActiveNotification:
+            store.dispatch(PasswordGeneratorAction(windowUUID: windowUUID,
+                                                   actionType: PasswordGeneratorActionType.hidePassword))
+        case UIApplication.didBecomeActiveNotification:
+            store.dispatch(PasswordGeneratorAction(windowUUID: windowUUID,
+                                                   actionType: PasswordGeneratorActionType.showPassword))
         default: break
         }
     }

@@ -13,6 +13,8 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifia
         static let passwordFieldVerticalPadding: CGFloat = 10
         static let passwordLabelAndButtonSpacing: CGFloat = 10
         static let passwordRefreshButtonHeight: CGFloat = 18
+        static let passwordHiddenAlpha: CGFloat = 0
+        static let passwordVisibleAlpha: CGFloat = 1
     }
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
@@ -108,12 +110,8 @@ final class PasswordGeneratorPasswordFieldView: UIView, ThemeApplicable, Notifia
         return attributedString
     }
 
-    func hidePassword() {
-        passwordLabel.alpha = 0
-    }
-
-    func showPassword() {
-        passwordLabel.alpha = 1
+    func setPasswordHidden(_ hidden: Bool) {
+        passwordLabel.alpha = hidden ? UX.passwordHiddenAlpha : UX.passwordVisibleAlpha
     }
 
     @objc
