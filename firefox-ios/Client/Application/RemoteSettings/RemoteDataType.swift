@@ -58,15 +58,8 @@ enum RemoteDataType: String, Codable {
             throw RemoteDataTypeError.fileNotFound(fileName: "")
         }
 
-        guard let path = Bundle.main.path(forResource: fileName, ofType: "json") else {
-            throw RemoteDataTypeError.fileNotFound(fileName: fileName)
-        }
-
-        let url = URL(fileURLWithPath: path)
-
+        let data = try loadLocalSettingsFileAsJSON(fileName: fileName)
         do {
-            let data = try Data(contentsOf: url)
-
             if let decodedArray = try? JSONDecoder().decode([T].self, from: data) {
                 return decodedArray
             }
