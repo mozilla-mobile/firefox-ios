@@ -5,7 +5,7 @@
 import XCTest
 import WebKit
 import Common
-
+import Shared
 @testable import Client
 
 final class TabScrollControllerTests: XCTestCase {
@@ -13,6 +13,7 @@ final class TabScrollControllerTests: XCTestCase {
     var subject: TabScrollingController!
     var mockProfile: MockProfile!
     var mockGesture: UIPanGestureRecognizerMock!
+    let featureFlagManager = MockFeatureFlagManager()
     let windowUUID: WindowUUID = .XCTestDefaultUUID
 
     var header: BaseAlphaStackView = .build { _ in }
@@ -21,20 +22,21 @@ final class TabScrollControllerTests: XCTestCase {
         super.setUp()
 
         DependencyHelperMock().bootstrapDependencies()
-        self.mockProfile = MockProfile()
-        self.subject = TabScrollingController(windowUUID: windowUUID)
-        self.tab = Tab(profile: mockProfile, windowUUID: windowUUID)
+        mockProfile = MockProfile()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
+        subject = TabScrollingController(windowUUID: windowUUID, featureFlagManager: featureFlagManager)
+        tab = Tab(profile: mockProfile, windowUUID: windowUUID)
         mockGesture = UIPanGestureRecognizerMock()
+        trackForMemoryLeaks(subject)
     }
 
     override func tearDown() {
-        super.tearDown()
-
         mockProfile?.shutdown()
-        self.mockProfile = nil
-        self.subject = nil
-        self.tab = nil
+        mockProfile = nil
+        subject = nil
+        tab = nil
+        featureFlagManager.clearOverriddenFeatures()
+        super.tearDown()
     }
 
     func testHandlePan_ScrollingUp() {
@@ -89,6 +91,48 @@ final class TabScrollControllerTests: XCTestCase {
         subject.scrollViewDidEndDragging(tab.webView!.scrollView, willDecelerate: true)
 
         XCTAssertEqual(subject.toolbarState, TabScrollingController.ToolbarState.collapsed)
+    }
+
+    func testDidSetTab_setsLoadingObserverOnTab() {
+        setupTabScroll()
+    }
+
+    func testDidSetTab_addsPullRefreshViewToScrollView() {
+        featureFlagManager.overrideFeature(.pullToRefreshRefactor, value: true)
+        setupTabScroll()
+
+        let pullRefreshView = tab.webView?.scrollView.subviews.first(where: {
+            $0 is PullRefreshView
+        })
+
+        XCTAssertNotNil(pullRefreshView)
+        XCTAssertNil(tab.webView?.scrollView.refreshControl)
+    }
+
+    func testDidSetTab_addsUIRefreshControllToScrollView() {
+        featureFlagManager.overrideFeature(.pullToRefreshRefactor, value: false)
+        setupTabScroll()
+
+        let pullRefreshView = tab.webView?.scrollView.subviews.first(where: {
+            $0 is PullRefreshView
+        })
+
+        XCTAssertNotNil(tab.webView?.scrollView.refreshControl)
+        XCTAssertNil(pullRefreshView)
+    }
+
+    func testDidSetTab_setsTabOnLoadingClosure_whenPullRefreshFeatureEnabled() {
+        featureFlagManager.overrideFeature(.pullToRefreshRefactor, value: true)
+        setupTabScroll()
+
+        XCTAssertNotNil(tab.onLoading)
+    }
+
+    func testDidSetTab_tabHasNilOnLoadingClosure_whenPullRefreshFeatureDisabled() {
+        featureFlagManager.overrideFeature(.pullToRefreshRefactor, value: false)
+        setupTabScroll()
+
+        XCTAssertNil(tab.onLoading)
     }
 
     private func setupTabScroll() {

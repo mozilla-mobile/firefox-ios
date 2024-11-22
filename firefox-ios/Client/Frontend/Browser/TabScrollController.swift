@@ -9,7 +9,6 @@ import Common
 
 private let ToolbarBaseAnimationDuration: CGFloat = 0.2
 class TabScrollingController: NSObject,
-                              FeatureFlaggable,
                               SearchBarLocationProvider,
                               Themeable {
     private struct UX {
@@ -121,7 +120,7 @@ class TabScrollingController: NSObject,
         }) as? PullRefreshView
     }
     private var isPullToRefreshRefactorEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.pullToRefreshRefactor, checking: .buildOnly)
+        return featureFlagManager.isFeatureEnabled(.pullToRefreshRefactor, checking: .buildOnly)
     }
     var contentOffset: CGPoint { return scrollView?.contentOffset ?? .zero }
     private var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
@@ -130,6 +129,7 @@ class TabScrollingController: NSObject,
     private var contentOffsetBeforeAnimation = CGPoint.zero
     private var isAnimatingToolbar = false
 
+    private let featureFlagManager: FeatureFlaggable
     var themeManager: any Common.ThemeManager
     var themeObserver: (any NSObjectProtocol)?
     var notificationCenter: any Common.NotificationProtocol
@@ -165,11 +165,13 @@ class TabScrollingController: NSObject,
     init(windowUUID: WindowUUID,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
+         featureFlagManager: FeatureFlaggable = DefaultFeatureFlagManager(),
          logger: Logger = DefaultLogger.shared) {
         self.themeManager = themeManager
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.logger = logger
+        self.featureFlagManager = featureFlagManager
         super.init()
         setupNotifications()
     }
