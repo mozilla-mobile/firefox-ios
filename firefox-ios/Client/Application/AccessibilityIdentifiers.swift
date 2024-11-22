@@ -519,6 +519,7 @@ public struct AccessibilityIdentifiers {
         static let privacyNoticeAgreement = "TermsOfService.PrivacyNoticeAgreement"
         static let manageDataCollectionAgreement = "TermsOfService.ManageDataCollectionAgreement"
         static let agreeAndContinueButton = "TermsOfService.AgreeAndContinueButton"
+        static let doneButton = "TermsOfService.DoneButton"
     }
 
     struct Upgrade {
