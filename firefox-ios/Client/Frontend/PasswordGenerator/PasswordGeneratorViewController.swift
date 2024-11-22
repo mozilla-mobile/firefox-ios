@@ -28,6 +28,7 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
     var currentWindowUUID: UUID? { windowUUID }
     private var currentTab: Tab
     private var currentFrame: WKFrameInfo
+    var dismissDelegate: BottomSheetDismissProtocol?
 
     // MARK: - Views
 
@@ -157,7 +158,9 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
         store.dispatch(PasswordGeneratorAction(windowUUID: windowUUID,
                                                actionType: PasswordGeneratorActionType.userTappedUsePassword,
                                                currentFrame: currentFrame))
-        dismiss(animated: true)
+        dismissDelegate?.dismissSheetViewController(completion: {
+            self.currentTab.webView?.accessoryView.reloadViewFor(.passwordGenerator)
+        })
     }
 
     // MARK: - Themable
@@ -234,5 +237,5 @@ class PasswordGeneratorViewController: UIViewController, StoreSubscriber, Themea
 }
 
 extension PasswordGeneratorViewController: BottomSheetChild {
-    func willDismiss() { currentTab.webView?.accessoryView.reloadViewFor(.standard)}
+    func willDismiss() {}
 }

@@ -21,6 +21,7 @@ public struct BottomSheetViewModel {
     public var shadowOpacity: Float
     public var closeButtonA11yLabel: String
     public var closeButtonA11yIdentifier: String
+    public var dismissCompletion: (() -> Void)?
 
     public init(
         cornerRadius: CGFloat = BottomSheetViewModel.UX.cornerRadius,
