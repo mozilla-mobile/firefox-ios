@@ -8,7 +8,7 @@ import SiteImageView
 
 enum OneLineTableViewCustomization {
     case regular
-    case inactiveCell
+    case newFolder
 }
 
 struct OneLineTableViewCellViewModel {
@@ -163,9 +163,18 @@ class OneLineTableViewCell: UITableViewCell,
     func applyTheme(theme: Theme) {
         selectedView.backgroundColor = theme.colors.layer5Hover
         backgroundColor = theme.colors.layer5
-        titleLabel.textColor = theme.colors.textPrimary
         bottomSeparatorView.backgroundColor = theme.colors.borderPrimary
-        accessoryView?.tintColor = theme.colors.iconSecondary
-        leftImageView.tintColor = theme.colors.textPrimary
+        
+        switch customization {
+        case .regular:
+            accessoryView?.tintColor = theme.colors.iconSecondary
+            leftImageView.tintColor = theme.colors.textPrimary
+            titleLabel.textColor = theme.colors.textPrimary
+        case .newFolder:
+            accessoryView?.tintColor = theme.colors.iconSecondary
+            leftImageView.tintColor = theme.colors.textPrimary
+            cell.titleLabel.textColor = theme.colors.textAccent
+        }
+
     }
 }
