@@ -186,7 +186,13 @@ class BrowserViewController: UIViewController,
     private lazy var privacyWindowHelper = PrivacyWindowHelper()
     var keyboardBackdrop: UIView?
 
-    lazy var scrollController = TabScrollingController(windowUUID: windowUUID)
+    lazy var scrollController = TabScrollingController(
+        windowUUID: windowUUID,
+        isPullToRefreshRefactorEnabled: featureFlags.isFeatureEnabled(
+            .pullToRefreshRefactor,
+            checking: .buildOnly
+        )
+    )
     private var keyboardState: KeyboardState?
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress

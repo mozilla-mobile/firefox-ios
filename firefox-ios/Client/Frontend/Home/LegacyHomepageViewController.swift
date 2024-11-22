@@ -40,6 +40,7 @@ class LegacyHomepageViewController:
     private var overlayManager: OverlayModeManager
     private var userDefaults: UserDefaultsInterface
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
+    private var wallpaperViewTopConstraint: NSLayoutConstraint?
     private var jumpBackInContextualHintViewController: ContextualHintViewController
     private var syncTabContextualHintViewController: ContextualHintViewController
     private var collectionView: UICollectionView! = nil
@@ -192,6 +193,12 @@ class LegacyHomepageViewController:
         if UIDevice.current.userInterfaceIdiom == .pad {
             reloadOnRotation(newSize: size)
         }
+
+        coordinator.animate { _ in
+            let wallpaperTopConstant: CGFloat = UIWindow.keyWindow?.safeAreaInsets.top ?? self.statusBarFrame?.height ?? 0
+            print("FF: wallpaper constant \(wallpaperTopConstant)")
+            self.wallpaperViewTopConstraint?.constant = -wallpaperTopConstant
+        }
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -277,9 +284,10 @@ class LegacyHomepageViewController:
 
         // Constraint so wallpaper appears under the status bar
         let wallpaperTopConstant: CGFloat = UIWindow.keyWindow?.safeAreaInsets.top ?? statusBarFrame?.height ?? 0
+        wallpaperViewTopConstraint = wallpaperView.topAnchor.constraint(equalTo: view.topAnchor, constant: -wallpaperTopConstant)
 
+        wallpaperViewTopConstraint?.isActive = true
         NSLayoutConstraint.activate([
-            wallpaperView.topAnchor.constraint(equalTo: view.topAnchor, constant: -wallpaperTopConstant),
             wallpaperView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             wallpaperView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             wallpaperView.trailingAnchor.constraint(equalTo: view.trailingAnchor)

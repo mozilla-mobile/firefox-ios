@@ -42,7 +42,8 @@ class TabScrollingController: NSObject,
             if isPullToRefreshRefactorEnabled {
                 tab?.onLoading = { [weak self] in
                     guard let self else { return }
-                    if tabIsLoading() {
+                    // If we are in the home page delete pull to refresh so it doesn't show on the background
+                    if tabIsLoading() || (tab?.isFxHomeTab ?? false) {
                         pullToRefreshView?.stopObservingContentScroll()
                         pullToRefreshView?.removeFromSuperview()
                     } else {
@@ -118,9 +119,7 @@ class TabScrollingController: NSObject,
             $0 is PullRefreshView
         }) as? PullRefreshView
     }
-    private var isPullToRefreshRefactorEnabled: Bool {
-        return featureFlagManager.isFeatureEnabled(.pullToRefreshRefactor, checking: .buildOnly)
-    }
+    private let isPullToRefreshRefactorEnabled: Bool
     var contentOffset: CGPoint { return scrollView?.contentOffset ?? .zero }
     private var scrollViewHeight: CGFloat { return scrollView?.frame.height ?? 0 }
     private var topScrollHeight: CGFloat { header?.frame.height ?? 0 }
@@ -128,7 +127,6 @@ class TabScrollingController: NSObject,
     private var contentOffsetBeforeAnimation = CGPoint.zero
     private var isAnimatingToolbar = false
 
-    private let featureFlagManager: FeatureFlaggable
     var themeManager: any Common.ThemeManager
     var themeObserver: (any NSObjectProtocol)?
     var notificationCenter: any Common.NotificationProtocol
@@ -161,15 +159,15 @@ class TabScrollingController: NSObject,
     }
 
     init(windowUUID: WindowUUID,
+         isPullToRefreshRefactorEnabled: Bool,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
-         featureFlagManager: FeatureFlaggable = DefaultFeatureFlagManager(),
          logger: Logger = DefaultLogger.shared) {
         self.themeManager = themeManager
         self.windowUUID = windowUUID
         self.notificationCenter = notificationCenter
         self.logger = logger
-        self.featureFlagManager = featureFlagManager
+        self.isPullToRefreshRefactorEnabled = isPullToRefreshRefactorEnabled
         super.init()
         setupNotifications()
     }
