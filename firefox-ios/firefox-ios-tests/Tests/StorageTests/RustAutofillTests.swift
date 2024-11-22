@@ -221,6 +221,9 @@ class RustAutofillTests: XCTestCase {
         waitForExpectations(timeout: 3, handler: nil)
     }
 
+    func testUpdateCreditCard() async throws {
+    }
+
     private func createUnencryptedCreditCardFields(creditCard: CreditCard) -> UnencryptedCreditCardFields {
         return UnencryptedCreditCardFields(ccName: creditCard.ccName,
                                            ccNumber: creditCard.ccNumberEnc,
