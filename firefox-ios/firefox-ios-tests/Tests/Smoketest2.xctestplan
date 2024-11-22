@@ -16,6 +16,19 @@
     {
       "skippedTests" : [
         "ActivityStreamTest",
+<<<<<<< HEAD
+=======
+        "AddressesTests\/testAddNewAddressAllFieldsFilled()",
+        "AddressesTests\/testAddNewAddressCityFilled()",
+        "AddressesTests\/testAddNewAddressEmailFilled()",
+        "AddressesTests\/testAddNewAddressNameFilled()",
+        "AddressesTests\/testAddNewAddressOrganizationFilled()",
+        "AddressesTests\/testAddNewAddressPhoneFilled()",
+        "AddressesTests\/testAddNewAddressPostalCodeFilled()",
+        "AddressesTests\/testAddNewAddressStreetAddressFilled()",
+        "AddressesTests\/testDeleteAddress()",
+        "AddressesTests\/testUpdateAllAddressFields()",
+>>>>>>> cf5757ba5 (Fix MTE-3889 Remove updateAddress test from smoketest plan2 (#23330))
         "AuthenticationTest",
         "BaseTestCase",
         "BookmarksTests",
