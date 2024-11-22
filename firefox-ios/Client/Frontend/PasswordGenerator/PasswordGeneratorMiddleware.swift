@@ -94,7 +94,6 @@ final class PasswordGeneratorMiddleware {
     }
 
     private func userTappedUsePassword(frame: WKFrameInfo, password: String) {
-
         passwordGeneratorTelemetry.usePasswordButtonPressed()
         if let escapedPassword = escapeString(string: password) {
             let jsFunctionCall = "window.__firefox__.logins.fillGeneratedPassword(\(escapedPassword))"
@@ -115,12 +114,14 @@ final class PasswordGeneratorMiddleware {
                 return (jsonString)
             } else {
                 self.logger.log("Error encoding generated password to JSON",
-                                level: .warning, category: .passwordGenerator)
+                                level: .warning,
+                                category: .passwordGenerator)
                 return nil
             }
         } catch {
             self.logger.log("Error encoding generated password to JSON: \(error)",
-                            level: .warning, category: .passwordGenerator)
+                            level: .warning,
+                            category: .passwordGenerator)
             return nil
         }
     }
