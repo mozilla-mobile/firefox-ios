@@ -279,7 +279,7 @@ class RustAutofillTests: XCTestCase {
         let updatedCardVal = try await getCreditCard(id: creditCard.guid)
 
         XCTAssertEqual(creditCard.guid, card.guid)
-        XCTAssert(result)
+        XCTAssertTrue(result)
         XCTAssertEqual(updatedCardVal.ccExpYear, updatedCreditCard.ccExpYear)
     }
 
