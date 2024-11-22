@@ -633,17 +633,24 @@ export const FormAutofillHeuristics = {
       prevCCFields.add(detail.fieldName);
     }
 
+    const isLastField =
+      scanner.getFieldDetailByIndex(scanner.parsingIndex + 1) === null;
+
     // We update the "name" fields to "cc-name" fields when the following
     // conditions are met:
     // 1. The preceding fields are identified as credit card fields and
     //    contain the "cc-number" field.
     // 2. No "cc-name-*" field is found among the preceding credit card fields.
-    // 3. The "cc-csc" field is not present among the preceding credit card fields.
+    // 3. The "cc-csc" field is either not present among the preceding credit card fields,
+    //    or the current field is the last field in the form. This condition is in place
+    //    because "cc-csc" is often the last field in a credit card form, and we want to
+    //    avoid mistakenly updating fields in subsequent address forms.
     if (
       ["cc-number"].some(f => prevCCFields.has(f)) &&
-      !["cc-name", "cc-given-name", "cc-family-name", "cc-csc"].some(f =>
+      !["cc-name", "cc-given-name", "cc-family-name"].some(f =>
         prevCCFields.has(f)
-      )
+      ) &&
+      (isLastField || !prevCCFields.has("cc-csc"))
     ) {
       // If there is only one field, assume the name field a `cc-name` field
       if (fields.length == 1) {
