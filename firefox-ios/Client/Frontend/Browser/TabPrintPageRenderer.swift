@@ -5,19 +5,24 @@
 import Foundation
 import Common
 
-private struct PrintedPageUX {
-    static let PageInsets = CGFloat(36.0)
-    static let PageTextFont = FXFontStyles.Regular.caption1.scaledFont()
-    static let PageMarginScale = CGFloat(0.5)
-}
-
 class TabPrintPageRenderer: UIPrintPageRenderer {
-    fileprivate weak var tab: Tab?
-    let textAttributes = [NSAttributedString.Key.font: PrintedPageUX.PageTextFont]
+    private struct PrintedPageUX {
+        static let insets = CGFloat(36.0)
+        static let textFont = FXFontStyles.Regular.caption1.scaledFont()
+        static let marginScale = CGFloat(0.5)
+    }
+
+    fileprivate var tabDisplayTitle: String
+    fileprivate var tabURL: URL?
+    fileprivate weak var webView: TabWebView?
+
+    let textAttributes = [NSAttributedString.Key.font: PrintedPageUX.textFont]
     let dateString: String
 
-    required init(tab: Tab) {
-        self.tab = tab
+    required init(tabDisplayTitle: String, tabURL: URL?, webView: TabWebView?) {
+        self.tabDisplayTitle = tabDisplayTitle
+        self.tabURL = tabURL
+        self.webView = webView
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
         dateFormatter.timeStyle = .short
@@ -25,17 +30,11 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
 
         super.init()
 
-        self.footerHeight = PrintedPageUX.PageMarginScale * PrintedPageUX.PageInsets
-        self.headerHeight = PrintedPageUX.PageMarginScale * PrintedPageUX.PageInsets
+        self.footerHeight = PrintedPageUX.marginScale * PrintedPageUX.insets
+        self.headerHeight = PrintedPageUX.marginScale * PrintedPageUX.insets
 
-        if let tab = self.tab, let webview = tab.webView {
-            let formatter = webview.viewPrintFormatter()
-            formatter.perPageContentInsets = UIEdgeInsets(
-                top: PrintedPageUX.PageInsets,
-                left: PrintedPageUX.PageInsets,
-                bottom: PrintedPageUX.PageInsets,
-                right: PrintedPageUX.PageInsets
-            )
+        if let formatter = webView?.viewPrintFormatter() {
+            formatter.perPageContentInsets = UIEdgeInsets(equalInset: PrintedPageUX.insets)
             addPrintFormatter(formatter, startingAtPageAt: 0)
         }
     }
@@ -43,14 +42,14 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
     override func drawFooterForPage(at pageIndex: Int, in headerRect: CGRect) {
         let headerInsets = UIEdgeInsets(
             top: headerRect.minY,
-            left: PrintedPageUX.PageInsets,
+            left: PrintedPageUX.insets,
             bottom: paperRect.maxY - headerRect.maxY,
-            right: PrintedPageUX.PageInsets
+            right: PrintedPageUX.insets
         )
         let headerRect = paperRect.inset(by: headerInsets)
 
         // url on left
-        self.drawTextAtPoint(tab!.url?.displayURL?.absoluteString ?? "", rect: headerRect, onLeft: true)
+        self.drawTextAtPoint(tabURL?.displayURL?.absoluteString ?? "", rect: headerRect, onLeft: true)
 
         // page number on right
         let pageNumberString = "\(pageIndex + 1)"
@@ -60,14 +59,14 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
     override func drawHeaderForPage(at pageIndex: Int, in headerRect: CGRect) {
         let headerInsets = UIEdgeInsets(
             top: headerRect.minY,
-            left: PrintedPageUX.PageInsets,
+            left: PrintedPageUX.insets,
             bottom: paperRect.maxY - headerRect.maxY,
-            right: PrintedPageUX.PageInsets
+            right: PrintedPageUX.insets
         )
         let headerRect = paperRect.inset(by: headerInsets)
 
         // page title on left
-        self.drawTextAtPoint(tab!.displayTitle, rect: headerRect, onLeft: true)
+        self.drawTextAtPoint(tabDisplayTitle, rect: headerRect, onLeft: true)
 
         // date on right
         self.drawTextAtPoint(dateString, rect: headerRect, onLeft: false)
