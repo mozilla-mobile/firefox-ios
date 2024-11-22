@@ -222,50 +222,6 @@ class RustAutofillTests: XCTestCase {
         waitForExpectations(timeout: 3, handler: nil)
     }
 
-    func testUpdateCreditCard() {
-        let expectationAddCard = expectation(description: "completed add card")
-        let expectationGetCard = expectation(description: "completed getting card")
-        let expectationUpdateCard = expectation(description: "update card")
-        let expectationCheckUpdateCard = expectation(description: "checking updated card")
-
-        addCreditCard { creditCard, err in
-            do {
-                let creditCard = try XCTUnwrap(creditCard)
-
-                XCTAssertNil(err)
-                expectationAddCard.fulfill()
-
-                self.autofill.getCreditCard(id: creditCard.guid) { card, err in
-                    do {
-                        let card = try XCTUnwrap(card)
-
-                        XCTAssertNil(err)
-                        XCTAssertEqual(creditCard.guid, card.guid)
-                        expectationGetCard.fulfill()
-
-                        let updatedCreditCard = self.createUnencryptedCreditCardFields(creditCard: creditCard)
-                        self.autofill.updateCreditCard(id: creditCard.guid,
-                                                       creditCard: updatedCreditCard) { success, err in
-                            self.makeAssertionsForUpdateCard(success: success, err: err, expectation: expectationUpdateCard)
-
-                            self.getCreditCardAndMakeAssertionsForCheckUpdateCard(id: creditCard.guid,
-                                                                                  updatedCreditCard: updatedCreditCard,
-                                                                                  expectation: expectationCheckUpdateCard)
-                        }
-                    } catch {
-                        XCTFail("The card variable should not be nil.")
-                        expectationGetCard.fulfill()
-                    }
-                }
-            } catch {
-                XCTFail("The creditCard variable should not be nil.")
-                expectationAddCard.fulfill()
-            }
-        }
-
-        waitForExpectations(timeout: 3, handler: nil)
-    }
-
     func testUpdateCreditCard() async throws {
         let creditCard = try await addCreditCard()
         let card = try await getCreditCard(id: creditCard.guid)
