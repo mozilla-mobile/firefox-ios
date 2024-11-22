@@ -78,6 +78,19 @@ class RustAutofillTests: XCTestCase {
         }
     }
 
+    func updateCreditCard(id: String,
+                          creditCard: UnencryptedCreditCardFields) async throws -> Bool {
+        return try await withCheckedThrowingContinuation { continuation in
+            autofill.updateCreditCard(id: id, creditCard: creditCard) { success, error in
+                guard let success else {
+                    continuation.resume(throwing: error ?? NSError(domain: "Couldn't update credit card", code: 0))
+                    return
+                }
+                continuation.resume(returning: success)
+            }
+        }
+    }
+
     func addAddress(completion: @escaping (Result<Address, Error>) -> Void) {
         let address = UpdatableAddressFields(
             name: "Jane Doe",
