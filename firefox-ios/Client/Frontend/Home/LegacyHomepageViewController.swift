@@ -284,7 +284,8 @@ class LegacyHomepageViewController:
 
         // Constraint so wallpaper appears under the status bar
         let wallpaperTopConstant: CGFloat = UIWindow.keyWindow?.safeAreaInsets.top ?? statusBarFrame?.height ?? 0
-        wallpaperViewTopConstraint = wallpaperView.topAnchor.constraint(equalTo: view.topAnchor, constant: -wallpaperTopConstant)
+        wallpaperViewTopConstraint = wallpaperView.topAnchor.constraint(equalTo: view.topAnchor,
+                                                                        constant: -wallpaperTopConstant)
 
         wallpaperViewTopConstraint?.isActive = true
         NSLayoutConstraint.activate([
