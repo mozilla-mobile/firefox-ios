@@ -37,7 +37,7 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
     // MARK: - Properties
     let tabManager: TabManager
     weak var delegate: TopTabsDelegate?
-    private var topTabDisplayManager: LegacyTabDisplayManager!
+    private var topTabDisplayManager: TopTabDisplayManager!
     var tabCellIdentifier: TabDisplayerDelegate.TabCellIdentifier = TopTabCell.cellIdentifier
     var profile: Profile
     var themeManager: ThemeManager
@@ -123,11 +123,11 @@ class TopTabsViewController: UIViewController, Themeable, Notifiable, FeatureFla
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
-        topTabDisplayManager = LegacyTabDisplayManager(collectionView: self.collectionView,
-                                                       tabManager: self.tabManager,
-                                                       tabDisplayer: self,
-                                                       reuseID: TopTabCell.cellIdentifier,
-                                                       profile: profile)
+        topTabDisplayManager = TopTabDisplayManager(collectionView: self.collectionView,
+                                                    tabManager: self.tabManager,
+                                                    tabDisplayer: self,
+                                                    reuseID: TopTabCell.cellIdentifier,
+                                                    profile: profile)
         collectionView.dataSource = topTabDisplayManager
         collectionView.delegate = tabLayoutDelegate
     }
