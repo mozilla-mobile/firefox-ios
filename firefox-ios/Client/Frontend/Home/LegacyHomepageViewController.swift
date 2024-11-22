@@ -196,7 +196,6 @@ class LegacyHomepageViewController:
 
         coordinator.animate { _ in
             let wallpaperTopConstant: CGFloat = UIWindow.keyWindow?.safeAreaInsets.top ?? self.statusBarFrame?.height ?? 0
-            print("FF: wallpaper constant \(wallpaperTopConstant)")
             self.wallpaperViewTopConstraint?.constant = -wallpaperTopConstant
         }
     }

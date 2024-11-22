@@ -2,7 +2,7 @@
 features:
   pull-to-refresh-refactor-feature:
     description: >
-      The Feature flag to manage the refactor of the new pull to refresh feature.
+      The Feature flag to manage the roll out of the new pull to refresh feature.
     variables:
       enabled:
         description: >
