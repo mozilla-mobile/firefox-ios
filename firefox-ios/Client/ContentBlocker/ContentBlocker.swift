@@ -294,11 +294,7 @@ extension ContentBlocker {
         }
     }
 
-    private func calculateHash(forFileAtPath path: String) -> String? {
-        guard let fileData = try? Data(contentsOf: URL(fileURLWithPath: path)) else {
-            return nil
-        }
-
+    private func calculateHash(for fileData: Data) -> String? {
         let hash = SHA256.hash(data: fileData)
         return hash.compactMap { String(format: "%02x", $0) }.joined()
     }
@@ -308,9 +304,10 @@ extension ContentBlocker {
         let defaults = UserDefaults.standard
         var hasChanged = false
 
+        let lists = RemoteDataType.contentBlockingLists
         for list in blocklists {
-            guard let path = Bundle.main.path(forResource: list, ofType: "json"),
-                  let newHash = calculateHash(forFileAtPath: path) else { continue }
+            guard let data = try? lists.loadLocalSettingsFileAsJSON(fileName: list) else { continue }
+            guard let newHash = calculateHash(for: data) else { continue }
 
             let oldHash = defaults.string(forKey: list)
             if oldHash != newHash {
