@@ -40,7 +40,7 @@ for lang in $LOCALES; do
         --derived_data_path l10n-screenshots-dd \
         --ios_version "18.1" \
         --erase_simulator --localize_simulator \
-        --devices "iPhone 16" --languages "$lang" \
+        --devices "iPhone 16 (18.1)" --languages "$lang" \
         --output_directory "l10n-screenshots/$lang" \
         $EXTRA_FAST_LANE_ARGS
     echo "Fastlane exited with code: $?"
