@@ -822,7 +822,7 @@ workflows:
             set -e
             # debug log
             set -x
-            gem install fastlane -v 2.219.0
+            gem install fastlane -v 2.225.0
             fastlane -version
 
             ./firefox-ios/l10n-screenshots.sh en-US
