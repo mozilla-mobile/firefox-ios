@@ -256,6 +256,9 @@
 /* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
 "MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "Zapisz";
 
+/* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
+"MainMenu.ToolsSection.AccessibilityLabels.Save.v133" = "Podmenu Zachowaj";
+
 /* On the main menu, the accessibility label for the action that will switch a site from mobile version to the desktop version, if available. */
 "MainMenu.ToolsSection.AccessibilityLabels.SwitchToDesktopSite.v132" = "Wersja na komputery";
 
@@ -264,6 +267,9 @@
 
 /* On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu. */
 "MainMenu.ToolsSection.AccessibilityLabels.Tools.v132" = "Narzędzia";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.Tools.v133" = "Podmenu Narzędzia";
 
 /* On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
 "MainMenu.ToolsSection.FindInPage.Title.v131" = "Znajdź na stronie…";

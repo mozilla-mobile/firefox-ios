@@ -845,7 +845,7 @@
 "Menu.TrackingProtectionDescription.CrossSiteNew" = "Quelli canistrelli vi seguitanu da un situ à l’altru per coglie dati nant’à ciò chì vo fate in linea. Sò definiti da terze parti cum’è sucietà di publicità è d’analisa di dati.";
 
 /* Description of cryptominers. */
-"Menu.TrackingProtectionDescription.CryptominersNew" = "I minatori di crittomuneta impieganu à l’appiattu a putenza di calculu di u vostru urdinatore per minà muneta virtuale. I so scenarii viotanu a vostra batteria, freneghjanu u vostru urdinatore, è ponu aummantà a vostra fattura d’eletricità.";
+"Menu.TrackingProtectionDescription.CryptominersNew" = "I minatori di crittomuneta impieganu à l’appiattu a putenza di calculu di u vostru urdinatore per minà muneta virtuale. I so scenarii viotanu a vostra batteria, freneghjanu u vostru urdinatore, è ponu aumantà a vostra fattura d’elettricità.";
 
 /* Description of fingerprinters. */
 "Menu.TrackingProtectionDescription.Fingerprinters" = "I parametri di u vostru navigatore et di u vostru apparechju sò unichi. I detettori d’impronta numerica culletteghjanu una mansa di sti parametri unichi per creà un prufilu persunalizatu chì pò dopu esse impiegatu per spiunavvi durante a vostra navigazione.";
