@@ -196,7 +196,7 @@ class RustAutofillTests: XCTestCase {
 
         XCTAssertEqual(creditCard.guid, retrievedCreditCard.guid)
     }
-    
+
     func testListCreditCards() async throws {
         let cards = try await listCreditCards()
         _ = try await addCreditCard()
