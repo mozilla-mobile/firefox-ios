@@ -4,6 +4,9 @@
 /* On error page, this is the description for generic error. */
 "NativeErrorPage.GenericError.Description.v131" = "Prišlo je do napake SSL, zaradi katere ni mogoče vzpostaviti varne povezave s strežnikom.";
 
+/* On error page, this is the description for generic error. The placeholder will be replaced by the site url */
+"NativeErrorPage.GenericError.Description.v134" = "Strani %@ lastnik ni pravilno nastavil, zato ni mogoče vzpostaviti varne povezave.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Previdno. Nekaj ni videti v redu.";
 

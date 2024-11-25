@@ -4,6 +4,9 @@
 /* On error page, this is the description for generic error. */
 "NativeErrorPage.GenericError.Description.v131" = "SSL-zmylk je nastał a wěsty zwisk ze serwerom njeda so wutworić.";
 
+/* On error page, this is the description for generic error. The placeholder will be replaced by the site url */
+"NativeErrorPage.GenericError.Description.v134" = "Swójstwownik %@ njeje jo korektnje konfigurował a wěsty zwisk njeda so wutworić.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Budźće kedźbliwy. Něšto w porjadku njeje.";
 
