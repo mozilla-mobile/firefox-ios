@@ -108,22 +108,14 @@ final class PasswordGeneratorMiddleware {
     }
 
     private func escapeString(string: String) -> String? {
-        do {
-            let jsonData = try JSONEncoder().encode(string)
-            if let jsonString = String(data: jsonData, encoding: .utf8) {
-                return (jsonString)
-            } else {
-                self.logger.log("Error encoding generated password to JSON",
-                                level: .warning,
-                                category: .passwordGenerator)
-                return nil
-            }
-        } catch {
-            self.logger.log("Error encoding generated password to JSON: \(error)",
+        guard let jsonData = try? JSONEncoder().encode(string),
+              let jsonString = String(data: jsonData, encoding: .utf8) else {
+            self.logger.log("Error encoding generated password to JSON",
                             level: .warning,
                             category: .passwordGenerator)
             return nil
         }
+        return jsonString
     }
 
     private func userTappedRefreshPassword(frame: WKFrameInfo, windowUUID: WindowUUID) {

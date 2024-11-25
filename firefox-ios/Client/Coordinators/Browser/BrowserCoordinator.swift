@@ -964,7 +964,6 @@ class BrowserCoordinator: BaseCoordinator,
             usingDimmedBackground: true,
             windowUUID: windowUUID
         )
-
         present(bottomSheetVC)
     }
 
