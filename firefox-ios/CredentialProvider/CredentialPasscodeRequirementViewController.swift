@@ -14,7 +14,7 @@ class CredentialPasscodeRequirementViewController: UIViewController {
     private struct UX {
         static let cancelButtonCornerRadius: CGFloat = 8
     }
-    var delegate: CredentialPasscodeRequirementViewControllerDelegate?
+    weak var delegate: CredentialPasscodeRequirementViewControllerDelegate?
 
     private lazy var logoImageView: UIImageView = {
         let image = UIImageView(image: UIImage(named: "logo-glyph"))
