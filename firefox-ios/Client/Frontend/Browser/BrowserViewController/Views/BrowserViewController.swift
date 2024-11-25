@@ -391,6 +391,13 @@ class BrowserViewController: UIViewController,
         let showWarningBadge = isActionNeeded
 
         if isToolbarRefactorEnabled {
+            let shouldShowWarningBadge = store.state.screenState(
+                ToolbarState.self,
+                for: .toolbar,
+                window: windowUUID
+            )?.showMenuWarningBadge
+
+            guard showWarningBadge != shouldShowWarningBadge else { return }
             let action = ToolbarAction(
                 showMenuWarningBadge: showWarningBadge,
                 windowUUID: windowUUID,
