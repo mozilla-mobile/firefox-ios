@@ -144,6 +144,18 @@ class RustAutofillTests: XCTestCase {
         }
     }
 
+    func getListAllAddresses() async throws -> [Address] {
+        return try await withCheckedThrowingContinuation { continuation in
+            autofill.listAllAddresses { addresses, error in
+                guard let addresses else {
+                    continuation.resume(throwing: error ?? NSError(domain: "Couldn't get addresses", code: 0))
+                    return
+                }
+                continuation.resume(returning: addresses)
+            }
+        }
+    }
+
     func testAddAndGetAddress() async throws {
         let address = try await addAddress()
         let retrievedAddress = try await getAddress(id: address.guid)
