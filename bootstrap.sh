@@ -46,3 +46,7 @@ cp -r .githooks/* .git/hooks/
 
 # Make the hooks are executable
 chmod +x .git/hooks/*
+
+# Install Node.js dependencies and build user scripts
+npm install
+npm run build
