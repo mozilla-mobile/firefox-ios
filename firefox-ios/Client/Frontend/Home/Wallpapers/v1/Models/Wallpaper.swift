@@ -49,12 +49,19 @@ struct Wallpaper: Equatable {
     var thumbnailID: String { return "\(id)\(fileId.thumbnail)" }
     var portraitID: String { return "\(id)\(deviceVersionID)\(fileId.portrait)" }
     var landscapeID: String { return "\(id)\(deviceVersionID)\(fileId.landscape)" }
-    private var deviceVersionID: String {
-        return UIDevice.current.userInterfaceIdiom == .pad ? fileId.iPad : fileId.iPhone
+
+    // TODO: This is actually just a nil wallpaper. Make this clearer in FXIOS-10633
+    static var defaultWallpaper: Wallpaper {
+        return Wallpaper(
+            id: Wallpaper.defaultWallpaperName,
+            textColor: nil,
+            cardColor: nil,
+            logoTextColor: nil
+        )
     }
 
     var type: WallpaperType {
-        return id == "fxDefault" ? .defaultWallpaper : .other
+        return id == Wallpaper.defaultWallpaperName ? .defaultWallpaper : .other
     }
 
     var needsToFetchResources: Bool {
@@ -72,6 +79,11 @@ struct Wallpaper: Equatable {
 
     var landscape: UIImage? {
         return fetchResourceFor(imageType: .landscape)
+    }
+
+    private static var defaultWallpaperName = "fxDefault"
+    private var deviceVersionID: String {
+        return UIDevice.current.userInterfaceIdiom == .pad ? fileId.iPad : fileId.iPhone
     }
 
     // MARK: - Helper functions

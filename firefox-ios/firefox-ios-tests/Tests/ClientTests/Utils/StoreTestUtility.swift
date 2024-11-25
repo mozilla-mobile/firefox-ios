@@ -5,6 +5,7 @@
 import Foundation
 import Redux
 @testable import Client
+import XCTest
 
 protocol StoreTestUtility {
     func setupAppState() -> AppState

@@ -199,10 +199,7 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
     }
 
     private func addDefaultWallpaper(to availableCollections: [WallpaperCollection]) -> [WallpaperCollection] {
-        let defaultWallpaper = [Wallpaper(id: "fxDefault",
-                                          textColor: nil,
-                                          cardColor: nil,
-                                          logoTextColor: nil)]
+        let defaultWallpaper = [Wallpaper.defaultWallpaper]
 
         if availableCollections.isEmpty {
             return [WallpaperCollection(id: "classic-firefox",
