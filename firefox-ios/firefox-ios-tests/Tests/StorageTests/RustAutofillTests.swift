@@ -196,34 +196,7 @@ class RustAutofillTests: XCTestCase {
 
         XCTAssertEqual(creditCard.guid, retrievedCreditCard.guid)
     }
-
-    func testListCreditCards() {
-        let expectationCardList = expectation(description: "getting empty card list")
-        let expectationAddCard = expectation(description: "add card")
-        let expectationGetCards = expectation(description: "getting card list")
-        autofill.listCreditCards { cards, err in
-            XCTAssertNotNil(cards)
-            XCTAssertNil(err)
-            XCTAssertEqual(cards!.count, 0)
-            expectationCardList.fulfill()
-
-            self.addCreditCard { creditCard, err in
-                XCTAssertNotNil(creditCard)
-                XCTAssertNil(err)
-                expectationAddCard.fulfill()
-
-                self.autofill.listCreditCards { cards, err in
-                    XCTAssertNotNil(cards)
-                    XCTAssertNil(err)
-                    XCTAssertEqual(cards!.count, 1)
-                    expectationGetCards.fulfill()
-                }
-            }
-        }
-
-        waitForExpectations(timeout: 3, handler: nil)
-    }
-
+    
     func testListCreditCards() async throws {
         let cards = try await listCreditCards()
         let addedCreditCard = try await addCreditCard()
