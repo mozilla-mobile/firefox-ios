@@ -168,7 +168,6 @@ class TermsOfServiceViewController: UIViewController,
     private func setupAgreementTextView(with title: String, linkTitle: String, linkType: LinkType, and a11yId: String) {
         let agreementLabel: UILabel = .build()
         agreementLabel.accessibilityIdentifier = a11yId
-        agreementLabel.tag = linkType.rawValue
         agreementLabel.numberOfLines = 0
         agreementLabel.textAlignment = .center
         agreementLabel.adjustsFontForContentSizeCategory = true
@@ -187,10 +186,14 @@ class TermsOfServiceViewController: UIViewController,
 
         agreementLabel.isUserInteractionEnabled = true
 
-        if linkType != .manage {
-            let gesture = UITapGestureRecognizer(target: self, action: #selector(presentLink))
+        switch linkType {
+        case .termsOfService:
+            let gesture = UITapGestureRecognizer(target: self, action: #selector(presentTermsOfService))
             agreementLabel.addGestureRecognizer(gesture)
-        } else {
+        case .privacyNotice:
+            let gesture = UITapGestureRecognizer(target: self, action: #selector(presentPrivacyNotice))
+            agreementLabel.addGestureRecognizer(gesture)
+        case .manage:
             let gesture = UITapGestureRecognizer(target: self, action: #selector(presentManagePreferences))
             agreementLabel.addGestureRecognizer(gesture)
         }
@@ -199,20 +202,7 @@ class TermsOfServiceViewController: UIViewController,
         agreementContent.addArrangedSubview(agreementLabel)
     }
 
-    // MARK: - Button actions
-    @objc
-    private func presentLink(_ gesture: UIGestureRecognizer) {
-        let url: URL? = {
-            // TODO: FXIOS-10638 Firefox iOS: Use the correct Terms of Service and Privacy Notice URLs in ToSViewController
-            switch gesture.view?.tag {
-            case LinkType.termsOfService.rawValue:
-                return nil
-            case LinkType.privacyNotice.rawValue:
-                return nil
-            default: return nil
-            }
-        }()
-
+    private func presentLink(with url: URL?) {
         guard let url else { return }
         let presentLinkVC = PrivacyPolicyViewController(url: url, windowUUID: windowUUID)
         let buttonItem = UIBarButtonItem(
@@ -225,6 +215,19 @@ class TermsOfServiceViewController: UIViewController,
         presentLinkVC.navigationItem.rightBarButtonItem = buttonItem
         let controller = DismissableNavigationViewController(rootViewController: presentLinkVC)
         present(controller, animated: true)
+    }
+
+    // MARK: - Button actions
+    @objc
+    private func presentTermsOfService(_ gesture: UIGestureRecognizer) {
+        // TODO: FXIOS-10638 Firefox iOS: Use the correct Terms of Service and Privacy Notice URLs in ToSViewController
+        presentLink(with: nil)
+    }
+
+    @objc
+    private func presentPrivacyNotice(_ gesture: UIGestureRecognizer) {
+        // TODO: FXIOS-10638 Firefox iOS: Use the correct Terms of Service and Privacy Notice URLs in ToSViewController
+        presentLink(with: nil)
     }
 
     @objc
