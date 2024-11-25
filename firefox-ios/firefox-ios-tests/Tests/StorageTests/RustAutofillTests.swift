@@ -146,12 +146,12 @@ class RustAutofillTests: XCTestCase {
 
     func getAddress(id: String) async throws -> Address {
         return try await withCheckedThrowingContinuation { continuation in
-            autofill.getAddress(id: id) { retrievedAddress, getAddressError in
-                guard let retrievedAddress else {
+            autofill.getAddress(id: id) { address, getAddressError in
+                guard let address else {
                     continuation.resume(throwing: getAddressError ?? NSError(domain: "Couldn't get address", code: 0))
                     return
                 }
-                continuation.resume(returning: retrievedAddress)
+                continuation.resume(returning: address)
             }
         }
     }
