@@ -4,6 +4,9 @@
 /* On error page, this is the description for generic error. */
 "NativeErrorPage.GenericError.Description.v131" = "ਇੱਕ SSL ਗਲਤੀ ਆਈ ਹੈ ਅਤੇ ਸਰਵਰ ਨਾਲ ਸੁਰੱਖਿਅਤ ਕਨੈਕਸ਼ਨ ਨਹੀਂ ਬਣਾਇਆ ਜਾ ਸਕਦਾ ਹੈ।";
 
+/* On error page, this is the description for generic error. The placeholder will be replaced by the site url */
+"NativeErrorPage.GenericError.Description.v134" = "%@ ਦੇ ਮਾਲਕ ਨੇ ਇਸ ਨੂੰ ਠੀਕ ਢੰਗ ਨਾਲ ਸੈੱਟਅੱਪ ਨਹੀਂ ਕੀਤਾ ਹੈ ਅਤੇ ਸੁਰੱਖਿਅਤ ਕਨੈਕਸ਼ਨ ਬਣਾਇਆ ਨਹੀਂ ਜਾ ਸਕਦਾ ਹੈ।";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "ਧਿਆਨ ਰੱਖੋ। ਕੁਝ ਸਹੀ ਨਹੀਂ ਜਾਪਦਾ ਹੈ।";
 

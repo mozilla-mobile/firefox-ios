@@ -4,6 +4,9 @@
 /* On error page, this is the description for generic error. */
 "NativeErrorPage.GenericError.Description.v131" = "SSL hiba történt, és nem lehet biztonságos kapcsolatot létrehozni a kiszolgálóval.";
 
+/* On error page, this is the description for generic error. The placeholder will be replaced by the site url */
+"NativeErrorPage.GenericError.Description.v134" = "A(z) %@ tulajdonosa nem állította be megfelelően, és nem hozható létre biztonságos kapcsolat.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Legyen óvatos. Úgy tűnik, hogy valami nincs rendben.";
 

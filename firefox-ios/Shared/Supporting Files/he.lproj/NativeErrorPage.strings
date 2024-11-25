@@ -4,6 +4,9 @@
 /* On error page, this is the description for generic error. */
 "NativeErrorPage.GenericError.Description.v131" = "אירעה שגיאת SSL ולא ניתן ליצור חיבור מאובטח לשרת.";
 
+/* On error page, this is the description for generic error. The placeholder will be replaced by the site url */
+"NativeErrorPage.GenericError.Description.v134" = "הבעלים של %@ לא הגדיר אותו כראוי ולא ניתן ליצור חיבור מאובטח.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "נא להיזהר. משהו לא נראה תקין.";
 
