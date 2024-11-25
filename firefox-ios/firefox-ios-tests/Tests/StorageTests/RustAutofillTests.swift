@@ -167,27 +167,6 @@ class RustAutofillTests: XCTestCase {
         XCTAssertEqual(address.guid, retrievedAddress.guid)
     }
 
-    func testListAllAddressesSuccess() {
-        let expectationListAddresses = expectation(description: "Completes the list all addresses operation")
-
-        autofill.listAllAddresses { addresses, error in
-            XCTAssertNil(error, "Error should be nil")
-            XCTAssertNotNil(addresses, "Addresses should not be nil")
-
-            // Assert on individual addresses in the list
-            for address in addresses ?? [] {
-                XCTAssertEqual(address.name, "Jane Doe")
-                XCTAssertEqual(address.streetAddress, "123 Second Avenue")
-                XCTAssertEqual(address.addressLevel2, "Chicago, IL")
-                XCTAssertEqual(address.country, "United States")
-            }
-
-            expectationListAddresses.fulfill()
-        }
-
-        waitForExpectations(timeout: 3, handler: nil)
-    }
-
     func testListAllAddressesSuccess() async throws {
         let addresses = try await listAllAddresses()
 
