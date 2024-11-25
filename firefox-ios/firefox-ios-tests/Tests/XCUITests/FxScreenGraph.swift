@@ -1130,7 +1130,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.tables.cells[AccessibilityIdentifiers.MainMenu.addToShortcuts],
             forAction: Action.PinToTopSitesPAM
         )
-        // Save to reading list (TODO)
         screenState.tap(
             app.tables.cells[AccessibilityIdentifiers.MainMenu.saveToReadingList],
             forAction: Action.AddToReadingListBrowserTabMenu
@@ -1151,16 +1150,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         // Signed in (TODO)
         // New tab
         screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.newTab], to: NewTabScreen)
-        // New private tab (TODO: Not working)
-        /*
-        screenState.tap(
-            app.tables.cells[AccessibilityIdentifiers.MainMenu.newPrivateTab],
-            forAction: Action.OpenPrivateTabLongPressTabsButton,
-            transitionTo: NewTabScreen
-        ) { userState in
-            userState.isPrivate = !userState.isPrivate
-        }
-         */
+        // New private tab (TODO: Action.OpenPrivateTabLongPressTabsButton
         // Switch to Desktop/Mobile Site
         // The cell's identifier is the same for desktop and mobile, so I use static
         // texts for the RequestMobileSite case
@@ -1176,7 +1166,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.save], to: SaveBrowserTabMenu)
         // Bookmarks
         screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.bookmarks], to: LibraryPanel_Bookmarks)
-        // Actions.BookmarkThreeDots?
         // History
         screenState.tap(
             app.tables.cells[AccessibilityIdentifiers.MainMenu.history],
