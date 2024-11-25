@@ -109,14 +109,14 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.deviceDesktop])
+        mozWaitForElementToExist(app.tables.cells[AccessibilityIdentifiers.MainMenu.switchToDesktopSite])
         navigator.goto(RequestDesktopSite)
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
         navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.deviceMobile])
+        mozWaitForElementToExist(app.tables.cells.staticTexts["Switch to Mobile Site"])
         // Select Mobile site here, the identifier is the same but the Text is not
         navigator.goto(RequestMobileSite)
         waitUntilPageLoad()
