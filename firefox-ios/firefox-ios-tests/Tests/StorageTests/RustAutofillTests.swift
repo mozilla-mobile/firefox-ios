@@ -106,6 +106,32 @@ class RustAutofillTests: XCTestCase {
         return autofill.addAddress(address: address, completion: completion)
     }
 
+    func addAddress() async throws -> Address {
+        return try await withCheckedThrowingContinuation { continuation in
+            let address = UpdatableAddressFields(
+                name: "Jane Doe",
+                organization: "",
+                streetAddress: "123 Second Avenue",
+                addressLevel3: "",
+                addressLevel2: "Chicago, IL",
+                addressLevel1: "",
+                postalCode: "",
+                country: "United States",
+                tel: "",
+                email: "")
+            autofill.addAddress(address: address) { result in
+                switch result {
+                case .success(let addressAdded):
+                    continuation.resume(returning: addressAdded)
+                    return
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                    return
+                }
+            }
+        }
+    }
+
     func testAddAndGetAddress() {
         let expectationAddAddress = expectation(description: "Completes the add address operation")
         let expectationGetAddress = expectation(description: "Completes the get address operation")
