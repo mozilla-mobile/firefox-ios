@@ -203,7 +203,6 @@ class RustAutofillTests: XCTestCase {
         let updatedCards = try await listCreditCards()
 
         XCTAssertEqual(cards.count, 0)
-        XCTAssertNotNil(addedCreditCard)
         XCTAssertEqual(updatedCards.count, 1)
     }
 
