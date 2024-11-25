@@ -9,6 +9,7 @@ final class TrackingProtectionConnectionDetailsView: UIView {
     private struct UX {
         static let foxImageSize: CGFloat = 100
         static let connectionDetailsLabelsVerticalSpacing: CGFloat = 12
+        static let labelsCenteringDelta: CGFloat = 8
         static let connectionDetailsLabelBottomSpacing: CGFloat = 28
         static let connectionDetailsStackSpacing = 8.0
     }
@@ -87,14 +88,14 @@ final class TrackingProtectionConnectionDetailsView: UIView {
             connectionDetailsTitleLabel.trailingAnchor.constraint(equalTo: connectionDetailsLabelsContainer.trailingAnchor),
             connectionDetailsTitleLabel.bottomAnchor.constraint(
                 equalTo: connectionDetailsLabelsContainer.centerYAnchor,
-                constant: -UX.connectionDetailsLabelsVerticalSpacing / 2
+                constant: (-UX.connectionDetailsLabelsVerticalSpacing / 2 - UX.labelsCenteringDelta)
             ),
 
             connectionDetailsStatusLabel.leadingAnchor.constraint(equalTo: connectionDetailsLabelsContainer.leadingAnchor),
             connectionDetailsStatusLabel.trailingAnchor.constraint(equalTo: connectionDetailsLabelsContainer.trailingAnchor),
             connectionDetailsStatusLabel.topAnchor.constraint(
                 equalTo: connectionDetailsLabelsContainer.centerYAnchor,
-                constant: UX.connectionDetailsLabelsVerticalSpacing / 2
+                constant: (UX.connectionDetailsLabelsVerticalSpacing / 2 - UX.labelsCenteringDelta)
             ),
             connectionDetailsStatusLabel.bottomAnchor.constraint(
                 lessThanOrEqualTo: connectionDetailsLabelsContainer.bottomAnchor
