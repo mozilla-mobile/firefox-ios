@@ -130,6 +130,16 @@
 		1D91C1862CF11EA500B24960 /* disconnect-block-social.json in Resources */ = {isa = PBXBuildFile; fileRef = 1D91C17C2CF11EA500B24960 /* disconnect-block-social.json */; };
 		1D91C1872CF11EA500B24960 /* disconnect-block-cookies-advertising.json in Resources */ = {isa = PBXBuildFile; fileRef = 1D91C17D2CF11EA500B24960 /* disconnect-block-cookies-advertising.json */; };
 		1D91C1892CF1203F00B24960 /* ContentBlockingListRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D91C1882CF1203F00B24960 /* ContentBlockingListRecord.swift */; };
+		1D91C18A2CF526EF00B24960 /* disconnect-block-cookies-social.json in Resources */ = {isa = PBXBuildFile; fileRef = 1D91C1762CF11EA400B24960 /* disconnect-block-cookies-social.json */; };
+		1D91C18B2CF526EF00B24960 /* disconnect-block-cryptomining.json in Resources */ = {isa = PBXBuildFile; fileRef = 1D91C17A2CF11EA500B24960 /* disconnect-block-cryptomining.json */; };
+		1D91C18C2CF526EF00B24960 /* disconnect-block-cookies-content.json in Resources */ = {isa = PBXBuildFile; fileRef = 1D91C1752CF11EA400B24960 /* disconnect-block-cookies-content.json */; };
+		1D91C18D2CF526EF00B24960 /* disconnect-block-content.json in Resources */ = {isa = PBXBuildFile; fileRef = 1D91C1782CF11EA400B24960 /* disconnect-block-content.json */; };
+		1D91C18E2CF526EF00B24960 /* disconnect-block-cookies-advertising.json in Resources */ = {isa = PBXBuildFile; fileRef = 1D91C17D2CF11EA500B24960 /* disconnect-block-cookies-advertising.json */; };
+		1D91C18F2CF526EF00B24960 /* disconnect-block-fingerprinting.json in Resources */ = {isa = PBXBuildFile; fileRef = 1D91C17B2CF11EA500B24960 /* disconnect-block-fingerprinting.json */; };
+		1D91C1902CF526EF00B24960 /* disconnect-block-cookies-analytics.json in Resources */ = {isa = PBXBuildFile; fileRef = 1D91C1742CF11EA400B24960 /* disconnect-block-cookies-analytics.json */; };
+		1D91C1912CF526EF00B24960 /* disconnect-block-analytics.json in Resources */ = {isa = PBXBuildFile; fileRef = 1D91C1792CF11EA400B24960 /* disconnect-block-analytics.json */; };
+		1D91C1922CF526EF00B24960 /* disconnect-block-advertising.json in Resources */ = {isa = PBXBuildFile; fileRef = 1D91C1772CF11EA400B24960 /* disconnect-block-advertising.json */; };
+		1D91C1932CF526EF00B24960 /* disconnect-block-social.json in Resources */ = {isa = PBXBuildFile; fileRef = 1D91C17C2CF11EA500B24960 /* disconnect-block-social.json */; };
 		1DA3CE5D24EEE73100422BB2 /* OpenTabsWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA3CE5C24EEE73100422BB2 /* OpenTabsWidget.swift */; };
 		1DA3CE5F24EEE7C600422BB2 /* LegacyTabDataRetriever.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA3CE5E24EEE7C600422BB2 /* LegacyTabDataRetriever.swift */; };
 		1DA3CE6724EEE86C00422BB2 /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075641E37F7AB006961AC /* AppInfo.swift */; };
@@ -15401,6 +15411,16 @@
 				C869915D28917811007ACC5C /* wallpaperAvailabilityStart.json in Resources */,
 				C87BE0A428A2ED3F00BAADF5 /* wallpaperNoLearnMoreURL.json in Resources */,
 				C869915A28917811007ACC5C /* wallpaperBadTextColor.json in Resources */,
+				1D91C18A2CF526EF00B24960 /* disconnect-block-cookies-social.json in Resources */,
+				1D91C18B2CF526EF00B24960 /* disconnect-block-cryptomining.json in Resources */,
+				1D91C18C2CF526EF00B24960 /* disconnect-block-cookies-content.json in Resources */,
+				1D91C18D2CF526EF00B24960 /* disconnect-block-content.json in Resources */,
+				1D91C18E2CF526EF00B24960 /* disconnect-block-cookies-advertising.json in Resources */,
+				1D91C18F2CF526EF00B24960 /* disconnect-block-fingerprinting.json in Resources */,
+				1D91C1902CF526EF00B24960 /* disconnect-block-cookies-analytics.json in Resources */,
+				1D91C1912CF526EF00B24960 /* disconnect-block-analytics.json in Resources */,
+				1D91C1922CF526EF00B24960 /* disconnect-block-advertising.json in Resources */,
+				1D91C1932CF526EF00B24960 /* disconnect-block-social.json in Resources */,
 				C8B0F5EB283B7BF9007AE65D /* pocketsponsoredfeed.json in Resources */,
 				C869915F28917811007ACC5C /* wallpaperGoodData.json in Resources */,
 				8ABE9F1A2CB45B4B0080E1DF /* RemotePasswordRules.json in Resources */,
