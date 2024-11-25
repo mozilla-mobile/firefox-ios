@@ -10,12 +10,6 @@ import SwiftUI
 
 import struct MozillaAppServices.VisitTransitionSet
 
-private class FetchInProgressError: MaybeErrorType {
-    internal var description: String {
-        return "Fetch is already in-progress"
-    }
-}
-
 class HistoryPanelViewModel: FeatureFlaggable {
     enum Sections: Int, CaseIterable {
         case additionalHistoryActions

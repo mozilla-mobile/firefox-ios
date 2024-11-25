@@ -24,10 +24,6 @@ extension PocketStoriesProviding {
 }
 
 class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
-    private class PocketError: MaybeErrorType {
-        var description = "Failed to load from API"
-    }
-
     private let pocketEnvAPIKey = "PocketEnvironmentAPIKey"
 
     private static let SupportedLocales = ["en_CA", "en_US", "en_GB", "en_ZA", "de_DE", "de_AT", "de_CH"]
