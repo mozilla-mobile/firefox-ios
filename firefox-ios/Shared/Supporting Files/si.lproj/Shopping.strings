@@ -73,11 +73,17 @@
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
 "Shopping.OptInCard.PrivacyPolicy.Button.Title.v120" = "රහස්‍යතා ප්‍රතිපත්තිය";
 
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Firefox app name. */
+"Shopping.OptInCard.PrivacyPolicy.Button.Title.v123" = "%@ රහස්‍යතා දැන්වීම";
+
 /* Text for the secondary button of the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.SecondaryButton.Title.v120" = "දැන් නොවේ";
 
 /* Show Firefox Browser Terms of Use page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
 "Shopping.OptInCard.TermsOfUse.Button.Title.v120" = "භාවිත නියම";
+
+/* Show Fakespot Terms of Use page in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Fakespot name. */
+"Shopping.OptInCard.TermsOfUse.Button.Title.v123" = "%@ භාවිත නියම";
 
 /* Accessibility label for the Grade labels used in 'How we determine review quality' card and 'How reliable are these reviews' card displayed in the shopping review quality bottom sheet. The placeholder will be replaced by a grade letter (e.g. A). The grading system contains letters from A-F. */
 "Shopping.ReliabilityScore.Grade.A11y.Label.v120" = "%@ ශ්‍රේණිය";
@@ -140,8 +146,8 @@
 "Shopping.Sheet.Title.v120" = "සමාලෝචන සෝදිසිකරු";
 
 /* Text for body of error card displayed to the user when the device is disconnected from the network. */
-"Shopping.WarningCard.CheckNoConnection.Description.v120" = "ඔබගේ ජාල සම්බන්ධතාවය පරීක්‍ෂා කර පිටුව නැවත පූරණය කරන්න.";
+"Shopping.WarningCard.CheckNoConnection.Description.v120" = "ඔබගේ ජාල සම්බන්ධතාව පරීක්‍ෂා කර පිටුව නැවත පූරණය කරන්න.";
 
 /* Title for error card displayed to the user when the device is disconnected from the network. */
-"Shopping.WarningCard.CheckNoConnection.Title.v120" = "අන්තර්ජාල සම්බන්ධතාවයක් නැත";
+"Shopping.WarningCard.CheckNoConnection.Title.v120" = "අන්තර්ජාල සම්බන්ධතාවක් නැත";
 
