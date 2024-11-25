@@ -7,10 +7,10 @@ import Redux
 import Storage
 import UIKit
 
-class TabDisplayPanel: UIViewController,
-                       Themeable,
-                       EmptyPrivateTabsViewDelegate,
-                       StoreSubscriber {
+class TabDisplayPanelViewController: UIViewController,
+                                     Themeable,
+                                     EmptyPrivateTabsViewDelegate,
+                                     StoreSubscriber {
     typealias SubscriberStateType = TabsPanelState
 
     let panelType: TabTrayPanelType
@@ -62,6 +62,10 @@ class TabDisplayPanel: UIViewController,
         listenForThemeChange(view)
         applyTheme()
         subscribeToRedux()
+
+        if !tabDisplayView.shouldHideInactiveTabs {
+            InactiveTabsTelemetry().sectionShown()
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
