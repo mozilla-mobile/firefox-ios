@@ -189,7 +189,14 @@ class RustAutofillTests: XCTestCase {
     }
 
     func testListAllAddressesSuccess() async throws {
-        
+        let addresses = try await getListAllAddresses()
+
+        for address in addresses {
+            XCTAssertEqual(address.name, "Jane Doe")
+            XCTAssertEqual(address.streetAddress, "123 Second Avenue")
+            XCTAssertEqual(address.addressLevel2, "Chicago, IL")
+            XCTAssertEqual(address.country, "United States")
+        }
     }
 
     func testAddCreditCard() {
