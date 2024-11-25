@@ -224,6 +224,16 @@ class RustAutofillTests: XCTestCase {
         waitForExpectations(timeout: 3, handler: nil)
     }
 
+    func testListCreditCards() async throws {
+        let cards = try await listCreditCards()
+        let addedCreditCard = try await addCreditCard()
+        let updatedCards = try await listCreditCards()
+
+        XCTAssertEqual(cards.count, 0)
+        XCTAssertNotNil(addedCreditCard)
+        XCTAssertEqual(updatedCards.count, 1)
+    }
+
     func testListAllAddressesEmpty() {
         let expectationListAddresses = expectation(
             description: "Completes the list all addresses operation for an empty list"
