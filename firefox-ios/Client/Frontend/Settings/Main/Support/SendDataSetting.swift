@@ -6,19 +6,44 @@ import Common
 import Foundation
 import Shared
 
-class SendAnonymousUsageDataSetting: BoolSetting {
-    private weak var settingsDelegate: SupportSettingsDelegate?
+enum SendDataType {
+    case usageData
+    case crashReports
+}
 
-    var shouldSendUsageData: ((Bool) -> Void)?
+class SendDataSetting: BoolSetting {
+    private weak var settingsDelegate: SupportSettingsDelegate?
+    private let sendDataType: SendDataType
+
+    var shouldSendData: ((Bool) -> Void)?
 
     init(prefs: Prefs,
          delegate: SettingsDelegate?,
          theme: Theme,
-         settingsDelegate: SupportSettingsDelegate?) {
+         settingsDelegate: SupportSettingsDelegate?,
+         sendDataType: SendDataType) {
+        var title: String
+        var message: String
+        var linkedText: String
+        var prefKey: String
+
+        switch sendDataType {
+        case .usageData:
+            title = .SendUsageSettingTitle
+            message = .SendUsageSettingMessage
+            linkedText = .SendUsageSettingLink
+            prefKey = AppConstants.prefSendUsageData
+        case .crashReports:
+            title = .SendCrashReportsSettingTitle
+            message = .SendCrashReportsSettingMessage
+            linkedText = .SendCrashReportsSettingLink
+            prefKey = AppConstants.prefSendCrashReports
+        }
+
         let statusText = NSMutableAttributedString()
         statusText.append(
             NSAttributedString(
-                string: .SendUsageSettingMessage,
+                string: message,
                 attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textSecondary]
             )
         )
@@ -29,17 +54,18 @@ class SendAnonymousUsageDataSetting: BoolSetting {
         )
         statusText.append(
             NSAttributedString(
-                string: .SendUsageSettingLink,
+                string: linkedText,
                 attributes: [NSAttributedString.Key.foregroundColor: theme.colors.actionPrimary]
             )
         )
 
+        self.sendDataType = sendDataType
         self.settingsDelegate = settingsDelegate
         super.init(
             prefs: prefs,
-            prefKey: AppConstants.prefSendUsageData,
+            prefKey: prefKey,
             defaultValue: true,
-            attributedTitleText: NSAttributedString(string: .SendUsageSettingTitle),
+            attributedTitleText: NSAttributedString(string: title),
             attributedStatusText: statusText
         )
 
@@ -47,7 +73,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
 
         // We make sure to set this on initialization, in case the setting is turned off
         // in which case, we would to make sure that users are opted out of experiments
-        Experiments.setTelemetrySetting(prefs.boolForKey(AppConstants.prefSendUsageData) ?? true)
+        Experiments.setTelemetrySetting(prefs.boolForKey(prefKey) ?? true)
     }
 
     private func setupSettingDidChange() {
@@ -55,16 +81,27 @@ class SendAnonymousUsageDataSetting: BoolSetting {
             // AdjustHelper.setEnabled($0)
             DefaultGleanWrapper.shared.setUpload(isEnabled: value)
             Experiments.setTelemetrySetting(value)
-            self?.shouldSendUsageData?(value)
+            self?.shouldSendData?(value)
         }
     }
 
     override var accessibilityIdentifier: String? {
-        return AccessibilityIdentifiers.Settings.SendAnonymousUsageData.title
+        switch sendDataType {
+        case .usageData:
+            return AccessibilityIdentifiers.Settings.SendData.sendAnonymousUsageDataTitle
+        case .crashReports:
+            return AccessibilityIdentifiers.Settings.SendData.sendCrashReportsTitle
+        }
     }
 
     override var url: URL? {
-        return SupportUtils.URLForTopic("adjust")
+        switch sendDataType {
+        case .usageData:
+            return SupportUtils.URLForTopic("adjust")
+        case .crashReports:
+            // TODO: FXIOS-10348 Firefox iOS: Manage Privacy Preferences in Settings
+            return nil
+        }
     }
 
     override func onClick(_ navigationController: UINavigationController?) {

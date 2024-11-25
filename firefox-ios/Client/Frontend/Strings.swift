@@ -5334,6 +5334,21 @@ extension String {
         tableName: nil,
         value: "Mozilla strives to only collect what we need to provide and improve Firefox for everyone.",
         comment: "A short description that explains why mozilla collects usage data.")
+    public static let SendCrashReportsSettingTitle = MZLocalizedString(
+        key: "", // Settings.CrashReports.Title.v135
+        tableName: nil,
+        value: "Automatically send crash reports",
+        comment: "On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports.")
+    public static let SendCrashReportsSettingLink = MZLocalizedString(
+        key: "", // Settings.CrashReports.Link.v135
+        tableName: nil,
+        value: "Learn More.",
+        comment: "Title for a link that explains how Mozilla send crash reports.")
+    public static let SendCrashReportsSettingMessage = MZLocalizedString(
+        key: "", // Settings.CrashReports.Message.v135
+        tableName: nil,
+        value: "Crash reports allow us to diagnose and fix issues with the browser.",
+        comment: "On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports.")
     public static let SettingsSiriSectionName = MZLocalizedString(
         key: "Settings.Siri.SectionName",
         tableName: nil,
