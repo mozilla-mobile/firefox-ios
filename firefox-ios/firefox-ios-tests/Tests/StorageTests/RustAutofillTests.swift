@@ -138,6 +138,10 @@ class RustAutofillTests: XCTestCase {
         waitForExpectations(timeout: 3, handler: nil)
     }
 
+    func testAddAndGetAddress() async throws {
+        
+    }
+
     func testListAllAddressesSuccess() {
         let expectationListAddresses = expectation(description: "Completes the list all addresses operation")
 
