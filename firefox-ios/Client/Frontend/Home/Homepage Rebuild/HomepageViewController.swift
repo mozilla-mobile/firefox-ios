@@ -30,6 +30,8 @@ final class HomepageViewController: UIViewController,
     // MARK: - Private variables
     private var collectionView: UICollectionView?
     private var dataSource: HomepageDiffableDataSource?
+    // TODO: FXIOS-10541 will handle scrolling for wallpaper and other scroll issues
+    private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
     private var layoutConfiguration = HomepageSectionLayoutProvider().createCompositionalLayout()
     private var logger: Logger
     private var homepageState: HomepageState
@@ -72,6 +74,7 @@ final class HomepageViewController: UIViewController,
     // MARK: - View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureWallpaperView()
         setupLayout()
         configureCollectionView()
         configureDataSource()
@@ -85,6 +88,11 @@ final class HomepageViewController: UIViewController,
 
         listenForThemeChange(view)
         applyTheme()
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        wallpaperView.updateImageForOrientationChange()
     }
 
     // MARK: - Redux
@@ -109,6 +117,7 @@ final class HomepageViewController: UIViewController,
 
     func newState(state: HomepageState) {
         homepageState = state
+        wallpaperView.wallpaperState = state.wallpaperState
         dataSource?.applyInitialSnapshot(state: state)
     }
 
@@ -128,6 +137,28 @@ final class HomepageViewController: UIViewController,
     }
 
     // MARK: - Layout
+    var statusBarFrame: CGRect? {
+        guard let keyWindow = UIWindow.keyWindow else { return nil }
+
+        return keyWindow.windowScene?.statusBarManager?.statusBarFrame
+    }
+
+    func configureWallpaperView() {
+        view.addSubview(wallpaperView)
+
+        // Constraint so wallpaper appears under the status bar
+        let wallpaperTopConstant: CGFloat = UIWindow.keyWindow?.safeAreaInsets.top ?? statusBarFrame?.height ?? 0
+
+        NSLayoutConstraint.activate([
+            wallpaperView.topAnchor.constraint(equalTo: view.topAnchor, constant: -wallpaperTopConstant),
+            wallpaperView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            wallpaperView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            wallpaperView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+
+        view.sendSubviewToBack(wallpaperView)
+    }
+
     private func setupLayout() {
         guard let collectionView else {
             logger.log(
