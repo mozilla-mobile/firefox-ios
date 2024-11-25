@@ -6,7 +6,7 @@ import Foundation
 import Common
 
 class TabPrintPageRenderer: UIPrintPageRenderer {
-    private struct PrintedPageUX {
+    private struct UX {
         static let insets = CGFloat(36.0)
         static let textFont = FXFontStyles.Regular.caption1.scaledFont()
         static let marginScale = CGFloat(0.5)
@@ -16,7 +16,7 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
     fileprivate var tabURL: URL?
     fileprivate weak var webView: TabWebView?
 
-    let textAttributes = [NSAttributedString.Key.font: PrintedPageUX.textFont]
+    let textAttributes = [NSAttributedString.Key.font: UX.textFont]
     let dateString: String
 
     required init(tabDisplayTitle: String, tabURL: URL?, webView: TabWebView?) {
@@ -30,11 +30,11 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
 
         super.init()
 
-        self.footerHeight = PrintedPageUX.marginScale * PrintedPageUX.insets
-        self.headerHeight = PrintedPageUX.marginScale * PrintedPageUX.insets
+        self.footerHeight = UX.marginScale * UX.insets
+        self.headerHeight = UX.marginScale * UX.insets
 
         if let formatter = webView?.viewPrintFormatter() {
-            formatter.perPageContentInsets = UIEdgeInsets(equalInset: PrintedPageUX.insets)
+            formatter.perPageContentInsets = UIEdgeInsets(equalInset: UX.insets)
             addPrintFormatter(formatter, startingAtPageAt: 0)
         }
     }
@@ -42,9 +42,9 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
     override func drawFooterForPage(at pageIndex: Int, in headerRect: CGRect) {
         let headerInsets = UIEdgeInsets(
             top: headerRect.minY,
-            left: PrintedPageUX.insets,
+            left: UX.insets,
             bottom: paperRect.maxY - headerRect.maxY,
-            right: PrintedPageUX.insets
+            right: UX.insets
         )
         let headerRect = paperRect.inset(by: headerInsets)
 
@@ -59,9 +59,9 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
     override func drawHeaderForPage(at pageIndex: Int, in headerRect: CGRect) {
         let headerInsets = UIEdgeInsets(
             top: headerRect.minY,
-            left: PrintedPageUX.insets,
+            left: UX.insets,
             bottom: paperRect.maxY - headerRect.maxY,
-            right: PrintedPageUX.insets
+            right: UX.insets
         )
         let headerRect = paperRect.inset(by: headerInsets)
 
