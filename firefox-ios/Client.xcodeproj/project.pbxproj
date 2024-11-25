@@ -993,7 +993,6 @@
 		8ADC2A102A33758E00543DAA /* FxALaunchParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADC2A0F2A33758E00543DAA /* FxALaunchParams.swift */; };
 		8ADC2A122A3375B900543DAA /* FxAEntryPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADC2A112A3375B900543DAA /* FxAEntryPoint.swift */; };
 		8ADC2A142A33762900543DAA /* ReferringPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADC2A132A33762900543DAA /* ReferringPage.swift */; };
-		8ADC2A162A33765E00543DAA /* UrlToOpenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADC2A152A33765E00543DAA /* UrlToOpenModel.swift */; };
 		8ADC2A182A33775F00543DAA /* FxASignInViewParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADC2A172A33775F00543DAA /* FxASignInViewParameters.swift */; };
 		8ADC2A1B2A33998100543DAA /* AppStoreReviewSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADC2A1A2A33998100543DAA /* AppStoreReviewSetting.swift */; };
 		8ADC2A1D2A33999800543DAA /* VersionSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADC2A1C2A33999800543DAA /* VersionSetting.swift */; };
@@ -7580,7 +7579,6 @@
 		8ADC2A0F2A33758E00543DAA /* FxALaunchParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxALaunchParams.swift; sourceTree = "<group>"; };
 		8ADC2A112A3375B900543DAA /* FxAEntryPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxAEntryPoint.swift; sourceTree = "<group>"; };
 		8ADC2A132A33762900543DAA /* ReferringPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferringPage.swift; sourceTree = "<group>"; };
-		8ADC2A152A33765E00543DAA /* UrlToOpenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlToOpenModel.swift; sourceTree = "<group>"; };
 		8ADC2A172A33775F00543DAA /* FxASignInViewParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxASignInViewParameters.swift; sourceTree = "<group>"; };
 		8ADC2A1A2A33998100543DAA /* AppStoreReviewSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreReviewSetting.swift; sourceTree = "<group>"; };
 		8ADC2A1C2A33999800543DAA /* VersionSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionSetting.swift; sourceTree = "<group>"; };
@@ -13256,7 +13254,6 @@
 				E18BAAFC28E4A44500098AE2 /* TopTabFader.swift */,
 				8AD40FD227BB068F00672675 /* MainMenuActionHelper.swift */,
 				D3C744CC1A687D6C004CE85D /* URIFixup.swift */,
-				8ADC2A152A33765E00543DAA /* UrlToOpenModel.swift */,
 				884CA7482344A301002E4711 /* TextContentDetector.swift */,
 				E1877A7F286E0EFD00F5BDF2 /* WebView */,
 				DA4F826629AD221600189590 /* ZoomPageBar.swift */,
@@ -16437,7 +16434,6 @@
 				D04CD74B216CF86B004FF5B0 /* DevicePickerViewController.swift in Sources */,
 				C8DC90BD2A06699E0008832B /* MarkupNode.swift in Sources */,
 				E63ED8E11BFD25580097D08E /* PasswordManagerListViewController.swift in Sources */,
-				8ADC2A162A33765E00543DAA /* UrlToOpenModel.swift in Sources */,
 				D0625CA8208FC47A0081F3B2 /* BrowserViewController+DownloadQueueDelegate.swift in Sources */,
 				C22753402A3C9E1300B9C0D1 /* WebsiteDataManagementViewModel.swift in Sources */,
 				2F44FCC71A9E8CF500FD20CC /* SearchSettingsTableViewController.swift in Sources */,
