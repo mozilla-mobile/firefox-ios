@@ -188,6 +188,10 @@ class RustAutofillTests: XCTestCase {
         waitForExpectations(timeout: 3, handler: nil)
     }
 
+    func testListAllAddressesSuccess() async throws {
+        
+    }
+
     func testAddCreditCard() {
         let expectationAddCard = expectation(description: "completed add card")
         let expectationGetCard = expectation(description: "completed getting card")
