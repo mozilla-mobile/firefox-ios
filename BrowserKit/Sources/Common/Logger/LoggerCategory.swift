@@ -65,4 +65,7 @@ public enum LoggerCategory: String {
 
     /// Remote settings
     case remoteSettings
+
+    /// Password Generator
+    case passwordGenerator
 }
