@@ -194,7 +194,7 @@ class LegacyHomepageViewController:
             reloadOnRotation(newSize: size)
         }
 
-        coordinator.animate { _ in
+        coordinator.animate { sin_ in
             let wallpaperTopConstant: CGFloat = UIWindow.keyWindow?.safeAreaInsets.top ?? self.statusBarFrame?.height ?? 0
             self.wallpaperViewTopConstraint?.constant = -wallpaperTopConstant
         }

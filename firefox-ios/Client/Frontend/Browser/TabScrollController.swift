@@ -39,18 +39,7 @@ class TabScrollingController: NSObject,
             scrollView?.delegate = self
             scrollView?.keyboardDismissMode = .onDrag
             configureRefreshControl(isEnabled: true)
-            if isPullToRefreshRefactorEnabled {
-                tab?.onLoading = { [weak self] in
-                    guard let self else { return }
-                    // If we are in the home page delete pull to refresh so it doesn't show on the background
-                    if tabIsLoading() || (tab?.isFxHomeTab ?? false) {
-                        pullToRefreshView?.stopObservingContentScroll()
-                        pullToRefreshView?.removeFromSuperview()
-                    } else {
-                        configureRefreshControl(isEnabled: true)
-                    }
-                }
-            }
+            setupTabOnLoadingCallback()
         }
     }
 
@@ -185,6 +174,21 @@ class TabScrollingController: NSObject,
                                                selector: #selector(applicationWillTerminate(_:)),
                                                name: UIApplication.willTerminateNotification,
                                                object: nil)
+    }
+
+    private func setupTabOnLoadingCallback() {
+        if isPullToRefreshRefactorEnabled {
+            tab?.onLoading = { [weak self] in
+                guard let self else { return }
+                // If we are in the home page delete pull to refresh so it doesn't show on the background
+                if tabIsLoading() || (tab?.isFxHomeTab ?? false) {
+                    pullToRefreshView?.stopObservingContentScroll()
+                    pullToRefreshView?.removeFromSuperview()
+                } else {
+                    configureRefreshControl(isEnabled: true)
+                }
+            }
+        }
     }
 
     @objc
