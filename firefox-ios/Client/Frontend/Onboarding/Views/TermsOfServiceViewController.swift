@@ -7,6 +7,12 @@ import Shared
 import UIKit
 import ComponentLibrary
 
+enum LinkType: Int {
+    case termsOfService
+    case privacyNotice
+    case manage
+}
+
 class TermsOfServiceViewController: UIViewController,
                                     Themeable {
     struct UX {
@@ -87,6 +93,7 @@ class TermsOfServiceViewController: UIViewController,
         let termsOfServiceAgreement = String(format: .Onboarding.TermsOfService.TermsOfServiceAgreement, termsOfServiceLink)
         setupAgreementTextView(with: termsOfServiceAgreement,
                                linkTitle: termsOfServiceLink,
+                               linkType: .termsOfService,
                                and: AccessibilityIdentifiers.TermsOfService.termsOfServiceAgreement)
 
         let privacyNoticeLink = String.Onboarding.TermsOfService.PrivacyNoticeLink
@@ -94,6 +101,7 @@ class TermsOfServiceViewController: UIViewController,
         let privacyAgreement = String(format: privacyNoticeText, AppName.shortName.rawValue, privacyNoticeLink)
         setupAgreementTextView(with: privacyAgreement,
                                linkTitle: privacyNoticeLink,
+                               linkType: .privacyNotice,
                                and: AccessibilityIdentifiers.TermsOfService.privacyNoticeAgreement)
 
         let manageLink = String.Onboarding.TermsOfService.ManageLink
@@ -101,6 +109,7 @@ class TermsOfServiceViewController: UIViewController,
         let manageAgreement = String(format: manageText, AppName.shortName.rawValue, manageLink)
         setupAgreementTextView(with: manageAgreement,
                                linkTitle: manageLink,
+                               linkType: .manage,
                                and: AccessibilityIdentifiers.TermsOfService.manageDataCollectionAgreement)
     }
 
@@ -156,8 +165,7 @@ class TermsOfServiceViewController: UIViewController,
         ])
     }
 
-    // TODO: FXIOS-10347 Firefox iOS: Manage Privacy Preferences during Onboarding
-    private func setupAgreementTextView(with title: String, linkTitle: String, and a11yId: String) {
+    private func setupAgreementTextView(with title: String, linkTitle: String, linkType: LinkType, and a11yId: String) {
         let agreementLabel: UILabel = .build()
         agreementLabel.accessibilityIdentifier = a11yId
         agreementLabel.numberOfLines = 0
@@ -176,8 +184,60 @@ class TermsOfServiceViewController: UIViewController,
                                                 value: themeManager.getCurrentTheme(for: windowUUID).colors.textAccent,
                                                 range: linkedText)
 
+        agreementLabel.isUserInteractionEnabled = true
+
+        switch linkType {
+        case .termsOfService:
+            let gesture = UITapGestureRecognizer(target: self, action: #selector(presentTermsOfService))
+            agreementLabel.addGestureRecognizer(gesture)
+        case .privacyNotice:
+            let gesture = UITapGestureRecognizer(target: self, action: #selector(presentPrivacyNotice))
+            agreementLabel.addGestureRecognizer(gesture)
+        case .manage:
+            let gesture = UITapGestureRecognizer(target: self, action: #selector(presentManagePreferences))
+            agreementLabel.addGestureRecognizer(gesture)
+        }
+
         agreementLabel.attributedText = linkedAgreementDescription
         agreementContent.addArrangedSubview(agreementLabel)
+    }
+
+    private func presentLink(with url: URL?) {
+        guard let url else { return }
+        let presentLinkVC = PrivacyPolicyViewController(url: url, windowUUID: windowUUID)
+        let buttonItem = UIBarButtonItem(
+            title: .SettingsSearchDoneButton,
+            style: .plain,
+            target: self,
+            action: #selector(dismissPresentedLinkVC))
+        buttonItem.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfService.doneButton
+
+        presentLinkVC.navigationItem.rightBarButtonItem = buttonItem
+        let controller = DismissableNavigationViewController(rootViewController: presentLinkVC)
+        present(controller, animated: true)
+    }
+
+    // MARK: - Button actions
+    @objc
+    private func presentTermsOfService(_ gesture: UIGestureRecognizer) {
+        // TODO: FXIOS-10638 Firefox iOS: Use the correct Terms of Service and Privacy Notice URLs in ToSViewController
+        presentLink(with: nil)
+    }
+
+    @objc
+    private func presentPrivacyNotice(_ gesture: UIGestureRecognizer) {
+        // TODO: FXIOS-10638 Firefox iOS: Use the correct Terms of Service and Privacy Notice URLs in ToSViewController
+        presentLink(with: nil)
+    }
+
+    @objc
+    private func presentManagePreferences(_ gesture: UIGestureRecognizer) {
+        // TODO: FXIOS-10347 Firefox iOS: Manage Privacy Preferences during Onboarding
+    }
+
+    @objc
+    private func dismissPresentedLinkVC() {
+        dismiss(animated: true, completion: nil)
     }
 
     // MARK: - Themable

@@ -17,7 +17,7 @@
 "About" = "පිළිබඳව";
 
 /* The title for the pinning a shortcut action */
-"ActivityStream.ContextMenu.AddToShortcuts" = "කෙටිමං වෙත යොදන්න";
+"ActivityStream.ContextMenu.AddToShortcuts" = "කෙටිමං වෙත දමන්න";
 
 /* The title for the pinning a topsite action */
 "ActivityStream.ContextMenu.PinTopsite2" = "අමුණන්න";
@@ -47,10 +47,10 @@
 "Add Tab" = "පටිත්තක් යොදන්න";
 
 /* Name for button adding current article to reading list in reader mode */
-"Add to Reading List" = "කියවීමේ ලේඛනයට එක් කරන්න";
+"Add to Reading List" = "කියවීමේ ලැයිස්තුවට දමන්න";
 
 /* Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action. */
-"Added page to Reading List" = "කියවීමේ ලේඛනයට පිටුව එක් කෙරිණි";
+"Added page to Reading List" = "කියවීමේ ලැයිස්තුවට පිටුව එක් කෙරිණි";
 
 /* Button to dismiss the 'Add Pass Failed' alert.  See https://support.apple.com/HT204003 for context on Wallet. */
 "AddPass.Error.Dismiss" = "හරි";
@@ -65,7 +65,7 @@
 "Address and Search" = "ලිපිනය සහ සෙවීම";
 
 /* Accessibility label for action adding current page to reading list. */
-"Address.Bar.ReadingList.v106" = "කියවීමේ ලේඛනයට යොදන්න";
+"Address.Bar.ReadingList.v106" = "කියවීමේ ලැයිස්තුවට දමන්න";
 
 /* Accessibility label for the Address Bar, where a user can enter the search they wish to make */
 "Address.Bar.v99" = "ලිපින තීරුව";
@@ -212,10 +212,10 @@
 "ContextualHintsCloseButtonAccessibility.v105" = "වසන්න";
 
 /* Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed. */
-"Could not add page to Reading list" = "කියවීමේ ලේඛනයට පිටුව එක් කිරීමට නොහැකි විය";
+"Could not add page to Reading list" = "කියවීමේ ලැයිස්තුවට පිටුව එක් කිරීමට නොහැකි විය";
 
 /* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
-"Could not add page to Reading List. Maybe it’s already there?" = "කියවීමේ ලේඛනයට පිටුව එක් කිරීමට නොහැකි විය. බාගදා එය දැනටමත් තිබේද?";
+"Could not add page to Reading List. Maybe it’s already there?" = "කියවීමේ ලැයිස්තුවට පිටුව එක් කිරීමට නොහැකි විය. බාගදා එය දැනටමත් තිබේද?";
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "පිටුව පූරණය කළ නොහැකියි.";
@@ -305,7 +305,7 @@
 "ErrorPages.Advanced.Button" = "වැඩිදුර";
 
 /* Warning text when clicking the Advanced button on error pages */
-"ErrorPages.AdvancedWarning1.Text" = "අවවාදයයි: මෙම අඩවිය වෙත ඔබගේ සම්බන්ධතාවය ආරක්‍ෂිත බව තහවුරු කළ නොහැකිය.";
+"ErrorPages.AdvancedWarning1.Text" = "අවවාදයයි: මෙම අඩවිය වෙත ඔබගේ සම්බන්‍ධතාව ආරක්‍ෂිත දැයි තහවුරු කළ නොහැකිය.";
 
 /* Additional warning text when clicking the Advanced button on error pages */
 "ErrorPages.AdvancedWarning2.Text" = "එය වැරදි වින්‍යාස කිරීමක් හෝ ප්‍රහාරකයෙකුගේ අපවේශනයක් විය හැකිය. ඔබ අවදානම පිළිගන්නේ නම් ඉදිරියට යන්න.";
@@ -314,7 +314,7 @@
 "ErrorPages.CertWarning.Description" = "%@ හි අයිතිකරු ඔවුන්ගේ වියමන අඩවිය නිසි ලෙස සකස් කර නැත. ඔබගේ තොරතුරු සොරෙන් ගැනීම වැළැක්වීමට, ෆයර්ෆොක්ස් මෙම අඩවියට සම්බන්ධ වී නැත.";
 
 /* Title on the certificate error page */
-"ErrorPages.CertWarning.Title" = "මෙම සම්බන්ධතාවය අවිශ්වාසයි";
+"ErrorPages.CertWarning.Title" = "මෙම සම්බන්ධතාව අවිශ්වාසයි";
 
 /* Label for button to go back from the error page */
 "ErrorPages.GoBack.Button" = "ආපසු යන්න";
@@ -383,7 +383,7 @@
 "FxA.ManageAccount" = "ගිණුම හා උපාංග කළමනාකරණය";
 
 /* Label when no internet is present */
-"FxA.NoInternetConnection" = "අන්තර්ජාල සම්බන්ධතාවයක් නැත";
+"FxA.NoInternetConnection" = "අන්තර්ජාල සම්බන්ධතාවක් නැත";
 
 /* FxA sign in view subtitle */
 "fxa.signin.camera-signin" = "රූගතය සමඟ පිවිසෙන්න";
@@ -401,10 +401,10 @@
 "FxA.SyncNow" = "සමමුහූර්ත කරන්න";
 
 /* Title of a notification displayed when another device has connected to FxA. %@ refers to the name of the newly connected device. */
-"FxAPush_DeviceConnected_body" = "ෆයර්ෆොක්ස් සමමුහූර්තය %@ වෙත සම්බන්ධිතයි";
+"FxAPush_DeviceConnected_body" = "ෆයර්ෆොක්ස් සමමුහූර්තය %@ වෙත සම්බන්ධයි";
 
 /* Title of a notification displayed when another device has connected to FxA. */
-"FxAPush_DeviceConnected_title" = "සමමුහූර්තය සම්බන්ධිතයි";
+"FxAPush_DeviceConnected_title" = "සමමුහූර්තය සම්බන්ධයි";
 
 /* Body of a notification displayed when named device has been disconnected from FxA. %@ refers to the name of the disconnected device. */
 "FxAPush_DeviceDisconnected_body" = "%@ වෙතින් සාර්ථකව විසන්ධි කර ඇත.";
@@ -536,7 +536,7 @@
 "Keyboard.Shortcuts.ActualSize" = "සැබෑ ප්‍රමාණය";
 
 /* A label indicating the keyboard shortcut of adding the currently viewing web page as a bookmark. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.AddBookmark" = "පොත් යොමුවක් යොදන්න";
+"Keyboard.Shortcuts.AddBookmark" = "පොත්යොමුවක් තබන්න";
 
 /* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ClearRecentHistory" = "මෑත ඉතිහාසය මකන්න";
@@ -725,10 +725,10 @@
 "Menu.AddReadingList.Label.v99" = "එකතු";
 
 /* Toast displayed to the user after adding the item to their reading list. */
-"Menu.AddToReadingList.Confirm" = "කියවීමේ ලේඛනයට එක් කෙරිණි";
+"Menu.AddToReadingList.Confirm" = "කියවීමේ ලැයිස්තුවට එක් කෙරිණි";
 
 /* Label for the add to shortcuts button in the menu. Pressing this button pins the current website as a shortcut on the home page. */
-"Menu.AddToShortcuts.v99" = "කෙටිමං වෙත යොදන්න";
+"Menu.AddToShortcuts.v99" = "කෙටිමං වෙත දමන්න";
 
 /* Label for the button, displayed in the menu, takes you to bookmarks screen when pressed. */
 "Menu.Bookmarks.Label" = "පොත්යොමු";
@@ -779,7 +779,7 @@
 "Menu.PasteAndGo.Title" = "අලවන්න හා යන්න";
 
 /* Label for the button, displayed in the menu, takes you to Reading List screen when pressed. */
-"Menu.ReadingList.Label" = "කියවීමේ ලේඛනය";
+"Menu.ReadingList.Label" = "කියවීමේ ලැයිස්තුව";
 
 /* Label for the button, displayed in the menu, used to reload the current website without Tracking Protection */
 "Menu.ReloadWithoutTrackingProtection.Title" = "ලුහුබැඳීමේ රැකවරණය රහිතව යළි පූරණය";
@@ -800,7 +800,7 @@
 "Menu.RemovePin.Confirm2.v99" = "කෙටිමං වලින් ඉවත් කෙරිණි";
 
 /* Toast displayed to confirm to the user that his reading list item was correctly removed. */
-"Menu.RemoveReadingList.Confirm.v99" = "කියවීමේ ලේඛනයෙන් ඉවත් කෙරිණි";
+"Menu.RemoveReadingList.Confirm.v99" = "කියවීමේ ලැයිස්තුවෙන් ඉවත් කෙරිණි";
 
 /* Label for the remove from reading list button in the menu. Pressing this button removes the current page from the reading list. Please keep the text as short as possible for this label. */
 "Menu.RemoveReadingList.Label.v99" = "ඉවත් කරන්න";
@@ -920,13 +920,13 @@
 "Privacy" = "පෞද්ගලිකත්‍වය";
 
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/ */
-"Privacy Policy" = "පෞද්ගලිකත්‍ව ප්‍රතිපත්තිය";
+"Privacy Policy" = "රහස්‍යතා ප්‍රතිපත්තිය";
 
 /* This is the value for a label that indicates if a user is on an unencrypted website. */
-"ProtectionStatus.NotSecure" = "සම්බන්ධතාවය අනාරක්‍ෂිතයි";
+"ProtectionStatus.NotSecure" = "සම්බන්‍ධතාව අනාරක්‍ෂිතයි";
 
 /* This is the value for a label that indicates if a user is on a secure https connection. */
-"ProtectionStatus.Secure" = "සම්බන්ධතාවය ආරක්‍ෂිතයි";
+"ProtectionStatus.Secure" = "සම්බන්‍ධතාව ආරක්‍ෂිතයි";
 
 /* Title for quick-search engines settings section. */
 "Quick-Search Engines" = "ඉක්මන් සෙවුම් යන්ත්‍ර";
@@ -950,7 +950,7 @@
 "ReaderModeBar.MarkAsUnread.v106" = "නොකියවූ බව යොදන්න";
 
 /* Panel accessibility label */
-"Reading list" = "කියවීමේ ලේඛනය";
+"Reading list" = "කියවීමේ ලැයිස්තුව";
 
 /* Title for the Recently Closed Tabs Panel */
 "RecentlyClosedTabsPanel.Title" = "මෑතදී වැසූ";
@@ -968,7 +968,7 @@
 "Remove" = "ඉවත් කරන්න";
 
 /* Name for button removing current article from reading list in reader mode */
-"Remove from Reading List" = "කියවීමේ ලේඛනයෙන් ඉවතලන්න";
+"Remove from Reading List" = "කියවීමේ ලැයිස්තුවෙන් ඉවතලන්න";
 
 /* Cancel button text shown in reopen-alert at home page. */
 "ReopenAlert.Actions.Cancel" = "අවලංගු";
@@ -986,7 +986,7 @@
 "Sans-serif" = "Sans-serif";
 
 /* See http://mzl.la/1LXbDOL */
-"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "කියවීමේ දැක්ම පාලනවල ඇති පොත+ නිරූපකය තට්ටු කිරීමෙන් ඔබගේ කියවීම් ලේඛනයට පිටු සුරකින්න.";
+"Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "කියවීමේ දැක්ම පාලන වල ඇති පොත+ නිරූපකය තට්ටු කිරීමෙන් ඔබගේ කියවීමේ ලැයිස්තුවට පිටු සුරකින්න.";
 
 /* OK button to dismiss the error prompt. */
 "ScanQRCode.Error.OK.Button" = "හරි";
@@ -1571,10 +1571,10 @@
 "Settings.WebsiteData.Title" = "අඩවියේ දත්ත";
 
 /* Action label on share extension to add page to the Firefox reading list. */
-"ShareExtension.AddToReadingListAction.Title" = "කියවීමේ ලේඛනයට එක් කරන්න";
+"ShareExtension.AddToReadingListAction.Title" = "කියවීමේ ලැයිස්තුවට දමන්න";
 
 /* Share extension label shown after user has performed 'Add to Reading List' action. */
-"ShareExtension.AddToReadingListActionDone.Title" = "කියවීමේ ලේඛනයට එක් කෙරිණි";
+"ShareExtension.AddToReadingListActionDone.Title" = "කියවීමේ ලැයිස්තුවට එක් කෙරිණි";
 
 /* Action label on share extension to bookmark the page in Firefox. */
 "ShareExtension.BookmarkThisPageAction.Title" = "මෙම පිටුව පොත්යොමුවකට";
@@ -1772,7 +1772,7 @@
 "Web content" = "වියමන අන්තර්ගතය";
 
 /* See http://mzl.la/1LXbDOL */
-"Welcome to your Reading List" = "ඔබගේ කියවීමේ ලේඛනය වෙත පිළිගනිමු";
+"Welcome to your Reading List" = "ඔබගේ කියවීමේ ලැයිස්තුව වෙත පිළිගනිමු";
 
 /* Restore Tabs Prompt Title */
 "Well, this is embarrassing." = "මෙය අපහසුතාවයට පත්කරවයි :(";

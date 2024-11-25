@@ -4,6 +4,9 @@
 /* On error page, this is the description for generic error. */
 "NativeErrorPage.GenericError.Description.v131" = "Se produjo un error de SSL y no se puede establecer una conexión segura con el servidor.";
 
+/* On error page, this is the description for generic error. The placeholder will be replaced by the site url */
+"NativeErrorPage.GenericError.Description.v134" = "El propietario de %@ no lo configuró correctamente y no se pudo crear una conexión segura.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Cuidado. Algo no parece estar bien.";
 

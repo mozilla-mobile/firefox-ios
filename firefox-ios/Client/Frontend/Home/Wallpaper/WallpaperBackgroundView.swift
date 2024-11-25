@@ -4,6 +4,7 @@
 
 import UIKit
 import Common
+import Redux
 
 class WallpaperBackgroundView: UIView {
     // MARK: - UI Elements
@@ -14,26 +15,21 @@ class WallpaperBackgroundView: UIView {
     }
 
     // MARK: - Variables
-    private var wallpaperManager = WallpaperManager()
-    var notificationCenter: NotificationProtocol = NotificationCenter.default
+    var wallpaperState: WallpaperState? {
+        didSet {
+            updateImageToCurrentWallpaper()
+        }
+    }
 
     // MARK: - Initializers & Setup
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
-        setupNotifications(forObserver: self,
-                           observing: [.WallpaperDidChange])
-
-        updateImageToCurrentWallpaper()
     }
 
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        notificationCenter.removeObserver(self)
     }
 
     private func setupView() {
@@ -54,26 +50,19 @@ class WallpaperBackgroundView: UIView {
     }
 
     private func updateImageToCurrentWallpaper() {
+        guard let state = wallpaperState else { return }
         ensureMainThread {
-            let currentWallpaper = self.currentWallpaperImage()
+            let currentWallpaperImage = self.currentWallpaperImage(from: state)
             UIView.animate(withDuration: 0.3) {
-                self.pictureView.image = currentWallpaper
+                self.pictureView.image = currentWallpaperImage
             }
         }
     }
 
-    private func currentWallpaperImage() -> UIImage? {
+    private func currentWallpaperImage(from wallpaperState: WallpaperState) -> UIImage? {
         let isLandscape = UIDevice.current.orientation.isLandscape
-        return isLandscape ? wallpaperManager.currentWallpaper.landscape : wallpaperManager.currentWallpaper.portrait
-    }
-}
-
-// MARK: - Notifiable
-extension WallpaperBackgroundView: Notifiable {
-    func handleNotifications(_ notification: Notification) {
-        switch notification.name {
-        case .WallpaperDidChange: updateImageToCurrentWallpaper()
-        default: break
-        }
+        return isLandscape ?
+        wallpaperState.wallpaperConfiguration.landscapeImage :
+         wallpaperState.wallpaperConfiguration.landscapeImage
     }
 }

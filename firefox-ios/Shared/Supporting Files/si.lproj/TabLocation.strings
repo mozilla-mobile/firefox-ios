@@ -1,14 +1,14 @@
 /* Accessibility label for the security icon in url bar */
-"TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "සම්බන්ධතාවය අනාරක්‍ෂිතයි. දියුණු කළ ලුහුබැඳීමේ රැකවරණය අක්‍රියයි.";
+"TabLocation.ETP.Off.NotSecure.A11y.Label.v119" = "සම්බන්‍ධතාව අනාරක්‍ෂිතයි. දියුණු කළ ලුහුබැඳීමේ රැකවරණය අක්‍රියයි.";
 
 /* Accessibility label for the security icon in url bar */
-"TabLocation.ETP.Off.Secure.A11y.Label.v119" = "ආරක්‍ෂිත සම්බන්ධතාවයකි. දියුණු කළ ලුහුබැඳීමේ රැකවරණය අක්‍රියයි.";
+"TabLocation.ETP.Off.Secure.A11y.Label.v119" = "ආරක්‍ෂිත සම්බන්‍ධතාවකි. දියුණු කළ ලුහුබැඳීමේ රැකවරණය අක්‍රියයි.";
 
 /* Accessibility label for the security icon in url bar */
-"TabLocation.ETP.On.NotSecure.A11y.Label.v119" = "සම්බන්ධතාවය අනාරක්‍ෂිතයි";
+"TabLocation.ETP.On.NotSecure.A11y.Label.v119" = "සම්බන්‍ධතාව අනාරක්‍ෂිතයි";
 
 /* Accessibility label for the security icon in url bar */
-"TabLocation.ETP.On.Secure.A11y.Label.v119" = "ආරක්‍ෂිත සම්බන්ධතාවයකි";
+"TabLocation.ETP.On.Secure.A11y.Label.v119" = "ආරක්‍ෂිත සම්බන්‍ධතාවකි";
 
 /* Accessibility label for the lock / tracking protection button on the URL bar */
 "TabLocation.LockButton.AccessibilityLabel.v122" = "ලුහුබැඳීමේ රැකවරණය";

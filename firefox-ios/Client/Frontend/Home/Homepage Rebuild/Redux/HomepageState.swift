@@ -12,6 +12,7 @@ struct HomepageState: ScreenState, Equatable {
     var headerState: HeaderState
     var topSitesState: TopSitesSectionState
     var pocketState: PocketState
+    var wallpaperState: WallpaperState
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let homepageState = store.state.screenState(
@@ -27,7 +28,8 @@ struct HomepageState: ScreenState, Equatable {
             windowUUID: homepageState.windowUUID,
             headerState: homepageState.headerState,
             topSitesState: homepageState.topSitesState,
-            pocketState: homepageState.pocketState
+            pocketState: homepageState.pocketState,
+            wallpaperState: homepageState.wallpaperState
         )
     }
 
@@ -36,7 +38,8 @@ struct HomepageState: ScreenState, Equatable {
             windowUUID: windowUUID,
             headerState: HeaderState(windowUUID: windowUUID),
             topSitesState: TopSitesSectionState(windowUUID: windowUUID),
-            pocketState: PocketState(windowUUID: windowUUID)
+            pocketState: PocketState(windowUUID: windowUUID),
+            wallpaperState: WallpaperState(windowUUID: windowUUID)
         )
     }
 
@@ -44,12 +47,14 @@ struct HomepageState: ScreenState, Equatable {
         windowUUID: WindowUUID,
         headerState: HeaderState,
         topSitesState: TopSitesSectionState,
-        pocketState: PocketState
+        pocketState: PocketState,
+        wallpaperState: WallpaperState
     ) {
         self.windowUUID = windowUUID
         self.headerState = headerState
         self.topSitesState = topSitesState
         self.pocketState = pocketState
+        self.wallpaperState = wallpaperState
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -64,7 +69,8 @@ struct HomepageState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 headerState: HeaderState.reducer(state.headerState, action),
                 topSitesState: TopSitesSectionState.reducer(state.topSitesState, action),
-                pocketState: PocketState.reducer(state.pocketState, action)
+                pocketState: PocketState.reducer(state.pocketState, action),
+                wallpaperState: WallpaperState.reducer(state.wallpaperState, action)
             )
         default:
             return defaultState(from: state, action: action)
@@ -75,18 +81,21 @@ struct HomepageState: ScreenState, Equatable {
         var headerState = state.headerState
         var pocketState = state.pocketState
         var topSitesState = state.topSitesState
+        var wallpaperState = state.wallpaperState
 
         if let action {
             headerState = HeaderState.reducer(state.headerState, action)
             pocketState = PocketState.reducer(state.pocketState, action)
             topSitesState = TopSitesSectionState.reducer(state.topSitesState, action)
+            wallpaperState = WallpaperState.reducer(state.wallpaperState, action)
         }
 
         return HomepageState(
             windowUUID: state.windowUUID,
             headerState: headerState,
             topSitesState: topSitesState,
-            pocketState: pocketState
+            pocketState: pocketState,
+            wallpaperState: wallpaperState
         )
     }
 
