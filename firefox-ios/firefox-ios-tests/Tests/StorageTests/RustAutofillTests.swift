@@ -144,7 +144,7 @@ class RustAutofillTests: XCTestCase {
         }
     }
 
-    func getListAllAddresses() async throws -> [Address] {
+    func listAllAddresses() async throws -> [Address] {
         return try await withCheckedThrowingContinuation { continuation in
             autofill.listAllAddresses { addresses, error in
                 guard let addresses else {
@@ -189,7 +189,7 @@ class RustAutofillTests: XCTestCase {
     }
 
     func testListAllAddressesSuccess() async throws {
-        let addresses = try await getListAllAddresses()
+        let addresses = try await listAllAddresses()
 
         for address in addresses {
             XCTAssertEqual(address.name, "Jane Doe")
