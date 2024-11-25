@@ -38,9 +38,9 @@ for lang in $LOCALES; do
         --skip_open_summary \
         --xcargs "-maximum-parallel-testing-workers 2" \
         --derived_data_path l10n-screenshots-dd \
-        --ios_version "18.1" \
+        --ios_version "17.5" \
         --erase_simulator --localize_simulator \
-        --devices "iPhone 16 Pro" --languages "$lang" \
+        --devices "iPhone 15" --languages "$lang" \
         --output_directory "l10n-screenshots/$lang" \
         $EXTRA_FAST_LANE_ARGS
     echo "Fastlane exited with code: $?"

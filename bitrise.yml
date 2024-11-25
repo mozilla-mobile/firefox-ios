@@ -754,6 +754,7 @@ workflows:
         stack: osx-xcode-16.1.x
         machine_type_id: g2-m1.8core
   L10nBuild:
+    stack: osx-xcode-15.4.x
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
@@ -822,7 +823,7 @@ workflows:
             set -e
             # debug log
             set -x
-            gem install fastlane -v 2.225.0
+            gem install fastlane -v 2.219.0
             fastlane -version
 
             ./firefox-ios/l10n-screenshots.sh en-US
@@ -844,6 +845,7 @@ workflows:
       This Workflow is to run L10n tests in one locale and then share the bundle with
       the rest of the builds
   L10nScreenshotsTests:
+    stack: osx-xcode-15.4.x
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
