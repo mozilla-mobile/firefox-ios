@@ -144,38 +144,6 @@ class RustAutofillTests: XCTestCase {
         }
     }
 
-    func testAddAndGetAddress() {
-        let expectationAddAddress = expectation(description: "Completes the add address operation")
-        let expectationGetAddress = expectation(description: "Completes the get address operation")
-
-        addAddress { result in
-            switch result {
-            case .success(let address):
-                XCTAssertEqual(address.name, "Jane Doe")
-                XCTAssertEqual(address.streetAddress, "123 Second Avenue")
-                XCTAssertEqual(address.addressLevel2, "Chicago, IL")
-                XCTAssertEqual(address.country, "United States")
-                expectationAddAddress.fulfill()
-                self.autofill.getAddress(id: address.guid) { retrievedAddress, getAddressError in
-                    guard let retrievedAddress = retrievedAddress, getAddressError == nil else {
-                        XCTFail("Failed to get address. Retrieved Address: \(String(describing: retrievedAddress)), Error: \(String(describing: getAddressError))")
-                        expectationGetAddress.fulfill()
-                        return
-                    }
-                    XCTAssertEqual(address.guid, retrievedAddress.guid)
-                    expectationGetAddress.fulfill()
-                }
-
-            case .failure(let error):
-                XCTFail("Failed to add address, Error: \(String(describing: error))")
-                expectationAddAddress.fulfill()
-                return
-            }
-        }
-
-        waitForExpectations(timeout: 3, handler: nil)
-    }
-
     func testAddAndGetAddress() async throws {
         let address = try await addAddress()
         let retrievedAddress = try await getAddress(id: address.guid)
