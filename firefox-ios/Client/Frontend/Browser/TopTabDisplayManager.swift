@@ -62,7 +62,7 @@ struct TabDisplayOrder: Codable {
 
 /// This class is only used in top tabs, but it was used beforehand in the tab tray. Some clean up was done,
 /// but the code is not as clear as it could be since this class had multiple purposes.
-class LegacyTabDisplayManager: NSObject {
+class TopTabDisplayManager: NSObject {
     // MARK: - Variables
     private var performingChainedOperations = false
     var isInactiveViewExpanded = false
@@ -361,7 +361,7 @@ class LegacyTabDisplayManager: NSObject {
 }
 
 // MARK: - UICollectionViewDataSource
-extension LegacyTabDisplayManager: UICollectionViewDataSource {
+extension TopTabDisplayManager: UICollectionViewDataSource {
     @objc
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return dataStore.count
@@ -391,7 +391,7 @@ extension LegacyTabDisplayManager: UICollectionViewDataSource {
 }
 
 // MARK: - TabSelectionDelegate
-extension LegacyTabDisplayManager: TabSelectionDelegate {
+extension TopTabDisplayManager: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
         guard let tab = dataStore.at(index) else { return }
         getTabs { [weak self] tabsToDisplay in
@@ -404,7 +404,7 @@ extension LegacyTabDisplayManager: TabSelectionDelegate {
 }
 
 // MARK: - UIDropInteractionDelegate
-extension LegacyTabDisplayManager: UIDropInteractionDelegate {
+extension TopTabDisplayManager: UIDropInteractionDelegate {
     func dropInteraction(
         _ interaction: UIDropInteraction,
         canHandle session: UIDropSession
@@ -441,7 +441,7 @@ extension LegacyTabDisplayManager: UIDropInteractionDelegate {
 }
 
 // MARK: - UICollectionViewDragDelegate
-extension LegacyTabDisplayManager: UICollectionViewDragDelegate {
+extension TopTabDisplayManager: UICollectionViewDragDelegate {
     // This is called when the user has long-pressed on a cell, please note that
     // `collectionView.hasActiveDrag` is not true until the user's finger moves.
     // This problem is mitigated by checking the collectionView for activated long
@@ -468,7 +468,7 @@ extension LegacyTabDisplayManager: UICollectionViewDragDelegate {
 }
 
 // MARK: - UICollectionViewDropDelegate
-extension LegacyTabDisplayManager: UICollectionViewDropDelegate {
+extension TopTabDisplayManager: UICollectionViewDropDelegate {
     private func dragPreviewParameters(
         _ collectionView: UICollectionView,
         dragPreviewParametersForItemAt indexPath: IndexPath
@@ -574,7 +574,7 @@ extension LegacyTabDisplayManager: UICollectionViewDropDelegate {
     }
 }
 
-extension LegacyTabDisplayManager: TabEventHandler {
+extension TopTabDisplayManager: TabEventHandler {
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
 
     private func getIndexPath(tab: Tab) -> IndexPath? {
@@ -590,7 +590,7 @@ extension LegacyTabDisplayManager: TabEventHandler {
 }
 
 // MARK: - TabManagerDelegate
-extension LegacyTabDisplayManager: TabManagerDelegate {
+extension TopTabDisplayManager: TabManagerDelegate {
     func tabManager(
         _ tabManager: TabManager,
         didAddTab tab: Tab,
@@ -703,7 +703,7 @@ extension LegacyTabDisplayManager: TabManagerDelegate {
     }
 }
 
-extension LegacyTabDisplayManager: Notifiable {
+extension TopTabDisplayManager: Notifiable {
     // MARK: - Notifiable protocol
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
