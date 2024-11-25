@@ -199,7 +199,7 @@ class RustAutofillTests: XCTestCase {
     
     func testListCreditCards() async throws {
         let cards = try await listCreditCards()
-        let addedCreditCard = try await addCreditCard()
+        _ = try await addCreditCard()
         let updatedCards = try await listCreditCards()
 
         XCTAssertEqual(cards.count, 0)
