@@ -754,7 +754,7 @@ workflows:
         stack: osx-xcode-16.1.x
         machine_type_id: g2-m1.8core
   L10nBuild:
-    stack: osx-xcode-15.4.x
+    
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
@@ -2129,5 +2129,5 @@ trigger_map:
 
 meta:
   bitrise.io:
-    stack: osx-xcode-16.1.x-edge
+    stack: osx-xcode-16.1.x
     machine_type_id: g2-m1.8core
