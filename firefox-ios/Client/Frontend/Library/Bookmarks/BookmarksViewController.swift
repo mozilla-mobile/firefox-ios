@@ -81,6 +81,10 @@ class BookmarksViewController: SiteTableViewController,
         return button
     }()
 
+    private lazy var emptyStateView: BookmarksFolderEmptyStateView = .build()
+
+    private lazy var a11yEmptyStateScrollView: UIScrollView = .build()
+
     // MARK: - Init
 
     init(viewModel: BookmarksPanelViewModel,
@@ -119,6 +123,8 @@ class BookmarksViewController: SiteTableViewController,
         tableView.accessibilityIdentifier = AccessibilityIdentifiers.LibraryPanels.BookmarksPanel.tableView
         tableView.allowsSelectionDuringEditing = true
         tableView.dragInteractionEnabled = false
+
+        setupEmptyStateView()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -137,6 +143,7 @@ class BookmarksViewController: SiteTableViewController,
             if self?.viewModel.shouldFlashRow ?? false {
                 self?.flashRow()
             }
+            self?.updateEmptyState()
         }
     }
 
@@ -185,6 +192,7 @@ class BookmarksViewController: SiteTableViewController,
                     self.tableView.insertRows(at: [indexPath], with: .automatic)
                     self.tableView.endUpdates()
 
+                    self.updateEmptyState()
                     self.flashRow(at: indexPath)
                 }
             }
@@ -240,6 +248,7 @@ class BookmarksViewController: SiteTableViewController,
         viewModel.bookmarkNodes.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .left)
         tableView.endUpdates()
+        updateEmptyState()
     }
 
     // MARK: Button Actions helpers
@@ -306,6 +315,14 @@ class BookmarksViewController: SiteTableViewController,
         }
     }
 
+    private func updateEmptyState() {
+        a11yEmptyStateScrollView.isHidden = !viewModel.bookmarkNodes.isEmpty
+        if !a11yEmptyStateScrollView.isHidden {
+            let isRoot = viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID
+            emptyStateView.configure(isRoot: isRoot)
+        }
+    }
+
     // MARK: - Long press
 
     @objc
@@ -327,6 +344,31 @@ class BookmarksViewController: SiteTableViewController,
         return navigationBarContentView?.subviews.first(where: {
             $0.description.starts(with: "<_UIButtonBarButton:")
         })
+    }
+
+    // MARK: - UI Setup
+    private func setupEmptyStateView() {
+        view.addSubview(a11yEmptyStateScrollView)
+        a11yEmptyStateScrollView.addSubview(emptyStateView)
+        a11yEmptyStateScrollView.isHidden = true
+        NSLayoutConstraint.activate(
+            [
+                a11yEmptyStateScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                a11yEmptyStateScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                a11yEmptyStateScrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                a11yEmptyStateScrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+
+                emptyStateView.leadingAnchor.constraint(equalTo: a11yEmptyStateScrollView.contentLayoutGuide.leadingAnchor),
+                emptyStateView.trailingAnchor.constraint(
+                        equalTo: a11yEmptyStateScrollView.contentLayoutGuide.trailingAnchor),
+                emptyStateView.topAnchor.constraint(equalTo: a11yEmptyStateScrollView.contentLayoutGuide.topAnchor),
+                emptyStateView.bottomAnchor.constraint(equalTo: a11yEmptyStateScrollView.contentLayoutGuide.bottomAnchor),
+                emptyStateView.widthAnchor.constraint(equalTo: a11yEmptyStateScrollView.frameLayoutGuide.widthAnchor),
+                emptyStateView.heightAnchor.constraint(
+                    greaterThanOrEqualTo: a11yEmptyStateScrollView.frameLayoutGuide.heightAnchor),
+            ]
+        )
+        emptyStateView.applyTheme(theme: currentTheme())
     }
 
     // MARK: - UITableViewDataSource | UITableViewDelegate

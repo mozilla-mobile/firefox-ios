@@ -70,6 +70,9 @@ final class NimbusFeatureFlagLayer {
         case .nativeErrorPage:
             return checkNativeErrorPageFeature(from: nimbus)
 
+        case .noInternetConnectionErrorPage:
+            return checkNICErrorPageFeature(from: nimbus)
+
         case .nightMode:
             return checkNightModeFeature(from: nimbus)
 
@@ -364,5 +367,9 @@ final class NimbusFeatureFlagLayer {
 
     private func checkNativeErrorPageFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.nativeErrorPageFeature.value().enabled
+    }
+
+    private func checkNICErrorPageFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.nativeErrorPageFeature.value().noInternetConnectionError
     }
 }

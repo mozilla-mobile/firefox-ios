@@ -294,8 +294,10 @@ class CreditCardsTests: BaseTestCase {
             swipeUp(nrOfSwipes: 2)
             swipeDown(nrOfSwipes: 1)
             app.webViews["Web content"].textFields["Full name on card"].tapOnApp()
+            swipeUp(nrOfSwipes: 2)
+            swipeDown(nrOfSwipes: 1)
             if !app.buttons[useSavedCard].exists {
-                app.webViews["Web content"].textFields["Card number"].tapOnApp()
+                app.webViews["Web content"].textFields["CVC"].tapOnApp()
             }
             app.buttons[useSavedCard].waitAndTap()
             unlockLoginsView()
@@ -584,7 +586,7 @@ class CreditCardsTests: BaseTestCase {
             while email.value(forKey: "hasKeyboardFocus") as? Bool == false && nrOfRetries > 0 {
             }
         }
-        email.typeText("foo@mozilla.org")
+        email.typeText("foo1@mozilla.org")
 
         mozWaitForElementToExist(cardNumber)
         if skipFillInfo == false {
@@ -613,6 +615,11 @@ class CreditCardsTests: BaseTestCase {
             nrOfRetries -= 1
         }
         zip.typeText("12345")
+        app.buttons["KeyboardAccessory.doneButton"].tap()
+
+        if app.webViews["Web content"].switches.element(boundBy: 0).value as? String == "1" {
+            app.webViews["Web content"].switches.element(boundBy: 0).tapOnApp()
+        }
         name.tapOnApp()
         name.typeText(nameOnCard)
         swipeDown(nrOfSwipes: 2)
@@ -699,6 +706,7 @@ class CreditCardsTests: BaseTestCase {
         swipeUp(nrOfSwipes: 2)
         swipeDown(nrOfSwipes: 1)
         cardNumber.tapOnApp()
+        dismissSavedCardsPrompt()
         if !app.buttons[useSavedCard].exists {
             cardNumber.tapOnApp()
         }
@@ -728,7 +736,7 @@ class CreditCardsTests: BaseTestCase {
         let cardNumber = app.webViews["Web content"].textFields["Card number"]
         mozWaitForElementToExist(cardNumber)
         cardNumber.tapOnApp()
-        mozWaitForElementToExist(app.buttons[useSavedCard])
+        dismissSavedCardsPrompt()
         if !app.buttons[useSavedCard].isHittable {
             cardNumber.waitAndTap()
         }

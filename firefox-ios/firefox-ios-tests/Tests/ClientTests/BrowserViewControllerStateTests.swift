@@ -54,20 +54,6 @@ final class BrowserViewControllerStateTests: XCTestCase {
         XCTAssertEqual(newState.displayView, .dataClearance)
     }
 
-    func testUpdateSelectedTabAction() {
-        let initialState = createSubject()
-        let reducer = browserViewControllerReducer()
-
-        XCTAssertEqual(initialState.browserViewType, .normalHomepage)
-
-        let action = getGeneralBrowserAction(selectedTabURL: URL(string: "internal://local/errorpage"),
-                                             isNativeErrorPage: true,
-                                             for: .updateSelectedTab)
-        let newState = reducer(initialState, action)
-
-        XCTAssertEqual(newState.browserViewType, .nativeErrorPage)
-    }
-
     func testShowPasswordGeneratorAction() {
         let initialState = createSubject()
         let reducer = browserViewControllerReducer()

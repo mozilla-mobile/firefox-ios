@@ -47,12 +47,10 @@ protocol TabDisplayerDelegate: AnyObject {
 }
 
 enum TabDisplaySection: Int, CaseIterable {
-    case inactiveTabs
     case regularTabs
 }
 
-enum TabDisplayType {
-    case TabGrid
+enum TabDisplayType: Int {
     case TopTabTray
 }
 
@@ -62,15 +60,16 @@ struct TabDisplayOrder: Codable {
     var regularTabUUID: [TabUUID] = []
 }
 
-class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
+/// This class is only used in top tabs, but it was used beforehand in the tab tray. Some clean up was done,
+/// but the code is not as clear as it could be since this class had multiple purposes.
+class TopTabDisplayManager: NSObject {
     // MARK: - Variables
     private var performingChainedOperations = false
-    var inactiveViewModel: LegacyInactiveTabViewModel?
     var isInactiveViewExpanded = false
     var dataStore = WeakList<Tab>()
     var operations = [(TabAnimationType, (() -> Void))]()
     var refreshStoreOperation: (() -> Void)?
-    var tabDisplayType: TabDisplayType = .TabGrid
+    let tabDisplayType: TabDisplayType = .TopTabTray
     var windowUUID: WindowUUID { return tabManager.windowUUID }
     private let tabManager: TabManager
     private let collectionView: UICollectionView
@@ -79,17 +78,12 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
     private var hasSentInactiveTabShownEvent = false
     var profile: Profile
     var notificationCenter: NotificationProtocol
-    var theme: Theme
 
     weak var tabDisplayCompletionDelegate: TabDisplayCompletionDelegate?
     private weak var tabDisplayerDelegate: TabDisplayerDelegate?
 
     lazy var filteredTabs = [Tab]()
     var tabDisplayOrder = TabDisplayOrder()
-
-    var shouldEnableInactiveTabs: Bool {
-        return featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildAndUser)
-    }
 
     var orderedTabs: [Tab] {
         return filteredTabs
@@ -180,32 +174,25 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
          tabManager: TabManager,
          tabDisplayer: TabDisplayerDelegate,
          reuseID: String,
-         tabDisplayType: TabDisplayType,
-         profile: Profile,
-         theme: Theme
+         profile: Profile
     ) {
         self.collectionView = collectionView
         self.tabDisplayerDelegate = tabDisplayer
         self.tabManager = tabManager
         self.isPrivate = tabManager.selectedTab?.isPrivate ?? false
         self.tabReuseIdentifier = reuseID
-        self.tabDisplayType = tabDisplayType
         self.profile = profile
         self.notificationCenter = NotificationCenter.default
-        self.theme = theme
 
         super.init()
         setupNotifications(forObserver: self, observing: [.DidTapUndoCloseAllTabToast])
-        self.inactiveViewModel = LegacyInactiveTabViewModel(theme: theme)
         tabManager.addDelegate(self)
         register(self, forTabEvents: .didChangeURL, .didSetScreenshot)
         self.dataStore.removeAll()
-        getTabsAndUpdateInactiveState { [weak self] tabsToDisplay in
+        getTabs { [weak self] tabsToDisplay in
             guard let self, !tabsToDisplay.isEmpty else { return }
 
-            let defaultTabsValue = self.getRegularOrderedTabs() ?? tabsToDisplay
-            let orderedRegularTabs = tabDisplayType == .TopTabTray ? tabsToDisplay : defaultTabsValue
-
+            let orderedRegularTabs = tabsToDisplay
             if self.getRegularOrderedTabs() == nil {
                 self.saveRegularOrderedTabs(from: tabsToDisplay)
             }
@@ -216,64 +203,10 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
         }
     }
 
-    private func tabsSetupHelper(filteredTabs: [Tab]) {
-        self.filteredTabs = filteredTabs
-    }
-
-    private func setupFilteredTabs(tabsToBuildFrom: [Tab], completion: @escaping ([Tab]) -> Void) {
-        tabsSetupHelper(filteredTabs: tabsToBuildFrom)
-        completion(tabsToBuildFrom)
-    }
-
-    private func getTabsAndUpdateInactiveState(completion: @escaping ([Tab]) -> Void) {
+    private func getTabs(completion: @escaping ([Tab]) -> Void) {
         let allTabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-
-        // We should not make a single tab inactive as that would be the selected tab
-        guard !self.isPrivate, allTabs.count > 1 else {
-            tabsSetupHelper(filteredTabs: allTabs)
-            completion(allTabs)
-            return
-        }
-
-        if shouldEnableInactiveTabs, let inactiveViewModel = inactiveViewModel {
-            var selectedTab = tabManager.selectedTab
-            // Make sure selected tab has latest time
-            selectedTab?.lastExecutedTime = Date.now()
-
-            // Special Case: When toggling from Private to Regular
-            // mode none of the regular tabs are selected,
-            // this is because toggling from one mode to another a user still
-            // has to tap on a tab to select in order to fully switch modes
-            if let firstTab = allTabs.first, firstTab.isPrivate != selectedTab?.isPrivate {
-                selectedTab = mostRecentTab(inTabs: tabManager.normalTabs)
-            }
-
-            // update model
-            inactiveViewModel.updateInactiveTabs(with: selectedTab, tabs: allTabs)
-
-            // keep inactive tabs collapsed
-            self.isInactiveViewExpanded = false
-        }
-
-        guard tabDisplayType == .TabGrid else {
-            var filteredTabs = allTabs
-            if shouldEnableInactiveTabs, let inactiveViewModel = inactiveViewModel {
-                filteredTabs = inactiveViewModel.activeTabs
-            }
-            tabsSetupHelper(filteredTabs: filteredTabs)
-            completion(filteredTabs)
-            return
-        }
-
-        guard let inactiveViewModel = inactiveViewModel,
-              shouldEnableInactiveTabs else {
-            setupFilteredTabs(tabsToBuildFrom: tabManager.normalTabs,
-                              completion: completion)
-            return
-        }
-
-        setupFilteredTabs(tabsToBuildFrom: inactiveViewModel.activeTabs,
-                          completion: completion)
+        self.filteredTabs = allTabs
+        completion(allTabs)
     }
 
     func indexOfRegularTab(tab: Tab) -> Int? {
@@ -305,7 +238,7 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
         }
 
         if shouldSelectMostRecentTab {
-            getTabsAndUpdateInactiveState { [weak self] tabsToDisplay in
+            getTabs { [weak self] tabsToDisplay in
                 let tab = mostRecentTab(inTabs: tabsToDisplay) ?? tabsToDisplay.last
                 if let tab = tab {
                     self?.tabManager.selectTab(tab)
@@ -327,7 +260,7 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
         operations.removeAll()
         dataStore.removeAll()
 
-        getTabsAndUpdateInactiveState { [weak self] tabsToDisplay in
+        getTabs { [weak self] tabsToDisplay in
             guard let self else { return }
             tabsToDisplay.forEach {
                 self.dataStore.insert($0)
@@ -382,7 +315,7 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
     func performCloseAction(for tab: Tab) {
         guard !isDragging else { return }
 
-        getTabsAndUpdateInactiveState { [weak self] tabsToDisplay in
+        getTabs { [weak self] tabsToDisplay in
             guard let self else { return }
             // If it is the last tab of regular mode we automatically create an new tab
             if !self.isPrivate,
@@ -428,23 +361,10 @@ class LegacyTabDisplayManager: NSObject, FeatureFlaggable {
 }
 
 // MARK: - UICollectionViewDataSource
-extension LegacyTabDisplayManager: UICollectionViewDataSource {
+extension TopTabDisplayManager: UICollectionViewDataSource {
     @objc
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard tabDisplayType != .TopTabTray else {
-            return dataStore.count
-        }
-
-        switch TabDisplaySection(rawValue: section) {
-        case .inactiveTabs:
-            // Hide inactive tray if there are no inactive tabs
-            guard let vm = inactiveViewModel, !vm.inactiveTabs.isEmpty else { return 0 }
-            return shouldEnableInactiveTabs ? (isPrivate ? 0 : 1) : 0
-        case .regularTabs:
-            return dataStore.count
-        case .none:
-            return 0
-        }
+        return dataStore.count
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -459,39 +379,22 @@ extension LegacyTabDisplayManager: UICollectionViewDataSource {
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
         var cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.tabReuseIdentifier, for: indexPath)
-        if tabDisplayType == .TopTabTray {
-            guard let tab = dataStore.at(indexPath.row) else { return cell }
-            cell = tabDisplayerDelegate?.cellFactory(for: cell, using: tab) ?? cell
-            return cell
-        }
-
-        switch TabDisplaySection(rawValue: indexPath.section) {
-        case .inactiveTabs:
-            return cell
-
-        case .regularTabs:
-            guard let tab = dataStore.at(indexPath.row) else { return cell }
-            cell = tabDisplayerDelegate?.cellFactory(for: cell, using: tab) ?? cell
-
-        case .none:
-            return cell
-        }
-
+        guard let tab = dataStore.at(indexPath.row) else { return cell }
+        cell = tabDisplayerDelegate?.cellFactory(for: cell, using: tab) ?? cell
         return cell
     }
 
     @objc
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        if tabDisplayType == .TopTabTray { return 1 }
-        return TabDisplaySection.allCases.count
+        return 1 // There's only one section in top tabs, which contains normal or private tabs
     }
 }
 
 // MARK: - TabSelectionDelegate
-extension LegacyTabDisplayManager: TabSelectionDelegate {
+extension TopTabDisplayManager: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
         guard let tab = dataStore.at(index) else { return }
-        getTabsAndUpdateInactiveState { [weak self] tabsToDisplay in
+        getTabs { [weak self] tabsToDisplay in
             if tabsToDisplay.contains(tab) {
                 self?.tabManager.selectTab(tab)
             }
@@ -501,7 +404,7 @@ extension LegacyTabDisplayManager: TabSelectionDelegate {
 }
 
 // MARK: - UIDropInteractionDelegate
-extension LegacyTabDisplayManager: UIDropInteractionDelegate {
+extension TopTabDisplayManager: UIDropInteractionDelegate {
     func dropInteraction(
         _ interaction: UIDropInteraction,
         canHandle session: UIDropSession
@@ -538,7 +441,7 @@ extension LegacyTabDisplayManager: UIDropInteractionDelegate {
 }
 
 // MARK: - UICollectionViewDragDelegate
-extension LegacyTabDisplayManager: UICollectionViewDragDelegate {
+extension TopTabDisplayManager: UICollectionViewDragDelegate {
     // This is called when the user has long-pressed on a cell, please note that
     // `collectionView.hasActiveDrag` is not true until the user's finger moves.
     // This problem is mitigated by checking the collectionView for activated long
@@ -565,7 +468,7 @@ extension LegacyTabDisplayManager: UICollectionViewDragDelegate {
 }
 
 // MARK: - UICollectionViewDropDelegate
-extension LegacyTabDisplayManager: UICollectionViewDropDelegate {
+extension TopTabDisplayManager: UICollectionViewDropDelegate {
     private func dragPreviewParameters(
         _ collectionView: UICollectionView,
         dragPreviewParametersForItemAt indexPath: IndexPath
@@ -636,9 +539,8 @@ extension LegacyTabDisplayManager: UICollectionViewDropDelegate {
                 self?.dataStore.insert($0)
             }
 
-            let section = self?.tabDisplayType == .TopTabTray ? 0 : TabDisplaySection.regularTabs.rawValue
-            let start = IndexPath(row: sourceIndex, section: section)
-            let end = IndexPath(row: destinationIndexPath.item, section: section)
+            let start = IndexPath(row: sourceIndex, section: 0)
+            let end = IndexPath(row: destinationIndexPath.item, section: 0)
 
             self?.collectionView.moveItem(at: start, to: end)
         }
@@ -672,14 +574,12 @@ extension LegacyTabDisplayManager: UICollectionViewDropDelegate {
     }
 }
 
-extension LegacyTabDisplayManager: TabEventHandler {
+extension TopTabDisplayManager: TabEventHandler {
     var tabEventWindowResponseType: TabEventHandlerWindowResponseType { return .singleWindow(windowUUID) }
 
     private func getIndexPath(tab: Tab) -> IndexPath? {
         guard let index = dataStore.index(of: tab) else { return nil }
-        let section = tabDisplayType == .TopTabTray ? 0 : TabDisplaySection.regularTabs.rawValue
-
-        return IndexPath(row: index, section: section)
+        return IndexPath(row: index, section: 0)
     }
 
     func removeAllTabsFromView() {
@@ -690,7 +590,7 @@ extension LegacyTabDisplayManager: TabEventHandler {
 }
 
 // MARK: - TabManagerDelegate
-extension LegacyTabDisplayManager: TabManagerDelegate {
+extension TopTabDisplayManager: TabManagerDelegate {
     func tabManager(
         _ tabManager: TabManager,
         didAddTab tab: Tab,
@@ -707,8 +607,7 @@ extension LegacyTabDisplayManager: TabManagerDelegate {
         updateWith(animationType: .addTab) { [unowned self] in
             let indexToPlaceTab = getIndexToPlaceTab(placeNextToParentTab: placeNextToParentTab)
             self.dataStore.insert(tab, at: indexToPlaceTab)
-            let section = self.tabDisplayType == .TopTabTray ? 0 : TabDisplaySection.regularTabs.rawValue
-            self.collectionView.insertItems(at: [IndexPath(row: indexToPlaceTab, section: section)])
+            self.collectionView.insertItems(at: [IndexPath(row: indexToPlaceTab, section: 0)])
         }
     }
 
@@ -742,8 +641,7 @@ extension LegacyTabDisplayManager: TabManagerDelegate {
 
         updateWith(animationType: type) { [weak self] in
             guard let removed = self?.dataStore.remove(tab) else { return }
-            let section = self?.tabDisplayType == .TopTabTray ? 0 : TabDisplaySection.regularTabs.rawValue
-            self?.collectionView.deleteItems(at: [IndexPath(row: removed, section: section)])
+            self?.collectionView.deleteItems(at: [IndexPath(row: removed, section: 0)])
         }
     }
 
@@ -805,7 +703,7 @@ extension LegacyTabDisplayManager: TabManagerDelegate {
     }
 }
 
-extension LegacyTabDisplayManager: Notifiable {
+extension TopTabDisplayManager: Notifiable {
     // MARK: - Notifiable protocol
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
