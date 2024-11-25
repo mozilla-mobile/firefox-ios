@@ -110,7 +110,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         let gleanConfig = Configuration(
             channel: AppConstants.buildChannel.rawValue,
             logLevel: .off,
-            pingSchedule: ["baseline": ["dau-reporting"]]
+            pingSchedule: ["baseline": ["usage-reporting"]]
         )
         glean.initialize(uploadEnabled: sendUsageData,
                          configuration: gleanConfig,

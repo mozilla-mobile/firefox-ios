@@ -772,7 +772,7 @@ password_generator:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
-    
+
 # Microsurvey
 microsurvey:
   shown:
@@ -3350,7 +3350,6 @@ search:
     send_in_pings:
       - metrics
       - baseline
-      - dau-reporting
     no_lint:
       - BASELINE_PING
   default_engine:
@@ -3375,7 +3374,6 @@ search:
     send_in_pings:
       - metrics
       - baseline
-      - dau-reporting
     no_lint:
       - BASELINE_PING
   start_search_pressed:
@@ -3412,7 +3410,6 @@ search:
     send_in_pings:
       - metrics
       - baseline
-      - dau-reporting
     no_lint:
       - BASELINE_PING
   google_topsite_pressed:
@@ -4392,7 +4389,6 @@ browser_search:
     send_in_pings:
       - metrics
       - baseline
-      - dau-reporting
     no_lint:
       - BASELINE_PING
     bugs:
@@ -4414,7 +4410,6 @@ browser_search:
     send_in_pings:
       - metrics
       - baseline
-      - dau-reporting
     no_lint:
       - BASELINE_PING
     bugs:
@@ -4762,7 +4757,7 @@ awesomebar:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
-    
+
 # Toolbar related metrics
 toolbar:
   qr_scan_button_tapped:
