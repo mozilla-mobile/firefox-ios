@@ -262,8 +262,7 @@ class EditBookmarkViewController: UIViewController,
         guard let section = Section(rawValue: indexPath.section) else { return }
         if section == .folder, let folder = viewModel.folderStructures[safe: indexPath.row] {
             viewModel.selectFolder(folder)
-        }
-        else if section == .newFolder {
+        } else if section == .newFolder {
             viewModel.createNewFolder()
         }
     }
