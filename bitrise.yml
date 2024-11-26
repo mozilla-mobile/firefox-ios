@@ -1230,7 +1230,7 @@ workflows:
 
             ls /Users/vagrant/Library/Developer/Xcode/DerivedData/$CLIENT_PATH/Logs/Test
 
-            xcrun xcresulttool graph --path $BITRISE_XCRESULT_PATH
+            xcrun xcresulttool graph --path $BITRISE_XCRESULT_PATH --legacy
             ls ..
             python3 xcresult_extract/xcresult_extract.py -project ../Client.xcodeproj -scheme Fennec
             cat data.txt
