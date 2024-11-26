@@ -103,6 +103,19 @@ class RustAutofillTests: XCTestCase {
         }
     }
 
+    func deleteCreditCard(id: String) async throws -> Bool {
+        return try await withCheckedThrowingContinuation { continuation in
+            autofill.deleteCreditCard(id: id) { success, error in
+                guard let error else {
+                    continuation.resume(returning: success)
+                    return
+                }
+
+                continuation.resume(throwing: error)
+            }
+        }
+    }
+
     func addAddress(completion: @escaping (Result<Address, Error>) -> Void) {
         let address = UpdatableAddressFields(
             name: "Jane Doe",
