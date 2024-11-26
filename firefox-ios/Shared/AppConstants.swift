@@ -81,6 +81,7 @@ public class AppConstants {
     }()
 
     public static let prefSendUsageData = "settings.sendUsageData"
+    public static let prefSendCrashReports = "settings.sendCrashReports"
     public static let prefStudiesToggle = "settings.studiesToggle"
 
     /// Build Channel.

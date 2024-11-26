@@ -54,6 +54,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
     // MARK: - Data Settings
     private var sendAnonymousUsageDataSetting: BoolSetting?
+    private var sendCrashReportsSetting: BoolSetting?
     private var studiesToggleSetting: BoolSetting?
 
     // MARK: - Initializers
@@ -173,11 +174,14 @@ class AppSettingsTableViewController: SettingsTableViewController,
     // MARK: Data settings setup
 
     private func setupDataSettings() {
-        let anonymousUsageDataSetting = SendAnonymousUsageDataSetting(
+        let isSentCrashReportsEnabled = featureFlags.isFeatureEnabled(.tosFeature, checking: .buildOnly)
+
+        let anonymousUsageDataSetting = SendDataSetting(
             prefs: profile.prefs,
             delegate: settingsDelegate,
             theme: themeManager.getCurrentTheme(for: windowUUID),
-            settingsDelegate: parentCoordinator
+            settingsDelegate: parentCoordinator,
+            sendDataType: .usageData
         )
 
         let studiesSetting = StudiesToggleSetting(
@@ -187,8 +191,23 @@ class AppSettingsTableViewController: SettingsTableViewController,
             settingsDelegate: parentCoordinator
         )
 
-        anonymousUsageDataSetting.shouldSendUsageData = { value in
+        anonymousUsageDataSetting.shouldSendData = { value in
             studiesSetting.updateSetting(for: value)
+        }
+
+        // Only add this toggle to the Settings if Terms Of Service feature flag is enabled
+        if isSentCrashReportsEnabled {
+            let sendCrashReportsSettings = SendDataSetting(
+                prefs: profile.prefs,
+                delegate: settingsDelegate,
+                theme: themeManager.getCurrentTheme(for: windowUUID),
+                settingsDelegate: parentCoordinator,
+                sendDataType: .crashReports
+            )
+            sendCrashReportsSettings.shouldSendData = { value in
+                // TODO: FXIOS-10348 Firefox iOS: Manage Privacy Preferences in Settings
+            }
+            self.sendCrashReportsSetting = sendCrashReportsSettings
         }
 
         sendAnonymousUsageDataSetting = anonymousUsageDataSetting
@@ -377,8 +396,12 @@ class AppSettingsTableViewController: SettingsTableViewController,
             )
         }
 
+        supportSettings.append(sendAnonymousUsageDataSetting)
+        if let sendCrashReportsSetting {
+            supportSettings.append(sendCrashReportsSetting)
+        }
+
         supportSettings.append(contentsOf: [
-            sendAnonymousUsageDataSetting,
             studiesToggleSetting,
             OpenSupportPageSetting(delegate: settingsDelegate,
                                    theme: themeManager.getCurrentTheme(for: windowUUID),

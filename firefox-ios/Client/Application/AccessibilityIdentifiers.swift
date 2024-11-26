@@ -697,8 +697,9 @@ public struct AccessibilityIdentifiers {
             static let bottomSetting = "BottomSearchBar"
         }
 
-        struct SendAnonymousUsageData {
-            static let title = "SendAnonymousUsageData"
+        struct SendData {
+            static let sendAnonymousUsageDataTitle = "SendAnonymousUsageData"
+            static let sendCrashReportsTitle = "SendCrashReports"
         }
 
         struct PrivacyPolicy {
