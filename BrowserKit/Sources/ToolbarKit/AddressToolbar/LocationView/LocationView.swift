@@ -468,11 +468,9 @@ final class LocationView: UIView,
         lockIconButton.backgroundColor = colors.layerSearch
         urlTextField.applyTheme(theme: theme)
         safeListedURLImageColor = colors.iconAccentBlue
+        lockIconButton.tintColor = colors.iconPrimary
+        lockIconImageColor = colors.iconPrimary
 
-        if lockIconNeedsTheming {
-            lockIconButton.tintColor = colors.iconPrimary
-            lockIconImageColor = colors.iconPrimary
-        }
         setLockIconImage()
     }
 
