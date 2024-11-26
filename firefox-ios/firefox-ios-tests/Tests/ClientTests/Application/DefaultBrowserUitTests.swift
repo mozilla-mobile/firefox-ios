@@ -19,10 +19,6 @@ final class DefaultBrowserUitTests: XCTestCase {
         userDefaults = MockUserDefaults()
         locale = MockLocale()
         application = MockUIApplication()
-        subject = DefaultBrowserUtil(userDefault: userDefaults,
-                                     telemetryWrapper: telemetryWrapper,
-                                     locale: locale,
-                                     application: application)
     }
 
     override func tearDown() {
@@ -39,10 +35,14 @@ final class DefaultBrowserUitTests: XCTestCase {
 
         locale.localeRegionCode = "IE"
         application.mockDefaultApplicationValue = true
+
+        setupSubject()
         subject.processUserDefaultState(isFirstRun: true)
 
         XCTAssertTrue(userDefaults.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage))
         XCTAssertTrue(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
+        XCTAssertTrue(telemetryWrapper.recordedObjects.contains(.defaultBrowser))
+        XCTAssertTrue(telemetryWrapper.recordedObjects.contains(.choiceScreenAcquisition))
         XCTAssertEqual(userDefaults.setCalledCount, 2)
     }
 
@@ -51,11 +51,15 @@ final class DefaultBrowserUitTests: XCTestCase {
 
         locale.localeRegionCode = "US"
         application.mockDefaultApplicationValue = false
+
+        setupSubject()
         subject.processUserDefaultState(isFirstRun: true)
 
         XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage))
         XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
-        XCTAssertEqual(userDefaults.setCalledCount, 2)
+        XCTAssertTrue(telemetryWrapper.recordedObjects.contains(.defaultBrowser))
+        XCTAssertFalse(telemetryWrapper.recordedObjects.contains(.choiceScreenAcquisition))
+        XCTAssertEqual(userDefaults.setCalledCount, 1)
     }
 
     func testSecondLaunchWithDMAUser() {
@@ -63,11 +67,15 @@ final class DefaultBrowserUitTests: XCTestCase {
 
         locale.localeRegionCode = "IT"
         application.mockDefaultApplicationValue = true
+
+        setupSubject()
         subject.processUserDefaultState(isFirstRun: false)
 
         XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage))
-        XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
-        XCTAssertEqual(userDefaults.setCalledCount, 2)
+        XCTAssertTrue(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
+        XCTAssertTrue(telemetryWrapper.recordedObjects.contains(.defaultBrowser))
+        XCTAssertFalse(telemetryWrapper.recordedObjects.contains(.choiceScreenAcquisition))
+        XCTAssertEqual(userDefaults.setCalledCount, 1)
     }
 
     func testSecondLaunchWithNonDMAUser() {
@@ -75,10 +83,21 @@ final class DefaultBrowserUitTests: XCTestCase {
 
         locale.localeRegionCode = "US"
         application.mockDefaultApplicationValue = false
+
+        setupSubject()
         subject.processUserDefaultState(isFirstRun: false)
 
         XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.DidDismissDefaultBrowserMessage))
         XCTAssertFalse(userDefaults.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser))
-        XCTAssertEqual(userDefaults.setCalledCount, 2)
+        XCTAssertTrue(telemetryWrapper.recordedObjects.contains(.defaultBrowser))
+        XCTAssertFalse(telemetryWrapper.recordedObjects.contains(.choiceScreenAcquisition))
+        XCTAssertEqual(userDefaults.setCalledCount, 1)
+    }
+
+    private func setupSubject() {
+        subject = DefaultBrowserUtil(userDefault: userDefaults,
+                                     telemetryWrapper: telemetryWrapper,
+                                     locale: locale,
+                                     application: application)
     }
 }
