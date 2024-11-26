@@ -35,17 +35,6 @@ class RustAutofillTests: XCTestCase {
         }
     }
 
-    func addCreditCard(completion: @escaping (CreditCard?, Error?) -> Void) {
-        let creditCard = UnencryptedCreditCardFields(
-            ccName: "Jane Doe",
-            ccNumber: "1234567890123456",
-            ccNumberLast4: "3456",
-            ccExpMonth: 03,
-            ccExpYear: 2027,
-            ccType: "Visa")
-        return autofill.addCreditCard(creditCard: creditCard, completion: completion)
-    }
-
     func addCreditCard() async throws -> CreditCard {
         let creditCard = UnencryptedCreditCardFields(
             ccName: "Jane Doe",
