@@ -105,21 +105,6 @@ class RustAutofillTests: XCTestCase {
         }
     }
 
-    func addAddress(completion: @escaping (Result<Address, Error>) -> Void) {
-        let address = UpdatableAddressFields(
-            name: "Jane Doe",
-            organization: "",
-            streetAddress: "123 Second Avenue",
-            addressLevel3: "",
-            addressLevel2: "Chicago, IL",
-            addressLevel1: "",
-            postalCode: "",
-            country: "United States",
-            tel: "",
-            email: "")
-        return autofill.addAddress(address: address, completion: completion)
-    }
-
     func addAddress() async throws -> Address {
         return try await withCheckedThrowingContinuation { continuation in
             let address = UpdatableAddressFields(
