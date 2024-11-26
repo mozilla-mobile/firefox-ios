@@ -57,29 +57,6 @@ private func MZLocalizedString(
 // MARK: - Alerts
 extension String {
     public struct Alerts {
-        public struct RestoreTabs {
-            public static let Title = MZLocalizedString(
-                key: "Alerts.RestoreTabs.Title.v109.v2",
-                tableName: "Alerts",
-                value: "%@ crashed. Restore your tabs?",
-                comment: "The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. The placeholder will be the Firefox name.")
-            public static let Message = MZLocalizedString(
-                key: "Alerts.RestoreTabs.Message.v109",
-                tableName: "Alerts",
-                value: "Sorry about that. Restore tabs to pick up where you left off.",
-                comment: "The body of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed.")
-            public static let ButtonNo = MZLocalizedString(
-                key: "Alerts.RestoreTabs.Button.No.v109",
-                tableName: "Alerts",
-                value: "No",
-                comment: "The title for the negative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will reject the action of restoring tabs.")
-            public static let ButtonYes = MZLocalizedString(
-                key: "Alerts.RestoreTabs.Button.Yes.v109",
-                tableName: "Alerts",
-                value: "Restore tabs",
-                comment: "The title for the affirmative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will restore existing tabs.")
-        }
-
         public struct FeltDeletion {
             public static let Title = MZLocalizedString(
                 key: "Alerts.FeltDeletion.Title.v122",
@@ -6187,35 +6164,6 @@ extension String {
         comment: "String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch")
 }
 
-// MARK: - CrashOptInAlert
-extension String {
-    public static let CrashOptInAlertTitle = MZLocalizedString(
-        key: "Oops! Firefox crashed",
-        tableName: nil,
-        value: nil,
-        comment: "Title for prompt displayed to user after the app crashes")
-    public static let CrashOptInAlertMessage = MZLocalizedString(
-        key: "Send a crash report so Mozilla can fix the problem?",
-        tableName: nil,
-        value: nil,
-        comment: "Message displayed in the crash dialog above the buttons used to select when sending reports")
-    public static let CrashOptInAlertSend = MZLocalizedString(
-        key: "Send Report",
-        tableName: nil,
-        value: nil,
-        comment: "Used as a button label for crash dialog prompt")
-    public static let CrashOptInAlertAlwaysSend = MZLocalizedString(
-        key: "Always Send",
-        tableName: nil,
-        value: nil,
-        comment: "Used as a button label for crash dialog prompt")
-    public static let CrashOptInAlertDontSend = MZLocalizedString(
-        key: "Don’t Send",
-        tableName: nil,
-        value: nil,
-        comment: "Used as a button label for crash dialog prompt")
-}
-
 // MARK: - ClearPrivateDataAlert
 extension String {
     public static let ClearPrivateDataAlertMessage = MZLocalizedString(
@@ -7650,6 +7598,55 @@ extension String {
                 tableName: "MainMenu",
                 value: "Save",
                 comment: "On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on.")
+        }
+        struct v134 {
+            public struct RestoreTabs {
+                public static let Title = MZLocalizedString(
+                    key: "Alerts.RestoreTabs.Title.v109.v2",
+                    tableName: "Alerts",
+                    value: "%@ crashed. Restore your tabs?",
+                    comment: "The title of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed. The placeholder will be the Firefox name.")
+                public static let Message = MZLocalizedString(
+                    key: "Alerts.RestoreTabs.Message.v109",
+                    tableName: "Alerts",
+                    value: "Sorry about that. Restore tabs to pick up where you left off.",
+                    comment: "The body of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed.")
+                public static let ButtonNo = MZLocalizedString(
+                    key: "Alerts.RestoreTabs.Button.No.v109",
+                    tableName: "Alerts",
+                    value: "No",
+                    comment: "The title for the negative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will reject the action of restoring tabs.")
+                public static let ButtonYes = MZLocalizedString(
+                    key: "Alerts.RestoreTabs.Button.Yes.v109",
+                    tableName: "Alerts",
+                    value: "Restore tabs",
+                    comment: "The title for the affirmative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will restore existing tabs.")
+            }
+            public static let CrashOptInAlertTitle = MZLocalizedString(
+                key: "Oops! Firefox crashed",
+                tableName: nil,
+                value: nil,
+                comment: "Title for prompt displayed to user after the app crashes")
+            public static let CrashOptInAlertMessage = MZLocalizedString(
+                key: "Send a crash report so Mozilla can fix the problem?",
+                tableName: nil,
+                value: nil,
+                comment: "Message displayed in the crash dialog above the buttons used to select when sending reports")
+            public static let CrashOptInAlertSend = MZLocalizedString(
+                key: "Send Report",
+                tableName: nil,
+                value: nil,
+                comment: "Used as a button label for crash dialog prompt")
+            public static let CrashOptInAlertAlwaysSend = MZLocalizedString(
+                key: "Always Send",
+                tableName: nil,
+                value: nil,
+                comment: "Used as a button label for crash dialog prompt")
+            public static let CrashOptInAlertDontSend = MZLocalizedString(
+                key: "Don’t Send",
+                tableName: nil,
+                value: nil,
+                comment: "Used as a button label for crash dialog prompt")
         }
     }
 }
