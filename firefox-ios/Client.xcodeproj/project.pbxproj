@@ -608,11 +608,11 @@
 		619FE8932CE6595B004F83E2 /* WallpaperMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 619FE8922CE6595B004F83E2 /* WallpaperMiddleware.swift */; };
 		61A164492CE7BE84001D6058 /* WallpaperStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A164452CE7BE1A001D6058 /* WallpaperStateTests.swift */; };
 		61A1644A2CE7BE8A001D6058 /* WallpaperMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61A164472CE7BE3D001D6058 /* WallpaperMiddlewareTests.swift */; };
-		630FE1342C7FB42500D9D6B2 /* NativeErrorPageMockModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630FE1302C7FB42500D9D6B2 /* NativeErrorPageMockModel.swift */; };
 		630FE1352C7FB42500D9D6B2 /* NativeErrorPageViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630FE1322C7FB42500D9D6B2 /* NativeErrorPageViewControllerTests.swift */; };
 		631A369F2CC0A4FE0044DFEB /* NativeErrorPageMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631A369E2CC0A4FE0044DFEB /* NativeErrorPageMiddleware.swift */; };
 		631A36A32CC0B2470044DFEB /* NativeErrorPageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631A36A22CC0B2470044DFEB /* NativeErrorPageHelper.swift */; };
 		63306D3921103EAE00F25400 /* LegacySavedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D3821103EAE00F25400 /* LegacySavedTab.swift */; };
+		635183FB2CF5555C00EDFCE2 /* NativeErrorPageStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635183FA2CF5555C00EDFCE2 /* NativeErrorPageStateTests.swift */; };
 		63B213282CCA796D00A466DB /* NativeErrorPageAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B213272CCA796D00A466DB /* NativeErrorPageAction.swift */; };
 		63B2132A2CCA797400A466DB /* NativeErrorPageState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B213292CCA797400A466DB /* NativeErrorPageState.swift */; };
 		63F7A9AA2C7529ED005846F5 /* NativeErrorPageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F7A9A92C7529ED005846F5 /* NativeErrorPageModel.swift */; };
@@ -6923,12 +6923,12 @@
 		62C1428C920701180BCD4C47 /* anp */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = anp; path = anp.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		62DF49B9976D5863CADF6EAA /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Menu.strings; sourceTree = "<group>"; };
 		63094229AA6EC744599B77A4 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/ClearPrivateData.strings; sourceTree = "<group>"; };
-		630FE1302C7FB42500D9D6B2 /* NativeErrorPageMockModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeErrorPageMockModel.swift; sourceTree = "<group>"; };
 		630FE1322C7FB42500D9D6B2 /* NativeErrorPageViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeErrorPageViewControllerTests.swift; sourceTree = "<group>"; };
 		631A369E2CC0A4FE0044DFEB /* NativeErrorPageMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeErrorPageMiddleware.swift; sourceTree = "<group>"; };
 		631A36A22CC0B2470044DFEB /* NativeErrorPageHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeErrorPageHelper.swift; sourceTree = "<group>"; };
 		63306D3821103EAE00F25400 /* LegacySavedTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacySavedTab.swift; sourceTree = "<group>"; };
 		634148899F41CAA3BCF71E8B /* or */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = or; path = or.lproj/Localizable.strings; sourceTree = "<group>"; };
+		635183FA2CF5555C00EDFCE2 /* NativeErrorPageStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeErrorPageStateTests.swift; sourceTree = "<group>"; };
 		63B04BE882C41584580E0E59 /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = "fa.lproj/Default Browser.strings"; sourceTree = "<group>"; };
 		63B213272CCA796D00A466DB /* NativeErrorPageAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeErrorPageAction.swift; sourceTree = "<group>"; };
 		63B213292CCA797400A466DB /* NativeErrorPageState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeErrorPageState.swift; sourceTree = "<group>"; };
@@ -10946,19 +10946,11 @@
 			path = Wallpaper;
 			sourceTree = "<group>";
 		};
-		630FE1312C7FB42500D9D6B2 /* Mock */ = {
-			isa = PBXGroup;
-			children = (
-				630FE1302C7FB42500D9D6B2 /* NativeErrorPageMockModel.swift */,
-			);
-			path = Mock;
-			sourceTree = "<group>";
-		};
 		630FE1332C7FB42500D9D6B2 /* NativeErrorPage */ = {
 			isa = PBXGroup;
 			children = (
-				630FE1312C7FB42500D9D6B2 /* Mock */,
 				630FE1322C7FB42500D9D6B2 /* NativeErrorPageViewControllerTests.swift */,
+				635183FA2CF5555C00EDFCE2 /* NativeErrorPageStateTests.swift */,
 			);
 			path = NativeErrorPage;
 			sourceTree = "<group>";
@@ -17208,6 +17200,7 @@
 				215B458427DA87FC00E5E800 /* TabMetadataManagerTests.swift in Sources */,
 				215349062886007900FADB4D /* GleanPlumbMessageStoreTests.swift in Sources */,
 				2173326A29CCF901007F20C7 /* UIPanGestureRecognizerMock.swift in Sources */,
+				635183FB2CF5555C00EDFCE2 /* NativeErrorPageStateTests.swift in Sources */,
 				5A9A09D628B01FD500B6F51E /* MockURLBarView.swift in Sources */,
 				8A33222227DFE658008F809E /* NimbusMock.swift in Sources */,
 				0B7FC3D32CAE811F005C5CCE /* DefaultBookmarksSaverTests.swift in Sources */,
@@ -17280,7 +17273,6 @@
 				C869915428917803007ACC5C /* WallpaperTestDataProvider.swift in Sources */,
 				0AC659292BF493CE005C614A /* MockFxAWebViewModel.swift in Sources */,
 				8A5604F629DF09FA00035CA3 /* MockLaunchCoordinatorDelegate.swift in Sources */,
-				630FE1342C7FB42500D9D6B2 /* NativeErrorPageMockModel.swift in Sources */,
 				C807CCCC28367446008E6A5A /* FeatureFlagManagerTests.swift in Sources */,
 				8A552AC72CB43AB400564C98 /* HomepageStateTests.swift in Sources */,
 				8AABBD032A001CBC0089941E /* MockApplicationHelper.swift in Sources */,

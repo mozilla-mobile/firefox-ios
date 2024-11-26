@@ -67,6 +67,7 @@ public struct ImageIdentifiers {
 
     public struct NativeErrorPage {
         public static let noInternetConnection = "noInternetConnection"
+        public static let securityError = "securityError"
     }
 
     public struct TrackingProtection {
