@@ -7,6 +7,9 @@
 /* On the main menu, at the top, when the user is signed out. The title for the sign in action */
 "MainMenu.Account.SignedOut.Title.v131" = "ລົງຊື່ເຂົ້າໃຊ້";
 
+/* On the main menu, at the top, when the user is signed in but there was an error syncing. The description subtitle for the sync error state. */
+"MainMenu.Account.SyncError.Description.v131" = "ຢຸດການຊິງຄ໌ໄວ້ຊົ່ວຄາວ";
+
 /* On the main menu, the title for the action that will take the user to a website to get help from Mozilla. */
 "MainMenu.SettingsSection.GetHelp.Title.v131" = "ຂໍຄວາມຊ່ວຍເຫລືອ";
 

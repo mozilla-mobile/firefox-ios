@@ -9,12 +9,6 @@ import WebKit
 import Common
 import SiteImageView
 
-private class FetchInProgressError: MaybeErrorType {
-    internal var description: String {
-        return "Fetch is already in-progress"
-    }
-}
-
 @objcMembers
 class HistoryPanel: UIViewController,
                     LibraryPanel,

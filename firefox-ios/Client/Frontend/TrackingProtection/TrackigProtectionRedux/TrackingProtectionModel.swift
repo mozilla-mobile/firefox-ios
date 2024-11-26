@@ -150,12 +150,9 @@ class TrackingProtectionModel {
     }
 
     func getConnectionStatusImage(themeType: ThemeType) -> UIImage {
-        if connectionSecure {
-            return UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.lock)
-                .withRenderingMode(.alwaysTemplate)
-        } else {
-            return UIImage(imageLiteralResourceName: StandardImageIdentifiers.Large.lockSlash)
-        }
+        let imageName = connectionSecure ? StandardImageIdentifiers.Large.lock : StandardImageIdentifiers.Large.lockSlash
+        return UIImage(imageLiteralResourceName: imageName)
+            .withRenderingMode(.alwaysTemplate)
     }
 
     func toggleSiteSafelistStatus() {

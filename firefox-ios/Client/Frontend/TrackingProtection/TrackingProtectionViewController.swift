@@ -17,10 +17,11 @@ struct TPMenuUX {
         static let headerLabelDistance: CGFloat = 2.0
         static let iconSize: CGFloat = 24
         static let connectionDetailsHeaderMargins: CGFloat = 8
-        static let faviconCornerRadius: CGFloat = 5
+        static let faviconCornerRadius: CGFloat = 16
+        static let clearDataButtonTopDistance: CGFloat = 32
         static let clearDataButtonCornerRadius: CGFloat = 12
-        static let clearDataButtonBorderWidth: CGFloat = 1
-        static let settingsLinkButtonBottomSpacing: CGFloat = 32
+        static let clearDataButtonBorderWidth: CGFloat = 0
+        static let settingsLinkButtonBottomSpacing: CGFloat = 16
         static let modalMenuCornerRadius: CGFloat = 12
         struct Line {
             static let height: CGFloat = 1
@@ -150,7 +151,7 @@ class TrackingProtectionViewController: UIViewController,
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        self.view.invalidateIntrinsicContentSize() // Adjusts size based on content.
+        self.view.invalidateIntrinsicContentSize()
         if !hasSetPointOrigin {
             hasSetPointOrigin = true
             pointOrigin = self.view.frame.origin
@@ -273,6 +274,7 @@ class TrackingProtectionViewController: UIViewController,
         headerContainer.closeButtonCallback = { [weak self] in
             self?.enhancedTrackingProtectionMenuDelegate?.didFinish()
         }
+        headerContainer.updateHeaderLineView(isHidden: true)
     }
 
     // MARK: Connection Status Header Setup
@@ -373,7 +375,7 @@ class TrackingProtectionViewController: UIViewController,
             ),
             clearCookiesButton.topAnchor.constraint(
                 equalTo: toggleView.bottomAnchor,
-                constant: TPMenuUX.UX.horizontalMargin
+                constant: TPMenuUX.UX.clearDataButtonTopDistance
             )
         ]
         constraints.append(contentsOf: clearCookiesButtonConstraints)
@@ -381,8 +383,11 @@ class TrackingProtectionViewController: UIViewController,
 
     // MARK: Settings View Setup
     private func configureProtectionSettingsView() {
-        let settingsButtonViewModel = LinkButtonViewModel(title: model.settingsButtonTitle,
-                                                          a11yIdentifier: model.settingsA11yId)
+        let settingsButtonViewModel = LinkButtonViewModel(
+            title: model.settingsButtonTitle,
+            a11yIdentifier: model.settingsA11yId,
+            font: FXFontStyles.Regular.footnote.scaledFont()
+        )
         settingsLinkButton.configure(viewModel: settingsButtonViewModel)
     }
 
@@ -391,10 +396,17 @@ class TrackingProtectionViewController: UIViewController,
         baseView.addSubviews(settingsLinkButton)
 
         let protectionConstraints = [
-            settingsLinkButton.leadingAnchor.constraint(equalTo: baseView.leadingAnchor),
-            settingsLinkButton.trailingAnchor.constraint(equalTo: baseView.trailingAnchor),
-            settingsLinkButton.topAnchor.constraint(equalTo: clearCookiesButton.bottomAnchor,
-                                                    constant: TPMenuUX.UX.horizontalMargin),
+            settingsLinkButton.leadingAnchor.constraint(
+                equalTo: baseView.leadingAnchor,
+                constant: TPMenuUX.UX.horizontalMargin
+            ),
+            settingsLinkButton.trailingAnchor.constraint(
+                equalTo: baseView.trailingAnchor
+            ),
+            settingsLinkButton.topAnchor.constraint(
+                equalTo: clearCookiesButton.bottomAnchor,
+                constant: TPMenuUX.UX.horizontalMargin
+            ),
             settingsLinkButton.bottomAnchor.constraint(
                 equalTo: baseView.bottomAnchor,
                 constant: -TPMenuUX.UX.settingsLinkButtonBottomSpacing

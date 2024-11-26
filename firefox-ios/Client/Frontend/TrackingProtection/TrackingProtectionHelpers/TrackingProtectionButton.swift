@@ -60,7 +60,6 @@ class TrackingProtectionButton: ResizableButton, ThemeApplicable {
         updatedConfiguration.contentInsets = UX.contentInsets
         updatedConfiguration.title = viewModel?.title
         updatedConfiguration.titleAlignment = .leading
-        updatedConfiguration.background.customView?.layer.borderWidth = 1
         updatedConfiguration.background.customView?.layer.borderColor = borderColor.cgColor
 
         configuration = updatedConfiguration
@@ -77,7 +76,6 @@ class TrackingProtectionButton: ResizableButton, ThemeApplicable {
         updatedConfiguration.contentInsets = UX.contentInsets
         updatedConfiguration.title = viewModel.title
         updatedConfiguration.titleAlignment = .leading
-        updatedConfiguration.background.customView?.layer.borderWidth = 1
         updatedConfiguration.background.customView?.layer.borderColor = borderColor.cgColor
 
 //        if there were any pre-existing transformer applied to the background color,
@@ -96,10 +94,8 @@ class TrackingProtectionButton: ResizableButton, ThemeApplicable {
     // MARK: ThemeApplicable
 
     func applyTheme(theme: Theme) {
-        layer.borderColor = theme.colors.borderPrimary.cgColor
         backgroundColorNormal = theme.colors.layer2
         foregroundColor = theme.colors.textPrimary
-        borderColor = theme.colors.borderPrimary
         setNeedsUpdateConfiguration()
     }
 }

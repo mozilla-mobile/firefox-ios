@@ -20,6 +20,7 @@ class TabPanelViewAction: Action {
     let moveTabData: MoveTabData?
     let toastType: ToastType?
     let shareSheetURL: URL?
+    let isInactiveTab: Bool?
 
     init(panelType: TabTrayPanelType?,
          isPrivateModeActive: Bool? = nil,
@@ -28,6 +29,7 @@ class TabPanelViewAction: Action {
          moveTabData: MoveTabData? = nil,
          toastType: ToastType? = nil,
          shareSheetURL: URL? = nil,
+         isInactiveTab: Bool? = nil,
          windowUUID: WindowUUID,
          actionType: ActionType) {
         self.panelType = panelType
@@ -37,6 +39,7 @@ class TabPanelViewAction: Action {
         self.moveTabData = moveTabData
         self.toastType = toastType
         self.shareSheetURL = shareSheetURL
+        self.isInactiveTab = isInactiveTab
         super.init(windowUUID: windowUUID,
                    actionType: actionType)
     }
@@ -54,7 +57,7 @@ enum TabPanelViewActionType: ActionType {
     case undoCloseAllTabs
     case moveTab
     case toggleInactiveTabs
-    case closeInactiveTabs
+    case closeInactiveTab
     case undoCloseInactiveTab
     case closeAllInactiveTabs
     case undoCloseAllInactiveTabs

@@ -1,9 +1,9 @@
 {
-    "url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/185321162",
-    "assets_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/185321162/assets",
-    "upload_url": "https://uploads.github.com/repos/FirefoxUX/acorn-icons/releases/185321162/assets{?name,label}",
-    "html_url": "https://github.com/FirefoxUX/acorn-icons/releases/tag/v1.26.0",
-    "id": 185321162,
+    "url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/186782296",
+    "assets_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/releases/186782296/assets",
+    "upload_url": "https://uploads.github.com/repos/FirefoxUX/acorn-icons/releases/186782296/assets{?name,label}",
+    "html_url": "https://github.com/FirefoxUX/acorn-icons/releases/tag/v1.26.1",
+    "id": 186782296,
     "author": {
         "login": "cwzilla",
         "id": 87655586,
@@ -25,16 +25,16 @@
         "user_view_type": "public",
         "site_admin": false
     },
-    "node_id": "RE_kwDOI1CID84LC8bK",
-    "tag_name": "v1.26.0",
+    "node_id": "RE_kwDOI1CID84LIhJY",
+    "tag_name": "v1.26.1",
     "target_commitish": "main",
-    "name": "v1.26.0",
+    "name": "v1.26.1",
     "draft": false,
     "prerelease": false,
-    "created_at": "2024-11-14T01:05:03Z",
-    "published_at": "2024-11-14T01:05:48Z",
+    "created_at": "2024-11-22T03:32:17Z",
+    "published_at": "2024-11-22T03:32:58Z",
     "assets": [],
-    "tarball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/tarball/v1.26.0",
-    "zipball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/zipball/v1.26.0",
-    "body": "# Changelog\r\n## [1.26.0]\r\n### Added\r\n\r\n- PDF\r\n  - cursorArrowLarge.pdf\r\n  - permissionLarge.pdf\r\n\r\n- SVG\r\n  - cursor-arrow-24.svg\r\n  - permission-24.svg\r\n\r\n- XML\r\n  - ic_cursor_arrow_24.xml\r\n  - ic_permission_24.xml"
+    "tarball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/tarball/v1.26.1",
+    "zipball_url": "https://api.github.com/repos/FirefoxUX/acorn-icons/zipball/v1.26.1",
+    "body": "# Changelog\r\n## [1.26.1]\r\n### Changed\r\n- PDF\r\n  - crossCircleFillExtraLargeDark.pdf\r\n  - crossCircleFillExtraLargeLight.pdf"
 }
