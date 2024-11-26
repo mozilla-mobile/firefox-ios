@@ -92,10 +92,11 @@ class HomePageSettingsUITests: BaseTestCase {
         waitUntilPageLoad()
 
         // Now check open home page should load the previously saved home page
-        let homePageMenuItem = app.buttons[AccessibilityIdentifiers.Toolbar.homeButton]
+        let homePageMenuItem = app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton]
         homePageMenuItem.waitAndTap()
         waitUntilPageLoad()
-        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "example")
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
+                                value: "example")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339258
@@ -135,14 +136,19 @@ class HomePageSettingsUITests: BaseTestCase {
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.GoToHomePage)
-        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
 
         // Now after setting History, make sure FF home is set
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
         navigator.goto(SettingsScreen)
         navigator.goto(NewTabSettings)
         navigator.performAction(Action.SelectHomeAsFirefoxHomePage)
-        navigator.performAction(Action.GoToHomePage)
-        mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        if iPad() {
+            let homepage = AccessibilityIdentifiers.Settings.Homepage.self
+            mozWaitForElementToExist(app.cells[homepage.CustomizeFirefox.Shortcuts.settingsPage])
+        } else {
+            mozWaitForElementToExist(app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell])
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307031
@@ -162,8 +168,9 @@ class HomePageSettingsUITests: BaseTestCase {
 
         // Workaround needed after Xcode 11.3 update Issue 5937
         // Lets check only that website is open
-        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
-        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "mozilla")
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
+        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
+                                value: "mozilla")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339489
@@ -258,8 +265,16 @@ class HomePageSettingsUITests: BaseTestCase {
         // Preconditons: Create 6 bookmarks & add 1 items to reading list
         bookmarkPages()
         addContentToReaderView()
-        navigator.performAction(Action.GoToHomePage)
+        if iPad() {
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton])
+            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].tap()
+        } else {
+            navigator.performAction(Action.GoToHomePage)
+        }
         mozWaitForElementToExist(app.staticTexts["Bookmarks"])
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
         navigator.performAction(Action.ToggleRecentlySaved)
         // On iPad we have the homepage button always present,
         // on iPhone we have the search button instead when we're on a new tab page

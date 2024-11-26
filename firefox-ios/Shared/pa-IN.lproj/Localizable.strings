@@ -98,10 +98,10 @@
 "Bookmarks.Edit.Button" = "ਸੋਧੋ";
 
 /* The button to edit a bookmark */
-"Bookmarks.EditBookmark.Label" = "ਬੁੱਕਮਾਰਕ ਸੋਧੋ";
+"Bookmarks.EditBookmark.Label" = "ਬੁੱਕਮਾਰਕ ਨੂੰ ਸੋਧੋ";
 
 /* The button to edit a folder */
-"Bookmarks.EditFolder.Label" = "ਫੋਲਡਰ ਸੋਧੋ";
+"Bookmarks.EditFolder.Label" = "ਫੋਲਡਰ ਨੂੰ ਸੋਧੋ";
 
 /* The label to show the location of the folder where the bookmark is located */
 "Bookmarks.Folder.Label" = "ਫ਼ੋਲਡਰ";
@@ -158,46 +158,46 @@
 "Close" = "ਬੰਦ ਕਰੋ";
 
 /* Accessibility label (used by assistive technology) notifying the user that the tab is being closed. */
-"Closing tab" = "ਟੈਬ ਬੰਦ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ";
+"Closing tab" = "ਟੈਬ ਨੂੰ ਬੰਦ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ";
 
 /* Context menu item for bookmarking a link URL */
-"ContextMenu.BookmarkLinkButtonTitle" = "ਲਿੰਕ ਬੁੱਕਮਾਰਕ ਕਰੋ";
+"ContextMenu.BookmarkLinkButtonTitle" = "ਲਿੰਕ ਨੂੰ ਬੁੱਕਮਾਰਕ ਕਰੋ";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "ਨਵੀਂ ਨਿੱਜੀ ਟੈਬ ਖੋਲ੍ਹੀ ਗਈ";
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText" = "ਨਵੀਂ ਪ੍ਰਾਈਵੈਟ ਟੈਬ ਖੋਲ੍ਹੀ";
 
 /* The label text in the Button Toast for switching to a fresh New Private Tab. */
-"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText.v113" = "ਨਵੀਂ ਨਿੱਜੀ ਟੈਬ ਖੋਲ੍ਹੀ ਗਈ";
+"ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText.v113" = "ਨਵੀਂ ਪ੍ਰਾਈਵੈਟ ਟੈਬ ਖੋਲ੍ਹੀ";
 
 /* The button text in the Button Toast for switching to a fresh New Tab. */
 "ContextMenu.ButtonToast.NewTabOpened.ButtonText" = "ਜਾਓ";
 
 /* The label text in the Button Toast for switching to a fresh New Tab. */
-"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "ਨਵੀਂ ਟੈਬ ਖੋਲ੍ਹੀ ਗਈ";
+"ContextMenu.ButtonToast.NewTabOpened.LabelText" = "ਨਵੀਂ ਖੋਲ੍ਹੀ ਗਈ ਟੈਬ";
 
 /* The label text in the Button Toast for switching to a fresh New Tab. */
-"ContextMenu.ButtonToast.NewTabOpened.LabelText.v114" = "ਨਵੀਂ ਟੈਬ ਖੋਲ੍ਹੀ ਗਈ";
+"ContextMenu.ButtonToast.NewTabOpened.LabelText.v114" = "ਨਵੀਂ ਖੋਲ੍ਹੀ ਗਈ ਟੈਬ";
 
 /* Context menu item for copying an image to the clipboard */
-"ContextMenu.CopyImageButtonTitle" = "ਚਿੱਤਰ ਕਾਪੀ ਕਰੋ";
+"ContextMenu.CopyImageButtonTitle" = "ਚਿੱਤਰ ਨੂੰ ਕਾਪੀ ਕਰੋ";
 
 /* Context menu item for copying an image URL to the clipboard */
-"ContextMenu.CopyImageLinkButtonTitle" = "ਚਿੱਤਰ ਲਿੰਕ ਕਾਪੀ ਕਰੋ";
+"ContextMenu.CopyImageLinkButtonTitle" = "ਚਿੱਤਰ ਦੇ ਲਿੰਕ ਨੂੰ ਕਾਪੀ ਕਰੋ";
 
 /* Context menu item for copying a link URL to the clipboard */
-"ContextMenu.CopyLinkButtonTitle" = "ਲਿੰਕ ਕਾਪੀ ਕਰੋ";
+"ContextMenu.CopyLinkButtonTitle" = "ਲਿੰਕ ਨੂੰ ਕਾਪੀ ਕਰੋ";
 
 /* Context menu item for downloading a link URL */
-"ContextMenu.DownloadLinkButtonTitle" = "ਲਿੰਕ ਡਾਊਨਲੋਡ ਕਰੋ";
+"ContextMenu.DownloadLinkButtonTitle" = "ਲਿੰਕ ਨੂੰ ਡਾਊਨਲੋਡ ਕਰੋ";
 
 /* Context menu item for opening a link in a new tab */
-"ContextMenu.OpenInNewTabButtonTitle" = "ਨਵੇਂ ਟੈਬ ਵਿੱਚ ਖੋਲ੍ਹੋ";
+"ContextMenu.OpenInNewTabButtonTitle" = "ਨਵੀਂ ਟੈਬ 'ਚ ਖੋਲ੍ਹੋ";
 
 /* Context menu item for saving an image */
-"ContextMenu.SaveImageButtonTitle" = "ਚਿੱਤਰ ਸੰਭਾਲੋ";
+"ContextMenu.SaveImageButtonTitle" = "ਚਿੱਤਰ ਨੂੰ ਸੰਭਾਲੋ";
 
 /* Context menu item for sharing a link URL */
-"ContextMenu.ShareLinkButtonTitle" = "ਲਿੰਕ ਸਾਂਝਾ ਕਰੋ";
+"ContextMenu.ShareLinkButtonTitle" = "ਲਿੰਕ ਨੂੰ ਸਾਂਝਾ ਕਰੋ";
 
 /* Contextual hints are little popups that appear for the users informing them of new features. This one is a call to action for the popup describing search bar placement. It indicates a user can navigate to the settings page that allows them to customize the placement of the search bar. */
 "ContextualHints.SearchBarPlacement.CallToAction" = "ਟੂਲਬਾਰ ਸੈਟਿੰਗਾਂ";
@@ -269,10 +269,10 @@
 "Downloads.CancelDialog.Resume" = "ਮੁੜ ਜਾਰੀ ਰੱਖੋ";
 
 /* Alert dialog title when the user taps the cancel download icon. */
-"Downloads.CancelDialog.Title" = "ਡਾਊਨਲੋਡ ਰੱਦ ਕਰੋ";
+"Downloads.CancelDialog.Title" = "ਡਾਊਨਲੋਡ ਨੂੰ ਰੱਦ ਕਰੋ";
 
 /* The label text in the Download Cancelled toast for showing confirmation that the download was cancelled. */
-"Downloads.Toast.Cancelled.LabelText" = "ਡਾਊਨਲੋਡ ਰੱਦ ਕਰੋ";
+"Downloads.Toast.Cancelled.LabelText" = "ਡਾਊਨਲੋਡ ਨੂੰ ਰੱਦ ਕੀਤਾ ਗਿਆ";
 
 /* The label text in the Download Failed toast for showing confirmation that the download has failed. */
 "Downloads.Toast.Failed.LabelText" = "ਡਾਊਨਲੋਡ ਅਸਫ਼ਲ ਹੈ";
@@ -326,7 +326,7 @@
 "ExternalLink.AppStore.ConfirmationTitle" = "ਐਪ ਸਟੋਰ ਐਪ 'ਚ ਇਹ ਲਿੰਕ ਖੋਲ੍ਹਣਾ ਹੈ?";
 
 /* Question shown to user when tapping an SMS or MailTo link that opens the external app for those. */
-"ExternalLink.AppStore.GenericConfirmationTitle" = "ਇਹ ਲਿੰਕ ਬਾਹਰੀ ਐਪ ਵਿੱਚ ਖੋਲ੍ਹਣਾ ਹੈ?";
+"ExternalLink.AppStore.GenericConfirmationTitle" = "ਇਸ ਲਿੰਕ ਨੂੰ ਬਾਹਰੀ ਐਪ ਨਾਲ ਖੋਲ੍ਹਣਾ ਹੈ?";
 
 /* Tile title for Facebook */
 "Facebook" = "ਫੇਸਬੁੱਕ";
@@ -380,7 +380,7 @@
 "FxA.FirefoxAccount" = "Firefox ਖਾਤਾ";
 
 /* Button label to go to Firefox Account settings */
-"FxA.ManageAccount" = "ਖਾਤੇ ਤੇ ਡਿਵਾਈਸਾਂ ਦਾ ਇੰਤਜ਼ਾਮ";
+"FxA.ManageAccount" = "ਖਾਤੇ ਅਤੇ ਡਿਵਾਈਸਾਂ ਦਾ ਇੰਤਜ਼ਾਮ";
 
 /* Label when no internet is present */
 "FxA.NoInternetConnection" = "ਇੰਟਰਨੈੱਟ ਕਨੈਕਸ਼ਨ ਨਹੀਂ ਹੈ";
@@ -431,7 +431,7 @@
 "History" = "ਅਤੀਤ";
 
 /* Title for button in the history panel to clear recent history */
-"HistoryPanel.ClearHistoryButtonTitle" = "…ਸੱਜਰਾ ਅਤੀਤ ਮਿਟਾਓ";
+"HistoryPanel.ClearHistoryButtonTitle" = "…ਸੱਜਰੇ ਅਤੀਤ ਨੂੰ ਮਿਟਾਓ";
 
 /* Option title to clear all browsing history. */
 "HistoryPanel.ClearHistoryMenuOptionEverything" = "ਹਰ ਚੀਜ਼";
@@ -473,7 +473,7 @@
 "HomePanel.ContextMenu.DeleteFromHistory" = "ਅਤੀਤ 'ਚੋਂ ਹਟਾਓ";
 
 /* The title for the Open in New Private Tab context menu action for sites in Home Panels */
-"HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "ਨਿੱਜੀ ਟੈਬ ਵਿੱਚ ਖੋਲ੍ਹੋ";
+"HomePanel.ContextMenu.OpenInNewPrivateTab.v101" = "ਪ੍ਰਾਈਵੇਟ ਟੈਬ ਵਿੱਚ ਖੋਲ੍ਹੋ";
 
 /* The title for the Open in New Tab context menu action for sites in Home Panels */
 "HomePanel.ContextMenu.OpenInNewTab" = "ਨਵੀਂ ਟੈਬ 'ਚ ਖੋਲ੍ਹੋ";
@@ -491,7 +491,7 @@
 "Hotkeys.Back.DiscoveryTitle" = "ਪਿੱਛੇ";
 
 /* A label indicating the keyboard shortcut of closing the current tab a user is in. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Hotkeys.CloseTab.DiscoveryTitle" = "ਟੈਬ ਬੰਦ ਕਰੋ";
+"Hotkeys.CloseTab.DiscoveryTitle" = "ਟੈਬ ਨੂੰ ਬੰਦ ਕਰੋ";
 
 /* A label indicating the keyboard shortcut of finding text a user desires within a page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.Find.DiscoveryTitle" = "ਲੱਭੋ";
@@ -500,7 +500,7 @@
 "Hotkeys.Forward.DiscoveryTitle" = "ਅੱਗੇ";
 
 /* A label indicating the keyboard shortcut of creating a new private tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Hotkeys.NewPrivateTab.DiscoveryTitle" = "ਨਵੀਂ ਨਿੱਜੀ ਟੈਬ";
+"Hotkeys.NewPrivateTab.DiscoveryTitle" = "ਨਵੀਂ ਪ੍ਰਾਈਵੇਟ ਟੈਬ";
 
 /* A label indicating the keyboard shortcut of creating a new tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.NewTab.DiscoveryTitle" = "ਨਵੀਂ ਟੈਬ";
@@ -509,7 +509,7 @@
 "Hotkeys.NormalMode.DiscoveryTitle" = "ਆਮ ਬਰਾਊਜ਼ ਕਰਨ ਢੰਗ";
 
 /* A label indicating the keyboard shortcut of switching from Normal Browsing mode to Private Browsing Mode. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Hotkeys.PrivateMode.DiscoveryTitle" = "ਨਿੱਜੀ ਬਰਾਊਜ਼ਿੰਗ ਢੰਗ";
+"Hotkeys.PrivateMode.DiscoveryTitle" = "ਪ੍ਰਾਈਵੇਟ ਬਰਾਊਜ਼ਿੰਗ ਢੰਗ";
 
 /* A label indicating the keyboard shortcut of reloading the current page. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Hotkeys.Reload.DiscoveryTitle" = "ਸਫ਼ੇ ਨੂੰ ਮੁੜ ਲੋਡ ਕਰੋ";
@@ -521,7 +521,7 @@
 "Hotkeys.ShowNextTab.DiscoveryTitle" = "ਅਗਲੀ ਟੈਬ ਨੂੰ ਵੇਖੋ";
 
 /* A label indicating the keyboard shortcut of switching to a tab immediately preceding to the currently selected tab. This label is displayed inside the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "ਪਿਛਲਾ ਟੈਬ ਨੂੰ ਵੇਖੋ";
+"Hotkeys.ShowPreviousTab.DiscoveryTitle" = "ਪਿਛਲੀ ਟੈਬ ਨੂੰ ਵੇਖੋ";
 
 /* In the Tabs Tray, in the Inactive Tabs section, this is the button the user must tap in order to close all inactive tabs. */
 "InactiveTabs.TabTray.CloseButtonTitle" = "ਸਾਰੀਆਂ ਨਾ-ਸਰਗਰਮ ਟੈਬਾਂ ਬੰਦ ਕਰੋ";
@@ -536,7 +536,7 @@
 "Keyboard.Shortcuts.ActualSize" = "ਅਸਲ ਆਕਾਰ";
 
 /* A label indicating the keyboard shortcut of adding the currently viewing web page as a bookmark. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.AddBookmark" = "ਬੁੱਕਮਾਰਕ ਜੋੜੋ";
+"Keyboard.Shortcuts.AddBookmark" = "ਬੁੱਕਮਾਰਕ ਨੂੰ ਜੋੜੋ";
 
 /* A label indicating the keyboard shortcut of clearing recent history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ClearRecentHistory" = "ਸੱਜਰੇ ਅਤੀਤ ਨੂੰ ਸਾਫ਼ ਕਰੋ";
@@ -563,19 +563,19 @@
 "Keyboard.Shortcuts.Settings" = "ਸੈਟਿੰਗਾਂ";
 
 /* A label indicating the keyboard shortcut of showing all bookmarks. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.ShowBookmarks" = "ਬੁੱਕਮਾਰਕ ਵੇਖਾਓ";
+"Keyboard.Shortcuts.ShowBookmarks" = "ਬੁੱਕਮਾਰਕਾਂ ਨੂੰ ਵੇਖਾਓ";
 
 /* A label indcating the keyboard shortcut of showing all downloads. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.ShowDownloads" = "ਡਾਊਨਲੋਡ ਵੇਖਾਓ";
+"Keyboard.Shortcuts.ShowDownloads" = "ਡਾਊਨਲੋਡ ਨੂੰ ਵੇਖਾਓ";
 
 /* A label indicating the keyboard shortcut to switch from the current tab to the first tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.ShowFirstTab" = "ਪਹਿਲੀ ਟੈਬ ਨੂੰ ਵੇਖੋ";
+"Keyboard.Shortcuts.ShowFirstTab" = "ਪਹਿਲੀ ਟੈਬ ਨੂੰ ਵੇਖਾਓ";
 
 /* A label indicating the keyboard shortcut of showing all history. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.ShowHistory" = "ਅਤੀਤ ਵੇਖੋ";
+"Keyboard.Shortcuts.ShowHistory" = "ਅਤੀਤ ਨੂੰ ਵੇਖਾਓ";
 
 /* A label indicating the keyboard shortcut switch from your current tab to the last tab. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
-"Keyboard.Shortcuts.ShowLastTab" = "ਪਿਛਲੀ ਟੈਬ ਵੇਖੋ";
+"Keyboard.Shortcuts.ShowLastTab" = "ਪਿਛਲੀ ਟੈਬ ਵੇਖਾਓ";
 
 /* A label indicating the keyboard shortcut of enlarging the view of the current web page. This label is displayed in the Discoverability overlay when a user presses the Command key. The Discoverability overlay and shortcut become available only when a user has connected a hardware keyboard to an iPad. See https://drive.google.com/file/d/1gH3tbvDceg7yG5N67NIHS-AXgDgCzBHN/view?usp=sharing for more details. */
 "Keyboard.Shortcuts.ZoomIn" = "ਜ਼ੂਮ ਇਨ";
@@ -614,7 +614,7 @@
 "LibraryPanel.History.NoHistoryFound.v99" = "ਕੋਈ ਅਤੀਤ ਨਹੀਂ ਲੱਭਿਆ";
 
 /* In the history panel, this is the title on the button that navigates the user to a screen showing their recently closed tabs. */
-"LibraryPanel.History.RecentlyClosedTabs.v99" = "ਹਾਲੀਆ ਬੰਦ ਕੀਤੀ ਟੈਬ ਨਹੀਂ ਹੈ";
+"LibraryPanel.History.RecentlyClosedTabs.v99" = "ਸੱਜਰੀਆਂ ਬੰਦ ਕੀਤੀਆਂ ਟੈਬਾਂ";
 
 /* In the history panel, users will be able to search terms in their browsing history. This placeholder text inside the search component will indicate that a user can search through their browsing history. */
 "LibraryPanel.History.SearchHistoryPlaceholder.v99" = "ਖੋਜ ਸ਼ਬਦ ਦਿਓ";
@@ -713,7 +713,7 @@
 "Mark as Unread" = "ਨਾ-ਪੜ੍ਹੇ ਵਜੋਂ ਨਿਸ਼ਾਨੀ ਲਾਓ";
 
 /* Toast displayed to the user after a bookmark has been added. */
-"Menu.AddBookmark.Confirm" = "ਬੁੱਕਮਾਰਕ ਜੋੜਿਆ";
+"Menu.AddBookmark.Confirm" = "ਬੁੱਕਮਾਰਕ ਨੂੰ ਜੋੜਿਆ ਗਿਆ";
 
 /* Label for the add bookmark button in the menu. Pressing this button bookmarks the current page. Please keep the text as short as possible for this label. */
 "Menu.AddBookmark.Label.v99" = "ਜੋੜੋ";
@@ -734,7 +734,7 @@
 "Menu.Bookmarks.Label" = "ਬੁੱਕਮਾਰਕ";
 
 /* The title for the button that lets you copy the url from the location bar. */
-"Menu.Copy.Title" = "ਸਿਰਨਾਵਾਂ ਕਾਪੀ ਕਰੋ";
+"Menu.Copy.Title" = "ਸਿਰਨਾਵੇਂ ਨੂੰ ਕਾਪੀ ਕਰੋ";
 
 /* Toast displayed to user after copy url pressed. */
 "Menu.CopyURL.Confirm" = "URL ਕਲਿੱਪਬੋਰਡ 'ਚ ਕਾਪੀ ਕੀਤਾ";
@@ -788,7 +788,7 @@
 "Menu.ReloadWithTrackingProtection.Title" = "ਟਰੈਕਿੰਗ ਸੁਰੱਖਿਆ ਨਾਲ ਮੁੜ-ਲੋਡ ਕਰੋ";
 
 /* Toast displayed to the user after a bookmark has been removed. */
-"Menu.RemoveBookmark.Confirm" = "ਬੁੱਕਮਾਰਕ ਹਟਾਇਆ";
+"Menu.RemoveBookmark.Confirm" = "ਬੁੱਕਮਾਰਕ ਨੂੰ ਹਟਾਇਆ";
 
 /* Label for the remove bookmark button in the menu. Pressing this button remove the current page from the bookmarks. Please keep the text as short as possible for this label. */
 "Menu.RemoveBookmark.Label.v99" = "ਹਟਾਓ";
@@ -809,7 +809,7 @@
 "Menu.Share.v99" = "ਸਾਂਝਾ ਕਰੋ";
 
 /* Label for the Firefox Sync button in the menu page. Pressing this button open the sign in to Firefox page service to sync and save data. */
-"Menu.SyncAndSaveData.v103" = "ਡਾਟਾ ਸਿੰਕ ਕਰੋ ਤੇ ਸੰਭਾਲੋ";
+"Menu.SyncAndSaveData.v103" = "ਡਾਟਾ ਸਿੰਕ ਕਰੋ ਅਤੇ ਸੰਭਾਲੋ";
 
 /* Toast displayed to the user after a tab has been sent successfully. */
 "Menu.TabSent.Confirm" = "ਟੈਬ ਭੇਜੋ";
@@ -1154,10 +1154,10 @@
 "Settings.ClearAllWebsiteData.Clear.Button" = "ਸਾਰੇ ਵੈੱਬਸਾਈਟ ਡਾਟੇ ਨੂੰ ਸਾਫ਼ ਕਰੋ";
 
 /* Button in settings that clears private data for the selected items. */
-"Settings.ClearPrivateData.Clear.Button" = "ਨਿੱਜੀ ਡਾਟੇ ਨੂੰ ਮਿਟਾਓ";
+"Settings.ClearPrivateData.Clear.Button" = "ਪ੍ਰਾਈਵੇਟ ਡਾਟੇ ਨੂੰ ਮਿਟਾਓ";
 
 /* Label used as an item in Settings. When touched it will open a dialog prompting the user to make sure they want to clear all of their private data. */
-"Settings.ClearPrivateData.SectionName" = "ਨਿੱਜੀ ਡਾਟੇ ਨੂੰ ਮਿਟਾਓ";
+"Settings.ClearPrivateData.SectionName" = "ਪ੍ਰਾਈਵੇਟ ਡਾਟੇ ਨੂੰ ਮਿਟਾਓ";
 
 /* Button in Data Management that clears private data for the selected items. Parameter is the number of items to be cleared */
 "Settings.ClearSelectedWebsiteData.ClearSelected.Button" = "ਚੀਜ਼ਾਂ ਮਿਟਾਓ: %1$@";
@@ -1676,7 +1676,7 @@
 "TabTray.OpenNewTab.KeyCodeTitle" = "ਨਵੀਂ ਟੈਬ ਖੋਲ੍ਹੋ";
 
 /* The title on the button to look at private tabs. */
-"TabTray.SegmentedControlTitles.PrivateTabs" = "ਨਿੱਜੀ";
+"TabTray.SegmentedControlTitles.PrivateTabs" = "ਪ੍ਰਾਈਵੇਟ";
 
 /* The title on the button to look at synced tabs. */
 "TabTray.SegmentedControlTitles.SyncedTabs" = "ਸਿੰਕ ਕੀਤੀਆਂ";

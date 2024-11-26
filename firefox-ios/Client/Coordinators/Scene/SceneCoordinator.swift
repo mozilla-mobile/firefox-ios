@@ -5,7 +5,6 @@
 import Common
 import UIKit
 import Shared
-import Storage
 
 /// Each scene has it's own scene coordinator, which is the root coordinator for a scene.
 class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinishedLoadingDelegate {

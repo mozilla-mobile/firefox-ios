@@ -139,6 +139,11 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.nativeErrorPage, checking: .buildOnly)
     }
 
+    /// Temporary flag for showing no internet connection native error page only.
+    var isNICErrorPageEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.noInternetConnectionErrorPage, checking: .buildOnly)
+    }
+
     private var browserViewControllerState: BrowserViewControllerState?
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
@@ -166,7 +171,7 @@ class BrowserViewController: UIViewController,
     // The content stack view contains the contentContainer with homepage or browser and the shopping sidebar
     var contentStackView: SidebarEnabledView = .build()
 
-    // The content container contains the homepage or webview. Embedded by the coordinator.
+    // The content container contains the homepage, error page or webview. Embedded by the coordinator.
     var contentContainer: ContentContainer = .build { _ in }
 
     lazy var isBottomSearchBar: Bool = {
@@ -186,7 +191,13 @@ class BrowserViewController: UIViewController,
     private lazy var privacyWindowHelper = PrivacyWindowHelper()
     var keyboardBackdrop: UIView?
 
-    lazy var scrollController = TabScrollingController(windowUUID: windowUUID)
+    lazy var scrollController = TabScrollingController(
+        windowUUID: windowUUID,
+        isPullToRefreshRefactorEnabled: featureFlags.isFeatureEnabled(
+            .pullToRefreshRefactor,
+            checking: .buildOnly
+        )
+    )
     private var keyboardState: KeyboardState?
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
@@ -386,6 +397,13 @@ class BrowserViewController: UIViewController,
         let showWarningBadge = isActionNeeded
 
         if isToolbarRefactorEnabled {
+            let shouldShowWarningBadge = store.state.screenState(
+                ToolbarState.self,
+                for: .toolbar,
+                window: windowUUID
+            )?.showMenuWarningBadge
+
+            guard showWarningBadge != shouldShowWarningBadge else { return }
             let action = ToolbarAction(
                 showMenuWarningBadge: showWarningBadge,
                 windowUUID: windowUUID,
@@ -496,6 +514,22 @@ class BrowserViewController: UIViewController,
     }
 
     @objc
+    func sceneDidEnterBackgroundNotification(notification: Notification) {
+        // Ensure the notification is for the current window scene
+        guard let currentWindowScene = view.window?.windowScene,
+              let notificationWindowScene = notification.object as? UIWindowScene,
+              currentWindowScene === notificationWindowScene else { return }
+        guard canShowPrivacyWindow else { return }
+
+        privacyWindowHelper.showWindow(windowScene: currentWindowScene, withThemedColor: currentTheme().colors.layer3)
+    }
+
+    @objc
+    func sceneDidActivateNotification() {
+        privacyWindowHelper.removeWindow()
+    }
+
+    @objc
     func appWillResignActiveNotification() {
         // Dismiss any popovers that might be visible
         displayedPopoverController?.dismiss(animated: false) {
@@ -503,51 +537,21 @@ class BrowserViewController: UIViewController,
             self.displayedPopoverController = nil
         }
 
-        // If we are displaying a private tab, hide any elements in the tab that we wouldn't want shown
-        // when the app is in the home switcher
-        guard let privateTab = tabManager.selectedTab,
-              privateTab.isPrivate,
-              canShowPrivacyView
-        else { return }
-
-        contentStackView.alpha = 0
-        privacyWindowHelper.showWindow(withThemedColor: currentTheme().colors.layer3)
-
-        if isToolbarRefactorEnabled {
-            addressToolbarContainer.alpha = 0
-        } else {
-            urlBar.locationContainer.alpha = 0
-        }
-        presentedViewController?.popoverPresentationController?.containerView?.alpha = 0
-        presentedViewController?.view.alpha = 0
+        guard canShowPrivacyWindow else { return }
+        privacyWindowHelper.showWindow(windowScene: view.window?.windowScene, withThemedColor: currentTheme().colors.layer3)
     }
 
-    var canShowPrivacyView: Bool {
-        // Show privacy view if no view controller is presented
+    private var canShowPrivacyWindow: Bool {
+        // Ensure the selected tab is private and determine if the privacy window can be shown.
+        guard let privateTab = tabManager.selectedTab, privateTab.isPrivate else { return false }
+        // Show privacy window if no view controller is presented
         // or if the presented view is a PhotonActionSheet.
-        self.presentedViewController == nil || presentedViewController is PhotonActionSheet
+        return self.presentedViewController == nil || presentedViewController is PhotonActionSheet
     }
 
     @objc
     func appDidBecomeActiveNotification() {
-        // Re-show any components that might have been hidden because they were being displayed
-        // as part of a private mode tab
-        UIView.animate(
-            withDuration: 0.2,
-            delay: 0,
-            options: UIView.AnimationOptions(),
-            animations: {
-                self.contentStackView.alpha = 1
-                if self.isToolbarRefactorEnabled {
-                    self.addressToolbarContainer.alpha = 1
-                } else {
-                    self.urlBar.locationContainer.alpha = 1
-                }
-                self.presentedViewController?.popoverPresentationController?.containerView?.alpha = 1
-                self.presentedViewController?.view.alpha = 1
-            }, completion: { _ in
-                self.privacyWindowHelper.removeWindow()
-            })
+        privacyWindowHelper.removeWindow()
 
         if let tab = tabManager.selectedTab, !tab.isFindInPageMode {
             // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
@@ -817,6 +821,16 @@ class BrowserViewController: UIViewController,
             object: nil)
         notificationCenter.addObserver(
             self,
+            selector: #selector(sceneDidEnterBackgroundNotification),
+            name: UIScene.didEnterBackgroundNotification,
+            object: nil)
+        notificationCenter.addObserver(
+            self,
+            selector: #selector(sceneDidActivateNotification),
+            name: UIScene.didActivateNotification,
+            object: nil)
+        notificationCenter.addObserver(
+            self,
             selector: #selector(appMenuBadgeUpdate),
             name: .FirefoxAccountStateChange,
             object: nil)
@@ -954,19 +968,8 @@ class BrowserViewController: UIViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        // Skip the 'restore tabs' alert on iPad; this avoids some potential UX issues with multi-window. [FXIOS-9079]
-        let iPadDevice = UIDevice.current.userInterfaceIdiom == .pad
-        if !iPadDevice && !displayedRestoreTabsAlert && crashedLastLaunch() {
-            logger.log("The application crashed on last session",
-                       level: .info,
-                       category: .lifecycle)
-            displayedRestoreTabsAlert = true
-            showRestoreTabsAlert()
-        } else {
-            // Tab restoration is triggered here for new installs, cold launches, or any BVC appearance.
-            // Note: `restoreTabs()` returns early if `tabs` is not-empty; repeated calls should have no effect.
-            tabManager.restoreTabs()
-        }
+        // Note: `restoreTabs()` returns early if `tabs` is not-empty; repeated calls should have no effect.
+        tabManager.restoreTabs()
 
         switchToolbarIfNeeded()
         updateTabCountUsingTabManager(tabManager, animated: false)
@@ -1288,41 +1291,6 @@ class BrowserViewController: UIViewController,
         overKeyboardContainer.addKeyboardSpacer(spacerHeight: spacerHeight)
     }
 
-    // Because crashedLastLaunch is sticky, it does not get reset, we need to remember its
-    // value so that we do not keep asking the user to restore their tabs.
-    var displayedRestoreTabsAlert = false
-
-    fileprivate func crashedLastLaunch() -> Bool {
-        return logger.crashedLastLaunch
-    }
-
-    fileprivate func showRestoreTabsAlert() {
-        let alert = UIAlertController.restoreTabsAlert(
-            okayCallback: { _ in
-                let extra = [TelemetryWrapper.EventExtraKey.isRestoreTabsStarted.rawValue: true]
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .tap,
-                                             object: .restoreTabsAlert,
-                                             extras: extra)
-                self.isCrashAlertShowing = false
-                self.tabManager.restoreTabs(true)
-            },
-            noCallback: { _ in
-                let extra = [TelemetryWrapper.EventExtraKey.isRestoreTabsStarted.rawValue: false]
-                TelemetryWrapper.recordEvent(category: .action,
-                                             method: .tap,
-                                             object: .restoreTabsAlert,
-                                             extras: extra)
-                self.isCrashAlertShowing = false
-                self.tabManager.selectTab(self.tabManager.addTab())
-                self.openUrlAfterRestore()
-                AppEventQueue.signal(event: .tabRestoration(self.tabManager.windowUUID))
-            }
-        )
-        self.present(alert, animated: true, completion: nil)
-        isCrashAlertShowing = true
-    }
-
     fileprivate func showQueuedAlertIfAvailable() {
         if let queuedAlertInfo = tabManager.selectedTab?.dequeueJavascriptAlertPrompt() {
             let alertController = queuedAlertInfo.alertController()
@@ -1505,8 +1473,6 @@ class BrowserViewController: UIViewController,
                    category: .coordinator)
 
         switch browserViewType {
-        case .nativeErrorPage:
-            showEmbeddedNativeErrorPage()
         case .normalHomepage:
             showEmbeddedHomepage(inline: true, isPrivate: false)
         case .privateHomepage:
@@ -1537,9 +1503,15 @@ class BrowserViewController: UIViewController,
             return
         }
 
+        /// Used for checking if current error code is for no internet connection
+        let isNICErrorCode = url?.absoluteString.contains(String(Int(
+            CFNetworkErrors.cfurlErrorNotConnectedToInternet.rawValue))) ?? false
+
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
         } else if isErrorURL && isNativeErrorPageEnabled {
+            showEmbeddedNativeErrorPage()
+        } else if isNICErrorCode && isNICErrorPageEnabled {
             showEmbeddedNativeErrorPage()
         } else {
             showEmbeddedWebview()
@@ -2084,6 +2056,8 @@ class BrowserViewController: UIViewController,
 
     private func handleNavigation(to type: NavigationDestination) {
         switch type.destination {
+        case .contextMenu:
+            navigationHandler?.showContextMenu()
         case .customizeHomepage:
             navigationHandler?.show(settings: .homePage)
         case .link:
@@ -3827,6 +3801,8 @@ extension BrowserViewController: TabManagerDelegate {
 
             browserDelegate?.show(webView: webView)
             if selectedTab.isFxHomeTab {
+                // Added as initial fix for WKWebView memory leak. Needs further investigation.
+                // See: [FXIOS-10612] + [FXIOS-10335]
                 needsReload = true
             }
             if webView.url == nil {

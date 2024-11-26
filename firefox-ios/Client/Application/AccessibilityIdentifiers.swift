@@ -512,6 +512,16 @@ public struct AccessibilityIdentifiers {
         }
     }
 
+    struct TermsOfService {
+        static let logo = "TermsOfService.Logo"
+        static let title = "TermsOfService.Title"
+        static let termsOfServiceAgreement = "TermsOfService.TermsOfServiceAgreement"
+        static let privacyNoticeAgreement = "TermsOfService.PrivacyNoticeAgreement"
+        static let manageDataCollectionAgreement = "TermsOfService.ManageDataCollectionAgreement"
+        static let agreeAndContinueButton = "TermsOfService.AgreeAndContinueButton"
+        static let doneButton = "TermsOfService.DoneButton"
+    }
+
     struct Upgrade {
         static let backgroundImage = "Upgrade.BackgroundImage"
         static let upgrade = "upgrade."
@@ -835,6 +845,7 @@ public struct AccessibilityIdentifiers {
         static let passwordlabel = "PasswordGenerator.passwordLabel"
         static let content = "PasswordGenerator.content"
         static let header = "PasswordGenerator.header"
+        static let keyboardButton = "PasswordGenerator.keyboardButton"
     }
 
     struct NativeErrorPage {

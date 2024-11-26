@@ -33,7 +33,6 @@ class MockTabManager: TabManager {
     var normalActiveTabs = [Tab]()
     var inactiveTabs = [Tab]()
     var privateTabs = [Tab]()
-    var tabDisplayType: TabDisplayType = .TabGrid
 
     var addTabsForURLsCalled = 0
     var addTabsURLs: [URL] = []

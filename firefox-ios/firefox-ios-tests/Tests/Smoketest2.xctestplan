@@ -25,6 +25,7 @@
         "AddressesTests\/testAddNewAddressPostalCodeFilled()",
         "AddressesTests\/testAddNewAddressStreetAddressFilled()",
         "AddressesTests\/testDeleteAddress()",
+        "AddressesTests\/testUpdateAllAddressFields()",
         "AuthenticationTest",
         "BaseTestCase",
         "BookmarksTests",

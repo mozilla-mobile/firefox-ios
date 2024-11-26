@@ -18,17 +18,24 @@ class RemoteSettingsFetchConfigTests: XCTestCase {
             return
         }
 
-        XCTAssertGreaterThan(config.rules.count, 0, "Expected more than 0 rules in the config")
-
-        let expectedRule = RemoteSettingsFetchConfig.Rule(
-            name: "Password Rules",
-            url: "https://firefox.settings.services.mozilla.com/v1/buckets/main/collections/password-rules/records",
-            file: "./firefox-ios/Client/Assets/RemoteSettingsData/RemotePasswordRules.json",
-            bucketID: "main",
-            collectionsID: "password-rules"
+        XCTAssertGreaterThan(
+            config.collections.count,
+            0,
+            "Expected more than 0 collections in the config"
         )
 
-        XCTAssertTrue(config.rules.contains { $0 == expectedRule }, "Expected rule not found in the loaded config")
+        let expectedCollection = RemoteSettingsFetchConfig.Collection(
+            name: "Password Rules",
+            url: "https://firefox.settings.services.mozilla.com/v1",
+            file: Optional("./firefox-ios/Client/Assets/RemoteSettingsData/RemotePasswordRules.json"),
+            bucketID: "main",
+            collectionID: "password-rules"
+        )
+
+        XCTAssertTrue(
+            config.collections.contains { $0 == expectedCollection },
+            "Expected collection not found in the loaded config"
+        )
     }
 
     func testConfigHasValidStructure() {
@@ -37,12 +44,21 @@ class RemoteSettingsFetchConfigTests: XCTestCase {
             return
         }
 
-        for rule in config.rules {
-            XCTAssertFalse(rule.name.isEmpty, "Rule name should not be empty")
-            XCTAssertFalse(rule.url.isEmpty, "Rule URL should not be empty")
-            XCTAssertFalse(rule.file.isEmpty, "Rule file path should not be empty")
-            XCTAssertFalse(rule.bucketID.isEmpty, "Bucket ID should not be empty")
-            XCTAssertFalse(rule.collectionsID.isEmpty, "Collections ID should not be empty")
+        for collection in config.collections {
+            XCTAssertFalse(collection.name.isEmpty, "Collection name should not be empty for \(collection)")
+            XCTAssertFalse(collection.url.isEmpty, "Collection URL should not be empty for \(collection)")
+
+            if let file = collection.file, collection.saveRecords ?? true {
+                XCTAssertFalse(file.isEmpty, "Collection file path should exist and not be empty for \(collection)")
+            } else {
+                XCTAssertNil(collection.file, "Collection file path should not exist for \(collection)")
+            }
+
+            XCTAssertFalse(collection.bucketID.isEmpty, "Bucket ID should not be empty for \(collection)")
+            XCTAssertFalse(collection.collectionID.isEmpty, "Collection ID should not be empty for \(collection)")
+
+            // Validate URL format
+            XCTAssertNotNil(URL(string: collection.url), "Collection URL is invalid: \(collection.url)")
         }
     }
 
@@ -52,13 +68,12 @@ class RemoteSettingsFetchConfigTests: XCTestCase {
             return
         }
 
-        for rule in config.rules {
-            if rule.name.isEmpty ||
-                rule.url.isEmpty ||
-                rule.file.isEmpty ||
-                rule.bucketID.isEmpty ||
-                rule.collectionsID.isEmpty {
-                XCTFail("A rule has missing or invalid fields")
+        for collection in config.collections {
+            if collection.name.isEmpty ||
+                collection.url.isEmpty ||
+                collection.bucketID.isEmpty ||
+                collection.collectionID.isEmpty {
+                XCTFail("A collection has missing or invalid fields")
             }
         }
     }

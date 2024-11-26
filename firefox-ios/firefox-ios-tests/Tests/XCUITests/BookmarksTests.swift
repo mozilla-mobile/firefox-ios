@@ -138,7 +138,8 @@ class BookmarksTests: BaseTestCase {
     // Smoketest
     func testBookmarksAwesomeBar() {
         XCTExpectFailure("The app was not launched", strict: false) {
-            mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], timeout: TIMEOUT_LONG)
+            mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
+                                     timeout: TIMEOUT_LONG)
         }
         typeOnSearchBar(text: "www.google")
         waitForElementsToExist([app.tables["SiteTable"], app.tables["SiteTable"].cells.staticTexts["www.google"]])
@@ -147,6 +148,7 @@ class BookmarksTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
 
         // Clear text and enter new url
+        waitUntilPageLoad()
         waitForTabsButton()
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(URLBarOpen)
@@ -177,7 +179,7 @@ class BookmarksTests: BaseTestCase {
         addNewBookmark()
         // Verify that clicking on bookmark opens the website
         app.tables["Bookmarks List"].cells.element(boundBy: 1).tap()
-        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306914
@@ -275,7 +277,7 @@ class BookmarksTests: BaseTestCase {
     }
 
     private func typeOnSearchBar(text: String) {
-        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].waitAndTap()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         urlBarAddress.typeText(text)
     }
 
@@ -284,7 +286,8 @@ class BookmarksTests: BaseTestCase {
     func testBookmarkLibraryAddDeleteBookmark() {
         // Verify that there are only 1 cell (desktop bookmark folder)
         XCTExpectFailure("The app was not launched", strict: false) {
-            mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], timeout: TIMEOUT_LONG)
+            mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
+                                     timeout: TIMEOUT_LONG)
         }
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()

@@ -1,3 +1,21 @@
+/* This label is used for a button in the address list screen allowing users to manage their saved addresses. It's meant to direct users to where they can add, remove, or edit their saved addresses. */
+"Addresses.ManageAddressesButton.v130" = "ලිපින කළමනාකරණය";
+
+/* Accessibility label for an address list item in autofill settings screen. The %@ parameter is the address of the user that will read the name, street, city, state, postal code if available. */
+"Addresses.Settings.ListItemA11y.v130" = "%@ සඳහා ලිපිනය";
+
+/* On the autofill settings screen, a label for the section that displays the list of saved addresses. This label adds additional context for users regarding the toggle switch that allows saving and autofilling of addresses for webpages. */
+"Addresses.Settings.SavedAddressesSectionTitle.v124" = "සුරැකි ලිපින";
+
+/* Title text for the content unavailable view informing users they can create or add new addresses. %@ is the name of the app. */
+"Addresses.Settings.SaveToFirefox.Title.v130" = "%@ වෙත ලිපින සුරකින්න";
+
+/* Title label for user to use the toggle settings to allow saving and autofilling of addresses for webpages. */
+"Addresses.Settings.Switch.Title.v124" = "ලිපින සුරැකීම හා පිරවීම";
+
+/* Displayed inside the keyboard hint when a user is entering their address and has at least one saved address. Indicates that there are stored addresses available for use in filling out a form. */
+"Addresses.Settings.UseSavedAddressFromKeyboard.v124" = "සුරැකි ලිපිනය භාවිතා කරන්න";
+
 /* Accessibility label for the add button in autofill settings screen. Pressing this button presents a modal that allows users to add a card by entering the credit card information. */
 "CreditCard.Settings.AddCard.AccessibilityLabel.v121" = "පතක් එක් කරන්න";
 
@@ -40,6 +58,9 @@
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v124" = "ලිපින ස්වයං පිරවීම";
 
+/* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
+"Settings.AddressAutofill.Title.v126" = "ලිපින";
+
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
 "Settings.AutofillCreditCard.Title.v122" = "ගෙවීමේ ක්‍රම";
 
@@ -76,11 +97,20 @@
 /* Accessibility label for Learn more about Firefox Suggest. */
 "Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "ෆයර්ෆොක්ස් යෝජනා ගැන තව දැනගන්න";
 
+/* Title for alternate search engines settings section in the Search page in the Settings menu. */
+"Settings.Search.AlternateSearchEngines.Title.v124.v2" = "විකල්ප සෙවුම් යන්ත්‍ර";
+
 /* Title for the `default search engine` settings section in the Search page in the Settings menu. */
 "Settings.Search.DefaultSearchEngine.Title.v121" = "පෙරනිමි සෙවුම් එළවුම";
 
 /* Navigation title for search page in the Settings menu. */
 "Settings.Search.PageTitle.v121" = "සොයන්න";
+
+/* Description for `Show in Private Sessions` toggle, located in `Suggestions from Search Engines` section in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Description.v125" = "පෞද්ගලික වාර වල සෙවුම් යන්ත්‍ර වලින් යෝජනා පෙන්වන්න";
+
+/* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in `Suggestions from Search Engines` and `Address Bar - Firefox Suggest` sections in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Setting.v124" = "පෞද්. වාර වල පෙන්වන්න";
 
 /* Title for the `Private Browsing` settings section in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Title.v122" = "පෞද්. පිරික්සුම";
@@ -96,6 +126,18 @@
 
 /* In the search page of the Settings menu, the title for the link to the SUMO Page about Firefox Suggest. */
 "Settings.Search.Suggest.LearnAboutSuggestions.v124" = "ෆයර්ෆොක්ස් යෝජනා ගැන තව දැනගන්න";
+
+/* Description for `Show in Private Sessions` toggle, located in `Address Bar - Firefox Suggest` section in the Search page in the Settings menu. */
+"Settings.Search.Suggest.PrivateSession.Description.v125" = "පෞද්ගලික වාර වල ෆයර්ෆොක්ස් යෝජනා වෙතින් යෝජනා පෙන්වන්න";
+
+/* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
+"Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "පිරික්සුම් ඉතිහාසය සොයන්න";
+
+/* In the Search page of the Settings menu, the title for the setting to enable search bookmarks. */
+"Settings.Search.Suggest.SearchSearchBookmarks.Title.v124" = "පොත්යොමු සොයන්න";
+
+/* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
+"Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "සමමුහූර්ත පටිති සොයන්න";
 
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124" = "ඔබගේ සෙවීමට අදාළ යෝජනා අන්තර්ජාලයෙන් ලබා ගන්න";

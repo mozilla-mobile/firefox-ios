@@ -114,11 +114,11 @@ extension String {
                 tableName: "Alerts",
                 value: "%@ is asking to download a file and add an event to your calendar.",
                 comment: "When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the body message for the alert. %@ is the name/domain of the website, for example 'google.com'")
-            public static let BodyDefaultDomain = MZLocalizedString(
-                key: "Alerts.AddToCalendar.BodyDefaultDomain.v134",
+            public static let BodyDefault = MZLocalizedString(
+                key: "Alerts.AddToCalendar.BodyDefault.v134",
                 tableName: "Alerts",
-                value: "This site",
-                comment: "When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is a default value for %@ from the body in cases when we don't have a base domain for a website.")
+                value: "This site is asking to download a file and add an event to your calendar.",
+                comment: "When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the body message for the alert in case the website doesn't have a base domain.")
             public static let AddButton = MZLocalizedString(
                 key: "Alerts.AddToCalendar.Button.Add.v134",
                 tableName: "Alerts",
@@ -151,7 +151,7 @@ extension String {
     }
 }
 
-// MARK: - Bookmarks Menu
+// MARK: - Bookmarks Panel
 extension String {
     public struct Bookmarks {
         public struct Menu {
@@ -200,6 +200,33 @@ extension String {
                 tableName: "Bookmarks",
                 value: "Delete Bookmark",
                 comment: "The title for the Delete Bookmark button, in the Edit Bookmark popup screen which is summoned from the main menu's Save submenu, which will delete the currently bookmarked site from the user's bookmarks.")
+        }
+
+        public struct EmptyState {
+            public struct Root {
+                public static let Title = MZLocalizedString(
+                    key: "Bookmarks.EmptyState.Root.Title.v135",
+                    tableName: "Bookmarks",
+                    value: "No bookmarks yet",
+                    comment: "The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal")
+                public static let Body = MZLocalizedString(
+                    key: "Bookmarks.EmptyState.Root.Body.v135",
+                    tableName: "Bookmarks",
+                    value: "Save sites as you browse. We’ll also grab bookmarks from other synced devices.",
+                    comment: "The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal")
+            }
+            public struct Nested {
+                public static let Title = MZLocalizedString(
+                    key: "Bookmarks.EmptyState.Nested.Title.v135",
+                    tableName: "Bookmarks",
+                    value: "This folder is empty",
+                    comment: "The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal")
+                public static let Body = MZLocalizedString(
+                    key: "Bookmarks.EmptyState.Nested.Body.v135",
+                    tableName: "Bookmarks",
+                    value: "Add bookmarks as you browse so you can find your favorite sites later.",
+                    comment: "The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal")
+            }
         }
     }
 }
@@ -1618,6 +1645,49 @@ extension String {
             tableName: "Onboarding",
             value: "Skip",
             comment: "Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page.")
+
+        public struct TermsOfService {
+            public static let Title = MZLocalizedString(
+                key: "", // Onboarding.TermsOfService.Title.v135
+                tableName: "Onboarding",
+                value: "Welcome to %@",
+                comment: "Title for the Terms of Service screen in the onboarding process. Placeholder is for app name.")
+            public static let AgreementButtonTitle = MZLocalizedString(
+                key: "", // Onboarding.TermsOfService.AgreementButtonTitle.v135
+                tableName: "Onboarding",
+                value: "Agree and continue",
+                comment: "Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen.")
+            public static let TermsOfServiceAgreement = MZLocalizedString(
+                key: "", // Onboarding.TermsOfService.TermsOfServiceAgreement.v135
+                tableName: "Onboarding",
+                value: "By continuing, you agree to the %@",
+                comment: "Agreement text for Terms of Service in the Terms of Service screen. Placeholder is for the Terms of Service link button that redirect the user to the Terms of Service page")
+            public static let PrivacyNoticeAgreement = MZLocalizedString(
+                key: "", // Onboarding.TermsOfService.PrivacyNoticeAgreement.v135
+                tableName: "Onboarding",
+                value: "%@ cares about your privacy. Read more in our %@",
+                comment: "Agreement text for Privacy Notice in the Terms of Service screen. First placeholder is for the app name. The second placeholder is for the Privacy Notice link button that redirect the user to the Privacy Notice page")
+            public static let ManagePreferenceAgreement = MZLocalizedString(
+                key: "", // Onboarding.TermsOfService.ManagePreferenceAgreement.v135
+                tableName: "Onboarding",
+                value: "To help improve the browser, %@ sends diagnostic and interaction data to Mozilla. %@",
+                comment: "Agreement text for sends diagnostic and interaction data to Mozilla in the Terms of Service screen. First placeholder is for the app name. The last placeholder is for for the Manage link button which redirect the user to another screen in order to manage the data collection preferences.")
+            public static let TermsOfServiceLink = MZLocalizedString(
+                key: "", // Onboarding.TermsOfService.TermsOfServiceLink.v135
+                tableName: "Onboarding",
+                value: "%@ Terms of Service.",
+                comment: "Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. Placeholder is for the app name.")
+            public static let PrivacyNoticeLink = MZLocalizedString(
+                key: "", // Onboarding.TermsOfService.PrivacyNoticeLink.v135
+                tableName: "Onboarding",
+                value: "Privacy Notice.",
+                comment: "Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page.")
+            public static let ManageLink = MZLocalizedString(
+                key: "", // Onboarding.TermsOfService.ManageLink.v135
+                tableName: "Onboarding",
+                value: "Manage",
+                comment: "Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen.")
+        }
 
         public struct Intro {
             public static let DescriptionPart1 = MZLocalizedString(

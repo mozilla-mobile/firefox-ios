@@ -143,8 +143,6 @@ public struct PrefsKeys {
     public static let KeyBlockPopups = "blockPopups"
 
     // Tabs Tray
-    public static let KeyInactiveTabsModel = "KeyInactiveTabsModelKey"
-    public static let KeyInactiveTabsFirstTimeRun = "KeyInactiveTabsFirstTimeRunKey"
     public static let KeyTabDisplayOrder = "KeyTabDisplayOrderKey"
     public static let TabMigrationKey = "TabMigrationKey"
     public static let TabSyncEnabled = "sync.engine.tabs.enabled"

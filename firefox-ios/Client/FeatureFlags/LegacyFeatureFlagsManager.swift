@@ -6,7 +6,7 @@ import Shared
 import Common
 
 // MARK: - Protocol
-protocol FeatureFlaggable { }
+protocol FeatureFlaggable {}
 
 extension FeatureFlaggable {
     var featureFlags: LegacyFeatureFlagsManager {

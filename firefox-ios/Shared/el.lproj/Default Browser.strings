@@ -23,7 +23,7 @@
 "DefaultBrowserCard.PeaceOfMind.Title.v108" = "Το Firefox προστατεύει το απόρρητό σας";
 
 /* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
-"DefaultBrowserCard.Title" = "Αλλαγή κύριου φυλλομετρητή";
+"DefaultBrowserCard.Title" = "Αλλαγή κύριου προγράμματος περιήγησης";
 
 /* Button string to open settings that allows user to switch their default browser to Firefox. */
 "DefaultBrowserOnboarding.Button" = "Μετάβαση στις ρυθμίσεις";

@@ -19,15 +19,16 @@ class ThirdPartySearchTest: BaseTestCase {
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
 
         // Perform a search using a custom search engine
-        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].tap()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         UIPasteboard.general.string = "window"
         app.textFields.firstMatch.press(forDuration: 1)
-        app.staticTexts["Paste"].tap()
+        app.otherElements["Paste"].tap()
         app.scrollViews.otherElements.buttons["Mozilla Engine search"].tap()
         waitUntilPageLoad()
 
-        guard var url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as? String else {
+        guard var url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value
+                as? String else {
             XCTFail("Failed to retrieve the URL value from the browser's URL bar")
             return
         }
@@ -47,20 +48,19 @@ class ThirdPartySearchTest: BaseTestCase {
         dismissSearchScreen()
 
         // Perform a search to check
-        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].tap()
         app.textFields.firstMatch.typeText("window\n")
 
         waitUntilPageLoad()
 
         // Ensure that the default search is MDN
-        guard var url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as? String else {
+        guard let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value
+                as? String else {
             XCTFail("Failed to retrieve the URL value from the browser's URL bar")
             return
         }
-        if url.hasPrefix("https://") == false {
-            url = "https://\(url)"
-        }
-        XCTAssert(url.hasPrefix("https://developer.mozilla.org/en-US/search"), "The URL should indicate that the search was performed on MDN and not the default")
+        XCTAssert(url.hasPrefix("developer.mozilla.org"), "The URL should indicate that the search was performed on MDN and not the default")
+        mozWaitForElementToExist(app.staticTexts["MDN"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306941
@@ -69,11 +69,11 @@ class ThirdPartySearchTest: BaseTestCase {
 
         app.navigationBars["Search"].buttons["Settings"].waitAndTap()
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
-        app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].tap()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
         UIPasteboard.general.string = "window"
         app.textFields.firstMatch.press(forDuration: 1)
-        app.staticTexts["Paste"].tap()
+        app.otherElements["Paste"].tap()
         mozWaitForElementToExist(app.scrollViews.otherElements.buttons["Mozilla Engine search"])
 
         // Need to go step by step to Search Settings. The ScreenGraph will fail to go to the Search Settings Screen
@@ -88,7 +88,7 @@ class ThirdPartySearchTest: BaseTestCase {
             dismissSearchScreen()
 
             // Perform a search to check
-            app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].waitAndTap()
+            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
             UIPasteboard.general.string = "window"
             app.textFields.firstMatch.press(forDuration: 1)

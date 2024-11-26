@@ -163,9 +163,9 @@ class AddressesTests: BaseTestCase {
         addNewAddress()
         tapSave()
         if iPad() {
-            app.collectionViews.buttons.element(boundBy: 0).waitAndTap()
+            app.collectionViews.buttons.element(boundBy: 0).tapWithRetry()
         } else {
-            app.collectionViews.buttons.element(boundBy: 1).waitAndTap()
+            app.collectionViews.buttons.element(boundBy: 1).tapWithRetry()
         }
         // Update the all addresses fields
         tapEdit()
@@ -182,9 +182,9 @@ class AddressesTests: BaseTestCase {
     private func updateFieldsWithWithoutState(updateCountry: Bool, isPostalCode: Bool) {
         // Choose to update an address
         if iPad() {
-            app.collectionViews.buttons.element(boundBy: 0).waitAndTap()
+            app.collectionViews.buttons.element(boundBy: 0).tapWithRetry()
         } else {
-            app.collectionViews.buttons.element(boundBy: 1).waitAndTap()
+            app.collectionViews.buttons.element(boundBy: 1).tapWithRetry()
         }
         // Update the all addresses fields
         tapEdit()
@@ -193,7 +193,6 @@ class AddressesTests: BaseTestCase {
         // The "Address saved" toast message is displayed
         mozWaitForElementToExist(app.staticTexts[addressSavedTxt])
         // The address is saved
-        // Update with correct toast message after https://mozilla-hub.atlassian.net/browse/FXIOS-10422 is fixed
         mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
         if updateCountry {
             let addressInfo = ["Test2", "test address2", "city test2, 100000"]
@@ -318,8 +317,12 @@ class AddressesTests: BaseTestCase {
         app.typeText(email)
     }
 
-    private func tapSave() {
-        app.buttons["Save"].waitAndTap()
+    private func tapSave(withRetry: Bool = false) {
+        if withRetry {
+            app.buttons["Save"].tapWithRetry()
+        } else {
+            app.buttons["Save"].tap()
+        }
     }
 
     private func tapEdit() {

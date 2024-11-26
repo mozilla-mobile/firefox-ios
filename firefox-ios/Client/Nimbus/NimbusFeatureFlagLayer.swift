@@ -70,6 +70,9 @@ final class NimbusFeatureFlagLayer {
         case .nativeErrorPage:
             return checkNativeErrorPageFeature(from: nimbus)
 
+        case .noInternetConnectionErrorPage:
+            return checkNICErrorPageFeature(from: nimbus)
+
         case .nightMode:
             return checkNightModeFeature(from: nimbus)
 
@@ -78,6 +81,9 @@ final class NimbusFeatureFlagLayer {
 
         case .preferSwitchToOpenTabOverDuplicate:
             return checkPreferSwitchToOpenTabOverDuplicate(from: nimbus)
+
+        case .pullToRefreshRefactor:
+            return checkPullToRefreshFeature(from: nimbus)
 
         case .reduxSearchSettings:
             return checkReduxSearchSettingsFeature(from: nimbus)
@@ -105,6 +111,9 @@ final class NimbusFeatureFlagLayer {
 
         case .toolbarNavigationHint:
             return checkToolbarNavigationHintFeature(from: nimbus)
+
+        case .tosFeature:
+            return checkTosFeature(from: nimbus)
 
         case .trackingProtectionRefactor:
             return checkTrackingProtectionRefactor(from: nimbus)
@@ -210,6 +219,11 @@ final class NimbusFeatureFlagLayer {
         return config.navigationHint
     }
 
+    private func checkTosFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.tosFeature.value()
+        return config.status
+    }
+
     private func checkTrackingProtectionRefactor(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.trackingProtectionRefactor.value()
         return config.enabled
@@ -298,6 +312,10 @@ final class NimbusFeatureFlagLayer {
         return nimbus.features.homescreenFeature.value().preferSwitchToOpenTab
     }
 
+    private func checkPullToRefreshFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.pullToRefreshRefactorFeature.value().enabled
+    }
+
     private func checkAddressAutofillEditing(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.addressAutofillEdit.value()
 
@@ -349,5 +367,9 @@ final class NimbusFeatureFlagLayer {
 
     private func checkNativeErrorPageFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.nativeErrorPageFeature.value().enabled
+    }
+
+    private func checkNICErrorPageFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.nativeErrorPageFeature.value().noInternetConnectionError
     }
 }

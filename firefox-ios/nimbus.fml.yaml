@@ -32,6 +32,7 @@ include:
   - nimbus-features/nightModeFeature.yaml
   - nimbus-features/onboardingFrameworkFeature.yaml
   - nimbus-features/passwordGeneratorFeature.yaml
+  - nimbus-features/pullToRefreshRefactorFeature.yaml
   - nimbus-features/reduxSearchSettingsFeature.yaml
   - nimbus-features/remoteTabManagement.yaml
   - nimbus-features/searchFeature.yaml
@@ -40,5 +41,6 @@ include:
   - nimbus-features/spotlightSearchFeature.yaml
   - nimbus-features/tabTrayFeature.yaml
   - nimbus-features/toolbarRefactorFeature.yaml
+  - nimbus-features/tosFeature.yaml
   - nimbus-features/trackingProtectionRefactor.yaml
   - nimbus-features/zoomFeature.yaml

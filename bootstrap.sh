@@ -47,5 +47,6 @@ cp -r .githooks/* .git/hooks/
 # Make the hooks are executable
 chmod +x .git/hooks/*
 
-# Run and update content blocker
-./content_blocker_update.sh
+# Install Node.js dependencies and build user scripts
+npm install
+npm run build

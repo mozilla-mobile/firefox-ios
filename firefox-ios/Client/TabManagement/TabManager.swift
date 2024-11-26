@@ -28,7 +28,6 @@ protocol TabManager: AnyObject {
     var normalActiveTabs: [Tab] { get }
     var inactiveTabs: [Tab] { get }
     var privateTabs: [Tab] { get }
-    var tabDisplayType: TabDisplayType { get set }
     subscript(index: Int) -> Tab? { get }
     subscript(webView: WKWebView) -> Tab? { get }
 

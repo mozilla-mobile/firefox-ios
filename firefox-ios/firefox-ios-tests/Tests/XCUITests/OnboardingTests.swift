@@ -198,24 +198,26 @@ class OnboardingTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.performAction(Action.OpenWhatsNewPage)
         waitUntilPageLoad()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].tap()
 
         // Extract version number from url
-        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value
+        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value
         let textUrl = String(describing: url)
-        let start = textUrl.index(textUrl.startIndex, offsetBy: 43)
-        let end = textUrl.index(textUrl.startIndex, offsetBy: 48)
+        let start = textUrl.index(textUrl.startIndex, offsetBy: 51)
+        let end = textUrl.index(textUrl.startIndex, offsetBy: 56)
         let range = start..<end
         let mySubstring = textUrl[range]
         let releaseVersion = String(mySubstring)
 
         mozWaitForElementToExist(app.staticTexts[releaseVersion])
         mozWaitForValueContains(
-            app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url],
-            value: "www.mozilla.org/en-US/firefox/ios/" + releaseVersion + "/releasenotes/"
+            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
+            value: "https://www.mozilla.org/en-US/firefox/ios/" + releaseVersion + "/releasenotes/"
         )
-        mozWaitForElementToExist(app.staticTexts["Release Notes"])
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
         waitForElementsToExist(
             [
+                app.staticTexts["Release Notes"],
                 app.staticTexts["Firefox for iOS Release"],
                 app.staticTexts["\(releaseVersion)"],
                 app.staticTexts["Get the most recent version"]

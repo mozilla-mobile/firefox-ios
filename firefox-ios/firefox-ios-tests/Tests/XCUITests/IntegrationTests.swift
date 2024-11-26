@@ -78,6 +78,9 @@ class IntegrationTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["ACCOUNT"], timeout: TIMEOUT_LONG)
         mozWaitForElementToNotExist(app.staticTexts["Sync and Save Data"])
         sleep(5)
+        if app.tables.staticTexts["Sync is offline"].exists {
+            app.tables.staticTexts["Sync is offline"].tap()
+        }
         if app.tables.staticTexts["Sync Now"].exists {
             app.tables.staticTexts["Sync Now"].tap()
         }
@@ -112,7 +115,7 @@ class IntegrationTests: BaseTestCase {
         // Bookmark is added by the DB
         // Sign into Mozilla Account
         navigator.openURL(testingURL)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon])
         navigator.goto(BrowserTabMenu)
         app.tables.otherElements[StandardImageIdentifiers.Large.bookmark].waitAndTap()
         navigator.nowAt(BrowserTab)
@@ -199,7 +202,7 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(SettingsScreen)
         navigator.goto(LoginsSettings)
         mozWaitForElementToExist(app.buttons.firstMatch)
-        app.buttons["Continue"].tap()
+        app.scrollViews.buttons["Continue"].tap()
 
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         let passcodeInput = springboard.secureTextFields["Passcode field"]
@@ -254,7 +257,7 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(SettingsScreen)
         navigator.goto(LoginsSettings)
         mozWaitForElementToExist(app.buttons.firstMatch)
-        app.buttons["Continue"].tap()
+        app.scrollViews.buttons["Continue"].tap()
 
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         let passcodeInput = springboard.secureTextFields["Passcode field"]

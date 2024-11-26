@@ -22,6 +22,9 @@
 /* Accessibility label for toggling on/off private mode */
 "Private Mode" = "Modu di navigazione privata";
 
+/* Accessibility label for toggling on/off private mode */
+"PrivateBrowsing.Toggle.A11y.Label.v132" = "Navigazione privata";
+
 /* Accessiblity hint for toggling on/off private mode */
 "Turns private mode on or off" = "Attiva o disattiva a navigazione privata";
 
