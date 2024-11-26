@@ -147,6 +147,7 @@ class BookmarksTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
 
         // Clear text and enter new url
+        waitUntilPageLoad()
         waitForTabsButton()
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(URLBarOpen)

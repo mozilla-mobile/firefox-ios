@@ -192,6 +192,7 @@ private extension BaseTestCase {
             navigator.nowAt(NewTabScreen)
         }
         navigator.openURL(firstWebsite.url)
+        waitUntilPageLoad()
         waitForTabsButton()
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
