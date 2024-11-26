@@ -242,44 +242,6 @@ class RustAutofillTests: XCTestCase {
         XCTAssertEqual(updatedCardVal.ccExpYear, updatedCreditCard.ccExpYear)
     }
 
-    func testDeleteCreditCard() {
-        let expectationAddCard = expectation(description: "completed add card")
-        let expectationGetCard = expectation(description: "completed getting card")
-        let expectationDeleteCard = expectation(description: "delete card")
-        let expectationCheckDeleteCard = expectation(description: "check that no card exist")
-
-        addCreditCard { creditCard, err in
-            XCTAssertNotNil(creditCard)
-            XCTAssertNil(err)
-            expectationAddCard.fulfill()
-
-            self.autofill.getCreditCard(id: creditCard!.guid) { card, error in
-                XCTAssertNotNil(card)
-                XCTAssertNil(err)
-                XCTAssertEqual(creditCard!.guid, card!.guid)
-                expectationGetCard.fulfill()
-
-                self.autofill.deleteCreditCard(id: card!.guid) { success, err in
-                    XCTAssert(success)
-                    XCTAssertNil(err)
-                    expectationDeleteCard.fulfill()
-
-                    self.autofill.getCreditCard(id: creditCard!.guid) { deletedCreditCard, error in
-                        XCTAssertNil(deletedCreditCard)
-                        XCTAssertNotNil(error)
-
-                        let expectedError =
-                        "NoSuchRecord(guid: \"\(creditCard!.guid)\")"
-                        XCTAssertEqual(expectedError, "\(error!)")
-                        expectationCheckDeleteCard.fulfill()
-                    }
-                }
-            }
-        }
-
-        waitForExpectations(timeout: 3, handler: nil)
-    }
-
     func testDeleteCreditCard() async throws {
         let creditCard = try await addCreditCard()
         let retrievedCreditCard = try await getCreditCard(id: creditCard.guid)
