@@ -221,13 +221,13 @@ class MockDelegate: ReaderModeStyleViewModelDelegate {
     }
 }
 
-extension ReaderModeFontSize: Comparable {
+extension ReaderModeFontSize: @retroactive Comparable {
     public static func < (lhs: ReaderModeFontSize, rhs: ReaderModeFontSize) -> Bool {
         lhs.rawValue < rhs.rawValue
     }
 }
 
-extension ReaderModeStyle: Equatable {
+extension ReaderModeStyle: @retroactive Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.fontSize == rhs.fontSize && lhs.fontType == rhs.fontType && lhs.theme == rhs.theme
     }

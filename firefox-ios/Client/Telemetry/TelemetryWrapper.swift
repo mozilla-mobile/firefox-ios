@@ -110,7 +110,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         let gleanConfig = Configuration(
             channel: AppConstants.buildChannel.rawValue,
             logLevel: .off,
-            pingSchedule: ["baseline": ["dau-reporting"]]
+            pingSchedule: ["baseline": ["usage-reporting"]]
         )
         glean.initialize(uploadEnabled: sendUsageData,
                          configuration: gleanConfig,
@@ -525,10 +525,8 @@ extension TelemetryWrapper {
         case syncedTabTileImpressions = "synced-tab-tile-impressions"
         case historyImpressions = "history-highlights-impressions"
         case bookmarkImpressions = "bookmark-impressions"
-        case inactiveTabTray = "inactiveTabTray"
         case reload = "reload"
         case reloadFromUrlBar = "reload-from-url-bar"
-        case restoreTabsAlert = "restore-tabs-alert"
         case fxaLoginWebpage = "fxa-login-webpage"
         case fxaLoginCompleteWebpage = "fxa-login-complete-webpage"
         case fxaRegistrationWebpage = "fxa-registration-webpage"
@@ -613,12 +611,6 @@ extension TelemetryWrapper {
         case addBookmarkToast = "add-bookmark-toast"
         case openHomeFromAwesomebar = "open-home-from-awesomebar"
         case openHomeFromPhotonMenuButton = "open-home-from-photon-menu-button"
-        case openInactiveTab = "openInactiveTab"
-        case inactiveTabShown = "inactive-Tab-Shown"
-        case inactiveTabExpand = "inactivetab-expand"
-        case inactiveTabCollapse = "inactivetab-collapse"
-        case inactiveTabCloseAllButton = "inactive-tab-close-all-button"
-        case inactiveTabSwipeClose = "inactive-tab-swipe-close"
         case openRecentlyClosedTab = "openRecentlyClosedTab"
         case tabGroupWithExtras = "tabGroupWithExtras"
         case closeGroupedTab = "recordCloseGroupedTab"
@@ -660,7 +652,6 @@ extension TelemetryWrapper {
         case pocketTilePosition = "pocketTilePosition"
         case fxHomepageOrigin = "fxHomepageOrigin"
         case tabsQuantity = "tabsQuantity"
-        case isRestoreTabsStarted = "is-restore-tabs-started"
         case recordSearchLocation = "recordSearchLocation"
         case recordSearchEngineID = "recordSearchEngineID"
         case windowCount = "windowCount"
@@ -696,10 +687,6 @@ extension TelemetryWrapper {
 
         // Tabs Tray
         case done = "done"
-
-        // Inactive Tab
-        case inactiveTabsCollapsed = "collapsed"
-        case inactiveTabsExpanded = "expanded"
 
         // GleanPlumb
         case actionUUID = "action-uuid"
@@ -926,18 +913,6 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.navigateTabBackSwipe.add()
         case(.action, .tap, .reloadFromUrlBar, _, _):
             GleanMetrics.Tabs.reloadFromUrlBar.add()
-        case(.action, .tap, .restoreTabsAlert, _, let extras):
-            if let isEnabled = extras?[EventExtraKey.isRestoreTabsStarted.rawValue] as? Bool {
-                let isEnabledExtra = GleanMetrics.Tabs.RestoreTabsAlertExtra(isEnabled: isEnabled)
-                GleanMetrics.Tabs.restoreTabsAlert.record(isEnabledExtra)
-            } else {
-                recordUninstrumentedMetrics(
-                    category: category,
-                    method: method,
-                    object: object,
-                    value: value,
-                    extras: extras)
-            }
         case(.information, .background, .iPadWindowCount, _, let extras):
             if let quantity = extras?[EventExtraKey.windowCount.rawValue] as? Int64 {
                 GleanMetrics.Windows.ipadWindowCount.set(quantity)
@@ -1766,21 +1741,6 @@ extension TelemetryWrapper {
             }
         case (.action, .tap, .newPrivateTab, .tabTray, _):
             GleanMetrics.TabsTray.newPrivateTabTapped.record()
-        // MARK: Inactive Tab Tray
-        case (.action, .tap, .inactiveTabTray, .openInactiveTab, _):
-            GleanMetrics.InactiveTabsTray.openInactiveTab.add()
-        case (.action, .tap, .inactiveTabTray, .inactiveTabExpand, _):
-            let expandedExtras = GleanMetrics.InactiveTabsTray.ToggleInactiveTabTrayExtra(toggleType: EventExtraKey.inactiveTabsExpanded.rawValue)
-            GleanMetrics.InactiveTabsTray.toggleInactiveTabTray.record(expandedExtras)
-        case (.action, .tap, .inactiveTabTray, .inactiveTabCollapse, _):
-            let collapsedExtras = GleanMetrics.InactiveTabsTray.ToggleInactiveTabTrayExtra(toggleType: EventExtraKey.inactiveTabsCollapsed.rawValue)
-            GleanMetrics.InactiveTabsTray.toggleInactiveTabTray.record(collapsedExtras)
-        case (.action, .tap, .inactiveTabTray, .inactiveTabSwipeClose, _):
-            GleanMetrics.InactiveTabsTray.inactiveTabSwipeClose.add()
-        case (.action, .tap, .inactiveTabTray, .inactiveTabCloseAllButton, _):
-            GleanMetrics.InactiveTabsTray.inactiveTabsCloseAllBtn.add()
-        case (.action, .tap, .inactiveTabTray, .inactiveTabShown, _):
-            GleanMetrics.InactiveTabsTray.inactiveTabShown.add()
 
         // MARK: Tab Groups
         case (.action, .view, .tabTray, .tabGroupWithExtras, let extras):

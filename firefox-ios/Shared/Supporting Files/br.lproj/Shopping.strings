@@ -131,7 +131,7 @@
 "Shopping.ReviewQualityCard.Expand.AccessibilityLabel.v120" = "Brasaat ar gartenn \"Penaos e wiriekaomp perzhded an alioù\"";
 
 /* Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
-"Shopping.ReviewQualityCard.Headline.Label.v120" = "Ober a reomp gant teknologiezh an naouegezh alvezel savet gant %s evit %2$@ evit gwiriañ eo fizius an alioù war ar produioù. Kement-se a sikouro ac’hanoc’h da gompren gwelloc’h perzhded an alioù, met ket hini ar produioù. ";
+"Shopping.ReviewQualityCard.Headline.Label.v120" = "Ober a reomp gant teknologiezh an naouegezh alvezel savet gant %1$@ evit %2$@ evit gwiriañ eo fizius an alioù war ar produioù. Kement-se a sikouro ac’hanoc’h da gompren gwelloc’h perzhded an alioù, met ket hini ar produioù.";
 
 /* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "Shopping.ReviewQualityCard.Highlights.Label.v120" = "Ar *poentoù pouezus* a zeu eus alioù %1@ er 80 devezh diwezhañ a soñj deomp int fizius. ";

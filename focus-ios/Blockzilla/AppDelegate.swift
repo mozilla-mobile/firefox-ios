@@ -363,7 +363,7 @@ extension AppDelegate {
         let channel = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" ? "testflight" : "release"
         let configuration = Configuration(
             channel: channel,
-            pingSchedule: ["baseline": ["dau-reporting"]]
+            pingSchedule: ["baseline": ["usage-reporting"]]
         )
         Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData), configuration: configuration, buildInfo: GleanMetrics.GleanBuild.info)
 

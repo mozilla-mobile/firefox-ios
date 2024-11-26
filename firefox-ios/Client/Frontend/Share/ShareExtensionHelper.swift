@@ -98,7 +98,13 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
 
         // when tab is not loaded (webView != nil) don't show print activity
         if let tab = selectedTab, tab.webView != nil {
-            activityItems.append(TabPrintPageRenderer(tab: tab))
+            activityItems.append(
+                TabPrintPageRenderer(
+                    tabDisplayTitle: tab.displayTitle,
+                    tabURL: tab.url,
+                    webView: tab.webView
+                )
+            )
         }
 
         if let title = selectedTab?.title {

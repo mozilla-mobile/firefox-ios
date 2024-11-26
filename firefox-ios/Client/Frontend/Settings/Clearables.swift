@@ -15,15 +15,6 @@ protocol Clearable {
     var label: String { get }
 }
 
-class ClearableError: MaybeErrorType {
-    fileprivate let msg: String
-    init(msg: String) {
-        self.msg = msg
-    }
-
-    var description: String { return msg }
-}
-
 // Clears our browsing history, including favicons and thumbnails.
 class HistoryClearable: Clearable {
     let profile: Profile

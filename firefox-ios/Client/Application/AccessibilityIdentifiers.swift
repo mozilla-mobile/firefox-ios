@@ -519,6 +519,7 @@ public struct AccessibilityIdentifiers {
         static let privacyNoticeAgreement = "TermsOfService.PrivacyNoticeAgreement"
         static let manageDataCollectionAgreement = "TermsOfService.ManageDataCollectionAgreement"
         static let agreeAndContinueButton = "TermsOfService.AgreeAndContinueButton"
+        static let doneButton = "TermsOfService.DoneButton"
     }
 
     struct Upgrade {
@@ -696,8 +697,9 @@ public struct AccessibilityIdentifiers {
             static let bottomSetting = "BottomSearchBar"
         }
 
-        struct SendAnonymousUsageData {
-            static let title = "SendAnonymousUsageData"
+        struct SendData {
+            static let sendAnonymousUsageDataTitle = "SendAnonymousUsageData"
+            static let sendCrashReportsTitle = "SendCrashReports"
         }
 
         struct PrivacyPolicy {

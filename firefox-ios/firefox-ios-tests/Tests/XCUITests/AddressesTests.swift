@@ -191,10 +191,9 @@ class AddressesTests: BaseTestCase {
         updateAddress(updateCountry: updateCountry, isPostalCode: isPostalCode)
         tapSave()
         // The "Address saved" toast message is displayed
-        // mozWaitForElementToExist(app.staticTexts[addressSavedTxt])
+        mozWaitForElementToExist(app.staticTexts[addressSavedTxt])
         // The address is saved
-        // Update with correct toast message after https://mozilla-hub.atlassian.net/browse/FXIOS-10422 is fixed
-        // mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
+        mozWaitForElementToExist(app.staticTexts[savedAddressesTxt])
         if updateCountry {
             let addressInfo = ["Test2", "test address2", "city test2, 100000"]
             for index in addressInfo {
@@ -318,8 +317,12 @@ class AddressesTests: BaseTestCase {
         app.typeText(email)
     }
 
-    private func tapSave() {
-        app.buttons["Save"].tapWithRetry()
+    private func tapSave(withRetry: Bool = false) {
+        if withRetry {
+            app.buttons["Save"].tapWithRetry()
+        } else {
+            app.buttons["Save"].tap()
+        }
     }
 
     private func tapEdit() {

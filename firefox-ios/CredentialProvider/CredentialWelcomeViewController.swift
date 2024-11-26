@@ -11,7 +11,7 @@ protocol CredentialWelcomeViewControllerDelegate: AnyObject {
 }
 
 class CredentialWelcomeViewController: UIViewController {
-    var delegate: CredentialWelcomeViewControllerDelegate?
+    weak var delegate: CredentialWelcomeViewControllerDelegate?
 
     private lazy var logoImageView: UIImageView = {
         let image = UIImageView(image: UIImage(named: "logo-glyph"))

@@ -24,7 +24,7 @@ struct BreachRecord: Codable, Equatable, Hashable {
 }
 
 /// A manager for the user's breached login information, if any.
-public final class BreachAlertsManager {
+final class BreachAlertsManager {
     static let monitorAboutUrl = URL(string: "https://monitor.firefox.com/about")
     var breaches = Set<BreachRecord>()
     var client: BreachAlertsClientProtocol

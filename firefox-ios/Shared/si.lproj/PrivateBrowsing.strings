@@ -22,6 +22,9 @@
 /* Accessibility label for toggling on/off private mode */
 "Private Mode" = "පෞද්. ආකාරය";
 
+/* Accessibility label for toggling on/off private mode */
+"PrivateBrowsing.Toggle.A11y.Label.v132" = "පෞද්. පිරික්සුම";
+
 /* Accessiblity hint for toggling on/off private mode */
 "Turns private mode on or off" = "පෞද්. ආකාරය සක්‍රිය හෝ අක්‍රිය කරයි";
 
