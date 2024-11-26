@@ -1308,3 +1308,5 @@ extension XCUIElement {
         }
     }
 }
+
+// swiftlint:enable all
