@@ -579,6 +579,7 @@
 		5AB4237E28A2BA9C003BC40C /* HistoryHighlightsDataAdaptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4237D28A2BA9C003BC40C /* HistoryHighlightsDataAdaptor.swift */; };
 		5AC40329291AFBDB002BF91C /* DispatchQueueHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D83821FF1FC7961D00303C12 /* DispatchQueueHelper.swift */; };
 		5AC7110729F822E60011ED11 /* MockTabSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC7110629F822E60011ED11 /* MockTabSessionStore.swift */; };
+		5AD3B6742CF625B000AFA1FE /* DefaultBrowserUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD3B6732CF625A300AFA1FE /* DefaultBrowserUtil.swift */; };
 		5AE371842A4DD6F50092A760 /* PasswordManagerListViewControllerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE371832A4DD6F50092A760 /* PasswordManagerListViewControllerSpy.swift */; };
 		5AE371852A4DD6FE0092A760 /* PasswordManagerCoordinatorDelegateMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE371812A4DD0D70092A760 /* PasswordManagerCoordinatorDelegateMock.swift */; };
 		5AE371872A4E11750092A760 /* AboutSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE371862A4E11750092A760 /* AboutSettingsDelegate.swift */; };
@@ -6878,6 +6879,7 @@
 		5AC24B85BF0D2FCC2F1EB6D3 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		5AC549C0BA565EB2B08B87EC /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		5AC7110629F822E60011ED11 /* MockTabSessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabSessionStore.swift; sourceTree = "<group>"; };
+		5AD3B6732CF625A300AFA1FE /* DefaultBrowserUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultBrowserUtil.swift; sourceTree = "<group>"; };
 		5AE371812A4DD0D70092A760 /* PasswordManagerCoordinatorDelegateMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordManagerCoordinatorDelegateMock.swift; sourceTree = "<group>"; };
 		5AE371832A4DD6F50092A760 /* PasswordManagerListViewControllerSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordManagerListViewControllerSpy.swift; sourceTree = "<group>"; };
 		5AE371862A4E11750092A760 /* AboutSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutSettingsDelegate.swift; sourceTree = "<group>"; };
@@ -14265,6 +14267,7 @@
 		F84B21E41A0910F600AAB793 /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				5AD3B6732CF625A300AFA1FE /* DefaultBrowserUtil.swift */,
 				8A46F5AA2C9E4389005B6422 /* RemoteSettings */,
 				C84266742728462900382274 /* AccessibilityIdentifiers.swift */,
 				5A47CFF42860FB8900B2B7BF /* AppLaunchUtil.swift */,
@@ -16247,6 +16250,7 @@
 				F8A0B08229AD61FA0091C75B /* RustSyncManager.swift in Sources */,
 				438FE8642988ABA600155B10 /* CreditCardTableViewController.swift in Sources */,
 				3BCE6D3C1CEB9E4D0080928C /* ThirdPartySearchAlerts.swift in Sources */,
+				5AD3B6742CF625B000AFA1FE /* DefaultBrowserUtil.swift in Sources */,
 				8A93F86229D36F0F004159D9 /* NavigationController.swift in Sources */,
 				E13F8C342928194800BDC8B4 /* PhotonActionSheetSiteHeaderView.swift in Sources */,
 				C2D71B9B2A3850B4003DEC7A /* ThemedTableViewCellViewModel.swift in Sources */,

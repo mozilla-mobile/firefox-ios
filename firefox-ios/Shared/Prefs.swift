@@ -40,6 +40,9 @@ public struct PrefsKeys {
     public static let KeySecondRun = "SecondRun"
     public static let KeyAutofillCreditCardStatus = "KeyAutofillCreditCardStatus"
     public static let KeyAutofillAddressStatus = "KeyAutofillAddressStatus"
+    
+    // Only set if we get an actual response, no assumptions, nil otherwise
+    public static let AppleConfirmedUserIsDefaultBrowser = "AppleConfirmedUserIsDefaultBrowser"
 
     public struct Session {
         public static let FirstAppUse = "firstAppUse"
