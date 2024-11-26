@@ -866,7 +866,6 @@ extension HistoryPanel {
 
 // MARK: - User action helpers
 extension HistoryPanel {
-
     func handleLeftTopButton() {
         updatePanelState(newState: .history(state: .mainView))
     }
