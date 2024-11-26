@@ -97,6 +97,7 @@ class HistoryPanel: UIViewController,
         searchbar.searchTextField.placeholder = self.viewModel.searchHistoryPlaceholder
         searchbar.returnKeyType = .go
         searchbar.delegate = self
+        searchbar.showsCancelButton = true
     }
 
     private lazy var tableView: UITableView = .build { [weak self] tableView in
@@ -176,7 +177,6 @@ class HistoryPanel: UIViewController,
         setupLayout()
         configureDataSource()
         applyTheme()
-
         // Update theme of already existing view
         bottomStackView.applyTheme(theme: currentTheme())
     }
