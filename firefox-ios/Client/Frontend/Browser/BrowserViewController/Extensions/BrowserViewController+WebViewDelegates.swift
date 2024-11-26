@@ -628,33 +628,34 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        if OpenQLPreviewHelper.shouldOpenPreviewHelper(response: response,
-                                                       forceDownload: forceDownload),
+        // For USDZ / Reality 3D model files, we can cancel this response from the webView and open the QL previewer instead
+        if OpenQLPreviewHelper.shouldOpenPreviewHelper(response: response, forceDownload: forceDownload),
            let tab = tabManager[webView],
            let request = request {
-            let previewHelper = OpenQLPreviewHelper(presenter: self)
-            // Certain files are too large to download before the preview presents,
-            // block and use a temporary document instead
-            tab.temporaryDocument = TemporaryDocument(preflightResponse: response,
-                                                      request: request)
+            // Certain files are too large to download before the preview presents, so block until we have something to show
             let group = DispatchGroup()
             var url: URL?
             group.enter()
-            tab.temporaryDocument?.getURL(completionHandler: { docURL in
+            let temporaryDocument = TemporaryDocument(preflightResponse: response, request: request)
+            temporaryDocument.getURL(completionHandler: { docURL in
                 url = docURL
                 group.leave()
             })
             _ = group.wait(timeout: .distantFuture)
 
+            let previewHelper = OpenQLPreviewHelper(presenter: self, withTemporaryDocument: temporaryDocument)
             if previewHelper.canOpen(url: url) {
-                // Open our helper and cancel this response from the webview.
-                previewHelper.open()
+                // Open our helper and cancel this response from the webview
+                tab.quickLookPreviewHelper = previewHelper
+                previewHelper.open {
+                    // Once the preview is closed, we can safely release this object and let the tempory document be deleted
+                    tab.quickLookPreviewHelper = nil
+                }
                 decisionHandler(.cancel)
                 return
-            } else {
-                tab.temporaryDocument = nil
-                // We don't have a temporary document, fallthrough
             }
+
+            // We don't have a temporary document, fallthrough
         }
 
         if let url = responseURL, tabManager[webView]?.mimeType == MIMEType.Calendar {
