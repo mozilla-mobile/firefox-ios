@@ -33,8 +33,8 @@ struct DefaultBrowserUtil {
     }
 
     private func trackIfUserIsDefault(_ isDefault: Bool) {
-        telemtryWrapper.recordEvent(category: .information,
-                                    method: .application,
+        telemtryWrapper.recordEvent(category: .action,
+                                    method: .open,
                                     object: .defaultBrowser,
                                     extras: [TelemetryWrapper.EventExtraKey.isDefaultBrowser.rawValue: isDefault])
     }
@@ -44,8 +44,8 @@ struct DefaultBrowserUtil {
         // User is in a DMA effective region
         if dmaCountries.contains(regionCode) {
             let key = TelemetryWrapper.EventExtraKey.didComeFromBrowserChoiceScreen.rawValue
-            telemtryWrapper.recordEvent(category: .information,
-                                        method: .application,
+            telemtryWrapper.recordEvent(category: .action,
+                                        method: .open,
                                         object: .choiceScreenAcquisition,
                                         extras: [key: isDefault])
         }
