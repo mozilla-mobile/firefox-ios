@@ -20,7 +20,7 @@
 "About.rowHelp" = "උදව්";
 
 /* Link to Privacy Notice in the About screen */
-"About.rowPrivacy" = "පෞද්ගලිකත්‍ව දැන්වීම";
+"About.rowPrivacy" = "රහස්‍යතා දැන්වීම";
 
 /* Label for row in About screen */
 "About.rowRights" = "ඔබගේ අයිතීන්";
@@ -422,10 +422,10 @@
 "share" = "බෙදාගන්න";
 
 /* Text for the share menu option when a user wants to add the site to Shortcuts */
-"ShareMenu.AddToShortcuts" = "කෙටිමං වෙත යොදන්න";
+"ShareMenu.AddToShortcuts" = "කෙටිමං වෙත දමන්න";
 
 /* Toast displayed to the user after adding the item to the Shortcuts. */
-"ShareMenu.AddToShortcuts.Confirm" = "කෙටිමං වෙත යෙදිණි";
+"ShareMenu.AddToShortcuts.Confirm" = "කෙටිමං වෙත එක් කෙරිණි";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "ලිපිනයේ පිටපතක්";
@@ -530,7 +530,7 @@
 "Tip.ShareTrackers.Title" = "ඔබ පිරික්සයි. %@ වළක්වයි.";
 
 /* Text for a label that indicates the description for shortcuts tip. The placeholder is replaced with the short product name (Focus or Klar). */
-"Tip.Shortcuts.Description" = "%@ වට්ටෝරුවෙන් කෙටිමං වෙත එක් කරන්න තෝරන්න";
+"Tip.Shortcuts.Description" = "%@ වට්ටෝරුවෙන් කෙටිමං වෙත දමන්න තෝරන්න";
 
 /* Text for a label that indicates the title for shortcuts tip. */
 "Tip.Shortcuts.Title" = "නිතර ගොඩවදින අඩවි සඳහා කෙටිමං සාදන්න:";
@@ -581,10 +581,10 @@
 "TooltipTitleText.Privacy" = "ඔබ සුරක්‍ෂිතයි!";
 
 /* Text for tracking protection screen showing the connection is not secure */
-"trackingProtection.connectionNotSecureLabel" = "සම්බන්ධතාවය අනාරක්‍ෂිතයි";
+"trackingProtection.connectionNotSecureLabel" = "සම්බන්‍ධතාව අනාරක්‍ෂිතයි";
 
 /* Text for tracking protection screen showing the connection is secure */
-"trackingProtection.connectionSecureLabel" = "සම්බන්ධතාවය ආරක්‍ෂිතයි";
+"trackingProtection.connectionSecureLabel" = "සම්බන්‍ධතාව ආරක්‍ෂිතයි";
 
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "ලුහුබැඳීමේ රැකවරණය";
