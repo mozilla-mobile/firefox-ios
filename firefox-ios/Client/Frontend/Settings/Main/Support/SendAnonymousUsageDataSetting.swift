@@ -58,7 +58,11 @@ class SendAnonymousUsageDataSetting: BoolSetting {
 
             if !value {
                 self?.prefs?.removeObjectForKey(PrefsKeys.Usage.profileId)
-                GleanMetrics.Usage.profileId.set(UUID(uuidString: "beefbeef-beef-beef-beef-beeefbeefbee"))
+
+                // set dummy uuid to make sure the previous one is deleted
+                if let uuid = UUID(uuidString: "beefbeef-beef-beef-beef-beeefbeefbee") {
+                    GleanMetrics.Usage.profileId.set(uuid)
+                }
             }
 
             Experiments.setTelemetrySetting(value)
