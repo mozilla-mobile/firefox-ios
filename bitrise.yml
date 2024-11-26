@@ -754,7 +754,6 @@ workflows:
         stack: osx-xcode-16.1.x
         machine_type_id: g2-m1.8core
   L10nBuild:
-    
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
@@ -844,8 +843,11 @@ workflows:
     description: >-
       This Workflow is to run L10n tests in one locale and then share the bundle with
       the rest of the builds
+    meta:
+      bitrise.io:
+        stack: osx-xcode-15.4.x
+        machine_type_id: g2-m1.8core
   L10nScreenshotsTests:
-    stack: osx-xcode-15.4.x
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
@@ -886,6 +888,10 @@ workflows:
       BITRISE_SCHEME: L10nSnapshotTest
     description: >-
       This Workflow is to run L10n tests for all locales
+    meta:
+      bitrise.io:
+        stack: osx-xcode-15.4.x
+        machine_type_id: g2-m1.8core
   SPM_Deploy_Prod_Beta:
     steps:
     - activate-ssh-key@4.1:
