@@ -86,19 +86,13 @@ extension String {
     /// - Returns: An `NSAttributedString` with the specified parts styled differently.
     ///
     /// - Note: If the highlighted text does not exist in the original string, no highlighted style is applied.
-    func attributedText(with style: [NSAttributedString.Key: Any]? = nil,
-                        and highlightedText: String,
-                        with highlightedTextStyle: [NSAttributedString.Key: Any]? = nil) -> NSAttributedString {
-        // Apply base style to the entire string
+    func attributedText(style: [NSAttributedString.Key: Any],
+                        highlightedText: String,
+                        highlightedTextStyle: [NSAttributedString.Key: Any]) -> NSAttributedString {
         let formattedString = NSMutableAttributedString(string: self, attributes: style)
-
-        // Find the range of the highlighted text
         let highlightedTextRange = (self as NSString).range(of: highlightedText)
-
-        // Check if the highlighted text exists in the string
         if highlightedTextRange.location != NSNotFound {
-            // Apply the highlighted style to the specified range
-            formattedString.addAttributes(highlightedTextStyle ?? [:], range: highlightedTextRange)
+            formattedString.addAttributes(highlightedTextStyle, range: highlightedTextRange)
         }
         return formattedString
     }

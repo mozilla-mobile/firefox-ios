@@ -340,9 +340,9 @@ final class NativeErrorPageViewController: UIViewController,
 
         let errDescription = String(format: description, validHostName)
         let attributedString = errDescription.attributedText(
-            with: [.font: FXFontStyles.Regular.subheadline.scaledFont()],
-            and: validHostName,
-            with: [.font: FXFontStyles.Bold.body.scaledFont()]
+            style: [.font: FXFontStyles.Regular.subheadline.scaledFont()],
+            highlightedText: validHostName,
+            highlightedTextStyle: [.font: FXFontStyles.Bold.body.scaledFont()]
         )
         return attributedString
     }
