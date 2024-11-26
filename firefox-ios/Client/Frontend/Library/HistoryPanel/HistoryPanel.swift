@@ -177,7 +177,6 @@ class HistoryPanel: UIViewController,
         setupLayout()
         configureDataSource()
         applyTheme()
-        setupSearchBarTapGesture()
         // Update theme of already existing view
         bottomStackView.applyTheme(theme: currentTheme())
     }
@@ -863,23 +862,10 @@ extension HistoryPanel {
             }
         }
     }
-
-    private func setupSearchBarTapGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(removedSearchBarWhenTapOutside))
-        tapGesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(tapGesture)
-    }
 }
 
 // MARK: - User action helpers
 extension HistoryPanel {
-    @objc
-    private func removedSearchBarWhenTapOutside(_ sender: UITapGestureRecognizer) {
-        if !bottomStackView.isHidden && !bottomStackView.frame.contains(sender.location(in: view)) {
-            bottomStackView.isHidden = true
-            searchbar.resignFirstResponder()
-        }
-    }
 
     func handleLeftTopButton() {
         updatePanelState(newState: .history(state: .mainView))
