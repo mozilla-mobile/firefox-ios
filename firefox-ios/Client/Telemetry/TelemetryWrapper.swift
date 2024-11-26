@@ -100,16 +100,23 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         GleanMetrics.Search.defaultEngine.set(defaultEngine?.engineID ?? "unavailable")
 
         // Get the legacy telemetry ID and record it in Glean for the deletion-request ping
-        if let uuidString = UserDefaults.standard.string(forKey: "telemetry-key-prefix-clientId"), let uuid = UUID(uuidString: uuidString) {
+        if let uuidString = UserDefaults.standard.string(forKey: "telemetry-key-prefix-clientId"),
+           let uuid = UUID(uuidString: uuidString) {
             GleanMetrics.LegacyIds.clientId.set(uuid)
         }
 
         // Set or generate profile id used for usage reporting
-        if let uuidString = profile.prefs.stringForKey(PrefsKeys.Usage.profileId), let uuid = UUID(uuidString: uuidString) {
+        if profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true {
+            if let uuidString = profile.prefs.stringForKey(PrefsKeys.Usage.profileId),
+                let uuid = UUID(uuidString: uuidString) {
+                GleanMetrics.Usage.profileId.set(uuid)
+            } else {
+                let uuid = GleanMetrics.Usage.profileId.generateAndSet()
+                profile.prefs.setString(uuid.uuidString, forKey: PrefsKeys.Usage.profileId)
+            }
+        } else if let uuid = UUID(uuidString: "beefbeef-beef-beef-beef-beeefbeefbee") {
+            // set dummy uuid to make sure the previous one is deleted
             GleanMetrics.Usage.profileId.set(uuid)
-        } else {
-            let uuid = GleanMetrics.Usage.profileId.generateAndSet()
-            profile.prefs.setString(uuid.uuidString, forKey: PrefsKeys.Usage.profileId)
         }
 
         glean.registerPings(GleanMetrics.Pings.shared)
