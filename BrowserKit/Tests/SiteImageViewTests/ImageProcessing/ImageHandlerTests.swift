@@ -106,7 +106,7 @@ final class ImageHandlerTests: XCTestCase {
         let resource: SiteResource = .bundleAsset(name: "facebook", forRemoteResource: siteURL)
         let model = SiteImageModel(id: UUID(), imageType: .favicon, siteURL: siteURL, siteResource: resource)
         let image = await subject.fetchFavicon(imageModel: model)
-        
+
         let siteImageBundle = Bundle.allBundles.first {
             return $0.bundleIdentifier?.contains("browserkit.SiteImageView.resources") ?? false
         }!
