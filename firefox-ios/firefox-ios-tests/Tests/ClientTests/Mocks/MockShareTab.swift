@@ -17,7 +17,7 @@ class MockShareTab: ShareTab {
         self.webView = TabWebView(frame: CGRect.zero, configuration: .init(), windowUUID: .XCTestDefaultUUID)
     }
 
-    static func == (lhs: Self, rhs: Self) -> Bool {
+    static func == (lhs: MockShareTab, rhs: MockShareTab) -> Bool {
         return lhs.displayTitle == rhs.displayTitle
         && lhs.url == rhs.url
         && lhs.webView === rhs.webView
