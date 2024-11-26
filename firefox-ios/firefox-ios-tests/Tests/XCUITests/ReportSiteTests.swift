@@ -32,6 +32,6 @@ class ReportSiteTests: BaseTestCase {
 
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables["Context Menu"])
+        mozWaitForElementToExist(app.images[StandardImageIdentifiers.Large.avatarCircle])
     }
 }
