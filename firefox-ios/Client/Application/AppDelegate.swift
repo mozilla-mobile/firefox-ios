@@ -253,14 +253,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // the simulator after having run unit tests locally.
         #if targetEnvironment(simulator) && MOZ_CHANNEL_FENNEC
         let key = "_FennecLaunchedUnitTestDelegate"
-        guard let flagSet = UserDefaults.standard.value(forKey: key) as? Bool else { return }
-        if flagSet {
-            // Private API. This code is not present in release builds.
-            application.openSessions.forEach {
-                application.perform(Selector(("_removeSessionFromSessionSet:")), with: $0)
-            }
-            UserDefaults.standard.removeObject(forKey: key)
+        guard let flagSet = UserDefaults.standard.value(forKey: key) as? Bool, flagSet else { return }
+        // Private API. This code is not present in release builds.
+        application.openSessions.forEach {
+            application.perform(Selector(("_removeSessionFromSessionSet:")), with: $0)
         }
+        UserDefaults.standard.removeObject(forKey: key)
         #endif
     }
 }
