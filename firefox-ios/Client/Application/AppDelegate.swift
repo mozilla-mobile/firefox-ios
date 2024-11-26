@@ -254,7 +254,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         #if targetEnvironment(simulator) && MOZ_CHANNEL_FENNEC
         let key = "_FennecLaunchedUnitTestDelegate"
         guard let flagSet = UserDefaults.standard.value(forKey: key) as? Bool else { return }
-        if flagSet == true {
+        if flagSet {
             // Private API. This code is not present in release builds.
             application.openSessions.forEach {
                 application.perform(Selector(("_removeSessionFromSessionSet:")), with: $0)
