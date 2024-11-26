@@ -97,6 +97,7 @@ class HistoryPanel: UIViewController,
         searchbar.searchTextField.placeholder = self.viewModel.searchHistoryPlaceholder
         searchbar.returnKeyType = .go
         searchbar.delegate = self
+        searchbar.showsCancelButton = true
     }
 
     private lazy var tableView: UITableView = .build { [weak self] tableView in
