@@ -391,7 +391,7 @@ struct AddressBarState: StateType, Equatable {
             browserActions: browserActions(action: toolbarAction, addressBarState: state),
             borderPosition: state.borderPosition,
             url: state.url,
-            searchTerm: nil,
+            searchTerm: state.searchTerm,
             lockIconImageName: state.lockIconImageName,
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
@@ -689,7 +689,7 @@ struct AddressBarState: StateType, Equatable {
     }
 
     private static func handleDidStartTypingAction(state: Self, action: Action) -> Self {
-        guard action is ToolbarAction else { return defaultState(from: state) }
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
 
         return AddressBarState(
             windowUUID: state.windowUUID,
@@ -697,8 +697,8 @@ struct AddressBarState: StateType, Equatable {
             pageActions: state.pageActions,
             browserActions: state.browserActions,
             borderPosition: state.borderPosition,
-            url: state.url,
-            searchTerm: state.searchTerm,
+            url: toolbarAction.url,
+            searchTerm: toolbarAction.searchTerm,
             lockIconImageName: state.lockIconImageName,
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,

@@ -19,9 +19,6 @@ final class LocationView: UIView,
         static let iconContainerNoLockLeadingSpace: CGFloat = 16
     }
 
-    /// A static property to keep track of the text from a `LocationTextField` instance.
-    /// This ensures that the text is preserved and can be shared across different instances.
-    private static var persistentURLText = ""
     private var urlAbsolutePath: String?
     private var searchTerm: String?
     private var onTapLockIcon: ((UIButton) -> Void)?
@@ -145,8 +142,16 @@ final class LocationView: UIView,
     // MARK: - Layout
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
+        updateURLTextFieldForSizeClassChange(previousTraitCollection)
         DispatchQueue.main.async { [self] in
             formatAndTruncateURLTextField()
+        }
+    }
+
+    func updateURLTextFieldForSizeClassChange(_ previousTraitCollection: UITraitCollection?) {
+        if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass ||
+            previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
+            if isEditing, urlAbsolutePath == nil { urlTextField.text = searchTerm }
         }
     }
 
@@ -282,10 +287,7 @@ final class LocationView: UIView,
 
         // Once the user started typing we should not update the text anymore as that interferes with
         // setting the autocomplete suggestions which is done using a delegate method.
-        guard !state.didStartTyping else {
-            if isEditing { urlTextField.text = LocationView.persistentURLText }
-            return
-        }
+        guard !state.didStartTyping else { return }
 
         let text = (state.searchTerm != nil) && state.isEditing ? state.searchTerm : state.url?.absoluteString
         urlTextField.text = text
@@ -405,12 +407,10 @@ final class LocationView: UIView,
 
     // MARK: - LocationTextFieldDelegate
     func locationTextField(_ textField: LocationTextField, didEnterText text: String) {
-        LocationView.persistentURLText = text
         delegate?.locationViewDidEnterText(text)
     }
 
     func locationTextFieldShouldReturn(_ textField: LocationTextField) -> Bool {
-        LocationView.persistentURLText = ""
         guard let text = textField.text else { return true }
         if !text.trimmingCharacters(in: .whitespaces).isEmpty {
             delegate?.locationViewDidSubmitText(text)
@@ -422,7 +422,6 @@ final class LocationView: UIView,
     }
 
     func locationTextFieldShouldClear(_ textField: LocationTextField) -> Bool {
-        LocationView.persistentURLText = ""
         delegate?.locationViewDidClearText()
         return true
     }
