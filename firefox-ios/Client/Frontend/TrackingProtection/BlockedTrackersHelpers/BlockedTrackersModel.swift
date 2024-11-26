@@ -65,6 +65,6 @@ struct BlockedTrackersTableModel {
         let totalTrackerBlocked = String(contentBlockerStats?.total ?? 0)
         let trackersText = String(format: .Menu.EnhancedTrackingProtection.trackersBlockedLabel,
                                   totalTrackerBlocked)
-        return trackersText
+        return trackersText.uppercased()
     }
 }
