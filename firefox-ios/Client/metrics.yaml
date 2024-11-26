@@ -709,7 +709,7 @@ app:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-01-01"
 
-# DAU reporting
+# Usage reporting
 usage:
   profile_id:
     type: uuid
@@ -718,9 +718,9 @@ usage:
       A UUID uniquely identifying the profile,
       not shared with other telemetry data.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23254
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/
+      - https://github.com/mozilla-mobile/firefox-ios/pull/23254
     data_sensitivity:
       - technical
       - highly_sensitive
