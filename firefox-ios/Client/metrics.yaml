@@ -728,7 +728,7 @@ usage:
       - fx-ios-data-stewards@mozilla.com
     expires: never
     send_in_pings:
-      - dau-reporting
+      - usage-reporting
 
 # Downloads
 downloads:
