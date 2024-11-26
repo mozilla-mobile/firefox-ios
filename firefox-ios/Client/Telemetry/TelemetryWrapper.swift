@@ -106,7 +106,7 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         }
 
         // Set or generate profile id used for usage reporting
-        if profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true {
+        if sendUsageData {
             if let uuidString = profile.prefs.stringForKey(PrefsKeys.Usage.profileId),
                 let uuid = UUID(uuidString: uuidString) {
                 GleanMetrics.Usage.profileId.set(uuid)
