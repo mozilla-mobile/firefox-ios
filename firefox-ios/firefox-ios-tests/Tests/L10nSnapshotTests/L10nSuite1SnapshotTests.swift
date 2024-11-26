@@ -70,7 +70,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
         currentScreen += 1
-        mozWaitForElementToExist(app.textFields["url"])
+        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
         mozWaitForElementToExist(app.webViews["contentView"])
         snapshot("Homescreen-first-visit")
     }
