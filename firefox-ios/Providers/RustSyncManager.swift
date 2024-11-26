@@ -339,20 +339,12 @@ public class RustSyncManager: NSObject, SyncManager {
         public let description = "No key data found for scope."
     }
 
-    public class EncryptionKeyError: MaybeErrorType {
-        public let description = "Failed to get stored key."
-    }
-
     public class DeviceIdError: MaybeErrorType {
         public let description = "Failed to get deviceId."
     }
 
     public class NoTokenServerURLError: MaybeErrorType {
         public let description = "Failed to get token server endpoint url."
-    }
-
-    public class EngineAndKeyRetrievalError: MaybeErrorType {
-        public let description = "Failed to get sync engine and key data."
     }
 
     private func registerSyncEngines(engines: [RustSyncManagerAPI.TogglableEngine],
