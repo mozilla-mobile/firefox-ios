@@ -266,10 +266,8 @@ class HomePageSettingsUITests: BaseTestCase {
         bookmarkPages()
         addContentToReaderView()
         if iPad() {
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
-            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton])
-            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].tap()
+            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
+            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
         } else {
             navigator.performAction(Action.GoToHomePage)
         }

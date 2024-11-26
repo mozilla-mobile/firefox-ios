@@ -561,7 +561,7 @@ class NavigationTest: BaseTestCase {
         if iPad() {
             if let urlTextField =  app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value
                 as? String,
-               urlTextField == "ultimateqa.com/dummy-automation-websites" {
+               urlTextField == "ultimateqa.com" {
                 app.links["SauceDemo.com"].firstMatch.tap(force: true)
             }
         }

@@ -211,9 +211,7 @@ class TrackingProtectionTests: BaseTestCase {
         waitForElementsToExist(
             [
                 app.staticTexts["mozilla.org"],
-                // Need to determine what message should be displayed inside TP screen
-                // app.staticTexts["Secure connection"]
-                app.staticTexts["Connection not secure"]
+                app.staticTexts["Secure connection"]
             ]
         )
         XCTAssertEqual(
