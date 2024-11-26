@@ -3,24 +3,16 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Common
+import XCTest
 
 // MARK: - Data
 struct ParserData {
-    private let logger: Logger
-
-    init(logger: Logger = DefaultLogger.shared) {
-        self.logger = logger
-    }
-
     func getDictData(from dict: DictData) throws -> [String: Any] {
         let data = dict.getData()
         let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
 
         guard let dictData = jsonObject as? [String: Any] else {
-            logger.log("Failed to cast JSON object to expected type in getDictData: \(type(of: jsonObject))",
-                       level: .warning,
-                       category: .storage)
+            XCTFail("Failed to cast JSON object to expected type in getDictData: \(type(of: jsonObject))")
             return [:]
         }
         return dictData
@@ -31,9 +23,7 @@ struct ParserData {
         let jsonObject = try JSONSerialization.jsonObject(with: data, options: [])
 
         guard let listData = jsonObject as? [String] else {
-            logger.log("Failed to cast JSON object to expected type in getListData: \(type(of: jsonObject))",
-                       level: .warning,
-                       category: .storage)
+            XCTFail("Failed to cast JSON object to expected type in getListData: \(type(of: jsonObject))")
             return []
         }
         return listData
