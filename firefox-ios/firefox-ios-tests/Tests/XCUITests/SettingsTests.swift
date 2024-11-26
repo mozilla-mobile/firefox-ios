@@ -69,8 +69,9 @@ class SettingsTests: BaseTestCase {
         app.navigationBars["Settings"].buttons["Done"].tap()
 
         app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].tap()
-        let settingsmenuitemCell = app.tables.otherElements["Settings"]
-        settingsmenuitemCell.tap()
+        //let settingsmenuitemCell = app.tables.otherElements["Settings"]
+        //settingsmenuitemCell.tap()
+        app.staticTexts["Settings"].waitAndTap()
 
         // Check Offer to open copied links, when opening firefox is on
         let value3 = app.tables.cells.switches["Offer to Open Copied Links, When opening Firefox"].value
