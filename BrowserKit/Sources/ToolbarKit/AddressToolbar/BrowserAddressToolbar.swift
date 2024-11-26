@@ -35,6 +35,10 @@ public class BrowserAddressToolbar: UIView,
     private var theme: Theme?
     private var droppableUrl: URL?
 
+    /// A cache of `ToolbarButton` instances keyed by their accessibility identifier (`a11yId`).
+    /// This improves performance by reusing buttons instead of creating new instances.
+    private(set) var cachedButtonReferences = [String: ToolbarButton]()
+
     private lazy var toolbarContainerView: UIView = .build()
     private lazy var navigationActionStack: UIStackView = .build()
 
@@ -232,6 +236,7 @@ public class BrowserAddressToolbar: UIView,
         setNeedsLayout()
     }
 
+    // MARK: - Toolbar Actions and Layout Updates
     internal func updateActions(state: AddressToolbarState) {
         // Browser actions
         updateActionStack(stackView: browserActionStack, toolbarElements: state.browserActions)
@@ -256,16 +261,28 @@ public class BrowserAddressToolbar: UIView,
         widthAnchor.priority = .defaultHigh
     }
 
+    /// Retrieves a `ToolbarButton` for the given `ToolbarElement`.
+    /// If a cached button exists for the element's accessibility identifier, it returns the cached button.
+    /// Otherwise, it creates a new button, caches it, and then returns it.
+    /// - Parameter toolbarElement: The `ToolbarElement` for which to retrieve the button.
+    /// - Returns: A `ToolbarButton` instance configured for the given `ToolbarElement`.
+    func getToolbarButton(for toolbarElement: ToolbarElement) -> ToolbarButton {
+        let button: ToolbarButton
+        if let cachedButton = cachedButtonReferences[toolbarElement.a11yId] {
+            button = cachedButton
+        } else {
+            button = toolbarElement.numberOfTabs != nil ? TabNumberButton() : ToolbarButton()
+            cachedButtonReferences[toolbarElement.a11yId] = button
+        }
+
+        return button
+    }
+
     private func updateActionStack(stackView: UIStackView, toolbarElements: [ToolbarElement]) {
-        let existingButtons = stackView.arrangedSubviews.compactMap { $0 as? ToolbarButton }
         stackView.removeAllArrangedViews()
 
         toolbarElements.forEach { toolbarElement in
-            // find existing button or create new one
-            // we do this to avoid having a new button every time we re-configure the address toolbar
-            // as this can result in button taps not resulting in correct action because the action
-            // as the reference to an old and not displayed button (e.g. the menu that is displayed from the menu button)
-            let button = newOrExistingToolbarButton(for: toolbarElement, existingButtons: existingButtons)
+            let button = getToolbarButton(for: toolbarElement)
             button.configure(element: toolbarElement)
             stackView.addArrangedSubview(button)
 
@@ -283,17 +300,6 @@ public class BrowserAddressToolbar: UIView,
                 toolbarDelegate?.configureContextualHint(self, for: button, with: contextualHintType)
             }
         }
-    }
-
-    private func newOrExistingToolbarButton(for element: ToolbarElement,
-                                            existingButtons: [ToolbarButton]) -> ToolbarButton {
-        let existingButton = existingButtons.first { $0.isButtonFor(toolbarElement: element) }
-
-        guard let existingButton else {
-            return element.numberOfTabs != nil ? TabNumberButton() : ToolbarButton()
-        }
-
-        return existingButton
     }
 
     private func updateActionSpacing() {

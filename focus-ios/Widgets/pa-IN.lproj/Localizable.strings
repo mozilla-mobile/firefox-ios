@@ -2,7 +2,7 @@
 "TodayWidget.QuickActionGalleryDescription" = "ਆਪਣੀ ਮੁੱਖ ਸਕਰੀਨ ਉੱਤੇ %@ ਜੋੜੋ। ਵਿਜੈਟ ਜੋੜਨ ਦੇ ਬਾਅਦ ਇਸ ਨੂੰ ਸੋਧਣ ਲਈ ਛੂਹ ਕੇ ਰੱਖੋ ਅਤੇ ਵੱਖਰਾ ਸ਼ਾਰਟਕੱਟ ਚੁਣੋ।";
 
 /* Description for small size widget to add it to home screen. %@ is the name of the app(Focus/Klar). */
-"TodayWidget.QuickActionGalleryDescriptionV2" = "ਆਪਣੇ ਮੂਲ ਖੋਜ ਇੰਜਣ ਨਾਲ %@ ਵਿੱਚ ਨਿੱਜੀ ਖੋਜ ਸ਼ੁਰੂ ਕਰੋ।";
+"TodayWidget.QuickActionGalleryDescriptionV2" = "ਆਪਣੇ ਮੂਲ ਖੋਜ ਇੰਜਣ ਨਾਲ %@ ਵਿੱਚ ਪ੍ਰਾਈਵੇਟ ਖੋਜ ਸ਼ੁਰੂ ਕਰੋ।";
 
 /* Quick Actions title when widget enters edit mode */
 "TodayWidget.QuickActionsGalleryTitle" = "ਫ਼ੌਰੀ ਕਾਰਵਾਈਆਂ";

@@ -107,8 +107,8 @@ class JumpBackInTests: BaseTestCase {
         app.cells["JumpBackInCell"].staticTexts["Wikipedia"].firstMatch.tap()
 
         // The view is switched to the twitter tab
-        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as! String
-        XCTAssertEqual(url, "www.wikipedia.org/")
+        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value as! String
+        XCTAssertEqual(url, "wikipedia.org")
 
         // Open a new tab in normal browsing
         navigator.goto(TabTray)

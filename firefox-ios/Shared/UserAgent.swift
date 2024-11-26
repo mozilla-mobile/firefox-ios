@@ -71,13 +71,15 @@ open class UserAgent {
     public static func getUserAgent(domain: String, platform: UserAgentPlatform) -> String {
         switch platform {
         case .Desktop:
-            return desktopUserAgent()
+            guard let customUA = CustomUserAgentConstant.customDesktopUAForDomain[domain] else {
+                return desktopUserAgent()
+            }
+            return customUA
         case .Mobile:
-            if let customUA = CustomUserAgentConstant.customUAFor[domain] {
-                return customUA
-            } else {
+            guard let customUA = CustomUserAgentConstant.customMobileUAForDomain[domain] else {
                 return mobileUserAgent()
             }
+            return customUA
         }
     }
 
@@ -97,14 +99,19 @@ public enum UserAgentPlatform {
     case Mobile
 }
 
-public struct CustomUserAgentConstant {
+struct CustomUserAgentConstant {
     private static let defaultMobileUA = UserAgentBuilder.defaultMobileUserAgent().userAgent()
     private static let customDesktopUA = UserAgentBuilder.defaultDesktopUserAgent().clone(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
 
-    public static let customUAFor = [
+    static let customMobileUAForDomain = [
         "paypal.com": defaultMobileUA,
         "yahoo.com": defaultMobileUA,
-        "disneyplus.com": customDesktopUA]
+        "disneyplus.com": customDesktopUA
+    ]
+
+    static let customDesktopUAForDomain = [
+        "firefox.com": defaultMobileUA
+    ]
 }
 
 public struct UserAgentBuilder {

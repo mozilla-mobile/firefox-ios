@@ -26,4 +26,5 @@ enum NavigationBrowserActionType: ActionType {
     case tapOnCustomizeHomepage
     case tapOnCell
     case tapOnLink
+    case longPressOnCell
 }

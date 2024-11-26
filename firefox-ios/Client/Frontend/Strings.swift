@@ -102,6 +102,34 @@ extension String {
                 value: "Cancel",
                 comment: "When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the cancel action for the alert, cancelling ending your session.")
         }
+
+        public struct AddToCalendar {
+            public static let Title = MZLocalizedString(
+                key: "Alerts.AddToCalendar.Title.v134",
+                tableName: "Alerts",
+                value: "Add to calendar?",
+                comment: "When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the title for the alert.")
+            public static let Body = MZLocalizedString(
+                key: "Alerts.AddToCalendar.Body.v134",
+                tableName: "Alerts",
+                value: "%@ is asking to download a file and add an event to your calendar.",
+                comment: "When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the body message for the alert. %@ is the name/domain of the website, for example 'google.com'")
+            public static let BodyDefault = MZLocalizedString(
+                key: "Alerts.AddToCalendar.BodyDefault.v134",
+                tableName: "Alerts",
+                value: "This site is asking to download a file and add an event to your calendar.",
+                comment: "When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the body message for the alert in case the website doesn't have a base domain.")
+            public static let AddButton = MZLocalizedString(
+                key: "Alerts.AddToCalendar.Button.Add.v134",
+                tableName: "Alerts",
+                value: "Add",
+                comment: "When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the affirmative action for the alert, confirming that you do want to add the event to the calendar.")
+            public static let CancelButton = MZLocalizedString(
+                key: "Alerts.FeltDeletion.Button.Cancel.v134",
+                tableName: "Alerts",
+                value: "Cancel",
+                comment: "When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the cancel action for the alert, cancelling the action to add the event to the calendar.")
+        }
     }
 }
 
@@ -123,7 +151,7 @@ extension String {
     }
 }
 
-// MARK: - Bookmarks Menu
+// MARK: - Bookmarks Panel
 extension String {
     public struct Bookmarks {
         public struct Menu {
@@ -172,6 +200,33 @@ extension String {
                 tableName: "Bookmarks",
                 value: "Delete Bookmark",
                 comment: "The title for the Delete Bookmark button, in the Edit Bookmark popup screen which is summoned from the main menu's Save submenu, which will delete the currently bookmarked site from the user's bookmarks.")
+        }
+
+        public struct EmptyState {
+            public struct Root {
+                public static let Title = MZLocalizedString(
+                    key: "Bookmarks.EmptyState.Root.Title.v135",
+                    tableName: "Bookmarks",
+                    value: "No bookmarks yet",
+                    comment: "The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal")
+                public static let Body = MZLocalizedString(
+                    key: "Bookmarks.EmptyState.Root.Body.v135",
+                    tableName: "Bookmarks",
+                    value: "Save sites as you browse. We’ll also grab bookmarks from other synced devices.",
+                    comment: "The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal")
+            }
+            public struct Nested {
+                public static let Title = MZLocalizedString(
+                    key: "Bookmarks.EmptyState.Nested.Title.v135",
+                    tableName: "Bookmarks",
+                    value: "This folder is empty",
+                    comment: "The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal")
+                public static let Body = MZLocalizedString(
+                    key: "Bookmarks.EmptyState.Nested.Body.v135",
+                    tableName: "Bookmarks",
+                    value: "Add bookmarks as you browse so you can find your favorite sites later.",
+                    comment: "The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal")
+            }
         }
     }
 }
@@ -1590,6 +1645,49 @@ extension String {
             tableName: "Onboarding",
             value: "Skip",
             comment: "Describes an action on some of the Onboarding screen, including the wallpaper onboarding screen. This string will be on a button so user can skip that onboarding page.")
+
+        public struct TermsOfService {
+            public static let Title = MZLocalizedString(
+                key: "", // Onboarding.TermsOfService.Title.v135
+                tableName: "Onboarding",
+                value: "Welcome to %@",
+                comment: "Title for the Terms of Service screen in the onboarding process. Placeholder is for app name.")
+            public static let AgreementButtonTitle = MZLocalizedString(
+                key: "", // Onboarding.TermsOfService.AgreementButtonTitle.v135
+                tableName: "Onboarding",
+                value: "Agree and continue",
+                comment: "Title for the confirmation button for Terms of Service agreement, in the Terms of Service screen.")
+            public static let TermsOfServiceAgreement = MZLocalizedString(
+                key: "", // Onboarding.TermsOfService.TermsOfServiceAgreement.v135
+                tableName: "Onboarding",
+                value: "By continuing, you agree to the %@",
+                comment: "Agreement text for Terms of Service in the Terms of Service screen. Placeholder is for the Terms of Service link button that redirect the user to the Terms of Service page")
+            public static let PrivacyNoticeAgreement = MZLocalizedString(
+                key: "", // Onboarding.TermsOfService.PrivacyNoticeAgreement.v135
+                tableName: "Onboarding",
+                value: "%@ cares about your privacy. Read more in our %@",
+                comment: "Agreement text for Privacy Notice in the Terms of Service screen. First placeholder is for the app name. The second placeholder is for the Privacy Notice link button that redirect the user to the Privacy Notice page")
+            public static let ManagePreferenceAgreement = MZLocalizedString(
+                key: "", // Onboarding.TermsOfService.ManagePreferenceAgreement.v135
+                tableName: "Onboarding",
+                value: "To help improve the browser, %@ sends diagnostic and interaction data to Mozilla. %@",
+                comment: "Agreement text for sends diagnostic and interaction data to Mozilla in the Terms of Service screen. First placeholder is for the app name. The last placeholder is for for the Manage link button which redirect the user to another screen in order to manage the data collection preferences.")
+            public static let TermsOfServiceLink = MZLocalizedString(
+                key: "", // Onboarding.TermsOfService.TermsOfServiceLink.v135
+                tableName: "Onboarding",
+                value: "%@ Terms of Service.",
+                comment: "Title for the Terms of Service button link, in the Terms of Service screen for redirecting the user to the Terms of Service page. Placeholder is for the app name.")
+            public static let PrivacyNoticeLink = MZLocalizedString(
+                key: "", // Onboarding.TermsOfService.PrivacyNoticeLink.v135
+                tableName: "Onboarding",
+                value: "Privacy Notice.",
+                comment: "Title for the Privacy Notice button link, in the Terms of Service screen for redirecting the user to the Privacy Notice page.")
+            public static let ManageLink = MZLocalizedString(
+                key: "", // Onboarding.TermsOfService.ManageLink.v135
+                tableName: "Onboarding",
+                value: "Manage",
+                comment: "Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen.")
+        }
 
         public struct Intro {
             public static let DescriptionPart1 = MZLocalizedString(
@@ -3290,27 +3388,27 @@ extension String {
         key: "Mobile Bookmarks",
         tableName: "Storage",
         value: nil,
-        comment: "The legacy title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
+        comment: "The legacy title of the folder that contains mobile bookmarks.")
     public static let BookmarksFolderTitleMobile = MZLocalizedString(
         key: "Bookmarks",
         tableName: "Storage",
         value: nil,
-        comment: "The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
+        comment: "The title of the folder that contains mobile bookmarks.")
     public static let BookmarksFolderTitleMenu = MZLocalizedString(
         key: "Bookmarks Menu",
         tableName: "Storage",
         value: nil,
-        comment: "The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android.")
+        comment: "The name of the folder that contains desktop bookmarks in the menu.")
     public static let BookmarksFolderTitleToolbar = MZLocalizedString(
         key: "Bookmarks Toolbar",
         tableName: "Storage",
         value: nil,
-        comment: "The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android.")
+        comment: "The name of the folder that contains desktop bookmarks in the toolbar.")
     public static let BookmarksFolderTitleUnsorted = MZLocalizedString(
         key: "Unsorted Bookmarks",
         tableName: "Storage",
         value: nil,
-        comment: "The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android.")
+        comment: "The name of the folder that contains unsorted desktop bookmarks.")
 }
 
 // MARK: - Bookmark Management
@@ -4458,12 +4556,20 @@ extension String {
 
     // MARK: - Sent from Firefox / Share Link Experiment
     public struct SentFromFirefox {
+        public struct SocialMediaApp {
+            public static let WhatsApp = MZLocalizedString(
+                key: "SentFromFirefox.SocialMediaApp.WhatsApp.Title.v134",
+                tableName: "SocialMediaApp",
+                value: "WhatsApp",
+                comment: "The name of WhatsApp, a popular instant messaging and video calling app.")
+        }
+
         public struct SocialShare {
             public static let ShareMessageA = MZLocalizedString(
                 key: "SentFromFirefox.SocialShare.ShareMessageA.Title.v134",
                 tableName: "SocialShare",
-                value: "%1$@ %2$@ Sent from %3$@ 🦊 Try the mobile browser: %4$@",
-                comment: "When a user shares a link to social media, this is the shared text they'll see in the social media app. The first parameter is the shared website's page title. The second parameter is the shared website's URL. The third parameter is the Firefox app name. The fourth parameter is the link to download the Firefox app.")
+                value: "%1$@ Sent from %2$@ 🦊 Try the mobile browser: %3$@",
+                comment: "When a user shares a link to social media, this is the shared text they'll see in the social media app. The first parameter is the shared website's URL. The second parameter is the Firefox app name. The third parameter is the link to download the Firefox app.")
 
             public static let ShareMessageB = MZLocalizedString(
                 key: "SentFromFirefox.SocialShare.ShareMessageB.Title.v134",
@@ -4475,13 +4581,13 @@ extension String {
                 key: "SentFromFirefox.SocialShare.SettingsToggle.Title.v134",
                 tableName: "SocialShare",
                 value: "Include %1$@ Download Link on %2$@ Shares",
-                comment: "On the Settings screen, this is the title text for a toggle which controls adding additional text to links shared to social media. The first parameter is the Firefox app name. The second parameter is the social media app name (e.g. WhatsApp).")
+                comment: "On the Settings screen, this is the title text for a toggle which controls adding additional text to links shared to social media apps. The first parameter is the Firefox app name. The second parameter is the social media app name (e.g. WhatsApp).")
 
             public static let SocialSettingsToggleSubtitle = MZLocalizedString(
                 key: "SentFromFirefox.SocialShare.SettingsToggle.Subtitle.v134",
                 tableName: "SocialShare",
                 value: "Spread the word about %1$@ every time you share a link on %2$@.",
-                comment: "On the Settings screen, this is the subtitle text for a toggle which controls adding additional text to links shared to social media. The first parameter is the Firefox app name. The second parameter is the social media app name (e.g. WhatsApp).")
+                comment: "On the Settings screen, this is the subtitle text for a toggle which controls adding additional text to links shared to social media apps. The first parameter is the Firefox app name. The second parameter is the social media app name (e.g. WhatsApp).")
         }
     }
 

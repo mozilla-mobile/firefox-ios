@@ -31,6 +31,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case menuRefactorHint
     case microsurvey
     case nativeErrorPage
+    case noInternetConnectionErrorPage
     case nightMode
     case passwordGenerator
     case preferSwitchToOpenTabOverDuplicate
@@ -38,27 +39,31 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case closeRemoteTabs
     case reportSiteIssue
     case searchHighlights
+    case sentFromFirefox
     case splashScreen
     case unifiedSearch
     case toolbarRefactor
     case toolbarOneTapNewTab
     case toolbarNavigationHint
+    case tosFeature
     case trackingProtectionRefactor
     case zoomFeature
 
-    // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`
+    // Add flags here if you want to toggle them in the `FeatureFlagsDebugViewController`. Add in alphabetical order.
     var debugKey: String? {
         switch self {
         case    .bookmarksRefactor,
                 .closeRemoteTabs,
-                .microsurvey,
                 .homepageRebuild,
                 .menuRefactor,
-                .trackingProtectionRefactor,
+                .microsurvey,
                 .nativeErrorPage,
+                .noInternetConnectionErrorPage,
+                .sentFromFirefox,
                 .toolbarRefactor,
-                .unifiedSearch,
-                .passwordGenerator:
+                .trackingProtectionRefactor,
+                .passwordGenerator,
+                .unifiedSearch:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
             return nil
@@ -91,6 +96,8 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
             return FlagKeys.InactiveTabs
         case .jumpBackIn:
             return FlagKeys.JumpBackInSection
+        case .sentFromFirefox:
+            return FlagKeys.SentFromFirefox
         // Cases where users do not have the option to manipulate a setting.
         case .contextualHintForToolbar,
                 .bookmarksRefactor,
@@ -108,6 +115,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .menuRefactor,
                 .menuRefactorHint,
                 .nativeErrorPage,
+                .noInternetConnectionErrorPage,
                 .nightMode,
                 .passwordGenerator,
                 .preferSwitchToOpenTabOverDuplicate,
@@ -121,6 +129,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .toolbarRefactor,
                 .toolbarOneTapNewTab,
                 .toolbarNavigationHint,
+                .tosFeature,
                 .trackingProtectionRefactor,
                 .zoomFeature:
             return nil

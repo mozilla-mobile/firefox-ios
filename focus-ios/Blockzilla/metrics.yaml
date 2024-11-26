@@ -572,7 +572,6 @@ browser_search:
     send_in_pings:
       - metrics
       - baseline
-      - dau-reporting
     no_lint:
       - BASELINE_PING
     bugs:
@@ -592,7 +591,6 @@ browser_search:
     send_in_pings:
       - metrics
       - baseline
-      - dau-reporting
     no_lint:
       - BASELINE_PING
     bugs:
@@ -618,7 +616,6 @@ browser_search:
     send_in_pings:
       - metrics
       - baseline
-      - dau-reporting
     no_lint:
       - BASELINE_PING
     bugs:
@@ -649,7 +646,6 @@ browser_search:
     send_in_pings:
       - metrics
       - baseline
-      - dau-reporting
     no_lint:
       - BASELINE_PING
 

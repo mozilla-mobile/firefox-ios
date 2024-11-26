@@ -157,6 +157,16 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.homePanel(didSelectURL: url, visitType: visitType, isGoogleTopSite: isGoogleTopSite)
     }
 
+    func showContextMenu() {
+        // TODO: FXIOS-10613 - Add proper context menu actions
+        let state = ContextMenuState()
+        let viewModel = PhotonActionSheetViewModel(actions: state.actions,
+                                                   modalStyle: .overFullScreen)
+        let sheet = PhotonActionSheet(viewModel: viewModel, windowUUID: windowUUID)
+        sheet.modalTransitionStyle = .crossDissolve
+        present(sheet, animated: true)
+    }
+
     // MARK: - PrivateHomepageDelegate
     func homePanelDidRequestToOpenInNewTab(with url: URL, isPrivate: Bool, selectNewTab: Bool) {
         browserViewController.homePanelDidRequestToOpenInNewTab(
@@ -230,6 +240,10 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - ETPCoordinatorSSLStatusDelegate
 
     var showHasOnlySecureContentInTrackingPanel: Bool {
+        if browserViewController.isToolbarRefactorEnabled {
+            return browserViewController.tabManager.selectedTab?.currentWebView()?.hasOnlySecureContent ?? false
+        }
+
         guard let bar = browserViewController.urlBar else { return false }
         return bar.locationView.hasSecureContent
     }
@@ -247,7 +261,7 @@ class BrowserCoordinator: BaseCoordinator,
         }
 
         switch route {
-        case .searchQuery, .search, .searchURL, .glean, .homepanel, .action, .fxaSignIn, .defaultBrowser:
+        case .searchQuery, .search, .searchURL, .glean, .homepanel, .action, .fxaSignIn, .defaultBrowser, .sharesheet:
             return true
         case let .settings(section):
             return canHandleSettings(with: section)
@@ -272,6 +286,9 @@ class BrowserCoordinator: BaseCoordinator,
 
         case let .searchURL(url, tabId):
             handle(searchURL: url, tabId: tabId)
+
+        case let .sharesheet(url, title):
+            showShareSheet(with: url, title: title)
 
         case let .glean(url):
             glean.handleDeeplinkUrl(url: url)
@@ -514,11 +531,16 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showShareSheet(with url: URL?) {
+        showShareSheet(with: url, title: nil)
+    }
+
+    func showShareSheet(with url: URL?, title: String?) {
         guard let url else { return }
 
         let showShareSheet = { url in
             self.showShareExtension(
                 url: url,
+                title: title,
                 sourceView: self.browserViewController.addressToolbarContainer,
                 toastContainer: self.browserViewController.contentContainer,
                 popoverArrowDirection: .any
@@ -544,12 +566,19 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func makeMenuNavViewController() -> DismissableNavigationViewController? {
-        guard !childCoordinators.contains(where: { $0 is MainMenuCoordinator }) else { return nil }
+        guard !childCoordinators.contains(where: { $0 is MainMenuCoordinator }) else {
+            logger.log(
+                "MainMenuCoordinator already exists when it technically shouldn't",
+                level: .fatal,
+                category: .mainMenu
+            )
+            return nil
+        }
 
         let navigationController = DismissableNavigationViewController()
-        if navigationController.shouldUseiPadSetup() {
+        navigationController.modalPresentationStyle = .formSheet
+        if !navigationController.shouldUseiPadSetup() {
             navigationController.modalPresentationStyle = .formSheet
-        } else {
             navigationController.sheetPresentationController?.detents = [.medium(), .large()]
             navigationController.sheetPresentationController?.prefersGrabberVisible = true
         }
@@ -563,6 +592,14 @@ class BrowserCoordinator: BaseCoordinator,
         coordinator.navigationHandler = self
         add(child: coordinator)
         coordinator.start()
+
+        navigationController.onViewDismissed = { [weak self] in
+            self?.logger.log(
+                "MainMenu NavigationController - onViewDismissed",
+                level: .info,
+                category: .mainMenu
+            )
+        }
 
         return navigationController
     }
@@ -578,6 +615,9 @@ class BrowserCoordinator: BaseCoordinator,
 
     func showSearchEngineSelection(forSourceView sourceView: UIView) {
         guard !childCoordinators.contains(where: { $0 is SearchEngineSelectionCoordinator }) else { return }
+        let isEditing = store.state.screenState(ToolbarState.self,
+                                                for: .toolbar,
+                                                window: windowUUID)?.addressToolbar.isEditing == true
 
         let navigationController = DismissableNavigationViewController()
         if navigationController.shouldUseiPadSetup() {
@@ -589,7 +629,9 @@ class BrowserCoordinator: BaseCoordinator,
             navigationController.modalPresentationStyle = .pageSheet
             navigationController.sheetPresentationController?.detents = [.medium(), .large()]
             navigationController.sheetPresentationController?.prefersGrabberVisible = true
-            store.dispatch(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.hideKeyboard))
+            if isEditing {
+                store.dispatch(ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.hideKeyboard))
+            }
         }
 
         let coordinator = DefaultSearchEngineSelectionCoordinator(
@@ -692,6 +734,7 @@ class BrowserCoordinator: BaseCoordinator,
 
     func showShareExtension(
         url: URL,
+        title: String?,
         sourceView: UIView,
         sourceRect: CGRect?,
         toastContainer: UIView,
@@ -713,6 +756,7 @@ class BrowserCoordinator: BaseCoordinator,
         add(child: shareExtensionCoordinator)
         shareExtensionCoordinator.start(
             url: url,
+            title: title,
             sourceView: sourceView,
             sourceRect: sourceRect,
             popoverArrowDirection: popoverArrowDirection
@@ -897,7 +941,7 @@ class BrowserCoordinator: BaseCoordinator,
         router.present(viewController)
     }
 
-// MARK: - Password Generator
+    // MARK: - Password Generator
     func showPasswordGenerator(tab: Tab, frame: WKFrameInfo) {
         let passwordGenVC = PasswordGeneratorViewController(windowUUID: windowUUID, currentTab: tab, currentFrame: frame)
 
@@ -945,6 +989,8 @@ class BrowserCoordinator: BaseCoordinator,
 
     func didDismissTabTray(from coordinator: TabTrayCoordinator) {
         router.dismiss(animated: true, completion: nil)
+        // [FXIOS-10482] Initial bandaid for memory leaking during tab tray open/close. Needs further investigation.
+        coordinator.dismissChildTabTrayPanels()
         remove(child: coordinator)
     }
 

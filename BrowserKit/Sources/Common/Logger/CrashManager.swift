@@ -128,9 +128,10 @@ public class DefaultCrashManager: CrashManager {
             // Turn Sentry breadcrumbs off since we have our own log swizzling
             options.enableAutoBreadcrumbTracking = false
             options.beforeSend = { event in
-                if event.error.self is CustomCrashReport {
-                    self.alterEventForCustomCrash(event: event, crash: event.error as! CustomCrashReport)
+                guard let crashReport = event.error.self as? CustomCrashReport else {
+                    return event
                 }
+                self.alterEventForCustomCrash(event: event, crash: crashReport)
                 return event
             }
         })

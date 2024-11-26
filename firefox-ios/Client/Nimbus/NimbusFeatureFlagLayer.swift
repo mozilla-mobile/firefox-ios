@@ -70,6 +70,9 @@ final class NimbusFeatureFlagLayer {
         case .nativeErrorPage:
             return checkNativeErrorPageFeature(from: nimbus)
 
+        case .noInternetConnectionErrorPage:
+            return checkNICErrorPageFeature(from: nimbus)
+
         case .nightMode:
             return checkNightModeFeature(from: nimbus)
 
@@ -88,6 +91,9 @@ final class NimbusFeatureFlagLayer {
         case .reportSiteIssue:
             return checkGeneralFeature(for: featureID, from: nimbus)
 
+        case .sentFromFirefox:
+            return checkSentFromFirefoxFeature(from: nimbus)
+
         case .splashScreen:
             return checkSplashScreenFeature(for: featureID, from: nimbus)
 
@@ -102,6 +108,9 @@ final class NimbusFeatureFlagLayer {
 
         case .toolbarNavigationHint:
             return checkToolbarNavigationHintFeature(from: nimbus)
+
+        case .tosFeature:
+            return checkTosFeature(from: nimbus)
 
         case .trackingProtectionRefactor:
             return checkTrackingProtectionRefactor(from: nimbus)
@@ -129,6 +138,11 @@ final class NimbusFeatureFlagLayer {
         case .reportSiteIssue: return config.reportSiteIssue.status
         default: return false
         }
+    }
+
+    private func checkSentFromFirefoxFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.sentFromFirefoxFeature.value()
+        return config.enabled
     }
 
     private func checkAwesomeBarFeature(for featureID: NimbusFeatureFlagID,
@@ -200,6 +214,11 @@ final class NimbusFeatureFlagLayer {
     private func checkToolbarNavigationHintFeature(from nimbus: FxNimbus) -> Bool {
         let config = nimbus.features.toolbarRefactorFeature.value()
         return config.navigationHint
+    }
+
+    private func checkTosFeature(from nimbus: FxNimbus) -> Bool {
+        let config = nimbus.features.tosFeature.value()
+        return config.status
     }
 
     private func checkTrackingProtectionRefactor(from nimbus: FxNimbus) -> Bool {
@@ -341,5 +360,9 @@ final class NimbusFeatureFlagLayer {
 
     private func checkNativeErrorPageFeature(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.nativeErrorPageFeature.value().enabled
+    }
+
+    private func checkNICErrorPageFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.nativeErrorPageFeature.value().noInternetConnectionError
     }
 }

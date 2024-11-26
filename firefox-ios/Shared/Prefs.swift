@@ -77,6 +77,7 @@ public struct PrefsKeys {
         public static let InactiveTabs = "InactiveTabsUserPrefsKey"
         public static let JumpBackInSection = "JumpBackInSectionUserPrefsKey"
         public static let SearchBarPosition = "SearchBarPositionUsersPrefsKey"
+        public static let SentFromFirefox = "SentFromFirefoxUserPrefsKey"
     }
 
     public struct SearchSettings {
@@ -121,6 +122,7 @@ public struct PrefsKeys {
     // Firefox settings
     public struct Settings {
         public static let closePrivateTabs = "ClosePrivateTabs"
+        public static let sentFromFirefoxWhatsApp = "SentFromFirefoxWhatsApp"
     }
 
     // Activity Stream
@@ -141,8 +143,6 @@ public struct PrefsKeys {
     public static let KeyBlockPopups = "blockPopups"
 
     // Tabs Tray
-    public static let KeyInactiveTabsModel = "KeyInactiveTabsModelKey"
-    public static let KeyInactiveTabsFirstTimeRun = "KeyInactiveTabsFirstTimeRunKey"
     public static let KeyTabDisplayOrder = "KeyTabDisplayOrderKey"
     public static let TabMigrationKey = "TabMigrationKey"
     public static let TabSyncEnabled = "sync.engine.tabs.enabled"

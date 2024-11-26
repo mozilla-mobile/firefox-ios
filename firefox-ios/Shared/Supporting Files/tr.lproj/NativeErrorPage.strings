@@ -4,6 +4,9 @@
 /* On error page, this is the description for generic error. */
 "NativeErrorPage.GenericError.Description.v131" = "Bir SSL hatası oluştu ve sunucuyla güvenli bağlantı kurulamadı.";
 
+/* On error page, this is the description for generic error. The placeholder will be replaced by the site url */
+"NativeErrorPage.GenericError.Description.v134" = "%@ sitesinin sahibi siteyi düzgün kurmadığı için güvenli bir bağlantı oluşturulamıyor.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Dikkatli olun. Doğru görünmeyen bir şeyler var.";
 

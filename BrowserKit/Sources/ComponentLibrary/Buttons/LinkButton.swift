@@ -14,6 +14,7 @@ open class LinkButton: UIButton, ThemeApplicable {
         super.init(frame: frame)
 
         configuration = UIButton.Configuration.plain()
+        titleLabel?.adjustsFontForContentSizeCategory = true
     }
 
     open func configure(viewModel: LinkButtonViewModel) {

@@ -48,6 +48,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     private var debugSettingsClickCount: Int = 0
     private var appAuthenticator: AppAuthenticationProtocol
     private var applicationHelper: ApplicationHelper
+    private let logger: Logger
 
     weak var parentCoordinator: SettingsFlowDelegate?
 
@@ -58,16 +59,20 @@ class AppSettingsTableViewController: SettingsTableViewController,
     // MARK: - Initializers
     init(with profile: Profile,
          and tabManager: TabManager,
-         delegate: SettingsDelegate? = nil,
+         settingsDelegate: SettingsDelegate,
+         parentCoordinator: SettingsFlowDelegate,
          appAuthenticator: AppAuthenticationProtocol = AppAuthenticator(),
-         applicationHelper: ApplicationHelper = DefaultApplicationHelper()) {
+         applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
+         logger: Logger = DefaultLogger.shared) {
         self.appAuthenticator = appAuthenticator
         self.applicationHelper = applicationHelper
+        self.logger = logger
 
         super.init(windowUUID: tabManager.windowUUID)
         self.profile = profile
         self.tabManager = tabManager
-        self.settingsDelegate = delegate
+        self.settingsDelegate = settingsDelegate
+        self.parentCoordinator = parentCoordinator
         setupNavigationBar()
         setupDataSettings()
     }
@@ -353,15 +358,32 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
     private func getSupportSettings() -> [SettingSection] {
         guard let sendAnonymousUsageDataSetting, let studiesToggleSetting else { return [] }
-        let supportSettings = [
+        let isSentFromFirefoxEnabled = featureFlags.isFeatureEnabled(.sentFromFirefox, checking: .buildOnly)
+
+        var supportSettings = [
             ShowIntroductionSetting(settings: self, settingsDelegate: self),
             SendFeedbackSetting(settingsDelegate: parentCoordinator),
+        ]
+
+        // Only add this toggle to the Settings if Sent from Firefox feature flag is enabled
+        if isSentFromFirefoxEnabled {
+            supportSettings.append(
+                SentFromFirefoxSetting(
+                    prefs: profile.prefs,
+                    delegate: settingsDelegate,
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    settingsDelegate: parentCoordinator
+                )
+            )
+        }
+
+        supportSettings.append(contentsOf: [
             sendAnonymousUsageDataSetting,
             studiesToggleSetting,
             OpenSupportPageSetting(delegate: settingsDelegate,
                                    theme: themeManager.getCurrentTheme(for: windowUUID),
                                    settingsDelegate: parentCoordinator),
-        ]
+        ])
 
         return [SettingSection(title: NSAttributedString(string: .AppSettingsSupport),
                                children: supportSettings)]
@@ -460,10 +482,15 @@ class AppSettingsTableViewController: SettingsTableViewController,
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = super.tableView(
+        guard let headerView = super.tableView(
             tableView,
             viewForHeaderInSection: section
-        ) as! ThemedTableSectionHeaderFooterView
+        ) as? ThemedTableSectionHeaderFooterView else {
+            logger.log("Failed to cast or retrieve ThemedTableSectionHeaderFooterView for section: \(section)",
+                       level: .fatal,
+                       category: .lifecycle)
+            return UIView()
+        }
         return headerView
     }
 }

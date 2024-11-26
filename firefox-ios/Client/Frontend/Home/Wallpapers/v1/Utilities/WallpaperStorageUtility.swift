@@ -97,10 +97,7 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
             }
         }
 
-        return Wallpaper(id: "fxDefault",
-                         textColor: nil,
-                         cardColor: nil,
-                         logoTextColor: nil)
+        return Wallpaper.defaultWallpaper
     }
 
     public func fetchImageNamed(_ name: String) throws -> UIImage? {

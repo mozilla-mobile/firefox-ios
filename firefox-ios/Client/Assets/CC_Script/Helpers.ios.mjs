@@ -16,9 +16,15 @@ HTMLElement.prototype.ownerGlobal = window;
 
 // We cannot mock this in WebKit because we lack access to low-level APIs.
 // For completeness, we simply return true when the input type is "password".
-HTMLInputElement.prototype.hasBeenTypePassword = function () {
-  return this.type === "password";
-};
+// NOTE: Since now we also include this file for password generator, it might be included multiple times
+// which causes the defineProperty to throw. Allowing it to be overwritten for now is fine, since
+// our code runs in a sandbox and only firefox code can overwrite it.
+Object.defineProperty(HTMLInputElement.prototype, "hasBeenTypePassword", {
+  get() {
+    return this.type === "password";
+  },
+  configurable: true,
+});
 
 HTMLInputElement.prototype.setUserInput = function (value) {
   this.value = value;
@@ -110,10 +116,14 @@ export const XPCOMUtils = withNotImplementedError({
     onUpdate,
     transform = val => val
   ) => {
-    if (!Object.keys(IOSAppConstants.prefs).includes(pref)) {
-      throw Error(`Pref ${pref} is not defined.`);
+    const value = IOSAppConstants.prefs[pref] ?? defaultValue;
+    // Explicitly check for null since false, "" and 0 are valid values
+    if (value === null) {
+      throw Error(
+        `Pref ${pref} is not defined and no valid default value was provided.`
+      );
     }
-    obj[prop] = transform(IOSAppConstants.prefs[pref] ?? defaultValue);
+    obj[prop] = transform(value);
   },
   defineLazyModuleGetters(obj, modules) {
     internalModuleResolvers.resolveModules(obj, modules);
@@ -163,30 +173,6 @@ export const Services = withNotImplementedError({
         formatStringFromName: () => "",
       }),
   }),
-  telemetry: withNotImplementedError({
-    scalarAdd: (scalarName, scalarValue) => {
-      // For now, we only care about the address form telemetry
-      // TODO(FXCM-935): move address telemetry to Glean so we can remove this
-      // Data format of the sent message is:
-      // {
-      //   type: "scalar",
-      //   name: "formautofill.addresses.detected_sections_count",
-      //   value: Number,
-      // }
-      if (scalarName !== "formautofill.addresses.detected_sections_count") {
-        return;
-      }
-
-      // eslint-disable-next-line no-undef
-      webkit.messageHandlers.addressFormTelemetryMessageHandler.postMessage(
-        JSON.stringify({
-          type: "scalar",
-          object: scalarName,
-          value: scalarValue,
-        })
-      );
-    },
-  }),
   // TODO(FXCM-936): we should use crypto.randomUUID() instead of Services.uuid.generateUUID() in our codebase
   // Underneath crypto.randomUUID() uses the same implementation as generateUUID()
   // https://searchfox.org/mozilla-central/rev/d405168c4d3c0fb900a7354ae17bb34e939af996/dom/base/Crypto.cpp#96
@@ -205,7 +191,11 @@ window.Localization = function () {
 // dispatches telemetry messages to the iOS, we need to modify typedefs in swift. For now, we map the telemetry events
 // to the expected shape. FXCM-935 will tackle cleaning this up.
 window.Glean = {
+  // TODO(FXCM-1453): While moving away from legacy scalars to glean ones, the automated script generated
+  // an additional category `formautofill.credit_cards`. This resulted into two different methods in our code
+  // with different casing for the c in Credit(c|C)ards. This is a temp fix until FXCM-1453 happens.
   formautofillCreditcards: undefinedProxy(),
+  formautofillCreditCards: undefinedProxy(),
   formautofill: undefinedProxy(),
   creditcard: undefinedProxy(),
   _mapGleanToLegacy: (eventName, { value, ...extra }) => {
@@ -247,6 +237,7 @@ window.Glean = {
       },
     }
   ),
+  formautofillAddresses: undefinedProxy(),
 };
 
 const genericLogger = () =>

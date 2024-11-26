@@ -106,7 +106,7 @@ private func createTestGraph(for test: XCTestCase, with app: XCUIApplication) ->
 
     map.addScreenState(FirstRun) { screenState in
         screenState.noop(to: BrowserTab)
-        screenState.tap(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], to: URLBarOpen)
+        screenState.tap(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField], to: URLBarOpen)
     }
 
     map.addScreenState(WebPageLoading) { screenState in
@@ -120,15 +120,15 @@ private func createTestGraph(for test: XCTestCase, with app: XCUIApplication) ->
 
     map.addScreenState(BrowserTab) { screenState in
         screenState.onEnter { userState in
-            userState.url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as? String
+            userState.url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value as? String
         }
 
         screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], to: BrowserTabMenu)
-        screenState.tap(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], to: URLBarOpen)
+        screenState.tap(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField], to: URLBarOpen)
 
         screenState.gesture(forAction: TestActions.LoadURLByPasting, TestActions.LoadURL) { userState in
             UIPasteboard.general.string = userState.url ?? defaultURL
-            app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].press(forDuration: 1.0)
+            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].press(forDuration: 1.0)
             app.tables["Context Menu"].cells[AccessibilityIdentifiers.Photon.pasteAndGoAction].tap()
         }
     }

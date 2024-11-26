@@ -38,26 +38,19 @@ class MultiWindowTests: IpadOnlyTestCase {
         if skipPlatform { return }
         splitViewFromHomeScreen()
         // Access hamburger menu and tap on "new tab"
-        let menuButton = AccessibilityIdentifiers.Toolbar.settingsMenuButton
-        let newTab = StandardImageIdentifiers.Large.plus
         let tabsButtonIdentifier = AccessibilityIdentifiers.Toolbar.tabsButton
         let topSites = AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell
-        let homeButtom = AccessibilityIdentifiers.Toolbar.homeButton
+        let homeButtom = AccessibilityIdentifiers.Toolbar.addNewTabButton
         // A new tab is opened in the same window
         app.collectionViews.cells.matching(identifier: topSites).firstMatch.waitAndTap()
-        mozWaitForElementToExist(app.buttons[homeButtom])
-        app.buttons.matching(identifier: menuButton).element(boundBy: 0).tap()
-        mozWaitForElementToExist(app.tables.otherElements[newTab])
-        app.tables.otherElements[newTab].tap()
-        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
+        app.buttons[homeButtom].firstMatch.tap()
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].firstMatch.tap()
         let tabButtonSecondWindow = app.buttons.matching(identifier: tabsButtonIdentifier).element(boundBy: 0)
         XCTAssertEqual(tabButtonSecondWindow.value as? String, "2", "Number of tabs opened should be equal to 2")
         // A new tab is opened in the same window
         app.collectionViews.cells.matching(identifier: topSites).element(boundBy: 6).waitAndTap()
-        mozWaitForElementToExist(app.buttons[homeButtom])
-        app.buttons.matching(identifier: menuButton).element(boundBy: 1).tap()
-        app.tables.otherElements[newTab].tap()
-        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
+        app.buttons[homeButtom].firstMatch.tap()
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].firstMatch.tap()
         let tabButtonFirstWindow = app.buttons.matching(identifier: tabsButtonIdentifier).element(boundBy: 1)
         XCTAssertEqual(tabButtonFirstWindow.value as? String, "2", "Number of tabs opened should be equal to 2")
     }

@@ -443,6 +443,8 @@ public struct AccessibilityIdentifiers {
         static let navBarSegmentedControl = "navBarTabTray"
         static let syncDataButton = "syncDataButton"
         static let learnMoreButton = "learnMoreButton"
+        static let collectionView = "TabDisplayView.collectionView"
+        static let tabCell = "TabDisplayView.tabCell"
 
         struct InactiveTabs {
             static let headerLabel = "InactiveTabs.headerLabel"
@@ -508,6 +510,16 @@ public struct AccessibilityIdentifiers {
             static let title = "wallpaperOnboardingTitle"
             static let description = "wallpaperOnboardingDescription"
         }
+    }
+
+    struct TermsOfService {
+        static let logo = "TermsOfService.Logo"
+        static let title = "TermsOfService.Title"
+        static let termsOfServiceAgreement = "TermsOfService.TermsOfServiceAgreement"
+        static let privacyNoticeAgreement = "TermsOfService.PrivacyNoticeAgreement"
+        static let manageDataCollectionAgreement = "TermsOfService.ManageDataCollectionAgreement"
+        static let agreeAndContinueButton = "TermsOfService.AgreeAndContinueButton"
+        static let doneButton = "TermsOfService.DoneButton"
     }
 
     struct Upgrade {
@@ -697,6 +709,10 @@ public struct AccessibilityIdentifiers {
             static let title = "ShowTour"
         }
 
+        struct SentFromFirefox {
+            static let whatsApp = "SentFromFirefox.WhatsApp"
+        }
+
         struct SendFeedback {
             static let title = "SendFeedback"
         }
@@ -829,6 +845,7 @@ public struct AccessibilityIdentifiers {
         static let passwordlabel = "PasswordGenerator.passwordLabel"
         static let content = "PasswordGenerator.content"
         static let header = "PasswordGenerator.header"
+        static let keyboardButton = "PasswordGenerator.keyboardButton"
     }
 
     struct NativeErrorPage {

@@ -12,35 +12,30 @@ class HomeButtonTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306925
     func testGoHome() throws {
-        if iPad() {
-            waitForTabsButton()
-            navigator.nowAt(NewTabScreen)
-        }
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"), waitForLoading: true)
-        app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
-        XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].label, "Search")
-        if iPad() {
-            navigator.nowAt(NewTabScreen)
+        if !iPad() {
+            XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].label, "Search")
         }
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"), waitForLoading: true)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.homeButton])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
 
         XCUIDevice.shared.orientation = .landscapeRight
-        XCTAssertTrue(app.buttons["Home"].exists)
-        app.buttons["Home"].tap()
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
+        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].tap()
         navigator.nowAt(NewTabScreen)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306883
-    func testSwitchHomepageKeyboardNotRaisedUp() {
+    func testSwitchHomepageKeyboardRaisedUp() {
         // Open a new tab and load a web page
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
         waitUntilPageLoad()
 
         // Switch to Homepage by taping the home button
-        app.buttons[AccessibilityIdentifiers.Toolbar.homeButton].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
 
         validateHomePageAndKeyboardNotRaisedUp()
     }

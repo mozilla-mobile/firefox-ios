@@ -85,6 +85,7 @@ final class NativeErrorPageViewController: UIViewController,
         label.font = FXFontStyles.Bold.title2.scaledFont()
         label.numberOfLines = 0
         label.textAlignment = .natural
+        label.text = .NativeErrorPage.NoInternetConnection.TitleLabel
         label.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.titleLabel
         label.accessibilityTraits = .header
     }
@@ -94,6 +95,7 @@ final class NativeErrorPageViewController: UIViewController,
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.textAlignment = .natural
+        label.text = .NativeErrorPage.NoInternetConnection.Description
         label.accessibilityIdentifier = AccessibilityIdentifiers.NativeErrorPage.errorDescriptionLabel
     }
 
@@ -133,8 +135,11 @@ final class NativeErrorPageViewController: UIViewController,
     // MARK: Redux
     func newState(state: NativeErrorPageState) {
         nativeErrorPageState = state
-        titleLabel.text = state.title
-        errorDescriptionLabel.text = state.description
+
+        if state.title != nil {
+            titleLabel.text = state.title
+            errorDescriptionLabel.text = state.description
+        }
     }
 
     func subscribeToRedux() {

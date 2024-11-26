@@ -183,6 +183,17 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 )
             )
 
+        case NavigationBrowserActionType.longPressOnCell:
+            return BrowserViewControllerState(
+                searchScreenState: state.searchScreenState,
+                showDataClearanceFlow: state.showDataClearanceFlow,
+                fakespotState: FakespotState.reducer(state.fakespotState, action),
+                windowUUID: state.windowUUID,
+                browserViewType: state.browserViewType,
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                navigationDestination: NavigationDestination(.contextMenu)
+            )
+
         default:
             return defaultState(from: state, action: action)
         }
@@ -504,13 +515,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         let isAboutHomeURL = InternalURL(action.selectedTabURL)?.isAboutHomeURL ?? false
         var browserViewType = BrowserViewType.normalHomepage
         let isPrivateBrowsing = action.isPrivateBrowsing ?? false
-        let isNativeErrorPage = action.isNativeErrorPage ?? false
-        let isErrorURL = InternalURL(action.selectedTabURL)?.isErrorPage ?? false
 
         if isAboutHomeURL {
             browserViewType = isPrivateBrowsing ? .privateHomepage : .normalHomepage
-        } else if isNativeErrorPage && isErrorURL {
-            browserViewType = .nativeErrorPage
         } else {
             browserViewType = .webview
         }

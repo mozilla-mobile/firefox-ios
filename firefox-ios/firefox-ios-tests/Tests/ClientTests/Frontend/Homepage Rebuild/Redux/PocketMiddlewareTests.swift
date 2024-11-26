@@ -23,12 +23,12 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
         super.tearDown()
     }
 
-    func test_initializeAction_getPocketData() {
+    func test_initializeAction_getPocketData() throws {
         let subject = createSubject(pocketManager: pocketManager)
         let action = HomepageAction(windowUUID: .XCTestDefaultUUID, actionType: HomepageActionType.initialize)
         let expectation = XCTestExpectation(description: "Homepage action initialize dispatched")
 
-        mockStore.dispatchCalledCompletion = {
+        mockStore.dispatchCalled = {
             expectation.fulfill()
         }
 
@@ -36,23 +36,21 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
 
         wait(for: [expectation])
 
-        guard let actionCalled = mockStore.dispatchCalled.withActions.first as? PocketAction,
-              case PocketMiddlewareActionType.retrievedUpdatedStories = actionCalled.actionType else {
-            XCTFail("Unexpected action type dispatched, \(String(describing: mockStore.dispatchCalled.withActions.first))")
-            return
-        }
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? PocketAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? PocketMiddlewareActionType)
 
-        XCTAssertEqual(mockStore.dispatchCalled.numberOfTimes, 1)
+        XCTAssertEqual(actionType, PocketMiddlewareActionType.retrievedUpdatedStories)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
         XCTAssertEqual(actionCalled.pocketStories?.count, 3)
         XCTAssertEqual(pocketManager.getPocketItemsCalled, 1)
     }
 
-    func test_enterForegroundAction_getPocketData() {
+    func test_enterForegroundAction_getPocketData() throws {
         let subject = createSubject(pocketManager: pocketManager)
         let action = PocketAction(windowUUID: .XCTestDefaultUUID, actionType: PocketActionType.enteredForeground)
 
         let expectation = XCTestExpectation(description: "Pocket action entered foreground dispatched")
-        mockStore.dispatchCalledCompletion = {
+        mockStore.dispatchCalled = {
             expectation.fulfill()
         }
 
@@ -60,14 +58,12 @@ final class PocketMiddlewareTests: XCTestCase, StoreTestUtility {
 
         wait(for: [expectation])
 
-        guard let actionCalled = mockStore.dispatchCalled.withActions.first as? PocketAction,
-              case PocketMiddlewareActionType.retrievedUpdatedStories = actionCalled.actionType else {
-            XCTFail("Unexpected action type dispatched, \(String(describing: mockStore.dispatchCalled.withActions.first))")
-            return
-        }
+        let actionCalled = try XCTUnwrap(mockStore.dispatchedActions.first as? PocketAction)
+        let actionType = try XCTUnwrap(actionCalled.actionType as? PocketMiddlewareActionType)
 
-        XCTAssertEqual(mockStore.dispatchCalled.numberOfTimes, 1)
-        XCTAssertTrue(mockStore.dispatchCalled.withActions.first is PocketAction)
+        XCTAssertEqual(actionType, PocketMiddlewareActionType.retrievedUpdatedStories)
+        XCTAssertEqual(mockStore.dispatchedActions.count, 1)
+        XCTAssertTrue(mockStore.dispatchedActions.first is PocketAction)
         XCTAssertEqual(actionCalled.pocketStories?.count, 3)
         XCTAssertEqual(pocketManager.getPocketItemsCalled, 1)
     }

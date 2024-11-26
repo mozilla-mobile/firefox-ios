@@ -26,7 +26,9 @@ class OnboardingTests: BaseTestCase {
 
     // Smoketest
     // https://mozilla.testrail.io/index.php?/cases/view/2575178
-    func testFirstRunTour() {
+    func testFirstRunTour() throws {
+        guard #available(iOS 17.0, *), !skipPlatform else { return }
+
         // Complete the First run from first screen to the latest one
         // Check that the first's tour screen is shown as well as all the elements in there
         waitForElementsToExist(
@@ -40,6 +42,7 @@ class OnboardingTests: BaseTestCase {
                 app.pageIndicators["\(AccessibilityIdentifiers.Onboarding.pageControl)"]
             ]
         )
+        try app.performAccessibilityAudit()
 
         // Swipe to the second screen
         app.buttons["\(rootA11yId)SecondaryButton"].tap()
@@ -52,6 +55,7 @@ class OnboardingTests: BaseTestCase {
                 app.buttons["\(rootA11yId)PrimaryButton"],
             ]
         )
+        try app.performAccessibilityAudit()
 
         // Swipe to the third screen
         app.buttons["\(rootA11yId)SecondaryButton"].waitAndTap()
@@ -62,6 +66,7 @@ class OnboardingTests: BaseTestCase {
         XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
+        try app.performAccessibilityAudit()
 
         // Swipe to the fourth screen
         app.buttons["\(rootA11yId)SecondaryButton"].tap()
@@ -72,6 +77,7 @@ class OnboardingTests: BaseTestCase {
         XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
+        try app.performAccessibilityAudit()
 
         // Swipe to the fifth screen
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
@@ -82,6 +88,7 @@ class OnboardingTests: BaseTestCase {
         XCTAssertTrue(app.staticTexts["\(rootA11yId)DescriptionLabel"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)PrimaryButton"].exists)
         XCTAssertTrue(app.buttons["\(rootA11yId)SecondaryButton"].exists)
+        try app.performAccessibilityAudit()
 
         // Finish onboarding
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
@@ -191,24 +198,26 @@ class OnboardingTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.performAction(Action.OpenWhatsNewPage)
         waitUntilPageLoad()
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].tap()
 
         // Extract version number from url
-        let url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value
+        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value
         let textUrl = String(describing: url)
-        let start = textUrl.index(textUrl.startIndex, offsetBy: 43)
-        let end = textUrl.index(textUrl.startIndex, offsetBy: 48)
+        let start = textUrl.index(textUrl.startIndex, offsetBy: 51)
+        let end = textUrl.index(textUrl.startIndex, offsetBy: 56)
         let range = start..<end
         let mySubstring = textUrl[range]
         let releaseVersion = String(mySubstring)
 
         mozWaitForElementToExist(app.staticTexts[releaseVersion])
         mozWaitForValueContains(
-            app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url],
-            value: "www.mozilla.org/en-US/firefox/ios/" + releaseVersion + "/releasenotes/"
+            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
+            value: "https://www.mozilla.org/en-US/firefox/ios/" + releaseVersion + "/releasenotes/"
         )
-        mozWaitForElementToExist(app.staticTexts["Release Notes"])
+        app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
         waitForElementsToExist(
             [
+                app.staticTexts["Release Notes"],
                 app.staticTexts["Firefox for iOS Release"],
                 app.staticTexts["\(releaseVersion)"],
                 app.staticTexts["Get the most recent version"]

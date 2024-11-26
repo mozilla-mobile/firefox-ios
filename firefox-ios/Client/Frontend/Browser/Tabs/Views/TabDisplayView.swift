@@ -23,11 +23,12 @@ class TabDisplayView: UIView,
     private var inactiveTabsSectionManager: InactiveTabsSectionManager
     private var tabsSectionManager: TabsSectionManager
     private let windowUUID: WindowUUID
+    private let inactiveTabsTelemetry = InactiveTabsTelemetry()
     var theme: Theme?
 
     private var dataSource: TabDisplayDiffableDataSource?
 
-    private var shouldHideInactiveTabs: Bool {
+    var shouldHideInactiveTabs: Bool {
         guard !tabsState.isPrivateMode else { return true }
         return tabsState.inactiveTabs.isEmpty
     }
@@ -72,6 +73,7 @@ class TabDisplayView: UIView,
         collectionView.dragDelegate = self
         collectionView.dropDelegate = self
         collectionView.collectionViewLayout = createLayout()
+        collectionView.accessibilityIdentifier = AccessibilityIdentifiers.TabTray.collectionView
         return collectionView
     }()
 
@@ -169,7 +171,8 @@ class TabDisplayView: UIView,
                     ) as? TabCell
                 else { return UICollectionViewCell() }
 
-                cell.configure(with: tab, theme: theme, delegate: self)
+                let a11yId = "\(AccessibilityIdentifiers.TabTray.tabCell)_\(indexPath.section)_\(indexPath.row)"
+                cell.configure(with: tab, theme: theme, delegate: self, a11yId: a11yId)
                 return cell
             }
         }
@@ -279,7 +282,7 @@ class TabDisplayView: UIView,
         let action = TabPanelViewAction(panelType: panelType,
                                         tabUUID: inactiveTabs.tabUUID,
                                         windowUUID: windowUUID,
-                                        actionType: TabPanelViewActionType.closeInactiveTabs)
+                                        actionType: TabPanelViewActionType.closeInactiveTab)
         store.dispatch(action)
     }
 
@@ -287,9 +290,11 @@ class TabDisplayView: UIView,
         if let selectedItem = dataSource?.itemIdentifier(for: indexPath) {
             switch selectedItem {
             case .inactiveTab(let inactiveTabsModel):
+                inactiveTabsTelemetry.tabOpened()
                 let tabUUID = inactiveTabsModel.tabUUID
                 let action = TabPanelViewAction(panelType: panelType,
                                                 tabUUID: tabUUID,
+                                                isInactiveTab: true,
                                                 windowUUID: windowUUID,
                                                 actionType: TabPanelViewActionType.selectTab)
                 store.dispatch(action)

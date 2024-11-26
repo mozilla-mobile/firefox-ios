@@ -121,6 +121,15 @@ final class RouteBuilder {
 
             case .fxaSignIn:
                 return nil
+
+            case .sharesheet:
+                let linkString = urlScanner.value(query: "url")
+                let titleText = urlScanner.value(query: "title")
+                if let link = linkString, let url = URL(string: link) {
+                  return .sharesheet(url: url, title: titleText)
+                } else {
+                    return nil
+                }
             }
         } else if urlScanner.isHTTPScheme {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
@@ -192,7 +201,7 @@ final class RouteBuilder {
 
     private func recordTelemetry(input: DeeplinkInput.Host, isPrivate: Bool) {
         switch input {
-        case .deepLink, .fxaSignIn, .glean:
+        case .deepLink, .fxaSignIn, .glean, .sharesheet:
             return
         case .widgetMediumTopSitesOpenUrl:
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumTopSitesWidget)

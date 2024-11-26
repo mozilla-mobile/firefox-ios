@@ -7,14 +7,14 @@ import Common
 
 let PDF_website = [
     "url": "https://storage.googleapis.com/mobile_test_assets/public/pdf-test.pdf",
-    "pdfValue": "storage.googleapis.com/mobile_test_assets/public/pdf-test.pdf",
-    "urlValue": "www.education.gov.yk.ca/",
+    "urlValue": "education.gov.yk.ca",
+    "pdfValue": "storage.googleapis.com",
     "bookmarkLabel": "https://storage.googleapis.com/mobile_test_assets/public/pdf-test.pdf",
     "longUrlValue": "http://www.education.gov.yk.ca/"
 ]
 
 class BrowsingPDFTests: BaseTestCase {
-    let url = XCUIApplication().textFields[AccessibilityIdentifiers.Browser.UrlBar.url]
+    let url = XCUIApplication().textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307116
     func testOpenPDFViewer() {
