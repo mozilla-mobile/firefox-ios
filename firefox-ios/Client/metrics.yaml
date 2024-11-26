@@ -726,6 +726,7 @@ usage:
       - highly_sensitive
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
+      - glean-team@mozilla.com
     expires: never
     send_in_pings:
       - usage-reporting
