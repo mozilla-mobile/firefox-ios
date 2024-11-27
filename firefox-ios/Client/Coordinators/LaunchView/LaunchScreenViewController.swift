@@ -19,6 +19,8 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
         && !viewModel.getSplashScreenExperimentHasShown()
     }
 
+    private var isViewSetupComplete = false
+
     init(windowUUID: WindowUUID,
          coordinator: LaunchFinishedLoadingDelegate,
          viewModel: LaunchScreenViewModel? = nil,
@@ -52,7 +54,13 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupLaunchScreen()
+
+        if !isViewSetupComplete {
+            setupLaunchScreen()
+            isViewSetupComplete = true
+        }
+
+        viewModel.loadNextLaunchType()
     }
 
     // MARK: - Loading
@@ -90,6 +98,10 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
         mainQueue.async {
             self.coordinator?.launchBrowser()
         }
+    }
+
+    func finishedLoadingLaunchOrder() {
+        viewModel.loadNextLaunchType()
     }
 
     // MARK: - Splash Screen

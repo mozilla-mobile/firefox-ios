@@ -39,19 +39,45 @@ final class LaunchScreenViewModelTests: XCTestCase {
         subject.delegate = delegate
 
         XCTAssertEqual(delegate.launchBrowserCalled, 0)
-        XCTAssertEqual(delegate.launchWithTypeCalled, 0)
+        XCTAssertEqual(delegate.finishedLoadingLaunchOrderCalled, 0)
     }
 
     func testLaunchType_intro() async {
+        profile.prefs.setInt(1, forKey: PrefsKeys.TermsOfServiceAccepted)
         let subject = createSubject()
         subject.delegate = delegate
         await subject.startLoading(appVersion: "112.0")
+
+        XCTAssertEqual(delegate.launchBrowserCalled, 0)
+        XCTAssertEqual(delegate.finishedLoadingLaunchOrderCalled, 1)
+
+        subject.loadNextLaunchType()
 
         guard case .intro = delegate.savedLaunchType else {
             XCTFail("Expected intro, but was \(String(describing: delegate.savedLaunchType))")
             return
         }
+        XCTAssertEqual(delegate.launchWithTypeCalled, 1)
+    }
+
+    func testLaunchType_termsOfService() async {
+        FxNimbus.shared.features.tosFeature.with(initializer: { _, _ in
+            TosFeature(status: true)
+        })
+
+        let subject = createSubject()
+        subject.delegate = delegate
+        await subject.startLoading(appVersion: "112.0")
+
         XCTAssertEqual(delegate.launchBrowserCalled, 0)
+        XCTAssertEqual(delegate.finishedLoadingLaunchOrderCalled, 1)
+
+        subject.loadNextLaunchType()
+
+        guard case .termsOfService = delegate.savedLaunchType else {
+            XCTFail("Expected terms of service, but was \(String(describing: delegate.savedLaunchType))")
+            return
+        }
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
@@ -63,11 +89,15 @@ final class LaunchScreenViewModelTests: XCTestCase {
         subject.delegate = delegate
         await subject.startLoading(appVersion: "113.0")
 
+        XCTAssertEqual(delegate.launchBrowserCalled, 0)
+        XCTAssertEqual(delegate.finishedLoadingLaunchOrderCalled, 1)
+
+        subject.loadNextLaunchType()
+
         guard case .update = delegate.savedLaunchType else {
             XCTFail("Expected update, but was \(String(describing: delegate.savedLaunchType))")
             return
         }
-        XCTAssertEqual(delegate.launchBrowserCalled, 0)
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 
@@ -81,11 +111,15 @@ final class LaunchScreenViewModelTests: XCTestCase {
         subject.delegate = delegate
         await subject.startLoading(appVersion: "112.0")
 
+        XCTAssertEqual(delegate.launchBrowserCalled, 0)
+        XCTAssertEqual(delegate.finishedLoadingLaunchOrderCalled, 1)
+
+        subject.loadNextLaunchType()
+
         guard case .survey = delegate.savedLaunchType else {
             XCTFail("Expected survey, but was \(String(describing: delegate.savedLaunchType))")
             return
         }
-        XCTAssertEqual(delegate.launchBrowserCalled, 0)
         XCTAssertEqual(delegate.launchWithTypeCalled, 1)
     }
 

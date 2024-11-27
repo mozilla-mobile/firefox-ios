@@ -6,6 +6,7 @@ import Common
 import Foundation
 
 protocol LaunchCoordinatorDelegate: AnyObject {
+    func didFinishTermsOfService(from coordinator: LaunchCoordinator)
     func didFinishLaunch(from coordinator: LaunchCoordinator)
 }
 
@@ -32,6 +33,8 @@ class LaunchCoordinator: BaseCoordinator,
     func start(with launchType: LaunchType) {
         let isFullScreen = launchType.isFullScreenAvailable(isIphone: isIphone)
         switch launchType {
+        case .termsOfService(let manager):
+            presentTermsOfService(with: manager, isFullScreen: isFullScreen)
         case .intro(let manager):
             presentIntroOnboarding(with: manager, isFullScreen: isFullScreen)
         case .update(let viewModel):
@@ -41,6 +44,20 @@ class LaunchCoordinator: BaseCoordinator,
         case .survey(let manager):
             presentSurvey(with: manager)
         }
+    }
+
+    // MARK: - Terms of Service
+    private func presentTermsOfService(with manager: TermsOfServiceManager,
+                                       isFullScreen: Bool) {
+        let viewController = TermsOfServiceViewController(windowUUID: windowUUID)
+        viewController.didFinishFlow = { [weak self] in
+            manager.setAccepted()
+            guard let self = self else { return }
+            self.parentCoordinator?.didFinishTermsOfService(from: self)
+        }
+        viewController.modalPresentationStyle = .fullScreen
+        viewController.modalTransitionStyle = .crossDissolve
+        router.present(viewController, animated: false)
     }
 
     // MARK: - Intro

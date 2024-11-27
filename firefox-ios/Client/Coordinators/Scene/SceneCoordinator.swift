@@ -99,6 +99,9 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
         startBrowser(with: nil)
     }
 
+    // No implementation needed as LaunchScreenViewController is not calling this coordinator method
+    func finishedLoadingLaunchOrder() { }
+
     // MARK: - Helper methods
 
     private func startLaunch(with launchType: LaunchType) {
@@ -137,6 +140,10 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
     }
 
     // MARK: - LaunchCoordinatorDelegate
+    func didFinishTermsOfService(from coordinator: LaunchCoordinator) {
+        router.dismiss(animated: true)
+        remove(child: coordinator)
+    }
 
     func didFinishLaunch(from coordinator: LaunchCoordinator) {
         router.dismiss(animated: true)
