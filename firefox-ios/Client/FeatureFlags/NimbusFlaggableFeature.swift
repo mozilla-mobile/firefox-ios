@@ -42,6 +42,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case searchHighlights
     case sentFromFirefox
     case splashScreen
+    case unifiedAds
     case unifiedSearch
     case toolbarRefactor
     case toolbarOneTapNewTab
@@ -127,6 +128,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .feltPrivacyFeltDeletion,
                 .searchHighlights,
                 .splashScreen,
+                .unifiedAds,
                 .unifiedSearch,
                 .toolbarRefactor,
                 .toolbarOneTapNewTab,
