@@ -7,7 +7,7 @@ import Foundation
 import Shared
 
 /// Used only for sponsored tiles content and telemetry. This is aiming to be a temporary API
-/// as we'll migrate to using A-S for this at some point next year
+/// as we'll migrate to using A-S for this at some point in 2025
 protocol UnifiedAdsProviderInterface {
     func fetchTiles(completion: @escaping (ContileResult) -> Void)
 }

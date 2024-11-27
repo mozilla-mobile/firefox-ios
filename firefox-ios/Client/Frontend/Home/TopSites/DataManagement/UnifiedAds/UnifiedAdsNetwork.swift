@@ -6,7 +6,7 @@ import Common
 import Foundation
 
 /// Used only for sponsored tiles content and telemetry. This is aiming to be a temporary API
-/// as we'll migrate to using A-S for this at some point next year
+/// as we'll migrate to using A-S for this at some point in 2025
 protocol UnifiedAdsNetwork {
     func data(from request: URLRequest, completion: @escaping (NetworkingContileResult) -> Void)
 }
