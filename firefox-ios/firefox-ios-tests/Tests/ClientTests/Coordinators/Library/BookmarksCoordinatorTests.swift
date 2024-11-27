@@ -68,6 +68,14 @@ final class BookmarksCoordinatorTests: XCTestCase {
         XCTAssertEqual(router.pushCalled, 1)
     }
 
+    func testShowSignInViewController() {
+        let subject = createSubject()
+
+        subject.showSignIn()
+        XCTAssertTrue(router.pushedViewController is FirefoxAccountSignInViewController)
+        XCTAssertEqual(router.pushCalled, 1)
+    }
+
     func testShowShareExtension_callsNavigationHandlerShareFunction() {
         let subject = createSubject()
 

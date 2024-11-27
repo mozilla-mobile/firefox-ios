@@ -16,7 +16,10 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
         static let StackViewWidthMultiplier: CGFloat = 0.9
         static let ImageWidth: CGFloat = 200
         static let SignInButtonMaxWidth: CGFloat = 306
+        static let signInButtonMaxWidth: CGFloat = 306
     }
+
+    var signInAction: (() -> Void)?
 
     private lazy var logoImage: UIImageView = .build { imageView in
         imageView.contentMode = .scaleAspectFit
@@ -105,8 +108,10 @@ final class BookmarksFolderEmptyStateView: UIView, ThemeApplicable {
     }
 
     // MARK: Actions
-     @objc
-     private func didTapSignIn() {}
+    @objc
+    private func didTapSignIn() {
+        signInAction?()
+    }
 
     // MARK: ThemeApplicable
     func applyTheme(theme: Theme) {

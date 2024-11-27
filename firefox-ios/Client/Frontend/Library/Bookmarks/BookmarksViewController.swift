@@ -82,7 +82,11 @@ class BookmarksViewController: SiteTableViewController,
         return button
     }()
 
-    private lazy var emptyStateView: BookmarksFolderEmptyStateView = .build()
+    private lazy var emptyStateView: BookmarksFolderEmptyStateView = .build { emptyStateView in
+        emptyStateView.signInAction = { [weak self] in
+            self?.bookmarkCoordinatorDelegate?.showSignIn()
+        }
+    }
 
     private lazy var a11yEmptyStateScrollView: UIScrollView = .build()
 
@@ -126,6 +130,10 @@ class BookmarksViewController: SiteTableViewController,
         tableView.dragInteractionEnabled = false
 
         setupEmptyStateView()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -320,7 +328,7 @@ class BookmarksViewController: SiteTableViewController,
         a11yEmptyStateScrollView.isHidden = !viewModel.bookmarkNodes.isEmpty
         if !a11yEmptyStateScrollView.isHidden {
             let isRoot = viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID
-            let isSignedIn = RustFirefoxAccounts.shared.userProfile != nil
+            let isSignedIn = profile.hasAccount()
             emptyStateView.configure(isRoot: isRoot, isSignedIn: isSignedIn)
         }
     }
