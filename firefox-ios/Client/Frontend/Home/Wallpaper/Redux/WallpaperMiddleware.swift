@@ -9,13 +9,7 @@ class WallpaperMiddleware {
     private let wallpaperManager: WallpaperManagerInterface
     private var wallpaperConfiguration: WallpaperConfiguration {
         let currentWallpaper = wallpaperManager.currentWallpaper
-        return WallpaperConfiguration(
-            landscapeImage: currentWallpaper.landscape,
-            portraitImage: currentWallpaper.portrait,
-            textColor: currentWallpaper.textColor,
-            cardColor: currentWallpaper.cardColor,
-            logoTextColor: currentWallpaper.logoTextColor
-        )
+        return WallpaperConfiguration(wallpaper: currentWallpaper)
     }
 
     init(wallpaperManager: WallpaperManagerInterface = WallpaperManager()) {

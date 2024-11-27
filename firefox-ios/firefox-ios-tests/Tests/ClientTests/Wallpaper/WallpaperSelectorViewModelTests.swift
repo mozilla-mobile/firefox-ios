@@ -83,7 +83,7 @@ class WallpaperSelectorViewModelTests: XCTestCase {
 //    }
 
     func createSubject() -> WallpaperSelectorViewModel {
-        let subject = WallpaperSelectorViewModel(wallpaperManager: wallpaperManager) { }
+        let subject = WallpaperSelectorViewModel(wallpaperManager: wallpaperManager)
         trackForMemoryLeaks(subject)
         return subject
     }

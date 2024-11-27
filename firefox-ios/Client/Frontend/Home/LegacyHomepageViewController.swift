@@ -476,9 +476,7 @@ class LegacyHomepageViewController:
               canModalBePresented
         else { return }
 
-        let viewModel = WallpaperSelectorViewModel(wallpaperManager: wallpaperManager, openSettingsAction: {
-            self.homePanelDidRequestToOpenSettings(at: .wallpaper)
-        })
+        let viewModel = WallpaperSelectorViewModel(wallpaperManager: wallpaperManager)
         let viewController = WallpaperSelectorViewController(viewModel: viewModel, windowUUID: windowUUID)
         var bottomSheetViewModel = BottomSheetViewModel(
             closeButtonA11yLabel: .CloseButtonTitle,

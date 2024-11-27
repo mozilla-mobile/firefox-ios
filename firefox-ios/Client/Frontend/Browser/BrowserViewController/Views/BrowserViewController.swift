@@ -1341,7 +1341,7 @@ class BrowserViewController: UIViewController,
         }
 
         if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
-            browserDelegate?.showHomepage()
+            browserDelegate?.showHomepage(overlayManager: overlayManager, isZeroSearch: inline)
         } else {
             browserDelegate?.showLegacyHomepage(
                 inline: inline,
