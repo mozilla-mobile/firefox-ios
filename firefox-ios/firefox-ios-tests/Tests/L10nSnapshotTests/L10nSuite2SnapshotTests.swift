@@ -9,7 +9,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
     @MainActor
     func testPanelsEmptyState() {
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         navigator.goto(LibraryPanel_Bookmarks)
         snapshot("PanelsEmptyState-LibraryPanels.Bookmarks")
@@ -28,7 +28,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
 
         // Select some text and long press to find the option
-        mozWaitForElementToExist(app.webViews.element(boundBy: 0).staticTexts.element(boundBy: 0), timeout: 10)
+        mozWaitForElementToExist(app.webViews.element(boundBy: 0).staticTexts.element(boundBy: 0))
         app.webViews.element(boundBy: 0).staticTexts.element(boundBy: 0).press(forDuration: 1)
         snapshot("LongPressTextOptions-01")
         if app.menuItems["show.next.items.menu.button"].exists {
@@ -82,7 +82,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     func testPageMenuOnWebPage() {
         navigator.openURL(loremIpsumURL)
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 15)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.goto(BrowserTabMenu)
         snapshot("MenuOnWebPage-03")
     }
@@ -90,12 +90,12 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     @MainActor
     func testFxASignInPage() {
         navigator.openURL(loremIpsumURL)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton], timeout: 10)
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.sync], timeout: 5)
+        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.sync])
         navigator.goto(Intro_FxASignin)
-        mozWaitForElementToExist(app.navigationBars.staticTexts["FxASingin.navBar"], timeout: 10)
+        mozWaitForElementToExist(app.navigationBars.staticTexts["FxASingin.navBar"])
         snapshot("FxASignInScreen-01")
     }
 
@@ -122,7 +122,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         let key = 15
         navigator.nowAt(NewTabScreen)
         navigator.goto(SettingsScreen)
-        mozWaitForElementToExist(app.cells["Search"], timeout: 5)
+        mozWaitForElementToExist(app.cells["Search"])
         app.cells["Search"].swipeUp()
         app.cells["Logins"].waitAndTap(timeout: 15)
 
