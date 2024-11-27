@@ -19,7 +19,7 @@ class LaunchScreenViewModel {
     private var surveySurfaceManager: SurveySurfaceManager
     private var profile: Profile
 
-    // order of screens to showing at launch
+    // order of screens shown at launch
     private(set) var launchOrder: [LaunchType]?
 
     weak var delegate: LaunchFinishedLoadingDelegate?
