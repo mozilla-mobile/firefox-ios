@@ -76,6 +76,13 @@ class PullRefreshView: UIView,
         let shrinkFactor = computeShrinkingFactor()
         let progressContainerViewPadding = UX.progressViewPadding * shrinkFactor
         let progressContainerViewSize = UX.progressViewAnimatedBackgroundSize * shrinkFactor
+
+        if let scrollView, scrollView.contentOffset.y != 0 {
+            let threshold = UX.blinkProgressViewStandardThreshold * shrinkFactor
+            let initialRotationAngle = -(scrollView.contentOffset.y) / threshold
+            progressView.transform = CGAffineTransform(rotationAngle: initialRotationAngle)
+        }
+
         NSLayoutConstraint.activate([
             progressContainerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -progressContainerViewPadding),
             progressContainerView.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -133,7 +140,6 @@ class PullRefreshView: UIView,
             self.progressContainerView.backgroundColor = .clear
             self.progressContainerView.transform = .identity
             self.progressView.transform = .identity
-            TelemetryWrapper.shared.recordEvent(category: .action, method: .pull, object: .reload)
             self.onRefreshCallback()
         })
     }
@@ -196,6 +202,7 @@ class PullRefreshView: UIView,
 
     func stopObservingContentScroll() {
         scrollObserver?.invalidate()
+        scrollObserver = nil
     }
 
     func updateEasterEggForOrientationChange(isPotrait: Bool) {
