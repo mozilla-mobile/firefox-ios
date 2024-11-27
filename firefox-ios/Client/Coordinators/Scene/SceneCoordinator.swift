@@ -99,6 +99,7 @@ class SceneCoordinator: BaseCoordinator, LaunchCoordinatorDelegate, LaunchFinish
         startBrowser(with: nil)
     }
 
+    // No implementation needed as LaunchScreenViewController is not calling this coordinator method
     func finishedLoadingLaunchOrder() { }
 
     // MARK: - Helper methods
