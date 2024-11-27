@@ -8,9 +8,9 @@ import Common
 
 struct NativeErrorPageState: ScreenState, Equatable {
     var windowUUID: WindowUUID
-    var title: String?
-    var description: String?
-    var foxImage: String?
+    var title: String
+    var description: String
+    var foxImage: String
     var url: URL?
 
     init(appState: AppState, uuid: WindowUUID) {
@@ -34,9 +34,9 @@ struct NativeErrorPageState: ScreenState, Equatable {
 
     init(
         windowUUID: WindowUUID,
-        title: String? = nil,
-        description: String? = nil,
-        foxImage: String? = nil,
+        title: String = "",
+        description: String = "",
+        foxImage: String = "",
         url: URL? = nil
     ) {
         self.windowUUID = windowUUID

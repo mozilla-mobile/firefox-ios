@@ -136,22 +136,21 @@ final class NativeErrorPageViewController: UIViewController,
     func newState(state: NativeErrorPageState) {
         nativeErrorPageState = state
 
-        guard state.title != nil else { return }
+        if !state.title.isEmpty {
+            titleLabel.text = state.title
+            foxImage.image = UIImage(named: nativeErrorPageState.foxImage)
 
-        if let validImageName = nativeErrorPageState.foxImage {
-            foxImage.image = UIImage(named: validImageName)
-        }
-
-        titleLabel.text = state.title
-
-        if let validURL = state.url, let validDescription = state.description {
-            let errorDescription = getDescriptionWithHostName(
-                errorURL: validURL,
-                description: validDescription
-            )
-            errorDescriptionLabel.attributedText = errorDescription
+            if let validURL = state.url {
+                let errorDescription = getDescriptionWithHostName(
+                    errorURL: validURL,
+                    description: state.description
+                )
+                errorDescriptionLabel.attributedText = errorDescription
+            } else {
+                errorDescriptionLabel.text = state.description
+            }
         } else {
-            errorDescriptionLabel.text = state.description
+            return
         }
     }
 

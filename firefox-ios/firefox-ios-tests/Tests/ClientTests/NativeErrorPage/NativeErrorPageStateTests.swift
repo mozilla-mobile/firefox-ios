@@ -21,9 +21,9 @@ final class NativeErrorPageStateTests: XCTestCase {
     func testInitialState() {
         let initialState = createSubject()
 
-        XCTAssertNil(initialState.title)
-        XCTAssertNil(initialState.description)
-        XCTAssertNil(initialState.foxImage)
+        XCTAssertEqual(initialState.title, "")
+        XCTAssertEqual(initialState.description, "")
+        XCTAssertEqual(initialState.foxImage, "")
         XCTAssertNil(initialState.url)
     }
 
