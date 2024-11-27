@@ -43,6 +43,18 @@ final class LaunchTypeTests: XCTestCase {
         XCTAssertFalse(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: false))
     }
 
+    func testCanLaunch_termsOfServiceFromBrowserCoordinator() {
+        let launchType = LaunchType.termsOfService(manager: TermsOfServiceManager(prefs: MockProfile().prefs))
+        XCTAssertFalse(launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: true))
+        XCTAssertFalse(launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: false))
+    }
+
+    func testCanLaunch_termsOfServiceFromSceneCoordinator() {
+        let launchType = LaunchType.termsOfService(manager: TermsOfServiceManager(prefs: MockProfile().prefs))
+        XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: true))
+        XCTAssertTrue(launchType.canLaunch(fromType: .SceneCoordinator, isIphone: false))
+    }
+
     func testCanLaunch_introFromBrowserCoordinator() {
         let launchType = LaunchType.intro(manager: IntroScreenManager(prefs: MockProfile().prefs))
         XCTAssertFalse(launchType.canLaunch(fromType: .BrowserCoordinator, isIphone: true))

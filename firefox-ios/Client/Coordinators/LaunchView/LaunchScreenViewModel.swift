@@ -55,8 +55,8 @@ class LaunchScreenViewModel {
         guard let launches = launchOrder else { return }
 
         if let launchType = launches.first {
-            launchOrder?.removeFirst()
             delegate?.launchWith(launchType: launchType)
+            launchOrder?.removeFirst()
         } else {
             self.delegate?.launchBrowser()
         }

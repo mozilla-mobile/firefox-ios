@@ -13,4 +13,7 @@ class MockLaunchCoordinatorDelegate: LaunchCoordinatorDelegate {
         didFinishCalledCount += 1
         savedDidFinishCoordinator = coordinator
     }
+
+    func didFinishTermsOfService(from coordinator: LaunchCoordinator) {
+    }
 }

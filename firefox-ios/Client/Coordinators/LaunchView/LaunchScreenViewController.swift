@@ -19,6 +19,8 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
         && !viewModel.getSplashScreenExperimentHasShown()
     }
 
+    private var isViewSetupComplete = false
+
     init(windowUUID: WindowUUID,
          coordinator: LaunchFinishedLoadingDelegate,
          viewModel: LaunchScreenViewModel? = nil,
@@ -48,12 +50,16 @@ class LaunchScreenViewController: UIViewController, LaunchFinishedLoadingDelegat
             try await delayStart()
             await startLoading()
         }
-
-        setupLaunchScreen()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+
+        if !isViewSetupComplete {
+            setupLaunchScreen()
+            isViewSetupComplete = true
+        }
+
         viewModel.loadNextLaunchType()
     }
 

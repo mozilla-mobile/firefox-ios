@@ -9,6 +9,7 @@ class MockLaunchFinishedLoadingDelegate: LaunchFinishedLoadingDelegate {
     var savedLaunchType: LaunchType?
     var launchWithTypeCalled = 0
     var launchBrowserCalled = 0
+    var finishedLoadingLaunchOrderCalled = 0
 
     func launchWith(launchType: LaunchType) {
         launchWithTypeCalled += 1
@@ -17,5 +18,9 @@ class MockLaunchFinishedLoadingDelegate: LaunchFinishedLoadingDelegate {
 
     func launchBrowser() {
         launchBrowserCalled += 1
+    }
+
+    func finishedLoadingLaunchOrder() {
+        finishedLoadingLaunchOrderCalled += 1
     }
 }
