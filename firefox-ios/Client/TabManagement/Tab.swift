@@ -341,6 +341,9 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable {
     // point to a tempfile containing the content so it can be shared to external applications.
     var temporaryDocument: TemporaryDocument?
 
+    /// Used to retain a reference to an AR 3D model preview until display ends
+    var quickLookPreviewHelper: OpenQLPreviewHelper?
+
     /// Returns true if this tab's URL is known, and it's longer than we want to store.
     var urlIsTooLong: Bool {
         guard let url = self.url else {
