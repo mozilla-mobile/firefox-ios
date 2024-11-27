@@ -8,7 +8,7 @@ Download on the [App Store](https://itunes.apple.com/app/id1055677337).
 
 ## Main Branch
 
-This branch works with Xcode 15.4 and supports iOS 15.0 and newer.
+This branch works with Xcode 16.1 and supports iOS 15.0 and newer.
 
 Pull requests should be submitted with `main` as the base branch.
 
