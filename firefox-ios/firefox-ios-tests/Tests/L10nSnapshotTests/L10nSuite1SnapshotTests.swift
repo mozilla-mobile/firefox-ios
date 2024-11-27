@@ -200,7 +200,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         // Website without blocked elements
         navigator.openURL(loremIpsumURL)
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
-        // mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.trackingProtection])
         navigator.goto(TrackingProtectionContextMenuDetails)
         snapshot("TrackingProtectionEnabledPerSite-01")
 
