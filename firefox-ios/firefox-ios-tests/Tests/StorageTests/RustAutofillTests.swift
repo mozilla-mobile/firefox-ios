@@ -220,15 +220,10 @@ class RustAutofillTests: XCTestCase {
         let creditCard = try await addCreditCard()
         let retrievedCreditCard = try await getCreditCard(id: creditCard.guid)
         let deleteCreditCardResult = try await deleteCreditCard(id: retrievedCreditCard.guid)
-
-        do {
-            _ = try await getCreditCard(id: creditCard.guid)
-        } catch {
-            let expectedError = "NoSuchRecord(guid: \"\(creditCard.guid)\")"
-            XCTAssertEqual(expectedError, "\(error)")
-        }
+        let result = try? await getCreditCard(id: creditCard.guid)
 
         XCTAssertEqual(creditCard.guid, retrievedCreditCard.guid)
         XCTAssertTrue(deleteCreditCardResult)
+        XCTAssertNil(result)
     }
 }
