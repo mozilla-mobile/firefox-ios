@@ -46,7 +46,7 @@ class LaunchCoordinator: BaseCoordinator,
         }
     }
 
-    // MARK: - Intro
+    // MARK: - Terms of Service
     private func presentTermsOfService(with manager: TermsOfServiceManager,
                                        isFullScreen: Bool) {
         let viewController = TermsOfServiceViewController(windowUUID: windowUUID)
