@@ -4,7 +4,7 @@ This is the subdirectory that contains the Firefox for iOS application.
 
 ## Main branch
 
-Firefox for iOS works with [Xcode 15.4](https://developer.apple.com/download/all/?q=xcode), Swift 5.8 and supports iOS 15.0 and above.
+Firefox for iOS works with [Xcode 16.1](https://developer.apple.com/download/all/?q=xcode), Swift 5.6 and supports iOS 15.0 and above.
 
 Please make sure you aim your pull requests in the right direction.
 
