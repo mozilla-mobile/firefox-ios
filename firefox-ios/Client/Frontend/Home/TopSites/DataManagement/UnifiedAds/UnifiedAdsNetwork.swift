@@ -23,7 +23,7 @@ class DefaultUnifiedAdsNetwork: UnifiedAdsNetwork {
 
     func data(from request: URLRequest, completion: @escaping (NetworkingContileResult) -> Void) {
         urlSession.dataTaskWith(request: request) { [weak self] data, response, error in
-            guard let self = self else { return }
+            guard self != nil else { return }
             // TODO: FXIOS-10715
         }.resume()
     }
