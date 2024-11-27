@@ -56,6 +56,7 @@ class LaunchCoordinator: BaseCoordinator,
             self.parentCoordinator?.didFinishTermsOfService(from: self)
         }
         viewController.modalPresentationStyle = .fullScreen
+        viewController.modalTransitionStyle = .crossDissolve
         router.present(viewController, animated: false)
     }
 
