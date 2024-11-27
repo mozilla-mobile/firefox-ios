@@ -50,7 +50,7 @@ final class NativeErrorPageViewController: UIViewController,
             top: 100,
             leading: 166,
             bottom: -16,
-            trailing: -144
+            trailing: -166
         )
     }
 
@@ -92,7 +92,7 @@ final class NativeErrorPageViewController: UIViewController,
 
     private lazy var errorDescriptionLabel: UILabel = .build { label in
         label.adjustsFontForContentSizeCategory = true
-        label.font = FXFontStyles.Regular.body.scaledFont()
+        label.font = FXFontStyles.Regular.subheadline.scaledFont()
         label.numberOfLines = 0
         label.textAlignment = .natural
         label.text = .NativeErrorPage.NoInternetConnection.Description
@@ -136,9 +136,21 @@ final class NativeErrorPageViewController: UIViewController,
     func newState(state: NativeErrorPageState) {
         nativeErrorPageState = state
 
-        if state.title != nil {
+        if !state.title.isEmpty {
             titleLabel.text = state.title
-            errorDescriptionLabel.text = state.description
+            foxImage.image = UIImage(named: nativeErrorPageState.foxImage)
+
+            if let validURL = state.url {
+                let errorDescription = getDescriptionWithHostName(
+                    errorURL: validURL,
+                    description: state.description
+                )
+                errorDescriptionLabel.attributedText = errorDescription
+            } else {
+                errorDescriptionLabel.text = state.description
+            }
+        } else {
+            return
         }
     }
 
@@ -320,5 +332,17 @@ final class NativeErrorPageViewController: UIViewController,
                 actionType: GeneralBrowserActionType.reloadWebsite
             )
         )
+    }
+
+    func getDescriptionWithHostName(errorURL: URL, description: String) -> NSAttributedString? {
+        guard let validHostName = errorURL.host else { return nil }
+
+        let errDescription = String(format: description, validHostName)
+        let attributedString = errDescription.attributedText(
+            style: [.font: FXFontStyles.Regular.subheadline.scaledFont()],
+            highlightedText: validHostName,
+            highlightedTextStyle: [.font: FXFontStyles.Bold.body.scaledFont()]
+        )
+        return attributedString
     }
 }
