@@ -14,15 +14,6 @@ import class MozillaAppServices.Viaduct
 class NotificationService: UNNotificationServiceExtension {
     var display: SyncDataDisplay?
     var profile: BrowserProfile?
-    private let logger: Logger
-
-    init(display: SyncDataDisplay? = nil,
-         profile: BrowserProfile? = nil,
-         logger: Logger = DefaultLogger.shared) {
-        self.display = display
-        self.profile = profile
-        self.logger = logger
-    }
 
     // This is run when an APNS notification with `mutable-content` is received.
     // If the app is backgrounded, then the alert notification is displayed.
@@ -40,9 +31,7 @@ class NotificationService: UNNotificationServiceExtension {
         let userInfo = request.content.userInfo
 
         guard let content = request.content.mutableCopy() as? UNMutableNotificationContent else {
-            logger.log("Unable to create a mutable copy of UNNotificationContent from the notification request",
-                       level: .info,
-                       category: .lifecycle)
+            contentHandler(request.content)
             return
         }
 
