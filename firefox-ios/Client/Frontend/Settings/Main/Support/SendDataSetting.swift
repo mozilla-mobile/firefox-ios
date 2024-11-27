@@ -4,6 +4,7 @@
 
 import Common
 import Foundation
+import Glean
 import Shared
 
 enum SendDataType {
@@ -80,6 +81,16 @@ class SendDataSetting: BoolSetting {
         self.settingDidChange = { [weak self] value in
             // AdjustHelper.setEnabled($0)
             DefaultGleanWrapper.shared.setUpload(isEnabled: value)
+
+            if !value {
+                self?.prefs?.removeObjectForKey(PrefsKeys.Usage.profileId)
+
+                // set dummy uuid to make sure the previous one is deleted
+                if let uuid = UUID(uuidString: "beefbeef-beef-beef-beef-beeefbeefbee") {
+                    GleanMetrics.Usage.profileId.set(uuid)
+                }
+            }
+
             Experiments.setTelemetrySetting(value)
             self?.shouldSendData?(value)
         }
