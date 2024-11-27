@@ -27,6 +27,11 @@ extension HistoryPanel: UISearchBarDelegate {
         performSearch(term: searchText)
     }
 
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        bottomStackView.isHidden = true
+        searchBar.resignFirstResponder()
+    }
+
     func startSearchState() {
         updatePanelState(newState: .history(state: .search))
         bottomStackView.isHidden = false
