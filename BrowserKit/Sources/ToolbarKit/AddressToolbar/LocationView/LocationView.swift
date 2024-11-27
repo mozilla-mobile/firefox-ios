@@ -142,16 +142,8 @@ final class LocationView: UIView,
     // MARK: - Layout
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        updateURLTextFieldForSizeClassChange(previousTraitCollection)
         DispatchQueue.main.async { [self] in
             formatAndTruncateURLTextField()
-        }
-    }
-
-    func updateURLTextFieldForSizeClassChange(_ previousTraitCollection: UITraitCollection?) {
-        if previousTraitCollection?.horizontalSizeClass != traitCollection.horizontalSizeClass ||
-            previousTraitCollection?.verticalSizeClass != traitCollection.verticalSizeClass {
-            if isEditing, urlAbsolutePath == nil { urlTextField.text = searchTerm }
         }
     }
 

@@ -53,6 +53,7 @@ final class AddressToolbarContainer: UIView,
         return shouldDisplayCompact ? compactToolbar : regularToolbar
     }
 
+    private var searchTerm = ""
     private var shouldDisplayCompact = true
     private var isTransitioning = false {
         didSet {
@@ -207,6 +208,14 @@ final class AddressToolbarContainer: UIView,
 
             if shouldSwitchToolbars {
                 switchToolbars()
+                guard model?.shouldSelectSearchTerm == false else { return }
+                store.dispatch(
+                    ToolbarAction(
+                        searchTerm: searchTerm,
+                        windowUUID: windowUUID,
+                        actionType: ToolbarActionType.didSetSearchTerm
+                    )
+                )
             }
         }
     }
@@ -284,19 +293,17 @@ final class AddressToolbarContainer: UIView,
             } else if !searchTerm.isEmpty, toolbarState.addressToolbar.showQRPageAction {
                 let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didEnterSearchTerm)
                 store.dispatch(action)
+            } else if !toolbarState.addressToolbar.didStartTyping {
+                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.didStartTyping)
+                store.dispatch(action)
             }
-            let action = ToolbarAction(
-                url: nil,
-                searchTerm: searchTerm,
-                windowUUID: windowUUID,
-                actionType: ToolbarActionType.didStartTyping
-            )
-            store.dispatch(action)
         }
+        self.searchTerm = searchTerm
         delegate?.searchSuggestions(searchTerm: searchTerm)
     }
 
     func didClearSearch() {
+        searchTerm = ""
         delegate?.searchSuggestions(searchTerm: "")
 
         guard let windowUUID else { return }
