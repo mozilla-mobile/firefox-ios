@@ -219,6 +219,7 @@ class LegacyBookmarkDetailPanel: SiteTableViewController, BookmarksRefactorFeatu
         }
 
         updateSaveButton()
+        addDismissKeyboardGesture()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -331,6 +332,18 @@ class LegacyBookmarkDetailPanel: SiteTableViewController, BookmarksRefactorFeatu
     private func isBookmarkItemURLValid() -> Bool {
         let url = URL(string: bookmarkItemURL ?? "", invalidCharacters: false)
         return url?.schemeIsValid == true && url?.host != nil
+    }
+
+    private func addDismissKeyboardGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissTextFieldKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+
+    // dismiss textField keyboard when tap on the outside view
+    @objc
+    private func dismissTextFieldKeyboard() {
+        view.endEditing(true)
     }
 
     // MARK: - Button Actions
