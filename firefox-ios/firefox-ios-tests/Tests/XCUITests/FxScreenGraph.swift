@@ -1179,7 +1179,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         )
         // Passwords (TODO)
         // Customize Homepage (TODO)
-        // New in Firefox (TODO: Find out what is Action.OpenWhatsNewPage)
+        // New in Firefox
+        screenState.tap(
+            app.otherElements.cells["MainMenu.WhatsNew"],
+            forAction: Action.OpenWhatsNewPage
+        )
         // Get Help (TODO: Actions to open support.mozilla.org)
         // SettingsScreen
         screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.settings], to: SettingsScreen)
