@@ -9,7 +9,7 @@ class TitleSubtitleActivityItemProvider: UIActivityItemProvider, @unchecked Send
     private let message: String
     private let subtitle: String
 
-    init(_ shareMessage: ShareMessage) {
+    init(shareMessage: ShareMessage) {
         // If no subtitle is set, repeat the title for the subtitle for apps that use it (e.g. Mail)
         self.message = shareMessage.message
         self.subtitle = shareMessage.subtitle ?? shareMessage.message
