@@ -37,6 +37,29 @@ final class LaunchCoordinatorTests: XCTestCase {
         XCTAssertTrue(subject.childCoordinators.isEmpty)
     }
 
+    // MARK: - Terms of Service
+    func testStart_termsOfServiceNotIphone_present() throws {
+        let termsOfServiceManager = TermsOfServiceManager(prefs: profile.prefs)
+        let subject = createSubject(isIphone: false)
+        subject.start(with: .termsOfService(manager: termsOfServiceManager))
+
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertEqual(mockRouter.setRootViewControllerCalled, 0)
+        let presentedViewController = try XCTUnwrap(mockRouter.presentedViewController)
+        XCTAssertNotNil(presentedViewController as? TermsOfServiceViewController)
+    }
+
+    func testStart_termsOfServiceIsIphone_present() throws {
+        let termsOfServiceManager = TermsOfServiceManager(prefs: profile.prefs)
+        let subject = createSubject(isIphone: true)
+        subject.start(with: .termsOfService(manager: termsOfServiceManager))
+
+        XCTAssertEqual(mockRouter.presentCalled, 1)
+        XCTAssertEqual(mockRouter.setRootViewControllerCalled, 0)
+        let presentedViewController = try XCTUnwrap(mockRouter.presentedViewController)
+        XCTAssertNotNil(presentedViewController as? TermsOfServiceViewController)
+    }
+
     // MARK: - Intro
     func testStart_introNotIphone_present() throws {
         let introScreenManager = IntroScreenManager(prefs: profile.prefs)
