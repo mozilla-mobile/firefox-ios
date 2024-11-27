@@ -120,8 +120,8 @@ class RustAutofillTests: XCTestCase {
                 email: "")
             autofill.addAddress(address: address) { result in
                 switch result {
-                case .success(let addressAdded):
-                    continuation.resume(returning: addressAdded)
+                case .success(let addedAddress):
+                    continuation.resume(returning: addedAddress)
                     return
                 case .failure(let error):
                     continuation.resume(throwing: error)
