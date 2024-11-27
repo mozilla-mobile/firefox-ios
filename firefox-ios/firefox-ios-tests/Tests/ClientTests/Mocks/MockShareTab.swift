@@ -9,7 +9,7 @@ import Foundation
 class MockShareTab: ShareTab {
     var displayTitle: String
     var url: URL?
-    var webView: Client.TabWebView?
+    var webView: TabWebView?
 
     init(title: String, url: URL?, withActiveWebView: Bool = true) {
         self.displayTitle = title
