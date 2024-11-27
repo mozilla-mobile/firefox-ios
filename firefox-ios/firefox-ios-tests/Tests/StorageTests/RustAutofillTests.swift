@@ -213,7 +213,12 @@ class RustAutofillTests: XCTestCase {
 
         XCTAssertEqual(creditCard.guid, card.guid)
         XCTAssertTrue(result)
+        XCTAssertEqual(updatedCardVal.ccName, updatedCreditCard.ccName)
+        XCTAssertEqual(updatedCardVal.ccNumberEnc, updatedCreditCard.ccNumber)
+        XCTAssertEqual(updatedCardVal.ccNumberLast4, updatedCreditCard.ccNumberLast4)
+        XCTAssertEqual(updatedCardVal.ccExpMonth, updatedCreditCard.ccExpMonth)
         XCTAssertEqual(updatedCardVal.ccExpYear, updatedCreditCard.ccExpYear)
+        XCTAssertEqual(updatedCardVal.ccType, updatedCreditCard.ccType)
     }
 
     func testDeleteCreditCard() async throws {
