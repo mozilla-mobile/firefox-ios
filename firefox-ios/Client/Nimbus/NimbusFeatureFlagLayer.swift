@@ -82,6 +82,9 @@ final class NimbusFeatureFlagLayer {
         case .preferSwitchToOpenTabOverDuplicate:
             return checkPreferSwitchToOpenTabOverDuplicate(from: nimbus)
 
+        case .pullToRefreshRefactor:
+            return checkPullToRefreshFeature(from: nimbus)
+
         case .reduxSearchSettings:
             return checkReduxSearchSettingsFeature(from: nimbus)
 
@@ -307,6 +310,10 @@ final class NimbusFeatureFlagLayer {
 
     private func checkPreferSwitchToOpenTabOverDuplicate(from nimbus: FxNimbus) -> Bool {
         return nimbus.features.homescreenFeature.value().preferSwitchToOpenTab
+    }
+
+    private func checkPullToRefreshFeature(from nimbus: FxNimbus) -> Bool {
+        return nimbus.features.pullToRefreshRefactorFeature.value().enabled
     }
 
     private func checkAddressAutofillEditing(from nimbus: FxNimbus) -> Bool {
