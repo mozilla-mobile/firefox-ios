@@ -147,7 +147,7 @@ final class PrivacyPreferencesViewController: UIViewController,
         crashReportsSwitch.switchCallback = { _ in }
         technicalDataSwitch.switchCallback = { _ in }
 
-        // TODO: FXIOS-10638 Firefox iOS: Use the correct Terms of Service and Privacy Notice URLs in ToSViewController
+        // TODO: FXIOS-10739 Firefox iOS: Use the correct links for Learn more buttons, in Manage Privacy Preferences screen
         crashReportsSwitch.learnMoreCallBack = { [weak self] in
             self?.presentLink(with: nil)
         }
