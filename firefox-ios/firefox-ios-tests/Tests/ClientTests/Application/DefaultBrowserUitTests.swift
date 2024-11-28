@@ -6,7 +6,7 @@ import XCTest
 import Shared
 @testable import Client
 
-final class DefaultBrowserUitTests: XCTestCase {
+final class DefaultBrowserUtilTests: XCTestCase {
     var subject: DefaultBrowserUtil!
     var telemetryWrapper: MockTelemetryWrapper!
     var userDefaults: MockUserDefaults!
