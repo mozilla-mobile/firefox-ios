@@ -12,12 +12,13 @@ class UnifiedAdsProviderTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        TelemetryContextualIdentifier.setupContextId()
         networking = MockContileNetworking()
     }
 
     override func tearDown() {
-        super.tearDown()
         networking = nil
+        super.tearDown()
     }
 
     func testFetchTile_givenErrorResponse_thenFailsWithError() {

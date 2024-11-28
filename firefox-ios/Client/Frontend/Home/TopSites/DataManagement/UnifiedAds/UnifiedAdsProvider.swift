@@ -79,9 +79,15 @@ class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, FeatureFlagga
             return nil
         }
 
-        // TODO: Laurie - replace context id with real one
+        guard let contextId = TelemetryContextualIdentifier.contextId else {
+            logger.log("No context id: \(String(describing: TelemetryContextualIdentifier.contextId))",
+                       level: .warning,
+                       category: .legacyHomepage)
+            return nil
+        }
+
         let requestBody = RequestBody(
-            context_id: "03267ad1-0074-4aa6-8e0c-ec18e0906bfe",
+            context_id: contextId,
             placements: [
                 AdPlacement(placement: "newtab_mobile_tile_1", count: 1),
                 AdPlacement(placement: "newtab_mobile_tile_2", count: 1)

@@ -13,12 +13,6 @@ struct UnifiedTile: Decodable {
     let blockKey: String
 }
 
-// Root node containing tiles
-struct UnifiedTiles: Decodable {
-    let newtab_mobile_tile_1: [UnifiedTile]
-    let newtab_mobile_tile_2: [UnifiedTile]
-}
-
 // Callbacks for telemetry events
 struct UnifiedTileCallback: Decodable {
     let click: String
