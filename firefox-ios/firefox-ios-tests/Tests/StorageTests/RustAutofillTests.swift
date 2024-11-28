@@ -65,7 +65,7 @@ class RustAutofillTests: XCTestCase {
             ccType: "Visa")
 
         return try await withCheckedThrowingContinuation { continuation in
-            autofill.addCreditCard(creditCard: creditCard) { card, error in
+            autofill.addCreditCard(creditCard: mockCreditCard) { card, error in
                 guard let card else {
                     continuation.resume(throwing: error ?? NSError(domain: "Couldn't add credit card", code: 0))
                     return
