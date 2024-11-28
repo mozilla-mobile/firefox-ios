@@ -110,9 +110,9 @@ final class SwitchDetailedView: UIView, ThemeApplicable {
     }
 
     func setupDetails(actionTitle: String,
-                             actionDescription: String,
-                             linkDescription: String,
-                             theme: Theme
+                      actionDescription: String,
+                      linkDescription: String,
+                      theme: Theme
     ) {
         actionTitleLabel.text = actionTitle
         let description = String(format: actionDescription, linkDescription)
