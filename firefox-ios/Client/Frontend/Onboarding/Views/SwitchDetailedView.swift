@@ -5,8 +5,8 @@
 import Common
 import UIKit
 
-public struct SwitchDetailedViewModel {
-    public init(contentStackViewA11yId: String,
+struct SwitchDetailedViewModel {
+    init(contentStackViewA11yId: String,
                 actionContentViewA11yId: String,
                 actionTitleLabelA11yId: String,
                 actionSwitchA11yId: String,
@@ -18,14 +18,14 @@ public struct SwitchDetailedViewModel {
         self.actionDescriptionLabelA11yId = actionDescriptionLabelA11yId
     }
 
-    public let contentStackViewA11yId: String
-    public let actionContentViewA11yId: String
-    public let actionTitleLabelA11yId: String
-    public let actionSwitchA11yId: String
-    public let actionDescriptionLabelA11yId: String
+    let contentStackViewA11yId: String
+    let actionContentViewA11yId: String
+    let actionTitleLabelA11yId: String
+    let actionSwitchA11yId: String
+    let actionDescriptionLabelA11yId: String
 }
 
-public class SwitchDetailedView: UIView, ThemeApplicable {
+final class SwitchDetailedView: UIView, ThemeApplicable {
     private struct UX {
         static let actionContentViewMargin: CGFloat = 11
         static let actionContentViewRightMargin: CGFloat = 16
@@ -35,8 +35,8 @@ public class SwitchDetailedView: UIView, ThemeApplicable {
     }
 
     // MARK: - Properties
-    public var switchCallback: ((_ isOn: Bool) -> Void)?
-    public var learnMoreCallBack: (() -> Void)?
+    var switchCallback: ((_ isOn: Bool) -> Void)?
+    var learnMoreCallBack: (() -> Void)?
 
     private lazy var contentStackView: UIStackView = .build { stack in
         stack.axis = .vertical
@@ -113,7 +113,7 @@ public class SwitchDetailedView: UIView, ThemeApplicable {
         ])
     }
 
-    public func configure(viewModel: SwitchDetailedViewModel) {
+    func configure(viewModel: SwitchDetailedViewModel) {
         contentStackView.accessibilityIdentifier = viewModel.contentStackViewA11yId
         actionContentView.accessibilityIdentifier = viewModel.actionContentViewA11yId
         actionTitleLabel.accessibilityIdentifier = viewModel.actionTitleLabelA11yId
@@ -121,7 +121,7 @@ public class SwitchDetailedView: UIView, ThemeApplicable {
         actionDescriptionLabel.accessibilityIdentifier = viewModel.actionDescriptionLabelA11yId
     }
 
-    public func setupDetails(actionTitle: String,
+    func setupDetails(actionTitle: String,
                              actionDescription: String,
                              linkDescription: String,
                              theme: Theme
@@ -157,7 +157,7 @@ public class SwitchDetailedView: UIView, ThemeApplicable {
     }
 
     // MARK: - ThemeApplicable
-    public func applyTheme(theme: any Theme) {
+    func applyTheme(theme: any Theme) {
         backgroundColor = .clear
         actionContentView.backgroundColor = theme.colors.layer5
         actionTitleLabel.textColor = theme.colors.textPrimary
