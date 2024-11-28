@@ -25,6 +25,14 @@ class RustAutofillTests: XCTestCase {
         tel: "",
         email: "")
 
+    let mockCreditCard = UnencryptedCreditCardFields(
+        ccName: "Jane Doe",
+        ccNumber: "1234567890123456",
+        ccNumberLast4: "3456",
+        ccExpMonth: 03,
+        ccExpYear: 2027,
+        ccType: "Visa")
+
     override func setUp() {
         super.setUp()
         files = MockFiles()
