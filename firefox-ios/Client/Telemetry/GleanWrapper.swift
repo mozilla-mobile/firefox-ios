@@ -19,7 +19,7 @@ struct DefaultGleanWrapper: GleanWrapper {
         Glean.shared.handleCustomUrl(url: url)
     }
     func setUpload(isEnabled: Bool) {
-        Glean.shared.setUploadEnabled(isEnabled)
+        Glean.shared.setCollectionEnabled(isEnabled)
     }
     func submitPing() {
         GleanMetrics.Pings.shared.firstSession.submit()
