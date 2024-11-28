@@ -520,6 +520,27 @@ public struct AccessibilityIdentifiers {
         static let manageDataCollectionAgreement = "TermsOfService.ManageDataCollectionAgreement"
         static let agreeAndContinueButton = "TermsOfService.AgreeAndContinueButton"
         static let doneButton = "TermsOfService.DoneButton"
+
+        struct PrivacyNotice {
+            static let title = "TermsOfService.PrivacyNotice.Title"
+            static let doneButton = "TermsOfService.PrivacyNotice.DoneButton"
+
+            struct CrashReports {
+                static let contentStackView = "TermsOfService.PrivacyNotice.CrashReports.ContentStackView"
+                static let actionContentView = "TermsOfService.PrivacyNotice.CrashReports.ActionContentView"
+                static let actionTitleLabel = "TermsOfService.PrivacyNotice.CrashReports.ActionTitleLabel"
+                static let actionSwitch = "TermsOfService.PrivacyNotice.CrashReports.ActionSwitch"
+                static let actionDescriptionLabel = "TermsOfService.PrivacyNotice.CrashReports.ActionDescriptionLabel"
+            }
+
+            struct TechnicalData {
+                static let contentStackView = "TermsOfService.PrivacyNotice.TechnicalData.ContentStackView"
+                static let actionContentView = "TermsOfService.PrivacyNotice.TechnicalData.ActionContentView"
+                static let actionTitleLabel = "TermsOfService.PrivacyNotice.TechnicalData.ActionTitleLabel"
+                static let actionSwitch = "TermsOfService.PrivacyNotice.TechnicalData.ActionSwitch"
+                static let actionDescriptionLabel = "TermsOfService.PrivacyNotice.TechnicalData.ActionDescriptionLabel"
+            }
+        }
     }
 
     struct Upgrade {
