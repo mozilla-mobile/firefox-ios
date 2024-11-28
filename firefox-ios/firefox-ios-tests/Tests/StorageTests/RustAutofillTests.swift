@@ -130,7 +130,7 @@ class RustAutofillTests: XCTestCase {
                 country: "United States",
                 tel: "",
                 email: "")
-            autofill.addAddress(address: address) { result in
+            autofill.addAddress(address: mockAddress) { result in
                 switch result {
                 case .success(let addedAddress):
                     continuation.resume(returning: addedAddress)
