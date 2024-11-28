@@ -1,4 +1,4 @@
-name: Focus iOS 15 & 16 tests
+name: Focus iOS 15, 16 & 17 tests
 on:
   workflow_dispatch:
   schedule:
@@ -6,17 +6,19 @@ on:
 
 env:
     browser: focus-ios
-    xcode_version: 15.4
+    xcode_version: 16.1
     test_results_directory: /Users/runner/tmp
 
 jobs:
   Focus-iOS-Tests:
     name: Focus iOS
-    runs-on: macos-14
+    runs-on: macos-15
     strategy:
       fail-fast: false
       matrix:
         include:
+          - ios_version: 17.5
+            ios_simulator: iPhone 15
           - ios_version: 16.4
             ios_simulator: iPhone 14
           - ios_version: 15.5
@@ -37,7 +39,7 @@ jobs:
         id: xcode
         run: |
           sudo rm -rf /Applications/Xcode.app
-          sudo rm -fr /Applications/Xcode_16*
+          sudo rm -fr /Applications/Xcode_15*
           sudo rm -fr /Applications/Xcode_14*
           sudo xcode-select -s /Applications/Xcode_${{ env.xcode_version }}.app/Contents/Developer
           xcodebuild -version

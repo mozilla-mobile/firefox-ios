@@ -7,9 +7,9 @@ on:
 
 env:
     browser: firefox-ios
-    xcode_version: 15.4
-    ios_version: 17.5
-    ios_simulator_default: iPhone 15
+    xcode_version: 16.1
+    ios_version: 18.1
+    ios_simulator_default: iPhone 16
     xcodebuild_scheme: Fennec
     xcodebuild_target: Client
     test_results_directory: /Users/runner/tmp
@@ -17,7 +17,7 @@ env:
 jobs:
     compile:
         name: Compile
-        runs-on: macos-14
+        runs-on: macos-15
         steps:
             - name: Check out source code
               uses: actions/checkout@v4.1.7
@@ -62,7 +62,7 @@ jobs:
       strategy:
         fail-fast: false
         matrix:
-          ios_simulator: ['iPhone 15 Plus', 'iPad Pro 13-inch (M4)']
+          ios_simulator: ['iPhone 16', 'iPad mini (A17 Pro)']
       steps:
       - name: Check out source code
         uses: actions/checkout@v4.1.7

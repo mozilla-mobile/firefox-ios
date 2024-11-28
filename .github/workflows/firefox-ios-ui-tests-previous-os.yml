@@ -1,12 +1,12 @@
-name: "Firefox UI Tests for iOS 15 & 16"
+name: "Firefox UI Tests for iOS 15, 16 & 17"
     
 on:
     workflow_dispatch: {}
 env:
     browser: firefox-ios
-    xcode_version: 15.4
-    ios_version: 17.5
-    ios_simulator_default: iPhone 15
+    xcode_version: 16.1
+    ios_version: 18.1
+    ios_simulator_default: iPhone 16
     xcodebuild_scheme: Fennec
     xcodebuild_target: Client
     test_results_directory: /Users/runner/tmp
@@ -14,7 +14,7 @@ env:
 jobs:
     compile:
         name: Compile
-        runs-on: macos-14
+        runs-on: macos-15
         steps:
             - name: Check out source code
               uses: actions/checkout@v4.1.7
@@ -54,12 +54,14 @@ jobs:
 
     run-smoketests:
       name: Run smoke tests
-      runs-on: macos-14
+      runs-on: macos-15
       needs: compile
       strategy:
         fail-fast: false
         matrix:
           include:
+            - ios_version: 17.5
+              ios_simulator: iPhone 15
             - ios_version: 16.4
               ios_simulator: iPhone 14
             - ios_version: 15.5
@@ -77,8 +79,6 @@ jobs:
         id: xcode
         run: |
           sudo rm -rf /Applications/Xcode.app
-          sudo rm -fr /Applications/Xcode_16*
-          sudo rm -fr /Applications/Xcode_14*
           sudo xcode-select -s /Applications/Xcode_${{ env.xcode_version }}.app/Contents/Developer
           xcodebuild -version
           ./checkout.sh
