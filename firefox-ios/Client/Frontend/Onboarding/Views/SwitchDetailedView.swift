@@ -6,18 +6,6 @@ import Common
 import UIKit
 
 struct SwitchDetailedViewModel {
-    init(contentStackViewA11yId: String,
-                actionContentViewA11yId: String,
-                actionTitleLabelA11yId: String,
-                actionSwitchA11yId: String,
-                actionDescriptionLabelA11yId: String) {
-        self.contentStackViewA11yId = contentStackViewA11yId
-        self.actionContentViewA11yId = actionContentViewA11yId
-        self.actionTitleLabelA11yId = actionTitleLabelA11yId
-        self.actionSwitchA11yId = actionSwitchA11yId
-        self.actionDescriptionLabelA11yId = actionDescriptionLabelA11yId
-    }
-
     let contentStackViewA11yId: String
     let actionContentViewA11yId: String
     let actionTitleLabelA11yId: String
