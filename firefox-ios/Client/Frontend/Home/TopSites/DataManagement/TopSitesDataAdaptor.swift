@@ -147,7 +147,6 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
                 self?.dispatchGroup.leave()
             }
         }
-
     }
 
     private func loadTopSites() {
