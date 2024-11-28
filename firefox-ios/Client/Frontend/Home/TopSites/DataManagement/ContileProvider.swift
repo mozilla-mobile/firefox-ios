@@ -39,7 +39,7 @@ class ContileProvider: ContileProviderInterface, URLCaching, FeatureFlaggable {
         urlCache: URLCache = URLCache.shared,
         logger: Logger = DefaultLogger.shared
     ) {
-            self.logger = logger
+        self.logger = logger
         self.networking = networking
         self.urlCache = urlCache
     }
