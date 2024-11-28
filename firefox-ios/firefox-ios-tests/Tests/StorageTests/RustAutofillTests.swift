@@ -13,6 +13,18 @@ class RustAutofillTests: XCTestCase {
     var autofill: RustAutofill!
     var encryptionKey: String!
 
+    let mockAddress = UpdatableAddressFields(
+        name: "Jane Doe",
+        organization: "",
+        streetAddress: "123 Second Avenue",
+        addressLevel3: "",
+        addressLevel2: "Chicago, IL",
+        addressLevel1: "",
+        postalCode: "",
+        country: "United States",
+        tel: "",
+        email: "")
+
     override func setUp() {
         super.setUp()
         files = MockFiles()
