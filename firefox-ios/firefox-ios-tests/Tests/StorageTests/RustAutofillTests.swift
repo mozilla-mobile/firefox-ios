@@ -56,14 +56,6 @@ class RustAutofillTests: XCTestCase {
     }
 
     func addCreditCard() async throws -> CreditCard {
-        let creditCard = UnencryptedCreditCardFields(
-            ccName: "Jane Doe",
-            ccNumber: "1234567890123456",
-            ccNumberLast4: "3456",
-            ccExpMonth: 03,
-            ccExpYear: 2027,
-            ccType: "Visa")
-
         return try await withCheckedThrowingContinuation { continuation in
             autofill.addCreditCard(creditCard: mockCreditCard) { card, error in
                 guard let card else {
