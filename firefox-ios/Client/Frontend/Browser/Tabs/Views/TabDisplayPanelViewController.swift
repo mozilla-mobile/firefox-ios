@@ -72,7 +72,7 @@ class TabDisplayPanelViewController: UIViewController,
         super.viewWillAppear(animated)
 
         if !viewHasAppeared {
-            tabDisplayView.layoutIfNeeded()
+            //             tabDisplayView.layoutIfNeeded()
             store.dispatch(TabPanelViewAction(panelType: panelType,
                                               windowUUID: windowUUID,
                                               actionType: TabPanelViewActionType.tabPanelWillAppear))
@@ -162,9 +162,11 @@ class TabDisplayPanelViewController: UIViewController,
     }
 
     func newState(state: TabsPanelState) {
+        if tabsState != state {
+            tabDisplayView.newState(state: state)
+        }
+        shouldShowEmptyView(state.isPrivateTabsEmpty)
         tabsState = state
-        tabDisplayView.newState(state: tabsState)
-        shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
     }
 
     // MARK: EmptyPrivateTabsViewDelegate
