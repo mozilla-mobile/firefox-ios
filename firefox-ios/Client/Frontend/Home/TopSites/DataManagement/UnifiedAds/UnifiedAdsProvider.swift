@@ -6,21 +6,38 @@ import Common
 import Foundation
 import Shared
 
+typealias UnifiedTileResult = Swift.Result<[UnifiedTile], Error>
+
 /// Used only for sponsored tiles content and telemetry. This is aiming to be a temporary API
 /// as we'll migrate to using A-S for this at some point in 2025
 protocol UnifiedAdsProviderInterface {
-    func fetchTiles(completion: @escaping (ContileResult) -> Void)
+    /// Fetch contiles either from cache or backend
+    /// - Parameters:
+    ///   - timestamp: The timestamp to retrieve from cache, useful for tests. Default is Date.now()
+    ///   - completion: Returns an array of Tiles, can be empty
+    func fetchTiles(timestamp: Timestamp, completion: @escaping (UnifiedTileResult) -> Void)
 }
 
-class UnifiedAdsProvider: UnifiedAdsProviderInterface {
-    private static let resourceEndpoint = "https://ads.mozilla.org/v1/ads"
+extension UnifiedAdsProviderInterface {
+    func fetchTiles(timestamp: Timestamp = Date.now(), completion: @escaping (UnifiedTileResult) -> Void) {
+        fetchTiles(timestamp: timestamp, completion: completion)
+    }
+}
+
+class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, FeatureFlaggable {
+    private static let prodResourceEndpoint = "https://ads.mozilla.org/v1/ads"
+    static let stagingResourceEndpoint = "https://ads.allizom.org/v1/ads"
 
     var urlCache: URLCache
     private var logger: Logger
-    private var networking: UnifiedAdsNetwork
+    private var networking: ContileNetworking
+
+    enum Error: Swift.Error {
+        case noDataAvailable
+    }
 
     init(
-        networking: UnifiedAdsNetwork = DefaultUnifiedAdsNetwork(
+        networking: ContileNetworking = DefaultContileNetwork(
             with: makeURLSession(userAgent: UserAgent.mobileUserAgent(),
                                  configuration: URLSessionConfiguration.defaultMPTCP)),
         urlCache: URLCache = URLCache.shared,
@@ -31,7 +48,101 @@ class UnifiedAdsProvider: UnifiedAdsProviderInterface {
         self.urlCache = urlCache
     }
 
-    func fetchTiles(completion: @escaping (ContileResult) -> Void) {
-        // TODO: FXIOS-10715
+    private struct AdPlacement: Codable {
+        let placement: String
+        let count: Int
+    }
+
+    private struct RequestBody: Codable {
+        let context_id: String
+        let placements: [AdPlacement]
+    }
+
+    func fetchTiles(timestamp: Timestamp = Date.now(), completion: @escaping (UnifiedTileResult) -> Void) {
+        guard let request = buildRequest() else {
+            completion(.failure(Error.noDataAvailable))
+            return
+        }
+
+        if let cachedData = findCachedData(for: request, timestamp: timestamp) {
+            decode(data: cachedData, completion: completion)
+        } else {
+            fetchTiles(request: request, completion: completion)
+        }
+    }
+
+    private func buildRequest() -> URLRequest? {
+        guard let resourceEndpoint = resourceEndpoint else {
+            logger.log("The resource URL is invalid: \(String(describing: resourceEndpoint))",
+                       level: .warning,
+                       category: .legacyHomepage)
+            return nil
+        }
+
+        // TODO: Laurie - replace context id with real one
+        let requestBody = RequestBody(
+            context_id: "03267ad1-0074-4aa6-8e0c-ec18e0906bfe",
+            placements: [
+                AdPlacement(placement: "newtab_mobile_tile_1", count: 1),
+                AdPlacement(placement: "newtab_mobile_tile_2", count: 1)
+            ]
+        )
+
+        var request = URLRequest(url: resourceEndpoint)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.timeoutInterval = 5
+        request.cachePolicy = .reloadIgnoringLocalCacheData
+
+        do {
+            let jsonData = try JSONEncoder().encode(requestBody)
+            request.httpBody = jsonData
+        } catch {
+            logger.log("The request body is invalid: \(String(describing: requestBody))",
+                       level: .warning,
+                       category: .legacyHomepage)
+            return nil
+        }
+        return request
+    }
+
+    private func fetchTiles(request: URLRequest, completion: @escaping (UnifiedTileResult) -> Void) {
+        networking.data(from: request) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let result):
+                self.cache(response: result.response, for: request, with: result.data)
+                self.decode(data: result.data, completion: completion)
+            case .failure:
+                completion(.failure(Error.noDataAvailable))
+            }
+        }
+    }
+
+    private func decode(data: Data, completion: @escaping (UnifiedTileResult) -> Void) {
+        do {
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            let tilesDictionary = try decoder.decode([String: [UnifiedTile]].self, from: data)
+            let tiles = tilesDictionary.values.flatMap { $0 }
+
+            guard !tiles.isEmpty else {
+                completion(.failure(Error.noDataAvailable))
+                return
+            }
+            completion(.success(tiles))
+        } catch let error {
+            self.logger.log("Unable to parse with error: \(error)",
+                            level: .warning,
+                            category: .legacyHomepage)
+            completion(.failure(Error.noDataAvailable))
+        }
+    }
+
+    private var resourceEndpoint: URL? {
+        if featureFlags.isCoreFeatureEnabled(.useStagingContileAPI) {
+            return URL(string: UnifiedAdsProvider.stagingResourceEndpoint, invalidCharacters: false)
+        }
+        return URL(string: UnifiedAdsProvider.prodResourceEndpoint, invalidCharacters: false)
     }
 }
