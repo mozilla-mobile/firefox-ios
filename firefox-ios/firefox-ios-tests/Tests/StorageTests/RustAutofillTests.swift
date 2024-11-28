@@ -160,10 +160,10 @@ class RustAutofillTests: XCTestCase {
         let address = try await addAddress()
         let retrievedAddress = try await getAddress(id: address.guid)
 
-        XCTAssertEqual(address.name, "Jane Doe")
-        XCTAssertEqual(address.streetAddress, "123 Second Avenue")
-        XCTAssertEqual(address.addressLevel2, "Chicago, IL")
-        XCTAssertEqual(address.country, "United States")
+        XCTAssertEqual(address.name, retrievedAddress.name)
+        XCTAssertEqual(address.streetAddress, retrievedAddress.streetAddress)
+        XCTAssertEqual(address.addressLevel2, retrievedAddress.addressLevel2)
+        XCTAssertEqual(address.country, retrievedAddress.country)
         XCTAssertEqual(address.guid, retrievedAddress.guid)
     }
 
