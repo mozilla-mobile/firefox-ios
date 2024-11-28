@@ -235,8 +235,8 @@ class BookmarksCoordinator: BaseCoordinator,
             action: #selector(dismissFxAViewController)
         )
         viewController.navigationItem.leftBarButtonItem = buttonItem
-        viewController.shouldReload = {
-            self.reloadLastBookmarksController()
+        viewController.shouldReload = { [weak self] in
+            self?.reloadLastBookmarksController()
         }
         let navController = ThemedNavigationController(rootViewController: viewController, windowUUID: windowUUID)
         fxAccountViewController = viewController
