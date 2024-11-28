@@ -38,6 +38,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
     private let topSiteHistoryManager: TopSiteHistoryManager
     private let googleTopSiteManager: GoogleTopSiteManager
     private let contileProvider: ContileProviderInterface
+    private let unifiedAdsProvider: UnifiedAdsProviderInterface
     private let dispatchGroup: DispatchGroupInterface
 
     // Pre-loading the data with a default number of tiles so we always show section when needed
@@ -49,6 +50,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
          topSiteHistoryManager: TopSiteHistoryManager,
          googleTopSiteManager: GoogleTopSiteManager,
          contileProvider: ContileProviderInterface = ContileProvider(),
+         unifiedAdsProvider: UnifiedAdsProviderInterface = UnifiedAdsProvider(),
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          dispatchGroup: DispatchGroupInterface = DispatchGroup()
     ) {
@@ -56,6 +58,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
         self.topSiteHistoryManager = topSiteHistoryManager
         self.googleTopSiteManager = googleTopSiteManager
         self.contileProvider = contileProvider
+        self.unifiedAdsProvider = unifiedAdsProvider
         self.notificationCenter = notificationCenter
         self.dispatchGroup = dispatchGroup
         topSiteHistoryManager.delegate = self
@@ -124,14 +127,27 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
         guard shouldLoadSponsoredTiles else { return }
 
         dispatchGroup.enter()
-        contileProvider.fetchContiles { [weak self] result in
-            if case .success(let contiles) = result {
-                self?.contiles = contiles
-            } else {
-                self?.contiles = []
+
+        if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
+            unifiedAdsProvider.fetchTiles { [weak self] result in
+                if case .success(let unifiedTiles) = result {
+                    self?.contiles = UnifiedAdsConverter().convert(unifiedTiles: unifiedTiles)
+                } else {
+                    self?.contiles = []
+                }
+                self?.dispatchGroup.leave()
             }
-            self?.dispatchGroup.leave()
+        } else {
+            contileProvider.fetchContiles { [weak self] result in
+                if case .success(let contiles) = result {
+                    self?.contiles = contiles
+                } else {
+                    self?.contiles = []
+                }
+                self?.dispatchGroup.leave()
+            }
         }
+
     }
 
     private func loadTopSites() {
