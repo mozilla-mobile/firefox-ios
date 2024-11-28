@@ -276,14 +276,17 @@ class HomePageSettingsUITests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["Bookmarks"])
         app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
         navigator.performAction(Action.ToggleRecentlySaved)
-        // On iPad we have the homepage button always present,
-        // on iPhone we have the search button instead when we're on a new tab page
-        navigator.performAction(Action.ClickSearchButton)
-        mozWaitForElementToNotExist(
-            app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.bookmarks]
-        )
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
-        navigator.performAction(Action.CloseURLBarOpen)
+        if !iPad() {
+            navigator.performAction(Action.ClickSearchButton)
+            mozWaitForElementToNotExist(
+                app.scrollViews.cells[AccessibilityIdentifiers.FirefoxHomepage.MoreButtons.bookmarks]
+            )
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
+            navigator.performAction(Action.CloseURLBarOpen)
+        } else {
+            navigator.nowAt(HomeSettings)
+            navigator.performAction(Action.OpenNewTabFromTabTray)
+        }
         navigator.nowAt(NewTabScreen)
         navigator.performAction(Action.ToggleRecentlySaved)
         navigator.nowAt(HomeSettings)

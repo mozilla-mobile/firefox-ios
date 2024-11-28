@@ -485,6 +485,7 @@ class CreditCardsTests: BaseTestCase {
             ]
         )
         // Tapping 'x' will dismiss the prompt
+        app.buttons["Done"].tapIfExists()
         app.buttons[AccessibilityIdentifiers.SaveCardPrompt.Prompt.closeButton].waitAndTap()
         mozWaitForElementToNotExist(app.staticTexts["Update card?"])
         // Go to the Settings --> Payment methods
@@ -584,6 +585,8 @@ class CreditCardsTests: BaseTestCase {
         var nrOfRetries = 3
         if iPad() {
             while email.value(forKey: "hasKeyboardFocus") as? Bool == false && nrOfRetries > 0 {
+                app.buttons[AccessibilityIdentifiers.SaveCardPrompt.Prompt.closeButton].waitAndTap()
+                email.tapOnApp()
             }
         }
         email.typeText("foo1@mozilla.org")
@@ -647,8 +650,10 @@ class CreditCardsTests: BaseTestCase {
 
     private func pressDelete() {
         if iPad() {
+            mozWaitForElementToExist(app.keyboards.keys["delete"])
             app.keyboards.keys["delete"].press(forDuration: 2.2)
         } else {
+            mozWaitForElementToExist(app.keyboards.keys["Delete"])
             app.keyboards.keys["Delete"].press(forDuration: 2.2)
         }
     }
@@ -678,7 +683,7 @@ class CreditCardsTests: BaseTestCase {
 
     func typeCardNr(cardNo: String) {
         initCardFields()
-        cardNr.typeText(cardNo)
+        cardNr.typeTextWithDelay(cardNo, delay: 0.1)
     }
 
     func typeExpirationDate(exprDate: String) {
@@ -736,7 +741,6 @@ class CreditCardsTests: BaseTestCase {
         let cardNumber = app.webViews["Web content"].textFields["Card number"]
         mozWaitForElementToExist(cardNumber)
         cardNumber.tapOnApp()
-        dismissSavedCardsPrompt()
         if !app.buttons[useSavedCard].isHittable {
             cardNumber.waitAndTap()
         }
@@ -800,7 +804,6 @@ class CreditCardsTests: BaseTestCase {
             retryExpirationNumber(expirationDate: expirationDate)
         }
         let saveButton = app.buttons[creditCardsStaticTexts.AddCreditCard.save]
-        mozWaitForElementToExist(saveButton)
         if !saveButton.isEnabled {
             retryOnCardNumber(cardNumber: cardNumber)
             mozWaitForElementToExist(expiration)
@@ -808,19 +811,18 @@ class CreditCardsTests: BaseTestCase {
             retryExpirationNumber(expirationDate: expirationDate)
             mozWaitForElementToExist(saveButton)
         }
-        XCTAssertTrue(saveButton.isEnabled, "Save button is disabled")
-        saveButton.tap()
+        saveButton.waitAndTap()
     }
 
     private func retryOnCardNumber(cardNumber: String) {
         tapCardNr()
-        app.keyboards.keys["Delete"].press(forDuration: 2.2)
+        pressDelete()
         typeCardNr(cardNo: cardNumber)
         tapExpiration()
     }
 
     private func retryExpirationNumber(expirationDate: String) {
-        app.keyboards.keys["Delete"].press(forDuration: 1.5)
+        pressDelete()
         typeExpirationDate(exprDate: expirationDate)
     }
 }
