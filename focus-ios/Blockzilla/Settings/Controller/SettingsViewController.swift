@@ -550,7 +550,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
 
         // The following settings are special and need to be in effect immediately.
         if toggle.setting == .sendAnonymousUsageData {
-            Glean.shared.setUploadEnabled(sender.isOn)
+            Glean.shared.setCollectionEnabled(sender.isOn)
             if !sender.isOn {
                 NimbusWrapper.shared.nimbus.resetTelemetryIdentifiers()
             }
