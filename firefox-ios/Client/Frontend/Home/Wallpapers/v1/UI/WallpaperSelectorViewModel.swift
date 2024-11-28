@@ -46,7 +46,6 @@ class WallpaperSelectorViewModel {
     private var wallpaperManager: WallpaperManagerInterface
     private var availableCollections: [WallpaperCollection]
     private var wallpaperItems = [WallpaperSelectorItem]()
-    var openSettingsAction: (() -> Void)
     var sectionLayout: WallpaperSelectorLayout = .compact // We use the compact layout as default
     var selectedIndexPath: IndexPath?
 
@@ -54,10 +53,9 @@ class WallpaperSelectorViewModel {
         return wallpaperItems.count
     }
 
-    init(wallpaperManager: WallpaperManagerInterface = WallpaperManager(), openSettingsAction: @escaping (() -> Void)) {
+    init(wallpaperManager: WallpaperManagerInterface = WallpaperManager()) {
         self.wallpaperManager = wallpaperManager
         self.availableCollections = wallpaperManager.availableCollections
-        self.openSettingsAction = openSettingsAction
         setupWallpapers()
         selectedIndexPath = initialSelectedIndexPath
     }

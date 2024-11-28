@@ -9,6 +9,10 @@ class MockRouter: NSObject, Router {
     var navigationController: NavigationController
     var rootViewController: UIViewController?
 
+    var isPresenting: Bool {
+        presentCalled != 0
+    }
+
     var presentedViewController: UIViewController?
     var presentCalled = 0
     var dismissCalled = 0
