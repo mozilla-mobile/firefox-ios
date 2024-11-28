@@ -11,7 +11,7 @@ typealias UnifiedTileResult = Swift.Result<[UnifiedTile], Error>
 /// Used only for sponsored tiles content and telemetry. This is aiming to be a temporary API
 /// as we'll migrate to using A-S for this at some point in 2025
 protocol UnifiedAdsProviderInterface {
-    /// Fetch contiles either from cache or backend
+    /// Fetch tiles either from cache or backend
     /// - Parameters:
     ///   - timestamp: The timestamp to retrieve from cache, useful for tests. Default is Date.now()
     ///   - completion: Returns an array of Tiles, can be empty

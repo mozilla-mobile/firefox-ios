@@ -106,8 +106,8 @@ class UnifiedAdsProviderTests: XCTestCase {
 
         subject.fetchTiles { result in
             switch result {
-            case let .success(contiles):
-                XCTAssertEqual(contiles.count, 2)
+            case let .success(tiles):
+                XCTAssertEqual(tiles.count, 2)
             default:
                 XCTFail("Expected success, got \(result) instead")
             }
