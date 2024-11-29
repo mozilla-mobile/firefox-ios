@@ -7,7 +7,7 @@ import Storage
 import Shared
 
 // Top site UI class, used in the home top site section
-final class TopSite {
+final class TopSite: FeatureFlaggable {
     var site: Site
     var title: String
 
@@ -52,11 +52,15 @@ final class TopSite {
 
     // MARK: Telemetry
 
-    func impressionTracking(position: Int) {
+    func impressionTracking(position: Int, unifiedAdsTelemetry: UnifiedAdsCallbackTelemetry) {
         // Only sending sponsored tile impressions for now
         guard let tile = site as? SponsoredTile else { return }
 
-        SponsoredTileTelemetry.sendImpressionTelemetry(tile: tile, position: position)
+        if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
+            unifiedAdsTelemetry.sendImpressionTelemetry(tile: tile)
+        } else {
+            SponsoredTileTelemetry.sendImpressionTelemetry(tile: tile, position: position)
+        }
     }
 
     func getTelemetrySiteType() -> String {
