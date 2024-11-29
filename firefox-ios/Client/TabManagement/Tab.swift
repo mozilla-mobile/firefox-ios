@@ -586,7 +586,12 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     func restore(_ webView: WKWebView, interactionState: Data? = nil) {
         if let url = url {
-            webView.load(URLRequest(url: url))
+            if let internalURL = InternalURL(url),
+               internalURL.isAboutHomeURL {
+                webView.load(PrivilegedRequest(url: url) as URLRequest)
+            } else {
+                webView.load(URLRequest(url: url))
+            }
         }
 
         if let interactionState = interactionState {
