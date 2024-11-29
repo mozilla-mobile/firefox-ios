@@ -699,7 +699,9 @@ public struct AccessibilityIdentifiers {
 
         struct SendData {
             static let sendAnonymousUsageDataTitle = "SendAnonymousUsageData"
+            static let sendTechnicalDataTitle = "SendTechnicalData"
             static let sendCrashReportsTitle = "SendCrashReports"
+            static let sendDailyUsagePingTitle = "SendDailyUsagePing"
         }
 
         struct PrivacyPolicy {

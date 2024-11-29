@@ -54,7 +54,9 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
     // MARK: - Data Settings
     private var sendAnonymousUsageDataSetting: BoolSetting?
+    private var sendTechnicalDataSetting: BoolSetting?
     private var sendCrashReportsSetting: BoolSetting?
+    private var sendDailyUsagePingSetting: BoolSetting?
     private var studiesToggleSetting: BoolSetting?
 
     // MARK: - Initializers
@@ -195,8 +197,20 @@ class AppSettingsTableViewController: SettingsTableViewController,
             studiesSetting.updateSetting(for: value)
         }
 
-        // Only add this toggle to the Settings if Terms Of Service feature flag is enabled
+        // Only add this toggles to the Settings if Terms Of Service feature flag is enabled
         if isSentCrashReportsEnabled {
+            let sendTechnicalDataSettings = SendDataSetting(
+                prefs: profile.prefs,
+                delegate: settingsDelegate,
+                theme: themeManager.getCurrentTheme(for: windowUUID),
+                settingsDelegate: parentCoordinator,
+                sendDataType: .technicalData
+            )
+            sendTechnicalDataSettings.shouldSendData = { value in
+                // TODO: FXIOS-10754 Firefox iOS: Manage Privacy Preferences in Settings - Logic
+            }
+            sendTechnicalDataSetting = sendTechnicalDataSettings
+
             let sendCrashReportsSettings = SendDataSetting(
                 prefs: profile.prefs,
                 delegate: settingsDelegate,
@@ -205,9 +219,21 @@ class AppSettingsTableViewController: SettingsTableViewController,
                 sendDataType: .crashReports
             )
             sendCrashReportsSettings.shouldSendData = { value in
-                // TODO: FXIOS-10348 Firefox iOS: Manage Privacy Preferences in Settings
+                // TODO: FXIOS-10754 Firefox iOS: Manage Privacy Preferences in Settings - Logic
             }
             self.sendCrashReportsSetting = sendCrashReportsSettings
+
+            let sendDailyUsagePingSettings = SendDataSetting(
+                prefs: profile.prefs,
+                delegate: settingsDelegate,
+                theme: themeManager.getCurrentTheme(for: windowUUID),
+                settingsDelegate: parentCoordinator,
+                sendDataType: .dailyUsagePing
+            )
+            sendDailyUsagePingSettings.shouldSendData = { value in
+                // TODO: FXIOS-10754 Firefox iOS: Manage Privacy Preferences in Settings - Logic
+            }
+            sendDailyUsagePingSetting = sendDailyUsagePingSettings
         }
 
         sendAnonymousUsageDataSetting = anonymousUsageDataSetting
@@ -397,8 +423,17 @@ class AppSettingsTableViewController: SettingsTableViewController,
         }
 
         supportSettings.append(sendAnonymousUsageDataSetting)
+
+        if let sendTechnicalDataSetting {
+            supportSettings.append(sendTechnicalDataSetting)
+        }
+
         if let sendCrashReportsSetting {
             supportSettings.append(sendCrashReportsSetting)
+        }
+
+        if let sendDailyUsagePingSetting {
+            supportSettings.append(sendDailyUsagePingSetting)
         }
 
         supportSettings.append(contentsOf: [
