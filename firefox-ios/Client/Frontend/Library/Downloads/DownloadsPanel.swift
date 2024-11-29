@@ -369,6 +369,7 @@ class DownloadsPanel: UIViewController,
             style: .destructive,
             title: .TabsTray.DownloadsPanel.DeleteTitle
         ) { [weak self] (_, _, completion) in
+            // Swipe > delete action
             guard let strongSelf = self else { completion(false); return }
 
             if let downloadedFile = strongSelf.viewModel.downloadedFileForIndexPath(indexPath),
@@ -394,6 +395,7 @@ class DownloadsPanel: UIViewController,
             style: .normal,
             title: .TabsTray.DownloadsPanel.ShareTitle
         ) { [weak self] (_, view, completion) in
+            // Swipe > share action (which is different from the row selection share behaviour)
             guard let strongSelf = self else { completion(false); return }
 
             view.backgroundColor = strongSelf.view.tintColor
