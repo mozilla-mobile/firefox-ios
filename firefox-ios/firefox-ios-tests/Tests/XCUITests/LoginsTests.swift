@@ -201,8 +201,7 @@ class LoginTest: BaseTestCase {
         app.menuItems["Select All"].tap()
         app.menuItems["Cut"].waitAndTap()
         enterTextInField(typedText: "foo")
-        waitForExistence(app.buttons["Done"])
-        app.buttons["Done"].tap()
+        app.buttons["Done"].waitAndTap()
         // The username is correctly changed
         mozWaitForElementToExist(app.tables["Login Detail List"])
         mozWaitForElementToExist(app.tables.cells[loginsListURLLabel])

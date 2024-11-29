@@ -41,14 +41,11 @@ class ToolbarMenuTests: BaseTestCase {
             )
         }
         navigator.goto(BrowserTabMenu)
-        // mozWaitForElementToExist(app.tables["Context Menu"])
         mozWaitForElementToExist(app.images[StandardImageIdentifiers.Large.avatarCircle])
         validateMenuOptions()
         app.buttons["MainMenu.CloseMenuButton"].tap()
         XCUIDevice.shared.orientation = .landscapeLeft
         mozWaitForElementToExist(hamburgerMenu)
-        // mozWaitForElementToNotExist(app.tables["Context Menu"])
-        // mozWaitForElementToExist(app.images[StandardImageIdentifiers.Large.avatarCircle])
         mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
         mozWaitForElementToExist(tabsButton)
         XCTAssertTrue(
@@ -62,11 +59,8 @@ class ToolbarMenuTests: BaseTestCase {
         )
         hamburgerMenu.tap()
         mozWaitForElementToExist(app.images[StandardImageIdentifiers.Large.avatarCircle])
-        // mozWaitForElementToExist(app.tables["Context Menu"])
         validateMenuOptions()
         app.buttons["MainMenu.CloseMenuButton"].tap()
-        // app.otherElements["PopoverDismissRegion"].tap()
-        // mozWaitForElementToNotExist(app.tables["Context Menu"])
         mozWaitForElementToNotExist(app.images[StandardImageIdentifiers.Large.avatarCircle])
     }
 
