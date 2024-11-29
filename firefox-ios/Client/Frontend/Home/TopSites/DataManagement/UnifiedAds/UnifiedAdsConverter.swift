@@ -6,7 +6,7 @@
 /// into the old API Contile object. This will avoid logic changes inside the TopSitesDataAdaptor, which will be deprecated
 /// soon anyway due to the refactor of the homepage.
 struct UnifiedAdsConverter {
-    func convert(unifiedTiles: [UnifiedTile]) -> [Contile] {
+    static func convert(unifiedTiles: [UnifiedTile]) -> [Contile] {
         return unifiedTiles.enumerated().map { (index, tile) in
             Contile(
                 id: 0, // Was relevant for old telemetry, but not with unified ads

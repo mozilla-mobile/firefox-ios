@@ -131,7 +131,7 @@ class TopSitesDataAdaptorImplementation: TopSitesDataAdaptor, FeatureFlaggable {
         if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
             unifiedAdsProvider.fetchTiles { [weak self] result in
                 if case .success(let unifiedTiles) = result {
-                    self?.contiles = UnifiedAdsConverter().convert(unifiedTiles: unifiedTiles)
+                    self?.contiles = UnifiedAdsConverter.convert(unifiedTiles: unifiedTiles)
                 } else {
                     self?.contiles = []
                 }
