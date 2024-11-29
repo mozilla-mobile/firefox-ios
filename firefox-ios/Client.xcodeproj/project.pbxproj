@@ -812,6 +812,7 @@
 		8A4AC0EC28C929D700439F83 /* URLSessionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4AC0EA28C929D700439F83 /* URLSessionProtocol.swift */; };
 		8A4B14852CF8D67800FCE2D0 /* UnifiedTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4B14842CF8D67300FCE2D0 /* UnifiedTile.swift */; };
 		8A4B14872CF8D81800FCE2D0 /* UnifiedAdsProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4B14862CF8D80F00FCE2D0 /* UnifiedAdsProviderTests.swift */; };
+		8A4B148B2CF919C800FCE2D0 /* UnifiedAdsConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4B148A2CF919C300FCE2D0 /* UnifiedAdsConverter.swift */; };
 		8A4EA0D12C010BE700E4E4F1 /* MicrosurveySurfaceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4EA0D02C010BE700E4E4F1 /* MicrosurveySurfaceManager.swift */; };
 		8A4EA0D42C01100200E4E4F1 /* MicrosurveySurfaceManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4EA0D22C010BF800E4E4F1 /* MicrosurveySurfaceManagerTests.swift */; };
 		8A4EA0D92C01127C00E4E4F1 /* MicrosurveyMockModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4EA0D72C01125100E4E4F1 /* MicrosurveyMockModel.swift */; };
@@ -7412,6 +7413,7 @@
 		8A4AC0EA28C929D700439F83 /* URLSessionProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLSessionProtocol.swift; sourceTree = "<group>"; };
 		8A4B14842CF8D67300FCE2D0 /* UnifiedTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnifiedTile.swift; sourceTree = "<group>"; };
 		8A4B14862CF8D80F00FCE2D0 /* UnifiedAdsProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnifiedAdsProviderTests.swift; sourceTree = "<group>"; };
+		8A4B148A2CF919C300FCE2D0 /* UnifiedAdsConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnifiedAdsConverter.swift; sourceTree = "<group>"; };
 		8A4EA0D02C010BE700E4E4F1 /* MicrosurveySurfaceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicrosurveySurfaceManager.swift; sourceTree = "<group>"; };
 		8A4EA0D22C010BF800E4E4F1 /* MicrosurveySurfaceManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicrosurveySurfaceManagerTests.swift; sourceTree = "<group>"; };
 		8A4EA0D72C01125100E4E4F1 /* MicrosurveyMockModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrosurveyMockModel.swift; sourceTree = "<group>"; };
@@ -12056,6 +12058,7 @@
 			isa = PBXGroup;
 			children = (
 				8A7892042CF91FE100490CA4 /* UnifiedAdsCallbackTelemetry.swift */,
+				8A4B148A2CF919C300FCE2D0 /* UnifiedAdsConverter.swift */,
 				8A4B14842CF8D67300FCE2D0 /* UnifiedTile.swift */,
 				8AE9FD252CF662FF001053EE /* UnifiedAdsProvider.swift */,
 			);
@@ -16404,6 +16407,7 @@
 				0B3A153A2CE1FE710049746C /* PullRefreshView.swift in Sources */,
 				8CE1E4392B8C76C80026530B /* LoginCellView.swift in Sources */,
 				D3B6923D1B9F9444004B87A4 /* FindInPageBar.swift in Sources */,
+				8A4B148B2CF919C800FCE2D0 /* UnifiedAdsConverter.swift in Sources */,
 				1D5CBF492B17E3CB0001D033 /* NotificationPayloads.swift in Sources */,
 				2F44FC721A9E840300FD20CC /* SettingsNavigationController.swift in Sources */,
 				AB9CBC052C53B64C00102610 /* TrackingProtectionState.swift in Sources */,
