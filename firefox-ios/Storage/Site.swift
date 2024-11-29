@@ -91,10 +91,20 @@ open class Site: Identifiable {
 // MARK: - Hashable
 extension Site: Hashable {
      public func hash(into hasher: inout Hasher) {
+         // The == operator below must match the same requirements as this method
          hasher.combine(id)
+         hasher.combine(guid)
+         hasher.combine(title)
+         hasher.combine(url)
+         hasher.combine(faviconResource)
      }
 
      public static func == (lhs: Site, rhs: Site) -> Bool {
-         lhs.url == rhs.url
+         // The hash method above must match the same requirements as this operator
+         return lhs.id == rhs.id
+         && lhs.guid == rhs.guid
+         && lhs.title == rhs.title
+         && lhs.url == rhs.url
+         && lhs.faviconResource == rhs.faviconResource
      }
  }
