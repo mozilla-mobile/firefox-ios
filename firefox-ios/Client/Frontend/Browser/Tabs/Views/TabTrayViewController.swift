@@ -291,21 +291,23 @@ class TabTrayViewController: UIViewController,
     }
 
     func newState(state: TabTrayState) {
-        tabTrayState = state
+        defer {
+            tabTrayState = state
+        }
         if state.normalTabsCount != tabTrayState.normalTabsCount {
             updateTabCountImage(count: state.normalTabsCount)
         }
         segmentedControl.selectedSegmentIndex = state.selectedPanel.rawValue
 
-        if tabTrayState.shouldDismiss {
+        if state.shouldDismiss {
             delegate?.didFinish()
         }
 
-        if let url = tabTrayState.shareURL {
+        if let url = state.shareURL {
             navigationHandler?.shareTab(url: url, sourceView: self.view)
         }
 
-        if tabTrayState.showCloseConfirmation {
+        if state.showCloseConfirmation {
             showCloseAllConfirmation()
         }
 
