@@ -705,7 +705,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
             }
         }
 
-        if let webView, webView.url != nil {
+        // Do not reload from origin for homepage internal URLs
+        if let webView, webView.url != nil && !(InternalURL(webView.url)?.isAboutHomeURL ?? true) {
             webView.reloadFromOrigin()
             logger.log("Reloaded zombified tab from origin",
                        level: .debug,
