@@ -191,11 +191,9 @@ window.Localization = function () {
 // dispatches telemetry messages to the iOS, we need to modify typedefs in swift. For now, we map the telemetry events
 // to the expected shape. FXCM-935 will tackle cleaning this up.
 window.Glean = {
-  // TODO(FXCM-1453): While moving away from legacy scalars to glean ones, the automated script generated
-  // an additional category `formautofill.credit_cards`. This resulted into two different methods in our code
-  // with different casing for the c in Credit(c|C)ards. This is a temp fix until FXCM-1453 happens.
+  // While moving away from Legacy Telemetry to Glean, the automated script generated the additional categories
+  // `creditcard` and `address`. After bug 1933961 all probes will have moved to category formautofillCreditcards and formautofillAddresses.
   formautofillCreditcards: undefinedProxy(),
-  formautofillCreditCards: undefinedProxy(),
   formautofill: undefinedProxy(),
   creditcard: undefinedProxy(),
   _mapGleanToLegacy: (eventName, { value, ...extra }) => {
@@ -237,6 +235,8 @@ window.Glean = {
       },
     }
   ),
+  // Keeping unused category formautofillAddresses here, because Bug 1933961
+  // will move probes from the glean category address to formautofillAddresses
   formautofillAddresses: undefinedProxy(),
 };
 
