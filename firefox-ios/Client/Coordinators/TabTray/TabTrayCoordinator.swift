@@ -11,7 +11,6 @@ protocol TabTrayCoordinatorDelegate: AnyObject {
 
 protocol TabTrayNavigationHandler: AnyObject {
     func start(panelType: TabTrayPanelType, navigationController: UINavigationController)
-    func shareTab(url: URL, sourceView: UIView)
 }
 
 class TabTrayCoordinator: BaseCoordinator,
@@ -93,12 +92,6 @@ class TabTrayCoordinator: BaseCoordinator,
         add(child: remoteTabsCoordinator)
         remoteTabsCoordinator.parentCoordinator = self
         (navigationController.topViewController as? RemoteTabsPanel)?.remoteTabsDelegate = remoteTabsCoordinator
-    }
-
-    func shareTab(url: URL, sourceView: UIView) {
-        guard !childCoordinators.contains(where: { $0 is ShareExtensionCoordinator }) else { return }
-        let coordinator = makeShareExtensionCoordinator()
-        coordinator.start(url: url, sourceView: sourceView)
     }
 
     private func makeShareExtensionCoordinator() -> ShareExtensionCoordinator {
