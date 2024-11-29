@@ -571,7 +571,7 @@ class BrowserCoordinator: BaseCoordinator,
     private func makeMenuNavViewController() -> DismissableNavigationViewController? {
         if let mainMenuCoordinator = childCoordinators.first(where: { $0 is MainMenuCoordinator }) as? MainMenuCoordinator {
             logger.log(
-                "MainMenuCoordinator already exists when it technically shouldn't. Removing and recreating it to access menu",
+                "MainMenuCoordinator already exists when it shouldn't. Removing and recreating it to access menu",
                 level: .fatal,
                 category: .mainMenu,
                 extra: ["existing mainMenuCoordinator UUID": "\(mainMenuCoordinator.windowUUID)",
