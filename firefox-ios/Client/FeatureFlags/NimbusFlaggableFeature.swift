@@ -42,6 +42,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case searchHighlights
     case sentFromFirefox
     case splashScreen
+    case unifiedAds
     case unifiedSearch
     case toolbarRefactor
     case toolbarOneTapNewTab
@@ -64,6 +65,7 @@ enum NimbusFeatureFlagID: String, CaseIterable {
                 .toolbarRefactor,
                 .trackingProtectionRefactor,
                 .passwordGenerator,
+                .unifiedAds,
                 .unifiedSearch:
             return rawValue + PrefsKeys.FeatureFlags.DebugSuffixKey
         default:
@@ -127,6 +129,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .feltPrivacyFeltDeletion,
                 .searchHighlights,
                 .splashScreen,
+                .unifiedAds,
                 .unifiedSearch,
                 .toolbarRefactor,
                 .toolbarOneTapNewTab,
