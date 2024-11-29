@@ -570,7 +570,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     }
 
     // MARK: Share
-
+    
+    /// This action is called when the user taps Menu > Share for a file URL opened in the current active tab (e.g. by
+    /// viewing a file from the Downloads Panel)
     private func getShareFileAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .LegacyAppMenu.AppMenuSharePageTitleString,
                                      iconString: StandardImageIdentifiers.Large.share) { _ in
@@ -581,7 +583,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             self.share(fileURL: url, buttonView: self.buttonView)
         }.items
     }
-
+    
+    /// This action is called when the user taps Menu > Share for a website URL in the current active tab.
     private func getShareAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .LegacyAppMenu.Share,
                                      iconString: StandardImageIdentifiers.Large.share) { _ in
@@ -630,7 +633,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         }.items
     }
 
-    // Main menu option Share page with when opening a file
+    /// Share the URL of a downloaded file (e.g. either a user-downloaded file being viewed in the webView, or a link with a
+    /// non-HTML MIME type currently opened in the webView, such as a PDF).
     private func share(fileURL: URL, buttonView: UIView) {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
         navigationHandler?.showShareExtension(
