@@ -866,6 +866,8 @@
 		8A7653C228A2E57D00924ABF /* PocketDataAdaptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7653C128A2E57D00924ABF /* PocketDataAdaptorTests.swift */; };
 		8A7653C528A2E69100924ABF /* MockPocketAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7653C328A2E68B00924ABF /* MockPocketAPI.swift */; };
 		8A76B01629F6EB3900A82607 /* ScreenshotService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A76B01529F6EB3900A82607 /* ScreenshotService.swift */; };
+		8A7892052CF91FEF00490CA4 /* UnifiedAdsCallbackTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7892042CF91FE100490CA4 /* UnifiedAdsCallbackTelemetry.swift */; };
+		8A7892072CF9228700490CA4 /* UnifiedAdsCallbackTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7892062CF9228000490CA4 /* UnifiedAdsCallbackTelemetryTests.swift */; };
 		8A7A26E129D4785900EA76F1 /* MockRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7A26E029D4785900EA76F1 /* MockRouter.swift */; };
 		8A7A26E329D4ACF300EA76F1 /* SceneCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7A26E229D4ACF300EA76F1 /* SceneCoordinatorTests.swift */; };
 		8A7A26E529D4C0A800EA76F1 /* IntroScreenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A7A26E429D4C0A800EA76F1 /* IntroScreenManager.swift */; };
@@ -7473,6 +7475,8 @@
 		8A7653C128A2E57D00924ABF /* PocketDataAdaptorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketDataAdaptorTests.swift; sourceTree = "<group>"; };
 		8A7653C328A2E68B00924ABF /* MockPocketAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPocketAPI.swift; sourceTree = "<group>"; };
 		8A76B01529F6EB3900A82607 /* ScreenshotService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotService.swift; sourceTree = "<group>"; };
+		8A7892042CF91FE100490CA4 /* UnifiedAdsCallbackTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnifiedAdsCallbackTelemetry.swift; sourceTree = "<group>"; };
+		8A7892062CF9228000490CA4 /* UnifiedAdsCallbackTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnifiedAdsCallbackTelemetryTests.swift; sourceTree = "<group>"; };
 		8A7A26E029D4785900EA76F1 /* MockRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRouter.swift; sourceTree = "<group>"; };
 		8A7A26E229D4ACF300EA76F1 /* SceneCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneCoordinatorTests.swift; sourceTree = "<group>"; };
 		8A7A26E429D4C0A800EA76F1 /* IntroScreenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroScreenManager.swift; sourceTree = "<group>"; };
@@ -12009,6 +12013,7 @@
 			isa = PBXGroup;
 			children = (
 				8A4B14862CF8D80F00FCE2D0 /* UnifiedAdsProviderTests.swift */,
+				8A7892062CF9228000490CA4 /* UnifiedAdsCallbackTelemetryTests.swift */,
 				8A7A93ED2810ADF2005E7E1B /* ContileProviderTests.swift */,
 				961577932A39008100391E8D /* SponsoredTileDataUtilityTests.swift */,
 				8A33221E27DFE318008F809E /* TopSitesDataAdaptorTests.swift */,
@@ -12050,6 +12055,7 @@
 		8AE9FD272CF665C7001053EE /* UnifiedAds */ = {
 			isa = PBXGroup;
 			children = (
+				8A7892042CF91FE100490CA4 /* UnifiedAdsCallbackTelemetry.swift */,
 				8A4B14842CF8D67300FCE2D0 /* UnifiedTile.swift */,
 				8AE9FD252CF662FF001053EE /* UnifiedAdsProvider.swift */,
 			);
@@ -16852,6 +16858,7 @@
 				211046CD2A7D842A00A7309F /* TPAccessoryInfo.swift in Sources */,
 				8CEDF0802BFE138B00D2617B /* AddressProvider.swift in Sources */,
 				F605DD582CC73469009A671B /* TabDisplayDiffableDataSource.swift in Sources */,
+				8A7892052CF91FEF00490CA4 /* UnifiedAdsCallbackTelemetry.swift in Sources */,
 				8A454D292CB7078D009436D9 /* PocketState.swift in Sources */,
 				21E77E502AA8BAEC00FABA10 /* TabTrayState.swift in Sources */,
 				0EC57D0A2CA6FCC5002E3F04 /* PasswordGeneratorPasswordFieldView.swift in Sources */,
@@ -17114,6 +17121,7 @@
 				8A8482F02BE1602500F9007B /* MicrosurveyPromptStateTests.swift in Sources */,
 				8ADED7EC27691351009C19E6 /* CalendarExtensionsTests.swift in Sources */,
 				3B39EDBA1E16E18900EF029F /* CustomSearchEnginesTest.swift in Sources */,
+				8A7892072CF9228700490CA4 /* UnifiedAdsCallbackTelemetryTests.swift in Sources */,
 				0AFF7F662C7784F100265214 /* TrackingProtectionModelTests.swift in Sources */,
 				C80C11EE28B3C8B80062922A /* WallpaperMetadataTrackerTests.swift in Sources */,
 				0A686B3C2CDB70DC0090E146 /* MainMenuTelemetryTests.swift in Sources */,
