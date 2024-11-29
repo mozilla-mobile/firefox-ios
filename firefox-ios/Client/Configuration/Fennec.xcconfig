@@ -14,4 +14,4 @@ MOZ_TODAY_WIDGET_SEARCH_DISPLAY_NAME = Firefox - Search
 CODE_SIGN_ENTITLEMENTS = Client/Entitlements/FennecApplication.entitlements
 OTHER_SWIFT_FLAGS = $(OTHER_SWIFT_FLAGS_common) -DMOZ_CHANNEL_FENNEC
 MOZ_INTERNAL_URL_SCHEME = fennec
-OTHER_LDFLAGS = -ObjC -fprofile-instr-generate -ld_classic
+OTHER_LDFLAGS = -ObjC -fprofile-instr-generate
