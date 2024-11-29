@@ -1098,7 +1098,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             to: PageZoom)
         // Turn on night mode
         screenState.tap(
-            app.tables.cells[StandardImageIdentifiers.Large.nightMode],
+            app.otherElements.images[StandardImageIdentifiers.Large.nightMode],
             forAction: Action.ToggleNightMode,
             transitionTo: BrowserTab
         ) { userState in
