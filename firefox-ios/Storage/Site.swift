@@ -55,6 +55,11 @@ open class Site: Identifiable {
         self.init(url: url, title: title, bookmarked: false, guid: nil, faviconResource: nil)
     }
 
+    public convenience init(id: Int, url: String, title: String) {
+        self.init(url: url, title: title, bookmarked: false, guid: nil, faviconResource: nil)
+        self.id = id
+    }
+
     public init(url: String,
                 title: String,
                 bookmarked: Bool?,

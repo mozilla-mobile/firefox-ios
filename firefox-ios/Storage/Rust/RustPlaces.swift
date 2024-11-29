@@ -666,7 +666,10 @@ extension RustPlaces {
                     // as the title
                     title = info.url
                 }
-                let site = Site(url: info.url, title: title)
+                // FIXME: FXIOS-10740 Workaround for an iOS 18 HistoryPanel crash with diffable data sources until we can
+                // get a unique GUID from application services (should be sent in the payload with synced history items)
+                let hasValue = UUID().uuidString.hashValue
+                let site = Site(id: hasValue, url: info.url, title: title)
                 site.latestVisit = Visit(date: UInt64(info.timestamp) * 1000, type: info.visitType)
                 return site
             }.uniqued()
