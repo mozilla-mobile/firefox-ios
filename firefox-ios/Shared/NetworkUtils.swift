@@ -5,6 +5,24 @@
 import Foundation
 import Network
 
+public struct NetworkUtils {
+    private enum DefaultRequestConstants {
+        static let timeout: TimeInterval = 5
+        static let accept = "application/json"
+    }
+
+    public static func defaultURLSession() -> URLSession {
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.httpAdditionalHeaders = [
+            "User-Agent": UserAgent.mobileUserAgent(),
+            "Accept": DefaultRequestConstants.accept
+        ]
+        configuration.timeoutIntervalForRequest = DefaultRequestConstants.timeout
+        configuration.multipathServiceType = .handover
+        return URLSession(configuration: configuration)
+    }
+}
+
 public func makeURLSession(
     userAgent: String,
     configuration: URLSessionConfiguration,

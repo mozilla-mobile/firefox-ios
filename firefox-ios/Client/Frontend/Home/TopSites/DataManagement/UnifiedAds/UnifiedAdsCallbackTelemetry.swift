@@ -16,9 +16,7 @@ class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
     private var logger: Logger
 
     init(
-        networking: ContileNetworking = DefaultContileNetwork(
-            with: makeURLSession(userAgent: UserAgent.mobileUserAgent(),
-                                 configuration: URLSessionConfiguration.defaultMPTCP)),
+        networking: ContileNetworking = DefaultContileNetwork(with: NetworkUtils.defaultURLSession()),
         logger: Logger = DefaultLogger.shared
     ) {
         self.networking = networking
@@ -44,7 +42,7 @@ class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
         }
 
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
+        request.httpMethod = HTTPMethod.get.rawValue
 
         networking.data(from: request) { [weak self] result in
             guard let self = self else { return }
