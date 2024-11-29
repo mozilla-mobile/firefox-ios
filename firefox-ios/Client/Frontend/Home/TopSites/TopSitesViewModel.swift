@@ -32,11 +32,13 @@ class TopSitesViewModel {
     private let topSiteHistoryManager: TopSiteHistoryManager
     private let googleTopSiteManager: GoogleTopSiteManager
     private var wallpaperManager: WallpaperManager
+    private let unifiedAdsTelemetry: UnifiedAdsCallbackTelemetry
 
     init(profile: Profile,
          isZeroSearch: Bool = false,
          theme: Theme,
-         wallpaperManager: WallpaperManager) {
+         wallpaperManager: WallpaperManager,
+         unifiedAdsTelemetry: UnifiedAdsCallbackTelemetry = DefaultUnifiedAdsCallbackTelemetry()) {
         self.profile = profile
         self.isZeroSearch = isZeroSearch
         self.theme = theme
@@ -49,6 +51,7 @@ class TopSitesViewModel {
                                                         googleTopSiteManager: googleTopSiteManager)
         topSitesDataAdaptor = adaptor
         self.wallpaperManager = wallpaperManager
+        self.unifiedAdsTelemetry = unifiedAdsTelemetry
         adaptor.delegate = self
     }
 
@@ -61,7 +64,7 @@ class TopSitesViewModel {
 
     func sendImpressionTelemetry(_ homeTopSite: TopSite, position: Int) {
         guard !hasSentImpressionForTile(homeTopSite) else { return }
-        homeTopSite.impressionTracking(position: position)
+        homeTopSite.impressionTracking(position: position, unifiedAdsTelemetry: unifiedAdsTelemetry)
     }
 
     private func topSitePressTracking(homeTopSite: TopSite, position: Int) {
@@ -91,7 +94,11 @@ class TopSitesViewModel {
 
         // Sponsored tile specific telemetry
         if let tile = homeTopSite.site as? SponsoredTile {
-            SponsoredTileTelemetry.sendClickTelemetry(tile: tile, position: position)
+            if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
+                unifiedAdsTelemetry.sendClickTelemetry(tile: tile)
+            } else {
+                SponsoredTileTelemetry.sendClickTelemetry(tile: tile, position: position)
+            }
         }
     }
 
