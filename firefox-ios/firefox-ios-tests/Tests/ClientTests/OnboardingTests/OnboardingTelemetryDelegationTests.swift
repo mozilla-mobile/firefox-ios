@@ -26,18 +26,24 @@ class OnboardingTelemetryDelegationTests: XCTestCase {
     }
 
     func testOnboardingCard_viewDidAppear_viewSendsCardView() {
-        _ = createSubject()
+        let subject = createSubject()
+        guard let firstVC = subject.pageController.viewControllers?.first as? OnboardingBasicCardViewController else {
+            XCTFail("expected a view controller, but got nothing")
+            return
+        }
+        firstVC.viewDidAppear(true)
+
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView)
     }
 
     func testOnboardingCard_callsPrimaryButtonTap() {
         let subject = createSubject()
-        guard let result = subject.pageController.viewControllers?.first as? OnboardingBasicCardViewController else {
+        guard let firstVC = subject.pageController.viewControllers?.first as? OnboardingBasicCardViewController else {
             XCTFail("expected a view controller, but got nothing")
             return
         }
 
-        result.primaryAction()
+        firstVC.primaryAction()
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.primaryButtonTap)
     }
@@ -62,7 +68,6 @@ class OnboardingTelemetryDelegationTests: XCTestCase {
         result.secondaryAction()
 
         testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.secondaryButtonTap)
-        testEventMetricRecordingSuccess(metric: GleanMetrics.Onboarding.cardView, expectedCount: 3)
     }
 
     func testOnboardingCard_callsCloseTap() {
