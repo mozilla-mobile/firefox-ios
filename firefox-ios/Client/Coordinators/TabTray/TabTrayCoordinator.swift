@@ -94,18 +94,6 @@ class TabTrayCoordinator: BaseCoordinator,
         (navigationController.topViewController as? RemoteTabsPanel)?.remoteTabsDelegate = remoteTabsCoordinator
     }
 
-    private func makeShareExtensionCoordinator() -> ShareExtensionCoordinator {
-        let coordinator = ShareExtensionCoordinator(
-            alertContainer: UIView(),
-            router: router,
-            profile: profile,
-            parentCoordinator: self,
-            tabManager: tabManager
-        )
-        add(child: coordinator)
-        return coordinator
-    }
-
     // MARK: - ParentCoordinatorDelegate
     func didFinish(from childCoordinator: Coordinator) {
         TelemetryWrapper.recordEvent(category: .action,
