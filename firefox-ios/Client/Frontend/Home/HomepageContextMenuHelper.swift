@@ -236,7 +236,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         })
     }
 
-    /// Handles share from Long press on Pocket article
+    /// Handles share from long press on pocket articles, jump back in websites, bookmarks, etc. on the home screen.
     /// - Parameters:
     ///   - site: Site for pocket article
     ///   - sourceView: View to show the popover
