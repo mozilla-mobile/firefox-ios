@@ -9,7 +9,7 @@ import ComponentLibrary
 class HomepageCoordinatorTests: XCTestCase {
     var coordinator: HomepageCoordinator!
     let profile = MockProfile()
-    let wallpaperManger = WallpaperManagerMock()
+    let wallpaperManager = WallpaperManagerMock()
     let router = MockRouter(navigationController: MockNavigationController())
 
     override func setUp() {
@@ -54,7 +54,7 @@ class HomepageCoordinatorTests: XCTestCase {
         XCTAssertNil(router.presentedViewController)
     }
 
-    func test_showWallpaperSelectionOnboarding_RouterAlreadyPresnting_doesNotPresentWallpaperSelection() {
+    func test_showWallpaperSelectionOnboarding_RouterAlreadyPresenting_doesNotPresentWallpaperSelection() {
         router.presentCalled = 1
         coordinator = HomepageCoordinator(
             windowUUID: .XCTestDefaultUUID,

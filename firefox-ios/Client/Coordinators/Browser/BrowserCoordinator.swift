@@ -141,7 +141,6 @@ class BrowserCoordinator: BaseCoordinator,
         let homepageCoordinator = childCoordinators[HomepageCoordinator.self] ?? HomepageCoordinator(
             windowUUID: windowUUID,
             profile: profile,
-            wallpaperManger: WallpaperManager(),
             isZeroSearch: isZeroSearch,
             router: router
         )

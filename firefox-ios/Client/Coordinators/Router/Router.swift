@@ -15,7 +15,7 @@ protocol Router: AnyObject, UINavigationControllerDelegate, UIAdaptivePresentati
     /// controller on the navigation controller stack
     var rootViewController: UIViewController? { get }
 
-    /// Boolean value indicating whether or not the router is presnting a view controller for a vertical flow
+    /// Boolean value indicating whether or not the router is presenting a view controller for a vertical flow
     var isPresenting: Bool { get }
 
     /// Present a view controller for a vertical flow.

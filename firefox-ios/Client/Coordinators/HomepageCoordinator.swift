@@ -6,11 +6,11 @@ import Common
 import ComponentLibrary
 import Shared
 
-protocol HompageDelegate: AnyObject {
+protocol HomepageDelegate: AnyObject {
      func showWallpaperSelectionOnboarding(_ canPresentModally: Bool)
 }
 
-class HomepageCoordinator: BaseCoordinator, HompageDelegate {
+class HomepageCoordinator: BaseCoordinator, HomepageDelegate {
     private let windowUUID: WindowUUID
     private let profile: Profile
     private let wallpaperManager: WallpaperManagerInterface
@@ -19,13 +19,13 @@ class HomepageCoordinator: BaseCoordinator, HompageDelegate {
     init(
         windowUUID: WindowUUID,
         profile: Profile,
-        wallpaperManger: WallpaperManagerInterface,
+        wallpaperManager: WallpaperManagerInterface = WallpaperManager(),
         isZeroSearch: Bool,
         router: Router
     ) {
         self.windowUUID = windowUUID
         self.profile = profile
-        self.wallpaperManager = wallpaperManger
+        self.wallpaperManager = wallpaperManager
         self.isZeroSearch = isZeroSearch
         super.init(router: router)
         self.router = router
