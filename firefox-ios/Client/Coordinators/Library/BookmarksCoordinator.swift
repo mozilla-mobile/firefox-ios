@@ -222,7 +222,6 @@ class BookmarksCoordinator: BaseCoordinator,
 
     private func makeSignInController() -> UIViewController {
         let fxaParams = FxALaunchParams(entrypoint: .libraryPanel, query: [:])
-        // NEED TO CHANGE PARENT TYPE
         let viewController = FirefoxAccountSignInViewController(profile: profile,
                                                                 parentType: .library,
                                                                 deepLinkParams: fxaParams,
@@ -258,5 +257,6 @@ class BookmarksCoordinator: BaseCoordinator,
     @objc
     private func dismissFxAViewController() {
         fxAccountViewController?.dismissVC()
+        fxAccountViewController = nil
     }
 }

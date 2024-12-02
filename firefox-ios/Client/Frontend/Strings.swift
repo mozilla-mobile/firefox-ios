@@ -195,7 +195,7 @@ extension String {
                     key: "Bookmarks.EmptyState.Root.ButtonTitle.v135",
                     tableName: "Bookmarks",
                     value: "Sign in to Sync",
-                    comment: "The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal. This button starts the initiates allowing users to sign in to their Mozilla Account to sync data")
+                    comment: "The button title for the sign in button on the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the library modal. This button triggers the sign in flow, allowing users to sign in to their Mozilla Account to sync data")
             }
             public struct Nested {
                 public static let Title = MZLocalizedString(

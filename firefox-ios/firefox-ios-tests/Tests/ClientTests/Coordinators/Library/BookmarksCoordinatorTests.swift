@@ -19,6 +19,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
         profile = MockProfile()
         parentCoordinator = MockLibraryCoordinatorDelegate()
         navigationHandler = MockLibraryNavigationHandler()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {
@@ -75,6 +76,42 @@ final class BookmarksCoordinatorTests: XCTestCase {
         let presentedViewController = router.presentedViewController as? UINavigationController
         XCTAssertTrue(presentedViewController?.visibleViewController is FirefoxAccountSignInViewController)
         XCTAssertEqual(router.presentCalled, 1)
+    }
+
+    func testShowQRCode_addsQRCodeChildCoordinator() {
+        let subject = createSubject()
+        let delegate = MockQRCodeViewControllerDelegate()
+
+        subject.showQRCode(delegate: delegate)
+
+        XCTAssertEqual(subject.childCoordinators.count, 1)
+        XCTAssertTrue(subject.childCoordinators.first is QRCodeCoordinator)
+    }
+
+    func testShowQRCode_presentsQRCodeNavigationController() {
+        let subject = createSubject()
+        let delegate = MockQRCodeViewControllerDelegate()
+
+        subject.showQRCode(delegate: delegate)
+
+        XCTAssertEqual(router.presentCalled, 1)
+        XCTAssertTrue(router.presentedViewController is QRCodeNavigationController)
+    }
+
+    func testDidFinishCalled() {
+        let subject = createSubject()
+        let delegate = MockQRCodeViewControllerDelegate()
+        subject.showQRCode(delegate: delegate)
+
+        guard let qrCodeCoordinator = subject.childCoordinators.first(where: {
+            $0 is QRCodeCoordinator
+        }) as? QRCodeCoordinator else {
+            XCTFail("QRCodeCoordinator expected to be found")
+            return
+        }
+
+        subject.didFinish(from: qrCodeCoordinator)
+        XCTAssertEqual(subject.childCoordinators.count, 0)
     }
 
     func testShowShareExtension_callsNavigationHandlerShareFunction() {
