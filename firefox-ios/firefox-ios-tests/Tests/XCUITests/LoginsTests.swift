@@ -67,8 +67,11 @@ class LoginTest: BaseTestCase {
             ]
         )
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
-        app.buttons["Settings"].tap()
-        navigator.performAction(Action.OpenNewTabFromTabTray)
+        app.buttons["Settings"].waitAndTap()
+        app.buttons["Done"].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
+        navigator.nowAt(NewTabScreen)
         saveLogin(givenUrl: testLoginPage)
         // Make sure you can access populated Login List from Browser Tab Menu
         navigator.goto(LoginsSettings)
