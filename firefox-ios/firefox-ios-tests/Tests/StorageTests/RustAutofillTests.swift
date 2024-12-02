@@ -216,15 +216,15 @@ class RustAutofillTests: XCTestCase {
                                                         ccExpYear: Int64(2028),
                                                         ccType: creditCard.ccType)
         let result = try await updateCreditCard(id: creditCard.guid, creditCard: creditCardVal)
-        let updatedCardVal = try await getCreditCard(id: creditCard.guid)
+        let updatedCreditCardVal = try await getCreditCard(id: creditCard.guid)
 
         XCTAssertEqual(creditCard.guid, card.guid)
         XCTAssertTrue(result)
-        XCTAssertEqual(updatedCardVal.ccName, creditCardVal.ccName)
-        XCTAssertEqual(updatedCardVal.ccNumberLast4, creditCardVal.ccNumberLast4)
-        XCTAssertEqual(updatedCardVal.ccExpMonth, creditCardVal.ccExpMonth)
-        XCTAssertEqual(updatedCardVal.ccExpYear, creditCardVal.ccExpYear)
-        XCTAssertEqual(updatedCardVal.ccType, creditCardVal.ccType)
+        XCTAssertEqual(updatedCreditCardVal.ccName, creditCardVal.ccName)
+        XCTAssertEqual(updatedCreditCardVal.ccNumberLast4, creditCardVal.ccNumberLast4)
+        XCTAssertEqual(updatedCreditCardVal.ccExpMonth, creditCardVal.ccExpMonth)
+        XCTAssertEqual(updatedCreditCardVal.ccExpYear, creditCardVal.ccExpYear)
+        XCTAssertEqual(updatedCreditCardVal.ccType, creditCardVal.ccType)
     }
 
     func testDeleteCreditCard() async throws {
