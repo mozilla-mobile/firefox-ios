@@ -73,6 +73,8 @@ class ClipBoardTests: BaseTestCase {
         // Tap on "Copy Link
         navigator.openURL(url_3)
         waitForTabsButton()
+        // Menu Refactor: No "Copy Link" from browser tab menu
+        /*
         navigator.performAction(Action.CopyAddressPAM)
         // The Link is copied to clipboard
         mozWaitForElementToExist(app.staticTexts["URL Copied To Clipboard"])
@@ -86,6 +88,7 @@ class ClipBoardTests: BaseTestCase {
         mozWaitForElementToExist(urlBar)
         waitForValueContains(urlBar, value: "localhost")
         mozWaitForElementToExist(app.staticTexts["Example Domain"])
+        */
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2325691

@@ -119,6 +119,7 @@
         "ShortcutRouteTests\/testOpenLastBookmarkShortcutWithInvalidUrl()",
         "TabManagerTests\/testDeleteSelectedTab()",
         "TabManagerTests\/testPrivatePreference_togglePBMDeletesPrivate()",
+        "TabToolbarHelperTests\/testTelemetryForSiteMenu()",
         "TestFavicons\/testFaviconFetcherParse()",
         "VersionSettingTests",
         "VersionSettingTests\/testCopyAppVersion()"
