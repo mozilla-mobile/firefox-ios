@@ -107,9 +107,6 @@
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Verbeterde bescherming tegen volgen";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Beschermingen zijn UIT. We raden u aan de functie weer in te schakelen.";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Beschermingen zijn UIT. We raden u aan ze weer in te schakelen.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */

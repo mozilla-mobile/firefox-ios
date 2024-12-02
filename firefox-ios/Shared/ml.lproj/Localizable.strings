@@ -892,9 +892,6 @@
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "ഫയർഫോക്സ് തുറക്കുമ്പോൾ";
 
-/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "ഫയർഫോക്സ് തുറക്കുമ്പോൾ";
-
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "പകർത്തിയ ലിങ്കുകൾ തുറക്കുമെന്നു് വാഗ്ദാനം ചെയ്യുന്നു";
 

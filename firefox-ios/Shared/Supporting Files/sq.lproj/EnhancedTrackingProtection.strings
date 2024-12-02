@@ -107,9 +107,6 @@
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Mbrojtje e Thelluar Nga Gjurmimi";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Mbrojtjet janë OFF. Sugjerojmë t’i aktivizoni.";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Mbrojtjet janë OFF. Sugjerojmë t’i aktivizoni.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */

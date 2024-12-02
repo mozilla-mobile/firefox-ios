@@ -1,9 +1,6 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Ail-lwytho";
 
-/* On error page, this is the description for generic error. */
-"NativeErrorPage.GenericError.Description.v131" = "Mae gwall SSL wedi digwydd ac nid oes modd gwneud cysylltiad diogel â'r gweinydd.";
-
 /* On error page, this is the description for generic error. The placeholder will be replaced by the site url */
 "NativeErrorPage.GenericError.Description.v134" = "Nid yw perchennog %@ wedi ei osod yn iawn ac nid oes modd creu cysylltiad diogel.";
 

@@ -92,9 +92,6 @@
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Միացնել ծանուցումները";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Sync.Description.v120" = "Երբ մուտք եք գործել և համաժամացվել, դուք ավելի ապահով եք: %@-ը կոդավորում է ձեր գաղտնաբառերը, էջանիշները և ավելին:";
-
-/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Sync.Description.v123" = "%@-ը կոդավորում է ձեր գաղտնաբառերը, էջանիշները և ավելին, երբ համաժամացվում եք:";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
