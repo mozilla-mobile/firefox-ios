@@ -224,7 +224,7 @@ class BookmarksCoordinator: BaseCoordinator,
         let fxaParams = FxALaunchParams(entrypoint: .libraryPanel, query: [:])
         // NEED TO CHANGE PARENT TYPE
         let viewController = FirefoxAccountSignInViewController(profile: profile,
-                                                                parentType: .tabTray,
+                                                                parentType: .library,
                                                                 deepLinkParams: fxaParams,
                                                                 windowUUID: windowUUID)
         viewController.qrCodeNavigationHandler = self
@@ -235,9 +235,6 @@ class BookmarksCoordinator: BaseCoordinator,
             action: #selector(dismissFxAViewController)
         )
         viewController.navigationItem.leftBarButtonItem = buttonItem
-        viewController.shouldReload = { [weak self] in
-            self?.reloadLastBookmarksController()
-        }
         let navController = ThemedNavigationController(rootViewController: viewController, windowUUID: windowUUID)
         fxAccountViewController = viewController
         return navController

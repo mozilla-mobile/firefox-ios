@@ -122,6 +122,13 @@ class BookmarksViewController: SiteTableViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(profileFinishedSyncing),
+            name: .ProfileDidFinishSyncing,
+            object: nil
+        )
+
         let tableViewLongPressRecognizer = UILongPressGestureRecognizer(target: self,
                                                                         action: #selector(didLongPressTableView))
         tableView.addGestureRecognizer(tableViewLongPressRecognizer)
@@ -144,11 +151,13 @@ class BookmarksViewController: SiteTableViewController,
 
     override func reloadData() {
         viewModel.reloadData { [weak self] in
-            self?.tableView.reloadData()
-            if self?.viewModel.shouldFlashRow ?? false {
-                self?.flashRow()
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+                if self?.viewModel.shouldFlashRow ?? false {
+                    self?.flashRow()
+                }
+                self?.updateEmptyState()
             }
-            self?.updateEmptyState()
         }
     }
 
@@ -327,6 +336,11 @@ class BookmarksViewController: SiteTableViewController,
             let isSignedIn = profile.hasAccount()
             emptyStateView.configure(isRoot: isRoot, isSignedIn: isSignedIn)
         }
+    }
+
+    @objc
+    private func profileFinishedSyncing() {
+        reloadData()
     }
 
     // MARK: - Long press
