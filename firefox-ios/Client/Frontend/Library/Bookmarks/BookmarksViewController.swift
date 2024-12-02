@@ -7,7 +7,6 @@ import UIKit
 import Storage
 import Shared
 import SiteImageView
-import Account
 
 import class MozillaAppServices.BookmarkItemData
 import class MozillaAppServices.BookmarkSeparatorData
@@ -103,7 +102,7 @@ class BookmarksViewController: SiteTableViewController,
         self.bookmarksHandler = viewModel.profile.places
         super.init(profile: viewModel.profile, windowUUID: windowUUID)
 
-        setupNotifications(forObserver: self, observing: [.FirefoxAccountChanged])
+        setupNotifications(forObserver: self, observing: [.FirefoxAccountChanged, .ProfileDidFinishSyncing])
 
         tableView.register(cellType: OneLineTableViewCell.self)
         tableView.register(cellType: SeparatorTableViewCell.self)
@@ -121,13 +120,6 @@ class BookmarksViewController: SiteTableViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(profileFinishedSyncing),
-            name: .ProfileDidFinishSyncing,
-            object: nil
-        )
 
         let tableViewLongPressRecognizer = UILongPressGestureRecognizer(target: self,
                                                                         action: #selector(didLongPressTableView))
@@ -336,11 +328,6 @@ class BookmarksViewController: SiteTableViewController,
             let isSignedIn = profile.hasAccount()
             emptyStateView.configure(isRoot: isRoot, isSignedIn: isSignedIn)
         }
-    }
-
-    @objc
-    private func profileFinishedSyncing() {
-        reloadData()
     }
 
     // MARK: - Long press
@@ -593,7 +580,7 @@ extension BookmarksViewController: LibraryPanelContextMenu {
 extension BookmarksViewController: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .FirefoxAccountChanged:
+        case .FirefoxAccountChanged, .ProfileDidFinishSyncing:
             reloadData()
         default:
             break
