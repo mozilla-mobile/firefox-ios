@@ -7,62 +7,76 @@ import ComponentLibrary
 @testable import Client
 
 class HomepageCoordinatorTests: XCTestCase {
-    var coordinator: HomepageCoordinator!
-    let profile = MockProfile()
-    let wallpaperManager = WallpaperManagerMock()
-    let router = MockRouter(navigationController: MockNavigationController())
+    var profile: MockProfile!
+    var wallpaperManager: WallpaperManagerMock!
+    var router: MockRouter!
 
     override func setUp() {
         super.setUp()
+        profile = MockProfile()
+        wallpaperManager = WallpaperManagerMock()
+        router = MockRouter(navigationController: MockNavigationController())
         DependencyHelperMock().bootstrapDependencies()
     }
 
+    override func tearDown() {
+        super.tearDown()
+        DependencyHelperMock().reset()
+        profile = nil
+        wallpaperManager = nil
+        router = nil
+    }
+
     func test_showWallpaperSelectionOnboarding_withNoZeroSearch_doesNotPresentWallpaperSelection() {
-        coordinator = HomepageCoordinator(
+        let coordinator = HomepageCoordinator(
             windowUUID: .XCTestDefaultUUID,
             profile: profile,
-            wallpaperManger: wallpaperManger,
+            wallpaperManager: wallpaperManager,
             isZeroSearch: false,
             router: router
         )
+        trackForMemoryLeaks(coordinator)
         coordinator.showWallpaperSelectionOnboarding(true)
         XCTAssertNil(router.presentedViewController)
     }
 
     func test_showWallpaperSelectionOnboarding_withZeroSearch_doesPresentWallpaperSelection() {
-        coordinator = HomepageCoordinator(
+        let coordinator = HomepageCoordinator(
             windowUUID: .XCTestDefaultUUID,
             profile: profile,
-            wallpaperManger: wallpaperManger,
+            wallpaperManager: wallpaperManager,
             isZeroSearch: true,
             router: router
         )
+        trackForMemoryLeaks(coordinator)
         coordinator.showWallpaperSelectionOnboarding(true)
         XCTAssertEqual(router.presentCalled, 1)
         XCTAssertTrue(router.presentedViewController is BottomSheetViewController)
     }
 
     func test_showWallpaperSelectionOnboarding_withCanPresentModallyIsFalse_doesNotPresentWallpaperSelection() {
-        coordinator = HomepageCoordinator(
+        let coordinator = HomepageCoordinator(
             windowUUID: .XCTestDefaultUUID,
             profile: profile,
-            wallpaperManger: wallpaperManger,
+            wallpaperManager: wallpaperManager,
             isZeroSearch: true,
             router: router
         )
+        trackForMemoryLeaks(coordinator)
         coordinator.showWallpaperSelectionOnboarding(false)
         XCTAssertNil(router.presentedViewController)
     }
 
     func test_showWallpaperSelectionOnboarding_RouterAlreadyPresenting_doesNotPresentWallpaperSelection() {
         router.presentCalled = 1
-        coordinator = HomepageCoordinator(
+        let coordinator = HomepageCoordinator(
             windowUUID: .XCTestDefaultUUID,
             profile: profile,
-            wallpaperManger: wallpaperManger,
+            wallpaperManager: wallpaperManager,
             isZeroSearch: true,
             router: router
         )
+        trackForMemoryLeaks(coordinator)
         coordinator.showWallpaperSelectionOnboarding(true)
         XCTAssertNil(router.presentedViewController)
     }
