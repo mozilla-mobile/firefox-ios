@@ -209,22 +209,22 @@ class RustAutofillTests: XCTestCase {
     func testUpdateCreditCard() async throws {
         let creditCard = try await addCreditCard()
         let card = try await getCreditCard(id: creditCard.guid)
-        let updatedCreditCard = UnencryptedCreditCardFields(ccName: creditCard.ccName,
-                                                            ccNumber: creditCard.ccNumberEnc,
-                                                            ccNumberLast4: creditCard.ccNumberLast4,
-                                                            ccExpMonth: creditCard.ccExpMonth,
-                                                            ccExpYear: Int64(2028),
-                                                            ccType: creditCard.ccType)
-        let result = try await updateCreditCard(id: creditCard.guid, creditCard: updatedCreditCard)
+        let creditCardVal = UnencryptedCreditCardFields(ccName: creditCard.ccName,
+                                                        ccNumber: creditCard.ccNumberEnc,
+                                                        ccNumberLast4: creditCard.ccNumberLast4,
+                                                        ccExpMonth: creditCard.ccExpMonth,
+                                                        ccExpYear: Int64(2028),
+                                                        ccType: creditCard.ccType)
+        let result = try await updateCreditCard(id: creditCard.guid, creditCard: creditCardVal)
         let updatedCardVal = try await getCreditCard(id: creditCard.guid)
 
         XCTAssertEqual(creditCard.guid, card.guid)
         XCTAssertTrue(result)
-        XCTAssertEqual(updatedCardVal.ccName, updatedCreditCard.ccName)
-        XCTAssertEqual(updatedCardVal.ccNumberLast4, updatedCreditCard.ccNumberLast4)
-        XCTAssertEqual(updatedCardVal.ccExpMonth, updatedCreditCard.ccExpMonth)
-        XCTAssertEqual(updatedCardVal.ccExpYear, updatedCreditCard.ccExpYear)
-        XCTAssertEqual(updatedCardVal.ccType, updatedCreditCard.ccType)
+        XCTAssertEqual(updatedCardVal.ccName, creditCardVal.ccName)
+        XCTAssertEqual(updatedCardVal.ccNumberLast4, creditCardVal.ccNumberLast4)
+        XCTAssertEqual(updatedCardVal.ccExpMonth, creditCardVal.ccExpMonth)
+        XCTAssertEqual(updatedCardVal.ccExpYear, creditCardVal.ccExpYear)
+        XCTAssertEqual(updatedCardVal.ccType, creditCardVal.ccType)
     }
 
     func testDeleteCreditCard() async throws {
