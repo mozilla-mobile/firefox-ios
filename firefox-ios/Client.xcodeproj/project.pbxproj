@@ -24179,11 +24179,6 @@
 				EAGER_LINKING = YES;
 				FUSE_BUILD_SCRIPT_PHASES = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-Xlinker",
-					"-no_application_extension",
-				);
 				OTHER_SWIFT_FLAGS = "$(OTHER_SWIFT_FLAGS_common) -DMOZ_CHANNEL_FENNEC";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = TESTING;
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -25587,11 +25582,6 @@
 				EAGER_LINKING = YES;
 				FUSE_BUILD_SCRIPT_PHASES = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-Xlinker",
-					"-no_application_extension",
-				);
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				VALIDATE_WORKSPACE = YES;
 			};
