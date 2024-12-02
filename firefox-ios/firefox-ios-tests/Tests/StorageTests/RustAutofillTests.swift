@@ -209,12 +209,12 @@ class RustAutofillTests: XCTestCase {
     func testUpdateCreditCard() async throws {
         let creditCard = try await addCreditCard()
         let card = try await getCreditCard(id: creditCard.guid)
-        let creditCardVal = UnencryptedCreditCardFields(ccName: creditCard.ccName,
-                                                        ccNumber: creditCard.ccNumberEnc,
-                                                        ccNumberLast4: creditCard.ccNumberLast4,
-                                                        ccExpMonth: creditCard.ccExpMonth,
-                                                        ccExpYear: Int64(2028),
-                                                        ccType: creditCard.ccType)
+        let creditCardVal = UnencryptedCreditCardFields(ccName: "Jane Smith",
+                                                        ccNumber: "0123456789987654",
+                                                        ccNumberLast4: "7654",
+                                                        ccExpMonth: 01,
+                                                        ccExpYear: 2028,
+                                                        ccType: "Master")
         let result = try await updateCreditCard(id: creditCard.guid, creditCard: creditCardVal)
         let updatedCreditCardVal = try await getCreditCard(id: creditCard.guid)
 
