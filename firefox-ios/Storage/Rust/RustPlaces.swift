@@ -647,7 +647,9 @@ extension RustPlaces {
                     // as the title
                     title = info.url
                 }
-                let site = Site(url: info.url, title: title)
+                // Note: FXIOS-10740 Necessary to have unique Site ID iOS 18 HistoryPanel crash with diffable data sources
+                let hashValue = "\(info.url)_\(info.timestamp)".hashValue
+                let site = Site(id: hashValue, url: info.url, title: title)
                 site.latestVisit = Visit(date: UInt64(info.timestamp) * 1000, type: info.visitType)
                 return site
             }.uniqued()

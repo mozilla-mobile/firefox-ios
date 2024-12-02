@@ -472,9 +472,6 @@ class HistoryTests: BaseTestCase {
     func testDeleteHistoryEntryBySwiping() {
         navigateToPage()
         navigator.goto(LibraryPanel_History)
-        waitForExistence(app.cells.staticTexts["http://example.com/"])
-        navigateToPage()
-        navigator.goto(LibraryPanel_History)
         mozWaitForElementToExist(app.cells.staticTexts["http://example.com/"])
         app.cells.staticTexts["http://example.com/"].firstMatch.swipeLeft()
         app.buttons["Delete"].waitAndTap()
