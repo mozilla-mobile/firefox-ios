@@ -143,11 +143,13 @@ class BookmarksViewController: SiteTableViewController,
 
     override func reloadData() {
         viewModel.reloadData { [weak self] in
-            self?.tableView.reloadData()
-            if self?.viewModel.shouldFlashRow ?? false {
-                self?.flashRow()
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+                if self?.viewModel.shouldFlashRow ?? false {
+                    self?.flashRow()
+                }
+                self?.updateEmptyState()
             }
-            self?.updateEmptyState()
         }
     }
 
