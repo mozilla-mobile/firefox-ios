@@ -12,7 +12,7 @@ public struct NetworkUtils {
     }
 
     public static func defaultURLSession() -> URLSession {
-        let configuration = URLSessionConfiguration.ephemeral
+        let configuration = URLSessionConfiguration.default
         configuration.httpAdditionalHeaders = [
             "User-Agent": UserAgent.mobileUserAgent(),
             "Accept": DefaultRequestConstants.accept
