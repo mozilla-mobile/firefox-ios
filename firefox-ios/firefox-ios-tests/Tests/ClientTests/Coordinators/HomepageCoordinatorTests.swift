@@ -28,26 +28,14 @@ class HomepageCoordinatorTests: XCTestCase {
     }
 
     func test_showWallpaperSelectionOnboarding_withNoZeroSearch_doesNotPresentWallpaperSelection() {
-        let coordinator = HomepageCoordinator(
-            windowUUID: .XCTestDefaultUUID,
-            profile: profile,
-            wallpaperManager: wallpaperManager,
-            isZeroSearch: false,
-            router: router
-        )
+        let coordinator = createSubjectAndTrackForMemoryLeaks(isZeroSearch: false)
         trackForMemoryLeaks(coordinator)
         coordinator.showWallpaperSelectionOnboarding(true)
         XCTAssertNil(router.presentedViewController)
     }
 
     func test_showWallpaperSelectionOnboarding_withZeroSearch_doesPresentWallpaperSelection() {
-        let coordinator = HomepageCoordinator(
-            windowUUID: .XCTestDefaultUUID,
-            profile: profile,
-            wallpaperManager: wallpaperManager,
-            isZeroSearch: true,
-            router: router
-        )
+        let coordinator = createSubjectAndTrackForMemoryLeaks(isZeroSearch: true)
         trackForMemoryLeaks(coordinator)
         coordinator.showWallpaperSelectionOnboarding(true)
         XCTAssertEqual(router.presentCalled, 1)
@@ -55,13 +43,7 @@ class HomepageCoordinatorTests: XCTestCase {
     }
 
     func test_showWallpaperSelectionOnboarding_withCanPresentModallyIsFalse_doesNotPresentWallpaperSelection() {
-        let coordinator = HomepageCoordinator(
-            windowUUID: .XCTestDefaultUUID,
-            profile: profile,
-            wallpaperManager: wallpaperManager,
-            isZeroSearch: true,
-            router: router
-        )
+        let coordinator = createSubjectAndTrackForMemoryLeaks(isZeroSearch: true)
         trackForMemoryLeaks(coordinator)
         coordinator.showWallpaperSelectionOnboarding(false)
         XCTAssertNil(router.presentedViewController)
@@ -69,15 +51,20 @@ class HomepageCoordinatorTests: XCTestCase {
 
     func test_showWallpaperSelectionOnboarding_RouterAlreadyPresenting_doesNotPresentWallpaperSelection() {
         router.presentCalled = 1
+        let coordinator = createSubjectAndTrackForMemoryLeaks(isZeroSearch: true)
+        coordinator.showWallpaperSelectionOnboarding(true)
+        XCTAssertNil(router.presentedViewController)
+    }
+
+    private func createSubjectAndTrackForMemoryLeaks(isZeroSearch: Bool) -> HomepageCoordinator {
         let coordinator = HomepageCoordinator(
             windowUUID: .XCTestDefaultUUID,
             profile: profile,
             wallpaperManager: wallpaperManager,
-            isZeroSearch: true,
+            isZeroSearch: isZeroSearch,
             router: router
         )
         trackForMemoryLeaks(coordinator)
-        coordinator.showWallpaperSelectionOnboarding(true)
-        XCTAssertNil(router.presentedViewController)
+        return coordinator
     }
 }
