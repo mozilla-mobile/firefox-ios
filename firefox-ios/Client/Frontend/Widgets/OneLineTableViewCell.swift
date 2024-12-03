@@ -88,12 +88,13 @@ class OneLineTableViewCell: UITableViewCell,
     }
 
     private func setBookmarksRefactorMargin() {
-        // Move indentationLevelMargin to UX struct if Bookmarks feature is rolled out
-        let indentationLevelMargin: CGFloat = 52
         if indentationLevel == 0 {
             leftImageViewLeadingConstraint?.constant = UX.borderViewMargin
         } else {
-            leftImageViewLeadingConstraint?.constant = (CGFloat(indentationLevel) * indentationLevelMargin)
+            let indentationLevelMargin: CGFloat = UX.borderViewMargin + UX.imageSize + UX.longLeadingMargin
+            let indentSize = (UX.imageSize + UX.longLeadingMargin)
+            let indentLevel = indentSize * CGFloat(indentationLevel-1)
+            leftImageViewLeadingConstraint?.constant = indentationLevelMargin + indentLevel
         }
     }
 
