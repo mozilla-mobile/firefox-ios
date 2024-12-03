@@ -1039,8 +1039,6 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - Private helpers
 
     private func showShareSheet(with url: URL?, title: String?) {
-        // Note: From New Menu > Share
-        // Note: From deeplinks ( > sharesheet route)
         guard let url else { return }
 
         let showShareSheet = { url in
