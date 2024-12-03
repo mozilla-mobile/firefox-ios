@@ -96,7 +96,7 @@ final class LibraryCoordinatorTests: XCTestCase {
         XCTAssertEqual(delegate.didFinishSettingsCalled, 1)
     }
 
-    func testShowShareExtension_addsShareExtensionCoordinator() {
+    func testShowShareSheet_addsShareSheetCoordinator() {
         let subject = createSubject()
 
         subject.shareLibraryItem(

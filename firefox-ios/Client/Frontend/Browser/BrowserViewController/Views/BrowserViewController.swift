@@ -2340,7 +2340,7 @@ class BrowserViewController: UIViewController,
         }
 
         if let selectedTab = tabManager.selectedTab, let tabUrl = selectedTab.canonicalURL?.displayURL {
-            navigationHandler?.showShareExtension(
+            navigationHandler?.showShareSheet(
                 url: tabUrl,
                 sourceView: view,
                 toastContainer: contentContainer,

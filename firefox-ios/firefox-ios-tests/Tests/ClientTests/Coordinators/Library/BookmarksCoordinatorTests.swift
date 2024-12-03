@@ -114,7 +114,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
         XCTAssertEqual(subject.childCoordinators.count, 0)
     }
 
-    func testShowShareExtension_callsNavigationHandlerShareFunction() {
+    func testShowShareSheet_callsNavigationHandlerShareFunction() {
         let subject = createSubject()
 
         subject.shareLibraryItem(

@@ -238,10 +238,10 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         }
     }
 
-    func testShowShareExtension_addsShareExtensionCoordinator() {
+    func testShowShareSheet_addsShareSheetCoordinator() {
         let subject = createSubject()
 
-        subject.showShareExtension(
+        subject.showShareSheet(
             url: URL(
                 string: "https://www.google.com"
             )!,
@@ -255,10 +255,10 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(mockRouter.presentedViewController is UIActivityViewController)
     }
 
-    func testShowShareExtension_addsShareExtensionCoordinatorWithTitle() {
+    func testShowShareSheet_addsShareSheetCoordinatorWithTitle() {
         let subject = createSubject()
 
-        subject.showShareExtension(
+        subject.showShareSheet(
             url: URL(
                 string: "https://www.google.com"
             )!,

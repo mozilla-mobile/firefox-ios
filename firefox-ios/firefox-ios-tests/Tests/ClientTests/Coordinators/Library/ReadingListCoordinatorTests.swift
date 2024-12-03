@@ -40,7 +40,7 @@ final class ReadingListCoordinatorTests: XCTestCase {
         XCTAssertEqual(parentCoordinator.lastOpenedURL, urlToOpen)
     }
 
-    func testShowShareExtension_callsNavigationHandlerShareFunction() {
+    func testShowShareSheet_callsNavigationHandlerShareFunction() {
         let subject = createSubject()
 
         subject.shareLibraryItem(

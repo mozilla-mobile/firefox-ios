@@ -722,7 +722,7 @@ class BrowserCoordinator: BaseCoordinator,
         return coordinator
     }
 
-    func showShareExtension(
+    func startShareSheetCoordinator(
         url: URL,
         title: String?,
         sourceView: UIView,
@@ -1042,10 +1042,11 @@ class BrowserCoordinator: BaseCoordinator,
         guard let url else { return }
 
         let showShareSheet = { url in
-            self.showShareExtension(
+            self.startShareSheetCoordinator(
                 url: url,
                 title: title,
                 sourceView: self.browserViewController.addressToolbarContainer,
+                sourceRect: nil,
                 toastContainer: self.browserViewController.contentContainer,
                 popoverArrowDirection: .any
             )

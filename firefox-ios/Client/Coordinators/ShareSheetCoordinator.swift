@@ -40,7 +40,7 @@ class ShareSheetCoordinator: BaseCoordinator,
 
     // MARK: - Methods
 
-    /// Presents the Share extension from the source view
+    /// Presents the share sheet from the source view
     func start(
         url: URL,
         title: String? = nil,
@@ -48,17 +48,17 @@ class ShareSheetCoordinator: BaseCoordinator,
         sourceRect: CGRect? = nil,
         popoverArrowDirection: UIPopoverArrowDirection = .up
     ) {
-        let shareExtension = ShareManager(
+        let shareManager = ShareManager(
             url: url,
             // FXIOS-10669: We only want to pass a non-nil title here for the Info Card Referral experiment. Refactoring is
-            // needed in the ShareExtensionHelper to make it properly extensible to multiple share use cases like this.
+            // needed in the ShareManager to make it properly extensible to multiple share use cases like this.
             title: title,
             tab: tabManager.selectedTab)
-        let controller = shareExtension.createActivityViewController(
+        let controller = shareManager.createActivityViewController(
             tabManager.selectedTab?.webView
         ) { [weak self] completed, activityType in
             guard let self = self else { return }
-            self.handleShareExtensionCompletion(activityType: activityType, url: url)
+            self.handleShareSheetCompletion(activityType: activityType, url: url)
         }
         if let popoverPresentationController = controller.popoverPresentationController {
             popoverPresentationController.sourceView = sourceView
@@ -75,7 +75,7 @@ class ShareSheetCoordinator: BaseCoordinator,
         }
     }
 
-    private func handleShareExtensionCompletion(
+    private func handleShareSheetCompletion(
         activityType: UIActivity.ActivityType?,
         url: URL
     ) {

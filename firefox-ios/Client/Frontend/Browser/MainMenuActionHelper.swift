@@ -593,7 +593,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
 
             guard let temporaryDocument = tab.temporaryDocument else {
-                self.navigationHandler?.showShareExtension(
+                self.navigationHandler?.showShareSheet(
                     url: url,
                     sourceView: self.buttonView,
                     toastContainer: self.toastContainer,
@@ -609,7 +609,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                        tempDocURL.isFileURL {
                         self.share(fileURL: tempDocURL, buttonView: self.buttonView)
                     } else {
-                        self.navigationHandler?.showShareExtension(
+                        self.navigationHandler?.showShareSheet(
                             url: url,
                             sourceView: self.buttonView,
                             toastContainer: self.toastContainer,
@@ -637,7 +637,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     /// non-HTML MIME type currently opened in the webView, such as a PDF).
     private func share(fileURL: URL, buttonView: UIView) {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
-        navigationHandler?.showShareExtension(
+        navigationHandler?.showShareSheet(
             url: fileURL,
             sourceView: buttonView,
             toastContainer: toastContainer,
