@@ -1577,7 +1577,7 @@ extension XCTestCase {
         file: StaticString = #file,
         line: UInt = #line
     ) where ExtraObject: EventExtras {
-        XCTAssertNotNil(metric.testGetValue(), file: file, line: line)
+        XCTAssertNotNil(metric.testGetValue(), "Should have value on event metric \(metric)", file: file, line: line)
         XCTAssertEqual(metric.testGetValue()!.count, expectedCount, file: file, line: line)
 
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0, file: file, line: line)
@@ -1590,7 +1590,7 @@ extension XCTestCase {
                                            value: Int32 = 1,
                                            file: StaticString = #file,
                                            line: UInt = #line) {
-        XCTAssertNotNil(metric.testGetValue(), file: file, line: line)
+        XCTAssertNotNil(metric.testGetValue(), "Should have value on counter metric \(metric)", file: file, line: line)
         XCTAssertEqual(metric.testGetValue(), value, file: file, line: line)
 
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0, file: file, line: line)
@@ -1613,7 +1613,7 @@ extension XCTestCase {
                                    failureMessage: String,
                                    file: StaticString = #file,
                                    line: UInt = #line) {
-        XCTAssertNotNil(metric.testGetValue(), "Should have value on quantity metric", file: file, line: line)
+        XCTAssertNotNil(metric.testGetValue(), "Should have value on quantity metric \(metric)", file: file, line: line)
         XCTAssertEqual(metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
 
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0, file: file, line: line)
@@ -1627,7 +1627,7 @@ extension XCTestCase {
                                  failureMessage: String,
                                  file: StaticString = #file,
                                  line: UInt = #line) {
-        XCTAssertNotNil(metric.testGetValue(), "Should have value on string metric", file: file, line: line)
+        XCTAssertNotNil(metric.testGetValue(), "Should have value on string metric \(metric)", file: file, line: line)
         XCTAssertEqual(metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
 
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0, file: file, line: line)
@@ -1641,7 +1641,7 @@ extension XCTestCase {
                               failureMessage: String,
                               file: StaticString = #file,
                               line: UInt = #line) {
-        XCTAssertNotNil(metric.testGetValue(), "Should have value on url metric", file: file, line: line)
+        XCTAssertNotNil(metric.testGetValue(), "Should have value on url metric \(metric)", file: file, line: line)
         XCTAssertEqual(metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
 
         XCTAssertEqual(metric.testGetNumRecordedErrors(ErrorType.invalidLabel), 0, file: file, line: line)
@@ -1655,7 +1655,7 @@ extension XCTestCase {
                                failureMessage: String,
                                file: StaticString = #file,
                                line: UInt = #line) {
-        XCTAssertNotNil(metric.testGetValue(), "Should have value on uuid metric", file: file, line: line)
+        XCTAssertNotNil(metric.testGetValue(), "Should have value on uuid metric \(metric)", file: file, line: line)
         XCTAssertEqual(metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
     }
 
@@ -1664,7 +1664,7 @@ extension XCTestCase {
                                failureMessage: String,
                                file: StaticString = #file,
                                line: UInt = #line) {
-        XCTAssertNotNil(metric.testGetValue(), "Should have value on bool metric", file: file, line: line)
+        XCTAssertNotNil(metric.testGetValue(), "Should have value on bool metric \(metric)", file: file, line: line)
         XCTAssertEqual(metric.testGetValue(), expectedValue, failureMessage, file: file, line: line)
     }
 }
