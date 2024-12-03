@@ -1,9 +1,6 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Znowa začitać";
 
-/* On error page, this is the description for generic error. */
-"NativeErrorPage.GenericError.Description.v131" = "SSL-zmylk je nastał a wěsty zwisk ze serwerom njeda so wutworić.";
-
 /* On error page, this is the description for generic error. The placeholder will be replaced by the site url */
 "NativeErrorPage.GenericError.Description.v134" = "Swójstwownik %@ njeje jo korektnje konfigurował a wěsty zwisk njeda so wutworić.";
 

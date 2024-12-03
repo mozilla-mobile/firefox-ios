@@ -107,9 +107,6 @@
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Napredna zaštita od praćenja";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Zaštite su ISKLJUČENE. Predlažemo da ga ponovo uključite.";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Zaštite su ISKLJUČENE. Predlažemo da ih ponovo uključite.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */

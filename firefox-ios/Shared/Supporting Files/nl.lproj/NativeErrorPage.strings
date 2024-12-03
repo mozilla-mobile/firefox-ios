@@ -1,9 +1,6 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Vernieuwen";
 
-/* On error page, this is the description for generic error. */
-"NativeErrorPage.GenericError.Description.v131" = "Er is een SSL-fout opgetreden en er kan geen beveiligde verbinding met de server tot stand worden gebracht.";
-
 /* On error page, this is the description for generic error. The placeholder will be replaced by the site url */
 "NativeErrorPage.GenericError.Description.v134" = "De eigenaar van %@ heeft deze niet juist ingesteld en er kan geen beveiligde verbinding tot stand worden gebracht.";
 
