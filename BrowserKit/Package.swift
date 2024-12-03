@@ -9,11 +9,11 @@ let package = Package(
         .macOS(.v10_15)
     ],
     products: [
+        .library(name: "Shared",
+                 targets: ["Shared"]),
         .library(
             name: "SiteImageView",
             targets: ["SiteImageView"]),
-        .library(name: "Shared",
-                 targets: ["Shared"]),
         .library(
             name: "Common",
             targets: ["Common"]),
@@ -69,6 +69,12 @@ let package = Package(
             exact: "0.17.0"),
     ],
     targets: [
+        .target(name: "Shared",
+                dependencies: ["Common",
+                               "WebEngine",
+                               .product(name: "Sentry",
+                                        package: "sentry-cocoa")],
+                swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .target(
             name: "ComponentLibrary",
             dependencies: ["Common", "SiteImageView"],
@@ -76,9 +82,6 @@ let package = Package(
         .testTarget(
             name: "ComponentLibraryTests",
             dependencies: ["ComponentLibrary"]),
-        .target(name: "Shared",
-                dependencies: ["Common", "WebEngine"],
-                swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .target(
             name: "SiteImageView",
             dependencies: ["Fuzi", "Kingfisher", "Common", "SwiftDraw"],
