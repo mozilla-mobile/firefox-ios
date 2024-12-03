@@ -108,7 +108,7 @@ class JumpBackInTests: BaseTestCase {
 
         // The view is switched to the twitter tab
         if let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value as? String {
-            XCTAssertEqual(url, "wikipedia.org")
+            XCTAssertEqual(url, "wikipedia.org", "The URL retrieved from the address toolbar does not match the expected value")
         } else {
             XCTFail("Failed to retrieve the URL string from the address toolbar")
             return
