@@ -15,6 +15,7 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
     override func setUp() {
         super.setUp()
         profile = MockProfile()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {
@@ -58,7 +59,6 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
 
     func testShouldReload_whenMobileEmptyBookmarks() throws {
         profile.reopen()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
         let expectation = expectation(description: "Subject reloaded")
         subject.reloadData {
@@ -71,7 +71,6 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
 
     func testShouldReload_whenMobileEmptyBookmarksWithBookmarksRefactor() throws {
         profile.reopen()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         featureFlags.set(feature: .bookmarksRefactor, to: true, isDebug: true)
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
         let expectation = expectation(description: "Subject reloaded")
@@ -85,7 +84,6 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
 
     func testShouldReload_whenDesktopBookmarksExist() throws {
         profile.reopen()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         featureFlags.set(feature: .bookmarksRefactor, to: true)
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
 
