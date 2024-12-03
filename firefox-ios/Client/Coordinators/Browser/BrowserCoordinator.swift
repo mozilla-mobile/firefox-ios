@@ -301,12 +301,8 @@ class BrowserCoordinator: BaseCoordinator,
         case let .searchURL(url, tabId):
             handle(searchURL: url, tabId: tabId)
 
-        case .sharesheet:
-            // FIXME: FXIOS-10669 Implement with real data, (shareType, shareMessage)
-//            let tempURL = URL(string: "https://www.google.ca")
-//            let tempTitle = "Test Title"
-//            showShareSheet(with: tempURL, title: tempTitle)
-            break
+        case let .sharesheet(shareType, shareMessage):
+            handleShareRoute(shareType: shareType, shareMessage: shareMessage)
 
         case let .glean(url):
             glean.handleDeeplinkUrl(url: url)
@@ -391,6 +387,18 @@ class BrowserCoordinator: BaseCoordinator,
 
     private func handle(fxaParams: FxALaunchParams) {
         browserViewController.presentSignInViewController(fxaParams)
+    }
+
+    private func handleShareRoute(shareType: ShareType, shareMessage: ShareMessage?) {
+        // FIXME What should the sourceView be for deep links? Can we make it optional?
+        startShareSheetCoordinator(
+            shareType: shareType,
+            shareMessage: shareMessage,
+            sourceView: self.browserViewController.addressToolbarContainer,
+            sourceRect: nil,
+            toastContainer: self.browserViewController.contentContainer,
+            popoverArrowDirection: .any
+        )
     }
 
     private func canHandleSettings(with section: Route.SettingsSection) -> Bool {
@@ -552,7 +560,26 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func showShareSheet(with url: URL?) {
-        showShareSheet(with: url, title: nil)
+        // Note: From New Menu > Share   MainMenuCoordinatorDelegate
+        guard let url else { return }
+
+        let shareType: ShareType
+        if let selectedTab = tabManager.selectedTab {
+            shareType = .tab(url: url, tab: selectedTab)
+        } else {
+            shareType = .site(url: url)
+        }
+
+        // TODO handle temp document?
+
+        startShareSheetCoordinator(
+            shareType: shareType,
+            shareMessage: nil,
+            sourceView: self.browserViewController.addressToolbarContainer,
+            sourceRect: nil,
+            toastContainer: self.browserViewController.contentContainer,
+            popoverArrowDirection: .any
+        )
     }
 
     private func makeMenuNavViewController() -> DismissableNavigationViewController? {
@@ -648,14 +675,15 @@ class BrowserCoordinator: BaseCoordinator,
                         sourceRect: CGRect?,
                         toastContainer: UIView,
                         popoverArrowDirection: UIPopoverArrowDirection) {
-        startShareSheetCoordinator(
-            url: url,
-            title: title,
-            sourceView: sourceView,
-            sourceRect: sourceRect,
-            toastContainer: toastContainer,
-            popoverArrowDirection: popoverArrowDirection
-        )
+        // FIXME where is BrowserNavigationHandler method called
+//        startShareSheetCoordinator(
+//            url: url,
+//            title: title,
+//            sourceView: sourceView,
+//            sourceRect: sourceRect,
+//            toastContainer: toastContainer,
+//            popoverArrowDirection: popoverArrowDirection
+//        )
     }
 
     func show(settings: Route.SettingsSection, onDismiss: (() -> Void)? = nil) {
@@ -742,8 +770,8 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func startShareSheetCoordinator(
-        url: URL,
-        title: String?,
+        shareType: ShareType,
+        shareMessage: ShareMessage?,
         sourceView: UIView,
         sourceRect: CGRect?,
         toastContainer: UIView,
@@ -764,8 +792,8 @@ class BrowserCoordinator: BaseCoordinator,
         )
         add(child: shareSheetCoordinator)
         shareSheetCoordinator.start(
-            shareType: .site(url: url), // FIXME Need correct shareType, shareMessage passed in
-            shareMessage: nil,
+            shareType: shareType,
+            shareMessage: shareMessage,
             sourceView: sourceView,
             sourceRect: sourceRect,
             popoverArrowDirection: popoverArrowDirection
@@ -1057,39 +1085,46 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - Private helpers
 
-    private func showShareSheet(with url: URL?, title: String?) {
-        guard let url else { return }
-
-        let showShareSheet = { url in
-            self.startShareSheetCoordinator(
-                url: url,
-                title: title,
-                sourceView: self.browserViewController.addressToolbarContainer,
-                sourceRect: nil,
-                toastContainer: self.browserViewController.contentContainer,
-                popoverArrowDirection: .any
-            )
-        }
-
-        // We only care about the temp document for .tab shares right?
-        // BUT!! A tab might be displaying a downloaded PDF! Then it's file:// url
-        guard let temporaryDocument = browserViewController.tabManager.selectedTab?.temporaryDocument else {
-            showShareSheet(url)
-            return
-        }
-
-        temporaryDocument.getURL { tempDocURL in
-            DispatchQueue.main.async {
-                // If we successfully got a temp file URL, share it like a downloaded file,
-                // otherwise present the ordinary share menu for the web URL.
-                if let tempDocURL = tempDocURL, tempDocURL.isFileURL {
-                    showShareSheet(tempDocURL)
-                } else {
-                    showShareSheet(url)
-                }
-            }
-        }
-    }
+//    private func showShareSheet(with url: URL?, title: String?) {
+//        // Note: From deeplinks ( > sharesheet route)
+//        guard let url else { return }
+//
+//        var shareMessage: ShareMessage? = nil
+//        if let title {
+//            // TODO: Info Card Referral add subtitle
+//            shareMessage = ShareMessage(message: title, subtitle: nil)
+//        }
+//
+//        let showShareSheet = { url in
+//            self.startShareSheetCoordinator(
+//                shareType: .site(url: url),
+//                shareMessage: shareMessage,
+//                sourceView: self.browserViewController.addressToolbarContainer,
+//                sourceRect: nil,
+//                toastContainer: self.browserViewController.contentContainer,
+//                popoverArrowDirection: .any
+//            )
+//        }
+//
+//        // We only care about the temp document for .tab shares right?
+//        // BUT!! A tab might be displaying a downloaded PDF! Then it's file:// url
+//        guard let temporaryDocument = browserViewController.tabManager.selectedTab?.temporaryDocument else {
+//            showShareSheet(url)
+//            return
+//        }
+//
+//        temporaryDocument.getURL { tempDocURL in
+//            DispatchQueue.main.async {
+//                // If we successfully got a temp file URL, share it like a downloaded file,
+//                // otherwise present the ordinary share menu for the web URL.
+//                if let tempDocURL = tempDocURL, tempDocURL.isFileURL {
+//                    showShareSheet(tempDocURL)
+//                } else {
+//                    showShareSheet(url)
+//                }
+//            }
+//        }
+//    }
 
     /// Utility. Performs the supplied action if a coordinator of the indicated type
     /// is currently presenting its primary view controller.
