@@ -403,7 +403,7 @@ class MainMenuViewController: UIViewController,
                 currentTabInfo: menuState.currentTabInfo
             )
         )
-        coordinator?.dismissMenuModal(animated: true)
+        coordinator?.removeCoordinatorFromParent()
     }
 
     // MARK: - UISheetPresentationControllerDelegate
