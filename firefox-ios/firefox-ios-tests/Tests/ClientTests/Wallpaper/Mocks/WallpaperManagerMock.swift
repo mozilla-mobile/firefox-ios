@@ -24,6 +24,8 @@ class WallpaperManagerMock: WallpaperManagerInterface {
 
     func canOnboardingBeShown(using: Profile) -> Bool { return true }
 
+    func onboardingSeen() {}
+
     func setCurrentWallpaper(
         to wallpaper: Wallpaper,
         completion: @escaping (Result<Void, Error>) -> Void
@@ -41,12 +43,9 @@ class WallpaperManagerMock: WallpaperManagerInterface {
         completion(fetchResult)
     }
 
-    func removeUnusedAssets() {
-    }
+    func removeUnusedAssets() {}
 
-    func checkForUpdates() {
-    }
+    func checkForUpdates() {}
 
-    func migrateLegacyAssets() {
-    }
+    func migrateLegacyAssets() {}
 }

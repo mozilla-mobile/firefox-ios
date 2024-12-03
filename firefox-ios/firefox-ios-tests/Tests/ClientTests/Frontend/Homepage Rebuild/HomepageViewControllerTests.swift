@@ -78,11 +78,13 @@ final class HomepageViewControllerTests: XCTestCase {
     private func createSubject() -> HomepageViewController {
         let notificationCenter = MockNotificationCenter()
         let themeManager = MockThemeManager()
+        let mockOverlayManager = MockOverlayModeManager()
         mockNotificationCenter = notificationCenter
         mockThemeManager = themeManager
         let homepageViewController = HomepageViewController(
             windowUUID: .XCTestDefaultUUID,
             themeManager: themeManager,
+            overlayManager: mockOverlayManager,
             notificationCenter: notificationCenter
         )
         trackForMemoryLeaks(homepageViewController)
