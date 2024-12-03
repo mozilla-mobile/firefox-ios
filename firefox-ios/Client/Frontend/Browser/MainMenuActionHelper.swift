@@ -570,7 +570,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     }
 
     // MARK: Share
-    
+
     /// This action is called when the user taps Menu > Share for a file URL opened in the current active tab (e.g. by
     /// viewing a file from the Downloads Panel)
     private func getShareFileAction() -> PhotonRowActions {
@@ -583,7 +583,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             self.share(fileURL: url, buttonView: self.buttonView)
         }.items
     }
-    
+
     /// This action is called when the user taps Menu > Share for a website URL in the current active tab.
     private func getShareAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .LegacyAppMenu.Share,

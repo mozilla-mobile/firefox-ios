@@ -302,10 +302,11 @@ class BrowserCoordinator: BaseCoordinator,
             handle(searchURL: url, tabId: tabId)
 
         case .sharesheet:
-            // FIXME: Implement with real data, (shareType, shareMessage)
-            let tempURL = URL(string: "https://www.google.ca")
-            let tempTitle = "Test Title"
-            showShareSheet(with: tempURL, title: tempTitle)
+            // FIXME: FXIOS-10669 Implement with real data, (shareType, shareMessage)
+//            let tempURL = URL(string: "https://www.google.ca")
+//            let tempTitle = "Test Title"
+//            showShareSheet(with: tempURL, title: tempTitle)
+            break
 
         case let .glean(url):
             glean.handleDeeplinkUrl(url: url)
