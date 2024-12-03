@@ -63,6 +63,13 @@
 		0BBAC4BC2CDD44EC0072DB61 /* easterEggGif.gif in Resources */ = {isa = PBXBuildFile; fileRef = 0BBAC4BB2CDD44EC0072DB61 /* easterEggGif.gif */; };
 		0BBC50952CA1F7F900CB7248 /* BookmarksRefactorFeatureFlagProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BBC50942CA1F7F900CB7248 /* BookmarksRefactorFeatureFlagProvider.swift */; };
 		0BC9C9C41F26F54D000E8AB5 /* SiteLoadTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC9C9C31F26F54D000E8AB5 /* SiteLoadTest.swift */; };
+		0BCC26902CFF0CD70072CD5A /* KeychainWrapperExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BCC268F2CFF0CD70072CD5A /* KeychainWrapperExtensions.swift */; };
+		0BCC26922CFF10250072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26912CFF10250072CD5A /* Shared */; };
+		0BCC26932CFF103B0072CD5A /* Localizations.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Localizations.framework */; };
+		0BCC26952CFF10590072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26942CFF10590072CD5A /* Shared */; };
+		0BCC26962CFF106A0072CD5A /* Localizations.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Localizations.framework */; };
+		0BCC26982CFF10830072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26972CFF10830072CD5A /* Shared */; };
+		0BCC269A2CFF10950072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26992CFF10950072CD5A /* Shared */; };
 		0BDDB33D2CA6B1DA00D501DF /* EditFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDDB33C2CA6B1DA00D501DF /* EditFolderViewController.swift */; };
 		0BDDB33F2CA6B1F000D501DF /* EditFolderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDDB33E2CA6B1F000D501DF /* EditFolderViewModel.swift */; };
 		0BDDB3412CA6B23300D501DF /* EditFolderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDDB3402CA6B23300D501DF /* EditFolderCell.swift */; };
@@ -2323,6 +2330,7 @@
 		0BBD4108861715F8A60D6225 /* hi-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "hi-IN"; path = "hi-IN.lproj/Intro.strings"; sourceTree = "<group>"; };
 		0BBD47CD96940FB07733C725 /* ne-NP */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ne-NP"; path = "ne-NP.lproj/ErrorPages.strings"; sourceTree = "<group>"; };
 		0BC9C9C31F26F54D000E8AB5 /* SiteLoadTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SiteLoadTest.swift; sourceTree = "<group>"; };
+		0BCC268F2CFF0CD70072CD5A /* KeychainWrapperExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWrapperExtensions.swift; sourceTree = "<group>"; };
 		0BD24470A8F71A8CE50A55E0 /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		0BDDB33C2CA6B1DA00D501DF /* EditFolderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFolderViewController.swift; sourceTree = "<group>"; };
 		0BDDB33E2CA6B1F000D501DF /* EditFolderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFolderViewModel.swift; sourceTree = "<group>"; };
@@ -9506,11 +9514,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BCC26932CFF103B0072CD5A /* Localizations.framework in Frameworks */,
 				0BE4158B2CA16B5300F3B7A1 /* libStorage.a in Frameworks */,
 				43A878FE27AC39D30071C372 /* RustMozillaAppServices.framework in Frameworks */,
 				5A87148A292EA1520039A5BD /* Fuzi in Frameworks */,
 				433F87D02788ECDD00693368 /* GCDWebServers in Frameworks */,
 				5A70EF10295DFD4900790249 /* Common in Frameworks */,
+				0BCC26922CFF10250072CD5A /* Shared in Frameworks */,
 				5A68F0AB2AF2E5E00089AC62 /* TabDataStore in Frameworks */,
 				C8CC4F8725253E79003FDE1F /* WidgetKit.framework in Frameworks */,
 				5A5AB980296CA03500485E06 /* SiteImageView in Frameworks */,
@@ -9522,8 +9532,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BCC26962CFF106A0072CD5A /* Localizations.framework in Frameworks */,
 				43BE581B278BE5AE00491291 /* RustMozillaAppServices.framework in Frameworks */,
 				5A87148C292EA1640039A5BD /* Fuzi in Frameworks */,
+				0BCC26952CFF10590072CD5A /* Shared in Frameworks */,
 				5A393F8D2C8A410900D2628D /* SiteImageView in Frameworks */,
 				C820439A2523DC4500740B71 /* libStorage.a in Frameworks */,
 				5A70EF12295DFD6400790249 /* Common in Frameworks */,
@@ -9631,6 +9643,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0BCC26982CFF10830072CD5A /* Shared in Frameworks */,
 				43BE5825278BE7EF00491291 /* RustMozillaAppServices.framework in Frameworks */,
 				C82043AE2523DC8B00740B71 /* Sync.framework in Frameworks */,
 				C877039725222FE6006E38EB /* Localizations.framework in Frameworks */,
@@ -9727,6 +9740,7 @@
 				5A8FD0EE293A7D6D00333AA7 /* SnapKit in Frameworks */,
 				C82043AF2523DC9600740B71 /* Sync.framework in Frameworks */,
 				5A70EF14295DFD7C00790249 /* Common in Frameworks */,
+				0BCC269A2CFF10950072CD5A /* Shared in Frameworks */,
 				C877039625222FDC006E38EB /* Localizations.framework in Frameworks */,
 				0B75AEA91AC20FB20015E5DC /* ImageIO.framework in Frameworks */,
 			);
@@ -10313,6 +10327,7 @@
 				28C4AB711AD42D4300D9ACE3 /* Clients.swift */,
 				2FCAE2411ABB531100877008 /* Cursor.swift */,
 				28302E3F1AF0747800521E2E /* DatabaseError.swift */,
+				0BCC268F2CFF0CD70072CD5A /* KeychainWrapperExtensions.swift */,
 				394CF6CE1BAA493C00906917 /* DefaultSuggestedSites.swift */,
 				D3BF8CBA1B7425570007AFE6 /* DiskImageStore.swift */,
 				E65075C11E37F956006961AC /* ExtensionUtils.swift */,
@@ -14301,6 +14316,7 @@
 				5A70EF0F295DFD4900790249 /* Common */,
 				5A5AB97F296CA03500485E06 /* SiteImageView */,
 				5A68F0AA2AF2E5E00089AC62 /* TabDataStore */,
+				0BCC26912CFF10250072CD5A /* Shared */,
 			);
 			productName = WidgetKitExtension;
 			productReference = 047F9B2724E1FE1C00CD7DF7 /* WidgetKitExtension.appex */;
@@ -14326,6 +14342,7 @@
 				5A87148B292EA1640039A5BD /* Fuzi */,
 				5A70EF11295DFD6400790249 /* Common */,
 				5A393F8C2C8A410900D2628D /* SiteImageView */,
+				0BCC26942CFF10590072CD5A /* Shared */,
 			);
 			productName = Sync;
 			productReference = 2827315E1ABC9BE600AA1954 /* Sync.framework */;
@@ -14478,6 +14495,7 @@
 			name = NotificationService;
 			packageProductDependencies = (
 				5A37861C29A2C37C006B3A34 /* Common */,
+				0BCC26972CFF10830072CD5A /* Shared */,
 			);
 			productName = NotificationService;
 			productReference = 397848DB1ED86605004C0C0B /* NotificationService.appex */;
@@ -14743,6 +14761,7 @@
 				5A87148D292EA3270039A5BD /* Fuzi */,
 				5A8FD0ED293A7D6D00333AA7 /* SnapKit */,
 				5A70EF13295DFD7C00790249 /* Common */,
+				0BCC26992CFF10950072CD5A /* Shared */,
 			);
 			productName = ShareToFirefox;
 			productReference = F84B22491A0920C600AAB793 /* ShareTo.appex */;
@@ -15609,6 +15628,7 @@
 				D0769743206C19E900FACFD8 /* SQLiteReadingList.swift in Sources */,
 				BD6CC84229CDDA3400546A5D /* ZoomLevelStore.swift in Sources */,
 				E65075C21E37F956006961AC /* ExtensionUtils.swift in Sources */,
+				0BCC26902CFF0CD70072CD5A /* KeychainWrapperExtensions.swift in Sources */,
 				D057B2AB220103BC000614E0 /* RustLogins.swift in Sources */,
 				B2999FED2B044A5900F0FEC1 /* UnencryptedCreditCardFields.swift in Sources */,
 				15DE98FD27FCED4F00F1ECDB /* RustRemoteTabs.swift in Sources */,
@@ -25798,6 +25818,22 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0BCC26912CFF10250072CD5A /* Shared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Shared;
+		};
+		0BCC26942CFF10590072CD5A /* Shared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Shared;
+		};
+		0BCC26972CFF10830072CD5A /* Shared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Shared;
+		};
+		0BCC26992CFF10950072CD5A /* Shared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Shared;
+		};
 		0BF802E12CFF0937005633E5 /* Shared */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Shared;
