@@ -68,19 +68,3 @@ public enum HTTPMethod: String {
     case trace   = "TRACE"
     case connect = "CONNECT"
 }
-
-public enum JSONSerializeError: Error {
-    case noData
-    case parseError
-}
-
-public func jsonResponse(fromData data: Data?) throws -> [String: Any]? {
-    guard let data = data, !data.isEmpty else {
-        throw JSONSerializeError.noData
-    }
-
-    guard let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
-        throw JSONSerializeError.parseError
-    }
-    return json
-}

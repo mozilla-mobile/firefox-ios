@@ -1612,7 +1612,6 @@
 		E127313C28B6AD99006F39D2 /* WallpaperSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E127313A28B6AD99006F39D2 /* WallpaperSettingsViewController.swift */; };
 		E127313D28B6AD99006F39D2 /* WallpaperSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E127313B28B6AD99006F39D2 /* WallpaperSettingsViewModel.swift */; };
 		E127313F28B6C194006F39D2 /* WallpaperSettingsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E127313E28B6C194006F39D2 /* WallpaperSettingsHeaderView.swift */; };
-		E12BD0AC28AC37F00029AAF0 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12BD0AB28AC37F00029AAF0 /* UIColor+Extension.swift */; };
 		E12BD0AE28AC38480029AAF0 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12BD0AD28AC38480029AAF0 /* UIImage+Extension.swift */; };
 		E12BD0B028AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12BD0AF28AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift */; };
 		E1312FD129D237EE008DDA85 /* NotificationSurfaceManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1312FD029D237EE008DDA85 /* NotificationSurfaceManagerTests.swift */; };
@@ -9109,7 +9108,6 @@
 		E127313A28B6AD99006F39D2 /* WallpaperSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WallpaperSettingsViewController.swift; sourceTree = "<group>"; };
 		E127313B28B6AD99006F39D2 /* WallpaperSettingsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WallpaperSettingsViewModel.swift; sourceTree = "<group>"; };
 		E127313E28B6C194006F39D2 /* WallpaperSettingsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperSettingsHeaderView.swift; sourceTree = "<group>"; };
-		E12BD0AB28AC37F00029AAF0 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		E12BD0AD28AC38480029AAF0 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		E12BD0AF28AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIEdgeInsets+Extension.swift"; sourceTree = "<group>"; };
 		E1312FD029D237EE008DDA85 /* NotificationSurfaceManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSurfaceManagerTests.swift; sourceTree = "<group>"; };
@@ -10339,7 +10337,6 @@
 				4393931F29AC6CE900DC5A85 /* EnvironmentValues+Extension.swift */,
 				E1A6AB4528CA6A4C00EBEBDD /* String+Extension.swift */,
 				E1442FC5294782D7003680B0 /* UIAlertController+Extension.swift */,
-				E12BD0AB28AC37F00029AAF0 /* UIColor+Extension.swift */,
 				8A395551299AF83300B2AFBB /* UIControl+Extension.swift */,
 				E18EA56E28AD3279003F97FC /* UIDevice+Extension.swift */,
 				E12BD0AF28AC3A7E0029AAF0 /* UIEdgeInsets+Extension.swift */,
@@ -16910,7 +16907,6 @@
 				8AB893A32C73AF5200DAEED7 /* MockCreditCardProvider.swift in Sources */,
 				E1CD81BE290C5C7500124B27 /* DevicePickerTableViewHeaderCell.swift in Sources */,
 				B2FEA68B2B460D1D0058E616 /* AddressAutofillSettingsView.swift in Sources */,
-				E12BD0AC28AC37F00029AAF0 /* UIColor+Extension.swift in Sources */,
 				E4A961181AC041C40069AD6F /* ReadabilityService.swift in Sources */,
 				AB42CC752A1F5240003C9594 /* CreditCardBottomSheetHeaderView.swift in Sources */,
 				21371FA428AA7A8D00BC3F37 /* OnboardingViewModelProtocol.swift in Sources */,
