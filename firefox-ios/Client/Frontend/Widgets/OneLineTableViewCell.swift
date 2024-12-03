@@ -20,7 +20,8 @@ struct OneLineTableViewCellViewModel {
 
 class OneLineTableViewCell: UITableViewCell,
                             ReusableCell,
-                            ThemeApplicable {
+                            ThemeApplicable,
+                            BookmarksRefactorFeatureFlagProvider {
     // Tableview cell items
 
     struct UX {
@@ -76,9 +77,23 @@ class OneLineTableViewCell: UITableViewCell,
 
     override var indentationLevel: Int {
         didSet {
-            // Update the leading constraint based on this cell's indentationLevel value,
-            // adding 1 since the default indentation is 0.
-            leftImageViewLeadingConstraint?.constant = UX.borderViewMargin * CGFloat(1 + indentationLevel)
+            // Update the leading constraint based on this cell's indentationLevel value
+            if isBookmarkRefactorEnabled {
+                setBookmarksRefactorMargin()
+            } else {
+                // adding 1 since the default indentation is 0.
+                leftImageViewLeadingConstraint?.constant = UX.borderViewMargin * CGFloat(1 + indentationLevel)
+            }
+        }
+    }
+
+    private func setBookmarksRefactorMargin() {
+        // Move indentationLevelMargin to UX struct if Bookmarks feature is rolled out
+        let indentationLevelMargin: CGFloat = 52
+        if indentationLevel == 0 {
+            leftImageViewLeadingConstraint?.constant = UX.borderViewMargin
+        } else {
+            leftImageViewLeadingConstraint?.constant = (CGFloat(indentationLevel) * indentationLevelMargin)
         }
     }
 
