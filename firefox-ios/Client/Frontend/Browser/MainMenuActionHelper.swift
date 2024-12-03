@@ -595,7 +595,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             guard let temporaryDocument = tab.temporaryDocument else {
                 self.navigationHandler?.showShareSheet(
                     url: url,
+                    title: nil,
                     sourceView: self.buttonView,
+                    sourceRect: nil,
                     toastContainer: self.toastContainer,
                     popoverArrowDirection: .any)
                 return
@@ -611,7 +613,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
                     } else {
                         self.navigationHandler?.showShareSheet(
                             url: url,
+                            title: nil,
                             sourceView: self.buttonView,
+                            sourceRect: nil,
                             toastContainer: self.toastContainer,
                             popoverArrowDirection: .any)
                     }
@@ -639,7 +643,9 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
         navigationHandler?.showShareSheet(
             url: fileURL,
+            title: nil,
             sourceView: buttonView,
+            sourceRect: nil,
             toastContainer: toastContainer,
             popoverArrowDirection: .any)
     }

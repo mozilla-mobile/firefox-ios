@@ -109,24 +109,6 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 }
 
 extension BrowserNavigationHandler {
-    func showShareSheet(
-        url: URL,
-        title: String? = nil,
-        sourceView: UIView,
-        sourceRect: CGRect? = nil,
-        toastContainer: UIView,
-        popoverArrowDirection: UIPopoverArrowDirection = .up
-    ) {
-        showShareSheet(
-            url: url,
-            title: title,
-            sourceView: sourceView,
-            sourceRect: sourceRect,
-            toastContainer: toastContainer,
-            popoverArrowDirection: popoverArrowDirection
-        )
-    }
-
     func show(settings: Route.SettingsSection) {
         show(settings: settings, onDismiss: nil)
     }

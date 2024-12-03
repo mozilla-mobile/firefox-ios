@@ -250,7 +250,9 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
 
             self.browserNavigationHandler?.showShareSheet(
                 url: url,
+                title: nil,
                 sourceView: sourceView ?? UIView(),
+                sourceRect: nil,
                 toastContainer: self.toastContainer,
                 popoverArrowDirection: [.up, .down, .left])
         }).items

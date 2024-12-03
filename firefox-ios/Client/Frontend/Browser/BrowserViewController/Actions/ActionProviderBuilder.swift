@@ -118,6 +118,7 @@ class ActionProviderBuilder {
             let point = webView.convert(helper.touchPoint, to: view)
             navigationHandler?.showShareSheet(
                 url: url,
+                title: nil,
                 sourceView: view,
                 sourceRect: CGRect(origin: point, size: CGSize(width: 10.0, height: 10.0)),
                 toastContainer: contentContainer,

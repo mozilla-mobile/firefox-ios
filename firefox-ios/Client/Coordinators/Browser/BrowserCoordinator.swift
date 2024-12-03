@@ -639,6 +639,22 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - BrowserNavigationHandler
 
+    func showShareSheet(url: URL,
+                        title: String?,
+                        sourceView: UIView,
+                        sourceRect: CGRect?,
+                        toastContainer: UIView,
+                        popoverArrowDirection: UIPopoverArrowDirection) {
+        startShareSheetCoordinator(
+            url: url,
+            title: title,
+            sourceView: sourceView,
+            sourceRect: sourceRect,
+            toastContainer: toastContainer,
+            popoverArrowDirection: popoverArrowDirection
+        )
+    }
+
     func show(settings: Route.SettingsSection, onDismiss: (() -> Void)? = nil) {
         presentWithModalDismissIfNeeded {
             self.handleSettings(with: settings, onDismiss: onDismiss)

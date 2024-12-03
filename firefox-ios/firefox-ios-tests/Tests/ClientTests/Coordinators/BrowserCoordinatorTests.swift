@@ -245,8 +245,11 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
             url: URL(
                 string: "https://www.google.com"
             )!,
+            title: nil,
             sourceView: UIView(),
-            toastContainer: UIView()
+            sourceRect: CGRect(),
+            toastContainer: UIView(),
+            popoverArrowDirection: .up
         )
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
@@ -264,7 +267,9 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
             )!,
             title: "TEST TITLE",
             sourceView: UIView(),
-            toastContainer: UIView()
+            sourceRect: CGRect(),
+            toastContainer: UIView(),
+            popoverArrowDirection: .up
         )
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
