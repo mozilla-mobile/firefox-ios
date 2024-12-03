@@ -1505,7 +1505,7 @@
 		D38F02D11C05127100175932 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38F02D01C05127100175932 /* Authenticator.swift */; };
 		D38F03701C06387900175932 /* AuthenticationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D38F036F1C06387900175932 /* AuthenticationTests.swift */; };
 		D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3968F241A38FE8500CEFD3B /* TabManager.swift */; };
-		D3972BF31C22412B00035B87 /* ShareExtensionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3972BF11C22412B00035B87 /* ShareExtensionHelper.swift */; };
+		D3972BF31C22412B00035B87 /* ShareManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3972BF11C22412B00035B87 /* ShareManager.swift */; };
 		D3972BF41C22412B00035B87 /* TitleActivityItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3972BF21C22412B00035B87 /* TitleActivityItemProvider.swift */; };
 		D39FA16C1A83E17800EE869C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D39FA16B1A83E17800EE869C /* CoreGraphics.framework */; };
 		D39FA1811A83E84900EE869C /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = D39FA1801A83E84900EE869C /* Global.swift */; };
@@ -8632,7 +8632,7 @@
 		D38F02D01C05127100175932 /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
 		D38F036F1C06387900175932 /* AuthenticationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationTests.swift; sourceTree = "<group>"; };
 		D3968F241A38FE8500CEFD3B /* TabManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabManager.swift; sourceTree = "<group>"; };
-		D3972BF11C22412B00035B87 /* ShareExtensionHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareExtensionHelper.swift; sourceTree = "<group>"; };
+		D3972BF11C22412B00035B87 /* ShareManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShareManager.swift; sourceTree = "<group>"; };
 		D3972BF21C22412B00035B87 /* TitleActivityItemProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleActivityItemProvider.swift; sourceTree = "<group>"; };
 		D39FA15F1A83E0EC00EE869C /* UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D39FA1621A83E0EC00EE869C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -13203,7 +13203,7 @@
 				2128E27D2934F78600FB91BE /* CustomAppActivity.swift */,
 				2128E27A292E624400FB91BE /* SendToDeviceActivity.swift */,
 				E1AFBAF8292EA0330065E35E /* SendToDeviceHelper.swift */,
-				D3972BF11C22412B00035B87 /* ShareExtensionHelper.swift */,
+				D3972BF11C22412B00035B87 /* ShareManager.swift */,
 				ED7A08DA2CF674730035EC8F /* ShareMessage.swift */,
 				ED7A08DC2CF6749B0035EC8F /* ShareType.swift */,
 				ED7A08DE2CF674BA0035EC8F /* ShareTab.swift */,
@@ -16963,7 +16963,7 @@
 				59A68B280D62462B85CF57A4 /* HistoryPanel.swift in Sources */,
 				C400467C1CF4E43E00B08303 /* BackForwardListViewController.swift in Sources */,
 				D5D237782640BBA600326204 /* ExperimentsSettingsViewController.swift in Sources */,
-				D3972BF31C22412B00035B87 /* ShareExtensionHelper.swift in Sources */,
+				D3972BF31C22412B00035B87 /* ShareManager.swift in Sources */,
 				8AB30ECA2B6C03C700BD9A9B /* DataClearanceAnimation.swift in Sources */,
 				8A19ACB62A3290F9001C2147 /* NotificationsSetting.swift in Sources */,
 				43D16B8229831E6A009F8279 /* CreditCardInputField.swift in Sources */,
