@@ -92,6 +92,8 @@ class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, FeatureFlagga
             ]
         )
 
+        print("Laurie - contextId \(contextId)")
+
         var request = URLRequest(url: resourceEndpoint)
         request.httpMethod = HTTPMethod.post.rawValue
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -117,6 +119,7 @@ class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, FeatureFlagga
                 self.cache(response: result.response, for: request, with: result.data)
                 self.decode(data: result.data, completion: completion)
             case .failure:
+                print("Laurie - no data")
                 completion(.failure(Error.noDataAvailable))
             }
         }
@@ -143,9 +146,9 @@ class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, FeatureFlagga
     }
 
     private var resourceEndpoint: URL? {
-        if featureFlags.isCoreFeatureEnabled(.useStagingContileAPI) {
-            return URL(string: UnifiedAdsProvider.stagingResourceEndpoint, invalidCharacters: false)
-        }
+//        if featureFlags.isCoreFeatureEnabled(.useStagingContileAPI) {
+//            return URL(string: UnifiedAdsProvider.stagingResourceEndpoint, invalidCharacters: false)
+//        }
         return URL(string: UnifiedAdsProvider.prodResourceEndpoint, invalidCharacters: false)
     }
 }
