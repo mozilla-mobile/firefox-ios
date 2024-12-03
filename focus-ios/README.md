@@ -18,7 +18,7 @@ See readme at the root of the project for [the guidelines](https://github.com/mo
 
 ## Build Instructions
 
-1. Install Xcode 15.3 [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
+1. Install the latest [Xcode developer tools](https://developer.apple.com/download/all/) from Apple.
 2. Clone the repository:
 
   ```shell
