@@ -71,9 +71,7 @@ let package = Package(
     targets: [
         .target(name: "Shared",
                 dependencies: ["Common",
-                               "WebEngine",
-                               .product(name: "Sentry",
-                                        package: "sentry-cocoa")],
+                               "WebEngine"],
                 swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .target(
             name: "ComponentLibrary",
