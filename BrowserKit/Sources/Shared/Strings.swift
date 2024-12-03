@@ -33,9 +33,11 @@ private func MZLocalizedString(
     value: String?,
     comment: String
 ) -> String {
+    print("FF: bundle \(Strings.bundle)")
+    print("FF: main bundle: \(Bundle.main)")
     return NSLocalizedString(key,
                              tableName: tableName,
-                             bundle: Strings.bundle,
+                             bundle: .main,
                              value: value ?? "",
                              comment: comment)
 }
