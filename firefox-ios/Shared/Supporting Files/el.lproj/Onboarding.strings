@@ -92,9 +92,6 @@
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Ενεργοποίηση ειδοποιήσεων";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Sync.Description.v120" = "Όταν είστε συνδεδεμένοι και συγχρονισμένοι, είστε πιο ασφαλείς. Το %@ κρυπτογραφεί τους κωδικούς πρόσβασης, τους σελιδοδείκτες σας και πολλά άλλα.";
-
-/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Sync.Description.v123" = "Το %@ κρυπτογραφεί τους κωδικούς πρόσβασής σας, τους σελιδοδείκτες σας και πολλά άλλα όταν κάνετε συγχρονισμό.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */

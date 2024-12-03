@@ -107,9 +107,6 @@
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Trình chống theo dõi nâng cao";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Trình chống đã TẮT. Chúng tôi khuyên bạn nên bật lại.";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Trình chống đã TẮT. Chúng tôi khuyên bạn nên bật lại.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */

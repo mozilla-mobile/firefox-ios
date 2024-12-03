@@ -2,9 +2,6 @@
 "Microsurvey.Prompt.Button.v127" = "Lanjutkan";
 
 /* On top of the bottom toolbar, there can be a microsurvey prompt, this is the accessibility label for the close button that appears on the prompt that allows the user to dismiss the microsurvey prompt. */
-"Microsurvey.Prompt.Close.AccessibilityLabel.v127" = "Tutup Permintaan Survei";
-
-/* On top of the bottom toolbar, there can be a microsurvey prompt, this is the accessibility label for the close button that appears on the prompt that allows the user to dismiss the microsurvey prompt. */
 "Microsurvey.Prompt.Close.Button.AccessibilityLabel.v127" = "Tutup";
 
 /* On top of the bottom toolbar, there can be a microsurvey prompt, this is the logo image that appears on the prompt to inform the prompt is coming from the app specifically. Placeholder is for the app name. */
@@ -14,9 +11,6 @@
 "Microsurvey.Survey.Button.v127" = "Kirim";
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label for close button that dismisses the sheet. */
-"Microsurvey.Survey.Close.AccessibilityLabel.v127" = "Tutup Survei";
-
-/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label for close button that dismisses the sheet. */
 "Microsurvey.Survey.Close.Button.AccessibilityLabel.v127" = "Tutup";
 
 /* On the microsurvey, which is a bottom sheet that pops up with a survey question and options, this is the text shown on the confirmation page when the user has completed the survey. */
@@ -24,9 +18,6 @@
 
 /* On the microsurvey, which is a bottom sheet that pops up with a survey question and options, this is the title for the header on the microsurvey when the user has completed the survey. */
 "Microsurvey.Survey.ConfirmationPage.HeaderLabel.v127" = "Survei selesai";
-
-/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the title for the header on the screen. */
-"Microsurvey.Survey.HeaderLabel.v127" = "Lengkapi survei ini";
 
 /* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the title for the header on the screen. */
 "Microsurvey.Survey.HeaderLabel.v129" = "Silakan lengkapi survei";

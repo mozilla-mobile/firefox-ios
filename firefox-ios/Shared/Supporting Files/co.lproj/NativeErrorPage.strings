@@ -1,9 +1,6 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Attualizà";
 
-/* On error page, this is the description for generic error. */
-"NativeErrorPage.GenericError.Description.v131" = "Un sbagliu SSL hè accadutu è ùn si pò stabilisce una cunnessione sicura cù u servitore.";
-
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Fate casu. Pare ch’ella ci sia un prublema.";
 
