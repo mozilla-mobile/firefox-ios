@@ -95,7 +95,7 @@ class TopSitesViewModel {
         // Sponsored tile specific telemetry
         if let tile = homeTopSite.site as? SponsoredTile {
             if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
-                unifiedAdsTelemetry.sendClickTelemetry(tile: tile)
+                unifiedAdsTelemetry.sendClickTelemetry(tile: tile, position: position)
             } else {
                 SponsoredTileTelemetry.sendClickTelemetry(tile: tile, position: position)
             }

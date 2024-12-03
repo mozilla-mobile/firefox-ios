@@ -57,7 +57,7 @@ final class TopSite: FeatureFlaggable {
         guard let tile = site as? SponsoredTile else { return }
 
         if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
-            unifiedAdsTelemetry.sendImpressionTelemetry(tile: tile)
+            unifiedAdsTelemetry.sendImpressionTelemetry(tile: tile, position: position)
         } else {
             SponsoredTileTelemetry.sendImpressionTelemetry(tile: tile, position: position)
         }
