@@ -11,7 +11,7 @@ protocol UnifiedAdsCallbackTelemetry {
     func sendClickTelemetry(tile: SponsoredTile, position: Int)
 }
 
-class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
+final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
     private var networking: ContileNetworking
     private var logger: Logger
 
