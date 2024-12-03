@@ -42,30 +42,34 @@ class ShareSheetCoordinator: BaseCoordinator,
 
     /// Presents the share sheet from the source view
     func start(
-        url: URL,
-        title: String? = nil,
+        shareType: ShareType,
+        shareMessage: ShareMessage?,
         sourceView: UIView,
         sourceRect: CGRect? = nil,
         popoverArrowDirection: UIPopoverArrowDirection = .up
     ) {
-        let shareManager = ShareManager(
-            url: url,
-            // FXIOS-10669: We only want to pass a non-nil title here for the Info Card Referral experiment. Refactoring is
-            // needed in the ShareManager to make it properly extensible to multiple share use cases like this.
-            title: title,
-            tab: tabManager.selectedTab)
-        let controller = shareManager.createActivityViewController(
-            tabManager.selectedTab?.webView
-        ) { [weak self] completed, activityType in
-            guard let self = self else { return }
-            self.handleShareSheetCompletion(activityType: activityType, url: url)
-        }
+        let controller = ShareManager.createActivityViewController(
+            shareType: shareType,
+            shareMessage: shareMessage,
+            completionHandler: { [weak self] completed, activityType in
+                guard let self else { return }
+
+                self.handleShareSheetCompletion(
+                    activityType: activityType,
+                    shareType: shareType,
+                    relatedTab: self.tabManager.selectedTab
+                )
+            }
+        )
+
         if let popoverPresentationController = controller.popoverPresentationController {
             popoverPresentationController.sourceView = sourceView
             popoverPresentationController.sourceRect = sourceRect ?? sourceView.bounds
             popoverPresentationController.permittedArrowDirections = popoverArrowDirection
         }
+
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
+
         if let presentedViewController = router.navigationController.presentedViewController {
             presentedViewController.dismiss(animated: true) { [weak self] in
                 self?.router.present(controller)
@@ -77,7 +81,8 @@ class ShareSheetCoordinator: BaseCoordinator,
 
     private func handleShareSheetCompletion(
         activityType: UIActivity.ActivityType?,
-        url: URL
+        shareType: ShareType,
+        relatedTab: Tab?
     ) {
         switch activityType {
         case CustomActivityAction.sendToDevice.actionType:
@@ -87,10 +92,10 @@ class ShareSheetCoordinator: BaseCoordinator,
         }
     }
 
-    private func showSendToDevice(url: URL) {
+    private func showSendToDevice(url: URL, relatedTab: Tab?) {
         var shareItem: ShareItem!
-        if let selectedTab = tabManager.selectedTab, let url = selectedTab.canonicalURL?.displayURL {
-            shareItem = ShareItem(url: url.absoluteString, title: selectedTab.title)
+        if let relatedTab, let url = relatedTab.canonicalURL?.displayURL {
+            shareItem = ShareItem(url: url.absoluteString, title: relatedTab.title)
         } else {
             shareItem = ShareItem(url: url.absoluteString, title: nil)
         }
@@ -112,11 +117,11 @@ class ShareSheetCoordinator: BaseCoordinator,
     }
 
     private func dequeueNotShownJSAlert() {
-        guard let alertInfo = tabManager.selectedTab?.dequeueJavascriptAlertPrompt()
-        else {
+        guard let alertInfo = tabManager.selectedTab?.dequeueJavascriptAlertPrompt() else {
             parentCoordinator?.didFinish(from: self)
             return
         }
+
         let alertController = alertInfo.alertController()
         alertController.delegate = self
         router.present(alertController)

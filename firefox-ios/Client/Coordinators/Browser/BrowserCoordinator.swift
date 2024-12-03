@@ -764,8 +764,8 @@ class BrowserCoordinator: BaseCoordinator,
         )
         add(child: shareSheetCoordinator)
         shareSheetCoordinator.start(
-            url: url,
-            title: title,
+            shareType: .site(url: url), // FIXME Need correct shareType, shareMessage passed in
+            shareMessage: nil,
             sourceView: sourceView,
             sourceRect: sourceRect,
             popoverArrowDirection: popoverArrowDirection

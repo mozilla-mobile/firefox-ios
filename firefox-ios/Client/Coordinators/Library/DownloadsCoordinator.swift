@@ -50,11 +50,6 @@ class DownloadsCoordinator: BaseCoordinator,
 
     private func startShare(file: DownloadedFile, sourceView: UIView) {
         guard !childCoordinators.contains(where: { $0 is ShareSheetCoordinator }) else { return }
-        let coordinator = makeShareSheetCoordinator()
-        coordinator.start(url: file.path, sourceView: sourceView)
-    }
-
-    private func makeShareSheetCoordinator() -> ShareSheetCoordinator {
         let coordinator = ShareSheetCoordinator(
             alertContainer: UIView(),
             router: router,
@@ -63,7 +58,13 @@ class DownloadsCoordinator: BaseCoordinator,
             tabManager: tabManager
         )
         add(child: coordinator)
-        return coordinator
+        coordinator.start(
+            shareType: .file(url: file.path),
+            shareMessage: nil,
+            sourceView: sourceView,
+            sourceRect: nil,
+            popoverArrowDirection: .any
+        )
     }
 
     func showDocument(file: DownloadedFile) {
