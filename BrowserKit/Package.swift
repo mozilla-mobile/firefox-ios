@@ -12,6 +12,8 @@ let package = Package(
         .library(
             name: "SiteImageView",
             targets: ["SiteImageView"]),
+        .library(name: "Shared",
+                 targets: ["Shared"]),
         .library(
             name: "Common",
             targets: ["Common"]),
@@ -74,6 +76,9 @@ let package = Package(
         .testTarget(
             name: "ComponentLibraryTests",
             dependencies: ["ComponentLibrary"]),
+        .target(name: "Shared",
+                dependencies: ["Common", "WebEngine"],
+                swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .target(
             name: "SiteImageView",
             dependencies: ["Fuzi", "Kingfisher", "Common", "SwiftDraw"],
