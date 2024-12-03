@@ -751,16 +751,6 @@
 		8A3233FE28627446003E1C33 /* LocalDesktopFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3233FD28627446003E1C33 /* LocalDesktopFolder.swift */; };
 		8A32DD5028B419B300D57C60 /* HomepageMessageCardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A32DD4F28B419B300D57C60 /* HomepageMessageCardViewModelTests.swift */; };
 		8A33221F27DFE318008F809E /* TopSitesDataAdaptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A33221E27DFE318008F809E /* TopSitesDataAdaptorTests.swift */; };
-		8A3345612BA499B7008C52AB /* disconnect-block-fingerprinting.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A3345572BA499B6008C52AB /* disconnect-block-fingerprinting.json */; };
-		8A3345622BA499B7008C52AB /* disconnect-block-advertising.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A3345582BA499B6008C52AB /* disconnect-block-advertising.json */; };
-		8A3345632BA499B7008C52AB /* disconnect-block-cookies-content.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A3345592BA499B6008C52AB /* disconnect-block-cookies-content.json */; };
-		8A3345642BA499B7008C52AB /* disconnect-block-analytics.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A33455A2BA499B6008C52AB /* disconnect-block-analytics.json */; };
-		8A3345652BA499B7008C52AB /* disconnect-block-cookies-advertising.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A33455B2BA499B7008C52AB /* disconnect-block-cookies-advertising.json */; };
-		8A3345662BA499B7008C52AB /* disconnect-block-content.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A33455C2BA499B7008C52AB /* disconnect-block-content.json */; };
-		8A3345672BA499B7008C52AB /* disconnect-block-cookies-analytics.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A33455D2BA499B7008C52AB /* disconnect-block-cookies-analytics.json */; };
-		8A3345682BA499B7008C52AB /* disconnect-block-social.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A33455E2BA499B7008C52AB /* disconnect-block-social.json */; };
-		8A3345692BA499B7008C52AB /* disconnect-block-cookies-social.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A33455F2BA499B7008C52AB /* disconnect-block-cookies-social.json */; };
-		8A33456A2BA499B7008C52AB /* disconnect-block-cryptomining.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A3345602BA499B7008C52AB /* disconnect-block-cryptomining.json */; };
 		8A359EF32A1FD449004A5BB7 /* AdjustWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A359EF22A1FD449004A5BB7 /* AdjustWrapper.swift */; };
 		8A359EF62A1FE840004A5BB7 /* MockAdjustWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A359EF52A1FE840004A5BB7 /* MockAdjustWrapper.swift */; };
 		8A36AC2C2886F27F00CDC0AD /* MockTabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A36AC2B2886F27F00CDC0AD /* MockTabManager.swift */; };
@@ -7352,16 +7342,6 @@
 		8A3233FD28627446003E1C33 /* LocalDesktopFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalDesktopFolder.swift; sourceTree = "<group>"; };
 		8A32DD4F28B419B300D57C60 /* HomepageMessageCardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageMessageCardViewModelTests.swift; sourceTree = "<group>"; };
 		8A33221E27DFE318008F809E /* TopSitesDataAdaptorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesDataAdaptorTests.swift; sourceTree = "<group>"; };
-		8A3345572BA499B6008C52AB /* disconnect-block-fingerprinting.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-fingerprinting.json"; path = "../../../ContentBlockingLists/disconnect-block-fingerprinting.json"; sourceTree = "<group>"; };
-		8A3345582BA499B6008C52AB /* disconnect-block-advertising.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-advertising.json"; path = "../../../ContentBlockingLists/disconnect-block-advertising.json"; sourceTree = "<group>"; };
-		8A3345592BA499B6008C52AB /* disconnect-block-cookies-content.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-cookies-content.json"; path = "../../../ContentBlockingLists/disconnect-block-cookies-content.json"; sourceTree = "<group>"; };
-		8A33455A2BA499B6008C52AB /* disconnect-block-analytics.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-analytics.json"; path = "../../../ContentBlockingLists/disconnect-block-analytics.json"; sourceTree = "<group>"; };
-		8A33455B2BA499B7008C52AB /* disconnect-block-cookies-advertising.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-cookies-advertising.json"; path = "../../../ContentBlockingLists/disconnect-block-cookies-advertising.json"; sourceTree = "<group>"; };
-		8A33455C2BA499B7008C52AB /* disconnect-block-content.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-content.json"; path = "../../../ContentBlockingLists/disconnect-block-content.json"; sourceTree = "<group>"; };
-		8A33455D2BA499B7008C52AB /* disconnect-block-cookies-analytics.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-cookies-analytics.json"; path = "../../../ContentBlockingLists/disconnect-block-cookies-analytics.json"; sourceTree = "<group>"; };
-		8A33455E2BA499B7008C52AB /* disconnect-block-social.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-social.json"; path = "../../../ContentBlockingLists/disconnect-block-social.json"; sourceTree = "<group>"; };
-		8A33455F2BA499B7008C52AB /* disconnect-block-cookies-social.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-cookies-social.json"; path = "../../../ContentBlockingLists/disconnect-block-cookies-social.json"; sourceTree = "<group>"; };
-		8A3345602BA499B7008C52AB /* disconnect-block-cryptomining.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-cryptomining.json"; path = "../../../ContentBlockingLists/disconnect-block-cryptomining.json"; sourceTree = "<group>"; };
 		8A359EF22A1FD449004A5BB7 /* AdjustWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustWrapper.swift; sourceTree = "<group>"; };
 		8A359EF52A1FE840004A5BB7 /* MockAdjustWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAdjustWrapper.swift; sourceTree = "<group>"; };
 		8A36AC2B2886F27F00CDC0AD /* MockTabManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabManager.swift; sourceTree = "<group>"; };
@@ -15605,7 +15585,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "rm -rf .venv; bash $PWD/bin/sdk_generator.sh -g Glean -o $SRCROOT/Storage/Generated\n";
+			shellScript = "bash $PWD/bin/sdk_generator.sh -g Glean -o $SRCROOT/Storage/Generated\n";
 		};
 		5FA2232B27F6FA00005B3D87 /* Glean SDK Generator Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -15627,7 +15607,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "OUTPUT_DIR=\"${SRCROOT}/Client/Generated/Metrics/\"\n# remove old Metrics file if present\nrm \"${SRCROOT}/Client/Generated/Metrics.swift\"\nrm -rf .venv; bash $PWD/bin/sdk_generator.sh -g Glean -o $OUTPUT_DIR\n";
+			shellScript = "OUTPUT_DIR=\"${SRCROOT}/Client/Generated/Metrics/\"\n# remove old Metrics file if present\nrm \"${SRCROOT}/Client/Generated/Metrics.swift\"\nbash $PWD/bin/sdk_generator.sh -g Glean -o $OUTPUT_DIR\n";
 		};
 		5FA2232C27F6FA69005B3D87 /* Nimbus Feature Manifest Generator Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -24199,11 +24179,6 @@
 				EAGER_LINKING = YES;
 				FUSE_BUILD_SCRIPT_PHASES = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-Xlinker",
-					"-no_application_extension",
-				);
 				OTHER_SWIFT_FLAGS = "$(OTHER_SWIFT_FLAGS_common) -DMOZ_CHANNEL_FENNEC";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = TESTING;
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
@@ -24226,10 +24201,6 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-ld_classic",
-				);
 				OTHER_SWIFT_FLAGS = "$(OTHER_SWIFT_FLAGS_common) -DMOZ_CHANNEL_FENNEC";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
@@ -25607,11 +25578,6 @@
 				EAGER_LINKING = YES;
 				FUSE_BUILD_SCRIPT_PHASES = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					"-Xlinker",
-					"-no_application_extension",
-				);
 				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				VALIDATE_WORKSPACE = YES;
 			};
@@ -25631,10 +25597,6 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-ld_classic",
-				);
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
