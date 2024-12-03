@@ -7,10 +7,10 @@ import Common
 import Shared
 import Storage
 
-class ShareExtensionCoordinator: BaseCoordinator,
-                                 DevicePickerViewControllerDelegate,
-                                 InstructionsViewDelegate,
-                                 JSPromptAlertControllerDelegate {
+class ShareSheetCoordinator: BaseCoordinator,
+                             DevicePickerViewControllerDelegate,
+                             InstructionsViewDelegate,
+                             JSPromptAlertControllerDelegate {
     // MARK: - Properties
 
     private let tabManager: TabManager

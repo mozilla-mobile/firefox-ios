@@ -729,21 +729,21 @@ class BrowserCoordinator: BaseCoordinator,
         toastContainer: UIView,
         popoverArrowDirection: UIPopoverArrowDirection
     ) {
-        guard childCoordinators.first(where: { $0 is ShareExtensionCoordinator }) as? ShareExtensionCoordinator == nil
+        guard childCoordinators.first(where: { $0 is ShareSheetCoordinator }) as? ShareSheetCoordinator == nil
         else {
             // If this case is hitted it means the share extension coordinator wasn't removed
             // correctly in the previous session.
             return
         }
-        let shareExtensionCoordinator = ShareExtensionCoordinator(
+        let shareSheetCoordinator = ShareSheetCoordinator(
             alertContainer: toastContainer,
             router: router,
             profile: profile,
             parentCoordinator: self,
             tabManager: tabManager
         )
-        add(child: shareExtensionCoordinator)
-        shareExtensionCoordinator.start(
+        add(child: shareSheetCoordinator)
+        shareSheetCoordinator.start(
             url: url,
             title: title,
             sourceView: sourceView,
