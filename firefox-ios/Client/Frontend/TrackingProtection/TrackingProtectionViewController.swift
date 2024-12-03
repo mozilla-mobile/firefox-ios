@@ -190,9 +190,7 @@ class TrackingProtectionViewController: UIViewController,
     // MARK: Redux
     func newState(state: TrackingProtectionState) {
         trackingProtectionState = state
-        if let navigateTo = state.navigateTo {
-            // TODO: FXIOS-10657 connect the ETP navigation with the BVC general navigation
-        }
+        // TODO: FXIOS-10657 connect the ETP navigation with the BVC general navigation
         if let displayView = state.displayView {
             switch displayView {
             case .blockedTrackersDetails:
