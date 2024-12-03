@@ -70,6 +70,13 @@
 		0BCC26962CFF106A0072CD5A /* Localizations.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Localizations.framework */; };
 		0BCC26982CFF10830072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26972CFF10830072CD5A /* Shared */; };
 		0BCC269A2CFF10950072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26992CFF10950072CD5A /* Shared */; };
+		0BCC269E2CFF12ED0072CD5A /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC269D2CFF12ED0072CD5A /* GCDWebServers */; };
+		0BCC26A32CFF13E50072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26A22CFF13E50072CD5A /* Shared */; };
+		0BCC26A52CFF150C0072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26A42CFF150C0072CD5A /* Shared */; };
+		0BCC26A72CFF15A20072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26A62CFF15A20072CD5A /* Shared */; };
+		0BCC26A92CFF15D00072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26A82CFF15D00072CD5A /* Shared */; };
+		0BCC26AB2CFF15F90072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26AA2CFF15F90072CD5A /* Shared */; };
+		0BCC26AD2CFF16220072CD5A /* Shared in Frameworks */ = {isa = PBXBuildFile; productRef = 0BCC26AC2CFF16220072CD5A /* Shared */; };
 		0BDDB33D2CA6B1DA00D501DF /* EditFolderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDDB33C2CA6B1DA00D501DF /* EditFolderViewController.swift */; };
 		0BDDB33F2CA6B1F000D501DF /* EditFolderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDDB33E2CA6B1F000D501DF /* EditFolderViewModel.swift */; };
 		0BDDB3412CA6B23300D501DF /* EditFolderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BDDB3402CA6B23300D501DF /* EditFolderCell.swift */; };
@@ -448,7 +455,6 @@
 		43A715432A2DF94F00DD5747 /* UpdateCard.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43A715412A2DF94F00DD5747 /* UpdateCard.strings */; };
 		43A878172B838FF90039D6B7 /* PasswordAutofill.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43A878152B838FF90039D6B7 /* PasswordAutofill.strings */; };
 		43A878FC27AB498E0071C372 /* MozillaAppServices in Frameworks */ = {isa = PBXBuildFile; productRef = 43A878FB27AB498E0071C372 /* MozillaAppServices */; };
-		43A878FD27AB4A110071C372 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
 		43A878FE27AC39D30071C372 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
 		43AB6FA225DC53D30016B015 /* GoogleTopSiteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6F9C25DC53D20016B015 /* GoogleTopSiteManager.swift */; };
 		43AB6FA425DC53D30016B015 /* LegacyLabelButtonHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6F9E25DC53D20016B015 /* LegacyLabelButtonHeaderView.swift */; };
@@ -575,7 +581,6 @@
 		5A9F83402B2B4AE800272819 /* TabPeekAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9F833F2B2B4AE800272819 /* TabPeekAction.swift */; };
 		5A9F83422B2B796800272819 /* TabPeekState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9F83412B2B796800272819 /* TabPeekState.swift */; };
 		5A9F83442B2B8CE900272819 /* TabPeekModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9F83432B2B8CE900272819 /* TabPeekModel.swift */; };
-		5A9FF8492942454600DF9FBB /* Common in Frameworks */ = {isa = PBXBuildFile; productRef = 5A9FF8482942454600DF9FBB /* Common */; };
 		5AA0CC662A4B8F6100014E2A /* PasswordManagerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA0CC652A4B8F6100014E2A /* PasswordManagerCoordinator.swift */; };
 		5AA75A652A46274A00533F8D /* MockThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AA75A622A46272000533F8D /* MockThemeManager.swift */; };
 		5AB4237C28A1947A003BC40C /* MockNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4237B28A1947A003BC40C /* MockNotificationCenter.swift */; };
@@ -889,8 +894,6 @@
 		8A87B4322CC1A3C0003A9239 /* PocketManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A87B4302CC1A3BA003A9239 /* PocketManagerTests.swift */; };
 		8A87B4342CC1A731003A9239 /* PocketMiddlewareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A87B42E2CC1A3AA003A9239 /* PocketMiddlewareTests.swift */; };
 		8A87B4382CC1A92D003A9239 /* MockPocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A87B4362CC1A910003A9239 /* MockPocketManager.swift */; };
-		8A88815A2B20FFE0009635AE /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A8881592B20FFE0009635AE /* GCDWebServers */; };
-		8A88815C2B2103AD009635AE /* WebEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 8A88815B2B2103AD009635AE /* WebEngine */; };
 		8A88815E2B21071E009635AE /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A88815D2B21071E009635AE /* GCDWebServers */; };
 		8A8917692B57283B008B01EA /* LegacyHomepageHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8917682B57283B008B01EA /* LegacyHomepageHeaderCell.swift */; };
 		8A8BAE122B2107E400D774EB /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A8BAE112B2107E400D774EB /* GCDWebServers */; };
@@ -9528,6 +9531,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		0BCC26A12CFF13E00072CD5A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0BCC26A32CFF13E50072CD5A /* Shared in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2827315A1ABC9BE600AA1954 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -9549,6 +9560,7 @@
 			files = (
 				45D5EDCA292D65D600311934 /* RustMozillaAppServices.framework in Frameworks */,
 				28ECD9BF1BA1F19900D829DA /* libz.tbd in Frameworks */,
+				0BCC26A52CFF150C0072CD5A /* Shared in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9556,10 +9568,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43A878FD27AB4A110071C372 /* RustMozillaAppServices.framework in Frameworks */,
-				8A88815C2B2103AD009635AE /* WebEngine in Frameworks */,
-				8A88815A2B20FFE0009635AE /* GCDWebServers in Frameworks */,
-				5A9FF8492942454600DF9FBB /* Common in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9615,6 +9623,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4590912F2A2E558000061F0C /* RustMozillaAppServices.framework in Frameworks */,
+				0BCC26A72CFF15A20072CD5A /* Shared in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9636,6 +9645,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				43F93C2427A8681C009833D9 /* RustMozillaAppServices.framework in Frameworks */,
+				0BCC26AB2CFF15F90072CD5A /* Shared in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -9656,6 +9666,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				43C6A47F27A0679300C79856 /* MappaMundi in Frameworks */,
+				0BCC26A92CFF15D00072CD5A /* Shared in Frameworks */,
+				0BCC269E2CFF12ED0072CD5A /* GCDWebServers in Frameworks */,
 				8A05B0052A69A0C40011B622 /* Common in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -9728,6 +9740,7 @@
 				8A8BAE142B21110000D774EB /* GCDWebServers in Frameworks */,
 				E6231C081B90A71E005ABB0D /* libz.tbd in Frameworks */,
 				EDF567A22C8B51E100FDB09D /* Kingfisher in Frameworks */,
+				0BCC26AD2CFF16220072CD5A /* Shared in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -14364,6 +14377,7 @@
 			);
 			name = SyncTests;
 			packageProductDependencies = (
+				0BCC26A42CFF150C0072CD5A /* Shared */,
 			);
 			productName = SyncTests;
 			productReference = 282731681ABC9BE700AA1954 /* SyncTests.xctest */;
@@ -14472,6 +14486,7 @@
 			);
 			name = StorageTests;
 			packageProductDependencies = (
+				0BCC26AA2CFF15F90072CD5A /* Shared */,
 			);
 			productName = StorageTests;
 			productReference = 2FCAE2241ABB51F800877008 /* StorageTests.xctest */;
@@ -14534,6 +14549,8 @@
 			packageProductDependencies = (
 				43C6A47E27A0679300C79856 /* MappaMundi */,
 				8A05B0042A69A0C40011B622 /* Common */,
+				0BCC269D2CFF12ED0072CD5A /* GCDWebServers */,
+				0BCC26A82CFF15D00072CD5A /* Shared */,
 			);
 			productName = XCUITests;
 			productReference = 3BFE4B071D342FB800DDF53F /* XCUITests.xctest */;
@@ -14628,6 +14645,7 @@
 			buildConfigurationList = E6F965381B2F1CF20034B023 /* Build configuration list for PBXNativeTarget "SharedTests" */;
 			buildPhases = (
 				E6F965081B2F1CF20034B023 /* Sources */,
+				0BCC26A12CFF13E00072CD5A /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -14637,6 +14655,7 @@
 			);
 			name = SharedTests;
 			packageProductDependencies = (
+				0BCC26A22CFF13E50072CD5A /* Shared */,
 			);
 			productName = SharedTests;
 			productReference = E6F9650C1B2F1CF20034B023 /* SharedTests.xctest */;
@@ -14736,6 +14755,7 @@
 				8A8BAE132B21110000D774EB /* GCDWebServers */,
 				EDF5679F2C8B51DC00FDB09D /* SiteImageView */,
 				EDF567A12C8B51E100FDB09D /* Kingfisher */,
+				0BCC26AC2CFF16220072CD5A /* Shared */,
 			);
 			productName = ClientTests;
 			productReference = F84B21D31A090F8100AAB793 /* ClientTests.xctest */;
@@ -25831,6 +25851,35 @@
 			productName = Shared;
 		};
 		0BCC26992CFF10950072CD5A /* Shared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Shared;
+		};
+		0BCC269D2CFF12ED0072CD5A /* GCDWebServers */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 433F87CC2788EAB600693368 /* XCRemoteSwiftPackageReference "GCDWebServer" */;
+			productName = GCDWebServers;
+		};
+		0BCC26A22CFF13E50072CD5A /* Shared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Shared;
+		};
+		0BCC26A42CFF150C0072CD5A /* Shared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Shared;
+		};
+		0BCC26A62CFF15A20072CD5A /* Shared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Shared;
+		};
+		0BCC26A82CFF15D00072CD5A /* Shared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Shared;
+		};
+		0BCC26AA2CFF15F90072CD5A /* Shared */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Shared;
+		};
+		0BCC26AC2CFF16220072CD5A /* Shared */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Shared;
 		};

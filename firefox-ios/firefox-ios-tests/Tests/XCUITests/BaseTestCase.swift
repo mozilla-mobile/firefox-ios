@@ -5,6 +5,7 @@
 import Common
 import MappaMundi
 import XCTest
+import Shared
 
 let page1 = "http://localhost:\(serverPort)/test-fixture/find-in-page-test.html"
 let page2 = "http://localhost:\(serverPort)/test-fixture/test-example.html"
