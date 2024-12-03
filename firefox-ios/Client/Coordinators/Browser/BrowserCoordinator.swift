@@ -551,37 +551,6 @@ class BrowserCoordinator: BaseCoordinator,
         showShareSheet(with: url, title: nil)
     }
 
-    func showShareSheet(with url: URL?, title: String?) {
-        guard let url else { return }
-
-        let showShareSheet = { url in
-            self.showShareExtension(
-                url: url,
-                title: title,
-                sourceView: self.browserViewController.addressToolbarContainer,
-                toastContainer: self.browserViewController.contentContainer,
-                popoverArrowDirection: .any
-            )
-        }
-
-        guard let temporaryDocument = browserViewController.tabManager.selectedTab?.temporaryDocument else {
-            showShareSheet(url)
-            return
-        }
-
-        temporaryDocument.getURL { tempDocURL in
-            DispatchQueue.main.async {
-                // If we successfully got a temp file URL, share it like a downloaded file,
-                // otherwise present the ordinary share menu for the web URL.
-                if let tempDocURL = tempDocURL, tempDocURL.isFileURL {
-                    showShareSheet(tempDocURL)
-                } else {
-                    showShareSheet(url)
-                }
-            }
-        }
-    }
-
     private func makeMenuNavViewController() -> DismissableNavigationViewController? {
         if let mainMenuCoordinator = childCoordinators.first(where: { $0 is MainMenuCoordinator }) as? MainMenuCoordinator {
             logger.log(
@@ -1062,6 +1031,43 @@ class BrowserCoordinator: BaseCoordinator,
             if rootVC is QRCodeViewController {
                 router.dismiss(animated: true, completion: nil)
                 remove(child: childCoordinators.first(where: { $0 is QRCodeCoordinator }))
+            }
+        }
+    }
+
+    // MARK: - Private helpers
+
+    private func showShareSheet(with url: URL?, title: String?) {
+        // Note: From New Menu > Share
+        // Note: From deeplinks ( > sharesheet route)
+        guard let url else { return }
+
+        let showShareSheet = { url in
+            self.showShareExtension(
+                url: url,
+                title: title,
+                sourceView: self.browserViewController.addressToolbarContainer,
+                toastContainer: self.browserViewController.contentContainer,
+                popoverArrowDirection: .any
+            )
+        }
+
+        // We only care about the temp document for .tab shares right?
+        // BUT!! A tab might be displaying a downloaded PDF! Then it's file:// url
+        guard let temporaryDocument = browserViewController.tabManager.selectedTab?.temporaryDocument else {
+            showShareSheet(url)
+            return
+        }
+
+        temporaryDocument.getURL { tempDocURL in
+            DispatchQueue.main.async {
+                // If we successfully got a temp file URL, share it like a downloaded file,
+                // otherwise present the ordinary share menu for the web URL.
+                if let tempDocURL = tempDocURL, tempDocURL.isFileURL {
+                    showShareSheet(tempDocURL)
+                } else {
+                    showShareSheet(url)
+                }
             }
         }
     }
