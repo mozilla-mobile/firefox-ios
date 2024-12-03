@@ -81,7 +81,11 @@ class BookmarksViewController: SiteTableViewController,
         return button
     }()
 
-    private lazy var emptyStateView: BookmarksFolderEmptyStateView = .build()
+    private lazy var emptyStateView: BookmarksFolderEmptyStateView = .build { emptyStateView in
+        emptyStateView.signInAction = { [weak self] in
+            self?.bookmarkCoordinatorDelegate?.showSignIn()
+        }
+    }
 
     private lazy var a11yEmptyStateScrollView: UIScrollView = .build()
 
@@ -98,7 +102,7 @@ class BookmarksViewController: SiteTableViewController,
         self.bookmarksHandler = viewModel.profile.places
         super.init(profile: viewModel.profile, windowUUID: windowUUID)
 
-        setupNotifications(forObserver: self, observing: [.FirefoxAccountChanged])
+        setupNotifications(forObserver: self, observing: [.FirefoxAccountChanged, .ProfileDidFinishSyncing])
 
         tableView.register(cellType: OneLineTableViewCell.self)
         tableView.register(cellType: SeparatorTableViewCell.self)
@@ -139,11 +143,13 @@ class BookmarksViewController: SiteTableViewController,
 
     override func reloadData() {
         viewModel.reloadData { [weak self] in
-            self?.tableView.reloadData()
-            if self?.viewModel.shouldFlashRow ?? false {
-                self?.flashRow()
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+                if self?.viewModel.shouldFlashRow ?? false {
+                    self?.flashRow()
+                }
+                self?.updateEmptyState()
             }
-            self?.updateEmptyState()
         }
     }
 
@@ -319,7 +325,8 @@ class BookmarksViewController: SiteTableViewController,
         a11yEmptyStateScrollView.isHidden = !viewModel.bookmarkNodes.isEmpty
         if !a11yEmptyStateScrollView.isHidden {
             let isRoot = viewModel.bookmarkFolderGUID == BookmarkRoots.MobileFolderGUID
-            emptyStateView.configure(isRoot: isRoot)
+            let isSignedIn = profile.hasAccount()
+            emptyStateView.configure(isRoot: isRoot, isSignedIn: isSignedIn)
         }
     }
 
@@ -573,7 +580,7 @@ extension BookmarksViewController: LibraryPanelContextMenu {
 extension BookmarksViewController: Notifiable {
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
-        case .FirefoxAccountChanged:
+        case .FirefoxAccountChanged, .ProfileDidFinishSyncing:
             reloadData()
         default:
             break
