@@ -10200,13 +10200,6 @@
 			path = SyncTests;
 			sourceTree = "<group>";
 		};
-		288A2D7E1AB8B2AD0023ABC3 /* Result */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Result;
-			sourceTree = "<group>";
-		};
 		2891F2B91F991185001B105E /* fixtures */ = {
 			isa = PBXGroup;
 			children = (
@@ -10239,8 +10232,6 @@
 		28CE83EF1A1D246900576538 /* Third-Party Source */ = {
 			isa = PBXGroup;
 			children = (
-				EB912B8D22722A7800DF585A /* Deferred */,
-				288A2D7E1AB8B2AD0023ABC3 /* Result */,
 				D8FDEB54220CFE970069A582 /* UIImage+ImageEffects.h */,
 				D8FDEB55220CFE970069A582 /* UIImage+ImageEffects.m */,
 			);
@@ -13846,14 +13837,6 @@
 				E6F9650F1B2F1CF20034B023 /* Info.plist */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		EB912B8D22722A7800DF585A /* Deferred */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Deferred;
-			path = ThirdParty/Deferred/Deferred;
 			sourceTree = "<group>";
 		};
 		EB9A179720E69A7E00B12184 /* Theme */ = {
