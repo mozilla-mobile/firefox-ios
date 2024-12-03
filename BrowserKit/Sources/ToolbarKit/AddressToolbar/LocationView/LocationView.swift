@@ -40,10 +40,10 @@ final class LocationView: UIView,
         guard let text = urlTextField.text, let font = urlTextField.font else {
             return false
         }
-        let locationViewWidth = frame.width - (UX.horizontalSpace * 2)
-        let fontAttributes = [NSAttributedString.Key.font: font]
-        let urlTextFieldWidth = text.size(withAttributes: fontAttributes).width
-        return urlTextFieldWidth >= locationViewWidth
+        let locationViewVisibleWidth = frame.width - iconContainerStackView.frame.width - UX.horizontalSpace
+        let urlTextFieldWidth = text.size(withAttributes: [.font: font]).width
+
+        return urlTextFieldWidth >= locationViewVisibleWidth
     }
 
     private var dotWidth: CGFloat {
@@ -173,7 +173,7 @@ final class LocationView: UIView,
 
             urlTextField.topAnchor.constraint(equalTo: topAnchor),
             urlTextField.bottomAnchor.constraint(equalTo: bottomAnchor),
-            urlTextField.trailingAnchor.constraint(equalTo: trailingAnchor),
+            urlTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: UX.horizontalSpace),
 
             iconContainerBackgroundView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
             iconContainerBackgroundView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor),
