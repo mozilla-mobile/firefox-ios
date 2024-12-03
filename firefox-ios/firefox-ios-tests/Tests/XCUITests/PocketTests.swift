@@ -27,7 +27,7 @@ class PocketTests: BaseTestCase {
         navigator.goto(NewTabScreen)
     }
 
-    func scrollToElement(_ element: XCUIElement, direction: SwipeDirection, maxSwipes: Int) {
+    func scrollToElement(_ element: XCUIElement, direction: SwipeDirection, maxSwipes: Int = 5) {
         var swipeCount = 0
         while !element.exists && swipeCount < maxSwipes {
             switch direction {
@@ -47,7 +47,6 @@ class PocketTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306924
     func testPocketEnabledByDefault() {
-        let maxSwipes = 5
         navigator.goto(NewTabScreen)
         mozWaitForElementToExist(app.staticTexts[AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket])
         XCTAssertEqual(
@@ -78,8 +77,8 @@ class PocketTests: BaseTestCase {
 
         scrollToElement(app.buttons[AccessibilityIdentifiers.FirefoxHomepage.Pocket.footerLearnMoreLabel],
                         direction: SwipeDirection.up,
-                        maxSwipes: maxSwipes)
-        scrollToElement(app.cells.staticTexts["Discover more"], direction: .left, maxSwipes: maxSwipes)
+                        maxSwipes: MAX_SWIPE)
+        scrollToElement(app.cells.staticTexts["Discover more"], direction: .left, maxSwipes: MAX_SWIPE)
 
         app.cells.staticTexts["Discover more"].waitAndTap()
         mozWaitForElementToExist(url)
