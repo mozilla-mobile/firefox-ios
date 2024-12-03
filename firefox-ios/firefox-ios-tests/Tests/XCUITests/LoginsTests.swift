@@ -46,7 +46,7 @@ class LoginTest: BaseTestCase {
     private func openLoginsSettingsFromBrowserTab() {
         waitForExistence(app.buttons["TabToolbar.menuButton"])
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.otherElements[StandardImageIdentifiers.Large.login])
+        waitForExistence(app.buttons[AccessibilityIdentifiers.MainMenu.HeaderView.mainButton])
         navigator.goto(LoginsSettings)
 
         unlockLoginsView()
@@ -67,8 +67,11 @@ class LoginTest: BaseTestCase {
             ]
         )
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
-        app.buttons["Settings"].tap()
-        navigator.performAction(Action.OpenNewTabFromTabTray)
+        app.buttons["Settings"].waitAndTap()
+        app.buttons["Done"].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
+        app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
+        navigator.nowAt(NewTabScreen)
         saveLogin(givenUrl: testLoginPage)
         // Make sure you can access populated Login List from Browser Tab Menu
         navigator.goto(LoginsSettings)
@@ -201,8 +204,7 @@ class LoginTest: BaseTestCase {
         app.menuItems["Select All"].tap()
         app.menuItems["Cut"].waitAndTap()
         enterTextInField(typedText: "foo")
-        waitForExistence(app.buttons["Done"])
-        app.buttons["Done"].tap()
+        app.buttons["Done"].waitAndTap()
         // The username is correctly changed
         mozWaitForElementToExist(app.tables["Login Detail List"])
         mozWaitForElementToExist(app.tables.cells[loginsListURLLabel])

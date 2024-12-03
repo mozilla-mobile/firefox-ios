@@ -404,6 +404,7 @@ class SearchTests: BaseTestCase {
         // swiftlint:enable empty_count
 
         // Delete the text and type "g"
+        app.textFields.firstMatch.waitAndTap()
         app.buttons["Clear text"].waitAndTap()
         typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: true)
 

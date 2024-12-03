@@ -36,7 +36,7 @@ class FindInPageTests: BaseTestCase {
 
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
         app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].waitAndTap()
-        app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.search].waitAndTap()
+        app.otherElements.images[StandardImageIdentifiers.Large.search].waitAndTap()
 
         // Enter some text to start finding
         if #available(iOS 16, *) {
@@ -125,7 +125,7 @@ class FindInPageTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].waitAndTap()
         // Enter some text to start finding
-        app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.search].tap()
+        app.otherElements.images[StandardImageIdentifiers.Large.search].tap()
         if #available(iOS 16, *) {
             app.searchFields["find.searchField"].typeText("The Book of")
             mozWaitForElementToExist(app.searchFields["The Book of"])

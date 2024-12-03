@@ -239,17 +239,13 @@ class BaseTestCase: XCTestCase {
             timeout: TIMEOUT
         )
         navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(
-            app.tables.otherElements[StandardImageIdentifiers.Large.bookmark],
-            timeout: TIMEOUT_LONG
-        )
-        app.tables.otherElements[StandardImageIdentifiers.Large.bookmark].tap()
-        navigator.nowAt(BrowserTab)
+        navigator.goto(SaveBrowserTabMenu)
+        navigator.performAction(Action.Bookmark)
     }
 
     func unbookmark() {
-        navigator.goto(BrowserTabMenu)
-        app.otherElements[StandardImageIdentifiers.Large.bookmarkSlash].waitAndTap()
+        bookmark()
+        app.buttons["Delete Bookmark"].waitAndTap()
         navigator.nowAt(BrowserTab)
     }
 

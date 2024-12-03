@@ -41,11 +41,11 @@ class ToolbarMenuTests: BaseTestCase {
             )
         }
         navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables["Context Menu"])
+        mozWaitForElementToExist(app.images[StandardImageIdentifiers.Large.avatarCircle])
         validateMenuOptions()
+        app.buttons["MainMenu.CloseMenuButton"].tap()
         XCUIDevice.shared.orientation = .landscapeLeft
         mozWaitForElementToExist(hamburgerMenu)
-        mozWaitForElementToNotExist(app.tables["Context Menu"])
         mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
         mozWaitForElementToExist(tabsButton)
         XCTAssertTrue(
@@ -58,25 +58,22 @@ class ToolbarMenuTests: BaseTestCase {
             "Menu button is not below the pocket cells area"
         )
         hamburgerMenu.tap()
-        mozWaitForElementToExist(app.tables["Context Menu"])
+        mozWaitForElementToExist(app.images[StandardImageIdentifiers.Large.avatarCircle])
         validateMenuOptions()
-        app.otherElements["PopoverDismissRegion"].tap()
-        mozWaitForElementToNotExist(app.tables["Context Menu"])
+        app.buttons["MainMenu.CloseMenuButton"].tap()
+        mozWaitForElementToNotExist(app.images[StandardImageIdentifiers.Large.avatarCircle])
     }
 
     private func validateMenuOptions() {
         waitForElementsToExist(
             [
-                app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkTrayFill],
-                app.tables.otherElements[StandardImageIdentifiers.Large.download],
-                app.tables.otherElements[StandardImageIdentifiers.Large.readingList],
-                app.tables.otherElements[StandardImageIdentifiers.Large.login],
-                app.tables.otherElements[StandardImageIdentifiers.Large.sync],
-                app.tables.otherElements[StandardImageIdentifiers.Large.nightMode],
-                app.tables.otherElements[StandardImageIdentifiers.Large.whatsNew],
-                app.tables.otherElements[StandardImageIdentifiers.Large.helpCircle],
-                app.tables.otherElements[StandardImageIdentifiers.Large.edit],
-                app.tables.otherElements[StandardImageIdentifiers.Large.settings]
+                app.images[StandardImageIdentifiers.Large.avatarCircle],
+                app.images[StandardImageIdentifiers.Large.plus],
+                app.images[StandardImageIdentifiers.Large.privateModeCircleFill],
+                app.images[StandardImageIdentifiers.Large.bookmarkTrayFill],
+                app.images[StandardImageIdentifiers.Large.history],
+                app.images[StandardImageIdentifiers.Large.download],
+                app.images[StandardImageIdentifiers.Large.login]
             ]
         )
     }
