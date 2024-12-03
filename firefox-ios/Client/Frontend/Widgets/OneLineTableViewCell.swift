@@ -88,6 +88,7 @@ class OneLineTableViewCell: UITableViewCell,
     }
 
     private func setBookmarksRefactorMargin() {
+        // Sets the indentation so that at each level the folder icon is left aligned with the label of the parent folder above it.
         if indentationLevel == 0 {
             leftImageViewLeadingConstraint?.constant = UX.borderViewMargin
         } else {
