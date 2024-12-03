@@ -58,6 +58,12 @@ class ToolbarButton: UIButton, ThemeApplicable {
         accessibilityIdentifier = element.a11yId
         accessibilityLabel = element.a11yLabel
         accessibilityHint = element.a11yHint
+        // Remove all existing actions for .touchUpInside before adding the new one
+        // This ensures that we do not accumulate multiple actions for the same event,
+        // which can cause the action to be called multiple times when the button is tapped.
+        // By removing all existing actions first, we guarantee that only the new action
+        // will be associated with the .touchUpInside event.
+        removeTarget(nil, action: nil, for: .touchUpInside)
         addAction(action, for: .touchUpInside)
 
         showsLargeContentViewer = true
