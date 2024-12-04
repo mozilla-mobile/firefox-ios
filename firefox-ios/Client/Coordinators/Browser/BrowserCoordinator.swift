@@ -777,27 +777,44 @@ class BrowserCoordinator: BaseCoordinator,
         toastContainer: UIView,
         popoverArrowDirection: UIPopoverArrowDirection
     ) {
-        guard childCoordinators.first(where: { $0 is ShareSheetCoordinator }) as? ShareSheetCoordinator == nil
-        else {
+        guard childCoordinators.first(where: { $0 is ShareSheetCoordinator }) as? ShareSheetCoordinator == nil else {
             // If this case is hitted it means the share extension coordinator wasn't removed
             // correctly in the previous session.
+            // FIXME: Log this...
             return
         }
-        let shareSheetCoordinator = ShareSheetCoordinator(
-            alertContainer: toastContainer,
-            router: router,
-            profile: profile,
-            parentCoordinator: self,
-            tabManager: tabManager
-        )
-        add(child: shareSheetCoordinator)
-        shareSheetCoordinator.start(
-            shareType: shareType,
-            shareMessage: shareMessage,
-            sourceView: sourceView,
-            sourceRect: sourceRect,
-            popoverArrowDirection: popoverArrowDirection
-        )
+
+        Task {
+            // FIXME: Can we replicate Safari share behaviour here instead, grabbing the file from the Tab if it's available,
+            // otherwise just sharing the URL so we don't have this buggy latency???? It's strange if the user has to wait
+            // a long time to download files.
+            var overrideShareType = shareType
+            if case ShareType.tab = shareType {
+                tryDownloadingTabFileToShare(shareType: shareType) {  newShareType in
+                    overrideShareType = newShareType
+                }
+            }
+
+            await MainActor.run { [weak self, overrideShareType] in
+                guard let self else { return }
+
+                let shareSheetCoordinator = ShareSheetCoordinator(
+                    alertContainer: toastContainer,
+                    router: router,
+                    profile: profile,
+                    parentCoordinator: self,
+                    tabManager: tabManager
+                )
+                add(child: shareSheetCoordinator)
+                shareSheetCoordinator.start(
+                    shareType: overrideShareType,
+                    shareMessage: shareMessage,
+                    sourceView: sourceView,
+                    sourceRect: sourceRect,
+                    popoverArrowDirection: popoverArrowDirection
+                )
+            }
+        }
     }
 
     func showCreditCardAutofill(creditCard: CreditCard?,
@@ -1085,46 +1102,30 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - Private helpers
 
-//    private func showShareSheet(with url: URL?, title: String?) {
-//        // Note: From deeplinks ( > sharesheet route)
-//        guard let url else { return }
-//
-//        var shareMessage: ShareMessage? = nil
-//        if let title {
-//            // TODO: Info Card Referral add subtitle
-//            shareMessage = ShareMessage(message: title, subtitle: nil)
-//        }
-//
-//        let showShareSheet = { url in
-//            self.startShareSheetCoordinator(
-//                shareType: .site(url: url),
-//                shareMessage: shareMessage,
-//                sourceView: self.browserViewController.addressToolbarContainer,
-//                sourceRect: nil,
-//                toastContainer: self.browserViewController.contentContainer,
-//                popoverArrowDirection: .any
-//            )
-//        }
-//
-//        // We only care about the temp document for .tab shares right?
-//        // BUT!! A tab might be displaying a downloaded PDF! Then it's file:// url
-//        guard let temporaryDocument = browserViewController.tabManager.selectedTab?.temporaryDocument else {
-//            showShareSheet(url)
-//            return
-//        }
-//
-//        temporaryDocument.getURL { tempDocURL in
-//            DispatchQueue.main.async {
-//                // If we successfully got a temp file URL, share it like a downloaded file,
-//                // otherwise present the ordinary share menu for the web URL.
-//                if let tempDocURL = tempDocURL, tempDocURL.isFileURL {
-//                    showShareSheet(tempDocURL)
-//                } else {
-//                    showShareSheet(url)
-//                }
-//            }
-//        }
-//    }
+    private func tryDownloadingTabFileToShare(
+        shareType: ShareType,
+        completion: @escaping (ShareType) -> Void
+    ) {
+        // FIXME: BUT!! A tab might be displaying a downloaded PDF! Then it's file:// url. Where is this handled?
+        guard case let ShareType.tab(_, tab) = shareType,
+        let temporaryDocument = tab.temporaryDocument else {
+            // We can only try to download files for tab type shares that have a TemporaryDocument
+            completion(shareType)
+            return
+        }
+
+        temporaryDocument.getURL { tempDocURL in
+            DispatchQueue.main.async {
+                // If we successfully got a temp file URL, share it like a downloaded file, otherwise present the ordinary
+                // share menu for the tab.
+                if let tempDocURL = tempDocURL, tempDocURL.isFileURL {
+                    completion(.file(url: tempDocURL))
+                } else {
+                    completion(shareType)
+                }
+            }
+        }
+    }
 
     /// Utility. Performs the supplied action if a coordinator of the indicated type
     /// is currently presenting its primary view controller.
