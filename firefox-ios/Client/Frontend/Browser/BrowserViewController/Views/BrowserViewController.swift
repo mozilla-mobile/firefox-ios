@@ -2352,13 +2352,12 @@ class BrowserViewController: UIViewController,
         }
 
         navigationHandler?.showShareSheet(
-            url: tabUrl,
-            title: nil,
-            sourceView: sourceView,
+            shareType: .tab(url: tabUrl, tab: selectedTab),
+            shareMessage: nil,
+            sourceView: view,
             sourceRect: nil,
             toastContainer: contentContainer,
-            popoverArrowDirection: isBottomSearchBar ? .down : .up
-        )
+            popoverArrowDirection: isBottomSearchBar ? .down : .up)
     }
 
     func presentTabsLongPressAction(from view: UIView) {

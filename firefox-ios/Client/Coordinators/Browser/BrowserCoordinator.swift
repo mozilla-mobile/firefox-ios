@@ -559,21 +559,16 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.updateZoomPageBarVisibility(visible: true)
     }
 
-    func showShareSheet(with url: URL?) {
-        // Note: From New Menu > Share   MainMenuCoordinatorDelegate
-        guard let url else { return }
-
-        let shareType: ShareType
-        if let selectedTab = tabManager.selectedTab {
-            shareType = .tab(url: url, tab: selectedTab)
-        } else {
-            shareType = .site(url: url)
+    /// Share the currently selected tab using the share sheet.
+    /// Note: MainMenuCoordinatorDelegate implementation, called from the New Menu > Tools > Share.
+    func showShareSheetForCurrentlySelectedTab() {
+        guard let selectedTab = tabManager.selectedTab,
+              let url = selectedTab.canonicalURL else { // TODO check reader mode URLs... add .displayURL here?
+            return
         }
 
-        // TODO handle temp document?
-
         startShareSheetCoordinator(
-            shareType: shareType,
+            shareType: .tab(url: url, tab: selectedTab),
             shareMessage: nil,
             sourceView: self.browserViewController.addressToolbarContainer,
             sourceRect: nil,
