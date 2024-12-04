@@ -10,16 +10,19 @@ class MockShareTab: ShareTab {
     var displayTitle: String
     var url: URL?
     var webView: TabWebView?
+    var temporaryDocument: TemporaryDocument?
 
-    init(title: String, url: URL?, withActiveWebView: Bool = true) {
+    init(title: String, url: URL?, withActiveWebView: Bool = true, withTemporaryDocument: TemporaryDocument? = nil) {
         self.displayTitle = title
         self.url = url
         self.webView = TabWebView(frame: CGRect.zero, configuration: .init(), windowUUID: .XCTestDefaultUUID)
+        self.temporaryDocument = withTemporaryDocument
     }
 
     static func == (lhs: MockShareTab, rhs: MockShareTab) -> Bool {
         return lhs.displayTitle == rhs.displayTitle
         && lhs.url == rhs.url
         && lhs.webView === rhs.webView
+        && lhs.temporaryDocument === rhs.temporaryDocument
     }
 }

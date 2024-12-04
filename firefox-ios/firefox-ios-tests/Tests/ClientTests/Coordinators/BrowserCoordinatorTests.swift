@@ -238,44 +238,31 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         }
     }
 
-    func testShowShareSheet_addsShareSheetCoordinator() {
+    func testStartShareSheetCoordinator_addsShareSheetCoordinator() {
         let subject = createSubject()
 
-        subject.showShareSheet(
-            url: URL(
-                string: "https://www.google.com"
-            )!,
-            title: nil,
+        subject.startShareSheetCoordinator(
+            shareType: .site(url: URL(string: "https://www.google.com")!),
+            shareMessage: ShareMessage(message: "Test Message", subtitle: "Test Subtitle"),
             sourceView: UIView(),
             sourceRect: CGRect(),
             toastContainer: UIView(),
             popoverArrowDirection: .up
         )
 
-        XCTAssertEqual(subject.childCoordinators.count, 1)
-        XCTAssertTrue(subject.childCoordinators.first is ShareSheetCoordinator)
-        XCTAssertEqual(mockRouter.presentCalled, 1)
-        XCTAssertTrue(mockRouter.presentedViewController is UIActivityViewController)
-    }
+        // NOTE: We are waiting for an async call to complete. Hopefully the temporary document download will be improved
+        // in the future to make this call synchronous.
+        let predicate = NSPredicate { _, _ in
+            return self.mockRouter.presentCalled == 1
+        }
+        let exp = XCTNSPredicateExpectation(predicate: predicate, object: .none)
 
-    func testShowShareSheet_addsShareSheetCoordinatorWithTitle() {
-        let subject = createSubject()
-
-        subject.showShareSheet(
-            url: URL(
-                string: "https://www.google.com"
-            )!,
-            title: "TEST TITLE",
-            sourceView: UIView(),
-            sourceRect: CGRect(),
-            toastContainer: UIView(),
-            popoverArrowDirection: .up
-        )
+        wait(for: [exp], timeout: 3.0)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is ShareSheetCoordinator)
-        XCTAssertEqual(mockRouter.presentCalled, 1)
-        XCTAssertTrue(mockRouter.presentedViewController is UIActivityViewController)
+        XCTAssertEqual(self.mockRouter.presentCalled, 1)
+        XCTAssertTrue(self.mockRouter.presentedViewController is UIActivityViewController)
     }
 
     func testShowCreditCardAutofill_addsCredentialAutofillCoordinator() {
