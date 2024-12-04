@@ -13,6 +13,18 @@ extension NSLayoutConstraint {
         self.priority = priority
         return self
     }
+
+    /// Convenience utility for pinning a subview to the bounds of its superview.
+    class func pinToSuperview(_ view: UIView) {
+        guard let parentView = view.superview else { return }
+        NSLayoutConstraint.activate([
+            view.topAnchor.constraint(equalTo: parentView.topAnchor),
+            view.leadingAnchor.constraint(equalTo: parentView.leadingAnchor),
+            view.trailingAnchor.constraint(equalTo: parentView.trailingAnchor),
+            view.bottomAnchor.constraint(equalTo: parentView.bottomAnchor)
+        ])
+        view.translatesAutoresizingMaskIntoConstraints = false
+    }
 }
 
 extension NSLayoutAnchor where AnchorType == NSLayoutXAxisAnchor {
