@@ -591,36 +591,14 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
             guard let tab = self.selectedTab, let url = tab.canonicalURL?.displayURL else { return }
 
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
-
-            guard let temporaryDocument = tab.temporaryDocument else {
-                self.navigationHandler?.showShareSheet(
-                    url: url,
-                    title: nil,
-                    sourceView: self.buttonView,
-                    sourceRect: nil,
-                    toastContainer: self.toastContainer,
-                    popoverArrowDirection: .any)
-                return
-            }
-
-            temporaryDocument.getURL { tempDocURL in
-                DispatchQueue.main.async {
-                    // If we successfully got a temp file URL, share it like a downloaded file,
-                    // otherwise present the ordinary share menu for the web URL.
-                    if let tempDocURL = tempDocURL,
-                       tempDocURL.isFileURL {
-                        self.share(fileURL: tempDocURL, buttonView: self.buttonView)
-                    } else {
-                        self.navigationHandler?.showShareSheet(
-                            url: url,
-                            title: nil,
-                            sourceView: self.buttonView,
-                            sourceRect: nil,
-                            toastContainer: self.toastContainer,
-                            popoverArrowDirection: .any)
-                    }
-                }
-            }
+            self.navigationHandler?.showShareSheet(
+                shareType: .tab(url: url, tab: tab),
+                shareMessage: nil,
+                sourceView: self.buttonView,
+                sourceRect: nil,
+                toastContainer: self.toastContainer,
+                popoverArrowDirection: .any
+            )
         }.items
     }
 
@@ -642,8 +620,8 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     private func share(fileURL: URL, buttonView: UIView) {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
         navigationHandler?.showShareSheet(
-            url: fileURL,
-            title: nil,
+            shareType: .file(url: fileURL),
+            shareMessage: nil,
             sourceView: buttonView,
             sourceRect: nil,
             toastContainer: toastContainer,

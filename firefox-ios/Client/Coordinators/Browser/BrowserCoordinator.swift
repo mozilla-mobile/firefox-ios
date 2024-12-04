@@ -668,22 +668,22 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - BrowserNavigationHandler
-
-    func showShareSheet(url: URL,
-                        title: String?,
-                        sourceView: UIView,
-                        sourceRect: CGRect?,
-                        toastContainer: UIView,
-                        popoverArrowDirection: UIPopoverArrowDirection) {
-        // FIXME where is BrowserNavigationHandler method called
-//        startShareSheetCoordinator(
-//            url: url,
-//            title: title,
-//            sourceView: sourceView,
-//            sourceRect: sourceRect,
-//            toastContainer: toastContainer,
-//            popoverArrowDirection: popoverArrowDirection
-//        )
+    func showShareSheet(
+        shareType: ShareType,
+        shareMessage: ShareMessage?,
+        sourceView: UIView,
+        sourceRect: CGRect?,
+        toastContainer: UIView,
+        popoverArrowDirection: UIPopoverArrowDirection
+    ) {
+        startShareSheetCoordinator(
+            shareType: shareType,
+            shareMessage: shareMessage,
+            sourceView: sourceView,
+            sourceRect: sourceRect,
+            toastContainer: toastContainer,
+            popoverArrowDirection: popoverArrowDirection
+        )
     }
 
     func show(settings: Route.SettingsSection, onDismiss: (() -> Void)? = nil) {
@@ -790,9 +790,7 @@ class BrowserCoordinator: BaseCoordinator,
             // a long time to download files.
             var overrideShareType = shareType
             if case ShareType.tab = shareType {
-                tryDownloadingTabFileToShare(shareType: shareType) {  newShareType in
-                    overrideShareType = newShareType
-                }
+                overrideShareType = await tryDownloadingTabFileToShare(shareType: shareType)
             }
 
             await MainActor.run { [weak self, overrideShareType] in
@@ -1102,29 +1100,28 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - Private helpers
 
-    private func tryDownloadingTabFileToShare(
-        shareType: ShareType,
-        completion: @escaping (ShareType) -> Void
-    ) {
-        // FIXME: BUT!! A tab might be displaying a downloaded PDF! Then it's file:// url. Where is this handled?
-        guard case let ShareType.tab(_, tab) = shareType,
-        let temporaryDocument = tab.temporaryDocument else {
-            // We can only try to download files for tab type shares that have a TemporaryDocument
-            completion(shareType)
-            return
-        }
+    private func tryDownloadingTabFileToShare(shareType: ShareType) async -> ShareType  {
+        return await withCheckedContinuation({(continuation: CheckedContinuation<ShareType, Never>) in
+            // FIXME: BUT!! A tab might be displaying a downloaded PDF! Then it's file:// url. Where is this handled?
+            guard case let ShareType.tab(_, tab) = shareType,
+                  let temporaryDocument = tab.temporaryDocument else {
+                // We can only try to download files for tab type shares that have a TemporaryDocument
+                continuation.resume(returning: shareType)
+                return
+            }
 
-        temporaryDocument.getURL { tempDocURL in
-            DispatchQueue.main.async {
-                // If we successfully got a temp file URL, share it like a downloaded file, otherwise present the ordinary
-                // share menu for the tab.
-                if let tempDocURL = tempDocURL, tempDocURL.isFileURL {
-                    completion(.file(url: tempDocURL))
-                } else {
-                    completion(shareType)
+            temporaryDocument.getURL { tempDocURL in
+                DispatchQueue.main.async {
+                    // If we successfully got a temp file URL, share it like a downloaded file, otherwise present the
+                    // ordinary share menu for the tab.
+                    if let tempDocURL = tempDocURL, tempDocURL.isFileURL {
+                        continuation.resume(returning: ShareType.file(url: tempDocURL))
+                    } else {
+                        continuation.resume(returning: shareType)
+                    }
                 }
             }
-        }
+        })
     }
 
     /// Utility. Performs the supplied action if a coordinator of the indicated type
