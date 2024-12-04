@@ -13,11 +13,8 @@ class ShareManager: NSObject, FeatureFlaggable {
     static let downloadFirefoxAppStoreURL = URL(string: "https://mzl.la/3NDxAIS")!
 
     private struct ActivityIdentifiers {
-        static let browserFill = "org.appextension.fill-browser-action"
         static let pocketIconExtension = "com.ideashower.ReadItLaterPro.AddToPocketExtension"
         static let pocketActionExtension = "com.ideashower.ReadItLaterPro.Action-Extension"
-        // FIXME: Should this be com.apple.UIKit.activity.RemoteOpenInApplication-ByCopy ?
-        static let isOpenByCopy = "remoteopeninapplication-bycopy"
         static let whatsApp = "net.whatsapp.WhatsApp.ShareExtension"
     }
 
