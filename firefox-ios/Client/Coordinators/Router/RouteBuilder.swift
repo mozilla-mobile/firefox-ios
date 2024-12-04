@@ -123,13 +123,20 @@ final class RouteBuilder {
                 return nil
 
             case .sharesheet:
-                let linkString = urlScanner.value(query: "url")
-                let titleText = urlScanner.value(query: "title")
-                if let link = linkString, let url = URL(string: link) {
-                  return .sharesheet(url: url, title: titleText)
-                } else {
+                guard let shareURLString = urlScanner.value(query: "url"),
+                      let shareURL = URL(string: shareURLString) else {
+                    assertionFailure("Should not be trying to share a bad URL")
                     return nil
                 }
+
+                // Pass optional share message and subtitle here
+                var shareMessage: ShareMessage?
+                if let titleText = urlScanner.value(query: "title") {
+                    shareMessage = ShareMessage(message: titleText, subtitle: nil)
+                }
+
+                // Deeplinks cannot have an associated tab or file, so this must be a website URL `.site` share
+                return .sharesheet(shareType: .site(url: shareURL), shareMessage: shareMessage)
             }
         } else if urlScanner.isHTTPScheme {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)

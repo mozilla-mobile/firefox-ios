@@ -238,37 +238,42 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         }
     }
 
-    func testShowShareExtension_addsShareExtensionCoordinator() {
+    func testShowShareSheet_addsShareSheetCoordinator() {
         let subject = createSubject()
 
-        subject.showShareExtension(
+        subject.showShareSheet(
             url: URL(
                 string: "https://www.google.com"
             )!,
+            title: nil,
             sourceView: UIView(),
-            toastContainer: UIView()
+            sourceRect: CGRect(),
+            toastContainer: UIView(),
+            popoverArrowDirection: .up
         )
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
-        XCTAssertTrue(subject.childCoordinators.first is ShareExtensionCoordinator)
+        XCTAssertTrue(subject.childCoordinators.first is ShareSheetCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is UIActivityViewController)
     }
 
-    func testShowShareExtension_addsShareExtensionCoordinatorWithTitle() {
+    func testShowShareSheet_addsShareSheetCoordinatorWithTitle() {
         let subject = createSubject()
 
-        subject.showShareExtension(
+        subject.showShareSheet(
             url: URL(
                 string: "https://www.google.com"
             )!,
             title: "TEST TITLE",
             sourceView: UIView(),
-            toastContainer: UIView()
+            sourceRect: CGRect(),
+            toastContainer: UIView(),
+            popoverArrowDirection: .up
         )
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
-        XCTAssertTrue(subject.childCoordinators.first is ShareExtensionCoordinator)
+        XCTAssertTrue(subject.childCoordinators.first is ShareSheetCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is UIActivityViewController)
     }
@@ -388,7 +393,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     func testRemoveChildCoordinator_whenDidFinishCalled() {
         let subject = createSubject()
-        let childCoordinator = ShareExtensionCoordinator(
+        let childCoordinator = ShareSheetCoordinator(
             alertContainer: UIView(),
             router: mockRouter,
             profile: profile,
