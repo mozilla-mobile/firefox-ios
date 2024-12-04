@@ -4,6 +4,20 @@
 
 import UIKit
 
+extension UIView {
+    /// Convenience utility for pinning a subview to the bounds of its superview.
+    func pinToSuperview() {
+        guard let parentView = superview else { return }
+        NSLayoutConstraint.activate([
+            topAnchor.constraint(equalTo: parentView.topAnchor),
+            leadingAnchor.constraint(equalTo: parentView.leadingAnchor),
+            trailingAnchor.constraint(equalTo: parentView.trailingAnchor),
+            bottomAnchor.constraint(equalTo: parentView.bottomAnchor)
+        ])
+        translatesAutoresizingMaskIntoConstraints = false
+    }
+}
+
 extension NSLayoutConstraint {
     /// Builder function that return a new NSLayoutConstraints with the priority set. This is useful
     /// to inline constraint creation in a call to `NSLayoutConstraint.active()`.
@@ -12,18 +26,6 @@ extension NSLayoutConstraint {
     func priority(_ priority: UILayoutPriority) -> NSLayoutConstraint {
         self.priority = priority
         return self
-    }
-
-    /// Convenience utility for pinning a subview to the bounds of its superview.
-    class func pinToSuperview(_ view: UIView) {
-        guard let parentView = view.superview else { return }
-        NSLayoutConstraint.activate([
-            view.topAnchor.constraint(equalTo: parentView.topAnchor),
-            view.leadingAnchor.constraint(equalTo: parentView.leadingAnchor),
-            view.trailingAnchor.constraint(equalTo: parentView.trailingAnchor),
-            view.bottomAnchor.constraint(equalTo: parentView.bottomAnchor)
-        ])
-        view.translatesAutoresizingMaskIntoConstraints = false
     }
 }
 

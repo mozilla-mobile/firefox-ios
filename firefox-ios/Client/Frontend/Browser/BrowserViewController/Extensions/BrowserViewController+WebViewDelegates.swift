@@ -189,7 +189,7 @@ extension BrowserViewController: WKUIDelegate {
             let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)
 
             previewViewController.view.addSubview(clonedWebView)
-            NSLayoutConstraint.pinToSuperview(clonedWebView)
+            clonedWebView.pinToSuperview()
 
             clonedWebView.load(URLRequest(url: url))
 
