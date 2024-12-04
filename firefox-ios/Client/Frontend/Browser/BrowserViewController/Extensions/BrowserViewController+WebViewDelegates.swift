@@ -286,12 +286,15 @@ extension BrowserViewController: WKUIDelegate {
                        currentTab: Tab,
                        webView: WKWebView) -> [UIAction] {
         let actionBuilder = ActionProviderBuilder()
+        let isJavascriptScheme = (url.scheme?.caseInsensitiveCompare("javascript") == .orderedSame)
 
-        if !isPrivate {
+        if !isPrivate && !isJavascriptScheme {
             actionBuilder.addOpenInNewTab(url: url, currentTab: currentTab, addTab: addTab)
         }
 
-        actionBuilder.addOpenInNewPrivateTab(url: url, currentTab: currentTab, addTab: addTab)
+        if !isJavascriptScheme {
+            actionBuilder.addOpenInNewPrivateTab(url: url, currentTab: currentTab, addTab: addTab)
+        }
 
         let isBookmarkedSite = profile.places
             .isBookmarked(url: url.absoluteString)
@@ -305,7 +308,7 @@ extension BrowserViewController: WKUIDelegate {
             actionBuilder.addBookmarkLink(url: url, title: title, addBookmark: self.addBookmark)
         }
 
-        if url.scheme != "javascript" {
+        if !isJavascriptScheme {
             actionBuilder.addDownload(url: url, currentTab: currentTab, assignWebView: assignWebView)
         }
 
