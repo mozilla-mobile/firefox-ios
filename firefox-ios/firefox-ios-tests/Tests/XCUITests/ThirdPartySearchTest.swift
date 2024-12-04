@@ -71,9 +71,14 @@ class ThirdPartySearchTest: BaseTestCase {
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].tap()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
+<<<<<<< HEAD
         UIPasteboard.general.string = "window"
         app.textFields.firstMatch.press(forDuration: 1)
         app.otherElements["Paste"].tap()
+=======
+        app.textFields.firstMatch.waitAndTap()
+        app.textFields.firstMatch.typeText("window")
+>>>>>>> 207be82ad (Several MTE-2812  [UI Tests Menu/Toolbar] - fixes for auto tests (#23504))
         mozWaitForElementToExist(app.scrollViews.otherElements.buttons["Mozilla Engine search"])
 
         // Need to go step by step to Search Settings. The ScreenGraph will fail to go to the Search Settings Screen
@@ -87,6 +92,7 @@ class ThirdPartySearchTest: BaseTestCase {
             navigator.performAction(Action.RemoveCustomSearchEngine)
             dismissSearchScreen()
 
+<<<<<<< HEAD
             // Perform a search to check
             app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
@@ -96,6 +102,14 @@ class ThirdPartySearchTest: BaseTestCase {
 
             mozWaitForElementToNotExist(app.scrollViews.otherElements.buttons["Mozilla Engine search"])
         }
+=======
+        // Perform a search to check
+        app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
+        app.textFields.firstMatch.waitAndTap()
+        app.textFields.firstMatch.typeText("window")
+        mozWaitForElementToNotExist(app.scrollViews.otherElements.buttons["Mozilla Engine search"])
+>>>>>>> 207be82ad (Several MTE-2812  [UI Tests Menu/Toolbar] - fixes for auto tests (#23504))
     }
 
     private func addCustomSearchEngine() {
