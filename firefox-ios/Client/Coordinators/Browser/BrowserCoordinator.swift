@@ -523,7 +523,10 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func openNewTab(inPrivateMode isPrivate: Bool) {
-        handle(homepanelSection: isPrivate ? .newPrivateTab : .newTab)
+        browserViewController.openNewTabFromMenu(
+            focusLocationField: true,
+            isPrivate: isPrivate
+        )
     }
 
     func showLibraryPanel(_ panel: Route.HomepanelSection) {
