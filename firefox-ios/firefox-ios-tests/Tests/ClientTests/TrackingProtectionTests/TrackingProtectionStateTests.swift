@@ -135,7 +135,7 @@ final class TrackingProtectionStateTests: XCTestCase {
 
     private func getMiddlewareAction(
         for actionType: TrackingProtectionMiddlewareActionType
-    ) -> TrackingProtectionAction {
+    ) -> TrackingProtectionMiddlewareAction {
         return TrackingProtectionMiddlewareAction(windowUUID: .XCTestDefaultUUID, actionType: actionType)
     }
 
