@@ -1100,23 +1100,22 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - Private helpers
 
-    private func tryDownloadingTabFileToShare(shareType: ShareType) async -> ShareType  {
+    private func tryDownloadingTabFileToShare(shareType: ShareType) async -> ShareType {
         return await withCheckedContinuation({(continuation: CheckedContinuation<ShareType, Never>) in
-            // FIXME: BUT!! A tab might be displaying a downloaded PDF! Then it's file:// url. Where is this handled?
+            // We can only try to download files for `.tab` type shares that have a TemporaryDocument
             guard case let ShareType.tab(_, tab) = shareType,
                   let temporaryDocument = tab.temporaryDocument else {
-                // We can only try to download files for tab type shares that have a TemporaryDocument
                 continuation.resume(returning: shareType)
                 return
             }
 
             temporaryDocument.getURL { tempDocURL in
                 DispatchQueue.main.async {
-                    // If we successfully got a temp file URL, share it like a downloaded file, otherwise present the
-                    // ordinary share menu for the tab.
                     if let tempDocURL = tempDocURL, tempDocURL.isFileURL {
-                        continuation.resume(returning: ShareType.file(url: tempDocURL))
+                        // If we successfully got a temp file URL, share it like a downloaded file
+                        continuation.resume(returning: .file(url: tempDocURL))
                     } else {
+                        // If no file was downloaded, simply share the tab as usual
                         continuation.resume(returning: shareType)
                     }
                 }

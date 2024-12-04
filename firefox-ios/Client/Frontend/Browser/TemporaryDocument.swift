@@ -7,7 +7,11 @@ import Shared
 
 private let temporaryDocumentOperationQueue = OperationQueue()
 
-class TemporaryDocument: NSObject {
+protocol TemporaryDocument {
+    func getURL(completionHandler: @escaping ((URL?) -> Void))
+}
+
+class DefaultTemporaryDocument: NSObject, TemporaryDocument {
     fileprivate let request: URLRequest
     fileprivate let filename: String
 

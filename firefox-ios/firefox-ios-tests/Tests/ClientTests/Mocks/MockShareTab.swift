@@ -20,9 +20,14 @@ class MockShareTab: ShareTab {
     }
 
     static func == (lhs: MockShareTab, rhs: MockShareTab) -> Bool {
+        guard let lhsTempDoc = lhs.temporaryDocument as? MockTemporaryDocument,
+              let rhsTempDoc = rhs.temporaryDocument as? MockTemporaryDocument else {
+            return false
+        }
+
         return lhs.displayTitle == rhs.displayTitle
         && lhs.url == rhs.url
         && lhs.webView === rhs.webView
-        && lhs.temporaryDocument === rhs.temporaryDocument
+        && lhsTempDoc === rhsTempDoc
     }
 }
