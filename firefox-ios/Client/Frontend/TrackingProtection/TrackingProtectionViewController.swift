@@ -24,7 +24,7 @@ struct TPMenuUX {
         static let settingsLinkButtonBottomSpacing: CGFloat = 16
         static let modalMenuCornerRadius: CGFloat = 12
         struct Line {
-            static let height: CGFloat = 1
+            static let height: CGFloat = 0.5
         }
     }
 }
