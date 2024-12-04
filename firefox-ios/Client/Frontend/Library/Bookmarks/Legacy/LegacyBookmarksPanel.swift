@@ -150,7 +150,7 @@ class LegacyBookmarksPanel: SiteTableViewController,
 
     override func reloadData() {
         viewModel.reloadData { [weak self] in
-            DispatchQueue.main.async {
+            ensureMainThread {
                 self?.tableView.reloadData()
             }
             if self?.viewModel.shouldFlashRow ?? false {
