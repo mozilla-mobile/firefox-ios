@@ -68,6 +68,7 @@ class ThirdPartySearchTest: BaseTestCase {
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].tap()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
+        app.textFields.firstMatch.waitAndTap()
         app.textFields.firstMatch.typeText("window")
         mozWaitForElementToExist(app.scrollViews.otherElements.buttons["Mozilla Engine search"])
 
@@ -83,8 +84,8 @@ class ThirdPartySearchTest: BaseTestCase {
         // Perform a search to check
         app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].waitAndTap()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
+        app.textFields.firstMatch.waitAndTap()
         app.textFields.firstMatch.typeText("window")
-
         mozWaitForElementToNotExist(app.scrollViews.otherElements.buttons["Mozilla Engine search"])
     }
 
