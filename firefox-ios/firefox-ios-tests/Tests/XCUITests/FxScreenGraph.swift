@@ -647,7 +647,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
         screenState.gesture(forAction: Action.RemoveCustomSearchEngine) {userSTate in
             // Screengraph will go back to main Settings screen. Manually tap on settings
-            app.tables[AccessibilityIdentifiers.Settings.tableViewController].staticTexts["Google"].tap()
             app.navigationBars[AccessibilityIdentifiers.Settings.Search.searchNavigationBar].buttons["Edit"].tap()
             if #unavailable(iOS 17) {
                 app.tables.buttons["Delete Mozilla Engine"].tap()
