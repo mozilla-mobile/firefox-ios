@@ -10,28 +10,46 @@ import XCTest
 class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
     let url = URL(string: "my.testurl.com")!
 
-    func testResumeWasCalled() async {
-        let dataTask = WallpaperURLSessionDataTaskMock()
-        let session = WallpaperURLSessionMock(with: nil, response: nil, and: nil)
-        session.dataTask = dataTask
+    func testAsyncDataCall() async {
+        let expectedData = "Test data".data(using: .utf8)!
+        let expectedResponse = HTTPURLResponse(url: URL(string: "https://example.com")!,
+                                               statusCode: 200,
+                                               httpVersion: nil,
+                                               headerFields: nil)!
+
+        let session = WallpaperURLSessionMock(
+            with: expectedData,
+            response: expectedResponse,
+            and: nil
+        )
         let subject = WallpaperNetworkingModule(with: session)
 
-        _ = try? await subject.data(from: url)
-        XCTAssertTrue(dataTask.resumeWasCalled)
+        do {
+            let (responseData, response) = try await subject.data(from: url)
+            XCTAssertEqual(responseData, expectedData)
+            XCTAssertEqual((response as? HTTPURLResponse)?.statusCode, 200)
+        } catch {
+            XCTFail("This test should not throw an error, but it did.")
+        }
     }
 
     func testServerReturnsError() async {
+        let expectedError = URLError(.cannotConnectToHost)
         let session = WallpaperURLSessionMock(with: nil,
                                               response: nil,
-                                              and: URLError(.cannotConnectToHost))
+                                              and: expectedError)
         let subject = WallpaperNetworkingModule(with: session)
 
         do {
             _ = try await subject.data(from: url)
             XCTFail("This test should throw an error, but it did not.")
         } catch {
+<<<<<<< HEAD
             XCTAssertEqual(error as! URLError,
                            URLError(.cannotConnectToHost))
+=======
+            XCTAssertEqual(error as? URLError, expectedError)
+>>>>>>> 52186d6e6 (Bugfix FXIOS-10811 [Wallpaper] [Crash] Fix async/await in networking module (#23596))
         }
     }
 
