@@ -772,11 +772,11 @@ class BrowserCoordinator: BaseCoordinator,
         toastContainer: UIView,
         popoverArrowDirection: UIPopoverArrowDirection
     ) {
-        guard childCoordinators.first(where: { $0 is ShareSheetCoordinator }) as? ShareSheetCoordinator == nil else {
-            // If this case is hitted it means the share extension coordinator wasn't removed
-            // correctly in the previous session.
+        if let coordinator = childCoordinators.first(where: { $0 is ShareSheetCoordinator }) as? ShareSheetCoordinator {
+            // The share sheet extension coordinator wasn't correctly removed in the last share session. Attempt to recover.
             // FIXME: Log this...
-            return
+
+            coordinator.dismiss()
         }
 
         Task {

@@ -7,6 +7,7 @@ import Foundation
 protocol ShareTab: Equatable {
     var displayTitle: String { get }
     var url: URL? { get }
+    var canonicalURL: URL? { get }
     var webView: TabWebView? { get }
 
     // Tabs displaying content other than HTML mime type can optionally be downloaded and treated as files when shared
