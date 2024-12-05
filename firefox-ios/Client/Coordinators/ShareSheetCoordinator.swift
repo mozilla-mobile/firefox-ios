@@ -84,16 +84,25 @@ class ShareSheetCoordinator: BaseCoordinator,
         shareType: ShareType,
         relatedTab: Tab?
     ) {
+        // NOTE: didFinish will be called on each of these code paths to properly dismiss the share sheet.
         switch activityType {
         case CustomActivityAction.sendToDevice.actionType:
-            showSendToDevice(url: url)
+            // Can only reach here for non-file shares
+            showSendToDevice(url: shareType.wrappedURL, relatedTab: relatedTab)
+
         default:
+            // FIXME: FXIOS-10334 It's mysterious that we are calling this in the share coordinator. It may not be necessary,
+            // but this JS alert code is very brittle right now so let's not touch it until FXIOS-10334 is underway.
             dequeueNotShownJSAlert()
         }
     }
 
+    func dismiss() {
+        parentCoordinator?.didFinish(from: self)
+    }
+
     private func showSendToDevice(url: URL, relatedTab: Tab?) {
-        var shareItem: ShareItem!
+        let shareItem: ShareItem
         if let relatedTab, let url = relatedTab.canonicalURL?.displayURL {
             shareItem = ShareItem(url: url.absoluteString, title: relatedTab.title)
         } else {
@@ -105,12 +114,13 @@ class ShareSheetCoordinator: BaseCoordinator,
                                                textColor: themeColors.textPrimary,
                                                iconColor: themeColors.iconDisabled)
 
-        let helper = SendToDeviceHelper(
+        let sendToDeviceHelper = SendToDeviceHelper(
             shareItem: shareItem,
             profile: profile,
             colors: colors,
-            delegate: self)
-        let viewController = helper.initialViewController()
+            delegate: self
+        )
+        let viewController = sendToDeviceHelper.initialViewController()
 
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice)
         router.present(viewController)
@@ -122,6 +132,7 @@ class ShareSheetCoordinator: BaseCoordinator,
             return
         }
 
+        // Will call `dequeueNotShownJSAlert` again when finished via JSPromptAlertControllerDelegate delegate method
         let alertController = alertInfo.alertController()
         alertController.delegate = self
         router.present(alertController)
@@ -138,8 +149,7 @@ class ShareSheetCoordinator: BaseCoordinator,
         _ devicePickerViewController: DevicePickerViewController,
         didPickDevices devices: [RemoteDevice]
     ) {
-        guard let shareItem = devicePickerViewController.shareItem
-        else {
+        guard let shareItem = devicePickerViewController.shareItem else {
             router.dismiss()
             parentCoordinator?.didFinish(from: self)
             return
@@ -163,6 +173,7 @@ class ShareSheetCoordinator: BaseCoordinator,
             }
             return
         }
+
         profile.sendItem(shareItem, toDevices: devices).uponQueue(.main) { [weak self] _ in
             guard let self = self else { return }
             self.router.dismiss()

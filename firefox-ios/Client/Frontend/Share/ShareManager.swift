@@ -114,6 +114,8 @@ class ShareManager: NSObject, FeatureFlaggable {
 
             // Add the webview for an option to add a website to the iOS home screen
             if #available(iOS 16.4, *), let webView = tab.webView {
+                // NOTE: You will not see "Add to Home Screen" option on debug builds. Possibility this is because of how the
+                // com.apple.developer.web-browser entitelement is applied...
                 activityItems.append(webView)
             }
 
@@ -132,10 +134,8 @@ class ShareManager: NSObject, FeatureFlaggable {
     private static func getApplicationActivities(forShareType shareType: ShareType) -> [UIActivity] {
         var appActivities = [UIActivity]()
 
-        if case .file(let url) = shareType {
-            // Send to device is only available for files
-            appActivities.append(SendToDeviceActivity(activityType: .sendToDevice, url: url))
-        }
+        // Only acts on non-file URLs to send links to synced devices. Will ignore file URLs it can't handle.
+        appActivities.append(SendToDeviceActivity(activityType: .sendToDevice, url: shareType.wrappedURL))
 
         return appActivities
     }

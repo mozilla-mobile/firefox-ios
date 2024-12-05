@@ -27,6 +27,17 @@ enum ShareType: Equatable {
             return false
         }
     }
+
+    var wrappedURL: URL {
+        switch self {
+        case let .file(url):
+            return url
+        case let .site(url):
+            return url
+        case let .tab(url, _):
+            return url
+        }
+    }
 }
 
 extension ShareTab {
