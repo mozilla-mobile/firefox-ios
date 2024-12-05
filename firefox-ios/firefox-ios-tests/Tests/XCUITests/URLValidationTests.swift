@@ -26,7 +26,7 @@ class URLValidationTests: BaseTestCase {
         for url in urlTypes {
             navigator.openURL(url)
             waitUntilPageLoad()
-            mozWaitForElementToExist(app.otherElements.staticTexts["Mozilla"])
+            mozWaitForElementToExist(app.otherElements.staticTexts["Welcome to Mozilla"])
             mozWaitForElementToExist(app.buttons["Menu"])
             // Getting the current system locale ex:- en-US
             var locale = Locale.preferredLanguages[0]
