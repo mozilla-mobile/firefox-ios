@@ -8,7 +8,7 @@ import XCTest
 @testable import Client
 
 final class MicrosurveyPromptMiddlewareTests: XCTestCase {
-    private var microsurveyManager: MockMicrosurveySurfaceManager!
+    private var mockMicrosurveyManager: MockMicrosurveySurfaceManager!
     var mockStore: MockStoreForMiddleware<AppState>!
 
     override func setUp() {
@@ -26,7 +26,7 @@ final class MicrosurveyPromptMiddlewareTests: XCTestCase {
             icon: nil,
             utmContent: nil
         )
-        microsurveyManager = MockMicrosurveySurfaceManager(with: model)
+        mockMicrosurveyManager = MockMicrosurveySurfaceManager(with: model)
         DependencyHelperMock().bootstrapDependencies()
         setupStore()
     }
@@ -48,11 +48,11 @@ final class MicrosurveyPromptMiddlewareTests: XCTestCase {
         subject.microsurveyProvider(AppState(), action)
 
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
-        XCTAssertEqual(microsurveyManager.handleMessageDisplayedCount, 0)
+        XCTAssertEqual(mockMicrosurveyManager.handleMessageDisplayedCount, 0)
     }
 
     func testShowPromptAction_withValidModel() throws {
-        let subject = createSubject(microsurveyManager: microsurveyManager)
+        let subject = createSubject(microsurveyManager: mockMicrosurveyManager)
         let action = MicrosurveyPromptMiddlewareAction(
             windowUUID: .XCTestDefaultUUID,
             actionType: MicrosurveyPromptActionType.showPrompt
@@ -65,31 +65,33 @@ final class MicrosurveyPromptMiddlewareTests: XCTestCase {
 
         XCTAssertEqual(actionType, MicrosurveyPromptMiddlewareActionType.initialize)
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
-        XCTAssertEqual(microsurveyManager.handleMessageDisplayedCount, 1)
+        XCTAssertEqual(mockMicrosurveyManager.handleMessageDisplayedCount, 1)
     }
 
     func testClosePromptAction() {
-        let subject = createSubject(microsurveyManager: microsurveyManager)
+        let subject = createSubject(microsurveyManager: mockMicrosurveyManager)
         let action = MicrosurveyPromptMiddlewareAction(
             windowUUID: .XCTestDefaultUUID,
             actionType: MicrosurveyPromptActionType.closePrompt
         )
 
         subject.microsurveyProvider(AppState(), action)
+
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
-        XCTAssertEqual(microsurveyManager.handleMessageDismissCount, 1)
+        XCTAssertEqual(mockMicrosurveyManager.handleMessageDismissCount, 1)
     }
 
     func testContinueToSurveyAction() {
-        let subject = createSubject(microsurveyManager: microsurveyManager)
+        let subject = createSubject(microsurveyManager: mockMicrosurveyManager)
         let action = MicrosurveyPromptMiddlewareAction(
             windowUUID: .XCTestDefaultUUID,
             actionType: MicrosurveyPromptActionType.continueToSurvey
         )
 
         subject.microsurveyProvider(AppState(), action)
+
         XCTAssertEqual(mockStore.dispatchedActions.count, 0)
-        XCTAssertEqual(microsurveyManager.handleMessagePressedCount, 1)
+        XCTAssertEqual(mockMicrosurveyManager.handleMessagePressedCount, 1)
     }
 
     // MARK: - Helpers

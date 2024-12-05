@@ -77,6 +77,17 @@ final class MicrosurveyMiddlewareIntegrationTests: XCTestCase, StoreTestUtility 
         XCTAssertEqual(mockStore.dispatchedActions.count, 1)
     }
 
+    func testSurveyDidAppearAction() throws {
+        let subject = createSubject()
+        let action = getAction(for: .surveyDidAppear)
+
+        subject.microsurveyProvider(AppState(), action)
+
+        testEventMetricRecordingSuccess(metric: GleanMetrics.Microsurvey.shown)
+        let resultValue = try XCTUnwrap(GleanMetrics.Microsurvey.shown.testGetValue())
+        XCTAssertEqual(resultValue[0].extra?["survey_id"], "microsurvey-id")
+    }
+
     func testConfirmationViewedAction() throws {
         let subject = createSubject()
         let action = getAction(for: .confirmationViewed)
