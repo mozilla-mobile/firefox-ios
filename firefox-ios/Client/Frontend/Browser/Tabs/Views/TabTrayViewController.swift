@@ -295,18 +295,18 @@ class TabTrayViewController: UIViewController,
 
         tabTrayState = state
 
-        updateTabCountImage(count: state.normalTabsCount)
-        segmentedControl.selectedSegmentIndex = state.selectedPanel.rawValue
+        updateTabCountImage(count: tabTrayState.normalTabsCount)
+        segmentedControl.selectedSegmentIndex = tabTrayState.selectedPanel.rawValue
 
-        if state.shouldDismiss {
+        if tabTrayState.shouldDismiss {
             delegate?.didFinish()
         }
 
-        if state.showCloseConfirmation {
+        if tabTrayState.showCloseConfirmation {
             showCloseAllConfirmation()
         }
 
-        if let toastType = state.toastType {
+        if let toastType = tabTrayState.toastType {
             presentToast(toastType: toastType) { [weak self] undoClose in
                 guard let self else { return }
 

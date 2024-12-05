@@ -164,8 +164,8 @@ class TabDisplayPanelViewController: UIViewController,
         guard state != tabsState else { return }
 
         tabsState = state
-        tabDisplayView.newState(state: state)
-        shouldShowEmptyView(state.isPrivateTabsEmpty)
+        tabDisplayView.newState(state: tabsState)
+        shouldShowEmptyView(tabsState.isPrivateTabsEmpty)
     }
 
     // MARK: EmptyPrivateTabsViewDelegate
