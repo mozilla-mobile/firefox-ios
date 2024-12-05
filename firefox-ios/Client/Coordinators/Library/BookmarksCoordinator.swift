@@ -18,6 +18,8 @@ protocol BookmarksCoordinatorDelegate: AnyObject, LibraryPanelCoordinatorDelegat
         parentBookmarkFolder: FxBookmarkNode,
         updatePanelState: ((LibraryPanelSubState) -> Void)?
     )
+
+    func showSignIn()
 }
 
 extension BookmarksCoordinatorDelegate {
@@ -36,12 +38,15 @@ extension BookmarksCoordinatorDelegate {
 
 class BookmarksCoordinator: BaseCoordinator,
                             BookmarksCoordinatorDelegate,
-                            BookmarksRefactorFeatureFlagProvider {
+                            QRCodeNavigationHandler,
+                            BookmarksRefactorFeatureFlagProvider,
+                            ParentCoordinatorDelegate {
     // MARK: - Properties
 
     private let profile: Profile
     private weak var parentCoordinator: LibraryCoordinatorDelegate?
     private weak var navigationHandler: LibraryNavigationHandler?
+    private var fxAccountViewController: FirefoxAccountSignInViewController?
     private let windowUUID: WindowUUID
 
     // MARK: - Initializers
@@ -115,8 +120,42 @@ class BookmarksCoordinator: BaseCoordinator,
         }
     }
 
+    func showSignIn() {
+        let controller = makeSignInController()
+        router.present(controller)
+    }
+
     func shareLibraryItem(url: URL, sourceView: UIView) {
         navigationHandler?.shareLibraryItem(url: url, sourceView: sourceView)
+    }
+
+    // MARK: - QRCodeNavigationHandler
+
+    func showQRCode(delegate: QRCodeViewControllerDelegate, rootNavigationController: UINavigationController?) {
+        var coordinator: QRCodeCoordinator
+        if let qrCodeCoordinator = childCoordinators.first(where: { $0 is QRCodeCoordinator }) as? QRCodeCoordinator {
+            coordinator = qrCodeCoordinator
+        } else {
+            if rootNavigationController != nil {
+                coordinator = QRCodeCoordinator(
+                    parentCoordinator: self,
+                    router: DefaultRouter(navigationController: rootNavigationController!)
+                )
+            } else {
+                coordinator = QRCodeCoordinator(
+                    parentCoordinator: self,
+                    router: router
+                )
+            }
+            add(child: coordinator)
+        }
+        coordinator.showQRCode(delegate: delegate)
+    }
+
+    // MARK: - ParentCoordinatorDelegate
+
+    func didFinish(from childCoordinator: Coordinator) {
+        remove(child: childCoordinator)
     }
 
     // MARK: - Factory
@@ -181,6 +220,25 @@ class BookmarksCoordinator: BaseCoordinator,
         return controller
     }
 
+    private func makeSignInController() -> UIViewController {
+        let fxaParams = FxALaunchParams(entrypoint: .libraryPanel, query: [:])
+        let viewController = FirefoxAccountSignInViewController(profile: profile,
+                                                                parentType: .library,
+                                                                deepLinkParams: fxaParams,
+                                                                windowUUID: windowUUID)
+        viewController.qrCodeNavigationHandler = self
+        let buttonItem = UIBarButtonItem(
+            title: .CloseButtonTitle,
+            style: .plain,
+            target: self,
+            action: #selector(dismissFxAViewController)
+        )
+        viewController.navigationItem.leftBarButtonItem = buttonItem
+        let navController = ThemedNavigationController(rootViewController: viewController, windowUUID: windowUUID)
+        fxAccountViewController = viewController
+        return navController
+    }
+
     private func reloadLastBookmarksController() {
         guard let rootBookmarkController = router.navigationController.viewControllers.last
                 as? BookmarksViewController
@@ -194,5 +252,11 @@ class BookmarksCoordinator: BaseCoordinator,
     private func setBackBarButtonItemTitle(_ title: String) {
         let backBarButton = UIBarButtonItem(title: title)
         router.navigationController.viewControllers.last?.navigationItem.backBarButtonItem = backBarButton
+    }
+
+    @objc
+    private func dismissFxAViewController() {
+        fxAccountViewController?.dismissVC()
+        fxAccountViewController = nil
     }
 }

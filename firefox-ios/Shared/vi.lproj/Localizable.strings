@@ -37,9 +37,6 @@
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "Đã xem gần đây";
 
-/* Section title label for Shortcuts */
-"ActivityStream.Shortcuts.SectionTitle" = "Lối tắt";
-
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "Thết lập hàng";
 
@@ -1407,9 +1404,6 @@
 
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
 "Settings.OfferClipboardBar.Status.v128" = "Khi mở %@";
-
-/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Khi mở Firefox";
 
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "Đề nghị mở các liên kết được sao chép";

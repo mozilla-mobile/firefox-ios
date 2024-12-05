@@ -29,7 +29,7 @@ class URLValidationTest: BaseTestCase {
     private func loadAndValidateURL(URL: String) {
         loadWebPage(URL)
         waitForWebPageLoad()
-        mozWaitForElementToExist(app.otherElements.staticTexts["Mozilla"])
+        mozWaitForElementToExist(app.otherElements.staticTexts["Welcome to Mozilla"])
         if !iPad() {
             mozWaitForElementToExist(app.buttons["Menu"])
         }

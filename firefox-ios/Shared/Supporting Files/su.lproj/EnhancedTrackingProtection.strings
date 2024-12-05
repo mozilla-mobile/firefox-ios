@@ -98,9 +98,6 @@
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Protéksi Palacakan Tingkat Lanjut";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Protéksi dipareuman. Urang nyarankeun pikeun ngahurungkeun deui.";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Protéksi dipareuman. Urang nyarankeun pikeun ngahurungkeun deui.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */

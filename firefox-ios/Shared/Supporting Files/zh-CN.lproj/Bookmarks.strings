@@ -1,3 +1,15 @@
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Nested.Body.v135" = "可在浏览时添加书签，方便以后找到常用网站。";
+
+/* The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Nested.Title.v135" = "文件夹为空";
+
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Root.Body.v135" = "可在浏览时保存网站。我们还将从其他同步的设备上接收书签。";
+
+/* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Root.Title.v135" = "暂无书签";
+
 /* When navigating through the bookmarks menu and bookmark folders, a back button with an `All` (bookmarks) label is present to take the user to the top level bookmarks menu. */
 "Bookmarks.Menu.AllBookmarks.v131" = "全部";
 

@@ -92,9 +92,6 @@
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Attivate e nutificazioni";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Sync.Description.v120" = "Quandu site cunnessi cù a sincrunizazione attivata, a vostra sicurità hè rinfurzata. %@ cifra e vostre parolle d’intesa, e vostre indette, è ancu di più.";
-
-/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Sync.Description.v123" = "%@ cifra e vostre parolle d’intesa, e vostre indette, è ancu di più quandu vo impiegate a sincrunizazione.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */

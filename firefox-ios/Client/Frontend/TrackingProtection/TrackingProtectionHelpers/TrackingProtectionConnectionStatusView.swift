@@ -103,11 +103,6 @@ final class TrackingProtectionConnectionStatusView: UIView, ThemeApplicable {
         NSLayoutConstraint.activate(viewConstraints)
     }
 
-    func setupDetails(image: UIImage, text: String) {
-        connectionStatusImage.image = image
-        connectionStatusLabel.text = text
-    }
-
     func setupAccessibilityIdentifiers(arrowImageA11yId: String, securityStatusLabelA11yId: String) {
         connectionDetailArrow.accessibilityIdentifier = arrowImageA11yId
         connectionStatusLabel.accessibilityIdentifier = securityStatusLabelA11yId
@@ -130,13 +125,17 @@ final class TrackingProtectionConnectionStatusView: UIView, ThemeApplicable {
     }
 
     func applyTheme(theme: Theme) {
-        self.backgroundColor = theme.colors.layer2
+        backgroundColor = theme.colors.layer2
         connectionDetailArrow.tintColor = theme.colors.iconSecondary
         connectionStatusImage.tintColor = theme.colors.iconSecondary
     }
 
-    func setConnectionStatus(image: UIImage, isConnectionSecure: Bool, theme: Theme) {
+    func setConnectionStatus(image: UIImage,
+                             text: String,
+                             isConnectionSecure: Bool,
+                             theme: Theme) {
         connectionStatusImage.image = image
+        connectionStatusLabel.text = text
         connectionStatusImage.tintColor = theme.colors.iconSecondary
         connectionDetailArrow.isHidden = !isConnectionSecure
     }

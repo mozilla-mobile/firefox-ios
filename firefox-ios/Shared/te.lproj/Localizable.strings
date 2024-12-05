@@ -1054,9 +1054,6 @@
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Status" = "Firefox తెరుస్తున్నపుడు";
 
-/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "Firefox తెరుస్తున్నపుడు";
-
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "నకలు చేసిన లంకెలను తెరవడానికి సిద్దపడండి";
 

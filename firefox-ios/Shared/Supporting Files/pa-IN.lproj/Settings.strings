@@ -62,9 +62,6 @@
 "FxA.FirefoxAccount.v119" = "ਖਾਤਾ";
 
 /* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
-"Settings.AddressAutofill.Title.v124" = "ਆਪੇ ਭਰਨ ਵਾਲੇ ਸਿਰਨਾਵੇ";
-
-/* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
 "Settings.AddressAutofill.Title.v126" = "ਸਿਰਨਾਵੇਂ";
 
 /* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
@@ -106,9 +103,6 @@
 /* Title for alternate search engines settings section in the Search page in the Settings menu. */
 "Settings.Search.AlternateSearchEngines.Title.v124.v2" = "ਬਦਲਵੇਂ ਖੋਜ ਇੰਜਣ";
 
-/* Footer for the `default search engine` settings section in the Search Settings page, which explains in more details what the `Show Search Suggestions` setting includes. */
-"Settings.Search.DefaultSearchEngine.Footer.v122" = "ਖੋਜਾਂ, ਅਤੀਤ, ਬੁੱਕਮਾਰਕਾਂ ਅਤੇ ਹੋਰਾਂ ਤੋਂ ਨਤੀਜੇ";
-
 /* Title for the `default search engine` settings section in the Search page in the Settings menu. */
 "Settings.Search.DefaultSearchEngine.Title.v121" = "ਮੂਲ ਖੋਜ ਇੰਜਣ";
 
@@ -121,17 +115,8 @@
 /* Description for `Show in Private Sessions` toggle, located in `Suggestions from Search Engines` section in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Description.v125" = "ਪ੍ਰਾਈਵੇਟ ਸ਼ੈਸ਼ਨਾਂ ਵਿੱਚ ਖੋਜ ਇੰਜਣਾਂ ਵਲੋਂ ਸੁਝਾਆਵਾਂ ਨੂੰ ਵੇਖਾਓ";
 
-/* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in the Private Session section in the Search page in the Settings menu. */
-"Settings.Search.PrivateSession.Setting.v122" = "ਪ੍ਰਾਈਵੇਟ ਬਰਾਊਜ਼ਿੰਗ ਵਿੱਚ ਸੁਝਾਅ ਵੇਖਾਓ";
-
 /* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in `Suggestions from Search Engines` and `Address Bar - Firefox Suggest` sections in the Search page in the Settings menu. */
 "Settings.Search.PrivateSession.Setting.v124" = "ਪ੍ਰਾਈਵੇਟ ਸ਼ੈਸ਼ਨਾਂ ਵਿੱਚ ਵੇਖਾਓ";
-
-/* Title for the `Private Browsing` settings section in the Search page in the Settings menu. */
-"Settings.Search.PrivateSession.Title.v122" = "ਪ੍ਰਾਈਵੇਟ ਬਰਾਊਜ਼ਿੰਗ";
-
-/* Title for quick-search engines settings section in the Search page in the Settings menu. */
-"Settings.Search.QuickEnginesTitle.v121" = "ਫ਼ੌਰੀ-ਖੋਜ ਇੰਜਣ";
 
 /* Label for the `show search suggestions` setting, in the Search Settings page. */
 "Settings.Search.ShowSuggestions.v121" = "ਖੋਜ ਲਈ ਸੁਝਾਆਵਾਂ ਨੂੰ ਵੇਖੋ";
@@ -154,14 +139,8 @@
 /* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
 "Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "ਸਿੰਕ ਕੀਤੀਆਂ ਟੈਬਾਂ ਨੂੰ ਖੋਜੋ";
 
-/* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. */
-"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124" = "ਆਪਣੀ ਖੋਜ ਨਾਲ ਸੰਬੰਧਿਤ ਵੈੱਬ ਤੋਂ ਸੁਝਾਅ ਲਵੋ";
-
 /* In the Search page of the Settings menu, the description for the setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Description.v124.v2" = "ਆਪਣੀ ਖੋਜ ਨਾਲ ਸੰਬੰਧਿਤ %@ ਤੋਂ ਸੁਝਾਅ ਲਵੋ";
-
-/* In the Search page of the Settings menu, the title for setting to enable Suggestions from Firefox. Placeholder is for the app name - Firefox. */
-"Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124" = "%@ ਤੋਂ ਸੁਝਾਅ";
 
 /* In the Search page of the Settings menu, the title for setting to enable Suggestions from the web in Firefox. */
 "Settings.Search.Suggest.ShowNonSponsoredSuggestions.Title.v124.v2" = "ਵੈੱਬ ਤੋਂ ਸੁਝਾਅ";

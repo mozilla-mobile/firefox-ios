@@ -18,7 +18,6 @@ struct TabTrayState: ScreenState, Equatable {
     var normalTabsCount: String
     var hasSyncableAccount: Bool
     var shouldDismiss: Bool
-    var shareURL: URL?
     var toastType: ToastType?
     var windowUUID: WindowUUID
     var showCloseConfirmation: Bool
@@ -45,7 +44,6 @@ struct TabTrayState: ScreenState, Equatable {
                   normalTabsCount: panelState.normalTabsCount,
                   hasSyncableAccount: panelState.hasSyncableAccount,
                   shouldDismiss: panelState.shouldDismiss,
-                  shareURL: panelState.shareURL,
                   toastType: panelState.toastType,
                   showCloseConfirmation: panelState.showCloseConfirmation)
     }
@@ -73,7 +71,6 @@ struct TabTrayState: ScreenState, Equatable {
          normalTabsCount: String,
          hasSyncableAccount: Bool,
          shouldDismiss: Bool = false,
-         shareURL: URL? = nil,
          toastType: ToastType? = nil,
          showCloseConfirmation: Bool = false) {
         self.windowUUID = windowUUID
@@ -82,7 +79,6 @@ struct TabTrayState: ScreenState, Equatable {
         self.normalTabsCount = normalTabsCount
         self.hasSyncableAccount = hasSyncableAccount
         self.shouldDismiss = shouldDismiss
-        self.shareURL = shareURL
         self.toastType = toastType
         self.showCloseConfirmation = showCloseConfirmation
     }
@@ -185,15 +181,6 @@ struct TabTrayState: ScreenState, Equatable {
 
     static func reduceTabPanelViewAction(action: TabPanelViewAction, state: TabTrayState) -> TabTrayState {
         switch action.actionType {
-        case TabPanelViewActionType.showShareSheet:
-            guard let shareURL = action.shareSheetURL else { return defaultState(from: state) }
-            return TabTrayState(windowUUID: state.windowUUID,
-                                isPrivateMode: state.isPrivateMode,
-                                selectedPanel: state.selectedPanel,
-                                normalTabsCount: state.normalTabsCount,
-                                hasSyncableAccount: state.hasSyncableAccount,
-                                shareURL: shareURL)
-
         case TabPanelViewActionType.closeAllTabs:
             return TabTrayState(windowUUID: state.windowUUID,
                                 isPrivateMode: state.isPrivateMode,

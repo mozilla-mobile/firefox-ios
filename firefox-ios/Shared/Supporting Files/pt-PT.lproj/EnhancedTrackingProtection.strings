@@ -107,9 +107,6 @@
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Proteção melhorada contra a monitorização";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "As proteções estão desativadas. Sugerimos que a sua reativação.";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "As proteções estão desativadas. Sugerimos que as ligue novamente.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */

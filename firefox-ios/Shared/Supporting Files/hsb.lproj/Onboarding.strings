@@ -92,9 +92,6 @@
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Zdźělenki zmóžnić";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Sync.Description.v120" = "Hdyž sće so přizjewił a sće synchronizował, sće wěsćiši. %@ waše hesła, zapołožki a wjace zaklučuje.";
-
-/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Sync.Description.v123" = "%@ waše hesła, zapołožki a wjace zaklučuje, hdyž sće synchronizowany.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */

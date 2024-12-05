@@ -97,9 +97,6 @@
 /* Description for info card when the product is in analysis mode */
 "Shopping.InfoCard.ProgressAnalysis.Description.v120" = "This could take about 60 seconds.";
 
-/* Title for info card when the product is in analysis mode */
-"Shopping.InfoCard.ProgressAnalysis.Title.v120" = "Checking review quality";
-
 /* Title for info card when the product is in analysis mode. The placeholder represents the percentage of the analysis progress, ranging between 1 and 100. */
 "Shopping.InfoCard.ProgressAnalysis.Title.v123" = "Checking review quality (%@)";
 
@@ -117,9 +114,6 @@
 
 /* Title for card displayed when a shopping product has not been analysed yet. */
 "Shopping.NoAnalysisCard.HeadlineLabel.Title.v120" = "No info about these reviews yet";
-
-/* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name. After the colon, what appears are two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
-"Shopping.OptInCard.Disclaimer.Text.v120" = "By selecting “Yes, Try It” you agree to the following from %@:";
 
 /* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). After the colon, there will be two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
 "Shopping.OptInCard.Disclaimer.Text.v123" = "By selecting “Yes, Try It” you agree to these items:";
@@ -139,9 +133,6 @@
 /* Text for the main button of the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.MainButton.Title.v120" = "Yes, Try It";
 
-/* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
-"Shopping.OptInCard.PrivacyPolicy.Button.Title.v120" = "Privacy policy";
-
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Firefox app name. */
 "Shopping.OptInCard.PrivacyPolicy.Button.Title.v123" = "%@’s privacy notice";
 
@@ -150,9 +141,6 @@
 
 /* Label for the second paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be replaced by the Fakespot app name. The second parameter will be replaced the company name of Mozilla. */
 "Shopping.OptInCard.SecondParagraph.Description.v120" = "Using the power of %1$@ by %2$@, we help you avoid biased and inauthentic reviews. Our AI model is always improving to protect you as you shop.";
-
-/* Show Firefox Browser Terms of Use page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
-"Shopping.OptInCard.TermsOfUse.Button.Title.v120" = "Terms of use";
 
 /* Show Fakespot Terms of Use page in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Fakespot name. */
 "Shopping.OptInCard.TermsOfUse.Button.Title.v123" = "%@’s terms of use";
@@ -183,9 +171,6 @@
 
 /* Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
 "Shopping.ReviewQualityCard.Headline.Label.v120" = "We use AI technology from %1$@ by %2$@ to check the reliability of product reviews. This will only help you assess review quality, not product quality.";
-
-/* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
-"Shopping.ReviewQualityCard.Highlights.Label.v120" = "*Highlights* are from %1@ reviews within the last 80 days that we believe to be reliable.";
 
 /* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "Shopping.ReviewQualityCard.Highlights.Label.v126" = "*Highlights* are from %@ reviews within the last 80 days that we believe to be reliable.";

@@ -4,7 +4,7 @@
 
 import Common
 import Foundation
-import WebKit
+@preconcurrency import WebKit
 
 class WKEngineSession: NSObject,
                        EngineSession,

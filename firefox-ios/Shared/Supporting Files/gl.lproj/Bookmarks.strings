@@ -1,5 +1,20 @@
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Nested.Body.v135" = "Engadir marcadores mentres navegas para que poidas atopar os teus sitios favoritos máis tarde.";
+
+/* The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Nested.Title.v135" = "Este cartafol está baleiro";
+
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Root.Body.v135" = "Garda sitios mentres navegas. Tamén colleremos os marcadores doutros dispositivos sincronizados.";
+
+/* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Root.Title.v135" = "Aínda non hai marcadores";
+
 /* When navigating through the bookmarks menu and bookmark folders, a back button with an `All` (bookmarks) label is present to take the user to the top level bookmarks menu. */
 "Bookmarks.Menu.AllBookmarks.v131" = "Todo";
+
+/* The title for the Delete Bookmark button, in the Edit Bookmark popup screen which is summoned from the main menu's Save submenu, which will delete the currently bookmarked site from the user's bookmarks. */
+"Bookmarks.Menu.DeleteBookmark.v132" = "Eliminar o marcador";
 
 /* Label of toast displayed after a bookmark is deleted in the Bookmarks menu. %@ is the name of the bookmark. */
 "Bookmarks.Menu.DeletedBookmark.v131" = "Eliminouse «%@»";

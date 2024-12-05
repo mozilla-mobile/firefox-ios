@@ -1,9 +1,6 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Učitaj ponovo";
 
-/* On error page, this is the description for generic error. */
-"NativeErrorPage.GenericError.Description.v131" = "Došlo je do SSL greške i nije moguće uspostaviti sigurnu vezu sa serverom.";
-
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Oprez. Nešto nije u redu.";
 

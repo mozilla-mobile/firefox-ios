@@ -43,4 +43,5 @@ include:
   - nimbus-features/toolbarRefactorFeature.yaml
   - nimbus-features/tosFeature.yaml
   - nimbus-features/trackingProtectionRefactor.yaml
+  - nimbus-features/unifiedAds.yaml
   - nimbus-features/zoomFeature.yaml

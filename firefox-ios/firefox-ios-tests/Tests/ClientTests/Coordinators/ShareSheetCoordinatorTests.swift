@@ -5,7 +5,7 @@
 import XCTest
 @testable import Client
 
-final class ShareExtensionCoordinatorTests: XCTestCase {
+final class ShareSheetCoordinatorTests: XCTestCase {
     private var parentCoordinator: MockParentCoordinator!
     private var mockRouter: MockRouter!
 
@@ -72,9 +72,9 @@ final class ShareExtensionCoordinatorTests: XCTestCase {
         XCTAssertEqual(parentCoordinator.didFinishCalled, 1)
     }
 
-    private func createSubject() -> ShareExtensionCoordinator {
+    private func createSubject() -> ShareSheetCoordinator {
         mockRouter = MockRouter(navigationController: UINavigationController())
-        let subject = ShareExtensionCoordinator(
+        let subject = ShareSheetCoordinator(
             alertContainer: UIView(),
             router: mockRouter,
             profile: MockProfile(),

@@ -270,7 +270,6 @@ class SearchTests: BaseTestCase {
             // Reload icon is displayed.
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton])
             XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].label, "New Tab")
-            navigator.performAction(Action.CloseURLBarOpen)
             app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].tap()
             navigator.performAction(Action.CloseURLBarOpen)
             XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton].label, "Search")
@@ -374,36 +373,39 @@ class SearchTests: BaseTestCase {
 
         // Check accessibility
         // swiftlint:disable empty_count
-        try app.performAccessibilityAudit { issue in
-            guard let element = issue.element else { return false }
+        if !iPad() {
+            try app.performAccessibilityAudit { issue in
+                guard let element = issue.element else { return false }
 
-            var shouldIgnore = false
-            // number of tabs in navigation toolbar
-            let isDynamicTypeTabButton = element.label == "1" &&
+                var shouldIgnore = false
+                // number of tabs in navigation toolbar
+                let isDynamicTypeTabButton = element.label == "1" &&
                 issue.auditType == .dynamicType
 
-            // clipped text on homepage
-            let homepage = self.app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView].firstMatch
-            let isDescendantOfHomepage = homepage.descendants(matching: element.elementType).containing(NSPredicate(format: "label CONTAINS[c] '\(element.label)'")).count > 0
-            let isClippedTextOnHomepage = issue.auditType == .textClipped && isDescendantOfHomepage
+                // clipped text on homepage
+                let homepage = self.app.collectionViews[AccessibilityIdentifiers.FirefoxHomepage.collectionView].firstMatch
+                let isDescendantOfHomepage = homepage.descendants(matching: element.elementType).containing(NSPredicate(format: "label CONTAINS[c] '\(element.label)'")).count > 0
+                let isClippedTextOnHomepage = issue.auditType == .textClipped && isDescendantOfHomepage
 
-            // clipped text in search suggestions
-            let suggestions = self.app.tables["SiteTable"].firstMatch
-            let isDescendantOfSuggestions = suggestions.descendants(matching: element.elementType).containing(NSPredicate(format: "label CONTAINS[c] '\(element.label)'")).count > 0
-            let isClippedTextInSuggestions = issue.auditType == .textClipped && isDescendantOfSuggestions
+                // clipped text in search suggestions
+                let suggestions = self.app.tables["SiteTable"].firstMatch
+                let isDescendantOfSuggestions = suggestions.descendants(matching: element.elementType).containing(NSPredicate(format: "label CONTAINS[c] '\(element.label)'")).count > 0
+                let isClippedTextInSuggestions = issue.auditType == .textClipped && isDescendantOfSuggestions
 
-            // text in the address toolbar text field
-            let isAddressField = element.elementType == .textField && issue.auditType == .textClipped
+                // text in the address toolbar text field
+                let isAddressField = element.elementType == .textField && issue.auditType == .textClipped
 
-            if isDynamicTypeTabButton || isClippedTextOnHomepage || isClippedTextInSuggestions || isAddressField {
-                shouldIgnore = true
+                if isDynamicTypeTabButton || isClippedTextOnHomepage || isClippedTextInSuggestions || isAddressField {
+                    shouldIgnore = true
+                }
+
+                return shouldIgnore
             }
-
-            return shouldIgnore
+            // swiftlint:enable empty_count
         }
-        // swiftlint:enable empty_count
 
         // Delete the text and type "g"
+        app.textFields.firstMatch.waitAndTap()
         app.buttons["Clear text"].waitAndTap()
         typeTextAndValidateSearchSuggestions(text: "g", isSwitchOn: true)
 

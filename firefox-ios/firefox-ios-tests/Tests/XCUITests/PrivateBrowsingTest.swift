@@ -270,7 +270,7 @@ class PrivateBrowsingTest: BaseTestCase {
         waitUntilPageLoad()
         navigator.goto(BrowserTabMenu)
         // Validate menu option New Private Tab
-        let newPrivateTab = app.tables.otherElements["New Private Tab"]
+        let newPrivateTab = app.staticTexts["New Private Tab"]
         mozWaitForElementToExist(newPrivateTab)
         scrollToElement(newPrivateTab)
         // Tap on "New private tab" option

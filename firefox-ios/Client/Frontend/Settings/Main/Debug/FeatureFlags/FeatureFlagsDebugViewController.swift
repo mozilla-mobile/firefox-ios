@@ -89,6 +89,13 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
+                    with: .unifiedAds,
+                    titleText: format(string: "Enable Unified Ads"),
+                    statusText: format(string: "Toggle to use unified ads API")
+                ) { [weak self] _ in
+                    self?.reloadView()
+                },
+                FeatureFlagsBoolSetting(
                     with: .unifiedSearch,
                     titleText: format(string: "Enable Unified Search"),
                     statusText: format(string: "Toggle to use unified search within the new toolbar")

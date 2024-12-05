@@ -64,7 +64,6 @@ enum TabPanelViewActionType: ActionType {
     case learnMorePrivateMode
     case selectTab
     case hideUndoToast
-    case showShareSheet
 }
 
 class TabPanelMiddlewareAction: Action {

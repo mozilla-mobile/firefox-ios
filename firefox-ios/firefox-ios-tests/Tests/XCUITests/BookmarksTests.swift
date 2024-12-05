@@ -12,32 +12,23 @@ let url_3 = "localhost:\(serverPort)/test-fixture/test-example.html"
 
 class BookmarksTests: BaseTestCase {
     private func checkBookmarked() {
-        navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkSlash])
-        if iPad() {
-            app.otherElements["PopoverDismissRegion"].tap()
-            navigator.nowAt(BrowserTab)
-        } else {
-            navigator.goto(BrowserTab)
-        }
+        navigator.goto(LibraryPanel_Bookmarks)
+        app.buttons["Done"].waitAndTap()
+        navigator.nowAt(BrowserTab)
     }
 
     private func undoBookmarkRemoval() {
-        navigator.goto(BrowserTabMenu)
-        app.otherElements[StandardImageIdentifiers.Large.bookmarkSlash].waitAndTap()
-        navigator.nowAt(BrowserTab)
+        navigator.goto(SaveBrowserTabMenu)
+        app.tables.cells[AccessibilityIdentifiers.MainMenu.bookmarkThisPage].waitAndTap()
+        app.staticTexts["Delete Bookmark"].waitAndTap()
         app.buttons["Undo"].waitAndTap()
+        navigator.nowAt(BrowserTab)
     }
 
     private func checkUnbookmarked() {
-        navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.bookmark])
-        if iPad() {
-            app.otherElements["PopoverDismissRegion"].tap()
-            navigator.nowAt(BrowserTab)
-        } else {
-            navigator.goto(BrowserTab)
-        }
+        navigator.goto(LibraryPanel_Bookmarks)
+        app.buttons["Done"].waitAndTap()
+        navigator.nowAt(BrowserTab)
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306905
@@ -354,9 +345,11 @@ class BookmarksTests: BaseTestCase {
         bookmarkPageAndTapEdit()
         app.buttons["crossLarge"].tap()
         waitForTabsButton()
+        navigator.nowAt(BrowserTab)
         unbookmark()
         bookmarkPageAndTapEdit()
         app.buttons["Save"].tap()
+        navigator.nowAt(BrowserTab)
         navigator.goto(LibraryPanel_Bookmarks)
         checkItemInBookmarkList(oneItemBookmarked: true)
     }
@@ -394,8 +387,8 @@ class BookmarksTests: BaseTestCase {
     }
 
     private func bookmarkPageAndTapEdit() {
-        bookmark()
-        app.buttons["Edit"].waitAndTap()
+        bookmark() // Bookmark the page
+        bookmark() // Open the "Edit Bookmark" page
         mozWaitForElementToExist(app.navigationBars["Edit Bookmark"])
     }
 }

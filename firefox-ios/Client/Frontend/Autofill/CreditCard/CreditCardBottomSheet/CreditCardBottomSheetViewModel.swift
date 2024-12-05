@@ -89,7 +89,7 @@ class CreditCardBottomSheetViewModel {
         self.state = state
         self.logger = logger
         creditCards = [CreditCard]()
-        updateCreditCardList({ _ in })
+        updateCreditCardList { _ in }
         if creditCard != nil {
             self.creditCard = creditCard
             self.decryptedCreditCard = decryptedCreditCard
@@ -100,12 +100,13 @@ class CreditCardBottomSheetViewModel {
     }
 
     // MARK: Main Button Action
-    public func didTapMainButton(completion: @escaping (Error?) -> Void) {
+    public func didTapMainButton(queue: DispatchQueueInterface = DispatchQueue.main,
+                                 completion: @escaping (Error?) -> Void) {
         let decryptedCard = getPlainCreditCardValues(bottomSheetState: state)
         switch state {
         case .save:
             saveCreditCard(with: decryptedCard) { _, error in
-                DispatchQueue.main.async {
+                queue.async {
                     guard let error = error else {
                         completion(nil)
                         return
@@ -119,7 +120,7 @@ class CreditCardBottomSheetViewModel {
         case .update:
             updateCreditCard(for: creditCard?.guid,
                              with: decryptedCard) { _, error in
-                DispatchQueue.main.async {
+                queue.async {
                     guard let error = error else {
                         completion(nil)
                         return
@@ -292,7 +293,7 @@ class CreditCardBottomSheetViewModel {
         return decryptedCardNum ?? ""
     }
 
-    private func listStoredCreditCards(_ completionHandler: @escaping ([CreditCard]?) -> Void) {
+    private func listStoredCreditCards(completionHandler: @escaping ([CreditCard]?) -> Void) {
         autofill.listCreditCards(completion: { creditCards, error in
             guard let creditCards = creditCards,
                   error == nil else {
@@ -303,10 +304,11 @@ class CreditCardBottomSheetViewModel {
         })
     }
 
-    func updateCreditCardList(_ completionHandler: @escaping ([CreditCard]?) -> Void) {
+    func updateCreditCardList(queue: DispatchQueueInterface = DispatchQueue.main,
+                              completionHandler: @escaping ([CreditCard]?) -> Void) {
         if state == .selectSavedCard {
             listStoredCreditCards { [weak self] cards in
-                DispatchQueue.main.async {
+                queue.async {
                     self?.creditCards = cards
                     completionHandler(cards)
                 }

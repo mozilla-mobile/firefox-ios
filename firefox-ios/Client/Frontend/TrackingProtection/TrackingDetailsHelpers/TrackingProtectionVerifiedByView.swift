@@ -9,8 +9,12 @@ import Shared
 import ComponentLibrary
 
 class TrackingProtectionVerifiedByView: UIView {
+    private struct UX {
+        static let labelsVerticalMargins: CGFloat = 11
+    }
+
     private let verifiedByLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.subheadline.scaledFont()
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .left
@@ -36,8 +40,8 @@ class TrackingProtectionVerifiedByView: UIView {
         NSLayoutConstraint.activate([
             verifiedByLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: TPMenuUX.UX.horizontalMargin),
             verifiedByLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -TPMenuUX.UX.horizontalMargin),
-            verifiedByLabel.topAnchor.constraint(equalTo: topAnchor, constant: TPMenuUX.UX.horizontalMargin),
-            verifiedByLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -TPMenuUX.UX.horizontalMargin)
+            verifiedByLabel.topAnchor.constraint(equalTo: topAnchor, constant: UX.labelsVerticalMargins),
+            verifiedByLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -UX.labelsVerticalMargins)
         ])
     }
 
