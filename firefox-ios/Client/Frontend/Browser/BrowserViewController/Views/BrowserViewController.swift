@@ -420,8 +420,8 @@ class BrowserViewController: UIViewController,
 
         switchToolbarIfNeeded()
 
-        if isToolbarRefactorEnabled {
-            DispatchQueue.main.async { [self] in
+        DispatchQueue.main.async { [self] in
+            if isToolbarRefactorEnabled {
                 if showNavToolbar {
                     navigationToolbarContainer.isHidden = false
                     navigationToolbarContainer.applyTheme(theme: currentTheme())
@@ -430,27 +430,26 @@ class BrowserViewController: UIViewController,
                     navigationToolbarContainer.isHidden = true
                 }
                 updateToolbarStateTraitCollectionIfNecessary(newCollection)
-            }
-        } else {
-            urlBar.topTabsIsShowing = showTopTabs
-            urlBar.setShowToolbar(!showNavToolbar)
-
-            if showNavToolbar {
-                toolbar.isHidden = false
-                toolbar.tabToolbarDelegate = self
-                toolbar.applyUIMode(
-                    isPrivate: tabManager.selectedTab?.isPrivate ?? false,
-                    theme: currentTheme()
-                )
-                toolbar.applyTheme(theme: currentTheme())
-                handleMiddleButtonState(currentMiddleButtonState ?? .search)
-                updateTabCountUsingTabManager(self.tabManager)
             } else {
-                toolbar.tabToolbarDelegate = nil
-                toolbar.isHidden = true
+                urlBar.topTabsIsShowing = showTopTabs
+                urlBar.setShowToolbar(!showNavToolbar)
+
+                if showNavToolbar {
+                    toolbar.isHidden = false
+                    toolbar.tabToolbarDelegate = self
+                    toolbar.applyUIMode(
+                        isPrivate: tabManager.selectedTab?.isPrivate ?? false,
+                        theme: currentTheme()
+                    )
+                    toolbar.applyTheme(theme: currentTheme())
+                    handleMiddleButtonState(currentMiddleButtonState ?? .search)
+                    updateTabCountUsingTabManager(self.tabManager)
+                } else {
+                    toolbar.tabToolbarDelegate = nil
+                    toolbar.isHidden = true
+                }
             }
         }
-
         appMenuBadgeUpdate()
 
         if showTopTabs, topTabsViewController == nil {
