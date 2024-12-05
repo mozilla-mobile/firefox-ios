@@ -13,7 +13,7 @@ enum ContentType {
 
     var shouldContentBeCached: Bool {
         return switch self {
-            case .nativeErrorPage, .homepage:
+            case .nativeErrorPage, .homepage, .privateHomepage:
                 false
             default:
                 true
@@ -126,6 +126,10 @@ class OptimizedContentContainer: ContentContainer {
     private var type: ContentType?
     private var contentController: ContentContainable?
 
+    override var contentView: UIView? {
+        return contentController?.view
+    }
+
     /// Determine if the content can be added, making sure we only add once
     /// - Parameters:
     ///   - viewController: The view controller to add to the container
@@ -172,6 +176,7 @@ class OptimizedContentContainer: ContentContainer {
     // MARK: - Private
 
     private func removePreviousContentIfNeeded() {
+        // we cache only the view
         guard let type, !type.shouldContentBeCached else { return }
         contentController?.willMove(toParent: nil)
         contentController?.view.removeFromSuperview()
@@ -181,6 +186,7 @@ class OptimizedContentContainer: ContentContainer {
     private func saveContentType(content: ContentContainable) {
         type = content.contentType
         contentController = content
+        print("FF: content controller view: \(String(describing: contentView))")
     }
 
     private func addToView(content: ContentContainable) {

@@ -134,6 +134,7 @@ class BrowserCoordinator: BaseCoordinator,
         self.legacyHomepageViewController = legacyHomepageViewController
         legacyHomepageViewController.scrollToTop()
         // We currently don't support full page screenshot of the homepage
+        legacyHomepageViewController.reloadViewIfNeeded()
         screenshotService.screenshotableView = nil
     }
 

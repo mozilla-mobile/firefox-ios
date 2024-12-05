@@ -3798,11 +3798,12 @@ extension BrowserViewController: TabManagerDelegate {
             webView.accessibilityIdentifier = "contentView"
             webView.accessibilityElementsHidden = false
 
-            browserDelegate?.show(webView: webView)
             if selectedTab.isFxHomeTab {
                 // Added as initial fix for WKWebView memory leak. Needs further investigation.
                 // See: [FXIOS-10612] + [FXIOS-10335]
                 needsReload = true
+            } else {
+                browserDelegate?.show(webView: webView)
             }
             if webView.url == nil {
                 // The webView can go gray if it was zombified due to memory pressure.
