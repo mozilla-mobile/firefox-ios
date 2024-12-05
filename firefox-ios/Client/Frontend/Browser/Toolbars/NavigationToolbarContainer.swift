@@ -11,7 +11,7 @@ protocol NavigationToolbarContainerDelegate: AnyObject {
     func configureContextualHint(for: UIButton, with contextualHintType: String)
 }
 
-class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
+final class NavigationToolbarContainer: UIView, ThemeApplicable, StoreSubscriber {
     typealias SubscriberStateType = ToolbarState
 
     private enum UX {

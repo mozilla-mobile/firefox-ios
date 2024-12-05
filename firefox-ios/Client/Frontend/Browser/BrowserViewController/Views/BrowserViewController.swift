@@ -421,15 +421,16 @@ class BrowserViewController: UIViewController,
         switchToolbarIfNeeded()
 
         if isToolbarRefactorEnabled {
-            if showNavToolbar {
-                navigationToolbarContainer.isHidden = false
-                navigationToolbarContainer.applyTheme(theme: currentTheme())
-                updateTabCountUsingTabManager(self.tabManager)
-            } else {
-                navigationToolbarContainer.isHidden = true
+            DispatchQueue.main.async { [self] in
+                if showNavToolbar {
+                    navigationToolbarContainer.isHidden = false
+                    navigationToolbarContainer.applyTheme(theme: currentTheme())
+                    updateTabCountUsingTabManager(self.tabManager)
+                } else {
+                    navigationToolbarContainer.isHidden = true
+                }
+                updateToolbarStateTraitCollectionIfNecessary(newCollection)
             }
-
-            updateToolbarStateTraitCollectionIfNecessary(newCollection)
         } else {
             urlBar.topTabsIsShowing = showTopTabs
             urlBar.setShowToolbar(!showNavToolbar)
