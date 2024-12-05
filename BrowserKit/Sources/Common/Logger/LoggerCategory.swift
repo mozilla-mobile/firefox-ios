@@ -65,4 +65,10 @@ public enum LoggerCategory: String {
 
     /// Remote settings
     case remoteSettings
+
+    /// Password Generator
+    case passwordGenerator
+
+    /// Related to wallpaper functionality, like fetching metadata, images, etc
+    case wallpaper
 }
