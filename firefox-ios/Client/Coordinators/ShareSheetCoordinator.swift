@@ -88,7 +88,12 @@ class ShareSheetCoordinator: BaseCoordinator,
         switch activityType {
         case CustomActivityAction.sendToDevice.actionType:
             // Can only reach here for non-file shares
-            showSendToDevice(url: shareType.wrappedURL, relatedTab: relatedTab)
+            switch shareType {
+            case let .tab(_, tab):
+                showSendToDevice(url: shareType.wrappedURL, relatedTab: tab)
+            default:
+                showSendToDevice(url: shareType.wrappedURL, relatedTab: nil)
+            }
 
         default:
             // FIXME: FXIOS-10334 It's mysterious that we are calling this in the share coordinator. It may not be necessary,
@@ -101,10 +106,10 @@ class ShareSheetCoordinator: BaseCoordinator,
         parentCoordinator?.didFinish(from: self)
     }
 
-    private func showSendToDevice(url: URL, relatedTab: Tab?) {
+    private func showSendToDevice(url: URL, relatedTab: (any ShareTab)?) {
         let shareItem: ShareItem
         if let relatedTab, let url = relatedTab.canonicalURL?.displayURL {
-            shareItem = ShareItem(url: url.absoluteString, title: relatedTab.title)
+            shareItem = ShareItem(url: url.absoluteString, title: relatedTab.displayTitle)
         } else {
             shareItem = ShareItem(url: url.absoluteString, title: nil)
         }
