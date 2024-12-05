@@ -8,7 +8,12 @@ import Shared
 
 protocol BookmarksSaver {
     /// Saves or updates a bookmark
-    func save(bookmark: FxBookmarkNode, parentFolderGUID: String) async -> Result<Void, Error>
+    func save(bookmark: FxBookmarkNode, parentFolderGUID: String) async -> Result<SaveResult, Error>
+}
+
+enum SaveResult {
+    case guid(String)
+    case void
 }
 
 struct DefaultBookmarksSaver: BookmarksSaver {
@@ -19,9 +24,9 @@ struct DefaultBookmarksSaver: BookmarksSaver {
 
     let profile: Profile
 
-    func save(bookmark: FxBookmarkNode, parentFolderGUID: String) async -> Result<Void, Error> {
+    func save(bookmark: FxBookmarkNode, parentFolderGUID: String) async -> Result<SaveResult, Error> {
         return await withCheckedContinuation { continuation in
-            let operation: Success? = {
+            let operation: Deferred<Maybe<SaveResult>>? = {
                 switch bookmark.type {
                 case .bookmark:
                     guard let bookmark = bookmark as? BookmarkItemData else { return nil }
@@ -30,15 +35,21 @@ struct DefaultBookmarksSaver: BookmarksSaver {
                         return profile.places.createBookmark(parentGUID: parentFolderGUID,
                                                              url: bookmark.url,
                                                              title: bookmark.title,
-                                                             position: position).bind { result in
-                            return result.isFailure ? deferMaybe(BookmarkDetailPanelError()) : succeed()
+                                                             position: position).map { maybeGUID in
+                            maybeGUID.map { guid in
+                                SaveResult.guid(guid)
+                            }
                         }
                     } else {
                         return profile.places.updateBookmarkNode(guid: bookmark.guid,
                                                                  parentGUID: parentFolderGUID,
                                                                  position: bookmark.position,
                                                                  title: bookmark.title,
-                                                                 url: bookmark.url)
+                                                                 url: bookmark.url).map { maybeVoid in
+                            maybeVoid.map { _ in
+                                SaveResult.void
+                            }
+                        }
                     }
                 case .folder:
                     guard let folder = bookmark as? BookmarkFolderData else { return nil }
@@ -46,23 +57,30 @@ struct DefaultBookmarksSaver: BookmarksSaver {
                         let position: UInt32? = parentFolderGUID == BookmarkRoots.MobileFolderGUID ? 0 : nil
                         return profile.places.createFolder(parentGUID: parentFolderGUID,
                                                            title: folder.title,
-                                                           position: position).bind { result in
-                            return result.isFailure ? deferMaybe(BookmarkDetailPanelError()) : succeed()
+                                                           position: position).map { maybeGUID in
+                            maybeGUID.map { guid in
+                                SaveResult.guid(guid)
+                            }
                         }
                     } else {
                         return profile.places.updateBookmarkNode(guid: bookmark.guid,
                                                                  parentGUID: parentFolderGUID,
                                                                  position: bookmark.position,
-                                                                 title: bookmark.title)
+                                                                 title: folder.title).map { maybeVoid in
+                            maybeVoid.map { _ in
+                                SaveResult.void
+                            }
+                        }
                     }
                 default:
                     return nil
                 }
             }()
+
             if let operation {
                 operation.uponQueue(.main, block: { result in
-                    if let result = result.successValue {
-                        continuation.resume(returning: .success(result))
+                    if let successValue = result.successValue {
+                        continuation.resume(returning: .success(successValue))
                     } else {
                         continuation.resume(returning: .failure(SaveError.saveOperationFailed))
                     }
