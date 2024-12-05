@@ -34,7 +34,6 @@ include:
   - nimbus-features/passwordGeneratorFeature.yaml
   - nimbus-features/pullToRefreshRefactorFeature.yaml
   - nimbus-features/reduxSearchSettingsFeature.yaml
-  - nimbus-features/remoteTabManagement.yaml
   - nimbus-features/searchFeature.yaml
   - nimbus-features/sentFromFirefoxFeature.yaml
   - nimbus-features/splashScreenFeature.yaml

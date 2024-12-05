@@ -32,13 +32,6 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     self?.reloadView()
                 },
                 FeatureFlagsBoolSetting(
-                    with: .closeRemoteTabs,
-                    titleText: format(string: "Enable Close Remote Tabs"),
-                    statusText: format(string: "Toggle to enable closing tabs remotely feature")
-                ) { [weak self] _ in
-                    self?.reloadView()
-                },
-                FeatureFlagsBoolSetting(
                     with: .microsurvey,
                     titleText: format(string: "Enable Microsurvey"),
                     statusText: format(string: "Toggle to reset microsurvey expiration")
