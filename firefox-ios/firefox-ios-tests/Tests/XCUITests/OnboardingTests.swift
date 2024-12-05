@@ -19,7 +19,9 @@ class OnboardingTests: BaseTestCase {
     }
 
     override func tearDown() {
-        switchThemeToDarkOrLight(theme: "Light")
+        if #available(iOS 17.0, *) {
+            switchThemeToDarkOrLight(theme: "Light")
+        }
         app.terminate()
         super.tearDown()
     }

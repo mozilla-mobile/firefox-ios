@@ -1206,13 +1206,7 @@ extension MMNavigator where T == FxUserState {
         UIPasteboard.general.string = urlString
         userState.url = urlString
         userState.waitForLoading = waitForLoading
-        // Using LoadURLByTyping for Intel too on Xcode14
-        if #available (iOS 16, *) {
-            performAction(Action.LoadURLByTyping)
-        } else {
-            performAction(Action.LoadURL)
-            sleep(5) // Wait for toast to disappear
-        }
+        performAction(Action.LoadURLByTyping)
     }
 
     func mozWaitForElementToExist(_ element: XCUIElement, timeout: TimeInterval? = TIMEOUT) {
