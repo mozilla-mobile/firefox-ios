@@ -13,10 +13,28 @@ enum ContentType {
 
     var shouldContentBeCached: Bool {
         return switch self {
-            case .nativeErrorPage, .homepage, .privateHomepage:
-                false
-            default:
-                true
+        case .nativeErrorPage, .homepage, .privateHomepage:
+            false
+        default:
+            true
+        }
+    }
+
+    var transition: UIView.AnimationOptions {
+        return switch self {
+        case .privateHomepage:
+            .transitionFlipFromLeft
+        default:
+            .transitionCrossDissolve
+        }
+    }
+
+    var duration: TimeInterval {
+        return switch self {
+        case .privateHomepage:
+            0.5
+        default:
+            0.2
         }
     }
 }
@@ -122,13 +140,15 @@ class ContentContainer: UIView {
 }
 
 /// A container for view controllers, currently used to embed content in BrowserViewController
-class OptimizedContentContainer: ContentContainer {
+class CachedContentContainer: ContentContainer {
     private var type: ContentType?
     private var contentController: ContentContainable?
 
     override var contentView: UIView? {
         return contentController?.view
     }
+
+    private let animated = true
 
     /// Determine if the content can be added, making sure we only add once
     /// - Parameters:
@@ -157,7 +177,17 @@ class OptimizedContentContainer: ContentContainer {
         removePreviousContentIfNeeded()
         saveContentType(content: content)
         if content.view.superview == nil {
-            addToView(content: content)
+            if animated {
+                UIView.transition(
+                    with: self,
+                    duration: content.contentType.duration,
+                    options: content.contentType.transition
+                ) {
+                    self.addToView(content: content)
+                }
+            } else {
+                self.addToView(content: content)
+            }
         } else {
             bringSubviewToFront(content.view)
         }
@@ -169,14 +199,15 @@ class OptimizedContentContainer: ContentContainer {
     /// - Parameter content: The content to update
     override func update(content: ContentContainable) {
         removePreviousContentIfNeeded()
-        bringSubviewToFront(content.view)
+        if content.contentType != type {
+            bringSubviewToFront(content.view)
+        }
         saveContentType(content: content)
     }
 
     // MARK: - Private
 
     private func removePreviousContentIfNeeded() {
-        // we cache only the view
         guard let type, !type.shouldContentBeCached else { return }
         contentController?.willMove(toParent: nil)
         contentController?.view.removeFromSuperview()
@@ -198,5 +229,15 @@ class OptimizedContentContainer: ContentContainer {
             content.view.bottomAnchor.constraint(equalTo: bottomAnchor),
             content.view.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
+    }
+
+    override func bringSubviewToFront(_ view: UIView) {
+        if animated, let type {
+            UIView.transition(with: self, duration: type.duration, options: type.transition) {
+                super.bringSubviewToFront(view)
+            }
+        } else {
+            super.bringSubviewToFront(view)
+        }
     }
 }
