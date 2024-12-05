@@ -748,8 +748,6 @@ downloads:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
 
-<<<<<<< HEAD
-=======
 # Password Generator
 password_generator:
   shown:
@@ -775,7 +773,6 @@ password_generator:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
 
->>>>>>> f2a86671a (Refactor FXIOS-10764 [Telemetry] Update metrics renewal dates (#23556))
 # Microsurvey
 microsurvey:
   shown:
@@ -3790,8 +3787,6 @@ tabs:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
       - https://github.com/mozilla-mobile/firefox-ios/pull/12334
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-<<<<<<< HEAD
-=======
       - https://github.com/mozilla-mobile/firefox-ios/pull/23252
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
@@ -3804,7 +3799,6 @@ tabs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/23225
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/23252
->>>>>>> f2a86671a (Refactor FXIOS-10764 [Telemetry] Update metrics renewal dates (#23556))
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
@@ -4768,13 +4762,8 @@ awesomebar:
       - https://github.com/mozilla-mobile/firefox-ios/pull/14102
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-<<<<<<< HEAD
-    expires: "2025-01-01"
-    
-=======
     expires: "2025-07-01"
 
->>>>>>> f2a86671a (Refactor FXIOS-10764 [Telemetry] Update metrics renewal dates (#23556))
 # Toolbar related metrics
 toolbar:
   qr_scan_button_tapped:
