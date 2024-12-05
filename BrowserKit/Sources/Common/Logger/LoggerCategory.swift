@@ -65,13 +65,10 @@ public enum LoggerCategory: String {
 
     /// Remote settings
     case remoteSettings
-<<<<<<< HEAD
-=======
 
     /// Password Generator
     case passwordGenerator
 
     /// Related to wallpaper functionality, like fetching metadata, images, etc
     case wallpaper
->>>>>>> 52186d6e6 (Bugfix FXIOS-10811 [Wallpaper] [Crash] Fix async/await in networking module (#23596))
 }
