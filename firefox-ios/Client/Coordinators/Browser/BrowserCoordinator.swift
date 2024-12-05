@@ -663,6 +663,7 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - BrowserNavigationHandler
+
     func showShareSheet(
         shareType: ShareType,
         shareMessage: ShareMessage?,

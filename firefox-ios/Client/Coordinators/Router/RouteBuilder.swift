@@ -132,6 +132,7 @@ final class RouteBuilder {
                 // Pass optional share message and subtitle here
                 var shareMessage: ShareMessage?
                 if let titleText = urlScanner.value(query: "title") {
+                    // TODO: FXIOS-10629 Get the optional subtitle parameter 
                     shareMessage = ShareMessage(message: titleText, subtitle: nil)
                 }
 
