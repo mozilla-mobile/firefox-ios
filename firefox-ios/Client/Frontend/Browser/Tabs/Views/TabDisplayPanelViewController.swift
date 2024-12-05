@@ -161,11 +161,11 @@ class TabDisplayPanelViewController: UIViewController,
     }
 
     func newState(state: TabsPanelState) {
-        if state != tabsState {
-            tabDisplayView.newState(state: state)
-        }
-        shouldShowEmptyView(state.isPrivateTabsEmpty)
+        guard state != tabsState else { return }
+
         tabsState = state
+        tabDisplayView.newState(state: state)
+        shouldShowEmptyView(state.isPrivateTabsEmpty)
     }
 
     // MARK: EmptyPrivateTabsViewDelegate
