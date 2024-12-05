@@ -44,12 +44,7 @@ class WallpaperNetworkingModuleTests: XCTestCase, WallpaperTestDataProvider {
             _ = try await subject.data(from: url)
             XCTFail("This test should throw an error, but it did not.")
         } catch {
-<<<<<<< HEAD
-            XCTAssertEqual(error as! URLError,
-                           URLError(.cannotConnectToHost))
-=======
             XCTAssertEqual(error as? URLError, expectedError)
->>>>>>> 52186d6e6 (Bugfix FXIOS-10811 [Wallpaper] [Crash] Fix async/await in networking module (#23596))
         }
     }
 
