@@ -2354,7 +2354,7 @@ class BrowserViewController: UIViewController,
         navigationHandler?.showShareSheet(
             shareType: .tab(url: tabUrl, tab: selectedTab),
             shareMessage: nil,
-            sourceView: view,
+            sourceView: sourceView,
             sourceRect: nil,
             toastContainer: contentContainer,
             popoverArrowDirection: isBottomSearchBar ? .down : .up)
