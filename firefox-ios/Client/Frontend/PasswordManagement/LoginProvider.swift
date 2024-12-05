@@ -9,8 +9,8 @@ import Storage
 protocol LoginProvider: AnyObject {
     func searchLoginsWithQuery(
         _ query: String?,
-        completionHandler: @escaping (Result<[EncryptedLogin], Error>) -> Void)
-    func addLogin(login: LoginEntry, completionHandler: @escaping (Result<EncryptedLogin?, Error>) -> Void)
+        completionHandler: @escaping (Result<[Login], Error>) -> Void)
+    func addLogin(login: LoginEntry, completionHandler: @escaping (Result<Login?, Error>) -> Void)
 }
 
 extension RustLogins: LoginProvider {}

@@ -8,7 +8,7 @@ import MozillaAppServices
 
 class PasswordManagerSelectionHelperTests: XCTestCase {
     private var selectionHelper: PasswordManagerSelectionHelper!
-    private let loginRecord = EncryptedLogin(
+    private let loginRecord = Login(
         credentials: URLCredential(
             user: "test",
             password: "doubletest",
@@ -57,7 +57,7 @@ class PasswordManagerSelectionHelperTests: XCTestCase {
     }
 
     func testRemoveAllCell() {
-        let loginRecord2 = EncryptedLogin(
+        let loginRecord2 = Login(
             credentials: URLCredential(user: "filippo", password: "testtest", persistence: .permanent),
             protectionSpace: URLProtectionSpace.fromOrigin("https://testtest.com")
         )

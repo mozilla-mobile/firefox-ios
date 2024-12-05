@@ -6,7 +6,7 @@ import SwiftUI
 import Common
 import Storage
 
-import struct MozillaAppServices.EncryptedLogin
+import struct MozillaAppServices.Login
 
 /// A view representing a cell displaying login information.
 struct LoginCellView: View {
@@ -20,7 +20,7 @@ struct LoginCellView: View {
     @Environment(\.themeManager)
     var themeManager
 
-    private(set) var login: EncryptedLogin
+    private(set) var login: Login
     private(set) var onTap: () -> Void
 
     // MARK: - Body
@@ -96,7 +96,7 @@ struct LoginButtonStyle: ButtonStyle {
 struct LoginCellView_Previews: PreviewProvider {
     static var previews: some View {
         // Create a sample login item
-        let loginRecord = EncryptedLogin(
+        let loginRecord = Login(
             credentials: URLCredential(
                 user: "test",
                 password: "doubletest",

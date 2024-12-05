@@ -6,17 +6,17 @@ import Common
 import Storage
 import Foundation
 
-import struct MozillaAppServices.EncryptedLogin
+import struct MozillaAppServices.Login
 
 @MainActor
 class LoginListViewModel: ObservableObject {
-    @Published var logins: [EncryptedLogin] = []
+    @Published var logins: [Login] = []
 
     private let tabURL: URL
     private let field: FocusFieldType
     private let loginStorage: LoginStorage
     private let logger: Logger
-    let onLoginCellTap: (EncryptedLogin) -> Void
+    let onLoginCellTap: (Login) -> Void
     let manageLoginInfoAction: () -> Void
 
     var shortDisplayString: String {
@@ -28,7 +28,7 @@ class LoginListViewModel: ObservableObject {
         field: FocusFieldType,
         loginStorage: LoginStorage,
         logger: Logger,
-        onLoginCellTap: @escaping (EncryptedLogin) -> Void,
+        onLoginCellTap: @escaping (Login) -> Void,
         manageLoginInfoAction: @escaping () -> Void
     ) {
         self.tabURL = tabURL

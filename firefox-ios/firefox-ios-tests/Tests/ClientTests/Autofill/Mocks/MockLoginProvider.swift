@@ -12,7 +12,7 @@ class MockLoginProvider: LoginProvider {
         _ query: String?,
         completionHandler: @escaping (
             Result<
-                [MozillaAppServices.EncryptedLogin],
+                [MozillaAppServices.Login],
             any Error
             >
         ) -> Void
@@ -25,7 +25,7 @@ class MockLoginProvider: LoginProvider {
         login: MozillaAppServices.LoginEntry,
         completionHandler: @escaping (
             Result<
-            MozillaAppServices.EncryptedLogin?,
+            MozillaAppServices.Login?,
             any Error
             >
         ) -> Void
