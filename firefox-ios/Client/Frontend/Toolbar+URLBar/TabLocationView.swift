@@ -207,9 +207,13 @@ class TabLocationView: UIView, FeatureFlaggable {
         contentView.alignment = .center
         contentView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(contentView)
-        contentView.edges(equalTo: self)
 
         NSLayoutConstraint.activate([
+            contentView.topAnchor.constraint(equalTo: topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            contentView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: trailingAnchor),
+
             trackingProtectionButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),
             trackingProtectionButton.heightAnchor.constraint(equalToConstant: UX.buttonSize),
             shoppingButton.widthAnchor.constraint(equalToConstant: UX.buttonSize),

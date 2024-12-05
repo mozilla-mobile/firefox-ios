@@ -11,19 +11,6 @@ extension XCTestCase {
         XCTWaiter().wait(for: [expectation], timeout: timeout)
     }
 
-    func waitForCondition(timeout: TimeInterval = 10, condition: () -> Bool) {
-        let timeoutTime = Date.timeIntervalSinceReferenceDate + timeout
-
-        while !condition() {
-            if Date.timeIntervalSinceReferenceDate > timeoutTime {
-                XCTFail("Condition timed out")
-                return
-            }
-
-            wait(0.1)
-        }
-    }
-
     func trackForMemoryLeaks(_ instance: AnyObject, file: StaticString = #file, line: UInt = #line) {
         addTeardownBlock { [weak instance] in
             XCTAssertNil(
@@ -40,8 +27,10 @@ extension XCTestCase {
     /// It is a wrapper of XCTUnwrap. Since is not possible to do ```XCTUnwrap(await asyncMethod())```
     ///
     /// it has to be done always in two steps, this method make it one line for users.
-    func unwrapAsync<T>(asyncMethod: () async throws -> T?) async throws -> T {
+    func unwrapAsync<T>(asyncMethod: () async throws -> T?,
+                        file: StaticString = #file,
+                        line: UInt = #line) async throws -> T {
         let returnValue = try await asyncMethod()
-        return try XCTUnwrap(returnValue)
+        return try XCTUnwrap(returnValue, file: file, line: line)
     }
 }

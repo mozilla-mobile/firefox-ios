@@ -107,9 +107,6 @@
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Улучшенная защита от отслеживания";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Защита ОТКЛЮЧЕНА. Мы предлагаем снова включить её.";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Защита ОТКЛЮЧЕНА. Мы предлагаем включить её снова.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */

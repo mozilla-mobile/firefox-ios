@@ -92,9 +92,6 @@
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Értesítések bekapcsolása";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Sync.Description.v120" = "Ha be van jelentkezve és szinkronizálva van, akkor nagyobb biztonságban van. A %@ titkosítja a jelszavait, könyvjelzőit és egyebeit.";
-
-/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Sync.Description.v123" = "Ha szinkronizálva van, akkor a %@ titkosítja a jelszavait, könyvjelzőit és egyebeket.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */

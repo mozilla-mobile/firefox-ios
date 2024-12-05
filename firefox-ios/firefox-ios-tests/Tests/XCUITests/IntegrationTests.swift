@@ -118,7 +118,7 @@ class IntegrationTests: BaseTestCase {
         navigator.openURL(testingURL)
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.AddressToolbar.lockIcon])
         navigator.goto(BrowserTabMenu)
-        app.tables.otherElements[StandardImageIdentifiers.Large.bookmark].waitAndTap()
+        navigator.performAction(Action.Bookmark)
         navigator.nowAt(BrowserTab)
         signInFxAccounts()
 

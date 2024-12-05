@@ -1352,7 +1352,7 @@ class BrowserViewController: UIViewController,
         }
 
         if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
-            browserDelegate?.showHomepage()
+            browserDelegate?.showHomepage(overlayManager: overlayManager, isZeroSearch: inline)
         } else {
             browserDelegate?.showLegacyHomepage(
                 inline: inline,
@@ -1888,6 +1888,10 @@ class BrowserViewController: UIViewController,
                 navigationToolbar.updateForwardStatus(canGoForward)
             }
         case .hasOnlySecureContent:
+            store.dispatch(
+                TrackingProtectionAction(windowUUID: windowUUID,
+                                         actionType: TrackingProtectionActionType.updateConnectionStatus)
+            )
             guard let selectedTabURL = tabManager.selectedTab?.url,
                   let webViewURL = webView.url,
                   selectedTabURL == webViewURL else { return }
@@ -2340,9 +2344,11 @@ class BrowserViewController: UIViewController,
         }
 
         if let selectedTab = tabManager.selectedTab, let tabUrl = selectedTab.canonicalURL?.displayURL {
-            navigationHandler?.showShareExtension(
+            navigationHandler?.showShareSheet(
                 url: tabUrl,
+                title: nil,
                 sourceView: view,
+                sourceRect: nil,
                 toastContainer: contentContainer,
                 popoverArrowDirection: isBottomSearchBar ? .down : .up)
         }
