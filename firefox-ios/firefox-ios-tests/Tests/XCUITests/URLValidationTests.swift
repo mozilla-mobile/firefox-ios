@@ -26,6 +26,7 @@ class URLValidationTests: BaseTestCase {
         for url in urlTypes {
             navigator.openURL(url)
             waitUntilPageLoad()
+<<<<<<< HEAD
             mozWaitForElementToExist(app.otherElements.staticTexts["Mozilla"])
             mozWaitForElementToExist(app.buttons["Menu"])
             // Getting the current system locale ex:- en-US
@@ -35,6 +36,15 @@ class URLValidationTests: BaseTestCase {
                 locale = "en-US"
             }
             mozWaitForValueContains(urlField, value: "www.mozilla.org/\(locale)/")
+=======
+            waitForElementsToExist(
+                [
+                    app.otherElements.staticTexts["Welcome to Mozilla"],
+                    app.buttons["Menu"]
+                ]
+            )
+            mozWaitForValueContains(urlField, value: "mozilla.org")
+>>>>>>> 43f1c2d10 (Fix MTE-3935 - testDifferentURLTypes smoke test (#23569))
             clearURL()
         }
 
