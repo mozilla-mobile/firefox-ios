@@ -310,7 +310,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], to: TabTray)
         } else {
             screenState.gesture(to: TabTray) {
-                app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
+                app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
             }
         }
         makeURLBarAvailable(screenState)
@@ -460,7 +460,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], to: TabTray)
         } else {
             screenState.gesture(to: TabTray) {
-                app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
+                app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
             }
         }
 
@@ -942,7 +942,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], to: TabTray)
         } else {
             screenState.gesture(to: TabTray) {
-                app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
+                app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
             }
         }
     }
@@ -991,7 +991,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             screenState.tap(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton], to: TabTray)
         } else {
             screenState.gesture(to: TabTray) {
-                app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].tap()
+                app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
             }
         }
 
@@ -1241,8 +1241,7 @@ extension MMNavigator where T == FxUserState {
     func createNewTab() {
         let app = XCUIApplication()
         self.goto(TabTray)
-        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.TabTray.newTabButton], timeout: TIMEOUT)
-        app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].tap()
+        app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
         self.nowAt(NewTabScreen)
     }
 

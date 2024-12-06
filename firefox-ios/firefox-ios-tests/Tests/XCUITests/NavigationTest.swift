@@ -556,8 +556,9 @@ class NavigationTest: BaseTestCase {
         waitUntilPageLoad()
         // Sometimes first tap is not working on iPad
         if iPad() {
-            if let urlTextField =  app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as? String,
-               urlTextField == "ultimateqa.com/dummy-automation-websites" {
+            if let urlTextField =  app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value
+                as? String,
+               urlTextField == "ultimateqa.com" {
                 app.links["SauceDemo.com"].firstMatch.tap(force: true)
             }
         }

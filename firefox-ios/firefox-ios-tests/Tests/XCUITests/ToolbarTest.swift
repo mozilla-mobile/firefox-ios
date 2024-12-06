@@ -153,30 +153,14 @@ class ToolbarTests: BaseTestCase {
     }
 
     private func validateAddNewTabButtonOnToolbar(isPrivate: Bool) {
-        waitForElementsToExist(
-            [
-                app.buttons[AccessibilityIdentifiers.Toolbar.searchButton],
-                app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton]
-            ]
-        )
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
         restartInBackground()
-        waitForElementsToExist(
-            [
-                app.buttons[AccessibilityIdentifiers.Toolbar.searchButton],
-                app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton]
-            ]
-        )
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
         // Swipe up to close the app does not work on iOS 15.
         if #available(iOS 16, *) {
             closeFromAppSwitcherAndRelaunch()
-            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.searchButton])
-            let addNewTabButton = app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton]
-            mozWaitForElementToExist(addNewTabButton)
-            addNewTabButton.tapOnApp()
-            if !app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].exists {
-                addNewTabButton.tap()
-            }
-            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
+            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
+            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
             XCTAssertEqual(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String, "2")
         }

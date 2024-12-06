@@ -114,7 +114,6 @@ class ReadingListTests: BaseTestCase {
         // Go to reader list view to check that there is not any item there
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_ReadingList)
-        navigator.goto(LibraryPanel_ReadingList)
         checkReadingListNumberOfItems(items: 0)
     }
 

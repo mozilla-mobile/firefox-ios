@@ -258,7 +258,12 @@ class HomePageSettingsUITests: BaseTestCase {
         // Preconditons: Create 6 bookmarks & add 1 items to reading list
         bookmarkPages()
         addContentToReaderView()
-        navigator.performAction(Action.GoToHomePage)
+        if iPad() {
+            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].waitAndTap()
+            app.buttons[AccessibilityIdentifiers.TabTray.newTabButton].waitAndTap()
+        } else {
+            navigator.performAction(Action.GoToHomePage)
+        }
         mozWaitForElementToExist(app.staticTexts["Bookmarks"])
         navigator.performAction(Action.ToggleRecentlySaved)
         // On iPad we have the homepage button always present,
