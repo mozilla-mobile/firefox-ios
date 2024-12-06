@@ -114,11 +114,12 @@ class ActionProviderBuilder {
                   let helper = tab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper
             else { return }
 
-            // Shares from long-pressing a URL in the webview
-            // This is only used on ipad for positioning the popover. On iPhone it is an action sheet.
+            // The `point` is only used on ipad for positioning the popover. On iPhone it is an bottom sheet.
             let point = webView.convert(helper.touchPoint, to: view)
+
+            // Shares from long-pressing a link in the webview and tapping Share in the context menu
             navigationHandler?.showShareSheet(
-                shareType: .site(url: url), // FIXME: Not a tab since the link could be external to the current tab right?
+                shareType: .site(url: url), // NOT a `.tab` share, as the link might be to a different domain from the tab
                 shareMessage: nil,
                 sourceView: view,
                 sourceRect: CGRect(origin: point, size: CGSize(width: 10.0, height: 10.0)),

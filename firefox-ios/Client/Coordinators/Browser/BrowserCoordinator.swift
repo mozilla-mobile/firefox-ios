@@ -389,8 +389,12 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.presentSignInViewController(fxaParams)
     }
 
+    /// Starts the share sheet coordinator for the deep link `.sharesheet` route (share content via Nimbus Messaging).
+    /// - Parameters:
+    ///   - shareType: The content to share.
+    ///   - shareMessage: An optional textual message to accompany the shared content. May contain a Mail subject line.
     private func handleShareRoute(shareType: ShareType, shareMessage: ShareMessage?) {
-        // FIXME What should the sourceView be for deep links? Can we make it optional?
+        // FIXME: FXIOS-10829 Deep link shares should set a reasonable sourceView for iPad... or sourceView could be optional
         startShareSheetCoordinator(
             shareType: shareType,
             shareMessage: shareMessage,
@@ -768,9 +772,11 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     /// Starts the ShareSheetCoordinator, which initiates opening the iOS share sheet using an `UIActivityViewController`.
+    ///
     /// For shared tabs where the user is currently on a non-HTML page (e.g. viewing a PDF), this method will initiate a
-    /// file download, and then share the file instead. This currently blocks without any save indication, which is less
-    /// than ideal but has been the existing behaviour for a long time (task to address this: FXIOS-10823)
+    /// file download, and then share the file instead. This currently blocks without any UI indication, which is less
+    /// than ideal but has been the existing behaviour for a long time (task to address this: FXIOS-10823).
+    ///
     /// - Parameters:
     ///   - shareType: The type of content to share.
     ///   - shareMessage: An optional accompanying message to share (with optional email subject line).
@@ -780,13 +786,14 @@ class BrowserCoordinator: BaseCoordinator,
     ///   - toastContainer: The container for displaying toast information.
     ///   - popoverArrowDirection: The arrow direction for iPad share sheet popovers.
     ///
-    /// There are many ways to share many types of content from various areas of the app. A few code paths that go through
-    /// this method include:
+    /// There are many ways to share many types of content from various areas of the app. Code paths that go through this
+    /// method include:
     /// * Sharing content from a long press on Home screen tiles (e.g. long press Jump Back In context menu)
     /// * From the old Menu > Share and the new Menu > Tools > Share
     /// * From the new toolbar share button beside the address bar
     /// * From long pressing a link in the WKWebView and sharing from the context menu (via ActionProviderBuilder > addShare)
     /// * Via the sharesheet deeplink path in `RouteBuilder` (e.g. tapping home cards that initiate sharing content)
+    ///     * Currently this is the only path that is using the ShareMessage param (Info Card Referral experiment FXE-1090)
     func startShareSheetCoordinator(
         shareType: ShareType,
         shareMessage: ShareMessage?,

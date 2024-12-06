@@ -5,11 +5,14 @@
 import Foundation
 
 /// Preconfigured sharing schemes which the share manager knows how to handle.
-///     file: Include a file URL (file://). Best used for sharing downloaded files.
-///     site: Include a website URL (http(s)://). Best used for sharing library/bookmarks, etc. without an active tab.
+///     file: Include a file URL (`file://`). Best used for sharing downloaded files.
+///     site: Include a website URL (`http(s)://`). Best used for sharing library/bookmarks, etc. without an active tab.
 ///           Shares configured using .site will not append a title to Messages but will have a subtitle in Mail.
-///     tab:  Include a website URL and a tab to share. If sharing a tab with an active webView, then additional sharing
-///           options will be configured, including printing the page and adding the webpage to your iOS home screen.
+///     tab:  Include a URL and a tab to share. If sharing a tab with an active webView, then additional sharing
+///           options can be configured, including printing the page and adding the webpage to your iOS home screen.
+///           __SPECIAL NOTE__: If you download a PDF, you can view that in a tab. In that case, the URL may have a `file://`
+///            scheme instead of `http(s)://`, so certain options, like Send to Device / Add to Home Screen, may not be
+///            available.
 enum ShareType: Equatable {
     case file(url: URL)
     case site(url: URL)

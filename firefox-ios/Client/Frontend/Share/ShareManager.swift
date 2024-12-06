@@ -9,9 +9,6 @@ import WebKit
 import UniformTypeIdentifiers
 
 class ShareManager: NSObject, FeatureFlaggable {
-    // TODO: FXIOS-10582 not the real URL we want to use, those are still being finalized
-    static let downloadFirefoxAppStoreURL = URL(string: "https://mzl.la/3NDxAIS")!
-
     private struct ActivityIdentifiers {
         static let pocketIconExtension = "com.ideashower.ReadItLaterPro.AddToPocketExtension"
         static let pocketActionExtension = "com.ideashower.ReadItLaterPro.Action-Extension"
@@ -47,7 +44,7 @@ class ShareManager: NSObject, FeatureFlaggable {
                 return
             }
 
-            // Add telemetry for Pocket activityType
+            // Add telemetry for Pocket extension activityTypes
             if activityType?.rawValue == ActivityIdentifiers.pocketIconExtension {
                 TelemetryWrapper.recordEvent(category: .action,
                                              method: .tap,

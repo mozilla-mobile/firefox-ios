@@ -620,6 +620,7 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
 
     /// Share the URL of a downloaded file (e.g. either a user-downloaded file being viewed in the webView, or a link with a
     /// non-HTML MIME type currently opened in the webView, such as a PDF).
+    /// NOTE: Called from getShareFileAction (files in the browser) and getShareAction (websites)
     private func share(fileURL: URL, buttonView: UIView) {
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
         navigationHandler?.showShareSheet(

@@ -8,7 +8,7 @@ import XCTest
 
 final class ShareManagerTests: XCTestCase {
     let testMessage = "Test message"
-    let testSubtitle = "Test subtitle" // FIXME: naming
+    let testSubtitle = "Test subtitle"
     let testFileURL = URL(string: "file://some/file/url")!
     let testWebURL = URL(string: "https://mozilla.org")!
     let testWebpageDisplayTitle = "Mozilla"
@@ -40,7 +40,7 @@ final class ShareManagerTests: XCTestCase {
 
     func testGetActivityItems_forFileURL_withShareText() throws {
         let testMessage = "Test message"
-        let testSubtitle = "Test subtitle" // FIXME: naming
+        let testSubtitle = "Test subtitle"
         let stubActivityViewController = UIActivityViewController(
             activityItems: [],
             applicationActivities: []
@@ -95,7 +95,7 @@ final class ShareManagerTests: XCTestCase {
 
     func testGetActivityItems_forWebsiteURL_withShareText() throws {
         let testMessage = "Test message"
-        let testSubtitle = "Test subtitle" // FIXME: naming
+        let testSubtitle = "Test subtitle"
         let stubActivityViewController = UIActivityViewController(
             activityItems: [],
             applicationActivities: []
