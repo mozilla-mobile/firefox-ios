@@ -40,7 +40,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
     private lazy var smallFaviconView: FaviconImageView = .build()
     private lazy var favicon: FaviconImageView = .build()
-    private var headerView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+    private lazy var headerView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
 
     // MARK: - UI
 
@@ -82,8 +82,8 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.animator = SwipeAnimator(animatingView: self)
-        self.closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
+        animator = SwipeAnimator(animatingView: self)
+        closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
 
         contentView.addSubview(backgroundHolder)
 
@@ -92,14 +92,14 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
 
         accessibilityCustomActions = [
             UIAccessibilityCustomAction(name: .TabTrayCloseAccessibilityCustomAction,
-                                        target: self.animator,
+                                        target: animator,
                                         selector: #selector(SwipeAnimator.closeWithoutGesture))
         ]
 
         headerView.translatesAutoresizingMaskIntoConstraints = false
-        headerView.contentView.addSubview(self.closeButton)
-        headerView.contentView.addSubview(self.titleText)
-        headerView.contentView.addSubview(self.favicon)
+        headerView.contentView.addSubview(closeButton)
+        headerView.contentView.addSubview(titleText)
+        headerView.contentView.addSubview(favicon)
 
         setupConstraints()
     }
@@ -112,7 +112,7 @@ class TabCell: UICollectionViewCell, ThemeApplicable, ReusableCell {
         self.delegate = delegate
 
         if let swipeAnimatorDelegate = delegate as? SwipeAnimatorDelegate {
-            self.animator?.delegate = swipeAnimatorDelegate
+            animator?.delegate = swipeAnimatorDelegate
         }
 
         animator?.animateBackToCenter()
