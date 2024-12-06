@@ -731,7 +731,6 @@
 		8A3233FE28627446003E1C33 /* LocalDesktopFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3233FD28627446003E1C33 /* LocalDesktopFolder.swift */; };
 		8A32DD5028B419B300D57C60 /* HomepageMessageCardViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A32DD4F28B419B300D57C60 /* HomepageMessageCardViewModelTests.swift */; };
 		8A33221F27DFE318008F809E /* TopSitesDataAdaptorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A33221E27DFE318008F809E /* TopSitesDataAdaptorTests.swift */; };
-<<<<<<< HEAD
 		8A33222227DFE658008F809E /* NimbusMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A33222127DFE658008F809E /* NimbusMock.swift */; };
 		8A3345612BA499B7008C52AB /* disconnect-block-fingerprinting.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A3345572BA499B6008C52AB /* disconnect-block-fingerprinting.json */; };
 		8A3345622BA499B7008C52AB /* disconnect-block-advertising.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A3345582BA499B6008C52AB /* disconnect-block-advertising.json */; };
@@ -743,9 +742,6 @@
 		8A3345682BA499B7008C52AB /* disconnect-block-social.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A33455E2BA499B7008C52AB /* disconnect-block-social.json */; };
 		8A3345692BA499B7008C52AB /* disconnect-block-cookies-social.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A33455F2BA499B7008C52AB /* disconnect-block-cookies-social.json */; };
 		8A33456A2BA499B7008C52AB /* disconnect-block-cryptomining.json in Resources */ = {isa = PBXBuildFile; fileRef = 8A3345602BA499B7008C52AB /* disconnect-block-cryptomining.json */; };
-=======
-		8A34DD892CF6B31F00DC91FB /* UnifiedAdsNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A34DD882CF6B30F00DC91FB /* UnifiedAdsNetwork.swift */; };
->>>>>>> 475c70f1f (Added FXIOS-10710 default browser telemetry (#23426))
 		8A359EF32A1FD449004A5BB7 /* AdjustWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A359EF22A1FD449004A5BB7 /* AdjustWrapper.swift */; };
 		8A359EF62A1FE840004A5BB7 /* MockAdjustWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A359EF52A1FE840004A5BB7 /* MockAdjustWrapper.swift */; };
 		8A36AC2C2886F27F00CDC0AD /* MockTabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A36AC2B2886F27F00CDC0AD /* MockTabManager.swift */; };
@@ -7225,10 +7221,7 @@
 		8A3233FD28627446003E1C33 /* LocalDesktopFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalDesktopFolder.swift; sourceTree = "<group>"; };
 		8A32DD4F28B419B300D57C60 /* HomepageMessageCardViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageMessageCardViewModelTests.swift; sourceTree = "<group>"; };
 		8A33221E27DFE318008F809E /* TopSitesDataAdaptorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSitesDataAdaptorTests.swift; sourceTree = "<group>"; };
-<<<<<<< HEAD
 		8A33222127DFE658008F809E /* NimbusMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NimbusMock.swift; sourceTree = "<group>"; };
-=======
->>>>>>> 475c70f1f (Added FXIOS-10710 default browser telemetry (#23426))
 		8A3345572BA499B6008C52AB /* disconnect-block-fingerprinting.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-fingerprinting.json"; path = "../../../ContentBlockingLists/disconnect-block-fingerprinting.json"; sourceTree = "<group>"; };
 		8A3345582BA499B6008C52AB /* disconnect-block-advertising.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-advertising.json"; path = "../../../ContentBlockingLists/disconnect-block-advertising.json"; sourceTree = "<group>"; };
 		8A3345592BA499B6008C52AB /* disconnect-block-cookies-content.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-cookies-content.json"; path = "../../../ContentBlockingLists/disconnect-block-cookies-content.json"; sourceTree = "<group>"; };
@@ -7239,10 +7232,6 @@
 		8A33455E2BA499B7008C52AB /* disconnect-block-social.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-social.json"; path = "../../../ContentBlockingLists/disconnect-block-social.json"; sourceTree = "<group>"; };
 		8A33455F2BA499B7008C52AB /* disconnect-block-cookies-social.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-cookies-social.json"; path = "../../../ContentBlockingLists/disconnect-block-cookies-social.json"; sourceTree = "<group>"; };
 		8A3345602BA499B7008C52AB /* disconnect-block-cryptomining.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-block-cryptomining.json"; path = "../../../ContentBlockingLists/disconnect-block-cryptomining.json"; sourceTree = "<group>"; };
-<<<<<<< HEAD
-=======
-		8A34DD882CF6B30F00DC91FB /* UnifiedAdsNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnifiedAdsNetwork.swift; sourceTree = "<group>"; };
->>>>>>> 475c70f1f (Added FXIOS-10710 default browser telemetry (#23426))
 		8A359EF22A1FD449004A5BB7 /* AdjustWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustWrapper.swift; sourceTree = "<group>"; };
 		8A359EF52A1FE840004A5BB7 /* MockAdjustWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAdjustWrapper.swift; sourceTree = "<group>"; };
 		8A36AC2B2886F27F00CDC0AD /* MockTabManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTabManager.swift; sourceTree = "<group>"; };
@@ -25746,11 +25735,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift.git";
 			requirement = {
 				kind = exactVersion;
-<<<<<<< HEAD
 				version = 133.0.0;
-=======
-				version = 135.0.20241127050243;
->>>>>>> 475c70f1f (Added FXIOS-10710 default browser telemetry (#23426))
 			};
 		};
 		435C85EE2788F4D00072B526 /* XCRemoteSwiftPackageReference "glean-swift" */ = {
