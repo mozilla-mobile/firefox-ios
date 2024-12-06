@@ -668,6 +668,28 @@ default_browser_onboarding:
     expires: "2025-07-01"
 
 app:
+  default_browser:
+    type: boolean
+    description: |
+      Is Firefox the default browser
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/XXX
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/XXX
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
+  choice_screen_acquisition:
+    type: boolean
+    description: |
+      The user installed the app via the browser choice screen
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/XXX
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/XXX
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2026-01-01"
   opened_as_default_browser:
     type: counter
     description: |
