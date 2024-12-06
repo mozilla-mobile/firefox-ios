@@ -95,8 +95,13 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mozilla/rust-components-swift.git",
       "state" : {
+<<<<<<< HEAD
         "revision" : "3c5d60f896b898afa7a90ecd147324f53cc4e648",
         "version" : "134.0.0"
+=======
+        "revision" : "189fd9d7e7f41f06982ec23de44c8df9ffe8bc48",
+        "version" : "135.0.20241127050243"
+>>>>>>> 475c70f1f (Added FXIOS-10710 default browser telemetry (#23426))
       }
     },
     {
