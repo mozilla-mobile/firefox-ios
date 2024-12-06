@@ -34,7 +34,7 @@ class LabelButtonHeaderView: UICollectionReusableView,
         label.numberOfLines = 0
     }
 
-    private lazy var moreButton: ActionButton = .build { button in
+    private(set) lazy var moreButton: ActionButton = .build { button in
         button.isHidden = true
     }
 
