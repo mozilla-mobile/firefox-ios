@@ -21,20 +21,18 @@ class ThirdPartySearchTest: BaseTestCase {
         // Perform a search using a custom search engine
         app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
-        UIPasteboard.general.string = "window"
-        app.textFields.firstMatch.press(forDuration: 1)
-        app.staticTexts["Paste"].tap()
+        app.textFields.firstMatch.waitAndTap()
+        app.textFields.firstMatch.typeText("window")
         app.scrollViews.otherElements.buttons["Mozilla Engine search"].tap()
         waitUntilPageLoad()
 
-        guard var url = app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].value as? String else {
+        guard let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value
+                as? String else {
             XCTFail("Failed to retrieve the URL value from the browser's URL bar")
             return
         }
-        if url.hasPrefix("https://") == false {
-            url = "https://\(url)"
-        }
-        XCTAssert(url.hasPrefix("https://developer.mozilla.org/en-US"), "The URL should indicate that the search was performed on MDN and not the default")
+        XCTAssertEqual(url, "developer.mozilla.org", "The URL should indicate that the search was performed on MDN and not the default")
+        mozWaitForElementToExist(app.staticTexts["MDN"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2444328

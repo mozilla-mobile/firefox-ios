@@ -481,6 +481,15 @@ extension XCUIElement {
         }
     }
 
+    func tapIfExists(timeout: TimeInterval = 5.0) {
+        let existsPredicate = NSPredicate(format: "exists == true")
+        let expectation = XCTNSPredicateExpectation(predicate: existsPredicate, object: self)
+        let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
+        if result == .completed {
+            self.tap()
+        }
+    }
+
     /// Tap at @offsetPoint point in @self element view. This might not work for simulators lower than iPhone 14 Plus.
     func tapAtPoint(_ offsetPoint: CGPoint) {
         self.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
@@ -575,6 +584,13 @@ extension XCUIElement {
         }
         if self.isHittable {
             XCTFail("\(self) was not tapped")
+        }
+    }
+
+    func typeTextWithDelay(_ text: String, delay: TimeInterval) {
+        for character in text {
+            self.typeText(String(character))
+            Thread.sleep(forTimeInterval: delay)
         }
     }
 }
