@@ -91,7 +91,7 @@ workflows:
             "$BITRISE_SOURCE_DIR/firefox-ios/firefox-ios-tests/" \
             "$BITRISE_SOURCE_DIR/firefox-ios/Client/" \
             "$BITRISE_SOURCE_DIR/xcodebuild.log"
-    - deploy-to-bitrise-io@2:
+    - deploy-to-bitrise-io@2.9.2:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests" | and (getenv "BITRISE_XCRESULT_PATH" | ne "")}}'
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
@@ -208,7 +208,7 @@ workflows:
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.1
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest${SHARD}_iphonesimulator18.1-arm64.xctestrun"
-    - deploy-to-bitrise-io@2.1.1:
+    - deploy-to-bitrise-io@2.9.2:
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - pipeline_intermediate_files: '$BITRISE_XCRESULT_PATH:BITRISE_UITESTS_${SHARD}_XCRESULT_PATH'
@@ -504,7 +504,7 @@ workflows:
     - swiftlint-extended@1:
         inputs:
         - linting_path: "$BITRISE_SOURCE_DIR"
-    - deploy-to-bitrise-io@2.2: {}
+    - deploy-to-bitrise-io@2.9.2: {}
     - script@1:
         inputs:
         - content: |-
@@ -739,7 +739,7 @@ workflows:
         inputs:
         - scheme: Fennec
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.1
-    - deploy-to-bitrise-io@2.2: {}
+    - deploy-to-bitrise-io@2.9.2: {}
     - cache-push@2.4: {}
     - slack@3.1:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
@@ -831,7 +831,7 @@ workflows:
         inputs:
         - key: l10n-screenshots-dd-$GIT_CLONE_COMMIT_HASH
         - paths: l10n-screenshots-dd
-    - deploy-to-bitrise-io@2:
+    - deploy-to-bitrise-io@2.9.2:
         inputs:
         - deploy_path: l10n-screenshots/en-US/en-US
         - is_compress: 'true'
@@ -875,7 +875,7 @@ workflows:
               mv "$locale.zip" artifacts/
             done
         title: Generate screenshots
-    - deploy-to-bitrise-io@2:
+    - deploy-to-bitrise-io@2.9.2:
         inputs:
         - deploy_path: artifacts/
     envs:
@@ -957,7 +957,7 @@ workflows:
         - distribution_method: app-store
         - export_development_team: 43AQ936H96
         - configuration: "$BITRISE_SCHEME"
-    - deploy-to-bitrise-io@2.0: {}
+    - deploy-to-bitrise-io@2.9.2: {}
     - deploy-to-itunesconnect-application-loader@1.3:
         inputs:
         - app_password: "$APPLE_ACCOUNT_PW"
@@ -1174,7 +1174,7 @@ workflows:
         - distribution_method: app-store
         - configuration: FirefoxBeta
         title: 'FirefoxBeta: Xcode Archive & Export for iOS'
-    - deploy-to-bitrise-io@2: {}
+    - deploy-to-bitrise-io@2.9.2: {}
     - deploy-to-itunesconnect-application-loader@1.3:
         inputs:
         - app_password: "$APPLE_ACCOUNT_PW"
@@ -1237,7 +1237,7 @@ workflows:
             sed 's/.*=//;s/'\''/"/g' data.txt > test.json
             cat test.json
             python3 perfTestTransform.py
-    - deploy-to-bitrise-io@2: {}
+    - deploy-to-bitrise-io@2.9.2: {}
     before_run:
     - 1_git_clone_and_post_clone
     - 2_certificate_and_profile
@@ -1260,7 +1260,7 @@ workflows:
         - output_tool: xcodebuild
         - scheme: Fennec_Enterprise
         - configuration: Fennec_Enterprise
-    - deploy-to-bitrise-io@2: {}
+    - deploy-to-bitrise-io@2.9.2: {}
     - cache-pull@2:
         inputs:
         - cache_paths: "$HOME/sdk/google-cloud-sdk"
@@ -1371,7 +1371,7 @@ workflows:
         - output_tool: xcodebuild
         - scheme: Fennec_Enterprise
         - configuration: Fennec_Enterprise
-    - deploy-to-bitrise-io@2: {}
+    - deploy-to-bitrise-io@2.9.2: {}
     - script@1.1:
         title: Firebase Build for Testing Physical Devices
         inputs:
@@ -1619,7 +1619,7 @@ workflows:
             "$BITRISE_SOURCE_DIR/focus-ios/focus-ios-tests/" \
             "$BITRISE_SOURCE_DIR/focus-ios/xcodebuild.log" \
             "$BITRISE_SOURCE_DIR/focus-ios/Blockzilla/"
-    - deploy-to-bitrise-io@2:
+    - deploy-to-bitrise-io@2.9.2:
         inputs:
         - deploy_path: "${BITRISE_SOURCE_DIR}/DerivedData.zip"
         - pipeline_intermediate_files: |-
@@ -1671,7 +1671,7 @@ workflows:
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
         - test_name: SmokeTest
-    - deploy-to-bitrise-io@2: {}
+    - deploy-to-bitrise-io@2.9.2: {}
     - github-status@2:
         inputs:
         - status_identifier: "Focus-build"
@@ -1701,7 +1701,7 @@ workflows:
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
         - test_name: UnitTestsKlar
-    - deploy-to-bitrise-io@2: {}
+    - deploy-to-bitrise-io@2.9.2: {}
     - slack@3:
         run_if: ".IsBuildFailed"
         inputs:
@@ -1729,7 +1729,7 @@ workflows:
         inputs:
         - search_pattern: "$BITRISE_SOURCE_DIR/xcodebuild.xcresult"
         - test_name: UnitTests
-    - deploy-to-bitrise-io@2: {}
+    - deploy-to-bitrise-io@2.9.2: {}
     - slack@3:
         run_if: ".IsBuildFailed"
         inputs:
