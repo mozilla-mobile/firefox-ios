@@ -19,7 +19,7 @@ legacy.ids:
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
       - sarentz@mozilla.com
-    expires: never
+    expires: "2025-03-01"
 
 app:
   opened_as_default_browser:
@@ -35,7 +35,7 @@ app:
       - https://github.com/mozilla-mobile/focus-ios/pull/3855
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2025-03-01"
 
   keyboard_type:
     type: string
@@ -49,7 +49,7 @@ app:
       - https://github.com/mozilla-mobile/focus-ios/pull/4023
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-07-10"
+    expires: "2025-03-01"
 
 browser:
   total_uri_count:
@@ -69,7 +69,7 @@ browser:
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
       - sarentz@mozilla.com
-    expires: never
+    expires: "2025-03-01"
     send_in_pings:
       - metrics
       - baseline
@@ -89,7 +89,7 @@ browser:
       - focus-ios-data-stewards@mozilla.com
     data_sensitivity:
       - interaction
-    expires: "2024-07-10"
+    expires: "2025-03-01"
 
 mozilla_products:
   has_firefox_installed:
@@ -107,7 +107,7 @@ mozilla_products:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2025-03-01"
 
 settings_screen:
   set_as_default_browser_pressed:
@@ -124,7 +124,7 @@ settings_screen:
       - focus-ios-data-stewards@mozilla.com
     data_sensitivity:
       - interaction
-    expires: never
+    expires: "2025-03-01"
 
   autocomplete_domain_added:
     type: counter
@@ -140,7 +140,7 @@ settings_screen:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-07-17"
+    expires: "2025-03-01"
 
 tracking_protection:
   toolbar_shield_clicked:
@@ -157,7 +157,7 @@ tracking_protection:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-07-17"
+    expires: "2025-03-01"
 
   tracking_protection_changed:
     type: event
@@ -172,7 +172,7 @@ tracking_protection:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-07-17"
+    expires: "2025-03-01"
     extra_keys:
       is_enabled:
         description: The new setting for ETP, true for ON, false for OFF
@@ -193,7 +193,7 @@ tracking_protection:
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
       - sarentz@mozilla.com
-    expires: never
+    expires: "2025-03-01"
 
   tracker_setting_changed:
     type: event
@@ -208,7 +208,7 @@ tracking_protection:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-07-17"
+    expires: "2025-03-01"
     extra_keys:
       source_of_change:
         description: The source of interaction, "Panel" or "Settings"
@@ -235,7 +235,7 @@ tracking_protection:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-07-17"
+    expires: "2025-03-01"
 
   has_advertising_blocked:
     type: boolean
@@ -251,7 +251,7 @@ tracking_protection:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-07-17"
+    expires: "2025-03-01"
 
   has_analytics_blocked:
     type: boolean
@@ -267,7 +267,7 @@ tracking_protection:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-07-17"
+    expires: "2025-03-01"
 
   has_content_blocked:
     type: boolean
@@ -283,7 +283,7 @@ tracking_protection:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-07-17"
+    expires: "2025-03-01"
 
 shortcuts:
   shortcuts_on_home_number:
@@ -300,7 +300,7 @@ shortcuts:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-07-20"
+    expires: "2025-03-01"
     unit: shortcut(s)
   shortcut_opened_counter:
     type: counter
@@ -316,7 +316,7 @@ shortcuts:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-07-20"
+    expires: "2025-03-01"
   shortcut_added_counter:
     type: counter
     description: |
@@ -331,7 +331,7 @@ shortcuts:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-07-20"
+    expires: "2025-03-01"
   shortcut_removed_counter:
     type: labeled_counter
     description: |
@@ -347,7 +347,7 @@ shortcuts:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-07-20"
+    expires: "2025-03-01"
     labels:
       - removed_from_browser_menu
       - removed_from_home_screen
@@ -368,7 +368,7 @@ preferences:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-07-01"
+    expires: "2025-03-01"
 
 browser_menu:
   browser_menu_action:
@@ -383,7 +383,7 @@ browser_menu:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2025-03-01"
     extra_keys:
       item:
         description: |
@@ -406,7 +406,7 @@ show_search_suggestions:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2025-03-01"
   disabled_from_panel:
     type: event
     description: The "no"" option from the suggestion panel has been tapped.
@@ -419,7 +419,7 @@ show_search_suggestions:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2025-03-01"
   changed_from_settings:
     type: event
     description: The enabled state has been changed from the settings screen.
@@ -432,7 +432,7 @@ show_search_suggestions:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2025-03-01"
     extra_keys:
       is_enabled:
         description: The new setting value, true for ON, false for OFF
@@ -451,7 +451,7 @@ search_suggestions:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2025-03-01"
     extra_keys:
       engine_name:
         description: The name of the engine used to perform the search.
@@ -468,7 +468,7 @@ search_suggestions:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2025-03-01"
     extra_keys:
       engine_name:
         description: The name of the engine used to perform the search.
@@ -485,7 +485,7 @@ search_suggestions:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2025-03-01"
 
 url_interaction:
   drag_started:
@@ -499,7 +499,7 @@ url_interaction:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-03-05"
+    expires: "2025-03-01"
   drop_ended:
     type: event
     description: Drop interaction ended.
@@ -511,7 +511,7 @@ url_interaction:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-03-05"
+    expires: "2025-03-01"
   paste_and_go:
     type: event
     description: Paste url and navigate.
@@ -523,7 +523,7 @@ url_interaction:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-03-05"
+    expires: "2025-03-01"
 
 siri:
   open_favorite_site:
@@ -537,7 +537,7 @@ siri:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-03-05"
+    expires: "2025-03-01"
   erase_and_open:
     type: event
     description: Siri request erase session and open.
@@ -549,7 +549,7 @@ siri:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-03-05"
+    expires: "2025-03-01"
   erase_in_background:
     type: event
     description: Siri request erase session.
@@ -561,7 +561,7 @@ siri:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-03-05"
+    expires: "2025-03-01"
 
 browser_search:
   with_ads:
@@ -583,7 +583,7 @@ browser_search:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22609#issuecomment-2419002541
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2025-03-01"
   ad_clicks:
     type: labeled_counter
     description: |
@@ -603,7 +603,7 @@ browser_search:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22609#issuecomment-2419002541
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2025-03-01"
   search_count:
     type: labeled_counter
     description: |
@@ -632,7 +632,7 @@ browser_search:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2025-03-01"
   in_content:
     type: labeled_counter
     description: |
@@ -645,7 +645,7 @@ browser_search:
       - https://github.com/mozilla-mobile/firefox-ios/pull/22609#issuecomment-2419002541
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2025-03-01"
     send_in_pings:
       - metrics
       - baseline
@@ -669,7 +669,7 @@ onboarding:
       - https://github.com/mozilla-mobile/focus-ios/pull/3487
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-03-05"
+    expires: "2025-03-01"
   primary_button_tap:
     type: event
     description: |
@@ -685,7 +685,7 @@ onboarding:
       - https://github.com/mozilla-mobile/focus-ios/pull/3487
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-03-05"
+    expires: "2025-03-01"
   secondary_button_tap:
     type: event
     description: |
@@ -701,7 +701,7 @@ onboarding:
       - https://github.com/mozilla-mobile/focus-ios/pull/3487
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-03-05"
+    expires: "2025-03-01"
   close_tap:
     type: event
     description: |
@@ -717,7 +717,7 @@ onboarding:
       - https://github.com/mozilla-mobile/focus-ios/pull/3487
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-03-05"
+    expires: "2025-03-01"
 
 default_browser_onboarding:
   dismiss_pressed:
@@ -730,7 +730,7 @@ default_browser_onboarding:
       - https://github.com/mozilla-mobile/focus-ios/pull/3487
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-03-05"
+    expires: "2025-03-01"
   go_to_settings_pressed:
     type: counter
     description: |
@@ -742,7 +742,7 @@ default_browser_onboarding:
       - https://github.com/mozilla-mobile/focus-ios/pull/3487
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-03-05"
+    expires: "2025-03-01"
   skip_button_tapped:
     type: event
     description: The user has tapped to skip onboarding.
@@ -754,7 +754,7 @@ default_browser_onboarding:
       - interaction
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: "2024-03-05"
+    expires: "2025-03-01"
     extra_keys:
       current_item:
         description: The curent displayed item position.
@@ -775,7 +775,7 @@ search:
       - https://github.com/mozilla-mobile/firefox-ios/pull/9673
     notification_emails:
       - focus-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2025-03-01"
     send_in_pings:
       - metrics
       - baseline
@@ -793,7 +793,7 @@ webview:
       - https://github.com/mozilla-mobile/focus-ios/pull/3968
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2025-03-01"
   fail:
     type: event
     description: |
@@ -804,4 +804,4 @@ webview:
       - https://github.com/mozilla-mobile/focus-ios/pull/3968
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
-    expires: never
+    expires: "2025-03-01"
