@@ -71,9 +71,8 @@ class ThirdPartySearchTest: BaseTestCase {
         app.navigationBars["Settings"].buttons[AccessibilityIdentifiers.Settings.navigationBarItem].waitAndTap()
         app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].tap()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
-        UIPasteboard.general.string = "window"
-        app.textFields.firstMatch.press(forDuration: 1)
-        app.staticTexts["Paste"].tap()
+        app.textFields.firstMatch.waitAndTap()
+        app.textFields.firstMatch.typeText("window")
         mozWaitForElementToExist(app.scrollViews.otherElements.buttons["Mozilla Engine search"])
 
         // Need to go step by step to Search Settings. The ScreenGraph will fail to go to the Search Settings Screen
@@ -90,10 +89,8 @@ class ThirdPartySearchTest: BaseTestCase {
             // Perform a search to check
             app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url].waitAndTap()
             mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton])
-            UIPasteboard.general.string = "window"
-            app.textFields.firstMatch.press(forDuration: 1)
-            app.staticTexts["Paste"].tap()
-
+            app.textFields.firstMatch.waitAndTap()
+            app.textFields.firstMatch.typeText("window")
             mozWaitForElementToNotExist(app.scrollViews.otherElements.buttons["Mozilla Engine search"])
         }
     }
