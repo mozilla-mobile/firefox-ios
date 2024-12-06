@@ -18,7 +18,7 @@ class ShareSheetCoordinator: BaseCoordinator,
     private let profile: Profile
     private let alertContainer: UIView
     private weak var parentCoordinator: ParentCoordinatorDelegate?
-    private var windowUUID: WindowUUID { return tabManager.windowUUID }
+    var windowUUID: WindowUUID { return tabManager.windowUUID }
 
     // MARK: - Initializers
 
@@ -42,30 +42,34 @@ class ShareSheetCoordinator: BaseCoordinator,
 
     /// Presents the share sheet from the source view
     func start(
-        url: URL,
-        title: String? = nil,
+        shareType: ShareType,
+        shareMessage: ShareMessage?,
         sourceView: UIView,
         sourceRect: CGRect? = nil,
         popoverArrowDirection: UIPopoverArrowDirection = .up
     ) {
-        let shareManager = ShareManager(
-            url: url,
-            // FXIOS-10669: We only want to pass a non-nil title here for the Info Card Referral experiment. Refactoring is
-            // needed in the ShareManager to make it properly extensible to multiple share use cases like this.
-            title: title,
-            tab: tabManager.selectedTab)
-        let controller = shareManager.createActivityViewController(
-            tabManager.selectedTab?.webView
-        ) { [weak self] completed, activityType in
-            guard let self = self else { return }
-            self.handleShareSheetCompletion(activityType: activityType, url: url)
-        }
+        let controller = ShareManager.createActivityViewController(
+            shareType: shareType,
+            shareMessage: shareMessage,
+            completionHandler: { [weak self] completed, activityType in
+                guard let self else { return }
+
+                self.handleShareSheetCompletion(
+                    activityType: activityType,
+                    shareType: shareType,
+                    relatedTab: self.tabManager.selectedTab
+                )
+            }
+        )
+
         if let popoverPresentationController = controller.popoverPresentationController {
             popoverPresentationController.sourceView = sourceView
             popoverPresentationController.sourceRect = sourceRect ?? sourceView.bounds
             popoverPresentationController.permittedArrowDirections = popoverArrowDirection
         }
+
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
+
         if let presentedViewController = router.navigationController.presentedViewController {
             presentedViewController.dismiss(animated: true) { [weak self] in
                 self?.router.present(controller)
@@ -77,20 +81,46 @@ class ShareSheetCoordinator: BaseCoordinator,
 
     private func handleShareSheetCompletion(
         activityType: UIActivity.ActivityType?,
-        url: URL
+        shareType: ShareType,
+        relatedTab: Tab?
     ) {
+        // NOTE: didFinish will be called on each of these code paths to properly dismiss the share sheet.
+        // FIXME: FXIOS-10334 It's mysterious that we are calling dequeueNotShownJSAlert in the share coordinator. It may not
+        // be necessary, but this JS alert code is fragile right now so let's not touch it until FXIOS-10334 is underway.
         switch activityType {
         case CustomActivityAction.sendToDevice.actionType:
-            showSendToDevice(url: url)
+            // Cannot send file:// URLs to another synced device
+            guard !shareType.wrappedURL.isFileURL else {
+                dequeueNotShownJSAlert()
+                return
+            }
+
+            switch shareType {
+            case let .tab(_, tab):
+                showSendToDevice(url: shareType.wrappedURL, relatedTab: tab)
+            default:
+                showSendToDevice(url: shareType.wrappedURL, relatedTab: nil)
+            }
+
         default:
             dequeueNotShownJSAlert()
         }
     }
 
-    private func showSendToDevice(url: URL) {
-        var shareItem: ShareItem!
-        if let selectedTab = tabManager.selectedTab, let url = selectedTab.canonicalURL?.displayURL {
-            shareItem = ShareItem(url: url.absoluteString, title: selectedTab.title)
+    func dismiss() {
+        parentCoordinator?.didFinish(from: self)
+    }
+
+    /// Shows the view controller that allows users to send this URL to one of their synced devices running Firefox.
+    /// - Parameters:
+    ///   - url: The URL to send.
+    ///   - relatedTab: The tab associated with this URL. Will be used to provide the displayURL and displayTitle if set.
+    ///                 Should be nil if the url to be sent is NOT related to a specific tab (e.g. a bookmark URL).
+    private func showSendToDevice(url: URL, relatedTab: (any ShareTab)?) {
+        // TODO: FXIOS-10831 harden this code path to ensure we don't ever share a reader mode localhost URL
+        let shareItem: ShareItem
+        if let relatedTab, let url = relatedTab.canonicalURL?.displayURL {
+            shareItem = ShareItem(url: url.absoluteString, title: relatedTab.displayTitle)
         } else {
             shareItem = ShareItem(url: url.absoluteString, title: nil)
         }
@@ -100,23 +130,25 @@ class ShareSheetCoordinator: BaseCoordinator,
                                                textColor: themeColors.textPrimary,
                                                iconColor: themeColors.iconDisabled)
 
-        let helper = SendToDeviceHelper(
+        let sendToDeviceHelper = SendToDeviceHelper(
             shareItem: shareItem,
             profile: profile,
             colors: colors,
-            delegate: self)
-        let viewController = helper.initialViewController()
+            delegate: self
+        )
+        let viewController = sendToDeviceHelper.initialViewController()
 
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sendToDevice)
         router.present(viewController)
     }
 
     private func dequeueNotShownJSAlert() {
-        guard let alertInfo = tabManager.selectedTab?.dequeueJavascriptAlertPrompt()
-        else {
+        guard let alertInfo = tabManager.selectedTab?.dequeueJavascriptAlertPrompt() else {
             parentCoordinator?.didFinish(from: self)
             return
         }
+
+        // Will call `dequeueNotShownJSAlert` again when finished via JSPromptAlertControllerDelegate delegate method
         let alertController = alertInfo.alertController()
         alertController.delegate = self
         router.present(alertController)
@@ -133,8 +165,7 @@ class ShareSheetCoordinator: BaseCoordinator,
         _ devicePickerViewController: DevicePickerViewController,
         didPickDevices devices: [RemoteDevice]
     ) {
-        guard let shareItem = devicePickerViewController.shareItem
-        else {
+        guard let shareItem = devicePickerViewController.shareItem else {
             router.dismiss()
             parentCoordinator?.didFinish(from: self)
             return
@@ -158,6 +189,7 @@ class ShareSheetCoordinator: BaseCoordinator,
             }
             return
         }
+
         profile.sendItem(shareItem, toDevices: devices).uponQueue(.main) { [weak self] _ in
             guard let self = self else { return }
             self.router.dismiss()

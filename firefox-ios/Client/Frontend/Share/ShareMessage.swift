@@ -5,7 +5,7 @@
 import Foundation
 
 /// Additional text to share alongside a `ShareType`. Some apps, like Mail, support an additional subject line (called a
-/// subtitle).
+/// `subtitle` with respect to `UIActivityItemProvider`s).
 struct ShareMessage: Equatable {
     let message: String
     let subtitle: String?

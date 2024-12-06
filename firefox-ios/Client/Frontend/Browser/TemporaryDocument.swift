@@ -7,7 +7,11 @@ import Shared
 
 private let temporaryDocumentOperationQueue = OperationQueue()
 
-class TemporaryDocument: NSObject {
+protocol TemporaryDocument {
+    func getURL(completionHandler: @escaping ((URL?) -> Void))
+}
+
+class DefaultTemporaryDocument: NSObject, TemporaryDocument {
     fileprivate let request: URLRequest
     fileprivate let filename: String
 
@@ -36,6 +40,8 @@ class TemporaryDocument: NSObject {
         }
     }
 
+    // FIXME: FXIOS-10830 If we call this inside a continuation (as in BrowserCoordinator), is it possible we may have a
+    // crash similar to the one fixed in https://github.com/mozilla-mobile/firefox-ios/pull/23596
     func getURL(completionHandler: @escaping ((URL?) -> Void)) {
         if let url = localFileURL {
             completionHandler(url)

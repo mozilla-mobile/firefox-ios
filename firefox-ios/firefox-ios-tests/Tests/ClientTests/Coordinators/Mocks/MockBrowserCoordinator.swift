@@ -65,14 +65,12 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
         showCreditCardAutofillCalled += 1
     }
 
-    func showShareSheet(
-        url: URL,
-        title: String?,
-        sourceView: UIView,
-        sourceRect: CGRect?,
-        toastContainer: UIView,
-        popoverArrowDirection: UIPopoverArrowDirection
-    ) {
+    func showShareSheet(shareType: ShareType,
+                        shareMessage: ShareMessage?,
+                        sourceView: UIView,
+                        sourceRect: CGRect?,
+                        toastContainer: UIView,
+                        popoverArrowDirection: UIPopoverArrowDirection) {
         showShareSheetCalled += 1
     }
 

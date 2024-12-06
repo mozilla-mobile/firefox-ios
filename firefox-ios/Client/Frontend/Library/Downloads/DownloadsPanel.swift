@@ -156,10 +156,13 @@ class DownloadsPanel: UIViewController,
     }
 
     private func shareDownloadedFile(_ downloadedFile: DownloadedFile, indexPath: IndexPath) {
-        let helper = ShareManager(url: downloadedFile.path, tab: nil)
-        let controller = helper.createActivityViewController { _, _ in }
+        let shareActivityViewController = ShareManager.createActivityViewController(
+            shareType: .file(url: downloadedFile.path),
+            shareMessage: nil,
+            completionHandler: { _, _ in }
+        )
 
-        if let popoverPresentationController = controller.popoverPresentationController {
+        if let popoverPresentationController = shareActivityViewController.popoverPresentationController {
             guard let tableViewCell = tableView.cellForRow(at: indexPath) else { return }
 
             popoverPresentationController.sourceView = tableViewCell
@@ -167,7 +170,7 @@ class DownloadsPanel: UIViewController,
             popoverPresentationController.permittedArrowDirections = .any
         }
 
-        present(controller, animated: true, completion: nil)
+        present(shareActivityViewController, animated: true, completion: nil)
     }
 
     private func iconForFileExtension(_ fileExtension: String) -> UIImage? {

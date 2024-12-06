@@ -2346,19 +2346,22 @@ class BrowserViewController: UIViewController,
                                          extras: nil)
         }
 
-        guard let selectedTab = tabManager.selectedTab, let tabUrl = selectedTab.canonicalURL?.displayURL else {
+        // We share the tab's displayURL to make sure we don't share reader mode localhost URLs
+        guard let selectedTab = tabManager.selectedTab,
+              let tabUrl = selectedTab.canonicalURL?.displayURL else {
             assertionFailure("Tried to share with no selected tab or URL")
             return
         }
 
+        /// Note: If the user is viewing a _downloaded_ (not online) PDF in the browser, then the current tab's URL will
+        /// have a `file://` scheme.
         navigationHandler?.showShareSheet(
-            url: tabUrl,
-            title: nil,
+            shareType: .tab(url: tabUrl, tab: selectedTab),
+            shareMessage: nil,
             sourceView: sourceView,
             sourceRect: nil,
             toastContainer: contentContainer,
-            popoverArrowDirection: isBottomSearchBar ? .down : .up
-        )
+            popoverArrowDirection: isBottomSearchBar ? .down : .up)
     }
 
     func presentTabsLongPressAction(from view: UIView) {
