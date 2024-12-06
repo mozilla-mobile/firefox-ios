@@ -525,9 +525,6 @@ extension BookmarksViewController: LibraryPanelContextMenu {
         return
     }
 
-    func notBookmarksRoots(bookmarkGUID: String) -> Bool {
-        return !BookmarkRoots.All.contains(where: { $0 == bookmarkGUID })
-    }
     func presentContextMenu(for site: Site,
                             with indexPath: IndexPath,
                             completionHandler: @escaping () -> PhotonActionSheet?) {
@@ -538,7 +535,7 @@ extension BookmarksViewController: LibraryPanelContextMenu {
         present(contextMenu, animated: true, completion: nil)
     }
 
-    func presentContextMenu(for folder: FxBookmarkNode, indexPath: IndexPath) {
+    private func presentContextMenu(for folder: FxBookmarkNode, indexPath: IndexPath) {
         let actions: [PhotonRowActions] = getFolderContextMenuActions(for: folder, indexPath: indexPath)
         let viewModel = PhotonActionSheetViewModel(actions: [actions],
                                                    bookmarkFolderTitle: folder.title,
@@ -566,7 +563,7 @@ extension BookmarksViewController: LibraryPanelContextMenu {
         return Site(url: bookmarkItem.url, title: bookmarkItem.title, bookmarked: true, guid: bookmarkItem.guid)
     }
 
-    func getFolderContextMenuActions(for folder: FxBookmarkNode, indexPath: IndexPath) -> [PhotonRowActions] {
+    private func getFolderContextMenuActions(for folder: FxBookmarkNode, indexPath: IndexPath) -> [PhotonRowActions] {
         let editAction = SingleActionViewModel(title: .Bookmarks.Menu.EditFolder,
                                                iconString: StandardImageIdentifiers.Large.edit,
                                                tapHandler: { _ in
