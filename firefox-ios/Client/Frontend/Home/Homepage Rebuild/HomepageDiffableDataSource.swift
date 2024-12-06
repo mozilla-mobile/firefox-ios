@@ -11,16 +11,27 @@ typealias HomepageItem = HomepageDiffableDataSource.HomeItem
 /// Holds the data source configuration for the new homepage as part of the rebuild project
 final class HomepageDiffableDataSource:
     UICollectionViewDiffableDataSource<HomepageSection, HomepageItem> {
-    enum HomeSection: Int, Hashable {
+    enum HomeSection: Hashable {
         case header
         case topSites
-        case pocket
+        case pocket(SectionHeaderState)
         case customizeHomepage
+
+        init?(rawValue: Int) {
+            switch rawValue {
+            case 0: self = .header
+            case 1: self = .topSites
+            case 2: self = .pocket(SectionHeaderState())
+            case 3: self = .customizeHomepage
+            default: return nil
+            }
+        }
     }
 
     enum HomeItem: Hashable {
-        case header
-        case topSite(TopSiteState)
+        typealias TextColor = UIColor
+        case header(TextColor?)
+        case topSite(TopSiteState, TextColor?)
         case topSiteEmpty
         case pocket(PocketStoryState)
         case pocketDiscover
@@ -38,21 +49,20 @@ final class HomepageDiffableDataSource:
         }
     }
 
-    func applyInitialSnapshot(state: HomepageState) {
+    func updateSnapshot(state: HomepageState) {
         var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeItem>()
 
-        snapshot.appendSections([.header, .topSites, .pocket, .customizeHomepage])
-        snapshot.appendItems([.header], toSection: .header)
-        snapshot.appendItems([], toSection: .topSites)
+        let textColor = state.pocketState.sectionHeaderState.sectionHeaderColor
+        snapshot.appendSections([.header, .topSites, .pocket(state.pocketState.sectionHeaderState), .customizeHomepage])
+        snapshot.appendItems([.header(textColor)], toSection: .header)
 
-        let topSites: [HomeItem] = state.topSitesState.topSitesData.compactMap { .topSite($0) }
+        let topSites: [HomeItem] = state.topSitesState.topSitesData.compactMap { .topSite($0, textColor) }
         snapshot.appendItems(topSites, toSection: .topSites)
 
         let stories: [HomeItem] = state.pocketState.pocketData.compactMap { .pocket($0) }
-        snapshot.appendItems(stories, toSection: .pocket)
-        snapshot.appendItems([.pocketDiscover], toSection: .pocket)
+        snapshot.appendItems(stories, toSection: .pocket(state.pocketState.sectionHeaderState))
+        snapshot.appendItems([.pocketDiscover], toSection: .pocket(state.pocketState.sectionHeaderState))
 
-        snapshot.appendItems([], toSection: .pocket)
         snapshot.appendItems([.customizeHomepage], toSection: .customizeHomepage)
 
         apply(snapshot, animatingDifferences: true)

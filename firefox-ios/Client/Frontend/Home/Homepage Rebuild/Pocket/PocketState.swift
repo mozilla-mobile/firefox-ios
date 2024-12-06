@@ -7,12 +7,25 @@ import Foundation
 import Redux
 import Shared
 
-struct SectionHeaderState: Equatable {
+struct SectionHeaderState: Hashable {
     var sectionHeaderTitle: String
     var sectionTitleA11yIdentifier: String
     var isSectionHeaderButtonHidden: Bool
-    var sectionHeaderColor: UIColor
+    var sectionHeaderColor: UIColor?
     var sectionButtonA11yIdentifier: String?
+
+    init(
+        sectionHeaderTitle: String = .FirefoxHomepage.Pocket.SectionTitle,
+        sectionTitleA11yIdentifier: String = AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket,
+        isSectionHeaderButtonHidden: Bool = true,
+        sectionHeaderColor: UIColor? = nil,
+        sectionButtonA11yIdentifier: String? = nil) {
+        self.sectionHeaderTitle = sectionHeaderTitle
+        self.sectionTitleA11yIdentifier = sectionTitleA11yIdentifier
+        self.isSectionHeaderButtonHidden = isSectionHeaderButtonHidden
+        self.sectionHeaderColor = sectionHeaderColor
+        self.sectionButtonA11yIdentifier = sectionButtonA11yIdentifier
+    }
 }
 
 struct PocketDiscoverState: Equatable {
@@ -24,16 +37,11 @@ struct PocketDiscoverState: Equatable {
 struct PocketState: StateType, Equatable {
     var windowUUID: WindowUUID
     var pocketData: [PocketStoryState]
+    var sectionHeaderState: SectionHeaderState
     let pocketDiscoverItem = PocketDiscoverState(
         title: .FirefoxHomepage.Pocket.DiscoverMore,
         url: PocketProvider.MoreStoriesURL
     )
-    // TODO: FXIOS-10312 Update color for section header when wallpaper is configured with redux
-    let sectionHeaderState = SectionHeaderState(
-        sectionHeaderTitle: .FirefoxHomepage.Pocket.SectionTitle,
-        sectionTitleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket,
-        isSectionHeaderButtonHidden: true,
-        sectionHeaderColor: .systemRed)
 
     let footerURL = SupportUtils.URLForPocketLearnMore
 
@@ -46,10 +54,12 @@ struct PocketState: StateType, Equatable {
 
     private init(
         windowUUID: WindowUUID,
-        pocketData: [PocketStoryState]
+        pocketData: [PocketStoryState],
+        sectionHeaderState: SectionHeaderState = SectionHeaderState()
     ) {
         self.windowUUID = windowUUID
         self.pocketData = pocketData
+        self.sectionHeaderState = sectionHeaderState
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -59,26 +69,47 @@ struct PocketState: StateType, Equatable {
         }
 
         switch action.actionType {
+        case WallpaperMiddlewareActionType.wallpaperDidInitialize,
+            WallpaperMiddlewareActionType.wallpaperDidChange:
+            return handleWallpaperAction(action, state: state)
         case PocketMiddlewareActionType.retrievedUpdatedStories:
-            guard let pocketAction = action as? PocketAction,
-                  let stories = pocketAction.pocketStories
-            else {
-                return defaultState(from: state)
-            }
-
-            return PocketState(
-                windowUUID: state.windowUUID,
-                pocketData: stories
-            )
+            return handlePocketAction(action, state: state)
         default:
             return defaultState(from: state)
         }
     }
 
+    private static func handlePocketAction(_ action: Action, state: PocketState) -> PocketState {
+        guard let pocketAction = action as? PocketAction,
+              let pocketStories = pocketAction.pocketStories
+        else {
+            return defaultState(from: state)
+        }
+
+        return PocketState(
+            windowUUID: state.windowUUID,
+            pocketData: pocketStories,
+            sectionHeaderState: state.sectionHeaderState
+        )
+    }
+
+    private static func handleWallpaperAction(_ action: Action, state: PocketState) -> PocketState {
+        guard let wallpaperAction = action as? WallpaperAction else {
+            return defaultState(from: state)
+        }
+
+        return PocketState(
+            windowUUID: state.windowUUID,
+            pocketData: state.pocketData,
+            sectionHeaderState: SectionHeaderState(sectionHeaderColor: wallpaperAction.wallpaperConfiguration.textColor)
+        )
+    }
+
     static func defaultState(from state: PocketState) -> PocketState {
         return PocketState(
             windowUUID: state.windowUUID,
-            pocketData: state.pocketData
+            pocketData: state.pocketData,
+            sectionHeaderState: state.sectionHeaderState
         )
     }
 }

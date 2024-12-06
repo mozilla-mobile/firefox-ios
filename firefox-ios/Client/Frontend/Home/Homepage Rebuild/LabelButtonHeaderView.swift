@@ -121,7 +121,11 @@ class LabelButtonHeaderView: UICollectionReusableView,
             )
         }
 
-        applyTheme(theme: theme)
+        if let color = state.sectionHeaderColor {
+            applyTextColors(color: color)
+        } else {
+            applyTheme(theme: theme)
+        }
     }
 
     // MARK: - Dynamic Type Support
@@ -148,14 +152,15 @@ class LabelButtonHeaderView: UICollectionReusableView,
         layoutIfNeeded()
     }
 
+    private func applyTextColors(color: UIColor) {
+        titleLabel.textColor = color
+        moreButton.foregroundColorNormal = color
+    }
+
     // MARK: - ThemeApplicable
     func applyTheme(theme: Theme) {
-        // TODO: FXIOS-10312 Update color for section header when wallpaper is configured with redux
-        let titleColor = theme.colors.textPrimary
-        let moreButtonColor = theme.colors.textAccent
-
-        titleLabel.textColor = titleColor
-        moreButton.foregroundColorNormal = moreButtonColor
+        titleLabel.textColor = theme.colors.textPrimary
+        moreButton.foregroundColorNormal = theme.colors.textAccent
     }
 
     // MARK: - Notifiable
