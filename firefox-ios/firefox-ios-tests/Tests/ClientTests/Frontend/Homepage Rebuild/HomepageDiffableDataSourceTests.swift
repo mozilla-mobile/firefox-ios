@@ -36,10 +36,10 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfSections, 4)
-        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .topSites, .pocket(.systemCyan), .customizeHomepage])
+        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .topSites, .pocket(nil), .customizeHomepage])
 
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .header).count, 1)
-        XCTAssertEqual(snapshot.itemIdentifiers(inSection: .pocket(.systemCyan)).count, 1)
+        XCTAssertEqual(snapshot.itemIdentifiers(inSection: .pocket(nil)).count, 1)
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .customizeHomepage).count, 1)
     }
 }
