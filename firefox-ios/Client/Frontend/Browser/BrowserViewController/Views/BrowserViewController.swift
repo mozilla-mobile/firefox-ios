@@ -170,7 +170,7 @@ class BrowserViewController: UIViewController,
     var contentStackView: SidebarEnabledView = .build()
 
     // The content container contains the homepage, error page or webview. Embedded by the coordinator.
-    var contentContainer: CachedContentContainer = .build { _ in }
+    var contentContainer: ContentContainer = .build { _ in }
 
     lazy var isBottomSearchBar: Bool = {
         guard isSearchBarLocationFeatureEnabled else { return false }
