@@ -31,16 +31,15 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     // MARK: - applyInitialSnapshot
     func test_updateSnapshot_hasCorrectData() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
-        let sectionHeaderState = SectionHeaderState()
 
         dataSource.updateSnapshot(state: HomepageState(windowUUID: .XCTestDefaultUUID))
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfSections, 4)
-        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .topSites, .pocket(sectionHeaderState), .customizeHomepage])
+        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .topSites, .pocket(.systemCyan), .customizeHomepage])
 
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .header).count, 1)
-        XCTAssertEqual(snapshot.itemIdentifiers(inSection: .pocket(sectionHeaderState)).count, 1)
+        XCTAssertEqual(snapshot.itemIdentifiers(inSection: .pocket(.systemCyan)).count, 1)
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .customizeHomepage).count, 1)
     }
 }

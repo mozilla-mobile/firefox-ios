@@ -10,6 +10,7 @@ import Common
 final class LabelButtonHeaderViewTests: XCTestCase {
     var view: LabelButtonHeaderView!
     let theme = DarkTheme()
+    let sectionHeaderState = SectionHeaderState()
 
     override func setUp() {
         super.setUp()
@@ -22,15 +23,7 @@ final class LabelButtonHeaderViewTests: XCTestCase {
     }
 
     func test_configure_withStateColor_appliesStateColorOverThemeColors() {
-        let sectionHeaderState = SectionHeaderState(
-            sectionHeaderTitle: "Test Title",
-            sectionTitleA11yIdentifier: "testIdentifier",
-            isSectionHeaderButtonHidden: false,
-            sectionHeaderColor: .systemPink,
-            sectionButtonA11yIdentifier: "testIndentifier"
-        )
-
-        view.configure(state: sectionHeaderState, theme: theme)
+        view.configure(state: sectionHeaderState, textColor: .systemPink, theme: theme)
 
         XCTAssertEqual(view.titleLabel.textColor, .systemPink)
         XCTAssertEqual(view.moreButton.foregroundColorNormal, .systemPink)
@@ -39,7 +32,7 @@ final class LabelButtonHeaderViewTests: XCTestCase {
     func test_configure_withNoStateColro_appliesThemeColors() {
         let sectionHeaderState = SectionHeaderState()
 
-        view.configure(state: sectionHeaderState, theme: theme)
+        view.configure(state: sectionHeaderState, textColor: nil, theme: theme)
 
         XCTAssertEqual(view.titleLabel.textColor, theme.colors.textPrimary)
         XCTAssertEqual(view.moreButton.foregroundColorNormal, theme.colors.textAccent)

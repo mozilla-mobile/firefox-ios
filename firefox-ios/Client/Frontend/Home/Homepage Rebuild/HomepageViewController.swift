@@ -371,9 +371,10 @@ final class HomepageViewController: UIViewController,
         with sectionLabelCell: LabelButtonHeaderView
     ) -> LabelButtonHeaderView? {
         switch section {
-        case .pocket(let sectionHeaderState):
+        case .pocket(let textColor):
             sectionLabelCell.configure(
-                state: sectionHeaderState,
+                state: homepageState.pocketState.sectionHeaderState,
+                textColor: textColor,
                 theme: currentTheme
             )
             return sectionLabelCell

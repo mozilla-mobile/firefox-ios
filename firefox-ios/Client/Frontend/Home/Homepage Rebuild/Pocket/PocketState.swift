@@ -11,19 +11,16 @@ struct SectionHeaderState: Hashable {
     var sectionHeaderTitle: String
     var sectionTitleA11yIdentifier: String
     var isSectionHeaderButtonHidden: Bool
-    var sectionHeaderColor: UIColor?
     var sectionButtonA11yIdentifier: String?
 
     init(
         sectionHeaderTitle: String = .FirefoxHomepage.Pocket.SectionTitle,
         sectionTitleA11yIdentifier: String = AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket,
         isSectionHeaderButtonHidden: Bool = true,
-        sectionHeaderColor: UIColor? = nil,
         sectionButtonA11yIdentifier: String? = nil) {
         self.sectionHeaderTitle = sectionHeaderTitle
         self.sectionTitleA11yIdentifier = sectionTitleA11yIdentifier
         self.isSectionHeaderButtonHidden = isSectionHeaderButtonHidden
-        self.sectionHeaderColor = sectionHeaderColor
         self.sectionButtonA11yIdentifier = sectionButtonA11yIdentifier
     }
 }
@@ -69,9 +66,6 @@ struct PocketState: StateType, Equatable {
         }
 
         switch action.actionType {
-        case WallpaperMiddlewareActionType.wallpaperDidInitialize,
-            WallpaperMiddlewareActionType.wallpaperDidChange:
-            return handleWallpaperAction(action, state: state)
         case PocketMiddlewareActionType.retrievedUpdatedStories:
             return handlePocketAction(action, state: state)
         default:
@@ -90,18 +84,6 @@ struct PocketState: StateType, Equatable {
             windowUUID: state.windowUUID,
             pocketData: pocketStories,
             sectionHeaderState: state.sectionHeaderState
-        )
-    }
-
-    private static func handleWallpaperAction(_ action: Action, state: PocketState) -> PocketState {
-        guard let wallpaperAction = action as? WallpaperAction else {
-            return defaultState(from: state)
-        }
-
-        return PocketState(
-            windowUUID: state.windowUUID,
-            pocketData: state.pocketData,
-            sectionHeaderState: SectionHeaderState(sectionHeaderColor: wallpaperAction.wallpaperConfiguration.textColor)
         )
     }
 

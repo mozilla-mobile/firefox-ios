@@ -104,6 +104,7 @@ class LabelButtonHeaderView: UICollectionReusableView,
 
     func configure(
         state: SectionHeaderState,
+        textColor: UIColor?,
         theme: Theme
     ) {
         self.title = state.sectionHeaderTitle
@@ -121,7 +122,7 @@ class LabelButtonHeaderView: UICollectionReusableView,
             )
         }
 
-        if let color = state.sectionHeaderColor {
+        if let color = textColor {
             applyTextColors(color: color)
         } else {
             applyTheme(theme: theme)
