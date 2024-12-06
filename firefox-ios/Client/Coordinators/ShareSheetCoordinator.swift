@@ -117,6 +117,7 @@ class ShareSheetCoordinator: BaseCoordinator,
     ///   - relatedTab: The tab associated with this URL. Will be used to provide the displayURL and displayTitle if set.
     ///                 Should be nil if the url to be sent is NOT related to a specific tab (e.g. a bookmark URL).
     private func showSendToDevice(url: URL, relatedTab: (any ShareTab)?) {
+        // TODO: FXIOS-10831 harden this code path to ensure we don't ever share a reader mode localhost URL
         let shareItem: ShareItem
         if let relatedTab, let url = relatedTab.canonicalURL?.displayURL {
             shareItem = ShareItem(url: url.absoluteString, title: relatedTab.displayTitle)
