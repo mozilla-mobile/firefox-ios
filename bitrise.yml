@@ -207,13 +207,8 @@ workflows:
         inputs:
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
         - xcodebuild_options: '"-derivedDataPath" "/Users/vagrant/git/DerivedData" "COMPILER_INDEX_STORE_ENABLE=NO" "CODE_SIGN_IDENTITY=" "CODE_SIGNING_REQUIRED=NO" "CODE_SIGNING_ALLOWED=NO"'
-<<<<<<< HEAD
-        - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest${SHARD}_iphonesimulator18.1-arm64.xctestrun"
-    - deploy-to-bitrise-io@2.1.1:
-=======
         - xctestrun: "Users/vagrant/git/DerivedData/Build/Products/Fennec_Smoketest${SHARD}_iphonesimulator18.2-arm64.xctestrun"
     - deploy-to-bitrise-io@2.9.2:
->>>>>>> 475c70f1f (Added FXIOS-10710 default browser telemetry (#23426))
         run_if: '{{getenv "RUN_UI_TESTS" | eq "Run_UI_Tests"}}'
         inputs:
         - pipeline_intermediate_files: '$BITRISE_XCRESULT_PATH:BITRISE_UITESTS_${SHARD}_XCRESULT_PATH'
@@ -743,13 +738,8 @@ workflows:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
         inputs:
         - scheme: Fennec
-<<<<<<< HEAD
-        - destination: platform=iOS Simulator,name=iPhone 16,OS=18.1
-    - deploy-to-bitrise-io@2.2: {}
-=======
         - destination: platform=iOS Simulator,name=iPhone 16,OS=18.2
     - deploy-to-bitrise-io@2.9.2: {}
->>>>>>> 475c70f1f (Added FXIOS-10710 default browser telemetry (#23426))
     - cache-push@2.4: {}
     - slack@3.1:
         run_if: '{{getenv "NEW_XCODE_VERSION" | eq "New_Version_Found" | or (getenv "RUN_ALL_STEPS" | eq "Run_All_Steps")}}'
