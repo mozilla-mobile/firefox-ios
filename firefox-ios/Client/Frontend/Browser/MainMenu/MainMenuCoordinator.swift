@@ -23,7 +23,7 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     weak var parentCoordinator: ParentCoordinatorDelegate?
     weak var navigationHandler: MainMenuCoordinatorDelegate?
 
-    private let windowUUID: WindowUUID
+    let windowUUID: WindowUUID
     private let profile: Profile
 
     init(
@@ -34,6 +34,14 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         self.windowUUID = windowUUID
         self.profile = profile
         super.init(router: router)
+    }
+
+    deinit {
+        logger.log(
+            "MainMenuCoordinator - deinitialized",
+            level: .info,
+            category: .mainMenu
+        )
     }
 
     func start() {
@@ -69,6 +77,15 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         router.popViewController(animated: true)
     }
 
+    func removeCoordinatorFromParent() {
+        logger.log(
+            "MainMenuCoordinator - removing coordinator from parent",
+            level: .info,
+            category: .mainMenu
+        )
+        parentCoordinator?.didFinish(from: self)
+    }
+
     func dismissMenuModal(animated: Bool) {
         logger.log(
             "MainMenuCoordinator - dismissing main menu",
@@ -76,7 +93,7 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
             category: .mainMenu
         )
         router.dismiss(animated: animated, completion: nil)
-        parentCoordinator?.didFinish(from: self)
+        removeCoordinatorFromParent()
     }
 
     func navigateTo(_ destination: MenuNavigationDestination, animated: Bool) {
@@ -119,7 +136,7 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
                 self.navigationHandler?.updateZoomPageBarVisibility()
             }
 
-            self.parentCoordinator?.didFinish(from: self)
+            removeCoordinatorFromParent()
         })
     }
 

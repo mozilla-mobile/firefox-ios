@@ -43,7 +43,7 @@ class HomeButtonTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306881
     func testAppLaunchKeyboardNotRaisedUp() {
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton])
-        validateHomePageAndKeyboardNotRaisedUp()
+        validateHomePageAndKeyboardRaisedUp()
     }
 
     private func validateHomePageAndKeyboardRaisedUp(showKeyboard: Bool = false) {

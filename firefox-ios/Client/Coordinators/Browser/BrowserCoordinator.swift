@@ -505,7 +505,10 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func openNewTab(inPrivateMode isPrivate: Bool) {
-        handle(homepanelSection: isPrivate ? .newPrivateTab : .newTab)
+        browserViewController.openNewTabFromMenu(
+            focusLocationField: true,
+            isPrivate: isPrivate
+        )
     }
 
     func showLibraryPanel(_ panel: Route.HomepanelSection) {
@@ -566,13 +569,16 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     private func makeMenuNavViewController() -> DismissableNavigationViewController? {
-        guard !childCoordinators.contains(where: { $0 is MainMenuCoordinator }) else {
+        if let mainMenuCoordinator = childCoordinators.first(where: { $0 is MainMenuCoordinator }) as? MainMenuCoordinator {
             logger.log(
-                "MainMenuCoordinator already exists when it technically shouldn't",
+                "MainMenuCoordinator already exists when it shouldn't. Removing and recreating it to access menu",
                 level: .fatal,
-                category: .mainMenu
+                category: .mainMenu,
+                extra: ["existing mainMenuCoordinator UUID": "\(mainMenuCoordinator.windowUUID)",
+                        "BrowserCoordinator windowUUID": "\(windowUUID)"]
             )
-            return nil
+
+            mainMenuCoordinator.dismissMenuModal(animated: false)
         }
 
         let navigationController = DismissableNavigationViewController()
