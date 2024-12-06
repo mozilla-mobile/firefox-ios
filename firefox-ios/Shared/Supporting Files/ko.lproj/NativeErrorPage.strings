@@ -1,9 +1,6 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "새로 고침";
 
-/* On error page, this is the description for generic error. */
-"NativeErrorPage.GenericError.Description.v131" = "SSL 오류가 발생하여 서버에 대한 보안 연결을 할 수 없습니다.";
-
 /* On error page, this is the description for generic error. The placeholder will be replaced by the site url */
 "NativeErrorPage.GenericError.Description.v134" = "%@의 소유자가 올바르게 설정하지 않아서 보안 연결을 할 수 없습니다.";
 

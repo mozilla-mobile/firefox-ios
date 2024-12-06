@@ -76,9 +76,6 @@
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "දැනුම්දීම් සක්‍රිය කරන්න";
 
-/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Sync.Description.v120" = "ඔබ ඇතුළු වී සමමුහූර්ත කළ විට, ඔබ ආරක්‍ෂිතයි. %@ ඔබගේ මුරපද, පොත්යොමු සහ වෙනත් දෑ සංකේතනය කරයි.";
-
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.SignIn.Action.v114" = "පිවිසෙන්න";
 

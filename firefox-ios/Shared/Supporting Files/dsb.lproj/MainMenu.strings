@@ -224,9 +224,6 @@
 "MainMenu.Submenus.Tools.ReportBrokenSite.Subtitle.v131" = "K wěsći daś";
 
 /* On the main menu, the title for the action that will take the user to the site where they can report a broken website to our web compatibility team. */
-"MainMenu.Submenus.Tools.ReportBrokenSite.Title.v131" = "Wobškóźone sedło k wěsći daś";
-
-/* On the main menu, the title for the action that will take the user to the site where they can report a broken website to our web compatibility team. */
 "MainMenu.Submenus.Tools.ReportBrokenSite.Title.v133" = "Wobškóźone sedło k wěsći daś…";
 
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Share tool. */
