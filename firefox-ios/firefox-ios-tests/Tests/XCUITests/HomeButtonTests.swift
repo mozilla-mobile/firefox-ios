@@ -37,11 +37,7 @@ class HomeButtonTests: BaseTestCase {
         // Switch to Homepage by taping the home button
         app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].waitAndTap()
 
-<<<<<<< HEAD
-        validateHomePageAndKeyboardNotRaisedUp()
-=======
         validateHomePageAndKeyboardRaisedUp(showKeyboard: true)
->>>>>>> 3ac77cb53 (Fixes MTE-2812 - for multiple auto tests (#23444))
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2306881
@@ -50,13 +46,6 @@ class HomeButtonTests: BaseTestCase {
         validateHomePageAndKeyboardNotRaisedUp()
     }
 
-<<<<<<< HEAD
-    private func validateHomePageAndKeyboardNotRaisedUp() {
-        // The home page is loaded. The keyboard is not raised up
-        navigator.nowAt(NewTabScreen)
-        waitForTabsButton()
-        XCTAssertFalse(app.keyboards.element.isVisible(), "The keyboard is shown")
-=======
     private func validateHomePageAndKeyboardRaisedUp(showKeyboard: Bool = false) {
         // The home page is loaded. The keyboard is not raised up
         navigator.nowAt(NewTabScreen)
@@ -66,6 +55,5 @@ class HomeButtonTests: BaseTestCase {
         } else {
             XCTAssertTrue(app.keyboards.element.isVisible(), "The keyboard is not shown")
         }
->>>>>>> 3ac77cb53 (Fixes MTE-2812 - for multiple auto tests (#23444))
     }
 }
