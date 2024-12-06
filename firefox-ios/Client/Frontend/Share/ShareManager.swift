@@ -96,11 +96,6 @@ class ShareManager: NSObject, FeatureFlaggable {
             // webpage or adding a website to the iOS home screen
             activityItems.append(URLActivityItemProvider(url: siteURL))
 
-            // FIXME: Check for reader mode URLs?
-            //            // Return the URL for the selected tab. If we are in reader view then decode
-            //            // it so that we copy the original and not the internal localhost one.
-            //            return url.isReaderModeURL ? url.decodeReaderModeURL : url
-
             // Only show the print activity if the tab's webview is loaded
             if tab.webView != nil {
                 activityItems.append(

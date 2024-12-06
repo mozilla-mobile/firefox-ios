@@ -2346,7 +2346,9 @@ class BrowserViewController: UIViewController,
                                          extras: nil)
         }
 
-        guard let selectedTab = tabManager.selectedTab, let tabUrl = selectedTab.canonicalURL?.displayURL else {
+        // We share the tab's displayURL to make sure we don't share reader mode localhost URLs
+        guard let selectedTab = tabManager.selectedTab,
+              let tabUrl = selectedTab.canonicalURL?.displayURL else {
             assertionFailure("Tried to share with no selected tab or URL")
             return
         }

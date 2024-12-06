@@ -560,10 +560,12 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     /// Share the currently selected tab using the share sheet.
-    /// Note: MainMenuCoordinatorDelegate implementation, called from the New Menu > Tools > Share.
+    ///
+    /// Part of the MainMenuCoordinatorDelegate implementation, called from the New Menu > Tools > Share.
     func showShareSheetForCurrentlySelectedTab() {
+        // We share the tab's displayURL to make sure we don't share reader mode localhost URLs
         guard let selectedTab = tabManager.selectedTab,
-              let url = selectedTab.canonicalURL else { // TODO check reader mode URLs... add .displayURL here?
+              let url = selectedTab.canonicalURL?.displayURL else {
             return
         }
 
@@ -765,6 +767,26 @@ class BrowserCoordinator: BaseCoordinator,
         return coordinator
     }
 
+    /// Starts the ShareSheetCoordinator, which initiates opening the iOS share sheet using an `UIActivityViewController`.
+    /// For shared tabs where the user is currently on a non-HTML page (e.g. viewing a PDF), this method will initiate a
+    /// file download, and then share the file instead. This currently blocks without any save indication, which is less
+    /// than ideal but has been the existing behaviour for a long time (task to address this: FXIOS-10823)
+    /// - Parameters:
+    ///   - shareType: The type of content to share.
+    ///   - shareMessage: An optional accompanying message to share (with optional email subject line).
+    ///   - sourceView: The view tapped to initiate share. iPad share sheet popovers will point to this element.
+    ///   - sourceRect: The source rect for the view tapped to initiate share. iPad share sheet popovers will point to this
+    ///                 element.
+    ///   - toastContainer: The container for displaying toast information.
+    ///   - popoverArrowDirection: The arrow direction for iPad share sheet popovers.
+    ///
+    /// There are many ways to share many types of content from various areas of the app. A few code paths that go through
+    /// this method include:
+    /// * Sharing content from a long press on Home screen tiles (e.g. long press Jump Back In context menu)
+    /// * From the old Menu > Share and the new Menu > Tools > Share
+    /// * From the new toolbar share button beside the address bar
+    /// * From long pressing a link in the WKWebView and sharing from the context menu (via ActionProviderBuilder > addShare)
+    /// * Via the sharesheet deeplink path in `RouteBuilder` (e.g. tapping home cards that initiate sharing content)
     func startShareSheetCoordinator(
         shareType: ShareType,
         shareMessage: ShareMessage?,

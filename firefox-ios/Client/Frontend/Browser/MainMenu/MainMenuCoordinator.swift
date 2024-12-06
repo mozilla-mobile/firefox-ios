@@ -17,7 +17,7 @@ protocol MainMenuCoordinatorDelegate: AnyObject {
     func showSignInView(fxaParameters: FxASignInViewParameters?)
     func updateZoomPageBarVisibility()
 
-    /// Open the share sheet to share the currently selected `Tab` and its URL.
+    /// Open the share sheet to share the currently selected `Tab`.
     func showShareSheetForCurrentlySelectedTab()
 }
 

@@ -588,7 +588,10 @@ class MainMenuActionHelper: PhotonActionSheetProtocol,
     private func getShareAction() -> PhotonRowActions {
         return SingleActionViewModel(title: .LegacyAppMenu.Share,
                                      iconString: StandardImageIdentifiers.Large.share) { _ in
-            guard let tab = self.selectedTab, let url = tab.canonicalURL?.displayURL else { return }
+            // We share the tab's displayURL to make sure we don't share reader mode localhost URLs
+            guard let tab = self.selectedTab,
+                  let url = tab.canonicalURL?.displayURL
+            else { return }
 
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .sharePageWith)
             self.navigationHandler?.showShareSheet(

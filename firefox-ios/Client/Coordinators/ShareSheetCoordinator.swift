@@ -106,6 +106,11 @@ class ShareSheetCoordinator: BaseCoordinator,
         parentCoordinator?.didFinish(from: self)
     }
 
+    /// Shows the view controller that allows users to send this URL to one of their synced devices running Firefox.
+    /// - Parameters:
+    ///   - url: The URL to send.
+    ///   - relatedTab: The tab associated with this URL. Will be used to provide the displayURL and displayTitle if set.
+    ///                 Should be nil if the url to be sent is NOT related to a specific tab (e.g. a bookmark URL).
     private func showSendToDevice(url: URL, relatedTab: (any ShareTab)?) {
         let shareItem: ShareItem
         if let relatedTab, let url = relatedTab.canonicalURL?.displayURL {
