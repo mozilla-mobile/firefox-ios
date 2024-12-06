@@ -16,7 +16,7 @@ final class ShareManagerTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        testTab = MockShareTab(title: testWebpageDisplayTitle, url: testWebURL)
+        testTab = MockShareTab(title: testWebpageDisplayTitle, url: testWebURL, canonicalURL: testWebURL)
     }
 
     override func tearDown() {

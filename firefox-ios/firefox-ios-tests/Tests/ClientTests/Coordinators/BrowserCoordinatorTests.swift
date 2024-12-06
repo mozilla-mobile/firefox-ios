@@ -251,8 +251,8 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
             popoverArrowDirection: .up
         )
 
-        // NOTE: We are waiting for an async call to complete. Hopefully the temporary document download will be improved
-        // in the future to make this call synchronous.
+        // NOTE: FXIOS-10824 We are waiting for an async call to complete. Hopefully the temporary document download will be
+        // improved in the future to make this call synchronous.
         let predicate = NSPredicate { _, _ in
             return self.mockRouter.presentCalled == 1
         }
@@ -275,6 +275,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         let testTab = MockShareTab(
             title: testWebpageDisplayTitle,
             url: testWebURL,
+            canonicalURL: testWebURL,
             withTemporaryDocument: mockTemporaryDocument
         )
 
@@ -291,8 +292,8 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
             popoverArrowDirection: .up
         )
 
-        // NOTE: We are waiting for an async call to complete. Hopefully the temporary document download will be improved
-        // in the future to make this call synchronous.
+        // NOTE: FXIOS-10824 We are waiting for an async call to complete. Hopefully the temporary document download will be
+        // improved in the future to make this call synchronous.
         let predicate = NSPredicate { _, _ in
             return self.mockRouter.presentCalled == 1
         }
@@ -304,8 +305,8 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(subject.childCoordinators.first is ShareSheetCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is UIActivityViewController)
-        // Right now we have no interface to check the ShareType passed in to ShareSheetCoordinator's .start call, but this
-        //  can tell us that there was an attempt to download a TemporaryDocument for a tab type share, which is sufficient.
+        // Right now we have no interface to check the ShareType passed in to ShareSheetCoordinator's start() call, but this
+        // can tell us that there was an attempt to download a TemporaryDocument for a tab type share, which is sufficient.
         XCTAssertEqual(mockTemporaryDocument.getURLCalled, 1)
     }
 
