@@ -18,7 +18,7 @@ class ShareSheetCoordinator: BaseCoordinator,
     private let profile: Profile
     private let alertContainer: UIView
     private weak var parentCoordinator: ParentCoordinatorDelegate?
-    private var windowUUID: WindowUUID { return tabManager.windowUUID }
+    var windowUUID: WindowUUID { return tabManager.windowUUID }
 
     // MARK: - Initializers
 

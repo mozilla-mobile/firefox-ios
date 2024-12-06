@@ -775,7 +775,13 @@ class BrowserCoordinator: BaseCoordinator,
     ) {
         if let coordinator = childCoordinators.first(where: { $0 is ShareSheetCoordinator }) as? ShareSheetCoordinator {
             // The share sheet extension coordinator wasn't correctly removed in the last share session. Attempt to recover.
-            // FIXME: Log this...
+            logger.log(
+                "ShareSheetCoordinator already exists when it shouldn't. Removing and recreating it to access share sheet",
+                level: .info,
+                category: .shareSheet,
+                extra: ["existing ShareSheetCoordinator UUID": "\(coordinator.windowUUID)",
+                        "BrowserCoordinator windowUUID": "\(windowUUID)"]
+            )
 
             coordinator.dismiss()
         }
