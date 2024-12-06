@@ -119,7 +119,7 @@ class ActionProviderBuilder {
 
             // Shares from long-pressing a link in the webview and tapping Share in the context menu
             navigationHandler?.showShareSheet(
-                shareType: .site(url: url), // NOT a `.tab` share, as the link might be to a different domain from the tab
+                shareType: .site(url: url), // NOT `.tab` share; the link might be to a different domain from the current tab
                 shareMessage: nil,
                 sourceView: view,
                 sourceRect: CGRect(origin: point, size: CGSize(width: 10.0, height: 10.0)),

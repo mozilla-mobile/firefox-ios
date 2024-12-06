@@ -2353,6 +2353,8 @@ class BrowserViewController: UIViewController,
             return
         }
 
+        /// Note: If the user is viewing a _downloaded_ (not online) PDF in the browser, then the current tab's URL will
+        /// have a `file://` scheme.
         navigationHandler?.showShareSheet(
             shareType: .tab(url: tabUrl, tab: selectedTab),
             shareMessage: nil,

@@ -85,9 +85,16 @@ class ShareSheetCoordinator: BaseCoordinator,
         relatedTab: Tab?
     ) {
         // NOTE: didFinish will be called on each of these code paths to properly dismiss the share sheet.
+        // FIXME: FXIOS-10334 It's mysterious that we are calling dequeueNotShownJSAlert in the share coordinator. It may not
+        // be necessary, but this JS alert code is fragile right now so let's not touch it until FXIOS-10334 is underway.
         switch activityType {
         case CustomActivityAction.sendToDevice.actionType:
-            // Can only reach here for non-file shares
+            // Cannot send file:// URLs to another synced device
+            guard !shareType.wrappedURL.isFileURL else {
+                dequeueNotShownJSAlert()
+                return
+            }
+
             switch shareType {
             case let .tab(_, tab):
                 showSendToDevice(url: shareType.wrappedURL, relatedTab: tab)
@@ -96,8 +103,6 @@ class ShareSheetCoordinator: BaseCoordinator,
             }
 
         default:
-            // FIXME: FXIOS-10334 It's mysterious that we are calling this in the share coordinator. It may not be necessary,
-            // but this JS alert code is very brittle right now so let's not touch it until FXIOS-10334 is underway.
             dequeueNotShownJSAlert()
         }
     }
