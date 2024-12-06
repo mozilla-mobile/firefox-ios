@@ -185,6 +185,7 @@ class BookmarksCoordinator: BaseCoordinator,
         viewModel.onBookmarkSaved = { [weak self] in
             self?.reloadLastBookmarksController()
         }
+        viewModel.bookmarkCoordinatorDelegate = self
         setBackBarButtonItemTitle(viewModel.backNavigationButtonTitle())
         let controller = EditBookmarkViewController(viewModel: viewModel,
                                                     windowUUID: windowUUID)
