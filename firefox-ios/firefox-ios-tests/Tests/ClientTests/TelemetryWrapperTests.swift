@@ -1573,7 +1573,7 @@ class TelemetryWrapperTests: XCTestCase {
                                      method: .open,
                                      object: .defaultBrowser,
                                      extras: [TelemetryWrapper.EventExtraKey.isDefaultBrowser.rawValue: true])
-        testBoolMetricSuccess(metric: GleanMetrics.App.choiceScreenAcquisition,
+        testBoolMetricSuccess(metric: GleanMetrics.App.defaultBrowser,
                               expectedValue: true,
                               failureMessage: "Failed to record is default browser")
     }
