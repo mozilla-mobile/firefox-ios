@@ -12,7 +12,7 @@ protocol UIApplicationInterface {
     @available(watchOS, unavailable)
     @MainActor
     @preconcurrency
-    func isDefaultApplication(for category: UIApplication.Category) throws -> Bool
+    func isDefault(_ category: UIApplication.Category) throws -> Bool
 }
 
 extension UIApplication: UIApplicationInterface {}

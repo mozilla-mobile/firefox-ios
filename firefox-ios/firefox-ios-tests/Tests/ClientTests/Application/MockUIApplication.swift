@@ -8,7 +8,7 @@ class MockUIApplication: UIApplicationInterface {
     var mockDefaultApplicationValue = false
 
     @available(iOS 18.2, *)
-    func isDefaultApplication(for category: UIApplication.Category) throws -> Bool {
+    func isDefault(_ category: UIApplication.Category) throws -> Bool {
         return mockDefaultApplicationValue
     }
 }
