@@ -13,7 +13,13 @@ class MockShareTab: ShareTab {
     var webView: TabWebView?
     var temporaryDocument: TemporaryDocument?
 
-    init(title: String, url: URL?, canonicalURL: URL?, withActiveWebView: Bool = true, withTemporaryDocument: TemporaryDocument? = nil) {
+    init(
+        title: String,
+        url: URL?,
+        canonicalURL: URL?,
+        withActiveWebView: Bool = true,
+        withTemporaryDocument: TemporaryDocument? = nil
+    ) {
         self.displayTitle = title
         self.url = url
         self.canonicalURL = canonicalURL
