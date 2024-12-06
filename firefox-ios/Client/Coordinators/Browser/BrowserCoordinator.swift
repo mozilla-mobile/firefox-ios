@@ -809,9 +809,8 @@ class BrowserCoordinator: BaseCoordinator,
         }
 
         Task {
-            // FIXME: Can we replicate Safari share behaviour here instead, grabbing the file from the Tab if it's available,
-            // otherwise just sharing the URL so we don't have this buggy latency???? It's strange if the user has to wait
-            // a long time to download files.
+            // FXIOS-10824 It's strange if the user has to wait a long time to download files that are literally already
+            // being shown in the webview.
             var overrideShareType = shareType
             if case ShareType.tab = shareType {
                 overrideShareType = await tryDownloadingTabFileToShare(shareType: shareType)
