@@ -135,7 +135,7 @@ final class HomepageViewController: UIViewController,
     func newState(state: HomepageState) {
         homepageState = state
         wallpaperView.wallpaperState = state.wallpaperState
-        dataSource?.applyInitialSnapshot(state: state)
+        dataSource?.updateSnapshot(state: state)
     }
 
     func unsubscribeFromRedux() {
@@ -269,16 +269,16 @@ final class HomepageViewController: UIViewController,
 
             return headerCell
 
-        case .topSite(let site):
+        case .topSite(let site, let textColor):
             guard let topSiteCell = collectionView?.dequeueReusableCell(cellType: TopSiteCell.self, for: indexPath) else {
                 return UICollectionViewCell()
             }
-            // TODO: FXIOS-10312 - Handle textColor when working on wallpapers
+
             topSiteCell.configure(
                 site,
                 position: indexPath.row,
                 theme: currentTheme,
-                textColor: .systemPink
+                textColor: textColor
             )
             return topSiteCell
 
@@ -286,6 +286,7 @@ final class HomepageViewController: UIViewController,
             guard let emptyCell = collectionView?.dequeueReusableCell(cellType: EmptyTopSiteCell.self, for: indexPath) else {
                 return UICollectionViewCell()
             }
+
             emptyCell.applyTheme(theme: currentTheme)
             return emptyCell
 
@@ -296,6 +297,7 @@ final class HomepageViewController: UIViewController,
             ) else {
                 return UICollectionViewCell()
             }
+
             pocketCell.configure(story: story, theme: currentTheme)
 
             return pocketCell
@@ -369,9 +371,10 @@ final class HomepageViewController: UIViewController,
         with sectionLabelCell: LabelButtonHeaderView
     ) -> LabelButtonHeaderView? {
         switch section {
-        case .pocket:
+        case .pocket(let textColor):
             sectionLabelCell.configure(
                 state: homepageState.pocketState.sectionHeaderState,
+                textColor: textColor,
                 theme: currentTheme
             )
             return sectionLabelCell
@@ -441,7 +444,7 @@ final class HomepageViewController: UIViewController,
             return
         }
         switch item {
-        case .topSite(let state):
+        case .topSite(let state, _):
             store.dispatch(
                 NavigationBrowserAction(
                     url: state.site.url.asURL,
