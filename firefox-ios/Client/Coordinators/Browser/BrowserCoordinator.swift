@@ -398,9 +398,9 @@ class BrowserCoordinator: BaseCoordinator,
         startShareSheetCoordinator(
             shareType: shareType,
             shareMessage: shareMessage,
-            sourceView: self.browserViewController.addressToolbarContainer,
+            sourceView: browserViewController.addressToolbarContainer,
             sourceRect: nil,
-            toastContainer: self.browserViewController.contentContainer,
+            toastContainer: browserViewController.contentContainer,
             popoverArrowDirection: .any
         )
     }

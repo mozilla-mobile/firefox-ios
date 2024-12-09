@@ -106,8 +106,8 @@ class ShareManager: NSObject, FeatureFlaggable {
 
             // Add the webview for an option to add a website to the iOS home screen
             if #available(iOS 16.4, *), let webView = tab.webView {
-                // NOTE: You will not see "Add to Home Screen" option on debug builds. Possibility this is because of how the
-                // com.apple.developer.web-browser entitelement is applied...
+                // NOTE: You will not see "Add to Home Screen" option on debug builds. Possibly this is because of how the
+                // com.apple.developer.web-browser entitlement is applied...
                 activityItems.append(webView)
             }
 
