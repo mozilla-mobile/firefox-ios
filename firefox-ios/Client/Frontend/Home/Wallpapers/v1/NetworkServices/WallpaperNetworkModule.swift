@@ -2,39 +2,47 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import Shared
 
 class WallpaperNetworkingModule: WallpaperNetworking {
     private var urlSession: URLSessionProtocol
+    private var logger: Logger
 
-    init(with urlSession: URLSessionProtocol = URLSession.sharedMPTCP) {
+    init(
+        with urlSession: URLSessionProtocol = URLSession.sharedMPTCP,
+        logger: Logger = DefaultLogger.shared
+    ) {
         self.urlSession = urlSession
+        self.logger = logger
     }
 
-    /// A basic async/await wrapper
     func data(from url: URL) async throws -> (Data, URLResponse) {
-        return try await withCheckedThrowingContinuation { continuation in
-            urlSession.dataTaskWith(url) { data, response, error in
-                if let error = error {
-                    continuation.resume(throwing: error)
-                    return
-                }
+        do {
+            logger.log(
+                "Attempting to fetch wallpaper data",
+                level: .debug,
+                category: .wallpaper
+            )
+            let (data, response) = try await urlSession.data(from: url)
 
-                guard let response = validatedHTTPResponse(response, statusCode: 200..<300) else {
-                    continuation.resume(throwing: URLError(.badServerResponse))
-                    return
-                }
+            guard let response = validatedHTTPResponse(
+                response,
+                statusCode: 200..<300
+            ) else { throw URLError(.badServerResponse) }
 
-                guard let data = data,
-                      !data.isEmpty
-                else {
-                    continuation.resume(throwing: WallpaperServiceError.dataUnavailable)
-                    return
-                }
+            guard !data.isEmpty else { throw WallpaperServiceError.dataUnavailable }
 
-                continuation.resume(returning: (data, response))
-            }.resume()
+            logger.log(
+                "Wallpaper data fetched successfully",
+                level: .debug,
+                category: .wallpaper
+            )
+
+            return (data, response)
+        } catch {
+            throw error
         }
     }
 }

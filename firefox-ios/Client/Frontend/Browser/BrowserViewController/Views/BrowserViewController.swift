@@ -420,36 +420,36 @@ class BrowserViewController: UIViewController,
 
         switchToolbarIfNeeded()
 
-        if isToolbarRefactorEnabled {
-            if showNavToolbar {
-                navigationToolbarContainer.isHidden = false
-                navigationToolbarContainer.applyTheme(theme: currentTheme())
-                updateTabCountUsingTabManager(self.tabManager)
+        DispatchQueue.main.async { [self] in
+            if isToolbarRefactorEnabled {
+                if showNavToolbar {
+                    navigationToolbarContainer.isHidden = false
+                    navigationToolbarContainer.applyTheme(theme: currentTheme())
+                    updateTabCountUsingTabManager(self.tabManager)
+                } else {
+                    navigationToolbarContainer.isHidden = true
+                }
+                updateToolbarStateTraitCollectionIfNecessary(newCollection)
             } else {
-                navigationToolbarContainer.isHidden = true
-            }
+                urlBar.topTabsIsShowing = showTopTabs
+                urlBar.setShowToolbar(!showNavToolbar)
 
-            updateToolbarStateTraitCollectionIfNecessary(newCollection)
-        } else {
-            urlBar.topTabsIsShowing = showTopTabs
-            urlBar.setShowToolbar(!showNavToolbar)
-
-            if showNavToolbar {
-                toolbar.isHidden = false
-                toolbar.tabToolbarDelegate = self
-                toolbar.applyUIMode(
-                    isPrivate: tabManager.selectedTab?.isPrivate ?? false,
-                    theme: currentTheme()
-                )
-                toolbar.applyTheme(theme: currentTheme())
-                handleMiddleButtonState(currentMiddleButtonState ?? .search)
-                updateTabCountUsingTabManager(self.tabManager)
-            } else {
-                toolbar.tabToolbarDelegate = nil
-                toolbar.isHidden = true
+                if showNavToolbar {
+                    toolbar.isHidden = false
+                    toolbar.tabToolbarDelegate = self
+                    toolbar.applyUIMode(
+                        isPrivate: tabManager.selectedTab?.isPrivate ?? false,
+                        theme: currentTheme()
+                    )
+                    toolbar.applyTheme(theme: currentTheme())
+                    handleMiddleButtonState(currentMiddleButtonState ?? .search)
+                    updateTabCountUsingTabManager(self.tabManager)
+                } else {
+                    toolbar.tabToolbarDelegate = nil
+                    toolbar.isHidden = true
+                }
             }
         }
-
         appMenuBadgeUpdate()
 
         if showTopTabs, topTabsViewController == nil {
@@ -2097,8 +2097,9 @@ class BrowserViewController: UIViewController,
         case .tabTray:
             focusOnTabSegment()
         case .share:
+            // User tapped the Share button in the toolbar
             guard let button = state.buttonTapped else { return }
-            didTapOnShare(from: button)
+            shareSelectedTab(fromShareButton: button)
         case .readerMode:
             toggleReaderMode()
         case .readerModeLongPressAction:
@@ -2334,7 +2335,9 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    func didTapOnShare(from view: UIView) {
+    /// Shares the currently selected tab via the share sheet.
+    /// - Parameter sourceView: The button to which the share sheet popover will point (iPad).
+    func shareSelectedTab(fromShareButton sourceView: UIView) {
         if !isToolbarRefactorEnabled {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
@@ -2343,15 +2346,19 @@ class BrowserViewController: UIViewController,
                                          extras: nil)
         }
 
-        if let selectedTab = tabManager.selectedTab, let tabUrl = selectedTab.canonicalURL?.displayURL {
-            navigationHandler?.showShareSheet(
-                url: tabUrl,
-                title: nil,
-                sourceView: view,
-                sourceRect: nil,
-                toastContainer: contentContainer,
-                popoverArrowDirection: isBottomSearchBar ? .down : .up)
+        guard let selectedTab = tabManager.selectedTab, let tabUrl = selectedTab.canonicalURL?.displayURL else {
+            assertionFailure("Tried to share with no selected tab or URL")
+            return
         }
+
+        navigationHandler?.showShareSheet(
+            url: tabUrl,
+            title: nil,
+            sourceView: sourceView,
+            sourceRect: nil,
+            toastContainer: contentContainer,
+            popoverArrowDirection: isBottomSearchBar ? .down : .up
+        )
     }
 
     func presentTabsLongPressAction(from view: UIView) {
