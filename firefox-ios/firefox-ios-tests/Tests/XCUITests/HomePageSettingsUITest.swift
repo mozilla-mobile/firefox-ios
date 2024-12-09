@@ -164,18 +164,11 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.GoToHomePage)
 
-<<<<<<< HEAD
-        // Workaround needed after Xcode 11.3 update Issue 5937
-        // Lets check only that website is open
-        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url])
-        mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.UrlBar.url], value: "mozilla")
-=======
         // Issue found - https://mozilla-hub.atlassian.net/browse/FXIOS-10753
         // Workaround - the test will start to fail once the issue is fixed
         mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
         mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
                                 value: "Search or enter address")
->>>>>>> bbec7abf88 (Several MTE-2812  [UI Tests Menu/Toolbar] - fixes for auto tests (backport #23504) (#23546))
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339489
