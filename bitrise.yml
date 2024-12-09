@@ -1379,8 +1379,7 @@ workflows:
         - output_tool: xcodebuild
         - scheme: Fennec_Enterprise
         - configuration: Fennec_Enterprise
-    - deploy-to-bitrise-io@2.9.2: {}
-    - script@1.1:
+    - script@1.2.1:
         title: Firebase Build for Testing Physical Devices
         inputs:
         - content: |
@@ -1432,6 +1431,7 @@ workflows:
                 xcodebuild -showsdks | grep -E 'iphoneos|iphonesimulator'
                 exit 1
             fi
+    - deploy-to-bitrise-io@2.9.2: {}
     - script@1.1:
         title: Create .zip artifact for Firebase Testing
         inputs:
@@ -1572,6 +1572,10 @@ workflows:
             sed 's/.*=//;s/'\''/"/g' data.txt > test.json
             cat test.json
             python3 perfTestTransform.py
+    meta:
+      bitrise.io:
+        stack: osx-xcode-15.4.x
+        machine_type_id: g2-m1.8core
 
   #
   # *****%*****%***** FOCUS WORKFLOWS *****%*****%*****
