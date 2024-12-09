@@ -37,6 +37,17 @@ enum ContentType {
             0.2
         }
     }
+
+    func exitTransition(previosType: Self?) -> UIView.AnimationOptions {
+        guard let previosType else { return transition }
+        switch previosType {
+        case .privateHomepage:
+            guard self == .legacyHomepage else { return transition }
+            return .transitionFlipFromRight
+        default:
+            return transition
+        }
+    }
 }
 
 protocol ContentContainable: UIViewController {
@@ -45,8 +56,8 @@ protocol ContentContainable: UIViewController {
 
 /// A container for view controllers, currently used to embed content in BrowserViewController
 class ContentContainer: UIView {
-    private var type: ContentType?
-    private var contentController: ContentContainable?
+    var type: ContentType?
+    var contentController: ContentContainable?
 
     var contentView: UIView? {
         return contentController?.view
@@ -141,56 +152,29 @@ class ContentContainer: UIView {
 
 /// A container for view controllers, currently used to embed content in BrowserViewController
 class CachedContentContainer: ContentContainer {
-    private var type: ContentType?
-    private var contentController: ContentContainable?
-
-    override var contentView: UIView? {
-        return contentController?.view
-    }
-
     private let animated = true
-
-    /// Determine if the content can be added, making sure we only add once
-    /// - Parameters:
-    ///   - viewController: The view controller to add to the container
-    /// - Returns: True when we can add the view controller to the container
-    override func canAdd(content: ContentContainable) -> Bool {
-        switch type {
-        case .legacyHomepage:
-            return !(content is LegacyHomepageViewController)
-        case .nativeErrorPage:
-            return !(content is NativeErrorPageViewController)
-        case .homepage:
-            return !(content is HomepageViewController)
-        case .privateHomepage:
-            return !(content is PrivateHomepageViewController)
-        case .webview:
-            return !(content is WebviewViewController)
-        case .none:
-            return true
-        }
-    }
 
     /// Add content view controller to the container, we remove the previous content if present before adding new one
     /// - Parameter content: The view controller to add
     override func add(content: ContentContainable) {
         removePreviousContentIfNeeded()
-        saveContentType(content: content)
         if content.view.superview == nil {
-            if animated {
-                UIView.transition(
-                    with: self,
-                    duration: content.contentType.duration,
-                    options: content.contentType.transition
-                ) {
-                    self.addToView(content: content)
-                }
+            let transitionData = if content.contentType.exitTransition(previosType: type) != content.contentType.transition {
+                (content.contentType.exitTransition(previosType: type), type?.duration ?? 0.1)
             } else {
+                (content.contentType.transition, content.contentType.duration)
+            }
+            UIView.transition(
+                with: self,
+                duration: transitionData.1,
+                options: transitionData.0
+            ) {
                 self.addToView(content: content)
             }
         } else {
-            bringSubviewToFront(content.view)
+            bringSubViewToFront(content.view, type: content.contentType, previousType: type)
         }
+        saveContentType(content: content)
     }
 
     /// Update content in the container. This is used in the case of the webview since
@@ -200,7 +184,7 @@ class CachedContentContainer: ContentContainer {
     override func update(content: ContentContainable) {
         removePreviousContentIfNeeded()
         if content.contentType != type {
-            bringSubviewToFront(content.view)
+            bringSubViewToFront(content.view, type: content.contentType, previousType: type)
         }
         saveContentType(content: content)
     }
@@ -231,13 +215,14 @@ class CachedContentContainer: ContentContainer {
         ])
     }
 
-    override func bringSubviewToFront(_ view: UIView) {
-        if animated, let type {
-            UIView.transition(with: self, duration: type.duration, options: type.transition) {
-                super.bringSubviewToFront(view)
-            }
+    private func bringSubViewToFront(_ view: UIView, type: ContentType, previousType: ContentType?) {
+        let transitionData = if type.exitTransition(previosType: previousType) != type.transition {
+            (type.exitTransition(previosType: previousType), previousType?.duration ?? 0.1)
         } else {
-            super.bringSubviewToFront(view)
+            (type.transition, type.duration)
+        }
+        UIView.transition(with: self, duration: transitionData.1, options: transitionData.0) {
+            self.bringSubviewToFront(view)
         }
     }
 }
