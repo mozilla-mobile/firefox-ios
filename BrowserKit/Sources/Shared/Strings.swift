@@ -6,8 +6,8 @@
 import Foundation
 
 public struct Strings {
-    // This is a little workaround to get localizations, in the next PRs they will be moved in a spm package
-    // So we just call Bundle.module to reference the localizations
+    // This is a little workaround to get localizations
+    // FXIOS-10838 will fix this by moving localizations or this struct into the appropriate place
     public static let bundle = Bundle(identifier: "org.mozilla.ios.Localizations") ?? .main
 }
 
