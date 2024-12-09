@@ -27,7 +27,7 @@ class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         networking.error = UnifiedAdsProvider.Error.noDataAvailable
         let subject = createSubject()
 
-        subject.sendImpressionTelemetry(tile: tile)
+        subject.sendImpressionTelemetry(tile: tile, position: 1)
         XCTAssertEqual(logger.savedMessage, "The unified ads telemetry call failed: \(tile.impressionURL)")
     }
 
@@ -35,7 +35,7 @@ class UnifiedAdsCallbackTelemetryTests: XCTestCase {
         networking.error = UnifiedAdsProvider.Error.noDataAvailable
         let subject = createSubject()
 
-        subject.sendClickTelemetry(tile: tile)
+        subject.sendClickTelemetry(tile: tile, position: 2)
         XCTAssertEqual(logger.savedMessage, "The unified ads telemetry call failed: \(tile.clickURL)")
     }
 

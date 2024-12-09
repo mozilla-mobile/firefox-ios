@@ -459,6 +459,8 @@ extension TelemetryWrapper {
         case creditCardDeleted = "creditCard-deleted"
         case creditCardModified = "creditCard-modified"
         case notificationPermission = "notificationPermission"
+        case defaultBrowser = "defaultBrowser"
+        case choiceScreenAcquisition = "choiceScreenAcquisition"
         case engagementNotification = "engagementNotification"
         // MARK: New Onboarding
         case onboardingCardView = "onboarding-card-view"
@@ -661,6 +663,9 @@ extension TelemetryWrapper {
     }
 
     public enum EventExtraKey: String, CustomStringConvertible {
+        case isDefaultBrowser = "is-default-browser"
+        case didComeFromBrowserChoiceScreen = "did-come-from-browser-choice-screen"
+
         case topSitePosition = "tilePosition"
         case topSiteTileType = "tileType"
         case contextualMenuType = "contextualMenuType"
@@ -1248,6 +1253,14 @@ extension TelemetryWrapper {
                     object: object,
                     value: value,
                     extras: extras)
+            }
+        case (.action, .open, .defaultBrowser, _, let extras):
+            if let isDefaultBrowser = extras?[EventExtraKey.isDefaultBrowser.rawValue] as? Bool {
+                GleanMetrics.App.defaultBrowser.set(isDefaultBrowser)
+            }
+        case (.action, .open, .choiceScreenAcquisition, _, let extras):
+            if let choiceScreen = extras?[EventExtraKey.didComeFromBrowserChoiceScreen.rawValue] as? Bool {
+                GleanMetrics.App.choiceScreenAcquisition.set(choiceScreen)
             }
         case(.action, .tap, .engagementNotification, _, _):
             GleanMetrics.Onboarding.engagementNotificationTapped.record()

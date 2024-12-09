@@ -107,9 +107,6 @@
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "ປັບປຸງການປ້ອງກັນການຕິດຕາມ";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "ການປ້ອງກັນຖືກປິດໄວ້. ພວກເຮົາແນະນຳໃຫ້ເປີດການປ້ອງກັນຄືນໃໝ່.";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "ການປ້ອງກັນຖືກປິດໄວ້. ພວກເຮົາແນະນຳໃຫ້ເປີດການປ້ອງກັນຄືນໃໝ່.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */

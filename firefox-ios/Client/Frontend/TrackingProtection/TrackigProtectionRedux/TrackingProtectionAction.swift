@@ -19,6 +19,7 @@ enum TrackingProtectionActionType: ActionType {
     case tappedShowClearCookiesAlert
     case goBack
     case updateBlockedTrackerStats
+    case updateConnectionStatus
 }
 
 final class TrackingProtectionMiddlewareAction: Action { }

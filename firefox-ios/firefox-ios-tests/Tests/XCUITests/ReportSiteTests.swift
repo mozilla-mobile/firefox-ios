@@ -10,20 +10,22 @@ class ReportSiteTests: BaseTestCase {
         setUpLaunchArguments()
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2831278
     func testReportSiteIssueOn() {
         launchAndGoToMenu()
-
-        mozWaitForElementToExist(app.tables.otherElements[StandardImageIdentifiers.Large.lightbulb])
+        app.images[StandardImageIdentifiers.Large.tool].tap()
+        mozWaitForElementToExist(app.otherElements.images[StandardImageIdentifiers.Large.lightbulb])
     }
 
+    // https://mozilla.testrail.io/index.php?/cases/view/2831279
     func testReportSiteIssueOff() {
         var launchArgs = app.launchArguments + ["\(LaunchArguments.LoadExperiment)reportSiteIssueOff"]
         launchArgs = launchArgs + ["\(LaunchArguments.ExperimentFeatureName)general-app-features"]
         app.launchArguments = launchArgs
 
         launchAndGoToMenu()
-
-        mozWaitForElementToNotExist(app.tables.otherElements[StandardImageIdentifiers.Large.lightbulb])
+        app.images[StandardImageIdentifiers.Large.tool].tap()
+        mozWaitForElementToNotExist(app.otherElements.images[StandardImageIdentifiers.Large.lightbulb])
     }
 
     // MARK: Helper
@@ -32,6 +34,6 @@ class ReportSiteTests: BaseTestCase {
 
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
         navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.tables["Context Menu"])
+        mozWaitForElementToExist(app.images[StandardImageIdentifiers.Large.avatarCircle])
     }
 }

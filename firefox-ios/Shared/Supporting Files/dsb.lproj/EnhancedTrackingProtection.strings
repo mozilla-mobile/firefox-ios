@@ -107,9 +107,6 @@
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Pólěpšony slědowański šćit";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Šćity su znjemóžnjone. Naraźujomy je zasej zmóžniś.";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Šćity su znjemóžnjone. Naraźujomy je zasej zmóžniś.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */

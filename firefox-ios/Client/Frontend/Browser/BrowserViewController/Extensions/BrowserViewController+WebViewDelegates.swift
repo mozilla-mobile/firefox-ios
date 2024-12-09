@@ -557,7 +557,7 @@ extension BrowserViewController: WKNavigationDelegate {
                 webView.customUserAgent = UserAgent.getUserAgent(domain: url.baseDomain ?? "")
             }
 
-            if navigationAction.navigationType == .linkActivated {
+            if navigationAction.navigationType == .linkActivated && url != webView.url {
                 if profile.prefs.boolForKey(PrefsKeys.BlockOpeningExternalApps) ?? false {
                     decisionHandler(.cancel)
                     webView.load(navigationAction.request)

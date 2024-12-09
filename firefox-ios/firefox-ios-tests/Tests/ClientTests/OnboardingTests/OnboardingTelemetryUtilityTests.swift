@@ -13,6 +13,12 @@ class OnboardingTelemetryUtilityTests: XCTestCase {
     override func setUp() {
         super.setUp()
         Glean.shared.resetGlean(clearStores: true)
+        DependencyHelperMock().bootstrapDependencies()
+    }
+
+    override func tearDown() {
+        DependencyHelperMock().reset()
+        super.tearDown()
     }
 
     // MARK: - Card View telemetry

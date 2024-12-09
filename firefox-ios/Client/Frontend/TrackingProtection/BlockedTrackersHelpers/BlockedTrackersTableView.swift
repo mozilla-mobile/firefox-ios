@@ -31,7 +31,7 @@ class BlockedTrackersTableView: UITableView,
         layer.cornerRadius = TPMenuUX.UX.viewCornerRadius
         allowsSelection = false
         separatorColor = .clear
-        separatorStyle = .singleLine
+        separatorStyle = .none
         isScrollEnabled = false
         showsVerticalScrollIndicator = false
         rowHeight = UITableView.automaticDimension

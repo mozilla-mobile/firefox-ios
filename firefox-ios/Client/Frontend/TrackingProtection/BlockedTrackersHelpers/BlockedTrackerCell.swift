@@ -22,7 +22,7 @@ class BlockedTrackerCell: UITableViewCell,
     }
 
     private let trackerLabel: UILabel = .build { label in
-        label.font = FXFontStyles.Regular.subheadline.scaledFont()
+        label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
         label.adjustsFontForContentSizeCategory = true
         label.textAlignment = .left
@@ -92,7 +92,7 @@ class BlockedTrackerCell: UITableViewCell,
     func applyTheme(theme: Theme) {
         backgroundColor = theme.colors.layer2
         trackerLabel.textColor = theme.colors.textPrimary
-        trackerImageView.tintColor = theme.colors.iconPrimary
+        trackerImageView.tintColor = theme.colors.iconSecondary
         dividerView.backgroundColor = theme.colors.borderPrimary
     }
 }

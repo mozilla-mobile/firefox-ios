@@ -1,9 +1,6 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Ponovno naloži";
 
-/* On error page, this is the description for generic error. */
-"NativeErrorPage.GenericError.Description.v131" = "Prišlo je do napake SSL, zaradi katere ni mogoče vzpostaviti varne povezave s strežnikom.";
-
 /* On error page, this is the description for generic error. The placeholder will be replaced by the site url */
 "NativeErrorPage.GenericError.Description.v134" = "Strani %@ lastnik ni pravilno nastavil, zato ni mogoče vzpostaviti varne povezave.";
 
