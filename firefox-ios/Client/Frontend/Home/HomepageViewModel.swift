@@ -244,7 +244,8 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
             $0.refreshData(for: traitCollection,
                            size: size,
                            isPortrait: UIWindow.isPortrait,
-                           device: UIDevice.current.userInterfaceIdiom)
+                           device: UIDevice.current.userInterfaceIdiom,
+                           orientation: UIDevice.current.orientation)
         }
     }
 

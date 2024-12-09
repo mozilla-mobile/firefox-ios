@@ -187,7 +187,8 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     func refreshData(for traitCollection: UITraitCollection,
                      size: CGSize,
                      isPortrait: Bool = UIWindow.isPortrait,
-                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
+                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
+                     orientation: UIDeviceOrientation = UIDevice.current.orientation) {
         let interface = TopSitesUIInterface(trait: traitCollection,
                                             availableWidth: size.width)
         numberOfRows = topSitesDataAdaptor.numberOfRows
