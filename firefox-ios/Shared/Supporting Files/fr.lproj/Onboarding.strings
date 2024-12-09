@@ -92,9 +92,6 @@
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Activer les notifications";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Sync.Description.v120" = "Lorsque vous vous connectez et activez la synchronisation, votre sécurité est renforcée. %@ chiffre vos mots de passe, vos marque-pages et bien d’autres choses.";
-
-/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Sync.Description.v123" = "%@ chiffre vos mots de passe, vos marque-pages et plus encore lorsque vous utilisez la synchronisation.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */

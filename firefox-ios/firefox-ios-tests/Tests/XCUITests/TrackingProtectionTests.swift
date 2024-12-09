@@ -118,8 +118,7 @@ class TrackingProtectionTests: BaseTestCase {
             ]
         )
         navigator.goto(BrowserTabMenu)
-        app.tables.otherElements[StandardImageIdentifiers.Large.settings].waitAndTap()
-        navigator.nowAt(SettingsScreen)
+        navigator.goto(SettingsScreen)
         mozWaitForElementToExist(app.tables.cells["NewTab"])
         app.tables.cells["NewTab"].swipeUp()
         // Enable TP again

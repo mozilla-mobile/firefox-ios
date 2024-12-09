@@ -107,9 +107,6 @@
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Еиӷьтәу ашьҭаԥшра ахьчара";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Ахьчара Ҿыцуп. Ҳара иҳабжьаҳгоит уи еиҭа аркра.";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Ахьчара Ҿыцуп. Ҳара иҳабжьаҳгоит уи даҽазнык иаркырц.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */

@@ -61,9 +61,6 @@
 /* Description for info card when the product is in analysis mode */
 "Shopping.InfoCard.ProgressAnalysis.Description.v120" = "Gallout a ra padout tro-dro 60 eilenn.";
 
-/* Title for info card when the product is in analysis mode */
-"Shopping.InfoCard.ProgressAnalysis.Title.v120" = "O wiriañ perzhded an alioù";
-
 /* Title for info card when the product is in analysis mode. The placeholder represents the percentage of the analysis progress, ranging between 1 and 100. */
 "Shopping.InfoCard.ProgressAnalysis.Title.v123" = "O wiriañ perzhded an alioù (%@)";
 
@@ -88,9 +85,6 @@
 /* Text for the main button of the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.MainButton.Title.v120" = "Ya, esaeañ anezhañ";
 
-/* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
-"Shopping.OptInCard.PrivacyPolicy.Button.Title.v120" = "Reolenn a-fet buhez prevez";
-
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Firefox app name. */
 "Shopping.OptInCard.PrivacyPolicy.Button.Title.v123" = "Evezhiadennoù a-fet buhez prevez %@";
 
@@ -99,9 +93,6 @@
 
 /* Label for the second paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be replaced by the Fakespot app name. The second parameter will be replaced the company name of Mozilla. */
 "Shopping.OptInCard.SecondParagraph.Description.v120" = "A-drugarez da c'halloud %1$@ gant %2$@ e sikouromp ac’hanoc’h da chom hep lenn alioù n’int ket neptu. Hor patrom NA a glask bepred gwareziñ ac’hanoc’h pa rit prenadennoù.";
-
-/* Show Firefox Browser Terms of Use page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
-"Shopping.OptInCard.TermsOfUse.Button.Title.v120" = "Termenoù implij";
 
 /* Show Fakespot Terms of Use page in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Fakespot name. */
 "Shopping.OptInCard.TermsOfUse.Button.Title.v123" = "Termenoù implij %@";
@@ -132,9 +123,6 @@
 
 /* Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
 "Shopping.ReviewQualityCard.Headline.Label.v120" = "Ober a reomp gant teknologiezh an naouegezh alvezel savet gant %1$@ evit %2$@ evit gwiriañ eo fizius an alioù war ar produioù. Kement-se a sikouro ac’hanoc’h da gompren gwelloc’h perzhded an alioù, met ket hini ar produioù.";
-
-/* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
-"Shopping.ReviewQualityCard.Highlights.Label.v120" = "Ar *poentoù pouezus* a zeu eus alioù %1@ er 80 devezh diwezhañ a soñj deomp int fizius. ";
 
 /* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "Shopping.ReviewQualityCard.Highlights.Label.v126" = "Ar *poentoù pouezus* a zeu eus alioù %@ er 80 devezh diwezhañ a soñj deomp int fizius. ";

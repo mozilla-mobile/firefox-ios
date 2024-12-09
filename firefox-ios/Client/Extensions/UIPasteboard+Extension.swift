@@ -31,15 +31,6 @@ extension UIPasteboard {
         }
     }
 
-    /// Preferred method to get strings out of the clipboard.
-    /// When iCloud pasteboards are enabled, the usually fast, synchronous calls
-    /// become slow and synchronous causing very slow start up times.
-    func asyncString(completionHandler: @escaping (String?) -> Void) {
-        DispatchQueue.global().async {
-            completionHandler(UIPasteboard.general.string)
-        }
-    }
-
     /// Preferred method to get URLs out of the clipboard.
     func asyncURL(completionHandler: @escaping (URL?) -> Void) {
         DispatchQueue.global().async {

@@ -107,9 +107,6 @@
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Protezione antitracciamento avanzata";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Le protezioni sono DISATTIVATE. Si consiglia di riattivarle.";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Le protezioni sono DISATTIVATE. Si consiglia di riattivarle.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */

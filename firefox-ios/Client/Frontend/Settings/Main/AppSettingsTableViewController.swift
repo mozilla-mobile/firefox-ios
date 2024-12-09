@@ -197,7 +197,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             studiesSetting.updateSetting(for: value)
         }
 
-        // Only add this toggles to the Settings if Terms Of Service feature flag is enabled
+        // Only add these toggles to the Settings if Terms Of Service feature flag is enabled
         if isSentCrashReportsEnabled {
             let sendTechnicalDataSettings = SendDataSetting(
                 prefs: profile.prefs,

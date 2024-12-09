@@ -31,8 +31,14 @@ class TestHistory: ProfileTest {
     fileprivate func innerCheckSites(_ places: RustPlaces, callback: @escaping (_ cursor: Cursor<Site>) -> Void) {
         // Retrieve the entry
         places.getSitesWithBound(limit: 100, offset: 0, excludedTypes: VisitTransitionSet(0)).upon {
-            XCTAssertTrue($0.isSuccess)
-            callback($0.successValue!)
+            do {
+                XCTAssertTrue($0.isSuccess)
+                let successValue = try XCTUnwrap($0.successValue)
+                callback(successValue)
+            } catch {
+                XCTFail("Should not receive a nil successValue")
+                callback(Cursor<Site>())
+            }
         }
     }
 
@@ -47,14 +53,20 @@ class TestHistory: ProfileTest {
             excludedTypes: VisitTransitionSet(0)
         ).value.successValue {
             XCTAssertEqual(cursor.status, CursorStatus.success, "Returned success \(cursor.statusMessage).")
-            XCTAssertEqual(cursor.count, urls.count, "Cursor has \(urls.count) entries.")
+            XCTAssertEqual(cursor.count, urls.count, "Cursor has \(cursor.count) entries. Duplicates are filtered out.")
 
             for index in 0..<cursor.count {
-                let site = cursor[index]!
-                XCTAssertNotNil(site, "Cursor has a site for entry.")
-                let title = urls[site.url]
-                XCTAssertNotNil(title, "Found right URL.")
-                XCTAssertEqual(site.title, title!, "Found right title.")
+                guard let site = cursor[index] else {
+                    XCTFail("Cursor has a site for entry.")
+                    return
+                }
+
+                guard let title = urls[site.url] else {
+                    XCTFail("Bad test input data")
+                    return
+                }
+
+                XCTAssertEqual(site.title, title)
             }
         } else {
             XCTFail("Couldn't get cursor.")
@@ -78,18 +90,25 @@ class TestHistory: ProfileTest {
         self.waitForExpectations(timeout: 100, handler: nil)
     }
 
-    // This is a very basic test. Adds an entry. Retrieves it, and then clears the database
+    // This is a very basic test. Adds an entry, retrieves it, and then clears the database.
     func testHistory() {
         withTestProfile { profile in
             let places = profile.places
-            self.addSite(places, url: "http://url1/", title: "title")
-            self.addSite(places, url: "http://url1/", title: "title")
-            self.addSite(places, url: "http://url1/", title: "title 2")
-            self.addSite(places, url: "https://url2/", title: "title")
-            self.addSite(places, url: "https://url2/", title: "title")
-            self.checkSites(places, urls: ["http://url1/": "title 2", "https://url2/": "title"])
-            self.checkVisits(places, url: "http://url1/")
-            self.checkVisits(places, url: "https://url2/")
+            // Add 5 sites
+            let numSites = 5
+            var siteDictionary: [String: String] = [:]
+            for i in 0..<numSites {
+                let newSite = (url: "http://url\(i)/", title: "title \(i)")
+                siteDictionary[newSite.url] = newSite.title
+                self.addSite(places, url: newSite.url, title: newSite.title)
+            }
+
+            // Test
+            self.checkSites(places, urls: siteDictionary)
+            for entry in siteDictionary {
+                self.checkVisits(places, url: entry.key)
+            }
+
             self.clear(places)
         }
     }
@@ -283,7 +302,7 @@ class TestHistory: ProfileTest {
             var urls = [String: String]()
 
             self.clear(places)
-            for _ in 0...self.numCmds {
+            for _ in 0..<self.numCmds {
                 self.addSite(
                     places,
                     url: "https://someurl\(index).com/",

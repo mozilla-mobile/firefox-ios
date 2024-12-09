@@ -26,6 +26,7 @@ private let permanentURISchemes = [
     "dav",
     "dict",
     "dns",
+    "doi",
     "dtn",
     "example",
     "file",

@@ -104,9 +104,6 @@
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Tehostettu seurannan suojaus";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Suojaukset ovat POIS PÄÄLTÄ. Suosittelemme kytkemään ne takaisin päälle.";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Suojaukset ovat POIS PÄÄLTÄ. Suosittelemme kytkemään ne takaisin päälle.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */

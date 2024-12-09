@@ -92,8 +92,8 @@ class LibraryCoordinator: BaseCoordinator,
     }
 
     func shareLibraryItem(url: URL, sourceView: UIView) {
-        guard !childCoordinators.contains(where: { $0 is ShareExtensionCoordinator }) else { return }
-        let coordinator = makeShareExtensionCoordinator()
+        guard !childCoordinators.contains(where: { $0 is ShareSheetCoordinator }) else { return }
+        let coordinator = makeShareSheetCoordinator()
         coordinator.start(url: url, sourceView: sourceView)
     }
 
@@ -166,8 +166,8 @@ class LibraryCoordinator: BaseCoordinator,
         remove(child: childCoordinator)
     }
 
-    private func makeShareExtensionCoordinator() -> ShareExtensionCoordinator {
-        let coordinator = ShareExtensionCoordinator(
+    private func makeShareSheetCoordinator() -> ShareSheetCoordinator {
+        let coordinator = ShareSheetCoordinator(
             alertContainer: UIView(),
             router: router,
             profile: profile,

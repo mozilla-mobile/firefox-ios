@@ -25,7 +25,7 @@
 
 set -e
 
-GLEAN_PARSER_VERSION=15.0
+MIN_GLEAN_PARSER_VERSION=15.0
 
 # CMDNAME is used in the usage text below.
 # shellcheck disable=SC2034
@@ -158,8 +158,20 @@ VENVDIR="${SOURCE_ROOT}/.venv"
 [ -x "${VENVDIR}/bin/python" ] || python3 -m venv "${VENVDIR}"
 # We need at least pip 20.3 for Big Sur support, see https://pip.pypa.io/en/stable/news/#id48
 # Latest pip is 21.0.1
-"${VENVDIR}"/bin/pip install "pip>=20.3"
-"${VENVDIR}"/bin/pip install --upgrade "glean_parser~=$GLEAN_PARSER_VERSION"
+pip_version=$("${VENVDIR}/bin/pip" -V | grep "\d\d.\d" -o)
+min_pip_version="20.3"
+
+echo "Current pip version: $pip_version"
+if (( $(echo "$pip_version < $min_pip_version" | bc -l ) )); then
+    "${VENVDIR}/bin/pip" install "pip>=$min_pip_version"
+fi
+
+glean_parser_version=$("${VENVDIR}/bin/pip" freeze | grep "glean_parser" | grep "\d\d.\d" -o || echo "0.0")
+echo "Current glean parser version: $glean_parser_version"
+
+if (( $(echo "$glean_parser_version < $MIN_GLEAN_PARSER_VERSION" | bc -l) )); then
+    "${VENVDIR}/bin/pip" install --upgrade "glean_parser~=$MIN_GLEAN_PARSER_VERSION"
+fi
 
 # Run the glinter
 # Turn its warnings into warnings visible in Xcode (but don't do for the success message)

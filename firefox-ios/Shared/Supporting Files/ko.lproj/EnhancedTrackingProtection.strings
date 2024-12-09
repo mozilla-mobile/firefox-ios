@@ -107,9 +107,6 @@
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "향상된 추적 방지 기능";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "보호 기능이 꺼져 있습니다. 다시 켜는 것이 좋습니다.";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "보호 기능이 꺼져 있습니다. 다시 켜는 것이 좋습니다.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */

@@ -8,7 +8,7 @@ let defaultTopSite = ["topSiteLabel": "Wikipedia", "bookmarkLabel": "Wikipedia"]
 let newTopSite = [
     "url": "www.mozilla.org",
     "topSiteLabel": "Mozilla",
-    "bookmarkLabel": "Internet for people, not profit — Mozilla (US)"
+    "bookmarkLabel": "Mozilla - Internet for people, not profit (US)"
 ]
 let newTopSiteiOS15 = [
     "bookmarkLabel": "Internet for people, not profit"

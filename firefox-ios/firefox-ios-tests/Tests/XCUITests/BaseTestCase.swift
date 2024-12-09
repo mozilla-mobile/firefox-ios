@@ -18,6 +18,7 @@ func path(forTestPage page: String) -> String {
 // Extended timeout values for mozWaitForElementToExist and mozWaitForElementToNotExist
 let TIMEOUT: TimeInterval = 20
 let TIMEOUT_LONG: TimeInterval = 45
+let MAX_SWIPE: Int = 5
 
 class BaseTestCase: XCTestCase {
     var navigator: MMNavigator<FxUserState>!
@@ -239,17 +240,13 @@ class BaseTestCase: XCTestCase {
             timeout: TIMEOUT
         )
         navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(
-            app.tables.otherElements[StandardImageIdentifiers.Large.bookmark],
-            timeout: TIMEOUT_LONG
-        )
-        app.tables.otherElements[StandardImageIdentifiers.Large.bookmark].tap()
-        navigator.nowAt(BrowserTab)
+        navigator.goto(SaveBrowserTabMenu)
+        navigator.performAction(Action.Bookmark)
     }
 
     func unbookmark() {
-        navigator.goto(BrowserTabMenu)
-        app.otherElements[StandardImageIdentifiers.Large.bookmarkSlash].waitAndTap()
+        bookmark()
+        app.buttons["Delete Bookmark"].waitAndTap()
         navigator.nowAt(BrowserTab)
     }
 

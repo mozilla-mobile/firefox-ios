@@ -176,7 +176,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     isActive: false,
                     hasSubmenu: true,
                     a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.Tools,
-                    a11yHint: "",
+                    a11yHint: getToolsSubmenuDescription(with: configuration),
                     a11yId: AccessibilityIdentifiers.MainMenu.tools,
                     action: {
                         store.dispatch(
@@ -197,7 +197,7 @@ struct MainMenuConfigurationUtility: Equatable, FeatureFlaggable {
                     isActive: false,
                     hasSubmenu: true,
                     a11yLabel: .MainMenu.ToolsSection.AccessibilityLabels.Save,
-                    a11yHint: "",
+                    a11yHint: getSaveSubmenuDescription(with: configuration),
                     a11yId: AccessibilityIdentifiers.MainMenu.save,
                     action: {
                         store.dispatch(

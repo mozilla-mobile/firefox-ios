@@ -107,9 +107,6 @@
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Gelişmiş izlenme koruması";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Korumalar KAPALI. Yeniden açmanızı öneririz.";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Korumalar KAPALI. Yeniden açmanızı öneririz.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */

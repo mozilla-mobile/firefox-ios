@@ -105,16 +105,6 @@ extension UIViewController {
         }
     }
 
-    /// Returns the `SceneDelegate` that's foregrounded, active and currently engaged with.
-    var sceneForVC: SceneDelegate? {
-        guard let scene = walkChainUntil(visiting: UIWindow.self)?
-            .windowScene?
-            .delegate as? SceneDelegate
-        else { return nil }
-
-        return scene
-    }
-
     // MARK: - Logger Swizzling
 
     /// Ignore some view controller out of logs to avoid spamming the logger,
