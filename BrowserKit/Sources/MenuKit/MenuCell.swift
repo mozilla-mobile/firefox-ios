@@ -63,6 +63,7 @@ public class MenuCell: UITableViewCell, ReusableCell, ThemeApplicable {
         self.accessibilityIdentifier = model.a11yId
         self.accessibilityLabel = model.a11yLabel
         self.accessibilityHint = model.a11yHint
+        self.accessibilityTraits = .button
         self.separatorInset = UIEdgeInsets(top: 0, left: separatorInsetSize, bottom: 0, right: 0)
         setupView()
     }

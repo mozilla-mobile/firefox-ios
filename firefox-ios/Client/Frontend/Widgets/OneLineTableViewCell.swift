@@ -8,7 +8,7 @@ import SiteImageView
 
 enum OneLineTableViewCustomization {
     case regular
-    case inactiveCell
+    case newFolder
 }
 
 struct OneLineTableViewCellViewModel {
@@ -20,7 +20,8 @@ struct OneLineTableViewCellViewModel {
 
 class OneLineTableViewCell: UITableViewCell,
                             ReusableCell,
-                            ThemeApplicable {
+                            ThemeApplicable,
+                            BookmarksRefactorFeatureFlagProvider {
     // Tableview cell items
 
     struct UX {
@@ -76,9 +77,26 @@ class OneLineTableViewCell: UITableViewCell,
 
     override var indentationLevel: Int {
         didSet {
-            // Update the leading constraint based on this cell's indentationLevel value,
-            // adding 1 since the default indentation is 0.
-            leftImageViewLeadingConstraint?.constant = UX.borderViewMargin * CGFloat(1 + indentationLevel)
+            // Update the leading constraint based on this cell's indentationLevel value
+            if isBookmarkRefactorEnabled {
+                setBookmarksRefactorMargin()
+            } else {
+                // adding 1 since the default indentation is 0.
+                leftImageViewLeadingConstraint?.constant = UX.borderViewMargin * CGFloat(1 + indentationLevel)
+            }
+        }
+    }
+
+    private func setBookmarksRefactorMargin() {
+        // Sets the indentation so that at each level the folder icon is left
+        // aligned with the label of the parent folder above it.
+        if indentationLevel == 0 {
+            leftImageViewLeadingConstraint?.constant = UX.borderViewMargin
+        } else {
+            let indentationLevelMargin: CGFloat = UX.borderViewMargin + UX.imageSize + UX.longLeadingMargin
+            let indentSize = (UX.imageSize + UX.longLeadingMargin)
+            let indentLevel = indentSize * CGFloat(indentationLevel-1)
+            leftImageViewLeadingConstraint?.constant = indentationLevelMargin + indentLevel
         }
     }
 
@@ -163,9 +181,17 @@ class OneLineTableViewCell: UITableViewCell,
     func applyTheme(theme: Theme) {
         selectedView.backgroundColor = theme.colors.layer5Hover
         backgroundColor = theme.colors.layer5
-        titleLabel.textColor = theme.colors.textPrimary
         bottomSeparatorView.backgroundColor = theme.colors.borderPrimary
-        accessoryView?.tintColor = theme.colors.iconSecondary
-        leftImageView.tintColor = theme.colors.textPrimary
+
+        switch customization {
+        case .regular:
+            accessoryView?.tintColor = theme.colors.iconSecondary
+            leftImageView.tintColor = theme.colors.textPrimary
+            titleLabel.textColor = theme.colors.textPrimary
+        case .newFolder:
+            accessoryView?.tintColor = theme.colors.iconSecondary
+            leftImageView.tintColor = theme.colors.textAccent
+            titleLabel.textColor = theme.colors.textAccent
+        }
     }
 }

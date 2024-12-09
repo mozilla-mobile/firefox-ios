@@ -45,10 +45,6 @@ extension BrowserViewController: URLBarDelegate {
         tabManager.selectedTab?.reload()
     }
 
-    func urlBarDidPressShare(_ urlBar: URLBarView, shareView: UIView) {
-        didTapOnShare(from: shareView)
-    }
-
     internal func dismissFakespotIfNeeded(animated: Bool = true) {
         guard !contentStackView.isSidebarVisible else {
             // hide sidebar as user tapped on shopping icon for a second time

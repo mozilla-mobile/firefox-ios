@@ -8,7 +8,7 @@
 "NSCameraUsageDescription" = "Firefox usa la cámara pa escaniar códigos QR y facer semeyes y vídeos.";
 
 /* Privacy - Location When In Use Usage Description */
-"NSLocationWhenInUseUsageDescription" = "Los sitios web que visites puen solicitate l'allugamientu.";
+"NSLocationWhenInUseUsageDescription" = "Los sitios web que visites puen solicitate la llocalización.";
 
 /* Privacy - Microphone Usage Description */
 "NSMicrophoneUsageDescription" = "Firefox usa'l micrófonu pa grabar y xubir audiu.";

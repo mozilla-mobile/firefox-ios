@@ -68,4 +68,7 @@ public enum LoggerCategory: String {
 
     /// Password Generator
     case passwordGenerator
+
+    /// Related to wallpaper functionality, like fetching metadata, images, etc
+    case wallpaper
 }

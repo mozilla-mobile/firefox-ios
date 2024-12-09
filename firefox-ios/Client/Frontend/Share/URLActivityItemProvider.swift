@@ -8,6 +8,7 @@ import UniformTypeIdentifiers
 class URLActivityItemProvider: UIActivityItemProvider, @unchecked Sendable {
     private let url: URL
 
+    // We don't want to add this URL to Safari's Reading List
     static let excludedActivities = [
         UIActivity.ActivityType.addToReadingList,
     ]

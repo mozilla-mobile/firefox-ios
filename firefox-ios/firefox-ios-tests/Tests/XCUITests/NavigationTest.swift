@@ -368,6 +368,9 @@ class NavigationTest: BaseTestCase {
         XCTAssertEqual(switchValueAfter as? String, "0")
 
         // Check that now pop ups are shown, two sites loaded
+        navigator.goto(BrowserTab)
+        navigator.goto(URLBarOpen)
+        app.buttons["Clear text"].waitAndTap()
         navigator.openURL(popUpTestUrl)
         waitUntilPageLoad()
         mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],

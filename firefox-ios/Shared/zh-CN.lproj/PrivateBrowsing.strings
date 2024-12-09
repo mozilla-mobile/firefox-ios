@@ -29,5 +29,5 @@
 "Turns private mode on or off" = "开启或关闭隐私模式";
 
 /* Will be displayed in Settings under 'Close Private Tabs' */
-"When Leaving Private Browsing" = "在离开隐私浏览时";
+"When Leaving Private Browsing" = "离开隐私浏览时关闭";
 

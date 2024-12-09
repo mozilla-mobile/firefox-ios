@@ -92,7 +92,7 @@
 "Menu.EnhancedTrackingProtection.On.Header.v128" = "Ви захищені. Якщо ми щось помітимо, то повідомимо вас.";
 
 /* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
-"Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "Ваше з'єднання незахищене.";
+"Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "Ваше з'єднання не захищене.";
 
 /* Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
 "Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128" = "Будьте обережні на цьому сайті";

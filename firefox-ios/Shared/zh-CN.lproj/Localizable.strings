@@ -1445,10 +1445,10 @@
 "Settings.SendUsage.Title" = "发送使用数据";
 
 /* Description displayed under the ”Show Link Previews” option */
-"Settings.ShowLinkPreviews.Status" = "长按链接时";
+"Settings.ShowLinkPreviews.Status" = "长按链接时显示";
 
 /* Description displayed under the ”Show Link Previews” option */
-"Settings.ShowLinkPreviews.StatusV2" = "长按链接时";
+"Settings.ShowLinkPreviews.StatusV2" = "长按链接时显示";
 
 /* Title of setting to enable link previews when long-pressing links. */
 "Settings.ShowLinkPreviews.Title" = "显示链接预览";

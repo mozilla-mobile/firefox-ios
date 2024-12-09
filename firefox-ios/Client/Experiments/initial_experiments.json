@@ -78,7 +78,8 @@
       "publishedDate": "2024-03-05T16:11:17.007782Z",
       "isFirefoxLabsOptIn": false,
       "firefoxLabsTitle": null,
-      "firefoxLabsDescription": null
+      "firefoxLabsDescription": null,
+      "firefoxLabsGroup": null
     },
     {
       "schemaVersion": "1.12.0",
@@ -91,7 +92,7 @@
       "channel": "release",
       "userFacingName": "iOS Optimize Onboarding Card Order",
       "userFacingDescription": "Experiment changing the order of onboarding cards",
-      "isEnrollmentPaused": false,
+      "isEnrollmentPaused": true,
       "isRollout": false,
       "bucketConfig": {
         "randomizationUnit": "nimbus_id",
@@ -277,7 +278,8 @@
       "publishedDate": "2024-10-18T19:26:21.181472Z",
       "isFirefoxLabsOptIn": false,
       "firefoxLabsTitle": null,
-      "firefoxLabsDescription": null
+      "firefoxLabsDescription": null,
+      "firefoxLabsGroup": null
     },
     {
       "schemaVersion": "1.12.0",
@@ -343,7 +345,8 @@
       "publishedDate": null,
       "isFirefoxLabsOptIn": false,
       "firefoxLabsTitle": null,
-      "firefoxLabsDescription": null
+      "firefoxLabsDescription": null,
+      "firefoxLabsGroup": null
     },
     {
       "schemaVersion": "1.12.0",
@@ -417,7 +420,8 @@
       "publishedDate": "2024-09-19T17:57:04.754326Z",
       "isFirefoxLabsOptIn": false,
       "firefoxLabsTitle": null,
-      "firefoxLabsDescription": null
+      "firefoxLabsDescription": null,
+      "firefoxLabsGroup": null
     }
   ]
 }

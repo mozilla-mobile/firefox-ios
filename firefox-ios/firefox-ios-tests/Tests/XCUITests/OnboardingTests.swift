@@ -19,7 +19,9 @@ class OnboardingTests: BaseTestCase {
     }
 
     override func tearDown() {
-        switchThemeToDarkOrLight(theme: "Light")
+        if #available(iOS 17.0, *) {
+            switchThemeToDarkOrLight(theme: "Light")
+        }
         app.terminate()
         super.tearDown()
     }
@@ -173,9 +175,26 @@ class OnboardingTests: BaseTestCase {
         currentScreen += 1
         mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
         XCTAssertEqual("Stay encrypted when you hop between devices", app.staticTexts["\(rootA11yId)TitleLabel"].label)
+        if !iPad() {
+            XCTAssertEqual("Firefox encrypts your passwords, bookmarks, and more when you’re synced.",
+                           app.staticTexts["\(rootA11yId)DescriptionLabel"].label)
+        } else {
+            XCTAssertEqual("Firefox encrypts your passwords, bookmarks, and more when you’re synchronised.",
+                           app.staticTexts["\(rootA11yId)DescriptionLabel"].label)
+        }
+        if !iPad() {
+            XCTAssertEqual("Sign In", app.buttons["\(rootA11yId)PrimaryButton"].label)
+        } else {
+            XCTAssertEqual("Sign in", app.buttons["\(rootA11yId)PrimaryButton"].label)
+        }
+        XCTAssertEqual("Skip", app.buttons["\(rootA11yId)SecondaryButton"].label)
         // Tap on Sign In
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
-        mozWaitForElementToExist(app.navigationBars["Sync and Save Data"])
+        if !iPad() {
+            mozWaitForElementToExist(app.navigationBars["Sync and Save Data"])
+        } else {
+            mozWaitForElementToExist(app.navigationBars["Synchronise and Save Data"])
+        }
         XCTAssertTrue(app.buttons["QRCodeSignIn.button"].exists)
         XCTAssertEqual("Ready to Scan", app.buttons["QRCodeSignIn.button"].label)
         XCTAssertTrue(app.buttons["EmailSignIn.button"].exists)

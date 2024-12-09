@@ -1,5 +1,5 @@
 /* Button string to learn how to set your default browser. */
-"DefaultBrowserCard.Button.v2" = "Lleer cómo";
+"DefaultBrowserCard.Button.v2" = "Saber cómo";
 
 /* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
 "DefaultBrowserCard.Description" = "Fai que los enllaces de sitios web, correos electrónicos y Mensaxes s'abran automáticamente en Firefox.";

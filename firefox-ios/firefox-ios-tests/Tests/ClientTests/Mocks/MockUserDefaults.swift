@@ -10,6 +10,7 @@ class MockUserDefaults: UserDefaultsInterface {
     // MARK: - Properties
     public var savedData: [String: Any?]
     public var registrationDictionary: [String: Any]
+    public var setCalledCount = 0
 
     // MARK: - Initializers
     init() {
@@ -20,6 +21,7 @@ class MockUserDefaults: UserDefaultsInterface {
     // MARK: - Public interface
     func set(_ value: Any?, forKey defaultName: String) {
         savedData[defaultName] = value
+        setCalledCount += 1
     }
 
     func object(forKey defaultName: String) -> Any? {
@@ -28,6 +30,7 @@ class MockUserDefaults: UserDefaultsInterface {
 
     func set(_ value: Bool, forKey defaultName: String) {
         savedData[defaultName] = value
+        setCalledCount += 1
     }
 
     func bool(forKey defaultName: String) -> Bool {

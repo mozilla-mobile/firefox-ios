@@ -343,7 +343,7 @@ class BookmarksTests: BaseTestCase {
         navigator.openURL(path(forTestPage: url_2["url"]!))
         waitForTabsButton()
         bookmarkPageAndTapEdit()
-        app.buttons["crossLarge"].tap()
+        app.buttons["Close"].tap()
         waitForTabsButton()
         navigator.nowAt(BrowserTab)
         unbookmark()

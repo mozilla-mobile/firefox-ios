@@ -16,44 +16,35 @@ import Foundation
 /// Note that not all applications use the Subject. For example OmniFocus ignores it, so we need to do both.
 
 class TitleActivityItemProvider: UIActivityItemProvider, @unchecked Sendable {
-    private let logger: Logger
+    private let title: String
 
+    /// We do not want to append titles to website URL shares to the pasteboard, Messages, and Mail body.
+    /// However, this provider will append the title to the Mail subject line.
     static let activityTypesToIgnore = [
         UIActivity.ActivityType.copyToPasteboard,
         UIActivity.ActivityType.message,
-        UIActivity.ActivityType.mail]
+        UIActivity.ActivityType.mail
+    ]
 
-    init(title: String, logger: Logger = DefaultLogger.shared) {
-        self.logger = logger
+    init(title: String) {
+        self.title = title
+
         super.init(placeholderItem: title)
     }
 
     override var item: Any {
-        if let activityType = activityType {
-            if TitleActivityItemProvider.activityTypesToIgnore.contains(activityType) {
-                return NSNull()
-            }
-        }
-        if let item = placeholderItem as? AnyObject {
-            return item
-        } else {
-            logger.log("placeholderItem is not of expected type AnyObject",
-                       level: .fatal,
-                       category: .library)
+        // For excluded activites, we don't want to provide any content
+        if let activityType = activityType, TitleActivityItemProvider.activityTypesToIgnore.contains(activityType) {
             return NSNull()
         }
+
+        return title
     }
 
     override func activityViewController(
         _ activityViewController: UIActivityViewController,
         subjectForActivityType activityType: UIActivity.ActivityType?
     ) -> String {
-        guard let placeholderString = placeholderItem as? String else {
-            logger.log("Failed to cast placeholderItem to String",
-                       level: .fatal,
-                       category: .library)
-            return ""
-        }
-        return placeholderString
+        return title
     }
 }
