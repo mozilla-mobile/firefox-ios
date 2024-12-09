@@ -92,9 +92,6 @@
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Troi Hysbysiadau Ymlaen";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Sync.Description.v120" = "Pan fyddwch chi wedi mewngofnodi a chydweddu, rydych chi’n fwy diogel. Mae %@ yn amgryptio’ch cyfrineiriau, nodau tudalen a rhagor.";
-
-/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Sync.Description.v123" = "Mae %@ yn amgryptio eich cyfrineiriau, nodau tudalen, a mwy pan fyddwch chi'n cydweddu.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */

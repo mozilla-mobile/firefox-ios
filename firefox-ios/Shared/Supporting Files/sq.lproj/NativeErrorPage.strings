@@ -1,9 +1,6 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Ringarkoje";
 
-/* On error page, this is the description for generic error. */
-"NativeErrorPage.GenericError.Description.v131" = "Ndodhi një gabim SSL dhe s’u vendos dot një lidhje e siguruar me shërbyesin.";
-
 /* On error page, this is the description for generic error. The placeholder will be replaced by the site url */
 "NativeErrorPage.GenericError.Description.v134" = "I zoti i %@ s’e ka ujdisur si duhet dhe s’mund të krijohet një lidhje e siguruar.";
 

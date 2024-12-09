@@ -5,5 +5,8 @@
 "SentFromFirefox.SocialShare.SettingsToggle.Title.v134" = "%2$@ غا ھەمبەھىرلىگەن مەزمۇندا %1$@ چۈشۈرۈش ئۇلانمىسى بار";
 
 /* When a user shares a link to social media, this is the shared text they'll see in the social media app. The first parameter is the shared website's URL. The second parameter is the Firefox app name. The third parameter is the link to download the Firefox app. */
+"SentFromFirefox.SocialShare.ShareMessageA.Title.v134" = "%1$@ بۇ ئۇچۇر %2$@ 🦊دا يوللانغان، كۆچمە توركۆرگۈنى سىناڭ: %3$@";
+
+/* When a user shares a link to social media, this is the shared text they'll see in the social media app. The first parameter is the shared website's URL. The second parameter is the Firefox app name. The third parameter is the link to download the Firefox app. */
 "SentFromFirefox.SocialShare.ShareMessageB.Title.v134" = "%1$@ نى %2$@ 🦊 %3$@ يوللىدى";
 

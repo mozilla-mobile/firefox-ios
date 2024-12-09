@@ -83,7 +83,7 @@
 "Menu.EnhancedTrackingProtection.Off.Title.v128" = "כיבית את ההגנות";
 
 /* Header for the enhanced tracking protection screen when the user has selected to be protected. */
-"Menu.EnhancedTrackingProtection.On.Header.v128" = "ההגנה פעילה. אם נזהה משהו חריג, נודיע לך.";
+"Menu.EnhancedTrackingProtection.On.Header.v128" = "ההגנות פעילות. אם נזהה משהו חריג, נודיע לך.";
 
 /* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
 "Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "החיבור שלך אינו מאובטח.";
@@ -101,11 +101,8 @@
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "הגנת מעקב מתקדמת";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "ההגנות כבויות. אנו מציעים להפעיל אותם מחדש.";
+"Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "ההגנות כבויות. אנו מציעים להפעיל אותן מחדש.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "ההגנות כבויות. אנו מציעים להפעיל אותם מחדש.";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOn.Text.v128" = "אם משהו נראה שבור באתר הזה, כדאי לנסות לכבות אותה.";
+"Menu.EnhancedTrackingProtection.SwitchOn.Text.v128" = "אם משהו נראה שבור באתר הזה, ניתן לנסות לכבות אותה.";
 

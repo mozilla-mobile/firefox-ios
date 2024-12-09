@@ -92,9 +92,6 @@
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Cuir na brathan air";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Sync.Description.v120" = "Dèan clàradh a-steach is sioncronachadh is bidh thu nas sàbhailte. Crioptaichidh %@ na faclan-faire, comharran-lìn is mòran a bharrachd dhut.";
-
-/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Sync.Description.v123" = "Crioptaichidh %@ na faclan-faire, comharran-lìn is mòran a bharrachd dhut is tu ’ga shioncronachadh.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
