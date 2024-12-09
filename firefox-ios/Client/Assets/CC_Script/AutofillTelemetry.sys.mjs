@@ -230,14 +230,6 @@ class AutofillTelemetryBase {
     throw new Error("Not implemented.");
   }
 
-  recordDetectedSectionCount() {
-    throw new Error("Not implemented.");
-  }
-
-  recordSubmittedSectionCount(_count) {
-    throw new Error("Not implemented.");
-  }
-
   recordNumberOfUse(records) {
     let histogram = Services.telemetry.getKeyedHistogramById(
       this.HISTOGRAM_PROFILE_NUM_USES
@@ -369,18 +361,6 @@ export class AddressTelemetry extends AutofillTelemetryBase {
   recordAutofillProfileCount(count) {
     Glean.formautofillAddresses.autofillProfilesCount.set(count);
   }
-
-  recordDetectedSectionCount() {
-    Glean.formautofillAddresses.detectedSectionsCount.add(1);
-  }
-
-  recordSubmittedSectionCount(count) {
-    if (!count) {
-      return;
-    }
-
-    Glean.formautofillAddresses.submittedSectionsCount.add(count);
-  }
 }
 
 class CreditCardTelemetry extends AutofillTelemetryBase {
@@ -435,18 +415,6 @@ class CreditCardTelemetry extends AutofillTelemetryBase {
 
   recordAutofillProfileCount(count) {
     Glean.formautofillCreditcards.autofillProfilesCount.set(count);
-  }
-
-  recordDetectedSectionCount() {
-    Glean.formautofillCreditCards.detectedSectionsCount.add(1);
-  }
-
-  recordSubmittedSectionCount(count) {
-    if (!count) {
-      return;
-    }
-
-    Glean.formautofillCreditCards.submittedSectionsCount.add(count);
   }
 }
 
@@ -510,22 +478,6 @@ export class AutofillTelemetry {
   static recordFormInteractionEvent(method, flowId, fieldDetails, data) {
     const telemetry = this.#getTelemetryByFieldDetail(fieldDetails[0]);
     telemetry.recordFormInteractionEvent(method, flowId, fieldDetails, data);
-  }
-
-  /**
-   * Utility functions for submitted section count scalar (defined in Scalars.yaml)
-   *
-   * Category: formautofill.creditCards or formautofill.addresses
-   * Scalar name: submitted_sections_count
-   */
-  static recordDetectedSectionCount(fieldDetails) {
-    const telemetry = this.#getTelemetryByFieldDetail(fieldDetails[0]);
-    telemetry.recordDetectedSectionCount();
-  }
-
-  static recordSubmittedSectionCount(fieldDetails, count) {
-    const telemetry = this.#getTelemetryByFieldDetail(fieldDetails[0]);
-    telemetry.recordSubmittedSectionCount(count);
   }
 
   static recordManageEvent(type, method) {

@@ -22,6 +22,11 @@ class TermsOfServiceViewController: UIViewController, Themeable {
         static let distanceBetweenViews = 2 * margin
     }
 
+    struct Links {
+        static let termsOfService = "https://www.mozilla.org/about/legal/terms/firefox/"
+        static let privacyNotice = "https://www.mozilla.org/privacy/firefox/"
+    }
+
     // MARK: - Properties
     var windowUUID: WindowUUID
     var themeManager: ThemeManager
@@ -227,14 +232,12 @@ class TermsOfServiceViewController: UIViewController, Themeable {
     // MARK: - Button actions
     @objc
     private func presentTermsOfService(_ gesture: UIGestureRecognizer) {
-        // TODO: FXIOS-10638 Firefox iOS: Use the correct Terms of Service and Privacy Notice URLs in ToSViewController
-        presentLink(with: nil)
+        presentLink(with: URL(string: Links.termsOfService))
     }
 
     @objc
     private func presentPrivacyNotice(_ gesture: UIGestureRecognizer) {
-        // TODO: FXIOS-10638 Firefox iOS: Use the correct Terms of Service and Privacy Notice URLs in ToSViewController
-        presentLink(with: nil)
+        presentLink(with: URL(string: Links.privacyNotice))
     }
 
     @objc

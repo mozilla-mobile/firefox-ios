@@ -37,9 +37,7 @@ class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, FeatureFlagga
     }
 
     init(
-        networking: ContileNetworking = DefaultContileNetwork(
-            with: makeURLSession(userAgent: UserAgent.mobileUserAgent(),
-                                 configuration: URLSessionConfiguration.defaultMPTCP)),
+        networking: ContileNetworking = DefaultContileNetwork(with: NetworkUtils.defaultURLSession()),
         urlCache: URLCache = URLCache.shared,
         logger: Logger = DefaultLogger.shared
     ) {
@@ -95,9 +93,8 @@ class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, FeatureFlagga
         )
 
         var request = URLRequest(url: resourceEndpoint)
-        request.httpMethod = "POST"
+        request.httpMethod = HTTPMethod.post.rawValue
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.timeoutInterval = 5
         request.cachePolicy = .reloadIgnoringLocalCacheData
 
         do {

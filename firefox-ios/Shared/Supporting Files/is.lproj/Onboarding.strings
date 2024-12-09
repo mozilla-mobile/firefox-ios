@@ -92,9 +92,6 @@
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "Kveikja á tilkynningum";
 
 /* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Sync.Description.v120" = "Þegar þú ert skráð/ur inn og með samstillingu í gangi, ertu öruggari. %@ dulritar lykilorðin þín, bókamerki og fleira.";
-
-/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
 "Onboarding.Sync.Description.v123" = "%@ dulritar lykilorðin þín, bókamerkin og fleira þegar þú ert með samstillingu milli tækja.";
 
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */

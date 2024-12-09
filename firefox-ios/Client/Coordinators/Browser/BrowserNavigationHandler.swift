@@ -25,20 +25,19 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     /// - Parameter homepanelSection: The section to be displayed.
     func show(homepanelSection: Route.HomepanelSection)
 
-    /// Shows the share extension.
+    /// Shows the share sheet.
     ///
     /// - Parameter url: The url to be shared.
     /// - Parameter sourceView: The reference view to show the popoverViewController.
-    /// - Parameter sourceRect: An optional rect to use for ipad popover presentation
-    /// - Parameter toastContainer: The view in which is displayed the toast results
-    ///                             from actions in the share extension
+    /// - Parameter sourceRect: An optional rect to use for ipad popover presentation.
+    /// - Parameter toastContainer: The view in which is displayed the toast results from actions in the share extension.
     /// - Parameter popoverArrowDirection: The arrow direction for the view controller presented as popover.
-    func showShareExtension(url: URL,
-                            title: String?,
-                            sourceView: UIView,
-                            sourceRect: CGRect?,
-                            toastContainer: UIView,
-                            popoverArrowDirection: UIPopoverArrowDirection)
+    func showShareSheet(url: URL,
+                        title: String?,
+                        sourceView: UIView,
+                        sourceRect: CGRect?,
+                        toastContainer: UIView,
+                        popoverArrowDirection: UIPopoverArrowDirection)
 
     /// Initiates the modal presentation of the Fakespot flow for analyzing the authenticity of a product's reviews.
     /// - Parameter productURL: The URL of the product for which the reviews will be analyzed.
@@ -110,24 +109,6 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 }
 
 extension BrowserNavigationHandler {
-    func showShareExtension(
-        url: URL,
-        title: String? = nil,
-        sourceView: UIView,
-        sourceRect: CGRect? = nil,
-        toastContainer: UIView,
-        popoverArrowDirection: UIPopoverArrowDirection = .up
-    ) {
-        showShareExtension(
-            url: url,
-            title: title,
-            sourceView: sourceView,
-            sourceRect: sourceRect,
-            toastContainer: toastContainer,
-            popoverArrowDirection: popoverArrowDirection
-        )
-    }
-
     func show(settings: Route.SettingsSection) {
         show(settings: settings, onDismiss: nil)
     }

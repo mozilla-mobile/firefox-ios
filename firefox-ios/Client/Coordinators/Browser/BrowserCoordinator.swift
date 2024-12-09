@@ -137,8 +137,19 @@ class BrowserCoordinator: BaseCoordinator,
         screenshotService.screenshotableView = nil
     }
 
-    func showHomepage() {
-        let homepageController = self.homepageViewController ?? HomepageViewController(windowUUID: windowUUID)
+    func showHomepage(overlayManager: OverlayModeManager, isZeroSearch: Bool) {
+        let homepageCoordinator = childCoordinators[HomepageCoordinator.self] ?? HomepageCoordinator(
+            windowUUID: windowUUID,
+            profile: profile,
+            isZeroSearch: isZeroSearch,
+            router: router
+        )
+        add(child: homepageCoordinator)
+        let homepageController = self.homepageViewController ?? HomepageViewController(
+            windowUUID: windowUUID,
+            homepageDelegate: homepageCoordinator,
+            overlayManager: overlayManager
+        )
         guard browserViewController.embedContent(homepageController) else {
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
             return
@@ -290,8 +301,12 @@ class BrowserCoordinator: BaseCoordinator,
         case let .searchURL(url, tabId):
             handle(searchURL: url, tabId: tabId)
 
-        case let .sharesheet(url, title):
-            showShareSheet(with: url, title: title)
+        case .sharesheet:
+            // FIXME: FXIOS-10669 Implement with real data, (shareType, shareMessage)
+//            let tempURL = URL(string: "https://www.google.ca")
+//            let tempTitle = "Test Title"
+//            showShareSheet(with: tempURL, title: tempTitle)
+            break
 
         case let .glean(url):
             glean.handleDeeplinkUrl(url: url)
@@ -508,7 +523,10 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     func openNewTab(inPrivateMode isPrivate: Bool) {
-        handle(homepanelSection: isPrivate ? .newPrivateTab : .newTab)
+        browserViewController.openNewTabFromMenu(
+            focusLocationField: true,
+            isPrivate: isPrivate
+        )
     }
 
     func showLibraryPanel(_ panel: Route.HomepanelSection) {
@@ -537,45 +555,17 @@ class BrowserCoordinator: BaseCoordinator,
         showShareSheet(with: url, title: nil)
     }
 
-    func showShareSheet(with url: URL?, title: String?) {
-        guard let url else { return }
-
-        let showShareSheet = { url in
-            self.showShareExtension(
-                url: url,
-                title: title,
-                sourceView: self.browserViewController.addressToolbarContainer,
-                toastContainer: self.browserViewController.contentContainer,
-                popoverArrowDirection: .any
-            )
-        }
-
-        guard let temporaryDocument = browserViewController.tabManager.selectedTab?.temporaryDocument else {
-            showShareSheet(url)
-            return
-        }
-
-        temporaryDocument.getURL { tempDocURL in
-            DispatchQueue.main.async {
-                // If we successfully got a temp file URL, share it like a downloaded file,
-                // otherwise present the ordinary share menu for the web URL.
-                if let tempDocURL = tempDocURL, tempDocURL.isFileURL {
-                    showShareSheet(tempDocURL)
-                } else {
-                    showShareSheet(url)
-                }
-            }
-        }
-    }
-
     private func makeMenuNavViewController() -> DismissableNavigationViewController? {
-        guard !childCoordinators.contains(where: { $0 is MainMenuCoordinator }) else {
+        if let mainMenuCoordinator = childCoordinators.first(where: { $0 is MainMenuCoordinator }) as? MainMenuCoordinator {
             logger.log(
-                "MainMenuCoordinator already exists when it technically shouldn't",
+                "MainMenuCoordinator already exists when it shouldn't. Removing and recreating it to access menu",
                 level: .fatal,
-                category: .mainMenu
+                category: .mainMenu,
+                extra: ["existing mainMenuCoordinator UUID": "\(mainMenuCoordinator.windowUUID)",
+                        "BrowserCoordinator windowUUID": "\(windowUUID)"]
             )
-            return nil
+
+            mainMenuCoordinator.dismissMenuModal(animated: false)
         }
 
         let navigationController = DismissableNavigationViewController()
@@ -651,6 +641,22 @@ class BrowserCoordinator: BaseCoordinator,
     }
 
     // MARK: - BrowserNavigationHandler
+
+    func showShareSheet(url: URL,
+                        title: String?,
+                        sourceView: UIView,
+                        sourceRect: CGRect?,
+                        toastContainer: UIView,
+                        popoverArrowDirection: UIPopoverArrowDirection) {
+        startShareSheetCoordinator(
+            url: url,
+            title: title,
+            sourceView: sourceView,
+            sourceRect: sourceRect,
+            toastContainer: toastContainer,
+            popoverArrowDirection: popoverArrowDirection
+        )
+    }
 
     func show(settings: Route.SettingsSection, onDismiss: (() -> Void)? = nil) {
         presentWithModalDismissIfNeeded {
@@ -735,7 +741,7 @@ class BrowserCoordinator: BaseCoordinator,
         return coordinator
     }
 
-    func showShareExtension(
+    func startShareSheetCoordinator(
         url: URL,
         title: String?,
         sourceView: UIView,
@@ -743,21 +749,21 @@ class BrowserCoordinator: BaseCoordinator,
         toastContainer: UIView,
         popoverArrowDirection: UIPopoverArrowDirection
     ) {
-        guard childCoordinators.first(where: { $0 is ShareExtensionCoordinator }) as? ShareExtensionCoordinator == nil
+        guard childCoordinators.first(where: { $0 is ShareSheetCoordinator }) as? ShareSheetCoordinator == nil
         else {
             // If this case is hitted it means the share extension coordinator wasn't removed
             // correctly in the previous session.
             return
         }
-        let shareExtensionCoordinator = ShareExtensionCoordinator(
+        let shareSheetCoordinator = ShareSheetCoordinator(
             alertContainer: toastContainer,
             router: router,
             profile: profile,
             parentCoordinator: self,
             tabManager: tabManager
         )
-        add(child: shareExtensionCoordinator)
-        shareExtensionCoordinator.start(
+        add(child: shareSheetCoordinator)
+        shareSheetCoordinator.start(
             url: url,
             title: title,
             sourceView: sourceView,
@@ -1045,6 +1051,42 @@ class BrowserCoordinator: BaseCoordinator,
             if rootVC is QRCodeViewController {
                 router.dismiss(animated: true, completion: nil)
                 remove(child: childCoordinators.first(where: { $0 is QRCodeCoordinator }))
+            }
+        }
+    }
+
+    // MARK: - Private helpers
+
+    private func showShareSheet(with url: URL?, title: String?) {
+        guard let url else { return }
+
+        let showShareSheet = { url in
+            self.startShareSheetCoordinator(
+                url: url,
+                title: title,
+                sourceView: self.browserViewController.addressToolbarContainer,
+                sourceRect: nil,
+                toastContainer: self.browserViewController.contentContainer,
+                popoverArrowDirection: .any
+            )
+        }
+
+        // We only care about the temp document for .tab shares right?
+        // BUT!! A tab might be displaying a downloaded PDF! Then it's file:// url
+        guard let temporaryDocument = browserViewController.tabManager.selectedTab?.temporaryDocument else {
+            showShareSheet(url)
+            return
+        }
+
+        temporaryDocument.getURL { tempDocURL in
+            DispatchQueue.main.async {
+                // If we successfully got a temp file URL, share it like a downloaded file,
+                // otherwise present the ordinary share menu for the web URL.
+                if let tempDocURL = tempDocURL, tempDocURL.isFileURL {
+                    showShareSheet(tempDocURL)
+                } else {
+                    showShareSheet(url)
+                }
             }
         }
     }

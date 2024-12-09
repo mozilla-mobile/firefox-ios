@@ -368,6 +368,9 @@ class NavigationTest: BaseTestCase {
         XCTAssertEqual(switchValueAfter as? String, "0")
 
         // Check that now pop ups are shown, two sites loaded
+        navigator.goto(BrowserTab)
+        navigator.goto(URLBarOpen)
+        app.buttons["Clear text"].waitAndTap()
         navigator.openURL(popUpTestUrl)
         waitUntilPageLoad()
         mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
@@ -419,18 +422,17 @@ class NavigationTest: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         waitForElementsToExist(
             [
-                app.tables["Context Menu"],
-                app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkTrayFill],
-                app.tables.otherElements[StandardImageIdentifiers.Large.history],
-                app.tables.otherElements[StandardImageIdentifiers.Large.download],
-                app.tables.otherElements[StandardImageIdentifiers.Large.readingList],
-                app.tables.otherElements[StandardImageIdentifiers.Large.login],
-                app.tables.otherElements[StandardImageIdentifiers.Large.sync],
-                app.tables.otherElements[StandardImageIdentifiers.Large.nightMode],
-                app.tables.otherElements[StandardImageIdentifiers.Large.whatsNew],
-                app.tables.otherElements[StandardImageIdentifiers.Large.helpCircle],
-                app.tables.otherElements[StandardImageIdentifiers.Large.edit],
-                app.tables.otherElements[StandardImageIdentifiers.Large.settings]
+                app.buttons[AccessibilityIdentifiers.MainMenu.HeaderView.mainButton],
+                app.tables.cells[AccessibilityIdentifiers.MainMenu.newTab],
+                app.tables.cells[AccessibilityIdentifiers.MainMenu.newPrivateTab],
+                app.tables.cells[AccessibilityIdentifiers.MainMenu.bookmarks],
+                app.tables.cells[AccessibilityIdentifiers.MainMenu.history],
+                app.tables.cells[AccessibilityIdentifiers.MainMenu.downloads],
+                app.tables.cells[AccessibilityIdentifiers.MainMenu.passwords],
+                app.tables.cells[AccessibilityIdentifiers.MainMenu.customizeHomepage],
+                app.tables.cells[AccessibilityIdentifiers.MainMenu.whatsNew],
+                app.tables.cells[AccessibilityIdentifiers.MainMenu.getHelp],
+                app.tables.cells[AccessibilityIdentifiers.MainMenu.settings]
             ]
         )
     }

@@ -5,7 +5,10 @@
 import XCTest
 
 class LibraryTestsIpad: IpadOnlyTestCase {
-    func testLibraryShortcut() {
+    func testLibraryShortcut() throws {
+        guard !iPad() else {
+            throw XCTSkip("Library shortcut not available on the new toolbar for iPad")
+        }
         if skipPlatform {return}
         // Open Library from shortcut
         // The Bookmark panel is displayed

@@ -15,6 +15,7 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
     override func setUp() {
         super.setUp()
         profile = MockProfile()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
     }
 
     override func tearDown() {
@@ -58,7 +59,6 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
 
     func testShouldReload_whenMobileEmptyBookmarks() throws {
         profile.reopen()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
         let expectation = expectation(description: "Subject reloaded")
         subject.reloadData {
@@ -71,7 +71,6 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
 
     func testShouldReload_whenMobileEmptyBookmarksWithBookmarksRefactor() throws {
         profile.reopen()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         featureFlags.set(feature: .bookmarksRefactor, to: true, isDebug: true)
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
         let expectation = expectation(description: "Subject reloaded")
@@ -85,7 +84,6 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
 
     func testShouldReload_whenDesktopBookmarksExist() throws {
         profile.reopen()
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         featureFlags.set(feature: .bookmarksRefactor, to: true)
         let subject = createSubject(guid: BookmarkRoots.MobileFolderGUID)
 
@@ -98,9 +96,8 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
             position: 0
         ).uponQueue(.main) { _ in
             self.profile.places.countBookmarksInTrees(folderGuids: [BookmarkRoots.MenuFolderGUID]) { result in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success(let bookmarkCount):
+                switch result {
+                case .success(let bookmarkCount):
                         XCTAssertEqual(bookmarkCount, 1, "Menu folder contains one bookmark")
 
                         subject.reloadData {
@@ -108,10 +105,9 @@ class BookmarksPanelViewModelTests: XCTestCase, FeatureFlaggable {
                             XCTAssertEqual(subject.bookmarkNodes.count, 1, "Mobile folder contains the local desktop folder")
                             expectation.fulfill()
                         }
-                    case .failure(let error):
+                case .failure(let error):
                         XCTFail("Failed to count bookmarks: \(error)")
                         expectation.fulfill()
-                    }
                 }
             }
         }

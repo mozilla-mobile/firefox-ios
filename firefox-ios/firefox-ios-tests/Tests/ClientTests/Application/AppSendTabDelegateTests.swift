@@ -5,6 +5,7 @@
 import XCTest
 @testable import Client
 
+@preconcurrency
 final class AppFxACommandsTests: XCTestCase {
     private var applicationStateProvider: MockApplicationStateProvider!
     private var applicationHelper: MockApplicationHelper!

@@ -116,8 +116,9 @@ class ActionProviderBuilder {
 
             // This is only used on ipad for positioning the popover. On iPhone it is an action sheet.
             let point = webView.convert(helper.touchPoint, to: view)
-            navigationHandler?.showShareExtension(
+            navigationHandler?.showShareSheet(
                 url: url,
+                title: nil,
                 sourceView: view,
                 sourceRect: CGRect(origin: point, size: CGSize(width: 10.0, height: 10.0)),
                 toastContainer: contentContainer,

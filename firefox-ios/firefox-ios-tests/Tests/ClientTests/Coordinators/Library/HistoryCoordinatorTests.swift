@@ -60,7 +60,7 @@ final class HistoryCoordinatorTests: XCTestCase {
         XCTAssertEqual(notificationCenter.postCallCount, 1)
     }
 
-    func testShowShareExtension_callsNavigationHandlerShareFunction() {
+    func testShowShareSheet_callsNavigationHandlerShareFunction() {
         let subject = createSubject()
 
         subject.shareLibraryItem(

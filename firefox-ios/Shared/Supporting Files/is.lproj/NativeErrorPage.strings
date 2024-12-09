@@ -1,9 +1,6 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Endurhlaða";
 
-/* On error page, this is the description for generic error. */
-"NativeErrorPage.GenericError.Description.v131" = "SSL-villa kom upp og ekki er hægt að koma á öruggri tengingu við netþjóninn.";
-
 /* On error page, this is the description for generic error. The placeholder will be replaced by the site url */
 "NativeErrorPage.GenericError.Description.v134" = "Eigandi %@ hefur ekki sett það upp rétt og ekki er hægt að búa til örugga tengingu.";
 

@@ -107,9 +107,6 @@
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Protecziun avanzada cunter il fastizar";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Las protecziuns èn DEACTIVADAS. Nus recumandain da las reactivar.";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Las protecziuns èn DEACTIVADAS. Nus recumandain da las reactivar.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */

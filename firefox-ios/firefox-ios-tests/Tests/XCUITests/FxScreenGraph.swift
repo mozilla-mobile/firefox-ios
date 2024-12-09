@@ -2,6 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+// swiftlint:disable all
+
 import Common
 import Foundation
 import MappaMundi
@@ -59,6 +61,8 @@ let CreditCardsSettings = "AutofillCreditCard"
 let PageZoom = "PageZoom"
 let NotificationsSettings = "NotificationsSetting"
 let AddressesSettings = "AutofillAddress"
+let ToolsBrowserTabMenu = "ToolsBrowserTabMenu"
+let SaveBrowserTabMenu = "SaveBrowserTabMenu"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
@@ -465,7 +469,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
 
         screenState.gesture(forAction: Action.CloseURLBarOpen, transitionTo: HomePanelsScreen) {_ in
-            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         }
     }
 
@@ -571,6 +575,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.CloseDownloadsPanel, transitionTo: HomePanelsScreen) { userState in
             app.buttons["Done"].tap()
         }
+        screenState.tap(app.buttons["readingListLarge"], to: LibraryPanel_ReadingList)
     }
 
     map.addScreenState(HistoryRecentlyClosed) { screenState in
@@ -642,7 +647,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
         screenState.gesture(forAction: Action.RemoveCustomSearchEngine) {userSTate in
             // Screengraph will go back to main Settings screen. Manually tap on settings
-            app.tables[AccessibilityIdentifiers.Settings.tableViewController].staticTexts["Google"].tap()
             app.navigationBars[AccessibilityIdentifiers.Settings.Search.searchNavigationBar].buttons["Edit"].tap()
             if #unavailable(iOS 17) {
                 app.tables.buttons["Delete Mozilla Engine"].tap()
@@ -1086,108 +1090,104 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
     }
 
-    map.addScreenState(BrowserTabMenu) { screenState in
-        sleep(1)
+    map.addScreenState(ToolsBrowserTabMenu) { screenState in
+        // Zoom
         screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.settings],
-            to: SettingsScreen
-        )
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.zoom],
+            to: PageZoom)
+        // Turn on night mode
         screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.sync],
-            to: Intro_FxASignin,
-            if: "fxaUsername == nil"
-        )
-        screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.login],
-            to: LoginsSettings
-        )
-        screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.bookmarkTrayFill],
-            to: LibraryPanel_Bookmarks
-        )
-        screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.history],
-            to: LibraryPanel_History
-        )
-        screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.download],
-            to: LibraryPanel_Downloads
-        )
-        screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.readingList],
-            to: LibraryPanel_ReadingList
-        )
-        screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.avatarCircle],
-            to: FxAccountManagementPage
-        )
-
-        screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.nightMode],
+            app.otherElements.images[StandardImageIdentifiers.Large.nightMode],
             forAction: Action.ToggleNightMode,
-            transitionTo: BrowserTabMenu
+            transitionTo: BrowserTab
         ) { userState in
             userState.nightMode = !userState.nightMode
         }
-
+        // Report broken site (TODO)
+        // Share
         screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.whatsNew],
-            forAction: Action.OpenWhatsNewPage
-        ) { userState in
-        }
-        screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.deviceDesktopSend],
-            forAction: Action.SentToDevice
-        ) { userState in
-        }
-
-        screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.share],
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.share],
             forAction: Action.ShareBrowserTabMenuOption
         ) { userState in
         }
 
-        screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.deviceDesktop],
-            to: RequestDesktopSite
-        )
-        screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.deviceMobile],
-            to: RequestMobileSite
-        )
-        screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.search],
-            to: FindInPage
-        )
-        screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.pageZoom],
-            to: PageZoom
-        )
-        // TODO: Add new state
-//        screenState.tap(
-//            app.tables["Context Menu"].otherElements[StandardImageIdentifiers.Large.lightbulb],
-//            to: ReportSiteIssue
-//        )
+        screenState.dismissOnUse = true
+        screenState.backAction = cancelBackAction
+    }
 
+    map.addScreenState(SaveBrowserTabMenu) { screenState in
+        // Bookmark this page
         screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.pin],
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.bookmarkThisPage],
+            forAction: Action.BookmarkThreeDots
+        )
+        screenState.tap(
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.bookmarkThisPage],
+            forAction: Action.Bookmark
+        )
+        // Add to shortcuts
+        // No Copy link available (Action.CopyAddressPAM)
+        screenState.tap(
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.addToShortcuts],
             forAction: Action.PinToTopSitesPAM
         )
         screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.link],
-            forAction: Action.CopyAddressPAM
-        )
-
-        screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.bookmark],
-            forAction: Action.BookmarkThreeDots,
-            Action.Bookmark
-        )
-        screenState.tap(
-            app.tables.otherElements[StandardImageIdentifiers.Large.readingListAdd],
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.saveToReadingList],
             forAction: Action.AddToReadingListBrowserTabMenu
         )
 
+        screenState.dismissOnUse = true
+        screenState.backAction = navigationControllerBackAction
+    }
+
+    map.addScreenState(BrowserTabMenu) { screenState in
+        sleep(1)
+
+        // Sign In (if unauthenticated)
+        screenState.tap(
+            app.buttons[AccessibilityIdentifiers.MainMenu.HeaderView.mainButton],
+            to: Intro_FxASignin,
+            if: "fxaUsername == nil")
+        // Signed in (TODO)
+        // New tab
+        screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.newTab], to: NewTabScreen)
+        // New private tab (TODO: Action.OpenPrivateTabLongPressTabsButton
+        // Switch to Desktop/Mobile Site
+        // The cell's identifier is the same for desktop and mobile, so I use static
+        // texts for the RequestMobileSite case
+        screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.switchToDesktopSite], to: RequestDesktopSite)
+        screenState.tap(app.tables.cells.staticTexts["Switch to Mobile Site"], to: RequestMobileSite)
+        // Find in Page...
+        screenState.tap(
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.findInPage],
+            to: FindInPage)
+        // Tools (Zoom, NightMode, Report, Share)
+        screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.tools], to: ToolsBrowserTabMenu)
+        // Save (Add Bookmark, Shortcut)
+        screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.save], to: SaveBrowserTabMenu)
+        // Bookmarks
+        screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.bookmarks], to: LibraryPanel_Bookmarks)
+        // History
+        screenState.tap(
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.history],
+            to: LibraryPanel_History)
+        // Downloads
+        screenState.tap(
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.downloads],
+            to: LibraryPanel_Downloads
+        )
+        // Passwords (TODO)
+        // Customize Homepage (TODO)
+        // New in Firefox
+        screenState.tap(
+            app.otherElements.cells["MainMenu.WhatsNew"],
+            forAction: Action.OpenWhatsNewPage
+        )
+        // Get Help (TODO: Actions to open support.mozilla.org)
+        // SettingsScreen
+        screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.settings], to: SettingsScreen)
+
+        // "x" for close the menu and go back
         screenState.dismissOnUse = true
         screenState.backAction = cancelBackAction
     }
@@ -1206,13 +1206,7 @@ extension MMNavigator where T == FxUserState {
         UIPasteboard.general.string = urlString
         userState.url = urlString
         userState.waitForLoading = waitForLoading
-        // Using LoadURLByTyping for Intel too on Xcode14
-        if #available (iOS 16, *) {
-            performAction(Action.LoadURLByTyping)
-        } else {
-            performAction(Action.LoadURL)
-            sleep(5) // Wait for toast to disappear
-        }
+        performAction(Action.LoadURLByTyping)
     }
 
     func mozWaitForElementToExist(_ element: XCUIElement, timeout: TimeInterval? = TIMEOUT) {
@@ -1311,3 +1305,5 @@ extension XCUIElement {
         }
     }
 }
+
+// swiftlint:enable all

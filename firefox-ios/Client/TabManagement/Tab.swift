@@ -586,7 +586,12 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
 
     func restore(_ webView: WKWebView, interactionState: Data? = nil) {
         if let url = url {
-            webView.load(URLRequest(url: url))
+            if let internalURL = InternalURL(url),
+               internalURL.isAboutHomeURL {
+                webView.load(PrivilegedRequest(url: url) as URLRequest)
+            } else {
+                webView.load(URLRequest(url: url))
+            }
         }
 
         if let interactionState = interactionState {
@@ -705,7 +710,8 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
             }
         }
 
-        if let webView, webView.url != nil {
+        // Do not reload from origin for homepage internal URLs
+        if let webView, webView.url != nil && !(InternalURL(webView.url)?.isAboutHomeURL ?? false) {
             webView.reloadFromOrigin()
             logger.log("Reloaded zombified tab from origin",
                        level: .debug,

@@ -350,7 +350,6 @@ export class FormAutofillSection {
       return;
     }
 
-    lazy.AutofillTelemetry.recordDetectedSectionCount(this.fieldDetails);
     lazy.AutofillTelemetry.recordFormInteractionEvent(
       "detected",
       this.flowId,
@@ -388,7 +387,6 @@ export class FormAutofillSection {
   onSubmitted(formFilledData) {
     this.submitted = true;
 
-    lazy.AutofillTelemetry.recordSubmittedSectionCount(this.fieldDetails, 1);
     lazy.AutofillTelemetry.recordFormInteractionEvent(
       "submitted",
       this.flowId,

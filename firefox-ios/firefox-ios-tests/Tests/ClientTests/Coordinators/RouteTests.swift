@@ -348,21 +348,27 @@ class RouteTests: XCTestCase {
     }
 
     func testShareSheetRouteUrlOnly() {
+        let testURL = URL(string: "https://www.google.com")!
+        let shareURL = URL(string: "firefox://share-sheet?url=\(testURL.absoluteString)")!
         let subject = createSubject()
-        let url = URL(string: "firefox://share-sheet?url=https://www.google.com")!
 
-        let route = subject.makeRoute(url: url)
+        let route = subject.makeRoute(url: shareURL)
 
-        XCTAssertEqual(route, .sharesheet(url: URL(string: "https://www.google.com")!, title: nil))
+        XCTAssertEqual(route, .sharesheet(shareType: .site(url: testURL), shareMessage: nil))
     }
 
     func testShareSheetRouteUrlAndTitle() {
+        let testURL = URL(string: "https://www.google.com")!
+        let testTitle = "TEST TITLE"
+        let shareURL = URL(string: "firefox://share-sheet?url=\(testURL.absoluteString)&title=\(testTitle)")!
+
         let subject = createSubject()
-        let url = URL(string: "firefox://share-sheet?url=https://www.google.com&title=TEST TITLE")!
 
-        let route = subject.makeRoute(url: url)
+        let route = subject.makeRoute(url: shareURL)
 
-        XCTAssertEqual(route, .sharesheet(url: URL(string: "https://www.google.com")!, title: "TEST TITLE"))
+        let expectedShareType = ShareType.site(url: testURL)
+        let expectedShareMessage = ShareMessage(message: testTitle, subtitle: nil)
+        XCTAssertEqual(route, .sharesheet(shareType: expectedShareType, shareMessage: expectedShareMessage))
     }
 
     // MARK: - AppAction

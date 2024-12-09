@@ -19,7 +19,7 @@ class TrackingProtectionModel {
     var certificates = [Certificate]()
     let url: URL
     let displayTitle: String
-    let connectionSecure: Bool
+    var connectionSecure: Bool
     let globalETPIsEnabled: Bool
     var selectedTab: Tab?
 

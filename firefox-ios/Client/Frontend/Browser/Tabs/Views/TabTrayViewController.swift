@@ -299,10 +299,6 @@ class TabTrayViewController: UIViewController,
             delegate?.didFinish()
         }
 
-        if let url = tabTrayState.shareURL {
-            navigationHandler?.shareTab(url: url, sourceView: self.view)
-        }
-
         if tabTrayState.showCloseConfirmation {
             showCloseAllConfirmation()
         }
