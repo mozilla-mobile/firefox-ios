@@ -13,15 +13,7 @@ class EditBookmarkViewController: UIViewController,
     private enum Section: Int, CaseIterable {
         case bookmark
         case folder
-
-        var allowsSelection: Bool {
-            return switch self {
-            case .bookmark:
-                false
-            case .folder:
-                true
-            }
-        }
+        case newFolder
     }
     private struct UX {
         static let bookmarkCellTopPadding: CGFloat = 25.0
@@ -167,6 +159,14 @@ class EditBookmarkViewController: UIViewController,
             }
             configureParentFolderCell(cell, folder: folder)
             return cell
+        case .newFolder:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: OneLineTableViewCell.cellIdentifier,
+                                                           for: indexPath) as? OneLineTableViewCell
+            else {
+                return UITableViewCell()
+            }
+            configureNewFolderCell(cell)
+            return cell
         }
     }
 
@@ -191,6 +191,18 @@ class EditBookmarkViewController: UIViewController,
         let canShowAccessoryView = viewModel.shouldShowDisclosureIndicator(isFolderSelected: isFolderSelected)
         cell.accessoryType = canShowAccessoryView ? .checkmark : .none
         cell.selectionStyle = .default
+        cell.customization = .regular
+        cell.applyTheme(theme: theme)
+    }
+
+    private func configureNewFolderCell(_ cell: OneLineTableViewCell) {
+        cell.titleLabel.text = .BookmarksNewFolder
+        let folderImage = UIImage(named: StandardImageIdentifiers.Large.newFolder)?.withRenderingMode(.alwaysTemplate)
+        cell.leftImageView.image = folderImage
+        cell.indentationLevel = 0
+        cell.accessoryType = .none
+        cell.selectionStyle = .default
+        cell.customization = .newFolder
         cell.applyTheme(theme: theme)
     }
 
@@ -205,6 +217,8 @@ class EditBookmarkViewController: UIViewController,
             1
         case .folder:
             viewModel.folderStructures.count
+        case .newFolder:
+            1
         }
     }
 
@@ -237,6 +251,8 @@ class EditBookmarkViewController: UIViewController,
         guard let section = Section(rawValue: indexPath.section) else { return }
         if section == .folder, let folder = viewModel.folderStructures[safe: indexPath.row] {
             viewModel.selectFolder(folder)
+        } else if section == .newFolder {
+            viewModel.createNewFolder()
         }
     }
 }

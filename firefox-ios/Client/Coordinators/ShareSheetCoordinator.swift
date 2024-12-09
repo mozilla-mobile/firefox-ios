@@ -82,12 +82,6 @@ class ShareSheetCoordinator: BaseCoordinator,
         switch activityType {
         case CustomActivityAction.sendToDevice.actionType:
             showSendToDevice(url: url)
-        case CustomActivityAction.copyLink.actionType:
-            SimpleToast().showAlertWithText(
-                .LegacyAppMenu.AppMenuCopyURLConfirmMessage,
-                bottomContainer: alertContainer,
-                theme: themeManager.getCurrentTheme(for: windowUUID))
-            dequeueNotShownJSAlert()
         default:
             dequeueNotShownJSAlert()
         }
