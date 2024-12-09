@@ -267,7 +267,7 @@
       ],
       "targeting": "((is_already_enrolled) || ((isFirstRun == 'true' && is_phone) && (app_version|versionCompare('131.!') >= 0) && (enrollments_map['long-term-holdback-2024-h2-velocity-ios'] == 'delivery')))",
       "startDate": "2024-10-18",
-      "enrollmentEndDate": null,
+      "enrollmentEndDate": "2024-12-09",
       "endDate": null,
       "proposedDuration": 28,
       "proposedEnrollment": 14,
