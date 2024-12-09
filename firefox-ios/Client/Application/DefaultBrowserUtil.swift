@@ -24,7 +24,8 @@ struct DefaultBrowserUtil {
     }
 
     func processUserDefaultState(isFirstRun: Bool) {
-        guard #available(iOS 18.2, *),
+        guard UIDevice.current.userInterfaceIdiom == .phone,
+              #available(iOS 18.2, *),
               let isDefault = try? application.isDefault(.webBrowser)
         else { return }
 
