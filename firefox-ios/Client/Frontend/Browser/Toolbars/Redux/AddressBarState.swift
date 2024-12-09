@@ -917,7 +917,7 @@ struct AddressBarState: StateType, Equatable {
             maskImageName: isPrivateMode ? ImageIdentifiers.badgeMask : nil,
             numberOfTabs: numberOfTabs,
             isEnabled: true,
-            a11yLabel: .TabsButtonShowTabsAccessibilityLabel,
+            a11yLabel: .Toolbars.TabsButtonAccessibilityLabel,
             a11yId: AccessibilityIdentifiers.Toolbar.tabsButton)
     }
 
