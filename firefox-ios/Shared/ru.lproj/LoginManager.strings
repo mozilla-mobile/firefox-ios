@@ -16,6 +16,9 @@
 /* Label for the button used to delete the current login. */
 "Delete" = "Удалить";
 
+/* Toast text that appears after password delete */
+"Delete Toast" = "Пароль удален";
+
 /* Prompt option for cancelling out of deletion */
 "DeleteLoginAlert.DeleteButton.Cancel.v122" = "Отмена";
 
