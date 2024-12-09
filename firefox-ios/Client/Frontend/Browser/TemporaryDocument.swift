@@ -9,6 +9,7 @@ private let temporaryDocumentOperationQueue = OperationQueue()
 
 protocol TemporaryDocument {
     func getURL(completionHandler: @escaping ((URL?) -> Void))
+    func getDownloadedURL() async -> URL?
 }
 
 class DefaultTemporaryDocument: NSObject, TemporaryDocument {
@@ -40,8 +41,41 @@ class DefaultTemporaryDocument: NSObject, TemporaryDocument {
         }
     }
 
-    // FIXME: FXIOS-10830 If we call this inside a continuation (as in BrowserCoordinator), is it possible we may have a
-    // crash similar to the one fixed in https://github.com/mozilla-mobile/firefox-ios/pull/23596
+    /// Uses modern concurrency to download the file and save to temporary storage.
+    /// FXIOS-10830 - for iOS 18 we need to avoid calling the old URLSession APIs with continuations.
+    /// - Returns: The URL of the file within the temporary directory. Returns nil if the file could not be downloaded.
+    func getDownloadedURL() async -> URL? {
+        if let url = localFileURL {
+            return url
+        }
+
+        do {
+            let (downloadURL, _) = try await URLSession.shared.download(for: request)
+
+            let tempDirectory = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("TempDocs")
+            let tempFileURL = tempDirectory.appendingPathComponent(filename)
+
+            // Rename and move the downloaded file into the TempDocs directory
+            try? FileManager.default.createDirectory(
+                at: tempDirectory,
+                withIntermediateDirectories: true,
+                attributes: nil
+            )
+            try? FileManager.default.removeItem(at: tempFileURL)
+            try FileManager.default.moveItem(at: downloadURL, to: tempFileURL)
+
+            localFileURL = tempFileURL
+            return tempFileURL
+        } catch {
+            return nil
+        }
+    }
+
+    /// Downloads this file to temporary storage.
+    ///
+    /// CAUTION: Do not call this method from within a continuation. In iOS18, if we call this inside a continuation, is it
+    /// possible we may have a crash similar to the one fixed in https://github.com/mozilla-mobile/firefox-ios/pull/23596
+    /// (related ticket is FXIOS-10811, which tracked an incident elsewhere in the app).
     func getURL(completionHandler: @escaping ((URL?) -> Void)) {
         if let url = localFileURL {
             completionHandler(url)

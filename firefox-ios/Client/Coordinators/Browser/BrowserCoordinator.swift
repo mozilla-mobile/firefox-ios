@@ -1131,26 +1131,19 @@ class BrowserCoordinator: BaseCoordinator,
     // MARK: - Private helpers
 
     private func tryDownloadingTabFileToShare(shareType: ShareType) async -> ShareType {
-        return await withCheckedContinuation({(continuation: CheckedContinuation<ShareType, Never>) in
-            // We can only try to download files for `.tab` type shares that have a TemporaryDocument
-            guard case let ShareType.tab(_, tab) = shareType,
-                  let temporaryDocument = tab.temporaryDocument else {
-                continuation.resume(returning: shareType)
-                return
-            }
+        // We can only try to download files for `.tab` type shares that have a TemporaryDocument
+        guard case let ShareType.tab(_, tab) = shareType,
+              let temporaryDocument = tab.temporaryDocument else {
+            return shareType
+        }
 
-            temporaryDocument.getURL { tempDocURL in
-                DispatchQueue.main.async {
-                    if let tempDocURL = tempDocURL, tempDocURL.isFileURL {
-                        // If we successfully got a temp file URL, share it like a downloaded file
-                        continuation.resume(returning: .file(url: tempDocURL))
-                    } else {
-                        // If no file was downloaded, simply share the tab as usual
-                        continuation.resume(returning: shareType)
-                    }
-                }
-            }
-        })
+        guard let fileURL = await temporaryDocument.getDownloadedURL() else {
+            // If no file was downloaded, simply share the tab as usual with a web URL
+            return shareType
+        }
+
+        // If we successfully got a temp file URL, share it like a downloaded file
+        return .file(url: fileURL)
     }
 
     /// Utility. Performs the supplied action if a coordinator of the indicated type
