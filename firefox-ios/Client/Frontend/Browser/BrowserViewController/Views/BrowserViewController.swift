@@ -4101,9 +4101,13 @@ extension BrowserViewController: TopTabsDelegate {
     }
 
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
-        openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
-        overlayManager.openNewTab(url: nil,
-                                  newTabSettings: newTabSettings)
+        let page = NewTabAccessors.getHomePage(profile.prefs)
+        if page == .homePage, let homePageURL = HomeButtonHomePageAccessors.getHomePage(profile.prefs) {
+            tabManager.selectedTab?.loadRequest(PrivilegedRequest(url: homePageURL) as URLRequest)
+        } else {
+            openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
+            overlayManager.openNewTab(url: nil, newTabSettings: newTabSettings)
+        }
     }
 
     func topTabsDidLongPressNewTab(button: UIButton) {
