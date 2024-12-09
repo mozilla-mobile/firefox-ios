@@ -5,6 +5,7 @@
 import Common
 import Shared
 import TabDataStore
+import Foundation
 
 private let userDefaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
 

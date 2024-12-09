@@ -4,6 +4,7 @@
 
 import XCTest
 import Common
+import Shared
 
 let websiteUrl1 = "www.mozilla.org"
 let websiteUrl2 = "developer.mozilla.org"

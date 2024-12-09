@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Shared
 
 class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     var noSkipIntroTest = ["testIntro"]

@@ -4,6 +4,7 @@
 
 import Common
 import XCTest
+import Shared
 
 class ReportSiteTests: BaseTestCase {
     override func setUpApp() {

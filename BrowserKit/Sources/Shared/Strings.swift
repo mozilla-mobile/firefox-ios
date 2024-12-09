@@ -5,11 +5,10 @@
 // swiftlint:disable line_length
 import Foundation
 
-// MARK: - Localization bundle setup
-class BundleClass {}
-
 public struct Strings {
-    public static let bundle = Bundle(for: BundleClass.self)
+    // This is a little workaround to get localizations
+    // FXIOS-10838 will fix this by moving localizations or this struct into the appropriate place
+    public static let bundle = Bundle(identifier: "org.mozilla.ios.Localizations") ?? .main
 }
 
 // MARK: - Localization helper function
