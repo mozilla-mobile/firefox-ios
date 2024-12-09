@@ -95,8 +95,24 @@ class EditBookmarkViewModel {
     func saveBookmark() {
         guard let selectedFolder, let node else { return }
         Task { @MainActor [weak self] in
-            _ = await self?.bookmarksSaver.save(bookmark: node,
-                                                parentFolderGUID: selectedFolder.guid)
+            let result = await self?.bookmarksSaver.save(bookmark: node,
+                                                         parentFolderGUID: selectedFolder.guid)
+            if selectedFolder.guid != self?.parentFolder.guid {
+                switch result {
+                case .success(let saveResult):
+                    switch saveResult {
+                    case .void:
+                        self?.profile.prefs.setString(selectedFolder.guid, forKey: PrefsKeys.BookmarkSaveToFolder)
+                    default:
+                        break
+                    }
+                case .failure(let error):
+                    print("Failed to save: \(error)")
+                case .none:
+                    break
+                }
+            }
+
             self?.onBookmarkSaved?()
         }
     }
