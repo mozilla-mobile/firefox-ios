@@ -14,17 +14,6 @@ class EditBookmarkViewController: UIViewController,
         case bookmark
         case folder
         case newFolder
-
-        var allowsSelection: Bool {
-            return switch self {
-            case .bookmark:
-                false
-            case .folder:
-                true
-            case .newFolder:
-                true
-            }
-        }
     }
     private struct UX {
         static let bookmarkCellTopPadding: CGFloat = 25.0
