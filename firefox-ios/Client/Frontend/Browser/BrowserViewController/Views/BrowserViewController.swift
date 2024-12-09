@@ -986,7 +986,6 @@ class BrowserViewController: UIViewController,
             self.pendingToast = nil
             show(toast: toast, afterWaiting: ButtonToast.UX.delay)
         }
-        showQueuedAlertIfAvailable()
 
         prepareURLOnboardingContextualHint()
 
@@ -1290,6 +1289,7 @@ class BrowserViewController: UIViewController,
     }
 
     fileprivate func showQueuedAlertIfAvailable() {
+        guard presentedViewController == nil else { return }
         if let queuedAlertInfo = tabManager.selectedTab?.dequeueJavascriptAlertPrompt() {
             let alertController = queuedAlertInfo.alertController()
             alertController.delegate = self
@@ -4087,7 +4087,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
 
 extension BrowserViewController: JSPromptAlertControllerDelegate {
     func promptAlertControllerDidDismiss(_ alertController: JSPromptAlertController) {
-        showQueuedAlertIfAvailable()
+         showQueuedAlertIfAvailable()
     }
 }
 
