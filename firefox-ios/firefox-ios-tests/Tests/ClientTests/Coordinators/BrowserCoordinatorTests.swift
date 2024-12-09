@@ -307,7 +307,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(mockRouter.presentedViewController is UIActivityViewController)
         // Right now we have no interface to check the ShareType passed in to ShareSheetCoordinator's start() call, but this
         // can tell us that there was an attempt to download a TemporaryDocument for a tab type share, which is sufficient.
-        XCTAssertEqual(mockTemporaryDocument.getURLCalled, 1)
+        XCTAssertEqual(mockTemporaryDocument.getDownloadedURLCalled, 1)
     }
 
     func testShowCreditCardAutofill_addsCredentialAutofillCoordinator() {

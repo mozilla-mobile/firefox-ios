@@ -9,6 +9,7 @@ import Foundation
 class MockTemporaryDocument: TemporaryDocument {
     var fileURL: URL
     var getURLCalled = 0
+    var getDownloadedURLCalled = 0
 
     init(withFileURL fileURL: URL) {
         self.fileURL = fileURL
@@ -17,5 +18,10 @@ class MockTemporaryDocument: TemporaryDocument {
     func getURL(completionHandler: @escaping ((URL?) -> Void)) {
         getURLCalled += 1
         completionHandler(fileURL)
+    }
+
+    func getDownloadedURL() async -> URL? {
+        getDownloadedURLCalled += 1
+        return fileURL
     }
 }
