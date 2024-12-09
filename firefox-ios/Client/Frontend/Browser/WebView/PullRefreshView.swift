@@ -135,11 +135,11 @@ class PullRefreshView: UIView,
                        options: UX.reloadAnimation.option,
                        animations: {
             self.progressContainerView.transform = UX.progressViewAnimatedBackgroundFinalAnimationTransform
-        }, completion: { _ in
-            self.progressContainerView.backgroundColor = .clear
-            self.progressContainerView.transform = .identity
-            self.progressView.transform = .identity
-            self.onRefreshCallback()
+        }, completion: { [weak self] _ in
+            self?.progressContainerView.backgroundColor = .clear
+            self?.progressContainerView.transform = .identity
+            self?.progressView.transform = .identity
+            self?.onRefreshCallback()
         })
     }
 
