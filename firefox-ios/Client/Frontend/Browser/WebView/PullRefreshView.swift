@@ -249,12 +249,6 @@ struct EasterEggViewLayoutBuilder {
 
     private func layoutEasterEggView(_ view: UIView, superview: UIView, position: NSRectAlignment) {
         let constraints: [NSLayoutConstraint] = switch position {
-        case .topLeading:
-            [
-                view.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -easterEggSize.height / 1.5),
-                view.leadingAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.leadingAnchor,
-                                              constant: sidePadding)
-            ]
         case .leading:
             [
                 view.leadingAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.leadingAnchor),
@@ -276,12 +270,6 @@ struct EasterEggViewLayoutBuilder {
             [
                 view.trailingAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.trailingAnchor),
                 view.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -easterEggSize.height / 2.0)
-            ]
-        case .topTrailing:
-            [
-                view.trailingAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.trailingAnchor,
-                                               constant: -sidePadding),
-                view.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -easterEggSize.height / 1.5)
             ]
         default:
             []
@@ -316,8 +304,6 @@ struct EasterEggViewLayoutBuilder {
         let allowedPositions: [NSRectAlignment] = [
             .bottomLeading,
             .bottomTrailing,
-            .topLeading,
-            .topTrailing,
             .leading,
             .trailing
         ]
