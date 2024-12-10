@@ -43,7 +43,6 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .customizeHomepage).count, 1)
     }
 
-// what is actually the best way to test this? Should our state values be public vars? Probs not.
     func test_updateSnapshot_withColorValueOnState() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
         let wallpaperConfig = WallpaperConfiguration(
