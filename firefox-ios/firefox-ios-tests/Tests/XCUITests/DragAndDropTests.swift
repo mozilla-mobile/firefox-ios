@@ -37,9 +37,10 @@ class DragAndDropTests: BaseTestCase {
         // https://github.com/mozilla-mobile/firefox-ios/issues/19205
         // https://github.com/mozilla-mobile/firefox-ios/issues/19043
         if #available(iOS 17, *) {
+            let tabDisplayCollectionView = app.collectionViews.containingText("TabDisplayView")
             dragAndDrop(
-                dragElement: app.collectionViews.cells[firstWebsite.tabName].firstMatch,
-                dropOnElement: app.collectionViews.cells[secondWebsite.tabName].firstMatch
+                dragElement: tabDisplayCollectionView.cells[firstWebsite.tabName].firstMatch,
+                dropOnElement: tabDisplayCollectionView.cells[secondWebsite.tabName].firstMatch
             )
             mozWaitForElementToExist(app.collectionViews.cells["Internet for people, not profit — Mozilla"])
             checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
@@ -215,18 +216,19 @@ private extension BaseTestCase {
     }
 
     func checkTabsOrder(dragAndDropTab: Bool, firstTab: String, secondTab: String) {
+        let tabDisplayCollectionView = app.collectionViews.containingText("TabDisplayView")
         waitForElementsToExist(
             [
-                app.collectionViews.cells.element(
+                tabDisplayCollectionView.element(
                     boundBy: 0
                 ),
-                app.collectionViews.cells.element(
+                tabDisplayCollectionView.element(
                     boundBy: 1
                 )
             ]
         )
-        let firstTabCell = app.collectionViews.cells.element(boundBy: 0).label
-        let secondTabCell = app.collectionViews.cells.element(boundBy: 1).label
+        let firstTabCell = tabDisplayCollectionView.element(boundBy: 0).label
+        let secondTabCell = tabDisplayCollectionView.element(boundBy: 1).label
 
         if dragAndDropTab {
             sleep(2)

@@ -74,7 +74,7 @@ class DataManagementTests: BaseTestCase {
         }
         mozWaitForElementToExist(app.staticTexts["example.com"])
         if #available(iOS 17, *) {
-            XCTAssertEqual(1, app.cells.images.count)
+            XCTAssertEqual(1, app.cells.images.containingText("circle").count)
         } else {
             XCTAssertEqual(1, app.cells.staticTexts.count-1)
         }
