@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import MozillaAppServices
 import Shared
@@ -12,6 +13,7 @@ class EditBookmarkViewModel {
     private let parentFolder: FxBookmarkNode
     private var node: BookmarkItemData?
     private let profile: Profile
+    private let logger: Logger
     private let folderFetcher: FolderHierarchyFetcher
     private let bookmarksSaver: BookmarksSaver
     weak var bookmarkCoordinatorDelegate: BookmarksCoordinatorDelegate?
@@ -33,11 +35,13 @@ class EditBookmarkViewModel {
     init(parentFolder: FxBookmarkNode,
          node: FxBookmarkNode?,
          profile: Profile,
+         logger: Logger = DefaultLogger.shared,
          bookmarksSaver: BookmarksSaver? = nil,
          folderFetcher: FolderHierarchyFetcher? = nil) {
         self.parentFolder = parentFolder
         self.node = node as? BookmarkItemData
         self.profile = profile
+        self.logger = logger
         self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: profile)
         self.folderFetcher = folderFetcher ?? DefaultFolderHierarchyFetcher(profile: profile,
                                                                             rootFolderGUID: BookmarkRoots.RootGUID)
@@ -100,14 +104,10 @@ class EditBookmarkViewModel {
             if selectedFolder.guid != self?.parentFolder.guid {
                 switch result {
                 case .success(let saveResult):
-                    switch saveResult {
-                    case .void:
-                        self?.profile.prefs.setString(selectedFolder.guid, forKey: PrefsKeys.BookmarkSaveToFolder)
-                    default:
-                        break
-                    }
+                    guard saveResult == .void else { break }
+                    self?.profile.prefs.setString(selectedFolder.guid, forKey: PrefsKeys.BookmarkSaveToFolder)
                 case .failure(let error):
-                    print("Failed to save: \(error)")
+                    self?.logger.log("Failed to save: \(error)", level: .warning, category: .library)
                 case .none:
                     break
                 }

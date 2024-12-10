@@ -2,12 +2,14 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import MozillaAppServices
 import Shared
 
 class EditFolderViewModel {
     private let profile: Profile
+    private let logger: Logger
     private let parentFolder: FxBookmarkNode
     private var folder: FxBookmarkNode?
     private let bookmarkSaver: BookmarksSaver
@@ -27,11 +29,13 @@ class EditFolderViewModel {
     }
 
     init(profile: Profile,
+         logger: Logger = DefaultLogger.shared,
          parentFolder: FxBookmarkNode,
          folder: FxBookmarkNode?,
          bookmarkSaver: BookmarksSaver? = nil,
          folderFetcher: FolderHierarchyFetcher? = nil) {
         self.profile = profile
+        self.logger = logger
         self.parentFolder = parentFolder
         self.folder = folder
         self.bookmarkSaver = bookmarkSaver ?? DefaultBookmarksSaver(profile: profile)
@@ -102,7 +106,7 @@ class EditFolderViewModel {
                         break
                     }
                 case .failure(let error):
-                    print("Failed to save: \(error)")
+                    self.logger.log("Failed to save: \(error)", level: .warning, category: .library)
                 }
 
                 onBookmarkSaved?()
