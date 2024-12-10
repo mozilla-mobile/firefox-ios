@@ -4,7 +4,6 @@
 
 import UIKit
 import Shared
-import Storage
 import Common
 
 class DownloadsPanel: UIViewController,
