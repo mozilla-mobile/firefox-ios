@@ -291,9 +291,12 @@ class TabTrayViewController: UIViewController,
     }
 
     func newState(state: TabTrayState) {
+        guard state != tabTrayState else { return }
+
         tabTrayState = state
-        updateTabCountImage(count: state.normalTabsCount)
-        segmentedControl.selectedSegmentIndex = state.selectedPanel.rawValue
+
+        updateTabCountImage(count: tabTrayState.normalTabsCount)
+        segmentedControl.selectedSegmentIndex = tabTrayState.selectedPanel.rawValue
 
         if tabTrayState.shouldDismiss {
             delegate?.didFinish()
@@ -307,7 +310,7 @@ class TabTrayViewController: UIViewController,
             showCloseAllConfirmation()
         }
 
-        if let toastType = state.toastType {
+        if let toastType = tabTrayState.toastType {
             presentToast(toastType: toastType) { [weak self] undoClose in
                 guard let self else { return }
 

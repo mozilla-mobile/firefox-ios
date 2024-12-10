@@ -126,19 +126,14 @@ class TabDisplayView: UIView,
     private func scrollToTab(_ scrollState: TabsPanelState.ScrollState) {
         let section: Int = scrollState.isInactiveTabSection ? 0 : 1
         let indexPath = IndexPath(row: scrollState.toIndex, section: section)
-
-        // We cannot get the visible cells unless all layout operations have finished finished (e.g. after `reloadData()`)
-        collectionView.layoutIfNeeded()
-
-        // Only scroll to the view if it is not visible.
-        guard !collectionView.indexPathsForFullyVisibleItems.contains(indexPath) else { return }
-
-        // Scrolling to an invalid cell will crash the app, so check indexPath first
-        guard collectionView.isValid(indexPath: indexPath) else { return }
-
-        collectionView.scrollToItem(at: indexPath,
-                                    at: .centeredVertically,
-                                    animated: scrollState.withAnimation)
+        // Piping this into main thread let the collection view finish its layout process
+        DispatchQueue.main.async {
+            guard !self.collectionView.indexPathsForFullyVisibleItems.contains(indexPath) else { return }
+            guard self.collectionView.isValid(indexPath: indexPath) else { return }
+            self.collectionView.scrollToItem(at: indexPath,
+                                             at: .centeredVertically,
+                                             animated: scrollState.withAnimation)
+        }
     }
 
     private func configureDataSource() {
