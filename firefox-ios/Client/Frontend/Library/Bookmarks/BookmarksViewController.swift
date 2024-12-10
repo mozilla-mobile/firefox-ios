@@ -61,7 +61,7 @@ class BookmarksViewController: SiteTableViewController,
 
     private lazy var bottomLeftButton: UIBarButtonItem = {
         let button = UIBarButtonItem(
-            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.plus),
+            title: .BookmarksNewFolder,
             style: .plain,
             target: self,
             action: #selector(bottomLeftButtonAction)
@@ -151,58 +151,6 @@ class BookmarksViewController: SiteTableViewController,
                 self?.updateEmptyState()
             }
         }
-    }
-
-    // MARK: - Actions
-
-    func presentInFolderActions() {
-        let viewModel = PhotonActionSheetViewModel(actions: [[getNewFolderAction(),
-                                                              getNewSeparatorAction()]],
-                                                   modalStyle: .overFullScreen)
-        let sheet = PhotonActionSheet(viewModel: viewModel, windowUUID: windowUUID)
-        sheet.modalTransitionStyle = .crossDissolve
-        present(sheet, animated: true)
-    }
-
-    private func getNewFolderAction() -> PhotonRowActions {
-        return SingleActionViewModel(
-            title: .BookmarksNewFolder,
-            iconString: StandardImageIdentifiers.Large.folder,
-            tapHandler: { _ in
-                guard let bookmarkFolder = self.viewModel.bookmarkFolder else { return }
-
-                self.bookmarkCoordinatorDelegate?.showBookmarkDetail(
-                    bookmarkType: .folder,
-                    parentBookmarkFolder: bookmarkFolder
-                )
-            }).items
-    }
-
-    private func getNewSeparatorAction() -> PhotonRowActions {
-        return SingleActionViewModel(title: .BookmarksNewSeparator,
-                                     iconString: StandardImageIdentifiers.Large.appMenu,
-                                     tapHandler: { _ in
-            let centerVisibleRow = self.centerVisibleRow()
-
-            self.profile.places.createSeparator(parentGUID: self.viewModel.bookmarkFolderGUID,
-                                                position: UInt32(centerVisibleRow)) >>== { guid in
-                self.profile.places.getBookmark(guid: guid).uponQueue(.main) { result in
-                    guard let bookmarkNode = result.successValue,
-                          let bookmarkSeparator = bookmarkNode as? BookmarkSeparatorData
-                    else { return }
-
-                    let indexPath = IndexPath(row: centerVisibleRow,
-                                              section: BookmarksPanelViewModel.BookmarksSection.bookmarks.rawValue)
-                    self.tableView.beginUpdates()
-                    self.viewModel.bookmarkNodes.insert(bookmarkSeparator, at: centerVisibleRow)
-                    self.tableView.insertRows(at: [indexPath], with: .automatic)
-                    self.tableView.endUpdates()
-
-                    self.updateEmptyState()
-                    self.flashRow(at: indexPath)
-                }
-            }
-        }).items
     }
 
     private func centerVisibleRow() -> Int {
@@ -651,7 +599,12 @@ extension BookmarksViewController: Notifiable {
 extension BookmarksViewController {
     func bottomLeftButtonAction() {
         if state == .bookmarks(state: .inFolderEditMode) {
-            presentInFolderActions()
+            guard let bookmarkFolder = self.viewModel.bookmarkFolder else { return }
+
+            self.bookmarkCoordinatorDelegate?.showBookmarkDetail(
+                bookmarkType: .folder,
+                parentBookmarkFolder: bookmarkFolder
+            )
         }
     }
 

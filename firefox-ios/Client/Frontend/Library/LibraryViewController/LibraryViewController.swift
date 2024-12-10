@@ -132,6 +132,7 @@ class LibraryViewController: UIViewController, Themeable {
 
     func updateViewWithState() {
         setupButtons()
+        updateSegmentControl()
     }
 
     fileprivate func updateTitle() {
@@ -324,6 +325,17 @@ class LibraryViewController: UIViewController, Themeable {
         navigationController?.toolbar.tintColor = theme.colors.actionPrimary
     }
 
+    private func updateSegmentControl() {
+        let panelState = getCurrentPanelState()
+
+        switch panelState {
+        case .bookmarks(state: .inFolderEditMode):
+            (1...3).forEach { index in self.librarySegmentControl.setEnabled(false, forSegmentAt: index) }
+        default:
+            (0...3).forEach { index in self.librarySegmentControl.setEnabled(true, forSegmentAt: index) }
+        }
+    }
+
     func applyTheme() {
         // There is an ANNOYING bar in the nav bar above the segment control. These are the
         // UIBarBackgroundShadowViews. We must set them to be clear images in order to
@@ -361,6 +373,7 @@ extension LibraryViewController: Notifiable {
         switch notification.name {
         case .LibraryPanelStateDidChange:
             setupButtons()
+            updateSegmentControl()
         default: break
         }
     }
