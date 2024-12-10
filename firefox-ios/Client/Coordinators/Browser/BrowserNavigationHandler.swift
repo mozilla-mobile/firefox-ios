@@ -19,6 +19,8 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
     /// Asks to show a enhancedTrackingProtection page, can be a general 
     /// enhancedTrackingProtection page or a child page
     func showEnhancedTrackingProtection(sourceView: UIView)
+    func closeEnhancedTrackingProtection()
+    func enhancedTrackingProtectionGoBack()
 
     /// Shows the specified section of the home panel.
     ///

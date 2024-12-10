@@ -666,6 +666,7 @@ class BrowserViewController: UIViewController,
         executeNavigationAndDisplayActions()
 
         handleMicrosurvey(state: state)
+        handleTrackingProtectionState(state: state)
     }
 
     private func showToastType(toast: ToastType) {
@@ -710,6 +711,20 @@ class BrowserViewController: UIViewController,
         } else if state.microsurveyState.showPrompt {
             guard microsurvey == nil else { return }
             createMicrosurveyPrompt(with: state.microsurveyState)
+        }
+    }
+
+    private func handleTrackingProtectionState(state: BrowserViewControllerState) {
+        guard let navigationDestination = state.trackingProtectionState.navigateTo else { return }
+        switch navigationDestination {
+        case .back:
+            navigationHandler?.enhancedTrackingProtectionGoBack()
+        case .close:
+            navigationHandler?.closeEnhancedTrackingProtection()
+        case .settings:
+            navigationHandler?.show(settings: .contentBlocker)
+        case .home:
+            break
         }
     }
 
