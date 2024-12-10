@@ -17,7 +17,10 @@ public class AppContainer: ServiceProvider {
     /// Any services needed by the client can be resolved by calling this.
     public func resolve<T>() -> T {
         do {
-            return try container.resolve(T.self) as! T
+            guard let service = try container.resolve(T.self) as? T else {
+                fatalError("Failed to cast resolved service to type \(T.self)")
+            }
+            return service
         } catch {
             // If a service we thought was registered can't be resolved, this is likely an issue within
             // bootstrapping. Double check your registrations and their types.
