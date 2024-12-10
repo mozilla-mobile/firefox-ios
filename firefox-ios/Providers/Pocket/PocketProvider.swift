@@ -131,9 +131,9 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
             throw error
         }
     }
-    
+
     // Fetch items from the global pocket feed
-    func fetchStoriesNEWV1(items: Int) async throws -> [PocketFeedStory]  {
+    func fetchStoriesNEWV1(items: Int) async throws -> [PocketFeedStory] {
         let isFeatureEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
         let isCurrentLocaleSupported = PocketProvider.islocaleSupported(Locale.current.identifier)
 
@@ -232,7 +232,7 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
 
         return completion(.success(Array(PocketFeedStory.parseJSON(list: items).prefix(count))))
     }
-    
+
     private func getMockDataFeed(count: Int = 2) async throws -> [PocketFeedStory] {
         guard let path = Bundle(for: type(of: self)).path(forResource: "pocketglobalfeed", ofType: "json"),
               let data = try? Data(contentsOf: URL(fileURLWithPath: path))

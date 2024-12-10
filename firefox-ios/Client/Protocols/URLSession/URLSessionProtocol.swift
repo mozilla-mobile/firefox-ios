@@ -25,7 +25,7 @@ extension URLSession: URLSessionProtocol {
     public func data(from url: URL) async throws -> (Data, URLResponse) {
         try await data(from: url, delegate: nil)
     }
-    
+
     public func data(from urlRequest: URLRequest) async throws -> (Data, URLResponse) {
         try await data(for: urlRequest, delegate: nil)
     }
