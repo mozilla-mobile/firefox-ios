@@ -636,7 +636,7 @@ extension BrowserViewController: WKNavigationDelegate {
             let group = DispatchGroup()
             var url: URL?
             group.enter()
-            let temporaryDocument = TemporaryDocument(preflightResponse: response, request: request)
+            let temporaryDocument = DefaultTemporaryDocument(preflightResponse: response, request: request)
             temporaryDocument.getURL(completionHandler: { docURL in
                 url = docURL
                 group.leave()
@@ -711,7 +711,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // representative of the contents of the web view.
         if navigationResponse.isForMainFrame, let tab = tabManager[webView] {
             if response.mimeType != MIMEType.HTML, let request = request {
-                tab.temporaryDocument = TemporaryDocument(preflightResponse: response, request: request)
+                tab.temporaryDocument = DefaultTemporaryDocument(preflightResponse: response, request: request)
             } else {
                 tab.temporaryDocument = nil
             }
