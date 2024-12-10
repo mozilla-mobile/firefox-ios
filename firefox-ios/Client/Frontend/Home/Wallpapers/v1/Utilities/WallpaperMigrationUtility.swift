@@ -30,7 +30,7 @@ struct WallpaperMigrationUtility {
 
         do {
             let currentWallpaper = storageUtility.fetchCurrentWallpaper()
-            guard currentWallpaper.type != .defaultWallpaper,
+            guard currentWallpaper.type != .none,
                   let landscape = currentWallpaper.landscape,
                   let portrait = currentWallpaper.portrait,
                   let matchingID = getMatchingIdBasedOn(legacyId: currentWallpaper.id),

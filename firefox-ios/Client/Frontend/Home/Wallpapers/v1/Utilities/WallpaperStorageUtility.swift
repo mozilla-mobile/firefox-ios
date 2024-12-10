@@ -97,7 +97,7 @@ struct WallpaperStorageUtility: WallpaperMetadataCodableProtocol {
             }
         }
 
-        return Wallpaper.defaultWallpaper
+        return Wallpaper.baseWallpaper
     }
 
     public func fetchImageNamed(_ name: String) throws -> UIImage? {

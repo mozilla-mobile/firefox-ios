@@ -759,7 +759,7 @@ class TelemetryWrapperTests: XCTestCase {
                                          logoTextColor: nil)
 
         WallpaperManager().setCurrentWallpaper(to: defaultWallpaper) { _ in }
-        XCTAssertEqual(WallpaperManager().currentWallpaper.type, .defaultWallpaper)
+        XCTAssertEqual(WallpaperManager().currentWallpaper.type, .none)
 
         let fakeNotif = NSNotification(name: UIApplication.didEnterBackgroundNotification, object: nil)
         TelemetryWrapper.shared.recordEnteredBackgroundPreferenceMetrics(notification: fakeNotif)
