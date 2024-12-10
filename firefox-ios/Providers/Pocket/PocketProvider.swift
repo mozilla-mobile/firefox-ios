@@ -9,7 +9,7 @@ import Storage
 protocol PocketStoriesProviding {
     typealias StoryResult = Swift.Result<[PocketFeedStory], Error>
 
-    func fetchStoriesNewV2(items: Int) async throws -> [PocketFeedStory]
+    func fetchStories(items: Int) async throws -> [PocketFeedStory]
 }
 
 extension PocketStoriesProviding {
@@ -65,52 +65,7 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
     }
 
     // Fetch items from the global pocket feed
-    func fetchStoriesold(items: Int, completion: @escaping (StoryResult) -> Void) {
-        let isFeatureEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
-        let isCurrentLocaleSupported = PocketProvider.islocaleSupported(Locale.current.identifier)
-
-        // Check if we should use mock data
-        if shouldUseMockData {
-            return getMockDataFeedold(count: items, completion: completion)
-        }
-
-        // Ensure the feature is enabled and current locale is supported
-        guard isFeatureEnabled, isCurrentLocaleSupported else {
-            completion(.failure(Error.failure))
-            return
-        }
-
-        // Note: Global feed is restricted to specific locale and feature availability
-        getGlobalFeedold(items: items, completion: completion)
-    }
-
-    private func getGlobalFeedold(items: Int, completion: @escaping (StoryResult) -> Void) {
-        guard let request = createGlobalFeedRequest(items: items) else {
-            return completion(.failure(Error.failure))
-        }
-
-        if let cachedResponse = findCachedResponse(for: request),
-           let items = cachedResponse["recommendations"] as? [[String: Any]] {
-            return completion(.success(PocketFeedStory.parseJSON(list: items)))
-        }
-
-        urlSession.dataTask(with: request) { (data, response, error) in
-            guard let response = validatedHTTPResponse(response, contentType: "application/json"),
-                  let data = data
-            else { return completion(.failure(Error.failure)) }
-
-            self.cache(response: response, for: request, with: data)
-
-            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
-            guard let items = json?["recommendations"] as? [[String: Any]] else {
-                return completion(.failure(Error.failure))
-            }
-
-            return completion(.success(PocketFeedStory.parseJSON(list: items)))
-        }.resume()
-    }
-
-    func fetchStoriesNewV2(items: Int) async throws -> [PocketFeedStory] {
+    func fetchStories(items: Int) async throws -> [PocketFeedStory] {
         do {
             let isFeatureEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
             let isCurrentLocaleSupported = PocketProvider.islocaleSupported(Locale.current.identifier)
@@ -130,25 +85,6 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
         } catch {
             throw error
         }
-    }
-
-    // Fetch items from the global pocket feed
-    func fetchStoriesNEWV1(items: Int) async throws -> [PocketFeedStory] {
-        let isFeatureEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
-        let isCurrentLocaleSupported = PocketProvider.islocaleSupported(Locale.current.identifier)
-
-        // Check if we should use mock data
-        if shouldUseMockData {
-            return try await getMockDataFeed(count: items)
-        }
-
-        // Ensure the feature is enabled and current locale is supported
-        guard isFeatureEnabled, isCurrentLocaleSupported else {
-            throw Error.failure
-        }
-
-        // Note: Global feed is restricted to specific locale and feature availability
-        return try await getGlobalFeed(items: items)
     }
 
     private func getGlobalFeed(items: Int) async throws -> [PocketFeedStory] {
