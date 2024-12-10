@@ -93,7 +93,7 @@ struct AddressBarState: StateType, Equatable {
             safeListedURLImageName: nil,
             isEditing: false,
             shouldShowKeyboard: true,
-            shouldSelectSearchTerm: true,
+            shouldSelectSearchTerm: false,
             isLoading: false,
             readerModeState: nil,
             didStartTyping: false,
@@ -199,6 +199,9 @@ struct AddressBarState: StateType, Equatable {
         case ToolbarActionType.didEnterSearchTerm:
             return handleDidEnterSearchTermAction(state: state, action: action)
 
+        case ToolbarActionType.didSetSearchTerm:
+            return handleDidSetSearchTermAction(state: state, action: action)
+
         case ToolbarActionType.didStartTyping:
             return handleDidStartTypingAction(state: state, action: action)
 
@@ -231,7 +234,7 @@ struct AddressBarState: StateType, Equatable {
             safeListedURLImageName: nil,
             isEditing: false,
             shouldShowKeyboard: true,
-            shouldSelectSearchTerm: true,
+            shouldSelectSearchTerm: false,
             isLoading: false,
             readerModeState: nil,
             didStartTyping: false,
@@ -391,7 +394,7 @@ struct AddressBarState: StateType, Equatable {
             browserActions: browserActions(action: toolbarAction, addressBarState: state),
             borderPosition: state.borderPosition,
             url: state.url,
-            searchTerm: nil,
+            searchTerm: state.searchTerm,
             lockIconImageName: state.lockIconImageName,
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
@@ -542,7 +545,7 @@ struct AddressBarState: StateType, Equatable {
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: false,
             shouldShowKeyboard: true,
-            shouldSelectSearchTerm: true,
+            shouldSelectSearchTerm: false,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: false,
@@ -651,7 +654,7 @@ struct AddressBarState: StateType, Equatable {
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: true,
             shouldShowKeyboard: state.shouldShowKeyboard,
-            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            shouldSelectSearchTerm: false,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: true,
@@ -679,11 +682,36 @@ struct AddressBarState: StateType, Equatable {
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: true,
             shouldShowKeyboard: state.shouldShowKeyboard,
-            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            shouldSelectSearchTerm: false,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: true,
             showQRPageAction: false,
+            alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    private static func handleDidSetSearchTermAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            pageActions: state.pageActions,
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: toolbarAction.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            shouldShowKeyboard: state.shouldShowKeyboard,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: false,
+            showQRPageAction: state.showQRPageAction,
             alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
@@ -704,7 +732,7 @@ struct AddressBarState: StateType, Equatable {
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: state.isEditing,
             shouldShowKeyboard: state.shouldShowKeyboard,
-            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            shouldSelectSearchTerm: false,
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: true,
