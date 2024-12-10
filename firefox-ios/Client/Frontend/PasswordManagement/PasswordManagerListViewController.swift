@@ -334,6 +334,7 @@ private extension PasswordManagerListViewController {
                         self.cancelSelection()
                         self.loadLogins()
                         self.sendLoginsDeletedTelemetry()
+                        self.showToast()
                     }
                 }
             }, hasSyncedLogins: yes.successValue ?? true)
