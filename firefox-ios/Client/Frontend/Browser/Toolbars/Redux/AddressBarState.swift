@@ -78,6 +78,7 @@ struct AddressBarState: StateType, Equatable {
         a11yId: AccessibilityIdentifiers.Toolbar.fireButton)
 
     init(windowUUID: WindowUUID) {
+<<<<<<< HEAD
         self.init(windowUUID: windowUUID,
                   navigationActions: [],
                   pageActions: [],
@@ -85,6 +86,28 @@ struct AddressBarState: StateType, Equatable {
                   borderPosition: nil,
                   url: nil,
                   lockIconNeedsTheming: true)
+=======
+        self.init(
+            windowUUID: windowUUID,
+            navigationActions: [],
+            pageActions: [],
+            browserActions: [],
+            borderPosition: nil,
+            url: nil,
+            searchTerm: nil,
+            lockIconImageName: nil,
+            lockIconNeedsTheming: true,
+            safeListedURLImageName: nil,
+            isEditing: false,
+            shouldShowKeyboard: true,
+            shouldSelectSearchTerm: false,
+            isLoading: false,
+            readerModeState: nil,
+            didStartTyping: false,
+            showQRPageAction: true,
+            alternativeSearchEngine: nil
+        )
+>>>>>>> e3a47e5bd (Bugfix FXIOS-10597 - When rotating the device, text entered into the toolbar disappears. (#23370))
     }
 
     init(windowUUID: WindowUUID,
@@ -179,6 +202,9 @@ struct AddressBarState: StateType, Equatable {
         case ToolbarActionType.didEnterSearchTerm:
             return handleDidEnterSearchTermAction(state: state, action: action)
 
+        case ToolbarActionType.didSetSearchTerm:
+            return handleDidSetSearchTermAction(state: state, action: action)
+
         case ToolbarActionType.didStartTyping:
             return handleDidStartTypingAction(state: state, action: action)
 
@@ -197,7 +223,22 @@ struct AddressBarState: StateType, Equatable {
             browserActions: [tabsAction(), menuAction()],
             borderPosition: borderPosition,
             url: nil,
+<<<<<<< HEAD
             lockIconNeedsTheming: true
+=======
+            searchTerm: nil,
+            lockIconImageName: nil,
+            lockIconNeedsTheming: true,
+            safeListedURLImageName: nil,
+            isEditing: false,
+            shouldShowKeyboard: true,
+            shouldSelectSearchTerm: false,
+            isLoading: false,
+            readerModeState: nil,
+            didStartTyping: false,
+            showQRPageAction: true,
+            alternativeSearchEngine: state.alternativeSearchEngine
+>>>>>>> e3a47e5bd (Bugfix FXIOS-10597 - When rotating the device, text entered into the toolbar disappears. (#23370))
         )
     }
 
@@ -342,7 +383,7 @@ struct AddressBarState: StateType, Equatable {
             browserActions: browserActions(action: toolbarAction, addressBarState: state),
             borderPosition: state.borderPosition,
             url: state.url,
-            searchTerm: nil,
+            searchTerm: state.searchTerm,
             lockIconImageName: state.lockIconImageName,
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
@@ -485,8 +526,13 @@ struct AddressBarState: StateType, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: false,
+<<<<<<< HEAD
             isScrollingDuringEdit: false,
             shouldSelectSearchTerm: true,
+=======
+            shouldShowKeyboard: true,
+            shouldSelectSearchTerm: false,
+>>>>>>> e3a47e5bd (Bugfix FXIOS-10597 - When rotating the device, text entered into the toolbar disappears. (#23370))
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: false,
@@ -588,9 +634,15 @@ struct AddressBarState: StateType, Equatable {
             lockIconImageName: state.lockIconImageName,
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
+<<<<<<< HEAD
             isEditing: state.isEditing,
             isScrollingDuringEdit: state.isScrollingDuringEdit,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+=======
+            isEditing: true,
+            shouldShowKeyboard: state.shouldShowKeyboard,
+            shouldSelectSearchTerm: false,
+>>>>>>> e3a47e5bd (Bugfix FXIOS-10597 - When rotating the device, text entered into the toolbar disappears. (#23370))
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: true,
@@ -615,13 +667,44 @@ struct AddressBarState: StateType, Equatable {
             lockIconImageName: state.lockIconImageName,
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
+<<<<<<< HEAD
             isEditing: state.isEditing,
             isScrollingDuringEdit: state.isScrollingDuringEdit,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+=======
+            isEditing: true,
+            shouldShowKeyboard: state.shouldShowKeyboard,
+            shouldSelectSearchTerm: false,
+>>>>>>> e3a47e5bd (Bugfix FXIOS-10597 - When rotating the device, text entered into the toolbar disappears. (#23370))
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: true,
             showQRPageAction: false
+        )
+    }
+
+    private static func handleDidSetSearchTermAction(state: Self, action: Action) -> Self {
+        guard let toolbarAction = action as? ToolbarAction else { return defaultState(from: state) }
+
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            pageActions: state.pageActions,
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: toolbarAction.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: state.isEditing,
+            shouldShowKeyboard: state.shouldShowKeyboard,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: false,
+            showQRPageAction: state.showQRPageAction,
+            alternativeSearchEngine: state.alternativeSearchEngine
         )
     }
 
@@ -640,8 +723,13 @@ struct AddressBarState: StateType, Equatable {
             lockIconNeedsTheming: state.lockIconNeedsTheming,
             safeListedURLImageName: state.safeListedURLImageName,
             isEditing: state.isEditing,
+<<<<<<< HEAD
             isScrollingDuringEdit: state.isScrollingDuringEdit,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+=======
+            shouldShowKeyboard: state.shouldShowKeyboard,
+            shouldSelectSearchTerm: false,
+>>>>>>> e3a47e5bd (Bugfix FXIOS-10597 - When rotating the device, text entered into the toolbar disappears. (#23370))
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: true,

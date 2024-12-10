@@ -6,7 +6,7 @@ import Common
 import ToolbarKit
 import Shared
 
-class AddressToolbarContainerModel: Equatable {
+final class AddressToolbarContainerModel: Equatable {
     let navigationActions: [ToolbarElement]
     let pageActions: [ToolbarElement]
     let browserActions: [ToolbarElement]
