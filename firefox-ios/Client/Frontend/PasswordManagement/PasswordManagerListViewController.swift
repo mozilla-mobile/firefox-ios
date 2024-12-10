@@ -171,7 +171,7 @@ class PasswordManagerListViewController: SensitiveViewController, Themeable {
     func showToast() {
         SimpleToast().showAlertWithText(.LoginListDeleteToast,
                                         bottomContainer: view,
-                                        theme: themeManager.currentTheme(for: (self.view)?.currentWindowUUID))
+                                        theme: themeManager.getCurrentTheme(for: windowUUID))
     }
 
     lazy var editButton = UIBarButtonItem(barButtonSystemItem: .edit,
