@@ -488,6 +488,9 @@ public class RustLogins: LoginsProtocol, KeyManager {
         queue = DispatchQueue(label: "RustLogins queue: \(databasePath)", attributes: [])
     }
 
+    // MARK: - KeyManager
+    // This method will be called internally by rust
+    // when it needs to encrypt/decrypt logins.
     public func getKey() throws -> Data {
         var storedKey: String?
         var resultError: NSError?
@@ -679,7 +682,8 @@ public class RustLogins: LoginsProtocol, KeyManager {
                     }
 
                     let filteredRecords = records.filter {
-                        return $0.fields.origin.lowercased().contains(query) || $0.secFields.username.lowercased().contains(query)
+                        return $0.fields.origin.lowercased().contains(query) ||
+                            $0.secFields.username.lowercased().contains(query)
                     }
 
                     completionHandler(.success(filteredRecords))
