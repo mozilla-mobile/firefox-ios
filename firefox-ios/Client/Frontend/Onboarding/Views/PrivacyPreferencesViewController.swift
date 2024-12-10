@@ -10,7 +10,7 @@ final class PrivacyPreferencesViewController: UIViewController,
                                               Themeable,
                                               Notifiable {
     struct UX {
-        static let headerViewTopMargin: CGFloat = 10
+        static let headerViewTopMargin: CGFloat = 24
         static let horizontalMargin: CGFloat = 10
         static let contentHorizontalMargin: CGFloat = 24
         static let contentDistance: CGFloat = 24
@@ -24,7 +24,22 @@ final class PrivacyPreferencesViewController: UIViewController,
     var notificationCenter: NotificationProtocol
 
     // MARK: - UI elements
-    private var headerView: HeaderView = .build()
+    private lazy var titleLabel: UILabel = .build { label in
+        label.font = FXFontStyles.Regular.body.scaledFont()
+        label.numberOfLines = 0
+        label.text = .Onboarding.TermsOfService.PrivacyPreferences.Title
+        label.adjustsFontForContentSizeCategory = true
+        label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
+    }
+
+    private lazy var doneButton: UIButton = .build { button in
+        button.titleLabel?.font = FXFontStyles.Bold.body.scaledFont()
+        button.addTarget(self, action: #selector(self.doneButtonTapped), for: .touchUpInside)
+        button.titleLabel?.adjustsFontForContentSizeCategory = true
+        button.setTitle(.SettingsSearchDoneButton, for: .normal)
+        button.setContentHuggingPriority(.required, for: .horizontal)
+    }
 
     private lazy var contentScrollView: UIScrollView = .build()
 
@@ -48,7 +63,6 @@ final class PrivacyPreferencesViewController: UIViewController,
         setupNotifications(forObserver: self, observing: [.DynamicFontChanged])
         setupLayout()
         setDetentSize()
-        setupHeaderView()
         setupContentViews()
         setupCallbacks()
         setupAccessibility()
@@ -67,17 +81,21 @@ final class PrivacyPreferencesViewController: UIViewController,
 
     // MARK: - View setup
     private func setupLayout() {
-        view.addSubview(headerView)
+        view.addSubview(titleLabel)
+        view.addSubview(doneButton)
         view.addSubview(contentScrollView)
         contentScrollView.addSubview(contentView)
         contentView.addSubview(crashReportsSwitch)
         contentView.addSubview(technicalDataSwitch)
         NSLayoutConstraint.activate([
-            headerView.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.headerViewTopMargin),
-            headerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.horizontalMargin),
-            headerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.horizontalMargin),
+            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.headerViewTopMargin),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.contentHorizontalMargin),
 
-            contentScrollView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
+            doneButton.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: UX.horizontalMargin),
+            doneButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -UX.contentHorizontalMargin),
+            doneButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
+
+            contentScrollView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: UX.headerViewTopMargin),
             contentScrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             contentScrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentScrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -117,16 +135,6 @@ final class PrivacyPreferencesViewController: UIViewController,
         ])
     }
 
-    private func setupHeaderView() {
-        headerView.updateHeaderLineView(isHidden: true)
-        headerView.setupDetails(title: .Onboarding.TermsOfService.PrivacyPreferences.Title,
-                                doneText: .SettingsSearchDoneButton)
-        headerView.adjustLayout(shouldHideIcon: true, shouldUseDoneButton: true)
-        headerView.closeButtonCallback = { [weak self] in
-            self?.dismiss(animated: true)
-        }
-    }
-
     private func setupContentViews() {
         crashReportsSwitch.setupDetails(
             actionTitle: .Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle,
@@ -157,10 +165,10 @@ final class PrivacyPreferencesViewController: UIViewController,
     }
 
     private func setupAccessibility() {
-        headerView.setupAccessibility(doneButtonA11yId: AccessibilityIdentifiers.TermsOfService.PrivacyNotice.doneButton,
-                                      titleA11yId: AccessibilityIdentifiers.TermsOfService.PrivacyNotice.title)
-
         let identifiers = AccessibilityIdentifiers.TermsOfService.PrivacyNotice.self
+        titleLabel.accessibilityIdentifier = identifiers.title
+        doneButton.accessibilityIdentifier = identifiers.doneButton
+
         let crashReportViewModel = SwitchDetailedViewModel(
             contentStackViewA11yId: identifiers.CrashReports.contentStackView,
             actionContentViewA11yId: identifiers.CrashReports.actionContentView,
@@ -211,6 +219,11 @@ final class PrivacyPreferencesViewController: UIViewController,
         dismiss(animated: true, completion: nil)
     }
 
+    @objc
+    func doneButtonTapped() {
+        dismiss(animated: true)
+    }
+
     // MARK: - Notifications
     func handleNotifications(_ notification: Notification) {
         switch notification.name {
@@ -224,7 +237,8 @@ final class PrivacyPreferencesViewController: UIViewController,
     func applyTheme() {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer3
-        headerView.applyTheme(theme: theme)
+        titleLabel.textColor = theme.colors.textPrimary
+        doneButton.setTitleColor(theme.colors.textAccent, for: .normal)
         crashReportsSwitch.applyTheme(theme: theme)
         technicalDataSwitch.applyTheme(theme: theme)
         setupContentViews()
