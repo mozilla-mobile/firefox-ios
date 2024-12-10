@@ -75,13 +75,15 @@ extension SwipeAnimator {
         // Calculate the edge to calculate distance from
         let translation = velocity.x >= 0 ? animatingView.frame.width : -animatingView.frame.width
         let timeStep = TimeInterval(abs(translation) / speed)
-        self.delegate?.swipeAnimator(self)
         UIView.animate(
             withDuration: timeStep,
             animations: {
                 animatingView.transform = self.transformForTranslation(translation)
                 animatingView.alpha = self.alphaForDistanceFromCenter(abs(translation))
-            }, completion: { finished in
+            }, completion: { [weak self] finished in
+                if let self {
+                    delegate?.swipeAnimator(self)
+                }
                 if finished {
                     animatingView.alpha = 0
                 }
