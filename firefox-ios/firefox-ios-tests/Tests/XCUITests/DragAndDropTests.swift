@@ -19,7 +19,7 @@ let secondWebsiteUnselected = (
     tabName: "The Book of Mozilla"
 )
 let homeTabName = "Homepage"
-let websiteWithSearchField = "https://developer.mozilla.org/en-US/"
+let websiteWithSearchField = "developer.mozilla.org"
 
 class DragAndDropTests: BaseTestCase {
 //  Disable test suite since in theory it does not make sense with Chron tabs implementation
@@ -327,6 +327,10 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
 
         // Verify that the text in the search field is the same as the text in the url text field
         searchField.tap()
-        XCTAssertTrue(app.webViews["Web content"].otherElements.elementContainingText(websiteWithSearchField).exists)
+        guard let textValue = app.textFields[searchTextField].value as? String, textValue == websiteWithSearchField
+        else {
+            XCTFail("The url text field value is not equal to \(websiteWithSearchField)")
+            return
+        }
     }
 }
