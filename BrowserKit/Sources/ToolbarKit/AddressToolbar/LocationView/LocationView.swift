@@ -93,6 +93,10 @@ final class LocationView: UIView,
         urlTextField.adjustsFontForContentSizeCategory = true
         urlTextField.autocompleteDelegate = self
         urlTextField.accessibilityActionsSource = self
+        // Update the `textAlignment` property only when the entire layout direction is RTL or LTR,
+        // similar to Apple's handling in Safari, ensuring that `textAlignment` remains in sync with the layout constraints.
+        let layoutDirection = UIView.userInterfaceLayoutDirection(for: semanticContentAttribute)
+        urlTextField.textAlignment = layoutDirection == .rightToLeft ? .right : .left
     }
 
     // MARK: - Init
