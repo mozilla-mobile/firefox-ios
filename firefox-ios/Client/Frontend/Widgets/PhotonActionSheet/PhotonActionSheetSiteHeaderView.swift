@@ -49,12 +49,15 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
     }
 
     func configure(with bookmarkFolderTitle: String) {
-        imageView.manuallySetImage(UIImage(resource: .folderLarge))
+        if let image = UIImage(named: StandardImageIdentifiers.Large.folder)?.withRenderingMode(.alwaysTemplate) {
+            imageView.manuallySetImage(image)
+        }
         titleLabel.text = bookmarkFolderTitle
     }
 
     func applyTheme(theme: Theme) {
         imageView.layer.borderColor = theme.colors.borderPrimary.cgColor
+        imageView.tintColor = theme.colors.iconPrimary
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor = theme.colors.textPrimary
     }
