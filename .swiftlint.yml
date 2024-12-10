@@ -84,6 +84,7 @@ only_rules: # Only enforce these rules, ignore all others
   - yoda_condition
   - accessibility_label_for_image
   - accessibility_trait_for_button
+  - force_cast
 
 # These rules were originally opted into. Disabling for now to get
 # Swiftlint up and running.

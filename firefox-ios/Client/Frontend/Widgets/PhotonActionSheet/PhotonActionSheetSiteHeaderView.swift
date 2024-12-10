@@ -30,7 +30,7 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
         label.numberOfLines = 1
     }
 
-    private lazy var siteImageView: FaviconImageView = .build { _ in }
+    private lazy var imageView: FaviconImageView = .build { _ in }
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
@@ -43,13 +43,18 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
     }
 
     func configure(with site: Site) {
-        siteImageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
+        imageView.setFavicon(FaviconImageViewModel(siteURLString: site.url))
         titleLabel.text = site.title.isEmpty ? site.url : site.title
         descriptionLabel.text = site.tileURL.baseDomain
     }
 
+    func configure(with bookmarkFolderTitle: String) {
+        imageView.manuallySetImage(UIImage(resource: .folderLarge))
+        titleLabel.text = bookmarkFolderTitle
+    }
+
     func applyTheme(theme: Theme) {
-        siteImageView.layer.borderColor = theme.colors.borderPrimary.cgColor
+        imageView.layer.borderColor = theme.colors.borderPrimary.cgColor
         titleLabel.textColor = theme.colors.textPrimary
         descriptionLabel.textColor = theme.colors.textPrimary
     }
@@ -57,7 +62,7 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
     private func setupLayout() {
         backgroundView = UIView()
         backgroundView?.backgroundColor = .clear
-        contentView.addSubview(siteImageView)
+        contentView.addSubview(imageView)
 
         labelContainerView.addSubview(titleLabel)
         labelContainerView.addSubview(descriptionLabel)
@@ -66,14 +71,14 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView, ReusableCell
         let padding = PhotonActionSheetSiteHeaderView.UX.padding
 
         NSLayoutConstraint.activate([
-            siteImageView.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: padding),
-            siteImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
-            siteImageView.widthAnchor.constraint(equalToConstant: UX.siteImageViewSize),
-            siteImageView.heightAnchor.constraint(equalToConstant: UX.siteImageViewSize),
-            siteImageView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -padding),
-            siteImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            imageView.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: padding),
+            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: padding),
+            imageView.widthAnchor.constraint(equalToConstant: UX.siteImageViewSize),
+            imageView.heightAnchor.constraint(equalToConstant: UX.siteImageViewSize),
+            imageView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -padding),
+            imageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
 
-            labelContainerView.leadingAnchor.constraint(equalTo: siteImageView.trailingAnchor, constant: padding),
+            labelContainerView.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: padding),
             labelContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -padding),
             labelContainerView.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor, constant: padding),
             labelContainerView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor,
