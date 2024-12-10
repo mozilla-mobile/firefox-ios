@@ -11,7 +11,7 @@ protocol BookmarksSaver {
     func save(bookmark: FxBookmarkNode, parentFolderGUID: String) async -> Result<SaveResult, Error>
 }
 
-enum SaveResult {
+enum SaveResult: Equatable {
     case guid(String)
     case void
 }
