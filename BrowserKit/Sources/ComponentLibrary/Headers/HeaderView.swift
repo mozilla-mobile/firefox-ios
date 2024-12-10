@@ -132,7 +132,6 @@ public final class HeaderView: UIView, ThemeApplicable {
             mainButton.topAnchor.constraint(equalTo: headerLabelsContainer.topAnchor),
             mainButton.bottomAnchor.constraint(equalTo: headerLabelsContainer.bottomAnchor)
         ])
-
         let favIconSizes = isAccessibilityCategory ? UX.largeFaviconImageSize :
         isWebsiteIcon ? UX.favIconImageSize: UX.smallFaviconImageSize
         viewConstraints.append(favicon.heightAnchor.constraint(equalToConstant: favIconSizes))
