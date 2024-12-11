@@ -156,19 +156,6 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
         return featureFlags.isCoreFeatureEnabled(.useMockData) && pocketKey.isEmpty
     }
 
-    private func getMockDataFeedold(count: Int = 2, completion: (StoryResult) -> Void) {
-        guard let path = Bundle(for: type(of: self)).path(forResource: "pocketglobalfeed", ofType: "json"),
-              let data = try? Data(contentsOf: URL(fileURLWithPath: path))
-        else { return }
-
-        let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
-        guard let items = json?["recommendations"] as? [[String: Any]] else {
-            return completion(.failure(Error.failure))
-        }
-
-        return completion(.success(Array(PocketFeedStory.parseJSON(list: items).prefix(count))))
-    }
-
     private func getMockDataFeed(count: Int = 2) async throws -> [PocketFeedStory] {
         guard let path = Bundle(for: type(of: self)).path(forResource: "pocketglobalfeed", ofType: "json"),
               let data = try? Data(contentsOf: URL(fileURLWithPath: path))
