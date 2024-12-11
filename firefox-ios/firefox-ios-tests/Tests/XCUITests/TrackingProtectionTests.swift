@@ -152,6 +152,7 @@ class TrackingProtectionTests: BaseTestCase {
         XCTAssertEqual(switchValueOFF as? String, "0")
 
         // Open TP Settings menu
+        // app.buttons["Privacy settings"].tap()
         // Workaround for https://github.com/mozilla-mobile/firefox-ios/issues/23706
         navigator.goto(SettingsScreen)
         app.staticTexts["Tracking Protection"].waitAndTap()
