@@ -11,7 +11,7 @@ class TabCounterTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
 
-        var tabsOpen = app.buttons["Show Tabs"].value
+        var tabsOpen = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
         XCTAssertEqual("1", tabsOpen as? String)
 
         navigator.createNewTab()
@@ -21,7 +21,7 @@ class TabCounterTests: BaseTestCase {
         }
         waitForTabsButton()
 
-        tabsOpen = app.buttons["Show Tabs"].value
+        tabsOpen = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
         XCTAssertEqual("2", tabsOpen as? String)
 
         // Check only for iPhone, for iPad there is not counter in tab tray
@@ -40,7 +40,7 @@ class TabCounterTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
 
-        var tabsOpen = app.buttons["Show Tabs"].value
+        var tabsOpen = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
         XCTAssertEqual("1", tabsOpen as? String)
 
         navigator.createNewTab()
@@ -51,7 +51,7 @@ class TabCounterTests: BaseTestCase {
         }
         waitForTabsButton()
 
-        tabsOpen = app.buttons["Show Tabs"].value
+        tabsOpen = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
         XCTAssertEqual("2", tabsOpen as? String)
 
         navigator.goto(TabTray)
@@ -75,7 +75,7 @@ class TabCounterTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
 
-        tabsOpen = app.buttons["Show Tabs"].value
+        tabsOpen = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
         XCTAssertEqual("1", tabsOpen as? String)
 
         navigator.goto(TabTray)
