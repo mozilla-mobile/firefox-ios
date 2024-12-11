@@ -42,7 +42,7 @@ class PullRefreshView: UIView,
     }
 
     private var isIpad: Bool {
-        traitCollection.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular
+        return traitCollection.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular
     }
 
     init(parentScrollView: UIScrollView?,
@@ -233,6 +233,13 @@ struct EasterEggViewLayoutBuilder {
     let sidePadding: CGFloat = 32.0
 
     func layoutEasterEggView(_ view: UIView, superview: UIView, isPortrait: Bool, isIpad: Bool) {
+        var isPortrait = isPortrait
+        // MARK: 667 is the screen height for iPhone SE 2/3 rd gen, 6,7,8.
+        // https://www.appmysite.com/blog/the-complete-guide-to-iphone-screen-resolutions-and-sizes/
+        if let screenHeight = UIWindow.keyWindow?.windowScene?.screen.bounds.height, screenHeight <= 667.0 {
+            // Force landscape layout so the easter egg shows only bottom sides and doesn't render clipped for small devices
+            isPortrait = false
+        }
         if isPortrait || isIpad {
             layoutEasterEggView(view, superview: superview, position: randomPortraitLayoutPosition())
         } else {
@@ -242,12 +249,6 @@ struct EasterEggViewLayoutBuilder {
 
     private func layoutEasterEggView(_ view: UIView, superview: UIView, position: NSRectAlignment) {
         let constraints: [NSLayoutConstraint] = switch position {
-        case .topLeading:
-            [
-                view.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -easterEggSize.height / 1.5),
-                view.leadingAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.leadingAnchor,
-                                              constant: sidePadding)
-            ]
         case .leading:
             [
                 view.leadingAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.leadingAnchor),
@@ -269,12 +270,6 @@ struct EasterEggViewLayoutBuilder {
             [
                 view.trailingAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.trailingAnchor),
                 view.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -easterEggSize.height / 2.0)
-            ]
-        case .topTrailing:
-            [
-                view.trailingAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.trailingAnchor,
-                                               constant: -sidePadding),
-                view.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -easterEggSize.height / 1.5)
             ]
         default:
             []
@@ -309,8 +304,6 @@ struct EasterEggViewLayoutBuilder {
         let allowedPositions: [NSRectAlignment] = [
             .bottomLeading,
             .bottomTrailing,
-            .topLeading,
-            .topTrailing,
             .leading,
             .trailing
         ]
