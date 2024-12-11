@@ -57,7 +57,8 @@ class LibraryCoordinator: BaseCoordinator,
     private func makeChildPanels() -> [UINavigationController] {
         let bookmarksPanel: UIViewController
         if isBookmarkRefactorEnabled {
-            bookmarksPanel = BookmarksViewController(viewModel: BookmarksPanelViewModel(profile: profile,
+            bookmarksPanel = BookmarksViewController(viewModel:
+                                                                BookmarksPanelViewModel(profile: profile,
                                                                                         bookmarksHandler: profile.places),
                                                      windowUUID: windowUUID)
         } else {
