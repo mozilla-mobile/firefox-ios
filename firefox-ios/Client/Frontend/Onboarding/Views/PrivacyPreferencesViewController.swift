@@ -144,7 +144,8 @@ final class PrivacyPreferencesViewController: UIViewController,
             theme: themeManager.getCurrentTheme(for: windowUUID)
         )
         technicalDataSwitch.setupDetails(
-            actionTitle: .Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle,
+            actionTitle: String(format: .Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle,
+                                MozillaName.shortName.rawValue),
             actionDescription: .Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription,
             linkDescription: .Onboarding.TermsOfService.PrivacyPreferences.LearnMore,
             useAppName: true,

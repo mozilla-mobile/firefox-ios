@@ -1651,8 +1651,8 @@ extension String {
             public static let ManagePreferenceAgreement = MZLocalizedString(
                 key: "Onboarding.TermsOfService.ManagePreferenceAgreement.v135",
                 tableName: "Onboarding",
-                value: "To help improve the browser, %@ sends diagnostic and interaction data to Mozilla. %@",
-                comment: "Agreement text for sends diagnostic and interaction data to Mozilla in the Terms of Service screen. First placeholder is for the app name. The last placeholder is for for the Manage link button which redirect the user to another screen in order to manage the data collection preferences.")
+                value: "To help improve the browser, %@ sends diagnostic and interaction data to %@. %@",
+                comment: "Agreement text for sends diagnostic and interaction data to Mozilla in the Terms of Service screen. First placeholder is for the app name. The second placeholder will be replaced the company name of Mozilla. The last placeholder is for for the Manage link button which redirect the user to another screen in order to manage the data collection preferences.")
             public static let TermsOfServiceLink = MZLocalizedString(
                 key: "Onboarding.TermsOfService.TermsOfServiceLink.v135",
                 tableName: "Onboarding",
@@ -1688,8 +1688,8 @@ extension String {
                 public static let SendTechnicalDataTitle = MZLocalizedString(
                     key: "Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135",
                     tableName: "Onboarding",
-                    value: "Send technical and interaction data to Mozilla",
-                    comment: "Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not.")
+                    value: "Send technical and interaction data to %@",
+                    comment: "Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Placeholder will be replaced the company name of Mozilla.")
                 public static let SendTechnicalDataDescription = MZLocalizedString(
                     key: "Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135",
                     tableName: "Onboarding",
@@ -5361,8 +5361,8 @@ extension String {
     public static let SendCrashReportsSettingMessage = MZLocalizedString(
         key: "Settings.CrashReports.Message.v135",
         tableName: "Settings",
-        value: "Automatically send crash reports to Mozilla to diagnose and fix issues with the browser. Reports may include personal or sensitive data.",
-        comment: "On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports.")
+        value: "Automatically send crash reports to %@ to diagnose and fix issues with the browser. Reports may include personal or sensitive data.",
+        comment: "On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. Placeholder will be replaced the company name of Mozilla.")
     public static let SendTechnicalDataSettingTitle = MZLocalizedString(
         key: "Settings.TechnicalData.Title.v135",
         tableName: "Settings",
@@ -5376,8 +5376,8 @@ extension String {
     public static let SendTechnicalDataSettingMessage = MZLocalizedString(
         key: "Settings.TechnicalData.Message.v135",
         tableName: "Settings",
-        value: "Mozilla strives to only collect what we need to provide and improve %@ for everyone.",
-        comment: "On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. Placeholder is for the app name.")
+        value: "%@ strives to only collect what we need to provide and improve %@ for everyone.",
+        comment: "On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. The first placeholder will be replaced the company name of Mozilla. The second placeholder is the app name.")
     public static let SendDailyUsagePingSettingTitle = MZLocalizedString(
         key: "Settings.DailyUsagePing.Title.v135",
         tableName: "Settings",
@@ -5391,8 +5391,8 @@ extension String {
     public static let SendDailyUsagePingSettingMessage = MZLocalizedString(
         key: "Settings.DailyUsagePing.Message.v135",
         tableName: "Settings",
-        value: "This helps Mozilla to estimate active users.",
-        comment: "On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping.")
+        value: "This helps %@ to estimate active users.",
+        comment: "On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla.")
     public static let SettingsSiriSectionName = MZLocalizedString(
         key: "Settings.Siri.SectionName",
         tableName: nil,
