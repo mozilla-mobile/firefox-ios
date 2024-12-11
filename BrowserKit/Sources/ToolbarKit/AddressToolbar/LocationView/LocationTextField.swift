@@ -197,7 +197,10 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
     @objc
     @discardableResult
     private func removeCompletion() -> Bool {
-        guard markedTextRange != nil else { return false }
+        // If markedTextRange exists, avoid clearing it prematurely.
+        if markedTextRange != nil {
+            return false
+        }
 
         text = textWithoutSuggestion()
         return true
