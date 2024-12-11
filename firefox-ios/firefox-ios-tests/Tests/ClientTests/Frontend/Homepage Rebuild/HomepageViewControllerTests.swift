@@ -75,7 +75,7 @@ final class HomepageViewControllerTests: XCTestCase {
         XCTAssertEqual(mockNotificationCenter?.removeObserverCallCount, 1)
     }
 
-    private func createSubject() -> HomepageViewController {
+    private func createSubject(statusBarScrollDelegate: StatusBarScrollDelegate? = nil) -> HomepageViewController {
         let notificationCenter = MockNotificationCenter()
         let themeManager = MockThemeManager()
         let mockOverlayManager = MockOverlayModeManager()
@@ -85,6 +85,7 @@ final class HomepageViewControllerTests: XCTestCase {
             windowUUID: .XCTestDefaultUUID,
             themeManager: themeManager,
             overlayManager: mockOverlayManager,
+            statusBarScrollDelegate: statusBarScrollDelegate,
             notificationCenter: notificationCenter
         )
         trackForMemoryLeaks(homepageViewController)

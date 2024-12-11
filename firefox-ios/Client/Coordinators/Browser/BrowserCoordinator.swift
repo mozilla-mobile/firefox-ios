@@ -137,7 +137,11 @@ class BrowserCoordinator: BaseCoordinator,
         screenshotService.screenshotableView = nil
     }
 
-    func showHomepage(overlayManager: OverlayModeManager, isZeroSearch: Bool) {
+    func showHomepage(
+        overlayManager: OverlayModeManager,
+        isZeroSearch: Bool,
+        statusBarScrollDelegate: StatusBarScrollDelegate
+    ) {
         let homepageCoordinator = childCoordinators[HomepageCoordinator.self] ?? HomepageCoordinator(
             windowUUID: windowUUID,
             profile: profile,
@@ -148,7 +152,8 @@ class BrowserCoordinator: BaseCoordinator,
         let homepageController = self.homepageViewController ?? HomepageViewController(
             windowUUID: windowUUID,
             homepageDelegate: homepageCoordinator,
-            overlayManager: overlayManager
+            overlayManager: overlayManager,
+            statusBarScrollDelegate: statusBarScrollDelegate
         )
         guard browserViewController.embedContent(homepageController) else {
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)

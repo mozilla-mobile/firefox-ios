@@ -26,6 +26,15 @@ final class HomepageViewController: UIViewController,
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
 
+    // MARK: - Layout variables
+    var statusBarFrame: CGRect? {
+        guard let keyWindow = UIWindow.keyWindow else { return nil }
+
+        return keyWindow.windowScene?.statusBarManager?.statusBarFrame
+    }
+
+    weak var statusBarScrollDelegate: StatusBarScrollDelegate?
+
     // MARK: - Private variables
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
     private weak var homepageDelegate: HomepageDelegate?
@@ -47,6 +56,7 @@ final class HomepageViewController: UIViewController,
          homepageDelegate: HomepageDelegate? = nil,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          overlayManager: OverlayModeManager,
+         statusBarScrollDelegate: StatusBarScrollDelegate? = nil,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared
     ) {
@@ -55,6 +65,7 @@ final class HomepageViewController: UIViewController,
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.overlayManager = overlayManager
+        self.statusBarScrollDelegate = statusBarScrollDelegate
         self.logger = logger
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
@@ -112,6 +123,17 @@ final class HomepageViewController: UIViewController,
         wallpaperView.updateImageForOrientationChange()
     }
 
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if homepageState.wallpaperState.wallpaperConfiguration.hasImage {
+            let theme = themeManager.getCurrentTheme(for: windowUUID)
+            statusBarScrollDelegate?.scrollViewDidScroll(
+                scrollView,
+                statusBarFrame: statusBarFrame,
+                theme: theme
+            )
+        }
+    }
+
     // MARK: - Redux
     func subscribeToRedux() {
         let action = ScreenAction(
@@ -154,11 +176,6 @@ final class HomepageViewController: UIViewController,
     }
 
     // MARK: - Layout
-    var statusBarFrame: CGRect? {
-        guard let keyWindow = UIWindow.keyWindow else { return nil }
-
-        return keyWindow.windowScene?.statusBarManager?.statusBarFrame
-    }
 
     func configureWallpaperView() {
         view.addSubview(wallpaperView)
