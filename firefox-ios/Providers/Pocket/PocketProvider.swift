@@ -15,7 +15,7 @@ protocol PocketStoriesProviding {
 extension PocketStoriesProviding {
     func fetchStories(items: Int) async throws -> [PocketFeedStory] {
         do {
-            return try await fetchStoriesNewV2(items: items)
+            return try await fetchStories(items: items)
         } catch {
             throw error
         }
