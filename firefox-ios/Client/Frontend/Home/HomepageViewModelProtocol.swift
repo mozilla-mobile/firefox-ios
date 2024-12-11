@@ -31,7 +31,8 @@ protocol HomepageViewModelProtocol {
     func refreshData(for traitCollection: UITraitCollection,
                      size: CGSize,
                      isPortrait: Bool,
-                     device: UIUserInterfaceIdiom)
+                     device: UIUserInterfaceIdiom,
+                     orientation: UIDeviceOrientation)
 
     // Update section that are privacy sensitive, only implement when needed
     func updatePrivacyConcernedSection(isPrivate: Bool)
@@ -56,7 +57,8 @@ extension HomepageViewModelProtocol {
     func refreshData(for traitCollection: UITraitCollection,
                      size: CGSize,
                      isPortrait: Bool,
-                     device: UIUserInterfaceIdiom) {}
+                     device: UIUserInterfaceIdiom,
+                     orientation: UIDeviceOrientation) {}
 
     func screenWasShown() {}
 }

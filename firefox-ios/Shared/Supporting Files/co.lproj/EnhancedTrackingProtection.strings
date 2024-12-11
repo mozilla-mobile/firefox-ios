@@ -107,9 +107,6 @@
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Prutezzione rinfurzata contr’à u spiunagiu";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "E prutezzioni sò disattivate. Vi ricumandemu d’attivalle torna.";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "E prutezzioni sò disattivate. Vi ricumandemu di riattivalle torna.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */

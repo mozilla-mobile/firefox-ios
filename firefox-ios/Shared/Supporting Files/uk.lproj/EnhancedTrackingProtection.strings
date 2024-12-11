@@ -92,7 +92,7 @@
 "Menu.EnhancedTrackingProtection.On.Header.v128" = "Ви захищені. Якщо ми щось помітимо, то повідомимо вас.";
 
 /* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
-"Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "Ваше з'єднання незахищене.";
+"Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "Ваше з'єднання не захищене.";
 
 /* Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
 "Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128" = "Будьте обережні на цьому сайті";
@@ -105,9 +105,6 @@
 
 /* Title for the switch to enable/disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.Switch.Title.v128" = "Розширений захист від стеження";
-
-/* A switch to disable enhanced tracking protection inside the menu. */
-"Menu.EnhancedTrackingProtection.SwitchOff.Text.v128" = "Захист ВИМКНЕНО. Ми пропонуємо ввімкнути його знову.";
 
 /* A switch to disable enhanced tracking protection inside the menu. */
 "Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "Захист ВИМКНЕНО. Ми пропонуємо ввімкнути його знову.";

@@ -37,9 +37,6 @@
 /* Section title label for recently visited websites */
 "ActivityStream.RecentHistory.Title" = "נצפה לאחרונה";
 
-/* Section title label for Shortcuts */
-"ActivityStream.Shortcuts.SectionTitle" = "קיצורי דרך";
-
 /* The title for the setting page which lets you select the number of top site rows */
 "ActivityStream.TopSites.RowSettingFooter" = "הגדרת שורות";
 
@@ -215,7 +212,7 @@
 "Could not add page to Reading list" = "לא ניתן להוסיף דף לרשימת הקריאה";
 
 /* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
-"Could not add page to Reading List. Maybe it’s already there?" = "לא ניתן להוסיף דף לרשימת הקריאה. האם יתכן שהוא כבר קיים שם?";
+"Could not add page to Reading List. Maybe it’s already there?" = "לא ניתן להוסיף דף לרשימת הקריאה. אולי הוא כבר קיים שם?";
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "לא ניתן לטעון דף.";
@@ -1405,9 +1402,6 @@
 /* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349. Placeholder is for the app name. */
 "Settings.OfferClipboardBar.Status.v128" = "בעת פתיחת %@";
 
-/* Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
-"Settings.OfferClipboardBar.StatusV2" = "בעת פתיחת Firefox";
-
 /* Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349 */
 "Settings.OfferClipboardBar.Title" = "הצעה לפתיחת קישורים מועתקים";
 
@@ -1790,7 +1784,7 @@
 "Yesterday" = "אתמול";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "אין לך לשוניות פתוחות ב־Firefox על שאר המכשירים שלך.";
+"You don’t have any tabs open in Firefox on your other devices." = "אין לך לשוניות פתוחות ב־Firefox בשאר המכשירים שלך.";
 
 /* Your Rights settings section title */
 "Your Rights" = "הזכויות שלך";

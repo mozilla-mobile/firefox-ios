@@ -5,6 +5,7 @@
 import MappaMundi
 import XCTest
 import Common
+import Shared
 
 class ScreenGraphTest: XCTestCase {
     var navigator: MMNavigator<TestUserState>!
@@ -48,7 +49,8 @@ extension ScreenGraphTest {
     }
 
     func testSimpleToggleAction() {
-        navigator.nowAt(BrowserTab)
+        navigator.userState.url = "https://mozilla.org"
+        navigator.performAction(TestActions.LoadURLByTyping)
         // Switch night mode on, by toggling.
         navigator.performAction(TestActions.ToggleNightMode)
         XCTAssertTrue(navigator.userState.nightMode)
@@ -64,7 +66,7 @@ extension ScreenGraphTest {
 
         navigator.nowAt(BrowserTabMenu)
         // Switch night mode off.
-        navigator.toggleOff(navigator.userState.nightMode, withAction: TestActions.ToggleNightMode)
+        navigator.toggleOff(navigator.userState.nightMode, withAction: TestActions.ToggleNighModeOff)
         XCTAssertFalse(navigator.userState.nightMode)
         XCTAssertEqual(navigator.screenState, BrowserTabMenu)
     }
@@ -89,6 +91,7 @@ let WebPageLoading = "WebPageLoading"
 
 private class TestActions {
     static let ToggleNightMode = StandardImageIdentifiers.Large.nightMode
+    static let ToggleNighModeOff = "MainMenu.NightModeOn"
     static let LoadURL = "LoadURL"
     static let LoadURLByTyping = "LoadURLByTyping"
     static let LoadURLByPasting = "LoadURLByPasting"
@@ -136,23 +139,34 @@ private func createTestGraph(for test: XCTestCase, with app: XCUIApplication) ->
     map.addScreenState(URLBarOpen) { screenState in
         screenState.gesture(forAction: TestActions.LoadURLByTyping, TestActions.LoadURL) { userState in
             let urlString = userState.url ?? defaultURL
-            app.textFields[AccessibilityIdentifiers.Browser.UrlBar.searchTextField].typeText("\(urlString)\r")
+            app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].typeText("\(urlString)\r")
         }
     }
 
     map.addScreenAction(TestActions.LoadURL, transitionTo: WebPageLoading)
 
-    map.addScreenState(BrowserTabMenu) { screenState in
-        screenState.dismissOnUse = true
-        screenState.tap(app.tables.cells["Settings"], to: SettingsScreen)
-
+    map.addScreenState(ToolsBrowserTabMenu) { screenState in
         screenState.tap(
-            app.otherElements.cells.otherElements[StandardImageIdentifiers.Large.nightMode],
+            app.otherElements.images[StandardImageIdentifiers.Large.nightMode],
             forAction: TestActions.ToggleNightMode,
             transitionTo: BrowserTabMenu
         ) { userState in
             userState.nightMode = !userState.nightMode
         }
+
+        screenState.tap(
+            app.otherElements.cells["MainMenu.NightModeOn"],
+            forAction: TestActions.ToggleNighModeOff,
+            transitionTo: BrowserTabMenu
+        ) { userState in
+            userState.nightMode = !userState.nightMode
+        }
+    }
+
+    map.addScreenState(BrowserTabMenu) { screenState in
+        screenState.dismissOnUse = true
+        screenState.tap(app.tables.cells["Settings"], to: SettingsScreen)
+        screenState.tap(app.tables.cells[AccessibilityIdentifiers.MainMenu.tools], to: ToolsBrowserTabMenu)
 
         screenState.backAction = {
             if isTablet {

@@ -469,7 +469,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
 
         screenState.gesture(forAction: Action.CloseURLBarOpen, transitionTo: HomePanelsScreen) {_ in
-            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
+            app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
         }
     }
 
@@ -647,7 +647,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
         screenState.gesture(forAction: Action.RemoveCustomSearchEngine) {userSTate in
             // Screengraph will go back to main Settings screen. Manually tap on settings
-            app.tables[AccessibilityIdentifiers.Settings.tableViewController].staticTexts["Google"].tap()
             app.navigationBars[AccessibilityIdentifiers.Settings.Search.searchNavigationBar].buttons["Edit"].tap()
             if #unavailable(iOS 17) {
                 app.tables.buttons["Delete Mozilla Engine"].tap()
@@ -1207,13 +1206,7 @@ extension MMNavigator where T == FxUserState {
         UIPasteboard.general.string = urlString
         userState.url = urlString
         userState.waitForLoading = waitForLoading
-        // Using LoadURLByTyping for Intel too on Xcode14
-        if #available (iOS 16, *) {
-            performAction(Action.LoadURLByTyping)
-        } else {
-            performAction(Action.LoadURL)
-            sleep(5) // Wait for toast to disappear
-        }
+        performAction(Action.LoadURLByTyping)
     }
 
     func mozWaitForElementToExist(_ element: XCUIElement, timeout: TimeInterval? = TIMEOUT) {

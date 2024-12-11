@@ -1,3 +1,15 @@
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Nested.Body.v135" = "เพิ่มที่คั่นหน้าขณะที่คุณเรียกดูเพื่อให้คุณสามารถหาไซต์โปรดของคุณได้ในภายหลัง";
+
+/* The title for the placeholder screen shown when there are no saved bookmarks, located within a nested subfolder of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Nested.Title.v135" = "โฟลเดอร์นี้ว่างเปล่า";
+
+/* The body text for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Root.Body.v135" = "บันทึกไซต์ขณะที่คุณเรียกดู นอกจากนี้ เราจะดึงที่คั่นหน้าจากอุปกรณ์อื่นๆ ที่ซิงค์มาให้คุณด้วย";
+
+/* The title for the placeholder screen shown when there are no saved bookmarks, located at the root level of the bookmarks panel within the libray modal */
+"Bookmarks.EmptyState.Root.Title.v135" = "ไม่มีที่คั่นหน้า";
+
 /* When navigating through the bookmarks menu and bookmark folders, a back button with an `All` (bookmarks) label is present to take the user to the top level bookmarks menu. */
 "Bookmarks.Menu.AllBookmarks.v131" = "ทั้งหมด";
 

@@ -28,7 +28,7 @@ class URLValidationTests: BaseTestCase {
             waitUntilPageLoad()
             waitForElementsToExist(
                 [
-                    app.otherElements.staticTexts["Mozilla"],
+                    app.otherElements.staticTexts["Welcome to Mozilla"],
                     app.buttons["Menu"]
                 ]
             )

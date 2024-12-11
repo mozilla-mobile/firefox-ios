@@ -68,6 +68,17 @@ final class RemoteTabPanelStateTests: XCTestCase {
         XCTAssertEqual(newState.devices[0].id, deviceId)
     }
 
+    func testTabsRefreshBeginStateChange() {
+        let initialState = createSubject()
+        let reducer = remoteTabsPanelReducer()
+
+        let action = RemoteTabsPanelAction(windowUUID: WindowUUID.XCTestDefaultUUID,
+                                           actionType: RemoteTabsPanelActionType.refreshDidBegin)
+        let newState = reducer(initialState, action)
+
+        XCTAssertEqual(newState.refreshState, RemoteTabsPanelRefreshState.refreshing)
+    }
+
     func testTabsRefreshFailedStateChange() {
         let initialState = createSubject()
         let reducer = remoteTabsPanelReducer()

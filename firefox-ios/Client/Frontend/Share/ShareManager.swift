@@ -8,7 +8,7 @@ import MobileCoreServices
 import WebKit
 import UniformTypeIdentifiers
 
-class ShareExtensionHelper: NSObject, FeatureFlaggable {
+class ShareManager: NSObject, FeatureFlaggable {
     private weak var selectedTab: Tab?
 
     private let url: URL
@@ -125,7 +125,7 @@ class ShareExtensionHelper: NSObject, FeatureFlaggable {
     }
 }
 
-extension ShareExtensionHelper: UIActivityItemSource {
+extension ShareManager: UIActivityItemSource {
     func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
         return url
     }

@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Shared
 
 class OnboardingTests: BaseTestCase {
     var currentScreen = 0
@@ -19,7 +20,9 @@ class OnboardingTests: BaseTestCase {
     }
 
     override func tearDown() {
-        switchThemeToDarkOrLight(theme: "Light")
+        if #available(iOS 17.0, *) {
+            switchThemeToDarkOrLight(theme: "Light")
+        }
         app.terminate()
         super.tearDown()
     }
@@ -173,6 +176,10 @@ class OnboardingTests: BaseTestCase {
         currentScreen += 1
         mozWaitForElementToExist(app.staticTexts["\(rootA11yId)TitleLabel"])
         XCTAssertEqual("Stay encrypted when you hop between devices", app.staticTexts["\(rootA11yId)TitleLabel"].label)
+        XCTAssertEqual("Firefox encrypts your passwords, bookmarks, and more when you’re synced.",
+                       app.staticTexts["\(rootA11yId)DescriptionLabel"].label)
+        XCTAssertEqual("Sign In", app.buttons["\(rootA11yId)PrimaryButton"].label)
+        XCTAssertEqual("Skip", app.buttons["\(rootA11yId)SecondaryButton"].label)
         // Tap on Sign In
         app.buttons["\(rootA11yId)PrimaryButton"].tap()
         mozWaitForElementToExist(app.navigationBars["Sync and Save Data"])

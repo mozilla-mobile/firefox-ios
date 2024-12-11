@@ -62,4 +62,14 @@ struct WallpaperConfiguration: Equatable {
         self.cardColor = cardColor
         self.logoTextColor = logoTextColor
     }
+
+    init(wallpaper: Wallpaper) {
+        self.init(
+            landscapeImage: wallpaper.landscape,
+            portraitImage: wallpaper.portrait,
+            textColor: wallpaper.textColor,
+            cardColor: wallpaper.cardColor,
+            logoTextColor: wallpaper.logoTextColor
+        )
+    }
  }

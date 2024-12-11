@@ -1,9 +1,6 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Ladda om";
 
-/* On error page, this is the description for generic error. */
-"NativeErrorPage.GenericError.Description.v131" = "Ett SSL-fel har uppstått och en säker anslutning till servern kan inte göras.";
-
 /* On error page, this is the description for generic error. The placeholder will be replaced by the site url */
 "NativeErrorPage.GenericError.Description.v134" = "Ägaren av %@ har inte konfigurerat den korrekt och en säker anslutning kan inte skapas.";
 

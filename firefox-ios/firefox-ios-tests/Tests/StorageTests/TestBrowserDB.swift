@@ -129,8 +129,14 @@ class TestBrowserDB: XCTestCase {
 
         // But now it's been reopened, it's not the same -shm!
         let shmBAttributes = try files.attributesForFileAt(relativePath: "foo.db-shm")
-        let creationB = shmBAttributes[FileAttributeKey.creationDate] as! Date
-        let inodeB = (shmBAttributes[FileAttributeKey.systemFileNumber] as! NSNumber).uintValue
+        guard let creationB = shmBAttributes[FileAttributeKey.creationDate] as? Date else {
+            XCTFail("Failed to cast value for key 'creationDate' to Date.")
+            return
+        }
+        guard let inodeB = (shmBAttributes[FileAttributeKey.systemFileNumber] as? NSNumber)?.uintValue else {
+            XCTFail("Failed to cast value for key 'systemFileNumber' to NSNumber.")
+            return
+        }
         XCTAssertTrue(creationA.compare(creationB) != ComparisonResult.orderedDescending)
         XCTAssertNotEqual(inodeA, inodeB)
 

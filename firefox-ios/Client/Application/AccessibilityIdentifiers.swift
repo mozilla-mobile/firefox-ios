@@ -473,6 +473,10 @@ public struct AccessibilityIdentifiers {
             static let tableView = "Bookmarks List"
             static let titleTextField = "BookmarkDetail.titleTextField"
             static let urlTextField = "BookmarkDetail.urlTextField"
+
+            struct EmptyState {
+                static let signInButton = "BookmarksPanel.RootEmptyState.signInButton"
+            }
         }
 
         struct HistoryPanel {
@@ -699,7 +703,9 @@ public struct AccessibilityIdentifiers {
 
         struct SendData {
             static let sendAnonymousUsageDataTitle = "SendAnonymousUsageData"
+            static let sendTechnicalDataTitle = "SendTechnicalData"
             static let sendCrashReportsTitle = "SendCrashReports"
+            static let sendDailyUsagePingTitle = "SendDailyUsagePing"
         }
 
         struct PrivacyPolicy {

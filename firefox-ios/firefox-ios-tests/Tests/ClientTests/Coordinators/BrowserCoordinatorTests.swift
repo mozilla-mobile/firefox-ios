@@ -140,7 +140,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     func testShowNewHomepage_setsProperViewController() {
         let subject = createSubject()
-        subject.showHomepage()
+        subject.showHomepage(overlayManager: overlayModeManager, isZeroSearch: false)
 
         XCTAssertNotNil(subject.homepageViewController)
         XCTAssertNil(subject.webviewController)
@@ -149,11 +149,11 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     func testShowNewHomepage_hasSameInstance() {
         let subject = createSubject()
-        subject.showHomepage()
+        subject.showHomepage(overlayManager: overlayModeManager, isZeroSearch: false)
         let firstHomepage = subject.homepageViewController
         XCTAssertNotNil(subject.homepageViewController)
 
-        subject.showHomepage()
+        subject.showHomepage(overlayManager: overlayModeManager, isZeroSearch: false)
         let secondHomepage = subject.homepageViewController
         XCTAssertEqual(firstHomepage, secondHomepage)
     }
@@ -238,37 +238,42 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         }
     }
 
-    func testShowShareExtension_addsShareExtensionCoordinator() {
+    func testShowShareSheet_addsShareSheetCoordinator() {
         let subject = createSubject()
 
-        subject.showShareExtension(
+        subject.showShareSheet(
             url: URL(
                 string: "https://www.google.com"
             )!,
+            title: nil,
             sourceView: UIView(),
-            toastContainer: UIView()
+            sourceRect: CGRect(),
+            toastContainer: UIView(),
+            popoverArrowDirection: .up
         )
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
-        XCTAssertTrue(subject.childCoordinators.first is ShareExtensionCoordinator)
+        XCTAssertTrue(subject.childCoordinators.first is ShareSheetCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is UIActivityViewController)
     }
 
-    func testShowShareExtension_addsShareExtensionCoordinatorWithTitle() {
+    func testShowShareSheet_addsShareSheetCoordinatorWithTitle() {
         let subject = createSubject()
 
-        subject.showShareExtension(
+        subject.showShareSheet(
             url: URL(
                 string: "https://www.google.com"
             )!,
             title: "TEST TITLE",
             sourceView: UIView(),
-            toastContainer: UIView()
+            sourceRect: CGRect(),
+            toastContainer: UIView(),
+            popoverArrowDirection: .up
         )
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
-        XCTAssertTrue(subject.childCoordinators.first is ShareExtensionCoordinator)
+        XCTAssertTrue(subject.childCoordinators.first is ShareSheetCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is UIActivityViewController)
     }
@@ -388,7 +393,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     func testRemoveChildCoordinator_whenDidFinishCalled() {
         let subject = createSubject()
-        let childCoordinator = ShareExtensionCoordinator(
+        let childCoordinator = ShareSheetCoordinator(
             alertContainer: UIView(),
             router: mockRouter,
             profile: profile,

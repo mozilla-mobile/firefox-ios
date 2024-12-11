@@ -65,6 +65,11 @@ class MenuTableView: UIView,
         )
     }
 
+    func setupAccessibilityIdentifiers(menuA11yId: String, menuA11yLabel: String) {
+        tableView.accessibilityIdentifier = menuA11yId
+        tableView.accessibilityLabel = menuA11yLabel
+    }
+
     // MARK: - UITableView Methods
     func numberOfSections(in tableView: UITableView) -> Int {
         return menuData.count

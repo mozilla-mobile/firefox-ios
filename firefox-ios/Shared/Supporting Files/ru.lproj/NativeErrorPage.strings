@@ -1,9 +1,6 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Обновить";
 
-/* On error page, this is the description for generic error. */
-"NativeErrorPage.GenericError.Description.v131" = "Произошла ошибка SSL, и не удалось установить защищённое соединение с сервером.";
-
 /* On error page, this is the description for generic error. The placeholder will be replaced by the site url */
 "NativeErrorPage.GenericError.Description.v134" = "Владелец %@ не настроил его должным образом, и с ним не может быть установлено защищённое соединение.";
 

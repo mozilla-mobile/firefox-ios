@@ -16,7 +16,7 @@ See readme at the root of the project for [the guidelines](https://github.com/mo
 
 ## Building the code
 
-1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
+1. Install the latest [Xcode developer tools](https://developer.apple.com/download/all/) from Apple.
 1. Install, [Brew](https://brew.sh), Node, and a Python3 virtualenv for localization scripts:
     ```shell
     brew update

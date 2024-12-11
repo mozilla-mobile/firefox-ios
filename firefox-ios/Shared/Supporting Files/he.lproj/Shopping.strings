@@ -94,9 +94,6 @@
 /* Description for info card when the product is in analysis mode */
 "Shopping.InfoCard.ProgressAnalysis.Description.v120" = "פעולה זו יכולה להימשך כ־60 שניות.";
 
-/* Title for info card when the product is in analysis mode */
-"Shopping.InfoCard.ProgressAnalysis.Title.v120" = "בתהליך בדיקת איכות הסקירות";
-
 /* Title for info card when the product is in analysis mode. The placeholder represents the percentage of the analysis progress, ranging between 1 and 100. */
 "Shopping.InfoCard.ProgressAnalysis.Title.v123" = "בתהליך בדיקת איכות הסקירות (%@)";
 
@@ -114,9 +111,6 @@
 
 /* Title for card displayed when a shopping product has not been analysed yet. */
 "Shopping.NoAnalysisCard.HeadlineLabel.Title.v120" = "אין עדיין מידע על סקירות אלה";
-
-/* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replaced by the Fakespot app name. After the colon, what appears are two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
-"Shopping.OptInCard.Disclaimer.Text.v120" = "בחירה באפשרות ״כן, ארצה לנסות״ מהווה הסכמה לתנאים הבאים מאת %@:";
 
 /* Text for the disclaimer that appears underneath the rating image of the Shopping Experience Opt In onboarding Card (Fakespot). After the colon, there will be two links, each on their own line. The first link is to a Privacy policy. The second link is to Terms of use. */
 "Shopping.OptInCard.Disclaimer.Text.v123" = "בחירה באפשרות ״כן, ארצה לנסות״ מהווה הסכמה לפריטים הבאים:";
@@ -136,9 +130,6 @@
 /* Text for the main button of the Shopping Experience Opt In onboarding Card (Fakespot) */
 "Shopping.OptInCard.MainButton.Title.v120" = "כן, ארצה לנסות";
 
-/* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
-"Shopping.OptInCard.PrivacyPolicy.Button.Title.v120" = "מדיניות הפרטיות";
-
 /* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Firefox app name. */
 "Shopping.OptInCard.PrivacyPolicy.Button.Title.v123" = "הצהרת הפרטיות של %@";
 
@@ -147,9 +138,6 @@
 
 /* Label for the second paragraph of the Shopping Experience Opt In onboarding Card (Fakespot). The first parameter will be replaced by the Fakespot app name. The second parameter will be replaced the company name of Mozilla. */
 "Shopping.OptInCard.SecondParagraph.Description.v120" = "באמצעות הכוח של %1$@ מאת %2$@, אנו עוזרים לך להימנע מסקירות מוטות ולא אותנטיות. מודל הבינה המלאכותית שלנו משתפר תמיד כדי להגן עליך בזמן הקנייה.";
-
-/* Show Firefox Browser Terms of Use page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). See https://www.mozilla.org/privacy/firefox/ */
-"Shopping.OptInCard.TermsOfUse.Button.Title.v120" = "תנאי שימוש";
 
 /* Show Fakespot Terms of Use page in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Fakespot name. */
 "Shopping.OptInCard.TermsOfUse.Button.Title.v123" = "תנאי השימוש של %@";
@@ -180,9 +168,6 @@
 
 /* Label of the headline from How we determine review quality card displayed in the shopping review quality bottom sheet. The first parameter will be replaced by the Fakespot app name and the second parameter by the company name of Mozilla. */
 "Shopping.ReviewQualityCard.Headline.Label.v120" = "אנו משתמשים בטכנולוגיית AI של %1$@ מבית %2$@ כדי לנתח את המהימנות של סקירות מוצרים. ניתוח זה רק יעזור לך להעריך את איכות הסקירות, לא את איכות המוצר.";
-
-/* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
-"Shopping.ReviewQualityCard.Highlights.Label.v120" = "*הדגשים* הם מסקירות של %1@ במהלך 80 הימים האחרונים, שאנו מאמינים שהן אמינות.";
 
 /* Highlights label from How we determine review quality card displayed in the shopping review quality bottom sheet. The parameter substitutes the partner website the user is coming from. The *text inside asterisks* denotes part of the string to bold, please leave the text inside the '*' so that it is bolded correctly. */
 "Shopping.ReviewQualityCard.Highlights.Label.v126" = "*הדגשים* הם מסקירות של %@ במהלך 80 הימים האחרונים, שאנו מאמינים שהן אמינות.";

@@ -1,3 +1,6 @@
+/* The title of the folder that contains mobile bookmarks. */
+"Bookmarks" = "Marcadores";
+
 /* The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android. */
 "Bookmarks Menu" = "Menú dos marcadores";
 

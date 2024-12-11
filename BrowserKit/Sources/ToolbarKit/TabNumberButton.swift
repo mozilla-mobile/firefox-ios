@@ -51,6 +51,11 @@ final class TabNumberButton: ToolbarButton {
         } else { countLabel.alpha = 1.0 }
     }
 
+    override func updateConfiguration() {
+        super.updateConfiguration()
+        countLabel.textColor = configuration?.baseForegroundColor
+    }
+
     private func updateTabCount(_ count: Int) {
         let count = max(count, 1)
         let countToBe = (count <= UX.maxTabCount) ? count.description : UX.infinitySymbol

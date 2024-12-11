@@ -7,44 +7,53 @@ import Shared
 
 /// Send click and impression telemetry using the unified tile callbacks
 protocol UnifiedAdsCallbackTelemetry {
-    func sendImpressionTelemetry(tile: SponsoredTile)
-    func sendClickTelemetry(tile: SponsoredTile)
+    func sendImpressionTelemetry(tile: SponsoredTile, position: Int)
+    func sendClickTelemetry(tile: SponsoredTile, position: Int)
 }
 
-class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
+final class DefaultUnifiedAdsCallbackTelemetry: UnifiedAdsCallbackTelemetry {
     private var networking: ContileNetworking
     private var logger: Logger
 
     init(
-        networking: ContileNetworking = DefaultContileNetwork(
-            with: makeURLSession(userAgent: UserAgent.mobileUserAgent(),
-                                 configuration: URLSessionConfiguration.defaultMPTCP)),
+        networking: ContileNetworking = DefaultContileNetwork(with: NetworkUtils.defaultURLSession()),
         logger: Logger = DefaultLogger.shared
     ) {
         self.networking = networking
         self.logger = logger
     }
 
-    func sendImpressionTelemetry(tile: SponsoredTile) {
+    func sendImpressionTelemetry(tile: SponsoredTile, position: Int) {
         let impressionURL = tile.impressionURL
-        sendTelemetry(urlString: impressionURL)
+        sendTelemetry(urlString: impressionURL, position: position)
     }
 
-    func sendClickTelemetry(tile: SponsoredTile) {
+    func sendClickTelemetry(tile: SponsoredTile, position: Int) {
         let clickURL = tile.clickURL
-        sendTelemetry(urlString: clickURL)
+        sendTelemetry(urlString: clickURL, position: position)
     }
 
-    private func sendTelemetry(urlString: String) {
-        guard let url = URL(string: urlString) else {
+    private func sendTelemetry(urlString: String, position: Int) {
+        guard var urlComponents = URLComponents(string: urlString) else {
             logger.log("The provided URL is invalid: \(String(describing: urlString))",
                        level: .warning,
                        category: .legacyHomepage)
             return
         }
 
+        var queryItems = urlComponents.queryItems ?? []
+        queryItems.append(URLQueryItem(name: "position", value: String(position)))
+        urlComponents.queryItems = queryItems
+
+        guard let url = urlComponents.url else {
+            logger.log("The provided URL components are invalid: \(String(describing: urlString))",
+                       level: .warning,
+                       category: .legacyHomepage)
+            return
+        }
+
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
+        request.httpMethod = HTTPMethod.get.rawValue
 
         networking.data(from: request) { [weak self] result in
             guard let self = self else { return }

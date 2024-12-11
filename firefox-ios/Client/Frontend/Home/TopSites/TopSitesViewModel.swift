@@ -95,7 +95,7 @@ class TopSitesViewModel {
         // Sponsored tile specific telemetry
         if let tile = homeTopSite.site as? SponsoredTile {
             if featureFlags.isFeatureEnabled(.unifiedAds, checking: .buildOnly) {
-                unifiedAdsTelemetry.sendClickTelemetry(tile: tile)
+                unifiedAdsTelemetry.sendClickTelemetry(tile: tile, position: position)
             } else {
                 SponsoredTileTelemetry.sendClickTelemetry(tile: tile, position: position)
             }
@@ -194,7 +194,8 @@ extension TopSitesViewModel: HomepageViewModelProtocol, FeatureFlaggable {
     func refreshData(for traitCollection: UITraitCollection,
                      size: CGSize,
                      isPortrait: Bool = UIWindow.isPortrait,
-                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom) {
+                     device: UIUserInterfaceIdiom = UIDevice.current.userInterfaceIdiom,
+                     orientation: UIDeviceOrientation = UIDevice.current.orientation) {
         let interface = TopSitesUIInterface(trait: traitCollection,
                                             availableWidth: size.width)
         numberOfRows = topSitesDataAdaptor.numberOfRows

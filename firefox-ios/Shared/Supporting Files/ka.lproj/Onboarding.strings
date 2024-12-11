@@ -37,9 +37,6 @@
 /* String used to describe the option to continue to ask for the notification permission in Firefox Onboarding screens. */
 "Onboarding.Notification.TurnOnNotifications.Action.v114" = "შეტყობინებების ჩართვა";
 
-/* String used to describes the description of what Firefox is on the Sync onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Sync.Description.v120" = "ანგარიშზე შესვლისას და სინქრონიზაციისას კვლავ დაცული რჩებით. %@ შიფრავს თქვენს პაროლებს, სანიშნებსა და ყველა მონაცემს.";
-
 /* String used to describes the option to skip the Sync sign in during onboarding for the current version in Firefox Onboarding screens. */
 "Onboarding.Sync.SignIn.Action.v114" = "შესვლა";
 
@@ -77,10 +74,10 @@
 "Onboarding.Welcome.Close.AccessibilityLabel.v121" = "დახურეთ და დატოვეთ %@-გზამკვლევი";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. */
-"Onboarding.Welcome.Description.TreatementA.v120" = "ჩვენი ბრაუზერი არამომგებიანი დაწესებულებისგან გეხმარებათ აირიდოთ კომპანიებისგან ფარული თვალთვალი ვებსივრცით სარგებლობისას.";
+"Onboarding.Welcome.Description.TreatementA.v120" = "ჩვენი ბრაუზერი არამომგებიანი დაწესებულებისგანაა და გეხმარებათ აირიდოთ კომპანიებისგან ფარული თვალთვალი ვებსივრცით სარგებლობისას.";
 
 /* String used to describes the description of what Firefox is on the welcome onboarding page for current version in our Onboarding screens. Placeholder is for the app name. */
-"Onboarding.Welcome.Description.v120" = "ჩვენი ბრაუზერი არამომგებიანი დაწესებულებისგან გეხმარებათ აირიდოთ კომპანიებისგან ფარული თვალთვალი ვებსივრცით სარგებლობისას.";
+"Onboarding.Welcome.Description.v120" = "ჩვენი ბრაუზერი არამომგებიანი დაწესებულებისგანაა და გეხმარებათ აირიდოთ კომპანიებისგან ფარული თვალთვალი ვებსივრცით სარგებლობისას.";
 
 /* String used to describe the title of link button is on the welcome onboarding page for current version in our Onboarding screens. */
 "Onboarding.Welcome.Link.Action.v114" = "ვრცლად იხილეთ ჩვენი პირადულობის განაცხადი";
