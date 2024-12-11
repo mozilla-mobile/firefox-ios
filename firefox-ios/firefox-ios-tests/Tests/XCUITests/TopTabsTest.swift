@@ -31,7 +31,7 @@ class TopTabsTest: BaseTestCase {
         waitUntilPageLoad()
         waitForTabsButton()
         // The tabs counter shows the correct number
-        let tabsOpen = app.buttons["Show Tabs"].value
+        let tabsOpen = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
         XCTAssertEqual("2", tabsOpen as? String)
 
         // The tab tray shows the correct tabs
@@ -49,7 +49,7 @@ class TopTabsTest: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.openURL(urlExample)
         // Initially there is only one tab open
-        let tabsOpenInitially = app.buttons["Show Tabs"].value
+        let tabsOpenInitially = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
         XCTAssertEqual("1", tabsOpenInitially as? String)
 
         // Open link in a different tab and switch to it
@@ -268,8 +268,8 @@ class TopTabsTest: BaseTestCase {
         if !iPad() {
             // Long tap on Tab Counter should show the correct options
             navigator.nowAt(NewTabScreen)
-            mozWaitForElementToExist(app.buttons["Show Tabs"])
-            app.buttons["Show Tabs"].press(forDuration: 1)
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].press(forDuration: 1)
             waitForElementsToExist(
                 [
                     app.cells.otherElements[StandardImageIdentifiers.Large.plus],
@@ -292,8 +292,8 @@ class TopTabsTest: BaseTestCase {
             navigator.nowAt(HomePanelsScreen)
             navigator.nowAt(NewTabScreen)
 
-            mozWaitForElementToExist(app.buttons["Show Tabs"])
-            app.buttons["Show Tabs"].press(forDuration: 1)
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].press(forDuration: 1)
             mozWaitForElementToExist(app.tables.cells.otherElements[StandardImageIdentifiers.Large.plus])
             app.tables.cells.otherElements[StandardImageIdentifiers.Large.cross].tap()
             navigator.nowAt(NewTabScreen)
@@ -306,8 +306,8 @@ class TopTabsTest: BaseTestCase {
             )
             navigator.nowAt(HomePanelsScreen)
             navigator.nowAt(NewTabScreen)
-            mozWaitForElementToExist(app.buttons["Show Tabs"])
-            app.buttons["Show Tabs"].press(forDuration: 1)
+            mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+            app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].press(forDuration: 1)
             app.tables.cells.otherElements["New Private Tab"].waitAndTap()
             let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
             mozWaitForElementToExist(tabsButton)
@@ -329,7 +329,7 @@ class TopTabsTest: BaseTestCase {
                 navigator.performAction(Action.CloseURLBarOpen)
             }
         }
-        let numTab = app.buttons["Show Tabs"].value as? String
+        let numTab = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
         XCTAssertEqual("11", numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
         // Scroll down to view all open tabs thumbnails
         navigator.goto(TabTray)
@@ -390,7 +390,7 @@ class TopTabsTest: BaseTestCase {
         navigator.goto(TabTray)
         let tabsTrayCell = app.otherElements["Tabs Tray"].cells
         if !iPad() {
-            let numTab = app.buttons["Show Tabs"].value as? String
+            let numTab = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
             XCTAssertEqual(Int(numTab!), tabsTrayCell.count)
         } else {
             XCTAssertEqual(tabsTrayCell.count, 2)
@@ -404,7 +404,7 @@ class TopTabsTest: BaseTestCase {
         app.buttons["Undo"].tap()
         // Only the latest tab closed is restored
         if !iPad() {
-            let numTab = app.buttons["Show Tabs"].value as? String
+            let numTab = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
             let tabsTrayCell = app.otherElements["Tabs Tray"].cells
             XCTAssertEqual(Int(numTab!), tabsTrayCell.count)
         }
@@ -452,7 +452,7 @@ class TopTabsTest: BaseTestCase {
                 navigator.performAction(Action.CloseURLBarOpen)
             }
         }
-        let numTab = app.buttons["Show Tabs"].value as? String
+        let numTab = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
         XCTAssertEqual("4", numTab, "The number of counted tabs is not equal to \(String(describing: numTab))")
         navigator.goto(TabTray)
         // Long press on the tab tray to open the context menu
@@ -581,9 +581,9 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         waitUntilPageLoad()
         mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
                                 value: "iana")
-        XCTAssertTrue(app.links["RFC 2606"].exists)
-        mozWaitForElementToExist(app.buttons["Show Tabs"])
-        let numTab = app.buttons["Show Tabs"].value as? String
+        mozWaitForElementToExist(app.links["RFC 2606"])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+        let numTab = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
         XCTAssertEqual("2", numTab)
     }
 
@@ -621,7 +621,7 @@ class TopTabsTestIpad: IpadOnlyTestCase {
         app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].tap()
         app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton].tap()
         mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
-        let numTab = app.buttons["Show Tabs"].value as? String
+        let numTab = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
         XCTAssertEqual("3", numTab)
         // Remove one tab by tapping on 'x' button
         app.collectionViews["Top Tabs View"]
@@ -630,9 +630,9 @@ class TopTabsTestIpad: IpadOnlyTestCase {
             .element(boundBy: 1).buttons["Remove page — Homepage"]
             .tap()
         waitForTabsButton()
-        mozWaitForElementToNotExist(app.buttons["Show Tabs"].staticTexts["3"])
-        mozWaitForElementToExist(app.buttons["Show Tabs"].staticTexts["2"])
-        let numTabAfterRemovingThirdTab = app.buttons["Show Tabs"].value as? String
+        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["3"])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["2"])
+        let numTabAfterRemovingThirdTab = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
         XCTAssertEqual("2", numTabAfterRemovingThirdTab)
         app.collectionViews["Top Tabs View"]
             .children(matching: .cell)
@@ -640,9 +640,9 @@ class TopTabsTestIpad: IpadOnlyTestCase {
             .buttons["Remove page — Homepage"]
             .tap()
         waitForTabsButton()
-        mozWaitForElementToNotExist(app.buttons["Show Tabs"].staticTexts["2"])
-        mozWaitForElementToExist(app.buttons["Show Tabs"].staticTexts["1"])
-        let numTabAfterRemovingSecondTab = app.buttons["Show Tabs"].value as? String
+        mozWaitForElementToNotExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["2"])
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].staticTexts["1"])
+        let numTabAfterRemovingSecondTab = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
         XCTAssertEqual("1", numTabAfterRemovingSecondTab)
     }
 }

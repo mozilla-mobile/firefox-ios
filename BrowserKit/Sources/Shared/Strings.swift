@@ -6704,6 +6704,13 @@ extension String {
             tableName: "Toolbar",
             value: "New Tab",
             comment: "Accessibility label for the new tab button that can be displayed in the navigation or address toolbar.")
+
+        public static let TabsButtonAccessibilityLabel = MZLocalizedString(
+            key: "Toolbar.Tabs.Button.A11y.Label.v135",
+            tableName: "Toolbar",
+            value: "Tabs open",
+            comment: "Accessibility label for the tabs button in the toolbar, specifing the number of tabs open.")
+
         public struct TabToolbarLongPressActionsMenu {
             public static let CloseThisTabButton = MZLocalizedString(
                 key: "Toolbar.Tab.CloseThisTab.Button.v130",
