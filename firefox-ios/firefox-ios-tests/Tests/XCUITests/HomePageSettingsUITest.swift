@@ -96,11 +96,9 @@ class HomePageSettingsUITests: BaseTestCase {
         let homePageMenuItem = app.buttons[AccessibilityIdentifiers.Toolbar.addNewTabButton]
         homePageMenuItem.waitAndTap()
         waitUntilPageLoad()
-        // Issue found - https://mozilla-hub.atlassian.net/browse/FXIOS-10753
-        // Workaround - the test will start to fail once the issue is fixed
         mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
         mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
-                                value: "Search or enter address")
+                                value: "example.com")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339258
@@ -169,12 +167,9 @@ class HomePageSettingsUITests: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.GoToHomePage)
-
-        // Issue found - https://mozilla-hub.atlassian.net/browse/FXIOS-10753
-        // Workaround - the test will start to fail once the issue is fixed
         mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
         mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
-                                value: "Search or enter address")
+                                value: "mozilla.org")
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2339489
