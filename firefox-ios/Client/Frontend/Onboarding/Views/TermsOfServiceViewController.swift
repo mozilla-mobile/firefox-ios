@@ -118,7 +118,8 @@ class TermsOfServiceViewController: UIViewController, Themeable {
 
         let manageLink = String.Onboarding.TermsOfService.ManageLink
         let manageText = String.Onboarding.TermsOfService.ManagePreferenceAgreement
-        let manageAgreement = String(format: manageText, AppName.shortName.rawValue,
+        let manageAgreement = String(format: manageText,
+                                     AppName.shortName.rawValue,
                                      MozillaName.shortName.rawValue,
                                      manageLink)
         setupAgreementTextView(with: manageAgreement,
