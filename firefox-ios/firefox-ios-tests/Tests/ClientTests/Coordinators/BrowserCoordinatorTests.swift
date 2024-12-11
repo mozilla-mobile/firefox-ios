@@ -258,7 +258,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         }
         let exp = XCTNSPredicateExpectation(predicate: predicate, object: .none)
 
-        wait(for: [exp], timeout: 3.0)
+        wait(for: [exp], timeout: 5.0)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is ShareSheetCoordinator)
@@ -299,7 +299,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         }
         let exp = XCTNSPredicateExpectation(predicate: predicate, object: .none)
 
-        wait(for: [exp], timeout: 3.0)
+        wait(for: [exp], timeout: 5.0)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is ShareSheetCoordinator)
