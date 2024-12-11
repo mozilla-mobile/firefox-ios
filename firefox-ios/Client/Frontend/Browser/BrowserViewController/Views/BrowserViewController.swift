@@ -667,6 +667,7 @@ class BrowserViewController: UIViewController,
     private func showToastType(toast: ToastType) {
         switch toast {
         case .addShortcut,
+                .clearCookies,
                 .addToReadingList,
                 .removeShortcut,
                 .removeFromReadingList,

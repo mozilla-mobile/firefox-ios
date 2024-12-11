@@ -166,7 +166,7 @@ class TrackingProtectionModel {
     }
 
     func onTapClearCookiesAndSiteData(controller: UIViewController) {
-        let alertMessage = String(format: clearCookiesAlertText, url.absoluteDisplayString)
+        let alertMessage = String(format: clearCookiesAlertText, url.baseDomain ?? url.shortDisplayString)
         let alert = UIAlertController(
             title: clearCookiesAlertTitle,
             message: alertMessage,
@@ -178,15 +178,31 @@ class TrackingProtectionModel {
 
         let confirmAction = UIAlertAction(title: clearCookiesAlertButton,
                                           style: .destructive) { [weak self] _ in
-            self?.clearCookiesAndSiteData(cookiesClearable: CookiesClearable(), siteDataClearable: SiteDataClearable())
+            self?.clearCookiesAndSiteData()
             self?.selectedTab?.webView?.reload()
+
+            guard let windowUUID = self?.selectedTab?.windowUUID else { return }
+            store.dispatch(
+                TrackingProtectionMiddlewareAction(
+                    windowUUID: windowUUID,
+                    actionType: TrackingProtectionMiddlewareActionType.dismissTrackingProtection
+                )
+            )
+
+            store.dispatch(
+                GeneralBrowserAction(
+                    toastType: .clearCookies,
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserActionType.showToast
+                )
+            )
         }
         alert.addAction(confirmAction)
         controller.present(alert, animated: true, completion: nil)
     }
 
-    func clearCookiesAndSiteData(cookiesClearable: Clearable, siteDataClearable: Clearable) {
-        _ = cookiesClearable.clear()
-        _ = siteDataClearable.clear()
+    func clearCookiesAndSiteData() {
+        _ = CookiesClearable().clear()
+        _ = SiteDataClearable().clear()
     }
 }
