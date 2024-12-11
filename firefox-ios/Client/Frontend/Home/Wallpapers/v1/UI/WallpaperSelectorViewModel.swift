@@ -213,7 +213,7 @@ private extension WallpaperSelectorViewModel {
 
         let wallpaperTypeKey = TelemetryWrapper.EventExtraKey.wallpaperType.rawValue
         switch item.wallpaper.type {
-        case .defaultWallpaper:
+        case .none:
             metadata[wallpaperTypeKey] = "default"
         case .other:
             switch item.collection.type {

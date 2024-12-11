@@ -92,9 +92,30 @@ class LibraryCoordinator: BaseCoordinator,
     }
 
     func shareLibraryItem(url: URL, sourceView: UIView) {
-        guard !childCoordinators.contains(where: { $0 is ShareSheetCoordinator }) else { return }
-        let coordinator = makeShareSheetCoordinator()
-        coordinator.start(url: url, sourceView: sourceView)
+        if let coordinator = childCoordinators.first(where: { $0 is ShareSheetCoordinator }) as? ShareSheetCoordinator {
+            // The share sheet extension coordinator wasn't correctly removed in the last share session. Attempt to recover.
+            logger.log(
+                "ShareSheetCoordinator already exists when it shouldn't. Removing and recreating it to access share sheet",
+                level: .info,
+                category: .shareSheet,
+                extra: ["existing ShareSheetCoordinator UUID": "\(coordinator.windowUUID)",
+                        "LibraryCoordinator windowUUID": "\(windowUUID)"]
+            )
+
+            coordinator.dismiss()
+        }
+
+        let coordinator = ShareSheetCoordinator(
+            alertContainer: UIView(),
+            router: router,
+            profile: profile,
+            parentCoordinator: self,
+            tabManager: tabManager
+        )
+        add(child: coordinator)
+
+        // Note: Called from History, Bookmarks, and Reading List long presses > Share from the context menu
+        coordinator.start(shareType: .site(url: url), shareMessage: nil, sourceView: sourceView)
     }
 
     private func makeBookmarksCoordinator(navigationController: UINavigationController) {
@@ -164,18 +185,6 @@ class LibraryCoordinator: BaseCoordinator,
 
     func didFinish(from childCoordinator: any Coordinator) {
         remove(child: childCoordinator)
-    }
-
-    private func makeShareSheetCoordinator() -> ShareSheetCoordinator {
-        let coordinator = ShareSheetCoordinator(
-            alertContainer: UIView(),
-            router: router,
-            profile: profile,
-            parentCoordinator: self,
-            tabManager: tabManager
-        )
-        add(child: coordinator)
-        return coordinator
     }
 
     // MARK: - LibraryPanelDelegate

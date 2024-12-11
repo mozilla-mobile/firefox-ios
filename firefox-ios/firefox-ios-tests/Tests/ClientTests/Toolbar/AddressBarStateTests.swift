@@ -38,7 +38,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(initialState.safeListedURLImageName)
         XCTAssertFalse(initialState.isEditing)
         XCTAssertTrue(initialState.shouldShowKeyboard)
-        XCTAssertTrue(initialState.shouldSelectSearchTerm)
+        XCTAssertFalse(initialState.shouldSelectSearchTerm)
         XCTAssertFalse(initialState.isLoading)
         XCTAssertNil(initialState.readerModeState)
         XCTAssertFalse(initialState.didStartTyping)
@@ -76,7 +76,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertNil(newState.safeListedURLImageName)
         XCTAssertFalse(newState.isEditing)
         XCTAssertTrue(newState.shouldShowKeyboard)
-        XCTAssertTrue(newState.shouldSelectSearchTerm)
+        XCTAssertFalse(newState.shouldSelectSearchTerm)
         XCTAssertFalse(newState.isLoading)
         XCTAssertNil(newState.readerModeState)
         XCTAssertFalse(newState.didStartTyping)
@@ -454,7 +454,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.searchTerm, nil)
         XCTAssertFalse(newState.isEditing)
         XCTAssertTrue(newState.shouldShowKeyboard)
-        XCTAssertTrue(newState.shouldSelectSearchTerm)
+        XCTAssertFalse(newState.shouldSelectSearchTerm)
         XCTAssertFalse(newState.didStartTyping)
         XCTAssertTrue(newState.showQRPageAction)
     }
@@ -488,7 +488,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertEqual(newState.searchTerm, nil)
         XCTAssertFalse(newState.isEditing)
         XCTAssertTrue(newState.shouldShowKeyboard)
-        XCTAssertTrue(newState.shouldSelectSearchTerm)
+        XCTAssertFalse(newState.shouldSelectSearchTerm)
         XCTAssertFalse(newState.didStartTyping)
         XCTAssertFalse(newState.showQRPageAction)
     }
@@ -586,6 +586,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(newState.isEditing)
         XCTAssertTrue(newState.didStartTyping)
         XCTAssertTrue(newState.showQRPageAction)
+        XCTAssertFalse(newState.shouldSelectSearchTerm)
     }
 
     func test_didEnterSearchTermAction_returnsExpectedState() {
@@ -605,6 +606,26 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
         XCTAssertTrue(newState.isEditing)
         XCTAssertTrue(newState.didStartTyping)
         XCTAssertFalse(newState.showQRPageAction)
+        XCTAssertFalse(newState.shouldSelectSearchTerm)
+    }
+
+    func test_didSetSearchTermAction_returnsExpectedState() {
+        let initialState = createSubject()
+        let reducer = addressBarReducer()
+        let searchTerm = "Search Term"
+
+        let newState = reducer(
+            initialState,
+            ToolbarAction(
+                searchTerm: searchTerm,
+                windowUUID: windowUUID,
+                actionType: ToolbarActionType.didSetSearchTerm
+            )
+        )
+
+        XCTAssertEqual(newState.windowUUID, windowUUID)
+        XCTAssertEqual(newState.searchTerm, searchTerm)
+        XCTAssertFalse(newState.didStartTyping)
     }
 
     func test_didStartTypingAction_returnsExpectedState() {
@@ -621,6 +642,7 @@ final class AddressBarStateTests: XCTestCase, StoreTestUtility {
 
         XCTAssertEqual(newState.windowUUID, windowUUID)
         XCTAssertTrue(newState.didStartTyping)
+        XCTAssertFalse(newState.shouldSelectSearchTerm)
     }
 
     // MARK: - Private

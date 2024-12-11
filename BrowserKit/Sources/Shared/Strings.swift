@@ -1668,6 +1668,39 @@ extension String {
                 tableName: "Onboarding",
                 value: "Manage",
                 comment: "Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen.")
+
+            public struct PrivacyPreferences {
+                public static let Title = MZLocalizedString(
+                    key: "", // Onboarding.TermsOfService.PrivacyPreferences.Title.v135
+                    tableName: "Onboarding",
+                    value: "Help us make Firefox better",
+                    comment: "Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data.")
+                public static let SendCrashReportsTitle = MZLocalizedString(
+                    key: "", // Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v135
+                    tableName: "Onboarding",
+                    value: "Automatically send crash reports",
+                    comment: "Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not.")
+                public static let SendCrashReportsDescription = MZLocalizedString(
+                    key: "", // Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v135
+                    tableName: "Onboarding",
+                    value: "Crash reports allow us to diagnose and fix issues with the browser. %@",
+                    comment: "Description for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send crash reports option.")
+                public static let SendTechnicalDataTitle = MZLocalizedString(
+                    key: "", // Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135
+                    tableName: "Onboarding",
+                    value: "Send technical and interaction data to Mozilla",
+                    comment: "Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not.")
+                public static let SendTechnicalDataDescription = MZLocalizedString(
+                    key: "", // Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135
+                    tableName: "Onboarding",
+                    value: "Data about your device, hardware configuration, and how you use Firefox helps improve features, performance, and stability for users everywhere. %@",
+                    comment: "Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option.")
+                public static let LearnMore = MZLocalizedString(
+                    key: "", // Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v135
+                    tableName: "Onboarding",
+                    value: "Learn more.",
+                    comment: "A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not.")
+            }
         }
 
         public struct Intro {
@@ -6671,6 +6704,13 @@ extension String {
             tableName: "Toolbar",
             value: "New Tab",
             comment: "Accessibility label for the new tab button that can be displayed in the navigation or address toolbar.")
+
+        public static let TabsButtonAccessibilityLabel = MZLocalizedString(
+            key: "Toolbar.Tabs.Button.A11y.Label.v135",
+            tableName: "Toolbar",
+            value: "Tabs open",
+            comment: "Accessibility label for the tabs button in the toolbar, specifing the number of tabs open.")
+
         public struct TabToolbarLongPressActionsMenu {
             public static let CloseThisTabButton = MZLocalizedString(
                 key: "Toolbar.Tab.CloseThisTab.Button.v130",

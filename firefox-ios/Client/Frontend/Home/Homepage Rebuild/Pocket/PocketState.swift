@@ -11,8 +11,18 @@ struct SectionHeaderState: Equatable {
     var sectionHeaderTitle: String
     var sectionTitleA11yIdentifier: String
     var isSectionHeaderButtonHidden: Bool
-    var sectionHeaderColor: UIColor
     var sectionButtonA11yIdentifier: String?
+
+    init(
+        sectionHeaderTitle: String = .FirefoxHomepage.Pocket.SectionTitle,
+        sectionTitleA11yIdentifier: String = AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket,
+        isSectionHeaderButtonHidden: Bool = true,
+        sectionButtonA11yIdentifier: String? = nil) {
+        self.sectionHeaderTitle = sectionHeaderTitle
+        self.sectionTitleA11yIdentifier = sectionTitleA11yIdentifier
+        self.isSectionHeaderButtonHidden = isSectionHeaderButtonHidden
+        self.sectionButtonA11yIdentifier = sectionButtonA11yIdentifier
+    }
 }
 
 struct PocketDiscoverState: Equatable {
@@ -24,16 +34,11 @@ struct PocketDiscoverState: Equatable {
 struct PocketState: StateType, Equatable {
     var windowUUID: WindowUUID
     var pocketData: [PocketStoryState]
+    let sectionHeaderState = SectionHeaderState()
     let pocketDiscoverItem = PocketDiscoverState(
         title: .FirefoxHomepage.Pocket.DiscoverMore,
         url: PocketProvider.MoreStoriesURL
     )
-    // TODO: FXIOS-10312 Update color for section header when wallpaper is configured with redux
-    let sectionHeaderState = SectionHeaderState(
-        sectionHeaderTitle: .FirefoxHomepage.Pocket.SectionTitle,
-        sectionTitleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket,
-        isSectionHeaderButtonHidden: true,
-        sectionHeaderColor: .systemRed)
 
     let footerURL = SupportUtils.URLForPocketLearnMore
 
@@ -60,19 +65,23 @@ struct PocketState: StateType, Equatable {
 
         switch action.actionType {
         case PocketMiddlewareActionType.retrievedUpdatedStories:
-            guard let pocketAction = action as? PocketAction,
-                  let stories = pocketAction.pocketStories
-            else {
-                return defaultState(from: state)
-            }
-
-            return PocketState(
-                windowUUID: state.windowUUID,
-                pocketData: stories
-            )
+            return handlePocketAction(action, state: state)
         default:
             return defaultState(from: state)
         }
+    }
+
+    private static func handlePocketAction(_ action: Action, state: PocketState) -> PocketState {
+        guard let pocketAction = action as? PocketAction,
+              let pocketStories = pocketAction.pocketStories
+        else {
+            return defaultState(from: state)
+        }
+
+        return PocketState(
+            windowUUID: state.windowUUID,
+            pocketData: pocketStories
+        )
     }
 
     static func defaultState(from state: PocketState) -> PocketState {
