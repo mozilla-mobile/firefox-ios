@@ -11,6 +11,11 @@ let urlLabelExample_3 = "Example Domain"
 let url_3 = "localhost:\(serverPort)/test-fixture/test-example.html"
 
 class BookmarksTests: BaseTestCase {
+    override func tearDown() {
+        XCUIDevice.shared.orientation = .portrait
+        super.tearDown()
+    }
+
     private func checkBookmarked() {
         navigator.goto(LibraryPanel_Bookmarks)
         app.buttons["Done"].waitAndTap()
@@ -76,7 +81,7 @@ class BookmarksTests: BaseTestCase {
     private func checkEmptyBookmarkList() {
         mozWaitForElementToExist(app.tables["Bookmarks List"])
         let list = app.tables["Bookmarks List"].cells.count
-        XCTAssertEqual(list, 0, "There should not be any entry in the bookmarks list")
+        XCTAssertEqual(list, 1, "There should not be any entry in the bookmarks list")
     }
 
     private func checkItemInBookmarkList(oneItemBookmarked: Bool) {
@@ -356,24 +361,10 @@ class BookmarksTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2445808
     func testLongTapRecentlySavedLink() {
-        // Go to "Recently saved" section and long tap on one of the links
-        navigator.openURL(path(forTestPage: url_2["url"]!))
-        waitForTabsButton()
-        bookmark()
-        navigator.performAction(Action.GoToHomePage)
-        waitForElementsToExist([app.staticTexts["Bookmarks"], app.cells["BookmarksCell"]])
-        app.cells["BookmarksCell"].press(forDuration: 1.5)
-        // The context menu opens, having the correct options
-        let ContextMenuTable = app.tables["Context Menu"]
-        waitForElementsToExist(
-            [
-                ContextMenuTable,
-                ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.plus],
-                ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.privateMode],
-                ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.bookmarkSlash],
-                ContextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.share]
-            ]
-        )
+        validateLongTapOptionsFromBookmarkLink()
+        forceRestartApp()
+        XCUIDevice.shared.orientation = .landscapeLeft
+        validateLongTapOptionsFromBookmarkLink()
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307054
@@ -386,9 +377,78 @@ class BookmarksTests: BaseTestCase {
         mozWaitForElementToExist(app.staticTexts["Bookmark Removed"])
     }
 
+    private func validateLongTapOptionsFromBookmarkLink() {
+        // Go to "Recently saved" section and long tap on one of the links
+        navigator.openURL(path(forTestPage: url_2["url"]!))
+        waitForTabsButton()
+        bookmark()
+        navigator.performAction(Action.GoToHomePage)
+        longPressBookmarkCell()
+        // The context menu opens, having the correct options
+        let contextMenuTable = app.tables["Context Menu"]
+        waitForElementsToExist(
+            [
+                contextMenuTable,
+                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.plus],
+                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.privateMode],
+                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.bookmarkSlash],
+                contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.share]
+            ]
+        )
+        // Tap to "Open in New Tab"
+        contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.plus].tap()
+        // The webpage opens in a new tab
+        switchToTabAndValidate(nrOfTabs: "3")
+
+        // Tap to "Open in Private Tab"
+        navigator.performAction(Action.GoToHomePage)
+        longPressBookmarkCell()
+        contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.privateMode].waitAndTap()
+        // The webpage opens in a new private tab
+        switchToTabAndValidate(nrOfTabs: "1", isPrivate: true)
+        navigator.goto(TabTray)
+        if !iPad() {
+            mozWaitForElementToExist(app.staticTexts["Private Browsing"])
+        }
+        // Tap to "Remove bookmark"
+        navigator.toggleOn(userState.isPrivate, withAction: Action.ToggleRegularMode)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        longPressBookmarkCell()
+        contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.bookmarkSlash].waitAndTap()
+        // The bookmark is removed
+        mozWaitForElementToNotExist(app.cells["BookmarksCell"])
+        navigator.goto(LibraryPanel_Bookmarks)
+        checkEmptyBookmarkList()
+    }
+
     private func bookmarkPageAndTapEdit() {
         bookmark() // Bookmark the page
         bookmark() // Open the "Edit Bookmark" page
         mozWaitForElementToExist(app.navigationBars["Edit Bookmark"])
+    }
+
+    private func longPressBookmarkCell() {
+        let bookMarkCell = app.cells["BookmarksCell"]
+        scrollToElement(bookMarkCell)
+        bookMarkCell.press(forDuration: 1.5)
+    }
+
+    private func switchToTabAndValidate(nrOfTabs: String, isPrivate: Bool = false) {
+        if !iPad() {
+            app.buttons["Switch"].waitAndTap()
+        } else {
+            if isPrivate {
+                app.buttons[AccessibilityIdentifiers.Browser.TopTabs.privateModeButton].waitAndTap()
+            } else {
+                app.collectionViews[AccessibilityIdentifiers.Browser.TopTabs.collectionView].cells.element(boundBy: 2)
+                    .waitAndTap()
+            }
+        }
+        waitUntilPageLoad()
+        mozWaitForElementToExist(app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton])
+        let tabsOpen = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
+        XCTAssertEqual(nrOfTabs, tabsOpen as? String)
+        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
+        mozWaitForValueContains(url, value: "localhost")
     }
 }
