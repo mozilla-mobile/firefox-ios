@@ -132,8 +132,9 @@ final class RouteBuilder {
                 // Pass optional share message and subtitle here
                 var shareMessage: ShareMessage?
                 if let titleText = urlScanner.value(query: "title") {
-                    // TODO: FXIOS-10629 Get the optional subtitle parameter 
-                    shareMessage = ShareMessage(message: titleText, subtitle: nil)
+                    let subtitleText: String? = urlScanner.value(query: "subtitle")
+
+                    shareMessage = ShareMessage(message: titleText, subtitle: subtitleText)
                 }
 
                 // Deeplinks cannot have an associated tab or file, so this must be a website URL `.site` share
