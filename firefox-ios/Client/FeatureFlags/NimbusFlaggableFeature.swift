@@ -37,7 +37,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     case preferSwitchToOpenTabOverDuplicate
     case pullToRefreshRefactor
     case reduxSearchSettings
-    case closeRemoteTabs
     case reportSiteIssue
     case searchHighlights
     case sentFromFirefox
@@ -56,7 +55,6 @@ enum NimbusFeatureFlagID: String, CaseIterable {
     var debugKey: String? {
         switch self {
         case    .bookmarksRefactor,
-                .closeRemoteTabs,
                 .homepageRebuild,
                 .menuRefactor,
                 .microsurvey,
@@ -108,7 +106,6 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
                 .accountSettingsRedux,
                 .addressAutofillEdit,
                 .creditCardAutofillStatus,
-                .closeRemoteTabs,
                 .fakespotBackInStock,
                 .fakespotFeature,
                 .fakespotProductAds,
