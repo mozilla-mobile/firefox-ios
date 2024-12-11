@@ -104,6 +104,7 @@ extension BrowserViewController: WKUIDelegate {
 
             present(confirmAlert.alertController(), animated: true)
         } else if let promptingTab = tabManager[webView] {
+            // CRASH LAURIE - we're going here
             logger.log("Javascript confirm panel alert is queued.", level: .info, category: .webview)
 
             promptingTab.queueJavascriptAlertPrompt(confirmAlert)

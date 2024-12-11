@@ -18,7 +18,6 @@ class AccessoryViewProvider: UIView, Themeable, InjectedThemeUUIDIdentifiable {
         static let fixedSpacerHeight: CGFloat = 30
         static let fixedLeadingSpacerWidth: CGFloat = 2
         static let fixedTrailingSpacerWidth: CGFloat = 3
-        static let doneButtonFontSize: CGFloat = 17
     }
 
     // MARK: - Properties
