@@ -600,6 +600,15 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
     }
 
     deinit {
+        // Sync it on main thread so it should take precedence on the webView being deinited
+        ensureMainThread {
+            self.alertQueue.forEach {
+                // Creating the queued Alerts will also deinit them suddendly because there is no reference
+                // Thus calling the completion handler the WebView expects to be called once.
+                _ = $0.alertController()
+            }
+            self.alertQueue.removeAll()
+        }
         webViewLoadingObserver?.invalidate()
         webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
         webView?.removeObserver(self, forKeyPath: KVOConstants.title.rawValue)

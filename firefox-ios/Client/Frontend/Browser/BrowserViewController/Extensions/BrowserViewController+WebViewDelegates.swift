@@ -70,21 +70,21 @@ extension BrowserViewController: WKUIDelegate {
         initiatedByFrame frame: WKFrameInfo,
         completionHandler: @escaping () -> Void
     ) {
+        defer {
+            completionHandler()
+        }
         let messageAlert = MessageAlert(message: message, frame: frame)
         if shouldDisplayJSAlertForWebView(webView) {
             logger.log("Javascript message alert will be presented.", level: .info, category: .webview)
-
-            present(messageAlert.alertController(), animated: true) {
-                // TODO: [FXIOS-10334] This should be called when the alert is dismissed, not presented
-                completionHandler()
+            let alert = messageAlert.alertController()
+            alert.delegate = self
+            present(alert, animated: true) {
                 self.logger.log("Javascript message alert was completed.", level: .info, category: .webview)
             }
         } else if let promptingTab = tabManager[webView] {
             logger.log("Javascript message alert is queued.", level: .info, category: .webview)
 
             promptingTab.queueJavascriptAlertPrompt(messageAlert)
-            // TODO: [FXIOS-10334] This should be called when the alert is dismissed, not enqueued
-            completionHandler()
         }
     }
 
