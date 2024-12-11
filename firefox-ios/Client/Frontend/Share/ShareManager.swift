@@ -91,7 +91,7 @@ class ShareManager: NSObject, FeatureFlaggable {
         case .tab(let siteURL, let tab):
             // For websites, we also want to offer a few additional activity items besides the URL, like printing the
             // webpage or adding a website to the iOS home screen
-            activityItems.append(URLActivityItemProvider(url: siteURL))
+            activityItems.append(URLActivityItemProvider(url: siteURL, allowSentFromFirefoxTreatment: true))
 
             // Only show the print activity if the tab's webview is loaded
             if tab.webView != nil {
