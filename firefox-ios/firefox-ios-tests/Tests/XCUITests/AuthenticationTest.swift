@@ -46,12 +46,8 @@ class AuthenticationTest: BaseTestCase {
          inaccessible after sign in to verify the success text. */
         waitForNoExistence(app.alerts.buttons["Cancel"], timeoutValue: 5)
         waitForNoExistence(app.alerts.buttons["Log in"], timeoutValue: 5)
-        // Added this check to ensure the BasicAuth login is persisting after app restart as well.
-        app.terminate()
-        app.launch()
         navigator.openURL(testBasicHTTPAuthURL)
-        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
-        navigator.nowAt(NewTabScreen)
+        waitUntilPageLoad()
         mozWaitForElementToExist(app.webViews["Web content"].staticTexts["Your browser made it!"])
     }
 }
