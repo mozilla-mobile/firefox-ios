@@ -101,6 +101,10 @@ line_length:
   ignores_urls: true
   ignores_interpolated_strings: true
 
+closure_body_length:
+  warning: 90
+  error: 90
+
 file_header:
   required_string: |
                     // This Source Code Form is subject to the terms of the Mozilla Public
