@@ -329,7 +329,7 @@ class LibraryViewController: UIViewController, Themeable, BookmarksRefactorFeatu
     private func updateSegmentControl() {
         if isBookmarkRefactorEnabled {
             let panelState = getCurrentPanelState()
-            
+
             switch panelState {
             case .bookmarks(state: .inFolderEditMode):
                 (1...3).forEach { index in self.librarySegmentControl.setEnabled(false, forSegmentAt: index) }
