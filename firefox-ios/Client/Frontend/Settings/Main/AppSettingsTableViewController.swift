@@ -403,15 +403,14 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
     private func getSupportSettings() -> [SettingSection] {
         guard let sendAnonymousUsageDataSetting, let studiesToggleSetting else { return [] }
-        let isSentFromFirefoxEnabled = featureFlags.isFeatureEnabled(.sentFromFirefox, checking: .buildOnly)
 
         var supportSettings = [
             ShowIntroductionSetting(settings: self, settingsDelegate: self),
             SendFeedbackSetting(settingsDelegate: parentCoordinator),
         ]
 
-        // Only add this toggle to the Settings if Sent from Firefox feature flag is enabled
-        if isSentFromFirefoxEnabled {
+        // Only add this toggle to the Settings if Sent from Firefox feature flag is enabled from Nimbus
+        if featureFlags.isFeatureEnabled(.sentFromFirefox, checking: .buildOnly) {
             supportSettings.append(
                 SentFromFirefoxSetting(
                     prefs: profile.prefs,
