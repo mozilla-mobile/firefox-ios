@@ -50,7 +50,8 @@ class A11yOnboardingTests: BaseTestCase {
 
         for button in buttons {
             XCTAssertNotNil(button.accessibilityLabel, "Button \(button.identifier) should have an accessibility label")
-            XCTAssertFalse(button.accessibilityLabel!.isEmpty, "Button \(button.identifier) should have a non-empty accessibility label")
+            XCTAssertFalse(button.accessibilityLabel!.isEmpty,
+                           "Button \(button.identifier) should have a non-empty accessibility label")
         }
 
         // Swipe to the second screen
@@ -89,6 +90,4 @@ class A11yOnboardingTests: BaseTestCase {
         let topSites = app.collectionViews.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         mozWaitForElementToExist(topSites)
     }
-
-
 }
