@@ -55,16 +55,17 @@ extension XCTestCase {
 }
 
 extension ScreenGraphTest {
-    // Temporary disable since it is failing intermittently on BB
     func testUserStateChanges() {
         XCTAssertNil(navigator.userState.url, "Current url is empty")
 
         navigator.userState.url = "https://mozilla.org"
         navigator.performAction(TestActions.LoadURLByTyping)
+        waitUntilPageLoad()
         // The UserState is mutated in BrowserTab.
         navigator.goto(BrowserTab)
         navigator.nowAt(BrowserTab)
-        XCTAssertTrue(navigator.userState.url?.starts(with: "www.mozilla.org") ?? false, "Current url recorded by from the url bar is \(navigator.userState.url ?? "nil")")
+        let currentURL = navigator.userState.url as String?
+        XCTAssertTrue(currentURL?.starts(with: "mozilla.org") ?? false, "Current url recorded by from the url bar is \(currentURL ?? "nil")")
     }
 
     func testSimpleToggleAction() {
