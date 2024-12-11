@@ -4,6 +4,7 @@
 
 import Common
 import UIKit
+import Shared
 
 struct SwitchDetailedViewModel {
     let contentStackViewA11yId: String
@@ -112,10 +113,15 @@ final class SwitchDetailedView: UIView, ThemeApplicable {
     func setupDetails(actionTitle: String,
                       actionDescription: String,
                       linkDescription: String,
+                      useAppName: Bool = false,
                       theme: Theme
     ) {
         actionTitleLabel.text = actionTitle
-        let description = String(format: actionDescription, linkDescription)
+        let description: String = if useAppName {
+            String(format: actionDescription, AppName.shortName.rawValue, linkDescription)
+        } else {
+            String(format: actionDescription, linkDescription)
+        }
         let linkedDescription = NSMutableAttributedString(string: description)
         let linkedText = (description as NSString).range(of: linkDescription)
         linkedDescription.addAttribute(.font,

@@ -5,6 +5,7 @@
 import UIKit
 import Common
 import ComponentLibrary
+import Shared
 
 final class PrivacyPreferencesViewController: UIViewController,
                                               Themeable,
@@ -27,7 +28,7 @@ final class PrivacyPreferencesViewController: UIViewController,
     private lazy var titleLabel: UILabel = .build { label in
         label.font = FXFontStyles.Regular.body.scaledFont()
         label.numberOfLines = 0
-        label.text = .Onboarding.TermsOfService.PrivacyPreferences.Title
+        label.text = String(format: .Onboarding.TermsOfService.PrivacyPreferences.Title, AppName.shortName.rawValue)
         label.adjustsFontForContentSizeCategory = true
         label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
@@ -143,9 +144,11 @@ final class PrivacyPreferencesViewController: UIViewController,
             theme: themeManager.getCurrentTheme(for: windowUUID)
         )
         technicalDataSwitch.setupDetails(
-            actionTitle: .Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle,
+            actionTitle: String(format: .Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle,
+                                MozillaName.shortName.rawValue),
             actionDescription: .Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription,
             linkDescription: .Onboarding.TermsOfService.PrivacyPreferences.LearnMore,
+            useAppName: true,
             theme: themeManager.getCurrentTheme(for: windowUUID)
         )
     }
