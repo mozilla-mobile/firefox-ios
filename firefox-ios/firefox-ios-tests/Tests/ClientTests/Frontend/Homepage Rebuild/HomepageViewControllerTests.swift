@@ -75,6 +75,28 @@ final class HomepageViewControllerTests: XCTestCase {
         XCTAssertEqual(mockNotificationCenter?.removeObserverCallCount, 1)
     }
 
+    func test_scrollViewDidScroll_updatesStatusBarScrollDelegate() {
+        let mockStatusBarScrollDelegate = MockStatusBarScrollDelegate()
+        let homepageVC = createSubject(statusBarScrollDelegate: mockStatusBarScrollDelegate)
+        let wallpaperConfiguration = WallpaperConfiguration(hasImage: true)
+        let newState = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            WallpaperAction(
+                wallpaperConfiguration: wallpaperConfiguration,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: WallpaperMiddlewareActionType.wallpaperDidInitialize
+            )
+        )
+        homepageVC.newState(state: newState)
+        let scrollView = UIScrollView()
+
+        XCTAssertNil(mockStatusBarScrollDelegate.savedScrollView)
+
+        homepageVC.scrollViewDidScroll(scrollView)
+
+        XCTAssertEqual(mockStatusBarScrollDelegate.savedScrollView, scrollView)
+    }
+
     private func createSubject(statusBarScrollDelegate: StatusBarScrollDelegate? = nil) -> HomepageViewController {
         let notificationCenter = MockNotificationCenter()
         let themeManager = MockThemeManager()
