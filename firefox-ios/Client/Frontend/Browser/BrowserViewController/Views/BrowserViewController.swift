@@ -1313,7 +1313,11 @@ class BrowserViewController: UIViewController,
 
     func frontEmbeddedContent(_ viewController: ContentContainable) {
         contentContainer.update(content: viewController)
-        statusBarOverlay.resetState(isHomepage: contentContainer.hasLegacyHomepage)
+        if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
+            statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
+        } else {
+            statusBarOverlay.resetState(isHomepage: contentContainer.hasLegacyHomepage)
+        }
     }
 
     /// Embed a ContentContainable inside the content container
@@ -1326,7 +1330,11 @@ class BrowserViewController: UIViewController,
         viewController.willMove(toParent: self)
         contentContainer.add(content: viewController)
         viewController.didMove(toParent: self)
-        statusBarOverlay.resetState(isHomepage: contentContainer.hasLegacyHomepage)
+        if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
+            statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
+        } else {
+            statusBarOverlay.resetState(isHomepage: contentContainer.hasLegacyHomepage)
+        }
 
         UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
         return true
@@ -1352,7 +1360,11 @@ class BrowserViewController: UIViewController,
         }
 
         if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
-            browserDelegate?.showHomepage(overlayManager: overlayManager, isZeroSearch: inline)
+            browserDelegate?.showHomepage(
+                overlayManager: overlayManager,
+                isZeroSearch: inline,
+                statusBarScrollDelegate: statusBarOverlay
+            )
         } else {
             browserDelegate?.showLegacyHomepage(
                 inline: inline,
