@@ -67,7 +67,7 @@ final class TabErrorTelemetryHelper {
         invalidateTabCount()
     }
 
-    func invalidateTabCount() {
+    private func invalidateTabCount() {
         defaults.removeObject(forKey: defaultsKey)
     }
 
