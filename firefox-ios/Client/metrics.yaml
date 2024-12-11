@@ -5112,19 +5112,6 @@ share_sheet:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
-  copy_link_tapped:
-    type: event
-    description: |
-      Counts the number of times a user taps copy
-      button from Share Sheet actions
-    bugs:
-      - https://mozilla-hub.atlassian.net/browse/FXIOS-5226
-    data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/12526
-      - https://github.com/mozilla-mobile/firefox-ios/pull/14102
-    notification_emails:
-      - fx-ios-data-stewards@mozilla.com
-    expires: "2025-07-01"
   pocket_action_tapped:
     type: event
     description: |
