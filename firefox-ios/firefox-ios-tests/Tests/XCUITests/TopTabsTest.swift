@@ -309,6 +309,8 @@ class TopTabsTest: BaseTestCase {
             mozWaitForElementToExist(app.buttons["Show Tabs"])
             app.buttons["Show Tabs"].press(forDuration: 1)
             app.tables.cells.otherElements["New Private Tab"].waitAndTap()
+            let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
+            mozWaitForElementToExist(tabsButton)
             navigator.nowAt(NewTabScreen)
             app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].tap()
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
