@@ -249,8 +249,8 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
             guard let url = URL(string: site.url, invalidCharacters: false) else { return }
 
             self.browserNavigationHandler?.showShareSheet(
-                url: url,
-                title: nil,
+                shareType: .site(url: url),
+                shareMessage: nil,
                 sourceView: sourceView ?? UIView(),
                 sourceRect: nil,
                 toastContainer: self.toastContainer,
