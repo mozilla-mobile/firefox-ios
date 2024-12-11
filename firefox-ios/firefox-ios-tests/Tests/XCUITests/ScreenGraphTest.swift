@@ -11,6 +11,25 @@ class ScreenGraphTest: XCTestCase {
     var navigator: MMNavigator<TestUserState>!
     var app: XCUIApplication!
 
+    func mozWaitForElementToNotExist(_ element: XCUIElement, timeout: TimeInterval? = TIMEOUT) {
+        let startTime = Date()
+
+        while element.exists {
+            if let timeout = timeout, Date().timeIntervalSince(startTime) > timeout {
+                XCTFail("Timed out waiting for element \(element) to not exist")
+                break
+            }
+            usleep(10000)
+        }
+    }
+
+    func waitUntilPageLoad() {
+        let app = XCUIApplication()
+        let progressIndicator = app.progressIndicators.element(boundBy: 0)
+
+        mozWaitForElementToNotExist(progressIndicator, timeout: 90.0)
+    }
+
     override func setUp() {
         super.setUp()
         app = XCUIApplication()
@@ -51,6 +70,7 @@ extension ScreenGraphTest {
     func testSimpleToggleAction() {
         navigator.userState.url = "https://mozilla.org"
         navigator.performAction(TestActions.LoadURLByTyping)
+        waitUntilPageLoad()
         // Switch night mode on, by toggling.
         navigator.performAction(TestActions.ToggleNightMode)
         XCTAssertTrue(navigator.userState.nightMode)
