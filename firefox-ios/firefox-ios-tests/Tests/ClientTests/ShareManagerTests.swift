@@ -16,6 +16,8 @@ final class ShareManagerTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        DependencyHelperMock().bootstrapDependencies()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
         testTab = MockShareTab(title: testWebpageDisplayTitle, url: testWebURL, canonicalURL: testWebURL)
     }
 
@@ -35,16 +37,17 @@ final class ShareManagerTests: XCTestCase {
         XCTAssertEqual(activityItems.count, 1)
 
         let urlActivityItemProvider = try XCTUnwrap(activityItems.first as? URLActivityItemProvider)
-        XCTAssertEqual(urlActivityItemProvider.item as? URL, testFileURL)
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: UIActivity.ActivityType.message
+        )
+
+        XCTAssertEqual(itemForActivity as? URL, testFileURL)
     }
 
     func testGetActivityItems_forFileURL_withShareText() throws {
         let testMessage = "Test message"
         let testSubtitle = "Test subtitle"
-        let stubActivityViewController = UIActivityViewController(
-            activityItems: [],
-            applicationActivities: []
-        )
         let activityItems = ShareManager.getActivityItems(
             forShareType: .file(url: testFileURL),
             withExplicitShareMessage: ShareMessage(message: testMessage, subtitle: testSubtitle)
@@ -55,25 +58,27 @@ final class ShareManagerTests: XCTestCase {
 
         let urlActivityItemProvider = try XCTUnwrap(activityItems[safe: 0] as? URLActivityItemProvider)
         let urlDataIdentifier = urlActivityItemProvider.activityViewController(
-            stubActivityViewController,
+            createStubActivityViewController(),
             dataTypeIdentifierForActivityType: .mail
         )
-
-        XCTAssertEqual(urlActivityItemProvider.item as? URL, testFileURL)
-        XCTAssertEqual(urlDataIdentifier, UTType.fileURL.identifier)
-
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: UIActivity.ActivityType.message
+        )
         let titleSubjectActivityItemProvider = try XCTUnwrap(
             activityItems[safe: 1] as? TitleSubtitleActivityItemProvider
         )
         let titleSubjectSubject = titleSubjectActivityItemProvider.activityViewController(
-            stubActivityViewController,
+            createStubActivityViewController(),
             subjectForActivityType: .mail
         )
         let titleSubjectDataIdentifier = titleSubjectActivityItemProvider.activityViewController(
-            stubActivityViewController,
+            createStubActivityViewController(),
             dataTypeIdentifierForActivityType: .mail
         )
 
+        XCTAssertEqual(urlDataIdentifier, UTType.fileURL.identifier)
+        XCTAssertEqual(itemForActivity as? URL, testFileURL)
         XCTAssertEqual(titleSubjectActivityItemProvider.item as? String, testMessage)
         XCTAssertEqual(titleSubjectSubject, testSubtitle)
         XCTAssertEqual(titleSubjectDataIdentifier, UTType.text.identifier)
@@ -90,16 +95,17 @@ final class ShareManagerTests: XCTestCase {
         XCTAssertEqual(activityItems.count, 1)
 
         let urlActivityItemProvider = try XCTUnwrap(activityItems.first as? URLActivityItemProvider)
-        XCTAssertEqual(urlActivityItemProvider.item as? URL, testWebURL)
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: UIActivity.ActivityType.message
+        )
+
+        XCTAssertEqual(itemForActivity as? URL, testWebURL)
     }
 
     func testGetActivityItems_forWebsiteURL_withShareText() throws {
         let testMessage = "Test message"
         let testSubtitle = "Test subtitle"
-        let stubActivityViewController = UIActivityViewController(
-            activityItems: [],
-            applicationActivities: []
-        )
         let activityItems = ShareManager.getActivityItems(
             forShareType: .file(url: testWebURL),
             withExplicitShareMessage: ShareMessage(message: testMessage, subtitle: testSubtitle)
@@ -110,25 +116,27 @@ final class ShareManagerTests: XCTestCase {
 
         let urlActivityItemProvider = try XCTUnwrap(activityItems[safe: 0] as? URLActivityItemProvider)
         let urlDataIdentifier = urlActivityItemProvider.activityViewController(
-            stubActivityViewController,
+            createStubActivityViewController(),
             dataTypeIdentifierForActivityType: .mail
         )
-
-        XCTAssertEqual(urlActivityItemProvider.item as? URL, testWebURL)
-        XCTAssertEqual(urlDataIdentifier, UTType.url.identifier)
-
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: UIActivity.ActivityType.message
+        )
         let titleSubjectActivityItemProvider = try XCTUnwrap(
             activityItems[safe: 1] as? TitleSubtitleActivityItemProvider
         )
         let titleSubjectSubject = titleSubjectActivityItemProvider.activityViewController(
-            stubActivityViewController,
+            createStubActivityViewController(),
             subjectForActivityType: .mail
         )
         let titleSubjectDataIdentifier = titleSubjectActivityItemProvider.activityViewController(
-            stubActivityViewController,
+            createStubActivityViewController(),
             dataTypeIdentifierForActivityType: .mail
         )
 
+        XCTAssertEqual(urlDataIdentifier, UTType.url.identifier)
+        XCTAssertEqual(itemForActivity as? URL, testWebURL)
         XCTAssertEqual(titleSubjectActivityItemProvider.item as? String, testMessage)
         XCTAssertEqual(titleSubjectSubject, testSubtitle)
         XCTAssertEqual(titleSubjectDataIdentifier, UTType.text.identifier)
@@ -137,11 +145,6 @@ final class ShareManagerTests: XCTestCase {
     // MARK: - Test sharing a website with a related Tab and webview
 
     func testGetActivityItems_forTab_withNoShareText() throws {
-        let stubActivityViewController = UIActivityViewController(
-            activityItems: [],
-            applicationActivities: []
-        )
-
         let activityItems = ShareManager.getActivityItems(
             forShareType: .tab(url: testWebURL, tab: testTab),
             withExplicitShareMessage: nil
@@ -152,11 +155,16 @@ final class ShareManagerTests: XCTestCase {
 
         let urlActivityItemProvider = try XCTUnwrap(activityItems[safe: 0] as? URLActivityItemProvider)
         let urlDataIdentifier = urlActivityItemProvider.activityViewController(
-            stubActivityViewController,
+            createStubActivityViewController(),
             dataTypeIdentifierForActivityType: .mail
         )
-        XCTAssertEqual(urlActivityItemProvider.item as? URL, testWebURL)
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: UIActivity.ActivityType.message
+        )
+
         XCTAssertEqual(urlDataIdentifier, UTType.url.identifier)
+        XCTAssertEqual(itemForActivity as? URL, testWebURL)
 
         _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
 
@@ -171,11 +179,6 @@ final class ShareManagerTests: XCTestCase {
     }
 
     func testGetActivityItems_forTab_withShareText() throws {
-        let stubActivityViewController = UIActivityViewController(
-            activityItems: [],
-            applicationActivities: []
-        )
-
         let activityItems = ShareManager.getActivityItems(
             forShareType: .tab(url: testWebURL, tab: testTab),
             withExplicitShareMessage: ShareMessage(message: testMessage, subtitle: testSubtitle)
@@ -186,11 +189,17 @@ final class ShareManagerTests: XCTestCase {
 
         let urlActivityItemProvider = try XCTUnwrap(activityItems[safe: 0] as? URLActivityItemProvider)
         let urlDataIdentifier = urlActivityItemProvider.activityViewController(
-            stubActivityViewController,
+            createStubActivityViewController(),
             dataTypeIdentifierForActivityType: .mail
         )
-        XCTAssertEqual(urlActivityItemProvider.item as? URL, testWebURL)
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: UIActivity.ActivityType.message
+        )
+
         XCTAssertEqual(urlDataIdentifier, UTType.url.identifier)
+        XCTAssertEqual(itemForActivity as? URL, testWebURL)
+
         _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
 
         _ = try XCTUnwrap(activityItems[safe: 2] as? TabWebView)
@@ -201,5 +210,11 @@ final class ShareManagerTests: XCTestCase {
             testMessage,
             "When an explicit share message is set, we expect to see that message, not the webpage's title."
         )
+    }
+
+    // MARK: - Helpers
+
+    private func createStubActivityViewController() -> UIActivityViewController {
+        return UIActivityViewController(activityItems: [], applicationActivities: [])
     }
 }
