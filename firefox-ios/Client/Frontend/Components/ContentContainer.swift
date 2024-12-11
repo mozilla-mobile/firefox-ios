@@ -10,6 +10,15 @@ enum ContentType {
     case privateHomepage
     case nativeErrorPage
     case webview
+
+    var shouldContentBeCached: Bool {
+        return switch self {
+        case .nativeErrorPage, .privateHomepage:
+            false
+        default:
+            true
+        }
+    }
 }
 
 protocol ContentContainable: UIViewController {
@@ -69,9 +78,13 @@ class ContentContainer: UIView {
     /// Add content view controller to the container, we remove the previous content if present before adding new one
     /// - Parameter content: The view controller to add
     func add(content: ContentContainable) {
-        removePreviousContent()
+        removePreviousContentIfNeeded()
         saveContentType(content: content)
-        addToView(content: content)
+        if content.view.superview == nil {
+            addToView(content: content)
+        } else {
+            bringSubviewToFront(content.view)
+        }
     }
 
     /// Update content in the container. This is used in the case of the webview since
@@ -79,17 +92,17 @@ class ContentContainer: UIView {
     ///
     /// - Parameter content: The content to update
     func update(content: ContentContainable) {
-        removePreviousContent()
+        removePreviousContentIfNeeded()
+        if content.contentType != type {
+            bringSubviewToFront(content.view)
+        }
         saveContentType(content: content)
     }
 
     // MARK: - Private
 
-    private func removePreviousContent() {
-        // Only remove previous content when it's the homepage or native error page.
-        // We're not removing the webview controller for now since if it's not loaded, the
-        // webview doesn't layout it's WKCompositingView which result in black screen
-        guard !hasWebView else { return }
+    private func removePreviousContentIfNeeded() {
+        guard let type, !type.shouldContentBeCached else { return }
         contentController?.willMove(toParent: nil)
         contentController?.view.removeFromSuperview()
         contentController?.removeFromParent()

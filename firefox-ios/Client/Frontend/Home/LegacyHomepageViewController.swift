@@ -959,6 +959,15 @@ extension LegacyHomepageViewController: HomepageViewModelDelegate {
                             category: .legacyHomepage)
         }
     }
+
+    func reloadViewIfNeeded() {
+        notificationCenter.post(name: .ShowHomepage, withUserInfo: windowUUID.userInfo)
+        notificationCenter.post(name: .HistoryUpdated)
+        ensureMainThread { [weak self] in
+            guard let shouldReloadView = self?.viewModel.shouldReloadView, shouldReloadView else { return }
+            self?.reloadView()
+        }
+    }
 }
 
 // MARK: - Notifiable
