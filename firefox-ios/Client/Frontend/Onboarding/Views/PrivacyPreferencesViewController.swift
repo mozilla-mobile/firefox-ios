@@ -5,6 +5,7 @@
 import UIKit
 import Common
 import ComponentLibrary
+import Shared
 
 final class PrivacyPreferencesViewController: UIViewController,
                                               Themeable,
