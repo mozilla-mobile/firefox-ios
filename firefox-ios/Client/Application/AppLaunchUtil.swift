@@ -30,6 +30,8 @@ class AppLaunchUtil {
             logger.copyLogsToDocuments()
         }
 
+        DefaultBrowserUtil().processUserDefaultState(isFirstRun: introScreenManager.shouldShowIntroScreen)
+
         TelemetryWrapper.shared.setup(profile: profile)
         recordStartUpTelemetry()
 
@@ -100,8 +102,6 @@ class AppLaunchUtil {
     }
 
     func setUpPostLaunchDependencies() {
-        DefaultBrowserUtil().processUserDefaultState(isFirstRun: introScreenManager.shouldShowIntroScreen)
-
         let persistedCurrentVersion = InstallType.persistedCurrentVersion()
         // upgrade install - Intro screen shown & persisted current version does not match
         if !introScreenManager.shouldShowIntroScreen && persistedCurrentVersion != AppInfo.appVersion {
