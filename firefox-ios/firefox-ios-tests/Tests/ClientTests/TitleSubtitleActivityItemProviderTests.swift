@@ -47,7 +47,7 @@ final class TitleSubtitleActivityItemProviderTests: XCTestCase {
 
         XCTAssertEqual(dataIdentifier, UTType.text.identifier)
         XCTAssertEqual(titleSubtitleActivityItemProvider.item as? String, testMessage)
-        XCTAssertEqual(subtitle, testMessage, "If no subtitle set, should repeat title")
+        XCTAssertEqual(subtitle, testSubtitle)
     }
 
     func testShareMessage_forMessagesActivity_noSubtitle() throws {
@@ -85,7 +85,7 @@ final class TitleSubtitleActivityItemProviderTests: XCTestCase {
 
         XCTAssertEqual(dataIdentifier, UTType.text.identifier)
         XCTAssertEqual(titleSubtitleActivityItemProvider.item as? String, testMessage)
-        XCTAssertEqual(subtitle, testMessage, "If no subtitle set, should repeat title")
+        XCTAssertEqual(subtitle, testSubtitle)
     }
 
     // MARK: - Helpers
