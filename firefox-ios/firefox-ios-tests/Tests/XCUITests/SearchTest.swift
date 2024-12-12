@@ -230,7 +230,7 @@ class SearchTests: BaseTestCase {
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         mozWaitForValueContains(url, value: "google")
         // Now there should be two tabs open
-        let numTab = app.buttons["Show Tabs"].value as? String
+        let numTab = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
         XCTAssertEqual("2", numTab)
     }
 

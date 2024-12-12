@@ -5,7 +5,7 @@
 import Foundation
 
 enum WallpaperType: String {
-    case defaultWallpaper
+    case none
     case other
 }
 
@@ -50,10 +50,11 @@ struct Wallpaper: Equatable {
     var portraitID: String { return "\(id)\(deviceVersionID)\(fileId.portrait)" }
     var landscapeID: String { return "\(id)\(deviceVersionID)\(fileId.landscape)" }
 
-    // TODO: This is actually just a nil wallpaper. Make this clearer in FXIOS-10633
-    static var defaultWallpaper: Wallpaper {
+    /// "Default" wallpaper object. This basically acts as a wrapper to our `noAssetID` so that
+    /// we can identify that no wallpaper is selected.
+    static var baseWallpaper: Wallpaper {
         return Wallpaper(
-            id: Wallpaper.defaultWallpaperName,
+            id: Wallpaper.noAssetID,
             textColor: nil,
             cardColor: nil,
             logoTextColor: nil
@@ -61,11 +62,15 @@ struct Wallpaper: Equatable {
     }
 
     var type: WallpaperType {
-        return id == Wallpaper.defaultWallpaperName ? .defaultWallpaper : .other
+        return id == Wallpaper.noAssetID ? .none : .other
+    }
+
+    var hasImage: Bool {
+        type != .none
     }
 
     var needsToFetchResources: Bool {
-        guard type != .defaultWallpaper else { return false }
+        guard hasImage else { return false }
         return portrait == nil || landscape == nil
     }
 
@@ -81,7 +86,9 @@ struct Wallpaper: Equatable {
         return fetchResourceFor(imageType: .landscape)
     }
 
-    private static var defaultWallpaperName = "fxDefault"
+    /// ID for the "default" wallpaper object. This is not actually an image file name, this just helps us
+    /// identify that no image is selected.
+    private static var noAssetID = "fxDefault"
     private var deviceVersionID: String {
         return UIDevice.current.userInterfaceIdiom == .pad ? fileId.iPad : fileId.iPhone
     }

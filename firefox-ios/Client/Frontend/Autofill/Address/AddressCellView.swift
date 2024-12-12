@@ -5,7 +5,6 @@
 import SwiftUI
 import Common
 import Shared
-import Storage
 
 import struct MozillaAppServices.Address
 

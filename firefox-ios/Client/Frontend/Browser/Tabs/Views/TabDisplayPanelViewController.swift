@@ -4,7 +4,6 @@
 
 import Common
 import Redux
-import Storage
 import UIKit
 
 class TabDisplayPanelViewController: UIViewController,
@@ -72,7 +71,6 @@ class TabDisplayPanelViewController: UIViewController,
         super.viewWillAppear(animated)
 
         if !viewHasAppeared {
-            tabDisplayView.layoutIfNeeded()
             store.dispatch(TabPanelViewAction(panelType: panelType,
                                               windowUUID: windowUUID,
                                               actionType: TabPanelViewActionType.tabPanelWillAppear))
@@ -162,6 +160,8 @@ class TabDisplayPanelViewController: UIViewController,
     }
 
     func newState(state: TabsPanelState) {
+        guard state != tabsState else { return }
+
         tabsState = state
         tabDisplayView.newState(state: tabsState)
         shouldShowEmptyView(tabsState.isPrivateTabsEmpty)

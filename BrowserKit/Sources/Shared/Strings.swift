@@ -5,11 +5,10 @@
 // swiftlint:disable line_length
 import Foundation
 
-// MARK: - Localization bundle setup
-class BundleClass {}
-
 public struct Strings {
-    public static let bundle = Bundle(for: BundleClass.self)
+    // This is a little workaround to get localizations
+    // FXIOS-10838 will fix this by moving localizations or this struct into the appropriate place
+    public static let bundle = Bundle(identifier: "org.mozilla.ios.Localizations") ?? .main
 }
 
 // MARK: - Localization helper function
@@ -1669,6 +1668,39 @@ extension String {
                 tableName: "Onboarding",
                 value: "Manage",
                 comment: "Title for the Manage button link, in the Terms of Service screen for redirecting the user to the Manage data collection preferences screen.")
+
+            public struct PrivacyPreferences {
+                public static let Title = MZLocalizedString(
+                    key: "", // Onboarding.TermsOfService.PrivacyPreferences.Title.v135
+                    tableName: "Onboarding",
+                    value: "Help us make Firefox better",
+                    comment: "Title for the Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. Data like crash reports or technical and interaction data.")
+                public static let SendCrashReportsTitle = MZLocalizedString(
+                    key: "", // Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsTitle.v135
+                    tableName: "Onboarding",
+                    value: "Automatically send crash reports",
+                    comment: "Title for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not.")
+                public static let SendCrashReportsDescription = MZLocalizedString(
+                    key: "", // Onboarding.TermsOfService.PrivacyPreferences.SendCrashReportsDescription.v135
+                    tableName: "Onboarding",
+                    value: "Crash reports allow us to diagnose and fix issues with the browser. %@",
+                    comment: "Description for the send crash reports switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send crash reports option.")
+                public static let SendTechnicalDataTitle = MZLocalizedString(
+                    key: "", // Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataTitle.v135
+                    tableName: "Onboarding",
+                    value: "Send technical and interaction data to Mozilla",
+                    comment: "Title for the send technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not.")
+                public static let SendTechnicalDataDescription = MZLocalizedString(
+                    key: "", // Onboarding.TermsOfService.PrivacyPreferences.SendTechnicalDataDescription.v135
+                    tableName: "Onboarding",
+                    value: "Data about your device, hardware configuration, and how you use Firefox helps improve features, performance, and stability for users everywhere. %@",
+                    comment: "Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. %@ is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option.")
+                public static let LearnMore = MZLocalizedString(
+                    key: "", // Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v135
+                    tableName: "Onboarding",
+                    value: "Learn more.",
+                    comment: "A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not.")
+            }
         }
 
         public struct Intro {
@@ -5319,7 +5351,7 @@ extension String {
     public static let SendCrashReportsSettingTitle = MZLocalizedString(
         key: "", // Settings.CrashReports.Title.v135
         tableName: "Settings",
-        value: "Automatically send crash reports",
+        value: "Crash Reports",
         comment: "On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports.")
     public static let SendCrashReportsSettingLink = MZLocalizedString(
         key: "", // Settings.CrashReports.Link.v135
@@ -5329,8 +5361,38 @@ extension String {
     public static let SendCrashReportsSettingMessage = MZLocalizedString(
         key: "", // Settings.CrashReports.Message.v135
         tableName: "Settings",
-        value: "Crash reports allow us to diagnose and fix issues with the browser.",
+        value: "Automatically send crash reports to Mozilla to diagnose and fix issues with the browser. Reports may include personal or sensitive data",
         comment: "On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports.")
+    public static let SendTechnicalDataSettingTitle = MZLocalizedString(
+        key: "", // Settings.TechnicalData.Title.v135
+        tableName: "Settings",
+        value: "Technical and Interaction Data",
+        comment: "On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data.")
+    public static let SendTechnicalDataSettingLink = MZLocalizedString(
+        key: "", // Settings.TechnicalData.Link.v135
+        tableName: "Settings",
+        value: "Learn More.",
+        comment: "Title for a link that explains how Mozilla send technical and interaction data.")
+    public static let SendTechnicalDataSettingMessage = MZLocalizedString(
+        key: "", // Settings.TechnicalData.Message.v135
+        tableName: "Settings",
+        value: "Mozilla strives to only collect what we need to provide and improve %@ for everyone.",
+        comment: "On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. Placeholder is for the app name.")
+    public static let SendDailyUsagePingSettingTitle = MZLocalizedString(
+        key: "", // Settings.DailyUsagePing.Title.v135
+        tableName: "Settings",
+        value: "Daily Usage Ping",
+        comment: "On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping.")
+    public static let SendDailyUsagePingSettingLink = MZLocalizedString(
+        key: "", // Settings.DailyUsagePing.Link.v135
+        tableName: "Settings",
+        value: "Learn More.",
+        comment: "Title for a link that explains how Mozilla send daily usage ping.")
+    public static let SendDailyUsagePingSettingMessage = MZLocalizedString(
+        key: "", // Settings.DailyUsagePing.Message.v135
+        tableName: "Settings",
+        value: "This helps Mozilla to estimate active users.",
+        comment: "On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping.")
     public static let SettingsSiriSectionName = MZLocalizedString(
         key: "Settings.Siri.SectionName",
         tableName: nil,
@@ -6642,6 +6704,13 @@ extension String {
             tableName: "Toolbar",
             value: "New Tab",
             comment: "Accessibility label for the new tab button that can be displayed in the navigation or address toolbar.")
+
+        public static let TabsButtonAccessibilityLabel = MZLocalizedString(
+            key: "Toolbar.Tabs.Button.A11y.Label.v135",
+            tableName: "Toolbar",
+            value: "Tabs open",
+            comment: "Accessibility label for the tabs button in the toolbar, specifing the number of tabs open.")
+
         public struct TabToolbarLongPressActionsMenu {
             public static let CloseThisTabButton = MZLocalizedString(
                 key: "Toolbar.Tab.CloseThisTab.Button.v130",
@@ -6802,6 +6871,11 @@ extension String {
         tableName: "LoginManager",
         value: nil,
         comment: "Label for the button used to delete the current login.")
+    public static let LoginListDeleteToast = MZLocalizedString(
+        key: "LoginList.DeleteToast.v135",
+        tableName: "LoginManager",
+        value: "Password removed",
+        comment: "This message appears briefly as a notification (toast) to inform the user that a password has been successfully removed.")
 }
 
 // MARK: - Login Detail

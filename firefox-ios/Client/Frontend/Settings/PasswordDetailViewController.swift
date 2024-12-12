@@ -19,6 +19,7 @@ class PasswordDetailViewController: SensitiveViewController, Themeable {
     var notificationCenter: NotificationProtocol
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
+    var deleteHandler: (() -> Void)?
 
     private lazy var tableView: UITableView = .build { [weak self] tableView in
         guard let self = self else { return }
@@ -342,8 +343,9 @@ extension PasswordDetailViewController {
             self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
                 self.sendLoginsDeletedTelemetry()
                 self.viewModel.profile.logins.deleteLogin(id: self.viewModel.login.id) { _ in
-                    DispatchQueue.main.async {
-                        _ = self.navigationController?.popViewController(animated: true)
+                    DispatchQueue.main.async { [weak self] in
+                        _ = self?.navigationController?.popViewController(animated: true)
+                        self?.deleteHandler?()
                     }
                 }
             }, hasSyncedLogins: yes.successValue ?? true)

@@ -599,7 +599,7 @@
 "ScanQRCode.InvalidDataError.Message" = "Данните са невалидни";
 
 /* Title for the QR code scanner view. */
-"ScanQRCode.View.Title" = "Сканиране на QR код";
+"ScanQRCode.View.Title" = "Сканиране на QR";
 
 /* Open search section of settings */
 "Search" = "Търсене";
