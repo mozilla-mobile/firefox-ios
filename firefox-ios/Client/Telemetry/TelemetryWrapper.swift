@@ -582,7 +582,6 @@ extension TelemetryWrapper {
         case shareExtension = "share-extension"
         case shareMenu = "share-menu"
         case shareSendToDevice = "share-send-to-device"
-        case shareCopyLink = "share-copy-link"
         case sharePocketIcon = "share-pocket-icon"
         case shareSaveToPocket = "save-to-pocket-share-action"
         case tabTray = "tab-tray"
@@ -1992,8 +1991,6 @@ extension TelemetryWrapper {
         // MARK: - Share sheet actions
         case (.action, .tap, .shareSheet, .shareSendToDevice, _):
             GleanMetrics.ShareSheet.sendDeviceTapped.record()
-        case (.action, .tap, .shareSheet, .shareCopyLink, _):
-            GleanMetrics.ShareSheet.copyLinkTapped.record()
         case (.action, .tap, .shareSheet, .sharePocketIcon, _):
             GleanMetrics.ShareSheet.pocketActionTapped.record()
         case (.action, .tap, .shareSheet, .shareSaveToPocket, _):

@@ -12,7 +12,7 @@ import Foundation
 /// main element wherein they appear. As we continue updating views, all
 /// `.accessibilityIdentifier` identifiers from the client and the tests
 /// should be move here and updated throughout the app.
-public struct AccessibilityIdentifiers {
+struct AccessibilityIdentifiers {
     /// Used for toolbar/URL bar buttons since our classes are built that buttons can live in one or the other
     /// Using only those a11y identifiers for both ensures we have standard way to refer to buttons from iPad to iPhone
     struct Toolbar {

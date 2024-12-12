@@ -5,7 +5,6 @@
 import UIKit
 import CoreSpotlight
 import Shared
-import Sync
 import UserNotifications
 import Common
 
