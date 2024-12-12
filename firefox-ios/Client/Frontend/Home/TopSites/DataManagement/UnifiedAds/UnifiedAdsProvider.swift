@@ -27,6 +27,7 @@ extension UnifiedAdsProviderInterface {
 class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, FeatureFlaggable {
     private static let prodResourceEndpoint = "https://ads.mozilla.org/v1/ads"
     static let stagingResourceEndpoint = "https://ads.allizom.org/v1/ads"
+    var maxCacheAge: Timestamp = OneMinuteInMilliseconds * 30
 
     var urlCache: URLCache
     private var logger: Logger
