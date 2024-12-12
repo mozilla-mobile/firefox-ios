@@ -144,7 +144,8 @@ final class ShareManagerTests: XCTestCase {
 
     // MARK: - Test sharing a website with a related Tab and webview
 
-    func testGetActivityItems_forTab_withNoShareText() throws {
+    func testGetActivityItems_forTab_withNoShareText_sharedToMail() throws {
+        let testActivityType = UIActivity.ActivityType.mail
         let activityItems = ShareManager.getActivityItems(
             forShareType: .tab(url: testWebURL, tab: testTab),
             withExplicitShareMessage: nil
@@ -156,25 +157,67 @@ final class ShareManagerTests: XCTestCase {
         let urlActivityItemProvider = try XCTUnwrap(activityItems[safe: 0] as? URLActivityItemProvider)
         let urlDataIdentifier = urlActivityItemProvider.activityViewController(
             createStubActivityViewController(),
-            dataTypeIdentifierForActivityType: .mail
+            dataTypeIdentifierForActivityType: testActivityType
         )
-        let itemForActivity = urlActivityItemProvider.activityViewController(
+        let itemForUrlActivity = urlActivityItemProvider.activityViewController(
             createStubActivityViewController(),
-            itemForActivityType: UIActivity.ActivityType.message
+            itemForActivityType: testActivityType
         )
 
         XCTAssertEqual(urlDataIdentifier, UTType.url.identifier)
-        XCTAssertEqual(itemForActivity as? URL, testWebURL)
+        XCTAssertEqual(itemForUrlActivity as? URL, testWebURL)
 
         _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
 
         _ = try XCTUnwrap(activityItems[safe: 2] as? TabWebView)
 
         let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        let itemForTitleActivity = titleActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: testActivityType
+        )
+        XCTAssertTrue(
+            itemForTitleActivity is NSNull,
+            "We don't share a message for Mail, Messages, and Pasteboard when ShareMessage is not explicitly set"
+        )
+    }
+
+    func testGetActivityItems_forTab_withNoShareText_sharedToNonExcludedActivity() throws {
+        let testActivityType = UIActivity.ActivityType(rawValue: "com.random.non-excluded.activity")
+        let activityItems = ShareManager.getActivityItems(
+            forShareType: .tab(url: testWebURL, tab: testTab),
+            withExplicitShareMessage: nil
+        )
+
+        // Check we get all 4 types of share items for tabs below
+        XCTAssertEqual(activityItems.count, 4)
+
+        let urlActivityItemProvider = try XCTUnwrap(activityItems[safe: 0] as? URLActivityItemProvider)
+        let urlDataIdentifier = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            dataTypeIdentifierForActivityType: testActivityType
+        )
+        let itemForUrlActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: testActivityType
+        )
+
+        XCTAssertEqual(urlDataIdentifier, UTType.url.identifier)
+        XCTAssertEqual(itemForUrlActivity as? URL, testWebURL)
+
+        _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
+
+        _ = try XCTUnwrap(activityItems[safe: 2] as? TabWebView)
+
+        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        let itemForTitleActivity = titleActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: testActivityType
+        )
         XCTAssertEqual(
-            titleActivityItemProvider.item as? String,
+            itemForTitleActivity as? String,
             testWebpageDisplayTitle,
-            "When no explicit share message is set, we expect to see the webpage's title."
+            "When no explicit ShareMessage is set, we expect to see the webpage's title for non-excluded activities."
         )
     }
 
