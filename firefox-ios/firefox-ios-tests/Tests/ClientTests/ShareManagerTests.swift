@@ -298,6 +298,44 @@ final class ShareManagerTests: XCTestCase {
         )
     }
 
+    func testGetActivityItems_forTab_withSentFromFirefoxEnabled_doesNotImpactOtherShares() throws {
+        setupNimbusSentFromFirefoxTesting(isEnabled: true, isTreatmentA: true)
+
+        let mailActivity = UIActivity.ActivityType.mail
+
+        let activityItems = ShareManager.getActivityItems(
+            forShareType: .tab(url: testWebURL, tab: testTab),
+            withExplicitShareMessage: nil
+        )
+
+        // Check we get all 4 types of share items for tabs below
+        XCTAssertEqual(activityItems.count, 4)
+
+        let urlActivityItemProvider = try XCTUnwrap(activityItems[safe: 0] as? URLActivityItemProvider)
+        let urlDataIdentifier = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            dataTypeIdentifierForActivityType: mailActivity
+        )
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: mailActivity
+        )
+
+        XCTAssertEqual(urlDataIdentifier, UTType.url.identifier)
+        XCTAssertEqual(itemForActivity as? URL, testWebURL)
+
+        // The rest of the content should be unchanged from other tests:
+        _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
+
+        _ = try XCTUnwrap(activityItems[safe: 2] as? TabWebView)
+
+        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        XCTAssertEqual(
+            titleActivityItemProvider.item as? String,
+            testWebpageDisplayTitle,
+            "When no explicit share message is set, we expect to see the webpage's title."
+        )
+    }
 
     func testGetActivityItems_forTab_withSentFromFirefoxDisabled_DoesNotOverride() throws {
         setupNimbusSentFromFirefoxTesting(isEnabled: false, isTreatmentA: true)
