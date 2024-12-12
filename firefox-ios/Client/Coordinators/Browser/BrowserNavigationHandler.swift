@@ -27,13 +27,14 @@ protocol BrowserNavigationHandler: AnyObject, QRCodeNavigationHandler {
 
     /// Shows the share sheet.
     ///
-    /// - Parameter url: The url to be shared.
+    /// - Parameter shareType: The content to be shared.
+    /// - Parameter shareMessage: An optional plain text message to be shared.
     /// - Parameter sourceView: The reference view to show the popoverViewController.
     /// - Parameter sourceRect: An optional rect to use for ipad popover presentation.
     /// - Parameter toastContainer: The view in which is displayed the toast results from actions in the share extension.
     /// - Parameter popoverArrowDirection: The arrow direction for the view controller presented as popover.
-    func showShareSheet(url: URL,
-                        title: String?,
+    func showShareSheet(shareType: ShareType,
+                        shareMessage: ShareMessage?,
                         sourceView: UIView,
                         sourceRect: CGRect?,
                         toastContainer: UIView,

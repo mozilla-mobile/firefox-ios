@@ -29,17 +29,37 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
     }
 
     // MARK: - applyInitialSnapshot
-    func test_applyInitialSnapshot_hasCorrectData() throws {
+    func test_updateSnapshot_hasCorrectData() throws {
         let dataSource = try XCTUnwrap(diffableDataSource)
 
-        dataSource.applyInitialSnapshot(state: HomepageState(windowUUID: .XCTestDefaultUUID))
+        dataSource.updateSnapshot(state: HomepageState(windowUUID: .XCTestDefaultUUID))
 
         let snapshot = dataSource.snapshot()
         XCTAssertEqual(snapshot.numberOfSections, 4)
-        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .topSites, .pocket, .customizeHomepage])
+        XCTAssertEqual(snapshot.sectionIdentifiers, [.header, .topSites, .pocket(nil), .customizeHomepage])
 
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .header).count, 1)
-        XCTAssertEqual(snapshot.itemIdentifiers(inSection: .pocket).count, 1)
+        XCTAssertEqual(snapshot.itemIdentifiers(inSection: .pocket(nil)).count, 1)
         XCTAssertEqual(snapshot.itemIdentifiers(inSection: .customizeHomepage).count, 1)
+    }
+
+    func test_updateSnapshot_withColorValueOnState() throws {
+        let dataSource = try XCTUnwrap(diffableDataSource)
+        let wallpaperConfig = WallpaperConfiguration(
+            landscapeImage: nil,
+            portraitImage: nil,
+            textColor: .systemCyan,
+            cardColor: .black,
+            logoTextColor: .blue
+        )
+
+        let wallpaperState = WallpaperState(windowUUID: .XCTestDefaultUUID, wallpaperConfiguration: wallpaperConfig)
+        var state = HomepageState(windowUUID: .XCTestDefaultUUID)
+        state.wallpaperState = wallpaperState
+
+        dataSource.updateSnapshot(state: state)
+
+        let snapshot = dataSource.snapshot()
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .pocket(.systemCyan)), 1)
     }
 }

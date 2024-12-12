@@ -259,12 +259,6 @@ open class RustFirefoxAccounts {
         cachedUserProfile = nil
     }
 
-    public func hasAccount(completion: @escaping (Bool) -> Void) {
-        if let manager = RustFirefoxAccounts.shared.accountManager {
-            completion(manager.hasAccount())
-        }
-    }
-
     public func hasAccount() -> Bool {
         guard let accountManager = RustFirefoxAccounts.shared.accountManager else { return false }
         return accountManager.hasAccount()

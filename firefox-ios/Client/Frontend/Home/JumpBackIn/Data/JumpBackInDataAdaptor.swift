@@ -89,7 +89,7 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
     // MARK: Jump back in data
 
     private func updateTabsAndAccountData() async {
-        hasSyncAccount = await getHasSyncAccount()
+        hasSyncAccount = getHasSyncAccount()
         await updateTabsData()
     }
 
@@ -124,12 +124,8 @@ actor JumpBackInDataAdaptorImplementation: JumpBackInDataAdaptor, FeatureFlaggab
 
     // MARK: Synced tab data
 
-    private func getHasSyncAccount() async -> Bool {
-        return await withCheckedContinuation { continuation in
-            profile.hasSyncAccount { hasSync in
-                continuation.resume(returning: hasSync)
-            }
-        }
+    private func getHasSyncAccount() -> Bool {
+        return profile.hasAccount()
     }
 
     private func updateRemoteTabs() async -> [ClientAndTabs]? {

@@ -2346,19 +2346,22 @@ class BrowserViewController: UIViewController,
                                          extras: nil)
         }
 
-        guard let selectedTab = tabManager.selectedTab, let tabUrl = selectedTab.canonicalURL?.displayURL else {
+        // We share the tab's displayURL to make sure we don't share reader mode localhost URLs
+        guard let selectedTab = tabManager.selectedTab,
+              let tabUrl = selectedTab.canonicalURL?.displayURL else {
             assertionFailure("Tried to share with no selected tab or URL")
             return
         }
 
+        /// Note: If the user is viewing a _downloaded_ (not online) PDF in the browser, then the current tab's URL will
+        /// have a `file://` scheme.
         navigationHandler?.showShareSheet(
-            url: tabUrl,
-            title: nil,
+            shareType: .tab(url: tabUrl, tab: selectedTab),
+            shareMessage: nil,
             sourceView: sourceView,
             sourceRect: nil,
             toastContainer: contentContainer,
-            popoverArrowDirection: isBottomSearchBar ? .down : .up
-        )
+            popoverArrowDirection: isBottomSearchBar ? .down : .up)
     }
 
     func presentTabsLongPressAction(from view: UIView) {
@@ -2774,22 +2777,21 @@ class BrowserViewController: UIViewController,
         )
 
         // Credit card sync telemetry
-        self.profile.hasSyncAccount { [unowned self] hasSync in
-            logger.log("User has sync account setup \(hasSync)",
-                       level: .debug,
-                       category: .setup)
+        let hasSync = self.profile.hasAccount()
+        logger.log("User has sync account setup \(hasSync)",
+                   level: .debug,
+                   category: .setup)
 
-            guard hasSync else { return }
-            let syncStatus = self.profile.syncManager.checkCreditCardEngineEnablement()
-            TelemetryWrapper.recordEvent(
-                category: .information,
-                method: .settings,
-                object: .creditCardSyncEnabled,
-                extras: [
-                    TelemetryWrapper.ExtraKey.isCreditCardSyncEnabled.rawValue: syncStatus
-                ]
-            )
-        }
+        guard hasSync else { return }
+        let syncStatus = self.profile.syncManager.checkCreditCardEngineEnablement()
+        TelemetryWrapper.recordEvent(
+            category: .information,
+            method: .settings,
+            object: .creditCardSyncEnabled,
+            extras: [
+                TelemetryWrapper.ExtraKey.isCreditCardSyncEnabled.rawValue: syncStatus
+            ]
+        )
     }
 
     private func autofillCreditCardNimbusFeatureFlag() -> Bool {
@@ -4101,9 +4103,15 @@ extension BrowserViewController: TopTabsDelegate {
     }
 
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
-        openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
-        overlayManager.openNewTab(url: nil,
-                                  newTabSettings: newTabSettings)
+        let shouldLoadCustomHomePage = isToolbarRefactorEnabled && NewTabAccessors.getHomePage(profile.prefs) == .homePage
+        let homePageURL = HomeButtonHomePageAccessors.getHomePage(profile.prefs)
+
+        if shouldLoadCustomHomePage, let url = homePageURL {
+            tabManager.selectedTab?.loadRequest(PrivilegedRequest(url: url) as URLRequest)
+        } else {
+            openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
+            overlayManager.openNewTab(url: nil, newTabSettings: newTabSettings)
+        }
     }
 
     func topTabsDidLongPressNewTab(button: UIButton) {

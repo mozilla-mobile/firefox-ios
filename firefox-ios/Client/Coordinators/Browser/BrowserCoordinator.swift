@@ -301,12 +301,8 @@ class BrowserCoordinator: BaseCoordinator,
         case let .searchURL(url, tabId):
             handle(searchURL: url, tabId: tabId)
 
-        case .sharesheet:
-            // FIXME: FXIOS-10669 Implement with real data, (shareType, shareMessage)
-//            let tempURL = URL(string: "https://www.google.ca")
-//            let tempTitle = "Test Title"
-//            showShareSheet(with: tempURL, title: tempTitle)
-            break
+        case let .sharesheet(shareType, shareMessage):
+            handleShareRoute(shareType: shareType, shareMessage: shareMessage)
 
         case let .glean(url):
             glean.handleDeeplinkUrl(url: url)
@@ -391,6 +387,22 @@ class BrowserCoordinator: BaseCoordinator,
 
     private func handle(fxaParams: FxALaunchParams) {
         browserViewController.presentSignInViewController(fxaParams)
+    }
+
+    /// Starts the share sheet coordinator for the deep link `.sharesheet` route (share content via Nimbus Messaging).
+    /// - Parameters:
+    ///   - shareType: The content to share.
+    ///   - shareMessage: An optional textual message to accompany the shared content. May contain a Mail subject line.
+    private func handleShareRoute(shareType: ShareType, shareMessage: ShareMessage?) {
+        // FIXME: FXIOS-10829 Deep link shares should set a reasonable sourceView for iPad... or sourceView could be optional
+        startShareSheetCoordinator(
+            shareType: shareType,
+            shareMessage: shareMessage,
+            sourceView: browserViewController.addressToolbarContainer,
+            sourceRect: nil,
+            toastContainer: browserViewController.contentContainer,
+            popoverArrowDirection: .any
+        )
     }
 
     private func canHandleSettings(with section: Route.SettingsSection) -> Bool {
@@ -551,8 +563,24 @@ class BrowserCoordinator: BaseCoordinator,
         browserViewController.updateZoomPageBarVisibility(visible: true)
     }
 
-    func showShareSheet(with url: URL?) {
-        showShareSheet(with: url, title: nil)
+    /// Share the currently selected tab using the share sheet.
+    ///
+    /// Part of the MainMenuCoordinatorDelegate implementation, called from the New Menu > Tools > Share.
+    func showShareSheetForCurrentlySelectedTab() {
+        // We share the tab's displayURL to make sure we don't share reader mode localhost URLs
+        guard let selectedTab = tabManager.selectedTab,
+              let url = selectedTab.canonicalURL?.displayURL else {
+            return
+        }
+
+        startShareSheetCoordinator(
+            shareType: .tab(url: url, tab: selectedTab),
+            shareMessage: nil,
+            sourceView: self.browserViewController.addressToolbarContainer,
+            sourceRect: nil,
+            toastContainer: self.browserViewController.contentContainer,
+            popoverArrowDirection: .any
+        )
     }
 
     private func makeMenuNavViewController() -> DismissableNavigationViewController? {
@@ -642,15 +670,17 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - BrowserNavigationHandler
 
-    func showShareSheet(url: URL,
-                        title: String?,
-                        sourceView: UIView,
-                        sourceRect: CGRect?,
-                        toastContainer: UIView,
-                        popoverArrowDirection: UIPopoverArrowDirection) {
+    func showShareSheet(
+        shareType: ShareType,
+        shareMessage: ShareMessage?,
+        sourceView: UIView,
+        sourceRect: CGRect?,
+        toastContainer: UIView,
+        popoverArrowDirection: UIPopoverArrowDirection
+    ) {
         startShareSheetCoordinator(
-            url: url,
-            title: title,
+            shareType: shareType,
+            shareMessage: shareMessage,
             sourceView: sourceView,
             sourceRect: sourceRect,
             toastContainer: toastContainer,
@@ -741,35 +771,78 @@ class BrowserCoordinator: BaseCoordinator,
         return coordinator
     }
 
+    /// Starts the ShareSheetCoordinator, which initiates opening the iOS share sheet using an `UIActivityViewController`.
+    ///
+    /// For shared tabs where the user is currently on a non-HTML page (e.g. viewing a PDF), this method will initiate a
+    /// file download, and then share the file instead. This currently blocks without any UI indication, which is less
+    /// than ideal but has been the existing behaviour for a long time (task to address this: FXIOS-10823).
+    ///
+    /// - Parameters:
+    ///   - shareType: The type of content to share.
+    ///   - shareMessage: An optional accompanying message to share (with optional email subject line).
+    ///   - sourceView: The view tapped to initiate share. iPad share sheet popovers will point to this element.
+    ///   - sourceRect: The source rect for the view tapped to initiate share. iPad share sheet popovers will point to this
+    ///                 element.
+    ///   - toastContainer: The container for displaying toast information.
+    ///   - popoverArrowDirection: The arrow direction for iPad share sheet popovers.
+    ///
+    /// There are many ways to share many types of content from various areas of the app. Code paths that go through this
+    /// method include:
+    /// * Sharing content from a long press on Home screen tiles (e.g. long press Jump Back In context menu)
+    /// * From the old Menu > Share and the new Menu > Tools > Share
+    /// * From the new toolbar share button beside the address bar
+    /// * From long pressing a link in the WKWebView and sharing from the context menu (via ActionProviderBuilder > addShare)
+    /// * Via the sharesheet deeplink path in `RouteBuilder` (e.g. tapping home cards that initiate sharing content)
+    ///     * Currently this is the only path that is using the ShareMessage param (Info Card Referral experiment FXE-1090)
     func startShareSheetCoordinator(
-        url: URL,
-        title: String?,
+        shareType: ShareType,
+        shareMessage: ShareMessage?,
         sourceView: UIView,
         sourceRect: CGRect?,
         toastContainer: UIView,
         popoverArrowDirection: UIPopoverArrowDirection
     ) {
-        guard childCoordinators.first(where: { $0 is ShareSheetCoordinator }) as? ShareSheetCoordinator == nil
-        else {
-            // If this case is hitted it means the share extension coordinator wasn't removed
-            // correctly in the previous session.
-            return
+        if let coordinator = childCoordinators.first(where: { $0 is ShareSheetCoordinator }) as? ShareSheetCoordinator {
+            // The share sheet extension coordinator wasn't correctly removed in the last share session. Attempt to recover.
+            logger.log(
+                "ShareSheetCoordinator already exists when it shouldn't. Removing and recreating it to access share sheet",
+                level: .info,
+                category: .shareSheet,
+                extra: ["existing ShareSheetCoordinator UUID": "\(coordinator.windowUUID)",
+                        "BrowserCoordinator windowUUID": "\(windowUUID)"]
+            )
+
+            coordinator.dismiss()
         }
-        let shareSheetCoordinator = ShareSheetCoordinator(
-            alertContainer: toastContainer,
-            router: router,
-            profile: profile,
-            parentCoordinator: self,
-            tabManager: tabManager
-        )
-        add(child: shareSheetCoordinator)
-        shareSheetCoordinator.start(
-            url: url,
-            title: title,
-            sourceView: sourceView,
-            sourceRect: sourceRect,
-            popoverArrowDirection: popoverArrowDirection
-        )
+
+        Task {
+            // FXIOS-10824 It's strange if the user has to wait a long time to download files that are literally already
+            // being shown in the webview.
+            var overrideShareType = shareType
+            if case ShareType.tab = shareType {
+                overrideShareType = await tryDownloadingTabFileToShare(shareType: shareType)
+            }
+
+            await MainActor.run { [weak self, overrideShareType] in
+                guard let self else { return }
+
+                let shareSheetCoordinator = ShareSheetCoordinator(
+                    alertContainer: toastContainer,
+                    router: router,
+                    profile: profile,
+                    parentCoordinator: self,
+                    tabManager: tabManager
+                )
+                add(child: shareSheetCoordinator)
+                shareSheetCoordinator.start(
+                    shareType: overrideShareType,
+                    shareMessage: shareMessage,
+                    sourceView: sourceView,
+                    sourceRect: sourceRect,
+                    popoverArrowDirection: popoverArrowDirection
+                )
+            }
+        }
     }
 
     func showCreditCardAutofill(creditCard: CreditCard?,
@@ -1057,38 +1130,20 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - Private helpers
 
-    private func showShareSheet(with url: URL?, title: String?) {
-        guard let url else { return }
-
-        let showShareSheet = { url in
-            self.startShareSheetCoordinator(
-                url: url,
-                title: title,
-                sourceView: self.browserViewController.addressToolbarContainer,
-                sourceRect: nil,
-                toastContainer: self.browserViewController.contentContainer,
-                popoverArrowDirection: .any
-            )
+    private func tryDownloadingTabFileToShare(shareType: ShareType) async -> ShareType {
+        // We can only try to download files for `.tab` type shares that have a TemporaryDocument
+        guard case let ShareType.tab(_, tab) = shareType,
+              let temporaryDocument = tab.temporaryDocument else {
+            return shareType
         }
 
-        // We only care about the temp document for .tab shares right?
-        // BUT!! A tab might be displaying a downloaded PDF! Then it's file:// url
-        guard let temporaryDocument = browserViewController.tabManager.selectedTab?.temporaryDocument else {
-            showShareSheet(url)
-            return
+        guard let fileURL = await temporaryDocument.getDownloadedURL() else {
+            // If no file was downloaded, simply share the tab as usual with a web URL
+            return shareType
         }
 
-        temporaryDocument.getURL { tempDocURL in
-            DispatchQueue.main.async {
-                // If we successfully got a temp file URL, share it like a downloaded file,
-                // otherwise present the ordinary share menu for the web URL.
-                if let tempDocURL = tempDocURL, tempDocURL.isFileURL {
-                    showShareSheet(tempDocURL)
-                } else {
-                    showShareSheet(url)
-                }
-            }
-        }
+        // If we successfully got a temp file URL, share it like a downloaded file
+        return .file(url: fileURL)
     }
 
     /// Utility. Performs the supplied action if a coordinator of the indicated type
