@@ -40,7 +40,7 @@ class PullRefreshView: UIView,
         view.isHidden = true
         view.contentMode = .scaleAspectFill
     }
-
+    private var easterEggTimer: DispatchSourceTimer?
     private var isIpad: Bool {
         traitCollection.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular
     }
@@ -114,11 +114,10 @@ class PullRefreshView: UIView,
 
             if scrollView.contentOffset.y < -threshold {
                 self?.blinkBackgroundProgressViewIfNeeded()
-
-                DispatchQueue.main.asyncAfter(deadline: .now() + UX.easterEggDelayInSeconds) {
-                    self?.showEasterEgg()
-                }
+                self?.scheduleEasterEgg()
             } else if scrollView.contentOffset.y != 0.0 {
+                self?.easterEggTimer?.cancel()
+                self?.easterEggTimer = nil
                 // This check prevents progressView re blink when scrolling the pull refresh before the web view is loaded
                 self?.restoreBackgroundProgressViewIfNeeded()
                 let rotationAngle = -(scrollView.contentOffset.y) / threshold
@@ -136,11 +135,11 @@ class PullRefreshView: UIView,
                        options: UX.reloadAnimation.option,
                        animations: {
             self.progressContainerView.transform = UX.progressViewAnimatedBackgroundFinalAnimationTransform
-        }, completion: { _ in
-            self.progressContainerView.backgroundColor = .clear
-            self.progressContainerView.transform = .identity
-            self.progressView.transform = .identity
-            self.onRefreshCallback()
+        }, completion: { [weak self] _ in
+            self?.progressContainerView.backgroundColor = .clear
+            self?.progressContainerView.transform = .identity
+            self?.progressView.transform = .identity
+            self?.onRefreshCallback()
         })
     }
 
@@ -171,6 +170,16 @@ class PullRefreshView: UIView,
             self.progressContainerView.transform = .identity
             self.progressContainerView.backgroundColor = .clear
         }
+    }
+
+    private func scheduleEasterEgg() {
+        guard easterEggTimer == nil else { return }
+        easterEggTimer = DispatchSource.makeTimerSource(queue: .main)
+        easterEggTimer?.schedule(deadline: .now() + UX.easterEggDelayInSeconds)
+        easterEggTimer?.setEventHandler { [weak self] in
+            self?.showEasterEgg()
+        }
+        easterEggTimer?.activate()
     }
 
     private func showEasterEgg() {
@@ -224,7 +233,10 @@ class PullRefreshView: UIView,
     }
 
     deinit {
+        easterEggTimer?.cancel()
+        easterEggTimer = nil
         scrollObserver?.invalidate()
+        scrollObserver = nil
     }
 }
 
