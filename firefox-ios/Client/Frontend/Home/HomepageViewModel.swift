@@ -94,7 +94,6 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
     weak var delegate: HomepageViewModelDelegate?
     private var wallpaperManager: WallpaperManager
     private var logger: Logger
-    private let viewWillAppearEventThrottler = Throttler(seconds: 0.5)
 
     // Child View models
     private var childViewModels: [HomepageViewModelProtocol]
@@ -199,10 +198,7 @@ class HomepageViewModel: FeatureFlaggable, InjectedThemeUUIDIdentifiable {
         guard !viewAppeared else { return }
 
         viewAppeared = true
-        // TODO: FXIOS-9428 - Need to fix issue where viewWillAppear is called twice so we can remove the throttle workaround
-        viewWillAppearEventThrottler.throttle {
-            Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
-        }
+        Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
         nimbus.features.homescreenFeature.recordExposure()
         TelemetryWrapper.recordEvent(category: .action,
                                      method: .view,

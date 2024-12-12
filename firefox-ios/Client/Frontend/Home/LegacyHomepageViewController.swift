@@ -151,7 +151,6 @@ class LegacyHomepageViewController:
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel.recordViewAppeared()
 
         notificationCenter.post(name: .ShowHomepage, withUserInfo: windowUUID.userInfo)
         notificationCenter.post(name: .HistoryUpdated)
@@ -162,6 +161,8 @@ class LegacyHomepageViewController:
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        // FXIOS-9428 - Record telemetry in viewDidAppear since viewWillAppear is sometimes triggered twice
+        viewModel.recordViewAppeared()
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
             self?.displayWallpaperSelector()
