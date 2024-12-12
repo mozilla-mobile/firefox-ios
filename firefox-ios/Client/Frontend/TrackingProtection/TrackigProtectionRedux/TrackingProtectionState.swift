@@ -94,16 +94,7 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
 
         switch action.actionType {
         case TrackingProtectionMiddlewareActionType.clearCookies:
-            return TrackingProtectionState(
-                windowUUID: state.windowUUID,
-                trackingProtectionEnabled: !state.trackingProtectionEnabled,
-                connectionSecure: state.connectionSecure,
-                shouldClearCookies: true,
-                shouldUpdateBlockedTrackerStats: false,
-                shouldUpdateConnectionStatus: false,
-                navigateTo: .home,
-                displayView: nil
-            )
+            return clearCookiesState(from: state)
         case TrackingProtectionMiddlewareActionType.navigateToSettings:
             return navigateToSettingsState(from: state)
         case TrackingProtectionMiddlewareActionType.showTrackingProtectionDetails:
