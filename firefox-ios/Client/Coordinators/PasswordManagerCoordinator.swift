@@ -82,6 +82,9 @@ class PasswordManagerCoordinator: BaseCoordinator,
     func pressedPasswordDetail(model: PasswordDetailViewControllerModel) {
         let viewController = PasswordDetailViewController(viewModel: model, windowUUID: windowUUID)
         viewController.coordinator = self
+        viewController.deleteHandler = { [weak self] in
+            self?.passwordManager?.showToast()
+        }
         router.push(viewController)
     }
 
