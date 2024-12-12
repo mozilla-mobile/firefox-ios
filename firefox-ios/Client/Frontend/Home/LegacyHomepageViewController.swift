@@ -451,7 +451,7 @@ class LegacyHomepageViewController:
 
     private func handleScroll(_ scrollView: UIScrollView, isUserInteraction: Bool) {
         // We only handle status bar overlay alpha if there's a wallpaper applied on the homepage
-        if WallpaperManager().currentWallpaper.type != .defaultWallpaper {
+        if WallpaperManager().currentWallpaper.hasImage {
             let theme = themeManager.getCurrentTheme(for: windowUUID)
             statusBarScrollDelegate?.scrollViewDidScroll(scrollView,
                                                          statusBarFrame: statusBarFrame,
@@ -484,9 +484,7 @@ class LegacyHomepageViewController:
               canModalBePresented
         else { return }
 
-        let viewModel = WallpaperSelectorViewModel(wallpaperManager: wallpaperManager, openSettingsAction: {
-            self.homePanelDidRequestToOpenSettings(at: .wallpaper)
-        })
+        let viewModel = WallpaperSelectorViewModel(wallpaperManager: wallpaperManager)
         let viewController = WallpaperSelectorViewController(viewModel: viewModel, windowUUID: windowUUID)
         var bottomSheetViewModel = BottomSheetViewModel(
             closeButtonA11yLabel: .CloseButtonTitle,

@@ -26,12 +26,8 @@ class URLValidationTests: BaseTestCase {
         for url in urlTypes {
             navigator.openURL(url)
             waitUntilPageLoad()
-            waitForElementsToExist(
-                [
-                    app.otherElements.staticTexts["Mozilla"],
-                    app.buttons["Menu"]
-                ]
-            )
+            mozWaitForElementToExist(app.buttons["Menu"])
+            XCTAssertTrue(app.otherElements.staticTexts.elementContainingText("Mozilla").exists)
             mozWaitForValueContains(urlField, value: "mozilla.org")
             clearURL()
         }

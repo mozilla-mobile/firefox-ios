@@ -48,6 +48,9 @@ public enum LoggerCategory: String {
     /// Related to the setup of services on app launch.
     case setup
 
+    /// Related to showing the share sheet from multiple places in the app.
+    case shareSheet
+
     /// Related to storage (keychain, SQL database, store of different types, etc).
     case storage
 
@@ -68,4 +71,7 @@ public enum LoggerCategory: String {
 
     /// Password Generator
     case passwordGenerator
+
+    /// Related to wallpaper functionality, like fetching metadata, images, etc
+    case wallpaper
 }

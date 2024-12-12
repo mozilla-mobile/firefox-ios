@@ -114,7 +114,8 @@ class NotificationManager: NotificationManagerProtocol {
 
     // Determines if the user has allowed notifications
     func hasPermission() async -> Bool {
-        await withCheckedContinuation { continuation in
+        // NOTE: Testing "unsafe" variant of this method, see FXIOS-10832 for details.
+        await withUnsafeContinuation { continuation in
             hasPermission { hasPermission in
                 continuation.resume(returning: hasPermission)
             }

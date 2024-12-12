@@ -64,7 +64,7 @@ class ClipBoardTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(URLBarOpen)
         urlBarAddress.press(forDuration: 3)
-        app.otherElements["Paste"].tap()
+        app.otherElements["Paste"].waitAndTap()
         mozWaitForValueContains(urlBarAddress, value: "http://www.example.com/")
     }
 

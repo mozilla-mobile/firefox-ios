@@ -33,7 +33,7 @@ class SettingsTests: BaseTestCase {
         mozWaitForValueContains(url, value: "support.mozilla.org")
         mozWaitForElementToExist(app.webViews.staticTexts["Firefox for iOS Support"])
 
-        let numTabs = app.buttons["Show Tabs"].value
+        let numTabs = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
         XCTAssertEqual("2", numTabs as? String, "Sume should be open in a different tab")
     }
 

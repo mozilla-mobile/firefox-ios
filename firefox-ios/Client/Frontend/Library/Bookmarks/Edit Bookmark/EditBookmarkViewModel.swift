@@ -14,6 +14,7 @@ class EditBookmarkViewModel {
     private let profile: Profile
     private let folderFetcher: FolderHierarchyFetcher
     private let bookmarksSaver: BookmarksSaver
+    weak var bookmarkCoordinatorDelegate: BookmarksCoordinatorDelegate?
 
     private var isFolderCollapsed = true
     private(set) var folderStructures: [Folder] = []
@@ -65,6 +66,12 @@ class EditBookmarkViewModel {
         } else {
             getFolderStructure(folder)
         }
+    }
+
+    func createNewFolder() {
+        self.bookmarkCoordinatorDelegate?.showBookmarkDetail(
+            bookmarkType: .folder,
+            parentBookmarkFolder: parentFolder)
     }
 
     private func getFolderStructure(_ selectedFolder: Folder) {

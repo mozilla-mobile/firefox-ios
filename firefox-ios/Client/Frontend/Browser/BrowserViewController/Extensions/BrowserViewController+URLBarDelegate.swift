@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
-import Storage
 import Glean
 import Common
 import ComponentLibrary
@@ -43,10 +42,6 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidPressReload(_ urlBar: URLBarView) {
         tabManager.selectedTab?.reload()
-    }
-
-    func urlBarDidPressShare(_ urlBar: URLBarView, shareView: UIView) {
-        didTapOnShare(from: shareView)
     }
 
     internal func dismissFakespotIfNeeded(animated: Bool = true) {

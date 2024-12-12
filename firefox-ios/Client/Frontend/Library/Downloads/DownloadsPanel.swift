@@ -4,7 +4,6 @@
 
 import UIKit
 import Shared
-import Storage
 import Common
 
 class DownloadsPanel: UIViewController,
@@ -156,10 +155,13 @@ class DownloadsPanel: UIViewController,
     }
 
     private func shareDownloadedFile(_ downloadedFile: DownloadedFile, indexPath: IndexPath) {
-        let helper = ShareExtensionHelper(url: downloadedFile.path, tab: nil)
-        let controller = helper.createActivityViewController { _, _ in }
+        let shareActivityViewController = ShareManager.createActivityViewController(
+            shareType: .file(url: downloadedFile.path),
+            shareMessage: nil,
+            completionHandler: { _, _ in }
+        )
 
-        if let popoverPresentationController = controller.popoverPresentationController {
+        if let popoverPresentationController = shareActivityViewController.popoverPresentationController {
             guard let tableViewCell = tableView.cellForRow(at: indexPath) else { return }
 
             popoverPresentationController.sourceView = tableViewCell
@@ -167,7 +169,7 @@ class DownloadsPanel: UIViewController,
             popoverPresentationController.permittedArrowDirections = .any
         }
 
-        present(controller, animated: true, completion: nil)
+        present(shareActivityViewController, animated: true, completion: nil)
     }
 
     private func iconForFileExtension(_ fileExtension: String) -> UIImage? {
@@ -369,6 +371,7 @@ class DownloadsPanel: UIViewController,
             style: .destructive,
             title: .TabsTray.DownloadsPanel.DeleteTitle
         ) { [weak self] (_, _, completion) in
+            // Swipe > delete action
             guard let strongSelf = self else { completion(false); return }
 
             if let downloadedFile = strongSelf.viewModel.downloadedFileForIndexPath(indexPath),
@@ -394,6 +397,7 @@ class DownloadsPanel: UIViewController,
             style: .normal,
             title: .TabsTray.DownloadsPanel.ShareTitle
         ) { [weak self] (_, view, completion) in
+            // Swipe > share action (which is different from the row selection share behaviour)
             guard let strongSelf = self else { completion(false); return }
 
             view.backgroundColor = strongSelf.view.tintColor

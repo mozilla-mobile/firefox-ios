@@ -356,7 +356,7 @@ class NavigationTest: BaseTestCase {
                                 value: "localhost")
         mozWaitForElementToExist(app.webViews.staticTexts["Blocked Element"])
 
-        let numTabs = app.buttons["Show Tabs"].value
+        let numTabs = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
         XCTAssertEqual("1", numTabs as? String, "There should be only on tab")
 
         // Now disable the Block PopUps option
@@ -368,11 +368,14 @@ class NavigationTest: BaseTestCase {
         XCTAssertEqual(switchValueAfter as? String, "0")
 
         // Check that now pop ups are shown, two sites loaded
+        navigator.goto(BrowserTab)
+        navigator.goto(URLBarOpen)
+        app.buttons["Clear text"].waitAndTap()
         navigator.openURL(popUpTestUrl)
         waitUntilPageLoad()
         mozWaitForValueContains(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField],
                                 value: "example.com")
-        let numTabsAfter = app.buttons["Show Tabs"].value
+        let numTabsAfter = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
         XCTAssertNotEqual("1", numTabsAfter as? String, "Several tabs are open")
     }
 

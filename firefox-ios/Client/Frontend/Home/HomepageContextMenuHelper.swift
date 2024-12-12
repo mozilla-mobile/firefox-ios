@@ -236,7 +236,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
         })
     }
 
-    /// Handles share from Long press on Pocket article
+    /// Handles share from long press on pocket articles, jump back in websites, bookmarks, etc. on the home screen.
     /// - Parameters:
     ///   - site: Site for pocket article
     ///   - sourceView: View to show the popover
@@ -248,9 +248,11 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                                      tapHandler: { _ in
             guard let url = URL(string: site.url, invalidCharacters: false) else { return }
 
-            self.browserNavigationHandler?.showShareExtension(
-                url: url,
+            self.browserNavigationHandler?.showShareSheet(
+                shareType: .site(url: url),
+                shareMessage: nil,
                 sourceView: sourceView ?? UIView(),
+                sourceRect: nil,
                 toastContainer: self.toastContainer,
                 popoverArrowDirection: [.up, .down, .left])
         }).items

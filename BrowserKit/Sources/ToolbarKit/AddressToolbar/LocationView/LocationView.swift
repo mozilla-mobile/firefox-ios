@@ -60,8 +60,8 @@ final class LocationView: UIView,
     private lazy var gradientLayer = CAGradientLayer()
     private lazy var gradientView: UIView = .build()
 
-    private var clearButtonWidthConstraint: NSLayoutConstraint?
     private var urlTextFieldLeadingConstraint: NSLayoutConstraint?
+    private var urlTextFieldTrailingConstraint: NSLayoutConstraint?
     private var iconContainerStackViewLeadingConstraint: NSLayoutConstraint?
     private var lockIconWidthAnchor: NSLayoutConstraint?
 
@@ -93,6 +93,10 @@ final class LocationView: UIView,
         urlTextField.adjustsFontForContentSizeCategory = true
         urlTextField.autocompleteDelegate = self
         urlTextField.accessibilityActionsSource = self
+        // Update the `textAlignment` property only when the entire layout direction is RTL or LTR,
+        // similar to Apple's handling in Safari, ensuring that `textAlignment` remains in sync with the layout constraints.
+        let layoutDirection = UIView.userInterfaceLayoutDirection(for: semanticContentAttribute)
+        urlTextField.textAlignment = layoutDirection == .rightToLeft ? .right : .left
     }
 
     // MARK: - Init
@@ -162,6 +166,9 @@ final class LocationView: UIView,
         urlTextFieldLeadingConstraint = urlTextField.leadingAnchor.constraint(equalTo: iconContainerStackView.trailingAnchor)
         urlTextFieldLeadingConstraint?.isActive = true
 
+        urlTextFieldTrailingConstraint = urlTextField.trailingAnchor.constraint(equalTo: trailingAnchor)
+        urlTextFieldTrailingConstraint?.isActive = true
+
         iconContainerStackViewLeadingConstraint = iconContainerStackView.leadingAnchor.constraint(equalTo: leadingAnchor)
         iconContainerStackViewLeadingConstraint?.isActive = true
 
@@ -173,7 +180,6 @@ final class LocationView: UIView,
 
             urlTextField.topAnchor.constraint(equalTo: topAnchor),
             urlTextField.bottomAnchor.constraint(equalTo: bottomAnchor),
-            urlTextField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: UX.horizontalSpace),
 
             iconContainerBackgroundView.topAnchor.constraint(equalTo: urlTextField.topAnchor),
             iconContainerBackgroundView.bottomAnchor.constraint(equalTo: urlTextField.bottomAnchor),
@@ -226,6 +232,7 @@ final class LocationView: UIView,
     private func updateIconContainer() {
         guard !isEditing else {
             updateUIForSearchEngineDisplay()
+            urlTextFieldTrailingConstraint?.constant = 0
             return
         }
 
@@ -234,6 +241,7 @@ final class LocationView: UIView,
         } else {
             updateUIForLockIconDisplay()
         }
+        urlTextFieldTrailingConstraint?.constant = -UX.horizontalSpace
     }
 
     private func updateUIForSearchEngineDisplay() {

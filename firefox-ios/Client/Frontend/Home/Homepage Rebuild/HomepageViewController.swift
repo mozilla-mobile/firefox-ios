@@ -14,7 +14,6 @@ final class HomepageViewController: UIViewController,
                                     StoreSubscriber {
     // MARK: - Typealiases
     typealias SubscriberStateType = HomepageState
-    private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
 
     // MARK: - ContentContainable variables
     var contentType: ContentType = .homepage
@@ -28,11 +27,14 @@ final class HomepageViewController: UIViewController,
     var currentWindowUUID: UUID? { return windowUUID }
 
     // MARK: - Private variables
+    private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
+    private weak var homepageDelegate: HomepageDelegate?
     private var collectionView: UICollectionView?
     private var dataSource: HomepageDiffableDataSource?
     // TODO: FXIOS-10541 will handle scrolling for wallpaper and other scroll issues
     private lazy var wallpaperView: WallpaperBackgroundView = .build { _ in }
     private var layoutConfiguration = HomepageSectionLayoutProvider().createCompositionalLayout()
+    private var overlayManager: OverlayModeManager
     private var logger: Logger
     private var homepageState: HomepageState
 
@@ -42,13 +44,17 @@ final class HomepageViewController: UIViewController,
 
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
+         homepageDelegate: HomepageDelegate? = nil,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
+         overlayManager: OverlayModeManager,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared
     ) {
         self.windowUUID = windowUUID
+        self.homepageDelegate = homepageDelegate
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
+        self.overlayManager = overlayManager
         self.logger = logger
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
@@ -75,8 +81,8 @@ final class HomepageViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         configureWallpaperView()
-        setupLayout()
         configureCollectionView()
+        setupLayout()
         configureDataSource()
 
         store.dispatch(
@@ -88,6 +94,17 @@ final class HomepageViewController: UIViewController,
 
         listenForThemeChange(view)
         applyTheme()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
+            guard let self = self else { return }
+            // TODO: FXIOS-10312 Possibly move overlay mode to Redux
+            let canPresentModally = !self.overlayManager.inOverlayMode
+            self.homepageDelegate?.showWallpaperSelectionOnboarding(canPresentModally)
+        }
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -118,7 +135,7 @@ final class HomepageViewController: UIViewController,
     func newState(state: HomepageState) {
         homepageState = state
         wallpaperView.wallpaperState = state.wallpaperState
-        dataSource?.applyInitialSnapshot(state: state)
+        dataSource?.updateSnapshot(state: state)
     }
 
     func unsubscribeFromRedux() {
@@ -252,16 +269,16 @@ final class HomepageViewController: UIViewController,
 
             return headerCell
 
-        case .topSite(let site):
+        case .topSite(let site, let textColor):
             guard let topSiteCell = collectionView?.dequeueReusableCell(cellType: TopSiteCell.self, for: indexPath) else {
                 return UICollectionViewCell()
             }
-            // TODO: FXIOS-10312 - Handle textColor when working on wallpapers
+
             topSiteCell.configure(
                 site,
                 position: indexPath.row,
                 theme: currentTheme,
-                textColor: .systemPink
+                textColor: textColor
             )
             return topSiteCell
 
@@ -269,6 +286,7 @@ final class HomepageViewController: UIViewController,
             guard let emptyCell = collectionView?.dequeueReusableCell(cellType: EmptyTopSiteCell.self, for: indexPath) else {
                 return UICollectionViewCell()
             }
+
             emptyCell.applyTheme(theme: currentTheme)
             return emptyCell
 
@@ -279,6 +297,7 @@ final class HomepageViewController: UIViewController,
             ) else {
                 return UICollectionViewCell()
             }
+
             pocketCell.configure(story: story, theme: currentTheme)
 
             return pocketCell
@@ -352,9 +371,10 @@ final class HomepageViewController: UIViewController,
         with sectionLabelCell: LabelButtonHeaderView
     ) -> LabelButtonHeaderView? {
         switch section {
-        case .pocket:
+        case .pocket(let textColor):
             sectionLabelCell.configure(
                 state: homepageState.pocketState.sectionHeaderState,
+                textColor: textColor,
                 theme: currentTheme
             )
             return sectionLabelCell
@@ -424,7 +444,7 @@ final class HomepageViewController: UIViewController,
             return
         }
         switch item {
-        case .topSite(let state):
+        case .topSite(let state, _):
             store.dispatch(
                 NavigationBrowserAction(
                     url: state.site.url.asURL,

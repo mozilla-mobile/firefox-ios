@@ -12,7 +12,7 @@ import Foundation
 /// main element wherein they appear. As we continue updating views, all
 /// `.accessibilityIdentifier` identifiers from the client and the tests
 /// should be move here and updated throughout the app.
-public struct AccessibilityIdentifiers {
+struct AccessibilityIdentifiers {
     /// Used for toolbar/URL bar buttons since our classes are built that buttons can live in one or the other
     /// Using only those a11y identifiers for both ensures we have standard way to refer to buttons from iPad to iPhone
     struct Toolbar {
@@ -473,6 +473,10 @@ public struct AccessibilityIdentifiers {
             static let tableView = "Bookmarks List"
             static let titleTextField = "BookmarkDetail.titleTextField"
             static let urlTextField = "BookmarkDetail.urlTextField"
+
+            struct EmptyState {
+                static let signInButton = "BookmarksPanel.RootEmptyState.signInButton"
+            }
         }
 
         struct HistoryPanel {
@@ -520,6 +524,27 @@ public struct AccessibilityIdentifiers {
         static let manageDataCollectionAgreement = "TermsOfService.ManageDataCollectionAgreement"
         static let agreeAndContinueButton = "TermsOfService.AgreeAndContinueButton"
         static let doneButton = "TermsOfService.DoneButton"
+
+        struct PrivacyNotice {
+            static let title = "TermsOfService.PrivacyNotice.Title"
+            static let doneButton = "TermsOfService.PrivacyNotice.DoneButton"
+
+            struct CrashReports {
+                static let contentStackView = "TermsOfService.PrivacyNotice.CrashReports.ContentStackView"
+                static let actionContentView = "TermsOfService.PrivacyNotice.CrashReports.ActionContentView"
+                static let actionTitleLabel = "TermsOfService.PrivacyNotice.CrashReports.ActionTitleLabel"
+                static let actionSwitch = "TermsOfService.PrivacyNotice.CrashReports.ActionSwitch"
+                static let actionDescriptionLabel = "TermsOfService.PrivacyNotice.CrashReports.ActionDescriptionLabel"
+            }
+
+            struct TechnicalData {
+                static let contentStackView = "TermsOfService.PrivacyNotice.TechnicalData.ContentStackView"
+                static let actionContentView = "TermsOfService.PrivacyNotice.TechnicalData.ActionContentView"
+                static let actionTitleLabel = "TermsOfService.PrivacyNotice.TechnicalData.ActionTitleLabel"
+                static let actionSwitch = "TermsOfService.PrivacyNotice.TechnicalData.ActionSwitch"
+                static let actionDescriptionLabel = "TermsOfService.PrivacyNotice.TechnicalData.ActionDescriptionLabel"
+            }
+        }
     }
 
     struct Upgrade {
@@ -699,7 +724,9 @@ public struct AccessibilityIdentifiers {
 
         struct SendData {
             static let sendAnonymousUsageDataTitle = "SendAnonymousUsageData"
+            static let sendTechnicalDataTitle = "SendTechnicalData"
             static let sendCrashReportsTitle = "SendCrashReports"
+            static let sendDailyUsagePingTitle = "SendDailyUsagePing"
         }
 
         struct PrivacyPolicy {

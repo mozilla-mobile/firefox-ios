@@ -8,14 +8,19 @@ import UniformTypeIdentifiers
 class URLActivityItemProvider: UIActivityItemProvider, @unchecked Sendable {
     private let url: URL
 
+    // We don't want to add this URL to Safari's Reading List
     static let excludedActivities = [
         UIActivity.ActivityType.addToReadingList,
     ]
 
     init(url: URL) {
-        self.url = url
+        // If the user is sharing a reader mode URL, we must decode it so we don't share internal localhost URLs
+        let parsedURL = url.isReaderModeURL
+                        ? url.decodeReaderModeURL ?? url
+                        : url
 
-        super.init(placeholderItem: url)
+        self.url = parsedURL
+        super.init(placeholderItem: parsedURL)
     }
 
     override var placeholderItem: Any? {

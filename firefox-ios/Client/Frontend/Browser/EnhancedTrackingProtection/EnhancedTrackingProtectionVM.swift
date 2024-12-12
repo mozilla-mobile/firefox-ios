@@ -4,7 +4,6 @@
 
 import Common
 import Shared
-import Storage
 
 class EnhancedTrackingProtectionMenuVM {
     // MARK: - Variables

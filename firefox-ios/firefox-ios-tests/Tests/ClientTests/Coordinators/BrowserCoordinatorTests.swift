@@ -7,6 +7,7 @@ import ComponentLibrary
 import MozillaAppServices
 import WebKit
 import XCTest
+import GCDWebServers
 
 @testable import Client
 
@@ -140,7 +141,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     func testShowNewHomepage_setsProperViewController() {
         let subject = createSubject()
-        subject.showHomepage()
+        subject.showHomepage(overlayManager: overlayModeManager, isZeroSearch: false)
 
         XCTAssertNotNil(subject.homepageViewController)
         XCTAssertNil(subject.webviewController)
@@ -149,11 +150,11 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     func testShowNewHomepage_hasSameInstance() {
         let subject = createSubject()
-        subject.showHomepage()
+        subject.showHomepage(overlayManager: overlayModeManager, isZeroSearch: false)
         let firstHomepage = subject.homepageViewController
         XCTAssertNotNil(subject.homepageViewController)
 
-        subject.showHomepage()
+        subject.showHomepage(overlayManager: overlayModeManager, isZeroSearch: false)
         let secondHomepage = subject.homepageViewController
         XCTAssertEqual(firstHomepage, secondHomepage)
     }
@@ -238,39 +239,75 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         }
     }
 
-    func testShowShareExtension_addsShareExtensionCoordinator() {
+    func testStartShareSheetCoordinator_addsShareSheetCoordinator() {
         let subject = createSubject()
 
-        subject.showShareExtension(
-            url: URL(
-                string: "https://www.google.com"
-            )!,
+        subject.startShareSheetCoordinator(
+            shareType: .site(url: URL(string: "https://www.google.com")!),
+            shareMessage: ShareMessage(message: "Test Message", subtitle: "Test Subtitle"),
             sourceView: UIView(),
-            toastContainer: UIView()
+            sourceRect: CGRect(),
+            toastContainer: UIView(),
+            popoverArrowDirection: .up
         )
 
+        // NOTE: FXIOS-10824 We are waiting for an async call to complete. Hopefully the temporary document download will be
+        // improved in the future to make this call synchronous.
+        let predicate = NSPredicate { _, _ in
+            return self.mockRouter.presentCalled == 1
+        }
+        let exp = XCTNSPredicateExpectation(predicate: predicate, object: .none)
+
+        wait(for: [exp], timeout: 3.0)
+
         XCTAssertEqual(subject.childCoordinators.count, 1)
-        XCTAssertTrue(subject.childCoordinators.first is ShareExtensionCoordinator)
-        XCTAssertEqual(mockRouter.presentCalled, 1)
-        XCTAssertTrue(mockRouter.presentedViewController is UIActivityViewController)
+        XCTAssertTrue(subject.childCoordinators.first is ShareSheetCoordinator)
+        XCTAssertEqual(self.mockRouter.presentCalled, 1)
+        XCTAssertTrue(self.mockRouter.presentedViewController is UIActivityViewController)
     }
 
-    func testShowShareExtension_addsShareExtensionCoordinatorWithTitle() {
-        let subject = createSubject()
-
-        subject.showShareExtension(
-            url: URL(
-                string: "https://www.google.com"
-            )!,
-            title: "TEST TITLE",
-            sourceView: UIView(),
-            toastContainer: UIView()
+    func testStartShareSheetCoordinator_isSharingTabWithTemporaryDocument_upgradesTabShareToFileShare() throws {
+        let testWebURL = URL(string: "https://mozilla.org")!
+        let testFileURL = URL(string: "file://some/file/url")!
+        let testWebpageDisplayTitle = "Mozilla"
+        let testShareMessage = ShareMessage(message: "Test Message", subtitle: "Test Subtitle")
+        let mockTemporaryDocument = MockTemporaryDocument(withFileURL: testFileURL)
+        let testTab = MockShareTab(
+            title: testWebpageDisplayTitle,
+            url: testWebURL,
+            canonicalURL: testWebURL,
+            withTemporaryDocument: mockTemporaryDocument
         )
 
+        let mockServerURL = try startMockServer()
+
+        let subject = createSubject()
+
+        subject.startShareSheetCoordinator(
+            shareType: .tab(url: mockServerURL, tab: testTab),
+            shareMessage: testShareMessage,
+            sourceView: UIView(),
+            sourceRect: CGRect(),
+            toastContainer: UIView(),
+            popoverArrowDirection: .up
+        )
+
+        // NOTE: FXIOS-10824 We are waiting for an async call to complete. Hopefully the temporary document download will be
+        // improved in the future to make this call synchronous.
+        let predicate = NSPredicate { _, _ in
+            return self.mockRouter.presentCalled == 1
+        }
+        let exp = XCTNSPredicateExpectation(predicate: predicate, object: .none)
+
+        wait(for: [exp], timeout: 3.0)
+
         XCTAssertEqual(subject.childCoordinators.count, 1)
-        XCTAssertTrue(subject.childCoordinators.first is ShareExtensionCoordinator)
+        XCTAssertTrue(subject.childCoordinators.first is ShareSheetCoordinator)
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is UIActivityViewController)
+        // Right now we have no interface to check the ShareType passed in to ShareSheetCoordinator's start() call, but this
+        // can tell us that there was an attempt to download a TemporaryDocument for a tab type share, which is sufficient.
+        XCTAssertEqual(mockTemporaryDocument.getDownloadedURLCalled, 1)
     }
 
     func testShowCreditCardAutofill_addsCredentialAutofillCoordinator() {
@@ -388,7 +425,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     func testRemoveChildCoordinator_whenDidFinishCalled() {
         let subject = createSubject()
-        let childCoordinator = ShareExtensionCoordinator(
+        let childCoordinator = ShareSheetCoordinator(
             alertContainer: UIView(),
             router: mockRouter,
             profile: profile,
@@ -1168,5 +1205,23 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         let result = subject.canHandle(route: route)
         subject.handle(route: route)
         return result
+    }
+
+    // MARK: - Mock Server
+
+    func startMockServer() throws -> URL {
+        let webServer = GCDWebServer()
+
+        webServer.addHandler(forMethod: "GET",
+                             path: "/",
+                             request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
+            return GCDWebServerDataResponse()
+        }
+
+        if !webServer.start(withPort: 0, bonjourName: nil) {
+            XCTFail("Can't start the GCDWebServer")
+        }
+
+        return URL(string: "http://localhost:\(webServer.port)")!
     }
 }

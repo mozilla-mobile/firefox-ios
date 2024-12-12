@@ -35,7 +35,6 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
     private struct UX {
         static let baseCellHeight: CGFloat = 44
         static let baseDistance: CGFloat = 20
-        static let viewCertButtonTopDistance: CGFloat = 8.0
     }
 
     // MARK: - UI
@@ -177,10 +176,6 @@ class TrackingProtectionDetailsViewController: UIViewController, Themeable {
         )
         viewCertificatesButton.configure(viewModel: certificatesButtonViewModel)
         baseView.addArrangedSubview(viewCertificatesButton)
-        baseView.setCustomSpacing(
-            UX.viewCertButtonTopDistance,
-            after: verifiedByView
-        )
     }
 
     // MARK: Header Actions

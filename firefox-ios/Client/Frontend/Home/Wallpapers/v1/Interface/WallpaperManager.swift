@@ -18,6 +18,7 @@ protocol WallpaperManagerInterface {
     var canSettingsBeShown: Bool { get }
 
     func canOnboardingBeShown(using: Profile) -> Bool
+    func onboardingSeen()
     func setCurrentWallpaper(to wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void)
     func fetchAssetsFor(_ wallpaper: Wallpaper, completion: @escaping (Result<Void, Error>) -> Void)
     func removeUnusedAssets()
@@ -61,22 +62,6 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
         return getAvailableCollections(filtering: .thumbnailsAvailable)
     }
 
-    /// Determines whether the wallpaper onboarding can be shown
-    /// Doesn't need overlayState to check for CFR because the state was previously check
-    func canOnboardingBeShown(using profile: Profile) -> Bool {
-        let cfrHintUtility = ContextualHintEligibilityUtility(with: profile, overlayState: nil)
-        let toolbarCFRShown = !cfrHintUtility.canPresent(.toolbarLocation)
-        let jumpBackInCFRShown = !cfrHintUtility.canPresent(.jumpBackIn)
-        let cfrsHaveBeenShown = toolbarCFRShown && jumpBackInCFRShown
-
-        guard cfrsHaveBeenShown,
-              hasEnoughThumbnailsToShow,
-              !userDefaults.bool(forKey: PrefsKeys.Wallpapers.OnboardingSeenKey)
-        else { return false }
-
-        return true
-    }
-
     /// Determines whether the wallpaper settings can be shown
     var canSettingsBeShown: Bool {
         guard hasEnoughThumbnailsToShow else { return false }
@@ -93,17 +78,47 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
         return true
     }
 
+    /// Determines whether the wallpaper onboarding can be shown
+    /// Doesn't need overlayState to check for CFR because the state was previously check
+    func canOnboardingBeShown(using profile: Profile) -> Bool {
+        let cfrHintUtility = ContextualHintEligibilityUtility(with: profile, overlayState: nil)
+        let toolbarCFRShown = !cfrHintUtility.canPresent(.toolbarLocation)
+        let jumpBackInCFRShown = !cfrHintUtility.canPresent(.jumpBackIn)
+        let cfrsHaveBeenShown = toolbarCFRShown && jumpBackInCFRShown
+
+        guard cfrsHaveBeenShown,
+              hasEnoughThumbnailsToShow,
+              !userDefaults.bool(forKey: PrefsKeys.Wallpapers.OnboardingSeenKey)
+        else { return false }
+
+        return true
+    }
+
+    /// Update the value referenced for wallpaper onboarding when
+    /// wallpaper onboarding was shown
+    func onboardingSeen() {
+        userDefaults.set(true, forKey: PrefsKeys.Wallpapers.OnboardingSeenKey)
+    }
+
     /// Sets and saves a selected wallpaper as currently selected wallpaper.
     ///
     /// - Parameter wallpaper: A `Wallpaper` the user has selected.
-    public func setCurrentWallpaper(
+    func setCurrentWallpaper(
         to wallpaper: Wallpaper,
         completion: @escaping (Result<Void, Error>) -> Void
     ) {
         do {
             let storageUtility = WallpaperStorageUtility()
             try storageUtility.store(wallpaper)
-
+            if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
+                let wallpaperConfig = WallpaperConfiguration(wallpaper: wallpaper)
+                let action = WallpaperAction(
+                    wallpaperConfiguration: wallpaperConfig,
+                    windowUUID: .unavailable,
+                    actionType: WallpaperMiddlewareActionType.wallpaperDidChange
+                )
+                store.dispatch(action)
+            }
             NotificationCenter.default.post(name: .WallpaperDidChange, object: nil)
             completion(.success(()))
         } catch {
@@ -199,18 +214,18 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
     }
 
     private func addDefaultWallpaper(to availableCollections: [WallpaperCollection]) -> [WallpaperCollection] {
-        let defaultWallpaper = [Wallpaper.defaultWallpaper]
+        let baseWallpaper = [Wallpaper.baseWallpaper]
 
         if availableCollections.isEmpty {
             return [WallpaperCollection(id: "classic-firefox",
                                         learnMoreURL: nil,
                                         availableLocales: nil,
                                         availability: nil,
-                                        wallpapers: defaultWallpaper,
+                                        wallpapers: baseWallpaper,
                                         description: nil,
                                         heading: nil)]
         } else if let classicCollection = availableCollections.first(where: { $0.type == .classic }) {
-            let newWallpapers = defaultWallpaper + classicCollection.wallpapers
+            let newWallpapers = baseWallpaper + classicCollection.wallpapers
             let newClassic = WallpaperCollection(id: classicCollection.id,
                                                  learnMoreURL: classicCollection.learnMoreUrl?.absoluteString,
                                                  availableLocales: classicCollection.availableLocales,

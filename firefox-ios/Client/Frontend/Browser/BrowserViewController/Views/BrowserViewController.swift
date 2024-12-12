@@ -420,36 +420,36 @@ class BrowserViewController: UIViewController,
 
         switchToolbarIfNeeded()
 
-        if isToolbarRefactorEnabled {
-            if showNavToolbar {
-                navigationToolbarContainer.isHidden = false
-                navigationToolbarContainer.applyTheme(theme: currentTheme())
-                updateTabCountUsingTabManager(self.tabManager)
+        DispatchQueue.main.async { [self] in
+            if isToolbarRefactorEnabled {
+                if showNavToolbar {
+                    navigationToolbarContainer.isHidden = false
+                    navigationToolbarContainer.applyTheme(theme: currentTheme())
+                    updateTabCountUsingTabManager(self.tabManager)
+                } else {
+                    navigationToolbarContainer.isHidden = true
+                }
+                updateToolbarStateTraitCollectionIfNecessary(newCollection)
             } else {
-                navigationToolbarContainer.isHidden = true
-            }
+                urlBar.topTabsIsShowing = showTopTabs
+                urlBar.setShowToolbar(!showNavToolbar)
 
-            updateToolbarStateTraitCollectionIfNecessary(newCollection)
-        } else {
-            urlBar.topTabsIsShowing = showTopTabs
-            urlBar.setShowToolbar(!showNavToolbar)
-
-            if showNavToolbar {
-                toolbar.isHidden = false
-                toolbar.tabToolbarDelegate = self
-                toolbar.applyUIMode(
-                    isPrivate: tabManager.selectedTab?.isPrivate ?? false,
-                    theme: currentTheme()
-                )
-                toolbar.applyTheme(theme: currentTheme())
-                handleMiddleButtonState(currentMiddleButtonState ?? .search)
-                updateTabCountUsingTabManager(self.tabManager)
-            } else {
-                toolbar.tabToolbarDelegate = nil
-                toolbar.isHidden = true
+                if showNavToolbar {
+                    toolbar.isHidden = false
+                    toolbar.tabToolbarDelegate = self
+                    toolbar.applyUIMode(
+                        isPrivate: tabManager.selectedTab?.isPrivate ?? false,
+                        theme: currentTheme()
+                    )
+                    toolbar.applyTheme(theme: currentTheme())
+                    handleMiddleButtonState(currentMiddleButtonState ?? .search)
+                    updateTabCountUsingTabManager(self.tabManager)
+                } else {
+                    toolbar.tabToolbarDelegate = nil
+                    toolbar.isHidden = true
+                }
             }
         }
-
         appMenuBadgeUpdate()
 
         if showTopTabs, topTabsViewController == nil {
@@ -1352,7 +1352,7 @@ class BrowserViewController: UIViewController,
         }
 
         if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
-            browserDelegate?.showHomepage()
+            browserDelegate?.showHomepage(overlayManager: overlayManager, isZeroSearch: inline)
         } else {
             browserDelegate?.showLegacyHomepage(
                 inline: inline,
@@ -1888,6 +1888,10 @@ class BrowserViewController: UIViewController,
                 navigationToolbar.updateForwardStatus(canGoForward)
             }
         case .hasOnlySecureContent:
+            store.dispatch(
+                TrackingProtectionAction(windowUUID: windowUUID,
+                                         actionType: TrackingProtectionActionType.updateConnectionStatus)
+            )
             guard let selectedTabURL = tabManager.selectedTab?.url,
                   let webViewURL = webView.url,
                   selectedTabURL == webViewURL else { return }
@@ -2093,8 +2097,9 @@ class BrowserViewController: UIViewController,
         case .tabTray:
             focusOnTabSegment()
         case .share:
+            // User tapped the Share button in the toolbar
             guard let button = state.buttonTapped else { return }
-            didTapOnShare(from: button)
+            shareSelectedTab(fromShareButton: button)
         case .readerMode:
             toggleReaderMode()
         case .readerModeLongPressAction:
@@ -2330,7 +2335,9 @@ class BrowserViewController: UIViewController,
         }
     }
 
-    func didTapOnShare(from view: UIView) {
+    /// Shares the currently selected tab via the share sheet.
+    /// - Parameter sourceView: The button to which the share sheet popover will point (iPad).
+    func shareSelectedTab(fromShareButton sourceView: UIView) {
         if !isToolbarRefactorEnabled {
             TelemetryWrapper.recordEvent(category: .action,
                                          method: .tap,
@@ -2339,13 +2346,22 @@ class BrowserViewController: UIViewController,
                                          extras: nil)
         }
 
-        if let selectedTab = tabManager.selectedTab, let tabUrl = selectedTab.canonicalURL?.displayURL {
-            navigationHandler?.showShareExtension(
-                url: tabUrl,
-                sourceView: view,
-                toastContainer: contentContainer,
-                popoverArrowDirection: isBottomSearchBar ? .down : .up)
+        // We share the tab's displayURL to make sure we don't share reader mode localhost URLs
+        guard let selectedTab = tabManager.selectedTab,
+              let tabUrl = selectedTab.canonicalURL?.displayURL else {
+            assertionFailure("Tried to share with no selected tab or URL")
+            return
         }
+
+        /// Note: If the user is viewing a _downloaded_ (not online) PDF in the browser, then the current tab's URL will
+        /// have a `file://` scheme.
+        navigationHandler?.showShareSheet(
+            shareType: .tab(url: tabUrl, tab: selectedTab),
+            shareMessage: nil,
+            sourceView: sourceView,
+            sourceRect: nil,
+            toastContainer: contentContainer,
+            popoverArrowDirection: isBottomSearchBar ? .down : .up)
     }
 
     func presentTabsLongPressAction(from view: UIView) {
@@ -2761,22 +2777,21 @@ class BrowserViewController: UIViewController,
         )
 
         // Credit card sync telemetry
-        self.profile.hasSyncAccount { [unowned self] hasSync in
-            logger.log("User has sync account setup \(hasSync)",
-                       level: .debug,
-                       category: .setup)
+        let hasSync = self.profile.hasAccount()
+        logger.log("User has sync account setup \(hasSync)",
+                   level: .debug,
+                   category: .setup)
 
-            guard hasSync else { return }
-            let syncStatus = self.profile.syncManager.checkCreditCardEngineEnablement()
-            TelemetryWrapper.recordEvent(
-                category: .information,
-                method: .settings,
-                object: .creditCardSyncEnabled,
-                extras: [
-                    TelemetryWrapper.ExtraKey.isCreditCardSyncEnabled.rawValue: syncStatus
-                ]
-            )
-        }
+        guard hasSync else { return }
+        let syncStatus = self.profile.syncManager.checkCreditCardEngineEnablement()
+        TelemetryWrapper.recordEvent(
+            category: .information,
+            method: .settings,
+            object: .creditCardSyncEnabled,
+            extras: [
+                TelemetryWrapper.ExtraKey.isCreditCardSyncEnabled.rawValue: syncStatus
+            ]
+        )
     }
 
     private func autofillCreditCardNimbusFeatureFlag() -> Bool {
@@ -4088,9 +4103,15 @@ extension BrowserViewController: TopTabsDelegate {
     }
 
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
-        openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
-        overlayManager.openNewTab(url: nil,
-                                  newTabSettings: newTabSettings)
+        let shouldLoadCustomHomePage = isToolbarRefactorEnabled && NewTabAccessors.getHomePage(profile.prefs) == .homePage
+        let homePageURL = HomeButtonHomePageAccessors.getHomePage(profile.prefs)
+
+        if shouldLoadCustomHomePage, let url = homePageURL {
+            tabManager.selectedTab?.loadRequest(PrivilegedRequest(url: url) as URLRequest)
+        } else {
+            openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
+            overlayManager.openNewTab(url: nil, newTabSettings: newTabSettings)
+        }
     }
 
     func topTabsDidLongPressNewTab(button: UIButton) {

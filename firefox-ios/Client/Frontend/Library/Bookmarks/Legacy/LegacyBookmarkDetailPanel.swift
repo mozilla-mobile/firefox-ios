@@ -4,7 +4,6 @@
 
 import Common
 import UIKit
-import Storage
 import Shared
 
 import class MozillaAppServices.BookmarkFolderData
@@ -101,6 +100,7 @@ class LegacyBookmarkDetailPanel: SiteTableViewController, BookmarksRefactorFeatu
             target: self,
             action: #selector(topLeftButtonAction)
         )
+        button.accessibilityLabel = .MainMenu.Account.AccessibilityLabels.CloseButton
         return button
     }()
 

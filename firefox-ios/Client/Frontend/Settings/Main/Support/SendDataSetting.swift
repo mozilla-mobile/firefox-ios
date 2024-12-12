@@ -9,7 +9,9 @@ import Shared
 
 enum SendDataType {
     case usageData
+    case technicalData
     case crashReports
+    case dailyUsagePing
 }
 
 class SendDataSetting: BoolSetting {
@@ -34,11 +36,23 @@ class SendDataSetting: BoolSetting {
             message = .SendUsageSettingMessage
             linkedText = .SendUsageSettingLink
             prefKey = AppConstants.prefSendUsageData
+        case .technicalData:
+            title = .SendTechnicalDataSettingTitle
+            message = String(format: .SendTechnicalDataSettingMessage,
+                             MozillaName.shortName.rawValue,
+                             AppName.shortName.rawValue)
+            linkedText = .SendTechnicalDataSettingLink
+            prefKey = AppConstants.prefSendTechnicalData
         case .crashReports:
             title = .SendCrashReportsSettingTitle
-            message = .SendCrashReportsSettingMessage
+            message = String(format: .SendCrashReportsSettingMessage, MozillaName.shortName.rawValue)
             linkedText = .SendCrashReportsSettingLink
             prefKey = AppConstants.prefSendCrashReports
+        case .dailyUsagePing:
+            title = .SendDailyUsagePingSettingTitle
+            message = String(format: .SendDailyUsagePingSettingMessage, MozillaName.shortName.rawValue)
+            linkedText = .SendDailyUsagePingSettingLink
+            prefKey = AppConstants.prefSendDailyUsagePing
         }
 
         let statusText = NSMutableAttributedString()
@@ -100,18 +114,26 @@ class SendDataSetting: BoolSetting {
         switch sendDataType {
         case .usageData:
             return AccessibilityIdentifiers.Settings.SendData.sendAnonymousUsageDataTitle
+        case .technicalData:
+            return AccessibilityIdentifiers.Settings.SendData.sendTechnicalDataTitle
         case .crashReports:
             return AccessibilityIdentifiers.Settings.SendData.sendCrashReportsTitle
+        case .dailyUsagePing:
+            return AccessibilityIdentifiers.Settings.SendData.sendDailyUsagePingTitle
         }
     }
 
+    // TODO: FXIOS-10739 Firefox iOS: Use the correct links for Learn more buttons, in Manage Privacy Preferences screen
     override var url: URL? {
         switch sendDataType {
         case .usageData:
             return SupportUtils.URLForTopic("adjust")
-        case .crashReports:
-            // TODO: FXIOS-10348 Firefox iOS: Manage Privacy Preferences in Settings
+        case .technicalData:
             return nil
+        case .crashReports:
+            return nil
+        case .dailyUsagePing:
+            return SupportUtils.URLForTopic("dau-ping-settings-mobile")
         }
     }
 

@@ -118,7 +118,10 @@ class TermsOfServiceViewController: UIViewController, Themeable {
 
         let manageLink = String.Onboarding.TermsOfService.ManageLink
         let manageText = String.Onboarding.TermsOfService.ManagePreferenceAgreement
-        let manageAgreement = String(format: manageText, AppName.shortName.rawValue, manageLink)
+        let manageAgreement = String(format: manageText,
+                                     AppName.shortName.rawValue,
+                                     MozillaName.shortName.rawValue,
+                                     manageLink)
         setupAgreementTextView(with: manageAgreement,
                                linkTitle: manageLink,
                                linkType: .manage,
@@ -242,7 +245,11 @@ class TermsOfServiceViewController: UIViewController, Themeable {
 
     @objc
     private func presentManagePreferences(_ gesture: UIGestureRecognizer) {
-        // TODO: FXIOS-10347 Firefox iOS: Manage Privacy Preferences during Onboarding
+        let managePreferencesVC = PrivacyPreferencesViewController(windowUUID: windowUUID)
+        if UIDevice.current.userInterfaceIdiom != .phone {
+            managePreferencesVC.modalPresentationStyle = .formSheet
+        }
+        present(managePreferencesVC, animated: true)
     }
 
     @objc

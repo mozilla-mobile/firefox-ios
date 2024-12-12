@@ -20,7 +20,7 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
     var showLibraryCalled = 0
     var showHomepanelSectionCalled = 0
     var showEnhancedTrackingProtectionCalled = 0
-    var showShareExtensionCalled = 0
+    var showShareSheetCalled = 0
     var showTabTrayCalled = 0
     var showQrCodeCalled = 0
     var didFinishCalled = 0
@@ -65,13 +65,13 @@ class MockBrowserCoordinator: BrowserNavigationHandler, ParentCoordinatorDelegat
         showCreditCardAutofillCalled += 1
     }
 
-    func showShareExtension(
-        url: URL,
-        sourceView: UIView,
-        toastContainer: UIView,
-        popoverArrowDirection: UIPopoverArrowDirection
-    ) {
-        showShareExtensionCalled += 1
+    func showShareSheet(shareType: ShareType,
+                        shareMessage: ShareMessage?,
+                        sourceView: UIView,
+                        sourceRect: CGRect?,
+                        toastContainer: UIView,
+                        popoverArrowDirection: UIPopoverArrowDirection) {
+        showShareSheetCalled += 1
     }
 
     func show(homepanelSection: Route.HomepanelSection) {

@@ -1,0 +1,16 @@
+project: firefox-ios/Client.xcodeproj
+schemes:
+- Fennec
+targets:
+- Account
+- AccountTests
+- Client
+- ClientTests
+- NotificationService
+- SharedTests
+- Storage
+- StorageTests
+- Sync
+- SyncTelemetryTests
+- UITests
+- XCUITests
