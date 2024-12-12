@@ -229,14 +229,21 @@ class PullRefreshView: UIView,
 }
 
 struct EasterEggViewLayoutBuilder {
+    private struct UX {
+        static let sidePadding: CGFloat = 32.0
+        /// The max height that we are considering a device a small one.
+        /// This screen height refers to iPhone SE 2/3 rd gen, 6,7,8.
+        ///
+        /// https://www.appmysite.com/blog/the-complete-guide-to-iphone-screen-resolutions-and-sizes/
+        static let smallDevicesMaxScreenHeight: CGFloat = 667.0
+    }
+
     let easterEggSize: CGSize
-    let sidePadding: CGFloat = 32.0
 
     func layoutEasterEggView(_ view: UIView, superview: UIView, isPortrait: Bool, isIpad: Bool) {
         var isPortrait = isPortrait
-        // MARK: 667 is the screen height for iPhone SE 2/3 rd gen, 6,7,8.
-        // https://www.appmysite.com/blog/the-complete-guide-to-iphone-screen-resolutions-and-sizes/
-        if let screenHeight = UIWindow.keyWindow?.windowScene?.screen.bounds.height, screenHeight <= 667.0 {
+        if let screenHeight = UIWindow.keyWindow?.windowScene?.screen.bounds.height,
+           screenHeight <= UX.smallDevicesMaxScreenHeight {
             // Force landscape layout so the easter egg shows only bottom sides and doesn't render clipped for small devices
             isPortrait = false
         }
@@ -258,12 +265,12 @@ struct EasterEggViewLayoutBuilder {
             [
                 view.bottomAnchor.constraint(equalTo: superview.bottomAnchor),
                 view.leadingAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.leadingAnchor,
-                                              constant: sidePadding)
+                                              constant: UX.sidePadding)
             ]
         case .bottomTrailing:
             [
                 view.trailingAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.trailingAnchor,
-                                               constant: -sidePadding),
+                                               constant: -UX.sidePadding),
                 view.bottomAnchor.constraint(equalTo: superview.bottomAnchor)
             ]
         case .trailing:
