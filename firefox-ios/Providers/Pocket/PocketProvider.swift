@@ -102,7 +102,7 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
             throw Error.failure
         }
 
-        return PocketFeedStory.parseJSON(list: items) // Added missing return
+        return PocketFeedStory.parseJSON(list: items)
     }
 
     // Returns nil if the locale is not supported
