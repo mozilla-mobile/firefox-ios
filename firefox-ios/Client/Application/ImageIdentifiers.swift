@@ -8,7 +8,7 @@ import Foundation
 /// Please see `StandardImageIdentifiers` for th standard ones.
 /// When adding new identifiers, please respect alphabetical order.
 /// Sing the song if you must.
-public struct ImageIdentifiers {
+struct ImageIdentifiers {
     public static let badgeMask = "badge-mask"
     public static let firefoxFavicon = "faviconFox"
     public static let foxConfirmation = "foxConfirmation"
