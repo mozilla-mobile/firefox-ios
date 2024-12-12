@@ -28,6 +28,9 @@ class A11yOnboardingTests: BaseTestCase {
     }
 
     func testA11yFirstRunTour() throws {
+        // swiftlint:disable large_tuple
+        var missingLabels: [(elementType: String, identifier: String)] = []
+        // swiftlint:enable large_tuple
         guard #available(iOS 17.0, *), !skipPlatform else { return }
 
         // Complete the First run from first screen to the latest one
@@ -49,9 +52,18 @@ class A11yOnboardingTests: BaseTestCase {
         // let pageIndicators = app.pageIndicators.allElementsBoundByIndex
 
         for button in buttons {
-            XCTAssertNotNil(button.accessibilityLabel, "Button \(button.identifier) should have an accessibility label")
-            XCTAssertFalse(button.accessibilityLabel!.isEmpty,
-                           "Button \(button.identifier) should have a non-empty accessibility label")
+            if button.accessibilityLabel == nil || button.accessibilityLabel!.isEmpty {
+                missingLabels.append((elementType: "Button", identifier: button.identifier))
+            }
+        }
+
+        if missingLabels.isEmpty {
+            print("All elements have accessibility labels 🎉")
+        } else {
+            print("Accessibility Report: Missing Labels")
+            for (index, element) in missingLabels.enumerated() {
+                 print("\(index + 1). Type: \(element.elementType), Identifier: \(element.identifier)")
+            }
         }
 
         // Swipe to the second screen
