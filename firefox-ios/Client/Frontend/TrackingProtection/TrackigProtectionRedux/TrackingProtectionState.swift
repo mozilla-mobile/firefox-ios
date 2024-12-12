@@ -182,16 +182,7 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
                 displayView: .clearCookiesAlert
             )
         case TrackingProtectionActionType.toggleTrackingProtectionStatus:
-            return TrackingProtectionState(
-                windowUUID: state.windowUUID,
-                trackingProtectionEnabled: !state.trackingProtectionEnabled,
-                connectionSecure: state.connectionSecure,
-                shouldClearCookies: false,
-                shouldUpdateBlockedTrackerStats: false,
-                shouldUpdateConnectionStatus: false,
-                navigateTo: nil,
-                displayView: nil
-            )
+            return toggleTrackingProtectionStatusState(from: state)
         case TrackingProtectionMiddlewareActionType.dismissTrackingProtection:
             return dismissTrackingProtectionState(from: state)
         default:
