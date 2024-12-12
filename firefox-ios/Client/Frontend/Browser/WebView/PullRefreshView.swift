@@ -234,7 +234,9 @@ class PullRefreshView: UIView,
 
     deinit {
         easterEggTimer?.cancel()
+        easterEggTimer = nil
         scrollObserver?.invalidate()
+        scrollObserver = nil
     }
 }
 
