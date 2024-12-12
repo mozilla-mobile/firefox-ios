@@ -10,7 +10,8 @@ import Storage
 
 import enum MozillaAppServices.BookmarkRoots
 
-class TabManagerMiddleware: FeatureFlaggable {
+class TabManagerMiddleware: FeatureFlaggable,
+                            BookmarksRefactorFeatureFlagProvider {
     private let profile: Profile
     private let logger: Logger
     private let inactiveTabTelemetry = InactiveTabsTelemetry()
@@ -899,10 +900,8 @@ class TabManagerMiddleware: FeatureFlaggable {
     private func addToBookmarks(_ shareItem: ShareItem?) {
         guard let shareItem else { return }
         // Add new mobile bookmark at the top of the list
-        let isBookmarksRefactorEnabled = featureFlags.isFeatureEnabled(.bookmarksRefactor, checking: .buildOnly)
-        let bookmarksSaveToFolderGuid = profile.prefs.stringForKey(PrefsKeys.BookmarkSaveToFolder)
-        let parentGuid = isBookmarksRefactorEnabled ?
-        bookmarksSaveToFolderGuid ?? BookmarkRoots.MobileFolderGUID : BookmarkRoots.MobileFolderGUID
+        let recentBookmarkFolderGuid = profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder)
+        let parentGuid = (isBookmarkRefactorEnabled ? recentBookmarkFolderGuid : nil) ?? BookmarkRoots.MobileFolderGUID
 
         profile.places.createBookmark(parentGUID: parentGuid,
                                       url: shareItem.url,

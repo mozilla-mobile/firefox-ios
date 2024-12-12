@@ -103,11 +103,12 @@ class EditBookmarkViewModel {
                                                          parentFolderGUID: selectedFolder.guid)
             if selectedFolder.guid != self?.parentFolder.guid {
                 switch result {
-                case .success(let saveResult):
-                    guard saveResult == .void else { break }
-                    self?.profile.prefs.setString(selectedFolder.guid, forKey: PrefsKeys.BookmarkSaveToFolder)
+                case .success(let guid):
+                    if guid == nil {
+                        self?.profile.prefs.setString(selectedFolder.guid, forKey: PrefsKeys.RecentBookmarkFolder)
+                    }
                 case .failure(let error):
-                    self?.logger.log("Failed to save: \(error)", level: .warning, category: .library)
+                    self?.logger.log("Failed to save bookmark: \(error)", level: .warning, category: .library)
                 case .none:
                     break
                 }

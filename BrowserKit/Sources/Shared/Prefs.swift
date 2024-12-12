@@ -199,8 +199,9 @@ public struct PrefsKeys {
     // Represents whether or not the user has seen the photon main menu once, at least.
     public static let PhotonMainMenuShown = "PhotonMainMenuShown"
 
-    // Most recently created or saved to bookmark folder that we should save all future bookmarks to
-    public static let BookmarkSaveToFolder = "BookmarkSaveToFolder"
+    // The guid of the bookmark folder that was most recently created or saved to by the user.
+    // Used to indicate where we should save the next bookmark by default.
+    public static let RecentBookmarkFolder = "RecentBookmarkFolder"
 
     public struct Usage {
         public static let profileId = "profileId"

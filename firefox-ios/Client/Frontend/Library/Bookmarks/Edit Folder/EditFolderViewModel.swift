@@ -96,20 +96,17 @@ class EditFolderViewModel {
         guard let folder else { return }
         let selectedFolderGUID = selectedFolder?.guid ?? parentFolder.guid
         Task { @MainActor in
-                let result = await bookmarkSaver.save(bookmark: folder, parentFolderGUID: selectedFolderGUID)
-                switch result {
-                case .success(let saveResult):
-                    switch saveResult {
-                    case .guid(let guid):
-                        profile.prefs.setString(guid, forKey: PrefsKeys.BookmarkSaveToFolder)
-                    default:
-                        break
-                    }
-                case .failure(let error):
-                    self.logger.log("Failed to save: \(error)", level: .warning, category: .library)
+            let result = await bookmarkSaver.save(bookmark: folder, parentFolderGUID: selectedFolderGUID)
+            switch result {
+            case .success(let guid):
+                if let guid = guid {
+                    profile.prefs.setString(guid, forKey: PrefsKeys.RecentBookmarkFolder)
                 }
+            case .failure(let error):
+                self.logger.log("Failed to save folder: \(error)", level: .warning, category: .library)
+            }
 
-                onBookmarkSaved?()
+            onBookmarkSaved?()
         }
     }
 }
