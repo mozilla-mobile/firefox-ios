@@ -89,9 +89,19 @@ class ShareManager: NSObject, FeatureFlaggable {
             }
 
         case .tab(let siteURL, let tab):
+            let isSentFromFirefoxEnabled = LegacyFeatureFlagsManager.shared.isFeatureEnabled(
+                .sentFromFirefox,
+                checking: .buildAndUser
+            )
+            activityItems.append(
+                URLActivityItemProvider(
+                    url: siteURL,
+                    allowSentFromFirefoxTreatment: isSentFromFirefoxEnabled
+                )
+            )
+
             // For websites, we also want to offer a few additional activity items besides the URL, like printing the
             // webpage or adding a website to the iOS home screen
-            activityItems.append(URLActivityItemProvider(url: siteURL))
 
             // Only show the print activity if the tab's webview is loaded
             if tab.webView != nil {
