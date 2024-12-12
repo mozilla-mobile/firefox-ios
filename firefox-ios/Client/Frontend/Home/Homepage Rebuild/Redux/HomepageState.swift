@@ -9,10 +9,10 @@ struct HomepageState: ScreenState, Equatable {
     var windowUUID: WindowUUID
 
     // Homepage sections state in the order they appear on the collection view
-    var headerState: HeaderState
-    var topSitesState: TopSitesSectionState
-    var pocketState: PocketState
-    var wallpaperState: WallpaperState
+   let headerState: HeaderState
+   let topSitesState: TopSitesSectionState
+   let pocketState: PocketState
+   let wallpaperState: WallpaperState
 
     init(appState: AppState, uuid: WindowUUID) {
         guard let homepageState = store.state.screenState(

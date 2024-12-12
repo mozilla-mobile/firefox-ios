@@ -141,7 +141,11 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     func testShowNewHomepage_setsProperViewController() {
         let subject = createSubject()
-        subject.showHomepage(overlayManager: overlayModeManager, isZeroSearch: false)
+        subject.showHomepage(
+            overlayManager: overlayModeManager,
+            isZeroSearch: false,
+            statusBarScrollDelegate: scrollDelegate
+        )
 
         XCTAssertNotNil(subject.homepageViewController)
         XCTAssertNil(subject.webviewController)
@@ -150,11 +154,19 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     func testShowNewHomepage_hasSameInstance() {
         let subject = createSubject()
-        subject.showHomepage(overlayManager: overlayModeManager, isZeroSearch: false)
+        subject.showHomepage(
+            overlayManager: overlayModeManager,
+            isZeroSearch: false,
+            statusBarScrollDelegate: scrollDelegate
+        )
         let firstHomepage = subject.homepageViewController
         XCTAssertNotNil(subject.homepageViewController)
 
-        subject.showHomepage(overlayManager: overlayModeManager, isZeroSearch: false)
+        subject.showHomepage(
+            overlayManager: overlayModeManager,
+            isZeroSearch: false,
+            statusBarScrollDelegate: scrollDelegate
+        )
         let secondHomepage = subject.homepageViewController
         XCTAssertEqual(firstHomepage, secondHomepage)
     }
