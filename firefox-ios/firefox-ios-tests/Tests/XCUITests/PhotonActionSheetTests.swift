@@ -22,15 +22,25 @@ class PhotonActionSheetTests: BaseTestCase {
         let itemCell = app.cells[AccessibilityIdentifiers.FirefoxHomepage.TopSites.itemCell]
         let cell = itemCell.staticTexts["Example Domain"]
         mozWaitForElementToExist(cell)
+        if #available(iOS 17, *) {
+            mozWaitForElementToExist(app.cells["Example Domain"].images[StandardImageIdentifiers.Small.pinBadgeFill])
+        } else {
+            // No identifier is available for iOS 16 amd below
+            mozWaitForElementToExist(app.cells["Example Domain"].images.element(boundBy: 1))
+        }
 
         // Remove pin
         cell.press(forDuration: 2)
-        app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash].tap()
+        app.tables.cells.otherElements[StandardImageIdentifiers.Large.pinSlash].waitAndTap()
         // Check that it has been unpinned
         /* FIXME: Adding a workaround until https://github.com/mozilla-mobile/firefox-ios/issues/22323 is fixed
          * We will wait for the pinned icon on the example.com tile to disappear (max 8 seconds polling)
          */
-        waitForNoExistence(app.cells["Example Domain"].images[StandardImageIdentifiers.Small.pinBadgeFill], timeoutValue: 8)
+        if #available(iOS 17, *) {
+            mozWaitForElementToNotExist(app.cells["Example Domain"].images[StandardImageIdentifiers.Small.pinBadgeFill])
+        } else {
+            mozWaitForElementToNotExist(app.cells["Example Domain"].images.element(boundBy: 1))
+        }
 
         cell.press(forDuration: 2)
         mozWaitForElementToExist(app.tables.cells.otherElements[StandardImageIdentifiers.Large.pin])
