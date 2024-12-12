@@ -46,6 +46,9 @@ for lang in $LOCALES; do
     if [ "$?" != "0" ]; then
         echo "Fastlane exited with code: $?"
         exit $?
+    elif grep -q "** TEST FAILED **"; then
+        echo "Test/compilation failed"
+        exit 1
     elif grep -q "Caught error" "output.txt"; then
         echo "Fastlane caught error"
         exit 1
