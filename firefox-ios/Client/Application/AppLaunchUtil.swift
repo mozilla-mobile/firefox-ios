@@ -63,21 +63,6 @@ class AppLaunchUtil {
             self.runAppServicesHistoryMigration()
         }
 
-        NotificationCenter.default.addObserver(
-            forName: .FSReadingListAddReadingListItem,
-            object: nil,
-            queue: nil
-        ) { (notification) in
-            if let userInfo = notification.userInfo, let url = userInfo["URL"] as? URL {
-                let title = (userInfo["Title"] as? String) ?? ""
-                self.profile.readingList.createRecordWithURL(
-                    url.absoluteString,
-                    title: title,
-                    addedBy: UIDevice.current.name
-                )
-            }
-        }
-
         RustFirefoxAccounts.startup(prefs: profile.prefs) { _ in
             self.logger.log("RustFirefoxAccounts started", level: .info, category: .sync)
             AppEventQueue.signal(event: .accountManagerInitialized)
