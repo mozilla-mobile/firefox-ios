@@ -12,13 +12,12 @@ class MockPocketAPI: PocketStoriesProviding {
 
     var result: Result<[PocketFeedStory], Error>
 
-    func fetchStories(items: Int, completion: @escaping (StoryResult) -> Void) {
+    func fetchStories(items: Int) async throws -> [PocketFeedStory] {
         switch result {
         case .success(let value):
-            completion(.success(Array(value.prefix(items))))
+            return Array(value.prefix(items))
         case .failure(let error):
-            completion(.failure(error))
+            throw error
         }
-        return
     }
 }
