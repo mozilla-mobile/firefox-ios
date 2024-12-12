@@ -193,16 +193,7 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
                 displayView: nil
             )
         case TrackingProtectionMiddlewareActionType.dismissTrackingProtection:
-            return TrackingProtectionState(
-                windowUUID: state.windowUUID,
-                trackingProtectionEnabled: state.trackingProtectionEnabled,
-                connectionSecure: state.connectionSecure,
-                shouldClearCookies: false,
-                shouldUpdateBlockedTrackerStats: false,
-                shouldUpdateConnectionStatus: false,
-                navigateTo: .close,
-                displayView: nil
-            )
+            return dismissTrackingProtectionState(from: state)
         default:
             return defaultState(from: state)
         }
