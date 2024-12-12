@@ -543,10 +543,24 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             Utils.reloadSafariContentBlocker()
         }
 
+        func disableAndTurnOffStudiesToggle(_ sender: UISwitch) {
+            // Gray out the toggle
+            sender.isOn = false
+            sender.isEnabled = false
+            sender.alpha = 0.5
+            NimbusWrapper.shared.nimbus.globalUserParticipation = false
+            updateSetting(false, forToggle: .studies)
+        }
+
         // Find the 'studies' toggle
         let studiesToggle = toggles.values
             .flatMap { $0.values }
             .first(where: { $0.setting == .studies })?.toggle
+
+        // Find the 'Send usage data' toggle
+        let sendAnonymousUsageDataToggle = toggles.values
+            .flatMap { $0.values }
+            .first(where: { $0.setting == .sendAnonymousUsageData })?.toggle
 
         // The following settings are special and need to be in effect immediately.
         if toggle.setting == .sendAnonymousUsageData {
@@ -558,12 +572,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             // Disable and turn off 'studies' if 'sendAnonymousUsageData' is turned off
             if let studiesToggle = studiesToggle {
                 if !sender.isOn {
-                    // Gray out the toggle
-                    studiesToggle.isOn = false
-                    studiesToggle.isEnabled = false
-                    studiesToggle.alpha = 0.5
-                    NimbusWrapper.shared.nimbus.globalUserParticipation = false
-                    updateSetting(false, forToggle: .studies)
+                    disableAndTurnOffStudiesToggle(studiesToggle)
                 } else {
                     // Restore toggle's appearance
                     studiesToggle.isEnabled = true
@@ -571,7 +580,14 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
             }
         } else if toggle.setting == .studies {
-            NimbusWrapper.shared.nimbus.globalUserParticipation = sender.isOn
+
+            // Ensure 'studies' is disabled if 'sendAnonymousUsageData' is turned off, even when 'studies' is being enabled.
+            if sendAnonymousUsageDataToggle?.isOn == true {
+                NimbusWrapper.shared.nimbus.globalUserParticipation = sender.isOn
+            } else {
+                disableAndTurnOffStudiesToggle(sender)
+            }
+
         } else if toggle.setting == .biometricLogin {
             TipManager.biometricTip = false
         }
