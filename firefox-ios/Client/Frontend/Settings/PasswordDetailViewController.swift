@@ -354,7 +354,7 @@ extension PasswordDetailViewController {
         }
     }
 
-    func onProfileDidFinishSyncing() {
+    func onProfileDidFinishSyncing(completion: @escaping () -> Void) {
         // Reload details after syncing.
         viewModel.profile.logins.getLogin(id: viewModel.login.id) { [weak self] result in
             DispatchQueue.main.async {
@@ -366,6 +366,7 @@ extension PasswordDetailViewController {
                 case .failure:
                     break
                 }
+                completion()
             }
         }
     }
@@ -420,9 +421,10 @@ extension PasswordDetailViewController {
             viewModel.profile.logins.updateLogin(id: viewModel.login.id, login: updatedLogin) { [weak self] _ in
                 DispatchQueue.main.async {
                     guard let self = self else { return }
-                    self.onProfileDidFinishSyncing()
-                    // Required to get UI to reload with changed state
-                    self.tableView.reloadData()
+                    self.onProfileDidFinishSyncing {
+                        // Required to get UI to reload with changed state
+                        self.tableView.reloadData()
+                    }
                     self.sendLoginsModifiedTelemetry()
                 }
             }
