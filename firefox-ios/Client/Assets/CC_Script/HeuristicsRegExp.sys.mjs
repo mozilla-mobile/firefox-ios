@@ -48,9 +48,10 @@ export const HeuristicsRegExp = {
     // Firefox-specific rules
     {
       "address-line1": "addrline1|address_1|addl1",
-      "address-line2": "addrline2|address_2|addl2",
+      "address-line2":
+        "addrline2|address_2|addl2" +
+        "|landmark", // common in IN
       "address-line3": "addrline3|address_3|addl3",
-      "country": "land", // de-DE
       "postal-code": "^PLZ(\\b|\\*)", // de-DE
       "additional-name": "apellido.?materno|lastlastname",
       "cc-name":
