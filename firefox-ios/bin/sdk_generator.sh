@@ -25,11 +25,7 @@
 
 set -e
 
-<<<<<<< HEAD
 GLEAN_PARSER_VERSION=15.0
-=======
-MIN_GLEAN_PARSER_VERSION=15.2
->>>>>>> 301b75253 (Bump FXIOS [Dependencies] Glean to 62.0.0 (#23695))
 
 # CMDNAME is used in the usage text below.
 # shellcheck disable=SC2034
