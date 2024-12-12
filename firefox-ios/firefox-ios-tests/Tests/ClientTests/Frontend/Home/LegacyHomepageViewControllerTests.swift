@@ -60,7 +60,7 @@ class LegacyHomepageViewControllerTests: XCTestCase {
                 expression: "'homepage_viewed'|eventSum('Days', 1, 0) > 0"
             )
         )
-        subject.viewWillAppear(false)
+        subject.viewDidAppear(false)
         let expectation = self.expectation(description: "Record event called")
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             expectation.fulfill()
