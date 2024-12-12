@@ -66,25 +66,21 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
 
     // Fetch items from the global pocket feed
     func fetchStories(items: Int) async throws -> [PocketFeedStory] {
-        do {
-            let isFeatureEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
-            let isCurrentLocaleSupported = PocketProvider.islocaleSupported(Locale.current.identifier)
+        let isFeatureEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
+        let isCurrentLocaleSupported = PocketProvider.islocaleSupported(Locale.current.identifier)
 
-            // Check if we should use mock data
-            if shouldUseMockData {
-                return try await getMockDataFeed(count: items)
-            }
-
-            // Ensure the feature is enabled and current locale is supported
-            guard isFeatureEnabled, isCurrentLocaleSupported else {
-                throw Error.failure
-            }
-
-            // Note: Global feed is restricted to specific locale and feature availability
-            return try await getGlobalFeed(items: items)
-        } catch {
-            throw error
+        // Check if we should use mock data
+        if shouldUseMockData {
+            return try await getMockDataFeed(count: items)
         }
+
+        // Ensure the feature is enabled and current locale is supported
+        guard isFeatureEnabled, isCurrentLocaleSupported else {
+            throw Error.failure
+        }
+
+        // Note: Global feed is restricted to specific locale and feature availability
+        return try await getGlobalFeed(items: items)
     }
 
     private func getGlobalFeed(items: Int) async throws -> [PocketFeedStory] {
@@ -97,24 +93,20 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
             return PocketFeedStory.parseJSON(list: items)
         }
 
-        do {
-            let (data, response) = try await urlSession.data(for: request)
+        let (data, response) = try await urlSession.data(for: request)
 
-            guard let response = validatedHTTPResponse(response, contentType: "application/json") else {
-                throw Error.failure
-            }
-
-            self.cache(response: response, for: request, with: data)
-
-            let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
-            guard let items = json?["recommendations"] as? [[String: Any]] else {
-                throw Error.failure
-            }
-
-            return PocketFeedStory.parseJSON(list: items) // Added missing return
-        } catch {
-            throw error
+        guard let response = validatedHTTPResponse(response, contentType: "application/json") else {
+            throw Error.failure
         }
+
+        self.cache(response: response, for: request, with: data)
+
+        let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
+        guard let items = json?["recommendations"] as? [[String: Any]] else {
+            throw Error.failure
+        }
+
+        return PocketFeedStory.parseJSON(list: items) // Added missing return
     }
 
     // Returns nil if the locale is not supported
