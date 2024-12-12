@@ -199,6 +199,19 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
         }
     }
 
+    private static func toggleTrackingProtectionStatusState(from state: TrackingProtectionState) -> TrackingProtectionState {
+        return TrackingProtectionState(
+            windowUUID: state.windowUUID,
+            trackingProtectionEnabled: !state.trackingProtectionEnabled,
+            connectionSecure: state.connectionSecure,
+            shouldClearCookies: false,
+            shouldUpdateBlockedTrackerStats: false,
+            shouldUpdateConnectionStatus: false,
+            navigateTo: nil,
+            displayView: nil
+        )
+    }
+
     private static func dismissTrackingProtectionState(from state: TrackingProtectionState) -> TrackingProtectionState {
         return TrackingProtectionState(
             windowUUID: state.windowUUID,
