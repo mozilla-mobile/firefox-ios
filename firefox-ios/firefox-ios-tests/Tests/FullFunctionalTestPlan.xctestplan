@@ -118,7 +118,6 @@
         "ReadingListTests\/testAddToReadingList()",
         "ReadingListTests\/testLoadReaderContent()",
         "ReadingListTests\/testReadingList()",
-        "ScreenGraphTest\/testUserStateChanges()",
         "SearchTests\/testBottomVIewURLBar()",
         "SearchTests\/testDismissPromptPresence()",
         "SearchTests\/testOpenTabsInSearchSuggestions()",
