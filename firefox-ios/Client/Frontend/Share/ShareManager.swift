@@ -90,8 +90,8 @@ class ShareManager: NSObject, FeatureFlaggable {
 
         case .tab(let siteURL, let tab):
             let isSentFromFirefoxEnabled = LegacyFeatureFlagsManager.shared.isFeatureEnabled(
-                .sentFromFirefoxTreatmentA,
-                checking: .buildOnly
+                .sentFromFirefox,
+                checking: .buildAndUser
             )
             activityItems.append(
                 URLActivityItemProvider(
