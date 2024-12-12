@@ -6,14 +6,116 @@ import UniformTypeIdentifiers
 import XCTest
 @testable import Client
 
-// TODO: FXIOS-10816 Flesh out these unit tests
 final class URLActivityItemProviderTests: XCTestCase {
+    let testFileURL = URL(string: "file://some/file/url")!
     let testWebURL = URL(string: "https://mozilla.org")!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
+    }
+
+    func testWebURL_forMailActivity() throws {
+        let testActivityType = UIActivity.ActivityType.mail
+
+        let urlActivityItemProvider = URLActivityItemProvider(url: testWebURL, allowSentFromFirefoxTreatment: false)
+        let urlDataIdentifier = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            dataTypeIdentifierForActivityType: testActivityType
+        )
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: testActivityType
+        )
+
+        XCTAssertEqual(urlDataIdentifier, UTType.url.identifier)
+        XCTAssertEqual(itemForActivity as? URL, testWebURL)
+    }
+
+    func testWebURL_forMessagesActivity() throws {
+        let testActivityType = UIActivity.ActivityType.message
+
+        let urlActivityItemProvider = URLActivityItemProvider(url: testWebURL, allowSentFromFirefoxTreatment: false)
+        let urlDataIdentifier = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            dataTypeIdentifierForActivityType: testActivityType
+        )
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: testActivityType
+        )
+
+        XCTAssertEqual(urlDataIdentifier, UTType.url.identifier)
+        XCTAssertEqual(itemForActivity as? URL, testWebURL)
+    }
+
+    func testFileURL_forMailActivity() throws {
+        let testActivityType = UIActivity.ActivityType.mail
+
+        let urlActivityItemProvider = URLActivityItemProvider(url: testFileURL, allowSentFromFirefoxTreatment: false)
+        let urlDataIdentifier = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            dataTypeIdentifierForActivityType: testActivityType
+        )
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: testActivityType
+        )
+
+        XCTAssertEqual(urlDataIdentifier, UTType.fileURL.identifier)
+        XCTAssertEqual(itemForActivity as? URL, testFileURL)
+    }
+
+    func testFileURL_forMessagesActivity() throws {
+        let testActivityType = UIActivity.ActivityType.message
+
+        let urlActivityItemProvider = URLActivityItemProvider(url: testFileURL, allowSentFromFirefoxTreatment: false)
+        let urlDataIdentifier = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            dataTypeIdentifierForActivityType: testActivityType
+        )
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: testActivityType
+        )
+
+        XCTAssertEqual(urlDataIdentifier, UTType.fileURL.identifier)
+        XCTAssertEqual(itemForActivity as? URL, testFileURL)
+    }
+
+    func testWebURL_forExcludedActivity() throws {
+        let testActivityType = UIActivity.ActivityType.addToReadingList
+
+        let urlActivityItemProvider = URLActivityItemProvider(url: testWebURL, allowSentFromFirefoxTreatment: false)
+        let urlDataIdentifier = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            dataTypeIdentifierForActivityType: testActivityType
+        )
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: testActivityType
+        )
+
+        XCTAssertEqual(urlDataIdentifier, UTType.url.identifier)
+        XCTAssertTrue(itemForActivity is NSNull)
+    }
+
+    func testFileURL_forExcludedActivity() throws {
+        let testActivityType = UIActivity.ActivityType.addToReadingList
+
+        let urlActivityItemProvider = URLActivityItemProvider(url: testFileURL, allowSentFromFirefoxTreatment: false)
+        let urlDataIdentifier = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            dataTypeIdentifierForActivityType: testActivityType
+        )
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: testActivityType
+        )
+
+        XCTAssertEqual(urlDataIdentifier, UTType.fileURL.identifier)
+        XCTAssertTrue(itemForActivity is NSNull)
     }
 
     // MARK: - Sent from Firefox experiment WhatsApp tab share override
