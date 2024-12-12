@@ -10,8 +10,7 @@ import Storage
 
 import enum MozillaAppServices.BookmarkRoots
 
-class TabManagerMiddleware: FeatureFlaggable,
-                            BookmarksRefactorFeatureFlagProvider {
+class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
     private let profile: Profile
     private let logger: Logger
     private let inactiveTabTelemetry = InactiveTabsTelemetry()

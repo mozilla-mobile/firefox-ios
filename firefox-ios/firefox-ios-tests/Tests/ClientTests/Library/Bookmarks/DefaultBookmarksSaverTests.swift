@@ -68,11 +68,17 @@ final class DefaultBookmarksSaverTests: XCTestCase {
                                       parentFolderGUID: modifiedBookmark.parentGUID ?? rootFolderGUID)
         }
 
+        switch result {
+        case .success(let value):
+            XCTAssertNil(value, "Expected the result value to be nil for updates.")
+        case .failure(let error):
+            XCTFail("Expected success but got failure: \(error)")
+        }
+
         let readModfiedBookmark = try await unwrapAsync {
             return await readNode(guid: previouslyAddedBookmark.guid) as? BookmarkItemData
         }
 
-        XCTAssertNotNil(try? result.get())
         XCTAssertEqual(readModfiedBookmark.title, newTitle)
         XCTAssertEqual(readModfiedBookmark.url, newUrl)
     }
@@ -130,11 +136,17 @@ final class DefaultBookmarksSaverTests: XCTestCase {
                                       parentFolderGUID: modifiedFolder.parentGUID ?? rootFolderGUID)
         }
 
+        switch result {
+        case .success(let value):
+            XCTAssertNil(value, "Expected the result value to be nil for updates.")
+        case .failure(let error):
+            XCTFail("Expected success but got failure: \(error)")
+        }
+
         let readModfiedBookmark = try await unwrapAsync {
             return await readNode(guid: modifiedFolder.guid) as? BookmarkFolderData
         }
 
-        XCTAssertNotNil(try? result.get())
         XCTAssertEqual(readModfiedBookmark.title, newTitle)
     }
 

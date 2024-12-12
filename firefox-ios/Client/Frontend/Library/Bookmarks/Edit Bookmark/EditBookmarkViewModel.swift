@@ -99,14 +99,14 @@ class EditBookmarkViewModel {
     func saveBookmark() {
         guard let selectedFolder, let node else { return }
         Task { @MainActor [weak self] in
+            // Updates the bookmark
             let result = await self?.bookmarksSaver.save(bookmark: node,
                                                          parentFolderGUID: selectedFolder.guid)
+            // Only update the recent folder pref if the bookmarks parent folder changes
             if selectedFolder.guid != self?.parentFolder.guid {
                 switch result {
-                case .success(let guid):
-                    if guid == nil {
-                        self?.profile.prefs.setString(selectedFolder.guid, forKey: PrefsKeys.RecentBookmarkFolder)
-                    }
+                case .success:
+                    self?.profile.prefs.setString(selectedFolder.guid, forKey: PrefsKeys.RecentBookmarkFolder)
                 case .failure(let error):
                     self?.logger.log("Failed to save bookmark: \(error)", level: .warning, category: .library)
                 case .none:
