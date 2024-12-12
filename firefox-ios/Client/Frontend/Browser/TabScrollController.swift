@@ -41,7 +41,7 @@ class TabScrollingController: NSObject,
             configureRefreshControl(isEnabled: true)
             if isPullToRefreshRefactorEnabled {
                 tab?.onLoading = { [weak self] in
-                    self?.onTabLoading()
+                    self?.handleOnTabContentLoading()
                 }
             }
         }
@@ -185,7 +185,7 @@ class TabScrollingController: NSObject,
         }
     }
 
-    private func onTabLoading() {
+    private func handleOnTabContentLoading() {
         if tabIsLoading() || (tab?.isFxHomeTab ?? false) {
             pullToRefreshView?.stopObservingContentScroll()
             pullToRefreshView?.removeFromSuperview()
