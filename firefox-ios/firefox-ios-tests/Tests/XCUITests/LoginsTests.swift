@@ -16,7 +16,7 @@ let urlLogin = path(forTestPage: "empty-login-form.html")
 let mailLogin = "iosmztest@mailinator.com"
 // The following seem to be labels that change a lot and make the tests
 // break; aka volatile. Let's keep them in one place.
-let loginsListURLLabel = "Website, \(domain)"
+let loginsListURLLabel = "Web Site, \(domain)"
 let loginsListUsernameLabel = "Username, test@example.com"
 let loginsListUsernameLabelEdited = "Username, foo"
 let loginsListPasswordLabel = "Password"
