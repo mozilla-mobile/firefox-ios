@@ -58,7 +58,12 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
         // Long press on a link on the pdf and check the options shown
-        app.webViews.links.element(boundBy: 0).pressAtPoint(CGPoint(x: 10, y: 0), forDuration: 3)
+        if !iPad() {
+            // Workaround for https://github.com/mozilla-mobile/firefox-ios/issues/23473
+            longPressOnPdfLink()
+        } else {
+            app.webViews.links.element(boundBy: 0).pressAtPoint(CGPoint(x: 10, y: 0), forDuration: 3)
+        }
 
         waitForElementsToExist(
             [
@@ -80,7 +85,12 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.openURL(PDF_website["url"]!)
         waitUntilPageLoad()
         // Long press on a link on the pdf and check the options shown
-        app.webViews.links.element(boundBy: 0).pressAtPoint(CGPoint(x: 10, y: 0), forDuration: 3)
+        if !iPad() {
+            // Workaround for https://github.com/mozilla-mobile/firefox-ios/issues/23473
+            longPressOnPdfLink()
+        } else {
+            app.webViews.links.element(boundBy: 0).pressAtPoint(CGPoint(x: 10, y: 0), forDuration: 3)
+        }
 
         mozWaitForElementToExist(app.staticTexts[PDF_website["longUrlValue"]!])
         app.buttons["Add to Reading List"].tap()
@@ -146,5 +156,12 @@ class BrowsingPDFTests: BaseTestCase {
                 app.tables["Bookmarks List"].staticTexts[PDF_website["bookmarkLabel"]!]
             ]
         )
+    }
+
+    private func longPressOnPdfLink() {
+        let link = app.webViews.links.element(boundBy: 0)
+        let startCoordinate = link.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
+        let endCoordinate = link.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        startCoordinate.press(forDuration: 3, thenDragTo: endCoordinate)
     }
 }

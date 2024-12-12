@@ -81,7 +81,8 @@ class BookmarksTests: BaseTestCase {
     private func checkEmptyBookmarkList() {
         mozWaitForElementToExist(app.tables["Bookmarks List"])
         let list = app.tables["Bookmarks List"].cells.count
-        XCTAssertEqual(list, 1, "There should not be any entry in the bookmarks list")
+        // There is a "Desktop bookmarks" folder that makes the list to be equal with 1
+        XCTAssertEqual(list, 1, "There should no bookmarked items in the list")
     }
 
     private func checkItemInBookmarkList(oneItemBookmarked: Bool) {
