@@ -377,6 +377,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 app.buttons[AccessibilityIdentifiers.EnhancedTrackingProtection.MainScreen.closeButton].tap()
             }
         }
+
+        screenState.tap(app.buttons["Close privacy and security menu"], to: BrowserTab)
     }
 
     // URLBarOpen is dismissOnUse, which ScreenGraph interprets as "now we've done this action,
