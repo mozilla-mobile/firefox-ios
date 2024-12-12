@@ -431,21 +431,17 @@ class LegacyHomepageViewController:
     }
 
     private func handleToolbarStateOnScroll() {
-        let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
-
-        // Only dispatch action when user is in edit mode to avoid having the toolbar re-displayed
-        if featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly),
-           let toolbarState,
-           toolbarState.addressToolbar.isEditing {
-            // When the user scrolls the homepage (not overlaid on a webpage when searching) we cancel edit mode
+        guard featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly) else { return }
+        // When the user scrolls the homepage (not overlaid on a webpage when searching) we cancel edit mode
+        if let selectedTab = tabManager.selectedTab,
+           selectedTab.isFxHomeTab,
+           selectedTab.url?.displayURL == nil {
+            let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
+            store.dispatch(action)
             // On a website we just dismiss the keyboard
-            if toolbarState.addressToolbar.url == nil && tabManager.selectedTab?.isFxHomeTab == true {
-                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
-                store.dispatch(action)
-            } else {
-                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.hideKeyboard)
-                store.dispatch(action)
-            }
+        } else {
+            let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.hideKeyboard)
+            store.dispatch(action)
         }
     }
 
