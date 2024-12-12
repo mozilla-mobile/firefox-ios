@@ -126,8 +126,13 @@ class SearchTests: BaseTestCase {
         // Copy, Paste and Go to url
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "www.mozilla.org")
-        urlBarAddress.press(forDuration: 5)
-        app.menuItems["Select All"].tap()
+        if iPad() {
+            urlBarAddress.waitAndTap()
+            urlBarAddress.waitAndTap()
+        } else {
+            urlBarAddress.press(forDuration: 5)
+        }
+        app.menuItems["Select All"].waitAndTap()
         app.menuItems["Copy"].waitAndTap()
         app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
 
