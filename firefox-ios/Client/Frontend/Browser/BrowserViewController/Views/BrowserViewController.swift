@@ -1640,7 +1640,10 @@ class BrowserViewController: UIViewController,
         }
 
         let shareItem = ShareItem(url: url, title: title)
-        bookmarksSaver.createBookmark(url: shareItem.url, title: shareItem.title, position: 0)
+
+        Task { @MainActor in
+            await self.bookmarksSaver.createBookmark(url: shareItem.url, title: shareItem.title, position: 0)
+        }
 
         var userData = [QuickActionInfos.tabURLKey: shareItem.url]
         if let title = shareItem.title {

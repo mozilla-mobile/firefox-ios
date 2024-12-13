@@ -6,7 +6,7 @@ import XCTest
 import MozillaAppServices
 @testable import Client
 
-final class DefaultBookmarksSaverTests: XCTestCase {
+final class DefaultBookmarksSaverTests: XCTestCase, FeatureFlaggable {
     var mockProfile: MockProfile!
     let rootFolderGUID = BookmarkRoots.MobileFolderGUID
     let testBookmark = Bookmark(title: "test", url: "https://www.test.com")
@@ -68,15 +68,15 @@ final class DefaultBookmarksSaverTests: XCTestCase {
                                       parentFolderGUID: modifiedBookmark.parentGUID ?? rootFolderGUID)
         }
 
+        let readModfiedBookmark = try await unwrapAsync {
+            return await readNode(guid: previouslyAddedBookmark.guid) as? BookmarkItemData
+        }
+
         switch result {
         case .success(let value):
             XCTAssertNil(value, "Expected the result value to be nil for updates.")
         case .failure(let error):
             XCTFail("Expected success but got failure: \(error)")
-        }
-
-        let readModfiedBookmark = try await unwrapAsync {
-            return await readNode(guid: previouslyAddedBookmark.guid) as? BookmarkItemData
         }
 
         XCTAssertEqual(readModfiedBookmark.title, newTitle)
@@ -136,15 +136,15 @@ final class DefaultBookmarksSaverTests: XCTestCase {
                                       parentFolderGUID: modifiedFolder.parentGUID ?? rootFolderGUID)
         }
 
+        let readModfiedBookmark = try await unwrapAsync {
+            return await readNode(guid: modifiedFolder.guid) as? BookmarkFolderData
+        }
+
         switch result {
         case .success(let value):
             XCTAssertNil(value, "Expected the result value to be nil for updates.")
         case .failure(let error):
             XCTFail("Expected success but got failure: \(error)")
-        }
-
-        let readModfiedBookmark = try await unwrapAsync {
-            return await readNode(guid: modifiedFolder.guid) as? BookmarkFolderData
         }
 
         XCTAssertEqual(readModfiedBookmark.title, newTitle)
@@ -168,6 +168,25 @@ final class DefaultBookmarksSaverTests: XCTestCase {
         }
         let error = try XCTUnwrap(result as? DefaultBookmarksSaver.SaveError)
         XCTAssertEqual(error, .bookmarkTypeDontSupportSaving)
+    }
+
+    func testCreateBookmark_createsNewBookmark() async throws {
+        let bookmarkUrl = "https://www.mozilla.com/"
+        let bookmarTitle =  "testTitle"
+
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
+
+        let subject = createSubject()
+
+        await subject.createBookmark(url: bookmarkUrl, title: bookmarTitle, position: 0)
+
+        let addedNode = try await unwrapAsync {
+            return await readNode(url: bookmarkUrl) as? BookmarkItemData
+        }
+
+        XCTAssertEqual(addedNode.url, bookmarkUrl)
+        XCTAssertEqual(addedNode.title, bookmarTitle)
+        XCTAssertEqual(addedNode.parentGUID, rootFolderGUID)
     }
 
     // MARK: - Utility

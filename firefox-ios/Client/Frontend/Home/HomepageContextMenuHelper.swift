@@ -219,7 +219,10 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
             let shareItem = ShareItem(url: site.url, title: site.title)
-            self.bookmarksSaver.createBookmark(url: shareItem.url, title: shareItem.title, position: 0)
+
+            Task { @MainActor in
+                await self.bookmarksSaver.createBookmark(url: shareItem.url, title: shareItem.title, position: 0)
+            }
 
             var userData = [QuickActionInfos.tabURLKey: shareItem.url]
             if let title = shareItem.title {

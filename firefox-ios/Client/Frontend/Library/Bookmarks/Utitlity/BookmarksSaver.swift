@@ -10,7 +10,7 @@ protocol BookmarksSaver {
     /// Saves or updates a bookmark or folder
     /// Returns a GUID when creating a bookmark or folder, or nil when updating them
     func save(bookmark: FxBookmarkNode, parentFolderGUID: String) async -> Result<GUID?, Error>
-    func createBookmark(url: String, title: String?, position: UInt32?)
+    func createBookmark(url: String, title: String?, position: UInt32?) async
 }
 
 struct DefaultBookmarksSaver: BookmarksSaver, BookmarksRefactorFeatureFlagProvider {
@@ -86,7 +86,7 @@ struct DefaultBookmarksSaver: BookmarksSaver, BookmarksRefactorFeatureFlagProvid
         }
     }
 
-    func createBookmark(url: String, title: String?, position: UInt32?) {
+    func createBookmark(url: String, title: String?, position: UInt32?) async {
         let bookmarkData = BookmarkItemData(guid: "",
                                             dateAdded: 0,
                                             lastModified: 0,
@@ -98,8 +98,6 @@ struct DefaultBookmarksSaver: BookmarksSaver, BookmarksRefactorFeatureFlagProvid
         // If bookmarks refactor is enabled, save bookmark to recent bookmark folder, otherwise save to root folder
         let recentBookmarkFolderGuid = profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder)
         let parentGuid = (isBookmarkRefactorEnabled ? recentBookmarkFolderGuid : nil) ?? BookmarkRoots.MobileFolderGUID
-        Task { @MainActor in
-            await save(bookmark: bookmarkData, parentFolderGUID: parentGuid)
-        }
+        _ = await save(bookmark: bookmarkData, parentFolderGUID: parentGuid)
     }
 }

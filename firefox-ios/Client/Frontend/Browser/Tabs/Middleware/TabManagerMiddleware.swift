@@ -901,7 +901,10 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
 
     private func addToBookmarks(_ shareItem: ShareItem?) {
         guard let shareItem else { return }
-        bookmarksSaver.createBookmark(url: shareItem.url, title: shareItem.title, position: 0)
+
+        Task { @MainActor in
+            await self.bookmarksSaver.createBookmark(url: shareItem.url, title: shareItem.title, position: 0)
+        }
     }
 
     private func addToReadingList(with tabID: TabUUID?, uuid: WindowUUID) {
