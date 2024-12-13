@@ -314,7 +314,7 @@ class CumulativeDaysOfUseCounterMock: CumulativeDaysOfUseCounter {
 
 // MARK: - CrashingMockLogger
 class CrashingMockLogger: Logger {
-    func setup(sendUsageData: Bool) {}
+    func setup(sendCrashReports: Bool) {}
     func configure(crashManager: CrashManager) {}
     func copyLogsToDocuments() {}
     func logCustomError(error: Error) {}

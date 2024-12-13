@@ -176,7 +176,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     // MARK: Data settings setup
 
     private func setupDataSettings() {
-        let isSentCrashReportsEnabled = featureFlags.isFeatureEnabled(.tosFeature, checking: .buildOnly)
+        let isTermsOfServiceFeatureEnabled = featureFlags.isFeatureEnabled(.tosFeature, checking: .buildOnly)
 
         let anonymousUsageDataSetting = SendDataSetting(
             prefs: profile.prefs,
@@ -198,7 +198,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         }
 
         // Only add these toggles to the Settings if Terms Of Service feature flag is enabled
-        if isSentCrashReportsEnabled {
+        if isTermsOfServiceFeatureEnabled {
             let sendTechnicalDataSettings = SendDataSetting(
                 prefs: profile.prefs,
                 delegate: settingsDelegate,
@@ -210,18 +210,6 @@ class AppSettingsTableViewController: SettingsTableViewController,
                 // TODO: FXIOS-10754 Firefox iOS: Manage Privacy Preferences in Settings - Logic
             }
             sendTechnicalDataSetting = sendTechnicalDataSettings
-
-            let sendCrashReportsSettings = SendDataSetting(
-                prefs: profile.prefs,
-                delegate: settingsDelegate,
-                theme: themeManager.getCurrentTheme(for: windowUUID),
-                settingsDelegate: parentCoordinator,
-                sendDataType: .crashReports
-            )
-            sendCrashReportsSettings.shouldSendData = { value in
-                // TODO: FXIOS-10754 Firefox iOS: Manage Privacy Preferences in Settings - Logic
-            }
-            self.sendCrashReportsSetting = sendCrashReportsSettings
 
             let sendDailyUsagePingSettings = SendDataSetting(
                 prefs: profile.prefs,
@@ -235,6 +223,15 @@ class AppSettingsTableViewController: SettingsTableViewController,
             }
             sendDailyUsagePingSetting = sendDailyUsagePingSettings
         }
+
+        let sendCrashReportsSettings = SendDataSetting(
+            prefs: profile.prefs,
+            delegate: settingsDelegate,
+            theme: themeManager.getCurrentTheme(for: windowUUID),
+            settingsDelegate: parentCoordinator,
+            sendDataType: .crashReports
+        )
+        self.sendCrashReportsSetting = sendCrashReportsSettings
 
         sendAnonymousUsageDataSetting = anonymousUsageDataSetting
         studiesToggleSetting = studiesSetting

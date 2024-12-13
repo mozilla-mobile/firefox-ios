@@ -18,6 +18,7 @@ final class PrivacyPreferencesViewController: UIViewController,
     }
 
     // MARK: - Properties
+    private var profile: Profile
     var windowUUID: WindowUUID
     var themeManager: ThemeManager
     var themeObserver: (any NSObjectProtocol)?
@@ -46,16 +47,20 @@ final class PrivacyPreferencesViewController: UIViewController,
 
     private lazy var contentView: UIView = .build()
 
-    private lazy var crashReportsSwitch: SwitchDetailedView = .build()
+    private lazy var crashReportsSwitch: SwitchDetailedView = .build { [weak self] view in
+        view.setSwitchValue(isOn: self?.profile.prefs.boolForKey(AppConstants.prefSendCrashReports) ?? true)
+    }
 
     private lazy var technicalDataSwitch: SwitchDetailedView = .build()
 
     // MARK: - Initializers
     init(
+        profile: Profile,
         windowUUID: WindowUUID,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
+        self.profile = profile
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
@@ -154,8 +159,11 @@ final class PrivacyPreferencesViewController: UIViewController,
     }
 
     private func setupCallbacks() {
-        // TODO: FXIOS-10675 Firefox iOS: Manage Privacy Preferences during Onboarding - Logic
-        crashReportsSwitch.switchCallback = { _ in }
+        crashReportsSwitch.switchCallback = { [weak self] value in
+            self?.profile.prefs.setBool(value, forKey: AppConstants.prefSendCrashReports)
+        }
+
+        // TODO: FXIOS-10675 Firefox iOS: Manage Technical Data during Onboarding and Settings
         technicalDataSwitch.switchCallback = { _ in }
 
         // TODO: FXIOS-10739 Firefox iOS: Use the correct links for Learn more buttons, in Manage Privacy Preferences screen

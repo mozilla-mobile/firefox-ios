@@ -10,7 +10,7 @@ class MockLogger: Logger {
     var savedLevel: LoggerLevel?
     var savedCategory: LoggerCategory?
 
-    func setup(sendUsageData: Bool) {}
+    func setup(sendCrashReports: Bool) {}
     func configure(crashManager: Common.CrashManager) {}
     func copyLogsToDocuments() {}
     func logCustomError(error: Error) {}
