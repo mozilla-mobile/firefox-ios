@@ -6,9 +6,9 @@ import Glean
 import Foundation
 
 class UsageProfileManager {
-    public struct Constants {
-        public static let profileId = "profileId"
-        public static let canaryUUID = UUID(uuidString: "beefbeef-beef-beef-beef-beeefbeefbee")!
+    struct Constants {
+        static let profileId = "profileId"
+        static let canaryUUID = UUID(uuidString: "beefbeef-beef-beef-beef-beeefbeefbee")!
     }
     
     static func unsetUsageProfileId() {
