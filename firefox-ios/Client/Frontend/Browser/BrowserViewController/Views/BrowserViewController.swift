@@ -143,6 +143,10 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.noInternetConnectionErrorPage, checking: .buildOnly)
     }
 
+    var isJSAlertRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.jsAlertRefactor, checking: .buildOnly)
+    }
+
     private var browserViewControllerState: BrowserViewControllerState?
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
@@ -990,7 +994,10 @@ class BrowserViewController: UIViewController,
             self.pendingToast = nil
             show(toast: toast, afterWaiting: ButtonToast.UX.delay)
         }
-        showQueuedAlertIfAvailable()
+
+        if !isJSAlertRefactorEnabled {
+            showQueuedAlertIfAvailable()
+        }
 
         prepareURLOnboardingContextualHint()
 
@@ -1041,8 +1048,9 @@ class BrowserViewController: UIViewController,
         // Ensure the layout is updated immediately
         view.layoutIfNeeded()
 
-        // TODO: [FXIOS-10334] Needs investigation. Dequeuing JS alerts as part of subview layout is problematic.
-        showQueuedAlertIfAvailable()
+        if !isJSAlertRefactorEnabled {
+            showQueuedAlertIfAvailable()
+        }
         switchToolbarIfNeeded()
         adjustURLBarHeightBasedOnLocationViewHeight()
     }
@@ -3500,6 +3508,7 @@ extension BrowserViewController: LegacyTabDelegate {
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
+            tab.cancelQueuedAlerts()
             stopObserving(webView: webView)
             self.scrollController.stopObserving(scrollView: webView.scrollView)
             webView.uiDelegate = nil
@@ -3887,6 +3896,10 @@ extension BrowserViewController: TabManagerDelegate {
         if needsReload {
             selectedTab.reloadPage()
         }
+
+        if isJSAlertRefactorEnabled {
+            newShowQueuedAlertIfAvailable()
+        }
     }
 
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {
@@ -4100,6 +4113,45 @@ extension BrowserViewController: KeyboardHelperDelegate {
 extension BrowserViewController: JSPromptAlertControllerDelegate {
     func promptAlertControllerDidDismiss(_ alertController: JSPromptAlertController) {
         showQueuedAlertIfAvailable()
+    }
+}
+
+extension BrowserViewController: NewJSPromptAlertControllerDelegate {
+    func promptAlertControllerDidDismiss(_ alertController: NewJSPromptAlertController, withResult result: Any?) {
+        newShowQueuedAlertIfAvailable()
+
+        if let alertInfo = alertController.alertInfo {
+            handleAlertDismissalResult(result, for: alertInfo)
+        }
+    }
+
+    /// For debugging purposes of JS alerts, can be cleaned up later on
+    private func handleAlertDismissalResult(_ result: Any?, for alertInfo: NewJSAlertInfo) {
+        if alertInfo is NewMessageAlert {
+            logger.log("Message alert dismissed with no result.", level: .info, category: .webview)
+        } else if alertInfo is NewConfirmPanelAlert {
+            if (result as? Bool) != nil {
+                logger.log("Confirm alert dismissed with result.", level: .info, category: .webview)
+            } else {
+                logger.log("Confirm alert dismissed with no result.", level: .info, category: .webview)
+            }
+        } else if alertInfo is NewTextInputAlert {
+            if (result as? String) != nil {
+                logger.log("Text input alert dismissed with input.", level: .info, category: .webview)
+            } else {
+                logger.log("Text input alert dismissed with no input.", level: .info, category: .webview)
+            }
+        }
+    }
+
+    func newShowQueuedAlertIfAvailable() {
+        if let nextAlert = tabManager.selectedTab?.newDequeueJavascriptAlertPrompt() {
+            DispatchQueue.main.async {
+                let alertController = nextAlert.alertController()
+                alertController.delegate = self
+                self.present(alertController, animated: true, completion: nil)
+            }
+        }
     }
 }
 
