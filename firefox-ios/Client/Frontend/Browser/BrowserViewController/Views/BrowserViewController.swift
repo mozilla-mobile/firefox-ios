@@ -229,6 +229,8 @@ class BrowserViewController: UIViewController,
 
     private var keyboardPressesHandlerValue: Any?
 
+    private let bookmarksSaver: BookmarksSaver
+
     var themeManager: ThemeManager
     var notificationCenter: NotificationProtocol
     var themeObserver: NSObjectProtocol?
@@ -270,6 +272,7 @@ class BrowserViewController: UIViewController,
         self.logger = logger
         self.appAuthenticator = appAuthenticator
         self.overlayManager = DefaultOverlayModeManager()
+        self.bookmarksSaver = DefaultBookmarksSaver(profile: profile)
         let windowUUID = tabManager.windowUUID
         let contextualViewProvider = ContextualHintViewProvider(forHintType: .toolbarLocation,
                                                                 with: profile)
@@ -1637,15 +1640,7 @@ class BrowserViewController: UIViewController,
         }
 
         let shareItem = ShareItem(url: url, title: title)
-
-        // Add new bookmark to the top of the folder
-        // If bookmarks refactor is enabled, save bookmark to recent bookmark folder, otherwise save to root folder
-        let recentBookmarkFolderGuid = profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder)
-        let parentGuid = (isBookmarkRefactorEnabled ? recentBookmarkFolderGuid : nil) ?? BookmarkRoots.MobileFolderGUID
-        profile.places.createBookmark(parentGUID: parentGuid,
-                                      url: shareItem.url,
-                                      title: shareItem.title,
-                                      position: 0)
+        bookmarksSaver.createBookmark(url: shareItem.url, title: shareItem.title, position: 0)
 
         var userData = [QuickActionInfos.tabURLKey: shareItem.url]
         if let title = shareItem.title {

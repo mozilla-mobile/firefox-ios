@@ -14,11 +14,14 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
     private let profile: Profile
     private let logger: Logger
     private let inactiveTabTelemetry = InactiveTabsTelemetry()
+    private let bookmarksSaver: BookmarksSaver
 
     init(profile: Profile = AppContainer.shared.resolve(),
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         bookmarksSaver: BookmarksSaver? = nil) {
         self.profile = profile
         self.logger = logger
+        self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: profile)
     }
 
     lazy var tabsPanelProvider: Middleware<AppState> = { state, action in
@@ -898,16 +901,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
 
     private func addToBookmarks(_ shareItem: ShareItem?) {
         guard let shareItem else { return }
-
-        // Add new bookmark to the top of the folder
-        // If bookmarks refactor is enabled, save bookmark to recent bookmark folder, otherwise save to root folder
-        let recentBookmarkFolderGuid = profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder)
-        let parentGuid = (isBookmarkRefactorEnabled ? recentBookmarkFolderGuid : nil) ?? BookmarkRoots.MobileFolderGUID
-
-        profile.places.createBookmark(parentGUID: parentGuid,
-                                      url: shareItem.url,
-                                      title: shareItem.title,
-                                      position: 0)
+        bookmarksSaver.createBookmark(url: shareItem.url, title: shareItem.title, position: 0)
     }
 
     private func addToReadingList(with tabID: TabUUID?, uuid: WindowUUID) {

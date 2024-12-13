@@ -33,16 +33,19 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
     typealias ContextHelperDelegate = HomepageContextMenuHelperDelegate & UIPopoverPresentationControllerDelegate
     private var viewModel: HomepageViewModel
     private let toastContainer: UIView
+    private let bookmarksSaver: BookmarksSaver
     weak var browserNavigationHandler: BrowserNavigationHandler?
     weak var delegate: ContextHelperDelegate?
     var getPopoverSourceRect: ((UIView?) -> CGRect)?
 
     init(
         viewModel: HomepageViewModel,
-        toastContainer: UIView
+        toastContainer: UIView,
+        bookmarksSaver: BookmarksSaver? = nil
     ) {
         self.viewModel = viewModel
         self.toastContainer = toastContainer
+        self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: viewModel.profile)
     }
 
     func presentContextMenu(for site: Site,
@@ -216,16 +219,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
                                      allowIconScaling: true,
                                      tapHandler: { _ in
             let shareItem = ShareItem(url: site.url, title: site.title)
-
-            // Add new bookmark to the top of the folder
-            // If bookmarks refactor is enabled, save bookmark to recent bookmark folder, otherwise save to root folder
-            let recentBookmarkFolderGuid = self.viewModel.profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder)
-            let parentGuid = (self.isBookmarkRefactorEnabled ? recentBookmarkFolderGuid : nil)
-                             ?? BookmarkRoots.MobileFolderGUID
-            self.viewModel.profile.places.createBookmark(parentGUID: parentGuid,
-                                                         url: shareItem.url,
-                                                         title: shareItem.title,
-                                                         position: 0)
+            self.bookmarksSaver.createBookmark(url: shareItem.url, title: shareItem.title, position: 0)
 
             var userData = [QuickActionInfos.tabURLKey: shareItem.url]
             if let title = shareItem.title {
