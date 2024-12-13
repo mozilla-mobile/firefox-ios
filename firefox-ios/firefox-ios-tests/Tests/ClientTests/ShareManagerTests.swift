@@ -212,9 +212,183 @@ final class ShareManagerTests: XCTestCase {
         )
     }
 
+    // MARK: - Sent from Firefox experiment - test that special treatment is only enabled when feature flag is enabled
+
+    func testGetActivityItems_forTab_withSentFromFirefoxEnabled_OverridesURL_withTreatmentA() throws {
+        setupNimbusSentFromFirefoxTesting(isEnabled: true, isTreatmentA: true)
+
+        // TODO: FXIOS-10858 Real links to come
+        let expectedShareContentA = "https://mozilla.org Sent from Firefox 🦊 Try the mobile browser: <FXIOS-10858 marketing link here>"
+        let whatsAppActivityIdentifier = "net.whatsapp.WhatsApp.ShareExtension"
+        let whatsAppActivity = UIActivity.ActivityType(rawValue: whatsAppActivityIdentifier)
+
+        let activityItems = ShareManager.getActivityItems(
+            forShareType: .tab(url: testWebURL, tab: testTab),
+            withExplicitShareMessage: nil
+        )
+
+        // Check we get all 4 types of share items for tabs below
+        XCTAssertEqual(activityItems.count, 4)
+
+        let urlActivityItemProvider = try XCTUnwrap(activityItems[safe: 0] as? URLActivityItemProvider)
+        let urlDataIdentifier = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            dataTypeIdentifierForActivityType: whatsAppActivity
+        )
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: whatsAppActivity
+        )
+
+        XCTAssertEqual(urlDataIdentifier, UTType.plainText.identifier)
+        XCTAssertEqual(itemForActivity as? String, expectedShareContentA)
+
+        // The rest of the content should be unchanged from other tests:
+        _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
+
+        _ = try XCTUnwrap(activityItems[safe: 2] as? TabWebView)
+
+        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        XCTAssertEqual(
+            titleActivityItemProvider.item as? String,
+            testWebpageDisplayTitle,
+            "When no explicit share message is set, we expect to see the webpage's title."
+        )
+    }
+
+    func testGetActivityItems_forTab_withSentFromFirefoxEnabled_OverridesURL_withTreatmentB() throws {
+        setupNimbusSentFromFirefoxTesting(isEnabled: true, isTreatmentA: false)
+
+        // TODO: FXIOS-10858 Real links to come
+        let expectedShareContentB = "https://mozilla.org Sent from Firefox 🦊 <FXIOS-10858 marketing link here>"
+        let whatsAppActivityIdentifier = "net.whatsapp.WhatsApp.ShareExtension"
+        let whatsAppActivity = UIActivity.ActivityType(rawValue: whatsAppActivityIdentifier)
+
+        let activityItems = ShareManager.getActivityItems(
+            forShareType: .tab(url: testWebURL, tab: testTab),
+            withExplicitShareMessage: nil
+        )
+
+        // Check we get all 4 types of share items for tabs below
+        XCTAssertEqual(activityItems.count, 4)
+
+        let urlActivityItemProvider = try XCTUnwrap(activityItems[safe: 0] as? URLActivityItemProvider)
+        let urlDataIdentifier = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            dataTypeIdentifierForActivityType: whatsAppActivity
+        )
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: whatsAppActivity
+        )
+
+        XCTAssertEqual(urlDataIdentifier, UTType.plainText.identifier)
+        XCTAssertEqual(itemForActivity as? String, expectedShareContentB)
+
+        // The rest of the content should be unchanged from other tests:
+        _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
+
+        _ = try XCTUnwrap(activityItems[safe: 2] as? TabWebView)
+
+        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        XCTAssertEqual(
+            titleActivityItemProvider.item as? String,
+            testWebpageDisplayTitle,
+            "When no explicit share message is set, we expect to see the webpage's title."
+        )
+    }
+
+    func testGetActivityItems_forTab_withSentFromFirefoxEnabled_doesNotImpactOtherShares() throws {
+        setupNimbusSentFromFirefoxTesting(isEnabled: true, isTreatmentA: true)
+
+        let mailActivity = UIActivity.ActivityType.mail
+
+        let activityItems = ShareManager.getActivityItems(
+            forShareType: .tab(url: testWebURL, tab: testTab),
+            withExplicitShareMessage: nil
+        )
+
+        // Check we get all 4 types of share items for tabs below
+        XCTAssertEqual(activityItems.count, 4)
+
+        let urlActivityItemProvider = try XCTUnwrap(activityItems[safe: 0] as? URLActivityItemProvider)
+        let urlDataIdentifier = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            dataTypeIdentifierForActivityType: mailActivity
+        )
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: mailActivity
+        )
+
+        XCTAssertEqual(urlDataIdentifier, UTType.url.identifier)
+        XCTAssertEqual(itemForActivity as? URL, testWebURL)
+
+        // The rest of the content should be unchanged from other tests:
+        _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
+
+        _ = try XCTUnwrap(activityItems[safe: 2] as? TabWebView)
+
+        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        XCTAssertEqual(
+            titleActivityItemProvider.item as? String,
+            testWebpageDisplayTitle,
+            "When no explicit share message is set, we expect to see the webpage's title."
+        )
+    }
+
+    func testGetActivityItems_forTab_withSentFromFirefoxDisabled_DoesNotOverride() throws {
+        setupNimbusSentFromFirefoxTesting(isEnabled: false, isTreatmentA: true)
+
+        let whatsAppActivityIdentifier = "net.whatsapp.WhatsApp.ShareExtension"
+        let whatsAppActivity = UIActivity.ActivityType(rawValue: whatsAppActivityIdentifier)
+
+        let activityItems = ShareManager.getActivityItems(
+            forShareType: .tab(url: testWebURL, tab: testTab),
+            withExplicitShareMessage: nil
+        )
+
+        // Check we get all 4 types of share items for tabs below
+        XCTAssertEqual(activityItems.count, 4)
+
+        let urlActivityItemProvider = try XCTUnwrap(activityItems[safe: 0] as? URLActivityItemProvider)
+        let urlDataIdentifier = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            dataTypeIdentifierForActivityType: whatsAppActivity
+        )
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: whatsAppActivity
+        )
+
+        XCTAssertEqual(urlDataIdentifier, UTType.url.identifier)
+        XCTAssertEqual(itemForActivity as? URL, testWebURL)
+
+        // The rest of the content should be unchanged from other tests:
+        _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
+
+        _ = try XCTUnwrap(activityItems[safe: 2] as? TabWebView)
+
+        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        XCTAssertEqual(
+            titleActivityItemProvider.item as? String,
+            testWebpageDisplayTitle,
+            "When no explicit share message is set, we expect to see the webpage's title."
+        )
+    }
+
     // MARK: - Helpers
 
     private func createStubActivityViewController() -> UIActivityViewController {
         return UIActivityViewController(activityItems: [], applicationActivities: [])
+    }
+
+    private func setupNimbusSentFromFirefoxTesting(isEnabled: Bool, isTreatmentA: Bool) {
+        FxNimbus.shared.features.sentFromFirefoxFeature.with { _, _ in
+            return SentFromFirefoxFeature(
+                enabled: isEnabled,
+                isTreatmentA: isTreatmentA
+            )
+        }
     }
 }
