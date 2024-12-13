@@ -7,6 +7,7 @@ import Foundation
 /// Protocol to provide a caching functionality for network calls
 public protocol URLCaching {
     var urlCache: URLCache { get }
+    var maxCacheAge: Timestamp { get }
 
     func findCachedData(for request: URLRequest, timestamp: Timestamp) -> Data?
     func findCachedResponse(for request: URLRequest) -> [String: Any]?
