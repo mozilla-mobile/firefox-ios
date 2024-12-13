@@ -160,6 +160,7 @@ class BrowserCoordinator: BaseCoordinator,
             return
         }
         self.homepageViewController = homepageController
+        homepageController.scrollToTop()
     }
 
     func showPrivateHomepage(overlayManager: OverlayModeManager) {
