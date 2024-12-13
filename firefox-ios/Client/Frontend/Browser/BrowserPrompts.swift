@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import WebKit
 import Shared
@@ -174,6 +175,7 @@ struct NewMessageAlert: NewJSAlertInfo {
     let message: String
     let frame: WKFrameInfo
     let completionHandler: () -> Void
+    var logger: Logger = DefaultLogger.shared
 
     func alertController() -> NewJSPromptAlertController {
         let alertController = NewJSPromptAlertController(
@@ -192,6 +194,7 @@ struct NewMessageAlert: NewJSAlertInfo {
     }
 
     func cancel() {
+        logger.log("Message alert completion handler called through cancel", level: .info, category: .webview)
         completionHandler()
     }
 }
@@ -200,6 +203,7 @@ struct NewConfirmPanelAlert: NewJSAlertInfo {
     let message: String
     let frame: WKFrameInfo
     let completionHandler: (Bool) -> Void
+    var logger: Logger = DefaultLogger.shared
 
     func alertController() -> NewJSPromptAlertController {
         let alertController = NewJSPromptAlertController(
@@ -220,6 +224,7 @@ struct NewConfirmPanelAlert: NewJSAlertInfo {
     }
 
     func cancel() {
+        logger.log("Confirm panel alert completion handler called through cancel", level: .info, category: .webview)
         completionHandler(false)
     }
 }
@@ -229,6 +234,7 @@ struct NewTextInputAlert: NewJSAlertInfo {
     let frame: WKFrameInfo
     let defaultText: String?
     let completionHandler: (String?) -> Void
+    var logger: Logger = DefaultLogger.shared
 
     func alertController() -> NewJSPromptAlertController {
         let alertController = NewJSPromptAlertController(
@@ -257,6 +263,7 @@ struct NewTextInputAlert: NewJSAlertInfo {
     }
 
     func cancel() {
+        logger.log("Text input alert completion handler called through cancel", level: .info, category: .webview)
         completionHandler(nil)
     }
 }
