@@ -77,6 +77,7 @@ final class HomepageViewController: UIViewController,
                                                           .TopSitesUpdated,
                                                           .DefaultSearchEngineUpdated])
         subscribeToRedux()
+        addTapGestureRecognizerToDismissKeyboard()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -400,13 +401,27 @@ final class HomepageViewController: UIViewController,
         }
     }
 
+    // MARK: Tap Geasutre Recognizer
+    private func addTapGestureRecognizerToDismissKeyboard() {
+        // We want any interaction with the homepage to dismiss the keyboard, including taps
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+
+    @objc
+    private func dismissKeyboard() {
+        let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
+        store.dispatch(action)
+    }
+
     // MARK: Long Press (Photon Action Sheet)
     private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
         return UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
     }()
 
     @objc
-    fileprivate func handleLongPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+    private func handleLongPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard longPressGestureRecognizer.state == .began else { return }
         // TODO: FXIOS-10613 - Pass proper action data to context menu
         navigateToContextMenu()
