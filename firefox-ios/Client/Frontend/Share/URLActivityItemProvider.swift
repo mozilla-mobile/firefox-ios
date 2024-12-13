@@ -38,12 +38,12 @@ class URLActivityItemProvider: UIActivityItemProvider, @unchecked Sendable {
             whatsAppShareText = String.localizedStringWithFormat(.SentFromFirefox.SocialShare.ShareMessageA,
                                                                  parsedURL.absoluteString,
                                                                  AppName.shortName.rawValue,
-                                                                 "<FXIOS-10858 marketing link here>")
+                                                                 "https://mzl.la/4fOWPpd")
         } else {
             whatsAppShareText = String.localizedStringWithFormat(.SentFromFirefox.SocialShare.ShareMessageB,
                                                                  parsedURL.absoluteString,
                                                                  AppName.shortName.rawValue,
-                                                                 "<FXIOS-10858 marketing link here>")
+                                                                 "https://mzl.la/3YSUOl8")
         }
 
         super.init(placeholderItem: parsedURL)
