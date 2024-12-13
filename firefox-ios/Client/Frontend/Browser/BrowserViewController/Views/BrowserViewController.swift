@@ -3145,11 +3145,6 @@ class BrowserViewController: UIViewController,
 
     // MARK: - RecentlyClosedPanelDelegate
 
-    func openRecentlyClosedSiteInSameTab(_ url: URL) {
-        guard let tab = self.tabManager.selectedTab else { return }
-        self.finishEditingAndSubmit(url, visitType: .link, forTab: tab)
-    }
-
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
         tabManager.selectTab(tabManager.addTab(URLRequest(url: url)))
     }

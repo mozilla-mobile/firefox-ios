@@ -488,10 +488,6 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - LibraryCoordinatorDelegate
 
-    func openRecentlyClosedSiteInSameTab(_ url: URL) {
-        browserViewController.openRecentlyClosedSiteInSameTab(url)
-    }
-
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
         browserViewController.openRecentlyClosedSiteInNewTab(url, isPrivate: isPrivate)
     }
