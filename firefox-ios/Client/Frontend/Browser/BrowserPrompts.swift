@@ -113,3 +113,150 @@ private func titleForJavaScriptPanelInitiatedByFrame(_ frame: WKFrameInfo) -> St
     }
     return title
 }
+
+// MARK: Part of the FXIOS-10334 refactor
+/// This code duplicates existing alerts for a short moment in time to enable having a rollout of JS changes in production
+/// This code is brittle, and if there's any problems this will enable reverting easily
+
+protocol NewJSAlertInfo {
+    func alertController() -> NewJSPromptAlertController
+    func cancel()
+}
+
+struct NewMessageAlert: NewJSAlertInfo {
+    let message: String
+    let frame: WKFrameInfo
+    let completionHandler: () -> Void
+
+    func alertController() -> NewJSPromptAlertController {
+        let alertController = NewJSPromptAlertController(
+            title: titleForJavaScriptPanelInitiatedByFrame(frame),
+            message: message,
+            alertInfo: self
+        )
+        alertController.addAction(
+            UIAlertAction(title: .OKString, style: .default) { [weak alertController] _ in
+                alertController?.setDismissalResult(nil)
+                self.completionHandler()
+            }
+        )
+        alertController.alertInfo = self
+        return alertController
+    }
+
+    func cancel() {
+        completionHandler()
+    }
+}
+
+@objc
+protocol NewJSPromptAlertControllerDelegate: AnyObject {
+    func promptAlertControllerDidDismiss(_ alertController: NewJSPromptAlertController, withResult result: Any?)
+}
+
+/// A simple version of UIAlertController that attaches a delegate to the viewDidDisappear method
+/// to allow forwarding the event. The reason this is needed for prompts from Javascript is we
+/// need to invoke the completionHandler passed to us from the WKWebView delegate or else
+/// a runtime exception is thrown.
+class NewJSPromptAlertController: UIAlertController {
+    var alertInfo: NewJSAlertInfo?
+    weak var delegate: NewJSPromptAlertControllerDelegate?
+    private var handledAction: Bool = false
+    private var dismissalResult: Any?
+
+    convenience init(
+        title: String?,
+        message: String?,
+        preferredStyle: UIAlertController.Style = .alert,
+        alertInfo: NewJSAlertInfo
+    ) {
+        self.init(title: title, message: message, preferredStyle: preferredStyle)
+        self.alertInfo = alertInfo
+    }
+
+    /// Set the result to pass during dismissal
+    func setDismissalResult(_ result: Any?) {
+        handledAction = true
+        dismissalResult = result
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        // The alert controller is dismissed before the UIAlertAction handler is called so a delay is needed
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [self] in
+            // Call the dismissal completion handler if it wasn't handled yet
+            if !handledAction {
+                alertInfo?.cancel()
+            }
+
+            // Notify the delegate about dismissal and pass the result
+            delegate?.promptAlertControllerDidDismiss(self, withResult: dismissalResult)
+        }
+    }
+}
+
+struct NewConfirmPanelAlert: NewJSAlertInfo {
+    let message: String
+    let frame: WKFrameInfo
+    let completionHandler: (Bool) -> Void
+
+    func alertController() -> NewJSPromptAlertController {
+        let alertController = NewJSPromptAlertController(
+            title: titleForJavaScriptPanelInitiatedByFrame(frame),
+            message: message,
+            alertInfo: self
+        )
+
+        alertController.addAction(UIAlertAction(title: .OKString, style: .default) { _ in
+            alertController.setDismissalResult(true)
+            self.completionHandler(true)
+        })
+        alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel) { _ in
+            alertController.setDismissalResult(false)
+            self.completionHandler(false)
+        })
+        return alertController
+    }
+
+    func cancel() {
+        completionHandler(false)
+    }
+}
+
+struct NewTextInputAlert: NewJSAlertInfo {
+    let message: String
+    let frame: WKFrameInfo
+    let defaultText: String?
+    let completionHandler: (String?) -> Void
+
+    func alertController() -> NewJSPromptAlertController {
+        let alertController = NewJSPromptAlertController(
+            title: titleForJavaScriptPanelInitiatedByFrame(frame),
+            message: message,
+            alertInfo: self
+        )
+
+        alertController.addTextField { textField in
+            textField.text = self.defaultText
+        }
+
+        alertController.addAction(UIAlertAction(title: .OKString, style: .default) { _ in
+            let result = alertController.textFields?.first?.text
+            alertController.setDismissalResult(result)
+            self.completionHandler(result)
+        })
+
+        alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel) { _ in
+            alertController.setDismissalResult(nil)
+            self.completionHandler(nil)
+        })
+
+        alertController.alertInfo = self
+        return alertController
+    }
+
+    func cancel() {
+        completionHandler(nil)
+    }
+}
