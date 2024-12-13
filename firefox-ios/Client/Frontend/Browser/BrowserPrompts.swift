@@ -118,37 +118,6 @@ private func titleForJavaScriptPanelInitiatedByFrame(_ frame: WKFrameInfo) -> St
 /// This code duplicates existing alerts for a short moment in time to enable having a rollout of JS changes in production
 /// This code is brittle, and if there's any problems this will enable reverting easily
 
-protocol NewJSAlertInfo {
-    func alertController() -> NewJSPromptAlertController
-    func cancel()
-}
-
-struct NewMessageAlert: NewJSAlertInfo {
-    let message: String
-    let frame: WKFrameInfo
-    let completionHandler: () -> Void
-
-    func alertController() -> NewJSPromptAlertController {
-        let alertController = NewJSPromptAlertController(
-            title: titleForJavaScriptPanelInitiatedByFrame(frame),
-            message: message,
-            alertInfo: self
-        )
-        alertController.addAction(
-            UIAlertAction(title: .OKString, style: .default) { [weak alertController] _ in
-                alertController?.setDismissalResult(nil)
-                self.completionHandler()
-            }
-        )
-        alertController.alertInfo = self
-        return alertController
-    }
-
-    func cancel() {
-        completionHandler()
-    }
-}
-
 @objc
 protocol NewJSPromptAlertControllerDelegate: AnyObject {
     func promptAlertControllerDidDismiss(_ alertController: NewJSPromptAlertController, withResult result: Any?)
@@ -193,6 +162,37 @@ class NewJSPromptAlertController: UIAlertController {
             // Notify the delegate about dismissal and pass the result
             delegate?.promptAlertControllerDidDismiss(self, withResult: dismissalResult)
         }
+    }
+}
+
+protocol NewJSAlertInfo {
+    func alertController() -> NewJSPromptAlertController
+    func cancel()
+}
+
+struct NewMessageAlert: NewJSAlertInfo {
+    let message: String
+    let frame: WKFrameInfo
+    let completionHandler: () -> Void
+
+    func alertController() -> NewJSPromptAlertController {
+        let alertController = NewJSPromptAlertController(
+            title: titleForJavaScriptPanelInitiatedByFrame(frame),
+            message: message,
+            alertInfo: self
+        )
+        alertController.addAction(
+            UIAlertAction(title: .OKString, style: .default) { [weak alertController] _ in
+                alertController?.setDismissalResult(nil)
+                self.completionHandler()
+            }
+        )
+        alertController.alertInfo = self
+        return alertController
+    }
+
+    func cancel() {
+        completionHandler()
     }
 }
 
