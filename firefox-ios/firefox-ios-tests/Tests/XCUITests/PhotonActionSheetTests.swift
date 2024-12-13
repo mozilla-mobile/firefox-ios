@@ -9,7 +9,7 @@ class PhotonActionSheetTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2306849
     // Smoketest
     func testPinToShortcuts() {
-        navigator.openURL("http://example.com")
+        navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
         // Open Page Action Menu Sheet and Pin the site
         navigator.performAction(Action.PinToTopSitesPAM)
@@ -42,8 +42,7 @@ class PhotonActionSheetTests: BaseTestCase {
             mozWaitForElementToNotExist(app.cells["Example Domain"].images.element(boundBy: 1))
         }
 
-        cell.press(forDuration: 2)
-        mozWaitForElementToExist(app.tables.cells.otherElements[StandardImageIdentifiers.Large.pin])
+        mozWaitForElementToNotExist(app.cells["Example Domain"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2322067
