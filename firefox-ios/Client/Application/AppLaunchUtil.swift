@@ -146,7 +146,7 @@ class AppLaunchUtil {
     }
 
     private func initializeExperiments() {
-        Experiments.intialize()
+        Experiments.initialize()
     }
 
     private func updateSessionCount() {
