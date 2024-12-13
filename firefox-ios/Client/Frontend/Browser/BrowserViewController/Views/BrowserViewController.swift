@@ -32,6 +32,7 @@ class BrowserViewController: UIViewController,
                              BrowserFrameInfoProvider,
                              NavigationToolbarContainerDelegate,
                              AddressToolbarContainerDelegate,
+                             BookmarksRefactorFeatureFlagProvider,
                              FeatureFlaggable {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
@@ -1636,8 +1637,12 @@ class BrowserViewController: UIViewController,
         }
 
         let shareItem = ShareItem(url: url, title: title)
-        // Add new mobile bookmark at the top of the list
-        profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID,
+
+        // Add new bookmark to the top of the folder
+        // If bookmarks refactor is enabled, save bookmark to recent bookmark folder, otherwise save to root folder
+        let recentBookmarkFolderGuid = profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder)
+        let parentGuid = (isBookmarkRefactorEnabled ? recentBookmarkFolderGuid : nil) ?? BookmarkRoots.MobileFolderGUID
+        profile.places.createBookmark(parentGUID: parentGuid,
                                       url: shareItem.url,
                                       title: shareItem.title,
                                       position: 0)

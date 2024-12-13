@@ -28,7 +28,8 @@ enum BookmarkAction {
     case remove
 }
 
-class HomepageContextMenuHelper: HomepageContextMenuProtocol {
+class HomepageContextMenuHelper: HomepageContextMenuProtocol,
+                                 BookmarksRefactorFeatureFlagProvider {
     typealias ContextHelperDelegate = HomepageContextMenuHelperDelegate & UIPopoverPresentationControllerDelegate
     private var viewModel: HomepageViewModel
     private let toastContainer: UIView
@@ -215,11 +216,16 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                                      allowIconScaling: true,
                                      tapHandler: { _ in
             let shareItem = ShareItem(url: site.url, title: site.title)
-            // Add new mobile bookmark at the top of the list
-            _ = self.viewModel.profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID,
-                                                             url: shareItem.url,
-                                                             title: shareItem.title,
-                                                             position: 0)
+
+            // Add new bookmark to the top of the folder
+            // If bookmarks refactor is enabled, save bookmark to recent bookmark folder, otherwise save to root folder
+            let recentBookmarkFolderGuid = self.viewModel.profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder)
+            let parentGuid = (self.isBookmarkRefactorEnabled ? recentBookmarkFolderGuid : nil)
+                             ?? BookmarkRoots.MobileFolderGUID
+            self.viewModel.profile.places.createBookmark(parentGUID: parentGuid,
+                                                         url: shareItem.url,
+                                                         title: shareItem.title,
+                                                         position: 0)
 
             var userData = [QuickActionInfos.tabURLKey: shareItem.url]
             if let title = shareItem.title {

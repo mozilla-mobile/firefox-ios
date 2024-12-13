@@ -212,7 +212,7 @@ class SettingsCoordinator: BaseCoordinator,
     }
 
     func showDebugFeatureFlags() {
-        let featureFlagsViewController = FeatureFlagsDebugViewController(windowUUID: windowUUID)
+        let featureFlagsViewController = FeatureFlagsDebugViewController(profile: profile, windowUUID: windowUUID)
         router.push(featureFlagsViewController)
     }
 

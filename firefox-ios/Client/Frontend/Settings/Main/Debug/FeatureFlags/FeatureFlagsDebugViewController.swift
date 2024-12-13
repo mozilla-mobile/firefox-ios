@@ -4,11 +4,13 @@
 
 import Common
 import Foundation
+import Shared
 
 /// A view controller that manages the hidden Firefox Suggest debug settings.
 final class FeatureFlagsDebugViewController: SettingsTableViewController, FeatureFlaggable {
-    init(windowUUID: WindowUUID) {
+    init(profile: Profile, windowUUID: WindowUUID) {
         super.init(style: .grouped, windowUUID: windowUUID)
+        self.profile = profile
         self.title = "Feature Flags"
     }
 
@@ -30,6 +32,9 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     statusText: format(string: "Toggle to use the new bookmarks design")
                 ) { [weak self] _ in
                     self?.reloadView()
+                    let isBookmarksRefactorEnabled = self?.featureFlags.isFeatureEnabled(.bookmarksRefactor,
+                                                                                         checking: .buildOnly) ?? false
+                    self?.profile.prefs.setBool(isBookmarksRefactorEnabled, forKey: PrefsKeys.IsBookmarksRefactorEnabled)
                 },
                 FeatureFlagsBoolSetting(
                     with: .closeRemoteTabs,

@@ -61,6 +61,12 @@ class AppLaunchUtil {
         // i.e. this must be run before initializing those systems.
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
 
+        // Used by share extension to determine if the bookmarks refactor feature flag is enabled
+        profile.prefs.setBool(LegacyFeatureFlagsManager.shared.isFeatureEnabled(.bookmarksRefactor,
+                                                                                checking: .buildOnly),
+                              forKey: PrefsKeys.IsBookmarksRefactorEnabled)
+
+
         logger.setup(sendCrashReports: sendCrashReports && !termsOfServiceManager.isFeatureEnabled)
 
         // Start initializing the Nimbus SDK. This should be done after Glean

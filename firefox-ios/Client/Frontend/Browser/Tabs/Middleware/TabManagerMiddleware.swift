@@ -898,7 +898,9 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
 
     private func addToBookmarks(_ shareItem: ShareItem?) {
         guard let shareItem else { return }
-        // Add new mobile bookmark at the top of the list
+
+        // Add new bookmark to the top of the folder
+        // If bookmarks refactor is enabled, save bookmark to recent bookmark folder, otherwise save to root folder
         let recentBookmarkFolderGuid = profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder)
         let parentGuid = (isBookmarkRefactorEnabled ? recentBookmarkFolderGuid : nil) ?? BookmarkRoots.MobileFolderGUID
 

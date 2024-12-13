@@ -99,7 +99,8 @@ class EditBookmarkViewModel {
     func saveBookmark() {
         guard let selectedFolder, let node else { return }
         Task { @MainActor [weak self] in
-            // Updates the bookmark
+            // There is no way to access the EditBookmarkViewController without the bookmark already existing,
+            // so this call will always try to update an existing bookmark
             let result = await self?.bookmarksSaver.save(bookmark: node,
                                                          parentFolderGUID: selectedFolder.guid)
             // Only update the recent folder pref if the bookmarks parent folder changes
