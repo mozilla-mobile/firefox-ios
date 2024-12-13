@@ -25,7 +25,7 @@ class PhotonActionSheetTests: BaseTestCase {
         if #available(iOS 17, *) {
             mozWaitForElementToExist(app.cells["Example Domain"].images[StandardImageIdentifiers.Small.pinBadgeFill])
         } else {
-            // No identifier is available for iOS 16 amd below
+            // No identifier is available for iOS 17 amd below
             mozWaitForElementToExist(app.cells["Example Domain"].images.element(boundBy: 1))
         }
 
