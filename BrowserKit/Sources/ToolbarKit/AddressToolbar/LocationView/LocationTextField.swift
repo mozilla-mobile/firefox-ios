@@ -50,6 +50,8 @@ class LocationTextField: UITextField, UITextFieldDelegate, ThemeApplicable {
         autocapitalizationType = .none
         returnKeyType = .go
         tintAdjustmentMode = .normal
+        // Disables OS to load AutoFill content, this results in keyboard loaded faster.
+        textContentType = .none
         delegate = self
 
         // Disable dragging urls on iPhones because it conflicts with editing the text
