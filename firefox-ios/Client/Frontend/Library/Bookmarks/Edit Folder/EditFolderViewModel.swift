@@ -100,6 +100,7 @@ class EditFolderViewModel {
             let result = await bookmarkSaver.save(bookmark: folder, parentFolderGUID: selectedFolderGUID)
             switch result {
             case .success(let guid):
+                // A nil guid indicates a bookmark update, not creation
                 guard let guid else { return }
                 profile.prefs.setString(guid, forKey: PrefsKeys.RecentBookmarkFolder)
             case .failure(let error):
