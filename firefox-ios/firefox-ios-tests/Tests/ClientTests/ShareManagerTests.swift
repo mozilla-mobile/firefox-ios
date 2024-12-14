@@ -291,8 +291,12 @@ final class ShareManagerTests: XCTestCase {
         _ = try XCTUnwrap(activityItems[safe: 2] as? TabWebView)
 
         let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        let itemForTitleActivity = titleActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: whatsAppActivity
+        )
         XCTAssertEqual(
-            titleActivityItemProvider.item as? String,
+            itemForTitleActivity as? String,
             testWebpageDisplayTitle,
             "When no explicit share message is set, we expect to see the webpage's title."
         )
@@ -332,8 +336,12 @@ final class ShareManagerTests: XCTestCase {
         _ = try XCTUnwrap(activityItems[safe: 2] as? TabWebView)
 
         let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        let itemForTitleActivity = titleActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: whatsAppActivity
+        )
         XCTAssertEqual(
-            titleActivityItemProvider.item as? String,
+            itemForTitleActivity as? String,
             testWebpageDisplayTitle,
             "When no explicit share message is set, we expect to see the webpage's title."
         )
@@ -371,10 +379,13 @@ final class ShareManagerTests: XCTestCase {
         _ = try XCTUnwrap(activityItems[safe: 2] as? TabWebView)
 
         let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
-        XCTAssertEqual(
-            titleActivityItemProvider.item as? String,
-            testWebpageDisplayTitle,
-            "When no explicit share message is set, we expect to see the webpage's title."
+        let itemForTitleActivity = titleActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: mailActivity
+        )
+        XCTAssertTrue(
+            itemForTitleActivity is NSNull,
+            "When no explicit share message, TitleActivityItemProvider item should not be shared to excluded activity Mail."
         )
     }
 
@@ -411,8 +422,12 @@ final class ShareManagerTests: XCTestCase {
         _ = try XCTUnwrap(activityItems[safe: 2] as? TabWebView)
 
         let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        let itemForTitleActivity = titleActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: whatsAppActivity
+        )
         XCTAssertEqual(
-            titleActivityItemProvider.item as? String,
+            itemForTitleActivity as? String,
             testWebpageDisplayTitle,
             "When no explicit share message is set, we expect to see the webpage's title."
         )
