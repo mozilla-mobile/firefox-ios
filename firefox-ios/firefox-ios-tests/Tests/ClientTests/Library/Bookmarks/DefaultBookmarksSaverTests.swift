@@ -6,7 +6,7 @@ import XCTest
 import MozillaAppServices
 @testable import Client
 
-final class DefaultBookmarksSaverTests: XCTestCase, FeatureFlaggable {
+final class DefaultBookmarksSaverTests: XCTestCase {
     var mockProfile: MockProfile!
     let rootFolderGUID = BookmarkRoots.MobileFolderGUID
     let testBookmark = Bookmark(title: "test", url: "https://www.test.com")
