@@ -16,7 +16,7 @@ final class URLActivityItemProviderTests: XCTestCase {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: MockProfile())
     }
 
-    func testWebURL_forMailActivity() throws {
+    func testWebURL_forMailActivity() {
         let testActivityType = UIActivity.ActivityType.mail
 
         let urlActivityItemProvider = URLActivityItemProvider(url: testWebURL, allowSentFromFirefoxTreatment: false)
@@ -33,7 +33,7 @@ final class URLActivityItemProviderTests: XCTestCase {
         XCTAssertEqual(itemForActivity as? URL, testWebURL)
     }
 
-    func testWebURL_forMessagesActivity() throws {
+    func testWebURL_forMessagesActivity() {
         let testActivityType = UIActivity.ActivityType.message
 
         let urlActivityItemProvider = URLActivityItemProvider(url: testWebURL, allowSentFromFirefoxTreatment: false)
@@ -50,7 +50,7 @@ final class URLActivityItemProviderTests: XCTestCase {
         XCTAssertEqual(itemForActivity as? URL, testWebURL)
     }
 
-    func testFileURL_forMailActivity() throws {
+    func testFileURL_forMailActivity() {
         let testActivityType = UIActivity.ActivityType.mail
 
         let urlActivityItemProvider = URLActivityItemProvider(url: testFileURL, allowSentFromFirefoxTreatment: false)
@@ -67,7 +67,7 @@ final class URLActivityItemProviderTests: XCTestCase {
         XCTAssertEqual(itemForActivity as? URL, testFileURL)
     }
 
-    func testFileURL_forMessagesActivity() throws {
+    func testFileURL_forMessagesActivity() {
         let testActivityType = UIActivity.ActivityType.message
 
         let urlActivityItemProvider = URLActivityItemProvider(url: testFileURL, allowSentFromFirefoxTreatment: false)
@@ -84,7 +84,7 @@ final class URLActivityItemProviderTests: XCTestCase {
         XCTAssertEqual(itemForActivity as? URL, testFileURL)
     }
 
-    func testWebURL_forExcludedActivity() throws {
+    func testWebURL_forExcludedActivity() {
         let testActivityType = UIActivity.ActivityType.addToReadingList
 
         let urlActivityItemProvider = URLActivityItemProvider(url: testWebURL, allowSentFromFirefoxTreatment: false)
@@ -101,7 +101,7 @@ final class URLActivityItemProviderTests: XCTestCase {
         XCTAssertTrue(itemForActivity is NSNull)
     }
 
-    func testFileURL_forExcludedActivity() throws {
+    func testFileURL_forExcludedActivity() {
         let testActivityType = UIActivity.ActivityType.addToReadingList
 
         let urlActivityItemProvider = URLActivityItemProvider(url: testFileURL, allowSentFromFirefoxTreatment: false)
@@ -120,7 +120,7 @@ final class URLActivityItemProviderTests: XCTestCase {
 
     // MARK: - Sent from Firefox experiment WhatsApp tab share override
 
-    func testOveridesWhatsAppShareItem_forTreatmentA() throws {
+    func testOveridesWhatsAppShareItem_forTreatmentA() {
         setupNimbusSentFromFirefoxTesting(isEnabled: true, isTreatmentA: true)
 
         let expectedShareContentA = "https://mozilla.org Sent from Firefox 🦊 Try the mobile browser: https://mzl.la/4fOWPpd"
@@ -135,7 +135,7 @@ final class URLActivityItemProviderTests: XCTestCase {
         XCTAssertEqual(itemForActivity as? String, expectedShareContentA)
     }
 
-    func testOveridesWhatsAppShareItem_forTreatmentB() throws {
+    func testOveridesWhatsAppShareItem_forTreatmentB() {
         setupNimbusSentFromFirefoxTesting(isEnabled: true, isTreatmentA: false)
 
         let expectedShareContentB = "https://mozilla.org Sent from Firefox 🦊 https://mzl.la/3YSUOl8"
