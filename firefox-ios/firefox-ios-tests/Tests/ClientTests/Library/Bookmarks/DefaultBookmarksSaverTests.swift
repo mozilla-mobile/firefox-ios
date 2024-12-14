@@ -18,6 +18,7 @@ final class DefaultBookmarksSaverTests: XCTestCase, FeatureFlaggable {
     override func setUp() async throws {
         try await super.setUp()
         mockProfile = MockProfile()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         testBookmarkGUID = await addBookmark(title: testBookmark.title, url: testBookmark.url)
         testFolderGUID = await addFolder(title: testFolder.title)
     }
@@ -173,8 +174,6 @@ final class DefaultBookmarksSaverTests: XCTestCase, FeatureFlaggable {
     func testCreateBookmark_createsNewBookmark() async throws {
         let bookmarkUrl = "https://www.mozilla.com/"
         let bookmarTitle =  "testTitle"
-
-        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
 
         let subject = createSubject()
 
