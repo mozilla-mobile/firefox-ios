@@ -28,8 +28,8 @@ class ToolbarTextField: AutocompleteTextField {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        // Disable OS to load AutoFill, this results in keyboard loaded faster
-        textContentType = .none
+        // Disable OS to load AutoFill, since for URL type is not needed.
+        textContentType = .URL
     }
 
     required init?(coder aDecoder: NSCoder) {
