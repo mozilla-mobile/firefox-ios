@@ -37,7 +37,6 @@ final class HomepageViewController: UIViewController,
 
     // MARK: - Private variables
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
-    private weak var homepageDelegate: HomepageDelegate?
     private var collectionView: UICollectionView?
     private var dataSource: HomepageDiffableDataSource?
     // TODO: FXIOS-10541 will handle scrolling for wallpaper and other scroll issues
@@ -53,7 +52,6 @@ final class HomepageViewController: UIViewController,
 
     // MARK: - Initializers
     init(windowUUID: WindowUUID,
-         homepageDelegate: HomepageDelegate? = nil,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          overlayManager: OverlayModeManager,
          statusBarScrollDelegate: StatusBarScrollDelegate? = nil,
@@ -61,7 +59,6 @@ final class HomepageViewController: UIViewController,
          logger: Logger = DefaultLogger.shared
     ) {
         self.windowUUID = windowUUID
-        self.homepageDelegate = homepageDelegate
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.overlayManager = overlayManager
@@ -105,17 +102,6 @@ final class HomepageViewController: UIViewController,
 
         listenForThemeChange(view)
         applyTheme()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
-            guard let self = self else { return }
-            // TODO: FXIOS-10312 Possibly move overlay mode to Redux
-            let canPresentModally = !self.overlayManager.inOverlayMode
-            self.homepageDelegate?.showWallpaperSelectionOnboarding(canPresentModally)
-        }
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {

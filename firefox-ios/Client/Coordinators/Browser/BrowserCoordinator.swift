@@ -142,16 +142,8 @@ class BrowserCoordinator: BaseCoordinator,
         isZeroSearch: Bool,
         statusBarScrollDelegate: StatusBarScrollDelegate
     ) {
-        let homepageCoordinator = childCoordinators[HomepageCoordinator.self] ?? HomepageCoordinator(
-            windowUUID: windowUUID,
-            profile: profile,
-            isZeroSearch: isZeroSearch,
-            router: router
-        )
-        add(child: homepageCoordinator)
         let homepageController = self.homepageViewController ?? HomepageViewController(
             windowUUID: windowUUID,
-            homepageDelegate: homepageCoordinator,
             overlayManager: overlayManager,
             statusBarScrollDelegate: statusBarScrollDelegate
         )
