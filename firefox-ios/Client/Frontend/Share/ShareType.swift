@@ -30,7 +30,7 @@ enum ShareType: Equatable {
             return false
         }
     }
-    
+
     /// The share URL wrapped by the given type.
     var wrappedURL: URL {
         switch self {
@@ -42,7 +42,7 @@ enum ShareType: Equatable {
             return url
         }
     }
-    
+
     /// The plain text name of this share type.
     var typeName: String {
         switch self {
