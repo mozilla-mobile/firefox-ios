@@ -28,20 +28,24 @@ enum BookmarkAction {
     case remove
 }
 
-class HomepageContextMenuHelper: HomepageContextMenuProtocol {
+class HomepageContextMenuHelper: HomepageContextMenuProtocol,
+                                 BookmarksRefactorFeatureFlagProvider {
     typealias ContextHelperDelegate = HomepageContextMenuHelperDelegate & UIPopoverPresentationControllerDelegate
     private var viewModel: HomepageViewModel
     private let toastContainer: UIView
+    private let bookmarksSaver: BookmarksSaver
     weak var browserNavigationHandler: BrowserNavigationHandler?
     weak var delegate: ContextHelperDelegate?
     var getPopoverSourceRect: ((UIView?) -> CGRect)?
 
     init(
         viewModel: HomepageViewModel,
-        toastContainer: UIView
+        toastContainer: UIView,
+        bookmarksSaver: BookmarksSaver? = nil
     ) {
         self.viewModel = viewModel
         self.toastContainer = toastContainer
+        self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: viewModel.profile)
     }
 
     func presentContextMenu(for site: Site,
@@ -215,11 +219,10 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol {
                                      allowIconScaling: true,
                                      tapHandler: { _ in
             let shareItem = ShareItem(url: site.url, title: site.title)
-            // Add new mobile bookmark at the top of the list
-            _ = self.viewModel.profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID,
-                                                             url: shareItem.url,
-                                                             title: shareItem.title,
-                                                             position: 0)
+
+            Task {
+                await self.bookmarksSaver.createBookmark(url: shareItem.url, title: shareItem.title, position: 0)
+            }
 
             var userData = [QuickActionInfos.tabURLKey: shareItem.url]
             if let title = shareItem.title {

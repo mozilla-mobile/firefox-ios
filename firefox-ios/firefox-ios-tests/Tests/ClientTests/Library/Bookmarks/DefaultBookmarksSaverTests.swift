@@ -18,6 +18,7 @@ final class DefaultBookmarksSaverTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         mockProfile = MockProfile()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         testBookmarkGUID = await addBookmark(title: testBookmark.title, url: testBookmark.url)
         testFolderGUID = await addFolder(title: testFolder.title)
     }
@@ -72,7 +73,13 @@ final class DefaultBookmarksSaverTests: XCTestCase {
             return await readNode(guid: previouslyAddedBookmark.guid) as? BookmarkItemData
         }
 
-        XCTAssertNotNil(try? result.get())
+        switch result {
+        case .success(let value):
+            XCTAssertNil(value, "Expected the result value to be nil for updates.")
+        case .failure(let error):
+            XCTFail("Expected success but got failure: \(error)")
+        }
+
         XCTAssertEqual(readModfiedBookmark.title, newTitle)
         XCTAssertEqual(readModfiedBookmark.url, newUrl)
     }
@@ -134,7 +141,13 @@ final class DefaultBookmarksSaverTests: XCTestCase {
             return await readNode(guid: modifiedFolder.guid) as? BookmarkFolderData
         }
 
-        XCTAssertNotNil(try? result.get())
+        switch result {
+        case .success(let value):
+            XCTAssertNil(value, "Expected the result value to be nil for updates.")
+        case .failure(let error):
+            XCTFail("Expected success but got failure: \(error)")
+        }
+
         XCTAssertEqual(readModfiedBookmark.title, newTitle)
     }
 
@@ -156,6 +169,23 @@ final class DefaultBookmarksSaverTests: XCTestCase {
         }
         let error = try XCTUnwrap(result as? DefaultBookmarksSaver.SaveError)
         XCTAssertEqual(error, .bookmarkTypeDontSupportSaving)
+    }
+
+    func testCreateBookmark_createsNewBookmark() async throws {
+        let bookmarkUrl = "https://www.mozilla.com/"
+        let bookmarTitle =  "testTitle"
+
+        let subject = createSubject()
+
+        await subject.createBookmark(url: bookmarkUrl, title: bookmarTitle, position: 0)
+
+        let addedNode = try await unwrapAsync {
+            return await readNode(url: bookmarkUrl) as? BookmarkItemData
+        }
+
+        XCTAssertEqual(addedNode.url, bookmarkUrl)
+        XCTAssertEqual(addedNode.title, bookmarTitle)
+        XCTAssertEqual(addedNode.parentGUID, rootFolderGUID)
     }
 
     // MARK: - Utility

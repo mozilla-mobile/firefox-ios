@@ -10,15 +10,18 @@ import Storage
 
 import enum MozillaAppServices.BookmarkRoots
 
-class TabManagerMiddleware {
+class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
     private let profile: Profile
     private let logger: Logger
     private let inactiveTabTelemetry = InactiveTabsTelemetry()
+    private let bookmarksSaver: BookmarksSaver
 
     init(profile: Profile = AppContainer.shared.resolve(),
-         logger: Logger = DefaultLogger.shared) {
+         logger: Logger = DefaultLogger.shared,
+         bookmarksSaver: BookmarksSaver? = nil) {
         self.profile = profile
         self.logger = logger
+        self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: profile)
     }
 
     lazy var tabsPanelProvider: Middleware<AppState> = { state, action in
@@ -898,11 +901,10 @@ class TabManagerMiddleware {
 
     private func addToBookmarks(_ shareItem: ShareItem?) {
         guard let shareItem else { return }
-        // Add new mobile bookmark at the top of the list
-        profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID,
-                                      url: shareItem.url,
-                                      title: shareItem.title,
-                                      position: 0)
+
+        Task {
+            await self.bookmarksSaver.createBookmark(url: shareItem.url, title: shareItem.title, position: 0)
+        }
     }
 
     private func addToReadingList(with tabID: TabUUID?, uuid: WindowUUID) {
