@@ -4146,11 +4146,9 @@ extension BrowserViewController: NewJSPromptAlertControllerDelegate {
 
     func newShowQueuedAlertIfAvailable() {
         if let nextAlert = tabManager.selectedTab?.newDequeueJavascriptAlertPrompt() {
-            DispatchQueue.main.async {
-                let alertController = nextAlert.alertController()
-                alertController.delegate = self
-                self.present(alertController, animated: true, completion: nil)
-            }
+            let alertController = nextAlert.alertController()
+            alertController.delegate = self
+            presentWithModalDismissIfNeeded(alertController, animated: true)
         }
     }
 }
