@@ -159,15 +159,15 @@ class TelemetryWrapper: TelemetryWrapperProtocol, FeatureFlaggable {
         let isEnabled: Bool = (profile?.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts) ?? true) &&
                                (profile?.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.TopSiteSection) ?? true)
         recordEvent(category: .information,
-                                     method: .view,
-                                     object: .sponsoredShortcuts,
-                                     extras: [EventExtraKey.preference.rawValue: isEnabled])
+                    method: .view,
+                    object: .sponsoredShortcuts,
+                    extras: [EventExtraKey.preference.rawValue: isEnabled])
 
         if logger.crashedLastLaunch {
-        recordEvent(category: .information,
-                                         method: .error,
-                                         object: .app,
-                                         value: .crashedLastLaunch)
+            recordEvent(category: .information,
+                        method: .error,
+                        object: .app,
+                        value: .crashedLastLaunch)
         }
     }
 
