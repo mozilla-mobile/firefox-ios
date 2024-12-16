@@ -1641,7 +1641,7 @@ class BrowserViewController: UIViewController,
 
         let shareItem = ShareItem(url: url, title: title)
 
-        Task { @MainActor in
+        Task {
             await self.bookmarksSaver.createBookmark(url: shareItem.url, title: shareItem.title, position: 0)
         }
 

@@ -902,7 +902,7 @@ class TabManagerMiddleware: BookmarksRefactorFeatureFlagProvider {
     private func addToBookmarks(_ shareItem: ShareItem?) {
         guard let shareItem else { return }
 
-        Task { @MainActor in
+        Task {
             await self.bookmarksSaver.createBookmark(url: shareItem.url, title: shareItem.title, position: 0)
         }
     }

@@ -96,7 +96,7 @@ class EditFolderViewModel {
         guard let folder else { return }
         let selectedFolderGUID = selectedFolder?.guid ?? parentFolder.guid
         Task { @MainActor in
-            // Creats or updates the folder
+            // Creates or updates the folder
             let result = await bookmarkSaver.save(bookmark: folder, parentFolderGUID: selectedFolderGUID)
             switch result {
             case .success(let guid):

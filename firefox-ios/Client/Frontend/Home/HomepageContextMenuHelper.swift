@@ -220,7 +220,7 @@ class HomepageContextMenuHelper: HomepageContextMenuProtocol,
                                      tapHandler: { _ in
             let shareItem = ShareItem(url: site.url, title: site.title)
 
-            Task { @MainActor in
+            Task {
                 await self.bookmarksSaver.createBookmark(url: shareItem.url, title: shareItem.title, position: 0)
             }
 

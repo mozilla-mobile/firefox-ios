@@ -6,7 +6,7 @@ import XCTest
 import MozillaAppServices
 @testable import Client
 
-final class DefaultFolderHeirarchyFetcherTests: XCTestCase {
+final class DefaultFolderHierarchyFetcherTests: XCTestCase {
     var mockProfile: MockProfile!
     let rootFolderGUID = BookmarkRoots.MobileFolderGUID
     let testFolderTitle = "testTitle"
