@@ -1846,8 +1846,6 @@
 		ED4589402CC8220A006F2C0B /* MockSearchEngineSelectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED45893F2CC8220A006F2C0B /* MockSearchEngineSelectionCoordinator.swift */; };
 		ED55DC8C2CC2D7DA00E3FE3A /* SearchEngineSelectionCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED55DC8B2CC2D7DA00E3FE3A /* SearchEngineSelectionCoordinatorTests.swift */; };
 		ED575BD32D00F9D00056BCDA /* MockTemporaryDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED575BD22D00F9D00056BCDA /* MockTemporaryDocument.swift */; };
-		ED67B2922D0B79F000BDC599 /* TitleSubtitleActivityItemProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED67B2912D0B79F000BDC599 /* TitleSubtitleActivityItemProviderTests.swift */; };
-		ED67B2942D0B80E200BDC599 /* TitleActivityItemProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED67B2932D0B80E200BDC599 /* TitleActivityItemProviderTests.swift */; };
 		ED6C8DAC2CE6A4BB00D7F7F3 /* Sentry-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = ED6C8DAB2CE6A4BB00D7F7F3 /* Sentry-Dynamic */; };
 		ED70CD812CE3BD2C0018761B /* MockStoreForMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED70CD802CE3BD2C0018761B /* MockStoreForMiddleware.swift */; };
 		ED7A08DB2CF674730035EC8F /* ShareMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7A08DA2CF674730035EC8F /* ShareMessage.swift */; };
@@ -13924,6 +13922,17 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		EDD3348C2D109416004516D0 /* Sharing */ = {
+			isa = PBXGroup;
+			children = (
+				ED4294842CF1286E0077D7CB /* ShareManagerTests.swift */,
+				ED67B2932D0B80E200BDC599 /* TitleActivityItemProviderTests.swift */,
+				ED67B2912D0B79F000BDC599 /* TitleSubtitleActivityItemProviderTests.swift */,
+				ED33E3562D0A4CE9002265A7 /* URLActivityItemProviderTests.swift */,
+			);
+			path = Sharing;
+			sourceTree = "<group>";
+		};
 		F8324A082649A188007E4BFA /* CredentialProvider */ = {
 			isa = PBXGroup;
 			children = (
@@ -14092,6 +14101,7 @@
 				F80D53CD2A09A30F0047ED14 /* RustSyncManagerTests.swift */,
 				8A5189C62C1B5F6C00CDB668 /* Search */,
 				8A5D1CA12A30CF2E005AD35C /* Settings */,
+				EDD3348C2D109416004516D0 /* Sharing */,
 				8C6DA7D02A6FE78F00DE264F /* ShoppingProductTests.swift */,
 				8A04136A2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift */,
 				213B67A727CE721E000542F5 /* StartAtHomeHelperTests.swift */,
@@ -14123,10 +14133,6 @@
 				D3BA41671BD82F2200DA5457 /* XCTestCaseExtensions.swift */,
 				8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */,
 				0ECB6B672CCFE663006A7C82 /* DateGroupedTableDataTests.swift */,
-				ED4294842CF1286E0077D7CB /* ShareManagerTests.swift */,
-				ED33E3562D0A4CE9002265A7 /* URLActivityItemProviderTests.swift */,
-				ED67B2912D0B79F000BDC599 /* TitleSubtitleActivityItemProviderTests.swift */,
-				ED67B2932D0B80E200BDC599 /* TitleActivityItemProviderTests.swift */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";
@@ -16998,7 +17004,6 @@
 				C706CBEF2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift in Sources */,
 				E19B38B128A3E69300D8C541 /* WallpaperCollectionAvailabilityTests.swift in Sources */,
 				81DAB2F32C88F14400F4BE98 /* MainMenuCoordinatorTests.swift in Sources */,
-				ED67B2922D0B79F000BDC599 /* TitleSubtitleActivityItemProviderTests.swift in Sources */,
 				8A359EF62A1FE840004A5BB7 /* MockAdjustWrapper.swift in Sources */,
 				8AC225662B6D403200CDA7FD /* HomepageTelemetryTests.swift in Sources */,
 				1D558A582BED7ECB001EF527 /* MockWindowManager.swift in Sources */,
@@ -17018,7 +17023,6 @@
 				C869916328918C36007ACC5C /* WallpaperNetworkingModuleTests.swift in Sources */,
 				B640467E29B9B58200C5C7B6 /* TabLocationViewTests.swift in Sources */,
 				8ABA9C8D28931223002C0077 /* MockDispatchQueue.swift in Sources */,
-				ED67B2942D0B80E200BDC599 /* TitleActivityItemProviderTests.swift in Sources */,
 				8CCD74732B90A945008F919B /* LoginListViewModelTests.swift in Sources */,
 				C81C66C429F00D1000F6422F /* UserActivityRouteTests.swift in Sources */,
 				8AFCE50529DDF38300B1B253 /* LaunchScreenViewControllerTests.swift in Sources */,
