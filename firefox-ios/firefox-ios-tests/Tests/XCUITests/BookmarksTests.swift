@@ -364,8 +364,10 @@ class BookmarksTests: BaseTestCase {
     func testLongTapRecentlySavedLink() {
         validateLongTapOptionsFromBookmarkLink()
         forceRestartApp()
-        XCUIDevice.shared.orientation = .landscapeLeft
-        validateLongTapOptionsFromBookmarkLink()
+        if #available(iOS 18, *) {
+            XCUIDevice.shared.orientation = .landscapeLeft
+            validateLongTapOptionsFromBookmarkLink()
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307054

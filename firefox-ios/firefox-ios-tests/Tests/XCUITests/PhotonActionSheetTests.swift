@@ -42,7 +42,7 @@ class PhotonActionSheetTests: BaseTestCase {
             mozWaitForElementToNotExist(app.cells["Example Domain"].images.element(boundBy: 1))
         }
 
-        mozWaitForElementToNotExist(cell)
+        mozWaitForElementToNotExist(app.cells["Example Domain"])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2322067

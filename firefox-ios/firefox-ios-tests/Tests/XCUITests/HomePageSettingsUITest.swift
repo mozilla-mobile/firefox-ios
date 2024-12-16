@@ -456,9 +456,7 @@ class HomePageSettingsUITests: BaseTestCase {
         waitUntilPageLoad()
         navigator.goto(BrowserTabMenu)
         // Tap on Save item
-        app.otherElements.images[StandardImageIdentifiers.Large.save].waitAndTap()
-        // Tap on Add to Shortcuts
-        app.otherElements.images[StandardImageIdentifiers.Large.pin].waitAndTap()
+        navigator.performAction(Action.PinToTopSitesPAM)
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.performAction(Action.CloseURLBarOpen)
