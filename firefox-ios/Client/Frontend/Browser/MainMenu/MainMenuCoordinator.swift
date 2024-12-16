@@ -110,12 +110,9 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
                 self.navigationHandler?.showSignInView(fxaParameters: fxaParameters)
 
             case .shareSheet:
-<<<<<<< HEAD
                 self.navigationHandler?.showShareSheet(with: destination.url)
-=======
-                self.navigationHandler?.showShareSheetForCurrentlySelectedTab()
+                // self.navigationHandler?.showShareSheetForCurrentlySelectedTab()
 
->>>>>>> 15de24b7a (Refactor [Menu] Remove possibly spamming logs for Menu (#23753))
             case .zoom:
                 self.navigationHandler?.updateZoomPageBarVisibility()
             }
