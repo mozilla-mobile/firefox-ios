@@ -8,7 +8,6 @@ import XCTest
 @testable import Client
 
 final class ShareTelemetryTests: XCTestCase {
-    private let testFileURL = URL(string: "file://some/file/url")!
     private let testWebURL = URL(string: "https://mozilla.org")!
 
     // For telemetry extras

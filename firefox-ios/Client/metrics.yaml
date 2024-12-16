@@ -5149,7 +5149,7 @@ share_sheet:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
-    extra_keys: # TODO can only add all these if we're wrapping a telemetry/metrics share handler in the pile...
+    extra_keys:
       activity_identifier:
         type: string
         description: |

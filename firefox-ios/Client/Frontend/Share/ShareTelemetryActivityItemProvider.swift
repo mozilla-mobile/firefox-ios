@@ -17,7 +17,6 @@ class ShareTelemetryActivityItemProvider: UIActivityItemProvider, @unchecked Sen
         shareMessage: ShareMessage?,
         telemetry: ShareTelemetry = DefaultShareTelemetry()
     ) {
-        // If no subtitle is set, repeat the title for the subtitle for apps that use it (e.g. Mail)
         self.shareType = shareType
         self.shareMessage = shareMessage
         self.telemetry = telemetry
