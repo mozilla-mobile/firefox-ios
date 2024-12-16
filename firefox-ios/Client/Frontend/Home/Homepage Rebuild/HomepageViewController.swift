@@ -77,7 +77,6 @@ final class HomepageViewController: UIViewController,
                                                           .TopSitesUpdated,
                                                           .DefaultSearchEngineUpdated])
         subscribeToRedux()
-        addTapGestureRecognizerToDismissKeyboard()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -106,6 +105,7 @@ final class HomepageViewController: UIViewController,
 
         listenForThemeChange(view)
         applyTheme()
+        addTapGestureRecognizerToDismissKeyboard()
     }
 
     override func viewWillAppear(_ animated: Bool) {
