@@ -811,7 +811,7 @@ usage:
       A UUID uniquely identifying the profile,
       not shared with other telemetry data.
     bugs:
-      - https://github.com/mozilla-mobile/firefox-ios/pull/23741
+      - https://mozilla-hub.atlassian.net/browse/FXIOS-10874
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/pull/23741
     data_sensitivity:
