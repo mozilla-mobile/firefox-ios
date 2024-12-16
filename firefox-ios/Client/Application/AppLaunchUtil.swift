@@ -34,15 +34,22 @@ class AppLaunchUtil {
 
         DefaultBrowserUtil().processUserDefaultState(isFirstRun: introScreenManager.shouldShowIntroScreen)
 
-        TelemetryWrapper.shared.setup(profile: profile)
-        recordStartUpTelemetry()
-
         // Need to get "settings.sendCrashReports" this way so that Sentry can be initialized before getting the Profile.
         let sendCrashReports = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.prefSendCrashReports) ?? true
 
+        // Two cases:
+        // 1. when ToS screen has been presented and user accepted it
+        // 2. or when ToS screen is not presented because is not fresh install
+        let isTermsOfServiceAccepted = termsOfServiceManager.isAccepted || !introScreenManager.shouldShowIntroScreen
+
+        // Only if terms of service has been accepted, we may initialise Telemetry events
+        if isTermsOfServiceAccepted {
+            TelemetryWrapper.shared.setup(profile: profile)
+            TelemetryWrapper.shared.recordStartUpTelemetry()
+        }
+
         // For this phase, we should handle terms of service as accepted, in case of app updates.
-        logger.setup(sendCrashReports: sendCrashReports && (termsOfServiceManager.isAccepted ||
-                                                            !introScreenManager.shouldShowIntroScreen))
+        logger.setup(sendCrashReports: sendCrashReports && isTermsOfServiceAccepted)
 
         setUserAgent()
 
@@ -206,22 +213,6 @@ class AppLaunchUtil {
             self.logger.log("History Migration skipped",
                             level: .debug,
                             category: .sync)
-        }
-    }
-
-    private func recordStartUpTelemetry() {
-        let isEnabled: Bool = (profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts) ?? true) &&
-                               (profile.prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.TopSiteSection) ?? true)
-        TelemetryWrapper.recordEvent(category: .information,
-                                     method: .view,
-                                     object: .sponsoredShortcuts,
-                                     extras: [TelemetryWrapper.EventExtraKey.preference.rawValue: isEnabled])
-
-        if logger.crashedLastLaunch {
-            TelemetryWrapper.recordEvent(category: .information,
-                                         method: .error,
-                                         object: .app,
-                                         value: .crashedLastLaunch)
         }
     }
 

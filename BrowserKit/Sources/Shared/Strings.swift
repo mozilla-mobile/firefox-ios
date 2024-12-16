@@ -5333,21 +5333,6 @@ extension String {
 
 // MARK: - Settings Home
 extension String {
-    public static let SendUsageSettingTitle = MZLocalizedString(
-        key: "Settings.SendUsage.Title",
-        tableName: nil,
-        value: "Send Usage Data",
-        comment: "The title for the setting to send usage data.")
-    public static let SendUsageSettingLink = MZLocalizedString(
-        key: "Settings.SendUsage.Link",
-        tableName: nil,
-        value: "Learn More.",
-        comment: "title for a link that explains how mozilla collects telemetry")
-    public static let SendUsageSettingMessage = MZLocalizedString(
-        key: "Settings.SendUsage.Message",
-        tableName: nil,
-        value: "Mozilla strives to only collect what we need to provide and improve Firefox for everyone.",
-        comment: "A short description that explains why mozilla collects usage data.")
     public static let SendCrashReportsSettingTitle = MZLocalizedString(
         key: "Settings.CrashReports.Title.v135",
         tableName: "Settings",
@@ -7582,6 +7567,21 @@ extension String {
                 tableName: nil,
                 value: nil,
                 comment: "Used as a button label for crash dialog prompt")
+            public static let SendUsageSettingTitle = MZLocalizedString(
+                key: "Settings.SendUsage.Title",
+                tableName: nil,
+                value: "Send Usage Data",
+                comment: "The title for the setting to send usage data.")
+            public static let SendUsageSettingLink = MZLocalizedString(
+                key: "Settings.SendUsage.Link",
+                tableName: nil,
+                value: "Learn More.",
+                comment: "title for a link that explains how mozilla collects telemetry")
+            public static let SendUsageSettingMessage = MZLocalizedString(
+                key: "Settings.SendUsage.Message",
+                tableName: nil,
+                value: "Mozilla strives to only collect what we need to provide and improve Firefox for everyone.",
+                comment: "A short description that explains why mozilla collects usage data.")
         }
     }
 }

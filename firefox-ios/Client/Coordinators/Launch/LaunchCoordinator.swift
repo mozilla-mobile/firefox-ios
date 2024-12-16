@@ -54,9 +54,18 @@ class LaunchCoordinator: BaseCoordinator,
         viewController.didFinishFlow = { [weak self] in
             manager.setAccepted()
             guard let self = self else { return }
+
+            let sendTechnicalData = profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true
+            manager.shouldSendTechnicalData(value: sendTechnicalData)
+            self.profile.prefs.setBool(sendTechnicalData, forKey: AppConstants.prefSendUsageData)
+
             let sendCrashReports = profile.prefs.boolForKey(AppConstants.prefSendCrashReports) ?? true
             self.profile.prefs.setBool(sendCrashReports, forKey: AppConstants.prefSendCrashReports)
             self.logger.setup(sendCrashReports: sendCrashReports)
+
+            TelemetryWrapper.shared.setup(profile: profile)
+            TelemetryWrapper.shared.recordStartUpTelemetry()
+
             self.parentCoordinator?.didFinishTermsOfService(from: self)
         }
         viewController.modalPresentationStyle = .fullScreen

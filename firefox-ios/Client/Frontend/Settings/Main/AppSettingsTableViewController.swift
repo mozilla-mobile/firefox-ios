@@ -53,7 +53,6 @@ class AppSettingsTableViewController: SettingsTableViewController,
     weak var parentCoordinator: SettingsFlowDelegate?
 
     // MARK: - Data Settings
-    private var sendAnonymousUsageDataSetting: BoolSetting?
     private var sendTechnicalDataSetting: BoolSetting?
     private var sendCrashReportsSetting: BoolSetting?
     private var sendDailyUsagePingSetting: BoolSetting?
@@ -178,12 +177,19 @@ class AppSettingsTableViewController: SettingsTableViewController,
     private func setupDataSettings() {
         let isTermsOfServiceFeatureEnabled = featureFlags.isFeatureEnabled(.tosFeature, checking: .buildOnly)
 
-        let anonymousUsageDataSetting = SendDataSetting(
+        let sendTechnicalDataSettings = SendDataSetting(
             prefs: profile.prefs,
             delegate: settingsDelegate,
             theme: themeManager.getCurrentTheme(for: windowUUID),
             settingsDelegate: parentCoordinator,
-            sendDataType: .usageData
+            title: .SendTechnicalDataSettingTitle,
+            message: String(format: .SendTechnicalDataSettingMessage,
+                            MozillaName.shortName.rawValue,
+                            AppName.shortName.rawValue),
+            linkedText: .SendTechnicalDataSettingLink,
+            prefKey: AppConstants.prefSendUsageData,
+            a11yId: AccessibilityIdentifiers.Settings.SendData.sendTechnicalDataTitle,
+            learnMoreURL: SupportUtils.URLForTopic("adjust")
         )
 
         let studiesSetting = StudiesToggleSetting(
@@ -193,47 +199,48 @@ class AppSettingsTableViewController: SettingsTableViewController,
             settingsDelegate: parentCoordinator
         )
 
-        anonymousUsageDataSetting.shouldSendData = { value in
+        sendTechnicalDataSettings.shouldSendData = { [weak self] value in
+            guard let self else { return }
+            TermsOfServiceManager(prefs: self.profile.prefs).shouldSendTechnicalData(value: value)
             studiesSetting.updateSetting(for: value)
         }
+        sendTechnicalDataSetting = sendTechnicalDataSettings
 
         // Only add these toggles to the Settings if Terms Of Service feature flag is enabled
         if isTermsOfServiceFeatureEnabled {
-            let sendTechnicalDataSettings = SendDataSetting(
-                prefs: profile.prefs,
-                delegate: settingsDelegate,
-                theme: themeManager.getCurrentTheme(for: windowUUID),
-                settingsDelegate: parentCoordinator,
-                sendDataType: .technicalData
-            )
-            sendTechnicalDataSettings.shouldSendData = { value in
-                // TODO: FXIOS-10754 Firefox iOS: Manage Privacy Preferences in Settings - Logic
-            }
-            sendTechnicalDataSetting = sendTechnicalDataSettings
-
             let sendDailyUsagePingSettings = SendDataSetting(
                 prefs: profile.prefs,
                 delegate: settingsDelegate,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
                 settingsDelegate: parentCoordinator,
-                sendDataType: .dailyUsagePing
+                title: .SendDailyUsagePingSettingTitle,
+                message: String(format: .SendDailyUsagePingSettingMessage, MozillaName.shortName.rawValue),
+                linkedText: .SendDailyUsagePingSettingLink,
+                prefKey: AppConstants.prefSendDailyUsagePing,
+                a11yId: AccessibilityIdentifiers.Settings.SendData.sendDailyUsagePingTitle,
+                learnMoreURL: SupportUtils.URLForTopic("dau-ping-settings-mobile")
             )
             sendDailyUsagePingSettings.shouldSendData = { value in
-                // TODO: FXIOS-10754 Firefox iOS: Manage Privacy Preferences in Settings - Logic
+                // TODO: FXIOS-10469 Firefox iOS: DAU Ping Setting
             }
             sendDailyUsagePingSetting = sendDailyUsagePingSettings
         }
 
+        // TODO: FXIOS-10739 Firefox iOS: Use the correct links for Learn more buttons, in Manage Privacy Preferences screen
         let sendCrashReportsSettings = SendDataSetting(
             prefs: profile.prefs,
             delegate: settingsDelegate,
             theme: themeManager.getCurrentTheme(for: windowUUID),
             settingsDelegate: parentCoordinator,
-            sendDataType: .crashReports
+            title: .SendCrashReportsSettingTitle,
+            message: String(format: .SendCrashReportsSettingMessage, MozillaName.shortName.rawValue),
+            linkedText: .SendCrashReportsSettingLink,
+            prefKey: AppConstants.prefSendCrashReports,
+            a11yId: AccessibilityIdentifiers.Settings.SendData.sendCrashReportsTitle,
+            learnMoreURL: nil
         )
         self.sendCrashReportsSetting = sendCrashReportsSettings
 
-        sendAnonymousUsageDataSetting = anonymousUsageDataSetting
         studiesToggleSetting = studiesSetting
     }
 
@@ -399,7 +406,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     }
 
     private func getSupportSettings() -> [SettingSection] {
-        guard let sendAnonymousUsageDataSetting, let studiesToggleSetting else { return [] }
+        guard let sendTechnicalDataSetting, let studiesToggleSetting else { return [] }
 
         var supportSettings = [
             ShowIntroductionSetting(settings: self, settingsDelegate: self),
@@ -418,11 +425,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
             )
         }
 
-        supportSettings.append(sendAnonymousUsageDataSetting)
-
-        if let sendTechnicalDataSetting {
-            supportSettings.append(sendTechnicalDataSetting)
-        }
+        supportSettings.append(sendTechnicalDataSetting)
 
         if let sendCrashReportsSetting {
             supportSettings.append(sendCrashReportsSetting)

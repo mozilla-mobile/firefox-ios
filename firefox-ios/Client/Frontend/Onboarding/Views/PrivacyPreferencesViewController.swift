@@ -51,7 +51,9 @@ final class PrivacyPreferencesViewController: UIViewController,
         view.setSwitchValue(isOn: self?.profile.prefs.boolForKey(AppConstants.prefSendCrashReports) ?? true)
     }
 
-    private lazy var technicalDataSwitch: SwitchDetailedView = .build()
+    private lazy var technicalDataSwitch: SwitchDetailedView = .build { [weak self] view in
+        view.setSwitchValue(isOn: self?.profile.prefs.boolForKey(AppConstants.prefSendUsageData) ?? true)
+    }
 
     // MARK: - Initializers
     init(
@@ -163,8 +165,9 @@ final class PrivacyPreferencesViewController: UIViewController,
             self?.profile.prefs.setBool(value, forKey: AppConstants.prefSendCrashReports)
         }
 
-        // TODO: FXIOS-10675 Firefox iOS: Manage Technical Data during Onboarding and Settings
-        technicalDataSwitch.switchCallback = { _ in }
+        technicalDataSwitch.switchCallback = { [weak self] value in
+            self?.profile.prefs.setBool(value, forKey: AppConstants.prefSendUsageData)
+        }
 
         // TODO: FXIOS-10739 Firefox iOS: Use the correct links for Learn more buttons, in Manage Privacy Preferences screen
         crashReportsSwitch.learnMoreCallBack = { [weak self] in
