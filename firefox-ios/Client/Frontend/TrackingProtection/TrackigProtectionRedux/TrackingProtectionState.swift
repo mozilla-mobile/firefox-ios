@@ -144,7 +144,9 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
         )
     }
 
-    private static func handleShowTrackingProtectionDetailsAction(from state: TrackingProtectionState) -> TrackingProtectionState {
+    private static func handleShowTrackingProtectionDetailsAction(
+        from state: TrackingProtectionState
+    ) -> TrackingProtectionState {
         return TrackingProtectionState(
             windowUUID: state.windowUUID,
             trackingProtectionEnabled: state.trackingProtectionEnabled,
