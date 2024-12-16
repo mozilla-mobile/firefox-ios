@@ -98,7 +98,7 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
         case TrackingProtectionMiddlewareActionType.navigateToSettings:
             return handleNavigateToSettingsAction(from: state)
         case TrackingProtectionMiddlewareActionType.showTrackingProtectionDetails:
-            return showTrackingProtectionDetailsState(from: state)
+            return handleShowTrackingProtectionDetailsAction(from: state)
         case TrackingProtectionMiddlewareActionType.showBlockedTrackersDetails:
             return showBlockedTrackersDetailsState(from: state)
         case TrackingProtectionActionType.goBack:
@@ -144,7 +144,7 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
         )
     }
 
-    private static func showTrackingProtectionDetailsState(from state: TrackingProtectionState) -> TrackingProtectionState {
+    private static func handleShowTrackingProtectionDetailsAction(from state: TrackingProtectionState) -> TrackingProtectionState {
         return TrackingProtectionState(
             windowUUID: state.windowUUID,
             trackingProtectionEnabled: state.trackingProtectionEnabled,
