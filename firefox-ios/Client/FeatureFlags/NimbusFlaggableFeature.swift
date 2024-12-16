@@ -162,7 +162,7 @@ struct NimbusFlaggableFeature: HasNimbusSearchBar {
         guard let optionsKey = featureKey,
               let option = profile.prefs.boolForKey(optionsKey)
         else {
-            // In unit tests only, we provide a way to return a default value to simulate a user's preference for a feature
+            // In unit tests only, we provide a way to return an override value to simulate a user's preference for a feature
             if AppConstants.isRunningUnitTest,
                UserDefaults.standard.valueExists(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride) {
                 return UserDefaults.standard.bool(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)

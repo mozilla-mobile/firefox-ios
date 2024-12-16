@@ -514,8 +514,8 @@ final class ShareManagerTests: XCTestCase {
     }
 
     /// This test ensures that the `ShareManager` does not enforce Sent from Firefox treatment for users enrolled in the
-    /// experiment who have explicitly opted out using the "Include Firefox Download Link on WhatsApp Shares" toggle on the
-    /// general settings screen.
+    /// experiment who have explicitly opted out (for example, using the "Include Firefox Download Link on WhatsApp Shares"
+    /// toggle on the general settings screen).
     func testGetActivityItems_forTab_withSentFromFirefoxEnabled_respectsUserPreferences() throws {
         // Setup Nimbus to emulate a user enrolled in Sent from Firefox with the Treatment A branch
         setupNimbusSentFromFirefoxTesting(isEnabled: true, isTreatmentA: true)
