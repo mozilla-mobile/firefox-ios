@@ -5138,6 +5138,31 @@ share_sheet:
     notification_emails:
       - fx-ios-data-stewards@mozilla.com
     expires: "2025-07-01"
+  shared_to:
+    type: event
+    description: |
+      Event to record that the user has shared content via the ShareManager.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/23704
+    data_reviews:
+      - TODO
+    notification_emails:
+      - fx-ios-data-stewards@mozilla.com
+    expires: "2025-07-01"
+    extra_keys: # TODO can only add all these if we're wrapping a telemetry/metrics share handler in the pile...
+      activity_identifier:
+        type: string
+        description: |
+          The activity identifier indicating to where the user shared content.
+      share_type:
+        type: string
+        description: |
+          The type of content shared. Either a file, website, or tab.
+      has_share_message:
+        type: boolean
+        description: |
+          Whether an explicit share message (and optional subject line) was 
+          appended to the shared content.
 
 # Device specific metrics
 
