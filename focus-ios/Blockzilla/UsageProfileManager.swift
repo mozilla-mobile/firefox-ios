@@ -5,7 +5,7 @@
 import Glean
 import Foundation
 
-class UsageProfileManager {
+final class UsageProfileManager {
     struct Constants {
         static let profileId = "profileId"
         static let canaryUUID = UUID(uuidString: "beefbeef-beef-beef-beef-beeefbeefbee")!
