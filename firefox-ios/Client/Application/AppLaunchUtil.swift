@@ -66,7 +66,6 @@ class AppLaunchUtil {
                                                                                 checking: .buildOnly),
                               forKey: PrefsKeys.IsBookmarksRefactorEnabled)
 
-
         logger.setup(sendCrashReports: sendCrashReports && !termsOfServiceManager.isFeatureEnabled)
 
         // Start initializing the Nimbus SDK. This should be done after Glean
