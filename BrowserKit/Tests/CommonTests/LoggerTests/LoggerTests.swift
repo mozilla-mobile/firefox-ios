@@ -129,19 +129,19 @@ final class LoggerTests: XCTestCase {
         XCTAssertEqual(extra, ["example": "test", "errorDescription": "A description"])
     }
 
-    func testCrashManagerLog_sendUsageDataNotCalled() {
+    func testCrashManagerLog_sendCrashReportsNotCalled() {
         let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
         subject.configure(crashManager: crashManager)
-        XCTAssertNil(crashManager.savedSendUsageData)
+        XCTAssertNil(crashManager.savedSendCrashReports)
     }
 
-    func testCrashManagerLog_sendUsageDataCalled() throws {
+    func testCrashManagerLog_sendCrashReportsCalled() throws {
         let subject = DefaultLogger(swiftyBeaverBuilder: beaverBuilder)
         subject.configure(crashManager: crashManager)
-        subject.setup(sendUsageData: true)
+        subject.setup(sendCrashReports: true)
 
-        let savedSendUsageData = try XCTUnwrap(crashManager.savedSendUsageData)
-        XCTAssertTrue(savedSendUsageData)
+        let savedSendCrashReports = try XCTUnwrap(crashManager.savedSendCrashReports)
+        XCTAssertTrue(savedSendCrashReports)
     }
 }
 
@@ -201,9 +201,9 @@ class MockSwiftyBeaver: SwiftyBeaverWrapper {
 class MockCrashManager: CrashManager {
     var crashedLastLaunch = false
 
-    var savedSendUsageData: Bool?
-    func setup(sendUsageData: Bool) {
-        savedSendUsageData = sendUsageData
+    var savedSendCrashReports: Bool?
+    func setup(sendCrashReports: Bool) {
+        savedSendCrashReports = sendCrashReports
     }
 
     var message: String?

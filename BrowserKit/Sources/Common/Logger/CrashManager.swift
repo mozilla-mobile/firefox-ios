@@ -9,7 +9,7 @@ import Sentry
 public protocol CrashManager {
     var crashedLastLaunch: Bool { get }
     func captureError(error: Error)
-    func setup(sendUsageData: Bool)
+    func setup(sendCrashReports: Bool)
     func send(message: String,
               category: LoggerCategory,
               level: LoggerLevel,
@@ -102,8 +102,8 @@ public class DefaultCrashManager: CrashManager {
         return sentryWrapper.crashedInLastRun
     }
 
-    public func setup(sendUsageData: Bool) {
-        guard shouldSetup, sendUsageData, let dsn = sentryWrapper.dsn else { return }
+    public func setup(sendCrashReports: Bool) {
+        guard shouldSetup, sendCrashReports, let dsn = sentryWrapper.dsn else { return }
 
         sentryWrapper.startWithConfigureOptions(configure: { options in
             options.dsn = dsn

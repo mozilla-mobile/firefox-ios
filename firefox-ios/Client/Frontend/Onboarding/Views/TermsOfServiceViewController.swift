@@ -28,6 +28,7 @@ class TermsOfServiceViewController: UIViewController, Themeable {
     }
 
     // MARK: - Properties
+    private let profile: Profile
     var windowUUID: WindowUUID
     var themeManager: ThemeManager
     var themeObserver: NSObjectProtocol?
@@ -69,10 +70,12 @@ class TermsOfServiceViewController: UIViewController, Themeable {
 
     // MARK: - Initializers
     init(
+        profile: Profile,
         windowUUID: WindowUUID,
         themeManager: ThemeManager = AppContainer.shared.resolve(),
         notificationCenter: NotificationProtocol = NotificationCenter.default
     ) {
+        self.profile = profile
         self.windowUUID = windowUUID
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
@@ -245,7 +248,7 @@ class TermsOfServiceViewController: UIViewController, Themeable {
 
     @objc
     private func presentManagePreferences(_ gesture: UIGestureRecognizer) {
-        let managePreferencesVC = PrivacyPreferencesViewController(windowUUID: windowUUID)
+        let managePreferencesVC = PrivacyPreferencesViewController(profile: profile, windowUUID: windowUUID)
         if UIDevice.current.userInterfaceIdiom != .phone {
             managePreferencesVC.modalPresentationStyle = .formSheet
         }
