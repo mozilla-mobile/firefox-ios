@@ -125,15 +125,14 @@ class SendDataSetting: BoolSetting {
         }
     }
 
-    // TODO: FXIOS-10739 Firefox iOS: Use the correct links for Learn more buttons, in Manage Privacy Preferences screen
     override var url: URL? {
         switch sendDataType {
         case .usageData:
             return SupportUtils.URLForTopic("adjust")
         case .technicalData:
-            return nil
+            return SupportUtils.URLForTopic("mobile-technical-and-interaction-data")
         case .crashReports:
-            return nil
+            return SupportUtils.URLForTopic("mobile-crash-reports")
         case .dailyUsagePing:
             return SupportUtils.URLForTopic("dau-ping-settings-mobile")
         }

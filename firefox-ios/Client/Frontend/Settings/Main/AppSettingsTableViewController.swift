@@ -222,16 +222,16 @@ class AppSettingsTableViewController: SettingsTableViewController,
                 // TODO: FXIOS-10754 Firefox iOS: Manage Privacy Preferences in Settings - Logic
             }
             sendDailyUsagePingSetting = sendDailyUsagePingSettings
-        }
 
-        let sendCrashReportsSettings = SendDataSetting(
-            prefs: profile.prefs,
-            delegate: settingsDelegate,
-            theme: themeManager.getCurrentTheme(for: windowUUID),
-            settingsDelegate: parentCoordinator,
-            sendDataType: .crashReports
-        )
-        self.sendCrashReportsSetting = sendCrashReportsSettings
+            let sendCrashReportsSettings = SendDataSetting(
+                prefs: profile.prefs,
+                delegate: settingsDelegate,
+                theme: themeManager.getCurrentTheme(for: windowUUID),
+                settingsDelegate: parentCoordinator,
+                sendDataType: .crashReports
+            )
+            self.sendCrashReportsSetting = sendCrashReportsSettings
+        }
 
         sendAnonymousUsageDataSetting = anonymousUsageDataSetting
         studiesToggleSetting = studiesSetting
