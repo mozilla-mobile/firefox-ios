@@ -1,0 +1,12 @@
+/* When the user ends their private session, they are returned to the private mode homepage, and a toastbar popups confirming that their data has been erased. This is the label for that toast. */
+"FirefoxHomepage.FeltDeletion.Link.v122" = "സ്വകാര്യ തിരച്ചിൽ ദത്ത മായിച്ചു";
+
+/* The body of the message for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. Placeholder refers to app name. */
+"FirefoxHomepage.FeltPrivacyUI.Body.v122" = "സ്വകാര്യ ടാബു് അടക്കുമ്പോൾ %@ താങ്ങളുടെ കുക്കീകളും നാൾവഴിയും സൈറ്റദത്തയും മായ്ക്കാരുണ്ടു്.";
+
+/* The link for the card that educates users about how private mode works. The link redirects to an external site for more information. The card shows up on the homepage when in the new privacy mode. */
+"FirefoxHomepage.FeltPrivacyUI.Link.v122" = "ആർക്കൊക്കെ എന്റെ പ്രവർത്തനങ്ങൾ കാണാൻ കഴിയും?";
+
+/* The title for the card that educates users about how private mode works. The card shows up on the homepage when in the new privacy mode. */
+"FirefoxHomepage.FeltPrivacyUI.Title.v122" = "ഈ ഉപകരണത്തിൽ ഒരു ലക്ഷണമെങ്കിലും വിടരുതു്";
+

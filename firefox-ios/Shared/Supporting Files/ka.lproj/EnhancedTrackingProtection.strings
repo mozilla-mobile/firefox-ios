@@ -1,0 +1,114 @@
+/* The title for the certificate common name inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.CommonName.v131" = "საერთო სახელი";
+
+/* The title for the certificate issuer country inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.IssuerCountry.v131" = "ქვეყანა";
+
+/* The title for the certificate issuer name section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.IssuerName.v131" = "გამომცემის დასახელება";
+
+/* The title for the certificate issuer organization inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.IssuerOrganization.v131" = "დაწესებულება";
+
+/* The title for the certificate subject alt names section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectAltNames.v131" = "წარმდგენის სხვა სახელები";
+
+/* The title for the certificate subject alt names DNS name inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectAltNamesDNSName.v131" = "DNS-სახელი";
+
+/* The title for the certificate subject name section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.SubjectName.v131" = "წარმდგენის დასახელება";
+
+/* The title for the certificates screen inside the certificates screen. */
+"Menu.EnhancedTrackingProtection.Certificates.Title.v131" = "სერთიფიკატი";
+
+/* The title for the certificate validity section inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.Validity.v131" = "ძალამოსილობა";
+
+/* The title for the certificate validity not after date inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.ValidityNotAfter.v131" = "არა უგვიანეს";
+
+/* The title for the certificate validity not before date inside the certificate screen. */
+"Menu.EnhancedTrackingProtection.Certificates.ValidityNotBefore.v131" = "არა უადრეს";
+
+/* The text for the clear cookies and site data alert button inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.ClearData.AlertCancelButton.v128" = "გაუქმება";
+
+/* The text for the clear cookies and site data alert button inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.ClearData.AlertOkButton.v128" = "გასუფთავება";
+
+/* The text for the clear cookies and site data alert inside the enhanced tracking protection screen. The placeholder will be replaced with the user's currently visited website */
+"Menu.EnhancedTrackingProtection.ClearData.AlertText.v128" = "ფუნთუშებისა და საიტის მონაცემების წაშლით %@-ზე შესაძლოა, შესული ანგარიშიდან გამოხვიდეთ და საყიდლების კალათები დაგიცარიელდეთ.";
+
+/* The title for the clear cookies and site data alert inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.ClearData.AlertTitle.v128" = "ფუნთუშებისა და საიტის მონაცემების წაშლა";
+
+/* The title for the clear cookies and site data button inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.ClearData.ButtonTitle.v128" = "ფუნთუშებისა და საიტის მონაცემების წაშლა";
+
+/* The text for the clear cookies and site data toast that appears when the user selects to clear the cookies */
+"Menu.EnhancedTrackingProtection.ClearData.ToastMessage.v128" = "ფუნთუშები და საიტის მონაცემები წაიშალა";
+
+/* The accessibility label for the close button in the Enhanced Tracking protection menu. */
+"Menu.EnhancedTrackingProtection.CloseButton.AccessibilityLabel.v132" = "პირადულობისა და უსაფრთხოების მენიუს დახურვა";
+
+/* Text to let users know that the current website is secure. */
+"Menu.EnhancedTrackingProtection.Details.ConnectionSecure.v128" = "დაცული კავშირი";
+
+/* Text to let users know that the current website is not secure. */
+"Menu.EnhancedTrackingProtection.Details.ConnectionUnsecure.v128" = "დაუცველი კავშირი";
+
+/* Text to let users know that no trackers were found on the current website. */
+"Menu.EnhancedTrackingProtection.Details.NoTrackers.v131" = "მეთვალყურეები არაა";
+
+/* Text to let users know how many analytics trackers were blocked on the current website. The placeholder will show the number of such cookies detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.Analytics.v132" = "მეთვალყურე შიგთავსი: %@";
+
+/* Text to let users know how many cross-site tracking cookies were blocked on the current website. The placeholder will show the number of such cookies detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.CrossSite.v129" = "საიტთაშორისი მეთვალყურე ფუნთუშები: %@";
+
+/* Text to let users know how many fingerprinters were blocked on the current website. The placeholder will show the number of fingerprinters detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.Fingerprinter.v129" = "ამომცნობები: %@";
+
+/* Text to let users know how many social media trackers were blocked on the current website. The placeholder will show the number of such cookies detected */
+"Menu.EnhancedTrackingProtection.Details.Trackers.SocialMedia.v129" = "სოცქსელის მეთვალყურეები: %@";
+
+/* Text to let users know how many trackers were blocked on the current website. Placeholder for the number of trackers blocked */
+"Menu.EnhancedTrackingProtection.Details.Trackers.v128" = "შეზღუდული მეთვალყურეები: %@";
+
+/* Text to let users know the site verifier, where the placeholder represents the SSL certificate signer which is on the enhanced tracking protection screen after the user taps on the connection details. */
+"Menu.EnhancedTrackingProtection.Details.Verifier.v128" = "დამმოწმებელი %@";
+
+/* The title for the button that allows users to view certificates inside the enhanced tracking protection details screen. */
+"Menu.EnhancedTrackingProtection.Details.ViewCertificatesTitle.v131" = "სერტიფიკატის ნახვა";
+
+/* Header for the enhanced tracking protection screen when the user has opted out of the feature. Placeholder will be replaced by the app name */
+"Menu.EnhancedTrackingProtection.Off.Header.v128" = "%@ უქმადაა. გირჩევთ, კვლავ ჩართოთ დაცვა.";
+
+/* Title for the enhanced tracking protection screen when the user has opted out of the feature. */
+"Menu.EnhancedTrackingProtection.Off.Title.v128" = "გამორთული გაქვთ დაცვა";
+
+/* Header for the enhanced tracking protection screen when the user has selected to be protected. */
+"Menu.EnhancedTrackingProtection.On.Header.v128" = "დაცული ხართ. თუ რამეს შევამჩნევთ, გაცნობებთ.";
+
+/* Header for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
+"Menu.EnhancedTrackingProtection.On.NotSecure.Header.v128" = "კავშირი დაუცველია.";
+
+/* Title for the enhanced tracking protection screen when the user has selected to be protected but the connection is not secure. */
+"Menu.EnhancedTrackingProtection.On.NotSecure.Title.v128" = "ფრთხილად იყავით ამ საიტზე";
+
+/* Title for the enhanced tracking protection screen when the user has selected to be protected. The placeholder will have the value of the app name */
+"Menu.EnhancedTrackingProtection.On.Title.v128" = "%@ ფხიზლადაა";
+
+/* The title for the privacy settings button inside the enhanced tracking protection screen. */
+"Menu.EnhancedTrackingProtection.PrivacySettings.Title.v128" = "პირადულობის პარამეტრები";
+
+/* Title for the switch to enable/disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.Switch.Title.v128" = "თვალთვალისგან გაძლიერებული დაცვა";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.SwitchOff.Text.v129" = "დაცვა გამორთულია. გირჩევთ ისევ ჩართოთ.";
+
+/* A switch to disable enhanced tracking protection inside the menu. */
+"Menu.EnhancedTrackingProtection.SwitchOn.Text.v128" = "თუ საიტზე რამე გაუმართავია, სინჯეთ გამორთვა.";
+

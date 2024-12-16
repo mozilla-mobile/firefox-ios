@@ -1,0 +1,51 @@
+/* Title label for the view where user can add their credit card info */
+"CreditCard.EditCard.AddCreditCardTitle.v122" = "ചീട്ടു് ചേർക്കുക";
+
+/* Button label for cancelling editing of the credit card details shown in the form */
+"CreditCard.EditCard.CancelNavBarButtonLabel.v113" = "റദ്ദാക്കുക";
+
+/* Title label for user to input their credit card Expiration date in the format MM / YY printed on their credit card in the text box below. */
+"CreditCard.EditCard.CardExpirationDateTitle.v112" = "കാലഹരണം മമ/വവ";
+
+/* Title label for user to input their credit card number printed on their credit card in the text box below. */
+"CreditCard.EditCard.CardNumberTitle.v112" = "ചീട്ടു് അക്കം";
+
+/* Button label for closing the view where user can view their credit card info */
+"CreditCard.EditCard.CloseNavBarButtonLabel.v113" = "അടയ്ക്കുക";
+
+/* Label for concealing contents of the credit card number */
+"CreditCard.EditCard.ConcealLabel.v114" = "ഒളിപ്പിക്കുക";
+
+/* Label for copying contents of the form */
+"CreditCard.EditCard.CopyLabel.v113" = "പകര്‍ത്തുക";
+
+/* Button label for editing the credit card details shown in the form */
+"CreditCard.EditCard.EditNavBarButtonLabel.v113" = "തിരുത്തുക";
+
+/* Label for credit card expiration date. The %@ will be replaced by the actual date and thus doesn't need translation. */
+"CreditCard.EditCard.ExpiredDateTitle.v112" = "കാലാവധി തീരുന്നതു് %@";
+
+/* Title label for user to input their name printed on their credit card in the text box below. */
+"CreditCard.EditCard.NameOnCardTitle.v112" = "ചീട്ടിലെ പേര്";
+
+/* Button title which, when tapped, will allow the user to save valid credit card details. */
+"CreditCard.EditCard.NavButtonSaveTitle.v112" = "കരുതിവയ്ക്കുക";
+
+/* Title label for button that allows user to remove their saved credit card. */
+"CreditCard.EditCard.RemoveCardButtonTitle.v112" = "ചീട്ടു് മാറ്റുക";
+
+/* Label for revealing the contents of the credit card number */
+"CreditCard.EditCard.RevealLabel.v114" = "വെളിപ്പെടുത്തുക";
+
+/* Title label for user to pick a credit card from the list below to be updated. */
+"CreditCard.EditCard.SavedCardListTitle.v112" = "കരുതിവച്ച ചീട്ടുകൾ";
+
+/* Button label for saving the credit card details user entered in the form */
+"CreditCard.EditCard.SaveNavBarButtonLabel.v113" = "കരുതിവയ്ക്കുക";
+
+/* Title label for user to use the toggle settings to allow saving and autofilling of credit cards for webpages. */
+"CreditCard.EditCard.ToggleToAllowAutofillTitle.v122" = "പണം കൊടുക്കൽ രീതികൾ കരുതിവച്ചു് പൂരിപ്പിക്കുക";
+
+/* Title label for the view where user can view their credit card info */
+"CreditCard.EditCard.ViewCreditCardTitle.v116" = "ചീട്ടു് കാണുക";
+

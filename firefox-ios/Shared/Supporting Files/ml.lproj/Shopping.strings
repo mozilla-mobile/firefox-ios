@@ -1,0 +1,48 @@
+/* Footer label from the Fakespot Ad card displayed for the related product we advertise. This is displayed below the ad card, suggested as an alternative to the product reviewed. The first parameter will be replaced by the Fakespot app name */
+"Shopping.AdCard.Footer.v121" = "%@-ന്റെ പരസ്യം";
+
+/* Button text of the confirmation displayed in the shopping review quality bottom sheet. */
+"Shopping.ConfirmationCard.Button.Text.v120" = "പിടി കിട്ടി";
+
+/* Title of the button that shows less reviews in the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.LessButton.Title.v120" = "കുറച്ച് കാണിക്കുക";
+
+/* Title of the button that shows more reviews in the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.MoreButton.Title.v120" = "കൂടുതൽ കാണിക്കുക";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Price.Title.v120" = "വില";
+
+/* Section title of the review highlights displayed in the shopping review quality bottom sheet. */
+"Shopping.HighlightsCard.Quality.Title.v120" = "ഗുണനിലവാരം";
+
+/* Primary action title for info card when the product needs analysis */
+"Shopping.InfoCard.NeedsAnalysis.PrimaryAction.v120" = "ഇപ്പോള്‍ പരിശോധിക്കുക";
+
+/* Label for the Learn more button in the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.LearnMoreButtonTitle.Title.v120" = "കൂടുതല്‍ അറിയുക";
+
+/* Text for the main button of the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.MainButton.Title.v120" = "അതെ, ശ്രമിച്ചു നോക്കൂ";
+
+/* Show Firefox Browser Privacy Policy page from the Privacy section in the Shopping Experience Opt In onboarding Card (Fakespot). The parameter will be replace by the Firefox app name. */
+"Shopping.OptInCard.PrivacyPolicy.Button.Title.v123" = "%@-യുടെ സ്വകാര്യത അറിയിപ്പ്";
+
+/* Text for the secondary button of the Shopping Experience Opt In onboarding Card (Fakespot) */
+"Shopping.OptInCard.SecondaryButton.Title.v120" = "ഇപ്പോഴല്ല";
+
+/* Accessibility label for the up chevron icon used to collapse or minimize the Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.Collapse.AccessibilityLabel.v120" = "ക്രമീകരണ ചീട്ടു് ചുരുക്കുക";
+
+/* Accessibility label for the down chevron icon used to expand or show the details of the Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.Expand.AccessibilityLabel.v120" = "ക്രമീകരണ ചീട്ടു് വലുതാക്കുക";
+
+/* Title of the settings card displayed in the shopping review quality bottom sheet. */
+"Shopping.SettingsCard.Label.Title.v120" = "ക്രമീകരണങ്ങള്‍";
+
+/* Toggled Off accessibility switch value from Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.SwitchValueOff.AccessibilityLabel.v123" = "അണച്ചതു്";
+
+/* Toggled On accessibility value, from Settings Card within the shopping product review bottom sheet. */
+"Shopping.SettingsCard.SwitchValueOn.AccessibilityLabel.v123" = "തുറന്നതു്";
+

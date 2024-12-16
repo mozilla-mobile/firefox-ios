@@ -4,3 +4,6 @@
 /* Label text that gets presented as a confirmation at the bottom of screen when credit card information gets saved successfully */
 "CreditCard.SnackBar.SavedCardLabel.v112" = "ახალი ბარათი შენახულია";
 
+/* Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully */
+"CreditCard.SnackBar.UpdatedCardLabel.v122" = "ბარათის მონაცემები განახლდა";
+

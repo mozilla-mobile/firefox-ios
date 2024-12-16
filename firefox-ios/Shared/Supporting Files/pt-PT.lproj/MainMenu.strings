@@ -5,7 +5,7 @@
 "ContextualHints.MainMenu.NewMenu.Title.v132" = "Novo: menu simplificado";
 
 /* On the main menu, the accessibility label hint for any action/option inside the menu, that is disabled. For example: 'Save to Reading List' option, from Menu, in some cases is disabled and the voice over should indicate that. 'Save To Reading List dimmed' */
-"MainMenu.AccessibilityLabels.OptionDisabled.Hint.v133" = "Escuro";
+"MainMenu.AccessibilityLabels.OptionDisabled.Hint.v133" = "Esbatido";
 
 /* The accessibility label for the back button in the Main menu header navigation view. */
 "MainMenu.Account.AccessibilityLabels.BackButton.v132" = "Retroceder";
@@ -224,7 +224,7 @@
 "MainMenu.Submenus.Tools.ReportBrokenSite.Subtitle.v131" = "Reportar";
 
 /* On the main menu, the title for the action that will take the user to the site where they can report a broken website to our web compatibility team. */
-"MainMenu.Submenus.Tools.ReportBrokenSite.Title.v133" = "Reportar site quebrado…";
+"MainMenu.Submenus.Tools.ReportBrokenSite.Title.v133" = "Reportar site com problemas…";
 
 /* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Share tool. */
 "MainMenu.Submenus.Tools.Share.Subtitle.v131" = "Partilhar";

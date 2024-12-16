@@ -1,6 +1,9 @@
 /* On error page, this is the text on a button that will try to load the page again. */
 "NativeErrorPage.ButtonLabel.v131" = "Wczytaj ponownie";
 
+/* On error page, this is the description for generic error. The placeholder will be replaced by the site url */
+"NativeErrorPage.GenericError.Description.v134" = "Właściciel witryny %@ nie skonfigurował jej właściwie i nie można utworzyć zabezpieczonego połączenia.";
+
 /* On error page, this is the title for generic error. */
 "NativeErrorPage.GenericError.TitleLabel.v131" = "Zachowaj ostrożność. Coś tu nie gra.";
 

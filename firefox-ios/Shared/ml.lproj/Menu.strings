@@ -1,6 +1,15 @@
 /* Label for the button, displayed in the menu, used to close all tabs currently open. */
 "Menu.CloseAllTabsAction.Title" = "എല്ലാ ടാബുകളും അടയ്ക്കുക";
 
+/* Label for the button, displayed in the menu, used to copy the current page link to the clipboard. */
+"Menu.CopyLink.Title" = "കണ്ണി പകർത്തുക";
+
+/* Toast displayed to user after downlaod pdf was pressed. */
+"Menu.DownloadPDF.Confirm.v129" = "പീ.ഡീ.എഫ വിജയകരമായി ഇറക്കിവച്ചു";
+
+/* Label for the button, displayed in the menu, downloads a pdf when pressed. */
+"Menu.DownloadPDF.Label.v129" = "പീ.ഡീ.എഫ് ഇറക്കിവയ്ക്കുക";
+
 /* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
 "Menu.FindInPageAction.Title" = "താളില്‍ കണ്ടെത്തുക";
 
@@ -28,6 +37,9 @@
 /* Accessibility label for the button, displayed in the menu, used to open the Synced Tabs home panel. Please keep as short as possible, <15 chars of space available. */
 "Menu.OpenSyncedTabsAction.AccessibilityLabel.v2" = "സമന്വയിപ്പിച്ച ടാബുകൾ";
 
+/* Label for the button, displayed in the menu, used to report a compatibility issue with the current page. */
+"Menu.ReportSiteIssueAction.Title" = "വലസ്ഥാന പ്രശ്നം അറിയിക്കുക";
+
 /* Label for the button, displayed in Firefox Home, used to see all Library panels. */
 "Menu.SeeAllAction.Title" = "മുഴുവന്‍ കാണുക";
 
@@ -39,4 +51,7 @@
 
 /* Label for the button, displayed in the menu, used to request the mobile version of the current website. */
 "Menu.ViewMobileSiteAction.Title" = "മൊബൈൽ സൈറ്റ് അഭ്യർത്ഥിക്കുക";
+
+/* Label for the button, displayed in the menu, used to navigate to the home page. */
+"SettingsMenu.OpenHomePageAction.Title" = "ആമുഖതാൾ";
 

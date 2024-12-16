@@ -1,0 +1,15 @@
+/* When the user closes tabs in the tab tray, a popup will appear. This is the title for the button to undo the deletion of those tabs */
+"CloseTabsToast.Button.v113" = "പഴയപടിയാക്കുക";
+
+/* When the user closes an individual tab in the tab tray, a popup will appear informing them the tab was closed. This is the text for the popup. */
+"CloseTabsToast.SingleTabTitle.v113" = "ടാബു് അടച്ചു";
+
+/* When the user closes tabs in the tab tray, a popup will appear informing them how many tabs were closed. This is the text for the popup. The placeholder is the number of tabs */
+"CloseTabsToast.Title.v113" = "ടാബുകൾ അടച്ചതു്: %d";
+
+/* This is the swipe action title for closing an inactive tab by swiping, located in the Inactive Tabs section of the Tabs Tray */
+"InactiveTabs.TabTray.CloseSwipeActionTitle.v115" = "അടയ്ക്കുക";
+
+/* Button label to sync tabs in your account */
+"TabsTray.SyncTabs.SyncTabsButton.Title.v119" = "ടാബുകൾ സമന്വയിപ്പിക്കുക";
+

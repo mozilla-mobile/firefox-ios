@@ -1,0 +1,9 @@
+/* Label text that gets presented as a confirmation at the bottom of screen when the credit card is successfully removed. */
+"CreditCard.SnackBar.RemovedCardLabel.v112" = "ചീട്ടു് നീക്കം ചെയ്തു";
+
+/* Label text that gets presented as a confirmation at the bottom of screen when credit card information gets saved successfully */
+"CreditCard.SnackBar.SavedCardLabel.v112" = "പുതിയ ചീട്ടു് കരുതിവച്ചു";
+
+/* Label text that gets presented as a confirmation at the bottom of screen when credit card information gets updated successfully */
+"CreditCard.SnackBar.UpdatedCardLabel.v122" = "ചീട്ടിൽ വിവരം മാറ്റി";
+

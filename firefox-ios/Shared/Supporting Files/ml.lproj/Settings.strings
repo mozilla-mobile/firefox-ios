@@ -1,0 +1,84 @@
+/* This label is used for a button in the address list screen allowing users to manage their saved addresses. It's meant to direct users to where they can add, remove, or edit their saved addresses. */
+"Addresses.ManageAddressesButton.v130" = "വിലാസങ്ങൾ കൈകാര്യം ചെയ്യുക";
+
+/* Accessibility label for an address list item in autofill settings screen. The %@ parameter is the address of the user that will read the name, street, city, state, postal code if available. */
+"Addresses.Settings.ListItemA11y.v130" = "%@-നുള്ള വിലാസം";
+
+/* On the autofill settings screen, a label for the section that displays the list of saved addresses. This label adds additional context for users regarding the toggle switch that allows saving and autofilling of addresses for webpages. */
+"Addresses.Settings.SavedAddressesSectionTitle.v124" = "കരുതിവച്ച വിലാസങ്ങൾ";
+
+/* Title text for the content unavailable view informing users they can create or add new addresses. %@ is the name of the app. */
+"Addresses.Settings.SaveToFirefox.Title.v130" = "%@ -ലേക്കു് കരുതിവയ്ക്കുക";
+
+/* Title label for user to use the toggle settings to allow saving and autofilling of addresses for webpages. */
+"Addresses.Settings.Switch.Title.v124" = "വിലാസങ്ങൾ കരുതവച്ചുിട്ടു് പൂരിപ്പിക്കുക";
+
+/* Displayed inside the keyboard hint when a user is entering their address and has at least one saved address. Indicates that there are stored addresses available for use in filling out a form. */
+"Addresses.Settings.UseSavedAddressFromKeyboard.v124" = "കരുതിവച്ച വിലാസം ഉപയോഗിക്കുക";
+
+/* Accessibility label for the add button in autofill settings screen. Pressing this button presents a modal that allows users to add a card by entering the credit card information. */
+"CreditCard.Settings.AddCard.AccessibilityLabel.v121" = "ചീട്ടു് ചേർക്കുക";
+
+/* Title label for when there are no credit cards shown in credit card list in autofill settings screen. %@ is the product name and should not be altered. */
+"CreditCard.Settings.EmptyListTitle.v122" = "%S-ലേക്കു് ചീട്ടുകൾ കരുതിവയ്ക്കുക";
+
+/* When a user is in the process or has finished making a purchase with a card not saved in Firefox's list of stored cards, we ask the user if they would like to save this card for future purchases. This string indicates to users that they can deny Firefox from remembering the card that is being used. */
+"CreditCard.Settings.NotNow.v122" = "ഇപ്പോഴല്ല";
+
+/* When a user is in the process of making a purchase and has at least one saved credit card, a view above the keyboard shows actions a user can take. When tapping this label, the keyboard will dismiss from view. */
+"CreditCards.Settings.Done.v114" = "ചെയ്തിരിക്കുന്നു";
+
+/* When a user is in the process of making a purchase, and has at least one saved card, we show this label inside the keyboard hint. This indicates to the user that there are stored cards available for use on this pending purchase. */
+"CreditCards.Settings.UseSavedCardFromKeyboard.v112" = "കരുതിവച്ച ചീട്ടു് ഉപയോഗിക്കുക";
+
+/* Settings section title for the old Firefox account */
+"FxA.FirefoxAccount.v119" = "അക്കൗണ്ട്";
+
+/* Label used as an item in Settings screen. When touched, it will take user to address autofill settings page to that will allow user to add or modify saved addresses to allow for autofill in a webpage. */
+"Settings.AddressAutofill.Title.v126" = "വിലാസങ്ങള്‍";
+
+/* Label used as an item in Settings screen. When touched, it will take user to credit card settings page to that will allows to add or modify saved credit cards to allow for autofill in a webpage. */
+"Settings.AutofillCreditCard.Title.v122" = "പണം കൊടുക്കൽ മുറകൾ";
+
+/* Title displayed in header of the FxA settings panel. */
+"Settings.FxA.Title.v119" = "അക്കൗണ്ട്";
+
+/* This is the title for the setting that toggles Sync related notifications in the settings menu under the Notifications section. */
+"Settings.Notifications.SyncNotificationsTitle.v112" = "സമന്വയം";
+
+/* In the settings menu, in the Privacy section, this is the title for Notifications customization section. */
+"Settings.Notifications.Title.v112" = "അറിയിപ്പുകള്‍";
+
+/* This is the title informing the user needs to turn on notifications in iOS Settings. */
+"Settings.Notifications.TurnOnNotificationsTitle.v112" = "അറിയിപ്പുകൾ തുടങ്ങി വയ്ക്കുക";
+
+/* Accessibility label for default search engine setting. */
+"Settings.Search.Accessibility.DefaultSearchEngine.v121" = "തനതുതിരച്ചിൽയന്ത്രം";
+
+/* Accessibility label for Learn more about Firefox Suggest. */
+"Settings.Search.Accessibility.LearnAboutSuggestions.v124" = "ഫയര്‍ഫോക്സ് സച്ചസ്റ്റിനെപറ്റി കൂടുതലറിയുക";
+
+/* Title for alternate search engines settings section in the Search page in the Settings menu. */
+"Settings.Search.AlternateSearchEngines.Title.v124.v2" = "ഇതര തിരയൽ യന്ത്രങ്ങൾ";
+
+/* Title for the `default search engine` settings section in the Search page in the Settings menu. */
+"Settings.Search.DefaultSearchEngine.Title.v121" = "തനതുതിരച്ചിൽയന്ത്രം";
+
+/* Navigation title for search page in the Settings menu. */
+"Settings.Search.PageTitle.v121" = "തിരയുക";
+
+/* Label for toggle. Explains that in private browsing mode, the search suggestions which appears at the top of the search bar, can be toggled on or off. Located in `Suggestions from Search Engines` and `Address Bar - Firefox Suggest` sections in the Search page in the Settings menu. */
+"Settings.Search.PrivateSession.Setting.v124" = "സ്വകാര്യ തിരച്ചില്ക്കാലങ്ങളിൽ കാണിക്കുക";
+
+/* Label for the `show search suggestions` setting, in the Search Settings page. */
+"Settings.Search.ShowSuggestions.v121" = "തിരയല്‍ നിര്‍ദ്ദേശങ്ങള്‍ കാണിക്കുക";
+
+/* In the Search page of the Settings menu, the title for the setting to enable search browsing history. */
+"Settings.Search.Suggest.SearchBrowsingHistory.Title.v124" = "നാൾവഴി തിരയുക";
+
+/* In the Search page of the Settings menu, the title for the setting to enable search bookmarks. */
+"Settings.Search.Suggest.SearchSearchBookmarks.Title.v124" = "അടയാളക്കുറിപ്പുകള്‍ തിരയുക";
+
+/* In the Search page of the Settings menu, the title for the setting to enable synced tabs. */
+"Settings.Search.Suggest.SearchSyncedTabs.Title.v124" = "സമന്വയിപ്പിച്ച ടാബുകൾ തിരയുക";
+

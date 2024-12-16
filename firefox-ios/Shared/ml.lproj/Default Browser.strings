@@ -1,0 +1,27 @@
+/* Button string to learn how to set your default browser. */
+"DefaultBrowserCard.Button.v2" = "എങ്ങനെ എന്നു അറിയുക";
+
+/* Description for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Description" = "ഫയർ‌ഫോക്സിൽ‌ തന്നെതാനെ തുറക്കുന്നതിന് വെബ്‌സൈറ്റുകൾ‌, ഇ-തപാലുകൾ, സന്ദേശങ്ങൾ‌ എന്നിവയിൽ‌ നിന്നും കണ്ണികൾ സജ്ജമാക്കുക.";
+
+/* Title for small home tab banner shown that allows user to switch their default browser to Firefox. */
+"DefaultBrowserCard.Title" = "താങ്ങൾ  സ്ഥിരമായി  ഉപയോഗിക്കുന്ന അന്വഷിയേ  തുറക്കുക ";
+
+/* Button string to open settings that allows user to switch their default browser to Firefox. */
+"DefaultBrowserOnboarding.Button" = "ക്രമീകരണങ്ങളിലേക്ക് പോവുക";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description1" = "1. ക്രമീകരണങ്ങളിലേക്ക് പോവുക";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description2" = "2. സ്ഥിരമായി ഉപയോഗിക്കുന്ന അന്വേഷിയേ അമർത്തുക";
+
+/* Description for default browser onboarding card. */
+"DefaultBrowserOnboarding.Description3" = "ഫയർഫോക്സ്  തിരഞ്ഞെടുക്കുക ";
+
+/* Text for the screenshot of the iOS system settings page for Firefox. */
+"DefaultBrowserOnboarding.Screenshot" = "സ്ഥിരമായി ഉപയോഗിക്കുന്ന അന്വേഷിയന്ത്രം";
+
+/* Menu option for setting Firefox as default browser. */
+"Settings.DefaultBrowserMenuItem" = "തനതു അന്വേഷിയന്ത്രമായി സജീകരിക്കുക";
+

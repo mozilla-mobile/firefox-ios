@@ -1,5 +1,5 @@
 /* When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the body message for the alert. %@ is the name/domain of the website, for example 'google.com' */
-"Alerts.AddToCalendar.Body.v134" = "O %@ está a solicitar para transferir um ficheiro e adicionar um evento ao seu calendário.";
+"Alerts.AddToCalendar.Body.v134" = "%@ está a solicitar para transferir um ficheiro e adicionar um evento ao seu calendário.";
 
 /* When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the body message for the alert in case the website doesn't have a base domain. */
 "Alerts.AddToCalendar.BodyDefault.v134" = "Este site está a solicitar para transferir um ficheiro e adicionar um evento ao seu calendário.";

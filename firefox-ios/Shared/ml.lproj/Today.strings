@@ -1,0 +1,54 @@
+/* Close Private Tabs button label */
+"TodayWidget.ClosePrivateTabsButton" = "സ്വകാര്യ ടാബുകള്‍ അടയ്ക്കുക";
+
+/* Close Private Tabs */
+"TodayWidget.ClosePrivateTabsLabelV2" = "അടയ്ക്കൂ\nസ്വകാര്യ ടാബുകൾ";
+
+/* Description for medium size widget to add Firefox Shortcut to home screen */
+"TodayWidget.FirefoxShortcutGalleryDescription" = "താങ്ങളുടെ ആമുഖതാളിലേക്കു് ഫയർഫോക്സു് കുറുക്കുവഴികൾ ചേർക്കുക.";
+
+/* Go to link pasted on the clipboard */
+"TodayWidget.GoToCopiedLinkLabelV1" = "പകർത്തിയ കണ്ണിയിലേക്കു് ചെല്ലുക";
+
+/* Go to copied link */
+"TodayWidget.GoToCopiedLinkLabelV2" = "പകർത്തിയ കണ്ണിയിലേക്കു് ചെല്ലുക";
+
+/* %d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget */
+"TodayWidget.MoreTabsLabel" = "+%d കൂടുതൽ…";
+
+/* Open New Tab button label */
+"TodayWidget.NewTabButtonLabelV1" = "പുതിയ തിരയൽ";
+
+/* Label that is shown when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.NoOpenTabsLabel" = "തുറന്ന ടാബുകളൊന്നുമില്ല.";
+
+/* Open Firefox when there are no tabs opened in tab tray i.e. Empty State */
+"TodayWidget.OpenFirefoxLabel" = "ഫയർഫോക്സ് തുറക്കൂ";
+
+/* Open New Private Tab button label */
+"TodayWidget.PrivateTabButtonLabelV1" = "സ്വകാര്യ തിരയൽ";
+
+/* Quick Actions title when widget enters edit mode */
+"TodayWidget.QuickActionsGalleryTitle" = "ദ്രുത പ്രവർത്തനം";
+
+/* Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox. */
+"TodayWidget.QuickActionsGalleryTitleV2" = "ഫയർഫോക്സ് കുറുക്കുവഴികൾ";
+
+/* Description for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryDescriptionV2" = "താങ്ങളുടെ തുറന്ന ടാബുകളിലേക്ക് കുറുക്കുവഴികൾ ചേർക്കുക.";
+
+/* Title for Quick View widget in Gallery View where user can add it to home screen */
+"TodayWidget.QuickViewGalleryTitle" = "പെട്ടെന്നു് കാഴ്ച";
+
+/* Search in Firefox. Do not translate the word Firefox */
+"TodayWidget.SearchInFirefoxV2" = "ഫയർഫോക്സിൽ \nതിരയുക";
+
+/* Search in private tab */
+"TodayWidget.SearchInPrivateTabLabelV2" = "തിരയുക\nസ്വകാര്യ ടാബിൽ";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitle" = "പ്രധാന വെബ്സ്ഥാനങ്ങൾ";
+
+/* Title for top sites widget to add Firefox top sites shotcuts to home screen */
+"TodayWidget.TopSitesGalleryTitleV2" = "വെബ്സ്ഥാന കുറുക്കുവഴികൾ";
+

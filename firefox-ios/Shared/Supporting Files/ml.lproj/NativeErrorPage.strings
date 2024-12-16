@@ -1,0 +1,3 @@
+/* On error page, this is the text on a button that will try to load the page again. */
+"NativeErrorPage.ButtonLabel.v131" = "വീണ്ടും ലഭ്യമാക്കുക";
+

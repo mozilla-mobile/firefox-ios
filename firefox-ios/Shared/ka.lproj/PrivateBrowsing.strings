@@ -22,6 +22,9 @@
 /* Accessibility label for toggling on/off private mode */
 "Private Mode" = "პირადი რეჟიმი";
 
+/* Accessibility label for toggling on/off private mode */
+"PrivateBrowsing.Toggle.A11y.Label.v132" = "პირადი თვალიერება";
+
 /* Accessiblity hint for toggling on/off private mode */
 "Turns private mode on or off" = "პირადი თვალიერების ჩართვა/გამორთვა";
 

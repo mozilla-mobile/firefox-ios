@@ -1,3 +1,9 @@
+/* Toggle for address autofill syncing setting */
+"FirefoxSync.AddressAutofillEngine.v124" = "მისამართები";
+
 /* Toggle for credit cards syncing setting */
-"FirefoxSync.CreditCardsEngine.v115" = "საკრედიტო ბარათები";
+"FirefoxSync.CreditCardsEngine.v122" = "გადახდის საშუალებები";
+
+/* Toggle passwords syncing setting, in the Settings > Sync Data menu of the app. */
+"Sync.LoginsEngine.Title.v122" = "პაროლები";
 
