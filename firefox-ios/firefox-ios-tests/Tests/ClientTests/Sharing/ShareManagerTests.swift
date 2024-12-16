@@ -516,7 +516,7 @@ final class ShareManagerTests: XCTestCase {
     /// This test ensures that the `ShareManager` does not enforce Sent from Firefox treatment for users enrolled in the
     /// experiment who have explicitly opted out (for example, using the "Include Firefox Download Link on WhatsApp Shares"
     /// toggle on the general settings screen).
-    func testGetActivityItems_forTab_withSentFromFirefoxEnabled_respectsUserPreferences() throws {
+    func testGetActivityItems_forTab_withSentFromFirefoxEnabled_respectsUserPreferencesToOptOut() throws {
         // Setup Nimbus to emulate a user enrolled in Sent from Firefox with the Treatment A branch
         setupNimbusSentFromFirefoxTesting(isEnabled: true, isTreatmentA: true)
 
@@ -562,6 +562,65 @@ final class ShareManagerTests: XCTestCase {
         XCTAssertEqual(activityItems.count, 5)
         XCTAssertEqual(urlDataIdentifier, UTType.url.identifier)
         XCTAssertEqual(itemForActivity as? URL, testWebURL)
+        XCTAssertEqual(
+            itemForTitleActivity as? String,
+            testWebpageDisplayTitle,
+            "When no explicit share message is set, we expect to see the webpage's title."
+        )
+        XCTAssertTrue(itemForShareActivity is NSNull)
+    }
+
+    /// This test ensures that the `ShareManager` applies Sent from Firefox treatment for users enrolled in the experiment
+    /// who have explicitly opted in (for example, using the "Include Firefox Download Link on WhatsApp Shares" toggle on the
+    /// general settings screen).
+    func testGetActivityItems_forTab_withSentFromFirefoxEnabled_respectsUserPreferencesToOptIn() throws {
+        let expectedShareContentA = "https://mozilla.org Sent from Firefox 🦊 Try the mobile browser: https://mzl.la/4fOWPpd"
+
+        // Setup Nimbus to emulate a user enrolled in Sent from Firefox with the Treatment A branch
+        setupNimbusSentFromFirefoxTesting(isEnabled: true, isTreatmentA: true)
+
+        // Simulate the user having enabled the Sent from Firefox toggle in the Settings
+        UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
+
+        let whatsAppActivityIdentifier = "net.whatsapp.WhatsApp.ShareExtension"
+        let whatsAppActivity = UIActivity.ActivityType(rawValue: whatsAppActivityIdentifier)
+
+        let activityItems = ShareManager.getActivityItems(
+            forShareType: .tab(url: testWebURL, tab: testTab),
+            withExplicitShareMessage: nil
+        )
+
+        // Check we get all types of share items for tabs below:
+        let urlActivityItemProvider = try XCTUnwrap(activityItems[safe: 0] as? URLActivityItemProvider)
+        let urlDataIdentifier = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            dataTypeIdentifierForActivityType: whatsAppActivity
+        )
+        let itemForActivity = urlActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: whatsAppActivity
+        )
+
+        // The rest of the content should be unchanged from other tests:
+        _ = try XCTUnwrap(activityItems[safe: 1] as? TabPrintPageRenderer)
+
+        _ = try XCTUnwrap(activityItems[safe: 2] as? TabWebView)
+
+        let titleActivityItemProvider = try XCTUnwrap(activityItems[safe: 3] as? TitleActivityItemProvider)
+        let itemForTitleActivity = titleActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: whatsAppActivity
+        )
+
+        let telemetryActivityItemProvider = try XCTUnwrap(activityItems[safe: 4] as? ShareTelemetryActivityItemProvider)
+        let itemForShareActivity = telemetryActivityItemProvider.activityViewController(
+            createStubActivityViewController(),
+            itemForActivityType: whatsAppActivity
+        )
+
+        XCTAssertEqual(activityItems.count, 5)
+        XCTAssertEqual(urlDataIdentifier, UTType.plainText.identifier)
+        XCTAssertEqual(itemForActivity as? String, expectedShareContentA)
         XCTAssertEqual(
             itemForTitleActivity as? String,
             testWebpageDisplayTitle,
