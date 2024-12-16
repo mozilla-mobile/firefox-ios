@@ -5,9 +5,11 @@
 import Foundation
 import Common
 import Redux
+import Shared
 
 final class HomepageViewController: UIViewController,
                                     UICollectionViewDelegate,
+                                    FeatureFlaggable,
                                     ContentContainable,
                                     Themeable,
                                     Notifiable,
@@ -46,6 +48,7 @@ final class HomepageViewController: UIViewController,
     private var overlayManager: OverlayModeManager
     private var logger: Logger
     private var homepageState: HomepageState
+    private var lastContentOffsetY: CGFloat = 0
 
     private var currentTheme: Theme {
         themeManager.getCurrentTheme(for: windowUUID)
@@ -123,7 +126,25 @@ final class HomepageViewController: UIViewController,
         wallpaperView.updateImageForOrientationChange()
     }
 
+    // called when the homepage is displayed to make sure it's scrolled to top
+    func scrollToTop(animated: Bool = false) {
+        collectionView?.setContentOffset(.zero, animated: animated)
+        if let collectionView = collectionView {
+            handleScroll(collectionView, isUserInteraction: false)
+        }
+    }
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        handleScroll(scrollView, isUserInteraction: true)
+    }
+
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        lastContentOffsetY = scrollView.contentOffset.y
+        handleToolbarStateOnScroll()
+    }
+
+    private func handleScroll(_ scrollView: UIScrollView, isUserInteraction: Bool) {
+        // We only handle status bar overlay alpha if there's a wallpaper applied on the homepage
         if homepageState.wallpaperState.wallpaperConfiguration.hasImage {
             let theme = themeManager.getCurrentTheme(for: windowUUID)
             statusBarScrollDelegate?.scrollViewDidScroll(
@@ -131,6 +152,37 @@ final class HomepageViewController: UIViewController,
                 statusBarFrame: statusBarFrame,
                 theme: theme
             )
+        }
+        // this action controls the address toolbar's border position, and to prevent spamming redux with actions for every
+        // change in content offset, we keep track of lastContentOffsetY to know if the border needs to be updated
+        if (lastContentOffsetY > 0 && scrollView.contentOffset.y <= 0) ||
+            (lastContentOffsetY <= 0 && scrollView.contentOffset.y > 0) {
+            lastContentOffsetY = scrollView.contentOffset.y
+            store.dispatch(
+                GeneralBrowserMiddlewareAction(
+                    scrollOffset: scrollView.contentOffset,
+                    windowUUID: windowUUID,
+                    actionType: GeneralBrowserMiddlewareActionType.websiteDidScroll))
+        }
+    }
+
+    private func handleToolbarStateOnScroll() {
+        // TODO: FXIOS-10877 This logic will be handled by toolbar state, the homepage will just dispatch the action
+        let toolbarState = store.state.screenState(ToolbarState.self, for: .toolbar, window: windowUUID)
+
+        // Only dispatch action when user is in edit mode to avoid having the toolbar re-displayed
+        if featureFlags.isFeatureEnabled(.toolbarRefactor, checking: .buildOnly),
+           let toolbarState,
+           toolbarState.addressToolbar.isEditing {
+            // When the user scrolls the homepage (not overlaid on a webpage when searching) we cancel edit mode
+            // On a website we just dismiss the keyboard
+            if toolbarState.addressToolbar.url == nil {
+                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.cancelEdit)
+                store.dispatch(action)
+            } else {
+                let action = ToolbarAction(windowUUID: windowUUID, actionType: ToolbarActionType.hideKeyboard)
+                store.dispatch(action)
+            }
         }
     }
 
