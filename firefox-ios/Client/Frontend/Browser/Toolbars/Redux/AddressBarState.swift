@@ -258,7 +258,7 @@ struct AddressBarState: StateType, Equatable {
             shouldShowKeyboard: state.shouldShowKeyboard,
             shouldSelectSearchTerm: state.shouldSelectSearchTerm,
             isLoading: state.isLoading,
-            readerModeState: toolbarAction.readerModeState,
+            readerModeState: state.readerModeState,
             didStartTyping: state.didStartTyping,
             showQRPageAction: state.showQRPageAction,
             alternativeSearchEngine: state.alternativeSearchEngine
