@@ -174,7 +174,7 @@ class ReadingListTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307000
     func testOpenSavedForReadingLongPressInNewTab() {
-        let numTab = app.buttons["Show Tabs"].value as? String
+        let numTab = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
         XCTAssertEqual(numTab, "1")
 
         // Add item to Reading List
@@ -193,7 +193,7 @@ class ReadingListTests: BaseTestCase {
         // Now there should be two tabs open
         navigator.goto(HomePanelsScreen)
         // Disabling validation of tab count until https://github.com/mozilla-mobile/firefox-ios/issues/17579 is fixed
-//        let numTabAfter = app.buttons["Show Tabs"].value as? String
+//        let numTabAfter = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
 //        XCTAssertEqual(numTabAfter, "2")
     }
 

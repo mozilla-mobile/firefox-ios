@@ -182,3 +182,15 @@ class BaseTestCase: XCTestCase {
         mozTap(settingsViewControllerDoneButton)
     }
 }
+
+extension XCUIElementQuery {
+    func containingText(_ text: String) -> XCUIElementQuery {
+        return matching(
+            NSPredicate(format: "label CONTAINS %@ OR %@ == '' AND label != nil AND label != ''", text, text)
+        )
+    }
+
+    func elementContainingText(_ text: String) -> XCUIElement {
+        return containingText(text).element(boundBy: 0)
+    }
+}

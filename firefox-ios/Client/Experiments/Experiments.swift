@@ -134,7 +134,7 @@ enum Experiments {
     }
 
     /// The `NimbusApi` object. This is the entry point to do anything with the Nimbus SDK on device.
-    public static var shared: NimbusInterface = {
+    static var shared: NimbusInterface = {
         let defaults = UserDefaults.standard
         let isFirstRun: Bool = defaults.object(forKey: NIMBUS_IS_FIRST_RUN_KEY) == nil
         if isFirstRun {
@@ -170,7 +170,8 @@ enum Experiments {
             "isFirstRun": "\(isFirstRun)",
             "is_first_run": isFirstRun,
             "is_phone": isPhone,
-            "is_review_checker_enabled": isReviewCheckerEnabled()
+            "is_review_checker_enabled": isReviewCheckerEnabled(),
+            "is_default_browser": isDefaultBrowser(),
         ]
 
         // App settings, to allow experiments to target the app name and the
@@ -189,6 +190,10 @@ enum Experiments {
             isReviewCheckerEnabled = prefs.bool(forKey: "profile." + PrefsKeys.Shopping2023OptIn)
         }
         return isReviewCheckerEnabled
+    }
+
+    private static func isDefaultBrowser() -> Bool {
+        return UserDefaults.standard.bool(forKey: PrefsKeys.AppleConfirmedUserIsDefaultBrowser)
     }
 
     private static func buildNimbus(dbPath: String,
@@ -223,7 +228,7 @@ enum Experiments {
     /// - Parameters:
     ///     - fireURL: an optional file URL that stores the initial experiments document.
     ///     - firstRun: a flag indicating that this is the first time that the app has been run.
-    public static func intialize() {
+    static func intialize() {
         // Getting the singleton first time initializes it.
         let nimbus = Experiments.shared
 

@@ -24,7 +24,11 @@ protocol BrowserDelegate: AnyObject {
     )
 
     /// Show the new homepage to the user as part of the homepage rebuild project
-    func showHomepage(overlayManager: OverlayModeManager, isZeroSearch: Bool)
+    func showHomepage(
+        overlayManager: OverlayModeManager,
+        isZeroSearch: Bool,
+        statusBarScrollDelegate: StatusBarScrollDelegate
+    )
 
     /// Show the private homepage to the user as part of felt privacy
     func showPrivateHomepage(overlayManager: OverlayModeManager)

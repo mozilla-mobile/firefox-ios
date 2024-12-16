@@ -20,6 +20,7 @@ class PhotonActionSheetViewModel: FeatureFlaggable {
 
     var closeButtonTitle: String?
     var site: Site?
+    var bookmarkFolderTitle: String?
     var title: String?
 
     var presentationStyle: PresentationStyle {
@@ -27,13 +28,15 @@ class PhotonActionSheetViewModel: FeatureFlaggable {
     }
 
     private enum SheetStyle {
-        case site, title, other
+        case site, title, bookmarkFolder, other
     }
 
     // Style is based on what the view model was init with
     private var sheetStyle: SheetStyle {
         if site != nil {
             return .site
+        } else if bookmarkFolderTitle != nil {
+            return .bookmarkFolder
         } else if title != nil {
             return .title
         } else {
@@ -44,10 +47,12 @@ class PhotonActionSheetViewModel: FeatureFlaggable {
     // MARK: - Initializers
     init(actions: [[PhotonRowActions]],
          site: Site? = nil,
+         bookmarkFolderTitle: String? = nil,
          modalStyle: UIModalPresentationStyle,
          logger: Logger = DefaultLogger.shared) {
         self.actions = actions
         self.site = site
+        self.bookmarkFolderTitle = bookmarkFolderTitle
         self.modalStyle = modalStyle
         self.logger = logger
     }
@@ -119,7 +124,18 @@ class PhotonActionSheetViewModel: FeatureFlaggable {
             }
             header.configure(with: site)
             return header
-
+        case .bookmarkFolder:
+            guard let bookmarkFolderTitle = bookmarkFolderTitle else { break }
+            guard let header = tableView.dequeueReusableHeaderFooterView(
+                withIdentifier: PhotonActionSheetSiteHeaderView.cellIdentifier
+            ) as? PhotonActionSheetSiteHeaderView else {
+                logger.log("Failed to dequeue PhotonActionSheetSiteHeaderView",
+                           level: .fatal,
+                           category: .library)
+                return UIView()
+            }
+            header.configure(with: bookmarkFolderTitle)
+            return header
         case .title:
             guard let title = title else { break }
             if section > 0 {
@@ -155,7 +171,7 @@ class PhotonActionSheetViewModel: FeatureFlaggable {
 
     private func getHeaderHeightForFirstSection() -> CGFloat {
         switch sheetStyle {
-        case .site:
+        case .site, .bookmarkFolder:
             return UITableView.automaticDimension
         case .title:
             return PhotonActionSheet.UX.titleHeaderSectionHeight

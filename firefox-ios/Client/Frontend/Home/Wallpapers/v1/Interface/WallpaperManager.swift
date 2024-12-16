@@ -214,18 +214,18 @@ class WallpaperManager: WallpaperManagerInterface, FeatureFlaggable {
     }
 
     private func addDefaultWallpaper(to availableCollections: [WallpaperCollection]) -> [WallpaperCollection] {
-        let defaultWallpaper = [Wallpaper.defaultWallpaper]
+        let baseWallpaper = [Wallpaper.baseWallpaper]
 
         if availableCollections.isEmpty {
             return [WallpaperCollection(id: "classic-firefox",
                                         learnMoreURL: nil,
                                         availableLocales: nil,
                                         availability: nil,
-                                        wallpapers: defaultWallpaper,
+                                        wallpapers: baseWallpaper,
                                         description: nil,
                                         heading: nil)]
         } else if let classicCollection = availableCollections.first(where: { $0.type == .classic }) {
-            let newWallpapers = defaultWallpaper + classicCollection.wallpapers
+            let newWallpapers = baseWallpaper + classicCollection.wallpapers
             let newClassic = WallpaperCollection(id: classicCollection.id,
                                                  learnMoreURL: classicCollection.learnMoreUrl?.absoluteString,
                                                  availableLocales: classicCollection.availableLocales,

@@ -44,48 +44,38 @@ class PocketStoriesTests: XCTestCase {
         webServer = nil
     }
 
-    func testPocketStoriesCaching() {
-        let expect = expectation(description: "Pocket")
+    func testPocketStoriesCaching() async throws {
         let pocketFeed = PocketProvider(endPoint: pocketAPI, prefs: MockProfilePrefs())
         let feedNumber = 11
 
-        pocketFeed.fetchStories(items: feedNumber) { result in
-            switch result {
-            case .success(let items):
-                XCTAssertEqual(
-                    items.count,
-                    feedNumber,
-                    "We are fetching a static feed. There are \(feedNumber) items in it"
-                )
-            case .failure:
-                XCTFail("Expected success, got \(result) instead")
-            }
-            self.webServer.stop() // Stop the webserver so we can check caching
+        // Fetch stories from the API
+        do {
+            let items = try await pocketFeed.fetchStories(items: feedNumber)
+            XCTAssertEqual(
+                items.count,
+                feedNumber,
+                "We are fetching a static feed. There are \(feedNumber) items in it"
+            )
 
-            // Try again now that the webserver is down
-            pocketFeed.fetchStories(items: feedNumber) { result in
-                switch result {
-                case .success(let items):
-                    XCTAssertEqual(
-                        items.count,
-                        feedNumber,
-                        "We are fetching a static feed. There are \(feedNumber) items in it"
-                    )
-                    let item = items.first
-                    // These are all not optional so they should never be nil.
-                    // But lets check in case someone decides to change something
-                    XCTAssertNotNil(item?.domain, "Why")
-                    XCTAssertNotNil(item?.imageURL, "You")
-                    XCTAssertNotNil(item?.storyDescription, "Do")
-                    XCTAssertNotNil(item?.title, "This")
-                    XCTAssertNotNil(item?.url, "?")
-                    expect.fulfill()
+            // Stop the webserver so we can check caching
+            self.webServer.stop()
 
-                case .failure:
-                    XCTFail("Expected success, got \(result) instead")
-                }
-            }
+            // Fetch stories again (should use cache)
+            let cachedItems = try await pocketFeed.fetchStories(items: feedNumber)
+            XCTAssertEqual(
+                cachedItems.count,
+                feedNumber,
+                "We are fetching a static feed. There are \(feedNumber) items in it"
+            )
+
+            let item = cachedItems.first
+            XCTAssertNotNil(item?.domain, "Why")
+            XCTAssertNotNil(item?.imageURL, "You")
+            XCTAssertNotNil(item?.storyDescription, "Do")
+            XCTAssertNotNil(item?.title, "This")
+            XCTAssertNotNil(item?.url, "?")
+        } catch {
+            XCTFail("Expected success, got \(error) instead")
         }
-        waitForExpectations(timeout: 10, handler: nil)
     }
 }

@@ -14,6 +14,10 @@ class TelemetryWrapperTests: XCTestCase {
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
+        // Due to changes allow certain custom pings to implement their own opt-out
+        // independent of Glean, custom pings may need to be registered manually in
+        // tests in order to puth them in a state in which they can collect data.
+        Glean.shared.registerPings(GleanMetrics.Pings.shared)
         Glean.shared.resetGlean(clearStores: true)
         Experiments.events.clearEvents()
     }
@@ -759,7 +763,7 @@ class TelemetryWrapperTests: XCTestCase {
                                          logoTextColor: nil)
 
         WallpaperManager().setCurrentWallpaper(to: defaultWallpaper) { _ in }
-        XCTAssertEqual(WallpaperManager().currentWallpaper.type, .defaultWallpaper)
+        XCTAssertEqual(WallpaperManager().currentWallpaper.type, .none)
 
         let fakeNotif = NSNotification(name: UIApplication.didEnterBackgroundNotification, object: nil)
         TelemetryWrapper.shared.recordEnteredBackgroundPreferenceMetrics(notification: fakeNotif)

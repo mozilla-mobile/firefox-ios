@@ -38,17 +38,19 @@ class SendDataSetting: BoolSetting {
             prefKey = AppConstants.prefSendUsageData
         case .technicalData:
             title = .SendTechnicalDataSettingTitle
-            message = String(format: .SendTechnicalDataSettingMessage, AppName.shortName.rawValue)
+            message = String(format: .SendTechnicalDataSettingMessage,
+                             MozillaName.shortName.rawValue,
+                             AppName.shortName.rawValue)
             linkedText = .SendTechnicalDataSettingLink
             prefKey = AppConstants.prefSendTechnicalData
         case .crashReports:
             title = .SendCrashReportsSettingTitle
-            message = .SendCrashReportsSettingMessage
+            message = String(format: .SendCrashReportsSettingMessage, MozillaName.shortName.rawValue)
             linkedText = .SendCrashReportsSettingLink
             prefKey = AppConstants.prefSendCrashReports
         case .dailyUsagePing:
             title = .SendDailyUsagePingSettingTitle
-            message = .SendDailyUsagePingSettingMessage
+            message = String(format: .SendDailyUsagePingSettingMessage, MozillaName.shortName.rawValue)
             linkedText = .SendDailyUsagePingSettingLink
             prefKey = AppConstants.prefSendDailyUsagePing
         }
@@ -82,29 +84,31 @@ class SendDataSetting: BoolSetting {
             attributedStatusText: statusText
         )
 
-        setupSettingDidChange()
+        setupSettingDidChange(for: sendDataType)
 
         // We make sure to set this on initialization, in case the setting is turned off
         // in which case, we would to make sure that users are opted out of experiments
         Experiments.setTelemetrySetting(prefs.boolForKey(prefKey) ?? true)
     }
 
-    private func setupSettingDidChange() {
+    private func setupSettingDidChange(for sendDataType: SendDataType) {
         self.settingDidChange = { [weak self] value in
-            // AdjustHelper.setEnabled($0)
-            DefaultGleanWrapper.shared.setUpload(isEnabled: value)
+            if sendDataType != .crashReports {
+                // AdjustHelper.setEnabled($0)
+                DefaultGleanWrapper.shared.setUpload(isEnabled: value)
 
-            if !value {
-                self?.prefs?.removeObjectForKey(PrefsKeys.Usage.profileId)
+                if !value {
+                    self?.prefs?.removeObjectForKey(PrefsKeys.Usage.profileId)
 
-                // set dummy uuid to make sure the previous one is deleted
-                if let uuid = UUID(uuidString: "beefbeef-beef-beef-beef-beeefbeefbee") {
-                    GleanMetrics.Usage.profileId.set(uuid)
+                    // set dummy uuid to make sure the previous one is deleted
+                    if let uuid = UUID(uuidString: "beefbeef-beef-beef-beef-beeefbeefbee") {
+                        GleanMetrics.Usage.profileId.set(uuid)
+                    }
                 }
-            }
 
-            Experiments.setTelemetrySetting(value)
-            self?.shouldSendData?(value)
+                Experiments.setTelemetrySetting(value)
+                self?.shouldSendData?(value)
+            }
         }
     }
 

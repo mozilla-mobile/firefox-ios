@@ -8,6 +8,14 @@ import Shared
 struct TermsOfServiceManager: FeatureFlaggable {
     var prefs: Prefs
 
+    var isFeatureEnabled: Bool {
+        featureFlags.isFeatureEnabled(.tosFeature, checking: .buildAndUser)
+    }
+
+    var isAccepted: Bool {
+        prefs.intForKey(PrefsKeys.TermsOfServiceAccepted) == 1
+    }
+
     var shouldShowScreen: Bool {
         guard featureFlags.isFeatureEnabled(.tosFeature, checking: .buildAndUser) else { return false }
 

@@ -9,17 +9,12 @@ import Storage
 protocol PocketStoriesProviding {
     typealias StoryResult = Swift.Result<[PocketFeedStory], Error>
 
-    func fetchStories(items: Int, completion: @escaping (StoryResult) -> Void)
     func fetchStories(items: Int) async throws -> [PocketFeedStory]
 }
 
 extension PocketStoriesProviding {
     func fetchStories(items: Int) async throws -> [PocketFeedStory] {
-        return try await withCheckedThrowingContinuation { continuation in
-            fetchStories(items: items) { result in
-                continuation.resume(with: result)
-            }
-        }
+        return try await fetchStories(items: items)
     }
 }
 
@@ -66,49 +61,48 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
     }
 
     // Fetch items from the global pocket feed
-    func fetchStories(items: Int, completion: @escaping (StoryResult) -> Void) {
+    func fetchStories(items: Int) async throws -> [PocketFeedStory] {
         let isFeatureEnabled = prefs.boolForKey(PrefsKeys.UserFeatureFlagPrefs.ASPocketStories) ?? true
         let isCurrentLocaleSupported = PocketProvider.islocaleSupported(Locale.current.identifier)
 
         // Check if we should use mock data
         if shouldUseMockData {
-            return getMockDataFeed(count: items, completion: completion)
+            return try await getMockDataFeed(count: items)
         }
 
         // Ensure the feature is enabled and current locale is supported
         guard isFeatureEnabled, isCurrentLocaleSupported else {
-            completion(.failure(Error.failure))
-            return
+            throw Error.failure
         }
 
         // Note: Global feed is restricted to specific locale and feature availability
-        getGlobalFeed(items: items, completion: completion)
+        return try await getGlobalFeed(items: items)
     }
 
-    private func getGlobalFeed(items: Int, completion: @escaping (StoryResult) -> Void) {
+    private func getGlobalFeed(items: Int) async throws -> [PocketFeedStory] {
         guard let request = createGlobalFeedRequest(items: items) else {
-            return completion(.failure(Error.failure))
+            throw Error.failure
         }
 
         if let cachedResponse = findCachedResponse(for: request),
            let items = cachedResponse["recommendations"] as? [[String: Any]] {
-            return completion(.success(PocketFeedStory.parseJSON(list: items)))
+            return PocketFeedStory.parseJSON(list: items)
         }
 
-        urlSession.dataTask(with: request) { (data, response, error) in
-            guard let response = validatedHTTPResponse(response, contentType: "application/json"),
-                  let data = data
-            else { return completion(.failure(Error.failure)) }
+        let (data, response) = try await urlSession.data(for: request)
 
-            self.cache(response: response, for: request, with: data)
+        guard let response = validatedHTTPResponse(response, contentType: "application/json") else {
+            throw Error.failure
+        }
 
-            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
-            guard let items = json?["recommendations"] as? [[String: Any]] else {
-                return completion(.failure(Error.failure))
-            }
+        self.cache(response: response, for: request, with: data)
 
-            return completion(.success(PocketFeedStory.parseJSON(list: items)))
-        }.resume()
+        let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
+        guard let items = json?["recommendations"] as? [[String: Any]] else {
+            throw Error.failure
+        }
+
+        return PocketFeedStory.parseJSON(list: items)
     }
 
     // Returns nil if the locale is not supported
@@ -150,16 +144,18 @@ class PocketProvider: PocketStoriesProviding, FeatureFlaggable, URLCaching {
         return featureFlags.isCoreFeatureEnabled(.useMockData) && pocketKey.isEmpty
     }
 
-    private func getMockDataFeed(count: Int = 2, completion: (StoryResult) -> Void) {
+    private func getMockDataFeed(count: Int = 2) async throws -> [PocketFeedStory] {
         guard let path = Bundle(for: type(of: self)).path(forResource: "pocketglobalfeed", ofType: "json"),
               let data = try? Data(contentsOf: URL(fileURLWithPath: path))
-        else { return }
-
-        let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
-        guard let items = json?["recommendations"] as? [[String: Any]] else {
-            return completion(.failure(Error.failure))
+        else {
+            throw Error.failure
         }
 
-        return completion(.success(Array(PocketFeedStory.parseJSON(list: items).prefix(count))))
+        let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
+        guard let items = json?["recommendations"] as? [[String: Any]] else {
+            throw Error.failure
+        }
+
+        return Array(PocketFeedStory.parseJSON(list: items).prefix(count))
     }
 }

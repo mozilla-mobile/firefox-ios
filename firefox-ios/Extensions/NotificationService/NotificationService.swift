@@ -30,7 +30,10 @@ class NotificationService: UNNotificationServiceExtension {
 
         let userInfo = request.content.userInfo
 
-        let content = request.content.mutableCopy() as! UNMutableNotificationContent
+        guard let content = request.content.mutableCopy() as? UNMutableNotificationContent else {
+            contentHandler(request.content)
+            return
+        }
 
         if self.profile == nil {
             self.profile = BrowserProfile(localName: "profile")

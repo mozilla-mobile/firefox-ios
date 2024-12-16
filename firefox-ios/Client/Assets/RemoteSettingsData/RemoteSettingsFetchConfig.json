@@ -9,8 +9,8 @@
     },
     {
       "name": "Tracking Protection Lists",
-      "url": "https://remote-settings-dev.allizom.org/v1",
-      "bucket_id": "main-preview",
+      "url": "https://firefox.settings.services.mozilla.com/v1",
+      "bucket_id": "main",
       "collection_id": "tracking-protection-lists-ios",
       "fetch_attachments": true,
       "save_records": false

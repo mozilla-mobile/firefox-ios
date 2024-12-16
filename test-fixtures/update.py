@@ -58,7 +58,7 @@ if __name__ == '__main__':
     4. modify bitrise.yml (update stack value)
     '''
 
-    largest_semver = default_stack().split(pattern)[1]
+    default_semver = default_stack().split(pattern)[1]
     tmp_file = 'tmp.yml'
 
     with open(BITRISE_YML, 'r') as infile:
@@ -76,13 +76,13 @@ if __name__ == '__main__':
         # remove pattern prefix from current_semver to compare with largest
         current_semver = current_semver.split(pattern)[1]
 
-        if current_semver == largest_semver:
-            print('Xcode version unchanged! aborting.')
+        if current_semver >= default_semver:
+            print('Xcode version unchanged or more recent! aborting.')
         else:
-            print('New Xcode version available: {0} ... updating bitrise.yml!'.format(largest_semver))
+            print('New Xcode version available: {0} ... updating bitrise.yml!'.format(default_semver))
             # add prefix pattern back to be recognizable by bitrise
             # as a valid stack value
-            y['workflows'][WORKFLOW]['meta']['bitrise.io']['stack'] = '{0}{1}'.format(pattern, largest_semver)
+            y['workflows'][WORKFLOW]['meta']['bitrise.io']['stack'] = '{0}{1}'.format(pattern, default_semver)
             with open(tmp_file, 'w+') as tmpfile:
                 obj_yaml.dump(y, tmpfile)
                 copyfile(tmp_file, BITRISE_YML)

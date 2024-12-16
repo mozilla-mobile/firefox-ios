@@ -49,12 +49,19 @@ class DownloadsCoordinator: BaseCoordinator,
     }
 
     private func startShare(file: DownloadedFile, sourceView: UIView) {
-        guard !childCoordinators.contains(where: { $0 is ShareSheetCoordinator }) else { return }
-        let coordinator = makeShareSheetCoordinator()
-        coordinator.start(url: file.path, sourceView: sourceView)
-    }
+        if let coordinator = childCoordinators.first(where: { $0 is ShareSheetCoordinator }) as? ShareSheetCoordinator {
+            // The share sheet extension coordinator wasn't correctly removed in the last share session. Attempt to recover.
+            logger.log(
+                "ShareSheetCoordinator already exists when it shouldn't. Removing and recreating it to access share sheet",
+                level: .info,
+                category: .shareSheet,
+                extra: ["existing ShareSheetCoordinator UUID": "\(coordinator.windowUUID)",
+                        "DownloadsCoordinator windowUUID": "N/A"]
+            )
 
-    private func makeShareSheetCoordinator() -> ShareSheetCoordinator {
+            coordinator.dismiss()
+        }
+
         let coordinator = ShareSheetCoordinator(
             alertContainer: UIView(),
             router: router,
@@ -63,7 +70,13 @@ class DownloadsCoordinator: BaseCoordinator,
             tabManager: tabManager
         )
         add(child: coordinator)
-        return coordinator
+        coordinator.start(
+            shareType: .file(url: file.path),
+            shareMessage: nil,
+            sourceView: sourceView,
+            sourceRect: nil,
+            popoverArrowDirection: .any
+        )
     }
 
     func showDocument(file: DownloadedFile) {

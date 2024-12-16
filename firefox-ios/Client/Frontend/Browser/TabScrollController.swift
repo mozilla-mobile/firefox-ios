@@ -35,11 +35,15 @@ class TabScrollingController: NSObject,
         didSet {
             // FXIOS-9781 This could result in scrolling not closing the toolbar
             assert(scrollView != nil, "Can't set the scrollView delegate if the webView.scrollView is nil")
-            self.scrollView?.addGestureRecognizer(panGesture)
+            scrollView?.addGestureRecognizer(panGesture)
             scrollView?.delegate = self
             scrollView?.keyboardDismissMode = .onDrag
             configureRefreshControl(isEnabled: true)
-            setupTabOnLoadingCallback()
+            if isPullToRefreshRefactorEnabled {
+                tab?.onLoading = { [weak self] in
+                    self?.handleOnTabContentLoading()
+                }
+            }
         }
     }
 
@@ -174,20 +178,19 @@ class TabScrollingController: NSObject,
                                                selector: #selector(applicationWillTerminate(_:)),
                                                name: UIApplication.willTerminateNotification,
                                                object: nil)
+        // need to add this manually otherwise listenForThemeChanges(view) will retain the view in memory
+        // causing memory leaks
+        themeObserver = notificationCenter.addObserver(name: .ThemeDidChange, queue: .main) { [weak self] _ in
+            self?.applyTheme()
+        }
     }
 
-    private func setupTabOnLoadingCallback() {
-        if isPullToRefreshRefactorEnabled {
-            tab?.onLoading = { [weak self] in
-                guard let self else { return }
-                // If we are in the home page delete pull to refresh so it doesn't show on the background
-                if tabIsLoading() || (tab?.isFxHomeTab ?? false) {
-                    pullToRefreshView?.stopObservingContentScroll()
-                    pullToRefreshView?.removeFromSuperview()
-                } else {
-                    configureRefreshControl(isEnabled: true)
-                }
-            }
+    private func handleOnTabContentLoading() {
+        if tabIsLoading() || (tab?.isFxHomeTab ?? false) {
+            pullToRefreshView?.stopObservingContentScroll()
+            pullToRefreshView?.removeFromSuperview()
+        } else {
+            configureRefreshControl(isEnabled: true)
         }
     }
 
@@ -357,7 +360,6 @@ private extension TabScrollingController {
             refresh.widthAnchor.constraint(equalToConstant: scrollView.frame.width)
         ])
         refresh.applyTheme(theme: themeManager.getCurrentTheme(for: windowUUID))
-        listenForThemeChange(refresh)
     }
 
     @objc

@@ -83,7 +83,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
         navigator.goto(NewTabScreen)
         waitForTabsButton()
 
-        let tabsOpen = app.buttons["Show Tabs"].value
+        let tabsOpen = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
         XCTAssertEqual("1", tabsOpen as? String)
     }
 
@@ -125,7 +125,7 @@ final class ExperimentIntegrationTests: BaseTestCase {
         navigator.goto(NewTabScreen)
         waitForTabsButton()
 
-        let tabsOpen = app.buttons["Show Tabs"].value
+        let tabsOpen = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value
         XCTAssertEqual("1", tabsOpen as? String)
     }
 

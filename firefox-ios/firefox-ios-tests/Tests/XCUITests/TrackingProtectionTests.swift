@@ -152,7 +152,10 @@ class TrackingProtectionTests: BaseTestCase {
         XCTAssertEqual(switchValueOFF as? String, "0")
 
         // Open TP Settings menu
-        app.buttons["Privacy settings"].tap()
+        // app.buttons["Privacy settings"].tap()
+        // Workaround for https://github.com/mozilla-mobile/firefox-ios/issues/23706
+        navigator.goto(SettingsScreen)
+        app.staticTexts["Tracking Protection"].waitAndTap()
         mozWaitForElementToExist(app.navigationBars["Tracking Protection"], timeout: 5)
         let switchSettingsValue = app.switches["prefkey.trackingprotection.normalbrowsing"].value!
         XCTAssertEqual(switchSettingsValue as? String, "1")

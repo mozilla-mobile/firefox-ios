@@ -40,9 +40,9 @@ class PullRefreshView: UIView,
         view.isHidden = true
         view.contentMode = .scaleAspectFill
     }
-
+    private var easterEggTimer: DispatchSourceTimer?
     private var isIpad: Bool {
-        traitCollection.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular
+        return traitCollection.userInterfaceIdiom == .pad && traitCollection.horizontalSizeClass == .regular
     }
 
     init(parentScrollView: UIScrollView?,
@@ -114,11 +114,10 @@ class PullRefreshView: UIView,
 
             if scrollView.contentOffset.y < -threshold {
                 self?.blinkBackgroundProgressViewIfNeeded()
-
-                DispatchQueue.main.asyncAfter(deadline: .now() + UX.easterEggDelayInSeconds) {
-                    self?.showEasterEgg()
-                }
+                self?.scheduleEasterEgg()
             } else if scrollView.contentOffset.y != 0.0 {
+                self?.easterEggTimer?.cancel()
+                self?.easterEggTimer = nil
                 // This check prevents progressView re blink when scrolling the pull refresh before the web view is loaded
                 self?.restoreBackgroundProgressViewIfNeeded()
                 let rotationAngle = -(scrollView.contentOffset.y) / threshold
@@ -136,11 +135,11 @@ class PullRefreshView: UIView,
                        options: UX.reloadAnimation.option,
                        animations: {
             self.progressContainerView.transform = UX.progressViewAnimatedBackgroundFinalAnimationTransform
-        }, completion: { _ in
-            self.progressContainerView.backgroundColor = .clear
-            self.progressContainerView.transform = .identity
-            self.progressView.transform = .identity
-            self.onRefreshCallback()
+        }, completion: { [weak self] _ in
+            self?.progressContainerView.backgroundColor = .clear
+            self?.progressContainerView.transform = .identity
+            self?.progressView.transform = .identity
+            self?.onRefreshCallback()
         })
     }
 
@@ -171,6 +170,16 @@ class PullRefreshView: UIView,
             self.progressContainerView.transform = .identity
             self.progressContainerView.backgroundColor = .clear
         }
+    }
+
+    private func scheduleEasterEgg() {
+        guard easterEggTimer == nil else { return }
+        easterEggTimer = DispatchSource.makeTimerSource(queue: .main)
+        easterEggTimer?.schedule(deadline: .now() + UX.easterEggDelayInSeconds)
+        easterEggTimer?.setEventHandler { [weak self] in
+            self?.showEasterEgg()
+        }
+        easterEggTimer?.activate()
     }
 
     private func showEasterEgg() {
@@ -224,15 +233,32 @@ class PullRefreshView: UIView,
     }
 
     deinit {
+        easterEggTimer?.cancel()
+        easterEggTimer = nil
         scrollObserver?.invalidate()
+        scrollObserver = nil
     }
 }
 
 struct EasterEggViewLayoutBuilder {
+    private struct UX {
+        static let sidePadding: CGFloat = 32.0
+        /// The max height that we are considering a device a small one.
+        /// This screen height refers to iPhone SE 2/3 rd gen, 6,7,8.
+        ///
+        /// https://www.appmysite.com/blog/the-complete-guide-to-iphone-screen-resolutions-and-sizes/
+        static let smallDevicesMaxScreenHeight: CGFloat = 667.0
+    }
+
     let easterEggSize: CGSize
-    let sidePadding: CGFloat = 32.0
 
     func layoutEasterEggView(_ view: UIView, superview: UIView, isPortrait: Bool, isIpad: Bool) {
+        var isPortrait = isPortrait
+        if let screenHeight = UIWindow.keyWindow?.windowScene?.screen.bounds.height,
+           screenHeight <= UX.smallDevicesMaxScreenHeight {
+            // Force landscape layout so the easter egg shows only bottom sides and doesn't render clipped for small devices
+            isPortrait = false
+        }
         if isPortrait || isIpad {
             layoutEasterEggView(view, superview: superview, position: randomPortraitLayoutPosition())
         } else {
@@ -242,12 +268,6 @@ struct EasterEggViewLayoutBuilder {
 
     private func layoutEasterEggView(_ view: UIView, superview: UIView, position: NSRectAlignment) {
         let constraints: [NSLayoutConstraint] = switch position {
-        case .topLeading:
-            [
-                view.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -easterEggSize.height / 1.5),
-                view.leadingAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.leadingAnchor,
-                                              constant: sidePadding)
-            ]
         case .leading:
             [
                 view.leadingAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.leadingAnchor),
@@ -257,24 +277,18 @@ struct EasterEggViewLayoutBuilder {
             [
                 view.bottomAnchor.constraint(equalTo: superview.bottomAnchor),
                 view.leadingAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.leadingAnchor,
-                                              constant: sidePadding)
+                                              constant: UX.sidePadding)
             ]
         case .bottomTrailing:
             [
                 view.trailingAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.trailingAnchor,
-                                               constant: -sidePadding),
+                                               constant: -UX.sidePadding),
                 view.bottomAnchor.constraint(equalTo: superview.bottomAnchor)
             ]
         case .trailing:
             [
                 view.trailingAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.trailingAnchor),
                 view.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -easterEggSize.height / 2.0)
-            ]
-        case .topTrailing:
-            [
-                view.trailingAnchor.constraint(equalTo: superview.safeAreaLayoutGuide.trailingAnchor,
-                                               constant: -sidePadding),
-                view.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -easterEggSize.height / 1.5)
             ]
         default:
             []
@@ -309,8 +323,6 @@ struct EasterEggViewLayoutBuilder {
         let allowedPositions: [NSRectAlignment] = [
             .bottomLeading,
             .bottomTrailing,
-            .topLeading,
-            .topTrailing,
             .leading,
             .trailing
         ]

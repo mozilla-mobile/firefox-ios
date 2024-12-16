@@ -3,6 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
+import Shared
 
 let defaultTopSite = ["topSiteLabel": "Wikipedia", "bookmarkLabel": "Wikipedia"]
 let newTopSite = [
@@ -11,7 +12,7 @@ let newTopSite = [
     "bookmarkLabel": "Mozilla - Internet for people, not profit (US)"
 ]
 let newTopSiteiOS15 = [
-    "bookmarkLabel": "Internet for people, not profit"
+    "bookmarkLabel": "Internet for people, not profit — Mozilla (US)"
 ]
 let allDefaultTopSites = ["Facebook", "YouTube", "Amazon", "Wikipedia", "X"]
 
@@ -71,7 +72,7 @@ class ActivityStreamTest: BaseTestCase {
     }
     // https://mozilla.testrail.io/index.php?/cases/view/2272219
     func testTopSitesRemoveAllExceptDefaultClearPrivateData() {
-        waitForExistence(app.cells.staticTexts[newTopSite["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
+        waitForExistence(app.cells.staticTexts[newTopSiteiOS15["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
         // A new site has been added to the top sites
         if iPad() {
             checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 12)

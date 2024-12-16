@@ -9,7 +9,7 @@ import Shared
 import Storage
 import Sync
 
-protocol CredentialProviderViewProtocol: AnyObject, AlertControllerView {
+protocol CredentialProviderViewProtocol: AnyObject {
     var extensionContext: ASCredentialProviderExtensionContext { get }
 
     func showWelcome()

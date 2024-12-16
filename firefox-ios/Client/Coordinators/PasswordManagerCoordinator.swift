@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Foundation
-import Storage
 import Common
 
 import struct MozillaAppServices.LoginEntry
@@ -83,6 +82,9 @@ class PasswordManagerCoordinator: BaseCoordinator,
     func pressedPasswordDetail(model: PasswordDetailViewControllerModel) {
         let viewController = PasswordDetailViewController(viewModel: model, windowUUID: windowUUID)
         viewController.coordinator = self
+        viewController.deleteHandler = { [weak self] in
+            self?.passwordManager?.showToast()
+        }
         router.push(viewController)
     }
 

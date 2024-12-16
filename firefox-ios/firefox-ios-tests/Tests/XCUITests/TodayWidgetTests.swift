@@ -280,6 +280,12 @@ class TodayWidgetTests: BaseTestCase {
             mozWaitForElementToExist(springboard.buttons["Add Widget"])
             springboard.buttons["Add Widget"].tap()
         } else {
+            if #available(iOS 18, *) {
+                springboard.icons["Screen Time"].press(forDuration: 3)
+                if springboard.buttons["Edit Home Screen"].exists {
+                    springboard.buttons["Edit Home Screen"].tap()
+                }
+            }
             springboard.buttons["Edit"].tap()
             mozWaitForElementToExist(springboard.buttons["Add Widget"])
             springboard.buttons["Add Widget"].tap()
@@ -317,9 +323,6 @@ class TodayWidgetTests: BaseTestCase {
     // TESTS
     // https://mozilla.testrail.io/index.php?/cases/view/2769289
     func testNewSearchWidget() throws {
-        if #available(iOS 18, *) {
-            throw XCTSkip("This test is only for iOS versions 17.5 and lower.")
-        }
         XCUIDevice.shared.press(.home)
         // Go to Today Widget Page
         goToTodayWidgetPage()
@@ -379,9 +382,6 @@ class TodayWidgetTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2769297
     func testNewPrivateSearchWidget() throws {
-        if #available(iOS 18, *) {
-            throw XCTSkip("This test is only for iOS versions 17.5 and lower.")
-        }
         // Return to the Home screen
         XCUIDevice.shared.press(.home)
         // Navigate to the Today Widget Page
@@ -455,9 +455,6 @@ class TodayWidgetTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2769300
     func testGoToCopiedLinkWidget() throws {
-        if #available(iOS 18, *) {
-            throw XCTSkip("This test is only for iOS versions 17.5 and lower.")
-        }
         let copiedString = "mozilla.org"
         // Press Home and navigate to Today Widget Page
         XCUIDevice.shared.press(.home)
@@ -532,9 +529,6 @@ class TodayWidgetTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2783001
     func testFxShortcutSearchWidget() throws {
-        if #available(iOS 18, *) {
-            throw XCTSkip("This test is only for iOS versions 17.5 and lower.")
-        }
         XCUIDevice.shared.press(.home)
         goToTodayWidgetPage()
         // Remove Firefox Widget if it already exists
@@ -569,9 +563,6 @@ class TodayWidgetTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2783002
     func testFxShortcutPrivateSearchWidget() throws {
-        if #available(iOS 18, *) {
-            throw XCTSkip("This test is only for iOS versions 17.5 and lower.")
-        }
         XCUIDevice.shared.press(.home)
         app.terminate()
         goToTodayWidgetPage()
@@ -618,9 +609,6 @@ class TodayWidgetTests: BaseTestCase {
 
     // https://mozilla.testrail.io/index.php?/cases/view/2783003
     func testFxShortcutGoToCopiedLinkWidget() throws {
-        if #available(iOS 18, *) {
-            throw XCTSkip("This test is only for iOS versions 17.5 and lower.")
-        }
         let copiedString = "mozilla.org"
         UIPasteboard.general.string = copiedString
         XCUIDevice.shared.press(.home)

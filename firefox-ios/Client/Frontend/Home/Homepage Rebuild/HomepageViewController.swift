@@ -26,6 +26,15 @@ final class HomepageViewController: UIViewController,
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { return windowUUID }
 
+    // MARK: - Layout variables
+    var statusBarFrame: CGRect? {
+        guard let keyWindow = UIWindow.keyWindow else { return nil }
+
+        return keyWindow.windowScene?.statusBarManager?.statusBarFrame
+    }
+
+    weak var statusBarScrollDelegate: StatusBarScrollDelegate?
+
     // MARK: - Private variables
     private typealias a11y = AccessibilityIdentifiers.FirefoxHomepage
     private weak var homepageDelegate: HomepageDelegate?
@@ -47,6 +56,7 @@ final class HomepageViewController: UIViewController,
          homepageDelegate: HomepageDelegate? = nil,
          themeManager: ThemeManager = AppContainer.shared.resolve(),
          overlayManager: OverlayModeManager,
+         statusBarScrollDelegate: StatusBarScrollDelegate? = nil,
          notificationCenter: NotificationProtocol = NotificationCenter.default,
          logger: Logger = DefaultLogger.shared
     ) {
@@ -55,6 +65,7 @@ final class HomepageViewController: UIViewController,
         self.themeManager = themeManager
         self.notificationCenter = notificationCenter
         self.overlayManager = overlayManager
+        self.statusBarScrollDelegate = statusBarScrollDelegate
         self.logger = logger
         homepageState = HomepageState(windowUUID: windowUUID)
         super.init(nibName: nil, bundle: nil)
@@ -112,6 +123,17 @@ final class HomepageViewController: UIViewController,
         wallpaperView.updateImageForOrientationChange()
     }
 
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if homepageState.wallpaperState.wallpaperConfiguration.hasImage {
+            let theme = themeManager.getCurrentTheme(for: windowUUID)
+            statusBarScrollDelegate?.scrollViewDidScroll(
+                scrollView,
+                statusBarFrame: statusBarFrame,
+                theme: theme
+            )
+        }
+    }
+
     // MARK: - Redux
     func subscribeToRedux() {
         let action = ScreenAction(
@@ -135,7 +157,7 @@ final class HomepageViewController: UIViewController,
     func newState(state: HomepageState) {
         homepageState = state
         wallpaperView.wallpaperState = state.wallpaperState
-        dataSource?.applyInitialSnapshot(state: state)
+        dataSource?.updateSnapshot(state: state)
     }
 
     func unsubscribeFromRedux() {
@@ -154,11 +176,6 @@ final class HomepageViewController: UIViewController,
     }
 
     // MARK: - Layout
-    var statusBarFrame: CGRect? {
-        guard let keyWindow = UIWindow.keyWindow else { return nil }
-
-        return keyWindow.windowScene?.statusBarManager?.statusBarFrame
-    }
 
     func configureWallpaperView() {
         view.addSubview(wallpaperView)
@@ -269,16 +286,16 @@ final class HomepageViewController: UIViewController,
 
             return headerCell
 
-        case .topSite(let site):
+        case .topSite(let site, let textColor):
             guard let topSiteCell = collectionView?.dequeueReusableCell(cellType: TopSiteCell.self, for: indexPath) else {
                 return UICollectionViewCell()
             }
-            // TODO: FXIOS-10312 - Handle textColor when working on wallpapers
+
             topSiteCell.configure(
                 site,
                 position: indexPath.row,
                 theme: currentTheme,
-                textColor: .systemPink
+                textColor: textColor
             )
             return topSiteCell
 
@@ -286,6 +303,7 @@ final class HomepageViewController: UIViewController,
             guard let emptyCell = collectionView?.dequeueReusableCell(cellType: EmptyTopSiteCell.self, for: indexPath) else {
                 return UICollectionViewCell()
             }
+
             emptyCell.applyTheme(theme: currentTheme)
             return emptyCell
 
@@ -296,6 +314,7 @@ final class HomepageViewController: UIViewController,
             ) else {
                 return UICollectionViewCell()
             }
+
             pocketCell.configure(story: story, theme: currentTheme)
 
             return pocketCell
@@ -369,9 +388,10 @@ final class HomepageViewController: UIViewController,
         with sectionLabelCell: LabelButtonHeaderView
     ) -> LabelButtonHeaderView? {
         switch section {
-        case .pocket:
+        case .pocket(let textColor):
             sectionLabelCell.configure(
                 state: homepageState.pocketState.sectionHeaderState,
+                textColor: textColor,
                 theme: currentTheme
             )
             return sectionLabelCell
@@ -441,7 +461,7 @@ final class HomepageViewController: UIViewController,
             return
         }
         switch item {
-        case .topSite(let state):
+        case .topSite(let state, _):
             store.dispatch(
                 NavigationBrowserAction(
                     url: state.site.url.asURL,

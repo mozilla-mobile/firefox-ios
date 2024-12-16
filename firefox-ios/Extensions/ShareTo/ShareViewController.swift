@@ -529,9 +529,15 @@ extension ShareViewController {
         var responder = self as UIResponder?
         let selectorOpenURL = sel_registerName("openURL:")
         while let current = responder {
-            if current.responds(to: selectorOpenURL) {
-                current.perform(selectorOpenURL, with: url, afterDelay: 0)
-                break
+            if #available(iOS 18.0, *) {
+                if let application = responder as? UIApplication {
+                    application.open(url, options: [:], completionHandler: nil)
+                }
+            } else {
+                if current.responds(to: selectorOpenURL) {
+                    current.perform(selectorOpenURL, with: url, afterDelay: 0)
+                    break
+                }
             }
 
             responder = current.next

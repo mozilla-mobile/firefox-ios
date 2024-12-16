@@ -107,8 +107,12 @@ class JumpBackInTests: BaseTestCase {
         app.cells["JumpBackInCell"].staticTexts["Wikipedia"].firstMatch.tap()
 
         // The view is switched to the twitter tab
-        let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value as! String
-        XCTAssertEqual(url, "wikipedia.org")
+        if let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField].value as? String {
+            XCTAssertEqual(url, "wikipedia.org", "The URL retrieved from the address toolbar does not match the expected value")
+        } else {
+            XCTFail("Failed to retrieve the URL string from the address toolbar")
+            return
+        }
 
         // Open a new tab in normal browsing
         navigator.goto(TabTray)

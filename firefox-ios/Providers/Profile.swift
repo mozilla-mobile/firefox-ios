@@ -116,9 +116,6 @@ protocol Profile: AnyObject {
     // <http://stackoverflow.com/questions/26029317/exc-bad-access-when-indirectly-accessing-inherited-member-in-swift>
     func localName() -> String
 
-    // Async call to wait for result
-    func hasSyncAccount(completion: @escaping (Bool) -> Void)
-
     // Do we have an account at all?
     func hasAccount() -> Bool
 
@@ -695,12 +692,6 @@ open class BrowserProfile: Profile {
             return nil
         }
     }()
-
-    func hasSyncAccount(completion: @escaping (Bool) -> Void) {
-        rustFxA.hasAccount { hasAccount in
-            completion(hasAccount)
-        }
-    }
 
     func hasAccount() -> Bool {
         return rustFxA.hasAccount()

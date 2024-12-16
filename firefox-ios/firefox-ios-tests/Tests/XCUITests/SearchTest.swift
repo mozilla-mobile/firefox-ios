@@ -126,8 +126,13 @@ class SearchTests: BaseTestCase {
         // Copy, Paste and Go to url
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "www.mozilla.org")
-        urlBarAddress.press(forDuration: 5)
-        app.menuItems["Select All"].tap()
+        if iPad() {
+            urlBarAddress.waitAndTap()
+            urlBarAddress.waitAndTap()
+        } else {
+            urlBarAddress.press(forDuration: 5)
+        }
+        app.menuItems["Select All"].waitAndTap()
         app.menuItems["Copy"].waitAndTap()
         app.buttons[AccessibilityIdentifiers.Browser.UrlBar.cancelButton].waitAndTap()
 
@@ -230,7 +235,7 @@ class SearchTests: BaseTestCase {
         let url = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         mozWaitForValueContains(url, value: "google")
         // Now there should be two tabs open
-        let numTab = app.buttons["Show Tabs"].value as? String
+        let numTab = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton].value as? String
         XCTAssertEqual("2", numTab)
     }
 

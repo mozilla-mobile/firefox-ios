@@ -451,7 +451,7 @@ class LegacyHomepageViewController:
 
     private func handleScroll(_ scrollView: UIScrollView, isUserInteraction: Bool) {
         // We only handle status bar overlay alpha if there's a wallpaper applied on the homepage
-        if WallpaperManager().currentWallpaper.type != .defaultWallpaper {
+        if WallpaperManager().currentWallpaper.hasImage {
             let theme = themeManager.getCurrentTheme(for: windowUUID)
             statusBarScrollDelegate?.scrollViewDidScroll(scrollView,
                                                          statusBarFrame: statusBarFrame,

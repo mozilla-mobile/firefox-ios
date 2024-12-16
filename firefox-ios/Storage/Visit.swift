@@ -39,36 +39,3 @@ public func == (lhs: Visit, rhs: Visit) -> Bool {
     return lhs.date == rhs.date &&
            lhs.type == rhs.type
 }
-
-open class SiteVisit: Visit {
-    var id: Int?
-    public let site: Site
-
-    override public func hash(into hasher: inout Hasher) {
-        hasher.combine(date)
-        hasher.combine(type)
-        hasher.combine(id)
-        hasher.combine(site.id)
-    }
-
-    public init(site: Site, date: MicrosecondTimestamp, type: VisitType = .link) {
-        self.site = site
-        super.init(date: date, type: type)
-    }
-}
-
-public func == (lhs: SiteVisit, rhs: SiteVisit) -> Bool {
-    if let lhsID = lhs.id, let rhsID = rhs.id {
-        if lhsID != rhsID {
-            return false
-        }
-    } else {
-        if lhs.id != nil || rhs.id != nil {
-            return false
-        }
-    }
-
-    // TODO: compare Site.
-    return lhs.date == rhs.date &&
-           lhs.type == rhs.type
-}

@@ -202,6 +202,39 @@ struct UIConstants {
 
         static let labelStudies = NSLocalizedString("Settings.toggleStudies", value: "Studies", comment: "Label for Studies toggle on the settings screen")
         static let detailTextStudies = NSLocalizedString("Settings.detailTextStudies", value: "%@ may install and run studies from time to time.", comment: "Description associated to the Studies toggle on the settings screen. %@ is the app name (Focus/Klar)")
+        
+        static let labelTechnicalAndInteractionData = NSLocalizedString(
+            "Settings.toggleTechnicalInteractionData",
+            value: "Technical and Interaction Data",
+            comment: "Label for Technical and Interaction Data toggle on settings screen"
+        )
+        static let detailTextTechnicalAndInteractionData = NSLocalizedString(
+            "Settings.detailTextTechnicalInteractionData",
+            value: "Mozilla strives to collect only what we need to provide and improve %@ for everyone.",
+            comment: "Description associated with the Technical and Interaction Data toggle on settings screen. %@ is the app name (Focus/Klar)"
+        )
+        
+        static let labelCrashReports = NSLocalizedString(
+            "Settings.toggleCrashReports",
+            value: "Crash Reports",
+            comment: "Label for Crash Reports toggle on settings screen"
+        )
+        static let detailTextCrashReports = NSLocalizedString(
+            "Settings.detailTextCrashReports",
+            value: "Automatically send crash reports to Mozilla to diagnose and fix issues with the browser. Reports may include personal or sensitive data.",
+            comment: "Description associated with the Crash Reports toggle on settings screen"
+        )
+
+        static let labelDailyUsagePing = NSLocalizedString(
+            "Settings.toggleDailyUsagePing",
+            value: "Daily Usage Ping",
+            comment: "Label for Daily Usage Ping toggle on settings screen"
+        )
+        static let detailTextDailyUsagePing = NSLocalizedString(
+            "Settings.detailTextDailyUsagePing",
+            value: "This helps Mozilla to estimate active users.",
+            comment: "Description associated with the Daily Usage Ping toggle on settings screen"
+        )
 
         static let general = NSLocalizedString("Settings.general", value: "General", comment: "Title for section in settings menu")
         static let theme = NSLocalizedString("Settings.theme", value: "Theme", comment: "Theme section in settings menu")

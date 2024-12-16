@@ -34,9 +34,7 @@ final class SentFromFirefoxSetting: BoolSetting {
             defaultValue: true,
             attributedTitleText: titleAttributedString,
             attributedStatusText: subtitleAttributedString,
-            settingDidChange: { toValue in
-                // TODO: FXIOS-10582 enable/disable experimentation
-            }
+            featureFlagName: .sentFromFirefox
         )
     }
 

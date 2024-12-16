@@ -24,9 +24,10 @@ final class ShareSheetCoordinatorTests: XCTestCase {
     }
 
     func testStart_presentUIActivityViewController() {
+        let testURL = URL(string: "https://www.google.com")!
         let subject = createSubject()
 
-        subject.start(url: URL(string: "https://www.google.com")!, sourceView: UIView())
+        subject.start(shareType: .site(url: testURL), shareMessage: nil, sourceView: UIView())
 
         XCTAssertEqual(mockRouter.presentCalled, 1)
         XCTAssertTrue(mockRouter.presentedViewController is UIActivityViewController)

@@ -3,7 +3,6 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Common
-import Storage
 import Foundation
 
 import struct MozillaAppServices.EncryptedLogin
@@ -62,7 +61,7 @@ class MockLogger: Logger {
     var savedLevel: LoggerLevel?
     var savedCategory: LoggerCategory?
 
-    func setup(sendUsageData: Bool) {}
+    func setup(sendCrashReports: Bool) {}
     func configure(crashManager: Common.CrashManager) {}
     func copyLogsToDocuments() {}
     func logCustomError(error: Error) {}

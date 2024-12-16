@@ -4,7 +4,6 @@
 
 import Foundation
 import Redux
-import Storage
 import Common
 
 enum TabTrayLayoutType: Equatable {

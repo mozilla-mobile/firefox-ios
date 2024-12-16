@@ -9,6 +9,8 @@ let package = Package(
         .macOS(.v10_15)
     ],
     products: [
+        .library(name: "Shared",
+                 targets: ["Shared"]),
         .library(
             name: "SiteImageView",
             targets: ["SiteImageView"]),
@@ -67,6 +69,10 @@ let package = Package(
             exact: "0.17.0"),
     ],
     targets: [
+        .target(name: "Shared",
+                dependencies: ["Common",
+                               "WebEngine"],
+                swiftSettings: [.unsafeFlags(["-enable-testing"])]),
         .target(
             name: "ComponentLibrary",
             dependencies: ["Common", "SiteImageView"],

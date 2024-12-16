@@ -72,10 +72,12 @@ public final class SearchEngineTableView: UIView,
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(
+        guard let cell = tableView.dequeueReusableCell(
             withIdentifier: SearchEngineCell.cellIdentifier,
             for: indexPath
-        ) as! SearchEngineCell
+        ) as? SearchEngineCell else {
+            return UITableViewCell()
+        }
 
         cell.configureCellWith(model: searchEngineData[indexPath.section].options[indexPath.row])
         if let theme { cell.applyTheme(theme: theme) }
