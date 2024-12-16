@@ -21,7 +21,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
         messageManager = MockGleanPlumbMessageManagerProtocol()
 
-        UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusFeatureTestsOverride)
+        UserDefaults.standard.set(true, forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
     }
 
     override func tearDown() {
@@ -31,7 +31,7 @@ final class LaunchScreenViewModelTests: XCTestCase {
         messageManager = nil
         delegate = nil
 
-        UserDefaults.standard.set(false, forKey: PrefsKeys.NimbusFeatureTestsOverride)
+        UserDefaults.standard.removeObject(forKey: PrefsKeys.NimbusUserEnabledFeatureTestsOverride)
     }
 
     func testLaunchDoesntCallLoadedIfNotStarted() {
