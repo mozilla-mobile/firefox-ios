@@ -281,7 +281,7 @@ class TodayWidgetTests: BaseTestCase {
             springboard.buttons["Add Widget"].tap()
         } else {
             if #available(iOS 18, *) {
-                coordinate.press(forDuration: 3)
+                springboard.icons["Screen Time"].press(forDuration: 3)
                 if springboard.buttons["Edit Home Screen"].exists {
                     springboard.buttons["Edit Home Screen"].tap()
                 }
