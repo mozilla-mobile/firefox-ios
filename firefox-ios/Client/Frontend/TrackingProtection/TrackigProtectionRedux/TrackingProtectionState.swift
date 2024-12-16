@@ -106,7 +106,7 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
         case TrackingProtectionActionType.updateBlockedTrackerStats:
             return handleUpdateBlockedTrackerStatsAction(from: state)
         case TrackingProtectionActionType.updateConnectionStatus:
-            return updateConnectionStatusState(from: state)
+            return handleUpdateConnectionStatusAction(from: state)
         case TrackingProtectionMiddlewareActionType.showAlert:
             return showAlertState(from: state)
         case TrackingProtectionActionType.toggleTrackingProtectionStatus:
@@ -196,7 +196,7 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
         )
     }
 
-    private static func updateConnectionStatusState(from state: TrackingProtectionState) -> TrackingProtectionState {
+    private static func handleUpdateConnectionStatusAction(from state: TrackingProtectionState) -> TrackingProtectionState {
         return TrackingProtectionState(
             windowUUID: state.windowUUID,
             trackingProtectionEnabled: state.trackingProtectionEnabled,
