@@ -53,6 +53,7 @@ final class AddressToolbarContainer: UIView,
         return shouldDisplayCompact ? compactToolbar : regularToolbar
     }
 
+    private var searchTerm = ""
     private var shouldDisplayCompact = true
     private var isTransitioning = false {
         didSet {
@@ -207,6 +208,14 @@ final class AddressToolbarContainer: UIView,
 
             if shouldSwitchToolbars {
                 switchToolbars()
+                guard model?.shouldSelectSearchTerm == false else { return }
+                store.dispatch(
+                    ToolbarAction(
+                        searchTerm: searchTerm,
+                        windowUUID: windowUUID,
+                        actionType: ToolbarActionType.didSetSearchTerm
+                    )
+                )
             }
         }
     }
@@ -289,10 +298,12 @@ final class AddressToolbarContainer: UIView,
                 store.dispatch(action)
             }
         }
+        self.searchTerm = searchTerm
         delegate?.searchSuggestions(searchTerm: searchTerm)
     }
 
     func didClearSearch() {
+        searchTerm = ""
         delegate?.searchSuggestions(searchTerm: "")
 
         guard let windowUUID else { return }
