@@ -36,20 +36,7 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
         super.init(router: router)
     }
 
-    deinit {
-        logger.log(
-            "MainMenuCoordinator - deinitialized",
-            level: .info,
-            category: .mainMenu
-        )
-    }
-
     func start() {
-        logger.log(
-            "MainMenuCoordinator - started",
-            level: .info,
-            category: .mainMenu
-        )
         router.setRootViewController(
             createMainMenuViewController(),
             hideBar: true
@@ -57,11 +44,6 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     }
 
     func showDetailViewController() {
-        logger.log(
-            "MainMenuCoordinator - pushing detail view controller",
-            level: .info,
-            category: .mainMenu
-        )
         router.push(
             createMainMenuDetailViewController(),
             animated: true
@@ -69,29 +51,14 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     }
 
     func dismissDetailViewController() {
-        logger.log(
-            "MainMenuCoordinator - popping detail view controller",
-            level: .info,
-            category: .mainMenu
-        )
         router.popViewController(animated: true)
     }
 
     func removeCoordinatorFromParent() {
-        logger.log(
-            "MainMenuCoordinator - removing coordinator from parent",
-            level: .info,
-            category: .mainMenu
-        )
         parentCoordinator?.didFinish(from: self)
     }
 
     func dismissMenuModal(animated: Bool) {
-        logger.log(
-            "MainMenuCoordinator - dismissing main menu",
-            level: .info,
-            category: .mainMenu
-        )
         router.dismiss(animated: animated, completion: nil)
         removeCoordinatorFromParent()
     }
@@ -103,26 +70,37 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
             switch destination.destination {
             case .bookmarks:
                 self.navigationHandler?.showLibraryPanel(.bookmarks)
+
             case .customizeHomepage:
                 self.navigationHandler?.showSettings(at: .homePage)
+
             case .downloads:
                 self.navigationHandler?.showLibraryPanel(.downloads)
+
             case .editBookmark:
                 self.navigationHandler?.editLatestBookmark()
+
             case .findInPage:
                 self.navigationHandler?.showFindInPage()
+
             case .goToURL:
                 self.navigationHandler?.openURLInNewTab(destination.url)
+
             case .history:
                 self.navigationHandler?.showLibraryPanel(.history)
+
             case .newTab:
                 self.navigationHandler?.openNewTab(inPrivateMode: false)
+
             case .newPrivateTab:
                 self.navigationHandler?.openNewTab(inPrivateMode: true)
+
             case .passwords:
                 self.navigationHandler?.showSettings(at: .password)
+
             case .settings:
                 self.navigationHandler?.showSettings(at: .general)
+
             case .syncSignIn:
                 let fxaParameters = FxASignInViewParameters(
                     launchParameters: FxALaunchParams(entrypoint: .browserMenu, query: [:]),
@@ -130,8 +108,11 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
                     referringPage: .appMenu
                 )
                 self.navigationHandler?.showSignInView(fxaParameters: fxaParameters)
+
             case .shareSheet:
                 self.navigationHandler?.showShareSheet(with: destination.url)
+                // self.navigationHandler?.showShareSheetForCurrentlySelectedTab()
+
             case .zoom:
                 self.navigationHandler?.updateZoomPageBarVisibility()
             }
@@ -141,6 +122,7 @@ class MainMenuCoordinator: BaseCoordinator, FeatureFlaggable {
     }
 
     // MARK: - Private helpers
+
     private func createMainMenuViewController() -> MainMenuViewController {
         let mainMenuViewController = MainMenuViewController(windowUUID: windowUUID, profile: profile)
         mainMenuViewController.coordinator = self
