@@ -28,8 +28,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             case .integration: return UIConstants.strings.toggleSectionSafari
             case .mozilla: return UIConstants.strings.toggleSectionMozilla
             case .secret: return nil
-            case .crashReports:
-                return nil
+            case .crashReports: return nil
             }
         }
 
