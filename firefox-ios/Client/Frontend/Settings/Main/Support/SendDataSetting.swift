@@ -45,7 +45,7 @@ class SendDataSetting: BoolSetting {
             prefKey = AppConstants.prefSendTechnicalData
         case .crashReports:
             title = .SendCrashReportsSettingTitle
-            message = String(format: .SendCrashReportsSettingMessage, MozillaName.shortName.rawValue)
+            message = .SendCrashReportsSettingMessage
             linkedText = .SendCrashReportsSettingLink
             prefKey = AppConstants.prefSendCrashReports
         case .dailyUsagePing:

@@ -5361,7 +5361,7 @@ extension String {
     public static let SendCrashReportsSettingTitle = MZLocalizedString(
         key: "Settings.CrashReports.Title.v135",
         tableName: "Settings",
-        value: "Crash Reports",
+        value: "Automatically Send Crash Reports",
         comment: "On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports.")
     public static let SendCrashReportsSettingLink = MZLocalizedString(
         key: "Settings.CrashReports.Link.v135",
@@ -5371,8 +5371,8 @@ extension String {
     public static let SendCrashReportsSettingMessage = MZLocalizedString(
         key: "Settings.CrashReports.Message.v135",
         tableName: "Settings",
-        value: "Automatically send crash reports to %@ to diagnose and fix issues with the browser. Reports may include personal or sensitive data.",
-        comment: "On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. Placeholder will be replaced the company name of Mozilla.")
+        value: "Crash reports allow us diagnose and fix issues with the browser.",
+        comment: "On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports.")
     public static let SendTechnicalDataSettingTitle = MZLocalizedString(
         key: "Settings.TechnicalData.Title.v135",
         tableName: "Settings",
