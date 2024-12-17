@@ -171,6 +171,12 @@ final class MainMenuMiddleware {
         }
     }
 
+    private func handleShowReaderModeAction(action: MainMenuAction) {
+        guard let isActionOn = action.telemetryInfo?.isActionOn else { return }
+        let option = isActionOn ? TelemetryAction.readerViewTurnOn : TelemetryAction.readerViewTurnOff
+        telemetry.toolsSubmenuOptionTapped(with: false, and: option)
+    }
+
     private func dispatchUpdateAccountHeader(
         accountData: AccountData? = nil,
         action: MainMenuAction,
