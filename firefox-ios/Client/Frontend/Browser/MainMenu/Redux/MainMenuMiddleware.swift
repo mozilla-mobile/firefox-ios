@@ -167,6 +167,19 @@ final class MainMenuMiddleware {
         }
     }
 
+    private func handleTapToggleUserAgentAction(action: MainMenuAction, isHomepage: Bool) {
+        guard let defaultIsDesktop = action.telemetryInfo?.isDefaultUserAgentDesktop,
+              let hasChangedUserAgent = action.telemetryInfo?.hasChangedUserAgent
+        else { return }
+        if defaultIsDesktop {
+            let option = hasChangedUserAgent ? TelemetryAction.switchToDesktopSite : TelemetryAction.switchToMobileSite
+            telemetry.mainMenuOptionTapped(with: isHomepage, and: option)
+        } else {
+            let option = hasChangedUserAgent ? TelemetryAction.switchToMobileSite : TelemetryAction.switchToDesktopSite
+            telemetry.mainMenuOptionTapped(with: isHomepage, and: option)
+        }
+    }
+
     private func dispatchUpdateAccountHeader(
         accountData: AccountData? = nil,
         action: MainMenuAction,
