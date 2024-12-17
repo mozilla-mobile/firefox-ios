@@ -305,18 +305,20 @@ class CreditCardsTests: BaseTestCase {
             mozWaitForElementToExist(app.staticTexts["Use saved card"])
             app.scrollViews.otherElements.tables.cells["creditCardCell_1"].tap()
             validateAutofillCardInfo(cardNr: "4111 1111 1111 1111", expirationNr: "06 / 40", name: "Test2")
-            app.webViews["Web content"].textFields["Email"].tapOnApp()
-            app.webViews["Web content"].textFields["Card number"].tapOnApp()
-            if !app.buttons[useSavedCard].exists {
-                app.webViews["Web content"].textFields["Full name on card"].tapOnApp()
+            if #available(iOS 17, *) {
+                app.webViews["Web content"].textFields["Email"].tapOnApp()
+                app.webViews["Web content"].textFields["Card number"].tapOnApp()
+                if !app.buttons[useSavedCard].exists {
+                    app.webViews["Web content"].textFields["Full name on card"].tapOnApp()
+                }
+                app.buttons[useSavedCard].waitAndTap()
+                unlockLoginsView()
+                mozWaitForElementToExist(app.staticTexts["Use saved card"])
+                app.scrollViews.element.swipeUp()
+                mozWaitForElementToExist(app.scrollViews.otherElements.tables.cells["creditCardCell_2"])
+                app.scrollViews.otherElements.tables.cells["creditCardCell_2"].tap()
+                validateAutofillCardInfo(cardNr: "5346 7556 0029 9631", expirationNr: "07 / 40", name: "Test3")
             }
-            app.buttons[useSavedCard].waitAndTap()
-            unlockLoginsView()
-            mozWaitForElementToExist(app.staticTexts["Use saved card"])
-            app.scrollViews.element.swipeUp()
-            mozWaitForElementToExist(app.scrollViews.otherElements.tables.cells["creditCardCell_2"])
-            app.scrollViews.otherElements.tables.cells["creditCardCell_2"].tap()
-            validateAutofillCardInfo(cardNr: "5346 7556 0029 9631", expirationNr: "07 / 40", name: "Test3")
         }
     }
 

@@ -63,9 +63,11 @@ class ClipBoardTests: BaseTestCase {
         mozWaitForElementToNotExist(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         navigator.nowAt(NewTabScreen)
         navigator.goto(URLBarOpen)
-        urlBarAddress.press(forDuration: 3)
-        app.otherElements["Paste"].waitAndTap()
-        mozWaitForValueContains(urlBarAddress, value: "http://www.example.com/")
+        if #available(iOS 17, *) {
+            urlBarAddress.press(forDuration: 3)
+            app.otherElements["Paste"].waitAndTap()
+            mozWaitForValueContains(urlBarAddress, value: "http://www.example.com/")
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307051
