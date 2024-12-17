@@ -70,6 +70,11 @@ class AppLaunchUtil {
         let conversionValue = ConversionValueUtil(fineValue: 0, coarseValue: .low, logger: logger)
         conversionValue.adNetworkAttributionUpdateConversionEvent()
 
+        // Used by share extension to determine if the bookmarks refactor feature flag is enabled
+        profile.prefs.setBool(LegacyFeatureFlagsManager.shared.isFeatureEnabled(.bookmarksRefactor,
+                                                                                checking: .buildOnly),
+                              forKey: PrefsKeys.IsBookmarksRefactorEnabled)
+
         // Start initializing the Nimbus SDK. This should be done after Glean
         // has been started.
         initializeExperiments()
