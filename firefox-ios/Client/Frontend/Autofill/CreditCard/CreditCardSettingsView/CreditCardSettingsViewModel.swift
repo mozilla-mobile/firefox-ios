@@ -25,8 +25,8 @@ class CreditCardSettingsViewModel {
     var appAuthenticator: AppAuthenticationProtocol?
 
     lazy var cardInputViewModel = CreditCardInputViewModel(profile: profile)
+    lazy var toggleModel = ToggleModel(isEnabled: isAutofillEnabled, delegate: self)
     var tableViewModel = CreditCardTableViewModel()
-    var toggleModel: ToggleModel!
 
     public init(profile: Profile,
                 windowUUID: WindowUUID,
@@ -37,7 +37,7 @@ class CreditCardSettingsViewModel {
         guard let profile = profile as? BrowserProfile else { return }
         self.autofill = profile.autofill
         self.appAuthenticator = appAuthenticator
-        self.toggleModel = ToggleModel(isEnabled: isAutofillEnabled, delegate: self)
+
         tableViewModel.toggleModel = toggleModel
     }
 
