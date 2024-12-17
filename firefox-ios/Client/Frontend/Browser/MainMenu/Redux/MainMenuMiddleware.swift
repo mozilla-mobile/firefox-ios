@@ -61,16 +61,7 @@ final class MainMenuMiddleware {
             self.handleTapShowDetailsViewAction(action: action, isHomepage: isHomepage)
 
         case MainMenuActionType.tapToggleUserAgent:
-            guard let defaultIsDesktop = action.telemetryInfo?.isDefaultUserAgentDesktop,
-                  let hasChangedUserAgent = action.telemetryInfo?.hasChangedUserAgent
-            else { return }
-            if defaultIsDesktop {
-                let option = hasChangedUserAgent ? TelemetryAction.switchToDesktopSite : TelemetryAction.switchToMobileSite
-                self.telemetry.mainMenuOptionTapped(with: isHomepage, and: option)
-            } else {
-                let option = hasChangedUserAgent ? TelemetryAction.switchToMobileSite : TelemetryAction.switchToDesktopSite
-                self.telemetry.mainMenuOptionTapped(with: isHomepage, and: option)
-            }
+            self.handleTapToggleUserAgentAction(action: action, isHomepage: isHomepage)
 
         case MainMenuActionType.tapCloseMenu:
             self.telemetry.closeButtonTapped(isHomepage: isHomepage)
