@@ -380,7 +380,7 @@ class WKEngineSession: NSObject,
     // MARK: - WKNavigationDelegate
 
     func webView(_ webView: WKWebView,
-                 didCommit navigation: WKNavigation!) {
+                 didCommit navigation: WKNavigation?) {
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
         telemetryProxy?.handleTelemetry(session: self, event: .pageLoadStarted)
 
@@ -389,7 +389,7 @@ class WKEngineSession: NSObject,
     }
 
     func webView(_ webView: WKWebView,
-                 didFinish navigation: WKNavigation!) {
+                 didFinish navigation: WKNavigation?) {
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
 
         if let url = webView.url {
@@ -399,7 +399,7 @@ class WKEngineSession: NSObject,
     }
 
     func webView(_ webView: WKWebView,
-                 didFail navigation: WKNavigation!,
+                 didFail navigation: WKNavigation?,
                  withError error: Error) {
         telemetryProxy?.handleTelemetry(session: self, event: .didFailNavigation)
         telemetryProxy?.handleTelemetry(session: self, event: .pageLoadCancelled)
@@ -407,7 +407,7 @@ class WKEngineSession: NSObject,
     }
 
     func webView(_ webView: WKWebView,
-                 didFailProvisionalNavigation navigation: WKNavigation!,
+                 didFailProvisionalNavigation navigation: WKNavigation?,
                  withError error: Error) {
         telemetryProxy?.handleTelemetry(session: self, event: .didFailProvisionalNavigation)
         telemetryProxy?.handleTelemetry(session: self, event: .pageLoadCancelled)
@@ -415,7 +415,7 @@ class WKEngineSession: NSObject,
     }
 
     func webView(_ webView: WKWebView,
-                 didStartProvisionalNavigation navigation: WKNavigation!) {
+                 didStartProvisionalNavigation navigation: WKNavigation?) {
         // TODO: FXIOS-8277 - Determine navigation calls with EngineSessionDelegate
     }
 
@@ -435,7 +435,7 @@ class WKEngineSession: NSObject,
     }
 
     func webView(_ webView: WKWebView,
-                 didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
+                 didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation?) {
         // TODO: FXIOS-8275 - Handle didReceiveServerRedirectForProvisionalNavigation (epic part 3)
     }
 

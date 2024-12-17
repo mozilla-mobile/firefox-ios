@@ -166,12 +166,11 @@ final class PrivacyPreferencesViewController: UIViewController,
         // TODO: FXIOS-10675 Firefox iOS: Manage Technical Data during Onboarding and Settings
         technicalDataSwitch.switchCallback = { _ in }
 
-        // TODO: FXIOS-10739 Firefox iOS: Use the correct links for Learn more buttons, in Manage Privacy Preferences screen
         crashReportsSwitch.learnMoreCallBack = { [weak self] in
-            self?.presentLink(with: nil)
+            self?.presentLink(with: SupportUtils.URLForTopic("mobile-crash-reports"))
         }
         technicalDataSwitch.learnMoreCallBack = { [weak self] in
-            self?.presentLink(with: nil)
+            self?.presentLink(with: SupportUtils.URLForTopic("mobile-technical-and-interaction-data"))
         }
     }
 
