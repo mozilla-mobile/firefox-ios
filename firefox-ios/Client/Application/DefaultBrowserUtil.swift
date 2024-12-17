@@ -25,8 +25,8 @@ struct DefaultBrowserUtil {
 
     func processUserDefaultState(isFirstRun: Bool) {
         guard #available(iOS 18.2, *),
-              let isDefault = try? application.isDefault(.webBrowser)
-        else { return }
+              isRunningOnBlockListBetaOS(),
+              let isDefault = try? application.isDefault(.webBrowser) else { return }
 
         trackIfUserIsDefault(isDefault)
 
@@ -39,6 +39,13 @@ struct DefaultBrowserUtil {
                 userDefault.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
             }
         }
+    }
+
+    private func isRunningOnBlockListBetaOS() -> Bool {
+        let systemVersion = ProcessInfo.processInfo.operatingSystemVersionString
+        let betaBlockLists: [String] = ["22C5109p", "22C5125e", "22C5131e", "22C5142a"]
+
+        return betaBlockLists.contains { systemVersion.contains($0) }
     }
 
     private func trackIfUserIsDefault(_ isDefault: Bool) {
