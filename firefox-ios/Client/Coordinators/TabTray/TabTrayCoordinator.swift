@@ -16,7 +16,7 @@ class TabTrayCoordinator: BaseCoordinator,
                           ParentCoordinatorDelegate,
                           TabTrayViewControllerDelegate,
                           TabTrayNavigationHandler {
-    private var tabTrayViewController: TabTrayViewController!
+    private var tabTrayViewController: TabTrayViewController?
     private let profile: Profile
     private let tabManager: TabManager
     weak var parentCoordinator: TabTrayCoordinatorDelegate?
@@ -33,20 +33,22 @@ class TabTrayCoordinator: BaseCoordinator,
 
     func dismissChildTabTrayPanels() {
         // [FXIOS-10482] Initial bandaid for memory leaking during tab tray open/close. Needs further investigation.
-        guard let childVCs = tabTrayViewController.currentPanel?.viewControllers else { return }
+        guard let childVCs = tabTrayViewController?.currentPanel?.viewControllers else { return }
         childVCs.forEach { ($0 as? TabDisplayPanelViewController)?.removeTabPanel() }
     }
 
     private func initializeTabTrayViewController(selectedTab: TabTrayPanelType) {
-        tabTrayViewController = TabTrayViewController(selectedTab: selectedTab, windowUUID: tabManager.windowUUID)
+        let tabTrayViewController = TabTrayViewController(selectedTab: selectedTab, windowUUID: tabManager.windowUUID)
         router.setRootViewController(tabTrayViewController)
         tabTrayViewController.childPanelControllers = makeChildPanels()
         tabTrayViewController.delegate = self
         tabTrayViewController.navigationHandler = self
+
+        self.tabTrayViewController = tabTrayViewController
     }
 
     func start(with tabTraySection: TabTrayPanelType) {
-        tabTrayViewController.setupOpenPanel(panelType: tabTraySection)
+        tabTrayViewController?.setupOpenPanel(panelType: tabTraySection)
     }
 
     private func makeChildPanels() -> [UINavigationController] {
