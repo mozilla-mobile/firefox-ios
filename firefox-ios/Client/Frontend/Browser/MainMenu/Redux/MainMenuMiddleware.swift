@@ -198,6 +198,12 @@ final class MainMenuMiddleware {
         )
     }
 
+    private func handleTapToggleNightModeAction(action: MainMenuAction, isHomepage: Bool) {
+        guard let isActionOn = action.telemetryInfo?.isActionOn else { return }
+        let option = isActionOn ? TelemetryAction.nightModeTurnOn : TelemetryAction.nightModeTurnOff
+        telemetry.toolsSubmenuOptionTapped(with: isHomepage, and: option)
+    }
+
     private func getAccountData() -> AccountData? {
         let rustAccount = RustFirefoxAccounts.shared
         let needsReAuth = rustAccount.accountNeedsReauth()
