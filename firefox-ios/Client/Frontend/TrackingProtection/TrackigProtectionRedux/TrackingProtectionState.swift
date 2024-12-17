@@ -94,118 +94,168 @@ struct TrackingProtectionState: StateType, Equatable, ScreenState {
 
         switch action.actionType {
         case TrackingProtectionMiddlewareActionType.clearCookies:
-            return TrackingProtectionState(
-                windowUUID: state.windowUUID,
-                trackingProtectionEnabled: !state.trackingProtectionEnabled,
-                connectionSecure: state.connectionSecure,
-                shouldClearCookies: true,
-                shouldUpdateBlockedTrackerStats: false,
-                shouldUpdateConnectionStatus: false,
-                navigateTo: .home,
-                displayView: nil
-            )
+            return handleClearCookiesAction(from: state)
         case TrackingProtectionMiddlewareActionType.navigateToSettings:
-            return TrackingProtectionState(
-                windowUUID: state.windowUUID,
-                trackingProtectionEnabled: state.trackingProtectionEnabled,
-                connectionSecure: state.connectionSecure,
-                shouldClearCookies: false,
-                shouldUpdateBlockedTrackerStats: false,
-                shouldUpdateConnectionStatus: false,
-                navigateTo: .settings,
-                displayView: nil
-            )
+            return handleNavigateToSettingsAction(from: state)
         case TrackingProtectionMiddlewareActionType.showTrackingProtectionDetails:
-            return TrackingProtectionState(
-                windowUUID: state.windowUUID,
-                trackingProtectionEnabled: state.trackingProtectionEnabled,
-                connectionSecure: state.connectionSecure,
-                shouldClearCookies: false,
-                shouldUpdateBlockedTrackerStats: false,
-                shouldUpdateConnectionStatus: false,
-                navigateTo: nil,
-                displayView: .trackingProtectionDetails
-            )
+            return handleShowTrackingProtectionDetailsAction(from: state)
         case TrackingProtectionMiddlewareActionType.showBlockedTrackersDetails:
-            return TrackingProtectionState(
-                windowUUID: state.windowUUID,
-                trackingProtectionEnabled: state.trackingProtectionEnabled,
-                connectionSecure: state.connectionSecure,
-                shouldClearCookies: false,
-                shouldUpdateBlockedTrackerStats: false,
-                shouldUpdateConnectionStatus: false,
-                navigateTo: nil,
-                displayView: .blockedTrackersDetails
-            )
+            return handleShowBlockedTrackersDetailsAction(from: state)
         case TrackingProtectionActionType.goBack:
-            return TrackingProtectionState(
-                windowUUID: state.windowUUID,
-                trackingProtectionEnabled: state.trackingProtectionEnabled,
-                connectionSecure: state.connectionSecure,
-                shouldClearCookies: false,
-                shouldUpdateBlockedTrackerStats: false,
-                shouldUpdateConnectionStatus: false,
-                navigateTo: .back,
-                displayView: nil
-            )
+            return handleGoBackAction(from: state)
         case TrackingProtectionActionType.updateBlockedTrackerStats:
-            return TrackingProtectionState(
-                windowUUID: state.windowUUID,
-                trackingProtectionEnabled: state.trackingProtectionEnabled,
-                connectionSecure: state.connectionSecure,
-                shouldClearCookies: state.shouldClearCookies,
-                shouldUpdateBlockedTrackerStats: true,
-                shouldUpdateConnectionStatus: false,
-                navigateTo: nil,
-                displayView: nil
-            )
+            return handleUpdateBlockedTrackerStatsAction(from: state)
         case TrackingProtectionActionType.updateConnectionStatus:
-            return TrackingProtectionState(
-                windowUUID: state.windowUUID,
-                trackingProtectionEnabled: state.trackingProtectionEnabled,
-                connectionSecure: state.connectionSecure,
-                shouldClearCookies: false,
-                shouldUpdateBlockedTrackerStats: false,
-                shouldUpdateConnectionStatus: true,
-                navigateTo: nil,
-                displayView: nil
-            )
+            return handleUpdateConnectionStatusAction(from: state)
         case TrackingProtectionMiddlewareActionType.showAlert:
-            return TrackingProtectionState(
-                windowUUID: state.windowUUID,
-                trackingProtectionEnabled: state.trackingProtectionEnabled,
-                connectionSecure: state.connectionSecure,
-                shouldClearCookies: false,
-                shouldUpdateBlockedTrackerStats: false,
-                shouldUpdateConnectionStatus: false,
-                navigateTo: nil,
-                displayView: .clearCookiesAlert
-            )
+            return handleShowAlertAction(from: state)
         case TrackingProtectionActionType.toggleTrackingProtectionStatus:
-            return TrackingProtectionState(
-                windowUUID: state.windowUUID,
-                trackingProtectionEnabled: !state.trackingProtectionEnabled,
-                connectionSecure: state.connectionSecure,
-                shouldClearCookies: false,
-                shouldUpdateBlockedTrackerStats: false,
-                shouldUpdateConnectionStatus: false,
-                navigateTo: nil,
-                displayView: nil
-            )
+            return handleToggleTrackingProtectionStatusAction(from: state)
         case TrackingProtectionMiddlewareActionType.dismissTrackingProtection:
-            return TrackingProtectionState(
-                windowUUID: state.windowUUID,
-                trackingProtectionEnabled: state.trackingProtectionEnabled,
-                connectionSecure: state.connectionSecure,
-                shouldClearCookies: false,
-                shouldUpdateBlockedTrackerStats: false,
-                shouldUpdateConnectionStatus: false,
-                navigateTo: .close,
-                displayView: nil
-            )
+            return handleDismissTrackingProtectionAction(from: state)
         default:
             return defaultState(from: state)
         }
+    }
+
+    private static func handleClearCookiesAction(from state: TrackingProtectionState) -> TrackingProtectionState {
+        return TrackingProtectionState(
+            windowUUID: state.windowUUID,
+            trackingProtectionEnabled: !state.trackingProtectionEnabled,
+            connectionSecure: state.connectionSecure,
+            shouldClearCookies: true,
+            shouldUpdateBlockedTrackerStats: false,
+            shouldUpdateConnectionStatus: false,
+            navigateTo: .home,
+            displayView: nil
+        )
+    }
+
+    private static func handleNavigateToSettingsAction(from state: TrackingProtectionState) -> TrackingProtectionState {
+        return TrackingProtectionState(
+            windowUUID: state.windowUUID,
+            trackingProtectionEnabled: state.trackingProtectionEnabled,
+            connectionSecure: state.connectionSecure,
+            shouldClearCookies: false,
+            shouldUpdateBlockedTrackerStats: false,
+            shouldUpdateConnectionStatus: false,
+            navigateTo: .settings,
+            displayView: nil
+        )
+    }
+
+    private static func handleShowTrackingProtectionDetailsAction(
+        from state: TrackingProtectionState
+    ) -> TrackingProtectionState {
+        return TrackingProtectionState(
+            windowUUID: state.windowUUID,
+            trackingProtectionEnabled: state.trackingProtectionEnabled,
+            connectionSecure: state.connectionSecure,
+            shouldClearCookies: false,
+            shouldUpdateBlockedTrackerStats: false,
+            shouldUpdateConnectionStatus: false,
+            navigateTo: nil,
+            displayView: .trackingProtectionDetails
+        )
+    }
+
+    private static func handleShowBlockedTrackersDetailsAction(
+        from state: TrackingProtectionState
+    ) -> TrackingProtectionState {
+        return TrackingProtectionState(
+            windowUUID: state.windowUUID,
+            trackingProtectionEnabled: state.trackingProtectionEnabled,
+            connectionSecure: state.connectionSecure,
+            shouldClearCookies: false,
+            shouldUpdateBlockedTrackerStats: false,
+            shouldUpdateConnectionStatus: false,
+            navigateTo: nil,
+            displayView: .blockedTrackersDetails
+        )
+    }
+
+    private static func handleGoBackAction(from state: TrackingProtectionState) -> TrackingProtectionState {
+        return TrackingProtectionState(
+            windowUUID: state.windowUUID,
+            trackingProtectionEnabled: state.trackingProtectionEnabled,
+            connectionSecure: state.connectionSecure,
+            shouldClearCookies: false,
+            shouldUpdateBlockedTrackerStats: false,
+            shouldUpdateConnectionStatus: false,
+            navigateTo: .back,
+            displayView: nil
+        )
+    }
+
+    private static func handleUpdateBlockedTrackerStatsAction(
+        from state: TrackingProtectionState
+    ) -> TrackingProtectionState {
+        return TrackingProtectionState(
+            windowUUID: state.windowUUID,
+            trackingProtectionEnabled: state.trackingProtectionEnabled,
+            connectionSecure: state.connectionSecure,
+            shouldClearCookies: state.shouldClearCookies,
+            shouldUpdateBlockedTrackerStats: true,
+            shouldUpdateConnectionStatus: false,
+            navigateTo: nil,
+            displayView: nil
+        )
+    }
+
+    private static func handleUpdateConnectionStatusAction(from state: TrackingProtectionState) -> TrackingProtectionState {
+        return TrackingProtectionState(
+            windowUUID: state.windowUUID,
+            trackingProtectionEnabled: state.trackingProtectionEnabled,
+            connectionSecure: state.connectionSecure,
+            shouldClearCookies: false,
+            shouldUpdateBlockedTrackerStats: false,
+            shouldUpdateConnectionStatus: true,
+            navigateTo: nil,
+            displayView: nil
+        )
+    }
+
+    private static func handleShowAlertAction(from state: TrackingProtectionState) -> TrackingProtectionState {
+        return TrackingProtectionState(
+            windowUUID: state.windowUUID,
+            trackingProtectionEnabled: state.trackingProtectionEnabled,
+            connectionSecure: state.connectionSecure,
+            shouldClearCookies: false,
+            shouldUpdateBlockedTrackerStats: false,
+            shouldUpdateConnectionStatus: false,
+            navigateTo: nil,
+            displayView: .clearCookiesAlert
+        )
+    }
+
+    private static func handleToggleTrackingProtectionStatusAction(
+        from state: TrackingProtectionState
+    ) -> TrackingProtectionState {
+        return TrackingProtectionState(
+            windowUUID: state.windowUUID,
+            trackingProtectionEnabled: !state.trackingProtectionEnabled,
+            connectionSecure: state.connectionSecure,
+            shouldClearCookies: false,
+            shouldUpdateBlockedTrackerStats: false,
+            shouldUpdateConnectionStatus: false,
+            navigateTo: nil,
+            displayView: nil
+        )
+    }
+
+    private static func handleDismissTrackingProtectionAction(
+        from state: TrackingProtectionState
+    ) -> TrackingProtectionState {
+        return TrackingProtectionState(
+            windowUUID: state.windowUUID,
+            trackingProtectionEnabled: state.trackingProtectionEnabled,
+            connectionSecure: state.connectionSecure,
+            shouldClearCookies: false,
+            shouldUpdateBlockedTrackerStats: false,
+            shouldUpdateConnectionStatus: false,
+            navigateTo: .close,
+            displayView: nil
+        )
     }
 
     static func defaultState(from state: TrackingProtectionState) -> TrackingProtectionState {
