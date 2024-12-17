@@ -73,12 +73,7 @@ final class MainMenuMiddleware {
             self.handleDidInstantiateViewAction(action: action)
 
         case MainMenuActionType.viewDidLoad:
-            store.dispatch(
-                MainMenuAction(
-                    windowUUID: action.windowUUID,
-                    actionType: MainMenuMiddlewareActionType.requestTabInfo
-                )
-            )
+            self.handleViewDidLoadAction(action: action)
 
         case MainMenuActionType.menuDismissed:
             self.telemetry.menuDismissed(isHomepage: isHomepage)
