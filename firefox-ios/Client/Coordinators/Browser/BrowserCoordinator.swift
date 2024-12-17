@@ -137,24 +137,22 @@ class BrowserCoordinator: BaseCoordinator,
         screenshotService.screenshotableView = nil
     }
 
-    func showHomepage(overlayManager: OverlayModeManager, isZeroSearch: Bool) {
-        let homepageCoordinator = childCoordinators[HomepageCoordinator.self] ?? HomepageCoordinator(
-            windowUUID: windowUUID,
-            profile: profile,
-            isZeroSearch: isZeroSearch,
-            router: router
-        )
-        add(child: homepageCoordinator)
+    func showHomepage(
+        overlayManager: OverlayModeManager,
+        isZeroSearch: Bool,
+        statusBarScrollDelegate: StatusBarScrollDelegate
+    ) {
         let homepageController = self.homepageViewController ?? HomepageViewController(
             windowUUID: windowUUID,
-            homepageDelegate: homepageCoordinator,
-            overlayManager: overlayManager
+            overlayManager: overlayManager,
+            statusBarScrollDelegate: statusBarScrollDelegate
         )
         guard browserViewController.embedContent(homepageController) else {
             logger.log("Unable to embed new homepage", level: .debug, category: .coordinator)
             return
         }
         self.homepageViewController = homepageController
+        homepageController.scrollToTop()
     }
 
     func showPrivateHomepage(overlayManager: OverlayModeManager) {
@@ -483,10 +481,6 @@ class BrowserCoordinator: BaseCoordinator,
 
     // MARK: - LibraryCoordinatorDelegate
 
-    func openRecentlyClosedSiteInSameTab(_ url: URL) {
-        browserViewController.openRecentlyClosedSiteInSameTab(url)
-    }
-
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
         browserViewController.openRecentlyClosedSiteInNewTab(url, isPrivate: isPrivate)
     }
@@ -585,14 +579,6 @@ class BrowserCoordinator: BaseCoordinator,
 
     private func makeMenuNavViewController() -> DismissableNavigationViewController? {
         if let mainMenuCoordinator = childCoordinators.first(where: { $0 is MainMenuCoordinator }) as? MainMenuCoordinator {
-            logger.log(
-                "MainMenuCoordinator already exists when it shouldn't. Removing and recreating it to access menu",
-                level: .fatal,
-                category: .mainMenu,
-                extra: ["existing mainMenuCoordinator UUID": "\(mainMenuCoordinator.windowUUID)",
-                        "BrowserCoordinator windowUUID": "\(windowUUID)"]
-            )
-
             mainMenuCoordinator.dismissMenuModal(animated: false)
         }
 
@@ -613,14 +599,6 @@ class BrowserCoordinator: BaseCoordinator,
         coordinator.navigationHandler = self
         add(child: coordinator)
         coordinator.start()
-
-        navigationController.onViewDismissed = { [weak self] in
-            self?.logger.log(
-                "MainMenu NavigationController - onViewDismissed",
-                level: .info,
-                category: .mainMenu
-            )
-        }
 
         return navigationController
     }

@@ -81,7 +81,8 @@ class BookmarksTests: BaseTestCase {
     private func checkEmptyBookmarkList() {
         mozWaitForElementToExist(app.tables["Bookmarks List"])
         let list = app.tables["Bookmarks List"].cells.count
-        XCTAssertEqual(list, 1, "There should not be any entry in the bookmarks list")
+        // There is a "Desktop bookmarks" folder that makes the list to be equal with 1
+        XCTAssertEqual(list, 1, "There should no bookmarked items in the list")
     }
 
     private func checkItemInBookmarkList(oneItemBookmarked: Bool) {
@@ -363,8 +364,10 @@ class BookmarksTests: BaseTestCase {
     func testLongTapRecentlySavedLink() {
         validateLongTapOptionsFromBookmarkLink()
         forceRestartApp()
-        XCUIDevice.shared.orientation = .landscapeLeft
-        validateLongTapOptionsFromBookmarkLink()
+        if #available(iOS 18, *) {
+            XCUIDevice.shared.orientation = .landscapeLeft
+            validateLongTapOptionsFromBookmarkLink()
+        }
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2307054

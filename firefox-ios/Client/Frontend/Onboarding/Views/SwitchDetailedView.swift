@@ -139,6 +139,10 @@ final class SwitchDetailedView: UIView, ThemeApplicable {
         actionDescriptionLabel.attributedText = linkedDescription
     }
 
+    func setSwitchValue(isOn: Bool) {
+        actionSwitch.isOn = isOn
+    }
+
     // MARK: - Button actions
     @objc
     private func switchValueChanged(_ sender: UISwitch) {

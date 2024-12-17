@@ -2,10 +2,14 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import MozillaAppServices
+import Shared
 
 class EditFolderViewModel {
+    private let profile: Profile
+    private let logger: Logger
     private let parentFolder: FxBookmarkNode
     private var folder: FxBookmarkNode?
     private let bookmarkSaver: BookmarksSaver
@@ -25,10 +29,13 @@ class EditFolderViewModel {
     }
 
     init(profile: Profile,
+         logger: Logger = DefaultLogger.shared,
          parentFolder: FxBookmarkNode,
          folder: FxBookmarkNode?,
          bookmarkSaver: BookmarksSaver? = nil,
          folderFetcher: FolderHierarchyFetcher? = nil) {
+        self.profile = profile
+        self.logger = logger
         self.parentFolder = parentFolder
         self.folder = folder
         self.bookmarkSaver = bookmarkSaver ?? DefaultBookmarksSaver(profile: profile)
@@ -89,7 +96,17 @@ class EditFolderViewModel {
         guard let folder else { return }
         let selectedFolderGUID = selectedFolder?.guid ?? parentFolder.guid
         Task { @MainActor in
-            _ = await bookmarkSaver.save(bookmark: folder, parentFolderGUID: selectedFolderGUID)
+            // Creates or updates the folder
+            let result = await bookmarkSaver.save(bookmark: folder, parentFolderGUID: selectedFolderGUID)
+            switch result {
+            case .success(let guid):
+                // A nil guid indicates a bookmark update, not creation
+                guard let guid else { return }
+                profile.prefs.setString(guid, forKey: PrefsKeys.RecentBookmarkFolder)
+            case .failure(let error):
+                self.logger.log("Failed to save folder: \(error)", level: .warning, category: .library)
+            }
+
             onBookmarkSaved?()
         }
     }

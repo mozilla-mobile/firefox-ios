@@ -161,6 +161,11 @@ extension String {
                 tableName: "Bookmarks",
                 value: "Save in",
                 comment: "When editing a bookmark, you can select the folder that the bookmark will be saved in. The label for this section of the view is `Save in`.")
+            public static let EditBookmarkSave = MZLocalizedString(
+                key: "Bookmarks.Menu.EditBookmarkSave.v135",
+                tableName: "Bookmarks",
+                value: "Save",
+                comment: "When editing a bookmark, the right button in the navigation bar indicating that the edited bookmark will be saved.")
             public static let EditBookmarkTitle = MZLocalizedString(
                 key: "Bookmarks.Menu.EditBookmarkTitle.v131",
                 tableName: "Bookmarks",
@@ -4808,6 +4813,11 @@ extension String {
             tableName: nil,
             value: "Bookmark Removed",
             comment: "Toast displayed to the user after a bookmark has been removed.")
+        public static let EditBookmarkLabel = MZLocalizedString(
+            key: "Menu.EditBookmark.Label.v135",
+            tableName: "Menu",
+            value: "Edit",
+            comment: "Label for the edit bookmark button in the legacy menu. Pressing this button opens the bookmark editing screen for the current page's bookmark. Please keep the text as short as possible for this label.")
 
         // Reading list
         public static let ReadingList = MZLocalizedString(
@@ -5351,7 +5361,7 @@ extension String {
     public static let SendCrashReportsSettingTitle = MZLocalizedString(
         key: "Settings.CrashReports.Title.v135",
         tableName: "Settings",
-        value: "Crash Reports",
+        value: "Automatically Send Crash Reports",
         comment: "On the Settings screen, this is the title text for a toggle which controls automatically sending crash reports.")
     public static let SendCrashReportsSettingLink = MZLocalizedString(
         key: "Settings.CrashReports.Link.v135",
@@ -5361,8 +5371,8 @@ extension String {
     public static let SendCrashReportsSettingMessage = MZLocalizedString(
         key: "Settings.CrashReports.Message.v135",
         tableName: "Settings",
-        value: "Automatically send crash reports to %@ to diagnose and fix issues with the browser. Reports may include personal or sensitive data.",
-        comment: "On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports. Placeholder will be replaced the company name of Mozilla.")
+        value: "Crash reports allow us diagnose and fix issues with the browser.",
+        comment: "On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports.")
     public static let SendTechnicalDataSettingTitle = MZLocalizedString(
         key: "Settings.TechnicalData.Title.v135",
         tableName: "Settings",
@@ -6710,6 +6720,12 @@ extension String {
             tableName: "Toolbar",
             value: "Tabs open",
             comment: "Accessibility label for the tabs button in the toolbar, specifing the number of tabs open.")
+
+        public static let MenuButtonAccessibilityLabel = MZLocalizedString(
+            key: "Toolbar.Menu.Button.A11y.Label.v135",
+            tableName: "Toolbar",
+            value: "Main Menu",
+            comment: "Accessibility label for the Main Menu button in the toolbar, specifing that the button will open Main Menu")
 
         public struct TabToolbarLongPressActionsMenu {
             public static let CloseThisTabButton = MZLocalizedString(

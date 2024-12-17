@@ -42,6 +42,18 @@ for lang in $LOCALES; do
         --erase_simulator --localize_simulator \
         --devices "iPhone 15" --languages "$lang" \
         --output_directory "l10n-screenshots/$lang" \
-        $EXTRA_FAST_LANE_ARGS
-    echo "Fastlane exited with code: $?"
+        $EXTRA_FAST_LANE_ARGS | tee output.txt
+    if [ "$?" != "0" ]; then
+        echo "Fastlane exited with code: $?"
+        exit $?
+    elif grep -q "** TEST FAILED **"; then
+        echo "Test/compilation failed"
+        exit 1
+    elif grep -q "Caught error" "output.txt"; then
+        echo "Fastlane caught error"
+        exit 1
+    elif grep -q "❌" "output.txt"; then
+        exit 1
+    fi
+    rm output.txt
 done

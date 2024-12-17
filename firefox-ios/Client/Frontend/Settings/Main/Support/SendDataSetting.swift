@@ -45,7 +45,7 @@ class SendDataSetting: BoolSetting {
             prefKey = AppConstants.prefSendTechnicalData
         case .crashReports:
             title = .SendCrashReportsSettingTitle
-            message = String(format: .SendCrashReportsSettingMessage, MozillaName.shortName.rawValue)
+            message = .SendCrashReportsSettingMessage
             linkedText = .SendCrashReportsSettingLink
             prefKey = AppConstants.prefSendCrashReports
         case .dailyUsagePing:
@@ -84,29 +84,31 @@ class SendDataSetting: BoolSetting {
             attributedStatusText: statusText
         )
 
-        setupSettingDidChange()
+        setupSettingDidChange(for: sendDataType)
 
         // We make sure to set this on initialization, in case the setting is turned off
         // in which case, we would to make sure that users are opted out of experiments
         Experiments.setTelemetrySetting(prefs.boolForKey(prefKey) ?? true)
     }
 
-    private func setupSettingDidChange() {
+    private func setupSettingDidChange(for sendDataType: SendDataType) {
         self.settingDidChange = { [weak self] value in
-            // AdjustHelper.setEnabled($0)
-            DefaultGleanWrapper.shared.setUpload(isEnabled: value)
+            if sendDataType != .crashReports {
+                // AdjustHelper.setEnabled($0)
+                DefaultGleanWrapper.shared.setUpload(isEnabled: value)
 
-            if !value {
-                self?.prefs?.removeObjectForKey(PrefsKeys.Usage.profileId)
+                if !value {
+                    self?.prefs?.removeObjectForKey(PrefsKeys.Usage.profileId)
 
-                // set dummy uuid to make sure the previous one is deleted
-                if let uuid = UUID(uuidString: "beefbeef-beef-beef-beef-beeefbeefbee") {
-                    GleanMetrics.Usage.profileId.set(uuid)
+                    // set dummy uuid to make sure the previous one is deleted
+                    if let uuid = UUID(uuidString: "beefbeef-beef-beef-beef-beeefbeefbee") {
+                        GleanMetrics.Usage.profileId.set(uuid)
+                    }
                 }
-            }
 
-            Experiments.setTelemetrySetting(value)
-            self?.shouldSendData?(value)
+                Experiments.setTelemetrySetting(value)
+                self?.shouldSendData?(value)
+            }
         }
     }
 
@@ -123,17 +125,16 @@ class SendDataSetting: BoolSetting {
         }
     }
 
-    // TODO: FXIOS-10739 Firefox iOS: Use the correct links for Learn more buttons, in Manage Privacy Preferences screen
     override var url: URL? {
         switch sendDataType {
         case .usageData:
             return SupportUtils.URLForTopic("adjust")
         case .technicalData:
-            return nil
+            return SupportUtils.URLForTopic("mobile-technical-and-interaction-data")
         case .crashReports:
-            return nil
+            return SupportUtils.URLForTopic("mobile-crash-reports")
         case .dailyUsagePing:
-            return SupportUtils.URLForTopic("dau-ping-settings-mobile")
+            return SupportUtils.URLForTopic("usage-ping-settings-mobile")
         }
     }
 

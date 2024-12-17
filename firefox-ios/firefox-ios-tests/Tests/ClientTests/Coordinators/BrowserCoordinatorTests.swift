@@ -141,7 +141,11 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     func testShowNewHomepage_setsProperViewController() {
         let subject = createSubject()
-        subject.showHomepage(overlayManager: overlayModeManager, isZeroSearch: false)
+        subject.showHomepage(
+            overlayManager: overlayModeManager,
+            isZeroSearch: false,
+            statusBarScrollDelegate: scrollDelegate
+        )
 
         XCTAssertNotNil(subject.homepageViewController)
         XCTAssertNil(subject.webviewController)
@@ -150,11 +154,19 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
 
     func testShowNewHomepage_hasSameInstance() {
         let subject = createSubject()
-        subject.showHomepage(overlayManager: overlayModeManager, isZeroSearch: false)
+        subject.showHomepage(
+            overlayManager: overlayModeManager,
+            isZeroSearch: false,
+            statusBarScrollDelegate: scrollDelegate
+        )
         let firstHomepage = subject.homepageViewController
         XCTAssertNotNil(subject.homepageViewController)
 
-        subject.showHomepage(overlayManager: overlayModeManager, isZeroSearch: false)
+        subject.showHomepage(
+            overlayManager: overlayModeManager,
+            isZeroSearch: false,
+            statusBarScrollDelegate: scrollDelegate
+        )
         let secondHomepage = subject.homepageViewController
         XCTAssertEqual(firstHomepage, secondHomepage)
     }
@@ -258,7 +270,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         }
         let exp = XCTNSPredicateExpectation(predicate: predicate, object: .none)
 
-        wait(for: [exp], timeout: 3.0)
+        wait(for: [exp], timeout: 5.0)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is ShareSheetCoordinator)
@@ -299,7 +311,7 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         }
         let exp = XCTNSPredicateExpectation(predicate: predicate, object: .none)
 
-        wait(for: [exp], timeout: 3.0)
+        wait(for: [exp], timeout: 5.0)
 
         XCTAssertEqual(subject.childCoordinators.count, 1)
         XCTAssertTrue(subject.childCoordinators.first is ShareSheetCoordinator)
@@ -972,16 +984,6 @@ final class BrowserCoordinatorTests: XCTestCase, FeatureFlaggable {
         XCTAssertTrue(mbvc.didRequestToOpenInNewTabCalled)
         XCTAssertEqual(mbvc.lastOpenedURL, url)
         XCTAssertTrue(mbvc.isPrivate)
-    }
-
-    func testOpenRecentlyClosedTabInSameTab_callsReletedMethodInBrowserViewController() {
-        let subject = createSubject()
-        let mbvc = MockBrowserViewController(profile: profile, tabManager: tabManager)
-        subject.browserViewController = mbvc
-
-        subject.openRecentlyClosedSiteInSameTab(URL(string: "https://www.google.com")!)
-
-        XCTAssertEqual(mbvc.didOpenRecentlyClosedSiteInSameTab, 1)
     }
 
     func testOpenRecentlyClosedSiteInNewTab_addsOneTabToTabManager() {

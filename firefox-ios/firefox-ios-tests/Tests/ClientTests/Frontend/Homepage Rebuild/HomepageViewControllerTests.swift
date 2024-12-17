@@ -7,20 +7,23 @@ import Common
 
 @testable import Client
 
-final class HomepageViewControllerTests: XCTestCase {
+final class HomepageViewControllerTests: XCTestCase, StoreTestUtility {
     let windowUUID: WindowUUID = .XCTestDefaultUUID
     var mockNotificationCenter: MockNotificationCenter?
     var mockThemeManager: MockThemeManager?
+    var mockStore: MockStoreForMiddleware<AppState>!
 
     override func setUp() {
         super.setUp()
         DependencyHelperMock().bootstrapDependencies()
+        setupStore()
     }
 
     override func tearDown() {
         mockNotificationCenter = nil
         mockThemeManager = nil
         DependencyHelperMock().reset()
+        resetStore()
         super.tearDown()
     }
 
@@ -75,7 +78,73 @@ final class HomepageViewControllerTests: XCTestCase {
         XCTAssertEqual(mockNotificationCenter?.removeObserverCallCount, 1)
     }
 
-    private func createSubject() -> HomepageViewController {
+    func test_scrollViewDidScroll_updatesStatusBarScrollDelegate() {
+        let mockStatusBarScrollDelegate = MockStatusBarScrollDelegate()
+        let homepageVC = createSubject(statusBarScrollDelegate: mockStatusBarScrollDelegate)
+        let wallpaperConfiguration = WallpaperConfiguration(hasImage: true)
+        let newState = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            WallpaperAction(
+                wallpaperConfiguration: wallpaperConfiguration,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: WallpaperMiddlewareActionType.wallpaperDidInitialize
+            )
+        )
+        homepageVC.newState(state: newState)
+        let scrollView = UIScrollView()
+
+        XCTAssertNil(mockStatusBarScrollDelegate.savedScrollView)
+
+        homepageVC.scrollViewDidScroll(scrollView)
+
+        XCTAssertEqual(mockStatusBarScrollDelegate.savedScrollView, scrollView)
+    }
+
+    func test_scrollToTop_updatesStatusBarScrollDelegate_andSetsCollectionViewOffset() {
+        let mockStatusBarScrollDelegate = MockStatusBarScrollDelegate()
+        let homepageVC = createSubject(statusBarScrollDelegate: mockStatusBarScrollDelegate)
+       let wallpaperConfiguration = WallpaperConfiguration(hasImage: true)
+        let newState = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            WallpaperAction(
+                wallpaperConfiguration: wallpaperConfiguration,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: WallpaperMiddlewareActionType.wallpaperDidInitialize
+            )
+        )
+
+        guard let collectionView = homepageVC.view.subviews.first(where: {
+            $0 is UICollectionView
+        }) as? UICollectionView else {
+            XCTFail()
+            return
+        }
+
+        homepageVC.newState(state: newState)
+        homepageVC.scrollToTop()
+
+        XCTAssertEqual(collectionView.contentOffset, .zero)
+        XCTAssertEqual(mockStatusBarScrollDelegate.savedScrollView, collectionView)
+    }
+
+    func test_scrollViewDidScroll_TriggersGeneralBrowserMiddlewareAction() throws {
+        let mockStatusBarScrollDelegate = MockStatusBarScrollDelegate()
+        let homepageVC = createSubject(statusBarScrollDelegate: mockStatusBarScrollDelegate)
+        let scrollView = UIScrollView()
+        scrollView.contentOffset.y = 10
+
+        homepageVC.scrollViewDidScroll(scrollView)
+
+        let actionCalled = try XCTUnwrap(
+            mockStore.dispatchedActions.first(where: {
+                $0 is GeneralBrowserMiddlewareAction
+            }) as? GeneralBrowserMiddlewareAction
+        )
+        let actionType = try XCTUnwrap(actionCalled.actionType as? GeneralBrowserMiddlewareActionType)
+        XCTAssertEqual(actionType, GeneralBrowserMiddlewareActionType.websiteDidScroll)
+    }
+
+    private func createSubject(statusBarScrollDelegate: StatusBarScrollDelegate? = nil) -> HomepageViewController {
         let notificationCenter = MockNotificationCenter()
         let themeManager = MockThemeManager()
         let mockOverlayManager = MockOverlayModeManager()
@@ -85,9 +154,23 @@ final class HomepageViewControllerTests: XCTestCase {
             windowUUID: .XCTestDefaultUUID,
             themeManager: themeManager,
             overlayManager: mockOverlayManager,
+            statusBarScrollDelegate: statusBarScrollDelegate,
             notificationCenter: notificationCenter
         )
         trackForMemoryLeaks(homepageViewController)
         return homepageViewController
+    }
+
+    func setupAppState() -> Client.AppState {
+        return AppState()
+    }
+
+    func setupStore() {
+        mockStore = MockStoreForMiddleware(state: setupAppState())
+        StoreTestUtilityHelper.setupStore(with: mockStore)
+    }
+
+    func resetStore() {
+        StoreTestUtilityHelper.resetStore()
     }
 }

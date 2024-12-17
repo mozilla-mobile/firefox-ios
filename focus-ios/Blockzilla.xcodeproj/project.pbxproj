@@ -7168,7 +7168,7 @@
 			repositoryURL = "https://github.com/mozilla/rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 135.0.20241211011009;
+				version = 135.0.20241217050327;
 			};
 		};
 		8A0E7F2C2BA0F0E0006BC6B6 /* XCRemoteSwiftPackageReference "Fuzi" */ = {
@@ -7184,7 +7184,7 @@
 			repositoryURL = "https://github.com/mozilla/glean-swift";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 61.2.0;
+				minimumVersion = 63.0.0;
 			};
 		};
 		F8324C2D264C807C007E4BFA /* XCRemoteSwiftPackageReference "SnapKit" */ = {

@@ -32,6 +32,7 @@ class BrowserViewController: UIViewController,
                              BrowserFrameInfoProvider,
                              NavigationToolbarContainerDelegate,
                              AddressToolbarContainerDelegate,
+                             BookmarksRefactorFeatureFlagProvider,
                              FeatureFlaggable {
     private enum UX {
         static let ShowHeaderTapAreaHeight: CGFloat = 32
@@ -228,6 +229,8 @@ class BrowserViewController: UIViewController,
 
     private var keyboardPressesHandlerValue: Any?
 
+    private let bookmarksSaver: BookmarksSaver
+
     var themeManager: ThemeManager
     var notificationCenter: NotificationProtocol
     var themeObserver: NSObjectProtocol?
@@ -269,6 +272,7 @@ class BrowserViewController: UIViewController,
         self.logger = logger
         self.appAuthenticator = appAuthenticator
         self.overlayManager = DefaultOverlayModeManager()
+        self.bookmarksSaver = DefaultBookmarksSaver(profile: profile)
         let windowUUID = tabManager.windowUUID
         let contextualViewProvider = ContextualHintViewProvider(forHintType: .toolbarLocation,
                                                                 with: profile)
@@ -1313,7 +1317,11 @@ class BrowserViewController: UIViewController,
 
     func frontEmbeddedContent(_ viewController: ContentContainable) {
         contentContainer.update(content: viewController)
-        statusBarOverlay.resetState(isHomepage: contentContainer.hasLegacyHomepage)
+        if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
+            statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
+        } else {
+            statusBarOverlay.resetState(isHomepage: contentContainer.hasLegacyHomepage)
+        }
     }
 
     /// Embed a ContentContainable inside the content container
@@ -1326,7 +1334,11 @@ class BrowserViewController: UIViewController,
         viewController.willMove(toParent: self)
         contentContainer.add(content: viewController)
         viewController.didMove(toParent: self)
-        statusBarOverlay.resetState(isHomepage: contentContainer.hasLegacyHomepage)
+        if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
+            statusBarOverlay.resetState(isHomepage: contentContainer.hasHomepage)
+        } else {
+            statusBarOverlay.resetState(isHomepage: contentContainer.hasLegacyHomepage)
+        }
 
         UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
         return true
@@ -1352,7 +1364,11 @@ class BrowserViewController: UIViewController,
         }
 
         if featureFlags.isFeatureEnabled(.homepageRebuild, checking: .buildOnly) {
-            browserDelegate?.showHomepage(overlayManager: overlayManager, isZeroSearch: inline)
+            browserDelegate?.showHomepage(
+                overlayManager: overlayManager,
+                isZeroSearch: inline,
+                statusBarScrollDelegate: statusBarOverlay
+            )
         } else {
             browserDelegate?.showLegacyHomepage(
                 inline: inline,
@@ -1624,11 +1640,10 @@ class BrowserViewController: UIViewController,
         }
 
         let shareItem = ShareItem(url: url, title: title)
-        // Add new mobile bookmark at the top of the list
-        profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID,
-                                      url: shareItem.url,
-                                      title: shareItem.title,
-                                      position: 0)
+
+        Task {
+            await self.bookmarksSaver.createBookmark(url: shareItem.url, title: shareItem.title, position: 0)
+        }
 
         var userData = [QuickActionInfos.tabURLKey: shareItem.url]
         if let title = shareItem.title {
@@ -3132,11 +3147,6 @@ class BrowserViewController: UIViewController,
     }
 
     // MARK: - RecentlyClosedPanelDelegate
-
-    func openRecentlyClosedSiteInSameTab(_ url: URL) {
-        guard let tab = self.tabManager.selectedTab else { return }
-        self.finishEditingAndSubmit(url, visitType: .link, forTab: tab)
-    }
 
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool) {
         tabManager.selectTab(tabManager.addTab(URLRequest(url: url)))

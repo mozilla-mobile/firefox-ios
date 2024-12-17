@@ -53,9 +53,14 @@ final class HomepageDiffableDataSourceTests: XCTestCase {
             logoTextColor: .blue
         )
 
-        let wallpaperState = WallpaperState(windowUUID: .XCTestDefaultUUID, wallpaperConfiguration: wallpaperConfig)
-        var state = HomepageState(windowUUID: .XCTestDefaultUUID)
-        state.wallpaperState = wallpaperState
+        let state = HomepageState.reducer(
+            HomepageState(windowUUID: .XCTestDefaultUUID),
+            WallpaperAction(
+                wallpaperConfiguration: wallpaperConfig,
+                windowUUID: .XCTestDefaultUUID,
+                actionType: WallpaperMiddlewareActionType.wallpaperDidInitialize
+            )
+        )
 
         dataSource.updateSnapshot(state: state)
 

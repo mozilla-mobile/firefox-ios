@@ -6,7 +6,7 @@ import XCTest
 import MozillaAppServices
 @testable import Client
 
-final class DefaultFolderHeirarchyFetcherTests: XCTestCase {
+final class DefaultFolderHierarchyFetcherTests: XCTestCase {
     var mockProfile: MockProfile!
     let rootFolderGUID = BookmarkRoots.MobileFolderGUID
     let testFolderTitle = "testTitle"
@@ -14,6 +14,7 @@ final class DefaultFolderHeirarchyFetcherTests: XCTestCase {
     override func setUp() async throws {
         try await super.setUp()
         mockProfile = MockProfile()
+        LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: mockProfile)
         await addFolder(title: testFolderTitle)
     }
 

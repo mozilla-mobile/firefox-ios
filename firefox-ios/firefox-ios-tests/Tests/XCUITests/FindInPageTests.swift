@@ -35,8 +35,7 @@ class FindInPageTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
 
         mozWaitForElementToNotExist(app.staticTexts["Fennec pasted from XCUITests-Runner"])
-        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].waitAndTap()
-        app.otherElements.images[StandardImageIdentifiers.Large.search].waitAndTap()
+        navigator.goto(FindInPage)
 
         // Enter some text to start finding
         if #available(iOS 16, *) {
@@ -123,9 +122,8 @@ class FindInPageTests: BaseTestCase {
         // Workaround until FxSGraph is fixed to allow the previous way with goto
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
-        app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton].waitAndTap()
-        // Enter some text to start finding
-        app.otherElements.images[StandardImageIdentifiers.Large.search].tap()
+        navigator.goto(FindInPage)
+
         if #available(iOS 16, *) {
             app.searchFields["find.searchField"].typeText("The Book of")
             mozWaitForElementToExist(app.searchFields["The Book of"])

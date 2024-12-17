@@ -17,7 +17,6 @@ private struct RecentlyClosedPanelUX {
 
 protocol RecentlyClosedPanelDelegate: AnyObject {
     func openRecentlyClosedSiteInNewTab(_ url: URL, isPrivate: Bool)
-    func openRecentlyClosedSiteInSameTab(_ url: URL)
 }
 
 class RecentlyClosedTabsPanel: UIViewController, LibraryPanel, Themeable {

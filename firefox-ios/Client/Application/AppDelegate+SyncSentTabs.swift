@@ -3,10 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import Shared
-import Storage
-import Sync
 import UserNotifications
-import Account
 import Common
 
 extension UIApplication {
@@ -22,16 +19,13 @@ extension UIApplication {
 /// they can be handled when the app performs a sync.
 class AppFxACommandsDelegate: FxACommandsDelegate {
     private let app: ApplicationStateProvider
-    private let logger: Logger
     private var applicationHelper: ApplicationHelper
     private var mainQueue: DispatchQueueInterface
 
     init(app: ApplicationStateProvider,
-         logger: Logger = DefaultLogger.shared,
          applicationHelper: ApplicationHelper = DefaultApplicationHelper(),
          mainQueue: DispatchQueueInterface = DispatchQueue.main) {
         self.app = app
-        self.logger = logger
         self.applicationHelper = applicationHelper
         self.mainQueue = mainQueue
     }

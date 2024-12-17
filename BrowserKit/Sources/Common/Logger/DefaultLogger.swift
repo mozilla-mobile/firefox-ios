@@ -25,8 +25,8 @@ public class DefaultLogger: Logger {
         self.crashManager = crashManager
     }
 
-    public func setup(sendUsageData: Bool) {
-        crashManager?.setup(sendUsageData: sendUsageData)
+    public func setup(sendCrashReports: Bool) {
+        crashManager?.setup(sendCrashReports: sendCrashReports)
     }
 
     // TODO: FXIOS-7819 need to rethink if this should go to Sentry

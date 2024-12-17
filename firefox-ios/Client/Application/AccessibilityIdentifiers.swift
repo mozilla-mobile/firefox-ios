@@ -12,7 +12,7 @@ import Foundation
 /// main element wherein they appear. As we continue updating views, all
 /// `.accessibilityIdentifier` identifiers from the client and the tests
 /// should be move here and updated throughout the app.
-public struct AccessibilityIdentifiers {
+struct AccessibilityIdentifiers {
     /// Used for toolbar/URL bar buttons since our classes are built that buttons can live in one or the other
     /// Using only those a11y identifiers for both ensures we have standard way to refer to buttons from iPad to iPhone
     struct Toolbar {
@@ -44,7 +44,6 @@ public struct AccessibilityIdentifiers {
             static let scanQRCodeButton = "urlBar-scanQRCode"
             static let cancelButton = "urlBar-cancel"
             static let searchTextField = "address"
-            static let url = "url"
         }
 
         struct KeyboardAccessory {
@@ -53,11 +52,9 @@ public struct AccessibilityIdentifiers {
             static let previousButton = "KeyboardAccessory.previousButton"
             static let addressAutofillButton = "KeyboardAccessory.addressAutofillButton"
             static let creditCardAutofillButton = "KeyboardAccessory.creditCardAutofillButton"
-            static let loginAutofillButton = "KeyboardAccessory.loginAutofillButton"
         }
 
         struct AddressToolbar {
-            static let clear = "AddressToolbar.clear"
             static let lockIcon = "AddressToolbar.lockIcon"
             static let searchTextField = "AddressToolbar.address"
             static let searchEngine = "AddressToolbar.searchEngine"
@@ -99,13 +96,10 @@ public struct AccessibilityIdentifiers {
         static let settings = "MainMenu.Settings"
         static let whatsNew = "MainMenu.WhatsNew"
         static let customizeHomepage = "MainMenu.CustomizeHomepage"
-        static let saveAsPDF = "MainMenu.SaveAsPDF"
         static let saveToReadingList = "MainMenu.SaveToReadingList"
-        static let addToHomeScreen = "MainMenu.AddToHomeScreen"
         static let addToShortcuts = "MainMenu.AddToShortcuts"
         static let bookmarkThisPage = "MainMenu.BookmarkThisPage"
         static let share = "MainMenu.Share"
-        static let print = "MainMenu.Print"
         static let reportBrokenSite = "MainMenu.ReportBrokenSite"
         static let readerView = "MainMenu.ReaderViewOn"
         static let nightMode = "MainMenu.NightModeOn"
@@ -151,13 +145,6 @@ public struct AccessibilityIdentifiers {
             static let headerView = "BlockedTrackers.HeaderView"
             static let mainView = "BlockedTrackers.MainView"
             static let containerView = "BlockedTrackers.BaseView"
-            static let crossSiteTrackersView = "BlockedTrackers.CrossSiteTrackersView"
-            static let socialMediaTrackersView = "BlockedTrackers.SocialMediaTrackersView"
-            static let fingerprintersView = "BlockedTrackers.FingerprintersView"
-            static let crossSiteTrackersImage = "BlockedTrackers.CrossSiteTrackersImage"
-            static let socialMediaTrackersImage = "BlockedTrackers.SocialMediaTrackersImage"
-            static let fingerprintersImage = "BlockedTrackers.FingerprintersImage"
-            static let blockedTrackersLabel = "BlockedTrackers.BlockedTrackersLabel"
         }
 
         struct CertificatesScreen {
@@ -225,10 +212,8 @@ public struct AccessibilityIdentifiers {
             static let itemCell = "SyncedTabCell"
             static let cardTitle = "SyncedTabCardTitle"
             static let showAllButton = "SyncedTabShowAllButton"
-            static let heroImage = "SyncedTabHeroImage"
             static let itemTitle = "SyncedTabItemTitle"
             static let favIconImage = "SyncedTabFavIconImage"
-            static let fallbackFavIconImage = "SyncedTabFallbackFavIconImage"
             static let descriptionLabel = "SyncedTabDescriptionLabel"
         }
     }
@@ -296,7 +281,6 @@ public struct AccessibilityIdentifiers {
         struct AnalysisProgressInfoCard {
             static let card = "Shopping.AnalysisProgressInfoCard.Card"
             static let title = "Shopping.AnalysisProgressInfoCard.Title"
-            static let description = "Shopping.AnalysisProgressInfoCard.Description"
         }
 
         struct NeedsAnalysisInfoCard {
@@ -432,7 +416,6 @@ public struct AccessibilityIdentifiers {
     }
 
     struct TabTray {
-        static let filteredTabs = "filteredTabs"
         static let deleteCloseAllButton = "TabTrayController.deleteButton.closeAll"
         static let deleteCancelButton = "TabTrayController.deleteButton.cancel"
         static let syncedTabs = "Synced Tabs"
@@ -481,9 +464,7 @@ public struct AccessibilityIdentifiers {
 
         struct HistoryPanel {
             static let tableView = "History List"
-            static let clearHistoryCell = "HistoryPanel.clearHistory"
             static let recentlyClosedCell = "HistoryPanel.recentlyClosedCell"
-            static let syncedHistoryCell = "HistoryPanel.syncedHistoryCell"
         }
 
         struct GroupedList {
@@ -594,7 +575,6 @@ public struct AccessibilityIdentifiers {
 
         struct FirefoxAccount {
             static let continueButton = "Sign up or sign in"
-            static let emailTextFieldChinaFxA = "Email"
             static let emailTextField = "Enter your email"
             static let fxaNavigationBar = "Sync and Save Data"
             static let fxaSettingsButton = "Sync and Save Data"

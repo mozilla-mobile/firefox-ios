@@ -27,6 +27,7 @@ extension UnifiedAdsProviderInterface {
 class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, FeatureFlaggable {
     private static let prodResourceEndpoint = "https://ads.mozilla.org/v1/ads"
     static let stagingResourceEndpoint = "https://ads.allizom.org/v1/ads"
+    var maxCacheAge: Timestamp = OneMinuteInMilliseconds * 30
 
     var urlCache: URLCache
     private var logger: Logger
@@ -62,7 +63,10 @@ class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, FeatureFlagga
             return
         }
 
-        if let cachedData = findCachedData(for: request, timestamp: timestamp) {
+        // FXIOS-10798 - URLCache doesn't retrieve from cache if there's an httpBody set on the request
+        var cacheRequest = request
+        cacheRequest.httpBody = nil
+        if let cachedData = findCachedData(for: cacheRequest, timestamp: timestamp) {
             decode(data: cachedData, completion: completion)
         } else {
             fetchTiles(request: request, completion: completion)
@@ -114,7 +118,10 @@ class UnifiedAdsProvider: URLCaching, UnifiedAdsProviderInterface, FeatureFlagga
             guard let self = self else { return }
             switch result {
             case .success(let result):
-                self.cache(response: result.response, for: request, with: result.data)
+                // FXIOS-10798 - URLCache doesn't retrieve from cache if there's an httpBody set on the request
+                var cacheRequest = request
+                cacheRequest.httpBody = nil
+                self.cache(response: result.response, for: cacheRequest, with: result.data)
                 self.decode(data: result.data, completion: completion)
             case .failure:
                 completion(.failure(Error.noDataAvailable))

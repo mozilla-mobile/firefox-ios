@@ -14,8 +14,7 @@ class ReportSiteTests: BaseTestCase {
     // https://mozilla.testrail.io/index.php?/cases/view/2831278
     func testReportSiteIssueOn() {
         launchAndGoToMenu()
-        app.images[StandardImageIdentifiers.Large.tool].tap()
-        mozWaitForElementToExist(app.otherElements.images[StandardImageIdentifiers.Large.lightbulb])
+        mozWaitForElementToExist(app.tables.cells[AccessibilityIdentifiers.MainMenu.reportBrokenSite])
     }
 
     // https://mozilla.testrail.io/index.php?/cases/view/2831279
@@ -25,8 +24,7 @@ class ReportSiteTests: BaseTestCase {
         app.launchArguments = launchArgs
 
         launchAndGoToMenu()
-        app.images[StandardImageIdentifiers.Large.tool].tap()
-        mozWaitForElementToNotExist(app.otherElements.images[StandardImageIdentifiers.Large.lightbulb])
+        mozWaitForElementToNotExist(app.tables.cells[AccessibilityIdentifiers.MainMenu.reportBrokenSite])
     }
 
     // MARK: Helper
@@ -34,7 +32,6 @@ class ReportSiteTests: BaseTestCase {
         app.launch()
 
         navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
-        navigator.goto(BrowserTabMenu)
-        mozWaitForElementToExist(app.images[StandardImageIdentifiers.Large.avatarCircle])
+        navigator.goto(ToolsBrowserTabMenu)
     }
 }

@@ -14,6 +14,7 @@ class AppLaunchUtil {
 //    private var adjustHelper: AdjustHelper
     private var profile: Profile
     private let introScreenManager: IntroScreenManager
+    private let termsOfServiceManager: TermsOfServiceManager
 
     init(logger: Logger = DefaultLogger.shared,
          profile: Profile) {
@@ -21,6 +22,7 @@ class AppLaunchUtil {
         self.profile = profile
 //        self.adjustHelper = AdjustHelper(profile: profile)
         self.introScreenManager = IntroScreenManager(prefs: profile.prefs)
+        self.termsOfServiceManager = TermsOfServiceManager(prefs: profile.prefs)
     }
 
     func setUpPreLaunchDependencies() {
@@ -30,12 +32,17 @@ class AppLaunchUtil {
             logger.copyLogsToDocuments()
         }
 
+        DefaultBrowserUtil().processUserDefaultState(isFirstRun: introScreenManager.shouldShowIntroScreen)
+
         TelemetryWrapper.shared.setup(profile: profile)
         recordStartUpTelemetry()
 
-        // Need to get "settings.sendUsageData" this way so that Sentry can be initialized before getting the Profile.
-        let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.prefSendUsageData) ?? true
-        logger.setup(sendUsageData: sendUsageData)
+        // Need to get "settings.sendCrashReports" this way so that Sentry can be initialized before getting the Profile.
+        let sendCrashReports = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.prefSendCrashReports) ?? true
+
+        // For this phase, we should handle terms of service as accepted, in case of app updates.
+        logger.setup(sendCrashReports: sendCrashReports && (termsOfServiceManager.isAccepted ||
+                                                            !introScreenManager.shouldShowIntroScreen))
 
         setUserAgent()
 
@@ -53,6 +60,13 @@ class AppLaunchUtil {
         // Among other things, it toggles on and off Nimbus, Contile, Adjust.
         // i.e. this must be run before initializing those systems.
         LegacyFeatureFlagsManager.shared.initializeDeveloperFeatures(with: profile)
+
+        // Used by share extension to determine if the bookmarks refactor feature flag is enabled
+        profile.prefs.setBool(LegacyFeatureFlagsManager.shared.isFeatureEnabled(.bookmarksRefactor,
+                                                                                checking: .buildOnly),
+                              forKey: PrefsKeys.IsBookmarksRefactorEnabled)
+
+        logger.setup(sendCrashReports: sendCrashReports && !termsOfServiceManager.isFeatureEnabled)
 
         // Start initializing the Nimbus SDK. This should be done after Glean
         // has been started.
@@ -100,8 +114,6 @@ class AppLaunchUtil {
     }
 
     func setUpPostLaunchDependencies() {
-        DefaultBrowserUtil().processUserDefaultState(isFirstRun: introScreenManager.shouldShowIntroScreen)
-
         let persistedCurrentVersion = InstallType.persistedCurrentVersion()
         // upgrade install - Intro screen shown & persisted current version does not match
         if !introScreenManager.shouldShowIntroScreen && persistedCurrentVersion != AppInfo.appVersion {

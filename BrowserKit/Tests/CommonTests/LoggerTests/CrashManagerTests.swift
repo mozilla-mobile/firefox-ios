@@ -27,7 +27,7 @@ final class CrashManagerTests: XCTestCase {
         let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
                                           isSimulator: true,
                                           skipReleaseNameCheck: true)
-        subject.setup(sendUsageData: true)
+        subject.setup(sendCrashReports: true)
 
         XCTAssertEqual(sentryWrapper.startWithConfigureOptionsCalled, 0)
         XCTAssertEqual(sentryWrapper.configureScopeCalled, 0)
@@ -38,7 +38,7 @@ final class CrashManagerTests: XCTestCase {
         let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
                                           isSimulator: false,
                                           skipReleaseNameCheck: true)
-        subject.setup(sendUsageData: false)
+        subject.setup(sendCrashReports: false)
 
         XCTAssertEqual(sentryWrapper.startWithConfigureOptionsCalled, 0)
         XCTAssertEqual(sentryWrapper.configureScopeCalled, 0)
@@ -48,7 +48,7 @@ final class CrashManagerTests: XCTestCase {
         let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
                                           isSimulator: false,
                                           skipReleaseNameCheck: true)
-        subject.setup(sendUsageData: true)
+        subject.setup(sendCrashReports: true)
 
         XCTAssertEqual(sentryWrapper.startWithConfigureOptionsCalled, 0)
         XCTAssertEqual(sentryWrapper.configureScopeCalled, 0)
@@ -59,7 +59,7 @@ final class CrashManagerTests: XCTestCase {
         let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
                                           isSimulator: false,
                                           skipReleaseNameCheck: true)
-        subject.setup(sendUsageData: true)
+        subject.setup(sendCrashReports: true)
 
         XCTAssertEqual(sentryWrapper.startWithConfigureOptionsCalled, 1)
         XCTAssertEqual(sentryWrapper.configureScopeCalled, 1)
@@ -70,8 +70,8 @@ final class CrashManagerTests: XCTestCase {
         let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
                                           isSimulator: false,
                                           skipReleaseNameCheck: true)
-        subject.setup(sendUsageData: true)
-        subject.setup(sendUsageData: true)
+        subject.setup(sendCrashReports: true)
+        subject.setup(sendCrashReports: true)
 
         XCTAssertEqual(sentryWrapper.startWithConfigureOptionsCalled, 1)
         XCTAssertEqual(sentryWrapper.configureScopeCalled, 1)
@@ -114,7 +114,7 @@ final class CrashManagerTests: XCTestCase {
         let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
                                           isSimulator: false,
                                           skipReleaseNameCheck: true)
-        subject.setup(sendUsageData: true)
+        subject.setup(sendCrashReports: true)
 
         subject.send(message: "A message",
                      category: .setup,
@@ -132,7 +132,7 @@ final class CrashManagerTests: XCTestCase {
         let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
                                           isSimulator: false,
                                           skipReleaseNameCheck: true)
-        subject.setup(sendUsageData: true)
+        subject.setup(sendCrashReports: true)
 
         subject.send(message: "A message",
                      category: .setup,
@@ -150,7 +150,7 @@ final class CrashManagerTests: XCTestCase {
         let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
                                           isSimulator: false,
                                           skipReleaseNameCheck: true)
-        subject.setup(sendUsageData: true)
+        subject.setup(sendCrashReports: true)
 
         subject.send(message: "A message",
                      category: .setup,
@@ -168,7 +168,7 @@ final class CrashManagerTests: XCTestCase {
         let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
                                           isSimulator: false,
                                           skipReleaseNameCheck: true)
-        subject.setup(sendUsageData: true)
+        subject.setup(sendCrashReports: true)
 
         subject.send(message: "A message",
                      category: .setup,
@@ -186,7 +186,7 @@ final class CrashManagerTests: XCTestCase {
         let subject = DefaultCrashManager(sentryWrapper: sentryWrapper,
                                           isSimulator: false,
                                           skipReleaseNameCheck: true)
-        subject.setup(sendUsageData: true)
+        subject.setup(sendCrashReports: true)
 
         subject.send(message: "A message",
                      category: .setup,

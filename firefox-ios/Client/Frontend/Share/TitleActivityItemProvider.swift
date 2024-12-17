@@ -32,7 +32,10 @@ class TitleActivityItemProvider: UIActivityItemProvider, @unchecked Sendable {
         super.init(placeholderItem: title)
     }
 
-    override var item: Any {
+    override func activityViewController(
+        _ activityViewController: UIActivityViewController,
+        itemForActivityType activityType: UIActivity.ActivityType?
+    ) -> Any? {
         // For excluded activites, we don't want to provide any content
         if let activityType = activityType, TitleActivityItemProvider.activityTypesToIgnore.contains(activityType) {
             return NSNull()

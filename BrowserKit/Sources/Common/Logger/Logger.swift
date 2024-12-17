@@ -7,7 +7,7 @@ import Foundation
 public protocol Logger {
     var crashedLastLaunch: Bool { get }
 
-    func setup(sendUsageData: Bool)
+    func setup(sendCrashReports: Bool)
     func configure(crashManager: CrashManager)
     func logCustomError(error: Error)
 

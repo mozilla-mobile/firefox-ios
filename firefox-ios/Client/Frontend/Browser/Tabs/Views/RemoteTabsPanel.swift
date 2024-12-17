@@ -14,6 +14,10 @@ protocol RemoteTabsPanelDelegate: AnyObject {
     func presentFxAccountSettings()
 }
 
+protocol RemoteTabsClientAndTabsDataSourceDelegate: AnyObject {
+    func remoteTabsClientAndTabsDataSourceDidSelectURL(_ url: URL, visitType: VisitType)
+}
+
 class RemoteTabsPanel: UIViewController,
                        Themeable,
                        RemoteTabsClientAndTabsDataSourceDelegate,

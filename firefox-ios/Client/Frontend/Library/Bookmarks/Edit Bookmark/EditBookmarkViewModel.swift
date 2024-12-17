@@ -2,6 +2,7 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
+import Common
 import Foundation
 import MozillaAppServices
 import Shared
@@ -12,6 +13,7 @@ class EditBookmarkViewModel {
     private let parentFolder: FxBookmarkNode
     private var node: BookmarkItemData?
     private let profile: Profile
+    private let logger: Logger
     private let folderFetcher: FolderHierarchyFetcher
     private let bookmarksSaver: BookmarksSaver
     weak var bookmarkCoordinatorDelegate: BookmarksCoordinatorDelegate?
@@ -33,11 +35,13 @@ class EditBookmarkViewModel {
     init(parentFolder: FxBookmarkNode,
          node: FxBookmarkNode?,
          profile: Profile,
+         logger: Logger = DefaultLogger.shared,
          bookmarksSaver: BookmarksSaver? = nil,
          folderFetcher: FolderHierarchyFetcher? = nil) {
         self.parentFolder = parentFolder
         self.node = node as? BookmarkItemData
         self.profile = profile
+        self.logger = logger
         self.bookmarksSaver = bookmarksSaver ?? DefaultBookmarksSaver(profile: profile)
         self.folderFetcher = folderFetcher ?? DefaultFolderHierarchyFetcher(profile: profile,
                                                                             rootFolderGUID: BookmarkRoots.RootGUID)
@@ -95,8 +99,22 @@ class EditBookmarkViewModel {
     func saveBookmark() {
         guard let selectedFolder, let node else { return }
         Task { @MainActor [weak self] in
-            _ = await self?.bookmarksSaver.save(bookmark: node,
-                                                parentFolderGUID: selectedFolder.guid)
+            // There is no way to access the EditBookmarkViewController without the bookmark already existing,
+            // so this call will always try to update an existing bookmark
+            let result = await self?.bookmarksSaver.save(bookmark: node,
+                                                         parentFolderGUID: selectedFolder.guid)
+            // Only update the recent folder pref if it doesn't match whats saved in the pref
+            if selectedFolder.guid != self?.profile.prefs.stringForKey(PrefsKeys.RecentBookmarkFolder) {
+                switch result {
+                case .success:
+                    self?.profile.prefs.setString(selectedFolder.guid, forKey: PrefsKeys.RecentBookmarkFolder)
+                case .failure(let error):
+                    self?.logger.log("Failed to save bookmark: \(error)", level: .warning, category: .library)
+                case .none:
+                    break
+                }
+            }
+
             self?.onBookmarkSaved?()
         }
     }
