@@ -178,24 +178,12 @@ class AppSettingsTableViewController: SettingsTableViewController,
     private func setupDataSettings() {
         let isTermsOfServiceFeatureEnabled = featureFlags.isFeatureEnabled(.tosFeature, checking: .buildOnly)
 
-        let anonymousUsageDataSetting = SendDataSetting(
-            prefs: profile.prefs,
-            delegate: settingsDelegate,
-            theme: themeManager.getCurrentTheme(for: windowUUID),
-            settingsDelegate: parentCoordinator,
-            sendDataType: .usageData
-        )
-
         let studiesSetting = StudiesToggleSetting(
             prefs: profile.prefs,
             delegate: settingsDelegate,
             theme: themeManager.getCurrentTheme(for: windowUUID),
             settingsDelegate: parentCoordinator
         )
-
-        anonymousUsageDataSetting.shouldSendData = { value in
-            studiesSetting.updateSetting(for: value)
-        }
 
         // Only add these toggles to the Settings if Terms Of Service feature flag is enabled
         if isTermsOfServiceFeatureEnabled {
@@ -204,10 +192,20 @@ class AppSettingsTableViewController: SettingsTableViewController,
                 delegate: settingsDelegate,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
                 settingsDelegate: parentCoordinator,
-                sendDataType: .technicalData
+                title: .SendTechnicalDataSettingTitle,
+                message: String(format: .SendTechnicalDataSettingMessage,
+                                MozillaName.shortName.rawValue,
+                                AppName.shortName.rawValue),
+                linkedText: .SendTechnicalDataSettingLink,
+                prefKey: AppConstants.prefSendUsageData,
+                a11yId: AccessibilityIdentifiers.Settings.SendData.sendTechnicalDataTitle,
+                learnMoreURL: SupportUtils.URLForTopic("mobile-technical-and-interaction-data")
             )
-            sendTechnicalDataSettings.shouldSendData = { value in
-                // TODO: FXIOS-10754 Firefox iOS: Manage Privacy Preferences in Settings - Logic
+
+            sendTechnicalDataSettings.shouldSendData = { [weak self] value in
+                guard let self else { return }
+                TermsOfServiceManager(prefs: self.profile.prefs).shouldSendTechnicalData(value: value)
+                studiesSetting.updateSetting(for: value)
             }
             sendTechnicalDataSetting = sendTechnicalDataSettings
 
@@ -216,12 +214,39 @@ class AppSettingsTableViewController: SettingsTableViewController,
                 delegate: settingsDelegate,
                 theme: themeManager.getCurrentTheme(for: windowUUID),
                 settingsDelegate: parentCoordinator,
-                sendDataType: .dailyUsagePing
+                title: .SendDailyUsagePingSettingTitle,
+                message: String(format: .SendDailyUsagePingSettingMessage, MozillaName.shortName.rawValue),
+                linkedText: .SendDailyUsagePingSettingLink,
+                prefKey: AppConstants.prefSendDailyUsagePing,
+                a11yId: AccessibilityIdentifiers.Settings.SendData.sendDailyUsagePingTitle,
+                learnMoreURL: SupportUtils.URLForTopic("usage-ping-settings-mobile")
             )
             sendDailyUsagePingSettings.shouldSendData = { value in
-                // TODO: FXIOS-10754 Firefox iOS: Manage Privacy Preferences in Settings - Logic
+                // TODO: FXIOS-10469 Firefox iOS: DAU Ping Setting
             }
             sendDailyUsagePingSetting = sendDailyUsagePingSettings
+        } else {
+            let sendAnonymousUsageDataSettings = SendDataSetting(
+                prefs: profile.prefs,
+                delegate: settingsDelegate,
+                theme: themeManager.getCurrentTheme(for: windowUUID),
+                settingsDelegate: parentCoordinator,
+                title: .SendUsageSettingTitle,
+                message: String(format: .SendUsageSettingMessage,
+                                MozillaName.shortName.rawValue,
+                                AppName.shortName.rawValue),
+                linkedText: .SendUsageSettingLink,
+                prefKey: AppConstants.prefSendUsageData,
+                a11yId: AccessibilityIdentifiers.Settings.SendData.sendAnonymousUsageDataTitle,
+                learnMoreURL: SupportUtils.URLForTopic("adjust")
+            )
+
+            sendAnonymousUsageDataSettings.shouldSendData = { [weak self] value in
+                guard let self else { return }
+                TermsOfServiceManager(prefs: self.profile.prefs).shouldSendTechnicalData(value: value)
+                studiesSetting.updateSetting(for: value)
+            }
+            sendAnonymousUsageDataSetting = sendAnonymousUsageDataSettings
         }
 
         let sendCrashReportsSettings = SendDataSetting(
@@ -229,11 +254,15 @@ class AppSettingsTableViewController: SettingsTableViewController,
             delegate: settingsDelegate,
             theme: themeManager.getCurrentTheme(for: windowUUID),
             settingsDelegate: parentCoordinator,
-            sendDataType: .crashReports
+            title: .SendCrashReportsSettingTitle,
+            message: String(format: .SendCrashReportsSettingMessage, MozillaName.shortName.rawValue),
+            linkedText: .SendCrashReportsSettingLink,
+            prefKey: AppConstants.prefSendCrashReports,
+            a11yId: AccessibilityIdentifiers.Settings.SendData.sendCrashReportsTitle,
+            learnMoreURL: SupportUtils.URLForTopic("mobile-crash-reports")
         )
         self.sendCrashReportsSetting = sendCrashReportsSettings
 
-        sendAnonymousUsageDataSetting = anonymousUsageDataSetting
         studiesToggleSetting = studiesSetting
     }
 
@@ -399,7 +428,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
     }
 
     private func getSupportSettings() -> [SettingSection] {
-        guard let sendAnonymousUsageDataSetting, let studiesToggleSetting else { return [] }
+        guard let studiesToggleSetting else { return [] }
 
         var supportSettings = [
             ShowIntroductionSetting(settings: self, settingsDelegate: self),
@@ -418,10 +447,10 @@ class AppSettingsTableViewController: SettingsTableViewController,
             )
         }
 
-        supportSettings.append(sendAnonymousUsageDataSetting)
-
         if let sendTechnicalDataSetting {
             supportSettings.append(sendTechnicalDataSetting)
+        } else if let sendAnonymousUsageDataSetting {
+            supportSettings.append(sendAnonymousUsageDataSetting)
         }
 
         if let sendCrashReportsSetting {
