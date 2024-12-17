@@ -898,6 +898,10 @@ class Tab: NSObject, ThemeApplicable, FeatureFlaggable, ShareTab {
         return newAlertQueue.removeFirst()
     }
 
+    func hasJavascriptAlertPrompt() -> Bool {
+        return !newAlertQueue.isEmpty
+    }
+
     override func observeValue(
         forKeyPath keyPath: String?,
         of object: Any?,
