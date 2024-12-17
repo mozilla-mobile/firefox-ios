@@ -55,7 +55,7 @@ final class MainMenuMiddleware {
 
         switch action.actionType {
         case MainMenuActionType.tapNavigateToDestination:
-            self.handleActionTypeAction(action: action, isHomepage: isHomepage)
+            self.handleTapNavigateToDestinationAction(action: action, isHomepage: isHomepage)
 
         case MainMenuActionType.tapShowDetailsView:
             if action.detailsViewToShow == .tools {
@@ -156,7 +156,7 @@ final class MainMenuMiddleware {
         }
     }
 
-    private func handleActionTypeAction(action: MainMenuAction, isHomepage: Bool) {
+    private func handleTapNavigateToDestinationAction(action: MainMenuAction, isHomepage: Bool) {
         guard let destination = action.navigationDestination?.destination else { return }
         handleTelemetryFor(for: destination,
                            isHomepage: isHomepage,
