@@ -1059,11 +1059,31 @@ class BrowserViewController: UIViewController,
             statusBarOverlay.heightAnchor.constraint(equalToConstant: view.safeAreaInsets.top)
         ])
 
-        if !isJSAlertRefactorEnabled {
+        if isJSAlertRefactorEnabled {
+            checkForJSAlerts()
+        } else {
             showQueuedAlertIfAvailable()
         }
         switchToolbarIfNeeded()
         adjustURLBarHeightBasedOnLocationViewHeight()
+    }
+
+    func checkForJSAlerts() {
+        guard tabManager.selectedTab?.hasJavascriptAlertPrompt() ?? false else { return }
+
+        if presentedViewController == nil {
+            // We can show the alert, let's show it
+            guard let nextAlert = tabManager.selectedTab?.newDequeueJavascriptAlertPrompt() else { return }
+            let alertController = nextAlert.alertController()
+            alertController.delegate = self
+            present(alertController, animated: true)
+        } else {
+            // We cannot show the alert right now but there is one queued on the selected tab
+            // check after a delay if we can show it
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                self?.checkForJSAlerts()
+            }
+        }
     }
 
     private func adjustURLBarHeightBasedOnLocationViewHeight() {
@@ -3914,10 +3934,6 @@ extension BrowserViewController: TabManagerDelegate {
         if needsReload {
             selectedTab.reloadPage()
         }
-
-        if isJSAlertRefactorEnabled {
-            newShowQueuedAlertIfAvailable()
-        }
     }
 
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, placeNextToParentTab: Bool, isRestoring: Bool) {
@@ -4134,40 +4150,15 @@ extension BrowserViewController: JSPromptAlertControllerDelegate {
     }
 }
 
+// MARK: NewJSPromptAlertControllerDelegate
+
 extension BrowserViewController: NewJSPromptAlertControllerDelegate {
-    func promptAlertControllerDidDismiss(_ alertController: NewJSPromptAlertController, withResult result: Any?) {
-        newShowQueuedAlertIfAvailable()
+    func newPromptAlertControllerDidDismiss(_ alertController: NewJSPromptAlertController) {
+        logger.log("JS prompt was dismissed. Will dequeue next alert.",
+                   level: .info,
+                   category: .webview)
 
-        if let alertInfo = alertController.alertInfo {
-            handleAlertDismissalResult(result, for: alertInfo)
-        }
-    }
-
-    /// For debugging purposes of JS alerts, can be cleaned up later on
-    private func handleAlertDismissalResult(_ result: Any?, for alertInfo: NewJSAlertInfo) {
-        if alertInfo is NewMessageAlert {
-            logger.log("Message alert dismissed with no result.", level: .info, category: .webview)
-        } else if alertInfo is NewConfirmPanelAlert {
-            if (result as? Bool) != nil {
-                logger.log("Confirm alert dismissed with result.", level: .info, category: .webview)
-            } else {
-                logger.log("Confirm alert dismissed with no result.", level: .info, category: .webview)
-            }
-        } else if alertInfo is NewTextInputAlert {
-            if (result as? String) != nil {
-                logger.log("Text input alert dismissed with input.", level: .info, category: .webview)
-            } else {
-                logger.log("Text input alert dismissed with no input.", level: .info, category: .webview)
-            }
-        }
-    }
-
-    func newShowQueuedAlertIfAvailable() {
-        if let nextAlert = tabManager.selectedTab?.newDequeueJavascriptAlertPrompt() {
-            let alertController = nextAlert.alertController()
-            alertController.delegate = self
-            presentWithModalDismissIfNeeded(alertController, animated: true)
-        }
+        checkForJSAlerts()
     }
 }
 

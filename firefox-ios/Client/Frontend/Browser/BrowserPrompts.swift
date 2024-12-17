@@ -121,7 +121,7 @@ private func titleForJavaScriptPanelInitiatedByFrame(_ frame: WKFrameInfo) -> St
 
 @objc
 protocol NewJSPromptAlertControllerDelegate: AnyObject {
-    func promptAlertControllerDidDismiss(_ alertController: NewJSPromptAlertController, withResult result: Any?)
+    func newPromptAlertControllerDidDismiss(_ alertController: NewJSPromptAlertController)
 }
 
 /// A simple version of UIAlertController that attaches a delegate to the viewDidDisappear method
@@ -161,7 +161,9 @@ class NewJSPromptAlertController: UIAlertController {
             }
 
             // Notify the delegate about dismissal and pass the result
-            delegate?.promptAlertControllerDidDismiss(self, withResult: dismissalResult)
+            delegate?.newPromptAlertControllerDidDismiss(self)
+
+            alertInfo?.handleAlertDismissal(dismissalResult)
         }
     }
 }
@@ -169,6 +171,7 @@ class NewJSPromptAlertController: UIAlertController {
 protocol NewJSAlertInfo {
     func alertController() -> NewJSPromptAlertController
     func cancel()
+    func handleAlertDismissal(_ result: Any?)
 }
 
 struct NewMessageAlert: NewJSAlertInfo {
@@ -196,6 +199,10 @@ struct NewMessageAlert: NewJSAlertInfo {
     func cancel() {
         logger.log("Message alert completion handler called through cancel", level: .info, category: .webview)
         completionHandler()
+    }
+
+    func handleAlertDismissal(_ result: Any?) {
+        logger.log("Message alert dismissed with no result.", level: .info, category: .webview)
     }
 }
 
@@ -226,6 +233,14 @@ struct NewConfirmPanelAlert: NewJSAlertInfo {
     func cancel() {
         logger.log("Confirm panel alert completion handler called through cancel", level: .info, category: .webview)
         completionHandler(false)
+    }
+
+    func handleAlertDismissal(_ result: Any?) {
+        if (result as? Bool) != nil {
+            logger.log("Confirm alert dismissed with result.", level: .info, category: .webview)
+        } else {
+            logger.log("Confirm alert dismissed with no result.", level: .info, category: .webview)
+        }
     }
 }
 
@@ -265,5 +280,13 @@ struct NewTextInputAlert: NewJSAlertInfo {
     func cancel() {
         logger.log("Text input alert completion handler called through cancel", level: .info, category: .webview)
         completionHandler(nil)
+    }
+
+    func handleAlertDismissal(_ result: Any?) {
+        if (result as? String) != nil {
+            logger.log("Text input alert dismissed with input.", level: .info, category: .webview)
+        } else {
+            logger.log("Text input alert dismissed with no input.", level: .info, category: .webview)
+        }
     }
 }
