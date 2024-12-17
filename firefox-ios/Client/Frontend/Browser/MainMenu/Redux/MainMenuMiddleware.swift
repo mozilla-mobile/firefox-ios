@@ -194,6 +194,15 @@ final class MainMenuMiddleware {
         )
     }
 
+    private func handleViewDidLoadAction(action: MainMenuAction) {
+        store.dispatch(
+            MainMenuAction(
+                windowUUID: action.windowUUID,
+                actionType: MainMenuMiddlewareActionType.requestTabInfo
+            )
+        )
+    }
+
     private func getAccountData() -> AccountData? {
         let rustAccount = RustFirefoxAccounts.shared
         let needsReAuth = rustAccount.accountNeedsReauth()
