@@ -19,9 +19,9 @@ public class SecondaryRoundedButton: ResizableButton, ThemeApplicable {
         )
     }
 
-    private var highlightedBackgroundColor: UIColor!
-    private var normalBackgroundColor: UIColor!
-    private var foregroundColor: UIColor!
+    private var highlightedBackgroundColor: UIColor?
+    private var normalBackgroundColor: UIColor?
+    private var foregroundColor: UIColor?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
