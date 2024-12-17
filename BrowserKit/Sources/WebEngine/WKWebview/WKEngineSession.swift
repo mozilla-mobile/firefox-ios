@@ -132,7 +132,7 @@ class WKEngineSession: NSObject,
     }
 
     func scrollToTop() {
-        webView.engineScrollView.setContentOffset(CGPoint.zero, animated: true)
+        webView.engineScrollView?.setContentOffset(CGPoint.zero, animated: true)
     }
 
     func findInPage(text: String, function: FindInPageFunction) {
