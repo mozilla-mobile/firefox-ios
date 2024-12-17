@@ -67,7 +67,7 @@ class BackForwardTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        guard let context = UIGraphicsGetCurrentContext(), let viewModel = viewModel else { return }
+        guard let context = UIGraphicsGetCurrentContext(), let viewModel else { return }
 
         var startPoint = CGPoint(
             x: rect.origin.x + UX.faviconPadding + UX.faviconWidth * 0.5 + safeAreaInsets.left,
