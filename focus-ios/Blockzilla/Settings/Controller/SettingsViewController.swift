@@ -580,14 +580,12 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
             }
         } else if toggle.setting == .studies {
-
             // Ensure 'studies' is disabled if 'sendAnonymousUsageData' is turned off, even when 'studies' is being enabled.
             if sendAnonymousUsageDataToggle?.isOn == true {
                 NimbusWrapper.shared.nimbus.globalUserParticipation = sender.isOn
             } else {
                 disableAndTurnOffStudiesToggle(sender)
             }
-
         } else if toggle.setting == .biometricLogin {
             TipManager.biometricTip = false
         }
