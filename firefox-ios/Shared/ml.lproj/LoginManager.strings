@@ -16,6 +16,21 @@
 /* Label for the button used to delete the current login. */
 "Delete" = "കളയുക";
 
+/* Prompt option for cancelling out of deletion */
+"DeleteLoginAlert.DeleteButton.Cancel.v122" = "റദ്ദാക്കുക";
+
+/* Label for the button used to delete the current login. */
+"DeleteLoginAlert.DeleteButton.Title.v122" = "മാറ്റുക";
+
+/* Prompt message warning the user that deleting non-synced logins will permanently remove them, when they attempt to do so */
+"DeleteLoginAlert.Message.Local.v122" = "താങ്ങൾക്കു് ഈ പ്രവർത്തനം പഴയപടിയാക്കാനാവില്ല.";
+
+/* Prompt message warning the user that deleted logins will remove logins from all connected devices */
+"DeleteLoginAlert.Message.Synced.v122" = "ഇതു് താങ്ങളുടെ എല്ലാ സമന്വയിപ്പിച്ച ഉപകരണങ്ങളിൽ നിന്നു ഈ രഹസ്യവാക്കു് മാറ്റും";
+
+/* Title for the prompt that appears when the user deletes a login. */
+"DeleteLoginsAlert.Title.v122" = "രഹസ്യവാക്കു് മാറ്റുക?";
+
 /* Label for the button used to deselect all logins. */
 "Deselect All" = "തിരഞ്ഞെടുത്തവ വേണ്ടെന്ന് വയ്ക്കുക";
 
@@ -37,6 +52,9 @@
 /* Label displayed when no logins are found after searching. */
 "No logins found" = "പ്രവേശനങ്ങള്‍ ഒന്നും കണ്ടില്ല";
 
+/* Label displayed when no logins are found after searching. */
+"NoLoginsFound.Title.v122" = "ഒരു രഹസ്യവാക്കു് കണ്ടെത്താൻ കഴിഞ്ഞില്ല";
+
 /* Open and Fill website text selection menu item */
 "Open & Fill" = "തുറക്കുക & നിറയ്ക്കുക";
 
@@ -51,6 +69,9 @@
 
 /* Accessibility label for the search input field in the Logins list */
 "Search Input Field" = "തെരയുന്ന വാക്കിടാനുള്ള ഇടം";
+
+/* Title for the search field at the top of the Logins list screen */
+"SearchInput.Title.Search.v106" = "തിരയുക";
 
 /* Label for the button used to select all logins. */
 "Select All" = "എല്ലാം തിരഞ്ഞെടുക്കുക";

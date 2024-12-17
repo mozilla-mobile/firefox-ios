@@ -7,6 +7,9 @@
 /* Privacy - Camera Usage Description */
 "NSCameraUsageDescription" = "საშუალებას გაძლევთ, სურათის გადაღებისა და ატვირთვის.";
 
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Firefox-ს ესაჭიროება Face ID შენახულ პაროლებსა და გადახდის საშუალებებთან წდვომისთვის.";
+
 /* Privacy - Location When In Use Usage Description */
 "NSLocationWhenInUseUsageDescription" = "ვებსაიტებმა, შესაძლოა მოითხოვოს თქვენი მდებარეობის მონაცემები.";
 

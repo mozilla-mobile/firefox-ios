@@ -1,0 +1,51 @@
+/* On top of the bottom toolbar, there can be a microsurvey prompt, this is the title for the button that appears on the prompt that allows the user to tap on and navigates them to the microsurvey to respond to. */
+"Microsurvey.Prompt.Button.v127" = "തുടരുക";
+
+/* On top of the bottom toolbar, there can be a microsurvey prompt, this is the accessibility label for the close button that appears on the prompt that allows the user to dismiss the microsurvey prompt. */
+"Microsurvey.Prompt.Close.Button.AccessibilityLabel.v127" = "അടയ്ക്കുക";
+
+/* On top of the bottom toolbar, there can be a microsurvey prompt, this is the logo image that appears on the prompt to inform the prompt is coming from the app specifically. Placeholder is for the app name. */
+"Microsurvey.Prompt.LogoImage.AccessibilityLabel.v129" = "%@ അടയാളം";
+
+/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this the title of button on the survey that a user can tap on to submit their responses. */
+"Microsurvey.Survey.Button.v127" = "സമർപ്പിക്കുക";
+
+/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label for close button that dismisses the sheet. */
+"Microsurvey.Survey.Close.Button.AccessibilityLabel.v127" = "അടയ്ക്കുക";
+
+/* On the microsurvey, which is a bottom sheet that pops up with a survey question and options, this is the text shown on the confirmation page when the user has completed the survey. */
+"Microsurvey.Survey.ConfirmationPage.ConfirmationLabel.v127" = "താങ്കളുടെ പ്രതികരണത്തിനു് നന്ദി!";
+
+/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the logo image that appears on the bottom sheet that informs the user that it is coming from the app specifically. Placeholder is for the app name. */
+"Microsurvey.Survey.LogoImage.AccessibilityLabel.v129" = "%@ അടയാളം";
+
+/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
+"Microsurvey.Survey.Options.Dissatisfied.v132" = "സന്തുഷ്ടമായില്ല";
+
+/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
+"Microsurvey.Survey.Options.Neutral.v132" = "അത്രതൊന്നും പറയാൻ ഇല്ല";
+
+/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. It indicates that the user has not use the feature that the survey is inquiring about. */
+"Microsurvey.Survey.Options.NotApplicable.v132" = "ഞാൻ ഉപയോഗിക്കാരില്ല";
+
+/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
+"Microsurvey.Survey.Options.Satisfied.v132" = "സന്തുഷ്ടമായി";
+
+/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
+"Microsurvey.Survey.Options.VeryDissatisfied.v132" = "തീരെ സന്തുഷ്ടമായില്ല";
+
+/* On the microsurvey, this is the title for one of the options that the user can select to answer the survey. */
+"Microsurvey.Survey.Options.VerySatisfied.v132" = "വളരെ സന്തുഷ്ടമായി";
+
+/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label that states the order the survey option in the list of options. First placeholder is the number the option is in the list and the second placeholder is the total number of options such as 1 out of 6. */
+"Microsurvey.Survey.OptionsOrder.AccessibilityLabel.v129" = "%2$@ ഇൽ %1$@";
+
+/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this the title of a link on the survey and allows the user to navigate to our privacy policy details. */
+"Microsurvey.Survey.PrivacyPolicyLink.v127" = "സ്വകാര്യത അറിയിപ്പ്";
+
+/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label that states whether the survey option was not selected. */
+"Microsurvey.Survey.RadioButton.Unselected.AccessibilityLabel.v129" = "തിരഞ്ഞെടുത്തതു് മാറ്റി";
+
+/* After engaging with the microsurvey prompt, the microsurvey pops up as a bottom sheet for the user to answer, this is the accessibility label used to announce that the sheet has appeared. */
+"Microsurvey.Survey.Sheet.AccessibilityLabel.v130" = "കണക്കെടുപ്പു്";
+

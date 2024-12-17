@@ -212,7 +212,7 @@
 "Could not add page to Reading list" = "לא ניתן להוסיף דף לרשימת הקריאה";
 
 /* Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures. */
-"Could not add page to Reading List. Maybe it’s already there?" = "לא ניתן להוסיף דף לרשימת הקריאה. האם יתכן שהוא כבר קיים שם?";
+"Could not add page to Reading List. Maybe it’s already there?" = "לא ניתן להוסיף דף לרשימת הקריאה. אולי הוא כבר קיים שם?";
 
 /* Error message that is shown in settings when there was a problem loading */
 "Could not load page." = "לא ניתן לטעון דף.";
@@ -1784,7 +1784,7 @@
 "Yesterday" = "אתמול";
 
 /* Error message in the remote tabs panel */
-"You don’t have any tabs open in Firefox on your other devices." = "אין לך לשוניות פתוחות ב־Firefox על שאר המכשירים שלך.";
+"You don’t have any tabs open in Firefox on your other devices." = "אין לך לשוניות פתוחות ב־Firefox בשאר המכשירים שלך.";
 
 /* Your Rights settings section title */
 "Your Rights" = "הזכויות שלך";

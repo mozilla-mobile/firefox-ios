@@ -584,7 +584,7 @@
 "Reset text size" = "Нулиране размера на текста";
 
 /* Font type setting in the reading view settings */
-"Sans-serif" = "Несерифен";
+"Sans-serif" = "Безсерифен";
 
 /* See http://mzl.la/1LXbDOL */
 "Save pages to your Reading List by tapping the book plus icon in the Reader View controls." = "Запазвайте страници в списъка за четене, докосвайки пиктограмата на книга с плюс от менюто на изгледа за четене.";
@@ -599,7 +599,7 @@
 "ScanQRCode.InvalidDataError.Message" = "Данните са невалидни";
 
 /* Title for the QR code scanner view. */
-"ScanQRCode.View.Title" = "Сканиране на QR код";
+"ScanQRCode.View.Title" = "Сканиране на QR";
 
 /* Open search section of settings */
 "Search" = "Търсене";

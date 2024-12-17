@@ -1,0 +1,3 @@
+/* When a user is in the process of entering an address, a screen pops up prompting the user if they want to use a saved address. This string is used as the title label of the screen. */
+"Addresses.BottomSheet.UseSavedAddressBottomSheet.v124" = "കരുതിവച്ച വിലാസം ഉപയോഗിക്കണോ?";
+

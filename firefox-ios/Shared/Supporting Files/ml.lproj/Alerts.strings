@@ -1,0 +1,27 @@
+/* When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the affirmative action for the alert, confirming that you do want to add the event to the calendar. */
+"Alerts.AddToCalendar.Button.Add.v134" = "ചേര്‍ക്കുക";
+
+/* When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the title for the alert. */
+"Alerts.AddToCalendar.Title.v134" = "പഞ്ചാംഗമിലേക്കു് ചേർക്കണോ?";
+
+/* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the body text for the alert. */
+"Alerts.FeltDeletion.Body.v122" = "എല്ലാ സ്വകാര്യ ടാബുകളും അടച്ചിട്ടു് നാൾവഴിയും കുക്കികളും മറ്റു് എല്ലാ വെബ്സ്ഥാനാദത്തയും മായ്ക്കുക.";
+
+/* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the cancel action for the alert, cancelling ending your session. */
+"Alerts.FeltDeletion.Button.Cancel.v122" = "റദ്ദാക്കുക";
+
+/* When tapping on a link, on a website in order to download a file and that file is a calendar file, an alert comes up asking to confirm if you want to add the event to the device calendar. This is the cancel action for the alert, cancelling the action to add the event to the calendar. */
+"Alerts.FeltDeletion.Button.Cancel.v134" = "റദ്ദാക്കുക";
+
+/* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the affirmative action for the alert, confirming that you do want to do that. */
+"Alerts.FeltDeletion.Button.Confirm.v122" = "സെഷൻ ദത്ത മായ്ക്കുക";
+
+/* When tapping the fire icon in private mode, an alert comes up asking to confirm if you want to delete all browsing data and end your private session. This is the title for the alert. */
+"Alerts.FeltDeletion.Title.v122" = "സ്വകാര്യ തിരയൽകാലം അവസാനിക്കണോ?";
+
+/* The title for the negative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will reject the action of restoring tabs. */
+"Alerts.RestoreTabs.Button.No.v109" = "ഇല്ല";
+
+/* The title for the affirmative action of the restore tabs pop-up alert. This alert shows when opening up Firefox after it crashed, and will restore existing tabs. */
+"Alerts.RestoreTabs.Button.Yes.v109" = "ടാബുകൾ പുനഃസ്ഥാപിക്കുക";
+

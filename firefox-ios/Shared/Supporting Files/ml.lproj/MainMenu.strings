@@ -1,0 +1,252 @@
+/* Contextual hints are little popups that appear for the users informing them of new features. When a user opens the new menu design for the first time, this contextual hint appears. This is the title for the hint. */
+"ContextualHints.MainMenu.NewMenu.Title.v132" = "പുതിയതു്: ധാരാരേഖിതപെട്ട കുറിപ്പടിക്കട്ട";
+
+/* On the main menu, the accessibility label hint for any action/option inside the menu, that is disabled. For example: 'Save to Reading List' option, from Menu, in some cases is disabled and the voice over should indicate that. 'Save To Reading List dimmed' */
+"MainMenu.AccessibilityLabels.OptionDisabled.Hint.v133" = "മങ്ങിയതു്";
+
+/* The accessibility label for the back button in the Main menu header navigation view. */
+"MainMenu.Account.AccessibilityLabels.BackButton.v132" = "തിരിച്ചു്";
+
+/* The accessibility label for the close button in the Main menu. */
+"MainMenu.Account.AccessibilityLabels.CloseButton.v132" = "അടയ്ക്കുക";
+
+/* The accessibility label for the sign in button in the Main menu header view. */
+"MainMenu.Account.AccessibilityLabels.MainButton.v132" = "രഹസ്യവാക്കുകളും ടാബുകളും മറ്റും സമന്വയിപ്പിക്കാൻ പ്രവേശിക്കൽ ചെയ്യുക";
+
+/* On the main menu, at the top, when the user is signed out. The description for the sign in action */
+"MainMenu.Account.SignedOut.Description.v131" = "രഹസ്യവാക്കുകളും ടാബുകളും മറ്റും സമന്വയിപ്പിക്കുക";
+
+/* On the main menu, at the top, when the user is signed out. The title for the sign in action */
+"MainMenu.Account.SignedOut.Title.v131" = "പ്രവേശിക്കുക";
+
+/* On the main menu, at the top, when the user is signed in but there was an error syncing. The description subtitle for the sync error state. */
+"MainMenu.Account.SyncError.Description.v131" = "സമന്വയിപ്പിക്കൽ താൽക്കാലികമായി നിർത്തി";
+
+/* On the main menu, at the top, when the user is signed in but there was an error syncing. The title for this state. */
+"MainMenu.Account.SyncError.Title.v131" = "സമന്വയിപ്പിക്കാനായി പ്രവേശിക്കൽ ചെയ്യുക";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Bookmarks panel. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.Bookmarks.v132" = "അടയാളക്കുറിപ്പുകള്‍";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Downloads panel. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.Downloads.v132" = "ഇറക്കിവയ്ക്കലുകൾ";
+
+/* On the main menu, the accessibility label for the action that will take the user to the History panel. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.History.v132" = "നാള്‍വഴി";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Passwords panel in the settings screen. */
+"MainMenu.PanelLinkSection.AccessibilityLabels.Passwords.v132" = "രഹസ്യവാക്കുകൾ";
+
+/* On the main menu, the title for the action that will take the user to the Bookmarks panel. */
+"MainMenu.PanelLinkSection.Bookmarks.Title.v131" = "അടയാളക്കുറിപ്പുകള്‍";
+
+/* On the main menu, the title for the action that will take the user to the Downloads panel. */
+"MainMenu.PanelLinkSection.Downloads.Title.v131" = "ഇറക്കിവയ്ക്കലുകൾ";
+
+/* On the main menu, the title for the action that will take the user to the History panel. */
+"MainMenu.PanelLinkSection.History.Title.v131" = "നാള്‍വഴി";
+
+/* On the main menu, the title for the action that will take the user to the Passwords panel in the settings screen. */
+"MainMenu.PanelLinkSection.Passwords.Title.v131" = "രഹസ്യവാക്കുകൾ";
+
+/* On the main menu, the accessibility labels for the action that will take the user to the Customize Homepage section in the settings screen. */
+"MainMenu.SettingsSection.AccessibilityLabels.CustomizeHomepage.v132" = "ആമുഖതാൾ സ്വന്തമാക്കുക";
+
+/* On the main menu, the accessibility labels for the action that will take the user to a website to get help from Mozilla. */
+"MainMenu.SettingsSection.AccessibilityLabels.GetHelp.v132" = "സഹായം നേടുക";
+
+/* On the main menu, the accessibility labels for the action that will take the user to the Settings menu. */
+"MainMenu.SettingsSection.AccessibilityLabels.Settings.v132" = "ക്രമീകരണങ്ങള്‍";
+
+/* On the main menu, the accessibility labels for the action that will take the user to a What's New in Firefox popup. Placeholder is for the app name. */
+"MainMenu.SettingsSection.AccessibilityLabels.WhatsNew.v132" = "%@ -ൽ പുതിയതു്";
+
+/* On the main menu, the title for the action that will take the user to the Customize Hopegape section in the settings screen. */
+"MainMenu.SettingsSection.CustomizeHomepage.Title.v131" = "ആമുഖതാൾ സ്വന്തമാക്കുക";
+
+/* On the main menu, the title for the action that will take the user to a website to get help from Mozilla. */
+"MainMenu.SettingsSection.GetHelp.Title.v131" = "സഹായം നേടുക";
+
+/* On the main menu, the title for the action that will take the user to the Settings menu. */
+"MainMenu.SettingsSection.Settings.Title.v131" = "ക്രമീകരണങ്ങള്‍";
+
+/* On the main menu, the title for the action that will take the user to a What's New in Firefox popup. Placeholder is for the app name. */
+"MainMenu.SettingsSection.WhatsNew.Title.v131" = "%@-ൽ പുതിയതു്";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Add to Home screen tool for iOS Home screen. */
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Subtitle.v132" = "ആമുഖം";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to add a website to the iOS home screen. */
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToHomeScreen.Title.v132" = "ആമുഖതാളിലേക്കു് ചേർക്കുക";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Shortcuts tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Subtitle.v132" = "കുറുക്കുവഴി";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to add the current website to the shortcuts on the homepage. */
+"MainMenu.Submenus.Save.AccessibilityLabels.AddToShortcuts.Title.v132" = "കുറുക്കുവഴികളിലേക്കു് ചേർക്കുക";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Bookmarks tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Subtitle.v132" = "അടയാളക്കുറിപ്പുകളിലേക്കു് ചേര്‍ക്കുക";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to save a bookmark for this particular page.. */
+"MainMenu.Submenus.Save.AccessibilityLabels.BookmarkThisPage.Title.v132" = "ഈ താളിനു് അടയാളപ്പെടുത്തുക";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to edit the bookmark for this particular page. */
+"MainMenu.Submenus.Save.AccessibilityLabels.EditBookmark.Title.v132" = "അടയാളക്കുറിപ്പ് തിരുത്തുക";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows the user to remove this site from the reading list. */
+"MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromReadingList.Title.v132" = "വായനാപ്പട്ടികയില്‍ നിന്നും മാറ്റുക";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows a user to remove the current website from the shortcuts on the homepage. */
+"MainMenu.Submenus.Save.AccessibilityLabels.RemoveFromShortcuts.Title.v132" = "കുറുക്കുവഴികളിൽ നിന്നു് മാറ്റുക";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Save as PDF tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveAsPDF.Subtitle.v132" = "പീ.ഡീ.എഫ്";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows the user to use the Save to PDF tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveAsPDF.Title.v132" = "പീ.ഡീ.എഫ് ആയി കരുതിവയ്ക്കുക";
+
+/* On the main menu, a string below the Save submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Reading List tool. */
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveToReadingList.Subtitle.v132" = "വായനപട്ടിക";
+
+/* On the main menu, in the Save submenu, the accessibility label for the menu component that allows the user to add this site to the reading list. */
+"MainMenu.Submenus.Save.AccessibilityLabels.SaveToReadingList.Title.v132" = "വായനപ്പട്ടികയിലേക്കു് ചേർക്കുക";
+
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Add to Homescreen tool. */
+"MainMenu.Submenus.Save.AddToHomeScreen.Subtitle.v131" = "ആമുഖം";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to add a website to the home screen. */
+"MainMenu.Submenus.Save.AddToHomeScreen.Title.v131" = "ആമുഖതാളിലേക്കു് ചേർക്കുക";
+
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Shortcuts tool. */
+"MainMenu.Submenus.Save.AddToShortcuts.Subtitle.v131" = "കുറുക്കുവഴി";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to add the current website to the shortcuts on the homepage. */
+"MainMenu.Submenus.Save.AddToShortcuts.Title.v131" = "കുറുക്കുവഴികളിലേക്കു് ചേർക്കുക";
+
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Bookmarks tool. */
+"MainMenu.Submenus.Save.BookmarkThisPage.Subtitle.v131" = "അടയാളകുറിപ്പു് ചേർക്കുക";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to save a bookmark for this particular page.. */
+"MainMenu.Submenus.Save.BookmarkThisPage.Title.v131" = "ഈ താളിനു് അടയാളപ്പെടുത്തുക";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to edit the bookmark for this particular page. */
+"MainMenu.Submenus.Save.EditBookmark.Title.v131" = "അടയാളക്കുറിപ്പ് തിരുത്തുക";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows the user to remove this site from the reading list. */
+"MainMenu.Submenus.Save.RemoveFromReadingList.Title.v131" = "വായനാപ്പട്ടികയില്‍ നിന്നും മാറ്റുക";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows a user to remove the current website from the shortcuts on the homepage. */
+"MainMenu.Submenus.Save.RemoveFromShortcuts.Title.v131" = "കുറുക്കുവഴികളിൽ നിന്നു് മാറ്റുക";
+
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Save as PDF tool. */
+"MainMenu.Submenus.Save.SaveAsPDF.Subtitle.v131" = "പീ.ഡീ.എഫ്";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows the user to use the Save to PDF tool. */
+"MainMenu.Submenus.Save.SaveAsPDF.Title.v131" = "പീ.ഡീ.എഫ ആയി കരുതിവയ്ക്കുക";
+
+/* On the main menu, a string below the Save submenu title, indicating what kind of tools are available in that menu. This string is for the Reading List tool. */
+"MainMenu.Submenus.Save.SaveToReadingList.Subtitle.v131" = "വായനാ പട്ടിക";
+
+/* On the main menu, in the Save submenu, the title for the menu component that allows the user to add this site to the reading list. */
+"MainMenu.Submenus.Save.SaveToReadingList.Title.v131" = "വായനപ്പട്ടികയിലേക്കു് ചേർക്കുക";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Report Print tool. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Print.Subtitle.v132" = "അച്ചടിക്കുക";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Print module in the application. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Print.Title.v132" = "അച്ചടിപ്പിക്കുക";
+
+/* On the main menu, the accessibility label for the action that will turn the reader view on for the current website. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReaderView.Off.Title.v132" = "വായനാകാഴ്ച അണക്കുക";
+
+/* On the main menu, the accessibility label for the action that will turn the reader view on for the current website. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReaderView.On.Title.v132" = "വായനാകാഴ്ച തുടങ്ങുക";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Reader View tool. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReaderView.Subtitle.v132" = "വായന കാഴ്ച";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Report Broken Site tool and is indicating that under the Tools submenu, a Report (Report Broken Site) action is available. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReportBrokenSite.Subtitle.v132" = "വിവരം അറിയിക്കുക";
+
+/* On the main menu, the accessibility label for the action that will take the user to the site where they can report a broken website to our web compatibility team. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.ReportBrokenSite.Title.v132" = "പൊട്ടിയയൊരു വെബ്സ്ഥാനത്തിന്റെ വിവരം അറിയിക്കുക";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Share tool and is indicating that under the Tools submenu, a Share (to someone else) action is available. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Share.Subtitle.v132" = "പങ്കിടുക";
+
+/* On the main menu, the accessibility label for the action (Share with others) that will take the user/open (to) the Share submenu. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Share.Title.v132" = "പങ്കിടുക";
+
+/* On the main menu, a string below the Tool submenu accessibility label, indicating what kind of tools are available in that menu. This string is for the Zoom tool and is indicating that under the Tools submenu, a Zoom (apply zoom on a page) action is available. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Zoom.Subtitle.v132" = "വലുതാക്കുക";
+
+/* On the main menu, in the tools submenu, the accessibility label for the menu component that indicates the current zoom level. Placeholder is for the current zoom level percentage. */
+"MainMenu.Submenus.Tools.AccessibilityLabels.Zoom.Title.v132" = "വലുതാക്കുക (%@)";
+
+/* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Print tool. */
+"MainMenu.Submenus.Tools.Print.Subtitle.v131" = "അച്ചടിപ്പിക്കുക";
+
+/* On the main menu, the title for the action that will take the user to the Print module in the application. */
+"MainMenu.Submenus.Tools.Print.Title.v131" = "അച്ചടിപ്പിക്കുക";
+
+/* On the main menu, the title for the action that will turn the reader view on for the current website. */
+"MainMenu.Submenus.Tools.ReaderView.Off.Title.v131" = "വായനാകാഴ്ച അണക്കുക";
+
+/* On the main menu, the title for the action that will turn the reader view on for the current website. */
+"MainMenu.Submenus.Tools.ReaderView.On.Title.v131" = "വായനാകാഴ്ച തുടങ്ങുക";
+
+/* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Reader View tool. */
+"MainMenu.Submenus.Tools.ReaderView.Subtitle.v131" = "വായന കാഴ്ച";
+
+/* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Broken Site tool. */
+"MainMenu.Submenus.Tools.ReportBrokenSite.Subtitle.v131" = "വിവരം അറിയിക്കുക";
+
+/* On the main menu, the title for the action that will take the user to the site where they can report a broken website to our web compatibility team. */
+"MainMenu.Submenus.Tools.ReportBrokenSite.Title.v133" = "പൊട്ടിയയൊരു വെബ്സ്ഥാനത്തിന്റെ വിവരം അറിയിക്കുക…";
+
+/* On the main menu, a string below the Tool submenu tiitle, indicating what kind of tools are available in that menu. This string is for the Report Share tool. */
+"MainMenu.Submenus.Tools.Share.Subtitle.v131" = "പങ്കിടുക";
+
+/* On the main menu, the title for the action that will take the user to the Share module in the application. */
+"MainMenu.Submenus.Tools.Share.Title.v131" = "പങ്കിടുക";
+
+/* On the main menu, a string below the Tool submenu title, indicating what kind of tools are available in that menu. This string is for the Zoom tool. */
+"MainMenu.Submenus.Tools.Zoom.Subtitle.v131" = "വലുതാക്കുക";
+
+/* On the main menu, in the tools submenu, the title for the menu component that indicates the current zoom level. Placeholder is for the current zoom level percentage. */
+"MainMenu.Submenus.Tools.Zoom.Title.v131" = "വലുതാക്കുക (%@)";
+
+/* The accessibility label for the Main Menu. */
+"MainMenu.TabsSection.AccessibilityLabels.MainMenu.v132" = "പ്രധാന കുറിപ്പടിക്കട്ട";
+
+/* On the main menu, the accessibility label for the action that will create a new private tab. */
+"MainMenu.TabsSection.AccessibilityLabels.NewPrivateTab.v132" = "പുതിയ സ്വകാര്യ ടാബു്";
+
+/* On the main menu, the accessibility label for the action that will create a new, non-private, tab. */
+"MainMenu.TabsSection.AccessibilityLabels.NewTab.v132" = "പുതിയ ടാബു്";
+
+/* On the main menu, the title for the action that will create a new private tab. */
+"MainMenu.TabsSection.NewPrivateTab.Title.v131" = "പുതിയ സ്വകാര്യ ടാബു്";
+
+/* On the main menu, the title for the action that will create a new, non-private, tab. */
+"MainMenu.TabsSection.NewTab.Title.v131" = "പുതിയ ടാബു്";
+
+/* On the main menu, the accessibility label for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
+"MainMenu.ToolsSection.AccessibilityLabels.FindInPage.v132" = "താളില്‍ കണ്ടെത്തുക";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Save submenu in the menu. In the main menu, there is an option called Save that is taking the user to the Save submenu where user can share, bookmark the page and so on. */
+"MainMenu.ToolsSection.AccessibilityLabels.Save.v132" = "കരുതിവയ്ക്കുക";
+
+/* On the main menu, the accessibility label for the action that will take the user to the Tools submenu in the menu. */
+"MainMenu.ToolsSection.AccessibilityLabels.Tools.v132" = "ഉപകരണങ്ങള്‍";
+
+/* On the main menu, the title for the action that will bring up the Search menu, so the user can search for a word or a pharse on the current page. */
+"MainMenu.ToolsSection.FindInPage.Title.v131" = "താളില്‍ കണ്ടെത്തുക…";
+
+/* On the main menu, the title for the action that will take the user to the Save submenu in the menu. */
+"MainMenu.ToolsSection.SaveSubmenu.Title.v131" = "കരുതിവയ്ക്കുക";
+
+/* On the main menu, the title for the action that will take the user to the Tools submenu in the menu. */
+"MainMenu.ToolsSection.ToolsSubmenu.Title.v131" = "ഉപകരണങ്ങള്‍";
+

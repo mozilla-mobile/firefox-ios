@@ -4,6 +4,12 @@
 /* Label for the button, displayed in the menu, used to copy the current page link to the clipboard. */
 "Menu.CopyLink.Title" = "ბმულის ასლი";
 
+/* Toast displayed to user after downlaod pdf was pressed. */
+"Menu.DownloadPDF.Confirm.v129" = "წარმატებით ჩამოიტვირთა PDF";
+
+/* Label for the button, displayed in the menu, downloads a pdf when pressed. */
+"Menu.DownloadPDF.Label.v129" = "ჩამოიტვირთოს PDF";
+
 /* Label for the button, displayed in the menu, used to open the toolbar to search for text within the current page. */
 "Menu.FindInPageAction.Title" = "პოვნა გვერდზე";
 
