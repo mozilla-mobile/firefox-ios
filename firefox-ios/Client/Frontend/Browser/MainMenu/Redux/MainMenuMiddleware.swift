@@ -159,6 +159,13 @@ final class MainMenuMiddleware {
         }
     }
 
+    private func handleActionTypeAction(action: MainMenuAction, isHomepage: Bool) {
+        guard let destination = action.navigationDestination?.destination else { return }
+        handleTelemetryFor(for: destination,
+                           isHomepage: isHomepage,
+                           and: action.navigationDestination?.url)
+    }
+
     private func dispatchUpdateAccountHeader(
         accountData: AccountData? = nil,
         action: MainMenuAction,
