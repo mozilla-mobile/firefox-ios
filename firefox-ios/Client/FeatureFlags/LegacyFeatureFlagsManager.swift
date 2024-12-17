@@ -35,7 +35,7 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
     static let shared = LegacyFeatureFlagsManager()
 
     // MARK: - Variables
-    private var profile: Profile!
+    private var profile: Profile?
     private var coreFeatures: [CoreFeatureFlagID: CoreFlaggableFeature] = [:]
 
     // MARK: - Public methods
@@ -51,6 +51,10 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
     public func isFeatureEnabled(_ featureID: NimbusFeatureFlagID,
                                  checking channelsToCheck: FlaggableFeatureCheckOptions
     ) -> Bool {
+        guard let profile else {
+            return false
+        }
+
         let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
         let nimbusSetting = getNimbusOrDebugSetting(with: feature)
         let userSetting = feature.isUserEnabled(using: nimbusFlags)
@@ -78,6 +82,10 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
     /// binary state. Further information on return types can be found in
     /// `FlaggableFeatureOptions`
     public func getCustomState<T>(for featureID: NimbusFeatureFlagWithCustomOptionsID) -> T? {
+        guard let profile else {
+            return nil
+        }
+
         let feature = NimbusFlaggableFeature(withID: convertCustomIDToStandard(featureID),
                                              and: profile)
         guard let userSetting = feature.getUserPreference(using: nimbusFlags) else { return nil }
@@ -101,6 +109,10 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
 
     /// Set a feature that has a binary state to on or off
     public func set(feature featureID: NimbusFeatureFlagID, to desiredState: Bool, isDebug: Bool = false) {
+        guard let profile else {
+            return
+        }
+
         let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
         #if MOZ_CHANNEL_BETA || MOZ_CHANNEL_FENNEC
         if isDebug {
@@ -119,6 +131,10 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
         feature featureID: NimbusFeatureFlagWithCustomOptionsID,
         to desiredState: T
     ) {
+        guard let profile else {
+            return
+        }
+
         let feature = NimbusFlaggableFeature(withID: convertCustomIDToStandard(featureID),
                                              and: profile)
         switch featureID {
