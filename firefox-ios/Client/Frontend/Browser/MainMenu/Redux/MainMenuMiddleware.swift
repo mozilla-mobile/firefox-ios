@@ -163,6 +163,14 @@ final class MainMenuMiddleware {
                            and: action.navigationDestination?.url)
     }
 
+    private func handleTapShowDetailsViewAction(action: MainMenuAction, isHomepage: Bool) {
+        if action.detailsViewToShow == .tools {
+            telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.tools)
+        } else if action.detailsViewToShow == .save {
+            telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.save)
+        }
+    }
+
     private func dispatchUpdateAccountHeader(
         accountData: AccountData? = nil,
         action: MainMenuAction,
