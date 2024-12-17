@@ -34,7 +34,7 @@ class BackForwardTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     lazy var label: UILabel = .build { _ in }
 
-    var viewModel: BackForwardCellViewModel!
+    var viewModel: BackForwardCellViewModel?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -67,7 +67,7 @@ class BackForwardTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        guard let context = UIGraphicsGetCurrentContext() else { return }
+        guard let context = UIGraphicsGetCurrentContext(), let viewModel else { return }
 
         var startPoint = CGPoint(
             x: rect.origin.x + UX.faviconPadding + UX.faviconWidth * 0.5 + safeAreaInsets.left,
@@ -128,7 +128,7 @@ class BackForwardTableViewCell: UITableViewCell, ReusableCell, ThemeApplicable {
 
     func applyTheme(theme: Theme) {
         label.textColor = theme.colors.textPrimary
-        viewModel.strokeBackgroundColor = theme.colors.borderPrimary
+        viewModel?.strokeBackgroundColor = theme.colors.borderPrimary
         faviconView.layer.borderColor = theme.colors.borderPrimary.cgColor
         faviconView.tintColor = theme.colors.iconPrimary
     }
