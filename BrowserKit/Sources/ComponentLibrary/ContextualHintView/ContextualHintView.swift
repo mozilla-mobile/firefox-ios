@@ -7,7 +7,7 @@ import Common
 import UIKit
 
 public class ContextualHintView: UIView, ThemeApplicable {
-    private var viewModel: ContextualHintViewModel!
+    private var viewModel: ContextualHintViewModel?
 
     struct UX {
         static let closeButtonSize = CGSize(width: 35, height: 35)
@@ -113,6 +113,8 @@ public class ContextualHintView: UIView, ThemeApplicable {
     }
 
     private func setupConstraints() {
+        guard let viewModel else { return }
+
         let isArrowUp = viewModel.arrowDirection == .up
         let topPadding = isArrowUp ? UX.stackViewTopArrowTopConstraint : UX.stackViewBottomArrowTopConstraint
         let closeButtonPadding = isArrowUp ? UX.closeButtonTop : UX.closeButtonBottom
@@ -151,12 +153,12 @@ public class ContextualHintView: UIView, ThemeApplicable {
 
     @objc
     private func didTapCloseButton(sender: UIButton) {
-        viewModel.closeButtonAction?(sender)
+        viewModel?.closeButtonAction?(sender)
     }
 
     @objc
     private func didTapActionButton(sender: UIButton) {
-        viewModel.actionButtonAction?(sender)
+        viewModel?.actionButtonAction?(sender)
     }
 
     public func applyTheme(theme: Theme) {
@@ -164,6 +166,8 @@ public class ContextualHintView: UIView, ThemeApplicable {
         titleLabel.textColor = theme.colors.textOnDark
         descriptionLabel.textColor = theme.colors.textOnDark
         gradient.colors = theme.colors.layerGradient.cgColors
+
+        guard let viewModel else { return }
 
         if viewModel.isActionType {
             let textAttributes: [NSAttributedString.Key: Any] = [
