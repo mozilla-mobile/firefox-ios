@@ -9,7 +9,7 @@ import Storage
 
 protocol SearchEnginesManagerProvider {
     var defaultEngine: OpenSearchEngine? { get }
-    var orderedEngines: [OpenSearchEngine]! { get }
+    var orderedEngines: [OpenSearchEngine] { get }
     func getOrderedEngines(completion: @escaping ([OpenSearchEngine]) -> Void)
 }
 
@@ -52,7 +52,6 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
         self.fileAccessor = files
         self.engineProvider = engineProvider
         self.orderedEngines = []
-        self.disabledEngines = getDisabledEngines()
         initPrefBasedSuggestions()
 
         getOrderedEngines { orderedEngines in
@@ -110,13 +109,13 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     }
 
     // The keys of this dictionary are used as a set.
-    private var disabledEngines: [String: Bool]! {
+    private lazy var disabledEngines: [String: Bool] = getDisabledEngines() {
         didSet {
             self.prefs.setObject(Array(self.disabledEngines.keys), forKey: disabledEngineNames)
         }
     }
 
-    var orderedEngines: [OpenSearchEngine]! {
+    var orderedEngines: [OpenSearchEngine] {
         didSet {
             self.prefs.setObject(self.orderedEngines.map { $0.shortName }, forKey: orderedEngineNames)
         }
@@ -125,7 +124,7 @@ class SearchEnginesManager: SearchEnginesManagerProvider {
     /// The subset of search engines that are enabled and not the default search engine.
     ///
     /// The results can be empty if the user disables all search engines besides the default (which can't be disabled).
-    var quickSearchEngines: [OpenSearchEngine]! {
+    var quickSearchEngines: [OpenSearchEngine] {
         return self.orderedEngines.filter({ (engine) in !self.isEngineDefault(engine) && self.isEngineEnabled(engine) })
     }
 
