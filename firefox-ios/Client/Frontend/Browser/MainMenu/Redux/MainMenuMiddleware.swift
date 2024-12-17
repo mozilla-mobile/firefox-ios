@@ -175,6 +175,24 @@ final class MainMenuMiddleware {
         telemetry.toolsSubmenuOptionTapped(with: false, and: option)
     }
 
+    private func handleDidInstantiateViewAction(action: MainMenuAction) {
+        if let accountData = getAccountData() {
+            if let iconURL = accountData.iconURL {
+                GeneralizedImageFetcher().getImageFor(url: iconURL) { [weak self] image in
+                    guard let self else { return }
+                    self.dispatchUpdateAccountHeader(
+                        accountData: accountData,
+                        action: action,
+                        icon: image)
+                }
+            } else {
+                dispatchUpdateAccountHeader(accountData: accountData, action: action)
+            }
+        } else {
+            dispatchUpdateAccountHeader(action: action)
+        }
+    }
+
     private func dispatchUpdateAccountHeader(
         accountData: AccountData? = nil,
         action: MainMenuAction,
