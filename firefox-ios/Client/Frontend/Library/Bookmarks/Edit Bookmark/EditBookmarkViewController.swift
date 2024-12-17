@@ -42,17 +42,6 @@ class EditBookmarkViewController: UIViewController,
         view.tableHeaderView = headerSpacerView
     }
 
-    private lazy var closeBarButton: UIBarButtonItem =  {
-        let button = UIBarButtonItem(
-            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
-            style: .done,
-            target: self,
-            action: #selector(closeButtonAction)
-        )
-        button.accessibilityLabel = .MainMenu.Account.AccessibilityLabels.CloseButton
-        return button
-    }()
-
     private lazy var saveBarButton: UIBarButtonItem =  {
         let button = UIBarButtonItem(
             title: String.Bookmarks.Menu.EditBookmarkSave,
@@ -95,9 +84,6 @@ class EditBookmarkViewController: UIViewController,
         }
 
         navigationItem.rightBarButtonItem = saveBarButton
-        if isRootViewController {
-            navigationItem.leftBarButtonItem = closeBarButton
-        }
         // The back button title sometimes doesn't allign with the chevron, force navigation bar layout
         navigationController?.navigationBar.layoutIfNeeded()
         setupSubviews()
@@ -125,11 +111,11 @@ class EditBookmarkViewController: UIViewController,
         if let isDragging = transitionCoordinator?.isInteractive, !isDragging {
             navigationController?.setNavigationBarHidden(true, animated: true)
         }
-        onViewWillDisappear?()
-        // Don't save on "X" bar button press, only on "<" back press
-        if !isRootViewController {
+        // Save when popping the view off the navigation stack
+        if isMovingFromParent {
             viewModel.saveBookmark()
         }
+        onViewWillDisappear?()
     }
 
     // MARK: - Setup
@@ -145,10 +131,6 @@ class EditBookmarkViewController: UIViewController,
     }
 
     // MARK: - Actions
-    @objc
-    func closeButtonAction() {
-        self.dismiss(animated: true)
-    }
 
     @objc
     func saveButtonAction() {
@@ -156,6 +138,7 @@ class EditBookmarkViewController: UIViewController,
             viewModel.saveBookmark()
             self.dismiss(animated: true)
         } else {
+            // Save will happen in viewWillDisappear
             navigationController?.popViewController(animated: true)
         }
     }
