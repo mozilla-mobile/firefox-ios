@@ -134,7 +134,7 @@ class SendDataSetting: BoolSetting {
         case .crashReports:
             return SupportUtils.URLForTopic("mobile-crash-reports")
         case .dailyUsagePing:
-            return SupportUtils.URLForTopic("dau-ping-settings-mobile")
+            return SupportUtils.URLForTopic("usage-ping-settings-mobile")
         }
     }
 
