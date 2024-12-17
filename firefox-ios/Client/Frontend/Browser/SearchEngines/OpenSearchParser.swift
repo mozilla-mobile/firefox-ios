@@ -47,7 +47,7 @@ class OpenSearchParser {
             return nil
         }
 
-        var searchTemplate: String!
+        var searchTemplate: String?
         var suggestTemplate: String?
         for urlIndexer in urlIndexers {
             let type = urlIndexer.attributes["type"]
@@ -101,7 +101,7 @@ class OpenSearchParser {
             }
         }
 
-        if searchTemplate == nil {
+        guard let searchTemplate else {
             return nil
         }
 
