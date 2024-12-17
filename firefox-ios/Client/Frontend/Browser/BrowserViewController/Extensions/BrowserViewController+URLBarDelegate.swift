@@ -130,9 +130,9 @@ extension BrowserViewController: URLBarDelegate {
 
     func locationActionsForURLBar() -> [AccessibleAction] {
         if UIPasteboard.general.hasStrings {
-            return [pasteGoAction, pasteAction, copyAddressAction]
+            return [pasteGoAction, pasteAction, copyAddressAction].compactMap { $0 }
         } else {
-            return [copyAddressAction]
+            return [copyAddressAction].compactMap { $0 }
         }
     }
 

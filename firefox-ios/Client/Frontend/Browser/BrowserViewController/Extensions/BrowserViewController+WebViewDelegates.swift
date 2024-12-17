@@ -703,8 +703,7 @@ extension BrowserViewController: WKNavigationDelegate {
             // Open our helper and cancel this response from the webview.
             if let downloadViewModel = downloadHelper.downloadViewModel(windowUUID: windowUUID,
                                                                         okAction: downloadAction) {
-                let displayFrom = isToolbarRefactorEnabled ? addressToolbarContainer : urlBar!
-                presentSheetWith(viewModel: downloadViewModel, on: self, from: displayFrom)
+                presentSheetWith(viewModel: downloadViewModel, on: self, from: urlBarView)
             }
             decisionHandler(.cancel)
             return
@@ -795,7 +794,7 @@ extension BrowserViewController: WKNavigationDelegate {
                     )
                     store.dispatch(middlewareAction)
                 } else {
-                    urlBar.currentURL = tab.url?.displayURL
+                    legacyUrlBar?.currentURL = tab.url?.displayURL
                 }
             }
             return
