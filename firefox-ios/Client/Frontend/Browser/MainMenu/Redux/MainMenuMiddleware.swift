@@ -202,6 +202,15 @@ final class MainMenuMiddleware {
         telemetry.toolsSubmenuOptionTapped(with: isHomepage, and: option)
     }
 
+    private func handleTapBackToMainMenuAction(action: MainMenuAction, isHomepage: Bool) {
+        guard let submenuType = action.telemetryInfo?.submenuType else { return }
+        if submenuType == .save {
+            telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.back)
+        } else {
+            telemetry.toolsSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.back)
+        }
+    }
+
     private func getAccountData() -> AccountData? {
         let rustAccount = RustFirefoxAccounts.shared
         let needsReAuth = rustAccount.accountNeedsReauth()
