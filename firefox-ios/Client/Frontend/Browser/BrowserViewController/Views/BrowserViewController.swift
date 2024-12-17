@@ -1692,35 +1692,57 @@ class BrowserViewController: UIViewController,
     }
 
     /// This function will open a view separate from the bookmark edit panel found in the
-    /// Library Panel - Bookmarks section. In order to get the correct information, it needs
-    /// to fetch the last added bookmark in the mobile folder, which is the default
-    /// location for all bookmarks added on mobile.
+    /// Library Panel - Bookmarks section.
     internal func openBookmarkEditPanel() {
-        TelemetryWrapper.recordEvent(
-            category: .action,
-            method: .change,
-            object: .bookmark,
-            value: .addBookmarkToast
-        )
-        if profile.isShutdown { return }
-        profile.places.getBookmarksTree(
-            rootGUID: BookmarkRoots.MobileFolderGUID,
-            recursive: false
-        ).uponQueue(.main) { result in
-            guard let bookmarkFolder = result.successValue as? BookmarkFolderData,
-                  let bookmarkNode = bookmarkFolder.children?.first as? FxBookmarkNode
-            else { return }
+        guard !profile.isShutdown else { return }
 
-            let detailController = LegacyBookmarkDetailPanel(profile: self.profile,
-                                                             windowUUID: self.windowUUID,
-                                                             bookmarkNode: bookmarkNode,
-                                                             parentBookmarkFolder: bookmarkFolder,
-                                                             presentedFromToast: true) { [weak self] in
-                self?.showBookmarkToast(action: .remove)
+        // Open refactored bookmark edit view
+        if isBookmarkRefactorEnabled {
+            guard let url = tabManager.selectedTab?.url else { return }
+            profile.places.getBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
+                guard let bookmarkItem = result.successValue?.first,
+                let parentGuid = bookmarkItem.parentGUID else { return }
+                self.profile.places.getBookmarksTree(rootGUID: parentGuid, recursive: true).uponQueue(.main) { result in
+                    guard let parentFolder = result.successValue as? BookmarkFolderData else { return }
+                    let viewModel = EditBookmarkViewModel(parentFolder: parentFolder,
+                                                          node: bookmarkItem,
+                                                          profile: self.profile)
+                    let controller = EditBookmarkViewController(viewModel: viewModel,
+                                                                windowUUID: self.windowUUID)
+                    let navigationController = DismissableNavigationViewController(rootViewController: controller)
+                    self.present(navigationController, animated: true, completion: nil)
+                }
             }
-            let controller: DismissableNavigationViewController
-            controller = DismissableNavigationViewController(rootViewController: detailController)
-            self.present(controller, animated: true, completion: nil)
+        // Open legacy bookmark edit view
+        } else {
+            TelemetryWrapper.recordEvent(
+                category: .action,
+                method: .change,
+                object: .bookmark,
+                value: .addBookmarkToast
+            )
+
+            // Fetch the last added bookmark in the mobile folder, which is the default location for all bookmarks
+            // added on mobile when the bookmark refactor is not enabled
+            profile.places.getBookmarksTree(
+                rootGUID: BookmarkRoots.MobileFolderGUID,
+                recursive: false
+            ).uponQueue(.main) { result in
+                guard let bookmarkFolder = result.successValue as? BookmarkFolderData,
+                      let bookmarkNode = bookmarkFolder.children?.first as? FxBookmarkNode
+                else { return }
+
+                let detailController = LegacyBookmarkDetailPanel(profile: self.profile,
+                                                                 windowUUID: self.windowUUID,
+                                                                 bookmarkNode: bookmarkNode,
+                                                                 parentBookmarkFolder: bookmarkFolder,
+                                                                 presentedFromToast: true) { [weak self] in
+                    self?.showBookmarkToast(action: .remove)
+                }
+                let controller: DismissableNavigationViewController
+                controller = DismissableNavigationViewController(rootViewController: detailController)
+                self.present(controller, animated: true, completion: nil)
+            }
         }
     }
 

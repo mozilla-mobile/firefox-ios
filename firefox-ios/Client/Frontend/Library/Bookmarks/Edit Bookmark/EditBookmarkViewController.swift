@@ -41,9 +41,34 @@ class EditBookmarkViewController: UIViewController,
                                                     size: CGSize(width: 0, height: UX.bookmarkCellTopPadding)))
         view.tableHeaderView = headerSpacerView
     }
+
+    private lazy var closeBarButton: UIBarButtonItem =  {
+        let button = UIBarButtonItem(
+            image: UIImage.templateImageNamed(StandardImageIdentifiers.Large.cross),
+            style: .done,
+            target: self,
+            action: #selector(closeButtonAction)
+        )
+        button.accessibilityLabel = .MainMenu.Account.AccessibilityLabels.CloseButton
+        return button
+    }()
+
+    private lazy var saveBarButton: UIBarButtonItem =  {
+        let button = UIBarButtonItem(
+            title: String.Bookmarks.Menu.EditBookmarkSave,
+            style: .done,
+            target: self,
+            action: #selector(saveButtonAction)
+        )
+        return button
+    }()
+
     var onViewWillDisappear: (() -> Void)?
     var onViewWillAppear: (() -> Void)?
     private let viewModel: EditBookmarkViewModel
+    private var isRootViewController: Bool {
+        return navigationController?.viewControllers.first == self
+    }
 
     init(viewModel: EditBookmarkViewModel,
          windowUUID: WindowUUID,
@@ -67,6 +92,11 @@ class EditBookmarkViewController: UIViewController,
         title = .Bookmarks.Menu.EditBookmarkTitle
         viewModel.onFolderStatusUpdate = { [weak self] in
             self?.tableView.reloadSections(IndexSet(integer: Section.folder.rawValue), with: .automatic)
+        }
+
+        navigationItem.rightBarButtonItem = saveBarButton
+        if isRootViewController {
+            navigationItem.leftBarButtonItem = closeBarButton
         }
         // The back button title sometimes doesn't allign with the chevron, force navigation bar layout
         navigationController?.navigationBar.layoutIfNeeded()
@@ -96,7 +126,10 @@ class EditBookmarkViewController: UIViewController,
             navigationController?.setNavigationBarHidden(true, animated: true)
         }
         onViewWillDisappear?()
-        viewModel.saveBookmark()
+        // Don't save on "X" bar button press, only on "<" back press
+        if !isRootViewController {
+            viewModel.saveBookmark()
+        }
     }
 
     // MARK: - Setup
@@ -109,6 +142,22 @@ class EditBookmarkViewController: UIViewController,
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+
+    // MARK: - Actions
+    @objc
+    func closeButtonAction() {
+        self.dismiss(animated: true)
+    }
+
+    @objc
+    func saveButtonAction() {
+        if isRootViewController {
+            viewModel.saveBookmark()
+            self.dismiss(animated: true)
+        } else {
+            navigationController?.popViewController(animated: true)
+        }
     }
 
     // MARK: - Themeable
@@ -218,7 +267,7 @@ class EditBookmarkViewController: UIViewController,
         case .folder:
             viewModel.folderStructures.count
         case .newFolder:
-            1
+            isRootViewController ? 0 : 1
         }
     }
 
