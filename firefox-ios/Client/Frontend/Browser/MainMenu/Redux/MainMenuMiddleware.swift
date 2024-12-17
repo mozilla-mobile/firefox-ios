@@ -106,12 +106,7 @@ final class MainMenuMiddleware {
             self.handleTapToggleNightModeAction(action: action, isHomepage: isHomepage)
 
         case MainMenuDetailsActionType.tapBackToMainMenu:
-            guard let submenuType = action.telemetryInfo?.submenuType else { return }
-            if submenuType == .save {
-                self.telemetry.saveSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.back)
-            } else {
-                self.telemetry.toolsSubmenuOptionTapped(with: isHomepage, and: TelemetryAction.back)
-            }
+            self.handleTapBackToMainMenuAction(action: action, isHomepage: isHomepage)
 
         case MainMenuDetailsActionType.tapDismissView:
             self.telemetry.closeButtonTapped(isHomepage: isHomepage)
