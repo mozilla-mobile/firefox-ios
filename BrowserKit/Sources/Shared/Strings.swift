@@ -161,6 +161,11 @@ extension String {
                 tableName: "Bookmarks",
                 value: "Save in",
                 comment: "When editing a bookmark, you can select the folder that the bookmark will be saved in. The label for this section of the view is `Save in`.")
+            public static let EditBookmarkSave = MZLocalizedString(
+                key: "Bookmarks.Menu.EditBookmarkSave.v135",
+                tableName: "Bookmarks",
+                value: "Save",
+                comment: "When editing a bookmark, the right button in the navigation bar indicating that the edited bookmark will be saved.")
             public static let EditBookmarkTitle = MZLocalizedString(
                 key: "Bookmarks.Menu.EditBookmarkTitle.v131",
                 tableName: "Bookmarks",
@@ -4808,6 +4813,11 @@ extension String {
             tableName: nil,
             value: "Bookmark Removed",
             comment: "Toast displayed to the user after a bookmark has been removed.")
+        public static let EditBookmarkLabel = MZLocalizedString(
+            key: "Menu.EditBookmark.Label.v135",
+            tableName: "Menu",
+            value: "Edit",
+            comment: "Label for the edit bookmark button in the legacy menu. Pressing this button opens the bookmark editing screen for the current page's bookmark. Please keep the text as short as possible for this label.")
 
         // Reading list
         public static let ReadingList = MZLocalizedString(
