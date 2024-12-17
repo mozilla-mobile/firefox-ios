@@ -70,21 +70,7 @@ final class MainMenuMiddleware {
             self.handleShowReaderModeAction(action: action)
 
         case MainMenuActionType.didInstantiateView:
-            if let accountData = self.getAccountData() {
-                if let iconURL = accountData.iconURL {
-                    GeneralizedImageFetcher().getImageFor(url: iconURL) { [weak self] image in
-                        guard let self else { return }
-                        self.dispatchUpdateAccountHeader(
-                            accountData: accountData,
-                            action: action,
-                            icon: image)
-                    }
-                } else {
-                    self.dispatchUpdateAccountHeader(accountData: accountData, action: action)
-                }
-            } else {
-                self.dispatchUpdateAccountHeader(action: action)
-            }
+            self.handleDidInstantiateViewAction(action: action)
 
         case MainMenuActionType.viewDidLoad:
             store.dispatch(
