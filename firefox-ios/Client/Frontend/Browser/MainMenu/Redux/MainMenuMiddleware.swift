@@ -58,11 +58,7 @@ final class MainMenuMiddleware {
             self.handleTapNavigateToDestinationAction(action: action, isHomepage: isHomepage)
 
         case MainMenuActionType.tapShowDetailsView:
-            if action.detailsViewToShow == .tools {
-                self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.tools)
-            } else if action.detailsViewToShow == .save {
-                self.telemetry.mainMenuOptionTapped(with: isHomepage, and: TelemetryAction.save)
-            }
+            self.handleTapShowDetailsViewAction(action: action, isHomepage: isHomepage)
 
         case MainMenuActionType.tapToggleUserAgent:
             guard let defaultIsDesktop = action.telemetryInfo?.isDefaultUserAgentDesktop,
