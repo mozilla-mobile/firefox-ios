@@ -67,9 +67,7 @@ final class MainMenuMiddleware {
             self.telemetry.closeButtonTapped(isHomepage: isHomepage)
 
         case GeneralBrowserActionType.showReaderMode:
-            guard let isActionOn = action.telemetryInfo?.isActionOn else { return }
-            let option = isActionOn ? TelemetryAction.readerViewTurnOn : TelemetryAction.readerViewTurnOff
-            self.telemetry.toolsSubmenuOptionTapped(with: false, and: option)
+            self.handleShowReaderModeAction(action: action)
 
         case MainMenuActionType.didInstantiateView:
             if let accountData = self.getAccountData() {
