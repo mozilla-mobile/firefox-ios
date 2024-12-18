@@ -445,7 +445,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 footer.detailTextButton.setTitle(UIConstants.strings.learnMore, for: .normal)
                 footer.detailTextButton.addGestureRecognizer(tapGesture)
             }
-            
             return footer
         }
         
