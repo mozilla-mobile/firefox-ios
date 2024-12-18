@@ -39,6 +39,13 @@ class EditBookmarkViewModel: ParentFolderSelector {
     var onFolderStatusUpdate: VoidReturnCallback?
     var onBookmarkSaved: VoidReturnCallback?
 
+    var getBackNavigationButtonTitle: String {
+        if parentFolder.guid == BookmarkRoots.MobileFolderGUID {
+            return .Bookmarks.Menu.AllBookmarks
+        }
+        return parentFolder.title
+    }
+
     init(parentFolder: FxBookmarkNode,
          node: FxBookmarkNode?,
          profile: Profile,
@@ -55,13 +62,6 @@ class EditBookmarkViewModel: ParentFolderSelector {
         let folder = Folder(title: parentFolder.title, guid: parentFolder.guid, indentation: 0)
         folderStructures = [folder]
         selectedFolder = folder
-    }
-
-    func backNavigationButtonTitle() -> String {
-        if parentFolder.guid == BookmarkRoots.MobileFolderGUID {
-            return .Bookmarks.Menu.AllBookmarks
-        }
-        return parentFolder.title
     }
 
     func shouldShowDisclosureIndicator(isFolderSelected: Bool) -> Bool {
@@ -104,9 +104,10 @@ class EditBookmarkViewModel: ParentFolderSelector {
         node = node?.copy(with: bookmarkTitle, url: url)
     }
 
-    func saveBookmark() {
-        guard let selectedFolder, let node else { return }
-        Task { @MainActor [weak self] in
+    @discardableResult
+    func saveBookmark() -> Task<Void, Never>? {
+        guard let selectedFolder, let node else { return nil }
+        return Task { @MainActor [weak self] in
             // There is no way to access the EditBookmarkViewController without the bookmark already existing,
             // so this call will always try to update an existing bookmark
             let result = await self?.bookmarksSaver.save(bookmark: node,

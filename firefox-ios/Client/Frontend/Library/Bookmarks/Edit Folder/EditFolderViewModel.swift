@@ -96,10 +96,11 @@ class EditFolderViewModel {
         }
     }
 
-    func save() {
-        guard let folder, !folder.title.isEmpty else { return }
+    @discardableResult
+    func save() -> Task<Void, Never>? {
+        guard let folder, !folder.title.isEmpty else { return nil }
         let selectedFolderGUID = selectedFolder?.guid ?? parentFolder.guid
-        Task { @MainActor in
+        return Task { @MainActor in
             // Creates or updates the folder
             let result = await bookmarkSaver.save(bookmark: folder, parentFolderGUID: selectedFolderGUID)
             switch result {

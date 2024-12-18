@@ -3,7 +3,7 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 import XCTest
-import MozillaRustComponents
+import MozillaAppServices
 import Shared
 
 @testable import Client
@@ -14,16 +14,18 @@ class EditBookmarkViewModelTests: XCTestCase {
                                     position: 1,
                                     isRoot: false,
                                     title: "Hello")
-    let emptyTitleFolder = MockFxBookmarkNode(type: .folder,
-                                              guid: "1235",
-                                              position: 1,
-                                              isRoot: false,
-                                              title: "Hello")
-    let parentFolder = MockFxBookmarkNode(type: .folder,
+    var parentFolder = MockFxBookmarkNode(type: .folder,
                                           guid: "5678",
                                           position: 0,
                                           isRoot: false,
                                           title: "Parent")
+    var folderBookmarkItemData = BookmarkItemData(guid: "Hello",
+                                                  dateAdded: 0,
+                                                  lastModified: 0,
+                                                  parentGUID: nil,
+                                                  position: 0,
+                                                  url: "",
+                                                  title: "Hello")
     var folderFetcher: MockFolderHierarchyFetcher!
     var bookmarksSaver: MockBookmarksSaver!
     var profile: MockProfile!
@@ -54,20 +56,31 @@ class EditBookmarkViewModelTests: XCTestCase {
     func testShouldShowDisclosureIndicator_whenIsFolderSelected() {
         let subject = createSubject(folder: folder, parentFolder: parentFolder)
 
-        XCTAssertTrue(subject.shouldShowDisclosureIndicator(isFolderSelected: true))
+        XCTAssertFalse(subject.shouldShowDisclosureIndicator(isFolderSelected: true))
     }
 
     func testShouldShowDisclosureIndicator_whenIsNotFolderSelected() {
         let subject = createSubject(folder: folder, parentFolder: parentFolder)
 
-        XCTAssertTrue(subject.shouldShowDisclosureIndicator(isFolderSelected: false))
+        XCTAssertFalse(subject.shouldShowDisclosureIndicator(isFolderSelected: false))
     }
 
     func testShouldShowDisclosureIndicator_whenIsNotFolderSelectedAfterSelectFolder() {
         let subject = createSubject(folder: folder, parentFolder: parentFolder)
         subject.selectFolder(Folder(title: "Test", guid: "", indentation: 0))
 
-        XCTAssertTrue(subject.shouldShowDisclosureIndicator(isFolderSelected: false))
+        XCTAssertTrue(subject.shouldShowDisclosureIndicator(isFolderSelected: true))
+    }
+
+    func testBackNavigationButtonTitle_whenIsMobileFolderGuid() {
+        parentFolder.guid = "mobile______"
+        let subject = createSubject(folder: folder, parentFolder: parentFolder)
+        XCTAssertEqual(subject.getBackNavigationButtonTitle, "All")
+    }
+
+    func testBackNavigationButtonTitle_whenIsNotMobileFolderGuid() {
+        let subject = createSubject(folder: folder, parentFolder: parentFolder)
+        XCTAssertEqual(subject.getBackNavigationButtonTitle, parentFolder.title)
     }
 
     func testSelectFolder_callsOnFolderStatusUpdate() {
@@ -95,52 +108,52 @@ class EditBookmarkViewModelTests: XCTestCase {
         XCTAssertEqual(folderFetcher.mockFolderStructures, subject.folderStructures)
     }
 
-    func testSave_whenEmptyFolder_thenDoesntSave() throws {
-        let subject = createSubject(folder: emptyTitleFolder, parentFolder: parentFolder)
+    func testSaveBookmark_whenHasNoUpdateDoesntSave() async throws {
+        let subject = createSubject(folder: folder, parentFolder: parentFolder)
+
+        let task = subject.saveBookmark()
+
+        XCTAssertNil(task)
+        XCTAssertEqual(bookmarksSaver.saveCalled, 0)
+    }
+
+    func testSaveBookmark_whenHasEmptyGuid_thenSetsRecentBookmarksPrefsString() async throws {
+        let subject = createSubject(folder: folderBookmarkItemData, parentFolder: parentFolder)
         let expectation = expectation(description: "onBookmarkSaved should be called")
         subject.onBookmarkSaved = {
             expectation.fulfill()
         }
 
-        subject.saveBookmark()
+        subject.setUpdatedTitle("Hello test")
+        let task = subject.saveBookmark()
+        await task?.value
 
-        waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [expectation])
         let prefs = try XCTUnwrap(profile.prefs as? MockProfilePrefs)
         let recentBookmark = try XCTUnwrap(prefs.things[PrefsKeys.RecentBookmarkFolder] as? String)
-        XCTAssertEqual(recentBookmark, "")
+        XCTAssertEqual(recentBookmark, "5678")
         XCTAssertEqual(bookmarksSaver.saveCalled, 1)
     }
 
-    func testSave_whenRecentFolderPrefsDoesntMatch_thenWillSetString() throws {
-        let subject = createSubject(folder: folder, parentFolder: parentFolder)
+    func testSave_whenHasDifferentGuid_thenSetsRecentBookmarksPrefsString() async throws {
+        let expectedGuid = "09876"
+        bookmarksSaver.mockCreateGuid = expectedGuid
+        profile.prefs.setString(expectedGuid, forKey: PrefsKeys.RecentBookmarkFolder)
+
+        let subject = createSubject(folder: folderBookmarkItemData, parentFolder: parentFolder)
         let expectation = expectation(description: "onBookmarkSaved should be called")
         subject.onBookmarkSaved = {
             expectation.fulfill()
         }
 
-        subject.saveBookmark()
+        subject.setUpdatedTitle("Hello test")
+        let task = subject.saveBookmark()
+        await task?.value
 
-        waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [expectation])
         let prefs = try XCTUnwrap(profile.prefs as? MockProfilePrefs)
         let recentBookmark = try XCTUnwrap(prefs.things[PrefsKeys.RecentBookmarkFolder] as? String)
-        XCTAssertEqual(recentBookmark, "")
-        XCTAssertEqual(bookmarksSaver.saveCalled, 1)
-    }
-
-    func testSave_whenRecentFolderPrefsMatch_thenShouldntSetString() throws {
-        profile.prefs.setString("1235", forKey: PrefsKeys.RecentBookmarkFolder)
-        let subject = createSubject(folder: folder, parentFolder: parentFolder)
-        let expectation = expectation(description: "onBookmarkSaved should be called")
-        subject.onBookmarkSaved = {
-            expectation.fulfill()
-        }
-
-        subject.saveBookmark()
-
-        waitForExpectations(timeout: 0.1)
-        let prefs = try XCTUnwrap(profile.prefs as? MockProfilePrefs)
-        let recentBookmark = try XCTUnwrap(prefs.things[PrefsKeys.RecentBookmarkFolder] as? String)
-        XCTAssertEqual(recentBookmark, "")
+        XCTAssertEqual(recentBookmark, "5678")
         XCTAssertEqual(bookmarksSaver.saveCalled, 1)
     }
 

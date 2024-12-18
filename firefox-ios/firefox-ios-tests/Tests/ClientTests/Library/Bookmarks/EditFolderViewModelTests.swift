@@ -105,16 +105,18 @@ class EditFolderViewModelTests: XCTestCase {
         XCTAssertEqual(bookmarksSaver.saveCalled, 0)
     }
 
-    func testSave_whenNilGuidReturned() throws {
+    func testSave_whenNilGuidReturned() async throws {
         let subject = createSubject(folder: folder, parentFolder: parentFolder)
-        subject.save()
+
+        let task = subject.save()
+        await task?.value
 
         let prefs = try XCTUnwrap(profile.prefs as? MockProfilePrefs)
         XCTAssertNil(prefs.things[PrefsKeys.RecentBookmarkFolder])
-        XCTAssertEqual(bookmarksSaver.saveCalled, 0)
+        XCTAssertEqual(bookmarksSaver.saveCalled, 1)
     }
 
-    func testSave_whenHasGuidSavesRecentBookmark() throws {
+    func testSave_whenHasGuidSavesRecentBookmark() async throws {
         let expectedGuid = "09876"
         bookmarksSaver.mockCreateGuid = expectedGuid
         let subject = createSubject(folder: folder, parentFolder: parentFolder)
@@ -123,26 +125,26 @@ class EditFolderViewModelTests: XCTestCase {
             expectation.fulfill()
         }
 
-        subject.save()
+        let task = subject.save()
+        await task?.value
 
-        waitForExpectations(timeout: 0.1)
+        await fulfillment(of: [expectation])
         let prefs = try XCTUnwrap(profile.prefs as? MockProfilePrefs)
         let recentBookmarkGuid = try XCTUnwrap(prefs.things[PrefsKeys.RecentBookmarkFolder] as? String)
         XCTAssertEqual(recentBookmarkGuid, expectedGuid)
         XCTAssertEqual(bookmarksSaver.saveCalled, 1)
     }
 
-    func testSave_whenHasGuidCallsOnFolderCreated() throws {
+    func testSave_whenHasGuidCallsOnFolderCreated() async throws {
         let expectedGuid = "09876"
         bookmarksSaver.mockCreateGuid = expectedGuid
         profile.prefs.setString(expectedGuid, forKey: PrefsKeys.RecentBookmarkFolder)
         let subject = createSubject(folder: folder, parentFolder: parentFolder)
-        let expectation = expectation(description: "onFolderCreated should be called")
         subject.onFolderCreated = parentFolderSelector
 
-        subject.save()
+        let task = subject.save()
+        await task?.value
 
-        waitForExpectations(timeout: 0.1)
         XCTAssertNotNil(parentFolderSelector.selectedFolder)
     }
 
