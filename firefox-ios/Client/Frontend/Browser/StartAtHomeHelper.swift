@@ -53,7 +53,7 @@ class StartAtHomeHelper: FeatureFlaggable {
 
         switch setting {
         case .afterFourHours:
-            return dateComponents.hour ?? 9 >= 4
+            return dateComponents.hour ?? 0 >= 4
         case .always:
             return true
         case .disabled:
