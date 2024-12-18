@@ -131,7 +131,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             setting: SettingsToggle.crashToggle,
             subtitle: UIConstants.strings.detailTextCrashReports
         )
-        
         let searchSuggestionSubtitle = String(format: UIConstants.strings.detailTextSearchSuggestion, AppInfo.productName)
         let searchSuggestionToggle = BlockerToggle(label: UIConstants.strings.settingsSearchSuggestions, setting: SettingsToggle.enableSearchSuggestions, subtitle: searchSuggestionSubtitle)
         let safariToggle = BlockerToggle(label: UIConstants.strings.toggleSafari, setting: SettingsToggle.safari)
