@@ -30,16 +30,11 @@ struct DefaultHTMLDataRequest: HTMLDataRequest {
 
         let urlSession = URLSession(configuration: configuration)
 
-        return try await withCheckedThrowingContinuation { continuation in
-            urlSession.dataTask(with: url) { data, _, error in
-                guard let data = data,
-                      error == nil
-                else {
-                    continuation.resume(throwing: SiteImageError.invalidHTML)
-                    return
-                }
-                continuation.resume(returning: data)
-            }.resume()
+        do {
+            let (data, _) = try await urlSession.data(from: url)
+            return data
+        } catch {
+            throw SiteImageError.invalidHTML
         }
     }
 }
