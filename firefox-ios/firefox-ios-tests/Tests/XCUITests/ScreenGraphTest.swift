@@ -168,7 +168,7 @@ private func createTestGraph(for test: XCTestCase, with app: XCUIApplication) ->
 
     map.addScreenState(ToolsBrowserTabMenu) { screenState in
         screenState.tap(
-            app.otherElements.images[StandardImageIdentifiers.Large.nightMode],
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.nightMode],
             forAction: TestActions.ToggleNightMode,
             transitionTo: BrowserTabMenu
         ) { userState in
@@ -176,7 +176,7 @@ private func createTestGraph(for test: XCTestCase, with app: XCUIApplication) ->
         }
 
         screenState.tap(
-            app.otherElements.cells["MainMenu.NightModeOn"],
+            app.tables.cells[AccessibilityIdentifiers.MainMenu.nightMode],
             forAction: TestActions.ToggleNighModeOff,
             transitionTo: BrowserTabMenu
         ) { userState in

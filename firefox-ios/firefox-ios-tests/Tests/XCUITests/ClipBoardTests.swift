@@ -41,7 +41,7 @@ class ClipBoardTests: BaseTestCase {
                     return
                 }
                 if value.hasPrefix("http") == false {
-                    value = "http://\(value)"
+                    value = "http://www.\(value)/"
                 }
                 XCTAssertNotNil(myString)
                 XCTAssertEqual(myString, value, "Url matches with the UIPasteboard")
