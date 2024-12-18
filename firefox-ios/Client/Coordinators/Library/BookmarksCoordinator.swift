@@ -16,7 +16,8 @@ protocol BookmarksCoordinatorDelegate: AnyObject, LibraryPanelCoordinatorDelegat
     func showBookmarkDetail(
         bookmarkType: BookmarkNodeType,
         parentBookmarkFolder: FxBookmarkNode,
-        updatePanelState: ((LibraryPanelSubState) -> Void)?
+        updatePanelState: ((LibraryPanelSubState) -> Void)?,
+        parentFolderSelector: ParentFolderSelector?
     )
 
     func showSignIn()
@@ -26,12 +27,14 @@ extension BookmarksCoordinatorDelegate {
     func showBookmarkDetail(
         bookmarkType: BookmarkNodeType,
         parentBookmarkFolder: FxBookmarkNode,
-        updatePanelState: ((LibraryPanelSubState) -> Void)? = nil
+        updatePanelState: ((LibraryPanelSubState) -> Void)? = nil,
+        parentFolderSelector: ParentFolderSelector? = nil
     ) {
         showBookmarkDetail(
             bookmarkType: bookmarkType,
             parentBookmarkFolder: parentBookmarkFolder,
-            updatePanelState: updatePanelState
+            updatePanelState: updatePanelState,
+            parentFolderSelector: parentFolderSelector
         )
     }
 }
@@ -102,10 +105,13 @@ class BookmarksCoordinator: BaseCoordinator,
     func showBookmarkDetail(
         bookmarkType: BookmarkNodeType,
         parentBookmarkFolder: FxBookmarkNode,
-        updatePanelState: ((LibraryPanelSubState) -> Void)? = nil
+        updatePanelState: ((LibraryPanelSubState) -> Void)? = nil,
+        parentFolderSelector: ParentFolderSelector? = nil
     ) {
         if isBookmarkRefactorEnabled {
-            let detailController = makeDetailController(for: bookmarkType, parentFolder: parentBookmarkFolder)
+            let detailController = makeDetailController(for: bookmarkType,
+                                                        parentFolder: parentBookmarkFolder,
+                                                        parentFolderSelector: parentFolderSelector)
             router.push(detailController)
         } else {
             let detailController = LegacyBookmarkDetailPanel(
@@ -160,12 +166,14 @@ class BookmarksCoordinator: BaseCoordinator,
 
     // MARK: - Factory
 
-    private func makeDetailController(for type: BookmarkNodeType, parentFolder: FxBookmarkNode) -> UIViewController {
-        if type == .folder {
-            return makeEditFolderController(for: nil, folder: parentFolder)
-        }
+    private func makeDetailController(for type: BookmarkNodeType,
+                                      parentFolder: FxBookmarkNode,
+                                      parentFolderSelector: ParentFolderSelector?) -> UIViewController {
         if type == .bookmark {
             return makeEditBookmarkController(for: nil, folder: parentFolder)
+        }
+        if type == .folder {
+            return makeEditFolderController(for: nil, folder: parentFolder, parentFolderSelector: parentFolderSelector)
         }
         return UIViewController()
     }
@@ -175,7 +183,7 @@ class BookmarksCoordinator: BaseCoordinator,
             return makeEditBookmarkController(for: node, folder: folder)
         }
         if node.type == .folder {
-            return makeEditFolderController(for: node, folder: folder)
+            return makeEditFolderController(for: node, folder: folder, parentFolderSelector: nil)
         }
         return UIViewController()
     }
@@ -200,13 +208,16 @@ class BookmarksCoordinator: BaseCoordinator,
         return controller
     }
 
-    private func makeEditFolderController(for node: FxBookmarkNode?, folder: FxBookmarkNode) -> UIViewController {
+    private func makeEditFolderController(for node: FxBookmarkNode?,
+                                          folder: FxBookmarkNode,
+                                          parentFolderSelector: ParentFolderSelector?) -> UIViewController {
         let viewModel = EditFolderViewModel(profile: profile,
                                             parentFolder: folder,
                                             folder: node)
         viewModel.onBookmarkSaved = { [weak self] in
             self?.reloadLastBookmarksController()
         }
+        viewModel.onFolderCreated = parentFolderSelector
         setBackBarButtonItemTitle("")
         let controller = EditFolderViewController(viewModel: viewModel,
                                                   windowUUID: windowUUID)
@@ -249,7 +260,7 @@ class BookmarksCoordinator: BaseCoordinator,
 
     /// Sets the back button title for the controller
     ///
-    /// It has to be done here and not in the detail controller directly, otherwise it won't take place the modification.
+    /// It has to be done here and not in the detail controller directly, otherwise the modification won't take place.
     private func setBackBarButtonItemTitle(_ title: String) {
         let backBarButton = UIBarButtonItem(title: title)
         router.navigationController.viewControllers.last?.navigationItem.backBarButtonItem = backBarButton
