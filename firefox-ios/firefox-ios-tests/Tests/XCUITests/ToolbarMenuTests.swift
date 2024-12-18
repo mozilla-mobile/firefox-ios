@@ -17,10 +17,17 @@ class ToolbarMenuTests: BaseTestCase {
         let hamburgerMenu = app.buttons[AccessibilityIdentifiers.Toolbar.settingsMenuButton]
         let tabsButton = app.buttons[AccessibilityIdentifiers.Toolbar.tabsButton]
         let firstPocketCell = app.collectionViews.cells["PocketCell"].firstMatch
+        let backButton = app.buttons[AccessibilityIdentifiers.Toolbar.backButton]
+        let forwardButton = app.buttons[AccessibilityIdentifiers.Toolbar.forwardButton]
+        let searchField = app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField]
         waitForElementsToExist(
             [
                 hamburgerMenu,
-                firstPocketCell
+                firstPocketCell,
+                backButton,
+                forwardButton,
+                searchField,
+                tabsButton
             ]
         )
         if iPad() {
@@ -45,10 +52,16 @@ class ToolbarMenuTests: BaseTestCase {
         validateMenuOptions()
         app.buttons["MainMenu.CloseMenuButton"].tap()
         XCUIDevice.shared.orientation = .landscapeLeft
-        mozWaitForElementToExist(hamburgerMenu)
-        mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
-        mozWaitForElementToExist(tabsButton)
-        mozWaitForElementToExist(firstPocketCell)
+        waitForElementsToExist(
+            [
+                hamburgerMenu,
+                firstPocketCell,
+                backButton,
+                forwardButton,
+                searchField,
+                tabsButton
+            ]
+        )
         XCTAssertTrue(
             hamburgerMenu.isRightOf(rightElement: tabsButton),
             "Menu button is not on the right side of tabs button"
