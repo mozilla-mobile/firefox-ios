@@ -13,6 +13,7 @@ class SentryIDSetting: HiddenSetting {
     )?.string(forKey: "SentryDeviceAppHash")
 
     override var title: NSAttributedString? {
+        guard let theme else { return nil }
         return NSAttributedString(
             string: "Sentry ID \(deviceAppHash ?? "(null)")",
             attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
