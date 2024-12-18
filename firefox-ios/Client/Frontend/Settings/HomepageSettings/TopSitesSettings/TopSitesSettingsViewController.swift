@@ -28,45 +28,47 @@ class TopSitesSettingsViewController: SettingsTableViewController, FeatureFlagga
 
     // MARK: - Methods
     override func generateSettings() -> [SettingSection] {
-        var sections = [Setting]()
-        let topSitesSetting = BoolSetting(
-            prefs: profile.prefs,
-            theme: themeManager.getCurrentTheme(for: windowUUID),
-            prefKey: PrefsKeys.UserFeatureFlagPrefs.TopSiteSection,
-            defaultValue: true,
-            titleText: .Settings.Homepage.Shortcuts.ShortcutsToggle
-        )
-        sections.append(topSitesSetting)
+        var sections: [SettingSection] = []
 
-        let sponsoredShortcutSetting = BoolSetting(
-            prefs: profile.prefs,
-            theme: themeManager.getCurrentTheme(for: windowUUID),
-            prefKey: PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts,
-            defaultValue: true,
-            titleText: .Settings.Homepage.Shortcuts.SponsoredShortcutsToggle
-        )
-        sections.append(sponsoredShortcutSetting)
-
-        let toggleSection = SettingSection(title: nil,
-                                           children: sections)
+        if let profile {
+            let toggleSettings = [
+                BoolSetting(
+                    prefs: profile.prefs,
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    prefKey: PrefsKeys.UserFeatureFlagPrefs.TopSiteSection,
+                    defaultValue: true,
+                    titleText: .Settings.Homepage.Shortcuts.ShortcutsToggle
+                ),
+                BoolSetting(
+                    prefs: profile.prefs,
+                    theme: themeManager.getCurrentTheme(for: windowUUID),
+                    prefKey: PrefsKeys.UserFeatureFlagPrefs.SponsoredShortcuts,
+                    defaultValue: true,
+                    titleText: .Settings.Homepage.Shortcuts.SponsoredShortcutsToggle
+                )
+            ]
+            let toggleSection = SettingSection(title: nil, children: toggleSettings)
+            sections.append(toggleSection)
+        }
 
         let rowSetting = RowSettings(settings: self)
         let rowSection = SettingSection(title: nil, children: [rowSetting])
+        sections.append(rowSection)
 
-        return [toggleSection, rowSection]
+        return sections
     }
 }
 
 // MARK: - TopSitesSettings
 extension TopSitesSettingsViewController {
     class RowSettings: Setting {
-        let profile: Profile
+        let profile: Profile?
         let windowUUID: WindowUUID
 
         override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
         override var status: NSAttributedString {
             let defaultValue = TopSitesRowCountSettingsController.defaultNumberOfRows
-            let numberOfRows = profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? defaultValue
+            let numberOfRows = profile?.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? defaultValue
 
             return NSAttributedString(string: String(format: "%d", numberOfRows))
         }
@@ -91,6 +93,7 @@ extension TopSitesSettingsViewController {
         }
 
         override func onClick(_ navigationController: UINavigationController?) {
+            guard let profile else { return }
             let viewController = TopSitesRowCountSettingsController(prefs: profile.prefs, windowUUID: windowUUID)
             viewController.profile = profile
             navigationController?.pushViewController(viewController, animated: true)
