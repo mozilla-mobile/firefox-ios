@@ -150,6 +150,10 @@ class BrowserViewController: UIViewController,
         return featureFlags.isFeatureEnabled(.noInternetConnectionErrorPage, checking: .buildOnly)
     }
 
+    var isJSAlertRefactorEnabled: Bool {
+        return featureFlags.isFeatureEnabled(.jsAlertRefactor, checking: .buildOnly)
+    }
+
     private var browserViewControllerState: BrowserViewControllerState?
 
     // Header stack view can contain the top url bar, top reader mode, top ZoomPageBar
@@ -1002,7 +1006,10 @@ class BrowserViewController: UIViewController,
             self.pendingToast = nil
             show(toast: toast, afterWaiting: ButtonToast.UX.delay)
         }
-        showQueuedAlertIfAvailable()
+
+        if !isJSAlertRefactorEnabled {
+            showQueuedAlertIfAvailable()
+        }
 
         prepareURLOnboardingContextualHint()
 
@@ -1054,10 +1061,31 @@ class BrowserViewController: UIViewController,
         // Ensure the layout is updated immediately
         view.layoutIfNeeded()
 
-        // TODO: [FXIOS-10334] Needs investigation. Dequeuing JS alerts as part of subview layout is problematic.
-        showQueuedAlertIfAvailable()
+        if isJSAlertRefactorEnabled {
+            checkForJSAlerts()
+        } else {
+            showQueuedAlertIfAvailable()
+        }
         switchToolbarIfNeeded()
         adjustURLBarHeightBasedOnLocationViewHeight()
+    }
+
+    func checkForJSAlerts() {
+        guard tabManager.selectedTab?.hasJavascriptAlertPrompt() ?? false else { return }
+
+        if presentedViewController == nil {
+            // We can show the alert, let's show it
+            guard let nextAlert = tabManager.selectedTab?.newDequeueJavascriptAlertPrompt() else { return }
+            let alertController = nextAlert.alertController()
+            alertController.delegate = self
+            present(alertController, animated: true)
+        } else {
+            // We cannot show the alert right now but there is one queued on the selected tab
+            // check after a delay if we can show it
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                self?.checkForJSAlerts()
+            }
+        }
     }
 
     private func adjustURLBarHeightBasedOnLocationViewHeight() {
@@ -3515,6 +3543,7 @@ extension BrowserViewController: LegacyTabDelegate {
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
+            tab.cancelQueuedAlerts()
             stopObserving(webView: webView)
             self.scrollController.stopObserving(scrollView: webView.scrollView)
             webView.uiDelegate = nil
@@ -4118,6 +4147,18 @@ extension BrowserViewController: KeyboardHelperDelegate {
 extension BrowserViewController: JSPromptAlertControllerDelegate {
     func promptAlertControllerDidDismiss(_ alertController: JSPromptAlertController) {
         showQueuedAlertIfAvailable()
+    }
+}
+
+// MARK: NewJSPromptAlertControllerDelegate
+
+extension BrowserViewController: NewJSPromptAlertControllerDelegate {
+    func newPromptAlertControllerDidDismiss(_ alertController: NewJSPromptAlertController) {
+        logger.log("JS prompt was dismissed. Will dequeue next alert.",
+                   level: .info,
+                   category: .webview)
+
+        checkForJSAlerts()
     }
 }
 
