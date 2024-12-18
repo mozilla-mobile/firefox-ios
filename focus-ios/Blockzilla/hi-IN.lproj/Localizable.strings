@@ -187,6 +187,9 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsOpen" = "सेटिंग अनुप्रयोग खोलें";
 
+/* Label for instructions to enable extensions in Safari, shown when enabling Safari Integration in Settings */
+"Safari.openInstruction" = "डिवाइस सेटिंग खोलें";
+
 /* Save button label */
 "Save" = "सहेजें";
 
