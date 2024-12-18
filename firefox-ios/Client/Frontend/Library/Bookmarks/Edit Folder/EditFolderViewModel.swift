@@ -17,12 +17,16 @@ class EditFolderViewModel {
     private(set) var selectedFolder: Folder?
     private(set) var folderStructures = [Folder]()
     private(set) var isFolderCollapsed = true
+    private var isNewFolderView: Bool {
+        return folder == nil
+    }
 
     var onFolderStatusUpdate: VoidReturnCallback?
     var onBookmarkSaved: VoidReturnCallback?
+    var onFolderCreated: ParentFolderSelector?
 
     var controllerTitle: String {
-        return folder == nil ? .BookmarksNewFolder : .BookmarksEditFolder
+        return isNewFolderView ? .BookmarksNewFolder : .BookmarksEditFolder
     }
     var editedFolderTitle: String? {
         return folder?.title
@@ -103,6 +107,11 @@ class EditFolderViewModel {
                 // A nil guid indicates a bookmark update, not creation
                 guard let guid else { return }
                 profile.prefs.setString(guid, forKey: PrefsKeys.RecentBookmarkFolder)
+
+                // When the folder edit view is a child of the edit bookmark view, the newly created folder
+                // should be selected
+                let folderCreated = Folder(title: folder.title, guid: guid, indentation: 0)
+                onFolderCreated?.selectFolderCreatedFromChild(folder: folderCreated)
             case .failure(let error):
                 self.logger.log("Failed to save folder: \(error)", level: .warning, category: .library)
             }

@@ -9,7 +9,14 @@ import Shared
 
 typealias VoidReturnCallback = () -> Void
 
-class EditBookmarkViewModel {
+protocol ParentFolderSelector: AnyObject {
+    /// Enables a child `EditFolderViewController` to pass information to the parent `EditBookmarkViewController`
+    /// to select the folder that was just created
+    /// - Parameter folder: The folder that was created in the `EditFolderViewController`
+    func selectFolderCreatedFromChild(folder: Folder)
+}
+
+class EditBookmarkViewModel: ParentFolderSelector {
     private let parentFolder: FxBookmarkNode
     private var node: BookmarkItemData?
     private let profile: Profile
@@ -73,9 +80,10 @@ class EditBookmarkViewModel {
     }
 
     func createNewFolder() {
-        self.bookmarkCoordinatorDelegate?.showBookmarkDetail(
+        bookmarkCoordinatorDelegate?.showBookmarkDetail(
             bookmarkType: .folder,
-            parentBookmarkFolder: parentFolder)
+            parentBookmarkFolder: parentFolder,
+            parentFolderSelector: self)
     }
 
     private func getFolderStructure(_ selectedFolder: Folder) {
@@ -117,6 +125,15 @@ class EditBookmarkViewModel {
 
             self?.onBookmarkSaved?()
         }
+    }
+
+    // MARK: ParentFolderSelector
+
+    func selectFolderCreatedFromChild(folder: Folder) {
+        isFolderCollapsed = true
+        selectedFolder = folder
+        folderStructures = [folder]
+        onFolderStatusUpdate?()
     }
 }
 
