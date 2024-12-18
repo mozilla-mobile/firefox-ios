@@ -11,10 +11,12 @@ class ConnectSetting: WithoutAccountSetting {
     private weak var settingsDelegate: AccountSettingsDelegate?
 
     override var accessoryView: UIImageView? {
+        guard let theme else { return nil }
         return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
     }
 
     override var title: NSAttributedString? {
+        guard let theme else { return nil }
         return NSAttributedString(string: .Settings.Sync.ButtonTitle,
                                   attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }
