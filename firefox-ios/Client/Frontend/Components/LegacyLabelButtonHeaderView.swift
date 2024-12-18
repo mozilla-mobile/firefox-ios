@@ -80,7 +80,7 @@ class LegacyLabelButtonHeaderView: UICollectionReusableView, ReusableCell {
         addSubview(stackView)
 
         let stackViewLeadingConstraint = stackView.leadingAnchor.constraint(equalTo: leadingAnchor,
-                                                                        constant: UX.leadingInset)
+                                                                            constant: UX.leadingInset)
         self.stackViewLeadingConstraint = stackViewLeadingConstraint
 
         NSLayoutConstraint.activate([
