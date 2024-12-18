@@ -31,10 +31,11 @@ final class FeatureFlagsDebugViewController: SettingsTableViewController, Featur
                     titleText: format(string: "Enable Bookmarks Redesign"),
                     statusText: format(string: "Toggle to use the new bookmarks design")
                 ) { [weak self] _ in
-                    self?.reloadView()
-                    let isBookmarksRefactorEnabled = self?.featureFlags.isFeatureEnabled(.bookmarksRefactor,
-                                                                                         checking: .buildOnly) ?? false
-                    self?.profile.prefs.setBool(isBookmarksRefactorEnabled, forKey: PrefsKeys.IsBookmarksRefactorEnabled)
+                    guard let self else { return }
+                    self.reloadView()
+                    let isBookmarksRefactorEnabled = self.featureFlags.isFeatureEnabled(.bookmarksRefactor,
+                                                                                        checking: .buildOnly)
+                    self.profile?.prefs.setBool(isBookmarksRefactorEnabled, forKey: PrefsKeys.IsBookmarksRefactorEnabled)
                 },
                 FeatureFlagsBoolSetting(
                     with: .closeRemoteTabs,
