@@ -37,7 +37,7 @@ class BaseAlphaStackView: UIStackView, AlphaDimmable, ThemeApplicable {
 
     // MARK: - Spacer view
 
-    private var keyboardSpacerHeight: NSLayoutConstraint!
+    private var keyboardSpacerHeight: NSLayoutConstraint?
     private var keyboardSpacer: UIView?
 
     func addKeyboardSpacer(spacerHeight: CGFloat) {
