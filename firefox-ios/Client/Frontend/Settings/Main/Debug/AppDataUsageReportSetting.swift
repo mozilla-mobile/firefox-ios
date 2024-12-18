@@ -7,6 +7,7 @@ import Common
 
 class AppDataUsageReportSetting: HiddenSetting {
     override var title: NSAttributedString? {
+        guard let theme else { return nil }
         // Not localized for now.
         return NSAttributedString(string: "App Data Usage Report",
                                   attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
