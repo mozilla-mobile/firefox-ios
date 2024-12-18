@@ -43,7 +43,7 @@ class LegacyHomepageViewController:
     private var wallpaperViewTopConstraint: NSLayoutConstraint?
     private var jumpBackInContextualHintViewController: ContextualHintViewController
     private var syncTabContextualHintViewController: ContextualHintViewController
-    private var collectionView: UICollectionView! = nil
+    private var collectionView: UICollectionView?
     private var lastContentOffsetY: CGFloat = 0
     private var logger: Logger
     var windowUUID: WindowUUID { return tabManager.windowUUID }
@@ -244,8 +244,8 @@ class LegacyHomepageViewController:
     // MARK: - Layout
 
     func configureCollectionView() {
-        collectionView = UICollectionView(frame: view.bounds,
-                                          collectionViewLayout: createLayout())
+        let collectionView = UICollectionView(frame: view.bounds,
+                                              collectionViewLayout: createLayout())
 
         HomepageSectionType.cellTypes.forEach {
             collectionView.register($0, forCellWithReuseIdentifier: $0.cellIdentifier)
@@ -266,6 +266,8 @@ class LegacyHomepageViewController:
         collectionView.accessibilityIdentifier = a11y.collectionView
         collectionView.addInteraction(UIContextMenuInteraction(delegate: self))
         contentStackView.addArrangedSubview(collectionView)
+
+        self.collectionView = collectionView
     }
 
     func configureContentStackView() {
@@ -346,7 +348,8 @@ class LegacyHomepageViewController:
         guard longPressGestureRecognizer.state == .began else { return }
 
         let point = longPressGestureRecognizer.location(in: collectionView)
-        guard let indexPath = collectionView.indexPathForItem(at: point),
+        guard let collectionView,
+              let indexPath = collectionView.indexPathForItem(at: point),
               let viewModel = viewModel.getSectionViewModel(shownSection: indexPath.section) as? HomepageSectionHandler
         else { return }
 
@@ -376,14 +379,14 @@ class LegacyHomepageViewController:
 
         // Force the entire collection view to re-layout
         viewModel.refreshData(for: traitCollection, size: newSize)
-        collectionView.reloadData()
-        collectionView.collectionViewLayout.invalidateLayout()
+        collectionView?.reloadData()
+        collectionView?.collectionViewLayout.invalidateLayout()
 
         // This pushes a reload to the end of the main queue after all the work associated with
         // rotating has been completed. This is important because some of the cells layout are
         // based on the screen state
         DispatchQueue.main.async {
-            self.collectionView.reloadData()
+            self.collectionView?.reloadData()
         }
     }
 
@@ -406,7 +409,9 @@ class LegacyHomepageViewController:
 
     // called when the homepage is displayed to make sure it's scrolled to top
     func scrollToTop(animated: Bool = false) {
-        collectionView?.setContentOffset(.zero, animated: animated)
+        guard let collectionView else { return }
+
+        collectionView.setContentOffset(.zero, animated: animated)
         handleScroll(collectionView, isUserInteraction: false)
     }
 
@@ -508,7 +513,8 @@ class LegacyHomepageViewController:
     private func prepareJumpBackInContextualHint(onView headerView: LegacyLabelButtonHeaderView) {
         guard jumpBackInContextualHintViewController.shouldPresentHint(),
               !viewModel.shouldDisplayHomeTabBanner,
-              !headerView.frame.isEmpty
+              !headerView.frame.isEmpty,
+              let collectionView
         else { return }
 
         // Calculate label header view frame to add as source rect for CFR
@@ -922,7 +928,8 @@ extension LegacyHomepageViewController: UIContextMenuInteractionDelegate {
         configurationForMenuAtLocation location: CGPoint
     ) -> UIContextMenuConfiguration? {
         let locationInCollectionView = interaction.location(in: collectionView)
-        guard let indexPath = collectionView.indexPathForItem(at: locationInCollectionView),
+        guard let collectionView,
+              let indexPath = collectionView.indexPathForItem(at: locationInCollectionView),
               let viewModel = viewModel.getSectionViewModel(shownSection: indexPath.section) as? HomepageSectionHandler
         else { return nil }
 
@@ -945,11 +952,11 @@ extension LegacyHomepageViewController: UIAdaptivePresentationControllerDelegate
 extension LegacyHomepageViewController: HomepageViewModelDelegate {
     func reloadView() {
         ensureMainThread { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
 
             self.viewModel.refreshData(for: self.traitCollection, size: self.view.frame.size)
-            self.collectionView.reloadData()
-            self.collectionView.collectionViewLayout.invalidateLayout()
+            self.collectionView?.reloadData()
+            self.collectionView?.collectionViewLayout.invalidateLayout()
             self.logger.log("Amount of sections shown is \(self.viewModel.shownSections.count)",
                             level: .debug,
                             category: .legacyHomepage)
