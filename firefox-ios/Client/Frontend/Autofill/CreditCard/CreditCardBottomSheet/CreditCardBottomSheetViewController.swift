@@ -241,7 +241,7 @@ class CreditCardBottomSheetViewController: UIViewController,
         let contentViewWidth = contentWidthCheck ? size.width - UX.containerPadding : UX.contentViewWidth
         contentWidthConstraint.constant = contentViewWidth
         if let header = cardTableView.headerView(forSection: 0) as? CreditCardBottomSheetHeaderView {
-            header.titleLabelTrailingConstraint.constant = contentWidthCheck ? -UX.closeButtonMarginAndWidth : 0
+            header.titleLabelTrailingConstraint?.constant = contentWidthCheck ? -UX.closeButtonMarginAndWidth : 0
         }
     }
 

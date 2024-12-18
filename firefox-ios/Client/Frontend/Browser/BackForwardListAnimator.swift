@@ -83,7 +83,7 @@ extension BackForwardListAnimator {
                 options: [],
                 animations: { () in
                     backForward.view.alpha = 1
-                    backForward.tableViewHeightAnchor.constant = backForward.tableHeight
+                    backForward.tableViewHeightAnchor?.constant = backForward.tableHeight
                     backForward.view.layoutIfNeeded()
                 }, completion: { (completed) in
                     transitionContext.completeTransition(completed)
@@ -97,7 +97,7 @@ extension BackForwardListAnimator {
                 options: [],
                 animations: { () in
                     backForward.view.alpha = 0
-                    backForward.tableViewHeightAnchor.constant = 0
+                    backForward.tableViewHeightAnchor?.constant = 0
                     backForward.view.layoutIfNeeded()
                 }, completion: { (completed) in
                     backForward.view.removeFromSuperview()

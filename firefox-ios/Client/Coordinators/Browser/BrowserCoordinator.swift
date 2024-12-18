@@ -256,7 +256,7 @@ class BrowserCoordinator: BaseCoordinator,
             return browserViewController.tabManager.selectedTab?.currentWebView()?.hasOnlySecureContent ?? false
         }
 
-        guard let bar = browserViewController.urlBar else { return false }
+        guard let bar = browserViewController.legacyUrlBar else { return false }
         return bar.locationView.hasSecureContent
     }
 

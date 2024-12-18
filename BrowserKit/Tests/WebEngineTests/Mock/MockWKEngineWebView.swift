@@ -13,7 +13,7 @@ class MockWKEngineWebView: UIView, WKEngineWebView {
 
     var engineConfiguration: WKEngineConfiguration
     var interactionState: Any?
-    var engineScrollView: WKScrollView! = MockEngineScrollView()
+    var engineScrollView: WKScrollView? = MockEngineScrollView()
     var url: URL?
     var title: String?
     var hasOnlySecureContent = false

@@ -6,13 +6,13 @@ import Common
 import Foundation
 import Shared
 
+import struct MozillaAppServices.NimbusAppSettings
 import class MozillaAppServices.NimbusBuilder
 import class MozillaAppServices.NimbusDisabled
+import typealias MozillaAppServices.NimbusErrorReporter
 import protocol MozillaAppServices.NimbusEventStore
 import protocol MozillaAppServices.NimbusInterface
 import protocol MozillaAppServices.NimbusMessagingHelperProtocol
-import struct MozillaAppServices.NimbusAppSettings
-import typealias MozillaAppServices.NimbusErrorReporter
 
 private let nimbusAppName = "firefox_ios"
 private let NIMBUS_URL_KEY = "NimbusURL"
@@ -78,6 +78,7 @@ enum Experiments {
             shared.globalUserParticipation = studiesSetting && telemetrySetting
         }
     }
+
     static func setLocalExperimentData(payload: String?, storage: UserDefaults = .standard) {
         guard let payload = payload else {
             storage.removeObject(forKey: NIMBUS_LOCAL_DATA_KEY)
@@ -166,7 +167,7 @@ enum Experiments {
     private static func getAppSettings(isFirstRun: Bool) -> NimbusAppSettings {
         let isPhone = UIDevice.current.userInterfaceIdiom == .phone
 
-        let customTargetingAttributes: [String: Any] =  [
+        let customTargetingAttributes: [String: Any] = [
             "isFirstRun": "\(isFirstRun)",
             "is_first_run": isFirstRun,
             "is_phone": isPhone,
@@ -203,8 +204,12 @@ enum Experiments {
         let bundles = [
             Bundle.main,
             Strings.bundle,
-            Strings.bundle.fallbackTranslationBundle(language: "en-US")
+            Strings.bundle.fallbackTranslationBundle(language: "en-US"),
         ].compactMap { $0 }
+
+        let nimbusRecordedContext = RecordedNimbusContext(isFirstRun: isFirstRun,
+                                                          isReviewCheckerEnabled: isReviewCheckerEnabled(),
+                                                          isDefaultBrowser: true) // TODO: Update after https://github.com/mozilla-mobile/firefox-ios/pull/23754 merges
 
         return NimbusBuilder(dbPath: dbPath)
             .with(url: remoteSettingsURL)
@@ -215,6 +220,7 @@ enum Experiments {
             .with(bundles: bundles)
             .with(featureManifest: FxNimbus.shared)
             .with(commandLineArgs: CommandLine.arguments)
+            .with(recordedContext: nimbusRecordedContext)
             .build(appInfo: getAppSettings(isFirstRun: isFirstRun))
     }
 
@@ -228,7 +234,7 @@ enum Experiments {
     /// - Parameters:
     ///     - fireURL: an optional file URL that stores the initial experiments document.
     ///     - firstRun: a flag indicating that this is the first time that the app has been run.
-    static func intialize() {
+    static func initialize() {
         // Getting the singleton first time initializes it.
         let nimbus = Experiments.shared
 
@@ -249,13 +255,9 @@ extension Experiments {
         return try? sdk.createMessageHelper(additionalContext: context)
     }
 
-    public static var messaging: GleanPlumbMessageManagerProtocol = {
-        GleanPlumbMessageManager()
-    }()
+    public static var messaging: GleanPlumbMessageManagerProtocol = GleanPlumbMessageManager()
 
-    public static var events: NimbusEventStore = {
-        sdk.events
-    }()
+    public static var events: NimbusEventStore = sdk.events
 
     public static var sdk: NimbusInterface = shared
 }
