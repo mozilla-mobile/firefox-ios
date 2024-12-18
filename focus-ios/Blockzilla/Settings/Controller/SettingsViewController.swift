@@ -125,7 +125,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         let studiesToggle = BlockerToggle(label: UIConstants.strings.labelStudies, setting: SettingsToggle.studies, subtitle: studiesSubtitle)
         let usageDataSubtitle = String(format: UIConstants.strings.detailTextSendUsageData, AppInfo.productName)
         let usageDataToggle = BlockerToggle(label: UIConstants.strings.labelSendAnonymousUsageData, setting: SettingsToggle.sendAnonymousUsageData, subtitle: usageDataSubtitle)
-        
         let crashToggle = BlockerToggle(
             label: UIConstants.strings.labelCrashReports,
             setting: SettingsToggle.crashToggle,
