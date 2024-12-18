@@ -32,7 +32,7 @@ class Setting: NSObject {
     private var _footerTitle: NSAttributedString?
     private var _cellHeight: CGFloat?
     private var _image: UIImage?
-    var theme: Theme!
+    var theme: Theme?
 
     weak var delegate: SettingsDelegate?
 
@@ -632,7 +632,7 @@ class StringSetting: Setting, UITextFieldDelegate {
 
     @objc
     func textFieldDidChange(_ textField: UITextField) {
-        let color = isValid(textField.text) ? theme.colors.textPrimary : theme.colors.textCritical
+        let color = isValid(textField.text) ? theme?.colors.textPrimary : theme?.colors.textCritical
         textField.textColor = color
     }
 
@@ -769,7 +769,7 @@ class CheckmarkSetting: Setting {
 class AccountSetting: Setting {
     unowned var settings: SettingsTableViewController
 
-    var profile: Profile {
+    var profile: Profile? {
         return settings.profile
     }
 
@@ -782,7 +782,7 @@ class AccountSetting: Setting {
 
     override func onConfigureCell(_ cell: UITableViewCell, theme: Theme) {
         super.onConfigureCell(cell, theme: theme)
-        if settings.profile.rustFxA.userProfile != nil {
+        if settings.profile?.rustFxA.userProfile != nil {
             cell.selectionStyle = .none
         }
     }
@@ -791,11 +791,17 @@ class AccountSetting: Setting {
 }
 
 class WithAccountSetting: AccountSetting {
-    override var hidden: Bool { return !profile.hasAccount() }
+    override var hidden: Bool {
+        guard let profile else { return true }
+        return !profile.hasAccount()
+    }
 }
 
 class WithoutAccountSetting: AccountSetting {
-    override var hidden: Bool { return profile.hasAccount() }
+    override var hidden: Bool {
+        guard let profile else { return false }
+        return profile.hasAccount()
+    }
 }
 
 @objc
@@ -816,8 +822,8 @@ class SettingsTableViewController: ThemedTableViewController {
 
     weak var settingsDelegate: SettingsDelegate?
 
-    var profile: Profile!
-    var tabManager: TabManager!
+    var profile: Profile?
+    var tabManager: TabManager?
 
     override func viewDidLoad() {
         super.viewDidLoad()
