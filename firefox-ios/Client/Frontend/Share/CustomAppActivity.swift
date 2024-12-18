@@ -63,7 +63,9 @@ class CustomAppActivity: UIActivity, AppActivityProtocol {
 
     init(activityType: CustomActivityAction, url: URL) {
         self.appActivityType = activityType
-        self.url = url
+        self.url = url.isReaderModeURL
+                   ? (url.decodeReaderModeURL ?? url)
+                   : url
         super.init()
     }
 }
