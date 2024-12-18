@@ -72,7 +72,7 @@ class ActivityStreamTest: BaseTestCase {
     }
     // https://mozilla.testrail.io/index.php?/cases/view/2272219
     func testTopSitesRemoveAllExceptDefaultClearPrivateData() {
-        waitForExistence(app.cells.staticTexts[newTopSiteiOS15["bookmarkLabel"]!], timeout: TIMEOUT_LONG)
+        waitForExistence(app.cells.staticTexts["Internet for people, not profit — Mozilla (US)"], timeout: TIMEOUT_LONG)
         // A new site has been added to the top sites
         if iPad() {
             checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 12)
