@@ -176,6 +176,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
     // MARK: Data settings setup
 
     private func setupDataSettings() {
+        guard let profile else { return }
+
         let isTermsOfServiceFeatureEnabled = featureFlags.isFeatureEnabled(.tosFeature, checking: .buildOnly)
 
         let studiesSetting = StudiesToggleSetting(
@@ -312,7 +314,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         let accountSectionTitle = NSAttributedString(string: .FxAFirefoxAccount)
 
         let attributedString = NSAttributedString(string: .Settings.Sync.ButtonDescription)
-        let accountFooterText = !profile.hasAccount() ? attributedString : nil
+        let accountFooterText = !(profile?.hasAccount() ?? false) ? attributedString : nil
 
         return [SettingSection(title: accountSectionTitle, footerTitle: accountFooterText, children: [
             // Without a Firefox Account:
@@ -351,37 +353,39 @@ class AppSettingsTableViewController: SettingsTableViewController,
             )
         }
 
-        let offerToOpenCopiedLinksSettings = BoolSetting(
-            prefs: profile.prefs,
-            theme: themeManager.getCurrentTheme(for: windowUUID),
-            prefKey: "showClipboardBar",
-            defaultValue: false,
-            titleText: .SettingsOfferClipboardBarTitle,
-            statusText: String(format: .SettingsOfferClipboardBarStatus, AppName.shortName.rawValue)
-        )
+        if let profile {
+            let offerToOpenCopiedLinksSettings = BoolSetting(
+                prefs: profile.prefs,
+                theme: themeManager.getCurrentTheme(for: windowUUID),
+                prefKey: "showClipboardBar",
+                defaultValue: false,
+                titleText: .SettingsOfferClipboardBarTitle,
+                statusText: String(format: .SettingsOfferClipboardBarStatus, AppName.shortName.rawValue)
+            )
 
-        let showLinksPreviewSettings = BoolSetting(
-            prefs: profile.prefs,
-            theme: themeManager.getCurrentTheme(for: windowUUID),
-            prefKey: PrefsKeys.ContextMenuShowLinkPreviews,
-            defaultValue: true,
-            titleText: .SettingsShowLinkPreviewsTitle,
-            statusText: .SettingsShowLinkPreviewsStatus
-        )
+            let showLinksPreviewSettings = BoolSetting(
+                prefs: profile.prefs,
+                theme: themeManager.getCurrentTheme(for: windowUUID),
+                prefKey: PrefsKeys.ContextMenuShowLinkPreviews,
+                defaultValue: true,
+                titleText: .SettingsShowLinkPreviewsTitle,
+                statusText: .SettingsShowLinkPreviewsStatus
+            )
 
-        let blockOpeningExternalAppsSettings = BoolSetting(
-            prefs: profile.prefs,
-            theme: themeManager.getCurrentTheme(for: windowUUID),
-            prefKey: PrefsKeys.BlockOpeningExternalApps,
-            defaultValue: false,
-            titleText: .SettingsBlockOpeningExternalAppsTitle
-        )
+            let blockOpeningExternalAppsSettings = BoolSetting(
+                prefs: profile.prefs,
+                theme: themeManager.getCurrentTheme(for: windowUUID),
+                prefKey: PrefsKeys.BlockOpeningExternalApps,
+                defaultValue: false,
+                titleText: .SettingsBlockOpeningExternalAppsTitle
+            )
 
-        generalSettings += [
-            offerToOpenCopiedLinksSettings,
-            showLinksPreviewSettings,
-            blockOpeningExternalAppsSettings
-        ]
+            generalSettings += [
+                offerToOpenCopiedLinksSettings,
+                showLinksPreviewSettings,
+                blockOpeningExternalAppsSettings
+            ]
+        }
 
         return [SettingSection(title: NSAttributedString(string: .SettingsGeneralSectionTitle),
                                children: generalSettings)]
@@ -397,7 +401,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         }
 
         let autofillAddressStatus = AddressLocaleFeatureValidator.isValidRegion()
-        if autofillAddressStatus {
+        if autofillAddressStatus, let profile {
             privacySettings.append(AddressAutofillSetting(theme: themeManager.getCurrentTheme(for: windowUUID),
                                                           profile: profile,
                                                           settingsDelegate: parentCoordinator))
@@ -405,29 +409,31 @@ class AppSettingsTableViewController: SettingsTableViewController,
 
         privacySettings.append(ClearPrivateDataSetting(settings: self, settingsDelegate: parentCoordinator))
 
-        privacySettings += [
-            BoolSetting(prefs: profile.prefs,
-                        theme: themeManager.getCurrentTheme(for: windowUUID),
-                        prefKey: PrefsKeys.Settings.closePrivateTabs,
-                        defaultValue: true,
-                        titleText: .AppSettingsClosePrivateTabsTitle,
-                        statusText: .AppSettingsClosePrivateTabsDescription) { _ in
-                            let action = TabTrayAction(windowUUID: self.windowUUID,
-                                                       actionType: TabTrayActionType.closePrivateTabsSettingToggled)
-                            store.dispatch(action)
-            }
-        ]
+        if let profile {
+            privacySettings.append(
+                BoolSetting(prefs: profile.prefs,
+                            theme: themeManager.getCurrentTheme(for: windowUUID),
+                            prefKey: PrefsKeys.Settings.closePrivateTabs,
+                            defaultValue: true,
+                            titleText: .AppSettingsClosePrivateTabsTitle,
+                            statusText: .AppSettingsClosePrivateTabsDescription) { _ in
+                                let action = TabTrayAction(windowUUID: self.windowUUID,
+                                                           actionType: TabTrayActionType.closePrivateTabsSettingToggled)
+                                store.dispatch(action)
+                }
+            )
+        }
 
         privacySettings.append(ContentBlockerSetting(settings: self, settingsDelegate: parentCoordinator))
 
-        privacySettings.append(NotificationsSetting(theme: themeManager.getCurrentTheme(for: windowUUID),
-                                                    profile: profile,
-                                                    settingsDelegate: parentCoordinator))
+        if let profile {
+            privacySettings.append(NotificationsSetting(theme: themeManager.getCurrentTheme(for: windowUUID),
+                                                        profile: profile,
+                                                        settingsDelegate: parentCoordinator))
+        }
 
-        privacySettings += [
-            PrivacyPolicySetting(theme: themeManager.getCurrentTheme(for: windowUUID),
-                                 settingsDelegate: parentCoordinator)
-        ]
+        privacySettings.append(PrivacyPolicySetting(theme: themeManager.getCurrentTheme(for: windowUUID),
+                                                    settingsDelegate: parentCoordinator))
 
         return [SettingSection(title: NSAttributedString(string: .AppSettingsPrivacyTitle),
                                children: privacySettings)]
@@ -442,7 +448,7 @@ class AppSettingsTableViewController: SettingsTableViewController,
         ]
 
         // Only add this toggle to the Settings if Sent from Firefox feature flag is enabled from Nimbus
-        if featureFlags.isFeatureEnabled(.sentFromFirefox, checking: .buildOnly) {
+        if featureFlags.isFeatureEnabled(.sentFromFirefox, checking: .buildOnly), let profile {
             supportSettings.append(
                 SentFromFirefoxSetting(
                     prefs: profile.prefs,
