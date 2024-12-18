@@ -7,6 +7,7 @@ import Foundation
 /// Opens about:rights page in the content view controller
 class YourRightsSetting: Setting {
     override var title: NSAttributedString? {
+        guard let theme else { return nil }
         return NSAttributedString(string: .AppSettingsYourRights,
                                   attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }
