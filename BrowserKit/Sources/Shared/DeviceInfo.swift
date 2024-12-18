@@ -46,16 +46,6 @@ extension DeviceInfo {
         return identifier
     }
 
-    /// Return the client name, which can be either "Fennec on Stefan's iPod" or simply "Stefan's iPod"
-    /// if the application display name cannot be obtained.
-    public class func defaultClientName() -> String {
-        if ProcessInfo.processInfo.arguments.contains(LaunchArguments.DeviceName) {
-            return String(format: .DeviceInfoClientNameDescription, AppInfo.displayName, "iOS")
-        }
-
-        return String(format: .DeviceInfoClientNameDescription, AppInfo.displayName, UIDevice.current.name)
-    }
-
     public class func clientIdentifier(_ prefs: Prefs) -> String {
         if let id = prefs.stringForKey("clientIdentifier") {
             return id
