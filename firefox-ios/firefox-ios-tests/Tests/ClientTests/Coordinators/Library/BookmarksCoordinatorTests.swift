@@ -31,7 +31,9 @@ final class BookmarksCoordinatorTests: XCTestCase {
         navigationHandler = nil
     }
 
-    func testStart() {
+    // MARK: Legacy Bookmarks
+
+    func testStart_legacy() {
         let subject = createSubject()
         let folder = LocalDesktopFolder()
 
@@ -41,7 +43,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
         XCTAssertEqual(router.pushCalled, 1)
     }
 
-    func testShowBookmarksDetail_forFolder() {
+    func testShowBookmarksDetail_forFolder_legacy() {
         let subject = createSubject()
         let folder = LocalDesktopFolder()
 
@@ -51,7 +53,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
         XCTAssertEqual(router.pushCalled, 1)
     }
 
-    func testShowBookmarkDetail_forBookmarkCreation() {
+    func testShowBookmarkDetail_forBookmarkCreation_legacy() {
         let subject = createSubject()
 
         subject.showBookmarkDetail(bookmarkType: .bookmark, parentBookmarkFolder: LocalDesktopFolder())
@@ -60,7 +62,7 @@ final class BookmarksCoordinatorTests: XCTestCase {
         XCTAssertEqual(router.pushCalled, 1)
     }
 
-    func testShowBookmarkDetail_forFolderCreation() {
+    func testShowBookmarkDetail_forFolderCreation_legacy() {
         let subject = createSubject()
 
         subject.showBookmarkDetail(bookmarkType: .folder, parentBookmarkFolder: LocalDesktopFolder())
@@ -68,6 +70,48 @@ final class BookmarksCoordinatorTests: XCTestCase {
         XCTAssertTrue(router.pushedViewController is LegacyBookmarkDetailPanel)
         XCTAssertEqual(router.pushCalled, 1)
     }
+
+    // MARK: Bookmark refactor
+
+    func testStart() {
+        let subject = createSubject(isBookmarkRefactorEnabled: true)
+        let folder = LocalDesktopFolder()
+
+        subject.start(from: folder)
+
+        XCTAssertTrue(router.pushedViewController is BookmarksViewController)
+        XCTAssertEqual(router.pushCalled, 1)
+    }
+
+    func testShowBookmarksDetail_forFolder() {
+        let subject = createSubject(isBookmarkRefactorEnabled: true)
+        let folder = LocalDesktopFolder()
+
+        subject.showBookmarkDetail(for: folder, folder: folder)
+
+        XCTAssertTrue(router.pushedViewController is EditFolderViewController)
+        XCTAssertEqual(router.pushCalled, 1)
+    }
+
+    func testShowBookmarkDetail_forBookmarkCreation() {
+        let subject = createSubject(isBookmarkRefactorEnabled: true)
+
+        subject.showBookmarkDetail(bookmarkType: .bookmark, parentBookmarkFolder: LocalDesktopFolder())
+
+        XCTAssertTrue(router.pushedViewController is EditBookmarkViewController)
+        XCTAssertEqual(router.pushCalled, 1)
+    }
+
+    func testShowBookmarkDetail_forFolderCreation() {
+        let subject = createSubject(isBookmarkRefactorEnabled: true)
+
+        subject.showBookmarkDetail(bookmarkType: .folder, parentBookmarkFolder: LocalDesktopFolder())
+
+        XCTAssertTrue(router.pushedViewController is EditFolderViewController)
+        XCTAssertEqual(router.pushCalled, 1)
+    }
+
+    // MARK: Sign in
 
     func testShowSignInViewController() {
         let subject = createSubject()
@@ -98,6 +142,8 @@ final class BookmarksCoordinatorTests: XCTestCase {
         XCTAssertTrue(router.presentedViewController is QRCodeNavigationController)
     }
 
+    // MARK: Did finish
+
     func testDidFinishCalled() {
         let subject = createSubject()
         let delegate = MockQRCodeViewControllerDelegate()
@@ -114,6 +160,8 @@ final class BookmarksCoordinatorTests: XCTestCase {
         XCTAssertEqual(subject.childCoordinators.count, 0)
     }
 
+    // MARK: Share sheet
+
     func testShowShareSheet_callsNavigationHandlerShareFunction() {
         let subject = createSubject()
 
@@ -127,13 +175,16 @@ final class BookmarksCoordinatorTests: XCTestCase {
         XCTAssertEqual(navigationHandler.didShareLibraryItemCalled, 1)
     }
 
-    private func createSubject() -> BookmarksCoordinator {
+    // MARK: Helper methods
+
+    private func createSubject(isBookmarkRefactorEnabled: Bool = false) -> BookmarksCoordinator {
         let subject = BookmarksCoordinator(
             router: router,
             profile: profile,
             windowUUID: .XCTestDefaultUUID,
             parentCoordinator: parentCoordinator,
-            navigationHandler: navigationHandler
+            navigationHandler: navigationHandler,
+            isBookmarkRefactorEnabled: isBookmarkRefactorEnabled
         )
         trackForMemoryLeaks(subject)
         return subject
