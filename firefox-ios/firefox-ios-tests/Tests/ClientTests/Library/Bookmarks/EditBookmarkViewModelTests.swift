@@ -157,6 +157,38 @@ class EditBookmarkViewModelTests: XCTestCase {
         XCTAssertEqual(bookmarksSaver.saveCalled, 1)
     }
 
+    func testSelectFolderCreatedFromChild_ensureFolderIsCollapsed() {
+        let subject = createSubject(folder: folderBookmarkItemData, parentFolder: parentFolder)
+        let folderToSelect = Folder(title: folder.title, guid: folder.guid, indentation: 0)
+
+        subject.selectFolder(folderToSelect)
+        subject.selectFolderCreatedFromChild(folder: folderToSelect)
+
+        XCTAssertTrue(subject.isFolderCollapsed)
+    }
+
+    func testSelectFolderCreatedFromChild_ensureFolderSelectedUpdates() {
+        let subject = createSubject(folder: folderBookmarkItemData, parentFolder: parentFolder)
+        let folderToSelect = Folder(title: folder.title, guid: folder.guid, indentation: 0)
+
+        subject.selectFolderCreatedFromChild(folder: folderToSelect)
+
+        XCTAssertEqual(subject.selectedFolder, folderToSelect)
+        XCTAssertEqual(subject.folderStructures, [folderToSelect])    }
+
+    func testSelectFolderCreatedFromChild_ensureOnFolderStatusUpdateIsCalled() {
+        let subject = createSubject(folder: folderBookmarkItemData, parentFolder: parentFolder)
+        let folderToSelect = Folder(title: folder.title, guid: folder.guid, indentation: 0)
+        let expectation = expectation(description: "onFolderStatusUpdate should be called")
+        subject.onFolderStatusUpdate = {
+            expectation.fulfill()
+        }
+
+        subject.selectFolderCreatedFromChild(folder: folderToSelect)
+
+        waitForExpectations(timeout: 0.1)
+    }
+
     // MARK: Helper function
 
     func createSubject(folder: FxBookmarkNode,
