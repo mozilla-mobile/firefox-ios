@@ -149,7 +149,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         if let studiesIndex = getSectionIndex(Section.studies) {
             toggles[studiesIndex] = [0: studiesToggle]
         }
-        
         if let crashIndex = getSectionIndex(.crashReports) {
             toggles[crashIndex] = [0: crashToggle]
         }
