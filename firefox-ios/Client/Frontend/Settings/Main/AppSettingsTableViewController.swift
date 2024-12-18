@@ -330,10 +330,12 @@ class AppSettingsTableViewController: SettingsTableViewController,
             OpenWithSetting(settings: self, settingsDelegate: parentCoordinator),
             ThemeSetting(settings: self, settingsDelegate: parentCoordinator),
             SiriPageSetting(settings: self, settingsDelegate: parentCoordinator),
-            NoImageModeSetting(settings: self),
         ]
-        if let prefs = profile?.prefs {
-            generalSettings.insert(BlockPopupSetting(prefs: prefs), at: 6)
+        if let profile {
+            generalSettings += [
+                BlockPopupSetting(prefs: profile.prefs),
+                NoImageModeSetting(profile: profile)
+            ]
         }
 
         if isSearchBarLocationFeatureEnabled {
