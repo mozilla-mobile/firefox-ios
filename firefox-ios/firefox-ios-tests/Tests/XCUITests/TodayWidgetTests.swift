@@ -323,6 +323,9 @@ class TodayWidgetTests: BaseTestCase {
     // TESTS
     // https://mozilla.testrail.io/index.php?/cases/view/2769289
     func testNewSearchWidget() throws {
+        if #unavailable(iOS 16) {
+            throw XCTSkip("iOS 16 is required")
+        }
         XCUIDevice.shared.press(.home)
         // Go to Today Widget Page
         goToTodayWidgetPage()
@@ -342,11 +345,7 @@ class TodayWidgetTests: BaseTestCase {
         // Check Quick Action widget options
         checkFirefoxWidgetOptions()
         // Edit Widget and check the options
-        if #unavailable(iOS 16) {
-            springboard.buttons["Edit Widget"].tap()
-        } else {
-            springboard.buttons[editWidgetButton].tap()
-        }
+        springboard.buttons[editWidgetButton].tap()
         mozWaitElementHittable(element: newSearch, timeout: TIMEOUT)
         newSearch.tap()
         // Verify widget actions
