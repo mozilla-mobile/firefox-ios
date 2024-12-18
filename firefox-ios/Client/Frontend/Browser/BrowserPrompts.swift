@@ -81,19 +81,19 @@ struct TextInputAlert: JSAlertInfo {
     let defaultText: String?
     let completionHandler: (String?) -> Void
 
-    var input: UITextField!
+    var input: UITextField?
 
     func alertController() -> JSPromptAlertController {
         let alertController = JSPromptAlertController(title: titleForJavaScriptPanelInitiatedByFrame(frame),
                                                       message: message,
                                                       preferredStyle: .alert)
-        var input: UITextField!
+        var input: UITextField?
         alertController.addTextField(configurationHandler: { (textField: UITextField) in
             input = textField
-            input.text = self.defaultText
+            input?.text = self.defaultText
         })
         alertController.addAction(UIAlertAction(title: .OKString, style: .default) { _ in
-            self.completionHandler(input.text)
+            self.completionHandler(input?.text)
         })
         alertController.addAction(UIAlertAction(title: .CancelString, style: .cancel) { _ in
             self.completionHandler(nil)
