@@ -7,6 +7,12 @@ import Foundation
 @testable import Client
 
 class MockShareTelemetry: ShareTelemetry {
+    var activityType: UIActivity.ActivityType?
+    var shareType: ShareType?
+    var hasShareMessage: Bool?
+    var isEnrolledInSentFromFirefox: Bool?
+    var isOptedInSentFromFirefox: Bool?
+
     var sharedToCalled = 0
 
     func sharedTo(
@@ -16,6 +22,12 @@ class MockShareTelemetry: ShareTelemetry {
         isEnrolledInSentFromFirefox: Bool,
         isOptedInSentFromFirefox: Bool
     ) {
+        self.activityType = activityType
+        self.shareType = shareType
+        self.hasShareMessage = hasShareMessage
+        self.isEnrolledInSentFromFirefox = isEnrolledInSentFromFirefox
+        self.isOptedInSentFromFirefox = isOptedInSentFromFirefox
+
         sharedToCalled += 1
     }
 }
