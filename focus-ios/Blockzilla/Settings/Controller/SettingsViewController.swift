@@ -434,7 +434,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                 getSectionIndex(.studies): #selector(tappedLearnMoreStudies),
                 getSectionIndex(.crashReports): #selector(tappedLearnMoreCrashReports)
             ]
-            
             if let selector = learnMoreActions[section] {
                 let tapGesture = UITapGestureRecognizer(target: self, action: selector)
                 footer.detailTextButton.setTitle(UIConstants.strings.learnMore, for: .normal)
