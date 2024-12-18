@@ -5,14 +5,14 @@
 import Foundation
 
 class NoImageModeSetting: BoolSetting {
-    init(settings: SettingsTableViewController) {
-        let noImageEnabled = NoImageModeHelper.isActivated(settings.profile.prefs)
+    init(profile: Profile) {
+        let noImageEnabled = NoImageModeHelper.isActivated(profile.prefs)
         let didChange = { (isEnabled: Bool) in
-            NoImageModeHelper.toggle(isEnabled: isEnabled, profile: settings.profile)
+            NoImageModeHelper.toggle(isEnabled: isEnabled, profile: profile)
         }
 
         super.init(
-            prefs: settings.profile.prefs,
+            prefs: profile.prefs,
             prefKey: NoImageModePrefsKey.NoImageModeStatus,
             defaultValue: noImageEnabled,
             attributedTitleText: NSAttributedString(string: .Settings.Toggle.NoImageMode),
