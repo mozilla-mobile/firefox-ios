@@ -7,6 +7,7 @@ import Foundation
 
 class ExportLogDataSetting: HiddenSetting {
     override var title: NSAttributedString? {
+        guard let theme else { return nil }
         // Not localized for now.
         return NSAttributedString(
             string: "Copy log files to app container",
