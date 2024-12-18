@@ -9,7 +9,7 @@ struct SlideOverUXConstants {
 }
 
 class SlideOverPresentationController: UIPresentationController, FeatureFlaggable {
-    let blurEffectView: UIVisualEffectView!
+    let blurEffectView: UIVisualEffectView
     var tapGestureRecognizer = UITapGestureRecognizer()
     var globalETPStatus: Bool
     weak var enhancedTrackingProtectionMenuDelegate: EnhancedTrackingProtectionMenuDelegate?
