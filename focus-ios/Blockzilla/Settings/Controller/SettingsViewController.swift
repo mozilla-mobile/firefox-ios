@@ -447,7 +447,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             footer.textLabel.text = String(format: UIConstants.strings.setAsDefaultBrowserDescriptionLabel, AppInfo.productName)
             return footer
         }
-        
         return nil
     }
 
