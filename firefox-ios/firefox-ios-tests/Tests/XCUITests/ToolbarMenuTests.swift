@@ -48,11 +48,11 @@ class ToolbarMenuTests: BaseTestCase {
         mozWaitForElementToExist(hamburgerMenu)
         mozWaitForElementToExist(app.textFields[AccessibilityIdentifiers.Browser.AddressToolbar.searchTextField])
         mozWaitForElementToExist(tabsButton)
+        mozWaitForElementToExist(firstPocketCell)
         XCTAssertTrue(
             hamburgerMenu.isRightOf(rightElement: tabsButton),
             "Menu button is not on the right side of tabs button"
         )
-        mozWaitForElementToExist(firstPocketCell)
         XCTAssertTrue(
             hamburgerMenu.isAbove(element: firstPocketCell),
             "Menu button is not below the pocket cells area"
