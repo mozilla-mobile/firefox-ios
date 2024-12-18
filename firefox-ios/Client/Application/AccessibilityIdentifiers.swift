@@ -500,6 +500,7 @@ struct AccessibilityIdentifiers {
     struct TermsOfService {
         static let logo = "TermsOfService.Logo"
         static let title = "TermsOfService.Title"
+        static let subtitle = "TermsOfService.Subtitle"
         static let termsOfServiceAgreement = "TermsOfService.TermsOfServiceAgreement"
         static let privacyNoticeAgreement = "TermsOfService.PrivacyNoticeAgreement"
         static let manageDataCollectionAgreement = "TermsOfService.ManageDataCollectionAgreement"

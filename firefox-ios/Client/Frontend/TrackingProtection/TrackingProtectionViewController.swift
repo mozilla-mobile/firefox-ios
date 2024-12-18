@@ -272,6 +272,10 @@ class TrackingProtectionViewController: UIViewController,
         headerContainer.closeButtonCallback = { [weak self] in
             self?.enhancedTrackingProtectionMenuDelegate?.didFinish()
         }
+        headerContainer.setupAccessibility(
+            closeButtonA11yLabel: model.closeButtonA11yLabel,
+            closeButtonA11yId: model.closeButtonA11yId
+        )
         headerContainer.updateHeaderLineView(isHidden: true)
     }
 

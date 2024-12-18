@@ -409,6 +409,9 @@ class BookmarksTests: BaseTestCase {
         contextMenuTable.cells.otherElements[StandardImageIdentifiers.Large.privateMode].waitAndTap()
         // The webpage opens in a new private tab
         switchToTabAndValidate(nrOfTabs: "1", isPrivate: true)
+        if #unavailable(iOS 16) {
+            navigator.performAction(Action.CloseURLBarOpen)
+        }
         navigator.goto(TabTray)
         if !iPad() {
             mozWaitForElementToExist(app.staticTexts["Private Browsing"])

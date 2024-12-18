@@ -105,8 +105,8 @@ public func accumulate<T>(_ thunks: [() -> Deferred<Maybe<T>>]) -> Deferred<Mayb
     var results: [T] = []
     results.reserveCapacity(thunks.count)
 
-    var onValue: ((T) -> Void)!
-    var onResult: ((Maybe<T>) -> Void)!
+    var onValue: ((T) -> Void)?
+    var onResult: ((Maybe<T>) -> Void)?
 
     // onValue and onResult both hold references to each other niling them out before exiting breaks a reference cycle
     // We also cannot use unowned here because the thunks are not class types.
@@ -115,7 +115,7 @@ public func accumulate<T>(_ thunks: [() -> Deferred<Maybe<T>>]) -> Deferred<Mayb
         if results.count == thunks.count {
             onResult = nil
             combined.fill(Maybe(success: results))
-        } else {
+        } else if let onResult {
             thunks[results.count]().upon(onResult)
         }
     }
@@ -126,10 +126,12 @@ public func accumulate<T>(_ thunks: [() -> Deferred<Maybe<T>>]) -> Deferred<Mayb
             combined.fill(Maybe(failure: r.failureValue!))
             return
         }
-        onValue(r.successValue!)
+        onValue?(r.successValue!)
     }
 
-    thunks[0]().upon(onResult)
+    if let onResult {
+        thunks[0]().upon(onResult)
+    }
 
     return combined
 }

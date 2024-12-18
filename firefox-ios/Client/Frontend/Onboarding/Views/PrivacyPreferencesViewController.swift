@@ -93,8 +93,8 @@ final class PrivacyPreferencesViewController: UIViewController,
         view.addSubview(doneButton)
         view.addSubview(contentScrollView)
         contentScrollView.addSubview(contentView)
-        contentView.addSubview(crashReportsSwitch)
         contentView.addSubview(technicalDataSwitch)
+        contentView.addSubview(crashReportsSwitch)
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: UX.headerViewTopMargin),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UX.contentHorizontalMargin),
@@ -115,20 +115,7 @@ final class PrivacyPreferencesViewController: UIViewController,
             contentView.widthAnchor.constraint(equalTo: contentScrollView.frameLayoutGuide.widthAnchor),
             contentView.heightAnchor.constraint(equalTo: contentScrollView.heightAnchor).priority(.defaultLow),
 
-            crashReportsSwitch.topAnchor.constraint(equalTo: contentView.topAnchor),
-            crashReportsSwitch.leadingAnchor.constraint(
-                equalTo: contentView.leadingAnchor,
-                constant: UX.contentHorizontalMargin
-            ),
-            crashReportsSwitch.trailingAnchor.constraint(
-                equalTo: contentView.trailingAnchor,
-                constant: -UX.contentHorizontalMargin
-            ),
-
-            technicalDataSwitch.topAnchor.constraint(
-                equalTo: crashReportsSwitch.bottomAnchor,
-                constant: UX.contentDistance
-            ),
+            technicalDataSwitch.topAnchor.constraint(equalTo: contentView.topAnchor),
             technicalDataSwitch.leadingAnchor.constraint(
                 equalTo: contentView.leadingAnchor,
                 constant: UX.contentHorizontalMargin
@@ -137,7 +124,20 @@ final class PrivacyPreferencesViewController: UIViewController,
                 equalTo: contentView.trailingAnchor,
                 constant: -UX.contentHorizontalMargin
             ),
-            technicalDataSwitch.bottomAnchor.constraint(
+
+            crashReportsSwitch.topAnchor.constraint(
+                equalTo: technicalDataSwitch.bottomAnchor,
+                constant: UX.contentDistance
+            ),
+            crashReportsSwitch.leadingAnchor.constraint(
+                equalTo: contentView.leadingAnchor,
+                constant: UX.contentHorizontalMargin
+            ),
+            crashReportsSwitch.trailingAnchor.constraint(
+                equalTo: contentView.trailingAnchor,
+                constant: -UX.contentHorizontalMargin
+            ),
+            crashReportsSwitch.bottomAnchor.constraint(
                 equalTo: contentView.bottomAnchor,
                 constant: -UX.contentDistance)
         ])
