@@ -75,8 +75,8 @@ class QRCodeViewController: UIViewController {
     private var isLightOn = false
     private var shapeLayer = CAShapeLayer()
 
-    private var scanLineTopConstraint: NSLayoutConstraint!
-    private var scanBorderWidthConstraint: NSLayoutConstraint!
+    private var scanLineTopConstraint: NSLayoutConstraint?
+    private var scanBorderWidthConstraint: NSLayoutConstraint?
 
     private var scanBorderSize: CGFloat {
         let minSize = min(view.frame.width, view.frame.height)
@@ -213,9 +213,12 @@ class QRCodeViewController: UIViewController {
         view.addSubview(scanLine)
         view.addSubview(instructionsLabel)
 
-        scanLineTopConstraint = scanLine.topAnchor.constraint(equalTo: scanBorder.topAnchor,
-                                                              constant: UX.scanLineHeight)
-        scanBorderWidthConstraint = scanBorder.widthAnchor.constraint(equalToConstant: scanBorderSize)
+        let scanLineTopConstraint = scanLine.topAnchor.constraint(equalTo: scanBorder.topAnchor,
+                                                                  constant: UX.scanLineHeight)
+        self.scanLineTopConstraint = scanLineTopConstraint
+
+        let scanBorderWidthConstraint = scanBorder.widthAnchor.constraint(equalToConstant: scanBorderSize)
+        self.scanBorderWidthConstraint = scanBorderWidthConstraint
 
         NSLayoutConstraint.activate([
             maskView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -240,7 +243,7 @@ class QRCodeViewController: UIViewController {
     }
 
     private func updateContraintsAfterTransition() {
-        scanBorderWidthConstraint.constant = scanBorderSize
+        scanBorderWidthConstraint?.constant = scanBorderSize
     }
 
     private func setupVideoPreviewLayer() {
@@ -271,10 +274,10 @@ class QRCodeViewController: UIViewController {
                        delay: 0,
                        options: [.repeat],
                        animations: {
-            self.scanLineTopConstraint.constant = self.scanBorder.frame.size.height - UX.scanLineHeight
+            self.scanLineTopConstraint?.constant = self.scanBorder.frame.size.height - UX.scanLineHeight
             self.view.layoutIfNeeded()
         }) { (value: Bool) in
-            self.scanLineTopConstraint.constant = UX.scanLineHeight
+            self.scanLineTopConstraint?.constant = UX.scanLineHeight
             self.perform(#selector(self.startScanLineAnimation), with: nil, afterDelay: 0)
         }
     }
