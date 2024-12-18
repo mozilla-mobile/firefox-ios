@@ -1850,8 +1850,8 @@
 		ED4589402CC8220A006F2C0B /* MockSearchEngineSelectionCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED45893F2CC8220A006F2C0B /* MockSearchEngineSelectionCoordinator.swift */; };
 		ED55DC8C2CC2D7DA00E3FE3A /* SearchEngineSelectionCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED55DC8B2CC2D7DA00E3FE3A /* SearchEngineSelectionCoordinatorTests.swift */; };
 		ED575BD32D00F9D00056BCDA /* MockTemporaryDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED575BD22D00F9D00056BCDA /* MockTemporaryDocument.swift */; };
-		ED67B2922D0B79F000BDC599 /* TitleSubtitleActivityItemProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED67B2912D0B79F000BDC599 /* TitleSubtitleActivityItemProviderTests.swift */; };
-		ED67B2942D0B80E200BDC599 /* TitleActivityItemProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED67B2932D0B80E200BDC599 /* TitleActivityItemProviderTests.swift */; };
+		ED67B2962D0C921600BDC599 /* ShareTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED67B2952D0C921600BDC599 /* ShareTelemetry.swift */; };
+		ED67B2982D0C940C00BDC599 /* ShareTelemetryActivityItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED67B2972D0C940C00BDC599 /* ShareTelemetryActivityItemProvider.swift */; };
 		ED6C8DAC2CE6A4BB00D7F7F3 /* Sentry-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = ED6C8DAB2CE6A4BB00D7F7F3 /* Sentry-Dynamic */; };
 		ED70CD812CE3BD2C0018761B /* MockStoreForMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED70CD802CE3BD2C0018761B /* MockStoreForMiddleware.swift */; };
 		ED7A08DB2CF674730035EC8F /* ShareMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED7A08DA2CF674730035EC8F /* ShareMessage.swift */; };
@@ -1865,6 +1865,9 @@
 		EDD21F2E2CAEFB8F00AF7D1F /* SearchEngineSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD21F2D2CAEFB8F00AF7D1F /* SearchEngineSelectionViewController.swift */; };
 		EDD2A7F82CDACE7C00ED464C /* UnifiedSearchKit in Frameworks */ = {isa = PBXBuildFile; productRef = EDD2A7F72CDACE7C00ED464C /* UnifiedSearchKit */; };
 		EDD2A7FA2CDBD1D100ED464C /* SearchEngineElement+initFromSearchEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD2A7F92CDBD1D000ED464C /* SearchEngineElement+initFromSearchEngine.swift */; };
+		EDD3348E2D109458004516D0 /* ShareTelemetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD3348D2D109458004516D0 /* ShareTelemetryTests.swift */; };
+		EDD334902D109A5B004516D0 /* ShareTelemetryActivityItemProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD3348F2D109A5B004516D0 /* ShareTelemetryActivityItemProviderTests.swift */; };
+		EDD334932D109AE6004516D0 /* MockShareTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD334922D109AE6004516D0 /* MockShareTelemetry.swift */; };
 		EDDF340A2CDD159F008BB6A4 /* SearchEngineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDF34092CDD159F008BB6A4 /* SearchEngineModel.swift */; };
 		EDDF340B2CDD1B7C008BB6A4 /* SearchEngineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDDF34092CDD159F008BB6A4 /* SearchEngineModel.swift */; };
 		EDF567A02C8B51DC00FDB09D /* SiteImageView in Frameworks */ = {isa = PBXBuildFile; productRef = EDF5679F2C8B51DC00FDB09D /* SiteImageView */; };
@@ -9389,6 +9392,8 @@
 		ED575BD22D00F9D00056BCDA /* MockTemporaryDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTemporaryDocument.swift; sourceTree = "<group>"; };
 		ED67B2912D0B79F000BDC599 /* TitleSubtitleActivityItemProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleSubtitleActivityItemProviderTests.swift; sourceTree = "<group>"; };
 		ED67B2932D0B80E200BDC599 /* TitleActivityItemProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleActivityItemProviderTests.swift; sourceTree = "<group>"; };
+		ED67B2952D0C921600BDC599 /* ShareTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareTelemetry.swift; sourceTree = "<group>"; };
+		ED67B2972D0C940C00BDC599 /* ShareTelemetryActivityItemProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareTelemetryActivityItemProvider.swift; sourceTree = "<group>"; };
 		ED70CD802CE3BD2C0018761B /* MockStoreForMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockStoreForMiddleware.swift; sourceTree = "<group>"; };
 		ED7A08DA2CF674730035EC8F /* ShareMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareMessage.swift; sourceTree = "<group>"; };
 		ED7A08DC2CF6749B0035EC8F /* ShareType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareType.swift; sourceTree = "<group>"; };
@@ -9405,6 +9410,9 @@
 		EDCA4CBC8077FC37971CC0C7 /* kn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kn; path = kn.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EDD21F2D2CAEFB8F00AF7D1F /* SearchEngineSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineSelectionViewController.swift; sourceTree = "<group>"; };
 		EDD2A7F92CDBD1D000ED464C /* SearchEngineElement+initFromSearchEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchEngineElement+initFromSearchEngine.swift"; sourceTree = "<group>"; };
+		EDD3348D2D109458004516D0 /* ShareTelemetryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareTelemetryTests.swift; sourceTree = "<group>"; };
+		EDD3348F2D109A5B004516D0 /* ShareTelemetryActivityItemProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareTelemetryActivityItemProviderTests.swift; sourceTree = "<group>"; };
+		EDD334922D109AE6004516D0 /* MockShareTelemetry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockShareTelemetry.swift; sourceTree = "<group>"; };
 		EDDF34092CDD159F008BB6A4 /* SearchEngineModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEngineModel.swift; sourceTree = "<group>"; };
 		EDEE4CC7BD65892525632A4E /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Today.strings; sourceTree = "<group>"; };
 		EE294A97B40C4FDBD67AE536 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/ErrorPages.strings; sourceTree = "<group>"; };
@@ -13142,10 +13150,12 @@
 				2128E27A292E624400FB91BE /* SendToDeviceActivity.swift */,
 				E1AFBAF8292EA0330065E35E /* SendToDeviceHelper.swift */,
 				D3972BF11C22412B00035B87 /* ShareManager.swift */,
+				ED67B2952D0C921600BDC599 /* ShareTelemetry.swift */,
 				ED7A08DA2CF674730035EC8F /* ShareMessage.swift */,
 				ED7A08DC2CF6749B0035EC8F /* ShareType.swift */,
 				ED7A08DE2CF674BA0035EC8F /* ShareTab.swift */,
 				ED390D212CF4DEDB00A775F9 /* TitleSubtitleActivityItemProvider.swift */,
+				ED67B2972D0C940C00BDC599 /* ShareTelemetryActivityItemProvider.swift */,
 				ED390D1F2CF4DE2E00A775F9 /* URLActivityItemProvider.swift */,
 				D3972BF21C22412B00035B87 /* TitleActivityItemProvider.swift */,
 			);
@@ -13935,6 +13945,28 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		EDD3348C2D109416004516D0 /* Sharing */ = {
+			isa = PBXGroup;
+			children = (
+				EDD334912D109ADB004516D0 /* Mocks */,
+				ED4294842CF1286E0077D7CB /* ShareManagerTests.swift */,
+				EDD3348F2D109A5B004516D0 /* ShareTelemetryActivityItemProviderTests.swift */,
+				EDD3348D2D109458004516D0 /* ShareTelemetryTests.swift */,
+				ED67B2932D0B80E200BDC599 /* TitleActivityItemProviderTests.swift */,
+				ED67B2912D0B79F000BDC599 /* TitleSubtitleActivityItemProviderTests.swift */,
+				ED33E3562D0A4CE9002265A7 /* URLActivityItemProviderTests.swift */,
+			);
+			path = Sharing;
+			sourceTree = "<group>";
+		};
+		EDD334912D109ADB004516D0 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				EDD334922D109AE6004516D0 /* MockShareTelemetry.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
 		F8324A082649A188007E4BFA /* CredentialProvider */ = {
 			isa = PBXGroup;
 			children = (
@@ -14103,6 +14135,7 @@
 				F80D53CD2A09A30F0047ED14 /* RustSyncManagerTests.swift */,
 				8A5189C62C1B5F6C00CDB668 /* Search */,
 				8A5D1CA12A30CF2E005AD35C /* Settings */,
+				EDD3348C2D109416004516D0 /* Sharing */,
 				8C6DA7D02A6FE78F00DE264F /* ShoppingProductTests.swift */,
 				8A04136A2825ABEA00D20B10 /* SponsoredTileTelemetryTests.swift */,
 				213B67A727CE721E000542F5 /* StartAtHomeHelperTests.swift */,
@@ -14134,10 +14167,6 @@
 				D3BA41671BD82F2200DA5457 /* XCTestCaseExtensions.swift */,
 				8A96C4BA28F9E7B300B75884 /* XCTestCaseRootViewController.swift */,
 				0ECB6B672CCFE663006A7C82 /* DateGroupedTableDataTests.swift */,
-				ED4294842CF1286E0077D7CB /* ShareManagerTests.swift */,
-				ED33E3562D0A4CE9002265A7 /* URLActivityItemProviderTests.swift */,
-				ED67B2912D0B79F000BDC599 /* TitleSubtitleActivityItemProviderTests.swift */,
-				ED67B2932D0B80E200BDC599 /* TitleActivityItemProviderTests.swift */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";
@@ -16444,6 +16473,7 @@
 				C84655E22887388F00861B4A /* Wallpaper.swift in Sources */,
 				C849E46326B9C3AF00260F0B /* EnhancedTrackingProtectionVM.swift in Sources */,
 				5A9F83402B2B4AE800272819 /* TabPeekAction.swift in Sources */,
+				ED67B2982D0C940C00BDC599 /* ShareTelemetryActivityItemProvider.swift in Sources */,
 				C8EDDBF429DF119F003A4C07 /* DeeplinkInput.swift in Sources */,
 				C88E7A552A0553180072E638 /* OnboardingViewModel.swift in Sources */,
 				8C29627C2B1F473800571655 /* AdEventsResponse.swift in Sources */,
@@ -16654,6 +16684,7 @@
 				3BF56D271CDBBE1F00AC4D75 /* SimpleToast.swift in Sources */,
 				8C4B0F5D2C076B12008B3E74 /* UpdatableAddressFields+Decodable.swift in Sources */,
 				C8B0F5F6283B7CCE007AE65D /* PocketStory.swift in Sources */,
+				ED67B2962D0C921600BDC599 /* ShareTelemetry.swift in Sources */,
 				63B2132A2CCA797400A466DB /* NativeErrorPageState.swift in Sources */,
 				8ADAE4222A33A113007BF926 /* SendDataSetting.swift in Sources */,
 				E170CA542B72C07A0082EFC5 /* FakespotActionFooterView.swift in Sources */,
@@ -16956,6 +16987,7 @@
 				E16941B42C4E4A2E00FF5F4E /* BrowserViewControllerStateTests.swift in Sources */,
 				E1AEC179286E0CF500062E29 /* FirefoxHomeViewModelTests.swift in Sources */,
 				DF940A0C2A96352B00C1497D /* FakespotSettingsCardViewModelTests.swift in Sources */,
+				EDD334902D109A5B004516D0 /* ShareTelemetryActivityItemProviderTests.swift in Sources */,
 				8ABCFEA62B45CB4C00C2988A /* PrivateBrowsingTelemetryTests.swift in Sources */,
 				ED33E3572D0A4CE9002265A7 /* URLActivityItemProviderTests.swift in Sources */,
 				281B2BEA1ADF4D90002917DC /* MockProfile.swift in Sources */,
@@ -17014,7 +17046,6 @@
 				C706CBEF2C3F0FDE00DC65F1 /* CreditCardSettingsViewControllerTests.swift in Sources */,
 				E19B38B128A3E69300D8C541 /* WallpaperCollectionAvailabilityTests.swift in Sources */,
 				81DAB2F32C88F14400F4BE98 /* MainMenuCoordinatorTests.swift in Sources */,
-				ED67B2922D0B79F000BDC599 /* TitleSubtitleActivityItemProviderTests.swift in Sources */,
 				8A359EF62A1FE840004A5BB7 /* MockAdjustWrapper.swift in Sources */,
 				8AC225662B6D403200CDA7FD /* HomepageTelemetryTests.swift in Sources */,
 				1D558A582BED7ECB001EF527 /* MockWindowManager.swift in Sources */,
@@ -17034,7 +17065,6 @@
 				C869916328918C36007ACC5C /* WallpaperNetworkingModuleTests.swift in Sources */,
 				B640467E29B9B58200C5C7B6 /* TabLocationViewTests.swift in Sources */,
 				8ABA9C8D28931223002C0077 /* MockDispatchQueue.swift in Sources */,
-				ED67B2942D0B80E200BDC599 /* TitleActivityItemProviderTests.swift in Sources */,
 				8CCD74732B90A945008F919B /* LoginListViewModelTests.swift in Sources */,
 				C81C66C429F00D1000F6422F /* UserActivityRouteTests.swift in Sources */,
 				8AFCE50529DDF38300B1B253 /* LaunchScreenViewControllerTests.swift in Sources */,
@@ -17080,6 +17110,7 @@
 				C838FD612899A9BB0068F60B /* WallpaperURLProviderTests.swift in Sources */,
 				8A11C8112731CFD700AC7318 /* ReaderModeStyleTests.swift in Sources */,
 				8ABA9C8E28931288002C0077 /* JumpBackInDataAdaptorTests.swift in Sources */,
+				EDD3348E2D109458004516D0 /* ShareTelemetryTests.swift in Sources */,
 				0EC57CE32CA31C5B002E3F04 /* PasswordGeneratorViewControllerTests.swift in Sources */,
 				3943A81D1E9807C700D4F6DC /* FxAPushMessageTest.swift in Sources */,
 				0EC57CE52CA31E59002E3F04 /* PasswordGeneratorStateTests.swift in Sources */,
@@ -17160,6 +17191,7 @@
 				C2D80BED2AAF3C6B00CDF7A9 /* MockBrowserCoordinator.swift in Sources */,
 				45D5EDC0292D619000311934 /* MockablePinnedSites.swift in Sources */,
 				5AE371852A4DD6FE0092A760 /* PasswordManagerCoordinatorDelegateMock.swift in Sources */,
+				EDD334932D109AE6004516D0 /* MockShareTelemetry.swift in Sources */,
 				1D558A5B2BEE7D07001EF527 /* WindowSimpleTabsCoordinator.swift in Sources */,
 				8A6E8DEB2B275BA9000C4301 /* PrivateHomepageViewControllerTests.swift in Sources */,
 				8A93F86529D37331004159D9 /* DefaultRouterTests.swift in Sources */,

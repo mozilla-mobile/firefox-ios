@@ -130,6 +130,9 @@ class ShareManager: NSObject, FeatureFlaggable {
             }
         }
 
+        // For all share types, record basic telemetry
+        activityItems.append(ShareTelemetryActivityItemProvider(shareType: shareType, shareMessage: explicitShareMessage))
+
         return activityItems
     }
 

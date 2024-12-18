@@ -31,6 +31,7 @@ enum ShareType: Equatable {
         }
     }
 
+    /// The share URL wrapped by the given type.
     var wrappedURL: URL {
         switch self {
         case let .file(url):
@@ -39,6 +40,18 @@ enum ShareType: Equatable {
             return url
         case let .tab(url, _):
             return url
+        }
+    }
+
+    /// The plain text name of this share type.
+    var typeName: String {
+        switch self {
+        case .file:
+            return "file"
+        case .site:
+            return "site"
+        case .tab:
+            return "tab"
         }
     }
 }
