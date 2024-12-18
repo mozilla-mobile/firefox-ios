@@ -8,7 +8,7 @@ import Storage
 import Common
 
 import struct MozillaAppServices.LoginEntry
-import struct MozillaAppServices.EncryptedLogin
+import struct MozillaAppServices.Login
 
 class Authenticator {
     fileprivate static let MaxAuthenticationAttempts = 3
@@ -141,14 +141,14 @@ class Authenticator {
         }
     }
 
-    private static func filterHttpAuthLogins(logins: [EncryptedLogin]) -> [EncryptedLogin] {
+    private static func filterHttpAuthLogins(logins: [Login]) -> [Login] {
         return logins.compactMap {
             // HTTP Auth must have nil formSubmitUrl and a non-nil httpRealm.
             return $0.formSubmitUrl == nil && $0.httpRealm != nil ? $0 : nil
         }
     }
 
-    private static func handleDuplicatedEntries(logins: [EncryptedLogin],
+    private static func handleDuplicatedEntries(logins: [Login],
                                                 challenge: URLAuthenticationChallenge,
                                                 loginsProvider: RustLogins) -> URLCredential? {
         let credentials = (logins.first(where: { login in
@@ -167,7 +167,7 @@ class Authenticator {
         return credentials
     }
 
-    private static func handleUnmatchedSchemes(logins: [EncryptedLogin],
+    private static func handleUnmatchedSchemes(logins: [Login],
                                                challenge: URLAuthenticationChallenge,
                                                loginsProvider: RustLogins,
                                                completionHandler: @escaping (Result<URLCredential?, Error>) -> Void) {
