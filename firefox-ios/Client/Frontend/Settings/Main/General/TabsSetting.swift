@@ -9,7 +9,10 @@ import Shared
 class TabsSetting: Setting {
     private weak var settingsDelegate: GeneralSettingsDelegate?
 
-    override var accessoryView: UIImageView? { return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme) }
+    override var accessoryView: UIImageView? {
+        guard let theme else { return nil }
+        return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
+    }
 
     override var accessibilityIdentifier: String? {
         return AccessibilityIdentifiers.Settings.Tabs.title
