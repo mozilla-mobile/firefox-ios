@@ -175,8 +175,8 @@ public class BottomSheetViewController: UIViewController,
         view.addSubviews(dimmedBackgroundView, topTapView, sheetView)
         view.accessibilityElements = [closeButton, sheetView]
 
-        let contentViewBottomConstraint = sheetView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        self.contentViewBottomConstraint = contentViewBottomConstraint
+        contentViewBottomConstraint = sheetView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        contentViewBottomConstraint?.isActive = true
 
         let scrollViewHeightConstraint = scrollView.heightAnchor.constraint(
             greaterThanOrEqualTo: scrollContentView.heightAnchor)
@@ -195,7 +195,6 @@ public class BottomSheetViewController: UIViewController,
             sheetView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor,
                                            constant: BottomSheetViewController.UX.minVisibleTopSpace),
             sheetView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            contentViewBottomConstraint,
             sheetView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
             contentView.topAnchor.constraint(equalTo: sheetView.topAnchor),
