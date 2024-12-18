@@ -38,7 +38,7 @@ jobs:
                   -target ${{ env.xcodebuild_target }} \
                   -derivedDataPath ~/DerivedData \
                   -destination 'platform=iOS Simulator,name=${{ env.ios_simulator_default }},OS=${{ env.ios_version }}' \
-                  COMPILER_INDEX_STORE_ENABLE=NO CODE_SIGN_IDENTITY= CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO ARCH="arm64"
+                  COMPILER_INDEX_STORE_ENABLE=NO CODE_SIGN_IDENTITY= CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
               working-directory: ${{ env.browser }}
             - name: Save Derived Data
               id: upload-derived-data
