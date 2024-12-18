@@ -9,7 +9,13 @@ import Foundation
 class MockShareTelemetry: ShareTelemetry {
     var sharedToCalled = 0
 
-    func sharedTo(activityType: UIActivity.ActivityType?, shareType: ShareType, hasShareMessage: Bool) {
+    func sharedTo(
+        activityType: UIActivity.ActivityType?,
+        shareType: ShareType,
+        hasShareMessage: Bool,
+        isEnrolledInSentFromFirefox: Bool,
+        isOptedInSentFromFirefox: Bool
+    ) {
         sharedToCalled += 1
     }
 }
