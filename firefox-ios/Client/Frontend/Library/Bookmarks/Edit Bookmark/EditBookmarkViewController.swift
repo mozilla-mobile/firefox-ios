@@ -76,7 +76,7 @@ class EditBookmarkViewController: UIViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setTheme(theme)
-        _ = viewModel.backNavigationButtonTitle()
+        _ = viewModel.getBackNavigationButtonTitle
         navigationController?.setNavigationBarHidden(false, animated: true)
         navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         onViewWillAppear?()
