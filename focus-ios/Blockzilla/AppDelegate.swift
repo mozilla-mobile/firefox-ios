@@ -357,6 +357,12 @@ extension AppDelegate {
                 Glean.shared.handleCustomUrl(url: url)
             }
         }
+        
+        if Settings.getToggle(.sendAnonymousUsageData) {
+            UsageProfileManager.checkAndSetUsageProfileId()
+        } else {
+            UsageProfileManager.unsetUsageProfileId()
+        }
 
         Glean.shared.registerPings(GleanMetrics.Pings.shared)
 

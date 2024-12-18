@@ -1638,6 +1638,11 @@ extension String {
                 tableName: "Onboarding",
                 value: "Welcome to %@",
                 comment: "Title for the Terms of Service screen in the onboarding process. Placeholder is for app name.")
+            public static let Subtitle = MZLocalizedString(
+                key: "Onboarding.TermsOfService.Subtitle.v136",
+                tableName: "Onboarding",
+                value: "Fast and secure web browsing",
+                comment: "Subtitle for the Terms of Service screen in the onboarding process.")
             public static let AgreementButtonTitle = MZLocalizedString(
                 key: "Onboarding.TermsOfService.AgreementButtonTitle.v135",
                 tableName: "Onboarding",
@@ -1701,9 +1706,9 @@ extension String {
                     value: "Data about your device, hardware configuration, and how you use %@ helps improve features, performance, and stability for everyone. %@",
                     comment: "Description for the technical and interaction data switch option in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not. First placeholder is for the app name. The second placeholder is for the Learn more button link, to open a link where user can find more information about this send technical and interaction data option.")
                 public static let LearnMore = MZLocalizedString(
-                    key: "Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v135",
+                    key: "Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v136",
                     tableName: "Onboarding",
-                    value: "Learn more.",
+                    value: "Learn more",
                     comment: "A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not.")
             }
         }
@@ -7598,6 +7603,13 @@ extension String {
                 tableName: nil,
                 value: nil,
                 comment: "Used as a button label for crash dialog prompt")
+        }
+        struct v135 {
+            public static let LearnMore = MZLocalizedString(
+                key: "Onboarding.TermsOfService.PrivacyPreferences.LearnMore.v135",
+                tableName: "Onboarding",
+                value: "Learn more.",
+                comment: "A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not.")
         }
     }
 }

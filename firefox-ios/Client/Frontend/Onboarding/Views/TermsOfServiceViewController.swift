@@ -50,6 +50,15 @@ class TermsOfServiceViewController: UIViewController, Themeable {
         label.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfService.title
     }
 
+    private lazy var subtitleLabel: UILabel = .build { label in
+        label.text = .Onboarding.TermsOfService.Subtitle
+        label.font = FXFontStyles.Regular.subheadline.scaledFont()
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.adjustsFontForContentSizeCategory = true
+        label.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfService.subtitle
+    }
+
     private lazy var logoImage: UIImageView = .build { logoImage in
         logoImage.image = UIImage(named: ImageIdentifiers.logo)
         logoImage.accessibilityIdentifier = AccessibilityIdentifiers.TermsOfService.logo
@@ -135,6 +144,7 @@ class TermsOfServiceViewController: UIViewController, Themeable {
         view.addSubview(contentScrollView)
         contentScrollView.addSubview(contentView)
         contentView.addSubview(titleLabel)
+        contentView.addSubview(subtitleLabel)
         contentView.addSubview(logoImage)
         contentView.addSubview(confirmationButton)
         contentView.addSubview(agreementContent)
@@ -163,8 +173,12 @@ class TermsOfServiceViewController: UIViewController, Themeable {
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.horizontalMargin),
             titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.horizontalMargin),
 
+            subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: UX.margin),
+            subtitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.horizontalMargin),
+            subtitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -UX.horizontalMargin),
+
             agreementContent.topAnchor.constraint(
-                greaterThanOrEqualTo: titleLabel.bottomAnchor,
+                greaterThanOrEqualTo: subtitleLabel.bottomAnchor,
                 constant: UX.distanceBetweenViews
             ),
             agreementContent.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: UX.horizontalMargin),
@@ -265,6 +279,7 @@ class TermsOfServiceViewController: UIViewController, Themeable {
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         view.backgroundColor = theme.colors.layer2
         titleLabel.textColor = theme.colors.textPrimary
+        subtitleLabel.textColor = theme.colors.textSecondary
         confirmationButton.applyTheme(theme: theme)
         configure()
     }
