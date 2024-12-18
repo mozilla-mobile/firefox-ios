@@ -213,12 +213,12 @@ class QRCodeViewController: UIViewController {
         view.addSubview(scanLine)
         view.addSubview(instructionsLabel)
 
-        let scanLineTopConstraint = scanLine.topAnchor.constraint(equalTo: scanBorder.topAnchor,
-                                                                  constant: UX.scanLineHeight)
-        self.scanLineTopConstraint = scanLineTopConstraint
+        scanLineTopConstraint = scanLine.topAnchor.constraint(equalTo: scanBorder.topAnchor,
+                                                              constant: UX.scanLineHeight)
+        scanLineTopConstraint?.isActive = true
 
-        let scanBorderWidthConstraint = scanBorder.widthAnchor.constraint(equalToConstant: scanBorderSize)
-        self.scanBorderWidthConstraint = scanBorderWidthConstraint
+        scanBorderWidthConstraint = scanBorder.widthAnchor.constraint(equalToConstant: scanBorderSize)
+        scanBorderWidthConstraint?.isActive = true
 
         NSLayoutConstraint.activate([
             maskView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -228,10 +228,8 @@ class QRCodeViewController: UIViewController {
 
             scanBorder.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             scanBorder.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            scanBorderWidthConstraint,
             scanBorder.heightAnchor.constraint(equalTo: scanBorder.widthAnchor),
 
-            scanLineTopConstraint,
             scanLine.leadingAnchor.constraint(equalTo: scanBorder.leadingAnchor),
             scanLine.widthAnchor.constraint(equalTo: scanBorder.widthAnchor),
             scanLine.heightAnchor.constraint(equalToConstant: UX.scanLineHeight),
