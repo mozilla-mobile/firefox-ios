@@ -5,6 +5,7 @@
 import Common
 import Foundation
 import Shared
+import Localizations
 
 import struct MozillaAppServices.NimbusAppSettings
 import class MozillaAppServices.NimbusBuilder
