@@ -301,29 +301,25 @@ class AppSettingsTableViewController: SettingsTableViewController,
     }
 
     private func getAccountSetting() -> [SettingSection] {
-        let accountChinaSyncSetting: [Setting]
-        if !AppInfo.isChinaEdition {
-            accountChinaSyncSetting = []
-        } else {
-            accountChinaSyncSetting = [
-                // Show China sync service setting:
-                ChinaSyncServiceSetting(settings: self, settingsDelegate: self)
-            ]
-        }
-
         let accountSectionTitle = NSAttributedString(string: .FxAFirefoxAccount)
 
         let attributedString = NSAttributedString(string: .Settings.Sync.ButtonDescription)
         let accountFooterText = !(profile?.hasAccount() ?? false) ? attributedString : nil
 
-        return [SettingSection(title: accountSectionTitle, footerTitle: accountFooterText, children: [
+        var settings = [
             // Without a Firefox Account:
             ConnectSetting(settings: self, settingsDelegate: parentCoordinator),
             AdvancedAccountSetting(settings: self, isHidden: showDebugSettings, settingsDelegate: parentCoordinator),
             // With a Firefox Account:
             AccountStatusSetting(settings: self, settingsDelegate: parentCoordinator),
             SyncNowSetting(settings: self, settingsDelegate: parentCoordinator)
-        ] + accountChinaSyncSetting)]
+        ]
+        if AppInfo.isChinaEdition, let profile {
+            settings.append(ChinaSyncServiceSetting(profile: profile, settingsDelegate: self))
+        }
+        return [
+            SettingSection(title: accountSectionTitle, footerTitle: accountFooterText, children: settings)
+        ]
     }
 
     private func getGeneralSettings() -> [SettingSection] {
