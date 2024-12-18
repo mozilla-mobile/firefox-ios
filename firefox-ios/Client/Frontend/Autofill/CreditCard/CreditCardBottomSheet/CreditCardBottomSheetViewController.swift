@@ -170,17 +170,17 @@ class CreditCardBottomSheetViewController: UIViewController,
             estimatedContentHeight += UX.yesButtonHeight
         }
 
-        let contentViewHeightConstraint = contentView.heightAnchor.constraint(
+        contentViewHeightConstraint = contentView.heightAnchor.constraint(
             greaterThanOrEqualToConstant: estimatedContentHeight
         )
-        contentViewHeightConstraint.priority = UILayoutPriority(999)
-        self.contentViewHeightConstraint = contentViewHeightConstraint
+        contentViewHeightConstraint?.priority = UILayoutPriority(999)
+        contentViewHeightConstraint?.isActive = true
 
         let contentWidthCheck = UX.contentViewWidth > view.frame.width
         let contentViewWidth = contentWidthCheck ? view.frame.width - UX.containerPadding : UX.contentViewWidth
-        let contentWidthConstraint = contentView.widthAnchor.constraint(equalToConstant: contentViewWidth)
-        contentWidthConstraint.priority = UILayoutPriority(999)
-        self.contentWidthConstraint = contentWidthConstraint
+        contentWidthConstraint = contentView.widthAnchor.constraint(equalToConstant: contentViewWidth)
+        contentWidthConstraint?.priority = UILayoutPriority(999)
+        contentWidthConstraint?.isActive = true
 
         NSLayoutConstraint.activate(
             [
@@ -213,8 +213,6 @@ class CreditCardBottomSheetViewController: UIViewController,
                 ),
 
                 yesButton.heightAnchor.constraint(greaterThanOrEqualToConstant: UX.yesButtonHeight),
-                contentWidthConstraint,
-                contentViewHeightConstraint
             ]
         )
     }
