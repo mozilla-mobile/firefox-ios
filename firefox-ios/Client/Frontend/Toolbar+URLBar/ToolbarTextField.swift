@@ -28,7 +28,9 @@ class ToolbarTextField: AutocompleteTextField {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        // Disable OS to load AutoFill, since for URL type is not needed.
+        // Setting the content type to a field that is not related to AutoFill functionality
+        // like email and password, should disable the Operating system to load those content,
+        // hence having a faster keyboard start up the first time
         textContentType = .URL
     }
 
