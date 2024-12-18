@@ -51,9 +51,7 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
     public func isFeatureEnabled(_ featureID: NimbusFeatureFlagID,
                                  checking channelsToCheck: FlaggableFeatureCheckOptions
     ) -> Bool {
-        guard let profile else {
-            return false
-        }
+        guard let profile else { return false }
 
         let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
         let nimbusSetting = getNimbusOrDebugSetting(with: feature)
@@ -82,9 +80,7 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
     /// binary state. Further information on return types can be found in
     /// `FlaggableFeatureOptions`
     public func getCustomState<T>(for featureID: NimbusFeatureFlagWithCustomOptionsID) -> T? {
-        guard let profile else {
-            return nil
-        }
+        guard let profile else { return nil }
 
         let feature = NimbusFlaggableFeature(withID: convertCustomIDToStandard(featureID),
                                              and: profile)
@@ -109,9 +105,7 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
 
     /// Set a feature that has a binary state to on or off
     public func set(feature featureID: NimbusFeatureFlagID, to desiredState: Bool, isDebug: Bool = false) {
-        guard let profile else {
-            return
-        }
+        guard let profile else { return }
 
         let feature = NimbusFlaggableFeature(withID: featureID, and: profile)
         #if MOZ_CHANNEL_BETA || MOZ_CHANNEL_FENNEC
@@ -131,9 +125,7 @@ class LegacyFeatureFlagsManager: HasNimbusFeatureFlags {
         feature featureID: NimbusFeatureFlagWithCustomOptionsID,
         to desiredState: T
     ) {
-        guard let profile else {
-            return
-        }
+        guard let profile else { return }
 
         let feature = NimbusFlaggableFeature(withID: convertCustomIDToStandard(featureID),
                                              and: profile)
