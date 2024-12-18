@@ -182,8 +182,8 @@ public struct PrefsKeys {
     // Representing whether or not the last user session was private
     public static let LastSessionWasPrivate = "wasLastSessionPrivate"
 
-    // Only used to force nimbus features to true with tests
-    public static let NimbusFeatureTestsOverride = "NimbusFeatureTestsOverride"
+    // Only used in unit tests to override the user's setting for nimbus features
+    public static let NimbusUserEnabledFeatureTestsOverride = "NimbusUserEnabledFeatureTestsOverride"
 
     // Only used to force faster transition of tabs to the inactive state (10 seconds)
     public static let FasterInactiveTabsOverride = "FasterInactiveTabsOverride"
