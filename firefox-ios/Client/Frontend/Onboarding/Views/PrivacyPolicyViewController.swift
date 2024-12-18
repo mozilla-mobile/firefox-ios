@@ -22,7 +22,7 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
             }
         }
     }
-    private var webView: WKWebView!
+    private var webView: WKWebView?
     private var url: URL
     let windowUUID: WindowUUID
     var currentWindowUUID: UUID? { windowUUID }
@@ -80,9 +80,11 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
                            width: view.frame.width * UX.contentScalePhone,
                            height: view.frame.height - UX.topPaddingPhone)
         }
-        webView = WKWebView(frame: frame)
+        let webView = WKWebView(frame: frame)
         webView.navigationDelegate = self
         webView.load(URLRequest(url: url))
+        self.webView = webView
+
         view.backgroundColor = .systemBackground
         view.addSubview(webView)
     }
@@ -95,7 +97,7 @@ class PrivacyPolicyViewController: UIViewController, Themeable {
 }
 
 extension PrivacyPolicyViewController: WKNavigationDelegate {
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         let contentSize = webView.scrollView.contentSize
         let viewSize = self.view.bounds.size
         let zoom = viewSize.width / contentSize.width
