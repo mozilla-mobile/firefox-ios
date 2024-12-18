@@ -93,7 +93,7 @@ class EditFolderViewModel {
     }
 
     func save() {
-        guard let folder else { return }
+        guard let folder, !folder.title.isEmpty else { return }
         let selectedFolderGUID = selectedFolder?.guid ?? parentFolder.guid
         Task { @MainActor in
             // Creates or updates the folder
