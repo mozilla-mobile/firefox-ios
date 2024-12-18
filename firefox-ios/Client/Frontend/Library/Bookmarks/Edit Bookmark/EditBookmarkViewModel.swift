@@ -25,7 +25,7 @@ class EditBookmarkViewModel: ParentFolderSelector {
     private let bookmarksSaver: BookmarksSaver
     weak var bookmarkCoordinatorDelegate: BookmarksCoordinatorDelegate?
 
-    private var isFolderCollapsed = true
+    private(set) var isFolderCollapsed = true
     private(set) var folderStructures: [Folder] = []
     private(set) var selectedFolder: Folder?
 

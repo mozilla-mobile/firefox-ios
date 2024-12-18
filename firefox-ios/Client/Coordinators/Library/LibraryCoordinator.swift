@@ -128,7 +128,8 @@ class LibraryCoordinator: BaseCoordinator,
             profile: profile,
             windowUUID: windowUUID,
             parentCoordinator: parentCoordinator,
-            navigationHandler: self
+            navigationHandler: self,
+            isBookmarkRefactorEnabled: isBookmarkRefactorEnabled
         )
         add(child: bookmarksCoordinator)
         if isBookmarkRefactorEnabled {

@@ -42,7 +42,6 @@ extension BookmarksCoordinatorDelegate {
 class BookmarksCoordinator: BaseCoordinator,
                             BookmarksCoordinatorDelegate,
                             QRCodeNavigationHandler,
-                            BookmarksRefactorFeatureFlagProvider,
                             ParentCoordinatorDelegate {
     // MARK: - Properties
 
@@ -51,6 +50,7 @@ class BookmarksCoordinator: BaseCoordinator,
     private weak var navigationHandler: LibraryNavigationHandler?
     private var fxAccountViewController: FirefoxAccountSignInViewController?
     private let windowUUID: WindowUUID
+    private let isBookmarkRefactorEnabled: Bool
 
     // MARK: - Initializers
 
@@ -59,12 +59,14 @@ class BookmarksCoordinator: BaseCoordinator,
         profile: Profile,
         windowUUID: WindowUUID,
         parentCoordinator: LibraryCoordinatorDelegate?,
-        navigationHandler: LibraryNavigationHandler?
+        navigationHandler: LibraryNavigationHandler?,
+        isBookmarkRefactorEnabled: Bool
     ) {
         self.profile = profile
         self.windowUUID = windowUUID
         self.parentCoordinator = parentCoordinator
         self.navigationHandler = navigationHandler
+        self.isBookmarkRefactorEnabled = isBookmarkRefactorEnabled
         super.init(router: router)
     }
 
