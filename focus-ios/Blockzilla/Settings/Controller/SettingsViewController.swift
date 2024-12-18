@@ -151,7 +151,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         if let crashIndex = getSectionIndex(.crashReports) {
             toggles[crashIndex] = [0: crashToggle]
         }
-        
         if let searchIndex = getSectionIndex(Section.search) {
             toggles[searchIndex] = [2: searchSuggestionToggle]
         }
