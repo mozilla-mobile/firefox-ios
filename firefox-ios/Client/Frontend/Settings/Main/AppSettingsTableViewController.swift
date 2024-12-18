@@ -332,8 +332,11 @@ class AppSettingsTableViewController: SettingsTableViewController,
             ]
         }
 
-        if isSearchBarLocationFeatureEnabled {
-            generalSettings.insert(SearchBarSetting(settings: self, settingsDelegate: parentCoordinator), at: 5)
+        if isSearchBarLocationFeatureEnabled, let profile {
+            generalSettings.insert(
+                SearchBarSetting(settings: self, profile: profile, settingsDelegate: parentCoordinator),
+                at: 5
+            )
         }
 
         let inactiveTabsAreBuildActive = featureFlags.isFeatureEnabled(.inactiveTabs, checking: .buildOnly)
