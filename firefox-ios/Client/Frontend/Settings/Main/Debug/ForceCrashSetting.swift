@@ -6,6 +6,7 @@ import Foundation
 
 class ForceCrashSetting: HiddenSetting {
     override var title: NSAttributedString? {
+        guard let theme else { return nil }
         return NSAttributedString(
             string: "Force Crash 💥",
             attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
