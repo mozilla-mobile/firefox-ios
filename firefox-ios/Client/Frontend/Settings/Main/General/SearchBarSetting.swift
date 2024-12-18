@@ -23,9 +23,9 @@ class SearchBarSetting: Setting {
 
     override var style: UITableViewCell.CellStyle { return .value1 }
 
-    init?(settings: SettingsTableViewController,
+    init(settings: SettingsTableViewController,
+         profile: Profile,
          settingsDelegate: GeneralSettingsDelegate?) {
-        guard let profile = settings.profile else { return nil }
         self.viewModel = SearchBarSettingsViewModel(prefs: profile.prefs)
         self.settingsDelegate = settingsDelegate
         let theme = settings.themeManager.getCurrentTheme(for: settings.windowUUID)
