@@ -545,7 +545,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
     func tappedLearnMoreStudies(gestureRecognizer: UIGestureRecognizer) {
         tappedFooter(forSupportTopic: .studies)
     }
-    
     @objc func tappedLearnMoreCrashReports() {
         tappedFooter(forSupportTopic: .mobileCrashReports)
     }
