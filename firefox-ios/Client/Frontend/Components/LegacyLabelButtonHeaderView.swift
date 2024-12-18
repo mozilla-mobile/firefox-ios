@@ -60,7 +60,7 @@ class LegacyLabelButtonHeaderView: UICollectionReusableView, ReusableCell {
 
     private var viewModel: LabelButtonHeaderViewModel?
     var notificationCenter: NotificationProtocol = NotificationCenter.default
-    private var stackViewLeadingConstraint: NSLayoutConstraint!
+    private var stackViewLeadingConstraint: NSLayoutConstraint?
 
     // MARK: - Initializers
     override init(frame: CGRect) {
@@ -79,8 +79,10 @@ class LegacyLabelButtonHeaderView: UICollectionReusableView, ReusableCell {
         stackView.addArrangedSubview(moreButton)
         addSubview(stackView)
 
-        stackViewLeadingConstraint = stackView.leadingAnchor.constraint(equalTo: leadingAnchor,
+        let stackViewLeadingConstraint = stackView.leadingAnchor.constraint(equalTo: leadingAnchor,
                                                                         constant: UX.leadingInset)
+        self.stackViewLeadingConstraint = stackViewLeadingConstraint
+
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: topAnchor),
             stackViewLeadingConstraint,
