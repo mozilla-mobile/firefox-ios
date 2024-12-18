@@ -432,7 +432,6 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         if let text = toggles[section]?.first?.value.subtitle {
             let footer = ActionFooterView(frame: .zero)
             footer.textLabel.text = text
-            
             let learnMoreActions: [Int?: Selector] = [
                 getSectionIndex(.usageData): #selector(tappedLearnMoreFooter),
                 getSectionIndex(.search): #selector(tappedLearnMoreSearchSuggestionsFooter),
