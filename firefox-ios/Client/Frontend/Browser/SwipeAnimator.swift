@@ -34,7 +34,7 @@ class SwipeAnimator: NSObject {
     private var prevOffset: CGPoint?
     private let params: SwipeAnimationParameters
 
-    private var panGestureRecogniser: UIPanGestureRecognizer!
+    private var panGestureRecogniser: UIPanGestureRecognizer?
 
     var containerCenter: CGPoint {
         guard let animatingView = self.animatingView else {
@@ -49,9 +49,10 @@ class SwipeAnimator: NSObject {
 
         super.init()
 
-        self.panGestureRecogniser = UIPanGestureRecognizer(target: self, action: #selector(didPan))
-        animatingView.addGestureRecognizer(self.panGestureRecogniser)
-        self.panGestureRecogniser.delegate = self
+        let panGestureRecogniser = UIPanGestureRecognizer(target: self, action: #selector(didPan))
+        panGestureRecogniser.delegate = self
+        animatingView.addGestureRecognizer(panGestureRecogniser)
+        self.panGestureRecogniser = panGestureRecogniser
     }
 }
 
@@ -113,7 +114,7 @@ extension SwipeAnimator {
 // MARK: Selectors
 extension SwipeAnimator {
     @objc
-    func didPan(_ recognizer: UIPanGestureRecognizer!) {
+    func didPan(_ recognizer: UIPanGestureRecognizer) {
         let translation = recognizer.translation(in: animatingView)
 
         switch recognizer.state {
