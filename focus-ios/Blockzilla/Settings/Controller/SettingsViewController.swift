@@ -597,7 +597,10 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         if toggle.setting == .sendAnonymousUsageData {
             Glean.shared.setCollectionEnabled(sender.isOn)
             if !sender.isOn {
+                UsageProfileManager.unsetUsageProfileId()
                 NimbusWrapper.shared.nimbus.resetTelemetryIdentifiers()
+            } else {
+                UsageProfileManager.checkAndSetUsageProfileId()
             }
 
             // Disable and turn off 'studies' if 'sendAnonymousUsageData' is turned off

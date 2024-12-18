@@ -6121,3 +6121,47 @@ server_knobs:
       - fx-ios-data-stewards@mozilla.com
       - brosa@mozilla.com
     expires: "2025-07-01"
+
+nimbus_system:
+  recorded_nimbus_context:
+    type: object
+    structure:
+      type: object
+      properties:
+        is_first_run:
+          type: boolean
+        event_query_values:
+          type: object
+          properties:
+            days_opened_in_last_28:
+              type: number
+        is_review_checker_enabled:
+          type: boolean
+        is_phone:
+          type: boolean
+        app_version:
+          type: string
+        locale:
+          type: string
+        days_since_install:
+          type: number
+        days_since_update:
+          type: number
+        language:
+          type: string
+        region:
+          type: string
+        is_default_browser:
+          type: boolean
+    description: |
+      The Nimbus context object that is recorded to Glean
+    bugs:
+      - 'https://github.com/mozilla-mobile/firefox-ios/issues/23736'
+    data_reviews:
+      - 'https://github.com/mozilla-mobile/firefox-ios/pull/23737#issuecomment-2541639916'
+    data_sensitivity:
+      - interaction
+    notification_emails:
+      - chumphreys@mozilla.com
+      - project-nimbus@mozilla.com
+    expires: never

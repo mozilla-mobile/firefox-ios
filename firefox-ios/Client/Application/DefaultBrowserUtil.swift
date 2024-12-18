@@ -13,21 +13,36 @@ struct DefaultBrowserUtil {
     let application: UIApplicationInterface
     let dmaCountries = ["BE", "BG", "CZ", "DK", "DE", "EE", "IE", "EL", "ES", "FR", "HR", "IT", "CY", "LV",
                         "LT", "LU", "HU", "MT", "NL", "AT", "PL", "PT", "RO", "SI", "SK", "FI", "SE", "GR"]
+    private let logger: Logger
     init(userDefault: UserDefaultsInterface = UserDefaults.standard,
          telemetryWrapper: TelemetryWrapperProtocol = TelemetryWrapper.shared,
          locale: LocaleInterface = Locale.current,
-         application: UIApplicationInterface = UIApplication.shared) {
+         application: UIApplicationInterface = UIApplication.shared,
+         logger: Logger = DefaultLogger.shared) {
         self.userDefault = userDefault
         self.telemtryWrapper = telemetryWrapper
         self.locale = locale
         self.application = application
+        self.logger = logger
     }
 
     func processUserDefaultState(isFirstRun: Bool) {
-        guard #available(iOS 18.2, *),
-              let isDefault = try? application.isDefault(.webBrowser)
-        else { return }
+        guard #available(iOS 18.2, *) else { return }
 
+        guard !isRunningOnBlockListBetaOS() else {
+            logger.log("Cannot run the isDefault since the device running a Beta on the block list",
+                       level: .info,
+                       category: .setup)
+            return
+        }
+
+        logger.log("Going to try UIApplicationInterface.isDefault", level: .info, category: .setup)
+        guard let isDefault = try? application.isDefault(.webBrowser) else {
+            logger.log("UIApplicationInterface.isDefault was not present", level: .info, category: .setup)
+            return
+        }
+
+        logger.log("UIApplicationInterface.isDefault was successful", level: .info, category: .setup)
         trackIfUserIsDefault(isDefault)
 
         if isFirstRun {
@@ -39,6 +54,13 @@ struct DefaultBrowserUtil {
                 userDefault.set(true, forKey: PrefsKeys.DidDismissDefaultBrowserMessage)
             }
         }
+    }
+
+    private func isRunningOnBlockListBetaOS() -> Bool {
+        let systemVersion = ProcessInfo.processInfo.operatingSystemVersionString
+        let betaBlockLists: [String] = ["22C5109p", "22C5125e", "22C5131e", "22C5142a"]
+
+        return betaBlockLists.contains { systemVersion.contains($0) }
     }
 
     private func trackIfUserIsDefault(_ isDefault: Bool) {

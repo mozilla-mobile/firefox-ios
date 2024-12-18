@@ -32,9 +32,9 @@ class BackForwardListViewController: UIViewController,
     private var dismissing = false
     private var currentRow = 0
     private var verticalConstraints: [NSLayoutConstraint] = []
-    var tableViewTopAnchor: NSLayoutConstraint!
-    var tableViewBottomAnchor: NSLayoutConstraint!
-    var tableViewHeightAnchor: NSLayoutConstraint!
+    var tableViewTopAnchor: NSLayoutConstraint?
+    var tableViewBottomAnchor: NSLayoutConstraint?
+    var tableViewHeightAnchor: NSLayoutConstraint?
 
     // MARK: - Theme
     var themeManager: ThemeManager
@@ -53,7 +53,7 @@ class BackForwardListViewController: UIViewController,
 
     lazy var shadow: UIView = .build { _ in }
 
-    var tabManager: TabManager!
+    var tabManager: TabManager?
     weak var browserFrameInfoProvider: BrowserFrameInfoProvider?
     var currentItem: WKBackForwardListItem?
     var listData = [WKBackForwardListItem]()
@@ -104,7 +104,9 @@ class BackForwardListViewController: UIViewController,
         view.addSubview(tableView)
 
         snappedToBottom = isDisplayedAtBottom(for: traitCollection, isBottomSearchBar: isBottomSearchBar)
-        tableViewHeightAnchor = tableView.heightAnchor.constraint(equalToConstant: 0)
+        let tableViewHeightAnchor = tableView.heightAnchor.constraint(equalToConstant: 0)
+        self.tableViewHeightAnchor = tableViewHeightAnchor
+
         NSLayoutConstraint.activate([
             tableViewHeightAnchor,
             tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
@@ -185,14 +187,14 @@ class BackForwardListViewController: UIViewController,
             snappedToBottom = isDisplayedAtBottom
             let anchor = snappedToBottom ? tableViewTopAnchor : tableViewBottomAnchor
             anchor?.constant = 0
-            tableViewHeightAnchor.constant = 0
+            tableViewHeightAnchor?.constant = 0
         }
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         let correctHeight = {
-            self.tableViewHeightAnchor.constant = min(
+            self.tableViewHeightAnchor?.constant = min(
                 BackForwardViewUX.RowHeight * CGFloat(self.listData.count),
                 size.height / 2
             )
@@ -220,7 +222,9 @@ class BackForwardListViewController: UIViewController,
             let keyboardContainerHeight = browserFrameInfo.getOverKeyboardContainerSize().height
             let toolbarContainerheight = browserFrameInfo.getBottomContainerSize().height
             let offset = keyboardContainerHeight + toolbarContainerheight
-            tableViewBottomAnchor = tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -offset)
+            let tableViewBottomAnchor = tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -offset)
+            self.tableViewBottomAnchor = tableViewBottomAnchor
+
             let constraints: [NSLayoutConstraint] = [
                 tableViewBottomAnchor,
                 shadow.bottomAnchor.constraint(equalTo: tableView.topAnchor),
@@ -230,10 +234,12 @@ class BackForwardListViewController: UIViewController,
             verticalConstraints += constraints
         } else {
             let statusBarHeight = UIWindow.keyWindow?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
-            tableViewTopAnchor = tableView.topAnchor.constraint(
+            let tableViewTopAnchor = tableView.topAnchor.constraint(
                 equalTo: view.topAnchor,
                 constant: browserFrameInfo.getHeaderSize().height + statusBarHeight
             )
+            self.tableViewTopAnchor = tableViewTopAnchor
+
             let constraints: [NSLayoutConstraint] = [
                 tableViewTopAnchor,
                 shadow.topAnchor.constraint(equalTo: tableView.bottomAnchor),
@@ -313,7 +319,7 @@ class BackForwardListViewController: UIViewController,
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tabManager.selectedTab?.goToBackForwardListItem(listData[indexPath.item])
+        tabManager?.selectedTab?.goToBackForwardListItem(listData[indexPath.item])
         dismiss(animated: true, completion: nil)
     }
 

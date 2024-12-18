@@ -17,7 +17,7 @@ class CreditCardBottomSheetHeaderView: UITableViewHeaderFooterView, ReusableCell
         static let logoSize: CGFloat = 36.0
         static let closeButtonMarginAndWidth: CGFloat = 46.0
     }
-    public var titleLabelTrailingConstraint: NSLayoutConstraint!
+    public var titleLabelTrailingConstraint: NSLayoutConstraint?
 
     // MARK: Views
     public var viewModel: CreditCardBottomSheetViewModel? {
@@ -88,10 +88,11 @@ class CreditCardBottomSheetHeaderView: UITableViewHeaderFooterView, ReusableCell
 
         addSubview(mainContainerStackView)
         let isCloseButtonOverlapping = traitCollection.horizontalSizeClass != .regular
-        titleLabelTrailingConstraint = titleLabel.trailingAnchor.constraint(
+        let titleLabelTrailingConstraint = titleLabel.trailingAnchor.constraint(
             equalTo: firstRowContainerView.trailingAnchor,
             constant: isCloseButtonOverlapping ? -UX.closeButtonMarginAndWidth : 0
         )
+        self.titleLabelTrailingConstraint = titleLabelTrailingConstraint
 
         NSLayoutConstraint.activate(
             [
