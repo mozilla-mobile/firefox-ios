@@ -12,7 +12,7 @@ env:
 jobs:
   Focus-iOS-Tests:
     name: Focus iOS
-    runs-on: macos-15
+    runs-on: macos-15-arm64
     strategy:
       fail-fast: false
       max-parallel: 1

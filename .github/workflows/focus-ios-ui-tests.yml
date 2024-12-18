@@ -17,7 +17,7 @@ env:
 jobs:
     compile:
         name: Compile
-        runs-on: macos-15
+        runs-on: macos-15-arm64
         steps:
             - name: Check out source code
               uses: actions/checkout@v4.1.7
@@ -49,7 +49,7 @@ jobs:
                 retention-days: 2          
     run-tests:
         name: Run tests
-        runs-on: macos-15
+        runs-on: macos-15-arm64
         needs: compile
         strategy:
             fail-fast: false
