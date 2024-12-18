@@ -46,6 +46,8 @@ class LegacyHomepageViewController:
     private var collectionView: UICollectionView! = nil
     private var lastContentOffsetY: CGFloat = 0
     private var logger: Logger
+    private let viewWillAppearEventThrottler = Throttler(seconds: 0.5)
+
     var windowUUID: WindowUUID { return tabManager.windowUUID }
     var currentWindowUUID: UUID? { return windowUUID }
 
@@ -151,7 +153,12 @@ class LegacyHomepageViewController:
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel.recordViewAppeared()
+
+        // TODO: FXIOS-9428 - Need to fix issue where viewWillAppear is called twice so we can remove the throttle workaround
+        // This can then be moved back inside the `viewModel.recordViewAppeared()`
+        viewWillAppearEventThrottler.throttle {
+            Experiments.events.recordEvent(BehavioralTargetingEvent.homepageViewed)
+        }
 
         notificationCenter.post(name: .ShowHomepage, withUserInfo: windowUUID.userInfo)
         notificationCenter.post(name: .HistoryUpdated)
@@ -162,6 +169,8 @@ class LegacyHomepageViewController:
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        // FXIOS-9428 - Record telemetry in viewDidAppear since viewWillAppear is sometimes triggered twice
+        viewModel.recordViewAppeared()
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
             self?.displayWallpaperSelector()
