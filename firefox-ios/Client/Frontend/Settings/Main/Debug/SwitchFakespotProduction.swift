@@ -15,6 +15,7 @@ class SwitchFakespotProduction: HiddenSetting, FeatureFlaggable {
     }
 
     override var title: NSAttributedString? {
+        guard let theme else { return nil }
         let toNewStatus = featureFlags.isCoreFeatureEnabled(.useStagingFakespotAPI) ? "prod" : "staging"
         return NSAttributedString(string: "Switch FakespotEndpoint to \(toNewStatus)",
                                   attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
