@@ -218,6 +218,7 @@ class SyncedTabCell: UICollectionViewCell, ReusableCell {
             syncedTabsButton.leadingAnchor.constraint(equalTo: cardTitle.leadingAnchor, constant: 0),
             syncedTabsButton.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor,
                                                        constant: -16),
+
             tabStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             tabStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             tabStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
