@@ -28,12 +28,13 @@ final class BreachAlertsManager {
     static let monitorAboutUrl = URL(string: "https://monitor.firefox.com/about")
     var breaches = Set<BreachRecord>()
     var client: BreachAlertsClientProtocol
-    var profile: Profile!
+    var profile: Profile
     private lazy var cacheURL: URL? = {
         guard let path = try? self.profile.files.getAndEnsureDirectory() else { return nil }
         return URL(fileURLWithPath: path, isDirectory: true).appendingPathComponent("breaches.json")
     }()
     private let dateFormatter = DateFormatter()
+
     init(_ client: BreachAlertsClientProtocol = BreachAlertsClient(), profile: Profile) {
         self.client = client
         self.profile = profile
