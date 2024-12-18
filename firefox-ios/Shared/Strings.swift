@@ -5373,41 +5373,61 @@ extension String {
         tableName: "Settings",
         value: "Learn More.",
         comment: "Title for a link that explains how Mozilla send crash reports.")
+    public static let SendCrashReportsSettingLinkV2 = MZLocalizedString(
+        key: "Settings.CrashReports.Link.v136",
+        tableName: "Settings",
+        value: "Learn More",
+        comment: "Title for a link that explains how Mozilla send crash reports.")
     public static let SendCrashReportsSettingMessage = MZLocalizedString(
         key: "Settings.CrashReports.Message.v135",
         tableName: "Settings",
         value: "Crash reports allow us diagnose and fix issues with the browser.",
         comment: "On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports.")
     public static let SendTechnicalDataSettingTitle = MZLocalizedString(
-        key: "Settings.TechnicalData.Title.v135",
+        key: "Settings.TechnicalData.Title.v136",
         tableName: "Settings",
-        value: "Technical and Interaction Data",
+        value: "Send Technical and Interaction Data",
         comment: "On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data.")
     public static let SendTechnicalDataSettingLink = MZLocalizedString(
-        key: "Settings.TechnicalData.Link.v135",
+        key: "Settings.TechnicalData.Link.v136",
         tableName: "Settings",
-        value: "Learn More.",
+        value: "Learn More",
         comment: "Title for a link that explains how Mozilla send technical and interaction data.")
     public static let SendTechnicalDataSettingMessage = MZLocalizedString(
-        key: "Settings.TechnicalData.Message.v135",
+        key: "Settings.TechnicalData.Message.v136",
         tableName: "Settings",
-        value: "%@ strives to only collect what we need to provide and improve %@ for everyone.",
-        comment: "On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. The first placeholder will be replaced the company name of Mozilla. The second placeholder is the app name.")
+        value: "Data about your device, hardware configuration, and usage helps us improve %@ features, performance and stability.",
+        comment: "On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. Placeholder is the app name.")
     public static let SendDailyUsagePingSettingTitle = MZLocalizedString(
         key: "Settings.DailyUsagePing.Title.v135",
         tableName: "Settings",
         value: "Daily Usage Ping",
         comment: "On the Settings screen, this is the title text for a toggle which controls automatically sending daily usage ping.")
     public static let SendDailyUsagePingSettingLink = MZLocalizedString(
-        key: "Settings.DailyUsagePing.Link.v135",
+        key: "Settings.DailyUsagePing.Link.v136",
         tableName: "Settings",
-        value: "Learn More.",
+        value: "Learn More",
         comment: "Title for a link that explains how Mozilla send daily usage ping.")
     public static let SendDailyUsagePingSettingMessage = MZLocalizedString(
         key: "Settings.DailyUsagePing.Message.v135",
         tableName: "Settings",
         value: "This helps %@ to estimate active users.",
         comment: "On the Settings screen, this is the subtitle text for a toggle which controls sending daily usage ping. Placeholder will be replaced the company name of Mozilla.")
+    public static let StudiesSettingTitle = MZLocalizedString(
+        key: "Settings.Studies.Title.v136",
+        tableName: "Settings",
+        value: "Install and Run Studies",
+        comment: "Label used as a toggle item in Settings. When this is off, the user is opting out of all studies.")
+    public static let StudiesSettingLink = MZLocalizedString(
+        key: "Settings.Studies.Link.v136",
+        tableName: "Settings",
+        value: "Learn More",
+        comment: "Title for a link that explains what Mozilla means by Studies")
+    public static let StudiesSettingMessage = MZLocalizedString(
+        key: "Settings.Studies.Message.v136",
+        tableName: "Settings",
+        value: "Try out features and ideas before they’re released to everyone.",
+        comment: "A short description that explains that Mozilla is running studies")
     public static let SettingsSiriSectionName = MZLocalizedString(
         key: "Settings.Siri.SectionName",
         tableName: nil,
@@ -7610,6 +7630,26 @@ extension String {
                 tableName: "Onboarding",
                 value: "Learn more.",
                 comment: "A text that indicate to the user, a link button is available to be clicked for reading more information about the option that is going to choose in Manage Privacy Preferences screen, where user can choose from the option to send data to Firefox or not.")
+            public static let SendTechnicalDataSettingTitle = MZLocalizedString(
+                key: "Settings.TechnicalData.Title.v135",
+                tableName: "Settings",
+                value: "Technical and Interaction Data",
+                comment: "On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data.")
+            public static let SendTechnicalDataSettingLink = MZLocalizedString(
+                key: "Settings.TechnicalData.Link.v135",
+                tableName: "Settings",
+                value: "Learn More.",
+                comment: "Title for a link that explains how Mozilla send technical and interaction data.")
+            public static let SendTechnicalDataSettingMessage = MZLocalizedString(
+                key: "Settings.TechnicalData.Message.v135",
+                tableName: "Settings",
+                value: "%@ strives to only collect what we need to provide and improve %@ for everyone.",
+                comment: "On the Settings screen, this is the subtitle text for a toggle which controls sending technical and interaction data. The first placeholder will be replaced the company name of Mozilla. The second placeholder is the app name.")
+            public static let SendDailyUsagePingSettingLink = MZLocalizedString(
+                key: "Settings.DailyUsagePing.Link.v135",
+                tableName: "Settings",
+                value: "Learn More.",
+                comment: "Title for a link that explains how Mozilla send daily usage ping.")
         }
     }
 }

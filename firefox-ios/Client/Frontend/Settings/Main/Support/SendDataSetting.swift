@@ -23,7 +23,8 @@ class SendDataSetting: BoolSetting {
          linkedText: String,
          prefKey: String,
          a11yId: String,
-         learnMoreURL: URL?) {
+         learnMoreURL: URL?,
+         isToSEnabled: Bool) {
         let statusText = NSMutableAttributedString()
         statusText.append(
             NSAttributedString(
@@ -33,7 +34,7 @@ class SendDataSetting: BoolSetting {
         )
         statusText.append(
             NSAttributedString(
-                string: " "
+                string: isToSEnabled ? "\n" : " "
             )
         )
         statusText.append(
