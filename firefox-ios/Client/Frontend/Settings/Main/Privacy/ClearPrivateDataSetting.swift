@@ -5,11 +5,11 @@
 import Foundation
 
 class ClearPrivateDataSetting: Setting {
-    private let profile: Profile
     private var tabManager: TabManager?
     private weak var settingsDelegate: PrivacySettingsDelegate?
 
     override var accessoryView: UIImageView? {
+        guard let theme else { return nil }
         return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
     }
 
@@ -17,7 +17,6 @@ class ClearPrivateDataSetting: Setting {
 
     init(settings: SettingsTableViewController,
          settingsDelegate: PrivacySettingsDelegate?) {
-        self.profile = settings.profile
         self.tabManager = settings.tabManager
         self.settingsDelegate = settingsDelegate
 
