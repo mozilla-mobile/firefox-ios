@@ -98,7 +98,7 @@ class ReadabilityOperation: Operation, @unchecked Sendable {
 extension ReadabilityOperation: WKNavigationDelegate {
     func webView(
         _ webView: WKWebView,
-        didFail navigation: WKNavigation!,
+        didFail navigation: WKNavigation?,
         withError error: Error
     ) {
         result = ReadabilityOperationResult.error(error as NSError)
@@ -107,14 +107,14 @@ extension ReadabilityOperation: WKNavigationDelegate {
 
     func webView(
         _ webView: WKWebView,
-        didFailProvisionalNavigation navigation: WKNavigation!,
+        didFailProvisionalNavigation navigation: WKNavigation?,
         withError error: Error
     ) {
         result = ReadabilityOperationResult.error(error as NSError)
         semaphore.signal()
     }
 
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation?) {
         webView.evaluateJavascriptInDefaultContentWorld("\(ReaderModeNamespace).checkReadability()")
     }
 }
