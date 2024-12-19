@@ -59,12 +59,14 @@ class StartAtHomeHelperTests: XCTestCase {
 
     func testNotShouldStartAtHome_AfterFourHours() {
         setupHelper()
+        helper.startAtHomeSetting = .afterFourHours
         setupLastActiveTimeStamp(value: -3)
         XCTAssertFalse(helper.shouldStartAtHome(), "Expected to fail for less than 4 hours")
     }
 
     func testShouldStartAtHome_AfterFourHours() {
         setupHelper()
+        helper.startAtHomeSetting = .afterFourHours
         setupLastActiveTimeStamp(value: -5)
         XCTAssertTrue(helper.shouldStartAtHome(), "Expected to pass for more than 4 hours")
     }
@@ -73,7 +75,7 @@ class StartAtHomeHelperTests: XCTestCase {
         setupHelper()
         helper.startAtHomeSetting = .always
         setupLastActiveTimeStamp(value: -3, dateComponents: .second)
-        XCTAssertFalse(helper.shouldStartAtHome(), "Expected to fail for more than 5 seconds")
+        XCTAssertTrue(helper.shouldStartAtHome(), "Expected to fail for more than 5 seconds")
     }
 
     func testShouldStartAtHome_Always() {
