@@ -7,10 +7,11 @@ import Foundation
 // Shown only when debug menu is active
 class AdvancedAccountSetting: HiddenSetting {
     private weak var settingsDelegate: AccountSettingsDelegate?
-    private let profile: Profile
+    private let profile: Profile?
     private let isHidden: Bool
 
     override var accessoryView: UIImageView? {
+        guard let theme else { return nil }
         return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
     }
 
@@ -19,6 +20,7 @@ class AdvancedAccountSetting: HiddenSetting {
     }
 
     override var title: NSAttributedString? {
+        guard let theme else { return nil }
         return NSAttributedString(
             string: .SettingsAdvancedAccountTitle,
             attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]
@@ -39,6 +41,6 @@ class AdvancedAccountSetting: HiddenSetting {
     }
 
     override var hidden: Bool {
-        return !isHidden || profile.hasAccount()
+        return !isHidden || (profile?.hasAccount() ?? false)
     }
 }

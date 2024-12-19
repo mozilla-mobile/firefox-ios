@@ -15,6 +15,7 @@ class OpenFiftyTabsDebugOption: HiddenSetting {
     }
 
     override var title: NSAttributedString? {
+        guard let theme else { return nil }
         return NSAttributedString(
             string: "Open 50 `mozilla.org` tabs ⚠️",
             attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]

@@ -7,6 +7,7 @@ import Foundation
 /// Opens the App Store review page of this app
 class AppStoreReviewSetting: Setting {
     override var title: NSAttributedString? {
+        guard let theme else { return nil }
         return NSAttributedString(string: .Settings.About.RateOnAppStore,
                                   attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }

@@ -9,6 +9,7 @@ class SendFeedbackSetting: Setting {
     private weak var settingsDelegate: SupportSettingsDelegate?
 
     override var title: NSAttributedString? {
+        guard let theme else { return nil }
         return NSAttributedString(string: .AppSettingsSendFeedback,
                                   attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary])
     }

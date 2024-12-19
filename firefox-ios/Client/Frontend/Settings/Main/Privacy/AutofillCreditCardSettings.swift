@@ -6,10 +6,10 @@ import Foundation
 
 class AutofillCreditCardSettings: Setting, FeatureFlaggable {
     private weak var settingsDelegate: PrivacySettingsDelegate?
-    private let profile: Profile
     weak var settings: AppSettingsTableViewController?
 
     override var accessoryView: UIImageView? {
+        guard let theme else { return nil }
         return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
     }
 
@@ -19,7 +19,6 @@ class AutofillCreditCardSettings: Setting, FeatureFlaggable {
 
     init(settings: SettingsTableViewController,
          settingsDelegate: PrivacySettingsDelegate?) {
-        self.profile = settings.profile
         self.settings = settings as? AppSettingsTableViewController
         self.settingsDelegate = settingsDelegate
 
