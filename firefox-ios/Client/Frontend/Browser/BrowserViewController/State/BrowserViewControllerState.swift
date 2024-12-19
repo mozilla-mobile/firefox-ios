@@ -49,6 +49,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
     var buttonTapped: UIButton?
     var frame: WKFrameInfo?
     var microsurveyState: MicrosurveyPromptState
+    var trackingProtectionState: TrackingProtectionState
     var navigationDestination: NavigationDestination?
 
     init(appState: AppState, uuid: WindowUUID) {
@@ -74,6 +75,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                   buttonTapped: bvcState.buttonTapped,
                   frame: bvcState.frame,
                   microsurveyState: bvcState.microsurveyState,
+                  trackingProtectionState: bvcState.trackingProtectionState,
                   navigationDestination: bvcState.navigationDestination)
     }
 
@@ -90,6 +92,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             displayView: nil,
             buttonTapped: nil,
             microsurveyState: MicrosurveyPromptState(windowUUID: windowUUID),
+            trackingProtectionState: TrackingProtectionState(windowUUID: windowUUID),
             navigationDestination: nil)
     }
 
@@ -107,6 +110,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         buttonTapped: UIButton? = nil,
         frame: WKFrameInfo? = nil,
         microsurveyState: MicrosurveyPromptState,
+        trackingProtectionState: TrackingProtectionState,
         navigationDestination: NavigationDestination? = nil
     ) {
         self.searchScreenState = searchScreenState
@@ -122,6 +126,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
         self.buttonTapped = buttonTapped
         self.frame = frame
         self.microsurveyState = microsurveyState
+        self.trackingProtectionState = trackingProtectionState
         self.navigationDestination = navigationDestination
     }
 
@@ -133,6 +138,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             return reduceStateForFakeSpotAction(action: action, state: state)
         } else if let action = action as? MicrosurveyPromptAction {
             return reduceStateForMicrosurveyAction(action: action, state: state)
+        } else if let action = action as? TrackingProtectionAction {
+            return reduceStateForTrackingProtectionAction(action: action, state: state)
         } else if let action = action as? GeneralBrowserAction {
             return reduceStateForGeneralBrowserAction(action: action, state: state)
         } else if let action = action as? NavigationBrowserAction {
@@ -146,6 +153,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 reloadWebView: false,
                 browserViewType: state.browserViewType,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action),
                 navigationDestination: nil)
         }
     }
@@ -164,6 +172,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action),
                 navigationDestination: NavigationDestination(.customizeHomepage)
             )
 
@@ -176,6 +185,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action),
                 navigationDestination: NavigationDestination(
                     .link,
                     url: action.url,
@@ -191,6 +201,7 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action),
                 navigationDestination: NavigationDestination(.contextMenu)
             )
 
@@ -207,7 +218,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             fakespotState: FakespotState.reducer(state.fakespotState, action),
             windowUUID: state.windowUUID,
             browserViewType: state.browserViewType,
-            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+            trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action)
+        )
     }
 
     static func reduceStateForMicrosurveyAction(action: MicrosurveyPromptAction,
@@ -218,7 +231,22 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             fakespotState: state.fakespotState,
             windowUUID: state.windowUUID,
             browserViewType: state.browserViewType,
-            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+            trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action)
+        )
+    }
+
+    static func reduceStateForTrackingProtectionAction(action: TrackingProtectionAction,
+                                                       state: BrowserViewControllerState) -> BrowserViewControllerState {
+        return BrowserViewControllerState(
+            searchScreenState: state.searchScreenState,
+            showDataClearanceFlow: state.showDataClearanceFlow,
+            fakespotState: state.fakespotState,
+            windowUUID: state.windowUUID,
+            browserViewType: state.browserViewType,
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+            trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action)
+        )
     }
 
     static func reduceStateForGeneralBrowserAction(action: GeneralBrowserAction,
@@ -233,7 +261,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 toast: toastType,
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action))
 
         case GeneralBrowserActionType.showOverlay,
             GeneralBrowserActionType.leaveOverlay:
@@ -245,7 +274,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 showOverlay: showOverlay,
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action)
+            )
 
         case GeneralBrowserActionType.updateSelectedTab:
             return resolveStateForUpdateSelectedTab(action: action, state: state)
@@ -259,7 +290,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 navigateTo: .home,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action)
+            )
 
         case GeneralBrowserActionType.addNewTab:
             return BrowserViewControllerState(
@@ -270,7 +303,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 navigateTo: .newTab,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action)
+            )
 
         case GeneralBrowserActionType.showQRcodeReader:
             return BrowserViewControllerState(
@@ -281,7 +316,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 displayView: .qrCodeReader,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action)
+            )
 
         case GeneralBrowserActionType.showBackForwardList:
             return BrowserViewControllerState(
@@ -292,7 +329,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 displayView: .backForwardList,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action)
+            )
 
         case GeneralBrowserActionType.showTrackingProtectionDetails:
             return BrowserViewControllerState(
@@ -304,7 +343,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                     browserViewType: state.browserViewType,
                     displayView: .trackingProtectionDetails,
                     buttonTapped: action.buttonTapped,
-                    microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+                    microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                    trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action)
+            )
 
         case GeneralBrowserActionType.showMenu:
             return BrowserViewControllerState(
@@ -316,7 +357,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                     browserViewType: state.browserViewType,
                     displayView: .menu,
                     buttonTapped: action.buttonTapped,
-                    microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+                    microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                    trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action)
+            )
 
         case GeneralBrowserActionType.showTabsLongPressActions:
             return BrowserViewControllerState(
@@ -327,7 +370,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 displayView: .tabsLongPressActions,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action)
+            )
 
         case GeneralBrowserActionType.showReloadLongPressAction:
             return BrowserViewControllerState(
@@ -339,7 +384,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 browserViewType: state.browserViewType,
                 displayView: .reloadLongPressAction,
                 buttonTapped: action.buttonTapped,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action)
+            )
 
         case GeneralBrowserActionType.showLocationViewLongPressActionSheet:
             return BrowserViewControllerState(
@@ -350,7 +397,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 displayView: .locationViewLongPressAction,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action)
+            )
 
         case GeneralBrowserActionType.navigateBack:
             return BrowserViewControllerState(
@@ -361,7 +410,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 navigateTo: .back,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action)
+            )
         case GeneralBrowserActionType.navigateForward:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
@@ -371,7 +422,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 navigateTo: .forward,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action)
+            )
 
         case GeneralBrowserActionType.showTabTray:
             return BrowserViewControllerState(
@@ -382,7 +435,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 displayView: .tabTray,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action)
+            )
 
         case GeneralBrowserActionType.reloadWebsite:
             return BrowserViewControllerState(
@@ -393,7 +448,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 navigateTo: .reload,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action)
+            )
 
         case GeneralBrowserActionType.reloadWebsiteNoCache:
             return BrowserViewControllerState(
@@ -404,7 +461,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 navigateTo: .reloadNoCache,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action)
+            )
 
         case GeneralBrowserActionType.stopLoadingWebsite:
             return BrowserViewControllerState(
@@ -415,7 +474,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 navigateTo: .stopLoading,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action)
+            )
 
         case GeneralBrowserActionType.showShare:
             return BrowserViewControllerState(
@@ -427,7 +488,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 browserViewType: state.browserViewType,
                 displayView: .share,
                 buttonTapped: action.buttonTapped,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action)
+            )
 
         case GeneralBrowserActionType.showReaderMode:
             return BrowserViewControllerState(
@@ -438,7 +501,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 displayView: .readerMode,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action))
 
         case GeneralBrowserActionType.showNewTabLongPressActions:
             return BrowserViewControllerState(
@@ -449,7 +513,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 displayView: .newTabLongPressActions,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action)
+            )
 
         case GeneralBrowserActionType.addToReadingListLongPressAction:
             return BrowserViewControllerState(
@@ -460,7 +526,9 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 displayView: .readerModeLongPressAction,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action)
+            )
 
         case GeneralBrowserActionType.clearData:
             return BrowserViewControllerState(
@@ -470,7 +538,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 windowUUID: state.windowUUID,
                 browserViewType: state.browserViewType,
                 displayView: .dataClearance,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action))
         case GeneralBrowserActionType.showPasswordGenerator:
             return BrowserViewControllerState(
                 searchScreenState: state.searchScreenState,
@@ -480,7 +549,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                 browserViewType: state.browserViewType,
                 displayView: .passwordGenerator,
                 frame: action.frame,
-                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action)
+                microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+                trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action)
                 )
         default:
             return defaultState(from: state, action: action)
@@ -491,9 +561,11 @@ struct BrowserViewControllerState: ScreenState, Equatable {
                                      action: Action?) -> BrowserViewControllerState {
         var fakespotState = state.fakespotState
         var microsurveyState = state.microsurveyState
+        var trackingProtectionState = state.trackingProtectionState
         if let action {
             fakespotState = FakespotState.reducer(state.fakespotState, action)
             microsurveyState = MicrosurveyPromptState.reducer(state.microsurveyState, action)
+            trackingProtectionState = TrackingProtectionState.reducer(state.trackingProtectionState, action)
         }
 
         return BrowserViewControllerState(
@@ -502,7 +574,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             fakespotState: fakespotState,
             windowUUID: state.windowUUID,
             browserViewType: state.browserViewType,
-            microsurveyState: microsurveyState
+            microsurveyState: microsurveyState,
+            trackingProtectionState: trackingProtectionState
         )
     }
 
@@ -529,6 +602,8 @@ struct BrowserViewControllerState: ScreenState, Equatable {
             windowUUID: state.windowUUID,
             reloadWebView: true,
             browserViewType: browserViewType,
-            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action))
+            microsurveyState: MicrosurveyPromptState.reducer(state.microsurveyState, action),
+            trackingProtectionState: TrackingProtectionState.reducer(state.trackingProtectionState, action)
+        )
     }
 }

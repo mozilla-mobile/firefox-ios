@@ -124,6 +124,10 @@ class EnhancedTrackingProtectionCoordinator: BaseCoordinator,
     func didFinish() {
         parentCoordinator?.didFinishEnhancedTrackingProtection(from: self)
     }
+
+    func goBack() {
+        trackingProtectionNavController?.popViewController(animated: true)
+    }
 }
 
 extension EnhancedTrackingProtectionCoordinator: UIViewControllerTransitioningDelegate {
