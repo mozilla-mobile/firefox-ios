@@ -52,8 +52,8 @@ jobs:
         id: setup-simulator
         run: |
           xcrun simctl list runtimes
-          xcrun simctl list runtimes | grep "${{ matrix.ios_version }}"
-          output=$(xcrun simctl list runtimes | grep "${{ matrix.ios_version }}")
+          xcrun simctl list runtimes | grep "iOS ${{ matrix.ios_version }}"
+          output=$(xcrun simctl list runtimes | grep "iOS ${{ matrix.ios_version }}")
           echo "output: '$output'"
           if  [ -z "$output" ]; then
             echo "iOS ${{ matrix.ios_version }} simulator has already been installed"
