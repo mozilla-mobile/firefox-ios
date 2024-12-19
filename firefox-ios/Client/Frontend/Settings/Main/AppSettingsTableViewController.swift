@@ -208,8 +208,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
             )
 
             sendTechnicalDataSettings.shouldSendData = { [weak self] value in
-                guard let self else { return }
-                TermsOfServiceManager(prefs: self.profile.prefs).shouldSendTechnicalData(value: value)
+                guard let self, let profile = self.profile else { return }
+                TermsOfServiceManager(prefs: profile.prefs).shouldSendTechnicalData(value: value)
                 studiesSetting.updateSetting(for: value)
             }
             sendTechnicalDataSetting = sendTechnicalDataSettings
@@ -249,8 +249,8 @@ class AppSettingsTableViewController: SettingsTableViewController,
             )
 
             sendAnonymousUsageDataSettings.shouldSendData = { [weak self] value in
-                guard let self else { return }
-                TermsOfServiceManager(prefs: self.profile.prefs).shouldSendTechnicalData(value: value)
+                guard let self, let profile = self.profile else { return }
+                TermsOfServiceManager(prefs: profile.prefs).shouldSendTechnicalData(value: value)
                 studiesSetting.updateSetting(for: value)
             }
             sendAnonymousUsageDataSetting = sendAnonymousUsageDataSettings
