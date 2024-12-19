@@ -21,11 +21,6 @@ jobs:
         steps:
             - name: Check out source code
               uses: actions/checkout@v4.1.7
-            - name: Install packages
-              id: packages
-              run: |
-                gem install xcpretty -v 0.3.0
-                pip install blockkit==1.9.1
             - name: Setup Xcode
               id: xcode
               run: |
