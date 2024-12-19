@@ -11,7 +11,7 @@ import Account
 class ManageFxAccountSetting: Setting {
     private var notification: NSObjectProtocol?
 
-    let profile: Profile
+    let profile: Profile?
 
     override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
 
@@ -40,6 +40,7 @@ class ManageFxAccountSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
+        guard let profile else { return }
         let fxaParams = FxALaunchParams(entrypoint: .manageFxASetting, query: [:])
         let viewController = FxAWebViewController(pageType: .settingsPage,
                                                   profile: profile,
@@ -57,7 +58,7 @@ class ManageFxAccountSetting: Setting {
 
 class DisconnectSetting: Setting {
     let settingsVC: SettingsTableViewController
-    let profile: Profile
+    let profile: Profile?
     override var accessoryType: UITableViewCell.AccessoryType { return .none }
 
     init(settings: SettingsTableViewController) {
@@ -82,7 +83,7 @@ class DisconnectSetting: Setting {
 
         alertController.addAction(
             UIAlertAction(title: .SettingsDisconnectDestructiveAction, style: .destructive) { (action) in
-                self.profile.removeAccount()
+                self.profile?.removeAccount()
                 TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .tap, object: .syncUserLoggedOut)
 
                 // If there is more than one view controller in the navigation controller, we can pop.
@@ -174,7 +175,7 @@ class SyncContentSettingsViewController: SettingsTableViewController, FeatureFla
 
     override func viewWillDisappear(_ animated: Bool) {
         if !enginesToSyncOnExit.isEmpty {
-            _ = self.profile.syncManager.syncNamedCollections(
+            _ = self.profile?.syncManager.syncNamedCollections(
                 why: .enabledChange,
                 names: Array(enginesToSyncOnExit)
             )
@@ -192,11 +193,11 @@ class SyncContentSettingsViewController: SettingsTableViewController, FeatureFla
                 self.loginsSyncEnabledTelemetry(status: enabled)
             }
 
-            if self.profile.prefs.boolForKey(prefName) != nil { // Switch it back to not-changed
-                self.profile.prefs.removeObjectForKey(prefName)
+            if self.profile?.prefs.boolForKey(prefName) != nil { // Switch it back to not-changed
+                self.profile?.prefs.removeObjectForKey(prefName)
                 self.enginesToSyncOnExit.remove(engineName.rawValue)
             } else {
-                self.profile.prefs.setBool(true, forKey: prefName)
+                self.profile?.prefs.setBool(true, forKey: prefName)
                 self.enginesToSyncOnExit.insert(engineName.rawValue)
             }
         }
@@ -227,6 +228,7 @@ class SyncContentSettingsViewController: SettingsTableViewController, FeatureFla
     override func generateSettings() -> [SettingSection] {
         let manage = ManageFxAccountSetting(settings: self)
         let manageSection = SettingSection(title: nil, footerTitle: nil, children: [manage])
+        guard let profile else { return [manageSection] }
 
         let bookmarks = BoolSetting(
             prefs: profile.prefs,

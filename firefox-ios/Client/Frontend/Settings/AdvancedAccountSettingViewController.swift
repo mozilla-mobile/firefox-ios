@@ -60,17 +60,21 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = .SettingsAdvancedAccountTitle
-        self.customFxAContentURI = self.profile.prefs.stringForKey(PrefsKeys.KeyCustomFxAContentServer)
-        self.customSyncTokenServerURI = self.profile.prefs.stringForKey(PrefsKeys.KeyCustomSyncTokenServerOverride)
+        customFxAContentURI = self.profile?.prefs.stringForKey(PrefsKeys.KeyCustomFxAContentServer)
+        customSyncTokenServerURI = self.profile?.prefs.stringForKey(PrefsKeys.KeyCustomSyncTokenServerOverride)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        RustFirefoxAccounts.reconfig(prefs: profile.prefs) { _ in }
+        if let profile {
+            RustFirefoxAccounts.reconfig(prefs: profile.prefs) { _ in }
+        }
     }
 
     override func generateSettings() -> [SettingSection] {
-        let prefs = profile.prefs
+        guard let prefs = profile?.prefs else {
+            return []
+        }
 
         let theme = themeManager.getCurrentTheme(for: windowUUID)
         let attributes = [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]

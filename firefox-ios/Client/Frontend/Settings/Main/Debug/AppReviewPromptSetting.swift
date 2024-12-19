@@ -15,6 +15,7 @@ class AppReviewPromptSetting: HiddenSetting {
     }
 
     override var title: NSAttributedString? {
+        guard let theme else { return nil }
         return NSAttributedString(
             string: "Toggle App Review (needs tab switch)",
             attributes: [NSAttributedString.Key.foregroundColor: theme.colors.textPrimary]

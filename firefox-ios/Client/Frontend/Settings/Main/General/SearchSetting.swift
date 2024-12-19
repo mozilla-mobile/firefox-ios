@@ -5,16 +5,18 @@
 import Foundation
 
 class SearchSetting: Setting {
-    private let profile: Profile
+    private let profile: Profile?
     private weak var settingsDelegate: GeneralSettingsDelegate?
 
     override var accessoryView: UIImageView? {
+        guard let theme else { return nil }
         return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
     }
 
     override var style: UITableViewCell.CellStyle { return .value1 }
 
-    override var status: NSAttributedString {
+    override var status: NSAttributedString? {
+        guard let profile else { return nil }
         return NSAttributedString(
             string: profile.searchEnginesManager.defaultEngine?.shortName ?? ""
         )

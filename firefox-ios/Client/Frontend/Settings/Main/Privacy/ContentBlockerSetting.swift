@@ -6,10 +6,11 @@ import Foundation
 
 class ContentBlockerSetting: Setting {
     private weak var settingsDelegate: PrivacySettingsDelegate?
-    private let profile: Profile
+    private let profile: Profile?
     private var tabManager: TabManager?
 
     override var accessoryView: UIImageView? {
+        guard let theme else { return nil }
         return SettingDisclosureUtility.buildDisclosureIndicator(theme: theme)
     }
 
@@ -18,6 +19,7 @@ class ContentBlockerSetting: Setting {
     }
 
     override var status: NSAttributedString? {
+        guard let profile else { return nil }
         let defaultValue = ContentBlockingConfig.Defaults.NormalBrowsing
         let isOn = profile.prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? defaultValue
 
