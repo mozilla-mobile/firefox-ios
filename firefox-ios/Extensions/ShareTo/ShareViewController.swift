@@ -70,9 +70,9 @@ func addAppExtensionTelemetryEvent(forMethod method: String) {
 class ShareViewController: UIViewController {
     var shareItem: ExtensionUtils.ExtractedShareItem?
     private var viewsShownDuringDoneAnimation = [UIView]()
-    private var stackView: UIStackView!
+    private var stackView: UIStackView?
     private var spinner: UIActivityIndicatorView?
-    private var actionDoneRow: (row: UIStackView, label: UILabel)!
+    private var actionDoneRow: (row: UIStackView, label: UILabel)?
     private var sendToDevice: SendToDevice?
     private var pageInfoHeight: NSLayoutConstraint?
     private var actionRowHeights = [NSLayoutConstraint]()
@@ -135,6 +135,8 @@ class ShareViewController: UIViewController {
     }
 
     private func setupRows() {
+        guard let stackView else { return }
+
         let theme = currentTheme()
         let pageInfoRow = makePageInfoRow(addTo: stackView)
         pageInfoRowTitleLabel = pageInfoRow.titleLabel
@@ -199,11 +201,12 @@ class ShareViewController: UIViewController {
         // done state, without this space, the page info label moves down slightly.
         footerSpaceRow.heightAnchor.constraint(greaterThanOrEqualToConstant: 0).isActive = true
 
-        actionDoneRow = makeActionDoneRow(addTo: stackView)
+        let actionDoneRow = makeActionDoneRow(addTo: stackView)
         // Fully constructing and pre-adding as a subview ensures that only the show operation will animate
         // during the UIView.animate(), and other animatable properties will not unexpectedly animate because
         // they are modified in the same event loop as the animation.
         actionDoneRow.row.isHidden = true
+        self.actionDoneRow = actionDoneRow
 
         // All other views are hidden for the done animation.
         viewsShownDuringDoneAnimation += [pageInfoRow.row, footerSpaceRow, actionDoneRow.row]
@@ -338,11 +341,11 @@ class ShareViewController: UIViewController {
             equalToConstant: CGFloat(UX.viewHeightForDoneState)
         ).isActive = true
 
-        actionDoneRow.label.text = title
+        actionDoneRow?.label.text = title
 
         UIView.animate(withDuration: UX.doneDialogAnimationDuration) {
-            self.actionDoneRow.row.isHidden = false
-            self.stackView.arrangedSubviews
+            self.actionDoneRow?.row.isHidden = false
+            self.stackView?.arrangedSubviews
                 .filter { !self.viewsShownDuringDoneAnimation.contains($0) }
                 .forEach { $0.removeFromSuperview() }
 
@@ -406,7 +409,7 @@ class ShareViewController: UIViewController {
     }
 
     private func setupStackView() {
-        stackView = UIStackView()
+        let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = 4
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -416,7 +419,8 @@ class ShareViewController: UIViewController {
             stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-         ])
+        ])
+        self.stackView = stackView
     }
 
     private func showProgressIndicator() {
