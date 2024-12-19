@@ -39,9 +39,17 @@ class TabLocationView: UIView, FeatureFlaggable {
 
     // MARK: Variables
     weak var delegate: TabLocationViewDelegate?
-    var longPressRecognizer: UILongPressGestureRecognizer!
-    var tapRecognizer: UITapGestureRecognizer!
-    var contentView: UIStackView!
+
+    private lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressLocation))
+        longPressRecognizer.delegate = self
+        return longPressRecognizer
+    }()
+    private lazy var tapRecognizer: UITapGestureRecognizer = {
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapLocation))
+        tapRecognizer.delegate = self
+        return tapRecognizer
+    }()
 
     var notificationCenter: NotificationProtocol = NotificationCenter.default
     private var themeManager: ThemeManager = AppContainer.shared.resolve()
@@ -80,6 +88,24 @@ class TabLocationView: UIView, FeatureFlaggable {
             setReaderModeState(newReaderModeState)
         }
     }
+
+    lazy var contentView: UIStackView = {
+        let space1px = UIView.build()
+        space1px.widthAnchor.constraint(equalToConstant: 1).isActive = true
+        let subviews = [
+            trackingProtectionButton,
+            space1px,
+            urlTextField,
+            shoppingButton,
+            readerModeButton,
+            reloadButton
+        ]
+        let contentView = UIStackView(arrangedSubviews: subviews)
+        contentView.distribution = .fill
+        contentView.alignment = .center
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        return contentView
+    }()
 
     lazy var urlTextField: URLTextField = .build { urlTextField in
         // Prevent the field from compressing the toolbar buttons on the 4S in landscape.
@@ -182,30 +208,10 @@ class TabLocationView: UIView, FeatureFlaggable {
             ]
         )
         register(self, forTabEvents: .didGainFocus, .didToggleDesktopMode, .didChangeContentBlocking)
-        longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressLocation))
-        longPressRecognizer.delegate = self
-
-        tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapLocation))
-        tapRecognizer.delegate = self
 
         addGestureRecognizer(longPressRecognizer)
         addGestureRecognizer(tapRecognizer)
 
-        let space1px = UIView.build()
-        space1px.widthAnchor.constraint(equalToConstant: 1).isActive = true
-
-        let subviews = [
-            trackingProtectionButton,
-            space1px,
-            urlTextField,
-            shoppingButton,
-            readerModeButton,
-            reloadButton
-        ]
-        contentView = UIStackView(arrangedSubviews: subviews)
-        contentView.distribution = .fill
-        contentView.alignment = .center
-        contentView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(contentView)
 
         NSLayoutConstraint.activate([
