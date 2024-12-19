@@ -48,12 +48,6 @@ class RemoteTabsTableViewController: UITableViewController,
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
-    // Checks whether we have allowed the user to close tabs on other
-    // devices
-    private var closeRemoteTabsEnabled: Bool {
-        return featureFlags.isFeatureEnabled(.closeRemoteTabs, checking: .buildOnly)
-    }
-
     // MARK: - Initializer
 
     init(state: RemoteTabsPanelState,
@@ -352,8 +346,7 @@ class RemoteTabsTableViewController: UITableViewController,
         let isCloseRemoteTabCompatible = self.state.devices.first(where: { $0.id == deviceId })?
                                                             .capabilities.contains(.closeTabs) ?? false
 
-        // Enabling close tab UI if the capability on this device exists and the feature is enabled
-        return isCloseRemoteTabCompatible && closeRemoteTabsEnabled
+        return isCloseRemoteTabCompatible
     }
 
     override func tableView(_ tableView: UITableView,
