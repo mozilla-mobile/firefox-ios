@@ -1,10 +1,12 @@
 
 echo "\n\n[*] Cloning required repo to import strings"
+rm -rf LocalizationTools
+rm -rf firefoxios-l10n
 git clone https://github.com/mozilla-mobile/LocalizationTools.git || exit 1
 git clone --depth 1 https://github.com/mozilla-l10n/firefoxios-l10n || exit 1
 
-pip install "firefoxios-l10n/.github/scripts/requirements.txt:
-python3 firefoxios-l10n/.github/scripts/rewrite_original_attribute.py --path firefoxios-l10n
+pip install "firefoxios-l10n/.github/scripts/requirements.txt"
+python3 "firefoxios-l10n/.github/scripts/rewrite_original_attribute.py" --path "firefoxios-l10n"
 
 echo "\n\n[*] Building tools/Localizations"
 (cd LocalizationTools && swift build)
