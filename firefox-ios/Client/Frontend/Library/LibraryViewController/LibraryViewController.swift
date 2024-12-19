@@ -328,15 +328,18 @@ class LibraryViewController: UIViewController, Themeable, BookmarksRefactorFeatu
     private func updateSegmentControl() {
         guard isBookmarkRefactorEnabled else { return }
         let panelState = getCurrentPanelState()
-        
+
         switch panelState {
         case .bookmarks(state: .inFolderEditMode):
             let affectedOptions: [LibraryPanelType] = [.history, .downloads, .readingList]
-            affectedOptions.forEach { librarySegmentOption in self.librarySegmentControl.setEnabled(false, forSegmentAt: librarySegmentOption.rawValue) }
+            affectedOptions.forEach { librarySegmentOption in
+                self.librarySegmentControl.setEnabled(false, forSegmentAt: librarySegmentOption.rawValue)
+            }
         default:
-            LibraryPanelType.allCases.forEach { librarySegmentOption in self.librarySegmentControl.setEnabled(true, forSegmentAt: librarySegmentOption.rawValue) }
+            LibraryPanelType.allCases.forEach { librarySegmentOption in
+                self.librarySegmentControl.setEnabled(true, forSegmentAt: librarySegmentOption.rawValue)
+            }
         }
-        
     }
 
     func applyTheme() {
