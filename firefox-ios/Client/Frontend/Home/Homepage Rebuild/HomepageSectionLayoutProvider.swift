@@ -53,7 +53,7 @@ final class HomepageSectionLayoutProvider {
 
         struct TopSitesConstants {
             static let cellEstimatedSize = CGSize(width: 85, height: 94)
-            static let numberOfTilesPerRow = 4
+            static let minCards = 4
         }
     }
 
@@ -73,14 +73,18 @@ final class HomepageSectionLayoutProvider {
                 )
                 return nil
             }
-            return self.createLayoutSection(for: section, with: environment.traitCollection)
+            return self.createLayoutSection(
+                    for: section,
+                    with: environment.traitCollection,
+                    size: environment.container.effectiveContentSize
+                )
         }
     }
 
-    // TODO: FXIOS-10162 - Update layout section with appropriate views + integrate with redux
     private func createLayoutSection(
         for section: HomepageSection,
-        with traitCollection: UITraitCollection
+        with traitCollection: UITraitCollection,
+        size: CGSize
     ) -> NSCollectionLayoutSection {
         switch section {
         case .header:
@@ -88,7 +92,7 @@ final class HomepageSectionLayoutProvider {
         case .topSites:
             return createTopSitesSectionLayout(
                 for: traitCollection,
-                numberOfTilesPerRow: UX.TopSitesConstants.numberOfTilesPerRow
+                availableWidth: size.width
             )
         case .pocket:
             return createPocketSectionLayout(for: traitCollection)
@@ -164,23 +168,32 @@ final class HomepageSectionLayoutProvider {
 
     func createTopSitesSectionLayout(
         for traitCollection: UITraitCollection,
-        numberOfTilesPerRow: Int
+        availableWidth: CGFloat
     ) -> NSCollectionLayoutSection {
+        let numberOfTilesPerRow = TopSitesDimensionImplementation().getNumberOfTilesPerRow(
+            availableWidth: availableWidth,
+            leadingInset: UX.leadingInset(
+                traitCollection: traitCollection
+            ),
+            cellWidth: UX.TopSitesConstants.cellEstimatedSize.width
+        )
+
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1),
+            widthDimension: .fractionalWidth(1.0 / CGFloat(numberOfTilesPerRow)),
             heightDimension: .estimated(UX.TopSitesConstants.cellEstimatedSize.height)
         )
+
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1),
             heightDimension: .estimated(UX.TopSitesConstants.cellEstimatedSize.height)
         )
-
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
-                                                       subitem: item,
-                                                       count: numberOfTilesPerRow)
-
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: groupSize,
+            subitem: item,
+            count: numberOfTilesPerRow
+        )
         group.interItemSpacing = NSCollectionLayoutSpacing.fixed(UX.standardSpacing)
         let section = NSCollectionLayoutSection(group: group)
 
