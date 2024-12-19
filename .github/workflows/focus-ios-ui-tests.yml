@@ -100,27 +100,27 @@ jobs:
                     | tee xcodebuild.log | xcpretty _0.3.0_ -r junit && exit ${PIPESTATUS[0]}
               working-directory:  ${{ env.browser }}
               continue-on-error: true
-            # - name: Print test report
-            #   id: test-report
-            #   run: |
-            #     python ../test-fixtures/ci/convert_junit_to_markdown.py ${{ matrix.xcodebuild_test_plan == 'SmokeTest' && '--smoke' || '' }} --github --${{ env.browser }} ./build/reports/junit.xml ./github.md
-            #     cat github.md >> $GITHUB_STEP_SUMMARY
-            #     python ../test-fixtures/ci/convert_junit_to_markdown.py ${{ matrix.xcodebuild_test_plan == 'SmokeTest' && '--smoke' || '' }} --slack --${{ env.browser }} ./build/reports/junit.xml ./slack.json
-            #   working-directory:  ${{ env.browser }}
-            # - name: Upload log file
-            #   id: upload-log
-            #   uses: actions/upload-artifact@v4.3.3
-            #   with:
-            #     name: ${{ env.browser }}-${{ matrix.xcodebuild_test_plan }}-${{ matrix.ios_simulator }}-xcodebuildlog-${{ github.run_number }}
-            #     path: ${{ env.browser }}/xcodebuild.log
-            #     retention-days: 90
-            # - name: Upload junit files
-            #   id: upload-junit
-            #   uses: actions/upload-artifact@v4.3.3
-            #   with:
-            #     name: ${{ env.browser }}-${{ matrix.xcodebuild_test_plan }}-${{ matrix.ios_simulator }}-junit-${{ github.run_number }}
-            #     path: ${{ env.browser }}/build/reports/junit.xml
-            #     retention-days: 90
+            - name: Print test report
+              id: test-report
+              run: |
+                python ../test-fixtures/ci/convert_junit_to_markdown.py ${{ matrix.xcodebuild_test_plan == 'SmokeTest' && '--smoke' || '' }} --github --${{ env.browser }} ./build/reports/junit.xml ./github.md
+                cat github.md >> $GITHUB_STEP_SUMMARY
+                python ../test-fixtures/ci/convert_junit_to_markdown.py ${{ matrix.xcodebuild_test_plan == 'SmokeTest' && '--smoke' || '' }} --slack --${{ env.browser }} ./build/reports/junit.xml ./slack.json
+              working-directory:  ${{ env.browser }}
+            - name: Upload log file
+              id: upload-log
+              uses: actions/upload-artifact@v4.3.3
+              with:
+                name: ${{ env.browser }}-${{ matrix.xcodebuild_test_plan }}-${{ matrix.ios_simulator }}-xcodebuildlog-${{ github.run_number }}
+                path: ${{ env.browser }}/xcodebuild.log
+                retention-days: 90
+            - name: Upload junit files
+              id: upload-junit
+              uses: actions/upload-artifact@v4.3.3
+              with:
+                name: ${{ env.browser }}-${{ matrix.xcodebuild_test_plan }}-${{ matrix.ios_simulator }}-junit-${{ github.run_number }}
+                path: ${{ env.browser }}/build/reports/junit.xml
+                retention-days: 90
             # - name: Report to Slack
             #   id: slack
             #   uses: slackapi/slack-github-action@v1.26.0
