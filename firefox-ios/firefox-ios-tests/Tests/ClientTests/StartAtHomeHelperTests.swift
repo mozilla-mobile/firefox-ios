@@ -75,7 +75,7 @@ class StartAtHomeHelperTests: XCTestCase {
         setupHelper()
         helper.startAtHomeSetting = .always
         setupLastActiveTimeStamp(value: -3, dateComponents: .second)
-        XCTAssertTrue(helper.shouldStartAtHome(), "Expected to fail for more than 5 seconds")
+        XCTAssertFalse(helper.shouldStartAtHome(), "Expected to fail for more than 5 seconds")
     }
 
     func testShouldStartAtHome_Always() {
