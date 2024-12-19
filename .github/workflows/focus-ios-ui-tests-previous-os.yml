@@ -53,7 +53,7 @@ jobs:
         run: |
           output=$(xcrun simctl list runtimes | grep "${{ matrix.ios_version }}")
           if  [ -n "$output" ]; then
-            echo "Pattern found."
+            echo "iOS ${{ matrix.ios_version }} simulator has already been installed"
           else
             sudo xcodes runtimes install "iOS ${{ matrix.ios_version }}"
           fi
