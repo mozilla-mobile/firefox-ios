@@ -63,9 +63,10 @@ jobs:
             - name: Install packages
               id: packages
               run: |
-                gem install xcpretty -v 0.2.8
-                pip install blockkit==1.9.1
+                gem uninstall xcpretty -ax
+                gem install xcpretty -v 0.3.0
                 xcpretty -version
+                pip install blockkit==1.9.1
             - name: Setup Xcode
               id: xcode
               run: |
