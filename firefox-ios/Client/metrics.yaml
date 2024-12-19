@@ -5163,6 +5163,15 @@ share_sheet:
         description: |
           Whether an explicit share message (and optional subject line) was 
           appended to the shared content.
+      is_enrolled_in_sent_from_firefox:
+        type: boolean
+        description: |
+          Whether the user is enrolled in the Sent from Firefox experiment.
+      is_opted_in_sent_from_firefox:
+        type: boolean
+        description: |
+          Whether the user is opted in to the Sent from Firefox experiment.
+          Only returns true if the user is both enrolled and opted in.
 
 # Device specific metrics
 

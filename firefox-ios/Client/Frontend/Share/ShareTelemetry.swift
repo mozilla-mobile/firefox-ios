@@ -6,14 +6,28 @@ import Foundation
 import Glean
 
 protocol ShareTelemetry {
-    func sharedTo(activityType: UIActivity.ActivityType?, shareType: ShareType, hasShareMessage: Bool)
+    func sharedTo(
+        activityType: UIActivity.ActivityType?,
+        shareType: ShareType,
+        hasShareMessage: Bool,
+        isEnrolledInSentFromFirefox: Bool,
+        isOptedInSentFromFirefox: Bool
+    )
 }
 
 struct DefaultShareTelemetry: ShareTelemetry {
-    func sharedTo(activityType: UIActivity.ActivityType?, shareType: ShareType, hasShareMessage: Bool) {
+    func sharedTo(
+        activityType: UIActivity.ActivityType?,
+        shareType: ShareType,
+        hasShareMessage: Bool,
+        isEnrolledInSentFromFirefox: Bool,
+        isOptedInSentFromFirefox: Bool
+    ) {
         let extra = GleanMetrics.ShareSheet.SharedToExtra(
             activityIdentifier: activityType?.rawValue ?? "unknown",
             hasShareMessage: hasShareMessage,
+            isEnrolledInSentFromFirefox: isEnrolledInSentFromFirefox,
+            isOptedInSentFromFirefox: isOptedInSentFromFirefox,
             shareType: shareType.typeName
         )
         GleanMetrics.ShareSheet.sharedTo.record(extra)
