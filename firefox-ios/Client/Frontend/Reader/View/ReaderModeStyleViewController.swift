@@ -319,7 +319,8 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
 
     @objc
     func changeTheme(_ button: ReaderModeThemeButton) {
-        viewModel.readerModeDidChangeTheme(button.readerModeTheme)
+        guard let readerModeTheme = button.readerModeTheme else { return }
+        viewModel.readerModeDidChangeTheme(readerModeTheme)
     }
 
     @objc
