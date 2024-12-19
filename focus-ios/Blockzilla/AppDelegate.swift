@@ -327,7 +327,7 @@ private let SentryDSNKey = "SentryDSN"
 extension AppDelegate {
     func setupCrashReporting() {
         // Do not enable crash reporting if collection of anonymous usage data is disabled.
-        if !Settings.getToggle(.sendAnonymousUsageData) {
+        if !Settings.getToggle(.crashToggle) {
             return
         }
 
