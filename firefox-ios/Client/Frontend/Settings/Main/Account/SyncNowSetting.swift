@@ -84,7 +84,7 @@ class SyncNowSetting: WithAccountSetting {
 
     override var image: UIImage? {
         guard let profile, let theme else { return nil }
-        guard let syncStatus = profile.syncManager.syncDisplayState else {
+        guard let syncStatus = profile.syncManager?.syncDisplayState else {
             return syncIcon?.tinted(withColor: theme.colors.iconPrimary)
         }
 
@@ -97,7 +97,7 @@ class SyncNowSetting: WithAccountSetting {
     }
 
     override var title: NSAttributedString? {
-        guard let profile, let theme, let syncStatus = profile.syncManager.syncDisplayState else {
+        guard let syncStatus = profile.syncManager?.syncDisplayState else {
             return syncNowTitle
         }
 
@@ -127,9 +127,7 @@ class SyncNowSetting: WithAccountSetting {
     }
 
     override var status: NSAttributedString? {
-        guard let profile, let theme, let timestamp = profile.syncManager.lastSyncFinishTime else {
-            return nil
-        }
+        guard let timestamp = profile.syncManager?.lastSyncFinishTime else { return nil }
 
         let formattedLabel = timestampFormatter.string(from: Date.fromTimestamp(timestamp))
         let attributedString = NSMutableAttributedString(string: formattedLabel)
@@ -196,7 +194,7 @@ class SyncNowSetting: WithAccountSetting {
         cell.textLabel?.attributedText = title
         cell.textLabel?.numberOfLines = 0
         cell.textLabel?.lineBreakMode = .byWordWrapping
-        if let syncStatus = profile?.syncManager.syncDisplayState {
+        if let syncStatus = profile.syncManager?.syncDisplayState {
             switch syncStatus {
             case .bad(let message):
                 if message != nil {
@@ -223,7 +221,7 @@ class SyncNowSetting: WithAccountSetting {
             cell.accessoryView = nil
         }
         cell.accessoryType = accessoryType
-        cell.isUserInteractionEnabled = !(profile?.syncManager.isSyncing ?? false) && DeviceInfo.hasConnectivity()
+        cell.isUserInteractionEnabled = !(profile.syncManager?.isSyncing ?? false) && DeviceInfo.hasConnectivity()
 
         // Animation that loops continuously until stopped
         continuousRotateAnimation.fromValue = 0.0
@@ -242,7 +240,7 @@ class SyncNowSetting: WithAccountSetting {
         cell.imageView?.image = syncIconWrapper
         cell.imageView?.addSubview(imageView)
 
-        if let syncStatus = profile?.syncManager.syncDisplayState {
+        if let syncStatus = profile.syncManager?.syncDisplayState {
             switch syncStatus {
             case .inProgress:
                 self.startRotateSyncIcon()
@@ -266,7 +264,7 @@ class SyncNowSetting: WithAccountSetting {
             return
         }
 
-        profile?.syncManager.syncEverything(why: .user)
-        profile?.pollCommands(forcePoll: true)
+        profile.syncManager?.syncEverything(why: .user)
+        profile.pollCommands(forcePoll: true)
     }
 }
