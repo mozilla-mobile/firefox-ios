@@ -6,7 +6,7 @@ import Foundation
 import CoreSpotlight
 import Shared
 
-final class RouteBuilder {
+final class RouteBuilder: FeatureFlaggable {
     private var isPrivate = false
     private var prefs: Prefs?
 
@@ -158,7 +158,8 @@ final class RouteBuilder {
 
         // If the user activity has a webpageURL, it's a deep link or an old history item.
         // Use the URL to create a new search tab.
-        if let url = userActivity.webpageURL {
+        if let url = userActivity.webpageURL,
+           isBrowsingActivity(userActivity) {
             return .search(url: url, isPrivate: false)
         }
 
@@ -203,6 +204,15 @@ final class RouteBuilder {
             }
         case .qrCode:
             return .action(action: .showQRCode)
+        }
+    }
+
+    private func isBrowsingActivity(_ userActivity: NSUserActivity) -> Bool {
+        if featureFlags.isFeatureEnabled(.universalLinks, checking: .buildOnly) {
+            return userActivity.activityType == NSUserActivityTypeBrowsingWeb ||
+            userActivity.activityType == browsingActivityType
+        } else {
+            return true
         }
     }
 
