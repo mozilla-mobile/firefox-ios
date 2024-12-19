@@ -12,7 +12,7 @@ extension LibraryViewController: UIToolbarDelegate {
     }
 }
 
-class LibraryViewController: UIViewController, Themeable {
+class LibraryViewController: UIViewController, Themeable, BookmarksRefactorFeatureFlagProvider {
     struct UX {
         struct NavigationMenu {
             static let height: CGFloat = 32
@@ -132,6 +132,7 @@ class LibraryViewController: UIViewController, Themeable {
 
     func updateViewWithState() {
         setupButtons()
+        updateSegmentControl()
     }
 
     fileprivate func updateTitle() {
@@ -324,6 +325,23 @@ class LibraryViewController: UIViewController, Themeable {
         navigationController?.toolbar.tintColor = theme.colors.actionPrimary
     }
 
+    private func updateSegmentControl() {
+        guard isBookmarkRefactorEnabled else { return }
+        let panelState = getCurrentPanelState()
+
+        switch panelState {
+        case .bookmarks(state: .inFolderEditMode):
+            let affectedOptions: [LibraryPanelType] = [.history, .downloads, .readingList]
+            affectedOptions.forEach { librarySegmentOption in
+                self.librarySegmentControl.setEnabled(false, forSegmentAt: librarySegmentOption.rawValue)
+            }
+        default:
+            LibraryPanelType.allCases.forEach { librarySegmentOption in
+                self.librarySegmentControl.setEnabled(true, forSegmentAt: librarySegmentOption.rawValue)
+            }
+        }
+    }
+
     func applyTheme() {
         // There is an ANNOYING bar in the nav bar above the segment control. These are the
         // UIBarBackgroundShadowViews. We must set them to be clear images in order to
@@ -361,6 +379,7 @@ extension LibraryViewController: Notifiable {
         switch notification.name {
         case .LibraryPanelStateDidChange:
             setupButtons()
+            updateSegmentControl()
         default: break
         }
     }
