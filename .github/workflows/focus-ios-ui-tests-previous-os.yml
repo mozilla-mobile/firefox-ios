@@ -6,7 +6,7 @@ on:
 
 env:
     browser: focus-ios
-    xcode_version: 16.1
+    xcode_version: 16.2
     test_results_directory: /Users/runner/tmp
 
 jobs:
