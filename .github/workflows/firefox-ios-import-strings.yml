@@ -31,15 +31,15 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     
-    - name: Install Python dependencies
-      run: |
-        pip install -r firefoxios-l10n/.github/scripts/requirements.txt
-    
     - name: Clone l10n iOS repository
       uses: actions/checkout@v4
       with:
         repository: "mozilla-l10n/firefoxios-l10n"
         path: "firefoxios-l10n"
+    
+    - name: Install Python dependencies
+      run: |
+        pip install -r firefoxios-l10n/.github/scripts/requirements.txt
 
     - name: Clone Localization Tools
       uses: actions/checkout@v4
@@ -77,7 +77,7 @@ jobs:
           echo "pr_title=Localize [$version] String import $current_date" >> $GITHUB_ENV
           echo "pr_body=This automated PR imports string changes into branch '$current_branch'" >> $GITHUB_ENV
         fi    
-            
+
     - name: Prepare Xliff files to import
       run: |
         # Change all the Xliff files original from en.lproj to en-US.lproj so they can be imported correctly
