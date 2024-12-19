@@ -20,8 +20,8 @@ jobs:
       max-parallel: 1
       matrix:
         include:
-          - ios_version: 17.5
-            ios_simulator: iPhone 15
+          # - ios_version: 17.5
+          #  ios_simulator: iPhone 15
           - ios_version: 16.4
             ios_simulator: iPhone 14
           - ios_version: 15.5
