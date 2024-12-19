@@ -5383,17 +5383,17 @@ extension String {
         tableName: "Settings",
         value: "Crash reports allow us diagnose and fix issues with the browser.",
         comment: "On the Settings screen, this is the subtitle text for a toggle which controls automatically sending crash reports.")
-    public static let SendTechnicalDataSettingTitleV2 = MZLocalizedString(
+    public static let SendTechnicalDataSettingTitle = MZLocalizedString(
         key: "Settings.TechnicalData.Title.v136",
         tableName: "Settings",
         value: "Send Technical and Interaction Data",
         comment: "On the Settings screen, this is the title text for a toggle which controls sending technical and interaction data.")
-    public static let SendTechnicalDataSettingLinkV2 = MZLocalizedString(
+    public static let SendTechnicalDataSettingLink = MZLocalizedString(
         key: "Settings.TechnicalData.Link.v136",
         tableName: "Settings",
         value: "Learn More",
         comment: "Title for a link that explains how Mozilla send technical and interaction data.")
-    public static let SendTechnicalDataSettingMessageV2 = MZLocalizedString(
+    public static let SendTechnicalDataSettingMessage = MZLocalizedString(
         key: "Settings.TechnicalData.Message.v136",
         tableName: "Settings",
         value: "Data about your device, hardware configuration, and usage helps us improve %@ features, performance and stability.",
