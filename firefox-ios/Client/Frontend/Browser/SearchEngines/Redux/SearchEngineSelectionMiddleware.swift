@@ -24,7 +24,9 @@ final class SearchEngineSelectionMiddleware {
 
         switch action.actionType {
         case SearchEngineSelectionActionType.viewDidLoad:
-            guard let searchEngines = searchEnginesManager.orderedEngines, !searchEngines.isEmpty else {
+            let searchEngines = searchEnginesManager.orderedEngines
+
+            guard !searchEngines.isEmpty else {
                 // The SearchEngineManager should have loaded these by now, but if not, attempt to fetch the search engines
                 self.searchEnginesManager.getOrderedEngines { [weak self] searchEngines in
                     self?.notifyDidLoad(windowUUID: action.windowUUID, searchEngines: searchEngines)
