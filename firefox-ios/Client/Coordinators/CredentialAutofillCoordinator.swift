@@ -133,11 +133,7 @@ class CredentialAutofillCoordinator: BaseCoordinator {
             logger: logger,
             onLoginCellTap: { [weak self] login in
                 guard let self else { return }
-                let rustLoginsEncryption = RustLoginEncryptionKeys()
-
-                guard let currentTab = self.tabManager.selectedTab,
-                      let decryptLogin = rustLoginsEncryption.decryptSecureFields(login: login)
-                else {
+                guard let currentTab = self.tabManager.selectedTab else {
                     router.dismiss(animated: true)
                     parentCoordinator?.didFinish(from: self)
                     return
@@ -148,9 +144,9 @@ class CredentialAutofillCoordinator: BaseCoordinator {
                     loginData: LoginInjectionData(
                         requestId: currentRequestId,
                         logins: [LoginItem(
-                            username: decryptLogin.secFields.username,
-                            password: decryptLogin.secFields.password,
-                            hostname: decryptLogin.fields.origin
+                            username: login.decryptedUsername,
+                            password: login.decryptedPassword,
+                            hostname: login.fields.origin
                         )]
                     )
                 )
